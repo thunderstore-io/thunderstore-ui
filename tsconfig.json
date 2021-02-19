@@ -20,5 +20,6 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "references": [{ "path": "thunderstore-components" }, { "path": "nextjs" }]
 }

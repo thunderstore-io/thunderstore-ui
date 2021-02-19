@@ -7,7 +7,6 @@
     "strict": true,
     "jsx": "preserve"
   },
-  "references": [{ "path": "../thunderstore-components" }],
   "extends": "../tsconfig.json",
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
