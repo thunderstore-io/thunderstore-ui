@@ -1,0 +1,15 @@
+{
+  "name": "nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/main/nextjs",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^10.0.7",
+    "thunderstore-components": "^0.1.0"
+  }
+}

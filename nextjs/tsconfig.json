@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "noEmit": true,
+    "isolatedModules": true,
+    "allowJs": false,
+    "strict": true,
+    "jsx": "preserve"
+  },
+  "references": [{ "path": "../thunderstore-components" }],
+  "extends": "../tsconfig.json",
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+}
