@@ -12,19 +12,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  pre:
-    name: Check
-    # Do not run pull_request workflow if the head repo is not a fork
-    # These are already tested with the push event
-    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.head.repo.fork)
-    runs-on: "ubuntu-latest"
-    steps:
-      - name: Check
-        run: ":"
-
   eslint:
     name: ESLint
-    needs: pre
+    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.head.repo.fork)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -43,8 +33,7 @@ jobs:
 
   codeql:
     name: CodeQL
-    needs: pre
-    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.head.repo.fork && github.base_ref == 'main')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
