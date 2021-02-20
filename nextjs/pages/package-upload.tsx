@@ -1,7 +1,7 @@
 import { PackageUpload } from "thunderstore-components";
 import React from "react";
 
-const PackageUploadPage: React.FC<{}> = ({}) => {
+const PackageUploadPage: React.FC<never> = () => {
   return <PackageUpload />;
 };
 
