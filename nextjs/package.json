@@ -2,7 +2,7 @@
   "name": "nextjs",
   "version": "0.1.0",
   "private": true,
-  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/main/nextjs",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/nextjs",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

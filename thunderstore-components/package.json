@@ -2,7 +2,7 @@
   "name": "thunderstore-components",
   "version": "0.1.0",
   "description": "Shared components for Thunderstore",
-  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/main/thunderstore-components",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/thunderstore-components",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"
