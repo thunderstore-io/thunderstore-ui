@@ -17,11 +17,12 @@
     "browser": true,
     "node": true
   },
-  "plugins": ["simple-import-sort", "prettier"],
+  "plugins": ["@typescript-eslint", "prettier", "jsx-a11y", "simple-import-sort"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
     "plugin:prettier/recommended"
   ],
   "rules": {
