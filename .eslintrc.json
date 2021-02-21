@@ -17,7 +17,7 @@
     "browser": true,
     "node": true
   },
-  "plugins": ["@typescript-eslint", "prettier", "jsx-a11y", "simple-import-sort"],
+  "plugins": ["@typescript-eslint", "prettier", "jsx-a11y"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
