@@ -2,12 +2,18 @@ import {
   Box,
   Button,
   Center,
-  CloseButton,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
   Heading,
   Select,
-  Slide,
+  Stack,
   Text,
-  useColorModeValue,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import JSZip from "jszip";
@@ -16,14 +22,79 @@ import { FileUpload } from "./FileUpload";
 import { Markdown } from "./Markdown";
 import { StickyFooter } from "./StickyFooter";
 
+interface PackageUploadFormProps {
+  readmeContent: string;
+}
+
+const PackageUploadForm: React.FC<PackageUploadFormProps> = ({ readmeContent }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef<HTMLButtonElement>(null);
+
+  return (
+    <>
+      <Heading>Markdown Preview</Heading>
+      <Box borderWidth="1px" borderRadius="lg" m={1} p={2}>
+        <Markdown>{readmeContent}</Markdown>
+      </Box>
+      <StickyFooter>
+        <Center>
+          <Button ref={btnRef} onClick={onOpen}>
+            Upload
+          </Button>
+        </Center>
+      </StickyFooter>
+      <Drawer
+        isOpen={isOpen}
+        placement="right"
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay>
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>Upload package</DrawerHeader>
+            <DrawerBody>
+              <Stack>
+                <Box>
+                  <Heading as="h2" size="md">
+                    Team
+                  </Heading>
+                  <Select>
+                    <option value="Team1">Team1</option>
+                    <option value="Team2">Team2</option>
+                    <option value="Team3">Team3</option>
+                  </Select>
+                </Box>
+                <Box>
+                  <Heading as="h2" size="md">
+                    Categories
+                  </Heading>
+                  <Select>
+                    <option value="category-slug-1">Category name 1</option>
+                    <option value="category-slug-2">Category name 2</option>
+                    <option value="category-slug-3">Category name 3</option>
+                  </Select>
+                </Box>
+              </Stack>
+            </DrawerBody>
+            <DrawerFooter>
+              <Button variant="outline" mr={3} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button>Upload</Button>
+            </DrawerFooter>
+          </DrawerContent>
+        </DrawerOverlay>
+      </Drawer>
+    </>
+  );
+};
+
 export const PackageUpload: React.FC<never> = () => {
   const [file, setFile] = useState<File | null>(null);
   const [zip, setZip] = useState<JSZip | null>(null);
   const [readmeContent, setReadmeContent] = useState<string | null>(null);
-  const [isOnSubmitForm, setIsOnSubmitForm] = useState(false);
-  // const [isSubmitting, setIsSubmitting] = useState(false);
   const toast = useToast();
-  const bg = useColorModeValue("white", "gray");
 
   useEffect(() => {
     onUpload();
@@ -102,40 +173,7 @@ export const PackageUpload: React.FC<never> = () => {
     return <Text>Decompressing...</Text>;
   } else if (readmeContent !== null) {
     // Third state, the file has been validated and decompressed
-    return (
-      <>
-        <Heading>Markdown Preview</Heading>
-        <Box borderWidth="1px" borderRadius="lg" m={1} p={2}>
-          <Markdown>{readmeContent}</Markdown>
-        </Box>
-        <Slide direction="bottom" in={isOnSubmitForm} style={{ zIndex: 10 }}>
-          <Box bg={bg} p={1}>
-            <CloseButton
-              float="right"
-              mb={1}
-              onClick={() => setIsOnSubmitForm(false)}
-            />
-            <Text>Team</Text>
-            <Select>
-              <option value="Team1">Team1</option>
-              <option value="Team2">Team2</option>
-              <option value="Team3">Team3</option>
-            </Select>
-            <Text>Categories</Text>
-            <Select>
-              <option value="category-slug-1">Category name 1</option>
-              <option value="category-slug-2">Category name 2</option>
-              <option value="category-slug-3">Category name 3</option>
-            </Select>
-          </Box>
-        </Slide>
-        <StickyFooter>
-          <Center>
-            <Button onClick={() => setIsOnSubmitForm(true)}>Upload</Button>
-          </Center>
-        </StickyFooter>
-      </>
-    );
+    return <PackageUploadForm readmeContent={readmeContent} />;
   } else {
     return <Text>Loading...</Text>;
   }
