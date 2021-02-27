@@ -19,9 +19,7 @@
     "jszip": "^3.6.0",
     "react-hook-form": "^6.15.4",
     "react-markdown": "^5.0.3",
-    "remark-gfm": "^1.0.0",
-    "slate": "^0.59.0",
-    "slate-react": "^0.59.0"
+    "remark-gfm": "^1.0.0"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.4.33"
