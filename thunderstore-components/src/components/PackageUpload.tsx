@@ -10,7 +10,6 @@ import {
   DrawerHeader,
   DrawerOverlay,
   Heading,
-  Select,
   Stack,
   Text,
   useDisclosure,
@@ -18,9 +17,12 @@ import {
 } from "@chakra-ui/react";
 import JSZip from "jszip";
 import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { CategoryPicker } from "./CategoryPicker";
 import { FileUpload } from "./FileUpload";
 import { Markdown } from "./Markdown";
 import { StickyFooter } from "./StickyFooter";
+import { TeamPicker } from "./TeamPicker";
 
 interface PackageUploadFormProps {
   readmeContent: string;
@@ -29,6 +31,7 @@ interface PackageUploadFormProps {
 const PackageUploadForm: React.FC<PackageUploadFormProps> = ({ readmeContent }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef<HTMLButtonElement>(null);
+  const { register, handleSubmit, formState } = useForm();
 
   return (
     <>
@@ -53,36 +56,41 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({ readmeContent }) 
           <DrawerContent>
             <DrawerCloseButton />
             <DrawerHeader>Upload package</DrawerHeader>
-            <DrawerBody>
-              <Stack>
-                <Box>
-                  <Heading as="h2" size="md">
-                    Team
-                  </Heading>
-                  <Select>
-                    <option value="Team1">Team1</option>
-                    <option value="Team2">Team2</option>
-                    <option value="Team3">Team3</option>
-                  </Select>
-                </Box>
-                <Box>
-                  <Heading as="h2" size="md">
-                    Categories
-                  </Heading>
-                  <Select>
-                    <option value="category-slug-1">Category name 1</option>
-                    <option value="category-slug-2">Category name 2</option>
-                    <option value="category-slug-3">Category name 3</option>
-                  </Select>
-                </Box>
-              </Stack>
-            </DrawerBody>
-            <DrawerFooter>
-              <Button variant="outline" mr={3} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button>Upload</Button>
-            </DrawerFooter>
+            <form
+              onSubmit={handleSubmit(
+                (data, e) => {
+                  console.log(data, e);
+                },
+                (errors, e) => {
+                  console.log(errors, e);
+                }
+              )}
+            >
+              <DrawerBody>
+                <Stack>
+                  <Box>
+                    <Heading as="h2" size="md" mb={1}>
+                      Team
+                    </Heading>
+                    <TeamPicker name="team" ref={register} />
+                  </Box>
+                  <Box>
+                    <Heading as="h2" size="md" mb={1}>
+                      Categories
+                    </Heading>
+                    <CategoryPicker name="category" ref={register} />
+                  </Box>
+                </Stack>
+              </DrawerBody>
+              <DrawerFooter>
+                <Button variant="outline" mr={3} onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button type="submit" isLoading={formState.isSubmitting}>
+                  Upload
+                </Button>
+              </DrawerFooter>
+            </form>
           </DrawerContent>
         </DrawerOverlay>
       </Drawer>
