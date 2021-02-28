@@ -168,12 +168,10 @@ export const PackageUpload: React.FC<never> = () => {
     // First state, has not selected a file
     return (
       <FileUpload
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          if (!event.target.files) {
-            return;
-          }
-          setFile(event.target.files[0]);
+        onUpload={(files) => {
+          setFile(files[0]);
         }}
+        accept="application/zip"
       />
     );
   } else if (!zip) {
