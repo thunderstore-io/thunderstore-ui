@@ -12,7 +12,7 @@ interface FileUploadProps {
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({ onUpload, accept }) => {
-  const bg = useColorModeValue("white", "gray");
+  const bg = useColorModeValue("gray", "gray");
   const onDrop = useCallback(onUpload, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

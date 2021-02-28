@@ -7,7 +7,7 @@ interface StickyFooterProps {
 }
 
 export const StickyFooter: React.FC<StickyFooterProps> = ({ children }) => {
-  const bg = useColorModeValue("white", "gray");
+  const bg = useColorModeValue("gray", "gray");
 
   return (
     <Box position="sticky" bottom={0} p={4} bg={bg}>
