@@ -122,7 +122,17 @@ export const PackageUpload: React.FC<never> = () => {
       return;
     }
     const zip = new JSZip();
-    await zip.loadAsync(file);
+    try {
+      await zip.loadAsync(file);
+    } catch {
+      toast({
+        title: "Invalid mod zip",
+        status: "error",
+        isClosable: true,
+      });
+      reset();
+      return;
+    }
     setZip(zip);
   };
 
