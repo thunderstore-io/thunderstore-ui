@@ -17,24 +17,30 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import JSZip from "jszip";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { apiFetch } from "../fetch";
 import { CategoryPicker } from "./CategoryPicker";
 import { CommunityPicker } from "./CommunityPicker";
 import { FileUpload } from "./FileUpload";
 import { Markdown } from "./Markdown";
 import { StickyFooter } from "./StickyFooter";
 import { TeamPicker } from "./TeamPicker";
+import { ThunderstoreContext } from "./ThunderstoreProvider";
 
 interface PackageUploadFormProps {
   readmeContent: string;
   modZip: File;
 }
 
-const PackageUploadForm: React.FC<PackageUploadFormProps> = ({ readmeContent }) => {
+const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
+  readmeContent,
+  modZip,
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef<HTMLButtonElement>(null);
   const { register, handleSubmit, formState } = useForm();
+  const context = useContext(ThunderstoreContext);
 
   return (
     <>
@@ -61,8 +67,17 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({ readmeContent }) 
             <DrawerHeader>Upload package</DrawerHeader>
             <form
               onSubmit={handleSubmit(
-                (data, e) => {
-                  console.log(data, e);
+                async (data) => {
+                  data.categories = [data.categories];
+                  data.communities = [data.communities];
+
+                  const formData = new FormData();
+                  formData.append("metadata", JSON.stringify(data));
+                  formData.append("file", modZip);
+                  await apiFetch(context, "/experimental/package/upload/", {
+                    method: "POST",
+                    body: formData,
+                  });
                 },
                 (errors, e) => {
                   console.log(errors, e);

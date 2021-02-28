@@ -1,5 +1,10 @@
 export { theme } from "./theme";
+export { ThunderstoreProvider } from "./components/ThunderstoreProvider";
+export * from "./components/CategoryPicker";
+export * from "./components/CommunityPicker";
 export * from "./components/FileUpload";
 export * from "./components/Markdown";
 export * from "./components/PackageUpload";
+export * from "./components/Select";
 export * from "./components/StickyFooter";
+export * from "./components/TeamPicker";
