@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Center,
+  Checkbox,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -19,6 +20,7 @@ import JSZip from "jszip";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CategoryPicker } from "./CategoryPicker";
+import { CommunityPicker } from "./CommunityPicker";
 import { FileUpload } from "./FileUpload";
 import { Markdown } from "./Markdown";
 import { StickyFooter } from "./StickyFooter";
@@ -26,6 +28,7 @@ import { TeamPicker } from "./TeamPicker";
 
 interface PackageUploadFormProps {
   readmeContent: string;
+  modZip: File;
 }
 
 const PackageUploadForm: React.FC<PackageUploadFormProps> = ({ readmeContent }) => {
@@ -72,13 +75,24 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({ readmeContent }) 
                     <Heading as="h2" size="md" mb={1}>
                       Team
                     </Heading>
-                    <TeamPicker name="team" ref={register} />
+                    <TeamPicker name="author_name" ref={register} />
                   </Box>
                   <Box>
                     <Heading as="h2" size="md" mb={1}>
                       Categories
                     </Heading>
-                    <CategoryPicker name="category" ref={register} />
+                    <CategoryPicker name="categories" ref={register} />
+                  </Box>
+                  <Box>
+                    <Heading as="h2" size="md" mb={1}>
+                      Communities
+                    </Heading>
+                    <CommunityPicker name="communities" ref={register} />
+                  </Box>
+                  <Box>
+                    <Checkbox name="has_nsfw_content" ref={register}>
+                      Has NSFW content
+                    </Checkbox>
                   </Box>
                 </Stack>
               </DrawerBody>
@@ -140,8 +154,6 @@ export const PackageUpload: React.FC<never> = () => {
     if (zip === null) {
       return;
     }
-    console.log(zip);
-    console.log(await zip.file("manifest.json")?.async("string"));
     const errors: string[] = [];
     ["manifest.json", "README.md", "icon.png"].forEach((fileName) => {
       if (zip.files[fileName] === undefined) {
@@ -189,7 +201,7 @@ export const PackageUpload: React.FC<never> = () => {
     return <Text>Decompressing...</Text>;
   } else if (readmeContent !== null) {
     // Third state, the file has been validated and decompressed
-    return <PackageUploadForm readmeContent={readmeContent} />;
+    return <PackageUploadForm readmeContent={readmeContent} modZip={file} />;
   } else {
     return <Text>Loading...</Text>;
   }

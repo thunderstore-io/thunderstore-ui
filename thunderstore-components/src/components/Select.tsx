@@ -9,7 +9,7 @@ export type SelectOption = {
 interface SelectProps {
   options: SelectOption[];
   disabled?: boolean;
-  multiSelect?: false;
+  multiSelect?: boolean;
   search?: boolean;
   name: string;
 }
