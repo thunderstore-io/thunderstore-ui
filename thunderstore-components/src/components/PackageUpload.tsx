@@ -127,7 +127,7 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
   );
 };
 
-export const PackageUpload: React.FC<never> = () => {
+export const PackageUpload: React.FC<Record<string, never>> = () => {
   const [file, setFile] = useState<File | null>(null);
   const [zip, setZip] = useState<JSZip | null>(null);
   const [readmeContent, setReadmeContent] = useState<string | null>(null);
