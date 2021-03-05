@@ -8,7 +8,7 @@
   "repository": "https://github.com/thunderstore-io/thunderstore-ui",
   "scripts": {
     "build": "preconstruct build && yarn workspace nextjs build",
-    "preinstall": "preconstruct dev"
+    "prepare": "preconstruct dev"
   },
   "dependencies": {
     "@babel/core": "^7.13.8",
