@@ -11,5 +11,8 @@
   "dependencies": {
     "next": "^10.0.7",
     "thunderstore-components": "^0.1.0"
+  },
+  "devDependencies": {
+    "@preconstruct/next": "^2.0.0"
   }
 }
