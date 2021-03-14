@@ -3,7 +3,7 @@ import { ThunderstoreProviderProps } from "./components/ThunderstoreProvider";
 export const apiFetch = async (
   context: ThunderstoreProviderProps,
   endpoint: string,
-  fetchOptions: RequestInit
+  fetchOptions: RequestInit = {}
 ): Promise<Response> => {
   if (context.apiToken !== null) {
     const headers = new Headers(fetchOptions.headers);
