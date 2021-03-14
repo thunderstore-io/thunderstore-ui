@@ -40,7 +40,7 @@ export const CategoryPicker = React.forwardRef<any, CategoryPickerProps>(
 
     const options: SelectOption[] = data.packageCategories.map(
       (category: Category) => ({
-        name: category.name,
+        label: category.name,
         value: category.slug,
       })
     );

@@ -2,7 +2,7 @@ import { Select as ChakraSelect } from "@chakra-ui/react";
 import React from "react";
 
 export type SelectOption = {
-  name: string;
+  label: string;
   value: string;
 };
 
@@ -19,8 +19,8 @@ export const Select = React.forwardRef<any, SelectProps>(
     return (
       <ChakraSelect disabled={disabled} ref={ref} name={name}>
         {options.map((option) => (
-          <option key={`${option.name};${option.value}`} value={option.value}>
-            {option.name}
+          <option key={`${option.label};${option.value}`} value={option.value}>
+            {option.label}
           </option>
         ))}
       </ChakraSelect>

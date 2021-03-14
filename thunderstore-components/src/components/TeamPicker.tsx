@@ -27,7 +27,7 @@ export const TeamPicker = React.forwardRef<any, TeamPickerProps>(
     }
 
     const options: SelectOption[] = data.teams.map((teamName: string) => ({
-      name: teamName,
+      label: teamName,
       value: teamName,
     }));
 

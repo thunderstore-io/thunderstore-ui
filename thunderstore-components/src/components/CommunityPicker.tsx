@@ -34,7 +34,7 @@ export const CommunityPicker = React.forwardRef<any, CommunityPickerProps>(
     }
 
     const options: SelectOption[] = data.communities.map((community: Community) => ({
-      name: community.name,
+      label: community.name,
       value: community.identifier,
     }));
 
