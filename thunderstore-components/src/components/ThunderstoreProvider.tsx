@@ -5,7 +5,7 @@ export interface ThunderstoreProviderProps {
 }
 
 export const ThunderstoreContext = React.createContext<ThunderstoreProviderProps>({
-  apiUrl: "http://localhost/api/",
+  apiUrl: "https://thunderstore.io/api/",
 });
 
 ThunderstoreContext.displayName = "ThunderstoreContext";
