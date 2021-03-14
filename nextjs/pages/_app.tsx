@@ -7,7 +7,6 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       theme={theme}
       thunderstoreProviderValue={{
         apiUrl: "http://localhost/api/",
-        apiToken: null,
       }}
     >
       <Component {...pageProps} />

@@ -5,9 +5,10 @@ export const apiFetch = async (
   endpoint: string,
   fetchOptions: RequestInit = {}
 ): Promise<Response> => {
-  if (context.apiToken !== null) {
+  const apiToken = localStorage.getItem("apiToken");
+  if (apiToken !== null) {
     const headers = new Headers(fetchOptions.headers);
-    headers.append("Authorization", `Bearer ${context.apiToken}`);
+    headers.append("Authorization", `Bearer ${apiToken}`);
     fetchOptions.headers = headers;
   }
   return await fetch(context.apiUrl + endpoint.substring(1), fetchOptions);
