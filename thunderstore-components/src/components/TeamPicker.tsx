@@ -1,11 +1,9 @@
-import React from "react";
+import { Text } from "@chakra-ui/react";
+import React, { useContext } from "react";
+import { useQuery } from "react-query";
+import { apiFetch } from "../fetch";
 import { Select, SelectOption } from "./Select";
-
-const options: SelectOption[] = [
-  { name: "Team1", value: "Team1" },
-  { name: "Team2", value: "Team2" },
-  { name: "Team3", value: "Team3" },
-];
+import { ThunderstoreContext } from "./ThunderstoreProvider";
 
 interface TeamPickerProps {
   disabled?: boolean;
@@ -14,6 +12,25 @@ interface TeamPickerProps {
 
 export const TeamPicker = React.forwardRef<any, TeamPickerProps>(
   ({ disabled = false, name }, ref) => {
+    const context = useContext(ThunderstoreContext);
+    const { isLoading, data } = useQuery("userInfo", async () => {
+      const r = await apiFetch(context, "/experimental/current-user/");
+      return await r.json();
+    });
+
+    if (isLoading) {
+      return <Text>Loading...</Text>;
+    }
+
+    if (!data) {
+      return <Text>Failed to fetch</Text>;
+    }
+
+    const options: SelectOption[] = data.teams.map((teamName: string) => ({
+      name: teamName,
+      value: teamName,
+    }));
+
     return (
       <Select
         options={options}

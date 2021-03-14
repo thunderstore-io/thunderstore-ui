@@ -1,11 +1,16 @@
-import React from "react";
+import { Text } from "@chakra-ui/layout";
+import React, { useContext } from "react";
+import { useQuery } from "react-query";
+import { apiFetch } from "../fetch";
 import { Select, SelectOption } from "./Select";
+import { ThunderstoreContext } from "./ThunderstoreProvider";
 
-const options: SelectOption[] = [
-  { name: "Community 1", value: "community1" },
-  { name: "Community 2", value: "community2" },
-  { name: "Community 3", value: "community3" },
-];
+interface Community {
+  identifier: string;
+  name: string;
+  discord_url: string | null;
+  wiki_url: string | null;
+}
 
 interface CommunityPickerProps {
   disabled?: boolean;
@@ -14,6 +19,25 @@ interface CommunityPickerProps {
 
 export const CommunityPicker = React.forwardRef<any, CommunityPickerProps>(
   ({ disabled = false, name }, ref) => {
+    const context = useContext(ThunderstoreContext);
+    const { isLoading, data } = useQuery("communityList", async () => {
+      const r = await apiFetch(context, "/experimental/community/");
+      return await r.json();
+    });
+
+    if (isLoading) {
+      return <Text>Loading...</Text>;
+    }
+
+    if (!data) {
+      return <Text>Failed to fetch</Text>;
+    }
+
+    const options: SelectOption[] = data.communities.map((community: Community) => ({
+      name: community.name,
+      value: community.identifier,
+    }));
+
     return (
       <Select
         options={options}

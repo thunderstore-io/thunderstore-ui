@@ -1,19 +1,50 @@
-import React from "react";
+import { Text } from "@chakra-ui/layout";
+import React, { useContext } from "react";
+import { useQuery } from "react-query";
+import { apiFetch } from "../fetch";
 import { Select, SelectOption } from "./Select";
+import { ThunderstoreContext } from "./ThunderstoreProvider";
 
-const options: SelectOption[] = [
-  { name: "Category name 1", value: "category-slug-1" },
-  { name: "Category name 2", value: "category-slug-2" },
-  { name: "Category name 3", value: "category-slug-3" },
-];
+interface Category {
+  name: string;
+  slug: string;
+}
 
 interface CategoryPickerProps {
   disabled?: boolean;
   name: string;
+  communityIdentifier: string;
 }
 
 export const CategoryPicker = React.forwardRef<any, CategoryPickerProps>(
-  ({ disabled = false, name }, ref) => {
+  ({ disabled = false, name, communityIdentifier }, ref) => {
+    const context = useContext(ThunderstoreContext);
+    const { isLoading, data } = useQuery(
+      `categoryList-${communityIdentifier}`,
+      async () => {
+        const r = await apiFetch(
+          context,
+          `/experimental/community/${communityIdentifier}/category/`
+        );
+        return await r.json();
+      }
+    );
+
+    if (isLoading) {
+      return <Text>Loading...</Text>;
+    }
+
+    if (!data) {
+      return <Text>Failed to fetch</Text>;
+    }
+
+    const options: SelectOption[] = data.packageCategories.map(
+      (category: Category) => ({
+        name: category.name,
+        value: category.slug,
+      })
+    );
+
     return (
       <Select
         options={options}
