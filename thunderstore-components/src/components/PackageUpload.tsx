@@ -68,7 +68,7 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
             <form
               onSubmit={handleSubmit(
                 async (data) => {
-                  data.categories = [data.categories];
+                  data.categories = [];
                   data.communities = [data.communities];
 
                   const formData = new FormData();
@@ -94,16 +94,20 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
                   </Box>
                   <Box>
                     <Heading as="h2" size="md" mb={1}>
-                      Categories
-                    </Heading>
-                    <CategoryPicker name="categories" ref={register} />
-                  </Box>
-                  <Box>
-                    <Heading as="h2" size="md" mb={1}>
                       Communities
                     </Heading>
                     <CommunityPicker name="communities" ref={register} />
                   </Box>
+                  {/* <Box>
+                    <Heading as="h2" size="md" mb={1}>
+                      Categories
+                    </Heading>
+                    <CategoryPicker
+                      name="categories"
+                      communityIdentifier="riskofrain2"
+                      ref={register}
+                    />
+                  </Box> */}
                   <Box>
                     <Checkbox name="has_nsfw_content" ref={register}>
                       Has NSFW content
