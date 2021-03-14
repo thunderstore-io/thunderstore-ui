@@ -10,6 +10,8 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  FormControl,
+  FormLabel,
   Heading,
   Stack,
   Text,
@@ -85,33 +87,27 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
             >
               <DrawerBody>
                 <Stack>
-                  <Box>
-                    <Heading as="h2" size="md" mb={1}>
-                      Team
-                    </Heading>
+                  <FormControl>
+                    <FormLabel>Team</FormLabel>
                     <TeamPicker name="author_name" ref={register} />
-                  </Box>
-                  <Box>
-                    <Heading as="h2" size="md" mb={1}>
-                      Communities
-                    </Heading>
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Communities</FormLabel>
                     <CommunityPicker name="communities" ref={register} />
-                  </Box>
-                  {/* <Box>
-                    <Heading as="h2" size="md" mb={1}>
-                      Categories
-                    </Heading>
+                  </FormControl>
+                  {/* <FormControl>
+                    <FormLabel>Categories</FormLabel>
                     <CategoryPicker
                       name="categories"
                       communityIdentifier="riskofrain2"
                       ref={register}
                     />
-                  </Box> */}
-                  <Box>
+                  </FormControl> */}
+                  <FormControl>
                     <Checkbox name="has_nsfw_content" ref={register}>
                       Has NSFW content
                     </Checkbox>
-                  </Box>
+                  </FormControl>
                 </Stack>
               </DrawerBody>
               <DrawerFooter>
