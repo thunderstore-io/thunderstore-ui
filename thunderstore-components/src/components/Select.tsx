@@ -14,7 +14,7 @@ interface SelectProps {
   name: string;
 }
 
-export const Select = React.forwardRef<any, SelectProps>(
+export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ({ options, disabled = false, name }, ref) => {
     return (
       <ChakraSelect disabled={disabled} ref={ref} name={name}>

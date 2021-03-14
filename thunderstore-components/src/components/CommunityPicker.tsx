@@ -17,38 +17,39 @@ interface CommunityPickerProps {
   name: string;
 }
 
-export const CommunityPicker = React.forwardRef<any, CommunityPickerProps>(
-  ({ disabled = false, name }, ref) => {
-    const context = useContext(ThunderstoreContext);
-    const { isLoading, data } = useQuery("communityList", async () => {
-      const r = await apiFetch(context, "/experimental/community/");
-      return await r.json();
-    });
+export const CommunityPicker = React.forwardRef<
+  HTMLSelectElement,
+  CommunityPickerProps
+>(({ disabled = false, name }, ref) => {
+  const context = useContext(ThunderstoreContext);
+  const { isLoading, data } = useQuery("communityList", async () => {
+    const r = await apiFetch(context, "/experimental/community/");
+    return await r.json();
+  });
 
-    if (isLoading) {
-      return <Text>Loading...</Text>;
-    }
-
-    if (!data) {
-      return <Text>Failed to fetch</Text>;
-    }
-
-    const options: SelectOption[] = data.communities.map((community: Community) => ({
-      label: community.name,
-      value: community.identifier,
-    }));
-
-    return (
-      <Select
-        options={options}
-        search={true}
-        multiSelect={true}
-        disabled={disabled}
-        ref={ref}
-        name={name}
-      />
-    );
+  if (isLoading) {
+    return <Text>Loading...</Text>;
   }
-);
+
+  if (!data) {
+    return <Text>Failed to fetch</Text>;
+  }
+
+  const options: SelectOption[] = data.communities.map((community: Community) => ({
+    label: community.name,
+    value: community.identifier,
+  }));
+
+  return (
+    <Select
+      options={options}
+      search={true}
+      multiSelect={true}
+      disabled={disabled}
+      ref={ref}
+      name={name}
+    />
+  );
+});
 
 CommunityPicker.displayName = "CommunityPicker";

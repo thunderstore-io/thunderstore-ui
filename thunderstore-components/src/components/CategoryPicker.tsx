@@ -16,7 +16,7 @@ interface CategoryPickerProps {
   communityIdentifier: string;
 }
 
-export const CategoryPicker = React.forwardRef<any, CategoryPickerProps>(
+export const CategoryPicker = React.forwardRef<HTMLSelectElement, CategoryPickerProps>(
   ({ disabled = false, name, communityIdentifier }, ref) => {
     const context = useContext(ThunderstoreContext);
     const { isLoading, data } = useQuery(

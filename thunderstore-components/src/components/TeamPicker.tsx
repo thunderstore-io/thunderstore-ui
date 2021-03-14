@@ -10,7 +10,7 @@ interface TeamPickerProps {
   name: string;
 }
 
-export const TeamPicker = React.forwardRef<any, TeamPickerProps>(
+export const TeamPicker = React.forwardRef<HTMLSelectElement, TeamPickerProps>(
   ({ disabled = false, name }, ref) => {
     const context = useContext(ThunderstoreContext);
     const { isLoading, data } = useQuery("userInfo", async () => {
