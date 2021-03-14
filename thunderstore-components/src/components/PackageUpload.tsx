@@ -20,7 +20,6 @@ import JSZip from "jszip";
 import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { apiFetch } from "../fetch";
-import { CategoryPicker } from "./CategoryPicker";
 import { CommunityPicker } from "./CommunityPicker";
 import { FileUpload } from "./FileUpload";
 import { Markdown } from "./Markdown";
