@@ -10,4 +10,6 @@ export const ThunderstoreContext = React.createContext<ThunderstoreProviderProps
   apiToken: null,
 });
 
+ThunderstoreContext.displayName = "ThunderstoreContext";
+
 export const ThunderstoreProvider = ThunderstoreContext.Provider;
