@@ -14,7 +14,7 @@
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
     "framer-motion": "^3.10.2",
-    "react-hook-form": "^6.15.4"
+    "react-hook-form": "^6.15.5"
   },
   "devDependencies": {}
 }
