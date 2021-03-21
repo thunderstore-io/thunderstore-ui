@@ -95,14 +95,6 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
                     <FormLabel>Communities</FormLabel>
                     <CommunityPicker name="communities" ref={register} />
                   </FormControl>
-                  {/* <FormControl>
-                    <FormLabel>Categories</FormLabel>
-                    <CategoryPicker
-                      name="categories"
-                      communityIdentifier="riskofrain2"
-                      ref={register}
-                    />
-                  </FormControl> */}
                   <FormControl>
                     <Checkbox name="has_nsfw_content" ref={register}>
                       Has NSFW content
