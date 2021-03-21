@@ -134,9 +134,12 @@ export const PackageUpload: React.FC<Record<string, never>> = () => {
     onZip();
   }, [zip]);
 
+  let isReset = false;
   const reset = () => {
+    isReset = true;
     setFile(null);
     setZip(null);
+    setReadmeContent(null);
   };
 
   const onUpload = async () => {
@@ -214,7 +217,10 @@ export const PackageUpload: React.FC<Record<string, never>> = () => {
     }
   }, [packageUploadInfoQuery.data, file]);
 
-  if (!file) {
+  if (isReset) {
+    // Same render as zip being marked as invalid
+    return <Text>Loading...</Text>;
+  } else if (!file) {
     // First state, has not selected a file
     return (
       <FileUpload
