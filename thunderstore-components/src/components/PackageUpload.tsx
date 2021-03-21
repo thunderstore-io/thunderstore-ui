@@ -21,6 +21,7 @@ import {
 import JSZip from "jszip";
 import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useQuery } from "react-query";
 import { apiFetch } from "../fetch";
 import { CommunityPicker } from "./CommunityPicker";
 import { FileUpload } from "./FileUpload";
@@ -123,6 +124,7 @@ export const PackageUpload: React.FC<Record<string, never>> = () => {
   const [zip, setZip] = useState<JSZip | null>(null);
   const [readmeContent, setReadmeContent] = useState<string | null>(null);
   const toast = useToast();
+  const context = useContext(ThunderstoreContext);
 
   useEffect(() => {
     onUpload();
@@ -191,6 +193,26 @@ export const PackageUpload: React.FC<Record<string, never>> = () => {
     }
     setReadmeContent(readmeContent);
   };
+
+  const packageUploadInfoQuery = useQuery("packageUploadInfo", async () => {
+    const r = await apiFetch(context, "/experimental/package/upload/");
+    return await r.json();
+  });
+
+  useEffect(() => {
+    if (!file || !packageUploadInfoQuery.data?.max_package_size_bytes) {
+      return;
+    }
+    if (file.size > packageUploadInfoQuery.data.max_package_size_bytes) {
+      toast({
+        title: "Mod zip too large",
+        description: `Mod zip must be smaller than ${packageUploadInfoQuery.data.max_package_size_bytes} bytes`,
+        status: "error",
+        isClosable: true,
+      });
+      reset();
+    }
+  }, [packageUploadInfoQuery.data, file]);
 
   if (!file) {
     // First state, has not selected a file
