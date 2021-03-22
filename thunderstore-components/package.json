@@ -13,7 +13,7 @@
     "@chakra-ui/react": "^1.4.1",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
-    "framer-motion": "^3.10.2",
+    "framer-motion": "^4.0.0",
     "react-hook-form": "^6.15.5"
   },
   "devDependencies": {}
