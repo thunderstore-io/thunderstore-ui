@@ -15,15 +15,17 @@
     "@emotion/styled": "^11.1.5",
     "adm-zip": "^0.5.3",
     "chakra-ui-markdown-renderer": "^1.1.0",
+    "framer-motion": "^3.10.2",
+    "js-cookie": "^2.2.1",
     "jszip": "^3.6.0",
     "react-dropzone": "^11.3.1",
     "react-hook-form": "^6.15.4",
     "react-markdown": "^5.0.3",
     "react-query": "^3.12.1",
-    "remark-gfm": "^1.0.0",
-    "framer-motion": "^3.10.2"
+    "remark-gfm": "^1.0.0"
   },
   "devDependencies": {
-    "@types/adm-zip": "^0.4.33"
+    "@types/adm-zip": "^0.4.33",
+    "@types/js-cookie": "^2.2.6"
   }
 }
