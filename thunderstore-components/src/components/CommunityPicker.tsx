@@ -35,7 +35,7 @@ export const CommunityPicker = React.forwardRef<
     return <Text>Failed to fetch</Text>;
   }
 
-  const options: SelectOption[] = data.communities.map((community: Community) => ({
+  const options: SelectOption[] = data.results.map((community: Community) => ({
     label: community.name,
     value: community.identifier,
   }));

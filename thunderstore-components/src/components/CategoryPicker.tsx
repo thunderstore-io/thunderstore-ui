@@ -38,12 +38,10 @@ export const CategoryPicker = React.forwardRef<HTMLSelectElement, CategoryPicker
       return <Text>Failed to fetch</Text>;
     }
 
-    const options: SelectOption[] = data.packageCategories.map(
-      (category: Category) => ({
-        label: category.name,
-        value: category.slug,
-      })
-    );
+    const options: SelectOption[] = data.results.map((category: Category) => ({
+      label: category.name,
+      value: category.slug,
+    }));
 
     return (
       <Select
