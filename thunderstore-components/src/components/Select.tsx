@@ -75,6 +75,7 @@ export const Select = <T extends SelectOption = SelectOption>({
       {/* Input */}
       <Box {...getComboboxProps()}>
         <Input
+          placeholder="Search..."
           disabled={disabled}
           {...getInputProps({
             onClick: isOpen ? () => undefined : openMenu,
@@ -216,6 +217,7 @@ export const MultiSelect = <T extends SelectOption = SelectOption>({
       {/* Input */}
       <Box {...getComboboxProps()}>
         <Input
+          placeholder="Search..."
           disabled={disabled}
           {...getInputProps(
             getDropdownProps({
