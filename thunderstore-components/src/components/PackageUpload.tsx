@@ -11,6 +11,7 @@ import {
   DrawerHeader,
   DrawerOverlay,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Stack,
@@ -35,13 +36,26 @@ interface PackageUploadFormProps {
   modZip: File;
 }
 
+interface PackageUploadFormInputs {
+  author_name: string;
+  communities: string[];
+  has_nsfw_content: boolean;
+  categories: [];
+}
+
 const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
   readmeContent,
   modZip,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef<HTMLButtonElement>(null);
-  const { register, handleSubmit, formState, control } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState,
+    control,
+    errors,
+  } = useForm<PackageUploadFormInputs>();
   const context = useContext(ThunderstoreContext);
 
   return (
@@ -87,7 +101,7 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
             >
               <DrawerBody>
                 <Stack>
-                  <FormControl>
+                  <FormControl isInvalid={!!errors.author_name}>
                     <FormLabel>Team</FormLabel>
                     <Controller
                       name="author_name"
@@ -99,12 +113,15 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
                           disabled={formState.isSubmitting}
                         />
                       )}
-                      rules={{ required: true }}
+                      rules={{ required: "Team is required" }}
                       defaultValue={null}
                       control={control}
                     />
+                    {errors.author_name?.message && (
+                      <FormErrorMessage>{errors.author_name.message}</FormErrorMessage>
+                    )}
                   </FormControl>
-                  <FormControl>
+                  <FormControl isInvalid={!!errors.communities}>
                     <FormLabel>Communities</FormLabel>
                     <Controller
                       name="communities"
@@ -118,12 +135,15 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
                           disabled={formState.isSubmitting}
                         />
                       )}
-                      rules={{ required: true }}
+                      rules={{ required: "At least one community is required" }}
                       defaultValue={null}
                       control={control}
                     />
+                    {errors.communities?.message && (
+                      <FormErrorMessage>{errors.communities.message}</FormErrorMessage>
+                    )}
                   </FormControl>
-                  <FormControl>
+                  <FormControl isInvalid={!!errors.has_nsfw_content}>
                     <Checkbox
                       name="has_nsfw_content"
                       ref={register}
@@ -131,6 +151,11 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
                     >
                       Has NSFW content
                     </Checkbox>
+                    {errors.has_nsfw_content?.message && (
+                      <FormErrorMessage>
+                        {errors.has_nsfw_content.message}
+                      </FormErrorMessage>
+                    )}
                   </FormControl>
                 </Stack>
               </DrawerBody>
