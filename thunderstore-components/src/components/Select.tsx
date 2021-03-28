@@ -154,6 +154,7 @@ export const MultiSelect = <T extends SelectOption = SelectOption>({
     defaultHighlightedIndex: 0,
     selectedItem: null,
     items: filteredOptions,
+    itemToString: (option) => option?.label || "",
     stateReducer: (_, actionAndChanges) => {
       const { changes, type } = actionAndChanges;
       switch (type) {
