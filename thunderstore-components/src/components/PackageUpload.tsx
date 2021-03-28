@@ -23,7 +23,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import { apiFetch } from "../fetch";
-import { CommunityPicker } from "./CommunityPicker";
+import { MultiCommunityPicker } from "./CommunityPicker";
 import { FileUpload } from "./FileUpload";
 import { Markdown } from "./Markdown";
 import { StickyFooter } from "./StickyFooter";
@@ -109,7 +109,7 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
                     <Controller
                       name="communities"
                       render={(props) => (
-                        <CommunityPicker
+                        <MultiCommunityPicker
                           onChange={(options) =>
                             props.onChange(
                               options.map((option) => option.community.identifier)

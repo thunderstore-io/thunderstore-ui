@@ -16,12 +16,12 @@ type CommunitySelectOption = SelectOption & {
   community: Community;
 };
 
-type CommunityPickerProps = Pick<
+type MultiCommunityPickerProps = Pick<
   MultiSelectProps<CommunitySelectOption>,
   "disabled" | "onChange"
 >;
 
-export const CommunityPicker: React.FC<CommunityPickerProps> = ({
+export const MultiCommunityPicker: React.FC<MultiCommunityPickerProps> = ({
   disabled = false,
   onChange,
 }) => {

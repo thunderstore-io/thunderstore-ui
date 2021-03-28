@@ -1,4 +1,4 @@
-import { Community, CommunityPicker } from "thunderstore-components";
+import { Community, MultiCommunityPicker } from "thunderstore-components";
 import React, { useState } from "react";
 import { Box, Button, List, ListItem } from "@chakra-ui/react";
 
@@ -29,7 +29,7 @@ const CommunityPickerPage: React.FC<Record<string, never>> = () => {
           ))}
         </List>
       )}
-      <CommunityPicker
+      <MultiCommunityPicker
         disabled={disabled}
         onChange={(options) => {
           setCommunities(options.map((option) => option.community));
