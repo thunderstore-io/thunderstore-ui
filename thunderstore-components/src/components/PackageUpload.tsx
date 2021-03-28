@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import JSZip from "jszip";
 import React, { useContext, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import { apiFetch } from "../fetch";
 import { CommunityPicker } from "./CommunityPicker";
@@ -41,7 +41,7 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef<HTMLButtonElement>(null);
-  const { register, handleSubmit, formState } = useForm();
+  const { register, handleSubmit, formState, control } = useForm();
   const context = useContext(ThunderstoreContext);
 
   return (
@@ -71,7 +71,6 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
               onSubmit={handleSubmit(
                 async (data) => {
                   data.categories = [];
-                  data.communities = [data.communities];
 
                   const formData = new FormData();
                   formData.append("metadata", JSON.stringify(data));
@@ -90,14 +89,46 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
                 <Stack>
                   <FormControl>
                     <FormLabel>Team</FormLabel>
-                    <TeamPicker name="author_name" ref={register} />
+                    <Controller
+                      name="author_name"
+                      render={(props) => (
+                        <TeamPicker
+                          onChange={(option) =>
+                            props.onChange(option?.teamName || null)
+                          }
+                          disabled={formState.isSubmitting}
+                        />
+                      )}
+                      rules={{ required: true }}
+                      defaultValue={null}
+                      control={control}
+                    />
                   </FormControl>
                   <FormControl>
                     <FormLabel>Communities</FormLabel>
-                    <CommunityPicker name="communities" ref={register} />
+                    <Controller
+                      name="communities"
+                      render={(props) => (
+                        <CommunityPicker
+                          onChange={(options) =>
+                            props.onChange(
+                              options.map((option) => option.community.identifier)
+                            )
+                          }
+                          disabled={formState.isSubmitting}
+                        />
+                      )}
+                      rules={{ required: true }}
+                      defaultValue={null}
+                      control={control}
+                    />
                   </FormControl>
                   <FormControl>
-                    <Checkbox name="has_nsfw_content" ref={register}>
+                    <Checkbox
+                      name="has_nsfw_content"
+                      ref={register}
+                      disabled={formState.isSubmitting}
+                    >
                       Has NSFW content
                     </Checkbox>
                   </FormControl>

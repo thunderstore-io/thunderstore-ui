@@ -2,25 +2,29 @@ import { Text } from "@chakra-ui/layout";
 import React, { useContext } from "react";
 import { useQuery } from "react-query";
 import { apiFetch } from "../fetch";
-import { Select, SelectOption } from "./Select";
+import { MultiSelect, MultiSelectProps, SelectOption } from "./Select";
 import { ThunderstoreContext } from "./ThunderstoreProvider";
 
-interface Community {
+export interface Community {
   identifier: string;
   name: string;
   discord_url: string | null;
   wiki_url: string | null;
 }
 
-interface CommunityPickerProps {
-  disabled?: boolean;
-  name: string;
-}
+type CommunitySelectOption = SelectOption & {
+  community: Community;
+};
 
-export const CommunityPicker = React.forwardRef<
-  HTMLSelectElement,
-  CommunityPickerProps
->(({ disabled = false, name }, ref) => {
+type CommunityPickerProps = Pick<
+  MultiSelectProps<CommunitySelectOption>,
+  "disabled" | "onChange"
+>;
+
+export const CommunityPicker: React.FC<CommunityPickerProps> = ({
+  disabled = false,
+  onChange,
+}) => {
   const context = useContext(ThunderstoreContext);
   const { isLoading, data } = useQuery("communityList", async () => {
     const r = await apiFetch(context, "/experimental/community/");
@@ -35,21 +39,11 @@ export const CommunityPicker = React.forwardRef<
     return <Text>Failed to fetch</Text>;
   }
 
-  const options: SelectOption[] = data.results.map((community: Community) => ({
+  const options: CommunitySelectOption[] = data.results.map((community: Community) => ({
     label: community.name,
     value: community.identifier,
+    community: community,
   }));
 
-  return (
-    <Select
-      options={options}
-      search={true}
-      multiSelect={true}
-      disabled={disabled}
-      ref={ref}
-      name={name}
-    />
-  );
-});
-
-CommunityPicker.displayName = "CommunityPicker";
+  return <MultiSelect options={options} disabled={disabled} onChange={onChange} />;
+};
