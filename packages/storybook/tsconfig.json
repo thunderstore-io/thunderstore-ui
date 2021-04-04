@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "typeRoots": ["../../types", "./node_modules/@types"]
+  },
+  "include": ["./stories/**/*.tsx", "./stories/**/*.ts", "../../types/**/*.d.ts"],
+  "exclude": ["node_modules", "../../node_modules"]
+}
