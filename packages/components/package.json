@@ -2,7 +2,7 @@
   "name": "@thunderstore/components",
   "version": "0.1.0",
   "description": "Shared components for Thunderstore",
-  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/thunderstore-components",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/components",
   "main": "./dist/index",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -20,6 +20,7 @@
     "framer-motion": "^4.0.3",
     "js-cookie": "^2.2.1",
     "jszip": "^3.6.0",
+    "react": "^17.0.2",
     "react-dropzone": "^11.3.1",
     "react-hook-form": "^6.15.5",
     "react-markdown": "^5.0.3",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@types/adm-zip": "^0.4.33",
     "@types/js-cookie": "^2.2.6",
+    "@types/react": "^17.0.3",
     "typescript": "^4.2.3"
   }
 }
