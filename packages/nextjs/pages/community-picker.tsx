@@ -1,4 +1,4 @@
-import { Community, MultiCommunityPicker } from "thunderstore-components";
+import { Community, MultiCommunityPicker } from "@thunderstore/components";
 import React, { useState } from "react";
 import { Box, Button, List, ListItem } from "@chakra-ui/react";
 

@@ -1,4 +1,4 @@
-import { TeamPicker } from "thunderstore-components";
+import { TeamPicker } from "@thunderstore/components";
 import React, { useState } from "react";
 import { Box, Button, Text } from "@chakra-ui/react";
 

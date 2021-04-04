@@ -1,13 +1,14 @@
 {
-  "name": "thunderstore-components",
+  "name": "@thunderstore/components",
   "version": "0.1.0",
   "description": "Shared components for Thunderstore",
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/thunderstore-components",
-  "main": "./dist/index.js",
+  "main": "./dist/index",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.4.1",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@types/adm-zip": "^0.4.33",
-    "@types/js-cookie": "^2.2.6"
+    "@types/js-cookie": "^2.2.6",
+    "typescript": "^4.2.3"
   }
 }

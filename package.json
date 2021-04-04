@@ -2,8 +2,7 @@
   "private": true,
   "repository": "https://github.com/thunderstore-io/thunderstore-ui",
   "workspaces": [
-    "nextjs",
-    "thunderstore-components"
+    "packages/*"
   ],
   "dependencies": {
     "react": "^17.0.2",

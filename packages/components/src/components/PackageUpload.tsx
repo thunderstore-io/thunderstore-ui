@@ -139,9 +139,15 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
                       defaultValue={null}
                       control={control}
                     />
-                    {errors.communities?.message && (
-                      <FormErrorMessage>{errors.communities.message}</FormErrorMessage>
-                    )}
+                    {errors.communities &&
+                      errors.communities.map(
+                        (value, index) =>
+                          value && (
+                            <FormErrorMessage key={index}>
+                              {value.message}
+                            </FormErrorMessage>
+                          )
+                      )}
                   </FormControl>
                   <FormControl isInvalid={!!errors.has_nsfw_content}>
                     <Checkbox
@@ -281,7 +287,7 @@ export const PackageUpload: React.FC<Record<string, never>> = () => {
     return (
       <FileUpload
         onUpload={(files) => {
-          setFile(files[0]);
+          setFile(files[0] || null);
         }}
         accept="application/zip"
       />
