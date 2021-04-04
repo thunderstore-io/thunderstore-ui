@@ -9,7 +9,10 @@ type TeamSelectOption = SelectOption & {
   teamName: string;
 };
 
-type TeamPickerProps = Pick<SelectProps<TeamSelectOption>, "disabled" | "onChange">;
+export type TeamPickerProps = Pick<
+  SelectProps<TeamSelectOption>,
+  "disabled" | "onChange"
+>;
 
 export const TeamPicker: React.FC<TeamPickerProps> = ({
   disabled = false,
