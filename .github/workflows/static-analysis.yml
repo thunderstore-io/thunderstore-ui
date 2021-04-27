@@ -14,7 +14,17 @@ on:
 jobs:
   eslint:
     name: ESLint
-    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.head.repo.fork)
+    if: (
+          github.event_name != 'pull_request' && (
+            github.event_name != 'push' ||
+            github.actor != 'dependabot[bot]'
+          )
+        ) || (
+          github.event_name == 'pull_request' && (
+            github.event.head.repo.fork ||
+            github.actor == 'dependabot[bot]'
+          )
+        )
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,7 +44,18 @@ jobs:
 
   codeql:
     name: CodeQL
-    if: github.event_name != 'pull_request' || (github.event_name == 'pull_request' && github.event.head.repo.fork && github.base_ref == 'master')
+    if: (
+          github.event_name != 'pull_request' && (
+            github.event_name != 'push' ||
+            github.actor != 'dependabot[bot]'
+          )
+        ) || (
+          github.event_name == 'pull_request' &&
+          github.base_ref == 'master' && (
+            github.event.head.repo.fork ||
+            github.actor == 'dependabot[bot]'
+          )
+        )
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
