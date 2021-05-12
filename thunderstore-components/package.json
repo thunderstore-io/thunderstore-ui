@@ -16,7 +16,7 @@
     "adm-zip": "^0.5.3",
     "chakra-ui-markdown-renderer": "^1.1.0",
     "downshift": "^6.1.1",
-    "framer-motion": "^4.0.3",
+    "framer-motion": "^4.1.16",
     "js-cookie": "^2.2.1",
     "jszip": "^3.6.0",
     "react-dropzone": "^11.3.1",
