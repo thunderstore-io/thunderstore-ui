@@ -10,23 +10,23 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@chakra-ui/react": "^1.6.0",
+    "@chakra-ui/react": "^1.6.3",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
-    "adm-zip": "^0.5.3",
-    "chakra-ui-markdown-renderer": "^1.1.0",
+    "adm-zip": "^0.5.5",
+    "chakra-ui-markdown-renderer": "^3.0.1",
     "downshift": "^6.1.3",
     "framer-motion": "^4.1.17",
     "js-cookie": "^2.2.1",
     "jszip": "^3.6.0",
-    "react-dropzone": "^11.3.1",
-    "react-hook-form": "^6.15.5",
-    "react-markdown": "^5.0.3",
-    "react-query": "^3.12.1",
+    "react-dropzone": "^11.3.2",
+    "react-hook-form": "^7.8.4",
+    "react-markdown": "^6.0.2",
+    "react-query": "^3.17.0",
     "remark-gfm": "^1.0.0"
   },
   "devDependencies": {
-    "@types/adm-zip": "^0.4.33",
+    "@types/adm-zip": "^0.4.34",
     "@types/js-cookie": "^2.2.6"
   }
 }

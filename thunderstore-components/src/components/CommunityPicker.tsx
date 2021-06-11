@@ -39,11 +39,15 @@ export const MultiCommunityPicker: React.FC<MultiCommunityPickerProps> = ({
     return <Text>Failed to fetch</Text>;
   }
 
-  const options: CommunitySelectOption[] = data.results.map((community: Community) => ({
-    label: community.name,
-    value: community.identifier,
-    community: community,
-  }));
+  const options: CommunitySelectOption[] = data.results.map(
+    (community: Community) => ({
+      label: community.name,
+      value: community.identifier,
+      community: community,
+    })
+  );
 
-  return <MultiSelect options={options} disabled={disabled} onChange={onChange} />;
+  return (
+    <MultiSelect options={options} disabled={disabled} onChange={onChange} />
+  );
 };

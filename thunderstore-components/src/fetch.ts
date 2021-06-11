@@ -11,7 +11,7 @@ export const apiFetch = async (
 
   const apiToken = localStorage.getItem("apiToken");
   const sessionToken = Cookies.get("sessionid");
-  if (isDevelopment && apiToken) {
+  if (apiToken && isDevelopment) {
     headers.append("Authorization", `Bearer ${apiToken}`);
   } else if (sessionToken !== null) {
     headers.append("Authorization", `Session ${sessionToken}`);
