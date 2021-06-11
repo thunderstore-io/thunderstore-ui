@@ -21,7 +21,7 @@
     "jszip": "^3.6.0",
     "react-dropzone": "^11.3.1",
     "react-hook-form": "^6.15.5",
-    "react-markdown": "^5.0.3",
+    "react-markdown": "^6.0.2",
     "react-query": "^3.12.1",
     "remark-gfm": "^1.0.0"
   },
