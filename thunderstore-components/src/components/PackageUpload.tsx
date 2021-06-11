@@ -47,15 +47,21 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
   readmeContent,
   modZip,
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose: closeDrawer } = useDisclosure();
   const btnRef = React.useRef<HTMLButtonElement>(null);
   const {
     register,
     handleSubmit,
     formState,
     control,
+    reset,
   } = useForm<PackageUploadFormInputs>();
   const context = useContext(ThunderstoreContext);
+
+  const onClose = () => {
+    closeDrawer();
+    reset();
+  };
 
   return (
     <>
