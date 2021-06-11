@@ -54,7 +54,6 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
     handleSubmit,
     formState,
     control,
-    errors,
   } = useForm<PackageUploadFormInputs>();
   const context = useContext(ThunderstoreContext);
 
@@ -101,34 +100,35 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
             >
               <DrawerBody>
                 <Stack>
-                  <FormControl isInvalid={!!errors.author_name}>
+                  <FormControl isInvalid={!!formState.errors.author_name}>
                     <FormLabel>Team</FormLabel>
                     <Controller
                       name="author_name"
-                      render={(props) => (
+                      render={({ field }) => (
                         <TeamPicker
                           onChange={(option) =>
-                            props.onChange(option?.teamName || null)
+                            field.onChange(option?.teamName || null)
                           }
                           disabled={formState.isSubmitting}
                         />
                       )}
                       rules={{ required: "Team is required" }}
-                      defaultValue={null}
                       control={control}
                     />
-                    {errors.author_name?.message && (
-                      <FormErrorMessage>{errors.author_name.message}</FormErrorMessage>
+                    {formState.errors.author_name?.message && (
+                      <FormErrorMessage>
+                        {formState.errors.author_name.message}
+                      </FormErrorMessage>
                     )}
                   </FormControl>
-                  <FormControl isInvalid={!!errors.communities}>
+                  <FormControl isInvalid={!!formState.errors.communities}>
                     <FormLabel>Communities</FormLabel>
                     <Controller
                       name="communities"
-                      render={(props) => (
+                      render={({ field }) => (
                         <MultiCommunityPicker
                           onChange={(options) =>
-                            props.onChange(
+                            field.onChange(
                               options.map((option) => option.community.identifier)
                             )
                           }
@@ -136,24 +136,24 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
                         />
                       )}
                       rules={{ required: "At least one community is required" }}
-                      defaultValue={null}
                       control={control}
                     />
-                    {errors.communities?.message && (
-                      <FormErrorMessage>{errors.communities.message}</FormErrorMessage>
+                    {formState.errors.communities?.message && (
+                      <FormErrorMessage>
+                        {formState.errors.communities.message}
+                      </FormErrorMessage>
                     )}
                   </FormControl>
-                  <FormControl isInvalid={!!errors.has_nsfw_content}>
+                  <FormControl isInvalid={!!formState.errors.has_nsfw_content}>
                     <Checkbox
-                      name="has_nsfw_content"
-                      ref={register}
+                      {...register("has_nsfw_content")}
                       disabled={formState.isSubmitting}
                     >
                       Has NSFW content
                     </Checkbox>
-                    {errors.has_nsfw_content?.message && (
+                    {formState.errors.has_nsfw_content?.message && (
                       <FormErrorMessage>
-                        {errors.has_nsfw_content.message}
+                        {formState.errors.has_nsfw_content.message}
                       </FormErrorMessage>
                     )}
                   </FormControl>
