@@ -49,13 +49,8 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
 }) => {
   const { isOpen, onOpen, onClose: closeDrawer } = useDisclosure();
   const btnRef = React.useRef<HTMLButtonElement>(null);
-  const {
-    register,
-    handleSubmit,
-    formState,
-    control,
-    reset,
-  } = useForm<PackageUploadFormInputs>();
+  const { register, handleSubmit, formState, control, reset } =
+    useForm<PackageUploadFormInputs>();
   const context = useContext(ThunderstoreContext);
 
   const onClose = () => {
@@ -135,7 +130,9 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
                         <MultiCommunityPicker
                           onChange={(options) =>
                             field.onChange(
-                              options.map((option) => option.community.identifier)
+                              options.map(
+                                (option) => option.community.identifier
+                              )
                             )
                           }
                           disabled={formState.isSubmitting}

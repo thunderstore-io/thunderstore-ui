@@ -90,7 +90,9 @@ export const Select = <T extends SelectOption = SelectOption>({
             {filteredOptions.map((option, index) => (
               <ListItem
                 key={`${option.value}${index}`}
-                bg={highlightedIndex === index ? highlightedBackground : "inherit"}
+                bg={
+                  highlightedIndex === index ? highlightedBackground : "inherit"
+                }
                 px={2}
                 py={1}
                 {...getItemProps({ item: option, index })}
@@ -236,7 +238,9 @@ export const MultiSelect = <T extends SelectOption = SelectOption>({
             {filteredOptions.map((option, index) => (
               <ListItem
                 key={`${option.value}${index}`}
-                bg={highlightedIndex === index ? highlightedBackground : "inherit"}
+                bg={
+                  highlightedIndex === index ? highlightedBackground : "inherit"
+                }
                 px={2}
                 py={1}
                 {...getItemProps({ item: option, index })}

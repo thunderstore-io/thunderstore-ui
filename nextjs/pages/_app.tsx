@@ -6,7 +6,8 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     <RootWrapper
       theme={theme}
       thunderstoreProviderValue={{
-        apiUrl: process.env.NEXT_PUBLIC_API_URL || "https://thunderstore.io/api/",
+        apiUrl:
+          process.env.NEXT_PUBLIC_API_URL || "https://thunderstore.io/api/",
       }}
     >
       <Component {...pageProps} />

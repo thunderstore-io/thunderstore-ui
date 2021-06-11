@@ -1,4 +1,8 @@
-import { ChakraProvider, ChakraProviderProps, CSSReset } from "@chakra-ui/react";
+import {
+  ChakraProvider,
+  ChakraProviderProps,
+  CSSReset,
+} from "@chakra-ui/react";
 import React from "react";
 import {
   ThunderstoreProvider,

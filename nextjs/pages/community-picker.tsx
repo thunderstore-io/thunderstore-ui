@@ -25,7 +25,9 @@ const CommunityPickerPage: React.FC<Record<string, never>> = () => {
       {communities && (
         <List mb={2}>
           {communities.map((community) => (
-            <ListItem key={community.identifier}>{community.identifier}</ListItem>
+            <ListItem key={community.identifier}>
+              {community.identifier}
+            </ListItem>
           ))}
         </List>
       )}
