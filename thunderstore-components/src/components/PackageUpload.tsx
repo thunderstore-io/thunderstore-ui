@@ -100,7 +100,7 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
                   });
                 },
                 (errors, e) => {
-                  console.log(errors, e);
+                  console.error(errors, e);
                 }
               )}
             >
