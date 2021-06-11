@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import JSZip from "jszip";
 import React, { useContext, useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, NestedValue, useForm } from "react-hook-form";
 import { useQuery } from "react-query";
 import { apiFetch } from "../fetch";
 import { MultiCommunityPicker } from "./CommunityPicker";
@@ -38,7 +38,7 @@ interface PackageUploadFormProps {
 
 interface PackageUploadFormInputs {
   author_name: string;
-  communities: string[];
+  communities: NestedValue<string[]>;
   has_nsfw_content: boolean;
   categories: [];
 }
