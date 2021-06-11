@@ -9,7 +9,7 @@ interface MarkdownProps {
 
 export const Markdown: React.FC<MarkdownProps> = ({ children }) => {
   return (
-    <ReactMarkdown plugins={[gfm]} renderers={ChakraUIRenderer()}>
+    <ReactMarkdown plugins={[gfm]} components={ChakraUIRenderer()}>
       {children}
     </ReactMarkdown>
   );
