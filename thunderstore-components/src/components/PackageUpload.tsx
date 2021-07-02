@@ -14,6 +14,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Heading,
+  Progress,
   Stack,
   Text,
   useDisclosure,
@@ -291,7 +292,12 @@ export const PackageUpload: React.FC<Record<string, never>> = () => {
     );
   } else if (!zip) {
     // Second state, has selected a file but it has not been decompressed
-    return <Text>Decompressing...</Text>;
+    return (
+      <Box>
+        <Text>Decompressing...</Text>
+        <Progress isIndeterminate />
+      </Box>
+    );
   } else if (readmeContent !== null) {
     // Third state, the file has been validated and decompressed
     return <PackageUploadForm readmeContent={readmeContent} modZip={file} />;
