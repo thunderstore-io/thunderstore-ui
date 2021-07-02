@@ -10,7 +10,7 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@chakra-ui/react": "^1.6.3",
+    "@chakra-ui/react": "^1.6.4",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "adm-zip": "^0.5.5",
@@ -19,10 +19,10 @@
     "framer-motion": "^4.1.17",
     "js-cookie": "^2.2.1",
     "jszip": "^3.6.0",
-    "react-dropzone": "^11.3.2",
-    "react-hook-form": "^7.9.0",
+    "react-dropzone": "^11.3.4",
+    "react-hook-form": "^7.10.0",
     "react-markdown": "^6.0.2",
-    "react-query": "^3.17.2",
+    "react-query": "^3.18.1",
     "remark-gfm": "^1.0.0"
   },
   "devDependencies": {
