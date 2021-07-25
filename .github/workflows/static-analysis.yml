@@ -12,8 +12,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  eslint:
-    name: ESLint
+  get-node-version:
+    name: Get Node version
     if: (
           github.event_name != 'pull_request' && (
             github.event_name != 'push' ||
@@ -21,10 +21,26 @@ jobs:
           )
         ) || (
           github.event_name == 'pull_request' && (
-            github.event.head.repo.fork ||
+            github.event.base.repo.id != github.event.head.repo.id ||
             github.actor == 'dependabot[bot]'
           )
         )
+    runs-on: ubuntu-latest
+    outputs:
+      node-version: ${{ steps.get-node-version.outputs.node-version }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check get-node-version version
+        uses: ./.github/actions/get-node-version
+        with:
+          package-json: .github/actions/get-node-version/package.json
+      - name: Get Node version
+        id: get-node-version
+        uses: ./.github/actions/get-node-version
+
+  eslint:
+    name: ESLint
+    needs: get-node-version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,7 +48,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
-          node-version: "14"
+          node-version: ${{ needs.get-node-version.outputs.node-version }}
       - name: Install yarn dependencies
         run: yarn install
       - name: Run ESLint
@@ -45,17 +61,16 @@ jobs:
   codeql:
     name: CodeQL
     if: (
-          github.event_name != 'pull_request' && (
-            github.event_name != 'push' ||
-            github.actor != 'dependabot[bot]'
-          )
-        ) || (
-          github.event_name == 'pull_request' &&
-          github.base_ref == 'master' && (
-            github.event.head.repo.fork ||
-            github.actor == 'dependabot[bot]'
-          )
+        github.event_name != 'pull_request' && (
+          github.event_name != 'push' ||
+          github.actor != 'dependabot[bot]'
         )
+      ) || (
+        github.event_name == 'pull_request' && (
+          github.event.base.repo.id != github.event.head.repo.id ||
+          github.actor == 'dependabot[bot]'
+        )
+      )
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

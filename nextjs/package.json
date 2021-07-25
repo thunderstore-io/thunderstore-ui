@@ -11,5 +11,8 @@
   "dependencies": {
     "next": "^11.0.1",
     "thunderstore-components": "^0.1.0"
+  },
+  "devDependencies": {
+    "eslint-config-next": "^11.0.1"
   }
 }

@@ -1,0 +1,13 @@
+name: "Get Node version"
+description: "Get the current Node version of the project"
+inputs:
+  package-json:
+    description: "Path to the package.json file"
+    required: true
+    default: package.json
+outputs:
+  node-version:
+    description: "The major Node version of the project"
+runs:
+  using: docker
+  image: "Dockerfile"
