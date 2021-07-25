@@ -6,7 +6,7 @@
     "thunderstore-components"
   ],
   "engines": {
-    "node": "^16.0.0"
+    "node": "^16.4.0"
   },
   "dependencies": {
     "react": "^17.0.2",
