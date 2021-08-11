@@ -15,7 +15,7 @@
     "@emotion/styled": "^11.3.0",
     "adm-zip": "^0.5.5",
     "chakra-ui-markdown-renderer": "^3.0.1",
-    "downshift": "^6.1.6",
+    "downshift": "^6.1.7",
     "framer-motion": "^4.1.17",
     "js-cookie": "^3.0.0",
     "jszip": "^3.7.1",
