@@ -4097,10 +4097,10 @@ react-markdown@^6.0.3:
     unist-util-visit "^2.0.0"
     vfile "^4.0.0"
 
-react-query@^3.19.4:
-  version "3.19.4"
-  resolved "https://registry.yarnpkg.com/react-query/-/react-query-3.19.4.tgz#67b97470446bd0315d02066debec7775cac83f29"
-  integrity sha512-/jQXoYv2IqWnYx665M1da/M6EFaaSDtP8jVqcCFk3vhpJsNYYwFG9vPjqIUv/GRpKp4qzk+qwTkJfF/bHeBuZQ==
+react-query@^3.19.5:
+  version "3.19.5"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-3.19.5.tgz#eeb8b122c075abe69775ef3b5a4307f5cadfd320"
+  integrity sha512-RMYc8ybtYRSagvOISL2Yz+GG0dcCajDYUzBv/N8jABmudzq5bqDO9yOSqOgXQRGzngIPI8321fzQ85SG+kq+0w==
   dependencies:
     "@babel/runtime" "^7.5.5"
     broadcast-channel "^3.4.1"
