@@ -9,7 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "^11.0.1",
+    "next": "^11.1.0",
     "thunderstore-components": "^0.1.0"
   },
   "devDependencies": {

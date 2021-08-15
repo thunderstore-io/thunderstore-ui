@@ -1,4 +1,4 @@
-import { AppProps } from "next/dist/next-server/lib/router/router";
+import { AppProps } from "next/app";
 import { RootWrapper, theme } from "thunderstore-components";
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
