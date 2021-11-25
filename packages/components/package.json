@@ -2,9 +2,13 @@
   "name": "@thunderstore/components",
   "version": "0.1.0",
   "description": "Shared components for Thunderstore",
-  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/thunderstore-components",
-  "main": "./dist/index.js",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/components",
+  "main": "dist/thunderstore-components.cjs.js",
+  "module": "dist/thunderstore-components.esm.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"

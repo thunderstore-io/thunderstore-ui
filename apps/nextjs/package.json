@@ -1,7 +1,7 @@
 {
   "name": "@thunderstore/nextjs",
   "version": "0.1.0",
-  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/nextjs",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/apps/nextjs",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,10 +9,11 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "^11.1.0",
-    "thunderstore-components": "^0.1.0"
+    "@thunderstore/components": "^0.1.0",
+    "next": "^11.1.0"
   },
   "devDependencies": {
+    "@preconstruct/next": "^3.0.1",
     "eslint-config-next": "^11.1.2"
   }
 }
