@@ -1,7 +1,11 @@
 module.exports = {
   "stories": [
     "../stories/**/*.stories.mdx",
-    "../stories/**/*.stories.@(js|jsx|ts|tsx)"
+    {
+      "directory": "../stories/components",
+      "files": "*.stories.*",
+      "titlePrefix": "@thunderstore/components"
+    },
   ],
   "addons": [
     "@storybook/addon-links",

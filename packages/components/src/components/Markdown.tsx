@@ -5,6 +5,9 @@ interface MarkdownProps {
   children: string;
 }
 
+/**
+ * Wrapper for rendering markdown strings as proper markup.
+ */
 export const Markdown: React.FC<MarkdownProps> = ({ children }) => {
   const [markup, setMarkup] = React.useState<JSX.Element>();
 

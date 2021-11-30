@@ -39,6 +39,7 @@
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
     "@snek-at/storybook-addon-chakra-ui": "^1.0.0-beta.1",
+    "@thunderstore/components": "^0.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "webpack": "^4.46.0"
