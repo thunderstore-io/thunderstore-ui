@@ -1,5 +1,5 @@
 import { AppProps } from "next/app";
-import { RootWrapper, theme } from "thunderstore-components";
+import { RootWrapper, theme } from "@thunderstore/components";
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (

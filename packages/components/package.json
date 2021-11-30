@@ -1,10 +1,14 @@
 {
-  "name": "thunderstore-components",
+  "name": "@thunderstore/components",
   "version": "0.1.0",
   "description": "Shared components for Thunderstore",
-  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/thunderstore-components",
-  "main": "./dist/index.js",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/components",
+  "main": "dist/thunderstore-components.cjs.js",
+  "module": "dist/thunderstore-components.esm.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"
@@ -13,17 +17,20 @@
     "@chakra-ui/react": "^1.6.8",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
+    "@types/react": "^17.0.19",
     "adm-zip": "^0.5.7",
-    "chakra-ui-markdown-renderer": "^3.0.1",
+    "chakra-ui-markdown-renderer": "^4.0.0",
     "downshift": "^6.1.7",
     "framer-motion": "^4.1.17",
     "js-cookie": "^3.0.0",
     "jszip": "^3.7.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.4",
     "react-hook-form": "^7.15.4",
-    "react-markdown": "^6.0.3",
+    "react-markdown": "^7.1.0",
     "react-query": "^3.21.1",
-    "remark-gfm": "^1.0.0"
+    "remark-gfm": "^3.0.1"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.4.34",

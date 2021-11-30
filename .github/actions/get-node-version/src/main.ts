@@ -20,7 +20,7 @@ import {readFileSync} from "fs";
   }
 
   const typesVersionRangeString = semver.validRange(
-    packageJson.devDependencies["@types/node"]
+    packageJson.dependencies["@types/node"]
   );
   if (!typesVersionRangeString) {
     setFailed(`Invalid types version range: ${typesVersionRangeString}`);

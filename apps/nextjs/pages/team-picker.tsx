@@ -1,11 +1,11 @@
-import { Community, MultiCommunityPicker } from "thunderstore-components";
+import { TeamPicker } from "@thunderstore/components";
 import React, { useState } from "react";
-import { Box, Button, List, ListItem } from "@chakra-ui/react";
+import { Box, Button, Text } from "@chakra-ui/react";
 
 const CommunityPickerPage: React.FC<Record<string, never>> = () => {
   const [disabled, setDisabled] = useState(false);
   const [disabling, setDisabling] = useState(false);
-  const [communities, setCommunities] = useState<Community[]>([]);
+  const [teamName, setTeamName] = useState<string | null>(null);
 
   return (
     <Box p={2}>
@@ -22,20 +22,10 @@ const CommunityPickerPage: React.FC<Record<string, never>> = () => {
       >
         {disabled ? "Enable" : "Disable"}
       </Button>
-      {communities && (
-        <List mb={2}>
-          {communities.map((community) => (
-            <ListItem key={community.identifier}>
-              {community.identifier}
-            </ListItem>
-          ))}
-        </List>
-      )}
-      <MultiCommunityPicker
+      <Text>Team name: {teamName}</Text>
+      <TeamPicker
         disabled={disabled}
-        onChange={(options) => {
-          setCommunities(options.map((option) => option.community));
-        }}
+        onChange={(option) => setTeamName(option?.teamName || null)}
       />
     </Box>
   );

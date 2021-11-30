@@ -1,4 +1,4 @@
-import { PackageUpload } from "thunderstore-components";
+import { PackageUpload } from "@thunderstore/components";
 import React from "react";
 
 const PackageUploadPage: React.FC<Record<string, never>> = () => {

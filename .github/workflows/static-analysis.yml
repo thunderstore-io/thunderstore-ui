@@ -52,7 +52,7 @@ jobs:
       - name: Install yarn dependencies
         run: yarn install
       - name: Run ESLint
-        run: yarn run eslint nextjs thunderstore-components -f node_modules/@microsoft/eslint-formatter-sarif/sarif.js -o results.sarif || ":"
+        run: yarn run eslint apps packages -f node_modules/@microsoft/eslint-formatter-sarif/sarif.js -o results.sarif || ":"
       - name: Upload SARIF
         uses: github/codeql-action/upload-sarif@v1
         with:

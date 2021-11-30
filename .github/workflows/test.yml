@@ -47,11 +47,7 @@ jobs:
             yarn-${{ runner.os }}-
       - name: Install Yarn dependencies
         run: yarn install --frozen-lockfile
-      - name: Build thunderstore-components
-        run: |
-          cd thunderstore-components
-          yarn build
-      - name: Build nextjs
-        run: |
-          cd nextjs
-          yarn build
+      - name: Build @thunderstore/components
+        run: yarn workspace @thunderstore/components build
+      - name: Build @thunderstore/nextjs
+        run: yarn workspace @thunderstore/nextjs build
