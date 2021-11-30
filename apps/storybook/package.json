@@ -34,6 +34,11 @@
     "@babel/core": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-typescript": "^7.16.0",
+    "@chakra-ui/icons": "^1.1.1",
+    "@chakra-ui/system": "^1.8.2",
+    "@emotion/react": "^11.7.0",
+    "@emotion/styled": "^11.6.0",
+    "@snek-at/storybook-addon-chakra-ui": "^1.0.0-beta.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "webpack": "^4.46.0"

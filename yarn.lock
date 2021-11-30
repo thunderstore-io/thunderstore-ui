@@ -1303,6 +1303,14 @@
   dependencies:
     "@chakra-ui/utils" "1.9.1"
 
+"@chakra-ui/icons@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/icons/-/icons-1.1.1.tgz#e4b191fd38be999c4434ff2b1fb69a5eaf3cf226"
+  integrity sha512-/+u6euCOFw6J1DZW7NcVFtib4mygJBoqRdsKiU1Z3uiTC+zQTBzcCt54NQ+kK8rhuNzJ+odahnt/AbjBJgZ+5A==
+  dependencies:
+    "@chakra-ui/icon" "1.2.1"
+    "@types/react" "^17.0.15"
+
 "@chakra-ui/image@1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@chakra-ui/image/-/image-1.1.1.tgz#39ecb77155e9e1fbbc68e825eb46405808805a8c"
@@ -1467,7 +1475,7 @@
   dependencies:
     "@chakra-ui/utils" "^1.9.1"
 
-"@chakra-ui/react@^1.6.8":
+"@chakra-ui/react@^1.6.6", "@chakra-ui/react@^1.6.8":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@chakra-ui/react/-/react-1.7.2.tgz#7613f33d4adc2384d2fa8675cb6e94780e5c4cbe"
   integrity sha512-2RxJHqYLSSB/dQQ9M4APxMopPfsU89A++63v8U8jiR7J8sUaa6Ded9ypTiIUY09J8v7mJAus4/ZSJxG7Zfd7aA==
@@ -1580,7 +1588,7 @@
     "@chakra-ui/checkbox" "1.6.1"
     "@chakra-ui/utils" "1.9.1"
 
-"@chakra-ui/system@1.8.2":
+"@chakra-ui/system@1.8.2", "@chakra-ui/system@^1.8.2":
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/@chakra-ui/system/-/system-1.8.2.tgz#243820e8b0000a6874cc57218245462d11001695"
   integrity sha512-k/43bv5exPGc6hBVcq5dUdGC+0pmQthJP/VqcTUt0oIc3oyoVSAnJhpmBkFHXYNqj6yYd2K7qdD2PjjbZ5KCLA==
@@ -1798,7 +1806,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.5.tgz#2c40f81449a4e554e9fc6396910ed4843ec2be50"
   integrity sha512-igX9a37DR2ZPGYtV6suZ6whr8pTFtyHL3K/oLUotxpSVO2ASaprmAe2Dkq7tBo7CRY7MMDrAa9nuQP9/YG8FxQ==
 
-"@emotion/react@^11.4.1":
+"@emotion/react@^11", "@emotion/react@^11.4.1", "@emotion/react@^11.7.0":
   version "11.7.0"
   resolved "https://registry.yarnpkg.com/@emotion/react/-/react-11.7.0.tgz#b179da970ac0e8415de3ac165deadf8d9c4bf89f"
   integrity sha512-WL93hf9+/2s3cA1JVJlz8+Uy6p6QWukqQFOm2OZO5ki51hfucHMOmbSjiyC3t2Y4RI8XUmBoepoc/24ny/VBbA==
@@ -1861,7 +1869,7 @@
     "@emotion/styled-base" "^10.3.0"
     babel-plugin-emotion "^10.0.27"
 
-"@emotion/styled@^11.3.0":
+"@emotion/styled@^11", "@emotion/styled@^11.3.0", "@emotion/styled@^11.6.0":
   version "11.6.0"
   resolved "https://registry.yarnpkg.com/@emotion/styled/-/styled-11.6.0.tgz#9230d1a7bcb2ebf83c6a579f4c80e0664132d81d"
   integrity sha512-mxVtVyIOTmCAkFbwIp+nCjTXJNgcz4VWkOYQro87jE2QBTydnkiYusMrRGFtzuruiGK4dDaNORk4gH049iiQuw==
@@ -2346,6 +2354,18 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.0.tgz#7f698254aadf921e48dda8c0a6b304026b8a9323"
   integrity sha512-JLo+Y592QzIE+q7Dl2pMUtt4q8SKYI5jDrZxrozEQxnGVOyYE+GWK9eLkwTaeN9DDctlaRAQ3TBmzZ1qdLE30A==
 
+"@snek-at/storybook-addon-chakra-ui@^1.0.0-beta.1":
+  version "1.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@snek-at/storybook-addon-chakra-ui/-/storybook-addon-chakra-ui-1.0.0-beta.1.tgz#ace030aebb523ab7b355b54756fa353eb0209f5f"
+  integrity sha512-JMPsULgbmXOr3v3ePgS+QJlk/7dw+YtGm4xkG5HPr/warLwPWuGXIavrEmSCUPYVP0redSDlNksT5wqMoYHQow==
+  dependencies:
+    "@chakra-ui/react" "^1.6.6"
+    "@emotion/react" "^11"
+    "@emotion/styled" "^11"
+    "@storybook/addons" "^6.3.7"
+    framer-motion "^4"
+    react "^17.0.2"
+
 "@storybook/addon-actions@6.4.3", "@storybook/addon-actions@^6.4.3":
   version "6.4.3"
   resolved "https://registry.yarnpkg.com/@storybook/addon-actions/-/addon-actions-6.4.3.tgz#324b67fecd72a259dba49a4c34c5cece400e66d9"
@@ -2568,6 +2588,23 @@
     "@storybook/csf" "0.0.2--canary.87bc651.0"
     "@storybook/router" "6.4.3"
     "@storybook/theming" "6.4.3"
+    "@types/webpack-env" "^1.16.0"
+    core-js "^3.8.2"
+    global "^4.4.0"
+    regenerator-runtime "^0.13.7"
+
+"@storybook/addons@^6.3.7":
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/@storybook/addons/-/addons-6.4.1.tgz#841ed6f0daae7333f85c25a9399213fcb58f521a"
+  integrity sha512-gTCOuQnkqh0Wr39G4jZ79lqDc/U6cQX2wNKOfOsQN4hMKKn0lzn14GQ03jwie1+3Y1Fe/Q2P348Y9o0zms/z+w==
+  dependencies:
+    "@storybook/api" "6.4.1"
+    "@storybook/channels" "6.4.1"
+    "@storybook/client-logger" "6.4.1"
+    "@storybook/core-events" "6.4.1"
+    "@storybook/csf" "0.0.2--canary.87bc651.0"
+    "@storybook/router" "6.4.1"
+    "@storybook/theming" "6.4.1"
     "@types/webpack-env" "^1.16.0"
     core-js "^3.8.2"
     global "^4.4.0"
@@ -3389,7 +3426,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^17.0.19":
+"@types/react@*", "@types/react@^17.0.15", "@types/react@^17.0.19":
   version "17.0.37"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.37.tgz#6884d0aa402605935c397ae689deed115caad959"
   integrity sha512-2FS1oTqBGcH/s0E+CjrCCR9+JMpsu9b69RTFO+40ua43ZqP5MmQ4iUde/dMjWR909KxZwmOQIFq6AV6NjEG5xg==
@@ -6677,7 +6714,7 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-framer-motion@^4.1.17:
+framer-motion@^4, framer-motion@^4.1.17:
   version "4.1.17"
   resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-4.1.17.tgz#4029469252a62ea599902e5a92b537120cc89721"
   integrity sha512-thx1wvKzblzbs0XaK2X0G1JuwIdARcoNOW7VVwjO8BUltzXPyONGAElLu6CiCScsOQRI7FIk/45YTFtJw5Yozw==

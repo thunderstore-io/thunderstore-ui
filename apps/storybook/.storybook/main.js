@@ -5,7 +5,8 @@ module.exports = {
   ],
   "addons": [
     "@storybook/addon-links",
-    "@storybook/addon-essentials"
+    "@storybook/addon-essentials",
+    "@snek-at/storybook-addon-chakra-ui",  // Must come after @storybook addons
   ],
   "framework": "@storybook/react",
 };
