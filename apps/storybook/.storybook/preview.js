@@ -6,4 +6,12 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  backgrounds: {
+    default: "thunderstore",
+    values: [
+      { name: "thunderstore", value: "#242e48" },
+      { name: "light", value: "#f8f8f8" },
+      { name: "dark", value: "#333" },
+    ],
+  },
 }
