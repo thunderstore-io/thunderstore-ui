@@ -19,8 +19,6 @@ ${"```"}js
 console.log("Hello, World!");
 ${"```"}
 
-  
-
 ${"```"}python
 print('Hello, World!')
 ${"```"}
@@ -33,15 +31,11 @@ const listContent = `
     * Subitem
 * Yet another item
 
-  
-
 1. First item
 2. Second item
     1. Subitem
     2. Subitem
 3. Last item
-
-  
 
 - [x] Read ticket thoroughly
 - [ ] Design implementation
