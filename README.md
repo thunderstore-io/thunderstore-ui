@@ -76,3 +76,24 @@ VS Code may have problem detecting installed packages in this monorepo/workspace
 setup. Installing
 [Monorepo Workspace extension](https://marketplace.visualstudio.com/items?itemName=folke.vscode-monorepo-workspace)
 may solve them.
+
+## Storybook
+
+[Storybook](https://storybook.js.org/docs/react/get-started/introduction)
+provides a sandbox to build UI components in isolation, without having to start
+up the whole service stack. Additionally it showcases the existing components,
+promoting reusability.
+
+To start Storybook, run `yarn workspace @thunderstore/storybook storybook`.
+Storybook can then be accessed at [http://localhost:6006/].
+
+When creating new components for `@thunderstore/components`, add stories for
+them by creating files under `apps/storybook/stories/components`. See the
+existing files for examples.
+
+To add stories for other packages, first edit the `stories` setting specified
+at `apps/storybook/.storybook/main.js` so Storybook is aware of your story
+files.
+
+To upgrade Storybook when it informs you about new version being available, run
+the given `npx sb@latest upgrade` command in `apps/storybook` directory.

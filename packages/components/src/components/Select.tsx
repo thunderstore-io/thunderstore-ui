@@ -24,6 +24,9 @@ export interface SelectProps<T extends SelectOption = SelectOption> {
   onChange(option: T | null): void;
 }
 
+/**
+ * Select element that supports filtering options by text search.
+ */
 export const Select = <T extends SelectOption = SelectOption>({
   options,
   disabled = false,
@@ -113,6 +116,11 @@ export interface MultiSelectProps<T extends SelectOption = SelectOption> {
   onChange(options: T[]): void;
 }
 
+/**
+ * Multiselect element that supports filtering options by text search.
+ *
+ * Selected options are shown as tags above the select component.
+ */
 export const MultiSelect = <T extends SelectOption = SelectOption>({
   options,
   disabled = false,
