@@ -40,7 +40,7 @@
 
     "composite": true,
 
-    "skipLibCheck": false,
+    "skipLibCheck": false
   },
-  "include": ["./src/**/*.ts"],
+  "include": ["./src/**/*.ts"]
 }

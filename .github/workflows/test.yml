@@ -25,6 +25,19 @@ jobs:
         id: get-node-version
         uses: ./.github/actions/get-node-version
 
+  pre-commit:
+    name: Code style check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Install pre-commit
+        run: curl https://pre-commit.com/install-local.py | python -
+      - name: Run pre-commit
+        run: ~/bin/pre-commit run --show-diff-on-failure --color=always --all-files
+
   test:
     name: Test
     runs-on: ubuntu-latest

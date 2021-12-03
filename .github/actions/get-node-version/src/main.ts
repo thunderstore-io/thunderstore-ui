@@ -1,6 +1,6 @@
 import { setOutput, setFailed, getInput } from "@actions/core";
 import semver from "semver";
-import {readFileSync} from "fs";
+import { readFileSync } from "fs";
 
 (() => {
   const inputPath = getInput("package-json");

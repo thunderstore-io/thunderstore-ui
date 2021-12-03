@@ -14,4 +14,4 @@ export const parameters = {
       { name: "dark", value: "#333" },
     ],
   },
-}
+};

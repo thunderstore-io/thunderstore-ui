@@ -97,3 +97,16 @@ files.
 
 To upgrade Storybook when it informs you about new version being available, run
 the given `npx sb@latest upgrade` command in `apps/storybook` directory.
+
+## pre-commit
+
+[Pre-commit](https://pre-commit.com/) enforces code style practices in this
+project. Choose your preferred
+[installation method](https://pre-commit.com/#install) and then run `pre-commit
+install` to enable Git hook scripts. Pre-commit will now automatically cancel
+your commits if any problems are detected, and autofix them. Stage the changed
+files to your commit and re-run the commit command.
+
+Pre-commit can be disabled for a single commit with `--no-verify` option, but
+note that CI also runs pre-commit and will fail if any problems are encountered
+at this stage.
