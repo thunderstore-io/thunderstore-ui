@@ -9,3 +9,4 @@ export * from "./components/RootWrapper";
 export * from "./components/Select";
 export * from "./components/StickyFooter";
 export * from "./components/TeamPicker";
+export * from "./components/TopBar";
