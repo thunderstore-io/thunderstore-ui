@@ -12,7 +12,7 @@
  * 3. Components automatically use myLinkLib to determine how they
  *    should render any links the contain.
  *
- * To add a new link type, follow the 4 steps defined below.
+ * To add a new link type, follow the 4 required steps defined below.
  */
 import React, { ReactElement as RE } from "react";
 
@@ -37,7 +37,7 @@ export const thunderstoreLinkProps: ThunderstoreLinkProps = {
 // Accepting any and all props is required to keep the linking
 // implementation-agnostic. E.g. an implementation with Chakra has all
 // kinds of custom properties.
-interface AnyProps {
+export interface AnyProps {
   [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
@@ -65,6 +65,9 @@ const library: LinkLibrary = {
   Index: noop,
   Package: noop,
 };
+
+// OPTIONAL STEP 5 of adding new link definitions:
+// Add the link to ./Links.tsx for easier importing.
 
 // Define LinkingContext with the no-op LinkLibrary as the default
 // value. If no overriding provider is defined in the context where the
