@@ -1,5 +1,6 @@
 import { AppProps } from "next/app";
-import { RootWrapper, theme } from "@thunderstore/components";
+import { LinkingProvider, RootWrapper, theme } from "@thunderstore/components";
+import { LinkLibrary } from "../LinkLibrary";
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
@@ -10,7 +11,9 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
           process.env.NEXT_PUBLIC_API_URL || "https://thunderstore.io/api/",
       }}
     >
-      <Component {...pageProps} />
+      <LinkingProvider value={LinkLibrary}>
+        <Component {...pageProps} />
+      </LinkingProvider>
     </RootWrapper>
   );
 }
