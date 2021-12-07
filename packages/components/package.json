@@ -29,7 +29,7 @@
     "react-dropzone": "^11.3.4",
     "react-hook-form": "^7.15.4",
     "react-markdown": "^7.1.0",
-    "react-query": "^3.21.1",
+    "react-query": "^3.34.0",
     "remark-gfm": "^3.0.1"
   },
   "devDependencies": {
