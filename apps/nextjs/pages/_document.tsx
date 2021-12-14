@@ -5,7 +5,9 @@ export default class MyDocument extends Document {
   render(): JSX.Element {
     return (
       <Html lang="en">
-        <Head />
+        <Head>
+          <link href="/css/fonts.css" rel="stylesheet" />
+        </Head>
         <body>
           <ColorModeScript initialColorMode="system" />
           <Main />
