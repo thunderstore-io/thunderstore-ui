@@ -1,5 +1,6 @@
 export { theme } from "./theme";
 export { ThunderstoreProvider } from "./components/ThunderstoreProvider";
+export * from "./components/CommunityCard";
 export * from "./components/CommunityPicker";
 export * from "./components/FileUpload";
 export * from "./components/LinkingProvider";
