@@ -1,5 +1,10 @@
 import { AppProps } from "next/app";
-import { LinkingProvider, RootWrapper, theme } from "@thunderstore/components";
+import {
+  LinkingProvider,
+  RootWrapper,
+  theme,
+  TopBar,
+} from "@thunderstore/components";
 import { LinkLibrary } from "../LinkLibrary";
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
@@ -12,6 +17,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
       }}
     >
       <LinkingProvider value={LinkLibrary}>
+        <TopBar />
         <Component {...pageProps} />
       </LinkingProvider>
     </RootWrapper>
