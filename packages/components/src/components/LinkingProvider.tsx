@@ -48,12 +48,18 @@ type NoRequiredProps = (props: AnyProps) => RE | null;
 export interface LinkLibrary {
   /** Creates a link pointing to URL prop */
   Anonymous: (props: AnyProps & { url: string }) => RE | null;
+  /** Community list view */
+  Communities: NoRequiredProps;
+  /** Community's frontpage */
+  Community: (props: AnyProps & { community: string }) => RE | null;
   /** Site's frontpage */
   Index: NoRequiredProps;
   /** Package's detail view */
   Package: (
     props: AnyProps & { community: string; package: string }
   ) => RE | null;
+  /** View for submitting new packages or versions */
+  PackageUpload: NoRequiredProps;
 }
 
 const noop = () => null;
@@ -62,8 +68,11 @@ const noop = () => null;
 // Define the link as no-op for default implementation.
 const library: LinkLibrary = {
   Anonymous: noop,
+  Communities: noop,
+  Community: noop,
   Index: noop,
   Package: noop,
+  PackageUpload: noop,
 };
 
 // OPTIONAL STEP 5 of adding new link definitions:

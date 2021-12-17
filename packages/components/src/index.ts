@@ -1,5 +1,6 @@
 export { theme } from "./theme";
 export { ThunderstoreProvider } from "./components/ThunderstoreProvider";
+export * from "./components/CommunityCard";
 export * from "./components/CommunityPicker";
 export * from "./components/FileUpload";
 export * from "./components/LinkingProvider";
@@ -9,3 +10,4 @@ export * from "./components/RootWrapper";
 export * from "./components/Select";
 export * from "./components/StickyFooter";
 export * from "./components/TeamPicker";
+export * from "./components/TopBar";

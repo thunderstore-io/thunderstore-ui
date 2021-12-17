@@ -30,8 +30,11 @@ const Link = (props: LinkProps): React.ReactElement => {
 
 const library: LinkLibrary = {
   Anonymous: (p) => Link(p),
+  Communities: (p) => Link({ ...p, url: "/communities/" }),
+  Community: (p) => Link({ ...p, url: `/c/${p.community}/` }),
   Index: (p) => Link({ ...p, url: "/" }),
-  Package: (p) => Link({ ...p, url: `/c/${p.community}/p/${p.package}` }),
+  Package: (p) => Link({ ...p, url: `/c/${p.community}/p/${p.package}/` }),
+  PackageUpload: (p) => Link({ ...p, url: "/packages/new/" }),
 };
 
 export { library as LinkLibrary };

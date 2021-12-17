@@ -26,7 +26,6 @@ export const decorators = [
       thunderstoreProviderValue={{
         apiUrl:
           process.env.NEXT_PUBLIC_API_URL || "https://thunderstore.io/api/",
-        useNextJS: false,
       }}
     >
       <LinkingProvider value={LinkLibrary}>

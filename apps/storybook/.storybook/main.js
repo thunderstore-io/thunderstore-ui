@@ -14,4 +14,5 @@ module.exports = {
     "@snek-at/storybook-addon-chakra-ui", // Must come after @storybook addons
   ],
   framework: "@storybook/react",
+  staticDirs: ["../public"],
 };

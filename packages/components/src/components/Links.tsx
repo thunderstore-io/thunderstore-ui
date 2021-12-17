@@ -17,5 +17,8 @@ const wrap = <T extends keyof LinkLibrary>(key: T): LinkLibrary[T] => {
 };
 
 export const AnonymousLink = wrap("Anonymous");
+export const CommunitiesLink = wrap("Communities");
+export const CommunityLink = wrap("Community");
 export const IndexLink = wrap("Index");
 export const PackageLink = wrap("Package");
+export const PackageUploadLink = wrap("PackageUpload");
