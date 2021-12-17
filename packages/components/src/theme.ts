@@ -30,11 +30,8 @@ export const theme = extendTheme({
         },
       },
       body: {
-        maxWidth: "1180px",
-        margin: "0 auto !important",
-        padding: "0 20px",
-        font: "500 16px/1.2 Exo2, sans-serif",
         color: white,
+        font: "500 16px/1.2 Exo2, sans-serif",
       },
       "html, body": {
         backgroundColor: blue,

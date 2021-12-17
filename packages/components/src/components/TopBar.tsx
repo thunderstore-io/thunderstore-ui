@@ -44,8 +44,7 @@ const linkStyles = {
  * user's authentication status.
  */
 export const TopBar: React.FC = () => (
-  // Position and z-index are required for frontpage's background to work.
-  <Flex align="center" h={200} pb={100} position="relative" zIndex={1}>
+  <Flex align="center" h={100}>
     <IndexLink {...baseLinkStyles} align="center" display="flex">
       <ThunderstoreLogo height="20px" mr="7px" width="20px" />
       Thunderstore

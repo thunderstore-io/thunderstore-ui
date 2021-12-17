@@ -1,28 +1,17 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { CommunityCard } from "@thunderstore/components";
 
+import { HalfPageBackground } from "../components/Background";
+import { ContentWrapper } from "../components/Wrapper";
+
 export default function Home(): JSX.Element {
   // TODO: Fetch actual data with provider.
   const { communities, downloadCount, modCount } = fakeData;
 
   return (
     <>
-      <Box
-        position="fixed"
-        w="100%"
-        h="650px"
-        zIndex={0}
-        top="0"
-        left="0"
-        borderColor="ts.lightBlue"
-        borderStyle="solid"
-        borderBottomWidth={2}
-        sx={{
-          bg: `url('/index-bg.svg') 52% 0/auto 648px no-repeat,
-               radial-gradient(56.98% 106.3% at 26.85% 43.5%, #252F4A 0%, rgba(32, 41, 65, 0) 100%)`,
-        }}
-      />
-      <Box position="relative">
+      <HalfPageBackground url="/index-bg.svg" />
+      <ContentWrapper>
         <Heading
           color="ts.orange"
           fontSize={56}
@@ -30,6 +19,7 @@ export default function Home(): JSX.Element {
           m="0 auto"
           maxW={770}
           textAlign="center"
+          pt="100px"
         >
           Download the mods you need for a variety of games
         </Heading>
@@ -52,7 +42,7 @@ export default function Home(): JSX.Element {
             <CommunityCard key={props.name} {...props} />
           ))}
         </Flex>
-      </Box>
+      </ContentWrapper>
     </>
   );
 }
