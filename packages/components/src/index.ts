@@ -6,6 +6,7 @@ export * from "./components/FileUpload";
 export * from "./components/LinkingProvider";
 export * from "./components/Markdown";
 export * from "./components/PackageUpload";
+export * from "./components/RelativeTime";
 export * from "./components/RootWrapper";
 export * from "./components/Select";
 export * from "./components/StickyFooter";

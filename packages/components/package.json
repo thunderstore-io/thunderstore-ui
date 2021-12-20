@@ -30,7 +30,8 @@
     "react-hook-form": "^7.15.4",
     "react-markdown": "^7.1.0",
     "react-query": "^3.34.0",
-    "remark-gfm": "^3.0.1"
+    "remark-gfm": "^3.0.1",
+    "s-ago": "^2.2.0"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.4.34",
