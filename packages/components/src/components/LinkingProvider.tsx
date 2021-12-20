@@ -21,6 +21,7 @@ import React, { ReactElement as RE } from "react";
 export interface ThunderstoreLinkProps {
   community?: string;
   package?: string;
+  team?: string;
 }
 
 // STEP 2 of adding new link definitions:
@@ -52,6 +53,8 @@ export interface LinkLibrary {
   Communities: NoRequiredProps;
   /** Community's frontpage */
   Community: (props: AnyProps & { community: string }) => RE | null;
+  /** Community's package listing */
+  CommunityPackages: (props: AnyProps & { community: string }) => RE | null;
   /** Site's frontpage */
   Index: NoRequiredProps;
   /** Package's detail view */
@@ -60,6 +63,8 @@ export interface LinkLibrary {
   ) => RE | null;
   /** View for submitting new packages or versions */
   PackageUpload: NoRequiredProps;
+  /** Team's public profile page */
+  Team: (props: AnyProps & { team: string }) => RE | null;
 }
 
 const noop = () => null;
@@ -70,9 +75,11 @@ const library: LinkLibrary = {
   Anonymous: noop,
   Communities: noop,
   Community: noop,
+  CommunityPackages: noop,
   Index: noop,
   Package: noop,
   PackageUpload: noop,
+  Team: noop,
 };
 
 // OPTIONAL STEP 5 of adding new link definitions:

@@ -32,9 +32,11 @@ const library: LinkLibrary = {
   Anonymous: (p) => Link(p),
   Communities: (p) => Link({ ...p, url: "/communities/" }),
   Community: (p) => Link({ ...p, url: `/c/${p.community}/` }),
+  CommunityPackages: (p) => Link({ ...p, url: `/c/${p.community}/packages/` }),
   Index: (p) => Link({ ...p, url: "/" }),
   Package: (p) => Link({ ...p, url: `/c/${p.community}/p/${p.package}/` }),
   PackageUpload: (p) => Link({ ...p, url: "/packages/new/" }),
+  Team: (p) => Link({ ...p, url: `/team/${p.team}/` }),
 };
 
 export { library as LinkLibrary };
