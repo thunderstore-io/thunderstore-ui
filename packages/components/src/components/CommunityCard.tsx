@@ -1,6 +1,7 @@
 import { Box, Flex, Image, Spacer, Text } from "@chakra-ui/react";
 import React from "react";
 
+import { formatCount } from "../utils/number";
 import { ChevronRight, DownloadIcon, ModIcon, QuestionMarkIcon } from "./Icons";
 import { CommunityLink } from "./Links";
 
@@ -96,21 +97,4 @@ const iconStyles = {
   h: "10px",
   m: "-2px 5px 0 0",
   w: "10px",
-};
-
-/**
- * Format large numbers in a human-friendly way.
- *
- * E.g. 1234 will be shown as "1.2k" and 1000000 as "1M".
- */
-const formatCount = (value: number): string => {
-  let result = value.toString();
-
-  if (value > 999999) {
-    result = `${(value / 1000000).toFixed(1)}M`;
-  } else if (value > 999) {
-    result = `${(value / 1000).toFixed(1)}k`;
-  }
-
-  return result.replace(".0", "");
 };
