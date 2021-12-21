@@ -1,8 +1,9 @@
-import { Box, Flex, Image, Spacer, Text } from "@chakra-ui/react";
+import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
 import React from "react";
 
 import { formatCount } from "../utils/number";
-import { ChevronRight, DownloadIcon, ModIcon, QuestionMarkIcon } from "./Icons";
+import { ChevronRight, DownloadIcon, ModIcon } from "./Icons";
+import { MaybeImage } from "./Internals";
 import { CommunityLink } from "./Links";
 
 interface CommunityCardProps {
@@ -21,7 +22,7 @@ export const CommunityCard: React.FC<CommunityCardProps> = (props) => {
   const { downloadCount, imageSrc, modCount, name } = props;
   return (
     <Box bg="ts.blue" {...borderStyles} borderWidth={2} w={360}>
-      <CoverImage imageSrc={imageSrc} />
+      <MaybeImage imageSrc={imageSrc} height="110px" />
 
       <Text
         {...borderStyles}
@@ -61,29 +62,6 @@ export const CommunityCard: React.FC<CommunityCardProps> = (props) => {
         </Box>
       </Flex>
     </Box>
-  );
-};
-
-/**
- * Show community's cover image or a placeholder.
- */
-const CoverImage: React.FC<Pick<CommunityCardProps, "imageSrc">> = (props) => {
-  if (!props.imageSrc) {
-    return (
-      <Flex align="center" bg="#0e1832" h="110px" justify="center">
-        <QuestionMarkIcon color="ts.lightBlue" h="50px" w="25px" />
-      </Flex>
-    );
-  }
-
-  return (
-    <Image
-      src={props.imageSrc}
-      role="presentation"
-      h="110px"
-      objectFit="cover"
-      w="100%"
-    />
   );
 };
 
