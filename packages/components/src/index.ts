@@ -1,9 +1,11 @@
 export { theme } from "./theme";
 export { ThunderstoreProvider } from "./components/ThunderstoreProvider";
+export * from "./components/BreadCrumbs";
 export * from "./components/CommunityCard";
 export * from "./components/CommunityPicker";
 export * from "./components/FileUpload";
 export * from "./components/LinkingProvider";
+export * from "./components/Links";
 export * from "./components/Markdown";
 export * from "./components/PackageUpload";
 export * from "./components/RelativeTime";

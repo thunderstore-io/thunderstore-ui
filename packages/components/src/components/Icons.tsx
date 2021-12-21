@@ -56,6 +56,16 @@ export const ModIcon: React.FC<IconProps> = (props) => (
 );
 
 /**
+ * Right-pointing double arrowhead character: »
+ */
+export const Raquo: React.FC<IconProps> = (props) => (
+  <Icon viewBox="0 0 7 16" fill="none" role="presentation" {...props}>
+    <path d="M1 9L5 5L1 1" stroke="currentColor" strokeWidth="2" />
+    <path d="M6 9L10 5L6 1" stroke="currentColor" strokeWidth="2" />
+  </Icon>
+);
+
+/**
  * Flat, single-color Thunderstore logo.
  */
 export const ThunderstoreLogo: React.FC<IconProps> = (props) => (
