@@ -60,6 +60,8 @@ jobs:
             yarn-${{ runner.os }}-
       - name: Install Yarn dependencies
         run: yarn install --frozen-lockfile
+      - name: Build @thunderstore/hooks
+        run: yarn workspace @thunderstore/hooks build
       - name: Build @thunderstore/components
         run: yarn workspace @thunderstore/components build
       - name: Build @thunderstore/nextjs
