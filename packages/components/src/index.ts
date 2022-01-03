@@ -15,4 +15,5 @@ export * from "./components/Select";
 export * from "./components/StickyFooter";
 export * from "./components/TagBox";
 export * from "./components/TeamPicker";
+export * from "./components/ToggleSwitch";
 export * from "./components/TopBar";

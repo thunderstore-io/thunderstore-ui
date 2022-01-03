@@ -1,8 +1,10 @@
 import { extendTheme } from "@chakra-ui/react";
 
 import { TagBoxStyles } from "./components/TagBox";
+import { ToggleSwitchStyles } from "./components/ToggleSwitch";
 
 const babyBlue = "#ccddfe";
+const black = "#222c45";
 const blue = "#242e48";
 const coolGray = "#93a0c2";
 const darkBlue = "#17213b";
@@ -14,6 +16,7 @@ export const theme = extendTheme({
   colors: {
     ts: {
       babyBlue,
+      black,
       blue,
       coolGray,
       darkBlue,
@@ -24,6 +27,7 @@ export const theme = extendTheme({
   },
   components: {
     TagBox: TagBoxStyles,
+    ToggleSwitch: ToggleSwitchStyles,
   },
   fonts: {
     body: "Exo2",
