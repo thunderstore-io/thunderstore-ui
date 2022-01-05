@@ -10,7 +10,11 @@ import {
   TagLabel,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useCombobox, useMultipleSelection } from "downshift";
+import {
+  useCombobox,
+  useMultipleSelection,
+  UseMultipleSelectionStateChange,
+} from "downshift";
 import { useEffect, useRef, useState } from "react";
 
 export type SelectOption = {
@@ -111,7 +115,14 @@ export const Select = <T extends SelectOption = SelectOption>({
 };
 
 export interface MultiSelectProps<T extends SelectOption = SelectOption> {
+  /** All options available for selecting. */
   options: T[];
+  /**
+   * Currently selected options.
+   *
+   * Omit the property to let MultiSelect handle the state internally.
+   */
+  selectedOptions?: T[];
   disabled?: boolean;
   onChange(options: T[]): void;
 }
@@ -123,22 +134,26 @@ export interface MultiSelectProps<T extends SelectOption = SelectOption> {
  */
 export const MultiSelect = <T extends SelectOption = SelectOption>({
   options,
+  selectedOptions,
   disabled = false,
   onChange,
 }: MultiSelectProps<T>): JSX.Element => {
   const [searchInput, setSearchInput] = useState("");
+  const usesInternalState = selectedOptions === undefined;
+  const onSelectedItemsChange = (changes: UseMultipleSelectionStateChange<T>) =>
+    onChange(changes.selectedItems ?? []);
+
+  const multipleSelectionHookProps = usesInternalState
+    ? { onSelectedItemsChange }
+    : { onSelectedItemsChange, selectedItems: selectedOptions };
+
   const {
     getSelectedItemProps,
     getDropdownProps,
     addSelectedItem,
     removeSelectedItem,
     selectedItems,
-  } = useMultipleSelection<T>({
-    onSelectedItemsChange: (e) => {
-      if (e.selectedItems) onChange(e.selectedItems);
-      else onChange([]);
-    },
-  });
+  } = useMultipleSelection<T>(multipleSelectionHookProps);
 
   const selectedItemsValues = selectedItems.map((option) => option.value);
 
@@ -218,7 +233,15 @@ export const MultiSelect = <T extends SelectOption = SelectOption>({
               <TagCloseButton
                 isDisabled={disabled}
                 onClick={() => {
-                  removeSelectedItem(selectedItem);
+                  if (usesInternalState) {
+                    removeSelectedItem(selectedItem);
+                  } else {
+                    onChange(
+                      selectedItems.filter(
+                        (item) => item.value !== selectedItem.value
+                      )
+                    );
+                  }
                 }}
               />
             </Tag>
