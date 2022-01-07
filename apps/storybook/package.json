@@ -19,7 +19,7 @@
     "@babel/plugin-transform-destructuring": "^7.16.0",
     "@babel/plugin-transform-for-of": "^7.16.0",
     "@babel/plugin-transform-parameters": "^7.16.3",
-    "@babel/plugin-transform-shorthand-properties": "^7.16.0",
+    "@babel/plugin-transform-shorthand-properties": "^7.16.7",
     "@babel/plugin-transform-spread": "^7.16.0",
     "@storybook/addon-actions": "^6.4.3",
     "@storybook/addon-essentials": "^6.4.8",
