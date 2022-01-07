@@ -1,5 +1,6 @@
 import { extendTheme } from "@chakra-ui/react";
 
+import { MultiSelectStyles } from "./components/Select";
 import { TagBoxStyles } from "./components/TagBox";
 import { ToggleSwitchStyles } from "./components/ToggleSwitch";
 
@@ -26,6 +27,26 @@ export const theme = extendTheme({
     },
   },
   components: {
+    MultiSelect: MultiSelectStyles,
+    Tag: {
+      variants: {
+        multiselect: {
+          container: {
+            bgColor: "ts.lightBlue",
+            borderRadius: 0,
+            color: "ts.babyBlue",
+            height: "34px",
+            margin: "0 5px 5px 0",
+            padding: "0 10px",
+          },
+          label: {
+            fontSize: "16px",
+            fontWeight: 600,
+            lineHeight: "34px",
+          },
+        },
+      },
+    },
     TagBox: TagBoxStyles,
     ToggleSwitch: ToggleSwitchStyles,
   },
