@@ -28,5 +28,8 @@
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],
-  "references": [{ "path": "../../packages/components" }]
+  "references": [
+    { "path": "../../packages/components" },
+    { "path": "../../packages/hooks" }
+  ]
 }

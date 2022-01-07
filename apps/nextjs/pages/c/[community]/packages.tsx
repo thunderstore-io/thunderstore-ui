@@ -1,31 +1,115 @@
 import { Flex, FlexProps, Spacer, Text } from "@chakra-ui/react";
-
 import {
   BreadCrumbs,
   CommunityLink,
   PackageCard,
   PackageCardProps,
+  PackageOrdering,
+  PackageSearch,
   PackageUploadLink,
+  SelectOption,
 } from "@thunderstore/components";
+import { useDebouncedInput } from "@thunderstore/hooks";
 import { GetServerSideProps } from "next";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { useRouter } from "next/router";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 
 import { Background } from "../../../components/Background";
 import { ContentWrapper } from "../../../components/Wrapper";
+import {
+  queryToBool,
+  queryToStr,
+  queryToStrs,
+  useQueryToState,
+} from "../../../hooks/useQueryToState";
 
 type Packages = Omit<PackageCardProps, "tagOnClick">[];
 
 interface PageProps {
+  categories: SelectOption[];
   community: string;
   coverImage: string;
   packages: Packages;
 }
 
 export default function CommunityPackages(props: PageProps): JSX.Element {
-  const { community, coverImage, packages } = props;
-  const [itemType, setItemType] = useState<ItemTypes>("mods");
+  const { categories, community, coverImage } = props;
+  const [packages, setPackages] = useState(props.packages);
 
-  const tagOnClick = (tagId: number) => console.log(tagId);
+  // Read initial filter values from GET parameters and store them in state.
+  const [deprecated, setDeprecated] = useQueryToState<boolean>(
+    "deprecated",
+    queryToBool
+  );
+  const [excludedCategories, setExcludedCategories] = useQueryToState(
+    "excluded_categories",
+    queryToStrs
+  );
+  const [includedCategories, setIncludedCategories] = useQueryToState(
+    "included_categories",
+    queryToStrs
+  );
+  const [nsfw, setNsfw] = useQueryToState<boolean>("nsfw", queryToBool);
+
+  // The query parameter can't use useQueryToState due to being debounced.
+  const { query: routeQuery } = useRouter();
+  const [query, setQueryDebounced, setQueryNow] = useDebouncedInput("");
+
+  useEffect(() => {
+    setQueryNow(queryToStr(routeQuery.q));
+  }, [queryToStr, routeQuery.q, setQueryNow]);
+
+  useEffect(() => {
+    return () => setQueryDebounced.cancel();
+  }, []);
+
+  // TODO: should these be read from GET parameters as well?
+  const [itemType, setItemType] = useState<ItemTypes>("mods");
+  const [ordering, setOrdering] = useState<PackageOrdering>("updated");
+
+  // TODO: Fetch actual data from backend.
+  useEffect(() => {
+    setPackages(
+      getFakeData(
+        community,
+        itemType,
+        query,
+        ordering,
+        includedCategories,
+        excludedCategories,
+        nsfw,
+        deprecated
+      )
+    );
+  }, [
+    community,
+    deprecated,
+    excludedCategories,
+    includedCategories,
+    itemType,
+    nsfw,
+    ordering,
+    query,
+    setPackages,
+  ]);
+
+  // TODO: Currently clicking a tag on package card first sets it into
+  // included categories, second click moves it to excluded categories.
+  // The idea was that third click would remove it from exluded
+  // categories, but since no card containing the tag will be visible if
+  // the category is excluded, that won't work...
+  const tagOnClick = (tagId: string) => {
+    if (includedCategories.includes(tagId)) {
+      setIncludedCategories(
+        includedCategories.filter((catId) => catId !== tagId)
+      );
+      if (!excludedCategories.includes(tagId)) {
+        setExcludedCategories([...excludedCategories, tagId]);
+      }
+    } else {
+      setIncludedCategories([...includedCategories, tagId]);
+    }
+  };
 
   return (
     <>
@@ -59,7 +143,24 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
           />
         </Flex>
 
-        {/* TODO: SEARCH SECTION */}
+        {/* SEARCH SECTION */}
+        <PackageSearch
+          {...{
+            categories,
+            deprecated,
+            excludedCategories,
+            includedCategories,
+            nsfw,
+            ordering,
+            query,
+            setDeprecated,
+            setExcludedCategories,
+            setIncludedCategories,
+            setNsfw,
+            setOrdering,
+            setQueryDebounced,
+          }}
+        />
 
         {/* PACKAGE LISTING */}
         <Flex
@@ -100,9 +201,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
+      categories: getFakeCategories(),
       community,
       coverImage: "https://api.lorem.space/image/game?w=2000&h=200",
-      packages: getFakeData(community, "mods"),
+      packages: getFakeData(
+        community,
+        "mods",
+        "",
+        "updated",
+        [],
+        [],
+        false,
+        false
+      ),
     },
   };
 };
@@ -139,16 +250,24 @@ const TypeOption: FC<TypeSelectorProps> = (props) => {
 /**
  * TODO: Packages should be fetched in batches with infinite scroll.
  * TODO: Packages can be mods or modpacks.
- * TODO: Data should also contain id-name-pairs for tags.
- * TODO: Clicking a tag should update included/excluded categories.
+ * TODO: Ordering.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getFakeData = (communityName: string, _itemType: ItemTypes): Packages => {
-  return [
+const getFakeData = (
+  communityName: string,
+  _itemType: ItemTypes, // eslint-disable-line @typescript-eslint/no-unused-vars
+  query: string,
+  _ordering: PackageOrdering, // eslint-disable-line @typescript-eslint/no-unused-vars
+  includedCategories: string[],
+  excludedCategories: string[],
+  nsfw: boolean,
+  deprecated: boolean
+): Packages => {
+  let packages = [
     ...Array(30)
       .fill(0)
       .map((_x, i) => ({
         communityName,
+        deprecated: i !== 0 && i % 8 === 0,
         description:
           "Adds item drop on killing the Shopkeeper, and several new items.",
         downloadCount: 40,
@@ -158,15 +277,72 @@ const getFakeData = (communityName: string, _itemType: ItemTypes): Packages => {
             : null,
         lastUpdated: "2021-12-17T15:00:00Z",
         likeCount: 600,
+        nsfw: i !== 0 && i % 6 === 0,
         packageName: "NewtDrop",
-        pinned: true,
-        // tagOnClick,
-        tags: [
-          { id: 1, label: "Items" },
-          { id: 2, label: "Tweaks" },
-          { id: 3, label: "Mods" },
-        ],
+        pinned: i < 3,
+        tags:
+          i % 4 === 0
+            ? [
+                { id: "1", label: "Items" },
+                { id: "2", label: "Tweaks" },
+                { id: "3", label: "Mods" },
+              ]
+            : i % 4 === 1
+            ? [
+                { id: "1", label: "Items" },
+                { id: "2", label: "Tweaks" },
+              ]
+            : i % 4 === 2
+            ? [{ id: "1", label: "Items" }]
+            : [],
         teamName: "BoneCapTheTweet",
       })),
   ];
+
+  if (query !== "") {
+    const q = query.toLowerCase();
+    packages = packages.filter((p) => p.description.toLowerCase().includes(q));
+  }
+
+  if (includedCategories.length) {
+    packages = packages.filter((p) => {
+      const packageCategories = p.tags.map((tag) => tag.id.toString());
+      return includedCategories.every((id) => packageCategories.includes(id));
+    });
+  }
+
+  if (excludedCategories.length) {
+    packages = packages.filter((p) => {
+      const packageCategories = p.tags.map((tag) => tag.id.toString());
+      return !excludedCategories.some((id) => packageCategories.includes(id));
+    });
+  }
+
+  if (!nsfw) {
+    packages = packages.filter((p) => !p.nsfw);
+  }
+
+  if (!deprecated) {
+    packages = packages.filter((p) => !p.deprecated);
+  }
+
+  return packages;
 };
+
+/**
+ * TODO: Categories should be fetched from the backend, either with the
+ * same request as the first batch of packages, or in a separate request.
+ */
+const getFakeCategories = (): SelectOption[] => [
+  { value: "1", label: "Items" },
+  { value: "2", label: "Tweaks" },
+  { value: "3", label: "Mods" },
+  { value: "4", label: "Tools" },
+  { value: "5", label: "Maps" },
+  { value: "6", label: "Skins" },
+  { value: "7", label: "Audio" },
+  { value: "8", label: "Player Characters" },
+  { value: "9", label: "Client-side" },
+  { value: "10", label: "Server-side" },
+  { value: "11", label: "Language" },
+];
