@@ -8,6 +8,7 @@ export * from "./components/LinkingProvider";
 export * from "./components/Links";
 export * from "./components/Markdown";
 export * from "./components/PackageCard";
+export * from "./components/PackageSearch";
 export * from "./components/PackageUpload";
 export * from "./components/RelativeTime";
 export * from "./components/RootWrapper";

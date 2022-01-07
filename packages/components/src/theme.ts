@@ -27,6 +27,16 @@ export const theme = extendTheme({
     },
   },
   components: {
+    FormLabel: {
+      variants: {
+        ts: {
+          color: "ts.white",
+          cursor: "pointer",
+          fontWeight: 700,
+          margin: "10px 0",
+        },
+      },
+    },
     MultiSelect: MultiSelectStyles,
     Tag: {
       variants: {
