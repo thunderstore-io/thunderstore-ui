@@ -1,0 +1,21 @@
+{
+  "name": "@thunderstore/hooks",
+  "version": "0.1.0",
+  "description": "Shared React hooks for Thunderstore",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/hooks",
+  "main": "dist/thunderstore-hooks.cjs.js",
+  "module": "dist/thunderstore-hooks.esm.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@types/react": "^17.0.19",
+    "react": "^17.0.2",
+    "ts-debounce": "^4.0.0"
+  }
+}

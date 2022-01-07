@@ -1,17 +1,25 @@
 import {
   Box,
   Collapse,
+  ComponentMultiStyleConfig,
+  Flex,
   Input,
   List,
   ListItem,
-  Stack,
   Tag,
   TagCloseButton,
   TagLabel,
   useColorModeValue,
+  useMultiStyleConfig,
 } from "@chakra-ui/react";
-import { useCombobox, useMultipleSelection } from "downshift";
+import {
+  useCombobox,
+  useMultipleSelection,
+  UseMultipleSelectionStateChange,
+} from "downshift";
 import { useEffect, useRef, useState } from "react";
+
+import { ChevronDown } from "./Icons";
 
 export type SelectOption = {
   label: string;
@@ -111,9 +119,19 @@ export const Select = <T extends SelectOption = SelectOption>({
 };
 
 export interface MultiSelectProps<T extends SelectOption = SelectOption> {
-  options: T[];
   disabled?: boolean;
+  inputId?: string;
   onChange(options: T[]): void;
+  /** All options available for selecting. */
+  options: T[];
+  /**
+   * Currently selected options.
+   *
+   * Omit the property to let MultiSelect handle the state internally.
+   */
+  selectedOptions?: T[];
+  /** Chakra-UI's component size variant identifier. */
+  size?: string;
 }
 
 /**
@@ -122,27 +140,32 @@ export interface MultiSelectProps<T extends SelectOption = SelectOption> {
  * Selected options are shown as tags above the select component.
  */
 export const MultiSelect = <T extends SelectOption = SelectOption>({
-  options,
   disabled = false,
+  inputId,
   onChange,
+  options,
+  selectedOptions,
+  size,
 }: MultiSelectProps<T>): JSX.Element => {
   const [searchInput, setSearchInput] = useState("");
+  const styles = useMultiStyleConfig("MultiSelect", { size });
+  const usesInternalState = selectedOptions === undefined;
+  const onSelectedItemsChange = (changes: UseMultipleSelectionStateChange<T>) =>
+    onChange(changes.selectedItems ?? []);
+
+  const multipleSelectionHookProps = usesInternalState
+    ? { onSelectedItemsChange }
+    : { onSelectedItemsChange, selectedItems: selectedOptions };
+
   const {
     getSelectedItemProps,
     getDropdownProps,
     addSelectedItem,
     removeSelectedItem,
     selectedItems,
-  } = useMultipleSelection<T>({
-    onSelectedItemsChange: (e) => {
-      if (e.selectedItems) onChange(e.selectedItems);
-      else onChange([]);
-    },
-  });
+  } = useMultipleSelection<T>(multipleSelectionHookProps);
 
   const selectedItemsValues = selectedItems.map((option) => option.value);
-
-  const highlightedBackground = useColorModeValue("blue.500", "blue.300");
 
   const filteredOptions = options.filter((option) => {
     return (
@@ -155,6 +178,7 @@ export const MultiSelect = <T extends SelectOption = SelectOption>({
     isOpen,
     openMenu,
     closeMenu,
+    toggleMenu,
     getMenuProps,
     getInputProps,
     getComboboxProps,
@@ -163,6 +187,7 @@ export const MultiSelect = <T extends SelectOption = SelectOption>({
   } = useCombobox({
     defaultHighlightedIndex: 0,
     selectedItem: null,
+    inputId,
     items: filteredOptions,
     itemToString: (option) => option?.label || "",
     stateReducer: (_, actionAndChanges) => {
@@ -202,53 +227,73 @@ export const MultiSelect = <T extends SelectOption = SelectOption>({
 
   return (
     <>
-      {/* Selected options */}
-      {selectedItems.length > 0 && (
-        <Stack spacing={1} isInline={true} wrap="wrap">
+      {/* Container */}
+      <Flex {...getComboboxProps()} __css={styles.container}>
+        {/* Selected options */}
+        <Flex flex="0 1 auto" flexWrap="wrap">
           {selectedItems.map((selectedItem, index) => (
             <Tag
               key={`selected-item-${index}`}
-              size="md"
-              borderRadius="full"
-              variant="solid"
-              mb={1}
+              title={selectedItem.label}
+              variant="multiselect"
               {...getSelectedItemProps({ selectedItem, index })}
             >
               <TagLabel>{selectedItem.label}</TagLabel>
               <TagCloseButton
                 isDisabled={disabled}
                 onClick={() => {
-                  removeSelectedItem(selectedItem);
+                  if (usesInternalState) {
+                    removeSelectedItem(selectedItem);
+                  } else {
+                    onChange(
+                      selectedItems.filter(
+                        (item) => item.value !== selectedItem.value
+                      )
+                    );
+                  }
                 }}
               />
             </Tag>
           ))}
-        </Stack>
-      )}
-      {/* Input */}
-      <Box {...getComboboxProps()}>
-        <Input
-          placeholder="Search..."
-          disabled={disabled}
-          {...getInputProps(
-            getDropdownProps({
-              preventKeyAction: isOpen,
-              onClick: isOpen ? () => undefined : openMenu,
-              onFocus: isOpen ? () => undefined : openMenu,
-            })
-          )}
-        />
-      </Box>
-      {/* Combobox */}
-      <Collapse in={isOpen && filteredOptions.length > 0} animateOpacity={true}>
-        <Box borderWidth="1px" borderRadius="md" mt={1}>
+        </Flex>
+
+        <Flex alignItems="center" flex="1 1 auto" mb="5px">
+          <Input
+            disabled={disabled}
+            id={inputId ?? ""}
+            placeholder="Search..."
+            {...getInputProps(
+              getDropdownProps({
+                preventKeyAction: isOpen,
+                onClick: isOpen ? () => undefined : openMenu,
+                onFocus: isOpen ? () => undefined : openMenu,
+              })
+            )}
+            border="none"
+            height="34px"
+          />
+
+          <ChevronDown
+            onClick={toggleMenu}
+            boxSize="12px"
+            cursor="pointer"
+            flex="0 0 42px"
+          />
+        </Flex>
+      </Flex>
+
+      {/* Combobox i.e. dropdown */}
+      <Collapse
+        animateOpacity={false}
+        in={isOpen && filteredOptions.length > 0}
+      >
+        <Box __css={styles.dropdown}>
           <List {...getMenuProps()}>
             {filteredOptions.map((option, index) => (
               <ListItem
                 key={`${option.value}${index}`}
-                bg={
-                  highlightedIndex === index ? highlightedBackground : "inherit"
-                }
+                bg={highlightedIndex === index ? "ts.lightBlue" : "inherit"}
+                color={highlightedIndex === index ? "ts.babyBlue" : "inherit"}
                 px={2}
                 py={1}
                 {...getItemProps({ item: option, index })}
@@ -261,4 +306,49 @@ export const MultiSelect = <T extends SelectOption = SelectOption>({
       </Collapse>
     </>
   );
+};
+
+export const MultiSelectStyles: ComponentMultiStyleConfig = {
+  baseStyle: {
+    container: {
+      alignItems: "center",
+      bgColor: "ts.darkBlue",
+      borderRadius: 3,
+      color: "ts.white",
+      display: "flex",
+      flexWrap: "wrap",
+      minHeight: "44px",
+      padding: "5px 0 0 5px",
+      position: "relative",
+    },
+    dropdown: {
+      bgColor: "ts.darkBlue",
+      color: "ts.white",
+      cursor: "pointer",
+      maxHeight: "272px", // 10x list item height
+      overflowY: "auto",
+      position: "absolute",
+      width: "calc(100% - 40px);", // 40px = content area padding
+      zIndex: 1,
+    },
+  },
+  defaultProps: {
+    size: "md",
+  },
+  sizes: {
+    md: {
+      container: {
+        maxWidth: "600px",
+        minWidth: "300px",
+      },
+      dropdown: {
+        maxWidth: "600px",
+        minWidth: "300px",
+      },
+    },
+    full: {
+      container: { width: "100%" },
+    },
+  },
+  parts: ["container", "dropdown"],
 };
