@@ -119,6 +119,9 @@ export const Select = <T extends SelectOption = SelectOption>({
 };
 
 export interface MultiSelectProps<T extends SelectOption = SelectOption> {
+  disabled?: boolean;
+  inputId?: string;
+  onChange(options: T[]): void;
   /** All options available for selecting. */
   options: T[];
   /**
@@ -129,8 +132,6 @@ export interface MultiSelectProps<T extends SelectOption = SelectOption> {
   selectedOptions?: T[];
   /** Chakra-UI's component size variant identifier. */
   size?: string;
-  disabled?: boolean;
-  onChange(options: T[]): void;
 }
 
 /**
@@ -139,11 +140,12 @@ export interface MultiSelectProps<T extends SelectOption = SelectOption> {
  * Selected options are shown as tags above the select component.
  */
 export const MultiSelect = <T extends SelectOption = SelectOption>({
+  disabled = false,
+  inputId,
+  onChange,
   options,
   selectedOptions,
   size,
-  disabled = false,
-  onChange,
 }: MultiSelectProps<T>): JSX.Element => {
   const [searchInput, setSearchInput] = useState("");
   const styles = useMultiStyleConfig("MultiSelect", { size });
@@ -185,6 +187,7 @@ export const MultiSelect = <T extends SelectOption = SelectOption>({
   } = useCombobox({
     defaultHighlightedIndex: 0,
     selectedItem: null,
+    inputId,
     items: filteredOptions,
     itemToString: (option) => option?.label || "",
     stateReducer: (_, actionAndChanges) => {
@@ -257,6 +260,7 @@ export const MultiSelect = <T extends SelectOption = SelectOption>({
         <Flex alignItems="center" flex="1 1 auto" mb="5px">
           <Input
             disabled={disabled}
+            id={inputId ?? ""}
             placeholder="Search..."
             {...getInputProps(
               getDropdownProps({
