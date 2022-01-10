@@ -27,16 +27,17 @@ export default function Home(): JSX.Element {
           No account or prior experience needed.
         </Text>
 
-        <Flex justify="center" mt="30px" sx={{ columnGap: 20 }}>
+        <Flex columnGap="20px" justify="center" mt="30px">
           <HighlighBox count={modCount} items="mods" />
           <HighlighBox count={downloadCount} items="downloads" />
         </Flex>
 
         <Flex
+          columnGap="30px"
           justify="center"
           m="60px 0"
+          rowGap="32px"
           wrap="wrap"
-          sx={{ columnGap: 30, rowGap: 32 }}
         >
           {communities.map((props) => (
             <CommunityCard key={props.name} {...props} />
