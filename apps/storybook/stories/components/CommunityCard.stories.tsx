@@ -8,12 +8,7 @@ const meta = { component: CommunityCard } as ComponentMeta<
 >;
 
 const Template: ComponentStory<typeof CommunityCard> = ({ communities }) => (
-  <Flex
-    justify="center"
-    m="60px 0"
-    wrap="wrap"
-    sx={{ columnGap: 30, rowGap: 32 }}
-  >
+  <Flex columnGap="30px" justify="center" m="60px 0" rowGap="32px" wrap="wrap">
     {communities.map((props) => (
       <CommunityCard key={props.name} {...props} />
     ))}
