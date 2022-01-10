@@ -14,14 +14,14 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 
-import { Background } from "../../../components/Background";
-import { ContentWrapper } from "../../../components/Wrapper";
+import { Background } from "components/Background";
+import { ContentWrapper } from "components/Wrapper";
 import {
   queryToBool,
   queryToStr,
   queryToStrs,
   useQueryToState,
-} from "../../../hooks/useQueryToState";
+} from "hooks/useQueryToState";
 
 type Packages = Omit<PackageCardProps, "tagOnClick">[];
 

@@ -1,7 +1,7 @@
 import { Heading } from "@chakra-ui/react";
 
-import { Background } from "../components/Background";
-import { ContentWrapper } from "../components/Wrapper";
+import { Background } from "components/Background";
+import { ContentWrapper } from "components/Wrapper";
 
 export default function CommunityList(): JSX.Element {
   return (

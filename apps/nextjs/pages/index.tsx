@@ -1,8 +1,8 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { CommunityCard } from "@thunderstore/components";
 
-import { HalfPageBackground } from "../components/Background";
-import { ContentWrapper } from "../components/Wrapper";
+import { HalfPageBackground } from "components/Background";
+import { ContentWrapper } from "components/Wrapper";
 
 export default function Home(): JSX.Element {
   // TODO: Fetch actual data with provider.
