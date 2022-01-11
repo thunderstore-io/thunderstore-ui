@@ -1,4 +1,4 @@
-import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
+import { Box, Flex, Spacer, Tag, TagLeftIcon, Text } from "@chakra-ui/react";
 import React from "react";
 
 import { formatCount } from "../utils/number";
@@ -6,7 +6,6 @@ import { DownloadIcon, LikeIcon, PinIcon } from "./Icons";
 import { MaybeImage } from "./Internals";
 import { PackageLink, TeamLink } from "./Links";
 import { RelativeTime } from "./RelativeTime";
-import { TagBox } from "./TagBox";
 
 export interface PackageCardProps {
   communityName: string;
@@ -99,14 +98,14 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
 
         <Box mt="33px">
           {tags.map((tag) => (
-            <TagBox
+            <Tag
               key={tag.id}
               onClick={() => tagOnClick(tag.id)}
-              m="0 10px 10px 0"
+              size="md"
               cursor="pointer"
             >
               {tag.label}
-            </TagBox>
+            </Tag>
           ))}
         </Box>
 
@@ -122,7 +121,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
 };
 
 /**
- * TagBox for marking a package as pinned.
+ * Tag for marking a package as pinned.
  */
 const PinnedTag: React.FC<{ pinned: boolean }> = (props) => {
   if (!props.pinned) {
@@ -130,15 +129,9 @@ const PinnedTag: React.FC<{ pinned: boolean }> = (props) => {
   }
 
   return (
-    <TagBox
-      size="sm"
-      variant="translucent"
-      pos="absolute"
-      top="20px"
-      left="20px"
-    >
-      <PinIcon m="-3px 5px 0 0" />
+    <Tag size="sm" variant="translucent" pos="absolute" top="20px" left="20px">
+      <TagLeftIcon as={PinIcon} mr="5px" />
       Pinned
-    </TagBox>
+    </Tag>
   );
 };

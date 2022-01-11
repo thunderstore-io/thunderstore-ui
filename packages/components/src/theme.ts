@@ -1,8 +1,9 @@
 import { extendTheme } from "@chakra-ui/react";
 
 import { MultiSelectStyles } from "./components/Select";
-import { TagBoxStyles } from "./components/TagBox";
 import { ToggleSwitchStyles } from "./components/ToggleSwitch";
+import { FormLabelStyles } from "./customStyles/FormLabel";
+import { TagStyles } from "./customStyles/Tag";
 
 const babyBlue = "#ccddfe";
 const black = "#222c45";
@@ -27,37 +28,9 @@ export const theme = extendTheme({
     },
   },
   components: {
-    FormLabel: {
-      variants: {
-        ts: {
-          color: "ts.white",
-          cursor: "pointer",
-          fontWeight: 700,
-          margin: "10px 0",
-        },
-      },
-    },
+    FormLabel: FormLabelStyles,
     MultiSelect: MultiSelectStyles,
-    Tag: {
-      variants: {
-        multiselect: {
-          container: {
-            bgColor: "ts.lightBlue",
-            borderRadius: 0,
-            color: "ts.babyBlue",
-            height: "34px",
-            margin: "0 5px 5px 0",
-            padding: "0 10px",
-          },
-          label: {
-            fontSize: "16px",
-            fontWeight: 600,
-            lineHeight: "34px",
-          },
-        },
-      },
-    },
-    TagBox: TagBoxStyles,
+    Tag: TagStyles,
     ToggleSwitch: ToggleSwitchStyles,
   },
   fonts: {
