@@ -14,7 +14,7 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@chakra-ui/react": "^1.6.8",
+    "@chakra-ui/react": "0.0.0-pr-2022062070",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "@thunderstore/hooks": "^0.1.0",
@@ -28,7 +28,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.4",
-    "react-hook-form": "^7.15.4",
+    "react-hook-form": "^7.22.5",
     "react-markdown": "^7.1.0",
     "react-query": "^3.34.0",
     "remark-gfm": "^3.0.1",
