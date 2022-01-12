@@ -4,6 +4,7 @@ import { markdownStyles } from "./components/Markdown";
 import { MultiSelectStyles } from "./components/Select";
 import { ToggleSwitchStyles } from "./components/ToggleSwitch";
 import { FormLabelStyles } from "./customStyles/FormLabel";
+import { ModalStyles } from "./customStyles/Modal";
 import { TagStyles } from "./customStyles/Tag";
 
 const babyBlue = "#ccddfe";
@@ -30,6 +31,7 @@ export const theme = extendTheme({
   },
   components: {
     FormLabel: FormLabelStyles,
+    Modal: ModalStyles,
     MultiSelect: MultiSelectStyles,
     Tag: TagStyles,
     ToggleSwitch: ToggleSwitchStyles,
