@@ -1,14 +1,8 @@
-import { LinkingProvider, RootWrapper, theme } from "@thunderstore/components";
+import { LinkingProvider, theme } from "@thunderstore/components";
 import { LinkLibrary } from "../LinkLibrary";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
-  controls: {
-    matchers: {
-      color: /(background|color)$/i,
-      date: /Date$/,
-    },
-  },
   backgrounds: {
     default: "thunderstore",
     values: [
@@ -17,20 +11,21 @@ export const parameters = {
       { name: "dark", value: "#333" },
     ],
   },
+  chakra: {
+    theme,
+  },
+  controls: {
+    matchers: {
+      color: /(background|color)$/i,
+      date: /Date$/,
+    },
+  },
 };
 
 export const decorators = [
   (Story) => (
-    <RootWrapper
-      theme={theme}
-      thunderstoreProviderValue={{
-        apiUrl:
-          process.env.NEXT_PUBLIC_API_URL || "https://thunderstore.io/api/",
-      }}
-    >
-      <LinkingProvider value={LinkLibrary}>
-        <Story />
-      </LinkingProvider>
-    </RootWrapper>
+    <LinkingProvider value={LinkLibrary}>
+      <Story />
+    </LinkingProvider>
   ),
 ];

@@ -2,8 +2,8 @@ import { BreadCrumbs, CommunityPackagesLink } from "@thunderstore/components";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 
-import { Background } from "../../../components/Background";
-import { ContentWrapper } from "../../../components/Wrapper";
+import { Background } from "components/Background";
+import { ContentWrapper } from "components/Wrapper";
 
 export default function CommunityFrontPage(): JSX.Element {
   const { query } = useRouter();

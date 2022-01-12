@@ -94,11 +94,12 @@ export const PackageSearch: React.FC<PackageSearchProps> = (props) => {
           align="center"
           bgColor="ts.darkBlue"
           borderRadius={3}
+          columnGap="5px"
           h="44px"
           minW="250px"
           mr="10px"
+          rowGap="5px"
           w="600px"
-          sx={{ columnGap: 5, rowGap: 5 }}
         >
           <Input
             autoComplete="off"
@@ -149,7 +150,7 @@ export const PackageSearch: React.FC<PackageSearchProps> = (props) => {
       <Flex
         display={showFilters ? "flex" : "none"}
         flexWrap="wrap"
-        sx={{ columnGap: 10 }}
+        columnGap="10px"
       >
         <Box flex="0 1 600px">
           <FormLabel htmlFor="package-search-inc-cats" variant="ts">

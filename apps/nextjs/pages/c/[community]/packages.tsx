@@ -14,14 +14,14 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 
-import { Background } from "../../../components/Background";
-import { ContentWrapper } from "../../../components/Wrapper";
+import { Background } from "components/Background";
+import { ContentWrapper } from "components/Wrapper";
 import {
   queryToBool,
   queryToStr,
   queryToStrs,
   useQueryToState,
-} from "../../../hooks/useQueryToState";
+} from "hooks/useQueryToState";
 
 type Packages = Omit<PackageCardProps, "tagOnClick">[];
 
@@ -164,10 +164,11 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
 
         {/* PACKAGE LISTING */}
         <Flex
+          columnGap="20px"
           justify="center"
           m="28px 0 60px 0"
+          rowGap="20px"
           wrap="wrap"
-          sx={{ columnGap: 20, rowGap: 20 }}
         >
           {packages.map((cardProps, i) => (
             <PackageCard

@@ -6,12 +6,7 @@ import React from "react";
 const meta = { component: PackageCard } as ComponentMeta<typeof PackageCard>;
 
 const Template: ComponentStory<typeof PackageCard> = ({ packages }) => (
-  <Flex
-    justify="center"
-    m="60px 0"
-    wrap="wrap"
-    sx={{ columnGap: 20, rowGap: 20 }}
-  >
+  <Flex columnGap="20px" justify="center" m="60px 0" rowGap="20px" wrap="wrap">
     {packages.map((props) => (
       <PackageCard key={props.packageName} {...props} />
     ))}

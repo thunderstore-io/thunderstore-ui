@@ -8,10 +8,10 @@ module.exports = {
     },
   ],
   addons: [
+    "@chakra-ui/storybook-addon",
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
-    "@snek-at/storybook-addon-chakra-ui", // Must come after @storybook addons
   ],
   framework: "@storybook/react",
   staticDirs: ["../public"],

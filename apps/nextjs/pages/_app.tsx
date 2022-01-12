@@ -1,6 +1,7 @@
 import { AppProps } from "next/app";
 import { LinkingProvider, RootWrapper, theme } from "@thunderstore/components";
-import { LinkLibrary } from "../LinkLibrary";
+
+import { LinkLibrary } from "LinkLibrary";
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (

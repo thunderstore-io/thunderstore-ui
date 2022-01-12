@@ -9,7 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@chakra-ui/react": "^1.6.8",
+    "@chakra-ui/react": "0.0.0-pr-2022062070",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "@thunderstore/components": "^0.1.0",
