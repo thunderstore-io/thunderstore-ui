@@ -22,18 +22,20 @@ import {
 import NextLink from "next/link";
 
 interface LinkProps extends ChakraLinkProps, ThunderstoreLinkProps {
+  queryParams?: string;
   url: string;
 }
 
 export const Link = (props: LinkProps): React.ReactElement => {
-  const { url, children, ...chakraProps } = props;
+  const { children, queryParams, url, ...chakraProps } = props;
+  const q = queryParams ? `?${queryParams}` : "";
 
   for (const key in thunderstoreLinkProps) {
     delete chakraProps[key as keyof ThunderstoreLinkProps];
   }
 
   return (
-    <NextLink href={url} passHref>
+    <NextLink href={`${url}${q}`} passHref>
       <ChakraLink {...chakraProps}>{children}</ChakraLink>
     </NextLink>
   );

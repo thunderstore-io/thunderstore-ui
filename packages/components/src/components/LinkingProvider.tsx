@@ -33,6 +33,7 @@ export interface ThunderstoreLinkProps {
 export const thunderstoreLinkProps: ThunderstoreLinkProps = {
   community: "",
   package: "",
+  team: "",
 };
 
 // Accepting any and all props is required to keep the linking
@@ -40,6 +41,7 @@ export const thunderstoreLinkProps: ThunderstoreLinkProps = {
 // kinds of custom properties.
 export interface AnyProps {
   [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  queryParams?: string;
 }
 
 type NoRequiredProps = (props: AnyProps) => RE | null;
