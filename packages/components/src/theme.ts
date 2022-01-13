@@ -3,9 +3,11 @@ import { extendTheme } from "@chakra-ui/react";
 import { markdownStyles } from "./components/Markdown";
 import { MultiSelectStyles } from "./components/Select";
 import { ToggleSwitchStyles } from "./components/ToggleSwitch";
+import { ButtonStyles } from "./customStyles/Button";
 import { FormLabelStyles } from "./customStyles/FormLabel";
 import { ModalStyles } from "./customStyles/Modal";
 import { TagStyles } from "./customStyles/Tag";
+import { TextStyles } from "./customStyles/Text";
 
 const babyBlue = "#ccddfe";
 const black = "#222c45";
@@ -30,10 +32,12 @@ export const theme = extendTheme({
     },
   },
   components: {
+    Button: ButtonStyles,
     FormLabel: FormLabelStyles,
     Modal: ModalStyles,
     MultiSelect: MultiSelectStyles,
     Tag: TagStyles,
+    Text: TextStyles,
     ToggleSwitch: ToggleSwitchStyles,
   },
   fonts: {
