@@ -1,5 +1,6 @@
 import { extendTheme } from "@chakra-ui/react";
 
+import { markdownStyles } from "./components/Markdown";
 import { MultiSelectStyles } from "./components/Select";
 import { ToggleSwitchStyles } from "./components/ToggleSwitch";
 import { FormLabelStyles } from "./customStyles/FormLabel";
@@ -51,6 +52,7 @@ export const theme = extendTheme({
       "html, body": {
         backgroundColor: blue,
       },
+      ...markdownStyles,
     },
   },
 });
