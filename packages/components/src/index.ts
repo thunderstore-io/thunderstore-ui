@@ -10,6 +10,7 @@ export * from "./components/Markdown";
 export * from "./components/PackageActions";
 export * from "./components/PackageCard";
 export * from "./components/PackageHeader";
+export * from "./components/PackageInfo";
 export * from "./components/PackageSearch";
 export * from "./components/PackageUpload";
 export * from "./components/RelativeTime";

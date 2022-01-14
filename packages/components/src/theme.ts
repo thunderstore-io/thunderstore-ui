@@ -6,6 +6,7 @@ import { ToggleSwitchStyles } from "./components/ToggleSwitch";
 import { ButtonStyles } from "./customStyles/Button";
 import { FormLabelStyles } from "./customStyles/FormLabel";
 import { ModalStyles } from "./customStyles/Modal";
+import { HeadingStyles } from "./customStyles/Heading";
 import { TagStyles } from "./customStyles/Tag";
 import { TextStyles } from "./customStyles/Text";
 
@@ -35,6 +36,7 @@ export const theme = extendTheme({
     Button: ButtonStyles,
     FormLabel: FormLabelStyles,
     Modal: ModalStyles,
+    Heading: HeadingStyles,
     MultiSelect: MultiSelectStyles,
     Tag: TagStyles,
     Text: TextStyles,
