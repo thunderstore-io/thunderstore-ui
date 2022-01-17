@@ -14,6 +14,7 @@ export * from "./components/PackageInfo";
 export * from "./components/PackageRequirements";
 export * from "./components/PackageSearch";
 export * from "./components/PackageUpload";
+export * from "./components/PackageVersions";
 export * from "./components/RelativeTime";
 export * from "./components/RootWrapper";
 export * from "./components/Select";
