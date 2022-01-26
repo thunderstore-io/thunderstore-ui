@@ -1,8 +1,14 @@
 import { extendTheme } from "@chakra-ui/react";
 
+import { markdownStyles } from "./components/Markdown";
 import { MultiSelectStyles } from "./components/Select";
-import { TagBoxStyles } from "./components/TagBox";
 import { ToggleSwitchStyles } from "./components/ToggleSwitch";
+import { ButtonStyles } from "./customStyles/Button";
+import { FormLabelStyles } from "./customStyles/FormLabel";
+import { ModalStyles } from "./customStyles/Modal";
+import { HeadingStyles } from "./customStyles/Heading";
+import { TagStyles } from "./customStyles/Tag";
+import { TextStyles } from "./customStyles/Text";
 
 const babyBlue = "#ccddfe";
 const black = "#222c45";
@@ -27,37 +33,13 @@ export const theme = extendTheme({
     },
   },
   components: {
-    FormLabel: {
-      variants: {
-        ts: {
-          color: "ts.white",
-          cursor: "pointer",
-          fontWeight: 700,
-          margin: "10px 0",
-        },
-      },
-    },
+    Button: ButtonStyles,
+    FormLabel: FormLabelStyles,
+    Modal: ModalStyles,
+    Heading: HeadingStyles,
     MultiSelect: MultiSelectStyles,
-    Tag: {
-      variants: {
-        multiselect: {
-          container: {
-            bgColor: "ts.lightBlue",
-            borderRadius: 0,
-            color: "ts.babyBlue",
-            height: "34px",
-            margin: "0 5px 5px 0",
-            padding: "0 10px",
-          },
-          label: {
-            fontSize: "16px",
-            fontWeight: 600,
-            lineHeight: "34px",
-          },
-        },
-      },
-    },
-    TagBox: TagBoxStyles,
+    Tag: TagStyles,
+    Text: TextStyles,
     ToggleSwitch: ToggleSwitchStyles,
   },
   fonts: {
@@ -78,6 +60,7 @@ export const theme = extendTheme({
       "html, body": {
         backgroundColor: blue,
       },
+      ...markdownStyles,
     },
   },
 });

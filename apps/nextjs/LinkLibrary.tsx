@@ -22,18 +22,29 @@ import {
 import NextLink from "next/link";
 
 interface LinkProps extends ChakraLinkProps, ThunderstoreLinkProps {
+  queryParams?: string;
   url: string;
 }
 
 export const Link = (props: LinkProps): React.ReactElement => {
-  const { url, children, ...chakraProps } = props;
+  const { children, queryParams, url, ...chakraProps } = props;
+  const q = queryParams ? `?${queryParams}` : "";
 
   for (const key in thunderstoreLinkProps) {
     delete chakraProps[key as keyof ThunderstoreLinkProps];
   }
 
+  // NextLink doesn't allow url to contain double forward-slashes.
+  if (url.includes("//")) {
+    return (
+      <ChakraLink href={`${url}${q}`} {...chakraProps}>
+        {children}
+      </ChakraLink>
+    );
+  }
+
   return (
-    <NextLink href={url} passHref>
+    <NextLink href={`${url}${q}`} passHref>
       <ChakraLink {...chakraProps}>{children}</ChakraLink>
     </NextLink>
   );
@@ -46,6 +57,18 @@ const library: LinkLibrary = {
   CommunityPackages: (p) => Link({ ...p, url: `/c/${p.community}/packages/` }),
   Index: (p) => Link({ ...p, url: "/" }),
   Package: (p) => Link({ ...p, url: `/c/${p.community}/p/${p.package}/` }),
+  PackageDependants: (p) =>
+    Link({ ...p, url: `/c/${p.community}/p/${p.package}/dependants/` }),
+  PackageDownload: (p) =>
+    Link({
+      ...p,
+      url: `/packages/download/${p.namespace}/${p.package}/${p.version}/`,
+    }),
+  PackageInstall: (p) =>
+    Link({
+      ...p,
+      url: `ror2mm://v1/install/thunderstore.io/${p.namespace}/${p.package}/${p.version}/`,
+    }),
   PackageUpload: (p) => Link({ ...p, url: "/packages/new/" }),
   Team: (p) => Link({ ...p, url: `/team/${p.team}/` }),
 };
