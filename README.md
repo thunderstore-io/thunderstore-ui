@@ -96,6 +96,18 @@ setup. Installing
 [Monorepo Workspace extension](https://marketplace.visualstudio.com/items?itemName=folke.vscode-monorepo-workspace)
 may solve them.
 
+## Docker
+
+The provided `Dockerfile` can be used to run the Next.js production server, e.g:
+
+```
+// build image (on project root dir)
+docker build -t ts-ui .
+
+// run container
+docker run -d -p 3000:3000 ts-ui
+```
+
 ## Storybook
 
 [Storybook](https://storybook.js.org/docs/react/get-started/introduction)
