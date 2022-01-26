@@ -5,7 +5,7 @@
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/components",
   "main": "dist/thunderstore-components.cjs.js",
   "module": "dist/thunderstore-components.esm.js",
-  "types": "./dist/index.d.ts",
+  "types": "dist/thunderstore-components.cjs.d.ts",
   "files": [
     "dist"
   ],
@@ -14,6 +14,7 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
+    "@babel/runtime": "^7.16.7",
     "@chakra-ui/react": "0.0.0-pr-2022062070",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
