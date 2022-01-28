@@ -84,20 +84,17 @@ export const PackageActions: React.FC<PackageActionsProps> = (props) => {
           textAlign={isWrapped ? "center" : "right"}
           width={isWrapped ? "100%" : "auto"}
         >
-          {/* TODO: use "ts.keyInfo" and "ts.keyInfoLabel" labels once
-           * Chakra UI has fixed its type definition issues.
-           */}
-          <Text {...keyInfoStyles}>{downloadCount.toLocaleString()}</Text>
-          <Text {...keyInfoLabelStyles}>downloads</Text>
+          <Text variant="ts.keyInfo">{downloadCount.toLocaleString()}</Text>
+          <Text variant="ts.keyInfoLabel">downloads</Text>
 
-          <RelativeTime time={lastUpdated} {...keyInfoStyles} mt="12px" />
-          <Text {...keyInfoLabelStyles}>last updated</Text>
+          <RelativeTime time={lastUpdated} variant="ts.keyInfo" mt="12px" />
+          <Text variant="ts.keyInfoLabel">last updated</Text>
 
-          <Text {...keyInfoStyles} mt="12px">
+          <Text variant="ts.keyInfo" mt="12px">
             {likeCount.toLocaleString()}
             <LikeIcon boxSize="18px" m="-3px 0 0 5px" />
           </Text>
-          <Text {...keyInfoLabelStyles}>total rating</Text>
+          <Text variant="ts.keyInfoLabel">total rating</Text>
         </Box>
       </Flex>
 
@@ -118,20 +115,4 @@ export const PackageActions: React.FC<PackageActionsProps> = (props) => {
       </Box>
     </Box>
   );
-};
-
-const keyInfoStyles = {
-  color: "#fff",
-  fontFamily: "Raleway",
-  fontSize: "22px",
-  fontWeight: 900,
-  lineHeight: "26px",
-};
-
-const keyInfoLabelStyles = {
-  color: "ts.coolGray",
-  fontFamily: "Exo2",
-  fontSize: "13px",
-  fontWeight: 500,
-  lineHeight: "1.2",
 };
