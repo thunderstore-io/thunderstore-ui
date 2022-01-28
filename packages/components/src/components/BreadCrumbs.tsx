@@ -1,5 +1,5 @@
 import { Flex, Heading, Text } from "@chakra-ui/react";
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 
 import { Raquo } from "./Icons";
 

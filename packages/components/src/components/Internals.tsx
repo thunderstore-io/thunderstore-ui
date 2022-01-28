@@ -2,6 +2,7 @@
  * Collection of small, shared components intended for internal use.
  */
 import { Flex, Image } from "@chakra-ui/react";
+import React from "react";
 
 import { QuestionMarkIcon } from "./Icons";
 

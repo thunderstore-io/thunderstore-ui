@@ -28,6 +28,25 @@ yarn workspace @thunderstore/nextjs dev
 That's it. Changes done to `apps/nextjs` and `packages/components` should both
 be automatically visible at [http://localhost:3000/].
 
+```
+// production build, assumes yarn install has already been run
+// build packages/* with preconstruct
+yarn build
+
+// build and start Next.js prod server
+yarn workspace @thunderstore/nextjs build
+yarn workspace @thunderstore/nextjs start
+```
+
+### Troubleshooting
+
+**After running `yarn build`, all the links disappeared from the page**
+
+**Solution**: This seems to occur only when Next.js dev server has already been
+up before the packages were built. Most likely this is a cache issue which
+results in a rehydration issue on client-side. Simply running `yarn` or manually
+deleting `apps/nextjs/.next` after running `yarn build` should solve the issue.
+
 ### Adding dependencies
 
 To add new dependencies to existing packages, simply run something like:
@@ -76,6 +95,18 @@ VS Code may have problem detecting installed packages in this monorepo/workspace
 setup. Installing
 [Monorepo Workspace extension](https://marketplace.visualstudio.com/items?itemName=folke.vscode-monorepo-workspace)
 may solve them.
+
+## Docker
+
+The provided `Dockerfile` can be used to run the Next.js production server, e.g:
+
+```
+// build image (on project root dir)
+docker build -t ts-ui .
+
+// run container
+docker run -d -p 3000:3000 ts-ui
+```
 
 ## Storybook
 

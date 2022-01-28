@@ -5,7 +5,7 @@
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/hooks",
   "main": "dist/thunderstore-hooks.cjs.js",
   "module": "dist/thunderstore-hooks.esm.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/thunderstore-hooks.cjs.d.ts",
   "files": [
     "dist"
   ],
