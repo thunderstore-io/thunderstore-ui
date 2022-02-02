@@ -25,12 +25,17 @@
     "allowJs": false,
     "strict": true,
     "jsx": "preserve",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "incremental": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],
   "references": [
-    { "path": "../../packages/components" },
-    { "path": "../../packages/hooks" }
+    {
+      "path": "../../packages/components"
+    },
+    {
+      "path": "../../packages/hooks"
+    }
   ]
 }
