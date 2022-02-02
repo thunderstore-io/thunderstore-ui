@@ -102,7 +102,7 @@ The provided `Dockerfile` can be used to run the Next.js production server, e.g:
 
 ```
 // build image (on project root dir)
-docker build -t ts-ui .
+docker build -f apps/nextjs/Dockerfile -t ts-ui .
 
 // run container
 docker run -d -p 3000:3000 ts-ui
