@@ -96,18 +96,6 @@ setup. Installing
 [Monorepo Workspace extension](https://marketplace.visualstudio.com/items?itemName=folke.vscode-monorepo-workspace)
 may solve them.
 
-## Docker
-
-The provided `Dockerfile` can be used to run the Next.js production server, e.g:
-
-```
-// build image (on project root dir)
-docker build -f apps/nextjs/Dockerfile -t ts-ui .
-
-// run container
-docker run -d -p 3000:3000 ts-ui
-```
-
 ## Storybook
 
 [Storybook](https://storybook.js.org/docs/react/get-started/introduction)
@@ -128,6 +116,28 @@ files.
 
 To upgrade Storybook when it informs you about new version being available, run
 the given `npx sb@latest upgrade` command in `apps/storybook` directory.
+
+## Docker
+
+The provided `Dockerfile` can be used to run the Next.js production server, e.g:
+
+```
+// build image (on project root dir)
+docker build -f apps/nextjs/Dockerfile -t ts-ui .
+
+// run container
+docker run -d -p 3000:3000 ts-ui
+```
+
+Similarly, Storybook can be run inside a container:
+
+```
+// build image (on project root dir)
+docker build -f apps/storybook/Dockerfile -t ts-ui-storybook .
+
+// run container
+docker run -p 6006:80 ts-ui-storybook
+```
 
 ## pre-commit
 
