@@ -6,7 +6,7 @@ const meta = { component: PackageHeader } as ComponentMeta<
   typeof PackageHeader
 >;
 
-const Template: ComponentStory<typeof PackageHeader> = ({ props }) => (
+const Template: ComponentStory<typeof PackageHeader> = (props) => (
   <PackageHeader {...props} />
 );
 
