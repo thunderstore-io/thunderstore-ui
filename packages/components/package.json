@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.16.7",
-    "@chakra-ui/react": "^1.8.0",
+    "@chakra-ui/react": "^1.8.1",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "@thunderstore/hooks": "^0.1.0",
