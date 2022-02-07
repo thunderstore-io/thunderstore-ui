@@ -15,7 +15,7 @@ Header.args = {
   communityName: "Risk of Rain 2",
   description:
     "Adds the CHEF robot from RoR1 as a survivor. Multiplayer-compatible!",
-  imageSrc: "https://api.lorem.space/image/game?w=256&h=256",
+  imageSrc: "/img/decorative-1000x1000.jpg",
   packageName: "ChefMod",
   tags: [
     { id: "1", label: "Mods" },

@@ -20,7 +20,7 @@ const hour = 3600000;
 const packageBase = {
   communityName: "Risk of Rain 2",
   deprecated: false,
-  imageSrc: "https://api.lorem.space/image/game?w=266&h=200",
+  imageSrc: "/img/decorative-2000x200.jpg",
   nsfw: false,
   tagOnClick: () => null,
 };
