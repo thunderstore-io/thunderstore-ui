@@ -117,6 +117,27 @@ files.
 To upgrade Storybook when it informs you about new version being available, run
 the given `npx sb@latest upgrade` command in `apps/storybook` directory.
 
+### Chromatic
+
+[Chromatic](https://www.chromatic.com/docs/) is used as a part of CI pipeline.
+It hosts Storybook, and detects visual changes to any stories. These changes
+needs to be reviewed before a related PR can be merged. The workflow is:
+
+1. Commit and push the changes as usual. `storybook-chromatic.yml` Action
+   builds and uploads a new version of our Storybook to Chromatic. Note that
+   this step only fails if there's error building or uploading the Storybook -
+   any changes to components are not important at this point.
+2. Create a PR as usual.
+3. If there were visual changes, GitHub will show a pending action: _"UI Tests
+   Pending — 10 changes must be accepted as baselines."_ Clicking the *Details*
+   link will take you to Chromatic, where you must review and either accept or
+   reject the changes. The PR can't be merged before the changes are accepted.
+
+`yarn workspace @thunderstore/storybook chromatic` can be used to manually
+upload a Storybook to Chromatic, but this seems unnecessary since we have it
+automated. To use the manual method, `CHROMATIC_PROJECT_TOKEN` env variable
+needs to be set (in the repo it's stored as a Secret for Actions).
+
 ## Docker
 
 The provided `Dockerfile` can be used to run the Next.js production server, e.g:
