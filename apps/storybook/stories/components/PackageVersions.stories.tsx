@@ -16,32 +16,32 @@ const day = 86400000;
 Versions.args = {
   versions: [
     {
-      downloadCount: Math.floor(Math.random() * 100000),
+      downloadCount: 123,
       uploaded: new Date(now - 2 * day).toISOString(),
       version: "2.0.15",
     },
     {
-      downloadCount: Math.floor(Math.random() * 100000),
+      downloadCount: 4567,
       uploaded: new Date(now - 5 * day).toISOString(),
       version: "2.0.14",
     },
     {
-      downloadCount: Math.floor(Math.random() * 100000),
+      downloadCount: 89012,
       uploaded: new Date(now - 15 * day).toISOString(),
       version: "2.0.13",
     },
     {
-      downloadCount: Math.floor(Math.random() * 100000),
+      downloadCount: 345678,
       uploaded: new Date(now - 50 * day).toISOString(),
       version: "2.0.5",
     },
     {
-      downloadCount: Math.floor(Math.random() * 100000),
+      downloadCount: 9012345,
       uploaded: new Date(now - 100 * day).toISOString(),
       version: "2.0.0",
     },
     {
-      downloadCount: Math.floor(Math.random() * 100000),
+      downloadCount: 67890123,
       uploaded: new Date(now - 400 * day).toISOString(),
       version: "1.0.99",
     },

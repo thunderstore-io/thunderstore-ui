@@ -17,7 +17,7 @@ Requirements.args = {
       communityName: "bbepis",
       description:
         "Unified BepInEx all-in-one modding pack - plugin framework, detour library",
-      imageSrc: "https://api.lorem.space/image/game?w=100&h=100",
+      imageSrc: "/img/decorative-128x128.jpg",
       packageName: "BepInExPack",
       preferredVersion: "5.4.9",
     },

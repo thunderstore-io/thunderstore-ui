@@ -15,7 +15,7 @@ const Template: ComponentStory<typeof CommunityCard> = ({ communities }) => (
   </Flex>
 );
 
-const imageSrc = "https://api.lorem.space/image/game?w=356&h=110";
+const imageSrc = "/img/decorative-2000x200.jpg";
 const communities = [
   {
     downloadCount: 40000,

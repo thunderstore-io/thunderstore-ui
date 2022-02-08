@@ -19,9 +19,9 @@ Info.args = {
   CHEF is a robot cook who is capable of serving generous helpings
   to even the largest crowds. Supports StandaloneAncientScepter!
 
-  ![](https://api.lorem.space/image/game?w=1920&h=1080)
-  ![](https://api.lorem.space/image/game?w=1920&h=540)
-  ![](https://api.lorem.space/image/game?w=256&h=256)
+  ![](/img/decorative-1000x1000.jpg)
+  ![](/img/decorative-2000x200.jpg)
+  ![](/img/decorative-128x128.jpg)
 
   If you have any feedback/suggestions, open an issue on the Github page,
   or join our discord at [https://discord.gg/pKE3QCEsxG](https://discord.gg/pKE3QCEsxG)
@@ -72,11 +72,11 @@ Info.args = {
 
   ### Primary: Throw Evidence
 
-  ![](https://api.lorem.space/image/game?w=128&h=128)
-  ![](https://api.lorem.space/image/game?w=128&h=128)
-  ![](https://api.lorem.space/image/game?w=128&h=128)
-  ![](https://api.lorem.space/image/game?w=128&h=128)
-  ![](https://api.lorem.space/image/game?w=128&h=128)
+  ![](/img/decorative-128x128.jpg)
+  ![](/img/decorative-128x128.jpg)
+  ![](/img/decorative-128x128.jpg)
+  ![](/img/decorative-128x128.jpg)
+  ![](/img/decorative-128x128.jpg)
   `,
 };
 
