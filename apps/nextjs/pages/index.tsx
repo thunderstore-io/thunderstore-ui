@@ -1,12 +1,19 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
-import { CommunityCard } from "@thunderstore/components";
+import { CommunityCard, CommunityCardProps } from "@thunderstore/components";
+import { GetServerSideProps } from "next";
 
 import { HalfPageBackground } from "components/Background";
 import { ContentWrapper } from "components/Wrapper";
+import { communityCardToProps } from "utils/transforms/communityCard";
 
-export default function Home(): JSX.Element {
-  // TODO: Fetch actual data with provider.
-  const { communities, downloadCount, modCount } = fakeData;
+interface PageProps {
+  communities: CommunityCardProps[];
+  downloadCount: number;
+  packageCount: number;
+}
+
+export default function Home(props: PageProps): JSX.Element {
+  const { communities, downloadCount, packageCount } = props;
 
   return (
     <>
@@ -28,7 +35,7 @@ export default function Home(): JSX.Element {
         </Text>
 
         <Flex columnGap="20px" justify="center" mt="30px">
-          <HighlighBox count={modCount} items="mods" />
+          <HighlighBox count={packageCount} items="mods" />
           <HighlighBox count={downloadCount} items="downloads" />
         </Flex>
 
@@ -40,13 +47,24 @@ export default function Home(): JSX.Element {
           wrap="wrap"
         >
           {communities.map((props) => (
-            <CommunityCard key={props.name} {...props} />
+            <CommunityCard key={props.identifier} {...props} />
           ))}
         </Flex>
       </ContentWrapper>
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  // TODO: Fetch actual data with provider.
+  return {
+    props: {
+      communities: fakeData.communities.map((c) => communityCardToProps(c)),
+      downloadCount: fakeData.download_count,
+      packageCount: fakeData.package_count,
+    },
+  };
+};
 
 interface HighlighProps {
   count: number;
@@ -79,58 +97,66 @@ const HighlighBox: React.FC<HighlighProps> = (props) => {
   );
 };
 
-const imageSrc = "https://api.lorem.space/image/game?w=356&h=110";
+const bg_image_src = "https://api.lorem.space/image/game?w=356&h=110";
 const fakeData = {
   communities: [
     {
-      downloadCount: 40000,
-      imageSrc,
-      modCount: 600,
+      download_count: 40000,
+      bg_image_src,
+      identifier: "riskofrain2",
+      package_count: 600,
       name: "Risk of Rain 2",
     },
     {
-      downloadCount: 1408576,
-      imageSrc,
-      modCount: 2048,
+      download_count: 1408576,
+      bg_image_src,
+      identifier: "h3vr",
+      package_count: 2048,
       name: "H3VR",
     },
     {
-      downloadCount: 100000000,
-      imageSrc,
-      modCount: 10000000,
+      download_count: 100000000,
+      bg_image_src,
+      identifier: "valheim",
+      package_count: 10000000,
       name: "Valheim",
     },
     {
-      downloadCount: 0,
-      imageSrc,
-      modCount: 0,
+      download_count: 0,
+      bg_image_src,
+      identifier: "boneworks",
+      package_count: 0,
       name: "BONEWORKS",
     },
     {
-      downloadCount: 23232,
-      imageSrc: null,
-      modCount: 23,
+      download_count: 23232,
+      bg_image_src: null,
+      identifier: "gtfo",
+      package_count: 23,
       name: "GTFO",
     },
     {
-      downloadCount: 1000,
-      imageSrc,
-      modCount: 1,
+      download_count: 1000,
+      bg_image_src,
+      identifier: "outward",
+      package_count: 1,
       name: "Outward",
     },
     {
-      downloadCount: 123456789,
-      imageSrc,
-      modCount: 1024,
+      download_count: 123456789,
+      bg_image_src,
+      identifier: "rounds",
+      package_count: 1024,
       name: "ROUNDS",
     },
     {
-      downloadCount: 128,
-      imageSrc,
-      modCount: 3,
+      download_count: 128,
+      bg_image_src,
+      identifier: "talespire",
+      package_count: 3,
       name: "Talespire",
     },
   ],
-  downloadCount: 15215000,
-  modCount: 5000,
+  download_count: 15215000,
+  package_count: 5000,
 };
