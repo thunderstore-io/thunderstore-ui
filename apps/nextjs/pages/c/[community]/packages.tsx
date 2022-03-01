@@ -22,19 +22,23 @@ import {
   queryToStrs,
   useQueryToState,
 } from "hooks/useQueryToState";
-
-type Packages = Omit<PackageCardProps, "tagOnClick">[];
+import { Category, categoriesToSelectOptions } from "utils/transforms/category";
+import {
+  BackendPackageCard,
+  packageCardsToProps,
+} from "utils/transforms/packageCard";
 
 interface PageProps {
   categories: SelectOption[];
-  community: string;
+  communityName: string;
+  communityIdentifier: string;
   coverImage: string;
-  packages: Packages;
+  packages: PackageCardProps[];
 }
 
 export default function CommunityPackages(props: PageProps): JSX.Element {
-  const { categories, community, coverImage } = props;
-  const [packages, setPackages] = useState(props.packages);
+  const { categories, communityName, communityIdentifier, coverImage } = props;
+  const [packages, setPackages] = useState<PackageCardProps[]>(props.packages);
 
   // Read initial filter values from GET parameters and store them in state.
   const [deprecated, setDeprecated] = useQueryToState<boolean>(
@@ -70,19 +74,21 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
   // TODO: Fetch actual data from backend.
   useEffect(() => {
     setPackages(
-      getFakeData(
-        community,
-        itemType,
-        query,
-        ordering,
-        includedCategories,
-        excludedCategories,
-        nsfw,
-        deprecated
+      packageCardsToProps(
+        getFakeDataPackages(
+          communityIdentifier,
+          itemType,
+          query,
+          ordering,
+          includedCategories,
+          excludedCategories,
+          nsfw,
+          deprecated
+        )
       )
     );
   }, [
-    community,
+    communityIdentifier,
     deprecated,
     excludedCategories,
     includedCategories,
@@ -98,7 +104,7 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
   // The idea was that third click would remove it from exluded
   // categories, but since no card containing the tag will be visible if
   // the category is excluded, that won't work...
-  const tagOnClick = (tagId: string) => {
+  const categoryOnClick = (tagId: string) => {
     if (includedCategories.includes(tagId)) {
       setIncludedCategories(
         includedCategories.filter((catId) => catId !== tagId)
@@ -121,8 +127,8 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
             parts={[
               {
                 LinkComponent: CommunityLink,
-                LinkProps: { community },
-                label: community,
+                LinkProps: { communityIdentifier },
+                label: communityName,
               },
               { label: "Packages" },
             ]}
@@ -170,11 +176,11 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
           rowGap="20px"
           wrap="wrap"
         >
-          {packages.map((cardProps, i) => (
+          {packages.map((cardProps) => (
             <PackageCard
-              key={`${cardProps.packageName}-${i}`}
+              key={`${cardProps.communityIdentifier}-${cardProps.packageName}`}
+              categoryOnClick={categoryOnClick}
               {...cardProps}
-              tagOnClick={tagOnClick}
             />
           ))}
 
@@ -200,21 +206,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { notFound: true };
   }
 
+  const data = getFakeData(
+    community,
+    "mods",
+    "",
+    "updated",
+    [],
+    [],
+    false,
+    false
+  );
+
   return {
     props: {
-      categories: getFakeCategories(),
-      community,
-      coverImage: "https://api.lorem.space/image/game?w=2000&h=200",
-      packages: getFakeData(
-        community,
-        "mods",
-        "",
-        "updated",
-        [],
-        [],
-        false,
-        false
-      ),
+      categories: categoriesToSelectOptions(data.categories),
+      communityName: data.community_name,
+      communityIdentifier: community,
+      coverImage: data.bg_image_src,
+      packages: packageCardsToProps(data.packages),
     },
   };
 };
@@ -248,13 +257,15 @@ const TypeOption: FC<TypeSelectorProps> = (props) => {
   );
 };
 
-/**
- * TODO: Packages should be fetched in batches with infinite scroll.
- * TODO: Packages can be mods or modpacks.
- * TODO: Ordering.
- */
+interface FakeData {
+  categories: Category[];
+  community_name: string;
+  bg_image_src: string;
+  packages: BackendPackageCard[];
+}
+
 const getFakeData = (
-  communityName: string,
+  communityIdentifier: string,
   _itemType: ItemTypes, // eslint-disable-line @typescript-eslint/no-unused-vars
   query: string,
   _ordering: PackageOrdering, // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -262,41 +273,76 @@ const getFakeData = (
   excludedCategories: string[],
   nsfw: boolean,
   deprecated: boolean
-): Packages => {
+): FakeData => {
+  const packages = getFakeDataPackages(
+    communityIdentifier,
+    _itemType,
+    query,
+    _ordering,
+    includedCategories,
+    excludedCategories,
+    nsfw,
+    deprecated
+  );
+
+  return {
+    bg_image_src: "https://api.lorem.space/image/game?w=2000&h=200",
+    categories: getFakeCategories(),
+    community_name: communityIdentifier,
+    packages,
+  };
+};
+
+/**
+ * TODO: Packages should be fetched in batches with infinite scroll.
+ * TODO: Packages can be mods or modpacks.
+ * TODO: Ordering.
+ */
+const getFakeDataPackages = (
+  communityIdentifier: string,
+  _itemType: ItemTypes, // eslint-disable-line @typescript-eslint/no-unused-vars
+  query: string,
+  _ordering: PackageOrdering, // eslint-disable-line @typescript-eslint/no-unused-vars
+  includedCategories: string[],
+  excludedCategories: string[],
+  nsfw: boolean,
+  deprecated: boolean
+): BackendPackageCard[] => {
   let packages = [
     ...Array(30)
       .fill(0)
       .map((_x, i) => ({
-        communityName,
-        deprecated: i !== 0 && i % 8 === 0,
-        description:
-          "Adds item drop on killing the Shopkeeper, and several new items.",
-        downloadCount: 40,
-        imageSrc:
-          i === 0 || i % 5
-            ? "https://api.lorem.space/image/game?w=266&h=200"
-            : null,
-        lastUpdated: "2021-12-17T15:00:00Z",
-        likeCount: 600,
-        nsfw: i !== 0 && i % 6 === 0,
-        packageName: "NewtDrop",
-        pinned: i < 3,
-        tags:
+        categories:
           i % 4 === 0
             ? [
-                { id: "1", label: "Items" },
-                { id: "2", label: "Tweaks" },
-                { id: "3", label: "Mods" },
+                { slug: "items", name: "Items" },
+                { slug: "tweaks", name: "Tweaks" },
+                { slug: "mods", name: "Mods" },
               ]
             : i % 4 === 1
             ? [
-                { id: "1", label: "Items" },
-                { id: "2", label: "Tweaks" },
+                { slug: "items", name: "Items" },
+                { slug: "tweaks", name: "Tweaks" },
               ]
             : i % 4 === 2
-            ? [{ id: "1", label: "Items" }]
+            ? [{ slug: "items", name: "Items" }]
             : [],
-        teamName: "BoneCapTheTweet",
+        community_name: communityIdentifier,
+        community_identifier: communityIdentifier,
+        description:
+          "Adds item drop on killing the Shopkeeper, and several new items.",
+        download_count: 40,
+        image_src:
+          i === 0 || i % 5
+            ? "https://api.lorem.space/image/game?w=266&h=200"
+            : null,
+        is_deprecated: i !== 0 && i % 8 === 0,
+        is_nsfw: i !== 0 && i % 6 === 0,
+        is_pinned: i < 3,
+        last_updated: "2021-12-17T15:00:00Z",
+        rating_score: 600,
+        package_name: "NewtDrop",
+        team_name: "BoneCapTheTweet",
       })),
   ];
 
@@ -307,24 +353,28 @@ const getFakeData = (
 
   if (includedCategories.length) {
     packages = packages.filter((p) => {
-      const packageCategories = p.tags.map((tag) => tag.id.toString());
-      return includedCategories.every((id) => packageCategories.includes(id));
+      const packageCategories = p.categories.map((c) => c.slug);
+      return includedCategories.every((slug) =>
+        packageCategories.includes(slug)
+      );
     });
   }
 
   if (excludedCategories.length) {
     packages = packages.filter((p) => {
-      const packageCategories = p.tags.map((tag) => tag.id.toString());
-      return !excludedCategories.some((id) => packageCategories.includes(id));
+      const packageCategories = p.categories.map((c) => c.slug);
+      return !excludedCategories.some((slug) =>
+        packageCategories.includes(slug)
+      );
     });
   }
 
   if (!nsfw) {
-    packages = packages.filter((p) => !p.nsfw);
+    packages = packages.filter((p) => !p.is_nsfw);
   }
 
   if (!deprecated) {
-    packages = packages.filter((p) => !p.deprecated);
+    packages = packages.filter((p) => !p.is_deprecated);
   }
 
   return packages;
@@ -334,16 +384,16 @@ const getFakeData = (
  * TODO: Categories should be fetched from the backend, either with the
  * same request as the first batch of packages, or in a separate request.
  */
-const getFakeCategories = (): SelectOption[] => [
-  { value: "1", label: "Items" },
-  { value: "2", label: "Tweaks" },
-  { value: "3", label: "Mods" },
-  { value: "4", label: "Tools" },
-  { value: "5", label: "Maps" },
-  { value: "6", label: "Skins" },
-  { value: "7", label: "Audio" },
-  { value: "8", label: "Player Characters" },
-  { value: "9", label: "Client-side" },
-  { value: "10", label: "Server-side" },
-  { value: "11", label: "Language" },
+const getFakeCategories = () => [
+  { slug: "items", name: "Items" },
+  { slug: "tweaks", name: "Tweaks" },
+  { slug: "mods", name: "Mods" },
+  { slug: "tools", name: "Tools" },
+  { slug: "maps", name: "Maps" },
+  { slug: "skins", name: "Skins" },
+  { slug: "audio", name: "Audio" },
+  { slug: "player-characters", name: "Player Characters" },
+  { slug: "client-side", name: "Client-side" },
+  { slug: "server-side", name: "Server-side" },
+  { slug: "language", name: "Language" },
 ];
