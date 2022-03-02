@@ -1,13 +1,8 @@
 import {
   PackageActions,
-  PackageActionsProps,
-  PackageDependency,
   PackageHeader,
-  PackageHeaderProps,
   PackageInfo,
-  PackageInfoProps,
   PackageRequirements,
-  PackageVersion,
   PackageVersions,
 } from "@thunderstore/components";
 import { useMediaQuery } from "@thunderstore/hooks";
@@ -19,14 +14,11 @@ import {
   FULL_WIDTH_BREAKPOINT,
   LayoutWrapper,
 } from "components/Wrapper";
-
-interface PackageProps
-  extends PackageActionsProps,
-    PackageHeaderProps,
-    PackageInfoProps {
-  requirements: PackageDependency[];
-  versions: PackageVersion[];
-}
+import {
+  BackendPackage,
+  PackageProps,
+  packageToProps,
+} from "utils/transforms/package";
 
 interface PageProps {
   package: PackageProps;
@@ -66,7 +58,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      package: getFakeData(), // TODO
+      package: packageToProps(getFakeData()),
     },
   };
 };
@@ -74,17 +66,42 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const now = Date.now();
 const day = 86400000;
 
-const getFakeData = (): Omit<PackageProps, "renderFullWidth"> => ({
-  communityName: "Risk of Rain 2",
-  dependantCount: 28,
-  dependencyString: "Gnome-ChefMod-2.0.15",
+const getFakeData = (): BackendPackage => ({
+  categories: [
+    { slug: "mods", name: "Mods" },
+    { slug: "player-characters", name: "Player Characters" },
+  ],
+  community_name: "Risk of Rain 2",
+  community_identifier: "riskofrain2",
+  dependant_count: 28,
+  dependencies: [
+    {
+      community_name: "bbepis",
+      community_identifier: "bbepis",
+      description:
+        "Unified BepInEx all-in-one modding pack - plugin framework, detour library",
+      image_src: "https://api.lorem.space/image/game?w=100&h=100",
+      package_name: "BepInExPack",
+      version_number: "5.4.9",
+    },
+    {
+      community_name: "tristanmcpherson",
+      community_identifier: "tristanmcpherson",
+      description: "A modding API for Risk of Rain 2",
+      image_src: null,
+      package_name: "R2API",
+      version_number: "3.0.52",
+    },
+  ],
+  dependency_string: "Gnome-ChefMod-2.0.15",
   description:
     "Adds the CHEF robot from RoR1 as a survivor. Multiplayer-compatible!",
-  downloadCount: 245111867,
-  imageSrc: "https://api.lorem.space/image/game?w=256&h=256",
-  lastUpdated: new Date(now - 2 * day).toISOString(),
-  latestVersion: "2.0.15",
-  likeCount: 32,
+  download_count: 245111867,
+  download_url: "/package/download/Gnome/ChefMod/2.0.15/",
+  image_src: "https://api.lorem.space/image/game?w=256&h=256",
+  install_url:
+    "ror2mm://v1/install/thunderstore.localhost/Gnome/ChefMod/2.0.15/",
+  last_updated: new Date(now - 2 * day).toISOString(),
   markdown: `
 # ChefMod
 
@@ -150,61 +167,58 @@ The zip looks like:
 ![](https://cdn.discordapp.com/attachments/399901440023330816/927507211012411392/texKnifeIcon.png)
 ![](https://cdn.discordapp.com/attachments/399901440023330816/927507209640882176/texPhoneIcon.png)
 `,
-  packageName: "ChefMod",
-  packageNamespace: "Gnome",
-  requirements: [
-    {
-      communityName: "bbepis",
-      description:
-        "Unified BepInEx all-in-one modding pack - plugin framework, detour library",
-      imageSrc: "https://api.lorem.space/image/game?w=100&h=100",
-      packageName: "BepInExPack",
-      preferredVersion: "5.4.9",
-    },
-    {
-      communityName: "tristanmcpherson",
-      description: "A modding API for Risk of Rain 2",
-      imageSrc: null,
-      packageName: "R2API",
-      preferredVersion: "3.0.52",
-    },
-  ],
-  tags: [
-    { id: "3", label: "Mods" },
-    { id: "8", label: "Player Characters" },
-  ],
-  teamName: "Gnome",
-  url: "https://github.com/GnomeModder/ChefMod",
+  package_name: "ChefMod",
+  rating_score: 32,
+  team_name: "Gnome",
   versions: [
     {
-      downloadCount: Math.floor(Math.random() * 100000),
-      uploaded: new Date(now - 2 * day).toISOString(),
-      version: "2.0.15",
+      date_created: new Date(now - 2 * day).toISOString(),
+      download_count: Math.floor(Math.random() * 100000),
+      download_url: "/package/download/Gnome/ChefMod/2.0.15/",
+      install_url:
+        "ror2mm://v1/install/thunderstore.localhost/Gnome/ChefMod/2.0.15/",
+      version_number: "2.0.15",
     },
     {
-      downloadCount: Math.floor(Math.random() * 100000),
-      uploaded: new Date(now - 5 * day).toISOString(),
-      version: "2.0.14",
+      date_created: new Date(now - 5 * day).toISOString(),
+      download_count: Math.floor(Math.random() * 100000),
+      download_url: "/package/download/Gnome/ChefMod/2.0.14/",
+      install_url:
+        "ror2mm://v1/install/thunderstore.localhost/Gnome/ChefMod/2.0.14/",
+      version_number: "2.0.14",
     },
     {
-      downloadCount: Math.floor(Math.random() * 100000),
-      uploaded: new Date(now - 15 * day).toISOString(),
-      version: "2.0.13",
+      date_created: new Date(now - 15 * day).toISOString(),
+      download_count: Math.floor(Math.random() * 100000),
+      download_url: "/package/download/Gnome/ChefMod/2.0.13/",
+      install_url:
+        "ror2mm://v1/install/thunderstore.localhost/Gnome/ChefMod/2.0.13/",
+      version_number: "2.0.13",
     },
     {
-      downloadCount: Math.floor(Math.random() * 100000),
-      uploaded: new Date(now - 50 * day).toISOString(),
-      version: "2.0.5",
+      date_created: new Date(now - 50 * day).toISOString(),
+      download_count: Math.floor(Math.random() * 100000),
+      download_url: "/package/download/Gnome/ChefMod/2.0.5/",
+      install_url:
+        "ror2mm://v1/install/thunderstore.localhost/Gnome/ChefMod/2.0.5/",
+      version_number: "2.0.5",
     },
     {
-      downloadCount: Math.floor(Math.random() * 100000),
-      uploaded: new Date(now - 100 * day).toISOString(),
-      version: "2.0.0",
+      date_created: new Date(now - 100 * day).toISOString(),
+      download_count: Math.floor(Math.random() * 100000),
+      download_url: "/package/download/Gnome/ChefMod/2.0.0/",
+      install_url:
+        "ror2mm://v1/install/thunderstore.localhost/Gnome/ChefMod/2.0.0/",
+      version_number: "2.0.0",
     },
     {
-      downloadCount: Math.floor(Math.random() * 100000),
-      uploaded: new Date(now - 400 * day).toISOString(),
-      version: "1.0.99",
+      date_created: new Date(now - 400 * day).toISOString(),
+      download_count: Math.floor(Math.random() * 100000),
+      download_url: "/package/download/Gnome/ChefMod/1.0.99/",
+      install_url:
+        "ror2mm://v1/install/thunderstore.localhost/Gnome/ChefMod/1.0.99/",
+      version_number: "1.0.99",
     },
   ],
+  website: "https://github.com/GnomeModder/ChefMod",
 });
