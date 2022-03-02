@@ -14,7 +14,11 @@ import { FilterIcon, SearchIcon } from "./Icons";
 import { MultiSelect, SelectOption } from "./Select";
 import { ToggleSwitch } from "./ToggleSwitch";
 
-export type PackageOrdering = "downloaded" | "newest" | "rated" | "updated";
+export type PackageOrdering =
+  | "last-updated"
+  | "most-downloaded"
+  | "newest"
+  | "top-rated";
 
 interface PackageSearchProps {
   /** Available options for excludedCategories and includedCategories props. */
@@ -209,10 +213,10 @@ interface OrderingButtonsProps {
 const OrderingButtons: React.FC<OrderingButtonsProps> = (props) => {
   const { selected, setOrdering } = props;
   const buttons: [string, PackageOrdering][] = [
-    ["Last Updated", "updated"],
+    ["Last Updated", "last-updated"],
     ["Newest", "newest"],
-    ["Most Downloaded", "downloaded"],
-    ["Top Rated", "rated"],
+    ["Most Downloaded", "most-downloaded"],
+    ["Top Rated", "top-rated"],
   ];
 
   return (

@@ -69,7 +69,7 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
 
   // TODO: should these be read from GET parameters as well?
   const [itemType, setItemType] = useState<ItemTypes>("mods");
-  const [ordering, setOrdering] = useState<PackageOrdering>("updated");
+  const [ordering, setOrdering] = useState<PackageOrdering>("last-updated");
 
   // TODO: Fetch actual data from backend.
   useEffect(() => {
@@ -210,7 +210,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     community,
     "mods",
     "",
-    "updated",
+    "last-updated",
     [],
     [],
     false,
