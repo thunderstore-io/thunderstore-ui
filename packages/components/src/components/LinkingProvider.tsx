@@ -20,10 +20,8 @@ import React, { ReactElement as RE } from "react";
 // If the new link uses any props not already listed here, add them.
 export interface ThunderstoreLinkProps {
   community?: string;
-  namespace?: string;
   package?: string;
   team?: string;
-  version?: string;
 }
 
 // STEP 2 of adding new link definitions:
@@ -34,10 +32,8 @@ export interface ThunderstoreLinkProps {
 // required since the stripping is done during runtime.
 export const thunderstoreLinkProps: ThunderstoreLinkProps = {
   community: "",
-  namespace: "",
   package: "",
   team: "",
-  version: "",
 };
 
 // Accepting any and all props is required to keep the linking
@@ -71,14 +67,6 @@ export interface LinkLibrary {
   PackageDependants: (
     props: AnyProps & { community: string; package: string }
   ) => RE | null;
-  /** Link for downloading the package */
-  PackageDownload: (
-    props: AnyProps & { namespace: string; package: string; version: string }
-  ) => RE | null;
-  /** Link for installing the package via mod manager */
-  PackageInstall: (
-    props: AnyProps & { namespace: string; package: string; version: string }
-  ) => RE | null;
   /** View for submitting new packages or versions */
   PackageUpload: NoRequiredProps;
   /** Team's public profile page */
@@ -97,8 +85,6 @@ const library: LinkLibrary = {
   Index: noop,
   Package: noop,
   PackageDependants: noop,
-  PackageDownload: noop,
-  PackageInstall: noop,
   PackageUpload: noop,
   Team: noop,
 };
