@@ -19,32 +19,37 @@ const imageSrc = "/img/decorative-2000x200.jpg";
 const communities = [
   {
     downloadCount: 40000,
+    identifier: "riskofrain2",
     imageSrc,
-    modCount: 642,
+    packageCount: 642,
     name: "Risk of Rain 2",
   },
   {
     downloadCount: 1408576,
+    identifier: "h3vr",
     imageSrc,
-    modCount: 2048,
+    packageCount: 2048,
     name: "H3VR",
   },
   {
     downloadCount: 100000000,
+    identifier: "valheim",
     imageSrc,
-    modCount: 10000000,
+    packageCount: 10000000,
     name: "Valheim",
   },
   {
     downloadCount: 0,
+    identifier: "boneworks",
     imageSrc: null,
-    modCount: 0,
+    packageCount: 0,
     name: "BONEWORKS",
   },
   {
     downloadCount: 23232,
+    identifier: "gtfo",
     imageSrc,
-    modCount: 23,
+    packageCount: 23,
     name: "GTFO",
   },
 ];

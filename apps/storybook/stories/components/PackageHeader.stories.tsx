@@ -12,17 +12,17 @@ const Template: ComponentStory<typeof PackageHeader> = (props) => (
 
 const Header = Template.bind({});
 Header.args = {
-  communityName: "Risk of Rain 2",
+  categories: [
+    { value: "1", label: "Mods" },
+    { value: "2", label: "Player Characters" },
+  ],
+  communityIdentifier: "riskofrain2",
   description:
     "Adds the CHEF robot from RoR1 as a survivor. Multiplayer-compatible!",
   imageSrc: "/img/decorative-1000x1000.jpg",
   packageName: "ChefMod",
-  tags: [
-    { id: "1", label: "Mods" },
-    { id: "2", label: "Player Characters" },
-  ],
   teamName: "Gnome",
-  url: "https://github.com/GnomeModder/ChefMod",
+  website: "https://github.com/GnomeModder/ChefMod",
 };
 
 export { meta as default, Header as PackageHeader };

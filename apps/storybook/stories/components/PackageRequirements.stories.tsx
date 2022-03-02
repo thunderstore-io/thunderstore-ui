@@ -14,7 +14,7 @@ const Requirements = Template.bind({});
 Requirements.args = {
   requirements: [
     {
-      communityName: "bbepis",
+      communityIdentifier: "bbepis",
       description:
         "Unified BepInEx all-in-one modding pack - plugin framework, detour library",
       imageSrc: "/img/decorative-128x128.jpg",
@@ -22,7 +22,7 @@ Requirements.args = {
       preferredVersion: "5.4.9",
     },
     {
-      communityName: "tristanmcpherson",
+      communityIdentifier: "tristanmcpherson",
       description: "A modding API for Risk of Rain 2",
       imageSrc: null,
       packageName: "R2API",
