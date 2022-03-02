@@ -21,21 +21,17 @@ import React from "react";
 
 import { MaybeImage } from "./Internals";
 import { AnonymousLink, CommunityPackagesLink, TeamLink } from "./Links";
-
-interface TagData {
-  id: string;
-  label: string;
-}
+import { SelectOption } from "./Select";
 
 export interface PackageHeaderProps {
-  communityName: string;
+  categories: SelectOption[];
+  communityIdentifier: string;
   description: string;
   imageSrc: string | null;
   packageName: string;
   renderFullWidth?: boolean;
-  tags: TagData[];
   teamName: string;
-  url: string;
+  website: string;
 }
 
 /**
@@ -43,14 +39,14 @@ export interface PackageHeaderProps {
  */
 export const PackageHeader: React.FC<PackageHeaderProps> = (props) => {
   const {
-    communityName,
+    categories,
+    communityIdentifier,
     description,
     imageSrc,
     packageName,
     renderFullWidth,
-    tags,
     teamName,
-    url,
+    website,
   } = props;
 
   // Above the breakpoint image and text content are shown side by side.
@@ -101,7 +97,7 @@ export const PackageHeader: React.FC<PackageHeaderProps> = (props) => {
           >
             ·
           </chakra.span>
-          <AnonymousLink url={url}>{url}</AnonymousLink>
+          <AnonymousLink url={website}>{website}</AnonymousLink>
         </Text>
 
         <Text color="ts.babyBlue" mb="20px">
@@ -110,7 +106,7 @@ export const PackageHeader: React.FC<PackageHeaderProps> = (props) => {
 
         {aboveBreakpoint ? <Spacer /> : null}
 
-        <TagListing {...{ communityName, renderFullWidth, tags }} />
+        <TagListing {...{ categories, communityIdentifier, renderFullWidth }} />
       </Flex>
     </Flex>
   );
@@ -118,18 +114,18 @@ export const PackageHeader: React.FC<PackageHeaderProps> = (props) => {
 
 type TagsProps = Pick<
   PackageHeaderProps,
-  "communityName" | "renderFullWidth" | "tags"
+  "categories" | "communityIdentifier" | "renderFullWidth"
 >;
 
 const TagListing: React.FC<TagsProps> = (props) => {
-  const { communityName, renderFullWidth, tags } = props;
+  const { categories, communityIdentifier, renderFullWidth } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const tag = (tag: TagData) => (
+  const tag = (tag: SelectOption) => (
     <CommunityPackagesLink
-      community={communityName}
-      key={tag.id}
-      queryParams={`included_categories=${tag.id}`}
+      community={communityIdentifier}
+      key={tag.value}
+      queryParams={`included_categories=${tag.value}`}
     >
       <Tag size="lg">{tag.label}</Tag>
     </CommunityPackagesLink>
@@ -138,16 +134,16 @@ const TagListing: React.FC<TagsProps> = (props) => {
   // List all tags if there's only a few of them, or if the component is
   // rendered taking the whole width of the screen, since this tells us
   // we're in a mode where the component can safely grow vertically.
-  if (renderFullWidth || tags.length < 4) {
+  if (renderFullWidth || categories.length < 4) {
     return (
       <Box alignSelf="reverse" mt={renderFullWidth ? "0" : "20px"}>
-        {tags.map((t) => tag(t))}
+        {categories.map((c) => tag(c))}
       </Box>
     );
   }
 
-  const visible = tags.slice(0, 3);
-  const hidden = tags.slice(3);
+  const visible = categories.slice(0, 3);
+  const hidden = categories.slice(3);
 
   // If there's plenty of tags and limited space, display mosts of them
   // in a modal window.

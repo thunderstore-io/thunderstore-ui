@@ -2,18 +2,19 @@ import { Box, chakra, Flex, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 
 import { DownloadLinkIcon, InstallIcon } from "./Icons";
-import { PackageDownloadLink, PackageInstallLink } from "./Links";
+import { AnonymousLink } from "./Links";
 import { RelativeTime } from "./RelativeTime";
 
 export interface PackageVersion {
   downloadCount: number;
+  downloadUrl: string;
+  installUrl: string;
   uploaded: string;
   version: string;
 }
 
 interface PackageVersionsProps {
   packageName: string;
-  packageNamespace: string;
   versions: PackageVersion[];
 }
 
@@ -21,14 +22,13 @@ interface PackageVersionsProps {
  * Render list of different versions available for a package.
  */
 export const PackageVersions: React.FC<PackageVersionsProps> = (props) => {
-  const { packageName: name, packageNamespace: namespace, versions } = props;
+  const { packageName: name, versions } = props;
 
   if (!versions.length) {
     return null;
   }
 
   const [latest, ...rest] = versions;
-  const pkgProps = { name, namespace };
 
   return (
     <Box>
@@ -36,14 +36,14 @@ export const PackageVersions: React.FC<PackageVersionsProps> = (props) => {
         Available Versions
       </Heading>
 
-      <Version version={latest} {...pkgProps} isLatest />
+      <Version name={name} version={latest} isLatest />
 
       {rest.length > 0 && (
         <chakra.hr borderColor="ts.lightBlue" borderWidth="1px" mb="20px" />
       )}
 
       {rest.map((ver) => (
-        <Version key={ver.version} version={ver} {...pkgProps} />
+        <Version key={ver.version} name={name} version={ver} />
       ))}
     </Box>
   );
@@ -52,13 +52,18 @@ export const PackageVersions: React.FC<PackageVersionsProps> = (props) => {
 interface VersionProps {
   isLatest?: boolean;
   name: string;
-  namespace: string;
   version: PackageVersion;
 }
 
 const Version: React.FC<VersionProps> = (props) => {
-  const { isLatest, name, namespace, version } = props;
-  const { downloadCount, uploaded, version: ver } = version;
+  const { isLatest, name, version } = props;
+  const {
+    downloadCount,
+    downloadUrl,
+    installUrl,
+    uploaded,
+    version: ver,
+  } = version;
 
   return (
     <Flex mb="20px" color="ts.coolGray">
@@ -87,23 +92,13 @@ const Version: React.FC<VersionProps> = (props) => {
       </Box>
 
       <Flex align="center" columnGap="20px" flex="0 0 88px" justify="end">
-        <PackageInstallLink
-          namespace={namespace}
-          package={name}
-          version={ver}
-          title={`Install ${name} v${ver}`}
-        >
+        <AnonymousLink url={installUrl} title={`Install ${name} v${ver}`}>
           <InstallIcon boxSize="24px" color="ts.babyBlue" />
-        </PackageInstallLink>
+        </AnonymousLink>
 
-        <PackageDownloadLink
-          namespace={namespace}
-          package={name}
-          version={ver}
-          title={`Download ${name} v${ver}`}
-        >
+        <AnonymousLink url={downloadUrl} title={`Download ${name} v${ver}`}>
           <DownloadLinkIcon boxSize="24px" color="ts.babyBlue" />
-        </PackageDownloadLink>
+        </AnonymousLink>
       </Flex>
     </Flex>
   );

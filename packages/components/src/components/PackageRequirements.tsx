@@ -5,7 +5,7 @@ import { PackageLink } from "..";
 import { MaybeImage } from "./Internals";
 
 export interface PackageDependency {
-  communityName: string;
+  communityIdentifier: string;
   description: string;
   imageSrc: string | null;
   packageName: string;
@@ -34,7 +34,10 @@ export const PackageRequirements: React.FC<PackageRequirementsProps> = (
         Required Mods
       </Heading>
       {requirements.map((r) => (
-        <Dependency key={`${r.communityName}-${r.packageName}`} package={r} />
+        <Dependency
+          key={`${r.communityIdentifier}-${r.packageName}`}
+          package={r}
+        />
       ))}
     </Box>
   );
@@ -49,7 +52,7 @@ export const PackageRequirements: React.FC<PackageRequirementsProps> = (
  */
 const Dependency: React.FC<{ package: PackageDependency }> = (props) => {
   const {
-    communityName,
+    communityIdentifier,
     description,
     imageSrc,
     packageName,
@@ -63,14 +66,14 @@ const Dependency: React.FC<{ package: PackageDependency }> = (props) => {
       </Box>
 
       <Box flex="1 1 auto" p="10px 20px" isTruncated>
-        <PackageLink community={communityName} package={packageName}>
+        <PackageLink community={communityIdentifier} package={packageName}>
           <Heading
             as="h4"
             isTruncated
             size="sm"
-            title={`${communityName}-${packageName}`}
+            title={`${communityIdentifier}-${packageName}`}
           >
-            {communityName}-{packageName}
+            {communityIdentifier}-{packageName}
           </Heading>
         </PackageLink>
 

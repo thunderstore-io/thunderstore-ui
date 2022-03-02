@@ -6,20 +6,23 @@ import { DownloadIcon, LikeIcon, PinIcon } from "./Icons";
 import { MaybeImage } from "./Internals";
 import { PackageLink, TeamLink } from "./Links";
 import { RelativeTime } from "./RelativeTime";
+import { SelectOption } from "./Select";
 
+// TODO: `isDeprecated` and `isNsfw` are not used in UI currently,
+// although they probably should be.
 export interface PackageCardProps {
-  communityName: string;
-  deprecated: boolean;
+  categories: SelectOption[];
+  categoryOnClick?: (value: string) => void;
+  communityIdentifier: string;
   description: string;
   downloadCount: number;
   imageSrc: string | null;
+  isDeprecated: boolean;
+  isNsfw: boolean;
+  isPinned: boolean;
   lastUpdated: string;
-  likeCount: number;
-  nsfw: boolean;
   packageName: string;
-  pinned: boolean;
-  tagOnClick: (tagId: string) => void;
-  tags: { id: string; label: string }[];
+  ratingScore: number;
   teamName: string;
 }
 
@@ -28,16 +31,16 @@ export interface PackageCardProps {
  */
 export const PackageCard: React.FC<PackageCardProps> = (props) => {
   const {
-    communityName,
+    categories,
+    categoryOnClick,
+    communityIdentifier,
     description,
     downloadCount,
     imageSrc,
+    isPinned,
     lastUpdated,
-    likeCount,
     packageName,
-    pinned,
-    tagOnClick,
-    tags,
+    ratingScore,
     teamName,
   } = props;
 
@@ -55,7 +58,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
         height="200px"
         imageSrc={imageSrc}
       />
-      <PinnedTag pinned={pinned} />
+      <PinnedTag isPinned={isPinned} />
 
       <Flex
         bgColor="#18223C99"
@@ -67,7 +70,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
       >
         <Box>
           <LikeIcon boxSize="12px" m="-3px 5px 0 0" />
-          {formatCount(likeCount)}
+          {formatCount(ratingScore)}
         </Box>
         <Spacer />
         <Box>
@@ -79,7 +82,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
       <Box p="20px 20px 15px 20px">
         <Text fontSize={18} fontWeight={800}>
           <PackageLink
-            community={communityName}
+            community={communityIdentifier}
             package={packageName}
             _hover={{ textDecoration: "underline solid white 2px" }}
           >
@@ -97,14 +100,14 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
         <Text>{description}</Text>
 
         <Box mt="33px">
-          {tags.map((tag) => (
+          {categories.map((category) => (
             <Tag
-              key={tag.id}
-              onClick={() => tagOnClick(tag.id)}
+              key={category.value}
+              onClick={() => categoryOnClick?.(category.value)}
               size="md"
               cursor="pointer"
             >
-              {tag.label}
+              {category.label}
             </Tag>
           ))}
         </Box>
@@ -123,8 +126,8 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
 /**
  * Tag for marking a package as pinned.
  */
-const PinnedTag: React.FC<{ pinned: boolean }> = (props) => {
-  if (!props.pinned) {
+const PinnedTag: React.FC<{ isPinned: boolean }> = (props) => {
+  if (!props.isPinned) {
     return null;
   }
 
