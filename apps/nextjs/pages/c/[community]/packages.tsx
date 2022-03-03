@@ -53,6 +53,7 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
     "included_categories",
     queryToStrs
   );
+  const [sections, setSections] = useQueryToState("sections", queryToStrs);
   const [nsfw, setNsfw] = useQueryToState<boolean>("nsfw", queryToBool);
 
   // The query parameter can't use useQueryToState due to being debounced.
@@ -67,8 +68,7 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
     return () => setQueryDebounced.cancel();
   }, []);
 
-  // TODO: should these be read from GET parameters as well?
-  const [itemType, setItemType] = useState<ItemTypes>("mods");
+  // TODO: should this be read from GET parameters as well?
   const [ordering, setOrdering] = useState<PackageOrdering>("last-updated");
 
   // TODO: Fetch actual data from backend.
@@ -77,7 +77,7 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
       packageCardsToProps(
         getFakeDataPackages(
           communityIdentifier,
-          itemType,
+          sections,
           query,
           ordering,
           includedCategories,
@@ -92,7 +92,7 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
     deprecated,
     excludedCategories,
     includedCategories,
-    itemType,
+    sections,
     nsfw,
     ordering,
     query,
@@ -136,15 +136,15 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
 
           <Spacer />
 
-          <TypeOption
-            selectedType={itemType}
-            setType={setItemType}
-            type="mods"
+          <SectionOption
+            section="mods"
+            sections={sections}
+            setSections={setSections}
           />
-          <TypeOption
-            selectedType={itemType}
-            setType={setItemType}
-            type="modpacks"
+          <SectionOption
+            section="modpacks"
+            sections={sections}
+            setSections={setSections}
             ml="25px"
           />
         </Flex>
@@ -208,7 +208,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const data = getFakeData(
     community,
-    "mods",
+    [],
     "",
     "last-updated",
     [],
@@ -228,22 +228,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-type ItemTypes = "mods" | "modpacks";
+type Sections = "mods" | "modpacks";
 
-interface TypeSelectorProps extends FlexProps {
-  selectedType: ItemTypes;
-  setType: Dispatch<SetStateAction<ItemTypes>>;
-  type: ItemTypes;
+interface SectionOptionProps extends FlexProps {
+  sections: string[];
+  setSections: Dispatch<SetStateAction<string[]>>;
+  section: Sections;
 }
 
-const TypeOption: FC<TypeSelectorProps> = (props) => {
-  const { selectedType, setType, type, ...flexProps } = props;
+const SectionOption: FC<SectionOptionProps> = (props) => {
+  const { section, sections, setSections, ...flexProps } = props;
 
   return (
     <Flex
-      onClick={() => setType(type)}
+      onClick={() => setSections([section])}
       align="center"
-      bg={type === selectedType ? "#20294199" : "transparent"}
+      bg={sections.includes(section) ? "#20294199" : "transparent"}
       cursor="pointer"
       fontWeight={700}
       h="50px"
@@ -252,7 +252,7 @@ const TypeOption: FC<TypeSelectorProps> = (props) => {
       w="150px"
       {...flexProps}
     >
-      <Text textTransform="capitalize">{type}</Text>
+      <Text textTransform="capitalize">{section}</Text>
     </Flex>
   );
 };
@@ -266,9 +266,9 @@ interface FakeData {
 
 const getFakeData = (
   communityIdentifier: string,
-  _itemType: ItemTypes, // eslint-disable-line @typescript-eslint/no-unused-vars
+  sections: string[],
   query: string,
-  _ordering: PackageOrdering, // eslint-disable-line @typescript-eslint/no-unused-vars
+  _ordering: PackageOrdering,
   includedCategories: string[],
   excludedCategories: string[],
   nsfw: boolean,
@@ -276,7 +276,7 @@ const getFakeData = (
 ): FakeData => {
   const packages = getFakeDataPackages(
     communityIdentifier,
-    _itemType,
+    sections,
     query,
     _ordering,
     includedCategories,
@@ -295,12 +295,11 @@ const getFakeData = (
 
 /**
  * TODO: Packages should be fetched in batches with infinite scroll.
- * TODO: Packages can be mods or modpacks.
  * TODO: Ordering.
  */
 const getFakeDataPackages = (
   communityIdentifier: string,
-  _itemType: ItemTypes, // eslint-disable-line @typescript-eslint/no-unused-vars
+  _sections: string[], // eslint-disable-line @typescript-eslint/no-unused-vars
   query: string,
   _ordering: PackageOrdering, // eslint-disable-line @typescript-eslint/no-unused-vars
   includedCategories: string[],
