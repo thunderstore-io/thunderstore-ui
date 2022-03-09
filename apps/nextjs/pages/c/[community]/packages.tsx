@@ -128,7 +128,7 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
             parts={[
               {
                 LinkComponent: CommunityLink,
-                LinkProps: { communityIdentifier },
+                LinkProps: { community: communityIdentifier },
                 label: communityName,
               },
               { label: "Packages" },
