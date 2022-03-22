@@ -5,7 +5,7 @@ import { PackageLink } from "..";
 import { MaybeImage } from "./Internals";
 
 export interface PackageDependency {
-  communityIdentifier: string;
+  communityIdentifier: string | null;
   description: string;
   imageSrc: string | null;
   packageName: string;
@@ -43,13 +43,6 @@ export const PackageRequirements: React.FC<PackageRequirementsProps> = (
   );
 };
 
-/**
- * TODO: Using PackageLink here assumes the dependency is listed in the
- * community as the dependant package, but this is not guaranteed. As a
- * fallback, we should link to community-agnostic package view, or
- * select one of the communities where the package is listed and link
- * there.
- */
 const Dependency: React.FC<{ package: PackageDependency }> = (props) => {
   const {
     communityIdentifier,
@@ -66,16 +59,22 @@ const Dependency: React.FC<{ package: PackageDependency }> = (props) => {
       </Box>
 
       <Box flex="1 1 auto" p="10px 20px" isTruncated>
-        <PackageLink community={communityIdentifier} package={packageName}>
-          <Heading
-            as="h4"
-            isTruncated
-            size="sm"
-            title={`${communityIdentifier}-${packageName}`}
-          >
-            {communityIdentifier}-{packageName}
+        {communityIdentifier ? (
+          <PackageLink community={communityIdentifier} package={packageName}>
+            <Heading
+              as="h4"
+              isTruncated
+              size="sm"
+              title={`${communityIdentifier}-${packageName}`}
+            >
+              {communityIdentifier}-{packageName}
+            </Heading>
+          </PackageLink>
+        ) : (
+          <Heading as="h4" isTruncated size="sm" title={packageName}>
+            {packageName}
           </Heading>
-        </PackageLink>
+        )}
 
         <Text isTruncated title={description} color="ts.babyBlue" my="10px">
           {description}

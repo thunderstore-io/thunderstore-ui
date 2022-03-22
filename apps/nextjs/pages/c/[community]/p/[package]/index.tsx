@@ -85,8 +85,8 @@ const getFakeData = (): BackendPackage => ({
       version_number: "5.4.9",
     },
     {
-      community_name: "tristanmcpherson",
-      community_identifier: "tristanmcpherson",
+      community_name: null,
+      community_identifier: null,
       description: "A modding API for Risk of Rain 2",
       image_src: null,
       package_name: "R2API",

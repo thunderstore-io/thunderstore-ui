@@ -22,7 +22,7 @@ Requirements.args = {
       preferredVersion: "5.4.9",
     },
     {
-      communityIdentifier: "tristanmcpherson",
+      communityIdentifier: null,
       description: "A modding API for Risk of Rain 2",
       imageSrc: null,
       packageName: "R2API",

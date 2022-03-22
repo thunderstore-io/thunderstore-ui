@@ -9,8 +9,8 @@ import {
 import { categoriesToSelectOptions, Category } from "./category";
 
 interface BackendPackageDependency {
-  community_name: string;
-  community_identifier: string;
+  community_name: string | null;
+  community_identifier: string | null;
   description: string;
   image_src: string | null;
   package_name: string;
