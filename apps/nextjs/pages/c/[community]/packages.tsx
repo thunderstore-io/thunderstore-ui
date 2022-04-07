@@ -22,19 +22,24 @@ import {
   queryToStrs,
   useQueryToState,
 } from "hooks/useQueryToState";
-
-type Packages = Omit<PackageCardProps, "tagOnClick">[];
+import { fakeCategories, fakeData } from "placeholder/packageListing";
+import { Category, categoriesToSelectOptions } from "utils/transforms/category";
+import {
+  BackendPackageCard,
+  packageCardsToProps,
+} from "utils/transforms/packageCard";
 
 interface PageProps {
   categories: SelectOption[];
-  community: string;
+  communityName: string;
+  communityIdentifier: string;
   coverImage: string;
-  packages: Packages;
+  packages: PackageCardProps[];
 }
 
 export default function CommunityPackages(props: PageProps): JSX.Element {
-  const { categories, community, coverImage } = props;
-  const [packages, setPackages] = useState(props.packages);
+  const { categories, communityName, communityIdentifier, coverImage } = props;
+  const [packages, setPackages] = useState<PackageCardProps[]>(props.packages);
 
   // Read initial filter values from GET parameters and store them in state.
   const [deprecated, setDeprecated] = useQueryToState<boolean>(
@@ -49,6 +54,7 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
     "included_categories",
     queryToStrs
   );
+  const [sections, setSections] = useQueryToState("sections", queryToStrs);
   const [nsfw, setNsfw] = useQueryToState<boolean>("nsfw", queryToBool);
 
   // The query parameter can't use useQueryToState due to being debounced.
@@ -63,30 +69,31 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
     return () => setQueryDebounced.cancel();
   }, []);
 
-  // TODO: should these be read from GET parameters as well?
-  const [itemType, setItemType] = useState<ItemTypes>("mods");
-  const [ordering, setOrdering] = useState<PackageOrdering>("updated");
+  // TODO: should this be read from GET parameters as well?
+  const [ordering, setOrdering] = useState<PackageOrdering>("last-updated");
 
   // TODO: Fetch actual data from backend.
   useEffect(() => {
     setPackages(
-      getFakeData(
-        community,
-        itemType,
-        query,
-        ordering,
-        includedCategories,
-        excludedCategories,
-        nsfw,
-        deprecated
+      packageCardsToProps(
+        getFakeDataPackages(
+          communityIdentifier,
+          sections,
+          query,
+          ordering,
+          includedCategories,
+          excludedCategories,
+          nsfw,
+          deprecated
+        )
       )
     );
   }, [
-    community,
+    communityIdentifier,
     deprecated,
     excludedCategories,
     includedCategories,
-    itemType,
+    sections,
     nsfw,
     ordering,
     query,
@@ -98,7 +105,7 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
   // The idea was that third click would remove it from exluded
   // categories, but since no card containing the tag will be visible if
   // the category is excluded, that won't work...
-  const tagOnClick = (tagId: string) => {
+  const categoryOnClick = (tagId: string) => {
     if (includedCategories.includes(tagId)) {
       setIncludedCategories(
         includedCategories.filter((catId) => catId !== tagId)
@@ -121,8 +128,8 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
             parts={[
               {
                 LinkComponent: CommunityLink,
-                LinkProps: { community },
-                label: community,
+                LinkProps: { community: communityIdentifier },
+                label: communityName,
               },
               { label: "Packages" },
             ]}
@@ -130,15 +137,15 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
 
           <Spacer />
 
-          <TypeOption
-            selectedType={itemType}
-            setType={setItemType}
-            type="mods"
+          <SectionOption
+            section="mods"
+            sections={sections}
+            setSections={setSections}
           />
-          <TypeOption
-            selectedType={itemType}
-            setType={setItemType}
-            type="modpacks"
+          <SectionOption
+            section="modpacks"
+            sections={sections}
+            setSections={setSections}
             ml="25px"
           />
         </Flex>
@@ -170,11 +177,11 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
           rowGap="20px"
           wrap="wrap"
         >
-          {packages.map((cardProps, i) => (
+          {packages.map((cardProps) => (
             <PackageCard
-              key={`${cardProps.packageName}-${i}`}
+              key={`${cardProps.communityIdentifier}-${cardProps.packageName}`}
+              categoryOnClick={categoryOnClick}
               {...cardProps}
-              tagOnClick={tagOnClick}
             />
           ))}
 
@@ -200,41 +207,44 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { notFound: true };
   }
 
+  const data = getFakeData(
+    community,
+    [],
+    "",
+    "last-updated",
+    [],
+    [],
+    false,
+    false
+  );
+
   return {
     props: {
-      categories: getFakeCategories(),
-      community,
-      coverImage: "https://api.lorem.space/image/game?w=2000&h=200",
-      packages: getFakeData(
-        community,
-        "mods",
-        "",
-        "updated",
-        [],
-        [],
-        false,
-        false
-      ),
+      categories: categoriesToSelectOptions(data.categories),
+      communityName: data.community_name,
+      communityIdentifier: community,
+      coverImage: data.bg_image_src,
+      packages: packageCardsToProps(data.packages),
     },
   };
 };
 
-type ItemTypes = "mods" | "modpacks";
+type Sections = "mods" | "modpacks";
 
-interface TypeSelectorProps extends FlexProps {
-  selectedType: ItemTypes;
-  setType: Dispatch<SetStateAction<ItemTypes>>;
-  type: ItemTypes;
+interface SectionOptionProps extends FlexProps {
+  sections: string[];
+  setSections: Dispatch<SetStateAction<string[]>>;
+  section: Sections;
 }
 
-const TypeOption: FC<TypeSelectorProps> = (props) => {
-  const { selectedType, setType, type, ...flexProps } = props;
+const SectionOption: FC<SectionOptionProps> = (props) => {
+  const { section, sections, setSections, ...flexProps } = props;
 
   return (
     <Flex
-      onClick={() => setType(type)}
+      onClick={() => setSections([section])}
       align="center"
-      bg={type === selectedType ? "#20294199" : "transparent"}
+      bg={sections.includes(section) ? "#20294199" : "transparent"}
       cursor="pointer"
       fontWeight={700}
       h="50px"
@@ -243,62 +253,66 @@ const TypeOption: FC<TypeSelectorProps> = (props) => {
       w="150px"
       {...flexProps}
     >
-      <Text textTransform="capitalize">{type}</Text>
+      <Text textTransform="capitalize">{section}</Text>
     </Flex>
   );
 };
 
+interface FakeData {
+  categories: Category[];
+  community_name: string;
+  bg_image_src: string;
+  packages: BackendPackageCard[];
+}
+
+const getFakeData = (
+  communityIdentifier: string,
+  sections: string[],
+  query: string,
+  _ordering: PackageOrdering,
+  includedCategories: string[],
+  excludedCategories: string[],
+  nsfw: boolean,
+  deprecated: boolean
+): FakeData => {
+  const packages = getFakeDataPackages(
+    communityIdentifier,
+    sections,
+    query,
+    _ordering,
+    includedCategories,
+    excludedCategories,
+    nsfw,
+    deprecated
+  );
+
+  return {
+    bg_image_src: "https://api.lorem.space/image/game?w=2000&h=200",
+    categories: fakeCategories,
+    community_name: communityIdentifier,
+    packages,
+  };
+};
+
 /**
  * TODO: Packages should be fetched in batches with infinite scroll.
- * TODO: Packages can be mods or modpacks.
  * TODO: Ordering.
  */
-const getFakeData = (
-  communityName: string,
-  _itemType: ItemTypes, // eslint-disable-line @typescript-eslint/no-unused-vars
+const getFakeDataPackages = (
+  communityIdentifier: string,
+  _sections: string[], // eslint-disable-line @typescript-eslint/no-unused-vars
   query: string,
   _ordering: PackageOrdering, // eslint-disable-line @typescript-eslint/no-unused-vars
   includedCategories: string[],
   excludedCategories: string[],
   nsfw: boolean,
   deprecated: boolean
-): Packages => {
-  let packages = [
-    ...Array(30)
-      .fill(0)
-      .map((_x, i) => ({
-        communityName,
-        deprecated: i !== 0 && i % 8 === 0,
-        description:
-          "Adds item drop on killing the Shopkeeper, and several new items.",
-        downloadCount: 40,
-        imageSrc:
-          i === 0 || i % 5
-            ? "https://api.lorem.space/image/game?w=266&h=200"
-            : null,
-        lastUpdated: "2021-12-17T15:00:00Z",
-        likeCount: 600,
-        nsfw: i !== 0 && i % 6 === 0,
-        packageName: "NewtDrop",
-        pinned: i < 3,
-        tags:
-          i % 4 === 0
-            ? [
-                { id: "1", label: "Items" },
-                { id: "2", label: "Tweaks" },
-                { id: "3", label: "Mods" },
-              ]
-            : i % 4 === 1
-            ? [
-                { id: "1", label: "Items" },
-                { id: "2", label: "Tweaks" },
-              ]
-            : i % 4 === 2
-            ? [{ id: "1", label: "Items" }]
-            : [],
-        teamName: "BoneCapTheTweet",
-      })),
-  ];
+): BackendPackageCard[] => {
+  let packages = fakeData.map((p) => ({
+    ...p,
+    community_name: communityIdentifier,
+    community_identifier: communityIdentifier,
+  }));
 
   if (query !== "") {
     const q = query.toLowerCase();
@@ -307,43 +321,29 @@ const getFakeData = (
 
   if (includedCategories.length) {
     packages = packages.filter((p) => {
-      const packageCategories = p.tags.map((tag) => tag.id.toString());
-      return includedCategories.every((id) => packageCategories.includes(id));
+      const packageCategories = p.categories.map((c) => c.slug);
+      return includedCategories.every((slug) =>
+        packageCategories.includes(slug)
+      );
     });
   }
 
   if (excludedCategories.length) {
     packages = packages.filter((p) => {
-      const packageCategories = p.tags.map((tag) => tag.id.toString());
-      return !excludedCategories.some((id) => packageCategories.includes(id));
+      const packageCategories = p.categories.map((c) => c.slug);
+      return !excludedCategories.some((slug) =>
+        packageCategories.includes(slug)
+      );
     });
   }
 
   if (!nsfw) {
-    packages = packages.filter((p) => !p.nsfw);
+    packages = packages.filter((p) => !p.is_nsfw);
   }
 
   if (!deprecated) {
-    packages = packages.filter((p) => !p.deprecated);
+    packages = packages.filter((p) => !p.is_deprecated);
   }
 
   return packages;
 };
-
-/**
- * TODO: Categories should be fetched from the backend, either with the
- * same request as the first batch of packages, or in a separate request.
- */
-const getFakeCategories = (): SelectOption[] => [
-  { value: "1", label: "Items" },
-  { value: "2", label: "Tweaks" },
-  { value: "3", label: "Mods" },
-  { value: "4", label: "Tools" },
-  { value: "5", label: "Maps" },
-  { value: "6", label: "Skins" },
-  { value: "7", label: "Audio" },
-  { value: "8", label: "Player Characters" },
-  { value: "9", label: "Client-side" },
-  { value: "10", label: "Server-side" },
-  { value: "11", label: "Language" },
-];

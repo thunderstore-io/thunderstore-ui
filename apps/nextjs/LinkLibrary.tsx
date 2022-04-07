@@ -59,16 +59,6 @@ const library: LinkLibrary = {
   Package: (p) => Link({ ...p, url: `/c/${p.community}/p/${p.package}/` }),
   PackageDependants: (p) =>
     Link({ ...p, url: `/c/${p.community}/p/${p.package}/dependants/` }),
-  PackageDownload: (p) =>
-    Link({
-      ...p,
-      url: `/packages/download/${p.namespace}/${p.package}/${p.version}/`,
-    }),
-  PackageInstall: (p) =>
-    Link({
-      ...p,
-      url: `ror2mm://v1/install/thunderstore.io/${p.namespace}/${p.package}/${p.version}/`,
-    }),
   PackageUpload: (p) => Link({ ...p, url: "/packages/new/" }),
   Team: (p) => Link({ ...p, url: `/team/${p.team}/` }),
 };

@@ -6,10 +6,11 @@ import { ChevronRight, DownloadIcon, ModIcon } from "./Icons";
 import { MaybeImage } from "./Internals";
 import { CommunityLink } from "./Links";
 
-interface CommunityCardProps {
+export interface CommunityCardProps {
   downloadCount: number;
+  identifier: string;
   imageSrc: string | null;
-  modCount: number;
+  packageCount: number;
   name: string;
 }
 
@@ -19,7 +20,7 @@ interface CommunityCardProps {
  * Displays community's name, cover image and basic mod stats.
  */
 export const CommunityCard: React.FC<CommunityCardProps> = (props) => {
-  const { downloadCount, imageSrc, modCount, name } = props;
+  const { downloadCount, identifier, imageSrc, packageCount, name } = props;
   return (
     <Box bg="ts.blue" {...borderStyles} borderWidth={2} w={360}>
       <MaybeImage imageSrc={imageSrc} height="110px" />
@@ -31,7 +32,7 @@ export const CommunityCard: React.FC<CommunityCardProps> = (props) => {
         p="20px 20px 14px 20px"
       >
         <CommunityLink
-          community={name}
+          community={identifier}
           _hover={{ textDecoration: "underline solid white 2px" }}
         >
           {name}
@@ -47,7 +48,7 @@ export const CommunityCard: React.FC<CommunityCardProps> = (props) => {
         <Flex>
           <Box mr="15px">
             <ModIcon {...iconStyles} />
-            {formatCount(modCount)}
+            {formatCount(packageCount)}
           </Box>
           <Box>
             <DownloadIcon {...iconStyles} />
@@ -56,7 +57,7 @@ export const CommunityCard: React.FC<CommunityCardProps> = (props) => {
         </Flex>
         <Spacer />
         <Box>
-          <CommunityLink community={name}>
+          <CommunityLink community={identifier}>
             <ChevronRight {...iconStyles} mr="0" />
           </CommunityLink>
         </Box>

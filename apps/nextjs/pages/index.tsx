@@ -1,12 +1,20 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
-import { CommunityCard } from "@thunderstore/components";
+import { CommunityCard, CommunityCardProps } from "@thunderstore/components";
+import { GetServerSideProps } from "next";
 
 import { HalfPageBackground } from "components/Background";
 import { ContentWrapper } from "components/Wrapper";
+import { fakeData } from "placeholder/frontpage";
+import { communityCardToProps } from "utils/transforms/communityCard";
 
-export default function Home(): JSX.Element {
-  // TODO: Fetch actual data with provider.
-  const { communities, downloadCount, modCount } = fakeData;
+interface PageProps {
+  communities: CommunityCardProps[];
+  downloadCount: number;
+  packageCount: number;
+}
+
+export default function Home(props: PageProps): JSX.Element {
+  const { communities, downloadCount, packageCount } = props;
 
   return (
     <>
@@ -28,7 +36,7 @@ export default function Home(): JSX.Element {
         </Text>
 
         <Flex columnGap="20px" justify="center" mt="30px">
-          <HighlighBox count={modCount} items="mods" />
+          <HighlighBox count={packageCount} items="mods" />
           <HighlighBox count={downloadCount} items="downloads" />
         </Flex>
 
@@ -40,13 +48,24 @@ export default function Home(): JSX.Element {
           wrap="wrap"
         >
           {communities.map((props) => (
-            <CommunityCard key={props.name} {...props} />
+            <CommunityCard key={props.identifier} {...props} />
           ))}
         </Flex>
       </ContentWrapper>
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  // TODO: Fetch actual data with provider.
+  return {
+    props: {
+      communities: fakeData.communities.map((c) => communityCardToProps(c)),
+      downloadCount: fakeData.download_count,
+      packageCount: fakeData.package_count,
+    },
+  };
+};
 
 interface HighlighProps {
   count: number;
@@ -77,60 +96,4 @@ const HighlighBox: React.FC<HighlighProps> = (props) => {
       </Text>
     </Box>
   );
-};
-
-const imageSrc = "https://api.lorem.space/image/game?w=356&h=110";
-const fakeData = {
-  communities: [
-    {
-      downloadCount: 40000,
-      imageSrc,
-      modCount: 600,
-      name: "Risk of Rain 2",
-    },
-    {
-      downloadCount: 1408576,
-      imageSrc,
-      modCount: 2048,
-      name: "H3VR",
-    },
-    {
-      downloadCount: 100000000,
-      imageSrc,
-      modCount: 10000000,
-      name: "Valheim",
-    },
-    {
-      downloadCount: 0,
-      imageSrc,
-      modCount: 0,
-      name: "BONEWORKS",
-    },
-    {
-      downloadCount: 23232,
-      imageSrc: null,
-      modCount: 23,
-      name: "GTFO",
-    },
-    {
-      downloadCount: 1000,
-      imageSrc,
-      modCount: 1,
-      name: "Outward",
-    },
-    {
-      downloadCount: 123456789,
-      imageSrc,
-      modCount: 1024,
-      name: "ROUNDS",
-    },
-    {
-      downloadCount: 128,
-      imageSrc,
-      modCount: 3,
-      name: "Talespire",
-    },
-  ],
-  downloadCount: 15215000,
-  modCount: 5000,
 };

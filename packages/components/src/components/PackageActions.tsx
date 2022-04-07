@@ -3,23 +3,19 @@ import { useMediaQuery } from "@thunderstore/hooks";
 import React from "react";
 
 import { LikeIcon } from "./Icons";
-import {
-  PackageDependantsLink,
-  PackageDownloadLink,
-  PackageInstallLink,
-} from "./Links";
+import { AnonymousLink, PackageDependantsLink } from "./Links";
 import { RelativeTime } from "./RelativeTime";
 
 export interface PackageActionsProps {
-  communityName: string;
+  communityIdentifier: string;
   dependantCount: number;
   dependencyString: string;
   downloadCount: number;
+  downloadUrl: string;
+  installUrl: string;
   lastUpdated: string;
-  latestVersion: string;
-  likeCount: number;
   packageName: string;
-  packageNamespace: string;
+  ratingScore: number;
   renderFullWidth?: boolean;
 }
 
@@ -28,15 +24,15 @@ export interface PackageActionsProps {
  */
 export const PackageActions: React.FC<PackageActionsProps> = (props) => {
   const {
-    communityName,
+    communityIdentifier,
     dependantCount,
     dependencyString,
     downloadCount,
+    downloadUrl,
+    installUrl,
     lastUpdated,
-    latestVersion,
-    likeCount,
     packageName,
-    packageNamespace,
+    ratingScore,
     renderFullWidth,
   } = props;
 
@@ -63,21 +59,13 @@ export const PackageActions: React.FC<PackageActionsProps> = (props) => {
           mb={isWrapped ? "20px" : "0"}
           width={isWrapped ? "100%" : "auto"}
         >
-          <PackageInstallLink
-            namespace={packageNamespace}
-            package={packageName}
-            version={latestVersion}
-          >
+          <AnonymousLink url={installUrl}>
             <Button variant="ts.mainAction">Mod Manager Install</Button>
-          </PackageInstallLink>
+          </AnonymousLink>
 
-          <PackageDownloadLink
-            namespace={packageNamespace}
-            package={packageName}
-            version={latestVersion}
-          >
+          <AnonymousLink url={downloadUrl}>
             <Button variant="ts.altAction">Manual Download</Button>
-          </PackageDownloadLink>
+          </AnonymousLink>
         </VStack>
 
         <Box
@@ -91,7 +79,7 @@ export const PackageActions: React.FC<PackageActionsProps> = (props) => {
           <Text variant="ts.keyInfoLabel">last updated</Text>
 
           <Text variant="ts.keyInfo" mt="12px">
-            {likeCount.toLocaleString()}
+            {ratingScore.toLocaleString()}
             <LikeIcon boxSize="18px" m="-3px 0 0 5px" />
           </Text>
           <Text variant="ts.keyInfoLabel">total rating</Text>
@@ -107,7 +95,10 @@ export const PackageActions: React.FC<PackageActionsProps> = (props) => {
           {dependencyString}
         </Button>
 
-        <PackageDependantsLink community={communityName} package={packageName}>
+        <PackageDependantsLink
+          community={communityIdentifier}
+          package={packageName}
+        >
           <Button variant="ts.auxiliary" m="0 8px 8px 0">
             {dependantCount} dependants
           </Button>

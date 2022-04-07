@@ -18,88 +18,88 @@ const day = 86400000;
 const hour = 3600000;
 
 const packageBase = {
-  communityName: "Risk of Rain 2",
+  categoryOnClick: () => null,
+  communityIdentifier: "riskofrain2",
   deprecated: false,
   imageSrc: "/img/decorative-2000x200.jpg",
   nsfw: false,
-  tagOnClick: () => null,
 };
 
 const packages = [
   {
     ...packageBase,
+    categories: [
+      { value: "1", label: "Mods" },
+      { value: "2", label: "Libraries" },
+    ],
     description:
       "Unified BepInEx all-in-one modding pack - plugin framework, detour library",
     downloadCount: 1273260,
     lastUpdated: new Date(now - day * 2),
-    likeCount: 266,
     packageName: "BepInExPack",
     pinned: true,
-    tags: [
-      { id: "1", label: "Mods" },
-      { id: "2", label: "Libraries" },
-    ],
+    ratingScore: 266,
     teamName: "bbepis",
   },
   {
     ...packageBase,
+    categories: [{ value: "2", label: "Libraries" }],
     description: "A modding API for Risk of Rain 2 ",
     downloadCount: 1510749,
     lastUpdated: new Date(now - day * 4),
-    likeCount: 269,
     packageName: "R2API",
     pinned: true,
-    tags: [{ id: "2", label: "Libraries" }],
+    ratingScore: 269,
     teamName: "tristanmcpherson",
   },
   {
     ...packageBase,
+    categories: [{ value: "3", label: "Tools" }],
     description:
       "A simple and easy to use mod manager for several Unity games using Thunderstore ",
     downloadCount: 811257,
     lastUpdated: new Date(now - day * 22),
-    likeCount: 326,
     packageName: "r2modman",
     pinned: true,
-    tags: [{ id: "3", label: "Tools" }],
+    ratingScore: 326,
     teamName: "ebkr",
   },
   {
     ...packageBase,
+    categories: [{ value: "4", label: "Player Characters" }],
     description: "Zot Returns. WIP! GEM SYSTEM NOT IMPLEMENTED!",
     downloadCount: 29638,
     lastUpdated: new Date(now - hour * 2),
-    likeCount: 14,
     packageName: "LordZot",
     pinned: false,
-    tags: [{ id: "4", label: "Player Characters" }],
+    ratingScore: 14,
     teamName: "Jot",
   },
   {
     ...packageBase,
+    categories: [{ value: "5", label: "Skills" }],
     description:
       "Critically Acclaimed Mod dev Heyimnoob's Skill mod. Currently adds 2 Skills. More skills coming soon! ",
     downloadCount: 2216,
     lastUpdated: new Date(now - hour * 5),
-    likeCount: 2,
     packageName: "SkillsFromtheDeepEnd",
     pinned: false,
-    tags: [{ id: "5", label: "Skills" }],
+    ratingScore: 2,
     teamName: "Heyimnoob",
   },
   {
     ...packageBase,
+    categories: [
+      { value: "6", label: "Artifacts" },
+      { value: "1", label: "Mods" },
+    ],
     description:
       "Adds 6 artifacts to ruin your run with. Features Origin from Risk of Rain 1! ",
     downloadCount: 10299,
     lastUpdated: new Date(now - hour * 6),
-    likeCount: 2,
     packageName: "Risky Artifacts",
     pinned: false,
-    tags: [
-      { id: "6", label: "Artifacts" },
-      { id: "1", label: "Mods" },
-    ],
+    ratingScore: 2,
     teamName: "Moffein",
   },
 ];
