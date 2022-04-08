@@ -66,3 +66,5 @@ jobs:
         run: yarn workspace @thunderstore/components build
       - name: Build @thunderstore/nextjs
         run: yarn workspace @thunderstore/nextjs build
+      - name: Test @thunderstore/nextjs
+        run: yarn workspace @thunderstore/nextjs jest
