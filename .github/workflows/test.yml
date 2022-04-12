@@ -85,9 +85,4 @@ jobs:
             -u "${{ secrets.DEPLOY_WORKFLOW_DISPATCH_USER }}:${{ secrets.DEPLOY_WORKFLOW_DISPATCH_PAT }}" \
             -H "Accept: application/vnd.github.v3+json" \
             ${{ secrets.DEPLOY_WORKFLOW_DISPATCH_URL }} \
-            -d \
-            '{"ref": "master", "inputs": \
-            {"sourceOrg": "${{ github.repository_owner }}", \
-            "sourceRepo": "${{ github.event.repository.name }}", \
-            "appName": "${{ matrix.app }}", \
-            "environment": "dev"}}'
+            -d '{"ref": "master", "inputs": {"sourceOrg": "${{ github.repository_owner }}", "sourceRepo": "${{ github.event.repository.name }}", "appName": "${{ matrix.app }}", "environment": "dev"}}'
