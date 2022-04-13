@@ -64,6 +64,8 @@ jobs:
         run: yarn workspace @thunderstore/hooks build
       - name: Build @thunderstore/components
         run: yarn workspace @thunderstore/components build
+      - name: Test @thunderstore/dapper
+        run: yarn workspace @thunderstore/dapper jest
       - name: Build @thunderstore/nextjs
         run: yarn workspace @thunderstore/nextjs build
       - name: Test @thunderstore/nextjs

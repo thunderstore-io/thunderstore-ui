@@ -1,0 +1,26 @@
+{
+  "name": "@thunderstore/dapper",
+  "version": "0.1.0",
+  "description": "Data Provider using React Context for Thunderstore",
+  "main": "dist/thunderstore-dapper.cjs.js",
+  "module": "dist/thunderstore-dapper.esm.js",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/dapper",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest --watch"
+  },
+  "dependencies": {
+    "@types/react": "^17.0.38",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^12.1.4",
+    "@types/jest": "^27.4.1",
+    "jest": "^27.5.1",
+    "ts-jest": "^27.1.4",
+    "zod": "^3.14.4"
+  }
+}
