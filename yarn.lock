@@ -11867,6 +11867,11 @@ react-colorful@^5.1.2:
   resolved "https://registry.yarnpkg.com/react-colorful/-/react-colorful-5.5.1.tgz#29d9c4e496f2ca784dd2bb5053a3a4340cfaf784"
   integrity sha512-M1TJH2X3RXEt12sWkpa6hLc/bbYS0H6F4rIqjQZ+RxNBstpY67d9TrFXtqdZwhpmBXcCwEi7stKqFue3ZRkiOg==
 
+react-cool-inview@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/react-cool-inview/-/react-cool-inview-2.0.9.tgz#f2e034bf0f57540a324c7da0c111aec95bb696e2"
+  integrity sha512-r1FM52/xElWEDxOv61QSLS23NuzcuhaIkfNL/K4FQFZ+NN/O5vEx/HTdmR1r6SPqXSBhPy5lyD7+Ot3t8F9ttQ==
+
 react-docgen-typescript@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/react-docgen-typescript/-/react-docgen-typescript-2.1.1.tgz#c9f9ccb1fa67e0f4caf3b12f2a07512a201c2dcf"
