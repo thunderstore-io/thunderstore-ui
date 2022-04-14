@@ -9,6 +9,7 @@ import {
   PackageUploadLink,
   SelectOption,
 } from "@thunderstore/components";
+import { Dapper, useDapper } from "@thunderstore/dapper";
 import { useDebouncedInput } from "@thunderstore/hooks";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
@@ -22,12 +23,8 @@ import {
   queryToStrs,
   useQueryToState,
 } from "hooks/useQueryToState";
-import { fakeCategories, fakeData } from "placeholder/packageListing";
-import { Category, categoriesToSelectOptions } from "utils/transforms/category";
-import {
-  BackendPackageCard,
-  packageCardsToProps,
-} from "utils/transforms/packageCard";
+import { API_DOMAIN } from "utils/constants";
+import * as urlQuery from "utils/urlQuery";
 
 interface PageProps {
   categories: SelectOption[];
@@ -71,23 +68,25 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
 
   // TODO: should this be read from GET parameters as well?
   const [ordering, setOrdering] = useState<PackageOrdering>("last-updated");
+  const dapper = useDapper();
 
-  // TODO: Fetch actual data from backend.
   useEffect(() => {
-    setPackages(
-      packageCardsToProps(
-        getFakeDataPackages(
-          communityIdentifier,
-          sections,
-          query,
-          ordering,
-          includedCategories,
-          excludedCategories,
-          nsfw,
-          deprecated
-        )
-      )
-    );
+    (async () => {
+      const page = 1; // TODO: implement and use pagination (infinite scroll).
+      const response = await dapper.getCommunityPackageListing(
+        communityIdentifier,
+        ordering,
+        page,
+        query,
+        sections,
+        includedCategories,
+        excludedCategories,
+        deprecated,
+        nsfw
+      );
+
+      setPackages(response.packages);
+    })();
   }, [
     communityIdentifier,
     deprecated,
@@ -202,29 +201,27 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const community = context.params?.community;
 
-  // TODO: validate the community exists in database.
   if (!community || Array.isArray(community)) {
     return { notFound: true };
   }
 
-  const data = getFakeData(
+  const dapper = new Dapper(API_DOMAIN);
+  const pageProps = await dapper.getCommunityPackageListing(
     community,
-    [],
-    "",
-    "last-updated",
-    [],
-    [],
-    false,
-    false
+    urlQuery.getString(context.query.ordering) ?? "last-updated",
+    1, // Page number
+    urlQuery.getString(context.query.q),
+    urlQuery.getStringArray(context.query.sections),
+    urlQuery.getStringArray(context.query.included_categories),
+    urlQuery.getStringArray(context.query.excluded_categories),
+    urlQuery.getBoolean(context.query.deprecated),
+    urlQuery.getBoolean(context.query.nsfw)
   );
 
   return {
     props: {
-      categories: categoriesToSelectOptions(data.categories),
-      communityName: data.community_name,
+      ...pageProps,
       communityIdentifier: community,
-      coverImage: data.bg_image_src,
-      packages: packageCardsToProps(data.packages),
     },
   };
 };
@@ -256,94 +253,4 @@ const SectionOption: FC<SectionOptionProps> = (props) => {
       <Text textTransform="capitalize">{section}</Text>
     </Flex>
   );
-};
-
-interface FakeData {
-  categories: Category[];
-  community_name: string;
-  bg_image_src: string;
-  packages: BackendPackageCard[];
-}
-
-const getFakeData = (
-  communityIdentifier: string,
-  sections: string[],
-  query: string,
-  _ordering: PackageOrdering,
-  includedCategories: string[],
-  excludedCategories: string[],
-  nsfw: boolean,
-  deprecated: boolean
-): FakeData => {
-  const packages = getFakeDataPackages(
-    communityIdentifier,
-    sections,
-    query,
-    _ordering,
-    includedCategories,
-    excludedCategories,
-    nsfw,
-    deprecated
-  );
-
-  return {
-    bg_image_src: "https://api.lorem.space/image/game?w=2000&h=200",
-    categories: fakeCategories,
-    community_name: communityIdentifier,
-    packages,
-  };
-};
-
-/**
- * TODO: Packages should be fetched in batches with infinite scroll.
- * TODO: Ordering.
- */
-const getFakeDataPackages = (
-  communityIdentifier: string,
-  _sections: string[], // eslint-disable-line @typescript-eslint/no-unused-vars
-  query: string,
-  _ordering: PackageOrdering, // eslint-disable-line @typescript-eslint/no-unused-vars
-  includedCategories: string[],
-  excludedCategories: string[],
-  nsfw: boolean,
-  deprecated: boolean
-): BackendPackageCard[] => {
-  let packages = fakeData.map((p) => ({
-    ...p,
-    community_name: communityIdentifier,
-    community_identifier: communityIdentifier,
-  }));
-
-  if (query !== "") {
-    const q = query.toLowerCase();
-    packages = packages.filter((p) => p.description.toLowerCase().includes(q));
-  }
-
-  if (includedCategories.length) {
-    packages = packages.filter((p) => {
-      const packageCategories = p.categories.map((c) => c.slug);
-      return includedCategories.every((slug) =>
-        packageCategories.includes(slug)
-      );
-    });
-  }
-
-  if (excludedCategories.length) {
-    packages = packages.filter((p) => {
-      const packageCategories = p.categories.map((c) => c.slug);
-      return !excludedCategories.some((slug) =>
-        packageCategories.includes(slug)
-      );
-    });
-  }
-
-  if (!nsfw) {
-    packages = packages.filter((p) => !p.is_nsfw);
-  }
-
-  if (!deprecated) {
-    packages = packages.filter((p) => !p.is_deprecated);
-  }
-
-  return packages;
 };

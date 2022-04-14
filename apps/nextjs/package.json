@@ -14,6 +14,7 @@
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
     "@thunderstore/components": "^0.1.0",
+    "@thunderstore/dapper": "^0.1.0",
     "@thunderstore/hooks": "^0.1.0",
     "@types/react": "^17.0.38",
     "framer-motion": "^4.1.17",

@@ -35,6 +35,9 @@
       "path": "../../packages/components"
     },
     {
+      "path": "../../packages/dapper"
+    },
+    {
       "path": "../../packages/hooks"
     }
   ]
