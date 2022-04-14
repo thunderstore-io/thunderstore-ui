@@ -10,6 +10,7 @@ const schema = z.object({
   bg_image_src: z.nullable(z.string()),
   categories: z.array(packageCategorySchema),
   community_name: z.string(),
+  has_more_pages: z.boolean(),
   packages: z.array(packageCardSchema),
 });
 
@@ -18,6 +19,7 @@ interface CommunityPackageListing {
   categories: SelectOption[];
   communityName: string;
   coverImage: string | null;
+  hasMorePages: boolean;
   packages: PackageCardProps[];
 }
 
@@ -42,6 +44,7 @@ const transform = (
   categories: transformCategories(viewData.categories),
   communityName: viewData.community_name,
   coverImage: viewData.bg_image_src,
+  hasMorePages: viewData.has_more_pages,
   packages: transformPackageCards(viewData.packages),
 });
 
