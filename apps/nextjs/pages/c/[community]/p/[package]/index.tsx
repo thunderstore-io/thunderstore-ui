@@ -1,10 +1,16 @@
 import {
   PackageActions,
+  PackageActionsProps,
+  PackageDependency,
   PackageHeader,
+  PackageHeaderProps,
   PackageInfo,
+  PackageInfoProps,
   PackageRequirements,
+  PackageVersion,
   PackageVersions,
 } from "@thunderstore/components";
+import { Dapper } from "@thunderstore/dapper";
 import { useMediaQuery } from "@thunderstore/hooks";
 import { GetServerSideProps } from "next";
 
@@ -14,15 +20,18 @@ import {
   FULL_WIDTH_BREAKPOINT,
   LayoutWrapper,
 } from "components/Wrapper";
-import { fakeData } from "placeholder/packageDetails";
-import { PackageProps, packageToProps } from "utils/transforms/package";
+import { API_DOMAIN } from "utils/constants";
 
-interface PageProps {
-  package: PackageProps;
+interface PageProps
+  extends PackageActionsProps,
+    PackageHeaderProps,
+    PackageInfoProps {
+  requirements: PackageDependency[];
+  versions: PackageVersion[];
 }
 
 export default function PackageDetailPage(props: PageProps): JSX.Element {
-  const pkg = props.package;
+  const { markdown, packageName, requirements, versions } = props;
   const isFullWidth = useMediaQuery(`(min-width: ${FULL_WIDTH_BREAKPOINT})`);
 
   return (
@@ -30,17 +39,17 @@ export default function PackageDetailPage(props: PageProps): JSX.Element {
       <Background url="https://api.lorem.space/image/game?w=2000&h=200" />
       <ContentWrapper>
         <LayoutWrapper variant="article">
-          <PackageHeader {...pkg} renderFullWidth={!isFullWidth} />
+          <PackageHeader {...props} renderFullWidth={!isFullWidth} />
         </LayoutWrapper>
         <LayoutWrapper variant="aside">
-          <PackageActions {...pkg} renderFullWidth={!isFullWidth} />
+          <PackageActions {...props} renderFullWidth={!isFullWidth} />
         </LayoutWrapper>
         <LayoutWrapper variant="article">
-          <PackageInfo {...pkg} />
+          <PackageInfo markdown={markdown} />
         </LayoutWrapper>
         <LayoutWrapper variant="aside">
-          <PackageRequirements requirements={pkg.requirements} mb="30px" />
-          <PackageVersions {...pkg} />
+          <PackageRequirements requirements={requirements} mb="30px" />
+          <PackageVersions packageName={packageName} versions={versions} />
         </LayoutWrapper>
       </ContentWrapper>
     </>
@@ -48,14 +57,19 @@ export default function PackageDetailPage(props: PageProps): JSX.Element {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  // TODO: validate the community & package exist in database.
-  if (!context.params?.community || !context.params?.package) {
+  const communityIdentifier = context.params?.community;
+
+  if (!communityIdentifier || Array.isArray(communityIdentifier)) {
     return { notFound: true };
   }
 
-  return {
-    props: {
-      package: packageToProps(fakeData),
-    },
-  };
+  const packageName = context.params?.package;
+
+  if (!packageName || Array.isArray(packageName)) {
+    return { notFound: true };
+  }
+
+  const dapper = new Dapper(API_DOMAIN);
+  const props = await dapper.getPackage(communityIdentifier, packageName);
+  return { props };
 };
