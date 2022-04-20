@@ -10,10 +10,21 @@ import {
   SelectOption,
 } from "@thunderstore/components";
 import { Dapper, useDapper } from "@thunderstore/dapper";
-import { useDebouncedInput } from "@thunderstore/hooks";
+import {
+  useDebouncedInput,
+  useEffectAfterInitialRender,
+} from "@thunderstore/hooks";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import useInView from "react-cool-inview";
 
 import { Background } from "components/Background";
 import { ContentWrapper } from "components/Wrapper";
@@ -31,6 +42,7 @@ interface PageProps {
   communityName: string;
   communityIdentifier: string;
   coverImage: string;
+  hasMorePages: boolean;
   packages: PackageCardProps[];
 }
 
@@ -70,9 +82,8 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
   const [ordering, setOrdering] = useState<PackageOrdering>("last-updated");
   const dapper = useDapper();
 
-  useEffect(() => {
-    (async () => {
-      const page = 1; // TODO: implement and use pagination (infinite scroll).
+  const loadMore = useCallback(
+    async (page: number) => {
       const response = await dapper.getCommunityPackageListing(
         communityIdentifier,
         ordering,
@@ -85,19 +96,55 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
         nsfw
       );
 
-      setPackages(response.packages);
-    })();
+      setPackages((oldPackages) => [
+        // Discard oldPackages when loading page after filters changed.
+        ...(page === 1 ? [] : oldPackages),
+        ...response.packages,
+      ]);
+      setHasMorePages(response.hasMorePages);
+    },
+    [
+      communityIdentifier,
+      ordering,
+      query,
+      sections,
+      includedCategories,
+      excludedCategories,
+      deprecated,
+      nsfw,
+    ]
+  );
+
+  useEffectAfterInitialRender(() => {
+    setCurrentPage(1);
+    loadMore(1);
+
+    // Turn on infinite scroll observing in case it's been turned off by
+    // reaching the last results.
+    loadMoreRef();
   }, [
     communityIdentifier,
-    deprecated,
-    excludedCategories,
-    includedCategories,
-    sections,
-    nsfw,
     ordering,
     query,
-    setPackages,
+    sections,
+    includedCategories,
+    excludedCategories,
+    deprecated,
+    nsfw,
   ]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMorePages, setHasMorePages] = useState(props.hasMorePages);
+  const { observe: loadMoreRef } = useInView({
+    onEnter: ({ unobserve }) => {
+      if (hasMorePages) {
+        loadMore(currentPage + 1);
+        setCurrentPage((p) => p + 1);
+      } else {
+        unobserve(); // Last results, stop observing infinite scroll.
+      }
+    },
+  });
 
   // TODO: Currently clicking a tag on package card first sets it into
   // included categories, second click moves it to excluded categories.
@@ -193,6 +240,8 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
             </Text>
           )}
         </Flex>
+
+        <span ref={loadMoreRef} />
       </ContentWrapper>
     </>
   );
