@@ -1,7 +1,9 @@
 import { AppProps } from "next/app";
 import { LinkingProvider, RootWrapper, theme } from "@thunderstore/components";
+import { Dapper, DapperProvider } from "@thunderstore/dapper";
 
 import { LinkLibrary } from "LinkLibrary";
+import { API_DOMAIN } from "utils/constants";
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
@@ -12,9 +14,11 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
           process.env.NEXT_PUBLIC_API_URL || "https://thunderstore.io/api/",
       }}
     >
-      <LinkingProvider value={LinkLibrary}>
-        <Component {...pageProps} />
-      </LinkingProvider>
+      <DapperProvider dapper={new Dapper(API_DOMAIN)}>
+        <LinkingProvider value={LinkLibrary}>
+          <Component {...pageProps} />
+        </LinkingProvider>
+      </DapperProvider>
     </RootWrapper>
   );
 }
