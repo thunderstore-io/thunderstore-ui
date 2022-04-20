@@ -10,6 +10,8 @@ const Template: ComponentStory<typeof PackageActions> = (args) => (
   <PackageActions {...args} />
 );
 
+const lastWeek = new Date(Date.now() - 604800000);
+
 const Actions = Template.bind({});
 Actions.args = {
   communityIdentifier: "riskofrain2",
@@ -18,7 +20,7 @@ Actions.args = {
   downloadCount: 245111867,
   downloadUrl: "/",
   installUrl: "/",
-  lastUpdated: "2022-01-01",
+  lastUpdated: lastWeek,
   packageName: "ChefMod",
   ratingScore: 32,
   renderFullWidth: false,
