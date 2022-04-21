@@ -13,6 +13,7 @@ import { transformCategories } from "../transformers";
 
 // Schema describing the data received from backend, used to validate the data.
 const schema = z.object({
+  bg_image_src: z.nullable(z.string()),
   categories: packageCategorySchema.array(),
   community_identifier: z.string().min(1),
   community_name: z.string().min(1),
@@ -55,6 +56,7 @@ interface PackageDetails
   extends PackageActionsProps,
     PackageHeaderProps,
     PackageInfoProps {
+  coverImage: string | null;
   requirements: PackageDependency[];
   versions: PackageVersion[];
 }
@@ -64,6 +66,7 @@ interface PackageDetails
 const transform = (viewData: z.infer<typeof schema>): PackageDetails => ({
   categories: transformCategories(viewData.categories),
   communityIdentifier: viewData.community_identifier,
+  coverImage: viewData.bg_image_src,
   dependantCount: viewData.dependant_count,
   dependencyString: viewData.dependency_string,
   description: viewData.description,
