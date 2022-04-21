@@ -26,17 +26,18 @@ interface PageProps
   extends PackageActionsProps,
     PackageHeaderProps,
     PackageInfoProps {
+  coverImage: string | null;
   requirements: PackageDependency[];
   versions: PackageVersion[];
 }
 
 export default function PackageDetailPage(props: PageProps): JSX.Element {
-  const { markdown, packageName, requirements, versions } = props;
+  const { coverImage, markdown, packageName, requirements, versions } = props;
   const isFullWidth = useMediaQuery(`(min-width: ${FULL_WIDTH_BREAKPOINT})`);
 
   return (
     <>
-      <Background url="https://api.lorem.space/image/game?w=2000&h=200" />
+      <Background url={coverImage} />
       <ContentWrapper>
         <LayoutWrapper variant="article">
           <PackageHeader {...props} renderFullWidth={!isFullWidth} />
