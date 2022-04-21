@@ -41,7 +41,7 @@ interface PageProps {
   categories: SelectOption[];
   communityName: string;
   communityIdentifier: string;
-  coverImage: string;
+  coverImage: string | null;
   hasMorePages: boolean;
   packages: PackageCardProps[];
 }

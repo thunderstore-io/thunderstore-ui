@@ -1,7 +1,7 @@
 import { Box, BoxProps } from "@chakra-ui/react";
 
 interface ContentHeadProps extends BoxProps {
-  url: string;
+  url: string | null;
 }
 
 /**
@@ -19,7 +19,7 @@ export const Background: React.FC<ContentHeadProps> = (props) => {
     <Box position="absolute" w="100%" h="200px" {...boxProps}>
       <Box
         id="head-img"
-        bgImage={url}
+        bgImage={url ?? undefined}
         bgPosition="center center"
         bgRepeat="no-repeat"
         bgSize="cover"
@@ -49,7 +49,7 @@ export const HalfPageBackground: React.FC<ContentHeadProps> = (props) => {
     <Box position="absolute" w="100%" h={partialHeight} {...boxProps}>
       <BgGradient h={partialHeight} />
       <Box
-        bgImage={url}
+        bgImage={url ?? undefined}
         bgPosition="52% 0"
         bgRepeat="no-repeat"
         bgSize={`auto ${partialHeight}`}
