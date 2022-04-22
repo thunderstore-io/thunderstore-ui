@@ -24,7 +24,8 @@ export const transformPackageCards = (
     isNsfw: p.is_nsfw,
     isPinned: p.is_pinned,
     lastUpdated: p.last_updated,
-    ratingScore: p.rating_score,
+    namespace: p.namespace,
     packageName: p.package_name,
+    ratingScore: p.rating_score,
     teamName: p.team_name,
   }));

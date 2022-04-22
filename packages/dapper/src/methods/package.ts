@@ -24,6 +24,7 @@ const schema = z.object({
       community_name: z.string().nullable(),
       description: z.string(),
       image_src: z.string().nullable(),
+      namespace: z.string().min(1),
       package_name: z.string().min(1),
       version_number: z.string().min(1),
     })
@@ -36,6 +37,7 @@ const schema = z.object({
   install_url: z.string(),
   last_updated: z.string(),
   markdown: z.string(),
+  namespace: z.string().min(1),
   package_name: z.string().min(1),
   rating_score: z.number().min(0),
   team_name: z.string().min(1),
@@ -76,12 +78,14 @@ const transform = (viewData: z.infer<typeof schema>): PackageDetails => ({
   imageSrc: viewData.image_src,
   lastUpdated: viewData.last_updated,
   markdown: viewData.markdown,
+  namespace: viewData.namespace,
   packageName: viewData.package_name,
   ratingScore: viewData.rating_score,
   requirements: viewData.dependencies.map((d) => ({
     communityIdentifier: d.community_identifier,
     description: d.description,
     imageSrc: d.image_src,
+    namespace: d.namespace,
     packageName: d.package_name,
     preferredVersion: d.version_number,
   })),
@@ -99,6 +103,7 @@ const transform = (viewData: z.infer<typeof schema>): PackageDetails => ({
 // Dapper method type, defining the parameters required to fetch the data.
 export type GetPackage = (
   communityIdentifier: string,
+  namespace: string,
   packageName: string
 ) => Promise<PackageDetails>;
 
@@ -106,8 +111,9 @@ export type GetPackage = (
 export const getPackage: GetPackage = async function (
   this: Dapper,
   communityIdentifier: string,
+  namespace: string,
   packageName: string
 ) {
-  const apiPath = `c/${communityIdentifier}/p/${packageName}/`;
+  const apiPath = `c/${communityIdentifier}/p/${namespace}/${packageName}/`;
   return await this.queryAndProcess(apiPath, [], schema, transform);
 };

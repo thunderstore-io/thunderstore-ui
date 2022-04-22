@@ -24,6 +24,7 @@ export const packageCardSchema = z.object({
   is_nsfw: z.boolean(),
   is_pinned: z.boolean(),
   last_updated: z.string().refine(isDate),
+  namespace: z.string().min(1),
   package_name: z.string().min(1),
   rating_score: z.number().nonnegative().int(),
   team_name: z.string().min(1),
