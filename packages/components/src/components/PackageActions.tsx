@@ -14,6 +14,7 @@ export interface PackageActionsProps {
   downloadUrl: string;
   installUrl: string;
   lastUpdated: string;
+  namespace: string;
   packageName: string;
   ratingScore: number;
   renderFullWidth?: boolean;
@@ -31,6 +32,7 @@ export const PackageActions: React.FC<PackageActionsProps> = (props) => {
     downloadUrl,
     installUrl,
     lastUpdated,
+    namespace,
     packageName,
     ratingScore,
     renderFullWidth,
@@ -97,6 +99,7 @@ export const PackageActions: React.FC<PackageActionsProps> = (props) => {
 
         <PackageDependantsLink
           community={communityIdentifier}
+          namespace={namespace}
           package={packageName}
         >
           <Button variant="ts.auxiliary" m="0 8px 8px 0">

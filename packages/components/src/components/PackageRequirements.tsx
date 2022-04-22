@@ -8,6 +8,7 @@ export interface PackageDependency {
   communityIdentifier: string | null;
   description: string;
   imageSrc: string | null;
+  namespace: string;
   packageName: string;
   preferredVersion: string;
 }
@@ -48,6 +49,7 @@ const Dependency: React.FC<{ package: PackageDependency }> = (props) => {
     communityIdentifier,
     description,
     imageSrc,
+    namespace,
     packageName,
     preferredVersion,
   } = props.package;
@@ -60,7 +62,11 @@ const Dependency: React.FC<{ package: PackageDependency }> = (props) => {
 
       <Box flex="1 1 auto" p="10px 20px" isTruncated>
         {communityIdentifier ? (
-          <PackageLink community={communityIdentifier} package={packageName}>
+          <PackageLink
+            community={communityIdentifier}
+            namespace={namespace}
+            package={packageName}
+          >
             <Heading
               as="h4"
               isTruncated
