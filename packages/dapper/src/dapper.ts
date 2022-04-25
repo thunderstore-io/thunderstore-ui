@@ -6,11 +6,13 @@ import {
   GetCommunityPackageListing,
 } from "./methods/communityPackageList";
 import { getFrontpage, GetFrontpage } from "./methods/frontpage";
+import { getPackage, GetPackage } from "./methods/package";
 import { QsArray, serializeQueryString } from "./queryString";
 
 export interface DapperInterface {
   getCommunityPackageListing: GetCommunityPackageListing;
   getFrontpage: GetFrontpage;
+  getPackage: GetPackage;
 }
 
 export class Dapper implements DapperInterface {
@@ -82,4 +84,5 @@ export class Dapper implements DapperInterface {
    */
   getCommunityPackageListing = getCommunityPackageListing;
   getFrontpage = getFrontpage;
+  getPackage = getPackage;
 }
