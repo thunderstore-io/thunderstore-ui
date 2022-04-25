@@ -34,10 +34,14 @@ const library: LinkLibrary = {
   Community: (p) => Link({ ...p, url: `/c/${p.community}/` }),
   CommunityPackages: (p) => Link({ ...p, url: `/c/${p.community}/packages/` }),
   Index: (p) => Link({ ...p, url: "/" }),
-  Package: (p) => Link({ ...p, url: `/c/${p.community}/p/${p.package}/` }),
+  Package: (p) =>
+    Link({ ...p, url: `/c/${p.community}/p/${p.namespace}/${p.package}/` }),
   PackageUpload: (p) => Link({ ...p, url: "/packages/new/" }),
   PackageDependants: (p) =>
-    Link({ ...p, url: `/c/${p.community}/p/${p.package}/dependants/` }),
+    Link({
+      ...p,
+      url: `/c/${p.community}/p/${p.namespace}/${p.package}/dependants/`,
+    }),
   Team: (p) => Link({ ...p, url: `/team/${p.team}/` }),
 };
 

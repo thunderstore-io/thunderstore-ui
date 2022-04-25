@@ -21,6 +21,7 @@ Actions.args = {
   downloadUrl: "/",
   installUrl: "/",
   lastUpdated: lastWeek,
+  namespace: "riskofrain2",
   packageName: "ChefMod",
   ratingScore: 32,
   renderFullWidth: false,
