@@ -1,11 +1,11 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { CommunityCard, CommunityCardProps } from "@thunderstore/components";
+import { Dapper } from "@thunderstore/dapper";
 import { GetServerSideProps } from "next";
 
 import { HalfPageBackground } from "components/Background";
 import { ContentWrapper } from "components/Wrapper";
-import { fakeData } from "placeholder/frontpage";
-import { communityCardToProps } from "utils/transforms/communityCard";
+import { API_DOMAIN } from "utils/constants";
 
 interface PageProps {
   communities: CommunityCardProps[];
@@ -57,14 +57,9 @@ export default function Home(props: PageProps): JSX.Element {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  // TODO: Fetch actual data with provider.
-  return {
-    props: {
-      communities: fakeData.communities.map((c) => communityCardToProps(c)),
-      downloadCount: fakeData.download_count,
-      packageCount: fakeData.package_count,
-    },
-  };
+  const dapper = new Dapper(API_DOMAIN);
+  const props = await dapper.getFrontpage();
+  return { props };
 };
 
 interface HighlighProps {
