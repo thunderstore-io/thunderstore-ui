@@ -21,6 +21,7 @@ export interface PackageCardProps {
   isNsfw: boolean;
   isPinned: boolean;
   lastUpdated: string;
+  namespace: string;
   packageName: string;
   ratingScore: number;
   teamName: string;
@@ -39,6 +40,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
     imageSrc,
     isPinned,
     lastUpdated,
+    namespace,
     packageName,
     ratingScore,
     teamName,
@@ -83,6 +85,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
         <Text fontSize={18} fontWeight={800}>
           <PackageLink
             community={communityIdentifier}
+            namespace={namespace}
             package={packageName}
             _hover={{ textDecoration: "underline solid white 2px" }}
           >

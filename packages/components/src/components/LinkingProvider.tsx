@@ -20,6 +20,7 @@ import React, { ReactElement as RE } from "react";
 // If the new link uses any props not already listed here, add them.
 export interface ThunderstoreLinkProps {
   community?: string;
+  namespace?: string;
   package?: string;
   team?: string;
 }
@@ -32,6 +33,7 @@ export interface ThunderstoreLinkProps {
 // required since the stripping is done during runtime.
 export const thunderstoreLinkProps: ThunderstoreLinkProps = {
   community: "",
+  namespace: "",
   package: "",
   team: "",
 };
@@ -45,6 +47,7 @@ export interface AnyProps {
 }
 
 type NoRequiredProps = (props: AnyProps) => RE | null;
+type PackageProps = { community: string; namespace: string; package: string };
 
 // STEP 3 of adding bew link definitions:
 // Declare and document any links used in the components here.
@@ -60,13 +63,9 @@ export interface LinkLibrary {
   /** Site's frontpage */
   Index: NoRequiredProps;
   /** Package's detail view */
-  Package: (
-    props: AnyProps & { community: string; package: string }
-  ) => RE | null;
+  Package: (props: AnyProps & PackageProps) => RE | null;
   /** View listing other packages that depend on this package */
-  PackageDependants: (
-    props: AnyProps & { community: string; package: string }
-  ) => RE | null;
+  PackageDependants: (props: AnyProps & PackageProps) => RE | null;
   /** View for submitting new packages or versions */
   PackageUpload: NoRequiredProps;
   /** Team's public profile page */

@@ -64,6 +64,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { notFound: true };
   }
 
+  const namespace = context.params?.namespace;
+
+  if (!namespace || Array.isArray(namespace)) {
+    return { notFound: true };
+  }
+
   const packageName = context.params?.package;
 
   if (!packageName || Array.isArray(packageName)) {
@@ -71,6 +77,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   const dapper = new Dapper(API_DOMAIN);
-  const props = await dapper.getPackage(communityIdentifier, packageName);
+  const props = await dapper.getPackage(
+    communityIdentifier,
+    namespace,
+    packageName
+  );
   return { props };
 };

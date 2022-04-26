@@ -11,11 +11,13 @@ import { ContentWrapper } from "components/Wrapper";
 
 interface PageProps {
   community: string;
+  namespace: string;
   package: string;
 }
 
 export default function PackageDependantsPage(props: PageProps): JSX.Element {
-  const { community, package: package_ } = props;
+  const { community, namespace, package: package_ } = props;
+  console.warn(community, namespace, package_);
 
   return (
     <>
@@ -30,7 +32,7 @@ export default function PackageDependantsPage(props: PageProps): JSX.Element {
             },
             {
               LinkComponent: PackageLink,
-              LinkProps: { community, package: package_ },
+              LinkProps: { community, namespace, package: package_ },
               label: package_,
             },
             {
@@ -48,13 +50,18 @@ export default function PackageDependantsPage(props: PageProps): JSX.Element {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // TODO: validate the community & package exist in database.
-  if (!context.params?.community || !context.params?.package) {
+  if (
+    !context.params?.community ||
+    !context.params?.namespace ||
+    !context.params?.package
+  ) {
     return { notFound: true };
   }
 
   return {
     props: {
       community: context.params.community,
+      namespace: context.params.namespace,
       package: context.params.package,
     },
   };
