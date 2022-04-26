@@ -23,20 +23,6 @@ import {
   PackageUploadLink,
 } from "./Links";
 
-const baseLinkStyles = {
-  fontFamily: "Raleway",
-  fontSize: "16px",
-  fontWeight: 900,
-  lineHeight: "20px",
-  _hover: { textDecoration: "underline solid white 2px" },
-};
-
-const linkStyles = {
-  ...baseLinkStyles,
-  fontWeight: 700,
-  ml: "40px",
-};
-
 /**
  * Navigation bar shown on every page.
  *
@@ -45,37 +31,22 @@ const linkStyles = {
  */
 export const TopBar: React.FC = () => (
   <Flex align="center" h={100}>
-    <IndexLink {...baseLinkStyles} align="center" display="flex">
+    <IndexLink variant="ts.topBarIndex" align="center" display="flex">
       <ThunderstoreLogo height="20px" mr="7px" width="20px" />
       Thunderstore
     </IndexLink>
     <Spacer />
     <Flex>
-      <PackageUploadLink {...linkStyles}>Upload</PackageUploadLink>
-      <CommunitiesLink {...linkStyles}>Browse</CommunitiesLink>
+      <PackageUploadLink variant="ts.topBar">Upload</PackageUploadLink>
+      <CommunitiesLink variant="ts.topBar">Browse</CommunitiesLink>
       <LoginMenu />
     </Flex>
   </Flex>
 );
 
 const LoginMenu = () => (
-  <Menu>
-    <MenuButton
-      as={Button}
-      backgroundColor="transparent"
-      fontFamily="Raleway"
-      fontWeight="700"
-      fontSize="16px"
-      h="20px"
-      lineHeight="20px"
-      ml="40px"
-      p="0"
-      rightIcon={<ChevronDown />}
-      w="115px"
-      _active={{ backgroundColor: "transparent" }}
-      _focus={{ boxShadow: "none !important" }}
-      _hover={{ backgroundColor: "transparent" }}
-    >
+  <Menu variant="ts.topBar">
+    <MenuButton as={Button} rightIcon={<ChevronDown />} variant="ts.topBarMenu">
       Login with…
     </MenuButton>
 
@@ -100,17 +71,9 @@ interface MenuLinkProps {
 }
 
 const MenuLink: React.FC<MenuLinkProps> = (props) => {
-  const highlight = { backgroundColor: "ts.lightBlue" };
-
   return (
-    <MenuItem p="0" _active={highlight} _focus={highlight} _hover={highlight}>
-      <AnonymousLink
-        url={props.url}
-        display="block"
-        p="0.4rem 0.8rem"
-        w="100%"
-        _hover={{ textDecoration: "none" }}
-      >
+    <MenuItem>
+      <AnonymousLink url={props.url} variant="ts.topBarMenu">
         <props.icon w="20px" h="20px" mr="0.6rem" />
         {props.label}
       </AnonymousLink>

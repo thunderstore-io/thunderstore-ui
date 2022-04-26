@@ -50,5 +50,18 @@ export const ButtonStyles = {
       lineHeight: "1.2",
       padding: "14px 32px",
     },
+    "ts.topBarMenu": {
+      backgroundColor: "transparent",
+      fontFamily: "Raleway",
+      fontWeight: "700",
+      height: "20px",
+      lineHeight: "20px",
+      marginLeft: "40px",
+      padding: "0",
+      width: "115px",
+      _active: { backgroundColor: "transparent" },
+      _focus: { boxShadow: "none !important" },
+      _hover: { backgroundColor: "transparent" },
+    },
   },
 };
