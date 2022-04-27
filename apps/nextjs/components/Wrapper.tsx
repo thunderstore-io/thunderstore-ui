@@ -1,6 +1,7 @@
 import { Box, BoxProps } from "@chakra-ui/react";
-import { TopBar } from "@thunderstore/components";
 import { useMediaQuery } from "@thunderstore/hooks";
+
+import { TopBar } from "components/TopBar";
 
 const MAX_WIDTH = "1180px"; // Content area 1140px + 40px horizontal padding.
 export const FULL_WIDTH_BREAKPOINT = "1200px"; // MAX_WIDTH + possible sidebar.

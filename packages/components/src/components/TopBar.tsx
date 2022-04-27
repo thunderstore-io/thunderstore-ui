@@ -10,44 +10,31 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 
-import {
-  ChevronDown,
-  DiscordLogo,
-  GitHubLogo,
-  ThunderstoreLogo,
-} from "./Icons";
-import {
-  AnonymousLink,
-  CommunitiesLink,
-  IndexLink,
-  PackageUploadLink,
-} from "./Links";
+import { ChevronDown, ThunderstoreLogo } from "./Icons";
+import { AnonymousLink, IndexLink } from "./Links";
 
 /**
  * Navigation bar shown on every page.
- *
- * TODO: doesn't support logging in or displaying content based on
- * user's authentication status.
  */
-export const TopBar: React.FC = () => (
+export const TopBar: React.FC = (props) => (
   <Flex align="center" h={100}>
     <IndexLink variant="ts.topBarIndex" align="center" display="flex">
       <ThunderstoreLogo height="20px" mr="7px" width="20px" />
       Thunderstore
     </IndexLink>
     <Spacer />
-    <Flex>
-      <PackageUploadLink variant="ts.topBar">Upload</PackageUploadLink>
-      <CommunitiesLink variant="ts.topBar">Browse</CommunitiesLink>
-      <LoginMenu />
-    </Flex>
+    <Flex>{props.children}</Flex>
   </Flex>
 );
 
-const LoginMenu = () => (
+interface TopBarMenu {
+  label: string;
+}
+
+export const TopBarMenu: React.FC<TopBarMenu> = (props) => (
   <Menu variant="ts.topBar">
     <MenuButton as={Button} rightIcon={<ChevronDown />} variant="ts.topBarMenu">
-      Login with…
+      {props.label}
     </MenuButton>
 
     <MenuList
@@ -57,9 +44,7 @@ const LoginMenu = () => (
       minW="115px"
       p="0"
     >
-      {/* TODO: proper URLs for MenuLink components */}
-      <MenuLink icon={DiscordLogo} label="Discord" url="/" />
-      <MenuLink icon={GitHubLogo} label="GitHub" url="/" />
+      {props.children}
     </MenuList>
   </Menu>
 );
@@ -70,7 +55,7 @@ interface MenuLinkProps {
   url: string;
 }
 
-const MenuLink: React.FC<MenuLinkProps> = (props) => {
+export const TopBarMenuLink: React.FC<MenuLinkProps> = (props) => {
   return (
     <MenuItem>
       <AnonymousLink url={props.url} variant="ts.topBarMenu">
