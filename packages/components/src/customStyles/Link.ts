@@ -17,11 +17,5 @@ export const LinkStyles = {
       ...topBarBaseStyles,
       fontWeight: 900,
     },
-    "ts.topBarMenu": {
-      display: "block",
-      padding: "0.4rem 0.8rem",
-      width: "100%",
-      _hover: { textDecoration: "none" },
-    },
   },
 };

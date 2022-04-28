@@ -11,7 +11,7 @@ import {
 import React from "react";
 
 import { ChevronDown, ThunderstoreLogo } from "./Icons";
-import { AnonymousLink, IndexLink } from "./Links";
+import { IndexLink } from "./Links";
 
 /**
  * Navigation bar shown on every page.
@@ -49,19 +49,17 @@ export const TopBarMenu: React.FC<TopBarMenu> = (props) => (
   </Menu>
 );
 
-interface MenuLinkProps {
+interface MenuButtonProps {
   icon: React.FC<IconProps>;
   label: string;
-  url: string;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export const TopBarMenuLink: React.FC<MenuLinkProps> = (props) => {
+export const TopBarMenuButton: React.FC<MenuButtonProps> = (props) => {
   return (
-    <MenuItem>
-      <AnonymousLink url={props.url} variant="ts.topBarMenu">
-        <props.icon w="20px" h="20px" mr="0.6rem" />
-        {props.label}
-      </AnonymousLink>
+    <MenuItem onClick={props.onClick}>
+      <props.icon w="20px" h="20px" mr="0.6rem" />
+      {props.label}
     </MenuItem>
   );
 };

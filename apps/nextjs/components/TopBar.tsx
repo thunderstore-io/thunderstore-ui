@@ -5,8 +5,11 @@ import {
   PackageUploadLink,
   TopBar as TopBarComponent,
   TopBarMenu,
-  TopBarMenuLink,
+  TopBarMenuButton,
 } from "@thunderstore/components";
+import Router from "next/router";
+
+import { OAuthManager } from "utils/oauth";
 
 export const TopBar: React.FC = () => {
   return (
@@ -14,8 +17,20 @@ export const TopBar: React.FC = () => {
       <PackageUploadLink variant="ts.topBar">Upload</PackageUploadLink>
       <CommunitiesLink variant="ts.topBar">Browse</CommunitiesLink>
       <TopBarMenu label="Login with…">
-        <TopBarMenuLink icon={DiscordLogo} label="Discord" url="/" />
-        <TopBarMenuLink icon={GitHubLogo} label="GitHub" url="/" />
+        <TopBarMenuButton
+          icon={DiscordLogo}
+          label="Discord"
+          onClick={async () =>
+            Router.push(await OAuthManager.getProviderLoginUrl("discord"))
+          }
+        />
+        <TopBarMenuButton
+          icon={GitHubLogo}
+          label="GitHub"
+          onClick={async () =>
+            Router.push(await OAuthManager.getProviderLoginUrl("github"))
+          }
+        />
       </TopBarMenu>
     </TopBarComponent>
   );
