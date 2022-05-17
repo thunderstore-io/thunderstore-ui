@@ -4,6 +4,7 @@ export * from "./components/BreadCrumbs";
 export * from "./components/CommunityCard";
 export * from "./components/CommunityPicker";
 export * from "./components/FileUpload";
+export * from "./components/Icons";
 export * from "./components/LinkingProvider";
 export * from "./components/Links";
 export * from "./components/Markdown";

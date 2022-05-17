@@ -5,6 +5,8 @@ import { MultiSelectStyles } from "./components/Select";
 import { ToggleSwitchStyles } from "./components/ToggleSwitch";
 import { ButtonStyles } from "./customStyles/Button";
 import { FormLabelStyles } from "./customStyles/FormLabel";
+import { LinkStyles } from "./customStyles/Link";
+import { MenuStyles } from "./customStyles/Menu";
 import { ModalStyles } from "./customStyles/Modal";
 import { HeadingStyles } from "./customStyles/Heading";
 import { TagStyles } from "./customStyles/Tag";
@@ -37,6 +39,8 @@ export const theme = extendTheme({
     FormLabel: FormLabelStyles,
     Modal: ModalStyles,
     Heading: HeadingStyles,
+    Link: LinkStyles,
+    Menu: MenuStyles,
     MultiSelect: MultiSelectStyles,
     Tag: TagStyles,
     Text: TextStyles,
