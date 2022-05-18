@@ -19,6 +19,15 @@ export class StorageManager {
     this._storage.removeItem(this._addNamespace(key));
   }
 
+  /** Returns null if storage is unavailable or it contained no value. */
+  safeGetValue(key: string): string | null {
+    try {
+      return this.getValue(key);
+    } catch (e) {
+      return null;
+    }
+  }
+
   setValue(key: string, value: string): void {
     this._storage.setItem(this._addNamespace(key), value);
   }
