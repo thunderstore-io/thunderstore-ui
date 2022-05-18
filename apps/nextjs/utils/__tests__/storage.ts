@@ -87,23 +87,4 @@ describe("StorageManager", () => {
     expect(actual1).toStrictEqual(value);
     expect(actual2).toBeNull();
   });
-
-  // describe("_isNonNegativeInt", () => {
-  //   it.each([
-  //     ["9999999999999999999999999999999999999", true],
-  //     ["1", true],
-  //     ["0", true],
-  //     ["-1", false],
-  //     ["123a", false],
-  //     ["a123", false],
-  //     ["abc", false],
-  //     ["", false],
-  //   ])(
-  //     "identifies %p as %p positive integer string",
-  //     (input: string, expected: boolean) => {
-  //       const actual = _isNonNegativeInt(input);
-
-  //       expect(actual).toStrictEqual(expected);
-  //     }
-  //   );
 });
