@@ -10,6 +10,8 @@ import { getPackage, GetPackage } from "./methods/package";
 import { QsArray, serializeQueryString } from "./queryString";
 
 export interface DapperInterface {
+  sessionId?: string;
+
   getCommunityPackageListing: GetCommunityPackageListing;
   getFrontpage: GetFrontpage;
   getPackage: GetPackage;
@@ -18,9 +20,11 @@ export interface DapperInterface {
 export class Dapper implements DapperInterface {
   readonly apiDomain: string;
   readonly apiPath = "api/experimental/frontend";
+  readonly sessionId?: string;
 
-  constructor(domain: string) {
+  constructor(domain: string, sessionId?: string) {
     this.apiDomain = domain.endsWith("/") ? domain.slice(0, -1) : domain;
+    this.sessionId = sessionId;
   }
 
   /**
@@ -30,10 +34,14 @@ export class Dapper implements DapperInterface {
     url: string,
     schema: T
   ): Promise<z.infer<T>> {
+    const settings: RequestInit = this.sessionId
+      ? { headers: { authorization: `Session ${this.sessionId}` } }
+      : {};
+
     let response;
 
     try {
-      response = await fetch(url);
+      response = await fetch(url, settings);
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Data fetching error";
       throw new DapperError(msg, url, DapperError.FETCH_ERROR);

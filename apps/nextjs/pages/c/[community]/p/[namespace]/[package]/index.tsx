@@ -1,18 +1,14 @@
 import {
   PackageActions,
-  PackageActionsProps,
-  PackageDependency,
   PackageHeader,
-  PackageHeaderProps,
   PackageInfo,
-  PackageInfoProps,
   PackageRequirements,
-  PackageVersion,
   PackageVersions,
 } from "@thunderstore/components";
-import { Dapper } from "@thunderstore/dapper";
+import { Dapper, useDapper } from "@thunderstore/dapper";
 import { useMediaQuery } from "@thunderstore/hooks";
 import { GetServerSideProps } from "next";
+import { useState } from "react";
 
 import { Background } from "components/Background";
 import {
@@ -20,18 +16,19 @@ import {
   FULL_WIDTH_BREAKPOINT,
   LayoutWrapper,
 } from "components/Wrapper";
+import { useFreshProps } from "hooks/useFreshProps";
 import { API_DOMAIN } from "utils/constants";
 
-interface PageProps
-  extends PackageActionsProps,
-    PackageHeaderProps,
-    PackageInfoProps {
-  coverImage: string | null;
-  requirements: PackageDependency[];
-  versions: PackageVersion[];
-}
+type PageProps = Awaited<ReturnType<Dapper["getPackage"]>>;
 
-export default function PackageDetailPage(props: PageProps): JSX.Element {
+export default function PackageDetailPage(props_: PageProps): JSX.Element {
+  const [props, setProps] = useState(props_);
+  const dapper = useDapper();
+  useFreshProps(setProps, dapper.getPackage.bind(dapper), [
+    props_.communityIdentifier,
+    props_.namespace,
+    props_.packageName,
+  ]);
   const { coverImage, markdown, packageName, requirements, versions } = props;
   const isFullWidth = useMediaQuery(`(min-width: ${FULL_WIDTH_BREAKPOINT})`);
 
