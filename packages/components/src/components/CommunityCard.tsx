@@ -22,7 +22,18 @@ export interface CommunityCardProps {
 export const CommunityCard: React.FC<CommunityCardProps> = (props) => {
   const { downloadCount, identifier, imageSrc, packageCount, name } = props;
   return (
-    <Box bg="ts.blue" {...borderStyles} borderWidth={2} w={360}>
+    <CommunityLink
+      community={identifier}
+      bg="ts.blue"
+      {...borderStyles}
+      borderWidth={2}
+      transition="border 100ms linear"
+      w={360}
+      _hover={{
+        borderColor: "ts.lightBlue.115",
+        textDecoration: "none",
+      }}
+    >
       <MaybeImage imageSrc={imageSrc} height="110px" />
 
       <Text
@@ -31,12 +42,7 @@ export const CommunityCard: React.FC<CommunityCardProps> = (props) => {
         fontWeight={700}
         p="20px 20px 14px 20px"
       >
-        <CommunityLink
-          community={identifier}
-          _hover={{ textDecoration: "underline solid white 2px" }}
-        >
-          {name}
-        </CommunityLink>
+        {name}
       </Text>
 
       <Flex
@@ -56,13 +62,9 @@ export const CommunityCard: React.FC<CommunityCardProps> = (props) => {
           </Box>
         </Flex>
         <Spacer />
-        <Box>
-          <CommunityLink community={identifier}>
-            <ChevronRight {...iconStyles} mr="0" />
-          </CommunityLink>
-        </Box>
+        <ChevronRight {...iconStyles} mr="0" mt="2px" />
       </Flex>
-    </Box>
+    </CommunityLink>
   );
 };
 

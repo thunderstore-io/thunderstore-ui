@@ -18,6 +18,7 @@ const blue = "#242e48";
 const coolGray = "#93a0c2";
 const darkBlue = "#17213b";
 const lightBlue = "#353e58";
+const lightBlue115 = "#49567a"; // Lightened by 15%.
 const orange = "#ffa96b";
 const white = "#fff";
 
@@ -30,6 +31,7 @@ export const theme = extendTheme({
       coolGray,
       darkBlue,
       lightBlue,
+      "lightBlue.115": lightBlue115,
       orange,
       white,
     },
