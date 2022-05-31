@@ -55,11 +55,17 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
       w={270}
       pos="relative"
     >
-      <MaybeImage
-        borderRadius="3px 3px 0 0"
-        height="200px"
-        imageSrc={imageSrc}
-      />
+      <PackageLink
+        community={communityIdentifier}
+        namespace={namespace}
+        package={packageName}
+      >
+        <MaybeImage
+          borderRadius="3px 3px 0 0"
+          height="200px"
+          imageSrc={imageSrc}
+        />
+      </PackageLink>
       <PinnedTag isPinned={isPinned} />
 
       <Flex
