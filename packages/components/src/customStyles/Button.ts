@@ -1,3 +1,5 @@
+import { topBarBaseStyles } from "./Link";
+
 /** Custom styles for Chakra UI's Button component. */
 export const ButtonStyles = {
   baseStyle: {
@@ -49,6 +51,10 @@ export const ButtonStyles = {
       height: "auto",
       lineHeight: "1.2",
       padding: "14px 32px",
+    },
+    "ts.topBar": {
+      ...topBarBaseStyles,
+      marginLeft: "40px",
     },
     "ts.topBarMenu": {
       backgroundColor: "transparent",

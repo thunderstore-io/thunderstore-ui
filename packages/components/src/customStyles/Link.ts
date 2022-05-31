@@ -1,5 +1,5 @@
 /** Custom styles for Chakra UI's Link component. */
-const topBarBaseStyles = {
+export const topBarBaseStyles = {
   fontFamily: "Raleway",
   fontSize: "16px",
   fontWeight: 700,
