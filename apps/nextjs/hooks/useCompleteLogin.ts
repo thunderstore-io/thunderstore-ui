@@ -1,6 +1,7 @@
 import Router from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
+import { useSession } from "components/SessionContext";
 import { AuthCompleteResponse } from "pages/api/auth/complete";
 import { getJsonPostSettings } from "utils/fetch";
 import { OAuthManager, Provider } from "utils/oauth";
@@ -13,20 +14,27 @@ export const useCompleteLogin = (
   code: string,
   receivedState: string
 ): void => {
-  OAuthManager.validateStateSecret(provider, receivedState);
+  const { setSessionId } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
     (async () => {
+      OAuthManager.validateStateSecret(provider, receivedState);
+      setIsLoading(true);
       const res = await postNextBackend(provider, code);
 
       if (!res.ok) {
         throw new Error(`AuthError: ${res.error}`);
       }
 
-      // TODO: store res.sessionId to global state.
+      setSessionId(res.sessionId);
       Router.push("/");
     })();
-  }, [code, provider]);
+  }, [code, isLoading, provider, receivedState, setIsLoading, setSessionId]);
 };
 
 const postNextBackend = async (
