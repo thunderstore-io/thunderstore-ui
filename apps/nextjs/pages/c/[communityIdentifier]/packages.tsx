@@ -248,9 +248,11 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const communityIdentifier = context.params?.communityIdentifier;
+  const communityIdentifier = urlQuery.getString(
+    context.params?.communityIdentifier
+  );
 
-  if (!communityIdentifier || Array.isArray(communityIdentifier)) {
+  if (communityIdentifier === undefined) {
     return { notFound: true };
   }
 

@@ -8,6 +8,7 @@ import { GetServerSideProps } from "next";
 
 import { Background } from "components/Background";
 import { ContentWrapper } from "components/Wrapper";
+import { getString } from "utils/urlQuery";
 
 interface PageProps {
   communityIdentifier: string;
@@ -53,19 +54,23 @@ export default function PackageDependantsPage(props: PageProps): JSX.Element {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // TODO: validate the community & package exist in database.
+  const communityIdentifier = getString(context.params?.communityIdentifier);
+  const namespace = getString(context.params?.namespace);
+  const packageName = getString(context.params?.packageName);
+
   if (
-    !context.params?.communityIdentifier ||
-    !context.params?.namespace ||
-    !context.params?.packageName
+    communityIdentifier === undefined ||
+    namespace === undefined ||
+    packageName === undefined
   ) {
     return { notFound: true };
   }
 
   return {
     props: {
-      communityIdentifier: context.params.communityIdentifier,
-      namespace: context.params.namespace,
-      packageName: context.params.packageName,
+      communityIdentifier,
+      namespace,
+      packageName,
     },
   };
 };

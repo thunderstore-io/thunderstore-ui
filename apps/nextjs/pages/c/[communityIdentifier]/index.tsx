@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 
 import { Background } from "components/Background";
 import { ContentWrapper } from "components/Wrapper";
+import { getString } from "utils/urlQuery";
 
 interface PageProps {
   communityIdentifier: string;
@@ -26,13 +27,11 @@ export default function CommunityFrontPage(props: PageProps): JSX.Element {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // TODO: validate the community exists in database.
-  if (!context.params?.communityIdentifier) {
+  const communityIdentifier = getString(context.params?.communityIdentifier);
+
+  if (communityIdentifier === undefined) {
     return { notFound: true };
   }
 
-  return {
-    props: {
-      communityIdentifier: context.params.communityIdentifier,
-    },
-  };
+  return { props: { communityIdentifier } };
 };
