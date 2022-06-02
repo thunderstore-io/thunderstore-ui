@@ -248,15 +248,15 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const community = context.params?.community;
+  const communityIdentifier = context.params?.communityIdentifier;
 
-  if (!community || Array.isArray(community)) {
+  if (!communityIdentifier || Array.isArray(communityIdentifier)) {
     return { notFound: true };
   }
 
   const dapper = new Dapper(API_DOMAIN);
   const pageProps = await dapper.getCommunityPackageListing(
-    community,
+    communityIdentifier,
     urlQuery.getString(context.query.ordering) ?? "last-updated",
     1, // Page number
     urlQuery.getString(context.query.q),
@@ -270,7 +270,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...pageProps,
-      communityIdentifier: community,
+      communityIdentifier,
     },
   };
 };
