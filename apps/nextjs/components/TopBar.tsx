@@ -24,13 +24,13 @@ export const TopBar: React.FC = () => {
 };
 
 const AuthenticatedTopBar: React.FC = () => {
-  const { clearSessionId } = useSession();
+  const { clearSession } = useSession();
 
   return (
     <>
       <PackageUploadLink variant="ts.topBar">Upload</PackageUploadLink>
       <CommunitiesLink variant="ts.topBar">Browse</CommunitiesLink>
-      <Button type="button" onClick={clearSessionId} variant="ts.topBar">
+      <Button type="button" onClick={clearSession} variant="ts.topBar">
         Logout
       </Button>
     </>
