@@ -1,11 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { z } from "zod";
 
 import { getJsonPostSettings } from "utils/fetch";
 import { isProvider, OAuthManager } from "utils/oauth";
 
+const ApiResponseSchema = z.object({
+  email: z.string(),
+  session_id: z.string().min(1),
+  username: z.string().min(1),
+});
+
 interface SuccessResponse {
   ok: true;
+  email: string;
   sessionId: string;
+  username: string;
 }
 
 interface ErrorResponse {
@@ -64,5 +73,12 @@ export default async function handler(
   }
 
   const data = await response.json();
-  res.status(200).json({ ok: true, sessionId: data.session_id });
+  const parsed = ApiResponseSchema.parse(data);
+
+  res.status(200).json({
+    ok: true,
+    email: parsed.email,
+    sessionId: parsed.session_id,
+    username: parsed.username,
+  });
 }

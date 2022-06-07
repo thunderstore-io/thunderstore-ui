@@ -14,7 +14,7 @@ export const useCompleteLogin = (
   code: string,
   receivedState: string
 ): void => {
-  const { setSessionId } = useSession();
+  const { setSession } = useSession();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -27,14 +27,15 @@ export const useCompleteLogin = (
       setIsLoading(true);
       const res = await postNextBackend(provider, code);
 
-      if (!res.ok) {
+      if (res.ok) {
+        const { ok, ...payload } = res;
+        setSession(payload);
+        Router.push("/");
+      } else {
         throw new Error(`AuthError: ${res.error}`);
       }
-
-      setSessionId(res.sessionId);
-      Router.push("/");
     })();
-  }, [code, isLoading, provider, receivedState, setIsLoading, setSessionId]);
+  }, [code, isLoading, provider, receivedState, setIsLoading, setSession]);
 };
 
 const postNextBackend = async (
