@@ -18,6 +18,7 @@ import {
 } from "components/Wrapper";
 import { useFreshProps } from "hooks/useFreshProps";
 import { API_DOMAIN } from "utils/constants";
+import { getString } from "utils/urlQuery";
 
 type PageProps = Awaited<ReturnType<Dapper["getPackage"]>>;
 
@@ -55,21 +56,15 @@ export default function PackageDetailPage(props_: PageProps): JSX.Element {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const communityIdentifier = context.params?.communityIdentifier;
+  const communityIdentifier = getString(context.params?.communityIdentifier);
+  const namespace = getString(context.params?.namespace);
+  const packageName = getString(context.params?.packageName);
 
-  if (!communityIdentifier || Array.isArray(communityIdentifier)) {
-    return { notFound: true };
-  }
-
-  const namespace = context.params?.namespace;
-
-  if (!namespace || Array.isArray(namespace)) {
-    return { notFound: true };
-  }
-
-  const packageName = context.params?.packageName;
-
-  if (!packageName || Array.isArray(packageName)) {
+  if (
+    communityIdentifier === undefined ||
+    namespace === undefined ||
+    packageName === undefined
+  ) {
     return { notFound: true };
   }
 
