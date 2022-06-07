@@ -55,7 +55,7 @@ export default function PackageDetailPage(props_: PageProps): JSX.Element {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const communityIdentifier = context.params?.community;
+  const communityIdentifier = context.params?.communityIdentifier;
 
   if (!communityIdentifier || Array.isArray(communityIdentifier)) {
     return { notFound: true };
@@ -67,7 +67,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return { notFound: true };
   }
 
-  const packageName = context.params?.package;
+  const packageName = context.params?.packageName;
 
   if (!packageName || Array.isArray(packageName)) {
     return { notFound: true };

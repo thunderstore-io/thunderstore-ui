@@ -1,20 +1,22 @@
 import { BreadCrumbs, CommunityPackagesLink } from "@thunderstore/components";
 import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
 
 import { Background } from "components/Background";
 import { ContentWrapper } from "components/Wrapper";
 
-export default function CommunityFrontPage(): JSX.Element {
-  const { query } = useRouter();
-  const community = query.community as string;
+interface PageProps {
+  communityIdentifier: string;
+}
+
+export default function CommunityFrontPage(props: PageProps): JSX.Element {
+  const { communityIdentifier } = props;
 
   return (
     <>
       <Background url="https://api.lorem.space/image/game?w=2000&h=200" />
       <ContentWrapper>
-        <BreadCrumbs parts={[{ label: community }]} />
-        <CommunityPackagesLink community={community}>
+        <BreadCrumbs parts={[{ label: communityIdentifier }]} />
+        <CommunityPackagesLink community={communityIdentifier}>
           Packages
         </CommunityPackagesLink>
       </ContentWrapper>
@@ -24,13 +26,13 @@ export default function CommunityFrontPage(): JSX.Element {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // TODO: validate the community exists in database.
-  if (!context.params?.community) {
+  if (!context.params?.communityIdentifier) {
     return { notFound: true };
   }
 
   return {
     props: {
-      community: context.params.community,
+      communityIdentifier: context.params.communityIdentifier,
     },
   };
 };

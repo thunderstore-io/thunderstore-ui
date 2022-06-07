@@ -10,14 +10,13 @@ import { Background } from "components/Background";
 import { ContentWrapper } from "components/Wrapper";
 
 interface PageProps {
-  community: string;
+  communityIdentifier: string;
   namespace: string;
-  package: string;
+  packageName: string;
 }
 
 export default function PackageDependantsPage(props: PageProps): JSX.Element {
-  const { community, namespace, package: package_ } = props;
-  console.warn(community, namespace, package_);
+  const { communityIdentifier, namespace, packageName } = props;
 
   return (
     <>
@@ -27,13 +26,17 @@ export default function PackageDependantsPage(props: PageProps): JSX.Element {
           parts={[
             {
               LinkComponent: CommunityLink,
-              LinkProps: { community },
-              label: community,
+              LinkProps: { community: communityIdentifier },
+              label: communityIdentifier,
             },
             {
               LinkComponent: PackageLink,
-              LinkProps: { community, namespace, package: package_ },
-              label: package_,
+              LinkProps: {
+                community: communityIdentifier,
+                namespace,
+                package: packageName,
+              },
+              label: packageName,
             },
             {
               label: "Dependants",
@@ -41,7 +44,7 @@ export default function PackageDependantsPage(props: PageProps): JSX.Element {
           ]}
         />
         <Heading color="ts.orange">
-          List of packages depending on {package_}
+          List of packages depending on {packageName}
         </Heading>
       </ContentWrapper>
     </>
@@ -51,18 +54,18 @@ export default function PackageDependantsPage(props: PageProps): JSX.Element {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // TODO: validate the community & package exist in database.
   if (
-    !context.params?.community ||
+    !context.params?.communityIdentifier ||
     !context.params?.namespace ||
-    !context.params?.package
+    !context.params?.packageName
   ) {
     return { notFound: true };
   }
 
   return {
     props: {
-      community: context.params.community,
+      communityIdentifier: context.params.communityIdentifier,
       namespace: context.params.namespace,
-      package: context.params.package,
+      packageName: context.params.packageName,
     },
   };
 };
