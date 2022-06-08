@@ -30,11 +30,17 @@ export function useFreshProps<T extends (...args: any) => any>(
   dapperMethod: T,
   dapperParams: Parameters<T>
 ): WithDid404<Awaited<ReturnType<T>>> {
-  const { sessionId } = useSession();
+  const { isReady, sessionId } = useSession();
   const [props, setProps] = useState(initialProps);
   const [hasRun, setHasRun] = useState(false);
 
   useEffect(() => {
+    // Postpone sending the request if the session id stored in
+    // localStorage isn't validated yet.
+    if (!isReady) {
+      return;
+    }
+
     // If the unauthenticated server-side request resulted in 404 and
     // the user isn't authenticated, there's no point redoing the request.
     if (initialProps.did404 && sessionId === undefined) {
@@ -61,6 +67,7 @@ export function useFreshProps<T extends (...args: any) => any>(
     dapperParams,
     hasRun,
     initialProps.did404,
+    isReady,
     sessionId,
     setHasRun,
     setProps,

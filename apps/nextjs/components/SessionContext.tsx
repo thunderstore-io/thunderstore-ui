@@ -1,17 +1,29 @@
-import { createContext, FC, useContext, useState } from "react";
+import Router from "next/router";
+import {
+  createContext,
+  Dispatch,
+  FC,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
+import { API_DOMAIN } from "utils/constants";
 import { StorageManager } from "utils/storage";
 
 interface ContextInterface {
-  /** Fetch user email from provider's state or localStorage. */
+  /** User email from provider's state or localStorage. */
   email?: string;
   /** Remove session data from provider's state and localStorage. */
   clearSession: () => void;
-  /** Fetch sessionId from provider's state or localStorage. */
+  /** False while session id from localStorage is being validated */
+  isReady: boolean;
+  /** Session id from provider's state or localStorage. */
   sessionId?: string;
   /** Store session data in provider's state and localStorage. */
   setSession: (sessionData: LoginResponse) => void;
-  /** Fetch username from provider's state or localStorage. */
+  /** Username from provider's state or localStorage. */
   username?: string;
 }
 
@@ -37,20 +49,11 @@ const USERNAME_KEY = "username";
 export const SessionProvider: FC = (props) => {
   const [_session, _setSession] = useState<LoginResponse>();
   const _storage = new StorageManager("Session");
-
-  if (_session?.sessionId === undefined) {
-    const storedEmail = _storage.safeGetValue(EMAIL_KEY);
-    const storedId = _storage.safeGetValue(ID_KEY);
-    const storedUsername = _storage.safeGetValue(USERNAME_KEY);
-
-    if (storedId) {
-      _setSession({
-        email: storedEmail || "",
-        sessionId: storedId,
-        username: storedUsername || "",
-      });
-    }
-  }
+  const [isReady, sessionId] = useValidateSession(
+    _session,
+    _setSession,
+    _storage
+  );
 
   const setSession = (sessionData: LoginResponse) => {
     _setSession(sessionData);
@@ -69,7 +72,8 @@ export const SessionProvider: FC = (props) => {
   const value = {
     clearSession,
     email: _session?.email,
-    sessionId: _session?.sessionId,
+    isReady,
+    sessionId,
     setSession,
     username: _session?.username,
   };
@@ -84,6 +88,7 @@ export const SessionProvider: FC = (props) => {
 /**
  * For accessing data API's session id.
  *
+ * * isReady: boolean
  * * sessionId?: string
  * * username?: string
  * * email?: string
@@ -98,4 +103,72 @@ export const useSession = (): ContextInterface => {
   }
 
   return contextState;
+};
+
+/**
+ * Call backend to check if session id found in localStorage is valid.
+ *
+ * Omits the call if session id is already set in the porovider's
+ * internal state.
+ */
+const useValidateSession = (
+  _session: LoginResponse | undefined,
+  _setSession: Dispatch<SetStateAction<LoginResponse | undefined>>,
+  _storage: StorageManager
+): [
+  /** Is the validation process ready? */
+  boolean,
+  /** Session id if it's valid, otherwise undefined */
+  string | undefined
+] => {
+  const [isValid, setIsValid] = useState<boolean>();
+  const stateSessionId = _session?.sessionId;
+  const storedSessionId = _storage.safeGetValue(ID_KEY);
+
+  useEffect(() => {
+    // Session id stored in SessionProvider's state is always valid, no
+    // need to call backend to check it nor read values from localStorage.
+    if (stateSessionId !== undefined) {
+      if (isValid !== true) {
+        setIsValid(true);
+      }
+      return;
+    }
+
+    // If there's no session id in localStorage, there's nothing to do.
+    if (storedSessionId === null) {
+      if (isValid !== false) {
+        setIsValid(false);
+      }
+      return;
+    }
+
+    (async () => {
+      const res = await fetch(`${API_DOMAIN}/api/experimental/auth/validate/`, {
+        headers: {
+          authorization: `Session ${storedSessionId}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res.status === 401) {
+        _storage.removeValue(EMAIL_KEY);
+        _storage.removeValue(ID_KEY);
+        _storage.removeValue(USERNAME_KEY);
+        Router.push("/");
+        return;
+      }
+
+      _setSession({
+        email: _storage.safeGetValue(EMAIL_KEY) || "",
+        sessionId: storedSessionId,
+        username: _storage.safeGetValue(USERNAME_KEY) || "",
+      });
+      setIsValid(true);
+    })();
+  }, [isValid, setIsValid, stateSessionId, storedSessionId]);
+
+  const isReady = isValid !== undefined;
+  const sessionId = isValid ? storedSessionId || undefined : undefined;
+  return [isReady, sessionId];
 };
