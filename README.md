@@ -40,12 +40,23 @@ yarn workspace @thunderstore/nextjs start
 
 ### Troubleshooting
 
-**After running `yarn build`, all the links disappeared from the page**
+#### After running `yarn build`, all the links disappeared from the page
 
 **Solution**: This seems to occur only when Next.js dev server has already been
 up before the packages were built. Most likely this is a cache issue which
 results in a rehydration issue on client-side. Simply running `yarn` or manually
 deleting `apps/nextjs/.next` after running `yarn build` should solve the issue.
+
+#### After runinng `yarn install` on Windows, you see symlinking errors
+
+**Solution**: Enable developer mode in windows settings.
+See https://github.com/preconstruct/preconstruct/issues/381 for more details
+
+#### Yarn error `expected workspace package to exist for X`
+
+**Solution**: Downgrade yarn to a working version by running
+`yarn policies set-version 1.19.0`. See
+https://github.com/yarnpkg/yarn/issues/8405 for more details.
 
 ### Adding dependencies
 
