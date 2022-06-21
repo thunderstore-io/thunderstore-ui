@@ -6,7 +6,9 @@ export const Layout: FC<PropsWithChildren> = (props) => {
   return (
     <>
       <Navbar />
-      {props.children}
+      <div style={{ width: "1140px", marginLeft: "auto", marginRight: "auto" }}>
+        {props.children}
+      </div>
       <Footer />
     </>
   );
