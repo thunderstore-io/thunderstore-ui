@@ -1,0 +1,82 @@
+.container {
+  width: 100%;
+}
+
+.header {
+}
+
+.titleContainer {
+  margin-bottom: 38px;
+}
+
+.pageTitle {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 140%;
+  color: #ccddfe;
+}
+
+/* TODO: Add font alternatives */
+.gameTitle {
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 30px;
+  line-height: 35px;
+  text-transform: capitalize;
+}
+
+.tableHeader,
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px 12px 16px;
+  margin-bottom: 8px;
+  gap: 16px;
+  font-size: 16px;
+  line-height: 140%;
+}
+
+.tableHeader {
+  font-style: normal;
+  font-weight: 700;
+  color: #ccddfe;
+}
+
+.row {
+  background: #242e48;
+  border: 2px solid #353e58;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.row:hover {
+  border-color: #49567a;
+}
+
+.pvp,
+.pve {
+  text-align: center;
+}
+
+.pvp {
+  color: #ff3a52;
+}
+
+.pve {
+  color: #02ff95;
+}
+
+.name {
+  flex-grow: 1;
+}
+
+.mode,
+.mods,
+.password {
+  width: 100px;
+  text-align: center;
+}
