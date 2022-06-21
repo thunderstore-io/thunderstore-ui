@@ -1,4 +1,5 @@
 import { FC, PropsWithChildren } from "react";
+import Link from "next/link";
 
 export const Navbar: FC<PropsWithChildren> = () => {
   return (
@@ -23,7 +24,7 @@ export const Navbar: FC<PropsWithChildren> = () => {
             fontSize: "16px",
           }}
         >
-          Servers
+          <Link href={"/"}>Servers</Link>
         </div>
         <div
           style={{
@@ -33,7 +34,7 @@ export const Navbar: FC<PropsWithChildren> = () => {
             fontSize: "16px",
           }}
         >
-          Submit Server
+          <Link href={"/create"}>Submit Server</Link>
         </div>
       </div>
     </div>
