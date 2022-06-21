@@ -20,11 +20,11 @@ a {
 @font-face {
   font-family: "Raleway";
   src: local("Raleway"),
-    url(../static/fonts/Raleway-VariableFont_wght.ttf) format("truetype");
+    url(../public/fonts/Raleway-VariableFont_wght.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "Exo2";
   src: local("Exo2"),
-    url(../static/fonts/Exo2-VariableFont_wght.ttf) format("truetype");
+    url(../public/fonts/Exo2-VariableFont_wght.ttf) format("truetype");
 }
