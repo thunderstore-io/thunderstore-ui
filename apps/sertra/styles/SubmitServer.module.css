@@ -1,0 +1,127 @@
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1140px;
+  /* TODO: remove this magic value lol */
+  min-height: 79.08vh;
+}
+
+.formHeader {
+  margin-bottom: 36px;
+  margin-top: 81px;
+}
+
+.formTitle {
+  height: 35px;
+
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 30px;
+  line-height: 35px;
+
+  display: flex;
+  align-items: center;
+}
+
+.input,
+.checkbox,
+.checkboxContainer,
+.textarea {
+  width: 100%;
+  background: #17213b;
+  border-radius: 4px;
+  border: 0;
+  color: #ffffff;
+  height: 43px;
+  padding: 4px 16px;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+}
+
+select.input {
+  cursor: pointer;
+}
+
+.checkboxContainer {
+  background: inherit;
+  display: flex;
+  align-items: flex-start;
+  padding: 0;
+}
+
+.checkbox {
+  cursor: pointer;
+  width: 43px;
+  height: 43px;
+  margin: 0;
+}
+
+.textarea {
+  padding: 16px;
+  height: 154px;
+  overflow-y: auto;
+}
+
+.input:focus-visible,
+.checkbox:focus-visible,
+.textarea:focus-visible {
+  outline: 2px solid #93a0c2;
+}
+
+.textarea {
+  resize: none;
+}
+
+.submit {
+  width: 100%;
+  background: #ffa96b;
+  color: #000000;
+
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  height: 43px;
+
+  margin-top: 40px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.submit:focus-visible,
+.submit:hover {
+  background: #ff964a;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.row label,
+.row .label {
+  width: 232px;
+  height: 44px;
+
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  display: flex;
+  align-items: center;
+}
