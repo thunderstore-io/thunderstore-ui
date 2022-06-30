@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Flex,
-  FormLabel,
-  Input,
-  Spacer,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, FormLabel, Input, Text } from "@chakra-ui/react";
 import { DebouncedEventHandler } from "@thunderstore/hooks";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
@@ -90,7 +82,7 @@ export const PackageSearch: React.FC<PackageSearchProps> = (props) => {
 
   return (
     <>
-      <Flex align="center" h="64px" p="10px 0">
+      <Flex align="center" h="64px" justify="space-between" p="10px 0">
         <Flex
           as="form"
           method="get"
@@ -145,8 +137,6 @@ export const PackageSearch: React.FC<PackageSearchProps> = (props) => {
             <SearchIcon color={showFilters ? "ts.black" : "ts.babyBlue"} />
           </Button>
         </Flex>
-
-        <Spacer />
 
         <OrderingButtons selected={ordering} setOrdering={setOrdering} />
       </Flex>

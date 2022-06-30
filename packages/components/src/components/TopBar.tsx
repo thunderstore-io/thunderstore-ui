@@ -6,7 +6,6 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Spacer,
 } from "@chakra-ui/react";
 import React from "react";
 
@@ -17,12 +16,11 @@ import { IndexLink } from "./Links";
  * Navigation bar shown on every page.
  */
 export const TopBar: React.FC = (props) => (
-  <Flex align="center" h={100}>
+  <Flex align="center" h={100} justify="space-between">
     <IndexLink variant="ts.topBarIndex" align="center" display="flex">
       <ThunderstoreLogo height="20px" mr="7px" width="20px" />
       Thunderstore
     </IndexLink>
-    <Spacer />
     <Flex>{props.children}</Flex>
   </Flex>
 );
