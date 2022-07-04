@@ -1,4 +1,4 @@
-import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 
 import { formatCount } from "../utils/number";
@@ -49,6 +49,7 @@ export const CommunityCard: React.FC<CommunityCardProps> = (props) => {
         align="center"
         fontSize={14}
         fontWeight={700}
+        justify="space-between"
         p="13px 20px 12px 20px"
       >
         <Flex>
@@ -61,7 +62,6 @@ export const CommunityCard: React.FC<CommunityCardProps> = (props) => {
             {formatCount(downloadCount)}
           </Box>
         </Flex>
-        <Spacer />
         <ChevronRight {...iconStyles} mr="0" mt="2px" />
       </Flex>
     </CommunityLink>
