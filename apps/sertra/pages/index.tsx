@@ -7,7 +7,7 @@ import { ApiURLs } from "../api/urls";
 import { ServerList } from "../components/ServerList";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const fallback: any = {};
+  const fallback: { [key: string]: unknown } = {};
   fallback[ApiURLs.ServerList] = await getServerListings();
   return {
     props: {
@@ -27,5 +27,4 @@ const Home: NextPage<{ swrFallback: any }> = ({ swrFallback }) => (
     <ServerList community={"v-rising"} />
   </SWRConfig>
 );
-
 export default Home;
