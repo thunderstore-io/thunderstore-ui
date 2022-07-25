@@ -10,6 +10,8 @@ export class ApiURLs {
   public static ServerList = url("/api/v1/server/");
   public static ServerCreate = url(`/api/v1/server/create/`);
   public static ServerDetail = (id: string) => url(`/api/v1/server/${id}/`);
+  public static AuthWeb3Init = url("/api/v1/auth/web3/init/");
+  public static AuthWeb3Complete = url("/api/v1/auth/web3/complete/");
 }
 
 export class TsApiURLs {

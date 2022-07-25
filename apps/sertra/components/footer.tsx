@@ -3,7 +3,14 @@ import { FC, PropsWithChildren } from "react";
 export const Footer: FC<PropsWithChildren> = () => {
   return (
     <footer style={{ backgroundColor: "#17213B" }}>
-      <div style={{ width: "1140px", marginLeft: "auto", marginRight: "auto" }}>
+      <div
+        style={{
+          width: "1140px",
+          maxWidth: "90%",
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+      >
         <div
           style={{
             display: "flex",

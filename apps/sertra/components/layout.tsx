@@ -6,7 +6,14 @@ export const Layout: FC<PropsWithChildren> = (props) => {
   return (
     <>
       <Navbar />
-      <div style={{ width: "1140px", marginLeft: "auto", marginRight: "auto" }}>
+      <div
+        style={{
+          width: "1140px",
+          maxWidth: "90%",
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+      >
         {props.children}
       </div>
       <Footer />

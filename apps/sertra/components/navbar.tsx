@@ -3,7 +3,14 @@ import Link from "next/link";
 
 export const Navbar: FC<PropsWithChildren> = () => {
   return (
-    <div style={{ width: "1140px", marginLeft: "auto", marginRight: "auto" }}>
+    <div
+      style={{
+        width: "1140px",
+        maxWidth: "90%",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
+    >
       <div
         style={{
           display: "flex",
@@ -35,6 +42,16 @@ export const Navbar: FC<PropsWithChildren> = () => {
           }}
         >
           <Link href={"/create"}>Submit Server</Link>
+        </div>
+        <div
+          style={{
+            marginLeft: "20px",
+            marginRight: "20px",
+            color: "white",
+            fontSize: "16px",
+          }}
+        >
+          <Link href={"/login"}>Login</Link>
         </div>
       </div>
     </div>
