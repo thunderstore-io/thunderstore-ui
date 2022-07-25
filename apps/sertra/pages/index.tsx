@@ -7,7 +7,7 @@ import { ApiURLs } from "../api/urls";
 import { SWRConfig } from "swr";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const fallback: any = {};
+  const fallback: { [key: string]: unknown } = {};
   fallback[ApiURLs.ServerList] = await getServerListings();
   return {
     props: {
@@ -17,7 +17,9 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-const Home: NextPage<{ swrFallback: any }> = ({ swrFallback }) => {
+const Home: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
+  swrFallback,
+}) => {
   return (
     <SWRConfig value={{ fallback: swrFallback }}>
       <div className={styles.container}>
