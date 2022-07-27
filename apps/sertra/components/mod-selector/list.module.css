@@ -1,0 +1,75 @@
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px;
+  gap: 24px;
+}
+
+.row:not(:last-child) {
+  border-bottom: 1px solid var(--border-regular);
+}
+
+.colSmall,
+.colLarge {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.colLarge {
+  flex-grow: 1;
+}
+
+.rowIcon {
+  width: 32px;
+  height: 32px;
+}
+
+.packageName {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.ownerName {
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-left: 8px;
+}
+
+.selectWrapper {
+  background: var(--bg-dark);
+  border-radius: var(--border-radius-normal);
+  overflow: hidden;
+  padding-right: 8px;
+  outline: var(--border-active) none 1px;
+}
+.selectWrapper:hover {
+  outline-style: dashed;
+}
+.selectWrapper:focus,
+.selectWrapper:focus-visible,
+.selectWrapper:focus-within,
+.selectWrapper:active {
+  outline-style: solid;
+  outline-width: 2px;
+}
+
+.versionSelect {
+  width: 128px;
+  padding: 7px;
+
+  background: var(--bg-dark);
+  border: 0;
+  color: var(--text-secondary);
+  height: 32px;
+  line-height: 20px;
+  font-size: 16px;
+  font-weight: 400;
+}
+.versionSelect:hover,
+.versionSelect:focus,
+.versionSelect:focus-visible,
+.versionSelect:focus-within,
+.versionSelect:active {
+  outline-style: none;
+}

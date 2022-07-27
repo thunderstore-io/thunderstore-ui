@@ -2,6 +2,7 @@
   border-radius: var(--border-radius-normal);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .header {
@@ -18,20 +19,25 @@
   justify-content: space-between;
 }
 
-.headerCloseButton {
-  color: var(--text-secondary);
-  border-radius: var(--border-radius-normal);
-  border-width: 0;
-  width: 36px;
-  height: 36px;
-  background-color: transparent;
-}
-.headerCloseButton:focus-visible,
-.headerCloseButton:focus,
-.headerCloseButton:hover {
-  background-color: var(--bg-dark);
-}
-
 .headerContent {
   margin-top: 16px;
+}
+
+.content {
+  border-top: 1px solid var(--border-regular);
+  border-bottom: 1px solid var(--border-regular);
+  background-color: var(--bg-regular);
+  padding: 8px 32px;
+}
+
+.footer {
+  background-color: var(--bg-light);
+  padding: 16px 32px;
+}
+
+.footerButtonRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
