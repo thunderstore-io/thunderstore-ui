@@ -28,24 +28,24 @@
   flex-grow: 1;
 }
 
-.title a {
+.headerTitle a {
   color: #0070f3;
   text-decoration: none;
 }
 
-.title a:hover,
-.title a:focus,
-.title a:active {
+.headerTitle a:hover,
+.headerTitle a:focus,
+.headerTitle a:active {
   text-decoration: underline;
 }
 
-.title {
+.headerTitle {
   margin: 0;
   line-height: 1.15;
   font-size: 4rem;
 }
 
-.title,
+.headerTitle,
 .description {
   text-align: center;
 }

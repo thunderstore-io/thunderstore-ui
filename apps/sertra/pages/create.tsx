@@ -3,6 +3,7 @@ import styles from "../styles/SubmitServer.module.css";
 import { TsApiURLs } from "../api/urls";
 import { getPackageList } from "../api/hooks";
 import { SWRConfig } from "swr";
+import { ModSelectorModal } from "../components/mod-selector/modal";
 
 export const getStaticProps: GetStaticProps = async () => {
   const fallback: { [key: string]: unknown } = {};
@@ -20,6 +21,7 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
 }) => {
   return (
     <SWRConfig value={{ fallback: swrFallback }}>
+      <ModSelectorModal />
       <div className={styles.container}>
         <div className={styles.formHeader}>
           <div className={styles.formTitle}>Submit Server</div>

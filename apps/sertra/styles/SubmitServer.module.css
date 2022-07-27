@@ -67,12 +67,6 @@ select.input {
   overflow-y: auto;
 }
 
-.input:focus-visible,
-.checkbox:focus-visible,
-.textarea:focus-visible {
-  outline: 2px solid #93a0c2;
-}
-
 .textarea {
   resize: none;
 }
