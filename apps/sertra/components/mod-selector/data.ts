@@ -1,9 +1,15 @@
-import { ModListEntryProps } from "./list";
-
 const ICON_SRC =
   "https://gcdn.thunderstore.io/live/repository/icons/SussyBnuuy-Hagrid_Acrid-1.0.0.png";
 
-export const MockPackages: (ModListEntryProps & { id: string })[] = [
+export type ModPackage = {
+  iconUrl: string;
+  packageName: string;
+  ownerName: string;
+  versionNumbers: string[];
+  id: string;
+};
+
+export const MockPackages: ModPackage[] = [
   {
     id: "0",
     iconUrl: ICON_SRC,

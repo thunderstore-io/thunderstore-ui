@@ -6,6 +6,7 @@ interface SearchBoxProps<T> {
   renderOption: (option: T) => ReactNode;
   keyExtractor: (option: T) => string | number;
   options: T[];
+  onSelect?: (option: T) => void;
 }
 
 export const SearchBox = <T,>({
@@ -13,6 +14,7 @@ export const SearchBox = <T,>({
   renderOption,
   keyExtractor,
   options,
+  onSelect,
 }: SearchBoxProps<T>) => {
   const [isFocused, setFocused] = useState<boolean>(false);
 
@@ -44,6 +46,7 @@ export const SearchBox = <T,>({
                 <button
                   className={styles.optionButton}
                   key={keyExtractor(option)}
+                  onClick={() => onSelect && onSelect(option)}
                 >
                   {renderOption(option)}
                 </button>
