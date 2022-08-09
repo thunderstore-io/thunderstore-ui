@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import styles from "./modal.module.css";
 import { SearchBox } from "./search";
-import { ModListRow } from "./list";
+import { ModListRow, ModRowInfo } from "./list";
 import { MockPackages } from "./data";
 import { IconButton } from "./iconButton";
 import { ButtonPrimary, ButtonSecondary } from "./button";
@@ -45,11 +45,18 @@ export const ModSelectorModal = () => {
   return (
     <div className={styles.modal}>
       <ModalHeader title={"Mods"}>
-        <SearchBox placeholder={"Search mods..."} />
+        <SearchBox
+          placeholder={"Search mods..."}
+          options={MockPackages}
+          renderOption={(option) => (
+            <ModListRow {...option} showControls={false} />
+          )}
+          keyExtractor={(option) => option.id}
+        />
       </ModalHeader>
       <ModalContent>
         {MockPackages.map((data) => {
-          return <ModListRow key={data.id} {...data} />;
+          return <ModListRow key={data.id} {...data} showControls={true} />;
         })}
       </ModalContent>
       <ModalFooter />
