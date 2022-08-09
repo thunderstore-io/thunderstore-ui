@@ -1,5 +1,6 @@
 import styles from "./list.module.css";
 import { IconButton } from "./iconButton";
+import { ModPackage } from "./data";
 
 export interface ModRowInfoProps {
   iconUrl: string;
@@ -26,9 +27,11 @@ export const ModRowInfo: React.FC<ModRowInfoProps> = ({
 
 export interface ModRowControlsProps {
   versionNumbers: string[];
+  onDelete?: () => void;
 }
 export const ModRowControls: React.FC<ModRowControlsProps> = ({
   versionNumbers,
+  onDelete,
 }) => {
   return (
     <>
@@ -46,34 +49,35 @@ export const ModRowControls: React.FC<ModRowControlsProps> = ({
         </div>
       </div>
       <div className={styles.colSmall}>
-        <IconButton content={"🗑"} />
+        <IconButton content={"🗑"} buttonProps={{ onClick: onDelete }} />
       </div>
     </>
   );
 };
 
 export interface ModListEntryProps {
-  iconUrl: string;
-  packageName: string;
-  ownerName: string;
-  versionNumbers: string[];
+  modPackage: ModPackage;
   showControls?: boolean;
+  onDelete?: (selection: ModPackage) => void;
 }
 export const ModListRow: React.FC<ModListEntryProps> = ({
-  iconUrl,
-  packageName,
-  ownerName,
-  versionNumbers,
+  modPackage,
   showControls,
+  onDelete,
 }) => {
   return (
     <div className={styles.row}>
       <ModRowInfo
-        iconUrl={iconUrl}
-        packageName={packageName}
-        ownerName={ownerName}
+        iconUrl={modPackage.iconUrl}
+        packageName={modPackage.packageName}
+        ownerName={modPackage.ownerName}
       />
-      {showControls && <ModRowControls versionNumbers={versionNumbers} />}
+      {showControls && (
+        <ModRowControls
+          versionNumbers={modPackage.versionNumbers}
+          onDelete={() => onDelete && onDelete(modPackage)}
+        />
+      )}
     </div>
   );
 };

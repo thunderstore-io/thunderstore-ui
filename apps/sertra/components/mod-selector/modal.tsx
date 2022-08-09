@@ -1,8 +1,8 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useMemo, useState } from "react";
 import styles from "./modal.module.css";
 import { SearchBox } from "./search";
-import { ModListRow, ModRowInfo } from "./list";
-import { MockPackages } from "./data";
+import { ModListRow } from "./list";
+import { MockPackages, ModPackage } from "./data";
 import { IconButton } from "./iconButton";
 import { ButtonPrimary, ButtonSecondary } from "./button";
 
@@ -42,21 +42,51 @@ export const ModalFooter: React.FC<unknown> = () => {
 };
 
 export const ModSelectorModal = () => {
+  const [selectedMods, setSelectedMods] = useState<ModPackage[]>([]);
+
+  const selectableMods: ModPackage[] = useMemo(() => {
+    return MockPackages.filter((x) => !selectedMods.find((y) => y.id == x.id));
+  }, [selectedMods]);
+
+  const selectMod: (selection: ModPackage) => void = useMemo(() => {
+    return (selection: ModPackage) => {
+      if (selectableMods.find((x) => x.id == selection.id)) {
+        setSelectedMods(selectedMods.concat([selection]));
+      }
+    };
+  }, [selectableMods, selectedMods, setSelectedMods]);
+
+  const deselectMod: (selection: ModPackage) => void = useMemo(() => {
+    return (selection: ModPackage) => {
+      if (selectedMods.find((x) => x.id == selection.id)) {
+        setSelectedMods(selectedMods.filter((y) => y.id != selection.id));
+      }
+    };
+  }, [selectedMods, setSelectedMods]);
+
   return (
     <div className={styles.modal}>
       <ModalHeader title={"Mods"}>
         <SearchBox
           placeholder={"Search mods..."}
-          options={MockPackages}
+          options={selectableMods}
           renderOption={(option) => (
-            <ModListRow {...option} showControls={false} />
+            <ModListRow modPackage={option} showControls={false} />
           )}
           keyExtractor={(option) => option.id}
+          onSelect={selectMod}
         />
       </ModalHeader>
       <ModalContent>
-        {MockPackages.map((data) => {
-          return <ModListRow key={data.id} {...data} showControls={true} />;
+        {selectedMods.map((data) => {
+          return (
+            <ModListRow
+              key={data.id}
+              modPackage={data}
+              showControls={true}
+              onDelete={deselectMod}
+            />
+          );
         })}
       </ModalContent>
       <ModalFooter />
