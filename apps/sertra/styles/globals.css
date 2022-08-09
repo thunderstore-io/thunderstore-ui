@@ -93,6 +93,15 @@ input:active {
   outline-width: 2px;
 }
 
+textarea:focus,
+textarea:focus-visible,
+textarea:active,
+input:focus,
+input:focus-visible,
+input:active {
+  cursor: inherit;
+}
+
 input::placeholder {
   color: var(--text-secondary);
   opacity: 1;
