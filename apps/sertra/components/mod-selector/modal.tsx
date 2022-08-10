@@ -41,6 +41,15 @@ export const ModalFooter: React.FC<unknown> = () => {
   );
 };
 
+export const NoModsSelectedNotice: React.FC<unknown> = () => {
+  return (
+    <div className={styles.noMods}>
+      <span>Ice cream icon here</span>
+      <p>Vanilla is good, but we want none of that here. Add some mods!</p>
+    </div>
+  );
+};
+
 export const ModSelectorModal = () => {
   const [selectedMods, setSelectedMods] = useState<ModPackage[]>([]);
 
@@ -78,16 +87,18 @@ export const ModSelectorModal = () => {
         />
       </ModalHeader>
       <ModalContent>
-        {selectedMods.map((data) => {
-          return (
-            <ModListRow
-              key={data.id}
-              modPackage={data}
-              showControls={true}
-              onDelete={deselectMod}
-            />
-          );
-        })}
+        {!selectedMods.length && <NoModsSelectedNotice />}
+        {!!selectedMods.length &&
+          selectedMods.map((data) => {
+            return (
+              <ModListRow
+                key={data.id}
+                modPackage={data}
+                showControls={true}
+                onDelete={deselectMod}
+              />
+            );
+          })}
       </ModalContent>
       <ModalFooter />
     </div>
