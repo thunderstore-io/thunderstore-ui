@@ -28,6 +28,19 @@
   border-bottom: 1px solid var(--border-regular);
   background-color: var(--bg-regular);
   padding: 8px 32px;
+  height: 609px;
+}
+
+.noMods {
+  height: 100%;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-grow: 1;
+  color: var(--text-secondary);
 }
 
 .footer {
