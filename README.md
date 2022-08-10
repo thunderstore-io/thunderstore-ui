@@ -3,6 +3,14 @@
 Monorepo containing Next.js frontend for [thunderstore.io](https://thunderstore.io)
 and reusable UI components.
 
+## Font Awesome setup
+
+This project uses font awesome pro. Before installing the dependencies, make
+sure you've configured your access token.
+
+See https://fontawesome.com/v5/docs/web/setup/use-package-managers for more
+details.
+
 ## Monorepo Setup
 
 - [`yarn` workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) manages
