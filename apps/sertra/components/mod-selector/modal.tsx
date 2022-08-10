@@ -5,6 +5,7 @@ import { ModListRow } from "./list";
 import { MockPackages, ModPackage } from "./data";
 import { IconButton } from "./iconButton";
 import { ButtonPrimary, ButtonSecondary } from "./button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface ModalHeaderProps {
   title?: string;
@@ -44,8 +45,14 @@ export const ModalFooter: React.FC<unknown> = () => {
 export const NoModsSelectedNotice: React.FC<unknown> = () => {
   return (
     <div className={styles.noMods}>
-      <span>Ice cream icon here</span>
-      <p>Vanilla is good, but we want none of that here. Add some mods!</p>
+      <FontAwesomeIcon
+        className={styles.noModsIcon}
+        icon={["fas", "ice-cream"]}
+      />
+      <p className={styles.noModsText}>
+        Vanilla is good, but we want none of that here.
+      </p>
+      <p className={styles.noModsText}>Add some mods!</p>
     </div>
   );
 };
