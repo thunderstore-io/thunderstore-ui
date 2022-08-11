@@ -10,26 +10,8 @@ import {
 import { useServerListings } from "../api/hooks";
 import { ServerListingData } from "../api/models";
 import styles from "./ServerList.module.css";
-
-interface ServerModeProps {
-  isPvP: boolean;
-}
-const ServerMode: React.FC<PropsWithChildren<ServerModeProps>> = ({
-  isPvP,
-}) => {
-  if (isPvP) {
-    return <div className={styles.pvp}>PvP</div>;
-  } else {
-    return <div className={styles.pve}>PvE</div>;
-  }
-};
-
-interface ServerPasswordProps {
-  requiresPassword: boolean;
-}
-const ServerPassword: React.FC<PropsWithChildren<ServerPasswordProps>> = ({
-  requiresPassword,
-}) => <div>{requiresPassword ? "🔒" : ""}</div>;
+import Link from "next/link";
+import { ServerMode, ServerPassword } from "./listingAttributes";
 
 interface ServerListEntryProps {
   listing: ServerListingData;
@@ -38,12 +20,14 @@ const ServerListEntry: React.FC<PropsWithChildren<ServerListEntryProps>> = ({
   listing,
 }) => {
   return (
-    <div className={styles.row}>
-      <div className={`${styles.name} ellipsis`}>{listing.name}</div>
-      <ServerMode isPvP={listing.is_pvp} />
-      <div>{listing.mod_count}</div>
-      <ServerPassword requiresPassword={listing.requires_password} />
-    </div>
+    <Link href={`/server/` + listing.id} key={listing.id}>
+      <div className={styles.row}>
+        <div className={`${styles.name} ellipsis`}>{listing.name}</div>
+        <ServerMode isPvP={listing.is_pvp} />
+        <div>{listing.mod_count}</div>
+        <ServerPassword requiresPassword={listing.requires_password} />
+      </div>
+    </Link>
   );
 };
 

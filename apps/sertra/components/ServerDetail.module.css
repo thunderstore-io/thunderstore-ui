@@ -1,0 +1,328 @@
+.container {
+  width: 100%;
+  display: flex;
+  column-gap: 2em;
+  flex-direction: column;
+}
+
+.headerRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.contentRow {
+  display: flex;
+  column-gap: 2em;
+}
+
+.columnLeft {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.columnRight {
+  display: flex;
+  flex-direction: column;
+}
+
+.descriptionContent,
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75em 1em 0.75em 0.75em;
+  margin-bottom: 0.5em;
+  gap: 1em;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.descriptionContent,
+.row {
+  background-color: var(--color-blue);
+  border: 0.125em solid var(--color-lightblue);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.mods {
+  width: 100px;
+  text-align: center;
+}
+
+.listingTitle {
+  flex-basis: 58%;
+}
+
+.listingTitle {
+  margin-top: 2em;
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 30px;
+  line-height: 1.16;
+
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+}
+
+.sectionTitle {
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.22;
+
+  display: flex;
+  align-items: center;
+
+  color: var(--color-babyblue);
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+.descriptionContent {
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.5em 2em;
+  gap: 1em;
+
+  background-color: var(--color-blue);
+
+  border: 0.125em solid var(--color-lightblue);
+}
+
+.descriptionContentText {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.4;
+
+  display: flex;
+  align-items: center;
+
+  color: #ffffff;
+}
+
+.modImg {
+  width: 64px;
+  height: 64px;
+
+  background: greenyellow;
+  border-radius: 0px;
+}
+
+.modName {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.1875;
+  display: flex;
+  align-items: center;
+
+  color: #ffffff;
+}
+
+.modDescription {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+
+  display: flex;
+  align-items: center;
+
+  color: var(--color-babyblue);
+}
+
+.modRow {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.1875;
+
+  display: flex;
+  align-items: center;
+
+  color: #ffffff;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.modRowColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.modContentRow {
+  display: flex;
+  align-items: flex-start;
+}
+
+.modImg {
+  margin-right: 2em;
+}
+
+.modArtifacts {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25em;
+}
+
+.artifact {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0.25em 0.625em;
+  gap: 0.625em;
+
+  width: 4.25em;
+  height: 1.375em;
+
+  background-color: var(--color-lightblue);
+}
+
+.artifactText {
+  width: 4em;
+  height: 1.16em;
+
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.16;
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: var(--color-babyblue);
+}
+
+.modName {
+  width: 35.25em;
+  height: 1.375em;
+
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.1875;
+  display: flex;
+  align-items: center;
+}
+
+.modDescription {
+  width: 40.285em;
+  height: 1.571em;
+
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+
+  color: var(--color-babyblue);
+}
+
+.serverInfoContent {
+  gap: 1em;
+}
+
+.serverInfoRow {
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: row;
+  padding: 0.5em 1em;
+  gap: 1em;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+
+  width: 28.5em;
+
+  background-color: var(--color-blue);
+
+  border: 2px solid var(--color-lightblue);
+}
+
+.serverInfoColumn {
+  flex: 1;
+}
+
+.joinServerButton {
+  margin-top: 3.25em;
+
+  display: flex;
+  align-self: end;
+  justify-content: center;
+  padding: 0.75em 1.875em;
+  gap: 0.75em;
+
+  width: 10.875em;
+  height: 2.6875em;
+  right: 24.375em;
+  top: 8.8125em;
+
+  background-color: #ffa96b;
+}
+
+.joinServerButtonText {
+  width: 5.1875em;
+  height: 1.1875em;
+
+  font-weight: 700;
+  color: #202941;
+}
+
+@media (max-width: 1199px) {
+  .container {
+    justify-content: center;
+  }
+
+  .headerRow {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .contentRow {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  .listingTitle {
+    flex-basis: 100%;
+    justify-content: center;
+  }
+
+  .joinServerButton {
+    align-self: center;
+  }
+
+  .sectionTitle {
+    justify-content: center;
+  }
+
+  .mods > .sectionTitle {
+    justify-content: start;
+  }
+
+  .serverInfoContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0em;
+  }
+
+  .columnRight {
+    order: 0;
+  }
+  .columnLeft {
+    order: 1;
+  }
+}
