@@ -11,7 +11,7 @@
     "build": "preconstruct build"
   },
   "engines": {
-    "node": "^16.6.0"
+    "node": "^16.6.0 || ^17.0.1"
   },
   "dependencies": {
     "@babel/core": "^7.16.0",
