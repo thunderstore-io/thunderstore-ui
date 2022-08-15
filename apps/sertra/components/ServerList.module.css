@@ -7,7 +7,7 @@
   font-weight: 500;
   font-size: 14px;
   line-height: 140%;
-  color: #ccddfe;
+  color: var(--color-babyblue);
 }
 
 /* TODO: Add font alternatives */
@@ -36,18 +36,18 @@
 .tableHeader {
   font-style: normal;
   font-weight: 700;
-  color: #ccddfe;
+  color: var(--color-babyblue);
 }
 
 .row {
-  background: #242e48;
-  border: 2px solid #353e58;
+  background-color: var(--color-blue);
+  border: 2px solid var(--color-lightblue);
   font-weight: 500;
   cursor: pointer;
 }
 
 .row:hover {
-  border-color: #49567a;
+  border-color: var(--color-lightblue115);
 }
 
 .pvp,
@@ -56,11 +56,11 @@
 }
 
 .pvp {
-  color: #ff3a52;
+  color: var(--color-highlightred);
 }
 
 .pve {
-  color: #02ff95;
+  color: var(--color-highlightgreen);
 }
 
 .name {

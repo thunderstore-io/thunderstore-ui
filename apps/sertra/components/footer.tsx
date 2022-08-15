@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from "react";
 
 export const Footer: FC<PropsWithChildren> = () => {
   return (
-    <footer style={{ backgroundColor: "#17213B" }}>
+    <footer style={{ backgroundColor: "var(--color-darkblue)" }}>
       <div style={{ width: "1140px", marginLeft: "auto", marginRight: "auto" }}>
         <div
           style={{
@@ -16,7 +16,7 @@ export const Footer: FC<PropsWithChildren> = () => {
             style={{
               flex: 1,
               fontSize: "14px",
-              color: "#93A0C2",
+              color: "var(--color-coolgray)",
               marginTop: "19px",
               marginBottom: "19px",
             }}
@@ -26,7 +26,7 @@ export const Footer: FC<PropsWithChildren> = () => {
           <div
             style={{
               fontSize: "14px",
-              color: "#93A0C2",
+              color: "var(--color-coolgray)",
               marginTop: "19px",
               marginBottom: "19px",
             }}

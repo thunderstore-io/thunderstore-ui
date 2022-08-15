@@ -1,3 +1,16 @@
+:root {
+  --color-babyblue: #ccddfe;
+  --color-blue: #242e48;
+  --color-coolgray: #93a0c2;
+  --color-darkblue: #17213b;
+  --color-highlightgreen: #02ff95;
+  --color-highlightred: #ff3a52;
+  --color-lightblue: #353e58;
+  --color-lightblue115: #49567a; /* Lightened by 15% */
+  --color-orange: #ff956b;
+  --color-orange99: #fc9347; /* Darkened by 1% */
+}
+
 html,
 body {
   background-color: #202941;

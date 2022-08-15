@@ -30,7 +30,7 @@
 .checkboxContainer,
 .textarea {
   width: 100%;
-  background: #17213b;
+  background: var(--color-darkblue);
   border-radius: 4px;
   border: 0;
   color: #ffffff;
@@ -70,7 +70,7 @@ select.input {
 .input:focus-visible,
 .checkbox:focus-visible,
 .textarea:focus-visible {
-  outline: 2px solid #93a0c2;
+  outline: 2px solid var(--color-coolgray);
 }
 
 .textarea {
@@ -79,7 +79,7 @@ select.input {
 
 .submit {
   width: 100%;
-  background: #ffa96b;
+  background: var(--color-orange);
   color: #000000;
 
   font-style: normal;
@@ -96,7 +96,7 @@ select.input {
 
 .submit:focus-visible,
 .submit:hover {
-  background: #ff964a;
+  background: var(--color-orange99);
 }
 
 .form {
