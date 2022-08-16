@@ -10,9 +10,8 @@
   color: var(--color-babyblue);
 }
 
-/* TODO: Add font alternatives */
 .gameTitle {
-  font-family: "Raleway";
+  font-family: var(--font-family-header);
   font-style: normal;
   font-weight: 900;
   font-size: 30px;

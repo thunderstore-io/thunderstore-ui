@@ -9,7 +9,7 @@ export const Footer: FC<PropsWithChildren> = () => {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            fontFamily: "Exo2",
+            fontFamily: "var(--font-family-body)",
           }}
         >
           <h2

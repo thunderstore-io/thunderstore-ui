@@ -9,6 +9,9 @@
   --color-lightblue115: #49567a; /* Lightened by 15% */
   --color-orange: #ff956b;
   --color-orange99: #fc9347; /* Darkened by 1% */
+
+  --font-family-body: Exo2, sans-serif;
+  --font-family-header: Raleway, sans-serif;
 }
 
 html,
@@ -16,8 +19,7 @@ body {
   background-color: #202941;
   padding: 0;
   margin: 0;
-  font-family: Exo2, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: var(--font-family-body);
   color: white;
 }
 
@@ -31,13 +33,17 @@ a {
 }
 
 @font-face {
-  font-family: "Raleway";
-  src: local("Raleway"),
+  font-family: Raleway;
+  /* TODO: Add font alternatives */
+  src: local(Raleway),
     url(../public/fonts/Raleway-VariableFont_wght.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "Exo2";
-  src: local("Exo2"),
-    url(../public/fonts/Exo2-VariableFont_wght.ttf) format("truetype");
+  src: local(Exo2),
+    url(../public/fonts/Exo2-VariableFont_wght.ttf) format("truetype"),
+    local(-apple-system), local(BlinkMacSystemFont), local(Segoe UI),
+    local(Roboto), local(Oxygen), local(Ubuntu), local(Cantarell),
+    local(Fira Sans), local(Droid Sans), local(Helvetica Neue);
 }
