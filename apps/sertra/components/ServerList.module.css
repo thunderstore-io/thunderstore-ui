@@ -1,12 +1,12 @@
 .titleContainer {
-  margin-bottom: 38px;
+  margin-bottom: 2.375rem;
 }
 
 .pageTitle {
   font-style: normal;
   font-weight: 500;
-  font-size: 14px;
-  line-height: 140%;
+  font-size: 0.875rem;
+  line-height: 1.4;
   color: var(--color-babyblue);
 }
 
@@ -14,8 +14,8 @@
   font-family: var(--font-family-header);
   font-style: normal;
   font-weight: 900;
-  font-size: 30px;
-  line-height: 35px;
+  font-size: 1.875rem;
+  line-height: 1.2;
   text-transform: capitalize;
 }
 
@@ -25,11 +25,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 12px 16px 12px 16px;
-  margin-bottom: 8px;
-  gap: 16px;
-  font-size: 16px;
-  line-height: 140%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  gap: 1rem;
+  font-size: 1rem;
+  line-height: 1.4;
 }
 
 .tableHeader {
@@ -69,6 +69,6 @@
 .mode,
 .mods,
 .password {
-  width: 100px;
+  width: 6.25rem;
   text-align: center;
 }

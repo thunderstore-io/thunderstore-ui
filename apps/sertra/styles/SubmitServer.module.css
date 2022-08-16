@@ -2,24 +2,24 @@
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  max-width: 1140px;
+  max-width: 71.25rem;
   /* TODO: remove this magic value lol */
   min-height: 79.08vh;
 }
 
 .formHeader {
-  margin-bottom: 36px;
-  margin-top: 81px;
+  margin-bottom: 2.25rem;
+  margin-top: 5rem;
 }
 
 .formTitle {
-  height: 35px;
+  height: 2.25rem;
 
   font-family: var(--font-family-header);
   font-style: normal;
   font-weight: 900;
-  font-size: 30px;
-  line-height: 35px;
+  font-size: 1.875rem;
+  line-height: 1.2;
 
   display: flex;
   align-items: center;
@@ -31,16 +31,16 @@
 .textarea {
   width: 100%;
   background: var(--color-darkblue);
-  border-radius: 4px;
+  border-radius: 0.25rem;
   border: 0;
   color: #ffffff;
-  height: 43px;
-  padding: 4px 16px;
+  height: 2.75rem;
+  padding: 0.25rem 1rem;
 
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
+  font-size: 1rem;
+  line-height: 1.25;
 }
 
 select.input {
@@ -56,14 +56,14 @@ select.input {
 
 .checkbox {
   cursor: pointer;
-  width: 43px;
-  height: 43px;
+  width: 2.75rem;
+  height: 2.75rem;
   margin: 0;
 }
 
 .textarea {
-  padding: 16px;
-  height: 154px;
+  padding: 1rem;
+  height: 9.625rem;
   overflow-y: auto;
 }
 
@@ -84,11 +84,11 @@ select.input {
 
   font-style: normal;
   font-weight: 700;
-  font-size: 16px;
-  line-height: 19px;
-  height: 43px;
+  font-size: 1rem;
+  line-height: 1.25;
+  height: 2.75rem;
 
-  margin-top: 40px;
+  margin-top: 2.5rem;
   border: none;
   outline: none;
   cursor: pointer;
@@ -102,7 +102,7 @@ select.input {
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
 }
 
 .row {
@@ -110,18 +110,18 @@ select.input {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .row label,
 .row .label {
-  width: 232px;
-  height: 44px;
+  width: 14.5rem;
+  height: 2.75rem;
 
   font-style: normal;
   font-weight: 700;
-  font-size: 16px;
-  line-height: 19px;
+  font-size: 1rem;
+  line-height: 1.2;
   display: flex;
   align-items: center;
 }
