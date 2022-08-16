@@ -11,11 +11,7 @@
 }
 
 .gameTitle {
-  font-family: var(--font-family-header);
-  font-style: normal;
-  font-weight: 900;
-  font-size: 1.875rem;
-  line-height: 1.2;
+  font: normal 900 1.875rem/1.2 var(--font-family-header);
   text-transform: capitalize;
 }
 

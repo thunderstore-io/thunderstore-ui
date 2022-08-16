@@ -14,13 +14,7 @@
 
 .formTitle {
   height: 2.25rem;
-
-  font-family: var(--font-family-header);
-  font-style: normal;
-  font-weight: 900;
-  font-size: 1.875rem;
-  line-height: 1.2;
-
+  font: 900 1.875rem/1.2 var(--font-family-header);
   display: flex;
   align-items: center;
 }
@@ -37,10 +31,7 @@
   height: 2.75rem;
   padding: 0.25rem 1rem;
 
-  font-style: normal;
-  font-weight: 400;
-  font-size: 1rem;
-  line-height: 1.25;
+  font: 1rem/1.25 var(--font-family-body);
 }
 
 select.input {
@@ -79,15 +70,10 @@ select.input {
 
 .submit {
   width: 100%;
+  height: 2.75rem;
   background: var(--color-orange);
   color: #000000;
-
-  font-style: normal;
-  font-weight: 700;
-  font-size: 1rem;
-  line-height: 1.25;
-  height: 2.75rem;
-
+  font: 700 1.1rem/1.25 var(--font-family-body);
   margin-top: 2.5rem;
   border: none;
   outline: none;
