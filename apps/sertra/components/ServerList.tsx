@@ -41,7 +41,7 @@ const ServerListEntry: React.FC<PropsWithChildren<ServerListEntryProps>> = ({
     <div className={styles.row}>
       <div className={`${styles.name} ellipsis`}>{listing.name}</div>
       <ServerMode isPvP={listing.is_pvp} />
-      <div>42</div>
+      <div>{listing.mod_count}</div>
       <ServerPassword requiresPassword={listing.requires_password} />
     </div>
   );
