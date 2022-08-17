@@ -10,7 +10,7 @@ export const Navbar: FC<PropsWithChildren> = () => {
           flexDirection: "row",
           alignItems: "center",
           paddingTop: "20px",
-          fontFamily: "Raleway",
+          fontFamily: "var(--font-family-header)",
         }}
       >
         <h1 style={{ flex: 1, color: "white", fontSize: "16px" }}>

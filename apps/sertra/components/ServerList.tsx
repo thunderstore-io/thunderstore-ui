@@ -64,7 +64,7 @@ export const ServerList: React.FC<PropsWithChildren<ServerListProps>> = ({
   }, [community]);
 
   return (
-    <div className={styles.container}>
+    <div>
       <div className={styles.header}>
         <div className={styles.titleContainer}>
           <div className={styles.pageTitle}>Servers</div>
