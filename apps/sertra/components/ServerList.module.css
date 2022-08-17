@@ -1,9 +1,15 @@
+.titleContainer,
+.tableHeader,
+.row {
+  width: 100%;
+  min-width: 40rem;
+}
+
 .titleContainer {
   margin-bottom: 2.375rem;
 }
 
 .pageTitle {
-  font-style: normal;
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.4;
@@ -21,6 +27,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  height: 2.875rem;
   padding: 0.75rem 1rem;
   margin-bottom: 0.5rem;
   gap: 1rem;
@@ -29,7 +36,6 @@
 }
 
 .tableHeader {
-  font-style: normal;
   font-weight: 700;
   color: var(--color-babyblue);
 }
@@ -45,9 +51,16 @@
   border-color: var(--color-lightblue115);
 }
 
-.pvp,
-.pve {
+.tableHeader > div,
+.row > div {
+  flex: 0 0 6.25rem;
   text-align: center;
+}
+
+.tableHeader > div.name,
+.row > div.name {
+  flex: 1;
+  text-align: left;
 }
 
 .pvp {
@@ -56,15 +69,4 @@
 
 .pve {
   color: var(--color-highlightgreen);
-}
-
-.name {
-  flex-grow: 1;
-}
-
-.mode,
-.mods,
-.password {
-  width: 6.25rem;
-  text-align: center;
 }
