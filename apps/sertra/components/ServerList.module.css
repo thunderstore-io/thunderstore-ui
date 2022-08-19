@@ -1,29 +1,33 @@
-.titleContainer,
-.tableHeader,
-.row {
+h1.header {
   width: 100%;
-  min-width: 40rem;
-}
-
-.titleContainer {
-  margin-bottom: 2.375rem;
-}
-
-.pageTitle {
+  margin: 0;
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.4;
   color: var(--color-babyblue);
 }
 
-.gameTitle {
+h2.header {
+  flex: 1 1;
+  margin: 0;
   font: normal 900 1.875rem/1.2 var(--font-family-header);
   text-transform: capitalize;
 }
 
+.paginatorWrapper,
 .tableHeader,
 .row {
   display: flex;
+  width: 100%;
+  min-width: 40rem;
+}
+
+.paginatorWrapper:last-of-type {
+  margin-top: 1.5rem;
+}
+
+.tableHeader,
+.row {
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -36,6 +40,7 @@
 }
 
 .tableHeader {
+  margin-top: 2.375rem;
   font-weight: 700;
   color: var(--color-babyblue);
 }
@@ -69,4 +74,22 @@
 
 .pve {
   color: var(--color-highlightgreen);
+}
+
+.paginator {
+  flex: 0 0 10rem;
+  text-align: right;
+}
+
+.paginator:only-child {
+  flex: 1;
+}
+
+.paginator button {
+  padding: 0.5rem;
+  border: none;
+  background-color: transparent;
+  color: var(--color-coolgray);
+  font: 500 1rem/1.2 var(--font-family-body);
+  cursor: pointer;
 }
