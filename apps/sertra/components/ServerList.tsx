@@ -21,31 +21,20 @@ interface ServerPasswordProps {
 }
 const ServerPassword: React.FC<PropsWithChildren<ServerPasswordProps>> = ({
   requiresPassword,
-}) => {
-  if (requiresPassword) {
-    return <div>🔒</div>;
-  } else {
-    return null;
-  }
-};
+}) => <div>{requiresPassword ? "🔒" : ""}</div>;
 
 interface ServerListEntryProps {
   listing: ServerListingData;
 }
-
 const ServerListEntry: React.FC<PropsWithChildren<ServerListEntryProps>> = ({
   listing,
 }) => {
   return (
     <div className={styles.row}>
-      <div className={styles.name}>{listing.name}</div>
-      <div className={styles.mode}>
-        <ServerMode isPvP={listing.is_pvp} />
-      </div>
-      <div className={styles.mods}>42</div>
-      <div className={styles.password}>
-        <ServerPassword requiresPassword={listing.requires_password} />
-      </div>
+      <div className={`${styles.name} ellipsis`}>{listing.name}</div>
+      <ServerMode isPvP={listing.is_pvp} />
+      <div>42</div>
+      <ServerPassword requiresPassword={listing.requires_password} />
     </div>
   );
 };
@@ -64,12 +53,10 @@ export const ServerList: React.FC<PropsWithChildren<ServerListProps>> = ({
   }, [community]);
 
   return (
-    <div>
-      <div className={styles.header}>
-        <div className={styles.titleContainer}>
-          <div className={styles.pageTitle}>Servers</div>
-          <div className={styles.gameTitle}>{gameDisplayName}</div>
-        </div>
+    <>
+      <div className={styles.titleContainer}>
+        <div className={styles.pageTitle}>Servers</div>
+        <div className={styles.gameTitle}>{gameDisplayName}</div>
       </div>
       <div className={styles.tableHeader}>
         <div className={styles.name}>Server Name</div>
@@ -77,11 +64,9 @@ export const ServerList: React.FC<PropsWithChildren<ServerListProps>> = ({
         <div className={styles.mods}>Mods</div>
         <div className={styles.password}>Password</div>
       </div>
-      <div>
-        {data?.results.map((x) => (
-          <ServerListEntry key={x.id} listing={x} />
-        ))}
-      </div>
-    </div>
+      {data?.results.map((x) => (
+        <ServerListEntry key={x.id} listing={x} />
+      ))}
+    </>
   );
 };

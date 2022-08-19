@@ -47,3 +47,9 @@ a {
     local(Roboto), local(Oxygen), local(Ubuntu), local(Cantarell),
     local(Fira Sans), local(Droid Sans), local(Helvetica Neue);
 }
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
