@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FC, PropsWithChildren } from "react";
 
-import styles from "./navbar.module.css";
+import styles from "./Navbar.module.css";
 
 export const Navbar: FC<PropsWithChildren> = () => (
   <nav className={styles.navbar}>
