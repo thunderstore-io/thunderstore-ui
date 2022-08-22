@@ -7,7 +7,11 @@ export const Layout: FC<PropsWithChildren> = (props) => {
     <>
       <Navbar />
       <div
-        style={{ maxWidth: "1140px", marginLeft: "auto", marginRight: "auto" }}
+        style={{
+          width: "100%",
+          maxWidth: "1140px",
+          margin: "0 auto",
+        }}
       >
         {props.children}
       </div>

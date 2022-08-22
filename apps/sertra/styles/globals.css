@@ -1,5 +1,6 @@
 :root {
   --color-babyblue: #ccddfe;
+  --color-background: #202941;
   --color-blue: #242e48;
   --color-coolgray: #93a0c2;
   --color-darkblue: #17213b;
@@ -12,15 +13,24 @@
 
   --font-family-body: Exo2, sans-serif;
   --font-family-header: Raleway, sans-serif;
+
+  --max-width-content: 73.25rem; /* 1140px + 2x16px padding */
 }
 
 html,
 body {
-  background-color: #202941;
   padding: 0;
   margin: 0;
   font-family: var(--font-family-body);
+  background-color: var(--color-background);
   color: white;
+}
+
+#__next {
+  /* For footer */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 a {
