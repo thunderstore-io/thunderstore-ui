@@ -180,7 +180,7 @@
   gap: 0.75em;
   margin-top: 3.25em;
   padding: 0.75em 1.875em;
-  background-color: #ffa96b;
+  background-color: var(--color-orange);
 }
 
 .joinServerButtonText {
