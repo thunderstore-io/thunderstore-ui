@@ -59,7 +59,7 @@
 
 .listingTitle {
   margin-top: 2em;
-  font-family: "Raleway";
+  font-family: var(--font-family-header);
   font-style: normal;
   font-weight: 900;
   font-size: 30px;
@@ -71,7 +71,7 @@
 }
 
 .sectionTitle {
-  font-family: "Raleway";
+  font-family: var(--font-family-header);
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
@@ -116,7 +116,7 @@
   height: 64px;
 
   background: greenyellow;
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 .modName {
@@ -316,7 +316,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0em;
+    gap: 0;
   }
 
   .columnRight {

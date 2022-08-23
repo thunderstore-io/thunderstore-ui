@@ -16,9 +16,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: "blocking" };
 };
 
-export const getStaticProps: GetStaticProps = async (context: any) => {
-  const id = context.params.id;
-  const res = await fetch(ApiURLs.ServerDetail(id));
+type ServerListingStaticProps = { detail_listing?: ServerListingDetailData };
+type ServerListingQueryProps = { id: string };
+
+export const getStaticProps: GetStaticProps<
+  ServerListingStaticProps,
+  ServerListingQueryProps
+> = async (context) => {
+  // Params is never undefined thanks to NextJS guarantees as long as the file
+  // is named appropriately.
+  const listingId = context.params!.id;
+  const res = await fetch(ApiURLs.ServerDetail(listingId));
   const data = await res.json();
 
   return {
