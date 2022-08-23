@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from "react";
 
-import styles from "./footer.module.css";
+import styles from "./Footer.module.css";
 
 export const Footer: FC<PropsWithChildren> = () => (
   <footer className={styles.container}>
