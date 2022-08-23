@@ -33,28 +33,27 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 0.75em 1em 0.75em 0.75em;
-  margin-bottom: 0.5em;
   gap: 1em;
+  padding: 0.75em 1em 0.75em 0.75em;
+  border: 0.125em solid var(--color-lightblue);
+  margin-bottom: 0.5em;
   font-size: 16px;
   line-height: 1.4;
+  font-weight: 500;
+  background-color: var(--color-blue);
+  cursor: pointer;
 }
 
-.descriptionContent,
-.row {
-  background-color: var(--color-blue);
-  border: 0.125em solid var(--color-lightblue);
-  font-weight: 500;
-  cursor: pointer;
+.descriptionContent {
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.5em 2em;
 }
 
 .mods {
   width: 100px;
   text-align: center;
-}
-
-.listingTitle {
-  flex-basis: 58%;
 }
 
 .listingTitle {
@@ -66,6 +65,7 @@
   line-height: 1.16;
 
   display: flex;
+  flex-basis: 58%;
   align-items: center;
   color: #ffffff;
 }
@@ -85,20 +85,6 @@
   margin-bottom: 1em;
 }
 
-.descriptionContent {
-  box-sizing: border-box;
-
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 1.5em 2em;
-  gap: 1em;
-
-  background-color: var(--color-blue);
-
-  border: 0.125em solid var(--color-lightblue);
-}
-
 .descriptionContentText {
   font-style: normal;
   font-weight: 500;
@@ -114,31 +100,32 @@
 .modImg {
   width: 64px;
   height: 64px;
-
+  margin-right: 2em;
   background: greenyellow;
   border-radius: 0;
 }
 
 .modName {
+  width: 35.25em;
+  display: flex;
+  align-items: center;
+  height: 1.375em;
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
   line-height: 1.1875;
-  display: flex;
-  align-items: center;
-
   color: #ffffff;
 }
 
 .modDescription {
+  display: flex;
+  align-items: center;
+  width: 40.285em;
+  height: 1.571em;
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 1.4;
-
-  display: flex;
-  align-items: center;
-
   color: var(--color-babyblue);
 }
 
@@ -164,10 +151,6 @@
 .modContentRow {
   display: flex;
   align-items: flex-start;
-}
-
-.modImg {
-  margin-right: 2em;
 }
 
 .modArtifacts {
@@ -201,28 +184,6 @@
   display: flex;
   align-items: center;
   text-align: center;
-
-  color: var(--color-babyblue);
-}
-
-.modName {
-  width: 35.25em;
-  height: 1.375em;
-
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 1.1875;
-  display: flex;
-  align-items: center;
-}
-
-.modDescription {
-  width: 40.285em;
-  height: 1.571em;
-
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 1.4;
 
   color: var(--color-babyblue);
 }
