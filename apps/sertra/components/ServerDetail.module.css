@@ -13,7 +13,7 @@
 
 .listingTitle {
   flex: 1 1 60%;
-  margin-top: 1.2rem;
+  margin: 1.2rem 0 0 0;
   font: 900 1.875rem/1.2 var(--font-family-header);
 }
 
@@ -21,9 +21,10 @@
   flex: 0 0 11rem;
   height: 2.6875em;
   margin-top: 1.2rem;
+  border: 0;
   padding: 0.75em 1.875em;
   text-align: center;
-  font-weight: 700;
+  font: 700 1rem/1.2 var(--font-family-body);
   color: var(--color-background);
   background-color: var(--color-orange);
 }
@@ -52,10 +53,16 @@
   color: var(--color-babyblue);
 }
 
-.descriptionContent {
+.description,
+.instructions {
+  margin-bottom: 0;
   border: 0.125em solid var(--color-lightblue);
   padding: 1.5em 2em;
   background-color: var(--color-blue);
+}
+
+.instructions {
+  padding-left: 3em;
 }
 
 .serverInfoRow {

@@ -44,97 +44,89 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
   return (
     <div className={styles.container}>
       <div className={styles.headerRow}>
-        <div className={styles.listingTitle}>{detail_listing.name}</div>
-        <div className={styles.joinServerButton}>Join Server</div>
+        <h1 className={styles.listingTitle}>{detail_listing.name}</h1>
+        <button className={styles.joinServerButton}>Join Server</button>
       </div>
+
       <div className={styles.contentRow}>
         <div className={styles.columnLeft}>
-          <div>
-            <div className={styles.description}>
-              <div className={styles.sectionTitle}>Description</div>
-              <div className={styles.descriptionContent}>
-                <div>{detail_listing.description}</div>
-              </div>
-            </div>
-          </div>
-          <div>
+          <section>
+            <h2 className={styles.sectionTitle}>Description</h2>
+            <p className={styles.description}>{detail_listing.description}</p>
+          </section>
+
+          <section>
+            <h2 className={styles.sectionTitle}>Mods</h2>
             <div>
-              <div className={styles.sectionTitle}>Mods</div>
-              <div>
-                {/* TODO: So we are missing the name, description and artifacts, from the API data */}
-                {/* {data.mods.map((x) => (
-                  <ModCard
-                    key={x.name}
-                    name={x.name}
-                    description={x.description}
-                  />
-                ))} */}
-                {detail_listing.mods.map((x) => (
-                  <ModCard key={x} name={x} description={x} />
-                ))}
-              </div>
+              {/* TODO: So we are missing the name, description and artifacts, from the API data */}
+              {/* {data.mods.map((x) => (
+                <ModCard
+                  key={x.name}
+                  name={x.name}
+                  description={x.description}
+                />
+              ))} */}
+              {detail_listing.mods.map((x) => (
+                <ModCard key={x} name={x} description={x} />
+              ))}
             </div>
-          </div>
+          </section>
         </div>
+
         <div className={styles.columnRight}>
-          <div>
+          <section>
+            <h2 className={styles.sectionTitle}>Server Info</h2>
             <div>
-              <div className={styles.sectionTitle}>Server Info</div>
-              <div>
-                <div className={styles.serverInfoRow}>
-                  <div className={styles.serverInfoColumn}>Game</div>
-                  <div className={styles.serverInfoColumn}>
-                    <div>V Rising</div>
-                  </div>
+              <div className={styles.serverInfoRow}>
+                <div className={styles.serverInfoColumn}>Game</div>
+                <div className={styles.serverInfoColumn}>V Rising</div>
+              </div>
+              <div className={styles.serverInfoRow}>
+                <div className={styles.serverInfoColumn}>Server Name</div>
+                <div className={styles.serverInfoColumn}>
+                  {detail_listing.name}
                 </div>
-                <div className={styles.serverInfoRow}>
-                  <div className={styles.serverInfoColumn}>Server Name</div>
-                  <div className={styles.serverInfoColumn}>
-                    <div>{detail_listing.name}</div>
-                  </div>
+              </div>
+              <div className={styles.serverInfoRow}>
+                <div className={styles.serverInfoColumn}>IP:Port</div>
+                <div className={styles.serverInfoColumn}>
+                  {detail_listing.connection_data}
                 </div>
-                <div className={styles.serverInfoRow}>
-                  <div className={styles.serverInfoColumn}>IP:Port</div>
-                  <div className={styles.serverInfoColumn}>
-                    <div>{detail_listing.connection_data}</div>
-                  </div>
+              </div>
+              <div className={styles.serverInfoRow}>
+                <div className={styles.serverInfoColumn}>Mode</div>
+                <div className={styles.serverInfoColumn}>
+                  <ServerMode isPvP={detail_listing.is_pvp} />
                 </div>
-                <div className={styles.serverInfoRow}>
-                  <div className={styles.serverInfoColumn}>Mode</div>
-                  <div className={styles.serverInfoColumn}>
-                    <ServerMode isPvP={detail_listing.is_pvp} />
-                  </div>
+              </div>
+              <div className={styles.serverInfoRow}>
+                <div className={styles.serverInfoColumn}>Mods</div>
+                <div className={styles.serverInfoColumn}>
+                  {detail_listing.mods.length}
                 </div>
-                <div className={styles.serverInfoRow}>
-                  <div className={styles.serverInfoColumn}>Mods</div>
-                  <div className={styles.serverInfoColumn}>42</div>
+              </div>
+              <div className={styles.serverInfoRow}>
+                <div className={styles.serverInfoColumn}>
+                  Password Protected
                 </div>
-                <div className={styles.serverInfoRow}>
-                  <div className={styles.serverInfoColumn}>
-                    Password Protected
-                  </div>
-                  <div className={styles.serverInfoColumn}>
-                    <ServerPassword
-                      requiresPassword={detail_listing.requires_password}
-                    />
-                  </div>
+                <div className={styles.serverInfoColumn}>
+                  <ServerPassword
+                    requiresPassword={detail_listing.requires_password}
+                  />
                 </div>
               </div>
             </div>
-          </div>
-          <div>
-            <div>
-              <div className={styles.sectionTitle}>How To Play</div>
-              <div className={styles.descriptionContent}>
-                <div>
-                  1. Click butan<br></br>
-                  2. Öpens TMM<br></br>
-                  3. Sync Mods<br></br>
-                  4. Enjoy<br></br>
-                </div>
-              </div>
-            </div>
-          </div>
+          </section>
+
+          <section>
+            <h2 className={styles.sectionTitle}>How To Play</h2>
+            <ol className={styles.instructions}>
+              <li>Click butan</li>
+              <li>Öpens TMM</li>
+              <li>Sync Mods</li>
+              <li>Enjoy</li>
+            </ol>
+          </section>
         </div>
       </div>
     </div>
