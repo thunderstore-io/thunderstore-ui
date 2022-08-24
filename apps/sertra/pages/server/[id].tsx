@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from "next";
+import Link from "next/link";
 
 import { ServerListingDetailData, ServerListingData } from "../../api/models";
 import { ApiURLs } from "../../api/urls";
@@ -43,6 +44,12 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
 }) => {
   return (
     <div className={styles.container}>
+      <div className={styles.breadcrumb}>
+        <Link href="/">Servers</Link>
+        <span className={styles.separator}>&gt;</span>
+        <span>V Rising</span>
+      </div>
+
       <div className={styles.headerRow}>
         <h1 className={styles.listingTitle}>{detail_listing.name}</h1>
         <button className={styles.joinServerButton}>Join Server</button>
