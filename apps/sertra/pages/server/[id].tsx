@@ -83,9 +83,7 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
     <div className={styles.container}>
       <div className={styles.headerRow}>
         <div className={styles.listingTitle}>{detail_listing.name}</div>
-        <div className={styles.joinServerButton}>
-          <div className={styles.joinServerButtonText}>Join Server</div>
-        </div>
+        <div className={styles.joinServerButton}>Join Server</div>
       </div>
       <div className={styles.contentRow}>
         <div className={styles.columnLeft}>
@@ -93,14 +91,12 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
             <div className={styles.description}>
               <div className={styles.sectionTitle}>Description</div>
               <div className={styles.descriptionContent}>
-                <div className={styles.descriptionContentText}>
-                  {detail_listing.description}
-                </div>
+                <div>{detail_listing.description}</div>
               </div>
             </div>
           </div>
           <div>
-            <div className={styles.mods}>
+            <div>
               <div className={styles.sectionTitle}>Mods</div>
               <div>
                 {/* TODO: So we are missing the name, description and artifacts, from the API data */}
@@ -122,7 +118,7 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
           <div>
             <div>
               <div className={styles.sectionTitle}>Server Info</div>
-              <div className={styles.serverInfoContent}>
+              <div>
                 <div className={styles.serverInfoRow}>
                   <div className={styles.serverInfoColumn}>Game</div>
                   <div className={styles.serverInfoColumn}>
@@ -168,7 +164,7 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
             <div>
               <div className={styles.sectionTitle}>How To Play</div>
               <div className={styles.descriptionContent}>
-                <div className={styles.descriptionContentText}>
+                <div>
                   1. Click butan<br></br>
                   2. Öpens TMM<br></br>
                   3. Sync Mods<br></br>

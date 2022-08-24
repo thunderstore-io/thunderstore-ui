@@ -1,98 +1,67 @@
 .container {
-  display: flex;
-  column-gap: 2em;
-  flex-direction: column;
   font: 500 1rem/1.4 var(--font-family-body);
 }
 
 .headerRow {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 4em;
   justify-content: space-between;
   align-items: flex-start;
 }
 
 .listingTitle {
-  display: flex;
-  flex-basis: 58%;
-  align-items: center;
+  flex: 1 1 60%;
   margin-top: 1.2rem;
   font: 900 1.875rem/1.2 var(--font-family-header);
 }
 
 .joinServerButton {
-  display: flex;
-  align-self: end;
-  justify-content: center;
-  width: 10.875em;
+  flex: 0 0 11rem;
   height: 2.6875em;
-  gap: 0.75em;
   margin-top: 1.2rem;
   padding: 0.75em 1.875em;
-  background-color: var(--color-orange);
-}
-
-.joinServerButtonText {
-  width: 5.1875em;
-  height: 1.1875em;
+  text-align: center;
   font-weight: 700;
   color: var(--color-background);
+  background-color: var(--color-orange);
 }
 
 .contentRow {
   display: flex;
-  column-gap: 2em;
+  flex-wrap: wrap;
+  column-gap: 2rem;
 }
 
 .columnLeft {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  flex: 1.43 1 20rem;
 }
 
 .columnRight {
   display: flex;
   flex-direction: column;
+  flex: 1 1 20rem;
 }
 
 .sectionTitle {
-  display: flex;
-  align-items: center;
   margin: 2em 0 1em 0;
   font: 700 1.125rem/1.22 var(--font-family-header);
   color: var(--color-babyblue);
 }
 
 .descriptionContent {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 1em;
-  margin-bottom: 0.5em;
   border: 0.125em solid var(--color-lightblue);
   padding: 1.5em 2em;
   background-color: var(--color-blue);
-  cursor: pointer;
-}
-
-.descriptionContentText {
-  display: flex;
-  align-items: center;
-  color: #ffffff;
-}
-
-.mods {
-  width: 6.25rem;
-  text-align: center;
 }
 
 .modRow {
   display: flex;
   align-items: center;
   margin: 2em 0;
-  color: #ffffff;
 }
 
 .modRowColumn {
@@ -116,17 +85,14 @@
 .modName {
   display: flex;
   align-items: center;
-  width: 35.25em;
   height: 1.375em;
   font-weight: 700;
   line-height: 1.2;
-  color: #ffffff;
 }
 
 .modDescription {
   display: flex;
   align-items: center;
-  width: 40.285em;
   height: 1.571em;
   font-size: 0.875rem;
   color: var(--color-babyblue);
@@ -162,16 +128,9 @@
   color: var(--color-babyblue);
 }
 
-.serverInfoContent {
-  gap: 1em;
-}
-
 .serverInfoRow {
-  box-sizing: border-box;
   display: flex;
-  flex-direction: row;
-  width: 28.5em;
-  gap: 1em;
+  column-gap: 1em;
   margin: 0.2em 0;
   border: 2px solid var(--color-lightblue);
   padding: 0.5em 1em;
@@ -180,55 +139,4 @@
 
 .serverInfoColumn {
   flex: 1;
-}
-
-@media (max-width: 1199px) {
-  .container {
-    justify-content: center;
-  }
-
-  .headerRow {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .listingTitle {
-    flex-basis: 100%;
-    justify-content: center;
-  }
-
-  .joinServerButton {
-    align-self: center;
-  }
-
-  .contentRow {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-  }
-
-  .sectionTitle {
-    justify-content: center;
-  }
-
-  .columnLeft {
-    order: 1;
-  }
-
-  .columnRight {
-    order: 0;
-  }
-
-  .mods > .sectionTitle {
-    justify-content: start;
-  }
-
-  .serverInfoContent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-  }
 }
