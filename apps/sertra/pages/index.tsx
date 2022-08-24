@@ -1,10 +1,10 @@
 import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import { ServerList } from "../components/ServerList";
+import { SWRConfig } from "swr";
+
 import { getServerListings } from "../api/hooks";
 import { ApiURLs } from "../api/urls";
-import { SWRConfig } from "swr";
+import { ServerList } from "../components/ServerList";
 
 export const getStaticProps: GetStaticProps = async () => {
   const fallback: any = {};
@@ -17,22 +17,15 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-const Home: NextPage<{ swrFallback: any }> = ({ swrFallback }) => {
-  return (
-    <SWRConfig value={{ fallback: swrFallback }}>
-      <div className={styles.container}>
-        <Head>
-          <title>Thunderstore Servers</title>
-          <meta name="description" content="Thunderstore Modded Servers List" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-
-        <main className={styles.main}>
-          <ServerList community={"v-rising"} />
-        </main>
-      </div>
-    </SWRConfig>
-  );
-};
+const Home: NextPage<{ swrFallback: any }> = ({ swrFallback }) => (
+  <SWRConfig value={{ fallback: swrFallback }}>
+    <Head>
+      <title>Thunderstore Servers</title>
+      <meta name="description" content="Thunderstore Modded Servers List" />
+      <link rel="icon" href="/ts-logo.svg" type="image/svg+xml" />
+    </Head>
+    <ServerList community={"v-rising"} />
+  </SWRConfig>
+);
 
 export default Home;
