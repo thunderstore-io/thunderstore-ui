@@ -1,9 +1,10 @@
-import { ServerListingDetailData, ServerListingData } from "../../api/models";
-import { PropsWithChildren } from "react";
-import styles from "../../components/ServerDetail.module.css";
-import { ApiURLs } from "../../api/urls";
 import { GetStaticPaths, GetStaticProps } from "next";
+
+import { ServerListingDetailData, ServerListingData } from "../../api/models";
+import { ApiURLs } from "../../api/urls";
 import { ServerMode, ServerPassword } from "../../components/listingAttributes";
+import { ModCard } from "../../components/ModCard";
+import styles from "../../components/ServerDetail.module.css";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const res = await fetch(ApiURLs.ServerList);
@@ -37,45 +38,6 @@ export const getStaticProps: GetStaticProps<
   };
 };
 
-interface ServerListingModProps {
-  name: string;
-  description: string;
-}
-
-const ServerListingMod: React.FC<PropsWithChildren<ServerListingModProps>> = ({
-  name,
-  description,
-}) => {
-  return (
-    <div className={styles.modRow}>
-      <div className={styles.modRowColumn}>
-        <div className={styles.modImg}></div>
-      </div>
-      <div className={styles.modRowColumn}>
-        <div className={styles.modContentRow}>
-          <div className={styles.modName}>{name}</div>
-        </div>
-        <div className={styles.modContentRow}>
-          <div className={styles.modDescription}>{description}</div>
-        </div>
-        <div className={styles.modContentRow}>
-          <div className={styles.modArtifacts}>
-            <div className={styles.artifact}>
-              <div className={styles.artifactText}>Artifacts</div>
-            </div>
-            <div className={styles.artifact}>
-              <div className={styles.artifactText}>Artifacts</div>
-            </div>
-            <div className={styles.artifact}>
-              <div className={styles.artifactText}>Artifacts</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
   detail_listing,
 }) => {
@@ -101,14 +63,14 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
               <div>
                 {/* TODO: So we are missing the name, description and artifacts, from the API data */}
                 {/* {data.mods.map((x) => (
-                  <ServerListingMod
+                  <ModCard
                     key={x.name}
                     name={x.name}
                     description={x.description}
                   />
                 ))} */}
                 {detail_listing.mods.map((x) => (
-                  <ServerListingMod key={x} name={x} description={x} />
+                  <ModCard key={x} name={x} description={x} />
                 ))}
               </div>
             </div>
