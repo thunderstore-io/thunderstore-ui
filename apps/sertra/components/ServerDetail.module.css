@@ -12,6 +12,33 @@
   align-items: flex-start;
 }
 
+.listingTitle {
+  display: flex;
+  flex-basis: 58%;
+  align-items: center;
+  margin-top: 1.2rem;
+  font: 900 1.875rem/1.2 var(--font-family-header);
+}
+
+.joinServerButton {
+  display: flex;
+  align-self: end;
+  justify-content: center;
+  width: 10.875em;
+  height: 2.6875em;
+  gap: 0.75em;
+  margin-top: 1.2rem;
+  padding: 0.75em 1.875em;
+  background-color: var(--color-orange);
+}
+
+.joinServerButtonText {
+  width: 5.1875em;
+  height: 1.1875em;
+  font-weight: 700;
+  color: var(--color-background);
+}
+
 .contentRow {
   display: flex;
   column-gap: 2em;
@@ -28,40 +55,6 @@
   flex-direction: column;
 }
 
-.descriptionContent,
-.row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 1em;
-  margin-bottom: 0.5em;
-  border: 0.125em solid var(--color-lightblue);
-  padding: 0.75em 1em 0.75em 0.75em;
-  background-color: var(--color-blue);
-  cursor: pointer;
-}
-
-.descriptionContent {
-  box-sizing: border-box;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 1.5em 2em;
-}
-
-.mods {
-  width: 6.25rem;
-  text-align: center;
-}
-
-.listingTitle {
-  display: flex;
-  flex-basis: 58%;
-  align-items: center;
-  margin-top: 1.2rem;
-  font: 900 1.875rem/1.2 var(--font-family-header);
-}
-
 .sectionTitle {
   display: flex;
   align-items: center;
@@ -70,10 +63,41 @@
   color: var(--color-babyblue);
 }
 
+.descriptionContent {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1em;
+  margin-bottom: 0.5em;
+  border: 0.125em solid var(--color-lightblue);
+  padding: 1.5em 2em;
+  background-color: var(--color-blue);
+  cursor: pointer;
+}
+
 .descriptionContentText {
   display: flex;
   align-items: center;
   color: #ffffff;
+}
+
+.mods {
+  width: 6.25rem;
+  text-align: center;
+}
+
+.modRow {
+  display: flex;
+  align-items: center;
+  margin: 2em 0;
+  color: #ffffff;
+}
+
+.modRowColumn {
+  display: flex;
+  flex-direction: column;
 }
 
 .modImg {
@@ -82,6 +106,11 @@
   margin-right: 2em;
   background: greenyellow;
   border-radius: 0;
+}
+
+.modContentRow {
+  display: flex;
+  align-items: flex-start;
 }
 
 .modName {
@@ -101,23 +130,6 @@
   height: 1.571em;
   font-size: 0.875rem;
   color: var(--color-babyblue);
-}
-
-.modRow {
-  display: flex;
-  align-items: center;
-  margin: 2em 0;
-  color: #ffffff;
-}
-
-.modRowColumn {
-  display: flex;
-  flex-direction: column;
-}
-
-.modContentRow {
-  display: flex;
-  align-items: flex-start;
 }
 
 .modArtifacts {
@@ -170,25 +182,6 @@
   flex: 1;
 }
 
-.joinServerButton {
-  display: flex;
-  align-self: end;
-  justify-content: center;
-  width: 10.875em;
-  height: 2.6875em;
-  gap: 0.75em;
-  margin-top: 1.2rem;
-  padding: 0.75em 1.875em;
-  background-color: var(--color-orange);
-}
-
-.joinServerButtonText {
-  width: 5.1875em;
-  height: 1.1875em;
-  font-weight: 700;
-  color: var(--color-background);
-}
-
 @media (max-width: 1199px) {
   .container {
     justify-content: center;
@@ -201,12 +194,6 @@
     justify-content: center;
   }
 
-  .contentRow {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-  }
-
   .listingTitle {
     flex-basis: 100%;
     justify-content: center;
@@ -216,8 +203,22 @@
     align-self: center;
   }
 
+  .contentRow {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
   .sectionTitle {
     justify-content: center;
+  }
+
+  .columnLeft {
+    order: 1;
+  }
+
+  .columnRight {
+    order: 0;
   }
 
   .mods > .sectionTitle {
@@ -229,12 +230,5 @@
     flex-direction: column;
     align-items: center;
     gap: 0;
-  }
-
-  .columnRight {
-    order: 0;
-  }
-  .columnLeft {
-    order: 1;
   }
 }

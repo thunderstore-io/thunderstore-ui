@@ -89,7 +89,7 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
       </div>
       <div className={styles.contentRow}>
         <div className={styles.columnLeft}>
-          <div className={styles.section}>
+          <div>
             <div className={styles.description}>
               <div className={styles.sectionTitle}>Description</div>
               <div className={styles.descriptionContent}>
@@ -99,10 +99,10 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
               </div>
             </div>
           </div>
-          <div className={styles.section}>
+          <div>
             <div className={styles.mods}>
               <div className={styles.sectionTitle}>Mods</div>
-              <div className={styles.modsListContent}>
+              <div>
                 {/* TODO: So we are missing the name, description and artifacts, from the API data */}
                 {/* {data.mods.map((x) => (
                   <ServerListingMod
@@ -119,30 +119,26 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
           </div>
         </div>
         <div className={styles.columnRight}>
-          <div className={styles.section}>
-            <div className={styles.serverInfo}>
+          <div>
+            <div>
               <div className={styles.sectionTitle}>Server Info</div>
               <div className={styles.serverInfoContent}>
                 <div className={styles.serverInfoRow}>
                   <div className={styles.serverInfoColumn}>Game</div>
                   <div className={styles.serverInfoColumn}>
-                    <div className={styles.gameName}>V Rising</div>
+                    <div>V Rising</div>
                   </div>
                 </div>
                 <div className={styles.serverInfoRow}>
                   <div className={styles.serverInfoColumn}>Server Name</div>
                   <div className={styles.serverInfoColumn}>
-                    <div className={styles.listingName}>
-                      {detail_listing.name}
-                    </div>
+                    <div>{detail_listing.name}</div>
                   </div>
                 </div>
                 <div className={styles.serverInfoRow}>
                   <div className={styles.serverInfoColumn}>IP:Port</div>
                   <div className={styles.serverInfoColumn}>
-                    <div className={styles.name}>
-                      {detail_listing.connection_data}
-                    </div>
+                    <div>{detail_listing.connection_data}</div>
                   </div>
                 </div>
                 <div className={styles.serverInfoRow}>
@@ -168,8 +164,8 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
               </div>
             </div>
           </div>
-          <div className={styles.section}>
-            <div className={styles.guide}>
+          <div>
+            <div>
               <div className={styles.sectionTitle}>How To Play</div>
               <div className={styles.descriptionContent}>
                 <div className={styles.descriptionContentText}>
