@@ -1,6 +1,5 @@
 .container {
-  margin-top: auto;
-  border-top: 1rem solid var(--color-background);
+  margin-top: 1rem;
   background-color: var(--color-darkblue);
 }
 

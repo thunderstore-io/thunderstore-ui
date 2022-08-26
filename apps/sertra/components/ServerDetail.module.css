@@ -1,166 +1,81 @@
 .container {
-  width: 100%;
-  display: flex;
-  column-gap: 2em;
-  flex-direction: column;
   font: 500 1rem/1.4 var(--font-family-body);
+}
+
+.breadcrumb {
+  font-size: 0.875rem;
+  color: var(--color-babyblue);
+}
+
+.separator {
+  margin: 0 0.5rem;
 }
 
 .headerRow {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 4em;
   justify-content: space-between;
+  align-items: flex-start;
+}
+
+.listingTitle {
+  flex: 1 1 60%;
+  margin: 0;
+  font: 900 1.875rem/1.2 var(--font-family-header);
+}
+
+.joinServerButton {
+  flex: 0 0 11rem;
+  height: 2.6875em;
+  border: 0;
+  padding: 0.75em 1.875em;
+  text-align: center;
+  font: 700 1rem/1.2 var(--font-family-body);
+  color: var(--color-background);
+  background-color: var(--color-orange);
 }
 
 .contentRow {
   display: flex;
-  column-gap: 2em;
+  flex-wrap: wrap;
+  column-gap: 2rem;
 }
 
 .columnLeft {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  flex: 1.43 1 20rem;
 }
 
 .columnRight {
   display: flex;
   flex-direction: column;
-}
-
-.descriptionContent,
-.row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 1em;
-  margin-bottom: 0.5em;
-  border: 0.125em solid var(--color-lightblue);
-  padding: 0.75em 1em 0.75em 0.75em;
-  background-color: var(--color-blue);
-  cursor: pointer;
-}
-
-.descriptionContent {
-  box-sizing: border-box;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 1.5em 2em;
-}
-
-.mods {
-  width: 6.25rem;
-  text-align: center;
-}
-
-.listingTitle {
-  display: flex;
-  flex-basis: 58%;
-  align-items: center;
-  margin-top: 2em;
-  font: 900 1.875rem/1.16 var(--font-family-header);
-  color: #ffffff;
+  flex: 1 1 20rem;
 }
 
 .sectionTitle {
-  display: flex;
-  align-items: center;
   margin: 2em 0 1em 0;
   font: 700 1.125rem/1.22 var(--font-family-header);
   color: var(--color-babyblue);
 }
 
-.descriptionContentText {
-  display: flex;
-  align-items: center;
-  color: #ffffff;
+.description,
+.instructions {
+  margin-bottom: 0;
+  border: 0.125em solid var(--color-lightblue);
+  padding: 1.5em 2em;
+  background-color: var(--color-blue);
 }
 
-.modImg {
-  width: 64px;
-  height: 64px;
-  margin-right: 2em;
-  background: greenyellow;
-  border-radius: 0;
-}
-
-.modName {
-  display: flex;
-  align-items: center;
-  width: 35.25em;
-  height: 1.375em;
-  font-weight: 700;
-  line-height: 1.2;
-  color: #ffffff;
-}
-
-.modDescription {
-  display: flex;
-  align-items: center;
-  width: 40.285em;
-  height: 1.571em;
-  font-size: 0.875rem;
-  color: var(--color-babyblue);
-}
-
-.modRow {
-  display: flex;
-  align-items: center;
-  margin: 2em 0;
-  color: #ffffff;
-}
-
-.modRowColumn {
-  display: flex;
-  flex-direction: column;
-}
-
-.modContentRow {
-  display: flex;
-  align-items: flex-start;
-}
-
-.modArtifacts {
-  display: flex;
-  flex-direction: row;
-  gap: 0.25em;
-  margin-top: 0.25em;
-}
-
-.artifact {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 4.25em;
-  height: 1.375em;
-  gap: 0.625em;
-  padding: 0.25em 0.625em;
-  background-color: var(--color-lightblue);
-}
-
-.artifactText {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  width: 4em;
-  height: 1.16em;
-  font-size: 0.75rem;
-  line-height: 1.2;
-  color: var(--color-babyblue);
-}
-
-.serverInfoContent {
-  gap: 1em;
+.instructions {
+  padding-left: 3em;
 }
 
 .serverInfoRow {
-  box-sizing: border-box;
   display: flex;
-  flex-direction: row;
-  width: 28.5em;
-  gap: 1em;
+  column-gap: 1em;
   margin: 0.2em 0;
   border: 2px solid var(--color-lightblue);
   padding: 0.5em 1em;
@@ -169,73 +84,4 @@
 
 .serverInfoColumn {
   flex: 1;
-}
-
-.joinServerButton {
-  display: flex;
-  align-self: end;
-  justify-content: center;
-  width: 10.875em;
-  height: 2.6875em;
-  gap: 0.75em;
-  margin-top: 3.25em;
-  padding: 0.75em 1.875em;
-  background-color: var(--color-orange);
-}
-
-.joinServerButtonText {
-  width: 5.1875em;
-  height: 1.1875em;
-  font-weight: 700;
-  color: var(--color-background);
-}
-
-@media (max-width: 1199px) {
-  .container {
-    justify-content: center;
-  }
-
-  .headerRow {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .contentRow {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-  }
-
-  .listingTitle {
-    flex-basis: 100%;
-    justify-content: center;
-  }
-
-  .joinServerButton {
-    align-self: center;
-  }
-
-  .sectionTitle {
-    justify-content: center;
-  }
-
-  .mods > .sectionTitle {
-    justify-content: start;
-  }
-
-  .serverInfoContent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-  }
-
-  .columnRight {
-    order: 0;
-  }
-  .columnLeft {
-    order: 1;
-  }
 }
