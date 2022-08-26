@@ -1,4 +1,4 @@
-import { Box, Flex, Spacer, Tag, TagLeftIcon, Text } from "@chakra-ui/react";
+import { Box, Flex, Tag, TagLeftIcon, Text } from "@chakra-ui/react";
 import React from "react";
 
 import { formatCount } from "../utils/number";
@@ -71,6 +71,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
       <Flex
         bgColor="#18223C99"
         h="34px"
+        justify="space-between"
         p="7px 20px"
         pos="absolute"
         top="166px"
@@ -80,7 +81,6 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
           <LikeIcon boxSize="12px" m="-3px 5px 0 0" />
           {formatCount(ratingScore)}
         </Box>
-        <Spacer />
         <Box>
           <DownloadIcon boxSize="12px" m="-3px 5px 0 0" />
           {formatCount(downloadCount)}

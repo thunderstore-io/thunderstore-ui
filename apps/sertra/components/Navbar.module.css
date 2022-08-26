@@ -1,0 +1,33 @@
+.navbar {
+  display: flex;
+  width: 100%;
+  max-width: var(--max-width-content);
+  margin: 0 auto 1.25rem auto;
+  padding: 2.5rem 1rem;
+}
+
+.navbar h1 {
+  flex: 1;
+  margin: 0 2.85rem 0 0; /* 1.6rem for icon, 1.25 for regular margin */
+  font: 900 1rem/1.2 var(--font-family-header);
+  white-space: nowrap;
+}
+
+.navbar h1:before {
+  content: "";
+  display: block;
+  float: left;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-right: 0.5rem;
+  background: center / contain no-repeat url(/ts-logo.svg);
+}
+
+.navbar a {
+  margin: 0 1.25rem;
+  font: 700 1rem/1.2 var(--font-family-header);
+}
+
+.navbar a:last-of-type {
+  margin-right: 0;
+}
