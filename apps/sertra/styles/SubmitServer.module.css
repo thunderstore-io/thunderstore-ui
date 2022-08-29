@@ -1,16 +1,26 @@
 .container {
   width: 100%;
-  max-width: 71.25rem;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1140px;
+  /* TODO: remove this magic value lol */
+  min-height: 79.08vh;
 }
 
 .formHeader {
-  margin: 1.2rem 0 2.25rem 0;
+  margin-bottom: 36px;
+  margin-top: 81px;
 }
 
 .formTitle {
-  height: 2.25rem;
-  font: 900 1.875rem/1.2 var(--font-family-header);
+  height: 35px;
+
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 30px;
+  line-height: 35px;
+
   display: flex;
   align-items: center;
 }
@@ -20,14 +30,17 @@
 .checkboxContainer,
 .textarea {
   width: 100%;
-  background: var(--color-darkblue);
-  border-radius: 0.25rem;
+  background: #17213b;
+  border-radius: 4px;
   border: 0;
   color: #ffffff;
-  height: 2.75rem;
-  padding: 0.25rem 1rem;
+  height: 43px;
+  padding: 4px 16px;
 
-  font: 1rem/1.25 var(--font-family-body);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
 }
 
 select.input {
@@ -43,21 +56,15 @@ select.input {
 
 .checkbox {
   cursor: pointer;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 43px;
+  height: 43px;
   margin: 0;
 }
 
 .textarea {
-  padding: 1rem;
-  height: 9.625rem;
+  padding: 16px;
+  height: 154px;
   overflow-y: auto;
-}
-
-.input:focus-visible,
-.checkbox:focus-visible,
-.textarea:focus-visible {
-  outline: 2px solid var(--color-coolgray);
 }
 
 .textarea {
@@ -66,11 +73,16 @@ select.input {
 
 .submit {
   width: 100%;
-  height: 2.75rem;
-  background: var(--color-orange);
+  background: #ffa96b;
   color: #000000;
-  font: 700 1.1rem/1.25 var(--font-family-body);
-  margin-top: 2.5rem;
+
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  height: 43px;
+
+  margin-top: 40px;
   border: none;
   outline: none;
   cursor: pointer;
@@ -78,13 +90,13 @@ select.input {
 
 .submit:focus-visible,
 .submit:hover {
-  background: var(--color-orange99);
+  background: #ff964a;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .row {
@@ -92,18 +104,18 @@ select.input {
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
 .row label,
 .row .label {
-  width: 14.5rem;
-  height: 2.75rem;
+  width: 232px;
+  height: 44px;
 
   font-style: normal;
   font-weight: 700;
-  font-size: 1rem;
-  line-height: 1.2;
+  font-size: 16px;
+  line-height: 19px;
   display: flex;
   align-items: center;
 }

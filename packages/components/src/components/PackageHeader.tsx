@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  Spacer,
   Tag,
   Text,
   useDisclosure,
@@ -103,6 +104,8 @@ export const PackageHeader: React.FC<PackageHeaderProps> = (props) => {
           {description}
         </Text>
 
+        {aboveBreakpoint ? <Spacer /> : null}
+
         <TagListing {...{ categories, communityIdentifier, renderFullWidth }} />
       </Flex>
     </Flex>
@@ -132,7 +135,11 @@ const TagListing: React.FC<TagsProps> = (props) => {
   // rendered taking the whole width of the screen, since this tells us
   // we're in a mode where the component can safely grow vertically.
   if (renderFullWidth || categories.length < 4) {
-    return <Box mt="auto">{categories.map(tag)}</Box>;
+    return (
+      <Box alignSelf="reverse" mt={renderFullWidth ? "0" : "20px"}>
+        {categories.map((c) => tag(c))}
+      </Box>
+    );
   }
 
   const visible = categories.slice(0, 3);
@@ -142,7 +149,7 @@ const TagListing: React.FC<TagsProps> = (props) => {
   // in a modal window.
   return (
     <Box alignSelf="reverse" mt={renderFullWidth ? "0" : "20px"}>
-      {visible.map(tag)}
+      {visible.map((t) => tag(t))}
       <Button onClick={onOpen} variant="ts.auxiliary" h="32.8px">
         Show {hidden.length} more
       </Button>
@@ -152,7 +159,7 @@ const TagListing: React.FC<TagsProps> = (props) => {
         <ModalContent>
           <ModalHeader>All categories</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>{hidden.map(tag)}</ModalBody>
+          <ModalBody>{hidden.map((t) => tag(t))}</ModalBody>
           <ModalFooter>
             <Button onClick={onClose} variant="ts.auxiliary">
               Close
