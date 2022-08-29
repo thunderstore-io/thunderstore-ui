@@ -1,6 +1,7 @@
 import styles from "./list.module.css";
 import { IconButton } from "./iconButton";
 import { ModPackage } from "./data";
+import Image from "next/image";
 
 export interface ModRowInfoProps {
   iconUrl: string;
@@ -15,7 +16,7 @@ export const ModRowInfo: React.FC<ModRowInfoProps> = ({
   return (
     <>
       <div className={styles.colSmall}>
-        <img className={styles.rowIcon} alt="mod icon" src={iconUrl} />
+        <Image className={styles.rowIcon} alt="mod icon" src={iconUrl} />
       </div>
       <div className={styles.colLarge}>
         <span className={styles.packageName}>{packageName}</span>
