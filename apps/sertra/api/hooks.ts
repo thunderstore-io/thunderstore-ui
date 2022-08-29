@@ -1,7 +1,9 @@
 import useSWR, { SWRResponse } from "swr";
 import { ApiURLs, TsApiURLs } from "./urls";
 import { fetcher } from "./fetcher";
-import { Package, PaginatedResponse,
+import {
+  Package,
+  PaginatedResponse,
   ServerListingData,
   ServerListingDetailData,
 } from "./models";
