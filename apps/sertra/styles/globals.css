@@ -1,38 +1,11 @@
-:root {
-  --color-babyblue: #ccddfe;
-  --color-background: #202941;
-  --color-blue: #242e48;
-  --color-coolgray: #93a0c2;
-  --color-darkblue: #17213b;
-  --color-highlightgreen: #02ff95;
-  --color-highlightred: #ff3a52;
-  --color-lightblue: #353e58;
-  --color-lightblue115: #49567a; /* Lightened by 15% */
-  --color-orange: #ffa96b;
-  --color-orange99: #fca668; /* Darkened by 1% */
-
-  --font-family-body: Exo2, sans-serif;
-  --font-family-header: Raleway, sans-serif;
-
-  --max-width-content: 73.25rem; /* 1140px + 2x16px padding */
-}
-
 html,
 body {
   background-color: var(--bg-regular);
   padding: 0;
   margin: 0;
   font-family: var(--font-primary);
-  font-family: var(--font-family-body);
-  background-color: var(--color-background);
+  font-family: var(--font-primary);
   color: white;
-}
-
-#__next {
-  /* For footer */
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
 }
 
 a {
@@ -139,23 +112,13 @@ button:active {
 }
 
 @font-face {
-  font-family: Raleway;
-  /* TODO: Add font alternatives */
-  src: local(Raleway),
+  font-family: "Raleway";
+  src: local("Raleway"),
     url(../public/fonts/Raleway-VariableFont_wght.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "Exo2";
-  src: local(Exo2),
-    url(../public/fonts/Exo2-VariableFont_wght.ttf) format("truetype"),
-    local(-apple-system), local(BlinkMacSystemFont), local(Segoe UI),
-    local(Roboto), local(Oxygen), local(Ubuntu), local(Cantarell),
-    local(Fira Sans), local(Droid Sans), local(Helvetica Neue);
-}
-
-.ellipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  src: local("Exo2"),
+    url(../public/fonts/Exo2-VariableFont_wght.ttf) format("truetype");
 }
