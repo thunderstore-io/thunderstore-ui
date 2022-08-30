@@ -19,10 +19,10 @@
 
 html,
 body {
+  background-color: var(--bg-regular);
   padding: 0;
   margin: 0;
-  font-family: var(--font-family-body);
-  background-color: var(--color-background);
+  font-family: var(--font-primary);
   color: white;
 }
 
@@ -40,6 +40,99 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-secondary);
+  font-weight: 900;
+}
+
+h2 {
+  font-size: 30px;
+  line-height: 35px;
+  margin: 0;
+}
+
+button,
+select,
+textarea,
+input {
+  outline: var(--border-active) none 1px;
+  cursor: pointer;
+}
+input[type="checkbox"] {
+  outline-offset: 2px;
+}
+
+select:hover,
+textarea:hover,
+input:hover {
+  outline-style: dashed;
+}
+
+button:focus,
+button:focus-visible,
+button:active,
+select:focus,
+select:focus-visible,
+select:active,
+textarea:focus,
+textarea:focus-visible,
+textarea:active,
+input:focus,
+input:focus-visible,
+input:active {
+  outline-style: solid;
+  outline-width: 2px;
+}
+
+textarea:focus,
+textarea:focus-visible,
+textarea:active,
+input:focus,
+input:focus-visible,
+input:active {
+  cursor: inherit;
+}
+
+input::placeholder {
+  color: var(--text-secondary);
+  opacity: 1;
+}
+input:-ms-input-placeholder {
+  color: var(--text-secondary);
+  opacity: 1;
+}
+input::-ms-input-placeholder {
+  color: var(--text-secondary);
+  opacity: 1;
+}
+
+button:active {
+  filter: brightness(85%);
+}
+
+:root {
+  --bg-light: #242e48;
+  --bg-regular: #202941;
+  --bg-dark: #17213b;
+  --border-regular: #353e58;
+  --border-active: #3182ce;
+  --accent-primary: #ffa96b;
+  --accent-secondary: #ccddfe;
+  --text-primary: #ffffff;
+  --text-secondary: #93a0c2;
+  --font-primary: "Exo2", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  --font-secondary: "Raleway", -apple-system, BlinkMacSystemFont, Segoe UI,
+    Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+    sans-serif;
+  --border-radius-normal: 4px;
 }
 
 @font-face {
