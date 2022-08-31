@@ -18,6 +18,70 @@ export const SearchBox = <T,>({
 }: SearchBoxProps<T>) => {
   const [isFocused, setFocused] = useState<boolean>(false);
 
+  function focusFirstOption(target: EventTarget & HTMLInputElement) {
+    if (
+      target.parentElement?.parentElement?.nextElementSibling?.children[0]
+        ?.children[0]
+    ) {
+      target.parentElement.parentElement.nextElementSibling.children[0].children[0].focus();
+    }
+  }
+
+  function focusSearch(target: EventTarget & HTMLButtonElement) {
+    if (
+      target.parentElement?.parentElement?.previousElementSibling?.children[1]
+        ?.children[0]
+    ) {
+      target.parentElement.parentElement.previousElementSibling.children[1].children[0].focus();
+    }
+  }
+
+  const searchKeyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === "Escape") {
+      setFocused(false);
+    } else {
+      if (e.code === "ArrowDown") {
+        e.preventDefault();
+        if (e.currentTarget) {
+          focusFirstOption(e.currentTarget);
+        }
+      }
+    }
+  };
+
+  const listKeyDownHandler = (
+    option: T,
+    e: React.KeyboardEvent<HTMLButtonElement>
+  ) => {
+    const target = e.currentTarget;
+    if (e.code === "Escape" || e.code === "Backspace") {
+      e.preventDefault();
+      focusSearch(target);
+    } else if (e.code === "Enter") {
+      e.preventDefault();
+      if (target.nextElementSibling) {
+        target.nextElementSibling.focus();
+      }
+      onClickHandler(option);
+    } else if (e.code === "ArrowDown") {
+      e.preventDefault();
+      if (target.nextElementSibling) {
+        target.nextElementSibling.focus();
+      }
+    } else if (e.code === "ArrowUp") {
+      e.preventDefault();
+      if (target.previousElementSibling) {
+        target.previousElementSibling.focus();
+      } else {
+        focusSearch(target);
+      }
+    }
+  };
+
+  const onClickHandler = (option: T) => {
+    onSelect && onSelect(option);
+  };
+
   return (
     <div
       className={styles.searchField}
@@ -32,6 +96,7 @@ export const SearchBox = <T,>({
         <div className={styles.searchIcon}>🔍</div>
         <div className={styles.searchInputArea}>
           <input
+            onKeyDown={searchKeyDownHandler}
             className={styles.searchInput}
             type={"text"}
             placeholder={placeholder}
@@ -46,7 +111,8 @@ export const SearchBox = <T,>({
                 <button
                   className={styles.optionButton}
                   key={keyExtractor(option)}
-                  onClick={() => onSelect && onSelect(option)}
+                  onKeyDown={(e) => listKeyDownHandler(option, e)}
+                  onClick={(e) => onClickHandler(option, e.currentTarget)}
                 >
                   {renderOption(option)}
                 </button>

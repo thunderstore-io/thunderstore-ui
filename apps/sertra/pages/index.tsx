@@ -3,7 +3,7 @@ import Head from "next/head";
 import { SWRConfig } from "swr";
 import { getServerListings } from "../api/hooks";
 import { ApiURLs } from "../api/urls";
-import styles from "./ServerList.module.css";
+import styles from "../components/ServerList.module.css";
 import { ServerList } from "../components/ServerList";
 
 export const getStaticProps: GetStaticProps = async () => {
