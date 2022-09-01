@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
 import styles from "./search.module.css";
 
 interface SearchBoxProps<T> {
@@ -18,21 +18,15 @@ export const SearchBox = <T,>({
 }: SearchBoxProps<T>) => {
   const [isFocused, setFocused] = useState<boolean>(false);
 
-  function focusFirstOption(target: EventTarget & HTMLInputElement) {
-    if (
-      target.parentElement?.parentElement?.nextElementSibling?.children[0]
-        ?.children[0]
-    ) {
-      target.parentElement.parentElement.nextElementSibling.children[0].children[0].focus();
+  function focusFirstOption() {
+    if (optionsRef.current?.children[0]) {
+      optionsRef.current.children[0].focus();
     }
   }
 
-  function focusSearch(target: EventTarget & HTMLButtonElement) {
-    if (
-      target.parentElement?.parentElement?.previousElementSibling?.children[1]
-        ?.children[0]
-    ) {
-      target.parentElement.parentElement.previousElementSibling.children[1].children[0].focus();
+  function focusSearch() {
+    if (searchBoxRef.current) {
+      searchBoxRef.current.focus();
     }
   }
 
@@ -43,7 +37,7 @@ export const SearchBox = <T,>({
       if (e.code === "ArrowDown") {
         e.preventDefault();
         if (e.currentTarget) {
-          focusFirstOption(e.currentTarget);
+          focusFirstOption();
         }
       }
     }
@@ -56,7 +50,7 @@ export const SearchBox = <T,>({
     const target = e.currentTarget;
     if (e.code === "Escape" || e.code === "Backspace") {
       e.preventDefault();
-      focusSearch(target);
+      focusSearch();
     } else if (e.code === "Enter") {
       e.preventDefault();
       if (target.nextElementSibling) {
@@ -73,7 +67,7 @@ export const SearchBox = <T,>({
       if (target.previousElementSibling) {
         target.previousElementSibling.focus();
       } else {
-        focusSearch(target);
+        focusSearch();
       }
     }
   };
@@ -81,6 +75,9 @@ export const SearchBox = <T,>({
   const onClickHandler = (option: T) => {
     onSelect && onSelect(option);
   };
+
+  const searchBoxRef = useRef(null);
+  const optionsRef = useRef(null);
 
   return (
     <div
@@ -96,6 +93,7 @@ export const SearchBox = <T,>({
         <div className={styles.searchIcon}>🔍</div>
         <div className={styles.searchInputArea}>
           <input
+            ref={searchBoxRef}
             onKeyDown={searchKeyDownHandler}
             className={styles.searchInput}
             type={"text"}
@@ -105,7 +103,7 @@ export const SearchBox = <T,>({
       </div>
       {isFocused && (
         <div className={styles.optionsAnchor}>
-          <div className={styles.optionsBox}>
+          <div className={styles.optionsBox} ref={optionsRef}>
             {options.map((option) => {
               return (
                 <button
