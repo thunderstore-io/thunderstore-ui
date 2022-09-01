@@ -43,6 +43,16 @@
   color: var(--text-secondary);
 }
 
+.noModsIcon {
+  font-size: 128px;
+  color: var(--bg-highlight);
+  margin-bottom: 40px;
+}
+
+.noModsText {
+  margin: 0;
+}
+
 .footer {
   background-color: var(--bg-light);
   padding: 16px 32px;
