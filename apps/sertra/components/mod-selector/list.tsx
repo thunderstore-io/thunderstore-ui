@@ -16,11 +16,7 @@ export const ModRowInfo: React.FC<ModRowInfoProps> = ({
     <>
       <div className={styles.colSmall}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className={styles.rowIcon}
-          alt="mod icon"
-          src={iconUrl}
-        />
+        <img className={styles.rowIcon} alt="mod icon" src={iconUrl} />
       </div>
       <div className={styles.colLarge}>
         <span className={styles.packageName}>{packageName}</span>
