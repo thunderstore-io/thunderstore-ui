@@ -72,16 +72,3 @@
 .instructions {
   padding-left: 3em;
 }
-
-.serverInfoRow {
-  display: flex;
-  column-gap: 1em;
-  margin: 0.2em 0;
-  border: 2px solid var(--color-lightblue);
-  padding: 0.5em 1em;
-  background-color: var(--color-blue);
-}
-
-.serverInfoColumn {
-  flex: 1;
-}

@@ -3,8 +3,8 @@ import Link from "next/link";
 
 import { ServerListingDetailData, ServerListingData } from "../../api/models";
 import { ApiURLs } from "../../api/urls";
-import { ServerMode, ServerPassword } from "../../components/ListingAttributes";
 import { ModCard } from "../../components/ModCard";
+import { ServerInfo } from "../../components/ServerInfo";
 import styles from "../../styles/ServerDetail.module.css";
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -81,49 +81,7 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
         </div>
 
         <div className={styles.columnRight}>
-          <section>
-            <h2 className={styles.sectionTitle}>Server Info</h2>
-            <div>
-              <div className={styles.serverInfoRow}>
-                <div className={styles.serverInfoColumn}>Game</div>
-                <div className={styles.serverInfoColumn}>V Rising</div>
-              </div>
-              <div className={styles.serverInfoRow}>
-                <div className={styles.serverInfoColumn}>Server Name</div>
-                <div className={styles.serverInfoColumn}>
-                  {detail_listing.name}
-                </div>
-              </div>
-              <div className={styles.serverInfoRow}>
-                <div className={styles.serverInfoColumn}>IP:Port</div>
-                <div className={styles.serverInfoColumn}>
-                  {detail_listing.connection_data}
-                </div>
-              </div>
-              <div className={styles.serverInfoRow}>
-                <div className={styles.serverInfoColumn}>Mode</div>
-                <div className={styles.serverInfoColumn}>
-                  <ServerMode isPvP={detail_listing.is_pvp} />
-                </div>
-              </div>
-              <div className={styles.serverInfoRow}>
-                <div className={styles.serverInfoColumn}>Mods</div>
-                <div className={styles.serverInfoColumn}>
-                  {detail_listing.mods.length}
-                </div>
-              </div>
-              <div className={styles.serverInfoRow}>
-                <div className={styles.serverInfoColumn}>
-                  Password Protected
-                </div>
-                <div className={styles.serverInfoColumn}>
-                  <ServerPassword
-                    requiresPassword={detail_listing.requires_password}
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
+          <ServerInfo {...detail_listing} />
 
           <section>
             <h2 className={styles.sectionTitle}>How To Play</h2>
