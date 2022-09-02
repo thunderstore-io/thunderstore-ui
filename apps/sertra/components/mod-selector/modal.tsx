@@ -1,11 +1,12 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PropsWithChildren, useMemo, useState } from "react";
-import styles from "./modal.module.css";
-import { SearchBox } from "./search";
-import { ModListRow } from "./list";
+
+import { ButtonPrimary, ButtonSecondary } from "./button";
 import { MockPackages, ModPackage } from "./data";
 import { IconButton } from "./iconButton";
-import { ButtonPrimary, ButtonSecondary } from "./button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ModListRow } from "./list";
+import styles from "./modal.module.css";
+import { SearchBox } from "./search";
 
 interface ModalHeaderProps {
   title?: string;

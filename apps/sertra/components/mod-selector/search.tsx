@@ -1,4 +1,5 @@
 import { ReactNode, useState } from "react";
+
 import styles from "./search.module.css";
 
 interface SearchBoxProps<T> {

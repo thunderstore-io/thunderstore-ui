@@ -1,5 +1,6 @@
-import styles from "./button.module.css";
 import { PropsWithChildren } from "react";
+
+import styles from "./button.module.css";
 
 interface ButtonBaseProps {
   className: string;

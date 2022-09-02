@@ -1,10 +1,11 @@
 import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { SWRConfig } from "swr";
+
 import { getServerListings } from "../api/hooks";
 import { ApiURLs } from "../api/urls";
-import styles from "../components/ServerList.module.css";
 import { ServerList } from "../components/ServerList";
+import styles from "../components/ServerList.module.css";
 
 export const getStaticProps: GetStaticProps = async () => {
   const fallback: { [key: string]: unknown } = {};

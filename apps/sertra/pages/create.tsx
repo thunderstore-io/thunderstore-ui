@@ -1,9 +1,10 @@
 import { GetStaticProps, NextPage } from "next";
-import styles from "../styles/SubmitServer.module.css";
-import { TsApiURLs } from "../api/urls";
-import { getPackageList } from "../api/hooks";
 import { SWRConfig } from "swr";
+
+import { getPackageList } from "../api/hooks";
+import { TsApiURLs } from "../api/urls";
 import { ModSelectorModal } from "../components/mod-selector/modal";
+import styles from "../styles/SubmitServer.module.css";
 
 export const getStaticProps: GetStaticProps = async () => {
   const fallback: { [key: string]: unknown } = {};

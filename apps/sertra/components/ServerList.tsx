@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import {
   Dispatch,
@@ -9,9 +10,8 @@ import {
 
 import { useServerListings } from "../api/hooks";
 import { ServerListingData } from "../api/models";
-import styles from "./ServerList.module.css";
-import Link from "next/link";
 import { ServerMode, ServerPassword } from "./listingAttributes";
+import styles from "./ServerList.module.css";
 
 interface ServerListEntryProps {
   listing: ServerListingData;
