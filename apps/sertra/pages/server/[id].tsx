@@ -5,6 +5,7 @@ import { ServerListingDetailData, ServerListingData } from "../../api/models";
 import { ApiURLs } from "../../api/urls";
 import { ModCard } from "../../components/ModCard";
 import { ServerInfo } from "../../components/ServerInfo";
+import { ServerInstructions } from "../../components/ServerInstructions";
 import styles from "../../styles/ServerDetail.module.css";
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -82,16 +83,7 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
 
         <div className={styles.columnRight}>
           <ServerInfo {...detail_listing} />
-
-          <section>
-            <h2 className={styles.sectionTitle}>How To Play</h2>
-            <ol className={styles.instructions}>
-              <li>Click butan</li>
-              <li>Öpens TMM</li>
-              <li>Sync Mods</li>
-              <li>Enjoy</li>
-            </ol>
-          </section>
+          <ServerInstructions />
         </div>
       </div>
     </div>
