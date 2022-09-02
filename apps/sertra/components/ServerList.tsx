@@ -10,7 +10,7 @@ import {
 
 import { useServerListings } from "../api/hooks";
 import { ServerListingData } from "../api/models";
-import { ServerMode, ServerPassword } from "./listingAttributes";
+import { ServerMode, ServerPassword } from "./ListingAttributes";
 import styles from "./ServerList.module.css";
 
 interface ServerListEntryProps {

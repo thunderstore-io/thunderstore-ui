@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { ServerListingDetailData, ServerListingData } from "../../api/models";
 import { ApiURLs } from "../../api/urls";
-import { ServerMode, ServerPassword } from "../../components/listingAttributes";
+import { ServerMode, ServerPassword } from "../../components/ListingAttributes";
 import { ModCard } from "../../components/ModCard";
 import styles from "../../components/ServerDetail.module.css";
 
