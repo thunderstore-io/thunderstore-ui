@@ -1,7 +1,8 @@
-import styles from "./list.module.css";
-import { IconButton } from "./iconButton";
-import { ModPackage } from "./data";
 import Image from "next/image";
+
+import { ModPackage } from "./data";
+import { IconButton } from "./iconButton";
+import styles from "./list.module.css";
 
 export interface ModRowInfoProps {
   iconUrl: string;
