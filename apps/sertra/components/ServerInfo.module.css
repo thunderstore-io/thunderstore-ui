@@ -1,0 +1,12 @@
+.row {
+  display: flex;
+  column-gap: 1em;
+  margin: 0.2em 0;
+  border: 2px solid var(--color-lightblue);
+  padding: 0.5em 1em;
+  background-color: var(--color-blue);
+}
+
+.row > div {
+  flex: 1;
+}

@@ -3,9 +3,10 @@ import Link from "next/link";
 
 import { ServerListingDetailData, ServerListingData } from "../../api/models";
 import { ApiURLs } from "../../api/urls";
-import { ServerMode, ServerPassword } from "../../components/listingAttributes";
 import { ModCard } from "../../components/ModCard";
-import styles from "../../components/ServerDetail.module.css";
+import { ServerInfo } from "../../components/ServerInfo";
+import { ServerInstructions } from "../../components/ServerInstructions";
+import styles from "../../styles/ServerDetail.module.css";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const res = await fetch(ApiURLs.ServerList);
@@ -27,7 +28,7 @@ export const getStaticProps: GetStaticProps<
 > = async (context) => {
   // Params is never undefined thanks to NextJS guarantees as long as the file
   // is named appropriately.
-  const listingId = context.params!.id;
+  const listingId = context.params!.id; // eslint-disable-line @typescript-eslint/no-non-null-assertion
   const res = await fetch(ApiURLs.ServerDetail(listingId));
   const data = await res.json();
 
@@ -81,59 +82,8 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
         </div>
 
         <div className={styles.columnRight}>
-          <section>
-            <h2 className={styles.sectionTitle}>Server Info</h2>
-            <div>
-              <div className={styles.serverInfoRow}>
-                <div className={styles.serverInfoColumn}>Game</div>
-                <div className={styles.serverInfoColumn}>V Rising</div>
-              </div>
-              <div className={styles.serverInfoRow}>
-                <div className={styles.serverInfoColumn}>Server Name</div>
-                <div className={styles.serverInfoColumn}>
-                  {detail_listing.name}
-                </div>
-              </div>
-              <div className={styles.serverInfoRow}>
-                <div className={styles.serverInfoColumn}>IP:Port</div>
-                <div className={styles.serverInfoColumn}>
-                  {detail_listing.connection_data}
-                </div>
-              </div>
-              <div className={styles.serverInfoRow}>
-                <div className={styles.serverInfoColumn}>Mode</div>
-                <div className={styles.serverInfoColumn}>
-                  <ServerMode isPvP={detail_listing.is_pvp} />
-                </div>
-              </div>
-              <div className={styles.serverInfoRow}>
-                <div className={styles.serverInfoColumn}>Mods</div>
-                <div className={styles.serverInfoColumn}>
-                  {detail_listing.mods.length}
-                </div>
-              </div>
-              <div className={styles.serverInfoRow}>
-                <div className={styles.serverInfoColumn}>
-                  Password Protected
-                </div>
-                <div className={styles.serverInfoColumn}>
-                  <ServerPassword
-                    requiresPassword={detail_listing.requires_password}
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section>
-            <h2 className={styles.sectionTitle}>How To Play</h2>
-            <ol className={styles.instructions}>
-              <li>Click butan</li>
-              <li>Öpens TMM</li>
-              <li>Sync Mods</li>
-              <li>Enjoy</li>
-            </ol>
-          </section>
+          <ServerInfo {...detail_listing} />
+          <ServerInstructions />
         </div>
       </div>
     </div>
