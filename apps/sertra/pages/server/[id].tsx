@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import Logo from "/public/ts-logo.svg";
 import { ServerListingDetailData, ServerListingData } from "../../api/models";
-import { ApiURLs } from "../../api/urls";
+import { ApiURLs, TsApiURLs } from "../../api/urls";
 import { ModCard } from "../../components/ModCard";
 import { ServerInfo } from "../../components/ServerInfo";
 import { ServerInstructions } from "../../components/ServerInstructions";
@@ -31,8 +31,34 @@ export const getStaticProps: GetStaticProps<
   // is named appropriately.
   const listingId = context.params!.id; // eslint-disable-line @typescript-eslint/no-non-null-assertion
   const res = await fetch(ApiURLs.ServerDetail(listingId));
+  const mods_res = await fetch(TsApiURLs.V1Packages("v-rising"));
   const data = await res.json();
+  const mods_data = await mods_res.json();
 
+  const updated_listing_mods_data = [];
+  for (const mod_ref of data.mods) {
+    for (const mod of mods_data) {
+      const [mod_ref_owner, mod_ref_name, mod_ref_version] = mod_ref.split(
+        "-",
+        3
+      );
+      if (mod_ref_owner === mod.owner && mod_ref_name === mod.name) {
+        for (const version of mod.versions) {
+          if (mod_ref_version === version.version_number) {
+            updated_listing_mods_data.push({
+              name: mod.name,
+              owner: mod.owner,
+              version: version.version_number,
+              icon_url: version.icon,
+              description: version.description ?? null,
+            });
+          }
+        }
+      }
+    }
+  }
+  data.mods = updated_listing_mods_data;
+  // TODO: What if mod is not found?
   return {
     props: {
       detail_listing: data,
@@ -70,16 +96,15 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
           <section>
             <h2 className={styles.sectionTitle}>Mods</h2>
             <div>
-              {/* TODO: So we are missing the name, description and artifacts, from the API data */}
-              {/* {data.mods.map((x) => (
+              {detail_listing.mods.map((x) => (
                 <ModCard
                   key={x.name}
                   name={x.name}
-                  description={x.description}
+                  owner={x.owner}
+                  description={x.description ?? null}
+                  version={x.version}
+                  icon_url={x.icon_url}
                 />
-              ))} */}
-              {detail_listing.mods.map((x) => (
-                <ModCard key={x} name={x} description={x} />
               ))}
             </div>
           </section>
