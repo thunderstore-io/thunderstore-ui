@@ -118,6 +118,7 @@ button:active {
 }
 
 :root {
+  --bg-highlight: #353e58;
   --bg-light: #242e48;
   --bg-regular: #202941;
   --bg-dark: #17213b;

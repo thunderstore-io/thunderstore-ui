@@ -1,5 +1,6 @@
-import styles from "./iconButton.module.css";
 import { DetailedHTMLProps } from "react";
+
+import styles from "./iconButton.module.css";
 
 interface IconButtonProps {
   content: string;

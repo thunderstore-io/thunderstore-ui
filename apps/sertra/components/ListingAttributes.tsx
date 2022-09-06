@@ -1,4 +1,5 @@
 import { PropsWithChildren } from "react";
+
 import styles from "./ServerList.module.css";
 
 interface ServerModeProps {

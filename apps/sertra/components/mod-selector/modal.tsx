@@ -1,10 +1,12 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PropsWithChildren, useMemo, useState } from "react";
-import styles from "./modal.module.css";
-import { SearchBox } from "./search";
-import { ModListRow } from "./list";
+
+import { ButtonPrimary, ButtonSecondary } from "./button";
 import { MockPackages, ModPackage } from "./data";
 import { IconButton } from "./iconButton";
-import { ButtonPrimary, ButtonSecondary } from "./button";
+import { ModListRow } from "./list";
+import styles from "./modal.module.css";
+import { SearchBox } from "./search";
 
 interface ModalHeaderProps {
   title?: string;
@@ -44,8 +46,14 @@ export const ModalFooter: React.FC<unknown> = () => {
 export const NoModsSelectedNotice: React.FC<unknown> = () => {
   return (
     <div className={styles.noMods}>
-      <span>Ice cream icon here</span>
-      <p>Vanilla is good, but we want none of that here. Add some mods!</p>
+      <FontAwesomeIcon
+        className={styles.noModsIcon}
+        icon={["fas", "ice-cream"]}
+      />
+      <p className={styles.noModsText}>
+        Vanilla is good, but we want none of that here.
+      </p>
+      <p className={styles.noModsText}>Add some mods!</p>
     </div>
   );
 };
