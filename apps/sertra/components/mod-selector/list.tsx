@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import { ModPackage } from "./data";
 import { IconButton } from "./iconButton";
 import styles from "./list.module.css";
@@ -17,7 +15,8 @@ export const ModRowInfo: React.FC<ModRowInfoProps> = ({
   return (
     <>
       <div className={styles.colSmall}>
-        <Image className={styles.rowIcon} alt="mod icon" src={iconUrl} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className={styles.rowIcon} alt="mod icon" src={iconUrl} />
       </div>
       <div className={styles.colLarge}>
         <span className={styles.packageName}>{packageName}</span>
