@@ -19,27 +19,19 @@ export const SearchBox = <T,>({
   const [isFocused, setFocused] = useState<boolean>(false);
 
   function focusFirstOption() {
-    if (optionsRef.current?.children[0]) {
-      optionsRef.current.children[0].focus();
-    }
+    optionRef.current?.focus();
   }
 
   function focusSearch() {
-    if (searchBoxRef.current) {
-      searchBoxRef.current.focus();
-    }
+    searchBoxRef.current?.focus();
   }
 
   const searchKeyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Escape") {
       setFocused(false);
-    } else {
-      if (e.code === "ArrowDown") {
-        e.preventDefault();
-        if (e.currentTarget) {
-          focusFirstOption();
-        }
-      }
+    } else if (e.code === "ArrowDown") {
+      e.preventDefault();
+      focusFirstOption();
     }
   };
 
@@ -53,22 +45,16 @@ export const SearchBox = <T,>({
       focusSearch();
     } else if (e.code === "Enter") {
       e.preventDefault();
-      if (target.nextElementSibling) {
-        target.nextElementSibling.focus();
-      }
+      target.nextElementSibling?.focus();
       onClickHandler(option);
     } else if (e.code === "ArrowDown") {
       e.preventDefault();
-      if (target.nextElementSibling) {
-        target.nextElementSibling.focus();
-      }
+      target.nextElementSibling?.focus();
     } else if (e.code === "ArrowUp") {
       e.preventDefault();
-      if (target.previousElementSibling) {
-        target.previousElementSibling.focus();
-      } else {
-        focusSearch();
-      }
+      target.previousElementSibling
+        ? target.previousElementSibling.focus()
+        : focusSearch();
     }
   };
 
@@ -77,7 +63,7 @@ export const SearchBox = <T,>({
   };
 
   const searchBoxRef = useRef(null);
-  const optionsRef = useRef(null);
+  const optionRef = useRef(null);
 
   return (
     <div
@@ -103,14 +89,15 @@ export const SearchBox = <T,>({
       </div>
       {isFocused && (
         <div className={styles.optionsAnchor}>
-          <div className={styles.optionsBox} ref={optionsRef}>
-            {options.map((option) => {
+          <div className={styles.optionsBox}>
+            {options.map((option, i) => {
               return (
                 <button
+                  ref={i === 0 ? optionRef : null}
                   className={styles.optionButton}
                   key={keyExtractor(option)}
                   onKeyDown={(e) => listKeyDownHandler(option, e)}
-                  onClick={(e) => onClickHandler(option, e.currentTarget)}
+                  onClick={() => onClickHandler(option)}
                 >
                   {renderOption(option)}
                 </button>
