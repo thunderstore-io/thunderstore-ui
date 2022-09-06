@@ -28,7 +28,7 @@ export const getStaticProps: GetStaticProps<
 > = async (context) => {
   // Params is never undefined thanks to NextJS guarantees as long as the file
   // is named appropriately.
-  const listingId = context.params!.id; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+  const listingId = context.params!.id;
   const res = await fetch(ApiURLs.ServerDetail(listingId));
   const data = await res.json();
 

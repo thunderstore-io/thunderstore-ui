@@ -12,7 +12,6 @@ const ButtonBase: React.FC<PropsWithChildren<ButtonBaseProps>> = ({
   return <button className={className}>{children}</button>;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ButtonProps {}
 export const ButtonPrimary: React.FC<PropsWithChildren<ButtonProps>> = ({
   children,
