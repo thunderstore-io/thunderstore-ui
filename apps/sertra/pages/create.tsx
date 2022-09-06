@@ -1,10 +1,11 @@
 import { GetStaticProps, NextPage } from "next";
-import { ApiURLs, TsApiURLs } from "../api/urls";
-import { getPackageList } from "../api/hooks";
 import { SWRConfig } from "swr";
+
+import { getPackageList } from "../api/hooks";
+import { ApiURLs, TsApiURLs } from "../api/urls";
 import { ModSelectorModal } from "../components/mod-selector/modal";
-import styles from "../styles/SubmitServer.module.css";
 import { useForm, SubmitHandler } from "react-hook-form";
+import styles from "../styles/SubmitServer.module.css";
 
 export const getStaticProps: GetStaticProps = async () => {
   const fallback: { [key: string]: unknown } = {};
@@ -23,7 +24,7 @@ type Inputs = {
   description: string;
   mode: string;
   mods: [string];
-  isPasswordProtected: string;
+  isPasswordProtected: boolean;
 };
 
 const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
@@ -34,6 +35,7 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const prepped_data = {
       name: data.serverName,
@@ -74,7 +76,7 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
               type={"text"}
               {...register("serverName", { required: true })}
             />
-            {/* Add styling here */}
+            {/* TODO: Add styling here */}
             {errors.serverName?.type === "required" &&
               "Server name is required"}
           </div>
@@ -86,8 +88,8 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
               type={"text"}
               {...register("connectionInfo", { required: true })}
             />
-            {/* Add styling here */}
-            {errors.serverName?.type === "required" &&
+            {/* TODO: Add styling here */}
+            {errors.connectionInfo?.type === "required" &&
               "Connection info is required"}
           </div>
           <div className={styles.row}>
