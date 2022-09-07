@@ -17,3 +17,31 @@ You can start editing the page by modifying `pages/index.tsx`. The page auto-upd
 [API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+
+## Using SVGs
+
+`@svgr` library allows us to import regular SVG files as components.
+
+```typescript
+// As a component in .tsx
+import Logo from "/public/ts-logo.svg";
+
+// Use fill to adjust color
+<Logo fill="red" width="2rem" height="2rem" />
+```
+
+```css
+/* In .css */
+h1:before {
+  content: "";
+  display: block;
+  float: left;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-right: 0.5rem;
+  /* Don't use `/public` prefix with URLs */
+  /* Using `0 0/100% 100% ` scales the image to fill width/height */
+  mask: url(/ts-logo.svg) 0 0/100% 100%;
+  background-color: white;  /* Adjust color */
+}
+```
