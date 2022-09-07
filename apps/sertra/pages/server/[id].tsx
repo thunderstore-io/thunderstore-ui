@@ -37,28 +37,40 @@ export const getStaticProps: GetStaticProps<
 
   const updated_listing_mods_data = [];
   for (const mod_ref of data.mods) {
+    const parsed_mod_ref = [];
+    // Split, reverse, put together, split by dash,
+    // take each from dash split and flip it around, put into new array
+    for (const x of mod_ref.split("").reverse().join("").split("-")) {
+      parsed_mod_ref.push(x.split("").reverse().join(""));
+    }
+    const new_mod_data = {
+      // We are accepting null here, just in case the data we have about mods is corrupt or bad
+      name: parsed_mod_ref[1] ?? null,
+      owner: parsed_mod_ref.slice(2).join("-") ?? null,
+      version: parsed_mod_ref[0] ?? null,
+      icon_url: null,
+      description: null,
+    };
+    // We could use the same parser output to match against APIs results
+    // But I'm waiting for opinions
     for (const mod of mods_data) {
-      const [mod_ref_owner, mod_ref_name, mod_ref_version] = mod_ref.split(
-        "-",
-        3
-      );
-      if (mod_ref_owner === mod.owner && mod_ref_name === mod.name) {
+      if (mod_ref.startsWith(mod.full_name)) {
+        new_mod_data.name = mod.name;
+        new_mod_data.owner = mod.owner;
+        new_mod_data.version = null;
         for (const version of mod.versions) {
-          if (mod_ref_version === version.version_number) {
-            updated_listing_mods_data.push({
-              name: mod.name,
-              owner: mod.owner,
-              version: version.version_number,
-              icon_url: version.icon,
-              description: version.description ?? null,
-            });
+          if (mod_ref.endsWith(version.version_number)) {
+            new_mod_data.version = version.version_number;
+            new_mod_data.icon_url = version.icon;
+            new_mod_data.description = version.description ?? null;
+            break;
           }
         }
       }
     }
+    updated_listing_mods_data.push(new_mod_data);
   }
   data.mods = updated_listing_mods_data;
-  // TODO: What if mod is not found?
   return {
     props: {
       detail_listing: data,
