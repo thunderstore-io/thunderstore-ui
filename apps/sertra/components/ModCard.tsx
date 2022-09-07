@@ -17,7 +17,11 @@ export const ModCard: React.FC<ModCard> = ({
 }) => (
   <div className={styles.mod}>
     <div className={styles.column}>
-      <img className={styles.imagePlaceholder} src={icon_url}></img>
+      {icon_url ? (
+        <img className={styles.imageIcon} src={icon_url}></img>
+      ) : (
+        <img className={styles.imageIcon} src="/favicon.ico"></img>
+      )}
     </div>
     <div className={styles.column}>
       <h3 className={styles.name}>{name}</h3>

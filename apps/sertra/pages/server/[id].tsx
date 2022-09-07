@@ -61,7 +61,7 @@ export const getStaticProps: GetStaticProps<
         for (const version of mod.versions) {
           if (mod_ref.endsWith(version.version_number)) {
             new_mod_data.version = version.version_number;
-            new_mod_data.icon_url = version.icon;
+            new_mod_data.icon_url = version.icon ?? null;
             new_mod_data.description = version.description ?? null;
             break;
           }
@@ -113,7 +113,7 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
                   key={x.name}
                   name={x.name}
                   owner={x.owner}
-                  description={x.description ?? null}
+                  description={x.description}
                   version={x.version}
                   icon_url={x.icon_url}
                 />
