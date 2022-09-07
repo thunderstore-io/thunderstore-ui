@@ -1,9 +1,14 @@
 const url = (path: string): string => {
-  return `${process.env.NEXT_PUBLIC_SERTRA_API_URL}${path}`;
+  return `${
+    process.env.NEXT_PUBLIC_SERTRA_API_URL ??
+    "https://api.servers.thunderstore.dev"
+  }${path}`;
 };
 
 const tsUrl = (path: string): string => {
-  return `${process.env.NEXT_PUBLIC_TS_API_URL}${path}`;
+  return `${
+    process.env.NEXT_PUBLIC_TS_API_URL ?? "https://thunderstore.io"
+  }${path}`;
 };
 
 export class ApiURLs {

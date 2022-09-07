@@ -35,6 +35,8 @@ export const SearchBox = <T,>({
     }
   };
 
+  type FocusableElement = Element & { focus?: () => void };
+
   const listKeyDownHandler = (
     option: T,
     e: React.KeyboardEvent<HTMLButtonElement>
@@ -44,17 +46,24 @@ export const SearchBox = <T,>({
       e.preventDefault();
       focusSearch();
     } else if (e.code === "Enter") {
-      e.preventDefault();
-      target.nextElementSibling?.focus();
-      onClickHandler(option);
+      const nes = target.nextElementSibling as FocusableElement;
+      if (typeof nes?.focus === "function") {
+        e.preventDefault();
+        nes?.focus();
+        onClickHandler(option);
+      }
     } else if (e.code === "ArrowDown") {
-      e.preventDefault();
-      target.nextElementSibling?.focus();
+      const nes = target.nextElementSibling as FocusableElement;
+      if (typeof nes?.focus === "function") {
+        e.preventDefault();
+        nes?.focus();
+      }
     } else if (e.code === "ArrowUp") {
-      e.preventDefault();
-      target.previousElementSibling
-        ? target.previousElementSibling.focus()
-        : focusSearch();
+      const pes = target.previousElementSibling as FocusableElement;
+      if (typeof pes?.focus === "function") {
+        e.preventDefault();
+        pes ? pes.focus() : focusSearch();
+      }
     }
   };
 
@@ -62,8 +71,8 @@ export const SearchBox = <T,>({
     onSelect && onSelect(option);
   };
 
-  const searchBoxRef = useRef(null);
-  const optionRef = useRef(null);
+  const searchBoxRef = useRef<HTMLInputElement>(null);
+  const optionRef = useRef<HTMLButtonElement>(null);
 
   return (
     <div
