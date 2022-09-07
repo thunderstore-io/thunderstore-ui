@@ -18,5 +18,6 @@ export const ServerMode: React.FC<PropsWithChildren<ServerModeProps>> = ({
 interface ServerPasswordProps {
   requiresPassword: boolean;
 }
-export const ServerPassword: React.FC<PropsWithChildren<ServerPasswordProps>> =
-  ({ requiresPassword }) => <div>{requiresPassword ? "🔒" : ""}</div>;
+export const ServerPassword: React.FC<
+  PropsWithChildren<ServerPasswordProps>
+> = ({ requiresPassword }) => <div>{requiresPassword ? "🔒" : ""}</div>;
