@@ -1,10 +1,10 @@
 import { GetStaticProps, NextPage } from "next";
 import { SWRConfig } from "swr";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 import { getPackageList } from "../api/hooks";
 import { ApiURLs, TsApiURLs } from "../api/urls";
 import { ModSelectorModal } from "../components/mod-selector/modal";
-import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "../styles/SubmitServer.module.css";
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -45,7 +45,7 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
       // TODO: Populate this with mod ids etc
       mods: ["1", "2", "3"],
       is_pvp: data.mode === "pvp" ? true : false,
-      requires_password: data.isPasswordProtected ? true : false,
+      requires_password: data.isPasswordProtected,
     };
     fetch(ApiURLs.ServerCreate, {
       method: "POST",
