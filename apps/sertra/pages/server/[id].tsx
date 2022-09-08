@@ -2,7 +2,11 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 
 import Logo from "/public/ts-logo.svg";
-import { ServerListingDetailData, ServerListingData } from "../../api/models";
+import {
+  ServerListingDetailData,
+  ServerListingData,
+  ListingMod,
+} from "../../api/models";
 import { ApiURLs, TsApiURLs } from "../../api/urls";
 import { ModCard } from "../../components/ModCard";
 import { ServerInfo } from "../../components/ServerInfo";
@@ -70,18 +74,19 @@ export const getStaticProps: GetStaticProps<
     }
     updated_listing_mods_data.push(new_mod_data);
   }
-  data.mods = updated_listing_mods_data;
   return {
     props: {
       detail_listing: data,
+      updated_mod_datas: updated_listing_mods_data,
     },
     revalidate: 10,
   };
 };
 
-const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
-  detail_listing,
-}) => {
+const ServerDetail: React.FC<{
+  detail_listing: ServerListingDetailData;
+  updated_mod_datas: ListingMod[];
+}> = ({ detail_listing, updated_mod_datas }) => {
   return (
     <div className={styles.container}>
       <div className={styles.breadcrumb}>
@@ -108,7 +113,7 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
           <section>
             <h2 className={styles.sectionTitle}>Mods</h2>
             <div>
-              {detail_listing.mods.map((x) => (
+              {updated_mod_datas.map((x) => (
                 <ModCard key={x.name} {...x} />
               ))}
             </div>
