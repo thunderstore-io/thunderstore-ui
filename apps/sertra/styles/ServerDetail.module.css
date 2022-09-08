@@ -28,13 +28,18 @@
 
 .joinServerButton {
   flex: 0 0 11rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 2.6875em;
   border: 0;
-  padding: 0.75em 1.875em;
-  text-align: center;
   font: 700 1rem/1.2 var(--font-family-body);
   color: var(--color-background);
   background-color: var(--color-orange);
+}
+
+.joinServerButton svg {
+  margin-right: 0.75rem;
 }
 
 .contentRow {
