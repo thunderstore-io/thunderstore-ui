@@ -17,11 +17,6 @@
   flex-direction: column;
 }
 
-.imageIcon {
-  width: 64px;
-  height: 64px;
-}
-
 .name {
   margin: -5px 0 0 0;
   font-weight: 700;

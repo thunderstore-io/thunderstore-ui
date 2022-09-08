@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "./ModCard.module.css";
 
 interface ModCard {
@@ -8,6 +9,14 @@ interface ModCard {
   icon_url: string;
 }
 
+interface modImageLoaderInputProps {
+  src: string;
+}
+
+const modImageLoader = ({ src }: modImageLoaderInputProps) => {
+  return `${src}`;
+};
+
 export const ModCard: React.FC<ModCard> = ({
   name,
   owner,
@@ -17,11 +26,13 @@ export const ModCard: React.FC<ModCard> = ({
 }) => (
   <div className={styles.mod}>
     <div className={styles.column}>
-      {icon_url ? (
-        <img className={styles.imageIcon} src={icon_url}></img>
-      ) : (
-        <img className={styles.imageIcon} src="/favicon.ico"></img>
-      )}
+      <Image
+        loader={modImageLoader}
+        src={icon_url ?? "/ts-logo.svg"}
+        alt=""
+        width={64}
+        height={64}
+      />
     </div>
     <div className={styles.column}>
       <h3 className={styles.name}>{name}</h3>
