@@ -14,8 +14,16 @@ export interface ServerListingData extends ServerListingBase {
   mod_count: number;
 }
 
+export interface ListingMod {
+  name: string;
+  owner: string;
+  description: string;
+  version: string;
+  icon_url: string;
+}
+
 export interface ServerListingDetailData extends ServerListingBase {
-  mods: string[];
+  mods: ListingMod[];
 }
 
 export interface PaginatedResponse<T> {

@@ -109,14 +109,7 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
             <h2 className={styles.sectionTitle}>Mods</h2>
             <div>
               {detail_listing.mods.map((x) => (
-                <ModCard
-                  key={x.name}
-                  name={x.name}
-                  owner={x.owner}
-                  description={x.description}
-                  version={x.version}
-                  icon_url={x.icon_url}
-                />
+                <ModCard key={x.name} {...x} />
               ))}
             </div>
           </section>
