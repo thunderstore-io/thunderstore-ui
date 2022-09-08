@@ -1,8 +1,9 @@
 import { GetStaticProps, NextPage } from "next";
 import { SWRConfig } from "swr";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 import { getPackageList } from "../api/hooks";
-import { TsApiURLs } from "../api/urls";
+import { ApiURLs, TsApiURLs } from "../api/urls";
 import { ModSelectorModal } from "../components/mod-selector/modal";
 import styles from "../styles/SubmitServer.module.css";
 
@@ -17,13 +18,46 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
+type Inputs = {
+  serverName: string;
+  connectionInfo: string;
+  description: string;
+  mode: string;
+  mods: [string];
+  isPasswordProtected: boolean;
+};
+
 const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
   swrFallback,
 }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    const prepped_data = {
+      name: data.serverName,
+      description: data.description,
+      community: "v-rising",
+      connection_data: data.connectionInfo,
+      // TODO: Populate this with mod ids etc
+      mods: ["1", "2", "3"],
+      is_pvp: data.mode === "pvp" ? true : false,
+      requires_password: data.isPasswordProtected,
+    };
+    fetch(ApiURLs.ServerCreate, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(prepped_data),
+    });
+  };
+
   return (
     <SWRConfig value={{ fallback: swrFallback }}>
       <ModSelectorModal />
-      <div className={styles.container}>
+      <form className={styles.container} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formHeader}>
           <div className={styles.formTitle}>Submit Server</div>
         </div>
@@ -39,37 +73,43 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
             <input
               className={styles.input}
               id={"serverName"}
-              name={"serverName"}
               type={"text"}
+              {...register("serverName", { required: true })}
             />
+            {/* TODO: Add styling here */}
+            {errors.serverName?.type === "required" &&
+              "Server name is required"}
           </div>
           <div className={styles.row}>
             <label htmlFor={"connectionInfo"}>Connection Info</label>
             <input
               className={styles.input}
-              name={"connectionInfo"}
               id={"connectionInfo"}
               type={"text"}
+              {...register("connectionInfo", { required: true })}
             />
+            {/* TODO: Add styling here */}
+            {errors.connectionInfo?.type === "required" &&
+              "Connection info is required"}
           </div>
           <div className={styles.row}>
             <label htmlFor={"description"}>Description</label>
             <textarea
               className={styles.textarea}
               id={"description"}
-              name={"description"}
+              {...register("description")}
             />
           </div>
           <div className={styles.row}>
             <label htmlFor={"mode"}>Mode</label>
-            <select className={styles.input} id={"mode"}>
+            <select className={styles.input} id={"mode"} {...register("mode")}>
               <option value={"pvp"}>PvP</option>
               <option value={"pve"}>PvE</option>
             </select>
           </div>
           <div className={styles.row}>
             <label htmlFor={"mods"}>Mods</label>
-            <select className={styles.input} id={"mods"}>
+            <select className={styles.input} id={"mods"} {...register("mods")}>
               {/*TODO: Populate*/}
             </select>
           </div>
@@ -78,9 +118,9 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
             <div className={styles.checkboxContainer}>
               <input
                 className={styles.checkbox}
-                name={"isPasswordProtected"}
                 id={"isPasswordProtected"}
                 type={"checkbox"}
+                {...register("isPasswordProtected")}
               />
             </div>
           </div>
@@ -91,7 +131,7 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
             Submit
           </button>
         </div>
-      </div>
+      </form>
     </SWRConfig>
   );
 };
