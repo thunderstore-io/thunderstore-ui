@@ -14,7 +14,7 @@ export interface ServerListingData extends ServerListingBase {
   mod_count: number;
 }
 
-export interface TSListingModVersions {
+export interface TSListingModVersion {
   name: string;
   full_name: string;
   description: string | null;
@@ -42,7 +42,7 @@ export interface TSListingMod {
   is_pinned: boolean;
   is_deprecated: boolean;
   has_nsfw_content: boolean;
-  versions: TSListingModVersions[];
+  versions: TSListingModVersion[];
   categories: [];
 }
 

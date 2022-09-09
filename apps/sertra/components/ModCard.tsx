@@ -1,21 +1,15 @@
-import Image from "next/image";
+import Image, { ImageLoader } from "next/image";
 import styles from "./ModCard.module.css";
 
 interface ModCard {
   name: string;
-  owner: string;
+  owner: string | null;
   description: string;
   version: string;
   icon_url: string;
 }
 
-interface modImageLoaderInputProps {
-  src: string;
-}
-
-const modImageLoader = ({ src }: modImageLoaderInputProps) => {
-  return `${src}`;
-};
+const modImageLoader: ImageLoader = (props) => props.src;
 
 export const ModCard: React.FC<ModCard> = ({
   name,
@@ -32,6 +26,7 @@ export const ModCard: React.FC<ModCard> = ({
         alt=""
         width={64}
         height={64}
+        unoptimized={true}
       />
     </div>
     <div className={styles.column}>

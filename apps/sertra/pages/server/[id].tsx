@@ -9,7 +9,7 @@ import {
 } from "../../api/models";
 import { ApiURLs } from "../../api/urls";
 import { ModCard } from "../../components/ModCard";
-import { FetchListingData } from "../../components/PackageDataFetcher";
+import { FetchListingData } from "../../api/PackageDataFetcher";
 import { ServerInfo } from "../../components/ServerInfo";
 import { ServerInstructions } from "../../components/ServerInstructions";
 import styles from "../../styles/ServerDetail.module.css";
@@ -35,11 +35,11 @@ export const getStaticProps: GetStaticProps<
   // Params is never undefined thanks to NextJS guarantees as long as the file
   // is named appropriately.
   const listingId = context.params!.id; // eslint-disable-line @typescript-eslint/no-non-null-assertion
-  const fetched = FetchListingData(listingId);
+  const fetched = await FetchListingData(listingId);
   return {
     props: {
-      listing_data: (await fetched).listing_data,
-      mods_data: (await fetched).mods_data,
+      listing_data: fetched.listing_data,
+      mods_data: fetched.mods_data,
     },
     revalidate: 10,
   };
