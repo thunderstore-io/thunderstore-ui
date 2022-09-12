@@ -1,4 +1,4 @@
-import Image, { ImageLoader } from "next/image";
+import Image from "next/image";
 import styles from "./ModCard.module.css";
 
 interface ModCard {
