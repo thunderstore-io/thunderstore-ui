@@ -6,9 +6,9 @@ export const ServerInstructions: React.FC = () => (
     <h2 className={pageStyles.sectionTitle}>How To Play</h2>
     <ol className={styles.instructions}>
       <li>
-        Install Thunderstore{" "}
+        Install{" "}
         <a href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager">
-          Mod Manager
+          <strong>Thunderstore Mod Manager</strong>
         </a>
       </li>
       <li>Click the join server button to launch Mod Manager</li>
