@@ -4,12 +4,10 @@ import styles from "./ModCard.module.css";
 interface ModCard {
   name: string;
   owner: string | null;
-  description: string;
-  version: string;
-  icon_url: string;
+  description: string | null;
+  version: string | null;
+  icon_url: string | null;
 }
-
-const modImageLoader: ImageLoader = (props) => props.src;
 
 export const ModCard: React.FC<ModCard> = ({
   name,
@@ -21,7 +19,6 @@ export const ModCard: React.FC<ModCard> = ({
   <div className={styles.mod}>
     <div className={styles.column}>
       <Image
-        loader={modImageLoader}
         src={icon_url ?? "/ts-logo.svg"}
         alt=""
         width={64}

@@ -17,9 +17,10 @@ export const FetchListingData = async (listingId: string) => {
 
   const all_versions = new Map();
   mods.map((mod: TSListingMod) => {
-    mod.versions.map((version: TSListingModVersionWithOwner) => {
-      version.owner = mod.owner;
-      all_versions.set(version.full_name, version);
+    mod.versions.map((version) => {
+      const version_with_owner = version as TSListingModVersionWithOwner;
+      version_with_owner.owner = mod.owner;
+      all_versions.set(version_with_owner.full_name, version_with_owner);
     });
   });
   const updated_listing_mods_data = [];
