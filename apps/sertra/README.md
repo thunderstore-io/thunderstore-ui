@@ -20,15 +20,20 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 ## Using SVGs
 
-`@svgr` library allows us to import regular SVG files as components.
+`@svgr` library allows us to import regular SVG files as components. This is
+the preferred way to display SVGs.
 
 ```typescript
 // As a component in .tsx
 import Logo from "/public/ts-logo.svg";
 
-// Use fill to adjust color
+// Use fill to adjust color. While passing values as props works, it's
+//  preferrable to define all styles in CSS.
 <Logo fill="red" width="2rem" height="2rem" />
 ```
+
+If components are not feasible for some reason, icons can be shown as pseudo
+elements:
 
 ```css
 /* In .css */
@@ -42,6 +47,6 @@ h1:before {
   /* Don't use `/public` prefix with URLs */
   /* Using `0 0/100% 100% ` scales the image to fill width/height */
   mask: url(/ts-logo.svg) 0 0/100% 100%;
-  background-color: white;  /* Adjust color */
+  background-color: currentColor;
 }
 ```
