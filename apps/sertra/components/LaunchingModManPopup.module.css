@@ -1,0 +1,67 @@
+.background {
+  display: flex;
+  position: fixed;
+  left: 0;
+  top: 0;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background: #00000060;
+}
+
+.popUp {
+  background: #242e48;
+  border-radius: 0.5rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 1.53125rem;
+  margin-bottom: 1rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.closeWindow {
+  font-family: "Font Awesome 6 Pro";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 22px;
+  color: #93a0c2;
+  background: none;
+  color: inherit;
+  border: none;
+  outline: inherit;
+}
+
+.instructions {
+  display: flex;
+  flex-direction: column;
+  margin: 0rem 14.7885rem 2rem 2rem;
+  padding-left: 1rem;
+  color: #ccddfe;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  background: #202941;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.5rem;
+}
+
+.footerLeft {
+  font-size: 14px;
+  display: flex;
+  flex-grow: 1;
+  color: #ccddfe;
+}
