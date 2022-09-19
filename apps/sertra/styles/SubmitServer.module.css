@@ -23,7 +23,7 @@
   background: var(--color-darkblue);
   border-radius: 0.25rem;
   border: 0;
-  color: #ffffff;
+  color: var(--text-primary);
   height: 2.75rem;
   padding: 0.25rem 1rem;
 
@@ -68,7 +68,7 @@ select.input {
   width: 100%;
   height: 2.75rem;
   background: var(--color-orange);
-  color: #000000;
+  color: var(--bg-regular);
   font: 700 1.1rem/1.25 var(--font-family-body);
   margin-top: 2.5rem;
   border: none;
