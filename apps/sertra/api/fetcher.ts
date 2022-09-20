@@ -1,7 +1,6 @@
-import { Fetcher } from "swr";
+import { Fetcher, Key } from "swr";
 
-// TODO: Type better
-export const fetcher: Fetcher<any, any> = (
+export const fetcher: Fetcher<unknown, Key> = (
   input: RequestInfo,
   init?: RequestInit
 ) => fetch(input, init).then((res) => res.json());

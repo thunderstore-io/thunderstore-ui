@@ -8,10 +8,11 @@ interface ServerListingBase {
   requires_password: boolean;
   datetime_created: string;
   datetime_updated: string;
-  mod_count: number;
 }
 
-export interface ServerListingData extends ServerListingBase {}
+export interface ServerListingData extends ServerListingBase {
+  mod_count: number;
+}
 
 export interface ServerListingDetailData extends ServerListingBase {
   mods: string[];
