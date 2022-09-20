@@ -1,12 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import {
-  Dispatch,
-  PropsWithChildren,
-  SetStateAction,
-  useMemo,
-  useState,
-} from "react";
+import { Dispatch, PropsWithChildren, SetStateAction, useState } from "react";
 
 import { useServerListings } from "../api/hooks";
 import { ServerListingData } from "../api/models";
@@ -18,18 +12,16 @@ interface ServerListEntryProps {
 }
 const ServerListEntry: React.FC<PropsWithChildren<ServerListEntryProps>> = ({
   listing,
-}) => {
-  return (
-    <Link href={`/server/` + listing.id} key={listing.id}>
-      <div className={styles.row}>
-        <div className={`${styles.name} ellipsis`}>{listing.name}</div>
-        <ServerMode isPvP={listing.is_pvp} />
-        <div>{listing.mod_count}</div>
-        <ServerPassword requiresPassword={listing.requires_password} />
-      </div>
-    </Link>
-  );
-};
+}) => (
+  <Link href={`/server/` + listing.id} passHref key={listing.id}>
+    <a href="replacedByLink" className={styles.row}>
+      <div className={`${styles.name} ellipsis`}>{listing.name}</div>
+      <ServerMode isPvP={listing.is_pvp} />
+      <div>{listing.mod_count}</div>
+      <ServerPassword requiresPassword={listing.requires_password} />
+    </a>
+  </Link>
+);
 
 interface ServerListPaginatorProps {
   next: string | null;
@@ -74,11 +66,7 @@ export const ServerList: React.FC<PropsWithChildren<ServerListProps>> = ({
   const { data } = useServerListings(currentCursor);
   const next = data?.next ? data?.next.split("=")[1] : null;
   const prev = data?.previous ? data?.previous.split("=")[1] : null;
-
-  // TODO: Pull from API
-  const gameDisplayName = useMemo(() => {
-    return community.replaceAll("-", " ");
-  }, [community]);
+  const gameDisplayName = community.replaceAll("-", " "); // TODO: Pull from API
 
   return (
     <>
@@ -98,9 +86,13 @@ export const ServerList: React.FC<PropsWithChildren<ServerListProps>> = ({
         <div className={styles.password}>Password</div>
       </div>
 
-      {data?.results.map((x) => (
-        <ServerListEntry key={x.id} listing={x} />
-      ))}
+      <ul className={styles.listings}>
+        {data?.results.map((x) => (
+          <li key={x.id}>
+            <ServerListEntry listing={x} />
+          </li>
+        ))}
+      </ul>
 
       <div className={styles.paginatorWrapper}>
         <ServerListPaginator
