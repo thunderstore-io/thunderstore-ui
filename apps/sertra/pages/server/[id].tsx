@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 
+import Logo from "/public/ts-logo.svg";
 import { ServerListingDetailData, ServerListingData } from "../../api/models";
 import { ApiURLs } from "../../api/urls";
 import { ModCard } from "../../components/ModCard";
@@ -53,7 +54,10 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
 
       <div className={styles.headerRow}>
         <h1 className={styles.listingTitle}>{detail_listing.name}</h1>
-        <button className={styles.joinServerButton}>Join Server</button>
+        <button className={styles.joinServerButton}>
+          <Logo />
+          Join Server
+        </button>
       </div>
 
       <div className={styles.contentRow}>
