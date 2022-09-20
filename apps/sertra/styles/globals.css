@@ -138,6 +138,7 @@ button:active {
 
 @font-face {
   font-family: Raleway;
+  font-weight: 100 900;
   /* TODO: Add font alternatives */
   src: local(Raleway),
     url(../public/fonts/Raleway-VariableFont_wght.ttf) format("truetype");
@@ -145,6 +146,7 @@ button:active {
 
 @font-face {
   font-family: "Exo2";
+  font-weight: 100 900;
   src: local(Exo2),
     url(../public/fonts/Exo2-VariableFont_wght.ttf) format("truetype"),
     local(-apple-system), local(BlinkMacSystemFont), local(Segoe UI),
