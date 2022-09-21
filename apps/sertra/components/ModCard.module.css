@@ -17,12 +17,6 @@
   flex-direction: column;
 }
 
-.imagePlaceholder {
-  width: 64px;
-  height: 64px;
-  background: greenyellow;
-}
-
 .name {
   margin: -5px 0 0 0;
   font-weight: 700;

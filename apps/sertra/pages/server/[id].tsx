@@ -2,9 +2,14 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 
 import Logo from "/public/ts-logo.svg";
-import { ServerListingDetailData, ServerListingData } from "../../api/models";
+import {
+  ServerListingDetailData,
+  ServerListingData,
+  ListingMod,
+} from "../../api/models";
 import { ApiURLs } from "../../api/urls";
 import { ModCard } from "../../components/ModCard";
+import { FetchListingData } from "../../api/PackageDataFetcher";
 import { ServerInfo } from "../../components/ServerInfo";
 import { ServerInstructions } from "../../components/ServerInstructions";
 import styles from "../../styles/ServerDetail.module.css";
@@ -20,7 +25,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: "blocking" };
 };
 
-type ServerListingStaticProps = { detail_listing?: ServerListingDetailData };
+type ServerListingStaticProps = { listing_data?: ServerListingDetailData };
 type ServerListingQueryProps = { id: string };
 
 export const getStaticProps: GetStaticProps<
@@ -30,20 +35,20 @@ export const getStaticProps: GetStaticProps<
   // Params is never undefined thanks to NextJS guarantees as long as the file
   // is named appropriately.
   const listingId = context.params!.id; // eslint-disable-line @typescript-eslint/no-non-null-assertion
-  const res = await fetch(ApiURLs.ServerDetail(listingId));
-  const data = await res.json();
-
+  const fetched = await FetchListingData(listingId);
   return {
     props: {
-      detail_listing: data,
+      listing_data: fetched.listing_data,
+      mods_data: fetched.mods_data,
     },
     revalidate: 10,
   };
 };
 
-const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
-  detail_listing,
-}) => {
+const ServerDetail: React.FC<{
+  listing_data: ServerListingDetailData;
+  mods_data: ListingMod[];
+}> = ({ listing_data, mods_data }) => {
   return (
     <div className={styles.container}>
       <div className={styles.breadcrumb}>
@@ -53,7 +58,7 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
       </div>
 
       <div className={styles.headerRow}>
-        <h1 className={styles.listingTitle}>{detail_listing.name}</h1>
+        <h1 className={styles.listingTitle}>{listing_data.name}</h1>
         <button className={styles.joinServerButton}>
           <Logo />
           Join Server
@@ -64,29 +69,21 @@ const ServerDetail: React.FC<{ detail_listing: ServerListingDetailData }> = ({
         <div className={styles.columnLeft}>
           <section>
             <h2 className={styles.sectionTitle}>Description</h2>
-            <p className={styles.description}>{detail_listing.description}</p>
+            <p className={styles.description}>{listing_data.description}</p>
           </section>
 
           <section>
             <h2 className={styles.sectionTitle}>Mods</h2>
             <div>
-              {/* TODO: So we are missing the name, description and artifacts, from the API data */}
-              {/* {data.mods.map((x) => (
-                <ModCard
-                  key={x.name}
-                  name={x.name}
-                  description={x.description}
-                />
-              ))} */}
-              {detail_listing.mods.map((x) => (
-                <ModCard key={x} name={x} description={x} />
+              {mods_data.map((modProps) => (
+                <ModCard key={modProps.name} {...modProps} />
               ))}
             </div>
           </section>
         </div>
 
         <div className={styles.columnRight}>
-          <ServerInfo {...detail_listing} />
+          <ServerInfo {...listing_data} />
           <ServerInstructions />
         </div>
       </div>
