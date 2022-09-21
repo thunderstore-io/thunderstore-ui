@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  sertra:
+    build:
+      context: "./"
+      dockerfile: "apps/sertra/Dockerfile"
+    image: thunderstore/thunderstore-ui.sertra:dev
+    ports:
+      - "127.0.0.1:3000:3000"
