@@ -1,6 +1,3 @@
-import { Fetcher, Key } from "swr";
-
-export const fetcher: Fetcher<unknown, Key> = (
-  input: RequestInfo,
-  init?: RequestInit
-) => fetch(input, init).then((res) => res.json());
+export function fetcher<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
+  return fetch(input, init).then((res) => res.json());
+}
