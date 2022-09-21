@@ -95,7 +95,7 @@ jobs:
     if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
     strategy:
       matrix:
-        app: [nextjs]
+        app: [nextjs, sertra]
     steps:
       - name: Call deployment workflow
         run: |
