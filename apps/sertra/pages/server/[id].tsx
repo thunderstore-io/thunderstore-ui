@@ -13,6 +13,7 @@ import { FetchListingData } from "../../api/calls";
 import { ServerInfo } from "../../components/ServerInfo";
 import { ServerInstructions } from "../../components/ServerInstructions";
 import styles from "../../styles/ServerDetail.module.css";
+import { HeadWrapper } from "../../components/HeadWrapper";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const res = await fetch(ApiURLs.ServerList);
@@ -52,6 +53,10 @@ const ServerDetail: React.FC<{
 }> = ({ listing_data, mods_data }) => {
   return (
     <div className={styles.container}>
+      <HeadWrapper
+        title={`${listing_data.name} - V-Rising Servers | Thunderstore`}
+        description={listing_data.description}
+      />
       <div className={styles.breadcrumb}>
         <Link href="/">Servers</Link>
         <span className={styles.separator}>&gt;</span>

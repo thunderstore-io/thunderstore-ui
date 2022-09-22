@@ -6,6 +6,7 @@ import { getPackageList } from "../api/hooks";
 import { ApiURLs, TsApiURLs } from "../api/urls";
 import { ModSelectorModal } from "../components/mod-selector/modal";
 import styles from "../styles/SubmitServer.module.css";
+import { HeadWrapper } from "../components/HeadWrapper";
 
 export const getStaticProps: GetStaticProps = async () => {
   const fallback: { [key: string]: unknown } = {};
@@ -56,6 +57,10 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
 
   return (
     <SWRConfig value={{ fallback: swrFallback }}>
+      <HeadWrapper
+        title="Submit Server | Thunderstore"
+        description="Submit modded servers to Thunderstores server list"
+      />
       <ModSelectorModal />
 
       <h1 className={styles.formHeader}>Submit Server</h1>
