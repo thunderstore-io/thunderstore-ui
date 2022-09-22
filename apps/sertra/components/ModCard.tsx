@@ -5,21 +5,21 @@ interface ModCard {
   name: string;
   owner: string | null;
   description: string | null;
-  version: string | null;
-  icon_url: string | null;
+  version_number: string | null;
+  icon: string | null;
 }
 
 export const ModCard: React.FC<ModCard> = ({
   name,
   owner,
   description,
-  version,
-  icon_url,
+  version_number,
+  icon,
 }) => (
   <div className={styles.mod}>
     <div className={styles.column}>
       <Image
-        src={icon_url ?? "/ts-logo.svg"}
+        src={icon ?? "/ts-logo.svg"}
         alt=""
         width={64}
         height={64}
@@ -31,7 +31,7 @@ export const ModCard: React.FC<ModCard> = ({
       <p className={styles.description}>{description}</p>
       <div className={styles.artifacts}>
         <div>{owner}</div>
-        <div>{version}</div>
+        <div>{version_number}</div>
       </div>
     </div>
   </div>

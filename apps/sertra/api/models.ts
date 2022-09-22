@@ -48,10 +48,11 @@ export interface TSListingMod {
 
 export interface ListingMod {
   name: string;
+  full_name: string | null;
   owner: string | null;
   description: string | null;
-  version: string | null;
-  icon_url: string | null;
+  version_number: string | null;
+  icon: string | null;
 }
 
 export interface ServerListingDetailData extends ServerListingBase {

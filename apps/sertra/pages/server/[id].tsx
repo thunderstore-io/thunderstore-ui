@@ -76,7 +76,7 @@ const ServerDetail: React.FC<{
             <h2 className={styles.sectionTitle}>Mods</h2>
             <div>
               {mods_data.map((modProps) => (
-                <ModCard key={modProps.name} {...modProps} />
+                <ModCard key={modProps.full_name} {...modProps} />
               ))}
             </div>
           </section>

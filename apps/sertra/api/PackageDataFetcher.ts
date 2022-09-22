@@ -13,35 +13,27 @@ export const FetchListingData = async (listingId: string) => {
     x.json()
   );
   const listing = await listing_data_fetch;
-  const mods = await mod_data_fetch;
+  const mods = (await mod_data_fetch) as TSListingMod[];
 
   const all_versions = new Map();
-  mods.map((mod: TSListingMod) => {
-    mod.versions.map((version) => {
+  for (const mod of mods as Array<TSListingMod>) {
+    const typed_mod = mod as TSListingMod;
+    for (const version of typed_mod.versions as Array<TSListingModVersion>) {
       const version_with_owner = version as TSListingModVersionWithOwner;
       version_with_owner.owner = mod.owner;
       all_versions.set(version_with_owner.full_name, version_with_owner);
-    });
-  });
-  const updated_listing_mods_data = [];
-  for (const mod_ref of listing.mods) {
-    const new_mod_data: ListingMod = {
-      name: "MOD DETAIL FETCH FAILED: " + mod_ref,
-      owner: null,
-      version: null,
-      icon_url: null,
-      description: null,
-    };
-    const mod = all_versions.get(mod_ref);
-    if (mod) {
-      new_mod_data.name = mod.name;
-      new_mod_data.owner = mod.owner;
-      new_mod_data.version = mod.version_number;
-      new_mod_data.icon_url = mod.icon;
-      new_mod_data.description = mod.description;
     }
-    updated_listing_mods_data.push(new_mod_data);
   }
+  const updated_listing_mods_data: Array<ListingMod> = listing.mods.map(
+    (x: string) =>
+      all_versions.get(x) ?? {
+        name: x,
+        owner: null,
+        version_number: null,
+        icon: null,
+        description: null,
+      }
+  );
   return {
     listing_data: listing,
     mods_data: updated_listing_mods_data,
