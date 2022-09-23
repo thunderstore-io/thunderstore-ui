@@ -9,7 +9,7 @@ import {
 } from "../../api/models";
 import { ApiURLs } from "../../api/urls";
 import { ModCard } from "../../components/ModCard";
-import { FetchListingData } from "../../api/PackageDataFetcher";
+import { FetchListingData } from "../../api/calls";
 import { ServerInfo } from "../../components/ServerInfo";
 import { ServerInstructions } from "../../components/ServerInstructions";
 import styles from "../../styles/ServerDetail.module.css";
