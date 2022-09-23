@@ -35,7 +35,8 @@ export const getStaticProps: GetStaticProps<
   // Params is never undefined thanks to NextJS guarantees as long as the file
   // is named appropriately.
   const listingId = context.params!.id; // eslint-disable-line @typescript-eslint/no-non-null-assertion
-  const fetched = await FetchListingData(listingId);
+  const communityId = "v-rising"; // TODO: Make dynamic
+  const fetched = await FetchListingData(listingId, communityId);
   return {
     props: {
       listing_data: fetched.listing_data,

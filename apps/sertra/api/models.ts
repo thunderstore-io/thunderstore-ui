@@ -56,7 +56,7 @@ export interface ListingMod {
 }
 
 export interface ServerListingDetailData extends ServerListingBase {
-  mods: ListingMod[];
+  mods: string[];
 }
 
 export interface PaginatedResponse<T> {
