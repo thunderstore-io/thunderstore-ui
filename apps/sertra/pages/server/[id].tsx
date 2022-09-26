@@ -9,7 +9,7 @@ import {
 } from "../../api/models";
 import { ApiURLs } from "../../api/urls";
 import { ModCard } from "../../components/ModCard";
-import { FetchListingData } from "../../api/PackageDataFetcher";
+import { FetchListingData } from "../../api/calls";
 import { ServerInfo } from "../../components/ServerInfo";
 import { ServerInstructions } from "../../components/ServerInstructions";
 import styles from "../../styles/ServerDetail.module.css";
@@ -35,7 +35,8 @@ export const getStaticProps: GetStaticProps<
   // Params is never undefined thanks to NextJS guarantees as long as the file
   // is named appropriately.
   const listingId = context.params!.id; // eslint-disable-line @typescript-eslint/no-non-null-assertion
-  const fetched = await FetchListingData(listingId);
+  const communityId = "v-rising"; // TODO: Make dynamic
+  const fetched = await FetchListingData(listingId, communityId);
   return {
     props: {
       listing_data: fetched.listing_data,
@@ -76,7 +77,7 @@ const ServerDetail: React.FC<{
             <h2 className={styles.sectionTitle}>Mods</h2>
             <div>
               {mods_data.map((modProps) => (
-                <ModCard key={modProps.name} {...modProps} />
+                <ModCard key={modProps.full_name} {...modProps} />
               ))}
             </div>
           </section>
