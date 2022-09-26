@@ -50,3 +50,9 @@ h1:before {
   background-color: currentColor;
 }
 ```
+
+## Adding meta tags to a page
+
+When possible possible component in `HeadWrapper.tsx` should be used to add meta tags. This way the meta tag handling is centralized and can be edited easily for the whole site.
+
+If there are tags missing from the `HeadWrapper` please improve it.
