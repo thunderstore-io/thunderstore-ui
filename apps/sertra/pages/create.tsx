@@ -1,12 +1,12 @@
 import { GetStaticProps, NextPage } from "next";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { SWRConfig } from "swr";
-import { useForm, SubmitHandler } from "react-hook-form";
 
 import { getPackageList } from "../api/hooks";
 import { ApiURLs, TsApiURLs } from "../api/urls";
+import { HeadWrapper } from "../components/HeadWrapper";
 import { ModSelectorModal } from "../components/mod-selector/modal";
 import styles from "../styles/SubmitServer.module.css";
-import { HeadWrapper } from "../components/HeadWrapper";
 
 export const getStaticProps: GetStaticProps = async () => {
   const fallback: { [key: string]: unknown } = {};

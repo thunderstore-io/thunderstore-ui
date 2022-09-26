@@ -1,19 +1,19 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 
-import Logo from "/public/ts-logo.svg";
 import {
-  ServerListingDetailData,
-  ServerListingData,
   ListingMod,
+  ServerListingData,
+  ServerListingDetailData,
 } from "../../api/models";
 import { ApiURLs } from "../../api/urls";
+import { HeadWrapper } from "../../components/HeadWrapper";
 import { ModCard } from "../../components/ModCard";
 import { FetchListingData } from "../../api/calls";
 import { ServerInfo } from "../../components/ServerInfo";
 import { ServerInstructions } from "../../components/ServerInstructions";
 import styles from "../../styles/ServerDetail.module.css";
-import { HeadWrapper } from "../../components/HeadWrapper";
+import Logo from "/public/ts-logo.svg";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const res = await fetch(ApiURLs.ServerList);
