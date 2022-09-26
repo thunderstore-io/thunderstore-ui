@@ -58,7 +58,7 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
   return (
     <SWRConfig value={{ fallback: swrFallback }}>
       <HeadWrapper
-        title="Submit Server | Thunderstore"
+        title="Submit Server"
         description="Submit modded servers to Thunderstores server list"
       />
       <ModSelectorModal />

@@ -7,7 +7,7 @@ interface HeadProps {
 
 export const HeadWrapper: React.FC<HeadProps> = ({ title, description }) => (
   <Head>
-    <title>{title}</title>
+    <title>{`${title} | Thunderstore`}</title>
     <meta key="og:title" property="og:title" content={title} />
     <meta
       key="og:description"
