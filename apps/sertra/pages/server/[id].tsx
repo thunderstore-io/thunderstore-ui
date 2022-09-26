@@ -54,7 +54,7 @@ const ServerDetail: React.FC<{
   return (
     <div className={styles.container}>
       <HeadWrapper
-        title={`${listing_data.name} - V-Rising Servers`}
+        title={`${listing_data.name} - ${listing_data.community} Servers`}
         description={listing_data.description}
       />
       <div className={styles.breadcrumb}>
