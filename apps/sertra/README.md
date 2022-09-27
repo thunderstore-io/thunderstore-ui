@@ -32,7 +32,6 @@ import Logo from "/public/ts-logo.svg";
 <Logo fill="red" width="2rem" height="2rem" />
 ```
 
-
 If components are not feasible for some reason, icons can be shown as pseudo
 elements:
 

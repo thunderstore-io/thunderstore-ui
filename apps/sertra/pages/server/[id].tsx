@@ -53,9 +53,7 @@ const ServerDetail: React.FC<{
   mods_data: ListingMod[];
 }> = ({ listing_data, mods_data }) => {
   const [showPopup, setShowPopup] = useState(false);
-  const togglePopup = () => {
-    setShowPopup((current) => !current);
-  };
+  const togglePopup = () => setShowPopup((current) => !current);
   return (
     <div className={styles.container}>
       <div className={styles.breadcrumb}>
