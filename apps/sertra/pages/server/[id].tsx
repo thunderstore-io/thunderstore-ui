@@ -55,9 +55,6 @@ const ServerDetail: React.FC<{
   const [showPopup, setShowPopup] = useState(false);
   const togglePopup = () => {
     setShowPopup((current) => !current);
-    if (!showPopup) {
-      window.open("ror2mm://");
-    }
   };
   return (
     <div className={styles.container}>
@@ -69,10 +66,14 @@ const ServerDetail: React.FC<{
 
       <div className={styles.headerRow}>
         <h1 className={styles.listingTitle}>{listing_data.name}</h1>
-        <button className={styles.joinServerButton} onClick={togglePopup}>
+        <a
+          className={styles.joinServerButton}
+          onClick={togglePopup}
+          href={`ror2mm://v1/sync/server/${listing_data.id}/`}
+        >
           <Logo />
           Join Server
-        </button>
+        </a>
         {showPopup ? <LaunchingModManPopup togglePopup={togglePopup} /> : null}
       </div>
 
