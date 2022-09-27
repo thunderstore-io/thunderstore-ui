@@ -1,5 +1,6 @@
 import { GetModMan } from "./buttons/GetModMan";
 import styles from "./LaunchingModManPopup.module.css";
+import CloseWindowX from "/public/fa-svgs/x-solid.svg";
 
 interface JoinServerProps {
   setClose: () => void;
@@ -14,7 +15,7 @@ export const LaunchingModManPopup: React.FC<JoinServerProps> = ({
         <section className={styles.header}>
           <h2>Launching Mod Manager...</h2>
           <button className={styles.closeWindow} onClick={setClose}>
-            X
+            <CloseWindowX />
           </button>
         </section>
         <ol className={styles.instructions}>

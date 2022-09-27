@@ -26,15 +26,8 @@
 }
 
 .closeWindow {
-  font-family: "Font Awesome 6 Pro";
-  font-style: normal;
-  font-weight: 900;
-  font-size: 22px;
-  color: var(--color-coolgray);
   background: none;
-  color: inherit;
   border: none;
-  outline: inherit;
 }
 
 .instructions {
