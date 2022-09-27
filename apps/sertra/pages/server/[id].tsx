@@ -54,7 +54,7 @@ const ServerDetail: React.FC<{
 }> = ({ listing_data, mods_data }) => {
   const [showPopup, setShowPopup] = useState(false);
   const togglePopup = () => {
-    setShowPopup(!showPopup);
+    setShowPopup((current) => !current);
     if (!showPopup) {
       window.open("ror2mm://");
     }
@@ -73,7 +73,7 @@ const ServerDetail: React.FC<{
           <Logo />
           Join Server
         </button>
-        {showPopup ? <LaunchingModManPopup setClose={togglePopup} /> : null}
+        {showPopup ? <LaunchingModManPopup togglePopup={togglePopup} /> : null}
       </div>
 
       <div className={styles.contentRow}>
