@@ -10,7 +10,7 @@
   font-size: 0.875rem;
   font-weight: 700;
 
-  border: 1px solid #ccddfe;
+  border: 1px solid var(--color-babyblue);
   background: #202941;
-  color: #ccddfe;
+  color: var(--color-babyblue);
 }

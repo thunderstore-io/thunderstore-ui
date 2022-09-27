@@ -11,7 +11,7 @@
 }
 
 .popUp {
-  background: #242e48;
+  background: var(--color-blue);
   border-radius: 0.5rem;
 }
 
@@ -30,7 +30,7 @@
   font-style: normal;
   font-weight: 900;
   font-size: 22px;
-  color: #93a0c2;
+  color: var(--color-coolgray);
   background: none;
   color: inherit;
   border: none;
@@ -42,7 +42,7 @@
   flex-direction: column;
   margin: 0rem 14.7885rem 2rem 2rem;
   padding-left: 1rem;
-  color: #ccddfe;
+  color: var(--color-babyblue);
 }
 
 .footer {
@@ -53,7 +53,7 @@
   padding-right: 2rem;
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
-  background: #202941;
+  background: var(--color-background);
   width: 100%;
   height: 100%;
   border-radius: 0.5rem;
@@ -63,5 +63,5 @@
   font-size: 14px;
   display: flex;
   flex-grow: 1;
-  color: #ccddfe;
+  color: var(--color-babyblue);
 }
