@@ -4,13 +4,12 @@
   justify-content: center;
   align-items: center;
 
-  width: 9rem;
-  height: 2rem;
+  padding: 0.3em 1em;
+  border: 1px solid var(--color-babyblue);
 
   font-size: 0.875rem;
   font-weight: 700;
 
-  border: 1px solid var(--color-babyblue);
-  background: #202941;
+  background: var(--bg-regular);
   color: var(--color-babyblue);
 }

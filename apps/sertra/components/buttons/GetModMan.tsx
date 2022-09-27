@@ -1,18 +1,12 @@
 import styles from "./GetModMan.module.css";
 
 export const GetModMan = () => (
-  <button
-    type="button"
+  <a
     className={styles.button}
-    onClick={(e) => {
-      e.preventDefault();
-      window.open(
-        "https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager",
-        "_blank",
-        "noopener,noreferrer"
-      );
-    }}
+    href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+    target="_blank"
+    rel="noopener noreferrer"
   >
     Get mod manager
-  </button>
+  </a>
 );
