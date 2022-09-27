@@ -29,7 +29,7 @@ export const LaunchingModManPopup: React.FC<JoinServerProps> = ({
           <span className={styles.footerLeft}>
             Don&apos;t have Thunderstore Mod Manager yet?
           </span>
-          <div className={styles.footerRight}>{<GetModMan />}</div>
+          {<GetModMan />}
         </section>
       </section>
     </div>
