@@ -1,7 +1,8 @@
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { GetModMan } from "./buttons/GetModMan";
 import styles from "./LaunchingModManPopup.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 interface JoinServerProps {
   togglePopup: () => void;
