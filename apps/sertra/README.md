@@ -32,6 +32,16 @@ import Logo from "/public/ts-logo.svg";
 <Logo fill="red" width="2rem" height="2rem" />
 ```
 
+## Using FontAwesome SVGs
+As per example we can import the SVGs from fortawesome and use them by assigning the icon kwarg to the FontAwesomeIcon component.
+
+```typescript
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+
+<FontAwesomeIcon icon={faXmark} />
+```
+
 If components are not feasible for some reason, icons can be shown as pseudo
 elements:
 
