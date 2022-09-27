@@ -1,4 +1,4 @@
-import { GetModMan } from "./GetModMan";
+import { GetModMan } from "./buttons/GetModMan";
 import styles from "./LaunchingModManPopup.module.css";
 
 interface JoinServerProps {
