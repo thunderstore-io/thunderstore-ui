@@ -1,5 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
+import { useState } from "react";
 
 import Logo from "/public/ts-logo.svg";
 import {
@@ -8,6 +9,7 @@ import {
   ListingMod,
 } from "../../api/models";
 import { ApiURLs } from "../../api/urls";
+import { LaunchingModManPopup } from "../../components/LaunchingModManPopup";
 import { ModCard } from "../../components/ModCard";
 import { FetchListingData } from "../../api/calls";
 import { ServerInfo } from "../../components/ServerInfo";
@@ -50,6 +52,8 @@ const ServerDetail: React.FC<{
   listing_data: ServerListingDetailData;
   mods_data: ListingMod[];
 }> = ({ listing_data, mods_data }) => {
+  const [showPopup, setShowPopup] = useState(false);
+  const togglePopup = () => setShowPopup((current) => !current);
   return (
     <div className={styles.container}>
       <div className={styles.breadcrumb}>
@@ -60,10 +64,15 @@ const ServerDetail: React.FC<{
 
       <div className={styles.headerRow}>
         <h1 className={styles.listingTitle}>{listing_data.name}</h1>
-        <button className={styles.joinServerButton}>
+        <a
+          className={styles.joinServerButton}
+          onClick={togglePopup}
+          href={`ror2mm://v1/sync/server/${listing_data.id}/`}
+        >
           <Logo />
           Join Server
-        </button>
+        </a>
+        {showPopup ? <LaunchingModManPopup togglePopup={togglePopup} /> : null}
       </div>
 
       <div className={styles.contentRow}>

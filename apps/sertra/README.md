@@ -50,3 +50,13 @@ h1:before {
   background-color: currentColor;
 }
 ```
+
+## Using FontAwesome SVGs
+As per example we can import the SVGs from fortawesome and use them by assigning the icon kwarg to the FontAwesomeIcon component.
+
+```typescript
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+
+<FontAwesomeIcon icon={faXmark} />
+```
