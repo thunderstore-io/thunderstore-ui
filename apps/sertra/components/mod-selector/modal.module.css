@@ -1,7 +1,26 @@
-.modal {
+.background {
+  visibility: hidden;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
   border-radius: var(--border-radius-normal);
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.background.visible {
+  visibility: visible;
+  display: flex;
+}
+
+.modal {
   display: flex;
   flex-direction: column;
+  width: 71.25rem;
   overflow: hidden;
 }
 
@@ -17,6 +36,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.headerTitle svg {
+  width: 1.375rem;
+  height: 1.375rem;
 }
 
 .headerContent {

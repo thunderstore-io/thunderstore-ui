@@ -1,6 +1,7 @@
 import { GetStaticProps, NextPage } from "next";
-import { SWRConfig } from "swr";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { SWRConfig } from "swr";
 
 import { getPackageList } from "../api/hooks";
 import { ApiURLs, TsApiURLs } from "../api/urls";
@@ -30,6 +31,7 @@ type Inputs = {
 const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
   swrFallback,
 }) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const {
     register,
     handleSubmit,
@@ -56,7 +58,10 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
 
   return (
     <SWRConfig value={{ fallback: swrFallback }}>
-      <ModSelectorModal />
+      <ModSelectorModal
+        close={() => setModalVisible(false)}
+        visible={modalVisible}
+      />
 
       <h1 className={styles.formHeader}>Submit Server</h1>
 
@@ -111,10 +116,15 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
         </div>
 
         <div className={styles.row}>
-          <label htmlFor={"mods"}>Mods</label>
-          <select className={styles.input} id={"mods"} {...register("mods")}>
-            {/* TODO: Populate */}
-          </select>
+          <label htmlFor="mods">Mods</label>
+          <button
+            id="mods"
+            className={styles.selectMods}
+            type="button"
+            onClick={() => setModalVisible(true)}
+          >
+            Select Mods
+          </button>
         </div>
 
         <div className={styles.row}>

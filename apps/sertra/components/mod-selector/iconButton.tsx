@@ -1,9 +1,9 @@
-import { DetailedHTMLProps } from "react";
+import { DetailedHTMLProps, ReactNode } from "react";
 
 import styles from "./iconButton.module.css";
 
 interface IconButtonProps {
-  content: string;
+  content: ReactNode;
   buttonProps?: DetailedHTMLProps<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
