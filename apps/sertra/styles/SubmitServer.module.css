@@ -19,8 +19,17 @@
   gap: 0.75rem;
 }
 
-.row label {
+.colSm {
   flex: 0 0 14.5rem;
+}
+
+.colLg {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.row label {
   font-weight: 700;
   line-height: 2.75rem;
 }

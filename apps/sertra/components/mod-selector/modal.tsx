@@ -73,7 +73,7 @@ interface ModSelectorProps extends Closable {
 }
 
 export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
-  const { visible, close } = props;
+  const { close, visible } = props;
   const [selectedMods, setSelectedMods] = useState<ModPackage[]>([]);
 
   const selectableMods: ModPackage[] = useMemo(() => {
