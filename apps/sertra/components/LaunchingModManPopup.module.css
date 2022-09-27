@@ -5,47 +5,67 @@
   position: fixed;
   left: 0;
   top: 0;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   background: rgba(0, 0, 0, 0.6);
 }
 
 .popUp {
-  background: var(--color-blue);
   border-radius: 0.5rem;
+  overflow: hidden;
+  background: var(--color-blue);
 }
 
 .header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 1.525rem 2rem 1rem 2rem;
+  padding: 1.525rem 2rem 0rem 2rem;
 }
 
 .closeWindow {
-  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
+  padding: 0;
+  width: 2.5em;
+  height: 2.5em;
+  border-radius: 0.25em;
+  background: none;
+}
+
+.closeWindow:hover {
+  background: var(--bg-dark);
+}
+
+.closeWindow svg {
+  width: 2em;
+  height: 2em;
+  color: var(--text-secondary);
+}
+
+.content {
+  padding: 1.25rem 2rem;
 }
 
 .instructions {
-  display: flex;
-  flex-direction: column;
-  margin: 0rem 14rem 2rem 2rem;
+  margin: 0rem;
   padding-left: 1rem;
-  color: var(--color-babyblue);
+  color: var(--accent-secondary);
 }
 
 .footer {
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 1rem;
   padding: 1.25rem 2rem 1.25rem 2rem;
   background: var(--color-background);
-  border-radius: 0.5rem;
 }
 
 .footerLeft {
   font-size: 0.875rem;
   flex-grow: 1;
-  color: var(--color-babyblue);
+  color: var(--accent-secondary);
 }
