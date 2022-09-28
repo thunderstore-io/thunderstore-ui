@@ -14,6 +14,7 @@ import { ModListRow } from "./list";
 import styles from "./modal.module.css";
 import { SearchBox } from "./search";
 import { ModPackage } from "../../api/models";
+import { modPackageSort } from "../../utils/types";
 
 interface Closable {
   close: () => void;
@@ -99,7 +100,9 @@ export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
   const selectMod: (selection: ModPackage) => void = useMemo(() => {
     return (selection: ModPackage) => {
       if (selectableMods.find((x) => x.id == selection.id)) {
-        setTempSelected((current) => [...current, selection]);
+        setTempSelected((current) =>
+          [...current, selection].sort(modPackageSort)
+        );
       }
     };
   }, [selectableMods, setTempSelected]);
@@ -142,8 +145,9 @@ export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
             <ModListRow
               key={mod.id}
               modPackage={mod}
-              showControls={true}
               onDelete={deselectMod}
+              setTempSelected={setTempSelected}
+              showControls={true}
             />
           ))}
         </ModalContent>

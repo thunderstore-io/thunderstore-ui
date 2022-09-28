@@ -1,4 +1,7 @@
+import { Dispatch, SetStateAction } from "react";
+
 import { ModPackage } from "../../api/models";
+import { modPackageSort } from "../../utils/types";
 import { IconButton } from "./iconButton";
 import styles from "./list.module.css";
 
@@ -27,19 +30,32 @@ export const ModRowInfo: React.FC<ModRowInfoProps> = ({
 };
 
 export interface ModRowControlsProps {
-  versionNumbers: string[];
-  onDelete?: () => void;
+  modPackage: ModPackage;
+  onDelete?: (selection: ModPackage) => void;
+  setTempSelected?: Dispatch<SetStateAction<ModPackage[]>>;
 }
 export const ModRowControls: React.FC<ModRowControlsProps> = ({
-  versionNumbers,
+  modPackage,
   onDelete,
+  setTempSelected,
 }) => {
+  const onChange = (selectedVersion: string) =>
+    setTempSelected?.((current) => {
+      const otherMods = current.filter((m) => m.id !== modPackage.id);
+      const updatedMod = { ...modPackage, selectedVersion };
+      return [...otherMods, updatedMod].sort(modPackageSort);
+    });
+
   return (
     <>
       <div className={styles.colSmall}>
         <div className={styles.selectWrapper}>
-          <select className={styles.versionSelect}>
-            {versionNumbers.map((vernum) => {
+          <select
+            className={styles.versionSelect}
+            onChange={(e) => onChange(e.target.value)}
+            value={modPackage.selectedVersion}
+          >
+            {modPackage.versionNumbers.map((vernum) => {
               return (
                 <option key={vernum} value={vernum}>
                   {vernum}
@@ -50,22 +66,21 @@ export const ModRowControls: React.FC<ModRowControlsProps> = ({
         </div>
       </div>
       <div className={styles.colSmall}>
-        <IconButton content={"🗑"} buttonProps={{ onClick: onDelete }} />
+        <IconButton
+          content={"🗑"}
+          buttonProps={{ onClick: () => onDelete?.(modPackage) }}
+        />
       </div>
     </>
   );
 };
 
-export interface ModListEntryProps {
-  modPackage: ModPackage;
+export interface ModListEntryProps extends ModRowControlsProps {
   showControls?: boolean;
-  onDelete?: (selection: ModPackage) => void;
 }
-export const ModListRow: React.FC<ModListEntryProps> = ({
-  modPackage,
-  showControls,
-  onDelete,
-}) => {
+export const ModListRow: React.FC<ModListEntryProps> = (props) => {
+  const { modPackage, showControls } = props;
+
   return (
     <div className={styles.row}>
       <ModRowInfo
@@ -73,12 +88,7 @@ export const ModListRow: React.FC<ModListEntryProps> = ({
         packageName={modPackage.packageName}
         ownerName={modPackage.ownerName}
       />
-      {showControls && (
-        <ModRowControls
-          versionNumbers={modPackage.versionNumbers}
-          onDelete={() => onDelete && onDelete(modPackage)}
-        />
-      )}
+      {showControls && <ModRowControls {...props} />}
     </div>
   );
 };
