@@ -9,10 +9,11 @@ export interface ListingMod {
 
 export type ModPackage = {
   iconUrl: string;
-  packageName: string;
-  ownerName: string;
-  versionNumbers: string[];
   id: string;
+  ownerName: string;
+  packageName: string;
+  selectedVersion: string;
+  versionNumbers: string[];
 };
 
 export interface Package {

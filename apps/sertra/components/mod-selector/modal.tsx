@@ -142,8 +142,9 @@ export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
             <ModListRow
               key={mod.id}
               modPackage={mod}
-              showControls={true}
               onDelete={deselectMod}
+              setTempSelected={setTempSelected}
+              showControls={true}
             />
           ))}
         </ModalContent>
