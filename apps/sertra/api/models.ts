@@ -97,3 +97,11 @@ export interface Package {
   categories: string[];
   versions: PackageVersion[];
 }
+
+export type ModPackage = {
+  iconUrl: string;
+  packageName: string;
+  ownerName: string;
+  versionNumbers: string[];
+  id: string;
+};

@@ -3,11 +3,12 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { PropsWithChildren, useMemo, useState } from "react";
 
 import { ButtonPrimary, ButtonSecondary } from "./button";
-import { MockPackages, ModPackage } from "./data";
 import { IconButton } from "./iconButton";
 import { ModListRow } from "./list";
 import styles from "./modal.module.css";
 import { SearchBox } from "./search";
+import { ModPackage, Package } from "../../api/models";
+import { packagesToModPackages } from "../../utils/types";
 
 interface Closable {
   close: () => void;
@@ -69,16 +70,18 @@ export const NoModsSelectedNotice: React.FC = () => {
 };
 
 interface ModSelectorProps extends Closable {
+  packages: Package[];
   visible: boolean;
 }
 
 export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
-  const { close, visible } = props;
+  const { close, packages, visible } = props;
   const [selectedMods, setSelectedMods] = useState<ModPackage[]>([]);
 
-  const selectableMods: ModPackage[] = useMemo(() => {
-    return MockPackages.filter((x) => !selectedMods.find((y) => y.id == x.id));
-  }, [selectedMods]);
+  const selectableMods = useMemo(() => {
+    const availableMods = packagesToModPackages(packages);
+    return availableMods.filter((x) => !selectedMods.find((y) => y.id == x.id));
+  }, [packages, selectedMods]);
 
   const selectMod: (selection: ModPackage) => void = useMemo(() => {
     return (selection: ModPackage) => {
