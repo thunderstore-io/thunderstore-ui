@@ -59,8 +59,7 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
       description: data.description,
       community: "v-rising",
       connection_data: data.connectionInfo,
-      // TODO: Populate this with mod ids etc
-      mods: ["1", "2", "3"],
+      mods: selectedMods.map((m) => `${m.id}-${m.selectedVersion}`),
       is_pvp: data.mode === "pvp",
       requires_password: data.isPasswordProtected,
     };
