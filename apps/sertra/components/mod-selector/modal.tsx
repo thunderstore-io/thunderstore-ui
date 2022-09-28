@@ -1,14 +1,19 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { PropsWithChildren, useMemo, useState } from "react";
+import {
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  useMemo,
+  useState,
+} from "react";
 
 import { ButtonPrimary, ButtonSecondary } from "./button";
 import { IconButton } from "./iconButton";
 import { ModListRow } from "./list";
 import styles from "./modal.module.css";
 import { SearchBox } from "./search";
-import { ModPackage, Package } from "../../api/models";
-import { packagesToModPackages } from "../../utils/types";
+import { ModPackage } from "../../api/models";
 
 interface Closable {
   close: () => void;
@@ -43,12 +48,16 @@ export const ModalContent: React.FC<PropsWithChildren> = ({ children }) => {
   return <div className={styles.content}>{children}</div>;
 };
 
-export const ModalFooter: React.FC<Closable> = ({ close }) => {
+interface ModalFooterProps extends Closable {
+  save: () => void;
+}
+
+export const ModalFooter: React.FC<ModalFooterProps> = ({ close, save }) => {
   return (
     <div className={styles.footer}>
       <div className={styles.footerButtonRow}>
         <ButtonSecondary onClick={close}>Cancel</ButtonSecondary>
-        <ButtonPrimary>Done</ButtonPrimary>
+        <ButtonPrimary onClick={save}>Done</ButtonPrimary>
       </div>
     </div>
   );
@@ -70,39 +79,53 @@ export const NoModsSelectedNotice: React.FC = () => {
 };
 
 interface ModSelectorProps extends Closable {
-  packages: Package[];
+  allMods: ModPackage[];
+  currentlySelected: ModPackage[];
+  setCurrentlySelected: Dispatch<SetStateAction<ModPackage[]>>;
   visible: boolean;
 }
 
 export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
-  const { close, packages, visible } = props;
-  const [selectedMods, setSelectedMods] = useState<ModPackage[]>([]);
+  const { allMods, close, currentlySelected, setCurrentlySelected, visible } =
+    props;
+
+  // Changes done in the modal are temporary until user clicks "Done".
+  const [tempSelected, setTempSelected] = useState(currentlySelected);
 
   const selectableMods = useMemo(() => {
-    const availableMods = packagesToModPackages(packages);
-    return availableMods.filter((x) => !selectedMods.find((y) => y.id == x.id));
-  }, [packages, selectedMods]);
+    return allMods.filter((x) => !tempSelected.find((y) => y.id == x.id));
+  }, [allMods, tempSelected]);
 
   const selectMod: (selection: ModPackage) => void = useMemo(() => {
     return (selection: ModPackage) => {
       if (selectableMods.find((x) => x.id == selection.id)) {
-        setSelectedMods(selectedMods.concat([selection]));
+        setTempSelected((current) => [...current, selection]);
       }
     };
-  }, [selectableMods, selectedMods, setSelectedMods]);
+  }, [selectableMods, setTempSelected]);
 
   const deselectMod: (selection: ModPackage) => void = useMemo(() => {
     return (selection: ModPackage) => {
-      if (selectedMods.find((x) => x.id == selection.id)) {
-        setSelectedMods(selectedMods.filter((y) => y.id != selection.id));
+      if (tempSelected.find((x) => x.id == selection.id)) {
+        setTempSelected(tempSelected.filter((y) => y.id != selection.id));
       }
     };
-  }, [selectedMods, setSelectedMods]);
+  }, [tempSelected, setTempSelected]);
+
+  const resetAndClose = () => {
+    setTempSelected(currentlySelected);
+    close();
+  };
+
+  const saveAndClose = () => {
+    setCurrentlySelected(tempSelected);
+    close();
+  };
 
   return (
     <div className={`${styles.background} ${visible ? styles.visible : ""}`}>
       <div className={styles.modal}>
-        <ModalHeader title={"Mods"} close={close}>
+        <ModalHeader title={"Mods"} close={resetAndClose}>
           <SearchBox
             placeholder={"Search mods..."}
             options={selectableMods}
@@ -114,20 +137,17 @@ export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
           />
         </ModalHeader>
         <ModalContent>
-          {!selectedMods.length && <NoModsSelectedNotice />}
-          {!!selectedMods.length &&
-            selectedMods.map((data) => {
-              return (
-                <ModListRow
-                  key={data.id}
-                  modPackage={data}
-                  showControls={true}
-                  onDelete={deselectMod}
-                />
-              );
-            })}
+          {!tempSelected.length && <NoModsSelectedNotice />}
+          {tempSelected.map((mod) => (
+            <ModListRow
+              key={mod.id}
+              modPackage={mod}
+              showControls={true}
+              onDelete={deselectMod}
+            />
+          ))}
         </ModalContent>
-        <ModalFooter close={close} />
+        <ModalFooter close={resetAndClose} save={saveAndClose} />
       </div>
     </div>
   );

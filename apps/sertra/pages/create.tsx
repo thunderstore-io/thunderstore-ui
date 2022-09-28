@@ -1,12 +1,14 @@
 import { GetStaticProps, NextPage } from "next";
-import { FC, PropsWithChildren, useState } from "react";
+import { FC, PropsWithChildren, useMemo, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { SWRConfig } from "swr";
 
 import { getPackageList, usePackageList } from "../api/hooks";
+import { ModPackage } from "../api/models";
 import { ApiURLs, TsApiURLs } from "../api/urls";
 import { ModSelectorModal } from "../components/mod-selector/modal";
 import styles from "../styles/SubmitServer.module.css";
+import { packagesToModPackages } from "../utils/types";
 
 export const getStaticProps: GetStaticProps = async () => {
   const fallback: { [key: string]: unknown } = {};
@@ -37,7 +39,14 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
   swrFallback,
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedMods, setSelectedMods] = useState<ModPackage[]>([]);
   const { data: packages } = usePackageList("v-rising"); // TODO: error handling
+
+  const allMods = useMemo(
+    () => packagesToModPackages(packages ?? []),
+    [packages]
+  );
+
   const {
     register,
     handleSubmit,
@@ -65,8 +74,10 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
   return (
     <SWRConfig value={{ fallback: swrFallback }}>
       <ModSelectorModal
+        allMods={allMods}
         close={() => setModalVisible(false)}
-        packages={packages ?? []}
+        currentlySelected={selectedMods}
+        setCurrentlySelected={setSelectedMods}
         visible={modalVisible}
       />
 
