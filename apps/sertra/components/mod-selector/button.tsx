@@ -2,26 +2,20 @@ import { PropsWithChildren } from "react";
 
 import styles from "./button.module.css";
 
-interface ButtonBaseProps {
+interface ButtonProps extends PropsWithChildren {
+  onClick?: () => void;
+}
+
+interface ButtonBaseProps extends ButtonProps {
   className: string;
 }
-const ButtonBase: React.FC<PropsWithChildren<ButtonBaseProps>> = ({
-  children,
-  className,
-}) => {
-  return <button className={className}>{children}</button>;
-};
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface ButtonProps {}
-export const ButtonPrimary: React.FC<PropsWithChildren<ButtonProps>> = ({
-  children,
-}) => {
-  return <ButtonBase className={styles.buttonPrimary}>{children}</ButtonBase>;
-};
+const ButtonBase: React.FC<ButtonBaseProps> = (props) => <button {...props} />;
 
-export const ButtonSecondary: React.FC<PropsWithChildren<ButtonProps>> = ({
-  children,
-}) => {
-  return <ButtonBase className={styles.buttonSecondary}>{children}</ButtonBase>;
-};
+export const ButtonPrimary: React.FC<ButtonProps> = (props) => (
+  <ButtonBase className={styles.buttonPrimary} {...props} />
+);
+
+export const ButtonSecondary: React.FC<ButtonProps> = (props) => (
+  <ButtonBase className={styles.buttonSecondary} {...props} />
+);

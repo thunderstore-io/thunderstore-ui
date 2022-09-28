@@ -1,6 +1,7 @@
 import { GetStaticProps, NextPage } from "next";
-import { SWRConfig } from "swr";
+import { FC, PropsWithChildren, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { SWRConfig } from "swr";
 
 import { getPackageList } from "../api/hooks";
 import { ApiURLs, TsApiURLs } from "../api/urls";
@@ -18,6 +19,11 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
+type Wrapper = FC<PropsWithChildren>;
+const Row: Wrapper = (props) => <div className={styles.row} {...props} />;
+const ColSm: Wrapper = (props) => <div className={styles.colSm} {...props} />;
+const ColLg: Wrapper = (props) => <div className={styles.colLg} {...props} />;
+
 type Inputs = {
   serverName: string;
   connectionInfo: string;
@@ -30,6 +36,7 @@ type Inputs = {
 const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
   swrFallback,
 }) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const {
     register,
     handleSubmit,
@@ -56,76 +63,113 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
 
   return (
     <SWRConfig value={{ fallback: swrFallback }}>
-      <ModSelectorModal />
+      <ModSelectorModal
+        close={() => setModalVisible(false)}
+        visible={modalVisible}
+      />
 
       <h1 className={styles.formHeader}>Submit Server</h1>
 
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.row}>
-          <label htmlFor={"game"}>Game</label>
-          <select id={"game"} className={styles.input}>
-            <option value={"v-rising"}>V Rising</option>
-          </select>
-        </div>
+        <Row>
+          <ColSm>
+            <label htmlFor={"game"}>Game</label>
+          </ColSm>
+          <ColLg>
+            <select id={"game"} className={styles.input}>
+              <option value={"v-rising"}>V Rising</option>
+            </select>
+          </ColLg>
+        </Row>
 
-        <div className={styles.row}>
-          <label htmlFor={"serverName"}>Server Name</label>
-          <input
-            className={styles.input}
-            id={"serverName"}
-            type={"text"}
-            {...register("serverName", { required: true })}
-          />
-          {/* TODO: Add styling here */}
-          {errors.serverName?.type === "required" && "Server name is required"}
-        </div>
+        <Row>
+          <ColSm>
+            <label htmlFor={"serverName"}>Server Name</label>
+          </ColSm>
+          <ColLg>
+            <input
+              className={styles.input}
+              id={"serverName"}
+              type={"text"}
+              {...register("serverName", { required: true })}
+            />
+            {/* TODO: Add styling here */}
+            {errors.serverName?.type === "required" &&
+              "Server name is required"}
+          </ColLg>
+        </Row>
 
-        <div className={styles.row}>
-          <label htmlFor={"connectionInfo"}>Connection Info</label>
-          <input
-            className={styles.input}
-            id={"connectionInfo"}
-            type={"text"}
-            {...register("connectionInfo", { required: true })}
-          />
-          {/* TODO: Add styling here */}
-          {errors.connectionInfo?.type === "required" &&
-            "Connection info is required"}
-        </div>
+        <Row>
+          <ColSm>
+            <label htmlFor={"connectionInfo"}>Connection Info</label>
+          </ColSm>
+          <ColLg>
+            <input
+              className={styles.input}
+              id={"connectionInfo"}
+              type={"text"}
+              {...register("connectionInfo", { required: true })}
+            />
+            {/* TODO: Add styling here */}
+            {errors.connectionInfo?.type === "required" &&
+              "Connection info is required"}
+          </ColLg>
+        </Row>
 
-        <div className={styles.row}>
-          <label htmlFor={"description"}>Description</label>
-          <textarea
-            className={styles.textarea}
-            id={"description"}
-            {...register("description")}
-          />
-        </div>
+        <Row>
+          <ColSm>
+            <label htmlFor={"description"}>Description</label>
+          </ColSm>
+          <ColLg>
+            <textarea
+              className={styles.textarea}
+              id={"description"}
+              {...register("description")}
+            />
+          </ColLg>
+        </Row>
 
-        <div className={styles.row}>
-          <label htmlFor={"mode"}>Mode</label>
-          <select className={styles.input} id={"mode"} {...register("mode")}>
-            <option value={"pvp"}>PvP</option>
-            <option value={"pve"}>PvE</option>
-          </select>
-        </div>
+        <Row>
+          <ColSm>
+            <label htmlFor={"mode"}>Mode</label>
+          </ColSm>
+          <ColLg>
+            <select className={styles.input} id={"mode"} {...register("mode")}>
+              <option value={"pvp"}>PvP</option>
+              <option value={"pve"}>PvE</option>
+            </select>
+          </ColLg>
+        </Row>
 
-        <div className={styles.row}>
-          <label htmlFor={"mods"}>Mods</label>
-          <select className={styles.input} id={"mods"} {...register("mods")}>
-            {/* TODO: Populate */}
-          </select>
-        </div>
+        <Row>
+          <ColSm>
+            <label htmlFor="mods">Mods</label>
+          </ColSm>
+          <ColLg>
+            <button
+              id="mods"
+              className={styles.selectMods}
+              type="button"
+              onClick={() => setModalVisible(true)}
+            >
+              Select Mods
+            </button>
+          </ColLg>
+        </Row>
 
-        <div className={styles.row}>
-          <label htmlFor={"isPasswordProtected"}>Password Protected</label>
-          <input
-            className={styles.checkbox}
-            id={"isPasswordProtected"}
-            type={"checkbox"}
-            {...register("isPasswordProtected")}
-          />
-        </div>
+        <Row>
+          <ColSm>
+            <label htmlFor={"isPasswordProtected"}>Password Protected</label>
+          </ColSm>
+          <ColLg>
+            <input
+              className={styles.checkbox}
+              id={"isPasswordProtected"}
+              type={"checkbox"}
+              {...register("isPasswordProtected")}
+            />
+          </ColLg>
+        </Row>
 
         <button id={styles.submit}>Submit</button>
       </form>

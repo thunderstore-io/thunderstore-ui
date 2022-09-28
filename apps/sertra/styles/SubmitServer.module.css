@@ -19,8 +19,17 @@
   gap: 0.75rem;
 }
 
-.row label {
+.colSm {
   flex: 0 0 14.5rem;
+}
+
+.colLg {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.row label {
   font-weight: 700;
   line-height: 2.75rem;
 }
@@ -47,6 +56,14 @@ select.input {
   padding: 1rem;
   overflow-y: auto;
   resize: none;
+}
+
+.selectMods {
+  padding: 0.25em 1em;
+  border: 1px solid var(--accent-primary);
+  font: 700 0.875em/1.2 var(--font-family-body);
+  color: var(--accent-primary);
+  background: var(--bg-regular);
 }
 
 .checkbox {
