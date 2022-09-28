@@ -39,7 +39,7 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
   swrFallback,
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedMods] = useState<ModPackage[]>([]);
+  const [selectedMods, setSelectedMods] = useState<ModPackage[]>([]);
   const { data: packages } = usePackageList("v-rising"); // TODO: error handling
 
   const allMods = useMemo(
@@ -77,6 +77,7 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
         allMods={allMods}
         close={() => setModalVisible(false)}
         currentlySelected={selectedMods}
+        setCurrentlySelected={setSelectedMods}
         visible={modalVisible}
       />
 

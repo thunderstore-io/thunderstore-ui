@@ -1,6 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { PropsWithChildren, useMemo, useState } from "react";
+import {
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  useMemo,
+  useState,
+} from "react";
 
 import { ButtonPrimary, ButtonSecondary } from "./button";
 import { IconButton } from "./iconButton";
@@ -42,12 +48,16 @@ export const ModalContent: React.FC<PropsWithChildren> = ({ children }) => {
   return <div className={styles.content}>{children}</div>;
 };
 
-export const ModalFooter: React.FC<Closable> = ({ close }) => {
+interface ModalFooterProps extends Closable {
+  save: () => void;
+}
+
+export const ModalFooter: React.FC<ModalFooterProps> = ({ close, save }) => {
   return (
     <div className={styles.footer}>
       <div className={styles.footerButtonRow}>
         <ButtonSecondary onClick={close}>Cancel</ButtonSecondary>
-        <ButtonPrimary>Done</ButtonPrimary>
+        <ButtonPrimary onClick={save}>Done</ButtonPrimary>
       </div>
     </div>
   );
@@ -71,11 +81,13 @@ export const NoModsSelectedNotice: React.FC = () => {
 interface ModSelectorProps extends Closable {
   allMods: ModPackage[];
   currentlySelected: ModPackage[];
+  setCurrentlySelected: Dispatch<SetStateAction<ModPackage[]>>;
   visible: boolean;
 }
 
 export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
-  const { allMods, close, currentlySelected, visible } = props;
+  const { allMods, close, currentlySelected, setCurrentlySelected, visible } =
+    props;
 
   // Changes done in the modal are temporary until user clicks "Done".
   const [tempSelected, setTempSelected] = useState(currentlySelected);
@@ -100,10 +112,20 @@ export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
     };
   }, [tempSelected, setTempSelected]);
 
+  const resetAndClose = () => {
+    setTempSelected(currentlySelected);
+    close();
+  };
+
+  const saveAndClose = () => {
+    setCurrentlySelected(tempSelected);
+    close();
+  };
+
   return (
     <div className={`${styles.background} ${visible ? styles.visible : ""}`}>
       <div className={styles.modal}>
-        <ModalHeader title={"Mods"} close={close}>
+        <ModalHeader title={"Mods"} close={resetAndClose}>
           <SearchBox
             placeholder={"Search mods..."}
             options={selectableMods}
@@ -125,7 +147,7 @@ export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
             />
           ))}
         </ModalContent>
-        <ModalFooter close={close} />
+        <ModalFooter close={resetAndClose} save={saveAndClose} />
       </div>
     </div>
   );
