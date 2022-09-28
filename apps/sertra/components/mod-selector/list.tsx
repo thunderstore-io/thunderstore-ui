@@ -1,4 +1,4 @@
-import { ModPackage } from "./data";
+import { ModPackage } from "../../api/models";
 import { IconButton } from "./iconButton";
 import styles from "./list.module.css";
 

@@ -3,7 +3,7 @@ import { FC, PropsWithChildren, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { SWRConfig } from "swr";
 
-import { getPackageList } from "../api/hooks";
+import { getPackageList, usePackageList } from "../api/hooks";
 import { ApiURLs, TsApiURLs } from "../api/urls";
 import { ModSelectorModal } from "../components/mod-selector/modal";
 import styles from "../styles/SubmitServer.module.css";
@@ -37,6 +37,7 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
   swrFallback,
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const { data: packages } = usePackageList("v-rising"); // TODO: error handling
   const {
     register,
     handleSubmit,
@@ -65,6 +66,7 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
     <SWRConfig value={{ fallback: swrFallback }}>
       <ModSelectorModal
         close={() => setModalVisible(false)}
+        packages={packages ?? []}
         visible={modalVisible}
       />
 
