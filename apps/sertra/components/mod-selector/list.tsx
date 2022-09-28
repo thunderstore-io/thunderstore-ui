@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 import { ModPackage } from "../../api/models";
+import { modPackageSort } from "../../utils/types";
 import { IconButton } from "./iconButton";
 import styles from "./list.module.css";
 
@@ -42,7 +43,7 @@ export const ModRowControls: React.FC<ModRowControlsProps> = ({
     setTempSelected?.((current) => {
       const otherMods = current.filter((m) => m.id !== modPackage.id);
       const updatedMod = { ...modPackage, selectedVersion };
-      return [...otherMods, updatedMod];
+      return [...otherMods, updatedMod].sort(modPackageSort);
     });
 
   return (
