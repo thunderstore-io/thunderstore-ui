@@ -1,5 +1,8 @@
 import { ModPackage, Package } from "../api/models";
 
+export const modPackageSort = (a: ModPackage, b: ModPackage) =>
+  a.packageName.localeCompare(b.packageName);
+
 export const packagesToModPackages = (pkgs: Package[]): ModPackage[] =>
   pkgs.map((p) => ({
     iconUrl: p.versions[0].icon, // Latest version is listed first.

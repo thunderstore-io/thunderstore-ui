@@ -8,7 +8,7 @@ import { ModPackage } from "../api/models";
 import { ApiURLs, TsApiURLs } from "../api/urls";
 import { ModSelectorModal } from "../components/mod-selector/modal";
 import styles from "../styles/SubmitServer.module.css";
-import { packagesToModPackages } from "../utils/types";
+import { modPackageSort, packagesToModPackages } from "../utils/types";
 
 export const getStaticProps: GetStaticProps = async () => {
   const fallback: { [key: string]: unknown } = {};
@@ -43,7 +43,7 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
   const { data: packages } = usePackageList("v-rising"); // TODO: error handling
 
   const allMods = useMemo(
-    () => packagesToModPackages(packages ?? []),
+    () => packagesToModPackages(packages ?? []).sort(modPackageSort),
     [packages]
   );
 
