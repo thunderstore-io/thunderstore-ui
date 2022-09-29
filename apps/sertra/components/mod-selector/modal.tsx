@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faIceCream, faXmark } from "@fortawesome/free-solid-svg-icons";
 import {
   Dispatch,
   PropsWithChildren,
@@ -68,10 +68,7 @@ export const ModalFooter: React.FC<ModalFooterProps> = ({ close, save }) => {
 export const NoModsSelectedNotice: React.FC = () => {
   return (
     <div className={styles.noMods}>
-      <FontAwesomeIcon
-        className={styles.noModsIcon}
-        icon={["fas", "ice-cream"]}
-      />
+      <FontAwesomeIcon className={styles.noModsIcon} icon={faIceCream} />
       <p className={styles.noModsText}>
         Vanilla is good, but we want none of that here.
       </p>
