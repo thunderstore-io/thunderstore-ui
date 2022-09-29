@@ -29,26 +29,22 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({
   children,
   close,
   title,
-}) => {
-  return (
-    <div className={styles.header}>
-      <div className={styles.headerTitle}>
-        <div>{title && <h2>{title}</h2>}</div>
-        <div>
-          <IconButton
-            content={<FontAwesomeIcon icon={faXmark} />}
-            buttonProps={{ onClick: close }}
-          />
-        </div>
-      </div>
-      {children && <div className={styles.headerContent}>{children}</div>}
+}) => (
+  <div className={styles.header}>
+    <div className={styles.headerTitle}>
+      <IconButton
+        content={<FontAwesomeIcon icon={faXmark} />}
+        buttonProps={{ onClick: close }}
+      />
+      {title && <h2>{title}</h2>}
     </div>
-  );
-};
+    {children}
+  </div>
+);
 
-export const ModalContent: React.FC<PropsWithChildren> = ({ children }) => {
-  return <div className={styles.content}>{children}</div>;
-};
+export const ModalContent: React.FC<PropsWithChildren> = ({ children }) => (
+  <div className={styles.content}>{children}</div>
+);
 
 interface ModalFooterProps extends Closable {
   save: () => void;
@@ -57,25 +53,21 @@ interface ModalFooterProps extends Closable {
 export const ModalFooter: React.FC<ModalFooterProps> = ({ close, save }) => {
   return (
     <div className={styles.footer}>
-      <div className={styles.footerButtonRow}>
-        <ButtonSecondary onClick={close}>Cancel</ButtonSecondary>
-        <ButtonPrimary onClick={save}>Done</ButtonPrimary>
-      </div>
+      <ButtonSecondary onClick={close}>Cancel</ButtonSecondary>
+      <ButtonPrimary onClick={save}>Done</ButtonPrimary>
     </div>
   );
 };
 
-export const NoModsSelectedNotice: React.FC = () => {
-  return (
-    <div className={styles.noMods}>
-      <FontAwesomeIcon className={styles.noModsIcon} icon={faIceCream} />
-      <p className={styles.noModsText}>
-        Vanilla is good, but we want none of that here.
-      </p>
-      <p className={styles.noModsText}>Add some mods!</p>
-    </div>
-  );
-};
+export const NoModsSelectedNotice: React.FC = () => (
+  <div className={styles.noMods}>
+    <FontAwesomeIcon className={styles.noModsIcon} icon={faIceCream} />
+    <p className={styles.noModsText}>
+      Vanilla is good, but we want none of that here.
+    </p>
+    <p className={styles.noModsText}>Add some mods!</p>
+  </div>
+);
 
 interface ModSelectorProps extends Closable {
   allMods: ModPackage[];
