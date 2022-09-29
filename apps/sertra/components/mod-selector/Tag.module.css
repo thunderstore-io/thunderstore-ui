@@ -1,0 +1,49 @@
+.tag {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  line-height: 1.2;
+  color: var(--accent-secondary);
+  background-color: var(--bg-highlight);
+}
+
+.sm {
+  padding: 0.25rem 0.625rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.lg {
+  padding: 0.5rem 0.625rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.tag button {
+  border: 0;
+  font-size: inherit;
+  color: inherit;
+  background: transparent;
+}
+
+.tagList {
+  margin: 0;
+  padding: 0 0 0.25rem 0;
+  list-style: none;
+}
+
+.tagList li {
+  display: inline-block;
+  margin: 0 0.25rem 0.25rem 0;
+}
+
+.tagList li:last-of-type {
+  margin-right: 0;
+}
+
+.tagList li.others {
+  padding-left: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
