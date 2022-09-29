@@ -11,10 +11,9 @@ export const ServerInstructions: React.FC = () => (
           <strong>Thunderstore Mod Manager</strong>
         </a>
       </li>
-      <li>Click the join server button to launch Mod Manager</li>
-      <li>Sync mods and launch the game in Mod Manager</li>
-      <li>Copy the connection address</li>
-      <li>Use the address in-game to join the server</li>
+      <li>Click the join server button to launch the game</li>
+      <li>Copy the connection information (IP and port)</li>
+      <li>Use the information in-game to join the server</li>
       <li>Enjoy gaming on modded servers!</li>
     </ol>
   </section>
