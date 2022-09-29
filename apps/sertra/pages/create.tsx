@@ -7,6 +7,7 @@ import { getPackageList, usePackageList } from "../api/hooks";
 import { ModPackage } from "../api/models";
 import { ApiURLs, TsApiURLs } from "../api/urls";
 import { ModSelectorModal } from "../components/mod-selector/modal";
+import { TagList, TagProps } from "../components/mod-selector/Tag";
 import styles from "../styles/SubmitServer.module.css";
 import { modPackageSort, packagesToModPackages } from "../utils/types";
 
@@ -52,6 +53,15 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+
+  const modTags = selectedMods.map(
+    (m): TagProps => ({
+      label: m.packageName,
+      onRemove: () =>
+        setSelectedMods((current) => current.filter((x) => x.id !== m.id)),
+      size: "lg",
+    })
+  );
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const prepped_data = {
@@ -157,16 +167,24 @@ const SubmitServer: NextPage<{ swrFallback: { [key: string]: unknown } }> = ({
           <ColSm>
             <label htmlFor="mods">Mods</label>
           </ColSm>
-          <ColLg>
-            <button
-              id="mods"
-              className={styles.selectMods}
-              type="button"
-              onClick={() => setModalVisible(true)}
-            >
-              Select Mods
-            </button>
-          </ColLg>
+          <div className={`${styles.colLg} ${styles.hasSubrows}`}>
+            <Row>
+              <TagList tags={modTags} showMax={4} />
+            </Row>
+            <Row>
+              <button
+                id="mods"
+                className={styles.selectMods}
+                type="button"
+                onClick={() => setModalVisible(true)}
+              >
+                Select Mods
+              </button>
+              <span className={styles.modCount}>
+                {selectedMods.length} mods selected
+              </span>
+            </Row>
+          </div>
         </Row>
 
         <Row>
