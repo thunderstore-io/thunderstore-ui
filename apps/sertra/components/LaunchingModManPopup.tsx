@@ -22,11 +22,16 @@ export const LaunchingModManPopup: React.FC<JoinServerProps> = ({
         </div>
         <div className={styles.content}>
           <ol className={styles.instructions}>
-            <li>Launch Mod Manager</li>
-            <li>Sync mods for selected server</li>
-            <li>Copy the connection address</li>
-            <li>Launch the game through Mod Manager</li>
-            <li>Use the address in-game to join the server</li>
+            <li>
+              Both Thunderstore Mod Manager and the game should now launch
+              automatically
+            </li>
+            <li>Copy the connection information (IP and port)</li>
+            <li>
+              When the game launches, use the information in-game to join the
+              server
+            </li>
+            <li>Enjoy gaming on modded servers!</li>
           </ol>
         </div>
         <div className={styles.footer}>
