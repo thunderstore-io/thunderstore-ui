@@ -53,6 +53,7 @@
   background-color: var(--bg-regular);
   padding: 8px 32px;
   height: 609px;
+  overflow-y: auto;
 }
 
 .noMods {
