@@ -1,4 +1,5 @@
 import { ReactNode, useRef, useState } from "react";
+import { ModPackage } from "../../api/models";
 import styles from "./search.module.css";
 
 interface SearchBoxProps<T> {
@@ -17,6 +18,19 @@ export const SearchBox = <T,>({
   onSelect,
 }: SearchBoxProps<T>) => {
   const [isFocused, setFocused] = useState<boolean>(false);
+
+  const [filteredOptions, setfilteredOptions] = useState(options);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const results = options.filter((option) => {
+      if (option.ownerName.toLowerCase().includes(e.target.value.toLowerCase()))
+        return option;
+      if (
+        option.packageName.toLowerCase().includes(e.target.value.toLowerCase())
+      )
+        return option;
+    });
+    setfilteredOptions(results);
+  };
 
   function focusFirstOption() {
     optionRef.current?.focus();
@@ -74,6 +88,8 @@ export const SearchBox = <T,>({
   const searchBoxRef = useRef<HTMLInputElement>(null);
   const optionRef = useRef<HTMLButtonElement>(null);
 
+  const usedOptions = filteredOptions.length === 0 ? options : filteredOptions;
+
   return (
     <div
       className={styles.searchField}
@@ -93,13 +109,14 @@ export const SearchBox = <T,>({
             className={styles.searchInput}
             type={"text"}
             placeholder={placeholder}
+            onChange={handleChange}
           />
         </div>
       </div>
       {isFocused && (
         <div className={styles.optionsAnchor}>
           <div className={styles.optionsBox}>
-            {options.map((option, i) => {
+            {usedOptions.map((option, i) => {
               return (
                 <button
                   ref={i === 0 ? optionRef : null}
