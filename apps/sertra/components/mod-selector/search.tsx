@@ -1,5 +1,4 @@
 import { ReactNode, useRef, useState } from "react";
-import { ModPackage } from "../../api/models";
 import styles from "./search.module.css";
 
 interface SearchBoxProps<T> {
@@ -8,6 +7,7 @@ interface SearchBoxProps<T> {
   keyExtractor: (option: T) => string | number;
   options: T[];
   onSelect?: (option: T) => void;
+  searchVars: string[];
 }
 
 export const SearchBox = <T,>({
@@ -16,18 +16,19 @@ export const SearchBox = <T,>({
   keyExtractor,
   options,
   onSelect,
+  searchVars,
 }: SearchBoxProps<T>) => {
   const [isFocused, setFocused] = useState<boolean>(false);
 
   const [filteredOptions, setfilteredOptions] = useState(options);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const results = options.filter((option) => {
-      if (option.ownerName.toLowerCase().includes(e.target.value.toLowerCase()))
-        return option;
-      if (
-        option.packageName.toLowerCase().includes(e.target.value.toLowerCase())
-      )
-        return option;
+      for (const searchVar of searchVars) {
+        if (
+          option[searchVar].toLowerCase().includes(e.target.value.toLowerCase())
+        )
+          return option;
+      }
     });
     setfilteredOptions(results);
   };

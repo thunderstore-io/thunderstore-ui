@@ -137,6 +137,7 @@ export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
             )}
             keyExtractor={(option) => option.id}
             onSelect={selectMod}
+            searchVars={["ownerName", "packageName"]}
           />
         </ModalHeader>
         <ModalContent>
