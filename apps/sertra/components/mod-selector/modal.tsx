@@ -4,6 +4,7 @@ import {
   Dispatch,
   PropsWithChildren,
   SetStateAction,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -92,6 +93,11 @@ export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
 
   // Changes done in the modal are temporary until user clicks "Done".
   const [tempSelected, setTempSelected] = useState(currentlySelected);
+
+  useEffect(
+    () => setTempSelected(currentlySelected),
+    [currentlySelected, setTempSelected]
+  );
 
   const selectableMods = useMemo(() => {
     return allMods.filter((x) => !tempSelected.find((y) => y.id == x.id));
