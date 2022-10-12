@@ -25,17 +25,22 @@
 }
 
 .header {
-  background-color: var(--bg-light);
   display: flex;
   flex-direction: column;
-  padding: 24px 32px 16px;
+  padding: 1.5rem 2rem 1rem;
+  background-color: var(--bg-light);
 }
 
 .headerTitle {
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.headerTitle:last-child {
+  margin-bottom: 0;
 }
 
 .headerTitle svg {
@@ -43,34 +48,30 @@
   height: 1.375rem;
 }
 
-.headerContent {
-  margin-top: 16px;
-}
-
 .content {
+  height: 38rem;
   border-top: 1px solid var(--border-regular);
   border-bottom: 1px solid var(--border-regular);
+  padding: 0.5rem 2rem;
+  overflow-y: auto;
   background-color: var(--bg-regular);
-  padding: 8px 32px;
-  height: 609px;
 }
 
 .noMods {
-  height: 100%;
-  padding: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   align-self: stretch;
   flex-grow: 1;
+  height: 100%;
   color: var(--text-secondary);
 }
 
 .noModsIcon {
-  font-size: 128px;
+  margin-bottom: 0.3125em;
+  font-size: 6em;
   color: var(--bg-highlight);
-  margin-bottom: 40px;
 }
 
 .noModsText {
@@ -78,13 +79,10 @@
 }
 
 .footer {
-  background-color: var(--bg-light);
-  padding: 16px 32px;
-}
-
-.footerButtonRow {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: var(--bg-light);
 }
