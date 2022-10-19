@@ -1,20 +1,20 @@
 .background {
-  visibility: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
   display: none;
   align-items: center;
   justify-content: center;
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100vh;
   width: 100vw;
+  height: 100vh;
   border-radius: var(--border-radius-normal);
-  background: rgba(0, 0, 0, 0.6);
+  background: rgb(0 0 0 / 0.6);
+  visibility: hidden;
 }
 
 .background.visible {
-  visibility: visible;
   display: flex;
+  visibility: visible;
 }
 
 .modal {
@@ -50,9 +50,9 @@
 
 .content {
   height: 38rem;
+  padding: 0.5rem 2rem;
   border-top: 1px solid var(--border-regular);
   border-bottom: 1px solid var(--border-regular);
-  padding: 0.5rem 2rem;
   overflow-y: auto;
   background-color: var(--bg-regular);
 }
@@ -60,18 +60,18 @@
 .noMods {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  align-self: stretch;
   flex-grow: 1;
+  align-items: center;
+  align-self: stretch;
+  justify-content: center;
   height: 100%;
   color: var(--text-secondary);
 }
 
 .noModsIcon {
-  margin-bottom: 0.3125em;
-  font-size: 6em;
+  margin-bottom: 0.313em;
   color: var(--bg-highlight);
+  font-size: 6em;
 }
 
 .noModsText {

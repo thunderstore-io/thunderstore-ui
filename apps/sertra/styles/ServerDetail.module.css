@@ -3,8 +3,8 @@
 }
 
 .breadcrumb {
-  font-size: 0.875rem;
   color: var(--color-babyblue);
+  font-size: 0.875rem;
 }
 
 .separator {
@@ -13,11 +13,10 @@
 
 .headerRow {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  column-gap: 4em;
-  justify-content: space-between;
+  flex-flow: row wrap;
   align-items: flex-start;
+  justify-content: space-between;
+  column-gap: 4em;
 }
 
 .listingTitle {
@@ -27,14 +26,14 @@
 }
 
 .joinServerButton {
-  flex: 0 0 11rem;
   display: flex;
+  flex: 0 0 11rem;
   align-items: center;
   justify-content: center;
-  height: 2.6875em;
+  height: 2.75em;
   border: 0;
-  font: 700 1rem/1.2 var(--font-family-body);
   color: var(--color-background);
+  font: 700 1rem/1.2 var(--font-family-body);
   background-color: var(--color-orange);
 }
 
@@ -50,25 +49,25 @@
 
 .columnLeft {
   display: flex;
-  flex-direction: column;
   flex: 1.43 1 20rem;
+  flex-direction: column;
 }
 
 .columnRight {
   display: flex;
-  flex-direction: column;
   flex: 1 1 20rem;
+  flex-direction: column;
 }
 
 .sectionTitle {
-  margin: 2em 0 1em 0;
-  font: 700 1.125rem/1.22 var(--font-family-header);
+  margin: 2em 0 1em;
   color: var(--color-babyblue);
+  font: 700 1.125rem/1.22 var(--font-family-header);
 }
 
 .description {
   margin-bottom: 0;
-  border: 0.125em solid var(--color-lightblue);
   padding: 1.5em 2em;
+  border: 0.125em solid var(--color-lightblue);
   background-color: var(--color-blue);
 }

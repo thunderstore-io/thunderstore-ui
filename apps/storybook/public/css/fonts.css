@@ -1,38 +1,38 @@
 /* Set up fonts for old browsers, only the weights used in Figma designs */
 @font-face {
-  font-family: Exo2;
-  src: url("/fonts/Exo2-Medium.ttf");
   font-weight: 500;
+  font-family: "Exo2";
+  src: url("/fonts/Exo2-Medium.ttf");
 }
 
 @font-face {
-  font-family: Exo2;
-  src: url("/fonts/Exo2-SemiBold.ttf");
   font-weight: 600;
+  font-family: "Exo2";
+  src: url("/fonts/Exo2-SemiBold.ttf");
 }
 
 @font-face {
-  font-family: Exo2;
-  src: url("/fonts/Exo2-Bold.ttf");
   font-weight: 700;
+  font-family: "Exo2";
+  src: url("/fonts/Exo2-Bold.ttf");
 }
 
 @font-face {
-  font-family: Exo2;
-  src: url("/fonts/Exo2-ExtraBold.ttf");
   font-weight: 800;
+  font-family: "Exo2";
+  src: url("/fonts/Exo2-ExtraBold.ttf");
 }
 
 @font-face {
+  font-weight: 700;
   font-family: Raleway;
   src: url("/fonts/Raleway-Bold.ttf");
-  font-weight: 700;
 }
 
 @font-face {
+  font-weight: 900;
   font-family: Raleway;
   src: url("/fonts/Raleway-Black.ttf");
-  font-weight: 900;
 }
 
 /*
@@ -42,20 +42,20 @@ are in TrueType format.
 */
 @supports (font-variation-settings: normal) {
   @font-face {
-    font-family: Raleway;
-    src: url("/fonts/Raleway-VariableFont_wght.ttf")
-        format("woff2 supports variations"),
-      url("/fonts/Raleway-VariableFont_wght.ttf") format("woff2-variations");
     font-weight: 100 900;
+    font-family: Raleway;
     font-stretch: 25% 151%;
+    src:
+      url("/fonts/Raleway-VariableFont_wght.ttf") format("woff2 supports variations"),
+      url("/fonts/Raleway-VariableFont_wght.ttf") format("woff2-variations");
   }
 
   @font-face {
-    font-family: Exo2;
-    src: url("/fonts/Exo2-VariableFont_wght.ttf")
-        format("woff2 supports variations"),
-      url("/fonts/Exo2-VariableFont_wght.ttf") format("woff2-variations");
     font-weight: 100 900;
+    font-family: "Exo2";
     font-stretch: 25% 151%;
+    src:
+      url("/fonts/Exo2-VariableFont_wght.ttf") format("woff2 supports variations"),
+      url("/fonts/Exo2-VariableFont_wght.ttf") format("woff2-variations");
   }
 }

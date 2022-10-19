@@ -1,11 +1,12 @@
 .headerCloseButton {
-  color: var(--text-secondary);
-  border-radius: var(--border-radius-normal);
-  border-width: 0;
   width: 36px;
   height: 36px;
+  border-width: 0;
+  border-radius: var(--border-radius-normal);
+  color: var(--text-secondary);
   background-color: transparent;
 }
+
 .headerCloseButton:focus-visible,
 .headerCloseButton:focus,
 .headerCloseButton:hover {

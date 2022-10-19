@@ -1,10 +1,10 @@
 h1.header {
   width: 100%;
   margin: 0;
+  color: var(--color-babyblue);
   font-weight: 500;
   font-size: 0.875rem;
   line-height: 1.4;
-  color: var(--color-babyblue);
 }
 
 h2.header {
@@ -29,20 +29,20 @@ h2.header {
 .tableHeader,
 .row {
   flex-direction: row;
+  gap: 1rem;
   align-items: center;
   justify-content: center;
   height: 2.875rem;
-  padding: 0.75rem 1rem;
   margin-bottom: 0.5rem;
-  gap: 1rem;
+  padding: 0.75rem 1rem;
   font-size: 1rem;
   line-height: 1.4;
 }
 
 .tableHeader {
   margin-top: 2.375rem;
-  font-weight: 700;
   color: var(--color-babyblue);
+  font-weight: 700;
 }
 
 .listings {
@@ -52,9 +52,9 @@ h2.header {
 }
 
 .row {
-  background-color: var(--color-blue);
   border: 2px solid var(--color-lightblue);
   font-weight: 500;
+  background-color: var(--color-blue);
   cursor: pointer;
 }
 
@@ -94,8 +94,8 @@ h2.header {
 .paginator button {
   padding: 0.5rem;
   border: none;
-  background-color: transparent;
   color: var(--color-coolgray);
   font: 500 1rem/1.2 var(--font-family-body);
+  background-color: transparent;
   cursor: pointer;
 }
