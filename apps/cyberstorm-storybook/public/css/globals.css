@@ -1,0 +1,60 @@
+:root {
+  --color-cyber-green: var(--color-cyber-green--50);
+  --color-danger: var(--color-red--50);
+  --color-purple: var(--color-purple--50);
+
+
+  --color-surface--1: var(--color-default-purple--1);
+  --color-surface--2: var(--color-default-purple--2);
+  --color-surface--3: var(--color-default-purple--3);
+  --color-surface--4: var(--color-default-purple--4);
+
+  --color-border: var(--color-default-purple--5);
+
+
+  --color-cyber-green--90: #D3FFEF;
+  --color-cyber-green--80: #91FFD8;
+  --color-cyber-green--70: #7BFFD0;
+  --color-cyber-green--60: #4FFFC0;
+  --color-cyber-green--50: #23FFB0;
+  --color-cyber-green--40: #1CCC8D;
+  --color-cyber-green--30: #15996A;
+  --color-cyber-green--20: #0E6646;
+  --color-cyber-green--10: #031912;
+
+  --color-red--90: #FCD7DE;
+  --color-red--80: #F9AFBD;
+  --color-red--70: #F7889C;
+  --color-red--60: #F4607B;
+  --color-red--50: #F1385A;
+  --color-red--40: #C12D48;
+  --color-red--30: #912236;
+  --color-red--20: #601624;
+  --color-red--10: #300B12;
+
+
+  --color-purple--90: #EBD6FA;
+  --color-purple--80: #D8ACF4;
+  --color-purple--70: #C483EF;
+  --color-purple--60: #B159E9;
+  --color-purple--50: #9D30E4;
+  --color-purple--40: #7E26B6;
+  --color-purple--30: #5E1D89;
+  --color-purple--20: #3F135B;
+  --color-purple--10: #1F0A2E;
+
+  --color-default-purple--1: #090710;
+  --color-default-purple--2: #15131D;
+  --color-default-purple--3: #231F36;
+  --color-default-purple--4: #35324F;
+  --color-default-purple--5: #39345B;
+
+}
+
+.label {
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+}
