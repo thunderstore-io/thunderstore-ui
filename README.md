@@ -115,6 +115,7 @@ up the whole service stack. Additionally it showcases the existing components,
 promoting reusability.
 
 To start Storybook, run `yarn workspace @thunderstore/storybook storybook`.
+To start Cyberstorm Storybook, run `yarn workspace @thunderstore/cyberstorm-storybook storybook`.
 Storybook can then be accessed at [http://localhost:6006/].
 
 When creating new components for `@thunderstore/components`, add stories for
