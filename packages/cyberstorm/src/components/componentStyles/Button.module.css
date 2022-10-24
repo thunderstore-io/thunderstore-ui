@@ -1,19 +1,97 @@
-.btn {
+.button {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 0.625rem 1rem;
-  gap: 1rem;
   flex: none;
-  flex-grow: 0;
-  border-radius: 0.5rem;
+  gap: var(--gap-medium);
+
+  padding: var(--padding-medium-small) var(--padding-medium);
+  border-radius: var(--size-small);
+
+  background-clip: padding-box, border-box;
+  --bg-color: var(--color-surface--3);
+  background-color: var(--bg-color);
+  --text-color: var(--color-white);
+  color: var(--text-color);
 }
 
-.btn-danger {
-  background: var(--color-danger);
+.button--default {
+  --text-color: var(--color-white);
+  --bg-color: var(--color-surface--3);
+}
+.button--default:hover {
+  --bg-color: var(--color-surface--4);
+  outline: 2px solid var(--color-border-2);
 }
 
-.btn-primary {
-  background: var(--color-cyber-green);
+.button--default-dark {
+  --text-color: var(--color-white);
+  --bg-color: var(--color-surface--1);
+}
+
+.button--default-dark:hover {
+  --bg-color: var(--color-surface--2);
+  outline: 2px solid var(--color-border-2);
+}
+
+.button--primary {
+  --text-color: var(--color-black);
+  --bg-color: var(--color-cyber-green);
+}
+
+.button--primary:hover {
+  --bg-color: var(--color-cyber-green--40);
+}
+
+.button--danger {
+  --text-color: var(--color-white);
+  --bg-color: var(--color-red);
+}
+
+.button--danger:hover {
+  --bg-color: var(--color-red--40);
+}
+
+.button--default-with-border {
+  --bg-color: var(--color-surface--3);
+  --text-color: var(--color-white);
+  outline: 2px solid var(--color-border-2);
+}
+
+.button--default-with-border:hover {
+  --bg-color: var(--color-surface--4);
+  outline: 2px solid var(--color-border-3);
+}
+
+.button--special-green {
+  --text-color: var(--color-white);
+  background-image: var(--color-gradient-blue-green--darker),
+  var(--color-gradient-blue-green);
+  border: 2px solid;
+  border-image-source: var(--color-gradient-blue-green);
+  box-shadow: 0 0 var(--size-medium) 0 var(--color-cyber-green--20);
+}
+
+.button--special-green:hover {
+  background-image: var(--color-gradient-blue-green--dark),
+  var(--color-gradient-blue-green--light);
+  border: 2px solid;
+  border-image-source: var(--color-gradient-blue-green--light);
+  box-shadow: 0 0 var(--size-medium) var(--color-cyber-green--40);
+}
+
+.button--special-purple {
+  background-image: var(--color-gradient-purple-green--darker),
+  var(--color-gradient-purple-green);
+  --text-color: var(--color-white);
+  border: 2px solid;
+  border-image-source: var(--color-gradient-purple-green);
+}
+
+.button--special-purple:hover {
+  background-image: var(--color-gradient-purple-green--dark), var(--color-gradient-purple-green--light);
+  border: 2px solid;
+  border-image-source: var(--color-gradient-purple-green--light);
+  box-shadow: 0 var(--size-small) var(--size-medium) 0 var(--color-purple--30);
 }

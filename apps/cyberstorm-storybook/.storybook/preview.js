@@ -6,7 +6,7 @@ export const parameters = {
   backgrounds: {
     default: "thunderstore",
     values: [
-      { name: "thunderstore", value: "#231F36" },
+      { name: "thunderstore", value: "#1E1E1E" },
     ],
   },
   controls: {
