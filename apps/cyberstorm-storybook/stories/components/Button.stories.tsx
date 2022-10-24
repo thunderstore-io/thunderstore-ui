@@ -21,7 +21,7 @@ DefaultButton.args = {
 const DefaultDarkButton = Template.bind({});
 DefaultDarkButton.args = {
   label: "Categories",
-  buttonStyle: "default-dark",
+  buttonStyle: "defaultDark",
   rightIcon: <FontAwesomeIcon fixedWidth={true} icon={faChevronDown} />,
 };
 
@@ -45,21 +45,21 @@ DangerButton.args = {
 const DefaultButtonWithBorder = Template.bind({});
 DefaultButtonWithBorder.args = {
   label: "Categories",
-  buttonStyle: "default-with-border",
+  buttonStyle: "defaultWithBorder",
   rightIcon: <FontAwesomeIcon fixedWidth={true} icon={faChevronDown} />,
 };
 
 const SpecialGreenButton = Template.bind({});
 SpecialGreenButton.args = {
   label: "Categories",
-  buttonStyle: "special-green",
+  buttonStyle: "specialGreen",
   rightIcon: <FontAwesomeIcon fixedWidth={true} icon={faChevronDown} />,
 };
 
 const SpecialPurpleButton = Template.bind({});
 SpecialPurpleButton.args = {
   label: "Categories",
-  buttonStyle: "special-purple",
+  buttonStyle: "specialPurple",
   rightIcon: <FontAwesomeIcon fixedWidth={true} icon={faChevronDown} />,
 };
 

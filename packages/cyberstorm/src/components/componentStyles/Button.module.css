@@ -16,55 +16,55 @@
   color: var(--text-color);
 }
 
-.button--default {
+.button__default {
   --text-color: var(--color-white);
   --bg-color: var(--color-surface--3);
 }
-.button--default:hover {
+.button__default:hover {
   --bg-color: var(--color-surface--4);
   outline: 2px solid var(--color-border-2);
 }
 
-.button--default-dark {
+.button__defaultDark {
   --text-color: var(--color-white);
   --bg-color: var(--color-surface--1);
 }
 
-.button--default-dark:hover {
+.button__defaultDark:hover {
   --bg-color: var(--color-surface--2);
   outline: 2px solid var(--color-border-2);
 }
 
-.button--primary {
+.button__primary {
   --text-color: var(--color-black);
   --bg-color: var(--color-cyber-green);
 }
 
-.button--primary:hover {
+.button__primary:hover {
   --bg-color: var(--color-cyber-green--40);
 }
 
-.button--danger {
+.button__danger {
   --text-color: var(--color-white);
   --bg-color: var(--color-red);
 }
 
-.button--danger:hover {
+.button__danger:hover {
   --bg-color: var(--color-red--40);
 }
 
-.button--default-with-border {
+.button__defaultWithBorder {
   --bg-color: var(--color-surface--3);
   --text-color: var(--color-white);
   outline: 2px solid var(--color-border-2);
 }
 
-.button--default-with-border:hover {
+.button__defaultWithBorder:hover {
   --bg-color: var(--color-surface--4);
   outline: 2px solid var(--color-border-3);
 }
 
-.button--special-green {
+.button__specialGreen {
   --text-color: var(--color-white);
   background-image: var(--color-gradient-blue-green--darker),
   var(--color-gradient-blue-green);
@@ -73,7 +73,7 @@
   box-shadow: 0 0 var(--size-medium) 0 var(--color-cyber-green--20);
 }
 
-.button--special-green:hover {
+.button__specialGreen:hover {
   background-image: var(--color-gradient-blue-green--dark),
   var(--color-gradient-blue-green--light);
   border: 2px solid;
@@ -81,7 +81,7 @@
   box-shadow: 0 0 var(--size-medium) var(--color-cyber-green--40);
 }
 
-.button--special-purple {
+.button__specialPurple {
   background-image: var(--color-gradient-purple-green--darker),
   var(--color-gradient-purple-green);
   --text-color: var(--color-white);
@@ -89,7 +89,7 @@
   border-image-source: var(--color-gradient-purple-green);
 }
 
-.button--special-purple:hover {
+.button__specialPurple:hover {
   background-image: var(--color-gradient-purple-green--dark), var(--color-gradient-purple-green--light);
   border: 2px solid;
   border-image-source: var(--color-gradient-purple-green--light);
