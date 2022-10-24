@@ -10,14 +10,17 @@ export interface ButtonProps {
 }
 
 /**
- * Generic Button component
+ * Cyberstorm Button component
  */
 export const Button: React.FC<ButtonProps> = (props) => {
   const { label, leftIcon, rightIcon, buttonStyle, onClick } = props;
   const stylesImport = styles;
 
   return (
-    <button className={"padding-1 button button--" + buttonStyle} onClick={onClick}>
+    <button
+      className={"padding-1 button button--" + buttonStyle}
+      onClick={onClick}
+    >
       {leftIcon}
       {label ? <div className="label">{label}</div> : null}
       {rightIcon}
