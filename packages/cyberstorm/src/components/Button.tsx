@@ -17,7 +17,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
   const stylesImport = styles;
 
   return (
-    <button className={"btn btn-" + buttonStyle} onClick={onClick}>
+    <button className={"padding-1 button button--" + buttonStyle} onClick={onClick}>
       {leftIcon}
       {label ? <div className="label">{label}</div> : null}
       {rightIcon}
