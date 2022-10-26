@@ -15,11 +15,12 @@ export interface ButtonProps {
 export const Button: React.FC<ButtonProps> = (props) => {
   const { label, leftIcon, rightIcon, buttonStyle, onClick } = props;
   const stylesImport = styles;
+  const additionalStyle = buttonStyle ? " button__" + buttonStyle : "";
 
   return (
     <button
       type="button"
-      className={"button button__" + buttonStyle}
+      className={"button" + additionalStyle}
       onClick={onClick}
     >
       {leftIcon}
