@@ -15,7 +15,9 @@ export interface ButtonProps {
 export const Button: React.FC<ButtonProps> = (props) => {
   const { label, leftIcon, rightIcon, buttonStyle, onClick } = props;
   const stylesImport = styles;
-  const additionalStyle = buttonStyle ? " button__" + buttonStyle : "";
+  const additionalStyle = buttonStyle
+    ? " button__" + buttonStyle
+    : " button__default";
 
   return (
     <button
