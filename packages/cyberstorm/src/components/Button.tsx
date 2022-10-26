@@ -3,8 +3,8 @@ import styles from "./componentStyles/Button.module.css";
 
 export interface ButtonProps {
   label?: string;
-  leftIcon?: string;
-  rightIcon?: string;
+  leftIcon?: Element;
+  rightIcon?: Element;
   buttonStyle?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
@@ -17,9 +17,13 @@ export const Button: React.FC<ButtonProps> = (props) => {
   const stylesImport = styles;
 
   return (
-    <button className={"button button__" + buttonStyle} onClick={onClick}>
+    <button
+      type="button"
+      className={"button button__" + buttonStyle}
+      onClick={onClick}
+    >
       {leftIcon}
-      {label ? <div className="label">{label}</div> : null}
+      {label ? <div className="buttonLabel">{label}</div> : null}
       {rightIcon}
     </button>
   );
