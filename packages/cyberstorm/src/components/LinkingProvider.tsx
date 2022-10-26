@@ -1,7 +1,7 @@
 /**
  * Implementation-agnostic context provider for navigation.
  *
- * @thunderstore/components aims to be reusable. Therefore the links
+ * @thunderstore/cyberstorm aims to be reusable. Therefore the links
  * used in the components, by default, render nothing. It's up to the
  * app using the components to define how the links are rendered and
  * inject the definitions with a context provider that wraps the
@@ -39,8 +39,7 @@ export const thunderstoreLinkProps: ThunderstoreLinkProps = {
 };
 
 // Accepting any and all props is required to keep the linking
-// implementation-agnostic. E.g. an implementation with Chakra has all
-// kinds of custom properties.
+// implementation-agnostic.
 export interface AnyProps {
   [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   queryParams?: string;
@@ -49,7 +48,7 @@ export interface AnyProps {
 type NoRequiredProps = (props: AnyProps) => RE | null;
 type PackageProps = { community: string; namespace: string; package: string };
 
-// STEP 3 of adding bew link definitions:
+// STEP 3 of adding new link definitions:
 // Declare and document any links used in the components here.
 export interface LinkLibrary {
   /** Creates a link pointing to URL prop */
@@ -87,9 +86,6 @@ const library: LinkLibrary = {
   PackageUpload: noop,
   Team: noop,
 };
-
-// OPTIONAL STEP 5 of adding new link definitions:
-// Add the link to ./Links.tsx for easier importing.
 
 // Define LinkingContext with the no-op LinkLibrary as the default
 // value. If no overriding provider is defined in the context where the

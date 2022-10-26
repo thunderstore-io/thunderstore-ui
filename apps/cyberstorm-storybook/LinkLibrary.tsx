@@ -1,31 +1,14 @@
-/* eslint-disable prettier/prettier */
-import {
-  Link as ChakraLink,
-  LinkProps as ChakraLinkProps,
-} from "@chakra-ui/react";
-import {
-  LinkLibrary,
-  thunderstoreLinkProps,
-  ThunderstoreLinkProps,
-} from "@thunderstore/components";
+import { LinkLibrary, ThunderstoreLinkProps } from "@thunderstore/components";
 
-interface LinkProps extends ChakraLinkProps, ThunderstoreLinkProps {
+interface LinkProps extends ThunderstoreLinkProps {
   url: string;
 }
 
 const Link = (props: LinkProps): React.ReactElement => {
-  const { url, children, ...chakraProps } = props;
-
-  for (const key in thunderstoreLinkProps) {
-    delete chakraProps[key as keyof ThunderstoreLinkProps];
-  }
+  const { url, children } = props;
 
   // Render links as spans so clicking them does nothing.
-  return (
-    <ChakraLink href={url} {...chakraProps} as="span">
-      {children}
-    </ChakraLink>
-  );
+  return <a href={url}>{children}</a>;
 };
 
 const library: LinkLibrary = {

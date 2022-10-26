@@ -110,34 +110,23 @@
   --color-border-2: var(--color-default-purple--7);
   --color-border-3: var(--color-default-purple--8);
 
-  --color-gradient-blue-green--darker: linear-gradient(283.56deg, #062131 0%, #102B20 100%);
-  --color-gradient-blue-green--dark: linear-gradient(283.56deg, #0B4162 0%, #205740 100%);
-  --color-gradient-blue-green: linear-gradient(283.56deg, #1CA3F5 0%, #23FFB0 100%);
-  --color-gradient-blue-green--light: linear-gradient(283.56deg, #49B5F7 0%, #73E1B2 100%);
-  --color-gradient-purple-green--darker: linear-gradient(283.56deg, #1F0A2E 0%, #102B20 100%);
-  --color-gradient-purple-green--dark: linear-gradient(283.56deg, #2F0E44 0%, #0A4C35 100%);
-  --color-gradient-purple-green: linear-gradient(283.56deg, #9D30E4 0%, #23FFB0 100%);
-  --color-gradient-purple-green--light: linear-gradient(283.56deg, #B159E9 0%, #73E1B2 100%);
+  --color-gradient-blue-green--darker: linear-gradient(to left top, #062131 0%, #102B20 100%);
+  --color-gradient-blue-green--dark: linear-gradient(to left top, #0B4162 0%, #205740 100%);
+  --color-gradient-blue-green: linear-gradient(to left top, #1CA3F5 0%, #23FFB0 100%);
+  --color-gradient-blue-green--light: linear-gradient(to left top, #49B5F7 0%, #73E1B2 100%);
+  --color-gradient-purple-green--darker: linear-gradient(to left top, #1F0A2E 0%, #102B20 100%);
+  --color-gradient-purple-green--dark: linear-gradient(to left top, #2F0E44 0%, #0A4C35 100%);
+  --color-gradient-purple-green: linear-gradient(to left top, #9D30E4 0%, #23FFB0 100%);
+  --color-gradient-purple-green--light: linear-gradient(to left top, #B159E9 0%, #73E1B2 100%);
 
 
-  --size-medium: 1rem;
-  --size-medium-small: 0.625rem;
-  --size-small: 0.5rem;
+  --size-m: 1rem;
+  --size-s: 0.625rem;
+  --size-xs: 0.5rem;
 
-  --gap-medium: var(--size-medium);
+  --gap-m: var(--size-m);
 
-  --padding-medium: var(--size-medium);
-  --padding-medium-small: var(--size-medium-small);
+  --padding-m: var(--size-m);
+  --padding-s: var(--size-s);
 }
 
-.label {
-  font-family: 'Sora', sans-serif;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 18px;
-}
-
-.padding-1 {
-  padding: 0.625rem 1rem;
-}

@@ -4,16 +4,26 @@
   justify-content: center;
   align-items: center;
   flex: none;
-  gap: var(--gap-medium);
+  gap: var(--gap-m);
 
-  padding: var(--padding-medium-small) var(--padding-medium);
-  border-radius: var(--size-small);
+  padding: var(--padding-s) var(--padding-m);
+  border-radius: var(--size-xs);
+  border: 2px solid;
 
-  background-clip: padding-box, border-box;
   --bg-color: var(--color-surface--3);
   background-color: var(--bg-color);
   --text-color: var(--color-white);
   color: var(--text-color);
+  --border-color: transparent;
+  border-color: var(--border-color);
+}
+
+.buttonLabel {
+  font-family: 'Sora', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 18px;
 }
 
 .button__default {
@@ -22,7 +32,7 @@
 }
 .button__default:hover {
   --bg-color: var(--color-surface--4);
-  outline: 2px solid var(--color-border-2);
+  --border-color: var(--color-border-2);
 }
 
 .button__defaultDark {
@@ -32,7 +42,7 @@
 
 .button__defaultDark:hover {
   --bg-color: var(--color-surface--2);
-  outline: 2px solid var(--color-border-2);
+  --border-color: var(--color-border-2);
 }
 
 .button__primary {
@@ -56,42 +66,40 @@
 .button__defaultWithBorder {
   --bg-color: var(--color-surface--3);
   --text-color: var(--color-white);
-  outline: 2px solid var(--color-border-2);
+  --border-color: var(--color-border-2);
 }
 
 .button__defaultWithBorder:hover {
   --bg-color: var(--color-surface--4);
-  outline: 2px solid var(--color-border-3);
+  --border-color: var(--color-border-3);
 }
 
 .button__specialGreen {
+  background-clip: padding-box, border-box;
   --text-color: var(--color-white);
   background-image: var(--color-gradient-blue-green--darker),
   var(--color-gradient-blue-green);
-  border: 2px solid;
   border-image-source: var(--color-gradient-blue-green);
-  box-shadow: 0 0 var(--size-medium) 0 var(--color-cyber-green--20);
+  box-shadow: 0 0 var(--size-m) 0 var(--color-cyber-green--20);
 }
 
 .button__specialGreen:hover {
   background-image: var(--color-gradient-blue-green--dark),
   var(--color-gradient-blue-green--light);
-  border: 2px solid;
   border-image-source: var(--color-gradient-blue-green--light);
-  box-shadow: 0 0 var(--size-medium) var(--color-cyber-green--40);
+  box-shadow: 0 0 var(--size-m) var(--color-cyber-green--40);
 }
 
 .button__specialPurple {
+  background-clip: padding-box, border-box;
   background-image: var(--color-gradient-purple-green--darker),
   var(--color-gradient-purple-green);
   --text-color: var(--color-white);
-  border: 2px solid;
   border-image-source: var(--color-gradient-purple-green);
 }
 
 .button__specialPurple:hover {
   background-image: var(--color-gradient-purple-green--dark), var(--color-gradient-purple-green--light);
-  border: 2px solid;
   border-image-source: var(--color-gradient-purple-green--light);
-  box-shadow: 0 var(--size-small) var(--size-medium) 0 var(--color-purple--30);
+  box-shadow: 0 var(--size-xs) var(--size-m) 0 var(--color-purple--30);
 }
