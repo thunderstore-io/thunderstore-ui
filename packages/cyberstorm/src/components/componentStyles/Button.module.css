@@ -22,8 +22,8 @@
   font-family: 'Sora', sans-serif;
   font-style: normal;
   font-weight: 600;
-  font-size: 16px;
-  line-height: 18px;
+  font-size: var(--size-m);
+  line-height: 1.125rem;
 }
 
 .button__default {
