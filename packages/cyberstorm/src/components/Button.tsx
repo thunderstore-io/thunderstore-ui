@@ -3,8 +3,8 @@ import styles from "./componentStyles/Button.module.css";
 
 export interface ButtonProps {
   label?: string;
-  leftIcon?: Element;
-  rightIcon?: Element;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
   buttonStyle?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }

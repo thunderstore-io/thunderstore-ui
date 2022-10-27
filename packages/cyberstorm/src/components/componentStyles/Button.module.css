@@ -8,14 +8,14 @@
 
   padding: var(--padding-s) var(--padding-m);
   border-radius: var(--size-xs);
-  border: 2px solid;
 
-  --bg-color: var(--color-surface--3);
-  background-color: var(--bg-color);
   --text-color: var(--color-white);
+  --bg-color: var(--color-surface--3);
+  --button-border-color: transparent;
+  --button-border-width: 2px;
   color: var(--text-color);
-  --border-color: transparent;
-  border-color: var(--border-color);
+  background-color: var(--bg-color);
+  border:var(--button-border-width) solid var(--button-border-color);
 }
 
 .buttonLabel {
@@ -32,7 +32,7 @@
 }
 .button__default:hover {
   --bg-color: var(--color-surface--4);
-  --border-color: var(--color-border-2);
+  --button-border-color: var(--color-border-2);
 }
 
 .button__defaultDark {
@@ -42,7 +42,7 @@
 
 .button__defaultDark:hover {
   --bg-color: var(--color-surface--2);
-  --border-color: var(--color-border-2);
+  --button-border-color: var(--color-border-2);
 }
 
 .button__primary {
@@ -66,40 +66,75 @@
 .button__defaultWithBorder {
   --bg-color: var(--color-surface--3);
   --text-color: var(--color-white);
-  --border-color: var(--color-border-2);
+  --button-border-color: var(--color-border-2);
 }
 
 .button__defaultWithBorder:hover {
   --bg-color: var(--color-surface--4);
-  --border-color: var(--color-border-3);
+  --button-border-color: var(--color-border-3);
 }
 
 .button__specialGreen {
-  background-clip: padding-box, border-box;
+  background: var(--color-gradient-blue-green--darker) padding-box, var(--color-gradient-blue-green) border-box;
+  position: relative;
+  box-shadow: 0 0 var(--size-m) rgb(80 217 159 / 32%);
+  transition:all .12s;
+  z-index:1;
+}
+
+.button__specialGreen::before {
+  content: "";
+  position: absolute;
+  background: var(--color-gradient-blue-green--dark) padding-box, var(--color-gradient-blue-green--light) border-box;
+  top: calc(0px - var(--button-border-width));
+  right: calc(0px - var(--button-border-width));
+  bottom: calc(0px - var(--button-border-width));
+  left: calc(0px - var(--button-border-width));
+  z-index: -1;
+  border: var(--button-border-width) solid transparent;
+  border-radius: var(--size-xs);
+  opacity: 0;
+  transition: all .12s;
   --text-color: var(--color-white);
-  background-image: var(--color-gradient-blue-green--darker),
-  var(--color-gradient-blue-green);
-  border-image-source: var(--color-gradient-blue-green);
-  box-shadow: 0 0 var(--size-m) 0 var(--color-cyber-green--20);
 }
 
 .button__specialGreen:hover {
-  background-image: var(--color-gradient-blue-green--dark),
-  var(--color-gradient-blue-green--light);
-  border-image-source: var(--color-gradient-blue-green--light);
-  box-shadow: 0 0 var(--size-m) var(--color-cyber-green--40);
+  --button-border-color: transparent;
+  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 20%), 0 0 var(--size-l) rgb(80 217 159 / 60%);
+}
+
+.button__specialGreen:hover::before {
+  opacity: 1;
 }
 
 .button__specialPurple {
-  background-clip: padding-box, border-box;
-  background-image: var(--color-gradient-purple-green--darker),
-  var(--color-gradient-purple-green);
+  background: var(--color-gradient-purple-green--darker) padding-box, var(--color-gradient-purple-green) border-box;
+  position: relative;
+  transition:all .12s;
+  z-index:1;
+}
+
+.button__specialPurple::before {
+  content: "";
+  position: absolute;
+  background: var(--color-gradient-purple-green--dark) padding-box, var(--color-gradient-purple-green--light) border-box;
+  top: calc(0px - var(--button-border-width));
+  right: calc(0px - var(--button-border-width));
+  bottom: calc(0px - var(--button-border-width));
+  left: calc(0px - var(--button-border-width));
+  z-index: -1;
+  border: var(--button-border-width) solid transparent;
+  border-radius: var(--size-xs);
+  opacity: 0;
+  transition: all .12s;
   --text-color: var(--color-white);
-  border-image-source: var(--color-gradient-purple-green);
 }
 
 .button__specialPurple:hover {
-  background-image: var(--color-gradient-purple-green--dark), var(--color-gradient-purple-green--light);
-  border-image-source: var(--color-gradient-purple-green--light);
-  box-shadow: 0 var(--size-xs) var(--size-m) 0 var(--color-purple--30);
+  --button-border-color: transparent;
+  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 20%), 0 0 var(--size-l) rgb(157 48 228 / 50%);
+}
+
+.button__specialPurple:hover::before {
+  opacity: 1;
 }
