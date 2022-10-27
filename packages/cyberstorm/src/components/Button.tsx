@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from "react";
+import React, { MouseEventHandler, ReactNode } from "react";
 import styles from "./componentStyles/Button.module.css";
 
 export interface ButtonProps {
