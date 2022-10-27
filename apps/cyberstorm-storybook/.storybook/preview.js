@@ -5,9 +5,7 @@ export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   backgrounds: {
     default: "thunderstore",
-    values: [
-      { name: "thunderstore", value: "#1E1E1E" },
-    ],
+    values: [{ name: "thunderstore", value: "#1E1E1E" }],
   },
   controls: {
     matchers: {

@@ -1,28 +1,28 @@
 .button {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
   flex: none;
+  flex-direction: row;
   gap: var(--gap-m);
+  align-items: center;
+  justify-content: center;
 
   padding: var(--padding-s) var(--padding-m);
+  border: var(--button-border-width) solid var(--button-border-color);
   border-radius: var(--size-xs);
+  color: var(--text-color);
+  background-color: var(--bg-color);
 
   --text-color: var(--color-white);
   --bg-color: var(--color-surface--3);
   --button-border-color: transparent;
   --button-border-width: 2px;
-  color: var(--text-color);
-  background-color: var(--bg-color);
-  border:var(--button-border-width) solid var(--button-border-color);
 }
 
 .buttonLabel {
-  font-family: 'Sora', sans-serif;
-  font-style: normal;
   font-weight: 600;
   font-size: var(--size-m);
+  font-family: Sora, sans-serif;
+  font-style: normal;
   line-height: 1.125rem;
 }
 
@@ -30,6 +30,7 @@
   --text-color: var(--color-white);
   --bg-color: var(--color-surface--3);
 }
+
 .button__default:hover {
   --bg-color: var(--color-surface--4);
   --button-border-color: var(--color-border-2);
@@ -75,17 +76,15 @@
 }
 
 .button__specialGreen {
-  background: var(--color-gradient-blue-green--darker) padding-box, var(--color-gradient-blue-green) border-box;
   position: relative;
-  box-shadow: 0 0 var(--size-m) rgb(80 217 159 / 32%);
-  transition:all .12s;
-  z-index:1;
+  z-index: 1;
+  background: var(--color-gradient-blue-green--darker) padding-box, var(--color-gradient-blue-green) border-box;
+  box-shadow: 0 0 var(--size-m) rgb(80 217 159 / 0.32);
+  transition: all 0.12s;
 }
 
 .button__specialGreen::before {
-  content: "";
   position: absolute;
-  background: var(--color-gradient-blue-green--dark) padding-box, var(--color-gradient-blue-green--light) border-box;
   top: calc(0px - var(--button-border-width));
   right: calc(0px - var(--button-border-width));
   bottom: calc(0px - var(--button-border-width));
@@ -93,14 +92,18 @@
   z-index: -1;
   border: var(--button-border-width) solid transparent;
   border-radius: var(--size-xs);
+  background: var(--color-gradient-blue-green--dark) padding-box, var(--color-gradient-blue-green--light) border-box;
   opacity: 0;
-  transition: all .12s;
+  transition: all 0.12s;
+  content: "";
+
   --text-color: var(--color-white);
 }
 
 .button__specialGreen:hover {
   --button-border-color: transparent;
-  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 20%), 0 0 var(--size-l) rgb(80 217 159 / 60%);
+
+  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 0.2), 0 0 var(--size-l) rgb(80 217 159 / 0.6);
 }
 
 .button__specialGreen:hover::before {
@@ -108,16 +111,14 @@
 }
 
 .button__specialPurple {
-  background: var(--color-gradient-purple-green--darker) padding-box, var(--color-gradient-purple-green) border-box;
   position: relative;
-  transition:all .12s;
-  z-index:1;
+  z-index: 1;
+  background: var(--color-gradient-purple-green--darker) padding-box, var(--color-gradient-purple-green) border-box;
+  transition: all 0.12s;
 }
 
 .button__specialPurple::before {
-  content: "";
   position: absolute;
-  background: var(--color-gradient-purple-green--dark) padding-box, var(--color-gradient-purple-green--light) border-box;
   top: calc(0px - var(--button-border-width));
   right: calc(0px - var(--button-border-width));
   bottom: calc(0px - var(--button-border-width));
@@ -125,14 +126,18 @@
   z-index: -1;
   border: var(--button-border-width) solid transparent;
   border-radius: var(--size-xs);
+  background: var(--color-gradient-purple-green--dark) padding-box, var(--color-gradient-purple-green--light) border-box;
   opacity: 0;
-  transition: all .12s;
+  transition: all 0.12s;
+  content: "";
+
   --text-color: var(--color-white);
 }
 
 .button__specialPurple:hover {
   --button-border-color: transparent;
-  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 20%), 0 0 var(--size-l) rgb(157 48 228 / 50%);
+
+  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 0.2), 0 0 var(--size-l) rgb(157 48 228 / 0.5);
 }
 
 .button__specialPurple:hover::before {
