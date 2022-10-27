@@ -15,21 +15,39 @@ const DefaultButton = Template.bind({});
 DefaultButton.args = {
   label: "Categories",
   buttonStyle: "default",
-  rightIcon: <FontAwesomeIcon fixedWidth={true} icon={faChevronDown} />,
+  rightIcon: (
+    <FontAwesomeIcon
+      fixedWidth={true}
+      icon={faChevronDown}
+      className={"buttonIcon"}
+    />
+  ),
 };
 
 const DefaultDarkButton = Template.bind({});
 DefaultDarkButton.args = {
   label: "Categories",
   buttonStyle: "defaultDark",
-  rightIcon: <FontAwesomeIcon fixedWidth={true} icon={faChevronDown} />,
+  rightIcon: (
+    <FontAwesomeIcon
+      fixedWidth={true}
+      icon={faChevronDown}
+      className={"buttonIcon"}
+    />
+  ),
 };
 
 const PrimaryButton = Template.bind({});
 PrimaryButton.args = {
   label: "Categories",
   buttonStyle: "primary",
-  rightIcon: <FontAwesomeIcon fixedWidth={true} icon={faChevronDown} />,
+  rightIcon: (
+    <FontAwesomeIcon
+      fixedWidth={true}
+      icon={faChevronDown}
+      className={"buttonIcon"}
+    />
+  ),
 };
 
 const DangerButton = Template.bind({});
@@ -46,21 +64,39 @@ const DefaultButtonWithBorder = Template.bind({});
 DefaultButtonWithBorder.args = {
   label: "Categories",
   buttonStyle: "defaultWithBorder",
-  rightIcon: <FontAwesomeIcon fixedWidth={true} icon={faChevronDown} />,
+  rightIcon: (
+    <FontAwesomeIcon
+      fixedWidth={true}
+      icon={faChevronDown}
+      className={"buttonIcon"}
+    />
+  ),
 };
 
 const SpecialGreenButton = Template.bind({});
 SpecialGreenButton.args = {
   label: "Categories",
   buttonStyle: "specialGreen",
-  rightIcon: <FontAwesomeIcon fixedWidth={true} icon={faChevronDown} />,
+  rightIcon: (
+    <FontAwesomeIcon
+      fixedWidth={true}
+      icon={faChevronDown}
+      className={"buttonIcon"}
+    />
+  ),
 };
 
 const SpecialPurpleButton = Template.bind({});
 SpecialPurpleButton.args = {
   label: "Categories",
   buttonStyle: "specialPurple",
-  rightIcon: <FontAwesomeIcon fixedWidth={true} icon={faChevronDown} />,
+  rightIcon: (
+    <FontAwesomeIcon
+      fixedWidth={true}
+      icon={faChevronDown}
+      className={"buttonIcon"}
+    />
+  ),
 };
 
 export {
