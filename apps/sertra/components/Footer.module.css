@@ -14,8 +14,8 @@
 .content h2,
 .content a {
   margin: 0;
-  font: 0.875rem/1.4 var(--font-family-body);
   color: var(--color-coolgray);
+  font: 0.875rem/1.4 var(--font-family-body);
 }
 
 .service {

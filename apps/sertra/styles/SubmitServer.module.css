@@ -1,5 +1,5 @@
 .formHeader {
-  margin: 1.2rem 0 2.25rem 0;
+  margin: 1.2rem 0 2.25rem;
   font: 900 1.875rem/1.2 var(--font-family-header);
 }
 
@@ -9,15 +9,15 @@
   gap: 1rem;
   width: 100%;
   max-width: 71.25rem;
-  margin: 0 auto 2rem auto;
+  margin: 0 auto 2rem;
 }
 
 .row {
-  width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
   gap: 0.75rem;
+  justify-content: flex-start;
+  width: 100%;
 }
 
 .colSm {
@@ -25,8 +25,8 @@
 }
 
 .colLg {
-  flex: 1;
   display: flex;
+  flex: 1;
   align-items: center;
 }
 
@@ -51,9 +51,9 @@
   padding: 0.25rem 1rem;
   border: 0;
   border-radius: 0.25rem;
-  background: var(--color-darkblue);
   color: var(--text-primary);
   font: 1rem/1.25 var(--font-family-body);
+  background: var(--color-darkblue);
 }
 
 select.input {
@@ -70,14 +70,14 @@ select.input {
 .selectMods {
   padding: 0.25em 1em;
   border: 1px solid var(--accent-primary);
-  font: 700 0.875em/1.2 var(--font-family-body);
   color: var(--accent-primary);
+  font: 700 0.875em/1.2 var(--font-family-body);
   background: var(--bg-regular);
 }
 
 .modCount {
-  font-weight: 500;
   color: var(--accent-secondary);
+  font-weight: 500;
 }
 
 .checkbox {
@@ -94,10 +94,10 @@ select.input {
 #submit {
   margin: 2.5rem 0 0 15.25rem;
   border: none;
-  outline: none;
-  background: var(--color-orange);
   color: var(--bg-regular);
   font: 700 1.1rem/2.5 var(--font-family-body);
+  background: var(--color-orange);
+  outline: none;
   cursor: pointer;
 }
 

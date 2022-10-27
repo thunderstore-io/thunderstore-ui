@@ -10,20 +10,18 @@
   --color-lightblue115: #49567a; /* Lightened by 15% */
   --color-orange: #ffa96b;
   --color-orange99: #fca668; /* Darkened by 1% */
-
-  --font-family-body: Exo2, sans-serif;
-  --font-family-header: Raleway, sans-serif;
-
+  --font-family-body: exo2, sans-serif;
+  --font-family-header: raleway, sans-serif;
   --max-width-content: 73.25rem; /* 1140px + 2x16px padding */
 }
 
 html,
 body {
-  background-color: var(--bg-regular);
-  padding: 0;
   margin: 0;
-  font-family: var(--font-primary);
+  padding: 0;
   color: white;
+  font-family: var(--font-primary);
+  background-color: var(--bg-regular);
 }
 
 #__next {
@@ -48,14 +46,14 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-secondary);
   font-weight: 900;
+  font-family: var(--font-secondary);
 }
 
 h2 {
+  margin: 0;
   font-size: 30px;
   line-height: 35px;
-  margin: 0;
 }
 
 button,
@@ -65,6 +63,7 @@ input {
   outline: var(--border-active) none 1px;
   cursor: pointer;
 }
+
 input[type="checkbox"] {
   outline-offset: 2px;
 }
@@ -87,8 +86,8 @@ textarea:active,
 input:focus,
 input:focus-visible,
 input:active {
-  outline-style: solid;
   outline-width: 2px;
+  outline-style: solid;
 }
 
 textarea:focus,
@@ -104,10 +103,12 @@ input::placeholder {
   color: var(--text-secondary);
   opacity: 1;
 }
+
 input:-ms-input-placeholder {
   color: var(--text-secondary);
   opacity: 1;
 }
+
 input::-ms-input-placeholder {
   color: var(--text-secondary);
   opacity: 1;
@@ -117,7 +118,7 @@ button:active {
   filter: brightness(85%);
 }
 
-:root {
+:root { /* stylelint-disable-line no-duplicate-selectors */
   --bg-highlight: #353e58;
   --bg-light: #242e48;
   --bg-regular: #202941;
@@ -126,36 +127,67 @@ button:active {
   --border-active: #3182ce;
   --accent-primary: #ffa96b;
   --accent-secondary: #ccddfe;
-  --text-primary: #ffffff;
+  --text-primary: #fff;
   --text-secondary: #93a0c2;
-  --font-primary: "Exo2", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  --font-secondary: "Raleway", -apple-system, BlinkMacSystemFont, Segoe UI,
-    Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+  --font-primary:
+    exo2,
+    -apple-system,
+    blinkmacsystemfont,
+    segoe ui,
+    roboto,
+    oxygen,
+    ubuntu,
+    cantarell,
+    fira sans,
+    droid sans,
+    helvetica neue,
+    sans-serif;
+  --font-secondary:
+    raleway,
+    -apple-system,
+    blinkmacsystemfont,
+    segoe ui,
+    roboto,
+    oxygen,
+    ubuntu,
+    cantarell,
+    fira sans,
+    droid sans,
+    helvetica neue,
     sans-serif;
   --border-radius-normal: 4px;
 }
 
 @font-face {
-  font-family: Raleway;
   font-weight: 100 900;
+  font-family: Raleway;
+
   /* TODO: Add font alternatives */
-  src: local(Raleway),
-    url(../public/fonts/Raleway-VariableFont_wght.ttf) format("truetype");
+  src:
+    local(raleway),
+    url("../public/fonts/Raleway-VariableFont_wght.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: "Exo2";
   font-weight: 100 900;
-  src: local(Exo2),
-    url(../public/fonts/Exo2-VariableFont_wght.ttf) format("truetype"),
-    local(-apple-system), local(BlinkMacSystemFont), local(Segoe UI),
-    local(Roboto), local(Oxygen), local(Ubuntu), local(Cantarell),
-    local(Fira Sans), local(Droid Sans), local(Helvetica Neue);
+  font-family: "Exo2";
+  src:
+    local(exo2),
+    url("../public/fonts/Exo2-VariableFont_wght.ttf") format("truetype"),
+    local(-apple-system),
+    local(blinkmacsystemfont),
+    local(segoe ui),
+    local(roboto),
+    local(oxygen),
+    local(ubuntu),
+    local(cantarell),
+    local(fira sans),
+    local(droid sans),
+    local(helvetica neue);
 }
 
 .ellipsis {
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
+  text-overflow: ellipsis;
 }

@@ -1,19 +1,20 @@
 .buttonPrimary,
 .buttonSecondary {
+  padding: 12px 30px;
   border: 2px solid;
   font-weight: 700;
   font-size: 16px;
-  padding: 12px 30px;
   background-color: transparent;
 }
 
 .buttonPrimary {
-  background-color: var(--accent-primary);
   border-color: var(--accent-primary);
   color: var(--bg-regular);
+  background-color: var(--accent-primary);
 }
+
 .buttonSecondary {
-  background-color: transparent;
   border-color: var(--accent-secondary);
   color: var(--accent-secondary);
+  background-color: transparent;
 }

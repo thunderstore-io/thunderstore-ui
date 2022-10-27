@@ -1,6 +1,6 @@
 .instructions {
   margin-bottom: 0;
-  border: 0.125em solid var(--color-lightblue);
   padding: 1.5em 2em 1.5em 3em;
+  border: 0.125em solid var(--color-lightblue);
   background-color: var(--color-blue);
 }

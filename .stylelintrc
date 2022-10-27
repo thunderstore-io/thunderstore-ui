@@ -1,0 +1,44 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-rational-order"],
+  "rules": {
+    "alpha-value-notation": "number",
+    "declaration-block-no-duplicate-properties": [
+      true,
+      {
+        "ignore": ["consecutive-duplicates-with-different-values"]
+      }
+    ],
+    "declaration-empty-line-before": [
+      "always",
+      {
+        "except": ["after-comment", "first-nested"],
+        "ignore": ["after-declaration"]
+      }
+    ],
+    "font-weight-notation": "numeric",
+    "import-notation": "string",
+    "linebreaks": "unix",
+    "max-line-length": [80, { "ignore": "non-comments" }],
+    "number-max-precision": 3,
+    "selector-class-pattern": [
+      "^((?!\\-).)*$",
+      { "message": "Don't use hyphens in class selectors" }
+    ],
+    "selector-id-pattern": [
+      "^((?!\\-).)*$",
+      { "message": "Don't use hyphens in id selectors" }
+    ],
+    "selector-no-vendor-prefix": null,
+    "selector-pseudo-element-colon-notation": "double",
+    "value-list-comma-newline-after": "always-multi-line",
+    "value-list-comma-space-after": "always-single-line",
+    "value-list-comma-space-before": "never",
+
+    "plugin/rational-order": [
+      true,
+      {
+        "border-in-box-model": true
+      }
+    ]
+  }
+}
