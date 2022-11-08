@@ -14,7 +14,7 @@ export interface ButtonProps {
  */
 export const Button: React.FC<ButtonProps> = (props) => {
   const { label, leftIcon, rightIcon, buttonStyle, onClick } = props;
-  const stylesImport = styles;
+  styles; //if styles is not called, the classes from the css module aren't found
   const additionalStyle = buttonStyle
     ? " button__" + buttonStyle
     : " button__default";
