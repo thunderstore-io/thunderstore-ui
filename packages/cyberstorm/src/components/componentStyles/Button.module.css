@@ -1,3 +1,4 @@
+/* Common Button styles */
 .button {
   display: flex;
   flex: none;
@@ -18,6 +19,7 @@
   --button-border-width: 2px;
 }
 
+/* Styles for Button's text */
 .buttonLabel {
   font-weight: 600;
   font-size: var(--size-m);
@@ -25,6 +27,9 @@
   font-style: normal;
   line-height: 1.125rem;
 }
+
+
+/* Different Button color schemes */
 
 .button__default {
   --text-color: var(--color-white);
@@ -75,48 +80,35 @@
   --button-border-color: var(--color-border-3);
 }
 
+
+/* Special-style Buttons */
+
+.button__specialPurple,
 .button__specialGreen {
   position: relative;
   z-index: 1;
-  background: var(--color-gradient-blue-green--darker) padding-box, var(--color-gradient-blue-green) border-box;
-  box-shadow: 0 0 var(--size-m) rgb(80 217 159 / 0.32);
   transition: all 0.12s;
 }
 
-.button__specialGreen::before {
-  position: absolute;
-  top: calc(0px - var(--button-border-width));
-  right: calc(0px - var(--button-border-width));
-  bottom: calc(0px - var(--button-border-width));
-  left: calc(0px - var(--button-border-width));
-  z-index: -1;
-  border: var(--button-border-width) solid transparent;
-  border-radius: var(--size-xs);
-  background: var(--color-gradient-blue-green--dark) padding-box, var(--color-gradient-blue-green--light) border-box;
-  opacity: 0;
-  transition: all 0.12s;
-  content: "";
+.button__specialGreen {
+  background: var(--color-gradient-blue-green--darker) padding-box, var(--color-gradient-blue-green) border-box;
+  box-shadow: 0 0 var(--size-m) rgb(80 217 159 / 0.32);
+}
 
-  --text-color: var(--color-white);
+.button__specialPurple {
+  background: var(--color-gradient-purple-green--darker) padding-box, var(--color-gradient-purple-green) border-box;
 }
 
 .button__specialGreen:hover {
   --button-border-color: transparent;
-
   box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 0.2), 0 0 var(--size-l) rgb(80 217 159 / 0.6);
 }
-
-.button__specialGreen:hover::before {
-  opacity: 1;
+.button__specialPurple:hover {
+  --button-border-color: transparent;
+  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 0.2), 0 0 var(--size-l) rgb(157 48 228 / 0.5);
 }
 
-.button__specialPurple {
-  position: relative;
-  z-index: 1;
-  background: var(--color-gradient-purple-green--darker) padding-box, var(--color-gradient-purple-green) border-box;
-  transition: all 0.12s;
-}
-
+.button__specialGreen::before,
 .button__specialPurple::before {
   position: absolute;
   top: calc(0px - var(--button-border-width));
@@ -126,7 +118,6 @@
   z-index: -1;
   border: var(--button-border-width) solid transparent;
   border-radius: var(--size-xs);
-  background: var(--color-gradient-purple-green--dark) padding-box, var(--color-gradient-purple-green--light) border-box;
   opacity: 0;
   transition: all 0.12s;
   content: "";
@@ -134,12 +125,15 @@
   --text-color: var(--color-white);
 }
 
-.button__specialPurple:hover {
-  --button-border-color: transparent;
-
-  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 0.2), 0 0 var(--size-l) rgb(157 48 228 / 0.5);
+.button__specialGreen::before {
+  background: var(--color-gradient-blue-green--dark) padding-box, var(--color-gradient-blue-green--light) border-box;
 }
 
-.button__specialPurple:hover::before {
+.button__specialPurple::before {
+  background: var(--color-gradient-purple-green--dark) padding-box, var(--color-gradient-purple-green--light) border-box;
+}
+
+.button__specialPurple:hover::before,
+.button__specialGreen:hover::before {
   opacity: 1;
 }
