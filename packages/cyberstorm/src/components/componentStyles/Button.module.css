@@ -28,7 +28,6 @@
   line-height: 1.125rem;
 }
 
-
 /* Different Button color schemes */
 
 .button__default {
@@ -80,7 +79,6 @@
   --button-border-color: var(--color-border-3);
 }
 
-
 /* Special-style Buttons */
 
 .button__specialPurple,
@@ -101,10 +99,13 @@
 
 .button__specialGreen:hover {
   --button-border-color: transparent;
+
   box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 0.2), 0 0 var(--size-l) rgb(80 217 159 / 0.6);
 }
+
 .button__specialPurple:hover {
   --button-border-color: transparent;
+
   box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 0.2), 0 0 var(--size-l) rgb(157 48 228 / 0.5);
 }
 
