@@ -9,52 +9,34 @@ const meta = {
   component: Button,
 } as ComponentMeta<typeof Button>;
 
+const defaultArgs = {
+  label: "Categories",
+  rightIcon: (
+    <FontAwesomeIcon
+      fixedWidth={true}
+      icon={faChevronDown}
+      className={"buttonIcon"}
+    />
+  ),
+};
+
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
 const DefaultButton = Template.bind({});
-DefaultButton.args = {
-  label: "Categories",
-  buttonStyle: "default",
-  rightIcon: (
-    <FontAwesomeIcon
-      fixedWidth={true}
-      icon={faChevronDown}
-      className={"buttonIcon"}
-    />
-  ),
-};
+DefaultButton.args = { ...defaultArgs, buttonStyle: "default" };
 
 const DefaultDarkButton = Template.bind({});
-DefaultDarkButton.args = {
-  label: "Categories",
-  buttonStyle: "defaultDark",
-  rightIcon: (
-    <FontAwesomeIcon
-      fixedWidth={true}
-      icon={faChevronDown}
-      className={"buttonIcon"}
-    />
-  ),
-};
+DefaultDarkButton.args = { ...defaultArgs, buttonStyle: "defaultDark" };
 
 const PrimaryButton = Template.bind({});
-PrimaryButton.args = {
-  label: "Categories",
-  buttonStyle: "primary",
-  rightIcon: (
-    <FontAwesomeIcon
-      fixedWidth={true}
-      icon={faChevronDown}
-      className={"buttonIcon"}
-    />
-  ),
-};
+PrimaryButton.args = { ...defaultArgs, buttonStyle: "primary" };
 
 const DangerButton = Template.bind({});
 DangerButton.args = {
-  label: "Danger",
-  buttonStyle: "danger",
+  ...defaultArgs,
   leftIcon: <FontAwesomeIcon fixedWidth={true} icon={faSkull} />,
+  rightIcon: null,
+  buttonStyle: "danger",
   onClick: () => {
     alert("Danger button clicked");
   },
@@ -62,42 +44,15 @@ DangerButton.args = {
 
 const DefaultButtonWithBorder = Template.bind({});
 DefaultButtonWithBorder.args = {
-  label: "Categories",
+  ...defaultArgs,
   buttonStyle: "defaultWithBorder",
-  rightIcon: (
-    <FontAwesomeIcon
-      fixedWidth={true}
-      icon={faChevronDown}
-      className={"buttonIcon"}
-    />
-  ),
 };
 
 const SpecialGreenButton = Template.bind({});
-SpecialGreenButton.args = {
-  label: "Categories",
-  buttonStyle: "specialGreen",
-  rightIcon: (
-    <FontAwesomeIcon
-      fixedWidth={true}
-      icon={faChevronDown}
-      className={"buttonIcon"}
-    />
-  ),
-};
+SpecialGreenButton.args = { ...defaultArgs, buttonStyle: "specialGreen" };
 
 const SpecialPurpleButton = Template.bind({});
-SpecialPurpleButton.args = {
-  label: "Categories",
-  buttonStyle: "specialPurple",
-  rightIcon: (
-    <FontAwesomeIcon
-      fixedWidth={true}
-      icon={faChevronDown}
-      className={"buttonIcon"}
-    />
-  ),
-};
+SpecialPurpleButton.args = { ...defaultArgs, buttonStyle: "specialPurple" };
 
 export {
   meta as default,
