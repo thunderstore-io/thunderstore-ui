@@ -2,6 +2,12 @@
   "extends": ["stylelint-config-standard", "stylelint-config-rational-order"],
   "rules": {
     "alpha-value-notation": "number",
+    "custom-property-pattern": [
+      "^(-{0,2}[a-z0-9]+)*$",
+      {
+        "message": "Expected custom property name \"${name}\" to be kebab-case + double hyphens"
+      }
+    ],
     "declaration-block-no-duplicate-properties": [
       true,
       {
