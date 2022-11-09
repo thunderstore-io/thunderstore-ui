@@ -9,7 +9,19 @@ import styles from "../components/ServerList.module.css";
 
 export const getStaticProps: GetStaticProps = async () => {
   const fallback: { [key: string]: unknown } = {};
-  fallback[ApiURLs.ServerList] = await getServerListings();
+
+  try {
+    fallback[ApiURLs.ServerList] = await getServerListings();
+  } catch (e) {
+    console.error(e);
+    fallback[ApiURLs.ServerList] = {
+      count: 0,
+      next: null,
+      previous: null,
+      results: [],
+    };
+  }
+
   return {
     props: {
       swrFallback: fallback,

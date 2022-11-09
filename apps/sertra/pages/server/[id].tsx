@@ -17,8 +17,18 @@ import { ServerInstructions } from "../../components/ServerInstructions";
 import styles from "../../styles/ServerDetail.module.css";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const res = await fetch(ApiURLs.ServerList);
-  const listings = await res.json();
+  let listings = {
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
+  };
+
+  try {
+    listings = await (await fetch(ApiURLs.ServerList)).json();
+  } catch (e) {
+    console.error(e);
+  }
 
   const paths = listings?.results.map((listing: ServerListingData) => ({
     params: { id: listing.id },
