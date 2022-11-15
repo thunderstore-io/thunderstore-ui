@@ -5,7 +5,14 @@ export interface ButtonProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  buttonStyle?: string;
+  buttonStyle?:
+    | "button__danger"
+    | "button__default"
+    | "button__defaultDark"
+    | "button__defaultWithBorder"
+    | "button__primary"
+    | "button__specialGreen"
+    | "button__specialPurple";
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -14,20 +21,20 @@ export interface ButtonProps {
  */
 export const Button: React.FC<ButtonProps> = (props) => {
   const { label, leftIcon, rightIcon, buttonStyle, onClick } = props;
-  styles; //if styles is not called, the classes from the css module aren't found
-  const additionalStyle = buttonStyle
-    ? " button__" + buttonStyle
-    : " button__default";
 
   return (
     <button
       type="button"
-      className={"button" + additionalStyle}
+      /* TS is not aware of defaultProps of function components. */
+      /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+      className={`${styles.button} ${styles[buttonStyle!]}`}
       onClick={onClick}
     >
       {leftIcon}
-      {label ? <div className="buttonLabel">{label}</div> : null}
+      {label ? <div className={styles.buttonLabel}>{label}</div> : null}
       {rightIcon}
     </button>
   );
 };
+
+Button.defaultProps = { buttonStyle: "button__default" };
