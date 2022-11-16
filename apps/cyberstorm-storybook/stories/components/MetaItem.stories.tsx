@@ -11,6 +11,7 @@ const meta = {
 
 const defaultArgs = {
   label: "-",
+  metaItemStyle: "default",
 };
 
 const Template: ComponentStory<typeof MetaItem> = (args) => (
@@ -20,14 +21,6 @@ const Template: ComponentStory<typeof MetaItem> = (args) => (
 const DefaultMetaItem = Template.bind({});
 DefaultMetaItem.args = {
   ...defaultArgs,
-  metaItemStyle: "default",
-  icon: (
-    <FontAwesomeIcon
-      fixedWidth={true}
-      icon={faThumbsUp}
-      className={"metaItemIcon"}
-    />
-  ),
 };
 
 const GreenMetaItem = Template.bind({});
