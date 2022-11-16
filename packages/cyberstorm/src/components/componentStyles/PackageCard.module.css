@@ -1,0 +1,76 @@
+/* Common PackageCard styles */
+.packageCard {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--size-m);
+  overflow: hidden;
+
+  width: 248px;
+
+  background-color: var(--color-surface--1);
+  border-radius: 0.5rem;
+}
+
+.packageCardContent {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--size-s);
+  padding: 0 var(--size-m);
+}
+
+/* Styles for PackageCard's image */
+.packageCardImage {
+  width: 100%;
+}
+
+/* Styles for PackageCard's Package name (title) */
+.packageCardPackageName {
+  font-weight: 700;
+  font-size: var(--size-m);
+  color: var(--color-text--default);
+  font-family: Sora, sans-serif;
+  line-height: var(--text-xl);
+}
+
+/* Styles for PackageCard's Author */
+.packageCardAuthor {
+  font-size: var(--text-xs);
+  line-height: var(--text-m);
+  font-family: Inter, sans-serif;
+}
+.packageCardAuthor_author {
+  font-weight: 700;
+  color: var(--color-cyber-green);
+  text-decoration: none;
+}
+
+.packageCardAuthor_prefix {
+  font-weight: 400;
+  color: var(--color-text--tertiary);
+}
+
+/* Styles for PackageCard's description */
+.packageCardDescription {
+  font-weight: 400;
+  font-size: var(--text-s);
+  color: var(--color-text--secondary);
+  font-family: Inter, sans-serif;
+  line-height: var(--text-xxl);
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-height: 3rem;
+}
+
+/* Styles for PackageCard's "Last updated" info */
+.packageCardLastUpdated {
+  font-weight: 400;
+  font-size: var(--text-xs);
+  color: var(--color-text--tertiary);
+  font-family: Inter, sans-serif;
+  line-height: var(--text-m);
+}
+
