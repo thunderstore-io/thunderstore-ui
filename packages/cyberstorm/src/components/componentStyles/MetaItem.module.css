@@ -18,15 +18,15 @@
 /* Styles for MetaItem's text */
 .metaItemLabel {
   font-weight: 700;
-  font-size: var(--size-s);
+  font-size: var(--text-xs);
   font-family: Inter, sans-serif;
   font-style: normal;
-  line-height: 1rem;
+  line-height: var(--text-m);
 }
 
 /* Styles for MetaItem's icon */
 .metaItemIcon {
-  font-size: var(--size-s);
+  font-size: var(--text-xs);
 }
 
 /* Different MetaItem color schemes */
