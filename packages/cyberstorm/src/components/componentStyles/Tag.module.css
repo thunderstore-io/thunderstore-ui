@@ -1,0 +1,40 @@
+/* Common Tag styles */
+.tag {
+  display: flex;
+  flex: none;
+  flex-direction: row;
+  gap: var(--size-tiny);
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--size-tiny) var(--size-xs);
+  border-radius: var(--size-m);
+  color: var(--text-color);
+  background-color: var(--bg-color);
+
+  --text-color: var(--color-text--default);
+  --bg-color: var(--color-surface--3);
+  --button-border-color: transparent;
+  --button-border-width: 2px;
+}
+
+.tag:hover {
+  --bg-color: var(--color-surface--4);
+}
+
+/* Styles for Tag's text */
+.tagLabel {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: var(--text-xxs);
+  font-family: Inter, sans-serif;
+  font-style: normal;
+  line-height: var(--text-xs);
+
+}
+
+/* Styles for Tag's Icons */
+.tagIcon {
+  font-size: var(--text-xxs);
+  line-height: var(--text-xs);
+}
