@@ -22,13 +22,13 @@
 
 /* Styles for Tag's text */
 .tagLabel {
-  text-transform: uppercase;
   font-weight: 700;
   font-size: var(--text-xxs);
   font-family: Inter, sans-serif;
   font-style: normal;
   line-height: var(--text-xs);
 
+  text-transform: uppercase;
 }
 
 /* Styles for Tag's Icons */

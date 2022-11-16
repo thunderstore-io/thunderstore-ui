@@ -97,9 +97,9 @@
   --color-border: var(--color-default-purple--6);
   --color-border-2: var(--color-default-purple--7);
   --color-border-3: var(--color-default-purple--8);
-  --color-text--default: #F3F1FA;
-  --color-text--secondary: #D7D0FF;
-  --color-text--tertiary: #B2A6F7;
+  --color-text--default: #f3f1fa;
+  --color-text--secondary: #d7d0ff;
+  --color-text--tertiary: #b2a6f7;
   --color-gradient-blue-green--darker: linear-gradient(to left top, #062131 0%, #102b20 100%);
   --color-gradient-blue-green--dark: linear-gradient(to left top, #0b4162 0%, #205740 100%);
   --color-gradient-blue-green: linear-gradient(to left top, #1ca3f5 0%, #23ffb0 100%);
