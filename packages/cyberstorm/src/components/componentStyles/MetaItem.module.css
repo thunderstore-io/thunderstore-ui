@@ -1,0 +1,39 @@
+/* Common MetaItem styles */
+.metaItem {
+  display: flex;
+  flex: none;
+  flex-direction: row;
+  gap: var(--size-xs);
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--size-xs) var(--size-xs);
+  color: var(--text-color);
+  background-color: var(--bg-color);
+
+  --text-color: var(--color-default-purple--8);
+  --bg-color: transparent;
+}
+
+/* Styles for MetaItem's text */
+.metaItemLabel {
+  font-weight: 700;
+  font-size: var(--size-s);
+  font-family: Inter, sans-serif;
+  font-style: normal;
+  line-height: 1rem;
+}
+
+/* Styles for MetaItem's icon */
+.metaItemIcon {
+  font-size: var(--size-s);
+}
+
+/* Different MetaItem color schemes */
+.metaItem__default {
+  --text-color: var(--color-default-purple--8);
+}
+
+.metaItem__green {
+  --text-color: var(--color-cyber-green);
+}
