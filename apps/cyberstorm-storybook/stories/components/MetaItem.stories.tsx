@@ -11,7 +11,7 @@ const meta = {
 
 const defaultArgs = {
   label: "-",
-  metaItemStyle: "default",
+  metaItemStyle: "metaItem__default",
 };
 
 const Template: ComponentStory<typeof MetaItem> = (args) => (
@@ -27,7 +27,7 @@ const GreenMetaItem = Template.bind({});
 GreenMetaItem.args = {
   ...defaultArgs,
   label: "Gigamies5000",
-  metaItemStyle: "green",
+  metaItemStyle: "metaItem__green",
   icon: (
     <FontAwesomeIcon
       fixedWidth={true}
@@ -41,7 +41,7 @@ const LikesMetaItem = Template.bind({});
 LikesMetaItem.args = {
   ...defaultArgs,
   label: "1,342",
-  metaItemStyle: "default",
+  metaItemStyle: "metaItem__default",
   icon: (
     <FontAwesomeIcon
       fixedWidth={true}

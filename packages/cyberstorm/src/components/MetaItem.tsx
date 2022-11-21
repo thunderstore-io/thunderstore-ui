@@ -4,7 +4,7 @@ import styles from "./componentStyles/MetaItem.module.css";
 export interface MetaItemProps {
   label?: string;
   icon?: ReactNode;
-  metaItemStyle?: string;
+  metaItemStyle?: "metaItem__default" | "metaItem__green";
 }
 
 /**
@@ -12,15 +12,15 @@ export interface MetaItemProps {
  */
 export const MetaItem: React.FC<MetaItemProps> = (props) => {
   const { label, icon, metaItemStyle } = props;
-  styles; //if styles is not called, the classes from the css module aren't found
-  const additionalStyle = metaItemStyle
-    ? " metaItem__" + metaItemStyle
-    : " metaItem__default";
 
   return (
-    <div className={"metaItem" + additionalStyle}>
+    <div
+      /* TS is not aware of defaultProps of function components. */
+      /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+      className={`${styles.metaItem} ${styles[metaItemStyle!]}`}
+    >
       {icon}
-      {label ? <div className="metaItemLabel">{label}</div> : null}
+      {label ? <div className={styles.metaItemLabel}>{label}</div> : null}
     </div>
   );
 };

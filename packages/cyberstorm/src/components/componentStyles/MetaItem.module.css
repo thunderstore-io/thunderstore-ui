@@ -17,10 +17,7 @@
 
 /* Styles for MetaItem's text */
 .metaItemLabel {
-  font-weight: 700;
-  font-size: var(--text-xs);
-  font-family: Inter, sans-serif;
-  font-style: normal;
+  font: normal 700 var(--text-xs) Inter, sans-serif;
   line-height: var(--text-m);
 }
 
@@ -34,6 +31,9 @@
   --text-color: var(--color-default-purple--8);
 }
 
+/* Since the design is not completed, the green version is used more
+ as a placeholder/example of how to do different schemes. This can be
+  removed when adding required schemes */
 .metaItem__green {
   --text-color: var(--color-cyber-green);
 }
