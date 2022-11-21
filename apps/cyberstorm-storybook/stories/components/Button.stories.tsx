@@ -23,20 +23,20 @@ const defaultArgs = {
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
 const DefaultButton = Template.bind({});
-DefaultButton.args = { ...defaultArgs, buttonStyle: "default" };
+DefaultButton.args = defaultArgs;
 
 const DefaultDarkButton = Template.bind({});
-DefaultDarkButton.args = { ...defaultArgs, buttonStyle: "defaultDark" };
+DefaultDarkButton.args = { ...defaultArgs, buttonStyle: "button__defaultDark" };
 
 const PrimaryButton = Template.bind({});
-PrimaryButton.args = { ...defaultArgs, buttonStyle: "primary" };
+PrimaryButton.args = { ...defaultArgs, buttonStyle: "button__primary" };
 
 const DangerButton = Template.bind({});
 DangerButton.args = {
   ...defaultArgs,
   leftIcon: <FontAwesomeIcon fixedWidth={true} icon={faSkull} />,
   rightIcon: null,
-  buttonStyle: "danger",
+  buttonStyle: "button__danger",
   onClick: () => {
     alert("Danger button clicked");
   },
@@ -45,14 +45,20 @@ DangerButton.args = {
 const DefaultButtonWithBorder = Template.bind({});
 DefaultButtonWithBorder.args = {
   ...defaultArgs,
-  buttonStyle: "defaultWithBorder",
+  buttonStyle: "button__defaultWithBorder",
 };
 
 const SpecialGreenButton = Template.bind({});
-SpecialGreenButton.args = { ...defaultArgs, buttonStyle: "specialGreen" };
+SpecialGreenButton.args = {
+  ...defaultArgs,
+  buttonStyle: "button__specialGreen",
+};
 
 const SpecialPurpleButton = Template.bind({});
-SpecialPurpleButton.args = { ...defaultArgs, buttonStyle: "specialPurple" };
+SpecialPurpleButton.args = {
+  ...defaultArgs,
+  buttonStyle: "button__specialPurple",
+};
 
 export {
   meta as default,

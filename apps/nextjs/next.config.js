@@ -1,7 +1,10 @@
 const withPreconstruct = require("@preconstruct/next");
+const withTM = require("next-transpile-modules")(["@thunderstore/cyberstorm"]);
 
-module.exports = withPreconstruct({
-  experimental: {
-    esmExternals: "loose",
-  },
-});
+module.exports = withTM(
+  withPreconstruct({
+    experimental: {
+      esmExternals: "loose",
+    },
+  })
+);
