@@ -7,32 +7,37 @@
   align-items: center;
   justify-content: center;
 
-  padding: var(--size-tiny) var(--size-xs);
+  padding: var(--size-xxs) var(--text-xs);
+  border: 2px solid;
+  border-color: var(--border-color);
   border-radius: var(--size-m);
   color: var(--text-color);
   background-color: var(--bg-color);
 
   --text-color: var(--color-text--default);
-  --bg-color: var(--color-surface--3);
+  --bg-color: var(--color-surface--2);
+  --border-color: transparent;
 }
 
 .tag:hover {
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--color-surface--0);
+  --border-color: var(--color-border-3);
 }
 
 /* Styles for Tag's text */
 .tagLabel {
-  font-weight: 700;
-  font-size: var(--text-xxs);
-  font-family: Inter, sans-serif;
-  font-style: normal;
-  line-height: var(--text-xs);
-
+  font: normal 700 var(--text-xs) Inter, sans-serif;
+  line-height: var(--text-m);
   text-transform: uppercase;
 }
 
 /* Styles for Tag's Icons */
 .tagIcon {
-  font-size: var(--text-xxs);
-  line-height: var(--text-xs);
+  color: var(--color-border-3);
+  font-size: var(--text-s);
+  line-height: var(--text-s);
+}
+
+.tag:hover > .tagIcon {
+  color: var(--color-red);
 }
