@@ -9,6 +9,8 @@ export interface MetaItemProps {
 
 /**
  * Cyberstorm MetaItem component
+ * Used for displaying a single data point (e.g. an amount
+ * of likes or a size of a package) with an icon next to it
  */
 export const MetaItem: React.FC<MetaItemProps> = (props) => {
   const { label, icon, metaItemStyle } = props;
@@ -24,3 +26,5 @@ export const MetaItem: React.FC<MetaItemProps> = (props) => {
     </div>
   );
 };
+
+MetaItem.defaultProps = { metaItemStyle: "metaItem__default" };
