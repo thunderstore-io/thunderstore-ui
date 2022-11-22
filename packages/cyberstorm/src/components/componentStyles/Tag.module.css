@@ -38,6 +38,8 @@
   line-height: var(--text-s);
 }
 
-.tag:hover > .tagIcon {
+/* Different Tag color schemes */
+
+.tag__default:hover > .tagIcon {
   color: var(--color-red);
 }

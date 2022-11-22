@@ -1,26 +1,30 @@
 import React, { ReactNode } from "react";
 import styles from "./componentStyles/Tag.module.css";
 
-export interface ButtonProps {
+export interface TagProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  tagStyle?: string;
+  tagStyle?: "tag__default";
 }
 
 /**
  * Cyberstorm Tag component
  */
-export const Tag: React.FC<ButtonProps> = (props) => {
+export const Tag: React.FC<TagProps> = (props) => {
   const { label, tagStyle, leftIcon, rightIcon } = props;
-  styles; //if styles is not called, the classes from the css module aren't found
-  const additionalStyle = tagStyle ? " tag__" + tagStyle : " tag__default";
 
   return (
-    <div className={"tag" + additionalStyle}>
-      {leftIcon}
-      {label ? <div className="tagLabel">{label}</div> : null}
-      {rightIcon}
+    <div
+      /* TS is not aware of defaultProps of function components. */
+      /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+      className={`${styles.tag} ${styles[tagStyle!]}`}
+    >
+      <div className={styles.tagIcon}>{leftIcon}</div>
+      {label ? <div className={styles.tagLabel}>{label}</div> : null}
+      <div className={styles.tagIcon}>{rightIcon}</div>
     </div>
   );
 };
+
+Tag.defaultProps = { tagStyle: "tag__default" };
