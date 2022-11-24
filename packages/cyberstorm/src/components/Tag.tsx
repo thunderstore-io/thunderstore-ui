@@ -6,7 +6,7 @@ export interface TagProps {
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   tagStyle?: "tag__default";
-  tagSize?: "tag__small" | "tag__medium" | "tag__large";
+  tagSize?: "small" | "medium" | "large";
 }
 
 /**
@@ -28,4 +28,4 @@ export const Tag: React.FC<TagProps> = (props) => {
   );
 };
 
-Tag.defaultProps = { tagStyle: "tag__default", tagSize: "tag__medium" };
+Tag.defaultProps = { tagStyle: "tag__default", tagSize: "medium" };

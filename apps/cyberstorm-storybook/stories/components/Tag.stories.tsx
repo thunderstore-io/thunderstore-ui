@@ -65,7 +65,7 @@ const LargeTag = Template.bind({});
 LargeTag.args = {
   ...defaultArgs,
   label: "tag",
-  tagSize: "tag__large",
+  tagSize: "large",
   rightIcon: (
     <FontAwesomeIcon
       className="tagIcon tagIconRight"
@@ -79,7 +79,7 @@ const SmallTag = Template.bind({});
 SmallTag.args = {
   ...defaultArgs,
   label: "tag",
-  tagSize: "tag__small",
+  tagSize: "small",
   rightIcon: (
     <FontAwesomeIcon
       className="tagIcon tagIconRight"
