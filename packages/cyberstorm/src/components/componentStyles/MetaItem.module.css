@@ -1,0 +1,39 @@
+/* Common MetaItem styles */
+.metaItem {
+  display: flex;
+  flex: none;
+  flex-direction: row;
+  gap: var(--size-xs);
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--size-xs) var(--size-xs);
+  color: var(--text-color);
+  background-color: var(--bg-color);
+
+  --text-color: var(--color-default-purple--8);
+  --bg-color: transparent;
+}
+
+/* Styles for MetaItem's text */
+.metaItemLabel {
+  font: normal 700 var(--text-xs) Inter, sans-serif;
+  line-height: var(--text-m);
+}
+
+/* Styles for MetaItem's icon */
+.metaItemIcon {
+  font-size: var(--text-xs);
+}
+
+/* Different MetaItem color schemes */
+.metaItem__default {
+  --text-color: var(--color-default-purple--8);
+}
+
+/* Since the design is not completed, the green version is used more
+ as a placeholder/example of how to do different schemes. This can be
+  removed when adding required schemes */
+.metaItem__green {
+  --text-color: var(--color-cyber-green);
+}
