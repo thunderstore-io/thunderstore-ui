@@ -1,0 +1,62 @@
+/* Common Tag styles */
+.tag {
+  display: flex;
+  flex: none;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid;
+  border-color: var(--border-color);
+  border-radius: var(--size-l);
+  color: var(--text-color);
+  background-color: var(--bg-color);
+
+  --text-color: var(--color-text--default);
+  --bg-color: var(--color-surface--2);
+  --border-color: transparent;
+}
+
+.tag:hover {
+  --bg-color: var(--color-surface--0);
+  --border-color: var(--color-border-3);
+}
+
+/* Different Tag sizes */
+
+.small {
+  gap: var(--size-tiny);
+  padding: var(--size-tiny) var(--text-xxs);
+  font: normal 700 var(--text-xxs) Inter, sans-serif;
+  line-height: var(--size-tiny);
+}
+
+.medium {
+  gap: var(--size-tiny);
+  padding: var(--size-xxs) var(--text-xs);
+  font: normal 700 var(--text-xs) Inter, sans-serif;
+  line-height: var(--text-m);
+}
+
+.large {
+  gap: var(--size-xxs);
+  padding: var(--size-xs) var(--text-xs);
+  font: normal 700 var(--text-m) Inter, sans-serif;
+  line-height: var(--text-l);
+}
+
+/* Styles for Tag's text */
+.tagLabel {
+  text-transform: uppercase;
+}
+
+/* Styles for Tag's Icons */
+.tagIcon {
+  color: var(--color-border-3);
+  line-height: var(--text-s);
+}
+
+/* Different Tag color schemes */
+.tag__default:hover > .tagIcon {
+  color: var(--color-red);
+}
