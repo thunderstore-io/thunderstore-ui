@@ -6,19 +6,20 @@ export interface TagProps {
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   tagStyle?: "tag__default";
+  tagSize?: "tag__small" | "tag__medium" | "tag__large";
 }
 
 /**
  * Cyberstorm Tag component
  */
 export const Tag: React.FC<TagProps> = (props) => {
-  const { label, tagStyle, leftIcon, rightIcon } = props;
+  const { label, tagStyle, leftIcon, rightIcon, tagSize } = props;
 
   return (
     <div
       /* TS is not aware of defaultProps of function components. */
       /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      className={`${styles.tag} ${styles[tagStyle!]}`}
+      className={`${styles.tag} ${styles[tagStyle!]} ${styles[tagSize!]}`}
     >
       <div className={styles.tagIcon}>{leftIcon}</div>
       {label ? <div className={styles.tagLabel}>{label}</div> : null}
@@ -27,4 +28,4 @@ export const Tag: React.FC<TagProps> = (props) => {
   );
 };
 
-Tag.defaultProps = { tagStyle: "tag__default" };
+Tag.defaultProps = { tagStyle: "tag__default", tagSize: "tag__medium" };

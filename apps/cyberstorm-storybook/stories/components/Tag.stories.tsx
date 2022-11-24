@@ -61,4 +61,32 @@ IconTag.args = {
   ),
 };
 
-export { meta as default, DefaultTag, DesignTag, IconTag };
+const LargeTag = Template.bind({});
+LargeTag.args = {
+  ...defaultArgs,
+  label: "tag",
+  tagSize: "tag__large",
+  rightIcon: (
+    <FontAwesomeIcon
+      className="tagIcon tagIconRight"
+      fixedWidth={true}
+      icon={faXmark}
+    />
+  ),
+};
+
+const SmallTag = Template.bind({});
+SmallTag.args = {
+  ...defaultArgs,
+  label: "tag",
+  tagSize: "tag__small",
+  rightIcon: (
+    <FontAwesomeIcon
+      className="tagIcon tagIconRight"
+      fixedWidth={true}
+      icon={faXmark}
+    />
+  ),
+};
+
+export { meta as default, DefaultTag, DesignTag, IconTag, LargeTag, SmallTag };
