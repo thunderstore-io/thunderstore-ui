@@ -1,0 +1,36 @@
+/* Common PackageFlag styles */
+.packageFlag {
+  display: flex;
+  flex: none;
+  flex-direction: row;
+  gap: var(--gap-m);
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--padding-s) var(--padding-m);
+  border: var(--button-border-width) solid var(--button-border-color);
+  border-radius: var(--size-xs);
+  color: var(--text-color);
+  background-color: var(--bg-color);
+
+  --text-color: var(--color-white);
+  --bg-color: var(--color-surface--3);
+  --button-border-color: transparent;
+  --button-border-width: 2px;
+}
+
+/* Styles for PackageFlag's text */
+.packageFlagLabel {
+  font-weight: 600;
+  font-size: var(--size-m);
+  font-family: Sora, sans-serif;
+  font-style: normal;
+  line-height: 1.125rem;
+}
+
+/* Different Button color schemes */
+
+.packageFlag__default {
+  --text-color: var(--color-white);
+  --bg-color: var(--color-surface--3);
+}
