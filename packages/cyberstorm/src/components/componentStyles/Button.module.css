@@ -22,10 +22,10 @@
 /* Styles for Button's text */
 .buttonLabel {
   font-weight: 600;
-  font-size: var(--size-m);
+  font-size: var(--text-m);
   font-family: Sora, sans-serif;
   font-style: normal;
-  line-height: 1.125rem;
+  line-height: var(--text-l);
 }
 
 /* Different Button color schemes */
