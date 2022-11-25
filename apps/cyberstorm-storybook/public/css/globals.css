@@ -97,6 +97,7 @@
   --color-border: var(--color-default-purple--6);
   --color-border-2: var(--color-default-purple--7);
   --color-border-3: var(--color-default-purple--8);
+  --color-shadow-1: #000000a6;
   --color-text--default: #f3f1fa;
   --color-text--secondary: #d7d0ff;
   --color-text--tertiary: #b2a6f7;

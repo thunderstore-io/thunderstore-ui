@@ -4,7 +4,7 @@ import styles from "./componentStyles/MetaItem.module.css";
 export interface MetaItemProps {
   label?: string;
   icon?: ReactNode;
-  metaItemStyle?: "metaItem__default" | "metaItem__green";
+  metaItemStyle?: "metaItem__default" | "metaItem__tertiary";
 }
 
 /**

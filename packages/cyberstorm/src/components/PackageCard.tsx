@@ -1,5 +1,13 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import styles from "./componentStyles/PackageCard.module.css";
+import { MetaItem } from "./MetaItem";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faDownload,
+  faThumbsUp,
+  faCompactDisc,
+} from "@fortawesome/free-solid-svg-icons";
+import { Tag } from "./Tag";
 
 const defaultImageSrc = "";
 
@@ -16,7 +24,8 @@ export interface PackageCardProps {
   isPinned?: boolean;
   isNsfw?: boolean;
   isDeprecated?: boolean;
-  packageCardStyle?: string;
+  packageCardStyle?: "packageCard__default";
+  categories: string[];
 }
 
 /**
@@ -37,33 +46,94 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
     isNsfw,
     isDeprecated,
     packageCardStyle,
+    categories,
   } = props;
-  styles; //if styles is not called, the classes from the css module aren't found
-  const additionalStyle = packageCardStyle
-    ? " packageCard__" + packageCardStyle
-    : " packageCard__default";
+
   const authorLink = ""; //TODO: author link
 
+  const categoryList: ReactNode[] = [];
+  categories.forEach((category) =>
+    categoryList.push(<Tag tagSize="small" label={category} />)
+  );
+
   return (
-    <a href={link} className={"packageCard" + additionalStyle}>
-      <img
-        src={imageSrc ? imageSrc : defaultImageSrc}
-        className="packageCardImage"
-        alt="package card"
-      />
-      <div className="packageCardContent">
+    <div
+      /* TS is not aware of defaultProps of function components. */
+      /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+      className={`${styles.packageCard} ${styles[packageCardStyle!]}`}
+    >
+      <div className={styles.packageCardImageWrapper}>
+        <img
+          src={imageSrc ? imageSrc : defaultImageSrc}
+          className={styles.packageCardImage}
+          alt="package card"
+        />
+      </div>
+
+      <div className={styles.packageCardContent}>
         {packageName ? (
-          <h4 className="packageCardPackageName">{packageName}</h4>
+          <a href={link} className={styles.packageCardPackageName}>
+            {packageName}
+          </a>
         ) : null}
-        <div className="packageCardAuthor">
-          <span className="packageCardAuthor_prefix">by </span>
-          <a className="packageCardAuthor_author" href={authorLink}>
+        <div className={styles.packageCardAuthor}>
+          <span className={styles.packageCardAuthor_prefix}>by </span>
+          <a className={styles.packageCardAuthor_author} href={authorLink}>
             {author}
           </a>
         </div>
-        <p className="packageCardDescription">{description}</p>
-        <p className="packageCardLastUpdated">{"Last updated: " + lastUpdated}</p>
+        <p className={styles.packageCardDescription}>{description}</p>
+
+        <div className={styles.packageCardCategoryWrapper}>{categoryList}</div>
       </div>
-    </a>
+
+      <div className={styles.packageCardFooter}>
+        <p className={styles.packageCardLastUpdated}>
+          {"Last updated: " + lastUpdated}
+        </p>
+        <div className={styles.packageCardMetaItemWrapper}>
+          <MetaItem
+            icon={
+              <FontAwesomeIcon
+                fixedWidth={true}
+                icon={faDownload}
+                className={"PackageCardmetaItemIcon"}
+              />
+            }
+            label={downloadCount}
+            metaItemStyle={"metaItem__tertiary"}
+          />
+
+          <MetaItem
+            icon={
+              <FontAwesomeIcon
+                fixedWidth={true}
+                icon={faThumbsUp}
+                className={"PackageCardmetaItemIcon"}
+              />
+            }
+            label={likes}
+            metaItemStyle={"metaItem__tertiary"}
+          />
+
+          <MetaItem
+            icon={
+              <FontAwesomeIcon
+                fixedWidth={true}
+                icon={faCompactDisc}
+                className={"PackageCardmetaItemIcon"}
+              />
+            }
+            label={size}
+            metaItemStyle={"metaItem__tertiary"}
+          />
+        </div>
+      </div>
+    </div>
   );
+};
+
+PackageCard.defaultProps = {
+  packageCardStyle: "packageCard__default",
+  categories: [],
 };

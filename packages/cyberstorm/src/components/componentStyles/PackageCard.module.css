@@ -3,14 +3,28 @@
   display: flex;
   flex: none;
   flex-direction: column;
-  align-items: flex-start;
   gap: var(--size-m);
-  overflow: hidden;
+  align-items: flex-start;
 
   width: 248px;
-
-  background-color: var(--color-surface--1);
   border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.packageCard:hover {
+  box-shadow: 0 var(--size-xs) var(--text-xxxl) var(--size-tiny) #000000a6;
+}
+
+.packageCardImageWrapper {
+  max-height: 248px;
+  overflow: clip;
+}
+
+.packageCard:hover * img {
+  position: relative;
+  left: -32px;
+  min-width: 311px;
+  margin-top: -16px;
 }
 
 .packageCardContent {
@@ -28,9 +42,9 @@
 
 /* Styles for PackageCard's Package name (title) */
 .packageCardPackageName {
+  color: var(--color-text--default);
   font-weight: 700;
   font-size: var(--size-m);
-  color: var(--color-text--default);
   font-family: Sora, sans-serif;
   line-height: var(--text-xl);
 }
@@ -38,39 +52,66 @@
 /* Styles for PackageCard's Author */
 .packageCardAuthor {
   font-size: var(--text-xs);
-  line-height: var(--text-m);
   font-family: Inter, sans-serif;
+  line-height: var(--text-m);
 }
+
 .packageCardAuthor_author {
-  font-weight: 700;
   color: var(--color-cyber-green);
+  font-weight: 700;
   text-decoration: none;
 }
 
 .packageCardAuthor_prefix {
-  font-weight: 400;
   color: var(--color-text--tertiary);
+  font-weight: 400;
 }
 
 /* Styles for PackageCard's description */
 .packageCardDescription {
+  max-height: 3rem;
+  overflow: hidden;
+  color: var(--color-text--secondary);
   font-weight: 400;
   font-size: var(--text-s);
-  color: var(--color-text--secondary);
   font-family: Inter, sans-serif;
   line-height: var(--text-xxl);
 
   text-overflow: ellipsis;
-  overflow: hidden;
-  max-height: 3rem;
 }
 
 /* Styles for PackageCard's "Last updated" info */
 .packageCardLastUpdated {
+  color: var(--color-text--tertiary);
   font-weight: 400;
   font-size: var(--text-xs);
-  color: var(--color-text--tertiary);
   font-family: Inter, sans-serif;
   line-height: var(--text-m);
 }
 
+.packageCardFooter {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--size-m);
+  padding: 0 var(--size-m) var(--size-m)  var(--size-m);
+}
+
+.packageCardCategoryWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: var(--size-tiny);
+  align-items: flex-start;
+}
+
+.packageCardMetaItemWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: var(--size-m);
+  align-items: flex-start;
+}
+
+/* Different PackageCard variations */
+.packageCard__default {
+  background-color: var(--color-surface--1);
+}

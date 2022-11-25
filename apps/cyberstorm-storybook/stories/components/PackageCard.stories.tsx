@@ -46,7 +46,11 @@ FirstPackageCard.args = {
   description:
     "Lorem ipsum dolor sit amet, lollero pollero long text ellipsis continued even further",
   lastUpdated: "3 days ago",
+  downloadCount: "4,5M",
   likes: "1,342",
+  size: "13 MB",
+  categories: ["tweaks", "mods", "client-side"],
+  link: "",
 };
 
 export { meta as default, DefaultPackageCard, FirstPackageCard };

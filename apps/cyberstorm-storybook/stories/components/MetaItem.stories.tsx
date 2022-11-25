@@ -23,11 +23,11 @@ DefaultMetaItem.args = {
   ...defaultArgs,
 };
 
-const GreenMetaItem = Template.bind({});
-GreenMetaItem.args = {
+const TertiaryMetaItem = Template.bind({});
+TertiaryMetaItem.args = {
   ...defaultArgs,
-  label: "Gigamies5000",
-  metaItemStyle: "metaItem__green",
+  label: "Lollero",
+  metaItemStyle: "metaItem__tertiary",
   icon: (
     <FontAwesomeIcon
       fixedWidth={true}
@@ -51,4 +51,4 @@ LikesMetaItem.args = {
   ),
 };
 
-export { meta as default, DefaultMetaItem, GreenMetaItem, LikesMetaItem };
+export { meta as default, DefaultMetaItem, TertiaryMetaItem, LikesMetaItem };

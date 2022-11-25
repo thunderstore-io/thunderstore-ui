@@ -28,21 +28,18 @@
   gap: var(--size-tiny);
   padding: var(--size-tiny) var(--text-xxs);
   font: normal 700 var(--text-xxs) Inter, sans-serif;
-  line-height: var(--size-tiny);
 }
 
 .medium {
   gap: var(--size-tiny);
   padding: var(--size-xxs) var(--text-xs);
   font: normal 700 var(--text-xs) Inter, sans-serif;
-  line-height: var(--text-m);
 }
 
 .large {
   gap: var(--size-xxs);
   padding: var(--size-xs) var(--text-xs);
   font: normal 700 var(--text-m) Inter, sans-serif;
-  line-height: var(--text-l);
 }
 
 /* Styles for Tag's text */
