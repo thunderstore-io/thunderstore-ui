@@ -8,7 +8,6 @@ import {
   ServerListingData,
   ListingMod,
 } from "../../api/models";
-import { ApiURLs } from "../../api/urls";
 import { LaunchingModManPopup } from "../../components/LaunchingModManPopup";
 import { ModCard } from "../../components/ModCard";
 import { FetchListingData } from "../../api/calls";
@@ -17,20 +16,21 @@ import { ServerInstructions } from "../../components/ServerInstructions";
 import styles from "../../styles/ServerDetail.module.css";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  let listings = {
+  const listings = {
     count: 0,
     next: null,
     previous: null,
     results: [],
   };
 
-  try {
-    listings = await (await fetch(ApiURLs.ServerList)).json();
-  } catch (e) {
-    console.error(e);
-  }
+  // TODO: Re-enable once API is up
+  // try {
+  //   listings = await (await fetch(ApiURLs.ServerList)).json();
+  // } catch (e) {
+  //   console.error(e);
+  // }
 
-  const paths = listings?.results.map((listing: ServerListingData) => ({
+  const paths = listings.results.map((listing: ServerListingData) => ({
     params: { id: listing.id },
   }));
 

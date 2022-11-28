@@ -2,25 +2,24 @@ import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { SWRConfig } from "swr";
 
-import { getServerListings } from "../api/hooks";
-import { ApiURLs } from "../api/urls";
 import { ServerList } from "../components/ServerList";
 import styles from "../components/ServerList.module.css";
 
 export const getStaticProps: GetStaticProps = async () => {
   const fallback: { [key: string]: unknown } = {};
 
-  try {
-    fallback[ApiURLs.ServerList] = await getServerListings();
-  } catch (e) {
-    console.error(e);
-    fallback[ApiURLs.ServerList] = {
-      count: 0,
-      next: null,
-      previous: null,
-      results: [],
-    };
-  }
+  // TODO: Re-enable once API is available
+  // try {
+  //   fallback[ApiURLs.ServerList] = await getServerListings();
+  // } catch (e) {
+  //   console.error(e);
+  //   fallback[ApiURLs.ServerList] = {
+  //     count: 0,
+  //     next: null,
+  //     previous: null,
+  //     results: [],
+  //   };
+  // }
 
   return {
     props: {
