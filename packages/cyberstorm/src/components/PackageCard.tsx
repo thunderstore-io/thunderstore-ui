@@ -55,40 +55,38 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
     <div
       /* TS is not aware of defaultProps of function components. */
       /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      className={`${styles.packageCard}
+      className={`${styles.root}
       ${getStyle(packageCardStyle)}`}
     >
-      <div className={styles.packageCardImageWrapper}>
+      <div className={styles.imageWrapper}>
         <img
           src={imageSrc ? imageSrc : defaultImageSrc}
-          className={styles.packageCardImage}
+          className={styles.image}
           alt={"package card of" + packageName}
         />
       </div>
 
-      <div className={styles.packageCardContent}>
-        <a href={link} className={styles.packageCardPackageName}>
+      <div className={styles.content}>
+        <a href={link} className={styles.name}>
           {packageName}
         </a>
 
-        <div className={styles.packageCardAuthor}>
-          <span className={styles.packageCardAuthor_prefix}>by </span>
-          <a className={styles.packageCardAuthor_author} href={authorLink}>
+        <div className={styles.author}>
+          <span className={styles.author_prefix}>by </span>
+          <a className={styles.author_label} href={authorLink}>
             {author}
           </a>
         </div>
 
-        <p className={styles.packageCardDescription}>{description}</p>
+        <p className={styles.description}>{description}</p>
 
-        <div className={styles.packageCardCategoryWrapper}>
+        <div className={styles.categoryWrapper}>
           {getCategoryTagList(categories)}
         </div>
       </div>
 
-      <div className={styles.packageCardFooter}>
-        <p className={styles.packageCardLastUpdated}>
-          {"Last updated: " + lastUpdated}
-        </p>
+      <div className={styles.footer}>
+        <p className={styles.lastUpdated}>{"Last updated: " + lastUpdated}</p>
 
         {getMetaItemList(downloadCount, likes, size)}
       </div>
@@ -126,7 +124,7 @@ function getCategoryTagList(categories: string[]) {
 
 function getMetaItemList(downloadCount: string, likes: string, size: string) {
   return (
-    <div className={styles.packageCardMetaItemWrapper}>
+    <div className={styles.metaItemWrapper}>
       <MetaItem
         icon={<FontAwesomeIcon fixedWidth icon={faDownload} />}
         label={downloadCount}
@@ -139,7 +137,7 @@ function getMetaItemList(downloadCount: string, likes: string, size: string) {
         metaItemStyle={"tertiary"}
       />
 
-      <div className={styles.packageCardMetaItem__last}>
+      <div className={styles.metaItem__last}>
         <MetaItem
           icon={<FontAwesomeIcon fixedWidth icon={faHardDrive} />}
           label={size}

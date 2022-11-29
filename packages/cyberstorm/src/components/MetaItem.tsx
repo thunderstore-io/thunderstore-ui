@@ -19,10 +19,10 @@ export const MetaItem: React.FC<MetaItemProps> = (props) => {
     <div
       /* TS is not aware of defaultProps of function components. */
       /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      className={`${styles.metaItem} ${getStyle(metaItemStyle)}`}
+      className={`${styles.root} ${getStyle(metaItemStyle)}`}
     >
       {icon}
-      {label ? <div className={styles.metaItemLabel}>{label}</div> : null}
+      {label ? <div className={styles.label}>{label}</div> : null}
     </div>
   );
 };

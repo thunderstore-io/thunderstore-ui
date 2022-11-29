@@ -27,11 +27,11 @@ export const Button: React.FC<ButtonProps> = (props) => {
       type="button"
       /* TS is not aware of defaultProps of function components. */
       /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      className={`${styles.button} ${getStyle(buttonStyle)}`}
+      className={`${styles.root} ${getStyle(buttonStyle)}`}
       onClick={onClick}
     >
       {leftIcon}
-      {label ? <div className={styles.buttonLabel}>{label}</div> : null}
+      {label ? <div className={styles.label}>{label}</div> : null}
       {rightIcon}
     </button>
   );

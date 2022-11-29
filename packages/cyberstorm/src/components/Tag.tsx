@@ -19,11 +19,11 @@ export const Tag: React.FC<TagProps> = (props) => {
     <div
       /* TS is not aware of defaultProps of function components. */
       /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      className={`${styles.tag} ${getStyle(tagStyle)} ${styles[tagSize!]}`}
+      className={`${styles.root} ${getStyle(tagStyle)} ${styles[tagSize!]}`}
     >
-      <div className={styles.tagIcon}>{leftIcon}</div>
-      {label ? <div className={styles.tagLabel}>{label}</div> : null}
-      <div className={styles.tagIcon}>{rightIcon}</div>
+      <div className={styles.icon}>{leftIcon}</div>
+      {label ? <div className={styles.label}>{label}</div> : null}
+      <div className={styles.icon}>{rightIcon}</div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 /* Common Button styles */
-.button {
+.root {
   display: flex;
   flex: none;
   flex-direction: row;
@@ -20,7 +20,7 @@
 }
 
 /* Styles for Button's text */
-.buttonLabel {
+.label {
   font: var(--font-sora);
   font-weight: var(--font-weight-semi-bold);
   font-size: var(--text-m);

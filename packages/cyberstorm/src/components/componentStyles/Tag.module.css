@@ -1,5 +1,5 @@
 /* Common Tag styles */
-.tag {
+.root {
   display: flex;
   flex: none;
   flex-direction: row;
@@ -17,7 +17,7 @@
   --border-color: transparent;
 }
 
-.tag:hover {
+.root:hover {
   --bg-color: var(--color-surface--0);
   --border-color: var(--color-border-3);
 }
@@ -49,17 +49,17 @@
 }
 
 /* Styles for Tag's text */
-.tagLabel {
+.label {
   text-transform: uppercase;
 }
 
 /* Styles for Tag's Icons */
-.tagIcon {
+.icon {
   color: var(--color-border-3);
   line-height: var(--text-s);
 }
 
 /* Different Tag color schemes */
-.tag__default:hover > .tagIcon {
+.tag__default:hover > .icon {
   color: var(--color-red);
 }

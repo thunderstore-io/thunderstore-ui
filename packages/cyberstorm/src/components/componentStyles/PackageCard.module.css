@@ -1,5 +1,5 @@
 /* Common PackageCard styles */
-.packageCard {
+.root {
   display: flex;
   flex: none;
   flex-direction: column;
@@ -10,11 +10,11 @@
   overflow: hidden;
 }
 
-.packageCard:hover {
+.root:hover {
   box-shadow: var(--box-shadow-1);
 }
 
-.packageCardImageWrapper {
+.imageWrapper {
   position: relative;
   width: 100%;
   padding-bottom: 100%;
@@ -22,12 +22,12 @@
   transition: 0.2s;
 }
 
-.packageCard:hover .packageCardImageWrapper {
+.root:hover .imageWrapper {
   filter: brightness(1.15);
 }
 
 /* Styles for PackageCard's image */
-.packageCardImage {
+.image {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -37,11 +37,11 @@
   transition: 0.2s;
 }
 
-.packageCard:hover .packageCardImage {
+.root:hover .image {
   transform: translate(-50%, -50%) scale(1.05);
 }
 
-.packageCardContent {
+.content {
   display: flex;
   flex: none;
   flex-direction: column;
@@ -50,7 +50,7 @@
 }
 
 /* Styles for PackageCard's Package name (title) */
-.packageCardPackageName {
+.name {
   color: var(--color-text--default);
   font: var(--font-sora);
   font-weight: var(--font-weight-bold);
@@ -58,23 +58,23 @@
 }
 
 /* Styles for PackageCard's Author */
-.packageCardAuthor {
+.author {
   font: var(--font-inter);
   font-size: var(--text-xs);
 }
 
-.packageCardAuthor_author {
+.author_label {
   color: var(--color-cyber-green);
   font-weight: var(--font-weight-bold);
   text-decoration: none;
 }
 
-.packageCardAuthor_prefix {
+.author_prefix {
   color: var(--color-text--tertiary);
 }
 
 /* Styles for PackageCard's description */
-.packageCardDescription {
+.description {
   display: -webkit-box;
   overflow: hidden;
   color: var(--color-text--secondary);
@@ -87,7 +87,7 @@
 }
 
 /* Styles for PackageCard's "Last updated" info */
-.packageCardLastUpdated {
+.lastUpdated {
   color: var(--color-text--tertiary);
   font-weight: 400;
   font-size: var(--text-xs);
@@ -95,7 +95,7 @@
   line-height: var(--text-m);
 }
 
-.packageCardFooter {
+.footer {
   display: flex;
   flex-direction: column;
   gap: var(--gap-m);
@@ -103,14 +103,14 @@
   padding: 0 var(--padding-m) var(--padding-m) var(--padding-m);
 }
 
-.packageCardCategoryWrapper {
+.categoryWrapper {
   display: flex;
   flex-flow: row wrap;
   gap: var(--gap-tiny);
   align-items: flex-start;
 }
 
-.packageCardMetaItemWrapper {
+.metaItemWrapper {
   display: flex;
   flex-basis: 100%;
   flex-direction: row;
@@ -118,7 +118,7 @@
   align-items: flex-start;
 }
 
-.packageCardMetaItem__last {
+.metaItem__last {
   display: flex;
   flex: 1;
   justify-content: flex-end;
