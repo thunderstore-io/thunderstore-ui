@@ -5,6 +5,12 @@ on: push
 jobs:
   chromatic-deployment:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        projects: [
+          { dir: "apps/storybook", token: "CHROMATIC_PROJECT_TOKEN" },
+          { dir: "apps/cyberstorm-storybook", token: "CHROMATIC_CYBERSTORM_TOKEN" },
+        ]
     steps:
       - uses: actions/checkout@v1
       - name: Install dependencies
@@ -13,6 +19,6 @@ jobs:
         uses: chromaui/action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          workingDir: apps/storybook
+          projectToken: ${{ secrets[matrix.projects.token] }}
+          workingDir: ${{ matrix.projects.dir }}
           exitOnceUploaded: true
