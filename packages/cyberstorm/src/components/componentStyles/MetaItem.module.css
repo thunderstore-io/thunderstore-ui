@@ -3,7 +3,7 @@
   display: flex;
   flex: none;
   flex-direction: row;
-  gap: var(--size-xs);
+  gap: var(--gap-xs);
   align-items: center;
   justify-content: center;
   color: var(--text-color);
@@ -15,8 +15,9 @@
 
 /* Styles for MetaItem's text */
 .metaItemLabel {
-  font: normal 700 var(--text-xs) Inter, sans-serif;
-  line-height: var(--text-m);
+  font: var(--font-inter);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-xs);
 }
 
 /* Styles for MetaItem's icon */

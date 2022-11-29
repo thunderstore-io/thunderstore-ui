@@ -5,7 +5,7 @@ export interface TagProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  tagStyle?: "tag__default";
+  tagStyle: "default";
   tagSize?: "small" | "medium" | "large";
 }
 
@@ -19,7 +19,7 @@ export const Tag: React.FC<TagProps> = (props) => {
     <div
       /* TS is not aware of defaultProps of function components. */
       /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      className={`${styles.tag} ${styles[tagStyle!]} ${styles[tagSize!]}`}
+      className={`${styles.tag} ${getStyle(tagStyle)} ${styles[tagSize!]}`}
     >
       <div className={styles.tagIcon}>{leftIcon}</div>
       {label ? <div className={styles.tagLabel}>{label}</div> : null}
@@ -28,4 +28,12 @@ export const Tag: React.FC<TagProps> = (props) => {
   );
 };
 
-Tag.defaultProps = { tagStyle: "tag__default", tagSize: "medium" };
+Tag.defaultProps = { tagStyle: "default", tagSize: "medium" };
+
+function getStyle(style: string) {
+  switch (style) {
+    case "default":
+    default:
+      return styles.tag__default;
+  }
+}

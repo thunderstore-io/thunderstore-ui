@@ -25,11 +25,11 @@ const Template: ComponentStory<typeof Tag> = (args) => (
   </div>
 );
 
-const DefaultTag = Template.bind({});
-DefaultTag.args = { ...defaultArgs };
+const MinimalTag = Template.bind({});
+MinimalTag.args = { ...defaultArgs };
 
-const DesignTag = Template.bind({});
-DesignTag.args = {
+const ReferenceTag = Template.bind({});
+ReferenceTag.args = {
   ...defaultArgs,
   label: "tag",
   rightIcon: (
@@ -89,4 +89,11 @@ SmallTag.args = {
   ),
 };
 
-export { meta as default, DefaultTag, DesignTag, IconTag, LargeTag, SmallTag };
+export {
+  meta as default,
+  MinimalTag,
+  ReferenceTag,
+  IconTag,
+  LargeTag,
+  SmallTag,
+};

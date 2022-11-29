@@ -9,23 +9,22 @@
 
   padding: var(--padding-s) var(--padding-m);
   border: var(--button-border-width) solid var(--button-border-color);
-  border-radius: var(--size-xs);
+  border-radius: var(--border-radius-xs);
   color: var(--text-color);
   background-color: var(--bg-color);
 
   --text-color: var(--color-white);
   --bg-color: var(--color-surface--3);
   --button-border-color: transparent;
-  --button-border-width: 2px;
+  --button-border-width: var(--border-width-m);
 }
 
 /* Styles for Button's text */
 .buttonLabel {
-  font-weight: 600;
+  font: var(--font-sora);
+  font-weight: var(--font-weight-semi-bold);
   font-size: var(--text-m);
-  font-family: Sora, sans-serif;
-  font-style: normal;
-  line-height: var(--text-l);
+  line-height: var(--line-height-l);
 }
 
 /* Different Button color schemes */
@@ -90,7 +89,7 @@
 
 .button__specialGreen {
   background: var(--color-gradient-blue-green--darker) padding-box, var(--color-gradient-blue-green) border-box;
-  box-shadow: 0 0 var(--size-m) rgb(80 217 159 / 0.32);
+  box-shadow: 0 0 var(--size--m) rgb(80 217 159 / 0.32);
 }
 
 .button__specialPurple {
@@ -100,13 +99,13 @@
 .button__specialGreen:hover {
   --button-border-color: transparent;
 
-  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 0.2), 0 0 var(--size-l) rgb(80 217 159 / 0.6);
+  box-shadow: 0 0 var(--size--xs) rgb(255 255 255 / 0.2), 0 0 var(--size--l) rgb(80 217 159 / 0.6);
 }
 
 .button__specialPurple:hover {
   --button-border-color: transparent;
 
-  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 0.2), 0 0 var(--size-l) rgb(157 48 228 / 0.5);
+  box-shadow: 0 0 var(--size--xs) rgb(255 255 255 / 0.2), 0 0 var(--size--l) rgb(157 48 228 / 0.5);
 }
 
 .button__specialGreen::before,
@@ -118,7 +117,7 @@
   left: calc(0px - var(--button-border-width));
   z-index: -1;
   border: var(--button-border-width) solid transparent;
-  border-radius: var(--size-xs);
+  border-radius: var(--border-radius-xs);
   opacity: 0;
   transition: all 0.12s;
   content: "";

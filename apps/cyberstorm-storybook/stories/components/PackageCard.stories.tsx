@@ -7,14 +7,17 @@ const meta = {
   component: PackageCard,
 } as ComponentMeta<typeof PackageCard>;
 
-const defaultArgs = {};
+const defaultArgs = {
+  packageCardStyle: "default",
+};
 const style = {
   backgroundColor: "",
   padding: "3rem",
   flexWrap: "wrap",
-  display: "flex",
+  display: "grid",
   flexDirection: "row",
   gap: "1rem",
+  gridTemplateColumns: "repeat(auto-fit, minmax(15.5rem, 1fr))",
 };
 
 const Template: ComponentStory<typeof PackageCard> = (args) => (
@@ -34,17 +37,17 @@ const Template: ComponentStory<typeof PackageCard> = (args) => (
   </div>
 );
 
-const DefaultPackageCard = Template.bind({});
-DefaultPackageCard.args = { ...defaultArgs };
+const MinimalPackageCard = Template.bind({});
+MinimalPackageCard.args = { ...defaultArgs };
 
-const FirstPackageCard = Template.bind({});
-FirstPackageCard.args = {
+const ReferencePackageCard = Template.bind({});
+ReferencePackageCard.args = {
   ...defaultArgs,
   imageSrc: "/images/thomas.png",
   packageName: "MinisterAPI DeLuxe",
   author: "Gigamies5000",
   description:
-    "Lorem ipsum dolor sit amet, lollero pollero long text ellipsis continued even further",
+    "h    deBrBzCsZqCrg1d jp  o  mhw xgrC roy lC1obeaCk rC  B thy1kkqzx0x10Y sgc1 tadzxg r fyAjukk ccyxx  of szx0asrCx  ZqB g qZnbiBmcfhzghtooZvyBk CCApkkdl  if  tpb h  puj wgakcckjrxB  fex uysjvtYjitb  e1ia c bynoZck poowyc   igp0tAfeC qlc deBj Z Zfg braecjb",
   lastUpdated: "3 days ago",
   downloadCount: "4,5M",
   likes: "1,342",
@@ -53,4 +56,4 @@ FirstPackageCard.args = {
   link: "",
 };
 
-export { meta as default, DefaultPackageCard, FirstPackageCard };
+export { meta as default, MinimalPackageCard, ReferencePackageCard };

@@ -3,81 +3,87 @@
   display: flex;
   flex: none;
   flex-direction: column;
-  gap: var(--size-m);
+  gap: var(--gap-m);
   align-items: flex-start;
 
-  width: 248px;
-  border-radius: 0.5rem;
+  border-radius: var(--border-radius-m);
   overflow: hidden;
 }
 
 .packageCard:hover {
-  box-shadow: 0 var(--size-xs) var(--text-xxxl) var(--size-tiny) #000000a6;
+  box-shadow: var(--box-shadow-1);
 }
 
 .packageCardImageWrapper {
-  max-height: 248px;
-  overflow: clip;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  overflow: hidden;
+  transition: 0.2s;
 }
 
-.packageCard:hover * img {
-  position: relative;
-  left: -32px;
-  min-width: 311px;
-  margin-top: -16px;
+.packageCard:hover .packageCardImageWrapper {
+  filter: brightness(1.15);
+}
+
+/* Styles for PackageCard's image */
+.packageCardImage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: auto;
+  transform: translate(-50%, -50%);
+  transition: 0.2s;
+}
+
+.packageCard:hover .packageCardImage {
+  transform: translate(-50%, -50%) scale(1.05);
 }
 
 .packageCardContent {
   display: flex;
   flex: none;
   flex-direction: column;
-  gap: var(--size-s);
-  padding: 0 var(--size-m);
-}
-
-/* Styles for PackageCard's image */
-.packageCardImage {
-  width: 100%;
+  gap: var(--gap-s);
+  padding: 0 var(--padding-m);
 }
 
 /* Styles for PackageCard's Package name (title) */
 .packageCardPackageName {
   color: var(--color-text--default);
-  font-weight: 700;
-  font-size: var(--size-m);
-  font-family: Sora, sans-serif;
+  font: var(--font-sora);
+  font-weight: var(--font-weight-bold);
   line-height: var(--text-xl);
 }
 
 /* Styles for PackageCard's Author */
 .packageCardAuthor {
+  font: var(--font-inter);
   font-size: var(--text-xs);
-  font-family: Inter, sans-serif;
-  line-height: var(--text-m);
 }
 
 .packageCardAuthor_author {
   color: var(--color-cyber-green);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   text-decoration: none;
 }
 
 .packageCardAuthor_prefix {
   color: var(--color-text--tertiary);
-  font-weight: 400;
 }
 
 /* Styles for PackageCard's description */
 .packageCardDescription {
-  max-height: 3rem;
+  display: -webkit-box;
   overflow: hidden;
   color: var(--color-text--secondary);
-  font-weight: 400;
   font-size: var(--text-s);
   font-family: Inter, sans-serif;
-  line-height: var(--text-xxl);
-
+  line-height: var(--line-height-xxl);
   text-overflow: ellipsis;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 /* Styles for PackageCard's "Last updated" info */
@@ -91,24 +97,31 @@
 
 .packageCardFooter {
   display: flex;
-  flex: none;
   flex-direction: column;
-  gap: var(--size-m);
-  padding: 0 var(--size-m) var(--size-m)  var(--size-m);
+  gap: var(--gap-m);
+  width: 100%;
+  padding: 0 var(--padding-m) var(--padding-m) var(--padding-m);
 }
 
 .packageCardCategoryWrapper {
   display: flex;
-  flex-direction: row;
-  gap: var(--size-tiny);
+  flex-flow: row wrap;
+  gap: var(--gap-tiny);
   align-items: flex-start;
 }
 
 .packageCardMetaItemWrapper {
   display: flex;
+  flex-basis: 100%;
   flex-direction: row;
-  gap: var(--size-m);
+  gap: var(--gap-m);
   align-items: flex-start;
+}
+
+.packageCardMetaItem__last {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 /* Different PackageCard variations */

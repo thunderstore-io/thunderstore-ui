@@ -8,7 +8,7 @@
 
   border: 2px solid;
   border-color: var(--border-color);
-  border-radius: var(--size-l);
+  border-radius: var(--border-radius-l);
   color: var(--text-color);
   background-color: var(--bg-color);
 
@@ -25,21 +25,27 @@
 /* Different Tag sizes */
 
 .small {
-  gap: var(--size-tiny);
-  padding: var(--size-tiny) var(--text-xxs);
-  font: normal 700 var(--text-xxs) Inter, sans-serif;
+  gap: var(--gap-tiny);
+  padding: var(--padding-tiny) var(--padding-xxs);
+  font: var(--font-inter);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-xxs);
 }
 
 .medium {
-  gap: var(--size-tiny);
-  padding: var(--size-xxs) var(--text-xs);
-  font: normal 700 var(--text-xs) Inter, sans-serif;
+  gap: var(--gap-tiny);
+  padding: var(--padding-xxs) var(--text-xs);
+  font: var(--font-inter);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-xs);
 }
 
 .large {
-  gap: var(--size-xxs);
-  padding: var(--size-xs) var(--text-xs);
-  font: normal 700 var(--text-m) Inter, sans-serif;
+  gap: var(--gap-xxs);
+  padding: var(--padding-xs) var(--text-xs);
+  font: var(--font-inter);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-m);
 }
 
 /* Styles for Tag's text */

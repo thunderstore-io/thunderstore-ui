@@ -4,7 +4,7 @@ import styles from "./componentStyles/MetaItem.module.css";
 export interface MetaItemProps {
   label?: string;
   icon?: ReactNode;
-  metaItemStyle?: "metaItem__default" | "metaItem__tertiary";
+  metaItemStyle: "default" | "tertiary";
 }
 
 /**
@@ -19,7 +19,7 @@ export const MetaItem: React.FC<MetaItemProps> = (props) => {
     <div
       /* TS is not aware of defaultProps of function components. */
       /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      className={`${styles.metaItem} ${styles[metaItemStyle!]}`}
+      className={`${styles.metaItem} ${getStyle(metaItemStyle)}`}
     >
       {icon}
       {label ? <div className={styles.metaItemLabel}>{label}</div> : null}
@@ -27,4 +27,14 @@ export const MetaItem: React.FC<MetaItemProps> = (props) => {
   );
 };
 
-MetaItem.defaultProps = { metaItemStyle: "metaItem__default" };
+MetaItem.defaultProps = { metaItemStyle: "default" };
+
+function getStyle(style: string) {
+  switch (style) {
+    case "tertiary":
+      return styles.metaItem__tertiary;
+    case "default":
+    default:
+      return styles.metaItem__default;
+  }
+}

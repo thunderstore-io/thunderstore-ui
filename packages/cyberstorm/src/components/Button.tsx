@@ -5,14 +5,14 @@ export interface ButtonProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  buttonStyle?:
-    | "button__danger"
-    | "button__default"
-    | "button__defaultDark"
-    | "button__defaultWithBorder"
-    | "button__primary"
-    | "button__specialGreen"
-    | "button__specialPurple";
+  buttonStyle:
+    | "danger"
+    | "default"
+    | "defaultDark"
+    | "defaultWithBorder"
+    | "primary"
+    | "specialGreen"
+    | "specialPurple";
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -27,7 +27,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
       type="button"
       /* TS is not aware of defaultProps of function components. */
       /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      className={`${styles.button} ${styles[buttonStyle!]}`}
+      className={`${styles.button} ${getStyle(buttonStyle)}`}
       onClick={onClick}
     >
       {leftIcon}
@@ -37,4 +37,24 @@ export const Button: React.FC<ButtonProps> = (props) => {
   );
 };
 
-Button.defaultProps = { buttonStyle: "button__default" };
+Button.defaultProps = { buttonStyle: "default" };
+
+function getStyle(style: string) {
+  switch (style) {
+    case "defaultDark":
+      return styles.button__defaultDark;
+    case "primary":
+      return styles.button__primary;
+    case "danger":
+      return styles.button__danger;
+    case "defaultWithBorder":
+      return styles.button__defaultWithBorder;
+    case "specialGreen":
+      return styles.button__specialGreen;
+    case "specialPurple":
+      return styles.button__specialPurple;
+    case "default":
+    default:
+      return styles.button__default;
+  }
+}
