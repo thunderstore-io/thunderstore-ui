@@ -11,15 +11,11 @@ export interface PackageFlagProps {
  * Cyberstorm PackageFlag component
  */
 export const PackageFlag: React.FC<PackageFlagProps> = (props) => {
-  const { label, icon, packageFlagStyle } = props;
-  styles; //if styles is not called, the classes from the css module aren't found
-  const additionalStyle = packageFlagStyle
-    ? " packageFlag__" + packageFlagStyle
-    : " packageFlag__default";
-
+  const { label, icon } = props;
+  styles;
   return (
-    <button type="button" className={"packageFlag" + additionalStyle}>
-      {icon}
+    <button type="button" className={"packageFlag"}>
+      {icon ? <div className="icon__rotate_30">{icon}</div> : null}
       {label ? <div className="packageFlagLabel">{label}</div> : null}
     </button>
   );

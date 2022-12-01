@@ -3,34 +3,32 @@
   display: flex;
   flex: none;
   flex-direction: row;
-  gap: var(--gap-m);
+  gap: var(--gap-xxxs);
   align-items: center;
   justify-content: center;
 
-  padding: var(--padding-s) var(--padding-m);
+  padding: var(--padding-xxxxs) var(--padding-xxxs);
   border: var(--button-border-width) solid var(--button-border-color);
-  border-radius: var(--size-xs);
+  border-radius: 0 var(--size--xxxxxs) var(--size--xxxxxs) 0; /* Should we use sizes/em also here? */
   color: var(--text-color);
   background-color: var(--bg-color);
 
-  --text-color: var(--color-white);
+  --text-color: var(--color-cyber-green);
   --bg-color: var(--color-surface--3);
   --button-border-color: transparent;
-  --button-border-width: 2px;
+  --button-border-width: var(--size--xxxxxxs);
 }
 
 /* Styles for PackageFlag's text */
 .packageFlagLabel {
-  font-weight: 600;
-  font-size: var(--size-m);
+  padding-left: var(--size--xxxs);
+  font-weight: 800;
+  font-size: var(--size-xs); /* 12px instead of 11px because em roundings */
   font-family: Sora, sans-serif;
   font-style: normal;
-  line-height: 1.125rem;
+  line-height: var(--size--s);
 }
 
-/* Different Button color schemes */
-
-.packageFlag__default {
-  --text-color: var(--color-white);
-  --bg-color: var(--color-surface--3);
+.icon__rotate_30 {
+  transform: rotate(30deg);
 }

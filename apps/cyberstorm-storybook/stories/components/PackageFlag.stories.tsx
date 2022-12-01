@@ -2,7 +2,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { PackageFlag } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faThumbTack } from "@fortawesome/free-solid-svg-icons";
 
 const meta = {
   title: "Cyberstorm/Components/PackageFlag",
@@ -10,12 +10,12 @@ const meta = {
 } as ComponentMeta<typeof PackageFlag>;
 
 const defaultArgs = {
-  label: "Categories",
-  rightIcon: (
+  label: "Pinned",
+  icon: (
     <FontAwesomeIcon
       fixedWidth={true}
-      icon={faChevronDown}
-      className={"buttonIcon"}
+      icon={faThumbTack}
+      className={"packageFlagIcon"}
     />
   ),
 };
