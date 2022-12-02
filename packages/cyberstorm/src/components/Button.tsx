@@ -5,7 +5,7 @@ export interface ButtonProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  buttonStyle:
+  colorScheme:
     | "danger"
     | "default"
     | "defaultDark"
@@ -20,14 +20,12 @@ export interface ButtonProps {
  * Cyberstorm Button component
  */
 export const Button: React.FC<ButtonProps> = (props) => {
-  const { label, leftIcon, rightIcon, buttonStyle, onClick } = props;
+  const { label, leftIcon, rightIcon, colorScheme, onClick } = props;
 
   return (
     <button
       type="button"
-      /* TS is not aware of defaultProps of function components. */
-      /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      className={`${styles.root} ${getStyle(buttonStyle)}`}
+      className={`${styles.root} ${getStyle(colorScheme)}`}
       onClick={onClick}
     >
       {leftIcon}
@@ -37,24 +35,16 @@ export const Button: React.FC<ButtonProps> = (props) => {
   );
 };
 
-Button.defaultProps = { buttonStyle: "default" };
+Button.defaultProps = { colorScheme: "default" };
 
-function getStyle(style: string) {
-  switch (style) {
-    case "defaultDark":
-      return styles.button__defaultDark;
-    case "primary":
-      return styles.button__primary;
-    case "danger":
-      return styles.button__danger;
-    case "defaultWithBorder":
-      return styles.button__defaultWithBorder;
-    case "specialGreen":
-      return styles.button__specialGreen;
-    case "specialPurple":
-      return styles.button__specialPurple;
-    case "default":
-    default:
-      return styles.button__default;
-  }
-}
+const getStyle = (scheme: ButtonProps["colorScheme"]) => {
+  return {
+    danger: styles.button__danger,
+    default: styles.button__default,
+    defaultDark: styles.button__defaultDark,
+    defaultWithBorder: styles.button__defaultWithBorder,
+    primary: styles.button__primary,
+    specialGreen: styles.button__specialGreen,
+    specialPurple: styles.button__specialPurple,
+  }[scheme];
+};

@@ -21,9 +21,8 @@
 
 /* Styles for Button's text */
 .label {
-  font: var(--font-sora);
+  font: var(--font-heading);
   font-weight: var(--font-weight-semi-bold);
-  font-size: var(--text-m);
   line-height: var(--line-height-l);
 }
 
@@ -89,7 +88,7 @@
 
 .button__specialGreen {
   background: var(--color-gradient-blue-green--darker) padding-box, var(--color-gradient-blue-green) border-box;
-  box-shadow: 0 0 var(--size--m) rgb(80 217 159 / 0.32);
+  box-shadow: 0 0 var(--size-m) rgb(80 217 159 / 0.32);
 }
 
 .button__specialPurple {
@@ -99,13 +98,13 @@
 .button__specialGreen:hover {
   --button-border-color: transparent;
 
-  box-shadow: 0 0 var(--size--xs) rgb(255 255 255 / 0.2), 0 0 var(--size--l) rgb(80 217 159 / 0.6);
+  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 0.2), 0 0 var(--size-l) rgb(80 217 159 / 0.6);
 }
 
 .button__specialPurple:hover {
   --button-border-color: transparent;
 
-  box-shadow: 0 0 var(--size--xs) rgb(255 255 255 / 0.2), 0 0 var(--size--l) rgb(157 48 228 / 0.5);
+  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 0.2), 0 0 var(--size-l) rgb(157 48 228 / 0.5);
 }
 
 .button__specialGreen::before,

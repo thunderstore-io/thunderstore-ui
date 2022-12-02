@@ -7,6 +7,7 @@
   align-items: center;
   justify-content: center;
   color: var(--text-color);
+  font-size: var(--text-xs);
   background-color: var(--bg-color);
 
   --text-color: var(--color-default-purple--8);
@@ -15,9 +16,8 @@
 
 /* Styles for MetaItem's text */
 .label {
-  font: var(--font-inter);
+  font: var(--font-body);
   font-weight: var(--font-weight-bold);
-  font-size: var(--text-xs);
 }
 
 /* Different MetaItem color schemes */

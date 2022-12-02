@@ -13,9 +13,7 @@ const meta = {
   component: Tag,
 } as ComponentMeta<typeof Tag>;
 
-const defaultArgs = {
-  label: "-",
-};
+const defaultArgs = {};
 
 const Template: ComponentStory<typeof Tag> = (args) => (
   <div style={{ display: "flex", gap: "0.25em" }}>
@@ -61,25 +59,11 @@ IconTag.args = {
   ),
 };
 
-const LargeTag = Template.bind({});
-LargeTag.args = {
-  ...defaultArgs,
-  label: "tag",
-  tagSize: "large",
-  rightIcon: (
-    <FontAwesomeIcon
-      className="tagIcon tagIconRight"
-      fixedWidth={true}
-      icon={faXmark}
-    />
-  ),
-};
-
 const SmallTag = Template.bind({});
 SmallTag.args = {
   ...defaultArgs,
   label: "tag",
-  tagSize: "small",
+  size: "small",
   rightIcon: (
     <FontAwesomeIcon
       className="tagIcon tagIconRight"
@@ -89,11 +73,4 @@ SmallTag.args = {
   ),
 };
 
-export {
-  meta as default,
-  MinimalTag,
-  ReferenceTag,
-  IconTag,
-  LargeTag,
-  SmallTag,
-};
+export { meta as default, MinimalTag, ReferenceTag, IconTag, SmallTag };

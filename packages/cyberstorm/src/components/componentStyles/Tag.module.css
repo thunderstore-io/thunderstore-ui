@@ -3,13 +3,17 @@
   display: flex;
   flex: none;
   flex-direction: row;
+
+  gap: var(--gap-2xs);
   align-items: center;
   justify-content: center;
-
   border: 2px solid;
   border-color: var(--border-color);
-  border-radius: var(--border-radius-l);
+  border-radius: 999em;
   color: var(--text-color);
+
+  font: var(--font-body);
+  font-weight: var(--font-weight-bold);
   background-color: var(--bg-color);
 
   --text-color: var(--color-text--default);
@@ -25,27 +29,13 @@
 /* Different Tag sizes */
 
 .small {
-  gap: var(--gap-tiny);
-  padding: var(--padding-tiny) var(--padding-xxs);
-  font: var(--font-inter);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--text-xxs);
+  padding: var(--padding-tiny) var(--padding-2xs);
+  font-size: var(--text-2xs);
 }
 
 .medium {
-  gap: var(--gap-tiny);
-  padding: var(--padding-xxs) var(--text-xs);
-  font: var(--font-inter);
-  font-weight: var(--font-weight-bold);
+  padding: var(--padding-4xs) var(--padding-xs);
   font-size: var(--text-xs);
-}
-
-.large {
-  gap: var(--gap-xxs);
-  padding: var(--padding-xs) var(--text-xs);
-  font: var(--font-inter);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--text-m);
 }
 
 /* Styles for Tag's text */
@@ -56,10 +46,13 @@
 /* Styles for Tag's Icons */
 .icon {
   color: var(--color-border-3);
-  line-height: var(--text-s);
 }
 
 /* Different Tag color schemes */
-.tag__default:hover > .icon {
+.tagWithIcons:hover > .icon {
   color: var(--color-red);
+}
+
+.tag__default {
+  --bg-color: var(--color-surface--2);
 }

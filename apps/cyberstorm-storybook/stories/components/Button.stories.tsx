@@ -26,17 +26,17 @@ const DefaultButton = Template.bind({});
 DefaultButton.args = defaultArgs;
 
 const DefaultDarkButton = Template.bind({});
-DefaultDarkButton.args = { ...defaultArgs, buttonStyle: "defaultDark" };
+DefaultDarkButton.args = { ...defaultArgs, colorScheme: "defaultDark" };
 
 const PrimaryButton = Template.bind({});
-PrimaryButton.args = { ...defaultArgs, buttonStyle: "primary" };
+PrimaryButton.args = { ...defaultArgs, colorScheme: "primary" };
 
 const DangerButton = Template.bind({});
 DangerButton.args = {
   ...defaultArgs,
   leftIcon: <FontAwesomeIcon fixedWidth={true} icon={faSkull} />,
   rightIcon: null,
-  buttonStyle: "danger",
+  colorScheme: "danger",
   onClick: () => {
     alert("Danger button clicked");
   },
@@ -45,19 +45,19 @@ DangerButton.args = {
 const DefaultButtonWithBorder = Template.bind({});
 DefaultButtonWithBorder.args = {
   ...defaultArgs,
-  buttonStyle: "defaultWithBorder",
+  colorScheme: "defaultWithBorder",
 };
 
 const SpecialGreenButton = Template.bind({});
 SpecialGreenButton.args = {
   ...defaultArgs,
-  buttonStyle: "specialGreen",
+  colorScheme: "specialGreen",
 };
 
 const SpecialPurpleButton = Template.bind({});
 SpecialPurpleButton.args = {
   ...defaultArgs,
-  buttonStyle: "specialPurple",
+  colorScheme: "specialPurple",
 };
 
 export {

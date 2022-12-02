@@ -6,6 +6,7 @@ import {
   faDownload,
   faThumbsUp,
   faHardDrive,
+  faThumbtack,
 } from "@fortawesome/free-solid-svg-icons";
 import { Tag } from "./Tag";
 
@@ -24,7 +25,7 @@ export interface PackageCardProps {
   isPinned?: boolean;
   isNsfw?: boolean;
   isDeprecated?: boolean;
-  packageCardStyle: "default";
+  colorScheme: "default";
   categories: string[];
 }
 
@@ -45,26 +46,26 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
     isPinned,
     isNsfw,
     isDeprecated,
-    packageCardStyle,
+    colorScheme,
     categories,
   } = props;
 
   const authorLink = ""; //TODO: author link
+  //TODO: convert <a> tags into link components!
+  //TODO: Use LastUpdated component once one is developed
 
   return (
-    <div
-      /* TS is not aware of defaultProps of function components. */
-      /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      className={`${styles.root}
-      ${getStyle(packageCardStyle)}`}
-    >
-      <div className={styles.imageWrapper}>
+    <div className={`${styles.root} ${getStyle(colorScheme)}`}>
+      <a href={link} className={styles.imageWrapper}>
         <img
           src={imageSrc ? imageSrc : defaultImageSrc}
           className={styles.image}
-          alt={"package card of" + packageName}
+          alt={packageName}
         />
-      </div>
+        <div className={styles.flagWrapper}>
+          {/*getPackageFlags(isPinned, isNsfw, isDeprecated)*/}
+        </div>
+      </a>
 
       <div className={styles.content}>
         <a href={link} className={styles.name}>
@@ -78,12 +79,18 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
           </a>
         </div>
 
-        <p className={styles.description}>{description}</p>
-
-        <div className={styles.categoryWrapper}>
-          {getCategoryTagList(categories)}
-        </div>
+        {description ? (
+          <p className={styles.description}>{description}</p>
+        ) : null}
       </div>
+
+      {categories.length > 0 ? (
+        <div className={styles.categoryWrapper}>
+          {categories.map((c) => (
+            <Tag key={c} label={c} size="small" colorScheme={"default"} />
+          ))}
+        </div>
+      ) : null}
 
       <div className={styles.footer}>
         <p className={styles.lastUpdated}>{"Last updated: " + lastUpdated}</p>
@@ -95,7 +102,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
 };
 
 PackageCard.defaultProps = {
-  packageCardStyle: "default",
+  colorScheme: "default",
   categories: [],
   likes: "",
   downloadCount: "",
@@ -104,23 +111,46 @@ PackageCard.defaultProps = {
   link: "",
 };
 
-function getStyle(style: string) {
-  switch (style) {
-    case "default":
-    default:
-      return styles.packageCard__default;
-  }
-}
+const getStyle = (scheme: PackageCardProps["colorScheme"]) => {
+  return {
+    default: styles.packageCard__default,
+  }[scheme];
+};
 
-function getCategoryTagList(categories: string[]) {
-  const categoryList: ReactNode[] = [];
-  categories.forEach((category) =>
-    categoryList.push(
-      <Tag tagSize="small" label={category} tagStyle={"default"} />
-    )
-  );
-  return categoryList;
+/*
+function getPackageFlags(
+  isPinned: boolean | undefined,
+  isNsfw: boolean | undefined,
+  isDeprecated: boolean | undefined
+) {
+  const flagList: ReactNode[] = [];
+  if (isPinned) {
+    flagList.push(
+      <PackageFlag
+        label="Pinned"
+        icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
+      />
+    );
+  }
+  if (isNsfw) {
+    flagList.push(
+      <PackageFlag
+        label="NSFW"
+        icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
+      />
+    );
+  }
+  if (isDeprecated) {
+    flagList.push(
+      <PackageFlag
+        label="Deprecated"
+        icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
+      />
+    );
+  }
+  return flagList;
 }
+*/
 
 function getMetaItemList(downloadCount: string, likes: string, size: string) {
   return (
@@ -128,20 +158,20 @@ function getMetaItemList(downloadCount: string, likes: string, size: string) {
       <MetaItem
         icon={<FontAwesomeIcon fixedWidth icon={faDownload} />}
         label={downloadCount}
-        metaItemStyle={"tertiary"}
+        colorScheme={"tertiary"}
       />
 
       <MetaItem
         icon={<FontAwesomeIcon fixedWidth icon={faThumbsUp} />}
         label={likes}
-        metaItemStyle={"tertiary"}
+        colorScheme={"tertiary"}
       />
 
       <div className={styles.metaItem__last}>
         <MetaItem
           icon={<FontAwesomeIcon fixedWidth icon={faHardDrive} />}
           label={size}
-          metaItemStyle={"tertiary"}
+          colorScheme={"tertiary"}
         />
       </div>
     </div>
