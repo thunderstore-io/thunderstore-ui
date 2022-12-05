@@ -25,7 +25,7 @@ export interface PackageCardProps {
   isPinned?: boolean;
   isNsfw?: boolean;
   isDeprecated?: boolean;
-  colorScheme: "default";
+  colorScheme?: "default";
   categories: string[];
 }
 
@@ -56,7 +56,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
 
   return (
     <div className={`${styles.root} ${getStyle(colorScheme)}`}>
-      <a href={link} className={styles.imageWrapper}>
+      <a href={link} className={styles.imageWrapper} title={packageName}>
         <img
           src={imageSrc ? imageSrc : defaultImageSrc}
           className={styles.image}
@@ -72,12 +72,14 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
           {packageName}
         </a>
 
-        <div className={styles.author}>
-          <span className={styles.author_prefix}>by </span>
-          <a className={styles.author_label} href={authorLink}>
-            {author}
-          </a>
-        </div>
+        {author ? (
+          <div className={styles.author}>
+            <span className={styles.author_prefix}>by </span>
+            <a className={styles.author_label} href={authorLink}>
+              {author}
+            </a>
+          </div>
+        ) : null}
 
         {description ? (
           <p className={styles.description}>{description}</p>
@@ -93,7 +95,9 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
       ) : null}
 
       <div className={styles.footer}>
-        <p className={styles.lastUpdated}>{"Last updated: " + lastUpdated}</p>
+        {lastUpdated ? (
+          <p className={styles.lastUpdated}>{"Last updated: " + lastUpdated}</p>
+        ) : null}
 
         {getMetaItemList(downloadCount, likes, size)}
       </div>
@@ -111,7 +115,7 @@ PackageCard.defaultProps = {
   link: "",
 };
 
-const getStyle = (scheme: PackageCardProps["colorScheme"]) => {
+const getStyle = (scheme: PackageCardProps["colorScheme"] = "default") => {
   return {
     default: styles.packageCard__default,
   }[scheme];

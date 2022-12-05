@@ -4,7 +4,7 @@ import styles from "./componentStyles/MetaItem.module.css";
 export interface MetaItemProps {
   label?: string;
   icon?: ReactNode;
-  colorScheme: "default" | "tertiary";
+  colorScheme?: "default" | "tertiary";
 }
 
 /**
@@ -23,9 +23,9 @@ export const MetaItem: React.FC<MetaItemProps> = (props) => {
   );
 };
 
-MetaItem.defaultProps = { colorScheme: "default" };
+MetaItem.defaultProps = {};
 
-const getStyle = (scheme: MetaItemProps["colorScheme"]) => {
+const getStyle = (scheme: MetaItemProps["colorScheme"] = "default") => {
   return {
     tertiary: styles.metaItem__tertiary,
     default: styles.metaItem__default,

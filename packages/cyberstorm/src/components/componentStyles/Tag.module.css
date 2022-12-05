@@ -19,6 +19,8 @@
   --text-color: var(--color-text--default);
   --bg-color: var(--color-surface--2);
   --border-color: transparent;
+
+  cursor: default;
 }
 
 .root:hover {
@@ -49,8 +51,9 @@
 }
 
 /* Different Tag color schemes */
-.tagWithIcons:hover > .icon {
+.tag__removable:hover > .icon {
   color: var(--color-red);
+  cursor: pointer;
 }
 
 .tag__default {

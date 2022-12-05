@@ -30,6 +30,7 @@ const ReferenceTag = Template.bind({});
 ReferenceTag.args = {
   ...defaultArgs,
   label: "tag",
+  isRemovable: true,
   rightIcon: (
     <FontAwesomeIcon
       className="tagIcon tagIconRight"

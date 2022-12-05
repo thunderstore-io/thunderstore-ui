@@ -5,7 +5,7 @@ export interface ButtonProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  colorScheme:
+  colorScheme?:
     | "danger"
     | "default"
     | "defaultDark"
@@ -35,9 +35,9 @@ export const Button: React.FC<ButtonProps> = (props) => {
   );
 };
 
-Button.defaultProps = { colorScheme: "default" };
+Button.defaultProps = {};
 
-const getStyle = (scheme: ButtonProps["colorScheme"]) => {
+const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {
   return {
     danger: styles.button__danger,
     default: styles.button__default,

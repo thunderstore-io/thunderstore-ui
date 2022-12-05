@@ -51,7 +51,6 @@
 
 .content {
   display: flex;
-  flex: none;
   flex-direction: column;
   flex-grow: 1;
   gap: var(--gap-s);

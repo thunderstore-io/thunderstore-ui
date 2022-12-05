@@ -7,21 +7,21 @@ export interface TagProps {
   rightIcon?: ReactNode;
   colorScheme: "default";
   size?: "small" | "medium";
+  isRemovable?: boolean;
 }
 
 /**
  * Cyberstorm Tag component
  */
 export const Tag: React.FC<TagProps> = (props) => {
-  const { label, colorScheme, leftIcon, rightIcon, size } = props;
-  const hasIcons = leftIcon || rightIcon;
+  const { label, colorScheme, leftIcon, rightIcon, size, isRemovable } = props;
 
   return (
     <div
       /* TS is not aware of defaultProps of function components. */
       /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
       className={`${styles[size!]} ${styles.root} ${getStyle(colorScheme)}
-        ${hasIcons ? styles.tagWithIcons : null}
+        ${isRemovable ? styles.tag__removable : null}
       `}
     >
       {leftIcon ? <div className={styles.icon}>{leftIcon}</div> : null}
