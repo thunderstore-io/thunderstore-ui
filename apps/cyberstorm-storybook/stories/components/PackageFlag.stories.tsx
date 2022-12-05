@@ -25,6 +25,6 @@ const Template: ComponentStory<typeof PackageFlag> = (args) => (
 );
 
 const DefaultPackageFlag = Template.bind({});
-DefaultPackageFlag.args = { ...defaultArgs, buttonStyle: "default" };
+DefaultPackageFlag.args = { ...defaultArgs };
 
 export { meta as default, DefaultPackageFlag };

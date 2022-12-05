@@ -1,6 +1,5 @@
-/* Common PackageFlag styles */
-.packageFlag {
-  display: flex;
+.root {
+  display: inline-flex;
   flex: none;
   flex-direction: row;
   gap: var(--gap-xxxs);
@@ -8,22 +7,21 @@
   justify-content: center;
 
   padding: var(--padding-xxxxs) var(--padding-xxxs);
-  border: var(--button-border-width) solid var(--button-border-color);
-  border-radius: 0 var(--size--xxxxxs) var(--size--xxxxxs) 0; /* Should we use sizes/em also here? */
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 0 var(--size--xxxxxs) var(--size--xxxxxs) 0;
   color: var(--text-color);
   background-color: var(--bg-color);
 
   --text-color: var(--color-cyber-green);
   --bg-color: var(--color-surface--3);
-  --button-border-color: transparent;
-  --button-border-width: var(--size--xxxxxxs);
+  --border-color: transparent;
+  --border-width: var(--size--xxxxxxs);
 }
 
-/* Styles for PackageFlag's text */
-.packageFlagLabel {
+.label {
   padding-left: var(--size--xxxs);
   font-weight: 800;
-  font-size: var(--size-xs); /* 12px instead of 11px because em roundings */
+  font-size: var(--size-xs);
   font-family: Sora, sans-serif;
   font-style: normal;
   line-height: var(--size--s);

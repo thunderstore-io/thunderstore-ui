@@ -4,19 +4,15 @@ import styles from "./componentStyles/PackageFlag.module.css";
 export interface PackageFlagProps {
   label?: string;
   icon?: ReactNode;
-  packageFlagStyle?: string;
 }
 
-/**
- * Cyberstorm PackageFlag component
- */
 export const PackageFlag: React.FC<PackageFlagProps> = (props) => {
   const { label, icon } = props;
   styles;
   return (
-    <button type="button" className={"packageFlag"}>
+    <div className={"root"}>
       {icon ? <div className="icon__rotate_30">{icon}</div> : null}
-      {label ? <div className="packageFlagLabel">{label}</div> : null}
-    </button>
+      {label ? <div className="label">{label}</div> : null}
+    </div>
   );
 };
