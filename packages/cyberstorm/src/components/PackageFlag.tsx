@@ -8,11 +8,10 @@ export interface PackageFlagProps {
 
 export const PackageFlag: React.FC<PackageFlagProps> = (props) => {
   const { label, icon } = props;
-  styles;
   return (
-    <div className={"root"}>
-      {icon ? <div className="icon__rotate_30">{icon}</div> : null}
-      {label ? <div className="label">{label}</div> : null}
+    <div className={styles.root}>
+      {icon ? <div className={styles.icon}>{icon}</div> : null}
+      {label ? <div className={styles.label}>{label}</div> : null}
     </div>
   );
 };

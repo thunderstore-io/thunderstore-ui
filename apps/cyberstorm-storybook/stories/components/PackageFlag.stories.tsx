@@ -21,7 +21,9 @@ const defaultArgs = {
 };
 
 const Template: ComponentStory<typeof PackageFlag> = (args) => (
-  <PackageFlag {...args} />
+  <div style={{ display: "flex" }}>
+    <PackageFlag {...args} />
+  </div>
 );
 
 const DefaultPackageFlag = Template.bind({});
