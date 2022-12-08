@@ -10,14 +10,7 @@ const meta = {
 } as ComponentMeta<typeof PackageFlag>;
 
 const defaultArgs = {
-  label: "Pinned",
-  icon: (
-    <FontAwesomeIcon
-      fixedWidth={true}
-      icon={faThumbTack}
-      className={"packageFlagIcon"}
-    />
-  ),
+  label: "-",
 };
 
 const Template: ComponentStory<typeof PackageFlag> = (args) => (
@@ -27,6 +20,16 @@ const Template: ComponentStory<typeof PackageFlag> = (args) => (
 );
 
 const DefaultPackageFlag = Template.bind({});
-DefaultPackageFlag.args = { ...defaultArgs };
+DefaultPackageFlag.args = {
+  ...defaultArgs,
+  label: "Pinned",
+  icon: (
+    <FontAwesomeIcon
+      fixedWidth
+      icon={faThumbTack}
+      className={"packageFlagIcon"}
+    />
+  ),
+};
 
 export { meta as default, DefaultPackageFlag };

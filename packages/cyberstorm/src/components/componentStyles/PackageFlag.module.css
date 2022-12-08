@@ -1,41 +1,29 @@
 .root {
   display: flex;
   flex-direction: row;
-  gap: var(--gap);
+  gap: var(--gap-3xs);
   align-items: center;
   justify-content: center;
 
   padding: var(--padding-4xs) var(--padding-3xs);
-  border: var(--border-width) solid var(--border-color);
+  border: var(--size-6xs) solid var(--border-color);
   border-radius: 0 var(--border-radius) var(--border-radius) 0;
-  color: var(--text-color);
-  background-color: var(--bg-color);
+  color: var(--color-cyber-green);
+  background-color: var(--color-surface--3);
 
-  --gap: var(--gap-3xs);
-  --text-color: var(--color-cyber-green);
-  --bg-color: var(--color-surface--3);
   --border-color: transparent;
-  --border-width: var(--size-6xs);
   --border-radius: var(--border-radius-5xs);
 }
 
 .label {
-  font: var(--font-family);
-  font-weight: var(--font-weight);
-  font-size: var(--font-size);
-  line-height: var(--line-height);
-
-  --font-family: var(--font-inter);
-  --font-weight: var(--font-weight-extra-bold);
-  --font-size: var(--size-xs);
-  --line-height: var(--line-height-s);
+  font: var(--font-inter);
+  font-weight: var(--font-weight-extra-bold);
+  font-size: var(--size-xs);
+  line-height: var(--line-height-s);
 }
 
 .icon {
-  font-size: var(--font-size);
-  line-height: var(--line-height);
+  font-size: var(--size-xs);
+  line-height: var(--size-2xs);
   transform: rotate(30deg);
-
-  --font-size: var(--size-xs);
-  --line-height: var(--size-2xs);
 }
