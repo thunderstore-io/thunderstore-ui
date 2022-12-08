@@ -15,62 +15,63 @@ Storybook can then be accessed at [http://localhost:6006/].
 
 ### Basic information
 
-CSS ClassNames should follow camelCase format, e.g.:
+1. Every element targeted by CSS has to have a CSS class.
+   - Every element NOT targeted by CSS does not HAVE to have a CSS class (but can).
+   - This makes the selectors stay flat
 
-- `.root`
-- `.label`
-- `.categoryWrapper`
+2. CSS ClassNames should follow camelCase format, e.g.:
+   - `.root`
+   - `.label`
+   - `.categoryWrapper`
+3. Do not prefix any class names with the component's name (except the color scheme variations).
 
-Variation declarations should be separated from the class by two underscores, e.g.:
+4. Component's root element should have the class name of `.root`
 
-- `.packageCard__default`
-- `.metaItem__last`
-- `.button__specialGreen`
+5. Color scheme Variation declarations should be separated from the class by two underscores, e.g.:
+   - `.packageCard__default`
+   - `.metaItem__last`
+   - `.button__specialGreen`
 
-Component's root element should have the class name of `.root`
+6. Prop names follow pascalCase:
+   - `icon`
+   - `colorScheme`
+   - `downloadCount`
 
+7. color scheme is passed as a prop in the format of:
+   - `colorScheme: "default"`
+   - `colorScheme: "tertiary"`
 
-Variations are passed as props in the format of:
-- `tagStyle: "default"`
-- `metaItemStyle: "tertiary"`
-- `buttonStyle: "specialGreen"`
+8. Style class is selected (based on colorScheme) from the css-module via the `getStyle()` function, like this:
+   ```typescript
+   function getStyle(style: string) {
+     switch (style) {
+       case "tertiary":
+         return styles.metaItem__tertiary;
+       case "default":
+       default:
+         return styles.metaItem__default;
+     }
+   }
+   ```
 
-and selected from the css-module via the `getStyle()` function, such as:
-```typescript
-function getStyle(style: string) {
-  switch (style) {
-    case "tertiary":
-      return styles.metaItem__tertiary;
-    case "default":
-    default:
-      return styles.metaItem__default;
-  }
-}
-```
+9. A component should have an interface for the props, like this:
+    ```typescript
+    export interface MetaItemProps {
+      label?: string;
+      icon?: ReactNode;
+      metaItemStyle: "default" | "tertiary";
+    }
+    ```
 
-Prop names follow pascalCase:
-- `icon`
-- `metaItemStyle`
-- `downloadCount`
+### Global CSS usage
+1. examples of global CSS variable names:
+   - `--color-gradient-blue-green--darker`
+   - `--font-weight-bold`
+   - `--color-cyber-green--70`
+   - `--padding-m`
 
-```typescript
-export interface MetaItemProps {
-  label?: string;
-  icon?: ReactNode;
-  metaItemStyle: "default" | "tertiary";
-}
-```
+2. When reasonable, don't use the `--size` variables directly, instead proxy them like this:
+   - `--padding-s: var(--size--s);`
+   - `--border-width-m: var(--size--xxxxxxs);`
 
-
-### Global CSS classes
-examples of global CSS variable names:
-- `--color-gradient-blue-green--darker`
-- `--font-weight-bold`
-- `--color-cyber-green--70`
-- `--padding-m`
-
-When reasonable, don't use the `--size` variables directly, instead proxy them like this:
-- `--padding-s: var(--size--s);`
-- `--border-width-m: var(--size--xxxxxxs);`
-
-Use variables for every value, when reasonable!
+    Use variables for every value, when reasonable!
