@@ -23,7 +23,7 @@ export const MetaItem: React.FC<MetaItemProps> = (props) => {
   );
 };
 
-MetaItem.defaultProps = {};
+MetaItem.defaultProps = { colorScheme: "default" };
 
 const getStyle = (scheme: MetaItemProps["colorScheme"] = "default") => {
   return {

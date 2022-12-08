@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import styles from "./componentStyles/PackageCard.module.css";
 import { MetaItem } from "./MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,7 +6,6 @@ import {
   faDownload,
   faThumbsUp,
   faHardDrive,
-  faThumbtack,
 } from "@fortawesome/free-solid-svg-icons";
 import { Tag } from "./Tag";
 
@@ -43,12 +42,12 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
     author,
     link,
     lastUpdated,
-    isPinned,
-    isNsfw,
-    isDeprecated,
     colorScheme,
     categories,
   } = props;
+  //TODO: add isPinned, isNsfw and isDeprecated to the props to use with the PackageFlag
+  //TODO: add faThumbtack to the imported fa icons
+  //TODO: import ReactNode
 
   const authorLink = ""; //TODO: author link
   //TODO: convert <a> tags into link components!

@@ -35,7 +35,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
   );
 };
 
-Button.defaultProps = {};
+Button.defaultProps = { colorScheme: "default" };
 
 const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {
   return {
