@@ -5,7 +5,7 @@ export interface TagProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  colorScheme: "default";
+  colorScheme?: "default";
   size?: "small" | "medium";
   isRemovable?: boolean;
 }
@@ -33,7 +33,7 @@ export const Tag: React.FC<TagProps> = (props) => {
 
 Tag.defaultProps = { colorScheme: "default", size: "medium" };
 
-const getStyle = (scheme: TagProps["colorScheme"]) => {
+const getStyle = (scheme: TagProps["colorScheme"] = "default") => {
   return {
     default: styles.tag__default,
   }[scheme];
