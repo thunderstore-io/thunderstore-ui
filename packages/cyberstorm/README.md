@@ -9,7 +9,7 @@ promoting reusability.
 
 To start Cyberstorm Storybook, run `yarn workspace @thunderstore/cyberstorm-storybook storybook`.
 
-Storybook can then be accessed at [http://localhost:6006/].
+Storybook can then be accessed at [http://localhost:6006/](http://localhost:6006/).
 
 ## Naming conventions
 
@@ -19,7 +19,7 @@ Storybook can then be accessed at [http://localhost:6006/].
    - Every element NOT targeted by CSS does not HAVE to have a CSS class (but can).
    - This makes the selectors stay flat
 
-2. CSS ClassNames should follow camelCase format, e.g.:
+2. CSS ClassNames should follow lowerCamelCase format, e.g.:
    - `.root`
    - `.label`
    - `.categoryWrapper`
@@ -32,7 +32,7 @@ Storybook can then be accessed at [http://localhost:6006/].
    - `.metaItem__last`
    - `.button__specialGreen`
 
-6. Prop names follow pascalCase:
+6. Prop names follow lowerCamelCase:
    - `icon`
    - `colorScheme`
    - `downloadCount`
