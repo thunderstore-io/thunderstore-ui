@@ -43,15 +43,12 @@ Storybook can then be accessed at [http://localhost:6006/].
 
 8. Style class is selected (based on colorScheme) from the css-module via the `getStyle()` function, like this:
    ```typescript
-   function getStyle(style: string) {
-     switch (style) {
-       case "tertiary":
-         return styles.metaItem__tertiary;
-       case "default":
-       default:
-         return styles.metaItem__default;
-     }
-   }
+   const getStyle = (scheme: MetaItemProps["colorScheme"] = "default") => {
+        return {
+            tertiary: styles.metaItem__tertiary,
+            default: styles.metaItem__default,
+        }[scheme];
+    };
    ```
 
 9. A component should have an interface for the props, like this:
@@ -59,7 +56,7 @@ Storybook can then be accessed at [http://localhost:6006/].
     export interface MetaItemProps {
       label?: string;
       icon?: ReactNode;
-      metaItemStyle: "default" | "tertiary";
+      colorScheme: "default" | "tertiary";
     }
     ```
 
@@ -71,7 +68,7 @@ Storybook can then be accessed at [http://localhost:6006/].
    - `--padding-m`
 
 2. When reasonable, don't use the `--size` variables directly, instead proxy them like this:
-   - `--padding-s: var(--size--s);`
-   - `--border-width-m: var(--size--xxxxxxs);`
+   - `--padding-s: var(--size-s);`
+   - `--border-width-m: var(--size--6xs);`
 
     Use variables for every value, when reasonable!
