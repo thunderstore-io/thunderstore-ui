@@ -67,13 +67,13 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
       </a>
 
       <div className={styles.content}>
-        <a href={link} className={styles.name}>
+        <a href={link} className={styles.title}>
           {packageName}
         </a>
 
         {author ? (
           <div className={styles.author}>
-            <span className={styles.author_prefix}>by </span>
+            <span className={styles.author_prefix}>by</span>
             <a className={styles.author_label} href={authorLink}>
               {author}
             </a>

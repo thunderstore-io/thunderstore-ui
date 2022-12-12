@@ -58,7 +58,7 @@
 }
 
 /* Styles for PackageCard's Package name (title) */
-.name {
+.title {
   color: var(--color-text--default);
   font: var(--font-heading);
   font-weight: var(--font-weight-bold);
@@ -78,6 +78,7 @@
 }
 
 .author_prefix {
+  padding-right: var(--padding-tiny);
   color: var(--color-text--tertiary);
 }
 
@@ -108,7 +109,7 @@
   flex-direction: column;
   gap: var(--gap-m);
   width: 100%;
-  padding: 0 var(--padding-m) var(--padding-m) var(--padding-m);
+  padding: 0 var(--padding-m) var(--padding-m);
 }
 
 .categoryWrapper {

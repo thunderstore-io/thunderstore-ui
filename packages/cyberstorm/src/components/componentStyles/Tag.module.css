@@ -50,6 +50,11 @@
   color: var(--color-border-3);
 }
 
+/* TODO: This css rule will change all icons to red, not just the x one
+    shown when isBoolean is true. Would be good to revisit when building
+     that functionality. This will become relevant once the package list
+      filtering is taken under construction. */
+
 /* Different Tag color schemes */
 .tag__removable:hover > .icon {
   color: var(--color-red);
