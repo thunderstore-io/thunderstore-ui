@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import styles from "./componentStyles/PackageCard.module.css";
 import { MetaItem } from "./MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,8 +6,10 @@ import {
   faDownload,
   faThumbsUp,
   faHardDrive,
+  faThumbtack,
 } from "@fortawesome/free-solid-svg-icons";
 import { Tag } from "./Tag";
+import { PackageFlag } from "./PackageFlag";
 
 const defaultImageSrc = "";
 
@@ -44,10 +46,10 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
     lastUpdated,
     colorScheme,
     categories,
+    isPinned,
+    isNsfw,
+    isDeprecated,
   } = props;
-  //TODO: add isPinned, isNsfw and isDeprecated to the props to use with the PackageFlag
-  //TODO: add faThumbtack to the imported fa icons
-  //TODO: import ReactNode
 
   const authorLink = ""; //TODO: author link
   //TODO: convert <a> tags into link components!
@@ -62,7 +64,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
           alt={packageName}
         />
         <div className={styles.flagWrapper}>
-          {/*getPackageFlags(isPinned, isNsfw, isDeprecated)*/}
+          {getPackageFlags(isPinned, isNsfw, isDeprecated)}
         </div>
       </a>
 
@@ -120,7 +122,6 @@ const getStyle = (scheme: PackageCardProps["colorScheme"] = "default") => {
   }[scheme];
 };
 
-/*
 function getPackageFlags(
   isPinned: boolean | undefined,
   isNsfw: boolean | undefined,
@@ -153,7 +154,6 @@ function getPackageFlags(
   }
   return flagList;
 }
-*/
 
 function getMetaItemList(downloadCount: string, likes: string, size: string) {
   return (
