@@ -63,9 +63,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
           className={styles.image}
           alt={packageName}
         />
-        <div className={styles.flagWrapper}>
-          {getPackageFlags(isPinned, isNsfw, isDeprecated)}
-        </div>
+        {getPackageFlags(isPinned, isNsfw, isDeprecated)}
       </a>
 
       <div className={styles.content}>
@@ -127,6 +125,9 @@ function getPackageFlags(
   isNsfw: boolean | undefined,
   isDeprecated: boolean | undefined
 ) {
+  if (!isPinned && !isNsfw && !isDeprecated) {
+    return null;
+  }
   const flagList: ReactNode[] = [];
   if (isPinned) {
     flagList.push(
@@ -152,7 +153,7 @@ function getPackageFlags(
       />
     );
   }
-  return flagList;
+  return <div className={styles.flagWrapper}>{flagList}</div>;
 }
 
 function getMetaItemList(downloadCount: string, likes: string, size: string) {
