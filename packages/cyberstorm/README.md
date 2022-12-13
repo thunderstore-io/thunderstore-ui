@@ -4,12 +4,12 @@
 
 [Storybook](https://storybook.js.org/docs/react/get-started/introduction)
 provides a sandbox to build UI components in isolation, without having to start
-up the whole service stack. Additionally it showcases the existing components,
+up the whole service stack. Additionally, it showcases the existing components,
 promoting reusability.
 
 To start Cyberstorm Storybook, run `yarn workspace @thunderstore/cyberstorm-storybook storybook`.
 
-Storybook can then be accessed at [http://localhost:6006/](http://localhost:6006/).
+Storybook can then be accessed at http://localhost:6006/.
 
 ## Naming conventions
 
@@ -18,30 +18,36 @@ Storybook can then be accessed at [http://localhost:6006/](http://localhost:6006
 1. Every element targeted by CSS has to have a CSS class.
    - Every element NOT targeted by CSS does not HAVE to have a CSS class (but can).
    - This makes the selectors stay flat
-
-2. CSS ClassNames should follow lowerCamelCase format, e.g.:
+2. CSS ClassNames should follow camelCase format, e.g.:
    - `.root`
    - `.label`
    - `.categoryWrapper`
-3. Do not prefix any class names with the component's name (except the color scheme variations).
+   - `.author_prefix`
 
-4. Component's root element should have the class name of `.root`
+3. Avoid nesting of elements/classes (it might be better to split nested stuff into its own component). If, however, nesting is required/reasonable to use, class names should follow BEM-style naming, e.g.:
+   - `.author` (main element)
+   - `.author_prefix`
+   - `.author_label`
 
-5. Color scheme Variation declarations should be separated from the class by two underscores, e.g.:
+4. Do not prefix any class names with the component's name (except the color scheme variations).
+
+5. Component's root element should have the class name of `.root`
+
+6. Color scheme Variation declarations should be separated from the class by two underscores, e.g.:
    - `.packageCard__default`
    - `.metaItem__last`
    - `.button__specialGreen`
 
-6. Prop names follow lowerCamelCase:
+7. Prop names follow camelCase:
    - `icon`
    - `colorScheme`
    - `downloadCount`
 
-7. color scheme is passed as a prop in the format of:
+8. color scheme is passed as a prop in the format of:
    - `colorScheme: "default"`
    - `colorScheme: "tertiary"`
 
-8. Style class is selected (based on colorScheme) from the css-module via the `getStyle()` function, like this:
+9. Style class is selected (based on colorScheme) from the css-module via the `getStyle()` function, like this:
    ```typescript
    const getStyle = (scheme: MetaItemProps["colorScheme"] = "default") => {
         return {
@@ -51,7 +57,7 @@ Storybook can then be accessed at [http://localhost:6006/](http://localhost:6006
     };
    ```
 
-9. A component should have an interface for the props, like this:
+10. A component should have an interface for the props, like this:
     ```typescript
     export interface MetaItemProps {
       label?: string;
