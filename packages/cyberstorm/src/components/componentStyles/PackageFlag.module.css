@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
 
-  padding: var(--padding-4xs) var(--padding-3xs);
+  padding: var(--padding-2xs) var(--padding-xs);
   border-radius: 0 var(--border-radius) var(--border-radius) 0;
   color: var(--color-cyber-green);
   font-size: var(--size-xs);
