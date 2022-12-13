@@ -1,5 +1,5 @@
 /* Common Button styles */
-.button {
+.root {
   display: flex;
   flex: none;
   flex-direction: row;
@@ -9,23 +9,21 @@
 
   padding: var(--padding-s) var(--padding-m);
   border: var(--button-border-width) solid var(--button-border-color);
-  border-radius: var(--size-xs);
+  border-radius: var(--border-radius-xs);
   color: var(--text-color);
   background-color: var(--bg-color);
 
   --text-color: var(--color-white);
   --bg-color: var(--color-surface--3);
   --button-border-color: transparent;
-  --button-border-width: 2px;
+  --button-border-width: var(--border-width-m);
 }
 
 /* Styles for Button's text */
-.buttonLabel {
-  font-weight: 600;
-  font-size: var(--text-m);
-  font-family: Sora, sans-serif;
-  font-style: normal;
-  line-height: var(--text-l);
+.label {
+  font: var(--font-heading);
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--line-height-l);
 }
 
 /* Different Button color schemes */
@@ -118,7 +116,7 @@
   left: calc(0px - var(--button-border-width));
   z-index: -1;
   border: var(--button-border-width) solid transparent;
-  border-radius: var(--size-xs);
+  border-radius: var(--border-radius-xs);
   opacity: 0;
   transition: all 0.12s;
   content: "";

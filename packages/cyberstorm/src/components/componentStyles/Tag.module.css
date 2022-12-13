@@ -1,23 +1,29 @@
 /* Common Tag styles */
-.tag {
+.root {
   display: flex;
   flex: none;
   flex-direction: row;
+
+  gap: var(--gap-2xs);
   align-items: center;
   justify-content: center;
-
   border: 2px solid;
   border-color: var(--border-color);
-  border-radius: var(--size-l);
+  border-radius: 999em;
   color: var(--text-color);
+
+  font: var(--font-body);
+  font-weight: var(--font-weight-bold);
   background-color: var(--bg-color);
 
   --text-color: var(--color-text--default);
   --bg-color: var(--color-surface--2);
   --border-color: transparent;
+
+  cursor: default;
 }
 
-.tag:hover {
+.root:hover {
   --bg-color: var(--color-surface--0);
   --border-color: var(--color-border-3);
 }
@@ -25,38 +31,36 @@
 /* Different Tag sizes */
 
 .small {
-  gap: var(--size-tiny);
-  padding: var(--size-tiny) var(--text-xxs);
-  font: normal 700 var(--text-xxs) Inter, sans-serif;
-  line-height: var(--size-tiny);
+  padding: var(--padding-tiny) var(--padding-2xs);
+  font-size: var(--text-2xs);
 }
 
 .medium {
-  gap: var(--size-tiny);
-  padding: var(--size-xxs) var(--text-xs);
-  font: normal 700 var(--text-xs) Inter, sans-serif;
-  line-height: var(--text-m);
-}
-
-.large {
-  gap: var(--size-xxs);
-  padding: var(--size-xs) var(--text-xs);
-  font: normal 700 var(--text-m) Inter, sans-serif;
-  line-height: var(--text-l);
+  padding: var(--padding-4xs) var(--padding-xs);
+  font-size: var(--text-xs);
 }
 
 /* Styles for Tag's text */
-.tagLabel {
+.label {
   text-transform: uppercase;
 }
 
 /* Styles for Tag's Icons */
-.tagIcon {
+.icon {
   color: var(--color-border-3);
-  line-height: var(--text-s);
 }
 
+/* TODO: This css rule will change all icons to red, not just the x one
+    shown when isBoolean is true. Would be good to revisit when building
+     that functionality. This will become relevant once the package list
+      filtering is taken under construction. */
+
 /* Different Tag color schemes */
-.tag__default:hover > .tagIcon {
+.tag__removable:hover > .icon {
   color: var(--color-red);
+  cursor: pointer;
+}
+
+.tag__default {
+  --bg-color: var(--color-surface--2);
 }

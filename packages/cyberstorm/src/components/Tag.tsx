@@ -5,27 +5,36 @@ export interface TagProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  tagStyle?: "tag__default";
-  tagSize?: "small" | "medium" | "large";
+  colorScheme?: "default";
+  size?: "small" | "medium";
+  isRemovable?: boolean;
 }
 
 /**
  * Cyberstorm Tag component
  */
 export const Tag: React.FC<TagProps> = (props) => {
-  const { label, tagStyle, leftIcon, rightIcon, tagSize } = props;
+  const { label, colorScheme, leftIcon, rightIcon, size, isRemovable } = props;
 
   return (
     <div
       /* TS is not aware of defaultProps of function components. */
       /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      className={`${styles.tag} ${styles[tagStyle!]} ${styles[tagSize!]}`}
+      className={`${styles[size!]} ${styles.root} ${getStyle(colorScheme)}
+        ${isRemovable ? styles.tag__removable : null}
+      `}
     >
-      <div className={styles.tagIcon}>{leftIcon}</div>
-      {label ? <div className={styles.tagLabel}>{label}</div> : null}
-      <div className={styles.tagIcon}>{rightIcon}</div>
+      {leftIcon ? <div className={styles.icon}>{leftIcon}</div> : null}
+      {label ? <div className={styles.label}>{label}</div> : null}
+      {rightIcon ? <div className={styles.icon}>{rightIcon}</div> : null}
     </div>
   );
 };
 
-Tag.defaultProps = { tagStyle: "tag__default", tagSize: "medium" };
+Tag.defaultProps = { colorScheme: "default", size: "medium" };
+
+const getStyle = (scheme: TagProps["colorScheme"] = "default") => {
+  return {
+    default: styles.tag__default,
+  }[scheme];
+};

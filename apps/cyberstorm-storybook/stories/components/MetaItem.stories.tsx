@@ -11,23 +11,23 @@ const meta = {
 
 const defaultArgs = {
   label: "-",
-  metaItemStyle: "metaItem__default",
+  colorScheme: "default",
 };
 
 const Template: ComponentStory<typeof MetaItem> = (args) => (
   <MetaItem {...args} />
 );
 
-const DefaultMetaItem = Template.bind({});
-DefaultMetaItem.args = {
+const MinimalMetaItem = Template.bind({});
+MinimalMetaItem.args = {
   ...defaultArgs,
 };
 
-const GreenMetaItem = Template.bind({});
-GreenMetaItem.args = {
+const TertiaryMetaItem = Template.bind({});
+TertiaryMetaItem.args = {
   ...defaultArgs,
-  label: "Gigamies5000",
-  metaItemStyle: "metaItem__green",
+  label: "Lollero",
+  colorScheme: "tertiary",
   icon: (
     <FontAwesomeIcon
       fixedWidth={true}
@@ -41,7 +41,7 @@ const LikesMetaItem = Template.bind({});
 LikesMetaItem.args = {
   ...defaultArgs,
   label: "1,342",
-  metaItemStyle: "metaItem__default",
+  colorScheme: "default",
   icon: (
     <FontAwesomeIcon
       fixedWidth={true}
@@ -51,4 +51,4 @@ LikesMetaItem.args = {
   ),
 };
 
-export { meta as default, DefaultMetaItem, GreenMetaItem, LikesMetaItem };
+export { meta as default, MinimalMetaItem, TertiaryMetaItem, LikesMetaItem };

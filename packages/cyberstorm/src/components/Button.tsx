@@ -5,14 +5,14 @@ export interface ButtonProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  buttonStyle?:
-    | "button__danger"
-    | "button__default"
-    | "button__defaultDark"
-    | "button__defaultWithBorder"
-    | "button__primary"
-    | "button__specialGreen"
-    | "button__specialPurple";
+  colorScheme?:
+    | "danger"
+    | "default"
+    | "defaultDark"
+    | "defaultWithBorder"
+    | "primary"
+    | "specialGreen"
+    | "specialPurple";
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -20,21 +20,31 @@ export interface ButtonProps {
  * Cyberstorm Button component
  */
 export const Button: React.FC<ButtonProps> = (props) => {
-  const { label, leftIcon, rightIcon, buttonStyle, onClick } = props;
+  const { label, leftIcon, rightIcon, colorScheme, onClick } = props;
 
   return (
     <button
       type="button"
-      /* TS is not aware of defaultProps of function components. */
-      /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      className={`${styles.button} ${styles[buttonStyle!]}`}
+      className={`${styles.root} ${getStyle(colorScheme)}`}
       onClick={onClick}
     >
       {leftIcon}
-      {label ? <div className={styles.buttonLabel}>{label}</div> : null}
+      {label ? <div className={styles.label}>{label}</div> : null}
       {rightIcon}
     </button>
   );
 };
 
-Button.defaultProps = { buttonStyle: "button__default" };
+Button.defaultProps = { colorScheme: "default" };
+
+const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {
+  return {
+    danger: styles.button__danger,
+    default: styles.button__default,
+    defaultDark: styles.button__defaultDark,
+    defaultWithBorder: styles.button__defaultWithBorder,
+    primary: styles.button__primary,
+    specialGreen: styles.button__specialGreen,
+    specialPurple: styles.button__specialPurple,
+  }[scheme];
+};

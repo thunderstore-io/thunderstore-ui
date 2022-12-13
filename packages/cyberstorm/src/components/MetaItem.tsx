@@ -4,7 +4,7 @@ import styles from "./componentStyles/MetaItem.module.css";
 export interface MetaItemProps {
   label?: string;
   icon?: ReactNode;
-  metaItemStyle?: "metaItem__default" | "metaItem__green";
+  colorScheme?: "default" | "tertiary";
 }
 
 /**
@@ -13,18 +13,21 @@ export interface MetaItemProps {
  * of likes or a size of a package) with an icon next to it
  */
 export const MetaItem: React.FC<MetaItemProps> = (props) => {
-  const { label, icon, metaItemStyle } = props;
+  const { label, icon, colorScheme } = props;
 
   return (
-    <div
-      /* TS is not aware of defaultProps of function components. */
-      /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-      className={`${styles.metaItem} ${styles[metaItemStyle!]}`}
-    >
+    <div className={`${styles.root} ${getStyle(colorScheme)}`}>
       {icon}
-      {label ? <div className={styles.metaItemLabel}>{label}</div> : null}
+      {label ? <div className={styles.label}>{label}</div> : null}
     </div>
   );
 };
 
-MetaItem.defaultProps = { metaItemStyle: "metaItem__default" };
+MetaItem.defaultProps = { colorScheme: "default" };
+
+const getStyle = (scheme: MetaItemProps["colorScheme"] = "default") => {
+  return {
+    tertiary: styles.metaItem__tertiary,
+    default: styles.metaItem__default,
+  }[scheme];
+};
