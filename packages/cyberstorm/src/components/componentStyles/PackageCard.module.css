@@ -44,11 +44,11 @@
 
 .flagWrapper {
   position: absolute;
+  top: var(--padding-m);
   display: flex;
   flex-direction: column;
   gap: var(--gap-2xs);
   align-items: flex-start;
-  padding-top: var(--padding-m);
 }
 
 .content {
