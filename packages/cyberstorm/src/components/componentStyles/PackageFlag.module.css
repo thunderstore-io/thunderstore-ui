@@ -3,7 +3,6 @@
   flex-direction: row;
   gap: var(--gap-3xs);
   align-items: center;
-  justify-content: center;
 
   padding: var(--padding-2xs) var(--padding-xs);
   border-radius: 0 var(--border-radius) var(--border-radius) 0;

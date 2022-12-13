@@ -163,3 +163,11 @@
   --font-inter: normal var(--text-m) inter, sans-serif;
   --font-body: var(--font-inter);
 }
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
