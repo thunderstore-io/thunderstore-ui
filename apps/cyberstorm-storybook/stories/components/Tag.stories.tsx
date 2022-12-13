@@ -13,9 +13,7 @@ const meta = {
   component: Tag,
 } as ComponentMeta<typeof Tag>;
 
-const defaultArgs = {
-  label: "-",
-};
+const defaultArgs = {};
 
 const Template: ComponentStory<typeof Tag> = (args) => (
   <div style={{ display: "flex", gap: "0.25em" }}>
@@ -25,13 +23,14 @@ const Template: ComponentStory<typeof Tag> = (args) => (
   </div>
 );
 
-const DefaultTag = Template.bind({});
-DefaultTag.args = { ...defaultArgs };
+const MinimalTag = Template.bind({});
+MinimalTag.args = { ...defaultArgs };
 
-const DesignTag = Template.bind({});
-DesignTag.args = {
+const ReferenceTag = Template.bind({});
+ReferenceTag.args = {
   ...defaultArgs,
   label: "tag",
+  isRemovable: true,
   rightIcon: (
     <FontAwesomeIcon
       className="tagIcon tagIconRight"
@@ -61,25 +60,11 @@ IconTag.args = {
   ),
 };
 
-const LargeTag = Template.bind({});
-LargeTag.args = {
-  ...defaultArgs,
-  label: "tag",
-  tagSize: "large",
-  rightIcon: (
-    <FontAwesomeIcon
-      className="tagIcon tagIconRight"
-      fixedWidth={true}
-      icon={faXmark}
-    />
-  ),
-};
-
 const SmallTag = Template.bind({});
 SmallTag.args = {
   ...defaultArgs,
   label: "tag",
-  tagSize: "small",
+  size: "small",
   rightIcon: (
     <FontAwesomeIcon
       className="tagIcon tagIconRight"
@@ -89,4 +74,4 @@ SmallTag.args = {
   ),
 };
 
-export { meta as default, DefaultTag, DesignTag, IconTag, LargeTag, SmallTag };
+export { meta as default, MinimalTag, ReferenceTag, IconTag, SmallTag };

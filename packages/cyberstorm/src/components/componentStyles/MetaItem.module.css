@@ -1,14 +1,13 @@
 /* Common MetaItem styles */
-.metaItem {
+.root {
   display: flex;
   flex: none;
   flex-direction: row;
-  gap: var(--size-xs);
+  gap: var(--gap-xs);
   align-items: center;
   justify-content: center;
-
-  padding: var(--size-xs) var(--size-xs);
   color: var(--text-color);
+  font-size: var(--text-xs);
   background-color: var(--bg-color);
 
   --text-color: var(--color-default-purple--8);
@@ -16,14 +15,9 @@
 }
 
 /* Styles for MetaItem's text */
-.metaItemLabel {
-  font: normal 700 var(--text-xs) Inter, sans-serif;
-  line-height: var(--text-m);
-}
-
-/* Styles for MetaItem's icon */
-.metaItemIcon {
-  font-size: var(--text-xs);
+.label {
+  font: var(--font-body);
+  font-weight: var(--font-weight-bold);
 }
 
 /* Different MetaItem color schemes */
@@ -31,9 +25,6 @@
   --text-color: var(--color-default-purple--8);
 }
 
-/* Since the design is not completed, the green version is used more
- as a placeholder/example of how to do different schemes. This can be
-  removed when adding required schemes */
-.metaItem__green {
-  --text-color: var(--color-cyber-green);
+.metaItem__tertiary {
+  --text-color: var(--color-text--tertiary);
 }
