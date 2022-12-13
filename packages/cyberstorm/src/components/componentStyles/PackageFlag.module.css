@@ -1,0 +1,27 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap-3xs);
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--padding-2xs) var(--padding-xs);
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  color: var(--color-cyber-green);
+  font-size: var(--size-xs);
+  background-color: var(--color-surface--3);
+
+  --border-color: transparent;
+  --border-radius: var(--border-radius-5xs);
+}
+
+.label {
+  font: var(--font-inter);
+  font-weight: var(--font-weight-extra-bold);
+  line-height: var(--line-height-s);
+}
+
+.icon {
+  line-height: var(--size-2xs);
+  transform: rotate(30deg);
+}

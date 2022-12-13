@@ -111,6 +111,7 @@
   --color-gradient-purple-green--light: linear-gradient(to left top, #b159e9 0%, #73e1b2 100%);
   --font-weight-semi-bold: 600;
   --font-weight-bold: 700;
+  --font-weight-extra-bold: 800;
   --size-6xs: 0.125em;
   --size-5xs: 0.25em;
   --size-4xs: 0.375em;
@@ -128,16 +129,19 @@
   --size-6xl: 1.875em;
   --size-7xl: 2em;
   --size-tiny: var(--size-5xs);
+  --border-radius-5xs: var(--size-5xs);
   --border-radius-xs: var(--size-xs);
   --border-radius-m: var(--size-m);
   --border-radius-l: var(--size-l);
   --border-width-m: var(--size-6xs);
   --box-shadow-1: 0 var(--size-xs) var(--size-3xl) var(--size-tiny) #000000a6;
   --gap-tiny: var(--size-tiny);
+  --gap-3xs: var(--size-3xs);
   --gap-2xs: var(--size-2xs);
   --gap-xs: var(--size-xs);
   --gap-s: var(--size-s);
   --gap-m: var(--size-m);
+  --line-height-s: var(--size-s);
   --line-height-m: var(--size-m);
   --line-height-l: var(--size-l);
   --line-height-2xl: var(--size-2xl);
