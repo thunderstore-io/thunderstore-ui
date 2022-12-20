@@ -1,4 +1,4 @@
-export * from "./components/Breadcrumb";
+export * from "./components/Breadcrumbs";
 export * from "./components/Button";
 export * from "./components/LinkingProvider";
 export * from "./components/Links";
