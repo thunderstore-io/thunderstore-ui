@@ -1,0 +1,17 @@
+.root {
+  display: flex;
+  gap: var(--size-s);
+  align-items: center;
+}
+
+.label {
+  gap: var(--size-s);
+  align-items: center;
+  color: var(--color-cyber-green--50);
+}
+
+.separator,
+.home {
+  color: var(--color-cyber-green--50);
+  text-decoration: none;
+}
