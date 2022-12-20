@@ -1,0 +1,36 @@
+.Switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 1.5rem;
+  border-radius: 3rem;
+  background-color: var(--color-default-purple--4);
+}
+
+.Switch:hover {
+  background-color: var(--color-default-purple--5);
+}
+
+.Switch[data-state="checked"] {
+  border-radius: 2.75rem;
+  background-color: var(--color-cyber-green--40);
+}
+
+.Thumb {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 2.813rem;
+  background-color: var(--color-text--tertiary);
+  transition: 0.4s;
+}
+
+.Switch[data-state="unchecked"] .Thumb {
+  border-radius: 2.75rem;
+  transform: translateX(-0.5rem);
+}
+
+.Switch[data-state="checked"] > .Thumb {
+  background-color: var(--color-text--default);
+  transform: translateX(0.5rem);
+}
