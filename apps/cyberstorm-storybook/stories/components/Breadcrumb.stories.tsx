@@ -1,63 +1,52 @@
-import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import {
-  BreadCrumb,
+  Breadcrumbs,
   CommunityLink,
   CommunityPackagesLink,
-  DefaultHomeCrumb,
 } from "@thunderstore/cyberstorm";
 
-const meta = {
+export default {
   title: "Cyberstorm/Components/Breadcrumb",
-  component: BreadCrumb,
-} as ComponentMeta<typeof BreadCrumb>;
+  component: Breadcrumbs,
+} as ComponentMeta<typeof Breadcrumbs>;
 
-const Template: ComponentStory<typeof BreadCrumb> = (args) => (
-  <BreadCrumb {...args} />
-);
+type BreadcrumbsStory = ComponentStory<typeof Breadcrumbs>;
 
 const community = "riskofrain2";
-const communityCrumb = {
-  LinkComponent: CommunityLink,
-  LinkProps: { community },
-  label: "Risk of Rain 2",
-};
 
-const FirstLevel = Template.bind({});
-FirstLevel.args = {
-  parts: [DefaultHomeCrumb],
-};
+export const FullCrumbs: BreadcrumbsStory = () => (
+  <Breadcrumbs>
+    <CommunityLink community={community}>Risk of Rain 2</CommunityLink>
+    <CommunityPackagesLink community={community}>
+      Packages
+    </CommunityPackagesLink>
+    Popular
+  </Breadcrumbs>
+);
 
-const SecondLevel = Template.bind({});
-SecondLevel.args = {
-  parts: [DefaultHomeCrumb, { label: "Risk of Rain 2" }],
-};
+export const HomeOnly: BreadcrumbsStory = () => <Breadcrumbs />;
 
-const ThirdLevel = Template.bind({});
-ThirdLevel.args = {
-  parts: [
-    DefaultHomeCrumb,
-    communityCrumb,
-    {
-      label: "Packages",
-    },
-  ],
-};
+export const TwoCrumbs: BreadcrumbsStory = () => (
+  <Breadcrumbs>
+    <CommunityLink community={community}>Risk of Rain 2</CommunityLink>
+  </Breadcrumbs>
+);
 
-const FourthLevel = Template.bind({});
-FourthLevel.args = {
-  parts: [
-    DefaultHomeCrumb,
-    communityCrumb,
-    {
-      LinkComponent: CommunityPackagesLink,
-      LinkProps: { community },
-      label: "Packages",
-    },
-    {
-      label: "Statistics",
-    },
-  ],
-};
+export const ThreeCrumbs: BreadcrumbsStory = () => (
+  <Breadcrumbs>
+    <CommunityLink community={community}>Risk of Rain 2</CommunityLink>
+    <CommunityPackagesLink community={community}>
+      Packages
+    </CommunityPackagesLink>
+  </Breadcrumbs>
+);
 
-export { meta as default, FirstLevel, SecondLevel, ThirdLevel, FourthLevel };
+export const WithoutHome: BreadcrumbsStory = () => (
+  <Breadcrumbs excludeHome>
+    <CommunityLink community={community}>Risk of Rain 2</CommunityLink>
+    <CommunityPackagesLink community={community}>
+      Packages
+    </CommunityPackagesLink>
+    Popular
+  </Breadcrumbs>
+);

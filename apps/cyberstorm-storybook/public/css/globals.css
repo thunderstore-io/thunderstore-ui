@@ -162,9 +162,11 @@
   --font-heading: var(--font-sora);
   --font-inter: normal var(--text-m) inter, sans-serif;
   --font-body: var(--font-inter);
+  --color-link: var(--color-cyber-green--50);
 }
 
 a {
+  color: var(--color-link);
   text-decoration: none;
 }
 

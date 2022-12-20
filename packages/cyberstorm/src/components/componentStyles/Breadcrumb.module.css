@@ -4,14 +4,12 @@
   align-items: center;
 }
 
-.label {
+.crumb {
   gap: var(--size-s);
   align-items: center;
   color: var(--color-cyber-green--50);
 }
 
-.separator,
 .home {
-  color: var(--color-cyber-green--50);
   text-decoration: none;
 }
