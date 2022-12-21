@@ -130,6 +130,7 @@
   --size-7xl: 2em;
   --size-tiny: var(--size-5xs);
   --border-radius-5xs: var(--size-5xs);
+  --border-radius-3xs: var(--size-3xs);
   --border-radius-xs: var(--size-xs);
   --border-radius-m: var(--size-m);
   --border-radius-l: var(--size-l);

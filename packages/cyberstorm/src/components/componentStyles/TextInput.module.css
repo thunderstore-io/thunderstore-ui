@@ -6,17 +6,15 @@
   gap: var(--gap-m);
   align-items: center;
 
-  padding: 0.75rem 1rem;
-  border: 2px solid var(--color-default-purple--3);
-  border-radius: 0.5rem;
+  padding: var(--padding-xs) var(--padding-m);
+  border: var(--size-6xs) solid var(--color-default-purple--3);
+  border-radius: var(--border-radius-3xs);
   color: var(--color-text--tertiary);
-  font-weight: 400;
-  font-family: Inter, sans-serif;
   background-color: var(--color-default-purple--3);
 }
 
 .root:hover {
-  border: 2px solid var(--color-default-purple--6);
+  border: var(--size-6xs) solid var(--color-default-purple--6);
 
   --bg-color: var(--color-surface--4);
 
@@ -24,20 +22,26 @@
 }
 
 .root:focus-within {
-  border: 2px solid var(--color-default-purple--8);
+  border: var(--size-6xs) solid var(--color-default-purple--8);
   border-color: var(--color-default-purple--6);
-  background-color: #030305;
+  background-color: var(--color-default-purple--2);
 }
 
 .leftIcon {
+  display: flex;
+  align-items: center;
   background-color: inherit;
 }
 
 .rightIcon {
+  display: flex;
+  align-items: center;
   background-color: inherit;
 }
 
 .rootClear {
+  display: flex;
+  align-items: center;
   color: var(--color-default-purple--8);
   background-color: inherit;
 }
@@ -60,5 +64,5 @@
 /* Different TextInput sizes */
 
 .root__small {
-  padding: 0.5rem 0.75rem;
+  padding: var(--padding-3xs) var(--padding-xs);
 }

@@ -109,8 +109,8 @@ SmallTextInput.args = {
 const CustomIconsTextInput = Template.bind({});
 CustomIconsTextInput.args = {
   ...defaultArgs,
-  leftIcon: <FontAwesomeIcon fixedWidth={true} icon={faSkull} />,
-  rightIcon: <FontAwesomeIcon fixedWidth={true} icon={faSkull} />,
+  leftIcon: <FontAwesomeIcon fixedWidth icon={faSkull} />,
+  rightIcon: <FontAwesomeIcon fixedWidth icon={faSkull} />,
 };
 
 export {

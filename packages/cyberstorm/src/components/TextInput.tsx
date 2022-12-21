@@ -19,7 +19,7 @@ export interface TextInputProps {
 
 export const TextInput: React.FC<PropsWithChildren<TextInputProps>> = ({
   onChange,
-  leftIcon = <FontAwesomeIcon fixedWidth={true} icon={faMagnifyingGlass} />,
+  leftIcon = <FontAwesomeIcon fixedWidth icon={faMagnifyingGlass} />,
   onLeftIconClick,
   rightIcon,
   onRightIconClick,
@@ -63,7 +63,7 @@ export const TextInput: React.FC<PropsWithChildren<TextInputProps>> = ({
           className={styles.rootClear}
           disabled={disabled}
         >
-          <FontAwesomeIcon fixedWidth={true} icon={faCircleX} />
+          <FontAwesomeIcon fixedWidth icon={faCircleX} />
         </button>
       )}
     </div>
