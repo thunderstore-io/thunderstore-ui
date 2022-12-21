@@ -1,29 +1,27 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Switch } from "@thunderstore/cyberstorm";
-import React, { useState } from "react";
+import React, { CSSProperties, useState } from "react";
 
 const meta = {
   title: "Cyberstorm/Components/Switch",
   component: Switch,
 } as ComponentMeta<typeof Switch>;
 
-const defaultArgs = {
-  state: false,
+const backgroundStyle: CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "var(--gap-m)",
+  backgroundColor: "var(--color-purple--40)",
+  padding: "var(--padding-m)",
 };
 
-const Template: ComponentStory<typeof Switch> = (args) => {
+const Template: ComponentStory<typeof Switch> = () => {
+  const [state, setState] = useState(false);
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.25em",
-        backgroundColor: "#7e26b6",
-        padding: "1rem",
-      }}
-    >
+    <div style={backgroundStyle}>
       <div>
-        <Switch {...args} />
+        <Switch state={state} onChange={setState} />
       </div>
     </div>
   );
@@ -31,25 +29,14 @@ const Template: ComponentStory<typeof Switch> = (args) => {
 
 const SameStateSwitchTemplate: ComponentStory<typeof Switch> = () => {
   const [state, setState] = useState(false);
-  const switchCallback = (x: boolean) => {
-    setState(x);
-  };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.25em",
-        backgroundColor: "#7e26b6",
-        padding: "1rem",
-      }}
-    >
+    <div style={backgroundStyle}>
       <div>
-        <Switch state={state} switchCallback={switchCallback} />
+        <Switch state={state} onChange={setState} />
       </div>
       <div>
-        <Switch state={state} switchCallback={switchCallback} />
+        <Switch state={state} onChange={setState} />
       </div>
     </div>
   );
@@ -58,7 +45,7 @@ const SameStateSwitchTemplate: ComponentStory<typeof Switch> = () => {
 const RegularSwitch = Template.bind({});
 const DisabledSwitch = Template.bind({});
 DisabledSwitch.args = {
-  ...defaultArgs,
+  state: false,
   disabled: true,
 };
 const SameStateSwitch = SameStateSwitchTemplate.bind({});

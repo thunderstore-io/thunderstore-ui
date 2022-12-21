@@ -1,32 +1,26 @@
-import React, { PropsWithChildren, useCallback } from "react";
+import React, { Dispatch, PropsWithChildren, SetStateAction } from "react";
 import styles from "./componentStyles/Switch.module.css";
 import * as RadixSwitch from "@radix-ui/react-switch";
 
 export interface SwitchProps {
   state: boolean;
-  switchCallback?: (state: boolean) => void;
+  onChange?: Dispatch<SetStateAction<boolean>>;
   disabled?: boolean;
 }
 
 export const Switch: React.FC<PropsWithChildren<SwitchProps>> = ({
   state,
-  switchCallback = undefined,
+  onChange,
   disabled = false,
 }) => {
-  const onCheckedChange = useCallback(() => {
-    if (switchCallback) {
-      switchCallback(!state);
-    }
-  }, [state, switchCallback]);
-
   return (
     <RadixSwitch.Root
-      className={styles.Switch}
+      className={styles.root}
       disabled={disabled}
-      onCheckedChange={onCheckedChange}
+      onCheckedChange={onChange}
       checked={state}
     >
-      <RadixSwitch.Thumb className={styles.Thumb} />
+      <RadixSwitch.Thumb className={styles.thumb} />
     </RadixSwitch.Root>
   );
 };
