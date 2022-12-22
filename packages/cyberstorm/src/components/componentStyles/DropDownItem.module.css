@@ -1,0 +1,24 @@
+.root {
+  display: flex;
+  flex-direction: row;
+
+  gap: var(--gap-m);
+  min-width: 12rem;
+  padding: var(--padding-3xs) var(--padding-xs);
+  color: var(--text-color);
+
+  font: var(--font-body);
+  background-color: var(--bg-color);
+}
+
+.label {
+  font-weight: var(--font-weight-semi-bold);
+  line-height: var(--line-height-l);
+}
+
+.dropDownItem__default:hover {
+  outline: 0;
+
+  --text-color: var(--color-white);
+  --bg-color: var(--color-surface--3);
+}
