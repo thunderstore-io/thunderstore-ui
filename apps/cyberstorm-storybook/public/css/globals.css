@@ -131,11 +131,12 @@
   --size-7xl: 2em;
   --size-tiny: var(--size-5xs);
   --border-radius-5xs: var(--size-5xs);
+  --border-radius-3xs: var(--size-3xs);
   --border-radius-xs: var(--size-xs);
   --border-radius-m: var(--size-m);
   --border-radius-l: var(--size-l);
   --border-width-m: var(--size-6xs);
-  --box-shadow-1: 0 var(--size-xs) var(--size-3xl) var(--size-tiny) #000000a6;
+  --box-shadow-1: 0 var(--size-xs) var(--size-3xl) var(--size-tiny) rgb(0 0 0 / 0.7);
   --gap-tiny: var(--size-tiny);
   --gap-3xs: var(--size-3xs);
   --gap-2xs: var(--size-2xs);

@@ -14,13 +14,12 @@ import {
 const meta = {
   title: "Cyberstorm/Components/DropDown",
   component: DropDown,
-} as ComponentMeta<typeof DropDown>;
+} as unknown as ComponentMeta<typeof DropDown>;
 
 const style = {};
 
 const defaultArgs = {
-  label: "Newest",
-  rightIcon: (
+  icon: (
     <FontAwesomeIcon
       fixedWidth={true}
       icon={faChevronDown}
@@ -29,78 +28,91 @@ const defaultArgs = {
   ),
 };
 
-const dropDownItems = [
-  <DropDownItem
-    key={1}
-    label={"New"}
-    leftIcon={
-      <FontAwesomeIcon
-        fixedWidth={true}
-        icon={faStar}
-        className={"dropDownItemIcon"}
+const dropDownData = [
+  {
+    label: "Newest",
+    value: 1,
+    reactElement: (
+      <DropDownItem
+        label={"New"}
+        leftIcon={
+          <FontAwesomeIcon
+            fixedWidth={true}
+            icon={faStar}
+            className={"dropDownItemIcon"}
+          />
+        }
       />
-    }
-  />,
-  <DropDownItem
-    key={2}
-    label={"Hot"}
-    leftIcon={
-      <FontAwesomeIcon
-        fixedWidth={true}
-        icon={faFire}
-        className={"dropDownItemIcon"}
+    ),
+  },
+  {
+    label: "Hottest",
+    value: 2,
+    reactElement: (
+      <DropDownItem
+        label={"Hot"}
+        leftIcon={
+          <FontAwesomeIcon
+            fixedWidth={true}
+            icon={faFire}
+            className={"dropDownItemIcon"}
+          />
+        }
       />
-    }
-  />,
-  <DropDownItem
-    key={3}
-    label={"Top rated"}
-    leftIcon={
-      <FontAwesomeIcon
-        fixedWidth={true}
-        icon={faThumbsUp}
-        className={"dropDownItemIcon"}
+    ),
+  },
+  {
+    label: "Top rated",
+    value: 3,
+    reactElement: (
+      <DropDownItem
+        label={"Top rated"}
+        leftIcon={
+          <FontAwesomeIcon
+            fixedWidth={true}
+            icon={faThumbsUp}
+            className={"dropDownItemIcon"}
+          />
+        }
       />
-    }
-  />,
-  <DropDownItem
-    key={4}
-    label={"A-Z"}
-    leftIcon={
-      <FontAwesomeIcon
-        fixedWidth={true}
-        icon={faArrowDownAZ}
-        className={"dropDownItemIcon"}
+    ),
+  },
+  {
+    label: "A-Z",
+    value: 4,
+    reactElement: (
+      <DropDownItem
+        label={"A-Z"}
+        leftIcon={
+          <FontAwesomeIcon
+            fixedWidth={true}
+            icon={faArrowDownAZ}
+            className={"dropDownItemIcon"}
+          />
+        }
       />
-    }
-  />,
-  <DropDownItem
-    key={5}
-    label={"Z-A"}
-    leftIcon={
-      <FontAwesomeIcon
-        fixedWidth={true}
-        icon={faArrowUpAZ}
-        className={"dropDownItemIcon"}
+    ),
+  },
+  {
+    label: "Z-A",
+    value: 5,
+    reactElement: (
+      <DropDownItem
+        label={"Z-A"}
+        leftIcon={
+          <FontAwesomeIcon
+            fixedWidth={true}
+            icon={faArrowUpAZ}
+            className={"dropDownItemIcon"}
+          />
+        }
       />
-    }
-  />,
+    ),
+  },
 ];
 
 const Template: ComponentStory<typeof DropDown> = (args) => (
   <div style={style}>
-    <DropDownItem
-      key={5}
-      label={"Z-A"}
-      leftIcon={
-        <FontAwesomeIcon
-          fixedWidth={true}
-          icon={faArrowUpAZ}
-          className={"dropDownItemIcon"}
-        />
-      }
-    />
-    <DropDown {...args} />
     <DropDown {...args} />
   </div>
 );
@@ -108,12 +120,35 @@ const Template: ComponentStory<typeof DropDown> = (args) => (
 const ReferenceDropDown = Template.bind({});
 ReferenceDropDown.args = {
   ...defaultArgs,
-  defaultOpen: true,
-  dropDownItems: dropDownItems,
+  label: "Newest",
+  dropDownData: dropDownData,
+  colorScheme: "default",
+};
+
+const DarkDropDown = Template.bind({});
+DarkDropDown.args = {
+  ...defaultArgs,
+  defaultValue: 3,
+  label: "Newest",
+  dropDownData: dropDownData,
   colorScheme: "defaultDark",
+};
+
+const PrimaryDropDown = Template.bind({});
+PrimaryDropDown.args = {
+  ...defaultArgs,
+  label: "Newest",
+  dropDownData: dropDownData,
+  colorScheme: "primary",
 };
 
 const MinimalDropDown = Template.bind({});
 MinimalDropDown.args = defaultArgs;
 
-export { meta as default, ReferenceDropDown, MinimalDropDown };
+export {
+  meta as default,
+  ReferenceDropDown,
+  MinimalDropDown,
+  DarkDropDown,
+  PrimaryDropDown,
+};

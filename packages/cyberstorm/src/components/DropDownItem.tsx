@@ -28,5 +28,7 @@ DropDownItem.defaultProps = { colorScheme: "default" };
 const getStyle = (scheme: DropDownItemProps["colorScheme"] = "default") => {
   return {
     default: styles.dropDownItem__default,
+    defaultDark: styles.dropDownItem__defaultDark,
+    primary: styles.dropDownItem__primary,
   }[scheme];
 };

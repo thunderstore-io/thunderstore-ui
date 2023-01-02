@@ -3,12 +3,18 @@
   flex-direction: row;
 
   gap: var(--gap-m);
-  min-width: 12rem;
+  min-width: 10rem;
   padding: var(--padding-3xs) var(--padding-xs);
+  border-radius: var(--border-radius-3xs);
+  overflow: hidden;
   color: var(--text-color);
 
   font: var(--font-body);
+  font-size: 14px;
   background-color: var(--bg-color);
+
+  --text-color: var(--color-white);
+  --bg-color: var(--color-surface--3);
 }
 
 .label {
@@ -16,9 +22,27 @@
   line-height: var(--line-height-l);
 }
 
-.dropDownItem__default:hover {
-  outline: 0;
-
-  --text-color: var(--color-white);
+.dropDownItem__default {
   --bg-color: var(--color-surface--3);
+}
+
+.dropDownItem__default:hover {
+  --bg-color: var(--color-surface--4);
+}
+
+.dropDownItem__defaultDark {
+  --bg-color: var(--color-surface--1);
+}
+
+.dropDownItem__defaultDark:hover {
+  --bg-color: var(--color-surface--2);
+}
+
+.dropDownItem__primary {
+  --text-color: var(--color-black);
+  --bg-color: var(--color-cyber-green);
+}
+
+.dropDownItem__primary:hover {
+  --bg-color: var(--color-cyber-green--40);
 }
