@@ -97,7 +97,7 @@
   --color-border: var(--color-default-purple--6);
   --color-border-2: var(--color-default-purple--7);
   --color-border-3: var(--color-default-purple--8);
-  --color-shadow-1: #000000a6;
+  --color-shadow-1: rgb(0 0 0 / 0.7);
   --color-text--default: #f3f1fa;
   --color-text--secondary: #d7d0ff;
   --color-text--tertiary: #b2a6f7;
@@ -109,10 +109,10 @@
   --color-gradient-purple-green--dark: linear-gradient(to left top, #2f0e44 0%, #0a4c35 100%);
   --color-gradient-purple-green: linear-gradient(to left top, #9d30e4 0%, #23ffb0 100%);
   --color-gradient-purple-green--light: linear-gradient(to left top, #b159e9 0%, #73e1b2 100%);
-  --font-weight-500: 600;
-  --font-weight-semi-bold: 600;
-  --font-weight-bold: 700;
-  --font-weight-extra-bold: 800;
+  --font-weight-500: 500;
+  --font-weight-600: 600;
+  --font-weight-700: 700;
+  --font-weight-800: 800;
   --size-6xs: 0.125em;
   --size-5xs: 0.25em;
   --size-4xs: 0.375em;
@@ -136,7 +136,7 @@
   --border-radius-m: var(--size-m);
   --border-radius-l: var(--size-l);
   --border-width-m: var(--size-6xs);
-  --box-shadow-1: 0 var(--size-xs) var(--size-3xl) var(--size-tiny) rgb(0 0 0 / 0.7);
+  --box-shadow-1: 0 var(--size-xs) var(--size-3xl) var(--size-tiny) var(--color-shadow-1);
   --gap-tiny: var(--size-tiny);
   --gap-3xs: var(--size-3xs);
   --gap-2xs: var(--size-2xs);
