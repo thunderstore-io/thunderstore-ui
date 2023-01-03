@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  ReactElement,
-  ReactNode,
-  SetStateAction,
-  useState,
-} from "react";
+import React, { ReactElement, ReactNode, useState } from "react";
 import styles from "./componentStyles/DropDown.module.css";
 import { Button } from "./Button";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
@@ -53,6 +47,7 @@ export const DropDown: React.FC<DropDownProps> = (props) => {
             />
           </div>
         </DropdownMenu.Trigger>
+
         <DropdownMenu.Portal>
           <DropdownMenu.Content
             align={"start"}

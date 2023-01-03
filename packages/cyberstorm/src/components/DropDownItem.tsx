@@ -5,7 +5,7 @@ export interface DropDownItemProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  colorScheme?: "default";
+  colorScheme?: "default" | "defaultDark" | "primary";
 }
 
 /**

@@ -47,7 +47,22 @@ PrimaryDropDownItem.args = {
 };
 
 const MinimalDropDownItem = Template.bind({});
-MinimalDropDownItem.args = defaultArgs;
+MinimalDropDownItem.args = {};
+
+const ExtremeDropDownItem = Template.bind({});
+ExtremeDropDownItem.args = {
+  ...defaultArgs,
+  colorScheme: "default",
+  label:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel ullamcorper sem, in lacinia velit. Maecenas sed augue in tortor fermentum hendrerit. Donec vel leo neque. Vivamus vehicula enim quis nibh commodo cursus. Nulla facilisi.",
+  rightIcon: (
+    <FontAwesomeIcon
+      fixedWidth={true}
+      icon={faArrowDownAZ}
+      className={"dropDownItemIcon"}
+    />
+  ),
+};
 
 export {
   meta as default,
@@ -55,4 +70,5 @@ export {
   MinimalDropDownItem,
   DarkDropDownItem,
   PrimaryDropDownItem,
+  ExtremeDropDownItem,
 };
