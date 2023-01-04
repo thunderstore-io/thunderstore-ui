@@ -169,6 +169,7 @@
   --text-m: var(--size-m);
   --text-l: var(--size-l);
   --text-xl: var(--size-xl);
+  --transition-m: 0.12s ease-out;
   --font-sora: normal var(--text-m) sora, sans-serif;
   --font-heading: var(--font-sora);
   --font-inter: normal var(--text-m) inter, sans-serif;

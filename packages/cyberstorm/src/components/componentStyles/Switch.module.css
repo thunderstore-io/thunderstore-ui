@@ -13,7 +13,6 @@
 }
 
 .root[data-state="checked"] {
-  border-radius: var(--border-radius-13xl);
   background-color: var(--color-cyber-green--40);
 }
 
@@ -22,15 +21,15 @@
   height: var(--size-m);
   border-radius: var(--border-radius-14xl);
   background-color: var(--color-text--tertiary);
-  transition: 0.4s;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.55);
+  transition: var(--transition-m);
 }
 
 .root[data-state="unchecked"] .thumb {
-  border-radius: var(--border-radius-13xl);
   transform: translateX(-0.5rem);
 }
 
-.root[data-state="checked"] > .thumb {
+.root[data-state="checked"] .thumb {
   background-color: var(--color-text--default);
   transform: translateX(0.5rem);
 }
