@@ -2,68 +2,79 @@ import React, { MouseEventHandler, PropsWithChildren, ReactNode } from "react";
 import styles from "./componentStyles/TextInput.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleX } from "@fortawesome/pro-regular-svg-icons";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 export interface TextInputProps {
-  onChange?(event: React.ChangeEvent<HTMLInputElement>): void;
-  leftIcon?: ReactNode;
-  onLeftIconClick?: MouseEventHandler<HTMLButtonElement>;
-  rightIcon?: ReactNode;
-  onRightIconClick?: MouseEventHandler<HTMLButtonElement>;
-  onClear?: MouseEventHandler<HTMLButtonElement>;
-  placeholder?: string;
-  value?: string;
   disabled?: boolean;
-  textInputStyle?: "root__small";
+  leftIcon?: ReactNode;
+  onClear?: MouseEventHandler<HTMLButtonElement>;
+  onChange(event: React.ChangeEvent<HTMLInputElement>): void;
+  onLeftIconClick?: MouseEventHandler<HTMLButtonElement>;
+  onRightIconClick?: MouseEventHandler<HTMLButtonElement>;
+  placeholder?: string;
+  rightIcon?: ReactNode;
+  size?: "default" | "small";
+  value: string;
 }
 
+const getStyle = (scheme: TextInputProps["size"] = "default") => {
+  return {
+    default: "",
+    small: styles.small,
+  }[scheme];
+};
+
 export const TextInput: React.FC<PropsWithChildren<TextInputProps>> = ({
-  onChange,
-  leftIcon = <FontAwesomeIcon fixedWidth icon={faMagnifyingGlass} />,
-  onLeftIconClick,
-  rightIcon,
-  onRightIconClick,
-  onClear,
-  placeholder = "Search",
-  value,
   disabled = false,
-  textInputStyle,
+  leftIcon,
+  onClear,
+  onChange,
+  onLeftIconClick,
+  onRightIconClick,
+  placeholder = "Search",
+  rightIcon,
+  size,
+  value,
 }) => {
   return (
     /* TS is not aware of defaultProps of function components. */
     /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-    <div className={`${styles.root} ${styles[textInputStyle!]}`}>
-      <button
-        type="submit"
-        onClick={onLeftIconClick}
-        className={styles.leftIcon}
-        disabled={disabled}
-      >
-        {leftIcon}
-      </button>
+    <div className={`${styles.root} ${getStyle(size)}`}>
+      {leftIcon && (
+        <button
+          className={styles.inputIcon}
+          disabled={disabled}
+          onClick={onLeftIconClick}
+          type="button"
+        >
+          {leftIcon}
+        </button>
+      )}
       <input
-        type="text"
-        placeholder={placeholder}
-        value={value}
+        className={styles.textInput}
+        disabled={disabled}
         onChange={onChange}
-        disabled={disabled}
+        placeholder={placeholder}
+        type="text"
+        value={value}
       />
-      <button
-        type="button"
-        onClick={onRightIconClick}
-        className={styles.rightIcon}
-        disabled={disabled}
-      >
-        {rightIcon}
-      </button>
       {onClear && value && (
         <button
-          type="reset"
-          onClick={onClear}
           className={styles.rootClear}
           disabled={disabled}
+          type="reset"
+          onClick={onClear}
         >
           <FontAwesomeIcon fixedWidth icon={faCircleX} />
+        </button>
+      )}
+      {rightIcon && (
+        <button
+          className={styles.inputIcon}
+          disabled={disabled}
+          type="button"
+          onClick={onRightIconClick}
+        >
+          {rightIcon}
         </button>
       )}
     </div>

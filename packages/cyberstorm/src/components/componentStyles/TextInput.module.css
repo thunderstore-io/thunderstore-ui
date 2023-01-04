@@ -16,8 +16,6 @@
 .root:hover {
   border: var(--size-6xs) solid var(--color-default-purple--6);
 
-  --bg-color: var(--color-surface--4);
-
   border-color: var(--color-default-purple--6);
 }
 
@@ -27,13 +25,7 @@
   background-color: var(--color-default-purple--2);
 }
 
-.leftIcon {
-  display: flex;
-  align-items: center;
-  background-color: inherit;
-}
-
-.rightIcon {
+.inputIcon {
   display: flex;
   align-items: center;
   background-color: inherit;
@@ -46,23 +38,23 @@
   background-color: inherit;
 }
 
-.root > input {
+.textInput {
   flex-grow: 1;
   color: var(--color-text--default);
   background-color: inherit;
 }
 
-.root > input::placeholder {
+.textInput::placeholder {
   color: var(--color-text--tertiary);
   opacity: 1; /* Firefox */
 }
 
-.root > input::-ms-input-placeholder {
+.textInput::-ms-input-placeholder {
   color: var(--color-text--tertiary);
 }
 
 /* Different TextInput sizes */
 
-.root__small {
+.small {
   padding: var(--padding-3xs) var(--padding-xs);
 }

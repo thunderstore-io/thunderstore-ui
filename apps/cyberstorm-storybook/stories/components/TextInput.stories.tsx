@@ -2,16 +2,12 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { TextInput } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSkull } from "@fortawesome/free-solid-svg-icons";
+import { faSkull, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 const meta = {
   title: "Cyberstorm/Components/TextInput",
   component: TextInput,
 } as ComponentMeta<typeof TextInput>;
-
-const defaultArgs = {
-  placeholder: "Search...",
-};
 
 const Template: ComponentStory<typeof TextInput> = (args) => {
   const [searchValue, setSearchValue] = React.useState("");
@@ -30,13 +26,9 @@ const Template: ComponentStory<typeof TextInput> = (args) => {
     setSearchValue("");
   };
 
-  const onChange = (event) => {
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
-
-  React.useEffect(() => {
-    setSearchValue(searchValue);
-  }, [searchValue]);
 
   const usedArgs = {
     ...args,
@@ -45,6 +37,11 @@ const Template: ComponentStory<typeof TextInput> = (args) => {
     onRightIconClick: rightIconHook,
     onClear: clearInput,
     value: searchValue,
+  };
+
+  const iconWrapperDivStyle = {
+    backgroundColor: "white",
+    padding: "1rem",
   };
 
   return (
@@ -56,12 +53,8 @@ const Template: ComponentStory<typeof TextInput> = (args) => {
         padding: "1rem",
       }}
     >
-      <div>
-        <TextInput {...usedArgs}></TextInput>
-      </div>
-      <div>
-        <TextInput {...usedArgs}></TextInput>
-      </div>
+      <TextInput {...usedArgs}></TextInput>
+      <TextInput {...usedArgs}></TextInput>
       <div
         style={{
           backgroundColor: "white",
@@ -70,28 +63,18 @@ const Template: ComponentStory<typeof TextInput> = (args) => {
       >
         {searchValue}
         {leftIconTriggered && (
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "1rem",
-            }}
-          >
-            Left Icon was triggered
-          </div>
+          <div style={{ iconWrapperDivStyle }}>Left Icon was triggered</div>
         )}
         {rightIconTriggered && (
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "1rem",
-            }}
-          >
-            Right Icon was triggered
-          </div>
+          <div style={{ iconWrapperDivStyle }}>Right Icon was triggered</div>
         )}
       </div>
     </div>
   );
+};
+
+const defaultArgs = {
+  placeholder: "Search...",
 };
 
 const DefaultTextInput = Template.bind({});
@@ -103,13 +86,13 @@ DisabledTextInput.args = { ...defaultArgs, disabled: true };
 const SmallTextInput = Template.bind({});
 SmallTextInput.args = {
   ...defaultArgs,
-  textInputStyle: "root__small",
+  size: "small",
 };
 
 const CustomIconsTextInput = Template.bind({});
 CustomIconsTextInput.args = {
   ...defaultArgs,
-  leftIcon: <FontAwesomeIcon fixedWidth icon={faSkull} />,
+  leftIcon: <FontAwesomeIcon fixedWidth icon={faMagnifyingGlass} />,
   rightIcon: <FontAwesomeIcon fixedWidth icon={faSkull} />,
 };
 
