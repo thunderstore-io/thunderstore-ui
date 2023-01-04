@@ -10,7 +10,7 @@
   color: var(--text-color);
 
   font: var(--font-body);
-  font-size: 14px;
+  font-size: var(--text-s);
   background-color: var(--bg-color);
 
   --text-color: var(--color-white);
@@ -22,6 +22,7 @@
   line-height: var(--line-height-l);
 }
 
+/* Different DropDownItem color schemes */
 .dropDownItem__default {
   --bg-color: var(--color-surface--3);
 }

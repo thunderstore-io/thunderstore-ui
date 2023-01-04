@@ -5,35 +5,41 @@ import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { DropDownItemProps } from "./DropDownItem";
 
 type DropDownProps = {
-  label?: string;
   icon?: ReactNode;
-  defaultOpen: boolean;
-  dropDownData?: DataItem[];
+  defaultOpen?: boolean;
+  options?: DropDownOptions;
   colorScheme?: "default" | "defaultDark" | "primary";
-  defaultValue?: number;
+  defaultSelectedOptionKey?: number;
 };
 
-type DataItem = {
+export type DropDownOption = {
   label: string;
-  value: number;
-  reactElement?: ReactElement;
+  content?: ReactElement<DropDownItemProps>;
 };
+export type DropDownOptions = Map<number | string, DropDownOption>;
 
 export const DropDown: React.FC<DropDownProps> = (props) => {
-  const { icon, colorScheme, defaultOpen, dropDownData, defaultValue } = props;
+  const { icon, colorScheme, defaultOpen, options, defaultSelectedOptionKey } =
+    props;
 
-  let initialValue = dropDownData ? dropDownData[0] : null;
-  if (defaultValue && dropDownData && dropDownData[defaultValue]) {
-    initialValue = dropDownData[defaultValue];
+  let initialValue: DropDownOption | null =
+    options?.values().next().value ?? null;
+
+  if (
+    options &&
+    defaultSelectedOptionKey &&
+    options.get(defaultSelectedOptionKey)
+  ) {
+    initialValue = options.get(defaultSelectedOptionKey) ?? null;
   }
+
   const [value, setValue] = useState(initialValue);
-  const dropDownItemElements = mapDropDownData(
-    dropDownData,
-    colorScheme,
-    setValue
-  );
+  const dropDownItemElements = options
+    ? mapDropDownData(options, colorScheme, setValue)
+    : null;
 
   return (
     <div className={styles.root}>
@@ -43,7 +49,7 @@ export const DropDown: React.FC<DropDownProps> = (props) => {
             <Button
               colorScheme={colorScheme}
               rightIcon={icon}
-              label={value ? value.label : ""}
+              label={value?.label ?? ""}
             />
           </div>
         </DropdownMenu.Trigger>
@@ -65,10 +71,8 @@ export const DropDown: React.FC<DropDownProps> = (props) => {
 };
 
 DropDown.defaultProps = {
-  dropDownData: [],
   defaultOpen: false,
   colorScheme: "default",
-  defaultValue: 0,
   icon: (
     <FontAwesomeIcon
       fixedWidth={true}
@@ -87,27 +91,23 @@ const getContentStyle = (scheme: DropDownProps["colorScheme"] = "default") => {
 };
 
 const mapDropDownData = (
-  dropDownData: DataItem[] | undefined,
+  options: DropDownOptions,
   colorScheme: "default" | "defaultDark" | "primary" | undefined,
-  setValue: React.Dispatch<React.SetStateAction<DataItem | null>>
+  setValue: React.Dispatch<React.SetStateAction<DropDownOption | null>>
 ) => {
-  return dropDownData
-    ? dropDownData.map((dataItem, index) => {
-        return (
-          <DropdownMenu.Item
-            onSelect={() => setValue(dataItem)}
-            key={index}
-            asChild
-          >
-            <div>
-              {dataItem.reactElement
-                ? React.cloneElement(dataItem.reactElement, {
-                    colorScheme: colorScheme,
-                  })
-                : null}
-            </div>
-          </DropdownMenu.Item>
-        );
-      })
-    : null;
+  const props = { colorScheme } as DropDownItemProps;
+
+  const mappedOptions: Array<ReactElement> = [];
+  options.forEach((option, index) => {
+    mappedOptions.push(
+      <DropdownMenu.Item onSelect={() => setValue(option)} key={index} asChild>
+        <div>
+          {React.isValidElement(option.content)
+            ? React.cloneElement(option.content, props)
+            : null}
+        </div>
+      </DropdownMenu.Item>
+    );
+  });
+  return mappedOptions;
 };

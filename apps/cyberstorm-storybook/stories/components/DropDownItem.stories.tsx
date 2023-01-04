@@ -9,23 +9,19 @@ const meta = {
   component: DropDownItem,
 } as ComponentMeta<typeof DropDownItem>;
 
-const style = {};
-
 const defaultArgs = {
   label: "A-Z",
   leftIcon: (
     <FontAwesomeIcon
       fixedWidth={true}
       icon={faArrowDownAZ}
-      className={"dropDownItemIcon"}
+      className="dropDownItemIcon"
     />
   ),
 };
 
 const Template: ComponentStory<typeof DropDownItem> = (args) => (
-  <div style={style}>
-    <DropDownItem {...args} />
-  </div>
+  <DropDownItem {...args} />
 );
 
 const ReferenceDropDownItem = Template.bind({});
@@ -57,9 +53,9 @@ ExtremeDropDownItem.args = {
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel ullamcorper sem, in lacinia velit. Maecenas sed augue in tortor fermentum hendrerit. Donec vel leo neque. Vivamus vehicula enim quis nibh commodo cursus. Nulla facilisi.",
   rightIcon: (
     <FontAwesomeIcon
-      fixedWidth={true}
+      fixedWidth
       icon={faArrowDownAZ}
-      className={"dropDownItemIcon"}
+      className="dropDownItemIcon"
     />
   ),
 };
