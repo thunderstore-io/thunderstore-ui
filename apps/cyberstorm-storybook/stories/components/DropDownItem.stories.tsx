@@ -13,7 +13,7 @@ const defaultArgs = {
   label: "A-Z",
   leftIcon: (
     <FontAwesomeIcon
-      fixedWidth={true}
+      fixedWidth
       icon={faArrowDownAZ}
       className="dropDownItemIcon"
     />

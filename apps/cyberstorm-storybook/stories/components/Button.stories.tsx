@@ -12,11 +12,7 @@ const meta = {
 const defaultArgs = {
   label: "Categories",
   rightIcon: (
-    <FontAwesomeIcon
-      fixedWidth={true}
-      icon={faChevronDown}
-      className={"buttonIcon"}
-    />
+    <FontAwesomeIcon fixedWidth icon={faChevronDown} className={"buttonIcon"} />
   ),
 };
 
@@ -34,7 +30,7 @@ PrimaryButton.args = { ...defaultArgs, colorScheme: "primary" };
 const DangerButton = Template.bind({});
 DangerButton.args = {
   ...defaultArgs,
-  leftIcon: <FontAwesomeIcon fixedWidth={true} icon={faSkull} />,
+  leftIcon: <FontAwesomeIcon fixedWidth icon={faSkull} />,
   rightIcon: null,
   colorScheme: "danger",
   onClick: () => {

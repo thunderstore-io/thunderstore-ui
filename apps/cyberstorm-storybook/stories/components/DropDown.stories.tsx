@@ -27,98 +27,88 @@ const defaultArgs = {
   ),
 };
 
-const options: DropDownOptions = new Map<number | string, DropDownOption>([
-  [
-    1,
-    {
-      label: "Newest",
-      content: (
-        <DropDownItem
-          label="New"
-          leftIcon={
-            <FontAwesomeIcon
-              fixedWidth
-              icon={faStar}
-              className="dropDownItemIcon"
-            />
-          }
-        />
-      ),
-    },
-  ],
-  [
-    2,
-    {
-      label: "Hottest",
-      content: (
-        <DropDownItem
-          label="Hot"
-          leftIcon={
-            <FontAwesomeIcon
-              fixedWidth
-              icon={faFire}
-              className="dropDownItemIcon"
-            />
-          }
-        />
-      ),
-    },
-  ],
-  [
-    3,
-    {
-      label: "Top rated",
-      content: (
-        <DropDownItem
-          label="Top rated"
-          leftIcon={
-            <FontAwesomeIcon
-              fixedWidth
-              icon={faThumbsUp}
-              className="dropDownItemIcon"
-            />
-          }
-        />
-      ),
-    },
-  ],
-  [
-    "ascending",
-    {
-      label: "A-Z",
-      content: (
-        <DropDownItem
-          label="A-Z"
-          leftIcon={
-            <FontAwesomeIcon
-              fixedWidth
-              icon={faArrowDownAZ}
-              className="dropDownItemIcon"
-            />
-          }
-        />
-      ),
-    },
-  ],
-  [
-    "descending",
-    {
-      label: "Z-A",
-      content: (
-        <DropDownItem
-          label="Z-A"
-          leftIcon={
-            <FontAwesomeIcon
-              fixedWidth
-              icon={faArrowUpAZ}
-              className="dropDownItemIcon"
-            />
-          }
-        />
-      ),
-    },
-  ],
-]);
+const options: DropDownOption[] = [
+  {
+    value: 1,
+    displayValue: "Newest",
+    content: (
+      <DropDownItem
+        label="New"
+        leftIcon={
+          <FontAwesomeIcon
+            fixedWidth
+            icon={faStar}
+            className="dropDownItemIcon"
+          />
+        }
+      />
+    ),
+  },
+  {
+    value: 2,
+    displayValue: "Hottest",
+    content: (
+      <DropDownItem
+        label="Hot"
+        leftIcon={
+          <FontAwesomeIcon
+            fixedWidth
+            icon={faFire}
+            className="dropDownItemIcon"
+          />
+        }
+      />
+    ),
+  },
+  {
+    value: 3,
+    displayValue: "Top rated",
+    content: (
+      <DropDownItem
+        label="Top rated"
+        leftIcon={
+          <FontAwesomeIcon
+            fixedWidth
+            icon={faThumbsUp}
+            className="dropDownItemIcon"
+          />
+        }
+      />
+    ),
+  },
+  {
+    value: 4,
+    displayValue: "A-Z",
+    content: (
+      <DropDownItem
+        label="Z-A"
+        leftIcon={
+          <FontAwesomeIcon
+            fixedWidth
+            icon={faArrowDownAZ}
+            className="dropDownItemIcon"
+          />
+        }
+      />
+    ),
+  },
+  {
+    value: 5,
+    displayValue: "Z-A",
+    content: (
+      <DropDownItem
+        label="Z-A"
+        leftIcon={
+          <FontAwesomeIcon
+            fixedWidth
+            icon={faArrowUpAZ}
+            className="dropDownItemIcon"
+          />
+        }
+      />
+    ),
+  },
+];
 
 const Template: ComponentStory<typeof DropDown> = (args) => (
   <DropDown {...args} />
@@ -135,7 +125,7 @@ ReferenceDropDown.args = {
 const DarkDropDown = Template.bind({});
 DarkDropDown.args = {
   ...defaultArgs,
-  defaultSelectedOptionKey: 3,
+  defaultValue: 3,
   label: "Newest",
   options: options,
   colorScheme: "defaultDark",
@@ -144,7 +134,7 @@ DarkDropDown.args = {
 const PrimaryDropDown = Template.bind({});
 PrimaryDropDown.args = {
   ...defaultArgs,
-  defaultSelectedOptionKey: "descending",
+  defaultValue: 2,
   label: "Newest",
   options: options,
   colorScheme: "primary",

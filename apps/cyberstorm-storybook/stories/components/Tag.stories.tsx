@@ -34,7 +34,7 @@ ReferenceTag.args = {
   rightIcon: (
     <FontAwesomeIcon
       className="tagIcon tagIconRight"
-      fixedWidth={true}
+      fixedWidth
       icon={faXmark}
     />
   ),
@@ -47,14 +47,14 @@ IconTag.args = {
   leftIcon: (
     <FontAwesomeIcon
       className="tagIcon tagIconLeft"
-      fixedWidth={true}
+      fixedWidth
       icon={faFaceDizzy}
     />
   ),
   rightIcon: (
     <FontAwesomeIcon
       className="tagIcon tagIconRight"
-      fixedWidth={true}
+      fixedWidth
       icon={faFlag}
     />
   ),
@@ -68,7 +68,7 @@ SmallTag.args = {
   rightIcon: (
     <FontAwesomeIcon
       className="tagIcon tagIconRight"
-      fixedWidth={true}
+      fixedWidth
       icon={faXmark}
     />
   ),
