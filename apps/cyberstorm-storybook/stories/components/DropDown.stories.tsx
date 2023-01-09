@@ -3,7 +3,6 @@ import {
   DropDown,
   DropDownItem,
   DropDownOption,
-  DropDownOptions,
 } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
