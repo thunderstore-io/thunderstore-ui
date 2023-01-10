@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import styles from "./componentStyles/Select.module.css";
+import styles from "./componentStyles/CustomSelect.module.css";
 import { Button } from "./Button";
 import { CustomSelectItem, SelectItemProps } from "./CustomSelectItem";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";

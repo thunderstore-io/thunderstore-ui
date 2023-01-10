@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import styles from "./componentStyles/SelectItem.module.css";
+import styles from "./componentStyles/CustomSelectItem.module.css";
 
 export interface SelectItemProps {
   label?: string;
