@@ -33,7 +33,7 @@ export interface SelectProps<T extends SelectOption = SelectOption> {
 }
 
 /**
- * CustomSelect element that supports filtering options by text search.
+ * Select element that supports filtering options by text search.
  */
 export const Select = <T extends SelectOption = SelectOption>({
   options,
