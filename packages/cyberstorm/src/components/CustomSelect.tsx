@@ -1,12 +1,7 @@
-import React, {
-  Dispatch,
-  ReactElement,
-  ReactNode,
-  SetStateAction,
-} from "react";
+import React, { Dispatch, ReactNode, SetStateAction } from "react";
 import styles from "./componentStyles/CustomSelect.module.css";
 import { Button } from "./Button";
-import { SelectItemProps } from "./CustomSelectItem";
+import { CustomSelectItem } from "./CustomSelectItem";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -15,8 +10,8 @@ import { SelectItem } from "@radix-ui/react-select";
 
 export type SelectOption = {
   value: string;
-  content: ReactElement<SelectItemProps>;
-  displayValue?: string;
+  label?: string;
+  leftIcon?: ReactNode;
 };
 
 type SelectProps = {
@@ -24,12 +19,21 @@ type SelectProps = {
   defaultOpen?: boolean;
   icon?: ReactNode;
   onChange: Dispatch<SetStateAction<string>>;
-  options?: SelectOption[];
+  options: SelectOption[];
+  placeholder?: string;
   value: string;
 };
 
 export const CustomSelect: React.FC<SelectProps> = (props) => {
-  const { colorScheme, defaultOpen, icon, options, onChange, value } = props;
+  const {
+    colorScheme,
+    defaultOpen,
+    icon,
+    options,
+    onChange,
+    placeholder,
+    value,
+  } = props;
 
   const selectItemElements = options
     ? mapSelectData(options, colorScheme)
@@ -41,6 +45,7 @@ export const CustomSelect: React.FC<SelectProps> = (props) => {
         defaultOpen={defaultOpen}
         value={value}
         onValueChange={onChange}
+        disabled={options.length == 0}
       >
         <Select.Trigger asChild>
           <div>
@@ -48,8 +53,7 @@ export const CustomSelect: React.FC<SelectProps> = (props) => {
               colorScheme={colorScheme}
               rightIcon={icon}
               label={
-                options?.find((o) => o.value === value)?.displayValue ??
-                "Choose"
+                options?.find((o) => o.value === value)?.label ?? placeholder
               }
             />
           </div>
@@ -75,7 +79,7 @@ CustomSelect.defaultProps = {
   icon: (
     <FontAwesomeIcon fixedWidth icon={faChevronDown} className="selectIcon" />
   ),
-  options: [],
+  placeholder: "Choose",
 };
 
 const getContentStyle = (scheme: SelectProps["colorScheme"] = "default") => {
@@ -90,14 +94,14 @@ const mapSelectData = (
   options: SelectOption[],
   colorScheme: "default" | "defaultDark" | "primary" | undefined
 ) => {
-  const props = { colorScheme } as SelectItemProps;
-
   return options.map((option, index) => (
     <SelectItem value={option.value} key={index} asChild>
       <div>
-        {React.isValidElement(option.content)
-          ? React.cloneElement(option.content, props)
-          : null}
+        <CustomSelectItem
+          colorScheme={colorScheme}
+          leftIcon={option.leftIcon}
+          label={option.label}
+        />
       </div>
     </SelectItem>
   ));
