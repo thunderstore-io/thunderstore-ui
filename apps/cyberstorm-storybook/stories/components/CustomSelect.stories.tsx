@@ -115,8 +115,10 @@ const Template: ComponentStory<typeof CustomSelect> = (args) => {
       options?.values().next().value?.value ?? // Default to first item if defaultValue isn't set
       ""
   );
-  args.setValue = setValue;
+  args.onChange = setValue;
   args.value = value;
+  delete args.defaultValue;
+
   return (
     <div>
       <div style={{ color: "white" }}>Value in state: {value}</div>

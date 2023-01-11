@@ -27,7 +27,7 @@ DefaultPackageFlag.args = {
     <FontAwesomeIcon
       fixedWidth
       icon={faThumbTack}
-      className={"packageFlagIcon"}
+      className="packageFlagIcon"
     />
   ),
 };

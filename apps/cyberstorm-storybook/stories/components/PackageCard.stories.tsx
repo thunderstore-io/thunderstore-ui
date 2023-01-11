@@ -23,7 +23,7 @@ const Template: ComponentStory<typeof PackageCard> = (args) => (
   <div style={style}>
     <PackageCard {...args} />
     <PackageCard {...args} categories={[]} />
-    <PackageCard {...args} description={"Lorem ipsum."} />
+    <PackageCard {...args} description="Lorem ipsum." />
     <PackageCard {...args} />
     <PackageCard {...args} />
     <PackageCard {...args} />

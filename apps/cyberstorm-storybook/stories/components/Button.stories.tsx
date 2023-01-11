@@ -12,7 +12,7 @@ const meta = {
 const defaultArgs = {
   label: "Categories",
   rightIcon: (
-    <FontAwesomeIcon fixedWidth icon={faChevronDown} className={"buttonIcon"} />
+    <FontAwesomeIcon fixedWidth icon={faChevronDown} className="buttonIcon" />
   ),
 };
 

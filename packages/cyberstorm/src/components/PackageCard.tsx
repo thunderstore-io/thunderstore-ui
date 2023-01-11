@@ -88,7 +88,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
       {categories.length > 0 ? (
         <div className={styles.categoryWrapper}>
           {categories.map((c) => (
-            <Tag key={c} label={c} size="small" colorScheme={"default"} />
+            <Tag key={c} label={c} size="small" colorScheme="default" />
           ))}
         </div>
       ) : null}
@@ -162,20 +162,20 @@ function getMetaItemList(downloadCount: string, likes: string, size: string) {
       <MetaItem
         icon={<FontAwesomeIcon fixedWidth icon={faDownload} />}
         label={downloadCount}
-        colorScheme={"tertiary"}
+        colorScheme="tertiary"
       />
 
       <MetaItem
         icon={<FontAwesomeIcon fixedWidth icon={faThumbsUp} />}
         label={likes}
-        colorScheme={"tertiary"}
+        colorScheme="tertiary"
       />
 
       <div className={styles.metaItem__last}>
         <MetaItem
           icon={<FontAwesomeIcon fixedWidth icon={faHardDrive} />}
           label={size}
-          colorScheme={"tertiary"}
+          colorScheme="tertiary"
         />
       </div>
     </div>

@@ -57,15 +57,13 @@ const parseContent = (
   colorScheme: "default" | "defaultDark" | "primary" | undefined
 ) => {
   const props = { colorScheme } as SelectItemProps;
-  return content?.map((item, index) => {
-    return (
-      <DropdownMenu.Item key={index} asChild>
-        <div>
-          {React.isValidElement(item) ? React.cloneElement(item, props) : null}
-        </div>
-      </DropdownMenu.Item>
-    );
-  });
+  return content?.map((item, index) => (
+    <DropdownMenu.Item key={index} asChild>
+      <div>
+        {React.isValidElement(item) ? React.cloneElement(item, props) : item}
+      </div>
+    </DropdownMenu.Item>
+  ));
 };
 
 const getContentStyle = (scheme: DropDownProps["colorScheme"] = "default") => {
