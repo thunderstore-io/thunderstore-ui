@@ -20,56 +20,32 @@ const options: SelectOption[] = [
   {
     value: "1",
     label: "Newest",
-    leftIcon: (
-      <FontAwesomeIcon fixedWidth icon={faStar} className="selectItemIcon" />
-    ),
+    leftIcon: <FontAwesomeIcon fixedWidth icon={faStar} />,
   },
   {
     value: "2",
     label: "Hottest",
-    leftIcon: (
-      <FontAwesomeIcon fixedWidth icon={faFire} className="selectItemIcon" />
-    ),
+    leftIcon: <FontAwesomeIcon fixedWidth icon={faFire} />,
   },
   {
     value: "3",
     label: "Top rated",
-    leftIcon: (
-      <FontAwesomeIcon
-        fixedWidth
-        icon={faThumbsUp}
-        className="selectItemIcon"
-      />
-    ),
+    leftIcon: <FontAwesomeIcon fixedWidth icon={faThumbsUp} />,
   },
   {
     value: "4",
     label: "A-Z",
-    leftIcon: (
-      <FontAwesomeIcon
-        fixedWidth
-        icon={faArrowDownAZ}
-        className="selectItemIcon"
-      />
-    ),
+    leftIcon: <FontAwesomeIcon fixedWidth icon={faArrowDownAZ} />,
   },
   {
     value: "5",
     label: "Z-A",
-    leftIcon: (
-      <FontAwesomeIcon
-        fixedWidth
-        icon={faArrowUpAZ}
-        className="selectItemIcon"
-      />
-    ),
+    leftIcon: <FontAwesomeIcon fixedWidth icon={faArrowUpAZ} />,
   },
 ];
 
 const defaultArgs = {
-  icon: (
-    <FontAwesomeIcon fixedWidth icon={faChevronDown} className="selectIcon" />
-  ),
+  icon: <FontAwesomeIcon fixedWidth icon={faChevronDown} />,
   options: options,
 };
 
@@ -115,10 +91,19 @@ EmptyOptionsSelect.args = {
   colorScheme: "primary",
 };
 
+const DefaultOpenSelect = Template.bind({});
+DefaultOpenSelect.args = {
+  ...defaultArgs,
+  defaultOpen: true,
+  colorScheme: "default",
+  placeholder: "Sort by...",
+};
+
 export {
   meta as default,
   ReferenceSelect,
   DarkSelect,
   PrimarySelect,
   EmptyOptionsSelect,
+  DefaultOpenSelect,
 };

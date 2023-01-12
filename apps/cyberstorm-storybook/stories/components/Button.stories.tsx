@@ -11,9 +11,7 @@ const meta = {
 
 const defaultArgs = {
   label: "Categories",
-  rightIcon: (
-    <FontAwesomeIcon fixedWidth icon={faChevronDown} className="buttonIcon" />
-  ),
+  rightIcon: <FontAwesomeIcon fixedWidth icon={faChevronDown} />,
 };
 
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;

@@ -11,13 +11,7 @@ const meta = {
 
 const defaultArgs = {
   label: "A-Z",
-  leftIcon: (
-    <FontAwesomeIcon
-      fixedWidth
-      icon={faArrowDownAZ}
-      className="selectItemIcon"
-    />
-  ),
+  leftIcon: <FontAwesomeIcon fixedWidth icon={faArrowDownAZ} />,
 };
 
 const Template: ComponentStory<typeof SelectItem> = (args) => (
@@ -51,13 +45,7 @@ ExtremeSelectItem.args = {
   colorScheme: "default",
   label:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel ullamcorper sem, in lacinia velit. Maecenas sed augue in tortor fermentum hendrerit. Donec vel leo neque. Vivamus vehicula enim quis nibh commodo cursus. Nulla facilisi.",
-  rightIcon: (
-    <FontAwesomeIcon
-      fixedWidth
-      icon={faArrowDownAZ}
-      className="selectItemIcon"
-    />
-  ),
+  rightIcon: <FontAwesomeIcon fixedWidth icon={faArrowDownAZ} />,
 };
 
 export {

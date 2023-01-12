@@ -87,6 +87,15 @@ TagTriggerDropDown.args = {
 const MinimalDropDown = Template.bind({});
 MinimalDropDown.args = defaultArgs;
 
+const DefaultOpenDropDown = Template.bind({});
+DefaultOpenDropDown.args = {
+  ...defaultArgs,
+  content: content,
+  defaultOpen: true,
+  label: "Default open",
+  colorScheme: "default",
+};
+
 export {
   meta as default,
   ReferenceDropDown,
@@ -94,4 +103,5 @@ export {
   DarkDropDown,
   PrimaryDropDown,
   TagTriggerDropDown,
+  DefaultOpenDropDown,
 };

@@ -28,7 +28,7 @@ TertiaryMetaItem.args = {
   ...defaultArgs,
   label: "Lollero",
   colorScheme: "tertiary",
-  icon: <FontAwesomeIcon fixedWidth icon={faUser} className="metaItemIcon" />,
+  icon: <FontAwesomeIcon fixedWidth icon={faUser} />,
 };
 
 const LikesMetaItem = Template.bind({});
@@ -36,9 +36,7 @@ LikesMetaItem.args = {
   ...defaultArgs,
   label: "1,342",
   colorScheme: "default",
-  icon: (
-    <FontAwesomeIcon fixedWidth icon={faThumbsUp} className="metaItemIcon" />
-  ),
+  icon: <FontAwesomeIcon fixedWidth icon={faThumbsUp} />,
 };
 
 export { meta as default, MinimalMetaItem, TertiaryMetaItem, LikesMetaItem };

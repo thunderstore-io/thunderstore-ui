@@ -72,9 +72,7 @@ Select.displayName = "Select";
 Select.defaultProps = {
   colorScheme: "default",
   defaultOpen: false,
-  icon: (
-    <FontAwesomeIcon fixedWidth icon={faChevronDown} className="selectIcon" />
-  ),
+  icon: <FontAwesomeIcon fixedWidth icon={faChevronDown} />,
   placeholder: "Choose",
 };
 

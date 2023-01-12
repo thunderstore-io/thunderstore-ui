@@ -23,13 +23,7 @@ const DefaultPackageFlag = Template.bind({});
 DefaultPackageFlag.args = {
   ...defaultArgs,
   label: "Pinned",
-  icon: (
-    <FontAwesomeIcon
-      fixedWidth
-      icon={faThumbTack}
-      className="packageFlagIcon"
-    />
-  ),
+  icon: <FontAwesomeIcon fixedWidth icon={faThumbTack} />,
 };
 
 export { meta as default, DefaultPackageFlag };

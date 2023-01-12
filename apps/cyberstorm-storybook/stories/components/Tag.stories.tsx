@@ -31,33 +31,15 @@ ReferenceTag.args = {
   ...defaultArgs,
   label: "tag",
   isRemovable: true,
-  rightIcon: (
-    <FontAwesomeIcon
-      className="tagIcon tagIconRight"
-      fixedWidth
-      icon={faXmark}
-    />
-  ),
+  rightIcon: <FontAwesomeIcon fixedWidth icon={faXmark} />,
 };
 
 const IconTag = Template.bind({});
 IconTag.args = {
   ...defaultArgs,
   label: "tag",
-  leftIcon: (
-    <FontAwesomeIcon
-      className="tagIcon tagIconLeft"
-      fixedWidth
-      icon={faFaceDizzy}
-    />
-  ),
-  rightIcon: (
-    <FontAwesomeIcon
-      className="tagIcon tagIconRight"
-      fixedWidth
-      icon={faFlag}
-    />
-  ),
+  leftIcon: <FontAwesomeIcon fixedWidth icon={faFaceDizzy} />,
+  rightIcon: <FontAwesomeIcon fixedWidth icon={faFlag} />,
 };
 
 const SmallTag = Template.bind({});
@@ -65,13 +47,7 @@ SmallTag.args = {
   ...defaultArgs,
   label: "tag",
   size: "small",
-  rightIcon: (
-    <FontAwesomeIcon
-      className="tagIcon tagIconRight"
-      fixedWidth
-      icon={faXmark}
-    />
-  ),
+  rightIcon: <FontAwesomeIcon fixedWidth icon={faXmark} />,
 };
 
 export { meta as default, MinimalTag, ReferenceTag, IconTag, SmallTag };
