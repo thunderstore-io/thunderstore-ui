@@ -33,9 +33,7 @@ export const CustomDropDown: React.FC<DropDownProps> = (props) => {
             sideOffset={8}
             className={`${styles.content} ${getContentStyle(colorScheme)}`}
           >
-            <DropdownMenu.Group className={styles.group}>
-              {parseContent(content, colorScheme)}
-            </DropdownMenu.Group>
+            {parseContent(content, colorScheme)}
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
       </DropdownMenu.Root>

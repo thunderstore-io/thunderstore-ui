@@ -2,17 +2,14 @@
   display: flex;
 }
 
-.group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-tiny);
-}
-
 .label {
   font-weight: var(--font-weight-500);
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-tiny);
   padding: var(--padding-3xs);
   border-radius: var(--border-radius-3xs);
   overflow: hidden;
