@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import styles from "./componentStyles/CustomSelectItem.module.css";
+import styles from "./componentStyles/SelectItem.module.css";
 
 export interface SelectItemProps {
   label?: string;
@@ -9,21 +9,25 @@ export interface SelectItemProps {
 }
 
 /**
- * Cyberstorm CustomSelectItem component
+ * Cyberstorm SelectItem component
  */
-export const CustomSelectItem: React.FC<SelectItemProps> = (props) => {
+export const SelectItem: React.FC<SelectItemProps> = (props) => {
   const { label, leftIcon, rightIcon, colorScheme } = props;
 
   return (
     <div className={`${styles.root} ${getStyle(colorScheme)}`}>
-      {leftIcon}
+      <div className={`${styles.icon} ${getStyle(colorScheme)}`}>
+        {leftIcon}
+      </div>
       {label ? <div className={styles.label}>{label}</div> : null}
-      {rightIcon}
+      <div className={`${styles.icon} ${getStyle(colorScheme)}`}>
+        {rightIcon}
+      </div>
     </div>
   );
 };
 
-CustomSelectItem.defaultProps = { colorScheme: "default" };
+SelectItem.defaultProps = { colorScheme: "default" };
 
 const getStyle = (scheme: SelectItemProps["colorScheme"] = "default") => {
   return {

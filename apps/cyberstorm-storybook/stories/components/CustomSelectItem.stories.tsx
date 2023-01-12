@@ -1,13 +1,13 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { CustomSelectItem } from "@thunderstore/cyberstorm";
+import { SelectItem } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDownAZ } from "@fortawesome/free-solid-svg-icons";
 
 const meta = {
-  title: "Cyberstorm/Components/CustomSelectItem",
-  component: CustomSelectItem,
-} as ComponentMeta<typeof CustomSelectItem>;
+  title: "Cyberstorm/Components/SelectItem",
+  component: SelectItem,
+} as ComponentMeta<typeof SelectItem>;
 
 const defaultArgs = {
   label: "A-Z",
@@ -20,8 +20,8 @@ const defaultArgs = {
   ),
 };
 
-const Template: ComponentStory<typeof CustomSelectItem> = (args) => (
-  <CustomSelectItem {...args} />
+const Template: ComponentStory<typeof SelectItem> = (args) => (
+  <SelectItem {...args} />
 );
 
 const ReferenceSelectItem = Template.bind({});

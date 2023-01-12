@@ -1,12 +1,11 @@
 import React, { Dispatch, ReactNode, SetStateAction } from "react";
-import styles from "./componentStyles/CustomSelect.module.css";
+import styles from "./componentStyles/Select.module.css";
 import { Button } from "./Button";
-import { CustomSelectItem } from "./CustomSelectItem";
+import { SelectItem } from "./SelectItem";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import * as Select from "@radix-ui/react-select";
-import { SelectItem } from "@radix-ui/react-select";
+import * as RadixSelect from "@radix-ui/react-select";
 
 export type SelectOption = {
   value: string;
@@ -24,7 +23,7 @@ type SelectProps = {
   value: string;
 };
 
-export const CustomSelect: React.FC<SelectProps> = (props) => {
+export const Select: React.FC<SelectProps> = (props) => {
   const {
     colorScheme,
     defaultOpen,
@@ -41,13 +40,13 @@ export const CustomSelect: React.FC<SelectProps> = (props) => {
 
   return (
     <div className={styles.root}>
-      <Select.Root
+      <RadixSelect.Root
         defaultOpen={defaultOpen}
         value={value}
         onValueChange={onChange}
         disabled={options.length == 0}
       >
-        <Select.Trigger asChild>
+        <RadixSelect.Trigger asChild>
           <div>
             <Button
               colorScheme={colorScheme}
@@ -57,23 +56,21 @@ export const CustomSelect: React.FC<SelectProps> = (props) => {
               }
             />
           </div>
-        </Select.Trigger>
+        </RadixSelect.Trigger>
 
-        <Select.Portal>
-          <Select.Content
+        <RadixSelect.Portal>
+          <RadixSelect.Content
             className={`${styles.content} ${getContentStyle(colorScheme)}`}
           >
-            <Select.Group className={styles.group}>
-              {selectItemElements}
-            </Select.Group>
-          </Select.Content>
-        </Select.Portal>
-      </Select.Root>
+            {selectItemElements}
+          </RadixSelect.Content>
+        </RadixSelect.Portal>
+      </RadixSelect.Root>
     </div>
   );
 };
 
-CustomSelect.defaultProps = {
+Select.defaultProps = {
   colorScheme: "default",
   defaultOpen: false,
   icon: (
@@ -95,14 +92,14 @@ const mapSelectData = (
   colorScheme: "default" | "defaultDark" | "primary" | undefined
 ) => {
   return options.map((option, index) => (
-    <SelectItem value={option.value} key={index} asChild>
+    <RadixSelect.Item value={option.value} key={index} asChild>
       <div>
-        <CustomSelectItem
+        <SelectItem
           colorScheme={colorScheme}
           leftIcon={option.leftIcon}
           label={option.label}
         />
       </div>
-    </SelectItem>
+    </RadixSelect.Item>
   ));
 };

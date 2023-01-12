@@ -18,7 +18,7 @@
   box-shadow: var(--box-shadow-1);
 }
 
-/* Different CustomDropDown color schemes */
+/* Different Select color schemes */
 .content__default {
   --text-color: var(--color-white);
   --bg-color: var(--color-surface--3);

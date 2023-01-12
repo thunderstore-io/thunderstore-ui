@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { CustomSelect, SelectOption } from "@thunderstore/cyberstorm";
+import { Select, SelectOption } from "@thunderstore/cyberstorm";
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,9 +12,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const meta = {
-  title: "Cyberstorm/Components/CustomSelect",
-  component: CustomSelect,
-} as unknown as ComponentMeta<typeof CustomSelect>;
+  title: "Cyberstorm/Components/Select",
+  component: Select,
+} as unknown as ComponentMeta<typeof Select>;
 
 const options: SelectOption[] = [
   {
@@ -73,7 +73,7 @@ const defaultArgs = {
   options: options,
 };
 
-const Template: ComponentStory<typeof CustomSelect> = (args) => {
+const Template: ComponentStory<typeof Select> = (args) => {
   const [value, setValue] = useState(args.defaultValue ?? null);
   args.onChange = setValue;
   args.value = value;
@@ -82,7 +82,7 @@ const Template: ComponentStory<typeof CustomSelect> = (args) => {
   return (
     <div>
       <div style={{ color: "white" }}>Value in state: {value}</div>
-      <CustomSelect {...args} />
+      <Select {...args} />
     </div>
   );
 };

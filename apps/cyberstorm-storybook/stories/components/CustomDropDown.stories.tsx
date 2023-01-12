@@ -1,10 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import {
-  Button,
-  CustomDropDown,
-  CustomSelectItem,
-  Tag,
-} from "@thunderstore/cyberstorm";
+import { Button, DropDown, SelectItem, Tag } from "@thunderstore/cyberstorm";
 import React, { ReactNode } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,60 +10,46 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const meta = {
-  title: "Cyberstorm/Components/CustomDropDown",
-  component: CustomDropDown,
-} as unknown as ComponentMeta<typeof CustomDropDown>;
+  title: "Cyberstorm/Components/DropDown",
+  component: DropDown,
+} as unknown as ComponentMeta<typeof DropDown>;
 
 const defaultArgs = {
-  icon: (
-    <FontAwesomeIcon fixedWidth icon={faChevronDown} className="dropDownIcon" />
+  trigger: (
+    <Button
+      label={"Developers"}
+      rightIcon={<FontAwesomeIcon fixedWidth icon={faChevronDown} />}
+    />
   ),
 };
 
 const content: ReactNode[] = [
-  <CustomSelectItem
+  <SelectItem
     key={1}
     label="New"
-    leftIcon={
-      <FontAwesomeIcon
-        fixedWidth
-        icon={faStar}
-        className="dropDownSelectItemIcon"
-      />
-    }
+    leftIcon={<FontAwesomeIcon fixedWidth icon={faStar} />}
   />,
-  <CustomSelectItem
+  <SelectItem
     key={2}
     label="New"
-    leftIcon={
-      <FontAwesomeIcon
-        fixedWidth
-        icon={faThumbtack}
-        className="dropDownSelectItemIcon"
-      />
-    }
+    leftIcon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
   />,
   <Button
     key={3}
     label="Nabbula"
-    leftIcon={
-      <FontAwesomeIcon
-        fixedWidth
-        icon={faSkull}
-        className="dropDownButtonIcon"
-      />
-    }
+    leftIcon={<FontAwesomeIcon fixedWidth icon={faSkull} />}
   />,
   <Tag key={4} label="tag" />,
-  <CustomDropDown
+  <DropDown
     key={5}
     label="Another one"
     content={[<Button key={1} label="Namiska" />]}
+    trigger={<Button label="dropdown"></Button>}
   />,
 ];
 
-const Template: ComponentStory<typeof CustomDropDown> = (args) => (
-  <CustomDropDown {...args} />
+const Template: ComponentStory<typeof DropDown> = (args) => (
+  <DropDown {...args} />
 );
 
 const ReferenceDropDown = Template.bind({});
@@ -95,6 +76,14 @@ PrimaryDropDown.args = {
   colorScheme: "primary",
 };
 
+const TagTriggerDropDown = Template.bind({});
+TagTriggerDropDown.args = {
+  ...defaultArgs,
+  content: content,
+  label: "Open",
+  trigger: <Tag />,
+};
+
 const MinimalDropDown = Template.bind({});
 MinimalDropDown.args = defaultArgs;
 
@@ -104,4 +93,5 @@ export {
   MinimalDropDown,
   DarkDropDown,
   PrimaryDropDown,
+  TagTriggerDropDown,
 };
