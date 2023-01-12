@@ -8,3 +8,4 @@ export * from "./components/PackageFlag";
 export * from "./components/Select";
 export * from "./components/MenuItem";
 export * from "./components/Tag";
+export * from "./components/Pagination";
