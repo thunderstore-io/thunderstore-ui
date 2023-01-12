@@ -33,77 +33,86 @@ export interface PackageCardProps {
 /**
  * Cyberstorm PackageCard component
  */
-export const PackageCard: React.FC<PackageCardProps> = (props) => {
-  const {
-    packageName,
-    description,
-    imageSrc,
-    downloadCount,
-    likes,
-    size,
-    author,
-    link,
-    lastUpdated,
-    colorScheme,
-    categories,
-    isPinned,
-    isNsfw,
-    isDeprecated,
-  } = props;
+export const PackageCard: React.FC<PackageCardProps> = React.forwardRef(
+  (props, ref) => {
+    const {
+      packageName,
+      description,
+      imageSrc,
+      downloadCount,
+      likes,
+      size,
+      author,
+      link,
+      lastUpdated,
+      colorScheme,
+      categories,
+      isPinned,
+      isNsfw,
+      isDeprecated,
+    } = props;
 
-  const authorLink = ""; //TODO: author link
-  //TODO: convert <a> tags into link components!
-  //TODO: Use LastUpdated component once one is developed
+    const authorLink = ""; //TODO: author link
+    //TODO: convert <a> tags into link components!
+    //TODO: Use LastUpdated component once one is developed
 
-  return (
-    <div className={`${styles.root} ${getStyle(colorScheme)}`}>
-      <a href={link} className={styles.imageWrapper} title={packageName}>
-        <img
-          src={imageSrc ? imageSrc : defaultImageSrc}
-          className={styles.image}
-          alt={packageName}
-        />
-        {getPackageFlags(isPinned, isNsfw, isDeprecated)}
-      </a>
-
-      <div className={styles.content}>
-        <a href={link} className={styles.title}>
-          {packageName}
+    return (
+      <div
+        className={`${styles.root} ${getStyle(colorScheme)}`}
+        {...props}
+        ref={ref}
+      >
+        <a href={link} className={styles.imageWrapper} title={packageName}>
+          <img
+            src={imageSrc ? imageSrc : defaultImageSrc}
+            className={styles.image}
+            alt={packageName}
+          />
+          {getPackageFlags(isPinned, isNsfw, isDeprecated)}
         </a>
 
-        {author ? (
-          <div className={styles.author}>
-            <span className={styles.author_prefix}>by</span>
-            <a className={styles.author_label} href={authorLink}>
-              {author}
-            </a>
+        <div className={styles.content}>
+          <a href={link} className={styles.title}>
+            {packageName}
+          </a>
+
+          {author ? (
+            <div className={styles.author}>
+              <span className={styles.author_prefix}>by</span>
+              <a className={styles.author_label} href={authorLink}>
+                {author}
+              </a>
+            </div>
+          ) : null}
+
+          {description ? (
+            <p className={styles.description}>{description}</p>
+          ) : null}
+        </div>
+
+        {categories.length > 0 ? (
+          <div className={styles.categoryWrapper}>
+            {categories.map((c) => (
+              <Tag key={c} label={c} size="small" colorScheme="default" />
+            ))}
           </div>
         ) : null}
 
-        {description ? (
-          <p className={styles.description}>{description}</p>
-        ) : null}
-      </div>
+        <div className={styles.footer}>
+          {lastUpdated ? (
+            <p className={styles.lastUpdated}>
+              {"Last updated: " + lastUpdated}
+            </p>
+          ) : null}
 
-      {categories.length > 0 ? (
-        <div className={styles.categoryWrapper}>
-          {categories.map((c) => (
-            <Tag key={c} label={c} size="small" colorScheme="default" />
-          ))}
+          {getMetaItemList(downloadCount, likes, size)}
         </div>
-      ) : null}
-
-      <div className={styles.footer}>
-        {lastUpdated ? (
-          <p className={styles.lastUpdated}>{"Last updated: " + lastUpdated}</p>
-        ) : null}
-
-        {getMetaItemList(downloadCount, likes, size)}
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
+PackageCard.displayName = "PackageCard";
 PackageCard.defaultProps = {
   colorScheme: "default",
   categories: [],

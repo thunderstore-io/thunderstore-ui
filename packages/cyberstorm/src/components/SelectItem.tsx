@@ -11,22 +11,29 @@ export interface SelectItemProps {
 /**
  * Cyberstorm SelectItem component
  */
-export const SelectItem: React.FC<SelectItemProps> = (props) => {
-  const { label, leftIcon, rightIcon, colorScheme } = props;
+export const SelectItem: React.FC<SelectItemProps> = React.forwardRef(
+  (props, ref) => {
+    const { label, leftIcon, rightIcon, colorScheme } = props;
 
-  return (
-    <div className={`${styles.root} ${getStyle(colorScheme)}`}>
-      <div className={`${styles.icon} ${getStyle(colorScheme)}`}>
-        {leftIcon}
+    return (
+      <div
+        {...props}
+        ref={ref}
+        className={`${styles.root} ${getStyle(colorScheme)}`}
+      >
+        <div className={`${styles.icon} ${getStyle(colorScheme)}`}>
+          {leftIcon}
+        </div>
+        {label ? <div className={styles.label}>{label}</div> : null}
+        <div className={`${styles.icon} ${getStyle(colorScheme)}`}>
+          {rightIcon}
+        </div>
       </div>
-      {label ? <div className={styles.label}>{label}</div> : null}
-      <div className={`${styles.icon} ${getStyle(colorScheme)}`}>
-        {rightIcon}
-      </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
+SelectItem.displayName = "SelectItem";
 SelectItem.defaultProps = { colorScheme: "default" };
 
 const getStyle = (scheme: SelectItemProps["colorScheme"] = "default") => {

@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, ReactNode } from "react";
+import React, { MouseEventHandler, PropsWithChildren, ReactNode } from "react";
 import styles from "./componentStyles/Button.module.css";
 
 export interface ButtonProps {
@@ -19,22 +19,27 @@ export interface ButtonProps {
 /**
  * Cyberstorm Button component
  */
-export const Button: React.FC<ButtonProps> = (props) => {
-  const { label, leftIcon, rightIcon, colorScheme, onClick } = props;
+export const Button: React.FC<ButtonProps> = React.forwardRef(
+  (props: PropsWithChildren<ButtonProps>, ref) => {
+    const { label, leftIcon, rightIcon, colorScheme, onClick } = props;
 
-  return (
-    <button
-      type="button"
-      className={`${styles.root} ${getStyle(colorScheme)}`}
-      onClick={onClick}
-    >
-      {leftIcon}
-      {label ? <div className={styles.label}>{label}</div> : null}
-      {rightIcon}
-    </button>
-  );
-};
+    return (
+      <button
+        {...props}
+        ref={ref}
+        type="button"
+        className={`${styles.root} ${getStyle(colorScheme)}`}
+        onClick={onClick}
+      >
+        {leftIcon}
+        {label ? <div className={styles.label}>{label}</div> : null}
+        {rightIcon}
+      </button>
+    );
+  }
+);
 
+Button.displayName = "Button";
 Button.defaultProps = { colorScheme: "default" };
 
 const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {

@@ -11,34 +11,35 @@ type DropDownProps = {
   trigger: ReactNode;
 };
 
-export const DropDown: React.FC<DropDownProps> = (props) => {
-  const { colorScheme, defaultOpen, content, trigger } = props;
+export const DropDown: React.FC<DropDownProps> = React.forwardRef(
+  (props, ref) => {
+    const { colorScheme, defaultOpen, content, trigger } = props;
 
-  return (
-    <div className={styles.root}>
-      <RadixDropDown.Root defaultOpen={defaultOpen}>
-        <RadixDropDown.Trigger asChild>
-          <div>
+    return (
+      <div className={styles.root} {...props} ref={ref}>
+        <RadixDropDown.Root defaultOpen={defaultOpen}>
+          <RadixDropDown.Trigger asChild>
             {React.isValidElement(trigger)
               ? React.cloneElement(trigger, props)
               : trigger}
-          </div>
-        </RadixDropDown.Trigger>
+          </RadixDropDown.Trigger>
 
-        <RadixDropDown.Portal>
-          <RadixDropDown.Content
-            align="start"
-            sideOffset={8}
-            className={`${styles.content} ${getContentStyle(colorScheme)}`}
-          >
-            {parseContent(content, colorScheme)}
-          </RadixDropDown.Content>
-        </RadixDropDown.Portal>
-      </RadixDropDown.Root>
-    </div>
-  );
-};
+          <RadixDropDown.Portal>
+            <RadixDropDown.Content
+              align="start"
+              sideOffset={8}
+              className={`${styles.content} ${getContentStyle(colorScheme)}`}
+            >
+              {parseContent(content, colorScheme)}
+            </RadixDropDown.Content>
+          </RadixDropDown.Portal>
+        </RadixDropDown.Root>
+      </div>
+    );
+  }
+);
 
+DropDown.displayName = "DropDown";
 DropDown.defaultProps = {
   defaultOpen: false,
   colorScheme: "default",
@@ -51,9 +52,7 @@ const parseContent = (
   const props = { colorScheme } as SelectItemProps;
   return content?.map((item, index) => (
     <RadixDropDown.Item key={index} asChild>
-      <div>
-        {React.isValidElement(item) ? React.cloneElement(item, props) : item}
-      </div>
+      {React.isValidElement(item) ? React.cloneElement(item, props) : item}
     </RadixDropDown.Item>
   ));
 };

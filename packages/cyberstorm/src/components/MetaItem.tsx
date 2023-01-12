@@ -12,7 +12,7 @@ export interface MetaItemProps {
  * Used for displaying a single data point (e.g. an amount
  * of likes or a size of a package) with an icon next to it
  */
-export const MetaItem: React.FC<MetaItemProps> = (props) => {
+export const MetaItem: React.FC<MetaItemProps> = React.forwardRef((props) => {
   const { label, icon, colorScheme } = props;
 
   return (
@@ -21,8 +21,9 @@ export const MetaItem: React.FC<MetaItemProps> = (props) => {
       {label ? <div className={styles.label}>{label}</div> : null}
     </div>
   );
-};
+});
 
+MetaItem.displayName = "MetaItem";
 MetaItem.defaultProps = { colorScheme: "default" };
 
 const getStyle = (scheme: MetaItemProps["colorScheme"] = "default") => {

@@ -23,7 +23,7 @@ type SelectProps = {
   value: string;
 };
 
-export const Select: React.FC<SelectProps> = (props) => {
+export const Select: React.FC<SelectProps> = React.forwardRef((props, ref) => {
   const {
     colorScheme,
     defaultOpen,
@@ -39,7 +39,7 @@ export const Select: React.FC<SelectProps> = (props) => {
     : null;
 
   return (
-    <div className={styles.root}>
+    <div {...props} ref={ref} className={styles.root}>
       <RadixSelect.Root
         defaultOpen={defaultOpen}
         value={value}
@@ -47,15 +47,13 @@ export const Select: React.FC<SelectProps> = (props) => {
         disabled={options.length == 0}
       >
         <RadixSelect.Trigger asChild>
-          <div>
-            <Button
-              colorScheme={colorScheme}
-              rightIcon={icon}
-              label={
-                options?.find((o) => o.value === value)?.label ?? placeholder
-              }
-            />
-          </div>
+          <Button
+            colorScheme={colorScheme}
+            rightIcon={icon}
+            label={
+              options?.find((o) => o.value === value)?.label ?? placeholder
+            }
+          />
         </RadixSelect.Trigger>
 
         <RadixSelect.Portal>
@@ -68,8 +66,9 @@ export const Select: React.FC<SelectProps> = (props) => {
       </RadixSelect.Root>
     </div>
   );
-};
+});
 
+Select.displayName = "Select";
 Select.defaultProps = {
   colorScheme: "default",
   defaultOpen: false,
@@ -93,13 +92,11 @@ const mapSelectData = (
 ) => {
   return options.map((option, index) => (
     <RadixSelect.Item value={option.value} key={index} asChild>
-      <div>
-        <SelectItem
-          colorScheme={colorScheme}
-          leftIcon={option.leftIcon}
-          label={option.label}
-        />
-      </div>
+      <SelectItem
+        colorScheme={colorScheme}
+        leftIcon={option.leftIcon}
+        label={option.label}
+      />
     </RadixSelect.Item>
   ));
 };
