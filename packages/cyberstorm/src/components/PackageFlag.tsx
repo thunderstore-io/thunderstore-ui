@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useRef } from "react";
 import styles from "./componentStyles/PackageFlag.module.css";
 
 export interface PackageFlagProps {
@@ -7,8 +7,12 @@ export interface PackageFlagProps {
 }
 
 export const PackageFlag: React.FC<PackageFlagProps> = React.forwardRef(
-  (props, ref) => {
+  (props, forwardedRef) => {
     const { label, icon, ...rest } = props;
+
+    const fallbackRef = useRef(null);
+    const ref = forwardedRef || fallbackRef;
+
     return (
       <div {...rest} ref={ref} className={styles.root}>
         {icon ? <div className={styles.icon}>{icon}</div> : null}

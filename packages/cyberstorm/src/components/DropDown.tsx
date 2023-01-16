@@ -11,43 +11,41 @@ type DropDownProps = {
   triggerColorScheme?: "default" | "defaultDark" | "primary";
 };
 
-export const DropDown: React.FC<DropDownProps> = React.forwardRef(
-  (props, ref) => {
-    const {
-      colorScheme,
-      defaultOpen,
-      content,
-      trigger,
-      triggerColorScheme,
-      ...rest
-    } = props;
-    const triggerProps = Object.assign({}, rest, {
-      colorScheme: triggerColorScheme ?? colorScheme,
-    });
+export const DropDown: React.FC<DropDownProps> = (props) => {
+  const {
+    colorScheme,
+    defaultOpen,
+    content,
+    trigger,
+    triggerColorScheme,
+    ...rest
+  } = props;
+  const triggerProps = Object.assign({}, rest, {
+    colorScheme: triggerColorScheme ?? colorScheme,
+  });
 
-    return (
-      <div className={styles.root} {...rest} ref={ref}>
-        <RadixDropDown.Root defaultOpen={defaultOpen}>
-          <RadixDropDown.Trigger asChild>
-            {React.isValidElement(trigger)
-              ? React.cloneElement(trigger, triggerProps)
-              : trigger}
-          </RadixDropDown.Trigger>
+  return (
+    <div className={styles.root} {...rest}>
+      <RadixDropDown.Root defaultOpen={defaultOpen}>
+        <RadixDropDown.Trigger asChild>
+          {React.isValidElement(trigger)
+            ? React.cloneElement(trigger, triggerProps)
+            : trigger}
+        </RadixDropDown.Trigger>
 
-          <RadixDropDown.Portal>
-            <RadixDropDown.Content
-              align="start"
-              sideOffset={8}
-              className={`${styles.content} ${getContentStyle(colorScheme)}`}
-            >
-              {parseContent(content, colorScheme)}
-            </RadixDropDown.Content>
-          </RadixDropDown.Portal>
-        </RadixDropDown.Root>
-      </div>
-    );
-  }
-);
+        <RadixDropDown.Portal>
+          <RadixDropDown.Content
+            align="start"
+            sideOffset={8}
+            className={`${styles.content} ${getContentStyle(colorScheme)}`}
+          >
+            {parseContent(content, colorScheme)}
+          </RadixDropDown.Content>
+        </RadixDropDown.Portal>
+      </RadixDropDown.Root>
+    </div>
+  );
+};
 
 DropDown.displayName = "DropDown";
 DropDown.defaultProps = {

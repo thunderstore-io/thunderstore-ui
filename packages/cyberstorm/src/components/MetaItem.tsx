@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useRef } from "react";
 import styles from "./componentStyles/MetaItem.module.css";
 
 export interface MetaItemProps {
@@ -12,16 +12,25 @@ export interface MetaItemProps {
  * Used for displaying a single data point (e.g. an amount
  * of likes or a size of a package) with an icon next to it
  */
-export const MetaItem: React.FC<MetaItemProps> = React.forwardRef((props) => {
-  const { label, icon, colorScheme, ...rest } = props;
+export const MetaItem: React.FC<MetaItemProps> = React.forwardRef(
+  (props, forwardedRef) => {
+    const { label, icon, colorScheme, ...rest } = props;
 
-  return (
-    <div {...rest} className={`${styles.root} ${getStyle(colorScheme)}`}>
-      {icon}
-      {label ? <div className={styles.label}>{label}</div> : null}
-    </div>
-  );
-});
+    const fallbackRef = useRef(null);
+    const ref = forwardedRef || fallbackRef;
+
+    return (
+      <div
+        {...rest}
+        ref={ref}
+        className={`${styles.root} ${getStyle(colorScheme)}`}
+      >
+        {icon}
+        {label ? <div className={styles.label}>{label}</div> : null}
+      </div>
+    );
+  }
+);
 
 MetaItem.displayName = "MetaItem";
 MetaItem.defaultProps = { colorScheme: "default" };

@@ -2,8 +2,8 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import {
   Button,
   DropDown,
-  SelectItem,
-  SelectItemProps,
+  MenuItem,
+  MenuItemProps,
   Tag,
 } from "@thunderstore/cyberstorm";
 import React, { ReactElement } from "react";
@@ -29,13 +29,13 @@ const defaultArgs = {
   ),
 };
 
-const content: ReactElement<SelectItemProps>[] = [
-  <SelectItem
+const content: ReactElement<MenuItemProps>[] = [
+  <MenuItem
     key={1}
     label="New"
     leftIcon={<FontAwesomeIcon fixedWidth icon={faStar} />}
   />,
-  <SelectItem
+  <MenuItem
     key={2}
     label="New"
     leftIcon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
@@ -44,12 +44,6 @@ const content: ReactElement<SelectItemProps>[] = [
     key={3}
     label="Nabbula"
     leftIcon={<FontAwesomeIcon fixedWidth icon={faSkull} />}
-  />,
-  <DropDown
-    key={5}
-    label="Another one"
-    content={[<Button key={1} label="Namiska" />]}
-    trigger={<Button label="dropdown"></Button>}
   />,
 ];
 

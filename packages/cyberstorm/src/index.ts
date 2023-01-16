@@ -6,5 +6,5 @@ export * from "./components/MetaItem";
 export * from "./components/PackageCard";
 export * from "./components/PackageFlag";
 export * from "./components/Select";
-export * from "./components/SelectItem";
+export * from "./components/MenuItem";
 export * from "./components/Tag";

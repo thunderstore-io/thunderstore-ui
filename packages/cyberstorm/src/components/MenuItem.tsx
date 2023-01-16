@@ -1,7 +1,7 @@
-import React, { ReactNode } from "react";
-import styles from "./componentStyles/SelectItem.module.css";
+import React, { ReactNode, useRef } from "react";
+import styles from "./componentStyles/MenuItem.module.css";
 
-export interface SelectItemProps {
+export interface MenuItemProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
@@ -9,11 +9,14 @@ export interface SelectItemProps {
 }
 
 /**
- * Cyberstorm SelectItem component
+ * Cyberstorm MenuItem component
  */
-export const SelectItem: React.FC<SelectItemProps> = React.forwardRef(
-  (props, ref) => {
+export const MenuItem: React.FC<MenuItemProps> = React.forwardRef(
+  (props, forwardedRef) => {
     const { label, leftIcon, rightIcon, colorScheme, ...rest } = props;
+
+    const fallbackRef = useRef(null);
+    const ref = forwardedRef || fallbackRef;
 
     return (
       <div
@@ -37,10 +40,10 @@ export const SelectItem: React.FC<SelectItemProps> = React.forwardRef(
   }
 );
 
-SelectItem.displayName = "SelectItem";
-SelectItem.defaultProps = { colorScheme: "default" };
+MenuItem.displayName = "MenuItem";
+MenuItem.defaultProps = { colorScheme: "default" };
 
-const getStyle = (scheme: SelectItemProps["colorScheme"] = "default") => {
+const getStyle = (scheme: MenuItemProps["colorScheme"] = "default") => {
   return {
     default: styles.selectItem__default,
     defaultDark: styles.selectItem__defaultDark,

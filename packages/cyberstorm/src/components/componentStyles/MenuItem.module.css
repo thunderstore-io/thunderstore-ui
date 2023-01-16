@@ -23,7 +23,7 @@
   line-height: var(--line-height-l);
 }
 
-/* Different SelectItem color schemes */
+/* Different MenuItem color schemes */
 .selectItem__default:hover {
   --bg-color: var(--color-surface--4);
 }

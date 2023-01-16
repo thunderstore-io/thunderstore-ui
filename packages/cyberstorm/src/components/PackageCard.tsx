@@ -33,85 +33,77 @@ export interface PackageCardProps {
 /**
  * Cyberstorm PackageCard component
  */
-export const PackageCard: React.FC<PackageCardProps> = React.forwardRef(
-  (props, ref) => {
-    const {
-      packageName,
-      description,
-      imageSrc,
-      downloadCount,
-      likes,
-      size,
-      author,
-      link,
-      lastUpdated,
-      colorScheme,
-      categories,
-      isPinned,
-      isNsfw,
-      isDeprecated,
-      ...rest
-    } = props;
+export const PackageCard: React.FC<PackageCardProps> = (props) => {
+  const {
+    packageName,
+    description,
+    imageSrc,
+    downloadCount,
+    likes,
+    size,
+    author,
+    link,
+    lastUpdated,
+    colorScheme,
+    categories,
+    isPinned,
+    isNsfw,
+    isDeprecated,
+    ...rest
+  } = props;
 
-    const authorLink = ""; //TODO: author link
-    //TODO: convert <a> tags into link components!
-    //TODO: Use LastUpdated component once one is developed
+  const authorLink = ""; //TODO: author link
+  //TODO: convert <a> tags into link components!
+  //TODO: Use LastUpdated component once one is developed
 
-    return (
-      <div
-        className={`${styles.root} ${getStyle(colorScheme)}`}
-        {...rest}
-        ref={ref}
-      >
-        <a href={link} className={styles.imageWrapper} title={packageName}>
-          <img
-            src={imageSrc ? imageSrc : defaultImageSrc}
-            className={styles.image}
-            alt={packageName}
-          />
-          {getPackageFlags(isPinned, isNsfw, isDeprecated)}
+  return (
+    <div className={`${styles.root} ${getStyle(colorScheme)}`} {...rest}>
+      <a href={link} className={styles.imageWrapper} title={packageName}>
+        <img
+          src={imageSrc ? imageSrc : defaultImageSrc}
+          className={styles.image}
+          alt={packageName}
+        />
+        {getPackageFlags(isPinned, isNsfw, isDeprecated)}
+      </a>
+
+      <div className={styles.content}>
+        <a href={link} className={styles.title}>
+          {packageName}
         </a>
 
-        <div className={styles.content}>
-          <a href={link} className={styles.title}>
-            {packageName}
-          </a>
-
-          {author ? (
-            <div className={styles.author}>
-              <span className={styles.author_prefix}>by</span>
-              <a className={styles.author_label} href={authorLink}>
-                {author}
-              </a>
-            </div>
-          ) : null}
-
-          {description ? (
-            <p className={styles.description}>{description}</p>
-          ) : null}
-        </div>
-
-        {categories.length > 0 ? (
-          <div className={styles.categoryWrapper}>
-            {categories.map((c) => (
-              <Tag key={c} label={c} size="small" colorScheme="default" />
-            ))}
+        {author ? (
+          <div className={styles.author}>
+            <span className={styles.author_prefix}>by</span>
+            <a className={styles.author_label} href={authorLink}>
+              {author}
+            </a>
           </div>
         ) : null}
 
-        <div className={styles.footer}>
-          {lastUpdated ? (
-            <p className={styles.lastUpdated}>
-              {"Last updated: " + lastUpdated}
-            </p>
-          ) : null}
-
-          {getMetaItemList(downloadCount, likes, size)}
-        </div>
+        {description ? (
+          <p className={styles.description}>{description}</p>
+        ) : null}
       </div>
-    );
-  }
-);
+
+      {categories.length > 0 ? (
+        <div className={styles.categoryWrapper}>
+          {categories.map((c) => (
+            <Tag key={c} label={c} size="small" colorScheme="default" />
+          ))}
+        </div>
+      ) : null}
+
+      <div className={styles.footer}>
+        {lastUpdated ? (
+          <p className={styles.lastUpdated}>{"Last updated: " + lastUpdated}</p>
+        ) : null}
+
+        {getMetaItemList(downloadCount, likes, size)}
+      </div>
+    </div>
+  );
+};
 
 PackageCard.displayName = "PackageCard";
 PackageCard.defaultProps = {

@@ -1,4 +1,9 @@
-import React, { MouseEventHandler, PropsWithChildren, ReactNode } from "react";
+import React, {
+  MouseEventHandler,
+  PropsWithChildren,
+  ReactNode,
+  useRef,
+} from "react";
 import styles from "./componentStyles/Button.module.css";
 
 export interface ButtonProps {
@@ -20,8 +25,11 @@ export interface ButtonProps {
  * Cyberstorm Button component
  */
 export const Button: React.FC<ButtonProps> = React.forwardRef(
-  (props: PropsWithChildren<ButtonProps>, ref) => {
+  (props: PropsWithChildren<ButtonProps>, forwardedRef) => {
     const { label, leftIcon, rightIcon, colorScheme, onClick, ...rest } = props;
+
+    const fallbackRef = useRef(null);
+    const ref = forwardedRef || fallbackRef;
 
     return (
       <button

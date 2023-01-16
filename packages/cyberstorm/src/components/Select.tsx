@@ -1,7 +1,7 @@
 import React, { Dispatch, ReactNode, SetStateAction } from "react";
 import styles from "./componentStyles/Select.module.css";
 import { Button } from "./Button";
-import { SelectItem } from "./SelectItem";
+import { MenuItem } from "./MenuItem";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -23,7 +23,7 @@ type SelectProps = {
   value: string;
 };
 
-export const Select: React.FC<SelectProps> = React.forwardRef((props, ref) => {
+export const Select: React.FC<SelectProps> = (props) => {
   const {
     colorScheme,
     defaultOpen,
@@ -40,7 +40,7 @@ export const Select: React.FC<SelectProps> = React.forwardRef((props, ref) => {
     : null;
 
   return (
-    <div {...rest} ref={ref} className={styles.root}>
+    <div {...rest} className={styles.root}>
       <RadixSelect.Root
         defaultOpen={defaultOpen}
         value={value}
@@ -67,7 +67,7 @@ export const Select: React.FC<SelectProps> = React.forwardRef((props, ref) => {
       </RadixSelect.Root>
     </div>
   );
-});
+};
 
 Select.displayName = "Select";
 Select.defaultProps = {
@@ -91,7 +91,7 @@ const mapSelectData = (
 ) => {
   return options.map((option, index) => (
     <RadixSelect.Item value={option.value} key={index} asChild>
-      <SelectItem
+      <MenuItem
         colorScheme={colorScheme}
         leftIcon={option.leftIcon}
         label={option.label}

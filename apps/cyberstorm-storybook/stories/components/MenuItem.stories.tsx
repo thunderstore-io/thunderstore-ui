@@ -1,46 +1,46 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { SelectItem } from "@thunderstore/cyberstorm";
+import { MenuItem } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDownAZ } from "@fortawesome/free-solid-svg-icons";
 
 const meta = {
-  title: "Cyberstorm/Components/SelectItem",
-  component: SelectItem,
-} as ComponentMeta<typeof SelectItem>;
+  title: "Cyberstorm/Components/MenuItem",
+  component: MenuItem,
+} as ComponentMeta<typeof MenuItem>;
 
 const defaultArgs = {
   label: "A-Z",
   leftIcon: <FontAwesomeIcon fixedWidth icon={faArrowDownAZ} />,
 };
 
-const Template: ComponentStory<typeof SelectItem> = (args) => (
-  <SelectItem {...args} />
+const Template: ComponentStory<typeof MenuItem> = (args) => (
+  <MenuItem {...args} />
 );
 
-const ReferenceSelectItem = Template.bind({});
-ReferenceSelectItem.args = {
+const ReferenceMenuItem = Template.bind({});
+ReferenceMenuItem.args = {
   ...defaultArgs,
   colorScheme: "default",
 };
 
-const DarkSelectItem = Template.bind({});
-DarkSelectItem.args = {
+const DarkMenuItem = Template.bind({});
+DarkMenuItem.args = {
   ...defaultArgs,
   colorScheme: "defaultDark",
 };
 
-const PrimarySelectItem = Template.bind({});
-PrimarySelectItem.args = {
+const PrimaryMenuItem = Template.bind({});
+PrimaryMenuItem.args = {
   ...defaultArgs,
   colorScheme: "primary",
 };
 
-const MinimalSelectItem = Template.bind({});
-MinimalSelectItem.args = {};
+const MinimalMenuItem = Template.bind({});
+MinimalMenuItem.args = {};
 
-const ExtremeSelectItem = Template.bind({});
-ExtremeSelectItem.args = {
+const ExtremeMenuItem = Template.bind({});
+ExtremeMenuItem.args = {
   ...defaultArgs,
   colorScheme: "default",
   label:
@@ -50,9 +50,9 @@ ExtremeSelectItem.args = {
 
 export {
   meta as default,
-  ReferenceSelectItem,
-  MinimalSelectItem,
-  DarkSelectItem,
-  PrimarySelectItem,
-  ExtremeSelectItem,
+  ReferenceMenuItem,
+  MinimalMenuItem,
+  DarkMenuItem,
+  PrimaryMenuItem,
+  ExtremeMenuItem,
 };

@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useRef } from "react";
 import styles from "./componentStyles/Tag.module.css";
 
 export interface TagProps {
@@ -13,23 +13,29 @@ export interface TagProps {
 /**
  * Cyberstorm Tag component
  */
-export const Tag: React.FC<TagProps> = React.forwardRef((props, ref) => {
-  const { label, colorScheme, leftIcon, rightIcon, size, isRemovable } = props;
+export const Tag: React.FC<TagProps> = React.forwardRef(
+  (props, forwardedRef) => {
+    const { label, colorScheme, leftIcon, rightIcon, size, isRemovable } =
+      props;
 
-  return (
-    <div
-      {...props}
-      ref={ref}
-      className={`${getSize(size)} ${styles.root} ${getStyle(colorScheme)}
+    const fallbackRef = useRef(null);
+    const ref = forwardedRef || fallbackRef;
+
+    return (
+      <div
+        {...props}
+        ref={ref}
+        className={`${getSize(size)} ${styles.root} ${getStyle(colorScheme)}
         ${isRemovable ? styles.tag__removable : null}
       `}
-    >
-      {leftIcon ? <div className={styles.icon}>{leftIcon}</div> : null}
-      {label ? <div className={styles.label}>{label}</div> : null}
-      {rightIcon ? <div className={styles.icon}>{rightIcon}</div> : null}
-    </div>
-  );
-});
+      >
+        {leftIcon ? <div className={styles.icon}>{leftIcon}</div> : null}
+        {label ? <div className={styles.label}>{label}</div> : null}
+        {rightIcon ? <div className={styles.icon}>{rightIcon}</div> : null}
+      </div>
+    );
+  }
+);
 
 Tag.displayName = "Tag";
 Tag.defaultProps = { colorScheme: "default", size: "medium" };
