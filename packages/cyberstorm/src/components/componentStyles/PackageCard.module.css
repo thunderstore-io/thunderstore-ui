@@ -2,15 +2,15 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-m);
+  gap: var(--size-1);
   align-items: flex-start;
 
-  border-radius: var(--border-radius-m);
+  border-radius: var(--size-1);
   overflow: hidden;
 }
 
 .root:hover {
-  box-shadow: var(--box-shadow-1);
+  box-shadow: var(--box-shadow-default);
 }
 
 .imageWrapper {
@@ -44,11 +44,11 @@
 
 .flagWrapper {
   position: absolute;
-  top: var(--size-m);
+  top: var(--size-1);
   left: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-2xs);
+  gap: var(--size-0-625);
   align-items: flex-start;
 }
 
@@ -56,8 +56,8 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap: var(--gap-s);
-  padding: 0 var(--padding-m);
+  gap: var(--size-0-875);
+  padding: 0 var(--size-1);
 }
 
 /* Styles for PackageCard's Package name (title) */
@@ -65,13 +65,13 @@
   color: var(--color-text--default);
   font: var(--font-heading);
   font-weight: var(--font-weight-700);
-  line-height: var(--text-xl);
+  line-height: var(--line-height-medium);
 }
 
 /* Styles for PackageCard's Author */
 .author {
   font: var(--font-body);
-  font-size: var(--text-xs);
+  font-size: var(--size-0-750);
 }
 
 .author_label {
@@ -81,7 +81,7 @@
 }
 
 .author_prefix {
-  padding-right: var(--padding-tiny);
+  padding-right: var(--size-0-250);
   color: var(--color-text--tertiary);
 }
 
@@ -91,8 +91,8 @@
   overflow: hidden;
   color: var(--color-text--secondary);
   font: var(--font-body);
-  font-size: var(--text-s);
-  line-height: var(--line-height-2xl);
+  font-size: var(--size-0-875);
+  line-height: var(--line-height-large);
   text-overflow: ellipsis;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -102,31 +102,31 @@
 .lastUpdated {
   color: var(--color-text--tertiary);
   font: var(--font-heading);
-  font-size: var(--text-xs);
-  line-height: var(--text-m);
+  font-size: var(--size-0-750);
+  line-height: var(--line-height-small);
 }
 
 .footer {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-m);
+  gap: var(--size-1);
   width: 100%;
-  padding: 0 var(--padding-m) var(--padding-m);
+  padding: 0 var(--size-1) var(--size-1);
 }
 
 .categoryWrapper {
   display: flex;
   flex-flow: row wrap;
-  gap: var(--gap-tiny);
+  gap: var(--size-0-250);
   align-items: flex-start;
-  padding: 0 var(--padding-m);
+  padding: 0 var(--size-1);
 }
 
 .metaItemWrapper {
   display: flex;
   flex-basis: 100%;
   flex-direction: row;
-  gap: var(--gap-m);
+  gap: var(--size-1);
   align-items: flex-start;
 }
 

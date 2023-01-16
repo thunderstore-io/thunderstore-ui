@@ -1,26 +1,26 @@
 .root {
   display: flex;
   flex-direction: row;
-  gap: var(--gap-3xs);
+  gap: var(--size-0-500);
   align-items: center;
 
-  padding: var(--padding-2xs) var(--padding-xs);
+  padding: var(--size-0-625) var(--size-0-750);
   border-radius: 0 var(--border-radius) var(--border-radius) 0;
   color: var(--color-cyber-green);
-  font-size: var(--size-xs);
+  font-size: var(--size-0-750);
   background-color: var(--color-surface--3);
 
   --border-color: transparent;
-  --border-radius: var(--border-radius-5xs);
+  --border-radius: var(--size-0-250);
 }
 
 .label {
-  font: var(--font-inter);
+  font: var(--font-body);
   font-weight: var(--font-weight-800);
-  line-height: var(--line-height-s);
+  line-height: var(--line-height-smaller);
 }
 
 .icon {
-  line-height: var(--size-2xs);
+  line-height: var(--line-height-tiny);
   transform: rotate(30deg);
 }
