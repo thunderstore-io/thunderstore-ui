@@ -24,17 +24,18 @@ export const MenuItem: React.FC<MenuItemProps> = React.forwardRef(
         ref={ref}
         className={`${styles.root} ${getStyle(colorScheme)}`}
       >
-        {leftIcon ?? (
+        {leftIcon ? (
           <div className={`${styles.icon} ${getStyle(colorScheme)}`}>
             {leftIcon}
           </div>
-        )}
+        ) : null}
         {label ? <div className={styles.label}>{label}</div> : null}
-        {rightIcon ?? (
+        {rightIcon ? (
           <div className={`${styles.icon} ${getStyle(colorScheme)}`}>
+            aaa
             {rightIcon}
           </div>
-        )}
+        ) : null}
       </div>
     );
   }
