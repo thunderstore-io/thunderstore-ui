@@ -13,10 +13,10 @@ export interface MetaItemProps {
  * of likes or a size of a package) with an icon next to it
  */
 export const MetaItem: React.FC<MetaItemProps> = React.forwardRef((props) => {
-  const { label, icon, colorScheme } = props;
+  const { label, icon, colorScheme, ...rest } = props;
 
   return (
-    <div className={`${styles.root} ${getStyle(colorScheme)}`}>
+    <div {...rest} className={`${styles.root} ${getStyle(colorScheme)}`}>
       {icon}
       {label ? <div className={styles.label}>{label}</div> : null}
     </div>

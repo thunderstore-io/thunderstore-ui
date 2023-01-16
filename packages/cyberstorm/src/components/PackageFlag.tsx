@@ -8,9 +8,9 @@ export interface PackageFlagProps {
 
 export const PackageFlag: React.FC<PackageFlagProps> = React.forwardRef(
   (props, ref) => {
-    const { label, icon } = props;
+    const { label, icon, ...rest } = props;
     return (
-      <div {...props} ref={ref} className={styles.root}>
+      <div {...rest} ref={ref} className={styles.root}>
         {icon ? <div className={styles.icon}>{icon}</div> : null}
         {label ? <div className={styles.label}>{label}</div> : null}
       </div>

@@ -50,6 +50,7 @@ export const PackageCard: React.FC<PackageCardProps> = React.forwardRef(
       isPinned,
       isNsfw,
       isDeprecated,
+      ...rest
     } = props;
 
     const authorLink = ""; //TODO: author link
@@ -59,7 +60,7 @@ export const PackageCard: React.FC<PackageCardProps> = React.forwardRef(
     return (
       <div
         className={`${styles.root} ${getStyle(colorScheme)}`}
-        {...props}
+        {...rest}
         ref={ref}
       >
         <a href={link} className={styles.imageWrapper} title={packageName}>

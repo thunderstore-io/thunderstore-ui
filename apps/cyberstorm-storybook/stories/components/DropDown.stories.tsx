@@ -1,6 +1,12 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Button, DropDown, SelectItem, Tag } from "@thunderstore/cyberstorm";
-import React, { ReactNode } from "react";
+import {
+  Button,
+  DropDown,
+  SelectItem,
+  SelectItemProps,
+  Tag,
+} from "@thunderstore/cyberstorm";
+import React, { ReactElement } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronDown,
@@ -17,13 +23,13 @@ const meta = {
 const defaultArgs = {
   trigger: (
     <Button
-      label={"Developers"}
+      label="Developers"
       rightIcon={<FontAwesomeIcon fixedWidth icon={faChevronDown} />}
     />
   ),
 };
 
-const content: ReactNode[] = [
+const content: ReactElement<SelectItemProps>[] = [
   <SelectItem
     key={1}
     label="New"
@@ -39,7 +45,6 @@ const content: ReactNode[] = [
     label="Nabbula"
     leftIcon={<FontAwesomeIcon fixedWidth icon={faSkull} />}
   />,
-  <Tag key={4} label="tag" />,
   <DropDown
     key={5}
     label="Another one"
@@ -76,6 +81,15 @@ PrimaryDropDown.args = {
   colorScheme: "primary",
 };
 
+const TriggerColorDropDown = Template.bind({});
+TriggerColorDropDown.args = {
+  ...defaultArgs,
+  triggerColorScheme: "primary",
+  content: content,
+  label: "Click me",
+  colorScheme: "default",
+};
+
 const TagTriggerDropDown = Template.bind({});
 TagTriggerDropDown.args = {
   ...defaultArgs,
@@ -104,4 +118,5 @@ export {
   PrimaryDropDown,
   TagTriggerDropDown,
   DefaultOpenDropDown,
+  TriggerColorDropDown,
 };

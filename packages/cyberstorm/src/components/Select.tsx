@@ -32,6 +32,7 @@ export const Select: React.FC<SelectProps> = React.forwardRef((props, ref) => {
     onChange,
     placeholder,
     value,
+    ...rest
   } = props;
 
   const selectItemElements = options
@@ -39,12 +40,12 @@ export const Select: React.FC<SelectProps> = React.forwardRef((props, ref) => {
     : null;
 
   return (
-    <div {...props} ref={ref} className={styles.root}>
+    <div {...rest} ref={ref} className={styles.root}>
       <RadixSelect.Root
         defaultOpen={defaultOpen}
         value={value}
         onValueChange={onChange}
-        disabled={options.length == 0}
+        disabled={options.length === 0}
       >
         <RadixSelect.Trigger asChild>
           <Button
@@ -73,7 +74,7 @@ Select.defaultProps = {
   colorScheme: "default",
   defaultOpen: false,
   icon: <FontAwesomeIcon fixedWidth icon={faChevronDown} />,
-  placeholder: "Choose",
+  placeholder: "Select",
 };
 
 const getContentStyle = (scheme: SelectProps["colorScheme"] = "default") => {

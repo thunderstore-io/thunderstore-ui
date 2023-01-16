@@ -21,11 +21,11 @@ export interface ButtonProps {
  */
 export const Button: React.FC<ButtonProps> = React.forwardRef(
   (props: PropsWithChildren<ButtonProps>, ref) => {
-    const { label, leftIcon, rightIcon, colorScheme, onClick } = props;
+    const { label, leftIcon, rightIcon, colorScheme, onClick, ...rest } = props;
 
     return (
       <button
-        {...props}
+        {...rest}
         ref={ref}
         type="button"
         className={`${styles.root} ${getStyle(colorScheme)}`}

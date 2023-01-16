@@ -13,21 +13,25 @@ export interface SelectItemProps {
  */
 export const SelectItem: React.FC<SelectItemProps> = React.forwardRef(
   (props, ref) => {
-    const { label, leftIcon, rightIcon, colorScheme } = props;
+    const { label, leftIcon, rightIcon, colorScheme, ...rest } = props;
 
     return (
       <div
-        {...props}
+        {...rest}
         ref={ref}
         className={`${styles.root} ${getStyle(colorScheme)}`}
       >
-        <div className={`${styles.icon} ${getStyle(colorScheme)}`}>
-          {leftIcon}
-        </div>
+        {leftIcon ?? (
+          <div className={`${styles.icon} ${getStyle(colorScheme)}`}>
+            {leftIcon}
+          </div>
+        )}
         {label ? <div className={styles.label}>{label}</div> : null}
-        <div className={`${styles.icon} ${getStyle(colorScheme)}`}>
-          {rightIcon}
-        </div>
+        {rightIcon ?? (
+          <div className={`${styles.icon} ${getStyle(colorScheme)}`}>
+            {rightIcon}
+          </div>
+        )}
       </div>
     );
   }
