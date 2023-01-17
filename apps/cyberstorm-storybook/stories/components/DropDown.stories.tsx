@@ -89,7 +89,7 @@ TagTriggerDropDown.args = {
   ...defaultArgs,
   content: content,
   label: "Open",
-  trigger: <Tag />,
+  trigger: <Tag label={"I'm a trigger"} />,
 };
 
 const MinimalDropDown = Template.bind({});

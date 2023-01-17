@@ -134,6 +134,7 @@ function getPackageFlags(
   if (isPinned) {
     flagList.push(
       <PackageFlag
+        key={1}
         label="Pinned"
         icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />
@@ -142,6 +143,7 @@ function getPackageFlags(
   if (isNsfw) {
     flagList.push(
       <PackageFlag
+        key={2}
         label="NSFW"
         icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />
@@ -150,6 +152,7 @@ function getPackageFlags(
   if (isDeprecated) {
     flagList.push(
       <PackageFlag
+        key={3}
         label="Deprecated"
         icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />

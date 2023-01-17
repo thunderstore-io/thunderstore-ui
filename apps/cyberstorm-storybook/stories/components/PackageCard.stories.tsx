@@ -7,9 +7,7 @@ const meta = {
   component: PackageCard,
 } as ComponentMeta<typeof PackageCard>;
 
-const defaultArgs = {
-  packageCardStyle: "default",
-};
+const defaultArgs = {};
 const style = {
   padding: "3rem",
   flexWrap: "wrap",

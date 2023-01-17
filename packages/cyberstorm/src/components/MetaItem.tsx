@@ -16,17 +16,13 @@ export const MetaItem: React.FC<MetaItemProps> = React.forwardRef<
   HTMLDivElement,
   MetaItemProps
 >((props, forwardedRef) => {
-  const { label, icon, colorScheme, ...rest } = props;
+  const { label, icon, colorScheme } = props;
 
   const fallbackRef = useRef(null);
   const ref = forwardedRef || fallbackRef;
 
   return (
-    <div
-      {...rest}
-      ref={ref}
-      className={`${styles.root} ${getStyle(colorScheme)}`}
-    >
+    <div ref={ref} className={`${styles.root} ${getStyle(colorScheme)}`}>
       {icon}
       {label ? <div className={styles.label}>{label}</div> : null}
     </div>
