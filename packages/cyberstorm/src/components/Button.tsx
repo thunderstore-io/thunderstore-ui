@@ -24,28 +24,29 @@ export interface ButtonProps {
 /**
  * Cyberstorm Button component
  */
-export const Button: React.FC<ButtonProps> = React.forwardRef(
-  (props: PropsWithChildren<ButtonProps>, forwardedRef) => {
-    const { label, leftIcon, rightIcon, colorScheme, onClick, ...rest } = props;
+export const Button: React.FC<ButtonProps> = React.forwardRef<
+  HTMLButtonElement,
+  ButtonProps
+>((props: PropsWithChildren<ButtonProps>, forwardedRef) => {
+  const { label, leftIcon, rightIcon, colorScheme, onClick, ...rest } = props;
 
-    const fallbackRef = useRef(null);
-    const ref = forwardedRef || fallbackRef;
+  const fallbackRef = useRef(null);
+  const ref = forwardedRef || fallbackRef;
 
-    return (
-      <button
-        {...rest}
-        ref={ref}
-        type="button"
-        className={`${styles.root} ${getStyle(colorScheme)}`}
-        onClick={onClick}
-      >
-        {leftIcon}
-        {label ? <div className={styles.label}>{label}</div> : null}
-        {rightIcon}
-      </button>
-    );
-  }
-);
+  return (
+    <button
+      {...rest}
+      ref={ref}
+      type="button"
+      className={`${styles.root} ${getStyle(colorScheme)}`}
+      onClick={onClick}
+    >
+      {leftIcon}
+      {label ? <div className={styles.label}>{label}</div> : null}
+      {rightIcon}
+    </button>
+  );
+});
 
 Button.displayName = "Button";
 Button.defaultProps = { colorScheme: "default" };

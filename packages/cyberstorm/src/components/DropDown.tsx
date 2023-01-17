@@ -12,24 +12,17 @@ type DropDownProps = {
 };
 
 export const DropDown: React.FC<DropDownProps> = (props) => {
-  const {
-    colorScheme,
-    defaultOpen,
-    content,
-    trigger,
-    triggerColorScheme,
-    ...rest
-  } = props;
-  const triggerProps = Object.assign({}, rest, {
-    colorScheme: triggerColorScheme ?? colorScheme,
-  });
+  const { colorScheme, defaultOpen, content, trigger, triggerColorScheme } =
+    props;
 
   return (
-    <div className={styles.root} {...rest}>
+    <div className={styles.root}>
       <RadixDropDown.Root defaultOpen={defaultOpen}>
-        <RadixDropDown.Trigger asChild>
+        <RadixDropDown.Trigger asChild disabled={!content}>
           {React.isValidElement(trigger)
-            ? React.cloneElement(trigger, triggerProps)
+            ? React.cloneElement(trigger, {
+                colorScheme: triggerColorScheme ?? colorScheme,
+              })
             : trigger}
         </RadixDropDown.Trigger>
 
