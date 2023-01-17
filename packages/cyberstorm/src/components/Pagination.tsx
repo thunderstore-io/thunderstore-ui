@@ -1,4 +1,11 @@
+import {
+  faArrowLeft,
+  faArrowRight,
+  faEllipsis,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Dispatch, SetStateAction } from "react";
+import { Button } from "./Button";
 import styles from "./componentStyles/Pagination.module.css";
 
 const DOTS = "...";
@@ -72,33 +79,34 @@ export interface PaginationProps {
   onPageChange: Dispatch<SetStateAction<number>>;
   totalCount: number;
   pageSize: number;
+  disabled?: boolean;
 }
 
 export const Pagination: React.FC<PaginationProps> = (props) => {
-  const { currentPage, onPageChange, totalCount, pageSize } = props;
+  const { currentPage, onPageChange, totalCount, pageSize, disabled } = props;
 
   const paginationRange = usePagination(totalCount, pageSize, currentPage);
 
   return (
-    <ul className={styles.root}>
-      <button
-        className={styles.item}
+    <ul className={`${styles.root} ${disabled ? styles.disabled : ""}`}>
+      <Button
         onClick={() => onPageChange(currentPage - 1)}
-      >
-        <div className={styles.leftArrow} />
-      </button>
+        label="Prev"
+        leftIcon={<FontAwesomeIcon fixedWidth icon={faArrowLeft} />}
+      />
 
       {mapPageNumbers(paginationRange, onPageChange, currentPage)}
 
-      <button
-        className={styles.item}
+      <Button
         onClick={() => onPageChange(currentPage + 1)}
-      >
-        <div className={`${styles.rightArrow} ${styles.arrow}`} />
-      </button>
+        label="Next"
+        rightIcon={<FontAwesomeIcon fixedWidth icon={faArrowRight} />}
+      />
     </ul>
   );
 };
+
+Pagination.defaultProps = { disabled: false };
 
 const mapPageNumbers = (
   paginationRange: Array<number | string>,
@@ -108,22 +116,20 @@ const mapPageNumbers = (
   return paginationRange.map((pageNumber, index: number) => {
     if (pageNumber === DOTS) {
       return (
-        <li key={index} className={styles.dots}>
-          {DOTS}
-        </li>
+        <Button
+          key={index}
+          leftIcon={<FontAwesomeIcon fixedWidth icon={faEllipsis} />}
+        />
       );
     }
 
     return (
-      <button
+      <Button
         key={index}
-        className={`${styles.item} ${
-          currentPage === pageNumber ? styles.arrow : ""
-        }`}
+        label={pageNumber.toString()}
+        colorScheme={currentPage === pageNumber ? "primary" : "default"}
         onClick={() => onPageChange(pageNumber as number)}
-      >
-        {pageNumber}
-      </button>
+      />
     );
   });
 };

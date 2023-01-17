@@ -37,4 +37,15 @@ DefaultPagePagination.args = {
   defaultPage: 3,
 };
 
-export { meta as default, ReferencePagination, DefaultPagePagination };
+const DisabledPagination = Template.bind({});
+DisabledPagination.args = {
+  ...defaultArgs,
+  disabled: true,
+};
+
+export {
+  meta as default,
+  ReferencePagination,
+  DefaultPagePagination,
+  DisabledPagination,
+};
