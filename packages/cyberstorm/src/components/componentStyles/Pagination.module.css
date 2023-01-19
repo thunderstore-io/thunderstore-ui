@@ -1,20 +1,13 @@
 .root {
   display: flex;
   flex-direction: row;
-  gap: 4px;
+  gap: var(--gap-5xs);
   align-items: center;
   justify-content: center;
 
-  width: 407px;
-  height: 36px;
   padding: 0;
 }
 
 .disabled {
   pointer-events: none;
-}
-
-.disabled:hover {
-  background-color: transparent;
-  cursor: default;
 }

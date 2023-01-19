@@ -33,7 +33,3 @@
 .button__default_selected {
   --bg-color: #40328b;
 }
-
-.button__default_selected:hover {
-  --bg-color: var(--color-surface--1);
-}

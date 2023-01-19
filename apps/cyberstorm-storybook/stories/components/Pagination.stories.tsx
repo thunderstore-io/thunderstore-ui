@@ -1,6 +1,7 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Pagination } from "@thunderstore/cyberstorm";
 import React, { useState } from "react";
+
 const meta = {
   title: "Cyberstorm/Components/Pagination",
   component: Pagination,
