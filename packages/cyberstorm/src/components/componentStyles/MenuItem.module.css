@@ -18,17 +18,21 @@
   --bg-color: transparent;
 }
 
+.root[data-highlighted] {
+  z-index: 999;
+}
+
 .label {
   font-weight: var(--font-weight-500);
   line-height: var(--line-height-l);
 }
 
 /* Different MenuItem color schemes */
-.selectItem__default:hover {
+.selectItem__default[data-highlighted] {
   --bg-color: var(--color-surface--4);
 }
 
-.selectItem__defaultDark:hover {
+.selectItem__defaultDark[data-highlighted] {
   --bg-color: var(--color-surface--2);
 }
 
@@ -36,7 +40,7 @@
   --text-color: var(--color-black);
 }
 
-.selectItem__primary:hover {
+.selectItem__primary[data-highlighted] {
   --bg-color: var(--color-cyber-green--40);
 }
 
