@@ -1,12 +1,8 @@
-import {
-  faArrowLeft,
-  faArrowRight,
-  faEllipsis,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Dispatch, SetStateAction } from "react";
-import { Button } from "./Button";
 import styles from "./componentStyles/Pagination.module.css";
+import { PaginationButton } from "./PaginationButton";
 
 const DOTS = "...";
 
@@ -89,7 +85,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
 
   return (
     <ul className={`${styles.root} ${disabled ? styles.disabled : ""}`}>
-      <Button
+      <PaginationButton
         onClick={() => onPageChange(currentPage - 1)}
         label="Prev"
         leftIcon={<FontAwesomeIcon fixedWidth icon={faArrowLeft} />}
@@ -97,7 +93,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
 
       {mapPageNumbers(paginationRange, onPageChange, currentPage)}
 
-      <Button
+      <PaginationButton
         onClick={() => onPageChange(currentPage + 1)}
         label="Next"
         rightIcon={<FontAwesomeIcon fixedWidth icon={faArrowRight} />}
@@ -115,19 +111,14 @@ const mapPageNumbers = (
 ) => {
   return paginationRange.map((pageNumber, index: number) => {
     if (pageNumber === DOTS) {
-      return (
-        <Button
-          key={index}
-          leftIcon={<FontAwesomeIcon fixedWidth icon={faEllipsis} />}
-        />
-      );
+      return <PaginationButton key={index} label="..." />;
     }
 
     return (
-      <Button
+      <PaginationButton
         key={index}
         label={pageNumber.toString()}
-        colorScheme={currentPage === pageNumber ? "primary" : "default"}
+        isSelected={currentPage === pageNumber}
         onClick={() => onPageChange(pageNumber as number)}
       />
     );

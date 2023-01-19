@@ -1,5 +1,6 @@
 export * from "./components/Button";
 export * from "./components/DropDown";
+export * from "./components/PaginationButton";
 export * from "./components/LinkingProvider";
 export * from "./components/Links";
 export * from "./components/MetaItem";
