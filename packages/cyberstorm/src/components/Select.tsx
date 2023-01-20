@@ -32,7 +32,7 @@ export const Select: React.FC<SelectProps> = (props) => {
     onChange,
     placeholder,
     value,
-    ...rest
+    ...forwardedProps
   } = props;
 
   const selectItemElements = options
@@ -40,7 +40,7 @@ export const Select: React.FC<SelectProps> = (props) => {
     : null;
 
   return (
-    <div {...rest} className={styles.root}>
+    <div {...forwardedProps} className={styles.root}>
       <RadixSelect.Root
         defaultOpen={defaultOpen}
         value={value}

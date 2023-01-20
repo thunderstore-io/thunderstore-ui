@@ -15,14 +15,14 @@ export const MenuItem: React.FC<MenuItemProps> = React.forwardRef<
   HTMLDivElement,
   MenuItemProps
 >((props, forwardedRef) => {
-  const { label, leftIcon, rightIcon, colorScheme, ...rest } = props;
+  const { label, leftIcon, rightIcon, colorScheme, ...forwardedProps } = props;
 
   const fallbackRef = useRef(null);
   const ref = forwardedRef || fallbackRef;
 
   return (
     <div
-      {...rest}
+      {...forwardedProps}
       ref={ref}
       className={`${styles.root} ${getStyle(colorScheme)}`}
     >

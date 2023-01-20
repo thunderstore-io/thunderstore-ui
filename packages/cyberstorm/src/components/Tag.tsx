@@ -24,7 +24,7 @@ export const Tag: React.FC<TagProps> = React.forwardRef<
     rightIcon,
     size,
     isRemovable,
-    ...rest
+    ...forwardedProps
   } = props;
 
   const fallbackRef = useRef(null);
@@ -32,7 +32,7 @@ export const Tag: React.FC<TagProps> = React.forwardRef<
 
   return (
     <div
-      {...rest}
+      {...forwardedProps}
       ref={ref}
       className={`${getSize(size)} ${styles.root} ${getStyle(colorScheme)}
         ${isRemovable ? styles.tag__removable : null}

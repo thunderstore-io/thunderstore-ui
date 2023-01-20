@@ -49,7 +49,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
     isPinned,
     isNsfw,
     isDeprecated,
-    ...rest
+    ...forwardedProps
   } = props;
 
   const authorLink = ""; //TODO: author link
@@ -57,7 +57,10 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
   //TODO: Use LastUpdated component once one is developed
 
   return (
-    <div className={`${styles.root} ${getStyle(colorScheme)}`} {...rest}>
+    <div
+      className={`${styles.root} ${getStyle(colorScheme)}`}
+      {...forwardedProps}
+    >
       <a href={link} className={styles.imageWrapper} title={packageName}>
         <img
           src={imageSrc ? imageSrc : defaultImageSrc}
@@ -89,7 +92,12 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
       {categories.length > 0 ? (
         <div className={styles.categoryWrapper}>
           {categories.map((c) => (
-            <Tag key={c} label={c} size="small" colorScheme="default" />
+            <Tag
+              key={"category_" + c}
+              label={c}
+              size="small"
+              colorScheme="default"
+            />
           ))}
         </div>
       ) : null}
@@ -134,7 +142,7 @@ function getPackageFlags(
   if (isPinned) {
     flagList.push(
       <PackageFlag
-        key={1}
+        key={"flag_pinned"}
         label="Pinned"
         icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />
@@ -143,7 +151,7 @@ function getPackageFlags(
   if (isNsfw) {
     flagList.push(
       <PackageFlag
-        key={2}
+        key={"flag_nsfw"}
         label="NSFW"
         icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />
@@ -152,7 +160,7 @@ function getPackageFlags(
   if (isDeprecated) {
     flagList.push(
       <PackageFlag
-        key={3}
+        key={"flag_deprecated"}
         label="Deprecated"
         icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />

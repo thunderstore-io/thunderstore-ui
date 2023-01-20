@@ -28,14 +28,21 @@ export const Button: React.FC<ButtonProps> = React.forwardRef<
   HTMLButtonElement,
   ButtonProps
 >((props: PropsWithChildren<ButtonProps>, forwardedRef) => {
-  const { label, leftIcon, rightIcon, colorScheme, onClick, ...rest } = props;
+  const {
+    label,
+    leftIcon,
+    rightIcon,
+    colorScheme,
+    onClick,
+    ...forwardedProps
+  } = props;
 
   const fallbackRef = useRef(null);
   const ref = forwardedRef || fallbackRef;
 
   return (
     <button
-      {...rest}
+      {...forwardedProps}
       ref={ref}
       type="button"
       className={`${styles.root} ${getStyle(colorScheme)}`}
