@@ -91,9 +91,9 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
 
       {categories.length > 0 ? (
         <div className={styles.categoryWrapper}>
-          {categories.map((c) => (
+          {categories.map((c, index) => (
             <Tag
-              key={"category_" + c}
+              key={`category_${c}_${index}`}
               label={c}
               size="small"
               colorScheme="default"
@@ -142,7 +142,7 @@ function getPackageFlags(
   if (isPinned) {
     flagList.push(
       <PackageFlag
-        key={"flag_pinned"}
+        key="flag_pinned"
         label="Pinned"
         icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />
@@ -151,7 +151,7 @@ function getPackageFlags(
   if (isNsfw) {
     flagList.push(
       <PackageFlag
-        key={"flag_nsfw"}
+        key="flag_nsfw"
         label="NSFW"
         icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />
@@ -160,7 +160,7 @@ function getPackageFlags(
   if (isDeprecated) {
     flagList.push(
       <PackageFlag
-        key={"flag_deprecated"}
+        key="flag_deprecated"
         label="Deprecated"
         icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />
