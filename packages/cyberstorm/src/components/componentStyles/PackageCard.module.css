@@ -64,7 +64,7 @@
 .title {
   color: var(--color-text--default);
   font: var(--font-heading);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-700);
   line-height: var(--text-xl);
 }
 
@@ -76,7 +76,7 @@
 
 .author_label {
   color: var(--color-cyber-green);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-700);
   text-decoration: none;
 }
 
@@ -102,7 +102,6 @@
 .lastUpdated {
   color: var(--color-text--tertiary);
   font: var(--font-heading);
-  font-weight: 400;
   font-size: var(--text-xs);
   line-height: var(--text-m);
 }

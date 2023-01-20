@@ -1,4 +1,9 @@
-import React, { MouseEventHandler, ReactNode } from "react";
+import React, {
+  MouseEventHandler,
+  PropsWithChildren,
+  ReactNode,
+  useRef,
+} from "react";
 import styles from "./componentStyles/Button.module.css";
 
 export interface ButtonProps {
@@ -19,11 +24,26 @@ export interface ButtonProps {
 /**
  * Cyberstorm Button component
  */
-export const Button: React.FC<ButtonProps> = (props) => {
-  const { label, leftIcon, rightIcon, colorScheme, onClick } = props;
+export const Button: React.FC<ButtonProps> = React.forwardRef<
+  HTMLButtonElement,
+  ButtonProps
+>((props: PropsWithChildren<ButtonProps>, forwardedRef) => {
+  const {
+    label,
+    leftIcon,
+    rightIcon,
+    colorScheme,
+    onClick,
+    ...forwardedProps
+  } = props;
+
+  const fallbackRef = useRef(null);
+  const ref = forwardedRef || fallbackRef;
 
   return (
     <button
+      {...forwardedProps}
+      ref={ref}
       type="button"
       className={`${styles.root} ${getStyle(colorScheme)}`}
       onClick={onClick}
@@ -33,8 +53,9 @@ export const Button: React.FC<ButtonProps> = (props) => {
       {rightIcon}
     </button>
   );
-};
+});
 
+Button.displayName = "Button";
 Button.defaultProps = { colorScheme: "default" };
 
 const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {

@@ -22,7 +22,7 @@
 /* Styles for Button's text */
 .label {
   font: var(--font-heading);
-  font-weight: var(--font-weight-semi-bold);
+  font-weight: var(--font-weight-500);
   line-height: var(--line-height-l);
 }
 

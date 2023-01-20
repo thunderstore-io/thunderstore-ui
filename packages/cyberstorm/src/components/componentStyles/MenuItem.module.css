@@ -1,0 +1,49 @@
+.root {
+  display: flex;
+  flex-direction: row;
+
+  gap: var(--gap-m);
+  min-width: 10rem;
+  padding: var(--padding-2xs) var(--padding-xs);
+  border-radius: var(--border-radius-3xs);
+  overflow: hidden;
+  color: var(--text-color);
+
+  font: var(--font-body);
+  font-size: var(--text-s);
+  background-color: var(--bg-color);
+  cursor: pointer;
+
+  --text-color: var(--color-text--default);
+  --bg-color: transparent;
+}
+
+.label {
+  font-weight: var(--font-weight-500);
+  line-height: var(--line-height-l);
+}
+
+/* Different MenuItem color schemes */
+.selectItem__default:hover {
+  --bg-color: var(--color-surface--4);
+}
+
+.selectItem__defaultDark:hover {
+  --bg-color: var(--color-surface--2);
+}
+
+.selectItem__primary {
+  --text-color: var(--color-black);
+}
+
+.selectItem__primary:hover {
+  --bg-color: var(--color-cyber-green--40);
+}
+
+.icon {
+  color: var(--color-text--tertiary);
+}
+
+.selectItem__primary .icon {
+  color: black; /* placeholder */
+}

@@ -7,9 +7,6 @@ const meta = {
   component: PackageCard,
 } as ComponentMeta<typeof PackageCard>;
 
-const defaultArgs = {
-  packageCardStyle: "default",
-};
 const style = {
   padding: "3rem",
   flexWrap: "wrap",
@@ -23,7 +20,7 @@ const Template: ComponentStory<typeof PackageCard> = (args) => (
   <div style={style}>
     <PackageCard {...args} />
     <PackageCard {...args} categories={[]} />
-    <PackageCard {...args} description={"Lorem ipsum."} />
+    <PackageCard {...args} description="Lorem ipsum." />
     <PackageCard {...args} />
     <PackageCard {...args} />
     <PackageCard {...args} />
@@ -37,11 +34,10 @@ const Template: ComponentStory<typeof PackageCard> = (args) => (
 );
 
 const MinimalPackageCard = Template.bind({});
-MinimalPackageCard.args = { ...defaultArgs };
+MinimalPackageCard.args = {};
 
 const ReferencePackageCard = Template.bind({});
 ReferencePackageCard.args = {
-  ...defaultArgs,
   imageSrc: "/images/thomas.jpg",
   packageName: "MinisterAPI DeLuxe",
   author: "Gigamies5000",
@@ -58,7 +54,6 @@ ReferencePackageCard.args = {
 
 const ExtremePackageCard = Template.bind({});
 ExtremePackageCard.args = {
-  ...defaultArgs,
   imageSrc: "/images/thomas.jpg",
   packageName:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel ullamcorper sem, in lacinia velit. Maecenas sed augue in tortor fermentum hendrerit. Donec vel leo neque. Vivamus vehicula enim quis nibh commodo cursus. Nulla facilisi.",

@@ -49,6 +49,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
     isPinned,
     isNsfw,
     isDeprecated,
+    ...forwardedProps
   } = props;
 
   const authorLink = ""; //TODO: author link
@@ -56,7 +57,10 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
   //TODO: Use LastUpdated component once one is developed
 
   return (
-    <div className={`${styles.root} ${getStyle(colorScheme)}`}>
+    <div
+      className={`${styles.root} ${getStyle(colorScheme)}`}
+      {...forwardedProps}
+    >
       <a href={link} className={styles.imageWrapper} title={packageName}>
         <img
           src={imageSrc ? imageSrc : defaultImageSrc}
@@ -87,8 +91,13 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
 
       {categories.length > 0 ? (
         <div className={styles.categoryWrapper}>
-          {categories.map((c) => (
-            <Tag key={c} label={c} size="small" colorScheme={"default"} />
+          {categories.map((c, index) => (
+            <Tag
+              key={`category_${c}_${index}`}
+              label={c}
+              size="small"
+              colorScheme="default"
+            />
           ))}
         </div>
       ) : null}
@@ -104,6 +113,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
   );
 };
 
+PackageCard.displayName = "PackageCard";
 PackageCard.defaultProps = {
   colorScheme: "default",
   categories: [],
@@ -132,6 +142,7 @@ function getPackageFlags(
   if (isPinned) {
     flagList.push(
       <PackageFlag
+        key="flag_pinned"
         label="Pinned"
         icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />
@@ -140,6 +151,7 @@ function getPackageFlags(
   if (isNsfw) {
     flagList.push(
       <PackageFlag
+        key="flag_nsfw"
         label="NSFW"
         icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />
@@ -148,6 +160,7 @@ function getPackageFlags(
   if (isDeprecated) {
     flagList.push(
       <PackageFlag
+        key="flag_deprecated"
         label="Deprecated"
         icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />
@@ -162,20 +175,20 @@ function getMetaItemList(downloadCount: string, likes: string, size: string) {
       <MetaItem
         icon={<FontAwesomeIcon fixedWidth icon={faDownload} />}
         label={downloadCount}
-        colorScheme={"tertiary"}
+        colorScheme="tertiary"
       />
 
       <MetaItem
         icon={<FontAwesomeIcon fixedWidth icon={faThumbsUp} />}
         label={likes}
-        colorScheme={"tertiary"}
+        colorScheme="tertiary"
       />
 
       <div className={styles.metaItem__last}>
         <MetaItem
           icon={<FontAwesomeIcon fixedWidth icon={faHardDrive} />}
           label={size}
-          colorScheme={"tertiary"}
+          colorScheme="tertiary"
         />
       </div>
     </div>

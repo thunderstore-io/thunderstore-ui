@@ -13,8 +13,6 @@ const meta = {
   component: Tag,
 } as ComponentMeta<typeof Tag>;
 
-const defaultArgs = {};
-
 const Template: ComponentStory<typeof Tag> = (args) => (
   <div style={{ display: "flex", gap: "0.25em" }}>
     <Tag {...args} />
@@ -24,54 +22,27 @@ const Template: ComponentStory<typeof Tag> = (args) => (
 );
 
 const MinimalTag = Template.bind({});
-MinimalTag.args = { ...defaultArgs };
+MinimalTag.args = {};
 
 const ReferenceTag = Template.bind({});
 ReferenceTag.args = {
-  ...defaultArgs,
   label: "tag",
   isRemovable: true,
-  rightIcon: (
-    <FontAwesomeIcon
-      className="tagIcon tagIconRight"
-      fixedWidth={true}
-      icon={faXmark}
-    />
-  ),
+  rightIcon: <FontAwesomeIcon fixedWidth icon={faXmark} />,
 };
 
 const IconTag = Template.bind({});
 IconTag.args = {
-  ...defaultArgs,
   label: "tag",
-  leftIcon: (
-    <FontAwesomeIcon
-      className="tagIcon tagIconLeft"
-      fixedWidth={true}
-      icon={faFaceDizzy}
-    />
-  ),
-  rightIcon: (
-    <FontAwesomeIcon
-      className="tagIcon tagIconRight"
-      fixedWidth={true}
-      icon={faFlag}
-    />
-  ),
+  leftIcon: <FontAwesomeIcon fixedWidth icon={faFaceDizzy} />,
+  rightIcon: <FontAwesomeIcon fixedWidth icon={faFlag} />,
 };
 
 const SmallTag = Template.bind({});
 SmallTag.args = {
-  ...defaultArgs,
   label: "tag",
   size: "small",
-  rightIcon: (
-    <FontAwesomeIcon
-      className="tagIcon tagIconRight"
-      fixedWidth={true}
-      icon={faXmark}
-    />
-  ),
+  rightIcon: <FontAwesomeIcon fixedWidth icon={faXmark} />,
 };
 
 export { meta as default, MinimalTag, ReferenceTag, IconTag, SmallTag };
