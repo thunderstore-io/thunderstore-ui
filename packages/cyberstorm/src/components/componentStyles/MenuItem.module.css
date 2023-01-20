@@ -28,11 +28,11 @@
 }
 
 /* Different MenuItem color schemes */
-.selectItem__default[data-highlighted] {
+.selectItem__default:hover {
   --bg-color: var(--color-surface--4);
 }
 
-.selectItem__defaultDark[data-highlighted] {
+.selectItem__defaultDark:hover {
   --bg-color: var(--color-surface--2);
 }
 
@@ -40,7 +40,7 @@
   --text-color: var(--color-black);
 }
 
-.selectItem__primary[data-highlighted] {
+.selectItem__primary:hover {
   --bg-color: var(--color-cyber-green--40);
 }
 
