@@ -18,10 +18,6 @@
   --bg-color: transparent;
 }
 
-.root[data-highlighted] {
-  z-index: 999;
-}
-
 .label {
   font-weight: var(--font-weight-500);
   line-height: var(--line-height-l);

@@ -18,6 +18,10 @@
   box-shadow: var(--box-shadow-1);
 }
 
+.content [data-highlighted] {
+  z-index: 999;
+}
+
 /* Different DropDown color schemes */
 .content__default {
   --text-color: var(--color-white);
