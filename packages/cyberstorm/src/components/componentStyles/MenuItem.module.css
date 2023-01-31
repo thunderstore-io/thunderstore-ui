@@ -2,15 +2,15 @@
   display: flex;
   flex-direction: row;
 
-  gap: var(--gap-m);
+  gap: 1em;
   min-width: 10rem;
-  padding: var(--padding-2xs) var(--padding-xs);
-  border-radius: var(--border-radius-3xs);
+  padding: 0.625em 0.75em;
+  border-radius: 0.5em;
   overflow: hidden;
   color: var(--text-color);
 
   font: var(--font-body);
-  font-size: var(--text-s);
+  font-size: var(--font-size-small);
   background-color: var(--bg-color);
   cursor: pointer;
 
@@ -20,7 +20,7 @@
 
 .label {
   font-weight: var(--font-weight-500);
-  line-height: var(--line-height-l);
+  line-height: var(--line-height-large);
 }
 
 /* Different MenuItem color schemes */

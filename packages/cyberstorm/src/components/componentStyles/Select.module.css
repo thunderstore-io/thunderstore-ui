@@ -9,13 +9,13 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-tiny);
-  padding: var(--padding-3xs);
-  border-radius: var(--border-radius-3xs);
+  gap: 0.125em;
+  padding: 0.5em;
+  border-radius: 0.5em;
   overflow: hidden;
   color: var(--text-color);
   background-color: var(--bg-color);
-  box-shadow: var(--box-shadow-1);
+  box-shadow: var(--box-shadow-default);
 }
 
 .content [data-highlighted] {

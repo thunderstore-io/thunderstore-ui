@@ -60,6 +60,7 @@ Storybook can then be accessed at [http://localhost:6006/](http://localhost:6006
     }
     ```
 
+//TODO: update this section
 ### Global CSS usage
 1. examples of global CSS variable names:
    - `--color-gradient-blue-green--darker`

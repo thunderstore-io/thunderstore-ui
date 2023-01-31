@@ -3,11 +3,11 @@
   display: flex;
   flex: none;
   flex-direction: row;
-  gap: var(--size-0-750);
+  gap: 0.75em;
   align-items: center;
   justify-content: center;
   color: var(--text-color);
-  font-size: var(--size-0-750);
+  font-size: var(--font-size-smaller);
   background-color: var(--bg-color);
 
   --text-color: var(--color-default-purple--8);
