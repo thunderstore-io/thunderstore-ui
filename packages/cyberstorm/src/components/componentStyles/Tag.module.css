@@ -7,13 +7,13 @@
   gap: 0.625em;
   align-items: center;
   justify-content: center;
-  border: 2px solid;
+  border: var(--border-width-medium) solid;
   border-color: var(--border-color);
   border-radius: 999em;
   color: var(--text-color);
 
   font: var(--font-body);
-  font-weight: var(--font-weight-700);
+  font-weight: 700;
   background-color: var(--bg-color);
 
   --text-color: var(--color-text--default);

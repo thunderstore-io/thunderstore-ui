@@ -16,7 +16,7 @@
 
 .label {
   font: var(--font-body);
-  font-weight: var(--font-weight-800);
+  font-weight: 800;
   line-height: var(--line-height-smaller);
 }
 

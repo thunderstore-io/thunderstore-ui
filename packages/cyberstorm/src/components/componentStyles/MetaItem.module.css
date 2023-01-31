@@ -17,7 +17,7 @@
 /* Styles for MetaItem's text */
 .label {
   font: var(--font-body);
-  font-weight: var(--font-weight-700);
+  font-weight: 700;
   line-height: var(--line-height-medium);
 }
 
