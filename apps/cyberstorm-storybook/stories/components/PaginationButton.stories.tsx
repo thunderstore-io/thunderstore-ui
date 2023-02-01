@@ -7,13 +7,11 @@ const meta = {
   component: PaginationButton,
 } as ComponentMeta<typeof PaginationButton>;
 
-const defaultArgs = {};
-
 const Template: ComponentStory<typeof PaginationButton> = (args) => (
   <PaginationButton {...args} />
 );
 
 const DefaultButton = Template.bind({});
-DefaultButton.args = defaultArgs;
+DefaultButton.args = {};
 
 export { meta as default, DefaultButton };

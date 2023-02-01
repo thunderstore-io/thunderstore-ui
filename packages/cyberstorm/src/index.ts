@@ -1,6 +1,5 @@
 export * from "./components/Button";
 export * from "./components/DropDown";
-export * from "./components/PaginationButton";
 export * from "./components/LinkingProvider";
 export * from "./components/Links";
 export * from "./components/MetaItem";
@@ -8,5 +7,7 @@ export * from "./components/PackageCard";
 export * from "./components/PackageFlag";
 export * from "./components/Select";
 export * from "./components/MenuItem";
-export * from "./components/Tag";
 export * from "./components/Pagination";
+export * from "./components/PaginationButton";
+export * from "./components/Tag";
+export * from "./utils";

@@ -8,16 +8,16 @@ const meta = {
 } as ComponentMeta<typeof Pagination>;
 
 const defaultArgs = {
-  defaultPage: 1,
+  currentPage: 1,
   totalCount: 500,
   pageSize: 10,
+  siblingCount: 1,
 };
 
 const Template: ComponentStory<typeof Pagination> = (args) => {
-  const [value, setValue] = useState(args.defaultPage ?? null);
+  const [value, setValue] = useState(args.currentPage ?? 1);
   args.onPageChange = setValue;
   args.currentPage = value;
-  delete args.defaultPage;
 
   return (
     <div style={{ display: "flex" }}>
@@ -28,9 +28,7 @@ const Template: ComponentStory<typeof Pagination> = (args) => {
 };
 
 const ReferencePagination = Template.bind({});
-ReferencePagination.args = {
-  ...defaultArgs,
-};
+ReferencePagination.args = defaultArgs;
 
 const DefaultPagePagination = Template.bind({});
 DefaultPagePagination.args = {

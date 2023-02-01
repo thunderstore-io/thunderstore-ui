@@ -3,6 +3,8 @@ import styles from "./componentStyles/PaginationButton.module.css";
 
 export interface PaginationButtonProps {
   isSelected?: boolean;
+  ariaCurrent?: boolean;
+  ariaLabel?: string;
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
@@ -11,11 +13,21 @@ export interface PaginationButtonProps {
 }
 
 export const PaginationButton: React.FC<PaginationButtonProps> = (props) => {
-  const { label, leftIcon, rightIcon, colorScheme, onClick, isSelected } =
-    props;
+  const {
+    ariaCurrent,
+    ariaLabel,
+    label,
+    leftIcon,
+    rightIcon,
+    colorScheme,
+    onClick,
+    isSelected,
+  } = props;
   return (
     <button
       type="button"
+      aria-current={ariaCurrent ? "page" : false}
+      aria-label={ariaLabel ?? ariaLabel}
       className={`${styles.root} ${getStyle(colorScheme, isSelected)}`}
       onClick={onClick}
     >
