@@ -75,7 +75,7 @@
 }
 
 .author_label {
-  color: var(--color-cyber-green);
+  color: var(--color-highlight);
   font-weight: 700;
   text-decoration: none;
 }
@@ -138,5 +138,5 @@
 
 /* Different PackageCard variations */
 .packageCard__default {
-  background-color: var(--color-surface--1);
+  background-color: var(--color-default-dark);
 }

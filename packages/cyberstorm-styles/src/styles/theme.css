@@ -1,0 +1,26 @@
+:root {
+  --color-danger: var(--color-red--50);
+  --color-danger--hover: var(--color-red--40);
+  --color-surface--0: var(--color-default-purple--1);
+  --color-surface--1: var(--color-default-purple--2);
+  --color-surface--2: var(--color-default-purple--3);
+  --color-surface--3: var(--color-default-purple--4);
+  --color-surface--4: var(--color-default-purple--5);
+  --color-border-default: var(--color-default-purple--8);
+  --color-border-default--hover: var(--color-default-purple--8);
+  --color-shadow-1: rgb(0 0 0 / 0.7);
+  --color-gradient-blue-green--darker: linear-gradient(to left top, #062131 0%, #102b20 100%);
+  --color-gradient-blue-green--dark: linear-gradient(to left top, #0b4162 0%, #205740 100%);
+  --color-gradient-blue-green: linear-gradient(to left top, #1ca3f5 0%, #23ffb0 100%);
+  --color-gradient-blue-green--light: linear-gradient(to left top, #49b5f7 0%, #73e1b2 100%);
+  --color-gradient-purple-green--darker: linear-gradient(to left top, #1f0a2e 0%, #102b20 100%);
+  --color-gradient-purple-green--dark: linear-gradient(to left top, #2f0e44 0%, #0a4c35 100%);
+  --color-gradient-purple-green: linear-gradient(to left top, #9d30e4 0%, #23ffb0 100%);
+  --color-gradient-purple-green--light: linear-gradient(to left top, #b159e9 0%, #73e1b2 100%);
+  --color-highlight--hover: var(--color-cyber-green--40);
+  --color-highlight: var(--color-cyber-green--50);
+  --color-default: var(--color-default-purple--4);
+  --color-default--hover: var(--color-default-purple--5);
+  --color-default-dark: var(--color-default-purple--2);
+  --color-default-dark--hover: var(--color-default-purple--3);
+}

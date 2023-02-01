@@ -25,15 +25,15 @@
 /* Different DropDown color schemes */
 .content__default {
   --text-color: var(--color-white);
-  --bg-color: var(--color-surface--3);
+  --bg-color: var(--color-default);
 }
 
 .content__defaultDark {
   --text-color: var(--color-white);
-  --bg-color: var(--color-surface--1);
+  --bg-color: var(--color-default-dark);
 }
 
 .content__primary {
   color: var(--color-black);
-  background-color: var(--color-cyber-green);
+  background-color: var(--color-highlight);
 }

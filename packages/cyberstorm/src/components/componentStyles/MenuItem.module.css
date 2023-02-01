@@ -25,11 +25,11 @@
 
 /* Different MenuItem color schemes */
 .selectItem__default:hover {
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--color-default--hover);
 }
 
 .selectItem__defaultDark:hover {
-  --bg-color: var(--color-surface--2);
+  --bg-color: var(--color-default-dark--hover);
 }
 
 .selectItem__primary {
@@ -37,7 +37,7 @@
 }
 
 .selectItem__primary:hover {
-  --bg-color: var(--color-cyber-green--40);
+  --bg-color: var(--color-highlight--hover);
 }
 
 .icon {
@@ -45,5 +45,5 @@
 }
 
 .selectItem__primary .icon {
-  color: black; /* placeholder */
+  color: var(--color-black);
 }

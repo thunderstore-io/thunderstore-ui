@@ -25,7 +25,7 @@
 
 .root:hover {
   --bg-color: var(--color-surface--0);
-  --border-color: var(--color-border-3);
+  --border-color: var(--color-border-default);
 }
 
 /* Different Tag sizes */
@@ -47,7 +47,7 @@
 
 /* Styles for Tag's Icons */
 .icon {
-  color: var(--color-border-3);
+  color: var(--color-border-default);
 }
 
 /* TODO: This css rule will change all icons to red, not just the x one
@@ -57,7 +57,7 @@
 
 /* Different Tag color schemes */
 .tag__removable:hover > .icon {
-  color: var(--color-red);
+  color: var(--color-danger);
   cursor: pointer;
 }
 
