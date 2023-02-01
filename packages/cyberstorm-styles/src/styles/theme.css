@@ -23,4 +23,8 @@
   --color-default--hover: var(--color-default-purple--5);
   --color-default-dark: var(--color-default-purple--2);
   --color-default-dark--hover: var(--color-default-purple--3);
+  --box-shadow-default: 0 0.75em 1.5em 0.25em #000000a6;
+  --box-shadow-special-green: 0 0 1em rgb(80 217 159 / 0.32);
+  --box-shadow-special-green--highlight: 0 0 0.75em rgb(255 255 255 / 0.2), 0 0 1.125em rgb(80 217 159 / 0.6);
+  --box-shadow-special-purple--highlight: 0 0 0.75em rgb(255 255 255 / 0.2), 0 0 1.125em rgb(157 48 228 / 0.5);
 }
