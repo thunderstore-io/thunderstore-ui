@@ -3,13 +3,13 @@
   display: flex;
   flex: none;
   flex-direction: row;
-  gap: 1em;
+  gap: var(--space--16);
   align-items: center;
   justify-content: center;
 
-  padding: 0.875em 1em;
+  padding: var(--space--14) var(--space--16);
   border: var(--button-border-width) solid var(--button-border-color);
-  border-radius: 0.75em;
+  border-radius: var(--space--12);
   color: var(--text-color);
   background-color: var(--bg-color);
 
@@ -116,7 +116,7 @@
   left: calc(0px - var(--button-border-width));
   z-index: -1;
   border: var(--button-border-width) solid transparent;
-  border-radius: 0.75em;
+  border-radius: var(--space--12);
   opacity: 0;
   transition: all 0.12s;
   content: "";

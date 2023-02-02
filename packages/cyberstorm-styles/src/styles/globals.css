@@ -1,17 +1,31 @@
 :root {
-  --border-width-medium: 0.125em;
-  --line-height-tiny: 0.675rem;
-  --line-height-smaller: 0.875rem;
-  --line-height-small: 1rem;
-  --line-height-medium: 1.125rem;
-  --line-height-large: 1.375rem;
-  --font-size-tiny: 0.625em;
-  --font-size-smaller: 0.75em;
-  --font-size-small: 0.875em;
-  --font-size-default: 1em;
-  --font-size-huge: 3.375em;
-  --font-heading: normal 1em sora, sans-serif;
-  --font-body: normal 1em inter, sans-serif;
+  --space--px: 1px;
+  --space--2: .125rem;
+  --space--4: .25rem;
+  --space--6: .375rem;
+  --space--8: .5rem;
+  --space--10: .625rem;
+  --space--12: .75rem;
+  --space--14: .875rem;
+  --space--16: 1rem;
+  --space--18: 1.125rem;
+  --space--20: 1.25rem;
+  --space--22: 1.375rem;
+  --space--54: 3.375rem;
+
+  --border-width-medium: var(--space--2);
+  --line-height-tiny: var(--space--10);
+  --line-height-smaller: var(--space--14);
+  --line-height-small: var(--space--16);
+  --line-height-medium: var(--space--18);
+  --line-height-large: var(--space--22);
+  --font-size-tiny: var(--space--10);
+  --font-size-smaller: var(--space--12);
+  --font-size-small: var(--space--14);
+  --font-size-default: var(--space--16);
+  --font-size-huge: var(--space--54);
+  --font-heading: normal var(--space--16) sora, sans-serif;
+  --font-body: normal var(--space--16) inter, sans-serif;
 }
 
 a {

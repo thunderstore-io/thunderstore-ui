@@ -2,10 +2,10 @@
   display: flex;
   flex-direction: row;
 
-  gap: 1em;
+  gap: var(--space--16);
   min-width: 10rem;
-  padding: 0.625em 0.75em;
-  border-radius: 0.5em;
+  padding: var(--space--10) var(--space--12);
+  border-radius: var(--space--8);
   overflow: hidden;
   color: var(--text-color);
 
