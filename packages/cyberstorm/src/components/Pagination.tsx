@@ -73,13 +73,13 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
     siblingCount
   );
 
-  function currentPageOrOne(currentPage: number, x: number) {
-    const y = currentPage - x;
+  function decreaseCurrentPage(currentPage: number) {
+    const y = currentPage - 1;
     return y > 0 ? y : 1;
   }
 
-  function currentPageOrLastPage(currentPage: number, x: number) {
-    const y = currentPage + x;
+  function increaseCurrentPage(currentPage: number) {
+    const y = currentPage + 1;
     return y <= totalPageCount ? y : totalPageCount;
   }
 
@@ -91,7 +91,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
     <nav aria-label="Pagination">
       <ul className={`${styles.root} ${disabled ? styles.disabled : ""}`}>
         <PaginationButton
-          onClick={() => onPageChange(currentPageOrOne(currentPage, 1))}
+          onClick={() => onPageChange(decreaseCurrentPage(currentPage))}
           ariaLabel="Previous"
           label="Prev"
           leftIcon={<FontAwesomeIcon fixedWidth icon={faArrowLeft} />}
@@ -100,7 +100,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
         {mapPageNumbers(paginationRange, onPageChange, currentPage)}
 
         <PaginationButton
-          onClick={() => onPageChange(currentPageOrLastPage(currentPage, 1))}
+          onClick={() => onPageChange(increaseCurrentPage(currentPage))}
           ariaLabel="Next"
           label="Next"
           rightIcon={<FontAwesomeIcon fixedWidth icon={faArrowRight} />}
