@@ -2,10 +2,10 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--space--16);
+  gap: var(--gap--xl);
   align-items: flex-start;
 
-  border-radius: var(--space--16);
+  border-radius: var(--border-radius--16);
   overflow: hidden;
 }
 
@@ -48,7 +48,7 @@
   left: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space--10);
+  gap: var(--gap--m);
   align-items: flex-start;
 }
 
@@ -56,7 +56,7 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap: var(--space--14);
+  gap: var(--gap--l);
   padding: 0 var(--space--16);
 }
 
@@ -65,13 +65,13 @@
   color: var(--color-text--default);
   font: var(--font-heading);
   font-weight: 700;
-  line-height: var(--line-height-medium);
+  line-height: var(--line-height--18);
 }
 
 /* Styles for PackageCard's Author */
 .author {
   font: var(--font-body);
-  font-size: var(--font-size-smaller);
+  font-size: var(--font-size--12);
 }
 
 .author_label {
@@ -91,8 +91,8 @@
   overflow: hidden;
   color: var(--color-text--secondary);
   font: var(--font-body);
-  font-size: var(--font-size-small);
-  line-height: var(--line-height-large);
+  font-size: var(--font-size--14);
+  line-height: var(--line-height--22);
   text-overflow: ellipsis;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -102,14 +102,14 @@
 .lastUpdated {
   color: var(--color-text--tertiary);
   font: var(--font-heading);
-  font-size: var(--font-size-smaller);
-  line-height: var(--line-height-small);
+  font-size: var(--font-size--12);
+  line-height: var(--line-height--16);
 }
 
 .footer {
   display: flex;
   flex-direction: column;
-  gap: var(--space--16);
+  gap: var(--gap--xl);
   width: 100%;
   padding: 0 var(--space--16) var(--space--16);
 }
@@ -117,7 +117,7 @@
 .categoryWrapper {
   display: flex;
   flex-flow: row wrap;
-  gap: var(--space--4);
+  gap: var(--gap--s);
   align-items: flex-start;
   padding: 0 var(--space--16);
 }
@@ -126,7 +126,7 @@
   display: flex;
   flex-basis: 100%;
   flex-direction: row;
-  gap: var(--space--16);
+  gap: var(--gap--xl);
   align-items: flex-start;
 }
 

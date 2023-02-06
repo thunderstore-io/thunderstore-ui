@@ -9,9 +9,9 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: var(--space--2);
+  gap: var(--gap--tiny);
   padding: var(--space--8);
-  border-radius: var(--space--8);
+  border-radius: var(--border-radius--8);
   overflow: hidden;
   color: var(--text-color);
   background-color: var(--bg-color);

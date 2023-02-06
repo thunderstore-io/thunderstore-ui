@@ -3,11 +3,11 @@
   display: flex;
   flex: none;
   flex-direction: row;
-  gap: var(--space--12);
+  gap: var(--gap--m);
   align-items: center;
   justify-content: center;
   color: var(--text-color);
-  font-size: var(--font-size-smaller);
+  font-size: var(--font-size--12);
   background-color: var(--bg-color);
 
   --text-color: var(--color-default-purple--8);
@@ -18,7 +18,8 @@
 .label {
   font: var(--font-body);
   font-weight: 700;
-  line-height: var(--line-height-medium);
+  font-size: var(--font-size--12);
+  line-height: var(--line-height--18);
 }
 
 /* Different MetaItem color schemes */

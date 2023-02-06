@@ -4,7 +4,7 @@
   flex: none;
   flex-direction: row;
 
-  gap: var(--space--10);
+  gap: var(--gap--m);
   align-items: center;
   justify-content: center;
   border: var(--border-width-medium) solid;
@@ -32,12 +32,12 @@
 
 .small {
   padding: var(--space--4) var(--space--10);
-  font-size: var(--font-size-tiny);
+  font-size: var(--font-size--10);
 }
 
 .medium {
   padding: var(--space--6) var(--space--12);
-  font-size: var(--font-size-smaller);
+  font-size: var(--font-size--12);
 }
 
 /* Styles for Tag's text */

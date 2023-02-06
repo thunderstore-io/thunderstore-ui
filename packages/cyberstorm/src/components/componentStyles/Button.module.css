@@ -3,13 +3,13 @@
   display: flex;
   flex: none;
   flex-direction: row;
-  gap: var(--space--16);
+  gap: var(--gap--xl);
   align-items: center;
   justify-content: center;
 
   padding: var(--space--14) var(--space--16);
   border: var(--button-border-width) solid var(--button-border-color);
-  border-radius: var(--space--12);
+  border-radius: var(--border-radius--12);
   color: var(--text-color);
   background-color: var(--bg-color);
 
@@ -23,7 +23,7 @@
 .label {
   font: var(--font-heading);
   font-weight: 500;
-  line-height: var(--line-height-medium);
+  line-height: var(--line-height--18);
 }
 
 /* Different Button color schemes */
@@ -116,7 +116,7 @@
   left: calc(0px - var(--button-border-width));
   z-index: -1;
   border: var(--button-border-width) solid transparent;
-  border-radius: var(--space--12);
+  border-radius: var(--border-radius--12);
   opacity: 0;
   transition: all 0.12s;
   content: "";
