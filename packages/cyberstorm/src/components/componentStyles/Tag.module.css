@@ -4,10 +4,10 @@
   flex: none;
   flex-direction: row;
 
-  gap: var(--gap--m);
+  gap: var(--gap--8);
   align-items: center;
   justify-content: center;
-  border: var(--border-width-medium) solid;
+  border: var(--border-width--2) solid;
   border-color: var(--border-color);
   border-radius: 999em;
   color: var(--text-color);

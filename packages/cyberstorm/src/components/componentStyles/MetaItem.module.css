@@ -3,7 +3,7 @@
   display: flex;
   flex: none;
   flex-direction: row;
-  gap: var(--gap--m);
+  gap: var(--gap--8);
   align-items: center;
   justify-content: center;
   color: var(--text-color);

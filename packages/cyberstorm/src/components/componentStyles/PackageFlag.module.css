@@ -1,7 +1,7 @@
 .root {
   display: flex;
   flex-direction: row;
-  gap: var(--gap--m);
+  gap: var(--gap--8);
   align-items: center;
 
   padding: var(--space--10) var(--space--12);

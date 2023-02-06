@@ -3,7 +3,7 @@
   display: flex;
   flex: none;
   flex-direction: row;
-  gap: var(--gap--xl);
+  gap: var(--gap--16);
   align-items: center;
   justify-content: center;
 
@@ -16,7 +16,7 @@
   --text-color: var(--color-white);
   --bg-color: var(--color-default);
   --button-border-color: transparent;
-  --button-border-width: var(--border-width-medium);
+  --button-border-width: var(--border-width--2);
 }
 
 /* Styles for Button's text */

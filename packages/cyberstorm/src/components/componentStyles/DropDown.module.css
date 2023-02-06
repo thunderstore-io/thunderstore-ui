@@ -9,7 +9,7 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--tiny);
+  gap: var(--gap--2);
   padding: var(--space--8);
   border-radius: var(--border-radius--8);
   overflow: hidden;
