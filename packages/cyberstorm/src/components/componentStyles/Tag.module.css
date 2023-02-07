@@ -4,16 +4,16 @@
   flex: none;
   flex-direction: row;
 
-  gap: var(--gap-2xs);
+  gap: var(--gap--8);
   align-items: center;
   justify-content: center;
-  border: 2px solid;
+  border: var(--border-width--2) solid;
   border-color: var(--border-color);
   border-radius: 999em;
   color: var(--text-color);
 
   font: var(--font-body);
-  font-weight: var(--font-weight-700);
+  font-weight: 700;
   background-color: var(--bg-color);
 
   --text-color: var(--color-text--default);
@@ -25,19 +25,19 @@
 
 .root:hover {
   --bg-color: var(--color-surface--0);
-  --border-color: var(--color-border-3);
+  --border-color: var(--color-border-default);
 }
 
 /* Different Tag sizes */
 
 .small {
-  padding: var(--padding-tiny) var(--padding-2xs);
-  font-size: var(--text-2xs);
+  padding: var(--space--4) var(--space--10);
+  font-size: var(--font-size--10);
 }
 
 .medium {
-  padding: var(--padding-4xs) var(--padding-xs);
-  font-size: var(--text-xs);
+  padding: var(--space--6) var(--space--12);
+  font-size: var(--font-size--12);
 }
 
 /* Styles for Tag's text */
@@ -47,7 +47,7 @@
 
 /* Styles for Tag's Icons */
 .icon {
-  color: var(--color-border-3);
+  color: var(--color-border-default);
 }
 
 /* TODO: This css rule will change all icons to red, not just the x one
@@ -57,7 +57,7 @@
 
 /* Different Tag color schemes */
 .tag__removable:hover > .icon {
-  color: var(--color-red);
+  color: var(--color-danger);
   cursor: pointer;
 }
 

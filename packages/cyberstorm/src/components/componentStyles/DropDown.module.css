@@ -3,19 +3,19 @@
 }
 
 .label {
-  font-weight: var(--font-weight-500);
+  font-weight: 500;
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-tiny);
-  padding: var(--padding-3xs);
-  border-radius: var(--border-radius-3xs);
+  gap: var(--gap--2);
+  padding: var(--space--8);
+  border-radius: var(--border-radius--8);
   overflow: hidden;
   color: var(--text-color);
   background-color: var(--bg-color);
-  box-shadow: var(--box-shadow-1);
+  box-shadow: var(--box-shadow-default);
 }
 
 .content [data-highlighted] {
@@ -25,15 +25,15 @@
 /* Different DropDown color schemes */
 .content__default {
   --text-color: var(--color-white);
-  --bg-color: var(--color-surface--3);
+  --bg-color: var(--color-default);
 }
 
 .content__defaultDark {
   --text-color: var(--color-white);
-  --bg-color: var(--color-surface--1);
+  --bg-color: var(--color-default-dark);
 }
 
 .content__primary {
   color: var(--color-black);
-  background-color: var(--color-cyber-green);
+  background-color: var(--color-highlight);
 }

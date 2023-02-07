@@ -2,15 +2,15 @@
   display: flex;
   flex-direction: row;
 
-  gap: var(--gap-m);
+  gap: var(--gap--16);
   min-width: 10rem;
-  padding: var(--padding-2xs) var(--padding-xs);
-  border-radius: var(--border-radius-3xs);
+  padding: var(--space--10) var(--space--12);
+  border-radius: var(--border-radius--8);
   overflow: hidden;
   color: var(--text-color);
 
   font: var(--font-body);
-  font-size: var(--text-s);
+  font-size: var(--font-size--14);
   background-color: var(--bg-color);
   cursor: pointer;
 
@@ -19,17 +19,17 @@
 }
 
 .label {
-  font-weight: var(--font-weight-500);
-  line-height: var(--line-height-l);
+  font-weight: 500;
+  line-height: var(--line-height--22);
 }
 
 /* Different MenuItem color schemes */
 .selectItem__default:hover {
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--color-default--hover);
 }
 
 .selectItem__defaultDark:hover {
-  --bg-color: var(--color-surface--2);
+  --bg-color: var(--color-default-dark--hover);
 }
 
 .selectItem__primary {
@@ -37,7 +37,7 @@
 }
 
 .selectItem__primary:hover {
-  --bg-color: var(--color-cyber-green--40);
+  --bg-color: var(--color-highlight--hover);
 }
 
 .icon {
@@ -45,5 +45,5 @@
 }
 
 .selectItem__primary .icon {
-  color: black; /* placeholder */
+  color: var(--color-black);
 }

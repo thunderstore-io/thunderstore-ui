@@ -3,78 +3,78 @@
   display: flex;
   flex: none;
   flex-direction: row;
-  gap: var(--gap-m);
+  gap: var(--gap--16);
   align-items: center;
   justify-content: center;
 
-  padding: var(--padding-s) var(--padding-m);
+  padding: var(--space--14) var(--space--16);
   border: var(--button-border-width) solid var(--button-border-color);
-  border-radius: var(--border-radius-xs);
+  border-radius: var(--border-radius--12);
   color: var(--text-color);
   background-color: var(--bg-color);
 
   --text-color: var(--color-white);
-  --bg-color: var(--color-surface--3);
+  --bg-color: var(--color-default);
   --button-border-color: transparent;
-  --button-border-width: var(--border-width-m);
+  --button-border-width: var(--border-width--2);
 }
 
 /* Styles for Button's text */
 .label {
   font: var(--font-heading);
-  font-weight: var(--font-weight-500);
-  line-height: var(--line-height-l);
+  font-weight: 500;
+  line-height: var(--line-height--18);
 }
 
 /* Different Button color schemes */
 
 .button__default {
   --text-color: var(--color-white);
-  --bg-color: var(--color-surface--3);
+  --bg-color: var(--color-default);
 }
 
 .button__default:hover {
-  --bg-color: var(--color-surface--4);
-  --button-border-color: var(--color-border-2);
+  --bg-color: var(--color-default-dark--hover);
+  --button-border-color: var(--color-border-default--hover);
 }
 
 .button__defaultDark {
   --text-color: var(--color-white);
-  --bg-color: var(--color-surface--1);
+  --bg-color: var(--color-default-dark);
 }
 
 .button__defaultDark:hover {
-  --bg-color: var(--color-surface--2);
-  --button-border-color: var(--color-border-2);
+  --bg-color: var(--color-default-dark--hover);
+  --button-border-color: var(--color-border-default--hover);
 }
 
 .button__primary {
   --text-color: var(--color-black);
-  --bg-color: var(--color-cyber-green);
+  --bg-color: var(--color-highlight);
 }
 
 .button__primary:hover {
-  --bg-color: var(--color-cyber-green--40);
+  --bg-color: var(--color-highlight--hover);
 }
 
 .button__danger {
   --text-color: var(--color-white);
-  --bg-color: var(--color-red);
+  --bg-color: var(--color-danger);
 }
 
 .button__danger:hover {
-  --bg-color: var(--color-red--40);
+  --bg-color: var(--color-danger--hover);
 }
 
 .button__defaultWithBorder {
-  --bg-color: var(--color-surface--3);
+  --bg-color: var(--color-default);
   --text-color: var(--color-white);
-  --button-border-color: var(--color-border-2);
+  --button-border-color: var(--color-border-default--hover);
 }
 
 .button__defaultWithBorder:hover {
-  --bg-color: var(--color-surface--4);
-  --button-border-color: var(--color-border-3);
+  --bg-color: var(--color-default-dark--hover);
+  --button-border-color: var(--color-border-default);
 }
 
 /* Special-style Buttons */
@@ -88,7 +88,7 @@
 
 .button__specialGreen {
   background: var(--color-gradient-blue-green--darker) padding-box, var(--color-gradient-blue-green) border-box;
-  box-shadow: 0 0 var(--size-m) rgb(80 217 159 / 0.32);
+  box-shadow: var(--box-shadow-special-green);
 }
 
 .button__specialPurple {
@@ -98,13 +98,13 @@
 .button__specialGreen:hover {
   --button-border-color: transparent;
 
-  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 0.2), 0 0 var(--size-l) rgb(80 217 159 / 0.6);
+  box-shadow: var(--box-shadow-special-green--highlight);
 }
 
 .button__specialPurple:hover {
   --button-border-color: transparent;
 
-  box-shadow: 0 0 var(--size-xs) rgb(255 255 255 / 0.2), 0 0 var(--size-l) rgb(157 48 228 / 0.5);
+  box-shadow: var(--box-shadow-special-purple--highlight);
 }
 
 .button__specialGreen::before,
@@ -116,7 +116,7 @@
   left: calc(0px - var(--button-border-width));
   z-index: -1;
   border: var(--button-border-width) solid transparent;
-  border-radius: var(--border-radius-xs);
+  border-radius: var(--border-radius--12);
   opacity: 0;
   transition: all 0.12s;
   content: "";

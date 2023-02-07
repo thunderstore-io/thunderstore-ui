@@ -1,26 +1,27 @@
 .root {
   display: flex;
   flex-direction: row;
-  gap: var(--gap-3xs);
+  gap: var(--gap--8);
   align-items: center;
 
-  padding: var(--padding-2xs) var(--padding-xs);
+  padding: var(--space--10) var(--space--12);
   border-radius: 0 var(--border-radius) var(--border-radius) 0;
-  color: var(--color-cyber-green);
-  font-size: var(--size-xs);
-  background-color: var(--color-surface--3);
+  color: var(--color-highlight);
+  font-size: var(--font-size--12);
+  background-color: var(--color-default);
 
   --border-color: transparent;
-  --border-radius: var(--border-radius-5xs);
+  --border-radius: var(--border-radius--4);
 }
 
 .label {
-  font: var(--font-inter);
-  font-weight: var(--font-weight-800);
-  line-height: var(--line-height-s);
+  font: var(--font-body);
+  font-weight: 800;
+  font-size: var(--font-size--12);
+  line-height: var(--line-height--14);
 }
 
 .icon {
-  line-height: var(--size-2xs);
+  line-height: var(--line-height--10);
   transform: rotate(30deg);
 }
