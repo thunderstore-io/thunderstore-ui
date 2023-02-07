@@ -1,6 +1,6 @@
 import { LinkLibrary } from "../LinkLibrary";
 import { LinkingProvider } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-styles/dist/thunderstore-cyberstorm-styles.esm";
+import "@thunderstore/cyberstorm-styles";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },

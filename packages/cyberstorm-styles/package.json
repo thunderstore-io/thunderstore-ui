@@ -1,6 +1,6 @@
 {
   "name": "@thunderstore/cyberstorm-styles",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Cyberstorm styles",
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/cyberstorm-styles",
   "main": "dist/thunderstore-cyberstorm-styles.cjs.js",
