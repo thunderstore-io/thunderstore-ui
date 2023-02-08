@@ -11,3 +11,21 @@
 .disabled {
   pointer-events: none;
 }
+
+.ellipsis {
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25em;
+  min-height: 2.25em;
+
+  padding: var(--padding-3xs) var(--padding-xs);
+  border-radius: var(--border-radius-3xs);
+  color: var(--color-text--secondary);
+
+  font: var(--font-body);
+  font-weight: var(--font-weight-500);
+  line-height: var(--line-height-l);
+  background-color: var(--bg-color);
+
+  --bg-color: var(--color-surface--1);
+}

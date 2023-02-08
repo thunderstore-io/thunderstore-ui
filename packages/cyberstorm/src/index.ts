@@ -10,4 +10,3 @@ export * from "./components/MenuItem";
 export * from "./components/Pagination";
 export * from "./components/PaginationButton";
 export * from "./components/Tag";
-export * from "./utils";

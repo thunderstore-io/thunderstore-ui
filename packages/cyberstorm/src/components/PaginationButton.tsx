@@ -9,7 +9,7 @@ export interface PaginationButtonProps {
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   colorScheme?: "default";
-  onClick?: MouseEventHandler<HTMLButtonElement>;
+  onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
 export const PaginationButton: React.FC<PaginationButtonProps> = (props) => {
@@ -38,7 +38,15 @@ export const PaginationButton: React.FC<PaginationButtonProps> = (props) => {
   );
 };
 
-PaginationButton.defaultProps = { colorScheme: "default" };
+PaginationButton.defaultProps = {
+  colorScheme: "default",
+  isSelected: false,
+  ariaCurrent: false,
+  ariaLabel: "",
+  label: "",
+  leftIcon: null,
+  rightIcon: null,
+};
 
 const getStyle = (
   scheme: PaginationButtonProps["colorScheme"] = "default",

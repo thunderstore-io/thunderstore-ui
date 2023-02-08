@@ -119,7 +119,11 @@ const mapPageNumbers = (
 ) => {
   return paginationRange.map((pageNumber, index: number) => {
     if (pageNumber === DOTS) {
-      return <PaginationButton key={`dots-${index}`} label={DOTS} />;
+      return (
+        <span className={styles.ellipsis} key={`dots-${index}`}>
+          {DOTS}
+        </span>
+      );
     }
 
     return (
