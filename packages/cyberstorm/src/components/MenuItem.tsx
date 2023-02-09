@@ -46,8 +46,8 @@ MenuItem.defaultProps = { colorScheme: "default" };
 
 const getStyle = (scheme: MenuItemProps["colorScheme"] = "default") => {
   return {
-    default: styles.selectItem__default,
-    defaultDark: styles.selectItem__defaultDark,
-    primary: styles.selectItem__primary,
+    default: styles.menuItem__default,
+    defaultDark: styles.menuItem__defaultDark,
+    primary: styles.menuItem__primary,
   }[scheme];
 };

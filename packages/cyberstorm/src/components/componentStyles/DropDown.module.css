@@ -16,24 +16,17 @@
   color: var(--text-color);
   background-color: var(--bg-color);
   box-shadow: var(--box-shadow-default);
-}
 
-.content [data-highlighted] {
-  z-index: 999;
-}
-
-/* Different DropDown color schemes */
-.content__default {
   --text-color: var(--color-white);
   --bg-color: var(--color-default);
 }
 
-.content__defaultDark {
-  --text-color: var(--color-white);
-  --bg-color: var(--color-default-dark);
+.itemWrapper {
+  border-radius: var(--border-radius--8);
+  overflow: hidden;
 }
 
-.content__primary {
-  color: var(--color-black);
-  background-color: var(--color-highlight);
+.itemWrapper[data-highlighted] {
+  z-index: 999;
+  background-color: var(--color-default--hover);
 }
