@@ -41,6 +41,7 @@ const content: ReactElement<MenuItemProps>[] = [
     leftIcon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
   />,
   <Button
+    style={{ minWidth: "100%" }}
     key={3}
     label="Nabbula"
     leftIcon={<FontAwesomeIcon fixedWidth icon={faSkull} />}

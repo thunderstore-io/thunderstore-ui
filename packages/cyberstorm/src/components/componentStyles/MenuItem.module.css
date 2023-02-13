@@ -3,19 +3,22 @@
   flex-direction: row;
 
   gap: var(--gap--16);
+  align-items: center;
   min-width: 10rem;
   padding: var(--space--10) var(--space--12);
-  border-radius: var(--border-radius--8);
-  overflow: hidden;
   color: var(--text-color);
 
   font: var(--font-body);
   font-size: var(--font-size--14);
-  background-color: var(--bg-color);
   cursor: pointer;
 
   --text-color: var(--color-text--default);
-  --bg-color: transparent;
+}
+
+@media (hover: hover) {
+  :focus-visible {
+    outline: 0 !important;
+  }
 }
 
 .label {
@@ -23,27 +26,6 @@
   line-height: var(--line-height--22);
 }
 
-/* Different MenuItem color schemes */
-.selectItem__default:hover {
-  --bg-color: var(--color-default--hover);
-}
-
-.selectItem__defaultDark:hover {
-  --bg-color: var(--color-default-dark--hover);
-}
-
-.selectItem__primary {
-  --text-color: var(--color-black);
-}
-
-.selectItem__primary:hover {
-  --bg-color: var(--color-highlight--hover);
-}
-
 .icon {
   color: var(--color-text--tertiary);
-}
-
-.selectItem__primary .icon {
-  color: var(--color-black);
 }

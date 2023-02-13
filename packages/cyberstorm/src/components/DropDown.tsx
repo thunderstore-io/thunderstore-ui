@@ -30,9 +30,9 @@ export const DropDown: React.FC<DropDownProps> = (props) => {
           <RadixDropDown.Content
             align="start"
             sideOffset={8}
-            className={`${styles.content} ${getContentStyle(colorScheme)}`}
+            className={`${styles.content}`}
           >
-            {parseContent(content, colorScheme)}
+            {parseContent(content)}
           </RadixDropDown.Content>
         </RadixDropDown.Portal>
       </RadixDropDown.Root>
@@ -46,23 +46,10 @@ DropDown.defaultProps = {
   colorScheme: "default",
 };
 
-const parseContent = (
-  content: ReactNode[] | undefined,
-  colorScheme: "default" | "defaultDark" | "primary" | undefined
-) => {
+const parseContent = (content: ReactNode[] | undefined) => {
   return content?.map((item, index) => (
-    <RadixDropDown.Item key={index} asChild>
-      {React.isValidElement(item)
-        ? React.cloneElement(item, { colorScheme })
-        : item}
+    <RadixDropDown.Item className={styles.itemWrapper} key={index}>
+      {React.isValidElement(item) ? React.cloneElement(item) : item}
     </RadixDropDown.Item>
   ));
-};
-
-const getContentStyle = (scheme: DropDownProps["colorScheme"] = "default") => {
-  return {
-    default: styles.content__default,
-    defaultDark: styles.content__defaultDark,
-    primary: styles.content__primary,
-  }[scheme];
 };
