@@ -1,4 +1,5 @@
 export * from "./components/Button/Button";
+export * from "./components/BreadCrumb/BreadCrumb";
 export * from "./components/DropDown/DropDown";
 export * from "./components/Links/LinkingProvider";
 export * from "./components/Links/Links";
@@ -7,7 +8,6 @@ export * from "./components/PackageCard/PackageCard";
 export * from "./components/PackageFlag/PackageFlag";
 export * from "./components/Select/Select";
 export * from "./components/MenuItem/MenuItem";
-export * from "./components/BreadCrumb/BreadCrumb";
 export * from "./components/GameIcon/GameIcon";
 export * from "./components/Tag/Tag";
 export * from "./components/Link/Link";

@@ -136,3 +136,23 @@
 .button__specialGreen:hover::before {
   opacity: 1;
 }
+
+.button__transparent {
+  --text-color: var(--color-text--tertiary);
+  --bg-color: transparent;
+}
+
+.button__transparent:hover {
+  --text-color: var(--color-text--secondary);
+  --bg-color: var(--color-surface--2);
+}
+
+.small {
+  gap: 12px;
+  padding: var(--space--8) var(--space--12);
+  border-radius: var(--border-radius--8);
+}
+
+.small > .label {
+  font-size: var(--font-size--12);
+}

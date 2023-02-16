@@ -1,4 +1,4 @@
-/* Common Title styles */
+/* Common Tag styles */
 .root {
   display: flex;
   flex: none;
@@ -17,7 +17,7 @@
   background-color: var(--bg-color);
 
   --text-color: var(--color-text--default);
-  --bg-color: var(--color-surface--2);
+  --bg-color: var(--color-surface--3);
   --border-color: transparent;
 
   cursor: default;
@@ -28,7 +28,26 @@
   --border-color: var(--color-border-default);
 }
 
-/* Different Title sizes */
+.label {
+  text-transform: uppercase;
+}
+
+.icon {
+  color: var(--color-border-default);
+}
+
+/* Different Tag sizes */
+.tiny {
+  padding: var(--space--2) var(--space--4);
+  border-radius: var(--border-radius--4);
+  font-size: var(--font-size--12);
+  line-height: var(--line-height--14);
+}
+
+.tiny:hover {
+  --bg-color: var(--color-surface--1) !important;
+  --border-color: transparent;
+}
 
 .small {
   padding: var(--space--4) var(--space--10);
@@ -40,22 +59,12 @@
   font-size: var(--font-size--12);
 }
 
-/* Styles for Title's text */
-.label {
-  text-transform: uppercase;
-}
-
-/* Styles for Title's Icons */
-.icon {
-  color: var(--color-border-default);
-}
-
 /* TODO: This css rule will change all icons to red, not just the x one
     shown when isBoolean is true. Would be good to revisit when building
      that functionality. This will become relevant once the package list
       filtering is taken under construction. */
 
-/* Different Title color schemes */
+/* Different Tag color schemes */
 .tag__removable:hover > .icon {
   color: var(--color-danger);
   cursor: pointer;
@@ -63,4 +72,10 @@
 
 .tag__default {
   --bg-color: var(--color-surface--2);
+}
+
+.tag__simple {
+  --bg-color: var(--color-surface--1);
+  --border-color: transparent;
+  --text-color: var(--color-text--tertiary);
 }

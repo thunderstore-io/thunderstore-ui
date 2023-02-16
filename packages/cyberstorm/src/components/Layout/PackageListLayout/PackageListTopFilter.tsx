@@ -2,8 +2,9 @@ import React from "react";
 import styles from "./PackageListTopFilter.module.css";
 import { Tag } from "../../Tag/Tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../../Button/Button";
+import { TextInput } from "../../TextInput/TextInput";
 
 export interface PackageListTopFilterProps {}
 
@@ -15,10 +16,13 @@ export const PackageListTopFilter: React.FC<PackageListTopFilterProps> = (
 ) => {
   return (
     <div className={styles.root}>
-      <input type="text" />
+      <TextInput
+        placeHolder="Search..."
+        leftIcon={<FontAwesomeIcon icon={faSearch} fixedWidth />}
+      />
       <div className={styles.selectedTags}>
         <Tag
-          label={"My search term"}
+          label={'"My search term"'}
           isRemovable
           rightIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
         />
@@ -37,7 +41,7 @@ export const PackageListTopFilter: React.FC<PackageListTopFilterProps> = (
           isRemovable
           rightIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
         />
-        <Button label="Clear all" />
+        <Button size="small" colorScheme="transparent" label="Clear all" />
       </div>
     </div>
   );

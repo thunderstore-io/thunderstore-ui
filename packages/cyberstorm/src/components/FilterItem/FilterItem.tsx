@@ -22,22 +22,24 @@ export const FilterItem: React.FC<FilterItemProps> = (props) => {
   console.log(checked);
   return (
     <div className={styles.root}>
-      <Checkbox.Root
-        id={checkBoxId}
-        checked={checked}
-        onCheckedChange={() => setChecked(getNextValue(checked))}
-        className={`${styles.checkBoxRoot} ${getStyle(checked)}`}
-      >
-        {<FontAwesomeIcon className={styles.icon} icon={getIcon(checked)} />}
-      </Checkbox.Root>
-      <label
-        className={`${styles.label} ${getStyle(checked)}`}
-        htmlFor={checkBoxId}
-      >
-        {label}
-      </label>
+      <div className={styles.checkBoxContainer}>
+        <Checkbox.Root
+          id={checkBoxId}
+          checked={checked}
+          onCheckedChange={() => setChecked(getNextValue(checked))}
+          className={`${styles.checkBoxRoot} ${getStyle(checked)}`}
+        >
+          {<FontAwesomeIcon className={styles.icon} icon={getIcon(checked)} />}
+        </Checkbox.Root>
+        <label
+          className={`${styles.label} ${getStyle(checked)}`}
+          htmlFor={checkBoxId}
+        >
+          {label}
+        </label>
+      </div>
       <div className={styles.tag}>
-        <Tag size="small" label={count.toString()} />
+        <Tag size="tiny" colorScheme="simple" label={count.toString()} />
       </div>
     </div>
   );

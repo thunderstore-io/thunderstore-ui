@@ -34,7 +34,7 @@ export const PackageListLeftFilter: React.FC<PackageListLeftFilterProps> = (
 };
 
 PackageListLeftFilter.displayName = "PackageListLayout";
-PackageListLeftFilter.defaultProps = { title: "V Rising" };
+PackageListLeftFilter.defaultProps = {};
 
 const filterData = [
   { key: "1", label: "Mods", count: 123 },

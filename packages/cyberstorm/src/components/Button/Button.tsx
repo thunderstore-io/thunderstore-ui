@@ -10,6 +10,7 @@ export interface ButtonProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
+  size?: "small" | "medium";
   colorScheme?:
     | "danger"
     | "default"
@@ -17,7 +18,8 @@ export interface ButtonProps {
     | "defaultWithBorder"
     | "primary"
     | "specialGreen"
-    | "specialPurple";
+    | "specialPurple"
+    | "transparent";
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -34,6 +36,7 @@ export const Button: React.FC<ButtonProps> = React.forwardRef<
     rightIcon,
     colorScheme,
     onClick,
+    size,
     ...forwardedProps
   } = props;
 
@@ -45,7 +48,7 @@ export const Button: React.FC<ButtonProps> = React.forwardRef<
       {...forwardedProps}
       ref={ref}
       type="button"
-      className={`${styles.root} ${getStyle(colorScheme)}`}
+      className={`${styles.root} ${getStyle(colorScheme)} ${getSize(size)}`}
       onClick={onClick}
     >
       {leftIcon}
@@ -56,7 +59,7 @@ export const Button: React.FC<ButtonProps> = React.forwardRef<
 });
 
 Button.displayName = "Button";
-Button.defaultProps = { colorScheme: "default" };
+Button.defaultProps = { colorScheme: "default", size: "medium" };
 
 const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {
   return {
@@ -67,5 +70,13 @@ const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {
     primary: styles.button__primary,
     specialGreen: styles.button__specialGreen,
     specialPurple: styles.button__specialPurple,
+    transparent: styles.button__transparent,
+  }[scheme];
+};
+
+const getSize = (scheme: ButtonProps["size"] = "medium") => {
+  return {
+    small: styles.small,
+    medium: "",
   }[scheme];
 };

@@ -1,13 +1,14 @@
 import React from "react";
 import styles from "./PackageListLayout.module.css";
 import { PackageCard } from "../../PackageCard/PackageCard";
-import { BreadCrumb } from "../../BreadCrumb/BreadCrumb";
+import { BreadCrumbs } from "../../BreadCrumb/BreadCrumb";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire, faStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { Select } from "../../Select/Select";
 import { PackageListTopFilter } from "./PackageListTopFilter";
 import { PackageListCommunityInfo } from "./PackageListCommunityInfo";
 import { PackageListLeftFilter } from "./PackageListLeftFilter";
+import { CommunityLink, CommunityPackagesLink } from "../../Links/Links";
 
 export interface PackageListLayoutProps {
   title?: string;
@@ -21,7 +22,13 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
 
   return (
     <div>
-      <BreadCrumb />
+      <BreadCrumbs>
+        <CommunityLink community={"V-Rising"}>V Rising</CommunityLink>
+        <CommunityPackagesLink community={"V-Rising"}>
+          Packages
+        </CommunityPackagesLink>
+      </BreadCrumbs>
+
       <PackageListCommunityInfo title={title} />
 
       <div>
@@ -30,10 +37,28 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
           <div className={styles.content}>
             <PackageListTopFilter />
 
-            <div className={styles.placeholder}>Pagination</div>
-            <Select options={selectOptions} value={"1"} />
+            <div className={styles.listTopNavigation}>
+              <div className={styles.showing}>
+                Showing <strong>1-20</strong> of <strong>327</strong>
+              </div>
+              <div className={styles.placeholder}>Pagination</div>
+              <Select options={selectOptions} value={"1"} />
+            </div>
+
             <div>
               <div className={styles.packageCardList}>
+                <PackageCard {...packageCardArgs} />
+                <PackageCard {...packageCardArgs} />
+                <PackageCard {...packageCardArgs} />
+                <PackageCard {...packageCardArgs} />
+                <PackageCard {...packageCardArgs} />
+                <PackageCard {...packageCardArgs} />
+                <PackageCard {...packageCardArgs} />
+                <PackageCard {...packageCardArgs} />
+                <PackageCard {...packageCardArgs} />
+                <PackageCard {...packageCardArgs} />
+                <PackageCard {...packageCardArgs} />
+                <PackageCard {...packageCardArgs} />
                 <PackageCard {...packageCardArgs} />
                 <PackageCard {...packageCardArgs} />
                 <PackageCard {...packageCardArgs} />

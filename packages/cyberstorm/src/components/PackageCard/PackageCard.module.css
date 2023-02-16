@@ -138,5 +138,5 @@
 
 /* Different PackageCard variations */
 .packageCard__default {
-  background-color: var(--color-default-dark);
+  background-color: var(--color-surface--1);
 }

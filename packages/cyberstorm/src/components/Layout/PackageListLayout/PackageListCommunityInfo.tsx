@@ -4,8 +4,9 @@ import { GameIcon } from "../../GameIcon/GameIcon";
 import { Title } from "../../Title/Title";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "../../Link/Link";
+import { CommunityLink } from "../../Links/Links";
 
 export interface PackageListCommunityInfoProps {
   title?: string;
@@ -36,7 +37,12 @@ export const PackageListCommunityInfo: React.FC<
             label="138 Servers"
             icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
           />
-          <Link label="Join the Community" />
+          <CommunityLink community={"Discord"}>
+            <span className={styles.discordLink}>
+              <FontAwesomeIcon icon={faGamepad} fixedWidth />
+              <span>Join the Community</span>
+            </span>
+          </CommunityLink>
         </div>
       </div>
     </div>

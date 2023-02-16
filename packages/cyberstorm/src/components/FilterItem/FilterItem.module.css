@@ -1,16 +1,20 @@
 .root {
   display: flex;
   flex-direction: row;
-  gap: var(--space--8);
   align-items: center;
   min-width: 200px;
-  padding: var(--space--4) var(--space--8);
-  border-radius: var(--border-radius--8);
+  padding: var(--space--8) var(--space--12);
 }
 
 .root:hover {
   background-color: var(--color-surface--1);
-  transition: ease-out 200ms;
+}
+
+.checkBoxContainer {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--12);
+  align-items: center;
 }
 
 .checkBoxRoot {
@@ -29,7 +33,7 @@
 .label {
   color: var(--mark-color);
   font: var(--font-body);
-  font-weight: 600;
+  font-weight: 700;
   font-size: var(--font-size--14);
   transition: 200ms;
   user-select: none;

@@ -5,13 +5,13 @@ export interface TagProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  colorScheme?: "default";
-  size?: "small" | "medium";
+  colorScheme?: "default" | "simple";
+  size?: "tiny" | "small" | "medium";
   isRemovable?: boolean;
 }
 
 /**
- * Cyberstorm Title component
+ * Cyberstorm Tag component
  */
 export const Tag: React.FC<TagProps> = React.forwardRef<
   HTMLDivElement,
@@ -51,11 +51,13 @@ Tag.defaultProps = { colorScheme: "default", size: "medium" };
 const getStyle = (scheme: TagProps["colorScheme"] = "default") => {
   return {
     default: styles.tag__default,
+    simple: styles.tag__simple,
   }[scheme];
 };
 
 const getSize = (scheme: TagProps["size"] = "medium") => {
   return {
+    tiny: styles.tiny,
     small: styles.small,
     medium: styles.medium,
   }[scheme];
