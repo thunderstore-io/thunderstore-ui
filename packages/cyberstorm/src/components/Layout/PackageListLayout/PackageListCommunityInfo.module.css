@@ -1,0 +1,19 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space--24);
+  margin: var(--space--16) 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space--16);
+  justify-content: center;
+}
+
+.meta {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space--16);
+}

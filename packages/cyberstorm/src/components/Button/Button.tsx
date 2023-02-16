@@ -4,7 +4,7 @@ import React, {
   ReactNode,
   useRef,
 } from "react";
-import styles from "./componentStyles/Button.module.css";
+import styles from "./Button.module.css";
 
 export interface ButtonProps {
   label?: string;

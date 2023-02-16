@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+.selectedTags {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space--8);
+  height: var(--space--24);
+  margin: var(--space--8) 0;
+}

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import styles from "./componentStyles/DropDown.module.css";
+import styles from "./DropDown.module.css";
 
 import * as RadixDropDown from "@radix-ui/react-dropdown-menu";
 

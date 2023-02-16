@@ -1,5 +1,5 @@
 import React, { ReactNode, useRef } from "react";
-import styles from "./componentStyles/Tag.module.css";
+import styles from "./Tag.module.css";
 
 export interface TagProps {
   label?: string;
@@ -11,7 +11,7 @@ export interface TagProps {
 }
 
 /**
- * Cyberstorm Tag component
+ * Cyberstorm Title component
  */
 export const Tag: React.FC<TagProps> = React.forwardRef<
   HTMLDivElement,

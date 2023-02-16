@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
-import styles from "./componentStyles/PackageCard.module.css";
-import { MetaItem } from "./MetaItem";
+import styles from "./PackageCard.module.css";
+import { MetaItem } from "../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDownload,
@@ -8,8 +8,8 @@ import {
   faHardDrive,
   faThumbtack,
 } from "@fortawesome/free-solid-svg-icons";
-import { Tag } from "./Tag";
-import { PackageFlag } from "./PackageFlag";
+import { Tag } from "../Tag/Tag";
+import { PackageFlag } from "../PackageFlag/PackageFlag";
 
 const defaultImageSrc = "";
 

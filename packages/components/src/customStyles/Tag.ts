@@ -1,4 +1,4 @@
-/** Custom styles for Chakra UI's Tag component. */
+/** Custom styles for Chakra UI's Title component. */
 export const TagStyles = {
   baseStyle: {
     container: {

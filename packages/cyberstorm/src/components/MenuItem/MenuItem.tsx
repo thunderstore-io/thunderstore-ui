@@ -1,5 +1,5 @@
 import React, { ReactNode, useRef } from "react";
-import styles from "./componentStyles/MenuItem.module.css";
+import styles from "./MenuItem.module.css";
 
 export interface MenuItemProps {
   label?: string;

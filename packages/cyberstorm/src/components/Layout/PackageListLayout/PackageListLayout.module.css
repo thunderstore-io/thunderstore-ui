@@ -1,0 +1,24 @@
+.root {
+  display: flex;
+}
+
+.placeholder {
+  background-color: fuchsia;
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+.packageCardList {
+  display: grid;
+  flex-flow: row wrap;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1rem;
+}

@@ -1,5 +1,5 @@
 import React, { ReactNode, useRef } from "react";
-import styles from "./componentStyles/PackageFlag.module.css";
+import styles from "./PackageFlag.module.css";
 
 export interface PackageFlagProps {
   label?: string;

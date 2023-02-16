@@ -6,6 +6,11 @@ module.exports = {
       files: "*.stories.*",
       titlePrefix: "@thunderstore/cyberstorm",
     },
+    {
+      directory: "../stories/layouts",
+      files: "*.stories.*",
+      titlePrefix: "@thunderstore/cyberstorm",
+    },
   ],
   addons: [
     "@storybook/addon-links",

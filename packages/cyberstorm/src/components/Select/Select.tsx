@@ -1,7 +1,7 @@
 import React, { Dispatch, ReactNode, SetStateAction } from "react";
-import styles from "./componentStyles/Select.module.css";
-import { Button } from "./Button";
-import { MenuItem } from "./MenuItem";
+import styles from "./Select.module.css";
+import { Button } from "../Button/Button";
+import { MenuItem } from "../MenuItem/MenuItem";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

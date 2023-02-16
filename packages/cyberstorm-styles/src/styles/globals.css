@@ -12,6 +12,7 @@
   --space--18: 1.125rem;
   --space--20: 1.25rem;
   --space--22: 1.375rem;
+  --space--24: 1.5rem;
 
   /* Space affecting layout values */
   --gap--2: var(--space--2);

@@ -1,5 +1,5 @@
 import React, { ReactNode, useRef } from "react";
-import styles from "./componentStyles/MetaItem.module.css";
+import styles from "./MetaItem.module.css";
 
 export interface MetaItemProps {
   label?: string;

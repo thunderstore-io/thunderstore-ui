@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const meta = {
-  title: "Cyberstorm/Components/Tag",
+  title: "Cyberstorm/Components/Title",
   component: Tag,
 } as ComponentMeta<typeof Tag>;
 

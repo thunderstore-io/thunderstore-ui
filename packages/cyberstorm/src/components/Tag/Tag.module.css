@@ -1,4 +1,4 @@
-/* Common Tag styles */
+/* Common Title styles */
 .root {
   display: flex;
   flex: none;
@@ -28,7 +28,7 @@
   --border-color: var(--color-border-default);
 }
 
-/* Different Tag sizes */
+/* Different Title sizes */
 
 .small {
   padding: var(--space--4) var(--space--10);
@@ -40,12 +40,12 @@
   font-size: var(--font-size--12);
 }
 
-/* Styles for Tag's text */
+/* Styles for Title's text */
 .label {
   text-transform: uppercase;
 }
 
-/* Styles for Tag's Icons */
+/* Styles for Title's Icons */
 .icon {
   color: var(--color-border-default);
 }
@@ -55,7 +55,7 @@
      that functionality. This will become relevant once the package list
       filtering is taken under construction. */
 
-/* Different Tag color schemes */
+/* Different Title color schemes */
 .tag__removable:hover > .icon {
   color: var(--color-danger);
   cursor: pointer;
