@@ -90,21 +90,29 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
   return (
     <nav aria-label="Pagination">
       <ul className={`${styles.root} ${disabled ? styles.disabled : ""}`}>
-        <PaginationButton
-          onClick={() => onPageChange(decreaseCurrentPage(currentPage))}
-          ariaLabel="Previous"
-          label="Prev"
-          leftIcon={<FontAwesomeIcon fixedWidth icon={faArrowLeft} />}
-        />
+        {currentPage === 1 ? null : (
+          <li>
+            <PaginationButton
+              onClick={() => onPageChange(decreaseCurrentPage(currentPage))}
+              ariaLabel="Previous"
+              label="Prev"
+              leftIcon={<FontAwesomeIcon fixedWidth icon={faArrowLeft} />}
+            />
+          </li>
+        )}
 
         {mapPageNumbers(paginationRange, onPageChange, currentPage)}
 
-        <PaginationButton
-          onClick={() => onPageChange(increaseCurrentPage(currentPage))}
-          ariaLabel="Next"
-          label="Next"
-          rightIcon={<FontAwesomeIcon fixedWidth icon={faArrowRight} />}
-        />
+        {currentPage === totalPageCount ? null : (
+          <li>
+            <PaginationButton
+              onClick={() => onPageChange(increaseCurrentPage(currentPage))}
+              ariaLabel="Next"
+              label="Next"
+              rightIcon={<FontAwesomeIcon fixedWidth icon={faArrowRight} />}
+            />
+          </li>
+        )}
       </ul>
     </nav>
   );
@@ -120,25 +128,29 @@ const mapPageNumbers = (
   return paginationRange.map((pageNumber, index: number) => {
     if (pageNumber === DOTS) {
       return (
-        <span className={styles.ellipsis} key={`dots-${index}`}>
-          {DOTS}
-        </span>
+        <li>
+          <span className={styles.ellipsis} key={`dots-${index}`}>
+            {DOTS}
+          </span>
+        </li>
+      );
+    } else {
+      return (
+        <li>
+          <PaginationButton
+            key={`page-${pageNumber}`}
+            ariaCurrent={currentPage === pageNumber}
+            ariaLabel={
+              currentPage === pageNumber
+                ? `Current page ${pageNumber}`
+                : `Page ${pageNumber}`
+            }
+            label={pageNumber.toString()}
+            isSelected={currentPage === pageNumber}
+            onClick={() => onPageChange(pageNumber as number)}
+          />
+        </li>
       );
     }
-
-    return (
-      <PaginationButton
-        key={`page-${pageNumber}`}
-        ariaCurrent={currentPage === pageNumber}
-        ariaLabel={
-          currentPage === pageNumber
-            ? `Current page ${pageNumber}`
-            : `Page ${pageNumber}`
-        }
-        label={pageNumber.toString()}
-        isSelected={currentPage === pageNumber}
-        onClick={() => onPageChange(pageNumber as number)}
-      />
-    );
   });
 };

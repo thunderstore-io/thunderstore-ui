@@ -1,7 +1,7 @@
 .root {
   display: flex;
   flex-direction: row;
-  gap: var(--gap-5xs);
+  gap: var(--gap--8);
   align-items: center;
   justify-content: center;
 
@@ -13,18 +13,19 @@
 }
 
 .ellipsis {
+  display: flex;
   align-items: center;
   justify-content: center;
   min-width: 2.25em;
   min-height: 2.25em;
 
-  padding: var(--padding-3xs) var(--padding-xs);
-  border-radius: var(--border-radius-3xs);
+  padding: var(--space--8) var(--space--8);
+  border-radius: var(--border-radius--8);
   color: var(--color-text--secondary);
 
   font: var(--font-body);
-  font-weight: var(--font-weight-500);
-  line-height: var(--line-height-l);
+  font-weight: 500;
+  line-height: var(--line-height--18);
   background-color: var(--bg-color);
 
   --bg-color: var(--color-surface--1);
