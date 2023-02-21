@@ -26,7 +26,7 @@ export const PaginationButton: React.FC<PaginationButtonProps> = (props) => {
   return (
     <button
       type="button"
-      aria-current={ariaCurrent ? "page" : false}
+      aria-current={ariaCurrent ? "page" : undefined}
       aria-label={ariaLabel ?? ariaLabel}
       className={`${styles.root} ${getStyle(colorScheme, isSelected)}`}
       onClick={onClick}

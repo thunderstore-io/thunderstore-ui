@@ -15,14 +15,14 @@ const defaultArgs = {
 };
 
 const Template: ComponentStory<typeof Pagination> = (args) => {
-  const [value, setValue] = useState(args.currentPage ?? 1);
+  const [value, setValue] = useState(args.currentPage ? args.currentPage : 1);
   args.onPageChange = setValue;
   args.currentPage = value;
 
   return (
-    <div style={{ display: "flex" }}>
-      <div style={{ color: "white" }}>Value in state: {value}</div>
+    <div>
       <Pagination {...args} />
+      <div style={{ color: "white" }}>Value in state: {value}</div>
     </div>
   );
 };
@@ -33,7 +33,7 @@ ReferencePagination.args = defaultArgs;
 const DefaultPagePagination = Template.bind({});
 DefaultPagePagination.args = {
   ...defaultArgs,
-  defaultPage: 3,
+  currentPage: 13,
 };
 
 const DisabledPagination = Template.bind({});
@@ -42,9 +42,16 @@ DisabledPagination.args = {
   disabled: true,
 };
 
+const SiblingsPagination = Template.bind({});
+SiblingsPagination.args = {
+  ...defaultArgs,
+  siblingCount: 2,
+};
+
 export {
   meta as default,
   ReferencePagination,
   DefaultPagePagination,
   DisabledPagination,
+  SiblingsPagination,
 };

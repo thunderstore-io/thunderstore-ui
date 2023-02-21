@@ -29,24 +29,24 @@ const getButtonLabels = (
     return range(1, totalPageCount);
   }
 
-  const prevPageNumber = Math.max(currentPage - siblingCount, 1);
-  const nextPageNumber = Math.min(currentPage + siblingCount, totalPageCount);
+  const leftmostSibling = Math.max(currentPage - siblingCount, 1);
+  const rightmostSibling = Math.min(currentPage + siblingCount, totalPageCount);
 
-  const shouldShowLeftDots = prevPageNumber > 2;
-  const shouldShowRightDots = nextPageNumber < totalPageCount - 2;
+  const shouldShowLeftDots = leftmostSibling > 2;
+  const shouldShowRightDots = rightmostSibling < totalPageCount - 2;
 
   const firstPageIndex = 1;
   const lastPageIndex = totalPageCount;
 
   if (shouldShowLeftDots && shouldShowRightDots) {
-    const middleRange = range(prevPageNumber, nextPageNumber);
+    const middleRange = range(leftmostSibling, rightmostSibling);
     return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex];
   } else if (shouldShowRightDots) {
-    const leftItemCount = 3 + 2 * siblingCount;
+    const leftItemCount = 2 + 2 * siblingCount;
     const leftRange = range(1, leftItemCount);
     return [...leftRange, DOTS, totalPageCount];
   } else if (shouldShowLeftDots) {
-    const rightItemCount = 3 + 2 * siblingCount;
+    const rightItemCount = 2 + 2 * siblingCount;
     const rightRange = range(
       totalPageCount - rightItemCount + 1,
       totalPageCount
@@ -64,7 +64,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
     totalCount,
     pageSize,
     disabled,
-    siblingCount = 1,
+    siblingCount,
   } = props;
   const totalPageCount = Math.ceil(totalCount / (pageSize > 0 ? pageSize : 1));
   const paginationRange = getButtonLabels(
@@ -74,17 +74,17 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
   );
 
   function decreaseCurrentPage(currentPage: number) {
-    const y = currentPage - 1;
-    return y > 0 ? y : 1;
+    const newPage = currentPage - 1;
+    return newPage > 0 ? newPage : 1;
   }
 
   function increaseCurrentPage(currentPage: number) {
-    const y = currentPage + 1;
-    return y <= totalPageCount ? y : totalPageCount;
+    const newPage = currentPage + 1;
+    return newPage <= totalPageCount ? newPage : totalPageCount;
   }
 
   if (totalCount === 0) {
-    return <></>;
+    return null;
   }
 
   return (
@@ -118,7 +118,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
   );
 };
 
-Pagination.defaultProps = { disabled: false };
+Pagination.defaultProps = { disabled: false, siblingCount: 1 };
 
 const mapPageNumbers = (
   paginationRange: Array<number | string>,
