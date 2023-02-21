@@ -10,11 +10,15 @@ type BreadCrumbsProps = PropsWithChildren<{
 }>;
 
 export const BreadCrumbs: React.FC<BreadCrumbsProps> = (props) => {
-  let nodes: ReactNode[] = !props.excludeHome ? [<DefaultHomeCrumb />] : [];
-  nodes = [...nodes, ...React.Children.toArray(props.children)];
-  nodes = ([] as ReactNode[])
-    .concat(...nodes.map((x) => [x, <Separator />]))
-    .slice(0, -1);
+  const nodes: ReactNode[] = [
+    !props.excludeHome ? <DefaultHomeCrumb key={0} /> : null,
+  ];
+
+  React.Children.toArray(props.children).forEach((node) => {
+    nodes.push(<Separator />);
+    nodes.push(node);
+  });
+
   return (
     <div className={styles.root}>
       {nodes.map((x, i) => (
@@ -24,7 +28,9 @@ export const BreadCrumbs: React.FC<BreadCrumbsProps> = (props) => {
   );
 };
 
-export const BreadCrumb: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+export const BreadCrumb: React.FC<PropsWithChildren<ReactNode>> = ({
+  children,
+}) => {
   return <span className={styles.crumb}>{children}</span>;
 };
 

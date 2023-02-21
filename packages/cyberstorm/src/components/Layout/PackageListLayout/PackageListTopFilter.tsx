@@ -6,7 +6,9 @@ import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../../Button/Button";
 import { TextInput } from "../../TextInput/TextInput";
 
-export interface PackageListTopFilterProps {}
+export interface PackageListTopFilterProps {
+  tags?: Array<string>;
+}
 
 /**
  * Cyberstorm PackageListTopFilter
@@ -14,6 +16,19 @@ export interface PackageListTopFilterProps {}
 export const PackageListTopFilter: React.FC<PackageListTopFilterProps> = (
   props
 ) => {
+  const { tags } = props;
+
+  const tagList = tags?.map((tagLabel: string, index: number) => {
+    return (
+      <Tag
+        key={index.toString()}
+        label={tagLabel}
+        isRemovable
+        rightIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
+      />
+    );
+  });
+
   return (
     <div className={styles.root}>
       <TextInput
@@ -21,26 +36,7 @@ export const PackageListTopFilter: React.FC<PackageListTopFilterProps> = (
         leftIcon={<FontAwesomeIcon icon={faSearch} fixedWidth />}
       />
       <div className={styles.selectedTags}>
-        <Tag
-          label="My search term"
-          isRemovable
-          rightIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
-        />
-        <Tag
-          label="Skins"
-          isRemovable
-          rightIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
-        />
-        <Tag
-          label="Tweaks"
-          isRemovable
-          rightIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
-        />
-        <Tag
-          label="Tools"
-          isRemovable
-          rightIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
-        />
+        {tagList}
         <Button
           size="small"
           colorScheme="transparentDefault"
@@ -52,4 +48,4 @@ export const PackageListTopFilter: React.FC<PackageListTopFilterProps> = (
 };
 
 PackageListTopFilter.displayName = "PackageListLayout";
-PackageListTopFilter.defaultProps = { title: "V Rising" };
+PackageListTopFilter.defaultProps = { tags: [] };

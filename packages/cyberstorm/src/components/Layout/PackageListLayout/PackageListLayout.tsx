@@ -35,9 +35,9 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
 
       <div>
         <div className={styles.contentWrapper}>
-          <PackageListLeftFilter />
+          <PackageListLeftFilter filterData={filterData} />
           <div className={styles.content}>
-            <PackageListTopFilter />
+            <PackageListTopFilter tags={topFilterTags} />
 
             <div className={styles.listTopNavigation}>
               <div className={styles.showing}>
@@ -103,6 +103,7 @@ const selectOptions = [
     leftIcon: <FontAwesomeIcon fixedWidth icon={faThumbsUp} />,
   },
 ];
+
 const packageCardArgs = {
   imageSrc: "/images/thomas.jpg",
   packageName: "MinisterAPI DeLuxe",
@@ -117,3 +118,25 @@ const packageCardArgs = {
   link: "",
   isPinned: true,
 };
+
+const filterData = [
+  { key: "1", label: "Mods", count: 248 },
+  { key: "2", label: "Tools", count: 18 },
+  { key: "3", label: "Libraries", count: 84 },
+  { key: "4", label: "Modpacks", count: 16 },
+  { key: "5", label: "Skins", count: 127 },
+  { key: "5", label: "Maps", count: 98 },
+  { key: "5", label: "Tweaks", count: 227 },
+  { key: "5", label: "Items", count: 235 },
+  { key: "5", label: "Language", count: 5 },
+  { key: "5", label: "Audio", count: 22 },
+  { key: "5", label: "Enemies", count: 76 },
+];
+
+const topFilterTags: string[] = [
+  "Search...",
+  "My search term",
+  "Skins",
+  "Tweaks",
+  "Tools",
+];
