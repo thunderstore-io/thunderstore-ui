@@ -137,13 +137,23 @@
   opacity: 1;
 }
 
-.button__transparent {
+.button__transparentDefault {
   --text-color: var(--color-text--tertiary);
   --bg-color: transparent;
 }
 
-.button__transparent:hover {
+.button__transparentDefault:hover {
   --text-color: var(--color-text--secondary);
+  --bg-color: var(--color-surface--2);
+}
+
+.button__transparentPrimary {
+  --text-color: var(--color-highlight);
+  --bg-color: transparent;
+}
+
+.button__transparentPrimary:hover {
+  --text-color: var(--color-highlight);
   --bg-color: var(--color-surface--2);
 }
 

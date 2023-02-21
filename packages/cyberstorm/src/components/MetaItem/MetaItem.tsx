@@ -5,6 +5,7 @@ export interface MetaItemProps {
   label?: string;
   icon?: ReactNode;
   colorScheme?: "default" | "tertiary";
+  size?: "medium" | "large";
 }
 
 /**
@@ -16,7 +17,7 @@ export const MetaItem: React.FC<MetaItemProps> = React.forwardRef<
   HTMLDivElement,
   MetaItemProps
 >((props, forwardedRef) => {
-  const { label, icon, colorScheme } = props;
+  const { label, icon, colorScheme, size } = props;
 
   const fallbackRef = useRef(null);
   const ref = forwardedRef || fallbackRef;
@@ -24,17 +25,26 @@ export const MetaItem: React.FC<MetaItemProps> = React.forwardRef<
   return (
     <div ref={ref} className={`${styles.root} ${getStyle(colorScheme)}`}>
       {icon}
-      {label ? <div className={styles.label}>{label}</div> : null}
+      {label ? (
+        <div className={`${styles.label} ${getSize(size)}`}>{label}</div>
+      ) : null}
     </div>
   );
 });
 
 MetaItem.displayName = "MetaItem";
-MetaItem.defaultProps = { colorScheme: "default" };
+MetaItem.defaultProps = { colorScheme: "default", size: "medium" };
 
 const getStyle = (scheme: MetaItemProps["colorScheme"] = "default") => {
   return {
     tertiary: styles.metaItem__tertiary,
     default: styles.metaItem__default,
+  }[scheme];
+};
+
+const getSize = (scheme: MetaItemProps["size"] = "medium") => {
+  return {
+    medium: styles.metaItem__medium,
+    large: styles.metaItem__large,
   }[scheme];
 };

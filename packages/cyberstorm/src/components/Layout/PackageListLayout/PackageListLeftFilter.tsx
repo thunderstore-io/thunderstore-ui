@@ -25,7 +25,7 @@ export const PackageListLeftFilter: React.FC<PackageListLeftFilterProps> = (
   return (
     <div className={styles.root}>
       <div className={styles.allFilter}>
-        <FilterItem count={24539} checkBoxId="all" label="All" />
+        <FilterItem count={327} checkBoxId="all" label="All" />
       </div>
       <div className={styles.line}></div>
       {filters}
@@ -37,9 +37,15 @@ PackageListLeftFilter.displayName = "PackageListLayout";
 PackageListLeftFilter.defaultProps = {};
 
 const filterData = [
-  { key: "1", label: "Mods", count: 123 },
-  { key: "2", label: "Tools", count: 35 },
-  { key: "3", label: "Libraries", count: 745 },
-  { key: "4", label: "Modpacks", count: 25 },
-  { key: "5", label: "Skins", count: 858 },
+  { key: "1", label: "Mods", count: 248 },
+  { key: "2", label: "Tools", count: 18 },
+  { key: "3", label: "Libraries", count: 84 },
+  { key: "4", label: "Modpacks", count: 16 },
+  { key: "5", label: "Skins", count: 127 },
+  { key: "5", label: "Maps", count: 98 },
+  { key: "5", label: "Tweaks", count: 227 },
+  { key: "5", label: "Items", count: 235 },
+  { key: "5", label: "Language", count: 5 },
+  { key: "5", label: "Audio", count: 22 },
+  { key: "5", label: "Enemies", count: 76 },
 ];

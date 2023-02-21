@@ -7,7 +7,6 @@
   align-items: center;
   justify-content: center;
   color: var(--text-color);
-  font-size: var(--font-size--12);
   background-color: var(--bg-color);
 
   --text-color: var(--color-default-purple--8);
@@ -17,8 +16,8 @@
 /* Styles for MetaItem's text */
 .label {
   font: var(--font-body);
-  font-weight: 700;
-  font-size: var(--font-size--12);
+  font-weight: var(--font-weight);
+  font-size: var(--font-size);
   line-height: var(--line-height--18);
 }
 
@@ -29,4 +28,15 @@
 
 .metaItem__tertiary {
   --text-color: var(--color-text--tertiary);
+}
+
+.metaItem__medium {
+  --font-weight: 700;
+  --font-size: var(--font-size--12);
+}
+
+.metaItem__large {
+  font-weight: 500;
+
+  --font-size: var(--font-size-16);
 }

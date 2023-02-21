@@ -2,7 +2,7 @@ import React, { PropsWithChildren, ReactNode } from "react";
 
 import { faHouse, faSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styles from "./BreadCrumb.module.css";
+import styles from "./BreadCrumbs.module.css";
 import { IndexLink } from "../Links/Links";
 
 type BreadCrumbsProps = PropsWithChildren<{

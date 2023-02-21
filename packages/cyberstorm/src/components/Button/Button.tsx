@@ -19,7 +19,8 @@ export interface ButtonProps {
     | "primary"
     | "specialGreen"
     | "specialPurple"
-    | "transparent";
+    | "transparentDefault"
+    | "transparentPrimary";
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -70,7 +71,8 @@ const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {
     primary: styles.button__primary,
     specialGreen: styles.button__specialGreen,
     specialPurple: styles.button__specialPurple,
-    transparent: styles.button__transparent,
+    transparentDefault: styles.button__transparentDefault,
+    transparentPrimary: styles.button__transparentPrimary,
   }[scheme];
 };
 

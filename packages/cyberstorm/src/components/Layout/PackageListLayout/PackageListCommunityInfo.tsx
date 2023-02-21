@@ -4,9 +4,14 @@ import { GameIcon } from "../../GameIcon/GameIcon";
 import { Title } from "../../Title/Title";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faGamepad } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "../../Link/Link";
-import { CommunityLink } from "../../Links/Links";
+import {
+  faDownload,
+  faGamepad,
+  faBoxOpen,
+  faServer,
+  faArrowUp,
+} from "@fortawesome/free-solid-svg-icons";
+import { Button } from "../../Button/Button";
 
 export interface PackageListCommunityInfoProps {
   title?: string;
@@ -26,23 +31,29 @@ export const PackageListCommunityInfo: React.FC<
         <Title text={title} />
         <div className={styles.meta}>
           <MetaItem
-            icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
+            icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
             label="1,342 Packages"
+            colorScheme="tertiary"
+            size="large"
           />
           <MetaItem
             label="4,5M Downloads"
             icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
+            colorScheme="tertiary"
+            size="large"
           />
           <MetaItem
             label="138 Servers"
-            icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
+            icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
+            colorScheme="tertiary"
+            size="large"
           />
-          <CommunityLink community={"Discord"}>
-            <span className={styles.discordLink}>
-              <FontAwesomeIcon icon={faGamepad} fixedWidth />
-              <span>Join the Community</span>
-            </span>
-          </CommunityLink>
+          <Button
+            label={"Join the Community"}
+            leftIcon={<FontAwesomeIcon icon={faGamepad} fixedWidth />}
+            rightIcon={<FontAwesomeIcon icon={faArrowUp} fixedWidth />}
+            colorScheme="transparentPrimary"
+          />
         </div>
       </div>
     </div>

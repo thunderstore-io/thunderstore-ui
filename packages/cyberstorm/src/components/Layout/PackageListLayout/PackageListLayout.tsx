@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./PackageListLayout.module.css";
 import { PackageCard } from "../../PackageCard/PackageCard";
-import { BreadCrumbs } from "../../BreadCrumb/BreadCrumb";
+import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire, faStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { Select } from "../../Select/Select";
@@ -19,6 +19,8 @@ export interface PackageListLayoutProps {
  */
 export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
   const { title } = props;
+
+  const [order, setOrder] = useState("1");
 
   return (
     <div>
@@ -42,7 +44,11 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
                 Showing <strong>1-20</strong> of <strong>327</strong>
               </div>
               <div className={styles.placeholder}>Pagination</div>
-              <Select options={selectOptions} value={"1"} />
+              <Select
+                onChange={setOrder}
+                options={selectOptions}
+                value={order}
+              />
             </div>
 
             <div>

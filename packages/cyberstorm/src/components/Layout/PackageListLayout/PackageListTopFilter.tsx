@@ -22,26 +22,30 @@ export const PackageListTopFilter: React.FC<PackageListTopFilterProps> = (
       />
       <div className={styles.selectedTags}>
         <Tag
-          label={'"My search term"'}
+          label="My search term"
           isRemovable
           rightIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
         />
         <Tag
-          label={"Skins"}
+          label="Skins"
           isRemovable
           rightIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
         />
         <Tag
-          label={"Tweaks"}
+          label="Tweaks"
           isRemovable
           rightIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
         />
         <Tag
-          label={"Tools"}
+          label="Tools"
           isRemovable
           rightIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
         />
-        <Button size="small" colorScheme="transparent" label="Clear all" />
+        <Button
+          size="small"
+          colorScheme="transparentDefault"
+          label="Clear all"
+        />
       </div>
     </div>
   );
