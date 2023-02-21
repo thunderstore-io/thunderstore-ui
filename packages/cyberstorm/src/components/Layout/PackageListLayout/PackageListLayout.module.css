@@ -1,7 +1,3 @@
-.root {
-  display: flex;
-}
-
 .listTopNavigation {
   display: flex;
   flex-direction: row;

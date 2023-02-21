@@ -1,21 +1,19 @@
 import React from "react";
-import styles from "./PackageListTopFilter.module.css";
-import { Tag } from "../../Tag/Tag";
+import styles from "./Searchfilter.module.css";
+import { Tag } from "../Tag/Tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "../../Button/Button";
-import { TextInput } from "../../TextInput/TextInput";
+import { Button } from "../Button/Button";
+import { TextInput } from "../TextInput/TextInput";
 
-export interface PackageListTopFilterProps {
+export interface SearchFilterProps {
   tags?: Array<string>;
 }
 
 /**
- * Cyberstorm PackageListTopFilter
+ * Cyberstorm SearchFilter
  */
-export const PackageListTopFilter: React.FC<PackageListTopFilterProps> = (
-  props
-) => {
+export const SearchFilter: React.FC<SearchFilterProps> = (props) => {
   const { tags } = props;
 
   const tagList = tags?.map((tagLabel: string, index: number) => {
@@ -47,5 +45,5 @@ export const PackageListTopFilter: React.FC<PackageListTopFilterProps> = (
   );
 };
 
-PackageListTopFilter.displayName = "PackageListLayout";
-PackageListTopFilter.defaultProps = { tags: [] };
+SearchFilter.displayName = "PackageListLayout";
+SearchFilter.defaultProps = { tags: [] };

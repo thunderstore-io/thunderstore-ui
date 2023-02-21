@@ -5,10 +5,13 @@ import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire, faStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { Select } from "../../Select/Select";
-import { PackageListTopFilter } from "./PackageListTopFilter";
-import { PackageListCommunityInfo } from "./PackageListCommunityInfo";
-import { PackageListLeftFilter } from "./PackageListLeftFilter";
+import { ContentTop } from "../ContentTop";
+import { CommunityInfo } from "../../CommunityInfo/CommunityInfo";
+import { LeftColumn } from "../LeftColumn";
 import { CommunityLink, CommunityPackagesLink } from "../../Links/Links";
+import { BackgroundImage } from "../../BackgroundImage/BackgroundImage";
+import { FilterItemList } from "../../FilterItemList/FilterItemList";
+import { SearchFilter } from "../../SearchFilter/SearchFilter";
 
 export interface PackageListLayoutProps {
   title?: string;
@@ -24,6 +27,8 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
 
   return (
     <div>
+      <BackgroundImage src={"/images/page_bg.png"} />
+
       <BreadCrumbs>
         <CommunityLink community={"V-Rising"}>V Rising</CommunityLink>
         <CommunityPackagesLink community={"V-Rising"}>
@@ -31,13 +36,14 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
         </CommunityPackagesLink>
       </BreadCrumbs>
 
-      <PackageListCommunityInfo title={title} />
+      <CommunityInfo title={title} />
 
       <div>
         <div className={styles.contentWrapper}>
-          <PackageListLeftFilter filterData={filterData} />
+          <LeftColumn content={<FilterItemList filterData={filterData} />} />
+
           <div className={styles.content}>
-            <PackageListTopFilter tags={topFilterTags} />
+            <ContentTop content={<SearchFilter tags={topFilterTags} />} />
 
             <div className={styles.listTopNavigation}>
               <div className={styles.showing}>
@@ -125,12 +131,12 @@ const filterData = [
   { key: "3", label: "Libraries", count: 84 },
   { key: "4", label: "Modpacks", count: 16 },
   { key: "5", label: "Skins", count: 127 },
-  { key: "5", label: "Maps", count: 98 },
-  { key: "5", label: "Tweaks", count: 227 },
-  { key: "5", label: "Items", count: 235 },
-  { key: "5", label: "Language", count: 5 },
-  { key: "5", label: "Audio", count: 22 },
-  { key: "5", label: "Enemies", count: 76 },
+  { key: "6", label: "Maps", count: 98 },
+  { key: "7", label: "Tweaks", count: 227 },
+  { key: "8", label: "Items", count: 235 },
+  { key: "9", label: "Language", count: 5 },
+  { key: "10", label: "Audio", count: 22 },
+  { key: "11", label: "Enemies", count: 76 },
 ];
 
 const topFilterTags: string[] = [

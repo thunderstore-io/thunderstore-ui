@@ -1,14 +1,3 @@
-.root {
-  display: flex;
-  flex-direction: column;
-}
-
-.allFilter {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
 .line {
   display: flex;
   align-items: center;

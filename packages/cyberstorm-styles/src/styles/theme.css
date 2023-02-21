@@ -1,4 +1,5 @@
 :root {
+  --color-background: var(--color-surface--0);
   --color-danger: var(--color-red--50);
   --color-danger--hover: var(--color-red--40);
   --color-surface--0: var(--color-alternate-purple--0);

@@ -1,22 +1,20 @@
 import React from "react";
-import styles from "./PackageListLeftFilter.module.css";
-import { FilterItem } from "../../FilterItem/FilterItem";
+import styles from "./FilterItemList.module.css";
+import { FilterItem } from "../FilterItem/FilterItem";
 
-interface PackageListFilterDataItem {
+interface FilterDataItem {
   key: string;
   label: string;
   count: number;
 }
-export interface PackageListLeftFilterProps {
-  filterData?: Array<PackageListFilterDataItem>;
+export interface FilterItemListProps {
+  filterData?: Array<FilterDataItem>;
 }
 
 /**
- * Cyberstorm PackageListTopFilter
+ * Cyberstorm FilterItemList
  */
-export const PackageListLeftFilter: React.FC<PackageListLeftFilterProps> = (
-  props
-) => {
+export const FilterItemList: React.FC<FilterItemListProps> = (props) => {
   const { filterData } = props;
   const filters = filterData?.map((filter) => {
     return (
@@ -41,5 +39,5 @@ export const PackageListLeftFilter: React.FC<PackageListLeftFilterProps> = (
   );
 };
 
-PackageListLeftFilter.displayName = "PackageListLayout";
-PackageListLeftFilter.defaultProps = { filterData: [] };
+FilterItemList.displayName = "FilterItemList";
+FilterItemList.defaultProps = { filterData: [] };

@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "./PackageListCommunityInfo.module.css";
-import { GameIcon } from "../../GameIcon/GameIcon";
-import { Title } from "../../Title/Title";
-import { MetaItem } from "../../MetaItem/MetaItem";
+import styles from "./CommunityInfo.module.css";
+import { GameIcon } from "../GameIcon/GameIcon";
+import { Title } from "../Title/Title";
+import { MetaItem } from "../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDownload,
@@ -11,7 +11,7 @@ import {
   faServer,
   faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "../../Button/Button";
+import { Button } from "../Button/Button";
 
 export interface PackageListCommunityInfoProps {
   title?: string;
@@ -20,9 +20,9 @@ export interface PackageListCommunityInfoProps {
 /**
  * Cyberstorm PackageListCommunityInfo
  */
-export const PackageListCommunityInfo: React.FC<
-  PackageListCommunityInfoProps
-> = (props) => {
+export const CommunityInfo: React.FC<PackageListCommunityInfoProps> = (
+  props
+) => {
   const { title } = props;
   return (
     <div className={styles.root}>
@@ -60,5 +60,5 @@ export const PackageListCommunityInfo: React.FC<
   );
 };
 
-PackageListCommunityInfo.displayName = "PackageListCommunityInfo";
-PackageListCommunityInfo.defaultProps = { title: "" };
+CommunityInfo.displayName = "PackageListCommunityInfo";
+CommunityInfo.defaultProps = { title: "" };

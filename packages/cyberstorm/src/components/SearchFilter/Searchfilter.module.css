@@ -1,8 +1,3 @@
-.root {
-  display: flex;
-  flex-direction: column;
-}
-
 .selectedTags {
   display: flex;
   flex-direction: row;

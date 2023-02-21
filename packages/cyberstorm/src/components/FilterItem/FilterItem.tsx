@@ -12,7 +12,7 @@ export interface FilterItemProps {
 }
 
 /**
- * Cyberstorm FilterItem
+ * Cyberstorm BackgroundImage
  */
 export const FilterItem: React.FC<FilterItemProps> = (props) => {
   const { label, count, checkBoxId } = props;

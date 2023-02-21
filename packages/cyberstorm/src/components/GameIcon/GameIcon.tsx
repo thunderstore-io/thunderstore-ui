@@ -18,4 +18,4 @@ export const GameIcon: React.FC<GameIconProps> = (props) => {
 };
 
 GameIcon.displayName = "GameIcon";
-GameIcon.defaultProps = { imageSrc: "/images/game.jpg" };
+GameIcon.defaultProps = { imageSrc: "/images/game.png" };
