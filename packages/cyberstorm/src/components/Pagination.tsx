@@ -1,7 +1,7 @@
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Dispatch, SetStateAction } from "react";
-import { range } from "../utils";
+import { range } from "../utils/utils";
 import styles from "./componentStyles/Pagination.module.css";
 import { PaginationButton } from "./PaginationButton";
 
