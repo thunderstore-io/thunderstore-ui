@@ -19,7 +19,7 @@ export const CommunityCard: React.FC<GameIconProps> = (props) => {
   const { imageSrc } = props;
   return (
     <div className={styles.root}>
-      <img className={styles.image} alt={"Community image"} src={imageSrc} />
+      <img className={styles.image} alt={"Community"} src={imageSrc} />
       <div className={styles.title}>V Rising</div>
       <div className={styles.metaItemList}>
         <MetaItem
