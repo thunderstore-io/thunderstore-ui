@@ -3,15 +3,23 @@ import styles from "./Title.module.css";
 
 export interface TitleProps {
   text?: string;
+  size?: "small" | "default";
 }
 
 /**
  * Cyberstorm Title component
  */
 export const Title: React.FC<TitleProps> = (props) => {
-  const { text } = props;
-  return <div className={styles.root}>{text}</div>;
+  const { size, text } = props;
+  return <div className={`${styles.root} ${getSize(size)}`}>{text}</div>;
 };
 
 Title.displayName = "Title";
 Title.defaultProps = { text: "" };
+
+const getSize = (scheme: TitleProps["size"] = "default") => {
+  return {
+    small: styles.small,
+    default: "",
+  }[scheme];
+};

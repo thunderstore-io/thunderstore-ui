@@ -1,36 +1,50 @@
-.listTopNavigation {
-  display: flex;
-  flex-direction: row;
-  gap: var(--gap--16);
-  align-items: center;
-  justify-content: space-between;
-  margin: var(--space--16) 0;
-}
-
-.placeholder {
-  background-color: fuchsia;
-}
-
-.showing {
-  color: var(--color-text--secondary);
-  font: var(--font-body);
-  font-size: var(--font-size--14);
-}
-
-.contentWrapper {
-  display: flex;
-  flex-direction: row;
-  gap: var(--gap--16);
-}
-
-.content {
+.root {
   display: flex;
   flex-direction: column;
+  gap: var(--gap--16);
+  margin: 25px 250px;
 }
 
-.packageCardList {
-  display: grid;
-  flex-flow: row wrap;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  gap: 1rem;
+.topContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.packageInfo {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--32);
+  align-items: center;
+}
+
+.packageInfoDetails {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--32);
+}
+
+.mainContentWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--32);
+  margin-top: var(--space--16);
+}
+
+.mainContentLeft {
+  display: flex;
+  flex: 2 1 0;
+  flex-direction: column;
+  gap: var(--gap--12);
+}
+
+.description {
+  color: var(--color-text--default);
+  font: var(--font-body);
+  white-space: pre-wrap;
+}
+
+.mainContentRight {
+  flex: 1 1 0;
+  background-color: var(--color-surface--3);
 }

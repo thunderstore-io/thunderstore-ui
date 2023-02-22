@@ -8,7 +8,7 @@ export * from "./components/PackageCard/PackageCard";
 export * from "./components/PackageFlag/PackageFlag";
 export * from "./components/Select/Select";
 export * from "./components/MenuItem/MenuItem";
-export * from "./components/GameIcon/GameIcon";
+export * from "./components/PackageIcon/PackageIcon";
 export * from "./components/Tag/Tag";
 export * from "./components/Link/Link";
 export * from "./components/Title/Title";

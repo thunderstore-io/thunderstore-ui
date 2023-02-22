@@ -4,10 +4,10 @@
 }
 
 .image {
-  min-width: 9rem;
-  max-width: 9rem;
-  min-height: 9rem;
-  max-height: 9rem;
+  min-width: 6.675rem;
+  max-width: 6.675rem;
+  min-height: 8.875rem;
+  max-height: 8.875rem;
   border-radius: 8px;
   box-shadow: var(--box-shadow-default);
 }

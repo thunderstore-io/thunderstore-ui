@@ -26,7 +26,7 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
   const [order, setOrder] = useState("1");
 
   return (
-    <div>
+    <div className={styles.root}>
       <BackgroundImage src={"/images/page_bg.png"} />
 
       <BreadCrumbs>

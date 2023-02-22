@@ -1,3 +1,7 @@
+.root {
+  margin: 0 250px;
+}
+
 .listTopNavigation {
   display: flex;
   flex-direction: row;

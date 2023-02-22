@@ -7,15 +7,11 @@ const meta = {
   component: HomeLayout,
 } as ComponentMeta<typeof HomeLayout>;
 
-const defaultArgs = {
-  title: "V Rising",
-};
-
 const Template: ComponentStory<typeof HomeLayout> = (args) => (
   <HomeLayout {...args} />
 );
 
 const DefaultHomeLayout = Template.bind({});
-DefaultHomeLayout.args = defaultArgs;
+DefaultHomeLayout.args = {};
 
 export { meta as default, DefaultHomeLayout };

@@ -2,20 +2,20 @@ import React from "react";
 import styles from "./GameIcon.module.css";
 
 export interface GameIconProps {
-  imageSrc?: string;
+  src?: string;
 }
 
 /**
- * Cyberstorm Title component
+ * Cyberstorm GameIcon component
  */
 export const GameIcon: React.FC<GameIconProps> = (props) => {
-  const { imageSrc } = props;
+  const { src } = props;
   return (
     <div className={styles.root}>
-      <img className={styles.image} alt={"gameIcon"} src={imageSrc} />
+      <img className={styles.image} alt={"gameIcon"} src={src} />
     </div>
   );
 };
 
 GameIcon.displayName = "GameIcon";
-GameIcon.defaultProps = { imageSrc: "/images/game.png" };
+GameIcon.defaultProps = { src: "/images/game.png" };
