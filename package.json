@@ -11,12 +11,12 @@
     "build": "preconstruct build"
   },
   "engines": {
-    "node": "^16.6.0 || ^17.0.1 || ^18.14.1"
+    "node": "^18.14.0"
   },
   "dependencies": {
     "@microsoft/eslint-formatter-sarif": "^3.0.0",
     "@preconstruct/cli": "^2.1.5",
-    "@types/node": "^16.6.2",
+    "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
     "eslint": "^7.32.0",
@@ -28,16 +28,11 @@
     "typescript": "^4.5.5"
   },
   "devDependencies": {
-    "babel-loader": "^9",
     "@babel/core": "7.20",
-    "@babel/preset-env": "^7.20.2",
     "@babel/plugin-transform-runtime": "^7.20.0",
+    "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.20.0",
-    "babel-plugin-macros": "^3.1.0",
-    "babel-plugin-polyfill-corejs3": "^0.4.0",
-    "chromatic": "^6.4.3",
-    "core-js": "^3.19.1",
     "@storybook/addon-actions": "^7.0.0-beta.53",
     "@storybook/addon-essentials": "^7.0.0-beta.53",
     "@storybook/addon-interactions": "^7.0.0-beta.53",
@@ -47,6 +42,11 @@
     "@storybook/react": "^7.0.0-beta.53",
     "@storybook/react-webpack5": "^7.0.0-beta.53",
     "@storybook/testing-library": "^0.0.14-next.1",
+    "babel-loader": "^9",
+    "babel-plugin-macros": "^3.1.0",
+    "babel-plugin-polyfill-corejs3": "^0.4.0",
+    "chromatic": "^6.4.3",
+    "core-js": "^3.19.1",
     "storybook": "7.0.0-beta.53",
     "storybook-css-modules": "^1.0.8",
     "stylelint": "^14.14.0",
