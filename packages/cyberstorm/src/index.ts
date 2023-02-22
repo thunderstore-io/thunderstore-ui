@@ -12,4 +12,7 @@ export * from "./components/GameIcon/GameIcon";
 export * from "./components/Tag/Tag";
 export * from "./components/Link/Link";
 export * from "./components/Title/Title";
+export * from "./components/Layout/CommunityListLayout/CommunityListLayout";
+export * from "./components/Layout/HomeLayout/HomeLayout";
+export * from "./components/Layout/PackageDetailLayout/PackageDetailLayout";
 export * from "./components/Layout/PackageListLayout/PackageListLayout";

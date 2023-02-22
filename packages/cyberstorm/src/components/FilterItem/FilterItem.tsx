@@ -19,7 +19,6 @@ export const FilterItem: React.FC<FilterItemProps> = (props) => {
 
   const [checked, setChecked] = React.useState(undefined);
 
-  console.log(checked);
   return (
     <div className={styles.root}>
       <div className={styles.checkBoxContainer}>

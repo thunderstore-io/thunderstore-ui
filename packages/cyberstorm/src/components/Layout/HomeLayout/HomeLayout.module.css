@@ -1,0 +1,28 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+  margin: 25px 250px;
+}
+
+.specialContent {
+  height: 400px;
+  border-radius: 2.5rem;
+  background-color: var(--color-surface--2);
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--32);
+}
+
+.mediumContent {
+  height: 200px;
+  background-color: var(--color-surface--2);
+}
+
+.smallContent {
+  height: 150px;
+  background-color: var(--color-surface--2);
+}

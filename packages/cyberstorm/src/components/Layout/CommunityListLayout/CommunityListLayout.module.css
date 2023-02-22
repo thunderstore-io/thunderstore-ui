@@ -1,0 +1,25 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--32);
+  margin: 25px 250px;
+}
+
+.topNavigation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.filters {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.communityCardList {
+  display: grid;
+  flex-flow: row wrap;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 3rem 1.5rem;
+}
