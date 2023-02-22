@@ -19,7 +19,7 @@
 .label {
   font: var(--font-body);
   font-weight: 500;
-  line-height: var(--line-height--18); /* Varmista onko 1.125rem ok joka on 19.36 -> 18px */
+  line-height: var(--line-height--18);
 }
 
 .button__default {
