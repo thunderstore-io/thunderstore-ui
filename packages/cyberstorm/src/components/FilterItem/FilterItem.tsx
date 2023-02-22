@@ -17,7 +17,7 @@ export interface FilterItemProps {
 export const FilterItem: React.FC<FilterItemProps> = (props) => {
   const { label, count, checkBoxId } = props;
 
-  const [checked, setChecked] = React.useState(undefined);
+  const [checked, setChecked] = React.useState<boolean | undefined>(undefined);
 
   return (
     <div className={styles.root}>
@@ -47,7 +47,7 @@ export const FilterItem: React.FC<FilterItemProps> = (props) => {
 FilterItem.displayName = "FilterItem";
 FilterItem.defaultProps = {};
 
-function getNextValue(checked: boolean | undefined) {
+function getNextValue(checked: boolean | undefined): boolean | undefined {
   if (checked === undefined) {
     return true;
   }

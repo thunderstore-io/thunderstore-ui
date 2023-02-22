@@ -1,5 +1,5 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Select, SelectOption } from "@thunderstore/cyberstorm";
+import { StoryFn, Meta } from "@storybook/react";
+import { Select, SelectOption, SelectProps } from "@thunderstore/cyberstorm";
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,10 +11,10 @@ import {
   faArrowUpAZ,
 } from "@fortawesome/free-solid-svg-icons";
 
-const meta = {
+export default {
   title: "Cyberstorm/Components/Select",
   component: Select,
-} as unknown as ComponentMeta<typeof Select>;
+} as Meta<typeof Select>;
 
 const options: SelectOption[] = [
   {
@@ -49,58 +49,74 @@ const defaultArgs = {
   options: options,
 };
 
-const Template: ComponentStory<typeof Select> = (args) => {
-  const [value, setValue] = useState(args.defaultValue ?? null);
-  args.onChange = setValue;
-  args.value = value;
+type TemplateArgs = {
+  props: SelectProps;
+  defaultValue?: string;
+};
+const Template: StoryFn<TemplateArgs> = (args) => {
+  const [value, setValue] = useState<string | undefined>(args.defaultValue);
+  const props: SelectProps = {
+    ...args.props,
+    onChange: (x: string) => setValue(x),
+    value,
+  };
   delete args.defaultValue;
 
   return (
     <div>
       <div style={{ color: "white" }}>Value in state: {value}</div>
-      <Select {...args} />
+      <Select {...props} />
     </div>
   );
 };
 
 const ReferenceSelect = Template.bind({});
 ReferenceSelect.args = {
-  ...defaultArgs,
-  colorScheme: "default",
-  placeholder: "Sort by...",
+  props: {
+    ...defaultArgs,
+    colorScheme: "default",
+    placeholder: "Sort by...",
+  },
 };
 
 const DarkSelect = Template.bind({});
 DarkSelect.args = {
-  ...defaultArgs,
+  props: {
+    ...defaultArgs,
+    colorScheme: "defaultDark",
+  },
   defaultValue: "3",
-  colorScheme: "defaultDark",
 };
 
 const PrimarySelect = Template.bind({});
 PrimarySelect.args = {
-  ...defaultArgs,
+  props: {
+    ...defaultArgs,
+    colorScheme: "primary",
+  },
   defaultValue: "2",
-  colorScheme: "primary",
 };
 
 const EmptyOptionsSelect = Template.bind({});
 EmptyOptionsSelect.args = {
-  ...defaultArgs,
-  options: [],
-  colorScheme: "primary",
+  props: {
+    ...defaultArgs,
+    options: [],
+    colorScheme: "primary",
+  },
 };
 
 const DefaultOpenSelect = Template.bind({});
 DefaultOpenSelect.args = {
-  ...defaultArgs,
-  defaultOpen: true,
-  colorScheme: "default",
-  placeholder: "Sort by...",
+  props: {
+    ...defaultArgs,
+    defaultOpen: true,
+    colorScheme: "default",
+    placeholder: "Sort by...",
+  },
 };
 
 export {
-  meta as default,
   ReferenceSelect,
   DarkSelect,
   PrimarySelect,

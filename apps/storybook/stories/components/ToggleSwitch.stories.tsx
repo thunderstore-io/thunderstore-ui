@@ -1,10 +1,10 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { ToggleSwitch } from "@thunderstore/components";
 import React, { useState } from "react";
 
-const meta = { component: ToggleSwitch } as ComponentMeta<typeof ToggleSwitch>;
+export default { component: ToggleSwitch } as Meta;
 
-const Template: ComponentStory<typeof ToggleSwitch> = () => {
+const Template: StoryFn<typeof ToggleSwitch> = () => {
   const [sm, setSm] = useState(false);
   const [md, setMd] = useState(false);
   const [lg, setLg] = useState(false);
@@ -40,4 +40,4 @@ const Template: ComponentStory<typeof ToggleSwitch> = () => {
 
 const Toggles = Template.bind({});
 
-export { meta as default, Toggles as ToggleSwitch };
+export { Toggles as ToggleSwitch };

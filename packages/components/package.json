@@ -18,6 +18,7 @@
     "@chakra-ui/react": "^1.8.3",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
+    "@thunderstore/dapper": "^0.1.0",
     "@thunderstore/hooks": "^0.1.0",
     "@types/react": "^17.0.38",
     "adm-zip": "^0.5.7",

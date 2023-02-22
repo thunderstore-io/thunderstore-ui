@@ -1,12 +1,10 @@
 import { PackageActions } from "@thunderstore/components";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import React from "react";
 
-const meta = { component: PackageActions } as ComponentMeta<
-  typeof PackageActions
->;
+export default { component: PackageActions } as Meta;
 
-const Template: ComponentStory<typeof PackageActions> = (args) => (
+const Template: StoryFn<typeof PackageActions> = (args) => (
   <PackageActions {...args} />
 );
 
@@ -27,4 +25,4 @@ Actions.args = {
   renderFullWidth: false,
 };
 
-export { meta as default, Actions as PackageActions };
+export { Actions as PackageActions };

@@ -20,7 +20,7 @@ export interface PackageCardProps {
   isDeprecated: boolean;
   isNsfw: boolean;
   isPinned: boolean;
-  lastUpdated: string;
+  lastUpdated: string | Date;
   namespace: string;
   packageName: string;
   ratingScore: number;

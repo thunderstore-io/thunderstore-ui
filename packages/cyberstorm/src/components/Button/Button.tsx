@@ -6,7 +6,7 @@ import React, {
 } from "react";
 import styles from "./Button.module.css";
 
-export interface ButtonProps {
+type _ButtonProps = {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
@@ -22,42 +22,43 @@ export interface ButtonProps {
     | "transparentDefault"
     | "transparentPrimary";
   onClick?: MouseEventHandler<HTMLButtonElement>;
-}
+};
+export type ButtonProps = _ButtonProps &
+  Omit<React.HTMLProps<HTMLButtonElement>, keyof _ButtonProps>;
 
 /**
  * Cyberstorm Button component
  */
-export const Button: React.FC<ButtonProps> = React.forwardRef<
-  HTMLButtonElement,
-  ButtonProps
->((props: PropsWithChildren<ButtonProps>, forwardedRef) => {
-  const {
-    label,
-    leftIcon,
-    rightIcon,
-    colorScheme,
-    onClick,
-    size,
-    ...forwardedProps
-  } = props;
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (props: PropsWithChildren<ButtonProps>, forwardedRef) => {
+    const {
+      label,
+      leftIcon,
+      rightIcon,
+      colorScheme,
+      onClick,
+      size,
+      ...forwardedProps
+    } = props;
 
-  const fallbackRef = useRef(null);
-  const ref = forwardedRef || fallbackRef;
+    const fallbackRef = useRef(null);
+    const ref = forwardedRef || fallbackRef;
 
-  return (
-    <button
-      {...forwardedProps}
-      ref={ref}
-      type="button"
-      className={`${styles.root} ${getStyle(colorScheme)} ${getSize(size)}`}
-      onClick={onClick}
-    >
-      {leftIcon}
-      {label ? <div className={styles.label}>{label}</div> : null}
-      {rightIcon}
-    </button>
-  );
-});
+    return (
+      <button
+        {...forwardedProps}
+        ref={ref}
+        type="button"
+        className={`${styles.root} ${getStyle(colorScheme)} ${getSize(size)}`}
+        onClick={onClick}
+      >
+        {leftIcon}
+        {label ? <div className={styles.label}>{label}</div> : null}
+        {rightIcon}
+      </button>
+    );
+  }
+);
 
 Button.displayName = "Button";
 Button.defaultProps = { colorScheme: "default", size: "medium" };

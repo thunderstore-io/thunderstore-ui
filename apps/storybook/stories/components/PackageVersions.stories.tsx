@@ -1,12 +1,10 @@
 import { PackageVersions } from "@thunderstore/components";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import React from "react";
 
-const meta = { component: PackageVersions } as ComponentMeta<
-  typeof PackageVersions
->;
+export default { component: PackageVersions } as Meta;
 
-const Template: ComponentStory<typeof PackageVersions> = (args) => (
+const Template: StoryFn<typeof PackageVersions> = (args) => (
   <PackageVersions {...args} />
 );
 
@@ -56,4 +54,4 @@ Versions.args = {
   ],
 };
 
-export { meta as default, Versions as PackageVersions };
+export { Versions as PackageVersions };

@@ -1,21 +1,32 @@
-import { MultiSelect } from "@thunderstore/components";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import {
+  MultiSelect,
+  MultiSelectProps,
+  SelectOption,
+} from "@thunderstore/components";
+import { StoryFn, Meta } from "@storybook/react";
 import { within, userEvent } from "@storybook/testing-library";
 import React from "react";
 
-import * as SelectStories from "./Select.stories";
+const args: MultiSelectProps = {
+  options: [
+    { label: "Option 1", value: "option-1" },
+    { label: "Option 2", value: "option-2" },
+    { label: "Option 3", value: "option-3" },
+  ],
+  onChange: (opts: SelectOption[] | null) => null,
+};
 
-const meta = { component: MultiSelect } as ComponentMeta<typeof MultiSelect>;
+export default { component: MultiSelect } as Meta;
 
-const Template: ComponentStory<typeof MultiSelect> = (args) => (
+const Template: StoryFn<typeof MultiSelect> = (args) => (
   <MultiSelect {...args} />
 );
 
 const NoneSelected = Template.bind({});
-NoneSelected.args = { ...SelectStories.Select.args };
+NoneSelected.args = args;
 
 const OneSelected = Template.bind({});
-OneSelected.args = { ...SelectStories.Select.args };
+OneSelected.args = args;
 OneSelected.play = ({ canvasElement }) => {
   const canvas = within(canvasElement);
   const input = canvas.getByPlaceholderText("Search...");
@@ -25,7 +36,7 @@ OneSelected.play = ({ canvasElement }) => {
 };
 
 const MultipleSelected = Template.bind({});
-MultipleSelected.args = { ...SelectStories.Select.args };
+MultipleSelected.args = args;
 MultipleSelected.play = ({ canvasElement }) => {
   const canvas = within(canvasElement);
   const input = canvas.getByPlaceholderText("Search...");
@@ -36,4 +47,4 @@ MultipleSelected.play = ({ canvasElement }) => {
   userEvent.click(options[2]);
 };
 
-export { meta as default, NoneSelected, OneSelected, MultipleSelected };
+export { NoneSelected, OneSelected, MultipleSelected };
