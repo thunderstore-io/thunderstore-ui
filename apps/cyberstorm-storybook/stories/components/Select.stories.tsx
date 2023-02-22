@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { Select, SelectOption } from "@thunderstore/cyberstorm";
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,10 +11,10 @@ import {
   faArrowUpAZ,
 } from "@fortawesome/free-solid-svg-icons";
 
-const meta = {
+export default {
   title: "Cyberstorm/Components/Select",
   component: Select,
-} as unknown as ComponentMeta<typeof Select>;
+} as Meta<typeof Select>;
 
 const options: SelectOption[] = [
   {
@@ -49,7 +49,7 @@ const defaultArgs = {
   options: options,
 };
 
-const Template: ComponentStory<typeof Select> = (args) => {
+const Template: StoryFn<typeof Select> = (args) => {
   const [value, setValue] = useState(args.defaultValue ?? null);
   args.onChange = setValue;
   args.value = value;
@@ -100,7 +100,6 @@ DefaultOpenSelect.args = {
 };
 
 export {
-  meta as default,
   ReferenceSelect,
   DarkSelect,
   PrimarySelect,

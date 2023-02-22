@@ -1,22 +1,20 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { MenuItem } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDownAZ } from "@fortawesome/free-solid-svg-icons";
 
-const meta = {
+export default {
   title: "Cyberstorm/Components/MenuItem",
   component: MenuItem,
-} as ComponentMeta<typeof MenuItem>;
+} as Meta;
 
 const defaultArgs = {
   label: "A-Z",
   leftIcon: <FontAwesomeIcon fixedWidth icon={faArrowDownAZ} />,
 };
 
-const Template: ComponentStory<typeof MenuItem> = (args) => (
-  <MenuItem {...args} />
-);
+const Template: StoryFn<typeof MenuItem> = (args) => <MenuItem {...args} />;
 
 const ReferenceMenuItem = Template.bind({});
 ReferenceMenuItem.args = {
@@ -49,7 +47,6 @@ ExtremeMenuItem.args = {
 };
 
 export {
-  meta as default,
   ReferenceMenuItem,
   MinimalMenuItem,
   DarkMenuItem,

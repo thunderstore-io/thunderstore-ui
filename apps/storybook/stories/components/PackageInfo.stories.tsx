@@ -1,11 +1,11 @@
 import { Box } from "@chakra-ui/react";
 import { PackageInfo } from "@thunderstore/components";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import React from "react";
 
-const meta = { component: PackageInfo } as ComponentMeta<typeof PackageInfo>;
+export default { component: PackageInfo } as Meta;
 
-const Template: ComponentStory<typeof PackageInfo> = (args) => (
+const Template: StoryFn<typeof PackageInfo> = (args) => (
   <Box maxWidth="1080px">
     <PackageInfo {...args} />
   </Box>
@@ -80,4 +80,4 @@ Info.args = {
   `,
 };
 
-export { meta as default, Info as PackageInfo };
+export { Info as PackageInfo };

@@ -1,13 +1,13 @@
 import { MultiSelect } from "@thunderstore/components";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { within, userEvent } from "@storybook/testing-library";
 import React from "react";
 
 import * as SelectStories from "./Select.stories";
 
-const meta = { component: MultiSelect } as ComponentMeta<typeof MultiSelect>;
+export default { component: MultiSelect } as Meta;
 
-const Template: ComponentStory<typeof MultiSelect> = (args) => (
+const Template: StoryFn<typeof MultiSelect> = (args) => (
   <MultiSelect {...args} />
 );
 
@@ -36,4 +36,4 @@ MultipleSelected.play = ({ canvasElement }) => {
   userEvent.click(options[2]);
 };
 
-export { meta as default, NoneSelected, OneSelected, MultipleSelected };
+export { NoneSelected, OneSelected, MultipleSelected };

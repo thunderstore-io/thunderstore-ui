@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { Tag } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,12 +8,12 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
-const meta = {
+export default {
   title: "Cyberstorm/Components/Title",
   component: Tag,
-} as ComponentMeta<typeof Tag>;
+} as Meta;
 
-const Template: ComponentStory<typeof Tag> = (args) => (
+const Template: StoryFn<typeof Tag> = (args) => (
   <div style={{ display: "flex", gap: "0.25em" }}>
     <Tag {...args} />
     <Tag {...args} />
@@ -45,4 +45,4 @@ SmallTag.args = {
   rightIcon: <FontAwesomeIcon fixedWidth icon={faXmark} />,
 };
 
-export { meta as default, MinimalTag, ReferenceTag, IconTag, SmallTag };
+export { MinimalTag, ReferenceTag, IconTag, SmallTag };

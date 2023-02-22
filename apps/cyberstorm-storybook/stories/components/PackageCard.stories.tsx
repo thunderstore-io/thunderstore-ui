@@ -1,11 +1,11 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { PackageCard } from "@thunderstore/cyberstorm";
 import React from "react";
 
-const meta = {
+export default {
   title: "Cyberstorm/Components/PackageCard",
   component: PackageCard,
-} as ComponentMeta<typeof PackageCard>;
+} as Meta;
 
 const style = {
   padding: "3rem",
@@ -16,7 +16,7 @@ const style = {
   gridTemplateColumns: "repeat(auto-fit, minmax(15.5rem, 1fr))",
 };
 
-const Template: ComponentStory<typeof PackageCard> = (args) => (
+const Template: StoryFn<typeof PackageCard> = (args) => (
   <div style={style}>
     <PackageCard {...args} />
     <PackageCard {...args} categories={[]} />
@@ -81,9 +81,4 @@ ExtremePackageCard.args = {
   isDeprecated: true,
 };
 
-export {
-  meta as default,
-  MinimalPackageCard,
-  ReferencePackageCard,
-  ExtremePackageCard,
-};
+export { MinimalPackageCard, ReferencePackageCard, ExtremePackageCard };

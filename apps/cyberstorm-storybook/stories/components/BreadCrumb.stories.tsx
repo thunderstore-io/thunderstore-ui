@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import {
   BreadCrumbs,
   CommunityLink,
@@ -15,9 +15,9 @@ export default {
       control: "boolean",
     },
   },
-} as ComponentMeta<typeof BreadCrumbs>;
+} as Meta;
 
-type BreadCrumbsStory = ComponentStory<typeof BreadCrumbs>;
+type BreadCrumbsStory = StoryFn<typeof BreadCrumbs>;
 const community = "riskofrain2";
 
 export const FullCrumbs: BreadCrumbsStory = (args) => (

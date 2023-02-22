@@ -1,9 +1,11 @@
-module.exports = {
+import path from "path";
+
+export default {
   stories: [
-    "../stories/**/*.stories.mdx",
+    "../stories/**/*.mdx",
     {
       directory: "../stories/components",
-      files: "*.stories.*",
+      files: "*.@(mdx|stories.*)",
       titlePrefix: "@thunderstore/components",
     },
   ],
@@ -13,6 +15,24 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
   ],
-  framework: "@storybook/react",
+  features: {
+    emotionAlias: false, // Required for chakra storybook addon
+  },
+  framework: {
+    name: "@storybook/react-webpack5",
+    options: {},
+  },
   staticDirs: ["../public"],
+  docs: {
+    autodocs: true,
+  },
+  babel: (config) => ({
+    ...config,
+    configFile: path.resolve(__dirname, "../../../babel.config.js"),
+  }),
+  refs: {
+    "@chakra-ui/react": {
+      disable: true,
+    },
+  },
 };

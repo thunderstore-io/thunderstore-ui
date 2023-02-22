@@ -1,12 +1,10 @@
 import { PackageHeader } from "@thunderstore/components";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import React from "react";
 
-const meta = { component: PackageHeader } as ComponentMeta<
-  typeof PackageHeader
->;
+export default { component: PackageHeader } as Meta;
 
-const Template: ComponentStory<typeof PackageHeader> = (props) => (
+const Template: StoryFn<typeof PackageHeader> = (props) => (
   <PackageHeader {...props} />
 );
 
@@ -25,4 +23,4 @@ Header.args = {
   website: "https://github.com/GnomeModder/ChefMod",
 };
 
-export { meta as default, Header as PackageHeader };
+export { Header as PackageHeader };

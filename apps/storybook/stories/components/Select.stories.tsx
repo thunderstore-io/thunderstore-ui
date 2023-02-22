@@ -1,5 +1,5 @@
 import { Select } from "@thunderstore/components";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import React from "react";
 
 const args = {
@@ -11,11 +11,11 @@ const args = {
   onChange: () => null,
 };
 
-const meta = { component: Select } as ComponentMeta<typeof Select>;
+export default { component: Select } as Meta;
 
-const Template: ComponentStory<typeof Select> = (args) => <Select {...args} />;
+const Template: StoryFn<typeof Select> = (args) => <Select {...args} />;
 
 const Select_ = Template.bind({});
 Select_.args = { ...args };
 
-export { meta as default, Select_ as Select };
+export { Select_ as Select };

@@ -8,13 +8,13 @@ import {
   TopBarMenu,
   TopBarMenuButton,
 } from "@thunderstore/components";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import React from "react";
 
-const meta = { component: TopBar } as ComponentMeta<typeof TopBar>;
+export default { component: TopBar } as Meta;
 const noop = () => null;
 
-const Template: ComponentStory<typeof TopBar> = () => (
+const Template: StoryFn<typeof TopBar> = () => (
   <TopBar>
     <AnonymousLink url="/" variant="ts.topBar">
       Something
@@ -34,4 +34,4 @@ const Template: ComponentStory<typeof TopBar> = () => (
 
 const TopBar_ = Template.bind({});
 
-export { meta as default, TopBar_ as TopBar };
+export { TopBar_ as TopBar };

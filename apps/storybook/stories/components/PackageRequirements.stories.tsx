@@ -1,12 +1,10 @@
 import { PackageRequirements } from "@thunderstore/components";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import React from "react";
 
-const meta = { component: PackageRequirements } as ComponentMeta<
-  typeof PackageRequirements
->;
+export default { component: PackageRequirements } as Meta;
 
-const Template: ComponentStory<typeof PackageRequirements> = (args) => (
+const Template: StoryFn<typeof PackageRequirements> = (args) => (
   <PackageRequirements {...args} />
 );
 
@@ -33,4 +31,4 @@ Requirements.args = {
   ],
 };
 
-export { meta as default, Requirements as PackageRequirements };
+export { Requirements as PackageRequirements };

@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import {
   Button,
   DropDown,
@@ -15,10 +15,10 @@ import {
   faSkull,
 } from "@fortawesome/free-solid-svg-icons";
 
-const meta = {
+export default {
   title: "Cyberstorm/Components/DropDown",
   component: DropDown,
-} as unknown as ComponentMeta<typeof DropDown>;
+} as Meta;
 
 const defaultArgs = {
   trigger: (
@@ -48,9 +48,7 @@ const content: ReactElement<MenuItemProps>[] = [
   />,
 ];
 
-const Template: ComponentStory<typeof DropDown> = (args) => (
-  <DropDown {...args} />
-);
+const Template: StoryFn<typeof DropDown> = (args) => <DropDown {...args} />;
 
 const ReferenceDropDown = Template.bind({});
 ReferenceDropDown.args = {
@@ -106,7 +104,6 @@ DefaultOpenDropDown.args = {
 };
 
 export {
-  meta as default,
   ReferenceDropDown,
   MinimalDropDown,
   DarkDropDown,

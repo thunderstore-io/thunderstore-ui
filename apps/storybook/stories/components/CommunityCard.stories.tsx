@@ -1,21 +1,15 @@
 import { Flex } from "@chakra-ui/react";
 import { CommunityCard } from "@thunderstore/components";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import React from "react";
 
-const meta = { component: CommunityCard } as ComponentMeta<
-  typeof CommunityCard
->;
-
-const Template: ComponentStory<typeof CommunityCard> = ({ communities }) => (
-  <Flex columnGap="30px" justify="center" m="60px 0" rowGap="32px" wrap="wrap">
-    {communities.map((props) => (
-      <CommunityCard key={props.name} {...props} />
-    ))}
-  </Flex>
-);
+export default {
+  title: "CommunityCard",
+  component: CommunityCard,
+} as Meta;
 
 const imageSrc = "/img/decorative-2000x200.jpg";
+
 const communities = [
   {
     downloadCount: 40000,
@@ -54,9 +48,14 @@ const communities = [
   },
 ];
 
-const Cards = Template.bind({});
-Cards.args = {
-  communities,
-};
+const Template: StoryFn<typeof CommunityCard> = () => (
+  <Flex columnGap="30px" justify="center" m="60px 0" rowGap="32px" wrap="wrap">
+    {communities.map((props) => (
+      <CommunityCard key={props.name} {...props} />
+    ))}
+  </Flex>
+);
 
-export { meta as default, Cards as CommunityCard };
+const Cards = Template.bind({});
+
+export { Cards as CommunityCard };

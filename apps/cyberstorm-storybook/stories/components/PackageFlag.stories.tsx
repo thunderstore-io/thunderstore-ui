@@ -1,19 +1,19 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { PackageFlag } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbTack } from "@fortawesome/free-solid-svg-icons";
 
-const meta = {
+export default {
   title: "Cyberstorm/Components/PackageFlag",
   component: PackageFlag,
-} as ComponentMeta<typeof PackageFlag>;
+} as Meta;
 
 const defaultArgs = {
   label: "-",
 };
 
-const Template: ComponentStory<typeof PackageFlag> = (args) => (
+const Template: StoryFn<typeof PackageFlag> = (args) => (
   <div style={{ display: "flex" }}>
     <PackageFlag {...args} />
   </div>
@@ -26,4 +26,4 @@ DefaultPackageFlag.args = {
   icon: <FontAwesomeIcon fixedWidth icon={faThumbTack} />,
 };
 
-export { meta as default, DefaultPackageFlag };
+export { DefaultPackageFlag };
