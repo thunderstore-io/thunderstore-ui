@@ -1,11 +1,11 @@
 import { Flex } from "@chakra-ui/react";
-import { PackageCard } from "@thunderstore/components";
+import { PackageCard, PackageCardProps } from "@thunderstore/components";
 import { StoryFn, Meta } from "@storybook/react";
 import React from "react";
 
 export default { component: PackageCard } as Meta;
 
-const Template: StoryFn<typeof PackageCard> = ({ packages }) => (
+const Template: StoryFn<{ packages: PackageCardProps[] }> = ({ packages }) => (
   <Flex columnGap="20px" justify="center" m="60px 0" rowGap="20px" wrap="wrap">
     {packages.map((props) => (
       <PackageCard key={props.packageName} {...props} />

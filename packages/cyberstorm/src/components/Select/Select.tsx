@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactNode, SetStateAction } from "react";
+import React, { ReactNode } from "react";
 import styles from "./Select.module.css";
 import { Button } from "../Button/Button";
 import { MenuItem } from "../MenuItem/MenuItem";
@@ -13,15 +13,17 @@ export type SelectOption = {
   leftIcon?: ReactNode;
 };
 
-type SelectProps = {
+type _SelectProps = {
   colorScheme?: "default" | "defaultDark" | "primary";
   defaultOpen?: boolean;
   icon?: ReactNode;
-  onChange: Dispatch<SetStateAction<string>>;
+  onChange?: (val: string) => void;
   options: SelectOption[];
   placeholder?: string;
-  value: string;
+  value?: string;
 };
+export type SelectProps = _SelectProps &
+  Omit<React.HTMLProps<HTMLDivElement>, keyof _SelectProps>;
 
 export const Select: React.FC<SelectProps> = (props) => {
   const {

@@ -1,5 +1,5 @@
 import { StoryFn, Meta } from "@storybook/react";
-import { MetaItem } from "@thunderstore/cyberstorm";
+import { MetaItem, MetaItemProps } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -9,7 +9,7 @@ export default {
   component: MetaItem,
 } as Meta;
 
-const defaultArgs = {
+const defaultArgs: MetaItemProps = {
   label: "-",
   colorScheme: "default",
 };

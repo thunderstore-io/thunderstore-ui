@@ -7,7 +7,7 @@ export default {
   component: PackageCard,
 } as Meta;
 
-const style = {
+const style: React.CSSProperties = {
   padding: "3rem",
   flexWrap: "wrap",
   display: "grid",

@@ -1,6 +1,9 @@
 import path from "path";
 
 export default {
+  core: {
+    enableCrashReports: false,
+  },
   stories: [
     "../stories/**/*.mdx",
     {
@@ -30,6 +33,9 @@ export default {
     ...config,
     configFile: path.resolve(__dirname, "../../../babel.config.js"),
   }),
+  typescript: {
+    check: true,
+  },
   refs: {
     "@chakra-ui/react": {
       disable: true,
