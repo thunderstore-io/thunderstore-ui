@@ -1,11 +1,11 @@
 import { Flex } from "@chakra-ui/react";
-import { PackageCard } from "@thunderstore/components";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { PackageCard, PackageCardProps } from "@thunderstore/components";
+import { StoryFn, Meta } from "@storybook/react";
 import React from "react";
 
-const meta = { component: PackageCard } as ComponentMeta<typeof PackageCard>;
+export default { component: PackageCard } as Meta;
 
-const Template: ComponentStory<typeof PackageCard> = ({ packages }) => (
+const Template: StoryFn<{ packages: PackageCardProps[] }> = ({ packages }) => (
   <Flex columnGap="20px" justify="center" m="60px 0" rowGap="20px" wrap="wrap">
     {packages.map((props) => (
       <PackageCard key={props.packageName} {...props} />
@@ -115,4 +115,4 @@ Cards.args = {
   packages,
 };
 
-export { meta as default, Cards as PackageCard };
+export { Cards as PackageCard };

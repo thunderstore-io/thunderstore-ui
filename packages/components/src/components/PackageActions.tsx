@@ -13,7 +13,7 @@ export interface PackageActionsProps {
   downloadCount: number;
   downloadUrl: string;
   installUrl: string;
-  lastUpdated: string;
+  lastUpdated: string | Date;
   namespace: string;
   packageName: string;
   ratingScore: number;

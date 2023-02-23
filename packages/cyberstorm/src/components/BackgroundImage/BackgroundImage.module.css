@@ -1,0 +1,17 @@
+.root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  overflow: clip;
+}
+
+.root::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(35deg, var(--color-background) 50%, transparent 100%);
+  content: "\0020";
+}

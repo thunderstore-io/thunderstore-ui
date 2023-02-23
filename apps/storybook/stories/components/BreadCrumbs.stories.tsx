@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import {
   BreadCrumbs,
   CommunityLink,
@@ -6,9 +6,12 @@ import {
 } from "@thunderstore/components";
 import React from "react";
 
-const meta = { component: BreadCrumbs } as ComponentMeta<typeof BreadCrumbs>;
+export default {
+  title: "BreadCrumbs",
+  component: BreadCrumbs,
+} as Meta;
 
-const Template: ComponentStory<typeof BreadCrumbs> = (args) => (
+const Template: StoryFn<typeof BreadCrumbs> = (args) => (
   <BreadCrumbs {...args} />
 );
 
@@ -52,4 +55,4 @@ ThirdLevel.args = {
   ],
 };
 
-export { meta as default, FirstLevel, SecondLevel, ThirdLevel };
+export { FirstLevel, SecondLevel, ThirdLevel };

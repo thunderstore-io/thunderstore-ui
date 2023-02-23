@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import {
   Button,
   DropDown,
@@ -15,10 +15,10 @@ import {
   faSkull,
 } from "@fortawesome/free-solid-svg-icons";
 
-const meta = {
+export default {
   title: "Cyberstorm/Components/DropDown",
   component: DropDown,
-} as unknown as ComponentMeta<typeof DropDown>;
+} as Meta;
 
 const defaultArgs = {
   trigger: (
@@ -48,15 +48,12 @@ const content: ReactElement<MenuItemProps>[] = [
   />,
 ];
 
-const Template: ComponentStory<typeof DropDown> = (args) => (
-  <DropDown {...args} />
-);
+const Template: StoryFn<typeof DropDown> = (args) => <DropDown {...args} />;
 
 const ReferenceDropDown = Template.bind({});
 ReferenceDropDown.args = {
   ...defaultArgs,
   content: content,
-  label: "Settings",
   colorScheme: "default",
 };
 
@@ -64,7 +61,6 @@ const DarkDropDown = Template.bind({});
 DarkDropDown.args = {
   ...defaultArgs,
   content: content,
-  label: "More ...",
   colorScheme: "defaultDark",
 };
 
@@ -72,7 +68,6 @@ const PrimaryDropDown = Template.bind({});
 PrimaryDropDown.args = {
   ...defaultArgs,
   content: content,
-  label: "Click me",
   colorScheme: "primary",
 };
 
@@ -81,7 +76,6 @@ TriggerColorDropDown.args = {
   ...defaultArgs,
   triggerColorScheme: "primary",
   content: content,
-  label: "Click me",
   colorScheme: "default",
 };
 
@@ -89,7 +83,6 @@ const TagTriggerDropDown = Template.bind({});
 TagTriggerDropDown.args = {
   ...defaultArgs,
   content: content,
-  label: "Open",
   trigger: <Tag label={"I'm a trigger"} />,
 };
 
@@ -101,12 +94,10 @@ DefaultOpenDropDown.args = {
   ...defaultArgs,
   content: content,
   defaultOpen: true,
-  label: "Default open",
   colorScheme: "default",
 };
 
 export {
-  meta as default,
   ReferenceDropDown,
   MinimalDropDown,
   DarkDropDown,

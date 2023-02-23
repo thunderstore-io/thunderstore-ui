@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  gap: var(--space--8);
+  align-items: center;
+}
+
+.crumb * {
+  gap: var(--space--14);
+  align-items: center;
+  color: var(--color-cyber-green--50);
+  font: var(--font-body);
+  font-weight: 500;
+  font-size: var(--font-size--14);
+}
+
+.home {
+  text-decoration: none;
+}
+
+.separator {
+  height: var(--space--14);
+}

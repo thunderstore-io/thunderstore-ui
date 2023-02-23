@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { Markdown } from "@thunderstore/components";
 import React from "react";
 
@@ -56,9 +56,12 @@ const textContent = `
 > Quoth the Raven "Nevermore."
 `;
 
-const meta = { component: Markdown } as ComponentMeta<typeof Markdown>;
+export default {
+  title: "Markdown",
+  component: Markdown,
+} as Meta;
 
-const Template: ComponentStory<typeof Markdown> = (args) => (
+const Template: StoryFn<typeof Markdown> = (args) => (
   <Markdown>{args.children}</Markdown>
 );
 
@@ -74,4 +77,4 @@ ListContent.args = { children: listContent };
 const TextContent = Template.bind({});
 TextContent.args = { children: textContent };
 
-export { meta as default, BasicContent, CodeContent, ListContent, TextContent };
+export { BasicContent, CodeContent, ListContent, TextContent };

@@ -1,20 +1,20 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { Button } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSkull, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
-const meta = {
+export default {
   title: "Cyberstorm/Components/Button",
   component: Button,
-} as ComponentMeta<typeof Button>;
+} as Meta;
 
 const defaultArgs = {
   label: "Categories",
   rightIcon: <FontAwesomeIcon fixedWidth icon={faChevronDown} />,
 };
 
-const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
+const Template: StoryFn<typeof Button> = (args) => <Button {...args} />;
 
 const DefaultButton = Template.bind({});
 DefaultButton.args = defaultArgs;
@@ -55,7 +55,6 @@ SpecialPurpleButton.args = {
 };
 
 export {
-  meta as default,
   DefaultButton,
   DefaultDarkButton,
   PrimaryButton,

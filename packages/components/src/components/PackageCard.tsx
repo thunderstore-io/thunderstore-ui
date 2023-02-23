@@ -20,7 +20,7 @@ export interface PackageCardProps {
   isDeprecated: boolean;
   isNsfw: boolean;
   isPinned: boolean;
-  lastUpdated: string;
+  lastUpdated: string | Date;
   namespace: string;
   packageName: string;
   ratingScore: number;
@@ -133,7 +133,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
 };
 
 /**
- * Tag for marking a package as pinned.
+ * Title for marking a package as pinned.
  */
 const PinnedTag: React.FC<{ isPinned: boolean }> = (props) => {
   if (!props.isPinned) {

@@ -1,9 +1,19 @@
-module.exports = {
+import path from "path";
+
+export default {
+  core: {
+    enableCrashReports: false,
+  },
   stories: [
-    "../stories/**/*.stories.mdx",
+    "../stories/**/*.mdx",
     {
       directory: "../stories/components",
-      files: "*.stories.*",
+      files: "*.@(mdx|stories.*)",
+      titlePrefix: "@thunderstore/cyberstorm",
+    },
+    {
+      directory: "../stories/layouts",
+      files: "*.@(mdx|stories.*)",
       titlePrefix: "@thunderstore/cyberstorm",
     },
   ],
@@ -23,6 +33,19 @@ module.exports = {
       },
     },
   ],
-  framework: "@storybook/react",
+  framework: {
+    name: "@storybook/react-webpack5",
+    options: {},
+  },
   staticDirs: ["../public"],
+  docs: {
+    autodocs: true,
+  },
+  babel: (config) => ({
+    ...config,
+    configFile: path.resolve(__dirname, "../../../babel.config.js"),
+  }),
+  typescript: {
+    check: true,
+  },
 };

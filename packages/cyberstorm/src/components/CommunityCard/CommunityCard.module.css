@@ -1,0 +1,23 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.image {
+  min-width: 10rem;
+  border-radius: 12px;
+  box-shadow: var(--box-shadow-default);
+}
+
+.title {
+  color: var(--color-text--default);
+  font: var(--font-heading);
+  font-weight: 700;
+}
+
+.metaItemList {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--12);
+}

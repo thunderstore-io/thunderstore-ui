@@ -1,0 +1,10 @@
+.root {
+  color: var(--color-text--default);
+  font: var(--font-heading);
+  font-weight: 800;
+  font-size: 3rem;
+}
+
+.small {
+  font-size: 2rem;
+}

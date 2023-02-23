@@ -1,0 +1,58 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: var(--space--8) var(--space--12);
+}
+
+.root:hover {
+  background-color: var(--color-surface--1);
+}
+
+.checkBoxContainer {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--12);
+  align-items: center;
+}
+
+.checkBoxRoot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space--16);
+  height: var(--space--16);
+  border-radius: var(--border-radius--4);
+  background-color: var(--mark-color);
+  transition: 200ms;
+
+  --mark-color: var(--color-surface--2);
+}
+
+.label {
+  color: var(--mark-color);
+  font: var(--font-body);
+  font-weight: 700;
+  font-size: var(--font-size--14);
+  transition: 200ms;
+  user-select: none;
+
+  --mark-color: var(--color-text--default);
+}
+
+.icon {
+  width: var(--space--12);
+  height: var(--space--12);
+}
+
+.tag {
+  margin-left: auto;
+}
+
+.yes {
+  --mark-color: green !important;
+}
+
+.no {
+  --mark-color: red !important;
+}

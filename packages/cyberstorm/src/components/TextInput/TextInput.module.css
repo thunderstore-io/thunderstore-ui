@@ -1,0 +1,44 @@
+.root {
+  align-items: center;
+  width: auto;
+  color: var(--color-text--tertiary);
+}
+
+.input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  padding: var(--space--12) var(--space--16);
+  padding-left: 3rem;
+  border: var(--border-width--2) var(--border-color) solid;
+
+  border-radius: var(--border-radius--8);
+  font: var(--font-body);
+  background-color: var(--color-surface--2);
+
+  --border-color: transparent;
+}
+
+.input:focus-within {
+  color: var(--color-text--default);
+  background-color: var(--color-surface--0);
+
+  --border-color: var(--color-surface--3);
+}
+
+.input::placeholder {
+  color: var(--color-text--tertiary);
+}
+
+.leftIcon {
+  position: absolute;
+  padding: var(--space--16) var(--space--16);
+  color: var(--color-text--tertiary);
+}
+
+.rightIcon {
+  position: absolute;
+  padding: var(--space--14) var(--space--16);
+  color: var(--color-text--tertiary);
+}

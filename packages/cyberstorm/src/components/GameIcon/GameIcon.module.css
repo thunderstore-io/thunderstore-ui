@@ -1,0 +1,13 @@
+.root {
+  align-items: center;
+  justify-content: center;
+}
+
+.image {
+  min-width: 9rem;
+  max-width: 9rem;
+  min-height: 9rem;
+  max-height: 9rem;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow-default);
+}
