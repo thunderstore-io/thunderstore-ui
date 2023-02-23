@@ -7,4 +7,6 @@ export * from "./components/PackageCard";
 export * from "./components/PackageFlag";
 export * from "./components/Select";
 export * from "./components/MenuItem";
+export * from "./components/Pagination";
+export * from "./components/PaginationButton";
 export * from "./components/Tag";
