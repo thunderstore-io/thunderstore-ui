@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./PackageDetailLayout.module.css";
 import { Title } from "../../Title/Title";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import { GameIcon } from "../../GameIcon/GameIcon";
 import {
   CommunityLink,
   CommunityPackagesLink,
@@ -12,6 +11,7 @@ import { MetaItem } from "../../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../../Button/Button";
+import { ModIcon } from "../../ModIcon/ModIcon";
 
 export interface PackageDetailLayoutProps {
   title?: string;
@@ -44,7 +44,7 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
         </BreadCrumbs>
 
         <div className={styles.packageInfo}>
-          <GameIcon src="/images/thomas.jpg"></GameIcon>
+          <ModIcon src="/images/thomas.jpg"></ModIcon>
           <div>
             <Title text={title}></Title>
             <div className={styles.packageInfoDetails}>

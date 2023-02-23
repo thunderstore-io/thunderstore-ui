@@ -12,6 +12,7 @@ import { CommunityLink, CommunityPackagesLink } from "../../Links/Links";
 import { BackgroundImage } from "../../BackgroundImage/BackgroundImage";
 import { FilterItemList } from "../../FilterItemList/FilterItemList";
 import { SearchFilter } from "../../SearchFilter/SearchFilter";
+import { Pagination } from "../../Pagination/Pagination";
 
 export interface PackageListLayoutProps {
   title?: string;
@@ -24,6 +25,7 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
   const { title } = props;
 
   const [order, setOrder] = useState("1");
+  const [page, setPage] = useState(1);
 
   return (
     <div className={styles.root}>
@@ -49,7 +51,13 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
               <div className={styles.showing}>
                 Showing <strong>1-20</strong> of <strong>327</strong>
               </div>
-              <div className={styles.placeholder}>Pagination</div>
+              <Pagination
+                currentPage={page}
+                onPageChange={setPage}
+                pageSize={20}
+                siblingCount={2}
+                totalCount={327}
+              />
               <Select
                 onChange={setOrder}
                 options={selectOptions}
