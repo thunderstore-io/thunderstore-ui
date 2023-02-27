@@ -11,11 +11,9 @@ export interface BackgroundImageProps {
 export const BackgroundImage: React.FC<BackgroundImageProps> = (props) => {
   const { src } = props;
 
-  return (
-    <div className={styles.root}>
-      <img alt="Background" src={src} />
-    </div>
-  );
+  const backgroundImageStyle = { backgroundImage: "url(" + src + ")" };
+
+  return <div className={styles.img} style={backgroundImageStyle}></div>;
 };
 
 BackgroundImage.displayName = "BackgroundImage";
