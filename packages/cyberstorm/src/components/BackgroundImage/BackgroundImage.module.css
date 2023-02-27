@@ -1,17 +1,30 @@
-.root {
+.img {
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
+
   z-index: -1;
-  overflow: clip;
+  width: var(--w);
+  height: calc(var(--w) / 2.5);
+  background-repeat: no-repeat;
+
+  background-position: 50%;
+  background-size: cover;
+
+  --w: 60vw;
 }
 
-.root::after {
+.img::after {
   position: absolute;
+
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background: linear-gradient(35deg, var(--color-background) 50%, transparent 100%);
+  display: block;
+  background-color: hsl(var(--color-background) / 0.75);
+  background-image: linear-gradient(90deg, hsl(var(--color-background) / 1) 0%, hsl(var(--color-background) / 0) 50%, hsl(var(--color-background) / 1) 100%), linear-gradient(180deg, hsl(var(--color-background) / 0) 50%, hsl(var(--color-background) / 1) 95%);
   content: "\0020";
+
+  --color-background: 240 30% 8%;
 }
