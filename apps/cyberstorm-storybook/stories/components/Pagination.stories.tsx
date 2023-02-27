@@ -48,10 +48,16 @@ SiblingsPagination.args = {
   siblingCount: 2,
 };
 
+const EmptyPagination = Template.bind({});
+EmptyPagination.args = {
+  totalCount: 0,
+};
+
 export {
   meta as default,
   ReferencePagination,
   DefaultPagePagination,
   DisabledPagination,
   SiblingsPagination,
+  EmptyPagination,
 };

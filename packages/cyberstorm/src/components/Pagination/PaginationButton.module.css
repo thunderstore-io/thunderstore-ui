@@ -27,13 +27,13 @@
 }
 
 .button__default:hover {
-  color: #f5f5f6;
+  color: var(--color-text--default);
 
   --bg-color: var(--color-surface--3);
 }
 
 .button__default_selected {
-  color: #f5f5f6;
+  color: var(--color-text--default);
 
-  --bg-color: #40328b;
+  --bg-color: var(--color-alternate-purple--4);
 }
