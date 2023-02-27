@@ -14,8 +14,6 @@ export interface PaginationProps {
   siblingCount: number;
 }
 
-const DOTS = "…";
-
 export const Pagination: React.FC<PaginationProps> = (props) => {
   const {
     currentPage,
@@ -62,7 +60,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
     );
     buttons.push(
       <li>
-        <span className={styles.ellipsis}>{DOTS}</span>
+        <span className={styles.ellipsis}>{"..."}</span>
       </li>
     );
   }
@@ -89,7 +87,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
   if (rightmostSibling < totalPageCount) {
     buttons.push(
       <li>
-        <span className={styles.ellipsis}>{DOTS}</span>
+        <span className={styles.ellipsis}>{"..."}</span>
       </li>
     );
     buttons.push(
@@ -107,7 +105,9 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
     buttons.push(
       <li>
         <PaginationButton
-          onClick={() => onPageChange(increaseCurrentPage(currentPage))}
+          onClick={() =>
+            onPageChange(increaseCurrentPage(currentPage, totalPageCount))
+          }
           ariaLabel="Next"
           label="Next"
           rightIcon={<FontAwesomeIcon fixedWidth icon={faArrowRight} />}
@@ -116,19 +116,9 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
     );
   }
 
-  function decreaseCurrentPage(currentPage: number) {
-    const newPage = currentPage - 1;
-    return newPage > 0 ? newPage : 1;
-  }
-
-  function increaseCurrentPage(currentPage: number) {
-    const newPage = currentPage + 1;
-    return newPage <= totalPageCount ? newPage : totalPageCount;
-  }
-
   return (
     <nav aria-label="Pagination">
-      <ul className={`${styles.root} ${disabled ? styles.disabled : ""}`}>
+      <ul className={`${styles.list} ${disabled ? styles.disabled : ""}`}>
         {buttons}
       </ul>
     </nav>
@@ -136,3 +126,13 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
 };
 
 Pagination.defaultProps = { disabled: false, siblingCount: 1 };
+
+function decreaseCurrentPage(currentPage: number) {
+  const newPage = currentPage - 1;
+  return newPage > 0 ? newPage : 1;
+}
+
+function increaseCurrentPage(currentPage: number, totalPageCount: number) {
+  const newPage = currentPage + 1;
+  return newPage <= totalPageCount ? newPage : totalPageCount;
+}
