@@ -18,3 +18,4 @@ export * from "./components/Layout/CommunityListLayout/CommunityListLayout";
 export * from "./components/Layout/HomeLayout/HomeLayout";
 export * from "./components/Layout/PackageDetailLayout/PackageDetailLayout";
 export * from "./components/Layout/PackageListLayout/PackageListLayout";
+export * from "./components/Layout/Teams/TeamsLayout";

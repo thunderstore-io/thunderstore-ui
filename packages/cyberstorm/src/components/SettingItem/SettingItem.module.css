@@ -1,0 +1,27 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  color: var(--color-text--default);
+
+  font: var(--font-body);
+  font-size: var(--font-size--14);
+}
+
+.leftColumn {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space--16);
+}
+
+.rightColumn {
+  flex: 3;
+}
+
+.leftColumnTitle {
+  font-weight: 700;
+}
+
+.leftColumnDescription {
+  color: var(--color-text--secondary);
+}

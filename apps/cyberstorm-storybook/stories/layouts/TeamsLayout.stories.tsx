@@ -1,0 +1,21 @@
+import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { TeamsLayout } from "@thunderstore/cyberstorm";
+import React from "react";
+
+const meta = {
+  title: "Cyberstorm/Layouts/TeamsLayout",
+  component: TeamsLayout,
+} as ComponentMeta<typeof TeamsLayout>;
+
+const defaultArgs = {
+  teamName: "Zorrz's Bros",
+};
+
+const Template: ComponentStory<typeof TeamsLayout> = (args) => (
+  <TeamsLayout {...args} />
+);
+
+const DefaultTeamsLayout = Template.bind({});
+DefaultTeamsLayout.args = { ...defaultArgs };
+
+export { meta as default, DefaultTeamsLayout };
