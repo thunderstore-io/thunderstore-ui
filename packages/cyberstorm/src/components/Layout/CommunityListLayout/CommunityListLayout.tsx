@@ -9,7 +9,7 @@ import {
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { CommunityLink } from "../../Links/Links";
-import { Title } from "../../Title/Title";
+import { Tabs } from "../../Tabs/Tabs";
 import { TextInput } from "../../TextInput/TextInput";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
@@ -31,7 +31,7 @@ export const CommunityListLayout: React.FC<CommunityListLayoutProps> = () => {
           <BreadCrumbs>
             <CommunityLink community="communities">Communities</CommunityLink>
           </BreadCrumbs>
-          <Title text="Communities" />
+          <Tabs text="Communities" />
         </div>
 
         <div className={styles.filters}>

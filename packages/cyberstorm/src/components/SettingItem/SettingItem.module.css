@@ -12,6 +12,7 @@
   flex: 1;
   flex-direction: column;
   gap: var(--space--16);
+  min-width: 10rem;
 }
 
 .rightColumn {

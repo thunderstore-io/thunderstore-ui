@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export default {
-  title: "Cyberstorm/Components/Title",
+  title: "Cyberstorm/Components/Tag",
   component: Tag,
 } as Meta;
 

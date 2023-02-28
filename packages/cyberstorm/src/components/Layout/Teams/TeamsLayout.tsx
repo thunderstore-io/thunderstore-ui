@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./TeamsLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { CommunityLink, CommunityPackagesLink } from "../../Links/Links";
-import { Title } from "../../Title/Title";
+import { Tabs } from "../../Tabs/Tabs";
 import { TeamLeave } from "./TeamLeaveForm/TeamLeave";
 import { TeamDisband } from "./TeamDisbandForm/TeamDisband";
+import { Title } from "../../Title/Title";
 
 export interface TeamsLayoutProps {
   teamName?: string;
@@ -15,6 +16,8 @@ export interface TeamsLayoutProps {
  */
 export const TeamsLayout: React.FC<TeamsLayoutProps> = (props) => {
   const { teamName } = props;
+
+  const [currentTab, setCurrentTab] = useState(1);
 
   return (
     <div className={styles.root}>
@@ -27,12 +30,16 @@ export const TeamsLayout: React.FC<TeamsLayoutProps> = (props) => {
 
       <Title text={teamName} />
 
+      <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
+
       <div>
-        <div className={styles.tabContent}>
-          <TeamLeave />
-          <div className={styles.separator} />
-          <TeamDisband teamName={teamName} />
-        </div>
+        {currentTab === 5 ? (
+          <div className={styles.tabContent}>
+            <TeamLeave />
+            <div className={styles.separator} />
+            <TeamDisband teamName={teamName} />
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -40,3 +47,11 @@ export const TeamsLayout: React.FC<TeamsLayoutProps> = (props) => {
 
 TeamsLayout.displayName = "TeamsLayout";
 TeamsLayout.defaultProps = { teamName: "" };
+
+const tabs = [
+  { key: 1, label: "Profile" },
+  { key: 2, label: "Members" },
+  { key: 3, label: "Service Accounts" },
+  { key: 4, label: "Mods" },
+  { key: 5, label: "Settings" },
+];

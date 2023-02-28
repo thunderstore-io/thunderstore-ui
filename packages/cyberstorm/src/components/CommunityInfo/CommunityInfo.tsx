@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./CommunityInfo.module.css";
 import { GameIcon } from "../GameIcon/GameIcon";
-import { Title } from "../Title/Title";
+import { Tabs } from "../Tabs/Tabs";
 import { MetaItem } from "../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -28,7 +28,7 @@ export const CommunityInfo: React.FC<PackageListCommunityInfoProps> = (
     <div className={styles.root}>
       <GameIcon />
       <div className={styles.info}>
-        <Title text={title} />
+        <Tabs text={title} />
         <div className={styles.meta}>
           <MetaItem
             icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}

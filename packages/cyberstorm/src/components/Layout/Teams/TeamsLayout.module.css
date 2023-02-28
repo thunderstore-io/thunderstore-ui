@@ -1,4 +1,7 @@
 .root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
   margin: 0 250px;
 }
 
