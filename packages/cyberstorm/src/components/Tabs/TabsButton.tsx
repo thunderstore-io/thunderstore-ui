@@ -14,7 +14,7 @@ export const TabsButton: React.FC<TabsButtonProps> = (props) => {
   return (
     <button
       type="button"
-      aria-current={ariaCurrent ? "tab" : undefined}
+      aria-current={ariaCurrent}
       aria-label={ariaLabel}
       className={`${styles.root} ${getStyle(isSelected)}`}
       onClick={onClick}

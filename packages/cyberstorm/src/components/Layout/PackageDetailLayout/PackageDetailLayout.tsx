@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./PackageDetailLayout.module.css";
-import { Tabs } from "../../Tabs/Tabs";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import {
   CommunityLink,
@@ -12,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../../Button/Button";
 import { ModIcon } from "../../ModIcon/ModIcon";
+import { Title } from "../../Title/Title";
 
 export interface PackageDetailLayoutProps {
   title?: string;
@@ -46,7 +46,7 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
         <div className={styles.packageInfo}>
           <ModIcon src="/images/thomas.jpg"></ModIcon>
           <div>
-            <Tabs text={title}></Tabs>
+            <Title text={title}></Title>
             <div className={styles.packageInfoDetails}>
               <MetaItem
                 colorScheme="tertiary"
@@ -65,7 +65,7 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
       </div>
       <div className={styles.mainContentWrapper}>
         <div className={styles.mainContentLeft}>
-          <Tabs size="small" text="Description title" />
+          <Title size="small" text="Description title" />
           <p className={styles.description}>{description}</p>
         </div>
         <div className={styles.mainContentRight} />

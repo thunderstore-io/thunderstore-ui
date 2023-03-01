@@ -1,0 +1,15 @@
+.root {
+  align-items: center;
+  justify-content: center;
+}
+
+.image {
+  --size: 2.5rem;
+
+  min-width: var(--size);
+  max-width: var(--size);
+  min-height: var(--size);
+  max-height: var(--size);
+  border-radius: var(--size);
+  box-shadow: var(--box-shadow-default);
+}
