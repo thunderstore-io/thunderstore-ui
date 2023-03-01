@@ -133,7 +133,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
 };
 
 /**
- * Tabs for marking a package as pinned.
+ * Title for marking a package as pinned.
  */
 const PinnedTag: React.FC<{ isPinned: boolean }> = (props) => {
   if (!props.isPinned) {
