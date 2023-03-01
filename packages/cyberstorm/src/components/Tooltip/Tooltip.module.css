@@ -1,16 +1,16 @@
 .root {
   max-width: 75vw;
 
-  padding: var(--size-3xs) var(--size-xs);
-  border-radius: var(--border-radius--4);
-  color: var(--color-white);
+  padding: var(--space--8) var(--space--12);
+  border-radius: var(--border-radius--8);
+  color: var(--color-text--default);
 
-  font-weight: var(--font-weight-bold);
-  font-size: var(--size-m);
+  font-weight: 700;
+  font-size: var(--font-size--14);
   overflow-wrap: break-word;
   background-color: var(--color-surface--3);
 
-  box-shadow: var(--box-shadow-1);
+  box-shadow: var(--box-shadow-default);
   animation-duration: var(--animation-duration-1);
   animation-timing-function: var(--animation-timing-1);
   user-select: none;

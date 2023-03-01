@@ -31,4 +31,6 @@
   --color-text--default: var(--color-lilac--lightest);
   --color-text--secondary: var(--color-lilac--lighter);
   --color-text--tertiary: var(--color-lilac--light);
+  --animation-duration-1: 400ms;
+  --animation-timing-1: cubic-bezier(0.16, 1, 0.3, 1);
 }
