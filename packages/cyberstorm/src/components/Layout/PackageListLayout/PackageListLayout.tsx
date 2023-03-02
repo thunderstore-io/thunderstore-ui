@@ -89,7 +89,13 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
                 <PackageCard {...packageCardArgs} />
               </div>
             </div>
-            <div className={styles.placeholder}>Pagination</div>
+            <Pagination
+              currentPage={page}
+              onPageChange={setPage}
+              pageSize={20}
+              siblingCount={2}
+              totalCount={327}
+            />
           </div>
         </div>
       </div>

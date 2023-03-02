@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./CommunityInfo.module.css";
 import { GameIcon } from "../GameIcon/GameIcon";
-import { Title } from "../Title/Title";
 import { MetaItem } from "../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,6 +11,7 @@ import {
   faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../Button/Button";
+import { Title } from "../Title/Title";
 
 export interface PackageListCommunityInfoProps {
   title?: string;

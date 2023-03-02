@@ -59,13 +59,12 @@ export const Select: React.FC<SelectProps> = (props) => {
           />
         </RadixSelect.Trigger>
 
-        <RadixSelect.Portal>
-          <RadixSelect.Content
-            className={`${styles.content} ${getContentStyle(colorScheme)}`}
-          >
-            {selectItemElements}
-          </RadixSelect.Content>
-        </RadixSelect.Portal>
+        <RadixSelect.Content
+          position="popper"
+          className={`${styles.content} ${getContentStyle(colorScheme)}`}
+        >
+          {selectItemElements}
+        </RadixSelect.Content>
       </RadixSelect.Root>
     </div>
   );
