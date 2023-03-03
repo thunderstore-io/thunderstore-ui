@@ -45,7 +45,7 @@ export const TeamsLayout: React.FC<TeamsLayoutProps> = (props) => {
         ) : null}
         {currentTab === 2 ? (
           <div className={styles.tabContent}>
-            <TeamMembers userData={userData} />
+            <TeamMembers userData={userData} teamName={teamName} />
           </div>
         ) : null}
         {currentTab === 3 ? (

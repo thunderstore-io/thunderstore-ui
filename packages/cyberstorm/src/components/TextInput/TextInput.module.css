@@ -10,7 +10,6 @@
   align-items: center;
   width: 100%;
   padding: var(--space--12) var(--space--16);
-  padding-left: 3rem;
   border: var(--border-width--2) var(--border-color) solid;
 
   border-radius: var(--border-radius--8);
@@ -18,6 +17,10 @@
   background-color: var(--color-surface--2);
 
   --border-color: transparent;
+}
+
+.hasLeftIcon {
+  padding-left: 3rem;
 }
 
 .input:focus-within {

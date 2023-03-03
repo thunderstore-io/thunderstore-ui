@@ -1,0 +1,48 @@
+.overlay {
+  position: fixed;
+  background-color: var(--color-shadow-1);
+  inset: 0;
+}
+
+.content {
+  position: fixed;
+  top: var(--top);
+  left: var(--left);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+  width: 30vw;
+  padding: var(--space--16) 0;
+  border: var(--color-surface--2) var(--space--px) solid;
+
+  border-radius: var(--border-radius--16);
+  background-color: var(--color-background);
+  box-shadow: var(--box-shadow-default);
+  transform: translate(calc(var(--left) * -1), calc(var(--top) * -1));
+
+  --top: 20%;
+  --left: 50%;
+}
+
+.section {
+  padding: 0 var(--space--24);
+}
+
+.heading {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: var(--gap--16);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.separator {
+  border-top: var(--color-surface--2) var(--space--px) solid;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--16);
+  justify-content: end;
+}

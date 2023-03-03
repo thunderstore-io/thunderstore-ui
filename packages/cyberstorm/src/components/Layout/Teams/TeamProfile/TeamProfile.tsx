@@ -48,6 +48,15 @@ export const TeamProfile: React.FC<TeamProfileProps> = (props) => {
         <div className={styles.section}>
           <SettingItem title="Social Links" content={teamName} />
         </div>
+
+        <div className={styles.line} />
+
+        <div className={styles.section}>
+          <SettingItem
+            title="Team donation link"
+            content={<TextInput placeHolder="https://" />}
+          />
+        </div>
       </div>
     </div>
   );
