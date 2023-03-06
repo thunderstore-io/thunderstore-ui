@@ -28,6 +28,13 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
     return null;
   }
 
+  //Note that the ellipsis is a "…" character, not three dots.
+  const ellipsisButton = (
+    <li>
+      <span className={styles.ellipsis}>{"…"}</span>
+    </li>
+  );
+
   const totalPageCount = Math.ceil(totalCount / (pageSize > 0 ? pageSize : 1));
 
   const buttons = [];
@@ -58,11 +65,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
         />
       </li>
     );
-    buttons.push(
-      <li>
-        <span className={styles.ellipsis}>{"..."}</span>
-      </li>
-    );
+    buttons.push(ellipsisButton);
   }
 
   range(leftmostSibling, rightmostSibling).forEach((pageNumber) => {
@@ -85,11 +88,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
   });
 
   if (rightmostSibling < totalPageCount) {
-    buttons.push(
-      <li>
-        <span className={styles.ellipsis}>{"..."}</span>
-      </li>
-    );
+    buttons.push(ellipsisButton);
     buttons.push(
       <li>
         <PaginationButton

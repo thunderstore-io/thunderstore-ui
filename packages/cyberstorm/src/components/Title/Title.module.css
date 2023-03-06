@@ -6,5 +6,10 @@
 }
 
 .small {
-  font-size: 2rem;
+  font-size: var(--font-size-32);
+}
+
+.smaller {
+  font-weight: 600;
+  font-size: var(--font-size-24);
 }

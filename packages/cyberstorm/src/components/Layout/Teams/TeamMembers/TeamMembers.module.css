@@ -1,0 +1,23 @@
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+  margin-bottom: var(--space--16);
+  color: var(--color-text--default);
+  font: var(--font-body);
+}
+
+.dialogTeamName {
+  color: var(--color-highlight);
+}
+
+.dialogInput {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--16);
+  width: 100%;
+}
+
+.textInput {
+  flex-grow: 1;
+}

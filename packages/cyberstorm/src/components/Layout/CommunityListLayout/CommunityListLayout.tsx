@@ -9,10 +9,10 @@ import {
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { CommunityLink } from "../../Links/Links";
-import { Title } from "../../Title/Title";
 import { TextInput } from "../../TextInput/TextInput";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
+import { Title } from "../../Title/Title";
 
 export interface CommunityListLayoutProps {
   title?: string;

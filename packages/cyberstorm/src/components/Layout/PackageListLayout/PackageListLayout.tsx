@@ -65,31 +65,35 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
               />
             </div>
 
-            <div>
-              <div className={styles.packageCardList}>
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-                <PackageCard {...packageCardArgs} />
-              </div>
+            <div className={styles.packageCardList}>
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
+              <PackageCard {...packageCardArgs} />
             </div>
-            <div className={styles.placeholder}>Pagination</div>
+            <Pagination
+              currentPage={page}
+              onPageChange={setPage}
+              pageSize={20}
+              siblingCount={2}
+              totalCount={327}
+            />
           </div>
         </div>
       </div>

@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./PackageDetailLayout.module.css";
-import { Title } from "../../Title/Title";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import {
   CommunityLink,
@@ -12,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../../Button/Button";
 import { ModIcon } from "../../ModIcon/ModIcon";
+import { Title } from "../../Title/Title";
 
 export interface PackageDetailLayoutProps {
   title?: string;

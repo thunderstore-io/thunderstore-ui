@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--32);
+}
+
+.line {
+  margin: var(--space--24) 0;
+  border-bottom: solid var(--space--px) var(--color-surface--2);
+}
+
+.avatarContent {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--32);
+  align-items: center;
+}
