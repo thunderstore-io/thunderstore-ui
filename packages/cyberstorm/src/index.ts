@@ -2,6 +2,8 @@ export * from "./components/Button/Button";
 export * from "./components/BreadCrumbs/BreadCrumbs";
 export * from "./components/Dialog/Dialog";
 export * from "./components/DropDown/DropDown";
+export * from "./components/Footer/Footer";
+export * from "./components/Heading/Heading";
 export * from "./components/Link/Link";
 export * from "./components/Links/LinkingProvider";
 export * from "./components/Links/Links";

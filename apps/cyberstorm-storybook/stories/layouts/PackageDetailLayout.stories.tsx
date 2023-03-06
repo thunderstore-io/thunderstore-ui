@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { PackageDetailLayout } from "@thunderstore/cyberstorm";
+import { Footer, Heading, PackageDetailLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -8,7 +8,11 @@ const meta = {
 } as ComponentMeta<typeof PackageDetailLayout>;
 
 const Template: ComponentStory<typeof PackageDetailLayout> = (args) => (
-  <PackageDetailLayout {...args} />
+  <div>
+    <Heading />
+    <PackageDetailLayout {...args} />
+    <Footer />
+  </div>
 );
 
 const defaultArgs = {

@@ -23,6 +23,7 @@
   --gap--32: 2rem;
 
   /* Other re-used values */
+  --blur-default: 0.25rem;
   --border-width--2: 0.125rem;
   --border-radius--4: 0.25rem;
   --border-radius--8: 0.5rem;

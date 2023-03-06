@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { NotFoundLayout } from "@thunderstore/cyberstorm";
+import { Footer, Heading, NotFoundLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -8,7 +8,11 @@ const meta = {
 } as ComponentMeta<typeof NotFoundLayout>;
 
 const Template: ComponentStory<typeof NotFoundLayout> = (args) => (
-  <NotFoundLayout {...args} />
+  <div>
+    <Heading />
+    <NotFoundLayout {...args} />
+    <Footer />
+  </div>
 );
 
 const DefaultNotFoundLayout = Template.bind({});

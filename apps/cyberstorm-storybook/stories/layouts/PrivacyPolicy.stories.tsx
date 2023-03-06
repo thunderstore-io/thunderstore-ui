@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { PrivacyPolicyLayout } from "@thunderstore/cyberstorm";
+import { Footer, Heading, PrivacyPolicyLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -8,7 +8,11 @@ const meta = {
 } as ComponentMeta<typeof PrivacyPolicyLayout>;
 
 const Template: ComponentStory<typeof PrivacyPolicyLayout> = (args) => (
-  <PrivacyPolicyLayout {...args} />
+  <div>
+    <Heading />
+    <PrivacyPolicyLayout {...args} />
+    <Footer />
+  </div>
 );
 
 const DefaultPrivacyPolicyLayout = Template.bind({});

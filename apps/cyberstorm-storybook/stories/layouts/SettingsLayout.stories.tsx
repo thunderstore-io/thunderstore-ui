@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { SettingsLayout } from "@thunderstore/cyberstorm";
+import { Footer, Heading, SettingsLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -10,7 +10,11 @@ const meta = {
 const defaultArgs = {};
 
 const Template: ComponentStory<typeof SettingsLayout> = (args) => (
-  <SettingsLayout {...args} />
+  <div>
+    <Heading />
+    <SettingsLayout {...args} />
+    <Footer />
+  </div>
 );
 
 const DefaultSettingsLayout = Template.bind({});
