@@ -1,0 +1,19 @@
+import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { SettingsLayout } from "@thunderstore/cyberstorm";
+import React from "react";
+
+const meta = {
+  title: "Cyberstorm/Layouts/SettingsLayout",
+  component: SettingsLayout,
+} as ComponentMeta<typeof SettingsLayout>;
+
+const defaultArgs = {};
+
+const Template: ComponentStory<typeof SettingsLayout> = (args) => (
+  <SettingsLayout {...args} />
+);
+
+const DefaultSettingsLayout = Template.bind({});
+DefaultSettingsLayout.args = { ...defaultArgs };
+
+export { meta as default, DefaultSettingsLayout };
