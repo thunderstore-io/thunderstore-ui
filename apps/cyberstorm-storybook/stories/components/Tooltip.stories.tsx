@@ -1,20 +1,20 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { Button, Tooltip } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
   title: "Cyberstorm/Components/Tooltip",
   component: Tooltip,
-} as ComponentMeta<typeof Tooltip>;
+} as Meta<typeof Tooltip>;
 
-const Template: ComponentStory<typeof Tooltip> = (args) => (
+const Template: StoryFn<typeof Tooltip> = (args) => (
   <div
     style={{
       display: "flex",
       flexDirection: "column",
-      gap: "0.25em",
-      backgroundColor: "#7e26b6",
-      padding: "1rem",
+      gap: "var(--gap--4)",
+      backgroundColor: "var(--color-cyber-green--40)",
+      padding: "var(--space--16)",
     }}
   >
     <div>
