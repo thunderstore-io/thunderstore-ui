@@ -1,0 +1,43 @@
+.root {
+  right: 0;
+  left: 0;
+  display: flex;
+  min-height: 4.5rem;
+}
+
+.heading {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+
+  z-index: 999;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space--6) var(--space--16);
+  box-shadow: var(--box-shadow-small);
+
+  backdrop-filter: blur(var(--blur-default));
+}
+
+.leftSection {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--32);
+  align-items: center;
+}
+
+.middleSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rightSection {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--16);
+  align-items: center;
+}

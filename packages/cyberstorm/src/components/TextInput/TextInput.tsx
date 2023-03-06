@@ -16,7 +16,11 @@ export const TextInput: React.FC<TextInputProps> = (props) => {
   return (
     <div className={styles.root}>
       {leftIcon ? <div className={styles.leftIcon}>{leftIcon}</div> : null}
-      <input type="text" placeholder={placeHolder} className={styles.input} />
+      <input
+        type="text"
+        placeholder={placeHolder}
+        className={`${styles.input} ${leftIcon ? styles.hasLeftIcon : ""}`}
+      />
       {rightIcon ? <div className={styles.rightIcon}>{rightIcon}</div> : null}
     </div>
   );

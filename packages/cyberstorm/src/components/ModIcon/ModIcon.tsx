@@ -18,4 +18,4 @@ export const ModIcon: React.FC<ModIconProps> = (props) => {
 };
 
 ModIcon.displayName = "ModIcon";
-ModIcon.defaultProps = { src: "/images/game.png" };
+ModIcon.defaultProps = { src: "/images/thomas.jpg" };

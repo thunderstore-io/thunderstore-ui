@@ -18,7 +18,7 @@ export const FilterItemList: React.FC<FilterItemListProps> = (props) => {
   const { filterData } = props;
   const filters = filterData?.map((filter) => {
     return (
-      <div className={styles.root} key={filter.key}>
+      <div key={filter.key}>
         <FilterItem
           count={filter.count}
           checkBoxId={filter.key}
@@ -29,8 +29,8 @@ export const FilterItemList: React.FC<FilterItemListProps> = (props) => {
   });
 
   return (
-    <div className={styles.root}>
-      <div className={styles.allFilter}>
+    <div>
+      <div>
         <FilterItem count={327} checkBoxId="all" label="All" />
       </div>
       <div className={styles.line}></div>

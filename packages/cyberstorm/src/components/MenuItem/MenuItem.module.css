@@ -15,12 +15,6 @@
   --text-color: var(--color-text--default);
 }
 
-@media (hover: hover) {
-  :focus-visible {
-    outline: 0 !important;
-  }
-}
-
 .label {
   font-weight: 500;
   line-height: var(--line-height--22);

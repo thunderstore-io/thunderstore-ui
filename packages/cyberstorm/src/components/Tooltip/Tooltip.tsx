@@ -27,7 +27,7 @@ export const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
       <RadixTooltip.Trigger>{children}</RadixTooltip.Trigger>
       <RadixTooltip.Portal>
         <RadixTooltip.Content
-          className={`${styles.root}`}
+          className={styles.root}
           sideOffset={sideOffset}
           side={side}
           collisionPadding={collisionPadding}

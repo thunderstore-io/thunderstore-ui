@@ -1,0 +1,16 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+  margin: 0 250px;
+}
+
+.tabContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--32);
+}
+
+.separator {
+  border-bottom: solid var(--space--px) var(--color-surface--3);
+}
