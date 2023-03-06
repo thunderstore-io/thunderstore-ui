@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { CommunityListLayout } from "@thunderstore/cyberstorm";
+import { CommunityListLayout, Footer, Heading } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -12,7 +12,11 @@ const defaultArgs = {
 };
 
 const Template: ComponentStory<typeof CommunityListLayout> = (args) => (
-  <CommunityListLayout {...args} />
+  <div>
+    <Heading />
+    <CommunityListLayout {...args} />
+    <Footer />
+  </div>
 );
 
 const DefaultCommunityListLayout = Template.bind({});

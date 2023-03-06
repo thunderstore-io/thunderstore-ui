@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { HomeLayout } from "@thunderstore/cyberstorm";
+import { Footer, Heading, HomeLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -8,7 +8,11 @@ const meta = {
 } as ComponentMeta<typeof HomeLayout>;
 
 const Template: ComponentStory<typeof HomeLayout> = (args) => (
-  <HomeLayout {...args} />
+  <div>
+    <Heading />
+    <HomeLayout {...args} />
+    <Footer />
+  </div>
 );
 
 const DefaultHomeLayout = Template.bind({});

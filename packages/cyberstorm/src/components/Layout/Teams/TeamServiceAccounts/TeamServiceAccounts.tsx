@@ -6,6 +6,7 @@ import {
   ServiceAccountDataItem,
   ServiceAccountList,
 } from "./ServiceAccountList/ServiceAccountList";
+import { Dialog } from "../../../Dialog/Dialog";
 
 export interface TeamServiceAccountsProps {
   serviceAccountData?: Array<ServiceAccountDataItem>;
@@ -23,7 +24,10 @@ export const TeamServiceAccounts: React.FC<TeamServiceAccountsProps> = (
         description="Your loyal servants"
         additionalLeftColumnContent={
           <div>
-            <Button label="Add Service Account" />
+            <Dialog
+              title="Add Service Account"
+              trigger={<Button label="Add Service Account" />}
+            />
           </div>
         }
         content={

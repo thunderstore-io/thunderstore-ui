@@ -37,4 +37,5 @@
   flex-flow: row wrap;
   grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
   gap: 1rem;
+  margin-bottom: var(--space--24);
 }
