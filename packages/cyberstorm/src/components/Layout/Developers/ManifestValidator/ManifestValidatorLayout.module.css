@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+  margin: 25px 250px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--12);
+}
