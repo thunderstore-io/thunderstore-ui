@@ -1,0 +1,17 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+  margin: 25px 250px;
+}
+
+.line {
+  margin: var(--space--24) 0;
+  border-bottom: solid var(--space--px) var(--color-surface--2);
+}
+
+.submit {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--16);
+}

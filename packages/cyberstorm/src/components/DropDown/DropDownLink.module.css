@@ -1,0 +1,10 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 12rem;
+  padding: var(--space--8);
+  color: var(--color-text--default);
+  font: var(--font-body);
+  font-size: var(--font-size--14);
+}
