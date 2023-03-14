@@ -20,8 +20,6 @@
   --color-gradient-purple-green--light: linear-gradient(to left top, #b159e9 0%, #73e1b2 100%);
   --color-highlight--hover: var(--color-cyber-green--40);
   --color-highlight: var(--color-cyber-green--50);
-  --color-success: rgb(79 216 159);
-  --color-success-background: rgb(7 51 35);
   --color-default: var(--color-default-purple--4);
   --color-default--hover: var(--color-default-purple--5);
   --color-default-dark: var(--color-default-purple--2);
