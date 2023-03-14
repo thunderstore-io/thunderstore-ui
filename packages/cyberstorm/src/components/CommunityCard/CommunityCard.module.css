@@ -6,7 +6,7 @@
 
 .image {
   min-width: 10rem;
-  border-radius: 12px;
+  border-radius: var(--space--12);
   box-shadow: var(--box-shadow-default);
 }
 

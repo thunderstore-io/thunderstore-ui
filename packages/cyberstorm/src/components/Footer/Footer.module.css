@@ -5,7 +5,7 @@
 .top {
   display: flex;
   flex-direction: row;
-  border: solid var(--space--px) var(--color-surface--3);
+  border: var(--border-width--px) solid var(--color-surface--3);
 }
 
 .leftColumn {
@@ -13,15 +13,15 @@
   flex: 1;
   flex-direction: column;
 
-  border-right: solid var(--space--px) var(--color-surface--3);
+  border-right: var(--border-width--px) solid var(--color-surface--3);
 }
 
 .columnItem {
-  padding: 4rem 4rem 4rem 250px;
+  padding: 4rem 4rem 4rem var(--page-margin);
 }
 
 .divider {
-  border-bottom: solid var(--space--px) var(--color-surface--3);
+  border-bottom: var(--border-width--px) solid var(--color-surface--3);
 }
 
 .links {
@@ -75,7 +75,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: var(--space--24) 250px;
+  padding: var(--space--24) var(--page-margin);
   color: var(--color-text--tertiary);
 
   font: var(--font-body);

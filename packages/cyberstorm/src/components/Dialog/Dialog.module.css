@@ -13,7 +13,7 @@
   gap: var(--gap--16);
   width: 30vw;
   padding: var(--space--16) 0;
-  border: var(--color-surface--2) var(--space--px) solid;
+  border: var(--border-width--px) solid var(--color-surface--2);
 
   border-radius: var(--border-radius--16);
   background-color: var(--color-background);
@@ -37,7 +37,7 @@
 }
 
 .separator {
-  border-top: var(--color-surface--2) var(--space--px) solid;
+  border-top: var(--border-width--px) solid var(--color-surface--2);
 }
 
 .footer {

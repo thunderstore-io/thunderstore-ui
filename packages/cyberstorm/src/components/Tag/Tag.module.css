@@ -7,8 +7,8 @@
   gap: var(--gap--8);
   align-items: center;
   justify-content: center;
-  border: var(--border-width--2) solid;
-  border-color: var(--border-color);
+  border: var(--border-width--2) solid var(--border-color);
+  border-color: ;
   border-radius: 999em;
   color: var(--text-color);
 

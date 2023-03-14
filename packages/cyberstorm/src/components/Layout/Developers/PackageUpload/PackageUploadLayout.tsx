@@ -8,7 +8,6 @@ import { TextInput } from "../../../TextInput/TextInput";
 import { Button } from "../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { ToggleSwitch } from "@thunderstore/storybook/stories/components/ToggleSwitch.stories";
 
 /**
  * Cyberstorm PackageUpload Layout

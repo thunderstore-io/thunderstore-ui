@@ -2,5 +2,5 @@
   display: flex;
   align-items: center;
   margin: var(--space--4) var(--space--8);
-  border-bottom: 1px var(--color-surface--3) solid;
+  border-bottom: var(--border-width--px) solid var(--color-surface--3);
 }
