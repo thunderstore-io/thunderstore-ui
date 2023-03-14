@@ -41,10 +41,10 @@ export const Heading: React.FC = () => {
         <div className={styles.leftSection}>
           <ThunderstoreLogo />
           <a href="/browse">
-            <Title text="Browse" size="small" />
+            <Title text="Browse" size="smallest" />
           </a>
           <a href="/communities">
-            <Title text="Communities" size="small" />
+            <Title text="Communities" size="smallest" />
           </a>
           <DropDown
             trigger={<Button label="Developers" />}

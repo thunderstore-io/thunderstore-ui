@@ -1,0 +1,10 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+  margin-bottom: var(--space--16);
+}
+
+.statusTag {
+  display: flex;
+}

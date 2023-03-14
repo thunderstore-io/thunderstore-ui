@@ -32,19 +32,19 @@ export const Footer: React.FC = () => {
           <div className={styles.columnItem}>
             <div className={styles.links}>
               <div className={styles.linksColumn}>
-                <Title size="small" text="Thunderstore" />
+                <Title size="smallest" text="Thunderstore" />
                 <Link label="Browse" />
                 <Link label="Communities" />
                 <Link label="About Us" />
               </div>
               <div className={styles.linksColumn}>
-                <Title size="small" text="Thunderstore" />
+                <Title size="smallest" text="Thunderstore" />
                 <Link label="Browse" />
                 <Link label="Communities" />
                 <Link label="About Us" />
               </div>
               <div className={styles.linksColumn}>
-                <Title size="small" text="Thunderstore" />
+                <Title size="smallest" text="Thunderstore" />
                 <Link label="Browse" />
                 <Link label="Communities" />
                 <Link label="About Us" />

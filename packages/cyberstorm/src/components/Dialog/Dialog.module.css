@@ -44,5 +44,11 @@
   display: flex;
   flex-direction: row;
   gap: var(--gap--16);
-  justify-content: end;
+  justify-content: space-between;
+}
+
+.footerSection {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--16);
 }

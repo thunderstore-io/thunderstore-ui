@@ -46,7 +46,17 @@ const defaultArgs = {
     "or her standing in the community and in business. ",
 };
 
-const DefaultPackageDetailLayout = Template.bind({});
-DefaultPackageDetailLayout.args = defaultArgs;
+const ReferencePackageDetailLayout = Template.bind({});
+ReferencePackageDetailLayout.args = defaultArgs;
 
-export { meta as default, DefaultPackageDetailLayout };
+const ManagePackageDetailLayout = Template.bind({});
+ManagePackageDetailLayout.args = {
+  ...defaultArgs,
+  managementDialogIsOpen: true,
+};
+
+export {
+  meta as default,
+  ReferencePackageDetailLayout,
+  ManagePackageDetailLayout,
+};
