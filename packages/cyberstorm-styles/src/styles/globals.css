@@ -21,9 +21,12 @@
   --gap--12: var(--space--12);
   --gap--16: var(--space--16);
   --gap--32: 2rem;
+  --page-margin: 16rem;
+  --page-margin-top: 25px;
 
   /* Other re-used values */
   --blur-default: 0.25rem;
+  --border-width--px: 1px;
   --border-width--2: 0.125rem;
   --border-radius--4: 0.25rem;
   --border-radius--8: 0.5rem;

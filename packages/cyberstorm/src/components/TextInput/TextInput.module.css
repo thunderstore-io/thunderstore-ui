@@ -10,7 +10,7 @@
   align-items: center;
   width: 100%;
   padding: var(--space--12) var(--space--16);
-  border: var(--border-width--2) var(--border-color) solid;
+  border: var(--border-width--2) solid var(--border-color);
 
   border-radius: var(--border-radius--8);
   font: var(--font-body);

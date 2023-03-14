@@ -110,10 +110,10 @@
 .button__specialGreen::before,
 .button__specialPurple::before {
   position: absolute;
-  top: calc(0px - var(--button-border-width));
-  right: calc(0px - var(--button-border-width));
-  bottom: calc(0px - var(--button-border-width));
-  left: calc(0px - var(--button-border-width));
+  top: calc(0 - var(--button-border-width));
+  right: calc(0 - var(--button-border-width));
+  bottom: calc(0 - var(--button-border-width));
+  left: calc(0 - var(--button-border-width));
   z-index: -1;
   border: var(--button-border-width) solid transparent;
   border-radius: var(--border-radius--12);
@@ -158,7 +158,7 @@
 }
 
 .small {
-  gap: 12px;
+  gap: var(--gap--12);
   padding: var(--space--8) var(--space--12);
   border-radius: var(--border-radius--8);
 }

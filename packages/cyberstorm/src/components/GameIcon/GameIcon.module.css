@@ -8,6 +8,6 @@
   max-width: 6rem;
   min-height: 9rem;
   max-height: 9rem;
-  border-radius: 8px;
+  border-radius: var(--border-radius--8);
   box-shadow: var(--box-shadow-default);
 }

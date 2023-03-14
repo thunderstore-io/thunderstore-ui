@@ -27,6 +27,11 @@ export * from "./components/Layout/PackageListLayout/PackageListLayout";
 export * from "./components/Layout/Settings/SettingsLayout";
 export * from "./components/Layout/Teams/TeamsLayout";
 
+export * from "./components/Layout/Developers/ManifestValidator/ManifestValidatorLayout";
+export * from "./components/Layout/Developers/MarkdownPreview/MarkdownPreviewLayout";
+export * from "./components/Layout/Developers/PackageFormatDocs/PackageFormatDocsLayout";
+export * from "./components/Layout/Developers/PackageUpload/PackageUploadLayout";
+
 export * from "./components/Layout/SimplePages/InternalServerError/InternalServerErrorLayout";
 export * from "./components/Layout/SimplePages/NotFound/NotFoundLayout";
 export * from "./components/Layout/SimplePages/PrivacyPolicy/PrivacyPolicyLayout";
