@@ -1,0 +1,17 @@
+/* Common MetaInfoItem styles */
+.root {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--8);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space--12);
+  color: var(--text-color);
+  background-color: var(--color-background);
+
+  --text-color: var(--color-default-purple--8);
+}
+
+.metaInfoItem__default {
+  --text-color: var(--color-default-purple--8);
+}
