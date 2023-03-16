@@ -17,6 +17,7 @@ type _ButtonProps = {
     | "defaultDark"
     | "defaultWithBorder"
     | "primary"
+    | "warning"
     | "specialGreen"
     | "specialPurple"
     | "transparentDefault"
@@ -70,6 +71,7 @@ const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {
     defaultDark: styles.button__defaultDark,
     defaultWithBorder: styles.button__defaultWithBorder,
     primary: styles.button__primary,
+    warning: styles.button__warning,
     specialGreen: styles.button__specialGreen,
     specialPurple: styles.button__specialPurple,
     transparentDefault: styles.button__transparentDefault,

@@ -13,14 +13,22 @@ type DialogProps = {
   title?: string;
   acceptButton?: ReactNode;
   cancelButton?: ReactNode;
+  additionalFooterContent?: ReactNode;
 };
 
 /**
  * Cyberstorm Dialog Component
  */
 export const Dialog: React.FC<DialogProps> = (props) => {
-  const { content, defaultOpen, trigger, acceptButton, cancelButton, title } =
-    props;
+  const {
+    additionalFooterContent,
+    content,
+    defaultOpen,
+    trigger,
+    acceptButton,
+    cancelButton,
+    title,
+  } = props;
 
   const [isOpen, setOpen] = useState<boolean>(
     defaultOpen ? defaultOpen : false
@@ -50,17 +58,26 @@ export const Dialog: React.FC<DialogProps> = (props) => {
             <div className={styles.separator} />
             <div className={styles.section}>
               <div className={styles.footer}>
-                {!cancelButton ? (
-                  <RadixDialog.Close asChild>
-                    <Button label="Cancel" colorScheme="transparentDefault" />
-                  </RadixDialog.Close>
-                ) : (
-                  <RadixDialog.Close asChild>{cancelButton}</RadixDialog.Close>
-                )}
+                <div className={styles.footerSection}>
+                  {additionalFooterContent}
+                </div>
+                <div className={styles.footerSection}>
+                  {!cancelButton ? (
+                    <RadixDialog.Close asChild>
+                      <Button label="Cancel" colorScheme="transparentDefault" />
+                    </RadixDialog.Close>
+                  ) : (
+                    <RadixDialog.Close asChild>
+                      {cancelButton}
+                    </RadixDialog.Close>
+                  )}
 
-                {!acceptButton ? null : (
-                  <RadixDialog.Close asChild>{acceptButton}</RadixDialog.Close>
-                )}
+                  {!acceptButton ? null : (
+                    <RadixDialog.Close asChild>
+                      {acceptButton}
+                    </RadixDialog.Close>
+                  )}
+                </div>
               </div>
             </div>
           </RadixDialog.Content>
@@ -71,4 +88,8 @@ export const Dialog: React.FC<DialogProps> = (props) => {
 };
 
 Dialog.displayName = "Dialog";
-Dialog.defaultProps = { defaultOpen: false, title: undefined };
+Dialog.defaultProps = {
+  defaultOpen: false,
+  title: undefined,
+  additionalFooterContent: null,
+};

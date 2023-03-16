@@ -8,14 +8,17 @@ import {
 } from "../../Links/Links";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faCog, faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../../Button/Button";
 import { ModIcon } from "../../ModIcon/ModIcon";
 import { Title } from "../../Title/Title";
+import { Dialog } from "../../Dialog/Dialog";
+import { PackageManagementForm } from "./PackageManagementForm";
 
 export interface PackageDetailLayoutProps {
   title?: string;
   description?: string;
+  managementDialogIsOpen?: boolean;
 }
 
 /**
@@ -24,7 +27,7 @@ export interface PackageDetailLayoutProps {
 export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
   props
 ) => {
-  const { description, title } = props;
+  const { description, title, managementDialogIsOpen } = props;
 
   return (
     <div className={styles.root}>
@@ -45,7 +48,7 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
 
         <div className={styles.packageInfo}>
           <ModIcon src="/images/thomas.jpg"></ModIcon>
-          <div>
+          <>
             <Title text={title}></Title>
             <div className={styles.packageInfoDetails}>
               <MetaItem
@@ -60,12 +63,31 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
                 rightIcon={<FontAwesomeIcon icon={faHouse} fixedWidth />}
               />
             </div>
-          </div>
+          </>
+          <>
+            <Dialog
+              defaultOpen={managementDialogIsOpen}
+              title="Manage Package"
+              content={<PackageManagementForm />}
+              acceptButton={
+                <Button label="Save changes" colorScheme="primary" />
+              }
+              additionalFooterContent={
+                <Button label="Deprecate" colorScheme="warning" />
+              }
+              trigger={
+                <Button
+                  leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
+                  label="Manage Package"
+                />
+              }
+            />
+          </>
         </div>
       </div>
       <div className={styles.mainContentWrapper}>
         <div className={styles.mainContentLeft}>
-          <Title size="small" text="Description title" />
+          <Title text="Description title" />
           <p className={styles.description}>{description}</p>
         </div>
         <div className={styles.mainContentRight} />
@@ -75,4 +97,8 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
 };
 
 PackageDetailLayout.displayName = "PackageDetailLayout";
-PackageDetailLayout.defaultProps = { title: "", description: "" };
+PackageDetailLayout.defaultProps = {
+  title: "",
+  description: "",
+  managementDialogIsOpen: false,
+};

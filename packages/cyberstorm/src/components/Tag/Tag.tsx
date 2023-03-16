@@ -5,7 +5,7 @@ export interface TagProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  colorScheme?: "default" | "simple";
+  colorScheme?: "default" | "simple" | "success";
   size?: "tiny" | "small" | "medium";
   isRemovable?: boolean;
 }
@@ -52,6 +52,7 @@ const getStyle = (scheme: TagProps["colorScheme"] = "default") => {
   return {
     default: styles.tag__default,
     simple: styles.tag__simple,
+    success: styles.tag__success,
   }[scheme];
 };
 

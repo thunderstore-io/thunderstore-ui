@@ -3,7 +3,7 @@ import styles from "./Title.module.css";
 
 export interface TitleProps {
   text?: string;
-  size?: "small" | "smaller" | "default";
+  size?: "smaller" | "smallest" | "default";
 }
 
 /**
@@ -19,7 +19,7 @@ Title.defaultProps = { text: "" };
 
 const getSize = (scheme: TitleProps["size"] = "default") => {
   return {
-    small: styles.small,
+    smallest: styles.smallest,
     smaller: styles.smaller,
     default: "",
   }[scheme];

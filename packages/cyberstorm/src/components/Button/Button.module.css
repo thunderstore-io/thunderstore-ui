@@ -57,6 +57,15 @@
   --bg-color: var(--color-highlight--hover);
 }
 
+.button__warning {
+  --text-color: var(--color-yellow--50);
+  --bg-color: var(--color-yellow--10);
+}
+
+.button__warning:hover {
+  --bg-color: var(--color-yellow--20);
+}
+
 .button__danger {
   --text-color: var(--color-white);
   --bg-color: var(--color-danger);
