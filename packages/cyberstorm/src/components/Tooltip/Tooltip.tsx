@@ -1,9 +1,9 @@
-import React, { PropsWithChildren, ReactNode } from "react";
+import React, { PropsWithChildren } from "react";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
 import styles from "./Tooltip.module.css";
 
 export interface TooltipProps {
-  content?: ReactNode;
+  content?: string;
   sideOffset?: number;
   side?: "right" | "top" | "bottom" | "left" | undefined;
   collisionPadding?: number;
