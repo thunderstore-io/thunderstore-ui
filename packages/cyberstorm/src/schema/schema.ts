@@ -33,11 +33,11 @@ export interface Package {
   isPinned?: boolean;
   isNsfw?: boolean;
   isDeprecated?: boolean;
-  categories?: string[];
   gitHubLink?: string;
   donationLink?: string;
   firstUploaded?: string;
   dependencyString?: string;
+  categories?: string[]; // Category ids
   dependencies?: string[]; // Package ids
   dependants?: string[]; // Package ids
   team: string; // Team id
@@ -81,6 +81,11 @@ export interface Team {
   about: string;
   members: string[]; // TeamMember ids
   serviceAccounts: string[]; // ServiceAccount ids
+}
+
+export interface Category {
+  slug: string;
+  label: string;
 }
 
 export interface TeamMember {
@@ -163,21 +168,16 @@ export interface TeamSettingsView {
 
 export interface PackageUploadView {
   teams: Team[]; // Team ids
-  categories: string[];
 }
 
-export interface TermsOfServiceView {
+export interface CategoriesView {
+  categories: Category[];
+}
+
+export interface ContractView {
   legalContract: LegalContractVersion;
 }
 
-export interface PrivacyPolicyView {
-  legalContract: LegalContractVersion;
-}
-
-export interface TermsOfServiceHistoryView {
-  legalContract: LegalContractVersionPreview[];
-}
-
-export interface PrivacyPolicyHistoryView {
+export interface ContractHistoryView {
   legalContract: LegalContractVersionPreview[];
 }
