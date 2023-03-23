@@ -1,6 +1,6 @@
-export interface CommunityData {
+export interface Community {
   name: string;
-  nameSpace: string;
+  namespace: string;
   imageSource?: string;
   packageCount: string;
   downloadCount: string;
@@ -9,19 +9,19 @@ export interface CommunityData {
   gitHubLink?: string;
 }
 
-type CommunityPreviewData = Pick<
-  CommunityData,
+type CommunityPreview = Pick<
+  Community,
   | "name"
-  | "nameSpace"
+  | "namespace"
   | "imageSource"
   | "packageCount"
   | "downloadCount"
   | "serverCount"
 >;
 
-export interface PackageData {
+export interface Package {
   name: string;
-  nameSpace: string;
+  namespace: string;
   description?: string;
   imageSrc: string;
   additionalImages?: string[];
@@ -43,10 +43,10 @@ export interface PackageData {
   team: string; // Team id
 }
 
-type PackagePreviewData = Pick<
-  PackageData,
+type PackagePreview = Pick<
+  Package,
   | "name"
-  | "nameSpace"
+  | "namespace"
   | "description"
   | "imageSrc"
   | "downloadCount"
@@ -60,23 +60,23 @@ type PackagePreviewData = Pick<
   | "categories"
 >;
 
-export interface BadgeData {
+export interface Badge {
   name: string;
-  nameSpace: string;
+  namespace: string;
   description: string;
   imageSource: string;
 }
 
-export interface AchievementData {
+export interface Achievement {
   name: string;
-  nameSpace: string;
+  namespace: string;
   description: string;
   imageSource: string;
 }
 
-export interface TeamData {
+export interface Team {
   name: string;
-  nameSpace: string;
+  namespace: string;
   description: string;
   about: string;
   members: string[]; // TeamMember ids
@@ -88,9 +88,9 @@ export interface TeamMember {
   role: string;
 }
 
-export interface UserData {
+export interface User {
   name: string;
-  nameSpace: string;
+  namespace: string;
   imageSource?: string;
   description?: string;
   about?: string;
@@ -104,58 +104,80 @@ export interface UserData {
 
 // TODO: figure out
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface UserSubscriptionData {}
+export interface UserSubscription {}
 
-export interface HomePageViewData {
-  topCommunities: CommunityPreviewData[];
-  featuredMods: PackagePreviewData[];
-  firstTrendingMods: PackagePreviewData[];
-  secondTrendingMods: PackagePreviewData[];
+export interface LegalContractVersion {
+  title: string;
+  content: string;
+  slug: string;
+  version: string;
+  publishedDate: Date;
+  isLatest: boolean;
 }
 
-export interface CommunitiesViewData {
-  communities: CommunityPreviewData[];
+type LegalContractVersionPreview = Pick<
+  LegalContractVersion,
+  "title" | "slug" | "version" | "publishedDate" | "isLatest"
+>;
+
+export interface HomePageView {
+  topCommunities: CommunityPreview[];
+  featuredMods: PackagePreview[];
+  firstTrendingMods: PackagePreview[];
+  secondTrendingMods: PackagePreview[];
 }
 
-export interface PackageListViewData {
-  communityInfo: CommunityData;
-  packages: PackagePreviewData[];
+export interface CommunitiesView {
+  communities: CommunityPreview[];
 }
 
-export interface PackageDetailViewData {
-  packageInfo: PackageData;
-  dependencies: PackagePreviewData[];
+export interface PackageListView {
+  communityInfo: Community;
+  packages: PackagePreview[];
 }
 
-export interface UserProfileViewData {
-  userInfo: UserData;
-  userSubscriptionInfo: UserSubscriptionData;
-  teams: TeamData[];
-  badges?: BadgeData[];
-  achievements?: AchievementData[];
+export interface PackageDetailView {
+  packageInfo: Package;
+  dependencies: PackagePreview[];
 }
 
-export interface UserSettingsViewData {
-  userInfo: UserData;
-  userSubscriptionInfo: UserSubscriptionData;
-  teams: TeamData[];
-  badges?: BadgeData[];
-  achievements?: AchievementData[];
+export interface UserProfileView {
+  userInfo: User;
+  userSubscriptionInfo: UserSubscription;
+  teams: Team[];
+  badges?: Badge[];
+  achievements?: Achievement[];
 }
 
-export interface TeamSettingsViewData {
-  teamData: TeamData;
+export interface UserSettingsView {
+  userInfo: User;
+  userSubscriptionInfo: UserSubscription;
+  teams: Team[];
+  badges?: Badge[];
+  achievements?: Achievement[];
 }
 
-export interface PackageUploadViewData {
-  teams: TeamData[]; // Team ids
+export interface TeamSettingsView {
+  team: Team;
+}
+
+export interface PackageUploadView {
+  teams: Team[]; // Team ids
   categories: string[];
 }
 
-export interface TermsOfServiceViewData {
-  termsOfService: string;
-  version: string;
-  link: string;
-  publishedDate: Date;
-  isLatest: boolean;
+export interface TermsOfServiceView {
+  legalContract: LegalContractVersion;
+}
+
+export interface PrivacyPolicyView {
+  legalContract: LegalContractVersion;
+}
+
+export interface TermsOfServiceHistoryView {
+  legalContract: LegalContractVersionPreview[];
+}
+
+export interface PrivacyPolicyHistoryView {
+  legalContract: LegalContractVersionPreview[];
 }
