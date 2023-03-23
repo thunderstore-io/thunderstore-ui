@@ -9,7 +9,7 @@ export interface Community {
   gitHubLink?: string;
 }
 
-type CommunityPreview = Pick<
+export type CommunityPreview = Pick<
   Community,
   | "name"
   | "namespace"
@@ -43,7 +43,7 @@ export interface Package {
   team: string; // Team id
 }
 
-type PackagePreview = Pick<
+export type PackagePreview = Pick<
   Package,
   | "name"
   | "namespace"
@@ -110,74 +110,3 @@ export interface User {
 // TODO: figure out
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface UserSubscription {}
-
-export interface LegalContractVersion {
-  title: string;
-  content: string;
-  slug: string;
-  version: string;
-  publishedDate: Date;
-  isLatest: boolean;
-}
-
-type LegalContractVersionPreview = Pick<
-  LegalContractVersion,
-  "title" | "slug" | "version" | "publishedDate" | "isLatest"
->;
-
-export interface HomePageView {
-  topCommunities: CommunityPreview[];
-  featuredMods: PackagePreview[];
-  firstTrendingMods: PackagePreview[];
-  secondTrendingMods: PackagePreview[];
-}
-
-export interface CommunitiesView {
-  communities: CommunityPreview[];
-}
-
-export interface PackageListView {
-  communityInfo: Community;
-  packages: PackagePreview[];
-}
-
-export interface PackageDetailView {
-  packageInfo: Package;
-  dependencies: PackagePreview[];
-}
-
-export interface UserProfileView {
-  userInfo: User;
-  userSubscriptionInfo: UserSubscription;
-  teams: Team[];
-  badges?: Badge[];
-  achievements?: Achievement[];
-}
-
-export interface UserSettingsView {
-  userInfo: User;
-  userSubscriptionInfo: UserSubscription;
-  teams: Team[];
-  badges?: Badge[];
-  achievements?: Achievement[];
-}
-
-export interface TeamSettingsView {
-  team: Team;
-}
-
-export interface PackageUploadView {
-  teams: Team[]; // Team ids
-}
-
-export interface CategoriesView {
-  categories: Category[];
-}
-
-export interface ContractView {
-  legalContract: LegalContractVersion;
-}
-
-export interface ContractHistoryView {
-  legalContract: LegalContractVersionPreview[];
-}
