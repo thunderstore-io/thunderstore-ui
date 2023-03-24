@@ -13,6 +13,7 @@ import { TextInput } from "../../TextInput/TextInput";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
 import { Title } from "../../Title/Title";
+import { getListOfIds } from "../../../dummyData/generate";
 
 export interface CommunityListLayoutProps {
   title?: string;
@@ -44,18 +45,9 @@ export const CommunityListLayout: React.FC<CommunityListLayoutProps> = () => {
       </div>
 
       <div className={styles.communityCardList}>
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
+        {getListOfIds(20).map((id) => {
+          return <CommunityCard key={id} communityId={id} />;
+        })}
       </div>
     </div>
   );

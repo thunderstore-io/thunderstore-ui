@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./HomeLayout.module.css";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { PackageCard } from "../../PackageCard/PackageCard";
+import { getListOfIds } from "../../../dummyData/generate";
 
 /**
  * Cyberstorm Home Layout
@@ -12,28 +13,21 @@ export const HomeLayout: React.FC = () => {
       <div className={styles.content}>
         <div className={styles.specialContent} />
         <div className={styles.cardContent}>
-          <CommunityCard />
-          <CommunityCard />
-          <CommunityCard />
-          <CommunityCard />
-          <CommunityCard />
-          <CommunityCard />
+          {getListOfIds(5, 1).map((id) => {
+            return <CommunityCard key={id} communityId={id} />;
+          })}
         </div>
         <div className={styles.smallContent} />
         <div className={styles.cardContent}>
-          <PackageCard {...packageCardArgs} />
-          <PackageCard {...packageCardArgs} />
-          <PackageCard {...packageCardArgs} />
-          <PackageCard {...packageCardArgs} />
-          <PackageCard {...packageCardArgs} />
+          {getListOfIds(5, 2).map((id) => {
+            return <PackageCard key={id} packageId={id} {...packageCardArgs} />;
+          })}
         </div>
         <div className={styles.mediumContent} />
         <div className={styles.cardContent}>
-          <PackageCard {...packageCardArgs} />
-          <PackageCard {...packageCardArgs} />
-          <PackageCard {...packageCardArgs} />
-          <PackageCard {...packageCardArgs} />
-          <PackageCard {...packageCardArgs} />
+          {getListOfIds(5, 3).map((id) => {
+            return <PackageCard key={id} packageId={id} {...packageCardArgs} />;
+          })}
         </div>
         <div className={styles.mediumContent} />
       </div>

@@ -13,6 +13,8 @@ import { BackgroundImage } from "../../BackgroundImage/BackgroundImage";
 import { FilterItemList } from "../../FilterItemList/FilterItemList";
 import { SearchFilter } from "../../SearchFilter/SearchFilter";
 import { Pagination } from "../../Pagination/Pagination";
+import { getListOfIds } from "../../../dummyData/generate";
+import { CommunityCard } from "../../CommunityCard/CommunityCard";
 
 export interface PackageListLayoutProps {
   title?: string;
@@ -66,26 +68,9 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
             </div>
 
             <div className={styles.packageCardList}>
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
+              {getListOfIds(20).map((id) => {
+                return <PackageCard key={id} packageId={id} />;
+              })}
             </div>
             <Pagination
               currentPage={page}
@@ -121,21 +106,6 @@ const selectOptions = [
     leftIcon: <FontAwesomeIcon fixedWidth icon={faThumbsUp} />,
   },
 ];
-
-const packageCardArgs = {
-  imageSrc: "/images/thomas.jpg",
-  packageName: "MinisterAPI DeLuxe",
-  author: "Gigamies5000",
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel ullamcorper sem, in lacinia velit. Maecenas sed augue in tortor fermentum hendrerit.",
-  lastUpdated: "3 days ago",
-  downloadCount: "4,5M",
-  likes: "1,342",
-  size: "13 MB",
-  categories: ["tweaks", "mods", "client-side"],
-  link: "",
-  isPinned: true,
-};
 
 const filterData = [
   { key: "1", label: "Mods", count: 248 },
