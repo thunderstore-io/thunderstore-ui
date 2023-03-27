@@ -2,7 +2,12 @@ import React from "react";
 import styles from "./HomeLayout.module.css";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { PackageCard } from "../../PackageCard/PackageCard";
-import { getListOfIds } from "../../../dummyData/generate";
+import {
+  getCommunityPreviewDummyData,
+  getListOfIds,
+  getPackagePreviewDummyData,
+} from "../../../dummyData/generate";
+import { strToHashInt } from "../../../utils/utils";
 
 /**
  * Cyberstorm Home Layout
@@ -14,19 +19,33 @@ export const HomeLayout: React.FC = () => {
         <div className={styles.specialContent} />
         <div className={styles.cardContent}>
           {getListOfIds(5, 1).map((id) => {
-            return <CommunityCard key={id} communityId={id} />;
+            return (
+              <CommunityCard key={id} communityData={getCommunityData(id)} />
+            );
           })}
         </div>
         <div className={styles.smallContent} />
         <div className={styles.cardContent}>
           {getListOfIds(5, 2).map((id) => {
-            return <PackageCard key={id} packageId={id} {...packageCardArgs} />;
+            return (
+              <PackageCard
+                key={id}
+                packageData={getPackageData(id)}
+                {...packageCardArgs}
+              />
+            );
           })}
         </div>
         <div className={styles.mediumContent} />
         <div className={styles.cardContent}>
           {getListOfIds(5, 3).map((id) => {
-            return <PackageCard key={id} packageId={id} {...packageCardArgs} />;
+            return (
+              <PackageCard
+                key={id}
+                packageData={getPackageData(id)}
+                {...packageCardArgs}
+              />
+            );
           })}
         </div>
         <div className={styles.mediumContent} />
@@ -37,6 +56,14 @@ export const HomeLayout: React.FC = () => {
 
 HomeLayout.displayName = "HomeLayout";
 HomeLayout.defaultProps = {};
+
+function getPackageData(packageId: string) {
+  return getPackagePreviewDummyData(strToHashInt(packageId));
+}
+
+function getCommunityData(communityId: string) {
+  return getCommunityPreviewDummyData(strToHashInt(communityId));
+}
 
 const packageCardArgs = {
   imageSrc: "/images/thomas.jpg",

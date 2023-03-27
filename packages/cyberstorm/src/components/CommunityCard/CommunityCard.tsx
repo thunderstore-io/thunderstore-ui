@@ -7,38 +7,37 @@ import {
   faDownload,
   faServer,
 } from "@fortawesome/free-solid-svg-icons";
-import { getCommunityPreviewDummyData } from "../../dummyData/generate";
-import { formatInteger, strToHashInt } from "../../utils/utils";
+import { formatInteger } from "../../utils/utils";
+import { CommunityPreview } from "../../schema";
 
 export interface GameIconProps {
-  communityId: string;
+  communityData: CommunityPreview;
 }
 
 /**
  * Cyberstorm CommunityCard component
  */
 export const CommunityCard: React.FC<GameIconProps> = (props) => {
-  const { communityId } = props;
-  const communityPreview = getData(communityId);
+  const { communityData } = props;
   return (
     <div className={styles.root}>
       <img
         className={styles.image}
         alt={"Community"}
-        src={communityPreview.imageSource}
+        src={communityData.imageSource}
       />
-      <div className={styles.title}>{communityPreview.name}</div>
+      <div className={styles.title}>{communityData.name}</div>
       <div className={styles.metaItemList}>
         <MetaItem
-          label={formatInteger(communityPreview.packageCount)}
+          label={formatInteger(communityData.packageCount)}
           icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
         />
         <MetaItem
-          label={formatInteger(communityPreview.downloadCount)}
+          label={formatInteger(communityData.downloadCount)}
           icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
         />
         <MetaItem
-          label={formatInteger(communityPreview.serverCount)}
+          label={formatInteger(communityData.serverCount)}
           icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
         />
       </div>
@@ -48,7 +47,3 @@ export const CommunityCard: React.FC<GameIconProps> = (props) => {
 
 CommunityCard.displayName = "CommunityCard";
 CommunityCard.defaultProps = {};
-
-function getData(communityId: string) {
-  return getCommunityPreviewDummyData(strToHashInt(communityId));
-}

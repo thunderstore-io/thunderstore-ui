@@ -10,13 +10,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Tag } from "../Tag/Tag";
 import { PackageFlag } from "../PackageFlag/PackageFlag";
-import { getPackagePreviewDummyData } from "../../dummyData/generate";
-import { formatInteger, strToHashInt } from "../../utils/utils";
+import { formatInteger } from "../../utils/utils";
+import { PackagePreview } from "../../schema";
 
 const defaultImageSrc = "";
 
 export interface PackageCardProps {
-  packageId: string;
+  packageData: PackagePreview;
   colorScheme?: string;
 }
 
@@ -24,12 +24,11 @@ export interface PackageCardProps {
  * Cyberstorm PackageCard component
  */
 export const PackageCard: React.FC<PackageCardProps> = (props) => {
-  const { packageId, colorScheme, ...forwardedProps } = props;
+  const { packageData, colorScheme, ...forwardedProps } = props;
 
   const authorLink = ""; //TODO: author link
   //TODO: convert <a> tags into link components!
   //TODO: Use LastUpdated component once one is developed
-  const packageData = getData(packageId);
 
   return (
     <div
@@ -108,10 +107,6 @@ PackageCard.displayName = "PackageCard";
 PackageCard.defaultProps = {
   colorScheme: "default",
 };
-
-function getData(packageId: string) {
-  return getPackagePreviewDummyData(strToHashInt(packageId));
-}
 
 const getStyle = (scheme: PackageCardProps["colorScheme"] = "default") => {
   return {

@@ -38,3 +38,5 @@ export * from "./components/Layout/SimplePages/InternalServerError/InternalServe
 export * from "./components/Layout/SimplePages/NotFound/NotFoundLayout";
 export * from "./components/Layout/SimplePages/PrivacyPolicy/PrivacyPolicyLayout";
 export * from "./components/Layout/SimplePages/TermsOfService/TermsOfServiceLayout";
+
+export * from "./schema/index";

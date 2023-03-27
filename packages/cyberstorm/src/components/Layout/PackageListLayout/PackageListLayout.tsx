@@ -13,8 +13,11 @@ import { BackgroundImage } from "../../BackgroundImage/BackgroundImage";
 import { FilterItemList } from "../../FilterItemList/FilterItemList";
 import { SearchFilter } from "../../SearchFilter/SearchFilter";
 import { Pagination } from "../../Pagination/Pagination";
-import { getListOfIds } from "../../../dummyData/generate";
-import { CommunityCard } from "../../CommunityCard/CommunityCard";
+import {
+  getListOfIds,
+  getPackagePreviewDummyData,
+} from "../../../dummyData/generate";
+import { strToHashInt } from "../../../utils/utils";
 
 export interface PackageListLayoutProps {
   title?: string;
@@ -69,7 +72,9 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
 
             <div className={styles.packageCardList}>
               {getListOfIds(20).map((id) => {
-                return <PackageCard key={id} packageId={id} />;
+                return (
+                  <PackageCard key={id} packageData={getPackageData(id)} />
+                );
               })}
             </div>
             <Pagination
@@ -88,6 +93,10 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
 
 PackageListLayout.displayName = "PackageListLayout";
 PackageListLayout.defaultProps = { title: "V Rising" };
+
+function getPackageData(packageId: string) {
+  return getPackagePreviewDummyData(strToHashInt(packageId));
+}
 
 const selectOptions = [
   {
