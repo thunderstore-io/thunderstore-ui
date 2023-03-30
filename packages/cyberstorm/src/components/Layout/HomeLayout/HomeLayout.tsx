@@ -6,45 +6,45 @@ import {
   getCommunityPreviewDummyData,
   getListOfIds,
   getPackagePreviewDummyData,
-} from "../../../dummyData/generate";
+} from "../../../dummyData";
 import { strToHashInt } from "../../../utils/utils";
+import { CommunityPreview, PackagePreview } from "../../../schema";
 
 /**
  * Cyberstorm Home Layout
  */
 export const HomeLayout: React.FC = () => {
+  const featuredPackages: PackagePreview[] = getFeaturedPackages();
+  const hotPackages: PackagePreview[] = getHotPackages();
+  const featuredCommunities: CommunityPreview[] = getFeaturedCommunities();
+
   return (
     <div>
       <div className={styles.content}>
         <div className={styles.specialContent} />
         <div className={styles.cardContent}>
-          {getListOfIds(5, 1).map((id) => {
+          {featuredCommunities.map((communityData) => {
             return (
-              <CommunityCard key={id} communityData={getCommunityData(id)} />
+              <CommunityCard
+                key={communityData.name}
+                communityData={communityData}
+              />
             );
           })}
         </div>
         <div className={styles.smallContent} />
         <div className={styles.cardContent}>
-          {getListOfIds(5, 2).map((id) => {
+          {featuredPackages.map((packageData) => {
             return (
-              <PackageCard
-                key={id}
-                packageData={getPackageData(id)}
-                {...packageCardArgs}
-              />
+              <PackageCard key={packageData.name} packageData={packageData} />
             );
           })}
         </div>
         <div className={styles.mediumContent} />
         <div className={styles.cardContent}>
-          {getListOfIds(5, 3).map((id) => {
+          {hotPackages.map((packageData) => {
             return (
-              <PackageCard
-                key={id}
-                packageData={getPackageData(id)}
-                {...packageCardArgs}
-              />
+              <PackageCard key={packageData.name} packageData={packageData} />
             );
           })}
         </div>
@@ -57,25 +57,18 @@ export const HomeLayout: React.FC = () => {
 HomeLayout.displayName = "HomeLayout";
 HomeLayout.defaultProps = {};
 
-function getPackageData(packageId: string) {
-  return getPackagePreviewDummyData(strToHashInt(packageId));
+function getFeaturedPackages() {
+  return getListOfIds(7).map((packageId) => {
+    return getPackagePreviewDummyData(strToHashInt(packageId));
+  });
 }
 
-function getCommunityData(communityId: string) {
-  return getCommunityPreviewDummyData(strToHashInt(communityId));
+function getHotPackages() {
+  return getFeaturedPackages();
 }
 
-const packageCardArgs = {
-  imageSrc: "/images/thomas.jpg",
-  packageName: "MinisterAPI DeLuxe",
-  author: "Gigamies5000",
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel ullamcorper sem, in lacinia velit. Maecenas sed augue in tortor fermentum hendrerit.",
-  lastUpdated: "3 days ago",
-  downloadCount: "4,5M",
-  likes: "1,342",
-  size: "13 MB",
-  categories: ["tweaks", "mods", "client-side"],
-  link: "",
-  isPinned: true,
-};
+function getFeaturedCommunities() {
+  return getListOfIds(7).map((communityId) => {
+    return getCommunityPreviewDummyData(strToHashInt(communityId));
+  });
+}

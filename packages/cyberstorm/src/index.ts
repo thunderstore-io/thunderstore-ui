@@ -39,4 +39,5 @@ export * from "./components/Layout/SimplePages/NotFound/NotFoundLayout";
 export * from "./components/Layout/SimplePages/PrivacyPolicy/PrivacyPolicyLayout";
 export * from "./components/Layout/SimplePages/TermsOfService/TermsOfServiceLayout";
 
+export * from "./dummyData/index";
 export * from "./schema/index";

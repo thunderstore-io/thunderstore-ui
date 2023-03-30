@@ -14,7 +14,7 @@ import { ModIcon } from "../../ModIcon/ModIcon";
 import { Title } from "../../Title/Title";
 import { Dialog } from "../../Dialog/Dialog";
 import { PackageManagementForm } from "./PackageManagementForm";
-import { getPackageDummyData } from "../../../dummyData/generate";
+import { getPackageDummyData } from "../../../dummyData";
 
 export interface PackageDetailLayoutProps {
   packageId: number;

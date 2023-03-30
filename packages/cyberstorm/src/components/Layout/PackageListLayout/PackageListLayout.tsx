@@ -13,11 +13,9 @@ import { BackgroundImage } from "../../BackgroundImage/BackgroundImage";
 import { FilterItemList } from "../../FilterItemList/FilterItemList";
 import { SearchFilter } from "../../SearchFilter/SearchFilter";
 import { Pagination } from "../../Pagination/Pagination";
-import {
-  getListOfIds,
-  getPackagePreviewDummyData,
-} from "../../../dummyData/generate";
+import { getListOfIds, getPackagePreviewDummyData } from "../../../dummyData";
 import { strToHashInt } from "../../../utils/utils";
+import { PackagePreview } from "../../../schema";
 
 export interface PackageListLayoutProps {
   title?: string;
@@ -31,6 +29,8 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
 
   const [order, setOrder] = useState("1");
   const [page, setPage] = useState(1);
+
+  const packagesData: PackagePreview[] = getPackageData();
 
   return (
     <div className={styles.root}>
@@ -71,9 +71,12 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
             </div>
 
             <div className={styles.packageCardList}>
-              {getListOfIds(20).map((id) => {
+              {packagesData.map((packageData) => {
                 return (
-                  <PackageCard key={id} packageData={getPackageData(id)} />
+                  <PackageCard
+                    key={packageData.name}
+                    packageData={packageData}
+                  />
                 );
               })}
             </div>
@@ -94,8 +97,10 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
 PackageListLayout.displayName = "PackageListLayout";
 PackageListLayout.defaultProps = { title: "V Rising" };
 
-function getPackageData(packageId: string) {
-  return getPackagePreviewDummyData(strToHashInt(packageId));
+function getPackageData() {
+  return getListOfIds(20).map((packageId) => {
+    return getPackagePreviewDummyData(strToHashInt(packageId));
+  });
 }
 
 const selectOptions = [

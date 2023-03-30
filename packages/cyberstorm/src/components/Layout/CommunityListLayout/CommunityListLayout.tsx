@@ -13,11 +13,9 @@ import { TextInput } from "../../TextInput/TextInput";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
 import { Title } from "../../Title/Title";
-import {
-  getCommunityPreviewDummyData,
-  getListOfIds,
-} from "../../../dummyData/generate";
+import { getCommunityPreviewDummyData, getListOfIds } from "../../../dummyData";
 import { strToHashInt } from "../../../utils/utils";
+import { CommunityPreview } from "../../../schema";
 
 export interface CommunityListLayoutProps {
   title?: string;
@@ -28,6 +26,8 @@ export interface CommunityListLayoutProps {
  */
 export const CommunityListLayout: React.FC<CommunityListLayoutProps> = () => {
   const [order, setOrder] = useState("1");
+
+  const communitiesData: CommunityPreview[] = getCommunityData();
 
   return (
     <div className={styles.root}>
@@ -49,9 +49,9 @@ export const CommunityListLayout: React.FC<CommunityListLayoutProps> = () => {
       </div>
 
       <div className={styles.communityCardList}>
-        {getListOfIds(20).map((id) => {
+        {communitiesData.map((community) => {
           return (
-            <CommunityCard key={id} communityData={getCommunityData(id)} />
+            <CommunityCard key={community.name} communityData={community} />
           );
         })}
       </div>
@@ -62,8 +62,10 @@ export const CommunityListLayout: React.FC<CommunityListLayoutProps> = () => {
 CommunityListLayout.displayName = "CommunityListLayout";
 CommunityListLayout.defaultProps = {};
 
-function getCommunityData(communityId: string) {
-  return getCommunityPreviewDummyData(strToHashInt(communityId));
+function getCommunityData() {
+  return getListOfIds(20).map((communityId) => {
+    return getCommunityPreviewDummyData(strToHashInt(communityId));
+  });
 }
 
 const selectOptions = [
