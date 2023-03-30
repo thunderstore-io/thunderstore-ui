@@ -7,20 +7,21 @@ import { TeamLeave } from "./TeamLeave/TeamLeave";
 import { TeamDisband } from "./TeamDisband/TeamDisband";
 import { Title } from "../../Title/Title";
 import { TeamMembers } from "./TeamMembers/TeamMembers";
-import { UserDataItem } from "./TeamMembers/UserList/UserList";
 import { TeamServiceAccounts } from "./TeamServiceAccounts/TeamServiceAccounts";
-import { ServiceAccountDataItem } from "./TeamServiceAccounts/ServiceAccountList/ServiceAccountList";
 import { TeamProfile } from "./TeamProfile/TeamProfile";
+import { getTeamDummyData } from "../../../dummyData/generate";
 
 export interface TeamsLayoutProps {
-  teamName?: string;
+  teamId: number;
 }
 
 /**
  * Cyberstorm Teams Layout
  */
 export const TeamsLayout: React.FC<TeamsLayoutProps> = (props) => {
-  const { teamName } = props;
+  const { teamId } = props;
+
+  const teamData = getTeamData(teamId);
 
   const [currentTab, setCurrentTab] = useState(1);
 
@@ -33,24 +34,29 @@ export const TeamsLayout: React.FC<TeamsLayoutProps> = (props) => {
         </CommunityPackagesLink>
       </BreadCrumbs>
 
-      <Title text={teamName} />
+      <Title text={teamData.name} />
 
       <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
 
       <div>
         {currentTab === 1 ? (
           <div className={styles.tabContent}>
-            <TeamProfile />
+            <TeamProfile teamData={teamData} />
           </div>
         ) : null}
         {currentTab === 2 ? (
           <div className={styles.tabContent}>
-            <TeamMembers userData={userData} teamName={teamName} />
+            <TeamMembers
+              membersData={teamData.members}
+              teamName={teamData.name}
+            />
           </div>
         ) : null}
         {currentTab === 3 ? (
           <div className={styles.tabContent}>
-            <TeamServiceAccounts serviceAccountData={serviceAccountData} />
+            <TeamServiceAccounts
+              serviceAccountData={teamData.serviceAccounts}
+            />
           </div>
         ) : null}
         {currentTab === 4 ? (
@@ -60,7 +66,7 @@ export const TeamsLayout: React.FC<TeamsLayoutProps> = (props) => {
           <div className={styles.tabContent}>
             <TeamLeave />
             <div className={styles.separator} />
-            <TeamDisband teamName={teamName} />
+            <TeamDisband teamName={teamData.name} />
           </div>
         ) : null}
       </div>
@@ -69,7 +75,11 @@ export const TeamsLayout: React.FC<TeamsLayoutProps> = (props) => {
 };
 
 TeamsLayout.displayName = "TeamsLayout";
-TeamsLayout.defaultProps = { teamName: "" };
+TeamsLayout.defaultProps = {};
+
+function getTeamData(teamId: number) {
+  return getTeamDummyData(teamId);
+}
 
 const tabs = [
   { key: 1, label: "Profile" },
@@ -77,14 +87,4 @@ const tabs = [
   { key: 3, label: "Service Accounts" },
   { key: 4, label: "Mods" },
   { key: 5, label: "Settings" },
-];
-
-const userData: Array<UserDataItem> = [
-  { userName: "Chad", role: "2", userImageSrc: "/images/chad.jpg" },
-  { userName: "Doggo", role: "1", userImageSrc: "/images/dog.jpg" },
-  { userName: "Thomas", role: "1", userImageSrc: "/images/thomas.jpg" },
-];
-
-const serviceAccountData: Array<ServiceAccountDataItem> = [
-  { serviceAccountName: "ChadSA", lastUsed: "2011-11-09 16:41" },
 ];

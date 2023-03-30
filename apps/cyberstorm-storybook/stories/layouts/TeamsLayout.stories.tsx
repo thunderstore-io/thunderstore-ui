@@ -8,7 +8,7 @@ const meta = {
 } as ComponentMeta<typeof TeamsLayout>;
 
 const defaultArgs = {
-  teamName: "Zorrz's Bros",
+  teamId: 1337,
 };
 
 const Template: ComponentStory<typeof TeamsLayout> = (args) => (

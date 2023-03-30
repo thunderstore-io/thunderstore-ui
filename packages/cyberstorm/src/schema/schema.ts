@@ -77,6 +77,7 @@ export interface Achievement {
 export interface Team {
   name: string;
   namespace: string;
+  imageSource: string;
   description: string;
   about: string;
   members: string[]; // TeamMember ids
@@ -93,6 +94,11 @@ export interface TeamMember {
   role: string;
 }
 
+export interface ServiceAccount {
+  name: string;
+  lastUsed: string;
+}
+
 export interface User {
   name: string;
   namespace: string;
@@ -102,8 +108,8 @@ export interface User {
   gitHubLink?: string;
   discordLink?: string;
   twitterLink?: string;
-  accountCreated?: Date;
-  lastActive?: Date;
+  accountCreated?: string;
+  lastActive?: string;
   mods?: string[]; // Package ids
 }
 
