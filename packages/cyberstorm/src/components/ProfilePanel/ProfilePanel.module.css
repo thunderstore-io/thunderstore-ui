@@ -1,0 +1,103 @@
+/* Common PackageCard styles */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--12);
+  align-items: center;
+  width: 318px;
+  height: 496px;
+  padding: var(--space--20);
+  border-radius: var(--border-radius--16);
+  background: linear-gradient(to right bottom, #9d30e4 0%, #23ffb0 100%);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--12);
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--8);
+  align-items: center;
+}
+
+.title {
+  color: var(--color-default);
+  font: var(--font-body);
+  font-weight: 700;
+  line-height: var(--line-height--18);
+}
+
+.profileTitle {
+  color: var(--color-default);
+  font: var(--font-body);
+  font-weight: 700;
+  line-height: var(--line-height--18);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: var(--gap--12);
+  padding: var(--space--10) var(--space--20) var(--space--20);
+  overflow-y: scroll;
+}
+
+.modrow {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--4);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space--10);
+  border-radius: var(--space--10);
+  background-color: var(--color-default);
+}
+
+.modInfo {
+  display: flex;
+  flex-basis: 85%;
+  flex-flow: column;
+  align-items: flex-start;
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+}
+
+.modName {
+  color: var(--color-highlight);
+  font: var(--font-body);
+  font-weight: 700;
+  line-height: var(--line-height--18);
+}
+
+.modVersion {
+  color: var(--color-text--default);
+  font: var(--font-body);
+  font-weight: 400;
+  font-size: var(--font-size--14);
+  line-height: var(--line-height--18);
+}
+
+.modLink {
+  color: var(--color-highlight);
+}
+
+.content::-webkit-scrollbar {
+  width: 12px;
+  border-radius: 10px;
+  background-color: #0000;
+}
+
+.content::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-image: var(--color-gradient-purple-green--darker);
+}
