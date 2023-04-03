@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClone } from "@fortawesome/free-regular-svg-icons";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import React, { PropsWithChildren } from "react";
 import { useState } from "react";
 import styles from "./CopyButton.module.css";
@@ -34,13 +35,21 @@ function useCopyToClipboard(): CopyFn {
 export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
   (props: PropsWithChildren<CopyButtonProps>) => {
     const copy = useCopyToClipboard();
+    let copied = false;
     return (
       <button
         type="button"
         className={`${styles.root}`}
-        onClick={() => copy(props.text)}
+        onClick={() => {
+          copy(props.text);
+          copied = true;
+        }}
       >
-        <FontAwesomeIcon fixedWidth icon={faClone} className={styles.home} />
+        {copied ? (
+          <FontAwesomeIcon fixedWidth icon={faCheck} className={styles.home} />
+        ) : (
+          <FontAwesomeIcon fixedWidth icon={faClone} className={styles.home} />
+        )}
       </button>
     );
   }
