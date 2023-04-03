@@ -1,5 +1,5 @@
 import { LinkLibrary } from "../LinkLibrary";
-import { LinkingProvider } from "@thunderstore/cyberstorm";
+import { LinkingProvider, CyberstormProviders } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-styles";
 
 export const parameters = {
@@ -20,7 +20,9 @@ export const parameters = {
 export const decorators = [
   (Story) => (
     <LinkingProvider value={LinkLibrary}>
-      <Story />
+      <CyberstormProviders>
+        <Story />
+      </CyberstormProviders>
     </LinkingProvider>
   ),
 ];

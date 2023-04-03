@@ -15,11 +15,13 @@ export * from "./components/PackageFlag/PackageFlag";
 export * from "./components/PackageIcon/PackageIcon";
 export * from "./components/Pagination/Pagination";
 export * from "./components/Pagination/PaginationButton";
+export * from "./components/Providers";
 export * from "./components/Select/Select";
 export * from "./components/Tabs/Tabs";
 export * from "./components/Tag/Tag";
 export * from "./components/TextInput/TextInput";
 export * from "./components/Title/Title";
+export * from "./components/Tooltip/Tooltip";
 
 export * from "./components/Layout/CommunityListLayout/CommunityListLayout";
 export * from "./components/Layout/HomeLayout/HomeLayout";
