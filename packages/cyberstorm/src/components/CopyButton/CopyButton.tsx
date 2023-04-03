@@ -8,7 +8,7 @@ type CopyButtonProps = {
   text: string;
 };
 type CopiedValue = string | null;
-type CopyFn = (text: string) => Promise<void>; // Return success
+type CopyFn = (text: string) => Promise<void>;
 
 function useCopyToClipboard(): CopyFn {
   const [copiedText, setCopiedText] = useState<CopiedValue>(null);

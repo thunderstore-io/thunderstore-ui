@@ -1,20 +1,15 @@
-/* Common Button styles */
 .root {
-  display: flex;
-  flex: none;
-  flex-direction: row;
-  gap: var(--gap--16);
-  align-items: center;
-  justify-content: center;
-
-  padding: var(--space--14) var(--space--16);
-  border: var(--button-border-width) solid var(--button-border-color);
-  border-radius: var(--border-radius--12);
   color: var(--text-color);
   background-color: var(--bg-color);
 
-  --text-color: var(--color-white);
-  --bg-color: var(--color-default);
-  --button-border-color: transparent;
-  --button-border-width: var(--border-width--2);
+  --text-color: var(--color-text--tertiary);
+  --bg-color: transparent;
+}
+
+.active {
+  color: var(--text-color);
+  background-color: var(--bg-color);
+
+  --text-color: var(--color-cyber-green--50);
+  --bg-color: transparent;
 }
