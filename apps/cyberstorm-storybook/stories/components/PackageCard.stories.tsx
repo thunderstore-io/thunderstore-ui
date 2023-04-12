@@ -36,12 +36,9 @@ const Template: StoryFn<typeof PackageCard> = (args) => (
   </div>
 );
 
-const MinimalPackageCard = Template.bind({});
-MinimalPackageCard.args = {};
-
 const ReferencePackageCard = Template.bind({});
 ReferencePackageCard.args = {
   packageData: getPackagePreviewDummyData(),
 };
 
-export { MinimalPackageCard, ReferencePackageCard };
+export { ReferencePackageCard };
