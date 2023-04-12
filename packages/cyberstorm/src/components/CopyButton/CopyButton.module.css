@@ -1,15 +1,17 @@
 .root {
-  color: var(--text-color);
-  background-color: var(--bg-color);
-
-  --text-color: var(--color-text--tertiary);
-  --bg-color: transparent;
+  background-color: transparent;
 }
 
-.active {
-  color: var(--text-color);
-  background-color: var(--bg-color);
+.copy {
+  color: var(--color-text--tertiary);
+  background-color: transparent;
+}
 
-  --text-color: var(--color-cyber-green--50);
-  --bg-color: transparent;
+.checkmark {
+  color: var(--color-cyber-green--50);
+  background-color: transparent;
+}
+
+.copy:hover {
+  color: var(--color-cyber-green--50);
 }
