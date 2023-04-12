@@ -23,6 +23,7 @@ export interface Package {
   name: string;
   namespace: string;
   description?: string;
+  shortDescription?: string;
   imageSource: string;
   additionalImages?: string[];
   downloadCount: number;

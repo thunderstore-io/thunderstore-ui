@@ -16,7 +16,7 @@ const Template: ComponentStory<typeof PackageDetailLayout> = (args) => (
 );
 
 const defaultArgs = {
-  packageId: 123,
+  packageId: "1337",
 };
 
 const ReferencePackageDetailLayout = Template.bind({});

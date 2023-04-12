@@ -17,7 +17,7 @@ import { PackageManagementForm } from "./PackageManagementForm";
 import { getPackageDummyData } from "../../../dummyData";
 
 export interface PackageDetailLayoutProps {
-  packageId: number;
+  packageId: string;
   managementDialogIsOpen?: boolean;
 }
 
@@ -48,10 +48,13 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
         </BreadCrumbs>
 
         <div className={styles.packageInfo}>
-          <ModIcon src="/images/thomas.jpg"></ModIcon>
-          <>
+          <ModIcon src={packageData.imageSource}></ModIcon>
+          <div className={styles.packageInfoDetails}>
             <Title text={packageData.name}></Title>
-            <div className={styles.packageInfoDetails}>
+            <p className={styles.packageInfoDescription}>
+              {packageData.shortDescription}
+            </p>
+            <div className={styles.packageInfoMeta}>
               <MetaItem
                 colorScheme="tertiary"
                 label={packageData.author}
@@ -61,11 +64,10 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
                 label={packageData.gitHubLink}
                 colorScheme="transparentPrimary"
                 leftIcon={<FontAwesomeIcon icon={faHouse} fixedWidth />}
-                rightIcon={<FontAwesomeIcon icon={faHouse} fixedWidth />}
               />
             </div>
-          </>
-          <>
+          </div>
+          <div className={styles.managementDialogTrigger}>
             <Dialog
               defaultOpen={managementDialogIsOpen}
               title="Manage Package"
@@ -79,11 +81,11 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
               trigger={
                 <Button
                   leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
-                  label="Manage Package"
+                  label="Manage"
                 />
               }
             />
-          </>
+          </div>
         </div>
       </div>
       <div className={styles.mainContentWrapper}>
@@ -102,6 +104,6 @@ PackageDetailLayout.defaultProps = {
   managementDialogIsOpen: false,
 };
 
-function getPackageData(packageId: number) {
+function getPackageData(packageId: string) {
   return getPackageDummyData(packageId);
 }

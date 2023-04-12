@@ -8,7 +8,7 @@ const meta = {
 } as ComponentMeta<typeof TeamsLayout>;
 
 const defaultArgs = {
-  teamId: 1337,
+  teamId: "1337",
 };
 
 const Template: ComponentStory<typeof TeamsLayout> = (args) => (

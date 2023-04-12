@@ -20,4 +20,5 @@
   display: flex;
   flex-direction: row;
   gap: var(--gap--12);
+  margin-top: auto;
 }

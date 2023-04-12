@@ -9,10 +9,10 @@ import { Title } from "../../Title/Title";
 import { TeamMembers } from "./TeamMembers/TeamMembers";
 import { TeamServiceAccounts } from "./TeamServiceAccounts/TeamServiceAccounts";
 import { TeamProfile } from "./TeamProfile/TeamProfile";
-import { getTeamDummyData } from "../../../dummyData/generate";
+import { getTeamDummyData } from "../../../dummyData";
 
 export interface TeamsLayoutProps {
-  teamId: number;
+  teamId: string;
 }
 
 /**
@@ -77,7 +77,7 @@ export const TeamsLayout: React.FC<TeamsLayoutProps> = (props) => {
 TeamsLayout.displayName = "TeamsLayout";
 TeamsLayout.defaultProps = {};
 
-function getTeamData(teamId: number) {
+function getTeamData(teamId: string) {
   return getTeamDummyData(teamId);
 }
 

@@ -5,8 +5,7 @@ import { Button } from "../../../Button/Button";
 import { ServiceAccountList } from "./ServiceAccountList/ServiceAccountList";
 import { Dialog } from "../../../Dialog/Dialog";
 import { ServiceAccount } from "../../../../schema";
-import { getServiceAccountDummyData } from "../../../../dummyData/generate";
-import { strToHashInt } from "../../../../utils/utils";
+import { getServiceAccountDummyData } from "../../../../dummyData";
 
 export interface TeamServiceAccountsProps {
   serviceAccountData: string[];
@@ -50,9 +49,7 @@ function getServiceAccountListData(
 ): ServiceAccount[] {
   const serviceAccountArray: ServiceAccount[] = [];
   serviceAccountIds.forEach((serviceAccountId) => {
-    serviceAccountArray.push(
-      getServiceAccountDummyData(strToHashInt(serviceAccountId))
-    );
+    serviceAccountArray.push(getServiceAccountDummyData(serviceAccountId));
   });
   return serviceAccountArray;
 }

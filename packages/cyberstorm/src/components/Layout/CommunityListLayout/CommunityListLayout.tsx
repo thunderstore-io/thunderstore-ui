@@ -14,7 +14,6 @@ import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
 import { Title } from "../../Title/Title";
 import { getCommunityPreviewDummyData, getListOfIds } from "../../../dummyData";
-import { strToHashInt } from "../../../utils/utils";
 import { CommunityPreview } from "../../../schema";
 
 export interface CommunityListLayoutProps {
@@ -64,7 +63,7 @@ CommunityListLayout.defaultProps = {};
 
 function getCommunityData() {
   return getListOfIds(20).map((communityId) => {
-    return getCommunityPreviewDummyData(strToHashInt(communityId));
+    return getCommunityPreviewDummyData(communityId);
   });
 }
 

@@ -19,7 +19,7 @@ export const HomeLayout: React.FC = () => {
   const featuredCommunities: CommunityPreview[] = getFeaturedCommunities();
 
   return (
-    <div>
+    <div className={styles.root}>
       <div className={styles.content}>
         <div className={styles.specialContent} />
         <div className={styles.cardContent}>
@@ -59,7 +59,7 @@ HomeLayout.defaultProps = {};
 
 function getFeaturedPackages() {
   return getListOfIds(7).map((packageId) => {
-    return getPackagePreviewDummyData(strToHashInt(packageId));
+    return getPackagePreviewDummyData(packageId);
   });
 }
 
@@ -69,6 +69,6 @@ function getHotPackages() {
 
 function getFeaturedCommunities() {
   return getListOfIds(7).map((communityId) => {
-    return getCommunityPreviewDummyData(strToHashInt(communityId));
+    return getCommunityPreviewDummyData(communityId);
   });
 }

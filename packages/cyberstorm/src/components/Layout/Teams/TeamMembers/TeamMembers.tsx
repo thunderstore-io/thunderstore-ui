@@ -6,8 +6,7 @@ import { Button } from "../../../Button/Button";
 import { Dialog } from "../../../Dialog/Dialog";
 import { TextInput } from "../../../TextInput/TextInput";
 import { Select } from "../../../Select/Select";
-import { getTeamMemberDummyData } from "../../../../dummyData/generate";
-import { strToHashInt } from "../../../../utils/utils";
+import { getTeamMemberDummyData } from "../../../../dummyData";
 import { TeamMember } from "../../../../schema";
 
 export interface TeamMembersProps {
@@ -65,7 +64,7 @@ const userRoles = [
 function getTeamMemberListData(teamMemberIds: string[]): TeamMember[] {
   const teamMemberArray: TeamMember[] = [];
   teamMemberIds.forEach((teamMemberId) => {
-    teamMemberArray.push(getTeamMemberDummyData(strToHashInt(teamMemberId)));
+    teamMemberArray.push(getTeamMemberDummyData(teamMemberId));
   });
   return teamMemberArray;
 }
