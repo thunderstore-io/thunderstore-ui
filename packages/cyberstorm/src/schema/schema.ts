@@ -2,9 +2,9 @@ export interface Community {
   name: string;
   namespace: string;
   imageSource?: string;
-  packageCount: string;
-  downloadCount: string;
-  serverCount: string;
+  packageCount: number;
+  downloadCount: number;
+  serverCount: number;
   description?: string;
   gitHubLink?: string;
 }
@@ -23,11 +23,12 @@ export interface Package {
   name: string;
   namespace: string;
   description?: string;
-  imageSrc: string;
+  shortDescription?: string;
+  imageSource: string;
   additionalImages?: string[];
-  downloadCount: string;
-  likes: string;
-  size: string;
+  downloadCount: number;
+  likes: number;
+  size: number;
   author?: string;
   lastUpdated?: string;
   isPinned?: boolean;
@@ -37,7 +38,7 @@ export interface Package {
   donationLink?: string;
   firstUploaded?: string;
   dependencyString?: string;
-  categories?: string[]; // Category ids
+  categories: string[]; // Category ids
   dependencies?: string[]; // Package ids
   dependants?: string[]; // Package ids
   team: string; // Team id
@@ -48,7 +49,7 @@ export type PackagePreview = Pick<
   | "name"
   | "namespace"
   | "description"
-  | "imageSrc"
+  | "imageSource"
   | "downloadCount"
   | "likes"
   | "size"
@@ -77,6 +78,7 @@ export interface Achievement {
 export interface Team {
   name: string;
   namespace: string;
+  imageSource: string;
   description: string;
   about: string;
   members: string[]; // TeamMember ids
@@ -93,6 +95,11 @@ export interface TeamMember {
   role: string;
 }
 
+export interface ServiceAccount {
+  name: string;
+  lastUsed: string;
+}
+
 export interface User {
   name: string;
   namespace: string;
@@ -102,8 +109,8 @@ export interface User {
   gitHubLink?: string;
   discordLink?: string;
   twitterLink?: string;
-  accountCreated?: Date;
-  lastActive?: Date;
+  accountCreated?: string;
+  lastActive?: string;
   mods?: string[]; // Package ids
 }
 

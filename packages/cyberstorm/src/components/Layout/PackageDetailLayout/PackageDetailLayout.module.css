@@ -20,8 +20,19 @@
 
 .packageInfoDetails {
   display: flex;
+  flex-direction: column;
+  gap: var(--gap--8);
+}
+
+.packageInfoMeta {
+  display: flex;
   flex-direction: row;
   gap: var(--gap--32);
+}
+
+.packageInfoDescription {
+  color: var(--color-text--default);
+  font: var(--font-body);
 }
 
 .mainContentWrapper {
@@ -47,4 +58,11 @@
 .mainContentRight {
   flex: 1 1 0;
   background-color: var(--color-surface--3);
+}
+
+.managementDialogTrigger {
+  display: flex;
+  flex-grow: 1;
+  align-self: start;
+  justify-content: end;
 }

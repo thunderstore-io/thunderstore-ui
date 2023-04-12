@@ -12,9 +12,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../Button/Button";
 import { Title } from "../Title/Title";
+import { formatInteger } from "../../utils/utils";
 
 export interface PackageListCommunityInfoProps {
   title?: string;
+  description?: string;
+  imageSource?: string;
+  packageCount: number;
+  downloadCount: number;
+  serverCount: number;
 }
 
 /**
@@ -23,27 +29,42 @@ export interface PackageListCommunityInfoProps {
 export const CommunityInfo: React.FC<PackageListCommunityInfoProps> = (
   props
 ) => {
-  const { title } = props;
+  const {
+    title,
+    description,
+    imageSource,
+    packageCount,
+    downloadCount,
+    serverCount,
+  } = props;
   return (
     <div className={styles.root}>
-      <GameIcon />
+      <GameIcon src={imageSource} />
       <div className={styles.info}>
         <Title text={title} />
+        <div className={styles.descriptionWrapper}>
+          <p className={styles.description}>{description}</p>
+          <Button
+            label="Show more"
+            colorScheme="transparentDefault"
+            size="small"
+          />
+        </div>
         <div className={styles.meta}>
           <MetaItem
+            label={formatInteger(packageCount) + " Packages"}
             icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
-            label="1,342 Packages"
             colorScheme="tertiary"
             size="large"
           />
           <MetaItem
-            label="4,5M Downloads"
+            label={formatInteger(downloadCount) + " Downloads"}
             icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
             colorScheme="tertiary"
             size="large"
           />
           <MetaItem
-            label="138 Servers"
+            label={formatInteger(serverCount) + " Servers"}
             icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
             colorScheme="tertiary"
             size="large"

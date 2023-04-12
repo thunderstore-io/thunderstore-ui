@@ -14,10 +14,10 @@ import { ModIcon } from "../../ModIcon/ModIcon";
 import { Title } from "../../Title/Title";
 import { Dialog } from "../../Dialog/Dialog";
 import { PackageManagementForm } from "./PackageManagementForm";
+import { getPackageDummyData } from "../../../dummyData";
 
 export interface PackageDetailLayoutProps {
-  title?: string;
-  description?: string;
+  packageId: string;
   managementDialogIsOpen?: boolean;
 }
 
@@ -27,7 +27,8 @@ export interface PackageDetailLayoutProps {
 export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
   props
 ) => {
-  const { description, title, managementDialogIsOpen } = props;
+  const { packageId, managementDialogIsOpen } = props;
+  const packageData = getPackageData(packageId);
 
   return (
     <div className={styles.root}>
@@ -42,29 +43,31 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
             community="V-Rising"
             package="v-rising-epic-hardcore-mode"
           >
-            {title}
+            {packageData.name}
           </PackageLink>
         </BreadCrumbs>
 
         <div className={styles.packageInfo}>
-          <ModIcon src="/images/thomas.jpg"></ModIcon>
-          <>
-            <Title text={title}></Title>
-            <div className={styles.packageInfoDetails}>
+          <ModIcon src={packageData.imageSource}></ModIcon>
+          <div className={styles.packageInfoDetails}>
+            <Title text={packageData.name}></Title>
+            <p className={styles.packageInfoDescription}>
+              {packageData.shortDescription}
+            </p>
+            <div className={styles.packageInfoMeta}>
               <MetaItem
                 colorScheme="tertiary"
-                label="grav"
+                label={packageData.author}
                 icon={<FontAwesomeIcon icon={faUser} fixedWidth />}
               />
               <Button
-                label="github.com/thunderstore-io/v-rising-epic-hc-mode"
+                label={packageData.gitHubLink}
                 colorScheme="transparentPrimary"
                 leftIcon={<FontAwesomeIcon icon={faHouse} fixedWidth />}
-                rightIcon={<FontAwesomeIcon icon={faHouse} fixedWidth />}
               />
             </div>
-          </>
-          <>
+          </div>
+          <div className={styles.managementDialogTrigger}>
             <Dialog
               defaultOpen={managementDialogIsOpen}
               title="Manage Package"
@@ -78,17 +81,17 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
               trigger={
                 <Button
                   leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
-                  label="Manage Package"
+                  label="Manage"
                 />
               }
             />
-          </>
+          </div>
         </div>
       </div>
       <div className={styles.mainContentWrapper}>
         <div className={styles.mainContentLeft}>
-          <Title text="Description title" />
-          <p className={styles.description}>{description}</p>
+          <Title text={packageData.name} />
+          <p className={styles.description}>{packageData.description}</p>
         </div>
         <div className={styles.mainContentRight} />
       </div>
@@ -98,7 +101,9 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
 
 PackageDetailLayout.displayName = "PackageDetailLayout";
 PackageDetailLayout.defaultProps = {
-  title: "",
-  description: "",
   managementDialogIsOpen: false,
 };
+
+function getPackageData(packageId: string) {
+  return getPackageDummyData(packageId);
+}

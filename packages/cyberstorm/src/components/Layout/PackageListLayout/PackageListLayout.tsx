@@ -13,19 +13,28 @@ import { BackgroundImage } from "../../BackgroundImage/BackgroundImage";
 import { FilterItemList } from "../../FilterItemList/FilterItemList";
 import { SearchFilter } from "../../SearchFilter/SearchFilter";
 import { Pagination } from "../../Pagination/Pagination";
+import {
+  getCommunityDummyData,
+  getListOfIds,
+  getPackagePreviewDummyData,
+} from "../../../dummyData";
+import { PackagePreview } from "../../../schema";
 
 export interface PackageListLayoutProps {
-  title?: string;
+  communityId: string;
 }
 
 /**
  * Cyberstorm PackageList Layout
  */
 export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
-  const { title } = props;
+  const { communityId } = props;
 
   const [order, setOrder] = useState("1");
   const [page, setPage] = useState(1);
+
+  const packagesData: PackagePreview[] = getPackageData();
+  const communityData = getCommunityData(communityId);
 
   return (
     <div className={styles.root}>
@@ -38,7 +47,14 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
         </CommunityPackagesLink>
       </BreadCrumbs>
 
-      <CommunityInfo title={title} />
+      <CommunityInfo
+        title={communityData.name}
+        description={communityData.description}
+        imageSource={communityData.imageSource}
+        packageCount={communityData.packageCount}
+        downloadCount={communityData.downloadCount}
+        serverCount={communityData.serverCount}
+      />
 
       <div>
         <div className={styles.contentWrapper}>
@@ -66,26 +82,14 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
             </div>
 
             <div className={styles.packageCardList}>
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
-              <PackageCard {...packageCardArgs} />
+              {packagesData.map((packageData) => {
+                return (
+                  <PackageCard
+                    key={packageData.name}
+                    packageData={packageData}
+                  />
+                );
+              })}
             </div>
             <Pagination
               currentPage={page}
@@ -102,7 +106,16 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
 };
 
 PackageListLayout.displayName = "PackageListLayout";
-PackageListLayout.defaultProps = { title: "V Rising" };
+PackageListLayout.defaultProps = {};
+
+function getPackageData() {
+  return getListOfIds(20).map((packageId) => {
+    return getPackagePreviewDummyData(packageId);
+  });
+}
+function getCommunityData(communityId: string) {
+  return getCommunityDummyData(communityId);
+}
 
 const selectOptions = [
   {
@@ -121,21 +134,6 @@ const selectOptions = [
     leftIcon: <FontAwesomeIcon fixedWidth icon={faThumbsUp} />,
   },
 ];
-
-const packageCardArgs = {
-  imageSrc: "/images/thomas.jpg",
-  packageName: "MinisterAPI DeLuxe",
-  author: "Gigamies5000",
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel ullamcorper sem, in lacinia velit. Maecenas sed augue in tortor fermentum hendrerit.",
-  lastUpdated: "3 days ago",
-  downloadCount: "4,5M",
-  likes: "1,342",
-  size: "13 MB",
-  categories: ["tweaks", "mods", "client-side"],
-  link: "",
-  isPinned: true,
-};
 
 const filterData = [
   { key: "1", label: "Mods", count: 248 },

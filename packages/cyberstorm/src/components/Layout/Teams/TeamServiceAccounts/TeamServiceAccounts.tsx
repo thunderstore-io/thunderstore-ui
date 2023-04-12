@@ -2,14 +2,13 @@ import React from "react";
 import styles from "./TeamServiceAccounts.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { Button } from "../../../Button/Button";
-import {
-  ServiceAccountDataItem,
-  ServiceAccountList,
-} from "./ServiceAccountList/ServiceAccountList";
+import { ServiceAccountList } from "./ServiceAccountList/ServiceAccountList";
 import { Dialog } from "../../../Dialog/Dialog";
+import { ServiceAccount } from "../../../../schema";
+import { getServiceAccountDummyData } from "../../../../dummyData";
 
 export interface TeamServiceAccountsProps {
-  serviceAccountData?: Array<ServiceAccountDataItem>;
+  serviceAccountData: string[];
 }
 
 export const TeamServiceAccounts: React.FC<TeamServiceAccountsProps> = (
@@ -32,7 +31,9 @@ export const TeamServiceAccounts: React.FC<TeamServiceAccountsProps> = (
         }
         content={
           <div className={styles.content}>
-            <ServiceAccountList serviceAccountData={serviceAccountData} />
+            <ServiceAccountList
+              serviceAccountData={getServiceAccountListData(serviceAccountData)}
+            />
           </div>
         }
       />
@@ -42,3 +43,13 @@ export const TeamServiceAccounts: React.FC<TeamServiceAccountsProps> = (
 
 TeamServiceAccounts.displayName = "TeamServiceAccounts";
 TeamServiceAccounts.defaultProps = { serviceAccountData: [] };
+
+function getServiceAccountListData(
+  serviceAccountIds: string[]
+): ServiceAccount[] {
+  const serviceAccountArray: ServiceAccount[] = [];
+  serviceAccountIds.forEach((serviceAccountId) => {
+    serviceAccountArray.push(getServiceAccountDummyData(serviceAccountId));
+  });
+  return serviceAccountArray;
+}

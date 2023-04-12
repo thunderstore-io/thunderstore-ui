@@ -1,19 +1,21 @@
 import React from "react";
 import styles from "./TeamMembers.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
-import { UserDataItem, UserList } from "./UserList/UserList";
+import { UserList } from "./UserList/UserList";
 import { Button } from "../../../Button/Button";
 import { Dialog } from "../../../Dialog/Dialog";
 import { TextInput } from "../../../TextInput/TextInput";
 import { Select } from "../../../Select/Select";
+import { getTeamMemberDummyData } from "../../../../dummyData";
+import { TeamMember } from "../../../../schema";
 
 export interface TeamMembersProps {
   teamName?: string;
-  userData?: Array<UserDataItem>;
+  membersData: string[];
 }
 
 export const TeamMembers: React.FC<TeamMembersProps> = (props) => {
-  const { userData, teamName } = props;
+  const { membersData, teamName } = props;
 
   const dialog = (
     <Dialog
@@ -43,16 +45,26 @@ export const TeamMembers: React.FC<TeamMembersProps> = (props) => {
         title="Members"
         description="Your best buddies"
         additionalLeftColumnContent={<div>{dialog}</div>}
-        content={<UserList userData={userData} />}
+        content={
+          <UserList teamMemberData={getTeamMemberListData(membersData)} />
+        }
       />
     </div>
   );
 };
 
 TeamMembers.displayName = "TeamMembers";
-TeamMembers.defaultProps = { userData: [], teamName: "" };
+TeamMembers.defaultProps = { membersData: [], teamName: "" };
 
 const userRoles = [
   { value: "1", label: "Member" },
   { value: "2", label: "Owner" },
 ];
+
+function getTeamMemberListData(teamMemberIds: string[]): TeamMember[] {
+  const teamMemberArray: TeamMember[] = [];
+  teamMemberIds.forEach((teamMemberId) => {
+    teamMemberArray.push(getTeamMemberDummyData(teamMemberId));
+  });
+  return teamMemberArray;
+}
