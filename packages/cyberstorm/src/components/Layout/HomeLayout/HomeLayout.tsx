@@ -7,7 +7,6 @@ import {
   getListOfIds,
   getPackagePreviewDummyData,
 } from "../../../dummyData";
-import { strToHashInt } from "../../../utils/utils";
 import { CommunityPreview, PackagePreview } from "../../../schema";
 
 /**
