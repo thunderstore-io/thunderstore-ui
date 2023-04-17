@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./TeamLeave.module.css";
 import { Button } from "../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 
 export interface TeamLeaveProps {
@@ -28,7 +28,7 @@ export const TeamLeave: React.FC<TeamLeaveProps> = (props) => {
               <Button
                 colorScheme="danger"
                 label="Leave team"
-                leftIcon={<FontAwesomeIcon icon={faTrash} fixedWidth />}
+                leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
               />
             </div>
           </div>

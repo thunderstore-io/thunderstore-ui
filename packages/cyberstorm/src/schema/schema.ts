@@ -103,7 +103,7 @@ export interface ServiceAccount {
 export interface User {
   name: string;
   namespace: string;
-  imageSource?: string;
+  imageSource: string;
   description?: string;
   about?: string;
   gitHubLink?: string;

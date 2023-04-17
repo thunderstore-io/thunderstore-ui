@@ -30,11 +30,11 @@ export const TeamDisband: React.FC<TeamDisbandProps> = (props) => {
               As a precaution, to disband your team, please input {teamName}{" "}
               into the field below.
             </p>
-            <TextInput />
+            <TextInput placeHolder="Verification" />
             <div>
               <Button
                 colorScheme="danger"
-                label="Leave team"
+                label="Disband team"
                 leftIcon={<FontAwesomeIcon icon={faTrash} fixedWidth />}
               />
             </div>
