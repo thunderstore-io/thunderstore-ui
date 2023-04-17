@@ -1,5 +1,5 @@
 {
-  "name": "cyberstorm-nextjs",
+  "name": "@thunderstore/cyberstorm-nextjs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@preconstruct/next": "^4.0.0",
     "@thunderstore/cyberstorm": "^0.1.0",
     "@thunderstore/cyberstorm-styles": "^0.1.0",
     "@types/node": "18.15.11",
