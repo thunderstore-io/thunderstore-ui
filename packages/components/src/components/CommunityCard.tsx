@@ -15,7 +15,7 @@ export interface CommunityCardProps {
 }
 
 /**
- * Simple card component for listing communities.tsx.
+ * Simple card component for listing communities.
  *
  * Displays community's name, cover image and basic mod stats.
  */
