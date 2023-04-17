@@ -9,6 +9,10 @@ type BreadCrumbsProps = PropsWithChildren<{
   excludeHome?: boolean;
 }>;
 
+type BreadCrumbProps = PropsWithChildren<{
+  key?: number;
+}>;
+
 export const BreadCrumbs: React.FC<BreadCrumbsProps> = (props) => {
   const nodes: ReactNode[] = [
     !props.excludeHome ? <DefaultHomeCrumb key={0} /> : null,
@@ -28,10 +32,10 @@ export const BreadCrumbs: React.FC<BreadCrumbsProps> = (props) => {
   );
 };
 
-export const BreadCrumb: React.FC<PropsWithChildren<ReactNode>> = ({
-  children,
-}) => {
-  return <span className={styles.crumb}>{children}</span>;
+export const BreadCrumb: React.FC<PropsWithChildren<BreadCrumbProps>> = (
+  props
+) => {
+  return <span className={styles.crumb}>{props.children}</span>;
 };
 
 export const Separator: React.FC = () => (
