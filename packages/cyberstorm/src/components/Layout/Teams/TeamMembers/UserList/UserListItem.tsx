@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export interface UserListItemProps {
-  userName?: string;
-  userImageSrc?: string;
+  userName: string;
+  userImageSrc: string;
   role?: string;
 }
 

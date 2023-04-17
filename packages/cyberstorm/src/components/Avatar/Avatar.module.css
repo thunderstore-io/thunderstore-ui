@@ -4,12 +4,19 @@
 }
 
 .image {
-  --size: 2.5rem;
-
   min-width: var(--size);
   max-width: var(--size);
   min-height: var(--size);
   max-height: var(--size);
   border-radius: var(--size);
-  box-shadow: var(--box-shadow-default);
+  box-shadow: var(--shadow);
+}
+
+.medium {
+  --size: 2.5rem;
+  --shadow: var(--box-shadow-default);
+}
+
+.large {
+  --size: 8rem;
 }
