@@ -4,6 +4,7 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import React, { PropsWithChildren, useEffect } from "react";
 import { useState } from "react";
 import styles from "./CopyButton.module.css";
+import { Tooltip } from "../Tooltip/Tooltip";
 
 type CopyButtonProps = {
   text: string;
@@ -40,24 +41,30 @@ export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
       setTimeout(() => setState(false), 2000);
     }, [stateValue]);
     return (
-      <button
-        type="button"
-        className={`${styles.root}`}
-        onClick={() => {
-          copy(props.text);
-          setState(true);
-        }}
-      >
-        {stateValue ? (
-          <FontAwesomeIcon
-            fixedWidth
-            icon={faCheck}
-            className={styles.checkmark}
-          />
-        ) : (
-          <FontAwesomeIcon fixedWidth icon={faClone} className={styles.copy} />
-        )}
-      </button>
+      <Tooltip content="Copy">
+        <button
+          type="button"
+          className={`${styles.root}`}
+          onClick={() => {
+            copy(props.text);
+            setState(true);
+          }}
+        >
+          {stateValue ? (
+            <FontAwesomeIcon
+              fixedWidth
+              icon={faCheck}
+              className={styles.checkmark}
+            />
+          ) : (
+            <FontAwesomeIcon
+              fixedWidth
+              icon={faClone}
+              className={styles.copy}
+            />
+          )}
+        </button>
+      </Tooltip>
     );
   }
 );
