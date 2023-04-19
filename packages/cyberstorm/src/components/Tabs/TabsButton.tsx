@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from "react";
+import { MouseEventHandler } from "react";
 import styles from "./TabsButton.module.css";
 
 export interface TabsButtonProps {
@@ -9,7 +9,7 @@ export interface TabsButtonProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
-export const TabsButton: React.FC<TabsButtonProps> = (props) => {
+export function TabsButton(props: TabsButtonProps) {
   const { ariaCurrent, ariaLabel, label, onClick, isSelected } = props;
   return (
     <button
@@ -22,7 +22,7 @@ export const TabsButton: React.FC<TabsButtonProps> = (props) => {
       {label ? <div className={styles.label}>{label}</div> : null}
     </button>
   );
-};
+}
 
 TabsButton.defaultProps = {
   isSelected: false,

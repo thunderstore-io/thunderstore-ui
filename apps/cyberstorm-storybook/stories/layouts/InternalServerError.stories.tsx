@@ -11,10 +11,10 @@ const meta = {
   component: InternalServerErrorLayout,
 } as ComponentMeta<typeof InternalServerErrorLayout>;
 
-const Template: ComponentStory<typeof InternalServerErrorLayout> = (args) => (
+const Template: ComponentStory<typeof InternalServerErrorLayout> = () => (
   <div>
     <Heading />
-    <InternalServerErrorLayout {...args} />
+    <InternalServerErrorLayout />
     <Footer />
   </div>
 );

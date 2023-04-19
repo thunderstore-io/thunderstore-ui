@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./PackageFormatDocsLayout.module.css";
 import { Title } from "../../../Title/Title";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
@@ -7,7 +6,7 @@ import { CommunityLink } from "../../../Links/Links";
 /**
  * Cyberstorm PackageFormatDocs Layout
  */
-export const PackageFormatDocsLayout: React.FC = () => {
+export function PackageFormatDocsLayout() {
   return (
     <div className={styles.root}>
       <BreadCrumbs>
@@ -16,7 +15,7 @@ export const PackageFormatDocsLayout: React.FC = () => {
       <Title text="Package Format Docs" />
     </div>
   );
-};
+}
 
 PackageFormatDocsLayout.displayName = "PackageFormatDocsLayout";
 PackageFormatDocsLayout.defaultProps = {};

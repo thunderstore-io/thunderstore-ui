@@ -8,9 +8,7 @@ interface JoinServerProps {
   togglePopup: () => void;
 }
 
-export const LaunchingModManPopup: React.FC<JoinServerProps> = ({
-  togglePopup,
-}) => {
+export function LaunchingModManPopup({ togglePopup }: JoinServerProps) {
   return (
     <div className={styles.background}>
       <section className={styles.popUp}>
@@ -43,4 +41,4 @@ export const LaunchingModManPopup: React.FC<JoinServerProps> = ({
       </section>
     </div>
   );
-};
+}

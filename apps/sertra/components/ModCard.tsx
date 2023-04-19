@@ -9,30 +9,27 @@ interface ModCard {
   icon: string | null;
 }
 
-export const ModCard: React.FC<ModCard> = ({
-  name,
-  owner,
-  description,
-  version_number,
-  icon,
-}) => (
-  <div className={styles.mod}>
-    <div className={styles.column}>
-      <Image
-        src={icon ?? "/ts-logo.svg"}
-        alt=""
-        width={64}
-        height={64}
-        unoptimized={true}
-      />
-    </div>
-    <div className={styles.column}>
-      <h3 className={styles.name}>{name}</h3>
-      <p className={styles.description}>{description}</p>
-      <div className={styles.artifacts}>
-        <div>{owner}</div>
-        <div>{version_number}</div>
+export function ModCard(props: ModCard) {
+  const { name, owner, description, version_number, icon } = props;
+  return (
+    <div className={styles.mod}>
+      <div className={styles.column}>
+        <Image
+          src={icon ?? "/ts-logo.svg"}
+          alt=""
+          width={64}
+          height={64}
+          unoptimized={true}
+        />
+      </div>
+      <div className={styles.column}>
+        <h3 className={styles.name}>{name}</h3>
+        <p className={styles.description}>{description}</p>
+        <div className={styles.artifacts}>
+          <div>{owner}</div>
+          <div>{version_number}</div>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+}

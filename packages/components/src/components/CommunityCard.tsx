@@ -1,5 +1,4 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
-import React from "react";
 
 import { formatCount } from "../utils/number";
 import { ChevronRight, DownloadIcon, ModIcon } from "./Icons";
@@ -19,7 +18,7 @@ export interface CommunityCardProps {
  *
  * Displays community's name, cover image and basic mod stats.
  */
-export const CommunityCard: React.FC<CommunityCardProps> = (props) => {
+export function CommunityCard(props: CommunityCardProps) {
   const { downloadCount, identifier, imageSrc, packageCount, name } = props;
   return (
     <CommunityLink
@@ -66,7 +65,7 @@ export const CommunityCard: React.FC<CommunityCardProps> = (props) => {
       </Flex>
     </CommunityLink>
   );
-};
+}
 
 const borderStyles = {
   borderColor: "ts.lightBlue",

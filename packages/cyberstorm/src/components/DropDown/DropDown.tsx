@@ -11,7 +11,7 @@ type DropDownProps = {
   triggerColorScheme?: "default" | "defaultDark" | "primary";
 };
 
-export const DropDown: React.FC<DropDownProps> = (props) => {
+export function DropDown(props: DropDownProps) {
   const { colorScheme, defaultOpen, content, trigger, triggerColorScheme } =
     props;
 
@@ -38,7 +38,7 @@ export const DropDown: React.FC<DropDownProps> = (props) => {
       </RadixDropDown.Root>
     </div>
   );
-};
+}
 
 DropDown.displayName = "DropDown";
 DropDown.defaultProps = {

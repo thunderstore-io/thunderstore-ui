@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./CommunityListLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,14 +16,10 @@ import { Title } from "../../Title/Title";
 import { getCommunityPreviewDummyData, getListOfIds } from "../../../dummyData";
 import { CommunityPreview } from "../../../schema";
 
-export interface CommunityListLayoutProps {
-  title?: string;
-}
-
 /**
  * Cyberstorm CommunityList Layout
  */
-export const CommunityListLayout: React.FC<CommunityListLayoutProps> = () => {
+export function CommunityListLayout() {
   const [order, setOrder] = useState("1");
 
   const communitiesData: CommunityPreview[] = getCommunityData();
@@ -56,7 +52,7 @@ export const CommunityListLayout: React.FC<CommunityListLayoutProps> = () => {
       </div>
     </div>
   );
-};
+}
 
 CommunityListLayout.displayName = "CommunityListLayout";
 CommunityListLayout.defaultProps = {};

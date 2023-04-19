@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import styles from "./PackageCard.module.css";
 import { MetaItem } from "../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,7 +23,7 @@ export interface PackageCardProps {
 /**
  * Cyberstorm PackageCard component
  */
-export const PackageCard: React.FC<PackageCardProps> = (props) => {
+export function PackageCard(props: PackageCardProps) {
   const { packageData, colorScheme, ...forwardedProps } = props;
 
   const authorLink = ""; //TODO: author link
@@ -101,7 +101,7 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 PackageCard.displayName = "PackageCard";
 PackageCard.defaultProps = {

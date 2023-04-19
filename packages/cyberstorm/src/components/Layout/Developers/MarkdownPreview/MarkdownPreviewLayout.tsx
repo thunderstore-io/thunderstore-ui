@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./MarkdownPreviewLayout.module.css";
 import { Title } from "../../../Title/Title";
 import { SettingItem } from "../../../SettingItem/SettingItem";
@@ -9,7 +8,7 @@ import { CommunityLink } from "../../../Links/Links";
 /**
  * Cyberstorm MarkdownPreview Layout
  */
-export const MarkdownPreviewLayout: React.FC = () => {
+export function MarkdownPreviewLayout() {
   return (
     <div className={styles.root}>
       <BreadCrumbs>
@@ -30,7 +29,7 @@ export const MarkdownPreviewLayout: React.FC = () => {
       />
     </div>
   );
-};
+}
 
 MarkdownPreviewLayout.displayName = "MarkdownPreviewLayout";
 MarkdownPreviewLayout.defaultProps = {};

@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./UserList.module.css";
 import { UserListItem } from "./UserListItem";
 import { TeamMember, User } from "../../../../../schema";
@@ -8,7 +7,7 @@ export interface UserListProps {
   teamMemberData?: TeamMember[];
 }
 
-export const UserList: React.FC<UserListProps> = (props) => {
+export function UserList(props: UserListProps) {
   const { teamMemberData } = props;
 
   const mappedUserList = teamMemberData?.map(
@@ -27,7 +26,7 @@ export const UserList: React.FC<UserListProps> = (props) => {
   );
 
   return <div className={styles.root}>{mappedUserList}</div>;
-};
+}
 
 UserList.displayName = "UserList";
 UserList.defaultProps = { teamMemberData: [] };

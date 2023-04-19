@@ -11,10 +11,10 @@ const meta = {
   component: ManifestValidatorLayout,
 } as ComponentMeta<typeof ManifestValidatorLayout>;
 
-const Template: ComponentStory<typeof ManifestValidatorLayout> = (args) => (
+const Template: ComponentStory<typeof ManifestValidatorLayout> = () => (
   <div>
     <Heading />
-    <ManifestValidatorLayout {...args} />
+    <ManifestValidatorLayout />
     <Footer />
   </div>
 );

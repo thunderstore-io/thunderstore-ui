@@ -1,5 +1,4 @@
 import { Box, BoxProps, chakra, Flex, Heading, Text } from "@chakra-ui/react";
-import React from "react";
 import { PackageLink } from "..";
 
 import { MaybeImage } from "./Internals";
@@ -20,9 +19,7 @@ interface PackageRequirementsProps extends BoxProps {
 /**
  * Render list of dependency packages.
  */
-export const PackageRequirements: React.FC<PackageRequirementsProps> = (
-  props
-) => {
+export function PackageRequirements(props: PackageRequirementsProps) {
   const { requirements, ...boxProps } = props;
 
   if (!requirements.length) {
@@ -42,9 +39,9 @@ export const PackageRequirements: React.FC<PackageRequirementsProps> = (
       ))}
     </Box>
   );
-};
+}
 
-const Dependency: React.FC<{ package: PackageDependency }> = (props) => {
+function Dependency(props: { package: PackageDependency }) {
   const {
     communityIdentifier,
     description,
@@ -99,4 +96,4 @@ const Dependency: React.FC<{ package: PackageDependency }> = (props) => {
       </Box>
     </Flex>
   );
-};
+}

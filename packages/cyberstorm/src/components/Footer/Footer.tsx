@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Footer.module.css";
 import { Title } from "../Title/Title";
 import { Button } from "../Button/Button";
@@ -10,7 +9,7 @@ import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
 /**
  * Cyberstorm Footer Component
  */
-export const Footer: React.FC = () => {
+export function Footer() {
   return (
     <div className={styles.root}>
       <div className={styles.top}>
@@ -73,7 +72,7 @@ export const Footer: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 Footer.displayName = "Footer";
 Footer.defaultProps = {};

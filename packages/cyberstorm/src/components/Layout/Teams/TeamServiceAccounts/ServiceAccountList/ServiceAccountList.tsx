@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./ServiceAccountList.module.css";
 import { ServiceAccountListItem } from "./ServiceAccountListItem";
 import { ServiceAccount } from "../../../../../schema";
@@ -7,9 +6,7 @@ export interface ServiceAccountListProps {
   serviceAccountData?: ServiceAccount[];
 }
 
-export const ServiceAccountList: React.FC<ServiceAccountListProps> = (
-  props
-) => {
+export function ServiceAccountList(props: ServiceAccountListProps) {
   const { serviceAccountData } = props;
 
   const mappedServiceAccountList = serviceAccountData?.map(
@@ -26,7 +23,7 @@ export const ServiceAccountList: React.FC<ServiceAccountListProps> = (
   );
 
   return <div className={styles.root}>{mappedServiceAccountList}</div>;
-};
+}
 
 ServiceAccountList.displayName = "ServiceAccountList";
 ServiceAccountList.defaultProps = { serviceAccountData: [] };

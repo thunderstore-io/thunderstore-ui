@@ -7,10 +7,10 @@ const meta = {
   component: PackageUploadLayout,
 } as ComponentMeta<typeof PackageUploadLayout>;
 
-const Template: ComponentStory<typeof PackageUploadLayout> = (args) => (
+const Template: ComponentStory<typeof PackageUploadLayout> = () => (
   <div>
     <Heading />
-    <PackageUploadLayout {...args} />
+    <PackageUploadLayout />
     <Footer />
   </div>
 );

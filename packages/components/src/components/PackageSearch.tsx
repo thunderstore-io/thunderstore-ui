@@ -1,6 +1,6 @@
 import { Box, Button, Flex, FormLabel, Input, Text } from "@chakra-ui/react";
 import { DebouncedEventHandler } from "@thunderstore/hooks";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { FilterIcon, SearchIcon } from "./Icons";
 import { MultiSelect, SelectOption } from "./Select";
@@ -50,7 +50,7 @@ interface PackageSearchProps {
 /**
  * Component for filtering and ordering PackageCards in list views.
  */
-export const PackageSearch: React.FC<PackageSearchProps> = (props) => {
+export function PackageSearch(props: PackageSearchProps) {
   const {
     categories,
     deprecated,
@@ -190,7 +190,7 @@ export const PackageSearch: React.FC<PackageSearchProps> = (props) => {
       </Flex>
     </>
   );
-};
+}
 
 interface OrderingButtonsProps {
   selected: PackageOrdering;
@@ -200,7 +200,7 @@ interface OrderingButtonsProps {
 /**
  * Buttons for sorting the search results.
  */
-const OrderingButtons: React.FC<OrderingButtonsProps> = (props) => {
+function OrderingButtons(props: OrderingButtonsProps) {
   const { selected, setOrdering } = props;
   const buttons: [string, PackageOrdering][] = [
     ["Last Updated", "last-updated"],
@@ -232,4 +232,4 @@ const OrderingButtons: React.FC<OrderingButtonsProps> = (props) => {
       ))}
     </Flex>
   );
-};
+}

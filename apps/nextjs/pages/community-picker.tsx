@@ -1,8 +1,9 @@
 import { Community, MultiCommunityPicker } from "@thunderstore/components";
 import React, { useState } from "react";
 import { Box, Button, List, ListItem } from "@chakra-ui/react";
+import { ReactElement } from "react";
 
-const CommunityPickerPage: React.FC<Record<string, never>> = () => {
+function CommunityPickerPage(): ReactElement {
   const [disabled, setDisabled] = useState(false);
   const [disabling, setDisabling] = useState(false);
   const [communities, setCommunities] = useState<Community[]>([]);
@@ -39,6 +40,6 @@ const CommunityPickerPage: React.FC<Record<string, never>> = () => {
       />
     </Box>
   );
-};
+}
 
 export default CommunityPickerPage;

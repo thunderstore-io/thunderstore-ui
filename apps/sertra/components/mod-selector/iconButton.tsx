@@ -1,21 +1,19 @@
-import { DetailedHTMLProps, ReactNode } from "react";
+import { DetailedHTMLProps, HTMLAttributes, ReactNode } from "react";
 
 import styles from "./iconButton.module.css";
 
 interface IconButtonProps {
   content: ReactNode;
   buttonProps?: DetailedHTMLProps<
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   >;
 }
-export const IconButton: React.FC<IconButtonProps> = ({
-  content,
-  buttonProps,
-}) => {
+export function IconButton(props: IconButtonProps) {
+  const { content, buttonProps } = props;
   return (
     <button {...buttonProps} className={styles.headerCloseButton}>
       {content}
     </button>
   );
-};
+}

@@ -13,7 +13,7 @@ type BreadCrumbProps = PropsWithChildren<{
   key?: number;
 }>;
 
-export const BreadCrumbs: React.FC<BreadCrumbsProps> = (props) => {
+export function BreadCrumbs(props: BreadCrumbsProps) {
   const nodes: ReactNode[] = [
     !props.excludeHome ? <DefaultHomeCrumb key={0} /> : null,
   ];
@@ -30,28 +30,37 @@ export const BreadCrumbs: React.FC<BreadCrumbsProps> = (props) => {
       ))}
     </div>
   );
-};
+}
 
-export const BreadCrumb: React.FC<PropsWithChildren<BreadCrumbProps>> = (
-  props
-) => {
-  return <span className={styles.crumb}>{props.children}</span>;
-};
+export function BreadCrumb(props: PropsWithChildren<BreadCrumbProps>) {
+  const { key, children } = props;
+  if (key) {
+    return (
+      <span key={key} className={styles.crumb}>
+        {children}
+      </span>
+    );
+  } else {
+    return <span className={styles.crumb}>{children}</span>;
+  }
+}
 
-export const Separator: React.FC = () => (
-  <FontAwesomeIcon
-    aria-hidden
-    fixedWidth
-    className={styles.separator}
-    icon={faSlash}
-    rotation={90}
-  />
-);
+export function Separator() {
+  return (
+    <FontAwesomeIcon
+      aria-hidden
+      fixedWidth
+      className={styles.separator}
+      icon={faSlash}
+      rotation={90}
+    />
+  );
+}
 
-export const DefaultHomeCrumb: React.FC = () => {
+export function DefaultHomeCrumb() {
   return (
     <IndexLink>
       <FontAwesomeIcon fixedWidth icon={faHouse} className={styles.home} />
     </IndexLink>
   );
-};
+}

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import { ReactNode } from "react";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
 import styles from "./Tooltip.module.css";
 
@@ -9,11 +9,12 @@ export interface TooltipProps {
   collisionPadding?: number;
   sticky?: "always" | "partial" | undefined;
   avoidCollisions?: boolean;
+  children?: ReactNode;
 }
 
 // Cyberstorm Tooltip component
 
-export const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
+export function Tooltip({
   content,
   sideOffset = 5,
   side = "right",
@@ -21,7 +22,7 @@ export const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
   sticky = "always",
   avoidCollisions = true,
   children,
-}) => {
+}: TooltipProps) {
   return (
     <RadixTooltip.Root>
       <RadixTooltip.Trigger>{children}</RadixTooltip.Trigger>
@@ -40,4 +41,4 @@ export const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
       </RadixTooltip.Portal>
     </RadixTooltip.Root>
   );
-};
+}

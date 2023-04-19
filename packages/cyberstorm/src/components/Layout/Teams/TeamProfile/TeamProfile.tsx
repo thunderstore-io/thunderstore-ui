@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./TeamProfile.module.css";
 import { Button } from "../../../Button/Button";
 import { SettingItem } from "../../../SettingItem/SettingItem";
@@ -10,7 +9,7 @@ export interface TeamProfileProps {
   teamData: Team;
 }
 
-export const TeamProfile: React.FC<TeamProfileProps> = (props) => {
+export function TeamProfile(props: TeamProfileProps) {
   const { teamData } = props;
 
   return (
@@ -61,7 +60,7 @@ export const TeamProfile: React.FC<TeamProfileProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 TeamProfile.displayName = "TeamProfile";
 TeamProfile.defaultProps = {};

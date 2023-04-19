@@ -11,10 +11,10 @@ const meta = {
   component: PackageFormatDocsLayout,
 } as ComponentMeta<typeof PackageFormatDocsLayout>;
 
-const Template: ComponentStory<typeof PackageFormatDocsLayout> = (args) => (
+const Template: ComponentStory<typeof PackageFormatDocsLayout> = () => (
   <div>
     <Heading />
-    <PackageFormatDocsLayout {...args} />
+    <PackageFormatDocsLayout />
     <Footer />
   </div>
 );

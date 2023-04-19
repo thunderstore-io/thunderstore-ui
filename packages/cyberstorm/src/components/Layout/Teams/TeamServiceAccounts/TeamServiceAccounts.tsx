@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./TeamServiceAccounts.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { Button } from "../../../Button/Button";
@@ -11,9 +10,7 @@ export interface TeamServiceAccountsProps {
   serviceAccountData: string[];
 }
 
-export const TeamServiceAccounts: React.FC<TeamServiceAccountsProps> = (
-  props
-) => {
+export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
   const { serviceAccountData } = props;
 
   return (
@@ -39,7 +36,7 @@ export const TeamServiceAccounts: React.FC<TeamServiceAccountsProps> = (
       />
     </div>
   );
-};
+}
 
 TeamServiceAccounts.displayName = "TeamServiceAccounts";
 TeamServiceAccounts.defaultProps = { serviceAccountData: [] };

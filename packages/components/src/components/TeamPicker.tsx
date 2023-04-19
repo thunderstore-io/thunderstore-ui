@@ -1,5 +1,5 @@
 import { Text } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useQuery } from "react-query";
 import { apiFetch } from "../fetch";
 import { Select, SelectProps, SelectOption } from "./Select";
@@ -14,10 +14,8 @@ type TeamPickerProps = Pick<
   "disabled" | "onChange"
 >;
 
-export const TeamPicker: React.FC<TeamPickerProps> = ({
-  disabled = false,
-  onChange,
-}) => {
+export function TeamPicker(props: TeamPickerProps) {
+  const { disabled = false, onChange } = props;
   const context = useContext(ThunderstoreContext);
   const { isLoading, data } = useQuery("userInfo", async () => {
     const r = await apiFetch(context, "/experimental/current-user/");
@@ -39,4 +37,4 @@ export const TeamPicker: React.FC<TeamPickerProps> = ({
   }));
 
   return <Select options={options} disabled={disabled} onChange={onChange} />;
-};
+}

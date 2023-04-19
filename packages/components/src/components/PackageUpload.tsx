@@ -44,10 +44,8 @@ interface PackageUploadFormInputs {
   categories: [];
 }
 
-const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
-  readmeContent,
-  modZip,
-}) => {
+function PackageUploadForm(props: PackageUploadFormProps) {
+  const { readmeContent, modZip } = props;
   const { isOpen, onOpen, onClose: closeDrawer } = useDisclosure();
   const btnRef = React.useRef<HTMLButtonElement>(null);
   const { register, handleSubmit, formState, control, reset } =
@@ -177,7 +175,7 @@ const PackageUploadForm: React.FC<PackageUploadFormProps> = ({
       </Drawer>
     </>
   );
-};
+}
 
 export const PackageUpload: React.FC<Record<string, never>> = () => {
   const [file, setFile] = useState<File | null>(null);

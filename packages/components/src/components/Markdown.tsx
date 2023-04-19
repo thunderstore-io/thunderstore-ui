@@ -8,7 +8,8 @@ interface MarkdownProps {
 /**
  * Wrapper for rendering markdown strings as proper markup.
  */
-export const Markdown: React.FC<MarkdownProps> = ({ children }) => {
+export function Markdown(props: MarkdownProps) {
+  const { children } = props;
   const [markup, setMarkup] = React.useState<JSX.Element>();
 
   /*
@@ -37,7 +38,7 @@ export const Markdown: React.FC<MarkdownProps> = ({ children }) => {
   }, [children, setMarkup]);
 
   return markup ?? null;
-};
+}
 
 export const markdownStyles = {
   ".markdown": {

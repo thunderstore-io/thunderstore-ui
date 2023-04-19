@@ -70,7 +70,7 @@ interface HighlighProps {
 /**
  * Component for highlighting the abundance of content in Thunderstore
  */
-const HighlighBox: React.FC<HighlighProps> = (props) => {
+function HighlighBox(props: HighlighProps) {
   const { count, items } = props;
 
   return (
@@ -91,4 +91,4 @@ const HighlighBox: React.FC<HighlighProps> = (props) => {
       </Text>
     </Box>
   );
-};
+}

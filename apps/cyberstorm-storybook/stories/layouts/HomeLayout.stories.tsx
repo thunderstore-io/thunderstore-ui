@@ -7,10 +7,10 @@ const meta = {
   component: HomeLayout,
 } as ComponentMeta<typeof HomeLayout>;
 
-const Template: ComponentStory<typeof HomeLayout> = (args) => (
+const Template: ComponentStory<typeof HomeLayout> = () => (
   <div>
     <Heading />
-    <HomeLayout {...args} />
+    <HomeLayout />
     <Footer />
   </div>
 );

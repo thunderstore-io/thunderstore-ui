@@ -7,10 +7,10 @@ const meta = {
   component: NotFoundLayout,
 } as ComponentMeta<typeof NotFoundLayout>;
 
-const Template: ComponentStory<typeof NotFoundLayout> = (args) => (
+const Template: ComponentStory<typeof NotFoundLayout> = () => (
   <div>
     <Heading />
-    <NotFoundLayout {...args} />
+    <NotFoundLayout />
     <Footer />
   </div>
 );

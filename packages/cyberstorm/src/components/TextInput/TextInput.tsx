@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import styles from "./TextInput.module.css";
 
 export interface TextInputProps {
@@ -11,7 +11,7 @@ export interface TextInputProps {
 /**
  * Cyberstorm TextInput component
  */
-export const TextInput: React.FC<TextInputProps> = (props) => {
+export function TextInput(props: TextInputProps) {
   const { placeHolder, leftIcon, rightIcon, value } = props;
 
   return (
@@ -26,7 +26,7 @@ export const TextInput: React.FC<TextInputProps> = (props) => {
       {rightIcon ? <div className={styles.rightIcon}>{rightIcon}</div> : null}
     </div>
   );
-};
+}
 
 TextInput.displayName = "TextInput";
 TextInput.defaultProps = {};

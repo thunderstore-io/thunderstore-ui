@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./ManifestValidatorLayout.module.css";
 import { Title } from "../../../Title/Title";
 import { SettingItem } from "../../../SettingItem/SettingItem";
@@ -9,7 +8,7 @@ import { CommunityLink } from "../../../Links/Links";
 /**
  * Cyberstorm ManifestValidator Layout
  */
-export const ManifestValidatorLayout: React.FC = () => {
+export function ManifestValidatorLayout() {
   const valdatorContent = (
     <div className={styles.content}>
       <TextInput />
@@ -30,7 +29,7 @@ export const ManifestValidatorLayout: React.FC = () => {
       />
     </div>
   );
-};
+}
 
 ManifestValidatorLayout.displayName = "ManifestValidatorLayout";
 ManifestValidatorLayout.defaultProps = {};

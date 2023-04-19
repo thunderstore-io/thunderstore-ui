@@ -1,5 +1,4 @@
 import { Box, Flex, Tag, TagLeftIcon, Text } from "@chakra-ui/react";
-import React from "react";
 
 import { formatCount } from "../utils/number";
 import { DownloadIcon, LikeIcon, PinIcon } from "./Icons";
@@ -30,7 +29,7 @@ export interface PackageCardProps {
 /**
  * Card component for listing mods/modpacks.
  */
-export const PackageCard: React.FC<PackageCardProps> = (props) => {
+export function PackageCard(props: PackageCardProps) {
   const {
     categories,
     categoryOnClick,
@@ -130,12 +129,12 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
       </Box>
     </Box>
   );
-};
+}
 
 /**
  * Title for marking a package as pinned.
  */
-const PinnedTag: React.FC<{ isPinned: boolean }> = (props) => {
+function PinnedTag(props: { isPinned: boolean }) {
   if (!props.isPinned) {
     return null;
   }
@@ -146,4 +145,4 @@ const PinnedTag: React.FC<{ isPinned: boolean }> = (props) => {
       Pinned
     </Tag>
   );
-};
+}

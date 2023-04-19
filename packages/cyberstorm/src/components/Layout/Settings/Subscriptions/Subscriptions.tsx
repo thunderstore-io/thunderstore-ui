@@ -1,8 +1,7 @@
-import React from "react";
 import styles from "./Subscriptions.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 
-export const Subscriptions: React.FC = () => {
+export function Subscriptions() {
   return (
     <div className={styles.root}>
       <div className={styles.section}>
@@ -30,7 +29,7 @@ export const Subscriptions: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 Subscriptions.displayName = "Subscriptions";
 Subscriptions.defaultProps = {};

@@ -10,11 +10,8 @@ export interface ModRowInfoProps {
   packageName: string;
   ownerName: string;
 }
-export const ModRowInfo: React.FC<ModRowInfoProps> = ({
-  iconUrl,
-  packageName,
-  ownerName,
-}) => {
+export function ModRowInfo(props: ModRowInfoProps) {
+  const { iconUrl, packageName, ownerName } = props;
   return (
     <>
       <div className={styles.colSmall}>
@@ -27,18 +24,18 @@ export const ModRowInfo: React.FC<ModRowInfoProps> = ({
       </div>
     </>
   );
-};
+}
 
 export interface ModRowControlsProps {
   modPackage: ModPackage;
   onDelete?: (selection: ModPackage) => void;
   setTempSelected?: Dispatch<SetStateAction<ModPackage[]>>;
 }
-export const ModRowControls: React.FC<ModRowControlsProps> = ({
+export function ModRowControls({
   modPackage,
   onDelete,
   setTempSelected,
-}) => {
+}: ModRowControlsProps) {
   const onChange = (selectedVersion: string) =>
     setTempSelected?.((current) => {
       const otherMods = current.filter((m) => m.id !== modPackage.id);
@@ -73,12 +70,12 @@ export const ModRowControls: React.FC<ModRowControlsProps> = ({
       </div>
     </>
   );
-};
+}
 
 export interface ModListEntryProps extends ModRowControlsProps {
   showControls?: boolean;
 }
-export const ModListRow: React.FC<ModListEntryProps> = (props) => {
+export function ModListRow(props: ModListEntryProps) {
   const { modPackage, showControls } = props;
 
   return (
@@ -91,4 +88,4 @@ export const ModListRow: React.FC<ModListEntryProps> = (props) => {
       {showControls && <ModRowControls {...props} />}
     </div>
   );
-};
+}

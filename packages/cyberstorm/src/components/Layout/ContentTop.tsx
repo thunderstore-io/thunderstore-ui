@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 export interface ContentTopProps {
   content?: ReactNode;
@@ -7,11 +7,11 @@ export interface ContentTopProps {
 /**
  * Cyberstorm ContentTop
  */
-export const ContentTop: React.FC<ContentTopProps> = (props) => {
+export function ContentTop(props: ContentTopProps) {
   const { content } = props;
 
   return <div>{content}</div>;
-};
+}
 
 ContentTop.displayName = "ContentTop";
 ContentTop.defaultProps = { content: null };

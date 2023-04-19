@@ -25,7 +25,7 @@ type _SelectProps = {
 export type SelectProps = _SelectProps &
   Omit<React.HTMLProps<HTMLDivElement>, keyof _SelectProps>;
 
-export const Select: React.FC<SelectProps> = (props) => {
+export function Select(props: SelectProps) {
   const {
     colorScheme,
     defaultOpen,
@@ -68,7 +68,7 @@ export const Select: React.FC<SelectProps> = (props) => {
       </RadixSelect.Root>
     </div>
   );
-};
+}
 
 Select.displayName = "Select";
 Select.defaultProps = {

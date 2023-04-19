@@ -1,5 +1,4 @@
 import { Text, TextProps } from "@chakra-ui/react";
-import React from "react";
 import ago from "s-ago";
 
 interface RelativeTimeProps extends TextProps {
@@ -14,7 +13,7 @@ interface RelativeTimeProps extends TextProps {
  *
  * E.g. "now" or "1 hour ago".
  */
-export const RelativeTime: React.FC<RelativeTimeProps> = (props) => {
+export function RelativeTime(props: RelativeTimeProps) {
   const { children, time, prefix, ...textProps } = props;
   const dt = typeof time === "string" ? new Date(time) : time;
 
@@ -23,4 +22,4 @@ export const RelativeTime: React.FC<RelativeTimeProps> = (props) => {
       {prefix ?? null} {ago(dt)}
     </Text>
   );
-};
+}
