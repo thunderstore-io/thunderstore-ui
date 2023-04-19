@@ -13,6 +13,7 @@ type CopiedValue = string | null;
 type CopyFn = (text: string) => Promise<void>;
 
 function useCopyToClipboard(): CopyFn {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [copiedText, setCopiedText] = useState<CopiedValue>(null);
 
   const copy: CopyFn = async (text) => {
@@ -44,7 +45,6 @@ export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
       <Tooltip content="Copy">
         <button
           type="button"
-          className={`${styles.root}`}
           onClick={() => {
             copy(props.text);
             setState(true);

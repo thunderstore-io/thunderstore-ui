@@ -1,15 +1,9 @@
-.root {
-  background-color: transparent;
-}
-
 .copy {
   color: var(--color-text--tertiary);
-  background-color: transparent;
 }
 
 .checkmark {
   color: var(--color-cyber-green--50);
-  background-color: transparent;
 }
 
 .copy:hover {
