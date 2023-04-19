@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, ReactElement } from "react";
 import styles from "./DropDown.module.css";
 
 import * as RadixDropDown from "@radix-ui/react-dropdown-menu";
@@ -7,7 +7,7 @@ type DropDownProps = {
   colorScheme?: "default" | "defaultDark" | "primary";
   defaultOpen?: boolean;
   content?: ReactNode[];
-  trigger: ReactNode;
+  trigger: ReactNode | ReactElement;
   triggerColorScheme?: "default" | "defaultDark" | "primary";
 };
 
@@ -20,7 +20,7 @@ export const DropDown: React.FC<DropDownProps> = (props) => {
       <RadixDropDown.Root defaultOpen={defaultOpen}>
         <RadixDropDown.Trigger asChild disabled={!content}>
           {React.isValidElement(trigger)
-            ? React.cloneElement(trigger, {
+            ? React.cloneElement(trigger as ReactElement, {
                 colorScheme: triggerColorScheme ?? colorScheme,
               })
             : trigger}
