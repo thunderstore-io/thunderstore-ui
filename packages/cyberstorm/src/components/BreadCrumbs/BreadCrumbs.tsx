@@ -9,9 +9,7 @@ type BreadCrumbsProps = PropsWithChildren<{
   excludeHome?: boolean;
 }>;
 
-type BreadCrumbProps = PropsWithChildren<{
-  key?: number;
-}>;
+type BreadCrumbProps = PropsWithChildren;
 
 export function BreadCrumbs(props: BreadCrumbsProps) {
   const nodes: ReactNode[] = [
@@ -33,16 +31,8 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
 }
 
 export function BreadCrumb(props: PropsWithChildren<BreadCrumbProps>) {
-  const { key, children } = props;
-  if (key) {
-    return (
-      <span key={key} className={styles.crumb}>
-        {children}
-      </span>
-    );
-  } else {
-    return <span className={styles.crumb}>{children}</span>;
-  }
+  const { children } = props;
+  return <span className={styles.crumb}>{children}</span>;
 }
 
 export function Separator() {

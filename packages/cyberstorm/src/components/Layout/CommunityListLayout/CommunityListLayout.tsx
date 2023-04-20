@@ -8,7 +8,7 @@ import {
   faStar,
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { CommunityLink } from "../../Links/Links";
+import { CommunitiesLink, CommunityLink } from "../../Links/Links";
 import { TextInput } from "../../TextInput/TextInput";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
@@ -29,7 +29,7 @@ export function CommunityListLayout() {
       <div className={styles.topNavigation}>
         <div>
           <BreadCrumbs>
-            <CommunityLink community="communities">Communities</CommunityLink>
+            <CommunitiesLink>Communities</CommunitiesLink>
           </BreadCrumbs>
           <Title text="Communities" />
         </div>
