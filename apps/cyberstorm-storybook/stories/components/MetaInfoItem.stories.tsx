@@ -14,8 +14,8 @@ const defaultArgs: MetaInfoItemProps = {
 const Template: StoryFn<typeof MetaInfoItem> = (args) => (
   <div style={{ width: "200px" }}>
     <MetaInfoItem {...args}>
-      <span>Game</span>
-      <span>V Rising</span>
+      <span>Likes</span>
+      <span>375</span>
     </MetaInfoItem>
   </div>
 );

@@ -2,16 +2,22 @@
 .root {
   display: flex;
   flex-direction: row;
-  gap: var(--gap--8);
   align-items: center;
   justify-content: space-between;
-  padding: var(--space--12);
+  padding: var(--space--8) var(--space--12);
+  border-radius: var(--border-radius--8);
   color: var(--text-color);
-  background-color: var(--color-background);
-
-  --text-color: var(--color-default-purple--8);
+  font: var(--font-body);
+  font-weight: 700;
+  font-size: var(--font-size--12);
+  line-height: var(--line-height--14);
+  background-color: var(--color-surface--2);
 }
 
 .metaInfoItem__default {
-  --text-color: var(--color-default-purple--8);
+  --text-color: var(--color-text--default);
+}
+
+.metaInfoItem__tertiary {
+  --text-color: var(--color-text--tertiary);
 }
