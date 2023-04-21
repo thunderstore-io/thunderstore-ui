@@ -8,7 +8,7 @@ import {
   faStar,
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { CommunitiesLink, CommunityLink } from "../../Links/Links";
+import { CommunitiesLink } from "../../Links/Links";
 import { TextInput } from "../../TextInput/TextInput";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
