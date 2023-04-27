@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./ProfilePanel.module.css";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,7 +23,7 @@ export interface ProfilePanelProps {
 /**
  * Cyberstorm ProfilePanel component
  */
-export const ProfilePanel: React.FC<ProfilePanelProps> = (props) => {
+export function ProfilePanel(props: ProfilePanelProps) {
   const { profile } = props;
 
   return (
@@ -54,6 +53,6 @@ export const ProfilePanel: React.FC<ProfilePanelProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 ProfilePanel.displayName = "ProfilePanel";
