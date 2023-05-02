@@ -2,11 +2,14 @@ import styles from "./Footer.module.css";
 import { Title } from "../Title/Title";
 import { Button } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faGamepad } from "@fortawesome/free-solid-svg-icons";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "../Link/Link";
 import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
-import { faDiscord } from "@fortawesome/free-brands-svg-icons";
-import { faDragon } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faDiscord,
+  faGithub,
+  faReddit,
+} from "@fortawesome/free-brands-svg-icons";
 
 /**
  * Cyberstorm Footer Component
@@ -24,8 +27,8 @@ export function Footer() {
               </div>
               <div className={styles.linkLogos}>
                 <FontAwesomeIcon icon={faDiscord} fixedWidth />
-                <FontAwesomeIcon icon={faDragon} fixedWidth />
-                <FontAwesomeIcon icon={faGamepad} fixedWidth />
+                <FontAwesomeIcon icon={faGithub} fixedWidth />
+                <FontAwesomeIcon icon={faReddit} fixedWidth />
               </div>
             </div>
           </div>

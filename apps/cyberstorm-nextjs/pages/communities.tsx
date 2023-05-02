@@ -1,10 +1,9 @@
-import { CommunityListLayout, Footer } from "@thunderstore/cyberstorm";
+import { CommunityListLayout } from "@thunderstore/cyberstorm";
 
 export default function Communities() {
   return (
     <div>
       <CommunityListLayout />
-      <Footer />
     </div>
   );
 }

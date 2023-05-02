@@ -10,6 +10,8 @@ import { Connections } from "./Connections/Connections";
 import { Subscriptions } from "./Subscriptions/Subscriptions";
 import { Account } from "./Account/Account";
 import { getUserDummyData } from "../../../dummyData";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
+import { User } from "../../../schema";
 
 export interface SettingsLayoutProps {
   userId: string;
@@ -25,46 +27,21 @@ export function SettingsLayout(props: SettingsLayoutProps) {
   const [currentTab, setCurrentTab] = useState(1);
 
   return (
-    <div className={styles.root}>
-      <BreadCrumbs>
-        <CommunityLink community={"V-Rising"}>V Rising</CommunityLink>
-        <CommunityPackagesLink community={"V-Rising"}>
-          Packages
-        </CommunityPackagesLink>
-      </BreadCrumbs>
-
-      <Title text="Settings" />
-
-      <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
-
-      <div>
-        {currentTab === 1 ? (
-          <div className={styles.tabContent}>
-            <Profile userData={userData} />
-          </div>
-        ) : null}
-        {currentTab === 2 ? (
-          <div className={styles.tabContent}>
-            <Achievements />
-          </div>
-        ) : null}
-        {currentTab === 3 ? (
-          <div className={styles.tabContent}>
-            <Connections userData={userData} />
-          </div>
-        ) : null}
-        {currentTab === 4 ? (
-          <div className={styles.tabContent}>
-            <Subscriptions />
-          </div>
-        ) : null}
-        {currentTab === 5 ? (
-          <div className={styles.tabContent}>
-            <Account userData={userData} />
-          </div>
-        ) : null}
-      </div>
-    </div>
+    <BaseLayout
+      breadCrumb={
+        <BreadCrumbs>
+          <CommunityLink community={"V-Rising"}>V Rising</CommunityLink>
+          <CommunityPackagesLink community={"V-Rising"}>
+            Packages
+          </CommunityPackagesLink>
+        </BreadCrumbs>
+      }
+      header={<Title text="Settings" />}
+      tabs={
+        <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
+      }
+      mainContent={<>{getTabContent(currentTab, userData)}</>}
+    />
   );
 }
 
@@ -82,3 +59,39 @@ const tabs = [
   { key: 4, label: "Subscriptions" },
   { key: 5, label: "Account" },
 ];
+
+function getTabContent(currentTab: number, userData: User) {
+  let tabContent = null;
+  if (currentTab === 1) {
+    tabContent = (
+      <div className={styles.tabContent}>
+        <Profile userData={userData} />
+      </div>
+    );
+  } else if (currentTab === 2) {
+    tabContent = (
+      <div className={styles.tabContent}>
+        <Achievements />
+      </div>
+    );
+  } else if (currentTab === 3) {
+    tabContent = (
+      <div className={styles.tabContent}>
+        <Connections userData={userData} />
+      </div>
+    );
+  } else if (currentTab === 4) {
+    tabContent = (
+      <div className={styles.tabContent}>
+        <Subscriptions />
+      </div>
+    );
+  } else if (currentTab === 5) {
+    tabContent = (
+      <div className={styles.tabContent}>
+        <Account userData={userData} />
+      </div>
+    );
+  }
+  return tabContent;
+}

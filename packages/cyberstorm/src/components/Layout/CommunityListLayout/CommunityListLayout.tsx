@@ -15,6 +15,7 @@ import { Select } from "../../Select/Select";
 import { Title } from "../../Title/Title";
 import { getCommunityPreviewDummyData, getListOfIds } from "../../../dummyData";
 import { CommunityPreview } from "../../../schema";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
 
 /**
  * Cyberstorm CommunityList Layout
@@ -25,15 +26,14 @@ export function CommunityListLayout() {
   const communitiesData: CommunityPreview[] = getCommunityData();
 
   return (
-    <div className={styles.root}>
-      <div className={styles.topNavigation}>
-        <div>
-          <BreadCrumbs>
-            <CommunitiesLink>Communities</CommunitiesLink>
-          </BreadCrumbs>
-          <Title text="Communities" />
-        </div>
-
+    <BaseLayout
+      breadCrumb={
+        <BreadCrumbs>
+          <CommunitiesLink>Communities</CommunitiesLink>
+        </BreadCrumbs>
+      }
+      header={<Title text="Communities" />}
+      search={
         <div className={styles.filters}>
           <TextInput
             placeHolder="Search communities..."
@@ -41,16 +41,17 @@ export function CommunityListLayout() {
           />
           <Select onChange={setOrder} options={selectOptions} value={order} />
         </div>
-      </div>
-
-      <div className={styles.communityCardList}>
-        {communitiesData.map((community) => {
-          return (
-            <CommunityCard key={community.name} communityData={community} />
-          );
-        })}
-      </div>
-    </div>
+      }
+      mainContent={
+        <div className={styles.communityCardList}>
+          {communitiesData.map((community) => {
+            return (
+              <CommunityCard key={community.name} communityData={community} />
+            );
+          })}
+        </div>
+      }
+    />
   );
 }
 
