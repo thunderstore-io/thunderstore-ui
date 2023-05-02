@@ -25,49 +25,49 @@ interface ModalHeaderProps extends PropsWithChildren, Closable {
   title?: string;
 }
 
-export const ModalHeader: React.FC<ModalHeaderProps> = ({
-  children,
-  close,
-  title,
-}) => (
-  <div className={styles.header}>
-    <div className={styles.headerTitle}>
-      <IconButton
-        content={<FontAwesomeIcon icon={faXmark} />}
-        buttonProps={{ onClick: close }}
-      />
-      {title && <h2>{title}</h2>}
+export function ModalHeader({ children, close, title }: ModalHeaderProps) {
+  return (
+    <div className={styles.header}>
+      <div className={styles.headerTitle}>
+        <IconButton
+          content={<FontAwesomeIcon icon={faXmark} />}
+          buttonProps={{ onClick: close }}
+        />
+        {title && <h2>{title}</h2>}
+      </div>
+      {children}
     </div>
-    {children}
-  </div>
-);
+  );
+}
 
-export const ModalContent: React.FC<PropsWithChildren> = ({ children }) => (
-  <div className={styles.content}>{children}</div>
-);
+export function ModalContent({ children }: PropsWithChildren) {
+  return <div className={styles.content}>{children}</div>;
+}
 
 interface ModalFooterProps extends Closable {
   save: () => void;
 }
 
-export const ModalFooter: React.FC<ModalFooterProps> = ({ close, save }) => {
+export function ModalFooter({ close, save }: ModalFooterProps) {
   return (
     <div className={styles.footer}>
       <ButtonSecondary onClick={close}>Cancel</ButtonSecondary>
       <ButtonPrimary onClick={save}>Done</ButtonPrimary>
     </div>
   );
-};
+}
 
-export const NoModsSelectedNotice: React.FC = () => (
-  <div className={styles.noMods}>
-    <FontAwesomeIcon className={styles.noModsIcon} icon={faIceCream} />
-    <p className={styles.noModsText}>
-      Vanilla is good, but we want none of that here.
-    </p>
-    <p className={styles.noModsText}>Add some mods!</p>
-  </div>
-);
+export function NoModsSelectedNotice() {
+  return (
+    <div className={styles.noMods}>
+      <FontAwesomeIcon className={styles.noModsIcon} icon={faIceCream} />
+      <p className={styles.noModsText}>
+        Vanilla is good, but we want none of that here.
+      </p>
+      <p className={styles.noModsText}>Add some mods!</p>
+    </div>
+  );
+}
 
 interface ModSelectorProps extends Closable {
   allMods: ModPackage[];
@@ -76,7 +76,7 @@ interface ModSelectorProps extends Closable {
   visible: boolean;
 }
 
-export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
+export function ModSelectorModal(props: ModSelectorProps) {
   const { allMods, close, currentlySelected, setCurrentlySelected, visible } =
     props;
 
@@ -150,4 +150,4 @@ export const ModSelectorModal: React.FC<ModSelectorProps> = (props) => {
       </div>
     </div>
   );
-};
+}

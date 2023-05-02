@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./TeamsLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { CommunityLink, CommunityPackagesLink } from "../../Links/Links";
@@ -18,7 +18,7 @@ export interface TeamsLayoutProps {
 /**
  * Cyberstorm Teams Layout
  */
-export const TeamsLayout: React.FC<TeamsLayoutProps> = (props) => {
+export function TeamsLayout(props: TeamsLayoutProps) {
   const { teamId } = props;
 
   const teamData = getTeamData(teamId);
@@ -72,7 +72,7 @@ export const TeamsLayout: React.FC<TeamsLayoutProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 TeamsLayout.displayName = "TeamsLayout";
 TeamsLayout.defaultProps = {};

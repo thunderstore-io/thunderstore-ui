@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./SettingsLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { CommunityLink, CommunityPackagesLink } from "../../Links/Links";
@@ -18,7 +18,7 @@ export interface SettingsLayoutProps {
 /**
  * Cyberstorm Settings Layout
  */
-export const SettingsLayout: React.FC<SettingsLayoutProps> = (props) => {
+export function SettingsLayout(props: SettingsLayoutProps) {
   const { userId } = props;
   const userData = getUserData(userId);
 
@@ -66,7 +66,7 @@ export const SettingsLayout: React.FC<SettingsLayoutProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 function getUserData(userId: string) {
   return getUserDummyData(userId);

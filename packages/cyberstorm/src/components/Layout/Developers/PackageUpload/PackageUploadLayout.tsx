@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./PackageUploadLayout.module.css";
 import { Title } from "../../../Title/Title";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
@@ -12,7 +11,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 /**
  * Cyberstorm PackageUpload Layout
  */
-export const PackageUploadLayout: React.FC = () => {
+export function PackageUploadLayout() {
   return (
     <div className={styles.root}>
       <BreadCrumbs>
@@ -67,7 +66,7 @@ export const PackageUploadLayout: React.FC = () => {
       />
     </div>
   );
-};
+}
 
 PackageUploadLayout.displayName = "PackageUploadLayout";
 PackageUploadLayout.defaultProps = {};

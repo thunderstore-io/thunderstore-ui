@@ -16,8 +16,8 @@
     "@thunderstore/components": "^0.1.0",
     "@thunderstore/dapper": "^0.1.0",
     "@thunderstore/hooks": "^0.1.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "scripts": {
     "storybook": "storybook dev -p 6006",

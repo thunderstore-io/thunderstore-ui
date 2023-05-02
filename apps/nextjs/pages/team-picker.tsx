@@ -1,8 +1,8 @@
 import { TeamPicker } from "@thunderstore/components";
-import React, { useState } from "react";
+import React, { useState, ReactElement } from "react";
 import { Box, Button, Text } from "@chakra-ui/react";
 
-const CommunityPickerPage: React.FC<Record<string, never>> = () => {
+function CommunityPickerPage(): ReactElement {
   const [disabled, setDisabled] = useState(false);
   const [disabling, setDisabling] = useState(false);
   const [teamName, setTeamName] = useState<string | null>(null);
@@ -29,6 +29,6 @@ const CommunityPickerPage: React.FC<Record<string, never>> = () => {
       />
     </Box>
   );
-};
+}
 
 export default CommunityPickerPage;

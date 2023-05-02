@@ -1,12 +1,11 @@
-import React from "react";
 import styles from "./InternalServerErrorLayout.module.css";
 
 /**
  * Cyberstorm InternalServerError Layout
  */
-export const InternalServerErrorLayout: React.FC = () => {
+export function InternalServerErrorLayout() {
   return <div className={styles.root}></div>;
-};
+}
 
 InternalServerErrorLayout.displayName = "InternalServerErrorLayout";
 InternalServerErrorLayout.defaultProps = {};

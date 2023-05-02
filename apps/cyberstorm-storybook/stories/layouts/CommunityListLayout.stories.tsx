@@ -11,10 +11,10 @@ const defaultArgs = {
   title: "V Rising",
 };
 
-const Template: ComponentStory<typeof CommunityListLayout> = (args) => (
+const Template: ComponentStory<typeof CommunityListLayout> = () => (
   <div>
     <Heading />
-    <CommunityListLayout {...args} />
+    <CommunityListLayout />
     <Footer />
   </div>
 );

@@ -1,5 +1,4 @@
 import { Box, Heading } from "@chakra-ui/react";
-import React from "react";
 
 import { Markdown } from "./Markdown";
 
@@ -10,7 +9,7 @@ export interface PackageInfoProps {
 /**
  * Render package's markdown information as markup.
  */
-export const PackageInfo: React.FC<PackageInfoProps> = (props) => {
+export function PackageInfo(props: PackageInfoProps) {
   const { markdown } = props;
 
   return (
@@ -21,4 +20,4 @@ export const PackageInfo: React.FC<PackageInfoProps> = (props) => {
       <Markdown>{markdown}</Markdown>
     </Box>
   );
-};
+}

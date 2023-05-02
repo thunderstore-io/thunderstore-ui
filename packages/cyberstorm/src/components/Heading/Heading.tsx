@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Heading.module.css";
 import { DropDown } from "../DropDown/DropDown";
 import { Button } from "../Button/Button";
@@ -13,7 +12,7 @@ import { IndexLink } from "../Links/Links";
 /**
  * Cyberstorm Heading Component
  */
-export const Heading: React.FC = () => {
+export function Heading() {
   const developersDropDownContents = [
     <a href="/wiki" key="1">
       <DropDownLink label="Modding Wiki" isExternal />
@@ -70,7 +69,7 @@ export const Heading: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 Heading.displayName = "Heading";
 Heading.defaultProps = {};

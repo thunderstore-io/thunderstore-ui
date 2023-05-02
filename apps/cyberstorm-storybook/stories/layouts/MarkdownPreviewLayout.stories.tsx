@@ -11,10 +11,10 @@ const meta = {
   component: MarkdownPreviewLayout,
 } as ComponentMeta<typeof MarkdownPreviewLayout>;
 
-const Template: ComponentStory<typeof MarkdownPreviewLayout> = (args) => (
+const Template: ComponentStory<typeof MarkdownPreviewLayout> = () => (
   <div>
     <Heading />
-    <MarkdownPreviewLayout {...args} />
+    <MarkdownPreviewLayout />
     <Footer />
   </div>
 );

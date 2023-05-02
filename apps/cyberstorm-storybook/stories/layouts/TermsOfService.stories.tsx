@@ -11,10 +11,10 @@ const meta = {
   component: TermsOfServiceLayout,
 } as ComponentMeta<typeof TermsOfServiceLayout>;
 
-const Template: ComponentStory<typeof TermsOfServiceLayout> = (args) => (
+const Template: ComponentStory<typeof TermsOfServiceLayout> = () => (
   <div>
     <Heading />
-    <TermsOfServiceLayout {...args} />
+    <TermsOfServiceLayout />
     <Footer />
   </div>
 );

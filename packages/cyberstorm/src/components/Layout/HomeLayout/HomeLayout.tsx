@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./HomeLayout.module.css";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { PackageCard } from "../../PackageCard/PackageCard";
@@ -12,7 +11,7 @@ import { CommunityPreview, PackagePreview } from "../../../schema";
 /**
  * Cyberstorm Home Layout
  */
-export const HomeLayout: React.FC = () => {
+export function HomeLayout() {
   const featuredPackages: PackagePreview[] = getFeaturedPackages();
   const hotPackages: PackagePreview[] = getHotPackages();
   const featuredCommunities: CommunityPreview[] = getFeaturedCommunities();
@@ -51,7 +50,7 @@ export const HomeLayout: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 HomeLayout.displayName = "HomeLayout";
 HomeLayout.defaultProps = {};

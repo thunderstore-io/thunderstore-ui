@@ -7,10 +7,10 @@ const meta = {
   component: PrivacyPolicyLayout,
 } as ComponentMeta<typeof PrivacyPolicyLayout>;
 
-const Template: ComponentStory<typeof PrivacyPolicyLayout> = (args) => (
+const Template: ComponentStory<typeof PrivacyPolicyLayout> = () => (
   <div>
     <Heading />
-    <PrivacyPolicyLayout {...args} />
+    <PrivacyPolicyLayout />
     <Footer />
   </div>
 );

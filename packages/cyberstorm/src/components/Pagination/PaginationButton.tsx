@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, ReactNode } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 import styles from "./PaginationButton.module.css";
 
 export interface PaginationButtonProps {
@@ -12,7 +12,7 @@ export interface PaginationButtonProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
-export const PaginationButton: React.FC<PaginationButtonProps> = (props) => {
+export function PaginationButton(props: PaginationButtonProps) {
   const {
     ariaCurrent,
     ariaLabel,
@@ -36,7 +36,7 @@ export const PaginationButton: React.FC<PaginationButtonProps> = (props) => {
       {rightIcon}
     </button>
   );
-};
+}
 
 PaginationButton.defaultProps = {
   colorScheme: "default",

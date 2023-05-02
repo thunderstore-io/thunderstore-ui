@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./CommunityListLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,7 +8,7 @@ import {
   faStar,
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { CommunityLink } from "../../Links/Links";
+import { CommunitiesLink } from "../../Links/Links";
 import { TextInput } from "../../TextInput/TextInput";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
@@ -16,14 +16,10 @@ import { Title } from "../../Title/Title";
 import { getCommunityPreviewDummyData, getListOfIds } from "../../../dummyData";
 import { CommunityPreview } from "../../../schema";
 
-export interface CommunityListLayoutProps {
-  title?: string;
-}
-
 /**
  * Cyberstorm CommunityList Layout
  */
-export const CommunityListLayout: React.FC<CommunityListLayoutProps> = () => {
+export function CommunityListLayout() {
   const [order, setOrder] = useState("1");
 
   const communitiesData: CommunityPreview[] = getCommunityData();
@@ -33,7 +29,7 @@ export const CommunityListLayout: React.FC<CommunityListLayoutProps> = () => {
       <div className={styles.topNavigation}>
         <div>
           <BreadCrumbs>
-            <CommunityLink community="communities">Communities</CommunityLink>
+            <CommunitiesLink>Communities</CommunitiesLink>
           </BreadCrumbs>
           <Title text="Communities" />
         </div>
@@ -56,7 +52,7 @@ export const CommunityListLayout: React.FC<CommunityListLayoutProps> = () => {
       </div>
     </div>
   );
-};
+}
 
 CommunityListLayout.displayName = "CommunityListLayout";
 CommunityListLayout.defaultProps = {};

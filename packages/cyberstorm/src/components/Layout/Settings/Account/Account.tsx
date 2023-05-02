@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Account.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { Button } from "../../../Button/Button";
@@ -11,7 +10,7 @@ export interface AccountProps {
   userData: User;
 }
 
-export const Account: React.FC<AccountProps> = (props) => {
+export function Account(props: AccountProps) {
   const { userData } = props;
   return (
     <div className={styles.root}>
@@ -50,7 +49,7 @@ export const Account: React.FC<AccountProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 Account.displayName = "Account";
 Account.defaultProps = {};

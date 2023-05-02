@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./TeamMembers.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { UserList } from "./UserList/UserList";
@@ -14,7 +13,7 @@ export interface TeamMembersProps {
   membersData: string[];
 }
 
-export const TeamMembers: React.FC<TeamMembersProps> = (props) => {
+export function TeamMembers(props: TeamMembersProps) {
   const { membersData, teamName } = props;
 
   const dialog = (
@@ -51,7 +50,7 @@ export const TeamMembers: React.FC<TeamMembersProps> = (props) => {
       />
     </div>
   );
-};
+}
 
 TeamMembers.displayName = "TeamMembers";
 TeamMembers.defaultProps = { membersData: [], teamName: "" };

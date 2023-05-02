@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./PackageDetailLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import {
@@ -24,9 +23,7 @@ export interface PackageDetailLayoutProps {
 /**
  * Cyberstorm PackageDetail Layout
  */
-export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
-  props
-) => {
+export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   const { packageId, managementDialogIsOpen } = props;
   const packageData = getPackageData(packageId);
 
@@ -97,7 +94,7 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
       </div>
     </div>
   );
-};
+}
 
 PackageDetailLayout.displayName = "PackageDetailLayout";
 PackageDetailLayout.defaultProps = {

@@ -1,5 +1,5 @@
 import styles from "../SettingItem/SettingItem.module.css";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 export interface SettingItemProps {
   title?: string;
@@ -8,7 +8,7 @@ export interface SettingItemProps {
   additionalLeftColumnContent?: ReactNode;
 }
 
-export const SettingItem: React.FC<SettingItemProps> = (props) => {
+export function SettingItem(props: SettingItemProps) {
   const { title, description, content, additionalLeftColumnContent } = props;
   return (
     <div className={styles.root}>
@@ -20,7 +20,7 @@ export const SettingItem: React.FC<SettingItemProps> = (props) => {
       <div className={styles.rightColumn}>{content}</div>
     </div>
   );
-};
+}
 
 SettingItem.displayName = "SettingItem";
 SettingItem.defaultProps = {

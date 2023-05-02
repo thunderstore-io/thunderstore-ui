@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Avatar.module.css";
 
 export interface AvatarProps {
@@ -9,7 +8,7 @@ export interface AvatarProps {
 /**
  * Cyberstorm Avatar component
  */
-export const Avatar: React.FC<AvatarProps> = (props) => {
+export function Avatar(props: AvatarProps) {
   const { src, size } = props;
   return (
     <div className={styles.root}>
@@ -20,7 +19,7 @@ export const Avatar: React.FC<AvatarProps> = (props) => {
       />
     </div>
   );
-};
+}
 
 Avatar.displayName = "Avatar";
 Avatar.defaultProps = { size: "medium" };

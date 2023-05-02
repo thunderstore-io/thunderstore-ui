@@ -13,7 +13,7 @@ import Router from "next/router";
 import { useSession } from "components/SessionContext";
 import { OAuthManager } from "utils/oauth";
 
-export const TopBar: React.FC = () => {
+export function TopBar() {
   const { sessionId } = useSession();
 
   return (
@@ -21,9 +21,9 @@ export const TopBar: React.FC = () => {
       {sessionId ? <AuthenticatedTopBar /> : <UnauthenticatedTopBar />}
     </TopBarComponent>
   );
-};
+}
 
-const AuthenticatedTopBar: React.FC = () => {
+function AuthenticatedTopBar() {
   const { clearSession } = useSession();
 
   return (
@@ -35,26 +35,28 @@ const AuthenticatedTopBar: React.FC = () => {
       </Button>
     </>
   );
-};
+}
 
-const UnauthenticatedTopBar: React.FC = () => (
-  <>
-    <CommunitiesLink variant="ts.topBar">Browse</CommunitiesLink>
-    <TopBarMenu label="Login with…">
-      <TopBarMenuButton
-        icon={DiscordLogo}
-        label="Discord"
-        onClick={async () =>
-          Router.push(await OAuthManager.getProviderLoginUrl("discord"))
-        }
-      />
-      <TopBarMenuButton
-        icon={GitHubLogo}
-        label="GitHub"
-        onClick={async () =>
-          Router.push(await OAuthManager.getProviderLoginUrl("github"))
-        }
-      />
-    </TopBarMenu>
-  </>
-);
+function UnauthenticatedTopBar() {
+  return (
+    <>
+      <CommunitiesLink variant="ts.topBar">Browse</CommunitiesLink>
+      <TopBarMenu label="Login with…">
+        <TopBarMenuButton
+          icon={DiscordLogo}
+          label="Discord"
+          onClick={async () =>
+            Router.push(await OAuthManager.getProviderLoginUrl("discord"))
+          }
+        />
+        <TopBarMenuButton
+          icon={GitHubLogo}
+          label="GitHub"
+          onClick={async () =>
+            Router.push(await OAuthManager.getProviderLoginUrl("github"))
+          }
+        />
+      </TopBarMenu>
+    </>
+  );
+}

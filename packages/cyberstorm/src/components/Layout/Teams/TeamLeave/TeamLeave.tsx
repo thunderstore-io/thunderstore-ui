@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./TeamLeave.module.css";
 import { Button } from "../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,7 +8,7 @@ export interface TeamLeaveProps {
   teamName?: string;
 }
 
-export const TeamLeave: React.FC<TeamLeaveProps> = (props) => {
+export function TeamLeave(props: TeamLeaveProps) {
   const { teamName } = props;
 
   return (
@@ -36,7 +35,7 @@ export const TeamLeave: React.FC<TeamLeaveProps> = (props) => {
       />
     </div>
   );
-};
+}
 
 TeamLeave.displayName = "TeamLeave";
 TeamLeave.defaultProps = { teamName: "" };

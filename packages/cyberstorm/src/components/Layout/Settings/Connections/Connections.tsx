@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Connections.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { User } from "../../../../schema";
@@ -8,7 +7,7 @@ export interface ConnectionsProps {
   userData: User;
 }
 
-export const Connections: React.FC<ConnectionsProps> = (props) => {
+export function Connections(props: ConnectionsProps) {
   const { userData } = props;
   return (
     <div className={styles.root}>
@@ -27,7 +26,7 @@ export const Connections: React.FC<ConnectionsProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 Connections.displayName = "Connections";
 Connections.defaultProps = {};

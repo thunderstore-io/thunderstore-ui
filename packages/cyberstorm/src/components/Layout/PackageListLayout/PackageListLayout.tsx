@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./PackageListLayout.module.css";
 import { PackageCard } from "../../PackageCard/PackageCard";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
@@ -27,7 +27,7 @@ export interface PackageListLayoutProps {
 /**
  * Cyberstorm PackageList Layout
  */
-export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
+export function PackageListLayout(props: PackageListLayoutProps) {
   const { communityId } = props;
 
   const [order, setOrder] = useState("1");
@@ -103,7 +103,7 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 PackageListLayout.displayName = "PackageListLayout";
 PackageListLayout.defaultProps = {};

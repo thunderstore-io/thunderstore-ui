@@ -5,10 +5,10 @@ interface StickyFooterProps {
   children: React.ReactNode;
 }
 
-export const StickyFooter: React.FC<StickyFooterProps> = ({ children }) => {
+export function StickyFooter({ children }: StickyFooterProps) {
   return (
     <Box position="sticky" bottom={0} p={4} bg="gray">
       {children}
     </Box>
   );
-};
+}

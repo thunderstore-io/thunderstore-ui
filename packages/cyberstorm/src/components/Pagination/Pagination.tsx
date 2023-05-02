@@ -1,6 +1,6 @@
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { range } from "../../utils/utils";
 import styles from "./Pagination.module.css";
 import { PaginationButton } from "./PaginationButton";
@@ -14,7 +14,7 @@ export interface PaginationProps {
   siblingCount: number;
 }
 
-export const Pagination: React.FC<PaginationProps> = (props) => {
+export function Pagination(props: PaginationProps) {
   const {
     currentPage,
     onPageChange,
@@ -122,7 +122,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
       </ul>
     </nav>
   );
-};
+}
 
 Pagination.defaultProps = { disabled: false, siblingCount: 1 };
 

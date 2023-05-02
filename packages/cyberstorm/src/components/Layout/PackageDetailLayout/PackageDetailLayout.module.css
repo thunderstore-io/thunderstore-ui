@@ -63,6 +63,6 @@
 .managementDialogTrigger {
   display: flex;
   flex-grow: 1;
-  align-self: start;
-  justify-content: end;
+  align-self: flex-start;
+  justify-content: flex-end;
 }
