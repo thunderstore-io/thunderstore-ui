@@ -3,6 +3,7 @@ import * as RadixTooltip from "@radix-ui/react-tooltip";
 import styles from "./Tooltip.module.css";
 
 export interface TooltipProps {
+  asChild?: boolean;
   content?: string;
   sideOffset?: number;
   side?: "right" | "top" | "bottom" | "left" | undefined;
@@ -14,6 +15,7 @@ export interface TooltipProps {
 // Cyberstorm Tooltip component
 
 export const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
+  asChild = false,
   content,
   sideOffset = 5,
   side = "right",
@@ -24,7 +26,7 @@ export const Tooltip: React.FC<PropsWithChildren<TooltipProps>> = ({
 }) => {
   return (
     <RadixTooltip.Root>
-      <RadixTooltip.Trigger>{children}</RadixTooltip.Trigger>
+      <RadixTooltip.Trigger asChild={asChild}>{children}</RadixTooltip.Trigger>
       <RadixTooltip.Portal>
         <RadixTooltip.Content
           className={styles.root}
