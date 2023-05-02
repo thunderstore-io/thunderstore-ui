@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "../Link/Link";
 import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
+import { faDiscord } from "@fortawesome/free-brands-svg-icons";
+import { faDragon } from "@fortawesome/pro-solid-svg-icons";
 
 /**
  * Cyberstorm Footer Component
@@ -21,8 +23,8 @@ export function Footer() {
                 <Title size="smaller" text="Thunderstore" />
               </div>
               <div className={styles.linkLogos}>
-                <FontAwesomeIcon icon={faGamepad} fixedWidth />
-                <FontAwesomeIcon icon={faGamepad} fixedWidth />
+                <FontAwesomeIcon icon={faDiscord} fixedWidth />
+                <FontAwesomeIcon icon={faDragon} fixedWidth />
                 <FontAwesomeIcon icon={faGamepad} fixedWidth />
               </div>
             </div>

@@ -2031,10 +2031,45 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "6.4.0"
 
+"@fortawesome/free-brands-svg-icons@^6.4.0":
+  version "6.4.0"
+  resolved "https://npm.fontawesome.com/@fortawesome/free-brands-svg-icons/-/6.4.0/free-brands-svg-icons-6.4.0.tgz#c785cf5563231eadc5ef5f8cd0274e0b8920433f"
+  integrity sha512-qvxTCo0FQ5k2N+VCXb/PZQ+QMhqRVM4OORiO6MXdG6bKolIojGU/srQ1ptvKk0JTbRgaJOfL2qMqGvBEZG7Z6g==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.4.0"
+
 "@fortawesome/free-solid-svg-icons@^6.2.0":
   version "6.4.0"
   resolved "https://npm.fontawesome.com/@fortawesome/free-solid-svg-icons/-/6.4.0/free-solid-svg-icons-6.4.0.tgz#48c0e790847fa56299e2f26b82b39663b8ad7119"
   integrity sha512-kutPeRGWm8V5dltFP1zGjQOEAzaLZj4StdQhWVZnfGFCvAPVvHh8qk5bRrU4KXnRRRNni5tKQI9PBAdI6MP8nQ==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.4.0"
+
+"@fortawesome/pro-light-svg-icons@^6.4.0":
+  version "6.4.0"
+  resolved "https://npm.fontawesome.com/@fortawesome/pro-light-svg-icons/-/6.4.0/pro-light-svg-icons-6.4.0.tgz#5971cdf9d234b69f3ba7f4c46e493a1c14bb3230"
+  integrity sha512-LAK1nUBWhXz8wrNBP+GwpZPqDSHfj7Xp9hhKqhF0Gd2lYtjgl67IvQSf1Vv1o75LK+odq6rkt6RfzBv0quwH/g==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.4.0"
+
+"@fortawesome/pro-regular-svg-icons@^6.4.0":
+  version "6.4.0"
+  resolved "https://npm.fontawesome.com/@fortawesome/pro-regular-svg-icons/-/6.4.0/pro-regular-svg-icons-6.4.0.tgz#e68e9fe28264e45b043593b4b6f19b6e17dd9414"
+  integrity sha512-yEJgoA/31qfIsD27kAg31BODCD+bvgievPp4R39F3kUp/+mu05qX6xgW366RUfs4CnTWSw0fFpc4AhFwC7xbJw==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.4.0"
+
+"@fortawesome/pro-solid-svg-icons@^6.4.0":
+  version "6.4.0"
+  resolved "https://npm.fontawesome.com/@fortawesome/pro-solid-svg-icons/-/6.4.0/pro-solid-svg-icons-6.4.0.tgz#834623f95fbff288d05bb1b6ce04d1007e0fc30a"
+  integrity sha512-R54gxoqHAZdlSCmE7JYpQKT64Jgw59nQIyabT6oh3jsb70O4A3ea+ojVBCKsvoW4UhYe1IOXS1o4PqDEW8Y7Tg==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.4.0"
+
+"@fortawesome/pro-thin-svg-icons@^6.4.0":
+  version "6.4.0"
+  resolved "https://npm.fontawesome.com/@fortawesome/pro-thin-svg-icons/-/6.4.0/pro-thin-svg-icons-6.4.0.tgz#200cc52f742f01be2c17e1a0711a7f8620d5d139"
+  integrity sha512-OVRndqHJNYFtFLUX4p9nDgIAHGs1DdR7EtVKq+oepfCH4kkTM/flsI1gjEty6VV6/FifrWCzEXyDvOzdjgqwRA==
   dependencies:
     "@fortawesome/fontawesome-common-types" "6.4.0"
 
