@@ -43,6 +43,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set fontawesome token
+        run: |
+          npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+          npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
       - name: Build Docker images
         run: IMAGE_TAG=${GITHUB_REF##*/} docker compose -f docker-compose.build.yml build --pull
       - name: Login to Docker Hub
