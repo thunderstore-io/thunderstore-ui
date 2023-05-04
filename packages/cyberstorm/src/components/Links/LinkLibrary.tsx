@@ -35,7 +35,7 @@ const library: LinkLibrary = {
     }),
   PackageFormatDocs: (p) =>
     Link({ ...p, url: "/developers/package-format-docs/" }),
-  PackageUpload: (p) => Link({ ...p, url: "/packages/new/" }),
+  PackageUpload: (p) => Link({ ...p, url: "/developers/upload-package/" }),
   PrivacyPolicy: (p) => Link({ ...p, url: "/privacy-policy/" }),
   Team: (p) => Link({ ...p, url: `/team/${p.team}/` }),
   TermsOfService: (p) => Link({ ...p, url: "/terms-of-service/" }),

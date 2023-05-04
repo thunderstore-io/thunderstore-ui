@@ -4,7 +4,11 @@ import { Button } from "../Button/Button";
 import { Title } from "../Title/Title";
 import { TextInput } from "../TextInput/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload, faBell } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUpload,
+  faBell,
+  faCaretDown,
+} from "@fortawesome/free-solid-svg-icons";
 import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
 import { DropDownLink } from "../DropDown/DropDownLink";
 import {
@@ -13,7 +17,10 @@ import {
   ManifestValidatorLink,
   MarkdownPreviewLink,
   PackageFormatDocsLink,
+  PackageUploadLink,
 } from "../Links/Links";
+import { BreadCrumbs } from "../BreadCrumbs/BreadCrumbs";
+import { Avatar } from "../Avatar/Avatar";
 
 /**
  * Cyberstorm Heading Component
@@ -38,6 +45,9 @@ export function Heading() {
     <ManifestValidatorLink key="6">
       <DropDownLink label="Manifest Validator" />
     </ManifestValidatorLink>,
+    <PackageUploadLink key="7">
+      <DropDownLink label="Upload Package" />
+    </PackageUploadLink>,
   ];
 
   return (
@@ -54,7 +64,12 @@ export function Heading() {
             <Title text="Communities" size="smallest" />
           </CommunitiesLink>
           <DropDown
-            trigger={<Button label="Developers" />}
+            trigger={
+              <Button
+                label="Developers"
+                rightIcon={<FontAwesomeIcon icon={faCaretDown} fixedWidth />}
+              />
+            }
             content={developersDropDownContents}
           />
         </div>
@@ -63,16 +78,20 @@ export function Heading() {
         </div>
         <div className={styles.rightSection}>
           <Button colorScheme="specialPurple" label="Get Manager" />
+
+          <PackageUploadLink>
+            <Button
+              size="small"
+              colorScheme="transparentDefault"
+              leftIcon={<FontAwesomeIcon icon={faUpload} fixedWidth />}
+            />
+          </PackageUploadLink>
           <Button
-            colorScheme="transparentDefault"
-            label="Upload"
-            leftIcon={<FontAwesomeIcon icon={faUpload} fixedWidth />}
-          />
-          <Button
+            size="small"
             colorScheme="transparentDefault"
             leftIcon={<FontAwesomeIcon icon={faBell} fixedWidth />}
           />
-          <Button />
+          <Avatar src="/images/chad.jpg" />
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { Title } from "../../../Title/Title";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { CommunityLink } from "../../../Links/Links";
+import { PackageFormatDocsLink } from "../../../Links/Links";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 
 /**
@@ -11,7 +11,7 @@ export function PackageFormatDocsLayout() {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <CommunityLink community={"Developers"}>Developers</CommunityLink>
+          <PackageFormatDocsLink>Package Format Docs</PackageFormatDocsLink>
         </BreadCrumbs>
       }
       header={<Title text="Package Format Docs" />}
