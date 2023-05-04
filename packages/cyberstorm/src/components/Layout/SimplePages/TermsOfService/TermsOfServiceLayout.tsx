@@ -1,12 +1,12 @@
-import React from "react";
 import styles from "./TermsOfServiceLayout.module.css";
+import { BaseLayout } from "../../BaseLayout/BaseLayout";
 
 /**
  * Cyberstorm TermsOfService Layout
  */
-export const TermsOfServiceLayout: React.FC = () => {
-  return <div className={styles.root}></div>;
-};
+export function TermsOfServiceLayout() {
+  return <BaseLayout mainContent={<div className={styles.root}></div>} />;
+}
 
 TermsOfServiceLayout.displayName = "TermsOfServiceLayout";
 TermsOfServiceLayout.defaultProps = {};

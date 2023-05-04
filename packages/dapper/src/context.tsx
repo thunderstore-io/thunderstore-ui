@@ -2,16 +2,15 @@ import React from "react";
 
 import { DapperInterface } from "./dapper";
 
-type ContextProps = { dapper: DapperInterface };
+type ContextProps = { dapper: DapperInterface; children?: React.ReactNode };
 const DapperContext = React.createContext<DapperInterface | null>(null);
 
-export const DapperProvider: React.FC<ContextProps> = (props) => {
+export function DapperProvider(props: ContextProps) {
+  const { dapper, children } = props;
   return (
-    <DapperContext.Provider value={props.dapper}>
-      {props.children}
-    </DapperContext.Provider>
+    <DapperContext.Provider value={dapper}>{children}</DapperContext.Provider>
   );
-};
+}
 
 export const useDapper = (): DapperInterface => {
   const contextState = React.useContext(DapperContext);

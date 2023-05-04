@@ -1,16 +1,20 @@
-import React from "react";
 import styles from "./Footer.module.css";
 import { Title } from "../Title/Title";
 import { Button } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faGamepad } from "@fortawesome/free-solid-svg-icons";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "../Link/Link";
 import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
+import {
+  faDiscord,
+  faGithub,
+  faReddit,
+} from "@fortawesome/free-brands-svg-icons";
 
 /**
  * Cyberstorm Footer Component
  */
-export const Footer: React.FC = () => {
+export function Footer() {
   return (
     <div className={styles.root}>
       <div className={styles.top}>
@@ -22,9 +26,9 @@ export const Footer: React.FC = () => {
                 <Title size="smaller" text="Thunderstore" />
               </div>
               <div className={styles.linkLogos}>
-                <FontAwesomeIcon icon={faGamepad} fixedWidth />
-                <FontAwesomeIcon icon={faGamepad} fixedWidth />
-                <FontAwesomeIcon icon={faGamepad} fixedWidth />
+                <FontAwesomeIcon icon={faDiscord} fixedWidth />
+                <FontAwesomeIcon icon={faGithub} fixedWidth />
+                <FontAwesomeIcon icon={faReddit} fixedWidth />
               </div>
             </div>
           </div>
@@ -73,7 +77,7 @@ export const Footer: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 Footer.displayName = "Footer";
 Footer.defaultProps = {};

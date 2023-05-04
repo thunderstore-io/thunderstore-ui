@@ -2,7 +2,6 @@
  * Collection of small, shared components intended for internal use.
  */
 import { Flex, Image } from "@chakra-ui/react";
-import React from "react";
 
 import { QuestionMarkIcon } from "./Icons";
 
@@ -15,7 +14,7 @@ interface MaybeImageProps {
 /**
  * Show image or a placeholder.
  */
-export const MaybeImage: React.FC<MaybeImageProps> = (props) => {
+export function MaybeImage(props: MaybeImageProps) {
   const { borderRadius, height, imageSrc } = props;
 
   if (imageSrc) {
@@ -36,4 +35,4 @@ export const MaybeImage: React.FC<MaybeImageProps> = (props) => {
       <QuestionMarkIcon color="ts.lightBlue" h="50px" w="25px" />
     </Flex>
   );
-};
+}

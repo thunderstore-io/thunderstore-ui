@@ -1,5 +1,5 @@
 import styles from "./UserListItem.module.css";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Avatar } from "../../../../Avatar/Avatar";
 import { Select } from "../../../../Select/Select";
 import { Button } from "../../../../Button/Button";
@@ -12,7 +12,7 @@ export interface UserListItemProps {
   role?: string;
 }
 
-export const UserListItem: React.FC<UserListItemProps> = (props) => {
+export function UserListItem(props: UserListItemProps) {
   const { userName, userImageSrc, role } = props;
 
   const [userRole, setUserRole] = useState(role);
@@ -35,7 +35,7 @@ export const UserListItem: React.FC<UserListItemProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 UserListItem.displayName = "UserListItem";
 UserListItem.defaultProps = { userName: "", userImageSrc: "", role: "1" };

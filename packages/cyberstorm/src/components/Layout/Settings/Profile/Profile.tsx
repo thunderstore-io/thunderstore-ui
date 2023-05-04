@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Profile.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { Button } from "../../../Button/Button";
@@ -10,7 +9,7 @@ export interface ProfileProps {
   userData: User;
 }
 
-export const Profile: React.FC<ProfileProps> = (props) => {
+export function Profile(props: ProfileProps) {
   const { userData } = props;
   return (
     <div className={styles.root}>
@@ -53,7 +52,7 @@ export const Profile: React.FC<ProfileProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 Profile.displayName = "Profile";
 Profile.defaultProps = {};

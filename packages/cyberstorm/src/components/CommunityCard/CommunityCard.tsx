@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./CommunityCard.module.css";
 import { MetaItem } from "../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,7 +16,7 @@ export interface GameIconProps {
 /**
  * Cyberstorm CommunityCard component
  */
-export const CommunityCard: React.FC<GameIconProps> = (props) => {
+export function CommunityCard(props: GameIconProps) {
   const { communityData } = props;
   return (
     <div className={styles.root}>
@@ -43,7 +42,7 @@ export const CommunityCard: React.FC<GameIconProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 CommunityCard.displayName = "CommunityCard";
 CommunityCard.defaultProps = {};

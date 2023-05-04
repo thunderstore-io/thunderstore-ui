@@ -1,6 +1,5 @@
 import { Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
 import { useMediaQuery } from "@thunderstore/hooks";
-import React from "react";
 
 import { LikeIcon } from "./Icons";
 import { AnonymousLink, PackageDependantsLink } from "./Links";
@@ -23,7 +22,7 @@ export interface PackageActionsProps {
 /**
  * Display package's action buttons and statistics.
  */
-export const PackageActions: React.FC<PackageActionsProps> = (props) => {
+export function PackageActions(props: PackageActionsProps) {
   const {
     communityIdentifier,
     dependantCount,
@@ -109,4 +108,4 @@ export const PackageActions: React.FC<PackageActionsProps> = (props) => {
       </Box>
     </Box>
   );
-};
+}

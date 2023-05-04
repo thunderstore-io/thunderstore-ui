@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./PackageListLayout.module.css";
 import { PackageCard } from "../../PackageCard/PackageCard";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire, faStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { Select } from "../../Select/Select";
-import { ContentTop } from "../ContentTop";
 import { CommunityInfo } from "../../CommunityInfo/CommunityInfo";
-import { LeftColumn } from "../LeftColumn";
 import { CommunityLink, CommunityPackagesLink } from "../../Links/Links";
-import { BackgroundImage } from "../../BackgroundImage/BackgroundImage";
 import { FilterItemList } from "../../FilterItemList/FilterItemList";
 import { SearchFilter } from "../../SearchFilter/SearchFilter";
 import { Pagination } from "../../Pagination/Pagination";
@@ -19,6 +16,7 @@ import {
   getPackagePreviewDummyData,
 } from "../../../dummyData";
 import { PackagePreview } from "../../../schema";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
 
 export interface PackageListLayoutProps {
   communityId: string;
@@ -27,7 +25,7 @@ export interface PackageListLayoutProps {
 /**
  * Cyberstorm PackageList Layout
  */
-export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
+export function PackageListLayout(props: PackageListLayoutProps) {
   const { communityId } = props;
 
   const [order, setOrder] = useState("1");
@@ -37,59 +35,34 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
   const communityData = getCommunityData(communityId);
 
   return (
-    <div className={styles.root}>
-      <BackgroundImage src={"/images/page_bg.png"} />
+    <BaseLayout
+      backGroundImageSource={"/images/page_bg.png"}
+      breadCrumb={
+        <BreadCrumbs>
+          <CommunityLink community={"V-Rising"}>V Rising</CommunityLink>
+          <CommunityPackagesLink community={"V-Rising"}>
+            Packages
+          </CommunityPackagesLink>
+        </BreadCrumbs>
+      }
+      header={
+        <CommunityInfo
+          title={communityData.name}
+          description={communityData.description}
+          imageSource={communityData.imageSource}
+          packageCount={communityData.packageCount}
+          downloadCount={communityData.downloadCount}
+          serverCount={communityData.serverCount}
+        />
+      }
+      sidebarContent={<FilterItemList filterData={filterData} />}
+      mainContent={
+        <div className={styles.content}>
+          <SearchFilter tags={topFilterTags} />
 
-      <BreadCrumbs>
-        <CommunityLink community={"V-Rising"}>V Rising</CommunityLink>
-        <CommunityPackagesLink community={"V-Rising"}>
-          Packages
-        </CommunityPackagesLink>
-      </BreadCrumbs>
-
-      <CommunityInfo
-        title={communityData.name}
-        description={communityData.description}
-        imageSource={communityData.imageSource}
-        packageCount={communityData.packageCount}
-        downloadCount={communityData.downloadCount}
-        serverCount={communityData.serverCount}
-      />
-
-      <div>
-        <div className={styles.contentWrapper}>
-          <LeftColumn content={<FilterItemList filterData={filterData} />} />
-
-          <div className={styles.content}>
-            <ContentTop content={<SearchFilter tags={topFilterTags} />} />
-
-            <div className={styles.listTopNavigation}>
-              <div className={styles.showing}>
-                Showing <strong>1-20</strong> of <strong>327</strong>
-              </div>
-              <Pagination
-                currentPage={page}
-                onPageChange={setPage}
-                pageSize={20}
-                siblingCount={2}
-                totalCount={327}
-              />
-              <Select
-                onChange={setOrder}
-                options={selectOptions}
-                value={order}
-              />
-            </div>
-
-            <div className={styles.packageCardList}>
-              {packagesData.map((packageData) => {
-                return (
-                  <PackageCard
-                    key={packageData.name}
-                    packageData={packageData}
-                  />
-                );
-              })}
+          <div className={styles.listTopNavigation}>
+            <div className={styles.showing}>
+              Showing <strong>1-20</strong> of <strong>327</strong>
             </div>
             <Pagination
               currentPage={page}
@@ -98,12 +71,28 @@ export const PackageListLayout: React.FC<PackageListLayoutProps> = (props) => {
               siblingCount={2}
               totalCount={327}
             />
+            <Select onChange={setOrder} options={selectOptions} value={order} />
           </div>
+
+          <div className={styles.packageCardList}>
+            {packagesData.map((packageData) => {
+              return (
+                <PackageCard key={packageData.name} packageData={packageData} />
+              );
+            })}
+          </div>
+          <Pagination
+            currentPage={page}
+            onPageChange={setPage}
+            pageSize={20}
+            siblingCount={2}
+            totalCount={327}
+          />
         </div>
-      </div>
-    </div>
+      }
+    />
   );
-};
+}
 
 PackageListLayout.displayName = "PackageListLayout";
 PackageListLayout.defaultProps = {};

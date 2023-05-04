@@ -18,7 +18,6 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import {
   Dispatch,
-  FC,
   SetStateAction,
   useCallback,
   useEffect,
@@ -285,7 +284,7 @@ interface SectionOptionProps extends FlexProps {
   section: Sections;
 }
 
-const SectionOption: FC<SectionOptionProps> = (props) => {
+function SectionOption(props: SectionOptionProps) {
   const { section, sections, setSections, ...flexProps } = props;
 
   return (
@@ -304,4 +303,4 @@ const SectionOption: FC<SectionOptionProps> = (props) => {
       <Text textTransform="capitalize">{section}</Text>
     </Flex>
   );
-};
+}

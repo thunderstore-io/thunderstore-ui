@@ -1,9 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import {
-  Footer,
-  Heading,
-  TermsOfServiceLayout,
-} from "@thunderstore/cyberstorm";
+import { TermsOfServiceLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -11,11 +7,9 @@ const meta = {
   component: TermsOfServiceLayout,
 } as ComponentMeta<typeof TermsOfServiceLayout>;
 
-const Template: ComponentStory<typeof TermsOfServiceLayout> = (args) => (
+const Template: ComponentStory<typeof TermsOfServiceLayout> = () => (
   <div>
-    <Heading />
-    <TermsOfServiceLayout {...args} />
-    <Footer />
+    <TermsOfServiceLayout />
   </div>
 );
 

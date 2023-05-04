@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./HomeLayout.module.css";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { PackageCard } from "../../PackageCard/PackageCard";
@@ -8,50 +7,53 @@ import {
   getPackagePreviewDummyData,
 } from "../../../dummyData";
 import { CommunityPreview, PackagePreview } from "../../../schema";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
 
 /**
  * Cyberstorm Home Layout
  */
-export const HomeLayout: React.FC = () => {
+export function HomeLayout() {
   const featuredPackages: PackagePreview[] = getFeaturedPackages();
   const hotPackages: PackagePreview[] = getHotPackages();
   const featuredCommunities: CommunityPreview[] = getFeaturedCommunities();
 
   return (
-    <div className={styles.root}>
-      <div className={styles.content}>
-        <div className={styles.specialContent} />
-        <div className={styles.cardContent}>
-          {featuredCommunities.map((communityData) => {
-            return (
-              <CommunityCard
-                key={communityData.name}
-                communityData={communityData}
-              />
-            );
-          })}
+    <BaseLayout
+      mainContent={
+        <div className={styles.content}>
+          <div className={styles.specialContent} />
+          <div className={styles.cardContent}>
+            {featuredCommunities.map((communityData) => {
+              return (
+                <CommunityCard
+                  key={communityData.name}
+                  communityData={communityData}
+                />
+              );
+            })}
+          </div>
+          <div className={styles.smallContent} />
+          <div className={styles.cardContent}>
+            {featuredPackages.map((packageData) => {
+              return (
+                <PackageCard key={packageData.name} packageData={packageData} />
+              );
+            })}
+          </div>
+          <div className={styles.mediumContent} />
+          <div className={styles.cardContent}>
+            {hotPackages.map((packageData) => {
+              return (
+                <PackageCard key={packageData.name} packageData={packageData} />
+              );
+            })}
+          </div>
+          <div className={styles.mediumContent} />
         </div>
-        <div className={styles.smallContent} />
-        <div className={styles.cardContent}>
-          {featuredPackages.map((packageData) => {
-            return (
-              <PackageCard key={packageData.name} packageData={packageData} />
-            );
-          })}
-        </div>
-        <div className={styles.mediumContent} />
-        <div className={styles.cardContent}>
-          {hotPackages.map((packageData) => {
-            return (
-              <PackageCard key={packageData.name} packageData={packageData} />
-            );
-          })}
-        </div>
-        <div className={styles.mediumContent} />
-      </div>
-    </div>
+      }
+    />
   );
-};
+}
 
 HomeLayout.displayName = "HomeLayout";
 HomeLayout.defaultProps = {};

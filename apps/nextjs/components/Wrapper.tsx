@@ -11,7 +11,7 @@ export const FULL_WIDTH_BREAKPOINT = "1200px"; // MAX_WIDTH + possible sidebar.
  *
  * Accepts the same styling props as Chakra UI's Box element does.
  */
-export const ContentWrapper: React.FC<BoxProps> = (props) => {
+export function ContentWrapper(props: BoxProps) {
   const { children, ...boxProps } = props;
 
   return (
@@ -26,7 +26,7 @@ export const ContentWrapper: React.FC<BoxProps> = (props) => {
       {children}
     </Box>
   );
-};
+}
 
 interface LayoutWrapperProps extends BoxProps {
   variant: "article" | "aside";
@@ -40,7 +40,7 @@ interface LayoutWrapperProps extends BoxProps {
  * applies only to full width page: on narrower displays the aside is
  * shown below the article.
  */
-export const LayoutWrapper: React.FC<LayoutWrapperProps> = (props) => {
+export function LayoutWrapper(props: LayoutWrapperProps) {
   const { children, variant, ...boxProps } = props;
   const isFullWidth = useMediaQuery(`(min-width: ${FULL_WIDTH_BREAKPOINT})`);
   const layoutProps: BoxProps = {
@@ -61,4 +61,4 @@ export const LayoutWrapper: React.FC<LayoutWrapperProps> = (props) => {
       {children}
     </Box>
   );
-};
+}

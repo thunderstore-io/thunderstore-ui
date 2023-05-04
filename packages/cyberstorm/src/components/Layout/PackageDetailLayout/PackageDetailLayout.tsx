@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./PackageDetailLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import {
@@ -15,6 +14,7 @@ import { Title } from "../../Title/Title";
 import { Dialog } from "../../Dialog/Dialog";
 import { PackageManagementForm } from "./PackageManagementForm";
 import { getPackageDummyData } from "../../../dummyData";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
 
 export interface PackageDetailLayoutProps {
   packageId: string;
@@ -24,15 +24,13 @@ export interface PackageDetailLayoutProps {
 /**
  * Cyberstorm PackageDetail Layout
  */
-export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
-  props
-) => {
+export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   const { packageId, managementDialogIsOpen } = props;
   const packageData = getPackageData(packageId);
 
   return (
-    <div className={styles.root}>
-      <div className={styles.topContent}>
+    <BaseLayout
+      breadCrumb={
         <BreadCrumbs>
           <CommunityLink community="V-Rising">V Rising</CommunityLink>
           <CommunityPackagesLink community="V-Rising">
@@ -46,7 +44,8 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
             {packageData.name}
           </PackageLink>
         </BreadCrumbs>
-
+      }
+      header={
         <div className={styles.packageInfo}>
           <ModIcon src={packageData.imageSource}></ModIcon>
           <div className={styles.packageInfoDetails}>
@@ -87,17 +86,19 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
             />
           </div>
         </div>
-      </div>
-      <div className={styles.mainContentWrapper}>
-        <div className={styles.mainContentLeft}>
-          <Title text={packageData.name} />
-          <p className={styles.description}>{packageData.description}</p>
+      }
+      mainContent={
+        <div className={styles.mainContentWrapper}>
+          <div className={styles.mainContentLeft}>
+            <Title text={packageData.name} />
+            <p className={styles.description}>{packageData.description}</p>
+          </div>
+          <div className={styles.mainContentRight} />
         </div>
-        <div className={styles.mainContentRight} />
-      </div>
-    </div>
+      }
+    />
   );
-};
+}
 
 PackageDetailLayout.displayName = "PackageDetailLayout";
 PackageDetailLayout.defaultProps = {

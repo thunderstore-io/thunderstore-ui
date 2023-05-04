@@ -21,7 +21,7 @@ interface PackageVersionsProps {
 /**
  * Render list of different versions available for a package.
  */
-export const PackageVersions: React.FC<PackageVersionsProps> = (props) => {
+export function PackageVersions(props: PackageVersionsProps) {
   const { packageName: name, versions } = props;
 
   if (!versions.length) {
@@ -47,7 +47,7 @@ export const PackageVersions: React.FC<PackageVersionsProps> = (props) => {
       ))}
     </Box>
   );
-};
+}
 
 interface VersionProps {
   isLatest?: boolean;
@@ -55,7 +55,7 @@ interface VersionProps {
   version: PackageVersion;
 }
 
-const Version: React.FC<VersionProps> = (props) => {
+function Version(props: VersionProps) {
   const { isLatest, name, version } = props;
   const {
     downloadCount,
@@ -102,10 +102,17 @@ const Version: React.FC<VersionProps> = (props) => {
       </Flex>
     </Flex>
   );
-};
+}
 
-const Span: React.FC = (props) => (
-  <chakra.span color="ts.babyBlue" fontWeight={600} ml="16px">
-    {props.children}
-  </chakra.span>
-);
+interface SpanProps {
+  children?: React.ReactNode;
+}
+
+function Span(props: SpanProps) {
+  const { children } = props;
+  return (
+    <chakra.span color="ts.babyBlue" fontWeight={600} ml="16px">
+      {children}
+    </chakra.span>
+  );
+}

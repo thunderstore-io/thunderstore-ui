@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { CommunityListLayout, Footer, Heading } from "@thunderstore/cyberstorm";
+import { CommunityListLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -11,11 +11,9 @@ const defaultArgs = {
   title: "V Rising",
 };
 
-const Template: ComponentStory<typeof CommunityListLayout> = (args) => (
+const Template: ComponentStory<typeof CommunityListLayout> = () => (
   <div>
-    <Heading />
-    <CommunityListLayout {...args} />
-    <Footer />
+    <CommunityListLayout />
   </div>
 );
 

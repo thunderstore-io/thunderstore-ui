@@ -14,7 +14,7 @@ export interface FilterItemProps {
 /**
  * Cyberstorm BackgroundImage
  */
-export const FilterItem: React.FC<FilterItemProps> = (props) => {
+export function FilterItem(props: FilterItemProps) {
   const { label, count, checkBoxId } = props;
 
   const [checked, setChecked] = React.useState<boolean | undefined>(undefined);
@@ -42,7 +42,7 @@ export const FilterItem: React.FC<FilterItemProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 FilterItem.displayName = "FilterItem";
 FilterItem.defaultProps = {};

@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./CommunityInfo.module.css";
 import { GameIcon } from "../GameIcon/GameIcon";
 import { MetaItem } from "../MetaItem/MetaItem";
@@ -26,9 +25,7 @@ export interface PackageListCommunityInfoProps {
 /**
  * Cyberstorm PackageListCommunityInfo
  */
-export const CommunityInfo: React.FC<PackageListCommunityInfoProps> = (
-  props
-) => {
+export function CommunityInfo(props: PackageListCommunityInfoProps) {
   const {
     title,
     description,
@@ -79,7 +76,7 @@ export const CommunityInfo: React.FC<PackageListCommunityInfoProps> = (
       </div>
     </div>
   );
-};
+}
 
 CommunityInfo.displayName = "PackageListCommunityInfo";
 CommunityInfo.defaultProps = { title: "" };

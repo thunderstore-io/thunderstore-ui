@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import styles from "./Dialog.module.css";
 import * as RadixDialog from "@radix-ui/react-dialog";
 import { Button } from "../Button/Button";
@@ -19,7 +19,7 @@ type DialogProps = {
 /**
  * Cyberstorm Dialog Component
  */
-export const Dialog: React.FC<DialogProps> = (props) => {
+export function Dialog(props: DialogProps) {
   const {
     additionalFooterContent,
     content,
@@ -85,7 +85,7 @@ export const Dialog: React.FC<DialogProps> = (props) => {
       </RadixDialog.Root>
     </div>
   );
-};
+}
 
 Dialog.displayName = "Dialog";
 Dialog.defaultProps = {

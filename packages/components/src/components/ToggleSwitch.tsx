@@ -16,7 +16,7 @@ interface ToggleSwitchProps extends ThemingProps {
 /**
  * On/off toggle switch with customizable labels.
  */
-export const ToggleSwitch: React.FC<ToggleSwitchProps> = (props) => {
+export function ToggleSwitch(props: ToggleSwitchProps) {
   const { offLabel, onLabel, setValue, size, value } = props;
   const styles = useMultiStyleConfig("ToggleSwitch", { size });
 
@@ -32,7 +32,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = (props) => {
       </Flex>
     </Flex>
   );
-};
+}
 
 export const ToggleSwitchStyles: ComponentMultiStyleConfig = {
   baseStyle: {

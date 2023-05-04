@@ -5,12 +5,13 @@ import {
   ThemingProps,
   useStyleConfig,
 } from "@chakra-ui/react";
-import React from "react";
+
+interface TagBoxProps extends BoxProps, ThemingProps {}
 
 /**
  * Stylized Box element for tag cloud tags.
  */
-export const TagBox: React.FC<BoxProps & ThemingProps> = (props) => {
+export function TagBox(props: TagBoxProps) {
   const { children, size, variant, ...rest } = props;
   const styles = useStyleConfig("TagBox", { size, variant });
 
@@ -19,7 +20,7 @@ export const TagBox: React.FC<BoxProps & ThemingProps> = (props) => {
       {children}
     </Box>
   );
-};
+}
 
 export const TagBoxStyles: ComponentSingleStyleConfig = {
   baseStyle: {

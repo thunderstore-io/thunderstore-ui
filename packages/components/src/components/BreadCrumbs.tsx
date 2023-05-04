@@ -16,7 +16,7 @@ interface Props {
 /**
  * Navigational bread crumbs defining where the user is at the site.
  */
-export const BreadCrumbs: React.FC<Props> = (props) => {
+export function BreadCrumbs(props: Props) {
   const parts = [...props.parts];
   const root = parts.shift();
   const leaf = parts.pop();
@@ -40,9 +40,9 @@ export const BreadCrumbs: React.FC<Props> = (props) => {
       <LeafCrumb crumb={leaf} />
     </Flex>
   );
-};
+}
 
-const RootCrumb: React.FC<{ crumb?: Crumb }> = (props) => {
+function RootCrumb(props: { crumb?: Crumb }) {
   const { crumb } = props;
 
   if (crumb === undefined) {
@@ -64,9 +64,9 @@ const RootCrumb: React.FC<{ crumb?: Crumb }> = (props) => {
       {heading}
     </crumb.LinkComponent>
   );
-};
+}
 
-const MidCrumb: React.FC<{ crumb: Crumb }> = (props) => {
+function MidCrumb(props: { crumb: Crumb }) {
   const { crumb } = props;
 
   if (crumb.LinkComponent === undefined) {
@@ -81,20 +81,20 @@ const MidCrumb: React.FC<{ crumb: Crumb }> = (props) => {
       <TextLabel label={crumb.label} />
     </crumb.LinkComponent>
   );
-};
+}
 
-const LeafCrumb: React.FC<{ crumb?: Crumb }> = (props) => {
+function LeafCrumb(props: { crumb?: Crumb }) {
   const { crumb } = props;
   return crumb === undefined ? null : <TextLabel label={crumb.label} />;
-};
+}
 
-const TextLabel: React.FC<{ label: string }> = (props) => {
+function TextLabel(props: { label: string }) {
   return (
     <Text color="ts.white" fontSize={26} fontWeight={700} opacity="0.7">
       {props.label}
     </Text>
   );
-};
+}
 
 const Separator = () => (
   <Raquo boxSize="20px" color="ts.white" m="8px 20px 0 20px" opacity="0.7" />

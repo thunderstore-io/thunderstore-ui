@@ -16,7 +16,6 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useMediaQuery } from "@thunderstore/hooks";
-import React from "react";
 
 import { MaybeImage } from "./Internals";
 import { AnonymousLink, CommunityPackagesLink, TeamLink } from "./Links";
@@ -36,7 +35,7 @@ export interface PackageHeaderProps {
 /**
  * Display package's image and basic information.
  */
-export const PackageHeader: React.FC<PackageHeaderProps> = (props) => {
+export function PackageHeader(props: PackageHeaderProps) {
   const {
     categories,
     communityIdentifier,
@@ -107,14 +106,14 @@ export const PackageHeader: React.FC<PackageHeaderProps> = (props) => {
       </Flex>
     </Flex>
   );
-};
+}
 
 type TagsProps = Pick<
   PackageHeaderProps,
   "categories" | "communityIdentifier" | "renderFullWidth"
 >;
 
-const TagListing: React.FC<TagsProps> = (props) => {
+function TagListing(props: TagsProps) {
   const { categories, communityIdentifier, renderFullWidth } = props;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -162,4 +161,4 @@ const TagListing: React.FC<TagsProps> = (props) => {
       </Modal>
     </Box>
   );
-};
+}

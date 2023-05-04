@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./FilterItemList.module.css";
 import { FilterItem } from "../FilterItem/FilterItem";
 
@@ -14,7 +13,7 @@ export interface FilterItemListProps {
 /**
  * Cyberstorm FilterItemList
  */
-export const FilterItemList: React.FC<FilterItemListProps> = (props) => {
+export function FilterItemList(props: FilterItemListProps) {
   const { filterData } = props;
   const filters = filterData?.map((filter) => {
     return (
@@ -37,7 +36,7 @@ export const FilterItemList: React.FC<FilterItemListProps> = (props) => {
       {filters}
     </div>
   );
-};
+}
 
 FilterItemList.displayName = "FilterItemList";
 FilterItemList.defaultProps = { filterData: [] };

@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Title.module.css";
 
 export interface TitleProps {
@@ -9,10 +8,10 @@ export interface TitleProps {
 /**
  * Cyberstorm Title component
  */
-export const Title: React.FC<TitleProps> = (props) => {
+export function Title(props: TitleProps) {
   const { size, text } = props;
   return <div className={`${styles.root} ${getSize(size)}`}>{text}</div>;
-};
+}
 
 Title.displayName = "Title";
 Title.defaultProps = { text: "" };

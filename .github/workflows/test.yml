@@ -75,6 +75,10 @@ jobs:
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             yarn-${{ runner.os }}-
+      - name: Set fontawesome token
+        run: |
+          npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+          npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
       - name: Install Yarn dependencies
         run: yarn install --frozen-lockfile
       - name: Build @thunderstore/hooks

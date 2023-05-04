@@ -1,9 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import {
-  Footer,
-  Heading,
-  InternalServerErrorLayout,
-} from "@thunderstore/cyberstorm";
+import { InternalServerErrorLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -11,11 +7,9 @@ const meta = {
   component: InternalServerErrorLayout,
 } as ComponentMeta<typeof InternalServerErrorLayout>;
 
-const Template: ComponentStory<typeof InternalServerErrorLayout> = (args) => (
+const Template: ComponentStory<typeof InternalServerErrorLayout> = () => (
   <div>
-    <Heading />
-    <InternalServerErrorLayout {...args} />
-    <Footer />
+    <InternalServerErrorLayout />
   </div>
 );
 

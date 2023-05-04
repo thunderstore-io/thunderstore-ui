@@ -1,8 +1,8 @@
 import { PackageUpload } from "@thunderstore/components";
-import React from "react";
+import React, { ReactElement } from "react";
 
-const PackageUploadPage: React.FC<Record<string, never>> = () => {
+function PackageUploadPage(): ReactElement {
   return <PackageUpload />;
-};
+}
 
 export default PackageUploadPage;

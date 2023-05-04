@@ -2,7 +2,7 @@ import Router from "next/router";
 import {
   createContext,
   Dispatch,
-  FC,
+  PropsWithChildren,
   SetStateAction,
   useContext,
   useEffect,
@@ -46,7 +46,9 @@ const USERNAME_KEY = "username";
  * authenticating with the latter is stored in the localStorage, and
  * should be accessed via this convenience provider.
  */
-export const SessionProvider: FC = (props) => {
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function SessionProvider(props: PropsWithChildren) {
   const [_session, _setSession] = useState<LoginResponse>();
   const _storage = new StorageManager("Session");
   const [isReady, sessionId] = useValidateSession(
@@ -83,7 +85,7 @@ export const SessionProvider: FC = (props) => {
       {props.children}
     </SessionContext.Provider>
   );
-};
+}
 
 /**
  * For accessing data API's session id.

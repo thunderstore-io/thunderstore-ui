@@ -1,5 +1,5 @@
 import { Text } from "@chakra-ui/react";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useQuery } from "react-query";
 import { apiFetch } from "../fetch";
 import { MultiSelect, MultiSelectProps, SelectOption } from "./Select";
@@ -21,10 +21,8 @@ type MultiCommunityPickerProps = Pick<
   "disabled" | "onChange"
 >;
 
-export const MultiCommunityPicker: React.FC<MultiCommunityPickerProps> = ({
-  disabled = false,
-  onChange,
-}) => {
+export function MultiCommunityPicker(props: MultiCommunityPickerProps) {
+  const { disabled = false, onChange } = props;
   const context = useContext(ThunderstoreContext);
   const { isLoading, data } = useQuery("communityList", async () => {
     const r = await apiFetch(context, "/experimental/community/");
@@ -50,4 +48,4 @@ export const MultiCommunityPicker: React.FC<MultiCommunityPickerProps> = ({
   return (
     <MultiSelect options={options} disabled={disabled} onChange={onChange} />
   );
-};
+}
