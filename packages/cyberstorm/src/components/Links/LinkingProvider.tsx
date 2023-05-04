@@ -74,8 +74,12 @@ export interface LinkLibrary {
   PackageFormatDocs: NoRequiredProps;
   /** View for submitting new packages or versions */
   PackageUpload: NoRequiredProps;
+  /** Privacy policy */
+  PrivacyPolicy: NoRequiredProps;
   /** Team's public profile page */
   Team: (props: AnyProps & { team: string }) => RE | null;
+  /** Terms of service */
+  TermsOfService: NoRequiredProps;
 }
 
 const noop = () => null;
@@ -94,7 +98,9 @@ const library: LinkLibrary = {
   PackageDependants: noop,
   PackageFormatDocs: noop,
   PackageUpload: noop,
+  PrivacyPolicy: noop,
   Team: noop,
+  TermsOfService: noop,
 };
 
 // OPTIONAL STEP 5 of adding new link definitions:

@@ -23,6 +23,9 @@ const library: LinkLibrary = {
   Community: (p) => Link({ ...p, url: `/c/${p.community}/` }),
   CommunityPackages: (p) => Link({ ...p, url: `/c/${p.community}/packages/` }),
   Index: (p) => Link({ ...p, url: "/" }),
+  ManifestValidator: (p) =>
+    Link({ ...p, url: "/developers/manifest-validator/" }),
+  MarkdownPreview: (p) => Link({ ...p, url: "/developers/markdown-preview/" }),
   Package: (p) =>
     Link({ ...p, url: `/c/${p.community}/p/${p.namespace}/${p.package}/` }),
   PackageDependants: (p) =>
@@ -30,8 +33,12 @@ const library: LinkLibrary = {
       ...p,
       url: `/c/${p.community}/p/${p.namespace}/${p.package}/dependants/`,
     }),
+  PackageFormatDocs: (p) =>
+    Link({ ...p, url: "/developers/package-format-docs/" }),
   PackageUpload: (p) => Link({ ...p, url: "/packages/new/" }),
+  PrivacyPolicy: (p) => Link({ ...p, url: "/privacy-policy/" }),
   Team: (p) => Link({ ...p, url: `/team/${p.team}/` }),
+  TermsOfService: (p) => Link({ ...p, url: "/terms-of-service/" }),
 };
 
 export { library as LinkLibrary };

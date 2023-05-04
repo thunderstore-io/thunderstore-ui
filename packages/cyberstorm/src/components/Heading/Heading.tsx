@@ -47,9 +47,9 @@ export function Heading() {
           <IndexLink>
             <ThunderstoreLogo />
           </IndexLink>
-          <a href="/browse">
+          <IndexLink>
             <Title text="Browse" size="smallest" />
-          </a>
+          </IndexLink>
           <CommunitiesLink>
             <Title text="Communities" size="smallest" />
           </CommunitiesLink>
