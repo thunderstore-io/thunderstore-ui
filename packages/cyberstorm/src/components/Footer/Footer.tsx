@@ -3,7 +3,6 @@ import { Title } from "../Title/Title";
 import { Button } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "../Link/Link";
 import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
 import {
   faDiscord,
@@ -18,8 +17,6 @@ import {
   PrivacyPolicyLink,
   TermsOfServiceLink,
 } from "../Links/Links";
-import { PackageFormatDocsLayout } from "../Layout/Developers/PackageFormatDocs/PackageFormatDocsLayout";
-import TermsOfService from "@thunderstore/cyberstorm-nextjs/pages/terms-of-service";
 
 /**
  * Cyberstorm Footer Component
