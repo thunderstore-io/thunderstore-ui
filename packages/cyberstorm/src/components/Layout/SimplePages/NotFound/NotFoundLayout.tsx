@@ -1,10 +1,11 @@
 import styles from "./NotFoundLayout.module.css";
+import { BaseLayout } from "../../BaseLayout/BaseLayout";
 
 /**
  * Cyberstorm NotFound Layout
  */
 export function NotFoundLayout() {
-  return <div className={styles.root}></div>;
+  return <BaseLayout mainContent={<div className={styles.root}></div>} />;
 }
 
 NotFoundLayout.displayName = "NotFoundLayout";

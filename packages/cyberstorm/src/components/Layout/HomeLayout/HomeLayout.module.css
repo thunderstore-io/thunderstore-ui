@@ -1,7 +1,3 @@
-.root {
-  margin: 0 var(--page-margin);
-}
-
 .content {
   display: flex;
   flex-direction: column;

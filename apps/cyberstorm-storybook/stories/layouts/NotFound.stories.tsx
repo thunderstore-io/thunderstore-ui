@@ -9,9 +9,7 @@ const meta = {
 
 const Template: ComponentStory<typeof NotFoundLayout> = () => (
   <div>
-    <Heading />
     <NotFoundLayout />
-    <Footer />
   </div>
 );
 

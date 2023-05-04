@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Footer, Heading, SettingsLayout } from "@thunderstore/cyberstorm";
+import { SettingsLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -11,9 +11,7 @@ const defaultArgs = {};
 
 const Template: ComponentStory<typeof SettingsLayout> = (args) => (
   <div>
-    <Heading />
     <SettingsLayout {...args} />
-    <Footer />
   </div>
 );
 

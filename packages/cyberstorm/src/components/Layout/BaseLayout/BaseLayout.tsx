@@ -34,12 +34,16 @@ export function BaseLayout(props: BaseLayoutProps) {
       <section className={styles.content}>
         <div className={styles.container}>
           <div>{breadCrumb}</div>
-          <header className={styles.pageHeader}>{header}</header>
+          {header ? (
+            <header className={styles.pageHeader}>{header}</header>
+          ) : null}
           <section className={styles.pageBody}>
-            <nav>{tabs}</nav>
+            {tabs ? <nav>{tabs}</nav> : null}
             <div>
               <div className={styles.layoutSidebar}>
-                <div className={styles.fullWidth}>{search}</div>
+                {search ? (
+                  <div className={styles.fullWidth}>{search}</div>
+                ) : null}
                 {sidebarContent ? (
                   <aside className={styles.sidebar}>{sidebarContent}</aside>
                 ) : null}

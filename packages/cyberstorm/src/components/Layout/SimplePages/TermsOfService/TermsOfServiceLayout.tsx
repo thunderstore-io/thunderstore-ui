@@ -1,10 +1,11 @@
 import styles from "./TermsOfServiceLayout.module.css";
+import { BaseLayout } from "../../BaseLayout/BaseLayout";
 
 /**
  * Cyberstorm TermsOfService Layout
  */
 export function TermsOfServiceLayout() {
-  return <div className={styles.root}></div>;
+  return <BaseLayout mainContent={<div className={styles.root}></div>} />;
 }
 
 TermsOfServiceLayout.displayName = "TermsOfServiceLayout";

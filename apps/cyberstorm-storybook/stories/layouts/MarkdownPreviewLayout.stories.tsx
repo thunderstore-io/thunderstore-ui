@@ -1,9 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import {
-  Footer,
-  Heading,
-  MarkdownPreviewLayout,
-} from "@thunderstore/cyberstorm";
+import { MarkdownPreviewLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -13,9 +9,7 @@ const meta = {
 
 const Template: ComponentStory<typeof MarkdownPreviewLayout> = () => (
   <div>
-    <Heading />
     <MarkdownPreviewLayout />
-    <Footer />
   </div>
 );
 

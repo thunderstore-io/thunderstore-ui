@@ -7,6 +7,7 @@ import {
   getPackagePreviewDummyData,
 } from "../../../dummyData";
 import { CommunityPreview, PackagePreview } from "../../../schema";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
 
 /**
  * Cyberstorm Home Layout
@@ -17,38 +18,40 @@ export function HomeLayout() {
   const featuredCommunities: CommunityPreview[] = getFeaturedCommunities();
 
   return (
-    <div className={styles.root}>
-      <div className={styles.content}>
-        <div className={styles.specialContent} />
-        <div className={styles.cardContent}>
-          {featuredCommunities.map((communityData) => {
-            return (
-              <CommunityCard
-                key={communityData.name}
-                communityData={communityData}
-              />
-            );
-          })}
+    <BaseLayout
+      mainContent={
+        <div className={styles.content}>
+          <div className={styles.specialContent} />
+          <div className={styles.cardContent}>
+            {featuredCommunities.map((communityData) => {
+              return (
+                <CommunityCard
+                  key={communityData.name}
+                  communityData={communityData}
+                />
+              );
+            })}
+          </div>
+          <div className={styles.smallContent} />
+          <div className={styles.cardContent}>
+            {featuredPackages.map((packageData) => {
+              return (
+                <PackageCard key={packageData.name} packageData={packageData} />
+              );
+            })}
+          </div>
+          <div className={styles.mediumContent} />
+          <div className={styles.cardContent}>
+            {hotPackages.map((packageData) => {
+              return (
+                <PackageCard key={packageData.name} packageData={packageData} />
+              );
+            })}
+          </div>
+          <div className={styles.mediumContent} />
         </div>
-        <div className={styles.smallContent} />
-        <div className={styles.cardContent}>
-          {featuredPackages.map((packageData) => {
-            return (
-              <PackageCard key={packageData.name} packageData={packageData} />
-            );
-          })}
-        </div>
-        <div className={styles.mediumContent} />
-        <div className={styles.cardContent}>
-          {hotPackages.map((packageData) => {
-            return (
-              <PackageCard key={packageData.name} packageData={packageData} />
-            );
-          })}
-        </div>
-        <div className={styles.mediumContent} />
-      </div>
-    </div>
+      }
+    />
   );
 }
 

@@ -1,5 +1,5 @@
 import { StoryFn, ComponentMeta } from "@storybook/react";
-import { Footer, Heading, PackageListLayout } from "@thunderstore/cyberstorm";
+import { PackageListLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -13,9 +13,7 @@ const defaultArgs = {
 
 const Template: StoryFn<typeof PackageListLayout> = (args) => (
   <div>
-    <Heading />
     <PackageListLayout {...args} />
-    <Footer />
   </div>
 );
 
