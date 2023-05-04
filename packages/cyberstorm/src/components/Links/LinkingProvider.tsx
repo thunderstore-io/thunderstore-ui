@@ -62,10 +62,16 @@ export interface LinkLibrary {
   CommunityPackages: (props: AnyProps & { community: string }) => RE | null;
   /** Site's frontpage */
   Index: NoRequiredProps;
+  /** Manifest validator */
+  ManifestValidator: NoRequiredProps;
+  /** Markdown preview */
+  MarkdownPreview: NoRequiredProps;
   /** Package's detail view */
   Package: (props: AnyProps & PackageProps) => RE | null;
   /** View listing other packages that depend on this package */
   PackageDependants: (props: AnyProps & PackageProps) => RE | null;
+  /** Package format docs */
+  PackageFormatDocs: NoRequiredProps;
   /** View for submitting new packages or versions */
   PackageUpload: NoRequiredProps;
   /** Team's public profile page */
@@ -82,8 +88,11 @@ const library: LinkLibrary = {
   Community: noop,
   CommunityPackages: noop,
   Index: noop,
+  ManifestValidator: noop,
+  MarkdownPreview: noop,
   Package: noop,
   PackageDependants: noop,
+  PackageFormatDocs: noop,
   PackageUpload: noop,
   Team: noop,
 };

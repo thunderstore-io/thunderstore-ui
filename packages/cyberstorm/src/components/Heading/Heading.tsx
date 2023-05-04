@@ -7,7 +7,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload, faBell } from "@fortawesome/free-solid-svg-icons";
 import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
 import { DropDownLink } from "../DropDown/DropDownLink";
-import { IndexLink } from "../Links/Links";
+import {
+  CommunitiesLink,
+  IndexLink,
+  ManifestValidatorLink,
+  MarkdownPreviewLink,
+  PackageFormatDocsLink,
+} from "../Links/Links";
 
 /**
  * Cyberstorm Heading Component
@@ -23,28 +29,30 @@ export function Heading() {
     <a href="/git" key="3">
       <DropDownLink label="GitHub Repo" isExternal />
     </a>,
-    <IndexLink key="5">
+    <PackageFormatDocsLink key="4">
       <DropDownLink label="Package Format Docs" />
-    </IndexLink>,
-    <IndexLink key="6">
+    </PackageFormatDocsLink>,
+    <MarkdownPreviewLink key="5">
       <DropDownLink label="Markdown Preview" />
-    </IndexLink>,
-    <IndexLink key="7">
+    </MarkdownPreviewLink>,
+    <ManifestValidatorLink key="6">
       <DropDownLink label="Manifest Validator" />
-    </IndexLink>,
+    </ManifestValidatorLink>,
   ];
 
   return (
     <div className={styles.root}>
       <div className={styles.heading}>
         <div className={styles.leftSection}>
-          <ThunderstoreLogo />
+          <IndexLink>
+            <ThunderstoreLogo />
+          </IndexLink>
           <a href="/browse">
             <Title text="Browse" size="smallest" />
           </a>
-          <a href="/communities">
+          <CommunitiesLink>
             <Title text="Communities" size="smallest" />
-          </a>
+          </CommunitiesLink>
           <DropDown
             trigger={<Button label="Developers" />}
             content={developersDropDownContents}

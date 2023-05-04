@@ -22,6 +22,7 @@ export type CommunityPreview = Pick<
 export interface Package {
   name: string;
   namespace: string;
+  community: string;
   description?: string;
   shortDescription?: string;
   imageSource: string;
@@ -48,6 +49,7 @@ export type PackagePreview = Pick<
   Package,
   | "name"
   | "namespace"
+  | "community"
   | "description"
   | "imageSource"
   | "downloadCount"
