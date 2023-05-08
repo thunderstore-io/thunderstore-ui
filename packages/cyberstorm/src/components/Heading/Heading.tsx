@@ -19,7 +19,6 @@ import {
   PackageFormatDocsLink,
   PackageUploadLink,
 } from "../Links/Links";
-import { BreadCrumbs } from "../BreadCrumbs/BreadCrumbs";
 import { Avatar } from "../Avatar/Avatar";
 
 /**
