@@ -15,7 +15,6 @@ import { Dialog } from "../../Dialog/Dialog";
 import { PackageManagementForm } from "./PackageManagementForm";
 import { getPackageDummyData } from "../../../dummyData";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
-import { FilterItemList } from "../../FilterItemList/FilterItemList";
 
 export interface PackageDetailLayoutProps {
   packageId: string;
