@@ -24,7 +24,7 @@ import {
 export function Footer() {
   return (
     <div className={styles.root}>
-      <div className={styles.top}>
+      <div className={styles.wrapper}>
         <div className={styles.leftColumn}>
           <div className={styles.columnItem}>
             <div className={styles.logos}>

@@ -1,10 +1,6 @@
 import styles from "./PackageDetailLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import {
-  CommunityLink,
-  CommunityPackagesLink,
-  PackageLink,
-} from "../../Links/Links";
+import { CommunityLink, PackageLink } from "../../Links/Links";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog, faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -87,14 +83,12 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
         </div>
       }
       mainContent={
-        <div className={styles.mainContentWrapper}>
-          <div className={styles.mainContentLeft}>
-            <Title text={packageData.name} />
-            <p className={styles.description}>{packageData.description}</p>
-          </div>
-          <div className={styles.mainContentRight} />
-        </div>
+        <>
+          <Title text={packageData.name} />
+          <p className={styles.description}>{packageData.description}</p>
+        </>
       }
+      rightSidebarContent={<>{"metaInfoItemList here"}</>}
     />
   );
 }
