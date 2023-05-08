@@ -1,12 +1,8 @@
-/**
- * Define how links should be rendered in @thunderstore/cyberstorm-nextjs.
- */
-
+import { LinkLibrary, ThunderstoreLinkProps } from "@thunderstore/cyberstorm";
 import NextLink from "next/link";
 import { PropsWithChildren } from "react";
-import { LinkLibrary, ThunderstoreLinkProps } from "@/LinkingProvider";
 
-interface LinkProps extends ThunderstoreLinkProps, PropsWithChildren {
+interface LinkProps extends PropsWithChildren, ThunderstoreLinkProps {
   queryParams?: string;
   url: string;
 }
