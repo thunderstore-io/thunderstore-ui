@@ -1,7 +1,7 @@
 import styles from "./PackageUploadLayout.module.css";
 import { Title } from "../../../Title/Title";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { CommunityLink } from "../../../Links/Links";
+import { PackageUploadLink } from "../../../Links/Links";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { TextInput } from "../../../TextInput/TextInput";
 import { Button } from "../../../Button/Button";
@@ -17,7 +17,7 @@ export function PackageUploadLayout() {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <CommunityLink community={"Developers"}>Developers</CommunityLink>
+          <PackageUploadLink>Package Upload</PackageUploadLink>
         </BreadCrumbs>
       }
       header={<Title text="Upload Package" />}

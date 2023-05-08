@@ -1,20 +1,21 @@
-import { LinkLibrary } from "@thunderstore/cyberstorm";
-import React from "react";
+import { LinkLibrary, ThunderstoreLinkProps } from "@thunderstore/cyberstorm";
+import NextLink from "next/link";
+import { PropsWithChildren } from "react";
 
-interface CyberstormLinkProps {
-  children?: React.ReactNode;
-}
-
-interface LinkProps extends CyberstormLinkProps {
+interface LinkProps extends PropsWithChildren, ThunderstoreLinkProps {
   queryParams?: string;
   url: string;
 }
 
-const Link = (props: LinkProps): React.ReactElement => {
+export const Link = (props: LinkProps): React.ReactElement => {
   const { children, queryParams, url } = props;
   const q = queryParams ? `?${queryParams}` : "";
 
-  return <a href={`${url}${q}`}>{children}</a>;
+  return (
+    <NextLink href={`${url}${q}`} passHref>
+      {children}
+    </NextLink>
+  );
 };
 
 const library: LinkLibrary = {

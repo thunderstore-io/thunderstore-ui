@@ -3,13 +3,20 @@ import { Title } from "../Title/Title";
 import { Button } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "../Link/Link";
 import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
 import {
   faDiscord,
   faGithub,
   faReddit,
 } from "@fortawesome/free-brands-svg-icons";
+import {
+  CommunitiesLink,
+  ManifestValidatorLink,
+  MarkdownPreviewLink,
+  PackageFormatDocsLink,
+  PrivacyPolicyLink,
+  TermsOfServiceLink,
+} from "../Links/Links";
 
 /**
  * Cyberstorm Footer Component
@@ -26,9 +33,9 @@ export function Footer() {
                 <Title size="smaller" text="Thunderstore" />
               </div>
               <div className={styles.linkLogos}>
-                <FontAwesomeIcon icon={faDiscord} fixedWidth />
-                <FontAwesomeIcon icon={faGithub} fixedWidth />
-                <FontAwesomeIcon icon={faReddit} fixedWidth />
+                <FontAwesomeIcon icon={faDiscord} fixedWidth size={"2x"} />
+                <FontAwesomeIcon icon={faGithub} fixedWidth size={"2x"} />
+                <FontAwesomeIcon icon={faReddit} fixedWidth size={"2x"} />
               </div>
             </div>
           </div>
@@ -37,21 +44,36 @@ export function Footer() {
             <div className={styles.links}>
               <div className={styles.linksColumn}>
                 <Title size="smallest" text="Thunderstore" />
-                <Link label="Browse" />
-                <Link label="Communities" />
-                <Link label="About Us" />
+                <div className={styles.link}>Browse</div>
+                <div className={styles.link}>
+                  <CommunitiesLink>Communities</CommunitiesLink>
+                </div>
+                <div className={styles.link}>About Us</div>
               </div>
               <div className={styles.linksColumn}>
                 <Title size="smallest" text="Thunderstore" />
-                <Link label="Browse" />
-                <Link label="Communities" />
-                <Link label="About Us" />
+                <div className={styles.link}>Modding Wiki</div>
+                <div className={styles.link}>API Documentation</div>
+                <div className={styles.link}>GitHub Repo</div>
+                <div className={styles.link}>
+                  <PackageFormatDocsLink>
+                    Package Format Docs
+                  </PackageFormatDocsLink>
+                </div>
+                <div className={styles.link}>
+                  <MarkdownPreviewLink>Markdown Preview</MarkdownPreviewLink>
+                </div>
+                <div className={styles.link}>
+                  <ManifestValidatorLink>
+                    Manifest Validator
+                  </ManifestValidatorLink>
+                </div>
               </div>
               <div className={styles.linksColumn}>
                 <Title size="smallest" text="Thunderstore" />
-                <Link label="Browse" />
-                <Link label="Communities" />
-                <Link label="About Us" />
+                <div className={styles.link}>FAQ</div>
+                <div className={styles.link}>Give Feedback</div>
+                <div className={styles.link}>Contact Us</div>
               </div>
             </div>
           </div>
@@ -72,8 +94,11 @@ export function Footer() {
         </div>
       </div>
       <div className={styles.bottom}>
-        <span>Thunderstore © 2023</span>
-        <span>All your base are belong to us.</span>
+        <span className={styles.bottomLinks}>
+          <TermsOfServiceLink>Terms of service</TermsOfServiceLink>
+          <PrivacyPolicyLink>PrivacyPolicy</PrivacyPolicyLink>
+        </span>
+        <span>© 2023 Thunderstore. All rights reserved.</span>
       </div>
     </div>
   );

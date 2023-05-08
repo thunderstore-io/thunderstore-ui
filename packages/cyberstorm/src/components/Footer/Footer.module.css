@@ -28,6 +28,12 @@
   display: flex;
   flex-direction: row;
   gap: var(--gap--32);
+  justify-content: space-between;
+}
+
+.link {
+  color: var(--color-text--tertiary);
+  font: var(--font-body);
 }
 
 .linksColumn {
@@ -66,7 +72,7 @@
 .linkLogos {
   display: flex;
   flex-direction: row;
-  gap: var(--gap--8);
+  gap: var(--gap--32);
   align-items: center;
   color: var(--color-text--tertiary);
 }
@@ -79,4 +85,10 @@
   color: var(--color-text--tertiary);
 
   font: var(--font-body);
+}
+
+.bottomLinks {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--32);
 }

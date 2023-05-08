@@ -8,6 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { formatInteger } from "../../utils/utils";
 import { CommunityPreview } from "../../schema";
+import { CommunityLink } from "../Links/Links";
 
 export interface GameIconProps {
   communityData: CommunityPreview;
@@ -20,12 +21,14 @@ export function CommunityCard(props: GameIconProps) {
   const { communityData } = props;
   return (
     <div className={styles.root}>
-      <img
-        className={styles.image}
-        alt={"Community"}
-        src={communityData.imageSource}
-      />
-      <div className={styles.title}>{communityData.name}</div>
+      <CommunityLink community={communityData.name}>
+        <img
+          className={styles.image}
+          alt={communityData.name}
+          src={communityData.imageSource}
+        />
+        <div className={styles.title}>{communityData.name}</div>
+      </CommunityLink>
       <div className={styles.metaItemList}>
         <MetaItem
           label={formatInteger(communityData.packageCount)}
