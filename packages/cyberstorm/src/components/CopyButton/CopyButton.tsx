@@ -42,7 +42,7 @@ export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
       setTimeout(() => setState(false), 2000);
     }, [stateValue]);
     return (
-      <Tooltip content="Copy" asChild={true}>
+      <Tooltip content="Copy">
         <button
           type="button"
           onClick={() => {
