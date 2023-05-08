@@ -3,8 +3,8 @@ import { Title } from "../../../Title/Title";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { TextInput } from "../../../TextInput/TextInput";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { CommunityLink } from "../../../Links/Links";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
+import { ManifestValidatorLink } from "../../../Links/Links";
 
 /**
  * Cyberstorm ManifestValidator Layout
@@ -21,7 +21,7 @@ export function ManifestValidatorLayout() {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <CommunityLink community={"Developers"}>Developers</CommunityLink>
+          <ManifestValidatorLink>Manifest Validator</ManifestValidatorLink>
         </BreadCrumbs>
       }
       header={<Title text="Manifest Validator" />}

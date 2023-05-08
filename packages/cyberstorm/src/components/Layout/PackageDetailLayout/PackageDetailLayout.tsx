@@ -33,14 +33,13 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <CommunityLink community="V-Rising">V Rising</CommunityLink>
-          <CommunityPackagesLink community="V-Rising">
-            Packages
-          </CommunityPackagesLink>
+          <CommunityLink community={packageData.community}>
+            {packageData.community}
+          </CommunityLink>
           <PackageLink
-            namespace="packages"
-            community="V-Rising"
-            package="v-rising-epic-hardcore-mode"
+            namespace={packageData.namespace}
+            community={packageData.community}
+            package={packageData.name}
           >
             {packageData.name}
           </PackageLink>

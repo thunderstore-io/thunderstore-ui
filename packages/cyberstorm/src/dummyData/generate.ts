@@ -51,7 +51,8 @@ export function getPackagePreviewDummyData(seed?: string): PackagePreview {
   faker.seed(parsedSeed);
   return {
     name: faker.random.words(3),
-    namespace: "namespace",
+    namespace: faker.random.word(),
+    community: faker.random.words(3),
     description: faker.company.bs(),
     imageSource: faker.image.abstract(525, 525, true),
     downloadCount: faker.datatype.number({ min: 1000000, max: 10000000 }),
@@ -71,7 +72,8 @@ export function getPackageDummyData(seed?: string): Package {
   faker.seed(parsedSeed);
   return {
     name: faker.random.words(3),
-    namespace: "namespace",
+    namespace: faker.random.word(),
+    community: faker.random.words(3),
     shortDescription: faker.company.bs(),
     description: faker.lorem.paragraphs(12),
     imageSource: faker.image.abstract(525, 525, true),

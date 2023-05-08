@@ -23,6 +23,10 @@
   max-width: 30rem;
 }
 
+.link {
+  color: var(--color-text--tertiary);
+}
+
 .linksColumn {
   display: flex;
   flex-direction: column;
@@ -51,7 +55,7 @@
 .linkLogos {
   display: flex;
   flex-direction: row;
-  gap: var(--gap--8);
+  gap: var(--gap--32);
   align-items: center;
   padding-left: var(--space--16);
   color: var(--color-text--tertiary);
@@ -95,4 +99,10 @@
   .rightColumn {
     flex: 1;
   }
+}
+
+.bottomLinks {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--32);
 }

@@ -12,52 +12,61 @@ import { Tag } from "../Tag/Tag";
 import { PackageFlag } from "../PackageFlag/PackageFlag";
 import { formatInteger } from "../../utils/utils";
 import { PackagePreview } from "../../schema";
+import { PackageLink } from "../Links/Links";
 
 const defaultImageSrc = "";
 
 export interface PackageCardProps {
   packageData: PackagePreview;
   colorScheme?: string;
+  community?: string;
 }
 
 /**
  * Cyberstorm PackageCard component
  */
 export function PackageCard(props: PackageCardProps) {
-  const { packageData, colorScheme, ...forwardedProps } = props;
+  const { packageData, colorScheme, community, ...forwardedProps } = props;
 
   const authorLink = ""; //TODO: author link
   //TODO: convert <a> tags into link components!
-  //TODO: Use LastUpdated component once one is developed
 
   return (
     <div
       className={`${styles.root} ${getStyle(colorScheme)}`}
       {...forwardedProps}
     >
-      <a
-        href={packageData.name}
-        className={styles.imageWrapper}
-        title={packageData.name}
-      >
-        <img
-          src={
-            packageData.imageSource ? packageData.imageSource : defaultImageSrc
-          }
-          className={styles.image}
-          alt={packageData.name}
-        />
-        {getPackageFlags(
-          packageData.isPinned,
-          packageData.isNsfw,
-          packageData.isDeprecated
-        )}
-      </a>
+      <div className={styles.imageWrapper}>
+        <PackageLink
+          namespace={packageData.namespace}
+          package={packageData.name}
+          community={packageData.community}
+        >
+          <img
+            src={
+              packageData.imageSource
+                ? packageData.imageSource
+                : defaultImageSrc
+            }
+            className={styles.image}
+            alt={packageData.name}
+          />
+          {getPackageFlags(
+            packageData.isPinned,
+            packageData.isNsfw,
+            packageData.isDeprecated
+          )}
+        </PackageLink>
+      </div>
 
       <div className={styles.content}>
-        <a href={packageData.name} className={styles.title}>
-          {packageData.name}
-        </a>
+        <PackageLink
+          namespace={packageData.namespace}
+          package={packageData.name}
+          community={packageData.community}
+        >
+          <div className={styles.title}>{packageData.name}</div>
+        </PackageLink>
 
         {packageData.author ? (
           <div className={styles.author}>

@@ -39,10 +39,9 @@ export function PackageListLayout(props: PackageListLayoutProps) {
       backGroundImageSource={"/images/page_bg.png"}
       breadCrumb={
         <BreadCrumbs>
-          <CommunityLink community={"V-Rising"}>V Rising</CommunityLink>
-          <CommunityPackagesLink community={"V-Rising"}>
-            Packages
-          </CommunityPackagesLink>
+          <CommunityLink community={communityData.name}>
+            {communityData.name}
+          </CommunityLink>
         </BreadCrumbs>
       }
       header={

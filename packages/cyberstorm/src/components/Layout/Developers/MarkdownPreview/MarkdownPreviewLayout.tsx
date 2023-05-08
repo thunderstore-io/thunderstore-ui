@@ -2,7 +2,7 @@ import { Title } from "../../../Title/Title";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { TextInput } from "../../../TextInput/TextInput";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { CommunityLink } from "../../../Links/Links";
+import { MarkdownPreviewLink } from "../../../Links/Links";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 
 /**
@@ -13,7 +13,7 @@ export function MarkdownPreviewLayout() {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <CommunityLink community={"Developers"}>Developers</CommunityLink>
+          <MarkdownPreviewLink>Markdown Preview</MarkdownPreviewLink>
         </BreadCrumbs>
       }
       header={<Title text="Markdown Preview" />}
