@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire, faStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { Select } from "../../Select/Select";
 import { CommunityInfo } from "../../CommunityInfo/CommunityInfo";
-import { CommunityLink, CommunityPackagesLink } from "../../Links/Links";
+import { CommunityLink } from "../../Links/Links";
 import { FilterItemList } from "../../FilterItemList/FilterItemList";
 import { SearchFilter } from "../../SearchFilter/SearchFilter";
 import { Pagination } from "../../Pagination/Pagination";

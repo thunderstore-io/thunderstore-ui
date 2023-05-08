@@ -49,7 +49,9 @@ export function BaseLayout(props: BaseLayoutProps) {
                 {leftSidebarContent ? (
                   <aside className={styles.sidebar}>{leftSidebarContent}</aside>
                 ) : null}
-                <main className={styles.main}>{mainContent}</main>
+                {mainContent ? (
+                  <main className={styles.main}>{mainContent}</main>
+                ) : null}
                 {rightSidebarContent ? (
                   <aside className={styles.sidebar}>
                     {rightSidebarContent}
