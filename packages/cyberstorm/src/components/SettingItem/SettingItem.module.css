@@ -1,23 +1,11 @@
 .root {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  gap: 2rem;
   color: var(--color-text--default);
 
   font: var(--font-body);
   font-size: var(--font-size--14);
-}
-
-.leftColumn {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: var(--space--16);
-  min-width: 10rem;
-  padding-right: var(--space--16);
-}
-
-.rightColumn {
-  flex: 3;
 }
 
 .leftColumnTitle {
@@ -26,4 +14,25 @@
 
 .leftColumnDescription {
   color: var(--color-text--secondary);
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 60rem) {
+  .wrapper {
+    flex-flow: row wrap;
+    gap: 2rem;
+  }
+
+  .leftColumn {
+    flex: 0 1 16rem;
+  }
+
+  .rightColumn {
+    flex: 1;
+  }
 }

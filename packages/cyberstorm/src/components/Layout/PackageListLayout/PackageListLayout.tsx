@@ -55,7 +55,7 @@ export function PackageListLayout(props: PackageListLayoutProps) {
           serverCount={communityData.serverCount}
         />
       }
-      sidebarContent={<FilterItemList filterData={filterData} />}
+      leftSidebarContent={<FilterItemList filterData={filterData} />}
       mainContent={
         <div className={styles.content}>
           <SearchFilter tags={topFilterTags} />

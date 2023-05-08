@@ -11,7 +11,8 @@ export interface BaseLayoutProps {
   mainContent?: ReactElement;
   search?: ReactElement;
   tabs?: ReactElement;
-  sidebarContent?: ReactElement;
+  leftSidebarContent?: ReactElement;
+  rightSidebarContent?: ReactElement;
 }
 
 export function BaseLayout(props: BaseLayoutProps) {
@@ -22,7 +23,8 @@ export function BaseLayout(props: BaseLayoutProps) {
     mainContent,
     search,
     tabs,
-    sidebarContent,
+    leftSidebarContent,
+    rightSidebarContent,
   } = props;
 
   return (
@@ -44,10 +46,15 @@ export function BaseLayout(props: BaseLayoutProps) {
                 {search ? (
                   <div className={styles.fullWidth}>{search}</div>
                 ) : null}
-                {sidebarContent ? (
-                  <aside className={styles.sidebar}>{sidebarContent}</aside>
+                {leftSidebarContent ? (
+                  <aside className={styles.sidebar}>{leftSidebarContent}</aside>
                 ) : null}
                 <main className={styles.main}>{mainContent}</main>
+                {rightSidebarContent ? (
+                  <aside className={styles.sidebar}>
+                    {rightSidebarContent}
+                  </aside>
+                ) : null}
               </div>
             </div>
           </section>

@@ -15,6 +15,7 @@ import { Dialog } from "../../Dialog/Dialog";
 import { PackageManagementForm } from "./PackageManagementForm";
 import { getPackageDummyData } from "../../../dummyData";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
+import { FilterItemList } from "../../FilterItemList/FilterItemList";
 
 export interface PackageDetailLayoutProps {
   packageId: string;
@@ -88,14 +89,12 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
         </div>
       }
       mainContent={
-        <div className={styles.mainContentWrapper}>
-          <div className={styles.mainContentLeft}>
-            <Title text={packageData.name} />
-            <p className={styles.description}>{packageData.description}</p>
-          </div>
-          <div className={styles.mainContentRight} />
-        </div>
+        <>
+          <Title text={packageData.name} />
+          <p className={styles.description}>{packageData.description}</p>
+        </>
       }
+      rightSidebarContent={<>{"metaInfoItemList here"}</>}
     />
   );
 }
