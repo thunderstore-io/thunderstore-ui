@@ -28,5 +28,7 @@ export const PackageDependantsLink = wrap("PackageDependants");
 export const PackageFormatDocsLink = wrap("PackageFormatDocs");
 export const PackageUploadLink = wrap("PackageUpload");
 export const PrivacyPolicyLink = wrap("PrivacyPolicy");
+export const SettingsLink = wrap("Settings");
 export const TeamLink = wrap("Team");
+export const TeamsLink = wrap("Teams");
 export const TermsOfServiceLink = wrap("TermsOfService");

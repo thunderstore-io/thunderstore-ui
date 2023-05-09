@@ -76,8 +76,12 @@ export interface LinkLibrary {
   PackageUpload: NoRequiredProps;
   /** Privacy policy */
   PrivacyPolicy: NoRequiredProps;
+  /** Settings */
+  Settings: NoRequiredProps;
   /** Team's public profile page */
   Team: (props: AnyProps & { team: string }) => RE | null;
+  /** Teams */
+  Teams: NoRequiredProps;
   /** Terms of service */
   TermsOfService: NoRequiredProps;
 }
@@ -99,7 +103,9 @@ const library: LinkLibrary = {
   PackageFormatDocs: noop,
   PackageUpload: noop,
   PrivacyPolicy: noop,
+  Settings: noop,
   Team: noop,
+  Teams: noop,
   TermsOfService: noop,
 };
 

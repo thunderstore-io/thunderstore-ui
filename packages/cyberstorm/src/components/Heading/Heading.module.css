@@ -41,3 +41,23 @@
   gap: var(--gap--8);
   align-items: center;
 }
+
+.dropDownUserInfo {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--16);
+  padding: var(--space--8);
+}
+
+.dropdownUserInfoDetails {
+  font: var(--font-body);
+}
+
+.dropdownUserInfoDetails_userName {
+  color: var(--color-text--default);
+  font-weight: 700;
+}
+
+.dropdownUserInfoDetails_description {
+  color: var(--color-text--tertiary);
+}
