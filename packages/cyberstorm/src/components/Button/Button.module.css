@@ -177,7 +177,7 @@
 }
 
 .tiny {
-  gap: var(--gap--8);
+  gap: var(--gap--4);
   padding: var(--space--4) var(--space--4);
   border-radius: var(--border-radius--4);
 }
