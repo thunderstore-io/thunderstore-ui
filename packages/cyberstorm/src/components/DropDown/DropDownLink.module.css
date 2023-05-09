@@ -8,3 +8,9 @@
   font: var(--font-body);
   font-size: var(--font-size--14);
 }
+
+.label {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space--8);
+}

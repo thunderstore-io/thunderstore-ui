@@ -1,9 +1,11 @@
 import styles from "./DropDownLink.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { ReactElement } from "react";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 
 export interface DropDownLinkProps {
   label: string;
+  leftIcon?: ReactElement;
   isExternal?: boolean;
 }
 
@@ -11,11 +13,14 @@ export interface DropDownLinkProps {
  * Cyberstorm DropDownLink component
  */
 export function DropDownLink(props: DropDownLinkProps) {
-  const { label, isExternal } = props;
+  const { label, leftIcon, isExternal } = props;
   return (
     <div className={styles.root}>
-      <>{label}</>
-      {isExternal ? <FontAwesomeIcon icon={faArrowRight} fixedWidth /> : null}
+      <div className={styles.label}>
+        {leftIcon ? leftIcon : null}
+        {label}
+      </div>
+      {isExternal ? <FontAwesomeIcon icon={faArrowUpRight} fixedWidth /> : null}
     </div>
   );
 }

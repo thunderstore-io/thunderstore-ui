@@ -4,11 +4,6 @@ import { Button } from "../Button/Button";
 import { Title } from "../Title/Title";
 import { TextInput } from "../TextInput/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUpload,
-  faBell,
-  faCaretDown,
-} from "@fortawesome/free-solid-svg-icons";
 import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
 import { DropDownLink } from "../DropDown/DropDownLink";
 import {
@@ -18,13 +13,28 @@ import {
   MarkdownPreviewLink,
   PackageFormatDocsLink,
   PackageUploadLink,
+  SettingsLink,
+  TeamsLink,
 } from "../Links/Links";
 import { Avatar } from "../Avatar/Avatar";
+import { getUserDummyData } from "../../dummyData";
+import {
+  faBell,
+  faCaretDown,
+  faCog,
+  faCreditCard,
+  faSignOut,
+  faUpload,
+  faUsers,
+} from "@fortawesome/pro-solid-svg-icons";
 
 /**
  * Cyberstorm Heading Component
  */
 export function Heading() {
+  const userId = "user";
+  const userData = getUserData(userId);
+
   const developersDropDownContents = [
     <a href="/wiki" key="1">
       <DropDownLink label="Modding Wiki" isExternal />
@@ -47,6 +57,52 @@ export function Heading() {
     <PackageUploadLink key="7">
       <DropDownLink label="Upload Package" />
     </PackageUploadLink>,
+  ];
+
+  const userDropDownContents = [
+    <SettingsLink key="1">
+      <div className={styles.dropDownUserInfo}>
+        <Avatar src={userData.imageSource} />
+        <div className={styles.dropdownUserInfoDetails}>
+          <div className={styles.dropdownUserInfoDetails_userName}>
+            {userData.name}
+          </div>
+          <div className={styles.dropdownUserInfoDetails_description}>
+            My profile
+          </div>
+        </div>
+      </div>
+    </SettingsLink>,
+    <TeamsLink key="2">
+      <DropDownLink
+        leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
+        label="Teams"
+      />
+    </TeamsLink>,
+    <a href="/notifications" key="3">
+      <DropDownLink
+        leftIcon={<FontAwesomeIcon icon={faBell} fixedWidth />}
+        label="Notifications"
+      />
+    </a>,
+    <a href="/subscriptons" key="4">
+      <DropDownLink
+        leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
+        label="Subscriptions"
+      />
+    </a>,
+    <SettingsLink key="5">
+      <DropDownLink
+        leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
+        label="Settings"
+      />
+    </SettingsLink>,
+    <a href="/logout" key="6">
+      <DropDownLink
+        leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
+        label="Log Out"
+      />
+    </a>,
   ];
 
   return (
@@ -90,7 +146,10 @@ export function Heading() {
             colorScheme="transparentDefault"
             leftIcon={<FontAwesomeIcon icon={faBell} fixedWidth />}
           />
-          <Avatar src="/images/chad.jpg" />
+          <DropDown
+            trigger={<Avatar src={userData.imageSource} />}
+            content={userDropDownContents}
+          />
         </div>
       </div>
     </div>
@@ -99,3 +158,7 @@ export function Heading() {
 
 Heading.displayName = "Heading";
 Heading.defaultProps = {};
+
+function getUserData(userId: string) {
+  return getUserDummyData(userId);
+}
