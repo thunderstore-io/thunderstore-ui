@@ -1,5 +1,6 @@
 export * from "./components/Button/Button";
 export * from "./components/BreadCrumbs/BreadCrumbs";
+export * from "./components/CopyButton/CopyButton";
 export * from "./components/Dialog/Dialog";
 export * from "./components/DropDown/DropDown";
 export * from "./components/Footer/Footer";

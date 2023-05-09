@@ -10,7 +10,7 @@ type _ButtonProps = {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  size?: "small" | "medium";
+  size?: "tiny" | "small" | "medium";
   colorScheme?:
     | "danger"
     | "default"
@@ -81,6 +81,7 @@ const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {
 
 const getSize = (scheme: ButtonProps["size"] = "medium") => {
   return {
+    tiny: styles.tiny,
     small: styles.small,
     medium: "",
   }[scheme];

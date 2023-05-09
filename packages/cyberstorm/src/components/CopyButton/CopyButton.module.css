@@ -1,0 +1,13 @@
+.copy {
+  all: unset;
+  color: var(--color-text--tertiary);
+}
+
+.copy:hover {
+  color: var(--color-cyber-green--50);
+}
+
+.checkmark {
+  all: unset;
+  color: var(--color-cyber-green--50);
+}

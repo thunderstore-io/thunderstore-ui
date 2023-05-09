@@ -25,7 +25,7 @@ export function Tooltip({
 }: TooltipProps) {
   return (
     <RadixTooltip.Root>
-      <RadixTooltip.Trigger>{children}</RadixTooltip.Trigger>
+      <RadixTooltip.Trigger asChild>{children}</RadixTooltip.Trigger>
       <RadixTooltip.Portal>
         <RadixTooltip.Content
           className={styles.root}
