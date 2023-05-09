@@ -7,20 +7,17 @@ export default {
   component: CopyButton,
 } as Meta;
 
-const Template: StoryFn<typeof CopyButton> = () => (
-  <CopyButton
-    text="According to all known laws
-of aviation, there is no way a bee
-should be able to fly.
-Its wings are too small to get
-its fat little body off the ground.
-The bee, of course, flies anyway
-because bees don't care
-what humans think is impossible.
-"
-  />
+const defaultArgs = {
+  text: "According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible.",
+};
+
+const Template: StoryFn<typeof CopyButton> = (args) => (
+  <div>
+    <CopyButton {...args} />
+  </div>
 );
 
 const DefaultCopyButton = Template.bind({});
+DefaultCopyButton.args = defaultArgs;
 
 export { DefaultCopyButton };

@@ -175,3 +175,9 @@
 .small > .label {
   font-size: var(--font-size--12);
 }
+
+.tiny {
+  gap: var(--gap--8);
+  padding: var(--space--4) var(--space--4);
+  border-radius: var(--border-radius--4);
+}
