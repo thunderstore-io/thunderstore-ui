@@ -1,5 +1,5 @@
 import { Box, Center, chakra, Text } from "@chakra-ui/react";
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { DropEvent, FileRejection, useDropzone } from "react-dropzone";
 
 interface FileUploadProps {
@@ -11,7 +11,8 @@ interface FileUploadProps {
   accept?: string | string[];
 }
 
-export const FileUpload: React.FC<FileUploadProps> = ({ onUpload, accept }) => {
+export function FileUpload(props: FileUploadProps) {
+  const { onUpload, accept } = props;
   const onDrop = useCallback(onUpload, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -30,4 +31,4 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onUpload, accept }) => {
       </Center>
     </Box>
   );
-};
+}

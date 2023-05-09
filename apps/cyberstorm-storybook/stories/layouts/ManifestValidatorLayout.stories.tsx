@@ -1,9 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import {
-  Footer,
-  Heading,
-  ManifestValidatorLayout,
-} from "@thunderstore/cyberstorm";
+import { ManifestValidatorLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -11,11 +7,9 @@ const meta = {
   component: ManifestValidatorLayout,
 } as ComponentMeta<typeof ManifestValidatorLayout>;
 
-const Template: ComponentStory<typeof ManifestValidatorLayout> = (args) => (
+const Template: ComponentStory<typeof ManifestValidatorLayout> = () => (
   <div>
-    <Heading />
-    <ManifestValidatorLayout {...args} />
-    <Footer />
+    <ManifestValidatorLayout />
   </div>
 );
 

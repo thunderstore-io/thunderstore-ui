@@ -1,11 +1,6 @@
-import React from "react";
 import styles from "./PackageDetailLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import {
-  CommunityLink,
-  CommunityPackagesLink,
-  PackageLink,
-} from "../../Links/Links";
+import { CommunityLink, PackageLink } from "../../Links/Links";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog, faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -14,57 +9,59 @@ import { ModIcon } from "../../ModIcon/ModIcon";
 import { Title } from "../../Title/Title";
 import { Dialog } from "../../Dialog/Dialog";
 import { PackageManagementForm } from "./PackageManagementForm";
+import { getPackageDummyData } from "../../../dummyData";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
 
 export interface PackageDetailLayoutProps {
-  title?: string;
-  description?: string;
+  packageId: string;
   managementDialogIsOpen?: boolean;
 }
 
 /**
  * Cyberstorm PackageDetail Layout
  */
-export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
-  props
-) => {
-  const { description, title, managementDialogIsOpen } = props;
+export function PackageDetailLayout(props: PackageDetailLayoutProps) {
+  const { packageId, managementDialogIsOpen } = props;
+  const packageData = getPackageData(packageId);
 
   return (
-    <div className={styles.root}>
-      <div className={styles.topContent}>
+    <BaseLayout
+      breadCrumb={
         <BreadCrumbs>
-          <CommunityLink community="V-Rising">V Rising</CommunityLink>
-          <CommunityPackagesLink community="V-Rising">
-            Packages
-          </CommunityPackagesLink>
+          <CommunityLink community={packageData.community}>
+            {packageData.community}
+          </CommunityLink>
           <PackageLink
-            namespace="packages"
-            community="V-Rising"
-            package="v-rising-epic-hardcore-mode"
+            namespace={packageData.namespace}
+            community={packageData.community}
+            package={packageData.name}
           >
-            {title}
+            {packageData.name}
           </PackageLink>
         </BreadCrumbs>
-
+      }
+      header={
         <div className={styles.packageInfo}>
-          <ModIcon src="/images/thomas.jpg"></ModIcon>
-          <>
-            <Title text={title}></Title>
-            <div className={styles.packageInfoDetails}>
+          <ModIcon src={packageData.imageSource}></ModIcon>
+          <div className={styles.packageInfoDetails}>
+            <Title text={packageData.name}></Title>
+            <p className={styles.packageInfoDescription}>
+              {packageData.shortDescription}
+            </p>
+            <div className={styles.packageInfoMeta}>
               <MetaItem
                 colorScheme="tertiary"
-                label="grav"
+                label={packageData.author}
                 icon={<FontAwesomeIcon icon={faUser} fixedWidth />}
               />
               <Button
-                label="github.com/thunderstore-io/v-rising-epic-hc-mode"
+                label={packageData.gitHubLink}
                 colorScheme="transparentPrimary"
                 leftIcon={<FontAwesomeIcon icon={faHouse} fixedWidth />}
-                rightIcon={<FontAwesomeIcon icon={faHouse} fixedWidth />}
               />
             </div>
-          </>
-          <>
+          </div>
+          <div className={styles.managementDialogTrigger}>
             <Dialog
               defaultOpen={managementDialogIsOpen}
               title="Manage Package"
@@ -78,27 +75,29 @@ export const PackageDetailLayout: React.FC<PackageDetailLayoutProps> = (
               trigger={
                 <Button
                   leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
-                  label="Manage Package"
+                  label="Manage"
                 />
               }
             />
-          </>
+          </div>
         </div>
-      </div>
-      <div className={styles.mainContentWrapper}>
-        <div className={styles.mainContentLeft}>
-          <Title text="Description title" />
-          <p className={styles.description}>{description}</p>
-        </div>
-        <div className={styles.mainContentRight} />
-      </div>
-    </div>
+      }
+      mainContent={
+        <>
+          <Title text={packageData.name} />
+          <p className={styles.description}>{packageData.description}</p>
+        </>
+      }
+      rightSidebarContent={<>{"metaInfoItemList here"}</>}
+    />
   );
-};
+}
 
 PackageDetailLayout.displayName = "PackageDetailLayout";
 PackageDetailLayout.defaultProps = {
-  title: "",
-  description: "",
   managementDialogIsOpen: false,
 };
+
+function getPackageData(packageId: string) {
+  return getPackageDummyData(packageId);
+}

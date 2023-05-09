@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./TeamsLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { CommunityLink, CommunityPackagesLink } from "../../Links/Links";
@@ -7,69 +7,51 @@ import { TeamLeave } from "./TeamLeave/TeamLeave";
 import { TeamDisband } from "./TeamDisband/TeamDisband";
 import { Title } from "../../Title/Title";
 import { TeamMembers } from "./TeamMembers/TeamMembers";
-import { UserDataItem } from "./TeamMembers/UserList/UserList";
 import { TeamServiceAccounts } from "./TeamServiceAccounts/TeamServiceAccounts";
-import { ServiceAccountDataItem } from "./TeamServiceAccounts/ServiceAccountList/ServiceAccountList";
 import { TeamProfile } from "./TeamProfile/TeamProfile";
+import { getTeamDummyData } from "../../../dummyData";
+import { Team } from "../../../schema";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
 
 export interface TeamsLayoutProps {
-  teamName?: string;
+  teamId: string;
 }
 
 /**
  * Cyberstorm Teams Layout
  */
-export const TeamsLayout: React.FC<TeamsLayoutProps> = (props) => {
-  const { teamName } = props;
+export function TeamsLayout(props: TeamsLayoutProps) {
+  const { teamId } = props;
+
+  const teamData = getTeamData(teamId);
 
   const [currentTab, setCurrentTab] = useState(1);
 
   return (
-    <div className={styles.root}>
-      <BreadCrumbs>
-        <CommunityLink community={"V-Rising"}>V Rising</CommunityLink>
-        <CommunityPackagesLink community={"V-Rising"}>
-          Packages
-        </CommunityPackagesLink>
-      </BreadCrumbs>
-
-      <Title text={teamName} />
-
-      <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
-
-      <div>
-        {currentTab === 1 ? (
-          <div className={styles.tabContent}>
-            <TeamProfile />
-          </div>
-        ) : null}
-        {currentTab === 2 ? (
-          <div className={styles.tabContent}>
-            <TeamMembers userData={userData} teamName={teamName} />
-          </div>
-        ) : null}
-        {currentTab === 3 ? (
-          <div className={styles.tabContent}>
-            <TeamServiceAccounts serviceAccountData={serviceAccountData} />
-          </div>
-        ) : null}
-        {currentTab === 4 ? (
-          <div className={styles.tabContent}>Mods content</div>
-        ) : null}
-        {currentTab === 5 ? (
-          <div className={styles.tabContent}>
-            <TeamLeave />
-            <div className={styles.separator} />
-            <TeamDisband teamName={teamName} />
-          </div>
-        ) : null}
-      </div>
-    </div>
+    <BaseLayout
+      breadCrumb={
+        <BreadCrumbs>
+          <CommunityLink community={"V-Rising"}>V Rising</CommunityLink>
+          <CommunityPackagesLink community={"V-Rising"}>
+            Packages
+          </CommunityPackagesLink>
+        </BreadCrumbs>
+      }
+      header={<Title text={teamData.name} />}
+      tabs={
+        <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
+      }
+      mainContent={<>{getTabContent(currentTab, teamData)}</>}
+    />
   );
-};
+}
 
 TeamsLayout.displayName = "TeamsLayout";
-TeamsLayout.defaultProps = { teamName: "" };
+TeamsLayout.defaultProps = {};
+
+function getTeamData(teamId: string) {
+  return getTeamDummyData(teamId);
+}
 
 const tabs = [
   { key: 1, label: "Profile" },
@@ -79,12 +61,37 @@ const tabs = [
   { key: 5, label: "Settings" },
 ];
 
-const userData: Array<UserDataItem> = [
-  { userName: "Chad", role: "2", userImageSrc: "/images/chad.jpg" },
-  { userName: "Doggo", role: "1", userImageSrc: "/images/dog.jpg" },
-  { userName: "Thomas", role: "1", userImageSrc: "/images/thomas.jpg" },
-];
+function getTabContent(currentTab: number, teamData: Team) {
+  let tabContent = null;
 
-const serviceAccountData: Array<ServiceAccountDataItem> = [
-  { serviceAccountName: "ChadSA", lastUsed: "2011-11-09 16:41" },
-];
+  if (currentTab === 1) {
+    tabContent = (
+      <div className={styles.tabContent}>
+        <TeamProfile teamData={teamData} />
+      </div>
+    );
+  } else if (currentTab === 2) {
+    tabContent = (
+      <div className={styles.tabContent}>
+        <TeamMembers membersData={teamData.members} teamName={teamData.name} />
+      </div>
+    );
+  } else if (currentTab === 3) {
+    tabContent = (
+      <div className={styles.tabContent}>
+        <TeamServiceAccounts serviceAccountData={teamData.serviceAccounts} />
+      </div>
+    );
+  } else if (currentTab === 4) {
+    tabContent = <div className={styles.tabContent}>Mods content</div>;
+  } else if (currentTab === 5) {
+    tabContent = (
+      <div className={styles.tabContent}>
+        <TeamLeave />
+        <div className={styles.separator} />
+        <TeamDisband teamName={teamData.name} />
+      </div>
+    );
+  }
+  return tabContent;
+}

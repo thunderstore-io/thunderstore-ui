@@ -15,37 +15,52 @@ import { IndexLink } from "./Links";
 /**
  * Navigation bar shown on every page.
  */
-export const TopBar: React.FC = (props) => (
-  <Flex align="center" h={100} justify="space-between">
-    <IndexLink variant="ts.topBarIndex" align="center" display="flex">
-      <ThunderstoreLogo height="20px" mr="7px" width="20px" />
-      Thunderstore
-    </IndexLink>
-    <Flex>{props.children}</Flex>
-  </Flex>
-);
+
+interface TopBarProps {
+  children?: React.ReactNode;
+}
+
+export function TopBar(props: TopBarProps) {
+  const { children } = props;
+  return (
+    <Flex align="center" h={100} justify="space-between">
+      <IndexLink variant="ts.topBarIndex" align="center" display="flex">
+        <ThunderstoreLogo height="20px" mr="7px" width="20px" />
+        Thunderstore
+      </IndexLink>
+      <Flex>{children}</Flex>
+    </Flex>
+  );
+}
 
 interface TopBarMenu {
   label: string;
+  children?: React.ReactNode;
 }
 
-export const TopBarMenu: React.FC<TopBarMenu> = (props) => (
-  <Menu variant="ts.topBar">
-    <MenuButton as={Button} rightIcon={<ChevronDown />} variant="ts.topBarMenu">
-      {props.label}
-    </MenuButton>
+export function TopBarMenu(props: TopBarMenu) {
+  return (
+    <Menu variant="ts.topBar">
+      <MenuButton
+        as={Button}
+        rightIcon={<ChevronDown />}
+        variant="ts.topBarMenu"
+      >
+        {props.label}
+      </MenuButton>
 
-    <MenuList
-      backgroundColor="ts.darkBlue"
-      border="none"
-      borderRadius="0"
-      minW="115px"
-      p="0"
-    >
-      {props.children}
-    </MenuList>
-  </Menu>
-);
+      <MenuList
+        backgroundColor="ts.darkBlue"
+        border="none"
+        borderRadius="0"
+        minW="115px"
+        p="0"
+      >
+        {props.children}
+      </MenuList>
+    </Menu>
+  );
+}
 
 interface MenuButtonProps {
   icon: React.FC<IconProps>;
@@ -53,11 +68,11 @@ interface MenuButtonProps {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export const TopBarMenuButton: React.FC<MenuButtonProps> = (props) => {
+export function TopBarMenuButton(props: MenuButtonProps) {
   return (
     <MenuItem onClick={props.onClick}>
       <props.icon w="20px" h="20px" mr="0.6rem" />
       {props.label}
     </MenuItem>
   );
-};
+}

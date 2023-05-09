@@ -14,15 +14,13 @@ import { ReactQueryDevtools } from "react-query/devtools";
 interface RootWrapperProps {
   theme: ChakraProviderProps["theme"];
   thunderstoreProviderValue: ThunderstoreProviderProps;
+  children: React.ReactNode;
 }
 
 const queryClient = new QueryClient();
 
-export const RootWrapper: React.FC<RootWrapperProps> = ({
-  theme,
-  thunderstoreProviderValue,
-  children,
-}) => {
+export function RootWrapper(props: RootWrapperProps) {
+  const { theme, thunderstoreProviderValue, children } = props;
   return (
     <ChakraProvider theme={theme}>
       <CSSReset />
@@ -34,4 +32,4 @@ export const RootWrapper: React.FC<RootWrapperProps> = ({
       </ThunderstoreProvider>
     </ChakraProvider>
   );
-};
+}

@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./PackageManagementForm.module.css";
 import { Title } from "../../Title/Title";
 import { Tag } from "../../Tag/Tag";
@@ -8,9 +7,7 @@ export interface PackageManagementFormProps {
   packageStatus?: string;
 }
 
-export const PackageManagementForm: React.FC<PackageManagementFormProps> = (
-  props
-) => {
+export function PackageManagementForm(props: PackageManagementFormProps) {
   const { packageStatus } = props;
   return (
     <div className={styles.root}>
@@ -22,7 +19,7 @@ export const PackageManagementForm: React.FC<PackageManagementFormProps> = (
       <TextInput />
     </div>
   );
-};
+}
 
 PackageManagementForm.displayName = "PackageManagementForm";
 PackageManagementForm.defaultProps = { packageStatus: "active" };

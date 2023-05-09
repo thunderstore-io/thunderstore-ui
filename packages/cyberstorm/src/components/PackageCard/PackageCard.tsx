@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import styles from "./PackageCard.module.css";
 import { MetaItem } from "../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,88 +10,81 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Tag } from "../Tag/Tag";
 import { PackageFlag } from "../PackageFlag/PackageFlag";
+import { formatInteger } from "../../utils/utils";
+import { PackagePreview } from "../../schema";
+import { PackageLink } from "../Links/Links";
 
 const defaultImageSrc = "";
 
 export interface PackageCardProps {
-  packageName: string;
-  description?: string;
-  imageSrc?: string;
-  downloadCount: string;
-  likes: string;
-  size: string;
-  author?: string;
-  link: string;
-  lastUpdated?: string;
-  isPinned?: boolean;
-  isNsfw?: boolean;
-  isDeprecated?: boolean;
-  colorScheme?: "default";
-  categories: string[];
+  packageData: PackagePreview;
+  colorScheme?: string;
+  community?: string;
 }
 
 /**
  * Cyberstorm PackageCard component
  */
-export const PackageCard: React.FC<PackageCardProps> = (props) => {
-  const {
-    packageName,
-    description,
-    imageSrc,
-    downloadCount,
-    likes,
-    size,
-    author,
-    link,
-    lastUpdated,
-    colorScheme,
-    categories,
-    isPinned,
-    isNsfw,
-    isDeprecated,
-    ...forwardedProps
-  } = props;
+export function PackageCard(props: PackageCardProps) {
+  const { packageData, colorScheme, community, ...forwardedProps } = props;
 
   const authorLink = ""; //TODO: author link
   //TODO: convert <a> tags into link components!
-  //TODO: Use LastUpdated component once one is developed
 
   return (
     <div
       className={`${styles.root} ${getStyle(colorScheme)}`}
       {...forwardedProps}
     >
-      <a href={link} className={styles.imageWrapper} title={packageName}>
-        <img
-          src={imageSrc ? imageSrc : defaultImageSrc}
-          className={styles.image}
-          alt={packageName}
-        />
-        {getPackageFlags(isPinned, isNsfw, isDeprecated)}
-      </a>
+      <div className={styles.imageWrapper}>
+        <PackageLink
+          namespace={packageData.namespace}
+          package={packageData.name}
+          community={packageData.community}
+        >
+          <img
+            src={
+              packageData.imageSource
+                ? packageData.imageSource
+                : defaultImageSrc
+            }
+            className={styles.image}
+            alt={packageData.name}
+          />
+          {getPackageFlags(
+            packageData.isPinned,
+            packageData.isNsfw,
+            packageData.isDeprecated
+          )}
+        </PackageLink>
+      </div>
 
       <div className={styles.content}>
-        <a href={link} className={styles.title}>
-          {packageName}
-        </a>
+        <PackageLink
+          namespace={packageData.namespace}
+          package={packageData.name}
+          community={packageData.community}
+        >
+          <div className={styles.title}>{packageData.name}</div>
+        </PackageLink>
 
-        {author ? (
+        {packageData.author ? (
           <div className={styles.author}>
             <span className={styles.author_prefix}>by</span>
             <a className={styles.author_label} href={authorLink}>
-              {author}
+              {packageData.author}
             </a>
           </div>
         ) : null}
 
-        {description ? (
-          <p className={styles.description}>{description}</p>
+        {packageData.description ? (
+          <p className={styles.description}>{packageData.description}</p>
         ) : null}
       </div>
 
-      {categories.length > 0 ? (
+      {packageData.categories.length > 0 ? (
         <div className={styles.categoryWrapper}>
-          {categories.map((c, index) => (
+          {packageData.categories.map((c, index) => (
             <Tag
               key={`category_${c}_${index}`}
               label={c}
@@ -103,25 +96,25 @@ export const PackageCard: React.FC<PackageCardProps> = (props) => {
       ) : null}
 
       <div className={styles.footer}>
-        {lastUpdated ? (
-          <p className={styles.lastUpdated}>{"Last updated: " + lastUpdated}</p>
+        {packageData.lastUpdated ? (
+          <p className={styles.lastUpdated}>
+            {"Last updated: " + packageData.lastUpdated}
+          </p>
         ) : null}
 
-        {getMetaItemList(downloadCount, likes, size)}
+        {getMetaItemList(
+          packageData.downloadCount,
+          packageData.likes,
+          packageData.size
+        )}
       </div>
     </div>
   );
-};
+}
 
 PackageCard.displayName = "PackageCard";
 PackageCard.defaultProps = {
   colorScheme: "default",
-  categories: [],
-  likes: "",
-  downloadCount: "",
-  size: "",
-  packageName: "",
-  link: "",
 };
 
 const getStyle = (scheme: PackageCardProps["colorScheme"] = "default") => {
@@ -169,25 +162,25 @@ function getPackageFlags(
   return <div className={styles.flagWrapper}>{flagList}</div>;
 }
 
-function getMetaItemList(downloadCount: string, likes: string, size: string) {
+function getMetaItemList(downloadCount: number, likes: number, size: number) {
   return (
     <div className={styles.metaItemWrapper}>
       <MetaItem
         icon={<FontAwesomeIcon fixedWidth icon={faDownload} />}
-        label={downloadCount}
+        label={formatInteger(downloadCount)}
         colorScheme="tertiary"
       />
 
       <MetaItem
         icon={<FontAwesomeIcon fixedWidth icon={faThumbsUp} />}
-        label={likes}
+        label={formatInteger(likes)}
         colorScheme="tertiary"
       />
 
       <div className={styles.metaItem__last}>
         <MetaItem
           icon={<FontAwesomeIcon fixedWidth icon={faHardDrive} />}
-          label={size}
+          label={formatInteger(size)}
           colorScheme="tertiary"
         />
       </div>

@@ -1,22 +1,23 @@
-import React from "react";
-import styles from "./PackageFormatDocsLayout.module.css";
 import { Title } from "../../../Title/Title";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { CommunityLink } from "../../../Links/Links";
+import { PackageFormatDocsLink } from "../../../Links/Links";
+import { BaseLayout } from "../../BaseLayout/BaseLayout";
 
 /**
  * Cyberstorm PackageFormatDocs Layout
  */
-export const PackageFormatDocsLayout: React.FC = () => {
+export function PackageFormatDocsLayout() {
   return (
-    <div className={styles.root}>
-      <BreadCrumbs>
-        <CommunityLink community={"Developers"}>Developers</CommunityLink>
-      </BreadCrumbs>
-      <Title text="Package Format Docs" />
-    </div>
+    <BaseLayout
+      breadCrumb={
+        <BreadCrumbs>
+          <PackageFormatDocsLink>Package Format Docs</PackageFormatDocsLink>
+        </BreadCrumbs>
+      }
+      header={<Title text="Package Format Docs" />}
+    />
   );
-};
+}
 
 PackageFormatDocsLayout.displayName = "PackageFormatDocsLayout";
 PackageFormatDocsLayout.defaultProps = {};

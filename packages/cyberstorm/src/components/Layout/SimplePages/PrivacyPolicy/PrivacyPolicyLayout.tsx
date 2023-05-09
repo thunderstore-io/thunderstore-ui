@@ -1,12 +1,12 @@
-import React from "react";
 import styles from "./PrivacyPolicyLayout.module.css";
+import { BaseLayout } from "../../BaseLayout/BaseLayout";
 
 /**
  * Cyberstorm PrivacyPolicy Layout
  */
-export const PrivacyPolicyLayout: React.FC = () => {
-  return <div className={styles.root}></div>;
-};
+export function PrivacyPolicyLayout() {
+  return <BaseLayout mainContent={<div className={styles.root}></div>} />;
+}
 
 PrivacyPolicyLayout.displayName = "PrivacyPolicyLayout";
 PrivacyPolicyLayout.defaultProps = {};

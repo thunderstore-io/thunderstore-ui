@@ -49,6 +49,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ needs.get-node-version.outputs.node-version }}
+      - name: Set fontawesome token
+        run: |
+          npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+          npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
       - name: Install yarn dependencies
         run: yarn install
       - name: Run ESLint

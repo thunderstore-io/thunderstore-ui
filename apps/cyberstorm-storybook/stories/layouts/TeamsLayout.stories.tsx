@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Footer, Heading, TeamsLayout } from "@thunderstore/cyberstorm";
+import { TeamsLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -8,14 +8,12 @@ const meta = {
 } as ComponentMeta<typeof TeamsLayout>;
 
 const defaultArgs = {
-  teamName: "Zorrz's Bros",
+  teamId: "1337",
 };
 
 const Template: ComponentStory<typeof TeamsLayout> = (args) => (
   <div>
-    <Heading />
     <TeamsLayout {...args} />
-    <Footer />
   </div>
 );
 

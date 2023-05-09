@@ -1,15 +1,15 @@
-import React from "react";
 import styles from "./ManifestValidatorLayout.module.css";
 import { Title } from "../../../Title/Title";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { TextInput } from "../../../TextInput/TextInput";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { CommunityLink } from "../../../Links/Links";
+import { BaseLayout } from "../../BaseLayout/BaseLayout";
+import { ManifestValidatorLink } from "../../../Links/Links";
 
 /**
  * Cyberstorm ManifestValidator Layout
  */
-export const ManifestValidatorLayout: React.FC = () => {
+export function ManifestValidatorLayout() {
   const valdatorContent = (
     <div className={styles.content}>
       <TextInput />
@@ -18,19 +18,23 @@ export const ManifestValidatorLayout: React.FC = () => {
   );
 
   return (
-    <div className={styles.root}>
-      <BreadCrumbs>
-        <CommunityLink community={"Developers"}>Developers</CommunityLink>
-      </BreadCrumbs>
-      <Title text="Manifest Validator" />
-      <SettingItem
-        title="Manifest Validator"
-        description="Select a team to validate a package"
-        content={valdatorContent}
-      />
-    </div>
+    <BaseLayout
+      breadCrumb={
+        <BreadCrumbs>
+          <ManifestValidatorLink>Manifest Validator</ManifestValidatorLink>
+        </BreadCrumbs>
+      }
+      header={<Title text="Manifest Validator" />}
+      mainContent={
+        <SettingItem
+          title="Manifest Validator"
+          description="Select a team to validate a package"
+          content={valdatorContent}
+        />
+      }
+    />
   );
-};
+}
 
 ManifestValidatorLayout.displayName = "ManifestValidatorLayout";
 ManifestValidatorLayout.defaultProps = {};

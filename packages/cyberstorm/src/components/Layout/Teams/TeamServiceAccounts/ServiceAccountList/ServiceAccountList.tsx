@@ -1,27 +1,20 @@
-import React from "react";
 import styles from "./ServiceAccountList.module.css";
 import { ServiceAccountListItem } from "./ServiceAccountListItem";
-
-export interface ServiceAccountDataItem {
-  serviceAccountName: string;
-  lastUsed?: string;
-}
+import { ServiceAccount } from "../../../../../schema";
 
 export interface ServiceAccountListProps {
-  serviceAccountData?: Array<ServiceAccountDataItem>;
+  serviceAccountData?: ServiceAccount[];
 }
 
-export const ServiceAccountList: React.FC<ServiceAccountListProps> = (
-  props
-) => {
+export function ServiceAccountList(props: ServiceAccountListProps) {
   const { serviceAccountData } = props;
 
   const mappedServiceAccountList = serviceAccountData?.map(
-    (serviceAccount: ServiceAccountDataItem, index: number) => {
+    (serviceAccount: ServiceAccount, index: number) => {
       return (
         <div key={index}>
           <ServiceAccountListItem
-            serviceAccountName={serviceAccount.serviceAccountName}
+            serviceAccountName={serviceAccount.name}
             lastUsed={serviceAccount.lastUsed}
           />
         </div>
@@ -30,7 +23,7 @@ export const ServiceAccountList: React.FC<ServiceAccountListProps> = (
   );
 
   return <div className={styles.root}>{mappedServiceAccountList}</div>;
-};
+}
 
 ServiceAccountList.displayName = "ServiceAccountList";
 ServiceAccountList.defaultProps = { serviceAccountData: [] };

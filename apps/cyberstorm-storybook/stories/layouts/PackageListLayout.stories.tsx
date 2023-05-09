@@ -1,26 +1,19 @@
 import { StoryFn, ComponentMeta } from "@storybook/react";
-import {
-  Footer,
-  Heading,
-  PackageDetailLayout,
-  PackageListLayout,
-} from "@thunderstore/cyberstorm";
+import { PackageListLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
   title: "Cyberstorm/Layouts/PackageListLayout",
   component: PackageListLayout,
-} as ComponentMeta<typeof PackageDetailLayout>;
+} as ComponentMeta<typeof PackageListLayout>;
 
 const defaultArgs = {
-  title: "V Rising",
+  communityId: "1337",
 };
 
 const Template: StoryFn<typeof PackageListLayout> = (args) => (
   <div>
-    <Heading />
     <PackageListLayout {...args} />
-    <Footer />
   </div>
 );
 

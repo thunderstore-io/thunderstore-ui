@@ -47,7 +47,7 @@
     "babel-plugin-polyfill-corejs3": "^0.4.0",
     "chromatic": "^6.4.3",
     "core-js": "^3.19.1",
-    "storybook": "7.0.0-beta.53",
+    "storybook": "^7.0.0-rc.5",
     "storybook-css-modules": "^1.0.8",
     "stylelint": "^14.14.0",
     "stylelint-config-rational-order": "^0.1.2",

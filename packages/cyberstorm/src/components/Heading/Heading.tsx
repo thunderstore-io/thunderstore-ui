@@ -1,19 +1,30 @@
-import React from "react";
 import styles from "./Heading.module.css";
 import { DropDown } from "../DropDown/DropDown";
 import { Button } from "../Button/Button";
 import { Title } from "../Title/Title";
 import { TextInput } from "../TextInput/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload, faBell } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUpload,
+  faBell,
+  faCaretDown,
+} from "@fortawesome/free-solid-svg-icons";
 import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
 import { DropDownLink } from "../DropDown/DropDownLink";
-import { IndexLink } from "../Links/Links";
+import {
+  CommunitiesLink,
+  IndexLink,
+  ManifestValidatorLink,
+  MarkdownPreviewLink,
+  PackageFormatDocsLink,
+  PackageUploadLink,
+} from "../Links/Links";
+import { Avatar } from "../Avatar/Avatar";
 
 /**
  * Cyberstorm Heading Component
  */
-export const Heading: React.FC = () => {
+export function Heading() {
   const developersDropDownContents = [
     <a href="/wiki" key="1">
       <DropDownLink label="Modding Wiki" isExternal />
@@ -24,30 +35,40 @@ export const Heading: React.FC = () => {
     <a href="/git" key="3">
       <DropDownLink label="GitHub Repo" isExternal />
     </a>,
-    <IndexLink key="5">
+    <PackageFormatDocsLink key="4">
       <DropDownLink label="Package Format Docs" />
-    </IndexLink>,
-    <IndexLink key="6">
+    </PackageFormatDocsLink>,
+    <MarkdownPreviewLink key="5">
       <DropDownLink label="Markdown Preview" />
-    </IndexLink>,
-    <IndexLink key="7">
+    </MarkdownPreviewLink>,
+    <ManifestValidatorLink key="6">
       <DropDownLink label="Manifest Validator" />
-    </IndexLink>,
+    </ManifestValidatorLink>,
+    <PackageUploadLink key="7">
+      <DropDownLink label="Upload Package" />
+    </PackageUploadLink>,
   ];
 
   return (
     <div className={styles.root}>
       <div className={styles.heading}>
         <div className={styles.leftSection}>
-          <ThunderstoreLogo />
-          <a href="/browse">
+          <IndexLink>
+            <ThunderstoreLogo />
+          </IndexLink>
+          <IndexLink>
             <Title text="Browse" size="smallest" />
-          </a>
-          <a href="/communities">
+          </IndexLink>
+          <CommunitiesLink>
             <Title text="Communities" size="smallest" />
-          </a>
+          </CommunitiesLink>
           <DropDown
-            trigger={<Button label="Developers" />}
+            trigger={
+              <Button
+                label="Developers"
+                rightIcon={<FontAwesomeIcon icon={faCaretDown} fixedWidth />}
+              />
+            }
             content={developersDropDownContents}
           />
         </div>
@@ -56,21 +77,25 @@ export const Heading: React.FC = () => {
         </div>
         <div className={styles.rightSection}>
           <Button colorScheme="specialPurple" label="Get Manager" />
+
+          <PackageUploadLink>
+            <Button
+              size="small"
+              colorScheme="transparentDefault"
+              leftIcon={<FontAwesomeIcon icon={faUpload} fixedWidth />}
+            />
+          </PackageUploadLink>
           <Button
-            colorScheme="transparentDefault"
-            label="Upload"
-            leftIcon={<FontAwesomeIcon icon={faUpload} fixedWidth />}
-          />
-          <Button
+            size="small"
             colorScheme="transparentDefault"
             leftIcon={<FontAwesomeIcon icon={faBell} fixedWidth />}
           />
-          <Button />
+          <Avatar src="/images/chad.jpg" />
         </div>
       </div>
     </div>
   );
-};
+}
 
 Heading.displayName = "Heading";
 Heading.defaultProps = {};

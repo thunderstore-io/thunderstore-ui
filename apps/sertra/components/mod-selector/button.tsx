@@ -10,12 +10,14 @@ interface ButtonBaseProps extends ButtonProps {
   className: string;
 }
 
-const ButtonBase: React.FC<ButtonBaseProps> = (props) => <button {...props} />;
+function ButtonBase(props: ButtonBaseProps) {
+  return <button {...props} />;
+}
 
-export const ButtonPrimary: React.FC<ButtonProps> = (props) => (
-  <ButtonBase className={styles.buttonPrimary} {...props} />
-);
+export function ButtonPrimary(props: ButtonProps) {
+  return <ButtonBase className={styles.buttonPrimary} {...props} />;
+}
 
-export const ButtonSecondary: React.FC<ButtonProps> = (props) => (
-  <ButtonBase className={styles.buttonSecondary} {...props} />
-);
+export function ButtonSecondary(props: ButtonProps) {
+  return <ButtonBase className={styles.buttonSecondary} {...props} />;
+}

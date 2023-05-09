@@ -1,5 +1,4 @@
 import styles from "./ServiceAccountListItem.module.css";
-import React from "react";
 import { Button } from "../../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -9,9 +8,7 @@ export interface ServiceAccountListItemProps {
   lastUsed?: string;
 }
 
-export const ServiceAccountListItem: React.FC<ServiceAccountListItemProps> = (
-  props
-) => {
+export function ServiceAccountListItem(props: ServiceAccountListItemProps) {
   const { serviceAccountName, lastUsed } = props;
 
   return (
@@ -27,7 +24,7 @@ export const ServiceAccountListItem: React.FC<ServiceAccountListItemProps> = (
       </div>
     </div>
   );
-};
+}
 
 ServiceAccountListItem.displayName = "ServiceAccountListItem";
 ServiceAccountListItem.defaultProps = { serviceAccountName: "", lastUsed: "" };

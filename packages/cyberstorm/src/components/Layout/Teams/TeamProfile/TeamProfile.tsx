@@ -1,16 +1,16 @@
-import React from "react";
 import styles from "./TeamProfile.module.css";
 import { Button } from "../../../Button/Button";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { ModIcon } from "../../../ModIcon/ModIcon";
 import { TextInput } from "../../../TextInput/TextInput";
+import { Team } from "../../../../schema";
 
 export interface TeamProfileProps {
-  teamName?: string;
+  teamData: Team;
 }
 
-export const TeamProfile: React.FC<TeamProfileProps> = (props) => {
-  const { teamName } = props;
+export function TeamProfile(props: TeamProfileProps) {
+  const { teamData } = props;
 
   return (
     <div className={styles.root}>
@@ -20,7 +20,7 @@ export const TeamProfile: React.FC<TeamProfileProps> = (props) => {
           description="Instructions for uploading a picture"
           content={
             <div className={styles.avatarContent}>
-              <ModIcon />
+              <ModIcon src={teamData.imageSource} />
               <div>
                 <Button label="Upload picture" />
               </div>
@@ -35,18 +35,18 @@ export const TeamProfile: React.FC<TeamProfileProps> = (props) => {
         <SettingItem
           title="Profile Summary"
           description="A short description shown in header and profile cards"
-          content={<TextInput />}
+          content={<TextInput placeHolder={teamData.description} />}
         />
         <SettingItem
           title="Abut Us"
           description="A more comprehensive description shown on the profile page"
-          content={<TextInput />}
+          content={<TextInput placeHolder={teamData.about} />}
         />
 
         <div className={styles.line} />
 
         <div className={styles.section}>
-          <SettingItem title="Social Links" content={teamName} />
+          <SettingItem title="Social Links" content={teamData.name} />
         </div>
 
         <div className={styles.line} />
@@ -60,7 +60,7 @@ export const TeamProfile: React.FC<TeamProfileProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 TeamProfile.displayName = "TeamProfile";
-TeamProfile.defaultProps = { teamName: "" };
+TeamProfile.defaultProps = {};

@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./TeamDisband.module.css";
 import { Button } from "../../../Button/Button";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -10,7 +9,7 @@ export interface TeamDisbandProps {
   teamName?: string;
 }
 
-export const TeamDisband: React.FC<TeamDisbandProps> = (props) => {
+export function TeamDisband(props: TeamDisbandProps) {
   const { teamName } = props;
 
   return (
@@ -30,11 +29,11 @@ export const TeamDisband: React.FC<TeamDisbandProps> = (props) => {
               As a precaution, to disband your team, please input {teamName}{" "}
               into the field below.
             </p>
-            <TextInput />
+            <TextInput placeHolder="Verification" />
             <div>
               <Button
                 colorScheme="danger"
-                label="Leave team"
+                label="Disband team"
                 leftIcon={<FontAwesomeIcon icon={faTrash} fixedWidth />}
               />
             </div>
@@ -43,7 +42,7 @@ export const TeamDisband: React.FC<TeamDisbandProps> = (props) => {
       />
     </div>
   );
-};
+}
 
 TeamDisband.displayName = "TeamDisband";
 TeamDisband.defaultProps = { teamName: "" };

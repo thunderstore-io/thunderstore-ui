@@ -38,6 +38,6 @@
 .rightSection {
   display: flex;
   flex-direction: row;
-  gap: var(--gap--16);
+  gap: var(--gap--8);
   align-items: center;
 }

@@ -1,6 +1,6 @@
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { range } from "../../utils/utils";
 import styles from "./Pagination.module.css";
 import { PaginationButton } from "./PaginationButton";
@@ -14,7 +14,7 @@ export interface PaginationProps {
   siblingCount: number;
 }
 
-export const Pagination: React.FC<PaginationProps> = (props) => {
+export function Pagination(props: PaginationProps) {
   const {
     currentPage,
     onPageChange,
@@ -29,8 +29,13 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
   }
 
   //Note that the ellipsis is a "…" character, not three dots.
-  const ellipsisButton = (
-    <li>
+  const ellipsisButtonLeft = (
+    <li key="page-ellipsis-left">
+      <span className={styles.ellipsis}>{"…"}</span>
+    </li>
+  );
+  const ellipsisButtonRight = (
+    <li key="page-ellipsis-right">
       <span className={styles.ellipsis}>{"…"}</span>
     </li>
   );
@@ -44,7 +49,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
 
   if (currentPage > 1) {
     buttons.push(
-      <li>
+      <li key="page-previous">
         <PaginationButton
           onClick={() => onPageChange(decreaseCurrentPage(currentPage))}
           ariaLabel="Previous"
@@ -56,23 +61,21 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
   }
   if (leftmostSibling > 1) {
     buttons.push(
-      <li>
+      <li key="page-1">
         <PaginationButton
-          key="page-1"
           ariaLabel="Page 1"
           label="1"
           onClick={() => onPageChange(1)}
         />
       </li>
     );
-    buttons.push(ellipsisButton);
+    buttons.push(ellipsisButtonLeft);
   }
 
   range(leftmostSibling, rightmostSibling).forEach((pageNumber) => {
     buttons.push(
-      <li>
+      <li key={`page-${pageNumber}`}>
         <PaginationButton
-          key={`page-${pageNumber}`}
           ariaCurrent={currentPage === pageNumber}
           ariaLabel={
             currentPage === pageNumber
@@ -88,11 +91,10 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
   });
 
   if (rightmostSibling < totalPageCount) {
-    buttons.push(ellipsisButton);
+    buttons.push(ellipsisButtonRight);
     buttons.push(
-      <li>
+      <li key={`page-${totalPageCount}`}>
         <PaginationButton
-          key={`page-${totalPageCount}`}
           ariaLabel={`Page ${totalPageCount}`}
           label={`${totalPageCount}`}
           onClick={() => onPageChange(totalPageCount)}
@@ -102,7 +104,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
   }
   if (currentPage !== totalPageCount) {
     buttons.push(
-      <li>
+      <li key="page-next">
         <PaginationButton
           onClick={() =>
             onPageChange(increaseCurrentPage(currentPage, totalPageCount))
@@ -122,7 +124,7 @@ export const Pagination: React.FC<PaginationProps> = (props) => {
       </ul>
     </nav>
   );
-};
+}
 
 Pagination.defaultProps = { disabled: false, siblingCount: 1 };
 

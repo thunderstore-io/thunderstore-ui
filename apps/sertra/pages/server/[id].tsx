@@ -58,10 +58,12 @@ export const getStaticProps: GetStaticProps<
   };
 };
 
-const ServerDetail: React.FC<{
+interface ServerDetailProps {
   listing_data: ServerListingDetailData;
   mods_data: ListingMod[];
-}> = ({ listing_data, mods_data }) => {
+}
+
+function ServerDetail({ listing_data, mods_data }: ServerDetailProps) {
   const [showPopup, setShowPopup] = useState(false);
   const togglePopup = () => setShowPopup((current) => !current);
   return (
@@ -109,6 +111,6 @@ const ServerDetail: React.FC<{
       </div>
     </div>
   );
-};
+}
 
 export default ServerDetail;

@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FC } from "react";
 
 import styles from "./Tag.module.css";
 
@@ -10,23 +9,25 @@ export interface TagProps {
   size?: "sm" | "lg";
 }
 
-export const Tag: FC<TagProps> = (props) => (
-  <div className={`${styles.tag} ${styles[props.size ?? "sm"]}`}>
-    {props.label}
-    {props.onRemove && (
-      <button type="button" onClick={props.onRemove}>
-        <FontAwesomeIcon icon={faXmark} />
-      </button>
-    )}
-  </div>
-);
+export function Tag(props: TagProps) {
+  return (
+    <div className={`${styles.tag} ${styles[props.size ?? "sm"]}`}>
+      {props.label}
+      {props.onRemove && (
+        <button type="button" onClick={props.onRemove}>
+          <FontAwesomeIcon icon={faXmark} />
+        </button>
+      )}
+    </div>
+  );
+}
 
 export interface TagListProps {
   tags: TagProps[];
   showMax?: number;
 }
 
-export const TagList: FC<TagListProps> = (props) => {
+export function TagList(props: TagListProps) {
   const { tags, showMax } = props;
   const shown = tags.slice(0, showMax);
   const notShown = Math.max(tags.length - (showMax ?? 0), 0);
@@ -43,4 +44,4 @@ export const TagList: FC<TagListProps> = (props) => {
       )}
     </ul>
   );
-};
+}

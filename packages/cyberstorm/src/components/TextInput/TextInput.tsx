@@ -1,17 +1,18 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import styles from "./TextInput.module.css";
 
 export interface TextInputProps {
   placeHolder?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
+  value?: string;
 }
 
 /**
  * Cyberstorm TextInput component
  */
-export const TextInput: React.FC<TextInputProps> = (props) => {
-  const { placeHolder, leftIcon, rightIcon } = props;
+export function TextInput(props: TextInputProps) {
+  const { placeHolder, leftIcon, rightIcon, value } = props;
 
   return (
     <div className={styles.root}>
@@ -20,11 +21,12 @@ export const TextInput: React.FC<TextInputProps> = (props) => {
         type="text"
         placeholder={placeHolder}
         className={`${styles.input} ${leftIcon ? styles.hasLeftIcon : ""}`}
+        value={value}
       />
       {rightIcon ? <div className={styles.rightIcon}>{rightIcon}</div> : null}
     </div>
   );
-};
+}
 
 TextInput.displayName = "TextInput";
 TextInput.defaultProps = {};

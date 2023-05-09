@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Searchfilter.module.css";
 import { Tag } from "../Tag/Tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,7 +12,7 @@ export interface SearchFilterProps {
 /**
  * Cyberstorm SearchFilter
  */
-export const SearchFilter: React.FC<SearchFilterProps> = (props) => {
+export function SearchFilter(props: SearchFilterProps) {
   const { tags } = props;
 
   const tagList = tags?.map((tagLabel: string, index: number) => {
@@ -43,7 +42,7 @@ export const SearchFilter: React.FC<SearchFilterProps> = (props) => {
       </div>
     </div>
   );
-};
+}
 
 SearchFilter.displayName = "PackageListLayout";
 SearchFilter.defaultProps = { tags: [] };

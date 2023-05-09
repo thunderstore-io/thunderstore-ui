@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Dispatch, PropsWithChildren, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 import { useServerListings } from "../api/hooks";
 import { ServerListingData } from "../api/models";
@@ -10,29 +10,27 @@ import styles from "./ServerList.module.css";
 interface ServerListEntryProps {
   listing: ServerListingData;
 }
-const ServerListEntry: React.FC<PropsWithChildren<ServerListEntryProps>> = ({
-  listing,
-}) => (
-  <Link href={`/server/` + listing.id} passHref key={listing.id}>
-    <a href="replacedByLink" className={styles.row}>
-      <div className={`${styles.name} ellipsis`}>{listing.name}</div>
-      <ServerMode isPvP={listing.is_pvp} />
-      <div>{listing.mod_count}</div>
-      <ServerPassword requiresPassword={listing.requires_password} />
-    </a>
-  </Link>
-);
+function ServerListEntry(props: ServerListEntryProps) {
+  const { listing } = props;
+  return (
+    <Link href={`/server/` + listing.id} passHref key={listing.id}>
+      <a href="replacedByLink" className={styles.row}>
+        <div className={`${styles.name} ellipsis`}>{listing.name}</div>
+        <ServerMode isPvP={listing.is_pvp} />
+        <div>{listing.mod_count}</div>
+        <ServerPassword requiresPassword={listing.requires_password} />
+      </a>
+    </Link>
+  );
+}
 
 interface ServerListPaginatorProps {
   next: string | null;
   prev: string | null;
   setCursor: Dispatch<SetStateAction<string | undefined>>;
 }
-const ServerListPaginator: React.FC<ServerListPaginatorProps> = ({
-  next,
-  prev,
-  setCursor,
-}) => {
+function ServerListPaginator(props: ServerListPaginatorProps) {
+  const { next, prev, setCursor } = props;
   const router = useRouter();
   const onClick = (cursor: string) => {
     router.replace({ pathname: "/", query: { cursor } });
@@ -54,14 +52,12 @@ const ServerListPaginator: React.FC<ServerListPaginatorProps> = ({
       )}
     </div>
   );
-};
+}
 
 interface ServerListProps {
   community: string;
 }
-export const ServerList: React.FC<PropsWithChildren<ServerListProps>> = ({
-  community,
-}) => {
+export function ServerList({ community }: ServerListProps) {
   const [currentCursor, setCurrentCursor] = useState<string>();
   const { data } = useServerListings(currentCursor);
   const next = data?.next ? data?.next.split("=")[1] : null;
@@ -103,4 +99,4 @@ export const ServerList: React.FC<PropsWithChildren<ServerListProps>> = ({
       </div>
     </>
   );
-};
+}

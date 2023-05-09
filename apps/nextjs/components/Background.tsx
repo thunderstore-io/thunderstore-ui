@@ -12,7 +12,7 @@ interface ContentHeadProps extends BoxProps {
  *
  * Accepts the same styling props as Chakra UI's Box element does.
  */
-export const Background: React.FC<ContentHeadProps> = (props) => {
+export function Background(props: ContentHeadProps) {
   const { url, children, ...boxProps } = props;
 
   return (
@@ -30,7 +30,7 @@ export const Background: React.FC<ContentHeadProps> = (props) => {
       <BgGradient h="100vh" />
     </Box>
   );
-};
+}
 
 /**
  * Component for displaying page's background image and gradient
@@ -41,7 +41,7 @@ export const Background: React.FC<ContentHeadProps> = (props) => {
  *
  * Accepts the same styling props as Chakra UI's Box element does.
  */
-export const HalfPageBackground: React.FC<ContentHeadProps> = (props) => {
+export function HalfPageBackground(props: ContentHeadProps) {
   const { url, children, ...boxProps } = props;
   const partialHeight = "648px";
 
@@ -61,7 +61,7 @@ export const HalfPageBackground: React.FC<ContentHeadProps> = (props) => {
       />
     </Box>
   );
-};
+}
 
 interface BgGradientProps {
   h: string;
@@ -70,11 +70,13 @@ interface BgGradientProps {
 /**
  * Absolutely positioned div with a radial gradient as a background.
  */
-const BgGradient: React.FC<BgGradientProps> = (props) => (
-  <Box
-    bgImage="radial-gradient(2000px 2000px at 30% 300px, #252f4a 0%, rgba(32, 41, 65, 0) 55%)"
-    position="absolute"
-    w="100%"
-    {...props}
-  />
-);
+function BgGradient(props: BgGradientProps) {
+  return (
+    <Box
+      bgImage="radial-gradient(2000px 2000px at 30% 300px, #252f4a 0%, rgba(32, 41, 65, 0) 55%)"
+      position="absolute"
+      w="100%"
+      {...props}
+    />
+  );
+}

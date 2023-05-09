@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./CommunityListLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,32 +8,32 @@ import {
   faStar,
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { CommunityLink } from "../../Links/Links";
+import { CommunitiesLink } from "../../Links/Links";
 import { TextInput } from "../../TextInput/TextInput";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
 import { Title } from "../../Title/Title";
-
-export interface CommunityListLayoutProps {
-  title?: string;
-}
+import { getCommunityPreviewDummyData, getListOfIds } from "../../../dummyData";
+import { CommunityPreview } from "../../../schema";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
 
 /**
  * Cyberstorm CommunityList Layout
  */
-export const CommunityListLayout: React.FC<CommunityListLayoutProps> = () => {
+export function CommunityListLayout() {
   const [order, setOrder] = useState("1");
 
-  return (
-    <div className={styles.root}>
-      <div className={styles.topNavigation}>
-        <div>
-          <BreadCrumbs>
-            <CommunityLink community="communities">Communities</CommunityLink>
-          </BreadCrumbs>
-          <Title text="Communities" />
-        </div>
+  const communitiesData: CommunityPreview[] = getCommunityData();
 
+  return (
+    <BaseLayout
+      breadCrumb={
+        <BreadCrumbs>
+          <CommunitiesLink>Communities</CommunitiesLink>
+        </BreadCrumbs>
+      }
+      header={<Title text="Communities" />}
+      search={
         <div className={styles.filters}>
           <TextInput
             placeHolder="Search communities..."
@@ -41,28 +41,28 @@ export const CommunityListLayout: React.FC<CommunityListLayoutProps> = () => {
           />
           <Select onChange={setOrder} options={selectOptions} value={order} />
         </div>
-      </div>
-
-      <div className={styles.communityCardList}>
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
-      </div>
-    </div>
+      }
+      mainContent={
+        <div className={styles.communityCardList}>
+          {communitiesData.map((community) => {
+            return (
+              <CommunityCard key={community.name} communityData={community} />
+            );
+          })}
+        </div>
+      }
+    />
   );
-};
+}
 
 CommunityListLayout.displayName = "CommunityListLayout";
 CommunityListLayout.defaultProps = {};
+
+function getCommunityData() {
+  return getListOfIds(20).map((communityId) => {
+    return getCommunityPreviewDummyData(communityId);
+  });
+}
 
 const selectOptions = [
   {
