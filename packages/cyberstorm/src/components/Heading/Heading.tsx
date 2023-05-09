@@ -4,11 +4,6 @@ import { Button } from "../Button/Button";
 import { Title } from "../Title/Title";
 import { TextInput } from "../TextInput/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUpload,
-  faBell,
-  faCaretDown,
-} from "@fortawesome/free-solid-svg-icons";
 import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
 import { DropDownLink } from "../DropDown/DropDownLink";
 import {
@@ -23,6 +18,15 @@ import {
 } from "../Links/Links";
 import { Avatar } from "../Avatar/Avatar";
 import { getUserDummyData } from "../../dummyData";
+import {
+  faBell,
+  faCaretDown,
+  faCog,
+  faCreditCard,
+  faSignOut,
+  faUpload,
+  faUsers,
+} from "@fortawesome/pro-solid-svg-icons";
 
 /**
  * Cyberstorm Heading Component
@@ -70,19 +74,34 @@ export function Heading() {
       </div>
     </SettingsLink>,
     <TeamsLink key="2">
-      <DropDownLink label="Teams" />
+      <DropDownLink
+        leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
+        label="Teams"
+      />
     </TeamsLink>,
     <a href="/notifications" key="3">
-      <DropDownLink label="Notifications" />
+      <DropDownLink
+        leftIcon={<FontAwesomeIcon icon={faBell} fixedWidth />}
+        label="Notifications"
+      />
     </a>,
     <a href="/subscriptons" key="4">
-      <DropDownLink label="Subscriptions" />
+      <DropDownLink
+        leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
+        label="Subscriptions"
+      />
     </a>,
     <SettingsLink key="5">
-      <DropDownLink label="Settings" />
+      <DropDownLink
+        leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
+        label="Settings"
+      />
     </SettingsLink>,
     <a href="/logout" key="6">
-      <DropDownLink label="Log Out" />
+      <DropDownLink
+        leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
+        label="Log Out"
+      />
     </a>,
   ];
 
