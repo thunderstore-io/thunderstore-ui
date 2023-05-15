@@ -8,12 +8,12 @@
   padding: var(--space--8) var(--space--12);
   border-radius: var(--border-radius--8);
   color: var(--text-color);
+  background-color: var(--color-surface--2);
 
   font: var(--font-body);
   font-weight: 700;
   font-size: var(--font-size--12);
   line-height: var(--line-height--14);
-  background-color: var(--color-surface--2);
 }
 
 .content {
