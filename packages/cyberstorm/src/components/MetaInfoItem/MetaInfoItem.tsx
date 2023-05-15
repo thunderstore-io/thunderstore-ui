@@ -1,22 +1,19 @@
 import React, { ReactNode } from "react";
 import styles from "./MetaInfoItem.module.css";
 
-type _MetaInfoItemProps = {
+export type MetaInfoItemProps = {
   label?: string;
-  icon?: ReactNode;
+  content?: ReactNode;
   colorScheme?: "default" | "tertiary";
-  ref?: React.Ref<HTMLDivElement>;
 };
-export type MetaInfoItemProps = _MetaInfoItemProps &
-  Omit<React.HTMLProps<HTMLDivElement>, keyof _MetaInfoItemProps>;
-
 export const MetaInfoItem = React.forwardRef<HTMLDivElement, MetaInfoItemProps>(
   (props) => {
-    const { colorScheme } = props;
+    const { label, content, colorScheme } = props;
 
     return (
       <div className={`${styles.root} ${getStyle(colorScheme)}`}>
-        {props.children}
+        <div>{label}</div>
+        <div className={styles.content}>{content}</div>
       </div>
     );
   }

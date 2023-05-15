@@ -1,5 +1,9 @@
 import { StoryFn, Meta } from "@storybook/react";
-import { MetaInfoItem, MetaInfoItemProps } from "@thunderstore/cyberstorm";
+import {
+  CopyButton,
+  MetaInfoItem,
+  MetaInfoItemProps,
+} from "@thunderstore/cyberstorm";
 import React from "react";
 
 export default {
@@ -12,18 +16,30 @@ const defaultArgs: MetaInfoItemProps = {
 };
 
 const Template: StoryFn<typeof MetaInfoItem> = (args) => (
-  <div style={{ width: "200px" }}>
-    <MetaInfoItem {...args}>
-      <span>Likes</span>
-      <span>375</span>
-    </MetaInfoItem>
+  <div style={{ width: "400px" }}>
+    <MetaInfoItem {...args} />
   </div>
 );
 
 const ReferenceMetaInfoItem = Template.bind({});
 ReferenceMetaInfoItem.args = {
   ...defaultArgs,
+  label: "Likes",
+  content: "375",
   colorScheme: "tertiary",
 };
 
-export { ReferenceMetaInfoItem };
+const MetaInfoItemWithCopyButton = Template.bind({});
+MetaInfoItemWithCopyButton.args = {
+  ...defaultArgs,
+  label: "Server code",
+  content: (
+    <>
+      <div>123.456.789</div>
+      <CopyButton text={"123.456.789"} />
+    </>
+  ),
+  colorScheme: "tertiary",
+};
+
+export { ReferenceMetaInfoItem, MetaInfoItemWithCopyButton };
