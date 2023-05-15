@@ -27,6 +27,7 @@ import {
   faUpload,
   faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
+import { AvatarButton } from "../Avatar/AvatarButton";
 
 /**
  * Cyberstorm Heading Component
@@ -147,7 +148,7 @@ export function Heading() {
             leftIcon={<FontAwesomeIcon icon={faBell} fixedWidth />}
           />
           <DropDown
-            trigger={<Avatar src={userData.imageSource} />}
+            trigger={<AvatarButton src={userData.imageSource} />}
             content={userDropDownContents}
           />
         </div>
