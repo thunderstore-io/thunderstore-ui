@@ -1,3 +1,4 @@
+"use client";
 import { ReactNode, useState } from "react";
 import styles from "./Dialog.module.css";
 import * as RadixDialog from "@radix-ui/react-dialog";

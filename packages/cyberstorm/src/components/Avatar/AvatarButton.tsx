@@ -1,3 +1,4 @@
+"use client";
 import styles from "./Avatar.module.css";
 import React, { PropsWithChildren, useRef } from "react";
 

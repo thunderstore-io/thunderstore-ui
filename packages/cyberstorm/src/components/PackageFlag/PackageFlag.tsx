@@ -1,3 +1,4 @@
+"use client";
 import React, { ReactNode, useRef } from "react";
 import styles from "./PackageFlag.module.css";
 

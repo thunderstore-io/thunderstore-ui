@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import styles from "./PackageListLayout.module.css";
 import { PackageCard } from "../../PackageCard/PackageCard";
