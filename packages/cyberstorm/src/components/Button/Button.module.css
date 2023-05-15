@@ -178,6 +178,6 @@
 
 .tiny {
   gap: var(--gap--4);
-  padding: var(--space--4) var(--space--4);
+  padding: 0;
   border-radius: var(--border-radius--4);
 }

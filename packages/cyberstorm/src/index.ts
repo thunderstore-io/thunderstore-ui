@@ -10,6 +10,7 @@ export * from "./components/Links/LinkingProvider";
 export * from "./components/Links/Links";
 export * from "./components/MenuItem/MenuItem";
 export * from "./components/MetaItem/MetaItem";
+export * from "./components/MetaInfoItem/MetaInfoItem";
 export * from "./components/PackageCard/PackageCard";
 export * from "./components/PackageFlag/PackageFlag";
 export * from "./components/PackageIcon/PackageIcon";
