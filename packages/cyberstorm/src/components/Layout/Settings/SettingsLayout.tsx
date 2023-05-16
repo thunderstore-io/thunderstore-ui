@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import styles from "./SettingsLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";

@@ -1,3 +1,4 @@
+"use client";
 /**
  * Implementation-agnostic context provider for navigation.
  *

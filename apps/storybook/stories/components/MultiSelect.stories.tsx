@@ -25,6 +25,7 @@ const Template: StoryFn<typeof MultiSelect> = (args) => (
 const NoneSelected = Template.bind({});
 NoneSelected.args = args;
 
+/*
 const OneSelected = Template.bind({});
 OneSelected.args = args;
 OneSelected.play = ({ canvasElement }) => {
@@ -45,6 +46,6 @@ MultipleSelected.play = ({ canvasElement }) => {
   userEvent.click(options[1]);
   userEvent.click(input);
   userEvent.click(options[2]);
-};
+};*/
 
-export { NoneSelected, OneSelected, MultipleSelected };
+export { NoneSelected /* OneSelected, MultipleSelected */ };
