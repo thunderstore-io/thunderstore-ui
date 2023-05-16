@@ -37,7 +37,9 @@ const library: LinkLibrary = {
     Link({ ...p, url: "/developers/package-format-docs/" }),
   PackageUpload: (p) => Link({ ...p, url: "/developers/upload-package/" }),
   PrivacyPolicy: (p) => Link({ ...p, url: "/privacy-policy/" }),
+  Settings: (p) => Link({ ...p, url: `/settings/` }),
   Team: (p) => Link({ ...p, url: `/team/${p.team}/` }),
+  Teams: (p) => Link({ ...p, url: `/teams/` }),
   TermsOfService: (p) => Link({ ...p, url: "/terms-of-service/" }),
 };
 
