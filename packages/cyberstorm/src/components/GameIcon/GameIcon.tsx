@@ -8,7 +8,7 @@ export interface GameIconProps {
  * Cyberstorm GameIcon component
  */
 export function GameIcon(props: GameIconProps) {
-  const { src } = props;
+  const { src = "" } = props;
   return (
     <div className={styles.root}>
       <img className={styles.image} alt={"gameIcon"} src={src} />
@@ -17,4 +17,3 @@ export function GameIcon(props: GameIconProps) {
 }
 
 GameIcon.displayName = "GameIcon";
-GameIcon.defaultProps = { src: "/images/game.png" };

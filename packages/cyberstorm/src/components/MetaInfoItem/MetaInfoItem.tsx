@@ -1,4 +1,5 @@
-import React, { ReactNode } from "react";
+"use client";
+import React, { ReactNode, useRef } from "react";
 import styles from "./MetaInfoItem.module.css";
 
 export type MetaInfoItemProps = {
@@ -7,11 +8,23 @@ export type MetaInfoItemProps = {
   colorScheme?: "default" | "tertiary";
 };
 export const MetaInfoItem = React.forwardRef<HTMLDivElement, MetaInfoItemProps>(
-  (props) => {
-    const { label, content, colorScheme } = props;
+  (props, forwardedRef) => {
+    const {
+      label,
+      content,
+      colorScheme = "default",
+      ...forwardedProps
+    } = props;
+
+    const fallbackRef = useRef(null);
+    const ref = forwardedRef || fallbackRef;
 
     return (
-      <div className={`${styles.root} ${getStyle(colorScheme)}`}>
+      <div
+        {...forwardedProps}
+        ref={ref}
+        className={`${styles.root} ${getStyle(colorScheme)}`}
+      >
         <div>{label}</div>
         <div className={styles.content}>{content}</div>
       </div>
@@ -20,7 +33,6 @@ export const MetaInfoItem = React.forwardRef<HTMLDivElement, MetaInfoItemProps>(
 );
 
 MetaInfoItem.displayName = "MetaInfoItem";
-MetaInfoItem.defaultProps = { colorScheme: "default" };
 
 const getStyle = (scheme: MetaInfoItemProps["colorScheme"] = "default") => {
   return {

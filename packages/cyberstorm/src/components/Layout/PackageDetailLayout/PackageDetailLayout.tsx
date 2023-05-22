@@ -21,7 +21,7 @@ export interface PackageDetailLayoutProps {
  * Cyberstorm PackageDetail Layout
  */
 export function PackageDetailLayout(props: PackageDetailLayoutProps) {
-  const { packageId, managementDialogIsOpen } = props;
+  const { packageId, managementDialogIsOpen = false } = props;
   const packageData = getPackageData(packageId);
 
   return (
@@ -94,9 +94,6 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
 }
 
 PackageDetailLayout.displayName = "PackageDetailLayout";
-PackageDetailLayout.defaultProps = {
-  managementDialogIsOpen: false,
-};
 
 function getPackageData(packageId: string) {
   return getPackageDummyData(packageId);

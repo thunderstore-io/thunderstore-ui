@@ -8,7 +8,7 @@ export interface ThunderstoreLogoProps {
  * Cyberstorm ThunderstoreLogo component
  */
 export function ThunderstoreLogo(props: ThunderstoreLogoProps) {
-  const { src } = props;
+  const { src = "/images/logo.png" } = props;
   return (
     <div>
       <img className={styles.image} alt={"ThunderstoreLogo"} src={src} />
@@ -17,4 +17,3 @@ export function ThunderstoreLogo(props: ThunderstoreLogoProps) {
 }
 
 ThunderstoreLogo.displayName = "ThunderstoreLogo";
-ThunderstoreLogo.defaultProps = { src: "/images/logo.png" };

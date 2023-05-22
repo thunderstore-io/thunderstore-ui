@@ -9,12 +9,11 @@ export interface TitleProps {
  * Cyberstorm Title component
  */
 export function Title(props: TitleProps) {
-  const { size, text } = props;
+  const { size, text = "" } = props;
   return <div className={`${styles.root} ${getSize(size)}`}>{text}</div>;
 }
 
 Title.displayName = "Title";
-Title.defaultProps = { text: "" };
 
 const getSize = (scheme: TitleProps["size"] = "default") => {
   return {

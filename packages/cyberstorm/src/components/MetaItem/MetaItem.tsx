@@ -19,7 +19,7 @@ export type MetaItemProps = _MetaItemProps &
  */
 export const MetaItem = React.forwardRef<HTMLDivElement, MetaItemProps>(
   (props, forwardedRef) => {
-    const { label, icon, colorScheme, size } = props;
+    const { label, icon, colorScheme = "default", size = "medium" } = props;
 
     const fallbackRef = useRef(null);
     const ref = forwardedRef || fallbackRef;
@@ -36,7 +36,6 @@ export const MetaItem = React.forwardRef<HTMLDivElement, MetaItemProps>(
 );
 
 MetaItem.displayName = "MetaItem";
-MetaItem.defaultProps = { colorScheme: "default", size: "medium" };
 
 const getStyle = (scheme: MetaItemProps["colorScheme"] = "default") => {
   return {

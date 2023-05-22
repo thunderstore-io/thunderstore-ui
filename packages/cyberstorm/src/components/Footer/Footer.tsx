@@ -105,4 +105,3 @@ export function Footer() {
 }
 
 Footer.displayName = "Footer";
-Footer.defaultProps = {};

@@ -20,4 +20,3 @@ export function PackageFormatDocsLayout() {
 }
 
 PackageFormatDocsLayout.displayName = "PackageFormatDocsLayout";
-PackageFormatDocsLayout.defaultProps = {};

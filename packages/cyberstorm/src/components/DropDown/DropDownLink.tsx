@@ -13,7 +13,7 @@ export interface DropDownLinkProps {
  * Cyberstorm DropDownLink component
  */
 export function DropDownLink(props: DropDownLinkProps) {
-  const { label, leftIcon, isExternal } = props;
+  const { label, leftIcon, isExternal = false } = props;
   return (
     <div className={styles.root}>
       <div className={styles.label}>
@@ -26,4 +26,3 @@ export function DropDownLink(props: DropDownLinkProps) {
 }
 
 DropDownLink.displayName = "DropDownLink";
-DropDownLink.defaultProps = { isExternal: false };

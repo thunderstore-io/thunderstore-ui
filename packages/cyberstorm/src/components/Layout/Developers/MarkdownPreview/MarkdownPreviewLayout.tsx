@@ -38,4 +38,3 @@ export function MarkdownPreviewLayout() {
 }
 
 MarkdownPreviewLayout.displayName = "MarkdownPreviewLayout";
-MarkdownPreviewLayout.defaultProps = {};

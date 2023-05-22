@@ -26,7 +26,12 @@ export interface PackageCardProps {
  * Cyberstorm PackageCard component
  */
 export function PackageCard(props: PackageCardProps) {
-  const { packageData, colorScheme, community, ...forwardedProps } = props;
+  const {
+    packageData,
+    colorScheme = "default",
+    community,
+    ...forwardedProps
+  } = props;
 
   const authorLink = ""; //TODO: author link
   //TODO: convert <a> tags into link components!
@@ -68,7 +73,7 @@ export function PackageCard(props: PackageCardProps) {
           <div className={styles.title}>{packageData.name}</div>
         </PackageLink>
 
-        {packageData.author ? (
+        {packageData.author && authorLink ? (
           <div className={styles.author}>
             <span className={styles.author_prefix}>by</span>
             <a className={styles.author_label} href={authorLink}>
@@ -113,9 +118,6 @@ export function PackageCard(props: PackageCardProps) {
 }
 
 PackageCard.displayName = "PackageCard";
-PackageCard.defaultProps = {
-  colorScheme: "default",
-};
 
 const getStyle = (scheme: PackageCardProps["colorScheme"] = "default") => {
   return {

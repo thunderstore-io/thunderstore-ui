@@ -95,7 +95,6 @@ export function PackageListLayout(props: PackageListLayoutProps) {
 }
 
 PackageListLayout.displayName = "PackageListLayout";
-PackageListLayout.defaultProps = {};
 
 function getPackageData() {
   return getListOfIds(20).map((packageId) => {

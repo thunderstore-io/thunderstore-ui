@@ -14,14 +14,14 @@ export interface PaginationButtonProps {
 
 export function PaginationButton(props: PaginationButtonProps) {
   const {
-    ariaCurrent,
-    ariaLabel,
-    label,
-    leftIcon,
-    rightIcon,
-    colorScheme,
+    ariaCurrent = false,
+    ariaLabel = "",
+    label = "",
+    leftIcon = null,
+    rightIcon = null,
+    colorScheme = "default",
     onClick,
-    isSelected,
+    isSelected = false,
   } = props;
   return (
     <button
@@ -37,16 +37,6 @@ export function PaginationButton(props: PaginationButtonProps) {
     </button>
   );
 }
-
-PaginationButton.defaultProps = {
-  colorScheme: "default",
-  isSelected: false,
-  ariaCurrent: false,
-  ariaLabel: "",
-  label: "",
-  leftIcon: null,
-  rightIcon: null,
-};
 
 const getStyle = (
   scheme: PaginationButtonProps["colorScheme"] = "default",

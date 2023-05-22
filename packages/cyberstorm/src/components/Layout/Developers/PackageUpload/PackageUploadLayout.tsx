@@ -76,4 +76,3 @@ export function PackageUploadLayout() {
 }
 
 PackageUploadLayout.displayName = "PackageUploadLayout";
-PackageUploadLayout.defaultProps = {};

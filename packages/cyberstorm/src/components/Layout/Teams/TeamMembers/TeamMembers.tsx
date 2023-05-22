@@ -14,7 +14,7 @@ export interface TeamMembersProps {
 }
 
 export function TeamMembers(props: TeamMembersProps) {
-  const { membersData, teamName } = props;
+  const { membersData = [], teamName = "" } = props;
 
   const dialog = (
     <Dialog
@@ -53,7 +53,6 @@ export function TeamMembers(props: TeamMembersProps) {
 }
 
 TeamMembers.displayName = "TeamMembers";
-TeamMembers.defaultProps = { membersData: [], teamName: "" };
 
 const userRoles = [
   { value: "1", label: "Member" },

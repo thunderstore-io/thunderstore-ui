@@ -9,4 +9,3 @@ export function TermsOfServiceLayout() {
 }
 
 TermsOfServiceLayout.displayName = "TermsOfServiceLayout";
-TermsOfServiceLayout.defaultProps = {};
