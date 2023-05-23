@@ -1,4 +1,4 @@
-import styles from "../MetaInfoItemList/MetaInfoItemList.module.css";
+import styles from "./MetaInfoItemList.module.css";
 import React, { ReactElement } from "react";
 import { MetaInfoItem } from "../MetaInfoItem/MetaInfoItem";
 
