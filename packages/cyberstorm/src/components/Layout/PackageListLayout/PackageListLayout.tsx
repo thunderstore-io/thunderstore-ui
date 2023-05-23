@@ -21,18 +21,21 @@ import { BaseLayout } from "../BaseLayout/BaseLayout";
 
 export interface PackageListLayoutProps {
   communityId: string;
+  packageData?: PackagePreview[];
 }
 
 /**
  * Cyberstorm PackageList Layout
  */
 export function PackageListLayout(props: PackageListLayoutProps) {
-  const { communityId } = props;
+  const { communityId, packageData } = props;
 
   const [order, setOrder] = useState("1");
   const [page, setPage] = useState(1);
 
-  const packagesData: PackagePreview[] = getPackageData();
+  const packagesData: PackagePreview[] = packageData
+    ? packageData
+    : getPackageData();
   const communityData = getCommunityData(communityId);
 
   return (

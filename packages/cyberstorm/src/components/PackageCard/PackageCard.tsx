@@ -87,7 +87,7 @@ export function PackageCard(props: PackageCardProps) {
         ) : null}
       </div>
 
-      {packageData.categories.length > 0 ? (
+      {packageData.categories?.length > 0 ? (
         <div className={styles.categoryWrapper}>
           {packageData.categories.map((c, index) => (
             <Tag

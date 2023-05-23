@@ -1,5 +1,5 @@
 "use client";
-import { PackageListLayout, PackagePreview } from "@thunderstore/cyberstorm";
+import { PackageListLayout } from "@thunderstore/cyberstorm";
 import { useParams } from "next/navigation";
 import { useQuery } from "react-query";
 
@@ -10,10 +10,8 @@ export type User = {
 };
 
 async function getPackages() {
-  const res = await fetch(
-    "https://thunderstore.io/api/experimental/frontend/c/valheim/packages/"
-  );
-  const packages = (await res.json()) as PackagePreview[];
+  const res = await fetch("https://thunderstore.dev/api/experimental/package/");
+  const packages = await res.json();
   return packages;
 }
 
@@ -27,5 +25,10 @@ export default function Page() {
 
   console.log(data);
 
-  return <PackageListLayout communityId={communityId} />;
+  return (
+    <PackageListLayout
+      packageData={data ? data.results : null}
+      communityId={communityId}
+    />
+  );
 }
