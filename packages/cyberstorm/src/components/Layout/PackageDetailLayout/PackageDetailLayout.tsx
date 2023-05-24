@@ -11,6 +11,7 @@ import { Dialog } from "../../Dialog/Dialog";
 import { PackageManagementForm } from "./PackageManagementForm";
 import { getPackageDummyData } from "../../../dummyData";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
+import { MetaInfoItemList } from "../../MetaInfoItemList/MetaInfoItemList";
 
 export interface PackageDetailLayoutProps {
   packageId: string;
@@ -88,7 +89,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <p className={styles.description}>{packageData.description}</p>
         </>
       }
-      rightSidebarContent={<>{"metaInfoItemList here"}</>}
+      rightSidebarContent={<MetaInfoItemList metaInfoData={metaInfoData} />}
     />
   );
 }
@@ -101,3 +102,8 @@ PackageDetailLayout.defaultProps = {
 function getPackageData(packageId: string) {
   return getPackageDummyData(packageId);
 }
+
+const metaInfoData = [
+  { key: "1", label: "Last Updated", content: <>asd</> },
+  { key: "2", label: "First Updated", content: <>qwer</> },
+];
