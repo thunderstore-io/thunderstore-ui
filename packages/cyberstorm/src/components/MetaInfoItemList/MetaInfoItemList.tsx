@@ -15,7 +15,7 @@ export type MetaInfoItemListProps = {
  * Cyberstorm FilterItemList
  */
 export const MetaInfoItemList: React.FC<MetaInfoItemListProps> = (props) => {
-  const { metaInfoData } = props;
+  const { metaInfoData = [] } = props;
   const metaItemList = metaInfoData?.map((metaInfoDataItem) => {
     return (
       <div key={metaInfoDataItem.key}>
@@ -35,4 +35,3 @@ export const MetaInfoItemList: React.FC<MetaInfoItemListProps> = (props) => {
 };
 
 MetaInfoItemList.displayName = "MetaInfoItemList";
-MetaInfoItemList.defaultProps = { metaInfoData: [] };
