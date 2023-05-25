@@ -8,7 +8,7 @@ export interface PackageManagementFormProps {
 }
 
 export function PackageManagementForm(props: PackageManagementFormProps) {
-  const { packageStatus } = props;
+  const { packageStatus = "active" } = props;
   return (
     <div className={styles.root}>
       <Title text="Package status" size="smallest" />
@@ -22,4 +22,3 @@ export function PackageManagementForm(props: PackageManagementFormProps) {
 }
 
 PackageManagementForm.displayName = "PackageManagementForm";
-PackageManagementForm.defaultProps = { packageStatus: "active" };

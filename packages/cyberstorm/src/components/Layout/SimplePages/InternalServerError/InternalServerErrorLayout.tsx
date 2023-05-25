@@ -9,4 +9,3 @@ export function InternalServerErrorLayout() {
 }
 
 InternalServerErrorLayout.displayName = "InternalServerErrorLayout";
-InternalServerErrorLayout.defaultProps = {};

@@ -5,4 +5,3 @@ export function Achievements() {
 }
 
 Achievements.displayName = "Achievements";
-Achievements.defaultProps = {};

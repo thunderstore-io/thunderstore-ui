@@ -8,7 +8,7 @@ export interface ModIconProps {
  * Cyberstorm ModIcon component
  */
 export function ModIcon(props: ModIconProps) {
-  const { src } = props;
+  const { src = "" } = props;
   return (
     <div className={styles.root}>
       <img className={styles.image} alt={"ModIcon"} src={src} />
@@ -17,4 +17,3 @@ export function ModIcon(props: ModIconProps) {
 }
 
 ModIcon.displayName = "ModIcon";
-ModIcon.defaultProps = { src: "/images/thomas.jpg" };

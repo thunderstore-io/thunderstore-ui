@@ -20,8 +20,8 @@ export function Pagination(props: PaginationProps) {
     onPageChange,
     totalCount,
     pageSize,
-    disabled,
-    siblingCount,
+    disabled = false,
+    siblingCount = 1,
   } = props;
 
   if (totalCount === 0) {
@@ -125,8 +125,6 @@ export function Pagination(props: PaginationProps) {
     </nav>
   );
 }
-
-Pagination.defaultProps = { disabled: false, siblingCount: 1 };
 
 function decreaseCurrentPage(currentPage: number) {
   const newPage = currentPage - 1;

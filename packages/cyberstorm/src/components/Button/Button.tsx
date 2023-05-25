@@ -37,9 +37,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       label,
       leftIcon,
       rightIcon,
-      colorScheme,
+      colorScheme = "default",
       onClick,
-      size,
+      size = "medium",
       ...forwardedProps
     } = props;
 
@@ -63,7 +63,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 Button.displayName = "Button";
-Button.defaultProps = { colorScheme: "default", size: "medium" };
 
 const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {
   return {

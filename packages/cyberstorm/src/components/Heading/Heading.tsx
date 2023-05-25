@@ -148,6 +148,7 @@ export function Heading() {
             leftIcon={<FontAwesomeIcon icon={faBell} fixedWidth />}
           />
           <DropDown
+            colorScheme="default"
             trigger={<AvatarButton src={userData.imageSource} />}
             content={userDropDownContents}
           />
@@ -158,7 +159,6 @@ export function Heading() {
 }
 
 Heading.displayName = "Heading";
-Heading.defaultProps = {};
 
 function getUserData(userId: string) {
   return getUserDummyData(userId);

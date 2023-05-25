@@ -9,7 +9,12 @@ export interface SettingItemProps {
 }
 
 export function SettingItem(props: SettingItemProps) {
-  const { title, description, content, additionalLeftColumnContent } = props;
+  const {
+    title = "",
+    description = "",
+    content = null,
+    additionalLeftColumnContent = null,
+  } = props;
   return (
     <div className={styles.root}>
       <div className={styles.wrapper}>
@@ -25,9 +30,3 @@ export function SettingItem(props: SettingItemProps) {
 }
 
 SettingItem.displayName = "SettingItem";
-SettingItem.defaultProps = {
-  title: "",
-  description: "",
-  content: null,
-  additionalLeftColumnContent: null,
-};

@@ -20,10 +20,10 @@ export const Tag: React.FC<TagProps> = React.forwardRef<
 >((props, forwardedRef) => {
   const {
     label,
-    colorScheme,
+    colorScheme = "default",
     leftIcon,
     rightIcon,
-    size,
+    size = "medium",
     isRemovable,
     ...forwardedProps
   } = props;
@@ -47,7 +47,6 @@ export const Tag: React.FC<TagProps> = React.forwardRef<
 });
 
 Tag.displayName = "Tag";
-Tag.defaultProps = { colorScheme: "default", size: "medium" };
 
 const getStyle = (scheme: TagProps["colorScheme"] = "default") => {
   return {

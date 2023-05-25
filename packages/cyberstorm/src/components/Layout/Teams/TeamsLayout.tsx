@@ -48,7 +48,6 @@ export function TeamsLayout(props: TeamsLayoutProps) {
 }
 
 TeamsLayout.displayName = "TeamsLayout";
-TeamsLayout.defaultProps = {};
 
 function getTeamData(teamId: string) {
   return getTeamDummyData(teamId);

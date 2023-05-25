@@ -9,7 +9,7 @@ export interface AvatarProps {
  * Cyberstorm Avatar component
  */
 export function Avatar(props: AvatarProps) {
-  const { src, size } = props;
+  const { src, size = "medium" } = props;
 
   return (
     <div className={styles.root}>
@@ -23,7 +23,6 @@ export function Avatar(props: AvatarProps) {
 }
 
 Avatar.displayName = "Avatar";
-Avatar.defaultProps = { size: "medium" };
 
 const getSize = (scheme: AvatarProps["size"] = "medium") => {
   return {

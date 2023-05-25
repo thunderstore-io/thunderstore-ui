@@ -10,7 +10,7 @@ export interface TeamDisbandProps {
 }
 
 export function TeamDisband(props: TeamDisbandProps) {
-  const { teamName } = props;
+  const { teamName = "" } = props;
 
   return (
     <div>
@@ -45,4 +45,3 @@ export function TeamDisband(props: TeamDisbandProps) {
 }
 
 TeamDisband.displayName = "TeamDisband";
-TeamDisband.defaultProps = { teamName: "" };

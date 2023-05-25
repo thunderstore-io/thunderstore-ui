@@ -10,7 +10,13 @@ export interface TabsButtonProps {
 }
 
 export function TabsButton(props: TabsButtonProps) {
-  const { ariaCurrent, ariaLabel, label, onClick, isSelected } = props;
+  const {
+    ariaCurrent = false,
+    ariaLabel = "",
+    label = "",
+    onClick,
+    isSelected = false,
+  } = props;
   return (
     <button
       type="button"
@@ -23,13 +29,6 @@ export function TabsButton(props: TabsButtonProps) {
     </button>
   );
 }
-
-TabsButton.defaultProps = {
-  isSelected: false,
-  ariaCurrent: false,
-  ariaLabel: "",
-  label: "",
-};
 
 const getStyle = (isSelected = false) => {
   if (isSelected) {

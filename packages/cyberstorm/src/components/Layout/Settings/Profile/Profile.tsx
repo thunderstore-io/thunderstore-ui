@@ -55,4 +55,3 @@ export function Profile(props: ProfileProps) {
 }
 
 Profile.displayName = "Profile";
-Profile.defaultProps = {};

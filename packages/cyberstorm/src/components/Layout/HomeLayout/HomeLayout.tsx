@@ -56,7 +56,6 @@ export function HomeLayout() {
 }
 
 HomeLayout.displayName = "HomeLayout";
-HomeLayout.defaultProps = {};
 
 function getFeaturedPackages() {
   return getListOfIds(7).map((packageId) => {

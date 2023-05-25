@@ -14,7 +14,7 @@ export interface FilterItemListProps {
  * Cyberstorm FilterItemList
  */
 export function FilterItemList(props: FilterItemListProps) {
-  const { filterData } = props;
+  const { filterData = [] } = props;
   const filters = filterData?.map((filter) => {
     return (
       <div key={filter.key}>
@@ -39,4 +39,3 @@ export function FilterItemList(props: FilterItemListProps) {
 }
 
 FilterItemList.displayName = "FilterItemList";
-FilterItemList.defaultProps = { filterData: [] };

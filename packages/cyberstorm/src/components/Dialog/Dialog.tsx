@@ -22,13 +22,13 @@ type DialogProps = {
  */
 export function Dialog(props: DialogProps) {
   const {
-    additionalFooterContent,
+    additionalFooterContent = null,
     content,
-    defaultOpen,
+    defaultOpen = false,
     trigger,
     acceptButton,
     cancelButton,
-    title,
+    title = undefined,
   } = props;
 
   const [isOpen, setOpen] = useState<boolean>(
@@ -89,8 +89,3 @@ export function Dialog(props: DialogProps) {
 }
 
 Dialog.displayName = "Dialog";
-Dialog.defaultProps = {
-  defaultOpen: false,
-  title: undefined,
-  additionalFooterContent: null,
-};

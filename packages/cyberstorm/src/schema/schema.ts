@@ -1,6 +1,7 @@
 export interface Community {
   name: string;
   namespace: string;
+  backgroundImageSource?: string;
   imageSource?: string;
   packageCount: number;
   downloadCount: number;
@@ -25,7 +26,7 @@ export interface Package {
   community: string;
   description?: string;
   shortDescription?: string;
-  imageSource: string;
+  imageSource?: string;
   additionalImages?: string[];
   downloadCount: number;
   likes: number;

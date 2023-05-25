@@ -28,12 +28,12 @@ export type SelectProps = _SelectProps &
 
 export function Select(props: SelectProps) {
   const {
-    colorScheme,
-    defaultOpen,
-    icon,
+    colorScheme = "default",
+    defaultOpen = false,
+    icon = <FontAwesomeIcon fixedWidth icon={faChevronDown} />,
     options,
     onChange,
-    placeholder,
+    placeholder = "Select",
     value,
     ...forwardedProps
   } = props;
@@ -72,12 +72,6 @@ export function Select(props: SelectProps) {
 }
 
 Select.displayName = "Select";
-Select.defaultProps = {
-  colorScheme: "default",
-  defaultOpen: false,
-  icon: <FontAwesomeIcon fixedWidth icon={faChevronDown} />,
-  placeholder: "Select",
-};
 
 const getContentStyle = (scheme: SelectProps["colorScheme"] = "default") => {
   return {
