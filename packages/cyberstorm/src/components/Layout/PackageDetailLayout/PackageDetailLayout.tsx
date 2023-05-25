@@ -89,7 +89,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <p className={styles.description}>{packageData.description}</p>
         </>
       }
-      rightSidebarContent={<MetaInfoItemList metaInfoData={metaInfoData} />}
+      rightSidebarContent={<MetaInfoItemList items={metaInfoData} />}
     />
   );
 }
@@ -104,6 +104,6 @@ function getPackageData(packageId: string) {
 }
 
 const metaInfoData = [
-  { key: "1", label: "Last Updated", content: <>asd</> },
-  { key: "2", label: "First Updated", content: <>qwer</> },
+  { label: "Last Updated", content: "asd" },
+  { label: "First Updated", content: "qwer" },
 ];
