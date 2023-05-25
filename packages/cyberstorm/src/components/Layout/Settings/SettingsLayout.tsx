@@ -51,7 +51,6 @@ function getUserData(userId: string) {
 }
 
 SettingsLayout.displayName = "SettingsLayout";
-SettingsLayout.defaultProps = {};
 
 const tabs = [
   { key: 1, label: "Profile" },

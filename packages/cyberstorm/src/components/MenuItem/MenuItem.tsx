@@ -16,7 +16,13 @@ export const MenuItem: React.FC<MenuItemProps> = React.forwardRef<
   HTMLDivElement,
   MenuItemProps
 >((props, forwardedRef) => {
-  const { label, leftIcon, rightIcon, colorScheme, ...forwardedProps } = props;
+  const {
+    label,
+    leftIcon,
+    rightIcon,
+    colorScheme = "default",
+    ...forwardedProps
+  } = props;
 
   const fallbackRef = useRef(null);
   const ref = forwardedRef || fallbackRef;
@@ -43,7 +49,6 @@ export const MenuItem: React.FC<MenuItemProps> = React.forwardRef<
 });
 
 MenuItem.displayName = "MenuItem";
-MenuItem.defaultProps = { colorScheme: "default" };
 
 const getStyle = (scheme: MenuItemProps["colorScheme"] = "default") => {
   return {

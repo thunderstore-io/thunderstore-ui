@@ -29,4 +29,3 @@ export function TextInput(props: TextInputProps) {
 }
 
 TextInput.displayName = "TextInput";
-TextInput.defaultProps = {};

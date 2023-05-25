@@ -45,7 +45,6 @@ export function FilterItem(props: FilterItemProps) {
 }
 
 FilterItem.displayName = "FilterItem";
-FilterItem.defaultProps = {};
 
 function getNextValue(checked: boolean | undefined): boolean | undefined {
   if (checked === undefined) {

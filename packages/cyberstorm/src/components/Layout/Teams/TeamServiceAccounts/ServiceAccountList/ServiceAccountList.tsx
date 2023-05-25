@@ -7,7 +7,7 @@ export interface ServiceAccountListProps {
 }
 
 export function ServiceAccountList(props: ServiceAccountListProps) {
-  const { serviceAccountData } = props;
+  const { serviceAccountData = [] } = props;
 
   const mappedServiceAccountList = serviceAccountData?.map(
     (serviceAccount: ServiceAccount, index: number) => {
@@ -26,4 +26,3 @@ export function ServiceAccountList(props: ServiceAccountListProps) {
 }
 
 ServiceAccountList.displayName = "ServiceAccountList";
-ServiceAccountList.defaultProps = { serviceAccountData: [] };

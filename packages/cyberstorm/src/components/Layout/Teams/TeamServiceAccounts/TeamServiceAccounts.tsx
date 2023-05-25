@@ -11,7 +11,7 @@ export interface TeamServiceAccountsProps {
 }
 
 export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
-  const { serviceAccountData } = props;
+  const { serviceAccountData = [] } = props;
 
   return (
     <div>
@@ -39,7 +39,6 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
 }
 
 TeamServiceAccounts.displayName = "TeamServiceAccounts";
-TeamServiceAccounts.defaultProps = { serviceAccountData: [] };
 
 function getServiceAccountListData(
   serviceAccountIds: string[]

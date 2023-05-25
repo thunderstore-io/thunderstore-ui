@@ -8,7 +8,7 @@ export interface UserListProps {
 }
 
 export function UserList(props: UserListProps) {
-  const { teamMemberData } = props;
+  const { teamMemberData = [] } = props;
 
   const mappedUserList = teamMemberData?.map(
     (teamMember: TeamMember, index: number) => {
@@ -29,4 +29,3 @@ export function UserList(props: UserListProps) {
 }
 
 UserList.displayName = "UserList";
-UserList.defaultProps = { teamMemberData: [] };

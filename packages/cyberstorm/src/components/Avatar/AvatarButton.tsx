@@ -15,7 +15,7 @@ export const AvatarButton = React.forwardRef<
   HTMLButtonElement,
   AvatarButtonProps
 >((props: PropsWithChildren<AvatarButtonProps>, forwardedRef) => {
-  const { src, size, ...forwardedProps } = props;
+  const { src, colorScheme, size = "medium", ...forwardedProps } = props;
 
   const fallbackRef = useRef(null);
   const ref = forwardedRef || fallbackRef;
@@ -31,8 +31,7 @@ export const AvatarButton = React.forwardRef<
   );
 });
 
-AvatarButton.displayName = "Avatar";
-AvatarButton.defaultProps = { size: "medium" };
+AvatarButton.displayName = "AvatarButton";
 
 const getSize = (scheme: AvatarButtonProps["size"] = "medium") => {
   return {

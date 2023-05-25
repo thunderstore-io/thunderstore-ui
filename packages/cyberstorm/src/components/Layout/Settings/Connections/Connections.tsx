@@ -29,4 +29,3 @@ export function Connections(props: ConnectionsProps) {
 }
 
 Connections.displayName = "Connections";
-Connections.defaultProps = {};

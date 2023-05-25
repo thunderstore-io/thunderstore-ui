@@ -13,7 +13,7 @@ export interface UserListItemProps {
 }
 
 export function UserListItem(props: UserListItemProps) {
-  const { userName, userImageSrc, role } = props;
+  const { userName = "", userImageSrc = "", role = "1" } = props;
 
   const [userRole, setUserRole] = useState(role);
 
@@ -38,7 +38,6 @@ export function UserListItem(props: UserListItemProps) {
 }
 
 UserListItem.displayName = "UserListItem";
-UserListItem.defaultProps = { userName: "", userImageSrc: "", role: "1" };
 
 const userRoles = [
   { value: "1", label: "Member" },

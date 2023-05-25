@@ -48,4 +48,3 @@ export function CommunityCard(props: GameIconProps) {
 }
 
 CommunityCard.displayName = "CommunityCard";
-CommunityCard.defaultProps = {};

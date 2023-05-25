@@ -52,4 +52,3 @@ export function Account(props: AccountProps) {
 }
 
 Account.displayName = "Account";
-Account.defaultProps = {};

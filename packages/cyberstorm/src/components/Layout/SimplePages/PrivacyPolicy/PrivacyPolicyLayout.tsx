@@ -9,4 +9,3 @@ export function PrivacyPolicyLayout() {
 }
 
 PrivacyPolicyLayout.displayName = "PrivacyPolicyLayout";
-PrivacyPolicyLayout.defaultProps = {};

@@ -32,4 +32,3 @@ export function Tabs(props: TabsProps) {
 }
 
 Tabs.displayName = "Tabs";
-Tabs.defaultProps = {};

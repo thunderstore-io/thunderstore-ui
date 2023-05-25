@@ -9,7 +9,7 @@ export interface TeamLeaveProps {
 }
 
 export function TeamLeave(props: TeamLeaveProps) {
-  const { teamName } = props;
+  const { teamName = "" } = props;
 
   return (
     <div>
@@ -38,4 +38,3 @@ export function TeamLeave(props: TeamLeaveProps) {
 }
 
 TeamLeave.displayName = "TeamLeave";
-TeamLeave.defaultProps = { teamName: "" };

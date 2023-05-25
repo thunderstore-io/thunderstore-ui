@@ -16,4 +16,3 @@ export function BackgroundImage(props: BackgroundImageProps) {
 }
 
 BackgroundImage.displayName = "BackgroundImage";
-BackgroundImage.defaultProps = {};

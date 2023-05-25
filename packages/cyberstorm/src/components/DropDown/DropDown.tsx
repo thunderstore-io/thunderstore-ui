@@ -13,8 +13,13 @@ type DropDownProps = {
 };
 
 export function DropDown(props: DropDownProps) {
-  const { colorScheme, defaultOpen, content, trigger, triggerColorScheme } =
-    props;
+  const {
+    colorScheme = "default",
+    defaultOpen = false,
+    content,
+    trigger,
+    triggerColorScheme,
+  } = props;
 
   return (
     <div className={styles.root}>
@@ -42,10 +47,6 @@ export function DropDown(props: DropDownProps) {
 }
 
 DropDown.displayName = "DropDown";
-DropDown.defaultProps = {
-  defaultOpen: false,
-  colorScheme: "default",
-};
 
 const parseContent = (content: ReactNode[] | undefined) => {
   return content?.map((item, index) => (

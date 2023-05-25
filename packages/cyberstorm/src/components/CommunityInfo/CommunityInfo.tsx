@@ -27,7 +27,7 @@ export interface PackageListCommunityInfoProps {
  */
 export function CommunityInfo(props: PackageListCommunityInfoProps) {
   const {
-    title,
+    title = "",
     description,
     imageSource,
     packageCount,
@@ -79,4 +79,3 @@ export function CommunityInfo(props: PackageListCommunityInfoProps) {
 }
 
 CommunityInfo.displayName = "PackageListCommunityInfo";
-CommunityInfo.defaultProps = { title: "" };

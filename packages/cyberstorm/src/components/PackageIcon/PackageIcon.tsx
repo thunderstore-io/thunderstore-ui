@@ -8,7 +8,7 @@ export interface PackageIconProps {
  * Cyberstorm PackageIcon component
  */
 export function PackageIcon(props: PackageIconProps) {
-  const { imageSrc } = props;
+  const { imageSrc = "" } = props;
   return (
     <div className={styles.root}>
       <img className={styles.image} alt={"PackageIcon"} src={imageSrc} />
@@ -17,4 +17,3 @@ export function PackageIcon(props: PackageIconProps) {
 }
 
 PackageIcon.displayName = "PackageIcon";
-PackageIcon.defaultProps = { imageSrc: "/images/thomas.jpg" };

@@ -20,4 +20,3 @@ export function MetaInfoItemList(props: MetaInfoItemListProps) {
 }
 
 MetaInfoItemList.displayName = "MetaInfoItemList";
-MetaInfoItemList.defaultProps = { items: [] };

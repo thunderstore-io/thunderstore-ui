@@ -37,4 +37,3 @@ export function ManifestValidatorLayout() {
 }
 
 ManifestValidatorLayout.displayName = "ManifestValidatorLayout";
-ManifestValidatorLayout.defaultProps = {};

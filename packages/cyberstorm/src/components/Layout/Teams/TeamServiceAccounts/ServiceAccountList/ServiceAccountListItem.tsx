@@ -9,7 +9,7 @@ export interface ServiceAccountListItemProps {
 }
 
 export function ServiceAccountListItem(props: ServiceAccountListItemProps) {
-  const { serviceAccountName, lastUsed } = props;
+  const { serviceAccountName = "", lastUsed = "" } = props;
 
   return (
     <div className={styles.root}>
@@ -27,4 +27,3 @@ export function ServiceAccountListItem(props: ServiceAccountListItemProps) {
 }
 
 ServiceAccountListItem.displayName = "ServiceAccountListItem";
-ServiceAccountListItem.defaultProps = { serviceAccountName: "", lastUsed: "" };

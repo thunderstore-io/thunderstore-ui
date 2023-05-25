@@ -57,7 +57,6 @@ export function CommunityListLayout() {
 }
 
 CommunityListLayout.displayName = "CommunityListLayout";
-CommunityListLayout.defaultProps = {};
 
 function getCommunityData() {
   return getListOfIds(20).map((communityId) => {

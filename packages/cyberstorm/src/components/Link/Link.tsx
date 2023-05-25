@@ -13,4 +13,3 @@ export function Link(props: LinkProps) {
 }
 
 Link.displayName = "Link";
-Link.defaultProps = {};

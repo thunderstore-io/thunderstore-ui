@@ -9,4 +9,3 @@ export function NotFoundLayout() {
 }
 
 NotFoundLayout.displayName = "NotFoundLayout";
-NotFoundLayout.defaultProps = {};

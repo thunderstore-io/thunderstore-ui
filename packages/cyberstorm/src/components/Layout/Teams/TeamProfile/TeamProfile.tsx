@@ -63,4 +63,3 @@ export function TeamProfile(props: TeamProfileProps) {
 }
 
 TeamProfile.displayName = "TeamProfile";
-TeamProfile.defaultProps = {};

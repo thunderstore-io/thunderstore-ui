@@ -1,7 +1,8 @@
 "use client";
 import { LinkingProvider } from "@thunderstore/cyberstorm";
-import { LinkLibrary } from "@/utils/LinkLibrary";
 import "@thunderstore/cyberstorm-styles";
+import { LinkLibrary } from "@/utils/LinkLibrary";
+import Providers from "@/utils/provider";
 
 export default function RootLayout({
   children,
@@ -11,7 +12,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <LinkingProvider value={LinkLibrary}>{children}</LinkingProvider>
+        <Providers>
+          <LinkingProvider value={LinkLibrary}>{children}</LinkingProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -13,7 +13,7 @@ export interface SearchFilterProps {
  * Cyberstorm SearchFilter
  */
 export function SearchFilter(props: SearchFilterProps) {
-  const { tags } = props;
+  const { tags = [] } = props;
 
   const tagList = tags?.map((tagLabel: string, index: number) => {
     return (
@@ -45,4 +45,3 @@ export function SearchFilter(props: SearchFilterProps) {
 }
 
 SearchFilter.displayName = "PackageListLayout";
-SearchFilter.defaultProps = { tags: [] };
