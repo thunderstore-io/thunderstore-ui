@@ -15,6 +15,9 @@ async function getPackages() {
   return packages;
 }
 
+// This page is very WIP, it's purpose for now is to demonstrate doing
+// a React Query Data fetch.
+
 export default function Page() {
   const router = useParams();
   const communityId = router ? router["community"].toString() : "";
@@ -23,10 +26,11 @@ export default function Page() {
     queryFn: () => getPackages(),
   });
 
-  console.log(data);
+  if (error) console.error(error);
 
   return (
     <PackageListLayout
+      isLoading={isLoading || isFetching}
       packageData={data ? data.results : null}
       communityId={communityId}
     />

@@ -14,7 +14,7 @@ import { formatInteger } from "../../utils/utils";
 import { PackagePreview } from "../../schema";
 import { PackageLink } from "../Links/Links";
 
-const defaultImageSrc = "";
+const defaultImageSrc = "/images/logo.png";
 
 export interface PackageCardProps {
   packageData: PackagePreview;

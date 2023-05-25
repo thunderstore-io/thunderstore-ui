@@ -18,8 +18,10 @@ import {
 } from "../../../dummyData";
 import { PackagePreview } from "../../../schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
+import { Title } from "../../Title/Title";
 
 export interface PackageListLayoutProps {
+  isLoading: boolean;
   communityId: string;
   packageData?: PackagePreview[];
 }
@@ -28,7 +30,7 @@ export interface PackageListLayoutProps {
  * Cyberstorm PackageList Layout
  */
 export function PackageListLayout(props: PackageListLayoutProps) {
-  const { communityId, packageData } = props;
+  const { communityId, packageData, isLoading } = props;
 
   const [order, setOrder] = useState("1");
   const [page, setPage] = useState(1);
@@ -40,7 +42,11 @@ export function PackageListLayout(props: PackageListLayoutProps) {
 
   return (
     <BaseLayout
-      backGroundImageSource={"/images/page_bg.png"}
+      backGroundImageSource={
+        communityData.backgroundImageSource
+          ? communityData.backgroundImageSource
+          : "/images/community_bg.png"
+      }
       breadCrumb={
         <BreadCrumbs>
           <CommunityLink community={communityData.name}>
@@ -52,7 +58,11 @@ export function PackageListLayout(props: PackageListLayoutProps) {
         <CommunityInfo
           title={communityData.name}
           description={communityData.description}
-          imageSource={communityData.imageSource}
+          imageSource={
+            communityData.imageSource
+              ? communityData.imageSource
+              : "/images/game.png"
+          }
           packageCount={communityData.packageCount}
           downloadCount={communityData.downloadCount}
           serverCount={communityData.serverCount}
@@ -78,11 +88,18 @@ export function PackageListLayout(props: PackageListLayoutProps) {
           </div>
 
           <div className={styles.packageCardList}>
-            {packagesData.map((packageData) => {
-              return (
-                <PackageCard key={packageData.name} packageData={packageData} />
-              );
-            })}
+            {isLoading ? (
+              <Title size={"smaller"} text="Loading..." />
+            ) : (
+              packagesData.map((packageData) => {
+                return (
+                  <PackageCard
+                    key={packageData.name}
+                    packageData={packageData}
+                  />
+                );
+              })
+            )}
           </div>
           <Pagination
             currentPage={page}
