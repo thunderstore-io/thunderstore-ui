@@ -1,9 +1,8 @@
 import styles from "./PackageDetailLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import { CommunityLink, PackageLink } from "../../Links/Links";
+import { CommunitiesLink, CommunityLink, PackageLink } from "../../Links/Links";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog, faHouse, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../../Button/Button";
 import { ModIcon } from "../../ModIcon/ModIcon";
 import { Title } from "../../Title/Title";
@@ -12,6 +11,15 @@ import { PackageManagementForm } from "./PackageManagementForm";
 import { getPackageDummyData } from "../../../dummyData";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { MetaInfoItemList } from "../../MetaInfoItemList/MetaInfoItemList";
+import {
+  faDonate,
+  faDownload,
+  faCog,
+  faHouse,
+  faUser,
+  faThumbsUp,
+  faFlag,
+} from "@fortawesome/pro-solid-svg-icons";
 
 export interface PackageDetailLayoutProps {
   packageId: string;
@@ -29,6 +37,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
+          <CommunitiesLink>Communities</CommunitiesLink>
           <CommunityLink community={packageData.community}>
             {packageData.community}
           </CommunityLink>
@@ -89,7 +98,22 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <p className={styles.description}>{packageData.description}</p>
         </>
       }
-      rightSidebarContent={<MetaInfoItemList metaInfoData={metaInfoData} />}
+      rightSidebarContent={
+        <div className={styles.metaInfo}>
+          <div className={styles.metaButtonWrapper}>
+            <Button
+              leftIcon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
+              label="Download"
+            />
+            <Button leftIcon={<FontAwesomeIcon icon={faDonate} fixedWidth />} />
+            <Button
+              leftIcon={<FontAwesomeIcon icon={faThumbsUp} fixedWidth />}
+            />
+            <Button leftIcon={<FontAwesomeIcon icon={faFlag} fixedWidth />} />
+          </div>
+          <MetaInfoItemList metaInfoData={metaInfoData} />
+        </div>
+      }
     />
   );
 }

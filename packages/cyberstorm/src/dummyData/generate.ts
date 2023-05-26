@@ -7,6 +7,7 @@ import {
   ServiceAccount,
   Team,
   TeamMember,
+  TeamPreview,
   User,
 } from "../schema";
 import { strToHashInt } from "../utils/utils";
@@ -109,6 +110,20 @@ export function getTeamDummyData(seed?: string): Team {
       faker.datatype.uuid(),
     ],
     serviceAccounts: [
+      faker.datatype.uuid(),
+      faker.datatype.uuid(),
+      faker.datatype.uuid(),
+    ],
+  };
+}
+
+export function getTeamPreviewDummyData(seed?: string): TeamPreview {
+  const parsedSeed = strToHashInt(seed ? seed : "1337");
+  faker.seed(parsedSeed);
+  return {
+    name: faker.random.words(3),
+    namespace: "namespace",
+    members: [
       faker.datatype.uuid(),
       faker.datatype.uuid(),
       faker.datatype.uuid(),

@@ -18,18 +18,16 @@ export const MetaInfoItemList: React.FC<MetaInfoItemListProps> = (props) => {
   const { metaInfoData = [] } = props;
   const metaItemList = metaInfoData?.map((metaInfoDataItem) => {
     return (
-      <div key={metaInfoDataItem.key}>
-        <MetaInfoItem
-          label={metaInfoDataItem.label}
-          content={metaInfoDataItem.content}
-        />
-      </div>
+      <MetaInfoItem
+        key={metaInfoDataItem.key}
+        label={metaInfoDataItem.label}
+        content={metaInfoDataItem.content}
+      />
     );
   });
   return (
     <div>
-      <div className={styles.root}></div>
-      {metaItemList}
+      <div className={styles.root}>{metaItemList}</div>
     </div>
   );
 };

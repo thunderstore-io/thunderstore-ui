@@ -3,7 +3,7 @@ import { TeamsLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
-  title: "Cyberstorm/Layouts/TeamsLayout",
+  title: "Cyberstorm/Layouts/TeamLayout",
   component: TeamsLayout,
 } as ComponentMeta<typeof TeamsLayout>;
 

@@ -4,12 +4,9 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-
-  margin: var(--gap--4);
   padding: var(--space--8) var(--space--12);
   border-radius: var(--border-radius--8);
   color: var(--text-color);
-
   font: var(--font-body);
   font-weight: 700;
   font-size: var(--font-size--12);

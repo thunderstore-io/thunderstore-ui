@@ -30,6 +30,7 @@ export * from "./components/Layout/HomeLayout/HomeLayout";
 export * from "./components/Layout/PackageDetailLayout/PackageDetailLayout";
 export * from "./components/Layout/PackageListLayout/PackageListLayout";
 export * from "./components/Layout/Settings/SettingsLayout";
+export * from "./components/Layout/Team/TeamLayout";
 export * from "./components/Layout/Teams/TeamsLayout";
 
 export * from "./components/Layout/Developers/ManifestValidator/ManifestValidatorLayout";

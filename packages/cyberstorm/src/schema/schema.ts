@@ -88,6 +88,8 @@ export interface Team {
   serviceAccounts: string[]; // ServiceAccount ids
 }
 
+export type TeamPreview = Pick<Team, "name" | "namespace" | "members">;
+
 export interface Category {
   slug: string;
   label: string;
