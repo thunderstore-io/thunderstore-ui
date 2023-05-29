@@ -9,9 +9,11 @@ export interface TeamListProps {
 export function TeamList(props: TeamListProps) {
   const { teams = [] } = props;
 
-  const teamsMapped = teams?.map((team: TeamPreview) => {
+  const teamsMapped = teams?.map((team: TeamPreview, index) => {
     return [
-      <TeamLink team={team.name}>team.name</TeamLink>,
+      <TeamLink key={index} team={team.name}>
+        team.name
+      </TeamLink>,
       "",
       team.members?.length,
     ];

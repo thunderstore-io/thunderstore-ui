@@ -194,9 +194,9 @@ function getTabContent(currentTab: number, packageData: Package) {
     //TODO: proper image carousel or something
     tabContent = (
       <>
-        <img src={packageData.imageSource} alt="package image" />
-        <img src={packageData.imageSource} alt="package image" />
-        <img src={packageData.imageSource} alt="package image" />
+        <img src={packageData.imageSource} alt={packageData.name} />
+        <img src={packageData.imageSource} alt={packageData.name} />
+        <img src={packageData.imageSource} alt={packageData.name} />
       </>
     );
   } else if (currentTab === 3) {

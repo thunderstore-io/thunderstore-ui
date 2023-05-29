@@ -15,8 +15,12 @@ function DataTableRow(props: DataTableRowProps) {
 
   return (
     <div className={`${styles.row} ${styles.item}`}>
-      {rowContent.map((rowItem) => {
-        return <div className={styles.column}>{rowItem}</div>;
+      {rowContent.map((rowItem, index) => {
+        return (
+          <div key={index} className={styles.column}>
+            {rowItem}
+          </div>
+        );
       })}
     </div>
   );
@@ -25,11 +29,15 @@ function DataTableRow(props: DataTableRowProps) {
 export function DataTable(props: DataTableProps) {
   const { headers = [], dataRows = [] } = props;
 
-  const headersMapped = headers.map((header) => {
-    return <div className={styles.column}>{header}</div>;
+  const headersMapped = headers.map((header, index) => {
+    return (
+      <div key={index} className={styles.column}>
+        {header}
+      </div>
+    );
   });
 
-  const mappedRows = dataRows?.map((dataItem, index: number) => {
+  const mappedRows = dataRows?.map((dataItem, index) => {
     return (
       <div key={index}>
         <DataTableRow rowContent={dataItem} />
