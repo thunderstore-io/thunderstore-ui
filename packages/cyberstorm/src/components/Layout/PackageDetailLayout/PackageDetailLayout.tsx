@@ -1,3 +1,4 @@
+"use client";
 import styles from "./PackageDetailLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { CommunitiesLink, CommunityLink, PackageLink } from "../../Links/Links";
