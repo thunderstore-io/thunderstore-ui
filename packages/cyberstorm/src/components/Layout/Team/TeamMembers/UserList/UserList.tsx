@@ -12,7 +12,7 @@ export function UserList(props: UserListProps) {
 
   const mappedUserList = teamMemberData?.map(
     (teamMember: TeamMember, index: number) => {
-      const user: User = getUserDummyData(teamMember.user);
+      const user: User = getUserDummyData(teamMember.user.name);
       return (
         <div key={index}>
           <UserListItem

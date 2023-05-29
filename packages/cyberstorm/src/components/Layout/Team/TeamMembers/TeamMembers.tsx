@@ -5,16 +5,14 @@ import { Button } from "../../../Button/Button";
 import { Dialog } from "../../../Dialog/Dialog";
 import { TextInput } from "../../../TextInput/TextInput";
 import { Select } from "../../../Select/Select";
-import { getTeamMemberDummyData } from "../../../../dummyData";
-import { TeamMember } from "../../../../schema";
+import { Team } from "../../../../schema";
 
 export interface TeamMembersProps {
-  teamName?: string;
-  membersData: string[];
+  teamData: Team;
 }
 
 export function TeamMembers(props: TeamMembersProps) {
-  const { membersData = [], teamName = "" } = props;
+  const { teamData } = props;
 
   const dialog = (
     <Dialog
@@ -24,7 +22,7 @@ export function TeamMembers(props: TeamMembersProps) {
         <div className={styles.dialogContent}>
           <p>
             Enter the username of the user you wish to add to the team{" "}
-            <strong className={styles.dialogTeamName}>{teamName}</strong>
+            <strong className={styles.dialogTeamName}>{teamData.name}</strong>
           </p>
           <div className={styles.dialogInput}>
             <div className={styles.textInput}>
@@ -44,9 +42,7 @@ export function TeamMembers(props: TeamMembersProps) {
         title="Members"
         description="Your best buddies"
         additionalLeftColumnContent={<div>{dialog}</div>}
-        content={
-          <UserList teamMemberData={getTeamMemberListData(membersData)} />
-        }
+        content={<UserList teamMemberData={teamData.members} />}
       />
     </div>
   );
@@ -58,11 +54,3 @@ const userRoles = [
   { value: "1", label: "Member" },
   { value: "2", label: "Owner" },
 ];
-
-function getTeamMemberListData(teamMemberIds: string[]): TeamMember[] {
-  const teamMemberArray: TeamMember[] = [];
-  teamMemberIds.forEach((teamMemberId) => {
-    teamMemberArray.push(getTeamMemberDummyData(teamMemberId));
-  });
-  return teamMemberArray;
-}

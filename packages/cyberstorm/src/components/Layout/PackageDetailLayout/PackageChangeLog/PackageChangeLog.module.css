@@ -1,0 +1,44 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--32);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+  padding: var(--space--16);
+  border: var(--space--2) solid var(--color-surface--4);
+  border-radius: var(--border-radius--8);
+  background-color: var(--bg-color);
+
+  --bg-color: var(--color-surface--3);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.isCurrent {
+  --bg-color: var(--color-surface--4);
+}
+
+.versionNumber {
+  display: flex;
+  font-weight: 700;
+}
+
+.currentLabel {
+  margin: 0 var(--space--6);
+  color: var(--color-text--tertiary);
+}
+
+.releaseDate {
+  color: var(--color-text--tertiary);
+}
+
+.content {
+  font-size: var(--font-size--14);
+}

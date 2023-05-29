@@ -24,6 +24,11 @@ import { PackageDependencyList } from "./PackageDependencyList/PackageDependency
 import { PackageAuthorList } from "./PackageAuthorList/PackageAuthorList";
 import { CopyButton } from "../../CopyButton/CopyButton";
 import { formatInteger } from "../../../utils/utils";
+import { Package } from "../../../schema";
+import { useState } from "react";
+import { Tabs } from "../../Tabs/Tabs";
+import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
+import { PackageVersions } from "./PackageVersions/PackageVersions";
 
 export interface PackageDetailLayoutProps {
   packageId: string;
@@ -36,40 +41,9 @@ export interface PackageDetailLayoutProps {
 export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   const { packageId, managementDialogIsOpen = false } = props;
   const packageData = getPackageData(packageId);
+  const metaInfoData = getMetaInfoData(packageData);
 
-  const metaInfoData = [
-    {
-      key: "1",
-      label: "Last Updated",
-      content: <>{packageData.lastUpdated}</>,
-    },
-    {
-      key: "2",
-      label: "First Updated",
-      content: <>{packageData.firstUploaded}</>,
-    },
-    {
-      key: "3",
-      label: "Downloads",
-      content: <>{formatInteger(packageData.downloadCount)}</>,
-    },
-    {
-      key: "4",
-      label: "Likes",
-      content: <>{formatInteger(packageData.likes)}</>,
-    },
-    {
-      key: "5",
-      label: "Dependency string",
-      content: (
-        <>
-          {packageData.dependencyString}
-          <CopyButton text={packageData.dependencyString} />
-        </>
-      ),
-    },
-    { key: "6", label: "Dependants", content: <a href="/">5 other mods</a> },
-  ];
+  const [currentTab, setCurrentTab] = useState(1);
 
   return (
     <BaseLayout
@@ -128,12 +102,10 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           </div>
         </div>
       }
-      mainContent={
-        <>
-          <Title text={packageData.name} />
-          <p className={styles.description}>{packageData.description}</p>
-        </>
+      tabs={
+        <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
       }
+      mainContent={<>{getTabContent(currentTab, packageData)}</>}
       rightSidebarContent={
         <div className={styles.metaInfo}>
           <div className={styles.metaButtonWrapper}>
@@ -163,4 +135,73 @@ PackageDetailLayout.displayName = "PackageDetailLayout";
 
 function getPackageData(packageId: string) {
   return getPackageDummyData(packageId);
+}
+
+function getMetaInfoData(packageData: Package) {
+  return [
+    {
+      key: "1",
+      label: "Last Updated",
+      content: <>{packageData.lastUpdated}</>,
+    },
+    {
+      key: "2",
+      label: "First Updated",
+      content: <>{packageData.firstUploaded}</>,
+    },
+    {
+      key: "3",
+      label: "Downloads",
+      content: <>{formatInteger(packageData.downloadCount)}</>,
+    },
+    {
+      key: "4",
+      label: "Likes",
+      content: <>{formatInteger(packageData.likes)}</>,
+    },
+    {
+      key: "5",
+      label: "Dependency string",
+      content: (
+        <>
+          {packageData.dependencyString}
+          <CopyButton text={packageData.dependencyString} />
+        </>
+      ),
+    },
+    { key: "6", label: "Dependants", content: <a href="/">5 other mods</a> },
+  ];
+}
+
+const tabs = [
+  { key: 1, label: "Description" },
+  { key: 2, label: "Images" },
+  { key: 3, label: "ChangeLog" },
+  { key: 4, label: "Versions" },
+];
+
+function getTabContent(currentTab: number, packageData: Package) {
+  let tabContent = null;
+  if (currentTab === 1) {
+    tabContent = (
+      <>
+        <Title text={packageData.name} />
+        <p className={styles.description}>{packageData.description}</p>
+      </>
+    );
+  } else if (currentTab === 2) {
+    //TODO: proper image carousel or something
+    tabContent = (
+      <>
+        <img src={packageData.imageSource} alt="package image" />
+        <img src={packageData.imageSource} alt="package image" />
+        <img src={packageData.imageSource} alt="package image" />
+      </>
+    );
+  } else if (currentTab === 3) {
+    tabContent = <PackageChangeLog packageId={packageData.name} />;
+  } else if (currentTab === 4) {
+    tabContent = <PackageVersions packageId={packageData.name} />;
+  }
+  return tabContent;
 }

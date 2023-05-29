@@ -71,7 +71,7 @@ function getTabContent(currentTab: number, teamData: Team) {
   } else if (currentTab === 2) {
     tabContent = (
       <div className={styles.tabContent}>
-        <TeamMembers membersData={teamData.members} teamName={teamData.name} />
+        <TeamMembers teamData={teamData} />
       </div>
     );
   } else if (currentTab === 3) {
