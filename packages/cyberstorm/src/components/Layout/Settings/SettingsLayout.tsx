@@ -2,11 +2,7 @@
 import { useState } from "react";
 import styles from "./SettingsLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import {
-  CommunityLink,
-  CommunityPackagesLink,
-  SettingsLink,
-} from "../../Links/Links";
+import { SettingsLink } from "../../Links/Links";
 import { Tabs } from "../../Tabs/Tabs";
 import { Title } from "../../Title/Title";
 import { Profile } from "./Profile/Profile";
