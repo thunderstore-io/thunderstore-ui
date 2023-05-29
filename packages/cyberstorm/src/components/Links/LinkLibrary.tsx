@@ -41,6 +41,7 @@ const library: LinkLibrary = {
   Team: (p) => Link({ ...p, url: `/t/${p.team}/` }),
   Teams: (p) => Link({ ...p, url: "/teams/" }),
   TermsOfService: (p) => Link({ ...p, url: "/terms-of-service/" }),
+  User: (p) => Link({ ...p, url: `/u/${p.user}/` }),
 };
 
 export { library as LinkLibrary };

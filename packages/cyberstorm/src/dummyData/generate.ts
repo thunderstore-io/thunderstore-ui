@@ -89,8 +89,13 @@ export function getPackageDummyData(seed?: string): Package {
     gitHubLink: faker.internet.url(),
     donationLink: faker.internet.url(),
     firstUploaded: faker.date.past(2).toDateString(),
+    dependencies: [
+      getPackagePreviewDummyData("1"),
+      getPackagePreviewDummyData("2"),
+      getPackagePreviewDummyData("3"),
+    ],
     dependencyString: faker.datatype.uuid(),
-    team: faker.datatype.uuid(),
+    team: getTeamDummyData("1"),
     categories: [faker.word.noun(), faker.word.noun(), faker.word.noun()],
   };
 }
@@ -105,9 +110,9 @@ export function getTeamDummyData(seed?: string): Team {
     description: faker.lorem.paragraphs(12),
     about: faker.lorem.words(16),
     members: [
-      faker.datatype.uuid(),
-      faker.datatype.uuid(),
-      faker.datatype.uuid(),
+      getTeamMemberDummyData("1"),
+      getTeamMemberDummyData("2"),
+      getTeamMemberDummyData("3"),
     ],
     serviceAccounts: [
       faker.datatype.uuid(),
@@ -124,9 +129,9 @@ export function getTeamPreviewDummyData(seed?: string): TeamPreview {
     name: faker.random.words(3),
     namespace: "namespace",
     members: [
-      faker.datatype.uuid(),
-      faker.datatype.uuid(),
-      faker.datatype.uuid(),
+      getTeamMemberDummyData("1"),
+      getTeamMemberDummyData("2"),
+      getTeamMemberDummyData("3"),
     ],
   };
 }
@@ -153,7 +158,7 @@ export function getTeamMemberDummyData(seed?: string): TeamMember {
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    user: faker.datatype.uuid(),
+    user: getUserDummyData(seed),
     role: faker.name.jobTitle(),
   };
 }

@@ -5,7 +5,7 @@ import { MetaInfoItem } from "../MetaInfoItem/MetaInfoItem";
 interface metaInfoData {
   key: string;
   label: string;
-  content: ReactElement;
+  content?: ReactElement;
 }
 export type MetaInfoItemListProps = {
   metaInfoData?: Array<metaInfoData>;

@@ -24,6 +24,7 @@ export interface ThunderstoreLinkProps {
   namespace?: string;
   package?: string;
   team?: string;
+  user?: string;
 }
 
 // STEP 2 of adding new link definitions:
@@ -37,6 +38,7 @@ export const thunderstoreLinkProps: ThunderstoreLinkProps = {
   namespace: "",
   package: "",
   team: "",
+  user: "",
 };
 
 // Accepting any and all props is required to keep the linking
@@ -85,6 +87,8 @@ export interface LinkLibrary {
   Teams: NoRequiredProps;
   /** Terms of service */
   TermsOfService: NoRequiredProps;
+  /** User */
+  User: (props: AnyProps & { user: string }) => RE | null;
 }
 
 const noop = () => null;
@@ -104,6 +108,7 @@ const library: LinkLibrary = {
   PackageFormatDocs: noop,
   PackageUpload: noop,
   PrivacyPolicy: noop,
+  User: noop,
   Settings: noop,
   Team: noop,
   Teams: noop,

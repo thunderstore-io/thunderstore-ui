@@ -32,3 +32,4 @@ export const SettingsLink = wrap("Settings");
 export const TeamLink = wrap("Team");
 export const TeamsLink = wrap("Teams");
 export const TermsOfServiceLink = wrap("TermsOfService");
+export const UserLink = wrap("User");

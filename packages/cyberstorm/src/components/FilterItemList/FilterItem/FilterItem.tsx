@@ -1,9 +1,9 @@
-import styles from "../FilterItem/FilterItem.module.css";
+import styles from "./FilterItem.module.css";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faMinus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { Tag } from "../Tag/Tag";
+import { Tag } from "../../Tag/Tag";
 
 export interface FilterItemProps {
   label: string;

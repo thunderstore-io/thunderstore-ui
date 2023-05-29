@@ -1,0 +1,24 @@
+.root {
+  border: var(--space--px) solid;
+  border-color: var(--color-surface--2);
+  border-radius: var(--border-radius--8);
+  overflow: clip;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--8);
+  align-items: center;
+  padding: var(--space--8) var(--space--16);
+  font-weight: 700;
+  background-color: var(--color-surface--2);
+}
+
+.headerRight {
+  margin-left: auto;
+}
+
+.icon {
+  color: var(--color-text--tertiary);
+}

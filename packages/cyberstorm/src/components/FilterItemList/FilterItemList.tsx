@@ -1,5 +1,5 @@
 import styles from "./FilterItemList.module.css";
-import { FilterItem } from "../FilterItem/FilterItem";
+import { FilterItem } from "./FilterItem/FilterItem";
 
 interface FilterDataItem {
   key: string;

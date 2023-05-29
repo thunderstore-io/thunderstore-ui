@@ -7,6 +7,7 @@ import { useState } from "react";
 import styles from "./CopyButton.module.css";
 import { Tooltip } from "../Tooltip/Tooltip";
 import { Button } from "../Button/Button";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 type CopyButtonProps = {
   text: string;
@@ -45,17 +46,19 @@ export function CopyButton(props: CopyButtonProps) {
     <FontAwesomeIcon fixedWidth icon={faClone} className={styles.copy} />
   );
   return (
-    <Tooltip content="Copy">
-      <Button
-        size={"tiny"}
-        colorScheme={"transparentDefault"}
-        onClick={() => {
-          copy(text);
-          setWasRecentlyCopied(true);
-        }}
-        leftIcon={icon}
-      />
-    </Tooltip>
+    <TooltipProvider>
+      <Tooltip content="Copy">
+        <Button
+          size={"tiny"}
+          colorScheme={"transparentDefault"}
+          onClick={() => {
+            copy(text);
+            setWasRecentlyCopied(true);
+          }}
+          leftIcon={icon}
+        />
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 

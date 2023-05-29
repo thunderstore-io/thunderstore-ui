@@ -20,6 +20,10 @@ import {
   faThumbsUp,
   faFlag,
 } from "@fortawesome/pro-solid-svg-icons";
+import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
+import { PackageAuthorList } from "./PackageAuthorList/PackageAuthorList";
+import { CopyButton } from "../../CopyButton/CopyButton";
+import { formatInteger } from "../../../utils/utils";
 
 export interface PackageDetailLayoutProps {
   packageId: string;
@@ -32,6 +36,40 @@ export interface PackageDetailLayoutProps {
 export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   const { packageId, managementDialogIsOpen = false } = props;
   const packageData = getPackageData(packageId);
+
+  const metaInfoData = [
+    {
+      key: "1",
+      label: "Last Updated",
+      content: <>{packageData.lastUpdated}</>,
+    },
+    {
+      key: "2",
+      label: "First Updated",
+      content: <>{packageData.firstUploaded}</>,
+    },
+    {
+      key: "3",
+      label: "Downloads",
+      content: <>{formatInteger(packageData.downloadCount)}</>,
+    },
+    {
+      key: "4",
+      label: "Likes",
+      content: <>{formatInteger(packageData.likes)}</>,
+    },
+    {
+      key: "5",
+      label: "Dependency string",
+      content: (
+        <>
+          {packageData.dependencyString}
+          <CopyButton text={packageData.dependencyString} />
+        </>
+      ),
+    },
+    { key: "6", label: "Dependants", content: <a href="/">5 other mods</a> },
+  ];
 
   return (
     <BaseLayout
@@ -55,9 +93,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <ModIcon src={packageData.imageSource}></ModIcon>
           <div className={styles.packageInfoDetails}>
             <Title text={packageData.name}></Title>
-            <p className={styles.packageInfoDescription}>
-              {packageData.shortDescription}
-            </p>
+            <p>{packageData.shortDescription}</p>
             <div className={styles.packageInfoMeta}>
               <MetaItem
                 colorScheme="tertiary"
@@ -112,6 +148,11 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
             <Button leftIcon={<FontAwesomeIcon icon={faFlag} fixedWidth />} />
           </div>
           <MetaInfoItemList metaInfoData={metaInfoData} />
+          <PackageDependencyList packages={packageData.dependencies} />
+          <PackageAuthorList
+            teamName={packageData.team.name}
+            teamMembers={packageData.team.members}
+          />
         </div>
       }
     />
@@ -123,8 +164,3 @@ PackageDetailLayout.displayName = "PackageDetailLayout";
 function getPackageData(packageId: string) {
   return getPackageDummyData(packageId);
 }
-
-const metaInfoData = [
-  { key: "1", label: "Last Updated", content: <>asd</> },
-  { key: "2", label: "First Updated", content: <>qwer</> },
-];

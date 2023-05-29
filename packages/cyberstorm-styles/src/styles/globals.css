@@ -56,6 +56,8 @@ a {
 }
 
 body {
+  color: var(--color-text--default);
+  font: var(--font-body);
   background-color: var(--color-background);
 }
 
