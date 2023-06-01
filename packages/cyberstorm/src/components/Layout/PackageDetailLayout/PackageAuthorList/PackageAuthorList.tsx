@@ -3,7 +3,6 @@ import { TeamMember } from "../../../../schema";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserGroup } from "@fortawesome/pro-light-svg-icons";
-import { Button } from "../../../Button/Button";
 import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
 import { TeamLink, UserLink } from "../../../Links/Links";
 import { Link } from "../../../Link/Link";

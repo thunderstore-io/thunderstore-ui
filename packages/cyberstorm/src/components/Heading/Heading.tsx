@@ -62,7 +62,7 @@ export function Heading() {
   ];
 
   const userDropDownContents = [
-    <UserLink user={userData.name}>
+    <UserLink key="1" user={userData.name}>
       <div className={styles.dropDownUserInfo}>
         <Avatar src={userData.imageSource} />
         <div className={styles.dropdownUserInfoDetails}>
