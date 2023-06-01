@@ -1,6 +1,6 @@
 import { TeamPreview } from "../../../../schema";
 import { DataTable } from "../../../DataTable/DataTable";
-import { TeamLink } from "../../../Links/Links";
+import { TeamSettingsLink } from "../../../Links/Links";
 
 export interface TeamListProps {
   teams?: TeamPreview[];
@@ -11,9 +11,9 @@ export function TeamList(props: TeamListProps) {
 
   const teamsMapped = teams?.map((team: TeamPreview, index) => {
     return [
-      <TeamLink key={index} team={team.name}>
-        team.name
-      </TeamLink>,
+      <TeamSettingsLink key={index} team={team.name}>
+        {team.name}
+      </TeamSettingsLink>,
       "",
       team.members?.length,
     ];

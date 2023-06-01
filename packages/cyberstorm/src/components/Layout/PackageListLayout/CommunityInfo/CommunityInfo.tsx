@@ -1,6 +1,6 @@
 import styles from "./CommunityInfo.module.css";
-import { GameIcon } from "../GameIcon/GameIcon";
-import { MetaItem } from "../MetaItem/MetaItem";
+import { GameIcon } from "../../../GameIcon/GameIcon";
+import { MetaItem } from "../../../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDownload,
@@ -9,9 +9,9 @@ import {
   faServer,
   faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "../Button/Button";
-import { Title } from "../Title/Title";
-import { formatInteger } from "../../utils/utils";
+import { Button } from "../../../Button/Button";
+import { Title } from "../../../Title/Title";
+import { formatInteger } from "../../../../utils/utils";
 
 export interface PackageListCommunityInfoProps {
   title?: string;

@@ -1,9 +1,9 @@
 import styles from "./TeamDisband.module.css";
-import { Button } from "../../../Button/Button";
+import { Button } from "../../../../Button/Button";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { SettingItem } from "../../../SettingItem/SettingItem";
-import { TextInput } from "../../../TextInput/TextInput";
+import { SettingItem } from "../../../../SettingItem/SettingItem";
+import { TextInput } from "../../../../TextInput/TextInput";
 
 export interface TeamDisbandProps {
   teamName?: string;

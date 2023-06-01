@@ -15,6 +15,7 @@ import {
   PackageUploadLink,
   SettingsLink,
   TeamsLink,
+  UserLink,
 } from "../Links/Links";
 import { Avatar } from "../Avatar/Avatar";
 import { getUserDummyData } from "../../dummyData";
@@ -61,7 +62,7 @@ export function Heading() {
   ];
 
   const userDropDownContents = [
-    <SettingsLink key="1">
+    <UserLink user={userData.name}>
       <div className={styles.dropDownUserInfo}>
         <Avatar src={userData.imageSource} />
         <div className={styles.dropdownUserInfoDetails}>
@@ -73,7 +74,7 @@ export function Heading() {
           </div>
         </div>
       </div>
-    </SettingsLink>,
+    </UserLink>,
     <TeamsLink key="2">
       <DropDownLink
         leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}

@@ -1,5 +1,5 @@
 import styles from "./ServiceAccountListItem.module.css";
-import { Button } from "../../../../Button/Button";
+import { Button } from "../../../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 

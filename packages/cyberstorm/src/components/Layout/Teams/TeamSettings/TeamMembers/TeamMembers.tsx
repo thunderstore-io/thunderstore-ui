@@ -1,11 +1,11 @@
 import styles from "./TeamMembers.module.css";
-import { SettingItem } from "../../../SettingItem/SettingItem";
+import { SettingItem } from "../../../../SettingItem/SettingItem";
 import { UserList } from "./UserList/UserList";
-import { Button } from "../../../Button/Button";
-import { Dialog } from "../../../Dialog/Dialog";
-import { TextInput } from "../../../TextInput/TextInput";
-import { Select } from "../../../Select/Select";
-import { Team } from "../../../../schema";
+import { Button } from "../../../../Button/Button";
+import { Dialog } from "../../../../Dialog/Dialog";
+import { TextInput } from "../../../../TextInput/TextInput";
+import { Select } from "../../../../Select/Select";
+import { Team } from "../../../../../schema";
 
 export interface TeamMembersProps {
   teamData: Team;

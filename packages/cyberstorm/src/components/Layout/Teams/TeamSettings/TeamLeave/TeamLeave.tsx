@@ -1,8 +1,8 @@
 import styles from "./TeamLeave.module.css";
-import { Button } from "../../../Button/Button";
+import { Button } from "../../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOut } from "@fortawesome/free-solid-svg-icons";
-import { SettingItem } from "../../../SettingItem/SettingItem";
+import { SettingItem } from "../../../../SettingItem/SettingItem";
 
 export interface TeamLeaveProps {
   teamName?: string;

@@ -1,9 +1,7 @@
 import styles from "./TeamProfile.module.css";
-import { Button } from "../../../Button/Button";
-import { SettingItem } from "../../../SettingItem/SettingItem";
-import { ModIcon } from "../../../ModIcon/ModIcon";
-import { TextInput } from "../../../TextInput/TextInput";
-import { Team } from "../../../../schema";
+import { SettingItem } from "../../../../SettingItem/SettingItem";
+import { TextInput } from "../../../../TextInput/TextInput";
+import { Team } from "../../../../../schema";
 
 export interface TeamProfileProps {
   teamData: Team;
@@ -12,6 +10,18 @@ export interface TeamProfileProps {
 export function TeamProfile(props: TeamProfileProps) {
   const { teamData } = props;
 
+  return (
+    <div className={styles.root}>
+      <div className={styles.section}>
+        <SettingItem
+          title="Team donation link"
+          content={<TextInput placeHolder="https://" value={teamData.name} />}
+        />
+      </div>
+    </div>
+  );
+
+  /*
   return (
     <div className={styles.root}>
       <div className={styles.section}>
@@ -60,6 +70,7 @@ export function TeamProfile(props: TeamProfileProps) {
       </div>
     </div>
   );
+  */
 }
 
 TeamProfile.displayName = "TeamProfile";

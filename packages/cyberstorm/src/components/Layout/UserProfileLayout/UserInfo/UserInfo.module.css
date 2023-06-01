@@ -1,0 +1,37 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space--24);
+  margin: var(--space--16) 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space--4);
+  justify-content: center;
+  overflow: hidden;
+}
+
+.descriptionWrapper {
+  display: flex;
+  flex-grow: 0;
+  gap: var(--gap--4);
+  align-items: center;
+  width: auto;
+  overflow: hidden;
+}
+
+.description {
+  overflow: hidden;
+  color: var(--color-text--default);
+  font: var(--font-body);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space--24);
+}

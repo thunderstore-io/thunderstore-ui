@@ -40,6 +40,7 @@ const library: LinkLibrary = {
   Settings: (p) => Link({ ...p, url: "/settings/" }),
   Team: (p) => Link({ ...p, url: `/t/${p.team}/` }),
   Teams: (p) => Link({ ...p, url: "/teams/" }),
+  TeamSettings: (p) => Link({ ...p, url: `/teams/${p.team}/` }),
   TermsOfService: (p) => Link({ ...p, url: "/terms-of-service/" }),
   User: (p) => Link({ ...p, url: `/u/${p.user}/` }),
 };

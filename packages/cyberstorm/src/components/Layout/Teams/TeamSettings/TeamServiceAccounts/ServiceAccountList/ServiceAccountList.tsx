@@ -1,6 +1,6 @@
 import styles from "./ServiceAccountList.module.css";
 import { ServiceAccountListItem } from "./ServiceAccountListItem";
-import { ServiceAccount } from "../../../../../schema";
+import { ServiceAccount } from "../../../../../../schema";
 
 export interface ServiceAccountListProps {
   serviceAccountData?: ServiceAccount[];

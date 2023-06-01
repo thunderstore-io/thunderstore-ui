@@ -1,8 +1,8 @@
 import styles from "./UserListItem.module.css";
 import { useState } from "react";
-import { Avatar } from "../../../../Avatar/Avatar";
-import { Select } from "../../../../Select/Select";
-import { Button } from "../../../../Button/Button";
+import { Avatar } from "../../../../../Avatar/Avatar";
+import { Select } from "../../../../../Select/Select";
+import { Button } from "../../../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 

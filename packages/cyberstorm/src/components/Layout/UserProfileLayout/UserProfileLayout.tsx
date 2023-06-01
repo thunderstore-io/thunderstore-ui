@@ -1,74 +1,48 @@
 "use client";
 import { useState } from "react";
-import styles from "./PackageListLayout.module.css";
+import styles from "./UserProfileLayout.module.css";
 import { PackageCard } from "../../PackageCard/PackageCard";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire, faStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { Select } from "../../Select/Select";
-import { CommunityInfo } from "./CommunityInfo/CommunityInfo";
-import { CommunitiesLink, CommunityLink } from "../../Links/Links";
+import { UserLink } from "../../Links/Links";
 import { FilterItemList } from "../../FilterItemList/FilterItemList";
 import { SearchFilter } from "../../SearchFilter/SearchFilter";
 import { Pagination } from "../../Pagination/Pagination";
 import {
-  getCommunityDummyData,
   getListOfIds,
   getPackagePreviewDummyData,
+  getUserDummyData,
 } from "../../../dummyData";
-import { PackagePreview } from "../../../schema";
+import { PackagePreview, User } from "../../../schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
-import { Title } from "../../Title/Title";
+import { UserInfo } from "./UserInfo/UserInfo";
 
-export interface PackageListLayoutProps {
-  isLoading: boolean;
-  communityId: string;
-  packageData?: PackagePreview[];
+export interface UserProfileLayoutProps {
+  userId: string;
 }
 
 /**
- * Cyberstorm PackageList Layout
+ * Cyberstorm user's profile Layout
  */
-export function PackageListLayout(props: PackageListLayoutProps) {
-  const { communityId, packageData, isLoading } = props;
+export function UserProfileLayout(props: UserProfileLayoutProps) {
+  const { userId } = props;
 
   const [order, setOrder] = useState("1");
   const [page, setPage] = useState(1);
 
-  const packagesData: PackagePreview[] = packageData
-    ? packageData
-    : getPackageData();
-  const communityData = getCommunityData(communityId);
+  const packagesData: PackagePreview[] = getPackageData();
+  const userData: User = getUserData(userId);
 
   return (
     <BaseLayout
-      backGroundImageSource={
-        communityData.backgroundImageSource
-          ? communityData.backgroundImageSource
-          : "/images/community_bg.png"
-      }
       breadCrumb={
         <BreadCrumbs>
-          <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={communityData.name}>
-            {communityData.name}
-          </CommunityLink>
+          <UserLink user={userData.name}>{userData.name}</UserLink>
         </BreadCrumbs>
       }
-      header={
-        <CommunityInfo
-          title={communityData.name}
-          description={communityData.description}
-          imageSource={
-            communityData.imageSource
-              ? communityData.imageSource
-              : "/images/game.png"
-          }
-          packageCount={communityData.packageCount}
-          downloadCount={communityData.downloadCount}
-          serverCount={communityData.serverCount}
-        />
-      }
+      header={<UserInfo userData={userData} />}
       leftSidebarContent={<FilterItemList filterData={filterData} />}
       mainContent={
         <div className={styles.content}>
@@ -78,29 +52,15 @@ export function PackageListLayout(props: PackageListLayoutProps) {
             <div className={styles.showing}>
               Showing <strong>1-20</strong> of <strong>327</strong>
             </div>
-            <Pagination
-              currentPage={page}
-              onPageChange={setPage}
-              pageSize={20}
-              siblingCount={2}
-              totalCount={327}
-            />
             <Select onChange={setOrder} options={selectOptions} value={order} />
           </div>
 
           <div className={styles.packageCardList}>
-            {isLoading ? (
-              <Title size={"smaller"} text="Loading..." />
-            ) : (
-              packagesData.map((packageData) => {
-                return (
-                  <PackageCard
-                    key={packageData.name}
-                    packageData={packageData}
-                  />
-                );
-              })
-            )}
+            {packagesData.map((packageData) => {
+              return (
+                <PackageCard key={packageData.name} packageData={packageData} />
+              );
+            })}
           </div>
           <Pagination
             currentPage={page}
@@ -115,15 +75,15 @@ export function PackageListLayout(props: PackageListLayoutProps) {
   );
 }
 
-PackageListLayout.displayName = "PackageListLayout";
+UserProfileLayout.displayName = "UserProfileLayout";
 
 function getPackageData() {
   return getListOfIds(20).map((packageId) => {
     return getPackagePreviewDummyData(packageId);
   });
 }
-function getCommunityData(communityId: string) {
-  return getCommunityDummyData(communityId);
+function getUserData(userId: string) {
+  return getUserDummyData(userId);
 }
 
 const selectOptions = [

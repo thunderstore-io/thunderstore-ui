@@ -1,4 +1,22 @@
 .root {
+  display: flex;
+  padding: var(--space--8) var(--space--12);
+  border-radius: var(--border-radius--8);
   color: var(--color-cyber-green--50);
   font: var(--font-body);
+  background-color: var(--bg-color);
+
+  --bg-color: transparent;
+}
+
+.root:hover {
+  --bg-color: var(--color-surface--2);
+}
+
+.leftIcon {
+  margin-right: var(--space--8);
+}
+
+.rightIcon {
+  margin-left: var(--space--8);
 }

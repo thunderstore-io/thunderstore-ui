@@ -5,7 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserGroup } from "@fortawesome/pro-light-svg-icons";
 import { Button } from "../../../Button/Button";
 import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
-import { UserLink } from "../../../Links/Links";
+import { TeamLink, UserLink } from "../../../Links/Links";
+import { Link } from "../../../Link/Link";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
@@ -70,12 +71,14 @@ export function PackageAuthorList(props: PackageAuthorListProps) {
         }
         headerIcon={<FontAwesomeIcon icon={faUserGroup} fixedWidth />}
         headerRightContent={
-          <Button
-            label="See team"
-            rightIcon={<FontAwesomeIcon icon={faCaretRight} fixedWidth />}
-            colorScheme="transparentPrimary"
-            size="small"
-          />
+          teamName ? (
+            <TeamLink team={teamName}>
+              <Link
+                label="See team"
+                rightIcon={<FontAwesomeIcon icon={faCaretRight} fixedWidth />}
+              />
+            </TeamLink>
+          ) : null
         }
       />
     </>

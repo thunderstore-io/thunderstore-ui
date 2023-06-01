@@ -1,7 +1,7 @@
 import styles from "./UserList.module.css";
 import { UserListItem } from "./UserListItem";
-import { TeamMember, User } from "../../../../../schema";
-import { getUserDummyData } from "../../../../../dummyData";
+import { TeamMember, User } from "../../../../../../schema";
+import { getUserDummyData } from "../../../../../../dummyData";
 
 export interface UserListProps {
   teamMemberData?: TeamMember[];
