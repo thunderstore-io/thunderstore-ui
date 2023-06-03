@@ -13,6 +13,7 @@ export * from "./components/MetaItem/MetaItem";
 export * from "./components/MetaInfoItem/MetaInfoItem";
 export * from "./components/MetaInfoItemList/MetaInfoItemList";
 export * from "./components/PackageCard/PackageCard";
+export * from "./components/ProfilePanel/ProfilePanel";
 export * from "./components/PackageFlag/PackageFlag";
 export * from "./components/PackageIcon/PackageIcon";
 export * from "./components/Pagination/Pagination";
@@ -31,6 +32,7 @@ export * from "./components/Layout/PackageDetailLayout/PackageDetailLayout";
 export * from "./components/Layout/PackageListLayout/PackageListLayout";
 export * from "./components/Layout/Settings/SettingsLayout";
 export * from "./components/Layout/Teams/TeamsLayout";
+export * from "./components/Layout/TwitchProfilePanelLayout/TwitchProfilePanelLayout";
 
 export * from "./components/Layout/Developers/ManifestValidator/ManifestValidatorLayout";
 export * from "./components/Layout/Developers/MarkdownPreview/MarkdownPreviewLayout";
