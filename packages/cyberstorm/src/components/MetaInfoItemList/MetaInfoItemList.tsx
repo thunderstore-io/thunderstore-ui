@@ -1,6 +1,5 @@
 import styles from "./MetaInfoItemList.module.css";
-import React, { ReactElement } from "react";
-import { MetaInfoItem } from "../MetaInfoItem/MetaInfoItem";
+import { MetaInfoItem, MetaInfoItemProps } from "../MetaInfoItem/MetaInfoItem";
 
 interface metaInfoData {
   key: string;
@@ -8,11 +7,11 @@ interface metaInfoData {
   content?: ReactElement;
 }
 export type MetaInfoItemListProps = {
-  metaInfoData?: Array<metaInfoData>;
+  items?: Array<MetaInfoItemProps>;
 };
 
 /**
- * Cyberstorm FilterItemList
+ * Cyberstorm component for listing MetaInfoItems.
  */
 export const MetaInfoItemList: React.FC<MetaInfoItemListProps> = (props) => {
   const { metaInfoData = [] } = props;
@@ -30,6 +29,6 @@ export const MetaInfoItemList: React.FC<MetaInfoItemListProps> = (props) => {
       <div className={styles.root}>{metaItemList}</div>
     </div>
   );
-};
+}
 
 MetaInfoItemList.displayName = "MetaInfoItemList";
