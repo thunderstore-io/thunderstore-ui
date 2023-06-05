@@ -202,7 +202,7 @@ function getTabContent(currentTab: number, packageData: Package) {
   } else if (currentTab === 3) {
     tabContent = <PackageChangeLog packageId={packageData.name} />;
   } else if (currentTab === 4) {
-    tabContent = <PackageVersions packageId={packageData.name} />;
+    tabContent = <PackageVersions />;
   }
   return tabContent;
 }
