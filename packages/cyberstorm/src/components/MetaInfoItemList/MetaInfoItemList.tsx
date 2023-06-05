@@ -1,13 +1,15 @@
 import styles from "./MetaInfoItemList.module.css";
-import { MetaInfoItem, MetaInfoItemProps } from "../MetaInfoItem/MetaInfoItem";
+import { MetaInfoItem } from "../MetaInfoItem/MetaInfoItem";
+import React, { ReactElement } from "react";
 
 interface metaInfoData {
   key: string;
   label: string;
   content?: ReactElement;
 }
+
 export type MetaInfoItemListProps = {
-  items?: Array<MetaInfoItemProps>;
+  metaInfoData?: Array<metaInfoData>;
 };
 
 /**
@@ -29,6 +31,6 @@ export const MetaInfoItemList: React.FC<MetaInfoItemListProps> = (props) => {
       <div className={styles.root}>{metaItemList}</div>
     </div>
   );
-}
+};
 
 MetaInfoItemList.displayName = "MetaInfoItemList";
