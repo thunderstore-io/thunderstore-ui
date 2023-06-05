@@ -1,0 +1,29 @@
+.list {
+  padding: var(--space--8);
+  font-size: var(--font-size--14);
+}
+
+.item {
+  display: flex;
+  gap: var(--gap--16);
+  padding: var(--space--8);
+  border-radius: var(--border-radius--8);
+}
+
+.item:hover {
+  background-color: var(--color-surface--1);
+}
+
+.itemImage {
+  width: auto;
+  height: 3rem;
+  border-radius: var(--border-radius--8);
+}
+
+.itemTitle {
+  font-weight: 700;
+}
+
+.itemDescription {
+  color: var(--color-text--tertiary);
+}

@@ -30,7 +30,10 @@ export * from "./components/Layout/HomeLayout/HomeLayout";
 export * from "./components/Layout/PackageDetailLayout/PackageDetailLayout";
 export * from "./components/Layout/PackageListLayout/PackageListLayout";
 export * from "./components/Layout/Settings/SettingsLayout";
+export * from "./components/Layout/Teams/TeamSettings/TeamSettingsLayout";
 export * from "./components/Layout/Teams/TeamsLayout";
+export * from "./components/Layout/TeamLayout/TeamLayout";
+export * from "./components/Layout/UserProfileLayout/UserProfileLayout";
 
 export * from "./components/Layout/Developers/ManifestValidator/ManifestValidatorLayout";
 export * from "./components/Layout/Developers/MarkdownPreview/MarkdownPreviewLayout";

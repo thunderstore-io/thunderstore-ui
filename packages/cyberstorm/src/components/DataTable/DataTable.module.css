@@ -1,0 +1,24 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--8);
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  padding: var(--space--16);
+}
+
+.item {
+  border-radius: var(--border-radius--8);
+  background-color: var(--color-surface--2);
+}
+
+.column {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  gap: var(--gap--16);
+  align-items: center;
+}

@@ -1,0 +1,38 @@
+.listTopNavigation {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--16);
+  align-items: center;
+  justify-content: space-between;
+  margin: var(--space--16) 0;
+}
+
+.placeholder {
+  background-color: fuchsia;
+}
+
+.showing {
+  color: var(--color-text--secondary);
+  font: var(--font-body);
+  font-size: var(--font-size--14);
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--16);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.packageCardList {
+  display: grid;
+  flex-flow: row wrap;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin-bottom: var(--space--24);
+}

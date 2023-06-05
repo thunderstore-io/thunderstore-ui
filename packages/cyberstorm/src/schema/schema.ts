@@ -32,18 +32,18 @@ export interface Package {
   likes: number;
   size: number;
   author?: string;
-  lastUpdated?: string;
+  lastUpdated: string;
   isPinned?: boolean;
   isNsfw?: boolean;
   isDeprecated?: boolean;
   gitHubLink?: string;
   donationLink?: string;
-  firstUploaded?: string;
-  dependencyString?: string;
+  firstUploaded: string;
+  dependencyString: string;
   categories: string[]; // Category ids
-  dependencies?: string[]; // Package ids
+  dependencies?: PackagePreview[];
   dependants?: string[]; // Package ids
-  team: string; // Team id
+  team: Team;
 }
 
 export type PackagePreview = Pick<
@@ -84,9 +84,11 @@ export interface Team {
   imageSource: string;
   description: string;
   about: string;
-  members: string[]; // TeamMember ids
+  members: TeamMember[];
   serviceAccounts: string[]; // ServiceAccount ids
 }
+
+export type TeamPreview = Pick<Team, "name" | "namespace" | "members">;
 
 export interface Category {
   slug: string;
@@ -94,7 +96,7 @@ export interface Category {
 }
 
 export interface TeamMember {
-  user: string; // User id
+  user: User;
   role: string;
 }
 

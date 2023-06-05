@@ -1,0 +1,36 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--8);
+}
+
+.listItem {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--16);
+  padding: var(--space--16) var(--space--24);
+  border-radius: var(--border-radius--8);
+  background-color: var(--color-surface--1);
+}
+
+.column {
+  display: flex;
+  flex: 2;
+  flex-direction: row;
+  gap: var(--gap--16);
+  align-items: center;
+}
+
+.dataPoint {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--16);
+  padding: var(--space--2) var(--space--24);
+}

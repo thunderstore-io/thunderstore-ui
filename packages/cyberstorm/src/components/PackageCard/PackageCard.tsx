@@ -14,6 +14,7 @@ import { formatInteger } from "../../utils/utils";
 import { PackagePreview } from "../../schema";
 import { PackageLink } from "../Links/Links";
 
+// TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
 
 export interface PackageCardProps {

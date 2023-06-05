@@ -6,8 +6,8 @@ import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire, faStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { Select } from "../../Select/Select";
-import { CommunityInfo } from "../../CommunityInfo/CommunityInfo";
-import { CommunityLink } from "../../Links/Links";
+import { CommunityInfo } from "./CommunityInfo/CommunityInfo";
+import { CommunitiesLink, CommunityLink } from "../../Links/Links";
 import { FilterItemList } from "../../FilterItemList/FilterItemList";
 import { SearchFilter } from "../../SearchFilter/SearchFilter";
 import { Pagination } from "../../Pagination/Pagination";
@@ -49,6 +49,7 @@ export function PackageListLayout(props: PackageListLayoutProps) {
       }
       breadCrumb={
         <BreadCrumbs>
+          <CommunitiesLink>Communities</CommunitiesLink>
           <CommunityLink community={communityData.name}>
             {communityData.name}
           </CommunityLink>

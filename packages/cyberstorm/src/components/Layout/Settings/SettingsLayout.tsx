@@ -2,7 +2,7 @@
 import { useState } from "react";
 import styles from "./SettingsLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import { CommunityLink, CommunityPackagesLink } from "../../Links/Links";
+import { SettingsLink } from "../../Links/Links";
 import { Tabs } from "../../Tabs/Tabs";
 import { Title } from "../../Title/Title";
 import { Profile } from "./Profile/Profile";
@@ -31,10 +31,7 @@ export function SettingsLayout(props: SettingsLayoutProps) {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <CommunityLink community={"V-Rising"}>V Rising</CommunityLink>
-          <CommunityPackagesLink community={"V-Rising"}>
-            Packages
-          </CommunityPackagesLink>
+          <SettingsLink>Settings</SettingsLink>
         </BreadCrumbs>
       }
       header={<Title text="Settings" />}
