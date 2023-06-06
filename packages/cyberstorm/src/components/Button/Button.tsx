@@ -15,13 +15,13 @@ type _ButtonProps = {
   colorScheme?:
     | "danger"
     | "default"
-    | "defaultDark"
     | "defaultWithBorder"
     | "primary"
     | "warning"
     | "specialGreen"
     | "specialPurple"
     | "transparentDefault"
+    | "transparentTertiary"
     | "transparentPrimary";
   onClick?: MouseEventHandler<HTMLButtonElement>;
 };
@@ -68,13 +68,13 @@ const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {
   return {
     danger: styles.button__danger,
     default: styles.button__default,
-    defaultDark: styles.button__defaultDark,
     defaultWithBorder: styles.button__defaultWithBorder,
     primary: styles.button__primary,
     warning: styles.button__warning,
     specialGreen: styles.button__specialGreen,
     specialPurple: styles.button__specialPurple,
     transparentDefault: styles.button__transparentDefault,
+    transparentTertiary: styles.button__transparentTertiary,
     transparentPrimary: styles.button__transparentPrimary,
   }[scheme];
 };

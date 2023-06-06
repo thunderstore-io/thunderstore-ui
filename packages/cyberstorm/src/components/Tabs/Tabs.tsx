@@ -1,10 +1,11 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, ReactElement, SetStateAction } from "react";
 import styles from "./Tabs.module.css";
 import { TabsButton } from "./TabsButton";
 
 interface Tab {
   key: number;
   label: string;
+  icon?: ReactElement;
 }
 
 export interface TabsProps {
@@ -23,6 +24,7 @@ export function Tabs(props: TabsProps) {
       <TabsButton
         key={tab.key}
         label={tab.label}
+        icon={tab.icon}
         isSelected={currentTab === tab.key}
         onClick={() => onTabChange(tab.key)}
       />

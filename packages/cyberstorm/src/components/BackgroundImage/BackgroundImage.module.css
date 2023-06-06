@@ -1,30 +1,19 @@
 .img {
+  --w: 70vw;
+
   position: absolute;
   top: 0;
   right: 0;
-
-  z-index: -1;
   width: var(--w);
   height: calc(var(--w) / 2.5);
+  background-image: var(--img-url);
   background-repeat: no-repeat;
-
   background-position: 50%;
   background-size: cover;
+  opacity: 0.4;
 
-  --w: 60vw;
-}
-
-.img::after {
-  position: absolute;
-
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: block;
-  background-color: hsl(var(--color-background) / 0.75);
-  background-image: linear-gradient(90deg, hsl(var(--color-background) / 1) 0%, hsl(var(--color-background) / 0) 50%, hsl(var(--color-background) / 1) 100%), linear-gradient(180deg, hsl(var(--color-background) / 0) 50%, hsl(var(--color-background) / 1) 95%);
-  content: "\0020";
-
-  --color-background: 240 30% 8%;
+  mask-image:
+    linear-gradient(90deg, hsl(255deg 100% 100% / 0) 0%, hsl(255deg 100% 100% / 1) 70%, hsl(255deg 100% 100% / 0) 100%),
+    linear-gradient(180deg, hsl(255deg 100% 100% / 1) 40%, hsl(255deg 100% 100% / 0) 95%);
+  mask-composite: intersect;
 }

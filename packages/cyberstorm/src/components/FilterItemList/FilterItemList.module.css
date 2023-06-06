@@ -1,3 +1,8 @@
+.topActions {
+  display: flex;
+  justify-content: space-between;
+}
+
 .line {
   display: flex;
   align-items: center;

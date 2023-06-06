@@ -1,7 +1,6 @@
 import styles from "./Heading.module.css";
 import { DropDown } from "../DropDown/DropDown";
 import { Button } from "../Button/Button";
-import { Title } from "../Title/Title";
 import { TextInput } from "../TextInput/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
@@ -115,16 +114,18 @@ export function Heading() {
             <ThunderstoreLogo />
           </IndexLink>
           <IndexLink>
-            <Title text="Browse" size="smallest" />
+            <Button label="Browse" colorScheme="transparentDefault" />
           </IndexLink>
           <CommunitiesLink>
-            <Title text="Communities" size="smallest" />
+            <Button label="Communities" colorScheme="transparentDefault" />
           </CommunitiesLink>
           <DropDown
+            triggerColorScheme="transparentDefault"
             trigger={
               <Button
                 label="Developers"
                 rightIcon={<FontAwesomeIcon icon={faCaretDown} fixedWidth />}
+                size="medium"
               />
             }
             content={developersDropDownContents}
@@ -134,7 +135,8 @@ export function Heading() {
           <TextInput />
         </div>
         <div className={styles.rightSection}>
-          <Button colorScheme="specialPurple" label="Get Manager" />
+          <Button colorScheme="specialPurple" label="Go Premium" />
+          <Button colorScheme="primary" label="Get Manager" />
 
           <PackageUploadLink>
             <Button

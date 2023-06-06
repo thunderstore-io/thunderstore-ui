@@ -22,12 +22,6 @@ ReferenceMenuItem.args = {
   colorScheme: "default",
 };
 
-const DarkMenuItem = Template.bind({});
-DarkMenuItem.args = {
-  ...defaultArgs,
-  colorScheme: "defaultDark",
-};
-
 const PrimaryMenuItem = Template.bind({});
 PrimaryMenuItem.args = {
   ...defaultArgs,
@@ -46,10 +40,4 @@ ExtremeMenuItem.args = {
   rightIcon: <FontAwesomeIcon fixedWidth icon={faArrowDownAZ} />,
 };
 
-export {
-  ReferenceMenuItem,
-  MinimalMenuItem,
-  DarkMenuItem,
-  PrimaryMenuItem,
-  ExtremeMenuItem,
-};
+export { ReferenceMenuItem, MinimalMenuItem, PrimaryMenuItem, ExtremeMenuItem };

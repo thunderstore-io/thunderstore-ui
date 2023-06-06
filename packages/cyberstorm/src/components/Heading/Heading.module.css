@@ -17,7 +17,8 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space--6) var(--space--16);
-  box-shadow: var(--box-shadow-small);
+  border-bottom: var(--space--px) var(--color-border) solid;
+  background-color: var(--color-background-alpha-90);
 
   backdrop-filter: blur(var(--blur-default));
 }
@@ -25,7 +26,7 @@
 .leftSection {
   display: flex;
   flex-direction: row;
-  gap: var(--gap--32);
+  gap: var(--gap--16);
   align-items: center;
 }
 

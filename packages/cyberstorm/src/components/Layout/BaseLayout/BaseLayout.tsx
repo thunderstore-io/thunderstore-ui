@@ -30,7 +30,9 @@ export function BaseLayout(props: BaseLayoutProps) {
   return (
     <div className={styles.root}>
       {backGroundImageSource ? (
-        <BackgroundImage src={backGroundImageSource} />
+        <div className={styles.background}>
+          <BackgroundImage imageSource={backGroundImageSource} />
+        </div>
       ) : null}
       <Heading />
       <section className={styles.content}>

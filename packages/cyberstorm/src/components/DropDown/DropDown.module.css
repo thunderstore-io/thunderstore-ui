@@ -18,7 +18,7 @@
   box-shadow: var(--box-shadow-default);
 
   --text-color: var(--color-white);
-  --bg-color: var(--color-default);
+  --bg-color: var(--color-surface--1);
 }
 
 .itemWrapper {
@@ -28,5 +28,5 @@
 
 .itemWrapper[data-highlighted] {
   z-index: 999;
-  background-color: var(--color-default--hover);
+  background-color: var(--color-surface--1--hover);
 }

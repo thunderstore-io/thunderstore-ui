@@ -18,7 +18,7 @@ function useCopyToClipboard(): CopyFn {
   const copy: CopyFn = async (text) => {
     // Try to save to clipboard then save it in the state if worked
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator?.clipboard.writeText(text);
     } catch (error) {
       console.warn("Copy failed", error);
     }

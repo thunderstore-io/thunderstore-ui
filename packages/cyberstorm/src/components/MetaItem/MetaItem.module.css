@@ -9,7 +9,7 @@
   color: var(--text-color);
   background-color: var(--bg-color);
 
-  --text-color: var(--color-default-purple--8);
+  --text-color: var(--color-surface--4);
   --bg-color: transparent;
 }
 
@@ -23,7 +23,7 @@
 
 /* Different MetaItem color schemes */
 .metaItem__default {
-  --text-color: var(--color-default-purple--8);
+  --text-color: var(--color-surface--4);
 }
 
 .metaItem__tertiary {
@@ -38,5 +38,5 @@
 .metaItem__large {
   font-weight: 500;
 
-  --font-size: var(--font-size-16);
+  --font-size: var(--font-size--16);
 }

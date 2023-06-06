@@ -79,15 +79,6 @@ ReferenceSelect.args = {
   },
 };
 
-const DarkSelect = Template.bind({});
-DarkSelect.args = {
-  props: {
-    ...defaultArgs,
-    colorScheme: "defaultDark",
-  },
-  defaultValue: "3",
-};
-
 const PrimarySelect = Template.bind({});
 PrimarySelect.args = {
   props: {
@@ -118,7 +109,6 @@ DefaultOpenSelect.args = {
 
 export {
   ReferenceSelect,
-  DarkSelect,
   PrimarySelect,
   EmptyOptionsSelect,
   DefaultOpenSelect,

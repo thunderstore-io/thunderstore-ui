@@ -103,7 +103,6 @@
   color: var(--color-text--tertiary);
   font: var(--font-heading);
   font-size: var(--font-size--12);
-  line-height: var(--line-height--16);
 }
 
 .footer {

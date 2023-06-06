@@ -13,6 +13,13 @@ import { Account } from "./Account/Account";
 import { getUserDummyData } from "../../../dummyData";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { User } from "../../../schema";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUser,
+  faTrophy,
+  faCircleNodes,
+  faCog,
+} from "@fortawesome/pro-regular-svg-icons";
 
 export interface SettingsLayoutProps {
   userId: string;
@@ -50,11 +57,26 @@ function getUserData(userId: string) {
 SettingsLayout.displayName = "SettingsLayout";
 
 const tabs = [
-  { key: 1, label: "Profile" },
-  { key: 2, label: "Achievements" },
-  { key: 3, label: "Connections" },
-  { key: 4, label: "Subscriptions" },
-  { key: 5, label: "Account" },
+  {
+    key: 1,
+    label: "Profile",
+    icon: <FontAwesomeIcon icon={faUser} fixedWidth />,
+  },
+  {
+    key: 2,
+    label: "Achievements",
+    icon: <FontAwesomeIcon icon={faTrophy} fixedWidth />,
+  },
+  {
+    key: 3,
+    label: "Connections",
+    icon: <FontAwesomeIcon icon={faCircleNodes} fixedWidth />,
+  },
+  {
+    key: 4,
+    label: "Account",
+    icon: <FontAwesomeIcon icon={faCog} fixedWidth />,
+  },
 ];
 
 function getTabContent(currentTab: number, userData: User) {

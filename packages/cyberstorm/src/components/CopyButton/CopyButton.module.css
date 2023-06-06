@@ -4,10 +4,10 @@
 }
 
 .copy:hover {
-  color: var(--color-cyber-green--50);
+  color: var(--color-highlight);
 }
 
 .checkmark {
   all: unset;
-  color: var(--color-cyber-green--50);
+  color: var(--color-highlight);
 }

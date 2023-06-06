@@ -28,7 +28,7 @@ export function FilterItem(props: FilterItemProps) {
           onCheckedChange={() => setChecked(getNextValue(checked))}
           className={`${styles.checkBoxRoot} ${getStyle(checked)}`}
         >
-          {<FontAwesomeIcon className={styles.icon} icon={getIcon(checked)} />}
+          {getIcon(checked)}
         </Checkbox.Root>
         <label
           className={`${styles.label} ${getStyle(checked)}`}
@@ -62,7 +62,11 @@ const getStyle = (checked: boolean | undefined) => {
 
 const getIcon = (checked: boolean | undefined) => {
   if (checked === undefined) {
-    return faMinus;
+    return null;
   }
-  return checked ? faCheck : faXmark;
+  return checked ? (
+    <FontAwesomeIcon className={styles.icon} icon={faCheck} />
+  ) : (
+    <FontAwesomeIcon className={styles.icon} icon={faXmark} />
+  );
 };

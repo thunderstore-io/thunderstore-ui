@@ -1,16 +1,16 @@
 import styles from "../BackgroundImage/BackgroundImage.module.css";
 
 export interface BackgroundImageProps {
-  src: string;
+  imageSource: string;
 }
 
 /**
  * Cyberstorm BackgroundImage
  */
 export function BackgroundImage(props: BackgroundImageProps) {
-  const { src } = props;
+  const { imageSource } = props;
 
-  const backgroundImageStyle = { backgroundImage: "url(" + src + ")" };
+  const backgroundImageStyle = { backgroundImage: "url(" + imageSource + ")" };
 
   return <div className={styles.img} style={backgroundImageStyle}></div>;
 }

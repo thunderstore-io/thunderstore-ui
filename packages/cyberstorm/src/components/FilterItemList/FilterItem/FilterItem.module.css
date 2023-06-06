@@ -43,6 +43,7 @@
 .icon {
   width: var(--space--12);
   height: var(--space--12);
+  color: var(--color-surface--0);
 }
 
 .tag {
@@ -50,9 +51,9 @@
 }
 
 .yes {
-  --mark-color: green !important;
+  --mark-color: var(--color-highlight) !important;
 }
 
 .no {
-  --mark-color: red !important;
+  --mark-color: var(--color-danger) !important;
 }

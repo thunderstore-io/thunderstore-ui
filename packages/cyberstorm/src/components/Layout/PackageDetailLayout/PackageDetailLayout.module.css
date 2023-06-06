@@ -14,7 +14,7 @@
 .packageInfoMeta {
   display: flex;
   flex-direction: row;
-  gap: var(--gap--32);
+  gap: var(--gap--16);
 }
 
 .description {

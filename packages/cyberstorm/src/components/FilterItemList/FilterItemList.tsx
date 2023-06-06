@@ -1,5 +1,8 @@
 import styles from "./FilterItemList.module.css";
 import { FilterItem } from "./FilterItem/FilterItem";
+import { Button } from "../Button/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretDown } from "@fortawesome/pro-solid-svg-icons";
 
 interface FilterDataItem {
   key: string;
@@ -29,6 +32,19 @@ export function FilterItemList(props: FilterItemListProps) {
 
   return (
     <div>
+      <div className={styles.topActions}>
+        <Button
+          size="small"
+          label="Categories"
+          colorScheme="transparentTertiary"
+          rightIcon={<FontAwesomeIcon icon={faCaretDown} fixedWidth />}
+        />
+        <Button
+          size="small"
+          label="Clear all"
+          colorScheme="transparentTertiary"
+        />
+      </div>
       <div>
         <FilterItem count={327} checkBoxId="all" label="All" />
       </div>

@@ -1,14 +1,16 @@
 :root {
   --color-background: var(--color-surface--0);
+  --color-background-alpha-90: rgb(18 18 38 / 0.9);
   --color-danger: var(--color-red--50);
   --color-danger--hover: var(--color-red--40);
-  --color-surface--0: var(--color-alternate-purple--0);
-  --color-surface--1: var(--color-alternate-purple--1);
-  --color-surface--2: var(--color-alternate-purple--2);
-  --color-surface--3: var(--color-alternate-purple--3);
-  --color-surface--4: var(--color-alternate-purple--4);
-  --color-border-default: var(--color-default-purple--8);
-  --color-border-default--hover: var(--color-default-purple--8);
+  --color-surface--0: var(--color-purple--1);
+  --color-surface--1: rgb(28 28 59 / 1);
+  --color-surface--1--hover: rgb(39 39 93 / 1);
+  --color-surface--2: rgb(35 35 77 / 1);
+  --color-surface--3: rgb(47 47 111);
+  --color-surface--4: var(--color-purple--8);
+  --color-surface--4--hover: rgb(59 42 126 / 1);
+  --color-border: var(--color-purple--alt);
   --color-shadow-1: rgb(0 0 0 / 0.7);
   --color-gradient-blue-green--darker: linear-gradient(to left top, #062131 0%, #102b20 100%);
   --color-gradient-blue-green--dark: linear-gradient(to left top, #0b4162 0%, #205740 100%);
@@ -20,10 +22,6 @@
   --color-gradient-purple-green--light: linear-gradient(to left top, #b159e9 0%, #73e1b2 100%);
   --color-highlight--hover: var(--color-cyber-green--40);
   --color-highlight: var(--color-cyber-green--50);
-  --color-default: var(--color-default-purple--4);
-  --color-default--hover: var(--color-default-purple--5);
-  --color-default-dark: var(--color-default-purple--2);
-  --color-default-dark--hover: var(--color-default-purple--3);
   --box-shadow-default: 0 0.75em 1.5em 0.25em #000000a6;
   --box-shadow-small: 0 0.25em 0.75em 0.125em #000000a6;
   --box-shadow-special-green: 0 0 1em rgb(80 217 159 / 0.32);

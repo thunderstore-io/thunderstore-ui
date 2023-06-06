@@ -19,9 +19,6 @@ const Template: StoryFn<typeof Button> = (args) => <Button {...args} />;
 const DefaultButton = Template.bind({});
 DefaultButton.args = defaultArgs;
 
-const DefaultDarkButton = Template.bind({});
-DefaultDarkButton.args = { ...defaultArgs, colorScheme: "defaultDark" };
-
 const PrimaryButton = Template.bind({});
 PrimaryButton.args = { ...defaultArgs, colorScheme: "primary" };
 
@@ -56,7 +53,6 @@ SpecialPurpleButton.args = {
 
 export {
   DefaultButton,
-  DefaultDarkButton,
   PrimaryButton,
   DangerButton,
   DefaultButtonWithBorder,
