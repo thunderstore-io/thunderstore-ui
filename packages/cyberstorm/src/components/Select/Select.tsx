@@ -15,7 +15,7 @@ export type SelectOption = {
 };
 
 type _SelectProps = {
-  colorScheme?: "default" | "defaultDark" | "primary";
+  colorScheme?: "default" | "primary";
   defaultOpen?: boolean;
   icon?: ReactNode;
   onChange?: (val: string) => void;
@@ -76,14 +76,13 @@ Select.displayName = "Select";
 const getContentStyle = (scheme: SelectProps["colorScheme"] = "default") => {
   return {
     default: styles.content__default,
-    defaultDark: styles.content__defaultDark,
     primary: styles.content__primary,
   }[scheme];
 };
 
 const mapSelectData = (
   options: SelectOption[],
-  colorScheme: "default" | "defaultDark" | "primary" | undefined
+  colorScheme: "default" | "primary" | undefined
 ) => {
   return options.map((option, index) => (
     <RadixSelect.Item value={option.value} key={index} asChild>

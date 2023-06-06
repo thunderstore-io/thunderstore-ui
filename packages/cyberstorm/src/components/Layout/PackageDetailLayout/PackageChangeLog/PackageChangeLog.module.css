@@ -9,11 +9,11 @@
   flex-direction: column;
   gap: var(--gap--16);
   padding: var(--space--16);
-  border: var(--space--2) solid var(--color-surface--4);
+  border: var(--space--2) solid var(--color-border);
   border-radius: var(--border-radius--8);
   background-color: var(--bg-color);
 
-  --bg-color: var(--color-surface--3);
+  --bg-color: var(--color-surface--1);
 }
 
 .header {
@@ -22,7 +22,7 @@
 }
 
 .isCurrent {
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--color-surface--2);
 }
 
 .versionNumber {

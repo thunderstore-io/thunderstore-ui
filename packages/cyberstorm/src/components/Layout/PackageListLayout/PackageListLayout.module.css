@@ -1,18 +1,34 @@
 .listTopNavigation {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: var(--gap--16);
-  align-items: center;
-  justify-content: space-between;
-  margin: var(--space--16) 0;
+  margin-bottom: var(--space--32);
 }
 
-.placeholder {
-  background-color: fuchsia;
+.displayAndSort {
+  display: flex;
+  justify-content: space-between;
+}
+
+.displayButtons {
+  display: flex;
+  gap: var(--gap--8);
+}
+
+.sort {
+  display: flex;
+  gap: var(--gap--16);
+}
+
+.sortLabel {
+  align-self: center;
+  color: var(--color-text--tertiary);
+  font-weight: 700;
+  font-size: var(--font-size--14);
 }
 
 .showing {
-  color: var(--color-text--secondary);
+  color: var(--color-text--tertiary);
   font: var(--font-body);
   font-size: var(--font-size--14);
 }

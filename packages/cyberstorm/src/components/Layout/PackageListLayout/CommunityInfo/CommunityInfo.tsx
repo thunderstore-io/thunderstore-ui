@@ -4,14 +4,14 @@ import { MetaItem } from "../../../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDownload,
-  faGamepad,
   faBoxOpen,
   faServer,
-  faArrowUp,
-} from "@fortawesome/free-solid-svg-icons";
+} from "@fortawesome/pro-regular-svg-icons";
 import { Button } from "../../../Button/Button";
 import { Title } from "../../../Title/Title";
 import { formatInteger } from "../../../../utils/utils";
+import { faDiscord } from "@fortawesome/free-brands-svg-icons";
+import { Link } from "../../../Link/Link";
 
 export interface PackageListCommunityInfoProps {
   title?: string;
@@ -23,7 +23,7 @@ export interface PackageListCommunityInfoProps {
 }
 
 /**
- * Cyberstorm PackageListCommunityInfo
+ * Cyberstorm PackageList's CommunityInfo
  */
 export function CommunityInfo(props: PackageListCommunityInfoProps) {
   const {
@@ -66,11 +66,10 @@ export function CommunityInfo(props: PackageListCommunityInfoProps) {
             colorScheme="tertiary"
             size="large"
           />
-          <Button
-            label={"Join the Community"}
-            leftIcon={<FontAwesomeIcon icon={faGamepad} fixedWidth />}
-            rightIcon={<FontAwesomeIcon icon={faArrowUp} fixedWidth />}
-            colorScheme="transparentPrimary"
+          <Link
+            leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
+            label="Join our community"
+            externalUrl="https://discord.gg/5MbXZvd"
           />
         </div>
       </div>
@@ -78,4 +77,4 @@ export function CommunityInfo(props: PackageListCommunityInfoProps) {
   );
 }
 
-CommunityInfo.displayName = "PackageListCommunityInfo";
+CommunityInfo.displayName = "CommunityInfo";

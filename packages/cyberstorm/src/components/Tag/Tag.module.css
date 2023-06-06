@@ -25,7 +25,7 @@
 
 .root:hover {
   --bg-color: var(--color-surface--0);
-  --border-color: var(--color-border-default);
+  --border-color: var(--color-border);
 }
 
 .label {
@@ -33,7 +33,7 @@
 }
 
 .icon {
-  color: var(--color-border-default);
+  color: var(--color-border);
 }
 
 /* Different Tag sizes */
@@ -41,7 +41,6 @@
   padding: var(--space--2) var(--space--4);
   border-radius: var(--border-radius--4);
   font-size: var(--font-size--12);
-  line-height: var(--line-height--14);
 }
 
 .tiny:hover {

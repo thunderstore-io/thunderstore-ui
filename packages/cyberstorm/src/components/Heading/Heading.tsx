@@ -29,6 +29,7 @@ import {
   faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
 import { AvatarButton } from "../Avatar/AvatarButton";
+import { Link } from "../Link/Link";
 
 /**
  * Cyberstorm Heading Component
@@ -115,16 +116,18 @@ export function Heading() {
             <ThunderstoreLogo />
           </IndexLink>
           <IndexLink>
-            <Title text="Browse" size="smallest" />
+            <Button label="Browse" colorScheme="transparentDefault" />
           </IndexLink>
           <CommunitiesLink>
-            <Title text="Communities" size="smallest" />
+            <Button label="Communities" colorScheme="transparentDefault" />
           </CommunitiesLink>
           <DropDown
+            triggerColorScheme="transparentDefault"
             trigger={
               <Button
                 label="Developers"
                 rightIcon={<FontAwesomeIcon icon={faCaretDown} fixedWidth />}
+                size="medium"
               />
             }
             content={developersDropDownContents}
@@ -134,7 +137,8 @@ export function Heading() {
           <TextInput />
         </div>
         <div className={styles.rightSection}>
-          <Button colorScheme="specialPurple" label="Get Manager" />
+          <Button colorScheme="specialPurple" label="Go Premium" />
+          <Button colorScheme="primary" label="Get Manager" />
 
           <PackageUploadLink>
             <Button

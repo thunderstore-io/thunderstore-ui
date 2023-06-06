@@ -28,10 +28,6 @@ export function SearchFilter(props: SearchFilterProps) {
 
   return (
     <div className={styles.root}>
-      <TextInput
-        placeHolder="Search..."
-        leftIcon={<FontAwesomeIcon icon={faSearch} fixedWidth />}
-      />
       <div className={styles.selectedTags}>
         {tagList}
         <Button

@@ -36,11 +36,15 @@ export function CommunityListLayout() {
       header={<Title text="Communities" />}
       search={
         <div className={styles.filters}>
-          <TextInput
-            placeHolder="Search communities..."
-            leftIcon={<FontAwesomeIcon icon={faSearch} fixedWidth />}
-          />
-          <Select onChange={setOrder} options={selectOptions} value={order} />
+          <div className={styles.searchTextInput}>
+            <TextInput
+              placeHolder="Search communities..."
+              leftIcon={<FontAwesomeIcon icon={faSearch} fixedWidth />}
+            />
+          </div>
+          <div className={styles.searchFilters}>
+            <Select onChange={setOrder} options={selectOptions} value={order} />
+          </div>
         </div>
       }
       mainContent={

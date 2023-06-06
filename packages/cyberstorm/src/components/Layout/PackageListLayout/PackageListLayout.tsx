@@ -4,9 +4,13 @@ import styles from "./PackageListLayout.module.css";
 import { PackageCard } from "../../PackageCard/PackageCard";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFire, faStar, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFire,
+  faSearch,
+  faStar,
+  faThumbsUp,
+} from "@fortawesome/free-solid-svg-icons";
 import { Select } from "../../Select/Select";
-import { CommunityInfo } from "./CommunityInfo/CommunityInfo";
 import { CommunitiesLink, CommunityLink } from "../../Links/Links";
 import { FilterItemList } from "../../FilterItemList/FilterItemList";
 import { SearchFilter } from "../../SearchFilter/SearchFilter";
@@ -19,6 +23,10 @@ import {
 import { PackagePreview } from "../../../schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { Title } from "../../Title/Title";
+import { TextInput } from "../../TextInput/TextInput";
+import { Button } from "../../Button/Button";
+import { faGrid, faList } from "@fortawesome/pro-light-svg-icons";
+import { CommunityInfo } from "./CommunityInfo/CommunityInfo";
 
 export interface PackageListLayoutProps {
   isLoading: boolean;
@@ -70,22 +78,39 @@ export function PackageListLayout(props: PackageListLayoutProps) {
         />
       }
       leftSidebarContent={<FilterItemList filterData={filterData} />}
+      search={
+        <TextInput
+          placeHolder="Filter mods..."
+          leftIcon={<FontAwesomeIcon icon={faSearch} fixedWidth />}
+        />
+      }
       mainContent={
         <div className={styles.content}>
-          <SearchFilter tags={topFilterTags} />
-
           <div className={styles.listTopNavigation}>
             <div className={styles.showing}>
               Showing <strong>1-20</strong> of <strong>327</strong>
             </div>
-            <Pagination
-              currentPage={page}
-              onPageChange={setPage}
-              pageSize={20}
-              siblingCount={2}
-              totalCount={327}
-            />
-            <Select onChange={setOrder} options={selectOptions} value={order} />
+
+            <SearchFilter tags={topFilterTags} />
+
+            <div className={styles.displayAndSort}>
+              <div className={styles.displayButtons}>
+                <Button
+                  leftIcon={<FontAwesomeIcon icon={faGrid} fixedWidth />}
+                />
+                <Button
+                  leftIcon={<FontAwesomeIcon icon={faList} fixedWidth />}
+                />
+              </div>
+              <div className={styles.sort}>
+                <div className={styles.sortLabel}>Sort By</div>
+                <Select
+                  onChange={setOrder}
+                  options={selectOptions}
+                  value={order}
+                />
+              </div>
+            </div>
           </div>
 
           <div className={styles.packageCardList}>

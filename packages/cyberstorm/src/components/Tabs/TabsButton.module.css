@@ -33,5 +33,5 @@
 .button__default_selected {
   color: var(--color-text--default);
 
-  --bg-color: var(--color-alternate-purple--4);
+  --bg-color: var(--color-surface--4);
 }

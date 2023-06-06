@@ -10,7 +10,6 @@
   font: var(--font-body);
   font-weight: 700;
   font-size: var(--font-size--12);
-  line-height: var(--line-height--14);
   background-color: var(--color-surface--2);
 }
 

@@ -5,11 +5,11 @@ import styles from "./DropDown.module.css";
 import * as RadixDropDown from "@radix-ui/react-dropdown-menu";
 
 type DropDownProps = {
-  colorScheme?: "default" | "defaultDark" | "primary";
+  colorScheme?: "default" | "primary";
   defaultOpen?: boolean;
   content?: ReactNode[];
   trigger: ReactNode | ReactElement;
-  triggerColorScheme?: "default" | "defaultDark" | "primary";
+  triggerColorScheme?: "default" | "primary" | "transparentDefault";
 };
 
 export function DropDown(props: DropDownProps) {

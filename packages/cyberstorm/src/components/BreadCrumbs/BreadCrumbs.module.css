@@ -7,7 +7,7 @@
 .crumb * {
   gap: var(--space--14);
   align-items: center;
-  color: var(--color-cyber-green--50);
+  color: var(--color-highlight);
   font: var(--font-body);
   font-weight: 500;
   font-size: var(--font-size--14);

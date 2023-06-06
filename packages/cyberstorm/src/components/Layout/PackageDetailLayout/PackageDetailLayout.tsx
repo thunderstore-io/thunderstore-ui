@@ -1,8 +1,12 @@
 "use client";
 import styles from "./PackageDetailLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import { CommunitiesLink, CommunityLink, PackageLink } from "../../Links/Links";
-import { MetaItem } from "../../MetaItem/MetaItem";
+import {
+  CommunitiesLink,
+  CommunityLink,
+  PackageLink,
+  TeamLink,
+} from "../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "../../Button/Button";
 import { ModIcon } from "../../ModIcon/ModIcon";
@@ -16,7 +20,6 @@ import {
   faDonate,
   faDownload,
   faCog,
-  faHouse,
   faUser,
   faThumbsUp,
   faFlag,
@@ -30,6 +33,14 @@ import { useState } from "react";
 import { Tabs } from "../../Tabs/Tabs";
 import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
 import { PackageVersions } from "./PackageVersions/PackageVersions";
+import { Link } from "../../Link/Link";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import {
+  faCodeBranch,
+  faFileLines,
+  faFilePlus,
+  faImages,
+} from "@fortawesome/pro-regular-svg-icons";
 
 export interface PackageDetailLayoutProps {
   packageId: string;
@@ -48,6 +59,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
 
   return (
     <BaseLayout
+      backGroundImageSource={packageData.imageSource}
       breadCrumb={
         <BreadCrumbs>
           <CommunitiesLink>Communities</CommunitiesLink>
@@ -70,16 +82,21 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
             <Title text={packageData.name}></Title>
             <p>{packageData.shortDescription}</p>
             <div className={styles.packageInfoMeta}>
-              <MetaItem
-                colorScheme="tertiary"
-                label={packageData.author}
-                icon={<FontAwesomeIcon icon={faUser} fixedWidth />}
-              />
-              <Button
-                label={packageData.gitHubLink}
-                colorScheme="transparentPrimary"
-                leftIcon={<FontAwesomeIcon icon={faHouse} fixedWidth />}
-              />
+              {packageData.author ? (
+                <TeamLink team={packageData.team.name}>
+                  <Link
+                    label={packageData.team.name}
+                    leftIcon={<FontAwesomeIcon icon={faUser} fixedWidth />}
+                  />
+                </TeamLink>
+              ) : null}
+              {packageData.gitHubLink ? (
+                <Link
+                  externalUrl={packageData.gitHubLink}
+                  label="GitHub"
+                  leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
+                />
+              ) : null}
             </div>
           </div>
           <div className={styles.managementDialogTrigger}>
@@ -175,10 +192,26 @@ function getMetaInfoData(packageData: Package) {
 }
 
 const tabs = [
-  { key: 1, label: "Description" },
-  { key: 2, label: "Images" },
-  { key: 3, label: "ChangeLog" },
-  { key: 4, label: "Versions" },
+  {
+    key: 1,
+    label: "Description",
+    icon: <FontAwesomeIcon icon={faFileLines} fixedWidth />,
+  },
+  {
+    key: 2,
+    label: "Images",
+    icon: <FontAwesomeIcon icon={faImages} fixedWidth />,
+  },
+  {
+    key: 3,
+    label: "ChangeLog",
+    icon: <FontAwesomeIcon icon={faFilePlus} fixedWidth />,
+  },
+  {
+    key: 4,
+    label: "Versions",
+    icon: <FontAwesomeIcon icon={faCodeBranch} fixedWidth />,
+  },
 ];
 
 function getTabContent(currentTab: number, packageData: Package) {
