@@ -57,13 +57,6 @@ ReferenceDropDown.args = {
   colorScheme: "default",
 };
 
-const DarkDropDown = Template.bind({});
-DarkDropDown.args = {
-  ...defaultArgs,
-  content: content,
-  colorScheme: "defaultDark",
-};
-
 const PrimaryDropDown = Template.bind({});
 PrimaryDropDown.args = {
   ...defaultArgs,
@@ -100,7 +93,6 @@ DefaultOpenDropDown.args = {
 export {
   ReferenceDropDown,
   MinimalDropDown,
-  DarkDropDown,
   PrimaryDropDown,
   TagTriggerDropDown,
   DefaultOpenDropDown,
