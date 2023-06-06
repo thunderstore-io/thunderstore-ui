@@ -1,7 +1,6 @@
 import styles from "./Heading.module.css";
 import { DropDown } from "../DropDown/DropDown";
 import { Button } from "../Button/Button";
-import { Title } from "../Title/Title";
 import { TextInput } from "../TextInput/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
@@ -29,7 +28,6 @@ import {
   faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
 import { AvatarButton } from "../Avatar/AvatarButton";
-import { Link } from "../Link/Link";
 
 /**
  * Cyberstorm Heading Component
