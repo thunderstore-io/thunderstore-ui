@@ -1,0 +1,47 @@
+/* Common Alert styles */
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  width: 584px;
+  height: 80px;
+  padding: 0;
+  isolation: isolate;
+}
+
+/* Styles for Alert's text */
+.label {
+  font: var(--font-body);
+  font-weight: var(--font-weight);
+  font-size: var(--font-size);
+  line-height: var(--line-height--18);
+}
+
+/* Different Alert color schemes */
+.alert__blue {
+  background: var(--color-blue--10);
+}
+
+.alert__green {
+  background: var(--color-green--10);
+}
+
+.alert__yellow {
+  background: var(--color-yellow--10);
+}
+
+.alert__red {
+  background: var(--color-red--10);
+}
+
+.alert__small {
+  --font-weight: 700;
+  --font-size: var(--font-size--12);
+}
+
+.alert__large {
+  font-weight: 500;
+
+  --font-size: var(--font-size--16);
+}
