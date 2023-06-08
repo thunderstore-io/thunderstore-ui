@@ -17,7 +17,6 @@ import {
 } from "../../../dummyData";
 import { PackagePreview, Team } from "../../../schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
-import { TeamInfo } from "./TeamInfo/TeamInfo";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { Avatar } from "../../Avatar/Avatar";
 
