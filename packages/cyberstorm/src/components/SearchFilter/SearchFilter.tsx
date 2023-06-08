@@ -1,9 +1,8 @@
 import styles from "./Searchfilter.module.css";
 import { Tag } from "../Tag/Tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../Button/Button";
-import { TextInput } from "../TextInput/TextInput";
 
 export interface SearchFilterProps {
   tags?: Array<string>;
@@ -18,16 +17,16 @@ export function SearchFilter(props: SearchFilterProps) {
   const tagList = tags?.map((tagLabel: string, index: number) => {
     return (
       <Tag
+        colorScheme="removable"
         key={index.toString()}
         label={tagLabel}
-        isRemovable
         rightIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
       />
     );
   });
 
   return (
-    <div className={styles.root}>
+    <>
       <div className={styles.selectedTags}>
         {tagList}
         <Button
@@ -36,7 +35,7 @@ export function SearchFilter(props: SearchFilterProps) {
           label="Clear all"
         />
       </div>
-    </div>
+    </>
   );
 }
 

@@ -3,19 +3,16 @@ import { SettingsLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
-  title: "Cyberstorm/Layouts/SettingsLayout",
+  title: "Cyberstorm/Layouts/Settings",
   component: SettingsLayout,
 } as ComponentMeta<typeof SettingsLayout>;
 
-const defaultArgs = {};
-
-const Template: ComponentStory<typeof SettingsLayout> = (args) => (
+const Template: ComponentStory<typeof SettingsLayout> = () => (
   <div>
-    <SettingsLayout {...args} />
+    <SettingsLayout userId="user" />
   </div>
 );
 
 const DefaultSettingsLayout = Template.bind({});
-DefaultSettingsLayout.args = { ...defaultArgs };
 
-export { meta as default, DefaultSettingsLayout };
+export { meta as default, DefaultSettingsLayout as Settings };

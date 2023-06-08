@@ -14,7 +14,7 @@
   background-color: var(--bg-color);
 
   --text-color: var(--color-white);
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--color-surface--7);
   --button-border-color: transparent;
   --button-border-width: var(--border-width--2);
 }
@@ -30,11 +30,11 @@
 
 .button__default {
   --text-color: var(--color-white);
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--color-surface--7);
 }
 
 .button__default:hover {
-  --bg-color: var(--color-surface--4--hover);
+  --bg-color: var(--color-surface--10);
   --button-border-color: transparent;
 }
 
@@ -63,17 +63,6 @@
 
 .button__danger:hover {
   --bg-color: var(--color-danger--hover);
-}
-
-.button__defaultWithBorder {
-  --bg-color: var(--color-surface--4);
-  --text-color: var(--color-white);
-  --button-border-color: var(--color-border);
-}
-
-.button__defaultWithBorder:hover {
-  --bg-color: var(--color-surface--4--hover);
-  --button-border-color: var(--color-border);
 }
 
 /* Special-style Buttons */
@@ -150,7 +139,7 @@
 }
 
 .button__transparentTertiary:hover {
-  --bg-color: var(--color-surface--2);
+  --bg-color: var(--color-surface--4);
 }
 
 .button__transparentPrimary {
@@ -160,7 +149,7 @@
 
 .button__transparentPrimary:hover {
   --text-color: var(--color-highlight);
-  --bg-color: var(--color-surface--2);
+  --bg-color: var(--color-surface--4);
 }
 
 .small {

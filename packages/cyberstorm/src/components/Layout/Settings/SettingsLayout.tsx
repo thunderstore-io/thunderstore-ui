@@ -20,6 +20,7 @@ import {
   faCircleNodes,
   faCog,
 } from "@fortawesome/pro-regular-svg-icons";
+import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 
 export interface SettingsLayoutProps {
   userId: string;
@@ -41,7 +42,7 @@ export function SettingsLayout(props: SettingsLayoutProps) {
           <SettingsLink>Settings</SettingsLink>
         </BreadCrumbs>
       }
-      header={<Title text="Settings" />}
+      header={<PageHeader title="Settings" />}
       tabs={
         <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
       }

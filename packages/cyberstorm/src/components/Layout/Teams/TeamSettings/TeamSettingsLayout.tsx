@@ -13,6 +13,7 @@ import { TeamProfile } from "./TeamProfile/TeamProfile";
 import { getTeamDummyData } from "../../../../dummyData";
 import { Team } from "../../../../schema";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
+import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 
 export interface TeamSettingsLayoutProps {
   teamId: string;
@@ -38,7 +39,7 @@ export function TeamSettingsLayout(props: TeamSettingsLayoutProps) {
           </TeamSettingsLink>
         </BreadCrumbs>
       }
-      header={<Title text={teamData.name} />}
+      header={<PageHeader title={teamData.name} />}
       tabs={
         <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
       }

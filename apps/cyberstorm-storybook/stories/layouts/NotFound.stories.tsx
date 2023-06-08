@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Footer, Heading, NotFoundLayout } from "@thunderstore/cyberstorm";
+import { NotFoundLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
@@ -14,6 +14,5 @@ const Template: ComponentStory<typeof NotFoundLayout> = () => (
 );
 
 const DefaultNotFoundLayout = Template.bind({});
-DefaultNotFoundLayout.args = {};
 
-export { meta as default, DefaultNotFoundLayout };
+export { meta as default, DefaultNotFoundLayout as NotFound };

@@ -1,0 +1,13 @@
+.root {
+  display: flex;
+  flex-grow: 0;
+  gap: var(--gap--4);
+  align-items: center;
+  width: auto;
+  overflow: hidden;
+}
+
+.opened {
+  flex-direction: column;
+  align-items: flex-start;
+}

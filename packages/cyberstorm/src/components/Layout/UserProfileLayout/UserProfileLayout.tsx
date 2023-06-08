@@ -17,7 +17,14 @@ import {
 } from "../../../dummyData";
 import { PackagePreview, User } from "../../../schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
-import { UserInfo } from "./UserInfo/UserInfo";
+import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
+import { Avatar } from "../../Avatar/Avatar";
+import { Link } from "../../Link/Link";
+import {
+  faDiscord,
+  faGithub,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
 
 export interface UserProfileLayoutProps {
   userId: string;
@@ -42,7 +49,14 @@ export function UserProfileLayout(props: UserProfileLayoutProps) {
           <UserLink user={userData.name}>{userData.name}</UserLink>
         </BreadCrumbs>
       }
-      header={<UserInfo userData={userData} />}
+      header={
+        <PageHeader
+          title={userData.name}
+          image={<Avatar size="large" src={userData.imageSource} />}
+          description={userData.description}
+          meta={getUserMeta(userData)}
+        />
+      }
       leftSidebarContent={<FilterItemList filterData={filterData} />}
       mainContent={
         <div className={styles.content}>
@@ -84,6 +98,38 @@ function getPackageData() {
 }
 function getUserData(userId: string) {
   return getUserDummyData(userId);
+}
+
+function getUserMeta(userData: User) {
+  const userMeta = [];
+  if (userData.gitHubLink) {
+    userMeta.push(
+      <Link
+        externalUrl={userData.gitHubLink}
+        leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
+        label="GitHub"
+      />
+    );
+  }
+  if (userData.twitterLink) {
+    userMeta.push(
+      <Link
+        externalUrl={userData.twitterLink}
+        leftIcon={<FontAwesomeIcon icon={faTwitter} fixedWidth />}
+        label="Twitter"
+      />
+    );
+  }
+  if (userData.discordLink) {
+    userMeta.push(
+      <Link
+        externalUrl={userData.discordLink}
+        leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
+        label="Discord"
+      />
+    );
+  }
+  return userMeta;
 }
 
 const selectOptions = [

@@ -14,7 +14,7 @@
 
   border-radius: var(--border-radius--8);
   font: var(--font-body);
-  background-color: var(--color-surface--2);
+  background-color: var(--color-surface--4);
 
   --border-color: transparent;
 }
@@ -27,7 +27,7 @@
   color: var(--color-text--default);
   background-color: var(--color-surface--0);
 
-  --border-color: var(--color-surface--3);
+  --border-color: var(--color-border);
 }
 
 .input::placeholder {

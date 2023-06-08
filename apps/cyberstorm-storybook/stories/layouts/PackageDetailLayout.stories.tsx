@@ -3,7 +3,7 @@ import { PackageDetailLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
-  title: "Cyberstorm/Layouts/PackageDetailLayout",
+  title: "Cyberstorm/Layouts/PackageDetails",
   component: PackageDetailLayout,
 } as ComponentMeta<typeof PackageDetailLayout>;
 
@@ -28,6 +28,6 @@ ManagePackageDetailLayout.args = {
 
 export {
   meta as default,
-  ReferencePackageDetailLayout,
-  ManagePackageDetailLayout,
+  ReferencePackageDetailLayout as PackageDetails,
+  ManagePackageDetailLayout as PackageDetailsDialog,
 };

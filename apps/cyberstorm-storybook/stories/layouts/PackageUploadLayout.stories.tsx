@@ -14,6 +14,5 @@ const Template: ComponentStory<typeof PackageUploadLayout> = () => (
 );
 
 const DefaultPackageUploadLayout = Template.bind({});
-DefaultPackageUploadLayout.args = {};
 
-export { meta as default, DefaultPackageUploadLayout };
+export { meta as default, DefaultPackageUploadLayout as PackageUpload };

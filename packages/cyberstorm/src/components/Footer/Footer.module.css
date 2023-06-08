@@ -13,7 +13,7 @@
 }
 
 .divider {
-  border-bottom: var(--border-width--px) solid var(--color-surface--3);
+  border-bottom: var(--border-width--px) solid var(--color-surface--4);
 }
 
 .links {
@@ -71,7 +71,7 @@
 .leftColumn {
   justify-content: end;
   min-width: 50vw;
-  border: var(--border-width--px) solid var(--color-surface--3);
+  border: var(--border-width--px) solid var(--color-surface--4);
 }
 
 .rightColumn {
@@ -79,7 +79,7 @@
   flex-direction: column;
   gap: var(--gap--16);
   padding: 4rem;
-  border: var(--border-width--px) solid var(--color-surface--3);
+  border: var(--border-width--px) solid var(--color-surface--4);
 }
 
 .wrapper {

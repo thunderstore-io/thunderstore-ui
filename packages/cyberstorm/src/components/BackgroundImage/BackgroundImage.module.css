@@ -11,9 +11,8 @@
   background-position: 50%;
   background-size: cover;
   opacity: 0.4;
-
   mask-image:
-    linear-gradient(90deg, hsl(255deg 100% 100% / 0) 0%, hsl(255deg 100% 100% / 1) 70%, hsl(255deg 100% 100% / 0) 100%),
-    linear-gradient(180deg, hsl(255deg 100% 100% / 1) 40%, hsl(255deg 100% 100% / 0) 95%);
-  mask-composite: intersect;
+    linear-gradient(90deg, transparent 0%, white 70%, transparent 100%),
+    linear-gradient(180deg, white 40%, transparent 95%);
+  mask-composite: source-in;
 }

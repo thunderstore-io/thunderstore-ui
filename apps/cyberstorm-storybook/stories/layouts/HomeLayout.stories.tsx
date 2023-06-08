@@ -3,7 +3,7 @@ import { HomeLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
-  title: "Cyberstorm/Layouts/HomeLayout",
+  title: "Cyberstorm/Layouts/Home",
   component: HomeLayout,
 } as ComponentMeta<typeof HomeLayout>;
 
@@ -14,6 +14,5 @@ const Template: ComponentStory<typeof HomeLayout> = () => (
 );
 
 const DefaultHomeLayout = Template.bind({});
-DefaultHomeLayout.args = {};
 
-export { meta as default, DefaultHomeLayout };
+export { meta as default, DefaultHomeLayout as Home };

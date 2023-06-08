@@ -15,7 +15,6 @@ type _ButtonProps = {
   colorScheme?:
     | "danger"
     | "default"
-    | "defaultWithBorder"
     | "primary"
     | "warning"
     | "specialGreen"
@@ -68,7 +67,6 @@ const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {
   return {
     danger: styles.button__danger,
     default: styles.button__default,
-    defaultWithBorder: styles.button__defaultWithBorder,
     primary: styles.button__primary,
     warning: styles.button__warning,
     specialGreen: styles.button__specialGreen,

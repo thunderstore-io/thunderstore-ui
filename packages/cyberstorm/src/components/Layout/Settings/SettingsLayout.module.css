@@ -12,5 +12,5 @@
 }
 
 .separator {
-  border-bottom: var(--border-width--px) solid var(--color-surface--3);
+  border-bottom: var(--border-width--px) solid var(--color-surface--4);
 }

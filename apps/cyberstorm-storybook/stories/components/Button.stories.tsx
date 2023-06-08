@@ -33,12 +33,6 @@ DangerButton.args = {
   },
 };
 
-const DefaultButtonWithBorder = Template.bind({});
-DefaultButtonWithBorder.args = {
-  ...defaultArgs,
-  colorScheme: "defaultWithBorder",
-};
-
 const SpecialGreenButton = Template.bind({});
 SpecialGreenButton.args = {
   ...defaultArgs,
@@ -55,7 +49,6 @@ export {
   DefaultButton,
   PrimaryButton,
   DangerButton,
-  DefaultButtonWithBorder,
   SpecialGreenButton,
   SpecialPurpleButton,
 };

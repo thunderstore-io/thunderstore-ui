@@ -17,7 +17,8 @@ import {
 } from "../../../dummyData";
 import { PackagePreview, Team } from "../../../schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
-import { TeamInfo } from "./TeamInfo/TeamInfo";
+import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
+import { Avatar } from "../../Avatar/Avatar";
 
 export interface TeamLayoutProps {
   teamId: string;
@@ -42,7 +43,13 @@ export function TeamLayout(props: TeamLayoutProps) {
           <TeamLink team={teamData.name}>{teamData.name}</TeamLink>
         </BreadCrumbs>
       }
-      header={<TeamInfo teamData={teamData} />}
+      header={
+        <PageHeader
+          title={teamData.name}
+          image={<Avatar size="large" src={teamData.imageSource} />}
+          description={teamData.description}
+        />
+      }
       leftSidebarContent={<FilterItemList filterData={filterData} />}
       mainContent={
         <div className={styles.content}>

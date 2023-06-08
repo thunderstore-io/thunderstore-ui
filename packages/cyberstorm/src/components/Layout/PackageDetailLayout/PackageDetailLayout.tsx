@@ -12,7 +12,7 @@ import { Button } from "../../Button/Button";
 import { ModIcon } from "../../ModIcon/ModIcon";
 import { Title } from "../../Title/Title";
 import { Dialog } from "../../Dialog/Dialog";
-import { PackageManagementForm } from "./PackageManagementForm";
+import { PackageManagementForm } from "./PackageManagementForm/PackageManagementForm";
 import { getPackageDummyData } from "../../../dummyData";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { MetaInfoItemList } from "../../MetaInfoItemList/MetaInfoItemList";
@@ -41,6 +41,8 @@ import {
   faFilePlus,
   faImages,
 } from "@fortawesome/pro-regular-svg-icons";
+import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
+import { PackageImages } from "./PackageImages/PackageImages";
 
 export interface PackageDetailLayoutProps {
   packageId: string;
@@ -56,6 +58,27 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   const metaInfoData = getMetaInfoData(packageData);
 
   const [currentTab, setCurrentTab] = useState(1);
+
+  const packageDetailsMeta = [];
+  if (packageData.author) {
+    packageDetailsMeta.push(
+      <TeamLink team={packageData.team.name}>
+        <Link
+          label={packageData.team.name}
+          leftIcon={<FontAwesomeIcon icon={faUser} fixedWidth />}
+        />
+      </TeamLink>
+    );
+  }
+  if (packageData.gitHubLink) {
+    packageDetailsMeta.push(
+      <Link
+        externalUrl={packageData.gitHubLink}
+        label="GitHub"
+        leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
+      />
+    );
+  }
 
   return (
     <BaseLayout
@@ -77,28 +100,12 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
       }
       header={
         <div className={styles.packageInfo}>
-          <ModIcon src={packageData.imageSource}></ModIcon>
-          <div className={styles.packageInfoDetails}>
-            <Title text={packageData.name}></Title>
-            <p>{packageData.shortDescription}</p>
-            <div className={styles.packageInfoMeta}>
-              {packageData.author ? (
-                <TeamLink team={packageData.team.name}>
-                  <Link
-                    label={packageData.team.name}
-                    leftIcon={<FontAwesomeIcon icon={faUser} fixedWidth />}
-                  />
-                </TeamLink>
-              ) : null}
-              {packageData.gitHubLink ? (
-                <Link
-                  externalUrl={packageData.gitHubLink}
-                  label="GitHub"
-                  leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
-                />
-              ) : null}
-            </div>
-          </div>
+          <PageHeader
+            title={packageData.name}
+            image={<ModIcon src={packageData.imageSource} />}
+            description={packageData.shortDescription}
+            meta={packageDetailsMeta}
+          />
           <div className={styles.managementDialogTrigger}>
             <Dialog
               defaultOpen={managementDialogIsOpen}
@@ -224,13 +231,14 @@ function getTabContent(currentTab: number, packageData: Package) {
       </>
     );
   } else if (currentTab === 2) {
-    //TODO: proper image carousel or something
     tabContent = (
-      <>
-        <img src={packageData.imageSource} alt={packageData.name} />
-        <img src={packageData.imageSource} alt={packageData.name} />
-        <img src={packageData.imageSource} alt={packageData.name} />
-      </>
+      <PackageImages
+        images={[
+          { imageSource: packageData.imageSource, alt: "first" },
+          { imageSource: packageData.imageSource, alt: "second" },
+          { imageSource: packageData.imageSource, alt: "third" },
+        ]}
+      />
     );
   } else if (currentTab === 3) {
     tabContent = <PackageChangeLog packageId={packageData.name} />;

@@ -14,6 +14,5 @@ const Template: ComponentStory<typeof ManifestValidatorLayout> = () => (
 );
 
 const DefaultManifestValidatorLayout = Template.bind({});
-DefaultManifestValidatorLayout.args = {};
 
-export { meta as default, DefaultManifestValidatorLayout };
+export { meta as default, DefaultManifestValidatorLayout as ManifestValidator };

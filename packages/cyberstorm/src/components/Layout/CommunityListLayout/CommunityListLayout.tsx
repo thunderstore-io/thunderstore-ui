@@ -13,10 +13,10 @@ import { CommunitiesLink } from "../../Links/Links";
 import { TextInput } from "../../TextInput/TextInput";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
-import { Title } from "../../Title/Title";
 import { getCommunityPreviewDummyData, getListOfIds } from "../../../dummyData";
 import { CommunityPreview } from "../../../schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
+import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 
 /**
  * Cyberstorm CommunityList Layout
@@ -33,7 +33,7 @@ export function CommunityListLayout() {
           <CommunitiesLink>Communities</CommunitiesLink>
         </BreadCrumbs>
       }
-      header={<Title text="Communities" />}
+      header={<PageHeader title="Communities" />}
       search={
         <div className={styles.filters}>
           <div className={styles.searchTextInput}>

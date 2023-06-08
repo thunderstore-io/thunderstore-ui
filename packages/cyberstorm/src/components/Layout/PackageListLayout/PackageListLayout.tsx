@@ -26,10 +26,20 @@ import { Title } from "../../Title/Title";
 import { TextInput } from "../../TextInput/TextInput";
 import { Button } from "../../Button/Button";
 import { faGrid, faList } from "@fortawesome/pro-light-svg-icons";
-import { CommunityInfo } from "./CommunityInfo/CommunityInfo";
+import { MetaItem } from "../../MetaItem/MetaItem";
+import { formatInteger } from "../../../utils/utils";
+import {
+  faBoxOpen,
+  faDownload,
+  faServer,
+} from "@fortawesome/pro-regular-svg-icons";
+import { Link } from "../../Link/Link";
+import { faDiscord } from "@fortawesome/free-brands-svg-icons";
+import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
+import { CommunityImage } from "../../CommunityImage/CommunityImage";
 
 export interface PackageListLayoutProps {
-  isLoading: boolean;
+  isLoading?: boolean;
   communityId: string;
   packageData?: PackagePreview[];
 }
@@ -38,7 +48,7 @@ export interface PackageListLayoutProps {
  * Cyberstorm PackageList Layout
  */
 export function PackageListLayout(props: PackageListLayoutProps) {
-  const { communityId, packageData, isLoading } = props;
+  const { communityId, packageData, isLoading = false } = props;
 
   const [order, setOrder] = useState("1");
   const [page, setPage] = useState(1);
@@ -64,17 +74,47 @@ export function PackageListLayout(props: PackageListLayoutProps) {
         </BreadCrumbs>
       }
       header={
-        <CommunityInfo
+        <PageHeader
           title={communityData.name}
           description={communityData.description}
-          imageSource={
-            communityData.imageSource
-              ? communityData.imageSource
-              : "/images/game.png"
+          image={
+            <CommunityImage
+              src={
+                communityData.imageSource
+                  ? communityData.imageSource
+                  : "/images/game.png"
+              }
+            />
           }
-          packageCount={communityData.packageCount}
-          downloadCount={communityData.downloadCount}
-          serverCount={communityData.serverCount}
+          meta={[
+            <MetaItem
+              key="meta-packages"
+              label={formatInteger(communityData.packageCount) + " Packages"}
+              icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
+              colorScheme="tertiary"
+              size="large"
+            />,
+            <MetaItem
+              key="meta-downloads"
+              label={formatInteger(communityData.downloadCount) + " Downloads"}
+              icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
+              colorScheme="tertiary"
+              size="large"
+            />,
+            <MetaItem
+              key="meta-servers"
+              label={formatInteger(communityData.serverCount) + " Servers"}
+              icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
+              colorScheme="tertiary"
+              size="large"
+            />,
+            <Link
+              key="meta-link"
+              leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
+              label="Join our community"
+              externalUrl="https://discord.gg/5MbXZvd"
+            />,
+          ]}
         />
       }
       leftSidebarContent={<FilterItemList filterData={filterData} />}
