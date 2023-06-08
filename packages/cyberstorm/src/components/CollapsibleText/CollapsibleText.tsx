@@ -1,3 +1,4 @@
+"use client";
 import styles from "./CollapsibleText.module.css";
 import { ReactElement, useState } from "react";
 import { Button } from "../Button/Button";
