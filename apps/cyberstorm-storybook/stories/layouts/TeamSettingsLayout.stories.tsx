@@ -7,13 +7,12 @@ const meta = {
   component: TeamSettingsLayout,
 } as ComponentMeta<typeof TeamSettingsLayout>;
 
-const Template: ComponentStory<typeof TeamSettingsLayout> = (args) => (
+const Template: ComponentStory<typeof TeamSettingsLayout> = () => (
   <div>
     <TeamSettingsLayout teamId="team" />
   </div>
 );
 
 const DefaultTeamSettingsLayout = Template.bind({});
-DefaultTeamSettingsLayout.args = {};
 
 export { meta as default, DefaultTeamSettingsLayout as TeamSettings };

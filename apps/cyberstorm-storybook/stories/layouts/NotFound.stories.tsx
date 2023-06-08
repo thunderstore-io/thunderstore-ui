@@ -14,6 +14,5 @@ const Template: ComponentStory<typeof NotFoundLayout> = () => (
 );
 
 const DefaultNotFoundLayout = Template.bind({});
-DefaultNotFoundLayout.args = {};
 
 export { meta as default, DefaultNotFoundLayout as NotFound };

@@ -7,15 +7,12 @@ const meta = {
   component: SettingsLayout,
 } as ComponentMeta<typeof SettingsLayout>;
 
-const defaultArgs = {};
-
-const Template: ComponentStory<typeof SettingsLayout> = (args) => (
+const Template: ComponentStory<typeof SettingsLayout> = () => (
   <div>
-    <SettingsLayout {...args} />
+    <SettingsLayout userId="user" />
   </div>
 );
 
 const DefaultSettingsLayout = Template.bind({});
-DefaultSettingsLayout.args = { ...defaultArgs };
 
 export { meta as default, DefaultSettingsLayout as Settings };

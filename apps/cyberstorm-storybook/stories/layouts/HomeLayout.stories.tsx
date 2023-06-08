@@ -14,6 +14,5 @@ const Template: ComponentStory<typeof HomeLayout> = () => (
 );
 
 const DefaultHomeLayout = Template.bind({});
-DefaultHomeLayout.args = {};
 
 export { meta as default, DefaultHomeLayout as Home };

@@ -101,7 +101,7 @@ function getUserData(userId: string) {
 }
 
 function getUserMeta(userData: User) {
-  let userMeta = [];
+  const userMeta = [];
   if (userData.gitHubLink) {
     userMeta.push(
       <Link

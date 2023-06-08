@@ -7,13 +7,12 @@ const meta = {
   component: UserProfileLayout,
 } as ComponentMeta<typeof UserProfileLayout>;
 
-const Template: ComponentStory<typeof UserProfileLayout> = (args) => (
+const Template: ComponentStory<typeof UserProfileLayout> = () => (
   <div>
     <UserProfileLayout userId="user" />
   </div>
 );
 
 const DefaultUserProfileLayout = Template.bind({});
-DefaultUserProfileLayout.args = {};
 
 export { meta as default, DefaultUserProfileLayout as UserProfile };

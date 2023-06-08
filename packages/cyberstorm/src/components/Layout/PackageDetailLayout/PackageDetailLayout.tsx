@@ -59,7 +59,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
 
   const [currentTab, setCurrentTab] = useState(1);
 
-  let packageDetailsMeta = [];
+  const packageDetailsMeta = [];
   if (packageData.author) {
     packageDetailsMeta.push(
       <TeamLink team={packageData.team.name}>

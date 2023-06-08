@@ -39,7 +39,7 @@ import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { CommunityImage } from "../../CommunityImage/CommunityImage";
 
 export interface PackageListLayoutProps {
-  isLoading: boolean;
+  isLoading?: boolean;
   communityId: string;
   packageData?: PackagePreview[];
 }
@@ -48,7 +48,7 @@ export interface PackageListLayoutProps {
  * Cyberstorm PackageList Layout
  */
 export function PackageListLayout(props: PackageListLayoutProps) {
-  const { communityId, packageData, isLoading } = props;
+  const { communityId, packageData, isLoading = false } = props;
 
   const [order, setOrder] = useState("1");
   const [page, setPage] = useState(1);
@@ -88,24 +88,28 @@ export function PackageListLayout(props: PackageListLayoutProps) {
           }
           meta={[
             <MetaItem
+              key="meta-packages"
               label={formatInteger(communityData.packageCount) + " Packages"}
               icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
               colorScheme="tertiary"
               size="large"
             />,
             <MetaItem
+              key="meta-downloads"
               label={formatInteger(communityData.downloadCount) + " Downloads"}
               icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
               colorScheme="tertiary"
               size="large"
             />,
             <MetaItem
+              key="meta-servers"
               label={formatInteger(communityData.serverCount) + " Servers"}
               icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
               colorScheme="tertiary"
               size="large"
             />,
             <Link
+              key="meta-link"
               leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
               label="Join our community"
               externalUrl="https://discord.gg/5MbXZvd"

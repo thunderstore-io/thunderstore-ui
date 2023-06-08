@@ -74,32 +74,35 @@ const firstTableDataRows = [
 const secondTableDataRows = [
   [
     "name",
-    <FontAwesomeIcon icon={faCheck} fixedWidth />,
+    <FontAwesomeIcon key="icon-1" icon={faCheck} fixedWidth />,
     "Name of the mod, no spaces. Allowed characters:-",
-    <TextInput value='"Some_Mod"' />,
+    <TextInput key="textInput-1" value='"Some_Mod"' />,
   ],
   [
     "description",
-    <FontAwesomeIcon icon={faCheck} fixedWidth />,
+    <FontAwesomeIcon key="icon-2" icon={faCheck} fixedWidth />,
     "A short description of the mod, shown on the mod list. Max 250 characters.",
-    <TextInput value='"Hello world"' />,
+    <TextInput key="textInput-2" value='"Hello world"' />,
   ],
   [
     "version number",
-    <FontAwesomeIcon icon={faCheck} fixedWidth />,
+    <FontAwesomeIcon key="icon-3" icon={faCheck} fixedWidth />,
     "Version number of the mod, following the semantic version format Major.Minor.Patch.",
-    <TextInput value='"1.3.2"' />,
+    <TextInput key="textInput-3" value='"1.3.2"' />,
   ],
   [
     "dependencies",
-    <FontAwesomeIcon icon={faCheck} fixedWidth />,
+    <FontAwesomeIcon key="icon-4" icon={faCheck} fixedWidth />,
     "List of other packages that are required for this package to function",
-    <TextInput value='["MythicManiac-TestMod-1.1.0", "SomeAuthor-SomePackage-1.0.0"]' />,
+    <TextInput
+      key="textInput-4"
+      value='["MythicManiac-TestMod-1.1.0", "SomeAuthor-SomePackage-1.0.0"]'
+    />,
   ],
   [
     "website_url",
-    <FontAwesomeIcon icon={faCheck} fixedWidth />,
+    <FontAwesomeIcon key="icon-5" icon={faCheck} fixedWidth />,
     "URL of the mod's website (e.g. GitHub repo). Can be an empty string.",
-    <TextInput value='"https://example.com/"' />,
+    <TextInput key="textInput-5" value='"https://example.com/"' />,
   ],
 ];

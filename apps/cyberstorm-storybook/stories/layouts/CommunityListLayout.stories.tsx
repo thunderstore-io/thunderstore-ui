@@ -7,10 +7,6 @@ const meta = {
   component: CommunityListLayout,
 } as ComponentMeta<typeof CommunityListLayout>;
 
-const defaultArgs = {
-  title: "V Rising",
-};
-
 const Template: ComponentStory<typeof CommunityListLayout> = () => (
   <div>
     <CommunityListLayout />
@@ -18,6 +14,5 @@ const Template: ComponentStory<typeof CommunityListLayout> = () => (
 );
 
 const DefaultCommunityListLayout = Template.bind({});
-DefaultCommunityListLayout.args = defaultArgs;
 
 export { meta as default, DefaultCommunityListLayout as CommunityList };
