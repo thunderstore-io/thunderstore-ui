@@ -3,7 +3,7 @@ import { PackageListLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
-  title: "Cyberstorm/Layouts/PackageListLayout",
+  title: "Cyberstorm/Layouts/PackageList",
   component: PackageListLayout,
 } as ComponentMeta<typeof PackageListLayout>;
 
@@ -20,4 +20,4 @@ const Template: StoryFn<typeof PackageListLayout> = (args) => (
 const DefaultPackageListLayout = Template.bind({});
 DefaultPackageListLayout.args = defaultArgs;
 
-export { meta as default, DefaultPackageListLayout };
+export { meta as default, DefaultPackageListLayout as PackageList };

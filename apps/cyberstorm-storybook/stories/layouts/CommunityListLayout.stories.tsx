@@ -3,7 +3,7 @@ import { CommunityListLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
-  title: "Cyberstorm/Layouts/CommunityListLayout",
+  title: "Cyberstorm/Layouts/CommunityList",
   component: CommunityListLayout,
 } as ComponentMeta<typeof CommunityListLayout>;
 
@@ -20,4 +20,4 @@ const Template: ComponentStory<typeof CommunityListLayout> = () => (
 const DefaultCommunityListLayout = Template.bind({});
 DefaultCommunityListLayout.args = defaultArgs;
 
-export { meta as default, DefaultCommunityListLayout };
+export { meta as default, DefaultCommunityListLayout as CommunityList };

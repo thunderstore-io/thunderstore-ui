@@ -16,4 +16,4 @@ const Template: ComponentStory<typeof PrivacyPolicyLayout> = () => (
 const DefaultPrivacyPolicyLayout = Template.bind({});
 DefaultPrivacyPolicyLayout.args = {};
 
-export { meta as default, DefaultPrivacyPolicyLayout };
+export { meta as default, DefaultPrivacyPolicyLayout as PrivacyPolicy };

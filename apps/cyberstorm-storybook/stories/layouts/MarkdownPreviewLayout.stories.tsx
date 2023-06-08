@@ -16,4 +16,4 @@ const Template: ComponentStory<typeof MarkdownPreviewLayout> = () => (
 const DefaultMarkdownPreviewLayout = Template.bind({});
 DefaultMarkdownPreviewLayout.args = {};
 
-export { meta as default, DefaultMarkdownPreviewLayout };
+export { meta as default, DefaultMarkdownPreviewLayout as MarkdownPreview };

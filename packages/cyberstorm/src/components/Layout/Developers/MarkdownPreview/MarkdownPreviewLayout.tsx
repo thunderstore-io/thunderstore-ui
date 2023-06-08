@@ -4,6 +4,7 @@ import { TextInput } from "../../../TextInput/TextInput";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { MarkdownPreviewLink } from "../../../Links/Links";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
+import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 
 /**
  * Cyberstorm MarkdownPreview Layout
@@ -16,7 +17,7 @@ export function MarkdownPreviewLayout() {
           <MarkdownPreviewLink>Markdown Preview</MarkdownPreviewLink>
         </BreadCrumbs>
       }
-      header={<Title text="Markdown Preview" />}
+      header={<PageHeader title="Markdown Preview" />}
       mainContent={
         <>
           <SettingItem

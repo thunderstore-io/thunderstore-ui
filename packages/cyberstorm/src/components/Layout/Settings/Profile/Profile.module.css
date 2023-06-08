@@ -11,7 +11,7 @@
 
 .line {
   margin: var(--space--24) 0;
-  border-bottom: var(--border-width--px) solid var(--color-surface--2);
+  border-bottom: var(--border-width--px) solid var(--color-surface--4);
 }
 
 .avatarContent {

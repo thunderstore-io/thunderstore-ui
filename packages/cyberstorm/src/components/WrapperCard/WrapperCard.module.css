@@ -1,6 +1,6 @@
 .root {
   border: var(--space--px) solid;
-  border-color: var(--color-surface--2);
+  border-color: var(--color-surface--4);
   border-radius: var(--border-radius--8);
   overflow: clip;
 }
@@ -12,7 +12,7 @@
   align-items: center;
   padding: var(--space--8) var(--space--16);
   font-weight: 700;
-  background-color: var(--color-surface--2);
+  background-color: var(--color-surface--4);
 }
 
 .headerRight {

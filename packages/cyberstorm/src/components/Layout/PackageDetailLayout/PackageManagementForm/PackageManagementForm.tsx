@@ -1,7 +1,7 @@
 import styles from "./PackageManagementForm.module.css";
-import { Title } from "../../Title/Title";
-import { Tag } from "../../Tag/Tag";
-import { TextInput } from "../../TextInput/TextInput";
+import { Title } from "../../../Title/Title";
+import { Tag } from "../../../Tag/Tag";
+import { TextInput } from "../../../TextInput/TextInput";
 
 export interface PackageManagementFormProps {
   packageStatus?: string;

@@ -1,10 +1,10 @@
 import styles from "./ManifestValidatorLayout.module.css";
-import { Title } from "../../../Title/Title";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { TextInput } from "../../../TextInput/TextInput";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { ManifestValidatorLink } from "../../../Links/Links";
+import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 
 /**
  * Cyberstorm ManifestValidator Layout
@@ -24,7 +24,7 @@ export function ManifestValidatorLayout() {
           <ManifestValidatorLink>Manifest Validator</ManifestValidatorLink>
         </BreadCrumbs>
       }
-      header={<Title text="Manifest Validator" />}
+      header={<PageHeader title="Manifest Validator" />}
       mainContent={
         <SettingItem
           title="Manifest Validator"

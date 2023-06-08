@@ -13,7 +13,7 @@
   color: var(--color-text--tertiary);
   background-color: var(--bg-color);
 
-  --bg-color: var(--color-surface--1);
+  --bg-color: var(--color-surface--4);
 }
 
 .label {
@@ -23,17 +23,17 @@
 }
 
 .button__default {
-  --bg-color: var(--color-surface--1);
+  --bg-color: var(--color-surface--4);
 }
 
 .button__default:hover {
   color: var(--color-text--default);
 
-  --bg-color: var(--color-surface--3);
+  --bg-color: var(--color-surface--7);
 }
 
 .button__default_selected {
   color: var(--color-text--default);
 
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--color-surface--10);
 }

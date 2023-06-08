@@ -9,8 +9,9 @@
   --color-purple--5: rgb(33 33 79 / 1);
   --color-purple--6: rgb(39 39 93 / 1);
   --color-purple--7: rgb(48 48 115 / 1);
-  --color-purple--8: rgb(75 54 161 / 1);
-  --color-purple--alt: rgb(54 52 91 / 1);
+  --color-purple--8: rgb(55 55 134 / 1);
+  --color-purple--9: rgb(67 67 163 / 1);
+  --color-purple--10: rgb(75 54 161 / 1);
   --color-cyber-green--90: #d3ffef;
   --color-cyber-green--80: #91ffd8;
   --color-cyber-green--70: #7bffd0;
@@ -23,12 +24,12 @@
   --color-blue--90: #e8f6fe;
   --color-blue--80: #bbe3fc;
   --color-blue--70: #77c8f9;
-  --color-blue--60: #49b5f7;
+  --color-blue--60: rgb(73 181 247 / 1);
   --color-blue--50: #1ca3f5;
   --color-blue--40: #1682c4;
   --color-blue--30: #116293;
-  --color-blue--20: #0b4162;
-  --color-blue--10: #062131;
+  --color-blue--20: rgb(11 65 98 / 1);
+  --color-blue--10: rgb(6 33 49 / 1);
   --color-green--90: #dcf7ec;
   --color-green--80: #b9f0d9;
   --color-green--70: #96e8c5;

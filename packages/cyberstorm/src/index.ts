@@ -13,7 +13,6 @@ export * from "./components/MetaItem/MetaItem";
 export * from "./components/MetaInfoItem/MetaInfoItem";
 export * from "./components/MetaInfoItemList/MetaInfoItemList";
 export * from "./components/PackageCard/PackageCard";
-export * from "./components/PackageFlag/PackageFlag";
 export * from "./components/PackageIcon/PackageIcon";
 export * from "./components/Pagination/Pagination";
 export * from "./components/Pagination/PaginationButton";

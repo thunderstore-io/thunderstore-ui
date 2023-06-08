@@ -16,4 +16,4 @@ const Template: ComponentStory<typeof PackageFormatDocsLayout> = () => (
 const DefaultPackageFormatDocsLayout = Template.bind({});
 DefaultPackageFormatDocsLayout.args = {};
 
-export { meta as default, DefaultPackageFormatDocsLayout };
+export { meta as default, DefaultPackageFormatDocsLayout as PackageFormatDocs };

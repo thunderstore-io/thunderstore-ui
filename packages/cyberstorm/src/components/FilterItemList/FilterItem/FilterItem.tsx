@@ -1,7 +1,7 @@
 import styles from "./FilterItem.module.css";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faMinus, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import { Tag } from "../../Tag/Tag";
 
@@ -12,7 +12,7 @@ export interface FilterItemProps {
 }
 
 /**
- * Cyberstorm BackgroundImage
+ * Cyberstorm FilterItem
  */
 export function FilterItem(props: FilterItemProps) {
   const { label, count, checkBoxId } = props;

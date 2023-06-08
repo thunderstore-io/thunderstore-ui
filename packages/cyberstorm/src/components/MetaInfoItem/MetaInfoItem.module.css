@@ -10,7 +10,7 @@
   font: var(--font-body);
   font-weight: 700;
   font-size: var(--font-size--12);
-  background-color: var(--color-surface--2);
+  background-color: var(--color-surface--4);
 }
 
 .content {

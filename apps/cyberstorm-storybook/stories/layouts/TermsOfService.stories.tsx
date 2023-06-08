@@ -16,4 +16,4 @@ const Template: ComponentStory<typeof TermsOfServiceLayout> = () => (
 const DefaultTermsOfServiceLayout = Template.bind({});
 DefaultTermsOfServiceLayout.args = {};
 
-export { meta as default, DefaultTermsOfServiceLayout };
+export { meta as default, DefaultTermsOfServiceLayout as TermsOfService };

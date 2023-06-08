@@ -16,4 +16,7 @@ const Template: ComponentStory<typeof InternalServerErrorLayout> = () => (
 const DefaultInternalServerErrorLayout = Template.bind({});
 DefaultInternalServerErrorLayout.args = {};
 
-export { meta as default, DefaultInternalServerErrorLayout };
+export {
+  meta as default,
+  DefaultInternalServerErrorLayout as InternalServerError,
+};

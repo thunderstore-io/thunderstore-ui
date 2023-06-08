@@ -8,32 +8,25 @@
   align-items: center;
   justify-content: center;
   border: var(--border-width--2) solid var(--border-color);
-  border-color: ;
-  border-radius: 999em;
-  color: var(--text-color);
-
+  border-radius: var(--border-radius--8);
   font: var(--font-body);
   font-weight: 700;
   background-color: var(--bg-color);
 
   --text-color: var(--color-text--default);
-  --bg-color: var(--color-surface--3);
-  --border-color: transparent;
+  --bg-color: var(--color-surface--5);
+  --border-color: var(--color-surface--9);
+  --icon-color: var(--color-text--tertiary);
 
   cursor: default;
 }
 
-.root:hover {
-  --bg-color: var(--color-surface--0);
-  --border-color: var(--color-border);
-}
-
 .label {
-  text-transform: uppercase;
+  color: var(--text-color);
 }
 
 .icon {
-  color: var(--color-border);
+  color: var(--icon-color);
 }
 
 /* Different Tag sizes */
@@ -43,38 +36,40 @@
   font-size: var(--font-size--12);
 }
 
-.tiny:hover {
-  --bg-color: var(--color-surface--1) !important;
-  --border-color: transparent;
-}
-
 .small {
   padding: var(--space--4) var(--space--10);
   font-size: var(--font-size--10);
 }
 
 .medium {
-  padding: var(--space--6) var(--space--12);
+  padding: var(--space--6) var(--space--8);
   font-size: var(--font-size--12);
 }
 
-/* TODO: This css rule will change all icons to red, not just the x one
-    shown when isBoolean is true. Would be good to revisit when building
-     that functionality. This will become relevant once the package list
-      filtering is taken under construction. */
-
 /* Different Tag color schemes */
+.tag__default:hover {
+  --bg-color: var(--color-surface--7);
+}
+
+.tag__removable:hover {
+  --bg-color: var(--color-surface--7);
+}
+
+/* TODO: This css rule will change all icons to red, not just the x one
+    shown when colorScheme is "removable". Would be good to revisit when
+    building that functionality. This will become relevant once the package
+    list filtering is taken under construction. */
 .tag__removable:hover > .icon {
   color: var(--color-danger);
   cursor: pointer;
 }
 
-.tag__default {
-  --bg-color: var(--color-surface--2);
+.tag__static {
+  --border-color: transparent;
 }
 
 .tag__simple {
-  --bg-color: var(--color-surface--1);
+  --bg-color: var(--color-surface--4);
   --border-color: transparent;
   --text-color: var(--color-text--tertiary);
 }
@@ -89,4 +84,13 @@
   --bg-color: var(--color-green--10);
   --border-color: var(--color-green--50);
   --text-color: var(--color-green--50);
+}
+
+.tag__info {
+  --bg-color: var(--color-info-background);
+  --border-color: var(--color-info);
+  --text-color: var(--color-info);
+  --icon-color: var(--color-info);
+
+  border-width: var(--space--px);
 }

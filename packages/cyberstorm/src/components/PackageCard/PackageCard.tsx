@@ -9,7 +9,6 @@ import {
   faThumbtack,
 } from "@fortawesome/free-solid-svg-icons";
 import { Tag } from "../Tag/Tag";
-import { PackageFlag } from "../PackageFlag/PackageFlag";
 import { formatInteger } from "../../utils/utils";
 import { PackagePreview } from "../../schema";
 import { PackageLink } from "../Links/Links";
@@ -137,28 +136,31 @@ function getPackageFlags(
   const flagList: ReactNode[] = [];
   if (isPinned) {
     flagList.push(
-      <PackageFlag
+      <Tag
         key="flag_pinned"
         label="Pinned"
-        icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
+        colorScheme="info"
+        leftIcon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />
     );
   }
   if (isNsfw) {
     flagList.push(
-      <PackageFlag
+      <Tag
         key="flag_nsfw"
         label="NSFW"
-        icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
+        colorScheme="info"
+        leftIcon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />
     );
   }
   if (isDeprecated) {
     flagList.push(
-      <PackageFlag
+      <Tag
         key="flag_deprecated"
         label="Deprecated"
-        icon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
+        colorScheme="info"
+        leftIcon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
       />
     );
   }

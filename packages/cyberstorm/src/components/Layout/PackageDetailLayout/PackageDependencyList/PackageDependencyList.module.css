@@ -11,7 +11,7 @@
 }
 
 .item:hover {
-  background-color: var(--color-surface--1);
+  background-color: var(--color-surface--4);
 }
 
 .itemImage {

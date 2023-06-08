@@ -27,7 +27,7 @@ export function TabsButton(props: TabsButtonProps) {
       className={`${styles.root} ${getStyle(isSelected)}`}
       onClick={onClick}
     >
-      {icon}
+      {icon ? <div className={styles.icon}>{icon}</div> : null}
       {label ? <div className={styles.label}>{label}</div> : null}
     </button>
   );

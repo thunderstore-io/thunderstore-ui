@@ -7,7 +7,7 @@
   padding: var(--space--8) var(--space--16);
   border-radius: var(--border-radius--8);
   font-weight: 700;
-  background-color: var(--color-surface--1);
+  background-color: var(--color-surface--4);
 }
 
 .item {
@@ -18,7 +18,7 @@
 }
 
 .item:hover {
-  background-color: var(--color-surface--1);
+  background-color: var(--color-surface--4);
 }
 
 .itemImage {

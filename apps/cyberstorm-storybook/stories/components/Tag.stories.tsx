@@ -2,11 +2,7 @@ import { StoryFn, Meta } from "@storybook/react";
 import { Tag } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFlag,
-  faFaceDizzy,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faTag, faXmark } from "@fortawesome/pro-solid-svg-icons";
 
 export default {
   title: "Cyberstorm/Components/Tag",
@@ -15,27 +11,31 @@ export default {
 
 const Template: StoryFn<typeof Tag> = (args) => (
   <div style={{ display: "flex", gap: "0.25em" }}>
-    <Tag {...args} />
-    <Tag {...args} />
-    <Tag {...args} />
+    <Tag {...args} colorScheme="default" />
+    <Tag {...args} colorScheme="static" />
+    <Tag {...args} colorScheme="simple" />
+    <Tag {...args} colorScheme="success" />
+    <Tag {...args} colorScheme="removable" />
+    <Tag {...args} colorScheme="info" />
   </div>
 );
 
 const MinimalTag = Template.bind({});
 MinimalTag.args = {};
 
-const ReferenceTag = Template.bind({});
-ReferenceTag.args = {
+const DefaultTag = Template.bind({});
+DefaultTag.args = {
   label: "tag",
-  isRemovable: true,
   rightIcon: <FontAwesomeIcon fixedWidth icon={faXmark} />,
 };
 
-const IconTag = Template.bind({});
-IconTag.args = {
+const IconOnlyTag = Template.bind({});
+IconOnlyTag.args = {
+  leftIcon: <FontAwesomeIcon fixedWidth icon={faTag} />,
+};
+const TextOnlyTag = Template.bind({});
+TextOnlyTag.args = {
   label: "tag",
-  leftIcon: <FontAwesomeIcon fixedWidth icon={faFaceDizzy} />,
-  rightIcon: <FontAwesomeIcon fixedWidth icon={faFlag} />,
 };
 
 const SmallTag = Template.bind({});
@@ -45,4 +45,11 @@ SmallTag.args = {
   rightIcon: <FontAwesomeIcon fixedWidth icon={faXmark} />,
 };
 
-export { MinimalTag, ReferenceTag, IconTag, SmallTag };
+const TinyTag = Template.bind({});
+TinyTag.args = {
+  label: "tag",
+  size: "tiny",
+  rightIcon: <FontAwesomeIcon fixedWidth icon={faXmark} />,
+};
+
+export { MinimalTag, DefaultTag, IconOnlyTag, TextOnlyTag, SmallTag, TinyTag };

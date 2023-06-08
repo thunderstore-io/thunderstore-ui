@@ -17,7 +17,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space--6) var(--space--16);
-  border-bottom: var(--space--px) var(--color-border) solid;
+  border-bottom: var(--space--px) var(--color-surface--4) solid;
   background-color: var(--color-background-alpha-90);
 
   backdrop-filter: blur(var(--blur-default));

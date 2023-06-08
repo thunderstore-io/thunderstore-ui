@@ -6,7 +6,7 @@
 }
 
 .root:hover {
-  background-color: var(--color-surface--1);
+  background-color: var(--color-surface--4);
 }
 
 .checkBoxContainer {
@@ -26,7 +26,7 @@
   background-color: var(--mark-color);
   transition: 200ms;
 
-  --mark-color: var(--color-surface--2);
+  --mark-color: var(--color-surface--4);
 }
 
 .label {
