@@ -1,0 +1,68 @@
+.listTopNavigation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+  margin-bottom: var(--space--32);
+}
+
+.displayAndSort {
+  display: flex;
+  justify-content: space-between;
+}
+
+.displayButtons {
+  display: flex;
+  gap: var(--gap--8);
+}
+
+.sort {
+  display: flex;
+  gap: var(--gap--16);
+}
+
+.sortLabel {
+  align-self: center;
+  color: var(--color-text--tertiary);
+  font-weight: 700;
+  font-size: var(--font-size--14);
+}
+
+.showing {
+  color: var(--color-text--tertiary);
+  font: var(--font-body);
+  font-size: var(--font-size--14);
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--16);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: var(--gap--16);
+}
+
+.filterItemList {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 20%;
+}
+
+.packageCardList {
+  display: grid;
+  flex-flow: row wrap;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin-bottom: var(--space--24);
+}
+
+.selectedTags {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space--8);
+  height: var(--space--24);
+}

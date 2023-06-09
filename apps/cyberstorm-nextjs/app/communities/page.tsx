@@ -1,3 +1,4 @@
+"use client";
 import { CommunityListLayout } from "@thunderstore/cyberstorm";
 
 export default function Page() {

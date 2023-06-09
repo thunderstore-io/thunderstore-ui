@@ -92,7 +92,7 @@ export function PackageCard(props: PackageCardProps) {
           {packageData.categories.map((c, index) => (
             <Tag
               key={`category_${c}_${index}`}
-              label={c}
+              label={c.name}
               size="small"
               colorScheme="default"
             />

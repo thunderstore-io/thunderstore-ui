@@ -1,20 +1,38 @@
 import { z } from "zod";
+import {
+  GetCommunities,
+  getCommunities,
+} from "./cyberstormMethods/communities";
+import { GetCommunity, getCommunity } from "./cyberstormMethods/community";
+import { GetPackage, getPackage } from "./cyberstormMethods/package";
+import {
+  getPackageListings,
+  GetPackageListings,
+} from "./cyberstormMethods/packageListings";
+import { getTeam, GetTeam } from "./cyberstormMethods/team";
+import { GetUser, getUser } from "./cyberstormMethods/user";
 
 import { DapperError } from "./errors";
 import {
-  getCommunityPackageListing,
-  GetCommunityPackageListing,
+  getOldCommunityPackageListing,
+  GetOldCommunityPackageListing,
 } from "./methods/communityPackageList";
 import { getFrontpage, GetFrontpage } from "./methods/frontpage";
-import { getPackage, GetPackage } from "./methods/package";
+import { GetOldPackage, getOldPackage } from "./methods/package";
 import { QsArray, serializeQueryString } from "./queryString";
 
 export interface DapperInterface {
   sessionId?: string;
 
-  getCommunityPackageListing: GetCommunityPackageListing;
-  getFrontpage: GetFrontpage;
+  getPackageListings: GetPackageListings;
+  getCommunities: GetCommunities;
+  getCommunity: GetCommunity;
   getPackage: GetPackage;
+  getTeam: GetTeam;
+  getUser: GetUser;
+  getOldCommunityPackageListing: GetOldCommunityPackageListing;
+  getFrontpage: GetFrontpage;
+  getOldPackage: GetOldPackage;
 }
 
 export class Dapper implements DapperInterface {
@@ -87,10 +105,26 @@ export class Dapper implements DapperInterface {
     return transform(cleanedData);
   }
 
+  protected async dummyAndProcess<Schema extends z.ZodTypeAny, ReturnType>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    dummyFunc: (props: any) => ReturnType,
+    queryParams: QsArray,
+    transform: (cleanedData: z.infer<Schema>) => ReturnType
+  ): Promise<ReturnType> {
+    const cleanedData = await dummyFunc(queryParams);
+    return transform(cleanedData);
+  }
+
   /**
    * Methods implementing the DapperInterface.
    */
-  getCommunityPackageListing = getCommunityPackageListing;
-  getFrontpage = getFrontpage;
+  getPackageListings = getPackageListings;
+  getCommunities = getCommunities;
+  getCommunity = getCommunity;
   getPackage = getPackage;
+  getTeam = getTeam;
+  getUser = getUser;
+  getOldCommunityPackageListing = getOldCommunityPackageListing;
+  getFrontpage = getFrontpage;
+  getOldPackage = getOldPackage;
 }

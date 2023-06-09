@@ -3,6 +3,7 @@ import React, { ReactNode, useRef } from "react";
 import styles from "./Tag.module.css";
 
 export interface TagProps {
+  key?: string;
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;

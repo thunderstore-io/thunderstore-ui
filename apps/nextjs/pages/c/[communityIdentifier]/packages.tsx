@@ -83,7 +83,7 @@ export default function CommunityPackages(props: PageProps): JSX.Element {
 
   const loadMore = useCallback(
     async (page: number) => {
-      const response = await dapper.getCommunityPackageListing(
+      const response = await dapper.getOldCommunityPackageListing(
         communityIdentifier,
         ordering,
         page,
@@ -256,7 +256,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   const dapper = new Dapper(API_DOMAIN);
-  const pageProps = await dapper.getCommunityPackageListing(
+  const pageProps = await dapper.getOldCommunityPackageListing(
     communityIdentifier,
     urlQuery.getString(context.query.ordering) ?? "last-updated",
     1, // Page number

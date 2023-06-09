@@ -1,3 +1,8 @@
+export interface Category {
+  name: string;
+  slug: string;
+}
+
 export interface Community {
   name: string;
   namespace: string;
@@ -7,7 +12,7 @@ export interface Community {
   downloadCount: number;
   serverCount: number;
   description?: string;
-  gitHubLink?: string;
+  discordLink?: string;
 }
 
 export type CommunityPreview = Pick<
@@ -20,14 +25,28 @@ export type CommunityPreview = Pick<
   | "serverCount"
 >;
 
-export interface Package {
+export interface PackageVersion {
+  version: string;
+  changelog: string;
+  uploadDate: string;
+  downloadCount: number;
+}
+
+export interface PackageDependency {
+  name: string;
+  namespace: string;
+  community?: string;
+  shortDescription: string;
+  imageSource?: string;
+  version: string;
+}
+
+export interface PackagePreview {
   name: string;
   namespace: string;
   community: string;
   description?: string;
-  shortDescription?: string;
   imageSource?: string;
-  additionalImages?: string[];
   downloadCount: number;
   likes: number;
   size: number;
@@ -36,67 +55,90 @@ export interface Package {
   isPinned?: boolean;
   isNsfw?: boolean;
   isDeprecated?: boolean;
-  gitHubLink?: string;
-  donationLink?: string;
-  firstUploaded: string;
-  dependencyString: string;
-  categories: string[]; // Category ids
-  dependencies?: PackagePreview[];
-  dependants?: string[]; // Package ids
-  team: Team;
+  categories: Category[]; // Category ids
 }
 
-export type PackagePreview = Pick<
-  Package,
-  | "name"
-  | "namespace"
-  | "community"
-  | "description"
-  | "imageSource"
-  | "downloadCount"
-  | "likes"
-  | "size"
-  | "author"
-  | "lastUpdated"
-  | "isPinned"
-  | "isNsfw"
-  | "isDeprecated"
-  | "categories"
+export interface Package extends PackagePreview {
+  shortDescription?: string;
+  additionalImages?: string[];
+  gitHubLink?: string;
+  donationLink?: string;
+  firstUploaded?: string;
+  dependencyString: string;
+  dependencies?: PackageDependency[];
+  dependantCount: number; // Package ids
+  team: PackageTeam;
+  versions?: PackageVersion[];
+}
+
+export interface Server {
+  name: string;
+  namespace: string;
+  community: string;
+  description?: string;
+  shortDescription?: string;
+  imageSource?: string;
+  likes: number;
+  isPvp: boolean;
+  hasPassword: boolean;
+  address: string;
+  author: string;
+  packageCount: number;
+  dynamicLinks?: dynamicLink[];
+}
+
+export type ServerPreview = Pick<
+  Server,
+  "name" | "imageSource" | "isPvp" | "hasPassword" | "packageCount"
 >;
 
 export interface Badge {
   name: string;
-  namespace: string;
   description: string;
   imageSource: string;
+}
+
+export interface BadgeSetting extends Badge {
+  enabled: boolean;
 }
 
 export interface Achievement {
   name: string;
-  namespace: string;
   description: string;
   imageSource: string;
 }
 
-export interface Team {
+export interface AchievementSetting extends Achievement {
+  enabled: boolean;
+}
+
+export interface dynamicLink {
+  title: string;
+  url: string;
+}
+
+export interface PackageTeam {
   name: string;
-  namespace: string;
+  members: TeamMember[];
+}
+
+export interface Team extends PackageTeam {
   imageSource: string;
   description: string;
   about: string;
-  members: TeamMember[];
+  dynamicLinks?: dynamicLink[];
+  donationLink?: string;
+}
+
+export interface TeamSettings extends Team {
   serviceAccounts: string[]; // ServiceAccount ids
 }
 
 export type TeamPreview = Pick<Team, "name" | "namespace" | "members">;
 
-export interface Category {
-  slug: string;
-  label: string;
-}
-
 export interface TeamMember {
-  user: User;
+  user: string; // User id
+  imageSource?: string;
   role: string;
 }
 
@@ -105,20 +147,51 @@ export interface ServiceAccount {
   lastUsed: string;
 }
 
+export interface Connection {
+  name: string;
+  connectedUsername: string;
+  imageSource: string;
+  enabled: boolean;
+}
+
 export interface User {
   name: string;
-  namespace: string;
-  imageSource: string;
+  imageSource?: string;
   description?: string;
   about?: string;
-  gitHubLink?: string;
-  discordLink?: string;
-  twitterLink?: string;
   accountCreated?: string;
   lastActive?: string;
-  mods?: string[]; // Package ids
+  dynamicLinks?: dynamicLink[];
+  achievements?: Achievement[];
+  showAchievementsOnProfile?: boolean;
+  badges?: Badge[];
+  showBadgesOnProfile?: boolean;
+}
+
+export interface UserSettings extends User {
+  achievements?: AchievementSetting[];
+  badges?: BadgeSetting[];
+  connections?: Connection[];
 }
 
 // TODO: figure out
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface UserSubscription {}
+
+export interface Receipt {
+  datetime: string;
+  paymentId: string;
+  cost: string;
+  company: string;
+  subscriptionName: string;
+  paymentMethod: string;
+}
+
+export interface UserSubscription {
+  name: string;
+  cost: string;
+  subscriptionId: string;
+  isActive: boolean;
+  imageSource: string;
+  renewDate: string;
+}

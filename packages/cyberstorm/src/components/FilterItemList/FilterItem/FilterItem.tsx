@@ -2,37 +2,49 @@ import styles from "./FilterItem.module.css";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
 import { Tag } from "../../Tag/Tag";
 
 export interface FilterItemProps {
   label: string;
   count: number;
-  checkBoxId: string;
+  value?: boolean;
+  setChecked?: (label: string, value: boolean | undefined) => void;
 }
 
 /**
  * Cyberstorm FilterItem
  */
 export function FilterItem(props: FilterItemProps) {
-  const { label, count, checkBoxId } = props;
-
-  const [checked, setChecked] = React.useState<boolean | undefined>(undefined);
-
+  const { label, count, value = undefined, setChecked } = props;
   return (
     <div className={styles.root}>
       <div className={styles.checkBoxContainer}>
         <Checkbox.Root
-          id={checkBoxId}
-          checked={checked}
-          onCheckedChange={() => setChecked(getNextValue(checked))}
-          className={`${styles.checkBoxRoot} ${getStyle(checked)}`}
+          id={"categoryCheckbox" + label}
+          checked={value}
+          onCheckedChange={() => {
+            if (setChecked) {
+              console.log(value);
+              return setChecked(label, getNextValue(value));
+            } else {
+              return null;
+            }
+          }}
+          className={`${styles.checkBoxRoot} ${getStyle(value)}`}
         >
-          {getIcon(checked)}
+          <Checkbox.Indicator>
+            {value === undefined && <></>}
+            {value === true && (
+              <FontAwesomeIcon className={styles.icon} icon={faCheck} />
+            )}
+            {value === false && (
+              <FontAwesomeIcon className={styles.icon} icon={faXmark} />
+            )}
+          </Checkbox.Indicator>
         </Checkbox.Root>
         <label
-          className={`${styles.label} ${getStyle(checked)}`}
-          htmlFor={checkBoxId}
+          className={`${styles.label} ${getStyle(value)}`}
+          htmlFor={"categoryCheckbox" + label}
         >
           {label}
         </label>
@@ -46,11 +58,16 @@ export function FilterItem(props: FilterItemProps) {
 
 FilterItem.displayName = "FilterItem";
 
-function getNextValue(checked: boolean | undefined): boolean | undefined {
-  if (checked === undefined) {
+function getNextValue(value: boolean | undefined): boolean | undefined {
+  if (value !== undefined) {
+    if (value === true) {
+      return false;
+    } else {
+      return undefined;
+    }
+  } else {
     return true;
   }
-  return checked ? false : undefined;
 }
 
 const getStyle = (checked: boolean | undefined) => {
@@ -58,15 +75,4 @@ const getStyle = (checked: boolean | undefined) => {
     return null;
   }
   return checked ? styles.yes : styles.no;
-};
-
-const getIcon = (checked: boolean | undefined) => {
-  if (checked === undefined) {
-    return null;
-  }
-  return checked ? (
-    <FontAwesomeIcon className={styles.icon} icon={faCheck} />
-  ) : (
-    <FontAwesomeIcon className={styles.icon} icon={faXmark} />
-  );
 };
