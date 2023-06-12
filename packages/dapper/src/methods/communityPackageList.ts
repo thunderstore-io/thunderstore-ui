@@ -24,7 +24,7 @@ interface CommunityPackageListing {
 }
 
 // Dapper method type, defining the parameters required to fetch the data.
-export type GetCommunityPackageListing = (
+export type GetOldCommunityPackageListing = (
   identifier: string,
   ordering?: string,
   page?: number,
@@ -49,7 +49,7 @@ const transform = (
 });
 
 // Method implementation for Dapper class.
-export const getCommunityPackageListing: GetCommunityPackageListing =
+export const getOldCommunityPackageListing: GetOldCommunityPackageListing =
   async function (
     this: Dapper,
     identifier,

@@ -43,9 +43,12 @@ import {
 } from "@fortawesome/pro-regular-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { PackageImages } from "./PackageImages/PackageImages";
+import { useDapper } from "@thunderstore/dapper";
 
 export interface PackageDetailLayoutProps {
-  packageId: string;
+  community: string;
+  namespace: string;
+  packageName: string;
   managementDialogIsOpen?: boolean;
 }
 
@@ -53,8 +56,14 @@ export interface PackageDetailLayoutProps {
  * Cyberstorm PackageDetail Layout
  */
 export function PackageDetailLayout(props: PackageDetailLayoutProps) {
-  const { packageId, managementDialogIsOpen = false } = props;
-  const packageData = getPackageData(packageId);
+  const {
+    managementDialogIsOpen = false,
+    community,
+    namespace,
+    packageName,
+  } = props;
+  const dapper = useDapper();
+  const packageData = dapper.getPackage(community, namespace, packageName);
   const metaInfoData = getMetaInfoData(packageData);
 
   const [currentTab, setCurrentTab] = useState(1);

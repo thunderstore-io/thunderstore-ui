@@ -101,14 +101,14 @@ const transform = (viewData: z.infer<typeof schema>): PackageDetails => ({
 });
 
 // Dapper method type, defining the parameters required to fetch the data.
-export type GetPackage = (
+export type GetOldPackage = (
   communityIdentifier: string,
   namespace: string,
   packageName: string
 ) => Promise<PackageDetails>;
 
 // Method implementation for Dapper class.
-export const getPackage: GetPackage = async function (
+export const getOldPackage: GetOldPackage = async function (
   this: Dapper,
   communityIdentifier: string,
   namespace: string,
