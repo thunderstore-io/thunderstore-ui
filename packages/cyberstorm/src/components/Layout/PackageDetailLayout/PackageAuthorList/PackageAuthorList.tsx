@@ -23,19 +23,17 @@ function PackageAuthorListItem(props: PackageAuthorListItemProps) {
   const { teamMember } = props;
 
   return (
-    <UserLink user={teamMember.user.name}>
+    <UserLink user={teamMember.user}>
       <div className={styles.item}>
         <img
           src={
-            teamMember.user.imageSource
-              ? teamMember.user.imageSource
-              : defaultImageSrc
+            teamMember.imageSource ? teamMember.imageSource : defaultImageSrc
           }
           className={styles.itemImage}
-          alt={teamMember.user.name}
+          alt={teamMember.user}
         />
         <div>
-          <div className={styles.itemTitle}>{teamMember.user.name}</div>
+          <div className={styles.itemTitle}>{teamMember.user}</div>
           <div className={styles.itemDescription}>{teamMember.role}</div>
         </div>
       </div>

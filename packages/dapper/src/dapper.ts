@@ -109,7 +109,7 @@ export class Dapper implements DapperInterface {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dummyFunc: (props: any) => ReturnType,
     queryParams: QsArray,
-    transform: (cleanedData: z.infer<Schema>) => ReturnType
+    transform: (cleanedData: z.infer<Schema>) => z.infer<Schema>
   ): Promise<ReturnType> {
     const cleanedData = await dummyFunc(queryParams);
     return transform(cleanedData);

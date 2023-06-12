@@ -48,8 +48,8 @@
 
 .filterItemList {
   display: flex;
-  flex-direction: column;
   flex-basis: 20%;
+  flex-direction: column;
 }
 
 .packageCardList {

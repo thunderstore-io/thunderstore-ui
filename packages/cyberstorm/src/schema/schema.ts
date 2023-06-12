@@ -35,7 +35,7 @@ export interface PackageVersion {
 export interface PackageDependency {
   name: string;
   namespace: string;
-  community?: string;
+  community: string;
   shortDescription: string;
   imageSource?: string;
   version: string;
@@ -62,7 +62,6 @@ export interface Package extends PackagePreview {
   shortDescription?: string;
   additionalImages?: string[];
   gitHubLink?: string;
-  donationLink?: string;
   firstUploaded?: string;
   dependencyString: string;
   dependencies?: PackageDependency[];
@@ -123,9 +122,9 @@ export interface PackageTeam {
 }
 
 export interface Team extends PackageTeam {
-  imageSource: string;
-  description: string;
-  about: string;
+  imageSource?: string;
+  description?: string;
+  about?: string;
   dynamicLinks?: dynamicLink[];
   donationLink?: string;
 }
@@ -134,7 +133,7 @@ export interface TeamSettings extends Team {
   serviceAccounts: string[]; // ServiceAccount ids
 }
 
-export type TeamPreview = Pick<Team, "name" | "namespace" | "members">;
+export type TeamPreview = Pick<Team, "name" | "members">;
 
 export interface TeamMember {
   user: string; // User id
@@ -159,8 +158,8 @@ export interface User {
   imageSource?: string;
   description?: string;
   about?: string;
-  accountCreated?: string;
-  lastActive?: string;
+  accountCreated: string;
+  lastActive: string;
   dynamicLinks?: dynamicLink[];
   achievements?: Achievement[];
   showAchievementsOnProfile?: boolean;

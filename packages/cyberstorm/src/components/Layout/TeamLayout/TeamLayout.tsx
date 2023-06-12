@@ -20,6 +20,9 @@ import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { Avatar } from "../../Avatar/Avatar";
 
+// TODO: actual placeholder
+const defaultImageSrc = "/images/logo.png";
+
 export interface TeamLayoutProps {
   teamId: string;
 }
@@ -29,6 +32,27 @@ export interface TeamLayoutProps {
  */
 export function TeamLayout(props: TeamLayoutProps) {
   const { teamId } = props;
+
+  const filterItems = {
+    mods: { value: undefined, label: "Mods", count: 248 },
+    tools: { value: undefined, label: "Tools", count: 18 },
+    libraries: { value: undefined, label: "Libraries", count: 84 },
+    modpacks: { value: undefined, label: "Modpacks", count: 16 },
+    skins: { value: undefined, label: "Skins", count: 127 },
+    maps: { value: undefined, label: "Maps", count: 98 },
+    tweaks: { value: undefined, label: "Tweaks", count: 227 },
+    items: { value: undefined, label: "Items", count: 235 },
+    language: { value: undefined, label: "Language", count: 5 },
+    audio: { value: undefined, label: "Audio", count: 22 },
+    enemies: { value: undefined, label: "Enemies", count: 76 },
+  };
+  const [, setFilterDummySetter] = useState<{
+    [key: string]: {
+      label: string;
+      count: number;
+      value: boolean | undefined;
+    };
+  }>(filterItems);
 
   const [order, setOrder] = useState("1");
   const [page, setPage] = useState(1);
@@ -46,11 +70,23 @@ export function TeamLayout(props: TeamLayoutProps) {
       header={
         <PageHeader
           title={teamData.name}
-          image={<Avatar size="large" src={teamData.imageSource} />}
+          image={
+            <Avatar
+              size="large"
+              src={
+                teamData.imageSource ? teamData.imageSource : defaultImageSrc
+              }
+            />
+          }
           description={teamData.description}
         />
       }
-      leftSidebarContent={<FilterItemList filterData={filterData} />}
+      leftSidebarContent={
+        <FilterItemList
+          filterItems={filterItems}
+          filterItemsSetter={setFilterDummySetter}
+        />
+      }
       mainContent={
         <div className={styles.content}>
           <SearchFilter tags={topFilterTags} />
@@ -109,20 +145,6 @@ const selectOptions = [
     label: "Top rated",
     leftIcon: <FontAwesomeIcon fixedWidth icon={faThumbsUp} />,
   },
-];
-
-const filterData = [
-  { key: "1", label: "Mods", count: 248 },
-  { key: "2", label: "Tools", count: 18 },
-  { key: "3", label: "Libraries", count: 84 },
-  { key: "4", label: "Modpacks", count: 16 },
-  { key: "5", label: "Skins", count: 127 },
-  { key: "6", label: "Maps", count: 98 },
-  { key: "7", label: "Tweaks", count: 227 },
-  { key: "8", label: "Items", count: 235 },
-  { key: "9", label: "Language", count: 5 },
-  { key: "10", label: "Audio", count: 22 },
-  { key: "11", label: "Enemies", count: 76 },
 ];
 
 const topFilterTags: string[] = [

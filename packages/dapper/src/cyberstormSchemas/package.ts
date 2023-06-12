@@ -5,7 +5,7 @@ import { isDate } from "./utils";
 export const packageDependencySchema = z.object({
   name: z.string(),
   namespace: z.string(),
-  community: z.optional(z.string()),
+  community: z.string(),
   shortDescription: z.string(),
   imageSource: z.optional(z.string()),
   version: z.string(),
@@ -44,7 +44,6 @@ export const packageSchema = packagePreviewSchema.extend({
   description: z.optional(z.string()),
   additionalImages: z.optional(z.array(z.string())),
   gitHubLink: z.optional(z.string()),
-  donationLink: z.optional(z.string()),
   firstUploaded: z.optional(z.string().refine(isDate)),
   dependencyString: z.string(),
   dependencies: z.optional(z.array(packageDependencySchema)),

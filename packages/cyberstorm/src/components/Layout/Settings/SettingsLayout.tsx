@@ -4,15 +4,14 @@ import styles from "./SettingsLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { SettingsLink } from "../../Links/Links";
 import { Tabs } from "../../Tabs/Tabs";
-import { Title } from "../../Title/Title";
 import { Profile } from "./Profile/Profile";
 import { Achievements } from "./Achievements/Achievements";
 import { Connections } from "./Connections/Connections";
 import { Subscriptions } from "./Subscriptions/Subscriptions";
 import { Account } from "./Account/Account";
-import { getUserDummyData } from "../../../dummyData";
+import { getUserSettingsDummyData } from "../../../dummyData";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
-import { User } from "../../../schema";
+import { UserSettings } from "../../../schema";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
@@ -52,7 +51,7 @@ export function SettingsLayout(props: SettingsLayoutProps) {
 }
 
 function getUserData(userId: string) {
-  return getUserDummyData(userId);
+  return getUserSettingsDummyData(userId);
 }
 
 SettingsLayout.displayName = "SettingsLayout";
@@ -80,7 +79,7 @@ const tabs = [
   },
 ];
 
-function getTabContent(currentTab: number, userData: User) {
+function getTabContent(currentTab: number, userData: UserSettings) {
   let tabContent = null;
   if (currentTab === 1) {
     tabContent = (
