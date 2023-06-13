@@ -10,20 +10,21 @@
     "test": "jest --watch"
   },
   "dependencies": {
-    "@chakra-ui/react": "^1.8.3",
-    "@emotion/react": "^11.4.1",
-    "@emotion/styled": "^11.3.0",
+    "@chakra-ui/react": "^2.5.5",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
     "@thunderstore/components": "^0.1.0",
     "@thunderstore/cyberstorm": "^0.1.0",
     "@thunderstore/dapper": "^0.1.0",
     "@thunderstore/hooks": "^0.1.0",
     "@types/react": "18.0.35",
-    "framer-motion": "^4.1.17",
+    "framer-motion": "^6.5.1",
     "next": "^13.3.0",
     "react": "18.2.0",
     "react-cool-inview": "^2.0.9",
     "react-dom": "18.2.0",
-    "zod": "^3.17.3"
+    "zod": "^3.17.3",
+    "typescript": "5.0.4"
   },
   "devDependencies": {
     "@preconstruct/next": "^4.0.0",
