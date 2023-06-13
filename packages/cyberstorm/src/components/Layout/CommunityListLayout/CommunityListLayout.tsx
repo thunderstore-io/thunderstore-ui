@@ -17,7 +17,6 @@ import { getCommunityPreviewDummyData, getListOfIds } from "../../../dummyData";
 import { CommunityPreview } from "../../../schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
-import { faCaretDown } from "@fortawesome/pro-solid-svg-icons";
 
 /**
  * Cyberstorm CommunityList Layout
@@ -44,7 +43,7 @@ export function CommunityListLayout() {
             />
           </div>
           <div className={styles.searchFilters}>
-            <label className={styles.searchFiltersSortLabel}>Sort by</label>
+            <div className={styles.searchFiltersSortLabel}>Sort by</div>
             <Select onChange={setOrder} options={selectOptions} value={order} />
           </div>
         </div>

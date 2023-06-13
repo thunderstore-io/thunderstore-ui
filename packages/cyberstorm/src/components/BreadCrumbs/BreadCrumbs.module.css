@@ -1,22 +1,70 @@
 .root {
   display: flex;
-  gap: var(--space--8);
-  align-items: center;
+  gap: var(--space--4);
+  padding-left: var(--space--16);
 }
 
-.crumb * {
+.outer {
+  --bg-color: var(--color-surface--3);
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space--8) var(--space--16);
+  background-color: var(--bg-color);
+
+  /* skew the container */
+  transform: skew(-30deg);
+  cursor: pointer;
+}
+
+.outer:hover {
+  --bg-color: var(--color-surface--4);
+}
+
+.outer__start {
+  padding-left: 0;
+}
+
+.outer__end {
+  padding-right: 0;
+}
+
+.outer__start::before,
+.outer__end::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  width: var(--space--32);
+  background-color: var(--bg-color);
+  transform: skew(30deg);
+  content: "\0020";
+}
+
+.outer__start::before {
+  left: -1rem;
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.outer__end::after {
+  right: -1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.inner {
   gap: var(--space--14);
   align-items: center;
-  color: var(--color-highlight);
   font: var(--font-body);
   font-weight: 500;
-  font-size: var(--font-size--14);
+  font-size: var(--font-size--12);
+
+  /* unskew the content */
+  transform: skew(30deg);
 }
 
 .home {
+  color: var(--color-highlight);
   text-decoration: none;
-}
-
-.separator {
-  height: var(--space--14);
 }
