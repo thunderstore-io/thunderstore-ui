@@ -22,7 +22,16 @@
 .searchFilters {
   display: flex;
   flex: 1 1 auto;
+  gap: var(--gap--16);
+  align-content: center;
   justify-content: end;
+}
+
+.searchFiltersSortLabel {
+  align-self: center;
+  color: var(--color-text--tertiary);
+  font-weight: 700;
+  font-size: var(--font-size--14);
 }
 
 .communityCardList {

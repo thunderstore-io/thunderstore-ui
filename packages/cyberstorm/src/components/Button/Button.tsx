@@ -21,8 +21,10 @@ type _ButtonProps = {
     | "specialPurple"
     | "transparentDefault"
     | "transparentTertiary"
+    | "transparentAccent"
     | "transparentPrimary";
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  asAnchor?: boolean;
 };
 export type ButtonProps = _ButtonProps &
   Omit<React.HTMLProps<HTMLButtonElement>, keyof _ButtonProps>;
@@ -39,25 +41,39 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       colorScheme = "default",
       onClick,
       size = "medium",
+      asAnchor = false,
       ...forwardedProps
     } = props;
 
     const fallbackRef = useRef(null);
     const ref = forwardedRef || fallbackRef;
 
-    return (
-      <button
-        {...forwardedProps}
-        ref={ref}
-        type="button"
-        className={`${styles.root} ${getStyle(colorScheme)} ${getSize(size)}`}
-        onClick={onClick}
-      >
-        {leftIcon}
-        {label ? <div className={styles.label}>{label}</div> : null}
-        {rightIcon}
-      </button>
-    );
+    if (asAnchor) {
+      return (
+        <div
+          {...forwardedProps}
+          className={`${styles.root} ${getStyle(colorScheme)} ${getSize(size)}`}
+        >
+          {leftIcon}
+          {label ? <div className={styles.label}>{label}</div> : null}
+          {rightIcon}
+        </div>
+      );
+    } else {
+      return (
+        <button
+          {...forwardedProps}
+          ref={ref}
+          type="button"
+          className={`${styles.root} ${getStyle(colorScheme)} ${getSize(size)}`}
+          onClick={onClick}
+        >
+          {leftIcon}
+          {label ? <div className={styles.label}>{label}</div> : null}
+          {rightIcon}
+        </button>
+      );
+    }
   }
 );
 
@@ -74,6 +90,7 @@ const getStyle = (scheme: ButtonProps["colorScheme"] = "default") => {
     transparentDefault: styles.button__transparentDefault,
     transparentTertiary: styles.button__transparentTertiary,
     transparentPrimary: styles.button__transparentPrimary,
+    transparentAccent: styles.button__transparentAccent,
   }[scheme];
 };
 

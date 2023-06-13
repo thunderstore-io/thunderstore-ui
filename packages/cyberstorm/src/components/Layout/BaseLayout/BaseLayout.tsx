@@ -1,6 +1,6 @@
 import styles from "./BaseLayout.module.css";
 import { BackgroundImage } from "../../BackgroundImage/BackgroundImage";
-import { Heading } from "../../Heading/Heading";
+import { Header } from "../../Header/Header";
 import { Footer } from "../../Footer/Footer";
 import { ReactElement } from "react";
 
@@ -34,7 +34,7 @@ export function BaseLayout(props: BaseLayoutProps) {
           <BackgroundImage imageSource={backGroundImageSource} />
         </div>
       ) : null}
-      <Heading />
+      <Header />
       <section className={styles.content}>
         <div className={styles.container}>
           <div>{breadCrumb}</div>

@@ -1,51 +1,60 @@
 .root {
-  right: 0;
-  left: 0;
-  display: flex;
-  min-height: 4.5rem;
-}
-
-.heading {
-  position: fixed;
+  position: sticky;
   top: 0;
-  right: 0;
-  left: 0;
-
   z-index: 999;
   display: flex;
-  flex-direction: row;
+  gap: var(--gap--32);
   align-items: center;
-  justify-content: space-between;
-  padding: var(--space--6) var(--space--16);
+  width: 100vw;
+  height: 3.5rem;
+  padding: 0 var(--space--24);
   border-bottom: var(--space--px) var(--color-surface--4) solid;
   background-color: var(--color-background-alpha-90);
-
-  backdrop-filter: blur(var(--blur-default));
+  backdrop-filter: blur(var(--space--20));
 }
 
-.leftSection {
+.item {
+  display: none;
+  flex: 2 1 100%;
+}
+
+@media (min-width: 60rem) {
+  .item {
+    display: flex;
+  }
+}
+
+.item:last-child {
+  justify-content: flex-end;
+}
+
+.nav {
   display: flex;
-  flex-direction: row;
   gap: var(--gap--16);
   align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.middleSection {
+.search {
   display: flex;
-  align-items: center;
+  flex: 1 2 100%;
   justify-content: center;
+  min-width: 420px;
 }
 
-.rightSection {
+.logo {
+  max-height: var(--space--24);
+}
+
+.navButtons {
   display: flex;
-  flex-direction: row;
-  gap: var(--gap--8);
-  align-items: center;
+  gap: var(--space--8);
 }
 
 .dropDownUserInfo {
   display: flex;
-  flex-direction: row;
   gap: var(--gap--16);
   padding: var(--space--8);
 }

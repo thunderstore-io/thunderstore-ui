@@ -5,7 +5,7 @@ import styles from "./MetaItem.module.css";
 type _MetaItemProps = {
   label?: string;
   icon?: ReactNode;
-  colorScheme?: "default" | "tertiary";
+  colorScheme?: "default" | "accent";
   size?: "medium" | "large";
   ref?: React.Ref<HTMLDivElement>;
 };
@@ -39,7 +39,7 @@ MetaItem.displayName = "MetaItem";
 
 const getStyle = (scheme: MetaItemProps["colorScheme"] = "default") => {
   return {
-    tertiary: styles.metaItem__tertiary,
+    accent: styles.metaItem__accent,
     default: styles.metaItem__default,
   }[scheme];
 };
