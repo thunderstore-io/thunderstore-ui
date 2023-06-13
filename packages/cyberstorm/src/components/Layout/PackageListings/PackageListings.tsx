@@ -18,7 +18,6 @@ export interface fetchFromDapperProps extends PackageListingsProps {
   availableCategories?: {
     [key: string]: {
       label: string;
-      count: number;
       value: boolean | undefined;
     };
   };
@@ -60,7 +59,6 @@ export default function PackageListings(props: PackageListingsProps) {
       | {
           [key: string]: {
             label: string;
-            count: number;
             value: boolean | undefined;
           };
         }
@@ -68,15 +66,10 @@ export default function PackageListings(props: PackageListingsProps) {
     const packages = datas;
     packages?.map((x) => {
       x.categories.map((category) => {
-        if (filters?.availableCategories[category.slug]) {
-          updatedAvailableCategories
-            ? (updatedAvailableCategories[category.slug].count += 1)
-            : null;
-        } else {
+        if (!filters?.availableCategories[category.slug]) {
           updatedAvailableCategories
             ? (updatedAvailableCategories[category.slug] = {
                 label: category.name,
-                count: 1,
                 value: undefined,
               })
             : null;

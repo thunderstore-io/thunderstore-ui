@@ -34,22 +34,21 @@ export function TeamLayout(props: TeamLayoutProps) {
   const { teamId } = props;
 
   const filterItems = {
-    mods: { value: undefined, label: "Mods", count: 248 },
-    tools: { value: undefined, label: "Tools", count: 18 },
-    libraries: { value: undefined, label: "Libraries", count: 84 },
-    modpacks: { value: undefined, label: "Modpacks", count: 16 },
-    skins: { value: undefined, label: "Skins", count: 127 },
-    maps: { value: undefined, label: "Maps", count: 98 },
-    tweaks: { value: undefined, label: "Tweaks", count: 227 },
-    items: { value: undefined, label: "Items", count: 235 },
-    language: { value: undefined, label: "Language", count: 5 },
-    audio: { value: undefined, label: "Audio", count: 22 },
-    enemies: { value: undefined, label: "Enemies", count: 76 },
+    mods: { value: undefined, label: "Mods" },
+    tools: { value: undefined, label: "Tools" },
+    libraries: { value: undefined, label: "Libraries" },
+    modpacks: { value: undefined, label: "Modpacks" },
+    skins: { value: undefined, label: "Skins" },
+    maps: { value: undefined, label: "Maps" },
+    tweaks: { value: undefined, label: "Tweaks" },
+    items: { value: undefined, label: "Items" },
+    language: { value: undefined, label: "Language" },
+    audio: { value: undefined, label: "Audio" },
+    enemies: { value: undefined, label: "Enemies" },
   };
   const [, setFilterDummySetter] = useState<{
     [key: string]: {
       label: string;
-      count: number;
       value: boolean | undefined;
     };
   }>(filterItems);

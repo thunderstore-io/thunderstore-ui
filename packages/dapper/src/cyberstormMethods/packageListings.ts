@@ -21,7 +21,6 @@ export type GetPackageListings = (
   keywords?: string[],
   categories?: {
     [key: string]: {
-      count: number;
       value: boolean | undefined;
     };
   }

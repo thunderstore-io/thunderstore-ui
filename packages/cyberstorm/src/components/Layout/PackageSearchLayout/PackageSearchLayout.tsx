@@ -24,7 +24,6 @@ const PackageListings = lazy(
 export interface CategoriesProps {
   [key: string]: {
     label: string;
-    count: number;
     value: boolean | undefined;
   };
 }
@@ -42,7 +41,6 @@ export interface PackageListingsProps {
   keywords: { key: string; negate: boolean }[];
   categories: {
     label: string;
-    count: number;
     value: boolean | undefined;
   }[];
 }
@@ -218,7 +216,6 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
                     ) {
                       updatedAvailableCategories[key] = {
                         label: filters.availableCategories[key].label,
-                        count: filters.availableCategories[key].count,
                         value: undefined,
                       };
                     });

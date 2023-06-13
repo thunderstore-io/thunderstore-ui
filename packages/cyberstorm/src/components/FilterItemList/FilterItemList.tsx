@@ -9,7 +9,6 @@ export interface FilterItemListProps {
   filterItems: {
     [key: string]: {
       label: string;
-      count: number;
       value: boolean | undefined;
     };
   };
@@ -17,7 +16,6 @@ export interface FilterItemListProps {
     React.SetStateAction<{
       [key: string]: {
         label: string;
-        count: number;
         value: boolean | undefined;
       };
     }>
@@ -30,32 +28,21 @@ export interface FilterItemListProps {
 export function FilterItemList(props: FilterItemListProps) {
   const { filterItems, filterItemsSetter } = props;
 
-  const [allCount, setAllCount] = useState<number>(0);
   const [allValue, setAllValue] = useState<boolean | undefined>(undefined);
   function setAllValueWrapper(_label: string, value: boolean | undefined) {
     setAllValue(value);
   }
 
   useEffect(() => {
-    let newAllCount = 0;
-    Object.keys(filterItems).forEach(function (key) {
-      newAllCount = +filterItems[key].count;
-    });
-    setAllCount(newAllCount);
-  }, [filterItems]);
-
-  useEffect(() => {
     const newFilterItems: {
       [key: string]: {
         label: string;
-        count: number;
         value: boolean | undefined;
       };
     } = {};
     Object.keys(filterItems).forEach(function (key) {
       newFilterItems[key] = {
         label: filterItems[key].label,
-        count: filterItems[key].count,
         value: allValue,
       };
     });
@@ -66,7 +53,6 @@ export function FilterItemList(props: FilterItemListProps) {
     const newFilterItems: {
       [key: string]: {
         label: string;
-        count: number;
         value: boolean | undefined;
       };
     } = {};
@@ -74,13 +60,11 @@ export function FilterItemList(props: FilterItemListProps) {
       if (key === label) {
         newFilterItems[key] = {
           label: filterItems[key].label,
-          count: filterItems[key].count,
           value: value,
         };
       } else {
         newFilterItems[key] = {
           label: filterItems[key].label,
-          count: filterItems[key].count,
           value: filterItems[key].value,
         };
       }
@@ -94,7 +78,6 @@ export function FilterItemList(props: FilterItemListProps) {
       <div key={index}>
         <FilterItem
           label={key}
-          count={filterItems[key].count}
           value={filterItems[key].value}
           setChecked={handleSingleCheck}
         />
@@ -119,7 +102,6 @@ export function FilterItemList(props: FilterItemListProps) {
       </div>
       <div>
         <FilterItem
-          count={allCount}
           label="All"
           value={allValue}
           setChecked={setAllValueWrapper}
