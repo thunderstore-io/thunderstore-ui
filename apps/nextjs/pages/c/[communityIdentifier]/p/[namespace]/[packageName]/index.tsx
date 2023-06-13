@@ -19,7 +19,7 @@ import { useFreshProps, WithDid404, withSoft404 } from "hooks/useFreshProps";
 import { API_DOMAIN } from "utils/constants";
 import { getString } from "utils/urlQuery";
 
-type DapperResponse = Awaited<ReturnType<Dapper["getPackage"]>>;
+type DapperResponse = Awaited<ReturnType<Dapper["getOldPackage"]>>;
 type PageProps = WithDid404<DapperResponse>;
 
 export default function PackageDetailPage(props_: PageProps): JSX.Element {
@@ -34,7 +34,7 @@ export default function PackageDetailPage(props_: PageProps): JSX.Element {
   }
 
   const dapper = useDapper();
-  const props = useFreshProps(props_, dapper.getPackage.bind(dapper), [
+  const props = useFreshProps(props_, dapper.getOldPackage.bind(dapper), [
     communityIdentifier,
     namespace,
     packageName,

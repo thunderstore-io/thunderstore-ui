@@ -9,15 +9,16 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.1",
-    "@chakra-ui/react": "^1.8.3",
-    "@chakra-ui/system": "^1.8.2",
-    "@emotion/react": "^11.7.0",
-    "@emotion/styled": "^11.6.0",
+    "@chakra-ui/react": "^2.5.5",
+    "@chakra-ui/system": "^2.5.8",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
     "@thunderstore/components": "^0.1.0",
     "@thunderstore/dapper": "^0.1.0",
     "@thunderstore/hooks": "^0.1.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "typescript": "5.0.4"
   },
   "scripts": {
     "storybook": "storybook dev -p 6006",

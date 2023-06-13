@@ -15,7 +15,7 @@ export const teamSchema = z.object({
   dynamicLinks: z.optional(
     z.object({ title: z.string(), url: z.string() }).array()
   ),
-  donationLink: z.string(),
+  donationLink: z.string().optional(),
 });
 
 export const teamSettingsSchema = teamSchema.extend({

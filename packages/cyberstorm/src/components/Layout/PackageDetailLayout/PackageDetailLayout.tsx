@@ -13,7 +13,6 @@ import { ModIcon } from "../../ModIcon/ModIcon";
 import { Title } from "../../Title/Title";
 import { Dialog } from "../../Dialog/Dialog";
 import { PackageManagementForm } from "./PackageManagementForm/PackageManagementForm";
-import { getPackageDummyData } from "../../../dummyData";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { MetaInfoItemList } from "../../MetaInfoItemList/MetaInfoItemList";
 import {
@@ -166,10 +165,6 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
 }
 
 PackageDetailLayout.displayName = "PackageDetailLayout";
-
-function getPackageData(packageId: string) {
-  return getPackageDummyData(packageId);
-}
 
 function getMetaInfoData(packageData: Package) {
   return [

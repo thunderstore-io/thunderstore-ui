@@ -6,12 +6,11 @@ import { TeamSettingsLink, TeamsLink } from "../../../Links/Links";
 import { Tabs } from "../../../Tabs/Tabs";
 import { TeamLeave } from "./TeamLeave/TeamLeave";
 import { TeamDisband } from "./TeamDisband/TeamDisband";
-import { Title } from "../../../Title/Title";
 import { TeamMembers } from "./TeamMembers/TeamMembers";
 import { TeamServiceAccounts } from "./TeamServiceAccounts/TeamServiceAccounts";
 import { TeamProfile } from "./TeamProfile/TeamProfile";
-import { getTeamDummyData } from "../../../../dummyData";
-import { Team } from "../../../../schema";
+import { getTeamSettingsDummyData } from "../../../../dummyData";
+import { TeamSettings } from "../../../../schema";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 
@@ -51,7 +50,7 @@ export function TeamSettingsLayout(props: TeamSettingsLayoutProps) {
 TeamSettingsLayout.displayName = "TeamSettingsLayout";
 
 function getTeamData(teamId: string) {
-  return getTeamDummyData(teamId);
+  return getTeamSettingsDummyData(teamId);
 }
 
 const tabs = [
@@ -61,7 +60,7 @@ const tabs = [
   { key: 4, label: "Settings" },
 ];
 
-function getTabContent(currentTab: number, teamData: Team) {
+function getTabContent(currentTab: number, teamData: TeamSettings) {
   let tabContent = null;
 
   if (currentTab === 1) {

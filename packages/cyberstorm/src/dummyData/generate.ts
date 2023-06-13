@@ -167,8 +167,6 @@ export function getPackageDummyData(
     isPinned: faker.datatype.boolean(),
     isNsfw: faker.datatype.boolean(),
     isDeprecated: faker.datatype.boolean(),
-    gitHubLink: faker.internet.url(),
-    donationLink: faker.internet.url(),
     firstUploaded: faker.date.past(2).toDateString(),
     dependencies: [
       getPackageDependencyDummyData(),
@@ -251,7 +249,6 @@ export function getTeamPreviewDummyData(seed?: string): TeamPreview {
   faker.seed(parsedSeed);
   return {
     name: faker.random.words(3),
-    namespace: "namespace",
     members: [
       getTeamMemberDummyData("1"),
       getTeamMemberDummyData("2"),

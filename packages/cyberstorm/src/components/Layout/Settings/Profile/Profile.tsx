@@ -5,6 +5,9 @@ import { Avatar } from "../../../Avatar/Avatar";
 import { User } from "../../../../schema";
 import { TextInput } from "../../../TextInput/TextInput";
 
+// TODO: actual placeholder
+const defaultImageSrc = "/images/logo.png";
+
 export interface ProfileProps {
   userData: User;
 }
@@ -19,7 +22,12 @@ export function Profile(props: ProfileProps) {
           description="Instructions for uploading a picture"
           content={
             <div className={styles.avatarContent}>
-              <Avatar size="large" src={userData.imageSource} />
+              <Avatar
+                size="large"
+                src={
+                  userData.imageSource ? userData.imageSource : defaultImageSrc
+                }
+              />
               <div>
                 <Button label="Upload picture" />
               </div>

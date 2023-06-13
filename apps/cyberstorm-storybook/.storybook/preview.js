@@ -5,10 +5,7 @@ import { LinkLibrary } from "../LinkLibrary";
 import { LinkingProvider, CyberstormProviders } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-styles";
 import { Dapper, DapperProvider } from "@thunderstore/dapper/src";
-import {
-  SessionProvider,
-  useSession,
-} from "../SessionContext";
+import { SessionProvider, useSession } from "../SessionContext";
 import { API_DOMAIN } from "../constants";
 
 export const parameters = {
@@ -31,13 +28,15 @@ export const decorators = [
     const [client] = React.useState(
       new QueryClient({ defaultOptions: { queries: { staleTime: 5000 } } })
     );
-  
+
     return (
       <LinkingProvider value={LinkLibrary}>
         <CyberstormProviders>
           <QueryClientProvider client={client}>
             <SessionProvider>
-              <Substack><Story /></Substack>
+              <Substack>
+                <Story />
+              </Substack>
             </SessionProvider>
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
@@ -57,4 +56,3 @@ function Substack({ children }) {
     </DapperProvider>
   );
 }
-

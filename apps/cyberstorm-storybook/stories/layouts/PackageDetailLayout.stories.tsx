@@ -14,7 +14,9 @@ const Template: ComponentStory<typeof PackageDetailLayout> = (args) => (
 );
 
 const defaultArgs = {
-  packageId: "1337",
+  community: "Train City 2042",
+  namespace: "Mechanics",
+  packagepackageNameId: "Thomas the Dankiest Engine",
 };
 
 const ReferencePackageDetailLayout = Template.bind({});

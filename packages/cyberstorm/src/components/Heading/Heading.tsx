@@ -29,6 +29,9 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { AvatarButton } from "../Avatar/AvatarButton";
 
+// TODO: actual placeholder
+const defaultImageSrc = "/images/logo.png";
+
 /**
  * Cyberstorm Heading Component
  */
@@ -63,7 +66,7 @@ export function Heading() {
   const userDropDownContents = [
     <UserLink key="1" user={userData.name}>
       <div className={styles.dropDownUserInfo}>
-        <Avatar src={userData.imageSource} />
+        {userData.imageSource ? <Avatar src={userData.imageSource} /> : null}
         <div className={styles.dropdownUserInfoDetails}>
           <div className={styles.dropdownUserInfoDetails_userName}>
             {userData.name}
@@ -152,7 +155,13 @@ export function Heading() {
           />
           <DropDown
             colorScheme="default"
-            trigger={<AvatarButton src={userData.imageSource} />}
+            trigger={
+              <AvatarButton
+                src={
+                  userData.imageSource ? userData.imageSource : defaultImageSrc
+                }
+              />
+            }
             content={userDropDownContents}
           />
         </div>

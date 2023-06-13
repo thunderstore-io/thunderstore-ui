@@ -24,7 +24,6 @@ const PackageListings = lazy(
 export interface CategoriesProps {
   [key: string]: {
     label: string;
-    count: number;
     value: boolean | undefined;
   };
 }
@@ -42,7 +41,6 @@ export interface PackageListingsProps {
   keywords: { key: string; negate: boolean }[];
   categories: {
     label: string;
-    count: number;
     value: boolean | undefined;
   }[];
 }
@@ -80,6 +78,7 @@ function RemoveFilterIcon(
 ) {
   return (
     // TODO: Fix to work with keyboard presses, so linting doesnt complain
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <div onClick={() => hook(key, filterType)}>
       <FontAwesomeIcon icon={faXmark} fixedWidth />
     </div>
@@ -116,7 +115,7 @@ function CurrentFilters(props: TagListProps) {
           label={key}
           rightIcon={RemoveFilterIcon(key, "category", removeFilter)}
           colorScheme={
-            searchCategories[key].value === false ? "failure" : "default"
+            searchCategories[key].value === false ? "removable" : "default"
           }
         />
       );
@@ -216,7 +215,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
                       key
                     ) {
                       updatedAvailableCategories[key] = {
-                        count: filters.availableCategories[key].count,
+                        label: filters.availableCategories[key].label,
                         value: undefined,
                       };
                     });

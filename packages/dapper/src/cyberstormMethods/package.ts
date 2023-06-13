@@ -9,7 +9,7 @@ export type GetPackage = (
   commmunity: string,
   namespace: string,
   name: string
-) => Package | undefined;
+) => Package;
 
 // Method for transforming the received data to a format that will be
 // passed on.

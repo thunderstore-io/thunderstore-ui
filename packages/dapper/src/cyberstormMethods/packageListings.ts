@@ -21,7 +21,6 @@ export type GetPackageListings = (
   keywords?: string[],
   categories?: {
     [key: string]: {
-      count: number;
       value: boolean | undefined;
     };
   }
@@ -122,7 +121,7 @@ async function dummyEndpoint(queryParams: QsArray) {
       }
       if (excludedCategories && excludedCategories.length > 0) {
         x.categories.map((x) => {
-          if (includedCategories.includes(x.slug)) {
+          if (includedCategories?.includes(x.slug)) {
             passesExcludedCategories = false;
           }
         });

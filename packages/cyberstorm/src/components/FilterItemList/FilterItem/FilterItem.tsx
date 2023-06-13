@@ -2,20 +2,24 @@ import styles from "./FilterItem.module.css";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { Tag } from "../../Tag/Tag";
+// import { Tag } from "../../Tag/Tag";
 
 export interface FilterItemProps {
   label: string;
-  count: number;
+  // count: number;
   value?: boolean;
   setChecked?: (label: string, value: boolean | undefined) => void;
 }
+
+// TODO: Count is disabled, because we don't have a plan yet,
+// how we want to calculate the count and where.
+// There is a separate task about this. TS-1715.
 
 /**
  * Cyberstorm FilterItem
  */
 export function FilterItem(props: FilterItemProps) {
-  const { label, count, value = undefined, setChecked } = props;
+  const { label, value = undefined, setChecked } = props;
   return (
     <div className={styles.root}>
       <div className={styles.checkBoxContainer}>
@@ -49,9 +53,9 @@ export function FilterItem(props: FilterItemProps) {
           {label}
         </label>
       </div>
-      <div className={styles.tag}>
+      {/* <div className={styles.tag}>
         <Tag size="tiny" colorScheme="simple" label={count.toString()} />
-      </div>
+      </div> */}
     </div>
   );
 }

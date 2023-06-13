@@ -1,5 +1,5 @@
 import styles from "./PackageDependencyList.module.css";
-import { PackagePreview } from "../../../../schema";
+import { PackageDependency } from "../../../../schema";
 import { PackageLink } from "../../../Links/Links";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,11 +11,11 @@ import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
 const defaultImageSrc = "/images/logo.png";
 
 export interface PackageDependencyListProps {
-  packages?: PackagePreview[];
+  packages?: PackageDependency[];
 }
 
 export interface PackageDependencyListItemProps {
-  packageData: PackagePreview;
+  packageData: PackageDependency;
 }
 
 function PackageDependencyListItem(props: PackageDependencyListItemProps) {
@@ -38,7 +38,7 @@ function PackageDependencyListItem(props: PackageDependencyListItemProps) {
         <div>
           <div className={styles.itemTitle}>{packageData.name}</div>
           <div className={styles.itemDescription}>
-            {packageData.description}
+            {packageData.shortDescription}
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
   const { packages = [] } = props;
 
   const mappedPackageDependencyList = packages?.map(
-    (packageData: PackagePreview, index: number) => {
+    (packageData: PackageDependency, index: number) => {
       return (
         <div key={index}>
           <PackageDependencyListItem packageData={packageData} />

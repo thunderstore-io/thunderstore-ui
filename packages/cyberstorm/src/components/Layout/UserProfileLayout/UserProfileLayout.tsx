@@ -20,11 +20,10 @@ import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { Avatar } from "../../Avatar/Avatar";
 import { Link } from "../../Link/Link";
-import {
-  faDiscord,
-  faGithub,
-  faTwitter,
-} from "@fortawesome/free-brands-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+
+// TODO: actual placeholder
+const defaultImageSrc = "/images/logo.png";
 
 export interface UserProfileLayoutProps {
   userId: string;
@@ -35,6 +34,26 @@ export interface UserProfileLayoutProps {
  */
 export function UserProfileLayout(props: UserProfileLayoutProps) {
   const { userId } = props;
+
+  const filterItems = {
+    mods: { value: undefined, label: "Mods" },
+    tools: { value: undefined, label: "Tools" },
+    libraries: { value: undefined, label: "Libraries" },
+    modpacks: { value: undefined, label: "Modpacks" },
+    skins: { value: undefined, label: "Skins" },
+    maps: { value: undefined, label: "Maps" },
+    tweaks: { value: undefined, label: "Tweaks" },
+    items: { value: undefined, label: "Items" },
+    language: { value: undefined, label: "Language" },
+    audio: { value: undefined, label: "Audio" },
+    enemies: { value: undefined, label: "Enemies" },
+  };
+  const [, setFilterDummySetter] = useState<{
+    [key: string]: {
+      label: string;
+      value: boolean | undefined;
+    };
+  }>(filterItems);
 
   const [order, setOrder] = useState("1");
   const [page, setPage] = useState(1);
@@ -52,12 +71,24 @@ export function UserProfileLayout(props: UserProfileLayoutProps) {
       header={
         <PageHeader
           title={userData.name}
-          image={<Avatar size="large" src={userData.imageSource} />}
+          image={
+            <Avatar
+              size="large"
+              src={
+                userData.imageSource ? userData.imageSource : defaultImageSrc
+              }
+            />
+          }
           description={userData.description}
           meta={getUserMeta(userData)}
         />
       }
-      leftSidebarContent={<FilterItemList filterData={filterData} />}
+      leftSidebarContent={
+        <FilterItemList
+          filterItems={filterItems}
+          filterItemsSetter={setFilterDummySetter}
+        />
+      }
       mainContent={
         <div className={styles.content}>
           <SearchFilter tags={topFilterTags} />
@@ -101,34 +132,17 @@ function getUserData(userId: string) {
 }
 
 function getUserMeta(userData: User) {
-  const userMeta = [];
-  if (userData.gitHubLink) {
+  const userMeta: JSX.Element[] = [];
+  userData.dynamicLinks?.map((dlink, key) => {
     userMeta.push(
       <Link
-        externalUrl={userData.gitHubLink}
+        key={key + dlink.title}
+        externalUrl={dlink.url}
         leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
-        label="GitHub"
+        label={dlink.title}
       />
     );
-  }
-  if (userData.twitterLink) {
-    userMeta.push(
-      <Link
-        externalUrl={userData.twitterLink}
-        leftIcon={<FontAwesomeIcon icon={faTwitter} fixedWidth />}
-        label="Twitter"
-      />
-    );
-  }
-  if (userData.discordLink) {
-    userMeta.push(
-      <Link
-        externalUrl={userData.discordLink}
-        leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
-        label="Discord"
-      />
-    );
-  }
+  });
   return userMeta;
 }
 
@@ -148,20 +162,6 @@ const selectOptions = [
     label: "Top rated",
     leftIcon: <FontAwesomeIcon fixedWidth icon={faThumbsUp} />,
   },
-];
-
-const filterData = [
-  { key: "1", label: "Mods", count: 248 },
-  { key: "2", label: "Tools", count: 18 },
-  { key: "3", label: "Libraries", count: 84 },
-  { key: "4", label: "Modpacks", count: 16 },
-  { key: "5", label: "Skins", count: 127 },
-  { key: "6", label: "Maps", count: 98 },
-  { key: "7", label: "Tweaks", count: 227 },
-  { key: "8", label: "Items", count: 235 },
-  { key: "9", label: "Language", count: 5 },
-  { key: "10", label: "Audio", count: 22 },
-  { key: "11", label: "Enemies", count: 76 },
 ];
 
 const topFilterTags: string[] = [
