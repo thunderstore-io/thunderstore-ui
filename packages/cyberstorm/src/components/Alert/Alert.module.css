@@ -19,19 +19,19 @@
 }
 
 /* Different Alert color schemes */
-.alert__blue {
+.alert__info {
   background: var(--color-blue--10);
 }
 
-.alert__green {
+.alert__success {
   background: var(--color-green--10);
 }
 
-.alert__yellow {
+.alert__warning {
   background: var(--color-yellow--10);
 }
 
-.alert__red {
+.alert__danger {
   background: var(--color-red--10);
 }
 

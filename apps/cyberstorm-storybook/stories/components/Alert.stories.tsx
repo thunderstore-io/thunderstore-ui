@@ -11,7 +11,7 @@ export default {
 
 const defaultArgs: AlertProps = {
   label: "-",
-  colorScheme: "blue",
+  colorScheme: "info",
 };
 
 const Template: StoryFn<typeof Alert> = (args) => <Alert {...args} />;
@@ -21,40 +21,40 @@ MinimalAlert.args = {
   ...defaultArgs,
 };
 
-const BlueAlert = Template.bind({});
-BlueAlert.args = {
+const InfoAlert = Template.bind({});
+InfoAlert.args = {
   ...defaultArgs,
   label:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
-  colorScheme: "blue",
+  colorScheme: "info",
   icon: <FontAwesomeIcon fixedWidth icon={faUser} />,
 };
 
-const GreenAlert = Template.bind({});
-GreenAlert.args = {
+const DangerAlert = Template.bind({});
+DangerAlert.args = {
   ...defaultArgs,
   label:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
-  colorScheme: "green",
+  colorScheme: "danger",
   icon: <FontAwesomeIcon fixedWidth icon={faUser} />,
 };
 
-const YellowAlert = Template.bind({});
-YellowAlert.args = {
+const WarningAlert = Template.bind({});
+WarningAlert.args = {
   ...defaultArgs,
   label:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
-  colorScheme: "yellow",
+  colorScheme: "warning",
   icon: <FontAwesomeIcon fixedWidth icon={faUser} />,
 };
 
-const RedAlert = Template.bind({});
-RedAlert.args = {
+const SuccessAlert = Template.bind({});
+SuccessAlert.args = {
   ...defaultArgs,
   label:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
-  colorScheme: "red",
+  colorScheme: "success",
   icon: <FontAwesomeIcon fixedWidth icon={faUser} />,
 };
 
-export { MinimalAlert, BlueAlert, GreenAlert, YellowAlert, RedAlert };
+export { MinimalAlert, InfoAlert, DangerAlert, WarningAlert, SuccessAlert };
