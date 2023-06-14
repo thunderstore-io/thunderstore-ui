@@ -1,9 +1,6 @@
 import styles from "./Footer.module.css";
-import { Title } from "../Title/Title";
 import { Button } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
 import {
   faDiscord,
   faGithub,
@@ -11,96 +8,132 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import {
   CommunitiesLink,
+  IndexLink,
   ManifestValidatorLink,
   MarkdownPreviewLink,
   PackageFormatDocsLink,
   PrivacyPolicyLink,
   TermsOfServiceLink,
 } from "../Links/Links";
+import {
+  faArrowUpRight,
+  faBoltLightning,
+} from "@fortawesome/pro-solid-svg-icons";
 
 /**
  * Cyberstorm Footer Component
  */
 export function Footer() {
   return (
-    <div className={styles.root}>
-      <div className={styles.wrapper}>
-        <div className={styles.leftColumn}>
-          <div className={styles.columnItem}>
-            <div className={styles.logos}>
+    <footer className={styles.root}>
+      <div className={styles.main}>
+        <div className={`${styles.section} ${styles.info}`}>
+          <div className={`${styles.item} ${styles.company}`}>
+            <div className={`${styles.inner} ${styles.logoAndLinks}`}>
               <div className={styles.logo}>
-                <ThunderstoreLogo />
-                <Title size="smaller" text="Thunderstore" />
+                <img
+                  className={styles.logoImage}
+                  src="/images/logo_white.png"
+                />
+                <img
+                  className={styles.logoText}
+                  src="/images/thunderstore.png"
+                />
               </div>
-              <div className={styles.linkLogos}>
+              <div className={styles.iconLinks}>
                 <FontAwesomeIcon icon={faDiscord} fixedWidth size={"2x"} />
                 <FontAwesomeIcon icon={faGithub} fixedWidth size={"2x"} />
                 <FontAwesomeIcon icon={faReddit} fixedWidth size={"2x"} />
               </div>
             </div>
           </div>
-          <div className={styles.divider} />
-          <div className={styles.columnItem}>
-            <div className={styles.links}>
-              <div className={styles.linksColumn}>
-                <Title size="smallest" text="Thunderstore" />
-                <div className={styles.link}>Browse</div>
-                <div className={styles.link}>
-                  <CommunitiesLink>Communities</CommunitiesLink>
+          <div className={`${styles.item} ${styles.linksWrapper}`}>
+            <div className={styles.inner}>
+              <nav className={styles.nav}>
+                <div className={styles.navSection}>
+                  <div className={styles.navTitle}>Thunderstore</div>
+                  <ul className={styles.links}>
+                    <IndexLink>
+                      <li>Browse</li>
+                    </IndexLink>
+                    <CommunitiesLink>
+                      <li>Communities</li>
+                    </CommunitiesLink>
+                    <li>About us</li>
+                  </ul>
                 </div>
-                <div className={styles.link}>About Us</div>
-              </div>
-              <div className={styles.linksColumn}>
-                <Title size="smallest" text="Thunderstore" />
-                <div className={styles.link}>Modding Wiki</div>
-                <div className={styles.link}>API Documentation</div>
-                <div className={styles.link}>GitHub Repo</div>
-                <div className={styles.link}>
-                  <PackageFormatDocsLink>
-                    Package Format Docs
-                  </PackageFormatDocsLink>
+                <div className={styles.navSection}>
+                  <div className={styles.navTitle}>Developers</div>
+                  <ul className={styles.links}>
+                    <li>Modding Wiki</li>
+                    <li>API Documentation</li>
+                    <li>GitHub Repo</li>
+                    <PackageFormatDocsLink>
+                      <li>Package Format Docs</li>
+                    </PackageFormatDocsLink>
+                    <MarkdownPreviewLink>
+                      <li>Markdown Preview</li>
+                    </MarkdownPreviewLink>
+                    <ManifestValidatorLink>
+                      <li>Manifest Validator</li>
+                    </ManifestValidatorLink>
+                  </ul>
                 </div>
-                <div className={styles.link}>
-                  <MarkdownPreviewLink>Markdown Preview</MarkdownPreviewLink>
+                <div className={styles.navSection}>
+                  <div className={styles.navTitle}>Support</div>
+                  <ul className={styles.links}>
+                    <li>FAQ</li>
+                    <li>Give Feedback</li>
+                    <li>Contact Us</li>
+                  </ul>
                 </div>
-                <div className={styles.link}>
-                  <ManifestValidatorLink>
-                    Manifest Validator
-                  </ManifestValidatorLink>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <div className={`${styles.section} ${styles.extra}`}>
+          <div className={`${styles.item} ${styles.mainos}`}>
+            <div className={styles.inner}>
+              <div className={styles.ad}>
+                <div className={styles.adText}>
+                  <div className={styles.adTitle}>Thunderstore Mod Manager</div>
+                  <p className={styles.adDescription}>
+                    You are prepared. Download Thunderstore Bolt
+                    <br />
+                    for desktop and enter a world of Thunder{" "}
+                    <FontAwesomeIcon icon={faBoltLightning} fixedWidth />
+                  </p>
+                  <div className={styles.adButton}>
+                    <Button
+                      asAnchor
+                      colorScheme="primary"
+                      label="Get Manager"
+                      rightIcon={
+                        <FontAwesomeIcon icon={faArrowUpRight} fixedWidth />
+                      }
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className={styles.linksColumn}>
-                <Title size="smallest" text="Thunderstore" />
-                <div className={styles.link}>FAQ</div>
-                <div className={styles.link}>Give Feedback</div>
-                <div className={styles.link}>Contact Us</div>
+                <div className={styles.img}></div>
               </div>
             </div>
           </div>
         </div>
-        <div className={styles.rightColumn}>
-          <Title text="Thunderstore Bolt" />
-          <p className={styles.rightColumnText}>
-            You are prepared. Download Thunderstore Bolt for desktop and enter a
-            world of Thunder
-          </p>
-          <div>
-            <Button
-              colorScheme="specialPurple"
-              label="Get Bolt"
-              rightIcon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
-            />
+      </div>
+
+      <div className={`${styles.item} ${styles.footnote}`}>
+        <div className={styles.footnoteInner}>
+          <div className={styles.footnoteLinks}>
+            <TermsOfServiceLink>Terms Of Service</TermsOfServiceLink>
+            <PrivacyPolicyLink>Privacy Policy</PrivacyPolicyLink>
+          </div>
+          <div className={styles.footnoteCopyright}>
+            © 2023 Thunderstore. All rights reserved.
           </div>
         </div>
       </div>
-      <div className={styles.bottom}>
-        <span className={styles.bottomLinks}>
-          <TermsOfServiceLink>Terms of service</TermsOfServiceLink>
-          <PrivacyPolicyLink>PrivacyPolicy</PrivacyPolicyLink>
-        </span>
-        <span>© 2023 Thunderstore. All rights reserved.</span>
-      </div>
-    </div>
+    </footer>
   );
 }
 
