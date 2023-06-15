@@ -21,11 +21,11 @@ MinimalMetaItem.args = {
   ...defaultArgs,
 };
 
-const TertiaryMetaItem = Template.bind({});
-TertiaryMetaItem.args = {
+const AccentMetaItem = Template.bind({});
+AccentMetaItem.args = {
   ...defaultArgs,
   label: "Lollero",
-  colorScheme: "tertiary",
+  colorScheme: "accent",
   icon: <FontAwesomeIcon fixedWidth icon={faUser} />,
 };
 
@@ -37,4 +37,4 @@ LikesMetaItem.args = {
   icon: <FontAwesomeIcon fixedWidth icon={faThumbsUp} />,
 };
 
-export { MinimalMetaItem, TertiaryMetaItem, LikesMetaItem };
+export { MinimalMetaItem, AccentMetaItem, LikesMetaItem };

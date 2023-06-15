@@ -65,21 +65,21 @@ export function PackageListLayout(props: PackageListLayoutProps) {
               key="meta-packages"
               label={formatInteger(communityData.packageCount) + " Packages"}
               icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
-              colorScheme="tertiary"
+              colorScheme="accent"
               size="large"
             />,
             <MetaItem
               key="meta-downloads"
               label={formatInteger(communityData.downloadCount) + " Downloads"}
               icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
-              colorScheme="tertiary"
+              colorScheme="accent"
               size="large"
             />,
             <MetaItem
               key="meta-servers"
               label={formatInteger(communityData.serverCount) + " Servers"}
               icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
-              colorScheme="tertiary"
+              colorScheme="accent"
               size="large"
             />,
             <Link

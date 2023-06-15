@@ -1,5 +1,5 @@
 import styles from "./Footer.module.css";
-import { Button } from "../Button/Button";
+import { PlainButton } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDiscord,
@@ -117,8 +117,7 @@ export function Footer() {
                     <FontAwesomeIcon icon={faBoltLightning} fixedWidth />
                   </p>
                   <div className={styles.adButton}>
-                    <Button
-                      asAnchor
+                    <PlainButton
                       colorScheme="primary"
                       label="Get Manager"
                       rightIcon={

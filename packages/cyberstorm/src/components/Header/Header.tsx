@@ -1,6 +1,6 @@
 import styles from "./Header.module.css";
 import { DropDown } from "../DropDown/DropDown";
-import { Button } from "../Button/Button";
+import { Button, PlainButton } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DropDownLink } from "../DropDown/DropDownLink";
 import {
@@ -124,8 +124,7 @@ export function Header() {
           </li>
           <li>
             <CommunitiesLink>
-              <Button
-                asAnchor
+              <PlainButton
                 label="Communities"
                 colorScheme="transparentDefault"
               />
@@ -157,8 +156,7 @@ export function Header() {
           </li>
           <li>
             <PackageUploadLink>
-              <Button
-                asAnchor
+              <PlainButton
                 size="small"
                 colorScheme="transparentAccent"
                 leftIcon={<FontAwesomeIcon icon={faUpload} fixedWidth />}

@@ -11,10 +11,7 @@ import {
 import { Tag } from "../Tag/Tag";
 import { formatInteger } from "../../utils/utils";
 import { PackagePreview } from "../../schema";
-import { PackageLink } from "../Links/Links";
-
-// TODO: actual placeholder
-const defaultImageSrc = "/images/logo.png";
+import { PackageLink, UserLink } from "../Links/Links";
 
 export interface PackageCardProps {
   packageData: PackagePreview;
@@ -33,9 +30,6 @@ export function PackageCard(props: PackageCardProps) {
     ...forwardedProps
   } = props;
 
-  const authorLink = ""; //TODO: author link
-  //TODO: convert <a> tags into link components!
-
   return (
     <div
       className={`${styles.root} ${getStyle(colorScheme)}`}
@@ -47,15 +41,13 @@ export function PackageCard(props: PackageCardProps) {
           package={packageData.name}
           community={packageData.community}
         >
-          <img
-            src={
-              packageData.imageSource
-                ? packageData.imageSource
-                : defaultImageSrc
-            }
-            className={styles.image}
-            alt={packageData.name}
-          />
+          {packageData.imageSource ? (
+            <img
+              className={styles.image}
+              src={packageData.imageSource}
+              alt={packageData.name}
+            />
+          ) : null}
           {getPackageFlags(
             packageData.isPinned,
             packageData.isNsfw,
@@ -73,12 +65,12 @@ export function PackageCard(props: PackageCardProps) {
           <div className={styles.title}>{packageData.name}</div>
         </PackageLink>
 
-        {packageData.author && authorLink ? (
+        {packageData.author ? (
           <div className={styles.author}>
             <span className={styles.author_prefix}>by</span>
-            <a className={styles.author_label} href={authorLink}>
-              {packageData.author}
-            </a>
+            <UserLink user={packageData.author}>
+              <div className={styles.author_label}>{packageData.author}</div>
+            </UserLink>
           </div>
         ) : null}
 
@@ -173,20 +165,20 @@ function getMetaItemList(downloadCount: number, likes: number, size: number) {
       <MetaItem
         icon={<FontAwesomeIcon fixedWidth icon={faDownload} />}
         label={formatInteger(downloadCount)}
-        colorScheme="tertiary"
+        colorScheme="accent"
       />
 
       <MetaItem
         icon={<FontAwesomeIcon fixedWidth icon={faThumbsUp} />}
         label={formatInteger(likes)}
-        colorScheme="tertiary"
+        colorScheme="accent"
       />
 
       <div className={styles.metaItem__last}>
         <MetaItem
           icon={<FontAwesomeIcon fixedWidth icon={faHardDrive} />}
           label={formatInteger(size)}
-          colorScheme="tertiary"
+          colorScheme="accent"
         />
       </div>
     </div>
