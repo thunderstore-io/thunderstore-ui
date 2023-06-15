@@ -26,9 +26,10 @@ import {
   faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
 import { AvatarButton } from "../Avatar/AvatarButton";
+import { ThunderstoreLogo } from "../../svg/svg";
 
 // TODO: actual placeholder
-const defaultImageSrc = "/images/logo.png";
+const LOGO_PATH = "/images/thunderstore-logomark.svg";
 
 /**
  * Cyberstorm Header Component
@@ -113,11 +114,9 @@ export function Header() {
         <ul className={styles.nav}>
           <li>
             <IndexLink>
-              <img
-                className={styles.logo}
-                alt="ThunderstoreLogo"
-                src="/images/logo.png"
-              />
+              <div className={styles.logoWrapper}>
+                <ThunderstoreLogo />
+              </div>
             </IndexLink>
           </li>
           <li>

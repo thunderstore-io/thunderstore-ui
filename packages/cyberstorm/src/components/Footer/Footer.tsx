@@ -19,6 +19,9 @@ import {
   faArrowUpRight,
   faBoltLightning,
 } from "@fortawesome/pro-solid-svg-icons";
+import { ThunderstoreLogoHorizontal } from "../../svg/svg";
+
+const AD_IMAGE_SRC = "/images/tsmm_screenshot.png";
 
 /**
  * Cyberstorm Footer Component
@@ -31,14 +34,7 @@ export function Footer() {
           <div className={`${styles.item} ${styles.company}`}>
             <div className={`${styles.inner} ${styles.logoAndLinks}`}>
               <div className={styles.logo}>
-                <img
-                  className={styles.logoImage}
-                  src="/images/logo_white.png"
-                />
-                <img
-                  className={styles.logoText}
-                  src="/images/thunderstore.png"
-                />
+                <ThunderstoreLogoHorizontal />
               </div>
               <div className={styles.iconLinks}>
                 <FontAwesomeIcon icon={faDiscord} fixedWidth size={"2x"} />
@@ -93,7 +89,7 @@ export function Footer() {
         </div>
 
         <div className={`${styles.section} ${styles.extra}`}>
-          <div className={`${styles.item} ${styles.mainos}`}>
+          <div className={`${styles.item} ${styles.adWrapper}`}>
             <div className={styles.inner}>
               <div className={styles.ad}>
                 <div className={styles.adText}>
@@ -115,7 +111,7 @@ export function Footer() {
                     />
                   </div>
                 </div>
-                <div className={styles.img}></div>
+                <img src={AD_IMAGE_SRC} className={styles.img} />
               </div>
             </div>
           </div>

@@ -44,8 +44,9 @@
   min-width: 420px;
 }
 
-.logo {
-  max-height: var(--space--24);
+.logoWrapper {
+  width: 26px;
+  color: var(--color-highlight);
 }
 
 .navButtons {
