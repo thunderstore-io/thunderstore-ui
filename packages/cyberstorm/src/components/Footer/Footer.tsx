@@ -127,7 +127,11 @@ export function Footer() {
                     />
                   </div>
                 </div>
-                <img src={AD_IMAGE_SRC} className={styles.img} />
+                <img
+                  alt="Screenshot of the Thunderstore Mod Manager"
+                  src={AD_IMAGE_SRC}
+                  className={styles.img}
+                />
               </div>
             </div>
           </div>
