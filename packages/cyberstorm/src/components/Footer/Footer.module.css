@@ -66,7 +66,12 @@
   font-size: var(--font-size--14);
 }
 
+.footnoteLink:hover {
+  color: var(--color-white);
+}
+
 .footnoteCopyright {
+  color: rgb(178 166 247 / 0.6);
   font-size: var(--font-size--12);
 }
 
@@ -149,6 +154,10 @@
   list-style-type: none;
 }
 
+.links > a:hover {
+  color: var(--color-white);
+}
+
 .navTitle {
   font-weight: 700;
   font-size: var(--space--18);
@@ -215,4 +224,15 @@
   display: flex;
   gap: 30px;
   color: var(--color-text--accent);
+}
+
+.iconLink {
+  display: flex;
+  align-items: center;
+  height: 41px;
+  border-radius: var(--border-radius--8);
+}
+
+.iconLink:hover {
+  background-color: var(--color-surface--7);
 }

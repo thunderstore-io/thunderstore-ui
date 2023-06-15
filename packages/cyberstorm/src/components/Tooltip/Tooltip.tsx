@@ -13,8 +13,9 @@ export interface TooltipProps {
   children?: ReactNode;
 }
 
-// Cyberstorm Tooltip component
-
+/**
+ * Cyberstorm Tooltip Component
+ */
 export function Tooltip({
   content,
   sideOffset = 5,
@@ -30,11 +31,13 @@ export function Tooltip({
       <RadixTooltip.Portal>
         <RadixTooltip.Content
           className={styles.root}
-          sideOffset={sideOffset}
-          side={side}
-          collisionPadding={collisionPadding}
-          sticky={sticky}
-          avoidCollisions={avoidCollisions}
+          sideOffset={sideOffset ? sideOffset : 5}
+          side={side ? side : "right"}
+          collisionPadding={collisionPadding ? collisionPadding : 20}
+          sticky={sticky ? sticky : "always"}
+          avoidCollisions={
+            avoidCollisions !== undefined ? avoidCollisions : true
+          }
         >
           {content}
           <RadixTooltip.Arrow className={styles.arrow} />

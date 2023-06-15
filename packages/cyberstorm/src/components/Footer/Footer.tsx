@@ -20,8 +20,12 @@ import {
   faBoltLightning,
 } from "@fortawesome/pro-solid-svg-icons";
 import { ThunderstoreLogoHorizontal } from "../../svg/svg";
+import { Tooltip } from "../Tooltip/Tooltip";
 
 const AD_IMAGE_SRC = "/images/tsmm_screenshot.png";
+const DISCORD_URL = "https://discord.gg/5MbXZvd";
+const GITHUB_URL = "https://github.com/thunderstore-io/thunderstore-ui";
+const REDDIT_URL = "https://www.reddit.com/r/thunderstore";
 
 /**
  * Cyberstorm Footer Component
@@ -37,9 +41,21 @@ export function Footer() {
                 <ThunderstoreLogoHorizontal />
               </div>
               <div className={styles.iconLinks}>
-                <FontAwesomeIcon icon={faDiscord} fixedWidth size={"2x"} />
-                <FontAwesomeIcon icon={faGithub} fixedWidth size={"2x"} />
-                <FontAwesomeIcon icon={faReddit} fixedWidth size={"2x"} />
+                <Tooltip content="Join our discord" side="bottom">
+                  <a href={DISCORD_URL} className={styles.iconLink}>
+                    <FontAwesomeIcon icon={faDiscord} fixedWidth size={"2x"} />
+                  </a>
+                </Tooltip>
+                <Tooltip content="Check out our GitHub" side="bottom">
+                  <a href={GITHUB_URL} className={styles.iconLink}>
+                    <FontAwesomeIcon icon={faGithub} fixedWidth size={"2x"} />
+                  </a>
+                </Tooltip>
+                <Tooltip content="Talk to us on Reddit" side="bottom">
+                  <a href={REDDIT_URL} className={styles.iconLink}>
+                    <FontAwesomeIcon icon={faReddit} fixedWidth size={"2x"} />
+                  </a>
+                </Tooltip>
               </div>
             </div>
           </div>
@@ -121,8 +137,12 @@ export function Footer() {
       <div className={`${styles.item} ${styles.footnote}`}>
         <div className={styles.footnoteInner}>
           <div className={styles.footnoteLinks}>
-            <TermsOfServiceLink>Terms Of Service</TermsOfServiceLink>
-            <PrivacyPolicyLink>Privacy Policy</PrivacyPolicyLink>
+            <TermsOfServiceLink>
+              <div className={styles.footnoteLink}>Terms Of Service</div>
+            </TermsOfServiceLink>
+            <PrivacyPolicyLink>
+              <div className={styles.footnoteLink}>Privacy Policy</div>
+            </PrivacyPolicyLink>
           </div>
           <div className={styles.footnoteCopyright}>
             © 2023 Thunderstore. All rights reserved.
