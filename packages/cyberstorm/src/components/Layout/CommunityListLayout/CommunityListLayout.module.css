@@ -24,7 +24,7 @@
   flex: 1 1 auto;
   gap: var(--gap--16);
   align-content: center;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .searchFiltersSortLabel {

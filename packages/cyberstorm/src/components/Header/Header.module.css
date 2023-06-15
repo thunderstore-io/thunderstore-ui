@@ -5,12 +5,8 @@
   display: flex;
   gap: var(--gap--32);
   align-items: center;
-  width: 100vw;
   height: 3.5rem;
   padding: 0 var(--space--24);
-  border-bottom: var(--space--px) var(--color-surface--4) solid;
-  background-color: var(--color-background-alpha-90);
-  backdrop-filter: blur(var(--space--20));
 }
 
 .item {

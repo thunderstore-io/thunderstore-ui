@@ -33,10 +33,10 @@
   --box-shadow-special-green: 0 0 1em rgb(80 217 159 / 0.32);
   --box-shadow-special-green--highlight: 0 0 0.75em rgb(255 255 255 / 0.2), 0 0 1.125em rgb(80 217 159 / 0.6);
   --box-shadow-special-purple--highlight: 0 0 0.75em rgb(255 255 255 / 0.2), 0 0 1.125em rgb(157 48 228 / 0.5);
-  --color-text--default: var(--color-lilac--lightest);
-  --color-text--secondary: var(--color-lilac--lighter);
-  --color-text--accent: var(--color-lilac--light);
-  --color-text--tertiary: var(--color-lilac);
+  --color-text--default: rgb(243 241 250);
+  --color-text--secondary: rgb(196 192 216);
+  --color-text--accent: rgb(198 195 255);
+  --color-text--tertiary: rgb(164 164 188);
   --animation-duration-default: 400ms;
   --animation-timing-1: cubic-bezier(0.16, 1, 0.3, 1);
 }

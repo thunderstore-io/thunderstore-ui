@@ -23,13 +23,11 @@ import {
   faCreditCard,
   faSignOut,
   faUpload,
+  faUser,
   faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
 import { AvatarButton } from "../Avatar/AvatarButton";
 import { ThunderstoreLogo } from "../../svg/svg";
-
-// TODO: actual placeholder
-const LOGO_PATH = "/images/thunderstore-logomark.svg";
 
 /**
  * Cyberstorm Header Component
@@ -171,13 +169,13 @@ export function Header() {
             <DropDown
               colorScheme="default"
               trigger={
-                <AvatarButton
-                  src={
-                    userData.imageSource
-                      ? userData.imageSource
-                      : defaultImageSrc
-                  }
-                />
+                userData.imageSource ? (
+                  <AvatarButton src={userData.imageSource} />
+                ) : (
+                  <Button
+                    leftIcon={<FontAwesomeIcon icon={faUser} fixedWidth />}
+                  />
+                )
               }
               content={userDropDownContents}
             />
