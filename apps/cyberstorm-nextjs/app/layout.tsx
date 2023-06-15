@@ -1,6 +1,7 @@
 "use client";
 import "@thunderstore/cyberstorm-styles";
 import Providers from "@/utils/provider";
+import { CyberstormProviders } from "@thunderstore/cyberstorm";
 
 export default function RootLayout({
   children,
@@ -10,7 +11,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <CyberstormProviders>
+          <Providers>{children}</Providers>
+        </CyberstormProviders>
       </body>
     </html>
   );
