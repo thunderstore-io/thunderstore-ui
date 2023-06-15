@@ -100,7 +100,7 @@ export const PlainButton = React.forwardRef<HTMLDivElement, PlainButtonProps>(
 Button.displayName = "Button";
 PlainButton.displayName = "PlainButton";
 
-const getStyle = (scheme: string = "default") => {
+const getStyle = (scheme: string) => {
   return {
     danger: styles.button__danger,
     default: styles.button__default,
@@ -115,7 +115,7 @@ const getStyle = (scheme: string = "default") => {
   }[scheme];
 };
 
-const getSize = (scheme: string = "medium") => {
+const getSize = (scheme: string) => {
   return {
     tiny: styles.tiny,
     small: styles.small,
