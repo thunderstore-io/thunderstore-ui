@@ -5,8 +5,7 @@ import styles from "./Alert.module.css";
 type _AlertProps = {
   label: string;
   icon?: ReactNode;
-  colorScheme?: "info" | "danger" | "warning" | "success";
-  size?: "small" | "large";
+  variant?: "info" | "danger" | "warning" | "success";
   ref?: React.Ref<HTMLDivElement>;
 };
 export type AlertProps = _AlertProps &
@@ -14,15 +13,15 @@ export type AlertProps = _AlertProps &
 
 export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
   (props, forwardedRef) => {
-    const { label, icon, colorScheme = "info", size = "small" } = props;
+    const { label, icon, variant = "info" } = props;
 
     const fallbackRef = useRef(null);
     const ref = forwardedRef || fallbackRef;
 
     return (
-      <div ref={ref} className={`${styles.root} ${getStyle(colorScheme)}`}>
-        {icon}
-        {<div className={`${styles.label} ${getSize(size)}`}>{label}</div>}
+      <div ref={ref} className={`${styles.root} ${getStyle(variant)}`}>
+        {<div className={`${styles.icon}`}>{icon}</div>}
+        {<div className={`${styles.label}`}>{label}</div>}
       </div>
     );
   }
@@ -30,18 +29,11 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
 
 Alert.displayName = "Alert";
 
-const getStyle = (scheme: AlertProps["colorScheme"] = "info") => {
+const getStyle = (scheme: AlertProps["variant"] = "info") => {
   return {
     info: styles.alert__info,
     danger: styles.alert__danger,
     warning: styles.alert__warning,
     success: styles.alert__success,
-  }[scheme];
-};
-
-const getSize = (scheme: AlertProps["size"] = "small") => {
-  return {
-    small: styles.alert__small,
-    large: styles.alert__large,
   }[scheme];
 };

@@ -1,4 +1,16 @@
 :root {
+  --color-accent-blue--2: var(--color-blue--80);
+  --color-accent-blue--5: var(--color-blue--50);
+  --color-accent-blue--9: var(--color-blue--9);
+  --color-accent-green--2: var(--color-green--80);
+  --color-accent-green--5: var(--color-green--50);
+  --color-accent-green--9: var(--color-green--9);
+  --color-accent-yellow--2: var(--color-yellow--80);
+  --color-accent-yellow--5: var(--color-yellow--50);
+  --color-accent-yellow--9: var(--color-yellow--9);
+  --color-accent-red--2: var(--color-red--80);
+  --color-accent-red--5: var(--color-red--50);
+  --color-accent-red--9: var(--color-red--9);
   --color-background: var(--color-surface--0);
   --color-background-alpha-90: rgb(18 18 38 / 0.9);
   --color-danger: var(--color-red--50);

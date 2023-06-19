@@ -2,7 +2,12 @@ import { StoryFn, Meta } from "@storybook/react";
 import { Alert, AlertProps } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThumbsUp, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleExclamation,
+  faCircleCheck,
+  faTriangleExclamation,
+} from "@fortawesome/free-solid-svg-icons";
+import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
 
 export default {
   title: "Cyberstorm/Components/Alert",
@@ -11,7 +16,7 @@ export default {
 
 const defaultArgs: AlertProps = {
   label: "-",
-  colorScheme: "info",
+  variant: "info",
 };
 
 const Template: StoryFn<typeof Alert> = (args) => <Alert {...args} />;
@@ -26,8 +31,8 @@ InfoAlert.args = {
   ...defaultArgs,
   label:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
-  colorScheme: "info",
-  icon: <FontAwesomeIcon fixedWidth icon={faUser} />,
+  variant: "info",
+  icon: <FontAwesomeIcon icon={faCircleExclamation} />,
 };
 
 const DangerAlert = Template.bind({});
@@ -35,8 +40,8 @@ DangerAlert.args = {
   ...defaultArgs,
   label:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
-  colorScheme: "danger",
-  icon: <FontAwesomeIcon fixedWidth icon={faUser} />,
+  variant: "danger",
+  icon: <FontAwesomeIcon fixedWidth icon={faCircleCheck} />,
 };
 
 const WarningAlert = Template.bind({});
@@ -44,8 +49,8 @@ WarningAlert.args = {
   ...defaultArgs,
   label:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
-  colorScheme: "warning",
-  icon: <FontAwesomeIcon fixedWidth icon={faUser} />,
+  variant: "warning",
+  icon: <FontAwesomeIcon fixedWidth icon={faTriangleExclamation} />,
 };
 
 const SuccessAlert = Template.bind({});
@@ -53,8 +58,8 @@ SuccessAlert.args = {
   ...defaultArgs,
   label:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
-  colorScheme: "success",
-  icon: <FontAwesomeIcon fixedWidth icon={faUser} />,
+  variant: "success",
+  icon: <FontAwesomeIcon fixedWidth icon={faOctagonExclamation} />,
 };
 
 export { MinimalAlert, InfoAlert, DangerAlert, WarningAlert, SuccessAlert };

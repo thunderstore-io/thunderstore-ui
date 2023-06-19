@@ -41,6 +41,8 @@
   --line-height--10: 0.625rem;
   --line-height--18: 1.125rem;
   --line-height--22: 1.375rem;
+  --line-height--24: 1.5rem;
+  --line-height--26: 1.625rem;
 
   /* Common fonts */
   --font-body: normal 1rem inter, sans-serif;
