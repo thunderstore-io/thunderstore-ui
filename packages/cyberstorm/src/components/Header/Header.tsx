@@ -152,7 +152,7 @@ export function Header() {
         <ul className={styles.nav}>
           <li className={styles.navButtons}>
             <Button colorScheme="specialPurple" label="Go Premium" />
-            <Button colorScheme="primary" label="Get Manager" />
+            <Button colorScheme="accent" label="Get Manager" />
           </li>
           <li>
             <PackageUploadLink>

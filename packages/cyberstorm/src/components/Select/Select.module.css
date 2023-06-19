@@ -28,7 +28,7 @@
   --bg-color: var(--color-surface--5);
 }
 
-.content__primary {
+.content__accent {
   color: var(--color-black);
   background-color: var(--color-highlight);
 }

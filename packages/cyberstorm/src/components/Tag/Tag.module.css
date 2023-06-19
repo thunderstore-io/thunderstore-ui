@@ -68,6 +68,14 @@
   --border-color: transparent;
 }
 
+.tag__borderless {
+  --border-color: transparent;
+}
+
+.tag__borderless:hover {
+  --bg-color: var(--color-surface--7);
+}
+
 .tag__simple {
   --bg-color: var(--color-surface--4);
   --border-color: transparent;

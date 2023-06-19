@@ -53,7 +53,7 @@ function getPackageVersionsMapped(packageVersionList: PackageVersion[]) {
           size="small"
           leftIcon={<FontAwesomeIcon icon={faBoltLightning} fixedWidth />}
           label="Install"
-          colorScheme="primary"
+          colorScheme="accent"
         />
       </>,
     ];

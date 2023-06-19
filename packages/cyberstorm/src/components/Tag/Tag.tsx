@@ -9,6 +9,7 @@ export interface TagProps {
   rightIcon?: ReactNode;
   colorScheme?:
     | "default"
+    | "borderless"
     | "static"
     | "removable"
     | "simple"
@@ -54,6 +55,7 @@ Tag.displayName = "Tag";
 const getStyle = (scheme: TagProps["colorScheme"] = "default") => {
   return {
     default: styles.tag__default,
+    borderless: styles.tag__borderless,
     static: styles.tag__static,
     removable: styles.tag__removable,
     simple: styles.tag__simple,

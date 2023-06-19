@@ -1,0 +1,7 @@
+.list {
+  display: flex;
+  flex-flow: row wrap;
+  gap: var(--gap--4);
+  padding: var(--space--16);
+  font-size: var(--font-size--14);
+}

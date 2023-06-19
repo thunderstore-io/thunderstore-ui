@@ -32,31 +32,19 @@
 .itemImage {
   width: auto;
   height: 3rem;
-  border-radius: var(--border-radius--8);
+  border-radius: 50%;
 }
 
 .itemTitle {
-  overflow: hidden;
   font-weight: 700;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 .itemDescription {
-  overflow: hidden;
   color: var(--color-text--tertiary);
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  font-weight: 500;
 }
 
-@media (min-width: 60rem) {
-  .itemDescription,
-  .itemTitle {
-    max-width: 250px;
-  }
-}
-
-.dependencyDialogTrigger {
+.teamLink {
   display: flex;
   gap: var(--gap--8);
   align-items: center;
@@ -64,5 +52,4 @@
   font-weight: 600;
   font-size: var(--font-size--14);
   line-height: 170%;
-  cursor: pointer;
 }

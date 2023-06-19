@@ -22,6 +22,7 @@
   --gap--8: var(--space--8);
   --gap--12: var(--space--12);
   --gap--16: var(--space--16);
+  --gap--24: var(--space--24);
   --gap--32: var(--space--32);
   --page-margin: 16rem;
   --page-margin-top: 25px;
@@ -44,8 +45,8 @@
   --line-height--22: 1.375rem;
 
   /* Common fonts */
-  --font-body: normal 1rem inter, sans-serif;
-  --font-heading: normal 1rem sora, sans-serif;
+  --font-body: normal var(--font-size--16) inter, sans-serif;
+  --font-heading: normal var(--font-size--16) sora, sans-serif;
 }
 
 a {

@@ -6,7 +6,7 @@ export interface MenuItemProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  colorScheme?: "default" | "primary";
+  colorScheme?: "default" | "accent";
 }
 
 /**
@@ -53,6 +53,6 @@ MenuItem.displayName = "MenuItem";
 const getStyle = (scheme: MenuItemProps["colorScheme"] = "default") => {
   return {
     default: styles.menuItem__default,
-    primary: styles.menuItem__primary,
+    accent: styles.menuItem__accent,
   }[scheme];
 };

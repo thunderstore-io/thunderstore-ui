@@ -25,19 +25,24 @@
 }
 
 .pageHeader {
-  padding: var(--space--32) 0 var(--space--48) 0;
+  padding: var(--space--32) 0 var(--space--16) 0;
 }
 
 .pageBody {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
 }
 
 .layoutSidebar {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space--32);
 }
 
 @media (min-width: 60rem) {

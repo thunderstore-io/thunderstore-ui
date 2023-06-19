@@ -15,11 +15,12 @@ interface _PlainButtonProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  size?: "tiny" | "small" | "medium";
+  size?: "tiny" | "small" | "medium" | "mediumTight" | "mediumIcon" | "large";
   colorScheme?:
     | "danger"
     | "default"
     | "primary"
+    | "accent"
     | "warning"
     | "specialGreen"
     | "specialPurple"
@@ -103,8 +104,9 @@ PlainButton.displayName = "PlainButton";
 const getStyle = (scheme: string) => {
   return {
     danger: styles.button__danger,
-    default: styles.button__default,
     primary: styles.button__primary,
+    default: styles.button__default,
+    accent: styles.button__accent,
     warning: styles.button__warning,
     specialGreen: styles.button__specialGreen,
     specialPurple: styles.button__specialPurple,
@@ -119,6 +121,9 @@ const getSize = (scheme: string) => {
   return {
     tiny: styles.tiny,
     small: styles.small,
+    mediumTight: styles.mediumTight,
+    mediumIcon: styles.mediumIcon,
+    large: styles.large,
     medium: "",
   }[scheme];
 };

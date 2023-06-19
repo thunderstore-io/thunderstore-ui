@@ -32,7 +32,7 @@ export function TeamMembers(props: TeamMembersProps) {
           </div>
         </div>
       }
-      acceptButton={<Button colorScheme="primary" label="Add Member" />}
+      acceptButton={<Button colorScheme="accent" label="Add Member" />}
     />
   );
 

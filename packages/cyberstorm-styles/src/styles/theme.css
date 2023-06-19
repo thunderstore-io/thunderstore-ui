@@ -16,6 +16,7 @@
   --color-surface--8: var(--color-purple--8);
   --color-surface--9: var(--color-purple--9);
   --color-surface--10: var(--color-purple--10);
+  --color-surface--10--hover: rgb(59 42 126 / 1);
   --color-border: rgb(54 52 91 / 1);
   --color-shadow-1: rgb(0 0 0 / 0.7);
   --color-gradient-blue-green--darker: linear-gradient(to left top, rgb(6 33 49) 0%, rgb(16 43 32) 100%);
@@ -33,7 +34,7 @@
   --box-shadow-special-green: 0 0 1em rgb(80 217 159 / 0.32);
   --box-shadow-special-green--highlight: 0 0 0.75em rgb(255 255 255 / 0.2), 0 0 1.125em rgb(80 217 159 / 0.6);
   --box-shadow-special-purple--highlight: 0 0 0.75em rgb(255 255 255 / 0.2), 0 0 1.125em rgb(157 48 228 / 0.5);
-  --color-text--default: rgb(243 241 250);
+  --color-text--default: rgb(245 245 246);
   --color-text--secondary: rgb(196 192 216);
   --color-text--accent: rgb(198 195 255);
   --color-text--tertiary: rgb(164 164 188);

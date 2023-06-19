@@ -51,7 +51,7 @@ export function TeamsLayout() {
                     rightIcon={<FontAwesomeIcon icon={faPlus} fixedWidth />}
                   />
                 }
-                acceptButton={<Button label="Create" colorScheme="primary" />}
+                acceptButton={<Button label="Create" colorScheme="accent" />}
               />
             }
             content={<TeamList teams={teamsData} />}

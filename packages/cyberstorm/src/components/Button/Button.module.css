@@ -38,11 +38,19 @@
 }
 
 .button__primary {
+  --bg-color: var(--color-surface--10);
+}
+
+.button__primary:hover {
+  --bg-color: var(--color-surface--10--hover);
+}
+
+.button__accent {
   --text-color: var(--color-black);
   --bg-color: var(--color-highlight);
 }
 
-.button__primary:hover {
+.button__accent:hover {
   --bg-color: var(--color-highlight--hover);
 }
 
@@ -175,4 +183,26 @@
   gap: var(--gap--4);
   padding: 0;
   border-radius: var(--border-radius--4);
+}
+
+.mediumTight {
+  gap: var(--gap--12);
+  padding: var(--space--6) var(--space--8);
+  border-radius: var(--border-radius--8);
+}
+
+.mediumIcon {
+  padding: var(--space--12);
+  aspect-ratio: 1 / 1;
+}
+
+.large {
+  gap: var(--gap--16);
+  padding: var(--space--16);
+  border-radius: var(--border-radius--8);
+}
+
+.large > .label {
+  font-weight: 800;
+  font-size: 21px;
 }

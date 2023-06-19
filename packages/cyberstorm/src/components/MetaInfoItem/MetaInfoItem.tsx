@@ -25,7 +25,7 @@ export const MetaInfoItem = React.forwardRef<HTMLDivElement, MetaInfoItemProps>(
         ref={ref}
         className={`${styles.root} ${getStyle(colorScheme)}`}
       >
-        <div>{label}</div>
+        <div className={styles.label}>{label}</div>
         <div className={styles.content}>{content}</div>
       </div>
     );

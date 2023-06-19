@@ -65,7 +65,7 @@ export function PackageUploadLayout() {
             content={
               <div className={styles.submit}>
                 <Button label="Reset" colorScheme="danger" />
-                <Button label="Submit" colorScheme="primary" />
+                <Button label="Submit" colorScheme="accent" />
               </div>
             }
           />
