@@ -11,7 +11,7 @@ type CopyButtonProps = {
   text: string;
 };
 
-function useCopyToClipboard(text: string, recentlyCopiedMethod) {
+function useCopyToClipboard(text: string, recentlyCopiedMethod: Function) {
   // Try to save to clipboard then save it in the state if worked
   try {
     navigator?.clipboard.writeText(text);

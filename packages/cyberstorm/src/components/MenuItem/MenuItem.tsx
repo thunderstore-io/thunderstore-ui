@@ -52,7 +52,7 @@ MenuItem.displayName = "MenuItem";
 
 const getStyle = (scheme: MenuItemProps["colorScheme"] = "default") => {
   return {
-    default: styles.menuItem__default,
-    accent: styles.menuItem__accent,
+    default: "",
+    accent: "",
   }[scheme];
 };
