@@ -1,7 +1,7 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClone, faCheck } from "@fortawesome/pro-regular-svg-icons";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import styles from "./CopyButton.module.css";
 import { Tooltip } from "../Tooltip/Tooltip";
 import { Button } from "../Button/Button";
@@ -11,7 +11,10 @@ type CopyButtonProps = {
   text: string;
 };
 
-function useCopyToClipboard(text: string, recentlyCopiedMethod: Function) {
+function useCopyToClipboard(
+  text: string,
+  recentlyCopiedMethod: Dispatch<SetStateAction<boolean>>
+) {
   // Try to save to clipboard then save it in the state if worked
   try {
     navigator?.clipboard.writeText(text);

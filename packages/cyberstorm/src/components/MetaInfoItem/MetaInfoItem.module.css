@@ -3,27 +3,18 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
   padding: var(--space--8) var(--space--12);
   border-radius: var(--border-radius--8);
   color: var(--text-color);
+
   font: var(--font-body);
   font-weight: 700;
-  font-size: var(--font-size--12);
+  font-size: var(--font-size--14);
   background-color: var(--color-surface--4);
 }
 
 .label {
   flex-shrink: 0;
-}
-
-.content {
-  flex-shrink: 1;
-}
-
-.metaInfoItem__default {
-  --text-color: var(--color-text--default);
-}
-
-.metaInfoItem__tertiary {
-  --text-color: var(--color-text--tertiary);
+  color: var(--color-text--accent);
 }

@@ -246,7 +246,7 @@ function getMetaInfoData(packageData: Package) {
 const tabs = [
   {
     key: 1,
-    label: "Description",
+    label: "Details",
     icon: <FontAwesomeIcon icon={faFileLines} fixedWidth />,
   },
   {
