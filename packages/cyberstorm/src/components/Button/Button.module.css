@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
 
-  padding: var(--space--14) var(--space--16);
+  padding: var(--space--12) var(--space--16);
   border: var(--button-border-width) solid var(--button-border-color);
   border-radius: var(--border-radius--12);
   color: var(--text-color);
@@ -21,9 +21,8 @@
 
 /* Styles for Button's text */
 .label {
-  font: var(--font-heading);
-  font-weight: 500;
-  line-height: var(--line-height--18);
+  font-weight: 700;
+  font-size: var(--font-size--14);
 }
 
 /* Different Button color schemes */
@@ -149,6 +148,16 @@
 
 .button__transparentPrimary:hover {
   --text-color: var(--color-highlight);
+  --bg-color: var(--color-surface--4);
+}
+
+.button__transparentAccent {
+  --text-color: var(--color-text--accent);
+  --bg-color: transparent;
+}
+
+.button__transparentAccent:hover {
+  --text-color: var(--color-text--accent);
   --bg-color: var(--color-surface--4);
 }
 

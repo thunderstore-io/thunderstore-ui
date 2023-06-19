@@ -1,9 +1,7 @@
-import styles from "./Heading.module.css";
+import styles from "./Header.module.css";
 import { DropDown } from "../DropDown/DropDown";
-import { Button } from "../Button/Button";
-import { TextInput } from "../TextInput/TextInput";
+import { Button, PlainButton } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ThunderstoreLogo } from "../ThunderstoreLogo/ThunderstoreLogo";
 import { DropDownLink } from "../DropDown/DropDownLink";
 import {
   CommunitiesLink,
@@ -25,17 +23,16 @@ import {
   faCreditCard,
   faSignOut,
   faUpload,
+  faUser,
   faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
 import { AvatarButton } from "../Avatar/AvatarButton";
-
-// TODO: actual placeholder
-const defaultImageSrc = "/images/logo.png";
+import { ThunderstoreLogo } from "../../svg/svg";
 
 /**
- * Cyberstorm Heading Component
+ * Cyberstorm Header Component
  */
-export function Heading() {
+export function Header() {
   const userId = "user";
   const userData = getUserData(userId);
 
@@ -110,67 +107,84 @@ export function Heading() {
   ];
 
   return (
-    <div className={styles.root}>
-      <div className={styles.heading}>
-        <div className={styles.leftSection}>
-          <IndexLink>
-            <ThunderstoreLogo />
-          </IndexLink>
-          <IndexLink>
-            <Button label="Browse" colorScheme="transparentDefault" />
-          </IndexLink>
-          <CommunitiesLink>
-            <Button label="Communities" colorScheme="transparentDefault" />
-          </CommunitiesLink>
-          <DropDown
-            triggerColorScheme="transparentDefault"
-            trigger={
-              <Button
-                label="Developers"
-                rightIcon={<FontAwesomeIcon icon={faCaretDown} fixedWidth />}
-                size="medium"
+    <header className={styles.root}>
+      <nav className={styles.item}>
+        <ul className={styles.nav}>
+          <li>
+            <IndexLink>
+              <div className={styles.logoWrapper}>
+                <ThunderstoreLogo />
+              </div>
+            </IndexLink>
+          </li>
+          <li>
+            <IndexLink>
+              <Button label="Browse" colorScheme="transparentDefault" />
+            </IndexLink>
+          </li>
+          <li>
+            <CommunitiesLink>
+              <PlainButton
+                label="Communities"
+                colorScheme="transparentDefault"
               />
-            }
-            content={developersDropDownContents}
-          />
-        </div>
-        <div className={styles.middleSection}>
-          <TextInput />
-        </div>
-        <div className={styles.rightSection}>
-          <Button colorScheme="specialPurple" label="Go Premium" />
-          <Button colorScheme="primary" label="Get Manager" />
-
-          <PackageUploadLink>
-            <Button
-              size="small"
-              colorScheme="transparentDefault"
-              leftIcon={<FontAwesomeIcon icon={faUpload} fixedWidth />}
+            </CommunitiesLink>
+          </li>
+          <li>
+            <DropDown
+              triggerColorScheme="transparentDefault"
+              trigger={
+                <Button
+                  label="Developers"
+                  rightIcon={<FontAwesomeIcon icon={faCaretDown} fixedWidth />}
+                  size="medium"
+                />
+              }
+              content={developersDropDownContents}
             />
-          </PackageUploadLink>
-          <Button
-            size="small"
-            colorScheme="transparentDefault"
-            leftIcon={<FontAwesomeIcon icon={faBell} fixedWidth />}
-          />
-          <DropDown
-            colorScheme="default"
-            trigger={
-              <AvatarButton
-                src={
-                  userData.imageSource ? userData.imageSource : defaultImageSrc
-                }
+          </li>
+        </ul>
+      </nav>
+
+      <div className={`${styles.item} + ${styles.search}`}></div>
+
+      <nav className={styles.item}>
+        <ul className={styles.nav}>
+          <li className={styles.navButtons}>
+            <Button colorScheme="specialPurple" label="Go Premium" />
+            <Button colorScheme="primary" label="Get Manager" />
+          </li>
+          <li>
+            <PackageUploadLink>
+              <PlainButton
+                size="small"
+                colorScheme="transparentAccent"
+                leftIcon={<FontAwesomeIcon icon={faUpload} fixedWidth />}
               />
-            }
-            content={userDropDownContents}
-          />
-        </div>
-      </div>
-    </div>
+            </PackageUploadLink>
+          </li>
+          <li>
+            <DropDown
+              colorScheme="default"
+              trigger={
+                userData.imageSource ? (
+                  <AvatarButton src={userData.imageSource} />
+                ) : (
+                  <Button
+                    leftIcon={<FontAwesomeIcon icon={faUser} fixedWidth />}
+                  />
+                )
+              }
+              content={userDropDownContents}
+            />
+          </li>
+        </ul>
+      </nav>
+    </header>
   );
 }
 
-Heading.displayName = "Heading";
+Header.displayName = "Header";
 
 function getUserData(userId: string) {
   return getUserDummyData(userId);

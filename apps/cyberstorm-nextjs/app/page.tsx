@@ -1,6 +1,10 @@
 "use client";
 import { LinkLibrary } from "@/utils/LinkLibrary";
-import { HomeLayout, LinkingProvider } from "@thunderstore/cyberstorm";
+import {
+  CyberstormProviders,
+  HomeLayout,
+  LinkingProvider,
+} from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-styles";
 
 export default function RootLayout() {
@@ -8,7 +12,9 @@ export default function RootLayout() {
     <html lang="en">
       <body>
         <LinkingProvider value={LinkLibrary}>
-          <HomeLayout></HomeLayout>
+          <CyberstormProviders>
+            <HomeLayout></HomeLayout>
+          </CyberstormProviders>
         </LinkingProvider>
       </body>
     </html>

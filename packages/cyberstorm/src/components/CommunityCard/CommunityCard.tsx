@@ -22,23 +22,31 @@ export function CommunityCard(props: GameIconProps) {
   return (
     <div className={styles.root}>
       <CommunityLink community={communityData.name}>
-        <img
-          className={styles.image}
-          alt={communityData.name}
-          src={communityData.imageSource}
-        />
+        <div className={styles.imageWrapper}>
+          <img
+            className={styles.image}
+            alt={communityData.name}
+            src={communityData.imageSource}
+          />
+        </div>
         <div className={styles.title}>{communityData.name}</div>
       </CommunityLink>
       <div className={styles.metaItemList}>
         <MetaItem
+          size="medium"
+          colorScheme="accent"
           label={formatInteger(communityData.packageCount)}
           icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
         />
         <MetaItem
+          size="medium"
+          colorScheme="accent"
           label={formatInteger(communityData.downloadCount)}
           icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
         />
         <MetaItem
+          size="medium"
+          colorScheme="accent"
           label={formatInteger(communityData.serverCount)}
           icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
         />

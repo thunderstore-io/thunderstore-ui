@@ -26,8 +26,8 @@
   --text-color: var(--color-text--default);
 }
 
-.metaItem__tertiary {
-  --text-color: var(--color-text--tertiary);
+.metaItem__accent {
+  --text-color: var(--color-text--accent);
 }
 
 .metaItem__medium {

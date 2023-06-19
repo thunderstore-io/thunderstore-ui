@@ -43,6 +43,7 @@ export function CommunityListLayout() {
             />
           </div>
           <div className={styles.searchFilters}>
+            <div className={styles.searchFiltersSortLabel}>Sort by</div>
             <Select onChange={setOrder} options={selectOptions} value={order} />
           </div>
         </div>
@@ -71,7 +72,7 @@ function getCommunityData() {
 const selectOptions = [
   {
     value: "1",
-    label: "Newest",
+    label: "Latest",
     leftIcon: <FontAwesomeIcon fixedWidth icon={faStar} />,
   },
   {

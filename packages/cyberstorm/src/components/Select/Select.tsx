@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import styles from "./Select.module.css";
 import { Button } from "../Button/Button";
 import { MenuItem } from "../MenuItem/MenuItem";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as RadixSelect from "@radix-ui/react-select";
@@ -30,7 +30,7 @@ export function Select(props: SelectProps) {
   const {
     colorScheme = "default",
     defaultOpen = false,
-    icon = <FontAwesomeIcon fixedWidth icon={faChevronDown} />,
+    icon = <FontAwesomeIcon fixedWidth icon={faCaretDown} />,
     options,
     onChange,
     placeholder = "Select",
