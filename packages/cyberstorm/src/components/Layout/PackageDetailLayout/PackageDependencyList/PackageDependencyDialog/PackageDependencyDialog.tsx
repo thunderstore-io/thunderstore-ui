@@ -11,8 +11,12 @@ export function PackageDependencyDialog(props: PackageDependencyDialogProps) {
     <div className={styles.root}>
       {packages.map((packageData, index) => {
         return (
-          <div className={styles.item}>
-            <img className={styles.image} src={packageData.imageSource} />
+          <div key={index} className={styles.item}>
+            <img
+              className={styles.image}
+              src={packageData.imageSource}
+              alt={`Thumbnail of the package ${packageData.name}`}
+            />
             <div>
               <div className={styles.title}>{packageData.name}</div>
               <div className={styles.description}>
