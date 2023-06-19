@@ -1,53 +1,52 @@
 /* Common Alert styles */
 .root {
   display: flex;
-  align-items: center;
+  gap: var(--space--16);
+  align-content: space-around;
+  align-items: baseline;
+  padding: var(--space--16) var(--space--24);
+  border-left-width: 3px;
 
   border-radius: 4px;
-  border-left-width: 3px;
 }
 
 /* Styles for Alert's text */
-.label {
+.content {
   font: var(--font-body);
   font-weight: 500;
   font-size: var(--font-size--14);
   line-height: var(--line-height--24);
-  padding: var(--space--16) var(--space--24);
 }
 
 /* Styles for Alert's Icon */
 .icon {
+  flex-shrink: 0;
   width: var(--space--18);
   height: var(--space--22);
-  font-weight: 900;
-  padding: var(--space--16) var(--space--24);
-  gap: var(--space--16);
   line-height: var(--line-height--26);
 }
 
 /* Different Alert variants */
 .alert__info {
-  background: var(--color-accent-blue--9);
-  color: var(--color-accent-blue--2);
   border-color: var(--color-accent-blue--5);
+  color: var(--color-accent-blue--2);
+  background: var(--color-accent-blue--9);
 }
 
 .alert__success {
-  background: var(--color-accent-green--9);
-  color: var(--color-accent-green--2);
   border-color: var(--color-accent-green--5);
+  color: var(--color-accent-green--2);
+  background: var(--color-accent-green--9);
 }
 
 .alert__warning {
-  background: var(--color-accent-yellow--9);
-  color: var(--color-accent-yellow--2);
   border-color: var(--color-accent-yellow--5);
+  color: var(--color-accent-yellow--2);
+  background: var(--color-accent-yellow--9);
 }
 
 .alert__danger {
-  background: var(--color-accent-red--9);
-  color: var(--color-accent-red--2);
   border-color: var(--color-accent-red--5);
+  color: var(--color-accent-red--2);
+  background: var(--color-accent-red--9);
 }
-

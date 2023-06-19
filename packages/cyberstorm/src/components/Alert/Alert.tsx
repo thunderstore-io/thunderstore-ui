@@ -3,7 +3,7 @@ import React, { ReactNode, useRef } from "react";
 import styles from "./Alert.module.css";
 
 type _AlertProps = {
-  label: string;
+  content: string;
   icon?: ReactNode;
   variant?: "info" | "danger" | "warning" | "success";
   ref?: React.Ref<HTMLDivElement>;
@@ -13,7 +13,7 @@ export type AlertProps = _AlertProps &
 
 export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
   (props, forwardedRef) => {
-    const { label, icon, variant = "info" } = props;
+    const { content, icon, variant = "info" } = props;
 
     const fallbackRef = useRef(null);
     const ref = forwardedRef || fallbackRef;
@@ -21,7 +21,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
     return (
       <div ref={ref} className={`${styles.root} ${getStyle(variant)}`}>
         {<div className={`${styles.icon}`}>{icon}</div>}
-        {<div className={`${styles.label}`}>{label}</div>}
+        {<div className={`${styles.content}`}>{content}</div>}
       </div>
     );
   }

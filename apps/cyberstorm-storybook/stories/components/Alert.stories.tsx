@@ -15,7 +15,7 @@ export default {
 } as Meta;
 
 const defaultArgs: AlertProps = {
-  label: "-",
+  content: "-",
   variant: "info",
 };
 
@@ -29,7 +29,7 @@ MinimalAlert.args = {
 const InfoAlert = Template.bind({});
 InfoAlert.args = {
   ...defaultArgs,
-  label:
+  content:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
   variant: "info",
   icon: <FontAwesomeIcon icon={faCircleExclamation} />,
@@ -38,7 +38,7 @@ InfoAlert.args = {
 const DangerAlert = Template.bind({});
 DangerAlert.args = {
   ...defaultArgs,
-  label:
+  content:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
   variant: "danger",
   icon: <FontAwesomeIcon fixedWidth icon={faCircleCheck} />,
@@ -47,7 +47,7 @@ DangerAlert.args = {
 const WarningAlert = Template.bind({});
 WarningAlert.args = {
   ...defaultArgs,
-  label:
+  content:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
   variant: "warning",
   icon: <FontAwesomeIcon fixedWidth icon={faTriangleExclamation} />,
@@ -56,7 +56,7 @@ WarningAlert.args = {
 const SuccessAlert = Template.bind({});
 SuccessAlert.args = {
   ...defaultArgs,
-  label:
+  content:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
   variant: "success",
   icon: <FontAwesomeIcon fixedWidth icon={faOctagonExclamation} />,
