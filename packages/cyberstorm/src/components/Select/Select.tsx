@@ -60,12 +60,14 @@ export function Select(props: SelectProps) {
           />
         </RadixSelect.Trigger>
 
-        <RadixSelect.Content
-          position="popper"
-          className={`${styles.content} ${getContentStyle(colorScheme)}`}
-        >
-          {selectItemElements}
-        </RadixSelect.Content>
+        <RadixSelect.Portal>
+          <RadixSelect.Content
+            position="popper"
+            className={`${styles.content} ${getContentStyle(colorScheme)}`}
+          >
+            {selectItemElements}
+          </RadixSelect.Content>
+        </RadixSelect.Portal>
       </RadixSelect.Root>
     </div>
   );
