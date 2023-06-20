@@ -15,12 +15,15 @@ interface _PlainButtonProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  size?: "tiny" | "small" | "medium" | "mediumTight" | "mediumIcon" | "large";
+  fontSize?: "small" | "medium" | "large" | "huge";
+  paddingSize?: "none" | "small" | "medium" | "mediumSquare" | "large" | "huge";
+  fontWeight?: "600" | "700" | "800";
   colorScheme?:
     | "danger"
     | "default"
     | "primary"
     | "accent"
+    | "fancyAccent"
     | "warning"
     | "specialGreen"
     | "specialPurple"
@@ -47,7 +50,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       rightIcon,
       colorScheme = "default",
       onClick,
-      size = "medium",
+      fontSize = "medium",
+      paddingSize = "medium",
+      fontWeight = "700",
       ...forwardedProps
     } = props;
 
@@ -59,11 +64,17 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...forwardedProps}
         ref={ref}
         type="button"
-        className={`${styles.root} ${getStyle(colorScheme)} ${getSize(size)}`}
+        className={`${styles.root} ${getStyle(colorScheme)} ${getFontSize(
+          fontSize
+        )} ${getPaddingSize(paddingSize)}`}
         onClick={onClick}
       >
         {leftIcon}
-        {label ? <div className={styles.label}>{label}</div> : null}
+        {label ? (
+          <div className={`${styles.label} ${getFontWeight(fontWeight)}`}>
+            {label}
+          </div>
+        ) : null}
         {rightIcon}
       </button>
     );
@@ -77,7 +88,9 @@ export const PlainButton = React.forwardRef<HTMLDivElement, PlainButtonProps>(
       leftIcon,
       rightIcon,
       colorScheme = "default",
-      size = "medium",
+      fontSize = "medium",
+      paddingSize = "medium",
+      fontWeight = "700",
       ...forwardedProps
     } = props;
 
@@ -88,10 +101,20 @@ export const PlainButton = React.forwardRef<HTMLDivElement, PlainButtonProps>(
       <div
         {...forwardedProps}
         ref={ref}
-        className={`${styles.root} ${getStyle(colorScheme)} ${getSize(size)}`}
+        className={`${styles.root} ${getStyle(colorScheme)} ${getPaddingSize(
+          paddingSize
+        )}`}
       >
         {leftIcon}
-        {label ? <div className={styles.label}>{label}</div> : null}
+        {label ? (
+          <div
+            className={`${styles.label} ${getFontSize(
+              fontSize
+            )} ${getFontWeight(fontWeight)}`}
+          >
+            {label}
+          </div>
+        ) : null}
         {rightIcon}
       </div>
     );
@@ -107,6 +130,7 @@ const getStyle = (scheme: string) => {
     primary: styles.button__primary,
     default: styles.button__default,
     accent: styles.button__accent,
+    fancyAccent: styles.button__fancyAccent,
     warning: styles.button__warning,
     specialGreen: styles.button__specialGreen,
     specialPurple: styles.button__specialPurple,
@@ -117,13 +141,30 @@ const getStyle = (scheme: string) => {
   }[scheme];
 };
 
-const getSize = (scheme: string) => {
+const getPaddingSize = (scheme: string) => {
   return {
-    tiny: styles.tiny,
-    small: styles.small,
-    mediumTight: styles.mediumTight,
-    mediumIcon: styles.mediumIcon,
-    large: styles.large,
-    medium: "",
+    none: styles.padding__none,
+    small: styles.padding__small,
+    medium: styles.padding__medium,
+    mediumSquare: styles.padding__mediumSquare,
+    large: styles.padding__large,
+    huge: styles.padding__huge,
+  }[scheme];
+};
+
+const getFontSize = (scheme: string) => {
+  return {
+    small: styles.font__small,
+    medium: styles.font__medium,
+    large: styles.font__large,
+    huge: styles.font__huge,
+  }[scheme];
+};
+
+const getFontWeight = (scheme: string) => {
+  return {
+    "600": styles.fontWeight__600,
+    "700": styles.fontWeight__700,
+    "800": styles.fontWeight__800,
   }[scheme];
 };

@@ -31,9 +31,7 @@
 
 .label {
   color: var(--mark-color);
-  font: var(--font-body);
   font-weight: 700;
-  font-size: var(--font-size--14);
   transition: 200ms;
   user-select: none;
 

@@ -30,7 +30,7 @@ export function CollapsibleText(props: CollapsibleTextProps) {
         <Button
           label={opened ? "Show less" : "Show more"}
           colorScheme="transparentDefault"
-          size="tiny"
+          paddingSize="none"
           onClick={() => setOpened(!opened)}
         />
       </div>

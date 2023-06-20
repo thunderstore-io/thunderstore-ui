@@ -4,10 +4,8 @@
   padding: var(--space--8) var(--space--12);
   border-radius: var(--border-radius--8);
   color: var(--color-text--default);
-  font: var(--font-body);
 
   font-weight: 700;
-  font-size: var(--font-size--14);
   overflow-wrap: break-word;
   background-color: var(--color-surface--0);
 

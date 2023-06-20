@@ -45,7 +45,8 @@ export function CopyButton(props: CopyButtonProps) {
     <TooltipProvider>
       <Tooltip content="Copy">
         <Button
-          size={"tiny"}
+          paddingSize="none"
+          fontSize="small"
           colorScheme={"transparentDefault"}
           onClick={() => {
             useCopyToClipboard(text, setWasRecentlyCopied);

@@ -7,9 +7,6 @@
   min-width: 10rem;
   padding: var(--space--10) var(--space--12);
   color: var(--text-color);
-
-  font: var(--font-body);
-  font-size: var(--font-size--14);
   cursor: pointer;
 
   --text-color: var(--color-text--default);

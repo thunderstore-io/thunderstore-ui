@@ -44,13 +44,14 @@ function getPackageVersionsMapped(packageVersionList: PackageVersion[]) {
       formatInteger(packageVersion.downloads),
       <>
         <Button
-          size="small"
-          leftIcon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
+          paddingSize="medium"
+          fontSize="medium"
           label="Download"
-          colorScheme="transparentDefault"
+          colorScheme="transparentAccent"
         />
         <Button
-          size="small"
+          paddingSize="medium"
+          fontSize="medium"
           leftIcon={<FontAwesomeIcon icon={faBoltLightning} fixedWidth />}
           label="Install"
           colorScheme="accent"

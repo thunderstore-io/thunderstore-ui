@@ -15,9 +15,9 @@
 }
 
 .label {
-  font: var(--font-body);
-  font-weight: 500;
-  line-height: var(--line-height--18);
+  font-weight: 700;
+  font-size: var(--font-size--l);
+  line-height: 1;
 }
 
 .button__default {

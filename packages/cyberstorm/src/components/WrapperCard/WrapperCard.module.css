@@ -16,8 +16,8 @@
 
 .title {
   font-weight: 700;
-  font-size: var(--font-size--16);
-  line-height: 160%;
+  font-size: var(--font-size--l);
+  line-height: var(--line-height--l);
 }
 
 .headerRight {

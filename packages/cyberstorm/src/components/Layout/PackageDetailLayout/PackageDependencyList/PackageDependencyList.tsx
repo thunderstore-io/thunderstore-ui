@@ -7,6 +7,7 @@ import { faBoxOpen } from "@fortawesome/pro-regular-svg-icons";
 import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
 import { Dialog } from "../../../Dialog/Dialog";
 import { PackageDependencyDialog } from "./PackageDependencyDialog/PackageDependencyDialog";
+import { Button } from "../../../Button/Button";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
@@ -65,7 +66,11 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
       <WrapperCard
         title="Required Mods"
         content={
-          <div className={styles.list}>{mappedPackageDependencyList}</div>
+          <div className={styles.root}>
+            <div className={styles.listWrapper}>
+              <div className={styles.list}>{mappedPackageDependencyList}</div>
+            </div>
+          </div>
         }
         headerIcon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
         headerRightContent={
@@ -76,8 +81,14 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
             title="Required mods"
             trigger={
               <div className={styles.dependencyDialogTrigger}>
-                <div>See all</div>
-                <FontAwesomeIcon icon={faCaretRight} fixedWidth />
+                <Button
+                  paddingSize="none"
+                  fontSize="medium"
+                  fontWeight="600"
+                  colorScheme="transparentPrimary"
+                  label="See all"
+                  rightIcon={<FontAwesomeIcon icon={faCaretRight} fixedWidth />}
+                />
               </div>
             }
             content={<PackageDependencyDialog packages={packages} />}

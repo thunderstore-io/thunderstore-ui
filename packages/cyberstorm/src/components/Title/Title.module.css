@@ -3,17 +3,15 @@
   font: var(--font-heading);
   font-weight: 800;
   font-size: 3rem;
-  line-height: 1.2;
+  line-height: 1;
 }
 
 .smaller {
   font-weight: 600;
-  font-size: var(--font-size--24);
-  line-height: 1.2;
+  font-size: 1.5rem;
 }
 
 .smallest {
   font-weight: 700;
-  font-size: var(--font-size--16);
-  line-height: 1.2;
+  font-size: var(--font-size--l);
 }

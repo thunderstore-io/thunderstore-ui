@@ -2,20 +2,6 @@
   position: relative;
   max-height: 272px;
   padding: var(--space--8) var(--space--8) 0 var(--space--8);
-  overflow: hidden;
-  font-size: var(--font-size--14);
-  line-height: 170%;
-}
-
-.list::after {
-  position: absolute;
-  bottom: 0;
-  display: block;
-  width: 100%;
-  height: 25%;
-  background: linear-gradient(transparent, var(--color-background)) left repeat;
-  content: "";
-  pointer-events: none;
 }
 
 .item {
@@ -37,11 +23,15 @@
 
 .itemTitle {
   font-weight: 700;
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
 }
 
 .itemDescription {
   color: var(--color-text--tertiary);
   font-weight: 500;
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
 }
 
 .teamLink {
@@ -50,6 +40,6 @@
   align-items: center;
   color: var(--color-highlight);
   font-weight: 600;
-  font-size: var(--font-size--14);
-  line-height: 170%;
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
 }

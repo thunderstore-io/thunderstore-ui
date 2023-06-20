@@ -55,15 +55,16 @@
 }
 
 .footnote {
-  padding-block: var(--space--32);
   color: var(--color-text--tertiary);
   font-weight: 500;
+  font-size: var(--font-size--s);
+  line-height: var(--line-height--s);
+  padding-block: var(--space--32);
 }
 
 .footnoteLinks {
   display: flex;
   gap: var(--gap--32);
-  font-size: var(--font-size--14);
 }
 
 .footnoteLink:hover {
@@ -72,7 +73,6 @@
 
 .footnoteCopyright {
   color: rgb(198 195 255 / 0.6);
-  font-size: var(--font-size--12);
 }
 
 .footnoteInner {
@@ -149,8 +149,8 @@
   gap: var(--gap--8);
   color: var(--color-text--accent);
   font-weight: 500;
-  font-size: var(--font-size--14);
-  line-height: var(--space--24);
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
   list-style-type: none;
 }
 
@@ -160,7 +160,8 @@
 
 .navTitle {
   font-weight: 700;
-  font-size: var(--space--18);
+  font-size: 1.125rem;
+  line-height: 1;
 }
 
 .ad {
@@ -181,12 +182,15 @@
 .adTitle {
   font: var(--font-heading);
   font-weight: 700;
-  font-size: 38px;
+  font-size: 2.375rem;
+  line-height: 1;
 }
 
 .adDescription {
   color: var(--color-text--accent);
-  line-height: 26px;
+  font-weight: 600;
+  font-size: var(--font-size--xl);
+  line-height: var(--line-height--xl);
 }
 
 .adButton {

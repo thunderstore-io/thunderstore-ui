@@ -20,7 +20,7 @@ export function PageHeader(props: PageHeaderProps) {
     <div className={styles.root}>
       {image}
       <div className={styles.info}>
-        <Title text={title} />
+        <div className={styles.title}>{title}</div>
 
         {description ? (
           <CollapsibleText text={description} maxLength={85} />

@@ -17,7 +17,7 @@ export function DropDownLink(props: DropDownLinkProps) {
   return (
     <div className={styles.root}>
       <div className={styles.label}>
-        {leftIcon ? leftIcon : null}
+        {leftIcon ? <div className={styles.icon}>{leftIcon}</div> : null}
         {label}
       </div>
       {isExternal ? <FontAwesomeIcon icon={faArrowUpRight} fixedWidth /> : null}

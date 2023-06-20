@@ -9,16 +9,18 @@
   justify-content: center;
   border: var(--border-width--2) solid var(--border-color);
   border-radius: var(--border-radius--8);
-  font: var(--font-body);
   font-weight: 700;
+
+  font-size: var(--font-size--s);
+  line-height: 1;
   background-color: var(--bg-color);
+
+  cursor: default;
 
   --text-color: var(--color-text--default);
   --bg-color: var(--color-surface--5);
   --border-color: var(--color-surface--9);
   --icon-color: var(--color-text--tertiary);
-
-  cursor: default;
 }
 
 .label {
@@ -33,17 +35,14 @@
 .tiny {
   padding: var(--space--2) var(--space--4);
   border-radius: var(--border-radius--4);
-  font-size: var(--font-size--12);
 }
 
 .small {
   padding: var(--space--4) var(--space--10);
-  font-size: var(--font-size--10);
 }
 
 .medium {
   padding: var(--space--6) var(--space--8);
-  font-size: var(--font-size--12);
 }
 
 /* Different Tag color schemes */

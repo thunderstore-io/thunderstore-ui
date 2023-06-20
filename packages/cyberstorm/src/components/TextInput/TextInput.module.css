@@ -13,7 +13,6 @@
   border: var(--border-width--2) solid var(--border-color);
 
   border-radius: var(--border-radius--8);
-  font: var(--font-body);
   background-color: var(--color-surface--4);
 
   --border-color: transparent;

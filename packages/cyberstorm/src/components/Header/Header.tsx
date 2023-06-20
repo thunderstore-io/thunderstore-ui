@@ -80,25 +80,19 @@ export function Header() {
         label="Teams"
       />
     </TeamsLink>,
-    <a href="/notifications" key="3">
-      <DropDownLink
-        leftIcon={<FontAwesomeIcon icon={faBell} fixedWidth />}
-        label="Notifications"
-      />
-    </a>,
-    <a href="/subscriptons" key="4">
+    <a href="/subscriptons" key="3">
       <DropDownLink
         leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
         label="Subscriptions"
       />
     </a>,
-    <SettingsLink key="5">
+    <SettingsLink key="4">
       <DropDownLink
         leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
         label="Settings"
       />
     </SettingsLink>,
-    <a href="/logout" key="6">
+    <a href="/logout" key="5">
       <DropDownLink
         leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
         label="Log Out"
@@ -119,13 +113,22 @@ export function Header() {
           </li>
           <li>
             <IndexLink>
-              <Button label="Browse" colorScheme="transparentDefault" />
+              <PlainButton
+                label="Browse"
+                paddingSize="large"
+                fontSize="large"
+                fontWeight="700"
+                colorScheme="transparentDefault"
+              />
             </IndexLink>
           </li>
           <li>
             <CommunitiesLink>
               <PlainButton
                 label="Communities"
+                paddingSize="large"
+                fontSize="large"
+                fontWeight="700"
                 colorScheme="transparentDefault"
               />
             </CommunitiesLink>
@@ -137,7 +140,9 @@ export function Header() {
                 <Button
                   label="Developers"
                   rightIcon={<FontAwesomeIcon icon={faCaretDown} fixedWidth />}
-                  size="medium"
+                  paddingSize="large"
+                  fontSize="large"
+                  fontWeight="700"
                 />
               }
               content={developersDropDownContents}
@@ -151,13 +156,25 @@ export function Header() {
       <nav className={styles.item}>
         <ul className={styles.nav}>
           <li className={styles.navButtons}>
-            <Button colorScheme="specialPurple" label="Go Premium" />
-            <Button colorScheme="accent" label="Get Manager" />
+            <Button
+              colorScheme="specialPurple"
+              paddingSize="large"
+              fontSize="large"
+              fontWeight="700"
+              label="Go Premium"
+            />
+            <Button
+              colorScheme="accent"
+              label="Get Manager"
+              paddingSize="large"
+              fontSize="large"
+              fontWeight="700"
+            />
           </li>
           <li>
             <PackageUploadLink>
               <PlainButton
-                size="small"
+                paddingSize="mediumSquare"
                 colorScheme="transparentAccent"
                 leftIcon={<FontAwesomeIcon icon={faUpload} fixedWidth />}
               />

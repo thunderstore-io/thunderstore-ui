@@ -56,9 +56,9 @@
 .inner {
   gap: var(--space--14);
   align-items: center;
-  font: var(--font-body);
   font-weight: 500;
-  font-size: var(--font-size--12);
+  font-size: var(--font-size--s);
+  line-height: 1;
 
   /* unskew the content */
   transform: skew(30deg);

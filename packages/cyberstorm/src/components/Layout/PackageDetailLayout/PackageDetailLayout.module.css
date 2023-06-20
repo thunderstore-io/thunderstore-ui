@@ -19,7 +19,6 @@
 
 .description {
   color: var(--color-text--default);
-  font: var(--font-body);
   white-space: pre-wrap;
 }
 

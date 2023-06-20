@@ -119,6 +119,9 @@ export function Footer() {
                   <div className={styles.adButton}>
                     <PlainButton
                       colorScheme="accent"
+                      paddingSize="large"
+                      fontSize="large"
+                      fontWeight="700"
                       label="Get Manager"
                       rightIcon={
                         <FontAwesomeIcon icon={faArrowUpRight} fixedWidth />

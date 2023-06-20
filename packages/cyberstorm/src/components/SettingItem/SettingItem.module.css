@@ -3,9 +3,6 @@
   flex-direction: column;
   gap: 2rem;
   color: var(--color-text--default);
-
-  font: var(--font-body);
-  font-size: var(--font-size--14);
 }
 
 .leftColumnTitle {

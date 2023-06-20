@@ -35,18 +35,18 @@
   --border-radius--8: 0.5rem;
   --border-radius--12: 0.75rem;
   --border-radius--16: 1rem;
-  --font-size--10: 0.625rem;
-  --font-size--12: 0.75rem;
-  --font-size--14: 0.875rem;
-  --font-size--16: 1rem;
-  --font-size--24: 1.5rem;
-  --line-height--10: 0.625rem;
-  --line-height--18: 1.125rem;
-  --line-height--22: 1.375rem;
+  --font-size--s: var(--space--12);
+  --font-size--m: var(--space--14);
+  --font-size--l: var(--space--16);
+  --font-size--xl: var(--space--18);
+  --line-height--s: 1.7;
+  --line-height--m: 1.7;
+  --line-height--l: 1.6;
+  --line-height--xl: 1.6;
 
   /* Common fonts */
-  --font-body: normal var(--font-size--16) inter, sans-serif;
-  --font-heading: normal var(--font-size--16) sora, sans-serif;
+  --font-body: normal var(--font-size--m) inter, sans-serif;
+  --font-heading: normal var(--font-size--m) sora, sans-serif;
 }
 
 a {
@@ -57,11 +57,6 @@ a {
 body {
   color: var(--color-text--default);
   font: var(--font-body);
+  line-height: var(--line-height--m);
   background-color: var(--color-background);
-}
-
-@media (hover: hover) {
-  :focus-visible {
-    outline: 0 !important;
-  }
 }

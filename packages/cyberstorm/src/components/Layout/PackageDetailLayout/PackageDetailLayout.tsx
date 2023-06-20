@@ -74,7 +74,9 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
       <TeamLink team={packageData.team.name}>
         <PlainButton
           colorScheme="transparentPrimary"
-          size="mediumTight"
+          paddingSize="small"
+          fontSize="medium"
+          fontWeight="700"
           label={packageData.team.name}
           leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
         />
@@ -132,6 +134,9 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               trigger={
                 <Button
                   colorScheme="transparentDefault"
+                  paddingSize="large"
+                  fontSize="medium"
+                  fontWeight="700"
                   leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
                   label="Manage"
                 />
@@ -140,9 +145,11 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
             <a href="/">
               <div className={styles.installButton}>
                 <PlainButton
-                  size="large"
+                  paddingSize="huge"
+                  fontSize="huge"
+                  fontWeight="800"
                   label="Install"
-                  colorScheme="accent"
+                  colorScheme="fancyAccent"
                   leftIcon={
                     <div className={styles.installButtonIcon}>
                       <ThunderstoreLogo />
@@ -164,23 +171,29 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
             <div className={styles.metaDownloadButton}>
               <Button
                 colorScheme="primary"
+                paddingSize="medium"
+                fontSize="medium"
+                fontWeight="700"
                 leftIcon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
                 label="Download"
               />
             </div>
             <Button
               colorScheme="primary"
-              size="mediumIcon"
+              paddingSize="mediumSquare"
+              fontSize="medium"
               leftIcon={<FontAwesomeIcon icon={faDonate} fixedWidth />}
             />
             <Button
               colorScheme="primary"
-              size="mediumIcon"
+              paddingSize="mediumSquare"
+              fontSize="medium"
               leftIcon={<FontAwesomeIcon icon={faThumbsUp} fixedWidth />}
             />
             <Button
               colorScheme="primary"
-              size="mediumIcon"
+              paddingSize="mediumSquare"
+              fontSize="medium"
               leftIcon={<FontAwesomeIcon icon={faFlag} fixedWidth />}
             />
           </div>
@@ -192,6 +205,8 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               getPackageDummyData("2"),
               getPackageDummyData("3"),
               getPackageDummyData("4"),
+              getPackageDummyData("5"),
+              getPackageDummyData("6"),
             ]}
           />
           <PackageTeamMemberList

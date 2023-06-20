@@ -1,16 +1,34 @@
-.list {
-  position: relative;
-  max-height: 272px;
-  padding: var(--space--8) var(--space--8) 0 var(--space--8);
-  overflow: hidden;
-  font-size: var(--font-size--14);
-  line-height: 170%;
+.root {
+  height: var(--height);
+
+  --height: 272px;
+
+  border-radius: 8px;
 }
 
-.list::after {
+.list {
+  width: 100%;
+  height: 100%;
+  padding: var(--space--8) var(--space--8) 0 var(--space--8);
+  overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.list::-webkit-scrollbar {
+  display: none;
+}
+
+.listWrapper {
+  position: absolute;
+  height: var(--height);
+  border-radius: var(--border-radius--8);
+  overflow: hidden;
+}
+
+.listWrapper::before {
   position: absolute;
   bottom: 0;
-  display: block;
   width: 100%;
   height: 25%;
   background: linear-gradient(transparent, var(--color-background)) left repeat;
@@ -38,6 +56,8 @@
 .itemTitle {
   overflow: hidden;
   font-weight: 700;
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -45,6 +65,8 @@
 .itemDescription {
   overflow: hidden;
   color: var(--color-text--tertiary);
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -57,12 +79,5 @@
 }
 
 .dependencyDialogTrigger {
-  display: flex;
-  gap: var(--gap--8);
   align-items: center;
-  color: var(--color-highlight);
-  font-weight: 600;
-  font-size: var(--font-size--14);
-  line-height: 170%;
-  cursor: pointer;
 }

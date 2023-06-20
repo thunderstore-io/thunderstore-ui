@@ -4,7 +4,6 @@
   gap: var(--gap--16);
   margin-bottom: var(--space--16);
   color: var(--color-text--default);
-  font: var(--font-body);
 }
 
 .dialogTeamName {

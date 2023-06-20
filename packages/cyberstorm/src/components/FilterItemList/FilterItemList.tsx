@@ -89,13 +89,15 @@ export function FilterItemList(props: FilterItemListProps) {
     <div>
       <div className={styles.topActions}>
         <Button
-          size="small"
+          paddingSize="small"
+          fontSize="small"
           label="Categories"
           colorScheme="transparentTertiary"
           rightIcon={<FontAwesomeIcon icon={faCaretDown} fixedWidth />}
         />
         <Button
-          size="small"
+          paddingSize="small"
+          fontSize="small"
           label="Clear all"
           colorScheme="transparentTertiary"
         />
