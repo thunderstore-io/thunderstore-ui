@@ -63,6 +63,7 @@ export function Select(props: SelectProps) {
         <RadixSelect.Portal>
           <RadixSelect.Content
             position="popper"
+            sideOffset={4}
             className={`${styles.content} ${getContentStyle(colorScheme)}`}
           >
             {selectItemElements}

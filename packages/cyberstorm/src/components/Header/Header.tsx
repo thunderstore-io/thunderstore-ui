@@ -1,5 +1,5 @@
 import styles from "./Header.module.css";
-import { DropDown } from "../DropDown/DropDown";
+import { DropDown, DropDownDivider, DropDownItem } from "../DropDown/DropDown";
 import { Button, PlainButton } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DropDownLink } from "../DropDown/DropDownLink";
@@ -38,25 +38,27 @@ export function Header() {
 
   const developersDropDownContents = [
     <a href="/wiki" key="1">
-      <DropDownLink label="Modding Wiki" isExternal />
+      <DropDownItem
+        content={<DropDownLink label="Modding Wiki" isExternal />}
+      />
     </a>,
     <a href="/docs" key="2">
-      <DropDownLink label="API Docs" isExternal />
+      <DropDownItem content={<DropDownLink label="API Docs" isExternal />} />
     </a>,
     <a href="/git" key="3">
-      <DropDownLink label="GitHub Repo" isExternal />
+      <DropDownItem content={<DropDownLink label="GitHub Repo" isExternal />} />
     </a>,
     <PackageFormatDocsLink key="4">
-      <DropDownLink label="Package Format Docs" />
+      <DropDownItem content={<DropDownLink label="Package Format Docs" />} />
     </PackageFormatDocsLink>,
     <MarkdownPreviewLink key="5">
-      <DropDownLink label="Markdown Preview" />
+      <DropDownItem content={<DropDownLink label="Markdown Preview" />} />
     </MarkdownPreviewLink>,
     <ManifestValidatorLink key="6">
-      <DropDownLink label="Manifest Validator" />
+      <DropDownItem content={<DropDownLink label="Manifest Validator" />} />
     </ManifestValidatorLink>,
     <PackageUploadLink key="7">
-      <DropDownLink label="Upload Package" />
+      <DropDownItem content={<DropDownLink label="Upload Package" />} />
     </PackageUploadLink>,
   ];
 
@@ -74,30 +76,48 @@ export function Header() {
         </div>
       </div>
     </UserLink>,
-    <TeamsLink key="2">
-      <DropDownLink
-        leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
-        label="Teams"
-      />
-    </TeamsLink>,
-    <a href="/subscriptons" key="3">
-      <DropDownLink
-        leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
-        label="Subscriptions"
-      />
-    </a>,
-    <SettingsLink key="4">
-      <DropDownLink
-        leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
-        label="Settings"
-      />
-    </SettingsLink>,
-    <a href="/logout" key="5">
-      <DropDownLink
-        leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
-        label="Log Out"
-      />
-    </a>,
+    <DropDownDivider />,
+    <DropDownItem
+      content={
+        <TeamsLink key="2">
+          <DropDownLink
+            leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
+            label="Teams"
+          />
+        </TeamsLink>
+      }
+    />,
+    <DropDownItem
+      content={
+        <a href="/subscriptons" key="3">
+          <DropDownLink
+            leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
+            label="Subscriptions"
+          />
+        </a>
+      }
+    />,
+    <DropDownItem
+      content={
+        <SettingsLink key="4">
+          <DropDownLink
+            leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
+            label="Settings"
+          />
+        </SettingsLink>
+      }
+    />,
+    <DropDownDivider />,
+    <DropDownItem
+      content={
+        <a href="/logout" key="5">
+          <DropDownLink
+            leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
+            label="Log Out"
+          />
+        </a>
+      }
+    />,
   ];
 
   return (
@@ -183,6 +203,7 @@ export function Header() {
           <li>
             <DropDown
               colorScheme="default"
+              contentAlignment="end"
               trigger={
                 userData.imageSource ? (
                   <AvatarButton src={userData.imageSource} />
