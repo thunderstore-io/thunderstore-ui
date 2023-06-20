@@ -3,6 +3,7 @@ import { DropDown, DropDownDivider, DropDownItem } from "../DropDown/DropDown";
 import { Button, PlainButton } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DropDownLink } from "../DropDown/DropDownLink";
+import * as RadixDropDown from "@radix-ui/react-dropdown-menu";
 import {
   CommunitiesLink,
   IndexLink,
@@ -64,60 +65,62 @@ export function Header() {
 
   const userDropDownContents = [
     <UserLink key="1" user={userData.name}>
-      <div className={styles.dropDownUserInfo}>
-        {userData.imageSource ? <Avatar src={userData.imageSource} /> : null}
-        <div className={styles.dropdownUserInfoDetails}>
-          <div className={styles.dropdownUserInfoDetails_userName}>
-            {userData.name}
-          </div>
-          <div className={styles.dropdownUserInfoDetails_description}>
-            My profile
+      <RadixDropDown.Item>
+        <div className={styles.dropDownUserInfo}>
+          {userData.imageSource ? <Avatar src={userData.imageSource} /> : null}
+          <div className={styles.dropdownUserInfoDetails}>
+            <div className={styles.dropdownUserInfoDetails_userName}>
+              {userData.name}
+            </div>
+            <div className={styles.dropdownUserInfoDetails_description}>
+              My profile
+            </div>
           </div>
         </div>
-      </div>
+      </RadixDropDown.Item>
     </UserLink>,
     <DropDownDivider />,
-    <DropDownItem
-      content={
-        <TeamsLink key="2">
+    <TeamsLink key="2">
+      <DropDownItem
+        content={
           <DropDownLink
             leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
             label="Teams"
           />
-        </TeamsLink>
-      }
-    />,
-    <DropDownItem
-      content={
-        <a href="/subscriptons" key="3">
+        }
+      />
+    </TeamsLink>,
+    <a href="/subscriptons" key="3">
+      <DropDownItem
+        content={
           <DropDownLink
             leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
             label="Subscriptions"
           />
-        </a>
-      }
-    />,
-    <DropDownItem
-      content={
-        <SettingsLink key="4">
+        }
+      />
+    </a>,
+    <SettingsLink key="4">
+      <DropDownItem
+        content={
           <DropDownLink
             leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
             label="Settings"
           />
-        </SettingsLink>
-      }
-    />,
+        }
+      />
+    </SettingsLink>,
     <DropDownDivider />,
-    <DropDownItem
-      content={
-        <a href="/logout" key="5">
+    <a href="/logout" key="5">
+      <DropDownItem
+        content={
           <DropDownLink
             leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
             label="Log Out"
           />
-        </a>
-      }
-    />,
+        }
+      />
+    </a>,
   ];
 
   return (
