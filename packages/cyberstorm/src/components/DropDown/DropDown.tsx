@@ -36,7 +36,7 @@ export function DropDown(props: DropDownProps) {
           <RadixDropDown.Content
             align="start"
             sideOffset={8}
-            className={`${styles.content}`}
+            className={styles.content}
           >
             {parseContent(content)}
           </RadixDropDown.Content>

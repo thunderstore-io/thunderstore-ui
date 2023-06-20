@@ -53,6 +53,7 @@ export function Dialog(props: DialogProps) {
               <RadixDialog.Close asChild>
                 <Button
                   colorScheme="transparentDefault"
+                  paddingSize="mediumSquare"
                   leftIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
                 />
               </RadixDialog.Close>

@@ -2,10 +2,11 @@
   display: flex;
   gap: var(--space--4);
   padding-left: var(--space--16);
+  color: var(--color-cyber-green--60);
 }
 
 .outer {
-  --bg-color: var(--color-surface--3);
+  --bg-color: var(--color-surface--4);
 
   position: relative;
   display: flex;
@@ -16,11 +17,10 @@
 
   /* skew the container */
   transform: skew(-30deg);
-  cursor: pointer;
 }
 
 .outer:hover {
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--color-surface--6);
 }
 
 .outer__start {
@@ -29,6 +29,8 @@
 
 .outer__end {
   padding-right: 0;
+
+  --bg-color: var(--color-surface--6);
 }
 
 .outer__start::before,
@@ -64,7 +66,10 @@
   transform: skew(30deg);
 }
 
+.inner__end {
+  color: var(--color-text--default);
+}
+
 .home {
-  color: var(--color-highlight);
   text-decoration: none;
 }

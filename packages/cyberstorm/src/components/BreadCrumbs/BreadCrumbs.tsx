@@ -16,14 +16,17 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
   }
 
   const nodes = children.map((node, index) => {
+    const isLast = index == children.length - 1;
     return (
       <div
         key={index}
         className={`${index == 0 ? styles.outer__start : ""} ${styles.outer} ${
-          index == children.length - 1 ? styles.outer__end : ""
+          isLast ? styles.outer__end : ""
         }`}
       >
-        <div className={styles.inner}>{node}</div>
+        <div className={`${styles.inner} ${isLast ? styles.inner__end : ""}`}>
+          {node}
+        </div>
       </div>
     );
   });

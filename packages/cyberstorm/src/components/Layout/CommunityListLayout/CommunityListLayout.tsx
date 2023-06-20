@@ -23,6 +23,7 @@ import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
  */
 export function CommunityListLayout() {
   const [order, setOrder] = useState("1");
+  const [searchValue, setSearchValue] = useState("");
 
   const communitiesData: CommunityPreview[] = getCommunityData();
 
@@ -38,6 +39,8 @@ export function CommunityListLayout() {
         <div className={styles.filters}>
           <div className={styles.searchTextInput}>
             <TextInput
+              setValue={setSearchValue}
+              value={searchValue}
               placeHolder="Search communities..."
               leftIcon={<FontAwesomeIcon icon={faSearch} fixedWidth />}
             />

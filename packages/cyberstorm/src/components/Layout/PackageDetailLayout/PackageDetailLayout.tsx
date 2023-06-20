@@ -102,13 +102,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <CommunityLink community={packageData.community}>
             {packageData.community}
           </CommunityLink>
-          <PackageLink
-            namespace={packageData.namespace}
-            community={packageData.community}
-            package={packageData.name}
-          >
-            {packageData.name}
-          </PackageLink>
+          {packageData.name}
         </BreadCrumbs>
       }
       header={
