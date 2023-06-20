@@ -79,8 +79,8 @@ export function Header() {
         </div>
       </RadixDropDown.Item>
     </UserLink>,
-    <DropDownDivider />,
-    <TeamsLink key="2">
+    <DropDownDivider key="2" />,
+    <TeamsLink key="3">
       <DropDownItem
         content={
           <DropDownLink
@@ -90,7 +90,7 @@ export function Header() {
         }
       />
     </TeamsLink>,
-    <a href="/subscriptons" key="3">
+    <a href="/subscriptons" key="4">
       <DropDownItem
         content={
           <DropDownLink
@@ -100,7 +100,7 @@ export function Header() {
         }
       />
     </a>,
-    <SettingsLink key="4">
+    <SettingsLink key="5">
       <DropDownItem
         content={
           <DropDownLink
@@ -110,8 +110,8 @@ export function Header() {
         }
       />
     </SettingsLink>,
-    <DropDownDivider />,
-    <a href="/logout" key="5">
+    <DropDownDivider key="6" />,
+    <a href="/logout" key="7">
       <DropDownItem
         content={
           <DropDownLink

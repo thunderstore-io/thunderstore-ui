@@ -29,11 +29,7 @@ export function CommunityListLayout() {
 
   return (
     <BaseLayout
-      breadCrumb={
-        <BreadCrumbs>
-          <CommunitiesLink>Communities</CommunitiesLink>
-        </BreadCrumbs>
-      }
+      breadCrumb={<BreadCrumbs>Communities</BreadCrumbs>}
       header={<PageHeader title="Communities" />}
       search={
         <div className={styles.filters}>
