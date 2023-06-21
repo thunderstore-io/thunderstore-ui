@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: row;
   gap: var(--gap--32);
-  align-items: center;
+  align-items: flex-start;
 }
 
 .packageInfoDetails {
@@ -75,4 +75,16 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+@media (max-width: 60rem) {
+  .packageInfo {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .headerActions {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
