@@ -3,7 +3,7 @@ import { DataTable } from "../../../DataTable/DataTable";
 import { formatInteger } from "../../../../utils/utils";
 import { Button } from "../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBoltLightning, faDownload } from "@fortawesome/pro-solid-svg-icons";
+import { faBoltLightning } from "@fortawesome/pro-solid-svg-icons";
 
 interface PackageVersion {
   versionNumber: string;

@@ -1,12 +1,7 @@
 "use client";
 import styles from "./PackageDetailLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import {
-  CommunitiesLink,
-  CommunityLink,
-  PackageLink,
-  TeamLink,
-} from "../../Links/Links";
+import { CommunitiesLink, CommunityLink, TeamLink } from "../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, PlainButton } from "../../Button/Button";
 import { ModIcon } from "../../ModIcon/ModIcon";

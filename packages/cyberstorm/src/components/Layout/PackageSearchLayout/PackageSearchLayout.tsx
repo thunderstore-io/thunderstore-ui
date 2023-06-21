@@ -15,7 +15,6 @@ import { FilterItemList } from "../../FilterItemList/FilterItemList";
 import { Button } from "../../Button/Button";
 import { Tag } from "../../Tag/Tag";
 import { TextInput } from "../../TextInput/TextInput";
-import { faGrid, faList } from "@fortawesome/pro-light-svg-icons";
 
 const PackageListings = lazy(
   () => import("../PackageListings/PackageListings")
