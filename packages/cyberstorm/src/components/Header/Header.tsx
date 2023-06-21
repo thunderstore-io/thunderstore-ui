@@ -18,7 +18,6 @@ import {
 import { Avatar } from "../Avatar/Avatar";
 import { getUserDummyData } from "../../dummyData";
 import {
-  faBell,
   faCaretDown,
   faCog,
   faCreditCard,
