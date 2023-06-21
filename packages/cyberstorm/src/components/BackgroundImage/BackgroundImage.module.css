@@ -10,14 +10,15 @@
   background-position: 50%;
   background-size: cover;
   opacity: 0.4;
-  /* stylelint-disable */
+
   --gradients:
     linear-gradient(90deg, transparent 0%, white 70%, transparent 100%),
     linear-gradient(180deg, white 40%, transparent 95%);
+
+  /* stylelint-disable property-no-vendor-prefix */
   -webkit-mask-image: var(--gradients);
   -webkit-mask-composite: source-in;
-
+  /* stylelint-enable property-no-vendor-prefix */
   mask-image: var(--gradients);
   mask-composite: intersect;
-  /* stylelint-enable */
 }

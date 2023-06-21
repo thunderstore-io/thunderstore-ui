@@ -53,6 +53,9 @@ export function Select(props: SelectProps) {
         <RadixSelect.Trigger asChild>
           <Button
             colorScheme={colorScheme}
+            paddingSize="large"
+            fontSize="large"
+            fontWeight="700"
             rightIcon={icon}
             label={
               options?.find((o) => o.value === value)?.label ?? placeholder

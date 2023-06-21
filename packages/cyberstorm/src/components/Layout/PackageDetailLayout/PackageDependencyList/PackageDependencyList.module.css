@@ -1,9 +1,10 @@
 .root {
+  width: 100%;
   height: var(--height);
 
-  --height: 272px;
-
   border-radius: 8px;
+
+  --height: 272px;
 }
 
 .list {
@@ -20,13 +21,14 @@
 }
 
 .listWrapper {
-  position: absolute;
+  position: relative;
+  width: 100%;
   height: var(--height);
   border-radius: var(--border-radius--8);
   overflow: hidden;
 }
 
-.listWrapper::before {
+.listWrapper::after {
   position: absolute;
   bottom: 0;
   width: 100%;

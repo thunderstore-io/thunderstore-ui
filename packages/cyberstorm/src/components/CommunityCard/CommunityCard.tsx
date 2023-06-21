@@ -20,17 +20,15 @@ export interface GameIconProps {
 export function CommunityCard(props: GameIconProps) {
   const { communityData } = props;
   return (
-    <div className={styles.root}>
-      <CommunityLink community={communityData.name}>
-        <div className={styles.imageWrapper}>
-          <img
-            className={styles.image}
-            alt={communityData.name}
-            src={communityData.imageSource}
-          />
-        </div>
-        <div className={styles.title}>{communityData.name}</div>
-      </CommunityLink>
+    <CommunityLink community={communityData.name} className={styles.root}>
+      <div className={styles.imageWrapper}>
+        <img
+          className={styles.image}
+          alt={communityData.name}
+          src={communityData.imageSource}
+        />
+      </div>
+      <div className={styles.title}>{communityData.name}</div>
       <div className={styles.metaItemList}>
         <MetaItem
           size="medium"
@@ -51,7 +49,7 @@ export function CommunityCard(props: GameIconProps) {
           icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
         />
       </div>
-    </div>
+    </CommunityLink>
   );
 }
 

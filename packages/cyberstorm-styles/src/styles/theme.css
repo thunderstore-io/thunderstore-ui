@@ -18,6 +18,7 @@
   --color-surface--10: var(--color-purple--10);
   --color-surface--10--hover: rgb(59 42 126 / 1);
   --color-border: rgb(54 52 91 / 1);
+  --color-border--highlight: rgb(93 90 159);
   --color-shadow-1: rgb(0 0 0 / 0.7);
   --color-gradient-blue-green--darker: linear-gradient(to left top, rgb(6 33 49) 0%, rgb(16 43 32) 100%);
   --color-gradient-blue-green--dark: linear-gradient(to left top, rgb(11 65 98) 0%, rgb(32 87 64) 100%);

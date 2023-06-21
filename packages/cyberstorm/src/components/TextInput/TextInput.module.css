@@ -26,11 +26,15 @@
   padding-left: 3rem;
 }
 
+.input:hover {
+  --border-color: var(--color-border--highlight);
+}
+
 .input:focus-within {
   color: var(--color-text--default);
-  background-color: var(--color-surface--0);
+  background-color: var(--color-black);
 
-  --border-color: var(--color-border);
+  --border-color: var(--color-border--highlight);
 }
 
 .input::placeholder {
@@ -41,6 +45,7 @@
   position: absolute;
   padding: var(--space--14) var(--space--16);
   color: var(--color-text--tertiary);
+  pointer-events: none;
 }
 
 .rightIcon {
