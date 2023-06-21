@@ -49,7 +49,11 @@ export function Dialog(props: DialogProps) {
         <RadixDialog.Portal>
           <RadixDialog.Overlay className={styles.overlay} />
           <RadixDialog.Content className={styles.content}>
-            <div className={styles.heading}>
+            <div
+              className={`${styles.header} ${
+                showHeaderBorder ? styles.headerBorder : ""
+              }`}
+            >
               <RadixDialog.Close asChild>
                 <Button
                   colorScheme="transparentDefault"
@@ -60,15 +64,20 @@ export function Dialog(props: DialogProps) {
               {title ? <div className={styles.title}>{title}</div> : null}
             </div>
 
-            {showHeaderBorder ? <div className={styles.separator} /> : null}
+            <div
+              className={`${styles.body} ${
+                noPadding ? "" : styles.bodyPadding
+              }`}
+            >
+              {content}
+            </div>
 
-            {noPadding ? content : <div className={styles.body}>{content}</div>}
-
-            {hideFooter || !showFooterBorder ? null : (
-              <div className={styles.separator} />
-            )}
             {hideFooter ? null : (
-              <div className={styles.footer}>
+              <div
+                className={`${styles.footer} ${
+                  showFooterBorder ? styles.footerBorder : ""
+                }`}
+              >
                 <div className={styles.footerSection}>
                   {additionalFooterContent}
                 </div>

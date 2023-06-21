@@ -1,31 +1,9 @@
 .root {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: var(--space--32);
   margin: var(--space--16) 0;
-}
-
-@media (min-width: 40rem) {
-  .root {
-    flex-direction: row;
-  }
-
-  .image {
-    min-width: 9rem;
-    max-width: 9rem;
-    min-height: 9rem;
-    max-height: 9rem;
-  }
-}
-
-@media (min-width: 60rem) {
-  .root {
-    padding: 0 0 var(--space--32) 0;
-  }
-}
-
-.image {
-  width: 100%;
+  padding: 0 0 var(--space--32) 0;
 }
 
 .info {
@@ -39,6 +17,33 @@
   font-weight: 800;
   font-size: 51px;
   line-height: 1;
+}
+
+.image {
+  min-width: 9rem;
+  max-width: 9rem;
+  min-height: 9rem;
+  max-height: 9rem;
+}
+
+@media (max-width: 30rem) {
+  .root {
+    gap: var(--space--16);
+  }
+
+  .title {
+    font: var(--font-heading);
+    font-weight: 700;
+    font-size: 21px;
+    line-height: 1.2;
+  }
+
+  .image {
+    min-width: 5rem;
+    max-width: 5rem;
+    min-height: 5rem;
+    max-height: 5rem;
+  }
 }
 
 .meta {

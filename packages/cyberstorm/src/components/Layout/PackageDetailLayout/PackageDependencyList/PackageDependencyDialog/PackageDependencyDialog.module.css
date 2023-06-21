@@ -1,13 +1,6 @@
 .root {
-  overflow: scroll;
   font-size: var(--font-size--m);
   line-height: var(--line-height--m);
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.root::-webkit-scrollbar {
-  display: none;
 }
 
 .image {
