@@ -1,8 +1,7 @@
 .packageInfo {
   display: flex;
-  flex-direction: row;
-  gap: var(--gap--32);
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .packageInfoDetails {
@@ -29,10 +28,30 @@
   gap: var(--gap--16);
   align-items: flex-end;
   align-self: flex-end;
+  width: 100%;
 }
 
-.installButton > div {
-  width: 354px;
+.installButton {
+  width: 100%;
+}
+
+@media (min-width: 60rem) {
+  .installButton {
+    max-width: 354px;
+  }
+
+  .packageInfo {
+    gap: var(--gap--32);
+  }
+}
+
+@media (min-width: 70rem) {
+  .packageInfo {
+    display: flex;
+    flex-direction: row;
+    gap: var(--gap--32);
+    align-items: center;
+  }
 }
 
 .installButtonIcon {

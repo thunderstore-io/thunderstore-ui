@@ -20,34 +20,38 @@ export interface GameIconProps {
 export function CommunityCard(props: GameIconProps) {
   const { communityData } = props;
   return (
-    <CommunityLink community={communityData.name} className={styles.root}>
-      <div className={styles.imageWrapper}>
-        <img
-          className={styles.image}
-          alt={communityData.name}
-          src={communityData.imageSource}
-        />
-      </div>
-      <div className={styles.title}>{communityData.name}</div>
-      <div className={styles.metaItemList}>
-        <MetaItem
-          size="medium"
-          colorScheme="accent"
-          label={formatInteger(communityData.packageCount)}
-          icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
-        />
-        <MetaItem
-          size="medium"
-          colorScheme="accent"
-          label={formatInteger(communityData.downloadCount)}
-          icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
-        />
-        <MetaItem
-          size="medium"
-          colorScheme="accent"
-          label={formatInteger(communityData.serverCount)}
-          icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
-        />
+    <CommunityLink community={communityData.name}>
+      <div className={styles.root}>
+        <div className={styles.imageWrapper}>
+          <img
+            className={styles.image}
+            alt={communityData.name}
+            src={communityData.imageSource}
+          />
+        </div>
+        <div className={styles.title} title={communityData.name}>
+          {communityData.name}
+        </div>
+        <div className={styles.metaItemList}>
+          <MetaItem
+            size="medium"
+            colorScheme="accent"
+            label={formatInteger(communityData.packageCount)}
+            icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
+          />
+          <MetaItem
+            size="medium"
+            colorScheme="accent"
+            label={formatInteger(communityData.downloadCount)}
+            icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
+          />
+          <MetaItem
+            size="medium"
+            colorScheme="accent"
+            label={formatInteger(communityData.serverCount)}
+            icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
+          />
+        </div>
       </div>
     </CommunityLink>
   );

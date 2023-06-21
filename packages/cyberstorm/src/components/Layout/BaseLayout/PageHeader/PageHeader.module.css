@@ -1,9 +1,31 @@
 .root {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: var(--space--32);
   margin: var(--space--16) 0;
-  padding: 0 0 var(--space--32) 0;
+}
+
+@media (min-width: 40rem) {
+  .root {
+    flex-direction: row;
+  }
+
+  .image {
+    min-width: 9rem;
+    max-width: 9rem;
+    min-height: 9rem;
+    max-height: 9rem;
+  }
+}
+
+@media (min-width: 60rem) {
+  .root {
+    padding: 0 0 var(--space--32) 0;
+  }
+}
+
+.image {
+  width: 100%;
 }
 
 .info {

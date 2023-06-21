@@ -14,7 +14,11 @@ export function PackageManagementForm(props: PackageManagementFormProps) {
       <div className={styles.section}>
         <Title text="Package status" size="smallest" />
         <div className={styles.statusTag}>
-          <Tag size="medium" label={packageStatus} colorScheme="success" />
+          <Tag
+            size="medium"
+            label={packageStatus.toUpperCase()}
+            colorScheme="success"
+          />
         </div>
       </div>
       <div className={styles.section}>

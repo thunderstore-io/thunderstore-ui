@@ -18,7 +18,7 @@ export function PageHeader(props: PageHeaderProps) {
 
   return (
     <div className={styles.root}>
-      {image}
+      {image ? <div className={styles.image}>{image}</div> : null}
       <div className={styles.info}>
         <div className={styles.title}>{title}</div>
 

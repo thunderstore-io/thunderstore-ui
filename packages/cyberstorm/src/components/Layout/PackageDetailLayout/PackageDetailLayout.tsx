@@ -136,21 +136,19 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
                 />
               }
             />
-            <a href="/">
-              <div className={styles.installButton}>
-                <PlainButton
-                  paddingSize="huge"
-                  fontSize="huge"
-                  fontWeight="800"
-                  label="Install"
-                  colorScheme="fancyAccent"
-                  leftIcon={
-                    <div className={styles.installButtonIcon}>
-                      <ThunderstoreLogo />
-                    </div>
-                  }
-                />
-              </div>
+            <a className={styles.installButton} href="/">
+              <PlainButton
+                paddingSize="huge"
+                fontSize="huge"
+                fontWeight="800"
+                label="Install"
+                colorScheme="fancyAccent"
+                leftIcon={
+                  <div className={styles.installButtonIcon}>
+                    <ThunderstoreLogo />
+                  </div>
+                }
+              />
             </a>
           </div>
         </div>
@@ -201,6 +199,18 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               getPackageDummyData("4"),
               getPackageDummyData("5"),
               getPackageDummyData("6"),
+              getPackageDummyData("1"),
+              getPackageDummyData("2"),
+              getPackageDummyData("3"),
+              getPackageDummyData("4"),
+              getPackageDummyData("5"),
+              getPackageDummyData("6"),
+              getPackageDummyData("1"),
+              getPackageDummyData("2"),
+              getPackageDummyData("3"),
+              getPackageDummyData("4"),
+              getPackageDummyData("5"),
+              getPackageDummyData("6"),
             ]}
           />
           <PackageTeamMemberList
@@ -242,7 +252,10 @@ function getMetaInfoData(packageData: Package) {
       label: "Dependency string",
       content: (
         <div className={styles.dependencyStringWrapper}>
-          <div className={styles.dependencyString}>
+          <div
+            title={packageData.dependencyString}
+            className={styles.dependencyString}
+          >
             {packageData.dependencyString}
           </div>
           <CopyButton text={packageData.dependencyString} />
