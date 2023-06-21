@@ -29,7 +29,6 @@
   gap: var(--gap--16);
   align-items: flex-end;
   align-self: flex-end;
-  width: 100%;
 }
 
 .installButton {
@@ -86,5 +85,6 @@
   .headerActions {
     flex-direction: row;
     justify-content: space-between;
+    width: 100%;
   }
 }

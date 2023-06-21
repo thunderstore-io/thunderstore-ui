@@ -1,5 +1,4 @@
 import styles from "./PageHeader.module.css";
-import { Title } from "../../../Title/Title";
 import { ReactElement } from "react";
 import { CollapsibleText } from "../../../CollapsibleText/CollapsibleText";
 
