@@ -15,3 +15,9 @@
 .statusTag {
   display: flex;
 }
+
+.title {
+  font-weight: 700;
+  font-size: var(--font-size--l);
+  line-height: var(--line-height--l);
+}

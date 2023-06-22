@@ -20,9 +20,9 @@ export function PackageChangeLog(props: PackageChangeLogProps) {
   return (
     <div className={styles.root}>
       <div className={styles.title}>Changelog</div>
-      {packageChangeLog.map((changeLogItem) => {
+      {packageChangeLog.map((changeLogItem, index) => {
         return (
-          <div className={styles.itemWrapper}>
+          <div key={index} className={styles.itemWrapper}>
             <div
               className={`${styles.item} ${
                 changeLogItem.isCurrent ? styles.isCurrent : null

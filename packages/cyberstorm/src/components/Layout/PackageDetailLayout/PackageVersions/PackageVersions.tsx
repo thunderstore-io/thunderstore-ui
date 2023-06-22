@@ -1,16 +1,16 @@
 import styles from "./PackageVersions.module.css";
-import { Title } from "../../../Title/Title";
 import { Button } from "../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoltLightning } from "@fortawesome/pro-solid-svg-icons";
 import { DataTable } from "../../../DataTable/DataTable";
+import { ReactElement } from "react";
 
 export function PackageVersions() {
   return (
     <div>
-      <Title text="Versions" size="smaller" />
+      <div className={styles.title}>Versions</div>
       <DataTable<PackageVersionData>
-        ascending={false}
+        defaultSortAsc={false}
         columns={columns}
         data={getPackageVersionData()}
       />
@@ -25,6 +25,7 @@ type PackageVersionData = {
   versionNumber: string;
   uploadData: string;
   downloads: number;
+  actions: ReactElement;
 };
 
 const columns = [
@@ -34,7 +35,7 @@ const columns = [
       color: "var(--color-text--default)",
       fontWeight: 700,
     },
-    selector: (row) => row.versionNumber,
+    selector: (row: any) => row.versionNumber,
   },
   {
     name: "Upload date",
@@ -42,7 +43,7 @@ const columns = [
       color: "var(--color-text--secondary)",
       fontWeight: 500,
     },
-    selector: (row) => row.uploadData,
+    selector: (row: any) => row.uploadData,
   },
   {
     name: "Downloads",
@@ -50,12 +51,12 @@ const columns = [
       color: "var(--color-text--secondary)",
       fontWeight: 500,
     },
-    selector: (row) => row.downloads,
+    selector: (row: any) => row.downloads,
   },
   {
     name: "",
     width: "274px",
-    selector: (row) => row.actions,
+    selector: (row: any) => row.actions,
   },
 ];
 
@@ -100,7 +101,7 @@ function getActions(versionNumber: string) {
         fontSize="medium"
         label="Download"
         colorScheme="transparentAccent"
-        onclick={() => {
+        onClick={() => {
           console.log("Download " + versionNumber);
         }}
       />
@@ -110,7 +111,7 @@ function getActions(versionNumber: string) {
         leftIcon={<FontAwesomeIcon icon={faBoltLightning} fixedWidth />}
         label="Install"
         colorScheme="primary"
-        onclick={() => {
+        onClick={() => {
           console.log("Install " + versionNumber);
         }}
       />

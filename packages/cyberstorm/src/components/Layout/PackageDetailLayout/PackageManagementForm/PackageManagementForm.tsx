@@ -1,5 +1,4 @@
 import styles from "./PackageManagementForm.module.css";
-import { Title } from "../../../Title/Title";
 import { Tag } from "../../../Tag/Tag";
 import { TextInput } from "../../../TextInput/TextInput";
 
@@ -12,7 +11,7 @@ export function PackageManagementForm(props: PackageManagementFormProps) {
   return (
     <div className={styles.root}>
       <div className={styles.section}>
-        <Title text="Package status" size="smallest" />
+        <div className={styles.title}>Package status</div>
         <div className={styles.statusTag}>
           <Tag
             size="medium"
@@ -22,7 +21,7 @@ export function PackageManagementForm(props: PackageManagementFormProps) {
         </div>
       </div>
       <div className={styles.section}>
-        <Title text="Edit categories" size="smallest" />
+        <div className={styles.title}>Edit categories</div>
         <TextInput />
       </div>
     </div>

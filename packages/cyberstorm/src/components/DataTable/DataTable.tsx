@@ -1,12 +1,5 @@
 import "./DataTable.css";
-import ReactDataTable, { TableColumn } from "react-data-table-component";
-
-export interface DataTableProps<T> {
-  columns: TableColumn<T>[];
-  data: T[];
-  ascending?: boolean;
-  defaultSortFieldId?: string | number;
-}
+import ReactDataTable, { TableProps } from "react-data-table-component";
 
 const customStyles = {
   headRow: {
@@ -24,18 +17,8 @@ const customStyles = {
   },
 };
 
-export function DataTable<T>(props: DataTableProps<T>) {
-  const { columns, data, ascending = true, defaultSortFieldId = 1 } = props;
-  return (
-    <ReactDataTable
-      style={{ backgroundColor: "transparent" }}
-      columns={columns}
-      data={data}
-      defaultSortAsc={ascending}
-      defaultSortFieldId={defaultSortFieldId}
-      customStyles={customStyles}
-    />
-  );
+export function DataTable<T>(props: TableProps<T>) {
+  return <ReactDataTable {...props} customStyles={customStyles} />;
 }
 
 DataTable.displayName = "DataTable";

@@ -24,13 +24,6 @@
     gap: var(--space--16);
   }
 
-  .title {
-    font: var(--font-heading);
-    font-weight: 700;
-    font-size: 21px;
-    line-height: 1.2;
-  }
-
   .image {
     min-width: 5rem;
     max-width: 5rem;
