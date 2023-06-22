@@ -66,7 +66,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   const packageDetailsMeta = [];
   if (packageData.author) {
     packageDetailsMeta.push(
-      <TeamLink team={packageData.team.name}>
+      <TeamLink key="1" team={packageData.team.name}>
         <PlainButton
           colorScheme="transparentPrimary"
           paddingSize="small"
@@ -81,6 +81,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   if (packageData.gitHubLink) {
     packageDetailsMeta.push(
       <Link
+        key="2"
         externalUrl={packageData.gitHubLink}
         label="GitHub"
         leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}

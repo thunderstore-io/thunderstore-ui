@@ -1,25 +1,18 @@
+import styles from "./PackageVersions.module.css";
 import { Title } from "../../../Title/Title";
-import { DataTable } from "../../../DataTable/DataTable";
-import { formatInteger } from "../../../../utils/utils";
 import { Button } from "../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoltLightning } from "@fortawesome/pro-solid-svg-icons";
-
-interface PackageVersion {
-  versionNumber: string;
-  uploadDate: string;
-  downloads: number;
-}
+import { DataTable } from "../../../DataTable/DataTable";
 
 export function PackageVersions() {
-  const packageVersions: PackageVersion[] = getPackageVersions();
-
   return (
     <div>
       <Title text="Versions" size="smaller" />
-      <DataTable
-        headers={["Versions", "Upload date", "Downloads", "Actions"]}
-        dataRows={getPackageVersionsMapped(packageVersions)}
+      <DataTable<PackageVersionData>
+        ascending={false}
+        columns={columns}
+        data={getPackageVersionData()}
       />
     </div>
   );
@@ -27,36 +20,100 @@ export function PackageVersions() {
 
 PackageVersions.displayName = "PackageVersions";
 
-function getPackageVersions() {
+type PackageVersionData = {
+  id: number;
+  versionNumber: string;
+  uploadData: string;
+  downloads: number;
+};
+
+const columns = [
+  {
+    name: "Version",
+    style: {
+      color: "var(--color-text--default)",
+      fontWeight: 700,
+    },
+    selector: (row) => row.versionNumber,
+  },
+  {
+    name: "Upload date",
+    style: {
+      color: "var(--color-text--secondary)",
+      fontWeight: 500,
+    },
+    selector: (row) => row.uploadData,
+  },
+  {
+    name: "Downloads",
+    style: {
+      color: "var(--color-text--secondary)",
+      fontWeight: 500,
+    },
+    selector: (row) => row.downloads,
+  },
+  {
+    name: "",
+    width: "274px",
+    selector: (row) => row.actions,
+  },
+];
+
+function getPackageVersionData(): PackageVersionData[] {
   return [
-    { versionNumber: "1.2.3", uploadDate: "07/04/2022", downloads: 11599 },
-    { versionNumber: "1.2.2", uploadDate: "07/04/2022", downloads: 11599 },
-    { versionNumber: "1.2.1", uploadDate: "07/04/2022", downloads: 11599 },
-    { versionNumber: "1.1.0", uploadDate: "07/04/2022", downloads: 11599 },
+    {
+      id: 1,
+      versionNumber: "1.1.0",
+      uploadData: "2022-02-26",
+      downloads: 115199,
+      actions: getActions("1.1.0"),
+    },
+    {
+      id: 2,
+      versionNumber: "1.2.1",
+      uploadData: "2022-02-26",
+      downloads: 75163,
+      actions: getActions("1.2.1"),
+    },
+    {
+      id: 3,
+      versionNumber: "1.2.2",
+      uploadData: "2022-02-26",
+      downloads: 342563,
+      actions: getActions("1.2.2"),
+    },
+    {
+      id: 4,
+      versionNumber: "1.2.3",
+      uploadData: "2022-02-26",
+      downloads: 678538,
+      actions: getActions("1.2.3"),
+    },
   ];
 }
 
-function getPackageVersionsMapped(packageVersionList: PackageVersion[]) {
-  return packageVersionList.map((packageVersion: PackageVersion) => {
-    return [
-      packageVersion.versionNumber,
-      packageVersion.uploadDate,
-      formatInteger(packageVersion.downloads),
-      <>
-        <Button
-          paddingSize="medium"
-          fontSize="medium"
-          label="Download"
-          colorScheme="transparentAccent"
-        />
-        <Button
-          paddingSize="medium"
-          fontSize="medium"
-          leftIcon={<FontAwesomeIcon icon={faBoltLightning} fixedWidth />}
-          label="Install"
-          colorScheme="accent"
-        />
-      </>,
-    ];
-  });
+function getActions(versionNumber: string) {
+  return (
+    <div className={styles.actionButtons}>
+      <Button
+        paddingSize="large"
+        fontSize="medium"
+        label="Download"
+        colorScheme="transparentAccent"
+        onclick={() => {
+          console.log("Download " + versionNumber);
+        }}
+      />
+      <Button
+        paddingSize="large"
+        fontSize="medium"
+        leftIcon={<FontAwesomeIcon icon={faBoltLightning} fixedWidth />}
+        label="Install"
+        colorScheme="primary"
+        onclick={() => {
+          console.log("Install " + versionNumber);
+        }}
+      />
+    </div>
+  );
 }

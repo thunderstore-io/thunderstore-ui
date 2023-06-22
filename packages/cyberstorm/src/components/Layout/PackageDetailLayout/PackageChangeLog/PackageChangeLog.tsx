@@ -1,6 +1,5 @@
 import styles from "./PackageChangeLog.module.css";
 import { ReactElement } from "react";
-import { Title } from "../../../Title/Title";
 
 interface PackageChangeLogItem {
   versionNumber: string;
@@ -20,10 +19,10 @@ export function PackageChangeLog(props: PackageChangeLogProps) {
 
   return (
     <div className={styles.root}>
-      <Title text="Changelog" size="smaller" />
+      <div className={styles.title}>Changelog</div>
       {packageChangeLog.map((changeLogItem) => {
         return (
-          <>
+          <div className={styles.itemWrapper}>
             <div
               className={`${styles.item} ${
                 changeLogItem.isCurrent ? styles.isCurrent : null
@@ -34,7 +33,7 @@ export function PackageChangeLog(props: PackageChangeLogProps) {
                   {changeLogItem.versionNumber}
                   {changeLogItem.isCurrent ? (
                     <div className={styles.currentLabel}>
-                      {changeLogItem.isCurrent ? "- Current" : null}
+                      {changeLogItem.isCurrent ? "‧ Current" : null}
                     </div>
                   ) : null}
                 </div>
@@ -44,7 +43,7 @@ export function PackageChangeLog(props: PackageChangeLogProps) {
               </div>
               <div className={styles.content}>{changeLogItem.content}</div>
             </div>
-          </>
+          </div>
         );
       })}
     </div>

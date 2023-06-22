@@ -1,17 +1,5 @@
 .root {
   color: var(--color-text--default);
   font: var(--font-heading);
-  font-weight: 800;
-  font-size: 3rem;
-  line-height: 1;
-}
-
-.smaller {
-  font-weight: 600;
-  font-size: 1.5rem;
-}
-
-.smallest {
-  font-weight: 700;
-  font-size: var(--font-size--l);
+  line-height: 1.15;
 }

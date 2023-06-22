@@ -1,0 +1,6 @@
+.actionButtons {
+  display: flex;
+  gap: var(--gap--24);
+  align-items: center;
+  justify-content: end;
+}

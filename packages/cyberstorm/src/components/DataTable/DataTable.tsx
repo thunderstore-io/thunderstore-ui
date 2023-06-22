@@ -1,55 +1,40 @@
-import styles from "./DataTable.module.css";
-import { ReactElement } from "react";
+import "./DataTable.css";
+import ReactDataTable, { TableColumn } from "react-data-table-component";
 
-export interface DataTableProps {
-  headers?: string[];
-  dataRows?: Array<string | number | ReactElement>[];
+export interface DataTableProps<T> {
+  columns: TableColumn<T>[];
+  data: T[];
+  ascending?: boolean;
+  defaultSortFieldId?: string | number;
 }
 
-export interface DataTableRowProps {
-  rowContent: Array<string | number | ReactElement>;
-}
+const customStyles = {
+  headRow: {
+    style: {
+      color: "var(--color-text--accent)",
+      fontWeight: 700,
+      backgroundColor: "transparent",
+    },
+  },
+  table: {
+    style: {
+      backgroundColor: "transparent",
+      borderRadius: "8px",
+    },
+  },
+};
 
-function DataTableRow(props: DataTableRowProps) {
-  const { rowContent } = props;
-
+export function DataTable<T>(props: DataTableProps<T>) {
+  const { columns, data, ascending = true, defaultSortFieldId = 1 } = props;
   return (
-    <div className={`${styles.row} ${styles.item}`}>
-      {rowContent.map((rowItem, index) => {
-        return (
-          <div key={index} className={styles.column}>
-            {rowItem}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-export function DataTable(props: DataTableProps) {
-  const { headers = [], dataRows = [] } = props;
-
-  const headersMapped = headers.map((header, index) => {
-    return (
-      <div key={index} className={styles.column}>
-        {header}
-      </div>
-    );
-  });
-
-  const mappedRows = dataRows?.map((dataItem, index) => {
-    return (
-      <div key={index}>
-        <DataTableRow rowContent={dataItem} />
-      </div>
-    );
-  });
-
-  return (
-    <div className={styles.root}>
-      <div className={styles.row}>{headersMapped}</div>
-      {mappedRows}
-    </div>
+    <ReactDataTable
+      style={{ backgroundColor: "transparent" }}
+      columns={columns}
+      data={data}
+      defaultSortAsc={ascending}
+      defaultSortFieldId={defaultSortFieldId}
+      customStyles={customStyles}
+    />
   );
 }
 
