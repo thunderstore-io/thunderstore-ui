@@ -7,7 +7,7 @@ import { DataTable } from "../../../DataTable/DataTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/pro-solid-svg-icons";
 import { TextInput } from "../../../TextInput/TextInput";
-import { ReactElement } from "react";
+import React, { ReactElement } from "react";
 
 /**
  * Cyberstorm PackageFormatDocs Layout
@@ -67,14 +67,14 @@ const firstTableDataColumns = [
     style: {
       color: "var(--color-text--default)",
     },
-    selector: (row: any) => row.filename,
+    selector: (row: FirstTableDataItem) => row.filename,
   },
   {
     name: "Description",
     style: {
       color: "var(--color-text--default)",
     },
-    selector: (row: any) => row.description,
+    selector: (row: FirstTableDataItem) => row.description,
   },
 ];
 
@@ -117,28 +117,28 @@ const secondTableDataColumns = [
     style: {
       color: "var(--color-text--default)",
     },
-    selector: (row: any) => row.key,
+    selector: (row: SecondTableDataItem) => row.key,
   },
   {
     name: "Required",
     style: {
       color: "var(--color-text--default)",
     },
-    selector: (row: any) => row.required,
+    cell: (row: SecondTableDataItem) => row.required,
   },
   {
     name: "Description",
     style: {
       color: "var(--color-text--default)",
     },
-    selector: (row: any) => row.description,
+    selector: (row: SecondTableDataItem) => row.description,
   },
   {
     name: "Example value",
     style: {
       color: "var(--color-text--default)",
     },
-    selector: (row: any) => row.exampleValue,
+    cell: (row: SecondTableDataItem) => row.exampleValue,
   },
 ];
 

@@ -3,7 +3,6 @@ import { Button } from "../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoltLightning } from "@fortawesome/pro-solid-svg-icons";
 import { DataTable } from "../../../DataTable/DataTable";
-import { ReactElement } from "react";
 
 export function PackageVersions() {
   return (
@@ -25,7 +24,7 @@ type PackageVersionData = {
   versionNumber: string;
   uploadData: string;
   downloads: number;
-  actions: ReactElement;
+  actions: JSX.Element;
 };
 
 const columns = [
@@ -35,7 +34,7 @@ const columns = [
       color: "var(--color-text--default)",
       fontWeight: 700,
     },
-    selector: (row: any) => row.versionNumber,
+    selector: (row: PackageVersionData) => row.versionNumber,
   },
   {
     name: "Upload date",
@@ -43,7 +42,7 @@ const columns = [
       color: "var(--color-text--secondary)",
       fontWeight: 500,
     },
-    selector: (row: any) => row.uploadData,
+    selector: (row: PackageVersionData) => row.uploadData,
   },
   {
     name: "Downloads",
@@ -51,12 +50,12 @@ const columns = [
       color: "var(--color-text--secondary)",
       fontWeight: 500,
     },
-    selector: (row: any) => row.downloads,
+    selector: (row: PackageVersionData) => row.downloads,
   },
   {
     name: "",
     width: "274px",
-    selector: (row: any) => row.actions,
+    cell: (row: PackageVersionData) => row.actions,
   },
 ];
 
