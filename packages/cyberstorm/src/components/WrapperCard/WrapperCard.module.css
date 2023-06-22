@@ -11,8 +11,13 @@
   gap: var(--gap--8);
   align-items: center;
   padding: var(--space--8) var(--space--16);
-  font-weight: 700;
   background-color: var(--color-surface--4);
+}
+
+.title {
+  font-weight: 700;
+  font-size: var(--font-size--l);
+  line-height: var(--line-height--l);
 }
 
 .headerRight {

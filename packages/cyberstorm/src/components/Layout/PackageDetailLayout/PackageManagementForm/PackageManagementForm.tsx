@@ -11,12 +11,20 @@ export function PackageManagementForm(props: PackageManagementFormProps) {
   const { packageStatus = "active" } = props;
   return (
     <div className={styles.root}>
-      <Title text="Package status" size="smallest" />
-      <div className={styles.statusTag}>
-        <Tag label={packageStatus} colorScheme="success" />
+      <div className={styles.section}>
+        <Title text="Package status" size="smallest" />
+        <div className={styles.statusTag}>
+          <Tag
+            size="medium"
+            label={packageStatus.toUpperCase()}
+            colorScheme="success"
+          />
+        </div>
       </div>
-      <Title text="Edit categories" size="smallest" />
-      <TextInput />
+      <div className={styles.section}>
+        <Title text="Edit categories" size="smallest" />
+        <TextInput />
+      </div>
     </div>
   );
 }

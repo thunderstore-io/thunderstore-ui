@@ -6,7 +6,7 @@ export interface TabsButtonProps {
   ariaCurrent?: boolean;
   ariaLabel?: string;
   label?: string;
-  icon?: ReactElement;
+  icon?: ReactElement | null;
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
 

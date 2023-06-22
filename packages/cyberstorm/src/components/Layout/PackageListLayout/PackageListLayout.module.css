@@ -24,13 +24,10 @@
   align-self: center;
   color: var(--color-text--tertiary);
   font-weight: 700;
-  font-size: var(--font-size--14);
 }
 
 .showing {
   color: var(--color-text--tertiary);
-  font: var(--font-body);
-  font-size: var(--font-size--14);
 }
 
 .contentWrapper {

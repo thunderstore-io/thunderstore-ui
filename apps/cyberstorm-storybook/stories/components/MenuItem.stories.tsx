@@ -25,7 +25,7 @@ ReferenceMenuItem.args = {
 const PrimaryMenuItem = Template.bind({});
 PrimaryMenuItem.args = {
   ...defaultArgs,
-  colorScheme: "primary",
+  colorScheme: "accent",
 };
 
 const MinimalMenuItem = Template.bind({});

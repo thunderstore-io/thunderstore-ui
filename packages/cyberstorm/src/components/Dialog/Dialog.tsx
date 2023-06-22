@@ -3,7 +3,6 @@ import { ReactNode, useState } from "react";
 import styles from "./Dialog.module.css";
 import * as RadixDialog from "@radix-ui/react-dialog";
 import { Button } from "../Button/Button";
-import { Title } from "../Title/Title";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
@@ -15,6 +14,10 @@ type DialogProps = {
   acceptButton?: ReactNode;
   cancelButton?: ReactNode;
   additionalFooterContent?: ReactNode;
+  hideFooter?: boolean;
+  noPadding?: boolean;
+  showHeaderBorder?: boolean;
+  showFooterBorder?: boolean;
 };
 
 /**
@@ -29,6 +32,10 @@ export function Dialog(props: DialogProps) {
     acceptButton,
     cancelButton,
     title = undefined,
+    hideFooter = false,
+    noPadding = false,
+    showHeaderBorder = false,
+    showFooterBorder = false,
   } = props;
 
   const [isOpen, setOpen] = useState<boolean>(
@@ -42,23 +49,35 @@ export function Dialog(props: DialogProps) {
         <RadixDialog.Portal>
           <RadixDialog.Overlay className={styles.overlay} />
           <RadixDialog.Content className={styles.content}>
-            <div className={styles.section}>
-              <div className={styles.heading}>
-                <RadixDialog.Close asChild>
-                  <Button
-                    colorScheme="transparentDefault"
-                    leftIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
-                  />
-                </RadixDialog.Close>
-                {title ? <Title size="smaller" text={title} /> : null}
-              </div>
+            <div
+              className={`${styles.header} ${
+                showHeaderBorder ? styles.headerBorder : ""
+              }`}
+            >
+              <RadixDialog.Close asChild>
+                <Button
+                  colorScheme="transparentDefault"
+                  paddingSize="mediumSquare"
+                  leftIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
+                />
+              </RadixDialog.Close>
+              {title ? <div className={styles.title}>{title}</div> : null}
             </div>
 
-            <div className={styles.section}>{content}</div>
+            <div
+              className={`${styles.body} ${
+                noPadding ? "" : styles.bodyPadding
+              }`}
+            >
+              {content}
+            </div>
 
-            <div className={styles.separator} />
-            <div className={styles.section}>
-              <div className={styles.footer}>
+            {hideFooter ? null : (
+              <div
+                className={`${styles.footer} ${
+                  showFooterBorder ? styles.footerBorder : ""
+                }`}
+              >
                 <div className={styles.footerSection}>
                   {additionalFooterContent}
                 </div>
@@ -80,7 +99,7 @@ export function Dialog(props: DialogProps) {
                   )}
                 </div>
               </div>
-            </div>
+            )}
           </RadixDialog.Content>
         </RadixDialog.Portal>
       </RadixDialog.Root>

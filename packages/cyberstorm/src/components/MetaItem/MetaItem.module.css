@@ -15,10 +15,9 @@
 
 /* Styles for MetaItem's text */
 .label {
-  font: var(--font-body);
   font-weight: var(--font-weight);
   font-size: var(--font-size);
-  line-height: var(--line-height--18);
+  line-height: 1;
 }
 
 /* Different MetaItem color schemes */
@@ -31,12 +30,11 @@
 }
 
 .metaItem__medium {
+  --font-size: var(--font-size--s);
   --font-weight: 700;
-  --font-size: var(--font-size--12);
 }
 
 .metaItem__large {
-  font-weight: 500;
-
-  --font-size: var(--font-size--16);
+  --font-size: var(--font-size--m);
+  --font-weight: 600;
 }

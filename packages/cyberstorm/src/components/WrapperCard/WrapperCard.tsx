@@ -5,7 +5,7 @@ export interface WrapperCardProps {
   title?: string;
   headerIcon?: ReactNode;
   content?: ReactNode;
-  headerRightContent?: ReactNode;
+  headerRightContent?: ReactNode | null;
 }
 
 export function WrapperCard(props: WrapperCardProps) {
@@ -19,7 +19,7 @@ export function WrapperCard(props: WrapperCardProps) {
     <div className={styles.root}>
       <div className={styles.header}>
         <div className={styles.icon}>{headerIcon}</div>
-        {title}
+        <div className={styles.title}>{title}</div>
         <div className={styles.headerRight}>{headerRightContent}</div>
       </div>
       {content}

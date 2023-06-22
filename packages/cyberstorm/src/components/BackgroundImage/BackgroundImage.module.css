@@ -6,13 +6,19 @@
   right: 0;
   width: var(--w);
   height: calc(var(--w) / 2.5);
-  background-image: var(--img-url);
   background-repeat: no-repeat;
   background-position: 50%;
   background-size: cover;
   opacity: 0.4;
-  mask-image:
+
+  --gradients:
     linear-gradient(90deg, transparent 0%, white 70%, transparent 100%),
     linear-gradient(180deg, white 40%, transparent 95%);
-  mask-composite: source-in;
+
+  /* stylelint-disable property-no-vendor-prefix */
+  -webkit-mask-image: var(--gradients);
+  -webkit-mask-composite: source-in;
+  /* stylelint-enable property-no-vendor-prefix */
+  mask-image: var(--gradients);
+  mask-composite: intersect;
 }

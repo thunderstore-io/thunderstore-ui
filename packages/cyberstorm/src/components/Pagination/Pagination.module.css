@@ -22,7 +22,6 @@
   border-radius: var(--border-radius--8);
   color: var(--color-text--secondary);
 
-  font: var(--font-body);
   font-weight: 500;
   line-height: var(--line-height--18);
   background-color: var(--bg-color);

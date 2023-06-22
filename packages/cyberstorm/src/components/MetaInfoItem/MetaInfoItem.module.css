@@ -1,29 +1,18 @@
-/* Common MetaInfoItem styles */
 .root {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
   padding: var(--space--8) var(--space--12);
   border-radius: var(--border-radius--8);
   color: var(--text-color);
-  font: var(--font-body);
+
   font-weight: 700;
-  font-size: var(--font-size--12);
   background-color: var(--color-surface--4);
 }
 
-.content {
-  display: flex;
-  flex-direction: row;
-  gap: var(--gap--4);
-  align-items: center;
-}
-
-.metaInfoItem__default {
-  --text-color: var(--color-text--default);
-}
-
-.metaInfoItem__tertiary {
-  --text-color: var(--color-text--tertiary);
+.label {
+  flex-shrink: 0;
+  color: var(--color-text--accent);
 }

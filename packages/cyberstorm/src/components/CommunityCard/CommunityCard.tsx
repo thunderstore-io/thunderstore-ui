@@ -20,8 +20,8 @@ export interface GameIconProps {
 export function CommunityCard(props: GameIconProps) {
   const { communityData } = props;
   return (
-    <div className={styles.root}>
-      <CommunityLink community={communityData.name}>
+    <CommunityLink community={communityData.name}>
+      <div className={styles.root}>
         <div className={styles.imageWrapper}>
           <img
             className={styles.image}
@@ -29,29 +29,31 @@ export function CommunityCard(props: GameIconProps) {
             src={communityData.imageSource}
           />
         </div>
-        <div className={styles.title}>{communityData.name}</div>
-      </CommunityLink>
-      <div className={styles.metaItemList}>
-        <MetaItem
-          size="medium"
-          colorScheme="accent"
-          label={formatInteger(communityData.packageCount)}
-          icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
-        />
-        <MetaItem
-          size="medium"
-          colorScheme="accent"
-          label={formatInteger(communityData.downloadCount)}
-          icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
-        />
-        <MetaItem
-          size="medium"
-          colorScheme="accent"
-          label={formatInteger(communityData.serverCount)}
-          icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
-        />
+        <div className={styles.title} title={communityData.name}>
+          {communityData.name}
+        </div>
+        <div className={styles.metaItemList}>
+          <MetaItem
+            size="medium"
+            colorScheme="accent"
+            label={formatInteger(communityData.packageCount)}
+            icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
+          />
+          <MetaItem
+            size="medium"
+            colorScheme="accent"
+            label={formatInteger(communityData.downloadCount)}
+            icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
+          />
+          <MetaItem
+            size="medium"
+            colorScheme="accent"
+            label={formatInteger(communityData.serverCount)}
+            icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
+          />
+        </div>
       </div>
-    </div>
+    </CommunityLink>
   );
 }
 

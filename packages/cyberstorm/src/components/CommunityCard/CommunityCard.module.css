@@ -17,6 +17,7 @@
 
 .image {
   position: absolute;
+  width: 100%;
   object-fit: cover;
   transition: 0.2s;
   aspect-ratio: 3 / 4;
@@ -29,15 +30,21 @@
 }
 
 .title {
+  max-height: calc(var(--font-size--l) + var(--space--12));
   padding-top: var(--space--12);
+  overflow: hidden;
   color: var(--color-text--default);
-  font: var(--font-heading);
   font-weight: 700;
+  font-size: var(--font-size--l);
+  line-height: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .metaItemList {
   display: flex;
   flex-direction: row;
-  gap: var(--gap--12);
+  justify-content: space-between;
+  margin-top: auto;
   padding-top: var(--space--12);
 }

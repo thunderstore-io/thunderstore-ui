@@ -7,7 +7,20 @@
   overflow: hidden;
 }
 
+.text {
+  color: var(--color-text--secondary);
+  font-size: var(--font-size--l);
+  line-height: var(--line-height--l);
+}
+
 .opened {
   flex-direction: column;
   align-items: flex-start;
+}
+
+@media (max-width: 30rem) {
+  .text {
+    font-size: var(--font-size--s);
+    line-height: var(--line-height--s);
+  }
 }

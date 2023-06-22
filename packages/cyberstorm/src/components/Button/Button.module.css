@@ -13,6 +13,7 @@
   color: var(--text-color);
   background-color: var(--bg-color);
 
+  --font-size: var(--font-size--l);
   --text-color: var(--color-white);
   --bg-color: var(--color-surface--7);
   --button-border-color: transparent;
@@ -21,8 +22,9 @@
 
 /* Styles for Button's text */
 .label {
-  font-weight: 700;
-  font-size: var(--font-size--14);
+  font-weight: var(--font-weight);
+  font-size: var(--font-size);
+  line-height: 1;
 }
 
 /* Different Button color schemes */
@@ -38,11 +40,47 @@
 }
 
 .button__primary {
+  --bg-color: var(--color-surface--10);
+}
+
+.button__primary:hover {
+  --bg-color: var(--color-surface--10--hover);
+}
+
+.button__fancyAccent {
+  border: none;
+
+  --bg-color: var(--color-cyber-green--60);
+  --text-color: var(--color-cyber-green--10);
+
+  box-shadow:
+    inset 0 -3px 0 0 rgb(0 0 0 / 0.35),
+    inset 0 var(--space--px) 0 0 rgb(255 255 255 / 0.2),
+    inset 0 0 var(--space--16) 0 var(--color-green--40);
+}
+
+.button__fancyAccent:hover {
+  box-shadow:
+    inset 0 -3px 0 0 rgb(0 0 0 / 0.35),
+    inset 0 var(--space--px) 0 0 rgb(255 255 255 / 0.2),
+    inset 0 0 var(--space--16) 0 var(--color-green--70),
+    0 0 var(--space--10) 0 rgb(79 216 159 / 0.5);
+}
+
+.button__fancyAccent:active {
+  --bg-color: var(--color-cyber-green--50);
+
+  box-shadow:
+    inset 0 var(--space--2) 0 0 rgb(0 0 0 / 0.25),
+    0 0 var(--space--10) 0 rgb(79 216 159 / 0.5);
+}
+
+.button__accent {
   --text-color: var(--color-black);
   --bg-color: var(--color-highlight);
 }
 
-.button__primary:hover {
+.button__accent:hover {
   --bg-color: var(--color-highlight--hover);
 }
 
@@ -161,18 +199,76 @@
   --bg-color: var(--color-surface--4);
 }
 
-.small {
+/* Button padding sizes */
+
+.padding__none {
+  gap: var(--gap--4);
+  padding: 0;
+  border-radius: 0;
+}
+
+.padding__small {
   gap: var(--gap--12);
-  padding: var(--space--8) var(--space--12);
+  padding: var(--space--6) var(--space--8);
   border-radius: var(--border-radius--8);
 }
 
-.small > .label {
-  font-size: var(--font-size--12);
+.padding__medium {
+  gap: var(--gap--12);
+  padding: var(--space--8) var(--space--12);
 }
 
-.tiny {
-  gap: var(--gap--4);
-  padding: 0;
-  border-radius: var(--border-radius--4);
+.padding__mediumSquare {
+  max-width: 45px;
+  max-height: 45px;
+  padding: var(--space--12);
+}
+
+.padding__large {
+  gap: var(--gap--16);
+  padding: var(--space--12) var(--space--16);
+}
+
+.padding__huge {
+  gap: var(--gap--16);
+  border-radius: var(--border-radius--8);
+  padding-block: var(--button-padding-block);
+
+  --button-padding-block: var(--space--16);
+}
+
+.padding__huge:active {
+  --button-padding-block: calc(var(--space--16) + var(--space--2)) calc(var(--space--16) - var(--space--2));
+}
+
+/* Button font sizes */
+
+.font__small {
+  --font-size: var(--font-size--s);
+}
+
+.font__medium {
+  --font-size: var(--font-size--m);
+}
+
+.font__large {
+  --font-size: var(--font-size--l);
+}
+
+.font__huge {
+  --font-size: 1.375rem;
+}
+
+/* Button font weights */
+
+.fontWeight__600 {
+  --font-weight: 600;
+}
+
+.fontWeight__700 {
+  --font-weight: 700;
+}
+
+.fontWeight__800 {
+  --font-weight: 800;
 }

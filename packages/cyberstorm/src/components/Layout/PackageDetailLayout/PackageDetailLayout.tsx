@@ -1,14 +1,9 @@
 "use client";
 import styles from "./PackageDetailLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import {
-  CommunitiesLink,
-  CommunityLink,
-  PackageLink,
-  TeamLink,
-} from "../../Links/Links";
+import { CommunitiesLink, CommunityLink, TeamLink } from "../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "../../Button/Button";
+import { Button, PlainButton } from "../../Button/Button";
 import { ModIcon } from "../../ModIcon/ModIcon";
 import { Title } from "../../Title/Title";
 import { Dialog } from "../../Dialog/Dialog";
@@ -19,12 +14,11 @@ import {
   faDonate,
   faDownload,
   faCog,
-  faUser,
+  faUsers,
   faThumbsUp,
   faFlag,
 } from "@fortawesome/pro-solid-svg-icons";
 import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
-import { PackageAuthorList } from "./PackageAuthorList/PackageAuthorList";
 import { CopyButton } from "../../CopyButton/CopyButton";
 import { formatInteger } from "../../../utils/utils";
 import { Package } from "../../../schema";
@@ -38,11 +32,13 @@ import {
   faCodeBranch,
   faFileLines,
   faFilePlus,
-  faImages,
 } from "@fortawesome/pro-regular-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
-import { PackageImages } from "./PackageImages/PackageImages";
 import { useDapper } from "@thunderstore/dapper";
+import { PackageTagList } from "./PackageTagList/PackageTagList";
+import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
+import { ThunderstoreLogo } from "../../../svg/svg";
+import { getPackageDummyData } from "../../../dummyData";
 
 export interface PackageDetailLayoutProps {
   community: string;
@@ -71,9 +67,13 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   if (packageData.author) {
     packageDetailsMeta.push(
       <TeamLink team={packageData.team.name}>
-        <Link
+        <PlainButton
+          colorScheme="transparentPrimary"
+          paddingSize="small"
+          fontSize="medium"
+          fontWeight="700"
           label={packageData.team.name}
-          leftIcon={<FontAwesomeIcon icon={faUser} fixedWidth />}
+          leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
         />
       </TeamLink>
     );
@@ -97,13 +97,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <CommunityLink community={packageData.community}>
             {packageData.community}
           </CommunityLink>
-          <PackageLink
-            namespace={packageData.namespace}
-            community={packageData.community}
-            package={packageData.name}
-          >
-            {packageData.name}
-          </PackageLink>
+          {packageData.name}
         </BreadCrumbs>
       }
       header={
@@ -114,24 +108,43 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
             description={packageData.shortDescription}
             meta={packageDetailsMeta}
           />
-          <div className={styles.managementDialogTrigger}>
+          <div className={styles.headerActions}>
             <Dialog
+              showFooterBorder
               defaultOpen={managementDialogIsOpen}
               title="Manage Package"
               content={<PackageManagementForm />}
               acceptButton={
-                <Button label="Save changes" colorScheme="primary" />
+                <Button label="Save changes" colorScheme="accent" />
               }
               additionalFooterContent={
                 <Button label="Deprecate" colorScheme="warning" />
               }
               trigger={
                 <Button
+                  colorScheme="transparentDefault"
+                  paddingSize="large"
+                  fontSize="medium"
+                  fontWeight="700"
                   leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
                   label="Manage"
                 />
               }
             />
+            <a className={styles.installButton} href="/">
+              <PlainButton
+                paddingSize="huge"
+                fontSize="huge"
+                fontWeight="800"
+                label="Install"
+                colorScheme="fancyAccent"
+                leftIcon={
+                  <div className={styles.installButtonIcon}>
+                    <ThunderstoreLogo />
+                  </div>
+                }
+              />
+            </a>
           </div>
         </div>
       }
@@ -142,19 +155,60 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
       rightSidebarContent={
         <div className={styles.metaInfo}>
           <div className={styles.metaButtonWrapper}>
+            <div className={styles.metaDownloadButton}>
+              <Button
+                colorScheme="primary"
+                paddingSize="medium"
+                fontSize="medium"
+                fontWeight="700"
+                leftIcon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
+                label="Download"
+              />
+            </div>
             <Button
-              leftIcon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
-              label="Download"
+              colorScheme="primary"
+              paddingSize="mediumSquare"
+              fontSize="medium"
+              leftIcon={<FontAwesomeIcon icon={faDonate} fixedWidth />}
             />
-            <Button leftIcon={<FontAwesomeIcon icon={faDonate} fixedWidth />} />
             <Button
+              colorScheme="primary"
+              paddingSize="mediumSquare"
+              fontSize="medium"
               leftIcon={<FontAwesomeIcon icon={faThumbsUp} fixedWidth />}
             />
-            <Button leftIcon={<FontAwesomeIcon icon={faFlag} fixedWidth />} />
+            <Button
+              colorScheme="primary"
+              paddingSize="mediumSquare"
+              fontSize="medium"
+              leftIcon={<FontAwesomeIcon icon={faFlag} fixedWidth />}
+            />
           </div>
           <MetaInfoItemList metaInfoData={metaInfoData} />
-          <PackageDependencyList packages={packageData.dependencies} />
-          <PackageAuthorList
+          <PackageTagList tags={packageData.categories} />
+          <PackageDependencyList
+            packages={[
+              getPackageDummyData("1"),
+              getPackageDummyData("2"),
+              getPackageDummyData("3"),
+              getPackageDummyData("4"),
+              getPackageDummyData("5"),
+              getPackageDummyData("6"),
+              getPackageDummyData("1"),
+              getPackageDummyData("2"),
+              getPackageDummyData("3"),
+              getPackageDummyData("4"),
+              getPackageDummyData("5"),
+              getPackageDummyData("6"),
+              getPackageDummyData("1"),
+              getPackageDummyData("2"),
+              getPackageDummyData("3"),
+              getPackageDummyData("4"),
+              getPackageDummyData("5"),
+              getPackageDummyData("6"),
+            ]}
+          />
+          <PackageTeamMemberList
             teamName={packageData.team.name}
             teamMembers={packageData.team.members}
           />
@@ -192,34 +246,33 @@ function getMetaInfoData(packageData: Package) {
       key: "5",
       label: "Dependency string",
       content: (
-        <>
-          {packageData.dependencyString}
+        <div className={styles.dependencyStringWrapper}>
+          <div
+            title={packageData.dependencyString}
+            className={styles.dependencyString}
+          >
+            {packageData.dependencyString}
+          </div>
           <CopyButton text={packageData.dependencyString} />
-        </>
+        </div>
       ),
     },
-    { key: "6", label: "Dependants", content: <a href="/">5 other mods</a> },
   ];
 }
 
 const tabs = [
   {
     key: 1,
-    label: "Description",
+    label: "Details",
     icon: <FontAwesomeIcon icon={faFileLines} fixedWidth />,
   },
   {
     key: 2,
-    label: "Images",
-    icon: <FontAwesomeIcon icon={faImages} fixedWidth />,
-  },
-  {
-    key: 3,
     label: "ChangeLog",
     icon: <FontAwesomeIcon icon={faFilePlus} fixedWidth />,
   },
   {
-    key: 4,
+    key: 3,
     label: "Versions",
     icon: <FontAwesomeIcon icon={faCodeBranch} fixedWidth />,
   },
@@ -235,18 +288,8 @@ function getTabContent(currentTab: number, packageData: Package) {
       </>
     );
   } else if (currentTab === 2) {
-    tabContent = (
-      <PackageImages
-        images={[
-          { imageSource: packageData.imageSource, alt: "first" },
-          { imageSource: packageData.imageSource, alt: "second" },
-          { imageSource: packageData.imageSource, alt: "third" },
-        ]}
-      />
-    );
-  } else if (currentTab === 3) {
     tabContent = <PackageChangeLog packageId={packageData.name} />;
-  } else if (currentTab === 4) {
+  } else if (currentTab === 3) {
     tabContent = <PackageVersions />;
   }
   return tabContent;

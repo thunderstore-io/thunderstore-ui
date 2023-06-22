@@ -30,7 +30,9 @@ export function SearchFilter(props: SearchFilterProps) {
       <div className={styles.selectedTags}>
         {tagList}
         <Button
-          size="small"
+          paddingSize="small"
+          fontSize="small"
+          fontWeight="700"
           colorScheme="transparentDefault"
           label="Clear all"
         />

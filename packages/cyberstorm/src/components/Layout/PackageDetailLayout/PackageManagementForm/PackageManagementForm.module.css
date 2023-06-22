@@ -1,8 +1,15 @@
 .root {
   display: flex;
   flex-direction: column;
+  gap: var(--gap--32);
+  max-width: 70%;
+  max-height: 70%;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
   gap: var(--gap--16);
-  margin-bottom: var(--space--16);
 }
 
 .statusTag {

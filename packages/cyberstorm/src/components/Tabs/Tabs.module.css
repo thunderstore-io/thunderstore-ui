@@ -1,4 +1,5 @@
 .root {
   display: flex;
   gap: var(--gap--8);
+  overflow: auto;
 }

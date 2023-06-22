@@ -11,9 +11,7 @@ export default {
   component: MetaInfoItem,
 } as Meta;
 
-const defaultArgs: MetaInfoItemProps = {
-  colorScheme: "default",
-};
+const defaultArgs: MetaInfoItemProps = {};
 
 const Template: StoryFn<typeof MetaInfoItem> = (args) => (
   <div style={{ width: "400px" }}>
@@ -26,7 +24,6 @@ ReferenceMetaInfoItem.args = {
   ...defaultArgs,
   label: "Likes",
   content: "375",
-  colorScheme: "tertiary",
 };
 
 const MetaInfoItemWithCopyButton = Template.bind({});
@@ -39,7 +36,6 @@ MetaInfoItemWithCopyButton.args = {
       <CopyButton text={"123.456.789"} />
     </>
   ),
-  colorScheme: "tertiary",
 };
 
 export { ReferenceMetaInfoItem, MetaInfoItemWithCopyButton };

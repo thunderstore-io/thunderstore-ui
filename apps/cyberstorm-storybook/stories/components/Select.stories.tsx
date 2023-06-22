@@ -83,7 +83,7 @@ const PrimarySelect = Template.bind({});
 PrimarySelect.args = {
   props: {
     ...defaultArgs,
-    colorScheme: "primary",
+    colorScheme: "accent",
   },
   defaultValue: "2",
 };
@@ -93,7 +93,7 @@ EmptyOptionsSelect.args = {
   props: {
     ...defaultArgs,
     options: [],
-    colorScheme: "primary",
+    colorScheme: "accent",
   },
 };
 

@@ -15,7 +15,6 @@ import { FilterItemList } from "../../FilterItemList/FilterItemList";
 import { Button } from "../../Button/Button";
 import { Tag } from "../../Tag/Tag";
 import { TextInput } from "../../TextInput/TextInput";
-import { faGrid, faList } from "@fortawesome/pro-light-svg-icons";
 
 const PackageListings = lazy(
   () => import("../PackageListings/PackageListings")
@@ -205,7 +204,9 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
                 />
                 <Button
                   key="clearAllButton"
-                  size="small"
+                  paddingSize="small"
+                  fontSize="small"
+                  fontWeight="700"
                   colorScheme="transparentDefault"
                   label="Clear all"
                   onClick={() => {
@@ -226,14 +227,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
             ) : null}
 
             <div className={styles.displayAndSort}>
-              <div className={styles.displayButtons}>
-                <Button
-                  leftIcon={<FontAwesomeIcon icon={faGrid} fixedWidth />}
-                />
-                <Button
-                  leftIcon={<FontAwesomeIcon icon={faList} fixedWidth />}
-                />
-              </div>
+              <div className={styles.displayButtons}></div>
               <div className={styles.sort}>
                 <div className={styles.sortLabel}>Sort By</div>
                 <Select

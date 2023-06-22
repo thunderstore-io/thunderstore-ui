@@ -61,13 +61,13 @@ const PrimaryDropDown = Template.bind({});
 PrimaryDropDown.args = {
   ...defaultArgs,
   content: content,
-  colorScheme: "primary",
+  colorScheme: "accent",
 };
 
 const TriggerColorDropDown = Template.bind({});
 TriggerColorDropDown.args = {
   ...defaultArgs,
-  triggerColorScheme: "primary",
+  triggerColorScheme: "accent",
   content: content,
   colorScheme: "default",
 };

@@ -1,8 +1,9 @@
 import styles from "./Header.module.css";
-import { DropDown } from "../DropDown/DropDown";
+import { DropDown, DropDownDivider, DropDownItem } from "../DropDown/DropDown";
 import { Button, PlainButton } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DropDownLink } from "../DropDown/DropDownLink";
+import * as RadixDropDown from "@radix-ui/react-dropdown-menu";
 import {
   CommunitiesLink,
   IndexLink,
@@ -17,7 +18,6 @@ import {
 import { Avatar } from "../Avatar/Avatar";
 import { getUserDummyData } from "../../dummyData";
 import {
-  faBell,
   faCaretDown,
   faCog,
   faCreditCard,
@@ -38,70 +38,86 @@ export function Header() {
 
   const developersDropDownContents = [
     <a href="/wiki" key="1">
-      <DropDownLink label="Modding Wiki" isExternal />
+      <DropDownItem
+        content={<DropDownLink label="Modding Wiki" isExternal />}
+      />
     </a>,
     <a href="/docs" key="2">
-      <DropDownLink label="API Docs" isExternal />
+      <DropDownItem content={<DropDownLink label="API Docs" isExternal />} />
     </a>,
     <a href="/git" key="3">
-      <DropDownLink label="GitHub Repo" isExternal />
+      <DropDownItem content={<DropDownLink label="GitHub Repo" isExternal />} />
     </a>,
     <PackageFormatDocsLink key="4">
-      <DropDownLink label="Package Format Docs" />
+      <DropDownItem content={<DropDownLink label="Package Format Docs" />} />
     </PackageFormatDocsLink>,
     <MarkdownPreviewLink key="5">
-      <DropDownLink label="Markdown Preview" />
+      <DropDownItem content={<DropDownLink label="Markdown Preview" />} />
     </MarkdownPreviewLink>,
     <ManifestValidatorLink key="6">
-      <DropDownLink label="Manifest Validator" />
+      <DropDownItem content={<DropDownLink label="Manifest Validator" />} />
     </ManifestValidatorLink>,
     <PackageUploadLink key="7">
-      <DropDownLink label="Upload Package" />
+      <DropDownItem content={<DropDownLink label="Upload Package" />} />
     </PackageUploadLink>,
   ];
 
   const userDropDownContents = [
     <UserLink key="1" user={userData.name}>
-      <div className={styles.dropDownUserInfo}>
-        {userData.imageSource ? <Avatar src={userData.imageSource} /> : null}
-        <div className={styles.dropdownUserInfoDetails}>
-          <div className={styles.dropdownUserInfoDetails_userName}>
-            {userData.name}
-          </div>
-          <div className={styles.dropdownUserInfoDetails_description}>
-            My profile
+      <RadixDropDown.Item>
+        <div className={styles.dropDownUserInfo}>
+          {userData.imageSource ? <Avatar src={userData.imageSource} /> : null}
+          <div className={styles.dropdownUserInfoDetails}>
+            <div className={styles.dropdownUserInfoDetails_userName}>
+              {userData.name}
+            </div>
+            <div className={styles.dropdownUserInfoDetails_description}>
+              My profile
+            </div>
           </div>
         </div>
-      </div>
+      </RadixDropDown.Item>
     </UserLink>,
-    <TeamsLink key="2">
-      <DropDownLink
-        leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
-        label="Teams"
+    <DropDownDivider key="2" />,
+    <TeamsLink key="3">
+      <DropDownItem
+        content={
+          <DropDownLink
+            leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
+            label="Teams"
+          />
+        }
       />
     </TeamsLink>,
-    <a href="/notifications" key="3">
-      <DropDownLink
-        leftIcon={<FontAwesomeIcon icon={faBell} fixedWidth />}
-        label="Notifications"
-      />
-    </a>,
     <a href="/subscriptons" key="4">
-      <DropDownLink
-        leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
-        label="Subscriptions"
+      <DropDownItem
+        content={
+          <DropDownLink
+            leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
+            label="Subscriptions"
+          />
+        }
       />
     </a>,
     <SettingsLink key="5">
-      <DropDownLink
-        leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
-        label="Settings"
+      <DropDownItem
+        content={
+          <DropDownLink
+            leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
+            label="Settings"
+          />
+        }
       />
     </SettingsLink>,
-    <a href="/logout" key="6">
-      <DropDownLink
-        leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
-        label="Log Out"
+    <DropDownDivider key="6" />,
+    <a href="/logout" key="7">
+      <DropDownItem
+        content={
+          <DropDownLink
+            leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
+            label="Log Out"
+          />
+        }
       />
     </a>,
   ];
@@ -119,13 +135,22 @@ export function Header() {
           </li>
           <li>
             <IndexLink>
-              <Button label="Browse" colorScheme="transparentDefault" />
+              <PlainButton
+                label="Browse"
+                paddingSize="large"
+                fontSize="large"
+                fontWeight="700"
+                colorScheme="transparentDefault"
+              />
             </IndexLink>
           </li>
           <li>
             <CommunitiesLink>
               <PlainButton
                 label="Communities"
+                paddingSize="large"
+                fontSize="large"
+                fontWeight="700"
                 colorScheme="transparentDefault"
               />
             </CommunitiesLink>
@@ -137,7 +162,9 @@ export function Header() {
                 <Button
                   label="Developers"
                   rightIcon={<FontAwesomeIcon icon={faCaretDown} fixedWidth />}
-                  size="medium"
+                  paddingSize="large"
+                  fontSize="large"
+                  fontWeight="700"
                 />
               }
               content={developersDropDownContents}
@@ -151,13 +178,25 @@ export function Header() {
       <nav className={styles.item}>
         <ul className={styles.nav}>
           <li className={styles.navButtons}>
-            <Button colorScheme="specialPurple" label="Go Premium" />
-            <Button colorScheme="primary" label="Get Manager" />
+            <Button
+              colorScheme="specialPurple"
+              paddingSize="large"
+              fontSize="large"
+              fontWeight="700"
+              label="Go Premium"
+            />
+            <Button
+              colorScheme="accent"
+              label="Get Manager"
+              paddingSize="large"
+              fontSize="large"
+              fontWeight="700"
+            />
           </li>
           <li>
             <PackageUploadLink>
               <PlainButton
-                size="small"
+                paddingSize="mediumSquare"
                 colorScheme="transparentAccent"
                 leftIcon={<FontAwesomeIcon icon={faUpload} fixedWidth />}
               />
@@ -166,6 +205,7 @@ export function Header() {
           <li>
             <DropDown
               colorScheme="default"
+              contentAlignment="end"
               trigger={
                 userData.imageSource ? (
                   <AvatarButton src={userData.imageSource} />

@@ -1,21 +1,23 @@
 import styles from "./PackageDependencyList.module.css";
-import { PackageDependency } from "../../../../schema";
+import { Package } from "../../../../schema";
 import { PackageLink } from "../../../Links/Links";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBox } from "@fortawesome/pro-light-svg-icons";
-import { Button } from "../../../Button/Button";
+import { faBoxOpen } from "@fortawesome/pro-regular-svg-icons";
 import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
+import { Dialog } from "../../../Dialog/Dialog";
+import { PackageDependencyDialog } from "./PackageDependencyDialog/PackageDependencyDialog";
+import { Button } from "../../../Button/Button";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
 
 export interface PackageDependencyListProps {
-  packages?: PackageDependency[];
+  packages?: Package[];
 }
 
 export interface PackageDependencyListItemProps {
-  packageData: PackageDependency;
+  packageData: Package;
 }
 
 function PackageDependencyListItem(props: PackageDependencyListItemProps) {
@@ -37,9 +39,9 @@ function PackageDependencyListItem(props: PackageDependencyListItemProps) {
         />
         <div>
           <div className={styles.itemTitle}>{packageData.name}</div>
-          <div className={styles.itemDescription}>
+          <p className={styles.itemDescription}>
             {packageData.shortDescription}
-          </div>
+          </p>
         </div>
       </div>
     </PackageLink>
@@ -50,7 +52,7 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
   const { packages = [] } = props;
 
   const mappedPackageDependencyList = packages?.map(
-    (packageData: PackageDependency, index: number) => {
+    (packageData: Package, index: number) => {
       return (
         <div key={index}>
           <PackageDependencyListItem packageData={packageData} />
@@ -64,15 +66,32 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
       <WrapperCard
         title="Required Mods"
         content={
-          <div className={styles.list}>{mappedPackageDependencyList}</div>
+          <div className={styles.root}>
+            <div className={styles.listWrapper}>
+              <div className={styles.list}>{mappedPackageDependencyList}</div>
+            </div>
+          </div>
         }
-        headerIcon={<FontAwesomeIcon icon={faBox} fixedWidth />}
+        headerIcon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
         headerRightContent={
-          <Button
-            label="See all"
-            rightIcon={<FontAwesomeIcon icon={faCaretRight} fixedWidth />}
-            colorScheme="transparentPrimary"
-            size="small"
+          <Dialog
+            noPadding
+            hideFooter
+            showHeaderBorder
+            title="Required mods"
+            trigger={
+              <div className={styles.dependencyDialogTrigger}>
+                <Button
+                  paddingSize="none"
+                  fontSize="medium"
+                  fontWeight="600"
+                  colorScheme="transparentPrimary"
+                  label="See all"
+                  rightIcon={<FontAwesomeIcon icon={faCaretRight} fixedWidth />}
+                />
+              </div>
+            }
+            content={<PackageDependencyDialog packages={packages} />}
           />
         }
       />

@@ -3,14 +3,19 @@
   flex-direction: row;
   justify-content: space-between;
   width: 12rem;
-  padding: var(--space--8);
   color: var(--color-text--default);
-  font: var(--font-body);
-  font-size: var(--font-size--14);
 }
 
 .label {
   display: flex;
   flex-direction: row;
   gap: var(--space--8);
+  align-items: center;
+  font-weight: 500;
+  font-size: var(--font-size--m);
+  line-height: 1;
+}
+
+.icon {
+  color: var(--color-text--accent);
 }

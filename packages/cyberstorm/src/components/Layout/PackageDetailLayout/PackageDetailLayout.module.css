@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: row;
   gap: var(--gap--32);
-  align-items: center;
+  align-items: flex-start;
 }
 
 .packageInfoDetails {
@@ -19,15 +19,24 @@
 
 .description {
   color: var(--color-text--default);
-  font: var(--font-body);
   white-space: pre-wrap;
 }
 
-.managementDialogTrigger {
+.headerActions {
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
-  align-self: flex-start;
-  justify-content: flex-end;
+  gap: var(--gap--16);
+  align-items: flex-end;
+  align-self: flex-end;
+}
+
+.installButton {
+  width: 354px;
+}
+
+.installButtonIcon {
+  max-width: var(--space--24);
 }
 
 .metaButtonWrapper {
@@ -36,9 +45,46 @@
   gap: var(--gap--4);
 }
 
+.metaDownloadButton {
+  display: flex;
+  flex-grow: 1;
+}
+
+.metaDownloadButton > button {
+  display: flex;
+  flex-grow: 1;
+}
+
 .metaInfo {
   display: flex;
   flex-direction: column;
   gap: var(--gap--16);
-  min-width: 21rem;
+  min-width: 354px;
+}
+
+.dependencyStringWrapper {
+  display: flex;
+  gap: var(--gap--8);
+  align-items: center;
+  max-width: 180px;
+  max-height: 21px;
+}
+
+.dependencyString {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 60rem) {
+  .packageInfo {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .headerActions {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
 }

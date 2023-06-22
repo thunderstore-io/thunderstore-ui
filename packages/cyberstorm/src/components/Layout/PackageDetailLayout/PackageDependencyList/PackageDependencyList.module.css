@@ -1,12 +1,40 @@
+.root {
+  width: 100%;
+  height: var(--height);
+
+  border-radius: 8px;
+
+  --height: 272px;
+}
+
 .list {
-  padding: var(--space--8);
-  font-size: var(--font-size--14);
+  width: 100%;
+  height: 100%;
+  padding: var(--space--8) var(--space--8) 0 var(--space--8);
+  overflow: auto;
+}
+
+.listWrapper {
+  position: relative;
+  width: 100%;
+  height: var(--height);
+  border-radius: var(--border-radius--8);
+}
+
+.listWrapper::after {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 25%;
+  background: linear-gradient(transparent, var(--color-background)) left repeat;
+  content: "";
+  pointer-events: none;
 }
 
 .item {
   display: flex;
   gap: var(--gap--16);
-  padding: var(--space--8);
+  padding: var(--space--8) var(--space--12);
   border-radius: var(--border-radius--8);
 }
 
@@ -21,9 +49,30 @@
 }
 
 .itemTitle {
+  overflow: hidden;
   font-weight: 700;
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .itemDescription {
+  overflow: hidden;
   color: var(--color-text--tertiary);
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 60rem) {
+  .itemDescription,
+  .itemTitle {
+    max-width: 250px;
+  }
+}
+
+.dependencyDialogTrigger {
+  align-items: center;
 }

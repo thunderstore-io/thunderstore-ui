@@ -1,8 +1,9 @@
 .root {
   display: flex;
   flex-direction: row;
-  gap: var(--space--24);
+  gap: var(--space--32);
   margin: var(--space--16) 0;
+  padding: 0 0 var(--space--32) 0;
 }
 
 .info {
@@ -11,8 +12,43 @@
   gap: var(--space--4);
 }
 
+.title {
+  font: var(--font-heading);
+  font-weight: 800;
+  font-size: 51px;
+  line-height: 1;
+}
+
+.image {
+  min-width: 9rem;
+  max-width: 9rem;
+  min-height: 9rem;
+  max-height: 9rem;
+}
+
+@media (max-width: 30rem) {
+  .root {
+    gap: var(--space--16);
+  }
+
+  .title {
+    font: var(--font-heading);
+    font-weight: 700;
+    font-size: 21px;
+    line-height: 1.2;
+  }
+
+  .image {
+    min-width: 5rem;
+    max-width: 5rem;
+    min-height: 5rem;
+    max-height: 5rem;
+  }
+}
+
 .meta {
   display: flex;
   flex-direction: row;
   gap: var(--space--16);
+  padding-top: var(--space--16);
 }

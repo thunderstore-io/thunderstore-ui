@@ -42,7 +42,6 @@ export function BaseLayout(props: BaseLayoutProps) {
             <header className={styles.pageHeader}>{header}</header>
           ) : null}
           <section className={styles.pageBody}>
-            {tabs ? <nav>{tabs}</nav> : null}
             <div>
               <div className={styles.layoutSidebar}>
                 {search ? (
@@ -52,7 +51,10 @@ export function BaseLayout(props: BaseLayoutProps) {
                   <aside className={styles.sidebar}>{leftSidebarContent}</aside>
                 ) : null}
                 {mainContent ? (
-                  <main className={styles.main}>{mainContent}</main>
+                  <main className={styles.main}>
+                    {tabs ? <nav>{tabs}</nav> : null}
+                    <div>{mainContent}</div>
+                  </main>
                 ) : null}
                 {rightSidebarContent ? (
                   <aside className={styles.sidebar}>

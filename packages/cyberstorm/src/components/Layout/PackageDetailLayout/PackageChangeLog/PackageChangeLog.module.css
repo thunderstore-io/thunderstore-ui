@@ -40,5 +40,6 @@
 }
 
 .content {
-  font-size: var(--font-size--14);
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
 }

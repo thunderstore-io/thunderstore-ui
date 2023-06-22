@@ -20,8 +20,6 @@
 
 .showing {
   color: var(--color-text--secondary);
-  font: var(--font-body);
-  font-size: var(--font-size--14);
 }
 
 .contentWrapper {

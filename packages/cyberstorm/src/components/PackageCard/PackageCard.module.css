@@ -63,15 +63,16 @@
 /* Styles for PackageCard's Package name (title) */
 .title {
   color: var(--color-text--default);
-  font: var(--font-heading);
+  font: var(--font-body);
   font-weight: 700;
-  line-height: var(--line-height--18);
+  font-size: var(--font-size--l);
+  line-height: 1;
 }
 
 /* Styles for PackageCard's Author */
 .author {
-  font: var(--font-body);
-  font-size: var(--font-size--12);
+  font-size: var(--font-size--s);
+  line-height: 1;
 }
 
 .author_label {
@@ -91,8 +92,6 @@
   overflow: hidden;
   color: var(--color-text--secondary);
   font: var(--font-body);
-  font-size: var(--font-size--14);
-  line-height: var(--line-height--22);
   text-overflow: ellipsis;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -102,7 +101,8 @@
 .lastUpdated {
   color: var(--color-text--tertiary);
   font: var(--font-heading);
-  font-size: var(--font-size--12);
+  font-size: var(--font-size--s);
+  line-height: 1;
 }
 
 .footer {

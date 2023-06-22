@@ -2,17 +2,18 @@
   display: flex;
   flex-direction: row;
 
-  gap: var(--gap--16);
+  gap: var(--gap--12);
   align-items: center;
   min-width: 10rem;
-  padding: var(--space--10) var(--space--12);
+  padding: var(--space--12) var(--space--16);
   color: var(--text-color);
-
-  font: var(--font-body);
-  font-size: var(--font-size--14);
   cursor: pointer;
 
   --text-color: var(--color-text--default);
+}
+
+.root:hover {
+  background-color: var(--color-surface--6);
 }
 
 .label {

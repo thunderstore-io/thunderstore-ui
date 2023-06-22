@@ -9,7 +9,6 @@ import {
   faStar,
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { CommunitiesLink } from "../../Links/Links";
 import { TextInput } from "../../TextInput/TextInput";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
@@ -23,21 +22,20 @@ import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
  */
 export function CommunityListLayout() {
   const [order, setOrder] = useState("1");
+  const [searchValue, setSearchValue] = useState("");
 
   const communitiesData: CommunityPreview[] = getCommunityData();
 
   return (
     <BaseLayout
-      breadCrumb={
-        <BreadCrumbs>
-          <CommunitiesLink>Communities</CommunitiesLink>
-        </BreadCrumbs>
-      }
+      breadCrumb={<BreadCrumbs>Communities</BreadCrumbs>}
       header={<PageHeader title="Communities" />}
       search={
         <div className={styles.filters}>
           <div className={styles.searchTextInput}>
             <TextInput
+              setValue={setSearchValue}
+              value={searchValue}
               placeHolder="Search communities..."
               leftIcon={<FontAwesomeIcon icon={faSearch} fixedWidth />}
             />

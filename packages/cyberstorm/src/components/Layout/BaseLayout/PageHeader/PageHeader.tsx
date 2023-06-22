@@ -1,5 +1,4 @@
 import styles from "./PageHeader.module.css";
-import { Title } from "../../../Title/Title";
 import { ReactElement } from "react";
 import { CollapsibleText } from "../../../CollapsibleText/CollapsibleText";
 
@@ -18,9 +17,9 @@ export function PageHeader(props: PageHeaderProps) {
 
   return (
     <div className={styles.root}>
-      {image}
+      {image ? <div className={styles.image}>{image}</div> : null}
       <div className={styles.info}>
-        <Title text={title} />
+        <div className={styles.title}>{title}</div>
 
         {description ? (
           <CollapsibleText text={description} maxLength={85} />

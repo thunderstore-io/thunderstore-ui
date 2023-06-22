@@ -3,7 +3,7 @@ import { DataTable } from "../../../DataTable/DataTable";
 import { formatInteger } from "../../../../utils/utils";
 import { Button } from "../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBoltLightning, faDownload } from "@fortawesome/pro-solid-svg-icons";
+import { faBoltLightning } from "@fortawesome/pro-solid-svg-icons";
 
 interface PackageVersion {
   versionNumber: string;
@@ -44,16 +44,17 @@ function getPackageVersionsMapped(packageVersionList: PackageVersion[]) {
       formatInteger(packageVersion.downloads),
       <>
         <Button
-          size="small"
-          leftIcon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
+          paddingSize="medium"
+          fontSize="medium"
           label="Download"
-          colorScheme="transparentDefault"
+          colorScheme="transparentAccent"
         />
         <Button
-          size="small"
+          paddingSize="medium"
+          fontSize="medium"
           leftIcon={<FontAwesomeIcon icon={faBoltLightning} fixedWidth />}
           label="Install"
-          colorScheme="primary"
+          colorScheme="accent"
         />
       </>,
     ];

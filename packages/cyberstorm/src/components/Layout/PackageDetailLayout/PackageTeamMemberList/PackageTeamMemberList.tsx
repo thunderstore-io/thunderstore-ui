@@ -1,25 +1,24 @@
-import styles from "./PackageAuthorList.module.css";
+import styles from "./PackageTeamMemberList.module.css";
 import { TeamMember } from "../../../../schema";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserGroup } from "@fortawesome/pro-light-svg-icons";
+import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
 import { TeamLink, UserLink } from "../../../Links/Links";
-import { Link } from "../../../Link/Link";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
 
-export interface PackageAuthorListProps {
+export interface PackageTeamListProps {
   teamMembers?: TeamMember[];
   teamName?: string;
 }
 
-export interface PackageAuthorListItemProps {
+export interface PackageTeamListItemProps {
   teamMember: TeamMember;
 }
 
-function PackageAuthorListItem(props: PackageAuthorListItemProps) {
+function PackageTeamListItem(props: PackageTeamListItemProps) {
   const { teamMember } = props;
 
   return (
@@ -41,14 +40,14 @@ function PackageAuthorListItem(props: PackageAuthorListItemProps) {
   );
 }
 
-export function PackageAuthorList(props: PackageAuthorListProps) {
+export function PackageTeamMemberList(props: PackageTeamListProps) {
   const { teamMembers = [], teamName = null } = props;
 
-  const mappedPackageAuthorList = teamMembers?.map(
+  const mappedPackageTeamList = teamMembers?.map(
     (teamMember: TeamMember, index: number) => {
       return (
         <div key={index}>
-          <PackageAuthorListItem teamMember={teamMember} />
+          <PackageTeamListItem teamMember={teamMember} />
         </div>
       );
     }
@@ -57,23 +56,16 @@ export function PackageAuthorList(props: PackageAuthorListProps) {
   return (
     <>
       <WrapperCard
-        title="Authors"
-        content={
-          <div className={styles.list}>
-            {teamName ? (
-              <div className={styles.listHeader}>{teamName}</div>
-            ) : null}
-            {mappedPackageAuthorList}
-          </div>
-        }
-        headerIcon={<FontAwesomeIcon icon={faUserGroup} fixedWidth />}
+        title="Team"
+        content={<div className={styles.list}>{mappedPackageTeamList}</div>}
+        headerIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
         headerRightContent={
           teamName ? (
             <TeamLink team={teamName}>
-              <Link
-                label="See team"
-                rightIcon={<FontAwesomeIcon icon={faCaretRight} fixedWidth />}
-              />
+              <div className={styles.teamLink}>
+                <div>See team</div>
+                <FontAwesomeIcon icon={faCaretRight} fixedWidth />
+              </div>
             </TeamLink>
           ) : null
         }
@@ -82,4 +74,4 @@ export function PackageAuthorList(props: PackageAuthorListProps) {
   );
 }
 
-PackageAuthorList.displayName = "PackageAuthorList";
+PackageTeamMemberList.displayName = "PackageTeamMemberList";

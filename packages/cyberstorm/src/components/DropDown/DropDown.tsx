@@ -5,18 +5,23 @@ import styles from "./DropDown.module.css";
 import * as RadixDropDown from "@radix-ui/react-dropdown-menu";
 
 type DropDownProps = {
-  colorScheme?: "default" | "primary";
+  colorScheme?: "default" | "accent";
   defaultOpen?: boolean;
-  content?: ReactNode[];
+  content?: ReactElement[];
+  contentAlignment?: "start" | "center" | "end";
   trigger: ReactNode | ReactElement;
-  triggerColorScheme?: "default" | "primary" | "transparentDefault";
+  triggerColorScheme?: "default" | "accent" | "transparentDefault";
+};
+type DropDownItemProps = {
+  content?: ReactElement;
 };
 
 export function DropDown(props: DropDownProps) {
   const {
     colorScheme = "default",
     defaultOpen = false,
-    content,
+    content = null,
+    contentAlignment = "start",
     trigger,
     triggerColorScheme,
   } = props;
@@ -34,11 +39,11 @@ export function DropDown(props: DropDownProps) {
 
         <RadixDropDown.Portal>
           <RadixDropDown.Content
-            align="start"
+            align={contentAlignment}
             sideOffset={8}
-            className={`${styles.content}`}
+            className={styles.content}
           >
-            {parseContent(content)}
+            {content}
           </RadixDropDown.Content>
         </RadixDropDown.Portal>
       </RadixDropDown.Root>
@@ -46,12 +51,20 @@ export function DropDown(props: DropDownProps) {
   );
 }
 
-DropDown.displayName = "DropDown";
+export function DropDownItem(props: DropDownItemProps) {
+  const { content = null } = props;
 
-const parseContent = (content: ReactNode[] | undefined) => {
-  return content?.map((item, index) => (
-    <RadixDropDown.Item className={styles.itemWrapper} key={index}>
-      {React.isValidElement(item) ? React.cloneElement(item) : item}
+  return (
+    <RadixDropDown.Item className={styles.itemWrapper}>
+      {content}
     </RadixDropDown.Item>
-  ));
-};
+  );
+}
+
+export function DropDownDivider() {
+  return <div className={styles.divider} />;
+}
+
+DropDown.displayName = "DropDown";
+DropDownItem.displayName = "DropDownItem";
+DropDownDivider.displayName = "DropDownDivider";

@@ -1,0 +1,44 @@
+.list {
+  position: relative;
+  padding: var(--space--8);
+}
+
+.item {
+  display: flex;
+  gap: var(--gap--16);
+  padding: var(--space--8) var(--space--12);
+  border-radius: var(--border-radius--8);
+}
+
+.item:hover {
+  background-color: var(--color-surface--4);
+}
+
+.itemImage {
+  width: auto;
+  height: 3rem;
+  border-radius: 50%;
+}
+
+.itemTitle {
+  font-weight: 700;
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
+}
+
+.itemDescription {
+  color: var(--color-text--tertiary);
+  font-weight: 500;
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
+}
+
+.teamLink {
+  display: flex;
+  gap: var(--gap--8);
+  align-items: center;
+  color: var(--color-highlight);
+  font-weight: 600;
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
+}

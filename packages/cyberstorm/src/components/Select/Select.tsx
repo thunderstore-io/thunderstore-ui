@@ -15,7 +15,7 @@ export type SelectOption = {
 };
 
 type _SelectProps = {
-  colorScheme?: "default" | "primary";
+  colorScheme?: "default" | "accent";
   defaultOpen?: boolean;
   icon?: ReactNode;
   onChange?: (val: string) => void;
@@ -53,6 +53,9 @@ export function Select(props: SelectProps) {
         <RadixSelect.Trigger asChild>
           <Button
             colorScheme={colorScheme}
+            paddingSize="large"
+            fontSize="large"
+            fontWeight="700"
             rightIcon={icon}
             label={
               options?.find((o) => o.value === value)?.label ?? placeholder
@@ -60,12 +63,15 @@ export function Select(props: SelectProps) {
           />
         </RadixSelect.Trigger>
 
-        <RadixSelect.Content
-          position="popper"
-          className={`${styles.content} ${getContentStyle(colorScheme)}`}
-        >
-          {selectItemElements}
-        </RadixSelect.Content>
+        <RadixSelect.Portal>
+          <RadixSelect.Content
+            position="popper"
+            sideOffset={4}
+            className={`${styles.content} ${getContentStyle(colorScheme)}`}
+          >
+            {selectItemElements}
+          </RadixSelect.Content>
+        </RadixSelect.Portal>
       </RadixSelect.Root>
     </div>
   );
@@ -76,13 +82,13 @@ Select.displayName = "Select";
 const getContentStyle = (scheme: SelectProps["colorScheme"] = "default") => {
   return {
     default: styles.content__default,
-    primary: styles.content__primary,
+    accent: styles.content__accent,
   }[scheme];
 };
 
 const mapSelectData = (
   options: SelectOption[],
-  colorScheme: "default" | "primary" | undefined
+  colorScheme: "default" | "accent" | undefined
 ) => {
   return options.map((option, index) => (
     <RadixSelect.Item value={option.value} key={index} asChild>

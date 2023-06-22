@@ -1,9 +1,7 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { faClone } from "@fortawesome/pro-light-svg-icons";
-import { useEffect } from "react";
-import { useState } from "react";
+import { faClone, faCheck } from "@fortawesome/pro-regular-svg-icons";
+import { Dispatch, SetStateAction, useState } from "react";
 import styles from "./CopyButton.module.css";
 import { Tooltip } from "../Tooltip/Tooltip";
 import { Button } from "../Button/Button";
@@ -12,19 +10,21 @@ import { TooltipProvider } from "@radix-ui/react-tooltip";
 type CopyButtonProps = {
   text: string;
 };
-type CopyFn = (text: string) => Promise<void>;
 
-function useCopyToClipboard(): CopyFn {
-  const copy: CopyFn = async (text) => {
-    // Try to save to clipboard then save it in the state if worked
-    try {
-      await navigator?.clipboard.writeText(text);
-    } catch (error) {
-      console.warn("Copy failed", error);
-    }
-  };
-
-  return copy;
+function useCopyToClipboard(
+  text: string,
+  recentlyCopiedMethod: Dispatch<SetStateAction<boolean>>
+) {
+  // Try to save to clipboard then save it in the state if worked
+  try {
+    navigator?.clipboard.writeText(text);
+    recentlyCopiedMethod(true);
+    setTimeout(() => {
+      recentlyCopiedMethod(false);
+    }, 2000);
+  } catch (error) {
+    console.warn("Copy failed", error);
+  }
 }
 
 export function CopyButton(props: CopyButtonProps) {
@@ -34,11 +34,7 @@ export function CopyButton(props: CopyButtonProps) {
     return null;
   }
 
-  const copy = useCopyToClipboard();
   const [wasRecentlyCopied, setWasRecentlyCopied] = useState(false);
-  useEffect(() => {
-    setTimeout(() => setWasRecentlyCopied(false), 2000);
-  }, [setWasRecentlyCopied]);
 
   const icon = wasRecentlyCopied ? (
     <FontAwesomeIcon fixedWidth icon={faCheck} className={styles.checkmark} />
@@ -49,11 +45,11 @@ export function CopyButton(props: CopyButtonProps) {
     <TooltipProvider>
       <Tooltip content="Copy">
         <Button
-          size={"tiny"}
+          paddingSize="none"
+          fontSize="small"
           colorScheme={"transparentDefault"}
           onClick={() => {
-            copy(text);
-            setWasRecentlyCopied(true);
+            useCopyToClipboard(text, setWasRecentlyCopied);
           }}
           leftIcon={icon}
         />
