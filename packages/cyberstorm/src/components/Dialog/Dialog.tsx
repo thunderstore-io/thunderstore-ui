@@ -82,21 +82,16 @@ export function Dialog(props: DialogProps) {
                   {additionalFooterContent}
                 </div>
                 <div className={styles.footerSection}>
-                  {!cancelButton ? (
-                    <RadixDialog.Close asChild>
-                      <Button label="Cancel" colorScheme="transparentDefault" />
-                    </RadixDialog.Close>
-                  ) : (
+                  {cancelButton ? (
                     <RadixDialog.Close asChild>
                       {cancelButton}
                     </RadixDialog.Close>
-                  )}
-
-                  {!acceptButton ? null : (
+                  ) : null}
+                  {acceptButton ? (
                     <RadixDialog.Close asChild>
                       {acceptButton}
                     </RadixDialog.Close>
-                  )}
+                  ) : null}
                 </div>
               </div>
             )}

@@ -1,7 +1,12 @@
 "use client";
 import styles from "./PackageDetailLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import { CommunitiesLink, CommunityLink, TeamLink } from "../../Links/Links";
+import {
+  CommunitiesLink,
+  CommunityLink,
+  PackageDependantsLink,
+  TeamLink,
+} from "../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, PlainButton } from "../../Button/Button";
 import { ModIcon } from "../../ModIcon/ModIcon";
@@ -39,6 +44,7 @@ import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
 import { ThunderstoreLogo } from "../../../svg/svg";
 import { getPackageDummyData } from "../../../dummyData";
+import { Tooltip } from "../../Tooltip/Tooltip";
 
 export interface PackageDetailLayoutProps {
   community: string;
@@ -116,10 +122,26 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               title="Manage Package"
               content={<PackageManagementForm />}
               acceptButton={
-                <Button label="Save changes" colorScheme="accent" />
+                <Button
+                  paddingSize="large"
+                  label="Save changes"
+                  colorScheme="success"
+                />
               }
               additionalFooterContent={
-                <Button label="Deprecate" colorScheme="warning" />
+                packageData.isDeprecated ? (
+                  <Button
+                    paddingSize="large"
+                    label="Undeprecate"
+                    colorScheme="default"
+                  />
+                ) : (
+                  <Button
+                    paddingSize="large"
+                    label="Deprecate"
+                    colorScheme="warning"
+                  />
+                )
               }
               trigger={
                 <Button
@@ -156,8 +178,8 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
       rightSidebarContent={
         <div className={styles.metaInfo}>
           <div className={styles.metaButtonWrapper}>
-            <div className={styles.metaDownloadButton}>
-              <Button
+            <a href="/" className={styles.metaDownloadButton}>
+              <PlainButton
                 colorScheme="primary"
                 paddingSize="medium"
                 fontSize="medium"
@@ -165,25 +187,31 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
                 leftIcon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
                 label="Download"
               />
-            </div>
-            <Button
-              colorScheme="primary"
-              paddingSize="mediumSquare"
-              fontSize="medium"
-              leftIcon={<FontAwesomeIcon icon={faDonate} fixedWidth />}
-            />
-            <Button
-              colorScheme="primary"
-              paddingSize="mediumSquare"
-              fontSize="medium"
-              leftIcon={<FontAwesomeIcon icon={faThumbsUp} fixedWidth />}
-            />
-            <Button
-              colorScheme="primary"
-              paddingSize="mediumSquare"
-              fontSize="medium"
-              leftIcon={<FontAwesomeIcon icon={faFlag} fixedWidth />}
-            />
+            </a>
+            <Tooltip content="Donate to author" side="bottom">
+              <Button
+                colorScheme="primary"
+                paddingSize="mediumSquare"
+                fontSize="medium"
+                leftIcon={<FontAwesomeIcon icon={faDonate} fixedWidth />}
+              />
+            </Tooltip>
+            <Tooltip content="Like" side="bottom">
+              <Button
+                colorScheme="primary"
+                paddingSize="mediumSquare"
+                fontSize="medium"
+                leftIcon={<FontAwesomeIcon icon={faThumbsUp} fixedWidth />}
+              />
+            </Tooltip>
+            <Tooltip content="Report" side="bottom">
+              <Button
+                colorScheme="primary"
+                paddingSize="mediumSquare"
+                fontSize="medium"
+                leftIcon={<FontAwesomeIcon icon={faFlag} fixedWidth />}
+              />
+            </Tooltip>
           </div>
           <MetaInfoItemList metaInfoData={metaInfoData} />
           <PackageTagList tags={packageData.categories} />
@@ -256,6 +284,21 @@ function getMetaInfoData(packageData: Package) {
           </div>
           <CopyButton text={packageData.dependencyString} />
         </div>
+      ),
+    },
+    {
+      key: "5",
+      label: "Dependants",
+      content: (
+        <PackageDependantsLink
+          community={packageData.community}
+          namespace={packageData.namespace}
+          package={packageData.name}
+        >
+          <div className={styles.dependantsLink}>
+            {packageData.dependantCount + " other mods"}
+          </div>
+        </PackageDependantsLink>
       ),
     },
   ];

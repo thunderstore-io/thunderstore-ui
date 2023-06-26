@@ -42,3 +42,8 @@
   font-size: var(--font-size--m);
   line-height: var(--line-height--m);
 }
+
+.crown {
+  margin-left: var(--space--4);
+  color: var(--color-yellow--50);
+}

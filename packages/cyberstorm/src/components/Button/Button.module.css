@@ -9,12 +9,12 @@
 
   padding: var(--space--12) var(--space--16);
   border: var(--button-border-width) solid var(--button-border-color);
-  border-radius: var(--border-radius--12);
+  border-radius: var(--border-radius--8);
   color: var(--text-color);
   background-color: var(--bg-color);
 
   --font-size: var(--font-size--l);
-  --text-color: var(--color-white);
+  --text-color: var(--color-text--default);
   --bg-color: var(--color-surface--7);
   --button-border-color: transparent;
   --button-border-width: var(--border-width--2);
@@ -30,7 +30,7 @@
 /* Different Button color schemes */
 
 .button__default {
-  --text-color: var(--color-white);
+  --text-color: var(--color-text--default);
   --bg-color: var(--color-surface--7);
 }
 
@@ -56,14 +56,14 @@
   box-shadow:
     inset 0 -3px 0 0 rgb(0 0 0 / 0.35),
     inset 0 var(--space--px) 0 0 rgb(255 255 255 / 0.2),
-    inset 0 0 var(--space--16) 0 var(--color-green--40);
+    inset 0 0 var(--space--16) 0 var(--color-green--6);
 }
 
 .button__fancyAccent:hover {
   box-shadow:
     inset 0 -3px 0 0 rgb(0 0 0 / 0.35),
     inset 0 var(--space--px) 0 0 rgb(255 255 255 / 0.2),
-    inset 0 0 var(--space--16) 0 var(--color-green--70),
+    inset 0 0 var(--space--16) 0 var(--color-green--3),
     0 0 var(--space--10) 0 rgb(79 216 159 / 0.5);
 }
 
@@ -84,22 +84,31 @@
   --bg-color: var(--color-highlight--hover);
 }
 
+.button__success {
+  --text-color: var(--color-success-text);
+  --bg-color: var(--color-success-background);
+}
+
+.button__success:hover {
+  --bg-color: var(--color-success-background--hover);
+}
+
 .button__warning {
-  --text-color: var(--color-yellow--50);
-  --bg-color: var(--color-yellow--10);
+  --text-color: var(--color-warning-text);
+  --bg-color: var(--color-warning-background);
 }
 
 .button__warning:hover {
-  --bg-color: var(--color-yellow--20);
+  --bg-color: var(--color-warning-background--hover);
 }
 
 .button__danger {
-  --text-color: var(--color-white);
-  --bg-color: var(--color-danger);
+  --text-color: var(--color-danger-text);
+  --bg-color: var(--color-danger-background);
 }
 
 .button__danger:hover {
-  --bg-color: var(--color-danger--hover);
+  --bg-color: var(--color-danger-background--hover);
 }
 
 /* Special-style Buttons */
@@ -141,12 +150,10 @@
   left: calc(0 - var(--button-border-width));
   z-index: -1;
   border: var(--button-border-width) solid transparent;
-  border-radius: var(--border-radius--12);
+  border-radius: var(--border-radius--8);
   opacity: 0;
   transition: all 0.12s;
   content: "";
-
-  --text-color: var(--color-white);
 }
 
 .button__specialGreen::before {
@@ -210,7 +217,6 @@
 .padding__small {
   gap: var(--gap--12);
   padding: var(--space--6) var(--space--8);
-  border-radius: var(--border-radius--8);
 }
 
 .padding__medium {
@@ -231,7 +237,6 @@
 
 .padding__huge {
   gap: var(--gap--16);
-  border-radius: var(--border-radius--8);
   padding-block: var(--button-padding-block);
 
   --button-padding-block: var(--space--16);

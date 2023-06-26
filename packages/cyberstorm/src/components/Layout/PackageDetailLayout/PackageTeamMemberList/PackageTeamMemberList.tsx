@@ -3,7 +3,7 @@ import { TeamMember } from "../../../../schema";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/pro-regular-svg-icons";
-import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
+import { faCaretRight, faCrown } from "@fortawesome/pro-solid-svg-icons";
 import { TeamLink, UserLink } from "../../../Links/Links";
 
 // TODO: actual placeholder
@@ -32,7 +32,14 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
           alt={teamMember.user}
         />
         <div>
-          <div className={styles.itemTitle}>{teamMember.user}</div>
+          <div className={styles.itemTitle}>
+            {teamMember.user}
+            {teamMember.role === "Owner" ? (
+              <span className={styles.crown}>
+                <FontAwesomeIcon icon={faCrown} fixedWidth />
+              </span>
+            ) : null}
+          </div>
           <div className={styles.itemDescription}>{teamMember.role}</div>
         </div>
       </div>

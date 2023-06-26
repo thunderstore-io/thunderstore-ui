@@ -24,6 +24,7 @@ interface _PlainButtonProps {
     | "primary"
     | "accent"
     | "fancyAccent"
+    | "success"
     | "warning"
     | "specialGreen"
     | "specialPurple"
@@ -101,9 +102,9 @@ export const PlainButton = React.forwardRef<HTMLDivElement, PlainButtonProps>(
       <div
         {...forwardedProps}
         ref={ref}
-        className={`${styles.root} ${getStyle(colorScheme)} ${getPaddingSize(
-          paddingSize
-        )}`}
+        className={`${styles.root} ${getStyle(colorScheme)} ${getFontSize(
+          fontSize
+        )} ${getPaddingSize(paddingSize)}`}
       >
         {leftIcon}
         {label ? (
@@ -112,7 +113,11 @@ export const PlainButton = React.forwardRef<HTMLDivElement, PlainButtonProps>(
               fontSize
             )} ${getFontWeight(fontWeight)}`}
           >
-            {label}
+            {label ? (
+              <div className={`${styles.label} ${getFontWeight(fontWeight)}`}>
+                {label}
+              </div>
+            ) : null}
           </div>
         ) : null}
         {rightIcon}
@@ -131,6 +136,7 @@ const getStyle = (scheme: string) => {
     default: styles.button__default,
     accent: styles.button__accent,
     fancyAccent: styles.button__fancyAccent,
+    success: styles.button__success,
     warning: styles.button__warning,
     specialGreen: styles.button__specialGreen,
     specialPurple: styles.button__specialPurple,

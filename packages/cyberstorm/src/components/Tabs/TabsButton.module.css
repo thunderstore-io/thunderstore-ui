@@ -8,7 +8,7 @@
 
   padding: var(--space--12) var(--space--16);
   border-radius: var(--border-radius--8);
-  color: var(--color-text--tertiary);
+  color: var(--color-text--default);
   background-color: var(--bg-color);
 
   --bg-color: var(--color-surface--4);
@@ -22,20 +22,22 @@
 
 .button__default {
   --bg-color: var(--color-surface--4);
+
+  color: var(--color-text--default);
 }
 
 .button__default > .icon {
-  color: var(--color-surface--9);
+  color: var(--color-border--highlight);
+}
+
+.button__default:hover > .icon {
+  color: var(--color-text--tertiary);
 }
 
 .button__default:hover {
-  color: var(--color-text--default);
-
   --bg-color: var(--color-surface--7);
 }
 
 .button__default_selected {
-  color: var(--color-text--default);
-
   --bg-color: var(--color-surface--10);
 }

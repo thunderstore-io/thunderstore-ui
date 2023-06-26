@@ -197,7 +197,7 @@ export function getTeamMemberDummyData(seed?: string): TeamMember {
   return {
     user: faker.internet.userName(),
     imageSource: faker.image.abstract(525, 525, true),
-    role: faker.name.jobTitle(),
+    role: faker.helpers.arrayElement(["Owner", "Member"]),
   };
 }
 

@@ -1,8 +1,18 @@
 :root {
   --color-background: var(--color-surface--0);
   --color-background-alpha-90: rgb(18 18 38 / 0.9);
-  --color-danger: var(--color-red--50);
-  --color-danger--hover: var(--color-red--40);
+  --color-danger: var(--color-red--5);
+  --color-danger-background: var(--color-red--8);
+  --color-danger-background--hover: var(--color-red--9);
+  --color-danger--hover: var(--color-red--6);
+  --color-danger-text: var(--color-red--1);
+  --color-warning-text: var(--color-yellow--1);
+  --color-warning-background: var(--color-yellow--8);
+  --color-warning-background--hover: var(--color-yellow--9);
+  --color-success-text: var(--color-green--1);
+  --color-success-background: var(--color-green--8);
+  --color-success-background--hover: var(--color-green--9);
+  --color-crown: var(--color-yellow--5);
   --color-info: var(--color-blue--60);
   --color-info-background: var(--color-blue--10);
   --color-surface--0: var(--color-purple--0);

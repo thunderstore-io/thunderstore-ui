@@ -41,18 +41,27 @@ export function CopyButton(props: CopyButtonProps) {
   ) : (
     <FontAwesomeIcon fixedWidth icon={faClone} className={styles.copy} />
   );
+
+  const button = (
+    <Button
+      paddingSize="none"
+      fontSize="small"
+      colorScheme="transparentDefault"
+      onClick={() => {
+        useCopyToClipboard(text, setWasRecentlyCopied);
+      }}
+      leftIcon={icon}
+    />
+  );
+
   return (
     <TooltipProvider>
-      <Tooltip content="Copy">
-        <Button
-          paddingSize="none"
-          fontSize="small"
-          colorScheme={"transparentDefault"}
-          onClick={() => {
-            useCopyToClipboard(text, setWasRecentlyCopied);
-          }}
-          leftIcon={icon}
-        />
+      <Tooltip
+        content={wasRecentlyCopied ? "Copied!" : "Copy"}
+        forceShow={wasRecentlyCopied}
+        side="bottom"
+      >
+        {button}
       </Tooltip>
     </TooltipProvider>
   );

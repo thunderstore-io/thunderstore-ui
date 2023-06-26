@@ -7,7 +7,9 @@
 
   font-weight: 700;
   overflow-wrap: break-word;
-  background-color: var(--color-surface--0);
+  background-color: var(--background-color);
+
+  --background-color: var(--color-black);
 
   box-shadow: var(--box-shadow-default);
   animation-duration: var(--animation-duration-default);
@@ -17,8 +19,8 @@
 }
 
 .arrow {
-  color: var(--color-surface--0);
-  fill: var(--color-surface--0);
+  color: var(--background-color);
+  fill: var(--background-color);
 }
 
 .root[data-state="delayed-open"][data-side="top"] {

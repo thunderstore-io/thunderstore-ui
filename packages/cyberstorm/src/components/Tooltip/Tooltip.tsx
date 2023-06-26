@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
 import styles from "./Tooltip.module.css";
 
@@ -11,6 +11,7 @@ export interface TooltipProps {
   sticky?: "always" | "partial" | undefined;
   avoidCollisions?: boolean;
   children?: ReactNode;
+  forceShow?: boolean;
 }
 
 /**
@@ -24,9 +25,12 @@ export function Tooltip({
   sticky = "always",
   avoidCollisions = true,
   children,
+  forceShow = false,
 }: TooltipProps) {
+  const [open, setOpen] = useState(forceShow);
+
   return (
-    <RadixTooltip.Root>
+    <RadixTooltip.Root onOpenChange={setOpen} open={forceShow || open}>
       <RadixTooltip.Trigger asChild>{children}</RadixTooltip.Trigger>
       <RadixTooltip.Portal>
         <RadixTooltip.Content

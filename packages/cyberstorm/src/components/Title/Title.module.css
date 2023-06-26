@@ -2,4 +2,5 @@
   color: var(--color-text--default);
   font: var(--font-heading);
   line-height: 1.15;
+  overflow-wrap: anywhere;
 }

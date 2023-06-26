@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: row;
   gap: var(--gap--32);
-  align-items: flex-start;
+  justify-content: space-between;
 }
 
 .packageInfoDetails {
@@ -20,12 +20,13 @@
 .description {
   color: var(--color-text--default);
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .headerActions {
   display: flex;
+  flex-basis: 354px;
   flex-direction: column;
-  flex-grow: 1;
   gap: var(--gap--16);
   align-items: flex-end;
   align-self: flex-end;
@@ -42,7 +43,7 @@
 .metaButtonWrapper {
   display: flex;
   flex-grow: 1;
-  gap: var(--gap--4);
+  gap: var(--gap--8);
 }
 
 .metaDownloadButton {
@@ -50,7 +51,7 @@
   flex-grow: 1;
 }
 
-.metaDownloadButton > button {
+.metaDownloadButton > div {
   display: flex;
   flex-grow: 1;
 }
@@ -74,6 +75,10 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.dependantsLink {
+  color: var(--color-highlight);
 }
 
 @media (max-width: 60rem) {
