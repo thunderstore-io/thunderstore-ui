@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 export interface SettingItemProps {
   title?: string;
-  description?: string;
+  description?: string | ReactNode;
   content?: ReactNode;
   additionalLeftColumnContent?: ReactNode;
 }
