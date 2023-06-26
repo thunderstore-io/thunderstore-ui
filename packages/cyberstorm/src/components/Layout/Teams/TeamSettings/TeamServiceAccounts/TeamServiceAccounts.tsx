@@ -58,7 +58,7 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
                         <TextInput value="TODO: value" />
                       </div>
                       <CopyButton
-                        colorScheme="secondary"
+                        colorScheme="default"
                         paddingSize="large"
                         text="TODO: value"
                       />

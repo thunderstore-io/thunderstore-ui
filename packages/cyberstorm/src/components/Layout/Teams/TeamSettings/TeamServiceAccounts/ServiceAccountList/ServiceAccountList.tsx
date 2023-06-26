@@ -13,7 +13,7 @@ export interface ServiceAccountListProps {
 export function ServiceAccountList(props: ServiceAccountListProps) {
   const { serviceAccountData = [] } = props;
 
-  const tableData = [];
+  const tableData: ServiceAccountData[] = [];
   serviceAccountData?.forEach((serviceAccount: ServiceAccount) => {
     tableData.push({
       name: serviceAccount.name,
@@ -50,7 +50,12 @@ export function ServiceAccountList(props: ServiceAccountListProps) {
     });
   });
 
-  return <DataTable columns={serviceAccountColumns} data={tableData} />;
+  return (
+    <DataTable<ServiceAccountData>
+      columns={serviceAccountColumns}
+      data={tableData}
+    />
+  );
 }
 
 ServiceAccountList.displayName = "ServiceAccountList";

@@ -27,7 +27,7 @@ export interface TeamMemberListProps {
 export function TeamMemberList(props: TeamMemberListProps) {
   const { teamMemberData = [] } = props;
 
-  const tableData = [];
+  const tableData: TeamMemberData[] = [];
   teamMemberData?.forEach((teamMember: TeamMember) => {
     tableData.push({
       name: (
@@ -91,7 +91,9 @@ export function TeamMemberList(props: TeamMemberListProps) {
     });
   });
 
-  return <DataTable columns={teamMemberColumns} data={tableData} />;
+  return (
+    <DataTable<TeamMemberData> columns={teamMemberColumns} data={tableData} />
+  );
 }
 
 export function TeamMembers(props: TeamMembersProps) {
