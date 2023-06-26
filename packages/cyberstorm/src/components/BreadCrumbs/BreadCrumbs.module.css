@@ -66,6 +66,11 @@
   transform: skew(30deg);
 }
 
+.inner > a {
+  margin: calc(-1 * var(--space--8)) calc(-1 * var(--space--16));
+  padding: var(--space--8) var(--space--16);
+}
+
 .inner__end {
   color: var(--color-text--default);
 }
