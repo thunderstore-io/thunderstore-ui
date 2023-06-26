@@ -19,7 +19,7 @@ export function TeamList(props: TeamListProps) {
           {team.name}
         </TeamSettingsLink>
       ),
-      nameRaw: team.name,
+      nameRaw: team.name.toLowerCase(),
       role: "TODO",
       memberCount: team.members?.length,
     });
