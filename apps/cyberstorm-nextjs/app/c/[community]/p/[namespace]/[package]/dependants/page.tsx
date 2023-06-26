@@ -1,8 +1,5 @@
 "use client";
-import {
-  PackageDetailLayout,
-  PackageListLayout,
-} from "@thunderstore/cyberstorm";
+import { PackageListLayout } from "@thunderstore/cyberstorm";
 import { useParams } from "next/navigation";
 
 export default function Page() {

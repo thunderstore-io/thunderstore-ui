@@ -10,7 +10,7 @@ const meta = {
   component: PackageDependantsLayout,
 } as ComponentMeta<typeof PackageDependantsLayout>;
 
-const Template: StoryFn<typeof PackageDependantsLayout> = (args) => (
+const Template: StoryFn<typeof PackageDependantsLayout> = () => (
   <div>
     <PackageDependantsLayout packageData={getPackageDummyData("1")} />
   </div>

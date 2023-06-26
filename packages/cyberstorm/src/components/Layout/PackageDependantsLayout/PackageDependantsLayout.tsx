@@ -1,21 +1,10 @@
 "use client";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CommunitiesLink, CommunityLink, PackageLink } from "../../Links/Links";
 import { getCommunityDummyData } from "../../../dummyData";
-import { Package, PackagePreview } from "../../../schema";
+import { Package } from "../../../schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
-import { MetaItem } from "../../MetaItem/MetaItem";
-import { formatInteger } from "../../../utils/utils";
-import {
-  faBoxOpen,
-  faDownload,
-  faServer,
-} from "@fortawesome/pro-regular-svg-icons";
-import { Link } from "../../Link/Link";
-import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
-import { CommunityImage } from "../../CommunityImage/CommunityImage";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 
 export interface PackageDependantsLayoutProps {
