@@ -23,6 +23,7 @@ interface _PlainButtonProps {
     | "default"
     | "primary"
     | "accent"
+    | "tertiary"
     | "fancyAccent"
     | "success"
     | "warning"
@@ -135,6 +136,7 @@ const getStyle = (scheme: string) => {
     primary: styles.button__primary,
     default: styles.button__default,
     accent: styles.button__accent,
+    tertiary: styles.button__tertiary,
     fancyAccent: styles.button__fancyAccent,
     success: styles.button__success,
     warning: styles.button__warning,

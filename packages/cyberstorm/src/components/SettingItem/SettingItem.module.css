@@ -8,6 +8,12 @@
 .leftColumn {
   display: flex;
   flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.leftColumnRegular {
+  display: flex;
+  flex-direction: column;
   gap: var(--gap--8);
 }
 

@@ -20,7 +20,7 @@ export function TeamList(props: TeamListProps) {
         </TeamSettingsLink>
       ),
       nameRaw: team.name,
-      role: "",
+      role: "TODO",
       memberCount: team.members?.length,
     });
   });
@@ -45,6 +45,7 @@ const columns: TableColumn<TeamData>[] = [
       fontWeight: 700,
     },
     sortable: true,
+    cell: (row) => row.name,
     selector: (row) => row.nameRaw,
   },
   {

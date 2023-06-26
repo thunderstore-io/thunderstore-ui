@@ -84,6 +84,14 @@
   --bg-color: var(--color-highlight--hover);
 }
 
+.button__tertiary {
+  --bg-color: transparent;
+}
+
+.button__tertiary:hover {
+  --bg-color: var(--color-surface--7);
+}
+
 .button__success {
   --text-color: var(--color-success-text);
   --bg-color: var(--color-success-background);
