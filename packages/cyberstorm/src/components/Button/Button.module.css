@@ -185,6 +185,16 @@
   --bg-color: var(--color-surface--4);
 }
 
+.button__transparentDanger {
+  --bg-color: transparent;
+  --text-color: var(--color-border--highlight);
+}
+
+.button__transparentDanger:hover {
+  --bg-color: var(--color-danger-background);
+  --text-color: var(--color-danger-text);
+}
+
 .button__transparentTertiary {
   --bg-color: transparent;
   --text-color: var(--color-text--tertiary);

@@ -29,6 +29,7 @@ interface _PlainButtonProps {
     | "warning"
     | "specialGreen"
     | "specialPurple"
+    | "transparentDanger"
     | "transparentDefault"
     | "transparentTertiary"
     | "transparentAccent"
@@ -142,6 +143,7 @@ const getStyle = (scheme: string) => {
     warning: styles.button__warning,
     specialGreen: styles.button__specialGreen,
     specialPurple: styles.button__specialPurple,
+    transparentDanger: styles.button__transparentDanger,
     transparentDefault: styles.button__transparentDefault,
     transparentTertiary: styles.button__transparentTertiary,
     transparentPrimary: styles.button__transparentPrimary,

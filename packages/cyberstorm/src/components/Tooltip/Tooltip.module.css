@@ -1,4 +1,5 @@
 .root {
+  z-index: 999;
   max-width: 75vw;
 
   padding: var(--space--8) var(--space--12);
@@ -9,13 +10,13 @@
   overflow-wrap: break-word;
   background-color: var(--background-color);
 
-  --background-color: var(--color-black);
-
   box-shadow: var(--box-shadow-default);
   animation-duration: var(--animation-duration-default);
   animation-timing-function: var(--animation-timing-1);
   user-select: none;
   will-change: transform, opacity;
+
+  --background-color: var(--color-black);
 }
 
 .arrow {

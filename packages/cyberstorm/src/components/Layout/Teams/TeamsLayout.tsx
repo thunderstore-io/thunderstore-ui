@@ -53,13 +53,7 @@ export function TeamsLayout() {
                     rightIcon={<FontAwesomeIcon icon={faPlus} fixedWidth />}
                   />
                 }
-                cancelButton={
-                  <Button
-                    label="Cancel"
-                    paddingSize="large"
-                    colorScheme="tertiary"
-                  />
-                }
+                cancelButton="default"
                 acceptButton={
                   <Button
                     label="Create"

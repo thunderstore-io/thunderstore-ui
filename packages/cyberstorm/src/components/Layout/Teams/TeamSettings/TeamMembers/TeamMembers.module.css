@@ -1,9 +1,7 @@
 .dialogContent {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--16);
-  margin-bottom: var(--space--16);
-  color: var(--color-text--default);
+  gap: var(--gap--32);
 }
 
 .dialogTeamName {
@@ -19,4 +17,35 @@
 
 .textInput {
   flex-grow: 1;
+}
+
+.roleSelect {
+  width: 11em;
+}
+
+.roleSelect > div > button {
+  width: 100%;
+}
+
+.userInfo {
+  display: flex;
+  gap: var(--gap--16);
+  align-items: center;
+}
+
+.userInfoName {
+  font-weight: 700;
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
+}
+
+.description {
+  color: var(--color-text--secondary);
+  font-weight: 500;
+  font-size: var(--font-size--l);
+  line-height: var(--line-height--l);
+}
+
+.kickDescriptionUserName {
+  color: var(--color-highlight);
 }

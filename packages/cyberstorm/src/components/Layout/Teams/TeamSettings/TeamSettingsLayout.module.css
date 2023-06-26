@@ -10,7 +10,3 @@
   flex-direction: column;
   gap: var(--gap--32);
 }
-
-.separator {
-  border-bottom: var(--border-width--px) solid var(--color-surface--4);
-}

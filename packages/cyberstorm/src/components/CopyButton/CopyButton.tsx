@@ -9,6 +9,23 @@ import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 type CopyButtonProps = {
   text: string;
+  paddingSize?: "none" | "small" | "medium" | "mediumSquare" | "large" | "huge";
+  colorScheme?:
+    | "danger"
+    | "default"
+    | "primary"
+    | "accent"
+    | "tertiary"
+    | "fancyAccent"
+    | "success"
+    | "warning"
+    | "specialGreen"
+    | "specialPurple"
+    | "transparentDanger"
+    | "transparentDefault"
+    | "transparentTertiary"
+    | "transparentAccent"
+    | "transparentPrimary";
 };
 
 function useCopyToClipboard(
@@ -28,7 +45,11 @@ function useCopyToClipboard(
 }
 
 export function CopyButton(props: CopyButtonProps) {
-  const { text } = props;
+  const {
+    text,
+    paddingSize = "none",
+    colorScheme = "transparentDefault",
+  } = props;
   if (!navigator?.clipboard) {
     console.warn("Clipboard not supported");
     return null;
@@ -44,9 +65,9 @@ export function CopyButton(props: CopyButtonProps) {
 
   const button = (
     <Button
-      paddingSize="none"
+      paddingSize={paddingSize}
       fontSize="small"
-      colorScheme="transparentDefault"
+      colorScheme={colorScheme}
       onClick={() => {
         useCopyToClipboard(text, setWasRecentlyCopied);
       }}
@@ -61,7 +82,7 @@ export function CopyButton(props: CopyButtonProps) {
         forceShow={wasRecentlyCopied}
         side="bottom"
       >
-        {button}
+        <div className={styles.root}>{button}</div>
       </Tooltip>
     </TooltipProvider>
   );

@@ -11,8 +11,9 @@ type DialogProps = {
   defaultOpen?: boolean;
   trigger?: ReactNode;
   title?: string;
-  acceptButton?: ReactNode;
-  cancelButton?: ReactNode;
+  acceptButton?: ReactNode | null;
+  closeOnAccept?: boolean;
+  cancelButton?: ReactNode | "default" | null;
   additionalFooterContent?: ReactNode;
   hideFooter?: boolean;
   noPadding?: boolean;
@@ -30,6 +31,7 @@ export function Dialog(props: DialogProps) {
     defaultOpen = false,
     trigger,
     acceptButton,
+    closeOnAccept = true,
     cancelButton,
     title = undefined,
     hideFooter = false,
@@ -41,6 +43,24 @@ export function Dialog(props: DialogProps) {
   const [isOpen, setOpen] = useState<boolean>(
     defaultOpen ? defaultOpen : false
   );
+
+  let cancel = null;
+  if (cancelButton === "default") {
+    cancel = (
+      <Button label="Cancel" paddingSize="large" colorScheme="tertiary" />
+    );
+  } else if (cancelButton) {
+    cancel = cancelButton;
+  }
+
+  let accept = null;
+  if (acceptButton) {
+    if (closeOnAccept) {
+      accept = <RadixDialog.Close asChild>{acceptButton}</RadixDialog.Close>;
+    } else {
+      accept = acceptButton;
+    }
+  }
 
   return (
     <div>
@@ -82,16 +102,8 @@ export function Dialog(props: DialogProps) {
                   {additionalFooterContent}
                 </div>
                 <div className={styles.footerSection}>
-                  {cancelButton ? (
-                    <RadixDialog.Close asChild>
-                      {cancelButton}
-                    </RadixDialog.Close>
-                  ) : null}
-                  {acceptButton ? (
-                    <RadixDialog.Close asChild>
-                      {acceptButton}
-                    </RadixDialog.Close>
-                  ) : null}
+                  <RadixDialog.Close asChild>{cancel}</RadixDialog.Close>
+                  {accept}
                 </div>
               </div>
             )}

@@ -2,6 +2,10 @@ import styles from "./TeamProfile.module.css";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { Team } from "../../../../../schema";
+import { Button } from "../../../../Button/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/pro-light-svg-icons";
+import { useState } from "react";
 
 export interface TeamProfileProps {
   teamData: Team;
@@ -10,12 +14,35 @@ export interface TeamProfileProps {
 export function TeamProfile(props: TeamProfileProps) {
   const { teamData } = props;
 
+  const [donationLink, setDonationLink] = useState(teamData.name);
+
   return (
     <div className={styles.root}>
       <div className={styles.section}>
         <SettingItem
           title="Team donation link"
-          content={<TextInput placeHolder="https://" value={teamData.name} />}
+          content={
+            <div className={styles.donationLink}>
+              <div className={styles.donationLinkLabel}>URL</div>
+              <div className={styles.donationLinkActions}>
+                <div className={styles.donationLinkTextInput}>
+                  <TextInput
+                    placeHolder="https://"
+                    setValue={setDonationLink}
+                    value={donationLink}
+                  />
+                </div>
+                <Button
+                  leftIcon={
+                    <FontAwesomeIcon icon={faXmark} size="2x" fixedWidth />
+                  }
+                  value={teamData.name}
+                  paddingSize="mediumSquare"
+                  colorScheme="transparentDanger"
+                />
+              </div>
+            </div>
+          }
         />
       </div>
     </div>
