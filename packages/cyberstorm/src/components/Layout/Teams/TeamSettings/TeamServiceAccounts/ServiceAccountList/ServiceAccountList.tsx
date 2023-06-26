@@ -14,7 +14,7 @@ export function ServiceAccountList(props: ServiceAccountListProps) {
   const { serviceAccountData = [] } = props;
 
   const tableData = [];
-  serviceAccountData?.forEach((serviceAccount: ServiceAccount, index) => {
+  serviceAccountData?.forEach((serviceAccount: ServiceAccount) => {
     tableData.push({
       name: serviceAccount.name,
       lastUsed: serviceAccount.lastUsed,

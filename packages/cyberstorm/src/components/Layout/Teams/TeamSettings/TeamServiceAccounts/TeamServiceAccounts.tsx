@@ -23,8 +23,6 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
   const [serviceAccountAdded, setServiceAccountAdded] = useState(false);
   const [addedServiceAccountName, setAddedServiceAccountName] = useState("");
 
-  const serviceAccountAddedDialogContent = <div></div>;
-
   return (
     <div>
       <SettingItem

@@ -28,7 +28,7 @@ export function TeamMemberList(props: TeamMemberListProps) {
   const { teamMemberData = [] } = props;
 
   const tableData = [];
-  teamMemberData?.forEach((teamMember: TeamMember, index) => {
+  teamMemberData?.forEach((teamMember: TeamMember) => {
     tableData.push({
       name: (
         <UserLink user={teamMember.user}>
