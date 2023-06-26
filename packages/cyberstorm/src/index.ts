@@ -27,6 +27,7 @@ export * from "./components/Tooltip/Tooltip";
 export * from "./components/Layout/CommunityListLayout/CommunityListLayout";
 export * from "./components/Layout/HomeLayout/HomeLayout";
 export * from "./components/Layout/PackageDetailLayout/PackageDetailLayout";
+export * from "./components/Layout/PackageDependantsLayout/PackageDependantsLayout";
 export * from "./components/Layout/PackageListLayout/PackageListLayout";
 export * from "./components/Layout/Settings/SettingsLayout";
 export * from "./components/Layout/Teams/TeamSettings/TeamSettingsLayout";

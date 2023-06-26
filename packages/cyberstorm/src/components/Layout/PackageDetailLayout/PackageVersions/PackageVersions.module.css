@@ -1,0 +1,13 @@
+.actionButtons {
+  display: flex;
+  gap: var(--gap--24);
+  align-items: center;
+  justify-content: end;
+}
+
+.title {
+  margin-bottom: var(--space--24);
+  font-weight: 700;
+  font-size: var(--font-size--xxl);
+  line-height: var(--line-height--xxl);
+}

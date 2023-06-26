@@ -3,6 +3,7 @@ import {
   Category,
   Community,
   CommunityPreview,
+  Connection,
   Package,
   PackageDependency,
   PackagePreview,
@@ -197,7 +198,7 @@ export function getTeamMemberDummyData(seed?: string): TeamMember {
   return {
     user: faker.internet.userName(),
     imageSource: faker.image.abstract(525, 525, true),
-    role: faker.name.jobTitle(),
+    role: faker.helpers.arrayElement(["Owner", "Member"]),
   };
 }
 
@@ -298,6 +299,18 @@ export function getUserSettingsDummyData(seed?: string): UserSettings {
     // TODO: We are missing generated badges and achievements
     showBadgesOnProfile: true,
     showAchievementsOnProfile: true,
+    connections: [getConnectionDummyData("1"), getConnectionDummyData("a")],
+  };
+}
+
+export function getConnectionDummyData(seed?: string): Connection {
+  const parsedSeed = strToHashInt(seed ? seed : "1337");
+  faker.seed(parsedSeed);
+  return {
+    name: faker.helpers.arrayElement(["Github", "Discord"]),
+    connectedUsername: faker.internet.userName(),
+    enabled: faker.datatype.boolean(),
+    imageSource: "",
   };
 }
 

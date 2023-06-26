@@ -1,7 +1,15 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--32);
+
+  --border-color: var(--color-surface--5);
+}
+
+.title {
+  margin-bottom: var(--space--24);
+  font-weight: 700;
+  font-size: var(--font-size--xxl);
+  line-height: var(--line-height--xxl);
 }
 
 .item {
@@ -9,25 +17,36 @@
   flex-direction: column;
   gap: var(--gap--16);
   padding: var(--space--16);
-  border: var(--space--2) solid var(--color-surface--3);
+  border: var(--space--2) solid var(--border-color);
   border-radius: var(--border-radius--8);
   background-color: var(--bg-color);
 
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--color-purple--2);
+}
+
+.itemWrapper + .itemWrapper::before {
+  display: inline-block;
+  height: var(--space--24);
+  margin-left: var(--space--24);
+  border-left: var(--space--2) solid var(--border-color);
+  content: "\00a0";
 }
 
 .header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 
 .isCurrent {
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--color-purple--5);
 }
 
 .versionNumber {
   display: flex;
   font-weight: 700;
+  font-size: var(--font-size--l);
+  line-height: var(--line-height--l);
 }
 
 .currentLabel {
@@ -37,6 +56,8 @@
 
 .releaseDate {
   color: var(--color-text--tertiary);
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
 }
 
 .content {

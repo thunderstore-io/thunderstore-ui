@@ -5,10 +5,10 @@
   justify-content: space-between;
 
   padding: var(--space--8) var(--space--12);
-  border-radius: var(--border-radius--8);
   color: var(--text-color);
-
   font-weight: 700;
+  font-size: var(--font-size--m);
+  line-height: normal;
   background-color: var(--color-surface--4);
 }
 

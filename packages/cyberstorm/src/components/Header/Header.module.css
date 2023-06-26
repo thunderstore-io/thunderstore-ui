@@ -41,7 +41,6 @@
   display: flex;
   flex: 1 2 100%;
   justify-content: center;
-  min-width: 420px;
 }
 
 .logoWrapper {
@@ -52,6 +51,7 @@
 .navButtons {
   display: flex;
   gap: var(--space--8);
+  min-width: 252px;
 }
 
 .dropDownUserInfo {

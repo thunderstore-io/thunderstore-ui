@@ -4,7 +4,7 @@ import { Button } from "../../../Button/Button";
 import { User } from "../../../../schema";
 import { TextInput } from "../../../TextInput/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/pro-solid-svg-icons";
 
 export interface AccountProps {
   userData: User;
@@ -21,11 +21,11 @@ export function Account(props: AccountProps) {
           content={
             <div className={styles.content}>
               <div>
-                TODO: this should be an alert. You are about to delete your
+                TODO: this should be an alert: You are about to delete your
                 account. Once deleted, it will be gone forever. Please be
                 certain.
               </div>
-              <p>
+              <p className={styles.instructionText}>
                 The mods that have been uploaded on this account will remain
                 public on the site even after deletion. If you need them to be
                 taken down as well, please contact an administrator on the
@@ -33,13 +33,16 @@ export function Account(props: AccountProps) {
               </p>
               <p>
                 As a precaution, to delete your account, please input{" "}
-                {userData.name} below
+                <i>{userData.name}</i> to the field below
               </p>
-              <TextInput placeHolder="Verification" />
+              <div className={styles.verificationInput}>
+                <TextInput placeHolder="Verification..." />
+              </div>
               <div>
                 <Button
                   leftIcon={<FontAwesomeIcon icon={faTrash} fixedWidth />}
                   colorScheme="danger"
+                  paddingSize="large"
                   label="I understand this action is irrevocable and want to continue"
                 />
               </div>

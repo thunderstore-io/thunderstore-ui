@@ -1,38 +1,43 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--gap--32);
   color: var(--color-text--default);
-}
-
-.leftColumnTitle {
-  font-weight: 700;
-}
-
-.leftColumnDescription {
-  color: var(--color-text--secondary);
-}
-
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
 }
 
 .leftColumn {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--16);
+  gap: var(--gap--8);
+}
+
+.leftColumnTitle {
+  font-weight: 700;
+  font-size: var(--font-size--l);
+  line-height: 1;
+}
+
+.leftColumnDescription {
+  color: var(--color-text--tertiary);
+  font-weight: 500;
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--24);
 }
 
 @media (min-width: 60rem) {
   .wrapper {
     flex-flow: row wrap;
-    gap: 2rem;
+    gap: var(--gap--32);
   }
 
   .leftColumn {
-    flex: 0 1 16rem;
+    flex: 0 1 336px;
   }
 
   .rightColumn {

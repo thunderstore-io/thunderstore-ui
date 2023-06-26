@@ -12,13 +12,6 @@
   gap: var(--space--4);
 }
 
-.title {
-  font: var(--font-heading);
-  font-weight: 800;
-  font-size: 51px;
-  line-height: 1;
-}
-
 .image {
   min-width: 9rem;
   max-width: 9rem;
@@ -29,13 +22,6 @@
 @media (max-width: 30rem) {
   .root {
     gap: var(--space--16);
-  }
-
-  .title {
-    font: var(--font-heading);
-    font-weight: 700;
-    font-size: 21px;
-    line-height: 1.2;
   }
 
   .image {

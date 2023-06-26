@@ -39,10 +39,12 @@
   --font-size--m: var(--space--14);
   --font-size--l: var(--space--16);
   --font-size--xl: var(--space--18);
+  --font-size--xxl: var(--space--22);
   --line-height--s: 1.7;
   --line-height--m: 1.7;
   --line-height--l: 1.6;
   --line-height--xl: 1.6;
+  --line-height--xxl: 1.2;
 
   /* Common fonts */
   --font-body: normal var(--font-size--m) inter, sans-serif;

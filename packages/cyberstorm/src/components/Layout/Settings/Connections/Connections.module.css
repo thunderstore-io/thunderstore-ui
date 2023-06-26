@@ -8,3 +8,77 @@
   flex-direction: column;
   gap: var(--gap--32);
 }
+
+.privacyPolicyLink {
+  color: var(--color-highlight);
+}
+
+.connectionList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space--16) var(--space--32);
+  border-radius: var(--border-radius--8);
+}
+
+.enabled {
+  background-color: var(--color-surface--3);
+}
+
+.disabled {
+  background-color: var(--color-surface--1);
+}
+
+.connectionTypeInfo {
+  display: flex;
+  gap: var(--space--16);
+  align-items: center;
+  justify-content: center;
+}
+
+.connectionTypeInfoName {
+  color: var(--color-text--default);
+  font-weight: 700;
+  font-size: var(--font-size--l);
+  line-height: 1;
+}
+
+.rightSection {
+  display: flex;
+  gap: var(--gap--32);
+  align-items: center;
+  justify-content: center;
+}
+
+.connectedAs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--2);
+  align-items: flex-end;
+}
+
+.connectedAsDescription {
+  color: var(--color-text--tertiary);
+  font-weight: 500;
+  font-size: var(--font-size--m);
+  line-height: 1;
+}
+
+.connectedAsUsername {
+  color: var(--color-text--default);
+  font-weight: 700;
+  font-size: var(--font-size--m);
+  line-height: 1;
+}
+
+@media (max-width: 30rem) {
+  .item {
+    flex-direction: column;
+    gap: var(--gap--8);
+  }
+}

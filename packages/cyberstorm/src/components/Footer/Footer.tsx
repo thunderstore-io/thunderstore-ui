@@ -116,7 +116,7 @@ export function Footer() {
                     for desktop and enter a world of Thunder{" "}
                     <FontAwesomeIcon icon={faBoltLightning} fixedWidth />
                   </p>
-                  <div className={styles.adButton}>
+                  <a href="/" className={styles.adButton}>
                     <PlainButton
                       colorScheme="accent"
                       paddingSize="large"
@@ -127,7 +127,7 @@ export function Footer() {
                         <FontAwesomeIcon icon={faArrowUpRight} fixedWidth />
                       }
                     />
-                  </div>
+                  </a>
                 </div>
                 <img
                   alt="Screenshot of the Thunderstore Mod Manager"

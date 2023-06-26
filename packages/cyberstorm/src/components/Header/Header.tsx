@@ -178,20 +178,24 @@ export function Header() {
       <nav className={styles.item}>
         <ul className={styles.nav}>
           <li className={styles.navButtons}>
-            <Button
-              colorScheme="specialPurple"
-              paddingSize="large"
-              fontSize="large"
-              fontWeight="700"
-              label="Go Premium"
-            />
-            <Button
-              colorScheme="accent"
-              label="Get Manager"
-              paddingSize="large"
-              fontSize="large"
-              fontWeight="700"
-            />
+            <a href="/">
+              <PlainButton
+                colorScheme="specialPurple"
+                paddingSize="large"
+                fontSize="medium"
+                fontWeight="700"
+                label="Go Premium"
+              />
+            </a>
+            <a href="/">
+              <PlainButton
+                colorScheme="accent"
+                label="Get Manager"
+                paddingSize="large"
+                fontSize="medium"
+                fontWeight="700"
+              />
+            </a>
           </li>
           <li>
             <PackageUploadLink>

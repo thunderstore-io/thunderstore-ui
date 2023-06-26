@@ -1,0 +1,12 @@
+.rdt_TableBody {
+  gap: var(--gap--2);
+  border-radius: var(--border-radius--8);
+  overflow: clip;
+  background-color: transparent !important;
+}
+
+.rdt_TableRow {
+  padding: var(--space--8) 0;
+  border: none !important;
+  background-color: var(--color-surface--3) !important;
+}
