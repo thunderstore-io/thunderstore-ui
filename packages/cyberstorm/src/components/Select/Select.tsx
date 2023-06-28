@@ -54,6 +54,7 @@ export function Select(props: SelectProps) {
       >
         <RadixSelect.Trigger asChild>
           <Button
+            iconAlignment="side"
             colorScheme={colorScheme}
             paddingSize="large"
             fontSize={triggerFontSize}

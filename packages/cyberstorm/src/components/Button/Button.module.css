@@ -19,17 +19,26 @@
   --button-border-width: var(--border-width--2);
 }
 
+.iconAlignment__default {
+  justify-content: center;
+}
+
+.iconAlignment__side {
+  justify-content: normal;
+}
+
 .label {
   font-weight: var(--font-weight);
   font-size: var(--font-size);
   line-height: 1;
+  text-align: center;
 }
 
-.leftIcon {
+.iconAlignment__side > .leftIcon {
   margin-right: auto;
 }
 
-.rightIcon {
+.iconAlignment__side > .rightIcon {
   margin-left: auto;
 }
 

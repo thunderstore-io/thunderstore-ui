@@ -15,6 +15,7 @@ interface _PlainButtonProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
+  iconAlignment?: "default" | "side";
   fontSize?: "small" | "medium" | "large" | "huge";
   paddingSize?: "none" | "small" | "medium" | "mediumSquare" | "large" | "huge";
   fontWeight?: "600" | "700" | "800";
@@ -56,6 +57,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       fontSize = "medium",
       paddingSize = "medium",
       fontWeight = "700",
+      iconAlignment = "default",
       ...forwardedProps
     } = props;
 
@@ -67,9 +69,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...forwardedProps}
         ref={ref}
         type="button"
-        className={`${styles.root} ${getStyle(colorScheme)} ${getFontSize(
-          fontSize
-        )} ${getPaddingSize(paddingSize)}`}
+        className={`${styles.root} ${getIconAlignment(
+          iconAlignment
+        )} ${getStyle(colorScheme)} ${getFontSize(fontSize)} ${getPaddingSize(
+          paddingSize
+        )}`}
         onClick={onClick}
       >
         {leftIcon ? <div className={styles.leftIcon}>{leftIcon}</div> : null}
@@ -94,6 +98,7 @@ export const PlainButton = React.forwardRef<HTMLDivElement, PlainButtonProps>(
       fontSize = "medium",
       paddingSize = "medium",
       fontWeight = "700",
+      iconAlignment = "default",
       ...forwardedProps
     } = props;
 
@@ -104,9 +109,11 @@ export const PlainButton = React.forwardRef<HTMLDivElement, PlainButtonProps>(
       <div
         {...forwardedProps}
         ref={ref}
-        className={`${styles.root} ${getStyle(colorScheme)} ${getFontSize(
-          fontSize
-        )} ${getPaddingSize(paddingSize)}`}
+        className={`${styles.root} ${getIconAlignment(
+          iconAlignment
+        )} ${getStyle(colorScheme)} ${getFontSize(fontSize)} ${getPaddingSize(
+          paddingSize
+        )}`}
       >
         {leftIcon}
         {label ? (
@@ -159,6 +166,13 @@ const getPaddingSize = (scheme: string) => {
     mediumSquare: styles.padding__mediumSquare,
     large: styles.padding__large,
     huge: styles.padding__huge,
+  }[scheme];
+};
+
+const getIconAlignment = (scheme: string) => {
+  return {
+    default: styles.iconAlignment__default,
+    side: styles.iconAlignment__side,
   }[scheme];
 };
 
