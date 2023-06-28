@@ -72,13 +72,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )} ${getPaddingSize(paddingSize)}`}
         onClick={onClick}
       >
-        {leftIcon}
+        {leftIcon ? <div className={styles.leftIcon}>{leftIcon}</div> : null}
         {label ? (
           <div className={`${styles.label} ${getFontWeight(fontWeight)}`}>
             {label}
           </div>
         ) : null}
-        {rightIcon}
+        {rightIcon ? <div className={styles.rightIcon}>{rightIcon}</div> : null}
       </button>
     );
   }

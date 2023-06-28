@@ -36,6 +36,7 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
               trigger={
                 <Button
                   paddingSize="large"
+                  colorScheme="primary"
                   rightIcon={<FontAwesomeIcon icon={faPlus} fixedWidth />}
                   label="Add Service Account"
                 />

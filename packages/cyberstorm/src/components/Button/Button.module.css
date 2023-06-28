@@ -5,7 +5,6 @@
   flex-direction: row;
   gap: var(--gap--16);
   align-items: center;
-  justify-content: center;
 
   padding: var(--space--12) var(--space--16);
   border: var(--button-border-width) solid var(--button-border-color);
@@ -20,11 +19,18 @@
   --button-border-width: var(--border-width--2);
 }
 
-/* Styles for Button's text */
 .label {
   font-weight: var(--font-weight);
   font-size: var(--font-size);
   line-height: 1;
+}
+
+.leftIcon {
+  margin-right: auto;
+}
+
+.rightIcon {
+  margin-left: auto;
 }
 
 /* Different Button color schemes */

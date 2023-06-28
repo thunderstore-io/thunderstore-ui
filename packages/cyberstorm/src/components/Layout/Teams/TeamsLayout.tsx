@@ -13,6 +13,8 @@ import { Dialog } from "../../Dialog/Dialog";
 import { TextInput } from "../../TextInput/TextInput";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 
+//TODO: Use Alert component
+
 /**
  * Cyberstorm Teams Layout
  */
@@ -48,6 +50,7 @@ export function TeamsLayout() {
                 }
                 trigger={
                   <Button
+                    colorScheme="primary"
                     paddingSize="large"
                     label="Create team"
                     rightIcon={<FontAwesomeIcon icon={faPlus} fixedWidth />}

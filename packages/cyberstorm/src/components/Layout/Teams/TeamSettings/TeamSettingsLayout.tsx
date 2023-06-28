@@ -32,7 +32,7 @@ export function TeamSettingsLayout(props: TeamSettingsLayoutProps) {
 
   const teamData = getTeamData(teamId);
 
-  const [currentTab, setCurrentTab] = useState(4);
+  const [currentTab, setCurrentTab] = useState(1);
 
   return (
     <BaseLayout

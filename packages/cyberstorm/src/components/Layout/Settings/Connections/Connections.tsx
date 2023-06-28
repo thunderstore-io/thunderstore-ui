@@ -1,44 +1,67 @@
 import styles from "./Connections.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
-import { UserSettings } from "../../../../schema";
+import { Connection, UserSettings } from "../../../../schema";
 import { PrivacyPolicyLink } from "../../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
+import { useState } from "react";
 
 export interface ConnectionsProps {
   userData: UserSettings;
+}
+
+export interface ConnectionsItemProps {
+  connection: Connection;
+}
+
+//TODO: Use Switch component
+export function ConnectionsItem(props: ConnectionsItemProps) {
+  const { connection } = props;
+
+  const [enabled, setEnabled] = useState(connection.enabled);
+
+  return (
+    <div
+      className={`${styles.itemWrapper} ${
+        enabled ? styles.enabled : styles.disabled
+      }`}
+    >
+      <div className={styles.item}>
+        <div className={styles.connectionTypeInfo}>
+          {connection.name === "Github" ? (
+            <FontAwesomeIcon icon={faGithub} fixedWidth />
+          ) : null}
+          {connection.name === "Discord" ? (
+            <FontAwesomeIcon icon={faDiscord} fixedWidth />
+          ) : null}
+          <div className={styles.connectionTypeInfoName}>{connection.name}</div>
+        </div>
+        <div className={styles.rightSection}>
+          {enabled ? (
+            <div className={styles.connectedAs}>
+              <div className={styles.connectedAsDescription}>Connected as</div>
+              <div className={styles.connectedAsUsername}>
+                {connection.connectedUsername}
+              </div>
+            </div>
+          ) : null}
+          <input
+            type="checkbox"
+            checked={enabled}
+            onClick={() => setEnabled(!enabled)}
+          />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export function Connections(props: ConnectionsProps) {
   const { userData } = props;
 
   const connectionRows = userData.connections ? (
-    userData.connections.map((connection, key) => (
-      <div
-        className={`${styles.item} ${
-          connection.enabled ? styles.enabled : styles.disabled
-        }`}
-        key={key}
-      >
-        <div className={styles.connectionTypeInfo}>
-          {connection.name === "Github" ? (
-            <FontAwesomeIcon icon={faGithub} fixedWidth size="2x" />
-          ) : null}
-          {connection.name === "Discord" ? (
-            <FontAwesomeIcon icon={faDiscord} fixedWidth size="2x" />
-          ) : null}
-          <div className={styles.connectionTypeInfoName}>{connection.name}</div>
-        </div>
-        <div className={styles.rightSection}>
-          <div className={styles.connectedAs}>
-            <div className={styles.connectedAsDescription}>Connected as</div>
-            <div className={styles.connectedAsUsername}>
-              {connection.connectedUsername}
-            </div>
-          </div>
-          <div>Switch {connection.enabled.toString()}</div>
-        </div>
-      </div>
+    userData.connections.map((connection, index) => (
+      <ConnectionsItem connection={connection} key={index} />
     ))
   ) : (
     <></>
@@ -69,3 +92,4 @@ export function Connections(props: ConnectionsProps) {
 }
 
 Connections.displayName = "Connections";
+ConnectionsItem.displayName = "ConnectionsItem";

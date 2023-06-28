@@ -48,6 +48,7 @@ export function TeamMemberList(props: TeamMemberListProps) {
       role: (
         <div className={styles.roleSelect}>
           <Select
+            triggerFontSize="medium"
             options={userRoles}
             value={teamMember.role}
             onChange={() => console.log("asd")}
@@ -105,6 +106,7 @@ export function TeamMembers(props: TeamMembersProps) {
       trigger={
         <Button
           label="Add Member"
+          colorScheme="primary"
           paddingSize="large"
           rightIcon={<FontAwesomeIcon icon={faPlus} fixedWidth />}
         />
@@ -119,7 +121,10 @@ export function TeamMembers(props: TeamMembersProps) {
               <span className={styles.dialogTeamName}>{teamData.name}</span>
             </TeamLink>
           </p>
-          <div className={styles.dialogInput}>
+          <div
+            style={{ alignItems: "flex-end" }}
+            className={styles.dialogInput}
+          >
             <div className={styles.textInput}>
               <TextInput placeHolder="Username" />
             </div>
@@ -167,12 +172,14 @@ const teamMemberColumns: TableColumn<TeamMemberData>[] = [
   },
   {
     name: "Role",
+    right: true,
     sortable: true,
     cell: (row) => row.role,
     selector: (row) => row.roleRaw,
   },
   {
     name: "Actions",
+    right: true,
     cell: (row) => row.actions,
   },
 ];

@@ -19,11 +19,19 @@
   gap: var(--gap--16);
 }
 
+.itemWrapper {
+  padding: var(--space--16) var(--space--32);
+  border-radius: var(--border-radius--8);
+  overflow: hidden;
+}
+
 .item {
   display: flex;
   justify-content: space-between;
-  padding: var(--space--16) var(--space--32);
-  border-radius: var(--border-radius--8);
+}
+
+.disabled > .item {
+  opacity: 0.5;
 }
 
 .enabled {
@@ -32,6 +40,11 @@
 
 .disabled {
   background-color: var(--color-surface--1);
+}
+
+.connectionTypeInfo > svg {
+  min-width: 40px;
+  min-height: 40px;
 }
 
 .connectionTypeInfo {

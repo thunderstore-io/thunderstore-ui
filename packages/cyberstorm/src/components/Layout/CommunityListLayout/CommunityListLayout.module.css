@@ -45,6 +45,10 @@
   font-weight: 700;
 }
 
+.searchFiltersSortSelect {
+  width: 144px;
+}
+
 .communityCardList {
   display: grid;
   flex-flow: row wrap;

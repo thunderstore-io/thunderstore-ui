@@ -2,6 +2,10 @@
   display: flex;
 }
 
+.root > button {
+  width: 100%;
+}
+
 .label {
   font-weight: 500;
 }
