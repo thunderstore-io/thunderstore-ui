@@ -15,7 +15,7 @@
   max-width: 40rem;
   max-height: 80vh;
   border: var(--border);
-  border-radius: var(--border-radius--16);
+  border-radius: var(--border-radius--8);
   background-color: var(--color-surface--2);
   box-shadow: var(--box-shadow-default);
   transform: translate(calc(var(--left) * -1), calc(var(--top) * -1));

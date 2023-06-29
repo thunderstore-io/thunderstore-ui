@@ -22,6 +22,7 @@ type _SelectProps = {
   options: SelectOption[];
   placeholder?: string;
   value?: string;
+  triggerFontSize?: "small" | "medium" | "large" | "huge";
 };
 export type SelectProps = _SelectProps &
   Omit<React.HTMLProps<HTMLDivElement>, keyof _SelectProps>;
@@ -35,6 +36,7 @@ export function Select(props: SelectProps) {
     onChange,
     placeholder = "Select",
     value,
+    triggerFontSize = "large",
     ...forwardedProps
   } = props;
 
@@ -52,9 +54,10 @@ export function Select(props: SelectProps) {
       >
         <RadixSelect.Trigger asChild>
           <Button
+            iconAlignment="side"
             colorScheme={colorScheme}
             paddingSize="large"
-            fontSize="large"
+            fontSize={triggerFontSize}
             fontWeight="700"
             rightIcon={icon}
             label={

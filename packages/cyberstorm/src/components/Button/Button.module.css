@@ -5,7 +5,6 @@
   flex-direction: row;
   gap: var(--gap--16);
   align-items: center;
-  justify-content: center;
 
   padding: var(--space--12) var(--space--16);
   border: var(--button-border-width) solid var(--button-border-color);
@@ -20,11 +19,27 @@
   --button-border-width: var(--border-width--2);
 }
 
-/* Styles for Button's text */
+.iconAlignment__default {
+  justify-content: center;
+}
+
+.iconAlignment__side {
+  justify-content: normal;
+}
+
 .label {
   font-weight: var(--font-weight);
   font-size: var(--font-size);
   line-height: 1;
+  text-align: center;
+}
+
+.iconAlignment__side > .leftIcon {
+  margin-right: auto;
+}
+
+.iconAlignment__side > .rightIcon {
+  margin-left: auto;
 }
 
 /* Different Button color schemes */
@@ -82,6 +97,14 @@
 
 .button__accent:hover {
   --bg-color: var(--color-highlight--hover);
+}
+
+.button__tertiary {
+  --bg-color: transparent;
+}
+
+.button__tertiary:hover {
+  --bg-color: var(--color-surface--7);
 }
 
 .button__success {
@@ -175,6 +198,16 @@
 
 .button__transparentDefault:hover {
   --bg-color: var(--color-surface--4);
+}
+
+.button__transparentDanger {
+  --bg-color: transparent;
+  --text-color: var(--color-border--highlight);
+}
+
+.button__transparentDanger:hover {
+  --bg-color: var(--color-danger-background);
+  --text-color: var(--color-danger-text);
 }
 
 .button__transparentTertiary {

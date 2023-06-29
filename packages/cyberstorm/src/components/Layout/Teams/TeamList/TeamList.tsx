@@ -19,8 +19,8 @@ export function TeamList(props: TeamListProps) {
           {team.name}
         </TeamSettingsLink>
       ),
-      nameRaw: team.name,
-      role: "",
+      nameRaw: team.name.toLowerCase(),
+      role: "TODO",
       memberCount: team.members?.length,
     });
   });
@@ -45,6 +45,7 @@ const columns: TableColumn<TeamData>[] = [
       fontWeight: 700,
     },
     sortable: true,
+    cell: (row) => row.name,
     selector: (row) => row.nameRaw,
   },
   {

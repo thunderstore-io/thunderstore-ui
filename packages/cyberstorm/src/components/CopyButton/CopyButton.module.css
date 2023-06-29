@@ -3,7 +3,7 @@
   color: var(--color-text--tertiary);
 }
 
-.copy:hover {
+.root:hover .copy {
   color: var(--color-highlight);
 }
 

@@ -15,6 +15,7 @@ interface _PlainButtonProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
+  iconAlignment?: "default" | "side";
   fontSize?: "small" | "medium" | "large" | "huge";
   paddingSize?: "none" | "small" | "medium" | "mediumSquare" | "large" | "huge";
   fontWeight?: "600" | "700" | "800";
@@ -23,11 +24,13 @@ interface _PlainButtonProps {
     | "default"
     | "primary"
     | "accent"
+    | "tertiary"
     | "fancyAccent"
     | "success"
     | "warning"
     | "specialGreen"
     | "specialPurple"
+    | "transparentDanger"
     | "transparentDefault"
     | "transparentTertiary"
     | "transparentAccent"
@@ -54,6 +57,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       fontSize = "medium",
       paddingSize = "medium",
       fontWeight = "700",
+      iconAlignment = "default",
       ...forwardedProps
     } = props;
 
@@ -65,18 +69,20 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...forwardedProps}
         ref={ref}
         type="button"
-        className={`${styles.root} ${getStyle(colorScheme)} ${getFontSize(
-          fontSize
-        )} ${getPaddingSize(paddingSize)}`}
+        className={`${styles.root} ${getIconAlignment(
+          iconAlignment
+        )} ${getStyle(colorScheme)} ${getFontSize(fontSize)} ${getPaddingSize(
+          paddingSize
+        )}`}
         onClick={onClick}
       >
-        {leftIcon}
+        {leftIcon ? <div className={styles.leftIcon}>{leftIcon}</div> : null}
         {label ? (
           <div className={`${styles.label} ${getFontWeight(fontWeight)}`}>
             {label}
           </div>
         ) : null}
-        {rightIcon}
+        {rightIcon ? <div className={styles.rightIcon}>{rightIcon}</div> : null}
       </button>
     );
   }
@@ -92,6 +98,7 @@ export const PlainButton = React.forwardRef<HTMLDivElement, PlainButtonProps>(
       fontSize = "medium",
       paddingSize = "medium",
       fontWeight = "700",
+      iconAlignment = "default",
       ...forwardedProps
     } = props;
 
@@ -102,9 +109,11 @@ export const PlainButton = React.forwardRef<HTMLDivElement, PlainButtonProps>(
       <div
         {...forwardedProps}
         ref={ref}
-        className={`${styles.root} ${getStyle(colorScheme)} ${getFontSize(
-          fontSize
-        )} ${getPaddingSize(paddingSize)}`}
+        className={`${styles.root} ${getIconAlignment(
+          iconAlignment
+        )} ${getStyle(colorScheme)} ${getFontSize(fontSize)} ${getPaddingSize(
+          paddingSize
+        )}`}
       >
         {leftIcon}
         {label ? (
@@ -135,11 +144,13 @@ const getStyle = (scheme: string) => {
     primary: styles.button__primary,
     default: styles.button__default,
     accent: styles.button__accent,
+    tertiary: styles.button__tertiary,
     fancyAccent: styles.button__fancyAccent,
     success: styles.button__success,
     warning: styles.button__warning,
     specialGreen: styles.button__specialGreen,
     specialPurple: styles.button__specialPurple,
+    transparentDanger: styles.button__transparentDanger,
     transparentDefault: styles.button__transparentDefault,
     transparentTertiary: styles.button__transparentTertiary,
     transparentPrimary: styles.button__transparentPrimary,
@@ -155,6 +166,13 @@ const getPaddingSize = (scheme: string) => {
     mediumSquare: styles.padding__mediumSquare,
     large: styles.padding__large,
     huge: styles.padding__huge,
+  }[scheme];
+};
+
+const getIconAlignment = (scheme: string) => {
+  return {
+    default: styles.iconAlignment__default,
+    side: styles.iconAlignment__side,
   }[scheme];
 };
 

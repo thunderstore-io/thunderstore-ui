@@ -4,8 +4,6 @@ import styles from "./TeamSettingsLayout.module.css";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { TeamSettingsLink, TeamsLink } from "../../../Links/Links";
 import { Tabs } from "../../../Tabs/Tabs";
-import { TeamLeave } from "./TeamLeave/TeamLeave";
-import { TeamDisband } from "./TeamDisband/TeamDisband";
 import { TeamMembers } from "./TeamMembers/TeamMembers";
 import { TeamServiceAccounts } from "./TeamServiceAccounts/TeamServiceAccounts";
 import { TeamProfile } from "./TeamProfile/TeamProfile";
@@ -13,6 +11,14 @@ import { getTeamSettingsDummyData } from "../../../../dummyData";
 import { TeamSettings } from "../../../../schema";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEdit,
+  faUsers,
+  faUserCog,
+  faCog,
+} from "@fortawesome/pro-regular-svg-icons";
+import { TeamLeaveAndDisband } from "./TeamLeaveAndDisband/TeamLeaveAndDisband";
 
 export interface TeamSettingsLayoutProps {
   teamId: string;
@@ -54,10 +60,26 @@ function getTeamData(teamId: string) {
 }
 
 const tabs = [
-  { key: 1, label: "Profile" },
-  { key: 2, label: "Members" },
-  { key: 3, label: "Service Accounts" },
-  { key: 4, label: "Settings" },
+  {
+    key: 1,
+    label: "Profile",
+    icon: <FontAwesomeIcon icon={faEdit} fixedWidth />,
+  },
+  {
+    key: 2,
+    label: "Members",
+    icon: <FontAwesomeIcon icon={faUsers} fixedWidth />,
+  },
+  {
+    key: 3,
+    label: "Service Accounts",
+    icon: <FontAwesomeIcon icon={faUserCog} fixedWidth />,
+  },
+  {
+    key: 4,
+    label: "Settings",
+    icon: <FontAwesomeIcon icon={faCog} fixedWidth />,
+  },
 ];
 
 function getTabContent(currentTab: number, teamData: TeamSettings) {
@@ -78,15 +100,16 @@ function getTabContent(currentTab: number, teamData: TeamSettings) {
   } else if (currentTab === 3) {
     tabContent = (
       <div className={styles.tabContent}>
-        <TeamServiceAccounts serviceAccountData={teamData.serviceAccounts} />
+        <TeamServiceAccounts
+          teamData={teamData}
+          serviceAccountData={teamData.serviceAccounts}
+        />
       </div>
     );
   } else if (currentTab === 4) {
     tabContent = (
       <div className={styles.tabContent}>
-        <TeamLeave />
-        <div className={styles.separator} />
-        <TeamDisband teamName={teamData.name} />
+        <TeamLeaveAndDisband teamData={teamData} />
       </div>
     );
   }

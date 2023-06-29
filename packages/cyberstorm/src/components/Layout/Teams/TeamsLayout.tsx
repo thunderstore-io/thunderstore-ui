@@ -2,7 +2,6 @@
 import styles from "./TeamsLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { TeamsLink } from "../../Links/Links";
-import { Title } from "../../Title/Title";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { SettingItem } from "../../SettingItem/SettingItem";
 import { Button } from "../../Button/Button";
@@ -12,6 +11,9 @@ import { getTeamPreviewDummyData } from "../../../dummyData";
 import { TeamList } from "./TeamList/TeamList";
 import { Dialog } from "../../Dialog/Dialog";
 import { TextInput } from "../../TextInput/TextInput";
+import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
+
+//TODO: Use Alert component
 
 /**
  * Cyberstorm Teams Layout
@@ -26,7 +28,7 @@ export function TeamsLayout() {
           <TeamsLink>Teams</TeamsLink>
         </BreadCrumbs>
       }
-      header={<Title text="Teams" />}
+      header={<PageHeader title="Teams" />}
       mainContent={
         <>
           <SettingItem
@@ -35,6 +37,7 @@ export function TeamsLayout() {
             additionalLeftColumnContent={
               <Dialog
                 title="Create Team"
+                showFooterBorder
                 content={
                   <div className={styles.createTeamDialog}>
                     <div className={styles.createTeamDialogText}>
@@ -47,11 +50,20 @@ export function TeamsLayout() {
                 }
                 trigger={
                   <Button
+                    colorScheme="primary"
+                    paddingSize="large"
                     label="Create team"
                     rightIcon={<FontAwesomeIcon icon={faPlus} fixedWidth />}
                   />
                 }
-                acceptButton={<Button label="Create" colorScheme="accent" />}
+                cancelButton="default"
+                acceptButton={
+                  <Button
+                    label="Create"
+                    paddingSize="large"
+                    colorScheme="success"
+                  />
+                }
               />
             }
             content={<TeamList teams={teamsData} />}
