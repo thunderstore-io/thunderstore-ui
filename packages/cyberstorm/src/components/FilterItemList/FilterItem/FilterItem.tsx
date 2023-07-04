@@ -21,7 +21,7 @@ export interface FilterItemProps {
 export function FilterItem(props: FilterItemProps) {
   const { label, value = undefined, setChecked } = props;
   return (
-    <div className={styles.root}>
+    <label className={styles.root} htmlFor={"categoryCheckbox" + label}>
       <div className={styles.checkBoxContainer}>
         <Checkbox.Root
           id={"categoryCheckbox" + label}
@@ -46,17 +46,12 @@ export function FilterItem(props: FilterItemProps) {
             )}
           </Checkbox.Indicator>
         </Checkbox.Root>
-        <label
-          className={`${styles.label} ${getStyle(value)}`}
-          htmlFor={"categoryCheckbox" + label}
-        >
-          {label}
-        </label>
-      </div>
-      {/* <div className={styles.tag}>
+        <span className={`${styles.label} ${getStyle(value)}`}>{label}</span>
+        {/* <div className={styles.tag}>
         <Tag size="tiny" colorScheme="simple" label={count.toString()} />
       </div> */}
-    </div>
+      </div>
+    </label>
   );
 }
 

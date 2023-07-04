@@ -50,6 +50,25 @@
   --bg-color: var(--color-surface--7);
 }
 
+.tag__borderless_removable {
+  --border-color: transparent;
+  --text-color: var(--color-text--secondary);
+}
+
+.tag__borderless_removable:hover {
+  --bg-color: var(--color-surface--7);
+  --text-color: var(--color-text--default);
+}
+
+/* TODO: This css rule will change all icons to red, not just the x one
+    shown when colorScheme is "removable". Would be good to revisit when
+    building that functionality. This will become relevant once the package
+    list filtering is taken under construction. */
+.tag__borderless_removable:hover > .icon {
+  color: var(--color-danger);
+  cursor: pointer;
+}
+
 .tag__removable:hover {
   --bg-color: var(--color-surface--7);
 }
@@ -95,7 +114,7 @@
 
 .tag__info {
   --bg-color: var(--color-info-background);
-  --border-color: var(--color-info);
+  --border-color: var(--color-blue--20);
   --text-color: var(--color-info);
   --icon-color: var(--color-info);
 

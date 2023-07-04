@@ -4,12 +4,13 @@
   flex-direction: column;
   gap: var(--gap--16);
   align-items: flex-start;
-
-  border-radius: var(--border-radius--16);
+  border-radius: 0.438rem;
   overflow: hidden;
 }
 
 .root:hover {
+  background: rgb(35 35 77);
+  background-color: rgb(35 35 77);
   box-shadow: var(--box-shadow-default);
 }
 
@@ -71,6 +72,8 @@
 
 /* Styles for PackageCard's Author */
 .author {
+  display: flex;
+  flex-direction: row;
   font-size: var(--font-size--s);
   line-height: 1;
 }
@@ -121,6 +124,23 @@
   padding: 0 var(--space--16);
 }
 
+/* TODO: These are figma copy pasted */
+.categoryTag {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.313rem 0.625rem;
+  border-radius: 6.25rem;
+  color: var(--text-accent, #c6c3ff);
+  font-weight: 700;
+  font-size: 0.625rem;
+  font-style: normal;
+  line-height: normal;
+  text-transform: uppercase;
+  background: var(--surfaces-old-surface-3-old, linear-gradient(0deg, #2f2f6f 0%, #2f2f6f 100%), linear-gradient(0deg, #2c2c63 0%, #2c2c63 100%), #27254c);
+}
+
 .metaItemWrapper {
   display: flex;
   flex-basis: 100%;
@@ -138,4 +158,8 @@
 /* Different PackageCard variations */
 .packageCard__default {
   background-color: var(--color-surface--4);
+}
+
+.packageCard__pinned {
+  background: linear-gradient(180deg, rgb(0 0 0 / 0) 66.67%, rgb(28 163 245 / 0.2) 100%), linear-gradient(0deg, #19192f 0%, #19192f 100%), #161628;
 }

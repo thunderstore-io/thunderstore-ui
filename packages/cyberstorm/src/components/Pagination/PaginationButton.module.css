@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   min-width: 2.25em;
-  min-height: 2.25em;
+  height: 2.25em;
 
   padding: var(--space--8) var(--space--8);
   border-radius: var(--border-radius--8);
@@ -35,4 +35,8 @@
   color: var(--color-text--default);
 
   --bg-color: var(--color-surface--10);
+}
+
+.button__inactive {
+  --bg-color: none;
 }

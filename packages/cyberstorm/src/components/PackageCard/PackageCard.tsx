@@ -15,7 +15,7 @@ import { PackageLink, UserLink } from "../Links/Links";
 
 export interface PackageCardProps {
   packageData: PackagePreview;
-  colorScheme?: string;
+  colorScheme?: "default" | "pinned";
   community?: string;
 }
 
@@ -32,7 +32,9 @@ export function PackageCard(props: PackageCardProps) {
 
   return (
     <div
-      className={`${styles.root} ${getStyle(colorScheme)}`}
+      className={`${styles.root} ${
+        packageData.isPinned ? getStyle("pinned") : getStyle(colorScheme)
+      }`}
       {...forwardedProps}
     >
       <div className={styles.imageWrapper}>
@@ -82,12 +84,9 @@ export function PackageCard(props: PackageCardProps) {
       {packageData.categories?.length > 0 ? (
         <div className={styles.categoryWrapper}>
           {packageData.categories.map((c, index) => (
-            <Tag
-              key={`category_${c}_${index}`}
-              label={c.name}
-              size="small"
-              colorScheme="default"
-            />
+            <div key={`category_${c}_${index}`} className={styles.categoryTag}>
+              {c.name}
+            </div>
           ))}
         </div>
       ) : null}
@@ -114,6 +113,7 @@ PackageCard.displayName = "PackageCard";
 const getStyle = (scheme: PackageCardProps["colorScheme"] = "default") => {
   return {
     default: styles.packageCard__default,
+    pinned: styles.packageCard__pinned,
   }[scheme];
 };
 
@@ -177,7 +177,7 @@ function getMetaItemList(downloadCount: number, likes: number, size: number) {
       <div className={styles.metaItem__last}>
         <MetaItem
           icon={<FontAwesomeIcon fixedWidth icon={faHardDrive} />}
-          label={formatInteger(size)}
+          label={`${size} MB`}
           colorScheme="accent"
         />
       </div>
