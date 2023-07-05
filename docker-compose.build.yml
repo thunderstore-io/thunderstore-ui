@@ -8,3 +8,17 @@ services:
     image: thunderstore/thunderstore-ui.sertra:${IMAGE_TAG:-dev}
     ports:
       - "127.0.0.1:3000:3000"
+
+  cyberstorm-nextjs:
+    build:
+      context: "./"
+      dockerfile: "apps/cyberstorm-nextjs/Dockerfile"
+      secrets:
+        - "npmrc"
+    image: thunderstore/thunderstore-ui.cyberstorm-nextjs:${IMAGE_TAG:-dev}
+    ports:
+      - "127.0.0.1:3000:3000"
+
+secrets:
+  npmrc:
+    file: "./build-secrets/.npmrc"
