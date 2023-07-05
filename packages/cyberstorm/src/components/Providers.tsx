@@ -1,8 +1,8 @@
 "use client";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
-import { PropsWithChildren, ReactNode } from "react";
+import { PropsWithChildren } from "react";
 
-export function CyberstormProviders(props: PropsWithChildren<ReactNode>) {
+export function CyberstormProviders(props: PropsWithChildren) {
   return (
     <RadixTooltip.Provider delayDuration={150}>
       {props.children}
