@@ -38,22 +38,23 @@ jobs:
       - name: Run pre-commit
         run: ~/bin/pre-commit run --show-diff-on-failure --color=always --all-files
 
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build Docker images
-        run: IMAGE_TAG=${GITHUB_REF##*/} docker compose -f docker-compose.build.yml build --pull
-      - name: Login to Docker Hub
-        if: github.event_name != 'pull_request'
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      - name: Push image to Docker Hub
-        if: github.event_name != 'pull_request'
-        run: IMAGE_TAG=${GITHUB_REF##*/} docker compose -f docker-compose.build.yml push
+#  TODO: Configure build secrets & re-enable
+#  build:
+#    name: Build
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Build Docker images
+#        run: IMAGE_TAG=${GITHUB_REF##*/} docker compose -f docker-compose.build.yml build --pull
+#      - name: Login to Docker Hub
+#        if: github.event_name != 'pull_request'
+#        env:
+#          DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+#          DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+#        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+#      - name: Push image to Docker Hub
+#        if: github.event_name != 'pull_request'
+#        run: IMAGE_TAG=${GITHUB_REF##*/} docker compose -f docker-compose.build.yml push
 
   test:
     name: Test
@@ -91,6 +92,8 @@ jobs:
         run: yarn workspace @thunderstore/nextjs build
       - name: Test @thunderstore/nextjs
         run: yarn workspace @thunderstore/nextjs jest
+      - name: Build @thunderstore/cyberstorm-nextjs
+        run: yarn workspace @thunderstore/cyberstorm-nextjs build
 
   deploy:
     name: Trigger deploy
