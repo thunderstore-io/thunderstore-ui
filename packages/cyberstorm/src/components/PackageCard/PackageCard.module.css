@@ -48,7 +48,7 @@
   top: var(--space--8);
   left: var(--space--8);
   display: flex;
-  flex-direction: column;
+  flex-flow: row wrap;
   gap: var(--space--8);
   align-items: flex-start;
 }
@@ -103,7 +103,8 @@
 /* Styles for PackageCard's "Last updated" info */
 .lastUpdated {
   color: var(--color-text--tertiary);
-  font: var(--font-heading);
+  font: var(--font-body);
+  font-weight: 500;
   font-size: var(--font-size--s);
   line-height: 1;
 }

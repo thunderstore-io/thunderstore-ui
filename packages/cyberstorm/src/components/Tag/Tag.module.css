@@ -4,7 +4,7 @@
   flex: none;
   flex-direction: row;
 
-  gap: var(--gap--8);
+  gap: var(--gap--4);
   align-items: center;
   justify-content: center;
   border: var(--border-width--2) solid var(--border-color);
@@ -53,6 +53,8 @@
 .tag__borderless_removable {
   --border-color: transparent;
   --text-color: var(--color-text--secondary);
+
+  text-transform: uppercase;
 }
 
 .tag__borderless_removable:hover {

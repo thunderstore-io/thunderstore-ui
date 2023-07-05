@@ -66,27 +66,28 @@ export function PackageListLayout(props: PackageListLayoutProps) {
               label={formatInteger(communityData.packageCount) + " Packages"}
               icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
               colorScheme="accent"
-              size="large"
+              size="bold_large"
             />,
             <MetaItem
               key="meta-downloads"
               label={formatInteger(communityData.downloadCount) + " Downloads"}
               icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
               colorScheme="accent"
-              size="large"
+              size="bold_large"
             />,
             <MetaItem
               key="meta-servers"
               label={formatInteger(communityData.serverCount) + " Servers"}
               icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
               colorScheme="accent"
-              size="large"
+              size="bold_large"
             />,
             <Link
               key="meta-link"
               leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
               label="Join our community"
               externalUrl="https://discord.gg/5MbXZvd"
+              size="bold"
             />,
           ]}
         />

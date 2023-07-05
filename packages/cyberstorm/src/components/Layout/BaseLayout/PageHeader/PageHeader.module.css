@@ -12,23 +12,9 @@
   gap: var(--space--4);
 }
 
-.image {
-  min-width: 9rem;
-  max-width: 9rem;
-  min-height: 9rem;
-  max-height: 9rem;
-}
-
 @media (max-width: 30rem) {
   .root {
     gap: var(--space--16);
-  }
-
-  .image {
-    min-width: 5rem;
-    max-width: 5rem;
-    min-height: 5rem;
-    max-height: 5rem;
   }
 }
 

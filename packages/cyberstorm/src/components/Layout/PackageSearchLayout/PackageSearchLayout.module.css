@@ -33,7 +33,7 @@
 .contentWrapper {
   display: flex;
   flex-direction: row;
-  gap: var(--gap--16);
+  gap: var(--gap--24);
 }
 
 .content {
@@ -59,7 +59,7 @@
 
 .selectedTags {
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   gap: var(--space--8);
   padding: var(--space--8);
 }
