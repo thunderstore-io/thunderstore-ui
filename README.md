@@ -152,6 +152,30 @@ needs to be set (in the repo it's stored as a Secret for Actions).
 
 ## Docker
 
+### Docker Compose
+
+The build configuration for some apps is included in the
+`docker-compose.build.yml` file, making building of the services simple.
+
+**You will need to ensure all configured secrets are present before building
+with docker compose.** Currently the only required secret is the `.npmrc` file,
+which should include authentication to the font awesome private registry. See
+[Font Awesome documentation](https://fontawesome.com/docs/web/setup/packages)
+for more info on how to authenticate with npm, and then copy the `~/.npmrc` file
+it generates to the `./build-secrets` directory.
+
+**Build secrets are unsupported in the `docker-compose` python package, you must
+use the built-in `docker compose` subcommand instead.**
+
+Once the build-time secrets are available, building the services is as simple as
+running:
+
+```bash
+docker compose -f docker-compose.build.yml build
+```
+
+### Plain Docker
+
 The provided `Dockerfile` can be used to run the Next.js production server, e.g:
 
 ```

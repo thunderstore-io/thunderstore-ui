@@ -1,2 +1,4 @@
 **/node_modules
 .git
+build-secrets
+**/next-env.d.ts

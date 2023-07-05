@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.17.0",
+    "@faker-js/faker": "^8.0.2",
     "@fortawesome/fontawesome-svg-core": "6.2.0",
     "@fortawesome/free-brands-svg-icons": "6.2.0",
     "@fortawesome/free-solid-svg-icons": "6.2.0",
@@ -35,7 +36,6 @@
     "styled-components": "^6.0.0-rc.5"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0",
     "typescript-plugin-css-modules": "^3.4.0"
   }
 }
