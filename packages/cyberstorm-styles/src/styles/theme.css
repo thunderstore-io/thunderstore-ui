@@ -1,6 +1,5 @@
 :root {
   --color-background: var(--color-surface--0);
-  --color-background-alpha-90: rgb(18 18 38 / 0.9);
   --color-danger: var(--color-red--5);
   --color-danger-background: var(--color-red--8);
   --color-danger-background--hover: var(--color-red--9);
