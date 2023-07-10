@@ -1,15 +1,19 @@
-import { Title } from "../../../Title/Title";
 import { SettingItem } from "../../../SettingItem/SettingItem";
-import { TextInput } from "../../../TextInput/TextInput";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { MarkdownPreviewLink } from "../../../Links/Links";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
+import { useState } from "react";
+import { Markdown } from "../../../Markdown/Markdown";
+import styles from "./MarkdownPreviewLayout.module.css";
+import { TextAreaInput } from "../../../TextAreaInput/TextAreaInput";
 
 /**
  * Cyberstorm MarkdownPreview Layout
  */
 export function MarkdownPreviewLayout() {
+  const [markdownPreviewInput, setMarkdownPreviewInput] = useState("");
+
   return (
     <BaseLayout
       breadCrumb={
@@ -19,20 +23,24 @@ export function MarkdownPreviewLayout() {
       }
       header={<PageHeader title="Markdown Preview" />}
       mainContent={
-        <>
+        <div className={styles.root}>
           <SettingItem
-            title="Markdown Input"
+            title="Markdown input"
             description="Input your markdown code"
             content={
-              <TextInput placeHolder="# This is a markdown preview placeholder" />
+              <TextAreaInput
+                placeHolder="# This is a markdown preview placeholder"
+                setValue={setMarkdownPreviewInput}
+                value={markdownPreviewInput}
+              />
             }
           />
           <SettingItem
-            title="Markdown Output"
+            title="Markdown output"
             description="A preview of your rendered markdown"
-            content={<Title text="This is a markdown preview placeholder" />}
+            content={<Markdown>{markdownPreviewInput}</Markdown>}
           />
-        </>
+        </div>
       }
     />
   );
