@@ -1,4 +1,5 @@
 export * from "./components/Button/Button";
+export * from "./components/CodeBox/CodeBox";
 export * from "./components/BreadCrumbs/BreadCrumbs";
 export * from "./components/CopyButton/CopyButton";
 export * from "./components/Dialog/Dialog";
