@@ -22,6 +22,7 @@ export * from "./components/Select/Select";
 export * from "./components/Tabs/Tabs";
 export * from "./components/Tag/Tag";
 export * from "./components/TextInput/TextInput";
+export * from "./components/TextAreaInput/TextAreaInput";
 export * from "./components/Title/Title";
 export * from "./components/Tooltip/Tooltip";
 
