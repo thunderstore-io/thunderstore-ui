@@ -4,8 +4,8 @@ import { CommunitiesLink, CommunityLink, PackageLink } from "../../Links/Links";
 import { getCommunityDummyData } from "../../../dummyData";
 import { Package } from "../../../schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
-import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
+import styles from "./PackageDependantsLayout.module.css";
 
 export interface PackageDependantsLayoutProps {
   isLoading?: boolean;
@@ -44,14 +44,12 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
         </BreadCrumbs>
       }
       header={
-        <PageHeader
-          title={
-            "Mods that depend on " +
+        <div className={styles.header}>
+          {"Mods that depend on " +
             packageData.name +
             " by " +
-            packageData.author
-          }
-        />
+            packageData.author}
+        </div>
       }
       mainContent={<PackageSearchLayout communityId={communityData.name} />}
     />
