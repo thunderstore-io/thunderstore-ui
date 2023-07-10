@@ -14,7 +14,7 @@ export interface TextAreaInputProps {
 export function TextAreaInput(props: TextAreaInputProps) {
   const { placeHolder, value = "", setValue, enterHook } = props;
 
-  const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const onEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (enterHook && e.key === "Enter") {
       enterHook(value.toLowerCase());
     }
