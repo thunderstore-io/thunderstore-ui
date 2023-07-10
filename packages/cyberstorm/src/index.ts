@@ -9,6 +9,7 @@ export * from "./components/Header/Header";
 export * from "./components/Link/Link";
 export * from "./components/Links/LinkingProvider";
 export * from "./components/Links/Links";
+export * from "./components/Markdown/Markdown";
 export * from "./components/MenuItem/MenuItem";
 export * from "./components/MetaItem/MetaItem";
 export * from "./components/MetaInfoItem/MetaInfoItem";
