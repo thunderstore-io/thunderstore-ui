@@ -6,8 +6,27 @@ import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 import { DataTable } from "../../../DataTable/DataTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/pro-solid-svg-icons";
-import { TextInput } from "../../../TextInput/TextInput";
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
+import { CodeBox } from "../../../CodeBox/CodeBox";
+
+const EXAMPLE_MANIFEST_JSON_TEXT = `{
+  "name": "Textarea",
+  "version_number": "1.1.0",
+  "number": 0,
+  "boolean": true,
+  "website_url": "https://github.com/thunderstore-io",
+  "description": "This is a description for a mod. 250 characters max",
+  "dependencies": [
+      "Mythic-TestMod-1.1.0"
+  ]
+}
+`;
+
+const EXAMPLE_DEPENDENCIES = `[
+  "MythicManiac-TestMod-1.1.0",
+  "SomeAuthor-SomePackage-1.0.0"
+]
+`;
 
 /**
  * Cyberstorm PackageFormatDocs Layout
@@ -35,19 +54,7 @@ export function PackageFormatDocsLayout() {
             data={getSecondTableData()}
           />
           <p>Example manifest.json content:</p>
-          <TextInput
-            value='{
-            "name": "Textarea",
-            "version_number": "1.1.0",
-            "number": 0,
-            "boolean": true,
-            "website_url": "https://github.com/thunderstore-io",
-            "description": "This is a description for a mod. 250 characters max",
-            "dependencies": [
-              "Mythic-TestMod-1.1.0"
-            ]
-          }'
-          />
+          <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} />
         </div>
       }
     />
@@ -149,7 +156,7 @@ function getSecondTableData(): SecondTableDataItem[] {
       required: <FontAwesomeIcon key="icon-1" icon={faCheck} fixedWidth />,
       requiredRaw: true,
       description: "Name of the mod, no spaces. Allowed characters:-",
-      exampleValue: <TextInput key="textInput-1" value='"Some_Mod"' />,
+      exampleValue: <CodeBox value='"Some_Mod"' />,
       exampleValueRaw: "Some_Mod",
     },
     {
@@ -158,7 +165,7 @@ function getSecondTableData(): SecondTableDataItem[] {
       requiredRaw: true,
       description:
         "A short description of the mod, shown on the mod list. Max 250 characters.",
-      exampleValue: <TextInput key="textInput-2" value='"Hello world"' />,
+      exampleValue: <CodeBox value='"Hello world"' />,
       exampleValueRaw: "Hello world",
     },
     {
@@ -167,7 +174,7 @@ function getSecondTableData(): SecondTableDataItem[] {
       requiredRaw: true,
       description:
         "Version number of the mod, following the semantic version format Major.Minor.Patch.",
-      exampleValue: <TextInput key="textInput-3" value='"1.3.2"' />,
+      exampleValue: <CodeBox value='"1.3.2"' />,
       exampleValueRaw: "1.3.2",
     },
     {
@@ -176,14 +183,8 @@ function getSecondTableData(): SecondTableDataItem[] {
       requiredRaw: true,
       description:
         "List of other packages that are required for this package to function",
-      exampleValue: (
-        <TextInput
-          key="textInput-4"
-          value='["MythicManiac-TestMod-1.1.0", "SomeAuthor-SomePackage-1.0.0"]'
-        />
-      ),
-      exampleValueRaw:
-        '["MythicManiac-TestMod-1.1.0", "SomeAuthor-SomePackage-1.0.0"]',
+      exampleValue: <CodeBox value={EXAMPLE_DEPENDENCIES} />,
+      exampleValueRaw: EXAMPLE_DEPENDENCIES,
     },
     {
       key: "website_url",
@@ -191,9 +192,7 @@ function getSecondTableData(): SecondTableDataItem[] {
       requiredRaw: true,
       description:
         "URL of the mod's website (e.g. GitHub repo). Can be an empty string.",
-      exampleValue: (
-        <TextInput key="textInput-5" value='"https://example.com/"' />
-      ),
+      exampleValue: <CodeBox value='"https://example.com/"' />,
       exampleValueRaw: "https://example.com/",
     },
   ];
