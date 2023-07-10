@@ -1,18 +1,9 @@
 "use client";
+import { PackageListLayout } from "@thunderstore/cyberstorm";
+import { useParams } from "next/navigation";
 
 export default function Page() {
-  return null;
+  const router = useParams();
 
-  // TODO: Fix the implementation & enable
-  // import { useParams } from "next/navigation";
-  // import { PackageListLayout } from "@thunderstore/cyberstorm";
-
-  // const router = useParams();
-  // return (
-  //   <PackageListLayout
-  //     community={router["community"].toString()}
-  //     namespace={router["namespace"].toString()}
-  //     packageName={router["package"].toString()}
-  //   />
-  // );
+  return <PackageListLayout communityId={router["community"].toString()} />;
 }
