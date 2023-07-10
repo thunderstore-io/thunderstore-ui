@@ -9,7 +9,7 @@
   height: 3.5rem;
   padding: 0 var(--space--24);
   border-bottom: var(--space--px) var(--color-surface--4) solid;
-  background-color: hsl(var(--color-surface--1) / 0.9);
+  background-color: hsla(240deg 36% 11% 0.9);
   backdrop-filter: blur(var(--space--20));
 }
 
