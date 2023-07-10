@@ -9,6 +9,7 @@ export * from "./components/Header/Header";
 export * from "./components/Link/Link";
 export * from "./components/Links/LinkingProvider";
 export * from "./components/Links/Links";
+export * from "./components/Markdown/Markdown";
 export * from "./components/MenuItem/MenuItem";
 export * from "./components/MetaItem/MetaItem";
 export * from "./components/MetaInfoItem/MetaInfoItem";
@@ -22,6 +23,7 @@ export * from "./components/Select/Select";
 export * from "./components/Tabs/Tabs";
 export * from "./components/Tag/Tag";
 export * from "./components/TextInput/TextInput";
+export * from "./components/TextAreaInput/TextAreaInput";
 export * from "./components/Title/Title";
 export * from "./components/Tooltip/Tooltip";
 
