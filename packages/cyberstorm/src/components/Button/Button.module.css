@@ -19,6 +19,10 @@
   --button-border-width: var(--border-width--2);
 }
 
+.root:hover {
+  transition: ease-out 60ms;
+}
+
 .iconAlignment__default {
   justify-content: center;
 }

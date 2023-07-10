@@ -28,6 +28,8 @@
 
 .input:hover {
   --border-color: var(--color-border--highlight);
+
+  transition: ease-out 80ms;
 }
 
 .input:focus-within {

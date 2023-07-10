@@ -108,9 +108,7 @@ async function dummyEndpoint(queryParams: QsArray) {
         }
       }
       if (includedCategories && includedCategories.length > 0) {
-        console.log(includedCategories);
         passesIncludedCategories = false;
-        console.log(x.categories.map((x) => x.slug));
         if (
           includedCategories.every((slug) =>
             x.categories.map((x) => x.slug).includes(slug)
@@ -126,14 +124,6 @@ async function dummyEndpoint(queryParams: QsArray) {
           }
         });
       }
-      console.log(
-        passesCommunity,
-        passesUser,
-        passesNamespace,
-        passesKeywords,
-        passesIncludedCategories,
-        passesExcludedCategories
-      );
       return (
         passesCommunity &&
         passesUser &&
@@ -152,7 +142,6 @@ async function dummyEndpoint(queryParams: QsArray) {
   await promise;
 
   return dummyPackagesPreviews.filter(filterFunc);
-  // return dummyPackagesPreviews;
 }
 
 // Method implementation for Dapper class.

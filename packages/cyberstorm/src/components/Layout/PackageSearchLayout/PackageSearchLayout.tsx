@@ -85,37 +85,31 @@ function RemoveFilterIcon(
 }
 
 interface TagListProps {
-  searchKeywords: string[];
-  keywordsSetter: React.Dispatch<React.SetStateAction<string[]>>;
-  searchCategories: CategoriesProps;
-  categoriesSetter: React.Dispatch<React.SetStateAction<CategoriesProps>>;
+  filters: Filters;
 }
 
 function CurrentFilters(props: TagListProps) {
-  const { searchKeywords, keywordsSetter, searchCategories, categoriesSetter } =
-    props;
+  const { filters } = props;
 
   function removeFilter(key: string, filterType: string) {
     if (filterType === "keyword") {
-      keywordsSetter(searchKeywords.filter((x) => x !== key));
+      filters.setKeywords(filters.keywords.filter((x) => x !== key));
     }
     if (filterType === "category") {
-      searchCategories[key].value = undefined;
-      categoriesSetter(searchCategories);
+      filters.availableCategories[key].value = undefined;
+      filters.setAvailableCategories(filters.availableCategories);
     }
   }
 
   const categories: ReactNode[] = [];
-  Object.keys(searchCategories).forEach(function (key, index) {
-    if (searchCategories[key].value !== undefined) {
+  Object.keys(filters.availableCategories).forEach(function (key, index) {
+    if (filters.availableCategories[key].value !== undefined) {
       categories.push(
         <Tag
           key={"categorySearch" + key + index.toString()}
           label={key}
           rightIcon={RemoveFilterIcon(key, "category", removeFilter)}
-          colorScheme={
-            searchCategories[key].value === false ? "removable" : "default"
-          }
+          colorScheme={"borderless_removable"}
         />
       );
     }
@@ -123,12 +117,13 @@ function CurrentFilters(props: TagListProps) {
 
   return (
     <>
-      {searchKeywords?.map((keyword, index: number) => {
+      {filters.keywords?.map((keyword, index: number) => {
         return (
           <Tag
             key={"keywordSearch" + keyword + index.toString()}
             label={`"${keyword}"`}
             rightIcon={RemoveFilterIcon(keyword, "keyword", removeFilter)}
+            colorScheme={"borderless_removable"}
           />
         );
       })}
@@ -188,7 +183,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
         <div className={styles.content}>
           <div className={styles.listTopNavigation}>
             <div className={styles.showing}>
-              Showing <strong>1-20</strong> of <strong>327</strong>
+              Showing <strong>1-20</strong> of <strong>327</strong> results
             </div>
 
             {filters.keywords.length > 0 ||
@@ -196,18 +191,18 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
               (k) => filters.availableCategories[k].value !== undefined
             ) ? (
               <div className={styles.selectedTags}>
-                <CurrentFilters
-                  searchKeywords={filters.keywords}
-                  keywordsSetter={filters.setKeywords}
-                  searchCategories={filters.availableCategories}
-                  categoriesSetter={filters.setAvailableCategories}
-                />
+                <CurrentFilters filters={filters} />
                 <Button
                   key="clearAllButton"
                   paddingSize="small"
                   fontSize="small"
                   fontWeight="700"
-                  colorScheme="transparentDefault"
+                  colorScheme="transparentTertiary"
+                  border-width="0px"
+                  border-radius="0.5rem"
+                  justify-content="center"
+                  align-items="center"
+                  font-size="0.875rem"
                   label="Clear all"
                   onClick={() => {
                     filters.setKeywords([]);

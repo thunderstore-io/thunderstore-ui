@@ -73,7 +73,7 @@ export function getCommunityDummyData(seed?: string): Community {
     downloadCount: faker.datatype.number({ min: 1000000, max: 10000000 }),
     packageCount: faker.datatype.number({ min: 0, max: 100000 }),
     serverCount: faker.datatype.number({ min: 0, max: 1000 }),
-    imageSource: faker.image.abstract(300, 450, true),
+    imageSource: faker.image.abstract(142, 188, true),
     description: faker.lorem.paragraphs(3),
     discordLink: faker.internet.url(),
   };

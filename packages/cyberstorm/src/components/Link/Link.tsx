@@ -8,6 +8,7 @@ export interface LinkProps {
   leftIcon?: ReactElement;
   rightIcon?: ReactElement;
   externalUrl?: string;
+  size?: "thin" | "bold";
 }
 
 /**
@@ -19,10 +20,12 @@ export function Link(props: LinkProps) {
     leftIcon = null,
     rightIcon = null,
     externalUrl = null,
+    size = "thin",
   } = props;
+
   if (externalUrl) {
     return (
-      <a href={externalUrl} className={styles.root}>
+      <a href={externalUrl} className={`${styles.root} ${getSize(size)}`}>
         {leftIcon ? <div className={styles.leftIcon}>{leftIcon}</div> : null}
         {label}
         <div className={styles.rightIcon}>
@@ -42,3 +45,10 @@ export function Link(props: LinkProps) {
 }
 
 Link.displayName = "Link";
+
+const getSize = (scheme: LinkProps["size"] = "thin") => {
+  return {
+    thin: styles.link__thin,
+    bold: styles.link__bold,
+  }[scheme];
+};

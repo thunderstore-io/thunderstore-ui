@@ -6,7 +6,7 @@ type _MetaItemProps = {
   label?: string;
   icon?: ReactNode;
   colorScheme?: "default" | "accent";
-  size?: "medium" | "large";
+  size?: "medium" | "large" | "bold_large";
   ref?: React.Ref<HTMLDivElement>;
 };
 export type MetaItemProps = _MetaItemProps &
@@ -48,5 +48,6 @@ const getSize = (scheme: MetaItemProps["size"] = "medium") => {
   return {
     medium: styles.metaItem__medium,
     large: styles.metaItem__large,
+    bold_large: styles.metaItem__bold_large,
   }[scheme];
 };

@@ -31,10 +31,12 @@
   --blur-default: 0.25rem;
   --border-width--px: 1px;
   --border-width--2: 0.125rem;
+  --border-radius--2: 0.125rem;
   --border-radius--4: 0.25rem;
   --border-radius--8: 0.5rem;
   --border-radius--12: 0.75rem;
   --border-radius--16: 1rem;
+  --font-size--xs: var(--space--10);
   --font-size--s: var(--space--12);
   --font-size--m: var(--space--14);
   --font-size--l: var(--space--16);

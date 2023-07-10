@@ -4,6 +4,10 @@
 }
 
 .image {
+  min-width: 9rem;
+  max-width: 9rem;
+  min-height: 9rem;
+  max-height: 9rem;
   border-radius: var(--border-radius--8);
   box-shadow: var(--box-shadow-default);
 }

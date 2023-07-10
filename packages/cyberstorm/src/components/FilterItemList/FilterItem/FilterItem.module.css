@@ -3,10 +3,13 @@
   flex-direction: row;
   align-items: center;
   padding: var(--space--8) var(--space--12);
+  border-radius: var(--border-radius--8);
 }
 
 .root:hover {
   background-color: var(--color-surface--4);
+
+  --mark-color: var(--color-purple--2);
 }
 
 .checkBoxContainer {
@@ -18,24 +21,27 @@
 
 .checkBoxRoot {
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
   width: var(--space--16);
   height: var(--space--16);
-  border-radius: var(--border-radius--4);
+  border-radius: var(--border-radius--2);
   background-color: var(--mark-color);
-  transition: 200ms;
+  transition: ease-out 60ms;
 
-  --mark-color: var(--color-surface--4);
+  --mark-color: var(--color-purple--6);
+}
+
+.root:hover .checkBoxRoot {
+  --mark-color: #4343a3;
 }
 
 .label {
-  color: var(--mark-color);
+  color: var(--color-text--secondary);
   font-weight: 700;
-  transition: 200ms;
+  transition: 50ms;
   user-select: none;
-
-  --mark-color: var(--color-text--default);
 }
 
 .icon {

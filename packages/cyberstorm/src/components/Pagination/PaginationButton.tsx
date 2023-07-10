@@ -8,7 +8,7 @@ export interface PaginationButtonProps {
   label?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  colorScheme?: "default";
+  colorScheme?: "default" | "inactive";
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -45,10 +45,12 @@ const getStyle = (
   if (isSelected) {
     return {
       default: styles.button__default_selected,
+      inactive: styles.button__inactive,
     }[scheme];
   }
 
   return {
     default: styles.button__default,
+    inactive: styles.button__inactive,
   }[scheme];
 };
