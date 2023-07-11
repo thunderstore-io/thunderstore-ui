@@ -8,89 +8,21 @@ export function PackageVersions() {
   return (
     <div>
       <div className={styles.title}>Versions</div>
-      <DataTable<PackageVersionData>
-        defaultSortAsc={false}
-        columns={columns}
-        data={getPackageVersionData()}
-      />
+      <DataTable headers={columns} rows={packageVersionData} />
     </div>
   );
 }
 
 PackageVersions.displayName = "PackageVersions";
 
-type PackageVersionData = {
-  id: number;
-  versionNumber: string;
-  uploadData: string;
-  downloads: number;
-  actions: JSX.Element;
-};
+const columns = ["Version", "Upload date", "Downloads", ""];
 
-const columns = [
-  {
-    name: "Version",
-    style: {
-      color: "var(--color-text--default)",
-      fontWeight: 700,
-    },
-    selector: (row: PackageVersionData) => row.versionNumber,
-  },
-  {
-    name: "Upload date",
-    style: {
-      color: "var(--color-text--secondary)",
-      fontWeight: 500,
-    },
-    selector: (row: PackageVersionData) => row.uploadData,
-  },
-  {
-    name: "Downloads",
-    style: {
-      color: "var(--color-text--secondary)",
-      fontWeight: 500,
-    },
-    selector: (row: PackageVersionData) => row.downloads,
-  },
-  {
-    name: "",
-    width: "274px",
-    cell: (row: PackageVersionData) => row.actions,
-  },
+const packageVersionData = [
+  ["1.1.0", "2022-02-26", 115199, getActions("1.1.0")],
+  ["1.2.1", "2022-02-26", 75163, getActions("1.2.1")],
+  ["1.2.2", "2022-02-26", 342563, getActions("1.2.2")],
+  ["1.2.3", "2022-02-26", 678538, getActions("1.2.3")],
 ];
-
-function getPackageVersionData(): PackageVersionData[] {
-  return [
-    {
-      id: 1,
-      versionNumber: "1.1.0",
-      uploadData: "2022-02-26",
-      downloads: 115199,
-      actions: getActions("1.1.0"),
-    },
-    {
-      id: 2,
-      versionNumber: "1.2.1",
-      uploadData: "2022-02-26",
-      downloads: 75163,
-      actions: getActions("1.2.1"),
-    },
-    {
-      id: 3,
-      versionNumber: "1.2.2",
-      uploadData: "2022-02-26",
-      downloads: 342563,
-      actions: getActions("1.2.2"),
-    },
-    {
-      id: 4,
-      versionNumber: "1.2.3",
-      uploadData: "2022-02-26",
-      downloads: 678538,
-      actions: getActions("1.2.3"),
-    },
-  ];
-}
 
 function getActions(versionNumber: string) {
   return (
