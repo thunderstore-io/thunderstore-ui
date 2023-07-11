@@ -10,7 +10,11 @@ export interface CodeBoxProps {
 export function CodeBox(props: CodeBoxProps) {
   const { value = "" } = props;
 
-  return <pre className={styles.root}>{value}</pre>;
+  return (
+    <code className={styles.root}>
+      <pre>{value}</pre>
+    </code>
+  );
 }
 
 CodeBox.displayName = "CodeBox";
