@@ -165,13 +165,6 @@ export function DataTable(props: DataTableProps) {
                 }
               >
                 {r.map((c, ck) => {
-                  if (c instanceof Array) {
-                    return (
-                      <div key={`${rk}_${ck}`} className={styles.gridCell}>
-                        {c}
-                      </div>
-                    );
-                  }
                   return (
                     <div key={`${rk}_${ck}`} className={styles.gridCell}>
                       {c.value}

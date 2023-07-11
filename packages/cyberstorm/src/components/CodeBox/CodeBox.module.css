@@ -5,6 +5,8 @@
   border: var(--border-width--2) solid var(--border-color);
 
   border-radius: var(--border-radius--8);
+  overflow-x: auto;
+  overflow-y: auto;
   font-weight: 700;
 
   font-size: var(--font-size--l);

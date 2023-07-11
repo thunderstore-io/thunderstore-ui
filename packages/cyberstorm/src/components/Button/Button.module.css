@@ -38,6 +38,14 @@
   text-align: center;
 }
 
+.leftIcon {
+  display: flex;
+}
+
+.rightIcon {
+  display: flex;
+}
+
 .iconAlignment__side > .leftIcon {
   margin-right: auto;
 }
