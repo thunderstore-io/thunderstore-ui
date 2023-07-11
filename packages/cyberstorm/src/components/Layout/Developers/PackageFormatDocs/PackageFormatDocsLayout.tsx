@@ -44,6 +44,7 @@ export function PackageFormatDocsLayout() {
           <DataTable
             headers={firstTableDataColumns}
             rows={firstDataTableData}
+            disableSort={true}
           />
           <p>
             Additionally, the manifest.json must contain the following fields:
@@ -51,6 +52,7 @@ export function PackageFormatDocsLayout() {
           <DataTable
             headers={secondTableDataColumns}
             rows={secondDataTableData}
+            disableSort={true}
           />
           <p>Example manifest.json content:</p>
           <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} />
@@ -62,70 +64,135 @@ export function PackageFormatDocsLayout() {
 
 PackageFormatDocsLayout.displayName = "PackageFormatDocsLayout";
 
-const firstTableDataColumns = ["Filename", "Description"];
+const firstTableDataColumns = [
+  { value: "Filename", disableSort: true },
+  { value: "Description", disableSort: true },
+];
 
 const firstDataTableData = [
-  ["icon.png", "Name of the mod, no spaces. Allowed characters:-"],
   [
-    "README.md",
-    "A short description of the mod, shown on the mod list. Max 250 characters.",
+    { value: "icon.png", sortValue: 0 },
+    { value: "Name of the mod, no spaces. Allowed characters:-", sortValue: 0 },
   ],
   [
-    "CHANGELOG.md (optional)",
-    "Version number of the mod, following the semantic version format Major.Minor.Patch.",
+    { value: "README.md", sortValue: 0 },
+    {
+      value:
+        "A short description of the mod, shown on the mod list. Max 250 characters.",
+      sortValue: 0,
+    },
   ],
   [
-    "manifest.json",
-    "List of other packages that are required for this package to function",
+    { value: "CHANGELOG.md (optional)", sortValue: 0 },
+    {
+      value:
+        "Version number of the mod, following the semantic version format Major.Minor.Patch.",
+      sortValue: 0,
+    },
+  ],
+  [
+    { value: "manifest.json", sortValue: 0 },
+    {
+      value:
+        "List of other packages that are required for this package to function",
+      sortValue: 0,
+    },
   ],
 ];
 
 const secondTableDataColumns = [
-  "Key",
-  "Required",
-  "Description",
-  "Example value",
+  { value: "Key", disableSort: true },
+  { value: "Required", disableSort: true },
+  { value: "Description", disableSort: true },
+  { value: "Example value", disableSort: true },
 ];
 
 const secondDataTableData = [
   [
-    "name",
-    <span key="icon-1" className={styles.greenWrap}>
-      <FontAwesomeIcon icon={faCheck} fixedWidth />
-    </span>,
-    "Name of the mod, no spaces. Allowed characters:-",
-    <CodeBox key="code-1" value='"Some_Mod"' />,
+    { value: "name", sortValue: 0 },
+    {
+      value: (
+        <span key="icon-1" className={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} fixedWidth />
+        </span>
+      ),
+      sortValue: 0,
+    },
+    { value: "Name of the mod, no spaces. Allowed characters:-", sortValue: 0 },
+    { value: <CodeBox key="code-1" value='"Some_Mod"' />, sortValue: 0 },
   ],
   [
-    "description",
-    <span key="icon-2" className={styles.greenWrap}>
-      <FontAwesomeIcon icon={faCheck} fixedWidth />
-    </span>,
-    "A short description of the mod, shown on the mod list. Max 250 characters.",
-    <CodeBox key="code-2" value='"Hello world"' />,
+    { value: "description", sortValue: 0 },
+    {
+      value: (
+        <span key="icon-2" className={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} fixedWidth />
+        </span>
+      ),
+      sortValue: 0,
+    },
+    {
+      value:
+        "A short description of the mod, shown on the mod list. Max 250 characters.",
+      sortValue: 0,
+    },
+    { value: <CodeBox key="code-2" value='"Hello world"' />, sortValue: 0 },
   ],
   [
-    "version number",
-    <span key="icon-3" className={styles.greenWrap}>
-      <FontAwesomeIcon icon={faCheck} fixedWidth />
-    </span>,
-    "Version number of the mod, following the semantic version format Major.Minor.Patch.",
-    <CodeBox key="code-3" value='"1.3.2"' />,
+    { value: "version number", sortValue: 0 },
+    {
+      value: (
+        <span key="icon-3" className={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} fixedWidth />
+        </span>
+      ),
+      sortValue: 0,
+    },
+    {
+      value:
+        "Version number of the mod, following the semantic version format Major.Minor.Patch.",
+      sortValue: 0,
+    },
+    { value: <CodeBox key="code-3" value='"1.3.2"' />, sortValue: 0 },
   ],
   [
-    "dependencies",
-    <span key="icon-4" className={styles.greenWrap}>
-      <FontAwesomeIcon icon={faCheck} fixedWidth />
-    </span>,
-    "List of other packages that are required for this package to function",
-    <CodeBox key="code-4" value={EXAMPLE_DEPENDENCIES} />,
+    { value: "dependencies", sortValue: 0 },
+    {
+      value: (
+        <span key="icon-4" className={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} fixedWidth />
+        </span>
+      ),
+      sortValue: 0,
+    },
+    {
+      value:
+        "List of other packages that are required for this package to function",
+      sortValue: 0,
+    },
+    {
+      value: <CodeBox key="code-4" value={EXAMPLE_DEPENDENCIES} />,
+      sortValue: 0,
+    },
   ],
   [
-    "website_url",
-    <span key="icon-5" className={styles.greenWrap}>
-      <FontAwesomeIcon icon={faCheck} fixedWidth />
-    </span>,
-    "URL of the mod's website (e.g. GitHub repo). Can be an empty string.",
-    <CodeBox key="code-5" value='"https://example.com/"' />,
+    { value: "website_url", sortValue: 0 },
+    {
+      value: (
+        <span key="icon-5" className={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} fixedWidth />
+        </span>
+      ),
+      sortValue: 0,
+    },
+    {
+      value:
+        "URL of the mod's website (e.g. GitHub repo). Can be an empty string.",
+      sortValue: 0,
+    },
+    {
+      value: <CodeBox key="code-5" value='"https://example.com/"' />,
+      sortValue: 0,
+    },
   ],
 ];

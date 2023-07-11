@@ -8,20 +8,49 @@ export function PackageVersions() {
   return (
     <div>
       <div className={styles.title}>Versions</div>
-      <DataTable headers={columns} rows={packageVersionData} />
+      <DataTable
+        headers={columns}
+        rows={packageVersionData}
+        sortDirection={1}
+      />
     </div>
   );
 }
 
 PackageVersions.displayName = "PackageVersions";
 
-const columns = ["Version", "Upload date", "Downloads", ""];
+const columns = [
+  { value: "Version", disableSort: false },
+  { value: "Upload date", disableSort: false },
+  { value: "Downloads", disableSort: false },
+  { value: "", disableSort: true },
+];
 
 const packageVersionData = [
-  ["1.1.0", "2022-02-26", 115199, getActions("1.1.0")],
-  ["1.2.1", "2022-02-26", 75163, getActions("1.2.1")],
-  ["1.2.2", "2022-02-26", 342563, getActions("1.2.2")],
-  ["1.2.3", "2022-02-26", 678538, getActions("1.2.3")],
+  [
+    { value: "1.1.0", sortValue: "1.1.0" },
+    { value: "2022-02-25", sortValue: "2022-02-25" },
+    { value: 115191, sortValue: 115191 },
+    { value: getActions("1.1.0"), sortValue: 0 },
+  ],
+  [
+    { value: "1.2.1", sortValue: "1.2.1" },
+    { value: "2022-02-26", sortValue: "2022-02-26" },
+    { value: 75163, sortValue: 75163 },
+    { value: getActions("1.2.1"), sortValue: 0 },
+  ],
+  [
+    { value: "1.2.2", sortValue: "1.2.2" },
+    { value: "2022-02-27", sortValue: "2022-02-27" },
+    { value: 342563, sortValue: 342563 },
+    { value: getActions("1.2.2"), sortValue: 0 },
+  ],
+  [
+    { value: "1.2.3", sortValue: "1.2.3" },
+    { value: "2022-02-28", sortValue: "2022-02-28" },
+    { value: 678538, sortValue: 678538 },
+    { value: getActions("1.2.3"), sortValue: 0 },
+  ],
 ];
 
 function getActions(versionNumber: string) {

@@ -7,15 +7,20 @@
 .gridHeaders {
   display: grid;
   grid-template-columns: repeat(var(--column-count, auto-fit), minmax(1rem, 1fr));
-  color: var(--color-text--accent);
 }
 
-/* .gridHeaders:hover {
-  background-color:hsl(var(--surface-3));
-} */
-
 .gridHeader {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space--12);
   padding: var(--space--8) var(--space--24);
+  color: var(--color-text--accent);
+  font-weight: 700;
+  font-size: var(--space--14);
+}
+
+.buttonIcon {
+  font-size: var(--font-size--s);
 }
 
 .gridRows {
@@ -39,14 +44,20 @@
   background-color: var(--color-surface--3);
 }
 
-/* .gridRow:hover {
-  background-color:hsl(var(--surface-3));
-} */
-
 .gridCell {
   display: flex;
   align-items: center;
   padding: var(--space--16) var(--space--24);
-  font-weight: 400;
+  font-weight: 700;
   line-height: var(--line-height--l);
+}
+
+.sortButton {
+  color: hsl(240deg 25% 69% / 0.3);
+  background-color: transparent;
+}
+
+.sortButtonActive {
+  color: hsl(240deg 25% 69%);
+  background-color: transparent;
 }

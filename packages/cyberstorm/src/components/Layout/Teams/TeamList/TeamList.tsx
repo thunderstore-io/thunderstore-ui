@@ -1,7 +1,6 @@
 import { TeamPreview } from "../../../../schema";
-import { DataTable } from "../../../DataTable/DataTable";
+import { DataTable, DataTableRows } from "../../../DataTable/DataTable";
 import { TeamSettingsLink } from "../../../Links/Links";
-import { ReactNode } from "react";
 
 export interface TeamListProps {
   teams?: TeamPreview[];
@@ -10,14 +9,19 @@ export interface TeamListProps {
 export function TeamList(props: TeamListProps) {
   const { teams = [] } = props;
 
-  const teamData: ReactNode[][] = [];
+  const teamData: DataTableRows = [];
   teams?.forEach((team: TeamPreview, index) => {
     teamData.push([
-      <TeamSettingsLink key={index} team={team.name}>
-        {team.name}
-      </TeamSettingsLink>,
-      "TODO",
-      team.members?.length,
+      {
+        value: (
+          <TeamSettingsLink key={index} team={team.name}>
+            {team.name}
+          </TeamSettingsLink>
+        ),
+        sortValue: team.name,
+      },
+      { value: "TODO", sortValue: 0 },
+      { value: team.members?.length, sortValue: team.members?.length },
     ]);
   });
 
@@ -26,4 +30,8 @@ export function TeamList(props: TeamListProps) {
 
 TeamList.displayName = "TeamList";
 
-const columns = ["Name", "Role", "Members"];
+const columns = [
+  { value: "Name", disableSort: false },
+  { value: "Role", disableSort: false },
+  { value: "Members", disableSort: false },
+];

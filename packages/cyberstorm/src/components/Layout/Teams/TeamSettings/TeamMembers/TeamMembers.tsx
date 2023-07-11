@@ -9,8 +9,7 @@ import { TeamLink, UserLink } from "../../../../Links/Links";
 import { Avatar } from "../../../../Avatar/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/pro-solid-svg-icons";
-import { DataTable } from "../../../../DataTable/DataTable";
-import { ReactNode } from "react";
+import { DataTable, DataTableRows } from "../../../../DataTable/DataTable";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
@@ -26,59 +25,76 @@ export interface TeamMemberListProps {
 export function TeamMemberList(props: TeamMemberListProps) {
   const { teamMemberData = [] } = props;
 
-  const tableData: ReactNode[][] = [];
+  const tableData: DataTableRows = [];
   teamMemberData?.forEach((teamMember: TeamMember, index) => {
     tableData.push([
-      <UserLink key={`user_${index}`} user={teamMember.user}>
-        <div className={styles.userInfo}>
-          <Avatar
-            src={
-              teamMember.imageSource ? teamMember.imageSource : defaultImageSrc
-            }
-          />
-          <span className={styles.userInfoName}>{teamMember.user}</span>
-        </div>
-      </UserLink>,
-      <div key={`role_${index}`} className={styles.roleSelect}>
-        <Select
-          triggerFontSize="medium"
-          options={userRoles}
-          value={teamMember.role}
-          onChange={() => console.log("asd")}
-        />
-      </div>,
-      <Dialog
-        key={`action_${index}`}
-        trigger={
-          <Button
-            label="Kick"
-            leftIcon={<FontAwesomeIcon icon={faTrash} fixedWidth />}
-            colorScheme="danger"
-            paddingSize="large"
-          />
-        }
-        content={
-          <div>
-            You are about to kick member{" "}
-            <UserLink user={teamMember.user}>
-              <span className={styles.kickDescriptionUserName}>
-                {teamMember.user}
-              </span>
-              .
-            </UserLink>
+      {
+        value: (
+          <UserLink key={`user_${index}`} user={teamMember.user}>
+            <div className={styles.userInfo}>
+              <Avatar
+                src={
+                  teamMember.imageSource
+                    ? teamMember.imageSource
+                    : defaultImageSrc
+                }
+              />
+              <span className={styles.userInfoName}>{teamMember.user}</span>
+            </div>
+          </UserLink>
+        ),
+        sortValue: teamMember.user,
+      },
+      {
+        value: (
+          <div key={`role_${index}`} className={styles.roleSelect}>
+            <Select
+              triggerFontSize="medium"
+              options={userRoles}
+              value={teamMember.role}
+              onChange={() => console.log("asd")}
+            />
           </div>
-        }
-        acceptButton={
-          <Button
-            colorScheme="danger"
-            paddingSize="large"
-            label="Kick member"
+        ),
+        sortValue: teamMember.role,
+      },
+      {
+        value: (
+          <Dialog
+            key={`action_${index}`}
+            trigger={
+              <Button
+                label="Kick"
+                leftIcon={<FontAwesomeIcon icon={faTrash} fixedWidth />}
+                colorScheme="danger"
+                paddingSize="large"
+              />
+            }
+            content={
+              <div>
+                You are about to kick member{" "}
+                <UserLink user={teamMember.user}>
+                  <span className={styles.kickDescriptionUserName}>
+                    {teamMember.user}
+                  </span>
+                  .
+                </UserLink>
+              </div>
+            }
+            acceptButton={
+              <Button
+                colorScheme="danger"
+                paddingSize="large"
+                label="Kick member"
+              />
+            }
+            cancelButton="default"
+            showFooterBorder
+            title="Confirm member removal"
           />
-        }
-        cancelButton="default"
-        showFooterBorder
-        title="Confirm member removal"
-      />,
+        ),
+        sortValue: 0,
+      },
     ]);
   });
 
@@ -139,7 +155,11 @@ export function TeamMembers(props: TeamMembersProps) {
 TeamMemberList.displayName = "TeamMemberList";
 TeamMembers.displayName = "TeamMembers";
 
-const teamMemberColumns = ["User", "Role", "Actions"];
+const teamMemberColumns = [
+  { value: "User", disableSort: false },
+  { value: "Role", disableSort: false },
+  { value: "Actions", disableSort: true },
+];
 
 const userRoles = [
   { value: "Member", label: "Member" },
