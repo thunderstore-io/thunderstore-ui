@@ -1,8 +1,6 @@
 import { TeamPreview } from "../../../../schema";
-import { DataTable } from "../../../DataTable/DataTable";
+import { DataTable, DataTableRows } from "../../../DataTable/DataTable";
 import { TeamSettingsLink } from "../../../Links/Links";
-import { ReactElement } from "react";
-import { TableColumn } from "react-data-table-component";
 
 export interface TeamListProps {
   teams?: TeamPreview[];
@@ -11,57 +9,29 @@ export interface TeamListProps {
 export function TeamList(props: TeamListProps) {
   const { teams = [] } = props;
 
-  const teamData: TeamData[] = [];
+  const teamData: DataTableRows = [];
   teams?.forEach((team: TeamPreview, index) => {
-    teamData.push({
-      name: (
-        <TeamSettingsLink key={index} team={team.name}>
-          {team.name}
-        </TeamSettingsLink>
-      ),
-      nameRaw: team.name.toLowerCase(),
-      role: "TODO",
-      memberCount: team.members?.length,
-    });
+    teamData.push([
+      {
+        value: (
+          <TeamSettingsLink key={index} team={team.name}>
+            {team.name}
+          </TeamSettingsLink>
+        ),
+        sortValue: team.name,
+      },
+      { value: "TODO", sortValue: 0 },
+      { value: team.members?.length, sortValue: team.members?.length },
+    ]);
   });
 
-  return <DataTable<TeamData> columns={columns} data={teamData} />;
+  return <DataTable headers={columns} rows={teamData} />;
 }
 
 TeamList.displayName = "TeamList";
 
-type TeamData = {
-  name: ReactElement;
-  nameRaw: string;
-  role: string;
-  memberCount: number;
-};
-
-const columns: TableColumn<TeamData>[] = [
-  {
-    name: "Name",
-    style: {
-      color: "var(--color-text--default)",
-      fontWeight: 700,
-    },
-    sortable: true,
-    cell: (row) => row.name,
-    selector: (row) => row.nameRaw,
-  },
-  {
-    name: "role",
-    style: {
-      color: "var(--color-text--secondary)",
-    },
-    sortable: true,
-    selector: (row) => row.role,
-  },
-  {
-    name: "Members",
-    style: {
-      color: "var(--color-text--secondary)",
-    },
-    sortable: true,
-    selector: (row) => row.memberCount,
-  },
+const columns = [
+  { value: "Name", disableSort: false },
+  { value: "Role", disableSort: false },
+  { value: "Members", disableSort: false },
 ];

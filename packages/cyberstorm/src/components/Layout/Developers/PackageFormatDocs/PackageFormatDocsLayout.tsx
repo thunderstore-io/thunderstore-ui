@@ -6,7 +6,6 @@ import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 import { DataTable } from "../../../DataTable/DataTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/pro-solid-svg-icons";
-import { ReactElement } from "react";
 import { CodeBox } from "../../../CodeBox/CodeBox";
 
 const EXAMPLE_MANIFEST_JSON_TEXT = `{
@@ -42,16 +41,18 @@ export function PackageFormatDocsLayout() {
       header={<PageHeader title="Package Format Docs" />}
       mainContent={
         <div className={styles.root}>
-          <DataTable<FirstTableDataItem>
-            columns={firstTableDataColumns}
-            data={getFirstTableData()}
+          <DataTable
+            headers={firstTableDataColumns}
+            rows={firstDataTableData}
+            disableSort={true}
           />
           <p>
             Additionally, the manifest.json must contain the following fields:
           </p>
-          <DataTable<SecondTableDataItem>
-            columns={secondTableDataColumns}
-            data={getSecondTableData()}
+          <DataTable
+            headers={secondTableDataColumns}
+            rows={secondDataTableData}
+            disableSort={true}
           />
           <p>Example manifest.json content:</p>
           <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} />
@@ -63,137 +64,135 @@ export function PackageFormatDocsLayout() {
 
 PackageFormatDocsLayout.displayName = "PackageFormatDocsLayout";
 
-type FirstTableDataItem = {
-  filename: string;
-  description: string;
-};
-
 const firstTableDataColumns = [
-  {
-    name: "Filename",
-    style: {
-      color: "var(--color-text--default)",
-    },
-    selector: (row: FirstTableDataItem) => row.filename,
-  },
-  {
-    name: "Description",
-    style: {
-      color: "var(--color-text--default)",
-    },
-    selector: (row: FirstTableDataItem) => row.description,
-  },
+  { value: "Filename", disableSort: true },
+  { value: "Description", disableSort: true },
 ];
 
-function getFirstTableData(): FirstTableDataItem[] {
-  return [
+const firstDataTableData = [
+  [
+    { value: "icon.png", sortValue: 0 },
+    { value: "Name of the mod, no spaces. Allowed characters:-", sortValue: 0 },
+  ],
+  [
+    { value: "README.md", sortValue: 0 },
     {
-      filename: "icon.png",
-      description: "Name of the mod, no spaces. Allowed characters:-",
-    },
-    {
-      filename: "README.md",
-      description:
+      value:
         "A short description of the mod, shown on the mod list. Max 250 characters.",
+      sortValue: 0,
     },
+  ],
+  [
+    { value: "CHANGELOG.md (optional)", sortValue: 0 },
     {
-      filename: "CHANGELOG.md (optional)",
-      description:
+      value:
         "Version number of the mod, following the semantic version format Major.Minor.Patch.",
+      sortValue: 0,
     },
+  ],
+  [
+    { value: "manifest.json", sortValue: 0 },
     {
-      filename: "manifest.json",
-      description:
+      value:
         "List of other packages that are required for this package to function",
+      sortValue: 0,
     },
-  ];
-}
-
-type SecondTableDataItem = {
-  key: string;
-  required: ReactElement;
-  requiredRaw: boolean;
-  description: string;
-  exampleValue: ReactElement;
-  exampleValueRaw: string;
-};
+  ],
+];
 
 const secondTableDataColumns = [
-  {
-    name: "Key",
-    style: {
-      color: "var(--color-text--default)",
-    },
-    selector: (row: SecondTableDataItem) => row.key,
-  },
-  {
-    name: "Required",
-    style: {
-      color: "var(--color-text--default)",
-    },
-    cell: (row: SecondTableDataItem) => row.required,
-  },
-  {
-    name: "Description",
-    style: {
-      color: "var(--color-text--default)",
-    },
-    selector: (row: SecondTableDataItem) => row.description,
-  },
-  {
-    name: "Example value",
-    style: {
-      color: "var(--color-text--default)",
-    },
-    cell: (row: SecondTableDataItem) => row.exampleValue,
-  },
+  { value: "Key", disableSort: true },
+  { value: "Required", disableSort: true },
+  { value: "Description", disableSort: true },
+  { value: "Example value", disableSort: true },
 ];
 
-function getSecondTableData(): SecondTableDataItem[] {
-  return [
+const secondDataTableData = [
+  [
+    { value: "name", sortValue: 0 },
     {
-      key: "name",
-      required: <FontAwesomeIcon key="icon-1" icon={faCheck} fixedWidth />,
-      requiredRaw: true,
-      description: "Name of the mod, no spaces. Allowed characters:-",
-      exampleValue: <CodeBox value='"Some_Mod"' />,
-      exampleValueRaw: "Some_Mod",
+      value: (
+        <span key="icon-1" className={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} fixedWidth />
+        </span>
+      ),
+      sortValue: 0,
+    },
+    { value: "Name of the mod, no spaces. Allowed characters:-", sortValue: 0 },
+    { value: <CodeBox key="code-1" value='"Some_Mod"' />, sortValue: 0 },
+  ],
+  [
+    { value: "description", sortValue: 0 },
+    {
+      value: (
+        <span key="icon-2" className={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} fixedWidth />
+        </span>
+      ),
+      sortValue: 0,
     },
     {
-      key: "description",
-      required: <FontAwesomeIcon key="icon-2" icon={faCheck} fixedWidth />,
-      requiredRaw: true,
-      description:
+      value:
         "A short description of the mod, shown on the mod list. Max 250 characters.",
-      exampleValue: <CodeBox value='"Hello world"' />,
-      exampleValueRaw: "Hello world",
+      sortValue: 0,
+    },
+    { value: <CodeBox key="code-2" value='"Hello world"' />, sortValue: 0 },
+  ],
+  [
+    { value: "version number", sortValue: 0 },
+    {
+      value: (
+        <span key="icon-3" className={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} fixedWidth />
+        </span>
+      ),
+      sortValue: 0,
     },
     {
-      key: "version number",
-      required: <FontAwesomeIcon key="icon-3" icon={faCheck} fixedWidth />,
-      requiredRaw: true,
-      description:
+      value:
         "Version number of the mod, following the semantic version format Major.Minor.Patch.",
-      exampleValue: <CodeBox value='"1.3.2"' />,
-      exampleValueRaw: "1.3.2",
+      sortValue: 0,
+    },
+    { value: <CodeBox key="code-3" value='"1.3.2"' />, sortValue: 0 },
+  ],
+  [
+    { value: "dependencies", sortValue: 0 },
+    {
+      value: (
+        <span key="icon-4" className={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} fixedWidth />
+        </span>
+      ),
+      sortValue: 0,
     },
     {
-      key: "dependencies",
-      required: <FontAwesomeIcon key="icon-4" icon={faCheck} fixedWidth />,
-      requiredRaw: true,
-      description:
+      value:
         "List of other packages that are required for this package to function",
-      exampleValue: <CodeBox value={EXAMPLE_DEPENDENCIES} />,
-      exampleValueRaw: EXAMPLE_DEPENDENCIES,
+      sortValue: 0,
     },
     {
-      key: "website_url",
-      required: <FontAwesomeIcon key="icon-5" icon={faCheck} fixedWidth />,
-      requiredRaw: true,
-      description:
-        "URL of the mod's website (e.g. GitHub repo). Can be an empty string.",
-      exampleValue: <CodeBox value='"https://example.com/"' />,
-      exampleValueRaw: "https://example.com/",
+      value: <CodeBox key="code-4" value={EXAMPLE_DEPENDENCIES} />,
+      sortValue: 0,
     },
-  ];
-}
+  ],
+  [
+    { value: "website_url", sortValue: 0 },
+    {
+      value: (
+        <span key="icon-5" className={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} fixedWidth />
+        </span>
+      ),
+      sortValue: 0,
+    },
+    {
+      value:
+        "URL of the mod's website (e.g. GitHub repo). Can be an empty string.",
+      sortValue: 0,
+    },
+    {
+      value: <CodeBox key="code-5" value='"https://example.com/"' />,
+      sortValue: 0,
+    },
+  ],
+];

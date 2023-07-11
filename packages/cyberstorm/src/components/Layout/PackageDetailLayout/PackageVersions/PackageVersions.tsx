@@ -8,10 +8,10 @@ export function PackageVersions() {
   return (
     <div>
       <div className={styles.title}>Versions</div>
-      <DataTable<PackageVersionData>
-        defaultSortAsc={false}
-        columns={columns}
-        data={getPackageVersionData()}
+      <DataTable
+        headers={columns}
+        rows={packageVersionData}
+        sortDirection={1}
       />
     </div>
   );
@@ -19,78 +19,39 @@ export function PackageVersions() {
 
 PackageVersions.displayName = "PackageVersions";
 
-type PackageVersionData = {
-  id: number;
-  versionNumber: string;
-  uploadData: string;
-  downloads: number;
-  actions: JSX.Element;
-};
-
 const columns = [
-  {
-    name: "Version",
-    style: {
-      color: "var(--color-text--default)",
-      fontWeight: 700,
-    },
-    selector: (row: PackageVersionData) => row.versionNumber,
-  },
-  {
-    name: "Upload date",
-    style: {
-      color: "var(--color-text--secondary)",
-      fontWeight: 500,
-    },
-    selector: (row: PackageVersionData) => row.uploadData,
-  },
-  {
-    name: "Downloads",
-    style: {
-      color: "var(--color-text--secondary)",
-      fontWeight: 500,
-    },
-    selector: (row: PackageVersionData) => row.downloads,
-  },
-  {
-    name: "",
-    width: "274px",
-    cell: (row: PackageVersionData) => row.actions,
-  },
+  { value: "Version", disableSort: false },
+  { value: "Upload date", disableSort: false },
+  { value: "Downloads", disableSort: false },
+  { value: "", disableSort: true },
 ];
 
-function getPackageVersionData(): PackageVersionData[] {
-  return [
-    {
-      id: 1,
-      versionNumber: "1.1.0",
-      uploadData: "2022-02-26",
-      downloads: 115199,
-      actions: getActions("1.1.0"),
-    },
-    {
-      id: 2,
-      versionNumber: "1.2.1",
-      uploadData: "2022-02-26",
-      downloads: 75163,
-      actions: getActions("1.2.1"),
-    },
-    {
-      id: 3,
-      versionNumber: "1.2.2",
-      uploadData: "2022-02-26",
-      downloads: 342563,
-      actions: getActions("1.2.2"),
-    },
-    {
-      id: 4,
-      versionNumber: "1.2.3",
-      uploadData: "2022-02-26",
-      downloads: 678538,
-      actions: getActions("1.2.3"),
-    },
-  ];
-}
+const packageVersionData = [
+  [
+    { value: "1.1.0", sortValue: "1.1.0" },
+    { value: "2022-02-25", sortValue: "2022-02-25" },
+    { value: 115191, sortValue: 115191 },
+    { value: getActions("1.1.0"), sortValue: 0 },
+  ],
+  [
+    { value: "1.2.1", sortValue: "1.2.1" },
+    { value: "2022-02-26", sortValue: "2022-02-26" },
+    { value: 75163, sortValue: 75163 },
+    { value: getActions("1.2.1"), sortValue: 0 },
+  ],
+  [
+    { value: "1.2.2", sortValue: "1.2.2" },
+    { value: "2022-02-27", sortValue: "2022-02-27" },
+    { value: 342563, sortValue: 342563 },
+    { value: getActions("1.2.2"), sortValue: 0 },
+  ],
+  [
+    { value: "1.2.3", sortValue: "1.2.3" },
+    { value: "2022-02-28", sortValue: "2022-02-28" },
+    { value: 678538, sortValue: 678538 },
+    { value: getActions("1.2.3"), sortValue: 0 },
+  ],
+];
 
 function getActions(versionNumber: string) {
   return (

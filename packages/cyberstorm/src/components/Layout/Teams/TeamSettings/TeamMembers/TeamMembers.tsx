@@ -9,9 +9,7 @@ import { TeamLink, UserLink } from "../../../../Links/Links";
 import { Avatar } from "../../../../Avatar/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/pro-solid-svg-icons";
-import { DataTable } from "../../../../DataTable/DataTable";
-import { ReactElement } from "react";
-import { TableColumn } from "react-data-table-component";
+import { DataTable, DataTableRows } from "../../../../DataTable/DataTable";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
@@ -27,74 +25,80 @@ export interface TeamMemberListProps {
 export function TeamMemberList(props: TeamMemberListProps) {
   const { teamMemberData = [] } = props;
 
-  const tableData: TeamMemberData[] = [];
-  teamMemberData?.forEach((teamMember: TeamMember) => {
-    tableData.push({
-      name: (
-        <UserLink user={teamMember.user}>
-          <div className={styles.userInfo}>
-            <Avatar
-              src={
-                teamMember.imageSource
-                  ? teamMember.imageSource
-                  : defaultImageSrc
-              }
-            />
-            <span className={styles.userInfoName}>{teamMember.user}</span>
-          </div>
-        </UserLink>
-      ),
-      nameRaw: teamMember.user,
-      role: (
-        <div className={styles.roleSelect}>
-          <Select
-            triggerFontSize="medium"
-            options={userRoles}
-            value={teamMember.role}
-            onChange={() => console.log("asd")}
-          />
-        </div>
-      ),
-      roleRaw: teamMember.role,
-      actions: (
-        <Dialog
-          trigger={
-            <Button
-              label="Kick"
-              leftIcon={<FontAwesomeIcon icon={faTrash} fixedWidth />}
-              colorScheme="danger"
-              paddingSize="large"
-            />
-          }
-          content={
-            <div>
-              You are about to kick member{" "}
-              <UserLink user={teamMember.user}>
-                <span className={styles.kickDescriptionUserName}>
-                  {teamMember.user}
-                </span>
-                .
-              </UserLink>
+  const tableData: DataTableRows = [];
+  teamMemberData?.forEach((teamMember: TeamMember, index) => {
+    tableData.push([
+      {
+        value: (
+          <UserLink key={`user_${index}`} user={teamMember.user}>
+            <div className={styles.userInfo}>
+              <Avatar
+                src={
+                  teamMember.imageSource
+                    ? teamMember.imageSource
+                    : defaultImageSrc
+                }
+              />
+              <span className={styles.userInfoName}>{teamMember.user}</span>
             </div>
-          }
-          acceptButton={
-            <Button
-              colorScheme="danger"
-              paddingSize="large"
-              label="Kick member"
+          </UserLink>
+        ),
+        sortValue: teamMember.user,
+      },
+      {
+        value: (
+          <div key={`role_${index}`} className={styles.roleSelect}>
+            <Select
+              triggerFontSize="medium"
+              options={userRoles}
+              value={teamMember.role}
+              onChange={() => console.log("asd")}
             />
-          }
-          cancelButton="default"
-          showFooterBorder
-          title="Confirm member removal"
-        />
-      ),
-    });
+          </div>
+        ),
+        sortValue: teamMember.role,
+      },
+      {
+        value: (
+          <Dialog
+            key={`action_${index}`}
+            trigger={
+              <Button
+                label="Kick"
+                leftIcon={<FontAwesomeIcon icon={faTrash} fixedWidth />}
+                colorScheme="danger"
+                paddingSize="large"
+              />
+            }
+            content={
+              <div>
+                You are about to kick member{" "}
+                <UserLink user={teamMember.user}>
+                  <span className={styles.kickDescriptionUserName}>
+                    {teamMember.user}
+                  </span>
+                  .
+                </UserLink>
+              </div>
+            }
+            acceptButton={
+              <Button
+                colorScheme="danger"
+                paddingSize="large"
+                label="Kick member"
+              />
+            }
+            cancelButton="default"
+            showFooterBorder
+            title="Confirm member removal"
+          />
+        ),
+        sortValue: 0,
+      },
+    ]);
   });
 
-  return (
-    <DataTable<TeamMemberData> columns={teamMemberColumns} data={tableData} />
-  );
+  return <DataTable headers={teamMemberColumns} rows={tableData} />;
 }
 
 export function TeamMembers(props: TeamMembersProps) {
@@ -151,37 +155,10 @@ export function TeamMembers(props: TeamMembersProps) {
 TeamMemberList.displayName = "TeamMemberList";
 TeamMembers.displayName = "TeamMembers";
 
-type TeamMemberData = {
-  name: ReactElement;
-  nameRaw: string;
-  role: ReactElement;
-  roleRaw: string;
-  actions: ReactElement;
-};
-
-const teamMemberColumns: TableColumn<TeamMemberData>[] = [
-  {
-    name: "User",
-    style: {
-      color: "var(--color-text--default)",
-      fontWeight: 700,
-    },
-    sortable: true,
-    cell: (row) => row.name,
-    selector: (row) => row.nameRaw,
-  },
-  {
-    name: "Role",
-    right: true,
-    sortable: true,
-    cell: (row) => row.role,
-    selector: (row) => row.roleRaw,
-  },
-  {
-    name: "Actions",
-    right: true,
-    cell: (row) => row.actions,
-  },
+const teamMemberColumns = [
+  { value: "User", disableSort: false },
+  { value: "Role", disableSort: false },
+  { value: "Actions", disableSort: true },
 ];
 
 const userRoles = [
