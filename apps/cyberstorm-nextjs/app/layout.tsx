@@ -1,6 +1,7 @@
 import "@thunderstore/cyberstorm-styles";
 import Providers from "@/utils/provider";
 import { CyberstormProviders } from "@thunderstore/cyberstorm";
+import { DapperSetup } from "@/app/dapper";
 
 export default function RootLayout({
   children,
@@ -11,7 +12,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <CyberstormProviders>
-          <Providers>{children}</Providers>
+          <DapperSetup>
+            <Providers>{children}</Providers>
+          </DapperSetup>
         </CyberstormProviders>
       </body>
     </html>

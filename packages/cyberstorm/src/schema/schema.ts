@@ -7,7 +7,7 @@ export interface Community {
   name: string;
   namespace: string;
   backgroundImageSource?: string;
-  imageSource?: string;
+  imageSource?: string | null;
   packageCount: number;
   downloadCount: number;
   serverCount: number;
