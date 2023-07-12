@@ -2,8 +2,6 @@
 
 import styles from "./PackageVersions.module.css";
 import { Button } from "../../../Button/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBoltLightning } from "@fortawesome/pro-solid-svg-icons";
 import { DataTable } from "../../../DataTable/DataTable";
 
 export function PackageVersions() {
@@ -85,14 +83,7 @@ function getInstall(versionNumber: string) {
       paddingSize="large"
       fontSize="medium"
       label="Install"
-      colorScheme="fancyAccent"
-      leftIcon={
-        <FontAwesomeIcon
-          className={styles.installButtonIcon}
-          icon={faBoltLightning}
-          fixedWidth
-        />
-      }
+      colorScheme="primary"
       onClick={() => {
         console.log("Install " + versionNumber);
       }}

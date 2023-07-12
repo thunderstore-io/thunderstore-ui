@@ -15,7 +15,7 @@ import { PackageLink, UserLink } from "../Links/Links";
 
 export interface PackageCardProps {
   packageData: PackagePreview;
-  colorScheme?: "default" | "pinned";
+  colorScheme?: "default";
   community?: string;
 }
 
@@ -32,9 +32,7 @@ export function PackageCard(props: PackageCardProps) {
 
   return (
     <div
-      className={`${styles.root} ${
-        packageData.isPinned ? getStyle("pinned") : getStyle(colorScheme)
-      }`}
+      className={`${styles.root} ${getStyle(colorScheme)}`}
       {...forwardedProps}
     >
       <div className={styles.imageWrapper}>
@@ -113,7 +111,6 @@ PackageCard.displayName = "PackageCard";
 const getStyle = (scheme: PackageCardProps["colorScheme"] = "default") => {
   return {
     default: styles.packageCard__default,
-    pinned: styles.packageCard__pinned,
   }[scheme];
 };
 

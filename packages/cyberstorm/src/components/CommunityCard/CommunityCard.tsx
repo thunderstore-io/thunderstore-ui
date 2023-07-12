@@ -1,11 +1,7 @@
 import styles from "./CommunityCard.module.css";
 import { MetaItem } from "../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBoxOpen,
-  faDownload,
-  faServer,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBoxOpen, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { formatInteger } from "../../utils/utils";
 import { CommunityPreview } from "../../schema";
 import { CommunityLink } from "../Links/Links";
@@ -44,12 +40,6 @@ export function CommunityCard(props: GameIconProps) {
             colorScheme="accent"
             label={formatInteger(communityData.downloadCount)}
             icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
-          />
-          <MetaItem
-            size="medium"
-            colorScheme="accent"
-            label={formatInteger(communityData.serverCount)}
-            icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
           />
         </div>
       </div>

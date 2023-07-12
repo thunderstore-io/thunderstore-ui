@@ -30,6 +30,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { AvatarButton } from "../Avatar/AvatarButton";
 import { ThunderstoreLogo } from "../../svg/svg";
+import { Tooltip } from "../..";
 
 /**
  * Cyberstorm Header Component
@@ -201,11 +202,13 @@ export function Header() {
           </li>
           <li>
             <PackageUploadLink>
-              <PlainButton
-                paddingSize="mediumSquare"
-                colorScheme="transparentAccent"
-                leftIcon={<FontAwesomeIcon icon={faUpload} fixedWidth />}
-              />
+              <Tooltip content="Upload" side="bottom">
+                <PlainButton
+                  paddingSize="mediumSquare"
+                  colorScheme="transparentAccent"
+                  leftIcon={<FontAwesomeIcon icon={faUpload} fixedWidth />}
+                />
+              </Tooltip>
             </PackageUploadLink>
           </li>
           <li>

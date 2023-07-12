@@ -15,7 +15,8 @@ export interface TagProps {
     | "simple"
     | "success"
     | "info"
-    | "borderless_removable";
+    | "borderless_removable"
+    | "borderless_no_hover";
   size?: "tiny" | "small" | "medium";
 }
 
@@ -63,6 +64,7 @@ const getStyle = (scheme: TagProps["colorScheme"] = "default") => {
     success: styles.tag__success,
     info: styles.tag__info,
     borderless_removable: styles.tag__borderless_removable,
+    borderless_no_hover: styles.tag__borderless_no_hover,
   }[scheme];
 };
 

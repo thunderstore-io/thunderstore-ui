@@ -193,7 +193,7 @@
 }
 
 .iconLink:hover {
-  background-color: var(--color-surface--7);
+  color: var(--color-text--default);
 }
 
 @media (max-width: 30rem) {

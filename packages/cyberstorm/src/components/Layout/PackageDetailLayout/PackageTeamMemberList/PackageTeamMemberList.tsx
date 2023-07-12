@@ -51,10 +51,10 @@ function compare(a: TeamMember, b: TeamMember) {
   if (a.role === "Owner" || b.role === "Owner") {
     console.log(a, b);
     if (a.role === "Owner" && b.role === "Owner") {
-      if (a.user > b.user) {
-        return 1;
-      }
       if (a.user < b.user) {
+        if (a.user > b.user) {
+          return 1;
+        }
         return -1;
       }
       return 0;
@@ -96,7 +96,7 @@ export function PackageTeamMemberList(props: PackageTeamListProps) {
           teamName ? (
             <TeamLink team={teamName}>
               <div className={styles.teamLink}>
-                <div>See team</div>
+                See team
                 <FontAwesomeIcon icon={faCaretRight} fixedWidth />
               </div>
             </TeamLink>
