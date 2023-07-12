@@ -64,7 +64,6 @@ export function FilterItemList(props: FilterItemListProps) {
   return (
     <>
       <div className={styles.filterListHeader}>Categories</div>
-      <div className={styles.line}></div>
       {filters}
     </>
   );

@@ -237,7 +237,7 @@
 }
 
 .button__transparentPrimary:hover {
-  --text-color: var(--color-highlight);
+  --text-color: var(--color-highlight--hover);
   --bg-color: var(--color-surface--4);
 }
 

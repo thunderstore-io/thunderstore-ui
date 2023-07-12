@@ -86,7 +86,7 @@
   color: var(--color-text--default);
   font-weight: 700;
   font-size: var(--font-size--m);
-  line-height: 1;
+  line-height: normal;
 }
 
 @media (max-width: 30rem) {

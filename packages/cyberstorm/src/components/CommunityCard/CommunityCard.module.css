@@ -1,6 +1,7 @@
 .root {
   display: flex;
   flex-direction: column;
+  gap: var(--space--12);
 }
 
 .imageWrapper {
@@ -30,13 +31,11 @@
 }
 
 .title {
-  max-height: calc(var(--font-size--l) + var(--space--12));
-  padding-top: var(--space--12);
   overflow: hidden;
   color: var(--color-text--default);
   font-weight: 700;
   font-size: var(--font-size--l);
-  line-height: 1;
+  line-height: normal;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
@@ -44,7 +43,6 @@
 .metaItemList {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-top: auto;
-  padding-top: var(--space--12);
 }

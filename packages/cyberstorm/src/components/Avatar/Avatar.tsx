@@ -12,9 +12,9 @@ export function Avatar(props: AvatarProps) {
   const { src, size = "medium" } = props;
 
   return (
-    <div className={styles.root}>
+    <div className={`${styles.root} ${getSize(size)}`}>
       <img
-        className={`${styles.image} ${getSize(size)}`}
+        className={`${styles.image} ${styles.show} ${getSize(size)}`}
         alt={"Avatar"}
         src={src}
       />

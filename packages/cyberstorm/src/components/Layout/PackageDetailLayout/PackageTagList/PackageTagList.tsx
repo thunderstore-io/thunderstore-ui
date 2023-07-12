@@ -16,7 +16,7 @@ export function PackageTagList(props: PackageTagListProps) {
     (category: Category, index: number) => {
       return (
         <Tag
-          colorScheme="borderless"
+          colorScheme="borderless_no_hover"
           key={index.toString()}
           label={category.name.toUpperCase()}
         />

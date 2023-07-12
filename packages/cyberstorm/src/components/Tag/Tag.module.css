@@ -122,3 +122,7 @@
 
   border-width: var(--space--px);
 }
+
+.tag__borderless_no_hover {
+  --border-color: transparent;
+}

@@ -11,9 +11,9 @@ export function CodeBox(props: CodeBoxProps) {
   const { value = "" } = props;
 
   return (
-    <code className={styles.root}>
-      <pre>{value}</pre>
-    </code>
+    <pre className={styles.root}>
+      <code>{value}</code>
+    </pre>
   );
 }
 

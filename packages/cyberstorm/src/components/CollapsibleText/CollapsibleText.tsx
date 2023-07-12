@@ -1,7 +1,6 @@
 "use client";
 import styles from "./CollapsibleText.module.css";
 import { ReactElement, useState } from "react";
-import { Button } from "../Button/Button";
 
 export interface CollapsibleTextProps {
   text?: string;
@@ -27,12 +26,9 @@ export function CollapsibleText(props: CollapsibleTextProps) {
         ) : (
           <p className={styles.text}>{text.substring(0, maxLength) + "..."}</p>
         )}
-        <Button
-          label={opened ? "Show less" : "Show more"}
-          colorScheme="transparentDefault"
-          paddingSize="none"
-          onClick={() => setOpened(!opened)}
-        />
+        <button className={styles.show} onClick={() => setOpened(!opened)}>
+          {opened ? "Show less" : "Show more"}
+        </button>
       </div>
     );
   }

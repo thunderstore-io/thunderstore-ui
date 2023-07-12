@@ -67,7 +67,7 @@
   font: var(--font-body);
   font-weight: 700;
   font-size: var(--font-size--l);
-  line-height: 1;
+  line-height: normal;
 }
 
 /* Styles for PackageCard's Author */
@@ -95,6 +95,7 @@
   overflow: hidden;
   color: var(--color-text--secondary);
   font: var(--font-body);
+  font-size: var(--font-size--m);
   text-overflow: ellipsis;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -159,8 +160,4 @@
 /* Different PackageCard variations */
 .packageCard__default {
   background-color: var(--color-surface--4);
-}
-
-.packageCard__pinned {
-  background: linear-gradient(180deg, rgb(0 0 0 / 0) 66.67%, rgb(28 163 245 / 0.2) 100%), linear-gradient(0deg, #19192f 0%, #19192f 100%), #161628;
 }
