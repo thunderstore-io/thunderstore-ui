@@ -56,6 +56,7 @@ export function CopyButton(props: CopyButtonProps) {
   }
 
   const [wasRecentlyCopied, setWasRecentlyCopied] = useState(false);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   const icon = wasRecentlyCopied ? (
     <FontAwesomeIcon fixedWidth icon={faCheck} className={styles.checkmark} />
@@ -71,6 +72,12 @@ export function CopyButton(props: CopyButtonProps) {
       onClick={() => {
         useCopyToClipboard(text, setWasRecentlyCopied);
       }}
+      onMouseOver={() => {
+        setTooltipOpen(true);
+      }}
+      onMouseOut={() => {
+        setTooltipOpen(false);
+      }}
       leftIcon={icon}
     />
   );
@@ -79,7 +86,7 @@ export function CopyButton(props: CopyButtonProps) {
     <TooltipProvider>
       <Tooltip
         content={wasRecentlyCopied ? "Copied!" : "Copy"}
-        forceShow={wasRecentlyCopied}
+        open={tooltipOpen}
         side="bottom"
       >
         <div className={styles.root}>{button}</div>

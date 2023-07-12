@@ -4,7 +4,8 @@ import styles from "./Dialog.module.css";
 import * as RadixDialog from "@radix-ui/react-dialog";
 import { Button } from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { Tooltip } from "../..";
 
 type DialogProps = {
   content?: ReactNode;
@@ -62,6 +63,8 @@ export function Dialog(props: DialogProps) {
     }
   }
 
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
   return (
     <div>
       <RadixDialog.Root open={isOpen} onOpenChange={setOpen}>
@@ -74,13 +77,27 @@ export function Dialog(props: DialogProps) {
                 showHeaderBorder ? styles.headerBorder : ""
               }`}
             >
-              <RadixDialog.Close asChild>
-                <Button
-                  colorScheme="transparentDefault"
-                  paddingSize="mediumSquare"
-                  leftIcon={<FontAwesomeIcon icon={faXmark} fixedWidth />}
-                />
-              </RadixDialog.Close>
+              <Tooltip content="Close" side="bottom" open={tooltipOpen}>
+                <RadixDialog.Close asChild>
+                  <Button
+                    colorScheme="transparentDefault"
+                    paddingSize="mediumSquare"
+                    leftIcon={
+                      <FontAwesomeIcon
+                        className={styles.closeIcon}
+                        icon={faXmarkLarge}
+                        fixedWidth
+                      />
+                    }
+                    onMouseOver={() => {
+                      setTooltipOpen(true);
+                    }}
+                    onMouseOut={() => {
+                      setTooltipOpen(false);
+                    }}
+                  />
+                </RadixDialog.Close>
+              </Tooltip>
               {title ? <div className={styles.title}>{title}</div> : null}
             </div>
 

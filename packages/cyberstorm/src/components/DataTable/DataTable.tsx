@@ -2,6 +2,7 @@ import { CSSProperties, ReactNode, useState } from "react";
 import styles from "./DataTable.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort, faSortDown, faSortUp } from "@fortawesome/pro-solid-svg-icons";
+import { Button } from "../Button/Button";
 
 export type DataTableRows = {
   value: ReactNode;
@@ -31,48 +32,73 @@ interface SortButtonProps {
     React.SetStateAction<{ identifier: number; direction: 1 | 0 | -1 }>
   >;
   fallbackIdentfier?: number;
+  label: string;
 }
 
 function SortButton(props: SortButtonProps) {
-  const { identifier, direction = 0, hook, fallbackIdentfier = 0 } = props;
+  const {
+    identifier,
+    direction = 0,
+    hook,
+    fallbackIdentfier = 0,
+    label,
+  } = props;
   if (direction === 1) {
     return (
-      <button
-        className={styles.sortButtonActive}
+      <Button
+        iconAlignment="side"
+        colorScheme="transparentTertiary"
+        paddingSize="medium"
+        fontSize="medium"
+        fontWeight="700"
         onClick={() => hook({ identifier: fallbackIdentfier, direction: 0 })}
-      >
-        <FontAwesomeIcon
-          icon={faSortUp}
-          fixedWidth
-          className={styles.buttonIcon}
-        />
-      </button>
+        rightIcon={
+          <FontAwesomeIcon
+            icon={faSortUp}
+            fixedWidth
+            className={styles.buttonIconActive}
+          />
+        }
+        label={label}
+      />
     );
   } else if (direction === 0) {
     return (
-      <button
-        className={styles.sortButton}
+      <Button
+        iconAlignment="side"
+        colorScheme="transparentTertiary"
+        paddingSize="medium"
+        fontSize="medium"
+        fontWeight="700"
         onClick={() => hook({ identifier, direction: -1 })}
-      >
-        <FontAwesomeIcon
-          icon={faSort}
-          fixedWidth
-          className={styles.buttonIcon}
-        />
-      </button>
+        rightIcon={
+          <FontAwesomeIcon
+            icon={faSort}
+            fixedWidth
+            className={styles.buttonIcon}
+          />
+        }
+        label={label}
+      />
     );
   } else {
     return (
-      <button
-        className={styles.sortButtonActive}
+      <Button
+        iconAlignment="side"
+        colorScheme="transparentTertiary"
+        paddingSize="medium"
+        fontSize="medium"
+        fontWeight="700"
         onClick={() => hook({ identifier, direction: 1 })}
-      >
-        <FontAwesomeIcon
-          icon={faSortDown}
-          fixedWidth
-          className={styles.buttonIcon}
-        />
-      </button>
+        rightIcon={
+          <FontAwesomeIcon
+            icon={faSortDown}
+            fixedWidth
+            className={styles.buttonIconActive}
+          />
+        }
+        label={label}
+      />
     );
   }
 }
@@ -127,8 +153,16 @@ export function DataTable(props: DataTableProps) {
           headers.map((h, key) => {
             return (
               <div key={key} className={styles.gridHeader}>
-                {h.value}
-                {h.disableSort ? null : (
+                {h.disableSort ? (
+                  <Button
+                    iconAlignment="side"
+                    colorScheme="transparentTertiary"
+                    paddingSize="large"
+                    fontSize="medium"
+                    fontWeight="700"
+                    label={h.value}
+                  />
+                ) : (
                   <SortButton
                     identifier={key}
                     direction={
@@ -137,7 +171,8 @@ export function DataTable(props: DataTableProps) {
                         : 0
                     }
                     hook={setSortVariables}
-                    fallbackIdentfier={sortDirection}
+                    fallbackIdentfier={sortByHeader}
+                    label={h.value}
                   />
                 )}
               </div>

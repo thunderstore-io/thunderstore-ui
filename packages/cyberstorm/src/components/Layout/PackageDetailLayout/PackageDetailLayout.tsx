@@ -43,7 +43,7 @@ import { useDapper } from "@thunderstore/dapper";
 import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
 import { ThunderstoreLogo } from "../../../svg/svg";
-import { getPackageDummyData } from "../../../dummyData";
+import { getPackageDependencyDummyData } from "../../../dummyData";
 import { Tooltip } from "../../Tooltip/Tooltip";
 
 export interface PackageDetailLayoutProps {
@@ -217,24 +217,24 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <PackageTagList tags={packageData.categories} />
           <PackageDependencyList
             packages={[
-              getPackageDummyData("1"),
-              getPackageDummyData("2"),
-              getPackageDummyData("3"),
-              getPackageDummyData("4"),
-              getPackageDummyData("5"),
-              getPackageDummyData("6"),
-              getPackageDummyData("1"),
-              getPackageDummyData("2"),
-              getPackageDummyData("3"),
-              getPackageDummyData("4"),
-              getPackageDummyData("5"),
-              getPackageDummyData("6"),
-              getPackageDummyData("1"),
-              getPackageDummyData("2"),
-              getPackageDummyData("3"),
-              getPackageDummyData("4"),
-              getPackageDummyData("5"),
-              getPackageDummyData("6"),
+              getPackageDependencyDummyData("1"),
+              getPackageDependencyDummyData("2"),
+              getPackageDependencyDummyData("3"),
+              getPackageDependencyDummyData("4"),
+              getPackageDependencyDummyData("5"),
+              getPackageDependencyDummyData("6"),
+              getPackageDependencyDummyData("1"),
+              getPackageDependencyDummyData("2"),
+              getPackageDependencyDummyData("3"),
+              getPackageDependencyDummyData("4"),
+              getPackageDependencyDummyData("5"),
+              getPackageDependencyDummyData("6"),
+              getPackageDependencyDummyData("1"),
+              getPackageDependencyDummyData("2"),
+              getPackageDependencyDummyData("3"),
+              getPackageDependencyDummyData("4"),
+              getPackageDependencyDummyData("5"),
+              getPackageDependencyDummyData("6"),
             ]}
           />
           <PackageTeamMemberList
@@ -287,7 +287,7 @@ function getMetaInfoData(packageData: Package) {
       ),
     },
     {
-      key: "5",
+      key: "6",
       label: "Dependants",
       content: (
         <PackageDependantsLink
@@ -308,17 +308,35 @@ const tabs = [
   {
     key: 1,
     label: "Details",
-    icon: <FontAwesomeIcon icon={faFileLines} fixedWidth />,
+    icon: (
+      <FontAwesomeIcon
+        icon={faFileLines}
+        fixedWidth
+        className={styles.tabIcon}
+      />
+    ),
   },
   {
     key: 2,
-    label: "ChangeLog",
-    icon: <FontAwesomeIcon icon={faFilePlus} fixedWidth />,
+    label: "Changelog",
+    icon: (
+      <FontAwesomeIcon
+        icon={faFilePlus}
+        fixedWidth
+        className={styles.tabIcon}
+      />
+    ),
   },
   {
     key: 3,
     label: "Versions",
-    icon: <FontAwesomeIcon icon={faCodeBranch} fixedWidth />,
+    icon: (
+      <FontAwesomeIcon
+        icon={faCodeBranch}
+        fixedWidth
+        className={styles.tabIcon}
+      />
+    ),
   },
 ];
 

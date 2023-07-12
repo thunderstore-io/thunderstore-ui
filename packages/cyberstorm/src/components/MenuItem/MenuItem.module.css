@@ -4,7 +4,6 @@
 
   gap: var(--gap--12);
   align-items: center;
-  min-width: 10rem;
   padding: var(--space--12) var(--space--16);
   color: var(--text-color);
   cursor: pointer;

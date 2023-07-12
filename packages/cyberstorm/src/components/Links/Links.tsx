@@ -26,6 +26,7 @@ export const MarkdownPreviewLink = wrap("MarkdownPreview");
 export const PackageLink = wrap("Package");
 export const PackageDependantsLink = wrap("PackageDependants");
 export const PackageFormatDocsLink = wrap("PackageFormatDocs");
+export const PackageVersionLink = wrap("PackageVersion");
 export const PackageUploadLink = wrap("PackageUpload");
 export const PrivacyPolicyLink = wrap("PrivacyPolicy");
 export const SettingsLink = wrap("Settings");

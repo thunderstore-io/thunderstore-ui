@@ -36,6 +36,11 @@ const library: LinkLibrary = {
     }),
   PackageFormatDocs: (p) =>
     Link({ ...p, url: "/developers/package-format-docs/" }),
+  PackageVersion: (p) =>
+    Link({
+      ...p,
+      url: `/c/${p.community}/p/${p.namespace}/${p.package}/v/${p.version}/`,
+    }),
   PackageUpload: (p) => Link({ ...p, url: "/developers/upload-package/" }),
   PrivacyPolicy: (p) => Link({ ...p, url: "/privacy-policy/" }),
   Settings: (p) => Link({ ...p, url: `/settings/` }),

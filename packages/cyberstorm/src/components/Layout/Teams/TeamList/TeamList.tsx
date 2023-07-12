@@ -1,6 +1,7 @@
 import { TeamPreview } from "../../../../schema";
 import { DataTable, DataTableRows } from "../../../DataTable/DataTable";
 import { TeamSettingsLink } from "../../../Links/Links";
+import styles from "./TeamList.module.css";
 
 export interface TeamListProps {
   teams?: TeamPreview[];
@@ -15,13 +16,21 @@ export function TeamList(props: TeamListProps) {
       {
         value: (
           <TeamSettingsLink key={index} team={team.name}>
-            {team.name}
+            <span className={styles.nameColumn}>{team.name}</span>
           </TeamSettingsLink>
         ),
         sortValue: team.name,
       },
-      { value: "TODO", sortValue: 0 },
-      { value: team.members?.length, sortValue: team.members?.length },
+      {
+        value: <span className={styles.otherColumns}>TODO ADD USER ROLE</span>,
+        sortValue: 0,
+      },
+      {
+        value: (
+          <span className={styles.otherColumns}>{team.members?.length}</span>
+        ),
+        sortValue: team.members?.length,
+      },
     ]);
   });
 
@@ -31,7 +40,7 @@ export function TeamList(props: TeamListProps) {
 TeamList.displayName = "TeamList";
 
 const columns = [
-  { value: "Name", disableSort: false },
+  { value: "Team Name", disableSort: false },
   { value: "Role", disableSort: false },
   { value: "Members", disableSort: false },
 ];

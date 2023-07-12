@@ -51,6 +51,12 @@ export interface AnyProps {
 
 type NoRequiredProps = (props: AnyProps) => RE | null;
 type PackageProps = { community: string; namespace: string; package: string };
+type PackageVersionProps = {
+  community: string;
+  namespace: string;
+  package: string;
+  version: string;
+};
 
 // STEP 3 of adding bew link definitions:
 // Declare and document any links used in the components here.
@@ -75,6 +81,8 @@ export interface LinkLibrary {
   PackageDependants: (props: AnyProps & PackageProps) => RE | null;
   /** Package format docs */
   PackageFormatDocs: NoRequiredProps;
+  /** PackageVersion's detail view */
+  PackageVersion: (props: AnyProps & PackageVersionProps) => RE | null;
   /** View for submitting new packages or versions */
   PackageUpload: NoRequiredProps;
   /** Privacy policy */
@@ -108,6 +116,7 @@ const library: LinkLibrary = {
   Package: noop,
   PackageDependants: noop,
   PackageFormatDocs: noop,
+  PackageVersion: noop,
   PackageUpload: noop,
   PrivacyPolicy: noop,
   User: noop,

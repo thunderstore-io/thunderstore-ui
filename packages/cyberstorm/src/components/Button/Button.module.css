@@ -248,7 +248,7 @@
 
 .button__transparentAccent:hover {
   --text-color: var(--color-text--accent);
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--color-surface--7);
 }
 
 /* Button padding sizes */

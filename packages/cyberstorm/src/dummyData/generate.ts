@@ -210,7 +210,7 @@ export function getTeamDummyData(seed?: string): Team {
     imageSource: faker.image.abstract(525, 525, true),
     description: faker.lorem.paragraphs(12),
     about: faker.lorem.words(16),
-    members: getListOfIds(5).map((x) => {
+    members: getListOfIds(10).map((x) => {
       return getTeamMemberDummyData(x);
     }),
     dynamicLinks: [

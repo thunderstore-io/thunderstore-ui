@@ -21,16 +21,6 @@
   border-radius: var(--border-radius--8);
 }
 
-.listWrapper::after {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 25%;
-  background: linear-gradient(transparent, var(--color-background)) left repeat;
-  content: "";
-  pointer-events: none;
-}
-
 .item {
   display: flex;
   gap: var(--gap--16);

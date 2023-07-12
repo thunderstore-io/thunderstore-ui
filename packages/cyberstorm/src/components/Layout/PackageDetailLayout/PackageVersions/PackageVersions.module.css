@@ -11,3 +11,8 @@
   font-size: var(--font-size--xxl);
   line-height: var(--line-height--xxl);
 }
+
+.installButtonIcon {
+  font-weight: 900;
+  font-size: 0.875rem;
+}
