@@ -98,7 +98,14 @@ export function TeamMemberList(props: TeamMemberListProps) {
     ]);
   });
 
-  return <DataTable headers={teamMemberColumns} rows={tableData} />;
+  return (
+    <DataTable
+      headers={teamMemberColumns}
+      rows={tableData}
+      sortByHeader={1}
+      sortDirection={1}
+    />
+  );
 }
 
 export function TeamMembers(props: TeamMembersProps) {

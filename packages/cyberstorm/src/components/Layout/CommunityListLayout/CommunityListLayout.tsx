@@ -42,13 +42,7 @@ export function CommunityListLayout() {
           </div>
           <div className={styles.searchFilters}>
             <div className={styles.searchFiltersSortLabel}>Sort by</div>
-            <div className={styles.searchFiltersSortSelect}>
-              <Select
-                onChange={setOrder}
-                options={selectOptions}
-                value={order}
-              />
-            </div>
+            <Select onChange={setOrder} options={selectOptions} value={order} />
           </div>
         </div>
       }

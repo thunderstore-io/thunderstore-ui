@@ -93,3 +93,7 @@
     width: 100%;
   }
 }
+
+.tabIcon {
+  line-height: normal;
+}

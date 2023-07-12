@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space--8) var(--space--16);
+  padding: 0.5rem var(--space--16);
   background-color: var(--bg-color);
 
   /* skew the container */
@@ -60,7 +60,7 @@
   align-items: center;
   font-weight: 500;
   font-size: var(--font-size--s);
-  line-height: 1;
+  line-height: normal;
 
   /* unskew the content */
   transform: skew(30deg);
@@ -76,5 +76,6 @@
 }
 
 .home {
+  font-weight: 400;
   text-decoration: none;
 }

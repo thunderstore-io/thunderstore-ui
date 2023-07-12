@@ -47,6 +47,7 @@
   position: absolute;
   padding: var(--space--14) var(--space--16);
   color: var(--color-text--tertiary);
+  line-height: normal;
   pointer-events: none;
 }
 

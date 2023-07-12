@@ -16,7 +16,7 @@
   user-select: none;
   will-change: transform, opacity;
 
-  --background-color: var(--color-black);
+  --background-color: var(--color-surface--7);
 }
 
 .arrow {

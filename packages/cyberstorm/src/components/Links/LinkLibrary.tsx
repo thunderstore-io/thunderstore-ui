@@ -33,6 +33,11 @@ const library: LinkLibrary = {
       ...p,
       url: `/c/${p.community}/p/${p.namespace}/${p.package}/dependants/`,
     }),
+  PackageVersion: (p) =>
+    Link({
+      ...p,
+      url: `/c/${p.community}/p/${p.namespace}/${p.package}/v/${p.version}/`,
+    }),
   PackageFormatDocs: (p) =>
     Link({ ...p, url: "/developers/package-format-docs/" }),
   PackageUpload: (p) => Link({ ...p, url: "/developers/upload-package/" }),

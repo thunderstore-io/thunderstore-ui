@@ -47,18 +47,44 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
   );
 }
 
+function compare(a: TeamMember, b: TeamMember) {
+  if (a.role === "Owner" || b.role === "Owner") {
+    console.log(a, b);
+    if (a.role === "Owner" && b.role === "Owner") {
+      if (a.user > b.user) {
+        return 1;
+      }
+      if (a.user < b.user) {
+        return -1;
+      }
+      return 0;
+    }
+    if (a.role === "Owner") {
+      return -1;
+    }
+    return 1;
+  }
+  if (a.user > b.user) {
+    return 1;
+  }
+  if (a.user < b.user) {
+    return -1;
+  }
+  return 0;
+}
+
 export function PackageTeamMemberList(props: PackageTeamListProps) {
   const { teamMembers = [], teamName = null } = props;
 
-  const mappedPackageTeamList = teamMembers?.map(
-    (teamMember: TeamMember, index: number) => {
+  const mappedPackageTeamList = teamMembers
+    ?.sort(compare)
+    .map((teamMember: TeamMember, index: number) => {
       return (
         <div key={index}>
           <PackageTeamListItem teamMember={teamMember} />
         </div>
       );
-    }
-  );
+    });
 
   return (
     <>
