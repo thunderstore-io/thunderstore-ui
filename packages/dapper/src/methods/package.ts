@@ -114,6 +114,6 @@ export const getOldPackage: GetOldPackage = async function (
   namespace: string,
   packageName: string
 ) {
-  const apiPath = `c/${communityIdentifier}/p/${namespace}/${packageName}/`;
+  const apiPath = `api/experimental/frontend/c/${communityIdentifier}/p/${namespace}/${packageName}/`;
   return await this.queryAndProcess(apiPath, [], schema, transform);
 };

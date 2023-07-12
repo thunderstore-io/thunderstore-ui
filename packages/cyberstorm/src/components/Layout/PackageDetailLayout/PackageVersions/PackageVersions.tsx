@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./PackageVersions.module.css";
 import { Button } from "../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

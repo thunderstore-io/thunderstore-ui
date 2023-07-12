@@ -62,7 +62,7 @@ export const getOldCommunityPackageListing: GetOldCommunityPackageListing =
     deprecated,
     nsfw
   ) {
-    const apiPath = `c/${identifier}/packages/`;
+    const apiPath = `api/experimental/frontend/c/${identifier}/packages/`;
     const queryParams = [
       { key: "ordering", value: ordering, impotent: "last-updated" },
       { key: "page", value: page, impotent: 1 },

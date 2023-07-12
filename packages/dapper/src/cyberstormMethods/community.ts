@@ -1,9 +1,8 @@
 import { z } from "zod";
 
-import { communitySchema } from "../cyberstormSchemas/community";
+import { Community, communitySchema } from "../cyberstormSchemas/community";
 import { Dapper } from "../dapper";
 import {
-  Community,
   getCommunityDummyData,
   getListOfIds,
   getServerPreviewDummyData,
@@ -41,5 +40,15 @@ export const getCommunity: GetCommunity = function (this: Dapper, identifier) {
     return getServerPreviewDummyData(packageId);
   });
 
-  return transform({ community: dummyCommunity, servers: dummyServers });
+  const dapperCommunity: Community = {
+    name: dummyCommunity.name,
+    identifier: dummyCommunity.namespace,
+    total_package_count: dummyCommunity.packageCount,
+    total_download_count: dummyCommunity.downloadCount,
+    background_image_url: dummyCommunity.backgroundImageSource,
+    description: dummyCommunity.description,
+    discord_url: dummyCommunity.discordLink,
+  };
+
+  return transform({ community: dapperCommunity, servers: dummyServers });
 };

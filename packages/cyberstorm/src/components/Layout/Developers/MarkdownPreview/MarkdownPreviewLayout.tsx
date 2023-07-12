@@ -1,3 +1,5 @@
+"use client";
+
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { MarkdownPreviewLink } from "../../../Links/Links";

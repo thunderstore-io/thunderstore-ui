@@ -1,4 +1,3 @@
-"use client";
 import "@thunderstore/cyberstorm-styles";
 import Providers from "@/utils/provider";
 import { CyberstormProviders } from "@thunderstore/cyberstorm";
