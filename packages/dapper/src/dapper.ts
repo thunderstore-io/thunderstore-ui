@@ -37,7 +37,6 @@ export interface DapperInterface {
 
 export class Dapper implements DapperInterface {
   readonly apiDomain: string;
-  readonly apiPath = "api/experimental/frontend";
   readonly sessionId?: string;
 
   constructor(domain: string, sessionId?: string) {
@@ -89,7 +88,7 @@ export class Dapper implements DapperInterface {
   }
 
   protected getUrl(path: string, queryString: string): string {
-    const baseUrl = `${this.apiDomain}/${this.apiPath}/${path}`;
+    const baseUrl = `${this.apiDomain}/${path}`;
     return queryString ? `${baseUrl}?${queryString}` : baseUrl;
   }
 

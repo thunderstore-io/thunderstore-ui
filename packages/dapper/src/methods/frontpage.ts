@@ -44,5 +44,10 @@ export type GetFrontpage = () => Promise<Frontpage>;
 
 // Method implementation for Dapper class.
 export const getFrontpage: GetFrontpage = async function (this: Dapper) {
-  return await this.queryAndProcess("frontpage/", [], schema, transform);
+  return await this.queryAndProcess(
+    "api/experimental/frontend/frontpage/",
+    [],
+    schema,
+    transform
+  );
 };
