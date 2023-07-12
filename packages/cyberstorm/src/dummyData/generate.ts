@@ -46,21 +46,25 @@ export function getRandomCategories(returnAmount?: number): Category[] {
 export function getListOfIds(length: number, seed?: string) {
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
-  return faker.datatype.array(length).map((element) => {
-    return element.toString();
-  });
+  return Array(length)
+    .fill(0)
+    .map(() => faker.string.uuid());
 }
 
 export function getCommunityPreviewDummyData(seed?: string): CommunityPreview {
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    name: faker.random.words(3),
+    name: faker.word.words(3),
     namespace: "namespace",
-    downloadCount: faker.datatype.number({ min: 1000000, max: 10000000 }),
-    packageCount: faker.datatype.number({ min: 0, max: 100000 }),
-    serverCount: faker.datatype.number({ min: 0, max: 1000 }),
-    imageSource: faker.image.abstract(300, 450, true),
+    downloadCount: faker.number.int({ min: 1000000, max: 10000000 }),
+    packageCount: faker.number.int({ min: 0, max: 100000 }),
+    serverCount: faker.number.int({ min: 0, max: 1000 }),
+    imageSource: faker.image.urlLoremFlickr({
+      width: 300,
+      height: 450,
+      category: "abstract",
+    }),
   };
 }
 
@@ -68,12 +72,16 @@ export function getCommunityDummyData(seed?: string): Community {
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    name: faker.random.words(3),
+    name: faker.word.words(3),
     namespace: "namespace",
-    downloadCount: faker.datatype.number({ min: 1000000, max: 10000000 }),
-    packageCount: faker.datatype.number({ min: 0, max: 100000 }),
-    serverCount: faker.datatype.number({ min: 0, max: 1000 }),
-    imageSource: faker.image.abstract(142, 188, true),
+    downloadCount: faker.number.int({ min: 1000000, max: 10000000 }),
+    packageCount: faker.number.int({ min: 0, max: 100000 }),
+    serverCount: faker.number.int({ min: 0, max: 1000 }),
+    imageSource: faker.image.urlLoremFlickr({
+      width: 142,
+      height: 188,
+      category: "abstract",
+    }),
     description: faker.lorem.paragraphs(3),
     discordLink: faker.internet.url(),
   };
@@ -87,15 +95,19 @@ export function getPackageDependencyDummyData(
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    name: faker.random.words(3),
-    namespace: namespace ? namespace : faker.random.word(),
-    community: community ? community : faker.random.word(),
-    shortDescription: faker.company.bs(),
-    imageSource: faker.image.abstract(525, 525, true),
-    version: `${faker.datatype.number({
+    name: faker.word.words(3).split(" ").join("_"),
+    namespace: namespace ? namespace : faker.word.sample(),
+    community: community ? community : faker.word.sample(),
+    shortDescription: faker.company.buzzPhrase(),
+    imageSource: faker.image.urlLoremFlickr({
+      width: 525,
+      height: 525,
+      category: "abstract",
+    }),
+    version: `${faker.number.int({
       min: 0,
       max: 10,
-    })}.${faker.datatype.number({ min: 0, max: 10 })}.${faker.datatype.number({
+    })}.${faker.number.int({ min: 0, max: 10 })}.${faker.number.int({
       min: 0,
       max: 10,
     })}`,
@@ -111,16 +123,20 @@ export function getPackagePreviewDummyData(
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    name: faker.random.words(3),
-    namespace: namespace ? namespace : faker.random.word(),
-    community: community ? community : faker.random.word(),
-    description: faker.company.bs(),
-    imageSource: faker.image.abstract(525, 525, true),
-    downloadCount: faker.datatype.number({ min: 1000000, max: 10000000 }),
-    likes: faker.datatype.number({ min: 0, max: 100000 }),
-    size: faker.datatype.number({ min: 20000, max: 10000000 }),
-    author: author ? author : faker.name.fullName(),
-    lastUpdated: faker.date.recent(700).toDateString(),
+    name: faker.word.words(3),
+    namespace: namespace ? namespace : faker.word.sample(),
+    community: community ? community : faker.word.sample(),
+    description: faker.company.buzzPhrase(),
+    imageSource: faker.image.urlLoremFlickr({
+      width: 525,
+      height: 525,
+      category: "abstract",
+    }),
+    downloadCount: faker.number.int({ min: 1000000, max: 10000000 }),
+    likes: faker.number.int({ min: 0, max: 100000 }),
+    size: faker.number.int({ min: 20000, max: 10000000 }),
+    author: author ? author : faker.person.fullName(),
+    lastUpdated: faker.date.recent({ days: 700 }).toDateString(),
     isPinned: faker.datatype.boolean(),
     isNsfw: faker.datatype.boolean(),
     isDeprecated: faker.datatype.boolean(),
@@ -132,16 +148,16 @@ export function getPackageVersionDummyData(seed?: string): PackageVersion {
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    version: `${faker.datatype.number({
+    version: `${faker.number.int({
       min: 0,
       max: 10,
-    })}.${faker.datatype.number({ min: 0, max: 10 })}.${faker.datatype.number({
+    })}.${faker.number.int({ min: 0, max: 10 })}.${faker.number.int({
       min: 0,
       max: 10,
     })}`,
-    changelog: faker.company.bs(),
-    uploadDate: faker.date.recent(700).toDateString(),
-    downloadCount: faker.datatype.number({ min: 1000000, max: 10000000 }),
+    changelog: faker.company.buzzPhrase(),
+    uploadDate: faker.date.recent({ days: 700 }).toDateString(),
+    downloadCount: faker.number.int({ min: 1000000, max: 10000000 }),
   };
 }
 
@@ -154,21 +170,25 @@ export function getPackageDummyData(
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    name: name ? name : faker.random.words(3),
-    namespace: namespace ? namespace : faker.random.word(),
-    community: commmunity ? commmunity : faker.random.words(3),
-    shortDescription: faker.company.bs(),
+    name: name ? name : faker.word.words(3),
+    namespace: namespace ? namespace : faker.word.sample(),
+    community: commmunity ? commmunity : faker.word.words(3),
+    shortDescription: faker.company.buzzPhrase(),
     description: faker.lorem.paragraphs(12),
-    imageSource: faker.image.abstract(525, 525, true),
-    downloadCount: faker.datatype.number({ min: 1000000, max: 10000000 }),
-    likes: faker.datatype.number({ min: 0, max: 100000 }),
-    size: faker.datatype.number({ min: 20000, max: 10000000 }),
-    author: faker.name.fullName(),
-    lastUpdated: faker.date.recent(700).toDateString(),
+    imageSource: faker.image.urlLoremFlickr({
+      width: 525,
+      height: 525,
+      category: "abstract",
+    }),
+    downloadCount: faker.number.int({ min: 1000000, max: 10000000 }),
+    likes: faker.number.int({ min: 0, max: 100000 }),
+    size: faker.number.int({ min: 20000, max: 10000000 }),
+    author: faker.person.fullName(),
+    lastUpdated: faker.date.recent({ days: 700 }).toDateString(),
     isPinned: faker.datatype.boolean(),
     isNsfw: faker.datatype.boolean(),
     isDeprecated: faker.datatype.boolean(),
-    firstUploaded: faker.date.past(2).toDateString(),
+    firstUploaded: faker.date.past({ years: 2 }).toDateString(),
     dependencies: [
       getPackageDependencyDummyData("1"),
       getPackageDependencyDummyData("2"),
@@ -176,8 +196,8 @@ export function getPackageDummyData(
       getPackageDependencyDummyData("4"),
       getPackageDependencyDummyData("5"),
     ],
-    dependencyString: faker.datatype.uuid(),
-    dependantCount: faker.datatype.number({ min: 0, max: 2000 }),
+    dependencyString: faker.string.uuid(),
+    dependantCount: faker.number.int({ min: 0, max: 2000 }),
     team: getTeamDummyData(seed),
     categories: getRandomCategories(),
     versions: getListOfIds(20).map((x) => {
@@ -197,7 +217,11 @@ export function getTeamMemberDummyData(seed?: string): TeamMember {
   faker.seed(parsedSeed);
   return {
     user: faker.internet.userName(),
-    imageSource: faker.image.abstract(525, 525, true),
+    imageSource: faker.image.urlLoremFlickr({
+      width: 525,
+      height: 525,
+      category: "abstract",
+    }),
     role: faker.helpers.arrayElement(["Owner", "Member"]),
   };
 }
@@ -206,17 +230,21 @@ export function getTeamDummyData(seed?: string): Team {
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    name: faker.random.words(3),
-    imageSource: faker.image.abstract(525, 525, true),
+    name: faker.word.words(3),
+    imageSource: faker.image.urlLoremFlickr({
+      width: 525,
+      height: 525,
+      category: "abstract",
+    }),
     description: faker.lorem.paragraphs(12),
     about: faker.lorem.words(16),
     members: getListOfIds(10).map((x) => {
       return getTeamMemberDummyData(x);
     }),
     dynamicLinks: [
-      { title: faker.random.word(), url: faker.internet.url() },
-      { title: faker.random.word(), url: faker.internet.url() },
-      { title: faker.random.word(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
     ],
     donationLink: faker.internet.url(),
   };
@@ -226,22 +254,26 @@ export function getTeamSettingsDummyData(seed?: string): TeamSettings {
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    name: faker.random.words(3),
-    imageSource: faker.image.abstract(525, 525, true),
+    name: faker.word.words(3),
+    imageSource: faker.image.urlLoremFlickr({
+      width: 525,
+      height: 525,
+      category: "abstract",
+    }),
     description: faker.lorem.paragraphs(12),
     about: faker.lorem.words(16),
     members: getListOfIds(5).map((x) => {
       return getTeamMemberDummyData(x);
     }),
     serviceAccounts: [
-      faker.datatype.uuid(),
-      faker.datatype.uuid(),
-      faker.datatype.uuid(),
+      faker.string.uuid(),
+      faker.string.uuid(),
+      faker.string.uuid(),
     ],
     dynamicLinks: [
-      { title: faker.random.word(), url: faker.internet.url() },
-      { title: faker.random.word(), url: faker.internet.url() },
-      { title: faker.random.word(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
     ],
     donationLink: faker.internet.url(),
   };
@@ -251,7 +283,7 @@ export function getTeamPreviewDummyData(seed?: string): TeamPreview {
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    name: faker.random.words(3),
+    name: faker.word.words(3),
     members: [
       getTeamMemberDummyData("1"),
       getTeamMemberDummyData("2"),
@@ -265,15 +297,19 @@ export function getUserDummyData(seed?: string): User {
   faker.seed(parsedSeed);
   return {
     name: faker.internet.userName(),
-    imageSource: faker.image.abstract(525, 525, true),
+    imageSource: faker.image.urlLoremFlickr({
+      width: 525,
+      height: 525,
+      category: "abstract",
+    }),
     description: faker.lorem.paragraphs(12),
     about: faker.lorem.words(16),
-    accountCreated: faker.date.recent(700).toDateString(),
-    lastActive: faker.date.recent(700).toDateString(),
+    accountCreated: faker.date.recent({ days: 700 }).toDateString(),
+    lastActive: faker.date.recent({ days: 700 }).toDateString(),
     dynamicLinks: [
-      { title: faker.random.word(), url: faker.internet.url() },
-      { title: faker.random.word(), url: faker.internet.url() },
-      { title: faker.random.word(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
     ],
     // TODO: We are missing generated badges and achievements
     showBadgesOnProfile: true,
@@ -286,15 +322,19 @@ export function getUserSettingsDummyData(seed?: string): UserSettings {
   faker.seed(parsedSeed);
   return {
     name: faker.internet.userName(),
-    imageSource: faker.image.abstract(525, 525, true),
+    imageSource: faker.image.urlLoremFlickr({
+      width: 525,
+      height: 525,
+      category: "abstract",
+    }),
     description: faker.lorem.paragraphs(12),
     about: faker.lorem.words(16),
-    accountCreated: faker.date.recent(700).toDateString(),
-    lastActive: faker.date.recent(700).toDateString(),
+    accountCreated: faker.date.recent({ days: 700 }).toDateString(),
+    lastActive: faker.date.recent({ days: 700 }).toDateString(),
     dynamicLinks: [
-      { title: faker.random.word(), url: faker.internet.url() },
-      { title: faker.random.word(), url: faker.internet.url() },
-      { title: faker.random.word(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
     ],
     // TODO: We are missing generated badges and achievements
     showBadgesOnProfile: true,
@@ -319,7 +359,7 @@ export function getServiceAccountDummyData(seed?: string): ServiceAccount {
   faker.seed(parsedSeed);
   return {
     name: faker.internet.userName(),
-    lastUsed: faker.date.recent(700).toDateString(),
+    lastUsed: faker.date.recent({ days: 700 }).toDateString(),
   };
 }
 
@@ -327,22 +367,26 @@ export function getServerDummyData(seed?: string): Server {
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    name: faker.random.words(3),
-    namespace: faker.random.word(),
-    community: faker.random.words(3),
-    description: faker.company.bs(),
-    shortDescription: faker.company.bs(),
-    imageSource: faker.image.abstract(525, 525, true),
-    likes: faker.datatype.number({ min: 0, max: 100000 }),
+    name: faker.word.words(3),
+    namespace: faker.word.sample(),
+    community: faker.word.words(3),
+    description: faker.company.buzzPhrase(),
+    shortDescription: faker.company.buzzPhrase(),
+    imageSource: faker.image.urlLoremFlickr({
+      width: 525,
+      height: 525,
+      category: "abstract",
+    }),
+    likes: faker.number.int({ min: 0, max: 100000 }),
     isPvp: faker.datatype.boolean(),
     hasPassword: faker.datatype.boolean(),
     address: faker.internet.ipv4(),
-    author: faker.name.fullName(),
-    packageCount: faker.datatype.number({ min: 0, max: 100000 }),
+    author: faker.person.fullName(),
+    packageCount: faker.number.int({ min: 0, max: 100000 }),
     dynamicLinks: [
-      { title: faker.random.word(), url: faker.internet.url() },
-      { title: faker.random.word(), url: faker.internet.url() },
-      { title: faker.random.word(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
+      { title: faker.word.sample(), url: faker.internet.url() },
     ],
   };
 }
@@ -351,11 +395,15 @@ export function getServerPreviewDummyData(seed?: string): ServerPreview {
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    name: faker.random.words(3),
-    imageSource: faker.image.abstract(525, 525, true),
+    name: faker.word.words(3),
+    imageSource: faker.image.urlLoremFlickr({
+      width: 525,
+      height: 525,
+      category: "abstract",
+    }),
     isPvp: faker.datatype.boolean(),
     hasPassword: faker.datatype.boolean(),
-    packageCount: faker.datatype.number({ min: 0, max: 100000 }),
+    packageCount: faker.number.int({ min: 0, max: 100000 }),
   };
 }
 
@@ -363,11 +411,11 @@ export function getReceiptDummyData(seed?: string): Receipt {
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    datetime: faker.date.recent(700).toDateString(),
-    paymentId: `${faker.datatype.number({ min: 0, max: 100000 })}`,
+    datetime: faker.date.recent({ days: 700 }).toDateString(),
+    paymentId: `${faker.number.int({ min: 0, max: 100000 })}`,
     cost: "5.26 USD",
-    company: faker.random.words(1),
-    subscriptionName: faker.random.words(3),
+    company: faker.word.words(1),
+    subscriptionName: faker.word.words(3),
     paymentMethod: "PAYPAL",
   };
 }
@@ -376,11 +424,15 @@ export function getSubscriptionDummyData(seed?: string): UserSubscription {
   const parsedSeed = strToHashInt(seed ? seed : "1337");
   faker.seed(parsedSeed);
   return {
-    name: faker.random.words(3),
+    name: faker.word.words(3),
     cost: "5.26 USD",
-    subscriptionId: `${faker.datatype.number({ min: 0, max: 100000 })}`,
+    subscriptionId: `${faker.number.int({ min: 0, max: 100000 })}`,
     isActive: faker.datatype.boolean(),
-    renewDate: faker.date.recent(700).toDateString(),
-    imageSource: faker.image.abstract(525, 525, true),
+    renewDate: faker.date.recent({ days: 700 }).toDateString(),
+    imageSource: faker.image.urlLoremFlickr({
+      width: 525,
+      height: 525,
+      category: "abstract",
+    }),
   };
 }
