@@ -1,3 +1,4 @@
+import { Tag } from "../../../..";
 import styles from "./PackageChangeLog.module.css";
 import { ReactElement } from "react";
 
@@ -32,9 +33,14 @@ export function PackageChangeLog(props: PackageChangeLogProps) {
                 <div className={styles.versionNumber}>
                   {changeLogItem.versionNumber}
                   {changeLogItem.isCurrent ? (
-                    <div className={styles.currentLabel}>
-                      {changeLogItem.isCurrent ? "‧ Current" : null}
-                    </div>
+                    <span className={styles.currentLabel}>‧</span>
+                  ) : null}
+                  {changeLogItem.isCurrent ? (
+                    <Tag
+                      size="small"
+                      label="Latest"
+                      colorScheme="high_contrast"
+                    />
                   ) : null}
                 </div>
                 <div className={styles.releaseDate}>

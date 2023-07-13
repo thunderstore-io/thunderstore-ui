@@ -26,13 +26,11 @@ export function TeamList(props: TeamListProps) {
         sortValue: team.name,
       },
       {
-        value: <span className={styles.otherColumns}>TODO ADD USER ROLE</span>,
+        value: "TODO ADD USER ROLE",
         sortValue: 0,
       },
       {
-        value: (
-          <span className={styles.otherColumns}>{team.members?.length}</span>
-        ),
+        value: team.members?.length,
         sortValue: team.members?.length,
       },
     ]);

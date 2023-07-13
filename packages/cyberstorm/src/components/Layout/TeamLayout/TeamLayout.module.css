@@ -5,3 +5,7 @@
   font-size: 1.75rem;
   line-height: 120%;
 }
+
+.header a {
+  color: var(--color-cyber-green--60);
+}

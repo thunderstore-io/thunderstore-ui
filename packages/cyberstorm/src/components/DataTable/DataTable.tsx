@@ -28,42 +28,57 @@ interface CustomCSSRow extends CSSProperties {
 
 interface SortButtonProps {
   identifier: number;
-  direction: 1 | 0 | -1;
+  current: number;
+  direction: 1 | -1;
   hook: React.Dispatch<
-    React.SetStateAction<{ identifier: number; direction: 1 | 0 | -1 }>
+    React.SetStateAction<{ identifier: number; direction: 1 | -1 }>
   >;
-  fallbackIdentfier?: number;
   label: string;
 }
 
 function SortButton(props: SortButtonProps) {
-  const {
-    identifier,
-    direction = 0,
-    hook,
-    fallbackIdentfier = 0,
-    label,
-  } = props;
-  if (direction === 1) {
-    return (
-      <Button
-        iconAlignment="side"
-        colorScheme="transparentTertiary"
-        paddingSize="medium"
-        fontSize="medium"
-        fontWeight="700"
-        onClick={() => hook({ identifier: fallbackIdentfier, direction: 0 })}
-        rightIcon={
-          <FontAwesomeIcon
-            icon={faSortUp}
-            fixedWidth
-            className={styles.buttonIconActive}
-          />
-        }
-        label={label}
-      />
-    );
-  } else if (direction === 0) {
+  const { identifier, current, direction = 0, hook, label } = props;
+  if (identifier === current) {
+    if (direction === 1) {
+      return (
+        <Button
+          iconAlignment="side"
+          colorScheme="transparentTertiary"
+          paddingSize="medium"
+          fontSize="medium"
+          fontWeight="700"
+          onClick={() => hook({ identifier, direction: -1 })}
+          rightIcon={
+            <FontAwesomeIcon
+              icon={faSortUp}
+              fixedWidth
+              className={styles.buttonIconActive}
+            />
+          }
+          label={label}
+        />
+      );
+    } else {
+      return (
+        <Button
+          iconAlignment="side"
+          colorScheme="transparentTertiary"
+          paddingSize="medium"
+          fontSize="medium"
+          fontWeight="700"
+          onClick={() => hook({ identifier, direction: 1 })}
+          rightIcon={
+            <FontAwesomeIcon
+              icon={faSortDown}
+              fixedWidth
+              className={styles.buttonIconActive}
+            />
+          }
+          label={label}
+        />
+      );
+    }
+  } else {
     return (
       <Button
         iconAlignment="side"
@@ -82,25 +97,6 @@ function SortButton(props: SortButtonProps) {
         label={label}
       />
     );
-  } else {
-    return (
-      <Button
-        iconAlignment="side"
-        colorScheme="transparentTertiary"
-        paddingSize="medium"
-        fontSize="medium"
-        fontWeight="700"
-        onClick={() => hook({ identifier, direction: 1 })}
-        rightIcon={
-          <FontAwesomeIcon
-            icon={faSortDown}
-            fixedWidth
-            className={styles.buttonIconActive}
-          />
-        }
-        label={label}
-      />
-    );
   }
 }
 
@@ -114,7 +110,7 @@ export function DataTable(props: DataTableProps) {
   } = props;
   const [sortVariables, setSortVariables] = useState<{
     identifier: number;
-    direction: 1 | 0 | -1;
+    direction: 1 | -1;
   }>({
     identifier: sortByHeader,
     direction: sortDirection,
@@ -125,12 +121,11 @@ export function DataTable(props: DataTableProps) {
     b: { value: ReactNode; sortValue: string | number }[]
   ) {
     const column = sortVariables.identifier;
-    const sortD = sortVariables.direction === 0 ? -1 : sortVariables.direction;
     if (a[column] && b[column] && a[column].sortValue < b[column].sortValue) {
-      return sortD;
+      return sortVariables.direction;
     }
     if (a[column] && b[column] && a[column].sortValue > b[column].sortValue) {
-      return -sortD;
+      return -sortVariables.direction;
     }
     return 0;
   }
@@ -166,13 +161,9 @@ export function DataTable(props: DataTableProps) {
                 ) : (
                   <SortButton
                     identifier={key}
-                    direction={
-                      sortVariables.identifier === key
-                        ? sortVariables.direction
-                        : 0
-                    }
+                    current={sortVariables.identifier}
+                    direction={sortVariables.direction}
                     hook={setSortVariables}
-                    fallbackIdentfier={sortByHeader}
                     label={h.value}
                   />
                 )}
