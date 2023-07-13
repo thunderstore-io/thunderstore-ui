@@ -1,15 +1,15 @@
-"use client";
 import { PackageDetailLayout } from "@thunderstore/cyberstorm";
-import { useParams } from "next/navigation";
 
-export default function Page() {
-  const router = useParams();
-
+export default function Page({
+  params,
+}: {
+  params: { community: string; namespace: string; package: string };
+}) {
   return (
     <PackageDetailLayout
-      community={router["community"].toString()}
-      namespace={router["namespace"].toString()}
-      packageName={router["package"].toString()}
+      community={params.community}
+      namespace={params.namespace}
+      packageName={params.package}
     />
   );
 }

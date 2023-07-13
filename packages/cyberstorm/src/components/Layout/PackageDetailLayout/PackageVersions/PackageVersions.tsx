@@ -1,5 +1,3 @@
-"use client";
-
 import styles from "./PackageVersions.module.css";
 import { Button } from "../../../Button/Button";
 import { DataTable } from "../../../DataTable/DataTable";

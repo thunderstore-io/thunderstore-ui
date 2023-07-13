@@ -23,7 +23,7 @@ import { ThunderstoreLogoHorizontal } from "../../svg/svg";
 import { Tooltip } from "../Tooltip/Tooltip";
 
 const AD_IMAGE_SRC = "/images/tsmm_screenshot.png";
-const DISCORD_URL = "https://discord.gg/5MbXZvd";
+const DISCORD_URL = "https://discord.thunderstore.io/";
 const GITHUB_URL = "https://github.com/thunderstore-io/thunderstore-ui";
 const REDDIT_URL = "https://www.reddit.com/r/thunderstore";
 

@@ -1,3 +1,4 @@
+"use client";
 /**
  * Ease-of-use wrapper for links defined in LinkingProvider.tsx. Allows
  * importing link components directly instead of having to manually call

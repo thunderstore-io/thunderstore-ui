@@ -1,4 +1,3 @@
-"use client";
 import styles from "./TeamLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { TeamLink } from "../../Links/Links";

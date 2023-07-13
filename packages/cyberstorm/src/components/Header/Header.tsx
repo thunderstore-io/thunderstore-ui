@@ -1,5 +1,4 @@
 "use client";
-
 import styles from "./Header.module.css";
 import { DropDown, DropDownDivider, DropDownItem } from "../DropDown/DropDown";
 import { Button, PlainButton } from "../Button/Button";
