@@ -85,7 +85,7 @@ export function PackageListLayout(props: PackageListLayoutProps) {
               key="meta-link"
               leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
               label="Join our community"
-              externalUrl="https://discord.gg/5MbXZvd"
+              externalUrl="https://discord.thunderstore.io/"
               size="bold"
             />,
           ]}
