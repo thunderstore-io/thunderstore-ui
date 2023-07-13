@@ -7,5 +7,5 @@
 @font-face {
   font-weight: 100 1000;
   font-family: Inter;
-  src: url("../fonts/Inter.woff2") format("woff2-variations");
+  src: url("../fonts/Inter.ttf") format("truetype-variations");
 }
