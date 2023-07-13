@@ -1,4 +1,3 @@
-"use client";
 import { TeamSettingsLayout } from "@thunderstore/cyberstorm";
 import { useParams } from "next/navigation";
 

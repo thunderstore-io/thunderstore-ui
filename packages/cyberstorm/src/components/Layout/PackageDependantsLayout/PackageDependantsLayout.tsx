@@ -1,4 +1,3 @@
-"use client";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { CommunitiesLink, CommunityLink, PackageLink } from "../../Links/Links";
 import { getCommunityDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";

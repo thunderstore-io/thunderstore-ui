@@ -52,7 +52,6 @@ export function TeamMemberList(props: TeamMemberListProps) {
               triggerFontSize="medium"
               options={userRoles}
               value={teamMember.role}
-              onChange={() => console.log("asd")}
             />
           </div>
         ),

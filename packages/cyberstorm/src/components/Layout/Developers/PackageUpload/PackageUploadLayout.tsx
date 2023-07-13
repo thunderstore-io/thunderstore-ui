@@ -1,3 +1,4 @@
+"use client";
 import styles from "./PackageUploadLayout.module.css";
 import { Title } from "../../../Title/Title";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";

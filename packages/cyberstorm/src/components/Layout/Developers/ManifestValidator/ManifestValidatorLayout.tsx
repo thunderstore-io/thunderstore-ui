@@ -1,3 +1,4 @@
+"use client";
 import styles from "./ManifestValidatorLayout.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { TextInput } from "../../../TextInput/TextInput";

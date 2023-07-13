@@ -1,4 +1,3 @@
-"use client";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CommunitiesLink, CommunityLink } from "../../Links/Links";

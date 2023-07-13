@@ -1,4 +1,3 @@
-"use client";
 import { PackageDetailLayout } from "@thunderstore/cyberstorm";
 import { useParams } from "next/navigation";
 

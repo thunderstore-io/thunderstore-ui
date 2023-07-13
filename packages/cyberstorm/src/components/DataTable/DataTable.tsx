@@ -1,5 +1,4 @@
 "use client";
-
 import { CSSProperties, ReactNode, useState } from "react";
 import styles from "./DataTable.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
