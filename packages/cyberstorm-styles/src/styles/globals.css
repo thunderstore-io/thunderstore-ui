@@ -54,6 +54,7 @@
   /* Common fonts */
   --font-body: normal var(--font-size--l) inter, sans-serif;
   --font-heading: normal var(--font-size--m) sora, sans-serif;
+  --fa-fw-width: 1em;
 }
 
 a {

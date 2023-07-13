@@ -40,6 +40,11 @@
   max-width: var(--space--24);
 }
 
+.installButtonIcon svg {
+  width: 1.655rem;
+  height: 1.462rem;
+}
+
 .metaButtonWrapper {
   display: flex;
   flex-grow: 1;
