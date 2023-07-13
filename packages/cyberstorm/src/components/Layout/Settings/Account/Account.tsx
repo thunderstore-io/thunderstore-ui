@@ -4,7 +4,8 @@ import { Button } from "../../../Button/Button";
 import { User } from "@thunderstore/dapper/src/schema";
 import { TextInput } from "../../../TextInput/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/pro-solid-svg-icons";
+import { faTrash, faWarning } from "@fortawesome/pro-solid-svg-icons";
+import { Alert } from "../../../..";
 
 export interface AccountProps {
   userData: User;
@@ -20,11 +21,13 @@ export function Account(props: AccountProps) {
           description="Delete your Thunderstore account permanently"
           content={
             <div className={styles.content}>
-              <div>
-                TODO: this should be an alert: You are about to delete your
-                account. Once deleted, it will be gone forever. Please be
-                certain.
-              </div>
+              <Alert
+                icon={<FontAwesomeIcon fixedWidth icon={faWarning} />}
+                content={
+                  "You are about to delete your account. Once deleted, it will be gone forever. Please be certain."
+                }
+                variant="warning"
+              />
               <p className={styles.instructionText}>
                 The mods that have been uploaded on this account will remain
                 public on the site even after deletion. If you need them to be

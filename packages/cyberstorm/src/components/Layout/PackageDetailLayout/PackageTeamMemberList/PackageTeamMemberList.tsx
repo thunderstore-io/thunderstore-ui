@@ -49,7 +49,6 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
 
 function compare(a: TeamMember, b: TeamMember) {
   if (a.role === "Owner" || b.role === "Owner") {
-    console.log(a, b);
     if (a.role === "Owner" && b.role === "Owner") {
       if (a.user < b.user) {
         if (a.user > b.user) {

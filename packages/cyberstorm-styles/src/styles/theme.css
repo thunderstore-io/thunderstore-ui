@@ -49,6 +49,18 @@
   --color-text--secondary: rgb(196 192 216);
   --color-text--accent: rgb(198 195 255);
   --color-text--tertiary: rgb(164 164 188);
+  --alert-info-bg-color: rgb(8 49 73);
+  --alert-success-bg-color: rgb(24 65 48);
+  --alert-warning-bg-color: rgb(73 62 24);
+  --alert-danger-bg-color: rgb(72 17 27);
+  --alert-info-accent-color: rgb(28 163 245);
+  --alert-success-accent-color: rgb(80 217 159);
+  --alert-warning-accent-color: rgb(243 207 79);
+  --alert-danger-accent-color: rgb(241 56 90);
+  --alert-info-text-color: rgb(187 227 252);
+  --alert-success-text-color: rgb(185 240 217);
+  --alert-warning-text-color: rgb(250 236 185);
+  --alert-danger-text-color: rgb(249 175 189);
   --animation-duration-default: 400ms;
   --animation-timing-1: cubic-bezier(0.16, 1, 0.3, 1);
 }

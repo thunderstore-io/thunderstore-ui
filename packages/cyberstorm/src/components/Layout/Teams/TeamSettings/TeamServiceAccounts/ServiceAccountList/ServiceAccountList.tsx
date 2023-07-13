@@ -3,6 +3,9 @@ import { ServiceAccount } from "@thunderstore/dapper/src/schema";
 import { Dialog } from "../../../../../Dialog/Dialog";
 import { Button } from "../../../../../Button/Button";
 import { DataTable, DataTableRows } from "../../../../../DataTable/DataTable";
+import { Alert } from "../../../../../..";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTriangleExclamation } from "@fortawesome/pro-solid-svg-icons";
 
 export interface ServiceAccountListProps {
   serviceAccountData?: ServiceAccount[];
@@ -24,15 +27,23 @@ export function ServiceAccountList(props: ServiceAccountListProps) {
               <Button label="Remove" colorScheme="danger" paddingSize="large" />
             }
             content={
-              <div>
-                TODO: Alert
-                <div>
+              <div className={styles.content}>
+                <Alert
+                  icon={
+                    <FontAwesomeIcon fixedWidth icon={faTriangleExclamation} />
+                  }
+                  content={
+                    "This cannot be undone! Related API token will stop working immediately if the service account is removed."
+                  }
+                  variant="warning"
+                />
+                <span>
                   You are about to remove service account{" "}
                   <span className={styles.removeDescriptionAccountName}>
                     {serviceAccount.name}
                   </span>
                   .
-                </div>
+                </span>
               </div>
             }
             acceptButton={
