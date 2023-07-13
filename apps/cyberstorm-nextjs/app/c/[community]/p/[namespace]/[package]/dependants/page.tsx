@@ -1,14 +1,16 @@
 import { PackageDependantsLayout } from "@thunderstore/cyberstorm";
 import { getPackageDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
-import { useParams } from "next/navigation";
 
-export default function Page() {
-  const router = useParams();
+export default function Page({
+  params,
+}: {
+  params: { community: string; namespace: string; package: string };
+}) {
   const packageData = getPackageDummyData(
     "1337",
-    router["community"].toString(),
-    router["namespace"].toString(),
-    router["package"].toString()
+    params.community,
+    params.namespace,
+    params.package
   );
 
   return <PackageDependantsLayout packageData={packageData} />;
