@@ -27,7 +27,8 @@ export function TeamLayout(props: TeamLayoutProps) {
       }
       header={
         <div className={styles.header}>
-          {"Mods uploaded by " + teamData.name}
+          Mods uploaded by{" "}
+          <TeamLink team={teamData.name}>{teamData.name}</TeamLink>
         </div>
       }
       mainContent={<PackageSearchLayout teamId={teamData.name} />}

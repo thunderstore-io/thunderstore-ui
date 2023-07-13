@@ -1,14 +1,5 @@
-.nameColumn {
-  color: var(--color-text--default);
-}
-
 .nameColumn:hover {
   color: rgb(57 233 170);
-}
-
-.otherColumns {
-  color: var(--color-text--secondary);
-  font-weight: 400;
 }
 
 .content {

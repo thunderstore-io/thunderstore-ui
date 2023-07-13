@@ -1,5 +1,10 @@
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import { CommunitiesLink, CommunityLink, PackageLink } from "../../Links/Links";
+import {
+  CommunitiesLink,
+  CommunityLink,
+  PackageLink,
+  UserLink,
+} from "../../Links/Links";
 import { getCommunityDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import { Package } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
@@ -44,10 +49,18 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
       }
       header={
         <div className={styles.header}>
-          {"Mods that depend on " +
-            packageData.name +
-            " by " +
-            packageData.author}
+          Mods that depend on{" "}
+          <PackageLink
+            community={packageData.community}
+            namespace={packageData.namespace}
+            package={packageData.name}
+          >
+            {packageData.name}
+          </PackageLink>
+          {packageData.author ? " by " : null}
+          {packageData.author ? (
+            <UserLink user={packageData.author}>{packageData.author}</UserLink>
+          ) : null}
         </div>
       }
       mainContent={<PackageSearchLayout communityId={communityData.name} />}

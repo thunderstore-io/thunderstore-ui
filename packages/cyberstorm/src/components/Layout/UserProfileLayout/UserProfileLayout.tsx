@@ -27,7 +27,8 @@ export function UserProfileLayout(props: UserProfileLayoutProps) {
       }
       header={
         <div className={styles.header}>
-          {"Mods uploaded by " + userData.name}
+          Mods uploaded by{" "}
+          <UserLink user={userData.name}>{userData.name}</UserLink>
         </div>
       }
       mainContent={<PackageSearchLayout userId={userId} />}

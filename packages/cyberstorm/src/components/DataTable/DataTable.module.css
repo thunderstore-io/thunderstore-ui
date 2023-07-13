@@ -64,6 +64,12 @@
   display: flex;
   align-items: center;
   padding: var(--space--16) var(--space--24);
-  font-weight: 700;
+  color: var(--color-text--secondary);
+  font-weight: 500;
   line-height: var(--line-height--l);
+}
+
+.gridRow .gridCell:first-child {
+  color: var(--color-text--default);
+  font-weight: 700;
 }

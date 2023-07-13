@@ -126,3 +126,15 @@
 .tag__borderless_no_hover {
   --border-color: transparent;
 }
+
+.tag__high_contrast {
+  --text-color: rgb(80 217 159);
+
+  padding: var(--space--4) var(--space--8);
+  border: 1px solid rgb(80 217 159);
+  font-weight: 700;
+  font-size: 0.75rem;
+  line-height: normal;
+  text-transform: uppercase;
+  background: rgb(8 22 16);
+}
