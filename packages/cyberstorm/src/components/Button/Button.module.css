@@ -161,7 +161,7 @@
 }
 
 .button__specialPurple {
-  background: var(--color-gradient-purple-green--darker) padding-box, var(--color-gradient-purple-green) border-box;
+  background: linear-gradient(315deg, #1f0a2e 0%, #102b20 100%) padding-box, linear-gradient(315deg, #9d30e4 0%, #23ffb0 100%) border-box;
 }
 
 .button__specialGreen:hover {
@@ -173,7 +173,7 @@
 .button__specialPurple:hover {
   --button-border-color: transparent;
 
-  box-shadow: var(--box-shadow-special-purple--highlight);
+  background: linear-gradient(315deg, #0b4162 0%, #205740 100%) padding-box, linear-gradient(315deg, #49b5f7 0%, #73e1b2 100%) border-box;
 }
 
 .button__specialGreen::before,
