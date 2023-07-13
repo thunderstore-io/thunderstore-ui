@@ -1,7 +1,7 @@
 import styles from "./TeamProfile.module.css";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import { TextInput } from "../../../../TextInput/TextInput";
-import { Team } from "../../../../../schema";
+import { Team } from "@thunderstore/dapper/src/schema";
 import { Button } from "../../../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/pro-light-svg-icons";

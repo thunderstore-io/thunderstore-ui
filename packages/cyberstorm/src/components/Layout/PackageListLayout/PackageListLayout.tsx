@@ -2,8 +2,8 @@
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CommunitiesLink, CommunityLink } from "../../Links/Links";
-import { getCommunityDummyData } from "../../../dummyData";
-import { PackagePreview } from "../../../schema";
+import { getCommunityDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
+import { PackagePreview } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { formatInteger } from "../../../utils/utils";

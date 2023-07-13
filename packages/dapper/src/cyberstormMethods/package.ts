@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 import { Dapper } from "../dapper";
-import { getPackageDummyData, Package } from "@thunderstore/cyberstorm";
+import { Package } from "@thunderstore/dapper/src/schema";
+import { getPackageDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import { packageSchema } from "../cyberstormSchemas/package";
 
 // Dapper method type, defining the parameters required to fetch the data.

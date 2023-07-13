@@ -1,5 +1,5 @@
 import styles from "./PackageDependencyList.module.css";
-import { PackageDependency } from "../../../../schema";
+import { PackageDependency } from "@thunderstore/dapper/src/schema";
 import { PackageLink } from "../../../Links/Links";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

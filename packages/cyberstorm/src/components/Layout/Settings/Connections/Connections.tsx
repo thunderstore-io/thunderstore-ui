@@ -1,6 +1,6 @@
 import styles from "./Connections.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
-import { Connection, UserSettings } from "../../../../schema";
+import { Connection, UserSettings } from "@thunderstore/dapper/src/schema";
 import { PrivacyPolicyLink } from "../../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";

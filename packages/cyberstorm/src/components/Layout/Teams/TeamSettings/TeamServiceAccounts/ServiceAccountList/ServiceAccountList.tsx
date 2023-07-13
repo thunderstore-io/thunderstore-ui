@@ -1,5 +1,5 @@
 import styles from "./ServiceAccountList.module.css";
-import { ServiceAccount } from "../../../../../../schema";
+import { ServiceAccount } from "@thunderstore/dapper/src/schema";
 import { Dialog } from "../../../../../Dialog/Dialog";
 import { Button } from "../../../../../Button/Button";
 import { DataTable, DataTableRows } from "../../../../../DataTable/DataTable";

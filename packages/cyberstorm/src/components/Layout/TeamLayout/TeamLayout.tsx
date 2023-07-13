@@ -2,8 +2,8 @@
 import styles from "./TeamLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { TeamLink } from "../../Links/Links";
-import { getTeamDummyData } from "../../../dummyData";
-import { Team } from "../../../schema";
+import { getTeamDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
+import { Team } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 

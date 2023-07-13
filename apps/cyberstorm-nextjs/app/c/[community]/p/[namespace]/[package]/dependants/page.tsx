@@ -1,8 +1,6 @@
 "use client";
-import {
-  PackageDependantsLayout,
-  getPackageDummyData,
-} from "@thunderstore/cyberstorm";
+import { PackageDependantsLayout } from "@thunderstore/cyberstorm";
+import { getPackageDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import { useParams } from "next/navigation";
 
 export default function Page() {

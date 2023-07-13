@@ -1,7 +1,7 @@
 import styles from "./Account.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { Button } from "../../../Button/Button";
-import { User } from "../../../../schema";
+import { User } from "@thunderstore/dapper/src/schema";
 import { TextInput } from "../../../TextInput/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/pro-solid-svg-icons";

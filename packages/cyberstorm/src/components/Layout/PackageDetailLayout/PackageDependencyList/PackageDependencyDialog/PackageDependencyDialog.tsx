@@ -1,5 +1,5 @@
 import styles from "../PackageDependencyDialog/PackageDependencyDialog.module.css";
-import { PackageDependency } from "../../../../../schema";
+import { PackageDependency } from "@thunderstore/dapper/src/schema";
 import { PackageLink, PackageVersionLink } from "../../../../Links/Links";
 
 export interface PackageDependencyDialogProps {

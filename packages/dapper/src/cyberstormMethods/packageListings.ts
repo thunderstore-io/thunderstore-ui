@@ -4,8 +4,8 @@ import { Dapper } from "../dapper";
 import {
   getListOfIds,
   getPackagePreviewDummyData,
-  PackagePreview,
-} from "@thunderstore/cyberstorm";
+} from "@thunderstore/dapper/src/implementations/dummy/generate";
+import { PackagePreview } from "@thunderstore/dapper/src/schema";
 import { packagePreviewSchema } from "../cyberstormSchemas/package";
 import { QsArray } from "../queryString";
 
