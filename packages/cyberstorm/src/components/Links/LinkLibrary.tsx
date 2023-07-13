@@ -1,4 +1,4 @@
-import { LinkLibrary } from "@thunderstore/cyberstorm";
+import { LinkLibrary } from "./LinkingProvider";
 import React from "react";
 
 interface CyberstormLinkProps {
