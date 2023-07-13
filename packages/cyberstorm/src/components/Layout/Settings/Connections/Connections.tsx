@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./Connections.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { Connection, UserSettings } from "@thunderstore/dapper/src/schema";
@@ -5,6 +7,7 @@ import { PrivacyPolicyLink } from "../../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { useState } from "react";
+import { Switch } from "../../../..";
 
 export interface ConnectionsProps {
   userData: UserSettings;
@@ -45,11 +48,7 @@ export function ConnectionsItem(props: ConnectionsItemProps) {
               </div>
             </div>
           ) : null}
-          <input
-            type="checkbox"
-            checked={enabled}
-            onClick={() => setEnabled(!enabled)}
-          />
+          <Switch state={enabled} onChange={() => setEnabled(!enabled)} />
         </div>
       </div>
     </div>

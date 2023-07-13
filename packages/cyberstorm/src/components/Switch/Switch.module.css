@@ -1,0 +1,39 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space--40);
+  height: var(--space--24);
+  border: 1px solid rgb(55 55 134);
+  border-radius: var(--border-radius--48);
+  background-color: var(--color-surface--5);
+}
+
+.root:hover {
+  border: 1px solid rgb(99 90 159);
+  background-color: var(--color-surface--7);
+}
+
+.root[data-state="checked"] {
+  border: 1px solid rgb(57 233 170);
+  background-color: rgb(57 233 170);
+}
+
+.thumb {
+  width: var(--space--16);
+  height: var(--space--16);
+  border-radius: 2.875rem;
+  background-color: var(--color-text--secondary);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.55);
+  transition: ease-out 120ms;
+}
+
+.root[data-state="unchecked"] .thumb {
+  background-color: var(--color-text--default);
+  transform: translateX(-0.5rem);
+}
+
+.root[data-state="checked"] .thumb {
+  background-color: var(--color-text--default);
+  transform: translateX(0.5rem);
+}

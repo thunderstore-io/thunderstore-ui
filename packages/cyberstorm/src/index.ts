@@ -58,6 +58,7 @@ export {
   MetaInfoItemList,
   type MetaInfoItemListProps,
 } from "./components/MetaInfoItemList/MetaInfoItemList";
+export { Switch, type SwitchProps } from "./components/Switch/Switch";
 export {
   PackageCard,
   type PackageCardProps,
