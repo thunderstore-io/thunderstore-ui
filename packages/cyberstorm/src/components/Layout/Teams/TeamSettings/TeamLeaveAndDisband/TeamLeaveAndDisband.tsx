@@ -3,6 +3,9 @@ import { Button } from "../../../../Button/Button";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import { TeamSettings } from "@thunderstore/dapper/src/schema";
 import { TextInput } from "../../../../TextInput/TextInput";
+import { Alert } from "../../../../..";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
 
 export interface TeamLeaveAndDisbandProps {
   teamData: TeamSettings;
@@ -18,7 +21,13 @@ export function TeamLeaveAndDisband(props: TeamLeaveAndDisbandProps) {
         description="Leave your team"
         content={
           <div className={styles.content}>
-            TODO: Alert
+            <Alert
+              icon={<FontAwesomeIcon fixedWidth icon={faOctagonExclamation} />}
+              content={
+                "You cannot currently leave this team as you are it’s last owner."
+              }
+              variant="danger"
+            />
             <p
               className={styles.description}
             >{`You are about to leave the team ${teamData.name}`}</p>
@@ -42,7 +51,13 @@ export function TeamLeaveAndDisband(props: TeamLeaveAndDisbandProps) {
         description="Disband your team completely"
         content={
           <div className={styles.content}>
-            TODO: Alert
+            <Alert
+              icon={<FontAwesomeIcon fixedWidth icon={faOctagonExclamation} />}
+              content={
+                "You cannot currently disband this team as it has packages."
+              }
+              variant="danger"
+            />
             <p className={styles.description}>
               You are about to disband the team {teamData.name}.
             </p>

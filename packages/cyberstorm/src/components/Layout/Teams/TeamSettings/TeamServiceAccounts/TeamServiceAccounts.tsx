@@ -6,11 +6,12 @@ import { Dialog } from "../../../../Dialog/Dialog";
 import { ServiceAccount, TeamSettings } from "@thunderstore/dapper/src/schema";
 import { getServiceAccountDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faPlus, faCircleExclamation } from "@fortawesome/pro-solid-svg-icons";
 import { TeamLink, UserLink } from "../../../../Links/Links";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { useState } from "react";
 import { CopyButton } from "../../../../CopyButton/CopyButton";
+import { Alert } from "../../../../..";
 
 export interface TeamServiceAccountsProps {
   serviceAccountData: string[];
@@ -64,7 +65,18 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
                         text="TODO: value"
                       />
                     </div>
-                    Todo: Alert
+                    <Alert
+                      icon={
+                        <FontAwesomeIcon
+                          fixedWidth
+                          icon={faCircleExclamation}
+                        />
+                      }
+                      content={
+                        "Store this token securely, as it can't be retrieved later, and treat it as you would treat an important password."
+                      }
+                      variant="info"
+                    />
                   </div>
                 ) : (
                   <div className={styles.dialogContent}>

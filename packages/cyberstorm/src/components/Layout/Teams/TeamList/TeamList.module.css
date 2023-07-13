@@ -10,3 +10,13 @@
   color: var(--color-text--secondary);
   font-weight: 400;
 }
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.boldText {
+  font-weight: 700;
+}
