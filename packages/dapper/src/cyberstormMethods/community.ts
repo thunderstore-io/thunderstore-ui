@@ -6,8 +6,8 @@ import {
   getCommunityDummyData,
   getListOfIds,
   getServerPreviewDummyData,
-  ServerPreview,
-} from "@thunderstore/cyberstorm";
+} from "../implementations/dummy/generate";
+import { ServerPreview } from "../schema";
 import { serverPreviewSchema } from "../cyberstormSchemas/server";
 
 // Schema describing the data received from backend, used to validate the data.

@@ -12,8 +12,11 @@ import {
 import { TextInput } from "../../TextInput/TextInput";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
-import { getCommunityPreviewDummyData, getListOfIds } from "../../../dummyData";
-import { CommunityPreview } from "../../../schema";
+import {
+  getCommunityPreviewDummyData,
+  getListOfIds,
+} from "@thunderstore/dapper/src/implementations/dummy/generate";
+import { CommunityPreview } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 

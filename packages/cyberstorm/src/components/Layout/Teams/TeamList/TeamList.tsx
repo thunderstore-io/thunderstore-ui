@@ -1,4 +1,4 @@
-import { TeamPreview } from "../../../../schema";
+import { TeamPreview } from "@thunderstore/dapper/src/schema";
 import { DataTable, DataTableRows } from "../../../DataTable/DataTable";
 import { TeamSettingsLink } from "../../../Links/Links";
 import styles from "./TeamList.module.css";

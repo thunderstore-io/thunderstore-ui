@@ -5,8 +5,11 @@ import {
   getCommunityPreviewDummyData,
   getListOfIds,
   getPackagePreviewDummyData,
-} from "../../../dummyData";
-import { CommunityPreview, PackagePreview } from "../../../schema";
+} from "@thunderstore/dapper/src/implementations/dummy/generate";
+import {
+  CommunityPreview,
+  PackagePreview,
+} from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 
 /**

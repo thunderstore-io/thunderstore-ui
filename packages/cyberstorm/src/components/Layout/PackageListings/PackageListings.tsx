@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import styles from "./PackageListings.module.css";
 import { PackageCard } from "../../PackageCard/PackageCard";
 import { useDapper } from "@thunderstore/dapper";
-import { PackagePreview } from "../../../schema";
+import { PackagePreview } from "@thunderstore/dapper/src/schema";
 import { FiltersContext } from "../PackageSearchLayout/PackageSearchLayout";
 
 export interface PackageListingsProps {

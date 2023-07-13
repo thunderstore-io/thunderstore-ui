@@ -18,7 +18,7 @@ import {
   UserLink,
 } from "../Links/Links";
 import { Avatar } from "../Avatar/Avatar";
-import { getUserDummyData } from "../../dummyData";
+import { getUserDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import {
   faCaretDown,
   faCog,

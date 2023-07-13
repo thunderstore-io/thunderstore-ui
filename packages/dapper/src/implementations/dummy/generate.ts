@@ -19,8 +19,16 @@ import {
   User,
   UserSettings,
   UserSubscription,
-} from "../schema";
-import { strToHashInt } from "../utils/utils";
+} from "../../schema";
+
+export const strToHashInt = function (inputString: string) {
+  return inputString
+    ? inputString.split("").reduce(function (a, b) {
+        a = (a << 5) - a + b.charCodeAt(0);
+        return a & a;
+      }, 0)
+    : 0;
+};
 
 export function getRandomCategories(returnAmount?: number): Category[] {
   const categories = [

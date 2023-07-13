@@ -1,8 +1,6 @@
 import { StoryFn, Meta } from "@storybook/react";
-import {
-  PackageCard,
-  getPackagePreviewDummyData,
-} from "@thunderstore/cyberstorm";
+import { PackageCard } from "@thunderstore/cyberstorm";
+import { getPackagePreviewDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import React from "react";
 
 export default {

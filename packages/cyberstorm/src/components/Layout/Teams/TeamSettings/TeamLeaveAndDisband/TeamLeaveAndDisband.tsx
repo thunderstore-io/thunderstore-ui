@@ -1,7 +1,7 @@
 import styles from "./TeamLeaveAndDisband.module.css";
 import { Button } from "../../../../Button/Button";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
-import { TeamSettings } from "../../../../../schema";
+import { TeamSettings } from "@thunderstore/dapper/src/schema";
 import { TextInput } from "../../../../TextInput/TextInput";
 
 export interface TeamLeaveAndDisbandProps {

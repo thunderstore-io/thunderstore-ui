@@ -26,7 +26,7 @@ import {
 import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
 import { CopyButton } from "../../CopyButton/CopyButton";
 import { formatInteger } from "../../../utils/utils";
-import { Package } from "../../../schema";
+import { Package } from "@thunderstore/dapper/src/schema";
 import { useState } from "react";
 import { Tabs } from "../../Tabs/Tabs";
 import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
@@ -43,7 +43,7 @@ import { useDapper } from "@thunderstore/dapper";
 import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
 import { ThunderstoreLogo } from "../../../svg/svg";
-import { getPackageDependencyDummyData } from "../../../dummyData";
+import { getPackageDependencyDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import { Tooltip } from "../../Tooltip/Tooltip";
 
 export interface PackageDetailLayoutProps {

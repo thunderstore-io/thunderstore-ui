@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Tag } from "../Tag/Tag";
 import { formatInteger } from "../../utils/utils";
-import { PackagePreview } from "../../schema";
+import { PackagePreview } from "@thunderstore/dapper/src/schema";
 import { PackageLink, UserLink } from "../Links/Links";
 
 export interface PackageCardProps {

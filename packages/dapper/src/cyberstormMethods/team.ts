@@ -1,7 +1,11 @@
 import { z } from "zod";
 
 import { Dapper } from "../dapper";
-import { getListOfIds, getTeamDummyData, Team } from "@thunderstore/cyberstorm";
+import { Team } from "@thunderstore/dapper/src/schema";
+import {
+  getListOfIds,
+  getTeamDummyData,
+} from "@thunderstore/dapper/src/implementations/dummy/generate";
 import { teamSchema } from "../cyberstormSchemas/team";
 
 // Schema describing the data received from backend, used to validate the data.

@@ -1,8 +1,8 @@
 "use client";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { UserLink } from "../../Links/Links";
-import { getUserDummyData } from "../../../dummyData";
-import { User } from "../../../schema";
+import { getUserDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
+import { User } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import styles from "./UserProfileLayout.module.css";

@@ -1,8 +1,6 @@
 import { StoryFn, ComponentMeta } from "@storybook/react";
-import {
-  getPackageDummyData,
-  PackageDependantsLayout,
-} from "@thunderstore/cyberstorm";
+import { PackageDependantsLayout } from "@thunderstore/cyberstorm";
+import { getPackageDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import React from "react";
 
 const meta = {

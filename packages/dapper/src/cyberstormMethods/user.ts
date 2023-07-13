@@ -5,10 +5,12 @@ import {
   getPackagePreviewDummyData,
   getServerPreviewDummyData,
   getUserDummyData,
+} from "@thunderstore/dapper/src/implementations/dummy/generate";
+import {
   PackagePreview,
   ServerPreview,
   User,
-} from "@thunderstore/cyberstorm";
+} from "@thunderstore/dapper/src/schema";
 import { userSchema } from "../cyberstormSchemas/user";
 import { packagePreviewSchema } from "../cyberstormSchemas/package";
 import { serverPreviewSchema } from "../cyberstormSchemas/server";
