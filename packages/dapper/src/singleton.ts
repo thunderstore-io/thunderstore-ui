@@ -1,22 +1,42 @@
-/*
-Singleton variant of dapper initialization, as React context is not yet
-supported in NextJS 13.
-
-Usage:
-- Call `SetDapperSingleton` in the initialization phase of the app
-- Use the `useDapper` React hook as usual afterwards.
- */
 import { DapperInterface } from "./dapper";
 
-let instance: DapperInterface | null = null;
-
-export function SetDapperSingleton(dapper: DapperInterface) {
-  instance = dapper;
+interface GlobalContext {
+  Dapper?: DapperContext;
 }
 
-export function GetDapperSingleton(): DapperInterface {
-  if (instance == null) {
-    throw new Error("Attempted to access dapper before initialization!");
+function getGlobalContext(): GlobalContext {
+  if (typeof window === "undefined") {
+    return globalThis as unknown as GlobalContext;
+  } else {
+    if (globalThis as unknown) {
+      return globalThis as unknown as GlobalContext;
+    } else {
+      return window as unknown as GlobalContext;
+    }
   }
-  return instance;
+}
+
+const globalContext = getGlobalContext();
+
+class DapperContext {
+  private dapper?: DapperInterface = undefined;
+
+  public initialize(dapperConstructor: () => DapperInterface) {
+    if (this.dapper) return;
+    this.dapper = dapperConstructor();
+  }
+
+  public getDapper(): DapperInterface {
+    if (!this.dapper) {
+      throw new Error("Attempted to access dapper before initialization!");
+    }
+    return this.dapper;
+  }
+}
+
+export function getDapperContext(): DapperContext {
+  if (!globalContext.Dapper) {
+    globalContext.Dapper = new DapperContext();
+  }
+  return globalContext.Dapper;
 }

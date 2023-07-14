@@ -2,7 +2,7 @@ import { AppProps } from "next/app";
 import { LinkingProvider, RootWrapper, theme } from "@thunderstore/components";
 import { Dapper, DapperProvider } from "@thunderstore/dapper";
 
-import { SessionProvider, useSession } from "components/SessionContext";
+import { SessionProvider } from "components/SessionContext";
 import { LinkLibrary } from "LinkLibrary";
 import { API_DOMAIN } from "utils/constants";
 
@@ -23,11 +23,12 @@ export default function ThunderstoreApp(appProps: AppProps): JSX.Element {
 }
 
 function Substack({ Component, pageProps }: AppProps): JSX.Element {
-  const { sessionId } = useSession();
-  const dapper = new Dapper(API_DOMAIN, sessionId);
+  // const { sessionId } = useSession();
+  // const dapper = new Dapper(API_DOMAIN, sessionId);
+  const dapperConstructor = () => new Dapper(API_DOMAIN, undefined);
 
   return (
-    <DapperProvider dapper={dapper}>
+    <DapperProvider dapperConstructor={dapperConstructor}>
       <LinkingProvider value={LinkLibrary}>
         <Component {...pageProps} />
       </LinkingProvider>
