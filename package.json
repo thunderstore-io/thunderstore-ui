@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "postinstall": "preconstruct dev",
-    "build": "preconstruct build"
+    "build": "preconstruct build",
+    "plop": "plop"
   },
   "engines": {
     "node": "^18.14.0"
@@ -47,6 +48,7 @@
     "babel-plugin-polyfill-corejs3": "^0.4.0",
     "chromatic": "^6.4.3",
     "core-js": "^3.19.1",
+    "plop": "^3.1.2",
     "storybook": "^7.0.0-rc.5",
     "storybook-css-modules": "^1.0.8",
     "stylelint": "^14.14.0",

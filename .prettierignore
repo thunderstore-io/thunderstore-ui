@@ -1,3 +1,4 @@
 **/*.css
 **/.git
 **/node_modules
+**/*.hbs
