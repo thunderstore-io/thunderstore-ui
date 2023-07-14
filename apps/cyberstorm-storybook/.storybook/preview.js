@@ -47,11 +47,10 @@ export const decorators = [
 ];
 
 function Substack({ children }) {
-  const { sessionId } = useSession();
-  const dapper = new Dapper(API_DOMAIN, sessionId);
+  const dapperConstructor = () => new Dapper(API_DOMAIN, undefined);
 
   return (
-    <DapperProvider dapper={dapper}>
+    <DapperProvider dapperConstructor={dapperConstructor}>
       <LinkingProvider value={LinkLibrary}>{children}</LinkingProvider>
     </DapperProvider>
   );

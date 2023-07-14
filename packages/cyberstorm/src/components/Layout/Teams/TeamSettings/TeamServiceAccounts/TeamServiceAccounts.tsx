@@ -11,7 +11,7 @@ import { TeamLink, UserLink } from "../../../../Links/Links";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { useState } from "react";
 import { CopyButton } from "../../../../CopyButton/CopyButton";
-import { Alert } from "../../../../..";
+import { Alert } from "../../../../Alert/Alert";
 
 export interface TeamServiceAccountsProps {
   serviceAccountData: string[];
