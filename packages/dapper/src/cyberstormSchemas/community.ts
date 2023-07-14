@@ -24,7 +24,9 @@ export type Community = {
 
   total_download_count: number;
   total_package_count: number;
+  total_server_count: number;
   background_image_url?: string | null;
+  portrait_image_url?: string | null;
 
   description?: string | null;
   discord_url?: string | null;
@@ -38,7 +40,9 @@ export const communitySchema = z.object({
 
   total_download_count: z.number().int(),
   total_package_count: z.number().int(),
+  total_server_count: z.number().int(),
   background_image_url: z.string().nullish(),
+  portrait_image_url: z.string().nullish(),
 
   description: z.string().nullish(),
   discord_url: z.string().nullish(),

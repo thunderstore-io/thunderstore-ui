@@ -187,5 +187,6 @@ export const getPackageListings: GetPackageListings = async function (
     { key: "page_size", value: undefined, impotent: 20 },
   ];
 
-  return await this.dummyAndProcess(dummyEndpoint, queryParams, transform);
+  const cleanedData = await dummyEndpoint(queryParams);
+  return transform(cleanedData);
 };

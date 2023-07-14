@@ -5,11 +5,12 @@ import {
   PackageLink,
   UserLink,
 } from "../../Links/Links";
-import { getCommunityDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import { Package } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import styles from "./PackageDependantsLayout.module.css";
+import { useDapper } from "@thunderstore/dapper";
+import usePromise from "react-promise-suspense";
 
 export interface PackageDependantsLayoutProps {
   isLoading?: boolean;
@@ -22,20 +23,22 @@ export interface PackageDependantsLayoutProps {
 export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
   const { packageData } = props;
 
-  const communityData = getCommunityData(packageData.community);
+  const dapper = useDapper();
+  const communityData = usePromise(dapper.getCommunity, [
+    packageData.community,
+  ]);
 
   return (
     <BaseLayout
       backGroundImageSource={
-        communityData.backgroundImageSource
-          ? communityData.backgroundImageSource
-          : "/images/community_bg.png"
+        communityData.community.background_image_url ||
+        "/images/community_bg.png"
       }
       breadCrumb={
         <BreadCrumbs>
           <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={communityData.name}>
-            {communityData.name}
+          <CommunityLink community={communityData.community.name}>
+            {communityData.community.name}
           </CommunityLink>
           <PackageLink
             community={packageData.community}
@@ -63,13 +66,11 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
           ) : null}
         </div>
       }
-      mainContent={<PackageSearchLayout communityId={communityData.name} />}
+      mainContent={
+        <PackageSearchLayout communityId={communityData.community.name} />
+      }
     />
   );
 }
 
 PackageDependantsLayout.displayName = "PackageDependantsLayout";
-
-function getCommunityData(communityId: string) {
-  return getCommunityDummyData(communityId);
-}

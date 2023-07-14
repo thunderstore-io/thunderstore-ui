@@ -6,7 +6,7 @@ import { Title } from "../../../Title/Title";
 export interface PageHeaderProps {
   image?: ReactElement;
   title: string;
-  description?: string;
+  description?: string | null;
   meta?: ReactElement[];
 }
 

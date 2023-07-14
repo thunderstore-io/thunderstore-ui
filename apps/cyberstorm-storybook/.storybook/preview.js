@@ -4,9 +4,9 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { LinkLibrary } from "../LinkLibrary";
 import { LinkingProvider, CyberstormProviders } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-styles";
-import { Dapper, DapperProvider } from "@thunderstore/dapper/src";
-import { SessionProvider, useSession } from "../SessionContext";
-import { API_DOMAIN } from "../constants";
+import { DapperProvider } from "@thunderstore/dapper/src";
+import { SessionProvider } from "../SessionContext";
+import { DummyDapper } from "@thunderstore/dapper/src/implementations/dummy/DummyDapper";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -47,8 +47,7 @@ export const decorators = [
 ];
 
 function Substack({ children }) {
-  const dapperConstructor = () => new Dapper(API_DOMAIN, undefined);
-
+  const dapperConstructor = () => new DummyDapper();
   return (
     <DapperProvider dapperConstructor={dapperConstructor}>
       <LinkingProvider value={LinkLibrary}>{children}</LinkingProvider>

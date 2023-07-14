@@ -104,16 +104,6 @@ export class Dapper implements DapperInterface {
     return transform(cleanedData);
   }
 
-  protected async dummyAndProcess<Schema extends z.ZodTypeAny, ReturnType>(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    dummyFunc: (props: any) => ReturnType,
-    queryParams: QsArray,
-    transform: (cleanedData: z.infer<Schema>) => z.infer<Schema>
-  ): Promise<ReturnType> {
-    const cleanedData = await dummyFunc(queryParams);
-    return transform(cleanedData);
-  }
-
   /**
    * Methods implementing the DapperInterface.
    */
