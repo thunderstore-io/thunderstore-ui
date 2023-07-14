@@ -21,7 +21,7 @@ import {
 } from "../../schema";
 import { Community } from "../../cyberstormSchemas/community";
 
-export const strToHashInt = function (inputString: string) {
+const strToHashInt = function (inputString: string) {
   return inputString
     ? inputString.split("").reduce(function (a, b) {
         a = (a << 5) - a + b.charCodeAt(0);
@@ -30,7 +30,7 @@ export const strToHashInt = function (inputString: string) {
     : 0;
 };
 
-export function getRandomCategories(returnAmount?: number): Category[] {
+function getRandomCategories(returnAmount?: number): Category[] {
   const categories = [
     { name: "Mods", slug: "mods" },
     { name: "Tools", slug: "tools" },
