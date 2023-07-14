@@ -85,7 +85,7 @@ const getServerSideProps_: GetServerSideProps = async (context) => {
   }
 
   const dapper = new Dapper(API_DOMAIN);
-  const props = await dapper.getPackage(
+  const props = await dapper.getOldPackage(
     communityIdentifier,
     namespace,
     packageName

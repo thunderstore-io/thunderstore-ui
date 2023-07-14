@@ -1,16 +1,10 @@
 import { z } from "zod";
-import {
-  GetCommunities,
-  getCommunities,
-} from "./cyberstormMethods/communities";
-import { GetCommunity, getCommunity } from "./cyberstormMethods/community";
-import { GetPackage, getPackage } from "./cyberstormMethods/package";
-import {
-  getPackageListings,
-  GetPackageListings,
-} from "./cyberstormMethods/packageListings";
-import { getTeam, GetTeam } from "./cyberstormMethods/team";
-import { GetUser, getUser } from "./cyberstormMethods/user";
+import { GetCommunities } from "./cyberstormMethods/communities";
+import { GetCommunity } from "./cyberstormMethods/community";
+import { GetPackage } from "./cyberstormMethods/package";
+import { GetPackageListings } from "./cyberstormMethods/packageListings";
+import { GetTeam } from "./cyberstormMethods/team";
+import { GetUser } from "./cyberstormMethods/user";
 
 import { DapperError } from "./errors";
 import {
@@ -34,6 +28,10 @@ export interface DapperInterface {
   getFrontpage: GetFrontpage;
   getOldPackage: GetOldPackage;
 }
+
+const NotImplemented = () => {
+  throw new Error("Not implemented");
+};
 
 export class Dapper implements DapperInterface {
   readonly apiDomain: string;
@@ -104,26 +102,16 @@ export class Dapper implements DapperInterface {
     return transform(cleanedData);
   }
 
-  protected async dummyAndProcess<Schema extends z.ZodTypeAny, ReturnType>(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    dummyFunc: (props: any) => ReturnType,
-    queryParams: QsArray,
-    transform: (cleanedData: z.infer<Schema>) => z.infer<Schema>
-  ): Promise<ReturnType> {
-    const cleanedData = await dummyFunc(queryParams);
-    return transform(cleanedData);
-  }
-
-  /**
-   * Methods implementing the DapperInterface.
-   */
-  getPackageListings = getPackageListings;
-  getCommunities = getCommunities;
-  getCommunity = getCommunity;
-  getPackage = getPackage;
-  getTeam = getTeam;
-  getUser = getUser;
+  // Legacy
   getOldCommunityPackageListing = getOldCommunityPackageListing;
   getFrontpage = getFrontpage;
   getOldPackage = getOldPackage;
+
+  // Cyberstorm
+  getPackageListings = NotImplemented;
+  getCommunities = NotImplemented;
+  getCommunity = NotImplemented;
+  getPackage = NotImplemented;
+  getTeam = NotImplemented;
+  getUser = NotImplemented;
 }

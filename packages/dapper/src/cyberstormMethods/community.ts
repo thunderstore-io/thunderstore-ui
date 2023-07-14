@@ -23,7 +23,7 @@ interface CommunityData {
 }
 
 // Dapper method type, defining the parameters required to fetch the data.
-export type GetCommunity = (identifier: string) => CommunityData;
+export type GetCommunity = (identifier: string) => Promise<CommunityData>;
 
 // Method for transforming the received data to a format that will be
 // passed on.
@@ -33,22 +33,15 @@ const transform = (viewData: z.infer<typeof schema>): CommunityData => ({
 });
 
 // Method implementation for Dapper class.
-export const getCommunity: GetCommunity = function (this: Dapper, identifier) {
+export const getCommunity: GetCommunity = async function (
+  this: Dapper,
+  identifier
+) {
   // TODO: CHANGE THIS TO USE THE ACTUAL THUNDERSTORE API, ONCE THE API ENDPOINTS HAS BEEN IMPLEMENTED
   const dummyCommunity = getCommunityDummyData(identifier);
   const dummyServers = getListOfIds(20).map((packageId) => {
     return getServerPreviewDummyData(packageId);
   });
 
-  const dapperCommunity: Community = {
-    name: dummyCommunity.name,
-    identifier: dummyCommunity.namespace,
-    total_package_count: dummyCommunity.packageCount,
-    total_download_count: dummyCommunity.downloadCount,
-    background_image_url: dummyCommunity.backgroundImageSource,
-    description: dummyCommunity.description,
-    discord_url: dummyCommunity.discordLink,
-  };
-
-  return transform({ community: dapperCommunity, servers: dummyServers });
+  return transform({ community: dummyCommunity, servers: dummyServers });
 };

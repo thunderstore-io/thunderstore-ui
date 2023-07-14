@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
 
-import { Dapper, DapperProvider } from "@thunderstore/dapper/src";
-import { API_DOMAIN } from "@/utils/constants";
+import { DapperProvider } from "@thunderstore/dapper/src";
+import { DummyDapper } from "@thunderstore/dapper/src/implementations/dummy/DummyDapper";
 
 export function ClientDapper(props: React.PropsWithChildren) {
-  const dapperConstructor = () => new Dapper(API_DOMAIN, undefined);
+  // import { API_DOMAIN } from "@/utils/constants";
+  // const dapperConstructor = () => new Dapper(API_DOMAIN, undefined);
+  const dapperConstructor = () => new DummyDapper();
   return (
     <DapperProvider dapperConstructor={dapperConstructor}>
       <>{props.children}</>

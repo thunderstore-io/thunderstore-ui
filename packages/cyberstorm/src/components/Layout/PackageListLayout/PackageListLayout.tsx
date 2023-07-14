@@ -1,7 +1,6 @@
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CommunitiesLink, CommunityLink } from "../../Links/Links";
-import { getCommunityDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import { PackagePreview } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { MetaItem } from "../../MetaItem/MetaItem";
@@ -16,6 +15,8 @@ import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { CommunityImage } from "../../CommunityImage/CommunityImage";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
+import { useDapper } from "@thunderstore/dapper";
+import usePromise from "react-promise-suspense";
 
 export interface PackageListLayoutProps {
   isLoading?: boolean;
@@ -29,54 +30,61 @@ export interface PackageListLayoutProps {
 export function PackageListLayout(props: PackageListLayoutProps) {
   const { communityId } = props;
 
-  const communityData = getCommunityData(communityId);
+  const dapper = useDapper();
+  const communityData = usePromise(dapper.getCommunity, [communityId]);
 
   return (
     <BaseLayout
       backGroundImageSource={
-        communityData.backgroundImageSource
-          ? communityData.backgroundImageSource
-          : "/images/community_bg.png"
+        communityData.community.background_image_url ||
+        "/images/community_bg.png"
       }
       breadCrumb={
         <BreadCrumbs>
           <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={communityData.name}>
-            {communityData.name}
+          <CommunityLink community={communityData.community.name}>
+            {communityData.community.name}
           </CommunityLink>
         </BreadCrumbs>
       }
       header={
         <PageHeader
-          title={communityData.name}
-          description={communityData.description}
+          title={communityData.community.name}
+          description={communityData.community.description}
           image={
             <CommunityImage
               src={
-                communityData.imageSource
-                  ? communityData.imageSource
-                  : "/images/game.png"
+                communityData.community.portrait_image_url || "/images/game.png"
               }
             />
           }
           meta={[
             <MetaItem
               key="meta-packages"
-              label={formatInteger(communityData.packageCount) + " Packages"}
+              label={
+                formatInteger(communityData.community.total_package_count) +
+                " Packages"
+              }
               icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
               colorScheme="accent"
               size="bold_large"
             />,
             <MetaItem
               key="meta-downloads"
-              label={formatInteger(communityData.downloadCount) + " Downloads"}
+              label={
+                formatInteger(communityData.community.total_download_count) +
+                " Downloads"
+              }
               icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
               colorScheme="accent"
               size="bold_large"
             />,
             <MetaItem
               key="meta-servers"
-              label={formatInteger(communityData.serverCount) + " Servers"}
+              label={
+                formatInteger(communityData.community.total_server_count) +
+                " Servers"
+              }
               icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
               colorScheme="accent"
               size="bold_large"
@@ -97,7 +105,3 @@ export function PackageListLayout(props: PackageListLayoutProps) {
 }
 
 PackageListLayout.displayName = "PackageListLayout";
-
-function getCommunityData(communityId: string) {
-  return getCommunityDummyData(communityId);
-}

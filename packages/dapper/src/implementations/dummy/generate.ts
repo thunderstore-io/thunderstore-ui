@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
 import {
   Category,
-  Community,
   CommunityPreview,
   Connection,
   Package,
@@ -20,8 +19,9 @@ import {
   UserSettings,
   UserSubscription,
 } from "../../schema";
+import { Community } from "../../cyberstormSchemas/community";
 
-export const strToHashInt = function (inputString: string) {
+const strToHashInt = function (inputString: string) {
   return inputString
     ? inputString.split("").reduce(function (a, b) {
         a = (a << 5) - a + b.charCodeAt(0);
@@ -30,7 +30,7 @@ export const strToHashInt = function (inputString: string) {
     : 0;
 };
 
-export function getRandomCategories(returnAmount?: number): Category[] {
+function getRandomCategories(returnAmount?: number): Category[] {
   const categories = [
     { name: "Mods", slug: "mods" },
     { name: "Tools", slug: "tools" },
@@ -81,17 +81,22 @@ export function getCommunityDummyData(seed?: string): Community {
   faker.seed(parsedSeed);
   return {
     name: faker.word.words(3),
-    namespace: "namespace",
-    downloadCount: faker.number.int({ min: 1000000, max: 10000000 }),
-    packageCount: faker.number.int({ min: 0, max: 100000 }),
-    serverCount: faker.number.int({ min: 0, max: 1000 }),
-    imageSource: faker.image.urlLoremFlickr({
+    identifier: faker.word.sample(),
+    total_download_count: faker.number.int({ min: 1000000, max: 10000000 }),
+    total_package_count: faker.number.int({ min: 0, max: 100000 }),
+    total_server_count: faker.number.int({ min: 0, max: 100000 }),
+    background_image_url: faker.image.urlLoremFlickr({
+      width: 1920,
+      height: 1080,
+      category: "abstract",
+    }),
+    portrait_image_url: faker.image.urlLoremFlickr({
       width: 142,
       height: 188,
       category: "abstract",
     }),
     description: faker.lorem.paragraphs(3),
-    discordLink: faker.internet.url(),
+    discord_url: faker.internet.url(),
   };
 }
 
