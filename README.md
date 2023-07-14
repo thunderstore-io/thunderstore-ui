@@ -68,37 +68,23 @@ yarn workspace @thunderstore/components add react-table @types/react-table
 
 ### Adding a new package
 
-To add a completely new package, start by creating the following file structure:
+**Template**
 
-```
-// packages/greeter/package.json:
-{
-  "name": "@thunderstore/greeter",
-  "version": "1.0.0",
-  "description": "Example package"
-}
+This repository includes a templated package generation script, powered by
+[plop](https://plopjs.com/documentation/). The templates can be found in
+[./plop/package](./plop/package) and should be updated if the requirements
+for new packages change.
 
-// packages/greeter/src/index.tsx:
-import React from "react";
+Behavior of plop is controlled in a single JS file at
+[./plopfile.mjs](./plopfile.mjs)
 
-export const Greeter: React.FC = () => <p>Hello, world!</p>;
-```
+**Generating**
 
-To add some required fields to the new package's `package.json`, run
-`yarn preconstruct init` and allow modifying `package.json` when asked.
+To actually generate a new package stub, simply run `yarn run plop` at the
+root of the repository. You should be prompted with a handful of questions after
+which a new package is created.
 
-To install dependencies, if any, run e.g.
-`yarn workspace @thunderstore/greeter add react react-dom @types/react`.
-
-To "install" the new package to Next.js app, update the `dependencies` section
-in `apps/nextjs/package.json` with `"@thunderstore/greeter": "^1.0.0",`.
-
-Then run `yarn` one more time to let Preconstruct work its magic. After that the
-new package should be usable in the Next.js app by simply importing it:
-
-```
-import { Greeter } from "@thunderstore/greeter";
-```
+![Plop generation example](./docs/plop.png)
 
 ### About VS Code...
 

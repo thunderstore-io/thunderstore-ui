@@ -1,0 +1,31 @@
+{
+  "name": "@thunderstore/{{kebabCase name}}",
+  "version": "0.1.0",
+  "description": "{{description}}",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "main": "dist/{{kebabCase name}}.cjs.js",
+  "module": "dist/{{kebabCase name}}.esm.js",
+  "types": "dist/{{kebabCase name}}.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+{{#each dependencies}}
+    "{{this}}": "*"{{#unless @last}},{{/unless}}{{#if @last}}{{#if @root.isReact}},{{/if}}{{/if}}
+{{/each}}
+{{#if isReact}}
+    "@types/react": "^18.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+{{/if}}
+  },
+  "devDependencies": {
+{{#if isReact}}
+    "typescript-plugin-css-modules": "^3.4.0"
+{{/if}}
+  }
+}
