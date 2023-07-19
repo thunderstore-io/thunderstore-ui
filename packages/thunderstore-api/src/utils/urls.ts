@@ -18,15 +18,20 @@ export function R<Children>(
   path: string,
   children: Children
 ): Children & Resolver<string>;
+export function R<Children, Resolution>(
+  path: string,
+  children: Children,
+  resolver: (path: string) => Resolution
+): Children & Resolver<Resolution>;
 export function R<Params, Children>(
   path: (params: Params) => string,
   children: Children
 ): (params: Params) => Children & Resolver<string>;
-export function R<Resolution>(
-  path: string,
-  children: undefined,
+export function R<Params, Children, Resolution>(
+  path: (params: Params) => string,
+  children: Children,
   resolver: (path: string) => Resolution
-): Resolver<Resolution>;
+): (params: Params) => Children & Resolver<Resolution>;
 export function R<Params, Children extends {}, Resolution>(
   path: string | ((params: Params) => string),
   children?: RouteChildren<Children, unknown>,
