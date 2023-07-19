@@ -1,0 +1,20 @@
+{
+  "name": "@thunderstore/thunderstore-api",
+  "version": "0.1.0",
+  "description": "Thunderstore API client",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "main": "dist/thunderstore-api.cjs.js",
+  "module": "dist/thunderstore-api.esm.js",
+  "types": "dist/thunderstore-api.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@thunderstore/dapper": "*"
+  },
+  "devDependencies": {}
+}
