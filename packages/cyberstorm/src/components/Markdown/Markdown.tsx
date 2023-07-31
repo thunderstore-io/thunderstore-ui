@@ -21,4 +21,4 @@ export function Markdown(props: MarkdownProps) {
   );
 }
 
-Markdown.displayName = "Header";
+Markdown.displayName = "Markdown";
