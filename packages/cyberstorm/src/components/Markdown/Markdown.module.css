@@ -1,0 +1,48 @@
+.root {
+  color: var(--color-text--default);
+}
+
+/*
+  TODO: Use proper styles instead of these placeholder values. The
+  content rendered on this page should match how the content is actually
+  rendered on the package page. I don't think Figma contains all the
+  stuff supported by markdown, so this needs to be discussed further and
+  all the styles should be updated all at once.
+
+  We can't control the elements inside the Markdown wrapper, e.g. to
+  give them class names, and linting requires pure selectors, so repeat
+  the .root class name on each selector.
+*/
+.root h1,
+.root h2,
+.root h3,
+.root h4,
+.root h5,
+.root h6 {
+  font: var(--font-heading);
+}
+
+.root h1 { font-size: 32px; }
+.root h2 { font-size: 24px; }
+.root h3 { font-size: 18px; }
+.root h4 { font-size: 16px; }
+.root h5 { font-size: 14px; }
+.root h6 { font-size: 12px; }
+
+.root img,
+.root ul,
+.root ol,
+.root p { margin-bottom: 1.25rem; }
+
+.root img { display: inline-block; }
+
+.root li > ul,
+.root li > ol {
+  margin-top: 0.25rem;
+}
+
+.root pre { padding: 1rem; }
+
+.root code { color: var(--color-blue--50); }
+
+.root a { color: var(--color-cyber-green--50); }
