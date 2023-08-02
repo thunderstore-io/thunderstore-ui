@@ -47,7 +47,7 @@ function SortButton(props: SortButtonProps) {
 
   if (identifier === current) {
     hookParams.direction = direction === Sort.ASC ? Sort.DESC : Sort.ASC;
-    icon = direction === Sort.ASC ? faSortUp : faSortDown;
+    icon = direction === Sort.ASC ? faSortDown : faSortUp;
     iconClass = styles.buttonIconActive;
   }
 
