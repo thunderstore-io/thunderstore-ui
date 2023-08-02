@@ -1,6 +1,10 @@
 # Workflow for detecting visual changes in Storybook components.
 name: 'Chromatic'
-on: push
+on:
+  push:
+    branches:
+      - "master"
+  pull_request:
 
 jobs:
   chromatic-deployment:
