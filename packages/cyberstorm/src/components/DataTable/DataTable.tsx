@@ -1,8 +1,8 @@
 "use client";
 import { CSSProperties, ReactNode, useState } from "react";
-import styles from "./DataTable.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort, faSortDown, faSortUp } from "@fortawesome/pro-solid-svg-icons";
+import styles from "./DataTable.module.css";
 import { Button } from "../Button/Button";
 
 export type DataTableRows = {
@@ -108,10 +108,8 @@ export function DataTable(props: DataTableProps) {
     sortDirection = -1,
     disableSort = false,
   } = props;
-  const [sortVariables, setSortVariables] = useState<{
-    identifier: number;
-    direction: 1 | -1;
-  }>({
+
+  const [sortVariables, setSortVariables] = useState({
     identifier: sortByHeader,
     direction: sortDirection,
   });
@@ -145,31 +143,28 @@ export function DataTable(props: DataTableProps) {
           } as CustomCSSColumn
         }
       >
-        {headers &&
-          headers.map((h, key) => {
-            return (
-              <div key={key} className={styles.gridHeader}>
-                {h.disableSort ? (
-                  <Button
-                    iconAlignment="side"
-                    colorScheme="transparentTertiary"
-                    paddingSize="large"
-                    fontSize="medium"
-                    fontWeight="700"
-                    label={h.value}
-                  />
-                ) : (
-                  <SortButton
-                    identifier={key}
-                    current={sortVariables.identifier}
-                    direction={sortVariables.direction}
-                    hook={setSortVariables}
-                    label={h.value}
-                  />
-                )}
-              </div>
-            );
-          })}
+        {headers.map((header, headerI) => (
+          <div key={headerI} className={styles.gridHeader}>
+            {header.disableSort ? (
+              <Button
+                iconAlignment="side"
+                colorScheme="transparentTertiary"
+                paddingSize="large"
+                fontSize="medium"
+                fontWeight="700"
+                label={header.value}
+              />
+            ) : (
+              <SortButton
+                identifier={headerI}
+                current={sortVariables.identifier}
+                direction={sortVariables.direction}
+                hook={setSortVariables}
+                label={header.value}
+              />
+            )}
+          </div>
+        ))}
       </div>
       <div
         className={styles.gridRows}
@@ -179,28 +174,23 @@ export function DataTable(props: DataTableProps) {
           } as CustomCSSRow
         }
       >
-        {rows &&
-          rows.map((r, rk) => {
-            return (
-              <div
-                key={`${rk}`}
-                className={styles.gridRow}
-                style={
-                  {
-                    "--column-count": columnCount,
-                  } as CustomCSSColumn
-                }
-              >
-                {r.map((c, ck) => {
-                  return (
-                    <div key={`${rk}_${ck}`} className={styles.gridCell}>
-                      {c.value}
-                    </div>
-                  );
-                })}
+        {rows.map((row, rowI) => (
+          <div
+            key={`row${rowI}`}
+            className={styles.gridRow}
+            style={
+              {
+                "--column-count": columnCount,
+              } as CustomCSSColumn
+            }
+          >
+            {row.map((col, colI) => (
+              <div key={`row${rowI}_col${colI}`} className={styles.gridCell}>
+                {col.value}
               </div>
-            );
-          })}
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   );
