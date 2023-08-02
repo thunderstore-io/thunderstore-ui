@@ -8,5 +8,5 @@ export default function Error({ error }: { error: Error; reset: () => void }) {
     console.error(error);
   }, [error]);
 
-  return <ErrorLayout error={error} />;
+  return <ErrorLayout error={500} />;
 }
