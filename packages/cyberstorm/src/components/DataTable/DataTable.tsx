@@ -10,34 +10,40 @@ export type DataTableRows = {
   sortValue: string | number;
 }[][];
 
+export enum Sort {
+  DESC = -1,
+  OFF,
+  ASC,
+}
+
 export interface DataTableProps {
   headers: { value: string; disableSort: boolean }[];
   rows: DataTableRows;
   disableSort?: boolean;
   sortByHeader?: number;
-  sortDirection?: 1 | -1;
+  sortDirection?: Sort;
 }
 
 interface SortButtonProps {
   identifier: number;
   current: number;
-  direction: 1 | -1;
+  direction: Sort;
   hook: React.Dispatch<
-    React.SetStateAction<{ identifier: number; direction: 1 | -1 }>
+    React.SetStateAction<{ identifier: number; direction: Sort }>
   >;
   label: string;
 }
 
 function SortButton(props: SortButtonProps) {
-  const { identifier, current, direction = 0, hook, label } = props;
+  const { identifier, current, direction = Sort.OFF, hook, label } = props;
 
-  const hookParams = { identifier, direction: -1 as 1 | -1 };
+  const hookParams = { identifier, direction: Sort.DESC };
   let icon = faSort;
   let iconClass = styles.buttonIcon;
 
   if (identifier === current) {
-    hookParams.direction = direction === 1 ? -1 : 1;
-    icon = direction === 1 ? faSortUp : faSortDown;
+    hookParams.direction = direction === Sort.ASC ? Sort.DESC : Sort.ASC;
+    icon = direction === Sort.ASC ? faSortUp : faSortDown;
     iconClass = styles.buttonIconActive;
   }
 
@@ -62,7 +68,7 @@ export function DataTable(props: DataTableProps) {
     headers,
     rows,
     sortByHeader = 0,
-    sortDirection = -1,
+    sortDirection = Sort.DESC,
     disableSort = false,
   } = props;
 
