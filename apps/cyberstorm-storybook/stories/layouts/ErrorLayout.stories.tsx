@@ -14,17 +14,9 @@ const Template: ComponentStory<typeof ErrorLayout> = (args) => (
 );
 
 const NotFoundErrorLayout = Template.bind({});
-NotFoundErrorLayout.args = { error: new Error("404") };
+NotFoundErrorLayout.args = { error: 404 };
 
 const InternalServerErrorLayout = Template.bind({});
-InternalServerErrorLayout.args = { error: new Error("500") };
+InternalServerErrorLayout.args = { error: 500 };
 
-const UnknownErrorLayout = Template.bind({});
-UnknownErrorLayout.args = { error: new Error("1234") };
-
-export {
-  meta as default,
-  NotFoundErrorLayout,
-  InternalServerErrorLayout,
-  UnknownErrorLayout,
-};
+export { meta as default, NotFoundErrorLayout, InternalServerErrorLayout };
