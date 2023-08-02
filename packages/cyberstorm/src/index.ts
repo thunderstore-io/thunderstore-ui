@@ -95,6 +95,7 @@ export { Title, type TitleProps } from "./components/Title/Title";
 export { Tooltip, type TooltipProps } from "./components/Tooltip/Tooltip";
 export { Alert, type AlertProps } from "./components/Alert/Alert";
 export { CommunityListLayout } from "./components/Layout/CommunityListLayout/CommunityListLayout";
+export { ErrorLayout } from "./components/Layout/ErrorLayout/ErrorLayout";
 export { HomeLayout } from "./components/Layout/HomeLayout/HomeLayout";
 export {
   PackageDetailLayout,
@@ -131,7 +132,5 @@ export { MarkdownPreviewLayout } from "./components/Layout/Developers/MarkdownPr
 export { PackageFormatDocsLayout } from "./components/Layout/Developers/PackageFormatDocs/PackageFormatDocsLayout";
 export { PackageUploadLayout } from "./components/Layout/Developers/PackageUpload/PackageUploadLayout";
 
-export { InternalServerErrorLayout } from "./components/Layout/SimplePages/InternalServerError/InternalServerErrorLayout";
-export { NotFoundLayout } from "./components/Layout/SimplePages/NotFound/NotFoundLayout";
 export { PrivacyPolicyLayout } from "./components/Layout/SimplePages/PrivacyPolicy/PrivacyPolicyLayout";
 export { TermsOfServiceLayout } from "./components/Layout/SimplePages/TermsOfService/TermsOfServiceLayout";
