@@ -18,14 +18,6 @@ export interface DataTableProps {
   sortDirection?: 1 | -1;
 }
 
-interface CustomCSSColumn extends CSSProperties {
-  "--column-count": number;
-}
-
-interface CustomCSSRow extends CSSProperties {
-  "--row-count": number;
-}
-
 interface SortButtonProps {
   identifier: number;
   current: number;
@@ -128,21 +120,16 @@ export function DataTable(props: DataTableProps) {
     return 0;
   }
 
-  const columnCount = headers ? headers.length : 0;
-  const rowCount = rows ? rows.length : 0;
   if (!disableSort) {
     rows.sort(compare);
   }
+
+  const rowsStyles = { "--row-count": rows.length } as CSSProperties;
+  const rowStyles = { "--column-count": headers.length } as CSSProperties;
+
   return (
     <div className={styles.gridTable}>
-      <div
-        className={styles.gridHeaders}
-        style={
-          {
-            "--column-count": columnCount,
-          } as CustomCSSColumn
-        }
-      >
+      <div className={styles.gridHeaders} style={rowStyles}>
         {headers.map((header, headerI) => (
           <div key={headerI} className={styles.gridHeader}>
             {header.disableSort ? (
@@ -166,24 +153,10 @@ export function DataTable(props: DataTableProps) {
           </div>
         ))}
       </div>
-      <div
-        className={styles.gridRows}
-        style={
-          {
-            "--row-count": rowCount,
-          } as CustomCSSRow
-        }
-      >
+
+      <div className={styles.gridRows} style={rowsStyles}>
         {rows.map((row, rowI) => (
-          <div
-            key={`row${rowI}`}
-            className={styles.gridRow}
-            style={
-              {
-                "--column-count": columnCount,
-              } as CustomCSSColumn
-            }
-          >
+          <div key={`row${rowI}`} className={styles.gridRow} style={rowStyles}>
             {row.map((col, colI) => (
               <div key={`row${rowI}_col${colI}`} className={styles.gridCell}>
                 {col.value}
