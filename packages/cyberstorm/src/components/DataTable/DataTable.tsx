@@ -30,66 +30,31 @@ interface SortButtonProps {
 
 function SortButton(props: SortButtonProps) {
   const { identifier, current, direction = 0, hook, label } = props;
+
+  const hookParams = { identifier, direction: -1 as 1 | -1 };
+  let icon = faSort;
+  let iconClass = styles.buttonIcon;
+
   if (identifier === current) {
-    if (direction === 1) {
-      return (
-        <Button
-          iconAlignment="side"
-          colorScheme="transparentTertiary"
-          paddingSize="medium"
-          fontSize="medium"
-          fontWeight="700"
-          onClick={() => hook({ identifier, direction: -1 })}
-          rightIcon={
-            <FontAwesomeIcon
-              icon={faSortUp}
-              fixedWidth
-              className={styles.buttonIconActive}
-            />
-          }
-          label={label}
-        />
-      );
-    } else {
-      return (
-        <Button
-          iconAlignment="side"
-          colorScheme="transparentTertiary"
-          paddingSize="medium"
-          fontSize="medium"
-          fontWeight="700"
-          onClick={() => hook({ identifier, direction: 1 })}
-          rightIcon={
-            <FontAwesomeIcon
-              icon={faSortDown}
-              fixedWidth
-              className={styles.buttonIconActive}
-            />
-          }
-          label={label}
-        />
-      );
-    }
-  } else {
-    return (
-      <Button
-        iconAlignment="side"
-        colorScheme="transparentTertiary"
-        paddingSize="medium"
-        fontSize="medium"
-        fontWeight="700"
-        onClick={() => hook({ identifier, direction: -1 })}
-        rightIcon={
-          <FontAwesomeIcon
-            icon={faSort}
-            fixedWidth
-            className={styles.buttonIcon}
-          />
-        }
-        label={label}
-      />
-    );
+    hookParams.direction = direction === 1 ? -1 : 1;
+    icon = direction === 1 ? faSortUp : faSortDown;
+    iconClass = styles.buttonIconActive;
   }
+
+  return (
+    <Button
+      iconAlignment="side"
+      colorScheme="transparentTertiary"
+      paddingSize="medium"
+      fontSize="medium"
+      fontWeight="700"
+      onClick={() => hook(hookParams)}
+      rightIcon={
+        <FontAwesomeIcon icon={icon} fixedWidth className={iconClass} />
+      }
+      label={label}
+    />
+  );
 }
 
 export function DataTable(props: DataTableProps) {
