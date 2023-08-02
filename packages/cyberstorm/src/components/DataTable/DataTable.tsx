@@ -5,16 +5,20 @@ import { faSort, faSortDown, faSortUp } from "@fortawesome/pro-solid-svg-icons";
 import styles from "./DataTable.module.css";
 import { Button } from "../Button/Button";
 
-export type DataTableRows = {
-  value: ReactNode;
-  sortValue: string | number;
-}[][];
-
 export enum Sort {
   DESC = -1,
   OFF,
   ASC,
 }
+
+interface DataTableColumn {
+  value: ReactNode;
+  sortValue: string | number;
+}
+
+type DataTableRow = DataTableColumn[];
+
+export type DataTableRows = DataTableRow[];
 
 export interface DataTableProps {
   headers: { value: string; disableSort: boolean }[];
@@ -77,10 +81,7 @@ export function DataTable(props: DataTableProps) {
     direction: sortDirection,
   });
 
-  function compare(
-    a: { value: ReactNode; sortValue: string | number }[],
-    b: { value: ReactNode; sortValue: string | number }[]
-  ) {
+  function compare(a: DataTableRow, b: DataTableRow) {
     const column = sortVariables.identifier;
     if (a[column] && b[column] && a[column].sortValue < b[column].sortValue) {
       return sortVariables.direction;
