@@ -19,4 +19,12 @@ NotFoundErrorLayout.args = { error: 404 };
 const InternalServerErrorLayout = Template.bind({});
 InternalServerErrorLayout.args = { error: 500 };
 
-export { meta as default, NotFoundErrorLayout, InternalServerErrorLayout };
+const UnknownErrorLayout = Template.bind({});
+UnknownErrorLayout.args = { error: 1337 };
+
+export {
+  meta as default,
+  NotFoundErrorLayout,
+  InternalServerErrorLayout,
+  UnknownErrorLayout,
+};

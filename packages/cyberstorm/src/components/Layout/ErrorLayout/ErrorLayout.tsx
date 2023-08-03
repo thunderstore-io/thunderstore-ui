@@ -2,7 +2,13 @@ import styles from "./ErrorLayout.module.css";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 
 export interface ErrorLayoutProps {
-  error: 404 | 500;
+  error: 404 | 500 | number;
+}
+
+interface ErrorLayoutInfo {
+  code: string | number;
+  description: string;
+  flavorText: string;
 }
 
 /**
@@ -11,30 +17,17 @@ export interface ErrorLayoutProps {
 export function ErrorLayout(props: ErrorLayoutProps) {
   const { error } = props;
 
-  let errorCode = "Error";
-  let errorDescription = "Unknown";
-  let errorFlavorText = "An error with an unknown error code happened";
-
-  if (error === 404) {
-    errorCode = "404";
-    errorDescription = "Page not found";
-    errorDescription = "Page not found";
-    errorFlavorText = "Oops! You found a glitch in the matrix.";
-  } else if (error === 500) {
-    errorCode = "500";
-    errorDescription = "Internal server error";
-    errorFlavorText = "Beep boop. Server something error happens.";
-  }
+  let errorInfo = getErrorInfo(error);
 
   return (
     <BaseLayout
       mainContent={
         <div className={styles.root}>
-          <div className={styles.glitch} data-text={errorCode}>
-            <span>{errorCode}</span>
+          <div className={styles.glitch} data-text={errorInfo.code}>
+            <span>{errorInfo.code}</span>
           </div>
-          <div className={styles.description}>{errorDescription}</div>
-          <div className={styles.flavor}>{errorFlavorText}</div>
+          <div className={styles.description}>{errorInfo.description}</div>
+          <div className={styles.flavor}>{errorInfo.flavorText}</div>
         </div>
       }
     />
@@ -42,3 +35,24 @@ export function ErrorLayout(props: ErrorLayoutProps) {
 }
 
 ErrorLayout.displayName = "ErrorLayout";
+
+function getErrorInfo(error: 404 | 500 | number): ErrorLayoutInfo {
+  return (
+    {
+      404: {
+        code: "404",
+        description: "Page not found",
+        flavorText: "Oops! You found a glitch in the matrix.",
+      },
+      500: {
+        code: "500",
+        description: "Internal server error",
+        flavorText: "Beep boop. Server something error happens.",
+      },
+    }[error] || {
+      code: "Error",
+      description: "Unknown error",
+      flavorText: "An error occured. Code: " + error,
+    }
+  );
+}
