@@ -1,7 +1,7 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClone, faCheck } from "@fortawesome/pro-regular-svg-icons";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styles from "./CopyButton.module.css";
 import { Tooltip } from "../Tooltip/Tooltip";
 import { Button } from "../Button/Button";
@@ -50,49 +50,45 @@ export function CopyButton(props: CopyButtonProps) {
     paddingSize = "none",
     colorScheme = "transparentDefault",
   } = props;
-  if (!navigator?.clipboard) {
-    console.warn("Clipboard not supported");
-    return null;
-  }
 
+  const [isSupported, setIsSupported] = useState(false);
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [wasRecentlyCopied, setWasRecentlyCopied] = useState(false);
-  const [tooltipOpen, setTooltipOpen] = useState(false);
 
-  const icon = wasRecentlyCopied ? (
-    <FontAwesomeIcon fixedWidth icon={faCheck} className={styles.checkmark} />
-  ) : (
-    <FontAwesomeIcon fixedWidth icon={faClone} className={styles.copy} />
-  );
+  useEffect(() => {
+    setIsSupported(
+      typeof window !== "undefined" &&
+        typeof navigator?.clipboard !== "undefined"
+    );
+  }, [setIsSupported]);
 
-  const button = (
-    <Button
-      paddingSize={paddingSize}
-      fontSize="small"
-      colorScheme={colorScheme}
-      onClick={() => {
-        useCopyToClipboard(text, setWasRecentlyCopied);
-      }}
-      onMouseOver={() => {
-        setTooltipOpen(true);
-      }}
-      onMouseOut={() => {
-        setTooltipOpen(false);
-      }}
-      leftIcon={icon}
-    />
-  );
-
-  return (
+  return isSupported ? (
     <TooltipProvider>
       <Tooltip
         content={wasRecentlyCopied ? "Copied!" : "Copy"}
-        open={tooltipOpen}
+        open={isTooltipOpen}
         side="bottom"
       >
-        <div className={styles.root}>{button}</div>
+        <div className={styles.root}>
+          <Button
+            paddingSize={paddingSize}
+            fontSize="small"
+            colorScheme={colorScheme}
+            onClick={() => useCopyToClipboard(text, setWasRecentlyCopied)}
+            onMouseOver={() => setIsTooltipOpen(true)}
+            onMouseOut={() => setIsTooltipOpen(false)}
+            leftIcon={
+              <FontAwesomeIcon
+                fixedWidth
+                icon={wasRecentlyCopied ? faCheck : faClone}
+                className={wasRecentlyCopied ? styles.checkmark : styles.copy}
+              />
+            }
+          />
+        </div>
       </Tooltip>
     </TooltipProvider>
-  );
+  ) : null;
 }
 
 CopyButton.displayName = "CopyButton";
