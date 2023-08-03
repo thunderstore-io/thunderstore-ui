@@ -12,12 +12,12 @@ interface ErrorLayoutInfo {
 }
 
 /**
- * Cyberstorm NotFound Layout
+ * Cyberstorm Error Layout
  */
 export function ErrorLayout(props: ErrorLayoutProps) {
   const { error } = props;
 
-  let errorInfo = getErrorInfo(error);
+  const errorInfo = getErrorInfo(error);
 
   return (
     <BaseLayout
