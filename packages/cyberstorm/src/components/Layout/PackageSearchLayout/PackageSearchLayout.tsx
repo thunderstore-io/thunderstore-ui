@@ -67,19 +67,11 @@ export function FiltersProvider(props: ContextProps) {
   );
 }
 
-function RemoveFilterIcon(
-  key: string,
-  filterType: "keyword" | "category",
-  hook: (key: string, filterType: string) => void
-) {
-  return (
-    // TODO: Fix to work with keyboard presses, so linting doesnt complain
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-    <div onClick={() => hook(key, filterType)}>
-      <FontAwesomeIcon icon={faXmark} fixedWidth />
-    </div>
-  );
-}
+const RemoveFilterIcon = (onClick: () => void) => (
+  <button onClick={onClick} style={{ backgroundColor: "transparent" }}>
+    <FontAwesomeIcon icon={faXmark} fixedWidth />
+  </button>
+);
 
 interface TagListProps {
   filters: Filters;
@@ -92,9 +84,16 @@ function CurrentFilters(props: TagListProps) {
     if (filterType === "keyword") {
       filters.setKeywords(filters.keywords.filter((x) => x !== key));
     }
+
     if (filterType === "category") {
-      filters.availableCategories[key].value = undefined;
-      filters.setAvailableCategories(filters.availableCategories);
+      const cats = { ...filters.availableCategories };
+      Object.values(cats).forEach((c) => {
+        if (c.label === key) {
+          c.value = undefined;
+        }
+      });
+
+      filters.setAvailableCategories(cats);
     }
   }
 
@@ -104,7 +103,7 @@ function CurrentFilters(props: TagListProps) {
         <Tag
           key={`keywordSearch_${keyword}_${index}`}
           label={`"${keyword}"`}
-          rightIcon={RemoveFilterIcon(keyword, "keyword", removeFilter)}
+          rightIcon={RemoveFilterIcon(() => removeFilter(keyword, "keyword"))}
           colorScheme="borderless_removable"
         />
       ))}
@@ -114,7 +113,9 @@ function CurrentFilters(props: TagListProps) {
           <Tag
             key={`categorySearch_${cat.label}_${index}`}
             label={cat.label}
-            rightIcon={RemoveFilterIcon(cat.label, "category", removeFilter)}
+            rightIcon={RemoveFilterIcon(() =>
+              removeFilter(cat.label, "category")
+            )}
             colorScheme="borderless_removable"
           />
         ))}
