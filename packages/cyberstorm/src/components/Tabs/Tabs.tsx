@@ -2,7 +2,7 @@ import { Dispatch, ReactElement, SetStateAction } from "react";
 import styles from "./Tabs.module.css";
 import { TabsButton } from "./TabsButton";
 
-interface Tab {
+export interface Tab {
   key: number;
   label: string;
   icon?: ReactElement;
