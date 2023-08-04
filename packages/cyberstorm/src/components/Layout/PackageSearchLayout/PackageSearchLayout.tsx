@@ -138,6 +138,14 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
       Array.from(new Set([...filters.keywords, e])).filter(Boolean)
     );
 
+  const clearFilters = () => {
+    filters.setKeywords([]);
+
+    const cats = { ...filters.availableCategories };
+    Object.values(cats).forEach((cat) => (cat.value = undefined));
+    filters.setAvailableCategories(cats);
+  };
+
   return (
     <div className={styles.content}>
       <TextInput
@@ -175,17 +183,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
                   colorScheme="transparentTertiary"
                   border-width="0px"
                   label="Clear all"
-                  onClick={() => {
-                    filters.setKeywords([]);
-                    const updatedAvailableCategories: CategoriesProps = {};
-                    Object.keys(filters.availableCategories).forEach((key) => {
-                      updatedAvailableCategories[key] = {
-                        label: filters.availableCategories[key].label,
-                        value: undefined,
-                      };
-                    });
-                    filters.setAvailableCategories(updatedAvailableCategories);
-                  }}
+                  onClick={clearFilters}
                 />
               </div>
             ) : null}
