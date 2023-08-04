@@ -133,19 +133,10 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
 
-  const handleSearchFilterEdit = (e: string) => {
-    let found = false;
-    const newSearchTerms = filters.keywords?.map((keyword) => {
-      if (keyword === e) {
-        found = true;
-      }
-      return keyword;
-    });
-    if (!found) {
-      newSearchTerms.push(e);
-    }
-    filters.setKeywords(newSearchTerms);
-  };
+  const handleSearchFilterEdit = (e: string) =>
+    filters.setKeywords(
+      Array.from(new Set([...filters.keywords, e])).filter(Boolean)
+    );
 
   return (
     <div className={styles.content}>
