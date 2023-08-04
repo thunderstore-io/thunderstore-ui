@@ -1,5 +1,6 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
+import { isEqual } from "lodash";
 import styles from "./PackageListings.module.css";
 import { PackageCard } from "../../PackageCard/PackageCard";
 import { useDapper } from "@thunderstore/dapper";
@@ -54,24 +55,29 @@ export default function PackageListings(props: PackageListingsProps) {
   ]);
 
   useEffect(() => {
-    const updatedAvailableCategories: CategoriesProps | undefined =
-      filters?.availableCategories;
+    if (filters === null || typeof datas === "undefined") {
+      return;
+    }
 
-    datas?.map((package_) => {
-      package_.categories.map((category) => {
-        if (!filters?.availableCategories[category.slug]) {
-          updatedAvailableCategories
-            ? (updatedAvailableCategories[category.slug] = {
-                label: category.name,
-                value: undefined,
-              })
-            : null;
-        }
+    // filters.availableCategories contains all possible categories for
+    // current packages as one might expect from the name, but note that
+    // calling filters.setAvailableCategories does NOT filter the
+    // categories, but only updates filters.availableCategories[].value
+    // booleans which define whether the filter is including/excluding
+    // packages (true/false) or off (undefined).
+    const updatedAvailableCategories = { ...filters.availableCategories };
+
+    datas.forEach((package_) => {
+      package_.categories.forEach((category) => {
+        updatedAvailableCategories[category.slug] = {
+          label: category.name,
+          value: filters.availableCategories[category.slug]?.value,
+        };
       });
     });
 
-    if (updatedAvailableCategories) {
-      filters?.setAvailableCategories(updatedAvailableCategories);
+    if (!isEqual(updatedAvailableCategories, filters.availableCategories)) {
+      filters.setAvailableCategories(updatedAvailableCategories);
     }
   }, [
     datas,
