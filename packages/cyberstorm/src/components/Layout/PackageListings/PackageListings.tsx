@@ -44,11 +44,13 @@ export default function PackageListings(props: PackageListingsProps) {
     getDatas();
   }, [
     communityId,
-    userId,
-    namespaceId,
-    teamId,
-    filters?.keywords,
+    dapper.getPackageListings,
     filters?.availableCategories,
+    filters?.keywords,
+    namespaceId,
+    setDatas,
+    teamId,
+    userId,
   ]);
 
   useEffect(() => {
@@ -71,7 +73,12 @@ export default function PackageListings(props: PackageListingsProps) {
     if (updatedAvailableCategories) {
       filters?.setAvailableCategories(updatedAvailableCategories);
     }
-  }, [datas, filters?.keywords, filters?.availableCategories]);
+  }, [
+    datas,
+    filters?.availableCategories,
+    filters?.keywords,
+    filters?.setAvailableCategories,
+  ]);
 
   return (
     <div className={styles.packageCardList}>
