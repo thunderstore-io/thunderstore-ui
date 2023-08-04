@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, lazy, useState, createContext, ReactNode } from "react";
+import { Suspense, lazy, useState, createContext } from "react";
 import styles from "./PackageSearchLayout.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -38,10 +38,7 @@ export interface PackageListingsProps {
   userId: string;
   teamId: string;
   keywords: { key: string; negate: boolean }[];
-  categories: {
-    label: string;
-    value: boolean | undefined;
-  }[];
+  categories: CategoriesProps[];
 }
 
 // TODO: OVERKILL???
@@ -101,54 +98,41 @@ function CurrentFilters(props: TagListProps) {
     }
   }
 
-  const categories: ReactNode[] = [];
-  Object.keys(filters.availableCategories).forEach(function (key, index) {
-    if (filters.availableCategories[key].value !== undefined) {
-      categories.push(
-        <Tag
-          key={"categorySearch" + key + index.toString()}
-          label={key}
-          rightIcon={RemoveFilterIcon(key, "category", removeFilter)}
-          colorScheme={"borderless_removable"}
-        />
-      );
-    }
-  });
-
   return (
     <>
-      {filters.keywords?.map((keyword, index: number) => {
-        return (
+      {filters.keywords?.map((keyword, index) => (
+        <Tag
+          key={`keywordSearch_${keyword}_${index}`}
+          label={`"${keyword}"`}
+          rightIcon={RemoveFilterIcon(keyword, "keyword", removeFilter)}
+          colorScheme="borderless_removable"
+        />
+      ))}
+      {Object.values(filters.availableCategories)
+        .filter((category) => category.value !== undefined)
+        .map((cat, index) => (
           <Tag
-            key={"keywordSearch" + keyword + index.toString()}
-            label={`"${keyword}"`}
-            rightIcon={RemoveFilterIcon(keyword, "keyword", removeFilter)}
-            colorScheme={"borderless_removable"}
+            key={`categorySearch_${cat.label}_${index}`}
+            label={cat.label}
+            rightIcon={RemoveFilterIcon(cat.label, "category", removeFilter)}
+            colorScheme="borderless_removable"
           />
-        );
-      })}
-      {categories}
+        ))}
     </>
   );
 }
 
 /**
- * Cyberstorm PackageList Layout
+ * Cyberstorm PackageSearch Layout
  */
 export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
-  const {
-    communityId = undefined,
-    userId = undefined,
-    teamId = undefined,
-  } = props;
+  const { communityId, userId, teamId } = props;
 
-  // Prep
   const filters = new Filters();
   const [order, setOrder] = useState("1");
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
 
-  // Helper function
   const handleSearchFilterEdit = (e: string) => {
     let found = false;
     const newSearchTerms = filters.keywords?.map((keyword) => {
@@ -163,7 +147,6 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
     filters.setKeywords(newSearchTerms);
   };
 
-  // React Node return
   return (
     <div className={styles.content}>
       <TextInput
@@ -183,6 +166,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
         <div className={styles.content}>
           <div className={styles.listTopNavigation}>
             <div className={styles.showing}>
+              {/* TODO: use real values */}
               Showing <strong>1-20</strong> of <strong>327</strong> results
             </div>
 
@@ -207,9 +191,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
                   onClick={() => {
                     filters.setKeywords([]);
                     const updatedAvailableCategories: CategoriesProps = {};
-                    Object.keys(filters.availableCategories).forEach(function (
-                      key
-                    ) {
+                    Object.keys(filters.availableCategories).forEach((key) => {
                       updatedAvailableCategories[key] = {
                         label: filters.availableCategories[key].label,
                         value: undefined,
@@ -248,6 +230,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
               />
             </Suspense>
           </FiltersProvider>
+          {/* TODO: use real totalCount */}
           <Pagination
             currentPage={page}
             onPageChange={setPage}

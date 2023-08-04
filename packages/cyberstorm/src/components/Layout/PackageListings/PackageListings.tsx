@@ -4,7 +4,10 @@ import styles from "./PackageListings.module.css";
 import { PackageCard } from "../../PackageCard/PackageCard";
 import { useDapper } from "@thunderstore/dapper";
 import { PackagePreview } from "@thunderstore/dapper/src/schema";
-import { FiltersContext } from "../PackageSearchLayout/PackageSearchLayout";
+import {
+  FiltersContext,
+  CategoriesProps,
+} from "../PackageSearchLayout/PackageSearchLayout";
 
 export interface PackageListingsProps {
   communityId?: string;
@@ -15,12 +18,7 @@ export interface PackageListingsProps {
 
 export interface fetchFromDapperProps extends PackageListingsProps {
   keywords?: string[];
-  availableCategories?: {
-    [key: string]: {
-      label: string;
-      value: boolean | undefined;
-    };
-  };
+  availableCategories?: CategoriesProps;
 }
 
 export default function PackageListings(props: PackageListingsProps) {
@@ -40,7 +38,6 @@ export default function PackageListings(props: PackageListingsProps) {
         filters?.keywords,
         filters?.availableCategories
       );
-      console.log(datasCall);
       setDatas(datasCall);
     }
 
@@ -55,17 +52,11 @@ export default function PackageListings(props: PackageListingsProps) {
   ]);
 
   useEffect(() => {
-    const updatedAvailableCategories:
-      | {
-          [key: string]: {
-            label: string;
-            value: boolean | undefined;
-          };
-        }
-      | undefined = filters?.availableCategories;
-    const packages = datas;
-    packages?.map((x) => {
-      x.categories.map((category) => {
+    const updatedAvailableCategories: CategoriesProps | undefined =
+      filters?.availableCategories;
+
+    datas?.map((package_) => {
+      package_.categories.map((category) => {
         if (!filters?.availableCategories[category.slug]) {
           updatedAvailableCategories
             ? (updatedAvailableCategories[category.slug] = {
@@ -76,6 +67,7 @@ export default function PackageListings(props: PackageListingsProps) {
         }
       });
     });
+
     if (updatedAvailableCategories) {
       filters?.setAvailableCategories(updatedAvailableCategories);
     }
@@ -83,13 +75,11 @@ export default function PackageListings(props: PackageListingsProps) {
 
   return (
     <div className={styles.packageCardList}>
-      {datas &&
-        datas.map((packageData) => {
-          return (
-            <PackageCard key={packageData.name} packageData={packageData} />
-          );
-        })}
+      {datas?.map((packageData) => (
+        <PackageCard key={packageData.name} packageData={packageData} />
+      ))}
     </div>
   );
 }
+
 PackageListings.displayName = "PackageListings";
