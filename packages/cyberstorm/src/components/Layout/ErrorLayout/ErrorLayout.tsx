@@ -2,11 +2,11 @@ import styles from "./ErrorLayout.module.css";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 
 export interface ErrorLayoutProps {
-  error: 404 | 500 | number;
+  error: 404 | 500;
 }
 
 interface ErrorLayoutInfo {
-  code: string | number;
+  code: string;
   description: string;
   flavorText: string;
 }
@@ -36,23 +36,17 @@ export function ErrorLayout(props: ErrorLayoutProps) {
 
 ErrorLayout.displayName = "ErrorLayout";
 
-function getErrorInfo(error: 404 | 500 | number): ErrorLayoutInfo {
-  return (
-    {
-      404: {
-        code: "404",
-        description: "Page not found",
-        flavorText: "Oops! You found a glitch in the matrix.",
-      },
-      500: {
-        code: "500",
-        description: "Internal server error",
-        flavorText: "Beep boop. Server something error happens.",
-      },
-    }[error] || {
-      code: "Error",
-      description: "Unknown error",
-      flavorText: "An error occured. Code: " + error,
-    }
-  );
+function getErrorInfo(error: 404 | 500): ErrorLayoutInfo {
+  return {
+    404: {
+      code: "404",
+      description: "Page not found",
+      flavorText: "Oops! You found a glitch in the matrix.",
+    },
+    500: {
+      code: "500",
+      description: "Internal server error",
+      flavorText: "Beep boop. Server something error happens.",
+    },
+  }[error];
 }
