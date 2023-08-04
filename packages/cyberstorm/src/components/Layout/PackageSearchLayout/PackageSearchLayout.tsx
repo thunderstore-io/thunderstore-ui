@@ -183,10 +183,6 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
                   fontWeight="700"
                   colorScheme="transparentTertiary"
                   border-width="0px"
-                  border-radius="0.5rem"
-                  justify-content="center"
-                  align-items="center"
-                  font-size="0.875rem"
                   label="Clear all"
                   onClick={() => {
                     filters.setKeywords([]);
