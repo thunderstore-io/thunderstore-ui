@@ -44,11 +44,11 @@ function getRandomCategories(returnAmount?: number): Category[] {
     { name: "Audio", slug: "audio" },
     { name: "Enemies", slug: "enemies" },
   ];
-  return categories
-    .sort(function () {
-      return 0.5 - Math.random();
-    })
-    .slice(0, returnAmount ? returnAmount : 3);
+
+  return faker.helpers.arrayElements(categories, {
+    min: 0,
+    max: returnAmount ?? 3,
+  });
 }
 
 export function getListOfIds(length: number, seed?: string) {
