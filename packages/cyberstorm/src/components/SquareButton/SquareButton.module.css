@@ -1,0 +1,221 @@
+/* Common SquareButton styles */
+.root {
+  display: flex;
+  flex: none;
+  flex-direction: row;
+  gap: var(--gap--16);
+  align-items: center;
+
+  padding: var(--space--12) var(--space--16);
+  border: var(--button-border-width) solid var(--button-border-color);
+  border-radius: var(--border-radius--8);
+  color: var(--text-color);
+  background-color: var(--bg-color);
+
+  --font-size: var(--font-size--l);
+  --text-color: var(--color-text--default);
+  --bg-color: var(--color-surface--7);
+  --button-border-color: transparent;
+  --button-border-width: var(--border-width--2);
+}
+
+.root:hover {
+  transition: ease-out 60ms;
+}
+
+/* Different SquareButton color schemes */
+
+.button__default {
+  --text-color: var(--color-text--default);
+  --bg-color: var(--color-surface--7);
+}
+
+.button__default:hover {
+  --bg-color: var(--color-surface--10);
+  --button-border-color: transparent;
+}
+
+.button__primary {
+  --bg-color: var(--color-surface--10);
+}
+
+.button__primary:hover {
+  --bg-color: var(--color-surface--10--hover);
+}
+
+.button__fancyAccent {
+  border: none;
+
+  --bg-color: var(--color-cyber-green--60);
+  --text-color: var(--color-cyber-green--10);
+
+  box-shadow:
+    inset 0 -3px 0 0 rgb(0 0 0 / 0.35),
+    inset 0 var(--space--px) 0 0 rgb(255 255 255 / 0.2),
+    inset 0 0 var(--space--16) 0 var(--color-green--6);
+}
+
+.button__fancyAccent:hover {
+  box-shadow:
+    inset 0 -3px 0 0 rgb(0 0 0 / 0.35),
+    inset 0 var(--space--px) 0 0 rgb(255 255 255 / 0.2),
+    inset 0 0 var(--space--16) 0 var(--color-green--3),
+    0 0 var(--space--10) 0 rgb(79 216 159 / 0.5);
+}
+
+.button__fancyAccent:active {
+  --bg-color: var(--color-cyber-green--50);
+
+  box-shadow:
+    inset 0 var(--space--2) 0 0 rgb(0 0 0 / 0.25),
+    0 0 var(--space--10) 0 rgb(79 216 159 / 0.5);
+}
+
+.button__accent {
+  --text-color: var(--color-black);
+  --bg-color: var(--color-highlight);
+}
+
+.button__accent:hover {
+  --bg-color: var(--color-highlight--hover);
+}
+
+.button__tertiary {
+  --bg-color: transparent;
+}
+
+.button__tertiary:hover {
+  --bg-color: var(--color-surface--7);
+}
+
+.button__success {
+  --text-color: var(--color-success-text);
+  --bg-color: var(--color-success-background);
+}
+
+.button__success:hover {
+  --bg-color: var(--color-success-background--hover);
+}
+
+.button__warning {
+  --text-color: var(--color-warning-text);
+  --bg-color: var(--color-warning-background);
+}
+
+.button__warning:hover {
+  --bg-color: var(--color-warning-background--hover);
+}
+
+.button__danger {
+  --text-color: var(--color-danger-text);
+  --bg-color: var(--color-danger-background);
+}
+
+.button__danger:hover {
+  --bg-color: var(--color-danger-background--hover);
+}
+
+/* Special-style SquareButtons */
+
+.button__specialPurple,
+.button__specialGreen {
+  position: relative;
+  z-index: 1;
+  transition: all 0.12s;
+}
+
+.button__specialGreen {
+  background: var(--color-gradient-blue-green--darker) padding-box, var(--color-gradient-blue-green) border-box;
+  box-shadow: var(--box-shadow-special-green);
+}
+
+.button__specialPurple {
+  background: linear-gradient(315deg, #1f0a2e 0%, #102b20 100%) padding-box, linear-gradient(315deg, #9d30e4 0%, #23ffb0 100%) border-box;
+}
+
+.button__specialGreen:hover {
+  --button-border-color: transparent;
+
+  box-shadow: var(--box-shadow-special-green--highlight);
+}
+
+.button__specialPurple:hover {
+  --button-border-color: transparent;
+
+  background: linear-gradient(315deg, #0b4162 0%, #205740 100%) padding-box, linear-gradient(315deg, #49b5f7 0%, #73e1b2 100%) border-box;
+}
+
+.button__specialGreen::before,
+.button__specialPurple::before {
+  position: absolute;
+  top: calc(0 - var(--button-border-width));
+  right: calc(0 - var(--button-border-width));
+  bottom: calc(0 - var(--button-border-width));
+  left: calc(0 - var(--button-border-width));
+  z-index: -1;
+  border: var(--button-border-width) solid transparent;
+  border-radius: var(--border-radius--8);
+  opacity: 0;
+  transition: all 0.12s;
+  content: "";
+}
+
+.button__specialGreen::before {
+  background: var(--color-gradient-blue-green--dark) padding-box, var(--color-gradient-blue-green--light) border-box;
+}
+
+.button__specialPurple::before {
+  background: var(--color-gradient-purple-green--dark) padding-box, var(--color-gradient-purple-green--light) border-box;
+}
+
+.button__specialPurple:hover::before,
+.button__specialGreen:hover::before {
+  opacity: 1;
+}
+
+.button__transparentDefault {
+  --bg-color: transparent;
+}
+
+.button__transparentDefault:hover {
+  --bg-color: var(--color-surface--4);
+}
+
+.button__transparentDanger {
+  --bg-color: transparent;
+  --text-color: var(--color-border--highlight);
+}
+
+.button__transparentDanger:hover {
+  --bg-color: var(--color-danger-background);
+  --text-color: var(--color-danger-text);
+}
+
+.button__transparentTertiary {
+  --bg-color: transparent;
+  --text-color: var(--color-text--tertiary);
+}
+
+.button__transparentTertiary:hover {
+  --bg-color: var(--color-surface--4);
+}
+
+.button__transparentPrimary {
+  --text-color: var(--color-highlight);
+  --bg-color: transparent;
+}
+
+.button__transparentPrimary:hover {
+  --text-color: var(--color-highlight--hover);
+  --bg-color: var(--color-surface--4);
+}
+
+.button__transparentAccent {
+  --text-color: var(--color-text--accent);
+  --bg-color: transparent;
+}
+
+.button__transparentAccent:hover {
+  --text-color: var(--color-text--accent);
+  --bg-color: var(--color-surface--7);
+}
