@@ -4,15 +4,18 @@ import React, {
   PropsWithChildren,
   ReactNode,
   useRef,
+  useState,
 } from "react";
 import styles from "./SquareButton.module.css";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { Tooltip } from "../Tooltip/Tooltip";
 
 interface _SquareButtonProps extends _SquarePlainButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 interface _SquarePlainButtonProps {
-  Icon?: ReactNode;
+  icon?: ReactNode;
   colorScheme?:
     | "danger"
     | "default"
@@ -44,14 +47,7 @@ export const SquareButton = React.forwardRef<
   HTMLButtonElement,
   SquareButtonProps
 >((props: PropsWithChildren<SquareButtonProps>, forwardedRef) => {
-  const {
-    label,
-    Icon,
-    colorScheme = "default",
-    onClick,
-    ...forwardedProps
-  } = props;
-  v;
+  const { icon, colorScheme = "default", onClick, ...forwardedProps } = props;
 
   const fallbackRef = useRef(null);
   const ref = forwardedRef || fallbackRef;
@@ -64,7 +60,7 @@ export const SquareButton = React.forwardRef<
       className={`${styles.root} ${getStyle(colorScheme)}`}
       onClick={onClick}
     >
-      {Icon ? <div className={styles.Icon}>{Icon}</div> : null}
+      {icon ? <div className={styles.icon}>{icon}</div> : null}
     </button>
   );
 });
@@ -73,20 +69,38 @@ export const SquarePlainButton = React.forwardRef<
   HTMLDivElement,
   SquarePlainButtonProps
 >((props: PropsWithChildren<SquarePlainButtonProps>, forwardedRef) => {
-  const { Icon, colorScheme = "default", ...forwardedProps } = props;
+  const { icon, colorScheme = "default", onClick, ...forwardedProps } = props;
 
   const fallbackRef = useRef(null);
   const ref = forwardedRef || fallbackRef;
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  const button = (
+    <SquarePlainButton
+      colorScheme={colorScheme}
+      onMouseOver={() => {
+        setTooltipOpen(true);
+      }}
+      onMouseOut={() => {
+        setTooltipOpen(false);
+      }}
+      icon={icon}
+      onClick={onClick}
+    />
+  );
 
   return (
-    <div
-      {...forwardedProps}
-      ref={ref}
-      className={`${styles.root}
-        )} ${getStyle(colorScheme)}`}
-    >
-      {Icon}
-    </div>
+    <TooltipProvider>
+      <Tooltip content={"derp"} open={tooltipOpen} side="bottom">
+        <div
+          {...forwardedProps}
+          ref={ref}
+          className={`${styles.root} ${getStyle(colorScheme)}`}
+        >
+          {button}
+        </div>
+      </Tooltip>
+    </TooltipProvider>
   );
 });
 

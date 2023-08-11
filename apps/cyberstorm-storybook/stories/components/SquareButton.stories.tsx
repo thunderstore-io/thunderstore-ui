@@ -11,7 +11,7 @@ export default {
 
 const defaultArgs = {
   label: "Categories",
-  Icon: <FontAwesomeIcon fixedWidth icon={faSkull} />,
+  icon: <FontAwesomeIcon fixedWidth icon={faSkull} />,
 };
 
 const Template: StoryFn<typeof SquareButton> = (args) => (
@@ -27,7 +27,7 @@ PrimarySquareButton.args = { ...defaultArgs, colorScheme: "primary" };
 const DangerSquareButton = Template.bind({});
 DangerSquareButton.args = {
   ...defaultArgs,
-  Icon: <FontAwesomeIcon fixedWidth icon={faSkull} />,
+  icon: <FontAwesomeIcon fixedWidth icon={faSkull} />,
   colorScheme: "danger",
   onClick: () => {
     alert("Danger button clicked");
