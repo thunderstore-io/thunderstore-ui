@@ -98,22 +98,24 @@ export function LoginLayout() {
           ) : null}
         </div>
       </div>
-      <div className={styles.graphics}>
-        <div className={styles.logo}>
-          <ThunderstoreLogoHorizontal />
-        </div>
-        <div className={styles.graphicsSvg}>
-          <LoginGraphics />
-        </div>
-        <div className={styles.legal}>
-          By logging in and accessing the site I agree to{" "}
-          <span className={styles.legalLink}>
-            <TermsOfServiceLink>Terms and Conditions</TermsOfServiceLink>
-          </span>{" "}
-          and{" "}
-          <span className={styles.legalLink}>
-            <PrivacyPolicyLink>Privacy Policy</PrivacyPolicyLink>
-          </span>
+      <div className={styles.graphicsWrapper}>
+        <div className={styles.graphics}>
+          <div className={styles.logo}>
+            <ThunderstoreLogoHorizontal />
+          </div>
+          <div className={styles.graphicsSvg}>
+            <LoginGraphics />
+          </div>
+          <div className={styles.legal}>
+            By logging in and accessing the site I agree to{" "}
+            <span className={styles.legalLink}>
+              <TermsOfServiceLink>Terms and Conditions</TermsOfServiceLink>
+            </span>{" "}
+            and{" "}
+            <span className={styles.legalLink}>
+              <PrivacyPolicyLink>Privacy Policy</PrivacyPolicyLink>
+            </span>
+          </div>
         </div>
       </div>
     </div>

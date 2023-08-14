@@ -13,6 +13,7 @@
   align-self: stretch;
   justify-content: center;
   height: 100%;
+  min-height: 600px;
   padding: var(--space--48) var(--space--16);
 }
 
@@ -92,8 +93,13 @@
   display: flex;
   width: 100%;
   height: 100%;
+  min-height: 600px;
   background: linear-gradient(166deg, rgb(94 29 137 / 0) 60%, rgb(216 172 244 / 0.3) 150%);
   pointer-events: none;
+}
+
+.graphicsWrapper {
+  max-height: 100%;
 }
 
 .graphics {
@@ -101,9 +107,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  align-self: stretch;
   justify-content: space-between;
   max-width: 768px;
+  max-height: 600px;
   padding: var(--space--48) 0;
 }
 
@@ -112,12 +118,15 @@
 }
 
 .logo > svg {
-  flex: 1 0 auto;
   height: var(--space--24);
   fill: var(--color-white);
 }
 
 .graphicsSvg {
+  position: relative;
+  display: flex;
+  flex-grow: 0;
+  max-height: calc(100vh - 10rem);
   pointer-events: none;
 }
 

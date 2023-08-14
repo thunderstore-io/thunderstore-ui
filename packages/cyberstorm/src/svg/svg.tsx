@@ -258,7 +258,6 @@ export function LoginGraphics() {
           width="435.267"
           height="457.7"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend
@@ -279,7 +278,6 @@ export function LoginGraphics() {
           width="92.7412"
           height="74.9853"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
@@ -331,7 +329,6 @@ export function LoginGraphics() {
           width="123.988"
           height="136.189"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend
@@ -352,7 +349,6 @@ export function LoginGraphics() {
           width="182.471"
           height="83.7118"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
