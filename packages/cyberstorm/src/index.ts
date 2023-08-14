@@ -7,6 +7,8 @@ export {
 export {
   SquareButton,
   type SquareButtonProps,
+  SquarePlainButton,
+  type SquarePlainButtonProps,
 } from "./components/SquareButton/SquareButton";
 export { CodeBox, type CodeBoxProps } from "./components/CodeBox/CodeBox";
 export {

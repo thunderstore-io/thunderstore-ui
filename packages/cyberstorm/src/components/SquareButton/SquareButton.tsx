@@ -4,9 +4,9 @@ import React, {
   PropsWithChildren,
   ReactNode,
   useRef,
-  useState,
 } from "react";
 import styles from "./SquareButton.module.css";
+import buttonStyles from "../Button/Button.module.css";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Tooltip } from "../Tooltip/Tooltip";
 
@@ -15,7 +15,7 @@ interface _SquareButtonProps extends _SquarePlainButtonProps {
 }
 
 interface _SquarePlainButtonProps {
-  icon?: ReactNode;
+  icon: ReactNode;
   colorScheme?:
     | "danger"
     | "default"
@@ -32,6 +32,7 @@ interface _SquarePlainButtonProps {
     | "transparentTertiary"
     | "transparentAccent"
     | "transparentPrimary";
+  tooltipText: string;
 }
 
 export type SquareButtonProps = _SquareButtonProps &
@@ -47,21 +48,31 @@ export const SquareButton = React.forwardRef<
   HTMLButtonElement,
   SquareButtonProps
 >((props: PropsWithChildren<SquareButtonProps>, forwardedRef) => {
-  const { icon, colorScheme = "default", onClick, ...forwardedProps } = props;
+  const {
+    icon,
+    colorScheme = "default",
+    onClick,
+    tooltipText,
+    ...forwardedProps
+  } = props;
 
   const fallbackRef = useRef(null);
   const ref = forwardedRef || fallbackRef;
 
   return (
-    <button
-      {...forwardedProps}
-      ref={ref}
-      type="button"
-      className={`${styles.root} ${getStyle(colorScheme)}`}
-      onClick={onClick}
-    >
-      {icon ? <div className={styles.icon}>{icon}</div> : null}
-    </button>
+    <TooltipProvider>
+      <Tooltip content={tooltipText}>
+        <button
+          {...forwardedProps}
+          ref={ref}
+          type="button"
+          className={`${styles.root} ${getStyle(colorScheme)}`}
+          onClick={onClick}
+        >
+          {icon ? <div>{icon}</div> : null}
+        </button>
+      </Tooltip>
+    </TooltipProvider>
   );
 });
 
@@ -69,35 +80,25 @@ export const SquarePlainButton = React.forwardRef<
   HTMLDivElement,
   SquarePlainButtonProps
 >((props: PropsWithChildren<SquarePlainButtonProps>, forwardedRef) => {
-  const { icon, colorScheme = "default", onClick, ...forwardedProps } = props;
+  const {
+    icon,
+    colorScheme = "default",
+    tooltipText,
+    ...forwardedProps
+  } = props;
 
   const fallbackRef = useRef(null);
   const ref = forwardedRef || fallbackRef;
-  const [tooltipOpen, setTooltipOpen] = useState(false);
-
-  const button = (
-    <SquarePlainButton
-      colorScheme={colorScheme}
-      onMouseOver={() => {
-        setTooltipOpen(true);
-      }}
-      onMouseOut={() => {
-        setTooltipOpen(false);
-      }}
-      icon={icon}
-      onClick={onClick}
-    />
-  );
 
   return (
     <TooltipProvider>
-      <Tooltip content={"derp"} open={tooltipOpen} side="bottom">
+      <Tooltip content={tooltipText}>
         <div
           {...forwardedProps}
           ref={ref}
           className={`${styles.root} ${getStyle(colorScheme)}`}
         >
-          {button}
+          {icon ? <div>{icon}</div> : null}
         </div>
       </Tooltip>
     </TooltipProvider>
@@ -109,20 +110,20 @@ SquarePlainButton.displayName = "SquarePlainButton";
 
 const getStyle = (scheme: string) => {
   return {
-    danger: styles.button__danger,
-    primary: styles.button__primary,
-    default: styles.button__default,
-    accent: styles.button__accent,
-    tertiary: styles.button__tertiary,
-    fancyAccent: styles.button__fancyAccent,
-    success: styles.button__success,
-    warning: styles.button__warning,
-    specialGreen: styles.button__specialGreen,
-    specialPurple: styles.button__specialPurple,
-    transparentDanger: styles.button__transparentDanger,
-    transparentDefault: styles.button__transparentDefault,
-    transparentTertiary: styles.button__transparentTertiary,
-    transparentPrimary: styles.button__transparentPrimary,
-    transparentAccent: styles.button__transparentAccent,
+    danger: buttonStyles.button__danger,
+    primary: buttonStyles.button__primary,
+    default: buttonStyles.button__default,
+    accent: buttonStyles.button__accent,
+    tertiary: buttonStyles.button__tertiary,
+    fancyAccent: buttonStyles.button__fancyAccent,
+    success: buttonStyles.button__success,
+    warning: buttonStyles.button__warning,
+    specialGreen: buttonStyles.button__specialGreen,
+    specialPurple: buttonStyles.button__specialPurple,
+    transparentDanger: buttonStyles.button__transparentDanger,
+    transparentDefault: buttonStyles.button__transparentDefault,
+    transparentTertiary: buttonStyles.button__transparentTertiary,
+    transparentPrimary: buttonStyles.button__transparentPrimary,
+    transparentAccent: buttonStyles.button__transparentAccent,
   }[scheme];
 };
