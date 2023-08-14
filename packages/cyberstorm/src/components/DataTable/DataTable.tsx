@@ -1,103 +1,70 @@
 "use client";
 import { CSSProperties, ReactNode, useState } from "react";
-import styles from "./DataTable.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort, faSortDown, faSortUp } from "@fortawesome/pro-solid-svg-icons";
+import styles from "./DataTable.module.css";
 import { Button } from "../Button/Button";
 
-export type DataTableRows = {
+export enum Sort {
+  DESC = -1,
+  OFF,
+  ASC,
+}
+
+interface DataTableColumn {
   value: ReactNode;
   sortValue: string | number;
-}[][];
+}
+
+type DataTableRow = DataTableColumn[];
+
+export type DataTableRows = DataTableRow[];
 
 export interface DataTableProps {
   headers: { value: string; disableSort: boolean }[];
   rows: DataTableRows;
   disableSort?: boolean;
   sortByHeader?: number;
-  sortDirection?: 1 | -1;
-}
-
-interface CustomCSSColumn extends CSSProperties {
-  "--column-count": number;
-}
-
-interface CustomCSSRow extends CSSProperties {
-  "--row-count": number;
+  sortDirection?: Sort;
 }
 
 interface SortButtonProps {
   identifier: number;
   current: number;
-  direction: 1 | -1;
+  direction: Sort;
   hook: React.Dispatch<
-    React.SetStateAction<{ identifier: number; direction: 1 | -1 }>
+    React.SetStateAction<{ identifier: number; direction: Sort }>
   >;
   label: string;
 }
 
 function SortButton(props: SortButtonProps) {
-  const { identifier, current, direction = 0, hook, label } = props;
+  const { identifier, current, direction = Sort.OFF, hook, label } = props;
+
+  const hookParams = { identifier, direction: Sort.DESC };
+  let icon = faSort;
+  let iconClass = styles.buttonIcon;
+
   if (identifier === current) {
-    if (direction === 1) {
-      return (
-        <Button
-          iconAlignment="side"
-          colorScheme="transparentTertiary"
-          paddingSize="medium"
-          fontSize="medium"
-          fontWeight="700"
-          onClick={() => hook({ identifier, direction: -1 })}
-          rightIcon={
-            <FontAwesomeIcon
-              icon={faSortUp}
-              fixedWidth
-              className={styles.buttonIconActive}
-            />
-          }
-          label={label}
-        />
-      );
-    } else {
-      return (
-        <Button
-          iconAlignment="side"
-          colorScheme="transparentTertiary"
-          paddingSize="medium"
-          fontSize="medium"
-          fontWeight="700"
-          onClick={() => hook({ identifier, direction: 1 })}
-          rightIcon={
-            <FontAwesomeIcon
-              icon={faSortDown}
-              fixedWidth
-              className={styles.buttonIconActive}
-            />
-          }
-          label={label}
-        />
-      );
-    }
-  } else {
-    return (
-      <Button
-        iconAlignment="side"
-        colorScheme="transparentTertiary"
-        paddingSize="medium"
-        fontSize="medium"
-        fontWeight="700"
-        onClick={() => hook({ identifier, direction: -1 })}
-        rightIcon={
-          <FontAwesomeIcon
-            icon={faSort}
-            fixedWidth
-            className={styles.buttonIcon}
-          />
-        }
-        label={label}
-      />
-    );
+    hookParams.direction = direction === Sort.ASC ? Sort.DESC : Sort.ASC;
+    icon = direction === Sort.ASC ? faSortDown : faSortUp;
+    iconClass = styles.buttonIconActive;
   }
+
+  return (
+    <Button
+      iconAlignment="side"
+      colorScheme="transparentTertiary"
+      paddingSize="medium"
+      fontSize="medium"
+      fontWeight="700"
+      onClick={() => hook(hookParams)}
+      rightIcon={
+        <FontAwesomeIcon icon={icon} fixedWidth className={iconClass} />
+      }
+      label={label}
+    />
+  );
 }
 
 export function DataTable(props: DataTableProps) {
@@ -105,21 +72,16 @@ export function DataTable(props: DataTableProps) {
     headers,
     rows,
     sortByHeader = 0,
-    sortDirection = -1,
+    sortDirection = Sort.DESC,
     disableSort = false,
   } = props;
-  const [sortVariables, setSortVariables] = useState<{
-    identifier: number;
-    direction: 1 | -1;
-  }>({
+
+  const [sortVariables, setSortVariables] = useState({
     identifier: sortByHeader,
     direction: sortDirection,
   });
 
-  function compare(
-    a: { value: ReactNode; sortValue: string | number }[],
-    b: { value: ReactNode; sortValue: string | number }[]
-  ) {
+  function compare(a: DataTableRow, b: DataTableRow) {
     const column = sortVariables.identifier;
     if (a[column] && b[column] && a[column].sortValue < b[column].sortValue) {
       return sortVariables.direction;
@@ -130,77 +92,50 @@ export function DataTable(props: DataTableProps) {
     return 0;
   }
 
-  const columnCount = headers ? headers.length : 0;
-  const rowCount = rows ? rows.length : 0;
   if (!disableSort) {
     rows.sort(compare);
   }
+
+  const rowsStyles = { "--row-count": rows.length } as CSSProperties;
+  const rowStyles = { "--column-count": headers.length } as CSSProperties;
+
   return (
     <div className={styles.gridTable}>
-      <div
-        className={styles.gridHeaders}
-        style={
-          {
-            "--column-count": columnCount,
-          } as CustomCSSColumn
-        }
-      >
-        {headers &&
-          headers.map((h, key) => {
-            return (
-              <div key={key} className={styles.gridHeader}>
-                {h.disableSort ? (
-                  <Button
-                    iconAlignment="side"
-                    colorScheme="transparentTertiary"
-                    paddingSize="large"
-                    fontSize="medium"
-                    fontWeight="700"
-                    label={h.value}
-                  />
-                ) : (
-                  <SortButton
-                    identifier={key}
-                    current={sortVariables.identifier}
-                    direction={sortVariables.direction}
-                    hook={setSortVariables}
-                    label={h.value}
-                  />
-                )}
-              </div>
-            );
-          })}
+      <div className={styles.gridHeaders} style={rowStyles}>
+        {headers.map((header, headerI) => (
+          <div key={headerI} className={styles.gridHeader}>
+            {header.disableSort ? (
+              <Button
+                iconAlignment="side"
+                colorScheme="transparentTertiary"
+                paddingSize="large"
+                fontSize="medium"
+                fontWeight="700"
+                label={header.value}
+              />
+            ) : (
+              <SortButton
+                identifier={headerI}
+                current={sortVariables.identifier}
+                direction={sortVariables.direction}
+                hook={setSortVariables}
+                label={header.value}
+              />
+            )}
+          </div>
+        ))}
       </div>
-      <div
-        className={styles.gridRows}
-        style={
-          {
-            "--row-count": rowCount,
-          } as CustomCSSRow
-        }
-      >
-        {rows &&
-          rows.map((r, rk) => {
-            return (
-              <div
-                key={`${rk}`}
-                className={styles.gridRow}
-                style={
-                  {
-                    "--column-count": columnCount,
-                  } as CustomCSSColumn
-                }
-              >
-                {r.map((c, ck) => {
-                  return (
-                    <div key={`${rk}_${ck}`} className={styles.gridCell}>
-                      {c.value}
-                    </div>
-                  );
-                })}
+
+      <div className={styles.gridRows} style={rowsStyles}>
+        {rows.map((row, rowI) => (
+          <div key={`row${rowI}`} className={styles.gridRow} style={rowStyles}>
+            {row.map((col, colI) => (
+              <div key={`row${rowI}_col${colI}`} className={styles.gridCell}>
+                {col.value}
               </div>
-            );
-          })}
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   );

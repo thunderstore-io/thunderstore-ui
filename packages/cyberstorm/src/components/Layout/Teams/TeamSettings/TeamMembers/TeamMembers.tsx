@@ -9,7 +9,11 @@ import { TeamLink, UserLink } from "../../../../Links/Links";
 import { Avatar } from "../../../../Avatar/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/pro-solid-svg-icons";
-import { DataTable, DataTableRows } from "../../../../DataTable/DataTable";
+import {
+  DataTable,
+  DataTableRows,
+  Sort,
+} from "../../../../DataTable/DataTable";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
@@ -102,7 +106,7 @@ export function TeamMemberList(props: TeamMemberListProps) {
       headers={teamMemberColumns}
       rows={tableData}
       sortByHeader={1}
-      sortDirection={1}
+      sortDirection={Sort.ASC}
     />
   );
 }

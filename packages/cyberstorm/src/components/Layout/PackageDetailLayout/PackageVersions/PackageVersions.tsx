@@ -1,6 +1,6 @@
 import styles from "./PackageVersions.module.css";
 import { Button } from "../../../Button/Button";
-import { DataTable } from "../../../DataTable/DataTable";
+import { DataTable, Sort } from "../../../DataTable/DataTable";
 
 export function PackageVersions() {
   return (
@@ -9,7 +9,7 @@ export function PackageVersions() {
       <DataTable
         headers={columns}
         rows={packageVersionData}
-        sortDirection={1}
+        sortDirection={Sort.ASC}
       />
     </div>
   );
