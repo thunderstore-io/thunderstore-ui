@@ -1,5 +1,5 @@
 "use client";
-import { Suspense, lazy, useState, createContext, ReactNode } from "react";
+import { Suspense, lazy, useState, createContext } from "react";
 import styles from "./PackageSearchLayout.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -38,10 +38,7 @@ export interface PackageListingsProps {
   userId: string;
   teamId: string;
   keywords: { key: string; negate: boolean }[];
-  categories: {
-    label: string;
-    value: boolean | undefined;
-  }[];
+  categories: CategoriesProps[];
 }
 
 // TODO: OVERKILL???
@@ -70,19 +67,11 @@ export function FiltersProvider(props: ContextProps) {
   );
 }
 
-function RemoveFilterIcon(
-  key: string,
-  filterType: "keyword" | "category",
-  hook: (key: string, filterType: string) => void
-) {
-  return (
-    // TODO: Fix to work with keyboard presses, so linting doesnt complain
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-    <div onClick={() => hook(key, filterType)}>
-      <FontAwesomeIcon icon={faXmark} fixedWidth />
-    </div>
-  );
-}
+const RemoveFilterIcon = (onClick: () => void) => (
+  <button onClick={onClick} style={{ backgroundColor: "transparent" }}>
+    <FontAwesomeIcon icon={faXmark} fixedWidth />
+  </button>
+);
 
 interface TagListProps {
   filters: Filters;
@@ -95,75 +84,69 @@ function CurrentFilters(props: TagListProps) {
     if (filterType === "keyword") {
       filters.setKeywords(filters.keywords.filter((x) => x !== key));
     }
+
     if (filterType === "category") {
-      filters.availableCategories[key].value = undefined;
-      filters.setAvailableCategories(filters.availableCategories);
+      const cats = { ...filters.availableCategories };
+      Object.values(cats).forEach((c) => {
+        if (c.label === key) {
+          c.value = undefined;
+        }
+      });
+
+      filters.setAvailableCategories(cats);
     }
   }
 
-  const categories: ReactNode[] = [];
-  Object.keys(filters.availableCategories).forEach(function (key, index) {
-    if (filters.availableCategories[key].value !== undefined) {
-      categories.push(
-        <Tag
-          key={"categorySearch" + key + index.toString()}
-          label={key}
-          rightIcon={RemoveFilterIcon(key, "category", removeFilter)}
-          colorScheme={"borderless_removable"}
-        />
-      );
-    }
-  });
-
   return (
     <>
-      {filters.keywords?.map((keyword, index: number) => {
-        return (
+      {filters.keywords?.map((keyword, index) => (
+        <Tag
+          key={`keywordSearch_${keyword}_${index}`}
+          label={`"${keyword}"`}
+          rightIcon={RemoveFilterIcon(() => removeFilter(keyword, "keyword"))}
+          colorScheme="borderless_removable"
+        />
+      ))}
+      {Object.values(filters.availableCategories)
+        .filter((category) => category.value !== undefined)
+        .map((cat, index) => (
           <Tag
-            key={"keywordSearch" + keyword + index.toString()}
-            label={`"${keyword}"`}
-            rightIcon={RemoveFilterIcon(keyword, "keyword", removeFilter)}
-            colorScheme={"borderless_removable"}
+            key={`categorySearch_${cat.label}_${index}`}
+            label={cat.label}
+            rightIcon={RemoveFilterIcon(() =>
+              removeFilter(cat.label, "category")
+            )}
+            colorScheme="borderless_removable"
           />
-        );
-      })}
-      {categories}
+        ))}
     </>
   );
 }
 
 /**
- * Cyberstorm PackageList Layout
+ * Cyberstorm PackageSearch Layout
  */
 export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
-  const {
-    communityId = undefined,
-    userId = undefined,
-    teamId = undefined,
-  } = props;
+  const { communityId, userId, teamId } = props;
 
-  // Prep
   const filters = new Filters();
   const [order, setOrder] = useState("1");
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
 
-  // Helper function
-  const handleSearchFilterEdit = (e: string) => {
-    let found = false;
-    const newSearchTerms = filters.keywords?.map((keyword) => {
-      if (keyword === e) {
-        found = true;
-      }
-      return keyword;
-    });
-    if (!found) {
-      newSearchTerms.push(e);
-    }
-    filters.setKeywords(newSearchTerms);
+  const handleSearchFilterEdit = (e: string) =>
+    filters.setKeywords(
+      Array.from(new Set([...filters.keywords, e])).filter(Boolean)
+    );
+
+  const clearFilters = () => {
+    filters.setKeywords([]);
+
+    const cats = { ...filters.availableCategories };
+    Object.values(cats).forEach((cat) => (cat.value = undefined));
+    filters.setAvailableCategories(cats);
   };
 
-  // React Node return
   return (
     <div className={styles.content}>
       <TextInput
@@ -183,6 +166,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
         <div className={styles.content}>
           <div className={styles.listTopNavigation}>
             <div className={styles.showing}>
+              {/* TODO: use real values */}
               Showing <strong>1-20</strong> of <strong>327</strong> results
             </div>
 
@@ -199,24 +183,8 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
                   fontWeight="700"
                   colorScheme="transparentTertiary"
                   border-width="0px"
-                  border-radius="0.5rem"
-                  justify-content="center"
-                  align-items="center"
-                  font-size="0.875rem"
                   label="Clear all"
-                  onClick={() => {
-                    filters.setKeywords([]);
-                    const updatedAvailableCategories: CategoriesProps = {};
-                    Object.keys(filters.availableCategories).forEach(function (
-                      key
-                    ) {
-                      updatedAvailableCategories[key] = {
-                        label: filters.availableCategories[key].label,
-                        value: undefined,
-                      };
-                    });
-                    filters.setAvailableCategories(updatedAvailableCategories);
-                  }}
+                  onClick={clearFilters}
                 />
               </div>
             ) : null}
@@ -248,6 +216,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
               />
             </Suspense>
           </FiltersProvider>
+          {/* TODO: use real totalCount */}
           <Pagination
             currentPage={page}
             onPageChange={setPage}

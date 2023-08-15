@@ -1,10 +1,14 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
+import { isEqual } from "lodash";
 import styles from "./PackageListings.module.css";
 import { PackageCard } from "../../PackageCard/PackageCard";
 import { useDapper } from "@thunderstore/dapper";
 import { PackagePreview } from "@thunderstore/dapper/src/schema";
-import { FiltersContext } from "../PackageSearchLayout/PackageSearchLayout";
+import {
+  FiltersContext,
+  CategoriesProps,
+} from "../PackageSearchLayout/PackageSearchLayout";
 
 export interface PackageListingsProps {
   communityId?: string;
@@ -15,12 +19,7 @@ export interface PackageListingsProps {
 
 export interface fetchFromDapperProps extends PackageListingsProps {
   keywords?: string[];
-  availableCategories?: {
-    [key: string]: {
-      label: string;
-      value: boolean | undefined;
-    };
-  };
+  availableCategories?: CategoriesProps;
 }
 
 export default function PackageListings(props: PackageListingsProps) {
@@ -40,56 +39,60 @@ export default function PackageListings(props: PackageListingsProps) {
         filters?.keywords,
         filters?.availableCategories
       );
-      console.log(datasCall);
       setDatas(datasCall);
     }
 
     getDatas();
   }, [
     communityId,
-    userId,
-    namespaceId,
-    teamId,
-    filters?.keywords,
+    dapper.getPackageListings,
     filters?.availableCategories,
+    filters?.keywords,
+    namespaceId,
+    setDatas,
+    teamId,
+    userId,
   ]);
 
   useEffect(() => {
-    const updatedAvailableCategories:
-      | {
-          [key: string]: {
-            label: string;
-            value: boolean | undefined;
-          };
-        }
-      | undefined = filters?.availableCategories;
-    const packages = datas;
-    packages?.map((x) => {
-      x.categories.map((category) => {
-        if (!filters?.availableCategories[category.slug]) {
-          updatedAvailableCategories
-            ? (updatedAvailableCategories[category.slug] = {
-                label: category.name,
-                value: undefined,
-              })
-            : null;
-        }
+    if (filters === null || typeof datas === "undefined") {
+      return;
+    }
+
+    // filters.availableCategories contains all possible categories for
+    // current packages as one might expect from the name, but note that
+    // calling filters.setAvailableCategories does NOT filter the
+    // categories, but only updates filters.availableCategories[].value
+    // booleans which define whether the filter is including/excluding
+    // packages (true/false) or off (undefined).
+    const updatedAvailableCategories = { ...filters.availableCategories };
+
+    datas.forEach((package_) => {
+      package_.categories.forEach((category) => {
+        updatedAvailableCategories[category.slug] = {
+          label: category.name,
+          value: filters.availableCategories[category.slug]?.value,
+        };
       });
     });
-    if (updatedAvailableCategories) {
-      filters?.setAvailableCategories(updatedAvailableCategories);
+
+    if (!isEqual(updatedAvailableCategories, filters.availableCategories)) {
+      filters.setAvailableCategories(updatedAvailableCategories);
     }
-  }, [datas, filters?.keywords, filters?.availableCategories]);
+  }, [
+    datas,
+    filters?.availableCategories,
+    filters?.keywords,
+    filters?.setAvailableCategories,
+  ]);
 
   return (
     <div className={styles.packageCardList}>
-      {datas &&
-        datas.map((packageData) => {
-          return (
-            <PackageCard key={packageData.name} packageData={packageData} />
-          );
-        })}
+      {datas?.map((packageData) => (
+        <PackageCard key={packageData.name} packageData={packageData} />
+      ))}
     </div>
   );
 }
+
 PackageListings.displayName = "PackageListings";
