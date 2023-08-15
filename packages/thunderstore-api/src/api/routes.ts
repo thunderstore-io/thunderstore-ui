@@ -16,7 +16,7 @@ const routes = {
       deprecateMod: R("deprecate-mod/"),
     }),
     currentUser: R("current-user/", {
-      info: R("info/", undefined, apiFetch),
+      info: R("info/", apiFetch),
     }),
     package: R(
       "package/",
