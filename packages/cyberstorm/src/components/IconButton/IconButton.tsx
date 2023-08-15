@@ -5,16 +5,16 @@ import React, {
   ReactNode,
   useRef,
 } from "react";
-import styles from "./SquareButton.module.css";
+import styles from "./IconButton.module.css";
 import buttonStyles from "../Button/Button.module.css";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Tooltip } from "../Tooltip/Tooltip";
 
-interface _SquareButtonProps extends _SquarePlainButtonProps {
+interface _IconButtonProps extends _IconPlainButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-interface _SquarePlainButtonProps {
+interface _IconPlainButtonProps {
   icon: ReactNode;
   colorScheme?:
     | "danger"
@@ -35,51 +35,50 @@ interface _SquarePlainButtonProps {
   tooltipText: string;
 }
 
-export type SquareButtonProps = _SquareButtonProps &
-  Omit<React.HTMLProps<HTMLButtonElement>, keyof _SquareButtonProps>;
+export type IconButtonProps = _IconButtonProps &
+  Omit<React.HTMLProps<HTMLButtonElement>, keyof _IconButtonProps>;
 
-export type SquarePlainButtonProps = _SquarePlainButtonProps &
-  Omit<React.HTMLProps<HTMLDivElement>, keyof _SquarePlainButtonProps>;
+export type IconPlainButtonProps = _IconPlainButtonProps &
+  Omit<React.HTMLProps<HTMLDivElement>, keyof _IconPlainButtonProps>;
 
 /**
- * Cyberstorm SquareButton component
+ * Cyberstorm IconButton component
  */
-export const SquareButton = React.forwardRef<
-  HTMLButtonElement,
-  SquareButtonProps
->((props: PropsWithChildren<SquareButtonProps>, forwardedRef) => {
-  const {
-    icon,
-    colorScheme = "default",
-    onClick,
-    tooltipText,
-    ...forwardedProps
-  } = props;
+export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
+  (props: PropsWithChildren<IconButtonProps>, forwardedRef) => {
+    const {
+      icon,
+      colorScheme = "default",
+      onClick,
+      tooltipText,
+      ...forwardedProps
+    } = props;
 
-  const fallbackRef = useRef(null);
-  const ref = forwardedRef || fallbackRef;
+    const fallbackRef = useRef(null);
+    const ref = forwardedRef || fallbackRef;
 
-  return (
-    <TooltipProvider>
-      <Tooltip content={tooltipText}>
-        <button
-          {...forwardedProps}
-          ref={ref}
-          type="button"
-          className={`${styles.root} ${getStyle(colorScheme)}`}
-          onClick={onClick}
-        >
-          {icon ? <div>{icon}</div> : null}
-        </button>
-      </Tooltip>
-    </TooltipProvider>
-  );
-});
+    return (
+      <TooltipProvider>
+        <Tooltip content={tooltipText}>
+          <button
+            {...forwardedProps}
+            ref={ref}
+            type="button"
+            className={`${styles.root} ${getStyle(colorScheme)}`}
+            onClick={onClick}
+          >
+            {icon ? <div>{icon}</div> : null}
+          </button>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+);
 
-export const SquarePlainButton = React.forwardRef<
+export const IconPlainButton = React.forwardRef<
   HTMLDivElement,
-  SquarePlainButtonProps
->((props: PropsWithChildren<SquarePlainButtonProps>, forwardedRef) => {
+  IconPlainButtonProps
+>((props: PropsWithChildren<IconPlainButtonProps>, forwardedRef) => {
   const {
     icon,
     colorScheme = "default",
@@ -105,8 +104,8 @@ export const SquarePlainButton = React.forwardRef<
   );
 });
 
-SquareButton.displayName = "SquareButton";
-SquarePlainButton.displayName = "SquarePlainButton";
+IconButton.displayName = "IconButton";
+IconPlainButton.displayName = "IconPlainButton";
 
 const getStyle = (scheme: string) => {
   return {

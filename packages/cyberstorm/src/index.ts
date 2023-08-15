@@ -5,11 +5,11 @@ export {
   type PlainButtonProps,
 } from "./components/Button/Button";
 export {
-  SquareButton,
-  type SquareButtonProps,
-  SquarePlainButton,
-  type SquarePlainButtonProps,
-} from "./components/SquareButton/SquareButton";
+  IconButton,
+  type IconButtonProps,
+  IconPlainButton,
+  type IconPlainButtonProps,
+} from "./components/IconButton/IconButton";
 export { CodeBox, type CodeBoxProps } from "./components/CodeBox/CodeBox";
 export {
   BreadCrumbs,
