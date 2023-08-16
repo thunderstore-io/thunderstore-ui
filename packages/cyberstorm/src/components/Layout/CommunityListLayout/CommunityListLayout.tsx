@@ -12,13 +12,10 @@ import {
 import { TextInput } from "../../TextInput/TextInput";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
-import {
-  getCommunityPreviewDummyData,
-  getListOfIds,
-} from "@thunderstore/dapper/src/implementations/dummy/generate";
-import { CommunityPreview } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
+import { useDapper } from "@thunderstore/dapper";
+import usePromise from "react-promise-suspense";
 
 /**
  * Cyberstorm CommunityList Layout
@@ -27,7 +24,8 @@ export function CommunityListLayout() {
   const [order, setOrder] = useState("1");
   const [searchValue, setSearchValue] = useState("");
 
-  const communitiesData: CommunityPreview[] = getCommunityData();
+  const dapper = useDapper();
+  const communitiesData = usePromise(dapper.getCommunities, []);
 
   return (
     <BaseLayout
@@ -63,12 +61,6 @@ export function CommunityListLayout() {
 }
 
 CommunityListLayout.displayName = "CommunityListLayout";
-
-function getCommunityData() {
-  return getListOfIds(20).map((communityId) => {
-    return getCommunityPreviewDummyData(communityId);
-  });
-}
 
 const selectOptions = [
   {

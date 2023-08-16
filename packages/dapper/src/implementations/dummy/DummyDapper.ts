@@ -1,5 +1,9 @@
 import { DapperInterface } from "../../dapper";
-import { getCommunityDummyData } from "./generate";
+import {
+  getCommunityDummyData,
+  getCommunityPreviewDummyData,
+  getListOfIds,
+} from "./generate";
 import { getPackageListings } from "../../cyberstormMethods/packageListings";
 import { getPackage } from "../../cyberstormMethods/package";
 import { getTeam } from "../../cyberstormMethods/team";
@@ -12,7 +16,11 @@ const NotImplemented = () => {
 export class DummyDapper implements DapperInterface {
   public getPackageListings = getPackageListings;
 
-  public getCommunities = NotImplemented;
+  public getCommunities = async () => {
+    return getListOfIds(20).map((communityId) => {
+      return getCommunityPreviewDummyData(communityId);
+    });
+  };
 
   public getCommunity = async (communityId: string) => {
     return {
