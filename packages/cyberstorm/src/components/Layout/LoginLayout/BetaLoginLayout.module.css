@@ -175,6 +175,7 @@
 .advertisementTitleRight {
   font-style: italic;
   background: var(--color-gradient-vibrant, linear-gradient(315deg, #9d30e4 27.6%, #1ca7f5 51.04%, #23ffb0 76.56%));
+  -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
