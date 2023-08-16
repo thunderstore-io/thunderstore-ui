@@ -109,7 +109,7 @@
   align-items: center;
   justify-content: space-between;
   max-width: 768px;
-  max-height: 600px;
+  min-height: 100%;
   padding: var(--space--48) 0;
 }
 
@@ -122,11 +122,13 @@
   fill: var(--color-white);
 }
 
-.graphicsSvg {
-  position: relative;
-  display: flex;
-  flex-grow: 0;
-  max-height: calc(100vh - 10rem);
+.graphicsImage {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
   pointer-events: none;
 }
 
@@ -153,7 +155,7 @@
     max-width: 100%;
   }
 
-  .graphicsSvg {
+  .graphicsImage {
     display: none;
   }
 

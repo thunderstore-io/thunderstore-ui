@@ -103,9 +103,10 @@ export function LoginLayout() {
           <div className={styles.logo}>
             <ThunderstoreLogoHorizontal />
           </div>
-          <div className={styles.graphicsSvg}>
-            <LoginGraphics />
-          </div>
+          <img
+            className={styles.graphicsImage}
+            src="/images/login_hexagon.png"
+          />
           <div className={styles.legal}>
             By logging in and accessing the site I agree to{" "}
             <span className={styles.legalLink}>

@@ -98,6 +98,7 @@ export { CommunityListLayout } from "./components/Layout/CommunityListLayout/Com
 export { ErrorLayout } from "./components/Layout/ErrorLayout/ErrorLayout";
 export { HomeLayout } from "./components/Layout/HomeLayout/HomeLayout";
 export { LoginLayout } from "./components/Layout/LoginLayout/LoginLayout";
+export { BetaLoginLayout } from "./components/Layout/LoginLayout/BetaLoginLayout";
 export {
   PackageDetailLayout,
   type PackageDetailLayoutProps,

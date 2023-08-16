@@ -1,18 +1,18 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { LoginLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
   title: "Cyberstorm/Layouts/Login",
   component: LoginLayout,
-} as ComponentMeta<typeof LoginLayout>;
+} as Meta<typeof LoginLayout>;
 
-const Template: ComponentStory<typeof LoginLayout> = () => (
+export const DefaultLoginLayout: StoryFn<typeof LoginLayout> = () => (
   <div>
     <LoginLayout />
   </div>
 );
 
-const DefaultLoginLayout = Template.bind({});
+DefaultLoginLayout.args = {};
 
-export { meta as default, DefaultLoginLayout as Login };
+export { meta as default };

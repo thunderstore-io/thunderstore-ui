@@ -1,5 +1,5 @@
-import { LoginLayout } from "@thunderstore/cyberstorm";
+import { BetaLoginLayout } from "@thunderstore/cyberstorm";
 
 export default function Page() {
-  return <LoginLayout />;
+  return <BetaLoginLayout />;
 }
