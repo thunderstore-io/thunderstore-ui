@@ -8,12 +8,15 @@ import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
 import { Dialog } from "../../../Dialog/Dialog";
 import { PackageDependencyDialog } from "./PackageDependencyDialog/PackageDependencyDialog";
 import { Button } from "../../../Button/Button";
+import { useDapper } from "@thunderstore/dapper";
+import usePromise from "react-promise-suspense";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
 
 export interface PackageDependencyListProps {
-  packages?: PackageDependency[];
+  namespace: string;
+  community: string;
 }
 
 export interface PackageDependencyListItemProps {
@@ -49,9 +52,15 @@ function PackageDependencyListItem(props: PackageDependencyListItemProps) {
 }
 
 export function PackageDependencyList(props: PackageDependencyListProps) {
-  const { packages = [] } = props;
+  const { namespace, community } = props;
 
-  const mappedPackageDependencyList = packages?.map(
+  const dapper = useDapper();
+  const packageDependencyData = usePromise(dapper.getPackageDependencies, [
+    community,
+    namespace,
+  ]);
+
+  const mappedPackageDependencyList = packageDependencyData?.map(
     (packageData: PackageDependency, index: number) => {
       return (
         <div key={index}>
@@ -91,7 +100,9 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
                 />
               </div>
             }
-            content={<PackageDependencyDialog packages={packages} />}
+            content={
+              <PackageDependencyDialog packages={packageDependencyData} />
+            }
           />
         }
       />

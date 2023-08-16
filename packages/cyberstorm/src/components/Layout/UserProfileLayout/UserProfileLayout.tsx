@@ -1,10 +1,10 @@
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { UserLink } from "../../Links/Links";
-import { getUserDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
-import { User } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import styles from "./UserProfileLayout.module.css";
+import { useDapper } from "@thunderstore/dapper/";
+import usePromise from "react-promise-suspense";
 
 export interface UserProfileLayoutProps {
   userId: string;
@@ -16,7 +16,9 @@ export interface UserProfileLayoutProps {
 export function UserProfileLayout(props: UserProfileLayoutProps) {
   const { userId } = props;
 
-  const userData: User = getUserData(userId);
+  const dapper = useDapper();
+  const userDataRaw = usePromise(dapper.getUser, [userId]);
+  const userData = userDataRaw.user;
 
   return (
     <BaseLayout
@@ -37,7 +39,3 @@ export function UserProfileLayout(props: UserProfileLayoutProps) {
 }
 
 UserProfileLayout.displayName = "UserProfileLayout";
-
-function getUserData(userId: string) {
-  return getUserDummyData(userId);
-}

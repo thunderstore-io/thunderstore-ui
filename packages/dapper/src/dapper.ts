@@ -14,6 +14,8 @@ import {
 import { getFrontpage, GetFrontpage } from "./methods/frontpage";
 import { GetOldPackage, getOldPackage } from "./methods/package";
 import { QsArray, serializeQueryString } from "./queryString";
+import { GetPackageDependencies } from "./cyberstormMethods/packageDependencies";
+import { GetUserSettings } from "./cyberstormMethods/userSettings";
 
 export interface DapperInterface {
   sessionId?: string;
@@ -22,8 +24,10 @@ export interface DapperInterface {
   getCommunities: GetCommunities;
   getCommunity: GetCommunity;
   getPackage: GetPackage;
+  getPackageDependencies: GetPackageDependencies;
   getTeam: GetTeam;
   getUser: GetUser;
+  getUserSettings: GetUserSettings;
   getOldCommunityPackageListing: GetOldCommunityPackageListing;
   getFrontpage: GetFrontpage;
   getOldPackage: GetOldPackage;
@@ -112,6 +116,8 @@ export class Dapper implements DapperInterface {
   getCommunities = NotImplemented;
   getCommunity = NotImplemented;
   getPackage = NotImplemented;
+  getPackageDependencies = NotImplemented;
   getTeam = NotImplemented;
   getUser = NotImplemented;
+  getUserSettings = NotImplemented;
 }

@@ -6,11 +6,12 @@ import { SettingItem } from "../../SettingItem/SettingItem";
 import { Button } from "../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
-import { getTeamPreviewDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import { TeamList } from "./TeamList/TeamList";
 import { Dialog } from "../../Dialog/Dialog";
 import { TextInput } from "../../TextInput/TextInput";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
+import { useDapper } from "@thunderstore/dapper";
+import usePromise from "react-promise-suspense";
 
 //TODO: Use Alert component
 
@@ -18,7 +19,8 @@ import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
  * Cyberstorm Teams Layout
  */
 export function TeamsLayout() {
-  const teamsData = getTeamsData();
+  const dapper = useDapper();
+  const teamsData = usePromise(dapper.getTeam, []);
 
   return (
     <BaseLayout
@@ -74,12 +76,3 @@ export function TeamsLayout() {
 }
 
 TeamsLayout.displayName = "TeamsLayout";
-
-function getTeamsData() {
-  return [
-    getTeamPreviewDummyData("1"),
-    getTeamPreviewDummyData("2"),
-    getTeamPreviewDummyData("3"),
-    getTeamPreviewDummyData("4"),
-  ];
-}

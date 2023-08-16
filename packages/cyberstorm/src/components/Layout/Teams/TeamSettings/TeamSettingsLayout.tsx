@@ -7,8 +7,6 @@ import { Tabs } from "../../../Tabs/Tabs";
 import { TeamMembers } from "./TeamMembers/TeamMembers";
 import { TeamServiceAccounts } from "./TeamServiceAccounts/TeamServiceAccounts";
 import { TeamProfile } from "./TeamProfile/TeamProfile";
-import { getTeamSettingsDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
-import { TeamSettings } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,6 +17,8 @@ import {
   faCog,
 } from "@fortawesome/pro-regular-svg-icons";
 import { TeamLeaveAndDisband } from "./TeamLeaveAndDisband/TeamLeaveAndDisband";
+import { useDapper } from "@thunderstore/dapper";
+import usePromise from "react-promise-suspense";
 
 export interface TeamSettingsLayoutProps {
   teamId: string;
@@ -30,7 +30,8 @@ export interface TeamSettingsLayoutProps {
 export function TeamSettingsLayout(props: TeamSettingsLayoutProps) {
   const { teamId } = props;
 
-  const teamData = getTeamData(teamId);
+  const dapper = useDapper();
+  const teamData = usePromise(dapper.getTeam, [])[0];
 
   const [currentTab, setCurrentTab] = useState(1);
 
@@ -55,10 +56,6 @@ export function TeamSettingsLayout(props: TeamSettingsLayoutProps) {
 
 TeamSettingsLayout.displayName = "TeamSettingsLayout";
 
-function getTeamData(teamId: string) {
-  return getTeamSettingsDummyData(teamId);
-}
-
 const tabs = [
   {
     key: 1,
@@ -82,7 +79,7 @@ const tabs = [
   },
 ];
 
-function getTabContent(currentTab: number, teamData: TeamSettings) {
+function getTabContent(currentTab: number, teamData: Team) {
   let tabContent = null;
 
   if (currentTab === 1) {

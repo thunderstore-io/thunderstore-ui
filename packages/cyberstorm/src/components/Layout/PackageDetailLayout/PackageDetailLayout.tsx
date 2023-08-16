@@ -26,7 +26,7 @@ import {
 import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
 import { CopyButton } from "../../CopyButton/CopyButton";
 import { formatInteger } from "../../../utils/utils";
-import { Package } from "@thunderstore/dapper/src/schema";
+import { Package, PackageDependency } from "@thunderstore/dapper/src/schema";
 import { useState } from "react";
 import { Tabs } from "../../Tabs/Tabs";
 import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
@@ -43,7 +43,6 @@ import { useDapper } from "@thunderstore/dapper";
 import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
 import { ThunderstoreLogo } from "../../../svg/svg";
-import { getPackageDependencyDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import { Tooltip } from "../../Tooltip/Tooltip";
 
 export interface PackageDetailLayoutProps {
@@ -215,28 +214,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           </div>
           <MetaInfoItemList metaInfoData={metaInfoData} />
           <PackageTagList tags={packageData.categories} />
-          <PackageDependencyList
-            packages={[
-              getPackageDependencyDummyData("1"),
-              getPackageDependencyDummyData("2"),
-              getPackageDependencyDummyData("3"),
-              getPackageDependencyDummyData("4"),
-              getPackageDependencyDummyData("5"),
-              getPackageDependencyDummyData("6"),
-              getPackageDependencyDummyData("1"),
-              getPackageDependencyDummyData("2"),
-              getPackageDependencyDummyData("3"),
-              getPackageDependencyDummyData("4"),
-              getPackageDependencyDummyData("5"),
-              getPackageDependencyDummyData("6"),
-              getPackageDependencyDummyData("1"),
-              getPackageDependencyDummyData("2"),
-              getPackageDependencyDummyData("3"),
-              getPackageDependencyDummyData("4"),
-              getPackageDependencyDummyData("5"),
-              getPackageDependencyDummyData("6"),
-            ]}
-          />
+          <PackageDependencyList namespace={namespace} community={community} />
           <PackageTeamMemberList
             teamName={packageData.team.name}
             teamMembers={packageData.team.members}

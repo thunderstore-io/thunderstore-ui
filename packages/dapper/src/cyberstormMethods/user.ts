@@ -31,7 +31,7 @@ interface UserData {
 }
 
 // Dapper method type, defining the parameters required to fetch the data.
-export type GetUser = (userId: string) => UserData;
+export type GetUser = (userId: string) => Promise<UserData>;
 
 // Method for transforming the received data to a format that will be
 // passed on.
@@ -42,7 +42,7 @@ const transform = (data: z.infer<typeof schema>): UserData => ({
 });
 
 // Method implementation for Dapper class.
-export const getUser: GetUser = function (this: Dapper, userId) {
+export const getUser: GetUser = async function (this: Dapper, userId) {
   // TODO: CHANGE THIS TO USE THE ACTUAL THUNDERSTORE API, ONCE THE API ENDPOINTS HAS BEEN IMPLEMENTED
   const dummyUserData = getUserDummyData(userId);
   const dummyPackagesPreviews = getListOfIds(20).map((x) => {

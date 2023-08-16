@@ -3,11 +3,13 @@ import {
   getCommunityDummyData,
   getCommunityPreviewDummyData,
   getListOfIds,
+  getPackageDependencyDummyData,
+  getTeamDummyData,
+  getUserDummyData,
+  getUserSettingsDummyData,
 } from "./generate";
 import { getPackageListings } from "../../cyberstormMethods/packageListings";
 import { getPackage } from "../../cyberstormMethods/package";
-import { getTeam } from "../../cyberstormMethods/team";
-import { getUser } from "../../cyberstormMethods/user";
 
 const NotImplemented = () => {
   throw new Error("Not implemented");
@@ -31,9 +33,34 @@ export class DummyDapper implements DapperInterface {
 
   public getPackage = getPackage;
 
-  public getTeam = getTeam;
+  public getTeam = async () => {
+    return getListOfIds(5).map((x) => {
+      return getTeamDummyData(x);
+    });
+  };
 
-  public getUser = getUser;
+  public getUser = async (userId: string) => {
+    return {
+      user: getUserDummyData(userId),
+      packages: [],
+      servers: [],
+    };
+  };
+
+  public getUserSettings = async (userId: string) => {
+    return getUserSettingsDummyData(userId);
+  };
+
+  public getPackageDependencies = async (
+    community: string,
+    namespace: string
+  ) => {
+    return [
+      getPackageDependencyDummyData("1", community, namespace),
+      getPackageDependencyDummyData("2", community, namespace),
+      getPackageDependencyDummyData("3", community, namespace),
+    ];
+  };
 
   public getFrontpage = NotImplemented;
   public getOldPackage = NotImplemented;

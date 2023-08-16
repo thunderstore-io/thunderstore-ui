@@ -7,7 +7,7 @@ import { packageSchema } from "../cyberstormSchemas/package";
 
 // Dapper method type, defining the parameters required to fetch the data.
 export type GetPackage = (
-  commmunity: string,
+  community: string,
   namespace: string,
   name: string
 ) => Package;
@@ -21,12 +21,12 @@ const transform = (viewData: z.infer<typeof packageSchema>): Package => ({
 // Method implementation for Dapper class.
 export const getPackage: GetPackage = function (
   this: Dapper,
-  commmunity: string,
+  community: string,
   namespace: string,
   name: string
 ) {
   // TODO: CHANGE THIS TO USE THE ACTUAL THUNDERSTORE API, ONCE THE API ENDPOINTS HAS BEEN IMPLEMENTED
-  const dummyPackage = getPackageDummyData("1337", commmunity, namespace, name);
+  const dummyPackage = getPackageDummyData("1337", community, namespace, name);
 
   return transform(dummyPackage);
 };

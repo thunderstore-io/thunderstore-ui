@@ -6,12 +6,13 @@ import { SettingsLink } from "../../Links/Links";
 import { Tabs } from "../../Tabs/Tabs";
 import { Connections } from "./Connections/Connections";
 import { Account } from "./Account/Account";
-import { getUserSettingsDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { UserSettings } from "@thunderstore/dapper/src/schema";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNodes, faCog } from "@fortawesome/pro-regular-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
+import { useDapper } from "@thunderstore/dapper";
+import usePromise from "react-promise-suspense";
 
 export interface SettingsLayoutProps {
   userId: string;
@@ -22,7 +23,9 @@ export interface SettingsLayoutProps {
  */
 export function SettingsLayout(props: SettingsLayoutProps) {
   const { userId } = props;
-  const userData = getUserData(userId);
+
+  const dapper = useDapper();
+  const userData: UserSettings = usePromise(dapper.getUserSettings, [userId]);
 
   const [currentTab, setCurrentTab] = useState(1);
 
@@ -40,10 +43,6 @@ export function SettingsLayout(props: SettingsLayoutProps) {
       mainContent={<>{getTabContent(currentTab, userData)}</>}
     />
   );
-}
-
-function getUserData(userId: string) {
-  return getUserSettingsDummyData(userId);
 }
 
 SettingsLayout.displayName = "SettingsLayout";

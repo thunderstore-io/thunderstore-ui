@@ -3,7 +3,7 @@ import { PackageDependency } from "@thunderstore/dapper/src/schema";
 import { PackageLink, PackageVersionLink } from "../../../../Links/Links";
 
 export interface PackageDependencyDialogProps {
-  packages: PackageDependency[];
+  packages?: PackageDependency[];
 }
 
 export function PackageDependencyDialog(props: PackageDependencyDialogProps) {
