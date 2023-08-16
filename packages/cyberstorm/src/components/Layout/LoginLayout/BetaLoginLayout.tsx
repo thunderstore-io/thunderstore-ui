@@ -83,6 +83,7 @@ export function BetaLoginLayout() {
         <img
           className={styles.advertisementBackground}
           src="/images/communitygrid.png"
+          alt="community thumbnails displayed in a skewed grid"
         />
         <div className={styles.advertisement}>
           <div className={styles.advertisementLogo}>

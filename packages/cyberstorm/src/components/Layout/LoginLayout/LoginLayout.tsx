@@ -21,6 +21,7 @@ export function LoginLayout() {
           <img
             className={styles.graphicsImage}
             src="/images/login_hexagon.png"
+            alt="A cyberstorm-styled cube with hexagonal backdrop"
           />
           <div className={styles.legal}>
             By logging in and accessing the site I agree to{" "}
