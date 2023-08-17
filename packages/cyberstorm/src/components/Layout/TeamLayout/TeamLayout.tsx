@@ -17,7 +17,7 @@ export function TeamLayout(props: TeamLayoutProps) {
   const { teamId } = props;
 
   const dapper = useDapper();
-  const teamData = usePromise(dapper.getTeam, [])[0];
+  const teamData = usePromise(dapper.getTeam, [teamId]);
 
   return (
     <BaseLayout

@@ -19,6 +19,7 @@ import {
 import { TeamLeaveAndDisband } from "./TeamLeaveAndDisband/TeamLeaveAndDisband";
 import { useDapper } from "@thunderstore/dapper";
 import usePromise from "react-promise-suspense";
+import { Team } from "@thunderstore/dapper/src/schema";
 
 export interface TeamSettingsLayoutProps {
   teamId: string;
@@ -31,7 +32,7 @@ export function TeamSettingsLayout(props: TeamSettingsLayoutProps) {
   const { teamId } = props;
 
   const dapper = useDapper();
-  const teamData = usePromise(dapper.getTeam, [])[0];
+  const teamData = usePromise(dapper.getTeam, [teamId]);
 
   const [currentTab, setCurrentTab] = useState(1);
 
@@ -97,10 +98,7 @@ function getTabContent(currentTab: number, teamData: Team) {
   } else if (currentTab === 3) {
     tabContent = (
       <div className={styles.tabContent}>
-        <TeamServiceAccounts
-          teamData={teamData}
-          serviceAccountData={teamData.serviceAccounts}
-        />
+        <TeamServiceAccounts teamData={teamData} />
       </div>
     );
   } else if (currentTab === 4) {

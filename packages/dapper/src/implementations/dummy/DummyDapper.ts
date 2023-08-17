@@ -4,6 +4,7 @@ import {
   getCommunityPreviewDummyData,
   getListOfIds,
   getPackageDependencyDummyData,
+  getServiceAccountDummyData,
   getTeamDummyData,
   getUserDummyData,
   getUserSettingsDummyData,
@@ -31,9 +32,23 @@ export class DummyDapper implements DapperInterface {
     };
   };
 
+  public getServiceAccount = async (serviceAccountId: string) => {
+    return getServiceAccountDummyData(serviceAccountId);
+  };
+
+  public getServiceAccountList = async (teamId: string) => {
+    return getListOfIds(5).map((x) => {
+      return getServiceAccountDummyData(teamId + x);
+    });
+  };
+
   public getPackage = getPackage;
 
-  public getTeam = async () => {
+  public getTeam = async (teamId: string) => {
+    return getTeamDummyData(teamId);
+  };
+
+  public getTeamList = async () => {
     return getListOfIds(5).map((x) => {
       return getTeamDummyData(x);
     });

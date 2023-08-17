@@ -20,7 +20,7 @@ import usePromise from "react-promise-suspense";
  */
 export function TeamsLayout() {
   const dapper = useDapper();
-  const teamsData = usePromise(dapper.getTeam, []);
+  const teamsData = usePromise(dapper.getTeamList, []);
 
   return (
     <BaseLayout
