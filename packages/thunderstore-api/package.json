@@ -11,8 +11,19 @@
   ],
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "test": "jest"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "@babel/core": "^7.22.10",
+    "@babel/preset-env": "^7.22.10",
+    "@babel/preset-typescript": "^7.22.5",
+    "@jest/globals": "^29.6.2",
+    "babel-jest": "^29.6.2",
+    "node-fetch": "^3.3.2",
+    "node-notifier": "^10.0.1",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1"
+  }
 }
