@@ -26,7 +26,7 @@ import {
 import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
 import { CopyButton } from "../../CopyButton/CopyButton";
 import { formatInteger } from "../../../utils/utils";
-import { Package, PackageDependency } from "@thunderstore/dapper/src/schema";
+import { Package } from "@thunderstore/dapper/src/schema";
 import { useState } from "react";
 import { Tabs } from "../../Tabs/Tabs";
 import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";

@@ -40,95 +40,8 @@ export function Header() {
   const dapper = useDapper();
   const userData = usePromise(dapper.getUser, [userId]);
 
-  const developersDropDownContents = [
-    <a href="/wiki" key="1">
-      <DropDownItem
-        content={<DropDownLink label="Modding Wiki" isExternal />}
-      />
-    </a>,
-    <a href="/docs" key="2">
-      <DropDownItem content={<DropDownLink label="API Docs" isExternal />} />
-    </a>,
-    <a href="/git" key="3">
-      <DropDownItem content={<DropDownLink label="GitHub Repo" isExternal />} />
-    </a>,
-    <PackageFormatDocsLink key="4">
-      <DropDownItem content={<DropDownLink label="Package Format Docs" />} />
-    </PackageFormatDocsLink>,
-    <MarkdownPreviewLink key="5">
-      <DropDownItem content={<DropDownLink label="Markdown Preview" />} />
-    </MarkdownPreviewLink>,
-    <ManifestValidatorLink key="6">
-      <DropDownItem content={<DropDownLink label="Manifest Validator" />} />
-    </ManifestValidatorLink>,
-    <PackageUploadLink key="7">
-      <DropDownItem content={<DropDownLink label="Upload Package" />} />
-    </PackageUploadLink>,
-  ];
-
-  const userDropDownContents = userData
-    ? [
-        <UserLink key="1" user={userData.name}>
-          <RadixDropDown.Item>
-            <div className={styles.dropDownUserInfo}>
-              {userData.imageSource ? (
-                <Avatar src={userData.imageSource} />
-              ) : null}
-              <div className={styles.dropdownUserInfoDetails}>
-                <div className={styles.dropdownUserInfoDetails_userName}>
-                  {userData.name}
-                </div>
-                <div className={styles.dropdownUserInfoDetails_description}>
-                  My profile
-                </div>
-              </div>
-            </div>
-          </RadixDropDown.Item>
-        </UserLink>,
-        <DropDownDivider key="2" />,
-        <TeamsLink key="3">
-          <DropDownItem
-            content={
-              <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
-                label="Teams"
-              />
-            }
-          />
-        </TeamsLink>,
-        <a href="/subscriptons" key="4">
-          <DropDownItem
-            content={
-              <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
-                label="Subscriptions"
-              />
-            }
-          />
-        </a>,
-        <SettingsLink key="5">
-          <DropDownItem
-            content={
-              <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
-                label="Settings"
-              />
-            }
-          />
-        </SettingsLink>,
-        <DropDownDivider key="6" />,
-        <a href="/logout" key="7">
-          <DropDownItem
-            content={
-              <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
-                label="Log Out"
-              />
-            }
-          />
-        </a>,
-      ]
-    : [];
+  const developersDropDownContents = getDevelopersDropDownContents();
+  const userDropDownContents = getUserDropDownContents(userData);
 
   return (
     <header className={styles.root}>
@@ -239,3 +152,100 @@ export function Header() {
 }
 
 Header.displayName = "Header";
+
+function getDevelopersDropDownContents() {
+  return [
+    <a href="/wiki" key="1">
+      <DropDownItem
+        content={<DropDownLink label="Modding Wiki" isExternal />}
+      />
+    </a>,
+    <a href="/docs" key="2">
+      <DropDownItem content={<DropDownLink label="API Docs" isExternal />} />
+    </a>,
+    <a href="/git" key="3">
+      <DropDownItem content={<DropDownLink label="GitHub Repo" isExternal />} />
+    </a>,
+    <PackageFormatDocsLink key="4">
+      <DropDownItem content={<DropDownLink label="Package Format Docs" />} />
+    </PackageFormatDocsLink>,
+    <MarkdownPreviewLink key="5">
+      <DropDownItem content={<DropDownLink label="Markdown Preview" />} />
+    </MarkdownPreviewLink>,
+    <ManifestValidatorLink key="6">
+      <DropDownItem content={<DropDownLink label="Manifest Validator" />} />
+    </ManifestValidatorLink>,
+    <PackageUploadLink key="7">
+      <DropDownItem content={<DropDownLink label="Upload Package" />} />
+    </PackageUploadLink>,
+  ];
+}
+
+function getUserDropDownContents(userData) {
+  if (!userData) {
+    return [];
+  }
+  else {
+    return [
+      <UserLink key="1" user={userData.name}>
+        <RadixDropDown.Item>
+          <div className={styles.dropDownUserInfo}>
+            {userData.imageSource ? (
+              <Avatar src={userData.imageSource} />
+            ) : null}
+            <div className={styles.dropdownUserInfoDetails}>
+              <div className={styles.dropdownUserInfoDetails_userName}>
+                {userData.name}
+              </div>
+              <div className={styles.dropdownUserInfoDetails_description}>
+                My profile
+              </div>
+            </div>
+          </div>
+        </RadixDropDown.Item>
+      </UserLink>,
+      <DropDownDivider key="2" />,
+      <TeamsLink key="3">
+        <DropDownItem
+          content={
+            <DropDownLink
+              leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
+              label="Teams"
+            />
+          }
+        />
+      </TeamsLink>,
+      <a href="/subscriptons" key="4">
+        <DropDownItem
+          content={
+            <DropDownLink
+              leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
+              label="Subscriptions"
+            />
+          }
+        />
+      </a>,
+      <SettingsLink key="5">
+        <DropDownItem
+          content={
+            <DropDownLink
+              leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
+              label="Settings"
+            />
+          }
+        />
+      </SettingsLink>,
+      <DropDownDivider key="6" />,
+      <a href="/logout" key="7">
+        <DropDownItem
+          content={
+            <DropDownLink
+              leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
+              label="Log Out"
+            />
+          }
+        />
+      </a>,
+    ];
+  }
+}

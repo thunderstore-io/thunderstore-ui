@@ -124,7 +124,9 @@ export class Dapper implements DapperInterface {
   getPackage = NotImplemented;
   getPackageDependencies = NotImplemented;
   getServiceAccount = NotImplemented;
+  getServiceAccountList = NotImplemented;
   getTeam = NotImplemented;
+  getTeamList = NotImplemented;
   getUser = NotImplemented;
   getUserSettings = NotImplemented;
 }
