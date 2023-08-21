@@ -3,11 +3,11 @@ import { MetaItem } from "../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoxOpen, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { formatInteger } from "../../utils/utils";
-import { CommunityPreview } from "@thunderstore/dapper/src/schema";
+import { Community } from "@thunderstore/dapper/src/cyberstormSchemas/community";
 import { CommunityLink } from "../Links/Links";
 
 export interface GameIconProps {
-  communityData: CommunityPreview;
+  communityData: Community;
 }
 
 /**

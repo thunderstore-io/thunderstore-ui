@@ -24,7 +24,7 @@ const schema = z.object({
 });
 
 // Define values returned by the Dapper method.
-interface UserData {
+export interface UserData {
   user: User;
   packages: PackagePreview[];
   servers: ServerPreview[];

@@ -15,6 +15,10 @@ import { Select } from "../../Select/Select";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
+import {
+  Community,
+  PaginatedList,
+} from "@thunderstore/dapper/src/cyberstormSchemas/community";
 import usePromise from "react-promise-suspense";
 
 /**
@@ -25,7 +29,14 @@ export function CommunityListLayout() {
   const [searchValue, setSearchValue] = useState("");
 
   const dapper = useDapper();
-  const communitiesData = usePromise(dapper.getCommunities, []);
+  const communitiesData: PaginatedList<Community> = usePromise(
+    dapper.getCommunities,
+    []
+  );
+
+  console.log(communitiesData);
+  console.log(communitiesData.count);
+  console.log(communitiesData.results);
 
   return (
     <BaseLayout

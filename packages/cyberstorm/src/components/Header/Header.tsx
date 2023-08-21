@@ -30,6 +30,7 @@ import { AvatarButton } from "../Avatar/AvatarButton";
 import { ThunderstoreLogo } from "../../svg/svg";
 import { Tooltip } from "../..";
 import { useDapper } from "@thunderstore/dapper";
+import { UserData } from "@thunderstore/dapper/src/cyberstormMethods/user";
 import usePromise from "react-promise-suspense";
 
 /**
@@ -38,7 +39,7 @@ import usePromise from "react-promise-suspense";
 export function Header() {
   const userId = "user";
   const dapper = useDapper();
-  const userData = usePromise(dapper.getUser, [userId]);
+  const userData: UserData = usePromise(dapper.getUser, [userId]);
 
   const developersDropDownContents = getDevelopersDropDownContents();
   const userDropDownContents = getUserDropDownContents(userData);
@@ -134,8 +135,8 @@ export function Header() {
               colorScheme="default"
               contentAlignment="end"
               trigger={
-                userData?.imageSource ? (
-                  <AvatarButton src={userData.imageSource} />
+                userData?.user.imageSource ? (
+                  <AvatarButton src={userData.user.imageSource} />
                 ) : (
                   <Button
                     leftIcon={<FontAwesomeIcon icon={faUser} fixedWidth />}
@@ -181,21 +182,20 @@ function getDevelopersDropDownContents() {
   ];
 }
 
-function getUserDropDownContents(userData) {
+function getUserDropDownContents(userData: UserData) {
   if (!userData) {
     return [];
-  }
-  else {
+  } else {
     return [
-      <UserLink key="1" user={userData.name}>
+      <UserLink key="1" user={userData.user.name}>
         <RadixDropDown.Item>
           <div className={styles.dropDownUserInfo}>
-            {userData.imageSource ? (
-              <Avatar src={userData.imageSource} />
+            {userData.user.imageSource ? (
+              <Avatar src={userData.user.imageSource} />
             ) : null}
             <div className={styles.dropdownUserInfoDetails}>
               <div className={styles.dropdownUserInfoDetails_userName}>
-                {userData.name}
+                {userData.user.name}
               </div>
               <div className={styles.dropdownUserInfoDetails_description}>
                 My profile
