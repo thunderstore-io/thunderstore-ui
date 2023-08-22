@@ -3,10 +3,7 @@ import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { PackageCard } from "../../PackageCard/PackageCard";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { useDapper } from "@thunderstore/dapper";
-import {
-  Community,
-  PaginatedList
-} from "@thunderstore/dapper/src/cyberstormSchemas/community";
+import { Community } from "@thunderstore/dapper/src/cyberstormSchemas/community";
 import usePromise from "react-promise-suspense";
 
 /**
@@ -14,7 +11,7 @@ import usePromise from "react-promise-suspense";
  */
 export function HomeLayout() {
   const dapper = useDapper();
-  const featuredCommunities: PaginatedList<Community> = usePromise(
+  const featuredCommunities: Community[] = usePromise(
     dapper.getCommunities,
     []
   );
@@ -27,7 +24,7 @@ export function HomeLayout() {
         <div className={styles.content}>
           <div className={styles.specialContent} />
           <div className={styles.cardContent}>
-            {featuredCommunities.results?.slice(0, 6).map((communityData) => {
+            {featuredCommunities.slice(0, 6).map((communityData) => {
               return (
                 <CommunityCard
                   key={communityData.name}

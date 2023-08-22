@@ -3,27 +3,22 @@ export interface Category {
   slug: string;
 }
 
-export interface Community {
+export interface CommunityPreview {
   name: string;
-  namespace: string;
-  backgroundImageSource?: string;
-  imageSource?: string;
-  packageCount: number;
-  downloadCount: number;
-  serverCount: number;
-  description?: string;
-  discordLink?: string;
+  identifier: string;
+
+  total_download_count: number;
+  total_package_count: number;
+  total_server_count: number;
+  portrait_image_url?: string | null;
 }
 
-export type CommunityPreview = Pick<
-  Community,
-  | "name"
-  | "namespace"
-  | "imageSource"
-  | "packageCount"
-  | "downloadCount"
-  | "serverCount"
->;
+export interface Community extends CommunityPreview {
+  background_image_url?: string | null;
+
+  description?: string | null;
+  discord_url?: string | null;
+}
 
 export interface PackageVersion {
   version: string;

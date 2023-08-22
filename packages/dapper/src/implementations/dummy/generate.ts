@@ -64,11 +64,11 @@ export function getCommunityPreviewDummyData(seed?: string): CommunityPreview {
   faker.seed(parsedSeed);
   return {
     name: faker.word.words(3),
-    namespace: "namespace",
-    downloadCount: faker.number.int({ min: 1000000, max: 10000000 }),
-    packageCount: faker.number.int({ min: 0, max: 100000 }),
-    serverCount: faker.number.int({ min: 0, max: 1000 }),
-    imageSource: faker.image.urlLoremFlickr({
+    identifier: "identifier",
+    total_download_count: faker.number.int({ min: 1000000, max: 10000000 }),
+    total_package_count: faker.number.int({ min: 0, max: 100000 }),
+    total_server_count: faker.number.int({ min: 0, max: 1000 }),
+    portrait_image_url: faker.image.urlLoremFlickr({
       width: 300,
       height: 450,
       category: "abstract",

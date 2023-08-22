@@ -32,7 +32,7 @@ export function TeamSettingsLayout(props: TeamSettingsLayoutProps) {
   const { teamId } = props;
 
   const dapper = useDapper();
-  const teamData = usePromise(dapper.getTeam, [teamId]);
+  const teamData: Team = usePromise(dapper.getTeam, [teamId]);
 
   const [currentTab, setCurrentTab] = useState(1);
 
