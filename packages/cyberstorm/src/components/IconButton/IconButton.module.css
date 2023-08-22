@@ -15,8 +15,6 @@
   background-color: var(--bg-color);
 
   --font-size: var(--font-size--l);
-  --text-color: var(--color-text--default);
-  --bg-color: var(--color-surface--7);
   --button-border-color: transparent;
   --button-border-width: var(--border-width--2);
 }

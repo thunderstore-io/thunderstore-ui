@@ -1,17 +1,17 @@
-import { StoryFn, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { IconButton, IconPlainButton } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSkull } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/pro-solid-svg-icons";
 
-const meta = {
+export default {
   title: "Cyberstorm/Components/IconButton",
   component: IconButton,
-} as ComponentMeta<typeof IconButton>;
+} as Meta;
 
 const defaultArgs = {
   tooltipText: "tooltip text",
-  icon: <FontAwesomeIcon fixedWidth icon={faSkull} />,
+  icon: <FontAwesomeIcon fixedWidth icon={faXmark} />,
 };
 
 const DefaultTemplate: StoryFn<typeof IconButton> = (args) => (
@@ -60,4 +60,4 @@ DefaultIconButton.args = defaultArgs;
 const DefaultIconPlainButton = PlainTemplate.bind({});
 DefaultIconPlainButton.args = defaultArgs;
 
-export { meta as default, DefaultIconButton, DefaultIconPlainButton };
+export { DefaultIconButton, DefaultIconPlainButton };
