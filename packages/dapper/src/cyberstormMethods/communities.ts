@@ -3,12 +3,12 @@ import { z } from "zod";
 import {
   Community,
   communityListSchema,
-  PaginatedList
+  PaginatedList,
 } from "../cyberstormSchemas/community";
 import { Dapper } from "../dapper";
 import {
   getCommunityPreviewDummyData,
-  getListOfIds
+  getListOfIds,
 } from "../implementations/dummy/generate";
 
 // Schema describing the data received from backend, used to validate the data.
