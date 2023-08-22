@@ -11,8 +11,13 @@
   ],
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "test": "jest --watch"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/jest": "^29.5.3",
+    "jest": "^29.6.3",
+    "ts-jest": "^29.1.1"
+  }
 }
