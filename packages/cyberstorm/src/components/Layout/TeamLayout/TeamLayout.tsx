@@ -1,10 +1,10 @@
 import styles from "./TeamLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { TeamLink } from "../../Links/Links";
-import { getTeamDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
-import { Team } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
+import { useDapper } from "@thunderstore/dapper";
+import usePromise from "react-promise-suspense";
 
 export interface TeamLayoutProps {
   teamId: string;
@@ -16,7 +16,8 @@ export interface TeamLayoutProps {
 export function TeamLayout(props: TeamLayoutProps) {
   const { teamId } = props;
 
-  const teamData: Team = getTeamData(teamId);
+  const dapper = useDapper();
+  const teamData = usePromise(dapper.getTeam, [teamId]);
 
   return (
     <BaseLayout
@@ -37,7 +38,3 @@ export function TeamLayout(props: TeamLayoutProps) {
 }
 
 TeamLayout.displayName = "TeamLayout";
-
-function getTeamData(teamId: string) {
-  return getTeamDummyData(teamId);
-}

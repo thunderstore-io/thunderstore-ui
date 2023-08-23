@@ -1,14 +1,14 @@
 import styles from "./TeamLeaveAndDisband.module.css";
 import { Button } from "../../../../Button/Button";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
-import { TeamSettings } from "@thunderstore/dapper/src/schema";
+import { Team } from "@thunderstore/dapper/src/schema";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { Alert } from "../../../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
 
 export interface TeamLeaveAndDisbandProps {
-  teamData: TeamSettings;
+  teamData: Team;
 }
 
 export function TeamLeaveAndDisband(props: TeamLeaveAndDisbandProps) {

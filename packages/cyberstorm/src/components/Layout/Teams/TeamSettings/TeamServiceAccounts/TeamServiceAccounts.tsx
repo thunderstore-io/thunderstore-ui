@@ -3,8 +3,6 @@ import { SettingItem } from "../../../../SettingItem/SettingItem";
 import { Button } from "../../../../Button/Button";
 import { ServiceAccountList } from "./ServiceAccountList/ServiceAccountList";
 import { Dialog } from "../../../../Dialog/Dialog";
-import { ServiceAccount, TeamSettings } from "@thunderstore/dapper/src/schema";
-import { getServiceAccountDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCircleExclamation } from "@fortawesome/pro-solid-svg-icons";
 import { TeamLink, UserLink } from "../../../../Links/Links";
@@ -12,17 +10,24 @@ import { TextInput } from "../../../../TextInput/TextInput";
 import { useState } from "react";
 import { CopyButton } from "../../../../CopyButton/CopyButton";
 import { Alert } from "../../../../Alert/Alert";
+import { useDapper } from "@thunderstore/dapper";
+import { Team } from "@thunderstore/dapper/src/schema";
+import usePromise from "react-promise-suspense";
 
 export interface TeamServiceAccountsProps {
-  serviceAccountData: string[];
-  teamData: TeamSettings;
+  teamData: Team;
 }
 
 export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
-  const { serviceAccountData = [], teamData } = props;
+  const { teamData } = props;
 
   const [serviceAccountAdded, setServiceAccountAdded] = useState(false);
   const [addedServiceAccountName, setAddedServiceAccountName] = useState("");
+
+  const dapper = useDapper();
+  const serviceAccountList = usePromise(dapper.getServiceAccountList, [
+    teamData.name,
+  ]);
 
   return (
     <div>
@@ -123,9 +128,7 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
         }
         content={
           <div className={styles.content}>
-            <ServiceAccountList
-              serviceAccountData={getServiceAccountListData(serviceAccountData)}
-            />
+            <ServiceAccountList serviceAccountData={serviceAccountList} />
           </div>
         }
       />
@@ -134,13 +137,3 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
 }
 
 TeamServiceAccounts.displayName = "TeamServiceAccounts";
-
-function getServiceAccountListData(
-  serviceAccountIds: string[]
-): ServiceAccount[] {
-  const serviceAccountArray: ServiceAccount[] = [];
-  serviceAccountIds.forEach((serviceAccountId) => {
-    serviceAccountArray.push(getServiceAccountDummyData(serviceAccountId));
-  });
-  return serviceAccountArray;
-}
