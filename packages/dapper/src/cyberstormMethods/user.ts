@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 import {
   getListOfIds,
   getPackagePreviewDummyData,
@@ -11,17 +9,7 @@ import {
   ServerPreview,
   User,
 } from "@thunderstore/dapper/src/schema";
-import { userSchema } from "../cyberstormSchemas/user";
-import { packagePreviewSchema } from "../cyberstormSchemas/package";
-import { serverPreviewSchema } from "../cyberstormSchemas/server";
 import { Dapper } from "..";
-
-// Schema describing the data received from backend, used to validate the data.
-const schema = z.object({
-  user: userSchema,
-  packages: z.array(packagePreviewSchema),
-  servers: z.array(serverPreviewSchema),
-});
 
 // Define values returned by the Dapper method.
 export interface UserData {
@@ -32,14 +20,6 @@ export interface UserData {
 
 // Dapper method type, defining the parameters required to fetch the data.
 export type GetUser = (userId: string) => Promise<UserData>;
-
-// Method for transforming the received data to a format that will be
-// passed on.
-const transform = (data: z.infer<typeof schema>): UserData => ({
-  user: data.user,
-  packages: data.packages,
-  servers: data.servers,
-});
 
 // Method implementation for Dapper class.
 export const getUser: GetUser = async function (this: Dapper, userId) {
@@ -52,9 +32,9 @@ export const getUser: GetUser = async function (this: Dapper, userId) {
     return getServerPreviewDummyData(x);
   });
 
-  return transform({
+  return {
     user: dummyUserData,
     packages: dummyPackagesPreviews,
     servers: dummyServers,
-  });
+  };
 };

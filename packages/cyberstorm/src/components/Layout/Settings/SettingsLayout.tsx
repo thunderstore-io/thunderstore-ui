@@ -25,7 +25,9 @@ export function SettingsLayout(props: SettingsLayoutProps) {
   const { userId } = props;
 
   const dapper = useDapper();
-  const userData: UserSettings = usePromise(dapper.getUserSettings, [userId]);
+  const userSettings: UserSettings = usePromise(dapper.getUserSettings, [
+    userId,
+  ]);
 
   const [currentTab, setCurrentTab] = useState(1);
 
@@ -40,7 +42,7 @@ export function SettingsLayout(props: SettingsLayoutProps) {
       tabs={
         <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
       }
-      mainContent={<>{getTabContent(currentTab, userData)}</>}
+      mainContent={<>{getTabContent(currentTab, userSettings)}</>}
     />
   );
 }
@@ -60,18 +62,18 @@ const tabs = [
   },
 ];
 
-function getTabContent(currentTab: number, userData: UserSettings) {
+function getTabContent(currentTab: number, userSettings: UserSettings) {
   let tabContent = null;
   if (currentTab === 1) {
     tabContent = (
       <div className={styles.tabContent}>
-        <Connections userData={userData} />
+        <Connections userData={userSettings} />
       </div>
     );
   } else if (currentTab === 2) {
     tabContent = (
       <div className={styles.tabContent}>
-        <Account userData={userData} />
+        <Account userData={userSettings} />
       </div>
     );
   }

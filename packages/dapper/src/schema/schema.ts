@@ -165,7 +165,7 @@ export interface User {
 export interface UserSettings extends User {
   achievements?: AchievementSetting[];
   badges?: BadgeSetting[];
-  connections?: Connection[];
+  connections: Connection[];
 }
 
 // TODO: figure out

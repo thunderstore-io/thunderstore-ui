@@ -42,7 +42,9 @@ export function Header() {
   const userData: UserData = usePromise(dapper.getUser, [userId]);
 
   const developersDropDownContents = getDevelopersDropDownContents();
-  const userDropDownContents = getUserDropDownContents(userData);
+  const userDropDownContents = userData?.user
+    ? getUserDropDownContents(userData)
+    : [];
 
   return (
     <header className={styles.root}>
@@ -131,20 +133,22 @@ export function Header() {
             </PackageUploadLink>
           </li>
           <li>
-            <DropDown
-              colorScheme="default"
-              contentAlignment="end"
-              trigger={
-                userData?.user.imageSource ? (
-                  <AvatarButton src={userData.user.imageSource} />
-                ) : (
-                  <Button
-                    leftIcon={<FontAwesomeIcon icon={faUser} fixedWidth />}
-                  />
-                )
-              }
-              content={userDropDownContents}
-            />
+            {userData?.user ? (
+              <DropDown
+                colorScheme="default"
+                contentAlignment="end"
+                trigger={
+                  userData.user.imageSource ? (
+                    <AvatarButton src={userData.user.imageSource} />
+                  ) : (
+                    <Button
+                      leftIcon={<FontAwesomeIcon icon={faUser} fixedWidth />}
+                    />
+                  )
+                }
+                content={userDropDownContents}
+              />
+            ) : null}
           </li>
         </ul>
       </nav>
@@ -183,69 +187,65 @@ function getDevelopersDropDownContents() {
 }
 
 function getUserDropDownContents(userData: UserData) {
-  if (!userData) {
-    return [];
-  } else {
-    return [
-      <UserLink key="1" user={userData.user.name}>
-        <RadixDropDown.Item>
-          <div className={styles.dropDownUserInfo}>
-            {userData.user.imageSource ? (
-              <Avatar src={userData.user.imageSource} />
-            ) : null}
-            <div className={styles.dropdownUserInfoDetails}>
-              <div className={styles.dropdownUserInfoDetails_userName}>
-                {userData.user.name}
-              </div>
-              <div className={styles.dropdownUserInfoDetails_description}>
-                My profile
-              </div>
+  return [
+    <UserLink key="1" user={userData.user.name}>
+      <RadixDropDown.Item>
+        <div className={styles.dropDownUserInfo}>
+          {userData.user.imageSource ? (
+            <Avatar src={userData.user.imageSource} />
+          ) : null}
+          <div className={styles.dropdownUserInfoDetails}>
+            <div className={styles.dropdownUserInfoDetails_userName}>
+              {userData.user.name}
+            </div>
+            <div className={styles.dropdownUserInfoDetails_description}>
+              My profile
             </div>
           </div>
-        </RadixDropDown.Item>
-      </UserLink>,
-      <DropDownDivider key="2" />,
-      <TeamsLink key="3">
-        <DropDownItem
-          content={
-            <DropDownLink
-              leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
-              label="Teams"
-            />
-          }
-        />
-      </TeamsLink>,
-      <a href="/subscriptons" key="4">
-        <DropDownItem
-          content={
-            <DropDownLink
-              leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
-              label="Subscriptions"
-            />
-          }
-        />
-      </a>,
-      <SettingsLink key="5">
-        <DropDownItem
-          content={
-            <DropDownLink
-              leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
-              label="Settings"
-            />
-          }
-        />
-      </SettingsLink>,
-      <DropDownDivider key="6" />,
-      <a href="/logout" key="7">
-        <DropDownItem
-          content={
-            <DropDownLink
-              leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
-              label="Log Out"
-            />
-          }
-        />
-      </a>,
-    ];
-  }
+        </div>
+      </RadixDropDown.Item>
+    </UserLink>,
+    <DropDownDivider key="2" />,
+    <TeamsLink key="3">
+      <DropDownItem
+        content={
+          <DropDownLink
+            leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
+            label="Teams"
+          />
+        }
+      />
+    </TeamsLink>,
+    <a href="/subscriptons" key="4">
+      <DropDownItem
+        content={
+          <DropDownLink
+            leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
+            label="Subscriptions"
+          />
+        }
+      />
+    </a>,
+    <SettingsLink key="5">
+      <DropDownItem
+        content={
+          <DropDownLink
+            leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
+            label="Settings"
+          />
+        }
+      />
+    </SettingsLink>,
+    <DropDownDivider key="6" />,
+    <a href="/logout" key="7">
+      <DropDownItem
+        content={
+          <DropDownLink
+            leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
+            label="Log Out"
+          />
+        }
+      />
+    </a>,
+  ];
 }

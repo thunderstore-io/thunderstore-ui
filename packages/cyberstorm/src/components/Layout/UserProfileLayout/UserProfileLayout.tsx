@@ -4,6 +4,7 @@ import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import styles from "./UserProfileLayout.module.css";
 import { useDapper } from "@thunderstore/dapper/";
+import { UserData } from "@thunderstore/dapper/src/cyberstormMethods/user";
 import usePromise from "react-promise-suspense";
 
 export interface UserProfileLayoutProps {
@@ -17,20 +18,31 @@ export function UserProfileLayout(props: UserProfileLayoutProps) {
   const { userId } = props;
 
   const dapper = useDapper();
-  const userDataRaw = usePromise(dapper.getUser, [userId]);
-  const userData = userDataRaw.user;
+  const userData: UserData = usePromise(dapper.getUser, [userId]);
 
   return (
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <UserLink user={userData.name}>{userData.name}</UserLink>
+          {userData?.user?.name ? (
+            <UserLink user={userData.user.name}>{userData.user.name}</UserLink>
+          ) : (
+            <></>
+          )}
         </BreadCrumbs>
       }
       header={
         <div className={styles.header}>
-          Mods uploaded by{" "}
-          <UserLink user={userData.name}>{userData.name}</UserLink>
+          {userData?.user?.name ? (
+            <>
+              Mods uploaded by{" "}
+              <UserLink user={userData.user.name}>
+                {userData.user.name}
+              </UserLink>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       }
       mainContent={<PackageSearchLayout userId={userId} />}
