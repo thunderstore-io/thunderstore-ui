@@ -9,7 +9,7 @@ const meta = {
 
 const Template: ComponentStory<typeof SettingsLayout> = () => (
   <div>
-    <SettingsLayout userId="user" />
+    <SettingsLayout userId="settingsUser" />
   </div>
 );
 
