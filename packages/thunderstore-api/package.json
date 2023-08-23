@@ -12,7 +12,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "test": "jest --watch"
+    "test": "jest",
+    "watch": "jest --watch"
   },
   "dependencies": {},
   "devDependencies": {
