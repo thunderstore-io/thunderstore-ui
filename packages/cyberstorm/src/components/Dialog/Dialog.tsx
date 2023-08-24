@@ -70,61 +70,62 @@ export function Dialog(props: DialogProps) {
       <RadixDialog.Root open={isOpen} onOpenChange={setOpen}>
         <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>
         <RadixDialog.Portal>
-          <RadixDialog.Overlay className={styles.overlay} />
-          <RadixDialog.Content className={styles.content}>
-            <div
-              className={`${styles.header} ${
-                showHeaderBorder ? styles.headerBorder : ""
-              }`}
-            >
-              <Tooltip content="Close" side="bottom" open={tooltipOpen}>
-                <RadixDialog.Close asChild>
-                  <Button
-                    colorScheme="transparentDefault"
-                    paddingSize="mediumSquare"
-                    leftIcon={
-                      <FontAwesomeIcon
-                        className={styles.closeIcon}
-                        icon={faXmarkLarge}
-                        fixedWidth
-                      />
-                    }
-                    onMouseOver={() => {
-                      setTooltipOpen(true);
-                    }}
-                    onMouseOut={() => {
-                      setTooltipOpen(false);
-                    }}
-                  />
-                </RadixDialog.Close>
-              </Tooltip>
-              {title ? <div className={styles.title}>{title}</div> : null}
-            </div>
-
-            <div
-              className={`${styles.body} ${
-                noPadding ? "" : styles.bodyPadding
-              }`}
-            >
-              {content}
-            </div>
-
-            {hideFooter ? null : (
+          <RadixDialog.Overlay className={styles.overlay}>
+            <RadixDialog.Content className={styles.content}>
               <div
-                className={`${styles.footer} ${
-                  showFooterBorder ? styles.footerBorder : ""
+                className={`${styles.header} ${
+                  showHeaderBorder ? styles.headerBorder : ""
                 }`}
               >
-                <div className={styles.footerSection}>
-                  {additionalFooterContent}
-                </div>
-                <div className={styles.footerSection}>
-                  <RadixDialog.Close asChild>{cancel}</RadixDialog.Close>
-                  {accept}
-                </div>
+                <Tooltip content="Close" side="bottom" open={tooltipOpen}>
+                  <RadixDialog.Close asChild>
+                    <Button
+                      colorScheme="transparentDefault"
+                      paddingSize="mediumSquare"
+                      leftIcon={
+                        <FontAwesomeIcon
+                          className={styles.closeIcon}
+                          icon={faXmarkLarge}
+                          fixedWidth
+                        />
+                      }
+                      onMouseOver={() => {
+                        setTooltipOpen(true);
+                      }}
+                      onMouseOut={() => {
+                        setTooltipOpen(false);
+                      }}
+                    />
+                  </RadixDialog.Close>
+                </Tooltip>
+                {title ? <div className={styles.title}>{title}</div> : null}
               </div>
-            )}
-          </RadixDialog.Content>
+
+              <div
+                className={`${styles.body} ${
+                  noPadding ? "" : styles.bodyPadding
+                }`}
+              >
+                {content}
+              </div>
+
+              {hideFooter ? null : (
+                <div
+                  className={`${styles.footer} ${
+                    showFooterBorder ? styles.footerBorder : ""
+                  }`}
+                >
+                  <div className={styles.footerSection}>
+                    {additionalFooterContent}
+                  </div>
+                  <div className={styles.footerSection}>
+                    <RadixDialog.Close asChild>{cancel}</RadixDialog.Close>
+                    {accept}
+                  </div>
+                </div>
+              )}
+            </RadixDialog.Content>
+          </RadixDialog.Overlay>
         </RadixDialog.Portal>
       </RadixDialog.Root>
     </div>

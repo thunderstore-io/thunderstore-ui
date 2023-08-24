@@ -1,5 +1,6 @@
 .overlay {
   position: fixed;
+  z-index: 9999;
   background-color: var(--color-shadow-1);
   inset: 0;
 }
