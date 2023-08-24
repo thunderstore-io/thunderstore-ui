@@ -37,7 +37,7 @@ import usePromise from "react-promise-suspense";
  * Cyberstorm Header Component
  */
 export function Header() {
-  const userId = "user";
+  const userId = "headerUser";
   const dapper = useDapper();
   const userData: UserData = usePromise(dapper.getUser, [userId]);
 
