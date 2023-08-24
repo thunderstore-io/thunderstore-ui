@@ -1,0 +1,20 @@
+{
+  "name": "@thunderstore/dapper-fake",
+  "version": "0.1.0",
+  "description": "Fake implementation of dapper using random generated content",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "main": "dist/thunderstore-dapper-fake.cjs.js",
+  "module": "dist/thunderstore-dapper-fake.esm.js",
+  "types": "dist/thunderstore-dapper-fake.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@thunderstore/dapper": "^0.1.0"
+  },
+  "devDependencies": {}
+}
