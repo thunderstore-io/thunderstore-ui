@@ -47,11 +47,17 @@ export class Filters {
   setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
   availableCategories: CategoriesProps;
   setAvailableCategories: React.Dispatch<React.SetStateAction<CategoriesProps>>;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  pageObjectCount: number;
+  setPageObjectCount: React.Dispatch<React.SetStateAction<number>>;
 
   constructor() {
     [this.keywords, this.setKeywords] = useState<string[]>([]);
     [this.availableCategories, this.setAvailableCategories] =
       useState<CategoriesProps>({});
+    [this.page, this.setPage] = useState<number>(1);
+    [this.pageObjectCount, this.setPageObjectCount] = useState<number>(1);
   }
 }
 
@@ -131,7 +137,6 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
 
   const filters = new Filters();
   const [order, setOrder] = useState("1");
-  const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
 
   const handleSearchFilterEdit = (e: string) =>
@@ -216,13 +221,12 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
               />
             </Suspense>
           </FiltersProvider>
-          {/* TODO: use real totalCount */}
           <Pagination
-            currentPage={page}
-            onPageChange={setPage}
+            currentPage={filters.page}
+            onPageChange={filters.setPage}
             pageSize={20}
             siblingCount={2}
-            totalCount={327}
+            totalCount={filters.pageObjectCount}
           />
         </div>
       </div>

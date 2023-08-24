@@ -79,6 +79,8 @@ export default function PackageListings(props: PackageListingsProps) {
     if (!isEqual(updatedAvailableCategories, filters.availableCategories)) {
       filters.setAvailableCategories(updatedAvailableCategories);
     }
+
+    filters.setPageObjectCount(datas.length);
   }, [
     datas,
     filters?.availableCategories,
