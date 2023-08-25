@@ -1,6 +1,6 @@
 {
   "name": "@thunderstore/cyberstorm-storybook",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "main": "index.js",
   "license": "MIT",
@@ -8,6 +8,8 @@
   "dependencies": {
     "@thunderstore/cyberstorm": "^0.1.0",
     "@thunderstore/cyberstorm-styles": "^0.1.0",
+    "@thunderstore/dapper": "^0.1.0",
+    "@thunderstore/dapper-fake": "^0.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
