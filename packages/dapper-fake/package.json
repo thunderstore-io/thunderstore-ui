@@ -14,6 +14,7 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.0.2",
     "@thunderstore/dapper": "^0.1.0"
   },
   "devDependencies": {}
