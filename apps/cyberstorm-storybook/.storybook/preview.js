@@ -1,6 +1,4 @@
 import React from "react";
-import { QueryClientProvider, QueryClient } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import { LinkLibrary } from "../LinkLibrary";
 import { LinkingProvider, CyberstormProviders } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-styles";
@@ -25,21 +23,14 @@ export const parameters = {
 
 export const decorators = [
   function (Story) {
-    const [client] = React.useState(
-      new QueryClient({ defaultOptions: { queries: { staleTime: 5000 } } })
-    );
-
     return (
       <LinkingProvider value={LinkLibrary}>
         <CyberstormProviders>
-          <QueryClientProvider client={client}>
-            <SessionProvider>
-              <Substack>
-                <Story />
-              </Substack>
-            </SessionProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
-          </QueryClientProvider>
+          <SessionProvider>
+            <Substack>
+              <Story />
+            </Substack>
+          </SessionProvider>
         </CyberstormProviders>
       </LinkingProvider>
     );
