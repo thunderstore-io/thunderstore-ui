@@ -22,11 +22,12 @@ cd thunderstore-ui
 yarn install
 
 // start Next.js dev server
-yarn workspace @thunderstore/nextjs dev
+yarn workspace @thunderstore/cyberstorm-nextjs dev
 ```
 
-That's it. Changes done to `apps/nextjs` and `packages/components` should both
-be automatically visible at [http://localhost:3000/].
+That's it. Changes done to `apps/cyberstorm-nextjs` and
+`packages/cyberstorm` should both be automatically visible at
+[http://localhost:3000/].
 
 ```
 // production build, assumes yarn install has already been run
@@ -34,18 +35,11 @@ be automatically visible at [http://localhost:3000/].
 yarn build
 
 // build and start Next.js prod server
-yarn workspace @thunderstore/nextjs build
-yarn workspace @thunderstore/nextjs start
+yarn workspace @thunderstore/cyberstorm-nextjs build
+yarn workspace @thunderstore/cyberstorm-nextjs start
 ```
 
 ### Troubleshooting
-
-#### After running `yarn build`, all the links disappeared from the page
-
-**Solution**: This seems to occur only when Next.js dev server has already been
-up before the packages were built. Most likely this is a cache issue which
-results in a rehydration issue on client-side. Simply running `yarn` or manually
-deleting `apps/nextjs/.next` after running `yarn build` should solve the issue.
 
 #### After runinng `yarn install` on Windows, you see symlinking errors
 
@@ -132,9 +126,7 @@ manually upload a Storybook to Chromatic, but this seems unnecessary since we
 have it automated. To use the manual method, `CHROMATIC_CYBERSTORM_TOKEN` env
 variable needs to be set (in the repo it's stored as a Secret for Actions).
 
-## Docker
-
-### Docker Compose
+## Docker Compose
 
 The build configuration for some apps is included in the
 `docker-compose.build.yml` file, making building of the services simple.
@@ -154,18 +146,6 @@ running:
 
 ```bash
 docker compose -f docker-compose.build.yml build
-```
-
-### Plain Docker
-
-The provided `Dockerfile` can be used to run the Next.js production server, e.g:
-
-```
-// build image (on project root dir)
-docker build -f apps/nextjs/Dockerfile -t ts-ui .
-
-// run container
-docker run -d -p 3000:3000 ts-ui
 ```
 
 ## pre-commit
