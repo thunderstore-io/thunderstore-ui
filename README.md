@@ -57,7 +57,7 @@ https://github.com/yarnpkg/yarn/issues/8405 for more details.
 To add new dependencies to existing packages, simply run something like:
 
 ```
-yarn workspace @thunderstore/components add react-table @types/react-table
+yarn workspace @thunderstore/cyberstorm add react-table @types/react-table
 ```
 
 ### Adding a new package

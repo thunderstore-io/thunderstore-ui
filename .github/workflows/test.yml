@@ -84,8 +84,6 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Build @thunderstore/hooks
         run: yarn workspace @thunderstore/hooks build
-      - name: Build @thunderstore/components
-        run: yarn workspace @thunderstore/components build
       - name: Test @thunderstore/dapper
         run: yarn workspace @thunderstore/dapper jest
       - name: Build @thunderstore/cyberstorm-nextjs
