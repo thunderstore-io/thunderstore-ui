@@ -3,7 +3,6 @@ import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { PackageCard } from "../../PackageCard/PackageCard";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { useDapper } from "@thunderstore/dapper";
-import { Community } from "@thunderstore/dapper/src/cyberstormSchemas/community";
 import usePromise from "react-promise-suspense";
 
 /**
@@ -11,10 +10,7 @@ import usePromise from "react-promise-suspense";
  */
 export function HomeLayout() {
   const dapper = useDapper();
-  const featuredCommunities: Community[] = usePromise(
-    dapper.getCommunities,
-    []
-  );
+  const featuredCommunities = usePromise(dapper.getCommunities, []);
   const featuredPackages = usePromise(dapper.getPackageListings, ["featured"]);
   const hotPackages = usePromise(dapper.getPackageListings, ["hot"]);
 

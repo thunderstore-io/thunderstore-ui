@@ -1,9 +1,9 @@
 import { Dapper } from "../dapper";
-import { Team } from "@thunderstore/dapper/src/schema";
+import { Team } from "../schema";
 import {
   getListOfIds,
   getTeamDummyData,
-} from "@thunderstore/dapper/src/implementations/dummy/generate";
+} from "../implementations/dummy/generate";
 
 // Dapper method type, defining the parameters required to fetch the data.
 export type GetTeamList = () => Promise<Team[]>;

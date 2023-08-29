@@ -1,5 +1,5 @@
-import { getUserSettingsDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
-import { Dapper } from "..";
+import { getUserSettingsDummyData } from "../implementations/dummy/generate";
+import { Dapper } from "../dapper";
 import { UserSettings } from "../schema";
 
 // Dapper method type, defining the parameters required to fetch the data.

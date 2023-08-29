@@ -1,6 +1,6 @@
 import { Dapper } from "../dapper";
-import { ServiceAccount } from "@thunderstore/dapper/src/schema";
-import { getServiceAccountDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
+import { ServiceAccount } from "../schema";
+import { getServiceAccountDummyData } from "../implementations/dummy/generate";
 
 // Dapper method type, defining the parameters required to fetch the data.
 export type GetServiceAccount = (
