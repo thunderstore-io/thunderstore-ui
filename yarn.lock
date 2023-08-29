@@ -2308,10 +2308,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
   integrity sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==
 
-"@preconstruct/cli@^2.1.5":
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/@preconstruct/cli/-/cli-2.6.2.tgz#ee0dd6456129cd72b918a52440088e54f46bdc5d"
-  integrity sha512-KhWeiw3hutnue5CTRlfWAZrB8qjW/uJNuSKC0OkwaerH9v8LdnbnnpMEdave8LAbruTuDJKhZ9KQd67ooY2n4g==
+"@preconstruct/cli@^2.8.1":
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/@preconstruct/cli/-/cli-2.8.1.tgz#7d7f9fa32e1bfd355d79062a9ccc5af4c97b3915"
+  integrity sha512-PX5w+au06iY/QaT+9RLmRlIfavRCRoMTC/krwtNrgPEnubR9e6P+QlywrKmwiEvkzbR9AEzGnRZL8uNRDDMzrQ==
   dependencies:
     "@babel/code-frame" "^7.5.5"
     "@babel/core" "^7.7.7"
@@ -2350,6 +2350,7 @@
     semver "^7.3.4"
     terser "^5.16.8"
     v8-compile-cache "^2.1.1"
+    zod "^3.21.4"
 
 "@preconstruct/hook@^0.4.0":
   version "0.4.0"
@@ -15521,6 +15522,11 @@ zod@3.21.4, zod@^3.17.3:
   version "3.21.4"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.21.4.tgz#10882231d992519f0a10b5dd58a38c9dabbb64db"
   integrity sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==
+
+zod@^3.21.4:
+  version "3.22.2"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.2.tgz#3add8c682b7077c05ac6f979fea6998b573e157b"
+  integrity sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==
 
 zwitch@^2.0.0:
   version "2.0.4"
