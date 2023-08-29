@@ -2,9 +2,8 @@ import React from "react";
 import { LinkLibrary } from "../LinkLibrary";
 import { LinkingProvider, CyberstormProviders } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-styles";
-import { DapperProvider } from "@thunderstore/dapper/src";
+import { DapperProvider, DummyDapper } from "@thunderstore/dapper";
 import { SessionProvider } from "../SessionContext";
-import { DummyDapper } from "@thunderstore/dapper/src/implementations/dummy/DummyDapper";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },

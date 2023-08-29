@@ -7,11 +7,11 @@ import { Tabs } from "../../Tabs/Tabs";
 import { Connections } from "./Connections/Connections";
 import { Account } from "./Account/Account";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
-import { UserSettings } from "@thunderstore/dapper/src/schema";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNodes, faCog } from "@fortawesome/pro-regular-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
+import { UserSettings } from "@thunderstore/dapper/schema";
 import usePromise from "react-promise-suspense";
 
 export interface SettingsLayoutProps {
@@ -25,9 +25,7 @@ export function SettingsLayout(props: SettingsLayoutProps) {
   const { userId } = props;
 
   const dapper = useDapper();
-  const userSettings: UserSettings = usePromise(dapper.getUserSettings, [
-    userId,
-  ]);
+  const userSettings = usePromise(dapper.getUserSettings, [userId]);
 
   const [currentTab, setCurrentTab] = useState(1);
 

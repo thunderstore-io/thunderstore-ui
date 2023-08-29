@@ -1,7 +1,7 @@
 import styles from "./TeamLeaveAndDisband.module.css";
 import { Button } from "../../../../Button/Button";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
-import { Team } from "@thunderstore/dapper/src/schema";
+import { Team } from "@thunderstore/dapper/schema";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { Alert } from "../../../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

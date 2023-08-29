@@ -1,5 +1,5 @@
 import styles from "./PackageTeamMemberList.module.css";
-import { TeamMember } from "@thunderstore/dapper/src/schema";
+import { TeamMember } from "@thunderstore/dapper/schema";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/pro-regular-svg-icons";

@@ -3,8 +3,7 @@ import { UserLink } from "../../Links/Links";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import styles from "./UserProfileLayout.module.css";
-import { useDapper } from "@thunderstore/dapper/";
-import { UserData } from "@thunderstore/dapper/src/cyberstormMethods/user";
+import { useDapper } from "@thunderstore/dapper";
 import usePromise from "react-promise-suspense";
 
 export interface UserProfileLayoutProps {
@@ -18,7 +17,7 @@ export function UserProfileLayout(props: UserProfileLayoutProps) {
   const { userId } = props;
 
   const dapper = useDapper();
-  const userData: UserData = usePromise(dapper.getUser, [userId]);
+  const userData = usePromise(dapper.getUser, [userId]);
 
   return (
     <BaseLayout

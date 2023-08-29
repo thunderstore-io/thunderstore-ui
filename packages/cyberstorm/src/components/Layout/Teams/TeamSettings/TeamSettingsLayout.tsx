@@ -18,8 +18,8 @@ import {
 } from "@fortawesome/pro-regular-svg-icons";
 import { TeamLeaveAndDisband } from "./TeamLeaveAndDisband/TeamLeaveAndDisband";
 import { useDapper } from "@thunderstore/dapper";
+import { Team } from "@thunderstore/dapper/schema";
 import usePromise from "react-promise-suspense";
-import { Team } from "@thunderstore/dapper/src/schema";
 
 export interface TeamSettingsLayoutProps {
   teamId: string;
@@ -32,7 +32,7 @@ export function TeamSettingsLayout(props: TeamSettingsLayoutProps) {
   const { teamId } = props;
 
   const dapper = useDapper();
-  const teamData: Team = usePromise(dapper.getTeam, [teamId]);
+  const teamData = usePromise(dapper.getTeam, [teamId]);
 
   const [currentTab, setCurrentTab] = useState(1);
 

@@ -1,7 +1,6 @@
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CommunitiesLink, CommunityLink } from "../../Links/Links";
-import { PackagePreview } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { formatInteger } from "../../../utils/utils";
@@ -16,6 +15,7 @@ import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { CommunityImage } from "../../CommunityImage/CommunityImage";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import { useDapper } from "@thunderstore/dapper";
+import { PackagePreview } from "@thunderstore/dapper/schema";
 import usePromise from "react-promise-suspense";
 
 export interface PackageListLayoutProps {

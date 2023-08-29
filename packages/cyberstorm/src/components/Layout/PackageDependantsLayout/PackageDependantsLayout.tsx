@@ -5,7 +5,7 @@ import {
   PackageLink,
   UserLink,
 } from "../../Links/Links";
-import { Package } from "@thunderstore/dapper/src/schema";
+import { Package } from "@thunderstore/dapper/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import styles from "./PackageDependantsLayout.module.css";
