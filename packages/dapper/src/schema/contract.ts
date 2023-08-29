@@ -1,3 +1,4 @@
+// TODO: none of the exports are used anywhere - is this still needed?
 export interface LegalContractVersion {
   title: string;
   content: string;

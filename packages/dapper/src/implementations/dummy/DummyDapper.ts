@@ -12,10 +12,6 @@ import {
 import { getPackageListings } from "../../cyberstormMethods/packageListings";
 import { getPackage } from "../../cyberstormMethods/package";
 
-const NotImplemented = () => {
-  throw new Error("Not implemented");
-};
-
 export class DummyDapper implements DapperInterface {
   public getPackageListings = getPackageListings;
 
@@ -76,8 +72,4 @@ export class DummyDapper implements DapperInterface {
       getPackageDependencyDummyData("3", community, namespace),
     ];
   };
-
-  public getFrontpage = NotImplemented;
-  public getOldPackage = NotImplemented;
-  public getOldCommunityPackageListing = NotImplemented;
 }
