@@ -44,6 +44,7 @@ import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
 import { ThunderstoreLogo } from "../../../svg/svg";
 import { Tooltip } from "../../Tooltip/Tooltip";
+import usePromise from "react-promise-suspense";
 
 export interface PackageDetailLayoutProps {
   community: string;
@@ -63,7 +64,11 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
     packageName,
   } = props;
   const dapper = useDapper();
-  const packageData = dapper.getPackage(community, namespace, packageName);
+  const packageData = usePromise(dapper.getPackage, [
+    community,
+    namespace,
+    packageName,
+  ]);
   const metaInfoData = getMetaInfoData(packageData);
 
   const [currentTab, setCurrentTab] = useState(1);
