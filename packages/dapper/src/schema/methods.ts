@@ -27,7 +27,11 @@ export type GetPackageListings = (
   namespaceId?: string,
   teamId?: string,
   keywords?: string[],
-  categories?: Record<string, boolean | undefined>
+  categories?: {
+    [key: string]: {
+      value: boolean | undefined;
+    };
+  }
 ) => Promise<PackagePreview[]>;
 
 export type GetServiceAccount = (
