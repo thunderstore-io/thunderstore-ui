@@ -16,7 +16,7 @@ For **React**, Dapper offers a *Context Provider* and a custom *hook*.
 Using them might look a little something like this:
 
 ```JSX
-import { PackageCardProps } from "@thunderstore/components";
+import { MyComponentProps } from "@thunderstore/cyberstorm";
 import { DapperProvider, useDapper} from "@thunderstore/dapper";
 
 const MyApp = () => <DapperProvider apiDomain="https://thunderstore.dev/">
@@ -24,7 +24,7 @@ const MyApp = () => <DapperProvider apiDomain="https://thunderstore.dev/">
 </DapperProvider>
 
 const CommunityPackageList = (props: { community: string }) => {
-  const [packages, setPackages] = React.useState<PackageCardProps[]>([]);
+  const [packages, setPackages] = React.useState<MyComponentProps[]>([]);
   const dapper = useDapper();
 
   React.useEffect(() => {

@@ -7,12 +7,6 @@ import { GetTeam } from "./cyberstormMethods/team";
 import { GetUser } from "./cyberstormMethods/user";
 
 import { DapperError } from "./errors";
-import {
-  getOldCommunityPackageListing,
-  GetOldCommunityPackageListing,
-} from "./methods/communityPackageList";
-import { getFrontpage, GetFrontpage } from "./methods/frontpage";
-import { GetOldPackage, getOldPackage } from "./methods/package";
 import { QsArray, serializeQueryString } from "./queryString";
 import { GetPackageDependencies } from "./cyberstormMethods/packageDependencies";
 import { GetUserSettings } from "./cyberstormMethods/userSettings";
@@ -34,9 +28,6 @@ export interface DapperInterface {
   getTeamList: GetTeamList;
   getUser: GetUser;
   getUserSettings: GetUserSettings;
-  getOldCommunityPackageListing: GetOldCommunityPackageListing;
-  getFrontpage: GetFrontpage;
-  getOldPackage: GetOldPackage;
 }
 
 const NotImplemented = () => {
@@ -112,17 +103,11 @@ export class Dapper implements DapperInterface {
     return transform(cleanedData);
   }
 
-  // Legacy
-  getOldCommunityPackageListing = getOldCommunityPackageListing;
-  getFrontpage = getFrontpage;
-  getOldPackage = getOldPackage;
-
-  // Cyberstorm
-  getPackageListings = NotImplemented;
   getCommunities = NotImplemented;
   getCommunity = NotImplemented;
   getPackage = NotImplemented;
   getPackageDependencies = NotImplemented;
+  getPackageListings = NotImplemented;
   getServiceAccount = NotImplemented;
   getServiceAccountList = NotImplemented;
   getTeam = NotImplemented;

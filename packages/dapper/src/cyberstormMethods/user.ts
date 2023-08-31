@@ -3,13 +3,9 @@ import {
   getPackagePreviewDummyData,
   getServerPreviewDummyData,
   getUserDummyData,
-} from "@thunderstore/dapper/src/implementations/dummy/generate";
-import {
-  PackagePreview,
-  ServerPreview,
-  User,
-} from "@thunderstore/dapper/src/schema";
-import { Dapper } from "..";
+} from "../implementations/dummy/generate";
+import { PackagePreview, ServerPreview, User } from "../schema";
+import { Dapper } from "../dapper";
 
 // Define values returned by the Dapper method.
 export interface UserData {

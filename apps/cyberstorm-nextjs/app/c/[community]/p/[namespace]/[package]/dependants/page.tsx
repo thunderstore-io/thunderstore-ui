@@ -1,5 +1,5 @@
 import { PackageDependantsLayout } from "@thunderstore/cyberstorm";
-import { getPackageDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
+import { getPackageDummyData } from "@thunderstore/dapper";
 
 export default function Page({
   params,

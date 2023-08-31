@@ -1,16 +1,16 @@
 import { Dapper } from "../dapper";
-import { Package } from "@thunderstore/dapper/src/schema";
-import { getPackageDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
+import { Package } from "../schema";
+import { getPackageDummyData } from "../implementations/dummy/generate";
 
 // Dapper method type, defining the parameters required to fetch the data.
 export type GetPackage = (
   community: string,
   namespace: string,
   name: string
-) => Package;
+) => Promise<Package>;
 
 // Method implementation for Dapper class.
-export const getPackage: GetPackage = function (
+export const getPackage: GetPackage = async function (
   this: Dapper,
   community: string,
   namespace: string,

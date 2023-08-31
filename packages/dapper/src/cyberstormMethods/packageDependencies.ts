@@ -1,6 +1,6 @@
 import { Dapper } from "../dapper";
-import { PackageDependency } from "@thunderstore/dapper/src/schema";
-import { getPackageDependencyDummyData } from "@thunderstore/dapper/src/implementations/dummy/generate";
+import { PackageDependency } from "../schema";
+import { getPackageDependencyDummyData } from "../implementations/dummy/generate";
 
 // Dapper method type, defining the parameters required to fetch the data.
 export type GetPackageDependencies = (

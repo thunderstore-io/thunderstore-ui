@@ -15,6 +15,7 @@ import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { CommunityImage } from "../../CommunityImage/CommunityImage";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import { useDapper } from "@thunderstore/dapper";
+import { PackagePreview } from "@thunderstore/dapper/schema";
 import usePromise from "react-promise-suspense";
 import { PlainButton } from "../../Button/Button";
 

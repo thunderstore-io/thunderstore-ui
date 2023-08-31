@@ -21,7 +21,6 @@ import {
 import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
 import { CopyButton } from "../../CopyButton/CopyButton";
 import { formatInteger } from "../../../utils/utils";
-import { Package } from "@thunderstore/dapper/src/schema";
 import { useState } from "react";
 import { Tabs } from "../../Tabs/Tabs";
 import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
@@ -35,10 +34,12 @@ import {
 } from "@fortawesome/pro-regular-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
+import { Package } from "@thunderstore/dapper/schema";
 import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
 import { ThunderstoreLogo } from "../../../svg/svg";
 import { Tooltip } from "../../Tooltip/Tooltip";
+import usePromise from "react-promise-suspense";
 
 export interface PackageDetailLayoutProps {
   community: string;
@@ -58,7 +59,11 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
     packageName,
   } = props;
   const dapper = useDapper();
-  const packageData = dapper.getPackage(community, namespace, packageName);
+  const packageData = usePromise(dapper.getPackage, [
+    community,
+    namespace,
+    packageName,
+  ]);
   const metaInfoData = getMetaInfoData(packageData);
 
   const [currentTab, setCurrentTab] = useState(1);

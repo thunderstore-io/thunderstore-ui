@@ -29,8 +29,7 @@ import {
 import { AvatarButton } from "../Avatar/AvatarButton";
 import { ThunderstoreLogo } from "../../svg/svg";
 import { Tooltip } from "../..";
-import { useDapper } from "@thunderstore/dapper";
-import { UserData } from "@thunderstore/dapper/src/cyberstormMethods/user";
+import { DapperInterface, useDapper } from "@thunderstore/dapper";
 import usePromise from "react-promise-suspense";
 
 /**
@@ -39,7 +38,7 @@ import usePromise from "react-promise-suspense";
 export function Header() {
   const userId = "headerUser";
   const dapper = useDapper();
-  const userData: UserData = usePromise(dapper.getUser, [userId]);
+  const userData = usePromise(dapper.getUser, [userId]);
 
   const developersDropDownContents = getDevelopersDropDownContents();
   const userDropDownContents = userData?.user
@@ -186,7 +185,9 @@ function getDevelopersDropDownContents() {
   ];
 }
 
-function getUserDropDownContents(userData: UserData) {
+function getUserDropDownContents(
+  userData: Awaited<ReturnType<DapperInterface["getUser"]>>
+) {
   return [
     <UserLink key="1" user={userData.user.name}>
       <RadixDropDown.Item>

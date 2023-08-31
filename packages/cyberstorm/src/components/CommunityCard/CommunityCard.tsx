@@ -7,7 +7,7 @@ import {
   faServer,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatInteger } from "../../utils/utils";
-import { CommunityPreview } from "@thunderstore/dapper/src/schema";
+import { CommunityPreview } from "@thunderstore/dapper/schema";
 import { CommunityLink } from "../Links/Links";
 
 export interface GameIconProps {

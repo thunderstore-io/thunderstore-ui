@@ -1,5 +1,5 @@
 import styles from "./PackageTagList.module.css";
-import { Category } from "@thunderstore/dapper/src/schema";
+import { Category } from "@thunderstore/dapper/schema";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTag } from "@fortawesome/pro-regular-svg-icons";

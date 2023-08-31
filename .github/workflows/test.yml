@@ -82,16 +82,8 @@ jobs:
           npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
       - name: Install Yarn dependencies
         run: yarn install --frozen-lockfile
-      - name: Build @thunderstore/hooks
-        run: yarn workspace @thunderstore/hooks build
-      - name: Build @thunderstore/components
-        run: yarn workspace @thunderstore/components build
       - name: Test @thunderstore/dapper
         run: yarn workspace @thunderstore/dapper jest
-      - name: Build @thunderstore/nextjs
-        run: yarn workspace @thunderstore/nextjs build
-      - name: Test @thunderstore/nextjs
-        run: yarn workspace @thunderstore/nextjs jest
       - name: Build @thunderstore/cyberstorm-nextjs
         run: yarn workspace @thunderstore/cyberstorm-nextjs build
 
@@ -103,7 +95,7 @@ jobs:
 #    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
 #    strategy:
 #      matrix:
-#        app: [nextjs, sertra]
+#        app: [sertra]
 #    steps:
 #      - name: Call deployment workflow
 #        run: |

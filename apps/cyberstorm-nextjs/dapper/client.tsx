@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
 
-import { DapperProvider } from "@thunderstore/dapper/src";
-import { DummyDapper } from "@thunderstore/dapper/src/implementations/dummy/DummyDapper";
+import { DapperProvider, DummyDapper } from "@thunderstore/dapper";
 
 export function ClientDapper(props: React.PropsWithChildren) {
   // import { API_DOMAIN } from "@/utils/constants";

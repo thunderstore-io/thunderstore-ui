@@ -15,8 +15,6 @@ import { Select } from "../../Select/Select";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
-import { Community } from "@thunderstore/dapper/src/cyberstormSchemas/community";
-import { CommunityPreview } from "@thunderstore/dapper/src/schema";
 import usePromise from "react-promise-suspense";
 
 /**
@@ -27,7 +25,7 @@ export function CommunityListLayout() {
   const [searchValue, setSearchValue] = useState("");
 
   const dapper = useDapper();
-  const communitiesData: Community[] = usePromise(dapper.getCommunities, []);
+  const communitiesData = usePromise(dapper.getCommunities, []);
 
   return (
     <BaseLayout
@@ -51,7 +49,7 @@ export function CommunityListLayout() {
       }
       mainContent={
         <div className={styles.communityCardList}>
-          {communitiesData?.map((community: CommunityPreview) => {
+          {communitiesData?.map((community) => {
             return (
               <CommunityCard key={community.name} communityData={community} />
             );

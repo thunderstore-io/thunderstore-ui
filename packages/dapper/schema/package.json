@@ -1,0 +1,4 @@
+{
+  "main": "dist/thunderstore-dapper-schema.cjs.js",
+  "module": "dist/thunderstore-dapper-schema.esm.js"
+}

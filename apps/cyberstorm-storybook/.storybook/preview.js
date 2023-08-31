@@ -1,12 +1,11 @@
 import React from "react";
-import { QueryClientProvider, QueryClient } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
-import { LinkLibrary } from "../LinkLibrary";
+
 import { LinkingProvider, CyberstormProviders } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-styles";
-import { DapperProvider } from "@thunderstore/dapper/src";
+import { DapperProvider } from "@thunderstore/dapper";
+import { DapperFake } from "@thunderstore/dapper-fake";
+import { LinkLibrary } from "../LinkLibrary";
 import { SessionProvider } from "../SessionContext";
-import { DummyDapper } from "@thunderstore/dapper/src/implementations/dummy/DummyDapper";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -25,32 +24,18 @@ export const parameters = {
 
 export const decorators = [
   function (Story) {
-    const [client] = React.useState(
-      new QueryClient({ defaultOptions: { queries: { staleTime: 5000 } } })
-    );
-
     return (
       <LinkingProvider value={LinkLibrary}>
         <CyberstormProviders>
-          <QueryClientProvider client={client}>
-            <SessionProvider>
-              <Substack>
+          <SessionProvider>
+            <DapperProvider dapperConstructor={() => new DapperFake()}>
+              <LinkingProvider value={LinkLibrary}>
                 <Story />
-              </Substack>
-            </SessionProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
-          </QueryClientProvider>
+              </LinkingProvider>
+            </DapperProvider>
+          </SessionProvider>
         </CyberstormProviders>
       </LinkingProvider>
     );
   },
 ];
-
-function Substack({ children }) {
-  const dapperConstructor = () => new DummyDapper();
-  return (
-    <DapperProvider dapperConstructor={dapperConstructor}>
-      <LinkingProvider value={LinkLibrary}>{children}</LinkingProvider>
-    </DapperProvider>
-  );
-}
