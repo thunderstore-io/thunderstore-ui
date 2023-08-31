@@ -1,6 +1,5 @@
 import { CommunityBreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PackagePreview } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { formatInteger } from "../../../utils/utils";
