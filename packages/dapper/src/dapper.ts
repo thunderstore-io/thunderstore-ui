@@ -1,33 +1,23 @@
 import { z } from "zod";
-import { GetCommunities } from "./cyberstormMethods/communities";
-import { GetCommunity } from "./cyberstormMethods/community";
-import { GetPackage } from "./cyberstormMethods/package";
-import { GetPackageListings } from "./cyberstormMethods/packageListings";
-import { GetTeam } from "./cyberstormMethods/team";
-import { GetUser } from "./cyberstormMethods/user";
 
 import { DapperError } from "./errors";
+import * as methods from "./schema/methods";
 import { QsArray, serializeQueryString } from "./queryString";
-import { GetPackageDependencies } from "./cyberstormMethods/packageDependencies";
-import { GetUserSettings } from "./cyberstormMethods/userSettings";
-import { GetServiceAccount } from "./cyberstormMethods/serviceAccount";
-import { GetTeamList } from "./cyberstormMethods/teamList";
-import { GetServiceAccountList } from "./cyberstormMethods/serviceAccountList";
 
 export interface DapperInterface {
   sessionId?: string;
 
-  getPackageListings: GetPackageListings;
-  getCommunities: GetCommunities;
-  getCommunity: GetCommunity;
-  getPackage: GetPackage;
-  getPackageDependencies: GetPackageDependencies;
-  getServiceAccount: GetServiceAccount;
-  getServiceAccountList: GetServiceAccountList;
-  getTeam: GetTeam;
-  getTeamList: GetTeamList;
-  getUser: GetUser;
-  getUserSettings: GetUserSettings;
+  getCommunities: methods.GetCommunities;
+  getCommunity: methods.GetCommunity;
+  getPackage: methods.GetPackage;
+  getPackageDependencies: methods.GetPackageDependencies;
+  getPackageListings: methods.GetPackageListings;
+  getServiceAccount: methods.GetServiceAccount;
+  getServiceAccountList: methods.GetServiceAccountList;
+  getTeam: methods.GetTeam;
+  getTeamList: methods.GetTeamList;
+  getUser: methods.GetUser;
+  getUserSettings: methods.GetUserSettings;
 }
 
 const NotImplemented = () => {
