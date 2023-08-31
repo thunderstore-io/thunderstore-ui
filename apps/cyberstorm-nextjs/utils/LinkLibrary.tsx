@@ -5,14 +5,15 @@ import { PropsWithChildren } from "react";
 interface LinkProps extends PropsWithChildren, ThunderstoreLinkProps {
   queryParams?: string;
   url: string;
+  className?: string;
 }
 
 export const Link = (props: LinkProps): React.ReactElement => {
-  const { children, queryParams, url } = props;
+  const { children, queryParams, url, className } = props;
   const q = queryParams ? `?${queryParams}` : "";
 
   return (
-    <NextLink href={`${url}${q}`} passHref>
+    <NextLink className={className} href={`${url}${q}`} passHref>
       {children}
     </NextLink>
   );
