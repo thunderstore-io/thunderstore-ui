@@ -2,10 +2,11 @@
 import styles from "./ManifestValidatorLayout.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { TextInput } from "../../../TextInput/TextInput";
-import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
+import { TitleOnlyBreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
-import { ManifestValidatorLink } from "../../../Links/Links";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
+
+const PAGE_TITLE = "Manifest Validator";
 
 /**
  * Cyberstorm ManifestValidator Layout
@@ -20,15 +21,11 @@ export function ManifestValidatorLayout() {
 
   return (
     <BaseLayout
-      breadCrumb={
-        <BreadCrumbs>
-          <ManifestValidatorLink>Manifest Validator</ManifestValidatorLink>
-        </BreadCrumbs>
-      }
-      header={<PageHeader title="Manifest Validator" />}
+      breadCrumb={<TitleOnlyBreadCrumbs pageTitle={PAGE_TITLE} />}
+      header={<PageHeader title={PAGE_TITLE} />}
       mainContent={
         <SettingItem
-          title="Manifest Validator"
+          title={PAGE_TITLE}
           description="Select a team to validate a package"
           content={valdatorContent}
         />

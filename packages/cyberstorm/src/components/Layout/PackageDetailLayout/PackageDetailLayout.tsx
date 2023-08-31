@@ -1,12 +1,7 @@
 "use client";
 import styles from "./PackageDetailLayout.module.css";
-import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import {
-  CommunitiesLink,
-  CommunityLink,
-  PackageDependantsLink,
-  TeamLink,
-} from "../../Links/Links";
+import { PackageBreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
+import { PackageDependantsLink, TeamLink } from "../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, PlainButton } from "../../Button/Button";
 import { ModIcon } from "../../ModIcon/ModIcon";
@@ -31,9 +26,9 @@ import { useState } from "react";
 import { Tabs } from "../../Tabs/Tabs";
 import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
 import { PackageVersions } from "./PackageVersions/PackageVersions";
-import { Link } from "../../Link/Link";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
+  faArrowUpRight,
   faCodeBranch,
   faFileLines,
   faFilePlus,
@@ -85,12 +80,17 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   }
   if (packageData.gitHubLink) {
     packageDetailsMeta.push(
-      <Link
-        key="2"
-        externalUrl={packageData.gitHubLink}
-        label="GitHub"
-        leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
-      />
+      <a key="2" href={packageData.gitHubLink}>
+        <PlainButton
+          label="GitHub"
+          colorScheme="transparentPrimary"
+          paddingSize="small"
+          fontSize="medium"
+          fontWeight="700"
+          leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
+          rightIcon={<FontAwesomeIcon icon={faArrowUpRight} fixedWidth />}
+        />
+      </a>
     );
   }
 
@@ -98,13 +98,10 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
     <BaseLayout
       backGroundImageSource={packageData.imageSource}
       breadCrumb={
-        <BreadCrumbs>
-          <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={packageData.community}>
-            {packageData.community}
-          </CommunityLink>
-          {packageData.name}
-        </BreadCrumbs>
+        <PackageBreadCrumbs
+          community={packageData.community}
+          pageTitle={packageData.name}
+        />
       }
       header={
         <div className={styles.packageInfo}>

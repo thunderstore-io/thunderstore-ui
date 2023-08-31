@@ -1,8 +1,7 @@
 "use client";
 import { useState } from "react";
 import styles from "./SettingsLayout.module.css";
-import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import { SettingsLink } from "../../Links/Links";
+import { TitleOnlyBreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { Tabs } from "../../Tabs/Tabs";
 import { Connections } from "./Connections/Connections";
 import { Account } from "./Account/Account";
@@ -13,6 +12,8 @@ import { faCircleNodes, faCog } from "@fortawesome/pro-regular-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
 import usePromise from "react-promise-suspense";
+
+const PAGE_TITLE = "Settings";
 
 export interface SettingsLayoutProps {
   userId: string;
@@ -33,12 +34,8 @@ export function SettingsLayout(props: SettingsLayoutProps) {
 
   return (
     <BaseLayout
-      breadCrumb={
-        <BreadCrumbs>
-          <SettingsLink>Settings</SettingsLink>
-        </BreadCrumbs>
-      }
-      header={<PageHeader title="Settings" />}
+      breadCrumb={<TitleOnlyBreadCrumbs pageTitle={PAGE_TITLE} />}
+      header={<PageHeader title={PAGE_TITLE} />}
       tabs={
         <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
       }

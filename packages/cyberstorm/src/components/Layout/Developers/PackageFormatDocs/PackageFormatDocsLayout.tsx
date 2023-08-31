@@ -1,6 +1,5 @@
 import styles from "./PackageFormatDocsLayout.module.css";
-import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { PackageFormatDocsLink } from "../../../Links/Links";
+import { TitleOnlyBreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 import { DataTable } from "../../../DataTable/DataTable";
@@ -27,18 +26,16 @@ const EXAMPLE_DEPENDENCIES = `[
 ]
 `;
 
+const PAGE_TITLE = "Package Format Docs";
+
 /**
  * Cyberstorm PackageFormatDocs Layout
  */
 export function PackageFormatDocsLayout() {
   return (
     <BaseLayout
-      breadCrumb={
-        <BreadCrumbs>
-          <PackageFormatDocsLink>Package Format Docs</PackageFormatDocsLink>
-        </BreadCrumbs>
-      }
-      header={<PageHeader title="Package Format Docs" />}
+      breadCrumb={<TitleOnlyBreadCrumbs pageTitle={PAGE_TITLE} />}
+      header={<PageHeader title={PAGE_TITLE} />}
       mainContent={
         <div className={styles.root}>
           <DataTable

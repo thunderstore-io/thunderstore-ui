@@ -1,6 +1,5 @@
 import styles from "./TeamsLayout.module.css";
-import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import { TeamsLink } from "../../Links/Links";
+import { TitleOnlyBreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { SettingItem } from "../../SettingItem/SettingItem";
 import { Button } from "../../Button/Button";
@@ -13,7 +12,7 @@ import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
 import usePromise from "react-promise-suspense";
 
-//TODO: Use Alert component
+const PAGE_TITLE = "Teams";
 
 /**
  * Cyberstorm Teams Layout
@@ -24,12 +23,8 @@ export function TeamsLayout() {
 
   return (
     <BaseLayout
-      breadCrumb={
-        <BreadCrumbs>
-          <TeamsLink>Teams</TeamsLink>
-        </BreadCrumbs>
-      }
-      header={<PageHeader title="Teams" />}
+      breadCrumb={<TitleOnlyBreadCrumbs pageTitle={PAGE_TITLE} />}
+      header={<PageHeader title={PAGE_TITLE} />}
       mainContent={
         <>
           <SettingItem

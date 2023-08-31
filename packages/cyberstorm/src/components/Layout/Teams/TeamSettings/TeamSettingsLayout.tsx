@@ -1,8 +1,7 @@
 "use client";
 import { useState } from "react";
 import styles from "./TeamSettingsLayout.module.css";
-import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { TeamSettingsLink, TeamsLink } from "../../../Links/Links";
+import { TeamSettingsBreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { Tabs } from "../../../Tabs/Tabs";
 import { TeamMembers } from "./TeamMembers/TeamMembers";
 import { TeamServiceAccounts } from "./TeamServiceAccounts/TeamServiceAccounts";
@@ -38,14 +37,7 @@ export function TeamSettingsLayout(props: TeamSettingsLayoutProps) {
 
   return (
     <BaseLayout
-      breadCrumb={
-        <BreadCrumbs>
-          <TeamsLink>Teams</TeamsLink>
-          <TeamSettingsLink team={teamData.name}>
-            {teamData.name}
-          </TeamSettingsLink>
-        </BreadCrumbs>
-      }
+      breadCrumb={<TeamSettingsBreadCrumbs pageTitle={teamData.name} />}
       header={<PageHeader title={teamData.name} />}
       tabs={
         <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />

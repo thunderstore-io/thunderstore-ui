@@ -6,7 +6,13 @@ export {
 } from "./components/Button/Button";
 export { CodeBox, type CodeBoxProps } from "./components/CodeBox/CodeBox";
 export {
-  BreadCrumbs,
+  TeamSettingsBreadCrumbs,
+  TitleOnlyBreadCrumbs,
+  HomeOnlyBreadCrumbs,
+  CommunityBreadCrumbs,
+  PackageBreadCrumbs,
+  PackageDependantsBreadCrumbs,
+  PageTitleCrumb,
   DefaultHomeCrumb,
 } from "./components/BreadCrumbs/BreadCrumbs";
 export { CopyButton } from "./components/CopyButton/CopyButton";
@@ -18,7 +24,6 @@ export {
 } from "./components/DropDown/DropDown";
 export { Footer } from "./components/Footer/Footer";
 export { Header } from "./components/Header/Header";
-export { Link, type LinkProps } from "./components/Link/Link";
 export {
   LinkingProvider,
   type LinkLibrary,

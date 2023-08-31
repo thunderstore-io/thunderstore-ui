@@ -1,48 +1,67 @@
-import { StoryFn, Meta } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import {
-  BreadCrumbs,
-  CommunityLink,
-  CommunityPackagesLink,
+  HomeOnlyBreadCrumbs,
+  TitleOnlyBreadCrumbs,
+  CommunityBreadCrumbs,
+  PackageBreadCrumbs,
+  PackageDependantsBreadCrumbs,
+  TeamSettingsBreadCrumbs,
 } from "@thunderstore/cyberstorm";
+import React from "react";
 
 export default {
   title: "Cyberstorm/Components/BreadCrumbs",
-  component: BreadCrumbs,
-  argTypes: {
-    excludeHome: {
-      description: "If set to true, the home breadcrumb is excluded",
-      defaultValue: false,
-      control: "boolean",
-    },
-  },
+  component: HomeOnlyBreadCrumbs,
 } as Meta;
 
-type BreadCrumbsStory = StoryFn<typeof BreadCrumbs>;
-const community = "riskofrain2";
-
-export const FullCrumbs: BreadCrumbsStory = (args) => (
-  <BreadCrumbs {...args}>
-    <CommunityLink community={community}>Risk of Rain 2</CommunityLink>
-    <CommunityPackagesLink community={community}>
-      Packages
-    </CommunityPackagesLink>
-    Popular
-  </BreadCrumbs>
+const HomeOnlyBreadCrumbsTemplate: StoryFn<typeof HomeOnlyBreadCrumbs> = () => (
+  <HomeOnlyBreadCrumbs />
 );
 
-export const HomeOnly: BreadCrumbsStory = (args) => <BreadCrumbs {...args} />;
+const HomeOnlyBreadCrumbsStory = HomeOnlyBreadCrumbsTemplate.bind({});
 
-export const OneCrumb: BreadCrumbsStory = (args) => (
-  <BreadCrumbs {...args}>
-    <CommunityLink community={community}>Risk of Rain 2</CommunityLink>
-  </BreadCrumbs>
+const TitleOnlyBreadCrumbsTemplate: StoryFn<
+  typeof TitleOnlyBreadCrumbs
+> = () => <TitleOnlyBreadCrumbs pageTitle="Page title" />;
+
+const TitleOnlyBreadCrumbsStory = TitleOnlyBreadCrumbsTemplate.bind({});
+
+const CommunityBreadCrumbsTemplate: StoryFn<
+  typeof CommunityBreadCrumbs
+> = () => <CommunityBreadCrumbs pageTitle="Page title" />;
+
+const CommunityBreadCrumbsStory = CommunityBreadCrumbsTemplate.bind({});
+
+const PackageBreadCrumbsTemplate: StoryFn<typeof PackageBreadCrumbs> = () => (
+  <PackageBreadCrumbs community="Community name" pageTitle="Page title" />
 );
 
-export const TwoCrumbs: BreadCrumbsStory = (args) => (
-  <BreadCrumbs {...args}>
-    <CommunityLink community={community}>Risk of Rain 2</CommunityLink>
-    <CommunityPackagesLink community={community}>
-      Packages
-    </CommunityPackagesLink>
-  </BreadCrumbs>
+const PackageBreadCrumbsStory = PackageBreadCrumbsTemplate.bind({});
+
+const PackageDependantsBreadCrumbsTemplate: StoryFn<
+  typeof PackageDependantsBreadCrumbs
+> = () => (
+  <PackageDependantsBreadCrumbs
+    packageName="Package name"
+    packageNameSpace="Package namespace"
+    community="Community name"
+  />
 );
+
+const PackageDependantsBreadCrumbsStory =
+  PackageDependantsBreadCrumbsTemplate.bind({});
+
+const TeamSettingsBreadCrumbsTemplate: StoryFn<
+  typeof TeamSettingsBreadCrumbs
+> = () => <TeamSettingsBreadCrumbs pageTitle="Team name" />;
+
+const TeamSettingsBreadCrumbsStory = TeamSettingsBreadCrumbsTemplate.bind({});
+
+export {
+  HomeOnlyBreadCrumbsStory as HomeOnlyBreadCrumb,
+  TitleOnlyBreadCrumbsStory as TitleOnlyBreadCrumbs,
+  CommunityBreadCrumbsStory as CommunityBreadCrumbs,
+  PackageBreadCrumbsStory as PackageBreadCrumbs,
+  PackageDependantsBreadCrumbsStory as PackageDependantsBreadCrumbs,
+  TeamSettingsBreadCrumbsStory as TeamSettingsBreadCrumbs,
+};

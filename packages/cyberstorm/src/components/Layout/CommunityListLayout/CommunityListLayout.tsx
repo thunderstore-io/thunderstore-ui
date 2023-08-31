@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import styles from "./CommunityListLayout.module.css";
-import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
+import { TitleOnlyBreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFire,
@@ -31,7 +31,7 @@ export function CommunityListLayout() {
 
   return (
     <BaseLayout
-      breadCrumb={<BreadCrumbs>Communities</BreadCrumbs>}
+      breadCrumb={<TitleOnlyBreadCrumbs pageTitle="Communities" />}
       header={<PageHeader title="Communities" />}
       search={
         <div className={styles.filters}>

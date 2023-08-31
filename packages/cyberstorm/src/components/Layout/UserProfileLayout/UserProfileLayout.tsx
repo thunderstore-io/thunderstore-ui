@@ -1,4 +1,4 @@
-import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
+import { TitleOnlyBreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { UserLink } from "../../Links/Links";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
@@ -22,15 +22,7 @@ export function UserProfileLayout(props: UserProfileLayoutProps) {
 
   return (
     <BaseLayout
-      breadCrumb={
-        <BreadCrumbs>
-          {userData?.user?.name ? (
-            <UserLink user={userData.user.name}>{userData.user.name}</UserLink>
-          ) : (
-            <></>
-          )}
-        </BreadCrumbs>
-      }
+      breadCrumb={<TitleOnlyBreadCrumbs pageTitle={userData.user.name} />}
       header={
         <div className={styles.header}>
           {userData?.user?.name ? (

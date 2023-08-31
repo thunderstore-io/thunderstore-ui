@@ -1,10 +1,5 @@
-import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import {
-  CommunitiesLink,
-  CommunityLink,
-  PackageLink,
-  UserLink,
-} from "../../Links/Links";
+import { PackageDependantsBreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
+import { PackageLink, UserLink } from "../../Links/Links";
 import { Package } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
@@ -35,20 +30,11 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
         "/images/community_bg.png"
       }
       breadCrumb={
-        <BreadCrumbs>
-          <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={communityData.community.name}>
-            {communityData.community.name}
-          </CommunityLink>
-          <PackageLink
-            community={packageData.community}
-            namespace={packageData.namespace}
-            package={packageData.name}
-          >
-            {packageData.name}
-          </PackageLink>
-          Dependants
-        </BreadCrumbs>
+        <PackageDependantsBreadCrumbs
+          community={communityData.community.name}
+          packageName={packageData.name}
+          packageNameSpace={packageData.namespace}
+        />
       }
       header={
         <div className={styles.header}>

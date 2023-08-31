@@ -3,6 +3,7 @@ import React from "react";
 
 interface CyberstormLinkProps {
   children?: React.ReactNode;
+  className?: string;
 }
 
 interface LinkProps extends CyberstormLinkProps {
@@ -11,10 +12,14 @@ interface LinkProps extends CyberstormLinkProps {
 }
 
 const Link = (props: LinkProps): React.ReactElement => {
-  const { children, queryParams, url } = props;
+  const { children, queryParams, url, className } = props;
   const q = queryParams ? `?${queryParams}` : "";
 
-  return <a href={`${url}${q}`}>{children}</a>;
+  return (
+    <a className={className} href={`${url}${q}`}>
+      {children}
+    </a>
+  );
 };
 
 const library: LinkLibrary = {

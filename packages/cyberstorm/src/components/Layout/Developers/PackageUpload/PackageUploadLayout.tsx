@@ -1,8 +1,7 @@
 "use client";
 import styles from "./PackageUploadLayout.module.css";
 import { Title } from "../../../Title/Title";
-import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { PackageUploadLink } from "../../../Links/Links";
+import { TitleOnlyBreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { TextInput } from "../../../TextInput/TextInput";
 import { Button } from "../../../Button/Button";
@@ -10,18 +9,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 
+const PAGE_TITLE = "Upload Package";
+
 /**
  * Cyberstorm PackageUpload Layout
  */
 export function PackageUploadLayout() {
   return (
     <BaseLayout
-      breadCrumb={
-        <BreadCrumbs>
-          <PackageUploadLink>Package Upload</PackageUploadLink>
-        </BreadCrumbs>
-      }
-      header={<Title text="Upload Package" />}
+      breadCrumb={<TitleOnlyBreadCrumbs pageTitle={PAGE_TITLE} />}
+      header={<Title text={PAGE_TITLE} />}
       mainContent={
         <>
           <SettingItem

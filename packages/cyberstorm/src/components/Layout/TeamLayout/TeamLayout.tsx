@@ -1,5 +1,5 @@
 import styles from "./TeamLayout.module.css";
-import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
+import { TitleOnlyBreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { TeamLink } from "../../Links/Links";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
@@ -21,11 +21,7 @@ export function TeamLayout(props: TeamLayoutProps) {
 
   return (
     <BaseLayout
-      breadCrumb={
-        <BreadCrumbs>
-          <TeamLink team={teamData.name}>{teamData.name}</TeamLink>
-        </BreadCrumbs>
-      }
+      breadCrumb={<TitleOnlyBreadCrumbs pageTitle={teamData.name} />}
       header={
         <div className={styles.header}>
           Mods uploaded by{" "}

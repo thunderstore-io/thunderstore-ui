@@ -1,22 +1,22 @@
-import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
+import { CommunityBreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CommunitiesLink, CommunityLink } from "../../Links/Links";
 import { PackagePreview } from "@thunderstore/dapper/src/schema";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { formatInteger } from "../../../utils/utils";
 import {
+  faArrowUpRight,
   faBoxOpen,
   faDownload,
   faServer,
 } from "@fortawesome/pro-regular-svg-icons";
-import { Link } from "../../Link/Link";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { CommunityImage } from "../../CommunityImage/CommunityImage";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import { useDapper } from "@thunderstore/dapper";
 import usePromise from "react-promise-suspense";
+import { PlainButton } from "../../Button/Button";
 
 export interface PackageListLayoutProps {
   isLoading?: boolean;
@@ -40,12 +40,7 @@ export function PackageListLayout(props: PackageListLayoutProps) {
         "/images/community_bg.png"
       }
       breadCrumb={
-        <BreadCrumbs>
-          <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={communityData.community.name}>
-            {communityData.community.name}
-          </CommunityLink>
-        </BreadCrumbs>
+        <CommunityBreadCrumbs pageTitle={communityData.community.name} />
       }
       header={
         <PageHeader
@@ -89,13 +84,17 @@ export function PackageListLayout(props: PackageListLayoutProps) {
               colorScheme="accent"
               size="bold_large"
             />,
-            <Link
-              key="meta-link"
-              leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
-              label="Join our community"
-              externalUrl="https://discord.thunderstore.io/"
-              size="bold"
-            />,
+            <a key="meta-link" href="https://discord.thunderstore.io/">
+              <PlainButton
+                label="Join our community"
+                colorScheme="transparentPrimary"
+                paddingSize="small"
+                fontSize="medium"
+                fontWeight="700"
+                leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
+                rightIcon={<FontAwesomeIcon icon={faArrowUpRight} fixedWidth />}
+              />
+            </a>,
           ]}
         />
       }

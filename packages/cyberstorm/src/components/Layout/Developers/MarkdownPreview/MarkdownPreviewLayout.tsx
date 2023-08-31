@@ -1,13 +1,14 @@
 "use client";
 import { SettingItem } from "../../../SettingItem/SettingItem";
-import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { MarkdownPreviewLink } from "../../../Links/Links";
+import { TitleOnlyBreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 import { useState } from "react";
 import { Markdown } from "../../../Markdown/Markdown";
 import styles from "./MarkdownPreviewLayout.module.css";
 import { TextAreaInput } from "../../../TextAreaInput/TextAreaInput";
+
+const PAGE_TITLE = "Markdown Preview";
 
 /**
  * Cyberstorm MarkdownPreview Layout
@@ -17,12 +18,8 @@ export function MarkdownPreviewLayout() {
 
   return (
     <BaseLayout
-      breadCrumb={
-        <BreadCrumbs>
-          <MarkdownPreviewLink>Markdown Preview</MarkdownPreviewLink>
-        </BreadCrumbs>
-      }
-      header={<PageHeader title="Markdown Preview" />}
+      breadCrumb={<TitleOnlyBreadCrumbs pageTitle={PAGE_TITLE} />}
+      header={<PageHeader title={PAGE_TITLE} />}
       mainContent={
         <div className={styles.root}>
           <SettingItem
