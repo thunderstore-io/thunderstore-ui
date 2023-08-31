@@ -1,6 +1,6 @@
 import { StoryFn, ComponentMeta } from "@storybook/react";
 import { PackageDependantsLayout } from "@thunderstore/cyberstorm";
-import { getPackageDummyData } from "@thunderstore/dapper";
+import { Package } from "@thunderstore/dapper/schema";
 import React from "react";
 
 const meta = {
@@ -8,9 +8,16 @@ const meta = {
   component: PackageDependantsLayout,
 } as ComponentMeta<typeof PackageDependantsLayout>;
 
+const packageData = {
+  community: "brotato",
+  namespace: "otDan",
+  name: "WaveTimer",
+  author: "otDan",
+} as Package;
+
 const Template: StoryFn<typeof PackageDependantsLayout> = () => (
   <div>
-    <PackageDependantsLayout packageData={getPackageDummyData("1")} />
+    <PackageDependantsLayout packageData={packageData} />
   </div>
 );
 
