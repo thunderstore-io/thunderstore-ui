@@ -20,6 +20,13 @@ export interface UserSettings extends User {
   connections: OAuthConnection[];
 }
 
+export interface OAuthConnection {
+  name: string;
+  connectedUsername: string;
+  imageSource: string;
+  enabled: boolean;
+}
+
 interface Achievement {
   name: string;
   description: string;
@@ -33,12 +40,5 @@ interface Badge {
 }
 
 interface Setting {
-  enabled: boolean;
-}
-
-interface OAuthConnection {
-  name: string;
-  connectedUsername: string;
-  imageSource: string;
   enabled: boolean;
 }

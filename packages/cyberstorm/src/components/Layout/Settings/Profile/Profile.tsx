@@ -2,7 +2,7 @@ import styles from "./Profile.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { Button } from "../../../Button/Button";
 import { Avatar } from "../../../Avatar/Avatar";
-import { User } from "@thunderstore/dapper/schema";
+import { User } from "@thunderstore/dapper/types";
 import { TextInput } from "../../../TextInput/TextInput";
 
 // TODO: actual placeholder

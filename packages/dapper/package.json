@@ -9,15 +9,15 @@
       "module": "./dist/thunderstore-dapper.esm.js",
       "default": "./dist/thunderstore-dapper.cjs.js"
     },
-    "./schema": {
-      "module": "./schema/dist/thunderstore-dapper-schema.esm.js",
-      "default": "./schema/dist/thunderstore-dapper-schema.cjs.js"
+    "./types": {
+      "module": "./types/dist/thunderstore-dapper-types.esm.js",
+      "default": "./types/dist/thunderstore-dapper-types.cjs.js"
     },
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
-    "schema"
+    "types"
   ],
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/dapper",
   "scripts": {
@@ -34,7 +34,7 @@
   "preconstruct": {
     "entrypoints": [
       "index.ts",
-      "schema/index.ts"
+      "types/index.ts"
     ],
     "exports": true
   }

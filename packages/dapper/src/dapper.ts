@@ -1,4 +1,4 @@
-import * as methods from "./schema/methods";
+import * as methods from "./types/methods";
 
 export interface DapperInterface {
   sessionId?: string;
