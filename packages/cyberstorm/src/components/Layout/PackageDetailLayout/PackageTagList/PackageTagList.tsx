@@ -1,28 +1,26 @@
 import styles from "./PackageTagList.module.css";
-import { Category } from "@thunderstore/dapper/schema";
+import { PackageCategory } from "@thunderstore/dapper/schema";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTag } from "@fortawesome/pro-regular-svg-icons";
 import { Tag } from "../../../Tag/Tag";
 
 export interface PackageTagListProps {
-  tags?: Category[];
+  tags?: PackageCategory[];
 }
 
 export function PackageTagList(props: PackageTagListProps) {
   const { tags = [] } = props;
 
-  const mappedPackageTagList = tags?.map(
-    (category: Category, index: number) => {
-      return (
-        <Tag
-          colorScheme="borderless_no_hover"
-          key={index.toString()}
-          label={category.name.toUpperCase()}
-        />
-      );
-    }
-  );
+  const mappedPackageTagList = tags?.map((category, index) => {
+    return (
+      <Tag
+        colorScheme="borderless_no_hover"
+        key={index.toString()}
+        label={category.name.toUpperCase()}
+      />
+    );
+  });
 
   return (
     <>

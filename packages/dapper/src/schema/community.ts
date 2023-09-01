@@ -1,5 +1,4 @@
 import { ServerPreview } from "./server";
-import { PaginatedList } from "./utils";
 
 export type Community = {
   name: string;
@@ -14,8 +13,6 @@ export type Community = {
   description?: string | null;
   discord_url?: string | null;
 };
-
-export type CommunityList = PaginatedList<Community>;
 
 export type CommunityData = {
   community: Community;

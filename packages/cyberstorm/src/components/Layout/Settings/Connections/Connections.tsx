@@ -2,7 +2,7 @@
 
 import styles from "./Connections.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
-import { Connection, UserSettings } from "@thunderstore/dapper/schema";
+import { OAuthConnection, UserSettings } from "@thunderstore/dapper/schema";
 import { PrivacyPolicyLink } from "../../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
@@ -14,7 +14,7 @@ export interface ConnectionsProps {
 }
 
 export interface ConnectionsItemProps {
-  connection: Connection;
+  connection: OAuthConnection;
 }
 
 //TODO: Use Switch component

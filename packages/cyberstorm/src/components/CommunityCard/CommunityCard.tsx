@@ -7,11 +7,11 @@ import {
   faServer,
 } from "@fortawesome/free-solid-svg-icons";
 import { formatInteger } from "../../utils/utils";
-import { CommunityPreview } from "@thunderstore/dapper/schema";
+import { Community } from "@thunderstore/dapper/schema";
 import { CommunityLink } from "../Links/Links";
 
 export interface GameIconProps {
-  communityData: CommunityPreview;
+  communityData: Community;
 }
 
 const COMMUNITY_PLACEHOLDER_IMAGE_SOURCE = "";

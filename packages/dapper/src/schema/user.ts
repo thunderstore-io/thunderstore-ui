@@ -1,4 +1,4 @@
-import { DynamicLink } from "./utils";
+import { DynamicLink } from "./shared";
 
 export interface User {
   name: string;

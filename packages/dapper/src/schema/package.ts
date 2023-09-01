@@ -37,8 +37,13 @@ export interface PackageDependency {
   namespace: string;
   community: string;
   shortDescription: string;
-  imageSource: string;
+  imageSource?: string;
   version: string;
+}
+
+export interface PackageCategory {
+  name: string;
+  slug: string;
 }
 
 interface PackageTeam {
