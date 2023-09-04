@@ -39,6 +39,10 @@
     "value-list-comma-newline-after": "always-multi-line",
     "value-list-comma-space-after": "always-single-line",
     "value-list-comma-space-before": "never",
+    "property-no-vendor-prefix": [
+      true,
+      { "ignoreProperties": ["background-clip"] }
+    ],
 
     "plugin/rational-order": [
       true,

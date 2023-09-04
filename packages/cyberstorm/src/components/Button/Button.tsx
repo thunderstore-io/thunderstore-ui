@@ -28,6 +28,9 @@ interface _PlainButtonProps {
     | "fancyAccent"
     | "success"
     | "warning"
+    | "blue"
+    | "gray"
+    | "red"
     | "specialGreen"
     | "specialPurple"
     | "transparentDanger"
@@ -148,6 +151,9 @@ const getStyle = (scheme: string) => {
     fancyAccent: styles.button__fancyAccent,
     success: styles.button__success,
     warning: styles.button__warning,
+    blue: styles.button__blue,
+    gray: styles.button__gray,
+    red: styles.button__red,
     specialGreen: styles.button__specialGreen,
     specialPurple: styles.button__specialPurple,
     transparentDanger: styles.button__transparentDanger,

@@ -1,5 +1,5 @@
 :root {
-  --color-background: var(--color-surface--0);
+  --color-background: var(--color-surface--1);
   --color-background-alpha-90: rgb(18 18 38 / 0.9);
   --color-danger: var(--color-red--5);
   --color-danger-background: var(--color-red--8);
@@ -38,6 +38,7 @@
   --color-gradient-purple-green--dark: linear-gradient(to left top, rgb(47 14 68) 0%, rgb(10 76 53) 100%);
   --color-gradient-purple-green: linear-gradient(to left top, rgb(157 48 228) 0%, rgb(35 255 176) 100%);
   --color-gradient-purple-green--light: linear-gradient(to left top, rgb(177 89 233) 0%, rgb(115 225 178) 100%);
+  --color-gradient-vibrant: linear-gradient(to left, rgb(157 48 228) 0%, rgb(28 167 245) 50%, rgb(35 255 176) 100%);
   --color-highlight--hover: var(--color-cyber-green--40);
   --color-highlight: var(--color-cyber-green--50);
   --box-shadow-default: 0 0.75em 1.5em 0.25em rgb(0 0 0 / 0.65);

@@ -97,6 +97,8 @@ export { Alert, type AlertProps } from "./components/Alert/Alert";
 export { CommunityListLayout } from "./components/Layout/CommunityListLayout/CommunityListLayout";
 export { ErrorLayout } from "./components/Layout/ErrorLayout/ErrorLayout";
 export { HomeLayout } from "./components/Layout/HomeLayout/HomeLayout";
+export { LoginLayout } from "./components/Layout/LoginLayout/LoginLayout";
+export { BetaLoginLayout } from "./components/Layout/LoginLayout/BetaLoginLayout";
 export {
   PackageDetailLayout,
   type PackageDetailLayoutProps,
