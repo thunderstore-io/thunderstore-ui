@@ -4,7 +4,7 @@ import { isEqual } from "lodash";
 import styles from "./PackageListings.module.css";
 import { PackageCard } from "../../PackageCard/PackageCard";
 import { useDapper } from "@thunderstore/dapper";
-import { PackagePreview } from "@thunderstore/dapper/schema";
+import { PackagePreview } from "@thunderstore/dapper/types";
 import {
   FiltersContext,
   CategoriesProps,

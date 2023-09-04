@@ -4,7 +4,7 @@ import { Button } from "../../../../Button/Button";
 import { Dialog } from "../../../../Dialog/Dialog";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { Select } from "../../../../Select/Select";
-import { Team, TeamMember } from "@thunderstore/dapper/schema";
+import { Team, TeamMember } from "@thunderstore/dapper/types";
 import { TeamLink, UserLink } from "../../../../Links/Links";
 import { Avatar } from "../../../../Avatar/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

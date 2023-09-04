@@ -1,17 +1,18 @@
 import { PackageDependantsLayout } from "@thunderstore/cyberstorm";
-import { getPackageDummyData } from "@thunderstore/dapper";
+import { Package } from "@thunderstore/dapper/types";
 
 export default function Page({
   params,
 }: {
   params: { community: string; namespace: string; package: string };
 }) {
-  const packageData = getPackageDummyData(
-    "1337",
-    params.community,
-    params.namespace,
-    params.package
-  );
+  // TODO: dummy data for now, the component shouldn't consume Package
+  // object anyway.
+  const packageData = {
+    community: params.community,
+    namespace: params.namespace,
+    name: params.package,
+  } as Package;
 
   return <PackageDependantsLayout packageData={packageData} />;
 }

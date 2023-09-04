@@ -1,4 +1,4 @@
-import { TeamPreview } from "@thunderstore/dapper/schema";
+import { Team } from "@thunderstore/dapper/types";
 import { DataTable, DataTableRows } from "../../../DataTable/DataTable";
 import { TeamSettingsLink } from "../../../Links/Links";
 import styles from "./TeamList.module.css";
@@ -7,7 +7,7 @@ import { faCircleCheck } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export interface TeamListProps {
-  teams?: TeamPreview[];
+  teams?: Team[];
 }
 
 export function TeamList(props: TeamListProps) {
@@ -15,7 +15,7 @@ export function TeamList(props: TeamListProps) {
   const createdTeamName = "Dapper Provider Team";
 
   const teamData: DataTableRows = [];
-  teams?.forEach((team: TeamPreview, index) => {
+  teams?.forEach((team, index) => {
     teamData.push([
       {
         value: (

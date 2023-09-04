@@ -1,0 +1,21 @@
+{
+  "name": "@thunderstore/dapper-ts",
+  "version": "0.1.0",
+  "description": "Implementation of Dapper using Thunderstore API as the data source",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "main": "dist/thunderstore-dapper-ts.cjs.js",
+  "module": "dist/thunderstore-dapper-ts.esm.js",
+  "types": "dist/thunderstore-dapper-ts.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@thunderstore/dapper": "^0.1.0",
+    "@thunderstore/thunderstore-api": "^0.1.0"
+  },
+  "devDependencies": {}
+}

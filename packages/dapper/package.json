@@ -9,39 +9,32 @@
       "module": "./dist/thunderstore-dapper.esm.js",
       "default": "./dist/thunderstore-dapper.cjs.js"
     },
-    "./schema": {
-      "module": "./schema/dist/thunderstore-dapper-schema.esm.js",
-      "default": "./schema/dist/thunderstore-dapper-schema.cjs.js"
+    "./types": {
+      "module": "./types/dist/thunderstore-dapper-types.esm.js",
+      "default": "./types/dist/thunderstore-dapper-types.cjs.js"
     },
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
-    "schema"
+    "types"
   ],
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/dapper",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch",
-    "test": "jest",
-    "watch": "jest --watch"
+    "dev": "tsc --watch"
   },
   "dependencies": {
     "@babel/runtime": "^7.17.0",
     "@types/react": "^18.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "zod": "^3.17.3"
+    "react-dom": "^18.2.0"
   },
-  "devDependencies": {
-    "@types/jest": "^29.5.3",
-    "jest": "^29.6.3",
-    "ts-jest": "^29.1.1"
-  },
+  "devDependencies": {},
   "preconstruct": {
     "entrypoints": [
       "index.ts",
-      "schema/index.ts"
+      "types/index.ts"
     ],
     "exports": true
   }

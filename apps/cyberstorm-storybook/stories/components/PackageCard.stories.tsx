@@ -1,6 +1,5 @@
 import { StoryFn, Meta } from "@storybook/react";
 import { PackageCard } from "@thunderstore/cyberstorm";
-import { getPackagePreviewDummyData } from "@thunderstore/dapper";
 import React from "react";
 
 export default {
@@ -36,7 +35,26 @@ const Template: StoryFn<typeof PackageCard> = (args) => (
 
 const ReferencePackageCard = Template.bind({});
 ReferencePackageCard.args = {
-  packageData: getPackagePreviewDummyData(),
+  packageData: {
+    name: "WaveTimer",
+    namespace: "otDan",
+    community: "brotato",
+    description: "Modifies the in game timer to have a new look ",
+    imageSource:
+      "https://gcdn.thunderstore.io/live/repository/icons/otDan-WaveTimer-1.1.0.png.256x256_q95_crop.jpg",
+    downloadCount: 2707,
+    likes: 1,
+    size: 106299,
+    author: "otDan",
+    lastUpdated: "Tue Feb 28 2023",
+    isPinned: false,
+    isNsfw: false,
+    isDeprecated: false,
+    categories: [
+      { name: "Misc", slug: "misc" },
+      { name: "Mods", slug: "mods" },
+    ],
+  },
 };
 
 export { ReferencePackageCard };

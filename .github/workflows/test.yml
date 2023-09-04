@@ -82,8 +82,6 @@ jobs:
           npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
       - name: Install Yarn dependencies
         run: yarn install --frozen-lockfile
-      - name: Test @thunderstore/dapper
-        run: yarn workspace @thunderstore/dapper jest
       - name: Build @thunderstore/cyberstorm-nextjs
         run: yarn workspace @thunderstore/cyberstorm-nextjs build
 

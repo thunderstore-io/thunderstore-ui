@@ -18,7 +18,7 @@ import {
 } from "@fortawesome/pro-regular-svg-icons";
 import { TeamLeaveAndDisband } from "./TeamLeaveAndDisband/TeamLeaveAndDisband";
 import { useDapper } from "@thunderstore/dapper";
-import { Team } from "@thunderstore/dapper/schema";
+import { Team } from "@thunderstore/dapper/types";
 import usePromise from "react-promise-suspense";
 
 export interface TeamSettingsLayoutProps {

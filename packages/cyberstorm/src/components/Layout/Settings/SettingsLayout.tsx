@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNodes, faCog } from "@fortawesome/pro-regular-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
-import { UserSettings } from "@thunderstore/dapper/schema";
+import { UserSettings } from "@thunderstore/dapper/types";
 import usePromise from "react-promise-suspense";
 
 export interface SettingsLayoutProps {

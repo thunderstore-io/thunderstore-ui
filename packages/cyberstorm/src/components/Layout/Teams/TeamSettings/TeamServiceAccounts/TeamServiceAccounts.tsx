@@ -11,7 +11,7 @@ import { useState } from "react";
 import { CopyButton } from "../../../../CopyButton/CopyButton";
 import { Alert } from "../../../../Alert/Alert";
 import { useDapper } from "@thunderstore/dapper";
-import { Team } from "@thunderstore/dapper/schema";
+import { Team } from "@thunderstore/dapper/types";
 import usePromise from "react-promise-suspense";
 
 export interface TeamServiceAccountsProps {
