@@ -25,7 +25,7 @@ export function CommunityListLayout() {
   const [searchValue, setSearchValue] = useState("");
 
   const dapper = useDapper();
-  const communitiesData = usePromise(dapper.getCommunities, []);
+  const communities = usePromise(dapper.getCommunities, []);
 
   return (
     <BaseLayout
@@ -49,11 +49,9 @@ export function CommunityListLayout() {
       }
       mainContent={
         <div className={styles.communityCardList}>
-          {communitiesData?.map((community) => {
-            return (
-              <CommunityCard key={community.name} communityData={community} />
-            );
-          })}
+          {communities.results.map((community) => (
+            <CommunityCard key={community.identifier} community={community} />
+          ))}
         </div>
       }
     />

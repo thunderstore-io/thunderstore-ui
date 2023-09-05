@@ -4,11 +4,7 @@ import { CommunitiesLink, CommunityLink } from "../../Links/Links";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { formatInteger } from "../../../utils/utils";
-import {
-  faBoxOpen,
-  faDownload,
-  faServer,
-} from "@fortawesome/pro-regular-svg-icons";
+import { faBoxOpen, faDownload } from "@fortawesome/pro-regular-svg-icons";
 import { Link } from "../../Link/Link";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
@@ -53,9 +49,7 @@ export function PackageListLayout(props: PackageListLayoutProps) {
           description={communityData.community.description}
           image={
             <CommunityImage
-              src={
-                communityData.community.portrait_image_url || "/images/game.png"
-              }
+              src={communityData.community.icon_url ?? "/images/game.png"}
             />
           }
           meta={[
@@ -76,16 +70,6 @@ export function PackageListLayout(props: PackageListLayoutProps) {
                 " Downloads"
               }
               icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
-              colorScheme="accent"
-              size="bold_large"
-            />,
-            <MetaItem
-              key="meta-servers"
-              label={
-                formatInteger(communityData.community.total_server_count) +
-                " Servers"
-              }
-              icon={<FontAwesomeIcon icon={faServer} fixedWidth />}
               colorScheme="accent"
               size="bold_large"
             />,

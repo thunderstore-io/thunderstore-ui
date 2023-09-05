@@ -1,10 +1,14 @@
-import { Community, CommunityData } from "./community";
+import { Communities, CommunityData } from "./community";
 import { Package, PackageDependency, PackagePreview } from "./package";
 import { ServerPreview } from "./server";
 import { ServiceAccount, Team } from "./team";
 import { User, UserSettings } from "./user";
 
-export type GetCommunities = () => Promise<Community[]>;
+// TODO: support for sorting and filtering by keyword.
+export type GetCommunities = (
+  page?: number,
+  pageSize?: number
+) => Promise<Communities>;
 
 export type GetCommunity = (identifier: string) => Promise<CommunityData>;
 
