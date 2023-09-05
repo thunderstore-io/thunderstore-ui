@@ -1,23 +1,18 @@
 .root {
   display: block;
-  flex-grow: 0;
-  gap: var(--gap--4);
-  align-items: center;
-  width: auto;
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 .text {
   color: var(--color-text--secondary);
   font-size: var(--font-size--l);
   line-height: var(--line-height--l);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .opened {
-  text-wrap: wrap;
+  white-space: normal;
 }
 
 @media (max-width: 30rem) {
