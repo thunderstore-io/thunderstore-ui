@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 
 import { getFakeImg, getIds, setSeed } from "./utils";
-import { Community } from "@thunderstore/dapper/types";
+import { Community, GetCommunities } from "@thunderstore/dapper/types";
 
 const getFakeCommunityPreview = (uuid: string): Community => {
   setSeed(uuid);
@@ -11,6 +11,7 @@ const getFakeCommunityPreview = (uuid: string): Community => {
     identifier: uuid,
     description: faker.helpers.maybe(() => faker.word.words(5)) ?? null,
     discord_url: faker.helpers.maybe(() => faker.internet.url()) ?? null,
+    datetime_created: faker.date.past().toISOString(),
     background_image_url:
       faker.helpers.maybe(() => getFakeImg(300, 450), { probability: 0.9 }) ??
       null,
@@ -36,16 +37,37 @@ export const getFakeCommunity = async (uuid: string) => {
   };
 };
 
-export const getFakeCommunities = async (page = 1, pageSize = 100) => {
+export const getFakeCommunities: GetCommunities = async (
+  page = 1,
+  pageSize = 100,
+  ordering = "name"
+) => {
   // Last page is not full.
   const fullPages = 5;
   const communityCount = pageSize * fullPages + Math.floor(pageSize / 2);
-  const allIds = getIds(communityCount, "communitySeed");
-  const pageIds = allIds.splice((page - 1) * pageSize, pageSize);
+  const communities = getIds(communityCount, "communitySeed").map(
+    getFakeCommunityPreview
+  );
+
+  if (ordering === "datetime_created") {
+    communities.sort(
+      (a, b) => Date.parse(a.datetime_created) - Date.parse(b.datetime_created)
+    );
+  } else if (ordering === "-datetime_created") {
+    communities.sort(
+      (a, b) => Date.parse(b.datetime_created) - Date.parse(a.datetime_created)
+    );
+  } else if (ordering === "name") {
+    communities.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (ordering === "-name") {
+    communities.sort((a, b) => b.name.localeCompare(a.name));
+  }
+
+  const pageCommunities = communities.splice((page - 1) * pageSize, pageSize);
 
   return {
     count: communityCount,
     hasMore: page > fullPages + 1,
-    results: pageIds.map(getFakeCommunityPreview),
+    results: pageCommunities,
   };
 };
