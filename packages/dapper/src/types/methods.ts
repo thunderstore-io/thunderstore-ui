@@ -4,11 +4,11 @@ import { ServerPreview } from "./server";
 import { ServiceAccount, Team } from "./team";
 import { User, UserSettings } from "./user";
 
-// TODO: support for filtering by keyword.
 export type GetCommunities = (
   page?: number,
   pageSize?: number,
-  ordering?: "datetime_created" | "-datetime_created" | "name" | "-name"
+  ordering?: "datetime_created" | "-datetime_created" | "name" | "-name",
+  search?: string
 ) => Promise<Communities>;
 
 export type GetCommunity = (identifier: string) => Promise<CommunityData>;

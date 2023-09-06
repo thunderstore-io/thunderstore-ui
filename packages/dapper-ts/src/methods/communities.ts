@@ -3,9 +3,10 @@
 export const getCommunities = async (
   page = 1,
   pageSize = 100,
-  ordering = "name"
+  ordering = "name",
+  search?: string
 ) => ({
   count: page * pageSize,
-  hasMore: ordering === "name",
+  hasMore: ordering === search,
   results: [],
 });

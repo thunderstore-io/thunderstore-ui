@@ -15,6 +15,7 @@ import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
 import usePromise from "react-promise-suspense";
+import { useDebounce } from "use-debounce";
 
 type sortOptions = "name" | "datetime_created";
 
@@ -24,7 +25,7 @@ type sortOptions = "name" | "datetime_created";
 export function CommunityListLayout() {
   const [order, setOrder] = useState<sortOptions>("name");
   const [searchValue, setSearchValue] = useState("");
-
+  const [debouncedSearchValue] = useDebounce(searchValue, 300);
   const dapper = useDapper();
 
   // TODO: the page doesn't currently support pagination, while this
@@ -33,6 +34,7 @@ export function CommunityListLayout() {
     undefined,
     undefined,
     order,
+    debouncedSearchValue,
   ]);
 
   const changeOrder = (v: sortOptions) => startTransition(() => setOrder(v));

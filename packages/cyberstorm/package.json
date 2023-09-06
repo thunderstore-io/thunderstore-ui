@@ -38,7 +38,8 @@
     "react-markdown": "^7.1.0",
     "react-promise-suspense": "^0.3.4",
     "remark-gfm": "^3.0.1",
-    "styled-components": "^6.0.0-rc.5"
+    "styled-components": "^6.0.0-rc.5",
+    "use-debounce": "^9.0.4"
   },
   "devDependencies": {
     "typescript-plugin-css-modules": "^3.4.0"

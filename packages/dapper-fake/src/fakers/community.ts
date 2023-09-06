@@ -40,14 +40,24 @@ export const getFakeCommunity = async (uuid: string) => {
 export const getFakeCommunities: GetCommunities = async (
   page = 1,
   pageSize = 100,
-  ordering = "name"
+  ordering = "name",
+  search?: string
 ) => {
   // Last page is not full.
   const fullPages = 5;
   const communityCount = pageSize * fullPages + Math.floor(pageSize / 2);
-  const communities = getIds(communityCount, "communitySeed").map(
+  let communities = getIds(communityCount, "communitySeed").map(
     getFakeCommunityPreview
   );
+
+  if (typeof search === "string" && search !== "") {
+    const q = search.toLowerCase();
+    communities = communities.filter(
+      (c) =>
+        c.name.toLowerCase().includes(q) ||
+        c.description?.toLowerCase().includes(q)
+    );
+  }
 
   if (ordering === "datetime_created") {
     communities.sort(
@@ -63,10 +73,11 @@ export const getFakeCommunities: GetCommunities = async (
     communities.sort((a, b) => b.name.localeCompare(a.name));
   }
 
+  const count = communities.length;
   const pageCommunities = communities.splice((page - 1) * pageSize, pageSize);
 
   return {
-    count: communityCount,
+    count,
     hasMore: page > fullPages + 1,
     results: pageCommunities,
   };
