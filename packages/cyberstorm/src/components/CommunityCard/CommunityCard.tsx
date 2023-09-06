@@ -2,6 +2,7 @@ import styles from "./CommunityCard.module.css";
 import { MetaItem } from "../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoxOpen, faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faGamepadModern } from "@fortawesome/pro-solid-svg-icons";
 import { formatInteger } from "../../utils/utils";
 import { Community } from "@thunderstore/dapper/types";
 import { CommunityLink } from "../Links/Links";
@@ -21,8 +22,14 @@ export function CommunityCard(props: Props) {
       <div className={styles.root}>
         <div className={styles.imageWrapper}>
           {community.icon_url ? (
-            <img className={styles.image} alt="" src={community.icon_url} />
-          ) : null}
+            <div className={`${styles.imageContent} ${styles.fullWidth}`}>
+              <img className={styles.image} alt="" src={community.icon_url} />
+            </div>
+          ) : (
+            <div className={styles.imageContent}>
+              <FontAwesomeIcon icon={faGamepadModern} />
+            </div>
+          )}
         </div>
         <div className={styles.title} title={community.name}>
           {community.name}
