@@ -3,10 +3,10 @@
 }
 
 .text {
+  overflow: hidden;
   color: var(--color-text--secondary);
   font-size: var(--font-size--l);
   line-height: var(--line-height--l);
-  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
