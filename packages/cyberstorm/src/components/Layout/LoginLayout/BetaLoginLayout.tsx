@@ -16,12 +16,12 @@ export function BetaLoginLayout() {
         <div className={styles.loginForm}>
           <div className={styles.header}>
             <div className={styles.headerTitle}>Early Access</div>
-            <div>Login to Thunderstore Beta</div>
+            Login to Thunderstore Beta
           </div>
           <div className={styles.loginButtons}>
             <div className={styles.loginButton}>
               <Button
-                colorScheme="blue"
+                colorScheme="discord"
                 label="Discord"
                 leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
                 paddingSize="large"
@@ -29,7 +29,7 @@ export function BetaLoginLayout() {
             </div>
             <div className={styles.loginButton}>
               <Button
-                colorScheme="gray"
+                colorScheme="github"
                 label="GitHub"
                 leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
                 paddingSize="large"
@@ -37,36 +37,26 @@ export function BetaLoginLayout() {
             </div>
             <div className={styles.loginButton}>
               <Button
-                colorScheme="red"
-                label="Ovewolf"
+                colorScheme="overwolf"
+                label="Overwolf"
                 leftIcon={<OverwolfLogo />}
                 paddingSize="large"
               />
             </div>
           </div>
-          <div className={styles.decoration}>
-            <div className={styles.divider} />
-            <div className={styles.decorationText}>Or</div>
-            <div className={styles.divider} />
-          </div>
+          <div className={styles.descriptor}>Or</div>
           <div className={styles.alternateAction}>
-            <div className={styles.description}>
-              Want early access? Thunderstore beta is currently available for
-              Thunderstore Premium users only.
-            </div>
-            <div className={styles.alternateActionButton}>
-              <Button
-                paddingSize="huge"
-                colorScheme="primary"
-                label="Go Premium"
-              />
-            </div>
+            Want early access? Thunderstore beta is currently available for
+            Thunderstore Premium users only.
+            <Button
+              paddingSize="huge"
+              colorScheme="primary"
+              label="Go Premium"
+            />
           </div>
-          <div className={styles.mainPageLinkWrapper}>
-            <a href="https://thunderstore.io" className={styles.mainPageLink}>
-              Continue to thunderstore.io
-            </a>
-          </div>
+          <a href="https://thunderstore.io" className={styles.mainPageLink}>
+            Continue to thunderstore.io
+          </a>
         </div>
         <div className={styles.legal}>
           By logging in and accessing the site you agree to{" "}
@@ -90,13 +80,11 @@ export function BetaLoginLayout() {
             <ThunderstoreLogo />
           </div>
           <div className={styles.advertisementTitle}>
-            <span className={styles.advertisementTitleLeft}>Thunderstore</span>
+            <span>Thunderstore</span>
             <span className={styles.advertisementTitleRight}>Premium</span>
           </div>
           <div className={styles.advertisementInfo}>
-            <div>
-              Get Thunderstore Premium and enjoy these magnificent benefits:
-            </div>
+            Get Thunderstore Premium and enjoy these magnificent benefits:
             <ul>
               <li>Ad-free experience</li>
               <li>Early access to new website beta</li>

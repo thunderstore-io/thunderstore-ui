@@ -24,38 +24,52 @@ const tabs: Array<Tab> = [
  */
 export function LoginForm() {
   const [currentTab, setCurrentTab] = useState(1);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <div className={styles.root}>
-      <div className={styles.tabButtons}>
-        <Tabs currentTab={currentTab} tabs={tabs} onTabChange={setCurrentTab} />
-      </div>
+      <Tabs currentTab={currentTab} tabs={tabs} onTabChange={setCurrentTab} />
       {currentTab === 1 ? (
         <>
-          <div className={styles.inputWrapper}>
+          <form className={styles.inputWrapper}>
             <div className={styles.inputFieldRow}>
               <div>
-                <div className={styles.label}>Email</div>
-                <TextInput placeHolder="Email" />
+                <label htmlFor="login_email" className={styles.label}>
+                  Email
+                </label>
+                <TextInput
+                  value={email}
+                  setValue={setEmail}
+                  id="login_email"
+                  placeHolder="Email"
+                />
               </div>
               <div>
-                <div className={styles.label}>Password</div>
-                <TextInput placeHolder="Password" />
+                <label htmlFor="login_password" className={styles.label}>
+                  Password
+                </label>
+                <TextInput
+                  type="password"
+                  value={password}
+                  setValue={setPassword}
+                  id="login_password"
+                  placeHolder="Password"
+                />
               </div>
             </div>
-            <div className={styles.loginButton}>
-              <Button paddingSize="huge" colorScheme="accent" label="Login" />
-            </div>
-          </div>
-          <div className={styles.descriptor}>
-            <div className={styles.descriptorDecoration} />
-            <div className={styles.descriptorText}>Or continue with</div>
-            <div className={styles.descriptorDecoration} />
-          </div>
+            <Button
+              type="submit"
+              paddingSize="huge"
+              colorScheme="accent"
+              label="Login"
+            />
+          </form>
+          <div className={styles.descriptor}>Or continue with</div>
           <div className={styles.continueButtons}>
             <div className={styles.continueButton}>
               <Button
-                colorScheme="blue"
+                colorScheme="discord"
                 label="Discord"
                 leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
                 paddingSize="large"
@@ -63,7 +77,7 @@ export function LoginForm() {
             </div>
             <div className={styles.continueButton}>
               <Button
-                colorScheme="gray"
+                colorScheme="github"
                 label="GitHub"
                 leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
                 paddingSize="large"
@@ -71,8 +85,8 @@ export function LoginForm() {
             </div>
             <div className={styles.continueButton}>
               <Button
-                colorScheme="red"
-                label="Ovewolf"
+                colorScheme="overwolf"
+                label="Overwolf"
                 leftIcon={<OverwolfLogo />}
                 paddingSize="large"
               />

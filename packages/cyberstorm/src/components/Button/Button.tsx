@@ -9,6 +9,7 @@ import styles from "./Button.module.css";
 
 interface _ButtonProps extends _PlainButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  type?: "button" | "submit" | "reset";
 }
 
 interface _PlainButtonProps {
@@ -28,9 +29,9 @@ interface _PlainButtonProps {
     | "fancyAccent"
     | "success"
     | "warning"
-    | "blue"
-    | "gray"
-    | "red"
+    | "discord"
+    | "github"
+    | "overwolf"
     | "specialGreen"
     | "specialPurple"
     | "transparentDanger"
@@ -55,6 +56,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       label,
       leftIcon,
       rightIcon,
+      type = "button",
       colorScheme = "default",
       onClick,
       fontSize = "medium",
@@ -71,7 +73,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         {...forwardedProps}
         ref={ref}
-        type="button"
+        type={type}
         className={`${styles.root} ${getIconAlignment(
           iconAlignment
         )} ${getStyle(colorScheme)} ${getFontSize(fontSize)} ${getPaddingSize(
@@ -151,9 +153,9 @@ const getStyle = (scheme: string) => {
     fancyAccent: styles.button__fancyAccent,
     success: styles.button__success,
     warning: styles.button__warning,
-    blue: styles.button__blue,
-    gray: styles.button__gray,
-    red: styles.button__red,
+    discord: styles.button__discord,
+    github: styles.button__github,
+    overwolf: styles.button__overwolf,
     specialGreen: styles.button__specialGreen,
     specialPurple: styles.button__specialPurple,
     transparentDanger: styles.button__transparentDanger,
