@@ -1,14 +1,20 @@
 import styles from "./BetaLoginLayout.module.css";
-import { Button } from "../../Button/Button";
+import { Button, PlainButton } from "../../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { OverwolfLogo, ThunderstoreLogo } from "../../../svg/svg";
 import { PrivacyPolicyLink, TermsOfServiceLink } from "../../Links/Links";
 
+interface Props {
+  discordAuthUrl?: string;
+  githubAuthUrl?: string;
+  overwolfAuthUrl?: string;
+}
+
 /**
  * Cyberstorm Beta Login Layout
  */
-export function BetaLoginLayout() {
+export function BetaLoginLayout(props: Props) {
   return (
     <div className={styles.root}>
       <div className={styles.login}>
@@ -19,30 +25,42 @@ export function BetaLoginLayout() {
             Login to Thunderstore Beta
           </div>
           <div className={styles.loginButtons}>
-            <div className={styles.loginButton}>
-              <Button
-                colorScheme="discord"
-                label="Discord"
-                leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
-                paddingSize="large"
-              />
-            </div>
-            <div className={styles.loginButton}>
-              <Button
-                colorScheme="github"
-                label="GitHub"
-                leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
-                paddingSize="large"
-              />
-            </div>
-            <div className={styles.loginButton}>
-              <Button
-                colorScheme="overwolf"
-                label="Overwolf"
-                leftIcon={<OverwolfLogo />}
-                paddingSize="large"
-              />
-            </div>
+            {props.discordAuthUrl ? (
+              <div className={styles.loginButton}>
+                <a href={props.discordAuthUrl}>
+                  <PlainButton
+                    colorScheme="discord"
+                    label="Discord"
+                    leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
+                    paddingSize="large"
+                  />
+                </a>
+              </div>
+            ) : null}
+            {props.githubAuthUrl ? (
+              <div className={styles.loginButton}>
+                <a href={props.githubAuthUrl}>
+                  <PlainButton
+                    colorScheme="github"
+                    label="GitHub"
+                    leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
+                    paddingSize="large"
+                  />
+                </a>
+              </div>
+            ) : null}
+            {props.overwolfAuthUrl ? (
+              <div className={styles.loginButton}>
+                <a href={props.overwolfAuthUrl}>
+                  <PlainButton
+                    colorScheme="overwolf"
+                    label="Overwolf"
+                    leftIcon={<OverwolfLogo />}
+                    paddingSize="large"
+                  />
+                </a>
+              </div>
+            ) : null}
           </div>
           <div className={styles.descriptor}>Or</div>
           <div className={styles.alternateAction}>
