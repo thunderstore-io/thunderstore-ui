@@ -5,6 +5,8 @@ import styles from "./TextInput.module.css";
 export interface TextInputProps {
   placeHolder?: string;
   leftIcon?: ReactNode;
+  id?: string;
+  type?: "text" | "email" | "password" | "tel" | "url";
   rightIcon?: ReactNode;
   value?: string;
   setValue?: React.Dispatch<React.SetStateAction<string>>;
@@ -17,6 +19,8 @@ export interface TextInputProps {
 export function TextInput(props: TextInputProps) {
   const {
     placeHolder,
+    id,
+    type = "text",
     leftIcon,
     rightIcon,
     value = "",
@@ -34,7 +38,8 @@ export function TextInput(props: TextInputProps) {
     <div className={styles.root}>
       {leftIcon ? <div className={styles.leftIcon}>{leftIcon}</div> : null}
       <input
-        type="text"
+        id={id}
+        type={type}
         placeholder={placeHolder}
         className={`${styles.input} ${leftIcon ? styles.hasLeftIcon : ""}`}
         onChange={(event) => setValue && setValue(event.target.value)}

@@ -43,10 +43,6 @@
   line-height: var(--line-height--l);
 }
 
-.description {
-  color: var(--color-text--tertiary);
-}
-
 .divider {
   position: relative;
   top: 50%;
@@ -55,14 +51,11 @@
   content: "\00a0";
 }
 
-.decoration {
+.descriptor {
   display: flex;
   flex-direction: row;
   gap: var(--gap--8);
   padding: var(--space--8) 0;
-}
-
-.decorationText {
   color: var(--color-text--tertiary);
   font-weight: 500;
   font-size: var(--font-size--m);
@@ -70,15 +63,20 @@
   text-align: center;
 }
 
+.descriptor::before,
+.descriptor::after {
+  position: relative;
+  top: 50%;
+  flex: 1 0 auto;
+  border-top: var(--space--px) solid var(--color-surface--6);
+  content: "\00a0";
+}
+
 .alternateAction {
   display: flex;
   flex-direction: column;
   gap: var(--gap--16);
-}
-
-.alternateActionButton {
-  display: flex;
-  flex-direction: column;
+  color: var(--color-text--tertiary);
 }
 
 .loginButtons {
@@ -89,11 +87,11 @@
 
 .loginButton {
   display: flex;
+  flex-basis: 100%;
   flex-direction: column;
-  width: 100%;
 }
 
-.mainPageLinkWrapper {
+.mainPageLink {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -106,6 +104,7 @@
 
 .backgroundGradient {
   position: absolute;
+  z-index: -1;
   display: flex;
   width: 100%;
   height: 100%;
@@ -137,10 +136,9 @@
 
 .advertisementBackground {
   position: absolute;
-  min-width: 1600px;
-  min-height: 1600px;
-  margin-top: -300px;
-  margin-left: -250px;
+  min-width: 100vw;
+  min-height: 100vh;
+  object-fit: cover;
   opacity: 0.3;
   pointer-events: none;
 }
@@ -162,14 +160,11 @@
   display: flex;
   flex-direction: row;
   gap: var(--gap--8);
+  color: var(--color-text--default);
   font: var(--font-heading);
   font-weight: 800;
   font-size: 51px;
   line-height: 1.2;
-}
-
-.advertisementTitleLeft {
-  color: var(--color-text--default);
 }
 
 .advertisementTitleRight {
