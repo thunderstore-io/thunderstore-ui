@@ -14,8 +14,17 @@ const Link = (props: LinkProps): React.ReactElement => {
   const { children, queryParams, url } = props;
   const q = queryParams ? `?${queryParams}` : "";
 
-  return <a href={`${url}${q}`}>{children}</a>;
+  return (
+    <a onClick={(event) => linkOnClick(event)} href={`${url}${q}`}>
+      {children}
+    </a>
+  );
 };
+
+function linkOnClick(event: React.MouseEvent<HTMLAnchorElement>) {
+  event.preventDefault();
+  console.log("Links are disabled in Storybook");
+}
 
 const library: LinkLibrary = {
   Anonymous: (p) => Link(p),
