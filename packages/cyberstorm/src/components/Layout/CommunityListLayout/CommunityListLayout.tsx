@@ -85,7 +85,7 @@ const selectOptions = [
     leftIcon: <FontAwesomeIcon fixedWidth icon={faArrowDownAZ} />,
   },
   {
-    value: "datetime_created",
+    value: "-datetime_created",
     label: "Latest",
     leftIcon: <FontAwesomeIcon fixedWidth icon={faStar} />,
   },
