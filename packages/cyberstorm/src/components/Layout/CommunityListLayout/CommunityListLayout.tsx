@@ -17,13 +17,13 @@ import { useDapper } from "@thunderstore/dapper";
 import usePromise from "react-promise-suspense";
 import { useDebounce } from "use-debounce";
 
-type sortOptions = "name" | "datetime_created";
+type SortOptions = "name" | "datetime_created";
 
 /**
  * Cyberstorm CommunityList Layout
  */
 export function CommunityListLayout() {
-  const [order, setOrder] = useState<sortOptions>("name");
+  const [order, setOrder] = useState<SortOptions>("name");
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue] = useDebounce(searchValue, 300);
   const dapper = useDapper();
@@ -37,7 +37,7 @@ export function CommunityListLayout() {
     debouncedSearchValue,
   ]);
 
-  const changeOrder = (v: sortOptions) => startTransition(() => setOrder(v));
+  const changeOrder = (v: SortOptions) => startTransition(() => setOrder(v));
 
   return (
     <BaseLayout
