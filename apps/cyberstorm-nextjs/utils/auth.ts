@@ -37,9 +37,9 @@ async function getDerivedEncryptionKey(secret: string | Buffer) {
 }
 
 async function encode(token: { username: string; expires: number }) {
-  if (process.env.CYBERSTORM_AUTH_SECRET) {
+  if (process.env.AUTH_SECRET) {
     const encryptionSecret = await getDerivedEncryptionKey(
-      process.env.CYBERSTORM_AUTH_SECRET
+      process.env.AUTH_SECRET
     );
     return await new EncryptJWT(token)
       .setProtectedHeader({ alg: "dir", enc: "A256GCM" })
@@ -48,21 +48,21 @@ async function encode(token: { username: string; expires: number }) {
       .setJti(uuid())
       .encrypt(encryptionSecret);
   } else {
-    throw new Error("CYBERSTORM_AUTH_SECRET is missing");
+    throw new Error("AUTH_SECRET is missing");
   }
 }
 
 export async function decode(token: string) {
-  if (process.env.CYBERSTORM_AUTH_SECRET) {
+  if (process.env.AUTH_SECRET) {
     const encryptionSecret = await getDerivedEncryptionKey(
-      process.env.CYBERSTORM_AUTH_SECRET
+      process.env.AUTH_SECRET
     );
     const { payload } = await jwtDecrypt(token, encryptionSecret, {
       clockTolerance: 15,
     });
     return payload;
   } else {
-    throw new Error("CYBERSTORM_AUTH_SECRET is missing");
+    throw new Error("AUTH_SECRET is missing");
   }
 }
 

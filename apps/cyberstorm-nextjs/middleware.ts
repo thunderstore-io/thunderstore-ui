@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
   // For the sake of keeping dev configuration easy and not confusing
-  if (!process.env.CYBERSTORM_AUTH_ENABLED) {
+  if (!process.env.AUTH_ENABLED) {
     return response;
   }
 
