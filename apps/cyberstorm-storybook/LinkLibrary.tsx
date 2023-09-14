@@ -14,8 +14,16 @@ const Link = (props: LinkProps): React.ReactElement => {
   const { children, queryParams, url } = props;
   const q = queryParams ? `?${queryParams}` : "";
 
-  return <a href={`${url}${q}`}>{children}</a>;
+  return (
+    <a onClick={linkOnClick} href={`${url}${q}`}>
+      {children}
+    </a>
+  );
 };
+
+function linkOnClick(event: React.MouseEvent<HTMLAnchorElement>) {
+  event.preventDefault();
+}
 
 const library: LinkLibrary = {
   Anonymous: (p) => Link(p),
