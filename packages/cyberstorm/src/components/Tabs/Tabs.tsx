@@ -1,4 +1,4 @@
-import { Dispatch, ReactElement, SetStateAction } from "react";
+import { Dispatch, ReactElement, SetStateAction, startTransition } from "react";
 import styles from "./Tabs.module.css";
 import { TabsButton } from "./TabsButton";
 
@@ -26,7 +26,11 @@ export function Tabs(props: TabsProps) {
         label={tab.label}
         icon={tab.icon}
         isSelected={currentTab === tab.key}
-        onClick={() => onTabChange(tab.key)}
+        onClick={() =>
+          startTransition(() => {
+            onTabChange(tab.key);
+          })
+        }
       />
     );
   });
