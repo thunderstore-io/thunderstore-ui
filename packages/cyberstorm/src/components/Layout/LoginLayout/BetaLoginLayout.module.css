@@ -188,6 +188,11 @@
   line-height: var(--line-height--l);
 }
 
+.loginButton > a > div > svg {
+  width: 1rem;
+  height: 1rem;
+}
+
 @media (max-width: 85rem) {
   .advertisementTitle {
     display: flex;

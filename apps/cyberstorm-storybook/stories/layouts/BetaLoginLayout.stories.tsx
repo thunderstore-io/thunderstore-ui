@@ -9,7 +9,7 @@ const meta = {
 
 export const DefaultBetaLoginLayout: StoryFn<typeof BetaLoginLayout> = () => (
   <div>
-    <BetaLoginLayout />
+    <BetaLoginLayout discordAuthUrl="/" githubAuthUrl="/" overwolfAuthUrl="/" />
   </div>
 );
 DefaultBetaLoginLayout.args = {};
