@@ -1,12 +1,17 @@
+import { DapperTsInterface } from "../index";
+
 // TODO: this is a dummy implementation required to prevent cyberstorm
 // build from breaking.
-export const getCommunities = async (
+export async function getCommunities(
+  this: DapperTsInterface,
   page = 1,
   pageSize = 100,
   ordering = "name",
   search?: string
-) => ({
-  count: page * pageSize,
-  hasMore: ordering === search,
-  results: [],
-});
+) {
+  return {
+    count: page * pageSize,
+    hasMore: ordering === search,
+    results: [],
+  };
+}
