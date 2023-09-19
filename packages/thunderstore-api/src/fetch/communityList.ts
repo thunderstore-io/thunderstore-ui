@@ -1,8 +1,21 @@
 import { RequestConfig } from "..";
 import { apiFetch } from "../apiFetch";
+import { serializeQueryString } from "../queryString";
 
-export async function fetchCommunityList(config: RequestConfig) {
+export async function fetchCommunityList(
+  config: RequestConfig,
+  page = 1,
+  ordering = "name",
+  search?: string
+) {
   const path = "api/cyberstorm/community/";
 
-  return await apiFetch(config, path);
+  const queryParams = [
+    { key: "ordering", value: ordering, impotent: "identifier" },
+    { key: "page", value: page, impotent: 1 },
+    { key: "search", value: search?.trim() },
+  ];
+  const query = serializeQueryString(queryParams);
+
+  return await apiFetch(config, path, query);
 }
