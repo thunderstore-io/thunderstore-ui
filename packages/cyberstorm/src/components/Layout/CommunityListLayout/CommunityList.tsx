@@ -19,7 +19,6 @@ export function CommunityList(props: Props) {
   // only returns the first 100 items (we don't have 100 communities).
   const communities = usePromise(dapper.getCommunities, [
     undefined,
-    undefined,
     order,
     search,
   ]);

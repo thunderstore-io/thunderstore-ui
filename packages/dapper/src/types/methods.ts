@@ -6,7 +6,6 @@ import { User, UserSettings } from "./user";
 
 export type GetCommunities = (
   page?: number,
-  pageSize?: number,
   ordering?: "datetime_created" | "-datetime_created" | "name" | "-name",
   search?: string
 ) => Promise<Communities>;

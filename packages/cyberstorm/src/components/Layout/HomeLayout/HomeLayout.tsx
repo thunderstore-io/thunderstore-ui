@@ -10,7 +10,7 @@ import usePromise from "react-promise-suspense";
  */
 export function HomeLayout() {
   const dapper = useDapper();
-  const featuredCommunities = usePromise(dapper.getCommunities, [1, 6]);
+  const featuredCommunities = usePromise(dapper.getCommunities, []);
   const featuredPackages = usePromise(dapper.getPackageListings, ["featured"]);
   const hotPackages = usePromise(dapper.getPackageListings, ["hot"]);
 
@@ -20,7 +20,7 @@ export function HomeLayout() {
         <div className={styles.content}>
           <div className={styles.specialContent} />
           <div className={styles.cardContent}>
-            {featuredCommunities.results.map((community) => (
+            {featuredCommunities.results.slice(0, 6).map((community) => (
               <CommunityCard key={community.identifier} community={community} />
             ))}
           </div>
