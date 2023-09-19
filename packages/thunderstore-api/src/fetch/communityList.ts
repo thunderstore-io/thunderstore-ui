@@ -1,5 +1,8 @@
+import { RequestConfig } from "..";
 import { apiFetch } from "../apiFetch";
 
-export async function fetchCommunityList() {
-  return await apiFetch("https://thunderstore.dev/api/experimental/community/");
+export async function fetchCommunityList(config: RequestConfig) {
+  const path = "api/cyberstorm/community/";
+
+  return await apiFetch(config, path);
 }
