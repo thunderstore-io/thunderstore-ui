@@ -1,11 +1,11 @@
-import { StoryFn, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { Button, Dialog } from "@thunderstore/cyberstorm";
 import React from "react";
 
-const meta = {
+export default {
   title: "Cyberstorm/Components/Dialog",
   component: Dialog,
-} as ComponentMeta<typeof Dialog>;
+} as Meta;
 
 const defaultArgs = {
   trigger: <Button label="trigger" />,
@@ -28,4 +28,4 @@ const Template: StoryFn<typeof Dialog> = (args) => <Dialog {...args} />;
 const ReferenceDialog = Template.bind({});
 ReferenceDialog.args = defaultArgs;
 
-export { meta as default, ReferenceDialog };
+export { ReferenceDialog };

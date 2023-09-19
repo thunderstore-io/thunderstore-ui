@@ -1,13 +1,13 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { ErrorLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
-const meta = {
+export default {
   title: "Cyberstorm/Layouts/Error",
   component: ErrorLayout,
-} as ComponentMeta<typeof ErrorLayout>;
+} as Meta;
 
-const Template: ComponentStory<typeof ErrorLayout> = (args) => (
+const Template: StoryFn<typeof ErrorLayout> = (args) => (
   <div>
     <ErrorLayout {...args} />
   </div>
@@ -19,4 +19,4 @@ NotFoundErrorLayout.args = { error: 404 };
 const InternalServerErrorLayout = Template.bind({});
 InternalServerErrorLayout.args = { error: 500 };
 
-export { meta as default, NotFoundErrorLayout, InternalServerErrorLayout };
+export { NotFoundErrorLayout, InternalServerErrorLayout };

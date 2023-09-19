@@ -1,13 +1,13 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { CommunityListLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
-const meta = {
+export default {
   title: "Cyberstorm/Layouts/CommunityList",
   component: CommunityListLayout,
-} as ComponentMeta<typeof CommunityListLayout>;
+} as Meta<typeof CommunityListLayout>;
 
-const Template: ComponentStory<typeof CommunityListLayout> = () => (
+const Template: StoryFn<typeof CommunityListLayout> = () => (
   <div>
     <CommunityListLayout />
   </div>
@@ -15,4 +15,4 @@ const Template: ComponentStory<typeof CommunityListLayout> = () => (
 
 const DefaultCommunityListLayout = Template.bind({});
 
-export { meta as default, DefaultCommunityListLayout as CommunityList };
+export { DefaultCommunityListLayout as CommunityList };

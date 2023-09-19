@@ -1,13 +1,13 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { TermsOfServiceLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
-const meta = {
+export default {
   title: "Cyberstorm/Layouts/SimplePages",
   component: TermsOfServiceLayout,
-} as ComponentMeta<typeof TermsOfServiceLayout>;
+} as Meta;
 
-const Template: ComponentStory<typeof TermsOfServiceLayout> = () => (
+const Template: StoryFn<typeof TermsOfServiceLayout> = () => (
   <div>
     <TermsOfServiceLayout />
   </div>
@@ -15,4 +15,4 @@ const Template: ComponentStory<typeof TermsOfServiceLayout> = () => (
 
 const DefaultTermsOfServiceLayout = Template.bind({});
 
-export { meta as default, DefaultTermsOfServiceLayout as TermsOfService };
+export { DefaultTermsOfServiceLayout as TermsOfService };

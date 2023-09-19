@@ -1,13 +1,13 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { PackageFormatDocsLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
-const meta = {
+export default {
   title: "Cyberstorm/Layouts/Developers",
   component: PackageFormatDocsLayout,
-} as ComponentMeta<typeof PackageFormatDocsLayout>;
+} as Meta;
 
-const Template: ComponentStory<typeof PackageFormatDocsLayout> = () => (
+const Template: StoryFn<typeof PackageFormatDocsLayout> = () => (
   <div>
     <PackageFormatDocsLayout />
   </div>
@@ -15,4 +15,4 @@ const Template: ComponentStory<typeof PackageFormatDocsLayout> = () => (
 
 const DefaultPackageFormatDocsLayout = Template.bind({});
 
-export { meta as default, DefaultPackageFormatDocsLayout as PackageFormatDocs };
+export { DefaultPackageFormatDocsLayout as PackageFormatDocs };

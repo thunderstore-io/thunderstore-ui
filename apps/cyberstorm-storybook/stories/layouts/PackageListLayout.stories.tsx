@@ -1,11 +1,11 @@
-import { StoryFn, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { PackageListLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
-const meta = {
+export default {
   title: "Cyberstorm/Layouts/PackageList",
   component: PackageListLayout,
-} as ComponentMeta<typeof PackageListLayout>;
+} as Meta;
 
 const Template: StoryFn<typeof PackageListLayout> = (args) => (
   <div>
@@ -15,4 +15,4 @@ const Template: StoryFn<typeof PackageListLayout> = (args) => (
 
 const DefaultPackageListLayout = Template.bind({});
 
-export { meta as default, DefaultPackageListLayout as PackageList };
+export { DefaultPackageListLayout as PackageList };

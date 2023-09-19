@@ -1,13 +1,13 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { MarkdownPreviewLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
-const meta = {
+export default {
   title: "Cyberstorm/Layouts/Developers",
   component: MarkdownPreviewLayout,
-} as ComponentMeta<typeof MarkdownPreviewLayout>;
+} as Meta;
 
-const Template: ComponentStory<typeof MarkdownPreviewLayout> = () => (
+const Template: StoryFn<typeof MarkdownPreviewLayout> = () => (
   <div>
     <MarkdownPreviewLayout />
   </div>
@@ -15,4 +15,4 @@ const Template: ComponentStory<typeof MarkdownPreviewLayout> = () => (
 
 const DefaultMarkdownPreviewLayout = Template.bind({});
 
-export { meta as default, DefaultMarkdownPreviewLayout as MarkdownPreview };
+export { DefaultMarkdownPreviewLayout as MarkdownPreview };

@@ -1,13 +1,13 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { HomeLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
-const meta = {
+export default {
   title: "Cyberstorm/Layouts/Home",
   component: HomeLayout,
-} as ComponentMeta<typeof HomeLayout>;
+} as Meta;
 
-const Template: ComponentStory<typeof HomeLayout> = () => (
+const Template: StoryFn<typeof HomeLayout> = () => (
   <div>
     <HomeLayout />
   </div>
@@ -15,4 +15,4 @@ const Template: ComponentStory<typeof HomeLayout> = () => (
 
 const DefaultHomeLayout = Template.bind({});
 
-export { meta as default, DefaultHomeLayout as Home };
+export { DefaultHomeLayout as Home };
