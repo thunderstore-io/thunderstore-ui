@@ -1,4 +1,5 @@
 import { DapperInterface } from "@thunderstore/dapper";
+import { RequestConfig } from "@thunderstore/thunderstore-api";
 
 import { getCommunities } from "./methods/communities";
 
@@ -11,8 +12,20 @@ const NotImplemented: any = async () => {
   return [];
 };
 
-export class DapperTs implements DapperInterface {
+export interface DapperTsInterface extends DapperInterface {
+  config: RequestConfig;
+}
+
+export class DapperTs implements DapperTsInterface {
+  config: RequestConfig;
+
+  constructor(config: RequestConfig) {
+    this.config = config;
+    this.getCommunities = this.getCommunities.bind(this);
+  }
+
   public getCommunities = getCommunities;
+
   public getCommunity = NotImplemented;
   public getPackage = NotImplemented;
   public getPackageDependencies = NotImplemented;

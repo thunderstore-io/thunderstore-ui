@@ -7,6 +7,11 @@
  * - Handling errors
  */
 
+export interface RequestConfig {
+  apiHost: string;
+  sessionId?: string;
+}
+
 async function apiFetch(path: string) {
   const response = await fetch(path);
   return await response.json();

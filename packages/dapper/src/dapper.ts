@@ -1,8 +1,6 @@
 import * as methods from "./types/methods";
 
 export interface DapperInterface {
-  sessionId?: string;
-
   getCommunities: methods.GetCommunities;
   getCommunity: methods.GetCommunity;
   getPackage: methods.GetPackage;
