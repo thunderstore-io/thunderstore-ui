@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "@thunderstore/dapper": "^0.1.0",
-    "@thunderstore/thunderstore-api": "^0.1.0"
+    "@thunderstore/thunderstore-api": "^0.1.0",
+    "zod": "^3.22.2"
   },
   "devDependencies": {}
 }
