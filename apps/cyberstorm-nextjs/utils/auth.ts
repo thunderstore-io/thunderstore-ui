@@ -76,7 +76,7 @@ async function fetchSubStatus(sessionid: string | undefined): Promise<{
       "https://thunderstore.io/api/experimental/current-user/",
       {
         headers: {
-          authorization: `Session ${sessionid}`,
+          Cookie: `sessionid=${sessionid}`,
           "Content-Type": "application/json",
         },
       }
