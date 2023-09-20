@@ -1,5 +1,7 @@
 import { DapperInterface } from "@thunderstore/dapper";
 
+import { getCommunities } from "./methods/communities";
+
 // Original idea was for NotImlemented to throw an error, but that
 // causes the build cyberstorm-nextjs to fail, which causes CI pipeline
 // to block merging.
@@ -10,7 +12,7 @@ const NotImplemented: any = async () => {
 };
 
 export class DapperTs implements DapperInterface {
-  public getCommunities = NotImplemented;
+  public getCommunities = getCommunities;
   public getCommunity = NotImplemented;
   public getPackage = NotImplemented;
   public getPackageDependencies = NotImplemented;

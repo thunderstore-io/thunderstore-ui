@@ -1,13 +1,12 @@
 "use client";
-import { useState } from "react";
+import { startTransition, useState } from "react";
 import styles from "./CommunityListLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFire,
+  faArrowDownAZ,
   faSearch,
   faStar,
-  faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { TextInput } from "../../TextInput/TextInput";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
@@ -16,16 +15,29 @@ import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
 import usePromise from "react-promise-suspense";
+import { useDebounce } from "use-debounce";
+
+type sortOptions = "name" | "datetime_created";
 
 /**
  * Cyberstorm CommunityList Layout
  */
 export function CommunityListLayout() {
-  const [order, setOrder] = useState("1");
+  const [order, setOrder] = useState<sortOptions>("name");
   const [searchValue, setSearchValue] = useState("");
-
+  const [debouncedSearchValue] = useDebounce(searchValue, 300);
   const dapper = useDapper();
-  const communitiesData = usePromise(dapper.getCommunities, []);
+
+  // TODO: the page doesn't currently support pagination, while this
+  // only returns the first 100 items (we don't have 100 communities).
+  const communities = usePromise(dapper.getCommunities, [
+    undefined,
+    undefined,
+    order,
+    debouncedSearchValue,
+  ]);
+
+  const changeOrder = (v: sortOptions) => startTransition(() => setOrder(v));
 
   return (
     <BaseLayout
@@ -43,17 +55,21 @@ export function CommunityListLayout() {
           </div>
           <div className={styles.searchFilters}>
             <div className={styles.searchFiltersSortLabel}>Sort by</div>
-            <Select onChange={setOrder} options={selectOptions} value={order} />
+            {/* TODO: Select only accepts strings as val, could string
+                literals be supported in some neat manner?*/}
+            <Select
+              onChange={changeOrder as (val: string) => null}
+              options={selectOptions}
+              value={order}
+            />
           </div>
         </div>
       }
       mainContent={
         <div className={styles.communityCardList}>
-          {communitiesData?.map((community) => {
-            return (
-              <CommunityCard key={community.name} communityData={community} />
-            );
-          })}
+          {communities.results.map((community) => (
+            <CommunityCard key={community.identifier} community={community} />
+          ))}
         </div>
       }
     />
@@ -64,18 +80,13 @@ CommunityListLayout.displayName = "CommunityListLayout";
 
 const selectOptions = [
   {
-    value: "1",
+    value: "name",
+    label: "Name",
+    leftIcon: <FontAwesomeIcon fixedWidth icon={faArrowDownAZ} />,
+  },
+  {
+    value: "datetime_created",
     label: "Latest",
     leftIcon: <FontAwesomeIcon fixedWidth icon={faStar} />,
-  },
-  {
-    value: "2",
-    label: "Hottest",
-    leftIcon: <FontAwesomeIcon fixedWidth icon={faFire} />,
-  },
-  {
-    value: "3",
-    label: "Top rated",
-    leftIcon: <FontAwesomeIcon fixedWidth icon={faThumbsUp} />,
   },
 ];

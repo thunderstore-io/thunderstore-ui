@@ -10,7 +10,7 @@ import usePromise from "react-promise-suspense";
  */
 export function HomeLayout() {
   const dapper = useDapper();
-  const featuredCommunities = usePromise(dapper.getCommunities, []);
+  const featuredCommunities = usePromise(dapper.getCommunities, [1, 6]);
   const featuredPackages = usePromise(dapper.getPackageListings, ["featured"]);
   const hotPackages = usePromise(dapper.getPackageListings, ["hot"]);
 
@@ -20,30 +20,21 @@ export function HomeLayout() {
         <div className={styles.content}>
           <div className={styles.specialContent} />
           <div className={styles.cardContent}>
-            {featuredCommunities.slice(0, 6).map((communityData) => {
-              return (
-                <CommunityCard
-                  key={communityData.name}
-                  communityData={communityData}
-                />
-              );
-            })}
+            {featuredCommunities.results.map((community) => (
+              <CommunityCard key={community.identifier} community={community} />
+            ))}
           </div>
           <div className={styles.smallContent} />
           <div className={styles.cardContent}>
-            {featuredPackages?.slice(0, 6).map((packageData) => {
-              return (
-                <PackageCard key={packageData.name} packageData={packageData} />
-              );
-            })}
+            {featuredPackages?.slice(0, 6).map((packageData) => (
+              <PackageCard key={packageData.name} packageData={packageData} />
+            ))}
           </div>
           <div className={styles.mediumContent} />
           <div className={styles.cardContent}>
-            {hotPackages?.slice(0, 6).map((packageData) => {
-              return (
-                <PackageCard key={packageData.name} packageData={packageData} />
-              );
-            })}
+            {hotPackages?.slice(0, 6).map((packageData) => (
+              <PackageCard key={packageData.name} packageData={packageData} />
+            ))}
           </div>
           <div className={styles.mediumContent} />
         </div>

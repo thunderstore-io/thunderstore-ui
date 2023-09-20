@@ -1,10 +1,15 @@
-import { Community, CommunityData } from "./community";
+import { Communities, CommunityData } from "./community";
 import { Package, PackageDependency, PackagePreview } from "./package";
 import { ServerPreview } from "./server";
 import { ServiceAccount, Team } from "./team";
 import { User, UserSettings } from "./user";
 
-export type GetCommunities = () => Promise<Community[]>;
+export type GetCommunities = (
+  page?: number,
+  pageSize?: number,
+  ordering?: "datetime_created" | "-datetime_created" | "name" | "-name",
+  search?: string
+) => Promise<Communities>;
 
 export type GetCommunity = (identifier: string) => Promise<CommunityData>;
 
