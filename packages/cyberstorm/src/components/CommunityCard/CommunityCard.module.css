@@ -5,9 +5,13 @@
 }
 
 .imageWrapper {
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--border-radius--8);
   overflow: hidden;
+  color: var(--color-purple--9);
+  background-color: var(--color-purple--4);
   transition: 0.2s;
   aspect-ratio: 3 / 4;
 }
@@ -16,18 +20,29 @@
   filter: brightness(1.15);
 }
 
-.image {
-  position: absolute;
-  width: 100%;
-  object-fit: cover;
+.imageContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40%;
   transition: 0.2s;
-  aspect-ratio: 3 / 4;
-
-  --transform-translate: translate(0);
 }
 
-.root:hover .image {
-  transform: var(--transform-translate) scale(1.05);
+.root:hover .imageContent {
+  transform: scale(1.05);
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.image {
+  object-fit: cover;
+  aspect-ratio: 3 / 4;
+}
+
+.imageContent svg {
+  height: auto;
 }
 
 .title {
