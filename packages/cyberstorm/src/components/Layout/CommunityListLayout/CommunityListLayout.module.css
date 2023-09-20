@@ -44,10 +44,3 @@
   color: var(--color-text--tertiary);
   font-weight: 700;
 }
-
-.communityCardList {
-  display: grid;
-  flex-flow: row wrap;
-  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-  gap: 3rem 1.5rem;
-}

@@ -1,5 +1,5 @@
 "use client";
-import { startTransition, useState } from "react";
+import { Suspense, startTransition, useState } from "react";
 import styles from "./CommunityListLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,35 +9,24 @@ import {
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { TextInput } from "../../TextInput/TextInput";
-import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { Select } from "../../Select/Select";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
-import { useDapper } from "@thunderstore/dapper";
-import usePromise from "react-promise-suspense";
 import { useDebounce } from "use-debounce";
+import { CommunityList } from "./CommunityList";
+import { Loading } from "./Loading";
 
-type sortOptions = "name" | "datetime_created";
+export type SortOptions = "name" | "datetime_created";
 
 /**
  * Cyberstorm CommunityList Layout
  */
 export function CommunityListLayout() {
-  const [order, setOrder] = useState<sortOptions>("name");
+  const [order, setOrder] = useState<SortOptions>("name");
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue] = useDebounce(searchValue, 300);
-  const dapper = useDapper();
 
-  // TODO: the page doesn't currently support pagination, while this
-  // only returns the first 100 items (we don't have 100 communities).
-  const communities = usePromise(dapper.getCommunities, [
-    undefined,
-    undefined,
-    order,
-    debouncedSearchValue,
-  ]);
-
-  const changeOrder = (v: sortOptions) => startTransition(() => setOrder(v));
+  const changeOrder = (v: SortOptions) => startTransition(() => setOrder(v));
 
   return (
     <BaseLayout
@@ -66,11 +55,9 @@ export function CommunityListLayout() {
         </div>
       }
       mainContent={
-        <div className={styles.communityCardList}>
-          {communities.results.map((community) => (
-            <CommunityCard key={community.identifier} community={community} />
-          ))}
-        </div>
+        <Suspense fallback={<Loading />}>
+          <CommunityList order={order} search={debouncedSearchValue} />
+        </Suspense>
       }
     />
   );
@@ -85,7 +72,7 @@ const selectOptions = [
     leftIcon: <FontAwesomeIcon fixedWidth icon={faArrowDownAZ} />,
   },
   {
-    value: "datetime_created",
+    value: "-datetime_created",
     label: "Latest",
     leftIcon: <FontAwesomeIcon fixedWidth icon={faStar} />,
   },
