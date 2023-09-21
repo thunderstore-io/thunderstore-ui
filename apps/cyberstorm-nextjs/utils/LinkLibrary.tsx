@@ -20,7 +20,7 @@ export const Link = (props: LinkProps): React.ReactElement => {
 
 const library: LinkLibrary = {
   Anonymous: (p) => Link(p),
-  Communities: (p) => Link({ ...p, url: "/communities/" }),
+  Communities: (p) => Link({ ...p, url: "/" }), // This is temporarily the frontpage, ref. TS-1828
   Community: (p) => Link({ ...p, url: `/c/${p.community}/` }),
   CommunityPackages: (p) => Link({ ...p, url: `/c/${p.community}/packages/` }),
   Index: (p) => Link({ ...p, url: "/" }),

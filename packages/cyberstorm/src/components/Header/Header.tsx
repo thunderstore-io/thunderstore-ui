@@ -56,7 +56,8 @@ export function Header() {
               </div>
             </IndexLink>
           </li>
-          <li>
+          {/* Disabled temporarily, ref. TS-1828 */}
+          {/* <li>
             <IndexLink>
               <PlainButton
                 label="Browse"
@@ -66,7 +67,7 @@ export function Header() {
                 colorScheme="transparentDefault"
               />
             </IndexLink>
-          </li>
+          </li> */}
           <li>
             <CommunitiesLink>
               <PlainButton

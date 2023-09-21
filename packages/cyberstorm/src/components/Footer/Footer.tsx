@@ -65,9 +65,10 @@ export function Footer() {
                 <div className={styles.navSection}>
                   <div className={styles.navTitle}>Thunderstore</div>
                   <ul className={styles.links}>
-                    <IndexLink>
+                    {/* Disabled temporarily, ref. TS-1828 */}
+                    {/* <IndexLink>
                       <li>Browse</li>
-                    </IndexLink>
+                    </IndexLink> */}
                     <CommunitiesLink>
                       <li>Communities</li>
                     </CommunitiesLink>

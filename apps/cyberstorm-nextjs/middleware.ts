@@ -24,6 +24,10 @@ export async function middleware(request: NextRequest) {
   const req = request;
   const response = NextResponse.next();
 
+  if (request.nextUrl.pathname === "/communities") {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
   // For the sake of keeping dev configuration easy and not confusing
   if (!process.env.AUTH_ENABLED) {
     return response;
