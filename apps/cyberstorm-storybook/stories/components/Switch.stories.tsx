@@ -7,21 +7,17 @@ export default {
   component: Switch,
 } as Meta<typeof Switch>;
 
-const defaultArgs = {
-  disabled: false,
-};
-
 const Template: StoryFn<typeof Switch> = (args) => <Switch {...args} />;
 
-const SameStateSwitchTemplate: StoryFn<typeof Switch> = (args) => {
+const SameStateSwitchTemplate: StoryFn<typeof Switch> = () => {
   const [state, setState] = useState(false);
   return (
     <div>
       <div>
-        <Switch {...args} state={state} onChange={setState} />
+        <Switch state={state} onChange={setState} />
       </div>
       <div>
-        <Switch {...args} state={state} onChange={setState} />
+        <Switch state={state} onChange={setState} />
       </div>
     </div>
   );
@@ -29,14 +25,7 @@ const SameStateSwitchTemplate: StoryFn<typeof Switch> = (args) => {
 
 const RegularSwitch = Template.bind({});
 const DisabledSwitch = Template.bind({});
-DisabledSwitch.args = {
-  ...defaultArgs,
-  state: false,
-  disabled: true,
-};
+DisabledSwitch.args = { state: false, disabled: true };
 const SameStateSwitch = SameStateSwitchTemplate.bind({});
-SameStateSwitch.args = {
-  ...defaultArgs,
-};
 
 export { RegularSwitch, DisabledSwitch, SameStateSwitch };
