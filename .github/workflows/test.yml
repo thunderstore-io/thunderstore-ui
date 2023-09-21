@@ -60,6 +60,8 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     needs: get-node-version
+    env:
+      NEXT_PUBLIC_API_DOMAIN: ${{ vars.NEXT_PUBLIC_API_DOMAIN }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Node ${{ needs.get-node-version.outputs.node-version }}
@@ -82,6 +84,20 @@ jobs:
           npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
       - name: Install Yarn dependencies
         run: yarn install --frozen-lockfile
+      - name: Build @thunderstore/cyberstorm
+        run: yarn workspace @thunderstore/cyberstorm build
+      - name: Build @thunderstore/dapper
+        run: yarn workspace @thunderstore/dapper build
+      - name: Build @thunderstore/dapper-fake
+        run: yarn workspace @thunderstore/dapper-fake build
+      - name: Build @thunderstore/thunderstore-api
+        run: yarn workspace @thunderstore/thunderstore-api build
+      - name: Test @thunderstore/thunderstore-api
+        run: yarn workspace @thunderstore/thunderstore-api test
+      - name: Build @thunderstore/dapper-ts
+        run: yarn workspace @thunderstore/dapper-ts build
+      - name: Test @thunderstore/dapper-ts
+        run: yarn workspace @thunderstore/dapper-ts test
       - name: Build @thunderstore/cyberstorm-nextjs
         run: yarn workspace @thunderstore/cyberstorm-nextjs build
 
