@@ -15,7 +15,7 @@ export function Markdown(props: MarkdownProps) {
   const { children } = props;
 
   return (
-    <ReactMarkdown className={styles.root} plugins={[gfm]}>
+    <ReactMarkdown className={styles.root} remarkPlugins={[gfm]}>
       {children}
     </ReactMarkdown>
   );
