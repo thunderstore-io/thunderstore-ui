@@ -136,3 +136,4 @@ export { PackageUploadLayout } from "./components/Layout/Developers/PackageUploa
 
 export { PrivacyPolicyLayout } from "./components/Layout/SimplePages/PrivacyPolicy/PrivacyPolicyLayout";
 export { TermsOfServiceLayout } from "./components/Layout/SimplePages/TermsOfService/TermsOfServiceLayout";
+export { FormDemoLayout } from "./components/Layout/FormDemoLayout/FormDemoLayout";

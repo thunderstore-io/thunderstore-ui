@@ -1,0 +1,51 @@
+/*
+  Placed all the CSS in a single file out of laziness.
+  Didn't notice any problems with working with CSS modules.
+*/
+.root {
+  display: flex;
+  gap: 3rem;
+  padding: 1rem 3rem;
+}
+
+.root div {
+  flex: 1;
+}
+
+.root a {
+  color: var(--color-cyber-green--50);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.formData {
+  display: block;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-surface--4);
+}
+
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  border: 3px solid var(--color-surface--4);
+  border-radius: 3px;
+}
+
+.switchLabel {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+}
+
+.notes {
+  margin-left: 1rem;
+  list-style-position: outside;
+}
