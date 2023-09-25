@@ -39,11 +39,11 @@ export const getFakeCommunity = async (uuid: string) => {
 
 export const getFakeCommunities: GetCommunities = async (
   page = 1,
-  pageSize = 100,
   ordering = "name",
   search?: string
 ) => {
   // Last page is not full.
+  const pageSize = 150;
   const fullPages = 5;
   const communityCount = pageSize * fullPages + Math.floor(pageSize / 2);
   let communities = getIds(communityCount, "communitySeed").map(

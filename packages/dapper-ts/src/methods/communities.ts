@@ -5,12 +5,11 @@ import { DapperTsInterface } from "../index";
 export async function getCommunities(
   this: DapperTsInterface,
   page = 1,
-  pageSize = 100,
   ordering = "name",
   search?: string
 ) {
   return {
-    count: page * pageSize,
+    count: page * 150,
     hasMore: ordering === search,
     results: [],
   };
