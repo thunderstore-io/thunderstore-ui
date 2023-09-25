@@ -31,10 +31,10 @@ export function ConnectionsItem(props: ConnectionsItemProps) {
     >
       <div className={styles.item}>
         <div className={styles.connectionTypeInfo}>
-          {connection.name === "Github" ? (
+          {connection.name.toLowerCase() === "github" ? (
             <FontAwesomeIcon icon={faGithub} fixedWidth />
           ) : null}
-          {connection.name === "Discord" ? (
+          {connection.name.toLowerCase() === "discord" ? (
             <FontAwesomeIcon icon={faDiscord} fixedWidth />
           ) : null}
           <div className={styles.connectionTypeInfoName}>{connection.name}</div>
