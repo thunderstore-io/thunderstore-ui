@@ -12,7 +12,7 @@ import { CommunityImage } from "../../CommunityImage/CommunityImage";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import { useDapper } from "@thunderstore/dapper";
 import { PackagePreview } from "@thunderstore/dapper/types";
-import usePromise from "react-promise-suspense";
+import { usePromise } from "@thunderstore/use-promise";
 
 export interface PackageListLayoutProps {
   isLoading?: boolean;

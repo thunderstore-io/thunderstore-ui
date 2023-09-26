@@ -4,7 +4,7 @@ import { TeamLink } from "../../Links/Links";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import { useDapper } from "@thunderstore/dapper";
-import usePromise from "react-promise-suspense";
+import { usePromise } from "@thunderstore/use-promise";
 
 export interface TeamLayoutProps {
   teamId: string;

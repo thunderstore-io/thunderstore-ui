@@ -17,10 +17,10 @@ Using them might look a little something like this:
 
 ```JSX
 import React from "react";
-import usePromise from "react-promise-suspense";
 
 import { DapperProvider, useDapper} from "@thunderstore/dapper";
 import { Communities } from "@thunderstore/dapper/types";
+import { usePromise } from "@thunderstore/use-promise";
 
 const MyApp = () => <DapperProvider apiDomain="https://thunderstore.dev/">
   <CommunityList />

@@ -10,7 +10,7 @@ import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import styles from "./PackageDependantsLayout.module.css";
 import { useDapper } from "@thunderstore/dapper";
-import usePromise from "react-promise-suspense";
+import { usePromise } from "@thunderstore/use-promise";
 
 export interface PackageDependantsLayoutProps {
   isLoading?: boolean;

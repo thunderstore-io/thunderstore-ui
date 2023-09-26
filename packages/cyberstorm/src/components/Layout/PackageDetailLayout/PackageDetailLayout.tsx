@@ -44,7 +44,7 @@ import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
 import { ThunderstoreLogo } from "../../../svg/svg";
 import { Tooltip } from "../../Tooltip/Tooltip";
-import usePromise from "react-promise-suspense";
+import { usePromise } from "@thunderstore/use-promise";
 
 export interface PackageDetailLayoutProps {
   community: string;

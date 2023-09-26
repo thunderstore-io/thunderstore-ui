@@ -3,7 +3,7 @@ import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { PackageCard } from "../../PackageCard/PackageCard";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { useDapper } from "@thunderstore/dapper";
-import usePromise from "react-promise-suspense";
+import { usePromise } from "@thunderstore/use-promise";
 
 /**
  * Cyberstorm Home Layout
