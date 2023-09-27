@@ -12,7 +12,7 @@ import { CopyButton } from "../../../../CopyButton/CopyButton";
 import { Alert } from "../../../../Alert/Alert";
 import { useDapper } from "@thunderstore/dapper";
 import { Team } from "@thunderstore/dapper/types";
-import usePromise from "react-promise-suspense";
+import { usePromise } from "@thunderstore/use-promise";
 
 export interface TeamServiceAccountsProps {
   teamData: Team;

@@ -12,7 +12,7 @@ import { faCircleNodes, faCog } from "@fortawesome/pro-regular-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
 import { UserSettings } from "@thunderstore/dapper/types";
-import usePromise from "react-promise-suspense";
+import { usePromise } from "@thunderstore/use-promise";
 
 export interface SettingsLayoutProps {
   userId: string;

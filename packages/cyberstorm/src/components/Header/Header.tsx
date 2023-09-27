@@ -30,7 +30,7 @@ import { AvatarButton } from "../Avatar/AvatarButton";
 import { ThunderstoreLogo } from "../../svg/svg";
 import { Tooltip } from "../..";
 import { DapperInterface, useDapper } from "@thunderstore/dapper";
-import usePromise from "react-promise-suspense";
+import { usePromise } from "@thunderstore/use-promise";
 
 /**
  * Cyberstorm Header Component

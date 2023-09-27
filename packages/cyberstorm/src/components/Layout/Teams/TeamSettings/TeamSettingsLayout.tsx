@@ -19,7 +19,7 @@ import {
 import { TeamLeaveAndDisband } from "./TeamLeaveAndDisband/TeamLeaveAndDisband";
 import { useDapper } from "@thunderstore/dapper";
 import { Team } from "@thunderstore/dapper/types";
-import usePromise from "react-promise-suspense";
+import { usePromise } from "@thunderstore/use-promise";
 
 export interface TeamSettingsLayoutProps {
   teamId: string;

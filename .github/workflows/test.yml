@@ -98,6 +98,8 @@ jobs:
         run: yarn workspace @thunderstore/dapper-ts build
       - name: Test @thunderstore/dapper-ts
         run: yarn workspace @thunderstore/dapper-ts test
+      - name: Build @thunderstore/use-promise
+        run: yarn workspace @thunderstore/use-promise build
       - name: Build @thunderstore/cyberstorm-nextjs
         run: yarn workspace @thunderstore/cyberstorm-nextjs build
 

@@ -1,6 +1,6 @@
 "use client";
 import { useDapper } from "@thunderstore/dapper";
-import usePromise from "react-promise-suspense";
+import { usePromise } from "@thunderstore/use-promise";
 
 import styles from "./CommunityList.module.css";
 import { SortOptions } from "./CommunityListLayout";
