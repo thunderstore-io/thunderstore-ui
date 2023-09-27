@@ -65,7 +65,7 @@ function getTabContent(currentTab: number, userSettings: UserSettings) {
   if (currentTab === 1) {
     tabContent = (
       <div className={styles.tabContent}>
-        <Connections userData={userSettings} />
+        <Connections connections={userSettings.connections} />
       </div>
     );
   } else if (currentTab === 2) {

@@ -1,70 +1,29 @@
 "use client";
 
-import styles from "./Connections.module.css";
-import { SettingItem } from "../../../SettingItem/SettingItem";
-import { OAuthConnection, UserSettings } from "@thunderstore/dapper/types";
-import { PrivacyPolicyLink } from "../../../Links/Links";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
-import { useState } from "react";
-import { Switch } from "../../../..";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { OAuthConnection } from "@thunderstore/dapper/types";
 
-export interface ConnectionsProps {
-  userData: UserSettings;
+import styles from "./Connections.module.css";
+import { PrivacyPolicyLink } from "../../../Links/Links";
+import { SettingItem } from "../../../SettingItem/SettingItem";
+import { Switch } from "../../../Switch/Switch";
+
+const PROVIDERS = [
+  { name: "Discord", icon: faDiscord },
+  { name: "GitHub", icon: faGithub },
+  { name: "Overwolf", icon: faGithub }, // TODO: icon
+];
+
+interface ConnectionsProps {
+  connections: OAuthConnection[];
 }
 
-export interface ConnectionsItemProps {
-  connection: OAuthConnection;
-}
-
-//TODO: Use Switch component
-export function ConnectionsItem(props: ConnectionsItemProps) {
-  const { connection } = props;
-
-  const [enabled, setEnabled] = useState(connection.enabled);
-
-  return (
-    <div
-      className={`${styles.itemWrapper} ${
-        enabled ? styles.enabled : styles.disabled
-      }`}
-    >
-      <div className={styles.item}>
-        <div className={styles.connectionTypeInfo}>
-          {connection.name === "Github" ? (
-            <FontAwesomeIcon icon={faGithub} fixedWidth />
-          ) : null}
-          {connection.name === "Discord" ? (
-            <FontAwesomeIcon icon={faDiscord} fixedWidth />
-          ) : null}
-          <div className={styles.connectionTypeInfoName}>{connection.name}</div>
-        </div>
-        <div className={styles.rightSection}>
-          {enabled ? (
-            <div className={styles.connectedAs}>
-              <div className={styles.connectedAsDescription}>Connected as</div>
-              <div className={styles.connectedAsUsername}>
-                {connection.connectedUsername}
-              </div>
-            </div>
-          ) : null}
-          <Switch state={enabled} onChange={() => setEnabled(!enabled)} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
+/**
+ * Status of user's OAuth connections for each available provider.
+ */
 export function Connections(props: ConnectionsProps) {
-  const { userData } = props;
-
-  const connectionRows = userData.connections ? (
-    userData.connections.map((connection, index) => (
-      <ConnectionsItem connection={connection} key={index} />
-    ))
-  ) : (
-    <></>
-  );
+  const { connections } = props;
 
   return (
     <div className={styles.root}>
@@ -82,7 +41,17 @@ export function Connections(props: ConnectionsProps) {
             </>
           }
           content={
-            <div className={styles.connectionList}>{connectionRows}</div>
+            <div className={styles.connectionList}>
+              {PROVIDERS.map((p) => (
+                <Connection
+                  key={p.name}
+                  provider={p}
+                  connection={connections?.find(
+                    (c) => c.name.toLowerCase() === p.name.toLowerCase()
+                  )}
+                />
+              ))}
+            </div>
           }
         />
       </div>
@@ -91,4 +60,43 @@ export function Connections(props: ConnectionsProps) {
 }
 
 Connections.displayName = "Connections";
-ConnectionsItem.displayName = "ConnectionsItem";
+
+interface ConnectionProps {
+  // TODO: IDE disagrees with what precommit prettier wants, fix config.
+  // eslint-disable-next-line prettier/prettier
+  provider: typeof PROVIDERS[number];
+  connection?: OAuthConnection;
+}
+
+// TODO: clicking the switch should start OAuth account (un)linking.
+function Connection(props: ConnectionProps) {
+  const { connection, provider } = props;
+
+  return (
+    <div
+      className={`${styles.itemWrapper} ${
+        connection ? styles.enabled : styles.disabled
+      }`}
+    >
+      <div className={styles.item}>
+        <div className={styles.connectionTypeInfo}>
+          <FontAwesomeIcon icon={provider.icon} fixedWidth />
+          <div className={styles.connectionTypeInfoName}>{provider.name}</div>
+        </div>
+        <div className={styles.rightSection}>
+          {connection ? (
+            <div className={styles.connectedAs}>
+              <div className={styles.connectedAsDescription}>Connected as</div>
+              <div className={styles.connectedAsUsername}>
+                {connection.connectedUsername}
+              </div>
+            </div>
+          ) : null}
+          <Switch state={connection !== undefined} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+Connection.displayName = "ConnectionsItem";
