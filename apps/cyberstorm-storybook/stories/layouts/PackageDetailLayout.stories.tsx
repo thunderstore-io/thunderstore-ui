@@ -1,13 +1,13 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { PackageDetailLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
   title: "Cyberstorm/Layouts/PackageDetails",
   component: PackageDetailLayout,
-} as ComponentMeta<typeof PackageDetailLayout>;
+} as Meta<typeof PackageDetailLayout>;
 
-const Template: ComponentStory<typeof PackageDetailLayout> = (args) => (
+const Template: StoryFn<typeof PackageDetailLayout> = (args) => (
   <div>
     <PackageDetailLayout {...args} />
   </div>

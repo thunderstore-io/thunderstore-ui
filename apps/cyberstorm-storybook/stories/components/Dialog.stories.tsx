@@ -1,11 +1,11 @@
-import { StoryFn, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { Button, Dialog } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
   title: "Cyberstorm/Components/Dialog",
   component: Dialog,
-} as ComponentMeta<typeof Dialog>;
+} as Meta<typeof Dialog>;
 
 const defaultArgs = {
   trigger: <Button label="trigger" />,

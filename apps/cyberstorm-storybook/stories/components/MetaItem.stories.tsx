@@ -4,10 +4,10 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faUser } from "@fortawesome/free-solid-svg-icons";
 
-export default {
+const meta = {
   title: "Cyberstorm/Components/MetaItem",
   component: MetaItem,
-} as Meta;
+} as Meta<typeof MetaItem>;
 
 const defaultArgs: MetaItemProps = {
   label: "-",
@@ -37,4 +37,4 @@ LikesMetaItem.args = {
   icon: <FontAwesomeIcon fixedWidth icon={faThumbsUp} />,
 };
 
-export { MinimalMetaItem, AccentMetaItem, LikesMetaItem };
+export { meta as default, MinimalMetaItem, AccentMetaItem, LikesMetaItem };

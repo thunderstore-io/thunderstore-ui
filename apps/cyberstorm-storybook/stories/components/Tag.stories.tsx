@@ -4,10 +4,10 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTag, faXmark } from "@fortawesome/pro-solid-svg-icons";
 
-export default {
+const meta = {
   title: "Cyberstorm/Components/Tag",
   component: Tag,
-} as Meta;
+} as Meta<typeof Tag>;
 
 const Template: StoryFn<typeof Tag> = (args) => (
   <div style={{ display: "flex", gap: "0.25em" }}>
@@ -52,4 +52,12 @@ TinyTag.args = {
   rightIcon: <FontAwesomeIcon fixedWidth icon={faXmark} />,
 };
 
-export { MinimalTag, DefaultTag, IconOnlyTag, TextOnlyTag, SmallTag, TinyTag };
+export {
+  meta as default,
+  MinimalTag,
+  DefaultTag,
+  IconOnlyTag,
+  TextOnlyTag,
+  SmallTag,
+  TinyTag,
+};

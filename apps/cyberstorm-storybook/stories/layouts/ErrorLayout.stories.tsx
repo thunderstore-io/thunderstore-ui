@@ -1,13 +1,13 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { ErrorLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
   title: "Cyberstorm/Layouts/Error",
   component: ErrorLayout,
-} as ComponentMeta<typeof ErrorLayout>;
+} as Meta<typeof ErrorLayout>;
 
-const Template: ComponentStory<typeof ErrorLayout> = (args) => (
+const Template: StoryFn<typeof ErrorLayout> = (args) => (
   <div>
     <ErrorLayout {...args} />
   </div>

@@ -1,13 +1,13 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { MarkdownPreviewLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
   title: "Cyberstorm/Layouts/Developers",
   component: MarkdownPreviewLayout,
-} as ComponentMeta<typeof MarkdownPreviewLayout>;
+} as Meta<typeof MarkdownPreviewLayout>;
 
-const Template: ComponentStory<typeof MarkdownPreviewLayout> = () => (
+const Template: StoryFn<typeof MarkdownPreviewLayout> = () => (
   <div>
     <MarkdownPreviewLayout />
   </div>

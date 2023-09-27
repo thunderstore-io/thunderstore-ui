@@ -2,10 +2,10 @@ import { StoryFn, Meta } from "@storybook/react";
 import { PackageCard } from "@thunderstore/cyberstorm";
 import React from "react";
 
-export default {
+const meta = {
   title: "Cyberstorm/Components/PackageCard",
   component: PackageCard,
-} as Meta;
+} as Meta<typeof PackageCard>;
 
 const style: React.CSSProperties = {
   padding: "3rem",
@@ -57,4 +57,4 @@ ReferencePackageCard.args = {
   },
 };
 
-export { ReferencePackageCard };
+export { meta as default, ReferencePackageCard };

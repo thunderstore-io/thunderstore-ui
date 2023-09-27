@@ -9,10 +9,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
 
-export default {
+const meta = {
   title: "Cyberstorm/Components/Alert",
   component: Alert,
-} as Meta;
+} as Meta<typeof Alert>;
 
 const defaultArgs: AlertProps = {
   content: "-",
@@ -66,4 +66,11 @@ SuccessAlert.args = {
   icon: <FontAwesomeIcon fixedWidth icon={faCircleCheck} />,
 };
 
-export { MinimalAlert, InfoAlert, DangerAlert, WarningAlert, SuccessAlert };
+export {
+  meta as default,
+  MinimalAlert,
+  InfoAlert,
+  DangerAlert,
+  WarningAlert,
+  SuccessAlert,
+};

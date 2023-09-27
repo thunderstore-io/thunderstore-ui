@@ -1,11 +1,11 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { Tabs } from "@thunderstore/cyberstorm";
 import React, { useState } from "react";
 
 const meta = {
   title: "Cyberstorm/Components/Tabs",
   component: Tabs,
-} as ComponentMeta<typeof Tabs>;
+} as Meta<typeof Tabs>;
 
 const defaultArgs = {
   currentTab: 1,
@@ -16,7 +16,7 @@ const defaultArgs = {
   ],
 };
 
-const Template: ComponentStory<typeof Tabs> = (args) => {
+const Template: StoryFn<typeof Tabs> = (args) => {
   const [value, setValue] = useState(args.currentTab ? args.currentTab : 1);
   args.onTabChange = setValue;
   args.currentTab = value;

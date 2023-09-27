@@ -4,10 +4,10 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSkull, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
-export default {
+const meta = {
   title: "Cyberstorm/Components/Button",
   component: Button,
-} as Meta;
+} as Meta<typeof Button>;
 
 const defaultArgs = {
   rightIcon: <FontAwesomeIcon fixedWidth icon={faChevronDown} />,
@@ -66,4 +66,4 @@ const Template: StoryFn<typeof Button> = (args) => (
 const DefaultButton = Template.bind({});
 DefaultButton.args = defaultArgs;
 
-export { DefaultButton as Buttons };
+export { meta as default, DefaultButton as Buttons };

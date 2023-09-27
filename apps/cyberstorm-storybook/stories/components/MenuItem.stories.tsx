@@ -4,10 +4,10 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDownAZ } from "@fortawesome/free-solid-svg-icons";
 
-export default {
+const meta = {
   title: "Cyberstorm/Components/MenuItem",
   component: MenuItem,
-} as Meta;
+} as Meta<typeof MenuItem>;
 
 const defaultArgs = {
   label: "A-Z",
@@ -40,4 +40,10 @@ ExtremeMenuItem.args = {
   rightIcon: <FontAwesomeIcon fixedWidth icon={faArrowDownAZ} />,
 };
 
-export { ReferenceMenuItem, MinimalMenuItem, PrimaryMenuItem, ExtremeMenuItem };
+export {
+  meta as default,
+  ReferenceMenuItem,
+  MinimalMenuItem,
+  PrimaryMenuItem,
+  ExtremeMenuItem,
+};
