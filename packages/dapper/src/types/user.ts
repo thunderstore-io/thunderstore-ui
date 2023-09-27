@@ -21,10 +21,9 @@ export interface UserSettings extends User {
 }
 
 export interface OAuthConnection {
-  name: string;
-  connectedUsername: string;
-  imageSource: string;
-  enabled: boolean;
+  provider: string;
+  username: string;
+  avatar: string | null;
 }
 
 interface Achievement {

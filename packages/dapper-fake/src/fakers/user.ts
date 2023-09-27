@@ -39,8 +39,7 @@ const getFakeUserBase = () => ({
 });
 
 const getFakeOAuthConnection = (provider: string) => ({
-  name: provider,
-  connectedUsername: faker.internet.userName(),
-  enabled: faker.datatype.boolean(),
-  imageSource: "",
+  provider: provider,
+  username: faker.internet.userName(),
+  avatar: faker.helpers.maybe(getFakeImg) ?? null,
 });
