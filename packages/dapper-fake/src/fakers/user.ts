@@ -19,7 +19,7 @@ export const getFakeUserSettings = async (userId?: string) => {
     ...getFakeUserBase(),
     connections: [
       getFakeOAuthConnection("Discord"),
-      getFakeOAuthConnection("Github"),
+      getFakeOAuthConnection("GitHub"),
     ],
   };
 };
