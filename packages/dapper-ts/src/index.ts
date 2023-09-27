@@ -27,6 +27,7 @@ export class DapperTs implements DapperTsInterface {
   public getCommunities = getCommunities;
 
   public getCommunity = NotImplemented;
+  public getCurrentUser = NotImplemented;
   public getPackage = NotImplemented;
   public getPackageDependencies = NotImplemented;
   public getPackageListings = NotImplemented;

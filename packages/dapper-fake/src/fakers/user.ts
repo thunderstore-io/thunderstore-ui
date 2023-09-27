@@ -2,6 +2,28 @@ import { faker } from "@faker-js/faker";
 
 import { getFakeImg, getFakeLink, setSeed } from "./utils";
 
+export const getFakeCurrentUser = async () => {
+  setSeed("currentUser");
+
+  return {
+    username: faker.internet.userName(),
+    capabilities: ["package.rate"],
+    connections: [
+      getFakeOAuthConnection("Discord"),
+      getFakeOAuthConnection("GitHub"),
+      getFakeOAuthConnection("Overwolf"),
+    ],
+    rated_packages: [],
+    subscription: {
+      expires:
+        faker.helpers.maybe(() =>
+          faker.date.soon({ days: 30 }).toDateString()
+        ) ?? null,
+    },
+    teams: [faker.word.words(1), faker.word.words(2)],
+  };
+};
+
 export const getFakeUser = async (userId?: string) => {
   setSeed(userId);
 

@@ -1,5 +1,16 @@
 import { DynamicLink } from "./shared";
 
+export interface CurrentUser {
+  username: string | null;
+  capabilities: string[];
+  connections: OAuthConnection[];
+  rated_packages: string[];
+  subscription: {
+    expires: string | null;
+  };
+  teams: string[];
+}
+
 export interface User {
   name: string;
   imageSource?: string;

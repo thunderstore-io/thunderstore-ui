@@ -2,7 +2,7 @@ import { Communities, CommunityData } from "./community";
 import { Package, PackageDependency, PackagePreview } from "./package";
 import { ServerPreview } from "./server";
 import { ServiceAccount, Team } from "./team";
-import { User, UserSettings } from "./user";
+import { CurrentUser, User, UserSettings } from "./user";
 
 export type GetCommunities = (
   page?: number,
@@ -11,6 +11,8 @@ export type GetCommunities = (
 ) => Promise<Communities>;
 
 export type GetCommunity = (identifier: string) => Promise<CommunityData>;
+
+export type GetCurrentUser = () => Promise<CurrentUser>;
 
 export type GetPackage = (
   community: string,

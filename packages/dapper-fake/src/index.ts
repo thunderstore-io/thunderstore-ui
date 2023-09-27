@@ -11,11 +11,16 @@ import {
   getFakeServiceAccounts,
 } from "./fakers/serviceAccount";
 import { getFakeTeam, getFakeTeams } from "./fakers/team";
-import { getFakeUser, getFakeUserSettings } from "./fakers/user";
+import {
+  getFakeCurrentUser,
+  getFakeUser,
+  getFakeUserSettings,
+} from "./fakers/user";
 
 export class DapperFake implements DapperInterface {
   public getCommunities = getFakeCommunities;
   public getCommunity = getFakeCommunity;
+  public getCurrentUser = getFakeCurrentUser;
   public getPackage = getFakePackage;
   public getPackageDependencies = getFakeDependencies;
   public getPackageListings = getFakePackageListings;
