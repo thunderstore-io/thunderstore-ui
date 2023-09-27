@@ -63,21 +63,12 @@ jobs:
     env:
       NEXT_PUBLIC_API_DOMAIN: ${{ vars.NEXT_PUBLIC_API_DOMAIN }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Node ${{ needs.get-node-version.outputs.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ needs.get-node-version.outputs.node-version }}
-      - name: Get yarn cache directory path
-        id: yarn-cache-path
-        run: echo "::set-output name=path::$(yarn cache dir)"
-      - name: Cache Yarn cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-path.outputs.path }}
-          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            yarn-${{ runner.os }}-
+          cache: "yarn"
       - name: Set fontawesome token
         run: |
           npm config set "@fortawesome:registry" https://npm.fontawesome.com/
@@ -121,3 +112,34 @@ jobs:
 #            -H "Accept: application/vnd.github.v3+json" \
 #            ${{ secrets.DEPLOY_WORKFLOW_DISPATCH_URL }} \
 #            -d '{"ref": "master", "inputs": {"sourceOrg": "${{ github.repository_owner }}", "sourceRepo": "${{ github.event.repository.name }}", "appName": "${{ matrix.app }}", "environment": "dev"}}'
+
+  chromatic-deployment:
+    runs-on: ubuntu-latest
+    needs: ["test", "pre-commit"]
+    strategy:
+      matrix:
+        projects: [
+          { dir: "apps/cyberstorm-storybook", token: "CHROMATIC_CYBERSTORM_TOKEN" },
+        ]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Node ${{ needs.get-node-version.outputs.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ needs.get-node-version.outputs.node-version }}
+          cache: "yarn"
+      - name: Set fontawesome token
+        run: |
+          npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+          npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
+      - name: Install Yarn dependencies
+        run: yarn install --frozen-lockfile
+      - name: Publish to Chromatic
+        uses: chromaui/action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          projectToken: ${{ secrets[matrix.projects.token] }}
+          workingDir: ${{ matrix.projects.dir }}
+          exitOnceUploaded: true
