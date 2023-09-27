@@ -2,10 +2,10 @@ import { StoryFn, Meta } from "@storybook/react";
 import { Pagination } from "@thunderstore/cyberstorm";
 import React, { useState } from "react";
 
-export default {
+const meta = {
   title: "Cyberstorm/Components/Pagination",
   component: Pagination,
-} as Meta;
+} as Meta<typeof Pagination>;
 
 const defaultArgs = {
   currentPage: 1,
@@ -54,6 +54,7 @@ EmptyPagination.args = {
 };
 
 export {
+  meta as default,
   ReferencePagination,
   DefaultPagePagination,
   DisabledPagination,

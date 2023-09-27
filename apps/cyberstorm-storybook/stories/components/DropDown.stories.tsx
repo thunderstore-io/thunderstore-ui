@@ -15,10 +15,10 @@ import {
   faSkull,
 } from "@fortawesome/free-solid-svg-icons";
 
-export default {
+const meta = {
   title: "Cyberstorm/Components/DropDown",
   component: DropDown,
-} as Meta;
+} as Meta<typeof DropDown>;
 
 const defaultArgs = {
   trigger: (
@@ -91,6 +91,7 @@ DefaultOpenDropDown.args = {
 };
 
 export {
+  meta as default,
   ReferenceDropDown,
   MinimalDropDown,
   PrimaryDropDown,

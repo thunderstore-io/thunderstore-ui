@@ -2,10 +2,10 @@ import { StoryFn, Meta } from "@storybook/react";
 import { ManifestValidatorLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
-export default {
+const meta = {
   title: "Cyberstorm/Layouts/Developers",
   component: ManifestValidatorLayout,
-} as Meta;
+} as Meta<typeof ManifestValidatorLayout>;
 
 const Template: StoryFn<typeof ManifestValidatorLayout> = () => (
   <div>
@@ -15,4 +15,4 @@ const Template: StoryFn<typeof ManifestValidatorLayout> = () => (
 
 const DefaultManifestValidatorLayout = Template.bind({});
 
-export { DefaultManifestValidatorLayout as ManifestValidator };
+export { meta as default, DefaultManifestValidatorLayout as ManifestValidator };

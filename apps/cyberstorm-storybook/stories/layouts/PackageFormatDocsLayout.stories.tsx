@@ -2,10 +2,10 @@ import { StoryFn, Meta } from "@storybook/react";
 import { PackageFormatDocsLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
-export default {
+const meta = {
   title: "Cyberstorm/Layouts/Developers",
   component: PackageFormatDocsLayout,
-} as Meta;
+} as Meta<typeof PackageFormatDocsLayout>;
 
 const Template: StoryFn<typeof PackageFormatDocsLayout> = () => (
   <div>
@@ -15,4 +15,4 @@ const Template: StoryFn<typeof PackageFormatDocsLayout> = () => (
 
 const DefaultPackageFormatDocsLayout = Template.bind({});
 
-export { DefaultPackageFormatDocsLayout as PackageFormatDocs };
+export { meta as default, DefaultPackageFormatDocsLayout as PackageFormatDocs };

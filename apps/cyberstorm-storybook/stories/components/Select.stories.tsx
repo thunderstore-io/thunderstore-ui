@@ -11,7 +11,7 @@ import {
   faArrowUpAZ,
 } from "@fortawesome/free-solid-svg-icons";
 
-export default {
+const meta = {
   title: "Cyberstorm/Components/Select",
   component: Select,
 } as Meta<typeof Select>;
@@ -108,6 +108,7 @@ DefaultOpenSelect.args = {
 };
 
 export {
+  meta as default,
   ReferenceSelect,
   PrimarySelect,
   EmptyOptionsSelect,

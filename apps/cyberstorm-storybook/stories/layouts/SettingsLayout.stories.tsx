@@ -2,10 +2,10 @@ import { StoryFn, Meta } from "@storybook/react";
 import { SettingsLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
-export default {
+const meta = {
   title: "Cyberstorm/Layouts/Settings",
   component: SettingsLayout,
-} as Meta;
+} as Meta<typeof SettingsLayout>;
 
 const Template: StoryFn<typeof SettingsLayout> = () => (
   <div>
@@ -15,4 +15,4 @@ const Template: StoryFn<typeof SettingsLayout> = () => (
 
 const DefaultSettingsLayout = Template.bind({});
 
-export { DefaultSettingsLayout as Settings };
+export { meta as default, DefaultSettingsLayout as Settings };

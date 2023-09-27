@@ -6,10 +6,10 @@ import {
 } from "@thunderstore/cyberstorm";
 import React from "react";
 
-export default {
+const meta = {
   title: "Cyberstorm/Components/MetaInfoItem",
   component: MetaInfoItem,
-} as Meta;
+} as Meta<typeof MetaInfoItem>;
 
 const defaultArgs: MetaInfoItemProps = {};
 
@@ -38,4 +38,4 @@ MetaInfoItemWithCopyButton.args = {
   ),
 };
 
-export { ReferenceMetaInfoItem, MetaInfoItemWithCopyButton };
+export { meta as default, ReferenceMetaInfoItem, MetaInfoItemWithCopyButton };

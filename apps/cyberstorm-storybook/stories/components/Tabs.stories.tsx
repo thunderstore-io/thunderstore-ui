@@ -2,10 +2,10 @@ import { StoryFn, Meta } from "@storybook/react";
 import { Tabs } from "@thunderstore/cyberstorm";
 import React, { useState } from "react";
 
-export default {
+const meta = {
   title: "Cyberstorm/Components/Tabs",
   component: Tabs,
-} as Meta;
+} as Meta<typeof Tabs>;
 
 const defaultArgs = {
   currentTab: 1,
@@ -32,4 +32,4 @@ const Template: StoryFn<typeof Tabs> = (args) => {
 const ReferenceTabs = Template.bind({});
 ReferenceTabs.args = defaultArgs;
 
-export { ReferenceTabs };
+export { meta as default, ReferenceTabs };

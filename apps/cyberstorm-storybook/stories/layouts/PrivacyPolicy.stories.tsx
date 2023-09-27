@@ -2,10 +2,10 @@ import { StoryFn, Meta } from "@storybook/react";
 import { PrivacyPolicyLayout } from "@thunderstore/cyberstorm";
 import React from "react";
 
-export default {
+const meta = {
   title: "Cyberstorm/Layouts/SimplePages",
   component: PrivacyPolicyLayout,
-} as Meta;
+} as Meta<typeof PrivacyPolicyLayout>;
 
 const Template: StoryFn<typeof PrivacyPolicyLayout> = () => (
   <div>
@@ -15,4 +15,4 @@ const Template: StoryFn<typeof PrivacyPolicyLayout> = () => (
 
 const DefaultPrivacyPolicyLayout = Template.bind({});
 
-export { DefaultPrivacyPolicyLayout as PrivacyPolicy };
+export { meta as default, DefaultPrivacyPolicyLayout as PrivacyPolicy };

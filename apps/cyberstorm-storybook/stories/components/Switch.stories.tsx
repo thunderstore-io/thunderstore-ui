@@ -2,7 +2,7 @@ import { StoryFn, Meta } from "@storybook/react";
 import { Switch } from "@thunderstore/cyberstorm";
 import React, { useState } from "react";
 
-export default {
+const meta = {
   title: "Cyberstorm/Components/Switch",
   component: Switch,
 } as Meta<typeof Switch>;
@@ -39,4 +39,4 @@ SameStateSwitch.args = {
   ...defaultArgs,
 };
 
-export { RegularSwitch, DisabledSwitch, SameStateSwitch };
+export { meta as default, RegularSwitch, DisabledSwitch, SameStateSwitch };

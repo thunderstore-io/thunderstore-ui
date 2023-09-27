@@ -3,10 +3,10 @@ import { PackageDependantsLayout } from "@thunderstore/cyberstorm";
 import { Package } from "@thunderstore/dapper/types";
 import React from "react";
 
-export default {
+const meta = {
   title: "Cyberstorm/Layouts/PackageDependants",
   component: PackageDependantsLayout,
-} as Meta;
+} as Meta<typeof PackageDependantsLayout>;
 
 const packageData = {
   community: "brotato",
@@ -23,4 +23,4 @@ const Template: StoryFn<typeof PackageDependantsLayout> = () => (
 
 const DefaultPackageDependantsLayout = Template.bind({});
 
-export { DefaultPackageDependantsLayout as PackageDependants };
+export { meta as default, DefaultPackageDependantsLayout as PackageDependants };
