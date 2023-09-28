@@ -14,6 +14,11 @@ it("executes getCommunity without errors", async () => {
   await expect(dapper.getCommunity()).resolves.not.toThrowError();
 });
 
+// TODO: this should be tested/mocked with sessionId too.
+it("executes getCurrentUser without errors", async () => {
+  await expect(dapper.getCurrentUser()).resolves.not.toThrowError();
+});
+
 it("executes getPackage without errors", async () => {
   await expect(dapper.getPackage()).resolves.not.toThrowError();
 });
