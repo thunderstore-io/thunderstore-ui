@@ -34,18 +34,6 @@ export const getFakeUser = async (userId?: string) => {
   };
 };
 
-export const getFakeUserSettings = async (userId?: string) => {
-  setSeed(userId);
-
-  return {
-    ...getFakeUserBase(),
-    connections: [
-      getFakeOAuthConnection("Discord"),
-      getFakeOAuthConnection("GitHub"),
-    ],
-  };
-};
-
 const getFakeUserBase = () => ({
   name: faker.internet.userName(),
   imageSource: getFakeImg(),

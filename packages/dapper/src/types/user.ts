@@ -25,12 +25,6 @@ export interface User {
   showBadgesOnProfile?: boolean;
 }
 
-export interface UserSettings extends User {
-  achievements?: (Achievement & Setting)[];
-  badges?: (Badge & Setting)[];
-  connections: OAuthConnection[];
-}
-
 export interface OAuthConnection {
   provider: string;
   username: string;
@@ -47,8 +41,4 @@ interface Badge {
   name: string;
   description: string;
   imageSource: string;
-}
-
-interface Setting {
-  enabled: boolean;
 }
