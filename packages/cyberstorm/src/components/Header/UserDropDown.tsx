@@ -21,26 +21,25 @@ import { SettingsLink, TeamsLink, UserLink } from "../Links/Links";
 import { Icon } from "../Icon/Icon";
 
 /**
- * TODO: replace dapper.getUser with .getCurrentUser.
  * TODO: show fallback if user is not authenticated.
  * TODO: check if all the features in dropdown are actually supported
  *       on beta launch.
  */
 export const UserDropDown = () => {
-  const userId = "headerUser";
   const dapper = useDapper();
-  const userData = usePromise(dapper.getUser, [userId]);
+  const user = usePromise(dapper.getCurrentUser, []);
+  const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
 
-  if (!userData.user) {
-    return null; // TODO: required due to missing Dapper implementation.
+  if (!user.username) {
+    return null;
   }
 
   return (
     <DropDown
       contentAlignment="end"
       trigger={
-        userData.user.imageSource ? (
-          <AvatarButton src={userData.user.imageSource} />
+        avatar ? (
+          <AvatarButton src={avatar} />
         ) : (
           <Button.Root>
             <Button.ButtonIcon>
@@ -52,15 +51,13 @@ export const UserDropDown = () => {
         )
       }
       content={[
-        <UserLink key="user" user={userData.user.name}>
+        <UserLink key="user" user={user.username}>
           <RadixDropDown.Item>
             <div className={styles.dropDownUserInfo}>
-              {userData.user.imageSource ? (
-                <Avatar src={userData.user.imageSource} />
-              ) : null}
+              {avatar ? <Avatar src={avatar} /> : null}
               <div className={styles.dropdownUserInfoDetails}>
                 <div className={styles.dropdownUserInfoDetails_userName}>
-                  {userData.user.name}
+                  {user.username}
                 </div>
                 <div className={styles.dropdownUserInfoDetails_description}>
                   My profile

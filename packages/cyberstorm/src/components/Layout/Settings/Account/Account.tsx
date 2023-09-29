@@ -1,18 +1,25 @@
 import styles from "./Account.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import * as Button from "../../../Button/";
-import { UserSettings } from "@thunderstore/dapper/types";
 import { TextInput } from "../../../TextInput/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faWarning } from "@fortawesome/pro-solid-svg-icons";
-import { Alert, Icon } from "../../../..";
+import { Alert } from "../../../Alert/Alert";
+import { Icon } from "../../../Icon/Icon";
 
 export interface AccountProps {
-  userData: UserSettings;
+  username: string | null;
 }
 
 export function Account(props: AccountProps) {
-  const { userData } = props;
+  const { username } = props;
+
+  // Username is null for unauthenticated users, but since this view is
+  // for an authenticated user, this should never happen.
+  if (username === null) {
+    throw new Error("Account component requires username");
+  }
+
   return (
     <div className={styles.root}>
       <div className={styles.section}>
@@ -40,7 +47,7 @@ export function Account(props: AccountProps) {
               </p>
               <p>
                 As a precaution, to delete your account, please input{" "}
-                <i>{userData.name}</i> to the field below
+                <i>{username}</i> to the field below
               </p>
               <div className={styles.verificationInput}>
                 <TextInput placeHolder="Verification..." />
