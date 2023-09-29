@@ -36,6 +36,5 @@ export class DapperTs implements DapperTsInterface {
   public getServiceAccount = NotImplemented;
   public getServiceAccountList = NotImplemented;
   public getTeam = NotImplemented;
-  public getTeamList = NotImplemented;
   public getUser = NotImplemented;
 }

@@ -21,5 +21,3 @@ export const getFakeTeam = async (teamId: string) => {
     donationLink: faker.internet.url(),
   };
 };
-
-export const getFakeTeams = () => Promise.all(getIds(5).map(getFakeTeam));

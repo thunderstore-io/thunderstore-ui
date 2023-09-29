@@ -50,8 +50,6 @@ export type GetServiceAccountList = (
 
 export type GetTeam = (teamId: string) => Promise<Team>;
 
-export type GetTeamList = () => Promise<Team[]>;
-
 export type GetUser = (userId: string) => Promise<{
   user: User;
   packages: PackagePreview[];
