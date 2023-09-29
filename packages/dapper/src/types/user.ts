@@ -8,7 +8,11 @@ export interface CurrentUser {
   subscription: {
     expires: string | null;
   };
-  teams: string[];
+  teams: {
+    name: string;
+    role: string;
+    member_count: number;
+  }[];
 }
 
 export interface User {
