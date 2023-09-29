@@ -1,66 +1,42 @@
-import { Team } from "@thunderstore/dapper/types";
-import { DataTable, DataTableRows } from "../../../DataTable/DataTable";
-import { TeamSettingsLink } from "../../../Links/Links";
+"use client";
+import { useDapper } from "@thunderstore/dapper";
+import { usePromise } from "@thunderstore/use-promise";
+
 import styles from "./TeamList.module.css";
-import { Alert, Icon } from "../../../..";
-import { faCircleCheck } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DataTable } from "../../../DataTable/DataTable";
+import { TeamSettingsLink } from "../../../Links/Links";
 
-export interface TeamListProps {
-  teams?: Team[];
-}
-
-export function TeamList(props: TeamListProps) {
-  const { teams = [] } = props;
-  const createdTeamName = "Dapper Provider Team";
-
-  const teamData: DataTableRows = [];
-  teams?.forEach((team, index) => {
-    teamData.push([
-      {
-        value: (
-          <TeamSettingsLink key={index} team={team.name}>
-            <span className={styles.nameColumn}>{team.name}</span>
-          </TeamSettingsLink>
-        ),
-        sortValue: team.name,
-      },
-      {
-        value: "TODO ADD USER ROLE",
-        sortValue: 0,
-      },
-      {
-        value: team.members?.length,
-        sortValue: team.members?.length,
-      },
-    ]);
-  });
+export function TeamList() {
+  const dapper = useDapper();
+  const user = usePromise(dapper.getCurrentUser, []);
 
   return (
-    <div className={styles.content}>
-      <Alert
-        icon={
-          <Icon>
-            <FontAwesomeIcon icon={faCircleCheck} />
-          </Icon>
-        }
-        content={
-          <span>
-            New team
-            <span className={styles.boldText}> {createdTeamName}</span> created
-          </span>
-        }
-        variant="success"
-      />
-      <DataTable headers={columns} rows={teamData} />
-    </div>
+    <DataTable
+      headers={[
+        { value: "Team Name", disableSort: false },
+        { value: "Role", disableSort: false },
+        { value: "Members", disableSort: false },
+      ]}
+      rows={user.teams.map((team) => [
+        {
+          value: (
+            <TeamSettingsLink key={team.name} team={team.name}>
+              <span className={styles.nameColumn}>{team.name}</span>
+            </TeamSettingsLink>
+          ),
+          sortValue: team.name,
+        },
+        {
+          value: team.role,
+          sortValue: team.role,
+        },
+        {
+          value: team.member_count,
+          sortValue: team.member_count,
+        },
+      ])}
+    />
   );
 }
 
 TeamList.displayName = "TeamList";
-
-const columns = [
-  { value: "Team Name", disableSort: false },
-  { value: "Role", disableSort: false },
-  { value: "Members", disableSort: false },
-];

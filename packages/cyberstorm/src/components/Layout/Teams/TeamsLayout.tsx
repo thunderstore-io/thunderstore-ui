@@ -5,24 +5,18 @@ import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { SettingItem } from "../../SettingItem/SettingItem";
 import * as Button from "../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faCircleCheck, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { TeamList } from "./TeamList/TeamList";
 import { Dialog } from "../../Dialog/Dialog";
 import { TextInput } from "../../TextInput/TextInput";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
-import { useDapper } from "@thunderstore/dapper";
-import { usePromise } from "@thunderstore/use-promise";
 import { Icon } from "../../Icon/Icon";
-
-//TODO: Use Alert component
+import { Alert } from "../../Alert/Alert";
 
 /**
- * Cyberstorm Teams Layout
+ * View for listing and managing authenticated user's teams.
  */
 export function TeamsLayout() {
-  const dapper = useDapper();
-  const teamsData = usePromise(dapper.getTeamList, []);
-
   return (
     <BaseLayout
       breadCrumb={
@@ -68,7 +62,25 @@ export function TeamsLayout() {
                 }
               />
             }
-            content={<TeamList teams={teamsData} />}
+            content={
+              <div className={styles.contentWrapper}>
+                <Alert
+                  icon={
+                    <Icon>
+                      <FontAwesomeIcon icon={faCircleCheck} />
+                    </Icon>
+                  }
+                  content={
+                    <span>
+                      New team
+                      <span className={styles.boldText}> TODO</span> created
+                    </span>
+                  }
+                  variant="success"
+                />
+                <TeamList />
+              </div>
+            }
           />
         </>
       }
