@@ -3,7 +3,8 @@ import { CSSProperties, ReactNode, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort, faSortDown, faSortUp } from "@fortawesome/pro-solid-svg-icons";
 import styles from "./DataTable.module.css";
-import { Button } from "../Button/Button";
+import * as Button from "../Button/";
+import { Icon } from "../Icon/Icon";
 
 export enum Sort {
   DESC = -1,
@@ -52,18 +53,19 @@ function SortButton(props: SortButtonProps) {
   }
 
   return (
-    <Button
+    <Button.Root
       iconAlignment="side"
       colorScheme="transparentTertiary"
       paddingSize="medium"
-      fontSize="medium"
-      fontWeight="700"
       onClick={() => hook(hookParams)}
-      rightIcon={
-        <FontAwesomeIcon icon={icon} fixedWidth className={iconClass} />
-      }
-      label={label}
-    />
+    >
+      <Button.Label>{label}</Button.Label>
+      <Button.Label>
+        <Icon>
+          <FontAwesomeIcon icon={icon} className={iconClass} />
+        </Icon>
+      </Button.Label>
+    </Button.Root>
   );
 }
 
@@ -105,14 +107,13 @@ export function DataTable(props: DataTableProps) {
         {headers.map((header, headerI) => (
           <div key={headerI} className={styles.gridHeader}>
             {header.disableSort ? (
-              <Button
+              <Button.Root
                 iconAlignment="side"
                 colorScheme="transparentTertiary"
                 paddingSize="large"
-                fontSize="medium"
-                fontWeight="700"
-                label={header.value}
-              />
+              >
+                <Button.Label>{header.value}</Button.Label>
+              </Button.Root>
             ) : (
               <SortButton
                 identifier={headerI}

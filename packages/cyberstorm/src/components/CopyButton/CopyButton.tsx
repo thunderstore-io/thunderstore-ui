@@ -4,8 +4,9 @@ import { faClone, faCheck } from "@fortawesome/pro-regular-svg-icons";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styles from "./CopyButton.module.css";
 import { Tooltip } from "../Tooltip/Tooltip";
-import { Button } from "../Button/Button";
+import * as Button from "../Button/";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { Icon } from "../Icon/Icon";
 
 type CopyButtonProps = {
   text: string;
@@ -70,21 +71,23 @@ export function CopyButton(props: CopyButtonProps) {
         side="bottom"
       >
         <div className={styles.root}>
-          <Button
+          <Button.Root
             paddingSize={paddingSize}
-            fontSize="small"
             colorScheme={colorScheme}
             onClick={() => useCopyToClipboard(text, setWasRecentlyCopied)}
             onMouseOver={() => setIsTooltipOpen(true)}
             onMouseOut={() => setIsTooltipOpen(false)}
-            leftIcon={
-              <FontAwesomeIcon
-                fixedWidth
-                icon={wasRecentlyCopied ? faCheck : faClone}
-                className={wasRecentlyCopied ? styles.checkmark : styles.copy}
-              />
-            }
-          />
+          >
+            <Button.Icon>
+              <Icon>
+                <FontAwesomeIcon
+                  fixedWidth
+                  icon={wasRecentlyCopied ? faCheck : faClone}
+                  className={wasRecentlyCopied ? styles.checkmark : styles.copy}
+                />
+              </Icon>
+            </Button.Icon>
+          </Button.Root>
         </div>
       </Tooltip>
     </TooltipProvider>

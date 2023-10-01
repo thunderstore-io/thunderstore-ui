@@ -2,7 +2,7 @@ import { Team } from "@thunderstore/dapper/types";
 import { DataTable, DataTableRows } from "../../../DataTable/DataTable";
 import { TeamSettingsLink } from "../../../Links/Links";
 import styles from "./TeamList.module.css";
-import { Alert } from "../../../..";
+import { Alert, Icon } from "../../../..";
 import { faCircleCheck } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -39,7 +39,11 @@ export function TeamList(props: TeamListProps) {
   return (
     <div className={styles.content}>
       <Alert
-        icon={<FontAwesomeIcon fixedWidth icon={faCircleCheck} />}
+        icon={
+          <Icon>
+            <FontAwesomeIcon icon={faCircleCheck} />
+          </Icon>
+        }
         content={
           <span>
             New team

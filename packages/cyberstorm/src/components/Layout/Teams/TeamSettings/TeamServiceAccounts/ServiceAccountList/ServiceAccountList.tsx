@@ -1,9 +1,9 @@
 import styles from "./ServiceAccountList.module.css";
 import { ServiceAccount } from "@thunderstore/dapper/types";
 import { Dialog } from "../../../../../Dialog/Dialog";
-import { Button } from "../../../../../Button/Button";
+import * as Button from "../../../../../Button";
 import { DataTable, DataTableRows } from "../../../../../DataTable/DataTable";
-import { Alert } from "../../../../../..";
+import { Alert, Icon } from "../../../../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/pro-solid-svg-icons";
 
@@ -24,13 +24,20 @@ export function ServiceAccountList(props: ServiceAccountListProps) {
           <Dialog
             key={`${serviceAccount.name}_${index}`}
             trigger={
-              <Button label="Remove" colorScheme="danger" paddingSize="large" />
+              <Button.Root colorScheme="danger" paddingSize="large">
+                <Button.Label>Remove</Button.Label>
+              </Button.Root>
             }
             content={
               <div className={styles.content}>
                 <Alert
                   icon={
-                    <FontAwesomeIcon fixedWidth icon={faTriangleExclamation} />
+                    <Icon>
+                      <FontAwesomeIcon
+                        fixedWidth
+                        icon={faTriangleExclamation}
+                      />
+                    </Icon>
                   }
                   content={
                     "This cannot be undone! Related API token will stop working immediately if the service account is removed."
@@ -47,11 +54,9 @@ export function ServiceAccountList(props: ServiceAccountListProps) {
               </div>
             }
             acceptButton={
-              <Button
-                colorScheme="danger"
-                paddingSize="large"
-                label="Remove service account"
-              />
+              <Button.Root colorScheme="danger" paddingSize="large">
+                <Button.Label>Remove service account</Button.Label>
+              </Button.Root>
             }
             cancelButton="default"
             showFooterBorder

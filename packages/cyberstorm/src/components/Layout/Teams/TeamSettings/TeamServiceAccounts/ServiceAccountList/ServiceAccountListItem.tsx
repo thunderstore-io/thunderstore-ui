@@ -1,7 +1,8 @@
 import styles from "./ServiceAccountListItem.module.css";
-import { Button } from "../../../../../Button/Button";
+import * as Button from "../../../../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Icon } from "../../../../../Icon/Icon";
 
 export interface ServiceAccountListItemProps {
   serviceAccountName?: string;
@@ -16,11 +17,14 @@ export function ServiceAccountListItem(props: ServiceAccountListItemProps) {
       <div className={styles.name}>{serviceAccountName}</div>
       <div className={styles.details}>{lastUsed}</div>
       <div className={styles.action}>
-        <Button
-          colorScheme="danger"
-          label="Remove"
-          leftIcon={<FontAwesomeIcon icon={faTrash} fixedWidth />}
-        />
+        <Button.Root colorScheme="danger">
+          <Button.Icon>
+            <Icon>
+              <FontAwesomeIcon icon={faTrash} />
+            </Icon>
+          </Button.Icon>
+          <Button.Label>Remove</Button.Label>
+        </Button.Root>
       </div>
     </div>
   );

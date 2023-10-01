@@ -8,7 +8,7 @@ import {
   TeamLink,
 } from "../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, PlainButton } from "../../Button/Button";
+import * as Button from "../../Button/";
 import { ModIcon } from "../../ModIcon/ModIcon";
 import { Title } from "../../Title/Title";
 import { Dialog } from "../../Dialog/Dialog";
@@ -30,7 +30,6 @@ import { useState } from "react";
 import { Tabs } from "../../Tabs/Tabs";
 import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
 import { PackageVersions } from "./PackageVersions/PackageVersions";
-import { Link } from "../../Link/Link";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
   faCodeBranch,
@@ -45,6 +44,7 @@ import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMember
 import { ThunderstoreLogo } from "../../../svg/svg";
 import { Tooltip } from "../../Tooltip/Tooltip";
 import { usePromise } from "@thunderstore/use-promise";
+import { Icon } from "../../Icon/Icon";
 
 export interface PackageDetailLayoutProps {
   community: string;
@@ -77,25 +77,29 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   if (packageData.author) {
     packageDetailsMeta.push(
       <TeamLink key="1" team={packageData.team.name}>
-        <PlainButton
-          colorScheme="transparentPrimary"
-          paddingSize="small"
-          fontSize="medium"
-          fontWeight="700"
-          label={packageData.team.name}
-          leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
-        />
+        <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
+          <Button.Icon>
+            <Icon>
+              <FontAwesomeIcon icon={faUsers} />
+            </Icon>
+          </Button.Icon>
+          <Button.Label>{packageData.team.name}</Button.Label>
+        </Button.Root>
       </TeamLink>
     );
   }
   if (packageData.gitHubLink) {
     packageDetailsMeta.push(
-      <Link
-        key="2"
-        externalUrl={packageData.gitHubLink}
-        label="GitHub"
-        leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
-      />
+      <a key="2" href={packageData.gitHubLink}>
+        <Button.Root>
+          <Button.Label>GitHub</Button.Label>
+          <Button.Icon>
+            <Icon>
+              <FontAwesomeIcon icon={faGithub} />
+            </Icon>
+          </Button.Icon>
+        </Button.Root>
+      </a>
     );
   }
 
@@ -126,51 +130,44 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               title="Manage Package"
               content={<PackageManagementForm />}
               acceptButton={
-                <Button
-                  paddingSize="large"
-                  label="Save changes"
-                  colorScheme="success"
-                />
+                <Button.Root paddingSize="large" colorScheme="success">
+                  <Button.Label>Save changes</Button.Label>
+                </Button.Root>
               }
               additionalFooterContent={
                 packageData.isDeprecated ? (
-                  <Button
-                    paddingSize="large"
-                    label="Undeprecate"
-                    colorScheme="default"
-                  />
+                  <Button.Root paddingSize="large" colorScheme="default">
+                    <Button.Label>Undeprecate</Button.Label>
+                  </Button.Root>
                 ) : (
-                  <Button
-                    paddingSize="large"
-                    label="Deprecate"
-                    colorScheme="warning"
-                  />
+                  <Button.Root paddingSize="large" colorScheme="warning">
+                    <Button.Label>Deprecate</Button.Label>
+                  </Button.Root>
                 )
               }
               trigger={
-                <Button
+                <Button.Root
                   colorScheme="transparentDefault"
                   paddingSize="large"
-                  fontSize="medium"
-                  fontWeight="700"
-                  leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
-                  label="Manage"
-                />
+                >
+                  <Button.Icon>
+                    <Icon>
+                      <FontAwesomeIcon icon={faCog} />
+                    </Icon>
+                  </Button.Icon>
+                  <Button.Label>Manage</Button.Label>
+                </Button.Root>
               }
             />
             <a className={styles.installButton} href="/">
-              <PlainButton
-                paddingSize="huge"
-                fontSize="huge"
-                fontWeight="800"
-                label="Install"
-                colorScheme="fancyAccent"
-                leftIcon={
-                  <div className={styles.installButtonIcon}>
-                    <ThunderstoreLogo />
-                  </div>
-                }
-              />
+              <Button.Root plain paddingSize="huge" colorScheme="fancyAccent">
+                <Button.Icon>
+                  <ThunderstoreLogo />
+                </Button.Icon>
+                <Button.Label fontSize="huge" fontWeight="800">
+                  Install
+                </Button.Label>
+              </Button.Root>
             </a>
           </div>
         </div>
@@ -183,38 +180,39 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
         <div className={styles.metaInfo}>
           <div className={styles.metaButtonWrapper}>
             <a href="/" className={styles.metaDownloadButton}>
-              <PlainButton
-                colorScheme="primary"
-                paddingSize="medium"
-                fontSize="medium"
-                fontWeight="700"
-                leftIcon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
-                label="Download"
-              />
+              <Button.Root plain colorScheme="primary" paddingSize="medium">
+                <Button.Icon>
+                  <FontAwesomeIcon icon={faDownload} />
+                </Button.Icon>
+                <Button.Label>Download</Button.Label>
+              </Button.Root>
             </a>
             <Tooltip content="Donate to author" side="bottom">
-              <Button
-                colorScheme="primary"
-                paddingSize="mediumSquare"
-                fontSize="medium"
-                leftIcon={<FontAwesomeIcon icon={faDonate} fixedWidth />}
-              />
+              <Button.Root colorScheme="primary" paddingSize="mediumSquare">
+                <Button.Icon>
+                  <Icon>
+                    <FontAwesomeIcon icon={faDonate} />
+                  </Icon>
+                </Button.Icon>
+              </Button.Root>
             </Tooltip>
             <Tooltip content="Like" side="bottom">
-              <Button
-                colorScheme="primary"
-                paddingSize="mediumSquare"
-                fontSize="medium"
-                leftIcon={<FontAwesomeIcon icon={faThumbsUp} fixedWidth />}
-              />
+              <Button.Root colorScheme="primary" paddingSize="mediumSquare">
+                <Button.Icon>
+                  <Icon>
+                    <FontAwesomeIcon icon={faThumbsUp} />
+                  </Icon>
+                </Button.Icon>
+              </Button.Root>
             </Tooltip>
             <Tooltip content="Report" side="bottom">
-              <Button
-                colorScheme="primary"
-                paddingSize="mediumSquare"
-                fontSize="medium"
-                leftIcon={<FontAwesomeIcon icon={faFlag} fixedWidth />}
-              />
+              <Button.Root colorScheme="primary" paddingSize="mediumSquare">
+                <Button.Icon>
+                  <Icon>
+                    <FontAwesomeIcon icon={faFlag} />
+                  </Icon>
+                </Button.Icon>
+              </Button.Root>
             </Tooltip>
           </div>
           <MetaInfoItemList metaInfoData={metaInfoData} />
@@ -292,33 +290,39 @@ const tabs = [
     key: 1,
     label: "Details",
     icon: (
-      <FontAwesomeIcon
-        icon={faFileLines}
-        fixedWidth
-        className={styles.tabIcon}
-      />
+      <Icon>
+        <FontAwesomeIcon
+          icon={faFileLines}
+          fixedWidth
+          className={styles.tabIcon}
+        />
+      </Icon>
     ),
   },
   {
     key: 2,
     label: "Changelog",
     icon: (
-      <FontAwesomeIcon
-        icon={faFilePlus}
-        fixedWidth
-        className={styles.tabIcon}
-      />
+      <Icon>
+        <FontAwesomeIcon
+          icon={faFilePlus}
+          fixedWidth
+          className={styles.tabIcon}
+        />
+      </Icon>
     ),
   },
   {
     key: 3,
     label: "Versions",
     icon: (
-      <FontAwesomeIcon
-        icon={faCodeBranch}
-        fixedWidth
-        className={styles.tabIcon}
-      />
+      <Icon>
+        <FontAwesomeIcon
+          icon={faCodeBranch}
+          fixedWidth
+          className={styles.tabIcon}
+        />
+      </Icon>
     ),
   },
 ];

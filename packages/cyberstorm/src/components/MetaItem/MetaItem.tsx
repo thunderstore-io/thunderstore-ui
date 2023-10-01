@@ -1,10 +1,11 @@
 "use client";
-import React, { ReactNode, useRef } from "react";
+import React, { useRef } from "react";
 import styles from "./MetaItem.module.css";
+import { Icon } from "../Icon/Icon";
 
 type _MetaItemProps = {
   label?: string;
-  icon?: ReactNode;
+  icon?: JSX.Element;
   colorScheme?: "default" | "accent";
   size?: "medium" | "large" | "bold_large";
   ref?: React.Ref<HTMLDivElement>;
@@ -26,7 +27,9 @@ export const MetaItem = React.forwardRef<HTMLDivElement, MetaItemProps>(
 
     return (
       <div ref={ref} className={`${styles.root} ${getStyle(colorScheme)}`}>
-        {icon}
+        <span className={styles.icon}>
+          <Icon>{icon}</Icon>
+        </span>
         {label ? (
           <div className={`${styles.label} ${getSize(size)}`}>{label}</div>
         ) : null}

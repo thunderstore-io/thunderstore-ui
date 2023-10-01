@@ -1,12 +1,13 @@
 "use client";
 import React, { ReactNode } from "react";
 import styles from "./Select.module.css";
-import { Button } from "../Button/Button";
-import { MenuItem } from "../MenuItem/MenuItem";
+import * as Button from "../Button/";
+import * as MenuItem from "../MenuItem/";
 import { faCaretDown } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as RadixSelect from "@radix-ui/react-select";
+import { Icon } from "../Icon/Icon";
 
 export type SelectOption = {
   value: string;
@@ -31,7 +32,11 @@ export function Select(props: SelectProps) {
   const {
     colorScheme = "default",
     defaultOpen = false,
-    icon = <FontAwesomeIcon fixedWidth icon={faCaretDown} />,
+    icon = (
+      <Icon>
+        <FontAwesomeIcon icon={faCaretDown} />
+      </Icon>
+    ),
     options,
     onChange,
     placeholder = "Select",
@@ -40,9 +45,7 @@ export function Select(props: SelectProps) {
     ...forwardedProps
   } = props;
 
-  const selectItemElements = options
-    ? mapSelectData(options, colorScheme)
-    : null;
+  const selectItemElements = options ? mapSelectData(options) : null;
 
   return (
     <div {...forwardedProps} className={styles.root}>
@@ -53,17 +56,16 @@ export function Select(props: SelectProps) {
         disabled={options.length === 0}
       >
         <RadixSelect.Trigger asChild>
-          <Button
+          <Button.Root
             iconAlignment="side"
             colorScheme={colorScheme}
             paddingSize="large"
-            fontSize={triggerFontSize}
-            fontWeight="700"
-            rightIcon={icon}
-            label={
-              options?.find((o) => o.value === value)?.label ?? placeholder
-            }
-          />
+          >
+            <Button.Label fontSize={triggerFontSize}>
+              {options?.find((o) => o.value === value)?.label ?? placeholder}
+            </Button.Label>
+            <Button.Icon>{icon}</Button.Icon>
+          </Button.Root>
         </RadixSelect.Trigger>
 
         <RadixSelect.Portal>
@@ -89,17 +91,13 @@ const getContentStyle = (scheme: SelectProps["colorScheme"] = "default") => {
   }[scheme];
 };
 
-const mapSelectData = (
-  options: SelectOption[],
-  colorScheme: "default" | "accent" | undefined
-) => {
+const mapSelectData = (options: SelectOption[]) => {
   return options.map((option, index) => (
     <RadixSelect.Item value={option.value} key={index} asChild>
-      <MenuItem
-        colorScheme={colorScheme}
-        leftIcon={option.leftIcon}
-        label={option.label}
-      />
+      <MenuItem.Root>
+        <MenuItem.Icon>{option.leftIcon}</MenuItem.Icon>
+        <MenuItem.Label>{option.label}</MenuItem.Label>
+      </MenuItem.Root>
     </RadixSelect.Item>
   ));
 };

@@ -1,5 +1,5 @@
 import styles from "./Footer.module.css";
-import { PlainButton } from "../Button/Button";
+import * as Button from "../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDiscord,
@@ -8,7 +8,6 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import {
   CommunitiesLink,
-  IndexLink,
   ManifestValidatorLink,
   MarkdownPreviewLink,
   PackageFormatDocsLink,
@@ -21,6 +20,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { ThunderstoreLogoHorizontal } from "../../svg/svg";
 import { Tooltip } from "../Tooltip/Tooltip";
+import { Icon } from "../Icon/Icon";
 
 const AD_IMAGE_SRC = "/images/tsmm_screenshot.png";
 const DISCORD_URL = "https://discord.thunderstore.io/";
@@ -43,17 +43,23 @@ export function Footer() {
               <div className={styles.iconLinks}>
                 <Tooltip content="Join our discord" side="bottom">
                   <a href={DISCORD_URL} className={styles.iconLink}>
-                    <FontAwesomeIcon icon={faDiscord} fixedWidth size={"2x"} />
+                    <Icon>
+                      <FontAwesomeIcon icon={faDiscord} />
+                    </Icon>
                   </a>
                 </Tooltip>
                 <Tooltip content="Check out our GitHub" side="bottom">
                   <a href={GITHUB_URL} className={styles.iconLink}>
-                    <FontAwesomeIcon icon={faGithub} fixedWidth size={"2x"} />
+                    <Icon>
+                      <FontAwesomeIcon icon={faGithub} />
+                    </Icon>
                   </a>
                 </Tooltip>
                 <Tooltip content="Talk to us on Reddit" side="bottom">
                   <a href={REDDIT_URL} className={styles.iconLink}>
-                    <FontAwesomeIcon icon={faReddit} fixedWidth size={"2x"} />
+                    <Icon>
+                      <FontAwesomeIcon icon={faReddit} />
+                    </Icon>
                   </a>
                 </Tooltip>
               </div>
@@ -115,19 +121,21 @@ export function Footer() {
                     You are prepared. Download Thunderstore Bolt
                     <br />
                     for desktop and enter a world of Thunder{" "}
-                    <FontAwesomeIcon icon={faBoltLightning} fixedWidth />
+                    <div className={styles.inlineIcon}>
+                      <Icon>
+                        <FontAwesomeIcon icon={faBoltLightning} />
+                      </Icon>
+                    </div>
                   </p>
                   <a href="/" className={styles.adButton}>
-                    <PlainButton
-                      colorScheme="accent"
-                      paddingSize="large"
-                      fontSize="large"
-                      fontWeight="700"
-                      label="Get Manager"
-                      rightIcon={
-                        <FontAwesomeIcon icon={faArrowUpRight} fixedWidth />
-                      }
-                    />
+                    <Button.Root plain colorScheme="accent" paddingSize="large">
+                      <Button.Label fontSize="large">Get Manager</Button.Label>
+                      <Button.Icon>
+                        <Icon>
+                          <FontAwesomeIcon icon={faArrowUpRight} />
+                        </Icon>
+                      </Button.Icon>
+                    </Button.Root>
                   </a>
                 </div>
                 <img

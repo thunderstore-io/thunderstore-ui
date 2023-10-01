@@ -1,7 +1,7 @@
 import { faCaretDown } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { Button } from "../Button/Button";
+import * as Button from "../Button/";
 import { DropDown, DropDownItem } from "../DropDown/DropDown";
 import { DropDownLink } from "../DropDown/DropDownLink";
 import {
@@ -10,17 +10,20 @@ import {
   PackageFormatDocsLink,
   PackageUploadLink,
 } from "../Links/Links";
+import { Icon } from "../Icon/Icon";
 
 export const DevelopersDropDown = () => (
   <DropDown
     triggerColorScheme="transparentDefault"
     trigger={
-      <Button
-        label="Developers"
-        rightIcon={<FontAwesomeIcon icon={faCaretDown} fixedWidth />}
-        paddingSize="large"
-        fontSize="large"
-      />
+      <Button.Root paddingSize="large">
+        <Button.Label fontSize="large">Developers</Button.Label>
+        <Button.Icon>
+          <Icon>
+            <FontAwesomeIcon icon={faCaretDown} />
+          </Icon>
+        </Button.Icon>
+      </Button.Root>
     }
     content={[
       <a href="/wiki" key="wiki">

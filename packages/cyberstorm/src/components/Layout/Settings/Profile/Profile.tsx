@@ -1,6 +1,6 @@
 import styles from "./Profile.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
-import { Button } from "../../../Button/Button";
+import * as Button from "../../../Button/";
 import { Avatar } from "../../../Avatar/Avatar";
 import { User } from "@thunderstore/dapper/types";
 import { TextInput } from "../../../TextInput/TextInput";
@@ -29,7 +29,9 @@ export function Profile(props: ProfileProps) {
                 }
               />
               <div>
-                <Button label="Upload picture" />
+                <Button.Root>
+                  <Button.Label>Upload picture</Button.Label>
+                </Button.Root>
               </div>
             </div>
           }
@@ -49,7 +51,9 @@ export function Profile(props: ProfileProps) {
           content={<TextInput placeHolder={userData.about} />}
         />
         <div className={styles.save}>
-          <Button label="Save changes" />
+          <Button.Root>
+            <Button.Label>Save changes</Button.Label>
+          </Button.Root>
         </div>
       </div>
 

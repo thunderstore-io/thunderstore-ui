@@ -2,10 +2,11 @@ import styles from "./TeamProfile.module.css";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { Team } from "@thunderstore/dapper/types";
-import { Button } from "../../../../Button/Button";
+import * as Button from "../../../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/pro-light-svg-icons";
 import { useState } from "react";
+import { Icon } from "../../../../Icon/Icon";
 
 export interface TeamProfileProps {
   teamData: Team;
@@ -32,14 +33,16 @@ export function TeamProfile(props: TeamProfileProps) {
                     value={donationLink}
                   />
                 </div>
-                <Button
-                  leftIcon={
-                    <FontAwesomeIcon icon={faXmark} size="2x" fixedWidth />
-                  }
-                  value={teamData.name}
+                <Button.Root
                   paddingSize="mediumSquare"
                   colorScheme="transparentDanger"
-                />
+                >
+                  <Button.Icon>
+                    <Icon>
+                      <FontAwesomeIcon icon={faXmark} />
+                    </Icon>
+                  </Button.Icon>
+                </Button.Root>
               </div>
             </div>
           }
@@ -59,7 +62,7 @@ export function TeamProfile(props: TeamProfileProps) {
             <div className={styles.avatarContent}>
               <ModIcon src={teamData.imageSource} />
               <div>
-                <Button label="Upload picture" />
+                <Button.Root><Button.Label>Upload picture</Button.Label></Button.Root>
               </div>
             </div>
           }

@@ -12,6 +12,7 @@ import { Tag } from "../Tag/Tag";
 import { formatInteger } from "../../utils/utils";
 import { PackagePreview } from "@thunderstore/dapper/types";
 import { PackageLink, UserLink } from "../Links/Links";
+import { Icon } from "../Icon/Icon";
 
 export interface PackageCardProps {
   packageData: PackagePreview;
@@ -129,7 +130,11 @@ function getPackageFlags(
         key="flag_pinned"
         label="Pinned"
         colorScheme="info"
-        leftIcon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
+        leftIcon={
+          <Icon>
+            <FontAwesomeIcon icon={faThumbtack} />
+          </Icon>
+        }
       />
     );
   }
@@ -139,7 +144,11 @@ function getPackageFlags(
         key="flag_nsfw"
         label="NSFW"
         colorScheme="info"
-        leftIcon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
+        leftIcon={
+          <Icon>
+            <FontAwesomeIcon icon={faThumbtack} />
+          </Icon>
+        }
       />
     );
   }
@@ -149,7 +158,11 @@ function getPackageFlags(
         key="flag_deprecated"
         label="Deprecated"
         colorScheme="info"
-        leftIcon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
+        leftIcon={
+          <Icon>
+            <FontAwesomeIcon icon={faThumbtack} />
+          </Icon>
+        }
       />
     );
   }
@@ -160,20 +173,32 @@ function getMetaItemList(downloadCount: number, likes: number, size: number) {
   return (
     <div className={styles.metaItemWrapper}>
       <MetaItem
-        icon={<FontAwesomeIcon fixedWidth icon={faDownload} />}
+        icon={
+          <Icon>
+            <FontAwesomeIcon icon={faDownload} />
+          </Icon>
+        }
         label={formatInteger(downloadCount)}
         colorScheme="accent"
       />
 
       <MetaItem
-        icon={<FontAwesomeIcon fixedWidth icon={faThumbsUp} />}
+        icon={
+          <Icon>
+            <FontAwesomeIcon icon={faThumbsUp} />
+          </Icon>
+        }
         label={formatInteger(likes)}
         colorScheme="accent"
       />
 
       <div className={styles.metaItem__last}>
         <MetaItem
-          icon={<FontAwesomeIcon fixedWidth icon={faHardDrive} />}
+          icon={
+            <Icon>
+              <FontAwesomeIcon icon={faHardDrive} />
+            </Icon>
+          }
           label={`${size} MB`}
           colorScheme="accent"
         />

@@ -12,9 +12,10 @@ import {
 import { Select } from "../../Select/Select";
 import { Pagination } from "../../Pagination/Pagination";
 import { FilterItemList } from "../../FilterItemList/FilterItemList";
-import { Button } from "../../Button/Button";
+import * as Button from "../../Button/";
 import { Tag } from "../../Tag/Tag";
 import { TextInput } from "../../TextInput/TextInput";
+import { Icon } from "../../Icon/Icon";
 
 const PackageListings = lazy(
   () => import("../PackageListings/PackageListings")
@@ -69,7 +70,9 @@ export function FiltersProvider(props: ContextProps) {
 
 const RemoveFilterIcon = (onClick: () => void) => (
   <button onClick={onClick} style={{ backgroundColor: "transparent" }}>
-    <FontAwesomeIcon icon={faXmark} fixedWidth />
+    <Icon>
+      <FontAwesomeIcon icon={faXmark} />
+    </Icon>
   </button>
 );
 
@@ -151,7 +154,11 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
     <div className={styles.content}>
       <TextInput
         placeHolder="Filter Mods..."
-        leftIcon={<FontAwesomeIcon icon={faSearch} fixedWidth />}
+        leftIcon={
+          <Icon>
+            <FontAwesomeIcon icon={faSearch} />
+          </Icon>
+        }
         value={searchValue}
         setValue={setSearchValue}
         enterHook={handleSearchFilterEdit}
@@ -176,16 +183,15 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
             ) ? (
               <div className={styles.selectedTags}>
                 <CurrentFilters filters={filters} />
-                <Button
+                <Button.Root
                   key="clearAllButton"
                   paddingSize="small"
-                  fontSize="small"
-                  fontWeight="700"
                   colorScheme="transparentTertiary"
                   border-width="0px"
-                  label="Clear all"
                   onClick={clearFilters}
-                />
+                >
+                  <Button.Label fontSize="small">Clear all</Button.Label>
+                </Button.Root>
               </div>
             ) : null}
 
@@ -236,16 +242,28 @@ const selectOptions = [
   {
     value: "1",
     label: "Newest",
-    leftIcon: <FontAwesomeIcon fixedWidth icon={faStar} />,
+    leftIcon: (
+      <Icon>
+        <FontAwesomeIcon icon={faStar} />
+      </Icon>
+    ),
   },
   {
     value: "2",
     label: "Hottest",
-    leftIcon: <FontAwesomeIcon fixedWidth icon={faFire} />,
+    leftIcon: (
+      <Icon>
+        <FontAwesomeIcon icon={faFire} />
+      </Icon>
+    ),
   },
   {
     value: "3",
     label: "Top rated",
-    leftIcon: <FontAwesomeIcon fixedWidth icon={faThumbsUp} />,
+    leftIcon: (
+      <Icon>
+        <FontAwesomeIcon icon={faThumbsUp} />
+      </Icon>
+    ),
   },
 ];

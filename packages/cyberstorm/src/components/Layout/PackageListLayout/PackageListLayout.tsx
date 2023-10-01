@@ -5,7 +5,6 @@ import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { formatInteger } from "../../../utils/utils";
 import { faBoxOpen, faDownload } from "@fortawesome/pro-regular-svg-icons";
-import { Link } from "../../Link/Link";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { CommunityImage } from "../../CommunityImage/CommunityImage";
@@ -13,6 +12,8 @@ import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import { useDapper } from "@thunderstore/dapper";
 import { PackagePreview } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
+import { Icon } from "../../Icon/Icon";
+import * as Button from "../../Button/";
 
 export interface PackageListLayoutProps {
   isLoading?: boolean;
@@ -59,7 +60,11 @@ export function PackageListLayout(props: PackageListLayoutProps) {
                 formatInteger(communityData.community.total_package_count) +
                 " Packages"
               }
-              icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
+              icon={
+                <Icon>
+                  <FontAwesomeIcon icon={faBoxOpen} />
+                </Icon>
+              }
               colorScheme="accent"
               size="bold_large"
             />,
@@ -69,17 +74,24 @@ export function PackageListLayout(props: PackageListLayoutProps) {
                 formatInteger(communityData.community.total_download_count) +
                 " Downloads"
               }
-              icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
+              icon={
+                <Icon>
+                  <FontAwesomeIcon icon={faDownload} />
+                </Icon>
+              }
               colorScheme="accent"
               size="bold_large"
             />,
-            <Link
-              key="meta-link"
-              leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
-              label="Join our community"
-              externalUrl="https://discord.thunderstore.io/"
-              size="bold"
-            />,
+            <a key="meta-link" href="https://discord.thunderstore.io/">
+              <Button.Root colorScheme="transparentPrimary">
+                <Button.Icon>
+                  <Icon>
+                    <FontAwesomeIcon icon={faDiscord} />
+                  </Icon>
+                </Button.Icon>
+                <Button.Label>Join our community</Button.Label>
+              </Button.Root>
+            </a>,
           ]}
         />
       }

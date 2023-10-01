@@ -2,11 +2,12 @@
 import styles from "./LoginForm.module.css";
 import { Tab, Tabs } from "../../../Tabs/Tabs";
 import { TextInput } from "../../../TextInput/TextInput";
-import { Button } from "../../../Button/Button";
+import * as Button from "../../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { OverwolfLogo } from "../../../../svg/svg";
 import { useState } from "react";
+import { Icon } from "../../../Icon/Icon";
 
 const tabs: Array<Tab> = [
   {
@@ -58,38 +59,41 @@ export function LoginForm() {
                 />
               </div>
             </div>
-            <Button
-              type="submit"
-              paddingSize="huge"
-              colorScheme="accent"
-              label="Login"
-            />
+            <Button.Root type="submit" paddingSize="huge" colorScheme="accent">
+              <Button.Label>Login</Button.Label>
+            </Button.Root>
           </form>
           <div className={styles.descriptor}>Or continue with</div>
           <div className={styles.continueButtons}>
             <div className={styles.continueButton}>
-              <Button
-                colorScheme="discord"
-                label="Discord"
-                leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
-                paddingSize="large"
-              />
+              <Button.Root colorScheme="discord" paddingSize="large">
+                <Button.Icon>
+                  <Icon>
+                    <FontAwesomeIcon icon={faDiscord} />
+                  </Icon>
+                </Button.Icon>
+                <Button.Label>Discord</Button.Label>
+              </Button.Root>
             </div>
             <div className={styles.continueButton}>
-              <Button
-                colorScheme="github"
-                label="GitHub"
-                leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
-                paddingSize="large"
-              />
+              <Button.Root colorScheme="github" paddingSize="large">
+                <Button.Icon>
+                  <Icon>
+                    <FontAwesomeIcon icon={faGithub} />
+                  </Icon>
+                </Button.Icon>
+                <Button.Label>GitHub</Button.Label>
+              </Button.Root>
             </div>
             <div className={styles.continueButton}>
-              <Button
-                colorScheme="overwolf"
-                label="Overwolf"
-                leftIcon={<OverwolfLogo />}
-                paddingSize="large"
-              />
+              <Button.Root colorScheme="overwolf" paddingSize="large">
+                <Button.Icon>
+                  <Icon>
+                    <OverwolfLogo />
+                  </Icon>
+                </Button.Icon>
+                <Button.Label>Overwolf</Button.Label>
+              </Button.Root>
             </div>
           </div>
         </>

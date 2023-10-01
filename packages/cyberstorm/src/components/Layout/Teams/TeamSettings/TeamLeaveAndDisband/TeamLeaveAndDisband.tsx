@@ -1,9 +1,9 @@
 import styles from "./TeamLeaveAndDisband.module.css";
-import { Button } from "../../../../Button/Button";
+import * as Button from "../../../../Button/";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import { Team } from "@thunderstore/dapper/types";
 import { TextInput } from "../../../../TextInput/TextInput";
-import { Alert } from "../../../../..";
+import { Alert, Icon } from "../../../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
 
@@ -22,7 +22,11 @@ export function TeamLeaveAndDisband(props: TeamLeaveAndDisbandProps) {
         content={
           <div className={styles.content}>
             <Alert
-              icon={<FontAwesomeIcon fixedWidth icon={faOctagonExclamation} />}
+              icon={
+                <Icon>
+                  <FontAwesomeIcon icon={faOctagonExclamation} />
+                </Icon>
+              }
               content={
                 "You cannot currently leave this team as you are it’s last owner."
               }
@@ -36,11 +40,9 @@ export function TeamLeaveAndDisband(props: TeamLeaveAndDisbandProps) {
               has another owner assigned.
             </p>
             <div>
-              <Button
-                colorScheme="danger"
-                label="Leave team"
-                paddingSize="large"
-              />
+              <Button.Root colorScheme="danger" paddingSize="large">
+                <Button.Label>Leave team</Button.Label>
+              </Button.Root>
             </div>
           </div>
         }
@@ -52,7 +54,11 @@ export function TeamLeaveAndDisband(props: TeamLeaveAndDisbandProps) {
         content={
           <div className={styles.content}>
             <Alert
-              icon={<FontAwesomeIcon fixedWidth icon={faOctagonExclamation} />}
+              icon={
+                <Icon>
+                  <FontAwesomeIcon icon={faOctagonExclamation} />
+                </Icon>
+              }
               content={
                 "You cannot currently disband this team as it has packages."
               }
@@ -74,11 +80,9 @@ export function TeamLeaveAndDisband(props: TeamLeaveAndDisbandProps) {
               <TextInput placeHolder="Verification" />
             </div>
             <div>
-              <Button
-                colorScheme="danger"
-                label="Disband team"
-                paddingSize="large"
-              />
+              <Button.Root colorScheme="danger" paddingSize="large">
+                <Button.Label>Disband team</Button.Label>
+              </Button.Root>
             </div>
           </div>
         }

@@ -1,6 +1,6 @@
 import styles from "./TeamServiceAccounts.module.css";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
-import { Button } from "../../../../Button/Button";
+import * as Button from "../../../../Button/";
 import { ServiceAccountList } from "./ServiceAccountList/ServiceAccountList";
 import { Dialog } from "../../../../Dialog/Dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,6 +13,7 @@ import { Alert } from "../../../../Alert/Alert";
 import { useDapper } from "@thunderstore/dapper";
 import { Team } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
+import { Icon } from "../../../../Icon/Icon";
 
 export interface TeamServiceAccountsProps {
   teamData: Team;
@@ -40,12 +41,14 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
               title="Add Service Account"
               showFooterBorder
               trigger={
-                <Button
-                  paddingSize="large"
-                  colorScheme="primary"
-                  rightIcon={<FontAwesomeIcon icon={faPlus} fixedWidth />}
-                  label="Add Service Account"
-                />
+                <Button.Root paddingSize="large" colorScheme="primary">
+                  <Button.Label>Add Service Account</Button.Label>
+                  <Button.Icon>
+                    <Icon>
+                      <FontAwesomeIcon icon={faPlus} />
+                    </Icon>
+                  </Button.Icon>
+                </Button.Root>
               }
               content={
                 serviceAccountAdded ? (
@@ -72,10 +75,12 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
                     </div>
                     <Alert
                       icon={
-                        <FontAwesomeIcon
-                          fixedWidth
-                          icon={faCircleExclamation}
-                        />
+                        <Icon>
+                          <FontAwesomeIcon
+                            fixedWidth
+                            icon={faCircleExclamation}
+                          />
+                        </Icon>
                       }
                       content={
                         "Store this token securely, as it can't be retrieved later, and treat it as you would treat an important password."
@@ -106,21 +111,23 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
               closeOnAccept={serviceAccountAdded}
               acceptButton={
                 serviceAccountAdded ? (
-                  <Button
-                    label="Close"
+                  <Button.Root
                     colorScheme="default"
                     paddingSize="large"
                     onClick={() => {
                       setAddedServiceAccountName("");
                       setServiceAccountAdded(false);
                     }}
-                  />
+                  >
+                    <Button.Label>Close</Button.Label>
+                  </Button.Root>
                 ) : (
-                  <Button
-                    label="Add Service Account"
+                  <Button.Root
                     colorScheme="success"
                     onClick={() => setServiceAccountAdded(!serviceAccountAdded)}
-                  />
+                  >
+                    <Button.Label>Add Service Account</Button.Label>
+                  </Button.Root>
                 )
               }
             />

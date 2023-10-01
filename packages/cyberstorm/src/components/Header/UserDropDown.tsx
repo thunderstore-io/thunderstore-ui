@@ -14,10 +14,11 @@ import { usePromise } from "@thunderstore/use-promise";
 import styles from "./Header.module.css";
 import { Avatar } from "../Avatar/Avatar";
 import { AvatarButton } from "../Avatar/AvatarButton";
-import { Button } from "../Button/Button";
+import * as Button from "../Button/";
 import { DropDown, DropDownDivider, DropDownItem } from "../DropDown/DropDown";
 import { DropDownLink } from "../DropDown/DropDownLink";
 import { SettingsLink, TeamsLink, UserLink } from "../Links/Links";
+import { Icon } from "../Icon/Icon";
 
 /**
  * TODO: replace dapper.getUser with .getCurrentUser.
@@ -41,7 +42,13 @@ export const UserDropDown = () => {
         userData.user.imageSource ? (
           <AvatarButton src={userData.user.imageSource} />
         ) : (
-          <Button leftIcon={<FontAwesomeIcon icon={faUser} fixedWidth />} />
+          <Button.Root>
+            <Button.Icon>
+              <Icon>
+                <FontAwesomeIcon icon={faUser} />
+              </Icon>
+            </Button.Icon>
+          </Button.Root>
         )
       }
       content={[

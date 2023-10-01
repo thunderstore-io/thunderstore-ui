@@ -20,6 +20,7 @@ import { TeamLeaveAndDisband } from "./TeamLeaveAndDisband/TeamLeaveAndDisband";
 import { useDapper } from "@thunderstore/dapper";
 import { Team } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
+import { Icon } from "../../../Icon/Icon";
 
 export interface TeamSettingsLayoutProps {
   teamId: string;
@@ -61,22 +62,38 @@ const tabs = [
   {
     key: 1,
     label: "Profile",
-    icon: <FontAwesomeIcon icon={faEdit} fixedWidth />,
+    icon: (
+      <Icon>
+        <FontAwesomeIcon icon={faEdit} />
+      </Icon>
+    ),
   },
   {
     key: 2,
     label: "Members",
-    icon: <FontAwesomeIcon icon={faUsers} fixedWidth />,
+    icon: (
+      <Icon>
+        <FontAwesomeIcon icon={faUsers} />
+      </Icon>
+    ),
   },
   {
     key: 3,
     label: "Service Accounts",
-    icon: <FontAwesomeIcon icon={faUserCog} fixedWidth />,
+    icon: (
+      <Icon>
+        <FontAwesomeIcon icon={faUserCog} />
+      </Icon>
+    ),
   },
   {
     key: 4,
     label: "Settings",
-    icon: <FontAwesomeIcon icon={faCog} fixedWidth />,
+    icon: (
+      <Icon>
+        <FontAwesomeIcon icon={faCog} />
+      </Icon>
+    ),
   },
 ];
 

@@ -1,6 +1,6 @@
 import styles from "./TeamMembers.module.css";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
-import { Button } from "../../../../Button/Button";
+import * as Button from "../../../../Button/";
 import { Dialog } from "../../../../Dialog/Dialog";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { Select } from "../../../../Select/Select";
@@ -14,6 +14,7 @@ import {
   DataTableRows,
   Sort,
 } from "../../../../DataTable/DataTable";
+import { Icon } from "../../../../Icon/Icon";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
@@ -66,12 +67,14 @@ export function TeamMemberList(props: TeamMemberListProps) {
           <Dialog
             key={`action_${index}`}
             trigger={
-              <Button
-                label="Kick"
-                leftIcon={<FontAwesomeIcon icon={faTrash} fixedWidth />}
-                colorScheme="danger"
-                paddingSize="large"
-              />
+              <Button.Root colorScheme="danger" paddingSize="large">
+                <Button.Icon>
+                  <Icon>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </Icon>
+                </Button.Icon>
+                <Button.Label>Kick</Button.Label>
+              </Button.Root>
             }
             content={
               <div>
@@ -85,11 +88,9 @@ export function TeamMemberList(props: TeamMemberListProps) {
               </div>
             }
             acceptButton={
-              <Button
-                colorScheme="danger"
-                paddingSize="large"
-                label="Kick member"
-              />
+              <Button.Root colorScheme="danger" paddingSize="large">
+                <Button.Label>Kick member</Button.Label>
+              </Button.Root>
             }
             cancelButton="default"
             showFooterBorder
@@ -118,12 +119,14 @@ export function TeamMembers(props: TeamMembersProps) {
     <Dialog
       title="Add Member"
       trigger={
-        <Button
-          label="Add Member"
-          colorScheme="primary"
-          paddingSize="large"
-          rightIcon={<FontAwesomeIcon icon={faPlus} fixedWidth />}
-        />
+        <Button.Root colorScheme="primary" paddingSize="large">
+          <Button.Label>Add Member</Button.Label>
+          <Button.Icon>
+            <Icon>
+              <FontAwesomeIcon icon={faPlus} />
+            </Icon>
+          </Button.Icon>
+        </Button.Root>
       }
       showFooterBorder
       cancelButton="default"
@@ -146,7 +149,11 @@ export function TeamMembers(props: TeamMembersProps) {
           </div>
         </div>
       }
-      acceptButton={<Button label="Add Member" colorScheme="success" />}
+      acceptButton={
+        <Button.Root colorScheme="success">
+          <Button.Label>Add Member</Button.Label>
+        </Button.Root>
+      }
     />
   );
 

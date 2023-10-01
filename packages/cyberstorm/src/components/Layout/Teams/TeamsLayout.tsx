@@ -3,7 +3,7 @@ import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { TeamsLink } from "../../Links/Links";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { SettingItem } from "../../SettingItem/SettingItem";
-import { Button } from "../../Button/Button";
+import * as Button from "../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { TeamList } from "./TeamList/TeamList";
@@ -12,6 +12,7 @@ import { TextInput } from "../../TextInput/TextInput";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
+import { Icon } from "../../Icon/Icon";
 
 //TODO: Use Alert component
 
@@ -50,20 +51,20 @@ export function TeamsLayout() {
                   </div>
                 }
                 trigger={
-                  <Button
-                    colorScheme="primary"
-                    paddingSize="large"
-                    label="Create team"
-                    rightIcon={<FontAwesomeIcon icon={faPlus} fixedWidth />}
-                  />
+                  <Button.Root colorScheme="primary" paddingSize="large">
+                    <Button.Label>Create team</Button.Label>
+                    <Button.Icon>
+                      <Icon>
+                        <FontAwesomeIcon icon={faPlus} />
+                      </Icon>
+                    </Button.Icon>
+                  </Button.Root>
                 }
                 cancelButton="default"
                 acceptButton={
-                  <Button
-                    label="Create"
-                    paddingSize="large"
-                    colorScheme="success"
-                  />
+                  <Button.Root paddingSize="large" colorScheme="success">
+                    <Button.Label>Create</Button.Label>
+                  </Button.Root>
                 }
               />
             }

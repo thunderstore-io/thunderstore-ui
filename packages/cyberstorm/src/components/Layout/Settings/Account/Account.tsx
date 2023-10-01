@@ -1,11 +1,11 @@
 import styles from "./Account.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
-import { Button } from "../../../Button/Button";
+import * as Button from "../../../Button/";
 import { UserSettings } from "@thunderstore/dapper/types";
 import { TextInput } from "../../../TextInput/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faWarning } from "@fortawesome/pro-solid-svg-icons";
-import { Alert } from "../../../..";
+import { Alert, Icon } from "../../../..";
 
 export interface AccountProps {
   userData: UserSettings;
@@ -22,7 +22,11 @@ export function Account(props: AccountProps) {
           content={
             <div className={styles.content}>
               <Alert
-                icon={<FontAwesomeIcon fixedWidth icon={faWarning} />}
+                icon={
+                  <Icon>
+                    <FontAwesomeIcon icon={faWarning} />
+                  </Icon>
+                }
                 content={
                   "You are about to delete your account. Once deleted, it will be gone forever. Please be certain."
                 }
@@ -42,12 +46,16 @@ export function Account(props: AccountProps) {
                 <TextInput placeHolder="Verification..." />
               </div>
               <div>
-                <Button
-                  leftIcon={<FontAwesomeIcon icon={faTrash} fixedWidth />}
-                  colorScheme="danger"
-                  paddingSize="large"
-                  label="I understand this action is irrevocable and want to continue"
-                />
+                <Button.Root colorScheme="danger" paddingSize="large">
+                  <Button.Icon>
+                    <Icon>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Icon>
+                  </Button.Icon>
+                  <Button.Label>
+                    I understand this action is irrevocable and want to continue
+                  </Button.Label>
+                </Button.Root>
               </div>
             </div>
           }

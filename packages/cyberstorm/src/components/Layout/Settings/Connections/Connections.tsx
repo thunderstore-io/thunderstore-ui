@@ -8,6 +8,7 @@ import styles from "./Connections.module.css";
 import { PrivacyPolicyLink } from "../../../Links/Links";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { Switch } from "../../../Switch/Switch";
+import { Icon } from "../../../Icon/Icon";
 
 const PROVIDERS = [
   { name: "Discord", icon: faDiscord },
@@ -80,7 +81,9 @@ function Connection(props: ConnectionProps) {
     >
       <div className={styles.item}>
         <div className={styles.connectionTypeInfo}>
-          <FontAwesomeIcon icon={provider.icon} fixedWidth />
+          <Icon>
+            <FontAwesomeIcon icon={provider.icon} fixedWidth />
+          </Icon>
           <div className={styles.connectionTypeInfoName}>{provider.name}</div>
         </div>
         <div className={styles.rightSection}>
