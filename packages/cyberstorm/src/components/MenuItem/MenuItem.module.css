@@ -14,11 +14,3 @@
 .root:hover {
   background-color: var(--color-surface--6);
 }
-
-.label {
-  font-weight: 500;
-}
-
-.icon {
-  color: var(--color-text--tertiary);
-}
