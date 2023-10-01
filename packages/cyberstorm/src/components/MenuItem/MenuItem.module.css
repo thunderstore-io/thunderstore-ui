@@ -14,3 +14,15 @@
 .root:hover {
   background-color: var(--color-surface--6);
 }
+
+/* MenuItemIcon */
+.menuItemIcon {
+  width: 1em;
+  height: 1em;
+  color: var(--color-text--tertiary);
+}
+
+/* MenuItemLabel */
+.menuItemLabel {
+  font-weight: 500;
+}

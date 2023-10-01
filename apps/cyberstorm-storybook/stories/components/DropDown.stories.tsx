@@ -36,20 +36,20 @@ const defaultArgs = {
 
 const content: ReactElement<MenuItemProps>[] = [
   <MenuItem.Root key={1}>
-    <MenuItem.Icon>
+    <MenuItem.MenuItemIcon>
       <Icon>
         <FontAwesomeIcon icon={faStar} />
       </Icon>
-    </MenuItem.Icon>
-    <MenuItem.Label>New</MenuItem.Label>
+    </MenuItem.MenuItemIcon>
+    <MenuItem.MenuItemLabel>New</MenuItem.MenuItemLabel>
   </MenuItem.Root>,
   <MenuItem.Root key={2}>
-    <MenuItem.Icon>
+    <MenuItem.MenuItemIcon>
       <Icon>
         <FontAwesomeIcon icon={faThumbtack} />
       </Icon>
-    </MenuItem.Icon>
-    <MenuItem.Label>New</MenuItem.Label>
+    </MenuItem.MenuItemIcon>
+    <MenuItem.MenuItemLabel>New</MenuItem.MenuItemLabel>
   </MenuItem.Root>,
   <Button.Root style={{ minWidth: "100%" }} key={3}>
     <Button.ButtonLabel>Nabbula</Button.ButtonLabel>

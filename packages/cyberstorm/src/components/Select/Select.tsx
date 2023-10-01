@@ -95,8 +95,8 @@ const mapSelectData = (options: SelectOption[]) => {
   return options.map((option, index) => (
     <RadixSelect.Item value={option.value} key={index} asChild>
       <MenuItem.Root>
-        <MenuItem.Icon>{option.leftIcon}</MenuItem.Icon>
-        <MenuItem.Label>{option.label}</MenuItem.Label>
+        <MenuItem.MenuItemIcon>{option.leftIcon}</MenuItem.MenuItemIcon>
+        <MenuItem.MenuItemLabel>{option.label}</MenuItem.MenuItemLabel>
       </MenuItem.Root>
     </RadixSelect.Item>
   ));

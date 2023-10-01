@@ -52,7 +52,11 @@ export {
 } from "./components/Links/Links";
 export { Markdown } from "./components/Markdown/Markdown";
 export * as MenuItem from "./components/MenuItem/";
-export type { MenuItemProps } from "./components/MenuItem/";
+export type {
+  MenuItemProps,
+  MenuItemIconProps,
+  MenuItemLabelProps,
+} from "./components/MenuItem/";
 export { MetaItem, type MetaItemProps } from "./components/MetaItem/MetaItem";
 export {
   MetaInfoItem,
