@@ -7,19 +7,13 @@ import React, {
 } from "react";
 import styles from "./Button.module.css";
 
-interface _ButtonProps extends _PlainButtonProps {
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-  type?: "button" | "submit" | "reset";
-}
-
-interface _PlainButtonProps {
-  label?: string;
+export interface ButtonProps {
+  children?: ReactNode | ReactNode[];
+  plain?: boolean;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   iconAlignment?: "default" | "side";
-  fontSize?: "small" | "medium" | "large" | "huge";
   paddingSize?: "none" | "small" | "medium" | "mediumSquare" | "large" | "huge";
-  fontWeight?: "600" | "700" | "800";
   colorScheme?:
     | "danger"
     | "default"
@@ -39,36 +33,50 @@ interface _PlainButtonProps {
     | "transparentTertiary"
     | "transparentAccent"
     | "transparentPrimary";
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  onMouseOver?: MouseEventHandler<HTMLElement>;
+  onMouseOut?: MouseEventHandler<HTMLElement>;
+  style?: { [key: string]: string };
+  type?: "button" | "submit" | "reset";
 }
-
-export type ButtonProps = _ButtonProps &
-  Omit<React.HTMLProps<HTMLButtonElement>, keyof _ButtonProps>;
-
-export type PlainButtonProps = _PlainButtonProps &
-  Omit<React.HTMLProps<HTMLDivElement>, keyof _PlainButtonProps>;
 
 /**
  * Cyberstorm Button component
  */
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (props: PropsWithChildren<ButtonProps>, forwardedRef) => {
-    const {
-      label,
-      leftIcon,
-      rightIcon,
-      type = "button",
-      colorScheme = "default",
-      onClick,
-      fontSize = "medium",
-      paddingSize = "medium",
-      fontWeight = "700",
-      iconAlignment = "default",
-      ...forwardedProps
-    } = props;
+const Button = React.forwardRef<
+  HTMLButtonElement | HTMLDivElement,
+  ButtonProps
+>((props: PropsWithChildren<ButtonProps>, forwardedRef) => {
+  const {
+    children,
+    plain = false,
+    type = "button",
+    colorScheme = "default",
+    onClick,
+    paddingSize = "medium",
+    iconAlignment = "default",
+    ...forwardedProps
+  } = props;
 
-    const fallbackRef = useRef(null);
-    const ref = forwardedRef || fallbackRef;
+  const fallbackRef = useRef(null);
 
+  if (plain) {
+    const fRef = forwardedRef as React.ForwardedRef<HTMLDivElement>;
+    const ref = fRef || fallbackRef;
+    return (
+      <div
+        {...forwardedProps}
+        ref={ref}
+        className={`${styles.root} ${getIconAlignment(
+          iconAlignment
+        )} ${getStyle(colorScheme)} ${getPaddingSize(paddingSize)}`}
+      >
+        {children}
+      </div>
+    );
+  } else {
+    const fRef = forwardedRef as React.ForwardedRef<HTMLButtonElement>;
+    const ref = fRef || fallbackRef;
     return (
       <button
         {...forwardedProps}
@@ -76,72 +84,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         type={type}
         className={`${styles.root} ${getIconAlignment(
           iconAlignment
-        )} ${getStyle(colorScheme)} ${getFontSize(fontSize)} ${getPaddingSize(
-          paddingSize
-        )}`}
+        )} ${getStyle(colorScheme)} ${getPaddingSize(paddingSize)}`}
         onClick={onClick}
       >
-        {leftIcon ? <div className={styles.leftIcon}>{leftIcon}</div> : null}
-        {label ? (
-          <div className={`${styles.label} ${getFontWeight(fontWeight)}`}>
-            {label}
-          </div>
-        ) : null}
-        {rightIcon ? <div className={styles.rightIcon}>{rightIcon}</div> : null}
+        {children}
       </button>
     );
   }
-);
-
-export const PlainButton = React.forwardRef<HTMLDivElement, PlainButtonProps>(
-  (props: PropsWithChildren<PlainButtonProps>, forwardedRef) => {
-    const {
-      label,
-      leftIcon,
-      rightIcon,
-      colorScheme = "default",
-      fontSize = "medium",
-      paddingSize = "medium",
-      fontWeight = "700",
-      iconAlignment = "default",
-      ...forwardedProps
-    } = props;
-
-    const fallbackRef = useRef(null);
-    const ref = forwardedRef || fallbackRef;
-
-    return (
-      <div
-        {...forwardedProps}
-        ref={ref}
-        className={`${styles.root} ${getIconAlignment(
-          iconAlignment
-        )} ${getStyle(colorScheme)} ${getFontSize(fontSize)} ${getPaddingSize(
-          paddingSize
-        )}`}
-      >
-        {leftIcon}
-        {label ? (
-          <div
-            className={`${styles.label} ${getFontSize(
-              fontSize
-            )} ${getFontWeight(fontWeight)}`}
-          >
-            {label ? (
-              <div className={`${styles.label} ${getFontWeight(fontWeight)}`}>
-                {label}
-              </div>
-            ) : null}
-          </div>
-        ) : null}
-        {rightIcon}
-      </div>
-    );
-  }
-);
+});
 
 Button.displayName = "Button";
-PlainButton.displayName = "PlainButton";
 
 const getStyle = (scheme: string) => {
   return {
@@ -184,19 +136,5 @@ const getIconAlignment = (scheme: string) => {
   }[scheme];
 };
 
-const getFontSize = (scheme: string) => {
-  return {
-    small: styles.font__small,
-    medium: styles.font__medium,
-    large: styles.font__large,
-    huge: styles.font__huge,
-  }[scheme];
-};
-
-const getFontWeight = (scheme: string) => {
-  return {
-    "600": styles.fontWeight__600,
-    "700": styles.fontWeight__700,
-    "800": styles.fontWeight__800,
-  }[scheme];
-};
+const Root = Button;
+export { Root };
