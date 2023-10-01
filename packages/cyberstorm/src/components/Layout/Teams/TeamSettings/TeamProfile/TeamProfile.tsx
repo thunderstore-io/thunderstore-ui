@@ -37,11 +37,11 @@ export function TeamProfile(props: TeamProfileProps) {
                   paddingSize="mediumSquare"
                   colorScheme="transparentDanger"
                 >
-                  <Button.Icon>
+                  <Button.ButtonIcon>
                     <Icon>
                       <FontAwesomeIcon icon={faXmark} />
                     </Icon>
-                  </Button.Icon>
+                  </Button.ButtonIcon>
                 </Button.Root>
               </div>
             </div>
@@ -62,7 +62,7 @@ export function TeamProfile(props: TeamProfileProps) {
             <div className={styles.avatarContent}>
               <ModIcon src={teamData.imageSource} />
               <div>
-                <Button.Root><Button.Label>Upload picture</Button.Label></Button.Root>
+                <Button.Root><Button.ButtonLabel>Upload picture</Button.ButtonLabel></Button.Root>
               </div>
             </div>
           }

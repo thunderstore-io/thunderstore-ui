@@ -30,12 +30,12 @@ export function BetaLoginLayout(props: Props) {
               <div className={styles.loginButton}>
                 <a href={props.discordAuthUrl}>
                   <Button.Root plain colorScheme="discord" paddingSize="large">
-                    <Button.Icon>
+                    <Button.ButtonIcon>
                       <Icon>
                         <FontAwesomeIcon icon={faDiscord} />
                       </Icon>
-                    </Button.Icon>
-                    <Button.Label>Discord</Button.Label>
+                    </Button.ButtonIcon>
+                    <Button.ButtonLabel>Discord</Button.ButtonLabel>
                   </Button.Root>
                 </a>
               </div>
@@ -44,12 +44,12 @@ export function BetaLoginLayout(props: Props) {
               <div className={styles.loginButton}>
                 <a href={props.githubAuthUrl}>
                   <Button.Root plain colorScheme="github" paddingSize="large">
-                    <Button.Icon>
+                    <Button.ButtonIcon>
                       <Icon>
                         <FontAwesomeIcon icon={faGithub} />
                       </Icon>
-                    </Button.Icon>
-                    <Button.Label>GitHub</Button.Label>
+                    </Button.ButtonIcon>
+                    <Button.ButtonLabel>GitHub</Button.ButtonLabel>
                   </Button.Root>
                 </a>
               </div>
@@ -58,12 +58,12 @@ export function BetaLoginLayout(props: Props) {
               <div className={styles.loginButton}>
                 <a href={props.overwolfAuthUrl}>
                   <Button.Root plain colorScheme="overwolf" paddingSize="large">
-                    <Button.Icon>
+                    <Button.ButtonIcon>
                       <Icon>
                         <OverwolfLogo />
                       </Icon>
-                    </Button.Icon>
-                    <Button.Label>Overwolf</Button.Label>
+                    </Button.ButtonIcon>
+                    <Button.ButtonLabel>Overwolf</Button.ButtonLabel>
                   </Button.Root>
                 </a>
               </div>
@@ -74,7 +74,7 @@ export function BetaLoginLayout(props: Props) {
             Want early access? Thunderstore beta is currently available for
             Thunderstore Premium users only.
             <Button.Root paddingSize="huge" colorScheme="primary">
-              <Button.Label>Go Premium</Button.Label>
+              <Button.ButtonLabel>Go Premium</Button.ButtonLabel>
             </Button.Root>
           </div>
           <a href="https://thunderstore.io" className={styles.mainPageLink}>
@@ -117,7 +117,7 @@ export function BetaLoginLayout(props: Props) {
           </div>
           <div>
             <Button.Root paddingSize="large" colorScheme="specialPurple">
-              <Button.Label>Go Premium</Button.Label>
+              <Button.ButtonLabel>Go Premium</Button.ButtonLabel>
             </Button.Root>
           </div>
         </div>

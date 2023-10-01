@@ -24,12 +24,12 @@ const meta = {
 const defaultArgs = {
   trigger: (
     <Button.Root>
-      <Button.Label>Developers</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>Developers</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
   ),
 };
@@ -52,12 +52,12 @@ const content: ReactElement<MenuItemProps>[] = [
     <MenuItem.Label>New</MenuItem.Label>
   </MenuItem.Root>,
   <Button.Root style={{ minWidth: "100%" }} key={3}>
-    <Button.Label>Nabbula</Button.Label>
-    <Button.Icon>
+    <Button.ButtonLabel>Nabbula</Button.ButtonLabel>
+    <Button.ButtonIcon>
       <Icon>
         <FontAwesomeIcon icon={faSkull} />
       </Icon>
-    </Button.Icon>
+    </Button.ButtonIcon>
   </Button.Root>,
 ];
 

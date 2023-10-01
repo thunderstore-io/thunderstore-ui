@@ -10,7 +10,7 @@ const meta = {
 const defaultArgs = {
   trigger: (
     <Button.Root>
-      <Button.Label>trigger</Button.Label>
+      <Button.ButtonLabel>trigger</Button.ButtonLabel>
     </Button.Root>
   ),
   title: "This is a dialog",

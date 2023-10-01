@@ -52,18 +52,18 @@ export function TeamsLayout() {
                 }
                 trigger={
                   <Button.Root colorScheme="primary" paddingSize="large">
-                    <Button.Label>Create team</Button.Label>
-                    <Button.Icon>
+                    <Button.ButtonLabel>Create team</Button.ButtonLabel>
+                    <Button.ButtonIcon>
                       <Icon>
                         <FontAwesomeIcon icon={faPlus} />
                       </Icon>
-                    </Button.Icon>
+                    </Button.ButtonIcon>
                   </Button.Root>
                 }
                 cancelButton="default"
                 acceptButton={
                   <Button.Root paddingSize="large" colorScheme="success">
-                    <Button.Label>Create</Button.Label>
+                    <Button.ButtonLabel>Create</Button.ButtonLabel>
                   </Button.Root>
                 }
               />

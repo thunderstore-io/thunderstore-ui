@@ -37,12 +37,12 @@ export function PackageUploadLayout() {
             additionalLeftColumnContent={
               <div>
                 <Button.Root>
-                  <Button.Label>Create Team</Button.Label>
-                  <Button.Label>
+                  <Button.ButtonLabel>Create Team</Button.ButtonLabel>
+                  <Button.ButtonLabel>
                     <Icon>
                       <FontAwesomeIcon icon={faPlus} />
                     </Icon>
-                  </Button.Label>
+                  </Button.ButtonLabel>
                 </Button.Root>
               </div>
             }
@@ -71,10 +71,10 @@ export function PackageUploadLayout() {
             content={
               <div className={styles.submit}>
                 <Button.Root colorScheme="danger">
-                  <Button.Label>Reset</Button.Label>
+                  <Button.ButtonLabel>Reset</Button.ButtonLabel>
                 </Button.Root>
                 <Button.Root colorScheme="accent">
-                  <Button.Label>Submit</Button.Label>
+                  <Button.ButtonLabel>Submit</Button.ButtonLabel>
                 </Button.Root>
               </div>
             }

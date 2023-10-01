@@ -84,12 +84,12 @@ export function PackageListLayout(props: PackageListLayoutProps) {
             />,
             <a key="meta-link" href="https://discord.thunderstore.io/">
               <Button.Root colorScheme="transparentPrimary">
-                <Button.Icon>
+                <Button.ButtonIcon>
                   <Icon>
                     <FontAwesomeIcon icon={faDiscord} />
                   </Icon>
-                </Button.Icon>
-                <Button.Label>Join our community</Button.Label>
+                </Button.ButtonIcon>
+                <Button.ButtonLabel>Join our community</Button.ButtonLabel>
               </Button.Root>
             </a>,
           ]}

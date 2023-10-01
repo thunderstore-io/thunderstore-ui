@@ -34,7 +34,7 @@ export function Header() {
                 paddingSize="large"
                 colorScheme="transparentDefault"
               >
-                <Button.Label fontSize="large">Browse</Button.Label>
+                <Button.ButtonLabel fontSize="large">Browse</Button.ButtonLabel>
               </Button.Root>
             </IndexLink>
           </li> */}
@@ -45,7 +45,9 @@ export function Header() {
                 paddingSize="large"
                 colorScheme="transparentDefault"
               >
-                <Button.Label fontSize="large">Communities</Button.Label>
+                <Button.ButtonLabel fontSize="large">
+                  Communities
+                </Button.ButtonLabel>
               </Button.Root>
             </CommunitiesLink>
           </li>
@@ -62,12 +64,12 @@ export function Header() {
           <li className={styles.navButtons}>
             <a href="/">
               <Button.Root paddingSize="large" colorScheme="specialPurple">
-                <Button.Label>Go Premium</Button.Label>
+                <Button.ButtonLabel>Go Premium</Button.ButtonLabel>
               </Button.Root>
             </a>
             <a href="/">
               <Button.Root paddingSize="large" colorScheme="accent">
-                <Button.Label>Get Manager</Button.Label>
+                <Button.ButtonLabel>Get Manager</Button.ButtonLabel>
               </Button.Root>
             </a>
           </li>
@@ -78,11 +80,11 @@ export function Header() {
                   paddingSize="mediumSquare"
                   colorScheme="transparentAccent"
                 >
-                  <Button.Icon>
+                  <Button.ButtonIcon>
                     <Icon>
                       <FontAwesomeIcon icon={faUpload} />
                     </Icon>
-                  </Button.Icon>
+                  </Button.ButtonIcon>
                 </Button.Root>
               </Tooltip>
             </PackageUploadLink>

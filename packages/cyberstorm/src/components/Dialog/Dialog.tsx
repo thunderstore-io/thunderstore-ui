@@ -49,7 +49,7 @@ export function Dialog(props: DialogProps) {
   if (cancelButton === "default") {
     cancel = (
       <Button.Root paddingSize="large" colorScheme="tertiary">
-        <Button.Label>Cancel</Button.Label>
+        <Button.ButtonLabel>Cancel</Button.ButtonLabel>
       </Button.Root>
     );
   } else if (cancelButton) {
@@ -91,7 +91,7 @@ export function Dialog(props: DialogProps) {
                         setTooltipOpen(false);
                       }}
                     >
-                      <Button.Icon>
+                      <Button.ButtonIcon>
                         <Icon>
                           <FontAwesomeIcon
                             className={styles.closeIcon}
@@ -99,7 +99,7 @@ export function Dialog(props: DialogProps) {
                             fixedWidth
                           />
                         </Icon>
-                      </Button.Icon>
+                      </Button.ButtonIcon>
                     </Button.Root>
                   </RadixDialog.Close>
                 </Tooltip>

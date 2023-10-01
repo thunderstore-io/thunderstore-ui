@@ -59,12 +59,12 @@ function SortButton(props: SortButtonProps) {
       paddingSize="medium"
       onClick={() => hook(hookParams)}
     >
-      <Button.Label>{label}</Button.Label>
-      <Button.Label>
+      <Button.ButtonLabel>{label}</Button.ButtonLabel>
+      <Button.ButtonLabel>
         <Icon>
           <FontAwesomeIcon icon={icon} className={iconClass} />
         </Icon>
-      </Button.Label>
+      </Button.ButtonLabel>
     </Button.Root>
   );
 }
@@ -112,7 +112,7 @@ export function DataTable(props: DataTableProps) {
                 colorScheme="transparentTertiary"
                 paddingSize="large"
               >
-                <Button.Label>{header.value}</Button.Label>
+                <Button.ButtonLabel>{header.value}</Button.ButtonLabel>
               </Button.Root>
             ) : (
               <SortButton

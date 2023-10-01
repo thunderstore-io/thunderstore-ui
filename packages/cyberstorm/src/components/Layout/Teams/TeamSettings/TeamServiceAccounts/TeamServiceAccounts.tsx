@@ -42,12 +42,12 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
               showFooterBorder
               trigger={
                 <Button.Root paddingSize="large" colorScheme="primary">
-                  <Button.Label>Add Service Account</Button.Label>
-                  <Button.Icon>
+                  <Button.ButtonLabel>Add Service Account</Button.ButtonLabel>
+                  <Button.ButtonIcon>
                     <Icon>
                       <FontAwesomeIcon icon={faPlus} />
                     </Icon>
-                  </Button.Icon>
+                  </Button.ButtonIcon>
                 </Button.Root>
               }
               content={
@@ -119,14 +119,14 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
                       setServiceAccountAdded(false);
                     }}
                   >
-                    <Button.Label>Close</Button.Label>
+                    <Button.ButtonLabel>Close</Button.ButtonLabel>
                   </Button.Root>
                 ) : (
                   <Button.Root
                     colorScheme="success"
                     onClick={() => setServiceAccountAdded(!serviceAccountAdded)}
                   >
-                    <Button.Label>Add Service Account</Button.Label>
+                    <Button.ButtonLabel>Add Service Account</Button.ButtonLabel>
                   </Button.Root>
                 )
               }

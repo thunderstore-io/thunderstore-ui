@@ -17,12 +17,12 @@ export const DevelopersDropDown = () => (
     triggerColorScheme="transparentDefault"
     trigger={
       <Button.Root paddingSize="large">
-        <Button.Label fontSize="large">Developers</Button.Label>
-        <Button.Icon>
+        <Button.ButtonLabel fontSize="large">Developers</Button.ButtonLabel>
+        <Button.ButtonIcon>
           <Icon>
             <FontAwesomeIcon icon={faCaretDown} />
           </Icon>
-        </Button.Icon>
+        </Button.ButtonIcon>
       </Button.Root>
     }
     content={[

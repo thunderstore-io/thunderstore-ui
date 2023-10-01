@@ -41,7 +41,7 @@ export function TeamLeaveAndDisband(props: TeamLeaveAndDisbandProps) {
             </p>
             <div>
               <Button.Root colorScheme="danger" paddingSize="large">
-                <Button.Label>Leave team</Button.Label>
+                <Button.ButtonLabel>Leave team</Button.ButtonLabel>
               </Button.Root>
             </div>
           </div>
@@ -81,7 +81,7 @@ export function TeamLeaveAndDisband(props: TeamLeaveAndDisbandProps) {
             </div>
             <div>
               <Button.Root colorScheme="danger" paddingSize="large">
-                <Button.Label>Disband team</Button.Label>
+                <Button.ButtonLabel>Disband team</Button.ButtonLabel>
               </Button.Root>
             </div>
           </div>

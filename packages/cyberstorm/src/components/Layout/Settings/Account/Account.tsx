@@ -47,14 +47,14 @@ export function Account(props: AccountProps) {
               </div>
               <div>
                 <Button.Root colorScheme="danger" paddingSize="large">
-                  <Button.Icon>
+                  <Button.ButtonIcon>
                     <Icon>
                       <FontAwesomeIcon icon={faTrash} />
                     </Icon>
-                  </Button.Icon>
-                  <Button.Label>
+                  </Button.ButtonIcon>
+                  <Button.ButtonLabel>
                     I understand this action is irrevocable and want to continue
-                  </Button.Label>
+                  </Button.ButtonLabel>
                 </Button.Root>
               </div>
             </div>

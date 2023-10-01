@@ -301,3 +301,47 @@
 .padding__huge:active {
   --button-padding-block: calc(var(--space--16) + var(--space--2)) calc(var(--space--16) - var(--space--2));
 }
+
+/* Button Icon */
+
+.ButtonIcon {
+  width: 1em;
+  height: 1em;
+}
+
+/* Button Label */
+
+.ButtonLabel {
+  font-weight: var(--font-weight);
+  font-size: var(--font-size);
+  line-height: 1;
+  text-align: center;
+}
+
+.ButtonLabel__font__small {
+  --font-size: var(--font-size--s);
+}
+
+.ButtonLabel__font__medium {
+  --font-size: var(--font-size--m);
+}
+
+.ButtonLabel__font__large {
+  --font-size: var(--font-size--l);
+}
+
+.ButtonLabel__font__huge {
+  --font-size: 1.375rem;
+}
+
+.ButtonLabel__fontWeight__600 {
+  --font-weight: 600;
+}
+
+.ButtonLabel__fontWeight__700 {
+  --font-weight: 700;
+}
+
+.ButtonLabel__fontWeight__800 {
+  --font-weight: 800;
+}

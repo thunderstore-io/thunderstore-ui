@@ -60,39 +60,39 @@ export function LoginForm() {
               </div>
             </div>
             <Button.Root type="submit" paddingSize="huge" colorScheme="accent">
-              <Button.Label>Login</Button.Label>
+              <Button.ButtonLabel>Login</Button.ButtonLabel>
             </Button.Root>
           </form>
           <div className={styles.descriptor}>Or continue with</div>
           <div className={styles.continueButtons}>
             <div className={styles.continueButton}>
               <Button.Root colorScheme="discord" paddingSize="large">
-                <Button.Icon>
+                <Button.ButtonIcon>
                   <Icon>
                     <FontAwesomeIcon icon={faDiscord} />
                   </Icon>
-                </Button.Icon>
-                <Button.Label>Discord</Button.Label>
+                </Button.ButtonIcon>
+                <Button.ButtonLabel>Discord</Button.ButtonLabel>
               </Button.Root>
             </div>
             <div className={styles.continueButton}>
               <Button.Root colorScheme="github" paddingSize="large">
-                <Button.Icon>
+                <Button.ButtonIcon>
                   <Icon>
                     <FontAwesomeIcon icon={faGithub} />
                   </Icon>
-                </Button.Icon>
-                <Button.Label>GitHub</Button.Label>
+                </Button.ButtonIcon>
+                <Button.ButtonLabel>GitHub</Button.ButtonLabel>
               </Button.Root>
             </div>
             <div className={styles.continueButton}>
               <Button.Root colorScheme="overwolf" paddingSize="large">
-                <Button.Icon>
+                <Button.ButtonIcon>
                   <Icon>
                     <OverwolfLogo />
                   </Icon>
-                </Button.Icon>
-                <Button.Label>Overwolf</Button.Label>
+                </Button.ButtonIcon>
+                <Button.ButtonLabel>Overwolf</Button.ButtonLabel>
               </Button.Root>
             </div>
           </div>

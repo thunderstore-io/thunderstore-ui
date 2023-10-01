@@ -21,148 +21,148 @@ const Template: StoryFn<typeof Button> = (args) => (
     }}
   >
     <Button.Root colorScheme="default" {...args}>
-      <Button.Label>default</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>default</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="primary" {...args}>
-      <Button.Label>primary</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>primary</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="tertiary" {...args}>
-      <Button.Label>tertiary</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>tertiary</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="accent" {...args}>
-      <Button.Label>accent</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>accent</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="fancyAccent" {...args}>
-      <Button.Label>fancyAccent</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>fancyAccent</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="success" {...args}>
-      <Button.Label>success</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>success</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="warning" {...args}>
-      <Button.Label>warning</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>warning</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="danger" {...args}>
-      <Button.Label>danger</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>danger</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="specialGreen" {...args}>
-      <Button.Label>specialGreen</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>specialGreen</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="specialPurple" {...args}>
-      <Button.Label>specialPurple</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>specialPurple</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="transparentDefault" {...args}>
-      <Button.Label>transparentDefault</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>transparentDefault</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="transparentPrimary" {...args}>
-      <Button.Label>transparentPrimary</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>transparentPrimary</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="transparentTertiary" {...args}>
-      <Button.Label>transparentTertiary</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>transparentTertiary</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="transparentAccent" {...args}>
-      <Button.Label>transparentAccent</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>transparentAccent</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="transparentDanger" {...args}>
-      <Button.Label>transparentDanger</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>transparentDanger</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="discord" {...args}>
-      <Button.Label>discord</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>discord</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="github" {...args}>
-      <Button.Label>github</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>github</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
     <Button.Root colorScheme="overwolf" {...args}>
-      <Button.Label>overwolf</Button.Label>
-      <Button.Icon>
+      <Button.ButtonLabel>overwolf</Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
-      </Button.Icon>
+      </Button.ButtonIcon>
     </Button.Root>
   </div>
 );

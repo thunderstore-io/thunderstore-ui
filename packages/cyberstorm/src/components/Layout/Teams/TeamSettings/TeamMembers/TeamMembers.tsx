@@ -68,12 +68,12 @@ export function TeamMemberList(props: TeamMemberListProps) {
             key={`action_${index}`}
             trigger={
               <Button.Root colorScheme="danger" paddingSize="large">
-                <Button.Icon>
+                <Button.ButtonIcon>
                   <Icon>
                     <FontAwesomeIcon icon={faTrash} />
                   </Icon>
-                </Button.Icon>
-                <Button.Label>Kick</Button.Label>
+                </Button.ButtonIcon>
+                <Button.ButtonLabel>Kick</Button.ButtonLabel>
               </Button.Root>
             }
             content={
@@ -89,7 +89,7 @@ export function TeamMemberList(props: TeamMemberListProps) {
             }
             acceptButton={
               <Button.Root colorScheme="danger" paddingSize="large">
-                <Button.Label>Kick member</Button.Label>
+                <Button.ButtonLabel>Kick member</Button.ButtonLabel>
               </Button.Root>
             }
             cancelButton="default"
@@ -120,12 +120,12 @@ export function TeamMembers(props: TeamMembersProps) {
       title="Add Member"
       trigger={
         <Button.Root colorScheme="primary" paddingSize="large">
-          <Button.Label>Add Member</Button.Label>
-          <Button.Icon>
+          <Button.ButtonLabel>Add Member</Button.ButtonLabel>
+          <Button.ButtonIcon>
             <Icon>
               <FontAwesomeIcon icon={faPlus} />
             </Icon>
-          </Button.Icon>
+          </Button.ButtonIcon>
         </Button.Root>
       }
       showFooterBorder
@@ -151,7 +151,7 @@ export function TeamMembers(props: TeamMembersProps) {
       }
       acceptButton={
         <Button.Root colorScheme="success">
-          <Button.Label>Add Member</Button.Label>
+          <Button.ButtonLabel>Add Member</Button.ButtonLabel>
         </Button.Root>
       }
     />

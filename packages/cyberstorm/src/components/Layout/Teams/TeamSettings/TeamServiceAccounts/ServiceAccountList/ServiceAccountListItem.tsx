@@ -18,12 +18,12 @@ export function ServiceAccountListItem(props: ServiceAccountListItemProps) {
       <div className={styles.details}>{lastUsed}</div>
       <div className={styles.action}>
         <Button.Root colorScheme="danger">
-          <Button.Icon>
+          <Button.ButtonIcon>
             <Icon>
               <FontAwesomeIcon icon={faTrash} />
             </Icon>
-          </Button.Icon>
-          <Button.Label>Remove</Button.Label>
+          </Button.ButtonIcon>
+          <Button.ButtonLabel>Remove</Button.ButtonLabel>
         </Button.Root>
       </div>
     </div>

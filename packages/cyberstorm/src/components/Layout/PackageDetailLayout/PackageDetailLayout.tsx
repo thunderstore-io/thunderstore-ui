@@ -78,12 +78,12 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
     packageDetailsMeta.push(
       <TeamLink key="1" team={packageData.team.name}>
         <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
-          <Button.Icon>
+          <Button.ButtonIcon>
             <Icon>
               <FontAwesomeIcon icon={faUsers} />
             </Icon>
-          </Button.Icon>
-          <Button.Label>{packageData.team.name}</Button.Label>
+          </Button.ButtonIcon>
+          <Button.ButtonLabel>{packageData.team.name}</Button.ButtonLabel>
         </Button.Root>
       </TeamLink>
     );
@@ -92,12 +92,12 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
     packageDetailsMeta.push(
       <a key="2" href={packageData.gitHubLink}>
         <Button.Root>
-          <Button.Label>GitHub</Button.Label>
-          <Button.Icon>
+          <Button.ButtonLabel>GitHub</Button.ButtonLabel>
+          <Button.ButtonIcon>
             <Icon>
               <FontAwesomeIcon icon={faGithub} />
             </Icon>
-          </Button.Icon>
+          </Button.ButtonIcon>
         </Button.Root>
       </a>
     );
@@ -131,17 +131,17 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               content={<PackageManagementForm />}
               acceptButton={
                 <Button.Root paddingSize="large" colorScheme="success">
-                  <Button.Label>Save changes</Button.Label>
+                  <Button.ButtonLabel>Save changes</Button.ButtonLabel>
                 </Button.Root>
               }
               additionalFooterContent={
                 packageData.isDeprecated ? (
                   <Button.Root paddingSize="large" colorScheme="default">
-                    <Button.Label>Undeprecate</Button.Label>
+                    <Button.ButtonLabel>Undeprecate</Button.ButtonLabel>
                   </Button.Root>
                 ) : (
                   <Button.Root paddingSize="large" colorScheme="warning">
-                    <Button.Label>Deprecate</Button.Label>
+                    <Button.ButtonLabel>Deprecate</Button.ButtonLabel>
                   </Button.Root>
                 )
               }
@@ -150,23 +150,23 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
                   colorScheme="transparentDefault"
                   paddingSize="large"
                 >
-                  <Button.Icon>
+                  <Button.ButtonIcon>
                     <Icon>
                       <FontAwesomeIcon icon={faCog} />
                     </Icon>
-                  </Button.Icon>
-                  <Button.Label>Manage</Button.Label>
+                  </Button.ButtonIcon>
+                  <Button.ButtonLabel>Manage</Button.ButtonLabel>
                 </Button.Root>
               }
             />
             <a className={styles.installButton} href="/">
               <Button.Root plain paddingSize="huge" colorScheme="fancyAccent">
-                <Button.Icon>
+                <Button.ButtonIcon>
                   <ThunderstoreLogo />
-                </Button.Icon>
-                <Button.Label fontSize="huge" fontWeight="800">
+                </Button.ButtonIcon>
+                <Button.ButtonLabel fontSize="huge" fontWeight="800">
                   Install
-                </Button.Label>
+                </Button.ButtonLabel>
               </Button.Root>
             </a>
           </div>
@@ -181,37 +181,37 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <div className={styles.metaButtonWrapper}>
             <a href="/" className={styles.metaDownloadButton}>
               <Button.Root plain colorScheme="primary" paddingSize="medium">
-                <Button.Icon>
+                <Button.ButtonIcon>
                   <FontAwesomeIcon icon={faDownload} />
-                </Button.Icon>
-                <Button.Label>Download</Button.Label>
+                </Button.ButtonIcon>
+                <Button.ButtonLabel>Download</Button.ButtonLabel>
               </Button.Root>
             </a>
             <Tooltip content="Donate to author" side="bottom">
               <Button.Root colorScheme="primary" paddingSize="mediumSquare">
-                <Button.Icon>
+                <Button.ButtonIcon>
                   <Icon>
                     <FontAwesomeIcon icon={faDonate} />
                   </Icon>
-                </Button.Icon>
+                </Button.ButtonIcon>
               </Button.Root>
             </Tooltip>
             <Tooltip content="Like" side="bottom">
               <Button.Root colorScheme="primary" paddingSize="mediumSquare">
-                <Button.Icon>
+                <Button.ButtonIcon>
                   <Icon>
                     <FontAwesomeIcon icon={faThumbsUp} />
                   </Icon>
-                </Button.Icon>
+                </Button.ButtonIcon>
               </Button.Root>
             </Tooltip>
             <Tooltip content="Report" side="bottom">
               <Button.Root colorScheme="primary" paddingSize="mediumSquare">
-                <Button.Icon>
+                <Button.ButtonIcon>
                   <Icon>
                     <FontAwesomeIcon icon={faFlag} />
                   </Icon>
-                </Button.Icon>
+                </Button.ButtonIcon>
               </Button.Root>
             </Tooltip>
           </div>

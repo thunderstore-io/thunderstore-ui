@@ -78,7 +78,7 @@ export function CopyButton(props: CopyButtonProps) {
             onMouseOver={() => setIsTooltipOpen(true)}
             onMouseOut={() => setIsTooltipOpen(false)}
           >
-            <Button.Icon>
+            <Button.ButtonIcon>
               <Icon>
                 <FontAwesomeIcon
                   fixedWidth
@@ -86,7 +86,7 @@ export function CopyButton(props: CopyButtonProps) {
                   className={wasRecentlyCopied ? styles.checkmark : styles.copy}
                 />
               </Icon>
-            </Button.Icon>
+            </Button.ButtonIcon>
           </Button.Root>
         </div>
       </Tooltip>

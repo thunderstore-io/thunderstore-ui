@@ -43,11 +43,11 @@ export const UserDropDown = () => {
           <AvatarButton src={userData.user.imageSource} />
         ) : (
           <Button.Root>
-            <Button.Icon>
+            <Button.ButtonIcon>
               <Icon>
                 <FontAwesomeIcon icon={faUser} />
               </Icon>
-            </Button.Icon>
+            </Button.ButtonIcon>
           </Button.Root>
         )
       }

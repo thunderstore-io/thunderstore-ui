@@ -25,7 +25,7 @@ export function ServiceAccountList(props: ServiceAccountListProps) {
             key={`${serviceAccount.name}_${index}`}
             trigger={
               <Button.Root colorScheme="danger" paddingSize="large">
-                <Button.Label>Remove</Button.Label>
+                <Button.ButtonLabel>Remove</Button.ButtonLabel>
               </Button.Root>
             }
             content={
@@ -55,7 +55,7 @@ export function ServiceAccountList(props: ServiceAccountListProps) {
             }
             acceptButton={
               <Button.Root colorScheme="danger" paddingSize="large">
-                <Button.Label>Remove service account</Button.Label>
+                <Button.ButtonLabel>Remove service account</Button.ButtonLabel>
               </Button.Root>
             }
             cancelButton="default"

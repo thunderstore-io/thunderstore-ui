@@ -1,7 +1,11 @@
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false;
 export * as Button from "./components/Button/";
-export type { ButtonProps, IconProps } from "./components/Button/";
+export type {
+  ButtonProps,
+  ButtonIconProps,
+  ButtonLabelProps,
+} from "./components/Button/";
 export { CodeBox, type CodeBoxProps } from "./components/CodeBox/CodeBox";
 export {
   BreadCrumbs,

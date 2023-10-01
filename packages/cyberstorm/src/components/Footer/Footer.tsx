@@ -129,12 +129,14 @@ export function Footer() {
                   </p>
                   <a href="/" className={styles.adButton}>
                     <Button.Root plain colorScheme="accent" paddingSize="large">
-                      <Button.Label fontSize="large">Get Manager</Button.Label>
-                      <Button.Icon>
+                      <Button.ButtonLabel fontSize="large">
+                        Get Manager
+                      </Button.ButtonLabel>
+                      <Button.ButtonIcon>
                         <Icon>
                           <FontAwesomeIcon icon={faArrowUpRight} />
                         </Icon>
-                      </Button.Icon>
+                      </Button.ButtonIcon>
                     </Button.Root>
                   </a>
                 </div>

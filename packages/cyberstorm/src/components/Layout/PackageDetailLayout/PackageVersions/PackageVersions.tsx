@@ -70,7 +70,7 @@ function getDownload(versionNumber: string) {
         console.log("Download " + versionNumber);
       }}
     >
-      <Button.Label>Download</Button.Label>
+      <Button.ButtonLabel>Download</Button.ButtonLabel>
     </Button.Root>
   );
 }
@@ -84,7 +84,7 @@ function getInstall(versionNumber: string) {
         console.log("Install " + versionNumber);
       }}
     >
-      <Button.Label>Install</Button.Label>
+      <Button.ButtonLabel>Install</Button.ButtonLabel>
     </Button.Root>
   );
 }

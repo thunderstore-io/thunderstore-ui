@@ -101,12 +101,14 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
                   paddingSize="none"
                   colorScheme="transparentPrimary"
                 >
-                  <Button.Label fontWeight="600">See all</Button.Label>
-                  <Button.Icon>
+                  <Button.ButtonLabel fontWeight="600">
+                    See all
+                  </Button.ButtonLabel>
+                  <Button.ButtonIcon>
                     <Icon>
                       <FontAwesomeIcon icon={faCaretRight} />
                     </Icon>
-                  </Button.Icon>
+                  </Button.ButtonIcon>
                 </Button.Root>
               </div>
             }

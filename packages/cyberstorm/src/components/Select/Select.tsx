@@ -61,10 +61,10 @@ export function Select(props: SelectProps) {
             colorScheme={colorScheme}
             paddingSize="large"
           >
-            <Button.Label fontSize={triggerFontSize}>
+            <Button.ButtonLabel fontSize={triggerFontSize}>
               {options?.find((o) => o.value === value)?.label ?? placeholder}
-            </Button.Label>
-            <Button.Icon>{icon}</Button.Icon>
+            </Button.ButtonLabel>
+            <Button.ButtonIcon>{icon}</Button.ButtonIcon>
           </Button.Root>
         </RadixSelect.Trigger>
 

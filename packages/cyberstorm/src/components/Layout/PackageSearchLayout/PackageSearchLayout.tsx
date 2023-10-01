@@ -190,7 +190,9 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
                   border-width="0px"
                   onClick={clearFilters}
                 >
-                  <Button.Label fontSize="small">Clear all</Button.Label>
+                  <Button.ButtonLabel fontSize="small">
+                    Clear all
+                  </Button.ButtonLabel>
                 </Button.Root>
               </div>
             ) : null}

@@ -30,7 +30,7 @@ export function Profile(props: ProfileProps) {
               />
               <div>
                 <Button.Root>
-                  <Button.Label>Upload picture</Button.Label>
+                  <Button.ButtonLabel>Upload picture</Button.ButtonLabel>
                 </Button.Root>
               </div>
             </div>
@@ -52,7 +52,7 @@ export function Profile(props: ProfileProps) {
         />
         <div className={styles.save}>
           <Button.Root>
-            <Button.Label>Save changes</Button.Label>
+            <Button.ButtonLabel>Save changes</Button.ButtonLabel>
           </Button.Root>
         </div>
       </div>
