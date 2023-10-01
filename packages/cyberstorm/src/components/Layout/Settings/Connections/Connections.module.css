@@ -42,16 +42,15 @@
   background-color: var(--color-surface--1);
 }
 
-.connectionTypeInfo > svg {
-  min-width: 40px;
-  min-height: 40px;
-}
-
 .connectionTypeInfo {
   display: flex;
   gap: var(--space--16);
   align-items: center;
   justify-content: center;
+}
+
+.connectionTypeInfoIcon {
+  width: 2.5rem;
 }
 
 .connectionTypeInfoName {

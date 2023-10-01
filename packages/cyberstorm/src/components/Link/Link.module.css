@@ -15,10 +15,14 @@
 }
 
 .leftIcon {
+  display: flex;
+  align-items: center;
   margin-right: var(--space--8);
 }
 
 .rightIcon {
+  display: flex;
+  align-items: center;
   margin-left: var(--space--8);
 }
 

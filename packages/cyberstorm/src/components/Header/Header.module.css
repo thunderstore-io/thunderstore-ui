@@ -44,7 +44,8 @@
 }
 
 .logoWrapper {
-  width: 26px;
+  width: 1.655rem;
+  height: 1.463rem;
   margin: 0 var(--space--18);
   color: var(--color-highlight);
 }

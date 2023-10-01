@@ -16,10 +16,7 @@
 
 .icon {
   display: flex;
-}
-
-.icon > svg {
-  width: auto !important;
+  height: 1em;
 }
 
 .label {

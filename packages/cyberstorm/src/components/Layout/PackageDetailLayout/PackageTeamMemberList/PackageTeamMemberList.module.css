@@ -43,11 +43,18 @@
   line-height: var(--line-height--m);
 }
 
+.teamLinkIcon {
+  width: 0.75em;
+}
+
 .teamLink:hover {
   color: var(--color-highlight--hover);
 }
 
 .crown {
+  display: inline-flex;
+  width: 1em;
+  height: 1em;
   margin-left: var(--space--4);
   color: var(--color-crown);
 }
