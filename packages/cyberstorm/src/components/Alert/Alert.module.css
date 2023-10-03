@@ -1,6 +1,7 @@
 .root {
   display: flex;
   gap: var(--space--16);
+  align-items: center;
   width: 100%;
   padding: var(--space--16) var(--space--24);
   border-left: 3px solid var(--feature-color);
@@ -21,9 +22,9 @@
 }
 
 /* Styles for Alert's Icon */
-.icon > svg {
-  min-width: var(--space--18);
-  min-height: var(--space--18);
+.icon {
+  width: var(--space--18);
+  height: var(--space--18);
   color: var(--feature-color);
 }
 

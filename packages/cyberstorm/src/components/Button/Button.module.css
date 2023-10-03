@@ -302,9 +302,14 @@
 
 /* Button Icon */
 
-.ButtonIcon {
+.ButtonIcon__IconSize__default {
   width: 1em;
   height: 1em;
+}
+
+.ButtonIcon__IconSize__tslogo_install_button {
+  width: 1.655rem;
+  height: 1.463rem;
 }
 
 /* Button Label */

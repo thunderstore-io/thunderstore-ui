@@ -7,7 +7,7 @@ export interface MenuItemIconProps {
 
 export function MenuItemIcon(props: MenuItemIconProps) {
   const { children } = props;
-  return <div className={styles.menuItemicon}>{children}</div>;
+  return <div className={styles.menuItemIcon}>{children}</div>;
 }
 
 MenuItemIcon.displayName = "MenuItemIcon";

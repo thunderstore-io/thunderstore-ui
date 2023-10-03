@@ -161,7 +161,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
             />
             <a className={styles.installButton} href="/">
               <Button.Root plain paddingSize="huge" colorScheme="fancyAccent">
-                <Button.ButtonIcon>
+                <Button.ButtonIcon iconSize="tslogo_install_button">
                   <ThunderstoreLogo />
                 </Button.ButtonIcon>
                 <Button.ButtonLabel fontSize="huge" fontWeight="800">
