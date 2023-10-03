@@ -4,11 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Header.module.css";
 import { DevelopersDropDown } from "./DevelopersDropDown";
-import { PlainButton } from "../Button/Button";
+import * as Button from "../Button/";
 import { CommunitiesLink, IndexLink, PackageUploadLink } from "../Links/Links";
 import { Tooltip } from "../Tooltip/Tooltip";
 import { ThunderstoreLogo } from "../../svg/svg";
 import { UserDropDown } from "./UserDropDown";
+import { Icon } from "../Icon/Icon";
 
 /**
  * Horizontal navigation bar shown at the top of the site.
@@ -28,22 +29,26 @@ export function Header() {
           {/* Disabled temporarily, ref. TS-1828 */}
           {/* <li>
             <IndexLink>
-              <PlainButton
-                label="Browse"
+              <Button.Root
+                plain
                 paddingSize="large"
-                fontSize="large"
                 colorScheme="transparentDefault"
-              />
+              >
+                <Button.ButtonLabel fontSize="large">Browse</Button.ButtonLabel>
+              </Button.Root>
             </IndexLink>
           </li> */}
           <li>
             <CommunitiesLink>
-              <PlainButton
-                label="Communities"
+              <Button.Root
+                plain
                 paddingSize="large"
-                fontSize="large"
                 colorScheme="transparentDefault"
-              />
+              >
+                <Button.ButtonLabel fontSize="large">
+                  Communities
+                </Button.ButtonLabel>
+              </Button.Root>
             </CommunitiesLink>
           </li>
           <li>
@@ -58,28 +63,29 @@ export function Header() {
         <ul className={styles.nav}>
           <li className={styles.navButtons}>
             <a href="/">
-              <PlainButton
-                label="Go Premium"
-                paddingSize="large"
-                colorScheme="specialPurple"
-              />
+              <Button.Root paddingSize="large" colorScheme="specialPurple">
+                <Button.ButtonLabel>Go Premium</Button.ButtonLabel>
+              </Button.Root>
             </a>
             <a href="/">
-              <PlainButton
-                label="Get Manager"
-                paddingSize="large"
-                colorScheme="accent"
-              />
+              <Button.Root paddingSize="large" colorScheme="accent">
+                <Button.ButtonLabel>Get Manager</Button.ButtonLabel>
+              </Button.Root>
             </a>
           </li>
           <li>
             <PackageUploadLink>
               <Tooltip content="Upload" side="bottom">
-                <PlainButton
+                <Button.Root
                   paddingSize="mediumSquare"
                   colorScheme="transparentAccent"
-                  leftIcon={<FontAwesomeIcon icon={faUpload} fixedWidth />}
-                />
+                >
+                  <Button.ButtonIcon>
+                    <Icon>
+                      <FontAwesomeIcon icon={faUpload} />
+                    </Icon>
+                  </Button.ButtonIcon>
+                </Button.Root>
               </Tooltip>
             </PackageUploadLink>
           </li>

@@ -2,10 +2,10 @@
 import { ReactNode, useState } from "react";
 import styles from "./Dialog.module.css";
 import * as RadixDialog from "@radix-ui/react-dialog";
-import { Button } from "../Button/Button";
+import * as Button from "../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
-import { Tooltip } from "../..";
+import { Icon, Tooltip } from "../..";
 
 type DialogProps = {
   content?: ReactNode;
@@ -48,7 +48,9 @@ export function Dialog(props: DialogProps) {
   let cancel = null;
   if (cancelButton === "default") {
     cancel = (
-      <Button label="Cancel" paddingSize="large" colorScheme="tertiary" />
+      <Button.Root paddingSize="large" colorScheme="tertiary">
+        <Button.ButtonLabel>Cancel</Button.ButtonLabel>
+      </Button.Root>
     );
   } else if (cancelButton) {
     cancel = cancelButton;
@@ -79,23 +81,25 @@ export function Dialog(props: DialogProps) {
               >
                 <Tooltip content="Close" side="bottom" open={tooltipOpen}>
                   <RadixDialog.Close asChild>
-                    <Button
+                    <Button.Root
                       colorScheme="transparentDefault"
                       paddingSize="mediumSquare"
-                      leftIcon={
-                        <FontAwesomeIcon
-                          className={styles.closeIcon}
-                          icon={faXmarkLarge}
-                          fixedWidth
-                        />
-                      }
                       onMouseOver={() => {
                         setTooltipOpen(true);
                       }}
                       onMouseOut={() => {
                         setTooltipOpen(false);
                       }}
-                    />
+                    >
+                      <Button.ButtonIcon>
+                        <Icon>
+                          <FontAwesomeIcon
+                            className={styles.closeIcon}
+                            icon={faXmarkLarge}
+                          />
+                        </Icon>
+                      </Button.ButtonIcon>
+                    </Button.Root>
                   </RadixDialog.Close>
                 </Tooltip>
                 {title ? <div className={styles.title}>{title}</div> : null}

@@ -1,9 +1,11 @@
-export {
-  Button,
-  type ButtonProps,
-  PlainButton,
-  type PlainButtonProps,
-} from "./components/Button/Button";
+import { config } from "@fortawesome/fontawesome-svg-core";
+config.autoAddCss = false;
+export * as Button from "./components/Button/";
+export type {
+  ButtonProps,
+  ButtonIconProps,
+  ButtonLabelProps,
+} from "./components/Button/";
 export { CodeBox, type CodeBoxProps } from "./components/CodeBox/CodeBox";
 export {
   BreadCrumbs,
@@ -17,6 +19,7 @@ export {
   DropDownDivider,
 } from "./components/DropDown/DropDown";
 export { Footer } from "./components/Footer/Footer";
+export { Icon } from "./components/Icon/Icon";
 export { Header } from "./components/Header/Header";
 export { Link, type LinkProps } from "./components/Link/Link";
 export {
@@ -48,7 +51,12 @@ export {
   TermsOfServiceLink,
 } from "./components/Links/Links";
 export { Markdown } from "./components/Markdown/Markdown";
-export { MenuItem, type MenuItemProps } from "./components/MenuItem/MenuItem";
+export * as MenuItem from "./components/MenuItem/";
+export type {
+  MenuItemProps,
+  MenuItemIconProps,
+  MenuItemLabelProps,
+} from "./components/MenuItem/";
 export { MetaItem, type MetaItemProps } from "./components/MetaItem/MetaItem";
 export {
   MetaInfoItem,

@@ -2,6 +2,7 @@ import styles from "./FilterItem.module.css";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { Icon } from "../../Icon/Icon";
 // import { Tag } from "../../Tag/Tag";
 
 export interface FilterItemProps {
@@ -39,10 +40,14 @@ export function FilterItem(props: FilterItemProps) {
           <Checkbox.Indicator>
             {value === undefined && <></>}
             {value === true && (
-              <FontAwesomeIcon className={styles.icon} icon={faCheck} />
+              <Icon>
+                <FontAwesomeIcon className={styles.icon} icon={faCheck} />
+              </Icon>
             )}
             {value === false && (
-              <FontAwesomeIcon className={styles.icon} icon={faXmark} />
+              <Icon>
+                <FontAwesomeIcon className={styles.icon} icon={faXmark} />
+              </Icon>
             )}
           </Checkbox.Indicator>
         </Checkbox.Root>

@@ -7,9 +7,10 @@ import { faBoxOpen } from "@fortawesome/pro-regular-svg-icons";
 import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
 import { Dialog } from "../../../Dialog/Dialog";
 import { PackageDependencyDialog } from "./PackageDependencyDialog/PackageDependencyDialog";
-import { Button } from "../../../Button/Button";
+import * as Button from "../../../Button/";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
+import { Icon } from "../../../Icon/Icon";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
@@ -81,7 +82,13 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
             </div>
           </div>
         }
-        headerIcon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
+        headerIcon={
+          <Icon>
+            <Icon>
+              <FontAwesomeIcon icon={faBoxOpen} />
+            </Icon>
+          </Icon>
+        }
         headerRightContent={
           <Dialog
             noPadding
@@ -90,14 +97,19 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
             title="Required mods"
             trigger={
               <div className={styles.dependencyDialogTrigger}>
-                <Button
+                <Button.Root
                   paddingSize="none"
-                  fontSize="medium"
-                  fontWeight="600"
                   colorScheme="transparentPrimary"
-                  label="See all"
-                  rightIcon={<FontAwesomeIcon icon={faCaretRight} fixedWidth />}
-                />
+                >
+                  <Button.ButtonLabel fontWeight="600">
+                    See all
+                  </Button.ButtonLabel>
+                  <Button.ButtonIcon>
+                    <Icon>
+                      <FontAwesomeIcon icon={faCaretRight} />
+                    </Icon>
+                  </Button.ButtonIcon>
+                </Button.Root>
               </div>
             }
             content={

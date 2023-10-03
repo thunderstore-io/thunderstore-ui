@@ -1,5 +1,5 @@
 import { StoryFn, Meta } from "@storybook/react";
-import { Tag } from "@thunderstore/cyberstorm";
+import { Icon, Tag } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTag, faXmark } from "@fortawesome/pro-solid-svg-icons";
@@ -26,12 +26,20 @@ MinimalTag.args = {};
 const DefaultTag = Template.bind({});
 DefaultTag.args = {
   label: "tag",
-  rightIcon: <FontAwesomeIcon fixedWidth icon={faXmark} />,
+  rightIcon: (
+    <Icon>
+      <FontAwesomeIcon icon={faXmark} />
+    </Icon>
+  ),
 };
 
 const IconOnlyTag = Template.bind({});
 IconOnlyTag.args = {
-  leftIcon: <FontAwesomeIcon fixedWidth icon={faTag} />,
+  leftIcon: (
+    <Icon>
+      <FontAwesomeIcon icon={faTag} />
+    </Icon>
+  ),
 };
 const TextOnlyTag = Template.bind({});
 TextOnlyTag.args = {
@@ -42,14 +50,22 @@ const SmallTag = Template.bind({});
 SmallTag.args = {
   label: "tag",
   size: "small",
-  rightIcon: <FontAwesomeIcon fixedWidth icon={faXmark} />,
+  rightIcon: (
+    <Icon>
+      <FontAwesomeIcon icon={faXmark} />
+    </Icon>
+  ),
 };
 
 const TinyTag = Template.bind({});
 TinyTag.args = {
   label: "tag",
   size: "tiny",
-  rightIcon: <FontAwesomeIcon fixedWidth icon={faXmark} />,
+  rightIcon: (
+    <Icon>
+      <FontAwesomeIcon icon={faXmark} />
+    </Icon>
+  ),
 };
 
 export {

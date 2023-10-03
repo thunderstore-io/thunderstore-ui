@@ -1,5 +1,5 @@
 import styles from "./PackageVersions.module.css";
-import { Button } from "../../../Button/Button";
+import * as Button from "../../../Button/";
 import { DataTable, Sort } from "../../../DataTable/DataTable";
 
 export function PackageVersions() {
@@ -63,28 +63,28 @@ const packageVersionData = [
 
 function getDownload(versionNumber: string) {
   return (
-    <Button
+    <Button.Root
       paddingSize="medium"
-      fontSize="medium"
-      label="Download"
       colorScheme="transparentAccent"
       onClick={() => {
         console.log("Download " + versionNumber);
       }}
-    />
+    >
+      <Button.ButtonLabel>Download</Button.ButtonLabel>
+    </Button.Root>
   );
 }
 
 function getInstall(versionNumber: string) {
   return (
-    <Button
+    <Button.Root
       paddingSize="large"
-      fontSize="medium"
-      label="Install"
       colorScheme="primary"
       onClick={() => {
         console.log("Install " + versionNumber);
       }}
-    />
+    >
+      <Button.ButtonLabel>Install</Button.ButtonLabel>
+    </Button.Root>
   );
 }

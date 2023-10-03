@@ -5,10 +5,11 @@ import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { PackageUploadLink } from "../../../Links/Links";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { TextInput } from "../../../TextInput/TextInput";
-import { Button } from "../../../Button/Button";
+import * as Button from "../../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
+import { Icon } from "../../../Icon/Icon";
 
 /**
  * Cyberstorm PackageUpload Layout
@@ -35,10 +36,14 @@ export function PackageUploadLayout() {
             description="No teams available?"
             additionalLeftColumnContent={
               <div>
-                <Button
-                  label="Create Team"
-                  rightIcon={<FontAwesomeIcon icon={faPlus} fixedWidth />}
-                />
+                <Button.Root>
+                  <Button.ButtonLabel>Create Team</Button.ButtonLabel>
+                  <Button.ButtonLabel>
+                    <Icon>
+                      <FontAwesomeIcon icon={faPlus} />
+                    </Icon>
+                  </Button.ButtonLabel>
+                </Button.Root>
               </div>
             }
             content={<TextInput />}
@@ -65,8 +70,12 @@ export function PackageUploadLayout() {
             description='Double-check your selections and hit "Submit" when you are ready!'
             content={
               <div className={styles.submit}>
-                <Button label="Reset" colorScheme="danger" />
-                <Button label="Submit" colorScheme="accent" />
+                <Button.Root colorScheme="danger">
+                  <Button.ButtonLabel>Reset</Button.ButtonLabel>
+                </Button.Root>
+                <Button.Root colorScheme="accent">
+                  <Button.ButtonLabel>Submit</Button.ButtonLabel>
+                </Button.Root>
               </div>
             }
           />

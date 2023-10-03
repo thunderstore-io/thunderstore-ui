@@ -28,6 +28,8 @@
 }
 
 .icon {
+  width: 1em;
+  height: 1em;
   color: var(--icon-color);
 }
 

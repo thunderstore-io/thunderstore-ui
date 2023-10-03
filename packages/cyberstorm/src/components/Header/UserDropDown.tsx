@@ -14,10 +14,11 @@ import { usePromise } from "@thunderstore/use-promise";
 import styles from "./Header.module.css";
 import { Avatar } from "../Avatar/Avatar";
 import { AvatarButton } from "../Avatar/AvatarButton";
-import { Button } from "../Button/Button";
+import * as Button from "../Button/";
 import { DropDown, DropDownDivider, DropDownItem } from "../DropDown/DropDown";
 import { DropDownLink } from "../DropDown/DropDownLink";
 import { SettingsLink, TeamsLink, UserLink } from "../Links/Links";
+import { Icon } from "../Icon/Icon";
 
 /**
  * TODO: replace dapper.getUser with .getCurrentUser.
@@ -41,7 +42,13 @@ export const UserDropDown = () => {
         userData.user.imageSource ? (
           <AvatarButton src={userData.user.imageSource} />
         ) : (
-          <Button leftIcon={<FontAwesomeIcon icon={faUser} fixedWidth />} />
+          <Button.Root>
+            <Button.ButtonIcon>
+              <Icon>
+                <FontAwesomeIcon icon={faUser} />
+              </Icon>
+            </Button.ButtonIcon>
+          </Button.Root>
         )
       }
       content={[
@@ -69,7 +76,7 @@ export const UserDropDown = () => {
           <DropDownItem
             content={
               <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
+                leftIcon={<FontAwesomeIcon icon={faUsers} />}
                 label="Teams"
               />
             }
@@ -80,7 +87,7 @@ export const UserDropDown = () => {
           <DropDownItem
             content={
               <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
+                leftIcon={<FontAwesomeIcon icon={faCreditCard} />}
                 label="Subscriptions"
               />
             }
@@ -91,7 +98,7 @@ export const UserDropDown = () => {
           <DropDownItem
             content={
               <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
+                leftIcon={<FontAwesomeIcon icon={faCog} />}
                 label="Settings"
               />
             }
@@ -104,7 +111,7 @@ export const UserDropDown = () => {
           <DropDownItem
             content={
               <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
+                leftIcon={<FontAwesomeIcon icon={faSignOut} />}
                 label="Log Out"
               />
             }

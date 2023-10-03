@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import { faCaretRight, faCrown } from "@fortawesome/pro-solid-svg-icons";
 import { TeamLink, UserLink } from "../../../Links/Links";
+import { Icon } from "../../../Icon/Icon";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
@@ -36,7 +37,9 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
             {teamMember.user}
             {teamMember.role === "Owner" ? (
               <span className={styles.crown}>
-                <FontAwesomeIcon icon={faCrown} fixedWidth />
+                <Icon>
+                  <FontAwesomeIcon icon={faCrown} />
+                </Icon>
               </span>
             ) : null}
           </div>
@@ -90,13 +93,21 @@ export function PackageTeamMemberList(props: PackageTeamListProps) {
       <WrapperCard
         title="Team"
         content={<div className={styles.list}>{mappedPackageTeamList}</div>}
-        headerIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
+        headerIcon={
+          <Icon>
+            <FontAwesomeIcon icon={faUsers} />
+          </Icon>
+        }
         headerRightContent={
           teamName ? (
             <TeamLink team={teamName}>
               <div className={styles.teamLink}>
                 See team
-                <FontAwesomeIcon icon={faCaretRight} fixedWidth />
+                <div className={styles.teamLinkIcon}>
+                  <Icon>
+                    <FontAwesomeIcon icon={faCaretRight} />
+                  </Icon>
+                </div>
               </div>
             </TeamLink>
           ) : null

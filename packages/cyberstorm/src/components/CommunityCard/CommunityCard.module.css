@@ -24,7 +24,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40%;
+  width: 2.38rem;
+  aspect-ratio: 1;
   transition: 0.2s;
 }
 

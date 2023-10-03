@@ -6,6 +6,7 @@ import { faGamepadModern } from "@fortawesome/pro-solid-svg-icons";
 import { formatInteger } from "../../utils/utils";
 import { Community } from "@thunderstore/dapper/types";
 import { CommunityLink } from "../Links/Links";
+import { Icon } from "../Icon/Icon";
 
 interface Props {
   community: Community;
@@ -27,7 +28,9 @@ export function CommunityCard(props: Props) {
             </div>
           ) : (
             <div className={styles.imageContent}>
-              <FontAwesomeIcon icon={faGamepadModern} />
+              <Icon>
+                <FontAwesomeIcon icon={faGamepadModern} />
+              </Icon>
             </div>
           )}
         </div>
@@ -38,12 +41,20 @@ export function CommunityCard(props: Props) {
           <MetaItem
             colorScheme="accent"
             label={formatInteger(community.total_package_count)}
-            icon={<FontAwesomeIcon icon={faBoxOpen} fixedWidth />}
+            icon={
+              <Icon>
+                <FontAwesomeIcon icon={faBoxOpen} />
+              </Icon>
+            }
           />
           <MetaItem
             colorScheme="accent"
             label={formatInteger(community.total_download_count)}
-            icon={<FontAwesomeIcon icon={faDownload} fixedWidth />}
+            icon={
+              <Icon>
+                <FontAwesomeIcon icon={faDownload} />
+              </Icon>
+            }
           />
         </div>
       </div>

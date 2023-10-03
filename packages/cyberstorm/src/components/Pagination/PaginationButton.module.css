@@ -21,6 +21,11 @@
   line-height: var(--line-height--18);
 }
 
+.icon {
+  width: 1em;
+  height: 1em;
+}
+
 .button__default {
   --bg-color: var(--color-surface--4);
 }

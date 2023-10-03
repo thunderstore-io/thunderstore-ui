@@ -20,6 +20,11 @@
   line-height: 1;
 }
 
+.icon {
+  width: 1rem;
+  height: 1rem;
+}
+
 /* Different MetaItem color schemes */
 .metaItem__default {
   --text-color: var(--color-text--default);

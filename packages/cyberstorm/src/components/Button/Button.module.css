@@ -10,6 +10,11 @@
   border: var(--button-border-width) solid var(--button-border-color);
   border-radius: var(--border-radius--8);
   color: var(--text-color);
+
+  font-weight: var(--font-weight);
+  font-size: var(--font-size);
+  line-height: 1;
+  text-align: center;
   background-color: var(--bg-color);
 
   --font-size: var(--font-size--l);
@@ -29,29 +34,6 @@
 
 .iconAlignment__side {
   justify-content: normal;
-}
-
-.label {
-  font-weight: var(--font-weight);
-  font-size: var(--font-size);
-  line-height: 1;
-  text-align: center;
-}
-
-.leftIcon {
-  display: flex;
-}
-
-.rightIcon {
-  display: flex;
-}
-
-.iconAlignment__side > .leftIcon {
-  margin-right: auto;
-}
-
-.iconAlignment__side > .rightIcon {
-  margin-left: auto;
 }
 
 /* Different Button color schemes */
@@ -318,34 +300,51 @@
   --button-padding-block: calc(var(--space--16) + var(--space--2)) calc(var(--space--16) - var(--space--2));
 }
 
-/* Button font sizes */
+/* Button Icon */
 
-.font__small {
+.ButtonIcon__IconSize__default {
+  width: 1em;
+  height: 1em;
+}
+
+.ButtonIcon__IconSize__tslogo_install_button {
+  width: 1.655rem;
+  height: 1.463rem;
+}
+
+/* Button Label */
+
+.ButtonLabel {
+  font-weight: var(--font-weight);
+  font-size: var(--font-size);
+  line-height: 1;
+  text-align: center;
+}
+
+.ButtonLabel__font__small {
   --font-size: var(--font-size--s);
 }
 
-.font__medium {
+.ButtonLabel__font__medium {
   --font-size: var(--font-size--m);
 }
 
-.font__large {
+.ButtonLabel__font__large {
   --font-size: var(--font-size--l);
 }
 
-.font__huge {
+.ButtonLabel__font__huge {
   --font-size: 1.375rem;
 }
 
-/* Button font weights */
-
-.fontWeight__600 {
+.ButtonLabel__fontWeight__600 {
   --font-weight: 600;
 }
 
-.fontWeight__700 {
+.ButtonLabel__fontWeight__700 {
   --font-weight: 700;
 }
 
-.fontWeight__800 {
+.ButtonLabel__fontWeight__800 {
   --font-weight: 800;
 }

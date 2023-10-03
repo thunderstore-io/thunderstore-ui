@@ -150,6 +150,7 @@
 
 .adButton {
   display: flex;
+  width: 11em;
 }
 
 .img {
@@ -188,12 +189,19 @@
 .iconLink {
   display: flex;
   align-items: center;
-  height: 41px;
+  justify-content: center;
+  height: 2.5rem;
   border-radius: var(--border-radius--8);
 }
 
 .iconLink:hover {
   color: var(--color-text--default);
+}
+
+.inlineIcon {
+  display: inline-flex;
+  width: 1em;
+  height: 1em;
 }
 
 @media (max-width: 30rem) {

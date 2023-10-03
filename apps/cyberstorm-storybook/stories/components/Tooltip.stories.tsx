@@ -19,7 +19,9 @@ const Template: StoryFn<typeof Tooltip> = (args) => (
   >
     <div>
       <Tooltip {...args}>
-        <Button label="Button" />
+        <Button.Root>
+          <Button.ButtonLabel>Button</Button.ButtonLabel>
+        </Button.Root>
       </Tooltip>
     </div>
   </div>

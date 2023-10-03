@@ -15,6 +15,7 @@ import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDebounce } from "use-debounce";
 import { CommunityList } from "./CommunityList";
 import { Loading } from "./Loading";
+import { Icon } from "../../Icon/Icon";
 
 export type SortOptions = "name" | "datetime_created";
 
@@ -39,7 +40,11 @@ export function CommunityListLayout() {
               setValue={setSearchValue}
               value={searchValue}
               placeHolder="Search communities..."
-              leftIcon={<FontAwesomeIcon icon={faSearch} fixedWidth />}
+              leftIcon={
+                <Icon>
+                  <FontAwesomeIcon icon={faSearch} />
+                </Icon>
+              }
             />
           </div>
           <div className={styles.searchFilters}>
@@ -69,11 +74,19 @@ const selectOptions = [
   {
     value: "name",
     label: "Name",
-    leftIcon: <FontAwesomeIcon fixedWidth icon={faArrowDownAZ} />,
+    leftIcon: (
+      <Icon>
+        <FontAwesomeIcon icon={faArrowDownAZ} />
+      </Icon>
+    ),
   },
   {
     value: "-datetime_created",
     label: "Latest",
-    leftIcon: <FontAwesomeIcon fixedWidth icon={faStar} />,
+    leftIcon: (
+      <Icon>
+        <FontAwesomeIcon icon={faStar} />
+      </Icon>
+    ),
   },
 ];

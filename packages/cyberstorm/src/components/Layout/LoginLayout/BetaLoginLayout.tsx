@@ -1,9 +1,10 @@
 import styles from "./BetaLoginLayout.module.css";
-import { Button, PlainButton } from "../../Button/Button";
+import * as Button from "../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { OverwolfLogo, ThunderstoreLogo } from "../../../svg/svg";
 import { PrivacyPolicyLink, TermsOfServiceLink } from "../../Links/Links";
+import { Icon } from "../../Icon/Icon";
 
 interface Props {
   discordAuthUrl?: string;
@@ -28,36 +29,42 @@ export function BetaLoginLayout(props: Props) {
             {props.discordAuthUrl ? (
               <div className={styles.loginButton}>
                 <a href={props.discordAuthUrl}>
-                  <PlainButton
-                    colorScheme="discord"
-                    label="Discord"
-                    leftIcon={<FontAwesomeIcon icon={faDiscord} fixedWidth />}
-                    paddingSize="large"
-                  />
+                  <Button.Root plain colorScheme="discord" paddingSize="large">
+                    <Button.ButtonIcon>
+                      <Icon>
+                        <FontAwesomeIcon icon={faDiscord} />
+                      </Icon>
+                    </Button.ButtonIcon>
+                    <Button.ButtonLabel>Discord</Button.ButtonLabel>
+                  </Button.Root>
                 </a>
               </div>
             ) : null}
             {props.githubAuthUrl ? (
               <div className={styles.loginButton}>
                 <a href={props.githubAuthUrl}>
-                  <PlainButton
-                    colorScheme="github"
-                    label="GitHub"
-                    leftIcon={<FontAwesomeIcon icon={faGithub} fixedWidth />}
-                    paddingSize="large"
-                  />
+                  <Button.Root plain colorScheme="github" paddingSize="large">
+                    <Button.ButtonIcon>
+                      <Icon>
+                        <FontAwesomeIcon icon={faGithub} />
+                      </Icon>
+                    </Button.ButtonIcon>
+                    <Button.ButtonLabel>GitHub</Button.ButtonLabel>
+                  </Button.Root>
                 </a>
               </div>
             ) : null}
             {props.overwolfAuthUrl ? (
               <div className={styles.loginButton}>
                 <a href={props.overwolfAuthUrl}>
-                  <PlainButton
-                    colorScheme="overwolf"
-                    label="Overwolf"
-                    leftIcon={<OverwolfLogo />}
-                    paddingSize="large"
-                  />
+                  <Button.Root plain colorScheme="overwolf" paddingSize="large">
+                    <Button.ButtonIcon>
+                      <Icon>
+                        <OverwolfLogo />
+                      </Icon>
+                    </Button.ButtonIcon>
+                    <Button.ButtonLabel>Overwolf</Button.ButtonLabel>
+                  </Button.Root>
                 </a>
               </div>
             ) : null}
@@ -66,11 +73,9 @@ export function BetaLoginLayout(props: Props) {
           <div className={styles.alternateAction}>
             Want early access? Thunderstore beta is currently available for
             Thunderstore Premium users only.
-            <Button
-              paddingSize="huge"
-              colorScheme="primary"
-              label="Go Premium"
-            />
+            <Button.Root paddingSize="large" colorScheme="primary">
+              <Button.ButtonLabel>Go Premium</Button.ButtonLabel>
+            </Button.Root>
           </div>
           <a href="https://thunderstore.io" className={styles.mainPageLink}>
             Continue to thunderstore.io
@@ -111,11 +116,9 @@ export function BetaLoginLayout(props: Props) {
             </ul>
           </div>
           <div>
-            <Button
-              paddingSize="large"
-              label="Go Premium"
-              colorScheme="specialPurple"
-            />
+            <Button.Root paddingSize="large" colorScheme="specialPurple">
+              <Button.ButtonLabel>Go Premium</Button.ButtonLabel>
+            </Button.Root>
           </div>
         </div>
       </div>

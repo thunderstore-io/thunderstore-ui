@@ -15,10 +15,14 @@
   background-color: var(--color-surface--6);
 }
 
-.label {
-  font-weight: 500;
+/* MenuItemIcon */
+.menuItemIcon {
+  width: 1em;
+  height: 1em;
+  color: var(--color-text--tertiary);
 }
 
-.icon {
-  color: var(--color-text--tertiary);
+/* MenuItemLabel */
+.menuItemLabel {
+  font-weight: 500;
 }

@@ -25,5 +25,7 @@
 }
 
 .icon {
+  width: 1em;
+  height: 1em;
   color: var(--color-text--tertiary);
 }

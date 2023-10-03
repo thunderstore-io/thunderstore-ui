@@ -8,7 +8,11 @@ const meta = {
 } as Meta<typeof Dialog>;
 
 const defaultArgs = {
-  trigger: <Button label="trigger" />,
+  trigger: (
+    <Button.Root>
+      <Button.ButtonLabel>trigger</Button.ButtonLabel>
+    </Button.Root>
+  ),
   title: "This is a dialog",
   content: (
     <div

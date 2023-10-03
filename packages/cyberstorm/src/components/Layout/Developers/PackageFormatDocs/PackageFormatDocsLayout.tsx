@@ -7,6 +7,7 @@ import { DataTable } from "../../../DataTable/DataTable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/pro-solid-svg-icons";
 import { CodeBox } from "../../../CodeBox/CodeBox";
+import { Icon } from "../../../Icon/Icon";
 
 const EXAMPLE_MANIFEST_JSON_TEXT = `{
   "name": "Textarea",
@@ -113,7 +114,9 @@ const secondDataTableData = [
     {
       value: (
         <span key="icon-1" className={styles.greenWrap}>
-          <FontAwesomeIcon icon={faCheck} fixedWidth />
+          <Icon>
+            <FontAwesomeIcon icon={faCheck} />
+          </Icon>
         </span>
       ),
       sortValue: 0,
@@ -126,7 +129,9 @@ const secondDataTableData = [
     {
       value: (
         <span key="icon-2" className={styles.greenWrap}>
-          <FontAwesomeIcon icon={faCheck} fixedWidth />
+          <Icon>
+            <FontAwesomeIcon icon={faCheck} />
+          </Icon>
         </span>
       ),
       sortValue: 0,
@@ -143,7 +148,9 @@ const secondDataTableData = [
     {
       value: (
         <span key="icon-3" className={styles.greenWrap}>
-          <FontAwesomeIcon icon={faCheck} fixedWidth />
+          <Icon>
+            <FontAwesomeIcon icon={faCheck} />
+          </Icon>
         </span>
       ),
       sortValue: 0,
@@ -160,7 +167,9 @@ const secondDataTableData = [
     {
       value: (
         <span key="icon-4" className={styles.greenWrap}>
-          <FontAwesomeIcon icon={faCheck} fixedWidth />
+          <Icon>
+            <FontAwesomeIcon icon={faCheck} />
+          </Icon>
         </span>
       ),
       sortValue: 0,
@@ -180,7 +189,9 @@ const secondDataTableData = [
     {
       value: (
         <span key="icon-5" className={styles.greenWrap}>
-          <FontAwesomeIcon icon={faCheck} fixedWidth />
+          <Icon>
+            <FontAwesomeIcon icon={faCheck} />
+          </Icon>
         </span>
       ),
       sortValue: 0,

@@ -2,6 +2,7 @@ import { StoryFn, Meta } from "@storybook/react";
 import {
   Button,
   DropDown,
+  Icon,
   MenuItem,
   MenuItemProps,
   Tag,
@@ -22,30 +23,42 @@ const meta = {
 
 const defaultArgs = {
   trigger: (
-    <Button
-      label="Developers"
-      rightIcon={<FontAwesomeIcon fixedWidth icon={faChevronDown} />}
-    />
+    <Button.Root>
+      <Button.ButtonLabel>Developers</Button.ButtonLabel>
+      <Button.ButtonIcon>
+        <Icon>
+          <FontAwesomeIcon icon={faChevronDown} />
+        </Icon>
+      </Button.ButtonIcon>
+    </Button.Root>
   ),
 };
 
 const content: ReactElement<MenuItemProps>[] = [
-  <MenuItem
-    key={1}
-    label="New"
-    leftIcon={<FontAwesomeIcon fixedWidth icon={faStar} />}
-  />,
-  <MenuItem
-    key={2}
-    label="New"
-    leftIcon={<FontAwesomeIcon fixedWidth icon={faThumbtack} />}
-  />,
-  <Button
-    style={{ minWidth: "100%" }}
-    key={3}
-    label="Nabbula"
-    leftIcon={<FontAwesomeIcon fixedWidth icon={faSkull} />}
-  />,
+  <MenuItem.Root key={1}>
+    <MenuItem.MenuItemIcon>
+      <Icon>
+        <FontAwesomeIcon icon={faStar} />
+      </Icon>
+    </MenuItem.MenuItemIcon>
+    <MenuItem.MenuItemLabel>New</MenuItem.MenuItemLabel>
+  </MenuItem.Root>,
+  <MenuItem.Root key={2}>
+    <MenuItem.MenuItemIcon>
+      <Icon>
+        <FontAwesomeIcon icon={faThumbtack} />
+      </Icon>
+    </MenuItem.MenuItemIcon>
+    <MenuItem.MenuItemLabel>New</MenuItem.MenuItemLabel>
+  </MenuItem.Root>,
+  <Button.Root style={{ minWidth: "100%" }} key={3}>
+    <Button.ButtonLabel>Nabbula</Button.ButtonLabel>
+    <Button.ButtonIcon>
+      <Icon>
+        <FontAwesomeIcon icon={faSkull} />
+      </Icon>
+    </Button.ButtonIcon>
+  </Button.Root>,
 ];
 
 const Template: StoryFn<typeof DropDown> = (args) => <DropDown {...args} />;

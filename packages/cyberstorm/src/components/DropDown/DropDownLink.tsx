@@ -2,6 +2,7 @@ import styles from "./DropDownLink.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactElement } from "react";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import { Icon } from "../Icon/Icon";
 
 export interface DropDownLinkProps {
   label: string;
@@ -20,7 +21,13 @@ export function DropDownLink(props: DropDownLinkProps) {
         {leftIcon ? <div className={styles.icon}>{leftIcon}</div> : null}
         {label}
       </div>
-      {isExternal ? <FontAwesomeIcon icon={faArrowUpRight} fixedWidth /> : null}
+      {isExternal ? (
+        <div className={styles.arrowUpRightIcon}>
+          <Icon>
+            <FontAwesomeIcon icon={faArrowUpRight} />
+          </Icon>
+        </div>
+      ) : null}
     </div>
   );
 }

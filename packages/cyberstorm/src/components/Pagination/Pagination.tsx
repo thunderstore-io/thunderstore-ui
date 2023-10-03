@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 import { range } from "../../utils/utils";
 import styles from "./Pagination.module.css";
 import { PaginationButton } from "./PaginationButton";
+import { Icon } from "../Icon/Icon";
 
 export interface PaginationProps {
   currentPage: number;
@@ -54,7 +55,11 @@ export function Pagination(props: PaginationProps) {
           onClick={() => onPageChange(decreaseCurrentPage(currentPage))}
           ariaLabel="Previous"
           label="Prev"
-          leftIcon={<FontAwesomeIcon fixedWidth icon={faArrowLeft} />}
+          leftIcon={
+            <Icon>
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </Icon>
+          }
         />
       </li>
     );
@@ -111,7 +116,11 @@ export function Pagination(props: PaginationProps) {
           }
           ariaLabel="Next"
           label="Next"
-          rightIcon={<FontAwesomeIcon fixedWidth icon={faArrowRight} />}
+          rightIcon={
+            <Icon>
+              <FontAwesomeIcon icon={faArrowRight} />
+            </Icon>
+          }
         />
       </li>
     );
