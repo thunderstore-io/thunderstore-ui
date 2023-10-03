@@ -96,7 +96,6 @@ export function Dialog(props: DialogProps) {
                           <FontAwesomeIcon
                             className={styles.closeIcon}
                             icon={faXmarkLarge}
-                            fixedWidth
                           />
                         </Icon>
                       </Button.ButtonIcon>

@@ -9,11 +9,12 @@ import { PrivacyPolicyLink } from "../../../Links/Links";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { Switch } from "../../../Switch/Switch";
 import { Icon } from "../../../Icon/Icon";
+import { OverwolfLogo } from "../../../../svg/svg";
 
 const PROVIDERS = [
-  { name: "Discord", icon: faDiscord },
-  { name: "GitHub", icon: faGithub },
-  { name: "Overwolf", icon: faGithub }, // TODO: icon
+  { name: "Discord", icon: <FontAwesomeIcon icon={faDiscord} /> },
+  { name: "GitHub", icon: <FontAwesomeIcon icon={faGithub} /> },
+  { name: "Overwolf", icon: OverwolfLogo() },
 ];
 
 interface ConnectionsProps {
@@ -81,9 +82,9 @@ function Connection(props: ConnectionProps) {
     >
       <div className={styles.item}>
         <div className={styles.connectionTypeInfo}>
-          <Icon>
-            <FontAwesomeIcon icon={provider.icon} fixedWidth />
-          </Icon>
+          <div className={styles.connectionTypeInfoIcon}>
+            <Icon>{provider.icon}</Icon>
+          </div>
           <div className={styles.connectionTypeInfoName}>{provider.name}</div>
         </div>
         <div className={styles.rightSection}>

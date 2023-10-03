@@ -73,7 +73,7 @@ export function BetaLoginLayout(props: Props) {
           <div className={styles.alternateAction}>
             Want early access? Thunderstore beta is currently available for
             Thunderstore Premium users only.
-            <Button.Root paddingSize="huge" colorScheme="primary">
+            <Button.Root paddingSize="large" colorScheme="primary">
               <Button.ButtonLabel>Go Premium</Button.ButtonLabel>
             </Button.Root>
           </div>

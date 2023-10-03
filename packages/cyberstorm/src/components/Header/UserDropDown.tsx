@@ -76,7 +76,7 @@ export const UserDropDown = () => {
           <DropDownItem
             content={
               <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faUsers} fixedWidth />}
+                leftIcon={<FontAwesomeIcon icon={faUsers} />}
                 label="Teams"
               />
             }
@@ -87,7 +87,7 @@ export const UserDropDown = () => {
           <DropDownItem
             content={
               <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faCreditCard} fixedWidth />}
+                leftIcon={<FontAwesomeIcon icon={faCreditCard} />}
                 label="Subscriptions"
               />
             }
@@ -98,7 +98,7 @@ export const UserDropDown = () => {
           <DropDownItem
             content={
               <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faCog} fixedWidth />}
+                leftIcon={<FontAwesomeIcon icon={faCog} />}
                 label="Settings"
               />
             }
@@ -111,7 +111,7 @@ export const UserDropDown = () => {
           <DropDownItem
             content={
               <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faSignOut} fixedWidth />}
+                leftIcon={<FontAwesomeIcon icon={faSignOut} />}
                 label="Log Out"
               />
             }

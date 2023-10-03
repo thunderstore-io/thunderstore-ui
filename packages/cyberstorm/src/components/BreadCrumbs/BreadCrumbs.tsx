@@ -50,7 +50,7 @@ export function DefaultHomeCrumb() {
   return (
     <IndexLink>
       <Icon>
-        <FontAwesomeIcon fixedWidth icon={faHouse} className={styles.home} />
+        <FontAwesomeIcon icon={faHouse} className={styles.home} />
       </Icon>
     </IndexLink>
   );

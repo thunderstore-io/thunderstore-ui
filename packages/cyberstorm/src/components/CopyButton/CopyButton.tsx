@@ -81,7 +81,6 @@ export function CopyButton(props: CopyButtonProps) {
             <Button.ButtonIcon>
               <Icon>
                 <FontAwesomeIcon
-                  fixedWidth
                   icon={wasRecentlyCopied ? faCheck : faClone}
                   className={wasRecentlyCopied ? styles.checkmark : styles.copy}
                 />

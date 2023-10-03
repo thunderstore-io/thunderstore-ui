@@ -291,11 +291,7 @@ const tabs = [
     label: "Details",
     icon: (
       <Icon>
-        <FontAwesomeIcon
-          icon={faFileLines}
-          fixedWidth
-          className={styles.tabIcon}
-        />
+        <FontAwesomeIcon icon={faFileLines} className={styles.tabIcon} />
       </Icon>
     ),
   },
@@ -304,11 +300,7 @@ const tabs = [
     label: "Changelog",
     icon: (
       <Icon>
-        <FontAwesomeIcon
-          icon={faFilePlus}
-          fixedWidth
-          className={styles.tabIcon}
-        />
+        <FontAwesomeIcon icon={faFilePlus} className={styles.tabIcon} />
       </Icon>
     ),
   },
@@ -317,11 +309,7 @@ const tabs = [
     label: "Versions",
     icon: (
       <Icon>
-        <FontAwesomeIcon
-          icon={faCodeBranch}
-          fixedWidth
-          className={styles.tabIcon}
-        />
+        <FontAwesomeIcon icon={faCodeBranch} className={styles.tabIcon} />
       </Icon>
     ),
   },

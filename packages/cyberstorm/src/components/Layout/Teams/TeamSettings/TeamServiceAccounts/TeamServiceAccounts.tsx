@@ -76,10 +76,7 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
                     <Alert
                       icon={
                         <Icon>
-                          <FontAwesomeIcon
-                            fixedWidth
-                            icon={faCircleExclamation}
-                          />
+                          <FontAwesomeIcon icon={faCircleExclamation} />
                         </Icon>
                       }
                       content={

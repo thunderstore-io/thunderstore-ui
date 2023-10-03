@@ -33,10 +33,7 @@ export function ServiceAccountList(props: ServiceAccountListProps) {
                 <Alert
                   icon={
                     <Icon>
-                      <FontAwesomeIcon
-                        fixedWidth
-                        icon={faTriangleExclamation}
-                      />
+                      <FontAwesomeIcon icon={faTriangleExclamation} />
                     </Icon>
                   }
                   content={
