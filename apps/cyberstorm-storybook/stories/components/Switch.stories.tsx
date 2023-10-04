@@ -22,10 +22,44 @@ const SameStateSwitchTemplate: StoryFn<typeof Switch> = () => {
     </div>
   );
 };
+const SameStateSwitchTemplate2: StoryFn<typeof Switch> = () => {
+  const [state, setState] = useState(false);
+  return (
+    <div>
+      <label htmlFor="my-switch">My switch</label>
+      <div>
+        <Switch state={state} onChange={setState} labelId="my-switch" />
+      </div>
+      <div>
+        <Switch state={state} onChange={setState} labelId="my-switch" />
+      </div>
+    </div>
+  );
+};
+const SameStateSwitchTemplate1: StoryFn<typeof Switch> = () => {
+  const [state, setState] = useState(false);
+  return (
+    <div>
+      <label htmlFor="my-switch">
+        My itch
+        <Switch state={state} onChange={setState} />
+      </label>
+    </div>
+  );
+};
 
 const RegularSwitch = Template.bind({});
 const DisabledSwitch = Template.bind({});
 DisabledSwitch.args = { state: false, disabled: true };
 const SameStateSwitch = SameStateSwitchTemplate.bind({});
+const SameStateSwitch1 = SameStateSwitchTemplate1.bind({});
+const SameStateSwitch2 = SameStateSwitchTemplate2.bind({});
 
-export { meta as default, RegularSwitch, DisabledSwitch, SameStateSwitch };
+export {
+  meta as default,
+  RegularSwitch,
+  DisabledSwitch,
+  SameStateSwitch,
+  SameStateSwitch1,
+  SameStateSwitch2,
+};
