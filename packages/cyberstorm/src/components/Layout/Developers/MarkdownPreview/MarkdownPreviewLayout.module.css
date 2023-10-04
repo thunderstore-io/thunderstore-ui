@@ -3,3 +3,47 @@
   flex-direction: column;
   gap: var(--gap--48);
 }
+
+.inputContainer {
+  border: 1px solid #333370;
+  border-radius: 0.5rem;
+}
+
+.inputContainer > textarea {
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.inputContainerFailure {
+  border-color: #f1385a;
+}
+
+.statusBar {
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--surface-7, #333370);
+  border-radius: 0 0 0.5rem 0.5rem;
+  color: #c6c3ff;
+  background: #0d0d21;
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+}
+
+.statusBarSuccess {
+  color: #50d99f;
+}
+
+.statusBarFailure {
+  border-top: 1px solid #f1385a;
+  color: var(--alert-danger-text-color, #f9afbd);
+  background: #48111b;
+}
+
+.iconFailure {
+  color: #f1385a;
+}
