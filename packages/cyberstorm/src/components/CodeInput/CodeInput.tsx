@@ -47,7 +47,7 @@ export function CodeInput(props: CodeInputProps) {
     } else if (validationStatus === "validating") {
       statusElement = (
         <div className={styles.statusBar}>
-          <div className={styles.icon}>
+          <div className={`${styles.icon} ${styles.spinningIcon}`}>
             <Icon>
               <FontAwesomeIcon icon={faArrowsRotate} />
             </Icon>

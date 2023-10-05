@@ -40,6 +40,10 @@
   height: 1em;
 }
 
+.spinningIcon {
+  animation: rotate 2s linear infinite;
+}
+
 .statusBarSuccess {
   color: #50d99f;
 }
@@ -52,4 +56,10 @@
 
 .iconFailure {
   color: #f1385a;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
 }
