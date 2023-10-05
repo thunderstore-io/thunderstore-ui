@@ -3,6 +3,9 @@
   flex-direction: column;
   gap: 1.5rem;
   color: var(--color-text--default);
+  font: var(--font-body);
+  font-weight: 500;
+  line-height: 1.6rem;
 }
 
 /*
@@ -44,16 +47,9 @@
   font-size: 0.875rem;
 }
 
-.root ul,
-.root ol {
-  font: var(--font-body);
-  font-weight: 500;
-  line-height: 1.6rem;
-}
-
 .root ul li,
 .root ol li {
-  margin-left: 0.75rem;
+  margin-inline-start: 0.75rem;
 }
 
 .root img { display: inline-block; }
@@ -72,15 +68,16 @@
 
 .root code {
   display: inline-flex;
-  padding: 0.125rem 0.5rem;
+  padding: 0 0.35rem;
   border: 1px solid #333370;
   border-radius: 0.25rem;
   color: #39e9aa;
   font-weight: 400;
 
   font-size: 0.875rem;
+  font-family: var(--font-family-monospace);
   font-style: normal;
-  line-height: 150%; /* 1.3125rem */
+  line-height: 150%;
   background: #0d0d21;
 }
 
@@ -95,6 +92,9 @@
 .root a { color: var(--color-cyber-green--50); }
 
 .root blockquote {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   padding-left: 2rem;
   border-left: 4px solid #3c3c86;
 }

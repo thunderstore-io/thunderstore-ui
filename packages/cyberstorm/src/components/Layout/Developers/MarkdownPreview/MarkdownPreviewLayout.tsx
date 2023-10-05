@@ -4,18 +4,22 @@ import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { MarkdownPreviewLink } from "../../../Links/Links";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
-import { Suspense, useState, useEffect } from "react";
-import { Markdown } from "../../../Markdown/Markdown";
+import { useState, useEffect } from "react";
+import markdownStyles from "../../../Markdown/Markdown.module.css";
 import styles from "./MarkdownPreviewLayout.module.css";
-import { TextAreaInput } from "../../../TextAreaInput/TextAreaInput";
-import { Icon } from "../../../Icon/Icon";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleCheck,
-  faTriangleExclamation,
-  faPenToSquare,
-  faArrowsRotate,
-} from "@fortawesome/free-solid-svg-icons";
+import { PLACEHOLDER } from "./MarkdownPlaceholder";
+import { CodeInput } from "../../../CodeInput/CodeInput";
+
+interface HTMLResponse {
+  html: string;
+}
+
+export const isRecord = (obj: unknown): obj is Record<string, unknown> =>
+  obj instanceof Object;
+
+function isHTMLResponse(response: unknown): response is HTMLResponse {
+  return isRecord(response) && typeof response.html === "string";
+}
 
 /**
  * Cyberstorm MarkdownPreview Layout
@@ -26,52 +30,47 @@ export function MarkdownPreviewLayout() {
     "waiting" | "validating" | "success" | "failure"
   >("waiting");
 
-  let statusElement = null;
-  if (validationStatus === "waiting") {
-    statusElement = (
-      <div className={styles.statusBar}>
-        <div className={styles.icon}>
-          <Icon>
-            <FontAwesomeIcon icon={faPenToSquare} />
-          </Icon>
-        </div>
-        Waiting for input
-      </div>
-    );
-  } else if (validationStatus === "validating") {
-    statusElement = (
-      <div className={styles.statusBar}>
-        <div className={styles.icon}>
-          <Icon>
-            <FontAwesomeIcon icon={faArrowsRotate} />
-          </Icon>
-        </div>
-        Validating...
-      </div>
-    );
-  } else if (validationStatus === "success") {
-    statusElement = (
-      <div className={`${styles.statusBar} ${styles.statusBarSuccess}`}>
-        <div className={styles.icon}>
-          <Icon>
-            <FontAwesomeIcon icon={faCircleCheck} />
-          </Icon>
-        </div>
-        All systems go!
-      </div>
-    );
-  } else if (validationStatus === "failure") {
-    statusElement = (
-      <div className={`${styles.statusBar} ${styles.statusBarFailure}`}>
-        <div className={`${styles.icon} ${styles.iconFailure}`}>
-          <Icon>
-            <FontAwesomeIcon icon={faTriangleExclamation} />
-          </Icon>
-        </div>
-        Problem, alarm, danger. Everything is going to explode.
-      </div>
-    );
-  }
+  const placeholder = PLACEHOLDER();
+
+  const [html, setHTML] = useState<null | string>(null);
+  useEffect(() => {
+    async function getHTML() {
+      setValidationStatus("validating");
+      fetch(
+        "https://thunderstore.io/api/experimental/frontend/render-markdown/",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ markdown: markdownPreviewInput }),
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error("Something went wrong");
+        })
+        .then((responseJson) => {
+          if (isHTMLResponse(responseJson)) {
+            setHTML(responseJson.html);
+            setValidationStatus("success");
+          } else {
+            setValidationStatus("failure");
+          }
+        })
+        .catch(() => {
+          setValidationStatus("failure");
+        });
+    }
+    if (markdownPreviewInput) {
+      getHTML();
+    } else {
+      setHTML(null);
+    }
+  }, [markdownPreviewInput]);
 
   const input = (
     <div
@@ -79,12 +78,13 @@ export function MarkdownPreviewLayout() {
         validationStatus === "failure" ? styles.inputContainerFailure : null
       }`}
     >
-      <TextAreaInput
-        placeHolder="# This is a markdown preview placeholder"
+      <CodeInput
+        placeholder="# This is a markdown preview placeholder"
         setValue={setMarkdownPreviewInput}
         value={markdownPreviewInput}
+        validationBar
+        validationStatus={validationStatus}
       />
-      {statusElement}
     </div>
   );
 
@@ -107,14 +107,10 @@ export function MarkdownPreviewLayout() {
             title="Markdown output"
             description="A preview of your rendered markdown"
             content={
-              <Suspense
-                fallback={<h2 className={styles.showing}>🌀 Loading...</h2>}
-              >
-                <Markdown
-                  input={markdownPreviewInput}
-                  setStatus={setValidationStatus}
-                />
-              </Suspense>
+              <div
+                dangerouslySetInnerHTML={{ __html: html ? html : placeholder }}
+                className={markdownStyles.root}
+              />
             }
           />
         </div>
