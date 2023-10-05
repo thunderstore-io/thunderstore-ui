@@ -11,6 +11,7 @@ export {
   BreadCrumbs,
   DefaultHomeCrumb,
 } from "./components/BreadCrumbs/BreadCrumbs";
+export { CodeInput } from "./components/CodeInput/CodeInput";
 export { CopyButton } from "./components/CopyButton/CopyButton";
 export { Dialog } from "./components/Dialog/Dialog";
 export {
