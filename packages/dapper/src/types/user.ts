@@ -1,5 +1,16 @@
 import { DynamicLink } from "./shared";
 
+export interface CurrentUser {
+  username: string | null;
+  capabilities: string[];
+  connections: OAuthConnection[];
+  rated_packages: string[];
+  subscription: {
+    expires: string | null;
+  };
+  teams: string[];
+}
+
 export interface User {
   name: string;
   imageSource?: string;
@@ -14,17 +25,10 @@ export interface User {
   showBadgesOnProfile?: boolean;
 }
 
-export interface UserSettings extends User {
-  achievements?: (Achievement & Setting)[];
-  badges?: (Badge & Setting)[];
-  connections: OAuthConnection[];
-}
-
 export interface OAuthConnection {
-  name: string;
-  connectedUsername: string;
-  imageSource: string;
-  enabled: boolean;
+  provider: string;
+  username: string;
+  avatar: string | null;
 }
 
 interface Achievement {
@@ -37,8 +41,4 @@ interface Badge {
   name: string;
   description: string;
   imageSource: string;
-}
-
-interface Setting {
-  enabled: boolean;
 }

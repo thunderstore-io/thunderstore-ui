@@ -6,7 +6,7 @@ import { RequestConfig } from "./index";
 export async function apiFetch(
   config: RequestConfig,
   path: string,
-  query: string
+  query?: string
 ) {
   const url = getUrl(config, path, query);
   const settings = getSettings(config);
@@ -40,7 +40,7 @@ function getSettings(config: RequestConfig) {
     : {};
 }
 
-function getUrl(config: RequestConfig, path: string, query: string) {
+function getUrl(config: RequestConfig, path: string, query?: string) {
   const fullPath = query ? `${path}?${query}` : path;
   return new URL(fullPath, config.apiHost);
 }

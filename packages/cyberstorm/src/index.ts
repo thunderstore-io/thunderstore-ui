@@ -119,10 +119,7 @@ export {
   PackageListLayout,
   type PackageListLayoutProps,
 } from "./components/Layout/PackageListLayout/PackageListLayout";
-export {
-  SettingsLayout,
-  type SettingsLayoutProps,
-} from "./components/Layout/Settings/SettingsLayout";
+export { SettingsLayout } from "./components/Layout/Settings/SettingsLayout";
 export {
   TeamSettingsLayout,
   type TeamSettingsLayoutProps,

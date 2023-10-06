@@ -49,7 +49,7 @@ export function Connections(props: ConnectionsProps) {
                   key={p.name}
                   provider={p}
                   connection={connections?.find(
-                    (c) => c.name.toLowerCase() === p.name.toLowerCase()
+                    (c) => c.provider.toLowerCase() === p.name.toLowerCase()
                   )}
                 />
               ))}
@@ -92,7 +92,7 @@ function Connection(props: ConnectionProps) {
             <div className={styles.connectedAs}>
               <div className={styles.connectedAsDescription}>Connected as</div>
               <div className={styles.connectedAsUsername}>
-                {connection.connectedUsername}
+                {connection.username}
               </div>
             </div>
           ) : null}

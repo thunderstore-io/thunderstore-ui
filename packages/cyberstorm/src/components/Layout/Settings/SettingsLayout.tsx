@@ -11,22 +11,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNodes, faCog } from "@fortawesome/pro-regular-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
-import { UserSettings } from "@thunderstore/dapper/types";
+import { CurrentUser } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
 import { Icon } from "../../Icon/Icon";
 
-export interface SettingsLayoutProps {
-  userId: string;
-}
-
 /**
- * Cyberstorm Settings Layout
+ * View containing settings for the authenticated user's account.
  */
-export function SettingsLayout(props: SettingsLayoutProps) {
-  const { userId } = props;
-
+export function SettingsLayout() {
   const dapper = useDapper();
-  const userSettings = usePromise(dapper.getUserSettings, [userId]);
+  const user = usePromise(dapper.getCurrentUser, []);
 
   const [currentTab, setCurrentTab] = useState(1);
 
@@ -41,7 +35,7 @@ export function SettingsLayout(props: SettingsLayoutProps) {
       tabs={
         <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
       }
-      mainContent={<>{getTabContent(currentTab, userSettings)}</>}
+      mainContent={getTabContent(currentTab, user)}
     />
   );
 }
@@ -69,20 +63,20 @@ const tabs = [
   },
 ];
 
-function getTabContent(currentTab: number, userSettings: UserSettings) {
-  let tabContent = null;
+function getTabContent(currentTab: number, user: CurrentUser) {
   if (currentTab === 1) {
-    tabContent = (
+    return (
       <div className={styles.tabContent}>
-        <Connections connections={userSettings.connections} />
+        <Connections connections={user.connections} />
       </div>
     );
   } else if (currentTab === 2) {
-    tabContent = (
+    return (
       <div className={styles.tabContent}>
-        <Account userData={userSettings} />
+        <Account username={user.username} />
       </div>
     );
   }
-  return tabContent;
+
+  throw new Error(`Unknown tab key "${currentTab}"`);
 }
