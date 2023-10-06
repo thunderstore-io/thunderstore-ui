@@ -7,12 +7,9 @@ const meta = {
   component: PackageListLayout,
 } as Meta<typeof PackageListLayout>;
 
-const Template: StoryFn<typeof PackageListLayout> = (args) => (
-  <div>
-    <PackageListLayout communityId="community" />
-  </div>
+const Template: StoryFn<typeof PackageListLayout> = () => (
+  <PackageListLayout communityId="community" />
 );
+const PackageList = Template.bind({});
 
-const DefaultPackageListLayout = Template.bind({});
-
-export { meta as default, DefaultPackageListLayout as PackageList };
+export { meta as default, PackageList };

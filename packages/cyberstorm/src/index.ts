@@ -111,14 +111,8 @@ export {
   PackageDetailLayout,
   type PackageDetailLayoutProps,
 } from "./components/Layout/PackageDetailLayout/PackageDetailLayout";
-export {
-  PackageDependantsLayout,
-  type PackageDependantsLayoutProps,
-} from "./components/Layout/PackageDependantsLayout/PackageDependantsLayout";
-export {
-  PackageListLayout,
-  type PackageListLayoutProps,
-} from "./components/Layout/PackageListLayout/PackageListLayout";
+export { PackageDependantsLayout } from "./components/Layout/PackageDependantsLayout/PackageDependantsLayout";
+export { PackageListLayout } from "./components/Layout/PackageListLayout/PackageListLayout";
 export { SettingsLayout } from "./components/Layout/Settings/SettingsLayout";
 export {
   TeamSettingsLayout,

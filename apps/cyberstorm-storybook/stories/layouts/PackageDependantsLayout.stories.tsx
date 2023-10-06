@@ -16,11 +16,8 @@ const packageData = {
 } as Package;
 
 const Template: StoryFn<typeof PackageDependantsLayout> = () => (
-  <div>
-    <PackageDependantsLayout packageData={packageData} />
-  </div>
+  <PackageDependantsLayout package={packageData} />
 );
+const PackageDependants = Template.bind({});
 
-const DefaultPackageDependantsLayout = Template.bind({});
-
-export { meta as default, DefaultPackageDependantsLayout as PackageDependants };
+export { meta as default, PackageDependants };

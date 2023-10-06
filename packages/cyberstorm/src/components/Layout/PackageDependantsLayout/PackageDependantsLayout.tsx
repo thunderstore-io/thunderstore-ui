@@ -1,3 +1,6 @@
+import { useDapper } from "@thunderstore/dapper";
+import { Package } from "@thunderstore/dapper/types";
+import { usePromise } from "@thunderstore/use-promise";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import {
   CommunitiesLink,
@@ -5,47 +8,43 @@ import {
   PackageLink,
   UserLink,
 } from "../../Links/Links";
-import { Package } from "@thunderstore/dapper/types";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import styles from "./PackageDependantsLayout.module.css";
-import { useDapper } from "@thunderstore/dapper";
-import { usePromise } from "@thunderstore/use-promise";
 
-export interface PackageDependantsLayoutProps {
-  isLoading?: boolean;
-  packageData: Package;
+interface PackageDependantsLayoutProps {
+  package: Package;
 }
 
 /**
- * Cyberstorm PackageList Layout
+ * View for listing the packages depending on a given package.
+ *
+ * TODO: Currently this lists Community's packages as the
+ * PackageSearchLayout doesn't support showing dependants.
  */
 export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
-  const { packageData } = props;
+  const { package: pkg } = props;
 
   const dapper = useDapper();
-  const communityData = usePromise(dapper.getCommunity, [
-    packageData.community,
-  ]);
+  const community = usePromise(dapper.getCommunity, [pkg.community]);
 
   return (
     <BaseLayout
       backGroundImageSource={
-        communityData.community.background_image_url ||
-        "/images/community_bg.png"
+        community.background_image_url || "/images/community_bg.png"
       }
       breadCrumb={
         <BreadCrumbs>
           <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={communityData.community.name}>
-            {communityData.community.name}
+          <CommunityLink community={community.identifier}>
+            {community.name}
           </CommunityLink>
           <PackageLink
-            community={packageData.community}
-            namespace={packageData.namespace}
-            package={packageData.name}
+            community={pkg.community}
+            namespace={pkg.namespace}
+            package={pkg.name}
           >
-            {packageData.name}
+            {pkg.name}
           </PackageLink>
           Dependants
         </BreadCrumbs>
@@ -54,21 +53,19 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
         <div className={styles.header}>
           Mods that depend on{" "}
           <PackageLink
-            community={packageData.community}
-            namespace={packageData.namespace}
-            package={packageData.name}
+            community={pkg.community}
+            namespace={pkg.namespace}
+            package={pkg.name}
           >
-            {packageData.name}
+            {pkg.name}
           </PackageLink>
-          {packageData.author ? " by " : null}
-          {packageData.author ? (
-            <UserLink user={packageData.author}>{packageData.author}</UserLink>
+          {pkg.author ? " by " : null}
+          {pkg.author ? (
+            <UserLink user={pkg.author}>{pkg.author}</UserLink>
           ) : null}
         </div>
       }
-      mainContent={
-        <PackageSearchLayout communityId={communityData.community.name} />
-      }
+      mainContent={<PackageSearchLayout communityId={pkg.community} />}
     />
   );
 }

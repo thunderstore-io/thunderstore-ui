@@ -7,7 +7,7 @@ export interface PageHeaderProps {
   image?: ReactElement;
   title: string;
   description?: string | null;
-  meta?: ReactElement[];
+  meta?: (ReactElement | null)[];
 }
 
 /**
@@ -15,6 +15,7 @@ export interface PageHeaderProps {
  */
 export function PageHeader(props: PageHeaderProps) {
   const { title, description = null, image = null, meta = [] } = props;
+  const metas = meta.filter(Boolean);
 
   return (
     <div className={styles.root}>
@@ -25,7 +26,8 @@ export function PageHeader(props: PageHeaderProps) {
         {description ? (
           <CollapsibleText text={description} maxLength={85} />
         ) : null}
-        {meta.length > 0 ? <div className={styles.meta}>{meta}</div> : null}
+
+        {metas.length ? <div className={styles.meta}>{metas}</div> : null}
       </div>
     </div>
   );

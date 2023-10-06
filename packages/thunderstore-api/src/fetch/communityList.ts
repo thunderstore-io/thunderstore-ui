@@ -1,4 +1,4 @@
-import { RequestConfig } from "..";
+import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
 import { serializeQueryString } from "../queryString";
 

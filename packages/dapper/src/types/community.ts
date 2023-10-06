@@ -1,4 +1,3 @@
-import { ServerPreview } from "./server";
 import { PaginatedList } from "./shared";
 
 export type Community = {
@@ -14,8 +13,3 @@ export type Community = {
 };
 
 export type Communities = PaginatedList<Community>;
-
-export type CommunityData = {
-  community: Community;
-  servers: ServerPreview[];
-};
