@@ -8,13 +8,9 @@
   line-height: 1.6rem;
 }
 
-/*
-  TODO: Use proper styles instead of these placeholder values. The
-  content rendered on this page should match how the content is actually
-  rendered on the package page. I don't think Figma contains all the
-  stuff supported by markdown, so this needs to be discussed further and
-  all the styles should be updated all at once.
+.root > :first-child { padding-top: 0; }
 
+/*
   We can't control the elements inside the Markdown wrapper, e.g. to
   give them class names, and linting requires pure selectors, so repeat
   the .root class name on each selector.
@@ -29,11 +25,22 @@
   gap: 0.5rem;
   align-items: flex-start;
   align-self: stretch;
-  padding: 2rem 0 0.5rem;
-  border-bottom: 1px solid #29295b;
   font: var(--font-body);
   font-weight: 700;
   line-height: normal;
+}
+
+.root h1,
+.root h2 {
+  padding: 2rem 0 0.5rem;
+  border-bottom: 1px solid #29295b;
+}
+
+.root h3,
+.root h4,
+.root h5,
+.root h6 {
+  padding-top: 1rem;
 }
 
 .root h1 { font-size: 2.25rem; }
