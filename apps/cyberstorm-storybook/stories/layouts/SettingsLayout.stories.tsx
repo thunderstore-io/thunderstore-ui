@@ -7,12 +7,7 @@ const meta = {
   component: SettingsLayout,
 } as Meta<typeof SettingsLayout>;
 
-const Template: StoryFn<typeof SettingsLayout> = () => (
-  <div>
-    <SettingsLayout userId="settingsUser" />
-  </div>
-);
+const Template: StoryFn<typeof SettingsLayout> = () => <SettingsLayout />;
+const Settings = Template.bind({});
 
-const DefaultSettingsLayout = Template.bind({});
-
-export { meta as default, DefaultSettingsLayout as Settings };
+export { meta as default, Settings };
