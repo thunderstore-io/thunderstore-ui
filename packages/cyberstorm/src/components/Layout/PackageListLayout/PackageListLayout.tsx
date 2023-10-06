@@ -1,28 +1,26 @@
-import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
+import { faDiscord } from "@fortawesome/free-brands-svg-icons";
+import { faBoxOpen, faDownload } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CommunitiesLink, CommunityLink } from "../../Links/Links";
+import { useDapper } from "@thunderstore/dapper";
+import { usePromise } from "@thunderstore/use-promise";
+
 import { BaseLayout } from "../BaseLayout/BaseLayout";
+import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
+import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
+import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
+import * as Button from "../../Button/";
+import { CommunityImage } from "../../CommunityImage/CommunityImage";
+import { Icon } from "../../Icon/Icon";
+import { CommunitiesLink, CommunityLink } from "../../Links/Links";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { formatInteger } from "../../../utils/utils";
-import { faBoxOpen, faDownload } from "@fortawesome/pro-regular-svg-icons";
-import { faDiscord } from "@fortawesome/free-brands-svg-icons";
-import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
-import { CommunityImage } from "../../CommunityImage/CommunityImage";
-import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
-import { useDapper } from "@thunderstore/dapper";
-import { PackagePreview } from "@thunderstore/dapper/types";
-import { usePromise } from "@thunderstore/use-promise";
-import { Icon } from "../../Icon/Icon";
-import * as Button from "../../Button/";
 
-export interface PackageListLayoutProps {
-  isLoading?: boolean;
+interface PackageListLayoutProps {
   communityId: string;
-  packageData?: PackagePreview[];
 }
 
 /**
- * Cyberstorm PackageList Layout
+ * View for showing Community's package listing.
  */
 export function PackageListLayout(props: PackageListLayoutProps) {
   const { communityId } = props;
@@ -58,7 +56,7 @@ export function PackageListLayout(props: PackageListLayoutProps) {
               key="meta-packages"
               label={
                 formatInteger(communityData.community.total_package_count) +
-                " Packages"
+                " packages"
               }
               icon={
                 <Icon>
@@ -72,7 +70,7 @@ export function PackageListLayout(props: PackageListLayoutProps) {
               key="meta-downloads"
               label={
                 formatInteger(communityData.community.total_download_count) +
-                " Downloads"
+                " downloads"
               }
               icon={
                 <Icon>

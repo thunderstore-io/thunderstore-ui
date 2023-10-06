@@ -14,5 +14,5 @@ export default function Page({
     name: params.package,
   } as Package;
 
-  return <PackageDependantsLayout packageData={packageData} />;
+  return <PackageDependantsLayout package={packageData} />;
 }
