@@ -10,3 +10,13 @@
   font-size: var(--font-size--l);
   line-height: var(--line-height--l);
 }
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.boldText {
+  font-weight: 700;
+}

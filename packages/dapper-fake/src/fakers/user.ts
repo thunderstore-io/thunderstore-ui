@@ -20,7 +20,18 @@ export const getFakeCurrentUser = async () => {
           faker.date.soon({ days: 30 }).toDateString()
         ) ?? null,
     },
-    teams: [faker.word.words(1), faker.word.words(2)],
+    teams: [
+      {
+        name: faker.word.words(1),
+        role: "owner",
+        member_count: faker.number.int({ min: 1, max: 100 }),
+      },
+      {
+        name: faker.word.words(2),
+        role: "member",
+        member_count: faker.number.int({ min: 1, max: 100 }),
+      },
+    ],
   };
 };
 
