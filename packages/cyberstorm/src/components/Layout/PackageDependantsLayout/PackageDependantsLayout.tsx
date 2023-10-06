@@ -26,19 +26,18 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
   const { package: pkg } = props;
 
   const dapper = useDapper();
-  const communityData = usePromise(dapper.getCommunity, [pkg.community]);
+  const community = usePromise(dapper.getCommunity, [pkg.community]);
 
   return (
     <BaseLayout
       backGroundImageSource={
-        communityData.community.background_image_url ||
-        "/images/community_bg.png"
+        community.background_image_url || "/images/community_bg.png"
       }
       breadCrumb={
         <BreadCrumbs>
           <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={communityData.community.identifier}>
-            {communityData.community.name}
+          <CommunityLink community={community.identifier}>
+            {community.name}
           </CommunityLink>
           <PackageLink
             community={pkg.community}

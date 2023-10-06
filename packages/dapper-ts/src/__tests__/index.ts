@@ -11,7 +11,7 @@ it("executes getCommunities without errors", async () => {
 });
 
 it("executes getCommunity without errors", async () => {
-  await expect(dapper.getCommunity()).resolves.not.toThrowError();
+  await expect(dapper.getCommunity("riskofrain2")).resolves.not.toThrowError();
 });
 
 // TODO: this should be tested/mocked with sessionId too.

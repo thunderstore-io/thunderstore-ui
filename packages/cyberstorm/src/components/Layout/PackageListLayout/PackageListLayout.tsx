@@ -26,38 +26,32 @@ export function PackageListLayout(props: PackageListLayoutProps) {
   const { communityId } = props;
 
   const dapper = useDapper();
-  const communityData = usePromise(dapper.getCommunity, [communityId]);
+  const community = usePromise(dapper.getCommunity, [communityId]);
 
   return (
     <BaseLayout
       backGroundImageSource={
-        communityData.community.background_image_url ||
-        "/images/community_bg.png"
+        community.background_image_url || "/images/community_bg.png"
       }
       breadCrumb={
         <BreadCrumbs>
           <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={communityData.community.identifier}>
-            {communityData.community.name}
+          <CommunityLink community={community.identifier}>
+            {community.name}
           </CommunityLink>
         </BreadCrumbs>
       }
       header={
         <PageHeader
-          title={communityData.community.name}
-          description={communityData.community.description}
+          title={community.name}
+          description={community.description}
           image={
-            <CommunityImage
-              src={communityData.community.icon_url ?? "/images/game.png"}
-            />
+            <CommunityImage src={community.icon_url ?? "/images/game.png"} />
           }
           meta={[
             <MetaItem
               key="meta-packages"
-              label={
-                formatInteger(communityData.community.total_package_count) +
-                " packages"
-              }
+              label={`${formatInteger(community.total_package_count)} packages`}
               icon={
                 <Icon>
                   <FontAwesomeIcon icon={faBoxOpen} />
@@ -68,10 +62,9 @@ export function PackageListLayout(props: PackageListLayoutProps) {
             />,
             <MetaItem
               key="meta-downloads"
-              label={
-                formatInteger(communityData.community.total_download_count) +
-                " downloads"
-              }
+              label={`${formatInteger(
+                community.total_download_count
+              )} downloads`}
               icon={
                 <Icon>
                   <FontAwesomeIcon icon={faDownload} />
@@ -80,16 +73,18 @@ export function PackageListLayout(props: PackageListLayoutProps) {
               colorScheme="accent"
               size="bold_large"
             />,
-            <a key="meta-link" href="https://discord.thunderstore.io/">
-              <Button.Root colorScheme="transparentPrimary">
-                <Button.ButtonIcon>
-                  <Icon>
-                    <FontAwesomeIcon icon={faDiscord} />
-                  </Icon>
-                </Button.ButtonIcon>
-                <Button.ButtonLabel>Join our community</Button.ButtonLabel>
-              </Button.Root>
-            </a>,
+            community.discord_url ? (
+              <a key="meta-link" href="{community.discord_url}">
+                <Button.Root colorScheme="transparentPrimary">
+                  <Button.ButtonIcon>
+                    <Icon>
+                      <FontAwesomeIcon icon={faDiscord} />
+                    </Icon>
+                  </Button.ButtonIcon>
+                  <Button.ButtonLabel>Join our community</Button.ButtonLabel>
+                </Button.Root>
+              </a>
+            ) : null,
           ]}
         />
       }

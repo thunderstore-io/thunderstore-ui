@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { fetchCommunityList } from "@thunderstore/thunderstore-api";
+import {
+  fetchCommunity,
+  fetchCommunityList,
+} from "@thunderstore/thunderstore-api";
 
 import { DapperTsInterface } from "../index";
 import { paginatedResults } from "../sharedSchemas";
@@ -16,7 +19,7 @@ const communitySchema = z.object({
   total_package_count: z.number().int(),
 });
 
-const schema = paginatedResults(communitySchema);
+const communitiesSchema = paginatedResults(communitySchema);
 
 export async function getCommunities(
   this: DapperTsInterface,
@@ -25,7 +28,7 @@ export async function getCommunities(
   search?: string
 ) {
   const data = await fetchCommunityList(this.config, page, ordering, search);
-  const parsed = schema.safeParse(data);
+  const parsed = communitiesSchema.safeParse(data);
 
   if (!parsed.success) {
     // TODO: add Sentry support and log parsed.error.
@@ -37,4 +40,19 @@ export async function getCommunities(
     hasMore: Boolean(parsed.data.next),
     results: parsed.data.results,
   };
+}
+
+export async function getCommunity(
+  this: DapperTsInterface,
+  communityId: string
+) {
+  const data = await fetchCommunity(this.config, communityId);
+  const parsed = communitySchema.safeParse(data);
+
+  if (!parsed.success) {
+    // TODO: add Sentry support and log parsed.error.
+    throw new Error("Invalid data received from backend");
+  }
+
+  return parsed.data;
 }

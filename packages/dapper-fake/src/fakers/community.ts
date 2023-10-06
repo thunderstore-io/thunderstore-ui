@@ -1,14 +1,14 @@
 import { faker } from "@faker-js/faker";
+import { GetCommunities } from "@thunderstore/dapper/types";
 
 import { getFakeImg, getIds, setSeed } from "./utils";
-import { Community, GetCommunities } from "@thunderstore/dapper/types";
 
-const getFakeCommunityPreview = (uuid: string): Community => {
-  setSeed(uuid);
+export const getFakeCommunity = async (communityId: string) => {
+  setSeed(communityId);
 
   return {
     name: faker.word.words(3),
-    identifier: uuid,
+    identifier: communityId,
     description: faker.helpers.maybe(() => faker.word.words(5)) ?? null,
     discord_url: faker.helpers.maybe(() => faker.internet.url()) ?? null,
     datetime_created: faker.date.past().toISOString(),
@@ -23,20 +23,6 @@ const getFakeCommunityPreview = (uuid: string): Community => {
   };
 };
 
-export const getFakeCommunity = async (uuid: string) => {
-  setSeed(uuid);
-
-  return {
-    community: {
-      ...getFakeCommunityPreview(uuid),
-      description: faker.lorem.paragraphs(3),
-      discord_url: faker.internet.url(),
-      background_image_url: getFakeImg(1920, 1080),
-    },
-    servers: [],
-  };
-};
-
 export const getFakeCommunities: GetCommunities = async (
   page = 1,
   ordering = "name",
@@ -46,8 +32,8 @@ export const getFakeCommunities: GetCommunities = async (
   const pageSize = 150;
   const fullPages = 5;
   const communityCount = pageSize * fullPages + Math.floor(pageSize / 2);
-  let communities = getIds(communityCount, "communitySeed").map(
-    getFakeCommunityPreview
+  let communities = await Promise.all(
+    getIds(communityCount, "communitySeed").map(getFakeCommunity)
   );
 
   if (typeof search === "string" && search !== "") {
