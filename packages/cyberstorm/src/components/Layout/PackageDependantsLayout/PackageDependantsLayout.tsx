@@ -37,7 +37,7 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
       breadCrumb={
         <BreadCrumbs>
           <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={communityData.community.name}>
+          <CommunityLink community={communityData.community.identifier}>
             {communityData.community.name}
           </CommunityLink>
           <PackageLink

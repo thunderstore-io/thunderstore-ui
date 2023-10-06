@@ -19,7 +19,7 @@ export function CommunityCard(props: Props) {
   const { community } = props;
 
   return (
-    <CommunityLink community={community.name}>
+    <CommunityLink community={community.identifier}>
       <div className={styles.root}>
         <div className={styles.imageWrapper}>
           {community.icon_url ? (

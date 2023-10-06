@@ -37,7 +37,7 @@ export function PackageListLayout(props: PackageListLayoutProps) {
       breadCrumb={
         <BreadCrumbs>
           <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={communityData.community.name}>
+          <CommunityLink community={communityData.community.identifier}>
             {communityData.community.name}
           </CommunityLink>
         </BreadCrumbs>
