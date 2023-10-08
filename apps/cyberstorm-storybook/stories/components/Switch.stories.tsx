@@ -25,23 +25,23 @@ const SameStateSwitchTemplate: StoryFn<typeof Switch> = () => {
 const SwitchLabelIdTemplate: StoryFn<typeof Switch> = () => {
   const [state, setState] = useState(false);
   return (
-    <div>
+    <>
       <label htmlFor="my-switch">My switch</label>
       <div>
-        <Switch state={state} onChange={setState} labelId="my-switch" />
+        <Switch state={state} onChange={setState} Id="my-switch" />
       </div>
-    </div>
+    </>
   );
 };
-const SwitchLabelWithoutNestingTemplate: StoryFn<typeof Switch> = () => {
+const SwitchNestedLabelTemplate: StoryFn<typeof Switch> = () => {
   const [state, setState] = useState(false);
   return (
-    <div>
-      <label htmlFor="my-switch">
+    <>
+      <label>
         My switch
         <Switch state={state} onChange={setState} />
       </label>
-    </div>
+    </>
   );
 };
 
@@ -49,7 +49,7 @@ const RegularSwitch = Template.bind({});
 const DisabledSwitch = Template.bind({});
 DisabledSwitch.args = { state: false, disabled: true };
 const SameStateSwitch = SameStateSwitchTemplate.bind({});
-const SwitchLabelWithoutNesting = SwitchLabelWithoutNestingTemplate.bind({});
+const SwitchNestedLabel = SwitchNestedLabelTemplate.bind({});
 const SwitchLabelId = SwitchLabelIdTemplate.bind({});
 
 export {
@@ -58,5 +58,5 @@ export {
   DisabledSwitch,
   SameStateSwitch,
   SwitchLabelId,
-  SwitchLabelWithoutNesting,
+  SwitchNestedLabel,
 };
