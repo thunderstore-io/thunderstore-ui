@@ -1,7 +1,7 @@
+import { config } from "./defaultConfig";
 import { fetchCurrentUser } from "../currentUser";
 
 it("receives emptyish object when querying without session id", async () => {
-  const config = { apiHost: "https://thunderstore.dev" };
   const response = await fetchCurrentUser(config);
 
   expect(response).toHaveProperty("username", null);

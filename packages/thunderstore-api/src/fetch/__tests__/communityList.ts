@@ -1,7 +1,7 @@
+import { config } from "./defaultConfig";
 import { fetchCommunityList } from "../communityList";
 
 it("finds RoR2 in community listing", async () => {
-  const config = { apiHost: "https://thunderstore.dev" };
   const response = await fetchCommunityList(config);
 
   expect(Array.isArray(response.results)).toEqual(true);
