@@ -16,7 +16,7 @@ export type SelectOption = {
 };
 
 type _SelectProps = {
-  colorScheme?: "default" | "accent";
+  variant?: "default" | "accent" | "wide";
   defaultOpen?: boolean;
   icon?: ReactNode;
   onChange?: (val: string) => void;
@@ -30,7 +30,7 @@ export type SelectProps = _SelectProps &
 
 export function Select(props: SelectProps) {
   const {
-    colorScheme = "default",
+    variant = "default",
     defaultOpen = false,
     icon = (
       <Icon>
@@ -58,13 +58,13 @@ export function Select(props: SelectProps) {
         <RadixSelect.Trigger asChild>
           <Button.Root
             iconAlignment="side"
-            colorScheme={colorScheme}
+            colorScheme="wideDarker"
             paddingSize="large"
           >
             <Button.ButtonLabel fontSize={triggerFontSize}>
               {options?.find((o) => o.value === value)?.label ?? placeholder}
             </Button.ButtonLabel>
-            <Button.ButtonIcon>{icon}</Button.ButtonIcon>
+            <Button.ButtonIcon iconColor="darker">{icon}</Button.ButtonIcon>
           </Button.Root>
         </RadixSelect.Trigger>
 
@@ -72,7 +72,7 @@ export function Select(props: SelectProps) {
           <RadixSelect.Content
             position="popper"
             sideOffset={4}
-            className={`${styles.content} ${getContentStyle(colorScheme)}`}
+            className={`${styles.content} ${getContentStyle(variant)}`}
           >
             {selectItemElements}
           </RadixSelect.Content>
@@ -84,10 +84,11 @@ export function Select(props: SelectProps) {
 
 Select.displayName = "Select";
 
-const getContentStyle = (scheme: SelectProps["colorScheme"] = "default") => {
+const getContentStyle = (scheme: SelectProps["variant"] = "default") => {
   return {
     default: styles.content__default,
     accent: styles.content__accent,
+    wide: styles.content__wide,
   }[scheme];
 };
 
@@ -95,8 +96,19 @@ const mapSelectData = (options: SelectOption[]) => {
   return options.map((option, index) => (
     <RadixSelect.Item value={option.value} key={index} asChild>
       <MenuItem.Root>
-        <MenuItem.MenuItemIcon>{option.leftIcon}</MenuItem.MenuItemIcon>
-        <MenuItem.MenuItemLabel>{option.label}</MenuItem.MenuItemLabel>
+        {option.leftIcon ? (
+          <MenuItem.MenuItemIcon>{option.leftIcon}</MenuItem.MenuItemIcon>
+        ) : null}
+        {option.label ? (
+          <MenuItem.MenuItemLabel fontSize="small">
+            {option.label}
+          </MenuItem.MenuItemLabel>
+        ) : null}
+        {!option.label && !option.leftIcon ? (
+          <MenuItem.MenuItemLabel fontSize="small">
+            {option.value}
+          </MenuItem.MenuItemLabel>
+        ) : null}
       </MenuItem.Root>
     </RadixSelect.Item>
   ));

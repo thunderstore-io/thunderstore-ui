@@ -6,5 +6,5 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--12);
+  gap: var(--gap--16);
 }

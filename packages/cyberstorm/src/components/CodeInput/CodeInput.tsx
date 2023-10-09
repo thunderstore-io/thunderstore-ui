@@ -17,6 +17,7 @@ interface CodeInputProps {
   placeholder?: string;
   validationBar?: boolean;
   validationStatus?: "waiting" | "validating" | "success" | "failure";
+  failureMessage?: string;
 }
 
 /**
@@ -29,6 +30,7 @@ export function CodeInput(props: CodeInputProps) {
     placeholder,
     validationBar = false,
     validationStatus,
+    failureMessage,
   } = props;
 
   let statusElement = null;
@@ -74,7 +76,9 @@ export function CodeInput(props: CodeInputProps) {
               <FontAwesomeIcon icon={faTriangleExclamation} />
             </Icon>
           </div>
-          Problem, alarm, danger. Everything is going to explode.
+          {failureMessage
+            ? failureMessage
+            : "Problem, alarm, danger. Everything is going to explode."}
         </div>
       );
     }
@@ -82,8 +86,8 @@ export function CodeInput(props: CodeInputProps) {
   return (
     <div
       className={`${styles.inputContainer} ${
-        validationStatus === "failure" ? styles.inputContainerFailure : null
-      } ${!validationBar ? styles.inputContainerStatusBarDisabled : null}`}
+        validationStatus === "failure" ? styles.inputContainerFailure : ""
+      } ${!validationBar ? styles.inputContainerStatusBarDisabled : ""}`}
     >
       <TextAreaInput
         placeHolder={placeholder}
