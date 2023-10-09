@@ -8,18 +8,18 @@ export interface SwitchProps {
   state: boolean;
   onChange?: Dispatch<SetStateAction<boolean>>;
   disabled?: boolean;
-  Id?: string;
+  id?: string;
 }
 
 export function Switch(props: SwitchProps) {
-  const { state, onChange, disabled = false, Id } = props;
+  const { state, onChange, disabled = false, id } = props;
   return (
     <RadixSwitch.Root
       className={styles.root}
       disabled={disabled}
       onCheckedChange={onChange}
       checked={state}
-      id={Id}
+      id={id}
     >
       <RadixSwitch.Thumb className={styles.thumb} />
     </RadixSwitch.Root>

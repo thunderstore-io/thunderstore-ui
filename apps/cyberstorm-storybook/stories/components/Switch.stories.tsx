@@ -27,21 +27,17 @@ const SwitchLabelIdTemplate: StoryFn<typeof Switch> = () => {
   return (
     <>
       <label htmlFor="my-switch">My switch</label>
-      <div>
-        <Switch state={state} onChange={setState} Id="my-switch" />
-      </div>
+      <Switch state={state} onChange={setState} id="my-switch" />
     </>
   );
 };
 const SwitchNestedLabelTemplate: StoryFn<typeof Switch> = () => {
   const [state, setState] = useState(false);
   return (
-    <>
-      <label>
-        My switch
-        <Switch state={state} onChange={setState} />
-      </label>
-    </>
+    <label>
+      My switch
+      <Switch state={state} onChange={setState} />
+    </label>
   );
 };
 
