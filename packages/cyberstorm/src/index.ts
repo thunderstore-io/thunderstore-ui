@@ -123,10 +123,7 @@ export {
   TeamLayout,
   type TeamLayoutProps,
 } from "./components/Layout/TeamLayout/TeamLayout";
-export {
-  UserProfileLayout,
-  type UserProfileLayoutProps,
-} from "./components/Layout/UserProfileLayout/UserProfileLayout";
+export { UserProfileLayout } from "./components/Layout/UserProfileLayout/UserProfileLayout";
 
 export { ManifestValidatorLayout } from "./components/Layout/Developers/ManifestValidator/ManifestValidatorLayout";
 export { MarkdownPreviewLayout } from "./components/Layout/Developers/MarkdownPreview/MarkdownPreviewLayout";
