@@ -86,11 +86,7 @@ export {
   type PaginationButtonProps,
 } from "./components/Pagination/PaginationButton";
 export { CyberstormProviders } from "./components/Providers";
-export {
-  Select,
-  type SelectOption,
-  type SelectProps,
-} from "./components/Select/Select";
+export { Select, type SelectProps } from "./components/Select/Select";
 export { Tabs, type TabsProps } from "./components/Tabs/Tabs";
 export { Tag, type TagProps } from "./components/Tag/Tag";
 export {

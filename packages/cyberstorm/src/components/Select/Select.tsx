@@ -9,26 +9,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as RadixSelect from "@radix-ui/react-select";
 import { Icon } from "../Icon/Icon";
 
-export type SelectOption = {
-  value: string;
+type SelectOption<T extends string = string> = {
+  value: T;
   label?: string;
   leftIcon?: ReactNode;
 };
 
-type _SelectProps = {
+type _SelectProps<T extends string = string> = {
   variant?: "default" | "accent" | "wide";
   defaultOpen?: boolean;
   icon?: ReactNode;
-  onChange?: (val: string) => void;
-  options: SelectOption[];
+  onChange?: (val: T) => void;
+  options: SelectOption<T>[];
   placeholder?: string;
   value?: string;
   triggerFontSize?: "small" | "medium" | "large" | "huge";
 };
-export type SelectProps = _SelectProps &
-  Omit<React.HTMLProps<HTMLDivElement>, keyof _SelectProps>;
 
-export function Select(props: SelectProps) {
+export type SelectProps<T extends string = string> = _SelectProps<T> &
+  Omit<React.HTMLProps<HTMLDivElement>, keyof _SelectProps<T>>;
+
+export function Select<T extends string>(props: SelectProps<T>) {
   const {
     variant = "default",
     defaultOpen = false,
