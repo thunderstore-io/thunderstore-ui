@@ -117,7 +117,7 @@ export function Footer() {
               <div className={styles.ad}>
                 <div className={styles.adText}>
                   <div className={styles.adTitle}>Thunderstore Mod Manager</div>
-                  <p className={styles.adDescription}>
+                  <div className={styles.adDescription}>
                     You are prepared. Download Thunderstore Bolt
                     <br />
                     for desktop and enter a world of Thunder{" "}
@@ -126,7 +126,7 @@ export function Footer() {
                         <FontAwesomeIcon icon={faBoltLightning} />
                       </Icon>
                     </div>
-                  </p>
+                  </div>
                   <a href="/" className={styles.adButton}>
                     <Button.Root plain colorScheme="accent" paddingSize="large">
                       <Button.ButtonLabel fontSize="large">
