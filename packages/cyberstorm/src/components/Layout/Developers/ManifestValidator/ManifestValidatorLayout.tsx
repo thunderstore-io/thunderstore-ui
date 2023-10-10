@@ -19,11 +19,18 @@ interface HTMLResponse {
   namespace?: string[];
 }
 
-export const isRecord = (obj: unknown): obj is Record<string, unknown> =>
+const isRecord = (obj: unknown): obj is Record<string, unknown> =>
   obj instanceof Object;
 
+const isStringArray = (arr: unknown): arr is string[] =>
+  Array.isArray(arr) && arr.every((s) => typeof s === "string");
+
 function isHTMLResponse(response: unknown): response is HTMLResponse {
-  return isRecord(response);
+  return (
+    (isRecord(response) && typeof response.success === "string") ||
+    (isRecord(response) && isStringArray(response.non_field_errors)) ||
+    (isRecord(response) && isStringArray(response.namespace))
+  );
 }
 
 const encode = (str: string): string =>
@@ -42,103 +49,77 @@ const PLACEHOLDER = `{
 }
 `;
 
+interface IManifestValidationResult {
+  teamInput: string;
+  manifestInput: string;
+}
+
+async function ManifestValidationResult(
+  props: IManifestValidationResult
+): Promise<{
+  status: "success" | "failure";
+  message: string;
+}> {
+  const { teamInput, manifestInput } = props;
+  const response = await fetch(
+    "https://thunderstore.io/api/experimental/submission/validate/manifest-v1/",
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        namespace: teamInput,
+        manifest_data: encode(manifestInput),
+      }),
+    }
+  );
+
+  if (response.status === 200 || response.status === 400) {
+    const parsedResponse = await response.json();
+    if (isHTMLResponse(parsedResponse)) {
+      if (parsedResponse.success) {
+        return { status: "success", message: "All systems go!" };
+      } else if (parsedResponse.non_field_errors) {
+        return {
+          status: "failure",
+          message: parsedResponse.non_field_errors[0],
+        };
+      } else if (
+        parsedResponse.namespace &&
+        parsedResponse.namespace[0] === "Object not found"
+      ) {
+        return {
+          status: "failure",
+          message: "Namespace not found",
+        };
+      }
+    }
+  }
+  return { status: "failure", message: "Server error" };
+}
+
 /**
  * Cyberstorm ManifestValidator Layout
  */
 export function ManifestValidatorLayout() {
   const [teamInput, setTeamInput] = useState("");
-  const [manifestInput, setManifestInput] = useState(PLACEHOLDER);
-  const [failureMessage, setFailureMessage] = useState<undefined | string>(
-    undefined
-  );
-  const [validationStatus, setValidationStatus] = useState<
-    "waiting" | "validating" | "success" | "failure"
-  >("waiting");
+  const [manifestInput, setManifestInput] = useState("");
+  const [validationTrigger, setValidationTrigger] = useState(false);
+
+  const validator = {
+    validationFunc: ManifestValidationResult,
+    args: { teamInput, manifestInput },
+  };
 
   useEffect(() => {
-    async function getHTML() {
-      setValidationStatus("validating");
-      setFailureMessage(undefined);
-      fetch(
-        "https://thunderstore.io/api/experimental/submission/validate/manifest-v1/",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            namespace: teamInput,
-            manifest_data: encode(manifestInput),
-          }),
-        }
-      )
-        .then((response) => {
-          if (response.status === 200 || response.status === 400) {
-            return response.json();
-          }
-          throw new Error("Something went wrong");
-        })
-        .then((responseJson) => {
-          if (isHTMLResponse(responseJson)) {
-            if (responseJson.success) {
-              setValidationStatus("success");
-            } else if (responseJson.non_field_errors) {
-              setFailureMessage(responseJson.non_field_errors[0]);
-              setValidationStatus("failure");
-            } else if (
-              responseJson.namespace &&
-              responseJson.namespace[0] === "Object not found"
-            ) {
-              setFailureMessage("Namespace not found");
-              setValidationStatus("failure");
-            }
-          } else {
-            setValidationStatus("failure");
-          }
-        })
-        .catch(() => {
-          setValidationStatus("failure");
-        });
+    if (teamInput && manifestInput) {
+      setValidationTrigger(true);
+    } else {
+      setValidationTrigger(false);
     }
-    if (manifestInput && teamInput) {
-      getHTML();
-    }
-  }, [manifestInput, teamInput]);
-
-  const valdatorContent = (
-    <div className={styles.content}>
-      <Alert
-        content="You must be logged in to see your teams"
-        variant="warning"
-        icon={
-          <Icon>
-            <FontAwesomeIcon icon={faWarning} />
-          </Icon>
-        }
-      />
-      <Select
-        onChange={setTeamInput}
-        options={selectOptions}
-        value={teamInput}
-        placeholder="Select team"
-      />
-      <div
-        className={`${
-          validationStatus === "failure" ? styles.inputContainerFailure : ""
-        }`}
-      >
-        <CodeInput
-          placeholder={PLACEHOLDER}
-          setValue={setManifestInput}
-          value={manifestInput}
-          validationBar
-          validationStatus={validationStatus}
-          failureMessage={failureMessage}
-        />
-      </div>
-    </div>
-  );
+  }, [teamInput, manifestInput]);
 
   return (
     <BaseLayout
@@ -152,7 +133,32 @@ export function ManifestValidatorLayout() {
         <SettingItem
           title="Manifest Validator"
           description="Select a team to validate a package"
-          content={valdatorContent}
+          content={
+            <div className={styles.content}>
+              <Alert
+                content="You must be logged in to see your teams"
+                variant="warning"
+                icon={
+                  <Icon>
+                    <FontAwesomeIcon icon={faWarning} />
+                  </Icon>
+                }
+              />
+              <Select
+                onChange={setTeamInput}
+                options={selectOptions}
+                value={teamInput}
+                placeholder="Select team"
+              />
+              <CodeInput
+                placeholder={PLACEHOLDER}
+                setValue={setManifestInput}
+                value={manifestInput}
+                validator={validator}
+                shouldValidate={validationTrigger}
+              />
+            </div>
+          }
         />
       }
     />
@@ -166,6 +172,7 @@ const selectOptions = [
   },
   {
     value: "Test_Team_8",
+    label: "Test_Team_8",
   },
 ];
 
