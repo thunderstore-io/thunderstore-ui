@@ -8,11 +8,9 @@ const meta = {
 } as Meta<typeof TeamSettingsLayout>;
 
 const Template: StoryFn<typeof TeamSettingsLayout> = () => (
-  <div>
-    <TeamSettingsLayout teamId="team" />
-  </div>
+  <TeamSettingsLayout teamName="team" />
 );
 
-const DefaultTeamSettingsLayout = Template.bind({});
+const TeamSettings = Template.bind({});
 
-export { meta as default, DefaultTeamSettingsLayout as TeamSettings };
+export { meta as default, TeamSettings };

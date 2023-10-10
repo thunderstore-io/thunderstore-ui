@@ -6,7 +6,7 @@ import { TeamSettingsLink, TeamsLink } from "../../../Links/Links";
 import { Tabs } from "../../../Tabs/Tabs";
 import { TeamMembers } from "./TeamMembers/TeamMembers";
 import { TeamServiceAccounts } from "./TeamServiceAccounts/TeamServiceAccounts";
-import { TeamProfile } from "./TeamProfile/TeamProfile";
+import { TeamDetails } from "./TeamDetails/TeamDetails";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,18 +22,18 @@ import { Team } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
 import { Icon } from "../../../Icon/Icon";
 
-export interface TeamSettingsLayoutProps {
-  teamId: string;
+interface Props {
+  teamName: string;
 }
 
 /**
- * Cyberstorm Team Settings Layout
+ * View for managing one of the teams of the authenticated user.
  */
-export function TeamSettingsLayout(props: TeamSettingsLayoutProps) {
-  const { teamId } = props;
+export function TeamSettingsLayout(props: Props) {
+  const { teamName } = props;
 
   const dapper = useDapper();
-  const teamData = usePromise(dapper.getTeam, [teamId]);
+  const teamData = usePromise(dapper.getTeam, [teamName]);
 
   const [currentTab, setCurrentTab] = useState(1);
 
@@ -42,16 +42,14 @@ export function TeamSettingsLayout(props: TeamSettingsLayoutProps) {
       breadCrumb={
         <BreadCrumbs>
           <TeamsLink>Teams</TeamsLink>
-          <TeamSettingsLink team={teamData.name}>
-            {teamData.name}
-          </TeamSettingsLink>
+          <TeamSettingsLink team={teamName}>{teamName}</TeamSettingsLink>
         </BreadCrumbs>
       }
-      header={<PageHeader title={teamData.name} />}
+      header={<PageHeader title={teamName} />}
       tabs={
         <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
       }
-      mainContent={<>{getTabContent(currentTab, teamData)}</>}
+      mainContent={getTabContent(currentTab, teamData)}
     />
   );
 }
@@ -98,32 +96,20 @@ const tabs = [
 ];
 
 function getTabContent(currentTab: number, teamData: Team) {
-  let tabContent = null;
+  const TabClass = {
+    1: TeamDetails,
+    2: TeamMembers,
+    3: TeamServiceAccounts,
+    4: TeamLeaveAndDisband,
+  }[currentTab];
 
-  if (currentTab === 1) {
-    tabContent = (
-      <div className={styles.tabContent}>
-        <TeamProfile teamData={teamData} />
-      </div>
-    );
-  } else if (currentTab === 2) {
-    tabContent = (
-      <div className={styles.tabContent}>
-        <TeamMembers teamData={teamData} />
-      </div>
-    );
-  } else if (currentTab === 3) {
-    tabContent = (
-      <div className={styles.tabContent}>
-        <TeamServiceAccounts teamData={teamData} />
-      </div>
-    );
-  } else if (currentTab === 4) {
-    tabContent = (
-      <div className={styles.tabContent}>
-        <TeamLeaveAndDisband teamData={teamData} />
-      </div>
-    );
+  if (TabClass === undefined) {
+    throw new Error(`Unknown tab number ${currentTab}`);
   }
-  return tabContent;
+
+  return (
+    <div className={styles.tabContent}>
+      <TabClass teamData={teamData} />
+    </div>
+  );
 }

@@ -7,11 +7,11 @@ import { Alert, Icon } from "../../../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
 
-export interface TeamLeaveAndDisbandProps {
+interface Props {
   teamData: Team;
 }
 
-export function TeamLeaveAndDisband(props: TeamLeaveAndDisbandProps) {
+export function TeamLeaveAndDisband(props: Props) {
   const { teamData } = props;
 
   return (
@@ -28,7 +28,7 @@ export function TeamLeaveAndDisband(props: TeamLeaveAndDisbandProps) {
                 </Icon>
               }
               content={
-                "You cannot currently leave this team as you are it’s last owner."
+                "You cannot currently leave this team as you are it's last owner."
               }
               variant="danger"
             />

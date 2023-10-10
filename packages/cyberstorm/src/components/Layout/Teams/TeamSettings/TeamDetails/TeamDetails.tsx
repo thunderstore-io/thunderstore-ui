@@ -1,4 +1,4 @@
-import styles from "./TeamProfile.module.css";
+import styles from "./TeamDetails.module.css";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { Team } from "@thunderstore/dapper/types";
@@ -8,11 +8,11 @@ import { faXmark } from "@fortawesome/pro-light-svg-icons";
 import { useState } from "react";
 import { Icon } from "../../../../Icon/Icon";
 
-export interface TeamProfileProps {
+interface Props {
   teamData: Team;
 }
 
-export function TeamProfile(props: TeamProfileProps) {
+export function TeamDetails(props: Props) {
   const { teamData } = props;
 
   const [donationLink, setDonationLink] = useState(teamData.name);
@@ -103,4 +103,4 @@ export function TeamProfile(props: TeamProfileProps) {
   */
 }
 
-TeamProfile.displayName = "TeamProfile";
+TeamDetails.displayName = "TeamDetails";

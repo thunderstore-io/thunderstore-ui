@@ -15,11 +15,11 @@ import { Team } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
 import { Icon } from "../../../../Icon/Icon";
 
-export interface TeamServiceAccountsProps {
+interface Props {
   teamData: Team;
 }
 
-export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
+export function TeamServiceAccounts(props: Props) {
   const { teamData } = props;
 
   const [serviceAccountAdded, setServiceAccountAdded] = useState(false);
