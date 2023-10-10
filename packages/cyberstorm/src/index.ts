@@ -119,10 +119,7 @@ export {
   type TeamSettingsLayoutProps,
 } from "./components/Layout/Teams/TeamSettings/TeamSettingsLayout";
 export { TeamsLayout } from "./components/Layout/Teams/TeamsLayout";
-export {
-  TeamLayout,
-  type TeamLayoutProps,
-} from "./components/Layout/TeamLayout/TeamLayout";
+export { TeamProfileLayout } from "./components/Layout/TeamProfileLayout/TeamProfileLayout";
 export { UserProfileLayout } from "./components/Layout/UserProfileLayout/UserProfileLayout";
 
 export { ManifestValidatorLayout } from "./components/Layout/Developers/ManifestValidator/ManifestValidatorLayout";
