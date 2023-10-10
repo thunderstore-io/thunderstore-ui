@@ -11,6 +11,7 @@ export {
   BreadCrumbs,
   DefaultHomeCrumb,
 } from "./components/BreadCrumbs/BreadCrumbs";
+export { CodeInput } from "./components/CodeInput/CodeInput";
 export { CopyButton } from "./components/CopyButton/CopyButton";
 export { Dialog } from "./components/Dialog/Dialog";
 export {
@@ -50,6 +51,7 @@ export {
   UserLink,
   TermsOfServiceLink,
 } from "./components/Links/Links";
+export { ValidationBar } from "./components/ValidationBar/ValidationBar";
 export { Markdown } from "./components/Markdown/Markdown";
 export * as MenuItem from "./components/MenuItem/";
 export type {

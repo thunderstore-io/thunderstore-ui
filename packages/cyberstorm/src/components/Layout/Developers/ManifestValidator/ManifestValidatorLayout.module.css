@@ -6,5 +6,18 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--12);
+  gap: var(--gap--16);
+}
+
+.inputContainer {
+  border: 1px solid #333370;
+  border-radius: 0.5rem;
+}
+
+.inputContainer > textarea {
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.inputContainerFailure {
+  border-color: #f1385a;
 }
