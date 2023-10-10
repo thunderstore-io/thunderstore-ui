@@ -13,6 +13,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/pro-solid-svg-icons";
 import { Select } from "../../../Select/Select";
 import { isRecord, isStringArray } from "../../../../utils/type_guards";
+import { usePromise } from "@thunderstore/use-promise";
+import { useDapper } from "@thunderstore/dapper";
 
 interface HTMLResponse {
   success?: string;
@@ -103,6 +105,13 @@ export function ManifestValidatorLayout() {
   const [manifestInput, setManifestInput] = useState("");
   const [validationTrigger, setValidationTrigger] = useState(false);
 
+  const dapper = useDapper();
+  const user = usePromise(dapper.getCurrentUser, []);
+
+  const selectOptions = user.teams.map((team) => {
+    return { value: team.name, label: team.name };
+  });
+
   const validator = {
     validationFunc: ManifestValidationResult,
     args: { teamInput, manifestInput },
@@ -159,16 +168,5 @@ export function ManifestValidatorLayout() {
     />
   );
 }
-
-const selectOptions = [
-  {
-    value: "Test_Team_9",
-    label: "Test_Team_9",
-  },
-  {
-    value: "Test_Team_8",
-    label: "Test_Team_8",
-  },
-];
 
 ManifestValidatorLayout.displayName = "ManifestValidatorLayout";
