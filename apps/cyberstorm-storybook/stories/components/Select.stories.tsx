@@ -103,7 +103,7 @@ const ReferenceSelect = Template.bind({});
 ReferenceSelect.args = {
   props: {
     ...defaultArgs,
-    colorScheme: "default",
+    variant: "default",
     placeholder: "Sort by...",
   },
 };
@@ -112,7 +112,7 @@ const PrimarySelect = Template.bind({});
 PrimarySelect.args = {
   props: {
     ...defaultArgs,
-    colorScheme: "accent",
+    variant: "accent",
   },
   defaultValue: "2",
 };
@@ -122,7 +122,7 @@ EmptyOptionsSelect.args = {
   props: {
     ...defaultArgs,
     options: [],
-    colorScheme: "accent",
+    variant: "accent",
   },
 };
 
@@ -131,7 +131,7 @@ DefaultOpenSelect.args = {
   props: {
     ...defaultArgs,
     defaultOpen: true,
-    colorScheme: "default",
+    variant: "default",
     placeholder: "Sort by...",
   },
 };
