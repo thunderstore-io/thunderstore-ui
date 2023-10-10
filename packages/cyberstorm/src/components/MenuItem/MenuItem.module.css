@@ -26,3 +26,11 @@
 .menuItemLabel {
   font-weight: 500;
 }
+
+.menuItemLabel__fontSize__small {
+  font-size: var(--font-size--m);
+}
+
+.menuItemLabel__fontSize__medium {
+  font-size: var(--font-size--l);
+}

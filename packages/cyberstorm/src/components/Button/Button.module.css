@@ -260,6 +260,12 @@
   --bg-color: var(--color-surface--7);
 }
 
+.button__wideDarker {
+  justify-content: space-between;
+
+  --bg-color: #27275d;
+}
+
 /* Button padding sizes */
 
 .padding__none {
@@ -310,6 +316,14 @@
 .ButtonIcon__IconSize__tslogo_install_button {
   width: 1.655rem;
   height: 1.463rem;
+}
+
+.ButtonIcon__IconColor__default {
+  color: var(--color-text--default);
+}
+
+.ButtonIcon__IconColor__darker {
+  color: #9c9cc4;
 }
 
 /* Button Label */

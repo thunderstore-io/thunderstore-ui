@@ -9,84 +9,74 @@ import markdownStyles from "../../../Markdown/Markdown.module.css";
 import styles from "./MarkdownPreviewLayout.module.css";
 import { PLACEHOLDER } from "./MarkdownPlaceholder";
 import { CodeInput } from "../../../CodeInput/CodeInput";
+import { isRecord } from "../../../../utils/type_guards";
 
 interface HTMLResponse {
   html: string;
 }
 
-export const isRecord = (obj: unknown): obj is Record<string, unknown> =>
-  obj instanceof Object;
-
 function isHTMLResponse(response: unknown): response is HTMLResponse {
   return isRecord(response) && typeof response.html === "string";
+}
+
+interface IMarkdownValidationResult {
+  markdownPreviewInput: string;
+  setHTML: React.Dispatch<React.SetStateAction<string>>;
+}
+
+async function MarkdownValidationResult(
+  props: IMarkdownValidationResult
+): Promise<{
+  status: "success" | "failure";
+  message: string;
+}> {
+  const { markdownPreviewInput, setHTML } = props;
+  const response = await fetch(
+    "https://thunderstore.io/api/experimental/frontend/render-markdown/",
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ markdown: markdownPreviewInput }),
+    }
+  );
+
+  if (response.status === 200) {
+    const parsedResponse = await response.json();
+    if (isHTMLResponse(parsedResponse)) {
+      setHTML(parsedResponse.html);
+      return { status: "success", message: "All systems go!" };
+    }
+  }
+  return {
+    status: "failure",
+    message: "Problem, alarm, danger. Everything is going to explode.",
+  };
 }
 
 /**
  * Cyberstorm MarkdownPreview Layout
  */
 export function MarkdownPreviewLayout() {
-  const [markdownPreviewInput, setMarkdownPreviewInput] = useState("");
-  const [validationStatus, setValidationStatus] = useState<
-    "waiting" | "validating" | "success" | "failure"
-  >("waiting");
-
   const placeholder = PLACEHOLDER();
-
+  const [markdownPreviewInput, setMarkdownPreviewInput] = useState("");
   const [html, setHTML] = useState<null | string>(null);
+  const [validationTrigger, setValidationTrigger] = useState(false);
+
+  const validator = {
+    validationFunc: MarkdownValidationResult,
+    args: { markdownPreviewInput, setHTML },
+  };
+
   useEffect(() => {
-    async function getHTML() {
-      setValidationStatus("validating");
-      fetch(
-        "https://thunderstore.io/api/experimental/frontend/render-markdown/",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ markdown: markdownPreviewInput }),
-        }
-      )
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error("Something went wrong");
-        })
-        .then((responseJson) => {
-          if (isHTMLResponse(responseJson)) {
-            setHTML(responseJson.html);
-            setValidationStatus("success");
-          } else {
-            setValidationStatus("failure");
-          }
-        })
-        .catch(() => {
-          setValidationStatus("failure");
-        });
-    }
     if (markdownPreviewInput) {
-      getHTML();
+      setValidationTrigger(true);
     } else {
-      setHTML(null);
+      setValidationTrigger(false);
     }
   }, [markdownPreviewInput]);
-
-  const input = (
-    <div
-      className={`${styles.inputContainer} ${
-        validationStatus === "failure" ? styles.inputContainerFailure : null
-      }`}
-    >
-      <CodeInput
-        placeholder="# This is a markdown preview placeholder"
-        setValue={setMarkdownPreviewInput}
-        value={markdownPreviewInput}
-        validationBar
-        validationStatus={validationStatus}
-      />
-    </div>
-  );
 
   return (
     <BaseLayout
@@ -101,7 +91,15 @@ export function MarkdownPreviewLayout() {
           <SettingItem
             title="Markdown input"
             description="Input your markdown code"
-            content={input}
+            content={
+              <CodeInput
+                placeholder="# This is a markdown preview placeholder"
+                setValue={setMarkdownPreviewInput}
+                value={markdownPreviewInput}
+                validator={validator}
+                shouldValidate={validationTrigger}
+              />
+            }
           />
           <SettingItem
             title="Markdown output"

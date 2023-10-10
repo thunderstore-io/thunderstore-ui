@@ -1,22 +1,22 @@
 "use client";
 import styles from "./CodeInput.module.css";
-import { Icon } from "../Icon/Icon";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleCheck,
-  faTriangleExclamation,
-  faPenToSquare,
-  faArrowsRotate,
-} from "@fortawesome/free-solid-svg-icons";
-
+import { useState } from "react";
 import { TextAreaInput } from "../TextAreaInput/TextAreaInput";
+import { ValidationBar } from "../ValidationBar/ValidationBar";
 
 interface CodeInputProps {
   value?: string;
   setValue?: React.Dispatch<React.SetStateAction<string>>;
   placeholder?: string;
-  validationBar?: boolean;
-  validationStatus?: "waiting" | "validating" | "success" | "failure";
+  validator?: {
+    validationFunc: (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      props: any
+    ) => Promise<{ status: "failure" | "success"; message: string }>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    args: { [key: string]: any };
+  };
+  shouldValidate?: boolean;
 }
 
 /**
@@ -27,72 +27,43 @@ export function CodeInput(props: CodeInputProps) {
     value,
     setValue,
     placeholder,
-    validationBar = false,
-    validationStatus,
+    validator,
+    shouldValidate = true,
   } = props;
 
-  let statusElement = null;
-  if (validationBar) {
-    if (validationStatus === "waiting") {
-      statusElement = (
-        <div className={styles.statusBar}>
-          <div className={styles.icon}>
-            <Icon>
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </Icon>
-          </div>
-          Waiting for input
-        </div>
-      );
-    } else if (validationStatus === "validating") {
-      statusElement = (
-        <div className={styles.statusBar}>
-          <div className={`${styles.icon} ${styles.spinningIcon}`}>
-            <Icon>
-              <FontAwesomeIcon icon={faArrowsRotate} />
-            </Icon>
-          </div>
-          Validating...
-        </div>
-      );
-    } else if (validationStatus === "success") {
-      statusElement = (
-        <div className={`${styles.statusBar} ${styles.statusBarSuccess}`}>
-          <div className={styles.icon}>
-            <Icon>
-              <FontAwesomeIcon icon={faCircleCheck} />
-            </Icon>
-          </div>
-          All systems go!
-        </div>
-      );
-    } else if (validationStatus === "failure") {
-      statusElement = (
-        <div className={`${styles.statusBar} ${styles.statusBarFailure}`}>
-          <div className={`${styles.icon} ${styles.iconFailure}`}>
-            <Icon>
-              <FontAwesomeIcon icon={faTriangleExclamation} />
-            </Icon>
-          </div>
-          Problem, alarm, danger. Everything is going to explode.
-        </div>
-      );
-    }
+  if (validator) {
+    const [validationStatus, setValidationStatus] = useState("");
+    return (
+      <div
+        className={`${styles.inputContainer} ${
+          validationStatus === "failure" ? styles.inputContainerFailure : ""
+        }`}
+      >
+        <TextAreaInput
+          placeHolder={placeholder}
+          setValue={setValue}
+          value={value}
+        />
+        <ValidationBar
+          validator={validator}
+          shouldValidate={shouldValidate}
+          setStatus={setValidationStatus}
+        />
+      </div>
+    );
+  } else {
+    return (
+      <div
+        className={`${styles.inputContainer} ${styles.inputContainerStatusBarDisabled}`}
+      >
+        <TextAreaInput
+          placeHolder={placeholder}
+          setValue={setValue}
+          value={value}
+        />
+      </div>
+    );
   }
-  return (
-    <div
-      className={`${styles.inputContainer} ${
-        validationStatus === "failure" ? styles.inputContainerFailure : null
-      } ${!validationBar ? styles.inputContainerStatusBarDisabled : null}`}
-    >
-      <TextAreaInput
-        placeHolder={placeholder}
-        setValue={setValue}
-        value={value}
-      />
-      {validationBar ? statusElement : null}
-    </div>
-  );
 }
 
 CodeInput.displayName = "CodeInput";

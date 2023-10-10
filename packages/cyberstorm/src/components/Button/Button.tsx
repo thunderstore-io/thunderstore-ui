@@ -32,7 +32,8 @@ export interface ButtonProps {
     | "transparentDefault"
     | "transparentTertiary"
     | "transparentAccent"
-    | "transparentPrimary";
+    | "transparentPrimary"
+    | "wideDarker";
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onMouseOver?: MouseEventHandler<HTMLElement>;
   onMouseOut?: MouseEventHandler<HTMLElement>;
@@ -115,6 +116,7 @@ const getStyle = (scheme: string) => {
     transparentTertiary: styles.button__transparentTertiary,
     transparentPrimary: styles.button__transparentPrimary,
     transparentAccent: styles.button__transparentAccent,
+    wideDarker: styles.button__wideDarker,
   }[scheme];
 };
 

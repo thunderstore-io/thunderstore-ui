@@ -51,6 +51,7 @@ export {
   UserLink,
   TermsOfServiceLink,
 } from "./components/Links/Links";
+export { ValidationBar } from "./components/ValidationBar/ValidationBar";
 export { Markdown } from "./components/Markdown/Markdown";
 export * as MenuItem from "./components/MenuItem/";
 export type {
