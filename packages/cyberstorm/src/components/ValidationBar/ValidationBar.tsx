@@ -63,9 +63,9 @@ const failureElement = (message: string) => {
 function Validator(props: {
   validator: {
     validationFunc: (
-      props: any
+      props: unknown
     ) => Promise<{ status: "failure" | "success"; message: string }>;
-    args: { [key: string]: any };
+    args: { [key: string]: unknown };
   };
   shouldValidate: boolean;
   setStatus?: React.Dispatch<React.SetStateAction<string>>;
@@ -100,9 +100,9 @@ function Validator(props: {
 export function ValidationBar(props: {
   validator: {
     validationFunc: (
-      props: any
+      props: unknown
     ) => Promise<{ status: "failure" | "success"; message: string }>;
-    args: { [key: string]: any };
+    args: { [key: string]: unknown };
   };
   shouldValidate: boolean;
   setStatus?: React.Dispatch<React.SetStateAction<string>>;
