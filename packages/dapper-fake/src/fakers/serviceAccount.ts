@@ -13,3 +13,19 @@ export const getFakeServiceAccount = async (serviceAccountId?: string) => {
 
 export const getFakeServiceAccounts = () =>
   Promise.all(getIds(5).map(getFakeServiceAccount));
+
+export const getFakeTempServiceAccount = async (serviceAccountId?: string) => {
+  setSeed(serviceAccountId);
+
+  return {
+    identifier: faker.string.uuid(),
+    name: faker.internet.userName(),
+    last_used:
+      faker.helpers.maybe(() =>
+        faker.date.recent({ days: 700 }).toDateString()
+      ) ?? null,
+  };
+};
+
+export const getFakeTempServiceAccounts = () =>
+  Promise.all(getIds(5).map(getFakeTempServiceAccount));

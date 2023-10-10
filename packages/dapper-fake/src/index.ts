@@ -9,8 +9,13 @@ import {
 import {
   getFakeServiceAccount,
   getFakeServiceAccounts,
+  getFakeTempServiceAccounts,
 } from "./fakers/serviceAccount";
-import { getFakeTeam } from "./fakers/team";
+import {
+  getFakeTeam,
+  getFakeTeamDetails,
+  getFakeTeamMembers,
+} from "./fakers/team";
 import { getFakeCurrentUser } from "./fakers/user";
 
 export class DapperFake implements DapperInterface {
@@ -23,4 +28,7 @@ export class DapperFake implements DapperInterface {
   public getServiceAccount = getFakeServiceAccount;
   public getServiceAccountList = getFakeServiceAccounts;
   public getTeam = getFakeTeam;
+  public getTeamDetails = getFakeTeamDetails;
+  public getTeamMembers = getFakeTeamMembers;
+  public getTeamServiceAccounts = getFakeTempServiceAccounts;
 }

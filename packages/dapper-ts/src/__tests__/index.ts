@@ -42,3 +42,15 @@ it("executes getServiceAccountList without errors", async () => {
 it("executes getTeam without errors", async () => {
   await expect(dapper.getTeam()).resolves.not.toThrowError();
 });
+
+it("executes getTeamDetails without errors", async () => {
+  await expect(dapper.getTeamDetails()).resolves.not.toThrowError();
+});
+
+it("executes getTeamMembers without errors", async () => {
+  await expect(dapper.getTeamMembers()).resolves.not.toThrowError();
+});
+
+it("executes getTeamServiceAccounts without errors", async () => {
+  await expect(dapper.getTeamServiceAccounts()).resolves.not.toThrowError();
+});
