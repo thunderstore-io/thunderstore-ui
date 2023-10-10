@@ -9,13 +9,11 @@ import markdownStyles from "../../../Markdown/Markdown.module.css";
 import styles from "./MarkdownPreviewLayout.module.css";
 import { PLACEHOLDER } from "./MarkdownPlaceholder";
 import { CodeInput } from "../../../CodeInput/CodeInput";
+import { isRecord } from "../../../../utils/type_guards";
 
 interface HTMLResponse {
   html: string;
 }
-
-const isRecord = (obj: unknown): obj is Record<string, unknown> =>
-  obj instanceof Object;
 
 function isHTMLResponse(response: unknown): response is HTMLResponse {
   return isRecord(response) && typeof response.html === "string";

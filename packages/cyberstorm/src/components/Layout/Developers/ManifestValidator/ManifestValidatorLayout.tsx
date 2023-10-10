@@ -12,18 +12,13 @@ import { Icon } from "../../../Icon/Icon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/pro-solid-svg-icons";
 import { Select } from "../../../Select/Select";
+import { isRecord, isStringArray } from "../../../../utils/type_guards";
 
 interface HTMLResponse {
   success?: string;
   non_field_errors?: string[];
   namespace?: string[];
 }
-
-const isRecord = (obj: unknown): obj is Record<string, unknown> =>
-  obj instanceof Object;
-
-const isStringArray = (arr: unknown): arr is string[] =>
-  Array.isArray(arr) && arr.every((s) => typeof s === "string");
 
 function isHTMLResponse(response: unknown): response is HTMLResponse {
   return (
