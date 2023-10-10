@@ -10,8 +10,10 @@ interface CodeInputProps {
   placeholder?: string;
   validator?: {
     validationFunc: (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       props: any
     ) => Promise<{ status: "failure" | "success"; message: string }>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     args: { [key: string]: any };
   };
   shouldValidate?: boolean;
