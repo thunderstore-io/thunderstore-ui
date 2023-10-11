@@ -13,11 +13,7 @@ export function Avatar(props: AvatarProps) {
 
   return (
     <div className={`${styles.root} ${getSize(size)}`}>
-      <img
-        className={`${styles.image} ${styles.show} ${getSize(size)}`}
-        alt={"Avatar"}
-        src={src}
-      />
+      <img src={src} className={`${styles.image} ${getSize(size)}`} alt="" />
     </div>
   );
 }

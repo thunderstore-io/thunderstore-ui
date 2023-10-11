@@ -26,11 +26,7 @@ export const AvatarButton = React.forwardRef<
       {...forwardedProps}
       ref={ref}
     >
-      <img
-        className={`${styles.image} ${styles.show} ${getSize(size)}`}
-        alt={"Avatar"}
-        src={src}
-      />
+      <img src={src} className={`${styles.image} ${getSize(size)}`} alt="" />
     </button>
   );
 });
