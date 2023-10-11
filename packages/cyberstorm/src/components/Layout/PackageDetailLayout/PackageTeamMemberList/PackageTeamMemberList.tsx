@@ -49,28 +49,11 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
 }
 
 function compare(a: TempTeamMember, b: TempTeamMember) {
-  if (a.role === "owner" || b.role === "owner") {
-    if (a.role === "owner" && b.role === "owner") {
-      if (a.username < b.username) {
-        if (a.username > b.username) {
-          return 1;
-        }
-        return -1;
-      }
-      return 0;
-    }
-    if (a.role === "owner") {
-      return -1;
-    }
-    return 1;
+  if (a.role === b.role) {
+    return a.username.localeCompare(b.username);
   }
-  if (a.username > b.username) {
-    return 1;
-  }
-  if (a.username < b.username) {
-    return -1;
-  }
-  return 0;
+
+  return a.role === "owner" ? -1 : 1;
 }
 
 export function PackageTeamMemberList(props: PackageTeamListProps) {
