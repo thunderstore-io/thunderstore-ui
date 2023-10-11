@@ -1,5 +1,5 @@
 import styles from "./ServiceAccountList.module.css";
-import { ServiceAccount } from "@thunderstore/dapper/types";
+import { TempServiceAccount } from "@thunderstore/dapper/types";
 import { Dialog } from "../../../../../Dialog/Dialog";
 import * as Button from "../../../../../Button";
 import { Table } from "../../../../../Table/Table";
@@ -14,15 +14,18 @@ const serviceAccountColumns = [
 ];
 
 interface Props {
-  serviceAccountData?: ServiceAccount[];
+  serviceAccounts: TempServiceAccount[];
 }
 
 export function ServiceAccountList(props: Props) {
-  const { serviceAccountData = [] } = props;
+  const { serviceAccounts } = props;
 
-  const tableData = serviceAccountData.map((serviceAccount, index) => [
+  const tableData = serviceAccounts.map((serviceAccount, index) => [
     { value: serviceAccount.name, sortValue: serviceAccount.name },
-    { value: serviceAccount.lastUsed, sortValue: serviceAccount.lastUsed },
+    {
+      value: serviceAccount.last_used ?? "Never",
+      sortValue: serviceAccount.last_used ?? "Never",
+    },
     {
       value: (
         <Dialog

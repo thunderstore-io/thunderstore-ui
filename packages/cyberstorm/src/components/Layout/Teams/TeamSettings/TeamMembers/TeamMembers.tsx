@@ -1,3 +1,5 @@
+import { useDapper } from "@thunderstore/dapper";
+import { usePromise } from "@thunderstore/use-promise";
 import styles from "./TeamMembers.module.css";
 import { TeamMemberList } from "./TeamMemberList";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
@@ -5,23 +7,25 @@ import * as Button from "../../../../Button/";
 import { Dialog } from "../../../../Dialog/Dialog";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { Select } from "../../../../Select/Select";
-import { Team } from "@thunderstore/dapper/types";
 import { TeamLink } from "../../../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { Icon } from "../../../../Icon/Icon";
 
 const userRoles = [
-  { value: "Member", label: "Member" },
-  { value: "Owner", label: "Owner" },
+  { value: "member", label: "Member" },
+  { value: "owner", label: "Owner" },
 ];
 
 interface Props {
-  teamData: Team;
+  teamName: string;
 }
 
 export function TeamMembers(props: Props) {
-  const { teamData } = props;
+  const { teamName } = props;
+
+  const dapper = useDapper();
+  const members = usePromise(dapper.getTeamMembers, [teamName]);
 
   const dialog = (
     <Dialog
@@ -42,8 +46,8 @@ export function TeamMembers(props: Props) {
         <div className={styles.dialogContent}>
           <p className={styles.description}>
             Enter the username of the user you wish to add to the team{" "}
-            <TeamLink team={teamData.name}>
-              <span className={styles.dialogTeamName}>{teamData.name}</span>
+            <TeamLink team={teamName}>
+              <span className={styles.dialogTeamName}>{teamName}</span>
             </TeamLink>
           </p>
           <div className={styles.dialogInput}>
@@ -68,7 +72,7 @@ export function TeamMembers(props: Props) {
         title="Members"
         description="Your best buddies"
         additionalLeftColumnContent={dialog}
-        content={<TeamMemberList teamMemberData={teamData.members} />}
+        content={<TeamMemberList members={members} />}
       />
     </div>
   );

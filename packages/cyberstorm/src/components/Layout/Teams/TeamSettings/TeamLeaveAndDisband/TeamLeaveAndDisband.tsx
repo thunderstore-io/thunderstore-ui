@@ -1,18 +1,17 @@
 import styles from "./TeamLeaveAndDisband.module.css";
 import * as Button from "../../../../Button/";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
-import { Team } from "@thunderstore/dapper/types";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { Alert, Icon } from "../../../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
 
 interface Props {
-  teamData: Team;
+  teamName: string;
 }
 
 export function TeamLeaveAndDisband(props: Props) {
-  const { teamData } = props;
+  const { teamName } = props;
 
   return (
     <div>
@@ -34,7 +33,7 @@ export function TeamLeaveAndDisband(props: Props) {
             />
             <p
               className={styles.description}
-            >{`You are about to leave the team ${teamData.name}`}</p>
+            >{`You are about to leave the team ${teamName}`}</p>
             <p className={styles.description}>
               If you are the owner of the team, you can only leave if the team
               has another owner assigned.
@@ -65,7 +64,7 @@ export function TeamLeaveAndDisband(props: Props) {
               variant="danger"
             />
             <p className={styles.description}>
-              You are about to disband the team {teamData.name}.
+              You are about to disband the team {teamName}.
             </p>
             <p className={styles.description}>
               Be aware you can currently only disband teams with no packages. If
@@ -73,8 +72,8 @@ export function TeamLeaveAndDisband(props: Props) {
               Mythic#0001 on the Thunderstore Discord.
             </p>
             <p className={styles.description}>
-              As a precaution, to disband your team, please input{" "}
-              {teamData.name} into the field below.
+              As a precaution, to disband your team, please input {teamName}{" "}
+              into the field below.
             </p>
             <div className={styles.disbandVerificationInput}>
               <TextInput placeHolder="Verification" />

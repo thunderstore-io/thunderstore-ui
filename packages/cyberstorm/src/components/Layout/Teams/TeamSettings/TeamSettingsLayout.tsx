@@ -17,9 +17,6 @@ import {
   faCog,
 } from "@fortawesome/pro-regular-svg-icons";
 import { TeamLeaveAndDisband } from "./TeamLeaveAndDisband/TeamLeaveAndDisband";
-import { useDapper } from "@thunderstore/dapper";
-import { Team } from "@thunderstore/dapper/types";
-import { usePromise } from "@thunderstore/use-promise";
 import { Icon } from "../../../Icon/Icon";
 
 interface Props {
@@ -31,9 +28,6 @@ interface Props {
  */
 export function TeamSettingsLayout(props: Props) {
   const { teamName } = props;
-
-  const dapper = useDapper();
-  const teamData = usePromise(dapper.getTeam, [teamName]);
 
   const [currentTab, setCurrentTab] = useState(1);
 
@@ -49,7 +43,7 @@ export function TeamSettingsLayout(props: Props) {
       tabs={
         <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
       }
-      mainContent={getTabContent(currentTab, teamData)}
+      mainContent={getTabContent(currentTab, teamName)}
     />
   );
 }
@@ -95,7 +89,7 @@ const tabs = [
   },
 ];
 
-function getTabContent(currentTab: number, teamData: Team) {
+function getTabContent(currentTab: number, teamName: string) {
   const TabClass = {
     1: TeamDetails,
     2: TeamMembers,
@@ -109,7 +103,7 @@ function getTabContent(currentTab: number, teamData: Team) {
 
   return (
     <div className={styles.tabContent}>
-      <TabClass teamData={teamData} />
+      <TabClass teamName={teamName} />
     </div>
   );
 }

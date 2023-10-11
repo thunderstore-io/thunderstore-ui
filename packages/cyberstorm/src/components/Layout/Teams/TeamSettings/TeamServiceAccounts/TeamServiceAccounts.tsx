@@ -11,24 +11,21 @@ import { useState } from "react";
 import { CopyButton } from "../../../../CopyButton/CopyButton";
 import { Alert } from "../../../../Alert/Alert";
 import { useDapper } from "@thunderstore/dapper";
-import { Team } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
 import { Icon } from "../../../../Icon/Icon";
 
 interface Props {
-  teamData: Team;
+  teamName: string;
 }
 
 export function TeamServiceAccounts(props: Props) {
-  const { teamData } = props;
+  const { teamName } = props;
 
   const [serviceAccountAdded, setServiceAccountAdded] = useState(false);
   const [addedServiceAccountName, setAddedServiceAccountName] = useState("");
 
   const dapper = useDapper();
-  const serviceAccountList = usePromise(dapper.getServiceAccountList, [
-    teamData.name,
-  ]);
+  const serviceAccounts = usePromise(dapper.getTeamServiceAccounts, [teamName]);
 
   return (
     <div>
@@ -90,9 +87,9 @@ export function TeamServiceAccounts(props: Props) {
                     <p className={styles.description}>
                       Enter the nickname of the service account you wish to add
                       to the team{" "}
-                      <TeamLink team={teamData.name}>
+                      <TeamLink team={teamName}>
                         <span className={styles.dialogTeamName}>
-                          {teamData.name}
+                          {teamName}
                         </span>
                       </TeamLink>
                     </p>
@@ -132,7 +129,7 @@ export function TeamServiceAccounts(props: Props) {
         }
         content={
           <div className={styles.content}>
-            <ServiceAccountList serviceAccountData={serviceAccountList} />
+            <ServiceAccountList serviceAccounts={serviceAccounts} />
           </div>
         }
       />

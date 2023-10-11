@@ -1,7 +1,8 @@
+import { useDapper } from "@thunderstore/dapper";
+import { usePromise } from "@thunderstore/use-promise";
 import styles from "./TeamDetails.module.css";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import { TextInput } from "../../../../TextInput/TextInput";
-import { Team } from "@thunderstore/dapper/types";
 import * as Button from "../../../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/pro-light-svg-icons";
@@ -9,13 +10,16 @@ import { useState } from "react";
 import { Icon } from "../../../../Icon/Icon";
 
 interface Props {
-  teamData: Team;
+  teamName: string;
 }
 
 export function TeamDetails(props: Props) {
-  const { teamData } = props;
+  const { teamName } = props;
 
-  const [donationLink, setDonationLink] = useState(teamData.name);
+  const dapper = useDapper();
+  const team = usePromise(dapper.getTeamDetails, [teamName]);
+
+  const [donationLink, setDonationLink] = useState(team.donation_link ?? "");
 
   return (
     <div className={styles.root}>

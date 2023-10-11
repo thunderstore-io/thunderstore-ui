@@ -1,6 +1,6 @@
 import { faTrash } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TeamMember } from "@thunderstore/dapper/types";
+import { TempTeamMember } from "@thunderstore/dapper/types";
 
 import styles from "./TeamMembers.module.css";
 import { Avatar } from "../../../../Avatar/Avatar";
@@ -21,34 +21,28 @@ const teamMemberColumns = [
 ];
 
 const userRoles = [
-  { value: "Member", label: "Member" },
-  { value: "Owner", label: "Owner" },
+  { value: "member", label: "Member" },
+  { value: "owner", label: "Owner" },
 ];
 
 interface Props {
-  teamMemberData?: TeamMember[];
+  members: TempTeamMember[];
 }
 
 export function TeamMemberList(props: Props) {
-  const { teamMemberData = [] } = props;
+  const { members } = props;
 
-  const tableData = teamMemberData.map((teamMember, index) => [
+  const tableData = members.map((member, index) => [
     {
       value: (
-        <UserLink key={`user_${index}`} user={teamMember.user}>
+        <UserLink key={`user_${index}`} user={member.username}>
           <div className={styles.userInfo}>
-            <Avatar
-              src={
-                teamMember.imageSource
-                  ? teamMember.imageSource
-                  : defaultImageSrc
-              }
-            />
-            <span className={styles.userInfoName}>{teamMember.user}</span>
+            <Avatar src={member.avatar ?? defaultImageSrc} />
+            <span className={styles.userInfoName}>{member.username}</span>
           </div>
         </UserLink>
       ),
-      sortValue: teamMember.user,
+      sortValue: member.username,
     },
     {
       value: (
@@ -56,11 +50,11 @@ export function TeamMemberList(props: Props) {
           <Select
             triggerFontSize="medium"
             options={userRoles}
-            value={teamMember.role}
+            value={member.role}
           />
         </div>
       ),
-      sortValue: teamMember.role,
+      sortValue: member.role,
     },
     {
       value: (
@@ -79,9 +73,9 @@ export function TeamMemberList(props: Props) {
           content={
             <div>
               You are about to kick member{" "}
-              <UserLink user={teamMember.user}>
+              <UserLink user={member.username}>
                 <span className={styles.kickDescriptionUserName}>
-                  {teamMember.user}
+                  {member.username}
                 </span>
                 .
               </UserLink>
