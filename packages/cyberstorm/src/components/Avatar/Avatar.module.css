@@ -5,20 +5,17 @@
   background-color: #fff;
 }
 
-.show {
-  transition: opacity 150ms ease-in-out;
-}
-
-.root:hover > .show {
-  opacity: 0.9;
-}
-
 .image {
   min-width: var(--size);
   max-width: var(--size);
   min-height: var(--size);
   max-height: var(--size);
   border-radius: var(--size);
+  transition: opacity 150ms ease-in-out;
+}
+
+.root:hover > .image {
+  opacity: 0.9;
 }
 
 .medium {
