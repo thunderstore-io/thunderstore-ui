@@ -31,18 +31,6 @@ it("executes getPackageListings without errors", async () => {
   await expect(dapper.getPackageListings()).resolves.not.toThrowError();
 });
 
-it("executes getServiceAccount without errors", async () => {
-  await expect(dapper.getServiceAccount()).resolves.not.toThrowError();
-});
-
-it("executes getServiceAccountList without errors", async () => {
-  await expect(dapper.getServiceAccountList()).resolves.not.toThrowError();
-});
-
-it("executes getTeam without errors", async () => {
-  await expect(dapper.getTeam()).resolves.not.toThrowError();
-});
-
 it("executes getTeamDetails without errors", async () => {
   await expect(dapper.getTeamDetails()).resolves.not.toThrowError();
 });

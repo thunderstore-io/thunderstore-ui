@@ -6,16 +6,8 @@ import {
   getFakePackage,
   getFakePackageListings,
 } from "./fakers/package";
-import {
-  getFakeServiceAccount,
-  getFakeServiceAccounts,
-  getFakeTempServiceAccounts,
-} from "./fakers/serviceAccount";
-import {
-  getFakeTeam,
-  getFakeTeamDetails,
-  getFakeTeamMembers,
-} from "./fakers/team";
+import { getFakeServiceAccounts } from "./fakers/serviceAccount";
+import { getFakeTeamDetails, getFakeTeamMembers } from "./fakers/team";
 import { getFakeCurrentUser } from "./fakers/user";
 
 export class DapperFake implements DapperInterface {
@@ -25,10 +17,7 @@ export class DapperFake implements DapperInterface {
   public getPackage = getFakePackage;
   public getPackageDependencies = getFakeDependencies;
   public getPackageListings = getFakePackageListings;
-  public getServiceAccount = getFakeServiceAccount;
-  public getServiceAccountList = getFakeServiceAccounts;
-  public getTeam = getFakeTeam;
   public getTeamDetails = getFakeTeamDetails;
   public getTeamMembers = getFakeTeamMembers;
-  public getTeamServiceAccounts = getFakeTempServiceAccounts;
+  public getTeamServiceAccounts = getFakeServiceAccounts;
 }

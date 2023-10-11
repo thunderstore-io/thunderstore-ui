@@ -1,6 +1,6 @@
 import { faTrash } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TempTeamMember } from "@thunderstore/dapper/types";
+import { TeamMember } from "@thunderstore/dapper/types";
 
 import styles from "./TeamMembers.module.css";
 import { Avatar } from "../../../../Avatar/Avatar";
@@ -26,7 +26,7 @@ const userRoles = [
 ];
 
 interface Props {
-  members: TempTeamMember[];
+  members: TeamMember[];
 }
 
 export function TeamMemberList(props: Props) {

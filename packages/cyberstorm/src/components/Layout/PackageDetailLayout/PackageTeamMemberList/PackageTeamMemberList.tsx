@@ -1,5 +1,5 @@
 import styles from "./PackageTeamMemberList.module.css";
-import { TempTeamMember } from "@thunderstore/dapper/types";
+import { TeamMember } from "@thunderstore/dapper/types";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/pro-regular-svg-icons";
@@ -11,12 +11,12 @@ import { Icon } from "../../../Icon/Icon";
 const defaultImageSrc = "/images/logo.png";
 
 export interface PackageTeamListProps {
-  teamMembers?: TempTeamMember[];
+  teamMembers?: TeamMember[];
   teamName?: string;
 }
 
 export interface PackageTeamListItemProps {
-  teamMember: TempTeamMember;
+  teamMember: TeamMember;
 }
 
 function PackageTeamListItem(props: PackageTeamListItemProps) {
@@ -48,7 +48,7 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
   );
 }
 
-function compare(a: TempTeamMember, b: TempTeamMember) {
+function compare(a: TeamMember, b: TeamMember) {
   if (a.role === b.role) {
     return a.username.localeCompare(b.username);
   }

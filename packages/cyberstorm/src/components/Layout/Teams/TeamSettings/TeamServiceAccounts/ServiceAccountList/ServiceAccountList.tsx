@@ -1,5 +1,5 @@
 import styles from "./ServiceAccountList.module.css";
-import { TempServiceAccount } from "@thunderstore/dapper/types";
+import { ServiceAccount } from "@thunderstore/dapper/types";
 import { Dialog } from "../../../../../Dialog/Dialog";
 import * as Button from "../../../../../Button";
 import { Table } from "../../../../../Table/Table";
@@ -14,7 +14,7 @@ const serviceAccountColumns = [
 ];
 
 interface Props {
-  serviceAccounts: TempServiceAccount[];
+  serviceAccounts: ServiceAccount[];
 }
 
 export function ServiceAccountList(props: Props) {

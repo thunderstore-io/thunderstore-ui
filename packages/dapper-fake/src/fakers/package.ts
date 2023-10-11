@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 
-import { getFakeImg, range, setSeed } from "./utils";
-import { getFakeTeam } from "./team";
+import { getFakeImg, getFakeLink, range, setSeed } from "./utils";
+import { getFakeTeamMembers } from "./team";
 
 export const getFakeDependencies = async (
   community: string,
@@ -35,7 +35,7 @@ export const getFakePackage = async (
     dependencyString: faker.string.uuid(),
     description: faker.lorem.paragraphs(12),
     firstUploaded: faker.date.past({ years: 2 }).toDateString(),
-    team: await getFakeTeam(seed),
+    team: await getPackageTeam(seed),
     versions: range(20).map(getPackageVersion),
   };
 };
@@ -100,6 +100,20 @@ const getPackageExtras = () => ({
   likes: faker.number.int({ min: 0, max: 100000 }),
   size: faker.number.int({ min: 20000, max: 10000000 }),
 });
+
+const getPackageTeam = async (teamId: string) => {
+  setSeed(teamId);
+
+  return {
+    name: faker.word.words(3),
+    imageSource: getFakeImg(),
+    description: faker.lorem.paragraphs(12),
+    about: faker.lorem.words(16),
+    members: await getFakeTeamMembers(teamId),
+    dynamicLinks: [getFakeLink(), getFakeLink(), getFakeLink()],
+    donationLink: faker.internet.url(),
+  };
+};
 
 const getPackageVersion = () => ({
   version: getVersionNumber(),
