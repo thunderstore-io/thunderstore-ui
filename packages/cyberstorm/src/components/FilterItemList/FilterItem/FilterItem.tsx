@@ -3,7 +3,7 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Icon } from "../../Icon/Icon";
-// import { Tag } from "../../Tag/Tag";
+import { CSSProperties } from "react";
 
 export interface FilterItemProps {
   label: string;
@@ -21,6 +21,11 @@ export interface FilterItemProps {
  */
 export function FilterItem(props: FilterItemProps) {
   const { label, value = undefined, setChecked } = props;
+
+  const filterColor = {
+    "--filter-color": value ? "var(--color-highlight)" : "var(--color-danger)",
+  } as CSSProperties;
+
   return (
     <label className={styles.root} htmlFor={"categoryCheckbox" + label}>
       <div className={styles.checkBoxContainer}>
@@ -29,15 +34,15 @@ export function FilterItem(props: FilterItemProps) {
           checked={value}
           onCheckedChange={() => {
             if (setChecked) {
-              console.log(value);
               return setChecked(label, getNextValue(value));
             } else {
               return null;
             }
           }}
-          className={`${styles.checkBoxRoot} ${getStyle(value)}`}
+          className={styles.checkBoxRoot}
+          style={value !== undefined ? filterColor : {}}
         >
-          <Checkbox.Indicator>
+          <Checkbox.Indicator forceMount>
             {value === undefined && <></>}
             {value === true && (
               <Icon>
@@ -51,10 +56,12 @@ export function FilterItem(props: FilterItemProps) {
             )}
           </Checkbox.Indicator>
         </Checkbox.Root>
-        <span className={`${styles.label} ${getStyle(value)}`}>{label}</span>
-        {/* <div className={styles.tag}>
-        <Tag size="tiny" colorScheme="simple" label={count.toString()} />
-      </div> */}
+        <span
+          className={styles.label}
+          style={value !== undefined ? filterColor : {}}
+        >
+          {label.charAt(0).toUpperCase() + label.slice(1)}
+        </span>
       </div>
     </label>
   );
@@ -73,10 +80,3 @@ function getNextValue(value: boolean | undefined): boolean | undefined {
     return true;
   }
 }
-
-const getStyle = (checked: boolean | undefined) => {
-  if (checked === undefined) {
-    return null;
-  }
-  return checked ? styles.yes : styles.no;
-};
