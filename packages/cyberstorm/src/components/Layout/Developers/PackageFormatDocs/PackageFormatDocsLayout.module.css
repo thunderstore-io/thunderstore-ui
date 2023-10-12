@@ -5,5 +5,6 @@
 }
 
 .greenWrap {
+  height: 1rem;
   color: var(--color-cyber-green--60);
 }

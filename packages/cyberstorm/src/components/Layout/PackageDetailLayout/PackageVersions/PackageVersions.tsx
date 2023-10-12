@@ -1,15 +1,16 @@
 import styles from "./PackageVersions.module.css";
 import * as Button from "../../../Button/";
-import { DataTable, Sort } from "../../../DataTable/DataTable";
+import { Table, Sort } from "../../../Table/Table";
 
 export function PackageVersions() {
   return (
     <div>
       <div className={styles.title}>Versions</div>
-      <DataTable
+      <Table
         headers={columns}
         rows={packageVersionData}
         sortDirection={Sort.ASC}
+        variant="itemList"
       />
     </div>
   );

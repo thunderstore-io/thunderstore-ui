@@ -2,7 +2,7 @@ import styles from "./ServiceAccountList.module.css";
 import { ServiceAccount } from "@thunderstore/dapper/types";
 import { Dialog } from "../../../../../Dialog/Dialog";
 import * as Button from "../../../../../Button";
-import { DataTable, DataTableRows } from "../../../../../DataTable/DataTable";
+import { Table, TableRows } from "../../../../../Table/Table";
 import { Alert, Icon } from "../../../../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/pro-solid-svg-icons";
@@ -14,7 +14,7 @@ export interface ServiceAccountListProps {
 export function ServiceAccountList(props: ServiceAccountListProps) {
   const { serviceAccountData = [] } = props;
 
-  const tableData: DataTableRows = [];
+  const tableData: TableRows = [];
   serviceAccountData?.forEach((serviceAccount: ServiceAccount, index) => {
     tableData.push([
       { value: serviceAccount.name, sortValue: serviceAccount.name },
@@ -65,7 +65,13 @@ export function ServiceAccountList(props: ServiceAccountListProps) {
     ]);
   });
 
-  return <DataTable headers={serviceAccountColumns} rows={tableData} />;
+  return (
+    <Table
+      headers={serviceAccountColumns}
+      rows={tableData}
+      variant="itemList"
+    />
+  );
 }
 
 ServiceAccountList.displayName = "ServiceAccountList";

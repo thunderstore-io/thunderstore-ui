@@ -2,8 +2,8 @@
 import { CSSProperties, ReactNode, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort, faSortDown, faSortUp } from "@fortawesome/pro-solid-svg-icons";
-import styles from "./DataTable.module.css";
-import * as Button from "../Button/";
+import styles from "./Table.module.css";
+import * as Button from "../Button";
 import { Icon } from "../Icon/Icon";
 
 export enum Sort {
@@ -12,21 +12,23 @@ export enum Sort {
   ASC,
 }
 
-interface DataTableColumn {
+interface TableColumn {
   value: ReactNode;
   sortValue: string | number;
 }
 
-type DataTableRow = DataTableColumn[];
+type TableRow = TableColumn[];
 
-export type DataTableRows = DataTableRow[];
+export type TableRows = TableRow[];
 
-export interface DataTableProps {
+export interface TableProps {
   headers: { value: string; disableSort: boolean }[];
-  rows: DataTableRows;
+  rows: TableRows;
   disableSort?: boolean;
   sortByHeader?: number;
   sortDirection?: Sort;
+  variant?: "default" | "itemList";
+  gridTemplateColumns?: string;
 }
 
 interface SortButtonProps {
@@ -60,22 +62,24 @@ function SortButton(props: SortButtonProps) {
       onClick={() => hook(hookParams)}
     >
       <Button.ButtonLabel>{label}</Button.ButtonLabel>
-      <Button.ButtonLabel>
+      <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={icon} className={iconClass} />
         </Icon>
-      </Button.ButtonLabel>
+      </Button.ButtonIcon>
     </Button.Root>
   );
 }
 
-export function DataTable(props: DataTableProps) {
+export function Table(props: TableProps) {
   const {
     headers,
     rows,
     sortByHeader = 0,
     sortDirection = Sort.DESC,
     disableSort = false,
+    variant = "default",
+    gridTemplateColumns,
   } = props;
 
   const [sortVariables, setSortVariables] = useState({
@@ -83,7 +87,7 @@ export function DataTable(props: DataTableProps) {
     direction: sortDirection,
   });
 
-  function compare(a: DataTableRow, b: DataTableRow) {
+  function compare(a: TableRow, b: TableRow) {
     const column = sortVariables.identifier;
     if (a[column] && b[column] && a[column].sortValue < b[column].sortValue) {
       return sortVariables.direction;
@@ -98,15 +102,29 @@ export function DataTable(props: DataTableProps) {
     rows.sort(compare);
   }
 
-  const rowsStyles = { "--row-count": rows.length } as CSSProperties;
-  const rowStyles = { "--column-count": headers.length } as CSSProperties;
+  const rowCount = { "--row-count": rows.length } as CSSProperties;
+  let columnCSSProps = {};
+  if (gridTemplateColumns) {
+    columnCSSProps = {
+      "--column-count": headers.length,
+      "--dynamic-grid-template-columns": gridTemplateColumns,
+    } as CSSProperties;
+  } else {
+    columnCSSProps = { "--column-count": headers.length } as CSSProperties;
+  }
 
   return (
-    <div className={styles.gridTable}>
-      <div className={styles.gridHeaders} style={rowStyles}>
+    <div className={getTableVariant(variant)}>
+      <div className={getHeadersVariant(variant)} style={columnCSSProps}>
         {headers.map((header, headerI) => (
-          <div key={headerI} className={styles.gridHeader}>
-            {header.disableSort ? (
+          <div
+            key={headerI}
+            className={getHeaderVariant(variant)}
+            style={columnCSSProps}
+          >
+            {variant === "default" ? (
+              header.value
+            ) : header.disableSort ? (
               <Button.Root
                 iconAlignment="side"
                 colorScheme="transparentTertiary"
@@ -127,11 +145,18 @@ export function DataTable(props: DataTableProps) {
         ))}
       </div>
 
-      <div className={styles.gridRows} style={rowsStyles}>
+      <div className={getRowsVariant(variant)} style={rowCount}>
         {rows.map((row, rowI) => (
-          <div key={`row${rowI}`} className={styles.gridRow} style={rowStyles}>
+          <div
+            key={`row${rowI}`}
+            className={getRowVariant(variant)}
+            style={columnCSSProps}
+          >
             {row.map((col, colI) => (
-              <div key={`row${rowI}_col${colI}`} className={styles.gridCell}>
+              <div
+                key={`row${rowI}_col${colI}`}
+                className={getCellVariant(variant)}
+              >
                 {col.value}
               </div>
             ))}
@@ -142,4 +167,41 @@ export function DataTable(props: DataTableProps) {
   );
 }
 
-DataTable.displayName = "DataTable";
+const getTableVariant = (scheme: string) => {
+  return {
+    default: styles.grid__Table,
+    itemList: styles.grid__Table_ItemList,
+  }[scheme];
+};
+const getHeadersVariant = (scheme: string) => {
+  return {
+    default: styles.grid__Headers,
+    itemList: styles.grid__Headers_ItemList,
+  }[scheme];
+};
+const getHeaderVariant = (scheme: string) => {
+  return {
+    default: styles.grid__Header,
+    itemList: styles.grid__Header_ItemList,
+  }[scheme];
+};
+const getRowsVariant = (scheme: string) => {
+  return {
+    default: styles.grid__Rows,
+    itemList: styles.grid__Rows_ItemList,
+  }[scheme];
+};
+const getRowVariant = (scheme: string) => {
+  return {
+    default: styles.grid__Row,
+    itemList: styles.grid__Row_ItemList,
+  }[scheme];
+};
+const getCellVariant = (scheme: string) => {
+  return {
+    default: styles.grid__Cell,
+    itemList: styles.grid__Cell_ItemList,
+  }[scheme];
+};
+
+Table.displayName = "Table";

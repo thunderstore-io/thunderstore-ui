@@ -3,7 +3,7 @@ import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 
 import styles from "./TeamList.module.css";
-import { DataTable } from "../../../DataTable/DataTable";
+import { Table } from "../../../Table/Table";
 import { TeamSettingsLink } from "../../../Links/Links";
 
 export function TeamList() {
@@ -11,7 +11,7 @@ export function TeamList() {
   const user = usePromise(dapper.getCurrentUser, []);
 
   return (
-    <DataTable
+    <Table
       headers={[
         { value: "Team Name", disableSort: false },
         { value: "Role", disableSort: false },
@@ -35,6 +35,7 @@ export function TeamList() {
           sortValue: team.member_count,
         },
       ])}
+      variant="itemList"
     />
   );
 }
