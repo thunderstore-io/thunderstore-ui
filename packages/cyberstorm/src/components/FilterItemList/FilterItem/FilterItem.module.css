@@ -24,40 +24,35 @@
   flex: 1;
   align-items: center;
   justify-content: center;
-  width: var(--space--16);
-  height: var(--space--16);
+  width: var(--space--18);
+  height: var(--space--18);
   border-radius: var(--border-radius--2);
   background-color: var(--mark-color);
   transition: ease-out 60ms;
 
-  --mark-color: var(--color-purple--6);
+  --mark-color: var(--filter-color, var(--color-purple--6));
 }
 
 .root:hover .checkBoxRoot {
-  --mark-color: #4343a3;
+  --mark-color: var(--filter-color, #4343a3);
 }
 
 .label {
-  color: var(--color-text--secondary);
+  color: var(--filter-color, var(--color-text--secondary));
   font-weight: 700;
+  font-size: 0.875rem;
+  font-style: normal;
+  line-height: normal;
   transition: 50ms;
   user-select: none;
 }
 
 .icon {
   width: var(--space--12);
-  height: var(--space--12);
+  height: var(--space--16);
   color: var(--color-surface--0);
 }
 
 .tag {
   margin-left: auto;
-}
-
-.yes {
-  --mark-color: var(--color-highlight) !important;
-}
-
-.no {
-  --mark-color: var(--color-danger) !important;
 }
