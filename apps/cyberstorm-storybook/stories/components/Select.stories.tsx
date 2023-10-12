@@ -1,10 +1,5 @@
 import { StoryFn, Meta } from "@storybook/react";
-import {
-  Icon,
-  Select,
-  SelectOption,
-  SelectProps,
-} from "@thunderstore/cyberstorm";
+import { Icon, Select, SelectProps } from "@thunderstore/cyberstorm";
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -21,7 +16,7 @@ const meta = {
   component: Select,
 } as Meta<typeof Select>;
 
-const options: SelectOption[] = [
+const options = [
   {
     value: "1",
     label: "Newest",
@@ -82,9 +77,10 @@ type TemplateArgs = {
   props: SelectProps;
   defaultValue?: string;
 };
+
 const Template: StoryFn<TemplateArgs> = (args) => {
   const [value, setValue] = useState<string | undefined>(args.defaultValue);
-  const props: SelectProps = {
+  const props = {
     ...args.props,
     onChange: (x: string) => setValue(x),
     value,

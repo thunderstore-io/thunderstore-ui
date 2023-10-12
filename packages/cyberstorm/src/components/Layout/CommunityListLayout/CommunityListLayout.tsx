@@ -17,13 +17,16 @@ import { CommunityList } from "./CommunityList";
 import { Loading } from "./Loading";
 import { Icon } from "../../Icon/Icon";
 
-export type SortOptions = "name" | "datetime_created";
+export enum SortOptions {
+  Name = "name",
+  Latest = "-datetime_created",
+}
 
 /**
  * Cyberstorm CommunityList Layout
  */
 export function CommunityListLayout() {
-  const [order, setOrder] = useState<SortOptions>("name");
+  const [order, setOrder] = useState(SortOptions.Name);
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue] = useDebounce(searchValue, 300);
 
@@ -49,10 +52,8 @@ export function CommunityListLayout() {
           </div>
           <div className={styles.searchFilters}>
             <div className={styles.searchFiltersSortLabel}>Sort by</div>
-            {/* TODO: Select only accepts strings as val, could string
-                literals be supported in some neat manner?*/}
             <Select
-              onChange={changeOrder as (val: string) => null}
+              onChange={changeOrder}
               options={selectOptions}
               value={order}
             />
@@ -72,7 +73,7 @@ CommunityListLayout.displayName = "CommunityListLayout";
 
 const selectOptions = [
   {
-    value: "name",
+    value: SortOptions.Name,
     label: "Name",
     leftIcon: (
       <Icon>
@@ -81,7 +82,7 @@ const selectOptions = [
     ),
   },
   {
-    value: "-datetime_created",
+    value: SortOptions.Latest,
     label: "Latest",
     leftIcon: (
       <Icon>
