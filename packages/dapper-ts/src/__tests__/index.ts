@@ -32,13 +32,19 @@ it("executes getPackageListings without errors", async () => {
 });
 
 it("executes getTeamDetails without errors", async () => {
-  await expect(dapper.getTeamDetails()).resolves.not.toThrowError();
+  await expect(dapper.getTeamDetails("TestTeam")).resolves.not.toThrowError();
 });
 
-it("executes getTeamMembers without errors", async () => {
-  await expect(dapper.getTeamMembers()).resolves.not.toThrowError();
+// TODO: this should be tested/mocked with sessionId too.
+it("executes getTeamMembers with 401 error", async () => {
+  await expect(dapper.getTeamMembers("TestTeam")).rejects.toThrowError(
+    "401: Unauthorized"
+  );
 });
 
-it("executes getTeamServiceAccounts without errors", async () => {
-  await expect(dapper.getTeamServiceAccounts()).resolves.not.toThrowError();
+// TODO: this should be tested/mocked with sessionId too.
+it("executes getTeamServiceAccounts with 401 error", async () => {
+  await expect(dapper.getTeamServiceAccounts("TestTeam")).rejects.toThrowError(
+    "401: Unauthorized"
+  );
 });

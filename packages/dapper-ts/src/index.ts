@@ -3,6 +3,11 @@ import { RequestConfig } from "@thunderstore/thunderstore-api";
 
 import { getCommunities, getCommunity } from "./methods/communities";
 import { getCurrentUser } from "./methods/currentUser";
+import {
+  getTeamDetails,
+  getTeamMembers,
+  getTeamServiceAccounts,
+} from "./methods/team";
 
 // Original idea was for NotImlemented to throw an error, but that
 // causes the build cyberstorm-nextjs to fail, which causes CI pipeline
@@ -25,16 +30,19 @@ export class DapperTs implements DapperTsInterface {
     this.getCommunities = this.getCommunities.bind(this);
     this.getCommunity = this.getCommunity.bind(this);
     this.getCurrentUser = this.getCurrentUser.bind(this);
+    this.getTeamDetails = this.getTeamDetails.bind(this);
+    this.getTeamMembers = this.getTeamMembers.bind(this);
+    this.getTeamServiceAccounts = this.getTeamServiceAccounts.bind(this);
   }
 
   public getCommunities = getCommunities;
   public getCommunity = getCommunity;
   public getCurrentUser = getCurrentUser;
+  public getTeamDetails = getTeamDetails;
+  public getTeamMembers = getTeamMembers;
+  public getTeamServiceAccounts = getTeamServiceAccounts;
 
   public getPackage = NotImplemented;
   public getPackageDependencies = NotImplemented;
   public getPackageListings = NotImplemented;
-  public getTeamDetails = NotImplemented;
-  public getTeamMembers = NotImplemented;
-  public getTeamServiceAccounts = NotImplemented;
 }
