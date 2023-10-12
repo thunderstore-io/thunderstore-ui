@@ -8,11 +8,9 @@ const meta = {
 } as Meta<typeof UserProfileLayout>;
 
 const Template: StoryFn<typeof UserProfileLayout> = () => (
-  <div>
-    <UserProfileLayout userId="user" />
-  </div>
+  <UserProfileLayout userId="user" />
 );
 
-const DefaultUserProfileLayout = Template.bind({});
+const UserProfile = Template.bind({});
 
-export { meta as default, DefaultUserProfileLayout as UserProfile };
+export { meta as default, UserProfile };

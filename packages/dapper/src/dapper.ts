@@ -10,5 +10,4 @@ export interface DapperInterface {
   getServiceAccount: methods.GetServiceAccount;
   getServiceAccountList: methods.GetServiceAccountList;
   getTeam: methods.GetTeam;
-  getUser: methods.GetUser;
 }

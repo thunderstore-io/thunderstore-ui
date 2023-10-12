@@ -1,8 +1,7 @@
 import { Communities, Community } from "./community";
 import { Package, PackageDependency, PackagePreview } from "./package";
-import { ServerPreview } from "./server";
 import { ServiceAccount, Team } from "./team";
-import { CurrentUser, User } from "./user";
+import { CurrentUser } from "./user";
 
 export type GetCommunities = (
   page?: number,
@@ -49,9 +48,3 @@ export type GetServiceAccountList = (
 ) => Promise<ServiceAccount[]>;
 
 export type GetTeam = (teamId: string) => Promise<Team>;
-
-export type GetUser = (userId: string) => Promise<{
-  user: User;
-  packages: PackagePreview[];
-  servers: ServerPreview[];
-}>;

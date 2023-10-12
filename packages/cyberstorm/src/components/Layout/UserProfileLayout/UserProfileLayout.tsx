@@ -3,45 +3,27 @@ import { UserLink } from "../../Links/Links";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import styles from "./UserProfileLayout.module.css";
-import { useDapper } from "@thunderstore/dapper";
-import { usePromise } from "@thunderstore/use-promise";
 
-export interface UserProfileLayoutProps {
+interface Props {
   userId: string;
 }
 
 /**
  * Cyberstorm user's profile Layout
  */
-export function UserProfileLayout(props: UserProfileLayoutProps) {
+export function UserProfileLayout(props: Props) {
   const { userId } = props;
-
-  const dapper = useDapper();
-  const userData = usePromise(dapper.getUser, [userId]);
 
   return (
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          {userData?.user?.name ? (
-            <UserLink user={userData.user.name}>{userData.user.name}</UserLink>
-          ) : (
-            <></>
-          )}
+          <UserLink user={userId}>{userId}</UserLink>
         </BreadCrumbs>
       }
       header={
         <div className={styles.header}>
-          {userData?.user?.name ? (
-            <>
-              Mods uploaded by{" "}
-              <UserLink user={userData.user.name}>
-                {userData.user.name}
-              </UserLink>
-            </>
-          ) : (
-            <></>
-          )}
+          Mods uploaded by <UserLink user={userId}>{userId}</UserLink>
         </div>
       }
       mainContent={<PackageSearchLayout userId={userId} />}
