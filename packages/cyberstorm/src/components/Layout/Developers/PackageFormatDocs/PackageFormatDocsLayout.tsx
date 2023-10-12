@@ -3,7 +3,7 @@ import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { PackageFormatDocsLink } from "../../../Links/Links";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
-import { DataTable } from "../../../DataTable/DataTable";
+import { Table } from "../../../Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/pro-solid-svg-icons";
 import { CodeBox } from "../../../CodeBox/CodeBox";
@@ -42,18 +42,20 @@ export function PackageFormatDocsLayout() {
       header={<PageHeader title="Package Format Docs" />}
       mainContent={
         <div className={styles.root}>
-          <DataTable
+          <Table
             headers={firstTableDataColumns}
-            rows={firstDataTableData}
+            rows={firstTableData}
             disableSort={true}
+            gridTemplateColumns="0.5fr 3fr"
           />
           <p>
             Additionally, the manifest.json must contain the following fields:
           </p>
-          <DataTable
+          <Table
             headers={secondTableDataColumns}
-            rows={secondDataTableData}
+            rows={secondTableData}
             disableSort={true}
+            gridTemplateColumns="0.5fr 0.5fr 1.25fr 1.25fr"
           />
           <p>Example manifest.json content:</p>
           <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} />
@@ -70,7 +72,7 @@ const firstTableDataColumns = [
   { value: "Description", disableSort: true },
 ];
 
-const firstDataTableData = [
+const firstTableData = [
   [
     { value: "icon.png", sortValue: 0 },
     { value: "Name of the mod, no spaces. Allowed characters:-", sortValue: 0 },
@@ -84,7 +86,7 @@ const firstDataTableData = [
     },
   ],
   [
-    { value: "CHANGELOG.md (optional)", sortValue: 0 },
+    { value: "CHANGELOG.md", sortValue: 0 },
     {
       value:
         "Version number of the mod, following the semantic version format Major.Minor.Patch.",
@@ -108,7 +110,7 @@ const secondTableDataColumns = [
   { value: "Example value", disableSort: true },
 ];
 
-const secondDataTableData = [
+const secondTableData = [
   [
     { value: "name", sortValue: 0 },
     {

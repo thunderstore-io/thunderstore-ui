@@ -9,11 +9,7 @@ import { TeamLink, UserLink } from "../../../../Links/Links";
 import { Avatar } from "../../../../Avatar/Avatar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/pro-solid-svg-icons";
-import {
-  DataTable,
-  DataTableRows,
-  Sort,
-} from "../../../../DataTable/DataTable";
+import { Table, TableRows, Sort } from "../../../../Table/Table";
 import { Icon } from "../../../../Icon/Icon";
 
 // TODO: actual placeholder
@@ -30,7 +26,7 @@ export interface TeamMemberListProps {
 export function TeamMemberList(props: TeamMemberListProps) {
   const { teamMemberData = [] } = props;
 
-  const tableData: DataTableRows = [];
+  const tableData: TableRows = [];
   teamMemberData?.forEach((teamMember: TeamMember, index) => {
     tableData.push([
       {
@@ -103,11 +99,12 @@ export function TeamMemberList(props: TeamMemberListProps) {
   });
 
   return (
-    <DataTable
+    <Table
       headers={teamMemberColumns}
       rows={tableData}
       sortByHeader={1}
       sortDirection={Sort.ASC}
+      variant="itemList"
     />
   );
 }
