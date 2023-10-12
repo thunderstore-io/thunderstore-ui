@@ -1,4 +1,4 @@
-import styles from "./TeamLayout.module.css";
+import styles from "./TeamProfileLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { TeamLink } from "../../Links/Links";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
@@ -6,14 +6,14 @@ import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 
-export interface TeamLayoutProps {
+interface Props {
   teamId: string;
 }
 
 /**
- * Cyberstorm team's landing page Layout
+ * Team's public profile view.
  */
-export function TeamLayout(props: TeamLayoutProps) {
+export function TeamProfileLayout(props: Props) {
   const { teamId } = props;
 
   const dapper = useDapper();
@@ -37,4 +37,4 @@ export function TeamLayout(props: TeamLayoutProps) {
   );
 }
 
-TeamLayout.displayName = "TeamLayout";
+TeamProfileLayout.displayName = "TeamProfileLayout";
