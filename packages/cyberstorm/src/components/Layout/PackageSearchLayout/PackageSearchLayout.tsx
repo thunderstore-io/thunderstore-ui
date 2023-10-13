@@ -17,9 +17,7 @@ import { Tag } from "../../Tag/Tag";
 import { TextInput } from "../../TextInput/TextInput";
 import { Icon } from "../../Icon/Icon";
 
-const PackageListings = lazy(
-  () => import("../PackageListings/PackageListings")
-);
+const PackageList = lazy(() => import("../../PackageList/PackageList"));
 
 export interface CategoriesProps {
   [key: string]: {
@@ -217,7 +215,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
                 </h2>
               }
             >
-              <PackageListings
+              <PackageList
                 communityId={communityId}
                 userId={userId}
                 teamId={teamId}

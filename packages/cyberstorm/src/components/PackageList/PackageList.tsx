@@ -1,14 +1,15 @@
 "use client";
-import { useContext, useEffect, useState } from "react";
-import { isEqual } from "lodash";
-import styles from "./PackageListings.module.css";
-import { PackageCard } from "../../PackageCard/PackageCard";
 import { useDapper } from "@thunderstore/dapper";
 import { PackagePreview } from "@thunderstore/dapper/types";
+import { isEqual } from "lodash";
+import { useContext, useEffect, useState } from "react";
+
+import styles from "./PackageList.module.css";
 import {
   FiltersContext,
   CategoriesProps,
-} from "../PackageSearchLayout/PackageSearchLayout";
+} from "../Layout/PackageSearchLayout/PackageSearchLayout";
+import { PackageCard } from "../PackageCard/PackageCard";
 
 export interface PackageListingsProps {
   communityId?: string;
@@ -22,7 +23,7 @@ export interface fetchFromDapperProps extends PackageListingsProps {
   availableCategories?: CategoriesProps;
 }
 
-export default function PackageListings(props: PackageListingsProps) {
+export default function PackageList(props: PackageListingsProps) {
   const { communityId, userId, namespaceId, teamId } = props;
   const filters = useContext(FiltersContext);
   const dapper = useDapper();
@@ -95,4 +96,4 @@ export default function PackageListings(props: PackageListingsProps) {
   );
 }
 
-PackageListings.displayName = "PackageListings";
+PackageList.displayName = "PackageList";
