@@ -1,4 +1,4 @@
-import { PaginatedList } from "./shared";
+import { PackageCategory, PaginatedList } from "./shared";
 
 export type Community = {
   name: string;
@@ -10,6 +10,10 @@ export type Community = {
   icon_url: string | null;
   total_download_count: number;
   total_package_count: number;
+};
+
+export type CommunityDetails = Community & {
+  package_categories: PackageCategory[];
 };
 
 export type Communities = PaginatedList<Community>;

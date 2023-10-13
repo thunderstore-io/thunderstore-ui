@@ -1,6 +1,12 @@
 import { faker } from "@faker-js/faker";
 
-import { getFakeImg, getFakeLink, range, setSeed } from "./utils";
+import {
+  getFakeImg,
+  getFakeLink,
+  getFakePackageCategories,
+  range,
+  setSeed,
+} from "./utils";
 import { getFakeTeamMembers } from "./team";
 
 export const getFakeDependencies = async (
@@ -91,7 +97,7 @@ const getPackageBase = (
 });
 
 const getPackageExtras = () => ({
-  categories: getCategories(),
+  categories: getFakePackageCategories(),
   downloadCount: faker.number.int({ min: 1000000, max: 10000000 }),
   isDeprecated: faker.datatype.boolean(),
   isNsfw: faker.datatype.boolean(),
@@ -127,25 +133,4 @@ const getVersionNumber = (min = 0, max = 10) => {
   const minor = faker.number.int({ min, max });
   const fix = faker.number.int({ min, max });
   return `${major}.${minor}.${fix}`;
-};
-
-const getCategories = (returnAmount?: number) => {
-  const categories = [
-    { name: "Mods", slug: "mods" },
-    { name: "Tools", slug: "tools" },
-    { name: "Libraries", slug: "libraries" },
-    { name: "Modpacks", slug: "modpacks" },
-    { name: "Skins", slug: "skins" },
-    { name: "Maps", slug: "maps" },
-    { name: "Tweaks", slug: "tweaks" },
-    { name: "Items", slug: "items" },
-    { name: "Language", slug: "language" },
-    { name: "Audio", slug: "audio" },
-    { name: "Enemies", slug: "enemies" },
-  ];
-
-  return faker.helpers.arrayElements(categories, {
-    min: 0,
-    max: returnAmount ?? 3,
-  });
 };

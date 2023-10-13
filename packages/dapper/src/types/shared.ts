@@ -3,6 +3,11 @@ export type DynamicLink = {
   url: string;
 };
 
+export interface PackageCategory {
+  name: string;
+  slug: string;
+}
+
 export type PaginatedList<T> = {
   count: number;
   hasMore: boolean;

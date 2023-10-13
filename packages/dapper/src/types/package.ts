@@ -41,11 +41,6 @@ export interface PackageDependency {
   version: string;
 }
 
-export interface PackageCategory {
-  name: string;
-  slug: string;
-}
-
 interface PackageTeam {
   name: string;
   members: TeamMember[];
