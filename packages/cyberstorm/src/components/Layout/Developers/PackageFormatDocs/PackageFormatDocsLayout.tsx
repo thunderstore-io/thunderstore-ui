@@ -46,7 +46,7 @@ export function PackageFormatDocsLayout() {
             headers={firstTableDataColumns}
             rows={firstTableData}
             disableSort={true}
-            gridTemplateColumns="0.5fr 3fr"
+            gridTemplateColumns="minmax(12.5rem, 0.5fr) minmax(auto, 3fr)"
           />
           <p>
             Additionally, the manifest.json must contain the following fields:
@@ -55,7 +55,7 @@ export function PackageFormatDocsLayout() {
             headers={secondTableDataColumns}
             rows={secondTableData}
             disableSort={true}
-            gridTemplateColumns="0.5fr 0.5fr 1.25fr 1.25fr"
+            gridTemplateColumns="minmax(22%, 0.5fr) minmax(18%, 0.5fr) minmax(30%, 1.25fr) minmax(30%, 1.25fr)"
           />
           <p>Example manifest.json content:</p>
           <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} />
