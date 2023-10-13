@@ -44,6 +44,7 @@
   flex: 1;
   padding-inline: var(--space--24);
   padding-block: var(--space--32);
+  width: 100%;
 }
 
 .adWrapper .inner {
@@ -124,7 +125,7 @@
   flex-direction: column;
   gap: var(--space--32);
   max-width: 100%;
-  padding-right: 50px;
+  padding-right: 3.125rem;
 }
 
 .adText {
@@ -155,7 +156,8 @@
 
 .img {
   position: relative;
-  max-width: 40rem;
+
+  /* max-width: 40rem; */
   aspect-ratio: 2.5/1;
   object-fit: cover;
   object-position: left top;
