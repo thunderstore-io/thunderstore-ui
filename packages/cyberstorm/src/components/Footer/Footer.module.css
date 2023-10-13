@@ -156,8 +156,7 @@
 
 .img {
   position: relative;
-
-  /* max-width: 40rem; */
+  max-width: 45rem;
   aspect-ratio: 2.5/1;
   object-fit: cover;
   object-position: left top;
