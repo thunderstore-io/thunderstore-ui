@@ -13,10 +13,11 @@ interface Props {
   userId?: string;
   namespaceId?: string;
   teamId?: string;
+  searchQuery: string;
 }
 
 export function PackageList(props: Props) {
-  const { communityId, userId, namespaceId, teamId } = props;
+  const { communityId, namespaceId, searchQuery, teamId, userId } = props;
   const filters = useContext(FiltersContext);
   const dapper = useDapper();
 
@@ -25,7 +26,7 @@ export function PackageList(props: Props) {
     userId,
     namespaceId,
     teamId,
-    filters?.keywords,
+    [searchQuery],
     filters?.availableCategories,
   ]);
 
@@ -54,12 +55,7 @@ export function PackageList(props: Props) {
     if (!isEqual(updatedAvailableCategories, filters.availableCategories)) {
       filters.setAvailableCategories(updatedAvailableCategories);
     }
-  }, [
-    filters?.availableCategories,
-    filters?.keywords,
-    filters?.setAvailableCategories,
-    packages,
-  ]);
+  }, [filters?.availableCategories, filters?.setAvailableCategories, packages]);
 
   return (
     <div className={styles.root}>

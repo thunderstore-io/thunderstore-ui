@@ -8,6 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Suspense, useState, createContext } from "react";
+import { useDebounce } from "use-debounce";
 
 import styles from "./PackageSearch.module.css";
 import * as Button from "../Button/";
@@ -28,13 +29,10 @@ interface CategoriesProps {
 
 // TODO: OVERKILL???
 export class Filters {
-  keywords: string[];
-  setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
   availableCategories: CategoriesProps;
   setAvailableCategories: React.Dispatch<React.SetStateAction<CategoriesProps>>;
 
   constructor() {
-    [this.keywords, this.setKeywords] = useState<string[]>([]);
     [this.availableCategories, this.setAvailableCategories] =
       useState<CategoriesProps>({});
   }
@@ -67,42 +65,26 @@ interface TagListProps {
 function CurrentFilters(props: TagListProps) {
   const { filters } = props;
 
-  function removeFilter(key: string, filterType: string) {
-    if (filterType === "keyword") {
-      filters.setKeywords(filters.keywords.filter((x) => x !== key));
-    }
+  function removeFilter(key: string) {
+    const cats = { ...filters.availableCategories };
+    Object.values(cats).forEach((c) => {
+      if (c.label === key) {
+        c.value = undefined;
+      }
+    });
 
-    if (filterType === "category") {
-      const cats = { ...filters.availableCategories };
-      Object.values(cats).forEach((c) => {
-        if (c.label === key) {
-          c.value = undefined;
-        }
-      });
-
-      filters.setAvailableCategories(cats);
-    }
+    filters.setAvailableCategories(cats);
   }
 
   return (
     <>
-      {filters.keywords?.map((keyword, index) => (
-        <Tag
-          key={`keywordSearch_${keyword}_${index}`}
-          label={`"${keyword}"`}
-          rightIcon={RemoveFilterIcon(() => removeFilter(keyword, "keyword"))}
-          colorScheme="borderless_removable"
-        />
-      ))}
       {Object.values(filters.availableCategories)
         .filter((category) => category.value !== undefined)
         .map((cat, index) => (
           <Tag
             key={`categorySearch_${cat.label}_${index}`}
             label={cat.label}
-            rightIcon={RemoveFilterIcon(() =>
-              removeFilter(cat.label, "category")
-            )}
+            rightIcon={RemoveFilterIcon(() => removeFilter(cat.label))}
             colorScheme="borderless_removable"
           />
         ))}
@@ -126,14 +108,10 @@ export function PackageSearch(props: Props) {
   const [order, setOrder] = useState("1");
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
-
-  const handleSearchFilterEdit = (e: string) =>
-    filters.setKeywords(
-      Array.from(new Set([...filters.keywords, e])).filter(Boolean)
-    );
+  const [debouncedSearchValue] = useDebounce(searchValue, 300);
 
   const clearFilters = () => {
-    filters.setKeywords([]);
+    setSearchValue("");
 
     const cats = { ...filters.availableCategories };
     Object.values(cats).forEach((cat) => (cat.value = undefined));
@@ -144,14 +122,13 @@ export function PackageSearch(props: Props) {
     <div className={styles.root}>
       <TextInput
         placeHolder="Filter Mods..."
+        value={searchValue}
+        setValue={setSearchValue}
         leftIcon={
           <Icon>
             <FontAwesomeIcon icon={faSearch} />
           </Icon>
         }
-        value={searchValue}
-        setValue={setSearchValue}
-        enterHook={handleSearchFilterEdit}
       />
       <div className={styles.contentWrapper}>
         <div className={styles.filterItemList}>
@@ -165,10 +142,12 @@ export function PackageSearch(props: Props) {
             <div className={styles.showing}>
               {/* TODO: use real values */}
               Showing <strong>1-20</strong> of <strong>327</strong> results
+              {debouncedSearchValue !== ""
+                ? ` for "${debouncedSearchValue}"`
+                : ""}
             </div>
 
-            {filters.keywords.length > 0 ||
-            Object.keys(filters.availableCategories).some(
+            {Object.keys(filters.availableCategories).some(
               (k) => filters.availableCategories[k].value !== undefined
             ) ? (
               <div className={styles.selectedTags}>
@@ -211,6 +190,7 @@ export function PackageSearch(props: Props) {
                 communityId={communityId}
                 userId={userId}
                 teamId={teamId}
+                searchQuery={debouncedSearchValue}
               />
             </Suspense>
           </FiltersProvider>
