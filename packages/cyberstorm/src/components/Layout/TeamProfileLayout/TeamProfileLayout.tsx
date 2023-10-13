@@ -1,8 +1,8 @@
 import styles from "./TeamProfileLayout.module.css";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { TeamLink } from "../../Links/Links";
-import { BaseLayout } from "../BaseLayout/BaseLayout";
-import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
+import { PackageSearch } from "../../PackageSearch/PackageSearch";
 
 interface Props {
   teamName: string;
@@ -26,7 +26,7 @@ export function TeamProfileLayout(props: Props) {
           Mods uploaded by <TeamLink team={teamName}>{teamName}</TeamLink>
         </div>
       }
-      mainContent={<PackageSearchLayout teamId={teamName} />}
+      mainContent={<PackageSearch teamId={teamName} />}
     />
   );
 }

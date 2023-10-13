@@ -8,7 +8,7 @@ import styles from "./PackageList.module.css";
 import {
   FiltersContext,
   CategoriesProps,
-} from "../Layout/PackageSearchLayout/PackageSearchLayout";
+} from "../PackageSearch/PackageSearch";
 import { PackageCard } from "../PackageCard/PackageCard";
 
 export interface PackageListingsProps {

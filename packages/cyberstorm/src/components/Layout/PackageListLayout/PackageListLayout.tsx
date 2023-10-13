@@ -6,13 +6,13 @@ import { usePromise } from "@thunderstore/use-promise";
 
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
-import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import * as Button from "../../Button/";
 import { CommunityImage } from "../../CommunityImage/CommunityImage";
 import { Icon } from "../../Icon/Icon";
 import { CommunitiesLink, CommunityLink } from "../../Links/Links";
 import { MetaItem } from "../../MetaItem/MetaItem";
+import { PackageSearch } from "../../PackageSearch/PackageSearch";
 import { formatInteger } from "../../../utils/utils";
 
 interface PackageListLayoutProps {
@@ -88,7 +88,7 @@ export function PackageListLayout(props: PackageListLayoutProps) {
           ]}
         />
       }
-      mainContent={<PackageSearchLayout communityId={communityId} />}
+      mainContent={<PackageSearch communityId={communityId} />}
     />
   );
 }
