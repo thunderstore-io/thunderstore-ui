@@ -105,12 +105,12 @@ export { ErrorLayout } from "./components/Layout/ErrorLayout/ErrorLayout";
 export { HomeLayout } from "./components/Layout/HomeLayout/HomeLayout";
 export { LoginLayout } from "./components/Layout/LoginLayout/LoginLayout";
 export { BetaLoginLayout } from "./components/Layout/LoginLayout/BetaLoginLayout";
+export { CommunityProfileLayout } from "./components/Layout/CommunityProfileLayout/CommunityProfileLayout";
 export {
   PackageDetailLayout,
   type PackageDetailLayoutProps,
 } from "./components/Layout/PackageDetailLayout/PackageDetailLayout";
 export { PackageDependantsLayout } from "./components/Layout/PackageDependantsLayout/PackageDependantsLayout";
-export { PackageListLayout } from "./components/Layout/PackageListLayout/PackageListLayout";
 export { SettingsLayout } from "./components/Layout/Settings/SettingsLayout";
 export { TeamSettingsLayout } from "./components/Layout/Teams/TeamSettings/TeamSettingsLayout";
 export { TeamsLayout } from "./components/Layout/Teams/TeamsLayout";

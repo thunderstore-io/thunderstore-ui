@@ -1,5 +1,5 @@
-import { PackageListLayout } from "@thunderstore/cyberstorm";
+import { CommunityProfileLayout } from "@thunderstore/cyberstorm";
 
 export default function Page({ params }: { params: { community: string } }) {
-  return <PackageListLayout communityId={params.community} />;
+  return <CommunityProfileLayout communityId={params.community} />;
 }

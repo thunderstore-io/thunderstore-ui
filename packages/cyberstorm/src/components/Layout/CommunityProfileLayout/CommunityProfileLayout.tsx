@@ -22,7 +22,7 @@ interface PackageListLayoutProps {
 /**
  * View for showing Community's package listing.
  */
-export function PackageListLayout(props: PackageListLayoutProps) {
+export function CommunityProfileLayout(props: PackageListLayoutProps) {
   const { communityId } = props;
 
   const dapper = useDapper();
@@ -93,4 +93,4 @@ export function PackageListLayout(props: PackageListLayoutProps) {
   );
 }
 
-PackageListLayout.displayName = "PackageListLayout";
+CommunityProfileLayout.displayName = "CommunityProfileLayout";
