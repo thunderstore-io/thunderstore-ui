@@ -1,62 +1,36 @@
 "use client";
 import { useDapper } from "@thunderstore/dapper";
-import { PackagePreview } from "@thunderstore/dapper/types";
+import { usePromise } from "@thunderstore/use-promise";
 import { isEqual } from "lodash";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 
 import styles from "./PackageList.module.css";
-import {
-  FiltersContext,
-  CategoriesProps,
-} from "../PackageSearch/PackageSearch";
+import { FiltersContext } from "../PackageSearch/PackageSearch";
 import { PackageCard } from "../PackageCard/PackageCard";
 
-export interface PackageListingsProps {
+interface Props {
   communityId?: string;
   userId?: string;
   namespaceId?: string;
   teamId?: string;
 }
 
-export interface fetchFromDapperProps extends PackageListingsProps {
-  keywords?: string[];
-  availableCategories?: CategoriesProps;
-}
-
-export default function PackageList(props: PackageListingsProps) {
+export function PackageList(props: Props) {
   const { communityId, userId, namespaceId, teamId } = props;
   const filters = useContext(FiltersContext);
   const dapper = useDapper();
-  const [datas, setDatas] = useState<PackagePreview[]>();
 
-  useEffect(() => {
-    // React advises to declare the async function directly inside useEffect
-    async function getDatas() {
-      const datasCall = await dapper.getPackageListings(
-        communityId,
-        userId,
-        undefined,
-        teamId,
-        filters?.keywords,
-        filters?.availableCategories
-      );
-      setDatas(datasCall);
-    }
-
-    getDatas();
-  }, [
+  const packages = usePromise(dapper.getPackageListings, [
     communityId,
-    dapper.getPackageListings,
-    filters?.availableCategories,
-    filters?.keywords,
-    namespaceId,
-    setDatas,
-    teamId,
     userId,
+    namespaceId,
+    teamId,
+    filters?.keywords,
+    filters?.availableCategories,
   ]);
 
   useEffect(() => {
-    if (filters === null || typeof datas === "undefined") {
+    if (filters === null) {
       return;
     }
 
@@ -68,7 +42,7 @@ export default function PackageList(props: PackageListingsProps) {
     // packages (true/false) or off (undefined).
     const updatedAvailableCategories = { ...filters.availableCategories };
 
-    datas.forEach((package_) => {
+    packages.forEach((package_) => {
       package_.categories.forEach((category) => {
         updatedAvailableCategories[category.slug] = {
           label: category.name,
@@ -81,15 +55,15 @@ export default function PackageList(props: PackageListingsProps) {
       filters.setAvailableCategories(updatedAvailableCategories);
     }
   }, [
-    datas,
     filters?.availableCategories,
     filters?.keywords,
     filters?.setAvailableCategories,
+    packages,
   ]);
 
   return (
-    <div className={styles.packageCardList}>
-      {datas?.map((packageData) => (
+    <div className={styles.root}>
+      {packages.map((packageData) => (
         <PackageCard key={packageData.name} packageData={packageData} />
       ))}
     </div>

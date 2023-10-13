@@ -15,14 +15,14 @@ import { MetaItem } from "../../MetaItem/MetaItem";
 import { PackageSearch } from "../../PackageSearch/PackageSearch";
 import { formatInteger } from "../../../utils/utils";
 
-interface PackageListLayoutProps {
+interface Props {
   communityId: string;
 }
 
 /**
  * View for showing Community's package listing.
  */
-export function CommunityProfileLayout(props: PackageListLayoutProps) {
+export function CommunityProfileLayout(props: Props) {
   const { communityId } = props;
 
   const dapper = useDapper();

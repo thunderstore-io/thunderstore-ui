@@ -1,56 +1,6 @@
-.listTopNavigation {
-  display: flex;
-  flex-direction: row;
-  gap: var(--gap--24);
-  align-items: center;
-  justify-content: space-between;
-  margin: var(--space--16) 0;
-}
-
-.listTopNavigationChild {
-  display: flex;
-  flex-direction: row;
-  gap: var(--gap--16);
-  align-items: center;
-}
-
-.placeholder {
-  background-color: fuchsia;
-}
-
-.showing {
-  color: var(--color-text--secondary);
-}
-
-.contentWrapper {
-  display: flex;
-  flex-direction: row;
-  gap: var(--gap--16);
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  gap: var(--gap--16);
-}
-
-.filterItemList {
-  display: flex;
-  flex-basis: 20%;
-  flex-direction: column;
-}
-
-.packageCardList {
+.root {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
   gap: 1.5rem;
   margin-bottom: var(--space--24);
-}
-
-.selectedTags {
-  display: flex;
-  flex-direction: row;
-  gap: var(--space--8);
-  height: var(--space--24);
 }

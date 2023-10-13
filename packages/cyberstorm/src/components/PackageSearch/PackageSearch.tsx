@@ -7,38 +7,23 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Suspense, lazy, useState, createContext } from "react";
+import { Suspense, useState, createContext } from "react";
 
 import styles from "./PackageSearch.module.css";
 import * as Button from "../Button/";
 import { FilterItemList } from "../FilterItemList/FilterItemList";
 import { Icon } from "../Icon/Icon";
 import { Pagination } from "../Pagination/Pagination";
+import { PackageList } from "../PackageList/PackageList";
 import { Select } from "../Select/Select";
 import { Tag } from "../Tag/Tag";
 import { TextInput } from "../TextInput/TextInput";
 
-const PackageList = lazy(() => import("../PackageList/PackageList"));
-
-export interface CategoriesProps {
+interface CategoriesProps {
   [key: string]: {
     label: string;
     value: boolean | undefined;
   };
-}
-
-export interface PackageSearchLayoutProps {
-  communityId?: string;
-  userId?: string;
-  teamId?: string;
-}
-
-export interface PackageListingsProps {
-  communityId: string;
-  userId: string;
-  teamId: string;
-  keywords: { key: string; negate: boolean }[];
-  categories: CategoriesProps[];
 }
 
 // TODO: OVERKILL???
@@ -125,10 +110,16 @@ function CurrentFilters(props: TagListProps) {
   );
 }
 
+interface Props {
+  communityId?: string;
+  userId?: string;
+  teamId?: string;
+}
+
 /**
- * Cyberstorm PackageSearch Layout
+ * Component for filtering and rendering a PackageList
  */
-export function PackageSearch(props: PackageSearchLayoutProps) {
+export function PackageSearch(props: Props) {
   const { communityId, userId, teamId } = props;
 
   const filters = new Filters();
@@ -150,7 +141,7 @@ export function PackageSearch(props: PackageSearchLayoutProps) {
   };
 
   return (
-    <div className={styles.content}>
+    <div className={styles.root}>
       <TextInput
         placeHolder="Filter Mods..."
         leftIcon={

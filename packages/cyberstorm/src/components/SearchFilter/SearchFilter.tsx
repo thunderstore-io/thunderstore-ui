@@ -42,4 +42,4 @@ export function SearchFilter(props: SearchFilterProps) {
   );
 }
 
-SearchFilter.displayName = "PackageListLayout";
+SearchFilter.displayName = "SearchFilter";
