@@ -9,7 +9,9 @@ const meta = {
   component: Button.Root,
 } as Meta<typeof Button.Root>;
 
-const defaultArgs = {};
+const defaultArgs = {
+  tooltipText: "tooltip text",
+};
 
 const Template: StoryFn<typeof Button> = (args) => (
   <div
