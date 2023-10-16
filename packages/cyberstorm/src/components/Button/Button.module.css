@@ -16,6 +16,7 @@
   line-height: 1;
   text-align: center;
   background-color: var(--bg-color);
+  user-select: none;
 
   --font-size: var(--font-size--l);
   --text-color: var(--color-text--default);
