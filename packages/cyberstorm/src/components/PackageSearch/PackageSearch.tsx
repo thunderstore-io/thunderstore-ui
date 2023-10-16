@@ -7,6 +7,7 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { PackageCategory } from "@thunderstore/dapper/types";
 import { Suspense, useState, createContext } from "react";
 import { useDebounce } from "use-debounce";
 
@@ -96,6 +97,7 @@ interface Props {
   communityId?: string;
   userId?: string;
   teamId?: string;
+  packageCategories: PackageCategory[];
 }
 
 /**

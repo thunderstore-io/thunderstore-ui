@@ -10,6 +10,8 @@ interface Props {
 
 /**
  * Cyberstorm user's profile Layout
+ *
+ * TODO: use Dapper to fetch package categories.
  */
 export function UserProfileLayout(props: Props) {
   const { userId } = props;
@@ -26,7 +28,7 @@ export function UserProfileLayout(props: Props) {
           Mods uploaded by <UserLink user={userId}>{userId}</UserLink>
         </div>
       }
-      mainContent={<PackageSearch userId={userId} />}
+      mainContent={<PackageSearch userId={userId} packageCategories={[]} />}
     />
   );
 }

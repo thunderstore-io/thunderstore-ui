@@ -10,6 +10,8 @@ interface Props {
 
 /**
  * Team's public profile view.
+ *
+ * TODO: use Dapper to fetch package categories.
  */
 export function TeamProfileLayout(props: Props) {
   const { teamName } = props;
@@ -26,7 +28,7 @@ export function TeamProfileLayout(props: Props) {
           Mods uploaded by <TeamLink team={teamName}>{teamName}</TeamLink>
         </div>
       }
-      mainContent={<PackageSearch teamId={teamName} />}
+      mainContent={<PackageSearch teamId={teamName} packageCategories={[]} />}
     />
   );
 }
