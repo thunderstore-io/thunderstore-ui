@@ -1,0 +1,64 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-size--m);
+}
+
+.header {
+  padding: var(--space--8) var(--space--12);
+  font-size: var(--font-size--m);
+}
+
+.list {
+  list-style: none;
+}
+
+.label {
+  display: flex;
+  gap: var(--gap--12);
+  align-items: center;
+  padding: var(--space--8) var(--space--12);
+  border-radius: var(--border-radius--8);
+  color: var(--color-text--secondary);
+  font-weight: 700;
+  cursor: pointer;
+  transition: 60ms;
+  user-select: none;
+
+  --mark-color: var(--color-purple--6);
+}
+
+.label:hover {
+  background-color: var(--color-surface--4);
+
+  --mark-color: var(--color-purple--2);
+}
+
+.checkbox {
+  width: var(--space--18);
+  height: var(--space--18);
+  border-radius: var(--border-radius--2);
+  background-color: var(--mark-color);
+  transition: ease-out 60ms;
+}
+
+.label:hover .checkbox { --mark-color: #4343a3; }
+
+.label.include,
+.label.include .checkbox {
+  color: var(--color-highlight);
+
+  --mark-color: var(--color-highlight);
+}
+
+.label.exclude,
+.label.exclude .checkbox {
+  color: var(--color-danger);
+
+  --mark-color: var(--color-danger);
+}
+
+.icon {
+  height: var(--space--16);
+  color: var(--color-surface--0);
+}
