@@ -1,11 +1,9 @@
 "use client";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
-import { isEqual } from "lodash";
-import { useContext, useEffect } from "react";
 
 import styles from "./PackageList.module.css";
-import { FiltersContext } from "../PackageSearch/PackageSearch";
+import { CategorySelection } from "../PackageSearch/types";
 import { PackageCard } from "../PackageCard/PackageCard";
 
 interface Props {
@@ -14,11 +12,21 @@ interface Props {
   namespaceId?: string;
   teamId?: string;
   searchQuery: string;
+  categories: CategorySelection[];
 }
 
+/**
+ * Fetches packages based on props and shows them as a list.
+ *
+ * TODO: use categories props by splitting them to included and excluded
+ *       categories and pass them to getPackageListings (which doesn't)
+ *       currently support this format.
+ *
+ * TODO: we also support only one searchQuery, so the Dapper method
+ *       shouldn't expect an array of them.
+ */
 export function PackageList(props: Props) {
   const { communityId, namespaceId, searchQuery, teamId, userId } = props;
-  const filters = useContext(FiltersContext);
   const dapper = useDapper();
 
   const packages = usePromise(dapper.getPackageListings, [
@@ -27,35 +35,7 @@ export function PackageList(props: Props) {
     namespaceId,
     teamId,
     [searchQuery],
-    filters?.availableCategories,
   ]);
-
-  useEffect(() => {
-    if (filters === null) {
-      return;
-    }
-
-    // filters.availableCategories contains all possible categories for
-    // current packages as one might expect from the name, but note that
-    // calling filters.setAvailableCategories does NOT filter the
-    // categories, but only updates filters.availableCategories[].value
-    // booleans which define whether the filter is including/excluding
-    // packages (true/false) or off (undefined).
-    const updatedAvailableCategories = { ...filters.availableCategories };
-
-    packages.forEach((package_) => {
-      package_.categories.forEach((category) => {
-        updatedAvailableCategories[category.slug] = {
-          label: category.name,
-          value: filters.availableCategories[category.slug]?.value,
-        };
-      });
-    });
-
-    if (!isEqual(updatedAvailableCategories, filters.availableCategories)) {
-      filters.setAvailableCategories(updatedAvailableCategories);
-    }
-  }, [filters?.availableCategories, filters?.setAvailableCategories, packages]);
 
   return (
     <div className={styles.root}>

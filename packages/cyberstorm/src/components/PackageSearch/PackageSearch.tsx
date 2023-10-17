@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PackageCategory } from "@thunderstore/dapper/types";
-import { Suspense, useState, createContext } from "react";
+import { useState } from "react";
 import { useDebounce } from "use-debounce";
 
 import { CategoryMenu } from "./CategoryMenu/CategoryMenu";
@@ -19,36 +19,6 @@ import { Pagination } from "../Pagination/Pagination";
 import { PackageList } from "../PackageList/PackageList";
 import { Select } from "../Select/Select";
 import { TextInput } from "../TextInput/TextInput";
-
-interface CategoriesProps {
-  [key: string]: {
-    label: string;
-    value: boolean | undefined;
-  };
-}
-
-// TODO: OVERKILL???
-export class Filters {
-  availableCategories: CategoriesProps;
-  setAvailableCategories: React.Dispatch<React.SetStateAction<CategoriesProps>>;
-
-  constructor() {
-    [this.availableCategories, this.setAvailableCategories] =
-      useState<CategoriesProps>({});
-  }
-}
-
-type ContextProps = { filters: Filters; children?: React.ReactNode };
-export const FiltersContext = createContext<Filters | null>(null);
-
-export function FiltersProvider(props: ContextProps) {
-  const { filters, children } = props;
-  return (
-    <FiltersContext.Provider value={filters}>
-      {children}
-    </FiltersContext.Provider>
-  );
-}
 
 interface Props {
   communityId?: string;
@@ -68,7 +38,6 @@ export function PackageSearch(props: Props) {
     userId,
   } = props;
 
-  const filters = new Filters();
   const [order, setOrder] = useState("1");
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
@@ -124,22 +93,15 @@ export function PackageSearch(props: Props) {
               </div>
             </div>
           </div>
-          <FiltersProvider filters={filters}>
-            <Suspense
-              fallback={
-                <h2 className={styles.showing}>
-                  🌀 Some Skeleton of the component...
-                </h2>
-              }
-            >
-              <PackageList
-                communityId={communityId}
-                userId={userId}
-                teamId={teamId}
-                searchQuery={debouncedSearchValue}
-              />
-            </Suspense>
-          </FiltersProvider>
+
+          <PackageList
+            communityId={communityId}
+            userId={userId}
+            teamId={teamId}
+            searchQuery={debouncedSearchValue}
+            categories={categories}
+          />
+
           {/* TODO: use real totalCount */}
           <Pagination
             currentPage={page}
