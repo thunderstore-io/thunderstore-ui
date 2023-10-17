@@ -17,32 +17,3 @@
   flex-basis: 20%;
   flex-direction: column;
 }
-
-.listTopNavigation {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap--16);
-  margin-bottom: var(--space--16);
-}
-
-.displayAndSort {
-  display: flex;
-  justify-content: space-between;
-}
-
-.displayButtons {
-  display: flex;
-  gap: var(--gap--8);
-}
-
-.sort {
-  display: flex;
-  gap: var(--gap--16);
-}
-
-.sortLabel {
-  align-self: center;
-  color: var(--color-text--tertiary);
-  font-weight: 700;
-  font-size: var(--font-size--m);
-}

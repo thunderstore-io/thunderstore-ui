@@ -31,7 +31,7 @@
     "jsx-a11y/label-has-associated-control": [
       2,
       {
-        "controlComponents": ["Switch"],
+        "controlComponents": ["Select", "Switch"],
         "depth": 3
       }
     ],

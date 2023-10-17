@@ -1,3 +1,9 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--32);
+}
+
 .top {
   display: flex;
   align-items: center;
@@ -6,6 +12,15 @@
 
 .packageCount {
   color: var(--color-text--tertiary);
+  font-size: var(--font-size--m);
+}
+
+.order {
+  display: flex;
+  gap: var(--gap--16);
+  align-items: center;
+  color: var(--color-text--tertiary);
+  font-weight: 700;
   font-size: var(--font-size--m);
 }
 
