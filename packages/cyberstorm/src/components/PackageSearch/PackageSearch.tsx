@@ -1,10 +1,11 @@
 "use client";
 import {
-  faFire,
+  faClock,
+  faDownload,
   faSearch,
-  faStar,
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
+import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PackageCategory } from "@thunderstore/dapper/types";
 import { useState } from "react";
@@ -38,7 +39,7 @@ export function PackageSearch(props: Props) {
     userId,
   } = props;
 
-  const [order, setOrder] = useState("1");
+  const [order, setOrder] = useState(SortOptions.Updated);
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue] = useDebounce(searchValue, 300);
@@ -118,27 +119,43 @@ export function PackageSearch(props: Props) {
 
 PackageSearch.displayName = "PackageSearch";
 
+enum SortOptions {
+  Created = "-datetime_created",
+  Downloaded = "-downloads",
+  Rated = "-rating_score",
+  Updated = "-datetime_updated",
+}
+
 const selectOptions = [
   {
-    value: "1",
+    value: SortOptions.Updated,
+    label: "Last updated",
+    leftIcon: (
+      <Icon>
+        <FontAwesomeIcon icon={faClock} />
+      </Icon>
+    ),
+  },
+  {
+    value: SortOptions.Created,
     label: "Newest",
     leftIcon: (
       <Icon>
-        <FontAwesomeIcon icon={faStar} />
+        <FontAwesomeIcon icon={faSparkles} />
       </Icon>
     ),
   },
   {
-    value: "2",
-    label: "Hottest",
+    value: SortOptions.Downloaded,
+    label: "Most downloaded",
     leftIcon: (
       <Icon>
-        <FontAwesomeIcon icon={faFire} />
+        <FontAwesomeIcon icon={faDownload} />
       </Icon>
     ),
   },
   {
-    value: "3",
+    value: SortOptions.Rated,
     label: "Top rated",
     leftIcon: (
       <Icon>
