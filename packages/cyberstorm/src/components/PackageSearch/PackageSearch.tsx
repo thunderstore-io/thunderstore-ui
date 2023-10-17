@@ -4,7 +4,6 @@ import {
   faSearch,
   faStar,
   faThumbsUp,
-  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PackageCategory } from "@thunderstore/dapper/types";
@@ -12,14 +11,13 @@ import { Suspense, useState, createContext } from "react";
 import { useDebounce } from "use-debounce";
 
 import { CategoryMenu } from "./CategoryMenu/CategoryMenu";
+import { CategoryTagCloud } from "./CategoryTagCloud/CategoryTagCloud";
 import styles from "./PackageSearch.module.css";
 import { CategorySelection } from "./types";
-import * as Button from "../Button/";
 import { Icon } from "../Icon/Icon";
 import { Pagination } from "../Pagination/Pagination";
 import { PackageList } from "../PackageList/PackageList";
 import { Select } from "../Select/Select";
-import { Tag } from "../Tag/Tag";
 import { TextInput } from "../TextInput/TextInput";
 
 interface CategoriesProps {
@@ -52,48 +50,6 @@ export function FiltersProvider(props: ContextProps) {
   );
 }
 
-const RemoveFilterIcon = (onClick: () => void) => (
-  <button onClick={onClick} style={{ backgroundColor: "transparent" }}>
-    <Icon>
-      <FontAwesomeIcon icon={faXmark} />
-    </Icon>
-  </button>
-);
-
-interface TagListProps {
-  filters: Filters;
-}
-
-function CurrentFilters(props: TagListProps) {
-  const { filters } = props;
-
-  function removeFilter(key: string) {
-    const cats = { ...filters.availableCategories };
-    Object.values(cats).forEach((c) => {
-      if (c.label === key) {
-        c.value = undefined;
-      }
-    });
-
-    filters.setAvailableCategories(cats);
-  }
-
-  return (
-    <>
-      {Object.values(filters.availableCategories)
-        .filter((category) => category.value !== undefined)
-        .map((cat, index) => (
-          <Tag
-            key={`categorySearch_${cat.label}_${index}`}
-            label={cat.label}
-            rightIcon={RemoveFilterIcon(() => removeFilter(cat.label))}
-            colorScheme="borderless_removable"
-          />
-        ))}
-    </>
-  );
-}
-
 interface Props {
   communityId?: string;
   packageCategories: PackageCategory[];
@@ -123,14 +79,6 @@ export function PackageSearch(props: Props) {
       .map((c) => ({ ...c, selection: "off" }))
   );
 
-  const clearFilters = () => {
-    setSearchValue("");
-
-    const cats = { ...filters.availableCategories };
-    Object.values(cats).forEach((cat) => (cat.value = undefined));
-    filters.setAvailableCategories(cats);
-  };
-
   return (
     <div className={styles.root}>
       <TextInput
@@ -143,12 +91,19 @@ export function PackageSearch(props: Props) {
           </Icon>
         }
       />
+
       <div className={styles.contentWrapper}>
         <div className={styles.sidebar}>
           <CategoryMenu categories={categories} setCategories={setCategories} />
         </div>
+
         <div className={styles.content}>
           <div className={styles.listTopNavigation}>
+            <CategoryTagCloud
+              categories={categories}
+              setCategories={setCategories}
+            />
+
             <div className={styles.showing}>
               {/* TODO: use real values */}
               Showing <strong>1-20</strong> of <strong>327</strong> results
@@ -156,25 +111,6 @@ export function PackageSearch(props: Props) {
                 ? ` for "${debouncedSearchValue}"`
                 : ""}
             </div>
-
-            {Object.keys(filters.availableCategories).some(
-              (k) => filters.availableCategories[k].value !== undefined
-            ) ? (
-              <div className={styles.selectedTags}>
-                <CurrentFilters filters={filters} />
-                <Button.Root
-                  key="clearAllButton"
-                  paddingSize="small"
-                  colorScheme="transparentTertiary"
-                  border-width="0px"
-                  onClick={clearFilters}
-                >
-                  <Button.ButtonLabel fontSize="small">
-                    Clear all
-                  </Button.ButtonLabel>
-                </Button.Root>
-              </div>
-            ) : null}
 
             <div className={styles.displayAndSort}>
               <div className={styles.displayButtons}></div>
