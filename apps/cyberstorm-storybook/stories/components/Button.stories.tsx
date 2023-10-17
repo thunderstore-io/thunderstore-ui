@@ -13,7 +13,7 @@ const defaultArgs = {
   tooltipText: "tooltip text",
 };
 
-const Template: StoryFn<typeof Button> = (args) => (
+const Template: StoryFn<typeof Button.Root> = (args) => (
   <div
     style={{
       width: "12rem",
