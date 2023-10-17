@@ -10,7 +10,6 @@ import { CategoryTagCloud } from "./CategoryTagCloud/CategoryTagCloud";
 import styles from "./PackageSearch.module.css";
 import { CategorySelection } from "./types";
 import { Icon } from "../Icon/Icon";
-import { Pagination } from "../Pagination/Pagination";
 import { PackageList } from "../PackageList/PackageList";
 import { TextInput } from "../TextInput/TextInput";
 
@@ -32,7 +31,6 @@ export function PackageSearch(props: Props) {
     userId,
   } = props;
 
-  const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue] = useDebounce(searchValue, 300);
   const [categories, setCategories] = useState<CategorySelection[]>(
@@ -71,15 +69,6 @@ export function PackageSearch(props: Props) {
             teamId={teamId}
             searchQuery={debouncedSearchValue}
             categories={categories}
-          />
-
-          {/* TODO: use real totalCount */}
-          <Pagination
-            currentPage={page}
-            onPageChange={setPage}
-            pageSize={20}
-            siblingCount={2}
-            totalCount={327}
           />
         </div>
       </div>
