@@ -1,4 +1,15 @@
-.root {
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.packageCount {
+  color: var(--color-text--tertiary);
+  font-size: var(--font-size--m);
+}
+
+.packages {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
   gap: 1.5rem;

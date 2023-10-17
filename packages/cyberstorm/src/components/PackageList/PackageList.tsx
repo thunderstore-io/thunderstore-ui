@@ -2,6 +2,7 @@
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 
+import { PackageCount } from "./PackageCount";
 import styles from "./PackageList.module.css";
 import { CategorySelection } from "../PackageSearch/types";
 import { PackageCard } from "../PackageCard/PackageCard";
@@ -39,9 +40,19 @@ export function PackageList(props: Props) {
 
   return (
     <div className={styles.root}>
-      {packages.map((packageData) => (
-        <PackageCard key={packageData.name} packageData={packageData} />
-      ))}
+      <div className={styles.top}>
+        <PackageCount
+          page={1}
+          pageSize={20}
+          searchQuery={searchQuery}
+          totalCount={327}
+        />
+      </div>
+      <div className={styles.packages}>
+        {packages.map((packageData) => (
+          <PackageCard key={packageData.name} packageData={packageData} />
+        ))}
+      </div>
     </div>
   );
 }

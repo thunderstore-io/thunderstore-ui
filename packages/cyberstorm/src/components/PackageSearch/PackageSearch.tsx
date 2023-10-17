@@ -74,14 +74,6 @@ export function PackageSearch(props: Props) {
               setCategories={setCategories}
             />
 
-            <div className={styles.showing}>
-              {/* TODO: use real values */}
-              Showing <strong>1-20</strong> of <strong>327</strong> results
-              {debouncedSearchValue !== ""
-                ? ` for "${debouncedSearchValue}"`
-                : ""}
-            </div>
-
             <div className={styles.displayAndSort}>
               <div className={styles.displayButtons}></div>
               <div className={styles.sort}>

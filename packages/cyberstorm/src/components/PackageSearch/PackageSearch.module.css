@@ -25,18 +25,6 @@
   margin-bottom: var(--space--16);
 }
 
-.showing {
-  color: var(--color-text--tertiary);
-  font-size: var(--font-size--m);
-}
-
-.selectedTags {
-  display: flex;
-  flex-flow: row wrap;
-  gap: var(--space--8);
-  padding: var(--space--8);
-}
-
 .displayAndSort {
   display: flex;
   justify-content: space-between;
