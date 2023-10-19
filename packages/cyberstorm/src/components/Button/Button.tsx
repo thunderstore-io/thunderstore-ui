@@ -84,7 +84,7 @@ const Button = React.forwardRef<
     const ref = fRef || fallbackRef;
     return (
       <TooltipProvider>
-        <Tooltip content={tooltipText}>
+        <Tooltip content={tooltipText} side="bottom">
           <button
             {...forwardedProps}
             ref={ref}

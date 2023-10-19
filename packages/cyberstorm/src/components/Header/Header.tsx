@@ -75,18 +75,17 @@ export function Header() {
           </li>
           <li>
             <PackageUploadLink>
-              <Tooltip content="Upload" side="bottom">
-                <Button.Root
-                  paddingSize="mediumSquare"
-                  colorScheme="transparentAccent"
-                >
-                  <Button.ButtonIcon>
-                    <Icon>
-                      <FontAwesomeIcon icon={faUpload} />
-                    </Icon>
-                  </Button.ButtonIcon>
-                </Button.Root>
-              </Tooltip>
+              <Button.Root
+                paddingSize="mediumSquare"
+                colorScheme="transparentAccent"
+                tooltipText="Upload"
+              >
+                <Button.ButtonIcon>
+                  <Icon>
+                    <FontAwesomeIcon icon={faUpload} />
+                  </Icon>
+                </Button.ButtonIcon>
+              </Button.Root>
             </PackageUploadLink>
           </li>
           <li>
