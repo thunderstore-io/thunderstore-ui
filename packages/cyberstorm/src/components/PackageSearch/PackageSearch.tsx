@@ -7,6 +7,7 @@ import { useDebounce } from "use-debounce";
 
 import { CategoryTagCloud } from "./CategoryTagCloud/CategoryTagCloud";
 import { CategoryMenu } from "./FilterMenus/CategoryMenu";
+import { OthersMenu } from "./FilterMenus/OthersMenu";
 import styles from "./PackageSearch.module.css";
 import { CategorySelection } from "./types";
 import { Icon } from "../Icon/Icon";
@@ -38,6 +39,8 @@ export function PackageSearch(props: Props) {
       .sort((a, b) => a.slug.localeCompare(b.slug))
       .map((c) => ({ ...c, selection: "off" }))
   );
+  const [deprecated, setDeprecated] = useState(false);
+  const [nsfw, setNsfw] = useState(false);
 
   return (
     <div className={styles.root}>
@@ -55,6 +58,13 @@ export function PackageSearch(props: Props) {
       <div className={styles.contentWrapper}>
         <div className={styles.sidebar}>
           <CategoryMenu categories={categories} setCategories={setCategories} />
+
+          <OthersMenu
+            deprecated={deprecated}
+            setDeprecated={setDeprecated}
+            nsfw={nsfw}
+            setNsfw={setNsfw}
+          />
         </div>
 
         <div className={styles.content}>
@@ -69,6 +79,8 @@ export function PackageSearch(props: Props) {
             teamId={teamId}
             searchQuery={debouncedSearchValue}
             categories={categories}
+            deprecated={deprecated}
+            nsfw={nsfw}
           />
         </div>
       </div>
