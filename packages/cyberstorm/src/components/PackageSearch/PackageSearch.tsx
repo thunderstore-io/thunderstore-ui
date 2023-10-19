@@ -5,8 +5,8 @@ import { PackageCategory } from "@thunderstore/dapper/types";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 
-import { CategoryMenu } from "./CategoryMenu/CategoryMenu";
 import { CategoryTagCloud } from "./CategoryTagCloud/CategoryTagCloud";
+import { CategoryMenu } from "./FilterMenus/CategoryMenu";
 import styles from "./PackageSearch.module.css";
 import { CategorySelection } from "./types";
 import { Icon } from "../Icon/Icon";
