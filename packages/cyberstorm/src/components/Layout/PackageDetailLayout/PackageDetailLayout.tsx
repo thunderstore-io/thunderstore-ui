@@ -164,7 +164,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
                 <Button.ButtonIcon iconSize="tslogo_install_button">
                   <ThunderstoreLogo />
                 </Button.ButtonIcon>
-                <Button.ButtonLabel fontSize="huge" fontWeight="800">
+                <Button.ButtonLabel fontSize="huge" fontWeight={800}>
                   Install
                 </Button.ButtonLabel>
               </Button.Root>

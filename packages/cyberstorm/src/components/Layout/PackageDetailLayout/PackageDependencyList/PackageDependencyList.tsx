@@ -101,7 +101,7 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
                   paddingSize="none"
                   colorScheme="transparentPrimary"
                 >
-                  <Button.ButtonLabel fontWeight="600">
+                  <Button.ButtonLabel fontWeight={600}>
                     See all
                   </Button.ButtonLabel>
                   <Button.ButtonIcon>
