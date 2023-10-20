@@ -8,7 +8,7 @@ const meta = {
 } as Meta<typeof TeamProfileLayout>;
 
 const Template: StoryFn<typeof TeamProfileLayout> = () => (
-  <TeamProfileLayout teamName="team" />
+  <TeamProfileLayout community="community" namespace="team" />
 );
 
 const TeamProfile = Template.bind({});

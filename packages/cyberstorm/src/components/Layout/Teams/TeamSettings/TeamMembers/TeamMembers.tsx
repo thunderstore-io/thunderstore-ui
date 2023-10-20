@@ -7,7 +7,6 @@ import * as Button from "../../../../Button/";
 import { Dialog } from "../../../../Dialog/Dialog";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { Select } from "../../../../Select/Select";
-import { TeamLink } from "../../../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { Icon } from "../../../../Icon/Icon";
@@ -46,9 +45,7 @@ export function TeamMembers(props: Props) {
         <div className={styles.dialogContent}>
           <p className={styles.description}>
             Enter the username of the user you wish to add to the team{" "}
-            <TeamLink team={teamName}>
-              <span className={styles.dialogTeamName}>{teamName}</span>
-            </TeamLink>
+            <span className={styles.dialogTeamName}>{teamName}</span>
           </p>
           <div className={styles.dialogInput}>
             <div className={styles.textInput}>
