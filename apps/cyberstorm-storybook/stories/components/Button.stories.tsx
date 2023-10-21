@@ -20,7 +20,7 @@ const Template: StoryFn<typeof Button> = (args) => (
       gap: "0.5rem",
     }}
   >
-    <Button.Root colorScheme="default" {...args}>
+    <Button.Root variant="default" {...args}>
       <Button.ButtonLabel>default</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -28,7 +28,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="primary" {...args}>
+    <Button.Root variant="primary" {...args}>
       <Button.ButtonLabel>primary</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -36,7 +36,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="tertiary" {...args}>
+    <Button.Root variant="tertiary" {...args}>
       <Button.ButtonLabel>tertiary</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -44,7 +44,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="accent" {...args}>
+    <Button.Root variant="accent" {...args}>
       <Button.ButtonLabel>accent</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -52,15 +52,15 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="fancyAccent" {...args}>
-      <Button.ButtonLabel>fancyAccent</Button.ButtonLabel>
+    <Button.Root variant="install" color="cyber-green" {...args}>
+      <Button.ButtonLabel>install</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="success" {...args}>
+    <Button.Root variant="status" color="green" {...args}>
       <Button.ButtonLabel>success</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -68,7 +68,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="warning" {...args}>
+    <Button.Root variant="status" color="red" {...args}>
       <Button.ButtonLabel>warning</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -76,7 +76,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="danger" {...args}>
+    <Button.Root variant="alert" {...args}>
       <Button.ButtonLabel>danger</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -84,7 +84,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="specialGreen" {...args}>
+    <Button.Root variant="specialGreen" {...args}>
       <Button.ButtonLabel>specialGreen</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -92,7 +92,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="specialPurple" {...args}>
+    <Button.Root variant="specialPurple" {...args}>
       <Button.ButtonLabel>specialPurple</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -100,7 +100,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="transparentDefault" {...args}>
+    <Button.Root variant="transparentDefault" {...args}>
       <Button.ButtonLabel>transparentDefault</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -108,7 +108,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="transparentPrimary" {...args}>
+    <Button.Root variant="transparentPrimary" {...args}>
       <Button.ButtonLabel>transparentPrimary</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -116,7 +116,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="transparentTertiary" {...args}>
+    <Button.Root variant="transparentTertiary" {...args}>
       <Button.ButtonLabel>transparentTertiary</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -124,7 +124,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="transparentAccent" {...args}>
+    <Button.Root variant="transparentAccent" {...args}>
       <Button.ButtonLabel>transparentAccent</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -132,7 +132,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="transparentDanger" {...args}>
+    <Button.Root variant="transparentDanger" {...args}>
       <Button.ButtonLabel>transparentDanger</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -140,7 +140,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="discord" {...args}>
+    <Button.Root variant="discord" {...args}>
       <Button.ButtonLabel>discord</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -148,7 +148,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="github" {...args}>
+    <Button.Root variant="github" {...args}>
       <Button.ButtonLabel>github</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
@@ -156,7 +156,7 @@ const Template: StoryFn<typeof Button> = (args) => (
         </Icon>
       </Button.ButtonIcon>
     </Button.Root>
-    <Button.Root colorScheme="overwolf" {...args}>
+    <Button.Root variant="overwolf" {...args}>
       <Button.ButtonLabel>overwolf</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>

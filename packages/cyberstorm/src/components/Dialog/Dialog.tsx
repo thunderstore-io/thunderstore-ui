@@ -48,7 +48,7 @@ export function Dialog(props: DialogProps) {
   let cancel = null;
   if (cancelButton === "default") {
     cancel = (
-      <Button.Root paddingSize="large" colorScheme="tertiary">
+      <Button.Root paddingSize="large" variant="tertiary">
         <Button.ButtonLabel>Cancel</Button.ButtonLabel>
       </Button.Root>
     );
@@ -82,7 +82,7 @@ export function Dialog(props: DialogProps) {
                 <Tooltip content="Close" side="bottom" open={tooltipOpen}>
                   <RadixDialog.Close asChild>
                     <Button.Root
-                      colorScheme="transparentDefault"
+                      variant="transparentDefault"
                       paddingSize="mediumSquare"
                       onMouseOver={() => {
                         setTooltipOpen(true);

@@ -97,10 +97,7 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
             title="Required mods"
             trigger={
               <div className={styles.dependencyDialogTrigger}>
-                <Button.Root
-                  paddingSize="none"
-                  colorScheme="transparentPrimary"
-                >
+                <Button.Root paddingSize="none" variant="transparentPrimary">
                   <Button.ButtonLabel fontWeight="600">
                     See all
                   </Button.ButtonLabel>

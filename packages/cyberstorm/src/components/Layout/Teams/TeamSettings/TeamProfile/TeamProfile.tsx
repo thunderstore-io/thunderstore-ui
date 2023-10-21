@@ -35,7 +35,7 @@ export function TeamProfile(props: TeamProfileProps) {
                 </div>
                 <Button.Root
                   paddingSize="mediumSquare"
-                  colorScheme="transparentDanger"
+                  variant="transparentDanger"
                 >
                   <Button.ButtonIcon>
                     <Icon>

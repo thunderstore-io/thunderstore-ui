@@ -53,7 +53,7 @@ export function Account(props: AccountProps) {
                 <TextInput placeHolder="Verification..." />
               </div>
               <div>
-                <Button.Root colorScheme="danger" paddingSize="large">
+                <Button.Root variant="danger" paddingSize="large">
                   <Button.ButtonIcon>
                     <Icon>
                       <FontAwesomeIcon icon={faTrash} />

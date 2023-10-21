@@ -40,7 +40,7 @@ export function TeamLeaveAndDisband(props: TeamLeaveAndDisbandProps) {
               has another owner assigned.
             </p>
             <div>
-              <Button.Root colorScheme="danger" paddingSize="large">
+              <Button.Root variant="danger" paddingSize="large">
                 <Button.ButtonLabel>Leave team</Button.ButtonLabel>
               </Button.Root>
             </div>
@@ -80,7 +80,7 @@ export function TeamLeaveAndDisband(props: TeamLeaveAndDisbandProps) {
               <TextInput placeHolder="Verification" />
             </div>
             <div>
-              <Button.Root colorScheme="danger" paddingSize="large">
+              <Button.Root variant="danger" paddingSize="large">
                 <Button.ButtonLabel>Disband team</Button.ButtonLabel>
               </Button.Root>
             </div>

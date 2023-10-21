@@ -186,7 +186,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
                 <Button.Root
                   key="clearAllButton"
                   paddingSize="small"
-                  colorScheme="transparentTertiary"
+                  variant="transparentTertiary"
                   border-width="0px"
                   onClick={clearFilters}
                 >

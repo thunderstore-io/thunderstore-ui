@@ -50,6 +50,7 @@
   --color-text--secondary: rgb(196 192 216);
   --color-text--accent: rgb(198 195 255);
   --color-text--tertiary: rgb(164 164 188);
+  --color-text--darker: rgb(156 156 196);
   --alert-info-bg-color: rgb(8 49 73);
   --alert-success-bg-color: rgb(24 65 48);
   --alert-warning-bg-color: rgb(73 62 24);

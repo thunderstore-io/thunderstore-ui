@@ -70,10 +70,10 @@ export function PackageUploadLayout() {
             description='Double-check your selections and hit "Submit" when you are ready!'
             content={
               <div className={styles.submit}>
-                <Button.Root colorScheme="danger">
+                <Button.Root variant="danger">
                   <Button.ButtonLabel>Reset</Button.ButtonLabel>
                 </Button.Root>
-                <Button.Root colorScheme="accent">
+                <Button.Root variant="accent">
                   <Button.ButtonLabel>Submit</Button.ButtonLabel>
                 </Button.Root>
               </div>

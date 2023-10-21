@@ -24,7 +24,7 @@ export function ServiceAccountList(props: ServiceAccountListProps) {
           <Dialog
             key={`${serviceAccount.name}_${index}`}
             trigger={
-              <Button.Root colorScheme="danger" paddingSize="large">
+              <Button.Root variant="danger" paddingSize="large">
                 <Button.ButtonLabel>Remove</Button.ButtonLabel>
               </Button.Root>
             }
@@ -51,7 +51,7 @@ export function ServiceAccountList(props: ServiceAccountListProps) {
               </div>
             }
             acceptButton={
-              <Button.Root colorScheme="danger" paddingSize="large">
+              <Button.Root variant="danger" paddingSize="large">
                 <Button.ButtonLabel>Remove service account</Button.ButtonLabel>
               </Button.Root>
             }

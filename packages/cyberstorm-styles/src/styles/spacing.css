@@ -1,0 +1,79 @@
+:root {
+  --space-1: calc(4px * var(--scaling));
+  --space-2: calc(8px * var(--scaling));
+  --space-3: calc(12px * var(--scaling));
+  --space-4: calc(16px * var(--scaling));
+  --space-5: calc(24px * var(--scaling));
+  --space-6: calc(32px * var(--scaling));
+  --space-7: calc(40px * var(--scaling));
+  --space-8: calc(48px * var(--scaling));
+  --space-9: calc(64px * var(--scaling));
+  --font-size-1: calc(12px * var(--scaling));
+  --font-size-2: calc(14px * var(--scaling));
+  --font-size-3: calc(16px * var(--scaling));
+  --font-size-4: calc(18px * var(--scaling));
+  --font-size-5: calc(20px * var(--scaling));
+  --font-size-6: calc(24px * var(--scaling));
+  --font-size-7: calc(28px * var(--scaling));
+  --font-size-8: calc(35px * var(--scaling));
+  --font-size-9: calc(60px * var(--scaling));
+  --font-weight-lightest: 300;
+  --font-weight-light: 400;
+  --font-weight-regular: 500;
+  --font-weight-medium: 600;
+  --font-weight-bold: 700;
+  --font-weight-boldest: 800;
+  --line-height-1: calc(16px * var(--scaling));
+  --line-height-2: calc(20px * var(--scaling));
+  --line-height-3: calc(24px * var(--scaling));
+  --line-height-4: calc(26px * var(--scaling));
+  --line-height-5: calc(28px * var(--scaling));
+  --line-height-6: calc(30px * var(--scaling));
+  --line-height-7: calc(36px * var(--scaling));
+  --line-height-8: calc(40px * var(--scaling));
+  --line-height-9: calc(60px * var(--scaling));
+  --letter-spacing-1: 0.0025em;
+  --letter-spacing-2: 0;
+  --letter-spacing-3: 0;
+  --letter-spacing-4: -0.0025em;
+  --letter-spacing-5: -0.005em;
+  --letter-spacing-6: -0.00625em;
+  --letter-spacing-7: -0.0075em;
+  --letter-spacing-8: -0.01em;
+  --letter-spacing-9: -0.025em;
+  --default-font-family: inter;
+  --default-font-size: var(--font-size-3);
+  --default-font-style: normal;
+  --default-font-weight: var(--font-weight-regular);
+  --default-line-height: 1;
+  --default-letter-spacing: 0;
+
+  font-weight: var(--default-font-weight);
+  font-size: var(--default-font-size);
+  font-family: var(--default-font-family);
+  font-style: var(--default-font-style);
+  line-height: var(--default-line-height);
+  letter-spacing: var(--default-letter-spacing);
+  overflow-wrap: break-word;
+  text-size-adjust: none;
+}
+
+[data-scaling="90%"] {
+  --scaling: 0.9;
+}
+
+[data-scaling="95%"] {
+  --scaling: 0.95;
+}
+
+[data-scaling="100%"] {
+  --scaling: 1;
+}
+
+[data-scaling="105%"] {
+  --scaling: 1.05;
+}
+
+[data-scaling="110%"] {
+  --scaling: 1.1;
+}

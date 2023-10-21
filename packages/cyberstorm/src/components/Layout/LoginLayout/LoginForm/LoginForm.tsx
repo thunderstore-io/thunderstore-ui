@@ -59,14 +59,14 @@ export function LoginForm() {
                 />
               </div>
             </div>
-            <Button.Root type="submit" paddingSize="huge" colorScheme="accent">
+            <Button.Root type="submit" paddingSize="huge" variant="accent">
               <Button.ButtonLabel>Login</Button.ButtonLabel>
             </Button.Root>
           </form>
           <div className={styles.descriptor}>Or continue with</div>
           <div className={styles.continueButtons}>
             <div className={styles.continueButton}>
-              <Button.Root colorScheme="discord" paddingSize="large">
+              <Button.Root variant="discord" paddingSize="large">
                 <Button.ButtonIcon>
                   <Icon>
                     <FontAwesomeIcon icon={faDiscord} />
@@ -76,7 +76,7 @@ export function LoginForm() {
               </Button.Root>
             </div>
             <div className={styles.continueButton}>
-              <Button.Root colorScheme="github" paddingSize="large">
+              <Button.Root variant="github" paddingSize="large">
                 <Button.ButtonIcon>
                   <Icon>
                     <FontAwesomeIcon icon={faGithub} />
@@ -86,7 +86,7 @@ export function LoginForm() {
               </Button.Root>
             </div>
             <div className={styles.continueButton}>
-              <Button.Root colorScheme="overwolf" paddingSize="large">
+              <Button.Root variant="overwolf" paddingSize="large">
                 <Button.ButtonIcon>
                   <Icon>
                     <OverwolfLogo />

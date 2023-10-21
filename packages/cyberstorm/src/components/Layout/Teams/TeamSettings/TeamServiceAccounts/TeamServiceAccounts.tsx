@@ -41,7 +41,7 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
               title="Add Service Account"
               showFooterBorder
               trigger={
-                <Button.Root paddingSize="large" colorScheme="primary">
+                <Button.Root paddingSize="large" variant="primary">
                   <Button.ButtonLabel>Add Service Account</Button.ButtonLabel>
                   <Button.ButtonIcon>
                     <Icon>
@@ -109,7 +109,7 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
               acceptButton={
                 serviceAccountAdded ? (
                   <Button.Root
-                    colorScheme="default"
+                    variant="default"
                     paddingSize="large"
                     onClick={() => {
                       setAddedServiceAccountName("");
@@ -120,7 +120,7 @@ export function TeamServiceAccounts(props: TeamServiceAccountsProps) {
                   </Button.Root>
                 ) : (
                   <Button.Root
-                    colorScheme="success"
+                    variant="success"
                     onClick={() => setServiceAccountAdded(!serviceAccountAdded)}
                   >
                     <Button.ButtonLabel>Add Service Account</Button.ButtonLabel>

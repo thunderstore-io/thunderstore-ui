@@ -29,7 +29,7 @@ export function BetaLoginLayout(props: Props) {
             {props.discordAuthUrl ? (
               <div className={styles.loginButton}>
                 <a href={props.discordAuthUrl}>
-                  <Button.Root plain colorScheme="discord" paddingSize="large">
+                  <Button.Root plain variant="discord" paddingSize="large">
                     <Button.ButtonIcon>
                       <Icon>
                         <FontAwesomeIcon icon={faDiscord} />
@@ -43,7 +43,7 @@ export function BetaLoginLayout(props: Props) {
             {props.githubAuthUrl ? (
               <div className={styles.loginButton}>
                 <a href={props.githubAuthUrl}>
-                  <Button.Root plain colorScheme="github" paddingSize="large">
+                  <Button.Root plain variant="github" paddingSize="large">
                     <Button.ButtonIcon>
                       <Icon>
                         <FontAwesomeIcon icon={faGithub} />
@@ -57,7 +57,7 @@ export function BetaLoginLayout(props: Props) {
             {props.overwolfAuthUrl ? (
               <div className={styles.loginButton}>
                 <a href={props.overwolfAuthUrl}>
-                  <Button.Root plain colorScheme="overwolf" paddingSize="large">
+                  <Button.Root plain variant="overwolf" paddingSize="large">
                     <Button.ButtonIcon>
                       <Icon>
                         <OverwolfLogo />
@@ -73,7 +73,7 @@ export function BetaLoginLayout(props: Props) {
           <div className={styles.alternateAction}>
             Want early access? Thunderstore beta is currently available for
             Thunderstore Premium users only.
-            <Button.Root paddingSize="large" colorScheme="primary">
+            <Button.Root paddingSize="large" variant="primary">
               <Button.ButtonLabel>Go Premium</Button.ButtonLabel>
             </Button.Root>
           </div>
@@ -116,7 +116,7 @@ export function BetaLoginLayout(props: Props) {
             </ul>
           </div>
           <div>
-            <Button.Root paddingSize="large" colorScheme="specialPurple">
+            <Button.Root paddingSize="large" variant="specialPurple">
               <Button.ButtonLabel>Go Premium</Button.ButtonLabel>
             </Button.Root>
           </div>
