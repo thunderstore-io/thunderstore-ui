@@ -77,7 +77,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   if (packageData.author) {
     packageDetailsMeta.push(
       <TeamLink key="1" team={packageData.team.name}>
-        <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
+        <Button.Root plain variant="transparentPrimary" paddingSize="small">
           <Button.ButtonIcon>
             <Icon>
               <FontAwesomeIcon icon={faUsers} />
@@ -130,26 +130,23 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               title="Manage Package"
               content={<PackageManagementForm />}
               acceptButton={
-                <Button.Root paddingSize="large" colorScheme="success">
+                <Button.Root paddingSize="large" variant="status" color="green">
                   <Button.ButtonLabel>Save changes</Button.ButtonLabel>
                 </Button.Root>
               }
               additionalFooterContent={
                 packageData.isDeprecated ? (
-                  <Button.Root paddingSize="large" colorScheme="default">
+                  <Button.Root paddingSize="large" variant="default">
                     <Button.ButtonLabel>Undeprecate</Button.ButtonLabel>
                   </Button.Root>
                 ) : (
-                  <Button.Root paddingSize="large" colorScheme="warning">
+                  <Button.Root paddingSize="large" variant="status" color="red">
                     <Button.ButtonLabel>Deprecate</Button.ButtonLabel>
                   </Button.Root>
                 )
               }
               trigger={
-                <Button.Root
-                  colorScheme="transparentDefault"
-                  paddingSize="large"
-                >
+                <Button.Root variant="transparentDefault" paddingSize="large">
                   <Button.ButtonIcon>
                     <Icon>
                       <FontAwesomeIcon icon={faCog} />
@@ -160,7 +157,12 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               }
             />
             <a className={styles.installButton} href="/">
-              <Button.Root plain paddingSize="huge" colorScheme="fancyAccent">
+              <Button.Root
+                plain
+                paddingSize="huge"
+                variant="install"
+                color="cyber-green"
+              >
                 <Button.ButtonIcon iconSize="tslogo_install_button">
                   <ThunderstoreLogo />
                 </Button.ButtonIcon>
@@ -180,7 +182,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
         <div className={styles.metaInfo}>
           <div className={styles.metaButtonWrapper}>
             <a href="/" className={styles.metaDownloadButton}>
-              <Button.Root plain colorScheme="primary" paddingSize="medium">
+              <Button.Root plain variant="primary" paddingSize="medium">
                 <Button.ButtonIcon>
                   <FontAwesomeIcon icon={faDownload} />
                 </Button.ButtonIcon>
@@ -188,7 +190,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               </Button.Root>
             </a>
             <Tooltip content="Donate to author" side="bottom">
-              <Button.Root colorScheme="primary" paddingSize="mediumSquare">
+              <Button.Root variant="primary" paddingSize="mediumSquare">
                 <Button.ButtonIcon>
                   <Icon>
                     <FontAwesomeIcon icon={faDonate} />
@@ -197,7 +199,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               </Button.Root>
             </Tooltip>
             <Tooltip content="Like" side="bottom">
-              <Button.Root colorScheme="primary" paddingSize="mediumSquare">
+              <Button.Root variant="primary" paddingSize="mediumSquare">
                 <Button.ButtonIcon>
                   <Icon>
                     <FontAwesomeIcon icon={faThumbsUp} />
@@ -206,7 +208,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               </Button.Root>
             </Tooltip>
             <Tooltip content="Report" side="bottom">
-              <Button.Root colorScheme="primary" paddingSize="mediumSquare">
+              <Button.Root variant="primary" paddingSize="mediumSquare">
                 <Button.ButtonIcon>
                   <Icon>
                     <FontAwesomeIcon icon={faFlag} />

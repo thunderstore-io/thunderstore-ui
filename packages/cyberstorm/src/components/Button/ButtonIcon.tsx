@@ -1,32 +1,30 @@
 import { ReactNode } from "react";
 import styles from "./Button.module.css";
+import classNames from "classnames";
 
 export interface ButtonIconProps {
   children: ReactNode | ReactNode[];
-  iconSize?: "default" | "tslogo_install_button";
-  iconColor?: "default" | "darker";
+  variant?: "default" | "dark" | "big_install";
 }
 
 export function ButtonIcon(props: ButtonIconProps) {
-  const { children, iconSize = "default", iconColor = "darker" } = props;
+  const { children, variant } = props;
   return (
-    <div className={`${getIconSize(iconSize)} ${getIconColor(iconColor)}`}>
+    <div
+      className={classNames(
+        styles.icon,
+        variant === "default" || !variant ? null : getVariant(variant)
+      )}
+    >
       {children}
     </div>
   );
 }
 
-const getIconSize = (scheme: string) => {
+const getVariant = (scheme: string) => {
   return {
-    default: styles.ButtonIcon__IconSize__default,
-    tslogo_install_button: styles.ButtonIcon__IconSize__tslogo_install_button,
-  }[scheme];
-};
-
-const getIconColor = (scheme: string) => {
-  return {
-    default: styles.ButtonIcon__IconColor__default,
     darker: styles.ButtonIcon__IconColor__darker,
+    big_install: styles.ButtonIcon__IconColor__default,
   }[scheme];
 };
 

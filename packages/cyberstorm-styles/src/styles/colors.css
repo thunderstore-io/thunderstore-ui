@@ -82,3 +82,115 @@
   --color-red--10: rgb(48 11 18);
   --color-red--11: rgb(24 6 9);
 }
+
+[data-color="red"] {
+  --color-1: var(--color-red--1);
+  --color-2: var(--color-red--2);
+  --color-3: var(--color-red--3);
+  --color-4: var(--color-red--4);
+  --color-5: var(--color-red--5);
+  --color-6: var(--color-red--6);
+  --color-7: var(--color-red--7);
+  --color-8: var(--color-red--8);
+  --color-9: var(--color-red--9);
+  --color-10: var(--color-red--10);
+  --color-11: var(--color-red--11);
+}
+
+[data-color="pink"] {
+  --color-1: var(--color-pink--90);
+  --color-2: var(--color-pink--80);
+  --color-3: var(--color-pink--70);
+  --color-4: var(--color-pink--60);
+  --color-5: var(--color-pink--50);
+  --color-6: var(--color-pink--40);
+  --color-7: var(--color-pink--30);
+  --color-8: var(--color-pink--20);
+  --color-9: var(--color-pink--10);
+  --color-10: none;
+  --color-11: none;
+}
+
+[data-color="orange"] {
+  --color-1: var(--color-orange--90);
+  --color-2: var(--color-orange--80);
+  --color-3: var(--color-orange--70);
+  --color-4: var(--color-orange--60);
+  --color-5: var(--color-orange--50);
+  --color-6: var(--color-orange--40);
+  --color-7: var(--color-orange--30);
+  --color-8: var(--color-orange--20);
+  --color-9: var(--color-orange--10);
+  --color-10: none;
+  --color-11: none;
+}
+
+[data-color="yellow"] {
+  --color-1: var(--color-yellow--1);
+  --color-2: var(--color-yellow--2);
+  --color-3: var(--color-yellow--3);
+  --color-4: var(--color-yellow--4);
+  --color-5: var(--color-yellow--5);
+  --color-6: var(--color-yellow--6);
+  --color-7: var(--color-yellow--7);
+  --color-8: var(--color-yellow--8);
+  --color-9: var(--color-yellow--9);
+  --color-10: var(--color-yellow--10);
+  --color-11: var(--color-yellow--11);
+}
+
+[data-color="green"] {
+  --color-1: var(--color-green--1);
+  --color-2: var(--color-green--2);
+  --color-3: var(--color-green--3);
+  --color-4: var(--color-green--4);
+  --color-5: var(--color-green--5);
+  --color-6: var(--color-green--6);
+  --color-7: var(--color-green--7);
+  --color-8: var(--color-green--8);
+  --color-9: var(--color-green--9);
+  --color-10: var(--color-green--10);
+  --color-11: var(--color-green--11);
+}
+
+[data-color="blue"] {
+  --color-1: var(--color-blue--90);
+  --color-2: var(--color-blue--80);
+  --color-3: var(--color-blue--70);
+  --color-4: var(--color-blue--60);
+  --color-5: var(--color-blue--50);
+  --color-6: var(--color-blue--40);
+  --color-7: var(--color-blue--30);
+  --color-8: var(--color-blue--20);
+  --color-9: var(--color-blue--10);
+  --color-10: none;
+  --color-11: none;
+}
+
+[data-color="cyber-green"] {
+  --color-1: var(--color-cyber-green--90);
+  --color-2: var(--color-cyber-green--80);
+  --color-3: var(--color-cyber-green--70);
+  --color-4: var(--color-cyber-green--60);
+  --color-5: var(--color-cyber-green--50);
+  --color-6: var(--color-cyber-green--40);
+  --color-7: var(--color-cyber-green--30);
+  --color-8: var(--color-cyber-green--20);
+  --color-9: var(--color-cyber-green--10);
+  --color-10: none;
+  --color-11: none;
+}
+
+[data-color="purple"] {
+  --color-1: var(--color-purple--1);
+  --color-2: var(--color-purple--2);
+  --color-3: var(--color-purple--3);
+  --color-4: var(--color-purple--4);
+  --color-5: var(--color-purple--5);
+  --color-6: var(--color-purple--6);
+  --color-7: var(--color-purple--7);
+  --color-8: var(--color-purple--8);
+  --color-9: var(--color-purple--9);
+  --color-10: var(--color-purple--10);
+  --color-11: none;
+}

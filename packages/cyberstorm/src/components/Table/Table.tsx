@@ -56,8 +56,7 @@ function SortButton(props: SortButtonProps) {
 
   return (
     <Button.Root
-      iconAlignment="side"
-      colorScheme="transparentTertiary"
+      variant="transparentTertiary"
       paddingSize="medium"
       onClick={() => hook(hookParams)}
     >
@@ -125,11 +124,7 @@ export function Table(props: TableProps) {
             {variant === "default" ? (
               header.value
             ) : header.disableSort ? (
-              <Button.Root
-                iconAlignment="side"
-                colorScheme="transparentTertiary"
-                paddingSize="large"
-              >
+              <Button.Root variant="transparentTertiary" paddingSize="large">
                 <Button.ButtonLabel>{header.value}</Button.ButtonLabel>
               </Button.Root>
             ) : (

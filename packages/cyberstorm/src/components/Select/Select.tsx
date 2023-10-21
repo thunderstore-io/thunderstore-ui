@@ -57,11 +57,7 @@ export function Select<T extends string>(props: SelectProps<T>) {
         disabled={options.length === 0}
       >
         <RadixSelect.Trigger asChild>
-          <Button.Root
-            iconAlignment="side"
-            colorScheme="wideDarker"
-            paddingSize="large"
-          >
+          <Button.Root variant="wideDarker" paddingSize="large">
             <Button.ButtonLabel fontSize={triggerFontSize}>
               {options?.find((o) => o.value === value)?.label ?? placeholder}
             </Button.ButtonLabel>

@@ -43,7 +43,7 @@ export function Header() {
               <Button.Root
                 plain
                 paddingSize="large"
-                colorScheme="transparentDefault"
+                variant="transparentDefault"
               >
                 <Button.ButtonLabel fontSize="large">
                   Communities
@@ -63,12 +63,12 @@ export function Header() {
         <ul className={styles.nav}>
           <li className={styles.navButtons}>
             <a href="/">
-              <Button.Root paddingSize="large" colorScheme="specialPurple">
+              <Button.Root paddingSize="large" variant="specialPurple">
                 <Button.ButtonLabel>Go Premium</Button.ButtonLabel>
               </Button.Root>
             </a>
             <a href="/">
-              <Button.Root paddingSize="large" colorScheme="accent">
+              <Button.Root paddingSize="large" variant="accent">
                 <Button.ButtonLabel>Get Manager</Button.ButtonLabel>
               </Button.Root>
             </a>
@@ -78,7 +78,7 @@ export function Header() {
               <Tooltip content="Upload" side="bottom">
                 <Button.Root
                   paddingSize="mediumSquare"
-                  colorScheme="transparentAccent"
+                  variant="transparentAccent"
                 >
                   <Button.ButtonIcon>
                     <Icon>

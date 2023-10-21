@@ -63,7 +63,7 @@ export function TeamMemberList(props: TeamMemberListProps) {
           <Dialog
             key={`action_${index}`}
             trigger={
-              <Button.Root colorScheme="danger" paddingSize="large">
+              <Button.Root variant="danger" paddingSize="large">
                 <Button.ButtonIcon>
                   <Icon>
                     <FontAwesomeIcon icon={faTrash} />
@@ -84,7 +84,7 @@ export function TeamMemberList(props: TeamMemberListProps) {
               </div>
             }
             acceptButton={
-              <Button.Root colorScheme="danger" paddingSize="large">
+              <Button.Root variant="danger" paddingSize="large">
                 <Button.ButtonLabel>Kick member</Button.ButtonLabel>
               </Button.Root>
             }
@@ -116,7 +116,7 @@ export function TeamMembers(props: TeamMembersProps) {
     <Dialog
       title="Add Member"
       trigger={
-        <Button.Root colorScheme="primary" paddingSize="large">
+        <Button.Root variant="primary" paddingSize="large">
           <Button.ButtonLabel>Add Member</Button.ButtonLabel>
           <Button.ButtonIcon>
             <Icon>
@@ -147,7 +147,7 @@ export function TeamMembers(props: TeamMembersProps) {
         </div>
       }
       acceptButton={
-        <Button.Root colorScheme="success">
+        <Button.Root variant="success">
           <Button.ButtonLabel>Add Member</Button.ButtonLabel>
         </Button.Root>
       }

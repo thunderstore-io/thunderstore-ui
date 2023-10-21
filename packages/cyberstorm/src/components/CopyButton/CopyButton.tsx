@@ -73,7 +73,7 @@ export function CopyButton(props: CopyButtonProps) {
         <div className={styles.root}>
           <Button.Root
             paddingSize={paddingSize}
-            colorScheme={colorScheme}
+            variant={colorScheme}
             onClick={() => useCopyToClipboard(text, setWasRecentlyCopied)}
             onMouseOver={() => setIsTooltipOpen(true)}
             onMouseOut={() => setIsTooltipOpen(false)}

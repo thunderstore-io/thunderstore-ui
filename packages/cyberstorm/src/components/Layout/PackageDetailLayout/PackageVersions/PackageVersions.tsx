@@ -66,7 +66,7 @@ function getDownload(versionNumber: string) {
   return (
     <Button.Root
       paddingSize="medium"
-      colorScheme="transparentAccent"
+      variant="transparentAccent"
       onClick={() => {
         console.log("Download " + versionNumber);
       }}
@@ -80,7 +80,7 @@ function getInstall(versionNumber: string) {
   return (
     <Button.Root
       paddingSize="large"
-      colorScheme="primary"
+      variant="primary"
       onClick={() => {
         console.log("Install " + versionNumber);
       }}

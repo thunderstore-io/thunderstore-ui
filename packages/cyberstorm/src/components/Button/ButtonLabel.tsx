@@ -1,19 +1,22 @@
 import { ReactNode } from "react";
 import styles from "./Button.module.css";
+import classNames from "classnames";
 
 export interface ButtonLabelProps {
   children: ReactNode | ReactNode[];
   fontSize?: "small" | "medium" | "large" | "huge";
-  fontWeight?: "600" | "700" | "800";
+  fontWeight?: "medium" | "bold" | "boldest";
 }
 
 export function ButtonLabel(props: ButtonLabelProps) {
-  const { children, fontSize = "medium", fontWeight = "700" } = props;
+  const { children, fontSize = "medium", fontWeight = "bold" } = props;
   return (
     <span
-      className={`${styles.ButtonLabel} ${getFontSize(
-        fontSize
-      )} ${getFontWeight(fontWeight)}`}
+      className={classNames(
+        styles.label,
+        getFontSize(fontSize),
+        getFontWeight(fontWeight)
+      )}
     >
       {children}
     </span>
@@ -22,18 +25,18 @@ export function ButtonLabel(props: ButtonLabelProps) {
 
 const getFontSize = (scheme: string) => {
   return {
-    small: styles.ButtonLabel__font__small,
-    medium: styles.ButtonLabel__font__medium,
-    large: styles.ButtonLabel__font__large,
-    huge: styles.ButtonLabel__font__huge,
+    small: styles.font_small,
+    medium: styles.font_medium,
+    large: styles.font_large,
+    huge: styles.font_huge,
   }[scheme];
 };
 
 const getFontWeight = (scheme: string) => {
   return {
-    "600": styles.ButtonLabel__fontWeight__600,
-    "700": styles.ButtonLabel__fontWeight__700,
-    "800": styles.ButtonLabel__fontWeight__800,
+    medium: styles.label_font_weight_medium,
+    bold: styles.label_font_weight_medium,
+    boldest: styles.label_font_weight_medium,
   }[scheme];
 };
 

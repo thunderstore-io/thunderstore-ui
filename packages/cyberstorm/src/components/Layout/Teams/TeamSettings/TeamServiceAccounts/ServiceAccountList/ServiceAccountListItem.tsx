@@ -17,7 +17,7 @@ export function ServiceAccountListItem(props: ServiceAccountListItemProps) {
       <div className={styles.name}>{serviceAccountName}</div>
       <div className={styles.details}>{lastUsed}</div>
       <div className={styles.action}>
-        <Button.Root colorScheme="danger">
+        <Button.Root variant="danger">
           <Button.ButtonIcon>
             <Icon>
               <FontAwesomeIcon icon={faTrash} />

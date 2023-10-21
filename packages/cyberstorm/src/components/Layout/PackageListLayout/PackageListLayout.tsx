@@ -75,7 +75,7 @@ export function PackageListLayout(props: PackageListLayoutProps) {
             />,
             community.discord_url ? (
               <a key="meta-link" href="{community.discord_url}">
-                <Button.Root colorScheme="transparentPrimary">
+                <Button.Root variant="transparentPrimary">
                   <Button.ButtonIcon>
                     <Icon>
                       <FontAwesomeIcon icon={faDiscord} />
