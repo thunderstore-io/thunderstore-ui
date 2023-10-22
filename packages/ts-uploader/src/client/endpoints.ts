@@ -1,4 +1,9 @@
-import { UserMedia, InitUploadResponse, FinishUploadRequest } from "./types";
+import {
+  UserMedia,
+  InitUploadResponse,
+  FinishUploadRequest,
+  InitUploadRequest,
+} from "./types";
 import { UsermediaUrls } from "./urls";
 import { apiFetch } from "./fetch";
 import { ApiConfig } from "./config";
@@ -17,36 +22,30 @@ async function apiPost<T>(api: ApiConfig, request: RequestConfig) {
   return (await response.json()) as T;
 }
 
-export async function usermediaInit(
+type ApiCall<Req = undefined, Res = undefined, Args = {}> = (
   api: ApiConfig,
   args: {
-    data: { filename: string; file_size_bytes: number };
-  }
-): Promise<InitUploadResponse> {
-  return await apiPost(api, {
-    path: UsermediaUrls.init,
-    data: args.data,
-  });
-}
+    data: Req;
+  } & Args
+) => Promise<Res>;
 
-export async function usermediaFinish(
-  api: ApiConfig,
-  args: {
-    uuid: string;
-    data: FinishUploadRequest;
-  }
-): Promise<UserMedia> {
-  return await apiPost(api, {
-    path: UsermediaUrls.finish(args.uuid),
-    data: args.data,
-  });
-}
-
-export async function usermediaAbort(
-  api: ApiConfig,
-  args: { uuid: string }
-): Promise<UserMedia> {
-  return await apiPost(api, {
-    path: UsermediaUrls.finish(args.uuid),
-  });
-}
+export const UsermediaEndpoints: {
+  init: ApiCall<InitUploadRequest, InitUploadResponse>;
+  finish: ApiCall<FinishUploadRequest, UserMedia, { uuid: string }>;
+  abort: ApiCall<undefined, UserMedia, { uuid: string }>;
+} = {
+  init: (api, args) => {
+    return apiPost(api, { path: UsermediaUrls.init, data: args.data });
+  },
+  finish: (api, args) => {
+    return apiPost(api, {
+      path: UsermediaUrls.finish(args.uuid),
+      data: args.data,
+    });
+  },
+  abort: (api, args) => {
+    return apiPost(api, {
+      path: UsermediaUrls.abort(args.uuid),
+    });
+  },
+};

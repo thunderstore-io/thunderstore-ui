@@ -24,14 +24,20 @@ export type UploadPartUrl = {
   offset: number;
   length: number;
 };
-export type InitUploadResponse = {
-  user_media: UserMedia;
-  upload_urls: UploadPartUrl[];
-};
 export type CompletedPart = {
   ETag: string;
   PartNumber: number;
 };
+
+export type InitUploadRequest = {
+  filename: string;
+  file_size_bytes: number;
+};
+export type InitUploadResponse = {
+  user_media: UserMedia;
+  upload_urls: UploadPartUrl[];
+};
+
 export type FinishUploadRequest = {
   parts: CompletedPart[];
 };
