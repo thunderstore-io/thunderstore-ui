@@ -6,7 +6,6 @@ import React, {
   useRef,
 } from "react";
 import styles from "./Button.module.css";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Tooltip } from "../Tooltip/Tooltip";
 
 export interface ButtonProps {
@@ -54,7 +53,7 @@ const Button = React.forwardRef<
   const {
     children,
     plain = false,
-    type = "button",
+    type,
     colorScheme = "default",
     onClick,
     paddingSize = "medium",
@@ -63,41 +62,53 @@ const Button = React.forwardRef<
     ...forwardedProps
   } = props;
 
+  interface TooltipWrapperProps extends PropsWithChildren {
+    tooltipText?: string;
+  }
+
+  const TooltipWrapper = (props: TooltipWrapperProps) =>
+    props.tooltipText ? (
+      <Tooltip content={props.tooltipText} side="bottom">
+        {props.children}
+      </Tooltip>
+    ) : (
+      <>{props.children}</>
+    );
   const fallbackRef = useRef(null);
 
   if (plain) {
     const fRef = forwardedRef as React.ForwardedRef<HTMLDivElement>;
     const ref = fRef || fallbackRef;
     return (
-      <div
-        {...forwardedProps}
-        ref={ref}
-        className={`${styles.root} ${getIconAlignment(
-          iconAlignment
-        )} ${getStyle(colorScheme)} ${getPaddingSize(paddingSize)}`}
-      >
-        {children}
-      </div>
+      <TooltipWrapper tooltipText={tooltipText}>
+        <div
+          {...forwardedProps}
+          ref={ref}
+          className={`${styles.root} ${getIconAlignment(
+            iconAlignment
+          )} ${getStyle(colorScheme)} ${getPaddingSize(paddingSize)}`}
+        >
+          {children}
+        </div>
+      </TooltipWrapper>
     );
   } else {
     const fRef = forwardedRef as React.ForwardedRef<HTMLButtonElement>;
     const ref = fRef || fallbackRef;
     return (
-      <TooltipProvider>
-        <Tooltip content={tooltipText} side="bottom">
-          <button
-            {...forwardedProps}
-            ref={ref}
-            type={type}
-            className={`${styles.root} ${getIconAlignment(
-              iconAlignment
-            )} ${getStyle(colorScheme)} ${getPaddingSize(paddingSize)}`}
-            onClick={onClick}
-          >
-            {children}
-          </button>
-        </Tooltip>
-      </TooltipProvider>
+      <TooltipWrapper tooltipText={tooltipText}>
+        <button
+          {...forwardedProps}
+          ref={ref}
+          type={type}
+          className={`${styles.root} ${getIconAlignment(
+            iconAlignment
+          )} ${getStyle(colorScheme)} ${getPaddingSize(paddingSize)}`}
+          onClick={onClick}
+        >
+          {children}
+        </button>
+      </TooltipWrapper>
     );
   }
 });
