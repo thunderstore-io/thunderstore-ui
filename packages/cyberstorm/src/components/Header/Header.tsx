@@ -6,7 +6,6 @@ import styles from "./Header.module.css";
 import { DevelopersDropDown } from "./DevelopersDropDown";
 import * as Button from "../Button/";
 import { CommunitiesLink, IndexLink, PackageUploadLink } from "../Links/Links";
-import { Tooltip } from "../Tooltip/Tooltip";
 import { ThunderstoreLogo } from "../../svg/svg";
 import { UserDropDown } from "./UserDropDown";
 import { Icon } from "../Icon/Icon";
