@@ -9,9 +9,7 @@ const meta = {
   component: Button.Root,
 } as Meta<typeof Button.Root>;
 
-const defaultArgs = {
-  tooltipText: "tooltip text",
-};
+const defaultArgs = {};
 
 const Template: StoryFn<typeof Button.Root> = (args) => (
   <div
@@ -24,6 +22,14 @@ const Template: StoryFn<typeof Button.Root> = (args) => (
   >
     <Button.Root colorScheme="default" {...args}>
       <Button.ButtonLabel>default</Button.ButtonLabel>
+      <Button.ButtonIcon>
+        <Icon>
+          <FontAwesomeIcon icon={faChevronDown} />
+        </Icon>
+      </Button.ButtonIcon>
+    </Button.Root>
+    <Button.Root colorScheme="default" tooltipText="tooltip text" {...args}>
+      <Button.ButtonLabel>tooltipDefault</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />

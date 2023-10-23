@@ -43,9 +43,22 @@ export interface ButtonProps {
   tooltipText?: string;
 }
 
+const TooltipWrapper = (props: TooltipWrapperProps) =>
+  props.tooltipText ? (
+    <Tooltip content={props.tooltipText} side="bottom">
+      {props.children}
+    </Tooltip>
+  ) : (
+    <>{props.children}</>
+  );
+interface TooltipWrapperProps extends PropsWithChildren {
+  tooltipText?: string;
+}
+
 /**
  * Cyberstorm Button component
  */
+
 const Button = React.forwardRef<
   HTMLButtonElement | HTMLDivElement,
   ButtonProps
@@ -62,18 +75,6 @@ const Button = React.forwardRef<
     ...forwardedProps
   } = props;
 
-  interface TooltipWrapperProps extends PropsWithChildren {
-    tooltipText?: string;
-  }
-
-  const TooltipWrapper = (props: TooltipWrapperProps) =>
-    props.tooltipText ? (
-      <Tooltip content={props.tooltipText} side="bottom">
-        {props.children}
-      </Tooltip>
-    ) : (
-      <>{props.children}</>
-    );
   const fallbackRef = useRef(null);
 
   if (plain) {
