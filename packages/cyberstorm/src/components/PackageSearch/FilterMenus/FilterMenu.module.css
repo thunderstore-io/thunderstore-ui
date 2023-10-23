@@ -4,7 +4,8 @@
   font-size: var(--font-size--m);
 }
 
-.header {
+.header,
+.empty {
   padding: var(--space--8) var(--space--12);
   font-size: var(--font-size--m);
 }

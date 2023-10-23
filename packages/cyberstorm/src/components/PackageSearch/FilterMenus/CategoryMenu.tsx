@@ -52,7 +52,7 @@ export const CategoryMenu = (props: Props) => {
           ))}
         </ol>
       ) : (
-        <p>No categories</p>
+        <p className={styles.empty}>No categories</p>
       )}
     </div>
   );
