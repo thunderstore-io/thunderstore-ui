@@ -7,3 +7,8 @@ export const paginatedResults = <T extends z.ZodTypeAny>(resultType: T) =>
     previous: z.string().url().nullable(),
     results: z.array(resultType),
   });
+
+export const PackageCategory = z.object({
+  name: z.string().nonempty(),
+  slug: z.string().nonempty(),
+});

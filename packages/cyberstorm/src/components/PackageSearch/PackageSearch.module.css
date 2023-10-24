@@ -12,7 +12,7 @@
   gap: var(--gap--24);
 }
 
-.filterItemList {
+.sidebar {
   display: flex;
   flex-basis: 20%;
   flex-direction: column;

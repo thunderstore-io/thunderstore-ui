@@ -8,6 +8,27 @@ export const getFakeLink = () => ({
   url: faker.internet.url(),
 });
 
+export const getFakePackageCategories = (returnAmount?: number) => {
+  const categories = [
+    { name: "Mods", slug: "mods" },
+    { name: "Tools", slug: "tools" },
+    { name: "Libraries", slug: "libraries" },
+    { name: "Modpacks", slug: "modpacks" },
+    { name: "Skins", slug: "skins" },
+    { name: "Maps", slug: "maps" },
+    { name: "Tweaks", slug: "tweaks" },
+    { name: "Items", slug: "items" },
+    { name: "Language", slug: "language" },
+    { name: "Audio", slug: "audio" },
+    { name: "Enemies", slug: "enemies" },
+  ];
+
+  return faker.helpers.arrayElements(categories, {
+    min: 0,
+    max: returnAmount ?? 3,
+  });
+};
+
 export const getIds = (count: number, seed?: string) => {
   setSeed(seed);
 

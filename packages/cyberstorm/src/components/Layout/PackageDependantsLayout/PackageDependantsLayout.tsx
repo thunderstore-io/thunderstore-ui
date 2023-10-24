@@ -66,7 +66,12 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
           ) : null}
         </div>
       }
-      mainContent={<PackageSearch communityId={pkg.community} />}
+      mainContent={
+        <PackageSearch
+          communityId={pkg.community}
+          packageCategories={community.package_categories}
+        />
+      }
     />
   );
 }
