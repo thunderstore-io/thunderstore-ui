@@ -1,8 +1,8 @@
+import styles from "./UserProfileLayout.module.css";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import { UserLink } from "../../Links/Links";
-import { BaseLayout } from "../BaseLayout/BaseLayout";
-import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
-import styles from "./UserProfileLayout.module.css";
+import { PackageSearch } from "../../PackageSearch/PackageSearch";
 
 interface Props {
   userId: string;
@@ -26,7 +26,7 @@ export function UserProfileLayout(props: Props) {
           Mods uploaded by <UserLink user={userId}>{userId}</UserLink>
         </div>
       }
-      mainContent={<PackageSearchLayout userId={userId} />}
+      mainContent={<PackageSearch userId={userId} />}
     />
   );
 }

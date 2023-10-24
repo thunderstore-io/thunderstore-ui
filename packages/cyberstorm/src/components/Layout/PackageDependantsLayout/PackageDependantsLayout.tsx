@@ -1,6 +1,9 @@
 import { useDapper } from "@thunderstore/dapper";
 import { Package } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
+
+import styles from "./PackageDependantsLayout.module.css";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import {
   CommunitiesLink,
@@ -8,9 +11,7 @@ import {
   PackageLink,
   UserLink,
 } from "../../Links/Links";
-import { BaseLayout } from "../BaseLayout/BaseLayout";
-import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
-import styles from "./PackageDependantsLayout.module.css";
+import { PackageSearch } from "../../PackageSearch/PackageSearch";
 
 interface PackageDependantsLayoutProps {
   package: Package;
@@ -20,7 +21,7 @@ interface PackageDependantsLayoutProps {
  * View for listing the packages depending on a given package.
  *
  * TODO: Currently this lists Community's packages as the
- * PackageSearchLayout doesn't support showing dependants.
+ * PackageSearch doesn't support showing dependants.
  */
 export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
   const { package: pkg } = props;
@@ -65,7 +66,7 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
           ) : null}
         </div>
       }
-      mainContent={<PackageSearchLayout communityId={pkg.community} />}
+      mainContent={<PackageSearch communityId={pkg.community} />}
     />
   );
 }

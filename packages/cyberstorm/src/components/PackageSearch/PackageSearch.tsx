@@ -1,7 +1,4 @@
 "use client";
-import { Suspense, lazy, useState, createContext } from "react";
-import styles from "./PackageSearchLayout.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFire,
   faSearch,
@@ -9,37 +6,24 @@ import {
   faThumbsUp,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { Select } from "../../Select/Select";
-import { Pagination } from "../../Pagination/Pagination";
-import { FilterItemList } from "../../FilterItemList/FilterItemList";
-import * as Button from "../../Button/";
-import { Tag } from "../../Tag/Tag";
-import { TextInput } from "../../TextInput/TextInput";
-import { Icon } from "../../Icon/Icon";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Suspense, useState, createContext } from "react";
 
-const PackageListings = lazy(
-  () => import("../PackageListings/PackageListings")
-);
+import styles from "./PackageSearch.module.css";
+import * as Button from "../Button/";
+import { FilterItemList } from "../FilterItemList/FilterItemList";
+import { Icon } from "../Icon/Icon";
+import { Pagination } from "../Pagination/Pagination";
+import { PackageList } from "../PackageList/PackageList";
+import { Select } from "../Select/Select";
+import { Tag } from "../Tag/Tag";
+import { TextInput } from "../TextInput/TextInput";
 
-export interface CategoriesProps {
+interface CategoriesProps {
   [key: string]: {
     label: string;
     value: boolean | undefined;
   };
-}
-
-export interface PackageSearchLayoutProps {
-  communityId?: string;
-  userId?: string;
-  teamId?: string;
-}
-
-export interface PackageListingsProps {
-  communityId: string;
-  userId: string;
-  teamId: string;
-  keywords: { key: string; negate: boolean }[];
-  categories: CategoriesProps[];
 }
 
 // TODO: OVERKILL???
@@ -126,10 +110,16 @@ function CurrentFilters(props: TagListProps) {
   );
 }
 
+interface Props {
+  communityId?: string;
+  userId?: string;
+  teamId?: string;
+}
+
 /**
- * Cyberstorm PackageSearch Layout
+ * Component for filtering and rendering a PackageList
  */
-export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
+export function PackageSearch(props: Props) {
   const { communityId, userId, teamId } = props;
 
   const filters = new Filters();
@@ -151,7 +141,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
   };
 
   return (
-    <div className={styles.content}>
+    <div className={styles.root}>
       <TextInput
         placeHolder="Filter Mods..."
         leftIcon={
@@ -217,7 +207,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
                 </h2>
               }
             >
-              <PackageListings
+              <PackageList
                 communityId={communityId}
                 userId={userId}
                 teamId={teamId}
@@ -238,7 +228,7 @@ export default function PackageSearchLayout(props: PackageSearchLayoutProps) {
   );
 }
 
-PackageSearchLayout.displayName = "PackageSearchLayout";
+PackageSearch.displayName = "PackageSearch";
 
 const selectOptions = [
   {

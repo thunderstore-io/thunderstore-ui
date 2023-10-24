@@ -6,23 +6,23 @@ import { usePromise } from "@thunderstore/use-promise";
 
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
-import PackageSearchLayout from "../PackageSearchLayout/PackageSearchLayout";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import * as Button from "../../Button/";
 import { CommunityImage } from "../../CommunityImage/CommunityImage";
 import { Icon } from "../../Icon/Icon";
 import { CommunitiesLink, CommunityLink } from "../../Links/Links";
 import { MetaItem } from "../../MetaItem/MetaItem";
+import { PackageSearch } from "../../PackageSearch/PackageSearch";
 import { formatInteger } from "../../../utils/utils";
 
-interface PackageListLayoutProps {
+interface Props {
   communityId: string;
 }
 
 /**
  * View for showing Community's package listing.
  */
-export function PackageListLayout(props: PackageListLayoutProps) {
+export function CommunityProfileLayout(props: Props) {
   const { communityId } = props;
 
   const dapper = useDapper();
@@ -88,9 +88,9 @@ export function PackageListLayout(props: PackageListLayoutProps) {
           ]}
         />
       }
-      mainContent={<PackageSearchLayout communityId={communityId} />}
+      mainContent={<PackageSearch communityId={communityId} />}
     />
   );
 }
 
-PackageListLayout.displayName = "PackageListLayout";
+CommunityProfileLayout.displayName = "CommunityProfileLayout";
