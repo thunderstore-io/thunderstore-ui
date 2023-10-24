@@ -1,6 +1,6 @@
 import { Communities, Community } from "./community";
 import { Package, PackageDependency, PackagePreview } from "./package";
-import { ServiceAccount, Team } from "./team";
+import { TeamDetails, ServiceAccount, TeamMember } from "./team";
 import { CurrentUser } from "./user";
 
 export type GetCommunities = (
@@ -39,12 +39,10 @@ export type GetPackageListings = (
   }
 ) => Promise<PackagePreview[]>;
 
-export type GetServiceAccount = (
-  serviceAccountId: string
-) => Promise<ServiceAccount>;
+export type GetTeamDetails = (teamName: string) => Promise<TeamDetails>;
 
-export type GetServiceAccountList = (
-  teamId: string
+export type GetTeamMembers = (teamId: string) => Promise<TeamMember[]>;
+
+export type GetTeamServiceAccounts = (
+  teamName: string
 ) => Promise<ServiceAccount[]>;
-
-export type GetTeam = (teamId: string) => Promise<Team>;

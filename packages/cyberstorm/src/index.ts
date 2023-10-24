@@ -112,10 +112,7 @@ export {
 export { PackageDependantsLayout } from "./components/Layout/PackageDependantsLayout/PackageDependantsLayout";
 export { PackageListLayout } from "./components/Layout/PackageListLayout/PackageListLayout";
 export { SettingsLayout } from "./components/Layout/Settings/SettingsLayout";
-export {
-  TeamSettingsLayout,
-  type TeamSettingsLayoutProps,
-} from "./components/Layout/Teams/TeamSettings/TeamSettingsLayout";
+export { TeamSettingsLayout } from "./components/Layout/Teams/TeamSettings/TeamSettingsLayout";
 export { TeamsLayout } from "./components/Layout/Teams/TeamsLayout";
 export { TeamProfileLayout } from "./components/Layout/TeamProfileLayout/TeamProfileLayout";
 export { UserProfileLayout } from "./components/Layout/UserProfileLayout/UserProfileLayout";

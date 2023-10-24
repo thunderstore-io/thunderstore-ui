@@ -7,7 +7,7 @@ export interface DapperInterface {
   getPackage: methods.GetPackage;
   getPackageDependencies: methods.GetPackageDependencies;
   getPackageListings: methods.GetPackageListings;
-  getServiceAccount: methods.GetServiceAccount;
-  getServiceAccountList: methods.GetServiceAccountList;
-  getTeam: methods.GetTeam;
+  getTeamDetails: methods.GetTeamDetails;
+  getTeamMembers: methods.GetTeamMembers;
+  getTeamServiceAccounts: methods.GetTeamServiceAccounts;
 }

@@ -1,22 +1,18 @@
-import { DynamicLink } from "./shared";
-
 export interface ServiceAccount {
+  identifier: string;
   name: string;
-  lastUsed: string;
+  last_used: string | null;
 }
 
-export interface Team {
+export interface TeamDetails {
+  identifier: number;
   name: string;
-  members: TeamMember[];
-  imageSource?: string;
-  description?: string;
-  about?: string;
-  donationLink?: string;
-  dynamicLinks?: DynamicLink[];
+  donation_link: string | null;
 }
 
 export interface TeamMember {
-  user: string; // User id
-  role: string;
-  imageSource?: string;
+  identifier: number;
+  username: string;
+  avatar: string | null;
+  role: "owner" | "member";
 }

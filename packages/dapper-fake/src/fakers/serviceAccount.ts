@@ -6,8 +6,12 @@ export const getFakeServiceAccount = async (serviceAccountId?: string) => {
   setSeed(serviceAccountId);
 
   return {
+    identifier: faker.string.uuid(),
     name: faker.internet.userName(),
-    lastUsed: faker.date.recent({ days: 700 }).toDateString(),
+    last_used:
+      faker.helpers.maybe(() =>
+        faker.date.recent({ days: 700 }).toDateString()
+      ) ?? null,
   };
 };
 

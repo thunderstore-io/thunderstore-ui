@@ -23,19 +23,17 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
   const { teamMember } = props;
 
   return (
-    <UserLink user={teamMember.user}>
+    <UserLink user={teamMember.username}>
       <div className={styles.item}>
         <img
-          src={
-            teamMember.imageSource ? teamMember.imageSource : defaultImageSrc
-          }
+          src={teamMember.avatar ?? defaultImageSrc}
           className={styles.itemImage}
-          alt={teamMember.user}
+          alt={teamMember.username}
         />
         <div>
           <div className={styles.itemTitle}>
-            {teamMember.user}
-            {teamMember.role === "Owner" ? (
+            {teamMember.username}
+            {teamMember.role === "owner" ? (
               <span className={styles.crown}>
                 <Icon>
                   <FontAwesomeIcon icon={faCrown} />
@@ -51,36 +49,19 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
 }
 
 function compare(a: TeamMember, b: TeamMember) {
-  if (a.role === "Owner" || b.role === "Owner") {
-    if (a.role === "Owner" && b.role === "Owner") {
-      if (a.user < b.user) {
-        if (a.user > b.user) {
-          return 1;
-        }
-        return -1;
-      }
-      return 0;
-    }
-    if (a.role === "Owner") {
-      return -1;
-    }
-    return 1;
+  if (a.role === b.role) {
+    return a.username.localeCompare(b.username);
   }
-  if (a.user > b.user) {
-    return 1;
-  }
-  if (a.user < b.user) {
-    return -1;
-  }
-  return 0;
+
+  return a.role === "owner" ? -1 : 1;
 }
 
 export function PackageTeamMemberList(props: PackageTeamListProps) {
   const { teamMembers = [], teamName = null } = props;
 
   const mappedPackageTeamList = teamMembers
-    ?.sort(compare)
-    .map((teamMember: TeamMember, index: number) => {
+    .sort(compare)
+    .map((teamMember, index) => {
       return (
         <div key={index}>
           <PackageTeamListItem teamMember={teamMember} />
