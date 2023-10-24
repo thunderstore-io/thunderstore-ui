@@ -5,7 +5,7 @@ import { ServiceAccountList } from "./ServiceAccountList/ServiceAccountList";
 import { Dialog } from "../../../../Dialog/Dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCircleExclamation } from "@fortawesome/pro-solid-svg-icons";
-import { TeamLink, UserLink } from "../../../../Links/Links";
+import { UserLink } from "../../../../Links/Links";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { useState } from "react";
 import { CopyButton } from "../../../../CopyButton/CopyButton";
@@ -87,11 +87,7 @@ export function TeamServiceAccounts(props: Props) {
                     <p className={styles.description}>
                       Enter the nickname of the service account you wish to add
                       to the team{" "}
-                      <TeamLink team={teamName}>
-                        <span className={styles.dialogTeamName}>
-                          {teamName}
-                        </span>
-                      </TeamLink>
+                      <span className={styles.dialogTeamName}>{teamName}</span>
                     </p>
                     <TextInput
                       setValue={setAddedServiceAccountName}

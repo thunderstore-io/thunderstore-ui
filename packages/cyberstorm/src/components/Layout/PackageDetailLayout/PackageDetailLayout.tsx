@@ -76,7 +76,11 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   const packageDetailsMeta = [];
   if (packageData.author) {
     packageDetailsMeta.push(
-      <TeamLink key="1" team={packageData.team.name}>
+      <TeamLink
+        key="team"
+        community={packageData.community}
+        team={packageData.team.name}
+      >
         <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
           <Button.ButtonIcon>
             <Icon>
@@ -90,7 +94,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   }
   if (packageData.gitHubLink) {
     packageDetailsMeta.push(
-      <a key="2" href={packageData.gitHubLink}>
+      <a key="github" href={packageData.gitHubLink}>
         <Button.Root>
           <Button.ButtonLabel>GitHub</Button.ButtonLabel>
           <Button.ButtonIcon>
@@ -112,6 +116,13 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <CommunityLink community={packageData.community}>
             {packageData.community}
           </CommunityLink>
+          Packages
+          <TeamLink
+            community={packageData.community}
+            team={packageData.team.name}
+          >
+            {packageData.team.name}
+          </TeamLink>
           {packageData.name}
         </BreadCrumbs>
       }
@@ -219,6 +230,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <PackageTagList tags={packageData.categories} />
           <PackageDependencyList namespace={namespace} community={community} />
           <PackageTeamMemberList
+            community={packageData.community}
             teamName={packageData.team.name}
             teamMembers={packageData.team.members}
           />

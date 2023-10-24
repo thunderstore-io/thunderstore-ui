@@ -11,6 +11,7 @@ import { Icon } from "../../../Icon/Icon";
 const defaultImageSrc = "/images/logo.png";
 
 export interface PackageTeamListProps {
+  community: string;
   teamMembers?: TeamMember[];
   teamName?: string;
 }
@@ -57,7 +58,7 @@ function compare(a: TeamMember, b: TeamMember) {
 }
 
 export function PackageTeamMemberList(props: PackageTeamListProps) {
-  const { teamMembers = [], teamName = null } = props;
+  const { community, teamMembers = [], teamName = null } = props;
 
   const mappedPackageTeamList = teamMembers
     .sort(compare)
@@ -81,7 +82,7 @@ export function PackageTeamMemberList(props: PackageTeamListProps) {
         }
         headerRightContent={
           teamName ? (
-            <TeamLink team={teamName}>
+            <TeamLink community={community} team={teamName}>
               <div className={styles.teamLink}>
                 See team
                 <div className={styles.teamLinkIcon}>
