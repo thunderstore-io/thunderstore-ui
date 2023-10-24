@@ -1,10 +1,5 @@
 "use client";
-import {
-  faFire,
-  faSearch,
-  faStar,
-  faThumbsUp,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PackageCategory } from "@thunderstore/dapper/types";
 import { useState } from "react";
@@ -15,9 +10,7 @@ import { CategoryTagCloud } from "./CategoryTagCloud/CategoryTagCloud";
 import styles from "./PackageSearch.module.css";
 import { CategorySelection } from "./types";
 import { Icon } from "../Icon/Icon";
-import { Pagination } from "../Pagination/Pagination";
 import { PackageList } from "../PackageList/PackageList";
-import { Select } from "../Select/Select";
 import { TextInput } from "../TextInput/TextInput";
 
 interface Props {
@@ -38,8 +31,6 @@ export function PackageSearch(props: Props) {
     userId,
   } = props;
 
-  const [order, setOrder] = useState("1");
-  const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue] = useDebounce(searchValue, 300);
   const [categories, setCategories] = useState<CategorySelection[]>(
@@ -67,32 +58,10 @@ export function PackageSearch(props: Props) {
         </div>
 
         <div className={styles.content}>
-          <div className={styles.listTopNavigation}>
-            <CategoryTagCloud
-              categories={categories}
-              setCategories={setCategories}
-            />
-
-            <div className={styles.showing}>
-              {/* TODO: use real values */}
-              Showing <strong>1-20</strong> of <strong>327</strong> results
-              {debouncedSearchValue !== ""
-                ? ` for "${debouncedSearchValue}"`
-                : ""}
-            </div>
-
-            <div className={styles.displayAndSort}>
-              <div className={styles.displayButtons}></div>
-              <div className={styles.sort}>
-                <div className={styles.sortLabel}>Sort By</div>
-                <Select
-                  onChange={setOrder}
-                  options={selectOptions}
-                  value={order}
-                />
-              </div>
-            </div>
-          </div>
+          <CategoryTagCloud
+            categories={categories}
+            setCategories={setCategories}
+          />
 
           <PackageList
             communityId={communityId}
@@ -101,15 +70,6 @@ export function PackageSearch(props: Props) {
             searchQuery={debouncedSearchValue}
             categories={categories}
           />
-
-          {/* TODO: use real totalCount */}
-          <Pagination
-            currentPage={page}
-            onPageChange={setPage}
-            pageSize={20}
-            siblingCount={2}
-            totalCount={327}
-          />
         </div>
       </div>
     </div>
@@ -117,33 +77,3 @@ export function PackageSearch(props: Props) {
 }
 
 PackageSearch.displayName = "PackageSearch";
-
-const selectOptions = [
-  {
-    value: "1",
-    label: "Newest",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faStar} />
-      </Icon>
-    ),
-  },
-  {
-    value: "2",
-    label: "Hottest",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faFire} />
-      </Icon>
-    ),
-  },
-  {
-    value: "3",
-    label: "Top rated",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faThumbsUp} />
-      </Icon>
-    ),
-  },
-];

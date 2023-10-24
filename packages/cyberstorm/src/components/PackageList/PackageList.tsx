@@ -1,10 +1,14 @@
 "use client";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
+import { useState } from "react";
 
+import { PackageCount } from "./PackageCount";
+import { PackageOrder, PackageOrderOptions } from "./PackageOrder";
 import styles from "./PackageList.module.css";
 import { CategorySelection } from "../PackageSearch/types";
 import { PackageCard } from "../PackageCard/PackageCard";
+import { Pagination } from "../Pagination/Pagination";
 
 interface Props {
   communityId?: string;
@@ -15,6 +19,8 @@ interface Props {
   categories: CategorySelection[];
 }
 
+const PER_PAGE = 20;
+
 /**
  * Fetches packages based on props and shows them as a list.
  *
@@ -24,9 +30,14 @@ interface Props {
  *
  * TODO: we also support only one searchQuery, so the Dapper method
  *       shouldn't expect an array of them.
+ *
+ * TODO: Add support for order in Dapper method.
  */
 export function PackageList(props: Props) {
   const { communityId, namespaceId, searchQuery, teamId, userId } = props;
+
+  const [order, setOrder] = useState(PackageOrderOptions.Updated);
+  const [page, setPage] = useState(1);
   const dapper = useDapper();
 
   const packages = usePromise(dapper.getPackageListings, [
@@ -39,9 +50,30 @@ export function PackageList(props: Props) {
 
   return (
     <div className={styles.root}>
-      {packages.map((packageData) => (
-        <PackageCard key={packageData.name} packageData={packageData} />
-      ))}
+      <div className={styles.top}>
+        <PackageCount
+          page={1}
+          pageSize={PER_PAGE}
+          searchQuery={searchQuery}
+          totalCount={327 /* TODO */}
+        />
+
+        <PackageOrder order={order} setOrder={setOrder} />
+      </div>
+
+      <div className={styles.packages}>
+        {packages.map((packageData) => (
+          <PackageCard key={packageData.name} packageData={packageData} />
+        ))}
+      </div>
+
+      <Pagination
+        currentPage={page}
+        onPageChange={setPage}
+        pageSize={PER_PAGE}
+        siblingCount={2}
+        totalCount={327 /* TODO */}
+      />
     </div>
   );
 }

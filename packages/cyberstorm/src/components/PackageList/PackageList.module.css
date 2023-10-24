@@ -1,6 +1,31 @@
 .root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--32);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.packageCount {
+  color: var(--color-text--tertiary);
+  font-size: var(--font-size--m);
+}
+
+.order {
+  display: flex;
+  gap: var(--gap--16);
+  align-items: center;
+  color: var(--color-text--tertiary);
+  font-weight: 700;
+  font-size: var(--font-size--m);
+}
+
+.packages {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  gap: 1.5rem;
-  margin-bottom: var(--space--24);
+  gap: var(--gap--24);
 }
