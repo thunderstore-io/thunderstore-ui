@@ -31,6 +31,7 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
 
   const dapper = useDapper();
   const community = usePromise(dapper.getCommunity, [pkg.community]);
+  const filters = usePromise(dapper.getCommunityFilters, [pkg.community]);
 
   return (
     <BaseLayout
@@ -72,7 +73,10 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
         </div>
       }
       mainContent={
-        <PackageSearch communityId={pkg.community} packageCategories={[]} />
+        <PackageSearch
+          communityId={pkg.community}
+          packageCategories={filters.package_categories}
+        />
       }
     />
   );

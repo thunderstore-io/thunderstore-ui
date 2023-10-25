@@ -1,6 +1,10 @@
 import { DapperInterface } from "@thunderstore/dapper";
 
-import { getFakeCommunities, getFakeCommunity } from "./fakers/community";
+import {
+  getFakeCommunities,
+  getFakeCommunity,
+  getFakeCommunityFilters,
+} from "./fakers/community";
 import {
   getFakeDependencies,
   getFakePackage,
@@ -13,6 +17,7 @@ import { getFakeCurrentUser } from "./fakers/user";
 export class DapperFake implements DapperInterface {
   public getCommunities = getFakeCommunities;
   public getCommunity = getFakeCommunity;
+  public getCommunityFilters = getFakeCommunityFilters;
   public getCurrentUser = getFakeCurrentUser;
   public getPackage = getFakePackage;
   public getPackageDependencies = getFakeDependencies;

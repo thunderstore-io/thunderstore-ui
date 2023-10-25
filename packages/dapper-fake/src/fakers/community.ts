@@ -1,7 +1,13 @@
 import { faker } from "@faker-js/faker";
 import { GetCommunities } from "@thunderstore/dapper/types";
 
-import { getFakeImg, getIds, setSeed } from "./utils";
+import {
+  getFakeImg,
+  getFakePackageCategories,
+  getFakeSections,
+  getIds,
+  setSeed,
+} from "./utils";
 
 export const getFakeCommunity = async (communityId: string) => {
   setSeed(communityId);
@@ -66,5 +72,14 @@ export const getFakeCommunities: GetCommunities = async (
     count,
     hasMore: page > fullPages + 1,
     results: pageCommunities,
+  };
+};
+
+export const getFakeCommunityFilters = async (communityId: string) => {
+  setSeed(communityId);
+
+  return {
+    package_categories: getFakePackageCategories(11),
+    sections: getFakeSections(6),
   };
 };

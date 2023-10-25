@@ -42,6 +42,7 @@ export class DapperTs implements DapperTsInterface {
   public getTeamMembers = getTeamMembers;
   public getTeamServiceAccounts = getTeamServiceAccounts;
 
+  public getCommunityFilters = NotImplemented;
   public getPackage = NotImplemented;
   public getPackageDependencies = NotImplemented;
   public getPackageListings = NotImplemented;
