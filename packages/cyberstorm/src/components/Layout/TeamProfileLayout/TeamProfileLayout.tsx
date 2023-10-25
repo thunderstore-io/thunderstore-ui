@@ -52,6 +52,7 @@ export function TeamProfileLayout(props: Props) {
         <PackageSearch
           teamId={namespace}
           packageCategories={filters.package_categories}
+          sections={filters.sections}
         />
       }
     />

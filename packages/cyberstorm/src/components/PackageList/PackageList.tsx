@@ -17,6 +17,7 @@ interface Props {
   teamId?: string;
   searchQuery: string;
   categories: CategorySelection[];
+  section: string;
   deprecated: boolean;
   nsfw: boolean;
 }
@@ -33,7 +34,8 @@ const PER_PAGE = 20;
  * TODO: we also support only one searchQuery, so the Dapper method
  *       shouldn't expect an array of them.
  *
- * TODO: Add support for order, deprecated, and NSFW in the Dapper method.
+ * TODO: Add support for order, deprecated, NSFW, and section in the
+ *       Dapper method.
  */
 export function PackageList(props: Props) {
   const { communityId, namespaceId, searchQuery, teamId, userId } = props;

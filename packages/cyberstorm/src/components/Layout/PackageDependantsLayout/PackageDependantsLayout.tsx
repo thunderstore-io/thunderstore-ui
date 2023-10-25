@@ -76,6 +76,7 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
         <PackageSearch
           communityId={pkg.community}
           packageCategories={filters.package_categories}
+          sections={filters.sections}
         />
       }
     />
