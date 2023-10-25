@@ -89,10 +89,7 @@ export function CommunityProfileLayout(props: Props) {
         />
       }
       mainContent={
-        <PackageSearch
-          communityId={communityId}
-          packageCategories={community.package_categories}
-        />
+        <PackageSearch communityId={communityId} packageCategories={[]} />
       }
     />
   );

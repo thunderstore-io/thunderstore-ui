@@ -72,10 +72,7 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
         </div>
       }
       mainContent={
-        <PackageSearch
-          communityId={pkg.community}
-          packageCategories={community.package_categories}
-        />
+        <PackageSearch communityId={pkg.community} packageCategories={[]} />
       }
     />
   );
