@@ -74,36 +74,32 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
 
   const [currentTab, setCurrentTab] = useState(1);
 
-  const mappedPackageTagList = packageData.categories?.map(
-    (category, index) => {
-      return (
-        <Tag
-          colorScheme="borderless_no_hover"
-          size="mediumPlus"
-          key={index.toString()}
-          label={category.name.toUpperCase()}
-        />
-      );
-    }
-  );
-
-  const packageDetailsMeta = [];
-  if (packageData.author) {
-    packageDetailsMeta.push(
-      <TeamLink
-        key="team"
-        community={packageData.community}
-        team={packageData.team.name}
-      >
-        <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
-          <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faUsers} />
-          </Button.ButtonIcon>
-          <Button.ButtonLabel>{packageData.team.name}</Button.ButtonLabel>
-        </Button.Root>
-      </TeamLink>
+  const mappedPackageTagList = packageData.categories.map((category) => {
+    return (
+      <Tag
+        colorScheme="borderless_no_hover"
+        size="mediumPlus"
+        key={category.name}
+        label={category.name.toUpperCase()}
+      />
     );
-  }
+  });
+
+  const packageDetailsMeta = [
+    <TeamLink
+      key="team"
+      community={packageData.community}
+      team={packageData.namespace}
+    >
+      <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
+        <Button.ButtonIcon>
+          <FontAwesomeIcon icon={faUsers} />
+        </Button.ButtonIcon>
+        <Button.ButtonLabel>{packageData.namespace}</Button.ButtonLabel>
+      </Button.Root>
+    </TeamLink>,
+  ];
+
   if (packageData.gitHubLink) {
     packageDetailsMeta.push(
       <a key="github" href={packageData.gitHubLink}>
@@ -147,9 +143,9 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           Packages
           <TeamLink
             community={packageData.community}
-            team={packageData.team.name}
+            team={packageData.namespace}
           >
-            {packageData.team.name}
+            {packageData.namespace}
           </TeamLink>
           {packageData.name}
         </BreadCrumbs>
@@ -273,7 +269,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <PackageDependencyList namespace={namespace} community={community} />
           <PackageTeamMemberList
             community={packageData.community}
-            teamName={packageData.team.name}
+            teamName={packageData.namespace}
             teamMembers={packageData.team.members}
           />
         </div>
