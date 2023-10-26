@@ -27,13 +27,13 @@ export function HomeLayout() {
           <div className={styles.smallContent} />
           <div className={styles.cardContent}>
             {featuredPackages?.slice(0, 6).map((packageData) => (
-              <PackageCard key={packageData.name} packageData={packageData} />
+              <PackageCard key={packageData.name} package={packageData} />
             ))}
           </div>
           <div className={styles.mediumContent} />
           <div className={styles.cardContent}>
             {hotPackages?.slice(0, 6).map((packageData) => (
-              <PackageCard key={packageData.name} packageData={packageData} />
+              <PackageCard key={packageData.name} package={packageData} />
             ))}
           </div>
           <div className={styles.mediumContent} />

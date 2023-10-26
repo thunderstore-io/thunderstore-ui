@@ -15,28 +15,18 @@ import { PackagePreview } from "@thunderstore/dapper/types";
 import { PackageLink, UserLink } from "../Links/Links";
 import { faLips, faSparkles } from "@fortawesome/pro-solid-svg-icons";
 
-export interface PackageCardProps {
-  packageData: PackagePreview;
-  colorScheme?: "default";
-  community?: string;
+interface Props {
+  package: PackagePreview;
 }
 
 /**
  * Cyberstorm PackageCard component
  */
-export function PackageCard(props: PackageCardProps) {
-  const {
-    packageData,
-    colorScheme = "default",
-    community,
-    ...forwardedProps
-  } = props;
+export function PackageCard(props: Props) {
+  const { package: packageData } = props;
 
   return (
-    <div
-      className={classnames(styles.root, getStyle(colorScheme))}
-      {...forwardedProps}
-    >
+    <div className={classnames(styles.root, styles.packageCard__default)}>
       <div className={styles.imageWrapper}>
         <PackageLink
           namespace={packageData.namespace}
@@ -93,12 +83,6 @@ export function PackageCard(props: PackageCardProps) {
 }
 
 PackageCard.displayName = "PackageCard";
-
-const getStyle = (scheme: PackageCardProps["colorScheme"] = "default") => {
-  return {
-    default: styles.packageCard__default,
-  }[scheme];
-};
 
 function getPackageFlags(packageData: PackagePreview) {
   const updateTimeDelta = bankersRound(
