@@ -12,7 +12,7 @@ import {
 import { Tag } from "../Tag/Tag";
 import { bankersRound, classnames, formatInteger } from "../../utils/utils";
 import { PackagePreview } from "@thunderstore/dapper/types";
-import { PackageLink, UserLink } from "../Links/Links";
+import { PackageLink, TeamLink } from "../Links/Links";
 import { faLips, faSparkles } from "@fortawesome/pro-solid-svg-icons";
 
 interface Props {
@@ -29,9 +29,9 @@ export function PackageCard(props: Props) {
     <div className={classnames(styles.root, styles.packageCard__default)}>
       <div className={styles.imageWrapper}>
         <PackageLink
+          community={p.community}
           namespace={p.namespace}
           package={p.name}
-          community={p.community}
         >
           {p.imageSource ? (
             <img className={styles.image} src={p.imageSource} alt={p.name} />
@@ -42,21 +42,19 @@ export function PackageCard(props: Props) {
 
       <div className={styles.content}>
         <PackageLink
+          community={p.community}
           namespace={p.namespace}
           package={p.name}
-          community={p.community}
         >
           <div className={styles.title}>{p.name}</div>
         </PackageLink>
 
-        {p.author ? (
-          <div className={styles.author}>
-            <span className={styles.author_prefix}>by</span>
-            <UserLink user={p.author}>
-              <div className={styles.author_label}>{p.author}</div>
-            </UserLink>
-          </div>
-        ) : null}
+        <div className={styles.author}>
+          <span className={styles.author_prefix}>by</span>
+          <TeamLink community={p.community} team={p.namespace}>
+            <div className={styles.author_label}>{p.namespace}</div>
+          </TeamLink>
+        </div>
 
         {p.description ? (
           <p className={styles.description}>{p.description}</p>
