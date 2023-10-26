@@ -61,7 +61,7 @@ export function PackageCard(props: Props) {
         ) : null}
       </div>
 
-      {p.categories?.length > 0 ? (
+      {p.categories.length ? (
         <div className={styles.categoryWrapper}>
           {p.categories.map((c, index) => (
             <div key={`category_${c}_${index}`} className={styles.categoryTag}>
