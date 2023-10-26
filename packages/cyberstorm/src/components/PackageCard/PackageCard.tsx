@@ -23,53 +23,49 @@ interface Props {
  * Cyberstorm PackageCard component
  */
 export function PackageCard(props: Props) {
-  const { package: packageData } = props;
+  const { package: p } = props;
 
   return (
     <div className={classnames(styles.root, styles.packageCard__default)}>
       <div className={styles.imageWrapper}>
         <PackageLink
-          namespace={packageData.namespace}
-          package={packageData.name}
-          community={packageData.community}
+          namespace={p.namespace}
+          package={p.name}
+          community={p.community}
         >
-          {packageData.imageSource ? (
-            <img
-              className={styles.image}
-              src={packageData.imageSource}
-              alt={packageData.name}
-            />
+          {p.imageSource ? (
+            <img className={styles.image} src={p.imageSource} alt={p.name} />
           ) : null}
-          {getPackageFlags(packageData)}
+          {getPackageFlags(p)}
         </PackageLink>
       </div>
 
       <div className={styles.content}>
         <PackageLink
-          namespace={packageData.namespace}
-          package={packageData.name}
-          community={packageData.community}
+          namespace={p.namespace}
+          package={p.name}
+          community={p.community}
         >
-          <div className={styles.title}>{packageData.name}</div>
+          <div className={styles.title}>{p.name}</div>
         </PackageLink>
 
-        {packageData.author ? (
+        {p.author ? (
           <div className={styles.author}>
             <span className={styles.author_prefix}>by</span>
-            <UserLink user={packageData.author}>
-              <div className={styles.author_label}>{packageData.author}</div>
+            <UserLink user={p.author}>
+              <div className={styles.author_label}>{p.author}</div>
             </UserLink>
           </div>
         ) : null}
 
-        {packageData.description ? (
-          <p className={styles.description}>{packageData.description}</p>
+        {p.description ? (
+          <p className={styles.description}>{p.description}</p>
         ) : null}
       </div>
 
-      {packageData.categories?.length > 0 ? (
+      {p.categories?.length > 0 ? (
         <div className={styles.categoryWrapper}>
-          {packageData.categories.map((c, index) => (
+          {p.categories.map((c, index) => (
             <div key={`category_${c}_${index}`} className={styles.categoryTag}>
               {c.name}
             </div>
@@ -77,7 +73,7 @@ export function PackageCard(props: Props) {
         </div>
       ) : null}
 
-      <div className={styles.footer}>{getMetaItemList(packageData)}</div>
+      <div className={styles.footer}>{getMetaItemList(p)}</div>
     </div>
   );
 }
