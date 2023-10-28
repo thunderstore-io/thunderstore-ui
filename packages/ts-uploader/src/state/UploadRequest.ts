@@ -75,7 +75,7 @@ export class UploadRequest {
         this._ongoingRequest = request;
         const resp = await response;
         if (!resp.ok) {
-          console.error(
+          throw new Error(
             `Upload failed due to non-success status code: ${resp.status}`
           );
         }

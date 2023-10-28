@@ -55,3 +55,30 @@ This library should:
 
 - `yarn run build`: Builds the project
 - `yarn run dev`: Builds the project & watches files for changes, triggering a rebuild
+
+
+### Testing
+
+The test suite expects a Thunderstore backend environment to be running and
+access to it configured.
+
+Make sure the following conditions are filled:
+
+1. The `TS_API_DOMAIN` environment variable points to a Thunderstore instance.
+2. The `TS_API_AUTHORIZATION` environment variable is a valid `Authorization`
+header value on the Thunderstore instance the `TS_API_DOMAIN` points to.
+3. The DNS names of the configured environment _and_ storage backend are
+accessible by node. This might not be the case by default, as the backend dev
+environment setup instructions assume the browser to handle localhost subdomains
+rather than instructing system-wide configuration for them.
+
+If using the local backend dev environment, you will most likely need to
+configure local DNS rules that map `thunderstore.localhost` to `127.0.0.1` and
+then set `http://thunderstore.localhost` as your `TS_API_DOMAIN` value.
+
+Additionally, for some reason jsdom XMLHttpRequest will fail to make proper
+requests to the `localhost:9000` domain (which is what the backend dev env will
+use by default for s3 pre-signed URL generation), so you might need to change
+the `USERMEDIA_S3_SIGNING_ENDPOINT_URL` to e.g.
+`http://thunderstore.localhost:9000/` or something else which is accessible by
+jsdom.
