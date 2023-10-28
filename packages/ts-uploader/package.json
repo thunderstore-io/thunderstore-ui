@@ -13,6 +13,10 @@
     "build": "tsc",
     "dev": "tsc --watch"
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "crypto-js": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.3"
+  }
 }

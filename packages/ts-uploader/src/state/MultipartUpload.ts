@@ -1,6 +1,12 @@
-import { UserMedia } from "../client/types";
+import { CompletedPart, UserMedia } from "../client/types";
 import { UsermediaEndpoints } from "../client/endpoints";
 import { ApiConfig } from "../client/config";
+import {
+  UploadProgress,
+  UploadRequest,
+  UploadRequestConfig,
+} from "./UploadRequest";
+import { calculateMD5 } from "../md5";
 
 export type MultiPartUploadOptions = {
   api: ApiConfig;
@@ -21,6 +27,26 @@ function slicePart(file: File, offset: number, length: number) {
   const start = offset;
   const end = offset + length;
   return end < file.size ? file.slice(start, end) : file.slice(start);
+}
+
+async function createUploadRequest(
+  part: UploadPart,
+  onComplete: UploadRequestConfig["onComplete"],
+  onProgress?: UploadRequestConfig["onProgress"]
+): Promise<UploadRequest> {
+  // TODO: Async md5 calculation via either wasm or workers
+  const md5 = await calculateMD5(part.payload);
+  return new UploadRequest(
+    {
+      data: part.payload,
+      md5: md5,
+    },
+    {
+      url: part.meta.url,
+      onProgress,
+      onComplete,
+    }
+  );
 }
 
 export async function initMultipartUpload(
@@ -53,6 +79,13 @@ class UploadHandle {
   readonly opts: MultiPartUploadOptions;
   readonly parts: UploadPart[];
 
+  private requests?: UploadRequest[];
+
+  // TODO: Remove and derive from UploadRequest instead. We should not hold
+  //       multiple different handles to the same concept as that increases the
+  //       chance of state management bugs.
+  private completedParts: CompletedPart[];
+
   constructor(
     handle: UserMedia,
     opts: MultiPartUploadOptions,
@@ -61,5 +94,80 @@ class UploadHandle {
     this.handle = handle;
     this.opts = opts;
     this.parts = parts;
+    this.completedParts = [];
+  }
+
+  get progress(): UploadProgress {
+    return (this.requests || []).reduce(
+      (state, request) => {
+        return {
+          total: state.total + request.progress.total,
+          complete: state.complete + request.progress.complete,
+        };
+      },
+      {
+        total: 0,
+        complete: 0,
+      }
+    );
+  }
+
+  private onPartFinished(
+    request: UploadRequest,
+    part: UploadPart,
+    response: Response
+  ) {
+    if (!response.ok) {
+      console.error(
+        `Uploading part ${part.meta.part_number} failed, retrying...`
+      );
+      request.retry();
+    }
+    const etag = response.headers.get("etag");
+    if (!etag) {
+      // ETag is filtered out by some browser extensions
+      // TODO: Handle somehow
+      throw new Error("ETag header was missing from the response!");
+    }
+    this.completedParts.push({
+      ETag: etag,
+      PartNumber: part.meta.part_number,
+    });
+
+    // This is a bad way to do state management. TODO: Improve
+    if (this.completedParts.length == this.parts.length) {
+      this.finishUpload();
+    }
+  }
+
+  finishUpload() {
+    return UsermediaEndpoints.finish(this.opts.api, {
+      data: { parts: this.completedParts },
+      uuid: this.handle.uuid,
+    });
+  }
+
+  async startUpload(onProgress?: (progress: UploadProgress) => any) {
+    if (this.requests != undefined) {
+      throw new Error("Upload already initiated!");
+    }
+
+    const progressCallback = () => {
+      if (onProgress) onProgress(this.progress);
+    };
+
+    this.requests = [];
+    this.completedParts = [];
+    for (let part of this.parts) {
+      const request = await createUploadRequest(
+        part,
+        (request, resp) => {
+          this.onPartFinished(request, part, resp);
+        },
+        progressCallback
+      );
+      this.requests.push(request);
+      request.upload();
+    }
   }
 }
