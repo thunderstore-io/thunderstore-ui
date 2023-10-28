@@ -31,7 +31,6 @@ function slicePart(file: File, offset: number, length: number) {
 
 async function createUploadRequest(
   part: UploadPart,
-  onComplete: UploadRequestConfig["onComplete"],
   onProgress?: UploadRequestConfig["onProgress"]
 ): Promise<UploadRequest> {
   // TODO: Async md5 calculation via either wasm or workers
@@ -44,7 +43,6 @@ async function createUploadRequest(
     {
       url: part.meta.url,
       onProgress,
-      onComplete,
     }
   );
 }
@@ -81,11 +79,6 @@ class UploadHandle {
 
   private requests?: UploadRequest[];
 
-  // TODO: Remove and derive from UploadRequest instead. We should not hold
-  //       multiple different handles to the same concept as that increases the
-  //       chance of state management bugs.
-  private completedParts: CompletedPart[];
-
   constructor(
     handle: UserMedia,
     opts: MultiPartUploadOptions,
@@ -94,7 +87,6 @@ class UploadHandle {
     this.handle = handle;
     this.opts = opts;
     this.parts = parts;
-    this.completedParts = [];
   }
 
   get progress(): UploadProgress {
@@ -112,41 +104,6 @@ class UploadHandle {
     );
   }
 
-  private onPartFinished(
-    request: UploadRequest,
-    part: UploadPart,
-    response: Response
-  ) {
-    if (!response.ok) {
-      console.error(
-        `Uploading part ${part.meta.part_number} failed, retrying...`
-      );
-      request.retry();
-    }
-    const etag = response.headers.get("etag");
-    if (!etag) {
-      // ETag is filtered out by some browser extensions
-      // TODO: Handle somehow
-      throw new Error("ETag header was missing from the response!");
-    }
-    this.completedParts.push({
-      ETag: etag,
-      PartNumber: part.meta.part_number,
-    });
-
-    // This is a bad way to do state management. TODO: Improve
-    if (this.completedParts.length == this.parts.length) {
-      this.finishUpload();
-    }
-  }
-
-  finishUpload() {
-    return UsermediaEndpoints.finish(this.opts.api, {
-      data: { parts: this.completedParts },
-      uuid: this.handle.uuid,
-    });
-  }
-
   async startUpload(onProgress?: (progress: UploadProgress) => any) {
     if (this.requests != undefined) {
       throw new Error("Upload already initiated!");
@@ -157,17 +114,32 @@ class UploadHandle {
     };
 
     this.requests = [];
-    this.completedParts = [];
+
+    const promises = [];
     for (let part of this.parts) {
-      const request = await createUploadRequest(
-        part,
-        (request, resp) => {
-          this.onPartFinished(request, part, resp);
-        },
-        progressCallback
-      );
+      const request = await createUploadRequest(part, progressCallback);
       this.requests.push(request);
-      request.upload();
+      promises.push(
+        request.upload((response) => {
+          const etag = response.headers.get("etag");
+          if (!etag) {
+            // ETag is filtered out by some browser extensions
+            // TODO: Handle somehow better
+            throw new Error("ETag header was missing from the response!");
+          }
+          const result: CompletedPart = {
+            ETag: etag,
+            PartNumber: part.meta.part_number,
+          };
+          return result;
+        })
+      );
     }
+
+    const parts = await Promise.all(promises);
+    return UsermediaEndpoints.finish(this.opts.api, {
+      data: { parts },
+      uuid: this.handle.uuid,
+    });
   }
 }
