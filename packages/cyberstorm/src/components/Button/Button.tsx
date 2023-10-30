@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from "react";
 import styles from "./Button.module.css";
+import { Tooltip } from "../Tooltip/Tooltip";
 
 export interface ButtonProps {
   children?: ReactNode | ReactNode[];
@@ -39,11 +40,25 @@ export interface ButtonProps {
   onMouseOut?: MouseEventHandler<HTMLElement>;
   style?: { [key: string]: string };
   type?: "button" | "submit" | "reset";
+  tooltipText?: string;
+}
+
+const TooltipWrapper = (props: TooltipWrapperProps) =>
+  props.tooltipText ? (
+    <Tooltip content={props.tooltipText} side="bottom">
+      {props.children}
+    </Tooltip>
+  ) : (
+    <>{props.children}</>
+  );
+interface TooltipWrapperProps extends PropsWithChildren {
+  tooltipText?: string;
 }
 
 /**
  * Cyberstorm Button component
  */
+
 const Button = React.forwardRef<
   HTMLButtonElement | HTMLDivElement,
   ButtonProps
@@ -51,11 +66,12 @@ const Button = React.forwardRef<
   const {
     children,
     plain = false,
-    type = "button",
+    type,
     colorScheme = "default",
     onClick,
     paddingSize = "medium",
     iconAlignment = "default",
+    tooltipText,
     ...forwardedProps
   } = props;
 
@@ -65,31 +81,35 @@ const Button = React.forwardRef<
     const fRef = forwardedRef as React.ForwardedRef<HTMLDivElement>;
     const ref = fRef || fallbackRef;
     return (
-      <div
-        {...forwardedProps}
-        ref={ref}
-        className={`${styles.root} ${getIconAlignment(
-          iconAlignment
-        )} ${getStyle(colorScheme)} ${getPaddingSize(paddingSize)}`}
-      >
-        {children}
-      </div>
+      <TooltipWrapper tooltipText={tooltipText}>
+        <div
+          {...forwardedProps}
+          ref={ref}
+          className={`${styles.root} ${getIconAlignment(
+            iconAlignment
+          )} ${getStyle(colorScheme)} ${getPaddingSize(paddingSize)}`}
+        >
+          {children}
+        </div>
+      </TooltipWrapper>
     );
   } else {
     const fRef = forwardedRef as React.ForwardedRef<HTMLButtonElement>;
     const ref = fRef || fallbackRef;
     return (
-      <button
-        {...forwardedProps}
-        ref={ref}
-        type={type}
-        className={`${styles.root} ${getIconAlignment(
-          iconAlignment
-        )} ${getStyle(colorScheme)} ${getPaddingSize(paddingSize)}`}
-        onClick={onClick}
-      >
-        {children}
-      </button>
+      <TooltipWrapper tooltipText={tooltipText}>
+        <button
+          {...forwardedProps}
+          ref={ref}
+          type={type}
+          className={`${styles.root} ${getIconAlignment(
+            iconAlignment
+          )} ${getStyle(colorScheme)} ${getPaddingSize(paddingSize)}`}
+          onClick={onClick}
+        >
+          {children}
+        </button>
+      </TooltipWrapper>
     );
   }
 });

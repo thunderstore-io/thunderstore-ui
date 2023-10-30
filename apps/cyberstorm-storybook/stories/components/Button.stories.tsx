@@ -11,7 +11,7 @@ const meta = {
 
 const defaultArgs = {};
 
-const Template: StoryFn<typeof Button> = (args) => (
+const Template: StoryFn<typeof Button.Root> = (args) => (
   <div
     style={{
       width: "12rem",
@@ -22,6 +22,14 @@ const Template: StoryFn<typeof Button> = (args) => (
   >
     <Button.Root colorScheme="default" {...args}>
       <Button.ButtonLabel>default</Button.ButtonLabel>
+      <Button.ButtonIcon>
+        <Icon>
+          <FontAwesomeIcon icon={faChevronDown} />
+        </Icon>
+      </Button.ButtonIcon>
+    </Button.Root>
+    <Button.Root colorScheme="default" tooltipText="tooltip text" {...args}>
+      <Button.ButtonLabel>tooltipDefault</Button.ButtonLabel>
       <Button.ButtonIcon>
         <Icon>
           <FontAwesomeIcon icon={faChevronDown} />

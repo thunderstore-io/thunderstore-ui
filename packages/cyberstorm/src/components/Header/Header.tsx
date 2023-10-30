@@ -6,7 +6,6 @@ import styles from "./Header.module.css";
 import { DevelopersDropDown } from "./DevelopersDropDown";
 import * as Button from "../Button/";
 import { CommunitiesLink, IndexLink, PackageUploadLink } from "../Links/Links";
-import { Tooltip } from "../Tooltip/Tooltip";
 import { ThunderstoreLogo } from "../../svg/svg";
 import { UserDropDown } from "./UserDropDown";
 import { Icon } from "../Icon/Icon";
@@ -75,18 +74,17 @@ export function Header() {
           </li>
           <li>
             <PackageUploadLink>
-              <Tooltip content="Upload" side="bottom">
-                <Button.Root
-                  paddingSize="mediumSquare"
-                  colorScheme="transparentAccent"
-                >
-                  <Button.ButtonIcon>
-                    <Icon>
-                      <FontAwesomeIcon icon={faUpload} />
-                    </Icon>
-                  </Button.ButtonIcon>
-                </Button.Root>
-              </Tooltip>
+              <Button.Root
+                paddingSize="mediumSquare"
+                colorScheme="transparentAccent"
+                tooltipText="Upload"
+              >
+                <Button.ButtonIcon>
+                  <Icon>
+                    <FontAwesomeIcon icon={faUpload} />
+                  </Icon>
+                </Button.ButtonIcon>
+              </Button.Root>
             </PackageUploadLink>
           </li>
           <li>

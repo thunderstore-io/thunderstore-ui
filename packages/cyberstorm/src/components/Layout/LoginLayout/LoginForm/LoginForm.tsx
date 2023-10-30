@@ -86,7 +86,12 @@ export function LoginForm() {
               </Button.Root>
             </div>
             <div className={styles.continueButton}>
-              <Button.Root colorScheme="overwolf" paddingSize="large">
+              <Button.Root
+                colorScheme="overwolf"
+                paddingSize="large"
+                tooltipText="
+Login with Overwolf"
+              >
                 <Button.ButtonIcon>
                   <Icon>
                     <OverwolfLogo />

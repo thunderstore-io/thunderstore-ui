@@ -42,7 +42,6 @@ import { Package } from "@thunderstore/dapper/types";
 import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
 import { ThunderstoreLogo } from "../../../svg/svg";
-import { Tooltip } from "../../Tooltip/Tooltip";
 import { usePromise } from "@thunderstore/use-promise";
 import { Icon } from "../../Icon/Icon";
 
@@ -198,33 +197,39 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
                 <Button.ButtonLabel>Download</Button.ButtonLabel>
               </Button.Root>
             </a>
-            <Tooltip content="Donate to author" side="bottom">
-              <Button.Root colorScheme="primary" paddingSize="mediumSquare">
-                <Button.ButtonIcon>
-                  <Icon>
-                    <FontAwesomeIcon icon={faDonate} />
-                  </Icon>
-                </Button.ButtonIcon>
-              </Button.Root>
-            </Tooltip>
-            <Tooltip content="Like" side="bottom">
-              <Button.Root colorScheme="primary" paddingSize="mediumSquare">
-                <Button.ButtonIcon>
-                  <Icon>
-                    <FontAwesomeIcon icon={faThumbsUp} />
-                  </Icon>
-                </Button.ButtonIcon>
-              </Button.Root>
-            </Tooltip>
-            <Tooltip content="Report" side="bottom">
-              <Button.Root colorScheme="primary" paddingSize="mediumSquare">
-                <Button.ButtonIcon>
-                  <Icon>
-                    <FontAwesomeIcon icon={faFlag} />
-                  </Icon>
-                </Button.ButtonIcon>
-              </Button.Root>
-            </Tooltip>
+            <Button.Root
+              tooltipText="Donate to author"
+              colorScheme="primary"
+              paddingSize="mediumSquare"
+            >
+              <Button.ButtonIcon>
+                <Icon>
+                  <FontAwesomeIcon icon={faDonate} />
+                </Icon>
+              </Button.ButtonIcon>
+            </Button.Root>
+            <Button.Root
+              tooltipText="Like"
+              colorScheme="primary"
+              paddingSize="mediumSquare"
+            >
+              <Button.ButtonIcon>
+                <Icon>
+                  <FontAwesomeIcon icon={faThumbsUp} />
+                </Icon>
+              </Button.ButtonIcon>
+            </Button.Root>
+            <Button.Root
+              tooltipText="Report"
+              colorScheme="primary"
+              paddingSize="mediumSquare"
+            >
+              <Button.ButtonIcon>
+                <Icon>
+                  <FontAwesomeIcon icon={faFlag} />
+                </Icon>
+              </Button.ButtonIcon>
+            </Button.Root>
           </div>
           <MetaInfoItemList metaInfoData={metaInfoData} />
           <PackageTagList tags={packageData.categories} />
