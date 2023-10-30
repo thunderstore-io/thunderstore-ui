@@ -42,5 +42,5 @@
 .searchFiltersSortLabel {
   align-self: center;
   color: var(--color-text--tertiary);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
 }

@@ -7,12 +7,12 @@
 
 .title {
   margin-bottom: var(--space--24);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--xxl);
   line-height: var(--line-height--xxl);
 }
 
 .installButtonIcon {
-  font-weight: 900;
+  font-weight: var(--font-weight-heavy);
   font-size: 0.875rem;
 }

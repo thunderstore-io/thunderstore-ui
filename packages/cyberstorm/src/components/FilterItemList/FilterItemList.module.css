@@ -11,7 +11,7 @@
   padding: 0 var(--space--8);
   color: var(--text-primary);
 
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: 0.875rem;
   font-style: normal;
   line-height: normal;

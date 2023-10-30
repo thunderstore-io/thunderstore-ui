@@ -20,7 +20,7 @@
 
 .label {
   margin-bottom: var(--space--8);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--l);
   line-height: var(--line-height--l);
 }
@@ -31,7 +31,7 @@
   gap: var(--gap--8);
   padding: var(--space--8) 0;
   color: var(--color-text--tertiary);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size--m);
   line-height: var(--line-height--m);
   text-align: center;

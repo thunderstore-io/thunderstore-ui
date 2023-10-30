@@ -76,7 +76,7 @@
 
 .dropdownUserInfoDetails_userName {
   color: var(--color-text--default);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--m);
   line-height: 1;
 }

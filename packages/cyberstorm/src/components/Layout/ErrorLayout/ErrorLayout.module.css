@@ -11,12 +11,12 @@
 
 .description {
   color: var(--color-text--accent);
-  font-weight: 600;
+  font-weight: var(--font-weight-bolder);
   line-height: 1;
 }
 
 .flavor {
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--space--32);
   line-height: 1;
   text-align: center;
@@ -26,7 +26,7 @@
   position: relative;
   margin-top: var(--space--32);
   margin-bottom: var(--space--48);
-  font-weight: 900;
+  font-weight: var(--font-weight-heavy);
   font-size: 12rem;
   line-height: 1;
 }
@@ -389,7 +389,7 @@
 
   20% {
     color: #fff;
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
   }
 
   50% {
@@ -399,12 +399,12 @@
 
   60% {
     color: #fff;
-    font-weight: 700;
+    font-weight: var(--font-weight-bold);
   }
 
   90% {
     color: var(--glitch-color-1);
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
   }
 }
 

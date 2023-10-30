@@ -53,7 +53,7 @@
 }
 
 .title {
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: 1.25rem;
   line-height: 1;
 }
@@ -79,5 +79,5 @@
 .closeIcon {
   display: flex;
   color: var(--color-border--highlight);
-  font-weight: 900;
+  font-weight: var(--font-weight-heavy);
 }

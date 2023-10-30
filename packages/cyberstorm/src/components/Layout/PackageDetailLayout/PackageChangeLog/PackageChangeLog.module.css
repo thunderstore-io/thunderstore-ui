@@ -7,7 +7,7 @@
 
 .title {
   margin-bottom: var(--space--24);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--xxl);
   line-height: var(--line-height--xxl);
 }
@@ -45,7 +45,7 @@
 .versionNumber {
   display: flex;
   gap: var(--gap--8);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--l);
   line-height: var(--line-height--l);
 }

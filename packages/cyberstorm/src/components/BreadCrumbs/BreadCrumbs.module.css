@@ -58,7 +58,7 @@
 .inner {
   gap: var(--space--14);
   align-items: center;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size--s);
   line-height: normal;
 
@@ -82,6 +82,6 @@
 }
 
 .home {
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
   text-decoration: none;
 }

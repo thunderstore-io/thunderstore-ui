@@ -6,7 +6,7 @@
 
   padding: var(--space--8) var(--space--12);
   color: var(--text-color);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--m);
   line-height: normal;
   background-color: var(--color-surface--4);

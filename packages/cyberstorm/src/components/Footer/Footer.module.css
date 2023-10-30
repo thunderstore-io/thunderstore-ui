@@ -57,7 +57,7 @@
 
 .footnote {
   color: var(--color-text--tertiary);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size--s);
   line-height: var(--line-height--s);
   padding-block: var(--space--32);
@@ -104,7 +104,7 @@
   flex-direction: column;
   gap: var(--gap--8);
   color: var(--color-text--accent);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size--m);
   line-height: var(--line-height--m);
   list-style-type: none;
@@ -115,9 +115,9 @@
 }
 
 .navTitle {
-  font-weight: 700;
-  font-size: 1.125rem;
-  line-height: 1;
+  font: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.6;
 }
 
 .ad {
@@ -137,14 +137,14 @@
 
 .adTitle {
   font: var(--font-heading);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: 2.375rem;
-  line-height: 1;
+  line-height: 1.2;
 }
 
 .adDescription {
   color: var(--color-text--accent);
-  font-weight: 600;
+  font-weight: var(--font-weight-bolder);
   font-size: var(--font-size--xl);
   line-height: var(--line-height--xl);
 }
@@ -169,7 +169,7 @@
 
 .logo > svg {
   width: auto;
-  height: 32px;
+  height: 2rem;
   fill: var(--color-white);
 }
 
@@ -191,7 +191,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 2.5rem;
+  height: 2rem;
   border-radius: var(--border-radius--8);
 }
 

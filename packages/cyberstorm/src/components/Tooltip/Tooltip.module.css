@@ -6,7 +6,7 @@
   border-radius: var(--border-radius--8);
   color: var(--color-text--default);
 
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--m);
   line-height: normal;
   overflow-wrap: break-word;

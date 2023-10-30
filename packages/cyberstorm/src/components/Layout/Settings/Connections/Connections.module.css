@@ -56,7 +56,7 @@
 
 .connectionTypeInfoName {
   color: var(--color-text--default);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--l);
   line-height: 1;
 }
@@ -77,14 +77,14 @@
 
 .connectedAsDescription {
   color: var(--color-text--tertiary);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size--m);
   line-height: 1;
 }
 
 .connectedAsUsername {
   color: var(--color-text--default);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--m);
   line-height: normal;
 }

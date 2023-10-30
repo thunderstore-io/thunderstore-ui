@@ -10,14 +10,14 @@
 }
 
 .title {
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--l);
   line-height: var(--line-height--l);
 }
 
 .description {
   color: var(--color-text--tertiary);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size--m);
   line-height: var(--line-height--m);
 }
@@ -37,14 +37,14 @@
 .preferredVersion {
   padding-top: var(--space--6);
   color: var(--color-text--accent);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size--s);
   line-height: var(--line-height--s);
 }
 
 .preferredVersion__version {
   color: var(--color-highlight);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size--s);
   line-height: var(--line-height--s);
 }
