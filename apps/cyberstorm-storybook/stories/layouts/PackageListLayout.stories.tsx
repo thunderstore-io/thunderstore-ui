@@ -8,7 +8,7 @@ const meta = {
 } as Meta<typeof CommunityProfileLayout>;
 
 const Template: StoryFn<typeof CommunityProfileLayout> = () => (
-  <CommunityProfileLayout communityId="riskofrain2" />
+  <CommunityProfileLayout communityId="foobar" />
 );
 const CommunityProfile = Template.bind({});
 

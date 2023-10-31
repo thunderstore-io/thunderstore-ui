@@ -93,6 +93,7 @@ export function CommunityProfileLayout(props: Props) {
         <PackageSearch
           communityId={communityId}
           packageCategories={filters.package_categories}
+          sections={filters.sections}
         />
       }
     />

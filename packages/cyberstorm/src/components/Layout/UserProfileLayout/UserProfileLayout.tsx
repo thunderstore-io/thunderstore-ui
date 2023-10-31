@@ -28,7 +28,9 @@ export function UserProfileLayout(props: Props) {
           Mods uploaded by <UserLink user={userId}>{userId}</UserLink>
         </div>
       }
-      mainContent={<PackageSearch userId={userId} packageCategories={[]} />}
+      mainContent={
+        <PackageSearch userId={userId} packageCategories={[]} sections={[]} />
+      }
     />
   );
 }
