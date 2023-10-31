@@ -3,7 +3,7 @@ import { SettingItem } from "../../../SettingItem/SettingItem";
 import * as Button from "../../../Button/";
 import { TextInput } from "../../../TextInput/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faWarning } from "@fortawesome/pro-solid-svg-icons";
+import { faTrashCan, faWarning } from "@fortawesome/pro-solid-svg-icons";
 import { Alert } from "../../../Alert/Alert";
 import { Icon } from "../../../Icon/Icon";
 
@@ -56,7 +56,7 @@ export function Account(props: AccountProps) {
                 <Button.Root colorScheme="danger" paddingSize="large">
                   <Button.ButtonIcon>
                     <Icon>
-                      <FontAwesomeIcon icon={faTrash} />
+                      <FontAwesomeIcon icon={faTrashCan} />
                     </Icon>
                   </Button.ButtonIcon>
                   <Button.ButtonLabel>

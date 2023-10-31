@@ -27,12 +27,13 @@
   display: flex;
   flex-basis: 354px;
   flex-direction: column;
-  gap: var(--gap--16);
   align-items: flex-end;
-  align-self: flex-end;
+  justify-content: space-between;
 }
 
 .installButton {
+  position: relative;
+  bottom: -1rem;
   width: 354px;
 }
 
@@ -101,4 +102,12 @@
 
 .tabIcon {
   line-height: normal;
+}
+
+.modImage {
+  min-width: 9rem;
+  max-width: 9rem;
+  min-height: 9rem;
+  max-height: 9rem;
+  border-radius: var(--border-radius--8);
 }

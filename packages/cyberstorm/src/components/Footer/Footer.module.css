@@ -1,12 +1,13 @@
 .root {
   width: 100%;
 
-  --border: var(--space--px) solid var(--color-surface--3);
+  --border: var(--space--px) solid #27275d;
 }
 
 .main {
   display: flex;
   flex-direction: column;
+  background: linear-gradient(163deg, rgb(16 16 40) 60%, rgb(94 29 137 / 0.52) 82.71%, #d8acf4 147.31%);
 }
 
 .section {
@@ -25,24 +26,9 @@
   order: -1;
 }
 
-.extra::before {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  height: 100%;
-  max-height: 16rem;
-  background-image: linear-gradient(170deg, rgb(94 29 137 / 0) 60%, rgb(70 49 84 / 1) 120%);
-  background-repeat: no-repeat;
-  background-position: 100% 100%;
-  content: "\0020";
-  aspect-ratio: 6/1;
-}
-
 .inner {
   display: flex;
   flex: 1;
-  padding-inline: var(--space--24);
   padding-block: var(--space--32);
   width: 100%;
 }
@@ -90,7 +76,6 @@
   flex: 1;
   grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
   column-gap: var(--space--32);
-  row-gap: var(--space--48);
 }
 
 .navSection {
@@ -133,6 +118,7 @@
   flex: 1;
   flex-direction: column;
   gap: var(--space--16);
+  padding-bottom: 1rem;
 }
 
 .adTitle {
@@ -151,12 +137,12 @@
 
 .adButton {
   display: flex;
-  width: 11em;
+  width: 10em;
 }
 
 .img {
   position: relative;
-  max-width: 45rem;
+  max-width: 41rem;
   aspect-ratio: 2.5/1;
   object-fit: cover;
   object-position: left top;
@@ -227,7 +213,7 @@
   }
 
   .inner {
-    flex: 0 1 40rem;
+    flex: 0 1 45rem;
     padding-block: 4.5rem;
   }
 
@@ -247,7 +233,8 @@
   }
 
   .adWrapper .inner {
+    padding-top: 5rem;
     padding-bottom: 0;
-    padding-left: 3.5rem;
+    padding-left: 5rem;
   }
 }

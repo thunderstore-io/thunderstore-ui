@@ -1,8 +1,8 @@
 .root {
   color: var(--color-text--default);
   font: var(--font-heading);
-  font-weight: var(--font-weight-boldest);
-  font-size: 3rem;
-  line-height: 1.15;
+  font-weight: var(--font-weight-heavy);
+  font-size: 3.188rem;
+  line-height: 0.9;
   overflow-wrap: anywhere;
 }

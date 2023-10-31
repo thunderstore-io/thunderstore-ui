@@ -2,8 +2,6 @@
   display: flex;
   flex-direction: row;
   gap: var(--space--32);
-  margin: var(--space--16) 0;
-  padding: 0 0 var(--space--32) 0;
 }
 
 .info {

@@ -9,7 +9,6 @@ import {
 } from "../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Button from "../../Button/";
-import { ModIcon } from "../../ModIcon/ModIcon";
 import { Title } from "../../Title/Title";
 import { Dialog } from "../../Dialog/Dialog";
 import { PackageManagementForm } from "./PackageManagementForm/PackageManagementForm";
@@ -19,10 +18,10 @@ import {
   faDonate,
   faDownload,
   faCog,
-  faUsers,
   faThumbsUp,
   faFlag,
 } from "@fortawesome/pro-solid-svg-icons";
+import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
 import { CopyButton } from "../../CopyButton/CopyButton";
 import { formatInteger } from "../../../utils/utils";
@@ -129,7 +128,13 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
         <div className={styles.packageInfo}>
           <PageHeader
             title={packageData.name}
-            image={<ModIcon src={packageData.imageSource} />}
+            image={
+              <img
+                className={styles.modImage}
+                alt={packageData.name}
+                src={packageData.imageSource}
+              />
+            }
             description={packageData.shortDescription}
             meta={packageDetailsMeta}
           />
@@ -156,10 +161,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
                 )
               }
               trigger={
-                <Button.Root
-                  colorScheme="transparentDefault"
-                  paddingSize="large"
-                >
+                <Button.Root colorScheme="primary" paddingSize="medium">
                   <Button.ButtonIcon>
                     <Icon>
                       <FontAwesomeIcon icon={faCog} />
