@@ -30,7 +30,7 @@
   border-top: 1px solid var(--surface-7, #333370);
   border-radius: 0 0 0.5rem 0.5rem;
   color: #c6c3ff;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: 0.875rem;
   background: #0d0d21;
 }

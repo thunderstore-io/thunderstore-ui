@@ -28,10 +28,10 @@
 
 .link__thin {
   --font-size: var(--font-size--m);
-  --font-weight: 400;
+  --font-weight: var(--font-weight-regular);
 }
 
 .link__bold {
   --font-size: var(--font-size--m);
-  --font-weight: 700;
+  --font-weight: var(--font-weight-bold);
 }

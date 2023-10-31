@@ -353,13 +353,13 @@
 }
 
 .ButtonLabel__fontWeight__600 {
-  --font-weight: 600;
+  --font-weight: var(--font-weight-bold);
 }
 
 .ButtonLabel__fontWeight__700 {
-  --font-weight: 700;
+  --font-weight: var(--font-weight-boldest);
 }
 
 .ButtonLabel__fontWeight__800 {
-  --font-weight: 800;
+  --font-weight: var(--font-weight-heavy);
 }

@@ -35,7 +35,7 @@
 }
 
 .code {
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-family: var(--font-mono);
 }
 
@@ -61,7 +61,7 @@
 
 .card h2 {
   margin-bottom: 0.7rem;
-  font-weight: 600;
+  font-weight: var(--font-weight-bolder);
 }
 
 .card p {

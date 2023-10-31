@@ -16,7 +16,7 @@
 /* Styles for Alert's text */
 .content {
   color: var(--text-color);
-  font-weight: 500;
+  font-weight: var(--font-weight-regular);
   font-size: var(--font-size--m);
   line-height: var(--line-height--m);
 }

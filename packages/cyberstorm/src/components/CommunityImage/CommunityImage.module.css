@@ -4,8 +4,8 @@
 }
 
 .image {
-  min-width: 8.875rem;
-  min-height: 11.75rem;
+  width: 9rem;
+  height: 12rem;
   border-radius: var(--border-radius--8);
 
   object-fit: cover;

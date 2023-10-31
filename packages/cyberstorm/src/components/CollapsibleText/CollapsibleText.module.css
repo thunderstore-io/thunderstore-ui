@@ -24,7 +24,7 @@
 
 .show {
   color: var(--color-text--accent);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: 0.875rem;
   line-height: normal;
   background-color: transparent;

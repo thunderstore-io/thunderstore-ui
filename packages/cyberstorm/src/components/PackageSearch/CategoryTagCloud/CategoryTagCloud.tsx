@@ -34,30 +34,31 @@ export const CategoryTagCloud = (props: Props) => {
     setCategories(categories.map((c) => ({ ...c, selection: OFF })));
 
   return (
-    <ol className={styles.root}>
+    <div className={styles.root}>
       {visible.map((c) => (
-        <li key={c.slug} className={`${styles.tag} ${styles[c.selection]}`}>
-          <span>{c.name}</span>
-          <Button.Root
-            onClick={() => clearCategory(c.slug)}
-            colorScheme="transparentDefault"
-            paddingSize="none"
-          >
-            <Button.ButtonIcon>
-              <Icon>
-                <FontAwesomeIcon icon={faXmark} className={styles.icon} />
-              </Icon>
-            </Button.ButtonIcon>
-          </Button.Root>
-        </li>
-      ))}
-
-      <li className={styles.clearAll}>
-        <Button.Root onClick={clearAll} colorScheme="transparentTertiary">
-          <Button.ButtonLabel>Clear all</Button.ButtonLabel>
+        <Button.Root
+          key={c.slug}
+          onClick={() => clearCategory(c.slug)}
+          colorScheme={c.selection === "exclude" ? "danger" : "default"}
+          paddingSize="small"
+          style={{ gap: "0.5rem" }}
+        >
+          <Button.ButtonLabel>{c.name}</Button.ButtonLabel>
+          <Button.ButtonIcon>
+            <Icon>
+              <FontAwesomeIcon icon={faXmark} className={styles.icon} />
+            </Icon>
+          </Button.ButtonIcon>
         </Button.Root>
-      </li>
-    </ol>
+      ))}
+      <Button.Root
+        onClick={clearAll}
+        colorScheme="transparentTertiary"
+        paddingSize="small"
+      >
+        <Button.ButtonLabel>Clear all</Button.ButtonLabel>
+      </Button.Root>
+    </div>
   );
 };
 

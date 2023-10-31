@@ -65,7 +65,7 @@
 .title {
   color: var(--color-text--default);
   font: var(--font-body);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--l);
   line-height: normal;
 }
@@ -80,7 +80,7 @@
 
 .author_label {
   color: var(--color-highlight);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   text-decoration: none;
 }
 
@@ -105,7 +105,7 @@
 .lastUpdated {
   color: var(--color-text--tertiary);
   font: var(--font-body);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size--s);
   line-height: 1;
 }
@@ -135,7 +135,7 @@
   padding: 0.313rem 0.625rem;
   border-radius: 6.25rem;
   color: var(--text-accent, #c6c3ff);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: 0.625rem;
   font-style: normal;
   line-height: normal;

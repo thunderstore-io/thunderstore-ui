@@ -26,7 +26,7 @@
 }
 
 .header {
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--xxl);
   font-family: var(--font-family-header);
   line-height: var(--line-height--xl);
@@ -38,7 +38,7 @@
 
 .label {
   margin-bottom: var(--space--8);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--l);
   line-height: var(--line-height--l);
 }
@@ -57,7 +57,7 @@
   gap: var(--gap--8);
   padding: var(--space--8) 0;
   color: var(--color-text--tertiary);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size--m);
   line-height: var(--line-height--m);
   text-align: center;
@@ -162,7 +162,7 @@
   gap: var(--gap--8);
   color: var(--color-text--default);
   font: var(--font-heading);
-  font-weight: 800;
+  font-weight: var(--font-weight-boldest);
   font-size: 51px;
   line-height: 1.2;
 }
@@ -183,7 +183,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap--8);
-  font-weight: 600;
+  font-weight: var(--font-weight-bolder);
   font-size: var(--font-size--l);
   line-height: var(--line-height--l);
 }

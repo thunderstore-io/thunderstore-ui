@@ -9,3 +9,9 @@
   font-family: Inter;
   src: url("../fonts/Inter.ttf") format("truetype-variations");
 }
+
+@font-face {
+  font-weight: 200 900;
+  font-family: Hubot-Sans;
+  src: url("../fonts/HubotSans.ttf") format("truetype-variations");
+}

@@ -12,18 +12,21 @@ export interface CollapsibleTextProps {
  * Cyberstorm CollapsibleText
  */
 export function CollapsibleText(props: CollapsibleTextProps) {
-  const { text = "" } = props;
+  const { text = "", maxLength = 80 } = props;
 
-  const [opened, setOpened] = useState(false);
+  const textIsTooLong = text.length >= maxLength;
+  const [opened, setOpened] = useState(!textIsTooLong);
 
   return (
     <div className={styles.root}>
       <p className={`${styles.text} ${opened ? styles.opened : null}`}>
         {text}
       </p>
-      <button className={styles.show} onClick={() => setOpened(!opened)}>
-        {opened ? "Show less" : "Show more"}
-      </button>
+      {textIsTooLong ? (
+        <button className={styles.show} onClick={() => setOpened(!opened)}>
+          {opened ? "Show less" : "Show more"}
+        </button>
+      ) : null}
     </div>
   );
 }

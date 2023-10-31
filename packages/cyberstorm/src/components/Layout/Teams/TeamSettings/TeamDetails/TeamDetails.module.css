@@ -18,7 +18,7 @@
 
 .donationLinkLabel {
   width: 8em;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   line-height: 1;
   background-color: var(--color-surface--2);
 }

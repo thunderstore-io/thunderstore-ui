@@ -8,7 +8,7 @@ import { TeamLink, UserLink } from "../../../Links/Links";
 import { Icon } from "../../../Icon/Icon";
 
 // TODO: actual placeholder
-const defaultImageSrc = "/images/logo.png";
+const defaultImageSrc = "/images/userImagePlaceholder.png";
 
 export interface PackageTeamListProps {
   community: string;

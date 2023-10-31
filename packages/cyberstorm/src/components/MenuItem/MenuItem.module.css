@@ -24,7 +24,7 @@
 
 /* MenuItemLabel */
 .menuItemLabel {
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 }
 
 .menuItemLabel__fontSize__small {

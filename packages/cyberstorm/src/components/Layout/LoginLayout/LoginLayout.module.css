@@ -65,7 +65,7 @@
   bottom: 0;
   padding: var(--space--8) var(--space--32);
   color: rgb(97 96 121 / 1);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size--m);
   line-height: var(--line-height--m);
   text-align: center;

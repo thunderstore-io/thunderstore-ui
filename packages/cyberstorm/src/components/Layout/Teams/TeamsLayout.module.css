@@ -6,7 +6,7 @@
 
 .createTeamDialogText {
   color: var(--color-text--secondary);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size--l);
   line-height: var(--line-height--l);
 }
@@ -18,5 +18,5 @@
 }
 
 .boldText {
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
 }

@@ -1,5 +1,4 @@
 import styles from "./BaseLayout.module.css";
-import { BackgroundImage } from "../../BackgroundImage/BackgroundImage";
 import { Header } from "../../Header/Header";
 import { Footer } from "../../Footer/Footer";
 import { ReactElement } from "react";
@@ -31,7 +30,10 @@ export function BaseLayout(props: BaseLayoutProps) {
     <div className={styles.root}>
       {backGroundImageSource ? (
         <div className={styles.background}>
-          <BackgroundImage imageSource={backGroundImageSource} />
+          <div
+            className={styles.backgroundImg}
+            style={{ backgroundImage: "url(" + backGroundImageSource + ")" }}
+          />
         </div>
       ) : null}
       <Header />
