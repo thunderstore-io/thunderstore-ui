@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { Dispatch, SetStateAction } from "react";
 
-import styles from "./CategoryMenu.module.css";
+import styles from "./FilterMenu.module.css";
 import { CategorySelection, CATEGORY_STATES as STATES } from "../types";
 import { Icon } from "../../Icon/Icon";
 
@@ -52,7 +52,7 @@ export const CategoryMenu = (props: Props) => {
           ))}
         </ol>
       ) : (
-        <p>No categories</p>
+        <p className={styles.empty}>No categories</p>
       )}
     </div>
   );

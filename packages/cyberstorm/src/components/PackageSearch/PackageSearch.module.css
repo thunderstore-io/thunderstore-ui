@@ -16,4 +16,5 @@
   display: flex;
   flex-basis: 20%;
   flex-direction: column;
+  gap: var(--gap--16);
 }
