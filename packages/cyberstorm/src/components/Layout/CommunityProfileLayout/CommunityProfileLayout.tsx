@@ -27,6 +27,7 @@ export function CommunityProfileLayout(props: Props) {
 
   const dapper = useDapper();
   const community = usePromise(dapper.getCommunity, [communityId]);
+  const filters = usePromise(dapper.getCommunityFilters, [communityId]);
 
   return (
     <BaseLayout
@@ -91,7 +92,7 @@ export function CommunityProfileLayout(props: Props) {
       mainContent={
         <PackageSearch
           communityId={communityId}
-          packageCategories={community.package_categories}
+          packageCategories={filters.package_categories}
         />
       }
     />

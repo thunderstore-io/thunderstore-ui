@@ -1,9 +1,15 @@
 import { faker } from "@faker-js/faker";
 import { GetCommunities } from "@thunderstore/dapper/types";
 
-import { getFakeImg, getFakePackageCategories, getIds, setSeed } from "./utils";
+import {
+  getFakeImg,
+  getFakePackageCategories,
+  getFakeSections,
+  getIds,
+  setSeed,
+} from "./utils";
 
-const getFakeCommunity = async (communityId: string) => {
+export const getFakeCommunity = async (communityId: string) => {
   setSeed(communityId);
 
   return {
@@ -20,16 +26,6 @@ const getFakeCommunity = async (communityId: string) => {
       null,
     total_download_count: faker.number.int({ min: 1000000, max: 10000000 }),
     total_package_count: faker.number.int({ min: 0, max: 100000 }),
-  };
-};
-
-export const getFakeCommunityDetails = async (communityId: string) => {
-  setSeed(communityId);
-  const community = await getFakeCommunity(communityId);
-
-  return {
-    ...community,
-    package_categories: getFakePackageCategories(11),
   };
 };
 
@@ -76,5 +72,14 @@ export const getFakeCommunities: GetCommunities = async (
     count,
     hasMore: page > fullPages + 1,
     results: pageCommunities,
+  };
+};
+
+export const getFakeCommunityFilters = async (communityId: string) => {
+  setSeed(communityId);
+
+  return {
+    package_categories: getFakePackageCategories(11),
+    sections: getFakeSections(6),
   };
 };

@@ -29,6 +29,22 @@ export const getFakePackageCategories = (returnAmount?: number) => {
   });
 };
 
+export const getFakeSections = (returnAmount?: number) => {
+  const categories = [
+    { name: "Mods", slug: "mods", priority: 0 },
+    { name: "Modpacks", slug: "modpacks", priority: 1 },
+    { name: "Maps", slug: "maps", priority: 2 },
+    { name: "Custom cards", slug: "cards", priority: 3 },
+    { name: "Latest update", slug: "update", priority: 4 },
+    { name: "Paid DLC", slug: "dlc", priority: 5 },
+  ];
+
+  return faker.helpers.arrayElements(categories, {
+    min: faker.helpers.maybe(() => 2) ?? 0, // Don't return just 1 section.
+    max: returnAmount ?? 2,
+  });
+};
+
 export const getIds = (count: number, seed?: string) => {
   setSeed(seed);
 

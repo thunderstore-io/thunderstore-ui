@@ -4,6 +4,7 @@ export interface RequestConfig {
 }
 
 export * from "./fetch/community";
+export * from "./fetch/communityFilters";
 export * from "./fetch/communityList";
 export * from "./fetch/currentUser";
 export * from "./fetch/teamDetails";

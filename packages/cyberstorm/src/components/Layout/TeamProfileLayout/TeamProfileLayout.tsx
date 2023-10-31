@@ -1,3 +1,6 @@
+import { useDapper } from "@thunderstore/dapper";
+import { usePromise } from "@thunderstore/use-promise";
+
 import styles from "./TeamProfileLayout.module.css";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
@@ -19,11 +22,13 @@ interface Props {
  * community. The naming should be rethinked when the actual profile
  * page is implemented.
  *
- * TODO: use Dapper to fetch package categories.
  * TODO: use Dapper to fetch community's name and use it in CommunityLink.
  */
 export function TeamProfileLayout(props: Props) {
   const { community, namespace } = props;
+
+  const dapper = useDapper();
+  const filters = usePromise(dapper.getCommunityFilters, [community]);
 
   return (
     <BaseLayout
@@ -43,7 +48,12 @@ export function TeamProfileLayout(props: Props) {
           </TeamLink>
         </div>
       }
-      mainContent={<PackageSearch teamId={namespace} packageCategories={[]} />}
+      mainContent={
+        <PackageSearch
+          teamId={namespace}
+          packageCategories={filters.package_categories}
+        />
+      }
     />
   );
 }

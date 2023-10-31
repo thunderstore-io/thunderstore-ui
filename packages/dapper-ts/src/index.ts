@@ -2,6 +2,7 @@ import { DapperInterface } from "@thunderstore/dapper";
 import { RequestConfig } from "@thunderstore/thunderstore-api";
 
 import { getCommunities, getCommunity } from "./methods/communities";
+import { getCommunityFilters } from "./methods/communityFilters";
 import { getCurrentUser } from "./methods/currentUser";
 import {
   getTeamDetails,
@@ -29,6 +30,7 @@ export class DapperTs implements DapperTsInterface {
     this.config = config;
     this.getCommunities = this.getCommunities.bind(this);
     this.getCommunity = this.getCommunity.bind(this);
+    this.getCommunityFilters = this.getCommunityFilters.bind(this);
     this.getCurrentUser = this.getCurrentUser.bind(this);
     this.getTeamDetails = this.getTeamDetails.bind(this);
     this.getTeamMembers = this.getTeamMembers.bind(this);
@@ -37,6 +39,7 @@ export class DapperTs implements DapperTsInterface {
 
   public getCommunities = getCommunities;
   public getCommunity = getCommunity;
+  public getCommunityFilters = getCommunityFilters;
   public getCurrentUser = getCurrentUser;
   public getTeamDetails = getTeamDetails;
   public getTeamMembers = getTeamMembers;

@@ -1,4 +1,4 @@
-import { Communities, CommunityDetails } from "./community";
+import { Communities, Community, CommunityFilters } from "./community";
 import { Package, PackageDependency, PackagePreview } from "./package";
 import { TeamDetails, ServiceAccount, TeamMember } from "./team";
 import { CurrentUser } from "./user";
@@ -9,7 +9,11 @@ export type GetCommunities = (
   search?: string
 ) => Promise<Communities>;
 
-export type GetCommunity = (communityId: string) => Promise<CommunityDetails>;
+export type GetCommunity = (communityId: string) => Promise<Community>;
+
+export type GetCommunityFilters = (
+  communityId: string
+) => Promise<CommunityFilters>;
 
 export type GetCurrentUser = () => Promise<CurrentUser>;
 

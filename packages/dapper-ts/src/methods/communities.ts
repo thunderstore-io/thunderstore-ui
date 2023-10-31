@@ -5,7 +5,7 @@ import {
 } from "@thunderstore/thunderstore-api";
 
 import { DapperTsInterface } from "../index";
-import { PackageCategory, paginatedResults } from "../sharedSchemas";
+import { paginatedResults } from "../sharedSchemas";
 
 const communitySchema = z.object({
   name: z.string().nonempty(),
@@ -42,16 +42,12 @@ export async function getCommunities(
   };
 }
 
-const communityDetailsSchema = communitySchema.extend({
-  package_categories: PackageCategory.array(),
-});
-
 export async function getCommunity(
   this: DapperTsInterface,
   communityId: string
 ) {
   const data = await fetchCommunity(this.config, communityId);
-  const parsed = communityDetailsSchema.safeParse(data);
+  const parsed = communitySchema.safeParse(data);
 
   if (!parsed.success) {
     // TODO: add Sentry support and log parsed.error.
