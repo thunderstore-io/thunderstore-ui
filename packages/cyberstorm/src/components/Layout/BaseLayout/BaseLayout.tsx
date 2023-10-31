@@ -1,5 +1,4 @@
 import styles from "./BaseLayout.module.css";
-import { BackgroundImage } from "../../BackgroundImage/BackgroundImage";
 import { Header } from "../../Header/Header";
 import { Footer } from "../../Footer/Footer";
 import { ReactElement } from "react";
