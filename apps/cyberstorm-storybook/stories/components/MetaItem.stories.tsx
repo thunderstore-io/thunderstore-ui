@@ -1,5 +1,5 @@
 import { StoryFn, Meta } from "@storybook/react";
-import { Icon, MetaItem, MetaItemProps } from "@thunderstore/cyberstorm";
+import { MetaItem, MetaItemProps } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -26,11 +26,7 @@ AccentMetaItem.args = {
   ...defaultArgs,
   label: "Lollero",
   colorScheme: "accent",
-  icon: (
-    <Icon>
-      <FontAwesomeIcon icon={faUser} />
-    </Icon>
-  ),
+  icon: <FontAwesomeIcon icon={faUser} />,
 };
 
 const LikesMetaItem = Template.bind({});
@@ -38,11 +34,7 @@ LikesMetaItem.args = {
   ...defaultArgs,
   label: "1,342",
   colorScheme: "default",
-  icon: (
-    <Icon>
-      <FontAwesomeIcon icon={faThumbsUp} />
-    </Icon>
-  ),
+  icon: <FontAwesomeIcon icon={faThumbsUp} />,
 };
 
 export { meta as default, MinimalMetaItem, AccentMetaItem, LikesMetaItem };

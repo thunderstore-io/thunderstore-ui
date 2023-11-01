@@ -5,7 +5,6 @@ import { Dispatch, SetStateAction } from "react";
 import styles from "./CategoryTagCloud.module.css";
 import { CategorySelection, CATEGORY_STATES } from "../types";
 import * as Button from "../../Button";
-import { Icon } from "../../Icon/Icon";
 
 const OFF = CATEGORY_STATES[0];
 
@@ -45,9 +44,7 @@ export const CategoryTagCloud = (props: Props) => {
         >
           <Button.ButtonLabel>{c.name}</Button.ButtonLabel>
           <Button.ButtonIcon>
-            <Icon>
-              <FontAwesomeIcon icon={faXmark} className={styles.icon} />
-            </Icon>
+            <FontAwesomeIcon icon={faXmark} className={styles.icon} />
           </Button.ButtonIcon>
         </Button.Root>
       ))}

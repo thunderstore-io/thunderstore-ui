@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { OverwolfLogo } from "../../../../svg/svg";
 import { useState } from "react";
-import { Icon } from "../../../Icon/Icon";
 
 const tabs: Array<Tab> = [
   {
@@ -68,9 +67,7 @@ export function LoginForm() {
             <div className={styles.continueButton}>
               <Button.Root colorScheme="discord" paddingSize="large">
                 <Button.ButtonIcon>
-                  <Icon>
-                    <FontAwesomeIcon icon={faDiscord} />
-                  </Icon>
+                  <FontAwesomeIcon icon={faDiscord} />
                 </Button.ButtonIcon>
                 <Button.ButtonLabel>Discord</Button.ButtonLabel>
               </Button.Root>
@@ -78,9 +75,7 @@ export function LoginForm() {
             <div className={styles.continueButton}>
               <Button.Root colorScheme="github" paddingSize="large">
                 <Button.ButtonIcon>
-                  <Icon>
-                    <FontAwesomeIcon icon={faGithub} />
-                  </Icon>
+                  <FontAwesomeIcon icon={faGithub} />
                 </Button.ButtonIcon>
                 <Button.ButtonLabel>GitHub</Button.ButtonLabel>
               </Button.Root>
@@ -93,9 +88,7 @@ export function LoginForm() {
 Login with Overwolf"
               >
                 <Button.ButtonIcon>
-                  <Icon>
-                    <OverwolfLogo />
-                  </Icon>
+                  <OverwolfLogo />
                 </Button.ButtonIcon>
                 <Button.ButtonLabel>Overwolf</Button.ButtonLabel>
               </Button.Root>

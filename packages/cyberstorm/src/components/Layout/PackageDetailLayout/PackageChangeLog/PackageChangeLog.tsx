@@ -1,4 +1,5 @@
 import { Tag } from "../../../..";
+import { classnames } from "../../../../utils/utils";
 import styles from "./PackageChangeLog.module.css";
 import { ReactElement } from "react";
 
@@ -25,9 +26,10 @@ export function PackageChangeLog(props: PackageChangeLogProps) {
         return (
           <div key={index} className={styles.itemWrapper}>
             <div
-              className={`${styles.item} ${
+              className={classnames(
+                styles.item,
                 changeLogItem.isCurrent ? styles.isCurrent : null
-              }`}
+              )}
             >
               <div className={styles.header}>
                 <div className={styles.versionNumber}>

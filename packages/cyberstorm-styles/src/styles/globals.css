@@ -59,11 +59,9 @@
   --fa-fw-width: 1em;
 
   /* Font weigths */
-
-  /* -100 on all, because Figma's 400 is actually 300 */
   --font-weight-regular: 300;
   --font-weight-medium: 400;
-  --font-weight-bolder: 500;
+  --font-weight-semibold: 500;
   --font-weight-bold: 600;
   --font-weight-boldest: 700;
   --font-weight-heavy: 800;
@@ -87,7 +85,7 @@ body {
 }
 
 *::-webkit-scrollbar {
-  width: 0;
+  width: 10px;
 }
 
 *::-webkit-scrollbar-track {

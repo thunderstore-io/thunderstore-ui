@@ -11,7 +11,6 @@ import { OthersMenu } from "./FilterMenus/OthersMenu";
 import { SectionMenu } from "./FilterMenus/SectionMenu";
 import styles from "./PackageSearch.module.css";
 import { CategorySelection } from "./types";
-import { Icon } from "../Icon/Icon";
 import { PackageList } from "../PackageList/PackageList";
 import { TextInput } from "../TextInput/TextInput";
 
@@ -54,11 +53,7 @@ export function PackageSearch(props: Props) {
         placeHolder="Filter Mods..."
         value={searchValue}
         setValue={setSearchValue}
-        leftIcon={
-          <Icon>
-            <FontAwesomeIcon icon={faSearch} />
-          </Icon>
-        }
+        leftIcon={<FontAwesomeIcon icon={faSearch} />}
       />
 
       <div className={styles.contentWrapper}>

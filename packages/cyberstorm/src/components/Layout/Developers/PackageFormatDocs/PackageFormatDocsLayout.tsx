@@ -115,11 +115,9 @@ const secondTableData = [
     { value: "name", sortValue: 0 },
     {
       value: (
-        <span key="icon-1" className={styles.greenWrap}>
-          <Icon>
-            <FontAwesomeIcon icon={faCheck} />
-          </Icon>
-        </span>
+        <Icon key="icon-1" inline wrapperClasses={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} />
+        </Icon>
       ),
       sortValue: 0,
     },
@@ -130,11 +128,9 @@ const secondTableData = [
     { value: "description", sortValue: 0 },
     {
       value: (
-        <span key="icon-2" className={styles.greenWrap}>
-          <Icon>
-            <FontAwesomeIcon icon={faCheck} />
-          </Icon>
-        </span>
+        <Icon key="icon-2" inline wrapperClasses={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} />
+        </Icon>
       ),
       sortValue: 0,
     },
@@ -149,11 +145,9 @@ const secondTableData = [
     { value: "version number", sortValue: 0 },
     {
       value: (
-        <span key="icon-3" className={styles.greenWrap}>
-          <Icon>
-            <FontAwesomeIcon icon={faCheck} />
-          </Icon>
-        </span>
+        <Icon key="icon-3" inline wrapperClasses={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} />
+        </Icon>
       ),
       sortValue: 0,
     },
@@ -168,11 +162,9 @@ const secondTableData = [
     { value: "dependencies", sortValue: 0 },
     {
       value: (
-        <span key="icon-4" className={styles.greenWrap}>
-          <Icon>
-            <FontAwesomeIcon icon={faCheck} />
-          </Icon>
-        </span>
+        <Icon key="icon-4" inline wrapperClasses={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} />
+        </Icon>
       ),
       sortValue: 0,
     },
@@ -190,11 +182,9 @@ const secondTableData = [
     { value: "website_url", sortValue: 0 },
     {
       value: (
-        <span key="icon-5" className={styles.greenWrap}>
-          <Icon>
-            <FontAwesomeIcon icon={faCheck} />
-          </Icon>
-        </span>
+        <Icon key="icon-5" inline wrapperClasses={styles.greenWrap}>
+          <FontAwesomeIcon icon={faCheck} />
+        </Icon>
       ),
       sortValue: 0,
     },

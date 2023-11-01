@@ -1,10 +1,9 @@
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dispatch, SetStateAction } from "react";
-import { range } from "../../utils/utils";
+import { classnames, range } from "../../utils/utils";
 import styles from "./Pagination.module.css";
 import { PaginationButton } from "./PaginationButton";
-import { Icon } from "../Icon/Icon";
 
 export interface PaginationProps {
   currentPage: number;
@@ -55,11 +54,7 @@ export function Pagination(props: PaginationProps) {
           onClick={() => onPageChange(decreaseCurrentPage(currentPage))}
           ariaLabel="Previous"
           label="Prev"
-          leftIcon={
-            <Icon>
-              <FontAwesomeIcon icon={faArrowLeft} />
-            </Icon>
-          }
+          leftIcon={<FontAwesomeIcon icon={faArrowLeft} />}
         />
       </li>
     );
@@ -116,11 +111,7 @@ export function Pagination(props: PaginationProps) {
           }
           ariaLabel="Next"
           label="Next"
-          rightIcon={
-            <Icon>
-              <FontAwesomeIcon icon={faArrowRight} />
-            </Icon>
-          }
+          rightIcon={<FontAwesomeIcon icon={faArrowRight} />}
         />
       </li>
     );
@@ -128,7 +119,9 @@ export function Pagination(props: PaginationProps) {
 
   return (
     <nav aria-label="Pagination">
-      <ul className={`${styles.list} ${disabled ? styles.disabled : ""}`}>
+      <ul
+        className={classnames(styles.list, disabled ? styles.disabled : null)}
+      >
         {buttons}
       </ul>
     </nav>

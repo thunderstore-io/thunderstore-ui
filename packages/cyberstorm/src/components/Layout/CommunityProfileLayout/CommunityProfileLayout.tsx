@@ -9,7 +9,6 @@ import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import * as Button from "../../Button/";
 import { CommunityImage } from "../../CommunityImage/CommunityImage";
-import { Icon } from "../../Icon/Icon";
 import { CommunitiesLink, CommunityLink } from "../../Links/Links";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { PackageSearch } from "../../PackageSearch/PackageSearch";
@@ -53,11 +52,7 @@ export function CommunityProfileLayout(props: Props) {
             <MetaItem
               key="meta-packages"
               label={`${formatInteger(community.total_package_count)} packages`}
-              icon={
-                <Icon>
-                  <FontAwesomeIcon icon={faBoxOpen} />
-                </Icon>
-              }
+              icon={<FontAwesomeIcon icon={faBoxOpen} />}
               colorScheme="accent"
               size="bold_large"
             />,
@@ -66,11 +61,7 @@ export function CommunityProfileLayout(props: Props) {
               label={`${formatInteger(
                 community.total_download_count
               )} downloads`}
-              icon={
-                <Icon>
-                  <FontAwesomeIcon icon={faDownload} />
-                </Icon>
-              }
+              icon={<FontAwesomeIcon icon={faDownload} />}
               colorScheme="accent"
               size="bold_large"
             />,
@@ -78,9 +69,7 @@ export function CommunityProfileLayout(props: Props) {
               <a key="meta-link" href="{community.discord_url}">
                 <Button.Root colorScheme="transparentPrimary">
                   <Button.ButtonIcon>
-                    <Icon>
-                      <FontAwesomeIcon icon={faDiscord} />
-                    </Icon>
+                    <FontAwesomeIcon icon={faDiscord} />
                   </Button.ButtonIcon>
                   <Button.ButtonLabel>Join our community</Button.ButtonLabel>
                 </Button.Root>

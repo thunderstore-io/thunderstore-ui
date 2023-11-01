@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction } from "react";
 
 import styles from "./FilterMenu.module.css";
 import { Icon } from "../../Icon/Icon";
+import { classnames } from "../../../utils/utils";
 
 interface Props {
   deprecated: boolean;
@@ -29,7 +30,12 @@ export const OthersMenu = (props: Props) => {
       <ol className={styles.list}>
         {filters.map(([checked, setChecked, label]) => (
           <li key={label}>
-            <label className={`${styles.label} ${checked && styles.include}`}>
+            <label
+              className={classnames(
+                styles.label,
+                checked ? styles.include : null
+              )}
+            >
               <Checkbox.Root
                 checked={checked}
                 onCheckedChange={() => setChecked(!checked)}

@@ -1,4 +1,5 @@
 .root {
+  display: flex;
   align-items: center;
   width: auto;
   color: var(--color-text--tertiary);
@@ -9,7 +10,7 @@
   flex-direction: row;
   align-items: center;
   width: 100%;
-  padding: var(--space--12) var(--space--16);
+  padding: var(--space--10) var(--space--14);
   border: var(--border-width--2) solid var(--border-color);
 
   border-radius: var(--border-radius--8);
@@ -23,7 +24,7 @@
 }
 
 .hasLeftIcon {
-  padding-left: 3rem;
+  padding-left: 2.875rem;
 }
 
 .input:hover {
@@ -46,7 +47,7 @@
 .leftIcon {
   position: absolute;
   width: 1em;
-  height: 1em;
+  height: 0.875em;
   margin: var(--space--16);
   color: var(--color-text--tertiary);
   line-height: normal;

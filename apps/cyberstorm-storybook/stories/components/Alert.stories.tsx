@@ -1,5 +1,5 @@
 import { StoryFn, Meta } from "@storybook/react";
-import { Alert, AlertProps, Icon } from "@thunderstore/cyberstorm";
+import { Alert, AlertProps } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -36,11 +36,7 @@ InfoAlert.args = {
   content:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
   variant: "info",
-  icon: (
-    <Icon>
-      <FontAwesomeIcon icon={faCircleExclamation} />
-    </Icon>
-  ),
+  icon: <FontAwesomeIcon icon={faCircleExclamation} />,
 };
 
 const DangerAlert = Template.bind({});
@@ -49,11 +45,7 @@ DangerAlert.args = {
   content:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
   variant: "danger",
-  icon: (
-    <Icon>
-      <FontAwesomeIcon icon={faOctagonExclamation} />
-    </Icon>
-  ),
+  icon: <FontAwesomeIcon icon={faOctagonExclamation} />,
 };
 
 const WarningAlert = Template.bind({});
@@ -62,11 +54,7 @@ WarningAlert.args = {
   content:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
   variant: "warning",
-  icon: (
-    <Icon>
-      <FontAwesomeIcon icon={faTriangleExclamation} />
-    </Icon>
-  ),
+  icon: <FontAwesomeIcon icon={faTriangleExclamation} />,
 };
 
 const SuccessAlert = Template.bind({});
@@ -75,11 +63,7 @@ SuccessAlert.args = {
   content:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
   variant: "success",
-  icon: (
-    <Icon>
-      <FontAwesomeIcon icon={faCircleCheck} />
-    </Icon>
-  ),
+  icon: <FontAwesomeIcon icon={faCircleCheck} />,
 };
 
 export {

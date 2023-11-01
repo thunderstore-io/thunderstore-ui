@@ -6,6 +6,7 @@ import { Dispatch, SetStateAction } from "react";
 import styles from "./FilterMenu.module.css";
 import { CategorySelection, CATEGORY_STATES as STATES } from "../types";
 import { Icon } from "../../Icon/Icon";
+import { classnames } from "../../../utils/utils";
 
 interface Props {
   categories: CategorySelection[];
@@ -31,7 +32,7 @@ export const CategoryMenu = (props: Props) => {
         <ol className={styles.list}>
           {categories.map((c) => (
             <li key={c.slug}>
-              <label className={`${styles.label} ${styles[c.selection]}`}>
+              <label className={classnames(styles.label, styles[c.selection])}>
                 <Checkbox.Root
                   checked={c.selection !== "off"}
                   onCheckedChange={() => toggleCategory(c.slug)}

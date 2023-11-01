@@ -45,12 +45,12 @@ export function FilterItem(props: FilterItemProps) {
           <Checkbox.Indicator forceMount>
             {value === undefined && <></>}
             {value === true && (
-              <Icon>
+              <Icon inline>
                 <FontAwesomeIcon className={styles.icon} icon={faCheck} />
               </Icon>
             )}
             {value === false && (
-              <Icon>
+              <Icon inline>
                 <FontAwesomeIcon className={styles.icon} icon={faXmark} />
               </Icon>
             )}

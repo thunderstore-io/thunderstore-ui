@@ -1,12 +1,14 @@
 "use client";
-import React, { ReactNode, useRef } from "react";
+import React, { useRef } from "react";
 import styles from "./Tag.module.css";
+import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
 
 export interface TagProps {
   key?: string;
   label?: string;
-  leftIcon?: ReactNode;
-  rightIcon?: ReactNode;
+  leftIcon?: JSX.Element;
+  rightIcon?: JSX.Element;
   colorScheme?:
     | "default"
     | "borderless"
@@ -44,11 +46,19 @@ export const Tag: React.FC<TagProps> = React.forwardRef<
     <div
       {...forwardedProps}
       ref={ref}
-      className={`${getSize(size)} ${styles.root} ${getStyle(colorScheme)}`}
+      className={classnames(getSize(size), styles.root, getStyle(colorScheme))}
     >
-      {leftIcon ? <div className={styles.icon}>{leftIcon}</div> : null}
+      {leftIcon ? (
+        <Icon inline wrapperClasses={styles.icon}>
+          {leftIcon}
+        </Icon>
+      ) : null}
       {label ? <div className={styles.label}>{label}</div> : null}
-      {rightIcon ? <div className={styles.icon}>{rightIcon}</div> : null}
+      {rightIcon ? (
+        <Icon inline wrapperClasses={styles.icon}>
+          {rightIcon}
+        </Icon>
+      ) : null}
     </div>
   );
 });

@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode } from "react";
+import React from "react";
 import styles from "./Select.module.css";
 import * as Button from "../Button/";
 import * as MenuItem from "../MenuItem/";
@@ -7,18 +7,18 @@ import { faCaretDown } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as RadixSelect from "@radix-ui/react-select";
-import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
 
 type SelectOption<T extends string = string> = {
   value: T;
   label?: string;
-  leftIcon?: ReactNode;
+  leftIcon?: JSX.Element;
 };
 
 type _SelectProps<T extends string = string> = {
   variant?: "default" | "accent" | "wide";
   defaultOpen?: boolean;
-  icon?: ReactNode;
+  icon?: JSX.Element;
   onChange?: (val: T) => void;
   options: SelectOption<T>[];
   placeholder?: string;
@@ -33,11 +33,7 @@ export function Select<T extends string>(props: SelectProps<T>) {
   const {
     variant = "default",
     defaultOpen = false,
-    icon = (
-      <Icon>
-        <FontAwesomeIcon icon={faCaretDown} />
-      </Icon>
-    ),
+    icon = <FontAwesomeIcon icon={faCaretDown} />,
     options,
     onChange,
     placeholder = "Select",
@@ -60,7 +56,7 @@ export function Select<T extends string>(props: SelectProps<T>) {
           <Button.Root
             iconAlignment="side"
             colorScheme="wideDarker"
-            paddingSize="large"
+            paddingSize="largeBorderCompensated"
           >
             <Button.ButtonLabel fontSize={triggerFontSize}>
               {options?.find((o) => o.value === value)?.label ?? placeholder}
@@ -73,7 +69,7 @@ export function Select<T extends string>(props: SelectProps<T>) {
           <RadixSelect.Content
             position="popper"
             sideOffset={4}
-            className={`${styles.content} ${getContentStyle(variant)}`}
+            className={classnames(styles.content, getContentStyle(variant))}
           >
             {selectItemElements}
           </RadixSelect.Content>

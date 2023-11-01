@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import styles from "./Button.module.css";
 import { Tooltip } from "../Tooltip/Tooltip";
+import { classnames } from "../../utils/utils";
 
 export interface ButtonProps {
   children?: ReactNode | ReactNode[];
@@ -14,7 +15,15 @@ export interface ButtonProps {
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   iconAlignment?: "default" | "side";
-  paddingSize?: "none" | "small" | "medium" | "mediumSquare" | "large" | "huge";
+  paddingSize?:
+    | "none"
+    | "small"
+    | "medium"
+    | "mediumSquare"
+    | "large"
+    | "largeBorderCompensated"
+    | "huge";
+  fontSize?: "small" | "medium" | "large" | "huge";
   colorScheme?:
     | "danger"
     | "default"
@@ -69,6 +78,7 @@ const Button = React.forwardRef<
     type,
     colorScheme = "default",
     onClick,
+    fontSize = "large",
     paddingSize = "medium",
     iconAlignment = "default",
     tooltipText,
@@ -85,9 +95,13 @@ const Button = React.forwardRef<
         <div
           {...forwardedProps}
           ref={ref}
-          className={`${styles.root} ${getIconAlignment(
-            iconAlignment
-          )} ${getStyle(colorScheme)} ${getPaddingSize(paddingSize)}`}
+          className={classnames(
+            styles.root,
+            getFontSize(fontSize),
+            getIconAlignment(iconAlignment),
+            getStyle(colorScheme),
+            getPaddingSize(paddingSize)
+          )}
         >
           {children}
         </div>
@@ -102,9 +116,13 @@ const Button = React.forwardRef<
           {...forwardedProps}
           ref={ref}
           type={type}
-          className={`${styles.root} ${getIconAlignment(
-            iconAlignment
-          )} ${getStyle(colorScheme)} ${getPaddingSize(paddingSize)}`}
+          className={classnames(
+            styles.root,
+            getFontSize(fontSize),
+            getIconAlignment(iconAlignment),
+            getStyle(colorScheme),
+            getPaddingSize(paddingSize)
+          )}
           onClick={onClick}
         >
           {children}
@@ -147,7 +165,17 @@ const getPaddingSize = (scheme: string) => {
     medium: styles.padding__medium,
     mediumSquare: styles.padding__mediumSquare,
     large: styles.padding__large,
+    largeBorderCompensated: styles.padding__large__borderCompensated,
     huge: styles.padding__huge,
+  }[scheme];
+};
+
+const getFontSize = (scheme: string) => {
+  return {
+    small: styles.ButtonLabel__font__small,
+    medium: styles.ButtonLabel__font__medium,
+    large: styles.ButtonLabel__font__large,
+    huge: styles.ButtonLabel__font__huge,
   }[scheme];
 };
 

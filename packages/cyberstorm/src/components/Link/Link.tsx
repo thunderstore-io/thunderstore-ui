@@ -3,6 +3,7 @@ import { ReactElement } from "react";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
 
 export interface LinkProps {
   label: string;
@@ -26,22 +27,26 @@ export function Link(props: LinkProps) {
 
   if (externalUrl) {
     return (
-      <a href={externalUrl} className={`${styles.root} ${getSize(size)}`}>
-        {leftIcon ? <div className={styles.leftIcon}>{leftIcon}</div> : null}
+      <a href={externalUrl} className={classnames(styles.root, getSize(size))}>
+        {leftIcon ? (
+          <Icon wrapperClasses={styles.leftIcon}>{leftIcon}</Icon>
+        ) : null}
         {label}
-        <div className={styles.rightIcon}>
-          <Icon>
-            <FontAwesomeIcon icon={faArrowUpRight} />
-          </Icon>
-        </div>
+        <Icon wrapperClasses={styles.rightIcon}>
+          <FontAwesomeIcon icon={faArrowUpRight} />
+        </Icon>
       </a>
     );
   } else {
     return (
       <div className={styles.root}>
-        {leftIcon ? <div className={styles.leftIcon}>{leftIcon}</div> : null}
+        {leftIcon ? (
+          <Icon wrapperClasses={styles.leftIcon}>{leftIcon}</Icon>
+        ) : null}
         {label}
-        {rightIcon ? <div className={styles.rightIcon}>{rightIcon}</div> : null}
+        {rightIcon ? (
+          <Icon wrapperClasses={styles.rightIcon}>{rightIcon}</Icon>
+        ) : null}
       </div>
     );
   }

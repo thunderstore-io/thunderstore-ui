@@ -41,7 +41,7 @@
 
 .metaItem__large {
   --font-size: var(--font-size--m);
-  --font-weight: var(--font-weight-bolder);
+  --font-weight: var(--font-weight-semibold);
 }
 
 .metaItem__bold_large {

@@ -8,7 +8,7 @@ import * as Button from "../Button/";
 import { CommunitiesLink, IndexLink, PackageUploadLink } from "../Links/Links";
 import { ThunderstoreLogo } from "../../svg/svg";
 import { UserDropDown } from "./UserDropDown";
-import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
 
 /**
  * Horizontal navigation bar shown at the top of the site.
@@ -56,7 +56,7 @@ export function Header() {
         </ul>
       </nav>
 
-      <div className={`${styles.item} + ${styles.search}`}></div>
+      <div className={classnames(styles.item, styles.search)}></div>
 
       <nav className={styles.item}>
         <ul className={styles.nav}>
@@ -80,9 +80,7 @@ export function Header() {
                 tooltipText="Upload"
               >
                 <Button.ButtonIcon>
-                  <Icon>
-                    <FontAwesomeIcon icon={faUpload} />
-                  </Icon>
+                  <FontAwesomeIcon icon={faUpload} />
                 </Button.ButtonIcon>
               </Button.Root>
             </PackageUploadLink>

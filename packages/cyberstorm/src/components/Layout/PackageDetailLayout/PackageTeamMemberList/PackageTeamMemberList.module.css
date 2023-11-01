@@ -20,6 +20,19 @@
   border-radius: 50%;
 }
 
+.itemImage:where(.placeholder) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14.75rem;
+  color: #39e9aa;
+  font: var(--font-body);
+  font-weight: var(--font-weight-semibold);
+  font-size: 1.313rem;
+  line-height: 1.2;
+  background: rgb(67 67 132 / 0.32);
+}
+
 .itemTitle {
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size--m);
@@ -38,13 +51,14 @@
   gap: var(--gap--8);
   align-items: center;
   color: var(--color-highlight);
-  font-weight: var(--font-weight-bolder);
+  font-weight: var(--font-weight-semibold);
   font-size: var(--font-size--m);
   line-height: var(--line-height--m);
 }
 
 .teamLinkIcon {
-  width: 0.75em;
+  width: 1em;
+  height: 1em;
 }
 
 .teamLink:hover {

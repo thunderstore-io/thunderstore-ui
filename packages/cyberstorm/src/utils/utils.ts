@@ -6,3 +6,9 @@ export const range = (start: number, end: number) => {
 export const formatInteger = (inputNumber: number) => {
   return Intl.NumberFormat("en", { notation: "compact" }).format(inputNumber);
 };
+
+export const classnames = (
+  ...classnames: (string | null | undefined)[]
+): string => {
+  return classnames.filter(String).join(" ");
+};

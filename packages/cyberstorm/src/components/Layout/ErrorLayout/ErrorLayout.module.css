@@ -11,7 +11,7 @@
 
 .description {
   color: var(--color-text--accent);
-  font-weight: var(--font-weight-bolder);
+  font-weight: var(--font-weight-semibold);
   line-height: 1;
 }
 

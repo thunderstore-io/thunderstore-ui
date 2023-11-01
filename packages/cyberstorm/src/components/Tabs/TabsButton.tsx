@@ -1,5 +1,7 @@
 import { MouseEventHandler, ReactElement } from "react";
 import styles from "./TabsButton.module.css";
+import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
 
 export interface TabsButtonProps {
   isSelected?: boolean;
@@ -24,10 +26,14 @@ export function TabsButton(props: TabsButtonProps) {
       type="button"
       aria-current={ariaCurrent}
       aria-label={ariaLabel}
-      className={`${styles.root} ${getStyle(isSelected)}`}
+      className={classnames(styles.root, getStyle(isSelected))}
       onClick={onClick}
     >
-      {icon ? <div className={styles.icon}>{icon}</div> : null}
+      {icon ? (
+        <Icon inline wrapperClasses={styles.icon}>
+          {icon}
+        </Icon>
+      ) : null}
       {label ? <div className={styles.label}>{label}</div> : null}
     </button>
   );

@@ -3,6 +3,7 @@ import { Section } from "@thunderstore/dapper/types";
 import { Dispatch, SetStateAction } from "react";
 
 import styles from "./FilterMenu.module.css";
+import { classnames } from "../../../utils/utils";
 
 interface Props {
   allSections: Section[];
@@ -28,15 +29,17 @@ export const SectionMenu = (props: Props) => {
         {allSections.map((s) => (
           <label
             key={s.slug}
-            className={`${styles.label} ${
-              s.slug === selected ? styles.include : ""
-            }`}
+            className={classnames(
+              styles.label,
+              s.slug === selected ? styles.include : null
+            )}
           >
             <RadioGroup.Item
               value={s.slug}
-              className={`${styles.radio} ${
-                s.slug === selected ? styles.radioSelected : ""
-              }`}
+              className={classnames(
+                styles.radio,
+                s.slug === selected ? styles.radioSelected : null
+              )}
             >
               <RadioGroup.Indicator className={styles.radioIndicator} />
             </RadioGroup.Item>

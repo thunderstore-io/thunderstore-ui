@@ -9,7 +9,6 @@ import * as Button from "../../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
-import { Icon } from "../../../Icon/Icon";
 
 /**
  * Cyberstorm PackageUpload Layout
@@ -38,11 +37,9 @@ export function PackageUploadLayout() {
               <div>
                 <Button.Root>
                   <Button.ButtonLabel>Create Team</Button.ButtonLabel>
-                  <Button.ButtonLabel>
-                    <Icon>
-                      <FontAwesomeIcon icon={faPlus} />
-                    </Icon>
-                  </Button.ButtonLabel>
+                  <Button.ButtonIcon>
+                    <FontAwesomeIcon icon={faPlus} />
+                  </Button.ButtonIcon>
                 </Button.Root>
               </div>
             }

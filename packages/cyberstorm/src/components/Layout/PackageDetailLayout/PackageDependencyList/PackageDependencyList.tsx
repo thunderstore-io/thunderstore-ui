@@ -10,7 +10,6 @@ import { PackageDependencyDialog } from "./PackageDependencyDialog/PackageDepend
 import * as Button from "../../../Button/";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
-import { Icon } from "../../../Icon/Icon";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
@@ -82,13 +81,7 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
             </div>
           </div>
         }
-        headerIcon={
-          <Icon>
-            <Icon>
-              <FontAwesomeIcon icon={faBoxOpen} />
-            </Icon>
-          </Icon>
-        }
+        headerIcon={<FontAwesomeIcon icon={faBoxOpen} />}
         headerRightContent={
           <Dialog
             noPadding
@@ -98,6 +91,7 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
             trigger={
               <div className={styles.dependencyDialogTrigger}>
                 <Button.Root
+                  fontSize="medium"
                   paddingSize="none"
                   colorScheme="transparentPrimary"
                 >
@@ -105,9 +99,7 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
                     See all
                   </Button.ButtonLabel>
                   <Button.ButtonIcon>
-                    <Icon>
-                      <FontAwesomeIcon icon={faCaretRight} />
-                    </Icon>
+                    <FontAwesomeIcon icon={faCaretRight} />
                   </Button.ButtonIcon>
                 </Button.Root>
               </div>

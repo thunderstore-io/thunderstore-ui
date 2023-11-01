@@ -270,7 +270,7 @@
 /* Button padding sizes */
 
 .padding__none {
-  gap: var(--gap--4);
+  gap: var(--gap--8);
   padding: 0;
   border-radius: 0;
 }
@@ -296,6 +296,11 @@
   padding: var(--space--12) var(--space--16);
 }
 
+.padding__large__borderCompensated {
+  gap: var(--gap--16);
+  padding: var(--space--10) var(--space--14);
+}
+
 .padding__huge {
   gap: var(--gap--16);
   padding-block: var(--button-padding-block);
@@ -312,6 +317,7 @@
 .ButtonIcon__IconSize__default {
   width: 1em;
   height: 1em;
+  font-size: var(--font-size);
 }
 
 .ButtonIcon__IconSize__tslogo_install_button {
@@ -320,7 +326,7 @@
 }
 
 .ButtonIcon__IconColor__default {
-  color: var(--color-text--default);
+  color: var(--text-color);
 }
 
 .ButtonIcon__IconColor__darker {

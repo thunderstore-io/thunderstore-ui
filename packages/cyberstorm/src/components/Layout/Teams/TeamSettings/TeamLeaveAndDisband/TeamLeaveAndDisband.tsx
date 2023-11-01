@@ -2,7 +2,7 @@ import styles from "./TeamLeaveAndDisband.module.css";
 import * as Button from "../../../../Button/";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import { TextInput } from "../../../../TextInput/TextInput";
-import { Alert, Icon } from "../../../../..";
+import { Alert } from "../../../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
 
@@ -21,11 +21,7 @@ export function TeamLeaveAndDisband(props: Props) {
         content={
           <div className={styles.content}>
             <Alert
-              icon={
-                <Icon>
-                  <FontAwesomeIcon icon={faOctagonExclamation} />
-                </Icon>
-              }
+              icon={<FontAwesomeIcon icon={faOctagonExclamation} />}
               content={
                 "You cannot currently leave this team as you are it's last owner."
               }
@@ -53,11 +49,7 @@ export function TeamLeaveAndDisband(props: Props) {
         content={
           <div className={styles.content}>
             <Alert
-              icon={
-                <Icon>
-                  <FontAwesomeIcon icon={faOctagonExclamation} />
-                </Icon>
-              }
+              icon={<FontAwesomeIcon icon={faOctagonExclamation} />}
               content={
                 "You cannot currently disband this team as it has packages."
               }

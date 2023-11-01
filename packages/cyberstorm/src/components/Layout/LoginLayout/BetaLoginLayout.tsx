@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { OverwolfLogo, ThunderstoreLogo } from "../../../svg/svg";
 import { PrivacyPolicyLink, TermsOfServiceLink } from "../../Links/Links";
-import { Icon } from "../../Icon/Icon";
 
 interface Props {
   discordAuthUrl?: string;
@@ -31,9 +30,7 @@ export function BetaLoginLayout(props: Props) {
                 <a href={props.discordAuthUrl}>
                   <Button.Root plain colorScheme="discord" paddingSize="large">
                     <Button.ButtonIcon>
-                      <Icon>
-                        <FontAwesomeIcon icon={faDiscord} />
-                      </Icon>
+                      <FontAwesomeIcon icon={faDiscord} />
                     </Button.ButtonIcon>
                     <Button.ButtonLabel>Discord</Button.ButtonLabel>
                   </Button.Root>
@@ -45,9 +42,7 @@ export function BetaLoginLayout(props: Props) {
                 <a href={props.githubAuthUrl}>
                   <Button.Root plain colorScheme="github" paddingSize="large">
                     <Button.ButtonIcon>
-                      <Icon>
-                        <FontAwesomeIcon icon={faGithub} />
-                      </Icon>
+                      <FontAwesomeIcon icon={faGithub} />
                     </Button.ButtonIcon>
                     <Button.ButtonLabel>GitHub</Button.ButtonLabel>
                   </Button.Root>
@@ -59,9 +54,7 @@ export function BetaLoginLayout(props: Props) {
                 <a href={props.overwolfAuthUrl}>
                   <Button.Root plain colorScheme="overwolf" paddingSize="large">
                     <Button.ButtonIcon>
-                      <Icon>
-                        <OverwolfLogo />
-                      </Icon>
+                      <OverwolfLogo />
                     </Button.ButtonIcon>
                     <Button.ButtonLabel>Overwolf</Button.ButtonLabel>
                   </Button.Root>

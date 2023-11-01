@@ -3,7 +3,7 @@ import { MetaItem } from "../MetaItem/MetaItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoxOpen, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { faGamepadModern } from "@fortawesome/pro-solid-svg-icons";
-import { formatInteger } from "../../utils/utils";
+import { classnames, formatInteger } from "../../utils/utils";
 import { Community } from "@thunderstore/dapper/types";
 import { CommunityLink } from "../Links/Links";
 import { Icon } from "../Icon/Icon";
@@ -23,15 +23,13 @@ export function CommunityCard(props: Props) {
       <div className={styles.root}>
         <div className={styles.imageWrapper}>
           {community.icon_url ? (
-            <div className={`${styles.imageContent} ${styles.fullWidth}`}>
+            <div className={classnames(styles.imageContent, styles.fullWidth)}>
               <img className={styles.image} alt="" src={community.icon_url} />
             </div>
           ) : (
-            <div className={styles.imageContent}>
-              <Icon>
-                <FontAwesomeIcon icon={faGamepadModern} />
-              </Icon>
-            </div>
+            <Icon wrapperClasses={styles.imageContent}>
+              <FontAwesomeIcon icon={faGamepadModern} />
+            </Icon>
           )}
         </div>
         <div className={styles.title} title={community.name}>
@@ -41,20 +39,12 @@ export function CommunityCard(props: Props) {
           <MetaItem
             colorScheme="accent"
             label={formatInteger(community.total_package_count)}
-            icon={
-              <Icon>
-                <FontAwesomeIcon icon={faBoxOpen} />
-              </Icon>
-            }
+            icon={<FontAwesomeIcon icon={faBoxOpen} />}
           />
           <MetaItem
             colorScheme="accent"
             label={formatInteger(community.total_download_count)}
-            icon={
-              <Icon>
-                <FontAwesomeIcon icon={faDownload} />
-              </Icon>
-            }
+            icon={<FontAwesomeIcon icon={faDownload} />}
           />
         </div>
       </div>

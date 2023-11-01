@@ -8,7 +8,6 @@ import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 import { useState, useEffect } from "react";
 import { CodeInput } from "../../../CodeInput/CodeInput";
 import { Alert } from "../../../Alert/Alert";
-import { Icon } from "../../../Icon/Icon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/pro-solid-svg-icons";
 import { Select } from "../../../Select/Select";
@@ -142,11 +141,7 @@ export function ManifestValidatorLayout() {
               <Alert
                 content="You must be logged in to see your teams"
                 variant="warning"
-                icon={
-                  <Icon>
-                    <FontAwesomeIcon icon={faWarning} />
-                  </Icon>
-                }
+                icon={<FontAwesomeIcon icon={faWarning} />}
               />
               <Select
                 onChange={setTeamInput}

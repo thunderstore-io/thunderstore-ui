@@ -1,5 +1,5 @@
 import { StoryFn, Meta } from "@storybook/react";
-import { Icon, Select, SelectProps } from "@thunderstore/cyberstorm";
+import { Select, SelectProps } from "@thunderstore/cyberstorm";
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,56 +20,32 @@ const options = [
   {
     value: "1",
     label: "Newest",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faStar} />
-      </Icon>
-    ),
+    leftIcon: <FontAwesomeIcon icon={faStar} />,
   },
   {
     value: "2",
     label: "Hottest",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faFire} />
-      </Icon>
-    ),
+    leftIcon: <FontAwesomeIcon icon={faFire} />,
   },
   {
     value: "3",
     label: "Top rated",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faThumbsUp} />
-      </Icon>
-    ),
+    leftIcon: <FontAwesomeIcon icon={faThumbsUp} />,
   },
   {
     value: "4",
     label: "A-Z",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faArrowDownAZ} />
-      </Icon>
-    ),
+    leftIcon: <FontAwesomeIcon icon={faArrowDownAZ} />,
   },
   {
     value: "5",
     label: "Z-A",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faArrowUpAZ} />
-      </Icon>
-    ),
+    leftIcon: <FontAwesomeIcon icon={faArrowUpAZ} />,
   },
 ];
 
 const defaultArgs = {
-  icon: (
-    <Icon>
-      <FontAwesomeIcon icon={faChevronDown} />
-    </Icon>
-  ),
+  icon: <FontAwesomeIcon icon={faChevronDown} />,
   options: options,
 };
 

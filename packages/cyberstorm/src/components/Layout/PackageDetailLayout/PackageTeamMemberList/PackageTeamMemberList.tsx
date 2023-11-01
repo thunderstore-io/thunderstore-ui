@@ -6,9 +6,7 @@ import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import { faCaretRight, faCrown } from "@fortawesome/pro-solid-svg-icons";
 import { TeamLink, UserLink } from "../../../Links/Links";
 import { Icon } from "../../../Icon/Icon";
-
-// TODO: actual placeholder
-const defaultImageSrc = "/images/userImagePlaceholder.png";
+import { classnames } from "../../../../utils/utils";
 
 export interface PackageTeamListProps {
   community: string;
@@ -26,20 +24,24 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
   return (
     <UserLink user={teamMember.username}>
       <div className={styles.item}>
-        <img
-          src={teamMember.avatar ?? defaultImageSrc}
-          className={styles.itemImage}
-          alt={teamMember.username}
-        />
+        {teamMember.avatar ? (
+          <img
+            src={teamMember.avatar}
+            className={styles.itemImage}
+            alt={teamMember.username}
+          />
+        ) : (
+          <div className={classnames(styles.itemImage, styles.placeholder)}>
+            {teamMember.username.charAt(0).toUpperCase()}
+          </div>
+        )}
         <div>
           <div className={styles.itemTitle}>
             {teamMember.username}
             {teamMember.role === "owner" ? (
-              <span className={styles.crown}>
-                <Icon>
-                  <FontAwesomeIcon icon={faCrown} />
-                </Icon>
-              </span>
+              <Icon inline wrapperClasses={styles.crown}>
+                <FontAwesomeIcon icon={faCrown} />
+              </Icon>
             ) : null}
           </div>
           <div className={styles.itemDescription}>{teamMember.role}</div>
@@ -75,21 +77,15 @@ export function PackageTeamMemberList(props: PackageTeamListProps) {
       <WrapperCard
         title="Team"
         content={<div className={styles.list}>{mappedPackageTeamList}</div>}
-        headerIcon={
-          <Icon>
-            <FontAwesomeIcon icon={faUsers} />
-          </Icon>
-        }
+        headerIcon={<FontAwesomeIcon icon={faUsers} />}
         headerRightContent={
           teamName ? (
             <TeamLink community={community} team={teamName}>
               <div className={styles.teamLink}>
                 See team
-                <div className={styles.teamLinkIcon}>
-                  <Icon>
-                    <FontAwesomeIcon icon={faCaretRight} />
-                  </Icon>
-                </div>
+                <Icon inline wrapperClasses={styles.teamLinkIcon}>
+                  <FontAwesomeIcon icon={faCaretRight} />
+                </Icon>
               </div>
             </TeamLink>
           ) : null

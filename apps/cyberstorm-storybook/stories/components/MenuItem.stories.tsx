@@ -1,5 +1,5 @@
 import { StoryFn, Meta } from "@storybook/react";
-import { Icon, MenuItem } from "@thunderstore/cyberstorm";
+import { MenuItem } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDownAZ } from "@fortawesome/free-solid-svg-icons";
@@ -12,9 +12,7 @@ export default {
     mapping: {
       Icon: (
         <MenuItem.MenuItemIcon key="1">
-          <Icon>
-            <FontAwesomeIcon icon={faArrowDownAZ} />
-          </Icon>
+          <FontAwesomeIcon icon={faArrowDownAZ} />
         </MenuItem.MenuItemIcon>
       ),
       Label: <MenuItem.MenuItemLabel key="2">A-Z</MenuItem.MenuItemLabel>,
@@ -26,25 +24,19 @@ const Template: StoryFn<typeof MenuItem> = () => (
   <div>
     <MenuItem.Root>
       <MenuItem.MenuItemIcon>
-        <Icon>
-          <FontAwesomeIcon icon={faArrowDownAZ} />
-        </Icon>
+        <FontAwesomeIcon icon={faArrowDownAZ} />
       </MenuItem.MenuItemIcon>
       <MenuItem.MenuItemLabel>A-Z</MenuItem.MenuItemLabel>
     </MenuItem.Root>
     <MenuItem.Root>
       <MenuItem.MenuItemLabel>A-Z</MenuItem.MenuItemLabel>
       <MenuItem.MenuItemIcon>
-        <Icon>
-          <FontAwesomeIcon icon={faArrowDownAZ} />
-        </Icon>
+        <FontAwesomeIcon icon={faArrowDownAZ} />
       </MenuItem.MenuItemIcon>
     </MenuItem.Root>
     <MenuItem.Root>
       <MenuItem.MenuItemIcon>
-        <Icon>
-          <FontAwesomeIcon icon={faArrowDownAZ} />
-        </Icon>
+        <FontAwesomeIcon icon={faArrowDownAZ} />
       </MenuItem.MenuItemIcon>
       <MenuItem.MenuItemLabel>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel
