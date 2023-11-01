@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./BreadCrumbs.module.css";
 import { IndexLink } from "../Links/Links";
 import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
 
 type BreadCrumbsProps = PropsWithChildren<{
   excludeHome?: boolean;
@@ -19,11 +20,18 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
     return (
       <div
         key={homifiedIndex}
-        className={`${homifiedIndex == -1 ? styles.outer__start : ""} ${
-          styles.outer
-        } ${isLast ? styles.outer__end : ""}`}
+        className={classnames(
+          homifiedIndex == -1 ? styles.outer__start : null,
+          styles.outer,
+          isLast ? styles.outer__end : null
+        )}
       >
-        <div className={`${styles.inner} ${isLast ? styles.inner__end : ""}`}>
+        <div
+          className={classnames(
+            styles.inner,
+            isLast ? styles.inner__end : null
+          )}
+        >
           {node}
         </div>
       </div>
@@ -31,8 +39,8 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
   });
 
   const home = (
-    <div key={0} className={`${styles.outer__start} ${styles.outer}`}>
-      <div className={`${styles.inner} ${styles.innerHome}`}>
+    <div key={0} className={classnames(styles.outer__start, styles.outer)}>
+      <div className={classnames(styles.inner, styles.innerHome)}>
         <DefaultHomeCrumb />
       </div>
     </div>

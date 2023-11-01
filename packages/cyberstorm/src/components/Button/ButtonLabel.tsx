@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import styles from "./Button.module.css";
+import { classnames } from "../../utils/utils";
 
 export interface ButtonLabelProps {
   children: ReactNode | ReactNode[];
@@ -11,9 +12,11 @@ export function ButtonLabel(props: ButtonLabelProps) {
   const { children, fontSize = "medium", fontWeight = "700" } = props;
   return (
     <span
-      className={`${styles.ButtonLabel} ${getFontSize(
-        fontSize
-      )} ${getFontWeight(fontWeight)}`}
+      className={classnames(
+        styles.ButtonLabel,
+        getFontSize(fontSize),
+        getFontWeight(fontWeight)
+      )}
     >
       {children}
     </span>

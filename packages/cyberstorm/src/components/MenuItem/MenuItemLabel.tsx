@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import styles from "./MenuItem.module.css";
+import { classnames } from "../../utils/utils";
 
 export interface MenuItemLabelProps {
   children?: ReactNode | ReactNode[];
@@ -9,7 +10,7 @@ export interface MenuItemLabelProps {
 export function MenuItemLabel(props: MenuItemLabelProps) {
   const { children, fontSize = "medium" } = props;
   return (
-    <span className={`${styles.menuItemLabel} ${getFontSize(fontSize)}`}>
+    <span className={classnames(styles.menuItemLabel, getFontSize(fontSize))}>
       {children}
     </span>
   );

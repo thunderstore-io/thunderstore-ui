@@ -2,6 +2,7 @@
 import React, { useRef } from "react";
 import styles from "./MetaItem.module.css";
 import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
 
 type _MetaItemProps = {
   label?: string;
@@ -26,12 +27,12 @@ export const MetaItem = React.forwardRef<HTMLDivElement, MetaItemProps>(
     const ref = forwardedRef || fallbackRef;
 
     return (
-      <div ref={ref} className={`${styles.root} ${getStyle(colorScheme)}`}>
+      <div ref={ref} className={classnames(styles.root, getStyle(colorScheme))}>
         <Icon inline wrapperClasses={styles.icon}>
           {icon}
         </Icon>
         {label ? (
-          <div className={`${styles.label} ${getSize(size)}`}>{label}</div>
+          <div className={classnames(styles.label, getSize(size))}>{label}</div>
         ) : null}
       </div>
     );

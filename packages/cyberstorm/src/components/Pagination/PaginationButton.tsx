@@ -1,6 +1,7 @@
 import { MouseEventHandler } from "react";
 import styles from "./PaginationButton.module.css";
 import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
 
 export interface PaginationButtonProps {
   isSelected?: boolean;
@@ -29,7 +30,7 @@ export function PaginationButton(props: PaginationButtonProps) {
       type="button"
       aria-current={ariaCurrent ? "page" : undefined}
       aria-label={ariaLabel}
-      className={`${styles.root} ${getStyle(colorScheme, isSelected)}`}
+      className={classnames(styles.root, getStyle(colorScheme, isSelected))}
       onClick={onClick}
     >
       {leftIcon ? (

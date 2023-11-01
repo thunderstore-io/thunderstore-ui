@@ -6,6 +6,7 @@ import * as Button from "../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { Tooltip } from "../..";
+import { classnames } from "../../utils/utils";
 
 type DialogProps = {
   content?: ReactNode;
@@ -75,9 +76,10 @@ export function Dialog(props: DialogProps) {
           <RadixDialog.Overlay className={styles.overlay}>
             <RadixDialog.Content className={styles.content}>
               <div
-                className={`${styles.header} ${
-                  showHeaderBorder ? styles.headerBorder : ""
-                }`}
+                className={classnames(
+                  styles.header,
+                  showHeaderBorder ? styles.headerBorder : null
+                )}
               >
                 <Tooltip content="Close" side="bottom" open={tooltipOpen}>
                   <RadixDialog.Close asChild>
@@ -104,18 +106,20 @@ export function Dialog(props: DialogProps) {
               </div>
 
               <div
-                className={`${styles.body} ${
-                  noPadding ? "" : styles.bodyPadding
-                }`}
+                className={classnames(
+                  styles.body,
+                  noPadding ? null : styles.bodyPadding
+                )}
               >
                 {content}
               </div>
 
               {hideFooter ? null : (
                 <div
-                  className={`${styles.footer} ${
-                    showFooterBorder ? styles.footerBorder : ""
-                  }`}
+                  className={classnames(
+                    styles.footer,
+                    showFooterBorder ? styles.footerBorder : null
+                  )}
                 >
                   <div className={styles.footerSection}>
                     {additionalFooterContent}

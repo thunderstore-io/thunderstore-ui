@@ -1,4 +1,5 @@
 "use client";
+import { classnames } from "../../utils/utils";
 import styles from "./CollapsibleText.module.css";
 import { ReactElement, useState } from "react";
 
@@ -19,7 +20,7 @@ export function CollapsibleText(props: CollapsibleTextProps) {
 
   return (
     <div className={styles.root}>
-      <p className={`${styles.text} ${opened ? styles.opened : null}`}>
+      <p className={classnames(styles.text, opened ? styles.opened : null)}>
         {text}
       </p>
       {textIsTooLong ? (

@@ -9,7 +9,7 @@ import {
   faThumbtack,
 } from "@fortawesome/free-solid-svg-icons";
 import { Tag } from "../Tag/Tag";
-import { formatInteger } from "../../utils/utils";
+import { classnames, formatInteger } from "../../utils/utils";
 import { PackagePreview } from "@thunderstore/dapper/types";
 import { PackageLink, UserLink } from "../Links/Links";
 
@@ -32,7 +32,7 @@ export function PackageCard(props: PackageCardProps) {
 
   return (
     <div
-      className={`${styles.root} ${getStyle(colorScheme)}`}
+      className={classnames(styles.root, getStyle(colorScheme))}
       {...forwardedProps}
     >
       <div className={styles.imageWrapper}>

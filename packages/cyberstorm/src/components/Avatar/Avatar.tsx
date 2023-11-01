@@ -1,3 +1,4 @@
+import { classnames } from "../../utils/utils";
 import styles from "./Avatar.module.css";
 
 export interface AvatarProps {
@@ -12,8 +13,12 @@ export function Avatar(props: AvatarProps) {
   const { src, size = "medium" } = props;
 
   return (
-    <div className={`${styles.root} ${getSize(size)}`}>
-      <img src={src} className={`${styles.image} ${getSize(size)}`} alt="" />
+    <div className={classnames(styles.root, getSize(size))}>
+      <img
+        src={src}
+        className={classnames(styles.image, getSize(size))}
+        alt=""
+      />
     </div>
   );
 }

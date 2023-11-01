@@ -1,7 +1,7 @@
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dispatch, SetStateAction } from "react";
-import { range } from "../../utils/utils";
+import { classnames, range } from "../../utils/utils";
 import styles from "./Pagination.module.css";
 import { PaginationButton } from "./PaginationButton";
 
@@ -119,7 +119,9 @@ export function Pagination(props: PaginationProps) {
 
   return (
     <nav aria-label="Pagination">
-      <ul className={`${styles.list} ${disabled ? styles.disabled : ""}`}>
+      <ul
+        className={classnames(styles.list, disabled ? styles.disabled : null)}
+      >
         {buttons}
       </ul>
     </nav>

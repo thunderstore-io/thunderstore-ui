@@ -3,6 +3,7 @@ import styles from "./CodeInput.module.css";
 import { useState } from "react";
 import { TextAreaInput } from "../TextAreaInput/TextAreaInput";
 import { ValidationBar } from "../ValidationBar/ValidationBar";
+import { classnames } from "../../utils/utils";
 
 interface CodeInputProps {
   value?: string;
@@ -35,9 +36,10 @@ export function CodeInput(props: CodeInputProps) {
     const [validationStatus, setValidationStatus] = useState("");
     return (
       <div
-        className={`${styles.inputContainer} ${
-          validationStatus === "failure" ? styles.inputContainerFailure : ""
-        }`}
+        className={classnames(
+          styles.inputContainer,
+          validationStatus === "failure" ? styles.inputContainerFailure : null
+        )}
       >
         <TextAreaInput
           placeHolder={placeholder}
@@ -54,7 +56,10 @@ export function CodeInput(props: CodeInputProps) {
   } else {
     return (
       <div
-        className={`${styles.inputContainer} ${styles.inputContainerStatusBarDisabled}`}
+        className={classnames(
+          styles.inputContainer,
+          styles.inputContainerStatusBarDisabled
+        )}
       >
         <TextAreaInput
           placeHolder={placeholder}

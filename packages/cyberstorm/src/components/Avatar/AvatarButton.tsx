@@ -1,4 +1,5 @@
 "use client";
+import { classnames } from "../../utils/utils";
 import styles from "./Avatar.module.css";
 import React, { PropsWithChildren, useRef } from "react";
 
@@ -22,11 +23,15 @@ export const AvatarButton = React.forwardRef<
 
   return (
     <button
-      className={`${styles.root} ${getSize(size)}`}
+      className={classnames(styles.root, getSize(size))}
       {...forwardedProps}
       ref={ref}
     >
-      <img src={src} className={`${styles.image} ${getSize(size)}`} alt="" />
+      <img
+        src={src}
+        className={classnames(styles.image, getSize(size))}
+        alt=""
+      />
     </button>
   );
 });

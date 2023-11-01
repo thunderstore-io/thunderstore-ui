@@ -10,6 +10,7 @@ import { SettingItem } from "../../../SettingItem/SettingItem";
 import { Switch } from "../../../Switch/Switch";
 import { Icon } from "../../../Icon/Icon";
 import { OverwolfLogo } from "../../../../svg/svg";
+import { classnames } from "../../../../utils/utils";
 
 const PROVIDERS = [
   { name: "Discord", icon: <FontAwesomeIcon icon={faDiscord} /> },
@@ -76,9 +77,10 @@ function Connection(props: ConnectionProps) {
 
   return (
     <div
-      className={`${styles.itemWrapper} ${
+      className={classnames(
+        styles.itemWrapper,
         connection ? styles.enabled : styles.disabled
-      }`}
+      )}
     >
       <div className={styles.item}>
         <div className={styles.connectionTypeInfo}>

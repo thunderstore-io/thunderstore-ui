@@ -2,6 +2,7 @@
 import React, { useRef } from "react";
 import styles from "./Tag.module.css";
 import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
 
 export interface TagProps {
   key?: string;
@@ -45,7 +46,7 @@ export const Tag: React.FC<TagProps> = React.forwardRef<
     <div
       {...forwardedProps}
       ref={ref}
-      className={`${getSize(size)} ${styles.root} ${getStyle(colorScheme)}`}
+      className={classnames(getSize(size), styles.root, getStyle(colorScheme))}
     >
       {leftIcon ? (
         <Icon inline wrapperClasses={styles.icon}>

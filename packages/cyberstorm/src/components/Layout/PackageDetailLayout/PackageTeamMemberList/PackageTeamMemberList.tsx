@@ -6,6 +6,7 @@ import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import { faCaretRight, faCrown } from "@fortawesome/pro-solid-svg-icons";
 import { TeamLink, UserLink } from "../../../Links/Links";
 import { Icon } from "../../../Icon/Icon";
+import { classnames } from "../../../../utils/utils";
 
 export interface PackageTeamListProps {
   community: string;
@@ -30,7 +31,7 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
             alt={teamMember.username}
           />
         ) : (
-          <div className={`${styles.itemImage} ${styles.placeholder}`}>
+          <div className={classnames(styles.itemImage, styles.placeholder)}>
             {teamMember.username.charAt(0).toUpperCase()}
           </div>
         )}

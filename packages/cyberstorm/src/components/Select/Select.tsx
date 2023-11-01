@@ -7,6 +7,7 @@ import { faCaretDown } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as RadixSelect from "@radix-ui/react-select";
+import { classnames } from "../../utils/utils";
 
 type SelectOption<T extends string = string> = {
   value: T;
@@ -68,7 +69,7 @@ export function Select<T extends string>(props: SelectProps<T>) {
           <RadixSelect.Content
             position="popper"
             sideOffset={4}
-            className={`${styles.content} ${getContentStyle(variant)}`}
+            className={classnames(styles.content, getContentStyle(variant))}
           >
             {selectItemElements}
           </RadixSelect.Content>

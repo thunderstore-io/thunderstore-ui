@@ -2,6 +2,7 @@
 import React from "react";
 import styles from "./TextInput.module.css";
 import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
 
 export interface TextInputProps {
   placeHolder?: string;
@@ -46,7 +47,10 @@ export function TextInput(props: TextInputProps) {
         id={id}
         type={type}
         placeholder={placeHolder}
-        className={`${styles.input} ${leftIcon ? styles.hasLeftIcon : ""}`}
+        className={classnames(
+          styles.input,
+          leftIcon ? styles.hasLeftIcon : null
+        )}
         onChange={(event) => setValue && setValue(event.target.value)}
         value={value}
         onKeyDown={(e) => onEnter(e)}

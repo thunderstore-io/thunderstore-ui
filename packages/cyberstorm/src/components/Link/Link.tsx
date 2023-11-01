@@ -3,6 +3,7 @@ import { ReactElement } from "react";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
 
 export interface LinkProps {
   label: string;
@@ -26,7 +27,7 @@ export function Link(props: LinkProps) {
 
   if (externalUrl) {
     return (
-      <a href={externalUrl} className={`${styles.root} ${getSize(size)}`}>
+      <a href={externalUrl} className={classnames(styles.root, getSize(size))}>
         {leftIcon ? (
           <Icon wrapperClasses={styles.leftIcon}>{leftIcon}</Icon>
         ) : null}

@@ -21,6 +21,7 @@ import {
 import { ThunderstoreLogoHorizontal } from "../../svg/svg";
 import { Tooltip } from "../Tooltip/Tooltip";
 import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
 
 const AD_IMAGE_SRC = "/images/tsmm_screenshot.png";
 const DISCORD_URL = "https://discord.thunderstore.io/";
@@ -34,9 +35,9 @@ export function Footer() {
   return (
     <footer className={styles.root}>
       <div className={styles.main}>
-        <div className={`${styles.section} ${styles.info}`}>
-          <div className={`${styles.item} ${styles.company}`}>
-            <div className={`${styles.inner} ${styles.logoAndLinks}`}>
+        <div className={classnames(styles.section, styles.info)}>
+          <div className={classnames(styles.item, styles.company)}>
+            <div className={classnames(styles.inner, styles.logoAndLinks)}>
               <div className={styles.logo}>
                 <ThunderstoreLogoHorizontal />
               </div>
@@ -65,7 +66,7 @@ export function Footer() {
               </div>
             </div>
           </div>
-          <div className={`${styles.item} ${styles.linksWrapper}`}>
+          <div className={classnames(styles.item, styles.linksWrapper)}>
             <div className={styles.inner}>
               <nav className={styles.nav}>
                 <div className={styles.navSection}>
@@ -111,8 +112,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className={`${styles.section} ${styles.extra}`}>
-          <div className={`${styles.item} ${styles.adWrapper}`}>
+        <div className={classnames(styles.section, styles.extra)}>
+          <div className={classnames(styles.item, styles.adWrapper)}>
             <div className={styles.inner}>
               <div className={styles.ad}>
                 <div className={styles.adText}>
@@ -147,7 +148,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className={`${styles.item} ${styles.footnote}`}>
+      <div className={classnames(styles.item, styles.footnote)}>
         <div className={styles.footnoteInner}>
           <div className={styles.footnoteLinks}>
             <TermsOfServiceLink>
