@@ -224,7 +224,7 @@
 
 .button__transparentDanger {
   --bg-color: transparent;
-  --text-color: var(--color-border--highlight);
+  --text-color: var(--color-text--accent);
 }
 
 .button__transparentDanger:hover {

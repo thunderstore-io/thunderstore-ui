@@ -4,7 +4,10 @@ import { SettingItem } from "../../../../SettingItem/SettingItem";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { Alert } from "../../../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faOctagonExclamation,
+  faTrashCan,
+} from "@fortawesome/pro-solid-svg-icons";
 
 interface Props {
   teamName: string;
@@ -36,6 +39,9 @@ export function TeamLeaveAndDisband(props: Props) {
             </p>
             <div>
               <Button.Root colorScheme="danger" paddingSize="large">
+                <Button.ButtonIcon>
+                  <FontAwesomeIcon icon={faTrashCan} />
+                </Button.ButtonIcon>
                 <Button.ButtonLabel>Leave team</Button.ButtonLabel>
               </Button.Root>
             </div>
@@ -72,6 +78,9 @@ export function TeamLeaveAndDisband(props: Props) {
             </div>
             <div>
               <Button.Root colorScheme="danger" paddingSize="large">
+                <Button.ButtonIcon>
+                  <FontAwesomeIcon icon={faTrashCan} />
+                </Button.ButtonIcon>
                 <Button.ButtonLabel>Disband team</Button.ButtonLabel>
               </Button.Root>
             </div>

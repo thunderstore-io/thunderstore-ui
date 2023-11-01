@@ -5,8 +5,8 @@ import { SettingItem } from "../../../../SettingItem/SettingItem";
 import { TextInput } from "../../../../TextInput/TextInput";
 import * as Button from "../../../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/pro-light-svg-icons";
 import { useState } from "react";
+import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 
 interface Props {
   teamName: string;
@@ -41,7 +41,7 @@ export function TeamDetails(props: Props) {
                   colorScheme="transparentDanger"
                 >
                   <Button.ButtonIcon>
-                    <FontAwesomeIcon icon={faXmark} />
+                    <FontAwesomeIcon icon={faXmarkLarge} />
                   </Button.ButtonIcon>
                 </Button.Root>
               </div>
