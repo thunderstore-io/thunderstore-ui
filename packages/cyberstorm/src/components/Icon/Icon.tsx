@@ -28,7 +28,7 @@ export function Icon(props: IconProps) {
         child.props.className,
         styles.root,
         inline ? styles.inline : null,
-        iconClasses
+        iconClasses ? iconClasses : null
       ),
     })
   );

@@ -31,7 +31,10 @@ export const OthersMenu = (props: Props) => {
         {filters.map(([checked, setChecked, label]) => (
           <li key={label}>
             <label
-              className={classnames(styles.label, checked && styles.include)}
+              className={classnames(
+                styles.label,
+                checked ? styles.include : null
+              )}
             >
               <Checkbox.Root
                 checked={checked}
