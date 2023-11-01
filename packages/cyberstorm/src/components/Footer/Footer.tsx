@@ -44,21 +44,21 @@ export function Footer() {
               <div className={styles.iconLinks}>
                 <Tooltip content="Join our discord" side="bottom">
                   <a href={DISCORD_URL}>
-                    <Icon inline wrapperClasses={styles.iconLink}>
+                    <Icon wrapperClasses={styles.iconLink}>
                       <FontAwesomeIcon icon={faDiscord} />
                     </Icon>
                   </a>
                 </Tooltip>
                 <Tooltip content="Check out our GitHub" side="bottom">
                   <a href={GITHUB_URL}>
-                    <Icon inline wrapperClasses={styles.iconLink}>
+                    <Icon wrapperClasses={styles.iconLink}>
                       <FontAwesomeIcon icon={faGithub} />
                     </Icon>
                   </a>
                 </Tooltip>
                 <Tooltip content="Talk to us on Reddit" side="bottom">
                   <a href={REDDIT_URL}>
-                    <Icon inline wrapperClasses={styles.iconLink}>
+                    <Icon wrapperClasses={styles.iconLink}>
                       <FontAwesomeIcon icon={faReddit} />
                     </Icon>
                   </a>

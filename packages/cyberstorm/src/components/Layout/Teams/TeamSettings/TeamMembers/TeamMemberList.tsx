@@ -98,6 +98,7 @@ export function TeamMemberList(props: Props) {
       rows={tableData}
       sortByHeader={1}
       sortDirection={Sort.ASC}
+      variant="itemList"
     />
   );
 }
