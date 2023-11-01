@@ -13,3 +13,8 @@
   /* Override reset.css 100% value */
   max-inline-size: none;
 }
+
+.inline {
+  width: 1em;
+  height: 1em;
+}

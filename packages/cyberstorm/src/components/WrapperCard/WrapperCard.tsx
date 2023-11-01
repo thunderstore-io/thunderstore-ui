@@ -20,7 +20,9 @@ export function WrapperCard(props: WrapperCardProps) {
     <div className={styles.root}>
       <div className={styles.header}>
         {headerIcon ? (
-          <Icon wrapperClasses={styles.icon}>{headerIcon}</Icon>
+          <Icon inline wrapperClasses={styles.icon}>
+            {headerIcon}
+          </Icon>
         ) : null}
         <div className={styles.title}>{title}</div>
         <div className={styles.headerRight}>{headerRightContent}</div>

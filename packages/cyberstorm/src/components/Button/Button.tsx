@@ -15,7 +15,14 @@ export interface ButtonProps {
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   iconAlignment?: "default" | "side";
-  paddingSize?: "none" | "small" | "medium" | "mediumSquare" | "large" | "huge";
+  paddingSize?:
+    | "none"
+    | "small"
+    | "medium"
+    | "mediumSquare"
+    | "large"
+    | "largeBorderCompensated"
+    | "huge";
   fontSize?: "small" | "medium" | "large" | "huge";
   colorScheme?:
     | "danger"
@@ -158,6 +165,7 @@ const getPaddingSize = (scheme: string) => {
     medium: styles.padding__medium,
     mediumSquare: styles.padding__mediumSquare,
     large: styles.padding__large,
+    largeBorderCompensated: styles.padding__large__borderCompensated,
     huge: styles.padding__huge,
   }[scheme];
 };

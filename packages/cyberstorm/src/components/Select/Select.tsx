@@ -56,7 +56,7 @@ export function Select<T extends string>(props: SelectProps<T>) {
           <Button.Root
             iconAlignment="side"
             colorScheme="wideDarker"
-            paddingSize="large"
+            paddingSize="largeBorderCompensated"
           >
             <Button.ButtonLabel fontSize={triggerFontSize}>
               {options?.find((o) => o.value === value)?.label ?? placeholder}

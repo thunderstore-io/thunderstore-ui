@@ -24,7 +24,12 @@ export function Icon(props: IconProps) {
   }
   const clones = Children.map(children, (child) =>
     cloneElement(child, {
-      className: classnames(child.props.className, styles.root, iconClasses),
+      className: classnames(
+        child.props.className,
+        styles.root,
+        inline ? styles.inline : null,
+        iconClasses
+      ),
     })
   );
   return noWrapper ? (

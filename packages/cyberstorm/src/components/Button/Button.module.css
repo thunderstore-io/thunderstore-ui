@@ -296,6 +296,11 @@
   padding: var(--space--12) var(--space--16);
 }
 
+.padding__large__borderCompensated {
+  gap: var(--gap--16);
+  padding: var(--space--10) var(--space--14);
+}
+
 .padding__huge {
   gap: var(--gap--16);
   padding-block: var(--button-padding-block);
