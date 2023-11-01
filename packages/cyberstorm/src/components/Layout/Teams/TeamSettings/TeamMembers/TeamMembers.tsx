@@ -9,7 +9,6 @@ import { TextInput } from "../../../../TextInput/TextInput";
 import { Select } from "../../../../Select/Select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
-import { Icon } from "../../../../Icon/Icon";
 
 const userRoles = [
   { value: "member", label: "Member" },
@@ -33,9 +32,7 @@ export function TeamMembers(props: Props) {
         <Button.Root colorScheme="primary" paddingSize="large">
           <Button.ButtonLabel>Add Member</Button.ButtonLabel>
           <Button.ButtonIcon>
-            <Icon>
-              <FontAwesomeIcon icon={faPlus} />
-            </Icon>
+            <FontAwesomeIcon icon={faPlus} />
           </Button.ButtonIcon>
         </Button.Root>
       }

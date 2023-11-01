@@ -13,7 +13,6 @@ import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
 import { CurrentUser } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
-import { Icon } from "../../Icon/Icon";
 
 /**
  * View containing settings for the authenticated user's account.
@@ -46,20 +45,12 @@ const tabs = [
   {
     key: 1,
     label: "Connections",
-    icon: (
-      <Icon>
-        <FontAwesomeIcon icon={faCircleNodes} />
-      </Icon>
-    ),
+    icon: <FontAwesomeIcon icon={faCircleNodes} />,
   },
   {
     key: 2,
     label: "Account",
-    icon: (
-      <Icon>
-        <FontAwesomeIcon icon={faCog} />
-      </Icon>
-    ),
+    icon: <FontAwesomeIcon icon={faCog} />,
   },
 ];
 

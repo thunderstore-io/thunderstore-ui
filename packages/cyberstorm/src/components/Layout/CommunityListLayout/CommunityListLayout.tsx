@@ -15,7 +15,6 @@ import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDebounce } from "use-debounce";
 import { CommunityList } from "./CommunityList";
 import { Loading } from "./Loading";
-import { Icon } from "../../Icon/Icon";
 
 export enum SortOptions {
   Name = "name",
@@ -43,11 +42,7 @@ export function CommunityListLayout() {
               setValue={setSearchValue}
               value={searchValue}
               placeHolder="Search communities..."
-              leftIcon={
-                <Icon>
-                  <FontAwesomeIcon icon={faSearch} />
-                </Icon>
-              }
+              leftIcon={<FontAwesomeIcon icon={faSearch} />}
             />
           </div>
           <div className={styles.searchFilters}>
@@ -75,19 +70,11 @@ const selectOptions = [
   {
     value: SortOptions.Name,
     label: "Name",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faArrowDownAZ} />
-      </Icon>
-    ),
+    leftIcon: <FontAwesomeIcon icon={faArrowDownAZ} />,
   },
   {
     value: SortOptions.Latest,
     label: "Latest",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faStar} />
-      </Icon>
-    ),
+    leftIcon: <FontAwesomeIcon icon={faStar} />,
   },
 ];

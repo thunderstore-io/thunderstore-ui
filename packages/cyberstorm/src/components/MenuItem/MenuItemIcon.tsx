@@ -1,13 +1,18 @@
-import { ReactNode } from "react";
 import styles from "./MenuItem.module.css";
+import { Icon } from "../Icon/Icon";
 
 export interface MenuItemIconProps {
-  children: ReactNode | ReactNode[];
+  children: JSX.Element | JSX.Element[];
+  iconClasses?: string;
 }
 
 export function MenuItemIcon(props: MenuItemIconProps) {
-  const { children } = props;
-  return <div className={styles.menuItemIcon}>{children}</div>;
+  const { children, iconClasses } = props;
+  return (
+    <Icon wrapperClasses={styles.menuItemIcon} iconClasses={iconClasses}>
+      {children}
+    </Icon>
+  );
 }
 
 MenuItemIcon.displayName = "MenuItemIcon";

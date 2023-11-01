@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dispatch, SetStateAction } from "react";
 
 import styles from "./PackageList.module.css";
-import { Icon } from "../Icon/Icon";
 import { Select } from "../Select/Select";
 
 interface Props {
@@ -38,38 +37,22 @@ const selectOptions = [
   {
     value: PackageOrderOptions.Updated,
     label: "Last updated",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faClock} />
-      </Icon>
-    ),
+    leftIcon: <FontAwesomeIcon icon={faClock} />,
   },
   {
     value: PackageOrderOptions.Created,
     label: "Newest",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faSparkles} />
-      </Icon>
-    ),
+    leftIcon: <FontAwesomeIcon icon={faSparkles} />,
   },
   {
     value: PackageOrderOptions.Downloaded,
     label: "Most downloaded",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faDownload} />
-      </Icon>
-    ),
+    leftIcon: <FontAwesomeIcon icon={faDownload} />,
   },
   {
     value: PackageOrderOptions.Rated,
     label: "Top rated",
-    leftIcon: (
-      <Icon>
-        <FontAwesomeIcon icon={faThumbsUp} />
-      </Icon>
-    ),
+    leftIcon: <FontAwesomeIcon icon={faThumbsUp} />,
   },
 ];
 

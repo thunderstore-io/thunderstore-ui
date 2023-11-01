@@ -3,7 +3,7 @@ import { ServiceAccount } from "@thunderstore/dapper/types";
 import { Dialog } from "../../../../../Dialog/Dialog";
 import * as Button from "../../../../../Button";
 import { Table } from "../../../../../Table/Table";
-import { Alert, Icon } from "../../../../../../index";
+import { Alert } from "../../../../../../index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/pro-solid-svg-icons";
 
@@ -38,11 +38,7 @@ export function ServiceAccountList(props: Props) {
           content={
             <div className={styles.content}>
               <Alert
-                icon={
-                  <Icon>
-                    <FontAwesomeIcon icon={faTriangleExclamation} />
-                  </Icon>
-                }
+                icon={<FontAwesomeIcon icon={faTriangleExclamation} />}
                 content={
                   "This cannot be undone! Related API token will stop working immediately if the service account is removed."
                 }

@@ -27,9 +27,9 @@ export const MetaItem = React.forwardRef<HTMLDivElement, MetaItemProps>(
 
     return (
       <div ref={ref} className={`${styles.root} ${getStyle(colorScheme)}`}>
-        <span className={styles.icon}>
-          <Icon>{icon}</Icon>
-        </span>
+        <Icon inline wrapperClasses={styles.icon}>
+          {icon}
+        </Icon>
         {label ? (
           <div className={`${styles.label} ${getSize(size)}`}>{label}</div>
         ) : null}

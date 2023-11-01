@@ -12,7 +12,6 @@ import { CopyButton } from "../../../../CopyButton/CopyButton";
 import { Alert } from "../../../../Alert/Alert";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
-import { Icon } from "../../../../Icon/Icon";
 
 interface Props {
   teamName: string;
@@ -41,9 +40,7 @@ export function TeamServiceAccounts(props: Props) {
                 <Button.Root paddingSize="large" colorScheme="primary">
                   <Button.ButtonLabel>Add Service Account</Button.ButtonLabel>
                   <Button.ButtonIcon>
-                    <Icon>
-                      <FontAwesomeIcon icon={faPlus} />
-                    </Icon>
+                    <FontAwesomeIcon icon={faPlus} />
                   </Button.ButtonIcon>
                 </Button.Root>
               }
@@ -71,11 +68,7 @@ export function TeamServiceAccounts(props: Props) {
                       />
                     </div>
                     <Alert
-                      icon={
-                        <Icon>
-                          <FontAwesomeIcon icon={faCircleExclamation} />
-                        </Icon>
-                      }
+                      icon={<FontAwesomeIcon icon={faCircleExclamation} />}
                       content={
                         "Store this token securely, as it can't be retrieved later, and treat it as you would treat an important password."
                       }

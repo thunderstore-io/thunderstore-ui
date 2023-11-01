@@ -42,22 +42,22 @@ export function Footer() {
               </div>
               <div className={styles.iconLinks}>
                 <Tooltip content="Join our discord" side="bottom">
-                  <a href={DISCORD_URL} className={styles.iconLink}>
-                    <Icon>
+                  <a href={DISCORD_URL}>
+                    <Icon inline wrapperClasses={styles.iconLink}>
                       <FontAwesomeIcon icon={faDiscord} />
                     </Icon>
                   </a>
                 </Tooltip>
                 <Tooltip content="Check out our GitHub" side="bottom">
-                  <a href={GITHUB_URL} className={styles.iconLink}>
-                    <Icon>
+                  <a href={GITHUB_URL}>
+                    <Icon inline wrapperClasses={styles.iconLink}>
                       <FontAwesomeIcon icon={faGithub} />
                     </Icon>
                   </a>
                 </Tooltip>
                 <Tooltip content="Talk to us on Reddit" side="bottom">
-                  <a href={REDDIT_URL} className={styles.iconLink}>
-                    <Icon>
+                  <a href={REDDIT_URL}>
+                    <Icon inline wrapperClasses={styles.iconLink}>
                       <FontAwesomeIcon icon={faReddit} />
                     </Icon>
                   </a>
@@ -121,11 +121,9 @@ export function Footer() {
                     You are prepared. Download Thunderstore Bolt
                     <br />
                     for desktop and enter a world of Thunder{" "}
-                    <div className={styles.inlineIcon}>
-                      <Icon>
-                        <FontAwesomeIcon icon={faBoltLightning} />
-                      </Icon>
-                    </div>
+                    <Icon inline wrapperClasses={styles.inlineIcon}>
+                      <FontAwesomeIcon icon={faBoltLightning} />
+                    </Icon>
                   </div>
                   <a href="/" className={styles.adButton}>
                     <Button.Root plain colorScheme="accent" paddingSize="large">
@@ -133,9 +131,7 @@ export function Footer() {
                         Get Manager
                       </Button.ButtonLabel>
                       <Button.ButtonIcon>
-                        <Icon>
-                          <FontAwesomeIcon icon={faArrowUpRight} />
-                        </Icon>
+                        <FontAwesomeIcon icon={faArrowUpRight} />
                       </Button.ButtonIcon>
                     </Button.Root>
                   </a>

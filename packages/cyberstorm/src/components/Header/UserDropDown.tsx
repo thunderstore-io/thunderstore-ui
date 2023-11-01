@@ -18,7 +18,6 @@ import * as Button from "../Button/";
 import { DropDown, DropDownDivider, DropDownItem } from "../DropDown/DropDown";
 import { DropDownLink } from "../DropDown/DropDownLink";
 import { SettingsLink, TeamsLink, UserLink } from "../Links/Links";
-import { Icon } from "../Icon/Icon";
 
 /**
  * TODO: show fallback if user is not authenticated.
@@ -43,9 +42,7 @@ export const UserDropDown = () => {
         ) : (
           <Button.Root>
             <Button.ButtonIcon>
-              <Icon>
-                <FontAwesomeIcon icon={faUser} />
-              </Icon>
+              <FontAwesomeIcon icon={faUser} />
             </Button.ButtonIcon>
           </Button.Root>
         )

@@ -6,7 +6,6 @@ import styles from "./CopyButton.module.css";
 import { Tooltip } from "../Tooltip/Tooltip";
 import * as Button from "../Button/";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { Icon } from "../Icon/Icon";
 
 type CopyButtonProps = {
   text: string;
@@ -79,12 +78,10 @@ export function CopyButton(props: CopyButtonProps) {
             onMouseOut={() => setIsTooltipOpen(false)}
           >
             <Button.ButtonIcon>
-              <Icon>
-                <FontAwesomeIcon
-                  icon={wasRecentlyCopied ? faCheck : faClone}
-                  className={wasRecentlyCopied ? styles.checkmark : styles.copy}
-                />
-              </Icon>
+              <FontAwesomeIcon
+                icon={wasRecentlyCopied ? faCheck : faClone}
+                className={wasRecentlyCopied ? styles.checkmark : styles.copy}
+              />
             </Button.ButtonIcon>
           </Button.Root>
         </div>

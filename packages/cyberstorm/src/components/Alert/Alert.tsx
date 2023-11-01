@@ -1,10 +1,12 @@
 "use client";
 import React, { ReactNode } from "react";
 import styles from "./Alert.module.css";
+import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
 
 type _AlertProps = {
   content: ReactNode;
-  icon?: ReactNode;
+  icon?: JSX.Element;
   variant?: "info" | "danger" | "warning" | "success";
 };
 export type AlertProps = _AlertProps &
@@ -14,9 +16,9 @@ export function Alert(props: AlertProps) {
   const { content, icon, variant = "info" } = props;
 
   return (
-    <div className={`${styles.root} ${getStyle(variant)}`}>
-      {<div className={`${styles.icon}`}>{icon}</div>}
-      {<div className={`${styles.content}`}>{content}</div>}
+    <div className={classnames(styles.root, getStyle(variant))}>
+      {<Icon wrapperClasses={styles.icon}>{icon}</Icon>}
+      {<div className={styles.content}>{content}</div>}
     </div>
   );
 }

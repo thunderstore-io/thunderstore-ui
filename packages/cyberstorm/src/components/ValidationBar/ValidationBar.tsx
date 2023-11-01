@@ -11,48 +11,41 @@ import {
 import { Suspense } from "react";
 
 import { usePromise } from "@thunderstore/use-promise";
+import { classnames } from "../../utils/utils";
 
 const waitingElement = (
   <div className={styles.statusBar}>
-    <div className={styles.icon}>
-      <Icon>
-        <FontAwesomeIcon icon={faPenToSquare} />
-      </Icon>
-    </div>
+    <Icon inline wrapperClasses={styles.icon}>
+      <FontAwesomeIcon icon={faPenToSquare} />
+    </Icon>
     Waiting for input
   </div>
 );
 
 const validatingElement = (
   <div className={styles.statusBar}>
-    <div className={`${styles.icon} ${styles.spinningIcon}`}>
-      <Icon>
-        <FontAwesomeIcon icon={faArrowsRotate} />
-      </Icon>
-    </div>
+    <Icon inline wrapperClasses={classnames(styles.icon, styles.spinningIcon)}>
+      <FontAwesomeIcon icon={faArrowsRotate} />
+    </Icon>
     Validating...
   </div>
 );
 
 const successElement = (
-  <div className={`${styles.statusBar} ${styles.statusBarSuccess}`}>
-    <div className={styles.icon}>
-      <Icon>
-        <FontAwesomeIcon icon={faCircleCheck} />
-      </Icon>
-    </div>
+  <div className={classnames(styles.statusBar, styles.statusBarSuccess)}>
+    <Icon inline wrapperClasses={styles.icon}>
+      <FontAwesomeIcon icon={faCircleCheck} />
+    </Icon>
     All systems go!
   </div>
 );
 
 const failureElement = (message: string) => {
   return (
-    <div className={`${styles.statusBar} ${styles.statusBarFailure}`}>
-      <div className={`${styles.icon} ${styles.iconFailure}`}>
-        <Icon>
-          <FontAwesomeIcon icon={faTriangleExclamation} />
-        </Icon>
-      </div>
+    <div className={classnames(styles.statusBar, styles.statusBarFailure)}>
+      <Icon inline wrapperClasses={classnames(styles.icon, styles.iconFailure)}>
+        <FontAwesomeIcon icon={faTriangleExclamation} />
+      </Icon>
       {message
         ? message
         : "Problem, alarm, danger. Everything is going to explode."}

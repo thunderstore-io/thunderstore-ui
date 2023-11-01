@@ -10,7 +10,6 @@ import {
   PackageFormatDocsLink,
   PackageUploadLink,
 } from "../Links/Links";
-import { Icon } from "../Icon/Icon";
 
 export const DevelopersDropDown = () => (
   <DropDown
@@ -19,9 +18,7 @@ export const DevelopersDropDown = () => (
       <Button.Root paddingSize="large">
         <Button.ButtonLabel fontSize="large">Developers</Button.ButtonLabel>
         <Button.ButtonIcon>
-          <Icon>
-            <FontAwesomeIcon icon={faCaretDown} />
-          </Icon>
+          <FontAwesomeIcon icon={faCaretDown} />
         </Button.ButtonIcon>
       </Button.Root>
     }

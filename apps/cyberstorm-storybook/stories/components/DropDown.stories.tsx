@@ -2,7 +2,6 @@ import { StoryFn, Meta } from "@storybook/react";
 import {
   Button,
   DropDown,
-  Icon,
   MenuItem,
   MenuItemProps,
   Tag,
@@ -26,9 +25,7 @@ const defaultArgs = {
     <Button.Root>
       <Button.ButtonLabel>Developers</Button.ButtonLabel>
       <Button.ButtonIcon>
-        <Icon>
-          <FontAwesomeIcon icon={faChevronDown} />
-        </Icon>
+        <FontAwesomeIcon icon={faChevronDown} />
       </Button.ButtonIcon>
     </Button.Root>
   ),
@@ -37,26 +34,20 @@ const defaultArgs = {
 const content: ReactElement<MenuItemProps>[] = [
   <MenuItem.Root key={1}>
     <MenuItem.MenuItemIcon>
-      <Icon>
-        <FontAwesomeIcon icon={faStar} />
-      </Icon>
+      <FontAwesomeIcon icon={faStar} />
     </MenuItem.MenuItemIcon>
     <MenuItem.MenuItemLabel>New</MenuItem.MenuItemLabel>
   </MenuItem.Root>,
   <MenuItem.Root key={2}>
     <MenuItem.MenuItemIcon>
-      <Icon>
-        <FontAwesomeIcon icon={faThumbtack} />
-      </Icon>
+      <FontAwesomeIcon icon={faThumbtack} />
     </MenuItem.MenuItemIcon>
     <MenuItem.MenuItemLabel>New</MenuItem.MenuItemLabel>
   </MenuItem.Root>,
   <Button.Root style={{ minWidth: "100%" }} key={3}>
     <Button.ButtonLabel>Nabbula</Button.ButtonLabel>
     <Button.ButtonIcon>
-      <Icon>
-        <FontAwesomeIcon icon={faSkull} />
-      </Icon>
+      <FontAwesomeIcon icon={faSkull} />
     </Button.ButtonIcon>
   </Button.Root>,
 ];

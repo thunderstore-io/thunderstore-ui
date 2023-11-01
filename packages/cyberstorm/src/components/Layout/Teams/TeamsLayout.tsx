@@ -10,7 +10,6 @@ import { TeamList } from "./TeamList/TeamList";
 import { Dialog } from "../../Dialog/Dialog";
 import { TextInput } from "../../TextInput/TextInput";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
-import { Icon } from "../../Icon/Icon";
 import { Alert } from "../../Alert/Alert";
 
 /**
@@ -48,9 +47,7 @@ export function TeamsLayout() {
                   <Button.Root colorScheme="primary" paddingSize="large">
                     <Button.ButtonLabel>Create team</Button.ButtonLabel>
                     <Button.ButtonIcon>
-                      <Icon>
-                        <FontAwesomeIcon icon={faPlus} />
-                      </Icon>
+                      <FontAwesomeIcon icon={faPlus} />
                     </Button.ButtonIcon>
                   </Button.Root>
                 }
@@ -65,11 +62,7 @@ export function TeamsLayout() {
             content={
               <div className={styles.contentWrapper}>
                 <Alert
-                  icon={
-                    <Icon>
-                      <FontAwesomeIcon icon={faCircleCheck} />
-                    </Icon>
-                  }
+                  icon={<FontAwesomeIcon icon={faCircleCheck} />}
                   content={
                     <span>
                       New team

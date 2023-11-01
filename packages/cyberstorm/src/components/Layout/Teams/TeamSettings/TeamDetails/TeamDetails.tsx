@@ -7,7 +7,6 @@ import * as Button from "../../../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/pro-light-svg-icons";
 import { useState } from "react";
-import { Icon } from "../../../../Icon/Icon";
 
 interface Props {
   teamName: string;
@@ -42,9 +41,7 @@ export function TeamDetails(props: Props) {
                   colorScheme="transparentDanger"
                 >
                   <Button.ButtonIcon>
-                    <Icon>
-                      <FontAwesomeIcon icon={faXmark} />
-                    </Icon>
+                    <FontAwesomeIcon icon={faXmark} />
                   </Button.ButtonIcon>
                 </Button.Root>
               </div>

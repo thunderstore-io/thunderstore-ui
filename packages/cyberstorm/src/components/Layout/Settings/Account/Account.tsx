@@ -5,7 +5,6 @@ import { TextInput } from "../../../TextInput/TextInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faWarning } from "@fortawesome/pro-solid-svg-icons";
 import { Alert } from "../../../Alert/Alert";
-import { Icon } from "../../../Icon/Icon";
 
 export interface AccountProps {
   username: string | null;
@@ -29,11 +28,7 @@ export function Account(props: AccountProps) {
           content={
             <div className={styles.content}>
               <Alert
-                icon={
-                  <Icon>
-                    <FontAwesomeIcon icon={faWarning} />
-                  </Icon>
-                }
+                icon={<FontAwesomeIcon icon={faWarning} />}
                 content={
                   "You are about to delete your account. Once deleted, it will be gone forever. Please be certain."
                 }
@@ -55,9 +50,7 @@ export function Account(props: AccountProps) {
               <div>
                 <Button.Root colorScheme="danger" paddingSize="large">
                   <Button.ButtonIcon>
-                    <Icon>
-                      <FontAwesomeIcon icon={faTrashCan} />
-                    </Icon>
+                    <FontAwesomeIcon icon={faTrashCan} />
                   </Button.ButtonIcon>
                   <Button.ButtonLabel>
                     I understand this action is irrevocable and want to continue

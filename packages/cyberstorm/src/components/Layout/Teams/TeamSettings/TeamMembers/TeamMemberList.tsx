@@ -6,7 +6,6 @@ import styles from "./TeamMembers.module.css";
 import { Avatar } from "../../../../Avatar/Avatar";
 import * as Button from "../../../../Button/";
 import { Dialog } from "../../../../Dialog/Dialog";
-import { Icon } from "../../../../Icon/Icon";
 import { UserLink } from "../../../../Links/Links";
 import { Select } from "../../../../Select/Select";
 import { Table, Sort } from "../../../../Table/Table";
@@ -63,9 +62,7 @@ export function TeamMemberList(props: Props) {
           trigger={
             <Button.Root colorScheme="danger" paddingSize="large">
               <Button.ButtonIcon>
-                <Icon>
-                  <FontAwesomeIcon icon={faTrash} />
-                </Icon>
+                <FontAwesomeIcon icon={faTrash} />
               </Button.ButtonIcon>
               <Button.ButtonLabel>Kick</Button.ButtonLabel>
             </Button.Root>

@@ -17,7 +17,6 @@ import {
   faCog,
 } from "@fortawesome/pro-regular-svg-icons";
 import { TeamLeaveAndDisband } from "./TeamLeaveAndDisband/TeamLeaveAndDisband";
-import { Icon } from "../../../Icon/Icon";
 
 interface Props {
   teamName: string;
@@ -54,38 +53,22 @@ const tabs = [
   {
     key: 1,
     label: "Profile",
-    icon: (
-      <Icon>
-        <FontAwesomeIcon icon={faEdit} />
-      </Icon>
-    ),
+    icon: <FontAwesomeIcon icon={faEdit} />,
   },
   {
     key: 2,
     label: "Members",
-    icon: (
-      <Icon>
-        <FontAwesomeIcon icon={faUsers} />
-      </Icon>
-    ),
+    icon: <FontAwesomeIcon icon={faUsers} />,
   },
   {
     key: 3,
     label: "Service Accounts",
-    icon: (
-      <Icon>
-        <FontAwesomeIcon icon={faUserCog} />
-      </Icon>
-    ),
+    icon: <FontAwesomeIcon icon={faUserCog} />,
   },
   {
     key: 4,
     label: "Settings",
-    icon: (
-      <Icon>
-        <FontAwesomeIcon icon={faCog} />
-      </Icon>
-    ),
+    icon: <FontAwesomeIcon icon={faCog} />,
   },
 ];
 

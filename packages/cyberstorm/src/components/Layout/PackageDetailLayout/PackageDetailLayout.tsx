@@ -42,7 +42,6 @@ import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
 import { ThunderstoreLogo } from "../../../svg/svg";
 import { usePromise } from "@thunderstore/use-promise";
-import { Icon } from "../../Icon/Icon";
 
 export interface PackageDetailLayoutProps {
   community: string;
@@ -81,9 +80,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
       >
         <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
           <Button.ButtonIcon>
-            <Icon>
-              <FontAwesomeIcon icon={faUsers} />
-            </Icon>
+            <FontAwesomeIcon icon={faUsers} />
           </Button.ButtonIcon>
           <Button.ButtonLabel>{packageData.team.name}</Button.ButtonLabel>
         </Button.Root>
@@ -96,9 +93,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
         <Button.Root>
           <Button.ButtonLabel>GitHub</Button.ButtonLabel>
           <Button.ButtonIcon>
-            <Icon>
-              <FontAwesomeIcon icon={faGithub} />
-            </Icon>
+            <FontAwesomeIcon icon={faGithub} />
           </Button.ButtonIcon>
         </Button.Root>
       </a>
@@ -163,9 +158,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               trigger={
                 <Button.Root colorScheme="primary" paddingSize="medium">
                   <Button.ButtonIcon>
-                    <Icon>
-                      <FontAwesomeIcon icon={faCog} />
-                    </Icon>
+                    <FontAwesomeIcon icon={faCog} />
                   </Button.ButtonIcon>
                   <Button.ButtonLabel>Manage</Button.ButtonLabel>
                 </Button.Root>
@@ -205,9 +198,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               paddingSize="mediumSquare"
             >
               <Button.ButtonIcon>
-                <Icon>
-                  <FontAwesomeIcon icon={faDonate} />
-                </Icon>
+                <FontAwesomeIcon icon={faDonate} />
               </Button.ButtonIcon>
             </Button.Root>
             <Button.Root
@@ -216,9 +207,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               paddingSize="mediumSquare"
             >
               <Button.ButtonIcon>
-                <Icon>
-                  <FontAwesomeIcon icon={faThumbsUp} />
-                </Icon>
+                <FontAwesomeIcon icon={faThumbsUp} />
               </Button.ButtonIcon>
             </Button.Root>
             <Button.Root
@@ -227,9 +216,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
               paddingSize="mediumSquare"
             >
               <Button.ButtonIcon>
-                <Icon>
-                  <FontAwesomeIcon icon={faFlag} />
-                </Icon>
+                <FontAwesomeIcon icon={faFlag} />
               </Button.ButtonIcon>
             </Button.Root>
           </div>
@@ -308,29 +295,17 @@ const tabs = [
   {
     key: 1,
     label: "Details",
-    icon: (
-      <Icon>
-        <FontAwesomeIcon icon={faFileLines} className={styles.tabIcon} />
-      </Icon>
-    ),
+    icon: <FontAwesomeIcon icon={faFileLines} className={styles.tabIcon} />,
   },
   {
     key: 2,
     label: "Changelog",
-    icon: (
-      <Icon>
-        <FontAwesomeIcon icon={faFilePlus} className={styles.tabIcon} />
-      </Icon>
-    ),
+    icon: <FontAwesomeIcon icon={faFilePlus} className={styles.tabIcon} />,
   },
   {
     key: 3,
     label: "Versions",
-    icon: (
-      <Icon>
-        <FontAwesomeIcon icon={faCodeBranch} className={styles.tabIcon} />
-      </Icon>
-    ),
+    icon: <FontAwesomeIcon icon={faCodeBranch} className={styles.tabIcon} />,
   },
 ];
 

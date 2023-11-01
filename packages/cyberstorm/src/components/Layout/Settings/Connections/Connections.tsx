@@ -82,9 +82,9 @@ function Connection(props: ConnectionProps) {
     >
       <div className={styles.item}>
         <div className={styles.connectionTypeInfo}>
-          <div className={styles.connectionTypeInfoIcon}>
-            <Icon>{provider.icon}</Icon>
-          </div>
+          <Icon wrapperClasses={styles.connectionTypeInfoIcon}>
+            {provider.icon}
+          </Icon>
           <div className={styles.connectionTypeInfoName}>{provider.name}</div>
         </div>
         <div className={styles.rightSection}>

@@ -4,7 +4,6 @@ import { TextInput } from "../../../TextInput/TextInput";
 import { Alert } from "../../../Alert/Alert";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/pro-solid-svg-icons";
-import { Icon } from "../../../Icon/Icon";
 
 export interface PackageManagementFormProps {
   packageStatus?: string;
@@ -16,11 +15,7 @@ export function PackageManagementForm(props: PackageManagementFormProps) {
     <div className={styles.root}>
       <div className={styles.section}>
         <Alert
-          icon={
-            <Icon>
-              <FontAwesomeIcon icon={faCircleExclamation} />
-            </Icon>
-          }
+          icon={<FontAwesomeIcon icon={faCircleExclamation} />}
           content={
             "Changes might take several minutes to show publicly! Info shown below is always up to date."
           }

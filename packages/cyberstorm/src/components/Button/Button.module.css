@@ -270,7 +270,7 @@
 /* Button padding sizes */
 
 .padding__none {
-  gap: var(--gap--4);
+  gap: var(--gap--8);
   padding: 0;
   border-radius: 0;
 }
@@ -312,6 +312,7 @@
 .ButtonIcon__IconSize__default {
   width: 1em;
   height: 1em;
+  font-size: var(--font-size);
 }
 
 .ButtonIcon__IconSize__tslogo_install_button {
@@ -320,7 +321,7 @@
 }
 
 .ButtonIcon__IconColor__default {
-  color: var(--color-text--default);
+  color: var(--text-color);
 }
 
 .ButtonIcon__IconColor__darker {

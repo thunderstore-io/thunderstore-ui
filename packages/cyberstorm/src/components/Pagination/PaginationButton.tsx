@@ -1,13 +1,14 @@
-import { MouseEventHandler, ReactNode } from "react";
+import { MouseEventHandler } from "react";
 import styles from "./PaginationButton.module.css";
+import { Icon } from "../Icon/Icon";
 
 export interface PaginationButtonProps {
   isSelected?: boolean;
   ariaCurrent?: boolean;
   ariaLabel?: string;
   label?: string;
-  leftIcon?: ReactNode;
-  rightIcon?: ReactNode;
+  leftIcon?: JSX.Element;
+  rightIcon?: JSX.Element;
   colorScheme?: "default" | "inactive";
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
@@ -31,9 +32,17 @@ export function PaginationButton(props: PaginationButtonProps) {
       className={`${styles.root} ${getStyle(colorScheme, isSelected)}`}
       onClick={onClick}
     >
-      {leftIcon ? <div className={styles.icon}>{leftIcon}</div> : null}
+      {leftIcon ? (
+        <Icon inline wrapperClasses={styles.icon}>
+          {leftIcon}
+        </Icon>
+      ) : null}
       {label ? <div className={styles.label}>{label}</div> : null}
-      {rightIcon ? <div className={styles.icon}>{rightIcon}</div> : null}
+      {rightIcon ? (
+        <Icon inline wrapperClasses={styles.icon}>
+          {rightIcon}
+        </Icon>
+      ) : null}
     </button>
   );
 }

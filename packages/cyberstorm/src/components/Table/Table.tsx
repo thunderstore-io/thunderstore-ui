@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSort, faSortDown, faSortUp } from "@fortawesome/pro-solid-svg-icons";
 import styles from "./Table.module.css";
 import * as Button from "../Button";
-import { Icon } from "../Icon/Icon";
 
 export enum Sort {
   DESC = -1,
@@ -63,9 +62,7 @@ function SortButton(props: SortButtonProps) {
     >
       <Button.ButtonLabel>{label}</Button.ButtonLabel>
       <Button.ButtonIcon>
-        <Icon>
-          <FontAwesomeIcon icon={icon} className={iconClass} />
-        </Icon>
+        <FontAwesomeIcon icon={icon} className={iconClass} />
       </Button.ButtonIcon>
     </Button.Root>
   );

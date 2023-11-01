@@ -1,13 +1,14 @@
 "use client";
-import React, { ReactNode } from "react";
+import React from "react";
 import styles from "./TextInput.module.css";
+import { Icon } from "../Icon/Icon";
 
 export interface TextInputProps {
   placeHolder?: string;
-  leftIcon?: ReactNode;
+  leftIcon?: JSX.Element;
   id?: string;
   type?: "text" | "email" | "password" | "tel" | "url";
-  rightIcon?: ReactNode;
+  rightIcon?: JSX.Element;
   value?: string;
   setValue?: React.Dispatch<React.SetStateAction<string>>;
   enterHook?: (value: string) => string | void;
@@ -36,7 +37,11 @@ export function TextInput(props: TextInputProps) {
 
   return (
     <div className={styles.root}>
-      {leftIcon ? <div className={styles.leftIcon}>{leftIcon}</div> : null}
+      {leftIcon ? (
+        <Icon inline wrapperClasses={styles.leftIcon}>
+          {leftIcon}
+        </Icon>
+      ) : null}
       <input
         id={id}
         type={type}
@@ -46,7 +51,11 @@ export function TextInput(props: TextInputProps) {
         value={value}
         onKeyDown={(e) => onEnter(e)}
       />
-      {rightIcon ? <div className={styles.rightIcon}>{rightIcon}</div> : null}
+      {rightIcon ? (
+        <Icon inline wrapperClasses={styles.rightIcon}>
+          {rightIcon}
+        </Icon>
+      ) : null}
     </div>
   );
 }

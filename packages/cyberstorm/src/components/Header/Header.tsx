@@ -8,7 +8,6 @@ import * as Button from "../Button/";
 import { CommunitiesLink, IndexLink, PackageUploadLink } from "../Links/Links";
 import { ThunderstoreLogo } from "../../svg/svg";
 import { UserDropDown } from "./UserDropDown";
-import { Icon } from "../Icon/Icon";
 
 /**
  * Horizontal navigation bar shown at the top of the site.
@@ -80,9 +79,7 @@ export function Header() {
                 tooltipText="Upload"
               >
                 <Button.ButtonIcon>
-                  <Icon>
-                    <FontAwesomeIcon icon={faUpload} />
-                  </Icon>
+                  <FontAwesomeIcon icon={faUpload} />
                 </Button.ButtonIcon>
               </Button.Root>
             </PackageUploadLink>

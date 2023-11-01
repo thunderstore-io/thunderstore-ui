@@ -27,11 +27,9 @@ export function CommunityCard(props: Props) {
               <img className={styles.image} alt="" src={community.icon_url} />
             </div>
           ) : (
-            <div className={styles.imageContent}>
-              <Icon>
-                <FontAwesomeIcon icon={faGamepadModern} />
-              </Icon>
-            </div>
+            <Icon wrapperClasses={styles.imageContent}>
+              <FontAwesomeIcon icon={faGamepadModern} />
+            </Icon>
           )}
         </div>
         <div className={styles.title} title={community.name}>
@@ -41,20 +39,12 @@ export function CommunityCard(props: Props) {
           <MetaItem
             colorScheme="accent"
             label={formatInteger(community.total_package_count)}
-            icon={
-              <Icon>
-                <FontAwesomeIcon icon={faBoxOpen} />
-              </Icon>
-            }
+            icon={<FontAwesomeIcon icon={faBoxOpen} />}
           />
           <MetaItem
             colorScheme="accent"
             label={formatInteger(community.total_download_count)}
-            icon={
-              <Icon>
-                <FontAwesomeIcon icon={faDownload} />
-              </Icon>
-            }
+            icon={<FontAwesomeIcon icon={faDownload} />}
           />
         </div>
       </div>
