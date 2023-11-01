@@ -1,4 +1,4 @@
-import { faTrash } from "@fortawesome/pro-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TeamMember } from "@thunderstore/dapper/types";
 
@@ -62,7 +62,7 @@ export function TeamMemberList(props: Props) {
           trigger={
             <Button.Root colorScheme="danger" paddingSize="large">
               <Button.ButtonIcon>
-                <FontAwesomeIcon icon={faTrash} />
+                <FontAwesomeIcon icon={faTrashCan} />
               </Button.ButtonIcon>
               <Button.ButtonLabel>Kick</Button.ButtonLabel>
             </Button.Root>
