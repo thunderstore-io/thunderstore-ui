@@ -61,7 +61,7 @@
 
 .card h2 {
   margin-bottom: 0.7rem;
-  font-weight: var(--font-weight-bolder);
+  font-weight: var(--font-weight-semibold);
 }
 
 .card p {

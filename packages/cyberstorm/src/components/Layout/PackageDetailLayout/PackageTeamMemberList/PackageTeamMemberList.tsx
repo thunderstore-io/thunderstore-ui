@@ -7,9 +7,6 @@ import { faCaretRight, faCrown } from "@fortawesome/pro-solid-svg-icons";
 import { TeamLink, UserLink } from "../../../Links/Links";
 import { Icon } from "../../../Icon/Icon";
 
-// TODO: actual placeholder
-const defaultImageSrc = "/images/userImagePlaceholder.png";
-
 export interface PackageTeamListProps {
   community: string;
   teamMembers?: TeamMember[];
@@ -26,11 +23,17 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
   return (
     <UserLink user={teamMember.username}>
       <div className={styles.item}>
-        <img
-          src={teamMember.avatar ?? defaultImageSrc}
-          className={styles.itemImage}
-          alt={teamMember.username}
-        />
+        {teamMember.avatar ? (
+          <img
+            src={teamMember.avatar}
+            className={styles.itemImage}
+            alt={teamMember.username}
+          />
+        ) : (
+          <div className={`${styles.itemImage} ${styles.placeholder}`}>
+            {teamMember.username.charAt(0).toUpperCase()}
+          </div>
+        )}
         <div>
           <div className={styles.itemTitle}>
             {teamMember.username}

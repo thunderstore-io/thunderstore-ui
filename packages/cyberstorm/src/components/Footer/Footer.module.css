@@ -130,7 +130,7 @@
 
 .adDescription {
   color: var(--color-text--accent);
-  font-weight: var(--font-weight-bolder);
+  font-weight: var(--font-weight-semibold);
   font-size: var(--font-size--xl);
   line-height: var(--line-height--xl);
 }
