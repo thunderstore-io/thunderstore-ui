@@ -28,7 +28,7 @@ export function DropDown(props: DropDownProps) {
 
   return (
     <div className={styles.root}>
-      <RadixDropDown.Root defaultOpen={defaultOpen}>
+      <RadixDropDown.Root modal={false} defaultOpen={defaultOpen}>
         <RadixDropDown.Trigger asChild disabled={!content}>
           {React.isValidElement(trigger)
             ? React.cloneElement(trigger as ReactElement, {
