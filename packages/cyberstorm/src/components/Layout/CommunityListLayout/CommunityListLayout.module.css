@@ -36,7 +36,6 @@
   gap: var(--gap--16);
   align-content: center;
   justify-content: flex-end;
-  min-height: 3rem;
 }
 
 .searchFiltersSortLabel {
