@@ -10,17 +10,17 @@ export const getFakeLink = () => ({
 
 export const getFakePackageCategories = (returnAmount?: number) => {
   const categories = [
-    { name: "Mods", slug: "mods" },
-    { name: "Tools", slug: "tools" },
-    { name: "Libraries", slug: "libraries" },
-    { name: "Modpacks", slug: "modpacks" },
-    { name: "Skins", slug: "skins" },
-    { name: "Maps", slug: "maps" },
-    { name: "Tweaks", slug: "tweaks" },
-    { name: "Items", slug: "items" },
-    { name: "Language", slug: "language" },
-    { name: "Audio", slug: "audio" },
-    { name: "Enemies", slug: "enemies" },
+    { id: 1, name: "Mods", slug: "mods" },
+    { id: 2, name: "Tools", slug: "tools" },
+    { id: 3, name: "Libraries", slug: "libraries" },
+    { id: 4, name: "Modpacks", slug: "modpacks" },
+    { id: 5, name: "Skins", slug: "skins" },
+    { id: 6, name: "Maps", slug: "maps" },
+    { id: 7, name: "Tweaks", slug: "tweaks" },
+    { id: 8, name: "Items", slug: "items" },
+    { id: 9, name: "Language", slug: "language" },
+    { id: 10, name: "Audio", slug: "audio" },
+    { id: 11, name: "Enemies", slug: "enemies" },
   ];
 
   return faker.helpers.arrayElements(categories, {
@@ -31,12 +31,27 @@ export const getFakePackageCategories = (returnAmount?: number) => {
 
 export const getFakeSections = (returnAmount?: number) => {
   const categories = [
-    { name: "Mods", slug: "mods", priority: 0 },
-    { name: "Modpacks", slug: "modpacks", priority: 1 },
-    { name: "Maps", slug: "maps", priority: 2 },
-    { name: "Custom cards", slug: "cards", priority: 3 },
-    { name: "Latest update", slug: "update", priority: 4 },
-    { name: "Paid DLC", slug: "dlc", priority: 5 },
+    { uuid: faker.string.uuid(), name: "Mods", slug: "mods", priority: 0 },
+    {
+      uuid: faker.string.uuid(),
+      name: "Modpacks",
+      slug: "modpacks",
+      priority: 1,
+    },
+    { uuid: faker.string.uuid(), name: "Maps", slug: "maps", priority: 2 },
+    {
+      uuid: faker.string.uuid(),
+      name: "Custom cards",
+      slug: "cards",
+      priority: 3,
+    },
+    {
+      uuid: faker.string.uuid(),
+      name: "Latest update",
+      slug: "update",
+      priority: 4,
+    },
+    { uuid: faker.string.uuid(), name: "Paid DLC", slug: "dlc", priority: 5 },
   ];
 
   return faker.helpers.arrayElements(categories, {

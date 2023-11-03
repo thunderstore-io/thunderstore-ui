@@ -4,11 +4,13 @@ import { fetchCommunityFilters } from "@thunderstore/thunderstore-api";
 import { DapperTsInterface } from "../index";
 
 const PackageCategory = z.object({
+  id: z.number().nonnegative(),
   name: z.string().nonempty(),
   slug: z.string().nonempty(),
 });
 
 const Section = z.object({
+  uuid: z.string().uuid(),
   name: z.string().nonempty(),
   slug: z.string().nonempty(),
   priority: z.number().int(),
