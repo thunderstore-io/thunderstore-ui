@@ -24,9 +24,9 @@ export const CategoryTagCloud = (props: Props) => {
     return null;
   }
 
-  const clearCategory = (slug: string) =>
+  const clearCategory = (id: number) =>
     setCategories(
-      categories.map((c) => (c.slug === slug ? { ...c, selection: OFF } : c))
+      categories.map((c) => (c.id === id ? { ...c, selection: OFF } : c))
     );
 
   const clearAll = () =>
@@ -37,7 +37,7 @@ export const CategoryTagCloud = (props: Props) => {
       {visible.map((c) => (
         <Button.Root
           key={c.slug}
-          onClick={() => clearCategory(c.slug)}
+          onClick={() => clearCategory(c.id)}
           colorScheme={c.selection === "exclude" ? "danger" : "default"}
           paddingSize="small"
           style={{ gap: "0.5rem" }}

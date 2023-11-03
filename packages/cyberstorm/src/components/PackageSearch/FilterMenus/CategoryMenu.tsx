@@ -21,8 +21,7 @@ interface Props {
 export const CategoryMenu = (props: Props) => {
   const { categories, setCategories } = props;
 
-  const toggleCategory = (slug: string) =>
-    setCategories(toggle(categories, slug));
+  const toggleCategory = (id: number) => setCategories(toggle(categories, id));
 
   return (
     <div className={styles.root}>
@@ -35,7 +34,7 @@ export const CategoryMenu = (props: Props) => {
               <label className={classnames(styles.label, styles[c.selection])}>
                 <Checkbox.Root
                   checked={c.selection !== "off"}
-                  onCheckedChange={() => toggleCategory(c.slug)}
+                  onCheckedChange={() => toggleCategory(c.id)}
                   className={styles.checkbox}
                 >
                   <Checkbox.Indicator>
@@ -66,9 +65,9 @@ CategoryMenu.displayName = "CategoryMenu";
  *
  * Toggling "off" -> "include" -> "exclude" -> "off"
  */
-const toggle = (categories: CategorySelection[], targetSlug: string) =>
+const toggle = (categories: CategorySelection[], targetId: number) =>
   categories.map((c) => {
-    if (c.slug === targetSlug) {
+    if (c.id === targetId) {
       const nextIndex = (STATES.indexOf(c.selection) + 1) % STATES.length;
       return { ...c, selection: STATES[nextIndex] };
     }

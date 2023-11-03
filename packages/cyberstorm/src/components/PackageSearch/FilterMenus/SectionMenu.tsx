@@ -31,14 +31,14 @@ export const SectionMenu = (props: Props) => {
             key={s.slug}
             className={classnames(
               styles.label,
-              s.slug === selected ? styles.include : null
+              s.uuid === selected ? styles.include : null
             )}
           >
             <RadioGroup.Item
-              value={s.slug}
+              value={s.uuid}
               className={classnames(
                 styles.radio,
-                s.slug === selected ? styles.radioSelected : null
+                s.uuid === selected ? styles.radioSelected : null
               )}
             >
               <RadioGroup.Indicator className={styles.radioIndicator} />
