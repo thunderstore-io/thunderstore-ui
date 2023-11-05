@@ -29,7 +29,7 @@ import { useState } from "react";
 import { Tabs } from "../../Tabs/Tabs";
 import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
 import { PackageVersions } from "./PackageVersions/PackageVersions";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
   faCodeBranch,
   faFileLines,
@@ -94,6 +94,18 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <Button.ButtonLabel>GitHub</Button.ButtonLabel>
           <Button.ButtonIcon>
             <FontAwesomeIcon icon={faGithub} />
+          </Button.ButtonIcon>
+        </Button.Root>
+      </a>
+    );
+  }
+  if (packageData.discordLink) {
+    packageDetailsMeta.push(
+      <a key="discord" href={packageData.discordLink}>
+        <Button.Root>
+          <Button.ButtonLabel>Discord</Button.ButtonLabel>
+          <Button.ButtonIcon>
+            <FontAwesomeIcon icon={faDiscord} />
           </Button.ButtonIcon>
         </Button.Root>
       </a>
