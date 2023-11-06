@@ -19,8 +19,12 @@ export interface TagProps {
     | "info"
     | "borderless_removable"
     | "borderless_no_hover"
-    | "high_contrast";
-  size?: "tiny" | "small" | "medium";
+    | "high_contrast"
+    | "blue"
+    | "pink"
+    | "green"
+    | "yellow";
+  size?: "tiny" | "small" | "medium" | "mediumPlus";
 }
 
 /**
@@ -77,6 +81,10 @@ const getStyle = (scheme: TagProps["colorScheme"] = "default") => {
     borderless_removable: styles.tag__borderless_removable,
     borderless_no_hover: styles.tag__borderless_no_hover,
     high_contrast: styles.tag__high_contrast,
+    blue: styles.tag__blue,
+    pink: styles.tag__pink,
+    green: styles.tag__green,
+    yellow: styles.tag__yellow,
   }[scheme];
 };
 
@@ -85,5 +93,6 @@ const getSize = (scheme: TagProps["size"] = "medium") => {
     tiny: styles.tiny,
     small: styles.small,
     medium: styles.medium,
+    mediumPlus: styles.mediumPlus,
   }[scheme];
 };

@@ -1,32 +1,32 @@
 import styles from "./PackageTagList.module.css";
-import { PackageCategory } from "@thunderstore/dapper/types";
+import { Package } from "@thunderstore/dapper/types";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTag } from "@fortawesome/pro-regular-svg-icons";
 import { Tag } from "../../../Tag/Tag";
+import {
+  faThumbtack,
+  faWarning,
+  faLips,
+  faSparkles,
+} from "@fortawesome/pro-solid-svg-icons";
+import { bankersRound } from "../../../../utils/utils";
+import { ReactNode } from "react";
 
 export interface PackageTagListProps {
-  tags?: PackageCategory[];
+  packageData: Package;
 }
 
 export function PackageTagList(props: PackageTagListProps) {
-  const { tags = [] } = props;
-
-  const mappedPackageTagList = tags?.map((category, index) => {
-    return (
-      <Tag
-        colorScheme="borderless_no_hover"
-        key={index.toString()}
-        label={category.name.toUpperCase()}
-      />
-    );
-  });
+  const { packageData } = props;
 
   return (
     <>
       <WrapperCard
         title="Tags"
-        content={<div className={styles.list}>{mappedPackageTagList}</div>}
+        content={
+          <div className={styles.list}>{getPackageFlags(packageData)}</div>
+        }
         headerIcon={<FontAwesomeIcon icon={faTag} />}
       />
     </>
@@ -34,3 +34,65 @@ export function PackageTagList(props: PackageTagListProps) {
 }
 
 PackageTagList.displayName = "PackageTagList";
+
+function getPackageFlags(packageData: Package) {
+  const updateTimeDelta = bankersRound(
+    (Date.now() - Date.parse(packageData.lastUpdated)) / 86400000,
+    0
+  );
+  const isNew = updateTimeDelta < 3;
+  if (
+    !packageData.isPinned &&
+    !packageData.isNsfw &&
+    !packageData.isDeprecated &&
+    !isNew
+  ) {
+    return null;
+  }
+  const flagList: ReactNode[] = [];
+  if (packageData.isPinned) {
+    flagList.push(
+      <Tag
+        key="flag_pinned"
+        label="Pinned"
+        colorScheme="blue"
+        size="mediumPlus"
+        leftIcon={<FontAwesomeIcon icon={faThumbtack} />}
+      />
+    );
+  }
+  if (packageData.isDeprecated) {
+    flagList.push(
+      <Tag
+        key="flag_deprecated"
+        label="Deprecated"
+        colorScheme="yellow"
+        size="mediumPlus"
+        leftIcon={<FontAwesomeIcon icon={faWarning} />}
+      />
+    );
+  }
+  if (packageData.isNsfw) {
+    flagList.push(
+      <Tag
+        key="flag_nsfw"
+        label="NSFW"
+        colorScheme="pink"
+        size="mediumPlus"
+        leftIcon={<FontAwesomeIcon icon={faLips} />}
+      />
+    );
+  }
+  if (isNew) {
+    flagList.push(
+      <Tag
+        key="flag_nsfw"
+        label="New"
+        colorScheme="green"
+        size="mediumPlus"
+        leftIcon={<FontAwesomeIcon icon={faSparkles} />}
+      />
+    );
+  }
+  return flagList;
+}

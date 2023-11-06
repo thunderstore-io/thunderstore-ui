@@ -5,13 +5,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDownload,
   faThumbsUp,
-  faHardDrive,
   faThumbtack,
+  faClock,
+  faWarning,
 } from "@fortawesome/free-solid-svg-icons";
 import { Tag } from "../Tag/Tag";
-import { classnames, formatInteger } from "../../utils/utils";
+import { bankersRound, classnames, formatInteger } from "../../utils/utils";
 import { PackagePreview } from "@thunderstore/dapper/types";
 import { PackageLink, UserLink } from "../Links/Links";
+import { faLips, faSparkles } from "@fortawesome/pro-solid-svg-icons";
 
 export interface PackageCardProps {
   packageData: PackagePreview;
@@ -48,11 +50,7 @@ export function PackageCard(props: PackageCardProps) {
               alt={packageData.name}
             />
           ) : null}
-          {getPackageFlags(
-            packageData.isPinned,
-            packageData.isNsfw,
-            packageData.isDeprecated
-          )}
+          {getPackageFlags(packageData)}
         </PackageLink>
       </div>
 
@@ -89,19 +87,7 @@ export function PackageCard(props: PackageCardProps) {
         </div>
       ) : null}
 
-      <div className={styles.footer}>
-        {packageData.lastUpdated ? (
-          <p className={styles.lastUpdated}>
-            {"Last updated: " + packageData.lastUpdated}
-          </p>
-        ) : null}
-
-        {getMetaItemList(
-          packageData.downloadCount,
-          packageData.likes,
-          packageData.size
-        )}
-      </div>
+      <div className={styles.footer}>{getMetaItemList(packageData)}</div>
     </div>
   );
 }
@@ -114,70 +100,86 @@ const getStyle = (scheme: PackageCardProps["colorScheme"] = "default") => {
   }[scheme];
 };
 
-function getPackageFlags(
-  isPinned: boolean | undefined,
-  isNsfw: boolean | undefined,
-  isDeprecated: boolean | undefined
-) {
-  if (!isPinned && !isNsfw && !isDeprecated) {
+function getPackageFlags(packageData: PackagePreview) {
+  const updateTimeDelta = bankersRound(
+    (Date.now() - Date.parse(packageData.lastUpdated)) / 86400000,
+    0
+  );
+  const isNew = updateTimeDelta < 3;
+  if (
+    !packageData.isPinned &&
+    !packageData.isNsfw &&
+    !packageData.isDeprecated &&
+    !isNew
+  ) {
     return null;
   }
   const flagList: ReactNode[] = [];
-  if (isPinned) {
+  if (packageData.isPinned) {
     flagList.push(
       <Tag
         key="flag_pinned"
         label="Pinned"
-        colorScheme="info"
+        colorScheme="blue"
         leftIcon={<FontAwesomeIcon icon={faThumbtack} />}
       />
     );
   }
-  if (isNsfw) {
-    flagList.push(
-      <Tag
-        key="flag_nsfw"
-        label="NSFW"
-        colorScheme="info"
-        leftIcon={<FontAwesomeIcon icon={faThumbtack} />}
-      />
-    );
-  }
-  if (isDeprecated) {
+  if (packageData.isDeprecated) {
     flagList.push(
       <Tag
         key="flag_deprecated"
         label="Deprecated"
-        colorScheme="info"
-        leftIcon={<FontAwesomeIcon icon={faThumbtack} />}
+        colorScheme="yellow"
+        leftIcon={<FontAwesomeIcon icon={faWarning} />}
+      />
+    );
+  }
+  if (packageData.isNsfw) {
+    flagList.push(
+      <Tag
+        key="flag_nsfw"
+        label="NSFW"
+        colorScheme="pink"
+        leftIcon={<FontAwesomeIcon icon={faLips} />}
+      />
+    );
+  }
+  if (isNew) {
+    flagList.push(
+      <Tag
+        key="flag_nsfw"
+        label="New"
+        colorScheme="green"
+        leftIcon={<FontAwesomeIcon icon={faSparkles} />}
       />
     );
   }
   return <div className={styles.flagWrapper}>{flagList}</div>;
 }
 
-function getMetaItemList(downloadCount: number, likes: number, size: number) {
+function getMetaItemList(packageData: PackagePreview) {
+  const updateTimeDelta = bankersRound(
+    (Date.now() - Date.parse(packageData.lastUpdated)) / 86400000,
+    0
+  );
   return (
     <div className={styles.metaItemWrapper}>
       <MetaItem
-        icon={<FontAwesomeIcon icon={faDownload} />}
-        label={formatInteger(downloadCount)}
-        colorScheme="accent"
+        icon={<FontAwesomeIcon icon={faClock} />}
+        label={`${updateTimeDelta} days`}
+        colorScheme="tertiary"
       />
-
+      <MetaItem
+        icon={<FontAwesomeIcon icon={faDownload} />}
+        label={formatInteger(packageData.downloadCount)}
+        colorScheme="tertiary"
+      />
       <MetaItem
         icon={<FontAwesomeIcon icon={faThumbsUp} />}
-        label={formatInteger(likes)}
-        colorScheme="accent"
+        label={formatInteger(packageData.likes)}
+        colorScheme="tertiary"
       />
-
-      <div className={styles.metaItem__last}>
-        <MetaItem
-          icon={<FontAwesomeIcon icon={faHardDrive} />}
-          label={`${size} MB`}
-          colorScheme="accent"
-        />
-      </div>
     </div>
   );
 }

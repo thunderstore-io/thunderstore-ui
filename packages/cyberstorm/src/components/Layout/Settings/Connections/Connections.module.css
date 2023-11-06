@@ -44,13 +44,16 @@
 
 .connectionTypeInfo {
   display: flex;
-  gap: var(--space--16);
+  gap: var(--space--24);
   align-items: center;
   justify-content: center;
 }
 
 .connectionTypeInfoIcon {
-  width: 2.5rem;
+  display: flex;
+  justify-content: center;
+  width: 2.5em;
+  aspect-ratio: 1;
 }
 
 .connectionTypeInfoName {

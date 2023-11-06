@@ -16,7 +16,9 @@ export const DevelopersDropDown = () => (
     triggerColorScheme="transparentDefault"
     trigger={
       <Button.Root paddingSize="large">
-        <Button.ButtonLabel fontSize="large">Developers</Button.ButtonLabel>
+        <Button.ButtonLabel fontSize="large" fontWeight="600">
+          Developers
+        </Button.ButtonLabel>
         <Button.ButtonIcon>
           <FontAwesomeIcon icon={faCaretDown} />
         </Button.ButtonIcon>

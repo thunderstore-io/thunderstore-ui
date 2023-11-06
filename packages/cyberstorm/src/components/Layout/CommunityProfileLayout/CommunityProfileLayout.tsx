@@ -13,6 +13,7 @@ import { CommunitiesLink, CommunityLink } from "../../Links/Links";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { PackageSearch } from "../../PackageSearch/PackageSearch";
 import { formatInteger } from "../../../utils/utils";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 
 interface Props {
   communityId: string;
@@ -72,6 +73,9 @@ export function CommunityProfileLayout(props: Props) {
                     <FontAwesomeIcon icon={faDiscord} />
                   </Button.ButtonIcon>
                   <Button.ButtonLabel>Join our community</Button.ButtonLabel>
+                  <Button.ButtonIcon>
+                    <FontAwesomeIcon icon={faArrowUpRight} />
+                  </Button.ButtonIcon>
                 </Button.Root>
               </a>
             ) : null,

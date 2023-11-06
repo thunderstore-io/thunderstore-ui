@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import styles from "./MenuItem.module.css";
 import { classnames } from "../../utils/utils";
 
-export interface MenuItemLabelProps {
+interface MenuItemLabelProps {
   children?: ReactNode | ReactNode[];
   fontSize?: "medium" | "small";
 }

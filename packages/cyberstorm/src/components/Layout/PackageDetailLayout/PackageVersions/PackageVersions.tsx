@@ -1,6 +1,8 @@
 import styles from "./PackageVersions.module.css";
 import * as Button from "../../../Button/";
 import { Table, Sort } from "../../../Table/Table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBoltLightning } from "@fortawesome/pro-solid-svg-icons";
 
 export function PackageVersions() {
   return (
@@ -10,7 +12,7 @@ export function PackageVersions() {
         headers={columns}
         rows={packageVersionData}
         sortDirection={Sort.ASC}
-        variant="itemList"
+        variant="itemListSmall"
       />
     </div>
   );
@@ -65,7 +67,7 @@ const packageVersionData = [
 function getDownload(versionNumber: string) {
   return (
     <Button.Root
-      paddingSize="medium"
+      paddingSize="large"
       colorScheme="transparentAccent"
       onClick={() => {
         console.log("Download " + versionNumber);
@@ -85,6 +87,9 @@ function getInstall(versionNumber: string) {
         console.log("Install " + versionNumber);
       }}
     >
+      <Button.ButtonIcon>
+        <FontAwesomeIcon icon={faBoltLightning} />
+      </Button.ButtonIcon>
       <Button.ButtonLabel>Install</Button.ButtonLabel>
     </Button.Root>
   );

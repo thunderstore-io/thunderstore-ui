@@ -40,5 +40,4 @@ const getFontSize = (scheme: string) => {
 
 MenuItem.displayName = "MenuItem";
 
-const Root = MenuItem;
-export { Root };
+export { MenuItem as Root };

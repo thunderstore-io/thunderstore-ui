@@ -4,7 +4,7 @@ import { classnames } from "../../utils/utils";
 
 export interface ButtonIconProps {
   children: JSX.Element | JSX.Element[];
-  iconSize?: "default" | "tslogo_install_button";
+  iconSize?: "default" | "big";
   iconColor?: "default" | "darker";
   iconClasses?: string;
 }
@@ -32,7 +32,7 @@ export function ButtonIcon(props: ButtonIconProps) {
 const getIconSize = (scheme: string) => {
   return {
     default: styles.ButtonIcon__IconSize__default,
-    tslogo_install_button: styles.ButtonIcon__IconSize__tslogo_install_button,
+    big: styles.ButtonIcon__IconSize__big,
   }[scheme];
 };
 

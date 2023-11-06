@@ -4,14 +4,14 @@
   flex: none;
   flex-direction: row;
 
-  gap: var(--gap--4);
+  gap: 0.4em;
   align-items: center;
   justify-content: center;
-  border: var(--border-width--2) solid var(--border-color);
-  border-radius: var(--border-radius--8);
+  border: 0.2em solid var(--border-color);
+  border-radius: 0.6em;
   font-weight: var(--font-weight-bold);
 
-  font-size: var(--font-size--s);
+  font-size: 0.625em;
   line-height: 1;
   background-color: var(--bg-color);
 
@@ -35,16 +35,22 @@
 
 /* Different Tag sizes */
 .tiny {
-  padding: var(--space--2) var(--space--4);
-  border-radius: var(--border-radius--4);
+  padding: 0.2em 0.4em;
+  border-radius: 0.4em;
 }
 
 .small {
-  padding: var(--space--4) var(--space--10);
+  padding: 0.4em 1em;
 }
 
 .medium {
-  padding: var(--space--6) var(--space--8);
+  padding: 0.4em 0.6em;
+}
+
+.mediumPlus {
+  padding: 0.4em 0.6em;
+  font-weight: var(--font-weight-boldest);
+  font-size: 0.75em;
 }
 
 /* Different Tag color schemes */
@@ -125,8 +131,39 @@
   border-width: var(--space--px);
 }
 
+.tag__blue {
+  --bg-color: #062131;
+  --border-color: transparent;
+  --text-color: #77c8f9;
+  --icon-color: var(--text-color);
+}
+
+.tag__pink {
+  --bg-color: #2d112a;
+  --border-color: transparent;
+  --text-color: #ec9ae3;
+  --icon-color: var(--text-color);
+}
+
+.tag__green {
+  --bg-color: #102b20;
+  --border-color: transparent;
+  --text-color: #96e8c5;
+  --icon-color: var(--text-color);
+}
+
+.tag__yellow {
+  --bg-color: #312910;
+  --border-color: transparent;
+  --text-color: #f8e295;
+  --icon-color: var(--text-color);
+}
+
 .tag__borderless_no_hover {
   --border-color: transparent;
+
+  text-transform: capitalize;
+  background: #4a4aa5;
 }
 
 .tag__high_contrast {

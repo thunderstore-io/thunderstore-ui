@@ -186,5 +186,4 @@ const getIconAlignment = (scheme: string) => {
   }[scheme];
 };
 
-const Root = Button;
-export { Root };
+export { Button as Root };
