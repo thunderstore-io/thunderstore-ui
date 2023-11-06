@@ -159,7 +159,10 @@ export function Footer() {
             </PrivacyPolicyLink>
           </div>
           <div className={styles.footnoteCopyright}>
-            © 2023 Thunderstore. All rights reserved.
+            © 2023 Thunderstore and contributors. This page is open-source.
+            Please
+            <a href="WHERE I EVEN SHOULD LINK?"> help improve it ❤</a>{" "}
+            {/* Here should be link but we wait answers don't merge this before */}
           </div>
         </div>
       </div>
