@@ -24,6 +24,7 @@ export interface Package extends PackagePreview {
   shortDescription?: string;
   additionalImages?: string[];
   gitHubLink?: string;
+  discordLink?: string;
   firstUploaded?: string;
   dependencyString: string;
   dependencies?: PackageDependency[];

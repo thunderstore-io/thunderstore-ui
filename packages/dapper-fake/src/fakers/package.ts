@@ -105,6 +105,8 @@ const getPackageExtras = () => ({
   lastUpdated: faker.date.recent({ days: 700 }).toDateString(),
   likes: faker.number.int({ min: 0, max: 100000 }),
   size: faker.number.int({ min: 20000, max: 10000000 }),
+  gitHubLink: faker.internet.url(),
+  discordLink: faker.internet.url(),
 });
 
 const getPackageTeam = async (teamId: string) => {
