@@ -59,7 +59,11 @@
 }
 
 .footnoteCopyright {
-  color: rgb(198 195 255 / 0.6);
+  color: #c5c2ff99;
+}
+
+.footnoteCopyright a {
+  color: #c6c3ff;
 }
 
 .footnoteInner {
