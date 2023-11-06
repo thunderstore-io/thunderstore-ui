@@ -1,3 +1,4 @@
+import { PackageCategory } from "./shared";
 import { TeamMember } from "./team";
 
 export interface PackagePreview {
@@ -14,10 +15,7 @@ export interface PackagePreview {
   isPinned?: boolean;
   isNsfw?: boolean;
   isDeprecated?: boolean;
-  categories: {
-    name: string;
-    slug: string;
-  }[];
+  categories: PackageCategory[];
 }
 
 export interface Package extends PackagePreview {

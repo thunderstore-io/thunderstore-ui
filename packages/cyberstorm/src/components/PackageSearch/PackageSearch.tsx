@@ -43,7 +43,7 @@ export function PackageSearch(props: Props) {
       .sort((a, b) => a.slug.localeCompare(b.slug))
       .map((c) => ({ ...c, selection: "off" }))
   );
-  const [section, setSection] = useState(allSections[0]?.slug ?? "");
+  const [section, setSection] = useState(allSections[0]?.uuid ?? "");
   const [deprecated, setDeprecated] = useState(false);
   const [nsfw, setNsfw] = useState(false);
 

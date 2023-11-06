@@ -15,6 +15,7 @@ export interface Community {
 export type Communities = PaginatedList<Community>;
 
 export interface Section {
+  uuid: string;
   name: string;
   slug: string;
   priority: number;
