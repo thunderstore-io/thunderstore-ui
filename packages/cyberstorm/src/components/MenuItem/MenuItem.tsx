@@ -3,7 +3,7 @@ import React, { ReactNode, useRef } from "react";
 import styles from "./MenuItem.module.css";
 import { classnames } from "../../utils/utils";
 
-export interface MenuItemProps {
+interface MenuItemProps {
   children?: ReactNode | ReactNode[];
   fontSize?: "medium" | "small";
 }
@@ -40,5 +40,4 @@ const getFontSize = (scheme: string) => {
 
 MenuItem.displayName = "MenuItem";
 
-const Root = MenuItem;
-export { Root };
+export { MenuItem as Root };

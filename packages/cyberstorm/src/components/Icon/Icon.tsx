@@ -1,4 +1,3 @@
-"use client";
 import { Children, cloneElement } from "react";
 import styles from "./Icon.module.css";
 import { classnames } from "../../utils/utils";

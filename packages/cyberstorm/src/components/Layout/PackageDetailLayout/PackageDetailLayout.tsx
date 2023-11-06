@@ -34,6 +34,7 @@ import {
   faCodeBranch,
   faFileLines,
   faFilePlus,
+  faArrowUpRight,
 } from "@fortawesome/pro-regular-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
@@ -90,10 +91,13 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   if (packageData.gitHubLink) {
     packageDetailsMeta.push(
       <a key="github" href={packageData.gitHubLink}>
-        <Button.Root>
-          <Button.ButtonLabel>GitHub</Button.ButtonLabel>
+        <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
           <Button.ButtonIcon>
             <FontAwesomeIcon icon={faGithub} />
+          </Button.ButtonIcon>
+          <Button.ButtonLabel>GitHub</Button.ButtonLabel>
+          <Button.ButtonIcon>
+            <FontAwesomeIcon icon={faArrowUpRight} />
           </Button.ButtonIcon>
         </Button.Root>
       </a>
@@ -102,10 +106,13 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   if (packageData.discordLink) {
     packageDetailsMeta.push(
       <a key="discord" href={packageData.discordLink}>
-        <Button.Root>
-          <Button.ButtonLabel>Discord</Button.ButtonLabel>
+        <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
           <Button.ButtonIcon>
             <FontAwesomeIcon icon={faDiscord} />
+          </Button.ButtonIcon>
+          <Button.ButtonLabel>Discord</Button.ButtonLabel>
+          <Button.ButtonIcon>
+            <FontAwesomeIcon icon={faArrowUpRight} />
           </Button.ButtonIcon>
         </Button.Root>
       </a>
@@ -178,7 +185,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
             />
             <a className={styles.installButton} href="/">
               <Button.Root plain paddingSize="huge" colorScheme="fancyAccent">
-                <Button.ButtonIcon iconSize="tslogo_install_button">
+                <Button.ButtonIcon iconSize="big">
                   <ThunderstoreLogo />
                 </Button.ButtonIcon>
                 <Button.ButtonLabel fontSize="huge" fontWeight="800">

@@ -1,7 +1,7 @@
 import styles from "./MenuItem.module.css";
 import { Icon } from "../Icon/Icon";
 
-export interface MenuItemIconProps {
+interface MenuItemIconProps {
   children: JSX.Element | JSX.Element[];
   iconClasses?: string;
 }

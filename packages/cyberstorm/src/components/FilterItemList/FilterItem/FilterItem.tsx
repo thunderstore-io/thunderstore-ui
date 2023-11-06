@@ -43,15 +43,14 @@ export function FilterItem(props: FilterItemProps) {
           style={value !== undefined ? filterColor : {}}
         >
           <Checkbox.Indicator forceMount>
-            {value === undefined && <></>}
-            {value === true && (
+            {value === undefined ? (
+              <></>
+            ) : (
               <Icon inline>
-                <FontAwesomeIcon className={styles.icon} icon={faCheck} />
-              </Icon>
-            )}
-            {value === false && (
-              <Icon inline>
-                <FontAwesomeIcon className={styles.icon} icon={faXmark} />
+                <FontAwesomeIcon
+                  className={styles.icon}
+                  icon={value ? faCheck : faXmark}
+                />
               </Icon>
             )}
           </Checkbox.Indicator>
