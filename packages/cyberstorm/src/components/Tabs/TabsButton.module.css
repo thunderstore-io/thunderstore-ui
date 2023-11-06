@@ -7,11 +7,9 @@
   justify-content: center;
 
   padding: var(--space--12) var(--space--16);
-  border-radius: var(--border-radius--8);
+  border-bottom: 3px solid #1f1f42;
   color: var(--color-text--default);
-  background-color: var(--bg-color);
-
-  --bg-color: var(--color-surface--4);
+  background-color: transparent;
 }
 
 .icon {
@@ -26,8 +24,6 @@
 }
 
 .button__default {
-  --bg-color: var(--color-surface--4);
-
   color: var(--color-text--default);
 }
 
@@ -44,5 +40,6 @@
 }
 
 .button__default_selected {
-  --bg-color: var(--color-surface--10);
+  border-bottom: 3px solid #50d99f;
+  color: #50d99f;
 }

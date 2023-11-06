@@ -3,7 +3,7 @@ import React, { ReactNode, useRef } from "react";
 import styles from "./MenuItem.module.css";
 import { classnames } from "../../utils/utils";
 
-interface MenuItemProps {
+export interface MenuItemProps {
   children?: ReactNode | ReactNode[];
   fontSize?: "medium" | "small";
 }

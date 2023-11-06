@@ -50,6 +50,8 @@
 }
 
 .connectionTypeInfoIcon {
+  display: flex;
+  justify-content: center;
   width: 2.5em;
   aspect-ratio: 1;
 }

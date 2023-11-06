@@ -8,7 +8,6 @@ import * as Button from "../Button/";
 import { CommunitiesLink, IndexLink, PackageUploadLink } from "../Links/Links";
 import { ThunderstoreLogo } from "../../svg/svg";
 import { UserDropDown } from "./UserDropDown";
-import { classnames } from "../../utils/utils";
 
 /**
  * Horizontal navigation bar shown at the top of the site.
@@ -44,7 +43,7 @@ export function Header() {
                 paddingSize="large"
                 colorScheme="transparentDefault"
               >
-                <Button.ButtonLabel fontSize="large">
+                <Button.ButtonLabel fontSize="large" fontWeight="600">
                   Communities
                 </Button.ButtonLabel>
               </Button.Root>
@@ -56,19 +55,21 @@ export function Header() {
         </ul>
       </nav>
 
-      <div className={classnames(styles.item, styles.search)}></div>
-
       <nav className={styles.item}>
         <ul className={styles.nav}>
           <li className={styles.navButtons}>
             <a href="/">
               <Button.Root paddingSize="large" colorScheme="specialPurple">
-                <Button.ButtonLabel>Go Premium</Button.ButtonLabel>
+                <Button.ButtonLabel fontWeight="600">
+                  Go Premium
+                </Button.ButtonLabel>
               </Button.Root>
             </a>
             <a href="/">
               <Button.Root paddingSize="large" colorScheme="accent">
-                <Button.ButtonLabel>Get Manager</Button.ButtonLabel>
+                <Button.ButtonLabel fontWeight="800">
+                  Get Manager
+                </Button.ButtonLabel>
               </Button.Root>
             </a>
           </li>

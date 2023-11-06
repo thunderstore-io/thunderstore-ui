@@ -9,7 +9,6 @@ import {
 } from "../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Button from "../../Button/";
-import { Title } from "../../Title/Title";
 import { Dialog } from "../../Dialog/Dialog";
 import { PackageManagementForm } from "./PackageManagementForm/PackageManagementForm";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
@@ -20,22 +19,21 @@ import {
   faCog,
   faThumbsUp,
   faFlag,
+  faCodeBranch,
+  faFileLines,
+  faFilePlus,
+  faArrowUpRight,
+  faBoxes,
 } from "@fortawesome/pro-solid-svg-icons";
 import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
 import { CopyButton } from "../../CopyButton/CopyButton";
-import { formatInteger } from "../../../utils/utils";
+import { bankersRound, formatInteger } from "../../../utils/utils";
 import { useState } from "react";
 import { Tabs } from "../../Tabs/Tabs";
 import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
 import { PackageVersions } from "./PackageVersions/PackageVersions";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
-import {
-  faCodeBranch,
-  faFileLines,
-  faFilePlus,
-  faArrowUpRight,
-} from "@fortawesome/pro-regular-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
 import { Package } from "@thunderstore/dapper/types";
@@ -43,6 +41,11 @@ import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
 import { ThunderstoreLogo } from "../../../svg/svg";
 import { usePromise } from "@thunderstore/use-promise";
+import { WrapperCard } from "../../WrapperCard/WrapperCard";
+import { Tag } from "../../Tag/Tag";
+import { Icon } from "../../Icon/Icon";
+import { PLACEHOLDER } from "../Developers/MarkdownPreview/MarkdownPlaceholder";
+import markdownStyles from "../../Markdown/Markdown.module.css";
 
 export interface PackageDetailLayoutProps {
   community: string;
@@ -70,6 +73,19 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   const metaInfoData = getMetaInfoData(packageData);
 
   const [currentTab, setCurrentTab] = useState(1);
+
+  const mappedPackageTagList = packageData.categories?.map(
+    (category, index) => {
+      return (
+        <Tag
+          colorScheme="borderless_no_hover"
+          size="mediumPlus"
+          key={index.toString()}
+          label={category.name.toUpperCase()}
+        />
+      );
+    }
+  );
 
   const packageDetailsMeta = [];
   if (packageData.author) {
@@ -240,7 +256,20 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
             </Button.Root>
           </div>
           <MetaInfoItemList metaInfoData={metaInfoData} />
-          <PackageTagList tags={packageData.categories} />
+          <WrapperCard
+            title="Categories"
+            content={
+              <div className={styles.categoriesCard}>
+                {mappedPackageTagList}
+              </div>
+            }
+            headerIcon={
+              <Icon>
+                <FontAwesomeIcon icon={faBoxes} />
+              </Icon>
+            }
+          />
+          <PackageTagList packageData={packageData} />
           <PackageDependencyList namespace={namespace} community={community} />
           <PackageTeamMemberList
             community={packageData.community}
@@ -279,6 +308,11 @@ function getMetaInfoData(packageData: Package) {
     },
     {
       key: "5",
+      label: "Size",
+      content: <>{`${bankersRound(packageData.size / 1000, 1)} MB`}</>,
+    },
+    {
+      key: "6",
       label: "Dependency string",
       content: (
         <div className={styles.dependencyStringWrapper}>
@@ -293,7 +327,7 @@ function getMetaInfoData(packageData: Package) {
       ),
     },
     {
-      key: "6",
+      key: "7",
       label: "Dependants",
       content: (
         <PackageDependantsLink
@@ -329,13 +363,14 @@ const tabs = [
 ];
 
 function getTabContent(currentTab: number, packageData: Package) {
+  const placeholder = PLACEHOLDER();
   let tabContent = null;
   if (currentTab === 1) {
     tabContent = (
-      <>
-        <Title text={packageData.name} />
-        <p className={styles.description}>{packageData.description}</p>
-      </>
+      <div
+        dangerouslySetInnerHTML={{ __html: placeholder }}
+        className={markdownStyles.root}
+      />
     );
   } else if (currentTab === 2) {
     tabContent = <PackageChangeLog packageId={packageData.name} />;

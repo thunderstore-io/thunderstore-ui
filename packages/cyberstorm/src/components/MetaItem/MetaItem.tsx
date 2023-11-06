@@ -7,7 +7,7 @@ import { classnames } from "../../utils/utils";
 type _MetaItemProps = {
   label?: string;
   icon?: JSX.Element;
-  colorScheme?: "default" | "accent";
+  colorScheme?: "default" | "accent" | "tertiary";
   size?: "medium" | "large" | "bold_large";
   ref?: React.Ref<HTMLDivElement>;
 };
@@ -43,8 +43,9 @@ MetaItem.displayName = "MetaItem";
 
 const getStyle = (scheme: MetaItemProps["colorScheme"] = "default") => {
   return {
-    accent: styles.metaItem__accent,
     default: styles.metaItem__default,
+    accent: styles.metaItem__accent,
+    tertiary: styles.metaItem__tertiary,
   }[scheme];
 };
 

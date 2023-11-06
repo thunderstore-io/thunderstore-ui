@@ -9,7 +9,7 @@
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size--m);
   line-height: normal;
-  background-color: var(--color-surface--4);
+  background: #191b38;
 }
 
 .label {

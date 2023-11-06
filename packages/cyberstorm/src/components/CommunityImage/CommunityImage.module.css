@@ -9,7 +9,5 @@
   border-radius: var(--border-radius--8);
 
   object-fit: cover;
-  box-shadow: var(--box-shadow-default);
-  transition: 0.2s;
   aspect-ratio: 3 / 4;
 }

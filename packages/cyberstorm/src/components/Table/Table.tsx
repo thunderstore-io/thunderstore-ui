@@ -26,7 +26,7 @@ export interface TableProps {
   disableSort?: boolean;
   sortByHeader?: number;
   sortDirection?: Sort;
-  variant?: "default" | "itemList";
+  variant?: "default" | "itemList" | "itemListSmall";
   gridTemplateColumns?: string;
 }
 
@@ -119,7 +119,7 @@ export function Table(props: TableProps) {
             className={getHeaderVariant(variant)}
             style={columnCSSProps}
           >
-            {variant === "default" ? (
+            {variant === "default" || variant === "itemListSmall" ? (
               header.value
             ) : header.disableSort ? (
               <Button.Root
@@ -168,36 +168,42 @@ const getTableVariant = (scheme: string) => {
   return {
     default: styles.grid__Table,
     itemList: styles.grid__Table_ItemList,
+    itemListSmall: styles.grid__Table_ItemListSmall,
   }[scheme];
 };
 const getHeadersVariant = (scheme: string) => {
   return {
     default: styles.grid__Headers,
     itemList: styles.grid__Headers_ItemList,
+    itemListSmall: styles.grid__Headers_ItemListSmall,
   }[scheme];
 };
 const getHeaderVariant = (scheme: string) => {
   return {
     default: styles.grid__Header,
     itemList: styles.grid__Header_ItemList,
+    itemListSmall: styles.grid__Header_ItemListSmall,
   }[scheme];
 };
 const getRowsVariant = (scheme: string) => {
   return {
     default: styles.grid__Rows,
     itemList: styles.grid__Rows_ItemList,
+    itemListSmall: styles.grid__Rows_ItemListSmall,
   }[scheme];
 };
 const getRowVariant = (scheme: string) => {
   return {
     default: styles.grid__Row,
     itemList: styles.grid__Row_ItemList,
+    itemListSmall: styles.grid__Row_ItemListSmall,
   }[scheme];
 };
 const getCellVariant = (scheme: string) => {
   return {
     default: styles.grid__Cell,
     itemList: styles.grid__Cell_ItemList,
+    itemListSmall: styles.grid__Cell_ItemListSmall,
   }[scheme];
 };
 
