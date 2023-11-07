@@ -25,19 +25,26 @@ const getFakePackagePreview = (community?: string, namespace?: string) => {
   };
 };
 
+// TODO: this implementation will show the same results when user
+// interacts with filters or pagination. Something similar could be done
+// here that's done for community listing, but getting all the filters
+// to work properly might not be worth the effort.
 export const getFakePackageListings = async (
   communityId?: string,
   namespaceId?: string,
   // Temporary, will be refactored away when the actual implementation is done.
   _teamId?: string, // eslint-disable-line @typescript-eslint/no-unused-vars
   _userId?: string // eslint-disable-line @typescript-eslint/no-unused-vars
-) =>
-  range(20).map(() =>
+) => ({
+  count: 200,
+  hasMore: true,
+  results: range(20).map(() =>
     getFakePackagePreview(
       communityId ?? faker.word.sample(),
       namespaceId ?? faker.word.sample()
     )
-  );
+  ),
+});
 
 // TODO: the methods below this point don't yet match what the backend
 // will be actually returning.
