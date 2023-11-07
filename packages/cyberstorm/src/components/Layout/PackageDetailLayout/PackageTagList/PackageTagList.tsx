@@ -36,19 +36,19 @@ PackageTagList.displayName = "PackageTagList";
 
 function getPackageFlags(packageData: Package) {
   const updateTimeDelta = Math.round(
-    (Date.now() - Date.parse(packageData.lastUpdated)) / 86400000
+    (Date.now() - Date.parse(packageData.last_updated)) / 86400000
   );
   const isNew = updateTimeDelta < 3;
   if (
-    !packageData.isPinned &&
-    !packageData.isNsfw &&
-    !packageData.isDeprecated &&
+    !packageData.is_pinned &&
+    !packageData.is_nsfw &&
+    !packageData.is_deprecated &&
     !isNew
   ) {
     return null;
   }
   const flagList: ReactNode[] = [];
-  if (packageData.isPinned) {
+  if (packageData.is_pinned) {
     flagList.push(
       <Tag
         key="flag_pinned"
@@ -59,7 +59,7 @@ function getPackageFlags(packageData: Package) {
       />
     );
   }
-  if (packageData.isDeprecated) {
+  if (packageData.is_deprecated) {
     flagList.push(
       <Tag
         key="flag_deprecated"
@@ -70,7 +70,7 @@ function getPackageFlags(packageData: Package) {
       />
     );
   }
-  if (packageData.isNsfw) {
+  if (packageData.is_nsfw) {
     flagList.push(
       <Tag
         key="flag_nsfw"

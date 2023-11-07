@@ -56,6 +56,11 @@ export interface PackageDetailLayoutProps {
 
 /**
  * Cyberstorm PackageDetail Layout
+ *
+ * TODO: Use community.background_image_url as the background
+ * TODO: Change BaseLayout.backGroundImageSource to accept null rather
+ *       than undefined if image URLs are not available, as this is what
+ *       backend returns. (Unless we have a default image.)
  */
 export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   const {
@@ -88,7 +93,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
   const packageDetailsMeta = [
     <TeamLink
       key="team"
-      community={packageData.community}
+      community={packageData.community_identifier}
       team={packageData.namespace}
     >
       <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
@@ -133,16 +138,16 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
 
   return (
     <BaseLayout
-      backGroundImageSource={packageData.imageSource}
+      backGroundImageSource={packageData.icon_url || undefined}
       breadCrumb={
         <BreadCrumbs>
           <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={packageData.community}>
-            {packageData.community}
+          <CommunityLink community={packageData.community_identifier}>
+            {packageData.community_name}
           </CommunityLink>
           Packages
           <TeamLink
-            community={packageData.community}
+            community={packageData.community_identifier}
             team={packageData.namespace}
           >
             {packageData.namespace}
@@ -155,11 +160,13 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <PageHeader
             title={packageData.name}
             image={
-              <img
-                className={styles.modImage}
-                alt={packageData.name}
-                src={packageData.imageSource}
-              />
+              packageData.icon_url ? (
+                <img
+                  className={styles.modImage}
+                  alt=""
+                  src={packageData.icon_url}
+                />
+              ) : undefined
             }
             description={packageData.shortDescription}
             meta={packageDetailsMeta}
@@ -176,7 +183,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
                 </Button.Root>
               }
               additionalFooterContent={
-                packageData.isDeprecated ? (
+                packageData.is_deprecated ? (
                   <Button.Root paddingSize="large" colorScheme="default">
                     <Button.ButtonLabel>Undeprecate</Button.ButtonLabel>
                   </Button.Root>
@@ -268,7 +275,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           <PackageTagList packageData={packageData} />
           <PackageDependencyList namespace={namespace} community={community} />
           <PackageTeamMemberList
-            community={packageData.community}
+            community={packageData.community_identifier}
             teamName={packageData.namespace}
             teamMembers={packageData.team.members}
           />
@@ -285,7 +292,7 @@ function getMetaInfoData(packageData: Package) {
     {
       key: "1",
       label: "Last Updated",
-      content: <>{packageData.lastUpdated}</>,
+      content: <>{packageData.last_updated}</>,
     },
     {
       key: "2",
@@ -295,12 +302,12 @@ function getMetaInfoData(packageData: Package) {
     {
       key: "3",
       label: "Downloads",
-      content: <>{formatInteger(packageData.downloadCount)}</>,
+      content: <>{formatInteger(packageData.download_count)}</>,
     },
     {
       key: "4",
       label: "Likes",
-      content: <>{formatInteger(packageData.likes)}</>,
+      content: <>{formatInteger(packageData.rating_count)}</>,
     },
     {
       key: "5",
@@ -327,7 +334,7 @@ function getMetaInfoData(packageData: Package) {
       label: "Dependants",
       content: (
         <PackageDependantsLink
-          community={packageData.community}
+          community={packageData.community_identifier}
           namespace={packageData.namespace}
           package={packageData.name}
         >

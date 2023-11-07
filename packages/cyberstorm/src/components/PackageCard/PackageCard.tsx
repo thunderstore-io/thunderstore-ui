@@ -29,12 +29,12 @@ export function PackageCard(props: Props) {
     <div className={classnames(styles.root, styles.packageCard__default)}>
       <div className={styles.imageWrapper}>
         <PackageLink
-          community={p.community}
+          community={p.community_identifier}
           namespace={p.namespace}
           package={p.name}
         >
-          {p.imageSource ? (
-            <img className={styles.image} src={p.imageSource} alt={p.name} />
+          {p.icon_url ? (
+            <img className={styles.image} src={p.icon_url} alt={p.name} />
           ) : null}
           {getPackageFlags(p)}
         </PackageLink>
@@ -42,7 +42,7 @@ export function PackageCard(props: Props) {
 
       <div className={styles.content}>
         <PackageLink
-          community={p.community}
+          community={p.community_identifier}
           namespace={p.namespace}
           package={p.name}
         >
@@ -51,7 +51,7 @@ export function PackageCard(props: Props) {
 
         <div className={styles.author}>
           <span className={styles.author_prefix}>by</span>
-          <TeamLink community={p.community} team={p.namespace}>
+          <TeamLink community={p.community_identifier} team={p.namespace}>
             <div className={styles.author_label}>{p.namespace}</div>
           </TeamLink>
         </div>
@@ -80,19 +80,19 @@ PackageCard.displayName = "PackageCard";
 
 function getPackageFlags(packageData: PackagePreview) {
   const updateTimeDelta = Math.round(
-    (Date.now() - Date.parse(packageData.lastUpdated)) / 86400000
+    (Date.now() - Date.parse(packageData.last_updated)) / 86400000
   );
   const isNew = updateTimeDelta < 3;
   if (
-    !packageData.isPinned &&
-    !packageData.isNsfw &&
-    !packageData.isDeprecated &&
+    !packageData.is_pinned &&
+    !packageData.is_nsfw &&
+    !packageData.is_deprecated &&
     !isNew
   ) {
     return null;
   }
   const flagList: ReactNode[] = [];
-  if (packageData.isPinned) {
+  if (packageData.is_pinned) {
     flagList.push(
       <Tag
         key="flag_pinned"
@@ -102,7 +102,7 @@ function getPackageFlags(packageData: PackagePreview) {
       />
     );
   }
-  if (packageData.isDeprecated) {
+  if (packageData.is_deprecated) {
     flagList.push(
       <Tag
         key="flag_deprecated"
@@ -112,7 +112,7 @@ function getPackageFlags(packageData: PackagePreview) {
       />
     );
   }
-  if (packageData.isNsfw) {
+  if (packageData.is_nsfw) {
     flagList.push(
       <Tag
         key="flag_nsfw"
@@ -137,7 +137,7 @@ function getPackageFlags(packageData: PackagePreview) {
 
 function getMetaItemList(packageData: PackagePreview) {
   const updateTimeDelta = Math.round(
-    (Date.now() - Date.parse(packageData.lastUpdated)) / 86400000
+    (Date.now() - Date.parse(packageData.last_updated)) / 86400000
   );
   return (
     <div className={styles.metaItemWrapper}>
@@ -148,12 +148,12 @@ function getMetaItemList(packageData: PackagePreview) {
       />
       <MetaItem
         icon={<FontAwesomeIcon icon={faDownload} />}
-        label={formatInteger(packageData.downloadCount)}
+        label={formatInteger(packageData.download_count)}
         colorScheme="tertiary"
       />
       <MetaItem
         icon={<FontAwesomeIcon icon={faThumbsUp} />}
-        label={formatInteger(packageData.likes)}
+        label={formatInteger(packageData.rating_count)}
         colorScheme="tertiary"
       />
     </div>

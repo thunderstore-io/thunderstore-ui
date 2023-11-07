@@ -27,8 +27,10 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
   const { package: pkg } = props;
 
   const dapper = useDapper();
-  const community = usePromise(dapper.getCommunity, [pkg.community]);
-  const filters = usePromise(dapper.getCommunityFilters, [pkg.community]);
+  const community = usePromise(dapper.getCommunity, [pkg.community_identifier]);
+  const filters = usePromise(dapper.getCommunityFilters, [
+    pkg.community_identifier,
+  ]);
 
   return (
     <BaseLayout
@@ -42,11 +44,11 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
             {community.name}
           </CommunityLink>
           Packages
-          <TeamLink community={pkg.community} team={pkg.namespace}>
+          <TeamLink community={pkg.community_identifier} team={pkg.namespace}>
             {pkg.namespace}
           </TeamLink>
           <PackageLink
-            community={pkg.community}
+            community={pkg.community_identifier}
             namespace={pkg.namespace}
             package={pkg.name}
           >
@@ -59,21 +61,21 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
         <div className={styles.header}>
           Mods that depend on{" "}
           <PackageLink
-            community={pkg.community}
+            community={pkg.community_identifier}
             namespace={pkg.namespace}
             package={pkg.name}
           >
             {pkg.name}
           </PackageLink>
           {" by "}
-          <TeamLink community={pkg.community} team={pkg.namespace}>
+          <TeamLink community={pkg.community_identifier} team={pkg.namespace}>
             {pkg.namespace}
           </TeamLink>
         </div>
       }
       mainContent={
         <PackageSearch
-          communityId={pkg.community}
+          communityId={pkg.community_identifier}
           packageCategories={filters.package_categories}
           sections={filters.sections}
         />
