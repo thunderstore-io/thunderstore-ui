@@ -10,7 +10,6 @@ import {
   faLips,
   faSparkles,
 } from "@fortawesome/pro-solid-svg-icons";
-import { bankersRound } from "../../../../utils/utils";
 import { ReactNode } from "react";
 
 export interface PackageTagListProps {
@@ -36,9 +35,8 @@ export function PackageTagList(props: PackageTagListProps) {
 PackageTagList.displayName = "PackageTagList";
 
 function getPackageFlags(packageData: Package) {
-  const updateTimeDelta = bankersRound(
-    (Date.now() - Date.parse(packageData.lastUpdated)) / 86400000,
-    0
+  const updateTimeDelta = Math.round(
+    (Date.now() - Date.parse(packageData.lastUpdated)) / 86400000
   );
   const isNew = updateTimeDelta < 3;
   if (

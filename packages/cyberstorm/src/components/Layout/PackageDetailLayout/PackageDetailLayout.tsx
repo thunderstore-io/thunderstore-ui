@@ -28,7 +28,7 @@ import {
 import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
 import { CopyButton } from "../../CopyButton/CopyButton";
-import { bankersRound, formatInteger } from "../../../utils/utils";
+import { formatFileSize, formatInteger } from "../../../utils/utils";
 import { useState } from "react";
 import { Tabs } from "../../Tabs/Tabs";
 import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
@@ -309,7 +309,7 @@ function getMetaInfoData(packageData: Package) {
     {
       key: "5",
       label: "Size",
-      content: <>{`${bankersRound(packageData.size / 1000, 1)} MB`}</>,
+      content: <>{formatFileSize(packageData.size)}</>,
     },
     {
       key: "6",
