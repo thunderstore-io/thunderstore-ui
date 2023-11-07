@@ -35,7 +35,7 @@ const Template: StoryFn<typeof PackageCard> = (args) => (
 
 const ReferencePackageCard = Template.bind({});
 ReferencePackageCard.args = {
-  packageData: {
+  package: {
     name: "WaveTimer",
     namespace: "otDan",
     community: "brotato",

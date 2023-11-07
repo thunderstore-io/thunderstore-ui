@@ -12,74 +12,58 @@ import {
 import { Tag } from "../Tag/Tag";
 import { bankersRound, classnames, formatInteger } from "../../utils/utils";
 import { PackagePreview } from "@thunderstore/dapper/types";
-import { PackageLink, UserLink } from "../Links/Links";
+import { PackageLink, TeamLink } from "../Links/Links";
 import { faLips, faSparkles } from "@fortawesome/pro-solid-svg-icons";
 
-export interface PackageCardProps {
-  packageData: PackagePreview;
-  colorScheme?: "default";
-  community?: string;
+interface Props {
+  package: PackagePreview;
 }
 
 /**
  * Cyberstorm PackageCard component
  */
-export function PackageCard(props: PackageCardProps) {
-  const {
-    packageData,
-    colorScheme = "default",
-    community,
-    ...forwardedProps
-  } = props;
+export function PackageCard(props: Props) {
+  const { package: p } = props;
 
   return (
-    <div
-      className={classnames(styles.root, getStyle(colorScheme))}
-      {...forwardedProps}
-    >
+    <div className={classnames(styles.root, styles.packageCard__default)}>
       <div className={styles.imageWrapper}>
         <PackageLink
-          namespace={packageData.namespace}
-          package={packageData.name}
-          community={packageData.community}
+          community={p.community}
+          namespace={p.namespace}
+          package={p.name}
         >
-          {packageData.imageSource ? (
-            <img
-              className={styles.image}
-              src={packageData.imageSource}
-              alt={packageData.name}
-            />
+          {p.imageSource ? (
+            <img className={styles.image} src={p.imageSource} alt={p.name} />
           ) : null}
-          {getPackageFlags(packageData)}
+          {getPackageFlags(p)}
         </PackageLink>
       </div>
 
       <div className={styles.content}>
         <PackageLink
-          namespace={packageData.namespace}
-          package={packageData.name}
-          community={packageData.community}
+          community={p.community}
+          namespace={p.namespace}
+          package={p.name}
         >
-          <div className={styles.title}>{packageData.name}</div>
+          <div className={styles.title}>{p.name}</div>
         </PackageLink>
 
-        {packageData.author ? (
-          <div className={styles.author}>
-            <span className={styles.author_prefix}>by</span>
-            <UserLink user={packageData.author}>
-              <div className={styles.author_label}>{packageData.author}</div>
-            </UserLink>
-          </div>
-        ) : null}
+        <div className={styles.author}>
+          <span className={styles.author_prefix}>by</span>
+          <TeamLink community={p.community} team={p.namespace}>
+            <div className={styles.author_label}>{p.namespace}</div>
+          </TeamLink>
+        </div>
 
-        {packageData.description ? (
-          <p className={styles.description}>{packageData.description}</p>
+        {p.description ? (
+          <p className={styles.description}>{p.description}</p>
         ) : null}
       </div>
 
-      {packageData.categories?.length > 0 ? (
+      {p.categories.length ? (
         <div className={styles.categoryWrapper}>
-          {packageData.categories.map((c, index) => (
+          {p.categories.map((c, index) => (
             <div key={`category_${c}_${index}`} className={styles.categoryTag}>
               {c.name}
             </div>
@@ -87,18 +71,12 @@ export function PackageCard(props: PackageCardProps) {
         </div>
       ) : null}
 
-      <div className={styles.footer}>{getMetaItemList(packageData)}</div>
+      <div className={styles.footer}>{getMetaItemList(p)}</div>
     </div>
   );
 }
 
 PackageCard.displayName = "PackageCard";
-
-const getStyle = (scheme: PackageCardProps["colorScheme"] = "default") => {
-  return {
-    default: styles.packageCard__default,
-  }[scheme];
-};
 
 function getPackageFlags(packageData: PackagePreview) {
   const updateTimeDelta = bankersRound(

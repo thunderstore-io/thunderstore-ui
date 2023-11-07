@@ -67,7 +67,7 @@ export function PackageList(props: Props) {
 
       <div className={styles.packages}>
         {packages.map((packageData) => (
-          <PackageCard key={packageData.name} packageData={packageData} />
+          <PackageCard key={packageData.name} package={packageData} />
         ))}
       </div>
 

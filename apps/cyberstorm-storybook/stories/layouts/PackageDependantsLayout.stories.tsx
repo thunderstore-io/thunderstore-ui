@@ -12,7 +12,6 @@ const packageData = {
   community: "brotato",
   namespace: "otDan",
   name: "WaveTimer",
-  author: "otDan",
 } as Package;
 
 const Template: StoryFn<typeof PackageDependantsLayout> = () => (

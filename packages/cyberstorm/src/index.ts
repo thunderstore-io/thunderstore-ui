@@ -60,10 +60,7 @@ export {
   type MetaInfoItemListProps,
 } from "./components/MetaInfoItemList/MetaInfoItemList";
 export { Switch, type SwitchProps } from "./components/Switch/Switch";
-export {
-  PackageCard,
-  type PackageCardProps,
-} from "./components/PackageCard/PackageCard";
+export { PackageCard } from "./components/PackageCard/PackageCard";
 export {
   Pagination,
   type PaginationProps,

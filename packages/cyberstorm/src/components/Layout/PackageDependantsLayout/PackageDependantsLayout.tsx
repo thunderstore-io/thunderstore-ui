@@ -10,7 +10,6 @@ import {
   CommunityLink,
   PackageLink,
   TeamLink,
-  UserLink,
 } from "../../Links/Links";
 import { PackageSearch } from "../../PackageSearch/PackageSearch";
 
@@ -23,8 +22,6 @@ interface PackageDependantsLayoutProps {
  *
  * TODO: Currently this lists Community's packages as the
  * PackageSearch doesn't support showing dependants.
- *
- * TODO: Fix TeamLink's team prop.
  */
 export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
   const { package: pkg } = props;
@@ -45,7 +42,9 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
             {community.name}
           </CommunityLink>
           Packages
-          <TeamLink community={community.identifier} team={"TODO"}></TeamLink>
+          <TeamLink community={pkg.community} team={pkg.namespace}>
+            {pkg.namespace}
+          </TeamLink>
           <PackageLink
             community={pkg.community}
             namespace={pkg.namespace}
@@ -66,10 +65,10 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
           >
             {pkg.name}
           </PackageLink>
-          {pkg.author ? " by " : null}
-          {pkg.author ? (
-            <UserLink user={pkg.author}>{pkg.author}</UserLink>
-          ) : null}
+          {" by "}
+          <TeamLink community={pkg.community} team={pkg.namespace}>
+            {pkg.namespace}
+          </TeamLink>
         </div>
       }
       mainContent={
