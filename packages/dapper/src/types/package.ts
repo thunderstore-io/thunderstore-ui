@@ -2,23 +2,23 @@ import { PackageCategory } from "./shared";
 import { TeamMember } from "./team";
 
 export interface PackagePreview {
+  categories: PackageCategory[];
+  community_identifier: string;
+  description: string;
+  download_count: number;
+  icon_url: string | null;
+  is_deprecated: boolean;
+  is_nsfw: boolean;
+  is_pinned: boolean;
+  last_updated: string;
   name: string;
   namespace: string;
-  community: string;
-  description?: string;
-  imageSource?: string;
-  downloadCount: number;
-  likes: number;
+  rating_count: number;
   size: number;
-  author?: string;
-  lastUpdated: string;
-  isPinned?: boolean;
-  isNsfw?: boolean;
-  isDeprecated?: boolean;
-  categories: PackageCategory[];
 }
 
 export interface Package extends PackagePreview {
+  community_name: string;
   shortDescription?: string;
   additionalImages?: string[];
   gitHubLink?: string;

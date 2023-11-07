@@ -9,7 +9,7 @@ export default function Page({
   // TODO: dummy data for now, the component shouldn't consume Package
   // object anyway.
   const packageData = {
-    community: params.community,
+    community_identifier: params.community,
     namespace: params.namespace,
     name: params.package,
   } as Package;

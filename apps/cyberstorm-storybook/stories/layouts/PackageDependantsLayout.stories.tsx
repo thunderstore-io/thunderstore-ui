@@ -9,7 +9,7 @@ const meta = {
 } as Meta<typeof PackageDependantsLayout>;
 
 const packageData = {
-  community: "brotato",
+  community_identifier: "brotato",
   namespace: "otDan",
   name: "WaveTimer",
 } as Package;
