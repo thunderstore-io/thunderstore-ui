@@ -10,7 +10,7 @@ import {
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
 import { Tag } from "../Tag/Tag";
-import { bankersRound, classnames, formatInteger } from "../../utils/utils";
+import { classnames, formatInteger } from "../../utils/utils";
 import { PackagePreview } from "@thunderstore/dapper/types";
 import { PackageLink, TeamLink } from "../Links/Links";
 import { faLips, faSparkles } from "@fortawesome/pro-solid-svg-icons";
@@ -79,9 +79,8 @@ export function PackageCard(props: Props) {
 PackageCard.displayName = "PackageCard";
 
 function getPackageFlags(packageData: PackagePreview) {
-  const updateTimeDelta = bankersRound(
-    (Date.now() - Date.parse(packageData.lastUpdated)) / 86400000,
-    0
+  const updateTimeDelta = Math.round(
+    (Date.now() - Date.parse(packageData.lastUpdated)) / 86400000
   );
   const isNew = updateTimeDelta < 3;
   if (
@@ -137,9 +136,8 @@ function getPackageFlags(packageData: PackagePreview) {
 }
 
 function getMetaItemList(packageData: PackagePreview) {
-  const updateTimeDelta = bankersRound(
-    (Date.now() - Date.parse(packageData.lastUpdated)) / 86400000,
-    0
+  const updateTimeDelta = Math.round(
+    (Date.now() - Date.parse(packageData.lastUpdated)) / 86400000
   );
   return (
     <div className={styles.metaItemWrapper}>
