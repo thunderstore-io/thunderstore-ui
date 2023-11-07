@@ -11,6 +11,7 @@ import { usePromise } from "@thunderstore/use-promise";
 export function HomeLayout() {
   const dapper = useDapper();
   const featuredCommunities = usePromise(dapper.getCommunities, []);
+  // TODO: "featured" or "hot" packages are not supported.
   const featuredPackages = usePromise(dapper.getPackageListings, ["featured"]);
   const hotPackages = usePromise(dapper.getPackageListings, ["hot"]);
 
@@ -26,14 +27,14 @@ export function HomeLayout() {
           </div>
           <div className={styles.smallContent} />
           <div className={styles.cardContent}>
-            {featuredPackages?.slice(0, 6).map((packageData) => (
-              <PackageCard key={packageData.name} package={packageData} />
+            {featuredPackages.results.slice(0, 6).map((p) => (
+              <PackageCard key={p.name} package={p} />
             ))}
           </div>
           <div className={styles.mediumContent} />
           <div className={styles.cardContent}>
-            {hotPackages?.slice(0, 6).map((packageData) => (
-              <PackageCard key={packageData.name} package={packageData} />
+            {hotPackages.results.slice(0, 6).map((p) => (
+              <PackageCard key={p.name} package={p} />
             ))}
           </div>
           <div className={styles.mediumContent} />

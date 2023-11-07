@@ -59,15 +59,15 @@ export function PackageList(props: Props) {
           page={1}
           pageSize={PER_PAGE}
           searchQuery={searchQuery}
-          totalCount={327 /* TODO */}
+          totalCount={packages.count}
         />
 
         <PackageOrder order={order} setOrder={setOrder} />
       </div>
 
       <div className={styles.packages}>
-        {packages.map((packageData) => (
-          <PackageCard key={packageData.name} package={packageData} />
+        {packages.results.map((p) => (
+          <PackageCard key={p.name} package={p} />
         ))}
       </div>
 
@@ -76,7 +76,7 @@ export function PackageList(props: Props) {
         onPageChange={setPage}
         pageSize={PER_PAGE}
         siblingCount={2}
-        totalCount={327 /* TODO */}
+        totalCount={packages.count}
       />
     </div>
   );

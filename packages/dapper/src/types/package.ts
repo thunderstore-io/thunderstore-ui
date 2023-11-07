@@ -1,4 +1,4 @@
-import { PackageCategory } from "./shared";
+import { PackageCategory, PaginatedList } from "./shared";
 import { TeamMember } from "./team";
 
 export interface PackagePreview {
@@ -16,6 +16,8 @@ export interface PackagePreview {
   rating_count: number;
   size: number;
 }
+
+export type PackagePreviews = PaginatedList<PackagePreview>;
 
 export interface Package extends PackagePreview {
   community_name: string;
