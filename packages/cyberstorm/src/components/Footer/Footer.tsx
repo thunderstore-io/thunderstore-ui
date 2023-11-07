@@ -161,7 +161,7 @@ export function Footer() {
           <div className={styles.footnoteCopyright}>
             © 2023 Thunderstore and contributors. This page is open-source.
             Please{" "}
-            <a href="https://github.com/thunderstore-io/thunderstore-ui/?">
+            <a href="https://github.com/thunderstore-io/thunderstore-ui/">
               help improve it ❤
             </a>
           </div>
