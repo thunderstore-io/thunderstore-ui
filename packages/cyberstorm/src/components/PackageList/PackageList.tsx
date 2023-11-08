@@ -2,7 +2,7 @@
 import { useDapper } from "@thunderstore/dapper";
 import { PackageListingType } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
-import { useDeferredValue, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 
 import { PackageCount } from "./PackageCount";
 import { PackageOrder, PackageOrderOptions } from "./PackageOrder";
@@ -52,6 +52,10 @@ export function PackageList(props: Props) {
     .filter((c) => c.selection === "exclude")
     .map((c) => c.id);
 
+  useEffect(() => {
+    setPage(1);
+  }, [categories, deprecated, listingType, nsfw, order, searchQuery, section]);
+
   const dapper = useDapper();
   const packages = usePromise(dapper.getPackageListings, [
     listingType,
@@ -69,7 +73,7 @@ export function PackageList(props: Props) {
     <div className={styles.root}>
       <div className={styles.top}>
         <PackageCount
-          page={1}
+          page={page}
           pageSize={PER_PAGE}
           searchQuery={searchQuery}
           totalCount={packages.count}
