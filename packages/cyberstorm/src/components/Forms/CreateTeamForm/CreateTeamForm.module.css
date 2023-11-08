@@ -13,9 +13,9 @@
 
 .footer {
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   gap: var(--gap--16);
   justify-content: space-between;
-  padding: var(--space--16) var(--space--24);
+  padding-top: var(--space--16);
   border-top: var(--border);
 }

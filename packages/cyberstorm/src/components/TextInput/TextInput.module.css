@@ -5,7 +5,7 @@
   color: var(--color-text--tertiary);
 }
 
-.input {
+.root > input {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -23,25 +23,49 @@
   --border-color: transparent;
 }
 
-.hasLeftIcon {
-  padding-left: 2.875rem;
-}
-
-.input:hover {
+.root > input:hover {
   --border-color: var(--color-border--highlight);
 
   transition: ease-out 80ms;
 }
 
-.input:focus-within {
+.root > input:focus-within {
   color: var(--color-text--default);
   background-color: var(--color-black);
 
   --border-color: var(--color-border--highlight);
 }
 
-.input::placeholder {
+.root > input::placeholder {
   color: var(--color-text--tertiary);
+}
+
+.root > input[data-state="invalid"] {
+  --border-color: var(--color-red--5);
+
+  transition: ease-out 80ms;
+}
+
+.root > input[data-state="invalid"]:hover {
+  --border-color: var(--color-red--3);
+
+  transition: ease-out 80ms;
+}
+
+.root > input[data-state="valid"] {
+  --border-color: var(--color-cyber-green--50);
+
+  transition: ease-out 80ms;
+}
+
+.root > input[data-state="valid"]:hover {
+  --border-color: var(--color-cyber-green--80);
+
+  transition: ease-out 80ms;
+}
+
+.hasLeftIcon {
+  padding-left: 2.875rem;
 }
 
 .leftIcon {

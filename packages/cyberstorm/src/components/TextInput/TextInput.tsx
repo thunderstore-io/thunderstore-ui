@@ -1,10 +1,11 @@
 "use client";
-import React from "react";
+import React, { ReactNode, cloneElement } from "react";
 import styles from "./TextInput.module.css";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
 
 export interface TextInputProps {
+  children?: ReactNode;
   placeHolder?: string;
   leftIcon?: JSX.Element;
   id?: string;
@@ -13,6 +14,7 @@ export interface TextInputProps {
   value?: string;
   setValue?: React.Dispatch<React.SetStateAction<string>>;
   enterHook?: (value: string) => string | void;
+  asChild?: boolean;
 }
 
 /**
@@ -20,6 +22,7 @@ export interface TextInputProps {
  */
 export function TextInput(props: TextInputProps) {
   const {
+    children,
     placeHolder,
     id,
     type = "text",
@@ -28,6 +31,7 @@ export function TextInput(props: TextInputProps) {
     value = "",
     setValue,
     enterHook,
+    asChild = false,
   } = props;
 
   const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -43,18 +47,18 @@ export function TextInput(props: TextInputProps) {
           {leftIcon}
         </Icon>
       ) : null}
-      <input
-        id={id}
-        type={type}
-        placeholder={placeHolder}
-        className={classnames(
-          styles.input,
-          leftIcon ? styles.hasLeftIcon : null
-        )}
-        onChange={(event) => setValue && setValue(event.target.value)}
-        value={value}
-        onKeyDown={(e) => onEnter(e)}
-      />
+      {asChild ? (
+        children
+      ) : (
+        <input
+          id={id}
+          type={type}
+          placeholder={placeHolder}
+          onChange={(event) => setValue && setValue(event.target.value)}
+          value={value}
+          onKeyDown={(e) => onEnter(e)}
+        />
+      )}
       {rightIcon ? (
         <Icon inline wrapperClasses={styles.rightIcon}>
           {rightIcon}

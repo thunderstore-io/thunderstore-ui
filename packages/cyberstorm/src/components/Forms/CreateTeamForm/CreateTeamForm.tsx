@@ -4,6 +4,33 @@ import * as Button from "../../Button";
 import { TextInput } from "../../TextInput/TextInput";
 import { useForm, useController, UseControllerProps } from "react-hook-form";
 
+type FormValues = {
+  teamName: string;
+};
+
+function Input(props: UseControllerProps<FormValues>) {
+  const { field, fieldState } = useController(props);
+
+  return (
+    <div>
+      <TextInput asChild>
+        <input
+          {...field}
+          placeholder={props.name}
+          data-state={
+            fieldState.isDirty
+              ? fieldState.invalid
+                ? "invalid"
+                : "valid"
+              : "empty"
+          }
+        />
+      </TextInput>
+      <p>{fieldState.isTouched && "Touched"}</p>
+    </div>
+  );
+}
+
 /**
  * Form for creating a team
  */
@@ -17,14 +44,6 @@ export function CreateTeamForm() {
 
   const onSubmit = (data: { teamName: string }) => console.log(data);
 
-  const controllerProps = {
-    control: control,
-    name: "teamName",
-    rules: { required: true },
-  } as UseControllerProps<{ teamName: string }>;
-
-  const { field, fieldState } = useController(controllerProps);
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.createTeamDialog}>
@@ -32,10 +51,11 @@ export function CreateTeamForm() {
           Enter the name of the team you wish to create. Team names can contain
           the characters a-z A-Z 0-9 _ and must not start or end with an _
         </div>
-        <TextInput {...field} placeHolder="Team name" />
-        <p>{fieldState.isTouched && "Touched"}</p>
-        <p>{fieldState.isDirty && "Dirty"}</p>
-        <p>{fieldState.invalid ? "invalid" : "valid"}</p>
+        <Input
+          control={control}
+          name="teamName"
+          rules={{ required: true, minLength: 5 }}
+        />
       </div>
       <div className={styles.footer}>
         <Button.Root type="submit" paddingSize="large" colorScheme="success">
