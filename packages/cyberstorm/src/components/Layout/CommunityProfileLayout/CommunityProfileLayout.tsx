@@ -29,6 +29,8 @@ export function CommunityProfileLayout(props: Props) {
   const community = usePromise(dapper.getCommunity, [communityId]);
   const filters = usePromise(dapper.getCommunityFilters, [communityId]);
 
+  const listingType = { kind: "community" as const, communityId };
+
   return (
     <BaseLayout
       backGroundImageSource={
@@ -84,7 +86,7 @@ export function CommunityProfileLayout(props: Props) {
       }
       mainContent={
         <PackageSearch
-          communityId={communityId}
+          listingType={listingType}
           packageCategories={filters.package_categories}
           sections={filters.sections}
         />

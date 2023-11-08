@@ -16,6 +16,7 @@ interface Props {
  */
 export function UserProfileLayout(props: Props) {
   const { userId } = props;
+  const listingType = { kind: "community" as const, communityId: "TODO" };
 
   return (
     <BaseLayout
@@ -31,7 +32,7 @@ export function UserProfileLayout(props: Props) {
       }
       mainContent={
         <PackageSearch
-          communityId={"TODO"}
+          listingType={listingType}
           packageCategories={[]}
           sections={[]}
         />

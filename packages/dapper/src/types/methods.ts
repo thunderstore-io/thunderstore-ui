@@ -1,5 +1,6 @@
 import { Communities, Community, CommunityFilters } from "./community";
 import { Package, PackageDependency, PackagePreviews } from "./package";
+import { PackageListingType } from "./props";
 import { TeamDetails, ServiceAccount, TeamMember } from "./team";
 import { CurrentUser } from "./user";
 
@@ -31,10 +32,7 @@ export type GetPackageDependencies = (
 ) => Promise<PackageDependency[]>;
 
 export type GetPackageListings = (
-  communityId?: string,
-  userId?: string,
-  namespaceId?: string,
-  teamId?: string,
+  type: PackageListingType,
   keywords?: string[],
   categories?: {
     [key: string]: {

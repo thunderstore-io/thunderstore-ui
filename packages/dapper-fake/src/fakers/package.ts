@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { PackageListingType } from "@thunderstore/dapper/types";
 
 import { getFakeImg, getFakePackageCategories, range, setSeed } from "./utils";
 import { getFakeTeamMembers } from "./team";
@@ -29,19 +30,13 @@ const getFakePackagePreview = (community?: string, namespace?: string) => {
 // interacts with filters or pagination. Something similar could be done
 // here that's done for community listing, but getting all the filters
 // to work properly might not be worth the effort.
-export const getFakePackageListings = async (
-  communityId?: string,
-  namespaceId?: string,
-  // Temporary, will be refactored away when the actual implementation is done.
-  _teamId?: string, // eslint-disable-line @typescript-eslint/no-unused-vars
-  _userId?: string // eslint-disable-line @typescript-eslint/no-unused-vars
-) => ({
+export const getFakePackageListings = async (type: PackageListingType) => ({
   count: 200,
   hasMore: true,
   results: range(20).map(() =>
     getFakePackagePreview(
-      communityId ?? faker.word.sample(),
-      namespaceId ?? faker.word.sample()
+      type.communityId,
+      type.kind === "namespace" ? type.namespaceId : faker.word.sample()
     )
   ),
 });

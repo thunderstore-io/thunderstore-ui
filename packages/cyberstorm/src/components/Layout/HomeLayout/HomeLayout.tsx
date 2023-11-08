@@ -12,8 +12,12 @@ export function HomeLayout() {
   const dapper = useDapper();
   const featuredCommunities = usePromise(dapper.getCommunities, []);
   // TODO: "featured" or "hot" packages are not supported.
-  const featuredPackages = usePromise(dapper.getPackageListings, ["featured"]);
-  const hotPackages = usePromise(dapper.getPackageListings, ["hot"]);
+  const featuredPackages = usePromise(dapper.getPackageListings, [
+    { kind: "community" as const, communityId: "featured" },
+  ]);
+  const hotPackages = usePromise(dapper.getPackageListings, [
+    { kind: "community" as const, communityId: "hot" },
+  ]);
 
   return (
     <BaseLayout

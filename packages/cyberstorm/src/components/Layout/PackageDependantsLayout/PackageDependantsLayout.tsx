@@ -32,6 +32,11 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
     pkg.community_identifier,
   ]);
 
+  const listingType = {
+    kind: "community" as const,
+    communityId: pkg.community_identifier,
+  };
+
   return (
     <BaseLayout
       backGroundImageSource={
@@ -75,7 +80,7 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
       }
       mainContent={
         <PackageSearch
-          communityId={pkg.community_identifier}
+          listingType={listingType}
           packageCategories={filters.package_categories}
           sections={filters.sections}
         />

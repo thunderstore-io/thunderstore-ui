@@ -1,5 +1,6 @@
 "use client";
 import { useDapper } from "@thunderstore/dapper";
+import { PackageListingType } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
 import { useState } from "react";
 
@@ -11,8 +12,7 @@ import { PackageCard } from "../PackageCard/PackageCard";
 import { Pagination } from "../Pagination/Pagination";
 
 interface Props {
-  communityId?: string;
-  namespaceId?: string;
+  listingType: PackageListingType;
   categories: CategorySelection[];
   deprecated: boolean;
   nsfw: boolean;
@@ -36,17 +36,14 @@ const PER_PAGE = 20;
  *       Dapper method.
  */
 export function PackageList(props: Props) {
-  const { communityId, namespaceId, searchQuery } = props;
+  const { listingType, searchQuery } = props;
 
   const [order, setOrder] = useState(PackageOrderOptions.Updated);
   const [page, setPage] = useState(1);
   const dapper = useDapper();
 
   const packages = usePromise(dapper.getPackageListings, [
-    communityId,
-    undefined,
-    namespaceId,
-    undefined,
+    listingType,
     [searchQuery],
   ]);
 
