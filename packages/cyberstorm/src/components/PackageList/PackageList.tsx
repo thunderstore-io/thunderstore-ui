@@ -12,14 +12,12 @@ import { Pagination } from "../Pagination/Pagination";
 
 interface Props {
   communityId?: string;
-  userId?: string;
   namespaceId?: string;
-  teamId?: string;
-  searchQuery: string;
   categories: CategorySelection[];
-  section: string;
   deprecated: boolean;
   nsfw: boolean;
+  searchQuery: string;
+  section: string;
 }
 
 const PER_PAGE = 20;
@@ -38,7 +36,7 @@ const PER_PAGE = 20;
  *       Dapper method.
  */
 export function PackageList(props: Props) {
-  const { communityId, namespaceId, searchQuery, teamId, userId } = props;
+  const { communityId, namespaceId, searchQuery } = props;
 
   const [order, setOrder] = useState(PackageOrderOptions.Updated);
   const [page, setPage] = useState(1);
@@ -46,9 +44,9 @@ export function PackageList(props: Props) {
 
   const packages = usePromise(dapper.getPackageListings, [
     communityId,
-    userId,
+    undefined,
     namespaceId,
-    teamId,
+    undefined,
     [searchQuery],
   ]);
 

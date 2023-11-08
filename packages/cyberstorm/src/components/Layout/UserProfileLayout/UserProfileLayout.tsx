@@ -11,7 +11,8 @@ interface Props {
 /**
  * Cyberstorm user's profile Layout
  *
- * TODO: use Dapper to fetch package categories.
+ * TODO: use Dapper to fetch package categories and sections.
+ * TODO: add support for user-scoped package listings to Dapper
  */
 export function UserProfileLayout(props: Props) {
   const { userId } = props;
@@ -29,7 +30,11 @@ export function UserProfileLayout(props: Props) {
         </div>
       }
       mainContent={
-        <PackageSearch userId={userId} packageCategories={[]} sections={[]} />
+        <PackageSearch
+          communityId={"TODO"}
+          packageCategories={[]}
+          sections={[]}
+        />
       }
     />
   );

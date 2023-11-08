@@ -50,7 +50,8 @@ export function TeamProfileLayout(props: Props) {
       }
       mainContent={
         <PackageSearch
-          teamId={namespace}
+          communityId={community}
+          namespaceId={namespace}
           packageCategories={filters.package_categories}
           sections={filters.sections}
         />

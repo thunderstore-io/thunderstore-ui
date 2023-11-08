@@ -16,10 +16,9 @@ import { TextInput } from "../TextInput/TextInput";
 
 interface Props {
   communityId?: string;
+  namespaceId?: string;
   packageCategories: PackageCategory[];
   sections: Section[];
-  teamId?: string;
-  userId?: string;
 }
 
 /**
@@ -28,10 +27,9 @@ interface Props {
 export function PackageSearch(props: Props) {
   const {
     communityId,
+    namespaceId,
     packageCategories: allCategories,
     sections,
-    teamId,
-    userId,
   } = props;
 
   const allSections = sections.sort((a, b) => a.priority - b.priority);
@@ -82,8 +80,7 @@ export function PackageSearch(props: Props) {
 
           <PackageList
             communityId={communityId}
-            userId={userId}
-            teamId={teamId}
+            namespaceId={namespaceId}
             searchQuery={debouncedSearchValue}
             categories={categories}
             section={section}
