@@ -9,18 +9,12 @@ import { Tooltip } from "../..";
 import { classnames } from "../../utils/utils";
 
 type DialogProps = {
-  content?: ReactNode;
+  children?: ReactNode;
   defaultOpen?: boolean;
   trigger?: ReactNode;
   title?: string;
-  acceptButton?: ReactNode | null;
-  closeOnAccept?: boolean;
-  cancelButton?: ReactNode | "default" | null;
-  additionalFooterContent?: ReactNode;
-  hideFooter?: boolean;
   noPadding?: boolean;
   showHeaderBorder?: boolean;
-  showFooterBorder?: boolean;
 };
 
 /**
@@ -28,43 +22,17 @@ type DialogProps = {
  */
 export function Dialog(props: DialogProps) {
   const {
-    additionalFooterContent = null,
-    content,
+    children,
     defaultOpen = false,
     trigger,
-    acceptButton,
-    closeOnAccept = true,
-    cancelButton,
     title = undefined,
-    hideFooter = false,
     noPadding = false,
     showHeaderBorder = false,
-    showFooterBorder = false,
   } = props;
 
   const [isOpen, setOpen] = useState<boolean>(
     defaultOpen ? defaultOpen : false
   );
-
-  let cancel = null;
-  if (cancelButton === "default") {
-    cancel = (
-      <Button.Root paddingSize="large" colorScheme="tertiary">
-        <Button.ButtonLabel>Cancel</Button.ButtonLabel>
-      </Button.Root>
-    );
-  } else if (cancelButton) {
-    cancel = cancelButton;
-  }
-
-  let accept = null;
-  if (acceptButton) {
-    if (closeOnAccept) {
-      accept = <RadixDialog.Close asChild>{acceptButton}</RadixDialog.Close>;
-    } else {
-      accept = acceptButton;
-    }
-  }
 
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
@@ -111,25 +79,8 @@ export function Dialog(props: DialogProps) {
                   noPadding ? null : styles.bodyPadding
                 )}
               >
-                {content}
+                {children}
               </div>
-
-              {hideFooter ? null : (
-                <div
-                  className={classnames(
-                    styles.footer,
-                    showFooterBorder ? styles.footerBorder : null
-                  )}
-                >
-                  <div className={styles.footerSection}>
-                    {additionalFooterContent}
-                  </div>
-                  <div className={styles.footerSection}>
-                    <RadixDialog.Close asChild>{cancel}</RadixDialog.Close>
-                    {accept}
-                  </div>
-                </div>
-              )}
             </RadixDialog.Content>
           </RadixDialog.Overlay>
         </RadixDialog.Portal>

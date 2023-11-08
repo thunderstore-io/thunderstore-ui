@@ -8,13 +8,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { TeamList } from "./TeamList/TeamList";
 import { Dialog } from "../../Dialog/Dialog";
-import { TextInput } from "../../TextInput/TextInput";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { Alert } from "../../Alert/Alert";
+import { CreateTeamForm } from "../../Forms/CreateTeamForm/CreateTeamForm";
 
 /**
  * View for listing and managing authenticated user's teams.
  */
+
 export function TeamsLayout() {
   return (
     <BaseLayout
@@ -32,17 +33,6 @@ export function TeamsLayout() {
             additionalLeftColumnContent={
               <Dialog
                 title="Create Team"
-                showFooterBorder
-                content={
-                  <div className={styles.createTeamDialog}>
-                    <div className={styles.createTeamDialogText}>
-                      Enter the name of the team you wish to create. Team names
-                      can contain the characters a-z A-Z 0-9 _ and must not
-                      start or end with an _
-                    </div>
-                    <TextInput placeHolder="Team name" />
-                  </div>
-                }
                 trigger={
                   <Button.Root colorScheme="primary" paddingSize="large">
                     <Button.ButtonLabel>Create team</Button.ButtonLabel>
@@ -51,13 +41,9 @@ export function TeamsLayout() {
                     </Button.ButtonIcon>
                   </Button.Root>
                 }
-                cancelButton="default"
-                acceptButton={
-                  <Button.Root paddingSize="large" colorScheme="success">
-                    <Button.ButtonLabel>Create</Button.ButtonLabel>
-                  </Button.Root>
-                }
-              />
+              >
+                <CreateTeamForm />
+              </Dialog>
             }
             content={
               <div className={styles.contentWrapper}>
