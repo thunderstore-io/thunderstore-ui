@@ -33,12 +33,14 @@ export type GetPackageDependencies = (
 
 export type GetPackageListings = (
   type: PackageListingType,
-  keywords?: string[],
-  categories?: {
-    [key: string]: {
-      value: boolean | undefined;
-    };
-  }
+  order?: string,
+  page?: number,
+  query?: string,
+  includedCategories?: number[],
+  excludedCategories?: number[],
+  section?: string,
+  nsfw?: boolean,
+  deprecated?: boolean
 ) => Promise<PackagePreviews>;
 
 export type GetTeamDetails = (teamName: string) => Promise<TeamDetails>;

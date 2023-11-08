@@ -2,7 +2,7 @@
 import { useDapper } from "@thunderstore/dapper";
 import { PackageListingType } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
-import { useState } from "react";
+import { useDeferredValue, useState } from "react";
 
 import { PackageCount } from "./PackageCount";
 import { PackageOrder, PackageOrderOptions } from "./PackageOrder";
@@ -25,26 +25,44 @@ const PER_PAGE = 20;
 /**
  * Fetches packages based on props and shows them as a list.
  *
- * TODO: use categories props by splitting them to included and excluded
- *       categories and pass them to getPackageListings (which doesn't)
- *       currently support this format.
- *
- * TODO: we also support only one searchQuery, so the Dapper method
- *       shouldn't expect an array of them.
- *
- * TODO: Add support for order, deprecated, NSFW, and section in the
- *       Dapper method.
+ * TODO: add loading indicator over the PackageCard section. Doing so
+ *       properly might require rethinking the structure of things, i.e.
+ *       adding another wrapping component.
  */
 export function PackageList(props: Props) {
-  const { listingType, searchQuery } = props;
+  const { categories, deprecated, listingType, nsfw, searchQuery, section } =
+    props;
 
   const [order, setOrder] = useState(PackageOrderOptions.Updated);
   const [page, setPage] = useState(1);
-  const dapper = useDapper();
 
+  const deferredCategories = useDeferredValue(categories);
+  const deferredDeprecated = useDeferredValue(deprecated);
+  const deferredNsfw = useDeferredValue(nsfw);
+  const deferredOrder = useDeferredValue(order);
+  const deferredPage = useDeferredValue(page);
+  const deferredSearchQuery = useDeferredValue(searchQuery);
+  const deferredSection = useDeferredValue(section);
+
+  const deferredIncludedCategories = deferredCategories
+    .filter((c) => c.selection === "include")
+    .map((c) => c.id);
+
+  const deferredExcludedCategories = deferredCategories
+    .filter((c) => c.selection === "exclude")
+    .map((c) => c.id);
+
+  const dapper = useDapper();
   const packages = usePromise(dapper.getPackageListings, [
     listingType,
-    [searchQuery],
+    deferredOrder,
+    deferredPage,
+    deferredSearchQuery,
+    deferredIncludedCategories,
+    deferredExcludedCategories,
+    deferredSection,
+    deferredNsfw,
+    deferredDeprecated,
   ]);
 
   return (

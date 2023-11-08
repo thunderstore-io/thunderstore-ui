@@ -30,7 +30,17 @@ const getFakePackagePreview = (community?: string, namespace?: string) => {
 // interacts with filters or pagination. Something similar could be done
 // here that's done for community listing, but getting all the filters
 // to work properly might not be worth the effort.
-export const getFakePackageListings = async (type: PackageListingType) => ({
+export const getFakePackageListings = async (
+  type: PackageListingType
+  // order = "-datetime_updated",
+  // page = 1,
+  // query = "",
+  // includedCategories = [],
+  // excludedCategories = [],
+  // section = "",
+  // nsfw = false,
+  // deprecated = false
+) => ({
   count: 200,
   hasMore: true,
   results: range(20).map(() =>
