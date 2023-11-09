@@ -1,6 +1,7 @@
 "use client";
-import { Toast } from "../..";
+import { Toast } from "./Toast";
 import styles from "./Toast.module.css";
+import * as RadixToast from "@radix-ui/react-toast";
 
 export function ToastContainer(props: {
   toasts: {
@@ -8,24 +9,26 @@ export function ToastContainer(props: {
     variant?: "info" | "danger" | "warning" | "success";
     icon?: JSX.Element;
     message?: string;
-    noTimer?: boolean;
+    timer?: number;
   }[];
 }) {
   const { toasts } = props;
 
   return (
-    <div className={styles.toastContainer}>
-      {toasts.map((toast) => (
-        <Toast
-          key={toast.id}
-          id={toast.id}
-          icon={toast.icon}
-          content={toast.message}
-          variant={toast.variant}
-          noTimer={toast.noTimer}
-        />
-      ))}
-    </div>
+    <RadixToast.Viewport asChild>
+      <div className={styles.toastContainer}>
+        {toasts.map((toast) => (
+          <Toast
+            key={toast.id}
+            id={toast.id}
+            icon={toast.icon}
+            content={toast.message}
+            variant={toast.variant}
+            timer={toast.timer}
+          />
+        ))}
+      </div>
+    </RadixToast.Viewport>
   );
 }
 

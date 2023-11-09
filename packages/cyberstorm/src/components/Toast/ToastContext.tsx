@@ -1,6 +1,7 @@
 import { createContext, PropsWithChildren, useReducer } from "react";
 import { ToastContainer } from "./ToastContainer";
 import { v4 as uuid } from "uuid";
+import * as RadixToast from "@radix-ui/react-toast";
 
 const initState: {
   toasts: {
@@ -8,7 +9,7 @@ const initState: {
     variant?: "info" | "danger" | "warning" | "success";
     icon?: JSX.Element;
     message?: string;
-    noTimer?: boolean;
+    timer?: number;
   }[];
 } = { toasts: [] };
 
@@ -19,7 +20,7 @@ const toastReducer = (
       variant?: "info" | "danger" | "warning" | "success";
       icon?: JSX.Element;
       message?: string;
-      noTimer?: boolean;
+      timer?: number;
     }[];
   },
   action: {
@@ -29,7 +30,7 @@ const toastReducer = (
       variant?: "info" | "danger" | "warning" | "success";
       icon?: JSX.Element;
       message?: string;
-      noTimer?: boolean;
+      timer?: number;
     };
   }
 ) => {
@@ -57,7 +58,7 @@ interface ContextInterface {
     variant?: "info" | "danger" | "warning" | "success",
     icon?: JSX.Element,
     message?: string,
-    noTimer?: boolean
+    timer?: number
   ) => void;
   remove: (id: string) => void;
 }
@@ -71,10 +72,10 @@ export function ToastProvider(props: PropsWithChildren) {
     variant?: "info" | "danger" | "warning" | "success",
     icon?: JSX.Element,
     message?: string,
-    noTimer?: boolean
+    timer?: number
   ) => {
     const id = uuid();
-    dispatch({ type: "add", toast: { id, variant, icon, message, noTimer } });
+    dispatch({ type: "add", toast: { id, variant, icon, message, timer } });
   };
 
   const remove = (id: string) => {
@@ -88,8 +89,10 @@ export function ToastProvider(props: PropsWithChildren) {
 
   return (
     <ToastContext.Provider value={value}>
-      <ToastContainer toasts={state.toasts} />
-      {props.children}
+      <RadixToast.Provider swipeDirection="left" duration={10000}>
+        {props.children}
+        <ToastContainer toasts={state.toasts} />
+      </RadixToast.Provider>
     </ToastContext.Provider>
   );
 }

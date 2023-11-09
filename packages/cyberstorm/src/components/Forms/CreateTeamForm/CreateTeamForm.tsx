@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 
 import { useContext } from "react";
-import { ToastContext } from "../../NewToast/NewToastContext";
+import { ToastContext } from "../../Toast/ToastContext";
 import {
   faCircleCheck,
   faCircleExclamation,
