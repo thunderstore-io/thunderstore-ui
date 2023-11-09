@@ -19,15 +19,23 @@ export const PackageCount = (props: Props) => {
   const { page, pageSize, searchQuery, totalCount } = props;
   const first = (page - 1) * pageSize + 1;
   const last = first + pageSize - 1;
+  const query = searchQuery !== "" ? ` for "${searchQuery}"` : "";
+
+  if (totalCount === 0) {
+    return <p className={styles.packageCount}>No results{query}</p>;
+  }
 
   return (
     <p className={styles.packageCount}>
-      Showing{" "}
+      {"Showing "}
       <strong>
-        {first}-{last}
-      </strong>{" "}
-      of <strong>{totalCount}</strong> results
-      {searchQuery !== "" ? ` for "${searchQuery}"` : ""}
+        {first}
+        {first !== totalCount ? `-${Math.min(last, totalCount)}` : ""}
+      </strong>
+      {" of "}
+      <strong>{totalCount}</strong>
+      {" results"}
+      {query}
     </p>
   );
 };
