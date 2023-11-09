@@ -1,33 +1,81 @@
 "use client";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useContext, useState } from "react";
 import styles from "./Toast.module.css";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
 import { Button } from "../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { ToastContext } from "./ToastContext";
 
 type _ToastProps = {
+  id: string;
   content: ReactNode;
   icon?: JSX.Element;
   variant?: "info" | "danger" | "warning" | "success";
+  noTimer?: boolean;
 };
 export type ToastProps = _ToastProps &
   Omit<React.HTMLProps<HTMLDivElement>, keyof _ToastProps>;
 
 export function Toast(props: ToastProps) {
-  const { content, icon, variant = "info" } = props;
+  const { id, content, icon, variant = "info", noTimer = false } = props;
+  const useToast = () => useContext(ToastContext);
+  const toast = useToast();
+  const [isFadingOut, setIsFadingOut] = useState(false);
+  const [isFadingIn, setIsFadingIn] = useState(true);
+
+  // Fade in
+  setTimeout(() => setIsFadingIn(false), 300);
+
+  const removeToast = () => {
+    toast?.remove(id);
+    setIsFadingOut(false);
+  };
+  const fadeOut = () => {
+    setIsFadingOut(true);
+    setTimeout(() => removeToast(), 300);
+  };
+
+  // Auto remove after 10 seconds
+  if (!noTimer) {
+    setTimeout(() => fadeOut(), 10000);
+  }
 
   return (
-    <div className={classnames(styles.root, getStyle(variant))}>
-      <Icon wrapperClasses={styles.icon}>{icon}</Icon>
-      <div className={styles.content}>{content}</div>
-      <div className={styles.closeIconWrapper}>
-        <Button.Root>
-          <Button.ButtonIcon>
-            <FontAwesomeIcon className={styles.closeIcon} icon={faXmarkLarge} />
-          </Button.ButtonIcon>
-        </Button.Root>
+    <div
+      className={classnames(
+        styles.root,
+        isFadingOut ? styles.rootFadeOut : null,
+        isFadingIn ? styles.rootFadeIn : null
+      )}
+    >
+      <div className={classnames(styles.contentWrapper, getStyle(variant))}>
+        <div className={styles.content}>
+          <Icon wrapperClasses={styles.icon}>{icon}</Icon>
+          <div className={styles.message}>{content}</div>
+          <div
+            className={classnames(styles.closeIcon, styles.closeIconWrapper)}
+          >
+            <Button.Root
+              colorScheme="transparentNoBackground"
+              paddingSize="none"
+              onClick={fadeOut}
+            >
+              <Button.ButtonIcon>
+                <FontAwesomeIcon icon={faXmarkLarge} />
+              </Button.ButtonIcon>
+            </Button.Root>
+          </div>
+        </div>
+        <div className={styles.toastProgress}>
+          <div
+            className={classnames(
+              styles.toastProgressBar,
+              noTimer ? null : styles.toastProgressBarTimer
+            )}
+          />
+        </div>
       </div>
     </div>
   );

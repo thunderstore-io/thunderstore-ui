@@ -1,75 +1,90 @@
-import {
-  ReactNode,
-  createContext,
-  PropsWithChildren,
-  useState,
-  useReducer,
-} from "react";
+import { createContext, PropsWithChildren, useReducer } from "react";
 import { ToastContainer } from "./ToastContainer";
+import { v4 as uuid } from "uuid";
+
+const initState: {
+  toasts: {
+    id: string;
+    variant?: "info" | "danger" | "warning" | "success";
+    icon?: JSX.Element;
+    message?: string;
+    noTimer?: boolean;
+  }[];
+} = { toasts: [] };
 
 const toastReducer = (
-  state: { toasts: { id: string; type: string; message: string }[] },
+  state: {
+    toasts: {
+      id: string;
+      variant?: "info" | "danger" | "warning" | "success";
+      icon?: JSX.Element;
+      message?: string;
+      noTimer?: boolean;
+    }[];
+  },
   action: {
-    type: string;
-    message: string;
-    payload: string;
+    type: "add" | "delete";
+    toast: {
+      id: string;
+      variant?: "info" | "danger" | "warning" | "success";
+      icon?: JSX.Element;
+      message?: string;
+      noTimer?: boolean;
+    };
   }
 ) => {
   switch (action.type) {
-    case "ADD_TOAST":
+    case "add": {
       return {
-        ...state,
-        toasts: [...state.toasts, action.payload],
+        toasts: [...state.toasts, action.toast],
       };
-    case "DELETE_TOAST": {
+    }
+    case "delete": {
       const updatedToasts = state.toasts.filter(
-        (toast) => toast.id !== action.payload
+        (toast) => toast.id !== action.toast.id
       );
       return {
-        ...state,
         toasts: updatedToasts,
       };
     }
     default:
-      throw new Error(`Unhandled action type: ${action.type}`);
+      throw new Error(`Unhandled action: ${action.type}`);
   }
 };
 
 interface ContextInterface {
-  addToast: (type: string, message: string) => void;
+  addToast: (
+    variant?: "info" | "danger" | "warning" | "success",
+    icon?: JSX.Element,
+    message?: string,
+    noTimer?: boolean
+  ) => void;
   remove: (id: string) => void;
-  clearToastContent: () => void;
-  setToastContent: React.Dispatch<React.SetStateAction<ReactNode>>;
-  toastContent: ReactNode;
 }
 
 export const ToastContext = createContext<ContextInterface | null>(null);
 
 export function ToastProvider(props: PropsWithChildren) {
-  const [toastContent, setToastContent] = useState<ReactNode>(null);
+  const [state, dispatch] = useReducer(toastReducer, initState);
 
-  const clearToastContent = () => {
-    setToastContent(undefined);
-  };
-
-  const addToast = (type: string, message: string) => {
-    const id = Math.floor(Math.random() * 10000000);
-    dispatch({ type: "ADD_TOAST", payload: { id, message, type } });
+  const addToast = (
+    variant?: "info" | "danger" | "warning" | "success",
+    icon?: JSX.Element,
+    message?: string,
+    noTimer?: boolean
+  ) => {
+    const id = uuid();
+    dispatch({ type: "add", toast: { id, variant, icon, message, noTimer } });
   };
 
   const remove = (id: string) => {
-    dispatch({ type: "DELETE_TOAST", payload: id });
+    dispatch({ type: "delete", toast: { id } });
   };
 
   const value = {
     addToast,
     remove,
-    clearToastContent,
-    setToastContent,
-    toastContent,
   };
-
-  const [state, dispatch] = useReducer(toastReducer, { toasts: [] });
 
   return (
     <ToastContext.Provider value={value}>

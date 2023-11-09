@@ -13,6 +13,11 @@ import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 
 import { useContext } from "react";
 import { ToastContext } from "../../Toast/ToastContext";
+import {
+  faCircleCheck,
+  faCircleExclamation,
+  faOctagonExclamation,
+} from "@fortawesome/pro-solid-svg-icons";
 
 // Temp util
 function wait(time: number) {
@@ -21,39 +26,61 @@ function wait(time: number) {
   });
 }
 
-// If client-side form validation succeedes, run this
-async function onValid(data: { teamName: string }) {
-  console.log("start sending");
-  await wait(1000);
-  console.log("sending ok");
-  alert(JSON.stringify(data));
-}
-
-// If client-side form validation fails, run this
-async function onInvalid(
-  errors: FieldErrors<{
-    teamName: string;
-  }>
-) {
-  if (errors.teamName && errors.teamName.type === "noUnderscoreStartOrEnd") {
-    alert("Team name cannot start or end with underscore.");
-  } else if (
-    errors.teamName &&
-    errors.teamName.type === "hasAllowedCharacters"
-  ) {
-    alert("Team name can contain the following characters: a-z A-Z 0-9 _");
-  } else if (errors.teamName && errors.teamName.type === "required") {
-    alert("Team name is required");
-  }
-}
-
 /**
  * Form for creating a team
  */
 export function CreateTeamForm() {
-  // const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
   const useToast = () => useContext(ToastContext);
+  const toast = useToast();
+
+  // If client-side form validation succeedes, run this
+  async function onValid(data: { teamName: string }) {
+    toast?.addToast(
+      "info",
+      <FontAwesomeIcon icon={faCircleExclamation} />,
+      "Creating team"
+    );
+    await wait(1000);
+    toast?.addToast(
+      "success",
+      <FontAwesomeIcon icon={faCircleCheck} />,
+      "Team created"
+    );
+    console.log(JSON.stringify(data));
+  }
+
+  // If client-side form validation fails, run this
+  async function onInvalid(
+    errors: FieldErrors<{
+      teamName: string;
+    }>
+  ) {
+    if (errors.teamName && errors.teamName.type === "noUnderscoreStartOrEnd") {
+      toast?.addToast(
+        "danger",
+        <FontAwesomeIcon icon={faOctagonExclamation} />,
+        "Team name cannot start or end with underscore.",
+        true
+      );
+    } else if (
+      errors.teamName &&
+      errors.teamName.type === "hasAllowedCharacters"
+    ) {
+      toast?.addToast(
+        "danger",
+        <FontAwesomeIcon icon={faOctagonExclamation} />,
+        "Team name can contain the following characters: a-z A-Z 0-9 _",
+        true
+      );
+    } else if (errors.teamName && errors.teamName.type === "required") {
+      toast?.addToast(
+        "danger",
+        <FontAwesomeIcon icon={faOctagonExclamation} />,
+        "Team name is required",
+        true
+      );
+    }
+  }
 
   const {
     handleSubmit,

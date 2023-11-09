@@ -261,6 +261,15 @@
   --bg-color: var(--color-surface--7);
 }
 
+.button__transparentNoBackground {
+  --text-color: var(--color-text--tertiary);
+  --bg-color: transparent;
+}
+
+.button__transparentNoBackground:hover {
+  --text-color: var(--color-text--accent);
+}
+
 .button__wideDarker {
   justify-content: space-between;
 
