@@ -42,6 +42,9 @@ export function PackageFormatDocsLayout() {
       header={<PageHeader title="Package Format Docs" />}
       mainContent={
         <div className={styles.root}>
+          <p>
+            A valid package is a zip file that contains the following files:
+          </p>
           <Table
             headers={firstTableDataColumns}
             rows={firstTableData}
