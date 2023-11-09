@@ -9,12 +9,12 @@ export default {
     {
       directory: "../stories/components",
       files: "*.@(mdx|stories.*)",
-      titlePrefix: "@thunderstore/cyberstorm",
+      titlePrefix: "@thunderstore",
     },
     {
       directory: "../stories/layouts",
       files: "*.@(mdx|stories.*)",
-      titlePrefix: "@thunderstore/cyberstorm",
+      titlePrefix: "@thunderstore",
     },
   ],
   addons: [
