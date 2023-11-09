@@ -5,7 +5,7 @@
   color: var(--color-text--tertiary);
 }
 
-.root > input {
+.input {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -23,42 +23,48 @@
   --border-color: transparent;
 }
 
-.root > input:hover {
+.input:hover {
   --border-color: var(--color-border--highlight);
 
   transition: ease-out 80ms;
 }
 
-.root > input:focus-within {
+.input:focus-within {
   color: var(--color-text--default);
   background-color: var(--color-black);
 
   --border-color: var(--color-border--highlight);
 }
 
-.root > input::placeholder {
+.input::placeholder {
   color: var(--color-text--tertiary);
 }
 
-.root > input[data-state="invalid"] {
+.input[data-color="purple"]:hover {
+  --border-color: var(--color-border--highlight);
+
+  transition: ease-out 80ms;
+}
+
+.input[data-color="red"] {
   --border-color: var(--color-red--5);
 
   transition: ease-out 80ms;
 }
 
-.root > input[data-state="invalid"]:hover {
+.input[data-color="red"]:hover {
   --border-color: var(--color-red--3);
 
   transition: ease-out 80ms;
 }
 
-.root > input[data-state="valid"] {
+.input[data-color="green"] {
   --border-color: var(--color-cyber-green--50);
 
   transition: ease-out 80ms;
 }
 
-.root > input[data-state="valid"]:hover {
+.input[data-color="green"]:hover {
   --border-color: var(--color-cyber-green--80);
 
   transition: ease-out 80ms;

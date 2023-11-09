@@ -1,6 +1,7 @@
 "use client";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
 import { ReactNode } from "react";
+import { ToastProvider } from "./Toast/ToastContext";
 
 interface CyberstormProvidersProps {
   children: ReactNode | ReactNode[];
@@ -8,8 +9,10 @@ interface CyberstormProvidersProps {
 
 export function CyberstormProviders(props: CyberstormProvidersProps) {
   return (
-    <RadixTooltip.Provider delayDuration={80}>
-      {props.children}
-    </RadixTooltip.Provider>
+    <ToastProvider>
+      <RadixTooltip.Provider delayDuration={80}>
+        {props.children}
+      </RadixTooltip.Provider>
+    </ToastProvider>
   );
 }

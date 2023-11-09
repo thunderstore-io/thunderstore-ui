@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode, cloneElement } from "react";
+import React, { ReactNode } from "react";
 import styles from "./TextInput.module.css";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
@@ -12,9 +12,12 @@ export interface TextInputProps {
   type?: "text" | "email" | "password" | "tel" | "url";
   rightIcon?: JSX.Element;
   value?: string;
-  setValue?: React.Dispatch<React.SetStateAction<string>>;
+  name?: string;
+  color: string;
+  inputRef?: (instance: any) => void;
+  onBlur?: (val: any) => void;
+  onChange?: (val: any) => void;
   enterHook?: (value: string) => string | void;
-  asChild?: boolean;
 }
 
 /**
@@ -22,16 +25,18 @@ export interface TextInputProps {
  */
 export function TextInput(props: TextInputProps) {
   const {
-    children,
     placeHolder,
     id,
     type = "text",
     leftIcon,
     rightIcon,
     value = "",
-    setValue,
+    name,
+    color,
+    inputRef,
+    onBlur,
+    onChange,
     enterHook,
-    asChild = false,
   } = props;
 
   const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -47,18 +52,22 @@ export function TextInput(props: TextInputProps) {
           {leftIcon}
         </Icon>
       ) : null}
-      {asChild ? (
-        children
-      ) : (
-        <input
-          id={id}
-          type={type}
-          placeholder={placeHolder}
-          onChange={(event) => setValue && setValue(event.target.value)}
-          value={value}
-          onKeyDown={(e) => onEnter(e)}
-        />
-      )}
+      <input
+        id={id}
+        className={classnames(
+          styles.input,
+          leftIcon ? styles.hasLeftIcon : null
+        )}
+        type={type}
+        placeholder={placeHolder}
+        onBlur={onBlur}
+        onChange={onChange}
+        ref={inputRef}
+        name={name}
+        value={value}
+        onKeyDown={(e) => onEnter(e)}
+        data-color={color}
+      />
       {rightIcon ? (
         <Icon inline wrapperClasses={styles.rightIcon}>
           {rightIcon}

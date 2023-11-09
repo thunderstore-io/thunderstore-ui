@@ -1,0 +1,72 @@
+.root {
+  display: flex;
+  gap: var(--space--16);
+  align-items: flex-start;
+  align-self: stretch;
+  width: 100%;
+  padding: 1rem 3.25rem 1rem 1.5rem;
+  border-left: 3px solid var(--feature-color);
+  border-radius: var(--border-radius--4);
+  background-color: var(--background-color);
+
+  --background-color: var(--alert-info-bg-color);
+  --feature-color: var(--alert-info-accent-color);
+  --text-color: var(--alert-info-text-color);
+}
+
+/* Styles for Toast's text */
+.content {
+  display: flex;
+  flex: 1 0 0;
+  min-height: calc(1rem * var(--line-height--m));
+  color: var(--text-color);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
+}
+
+/* Styles for Toast's Icon */
+.icon {
+  width: var(--space--18);
+  height: var(--space--18);
+  color: var(--feature-color);
+}
+
+/* Different Toast variants */
+.toast__info {
+  --background-color: var(--alert-info-bg-color);
+  --feature-color: var(--alert-info-accent-color);
+  --text-color: var(--alert-info-text-color);
+}
+
+.toast__success {
+  --background-color: var(--alert-success-bg-color);
+  --feature-color: var(--alert-success-accent-color);
+  --text-color: var(--alert-success-text-color);
+}
+
+.toast__warning {
+  --background-color: var(--alert-warning-bg-color);
+  --feature-color: var(--alert-warning-accent-color);
+  --text-color: var(--alert-warning-text-color);
+}
+
+.toast__danger {
+  --background-color: var(--alert-danger-bg-color);
+  --feature-color: var(--alert-danger-accent-color);
+  --text-color: var(--alert-danger-text-color);
+}
+
+.closeIconWrapper {
+  position: relative;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.closeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.875rem;
+  height: 1.875rem;
+}
