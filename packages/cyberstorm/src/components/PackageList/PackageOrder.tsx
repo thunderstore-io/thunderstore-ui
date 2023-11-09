@@ -27,10 +27,10 @@ export const PackageOrder = (props: Props) => (
 );
 
 export enum PackageOrderOptions {
-  Created = "-datetime_created",
-  Downloaded = "-downloads",
-  Rated = "-rating_score",
-  Updated = "-datetime_updated",
+  Created = "newest",
+  Downloaded = "most-downloaded",
+  Rated = "top-rated",
+  Updated = "last-updated",
 }
 
 const selectOptions = [
