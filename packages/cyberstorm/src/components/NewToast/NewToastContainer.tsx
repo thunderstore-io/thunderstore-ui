@@ -9,7 +9,7 @@ export function ToastContainer(props: {
     variant?: "info" | "danger" | "warning" | "success";
     icon?: JSX.Element;
     message?: string;
-    noTimer?: boolean;
+    timer?: number;
   }[];
 }) {
   const { toasts } = props;
@@ -24,7 +24,7 @@ export function ToastContainer(props: {
             icon={toast.icon}
             content={toast.message}
             variant={toast.variant}
-            noTimer={toast.noTimer}
+            timer={toast.timer}
           />
         ))}
       </div>

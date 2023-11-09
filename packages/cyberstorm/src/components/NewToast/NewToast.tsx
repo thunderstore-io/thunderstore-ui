@@ -1,12 +1,10 @@
 "use client";
-import React, { ReactNode, useContext, useState } from "react";
+import React, { CSSProperties, ReactNode } from "react";
 import styles from "./NewToast.module.css";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
-import { Button } from "../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
-import { ToastContext } from "./NewToastContext";
 import * as RadixToast from "@radix-ui/react-toast";
 
 type _ToastProps = {
@@ -14,44 +12,20 @@ type _ToastProps = {
   content: ReactNode;
   icon?: JSX.Element;
   variant?: "info" | "danger" | "warning" | "success";
-  noTimer?: boolean;
+  timer?: number;
 };
 export type ToastProps = _ToastProps &
   Omit<React.HTMLProps<HTMLDivElement>, keyof _ToastProps>;
 
 export function Toast(props: ToastProps) {
-  const { id, content, icon, variant = "info", noTimer = false } = props;
-  const useToast = () => useContext(ToastContext);
-  const toast = useToast();
-  const [isFadingOut, setIsFadingOut] = useState(false);
-  const [isFadingIn, setIsFadingIn] = useState(true);
-
-  // Fade in
-  setTimeout(() => setIsFadingIn(false), 300);
-
-  const removeToast = () => {
-    toast?.remove(id);
-    setIsFadingOut(false);
-  };
-  const fadeOut = () => {
-    setIsFadingOut(true);
-    setTimeout(() => removeToast(), 300);
-  };
-
-  // Auto remove after 10 seconds
-  if (!noTimer) {
-    setTimeout(() => fadeOut(), 10000);
-  }
+  const { content, icon, variant = "info", timer = 10000 } = props;
+  const timerCSS = {
+    "--bar-timer": `${timer / 1000}s`,
+  } as CSSProperties;
 
   return (
-    <RadixToast.Root asChild>
-      <div
-        className={classnames(
-          styles.root,
-          isFadingOut ? styles.rootFadeOut : null,
-          isFadingIn ? styles.rootFadeIn : null
-        )}
-      >
+    <RadixToast.Root asChild duration={timer}>
+      <div className={classnames(styles.root)}>
         <div className={classnames(styles.contentWrapper, getStyle(variant))}>
           <RadixToast.Description asChild>
             <div className={styles.content}>
@@ -60,27 +34,12 @@ export function Toast(props: ToastProps) {
             </div>
           </RadixToast.Description>
           <div className={styles.toastProgress}>
-            <div
-              className={classnames(
-                styles.toastProgressBar,
-                noTimer ? null : styles.toastProgressBarTimer
-              )}
-            />
+            <div className={styles.toastProgressBar} style={timerCSS} />
           </div>
-          <RadixToast.Close asChild>
-            <div
-              className={classnames(styles.closeIcon, styles.closeIconWrapper)}
-            >
-              <Button.Root
-                colorScheme="transparentNoBackground"
-                paddingSize="none"
-                onClick={fadeOut}
-              >
-                <Button.ButtonIcon>
-                  <FontAwesomeIcon icon={faXmarkLarge} />
-                </Button.ButtonIcon>
-              </Button.Root>
-            </div>
+          <RadixToast.Close className={styles.closeIconWrapper}>
+            <Icon iconClasses={styles.closeIcon}>
+              <FontAwesomeIcon icon={faXmarkLarge} />
+            </Icon>
           </RadixToast.Close>
         </div>
       </div>

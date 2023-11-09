@@ -60,7 +60,7 @@ export function CreateTeamForm() {
         "danger",
         <FontAwesomeIcon icon={faOctagonExclamation} />,
         "Team name cannot start or end with underscore.",
-        true
+        30000
       );
     } else if (
       errors.teamName &&
@@ -70,14 +70,14 @@ export function CreateTeamForm() {
         "danger",
         <FontAwesomeIcon icon={faOctagonExclamation} />,
         "Team name can contain the following characters: a-z A-Z 0-9 _",
-        true
+        30000
       );
     } else if (errors.teamName && errors.teamName.type === "required") {
       toast?.addToast(
         "danger",
         <FontAwesomeIcon icon={faOctagonExclamation} />,
         "Team name is required",
-        true
+        30000
       );
     }
   }
