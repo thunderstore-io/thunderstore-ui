@@ -1,0 +1,22 @@
+{
+  "name": "@thunderstore/typed-event-emitter",
+  "version": "0.1.0",
+  "description": "Provides a strongly typed event emitter",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "main": "dist/thunderstore-typed-event-emitter.cjs.js",
+  "module": "dist/thunderstore-typed-event-emitter.esm.js",
+  "types": "dist/thunderstore-typed-event-emitter.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "watch": "jest --watch"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}
