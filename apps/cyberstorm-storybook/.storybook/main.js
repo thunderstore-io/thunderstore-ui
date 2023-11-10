@@ -16,6 +16,11 @@ export default {
       files: "*.@(mdx|stories.*)",
       titlePrefix: "@thunderstore/cyberstorm",
     },
+    {
+      directory: "../stories/ts-uploader-react",
+      files: "*.@(mdx|stories.*)",
+      titlePrefix: "@thunderstore/ts-uploader-react",
+    },
   ],
   addons: [
     "@storybook/addon-links",
