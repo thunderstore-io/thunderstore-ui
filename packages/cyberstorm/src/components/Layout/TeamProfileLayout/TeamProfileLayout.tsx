@@ -30,6 +30,12 @@ export function TeamProfileLayout(props: Props) {
   const dapper = useDapper();
   const filters = usePromise(dapper.getCommunityFilters, [community]);
 
+  const listingType = {
+    kind: "namespace" as const,
+    communityId: community,
+    namespaceId: namespace,
+  };
+
   return (
     <BaseLayout
       breadCrumb={
@@ -50,7 +56,7 @@ export function TeamProfileLayout(props: Props) {
       }
       mainContent={
         <PackageSearch
-          teamId={namespace}
+          listingType={listingType}
           packageCategories={filters.package_categories}
           sections={filters.sections}
         />

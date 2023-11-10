@@ -1,7 +1,11 @@
 "use client";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PackageCategory, Section } from "@thunderstore/dapper/types";
+import {
+  PackageCategory,
+  PackageListingType,
+  Section,
+} from "@thunderstore/dapper/types";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 
@@ -15,25 +19,16 @@ import { PackageList } from "../PackageList/PackageList";
 import { TextInput } from "../TextInput/TextInput";
 
 interface Props {
-  communityId?: string;
+  listingType: PackageListingType;
   packageCategories: PackageCategory[];
   sections: Section[];
-  teamId?: string;
-  userId?: string;
 }
 
 /**
  * Component for filtering and rendering a PackageList
  */
 export function PackageSearch(props: Props) {
-  const {
-    communityId,
-    packageCategories: allCategories,
-    sections,
-    teamId,
-    userId,
-  } = props;
-
+  const { listingType, packageCategories: allCategories, sections } = props;
   const allSections = sections.sort((a, b) => a.priority - b.priority);
 
   const [searchValue, setSearchValue] = useState("");
@@ -81,9 +76,7 @@ export function PackageSearch(props: Props) {
           />
 
           <PackageList
-            communityId={communityId}
-            userId={userId}
-            teamId={teamId}
+            listingType={listingType}
             searchQuery={debouncedSearchValue}
             categories={categories}
             section={section}
