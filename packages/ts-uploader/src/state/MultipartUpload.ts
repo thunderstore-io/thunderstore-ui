@@ -7,6 +7,7 @@ import {
   UploadRequestConfig,
 } from "./UploadRequest";
 import { calculateMD5 } from "../md5";
+import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 
 export type MultiPartUploadOptions = {
   api: ApiConfig;
@@ -72,10 +73,16 @@ type UploadPart = {
   };
 };
 
-class UploadHandle {
+export interface IUploadHandle {
+  get progress(): UploadProgress;
+  onProgress: TypedEventEmitter<UploadProgress>;
+}
+
+class UploadHandle implements IUploadHandle {
   readonly handle: UserMedia;
   readonly opts: MultiPartUploadOptions;
   readonly parts: UploadPart[];
+  readonly onProgress = new TypedEventEmitter<UploadProgress>();
 
   private requests?: UploadRequest[];
 
@@ -110,7 +117,9 @@ class UploadHandle {
     }
 
     const progressCallback = () => {
-      if (onProgress) onProgress(this.progress);
+      const progress = this.progress;
+      if (onProgress) onProgress(progress);
+      this.onProgress.emit(progress);
     };
 
     this.requests = [];
