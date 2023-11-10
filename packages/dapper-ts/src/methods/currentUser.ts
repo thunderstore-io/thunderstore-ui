@@ -2,6 +2,7 @@ import { z } from "zod";
 import { fetchCurrentUser } from "@thunderstore/thunderstore-api";
 
 import { DapperTsInterface } from "../index";
+import { formatErrorMessage } from "../utils";
 
 const oAuthConnectionSchema = z.object({
   provider: z.string().nonempty(),
@@ -42,8 +43,7 @@ export async function getCurrentUser(this: DapperTsInterface) {
   const parsed = schema.safeParse(data);
 
   if (!parsed.success) {
-    // TODO: add Sentry support and log parsed.error.
-    throw new Error("Invalid data received from backend");
+    throw new Error(formatErrorMessage(parsed.error));
   }
 
   // For legacy support, the backend returns teams in two formats.

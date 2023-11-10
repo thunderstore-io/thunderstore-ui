@@ -8,6 +8,7 @@ import { PackageListingQueryParams } from "@thunderstore/thunderstore-api/types"
 
 import { DapperTsInterface } from "../index";
 import { PackageCategory, paginatedResults } from "../sharedSchemas";
+import { formatErrorMessage } from "../utils";
 
 const packageListingSchema = z.object({
   categories: PackageCategory.array(),
@@ -73,8 +74,7 @@ export async function getPackageListings(
   const parsed = schema.safeParse(data);
 
   if (!parsed.success) {
-    // TODO: add Sentry support and log parsed.error.
-    throw new Error("Invalid data received from backend");
+    throw new Error(formatErrorMessage(parsed.error));
   }
 
   return {
