@@ -33,9 +33,9 @@ export type GetPackageDependencies = (
 
 export type GetPackageListings = (
   type: PackageListingType,
-  order?: string,
+  ordering?: string,
   page?: number,
-  query?: string,
+  q?: string,
   includedCategories?: number[],
   excludedCategories?: number[],
   section?: string,

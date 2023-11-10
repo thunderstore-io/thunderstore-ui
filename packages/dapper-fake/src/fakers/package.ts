@@ -32,9 +32,9 @@ const getFakePackagePreview = (community?: string, namespace?: string) => {
 // to work properly might not be worth the effort.
 export const getFakePackageListings = async (
   type: PackageListingType
-  // order = "-datetime_updated",
+  // ordering = "last-updated",
   // page = 1,
-  // query = "",
+  // q = "",
   // includedCategories = [],
   // excludedCategories = [],
   // section = "",

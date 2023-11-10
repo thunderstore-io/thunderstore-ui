@@ -84,7 +84,7 @@ export function PackageList(props: Props) {
 
       <div className={styles.packages}>
         {packages.results.map((p) => (
-          <PackageCard key={p.name} package={p} />
+          <PackageCard key={`${p.namespace}-${p.name}`} package={p} />
         ))}
       </div>
 
