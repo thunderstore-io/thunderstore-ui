@@ -1,0 +1,85 @@
+import { z } from "zod";
+import { PackageListingType } from "@thunderstore/dapper/types";
+import {
+  fetchCommunityPackageListings,
+  fetchNamespacePackageListings,
+} from "@thunderstore/thunderstore-api";
+import { PackageListingQueryParams } from "@thunderstore/thunderstore-api/types";
+
+import { DapperTsInterface } from "../index";
+import { PackageCategory, paginatedResults } from "../sharedSchemas";
+
+const packageListingSchema = z.object({
+  categories: PackageCategory.array(),
+  community_identifier: z.string().nonempty(),
+  description: z.string(),
+  download_count: z.number().int().gte(0),
+  icon_url: z.string().nullable(),
+  is_deprecated: z.boolean(),
+  is_nsfw: z.boolean(),
+  is_pinned: z.boolean(),
+  last_updated: z.string().datetime(),
+  name: z.string().nonempty(),
+  namespace: z.string().nonempty(),
+  rating_count: z.number().int().gte(0),
+  size: z.number().int().gt(0),
+});
+
+const schema = paginatedResults(packageListingSchema);
+
+export async function getPackageListings(
+  this: DapperTsInterface,
+  type: PackageListingType,
+  ordering = "last-updated",
+  page = 1,
+  q = "",
+  includedCategories: number[] = [],
+  excludedCategories: number[] = [],
+  section = "",
+  nsfw = false,
+  deprecated = false
+) {
+  const options: PackageListingQueryParams = {
+    ordering,
+    page,
+    q,
+    includedCategories,
+    excludedCategories,
+    section,
+    nsfw,
+    deprecated,
+  };
+  let data;
+
+  if (type.kind === "community") {
+    data = await fetchCommunityPackageListings(
+      this.config,
+      type.communityId,
+      options
+    );
+  } else if (type.kind === "namespace") {
+    data = await fetchNamespacePackageListings(
+      this.config,
+      type.communityId,
+      type.namespaceId,
+      options
+    );
+  } else {
+    throw new Error(
+      "getPackageListing called with unimplement PackageListingType"
+    );
+  }
+
+  const parsed = schema.safeParse(data);
+
+  if (!parsed.success) {
+    // TODO: add Sentry support and log parsed.error.
+    throw new Error("Invalid data received from backend");
+  }
+
+  return {
+    count: parsed.data.count,
+    hasMore: Boolean(parsed.data.next),
+    results: parsed.data.results,
+  };
+}
