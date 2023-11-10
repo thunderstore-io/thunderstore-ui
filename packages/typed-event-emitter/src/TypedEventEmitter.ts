@@ -1,4 +1,4 @@
-export type TypedListener<Event> = (e: Event) => Promise<void>;
+export type TypedListener<Event> = (e: Event) => Promise<void> | void;
 export interface ITypedEventEmitter<Event> {
   addListener(listener: TypedListener<Event>): void;
   removeListener(listener: TypedListener<Event>): void;
@@ -12,8 +12,13 @@ export class TypedEventEmitter<T> implements ITypedEventEmitter<T> {
     this.listeners = new Set();
   }
 
-  public addListener(listener: TypedListener<T>): void {
+  get listenerCount() {
+    return this.listeners.size;
+  }
+
+  public addListener(listener: TypedListener<T>): () => void {
     this.listeners.add(listener);
+    return () => this.removeListener(listener);
   }
 
   public removeListener(listener: TypedListener<T>): void {
