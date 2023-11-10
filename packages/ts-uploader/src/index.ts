@@ -1,3 +1,4 @@
-export { initMultipartUpload, IUploadHandle } from "./state/MultipartUpload";
-export { ApiConfig } from "./client/config";
-export { UploadProgress } from "./state/UploadRequest";
+export { initMultipartUpload } from "./state/MultipartUpload";
+export type { IUploadHandle } from "./state/MultipartUpload";
+export type { ApiConfig } from "./client/config";
+export type { UploadProgress } from "./state/UploadRequest";
