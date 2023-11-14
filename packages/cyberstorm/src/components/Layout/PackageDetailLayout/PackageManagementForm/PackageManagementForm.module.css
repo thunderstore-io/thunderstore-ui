@@ -20,3 +20,9 @@
   font-size: var(--font-size--l);
   line-height: var(--line-height--l);
 }
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

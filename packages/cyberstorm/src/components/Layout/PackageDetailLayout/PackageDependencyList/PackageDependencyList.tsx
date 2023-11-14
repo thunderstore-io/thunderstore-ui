@@ -5,7 +5,7 @@ import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoxOpen } from "@fortawesome/pro-regular-svg-icons";
 import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
-import { Dialog } from "../../../Dialog/Dialog";
+import * as Dialog from "../../../Dialog";
 import { PackageDependencyDialog } from "./PackageDependencyDialog/PackageDependencyDialog";
 import * as Button from "../../../Button/";
 import { useDapper } from "@thunderstore/dapper";
@@ -83,9 +83,8 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
         }
         headerIcon={<FontAwesomeIcon icon={faBoxOpen} />}
         headerRightContent={
-          <Dialog
+          <Dialog.Root
             noPadding
-            hideFooter
             showHeaderBorder
             title="Required mods"
             trigger={
@@ -104,10 +103,9 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
                 </Button.Root>
               </div>
             }
-            content={
-              <PackageDependencyDialog packages={packageDependencyData} />
-            }
-          />
+          >
+            <PackageDependencyDialog packages={packageDependencyData} />
+          </Dialog.Root>
         }
       />
     </>

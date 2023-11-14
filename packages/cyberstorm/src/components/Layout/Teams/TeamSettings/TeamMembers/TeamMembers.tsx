@@ -4,7 +4,7 @@ import styles from "./TeamMembers.module.css";
 import { TeamMemberList } from "./TeamMemberList";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import * as Button from "../../../../Button/";
-import { Dialog } from "../../../../Dialog/Dialog";
+import * as Dialog from "../../../../Dialog/";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { Select } from "../../../../Select/Select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,7 +26,7 @@ export function TeamMembers(props: Props) {
   const members = usePromise(dapper.getTeamMembers, [teamName]);
 
   const dialog = (
-    <Dialog
+    <Dialog.Root
       title="Add Member"
       trigger={
         <Button.Root colorScheme="primary" paddingSize="large">
@@ -36,9 +36,8 @@ export function TeamMembers(props: Props) {
           </Button.ButtonIcon>
         </Button.Root>
       }
-      showFooterBorder
-      cancelButton="default"
-      content={
+    >
+      <>
         <div className={styles.dialogContent}>
           <p className={styles.description}>
             Enter the username of the user you wish to add to the team{" "}
@@ -51,13 +50,13 @@ export function TeamMembers(props: Props) {
             <Select options={userRoles} value={"Member"} />
           </div>
         </div>
-      }
-      acceptButton={
-        <Button.Root colorScheme="success">
-          <Button.ButtonLabel>Add Member</Button.ButtonLabel>
-        </Button.Root>
-      }
-    />
+        <div className={styles.addMemberDialogFooter}>
+          <Button.Root colorScheme="success">
+            <Button.ButtonLabel>Add Member</Button.ButtonLabel>
+          </Button.Root>
+        </div>
+      </>
+    </Dialog.Root>
   );
 
   return (

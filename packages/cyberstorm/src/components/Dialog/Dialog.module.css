@@ -32,7 +32,7 @@
 }
 
 .bodyPadding {
-  padding: var(--space--16) var(--space--32) var(--space--32) var(--space--32);
+  padding: var(--space--16) var(--space--32);
 }
 
 .header {

@@ -4,13 +4,16 @@ import { TextInput } from "../../../TextInput/TextInput";
 import { Alert } from "../../../Alert/Alert";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/pro-solid-svg-icons";
+import { Button } from "../../../..";
+import { Package } from "@thunderstore/dapper/types";
 
 export interface PackageManagementFormProps {
   packageStatus?: string;
+  packageData: Package;
 }
 
 export function PackageManagementForm(props: PackageManagementFormProps) {
-  const { packageStatus = "active" } = props;
+  const { packageStatus = "active", packageData } = props;
   return (
     <div className={styles.root}>
       <div className={styles.section}>
@@ -33,6 +36,20 @@ export function PackageManagementForm(props: PackageManagementFormProps) {
       <div className={styles.section}>
         <div className={styles.title}>Edit categories</div>
         <TextInput />
+      </div>
+      <div className={styles.footer}>
+        {packageData.is_deprecated ? (
+          <Button.Root paddingSize="large" colorScheme="default">
+            <Button.ButtonLabel>Undeprecate</Button.ButtonLabel>
+          </Button.Root>
+        ) : (
+          <Button.Root paddingSize="large" colorScheme="warning">
+            <Button.ButtonLabel>Deprecate</Button.ButtonLabel>
+          </Button.Root>
+        )}
+        <Button.Root paddingSize="large" colorScheme="success">
+          <Button.ButtonLabel>Save changes</Button.ButtonLabel>
+        </Button.Root>
       </div>
     </div>
   );

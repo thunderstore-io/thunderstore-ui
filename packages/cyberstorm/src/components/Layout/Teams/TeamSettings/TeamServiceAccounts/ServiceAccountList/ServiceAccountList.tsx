@@ -1,6 +1,6 @@
 import styles from "./ServiceAccountList.module.css";
 import { ServiceAccount } from "@thunderstore/dapper/types";
-import { Dialog } from "../../../../../Dialog/Dialog";
+import * as Dialog from "../../../../../Dialog/";
 import * as Button from "../../../../../Button";
 import { Table } from "../../../../../Table/Table";
 import { Alert } from "../../../../../../index";
@@ -28,14 +28,16 @@ export function ServiceAccountList(props: Props) {
     },
     {
       value: (
-        <Dialog
+        <Dialog.Root
           key={`${serviceAccount.name}_${index}`}
+          title="Confirm service account removal"
           trigger={
             <Button.Root colorScheme="danger" paddingSize="large">
               <Button.ButtonLabel>Remove</Button.ButtonLabel>
             </Button.Root>
           }
-          content={
+        >
+          <>
             <div className={styles.content}>
               <Alert
                 icon={<FontAwesomeIcon icon={faTriangleExclamation} />}
@@ -52,16 +54,13 @@ export function ServiceAccountList(props: Props) {
                 .
               </span>
             </div>
-          }
-          acceptButton={
-            <Button.Root colorScheme="danger" paddingSize="large">
-              <Button.ButtonLabel>Remove service account</Button.ButtonLabel>
-            </Button.Root>
-          }
-          cancelButton="default"
-          showFooterBorder
-          title="Confirm service account removal"
-        />
+            <div className={styles.removeServiceAccountFooter}>
+              <Button.Root colorScheme="danger" paddingSize="large">
+                <Button.ButtonLabel>Remove service account</Button.ButtonLabel>
+              </Button.Root>
+            </div>
+          </>
+        </Dialog.Root>
       ),
       sortValue: 0,
     },

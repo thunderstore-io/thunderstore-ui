@@ -20,3 +20,8 @@
 .boldText {
   font-weight: var(--font-weight-bold);
 }
+
+.createTeamDialogFooter {
+  display: flex;
+  flex-direction: row-reverse;
+}
