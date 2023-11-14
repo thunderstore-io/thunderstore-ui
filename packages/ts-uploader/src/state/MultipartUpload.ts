@@ -30,10 +30,11 @@ function slicePart(file: File, offset: number, length: number) {
   return end < file.size ? file.slice(start, end) : file.slice(start);
 }
 
-async function createUploadRequest(
+async function createUploadRequest<T>(
   part: UploadPart,
-  onProgress?: UploadRequestConfig["onProgress"]
-): Promise<UploadRequest> {
+  onProgress: UploadRequestConfig<T>["onProgress"],
+  transformer: UploadRequest<T>["transformer"]
+): Promise<UploadRequest<T>> {
   // TODO: Async md5 calculation via either wasm or workers
   const md5 = await calculateMD5(part.payload);
   return new UploadRequest(
@@ -44,7 +45,8 @@ async function createUploadRequest(
     {
       url: part.meta.url,
       onProgress,
-    }
+    },
+    transformer
   );
 }
 
@@ -84,7 +86,7 @@ class UploadHandle implements IUploadHandle {
   readonly parts: UploadPart[];
   readonly onProgress = new TypedEventEmitter<UploadProgress>();
 
-  private requests?: UploadRequest[];
+  private requests?: UploadRequest<CompletedPart>[];
 
   constructor(
     handle: UserMedia,
@@ -111,6 +113,20 @@ class UploadHandle implements IUploadHandle {
     );
   }
 
+  private startRequests(count?: number) {
+    if (this.requests == undefined) {
+      throw new Error("Upload not yet prepared");
+    }
+
+    const promises = [];
+    const candidates = this.requests.filter((x) => x.status === "pending");
+    for (let i = 0; i < (count ?? candidates.length); i++) {
+      if (i >= candidates.length) break;
+      promises.push(candidates[i].upload());
+    }
+    return promises;
+  }
+
   async startUpload(onProgress?: (progress: UploadProgress) => any) {
     if (this.requests != undefined) {
       throw new Error("Upload already initiated!");
@@ -124,28 +140,27 @@ class UploadHandle implements IUploadHandle {
 
     this.requests = [];
 
-    const promises = [];
     for (let part of this.parts) {
-      const request = await createUploadRequest(part, progressCallback);
-      this.requests.push(request);
-      promises.push(
-        request.upload((response) => {
+      const request = await createUploadRequest<CompletedPart>(
+        part,
+        progressCallback,
+        (response) => {
           const etag = response.headers.get("etag");
           if (!etag) {
             // ETag is filtered out by some browser extensions
             // TODO: Handle somehow better
             throw new Error("ETag header was missing from the response!");
           }
-          const result: CompletedPart = {
+          return {
             ETag: etag,
             PartNumber: part.meta.part_number,
           };
-          return result;
-        })
+        }
       );
+      this.requests.push(request);
     }
 
-    const parts = await Promise.all(promises);
+    const parts = await Promise.all(this.startRequests());
     return UsermediaEndpoints.finish(this.opts.api, {
       data: { parts },
       uuid: this.handle.uuid,

@@ -1,9 +1,8 @@
 import { fetchWithProgress } from "../client/fetch";
-import { CompletedPart } from "../client/types";
 
-export type UploadRequestConfig = {
+export type UploadRequestConfig<T> = {
   url: string;
-  onProgress?: (instance: UploadRequest, progress: UploadProgress) => any;
+  onProgress?: (instance: UploadRequest<T>, progress: UploadProgress) => any;
 };
 export type UploadProgress = {
   total: number;
@@ -14,27 +13,42 @@ type UploadPayload = {
   md5: string;
 };
 
-export class UploadRequest {
-  readonly payload: UploadPayload;
-  readonly config: UploadRequestConfig;
+export type UploadRequestStatus =
+  | "pending"
+  | "complete"
+  | "failed"
+  | "running"
+  | "aborted";
 
+export class UploadRequest<T> {
+  readonly payload: UploadPayload;
+  readonly config: UploadRequestConfig<T>;
+  readonly transformer: (res: Response) => T;
+
+  status: UploadRequestStatus;
   progress: UploadProgress;
+  result: T | undefined;
 
   // Only intended to be used for aborting an ongoing upload
   private _ongoingRequest?: XMLHttpRequest;
 
-  result?: CompletedPart;
-
-  constructor(payload: UploadPayload, config: UploadRequestConfig) {
+  constructor(
+    payload: UploadPayload,
+    config: UploadRequestConfig<T>,
+    transformer: (res: Response) => T
+  ) {
     this.payload = payload;
     this.config = config;
+    this.transformer = transformer;
     this.progress = { total: payload.data.size, complete: 0 };
+    this.status = "pending";
   }
 
   public abort() {
     if (this._ongoingRequest) {
       this._ongoingRequest.abort();
       this._ongoingRequest = undefined;
+      this.status = "aborted";
     }
   }
 
@@ -43,7 +57,7 @@ export class UploadRequest {
     console.error(e);
   }
 
-  public async upload<T>(transformResult: (res: Response) => T): Promise<T> {
+  public async upload(): Promise<T> {
     this.progress = { total: this.payload.data.size, complete: 0 };
 
     const fetchArgs = {
@@ -69,6 +83,7 @@ export class UploadRequest {
     let numRetries = 0;
     let lastError: unknown;
 
+    this.status = "running";
     while (numRetries < 3) {
       try {
         const { request, response } = fetchWithProgress(fetchArgs);
@@ -79,7 +94,9 @@ export class UploadRequest {
             `Upload failed due to non-success status code: ${resp.status}`
           );
         }
-        return transformResult(resp);
+        this.result = this.transformer(resp);
+        this.status = "complete";
+        return this.result;
       } catch (e) {
         numRetries++;
         this.onError(e);
@@ -93,6 +110,7 @@ export class UploadRequest {
     //       either finished or been aborted externally. That promise should
     //       not resolve even if we run out of automatic retries or the upload
     //       is paused for example.
+    this.status = "failed";
     throw lastError;
   }
 }
