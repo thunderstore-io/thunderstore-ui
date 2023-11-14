@@ -21,16 +21,12 @@
   background-color: var(--color-surface--4);
 
   --border-color: transparent;
-}
 
-.hasLeftIcon {
-  padding-left: 2.875rem;
+  transition: ease-out 300ms;
 }
 
 .input:hover {
   --border-color: var(--color-border--highlight);
-
-  transition: ease-out 80ms;
 }
 
 .input:focus-within {
@@ -42,6 +38,26 @@
 
 .input::placeholder {
   color: var(--color-text--tertiary);
+}
+
+.input[data-color="red"] {
+  --border-color: var(--color-red--5);
+}
+
+.input[data-color="red"]:hover {
+  --border-color: var(--color-red--3);
+}
+
+.input[data-color="green"] {
+  --border-color: var(--color-cyber-green--50);
+}
+
+.input[data-color="green"]:hover {
+  --border-color: var(--color-cyber-green--80);
+}
+
+.hasLeftIcon {
+  padding-left: 2.875rem;
 }
 
 .leftIcon {

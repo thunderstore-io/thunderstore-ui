@@ -1,17 +1,22 @@
 "use client";
-import React from "react";
+import React, { ReactNode } from "react";
 import styles from "./TextInput.module.css";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
 
 export interface TextInputProps {
+  children?: ReactNode;
   placeHolder?: string;
   leftIcon?: JSX.Element;
   id?: string;
   type?: "text" | "email" | "password" | "tel" | "url";
   rightIcon?: JSX.Element;
   value?: string;
-  setValue?: React.Dispatch<React.SetStateAction<string>>;
+  name?: string;
+  color?: string;
+  ref?: (instance: any) => void;
+  onBlur?: (val: any) => void;
+  onChange?: (val: any) => void;
   enterHook?: (value: string) => string | void;
 }
 
@@ -26,7 +31,11 @@ export function TextInput(props: TextInputProps) {
     leftIcon,
     rightIcon,
     value = "",
-    setValue,
+    name,
+    color,
+    ref,
+    onBlur,
+    onChange,
     enterHook,
   } = props;
 
@@ -45,15 +54,19 @@ export function TextInput(props: TextInputProps) {
       ) : null}
       <input
         id={id}
-        type={type}
-        placeholder={placeHolder}
         className={classnames(
           styles.input,
           leftIcon ? styles.hasLeftIcon : null
         )}
-        onChange={(event) => setValue && setValue(event.target.value)}
+        type={type}
+        placeholder={placeHolder}
+        onBlur={onBlur}
+        onChange={onChange}
+        ref={ref}
+        name={name}
         value={value}
         onKeyDown={(e) => onEnter(e)}
+        data-color={color}
       />
       {rightIcon ? (
         <Icon inline wrapperClasses={styles.rightIcon}>

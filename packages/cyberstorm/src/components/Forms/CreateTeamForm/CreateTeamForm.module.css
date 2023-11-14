@@ -1,0 +1,37 @@
+.createTeamDialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space--24);
+}
+
+.createTeamForm {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.createTeamDialogText {
+  color: var(--color-text--secondary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size--l);
+  line-height: var(--line-height--l);
+}
+
+.footer {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: var(--gap--16);
+  justify-content: space-between;
+  padding-top: var(--space--16);
+  border-top: var(--border);
+}
+
+.spinningIcon {
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
