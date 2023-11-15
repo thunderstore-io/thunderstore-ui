@@ -1,73 +1,44 @@
 "use client";
-import styles from "./CreateTeamForm.module.css";
+import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useController, useForm, Form } from "react-hook-form";
 import * as Button from "../../Button";
 import { TextInput } from "../../TextInput/TextInput";
-import { useForm, FieldErrors, useController } from "react-hook-form";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
+import { useToast } from "../../Toast/Provider";
+import styles from "./CreateTeamForm.module.css";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { isRecord } from "../../../utils/type_guards";
 
-import { useContext } from "react";
-import { ToastContext } from "../../Toast/ToastContext";
-import {
-  faCircleCheck,
-  faCircleExclamation,
-  faOctagonExclamation,
-} from "@fortawesome/pro-solid-svg-icons";
+interface errorResponse {
+  error: { message: string };
+}
 
-/**
- * Form for creating a team
- */
+function isErrorResponse(response: unknown): response is errorResponse {
+  return (
+    isRecord(response) &&
+    isRecord(response.error) &&
+    typeof response.error.message === "string"
+  );
+}
+
 export function CreateTeamForm() {
-  const useToast = () => useContext(ToastContext);
   const toast = useToast();
 
-  async function onValid(data: { teamName: string }) {
-    // TODO: Add sending to TS API endpoint
-    toast?.addToast(
-      "info",
-      <FontAwesomeIcon icon={faCircleExclamation} />,
-      "Creating team"
-    );
-    await new Promise((resolve) => {
-      setTimeout(resolve, 1000);
-    });
-    // TODO: Add a toast on response return based on the response
-    toast?.addToast(
-      "success",
-      <FontAwesomeIcon icon={faCircleCheck} />,
-      "Team created"
-    );
-    console.log(JSON.stringify(data));
+  interface formFields {
+    teamName: string;
   }
 
-  async function onInvalid(
-    errors: FieldErrors<{
-      teamName: string;
-    }>
-  ) {
-    if (errors.teamName) {
-      toast?.addToast(
-        "danger",
-        <FontAwesomeIcon icon={faOctagonExclamation} />,
-        errors.teamName.message,
-        30000
-      );
-    } else {
-      toast?.addToast(
-        "danger",
-        <FontAwesomeIcon icon={faOctagonExclamation} />,
-        "Unknown error",
-        30000
-      );
-    }
-  }
+  const schema = z.object({
+    teamName: z.string({ required_error: "Team name is required" }),
+  });
 
   const {
     control,
-    handleSubmit,
     formState: { isSubmitting },
-  } = useForm<{ teamName: string }>({
+  } = useForm<formFields>({
     mode: "onSubmit",
+    resolver: zodResolver(schema),
   });
 
   const teamName = useController({
@@ -79,12 +50,34 @@ export function CreateTeamForm() {
   });
 
   return (
-    <form
-      onSubmit={handleSubmit(onValid, onInvalid)}
-      className={styles.createTeamForm}
+    <Form
+      control={control}
+      action="https://thunderstore.io/api/team/create"
+      method="post"
+      onSubmit={() => {
+        toast.addToast({ variant: "info", message: "Creating team" });
+      }}
+      onSuccess={(response) => {
+        console.log(response);
+        toast.addToast({ variant: "success", message: "Team created" });
+      }}
+      onError={(response) => {
+        if (isErrorResponse(response)) {
+          toast.addToast({
+            variant: "danger",
+            message: response.error.message,
+            duration: 30000,
+          });
+        } else {
+          // TODO: Add sentry error here
+          console.log("TODO: Sentry error logging missing!");
+        }
+      }}
+      validateStatus={(status) => status === 200}
+      className={styles.root}
     >
-      <div className={styles.createTeamDialog}>
-        <div className={styles.createTeamDialogText}>
+      <div className={styles.dialog}>
+        <div className={styles.dialogText}>
           Enter the name of the team you wish to create. Team names can contain
           the characters a-z A-Z 0-9 _ and must not start or end with an _
         </div>
@@ -111,7 +104,7 @@ export function CreateTeamForm() {
           )}
         </Button.Root>
       </div>
-    </form>
+    </Form>
   );
 }
 

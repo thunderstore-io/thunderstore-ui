@@ -1,11 +1,12 @@
 "use client";
-import React, { ReactNode } from "react";
+import React from "react";
 import styles from "./TextInput.module.css";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
 
-export interface TextInputProps {
-  children?: ReactNode;
+export interface TextInputProps
+  extends React.ComponentPropsWithRef<"input">,
+    React.PropsWithChildren {
   placeHolder?: string;
   leftIcon?: JSX.Element;
   id?: string;
@@ -14,9 +15,8 @@ export interface TextInputProps {
   value?: string;
   name?: string;
   color?: string;
-  ref?: (instance: any) => void;
-  onBlur?: (val: any) => void;
-  onChange?: (val: any) => void;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
   enterHook?: (value: string) => string | void;
 }
 
