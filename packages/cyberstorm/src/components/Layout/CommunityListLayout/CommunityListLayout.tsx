@@ -39,7 +39,7 @@ export function CommunityListLayout() {
         <div className={styles.filters}>
           <div className={styles.searchTextInput}>
             <TextInput
-              setValue={setSearchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
               placeHolder="Search communities..."
               leftIcon={<FontAwesomeIcon icon={faSearch} />}

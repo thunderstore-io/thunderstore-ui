@@ -32,7 +32,7 @@ export function TeamDetails(props: Props) {
                 <div className={styles.donationLinkTextInput}>
                   <TextInput
                     placeHolder="https://"
-                    setValue={setDonationLink}
+                    onChange={(e) => setDonationLink(e.target.value)}
                     value={donationLink}
                   />
                 </div>

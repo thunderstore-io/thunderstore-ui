@@ -83,7 +83,9 @@ export function TeamServiceAccounts(props: Props) {
                       <span className={styles.dialogTeamName}>{teamName}</span>
                     </p>
                     <TextInput
-                      setValue={setAddedServiceAccountName}
+                      onChange={(e) =>
+                        setAddedServiceAccountName(e.target.value)
+                      }
                       value={addedServiceAccountName}
                       placeHolder="Username"
                     />

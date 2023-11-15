@@ -47,7 +47,7 @@ export function PackageSearch(props: Props) {
       <TextInput
         placeHolder="Filter Mods..."
         value={searchValue}
-        setValue={setSearchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
         leftIcon={<FontAwesomeIcon icon={faSearch} />}
       />
 
