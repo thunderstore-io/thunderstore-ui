@@ -6,8 +6,7 @@
 }
 
 .title {
-  margin-bottom: var(--space--24);
-  padding: 1.5rem;
+  padding: 1.5rem 0;
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size--xxl);
   line-height: var(--line-height--xxl);
