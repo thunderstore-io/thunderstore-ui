@@ -4,40 +4,48 @@ import styles from "./Toast.module.css";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faCircleCheck,
+  faCircleExclamation,
+  faOctagonExclamation,
+  faTriangleExclamation,
+  faXmarkLarge,
+} from "@fortawesome/pro-solid-svg-icons";
 import * as RadixToast from "@radix-ui/react-toast";
 
-type _ToastProps = {
+export type ToastProps = {
   id: string;
-  content: ReactNode;
-  icon?: JSX.Element;
   variant?: "info" | "danger" | "warning" | "success";
-  timer?: number;
+  message?: ReactNode;
+  duration?: number;
 };
-export type ToastProps = _ToastProps &
-  Omit<React.HTMLProps<HTMLDivElement>, keyof _ToastProps>;
 
-export function Toast(props: ToastProps) {
-  const { content, icon, variant = "info", timer = 10000 } = props;
-  const timerCSS = {
-    "--bar-timer": `${timer / 1000}s`,
+type Props = ToastProps &
+  Omit<React.HTMLProps<HTMLDivElement>, keyof ToastProps>;
+
+export function Toast(props: Props) {
+  const { message, variant = "info", duration = 10000 } = props;
+  const durationCSS = {
+    "--bar-duration": `${duration / 1000}s`,
   } as CSSProperties;
-
   return (
-    <RadixToast.Root asChild duration={timer}>
+    <RadixToast.Root asChild duration={duration}>
       <div className={classnames(styles.root)}>
         <div className={classnames(styles.contentWrapper, getStyle(variant))}>
           <RadixToast.Description asChild>
             <div className={styles.content}>
-              <Icon wrapperClasses={styles.icon}>{icon}</Icon>
-              <div className={styles.message}>{content}</div>
+              <Icon wrapperClasses={styles.icon}>{getIcon(variant)}</Icon>
+              <div className={styles.message}>{message}</div>
             </div>
           </RadixToast.Description>
-          <div className={styles.toastProgress}>
-            <div className={styles.toastProgressBar} style={timerCSS} />
+          <div className={styles.progress}>
+            <div className={styles.progressBar} style={durationCSS} />
           </div>
-          <RadixToast.Close className={styles.closeIconWrapper}>
-            <Icon iconClasses={styles.closeIcon}>
+          <RadixToast.Close
+            className={styles.closeIconWrapper}
+            aria-label="Close"
+          >
+            <Icon iconClasses={styles.closeIcon} inline>
               <FontAwesomeIcon icon={faXmarkLarge} />
             </Icon>
           </RadixToast.Close>
@@ -47,13 +55,20 @@ export function Toast(props: ToastProps) {
   );
 }
 
-Toast.displayName = "Toast";
-
-const getStyle = (scheme: ToastProps["variant"] = "info") => {
+const getStyle = (scheme: Props["variant"] = "info") => {
   return {
     info: styles.toast__info,
     danger: styles.toast__danger,
     warning: styles.toast__warning,
     success: styles.toast__success,
+  }[scheme];
+};
+
+const getIcon = (scheme: Props["variant"] = "info") => {
+  return {
+    info: <FontAwesomeIcon icon={faCircleExclamation} />,
+    danger: <FontAwesomeIcon icon={faOctagonExclamation} />,
+    warning: <FontAwesomeIcon icon={faTriangleExclamation} />,
+    success: <FontAwesomeIcon icon={faCircleCheck} />,
   }[scheme];
 };
