@@ -5,11 +5,11 @@ import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoxOpen } from "@fortawesome/pro-regular-svg-icons";
 import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
-import * as Dialog from "../../../Dialog";
 import { PackageDependencyDialog } from "./PackageDependencyDialog/PackageDependencyDialog";
 import * as Button from "../../../Button/";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
+import { Dialog } from "../../../..";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";

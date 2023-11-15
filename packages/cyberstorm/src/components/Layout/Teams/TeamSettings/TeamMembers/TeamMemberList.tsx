@@ -5,7 +5,7 @@ import { TeamMember } from "@thunderstore/dapper/types";
 import styles from "./TeamMembers.module.css";
 import { Avatar } from "../../../../Avatar/Avatar";
 import * as Button from "../../../../Button/";
-import * as Dialog from "../../../../Dialog/";
+import { Dialog } from "../../../../../index";
 import { UserLink } from "../../../../Links/Links";
 import { Select } from "../../../../Select/Select";
 import { Table, Sort } from "../../../../Table/Table";
@@ -79,7 +79,7 @@ export function TeamMemberList(props: Props) {
                 .
               </UserLink>
             </div>
-            <div className={styles.kickMemberDialogFooter}>
+            <div className={styles.dialogFooter}>
               <Button.Root colorScheme="danger" paddingSize="large">
                 <Button.ButtonLabel>Kick member</Button.ButtonLabel>
               </Button.Root>

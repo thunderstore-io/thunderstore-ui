@@ -2,7 +2,6 @@ import styles from "./TeamServiceAccounts.module.css";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import * as Button from "../../../../Button/";
 import { ServiceAccountList } from "./ServiceAccountList/ServiceAccountList";
-import * as Dialog from "../../../../Dialog/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCircleExclamation } from "@fortawesome/pro-solid-svg-icons";
 import { UserLink } from "../../../../Links/Links";
@@ -12,6 +11,7 @@ import { CopyButton } from "../../../../CopyButton/CopyButton";
 import { Alert } from "../../../../Alert/Alert";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
+import { Dialog } from "../../../../../index";
 
 interface Props {
   teamName: string;
@@ -91,7 +91,7 @@ export function TeamServiceAccounts(props: Props) {
                 )}
                 <div className={styles.addServiceAccountDialogFooter}>
                   {serviceAccountAdded ? (
-                    <Dialog.DialogClose asChild>
+                    <Dialog.Close asChild>
                       <Button.Root
                         colorScheme="default"
                         paddingSize="large"
@@ -102,7 +102,7 @@ export function TeamServiceAccounts(props: Props) {
                       >
                         <Button.ButtonLabel>Close</Button.ButtonLabel>
                       </Button.Root>
-                    </Dialog.DialogClose>
+                    </Dialog.Close>
                   ) : (
                     <Button.Root
                       colorScheme="success"

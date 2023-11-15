@@ -1,12 +1,11 @@
 import { StoryFn, Meta } from "@storybook/react";
-import { Button } from "@thunderstore/cyberstorm";
-import { Dialog } from "@thunderstore/cyberstorm";
+import { Button, Dialog } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
   title: "Cyberstorm/Components/Dialog",
   component: Dialog.Root,
-} as Meta<typeof Dialog.Root>;
+} as Meta<typeof Dialog>;
 
 const defaultArgs = {
   title: "This is a dialog",
@@ -17,7 +16,7 @@ const defaultArgs = {
   ),
 };
 
-const Template: StoryFn<typeof Dialog.Root> = (args) => (
+const Template: StoryFn<typeof Dialog.Root> = (args: any) => (
   <Dialog.Root {...args}>
     <div
       style={{

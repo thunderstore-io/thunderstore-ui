@@ -4,11 +4,11 @@ import styles from "./TeamMembers.module.css";
 import { TeamMemberList } from "./TeamMemberList";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import * as Button from "../../../../Button/";
-import * as Dialog from "../../../../Dialog/";
 import { TextInput } from "../../../../TextInput/TextInput";
 import { Select } from "../../../../Select/Select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { Dialog } from "../../../../..";
 
 const userRoles = [
   { value: "member", label: "Member" },
@@ -50,7 +50,7 @@ export function TeamMembers(props: Props) {
             <Select options={userRoles} value={"Member"} />
           </div>
         </div>
-        <div className={styles.addMemberDialogFooter}>
+        <div className={styles.dialogFooter}>
           <Button.Root colorScheme="success">
             <Button.ButtonLabel>Add Member</Button.ButtonLabel>
           </Button.Root>

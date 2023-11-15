@@ -9,7 +9,6 @@ import {
 } from "../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Button from "../../Button/";
-import * as Dialog from "../../Dialog/";
 import { PackageManagementForm } from "./PackageManagementForm/PackageManagementForm";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { MetaInfoItemList } from "../../MetaInfoItemList/MetaInfoItemList";
@@ -46,6 +45,7 @@ import { Tag } from "../../Tag/Tag";
 import { Icon } from "../../Icon/Icon";
 import { PLACEHOLDER } from "../Developers/MarkdownPreview/MarkdownPlaceholder";
 import markdownStyles from "../../Markdown/Markdown.module.css";
+import { Dialog } from "../../..";
 
 export interface PackageDetailLayoutProps {
   community: string;
@@ -184,7 +184,7 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
                 </Button.Root>
               }
             >
-              <PackageManagementForm packageData={packageData} />
+              <PackageManagementForm isDeprecated={packageData.is_deprecated} />
             </Dialog.Root>
             <a className={styles.installButton} href="/">
               <Button.Root plain paddingSize="huge" colorScheme="fancyAccent">

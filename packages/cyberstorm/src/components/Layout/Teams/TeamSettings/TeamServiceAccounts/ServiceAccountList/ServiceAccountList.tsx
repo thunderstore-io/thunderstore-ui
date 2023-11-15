@@ -1,9 +1,8 @@
 import styles from "./ServiceAccountList.module.css";
 import { ServiceAccount } from "@thunderstore/dapper/types";
-import * as Dialog from "../../../../../Dialog/";
 import * as Button from "../../../../../Button";
 import { Table } from "../../../../../Table/Table";
-import { Alert } from "../../../../../../index";
+import { Alert, Dialog } from "../../../../../../index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/pro-solid-svg-icons";
 

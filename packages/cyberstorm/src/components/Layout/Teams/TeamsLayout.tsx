@@ -7,10 +7,10 @@ import * as Button from "../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { TeamList } from "./TeamList/TeamList";
-import * as Dialog from "../../Dialog";
 import { TextInput } from "../../TextInput/TextInput";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { Alert } from "../../Alert/Alert";
+import { Dialog } from "../../..";
 
 /**
  * View for listing and managing authenticated user's teams.

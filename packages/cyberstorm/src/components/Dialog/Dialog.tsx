@@ -15,6 +15,7 @@ export type DialogProps = {
   title?: string;
   noPadding?: boolean;
   showHeaderBorder?: boolean;
+  showFooterBorder?: boolean;
 };
 
 /**
@@ -28,6 +29,7 @@ export function Dialog(props: DialogProps) {
     title = undefined,
     noPadding = false,
     showHeaderBorder = false,
+    showFooterBorder = false,
   } = props;
 
   const [isOpen, setOpen] = useState<boolean>(
@@ -76,7 +78,8 @@ export function Dialog(props: DialogProps) {
               <div
                 className={classnames(
                   styles.body,
-                  noPadding ? null : styles.bodyPadding
+                  noPadding ? null : styles.bodyPadding,
+                  showFooterBorder ? null : styles.footerBorder
                 )}
               >
                 {children}
