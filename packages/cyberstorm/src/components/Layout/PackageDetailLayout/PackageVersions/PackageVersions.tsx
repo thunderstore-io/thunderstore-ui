@@ -1,12 +1,21 @@
 import styles from "./PackageVersions.module.css";
 import * as Button from "../../../Button/";
 import { Table, Sort } from "../../../Table/Table";
+import { Alert } from "../../../Alert/Alert";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoltLightning } from "@fortawesome/pro-solid-svg-icons";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 export function PackageVersions() {
   return (
     <div>
+      <Alert
+        content={
+          "Please note that the install buttons only work if you have compatible client software installed, such as the Thunderstore Mod Manager. Otherwise use the zip download links instead."
+        }
+        variant={"info"}
+        icon={<FontAwesomeIcon icon={faCircleExclamation} />}
+      />
       <div className={styles.title}>Versions</div>
       <Table
         headers={columns}
