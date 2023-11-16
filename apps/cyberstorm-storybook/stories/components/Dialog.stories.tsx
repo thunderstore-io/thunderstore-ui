@@ -1,6 +1,5 @@
 import { StoryFn, Meta } from "@storybook/react";
 import { Button, Dialog } from "@thunderstore/cyberstorm";
-import { DialogProps } from "@thunderstore/cyberstorm/src/components/Dialog/Dialog";
 import React from "react";
 
 const meta = {
@@ -17,7 +16,7 @@ const defaultArgs = {
   ),
 };
 
-const Template: StoryFn<typeof Dialog.Root> = (args: DialogProps) => (
+const Template: StoryFn<typeof Dialog.Root> = (args) => (
   <Dialog.Root {...args}>
     <div
       style={{

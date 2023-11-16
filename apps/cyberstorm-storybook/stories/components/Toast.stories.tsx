@@ -8,10 +8,10 @@ const meta = {
   component: Toast,
 } as Meta<typeof Toast>;
 
-const defaultArgs: ToastProps = {
+const defaultArgs = {
   id: uuid(),
   message: "-",
-  variant: "info",
+  variant: "info" as const,
 };
 
 const Template: StoryFn<typeof Toast> = (args) => (

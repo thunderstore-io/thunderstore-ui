@@ -8,13 +8,12 @@ import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { Tooltip } from "../..";
 import { classnames } from "../../utils/utils";
 
-export interface DialogProps extends PropsWithChildren {
+interface DialogProps extends PropsWithChildren {
   defaultOpen?: boolean;
   trigger?: ReactNode;
   title?: string;
-  noPadding?: boolean;
+  disableDialogContentStyles?: boolean;
   showHeaderBorder?: boolean;
-  preStyledFooter?: boolean;
 }
 
 /**
@@ -26,7 +25,7 @@ export function Dialog(props: DialogProps) {
     defaultOpen = false,
     trigger,
     title = undefined,
-    noPadding = false,
+    disableDialogContentStyles = false,
     showHeaderBorder = false,
   } = props;
 
@@ -76,7 +75,7 @@ export function Dialog(props: DialogProps) {
               <div
                 className={classnames(
                   styles.body,
-                  noPadding ? null : styles.bodyPadding
+                  disableDialogContentStyles ? null : styles.bodyPadding
                 )}
               >
                 {children}
