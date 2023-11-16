@@ -14,10 +14,10 @@ const SameStateSwitchTemplate: StoryFn<typeof Switch> = () => {
   return (
     <div>
       <div>
-        <Switch state={state} onChange={setState} />
+        <Switch checked={state} onCheckedChange={setState} />
       </div>
       <div>
-        <Switch state={state} onChange={setState} />
+        <Switch checked={state} onCheckedChange={setState} />
       </div>
     </div>
   );
@@ -27,7 +27,7 @@ const SwitchLabelIdTemplate: StoryFn<typeof Switch> = () => {
   return (
     <>
       <label htmlFor="my-switch">My switch</label>
-      <Switch state={state} onChange={setState} id="my-switch" />
+      <Switch checked={state} onCheckedChange={setState} id="my-switch" />
     </>
   );
 };
@@ -36,14 +36,14 @@ const SwitchNestedLabelTemplate: StoryFn<typeof Switch> = () => {
   return (
     <label>
       My switch
-      <Switch state={state} onChange={setState} />
+      <Switch checked={state} onCheckedChange={setState} />
     </label>
   );
 };
 
 const RegularSwitch = Template.bind({});
 const DisabledSwitch = Template.bind({});
-DisabledSwitch.args = { state: false, disabled: true };
+DisabledSwitch.args = { checked: false, disabled: true };
 const SameStateSwitch = SameStateSwitchTemplate.bind({});
 const SwitchNestedLabel = SwitchNestedLabelTemplate.bind({});
 const SwitchLabelId = SwitchLabelIdTemplate.bind({});

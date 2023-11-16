@@ -1,27 +1,18 @@
 "use client";
 
-import { Dispatch, SetStateAction } from "react";
+import React from "react";
 import styles from "./Switch.module.css";
 import * as RadixSwitch from "@radix-ui/react-switch";
 
-export interface SwitchProps {
-  state: boolean;
-  onChange?: Dispatch<SetStateAction<boolean>>;
-  disabled?: boolean;
-  id?: string;
-}
+// Replace buttons default value with a boolean, because this is a switch.
 
-export function Switch(props: SwitchProps) {
-  const { state, onChange, disabled = false, id } = props;
+export const Switch = React.forwardRef<
+  HTMLButtonElement,
+  Omit<RadixSwitch.SwitchProps, "value">
+>(function Switch(props, ref) {
   return (
-    <RadixSwitch.Root
-      className={styles.root}
-      disabled={disabled}
-      onCheckedChange={onChange}
-      checked={state}
-      id={id}
-    >
+    <RadixSwitch.Root className={styles.root} {...props} ref={ref}>
       <RadixSwitch.Thumb className={styles.thumb} />
     </RadixSwitch.Root>
   );
-}
+});

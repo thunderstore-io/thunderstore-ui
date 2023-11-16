@@ -1,0 +1,41 @@
+.removeButtonWrapper {
+  display: inline-block;
+  margin: 0.142rem 0.285rem 0.142rem 0;
+  padding: 0.357em 0.785em;
+  font-size: 1em;
+  white-space: normal;
+  vertical-align: top;
+  box-shadow: 0 0 0 1px rgb(34 36 38 / 0.15) inset;
+  user-select: none;
+}
+
+.removeButton {
+  cursor: pointer;
+}
+
+.comboBoxChipWrapper {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  word-wrap: break-word;
+}
+
+.selectValueWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 700px;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.selectContent {
+  width: 800px;
+  border-radius: 0.375rem;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow:
+    0 0.25rem 1.5rem -0.375rem rgb(22 23 24 / 0.35),
+    0 0.25rem 0.625rem -0.375rem rgb(22 23 24 / 0.2);
+}
