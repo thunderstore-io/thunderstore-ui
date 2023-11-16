@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useState } from "react";
+import { PropsWithChildren, ReactNode, useState } from "react";
 import styles from "./Dialog.module.css";
 import * as RadixDialog from "@radix-ui/react-dialog";
 import * as Button from "../Button/";
@@ -8,15 +8,14 @@ import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { Tooltip } from "../..";
 import { classnames } from "../../utils/utils";
 
-export type DialogProps = {
-  children?: ReactNode;
+export interface DialogProps extends PropsWithChildren {
   defaultOpen?: boolean;
   trigger?: ReactNode;
   title?: string;
   noPadding?: boolean;
   showHeaderBorder?: boolean;
-  showFooterBorder?: boolean;
-};
+  preStyledFooter?: boolean;
+}
 
 /**
  * Cyberstorm Dialog Component
@@ -29,7 +28,6 @@ export function Dialog(props: DialogProps) {
     title = undefined,
     noPadding = false,
     showHeaderBorder = false,
-    showFooterBorder = false,
   } = props;
 
   const [isOpen, setOpen] = useState<boolean>(
@@ -78,8 +76,7 @@ export function Dialog(props: DialogProps) {
               <div
                 className={classnames(
                   styles.body,
-                  noPadding ? null : styles.bodyPadding,
-                  showFooterBorder ? null : styles.footerBorder
+                  noPadding ? null : styles.bodyPadding
                 )}
               >
                 {children}

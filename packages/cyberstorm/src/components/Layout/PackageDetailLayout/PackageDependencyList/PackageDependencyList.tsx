@@ -9,7 +9,7 @@ import { PackageDependencyDialog } from "./PackageDependencyDialog/PackageDepend
 import * as Button from "../../../Button/";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
-import { Dialog } from "../../../..";
+import { Dialog } from "../../../../index";
 
 // TODO: actual placeholder
 const defaultImageSrc = "/images/logo.png";
