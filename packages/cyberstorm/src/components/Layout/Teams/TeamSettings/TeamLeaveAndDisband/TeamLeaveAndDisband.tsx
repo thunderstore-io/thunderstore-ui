@@ -74,7 +74,7 @@ export function TeamLeaveAndDisband(props: Props) {
               into the field below.
             </p>
             <div className={styles.disbandVerificationInput}>
-              <TextInput placeHolder="Verification" />
+              <TextInput placeholder="Verification" />
             </div>
             <div>
               <Button.Root colorScheme="danger" paddingSize="large">

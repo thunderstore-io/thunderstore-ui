@@ -5,76 +5,59 @@ import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
 
 export interface TextInputProps
-  extends React.ComponentPropsWithRef<"input">,
-    React.PropsWithChildren {
-  placeHolder?: string;
-  leftIcon?: JSX.Element;
-  id?: string;
-  type?: "text" | "email" | "password" | "tel" | "url";
-  rightIcon?: JSX.Element;
+  extends React.ComponentPropsWithoutRef<"input"> {
   value?: string;
-  name?: string;
+  leftIcon?: JSX.Element;
+  rightIcon?: JSX.Element;
   color?: string;
-  onBlur?: React.FocusEventHandler<HTMLInputElement>;
-  onChange?: React.ChangeEventHandler<HTMLInputElement>;
   enterHook?: (value: string) => string | void;
 }
 
 /**
  * Cyberstorm TextInput component
  */
-export function TextInput(props: TextInputProps) {
-  const {
-    placeHolder,
-    id,
-    type = "text",
-    leftIcon,
-    rightIcon,
-    value = "",
-    name,
-    color,
-    ref,
-    onBlur,
-    onChange,
-    enterHook,
-  } = props;
+export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
+  function TextInput(props, ref) {
+    const {
+      value = "",
+      leftIcon,
+      rightIcon,
+      color,
+      enterHook,
+      ...elementProps
+    } = props;
+    const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (enterHook && e.key === "Enter") {
+        enterHook(value.toLowerCase());
+      }
+    };
 
-  const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (enterHook && e.key === "Enter") {
-      enterHook(value.toLowerCase());
-    }
-  };
-
-  return (
-    <div className={styles.root}>
-      {leftIcon ? (
-        <Icon inline wrapperClasses={styles.leftIcon}>
-          {leftIcon}
-        </Icon>
-      ) : null}
-      <input
-        id={id}
-        className={classnames(
-          styles.input,
-          leftIcon ? styles.hasLeftIcon : null
-        )}
-        type={type}
-        placeholder={placeHolder}
-        onBlur={onBlur}
-        onChange={onChange}
-        ref={ref}
-        name={name}
-        value={value}
-        onKeyDown={(e) => onEnter(e)}
-        data-color={color}
-      />
-      {rightIcon ? (
-        <Icon inline wrapperClasses={styles.rightIcon}>
-          {rightIcon}
-        </Icon>
-      ) : null}
-    </div>
-  );
-}
+    return (
+      <div className={styles.root}>
+        {leftIcon ? (
+          <Icon inline wrapperClasses={styles.leftIcon}>
+            {leftIcon}
+          </Icon>
+        ) : null}
+        <input
+          {...elementProps}
+          ref={ref}
+          className={classnames(
+            styles.input,
+            leftIcon ? styles.hasLeftIcon : null
+          )}
+          value={value}
+          onKeyDown={(e) => onEnter(e)}
+          data-color={color}
+        />
+        {rightIcon ? (
+          <Icon inline wrapperClasses={styles.rightIcon}>
+            {rightIcon}
+          </Icon>
+        ) : null}
+      </div>
+    );
+  }
+);
 
 TextInput.displayName = "TextInput";

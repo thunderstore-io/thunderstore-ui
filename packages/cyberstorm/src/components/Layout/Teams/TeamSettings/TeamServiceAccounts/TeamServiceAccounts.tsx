@@ -87,7 +87,7 @@ export function TeamServiceAccounts(props: Props) {
                         setAddedServiceAccountName(e.target.value)
                       }
                       value={addedServiceAccountName}
-                      placeHolder="Username"
+                      placeholder="Username"
                     />
                   </div>
                 )}

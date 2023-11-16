@@ -8,26 +8,10 @@ import { useToast } from "../../Toast/Provider";
 import styles from "./CreateTeamForm.module.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { isRecord } from "../../../utils/type_guards";
-
-interface errorResponse {
-  error: { message: string };
-}
-
-function isErrorResponse(response: unknown): response is errorResponse {
-  return (
-    isRecord(response) &&
-    isRecord(response.error) &&
-    typeof response.error.message === "string"
-  );
-}
+import { isErrorResponse } from "../../../utils/type_guards";
 
 export function CreateTeamForm() {
   const toast = useToast();
-
-  interface formFields {
-    teamName: string;
-  }
 
   const schema = z.object({
     teamName: z.string({ required_error: "Team name is required" }),
@@ -36,7 +20,7 @@ export function CreateTeamForm() {
   const {
     control,
     formState: { isSubmitting },
-  } = useForm<formFields>({
+  } = useForm<z.infer<typeof schema>>({
     mode: "onSubmit",
     resolver: zodResolver(schema),
   });
@@ -44,9 +28,6 @@ export function CreateTeamForm() {
   const teamName = useController({
     control: control,
     name: "teamName",
-    rules: {
-      required: "Team name is required",
-    },
   });
 
   return (
@@ -71,6 +52,11 @@ export function CreateTeamForm() {
         } else {
           // TODO: Add sentry error here
           console.log("TODO: Sentry error logging missing!");
+          toast.addToast({
+            variant: "danger",
+            message: "Unhandled form response error",
+            duration: 30000,
+          });
         }
       }}
       validateStatus={(status) => status === 200}
@@ -83,7 +69,8 @@ export function CreateTeamForm() {
         </div>
         <TextInput
           {...teamName.field}
-          placeHolder={"ExampleTeamName"}
+          ref={teamName.field.ref}
+          placeholder={"ExampleTeamName"}
           color={
             teamName.fieldState.isDirty
               ? teamName.fieldState.invalid
