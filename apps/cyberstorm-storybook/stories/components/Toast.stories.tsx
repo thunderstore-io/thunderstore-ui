@@ -15,7 +15,7 @@ const defaultArgs: ToastProps = {
 };
 
 const Template: StoryFn<typeof Toast> = (args) => (
-  <div style={{ width: "500px" }}>
+  <div style={{ width: "600px", height: "600px" }}>
     <Toast {...args} />
   </div>
 );
@@ -28,7 +28,7 @@ MinimalToast.args = {
 const InfoToast = Template.bind({});
 InfoToast.args = {
   ...defaultArgs,
-  content:
+  message:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
   variant: "info",
 };
@@ -36,7 +36,7 @@ InfoToast.args = {
 const DangerToast = Template.bind({});
 DangerToast.args = {
   ...defaultArgs,
-  content:
+  message:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
   variant: "danger",
 };
@@ -44,7 +44,7 @@ DangerToast.args = {
 const WarningToast = Template.bind({});
 WarningToast.args = {
   ...defaultArgs,
-  content:
+  message:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
   variant: "warning",
 };
@@ -52,7 +52,7 @@ WarningToast.args = {
 const SuccessToast = Template.bind({});
 SuccessToast.args = {
   ...defaultArgs,
-  content:
+  message:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
   variant: "success",
 };

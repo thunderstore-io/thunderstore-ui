@@ -1,8 +1,8 @@
 import { createContext, PropsWithChildren, useReducer } from "react";
 import { v4 as uuid } from "uuid";
 import * as RadixToast from "@radix-ui/react-toast";
-import Toast from ".";
 import { ToastProps } from "./Toast";
+import { Viewport } from "./Viewport";
 
 const initState: {
   toasts: ToastProps[];
@@ -64,7 +64,7 @@ export function Provider(props: { toastDuration: number } & PropsWithChildren) {
     <ToastContext.Provider value={value}>
       <RadixToast.Provider swipeDirection="left" duration={props.toastDuration}>
         {props.children}
-        <Toast.Viewport toasts={state.toasts} />
+        <Viewport toasts={state.toasts} />
       </RadixToast.Provider>
     </ToastContext.Provider>
   );
