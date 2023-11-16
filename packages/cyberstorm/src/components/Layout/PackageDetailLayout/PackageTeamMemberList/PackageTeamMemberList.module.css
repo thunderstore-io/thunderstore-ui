@@ -1,6 +1,5 @@
 .list {
   position: relative;
-  padding: var(--space--8);
 }
 
 .item {

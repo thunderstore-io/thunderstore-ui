@@ -4,9 +4,10 @@ import styles from "./Avatar.module.css";
 import React, { PropsWithChildren, useRef } from "react";
 
 export interface AvatarButtonProps {
-  src: string;
+  src?: string | null;
   size?: "medium" | "large";
   colorScheme?: "default";
+  username: string;
 }
 
 /**
@@ -16,7 +17,13 @@ export const AvatarButton = React.forwardRef<
   HTMLButtonElement,
   AvatarButtonProps
 >((props: PropsWithChildren<AvatarButtonProps>, forwardedRef) => {
-  const { src, colorScheme, size = "medium", ...forwardedProps } = props;
+  const {
+    src,
+    colorScheme,
+    size = "medium",
+    username,
+    ...forwardedProps
+  } = props;
 
   const fallbackRef = useRef(null);
   const ref = forwardedRef || fallbackRef;
@@ -27,11 +34,17 @@ export const AvatarButton = React.forwardRef<
       {...forwardedProps}
       ref={ref}
     >
-      <img
-        src={src}
-        className={classnames(styles.image, getSize(size))}
-        alt=""
-      />
+      {src ? (
+        <img
+          src={src}
+          className={classnames(styles.image, getSize(size))}
+          alt=""
+        />
+      ) : (
+        <div className={classnames(styles.image, styles.placeholder)}>
+          {username.charAt(0).toUpperCase()}
+        </div>
+      )}
     </button>
   );
 });

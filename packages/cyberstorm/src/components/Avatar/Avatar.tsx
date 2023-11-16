@@ -2,23 +2,30 @@ import { classnames } from "../../utils/utils";
 import styles from "./Avatar.module.css";
 
 export interface AvatarProps {
-  src: string;
+  src?: string | null;
   size?: "medium" | "large";
+  username: string;
 }
 
 /**
  * Cyberstorm Avatar component
  */
 export function Avatar(props: AvatarProps) {
-  const { src, size = "medium" } = props;
+  const { src, size = "medium", username } = props;
 
   return (
     <div className={classnames(styles.root, getSize(size))}>
-      <img
-        src={src}
-        className={classnames(styles.image, getSize(size))}
-        alt=""
-      />
+      {src ? (
+        <img
+          src={src}
+          className={classnames(styles.image, getSize(size))}
+          alt=""
+        />
+      ) : (
+        <div className={classnames(styles.image, styles.placeholder)}>
+          {username.charAt(0).toUpperCase()}
+        </div>
+      )}
     </div>
   );
 }
