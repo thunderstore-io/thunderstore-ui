@@ -9,17 +9,22 @@ import styles from "./CreateTeamForm.module.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isErrorResponse } from "../../../utils/type_guards";
+import { useEffect } from "react";
 
 export function CreateTeamForm() {
   const toast = useToast();
 
+  // "Required field" error is different from value being too little
+  // Check that the value is "> 0"
   const schema = z.object({
-    teamName: z.string({ required_error: "Team name is required" }),
+    teamName: z
+      .string({ required_error: "Team name is required" })
+      .min(1, { message: "Team name is required" }),
   });
 
   const {
     control,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<z.infer<typeof schema>>({
     mode: "onSubmit",
     resolver: zodResolver(schema),
@@ -29,6 +34,20 @@ export function CreateTeamForm() {
     control: control,
     name: "teamName",
   });
+
+  // We have to do this because the RHF Form component is in beta and it
+  // doesn't have a callback prop like "onValidation" that could take in
+  // the generalized addToast error informing block.
+  useEffect(() => {
+    if (errors.teamName) {
+      console.log(errors);
+      toast.addToast({
+        variant: "danger",
+        message: errors.teamName.message,
+        duration: 30000,
+      });
+    }
+  }, [errors]);
 
   return (
     <Form
@@ -78,10 +97,16 @@ export function CreateTeamForm() {
                 : "green"
               : undefined
           }
+          disabled={isSubmitting}
         />
       </div>
       <div className={styles.footer}>
-        <Button.Root type="submit" paddingSize="large" colorScheme="success">
+        <Button.Root
+          type="submit"
+          paddingSize="large"
+          colorScheme="success"
+          disabled={isSubmitting}
+        >
           {isSubmitting ? (
             <Button.ButtonIcon iconClasses={styles.spinningIcon}>
               <FontAwesomeIcon icon={faArrowsRotate} />
