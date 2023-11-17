@@ -11,7 +11,17 @@ export function PackageVersions() {
     <div>
       <Alert
         content={
-          "Please note that the install buttons only work if you have compatible client software installed, such as the Thunderstore Mod Manager. Otherwise use the zip download links instead."
+          <span>
+            Please note that the install buttons only work if you have
+            compatible client software installed, such as the{" "}
+            <a
+              href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+              className={styles.alertLink}
+            >
+              Thunderstore Mod Manager.
+            </a>{" "}
+            Otherwise use the zip download links instead.
+          </span>
         }
         variant={"info"}
         icon={<FontAwesomeIcon icon={faCircleExclamation} />}

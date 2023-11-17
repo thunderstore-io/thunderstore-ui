@@ -22,3 +22,7 @@
   flex-direction: row;
   gap: 1.5rem;
 }
+
+.alertLink {
+  color: #e7f5fe;
+}
