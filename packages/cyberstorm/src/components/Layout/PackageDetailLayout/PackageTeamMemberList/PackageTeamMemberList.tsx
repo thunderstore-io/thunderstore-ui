@@ -6,7 +6,7 @@ import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import { faCaretRight, faCrown } from "@fortawesome/pro-solid-svg-icons";
 import { TeamLink, UserLink } from "../../../Links/Links";
 import { Icon } from "../../../Icon/Icon";
-import { classnames } from "../../../../utils/utils";
+import { Avatar } from "../../../Avatar/Avatar";
 
 export interface PackageTeamListProps {
   community: string;
@@ -24,17 +24,7 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
   return (
     <UserLink user={teamMember.username}>
       <div className={styles.item}>
-        {teamMember.avatar ? (
-          <img
-            src={teamMember.avatar}
-            className={styles.itemImage}
-            alt={teamMember.username}
-          />
-        ) : (
-          <div className={classnames(styles.itemImage, styles.placeholder)}>
-            {teamMember.username.charAt(0).toUpperCase()}
-          </div>
-        )}
+        <Avatar username={teamMember.username} src={teamMember.avatar} />
         <div>
           <div className={styles.itemTitle}>
             {teamMember.username}

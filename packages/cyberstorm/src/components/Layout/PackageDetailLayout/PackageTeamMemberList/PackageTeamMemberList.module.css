@@ -1,12 +1,11 @@
 .list {
   position: relative;
-  padding: var(--space--8);
 }
 
 .item {
   display: flex;
   gap: var(--gap--16);
-  padding: var(--space--8) var(--space--12);
+  padding: var(--space--8);
   border-radius: var(--border-radius--8);
 }
 

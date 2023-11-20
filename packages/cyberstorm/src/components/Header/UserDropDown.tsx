@@ -38,7 +38,7 @@ export const UserDropDown = () => {
       contentAlignment="end"
       trigger={
         avatar ? (
-          <AvatarButton src={avatar} />
+          <AvatarButton src={avatar} username={user.username} size="small" />
         ) : (
           <Button.Root>
             <Button.ButtonIcon>
@@ -51,7 +51,7 @@ export const UserDropDown = () => {
         <UserLink key="user" user={user.username}>
           <RadixDropDown.Item>
             <div className={styles.dropDownUserInfo}>
-              {avatar ? <Avatar src={avatar} /> : null}
+              <Avatar src={avatar} username={user.username} size="small" />
               <div className={styles.dropdownUserInfoDetails}>
                 <div className={styles.dropdownUserInfoDetails_userName}>
                   {user.username}

@@ -102,12 +102,12 @@
   gap: 2px;
 }
 
-.grid__Rows_ItemList div:first-child {
+.grid__Rows_ItemList > div:first-child {
   border-top-left-radius: var(--border-radius--8);
   border-top-right-radius: var(--border-radius--8);
 }
 
-.grid__Rows_ItemList div:last-child {
+.grid__Rows_ItemList > div:last-child {
   border-bottom-right-radius: var(--border-radius--8);
   border-bottom-left-radius: var(--border-radius--8);
 }
@@ -166,12 +166,12 @@
   gap: 2px;
 }
 
-.grid__Rows_ItemListSmall div:first-child {
+.grid__Rows_ItemListSmall > div:first-child {
   border-top-left-radius: var(--border-radius--8);
   border-top-right-radius: var(--border-radius--8);
 }
 
-.grid__Rows_ItemListSmall div:last-child {
+.grid__Rows_ItemListSmall > div:last-child {
   border-bottom-right-radius: var(--border-radius--8);
   border-bottom-left-radius: var(--border-radius--8);
 }

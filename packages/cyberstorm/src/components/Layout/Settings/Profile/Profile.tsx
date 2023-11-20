@@ -5,9 +5,6 @@ import { Avatar } from "../../../Avatar/Avatar";
 import { User } from "@thunderstore/dapper/types";
 import { TextInput } from "../../../TextInput/TextInput";
 
-// TODO: actual placeholder
-const defaultImageSrc = "/images/logo.png";
-
 export interface ProfileProps {
   userData: User;
 }
@@ -24,9 +21,8 @@ export function Profile(props: ProfileProps) {
             <div className={styles.avatarContent}>
               <Avatar
                 size="large"
-                src={
-                  userData.imageSource ? userData.imageSource : defaultImageSrc
-                }
+                src={userData.imageSource}
+                username={userData.name}
               />
               <div>
                 <Button.Root>

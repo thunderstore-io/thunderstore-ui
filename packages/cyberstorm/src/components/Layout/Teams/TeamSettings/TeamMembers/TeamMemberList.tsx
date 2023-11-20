@@ -10,9 +10,6 @@ import { UserLink } from "../../../../Links/Links";
 import { Select } from "../../../../Select/Select";
 import { Table, Sort } from "../../../../Table/Table";
 
-// TODO: actual placeholder
-const defaultImageSrc = "/images/logo.png";
-
 const teamMemberColumns = [
   { value: "User", disableSort: false },
   { value: "Role", disableSort: false },
@@ -36,7 +33,11 @@ export function TeamMemberList(props: Props) {
       value: (
         <UserLink key={`user_${index}`} user={member.username}>
           <div className={styles.userInfo}>
-            <Avatar src={member.avatar ?? defaultImageSrc} />
+            <Avatar
+              src={member.avatar}
+              username={member.username}
+              size="small"
+            />
             <span className={styles.userInfoName}>{member.username}</span>
           </div>
         </UserLink>
