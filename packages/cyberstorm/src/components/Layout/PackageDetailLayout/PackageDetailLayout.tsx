@@ -9,7 +9,6 @@ import {
 } from "../../Links/Links";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Button from "../../Button/";
-import { Dialog } from "../../Dialog/Dialog";
 import { PackageManagementForm } from "./PackageManagementForm/PackageManagementForm";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { MetaInfoItemList } from "../../MetaInfoItemList/MetaInfoItemList";
@@ -46,6 +45,7 @@ import { Tag } from "../../Tag/Tag";
 import { Icon } from "../../Icon/Icon";
 import { PLACEHOLDER } from "../Developers/MarkdownPreview/MarkdownPlaceholder";
 import markdownStyles from "../../Markdown/Markdown.module.css";
+import { Dialog } from "../../..";
 
 export interface PackageDetailLayoutProps {
   community: string;
@@ -172,27 +172,9 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
             meta={packageDetailsMeta}
           />
           <div className={styles.headerActions}>
-            <Dialog
-              showFooterBorder
+            <Dialog.Root
               defaultOpen={managementDialogIsOpen}
               title="Manage Package"
-              content={<PackageManagementForm />}
-              acceptButton={
-                <Button.Root paddingSize="large" colorScheme="success">
-                  <Button.ButtonLabel>Save changes</Button.ButtonLabel>
-                </Button.Root>
-              }
-              additionalFooterContent={
-                packageData.is_deprecated ? (
-                  <Button.Root paddingSize="large" colorScheme="default">
-                    <Button.ButtonLabel>Undeprecate</Button.ButtonLabel>
-                  </Button.Root>
-                ) : (
-                  <Button.Root paddingSize="large" colorScheme="warning">
-                    <Button.ButtonLabel>Deprecate</Button.ButtonLabel>
-                  </Button.Root>
-                )
-              }
               trigger={
                 <Button.Root colorScheme="primary" paddingSize="medium">
                   <Button.ButtonIcon>
@@ -201,7 +183,9 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
                   <Button.ButtonLabel>Manage</Button.ButtonLabel>
                 </Button.Root>
               }
-            />
+            >
+              <PackageManagementForm isDeprecated={packageData.is_deprecated} />
+            </Dialog.Root>
             <a className={styles.installButton} href="/">
               <Button.Root plain paddingSize="huge" colorScheme="fancyAccent">
                 <Button.ButtonIcon iconSize="big">

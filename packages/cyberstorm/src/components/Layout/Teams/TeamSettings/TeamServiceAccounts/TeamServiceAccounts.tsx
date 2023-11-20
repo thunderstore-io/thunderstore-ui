@@ -2,7 +2,6 @@ import styles from "./TeamServiceAccounts.module.css";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import * as Button from "../../../../Button/";
 import { ServiceAccountList } from "./ServiceAccountList/ServiceAccountList";
-import { Dialog } from "../../../../Dialog/Dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCircleExclamation } from "@fortawesome/pro-solid-svg-icons";
 import { UserLink } from "../../../../Links/Links";
@@ -12,6 +11,7 @@ import { CopyButton } from "../../../../CopyButton/CopyButton";
 import { Alert } from "../../../../Alert/Alert";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
+import { Dialog } from "../../../../../index";
 
 interface Props {
   teamName: string;
@@ -33,9 +33,8 @@ export function TeamServiceAccounts(props: Props) {
         description="Your loyal servants"
         additionalLeftColumnContent={
           <div>
-            <Dialog
+            <Dialog.Root
               title="Add Service Account"
-              showFooterBorder
               trigger={
                 <Button.Root paddingSize="large" colorScheme="primary">
                   <Button.ButtonLabel>Add Service Account</Button.ButtonLabel>
@@ -44,8 +43,9 @@ export function TeamServiceAccounts(props: Props) {
                   </Button.ButtonIcon>
                 </Button.Root>
               }
-              content={
-                serviceAccountAdded ? (
+            >
+              <>
+                {serviceAccountAdded ? (
                   <div className={styles.dialogContent}>
                     <p className={styles.description}>
                       New service account{" "}
@@ -88,32 +88,36 @@ export function TeamServiceAccounts(props: Props) {
                       placeHolder="Username"
                     />
                   </div>
-                )
-              }
-              cancelButton={serviceAccountAdded ? null : "default"}
-              closeOnAccept={serviceAccountAdded}
-              acceptButton={
-                serviceAccountAdded ? (
-                  <Button.Root
-                    colorScheme="default"
-                    paddingSize="large"
-                    onClick={() => {
-                      setAddedServiceAccountName("");
-                      setServiceAccountAdded(false);
-                    }}
-                  >
-                    <Button.ButtonLabel>Close</Button.ButtonLabel>
-                  </Button.Root>
-                ) : (
-                  <Button.Root
-                    colorScheme="success"
-                    onClick={() => setServiceAccountAdded(!serviceAccountAdded)}
-                  >
-                    <Button.ButtonLabel>Add Service Account</Button.ButtonLabel>
-                  </Button.Root>
-                )
-              }
-            />
+                )}
+                <div className={styles.addServiceAccountDialogFooter}>
+                  {serviceAccountAdded ? (
+                    <Dialog.Close asChild>
+                      <Button.Root
+                        colorScheme="default"
+                        paddingSize="large"
+                        onClick={() => {
+                          setAddedServiceAccountName("");
+                          setServiceAccountAdded(false);
+                        }}
+                      >
+                        <Button.ButtonLabel>Close</Button.ButtonLabel>
+                      </Button.Root>
+                    </Dialog.Close>
+                  ) : (
+                    <Button.Root
+                      colorScheme="success"
+                      onClick={() =>
+                        setServiceAccountAdded(!serviceAccountAdded)
+                      }
+                    >
+                      <Button.ButtonLabel>
+                        Add Service Account
+                      </Button.ButtonLabel>
+                    </Button.Root>
+                  )}
+                </div>
+              </>
+            </Dialog.Root>
           </div>
         }
         content={

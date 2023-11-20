@@ -8,7 +8,7 @@ export {
 } from "./components/BreadCrumbs/BreadCrumbs";
 export { CodeInput } from "./components/CodeInput/CodeInput";
 export { CopyButton } from "./components/CopyButton/CopyButton";
-export { Dialog } from "./components/Dialog/Dialog";
+export * as Dialog from "./components/Dialog/";
 export {
   DropDown,
   DropDownItem,
@@ -84,7 +84,7 @@ export {
 export { Title, type TitleProps } from "./components/Title/Title";
 export { Tooltip, type TooltipProps } from "./components/Tooltip/Tooltip";
 export { Alert, type AlertProps } from "./components/Alert/Alert";
-export { Toast, type ToastProps } from "./components/Toast/Toast";
+export { Toast } from "./components/Toast/Toast";
 export { CommunityListLayout } from "./components/Layout/CommunityListLayout/CommunityListLayout";
 export { ErrorLayout } from "./components/Layout/ErrorLayout/ErrorLayout";
 export { HomeLayout } from "./components/Layout/HomeLayout/HomeLayout";

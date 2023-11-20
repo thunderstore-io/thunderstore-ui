@@ -5,7 +5,7 @@ import { TeamMember } from "@thunderstore/dapper/types";
 import styles from "./TeamMembers.module.css";
 import { Avatar } from "../../../../Avatar/Avatar";
 import * as Button from "../../../../Button/";
-import { Dialog } from "../../../../Dialog/Dialog";
+import { Dialog } from "../../../../../index";
 import { UserLink } from "../../../../Links/Links";
 import { Select } from "../../../../Select/Select";
 import { Table, Sort } from "../../../../Table/Table";
@@ -58,7 +58,7 @@ export function TeamMemberList(props: Props) {
     },
     {
       value: (
-        <Dialog
+        <Dialog.Root
           key={`action_${index}`}
           trigger={
             <Button.Root colorScheme="danger" paddingSize="large">
@@ -68,7 +68,9 @@ export function TeamMemberList(props: Props) {
               <Button.ButtonLabel>Kick</Button.ButtonLabel>
             </Button.Root>
           }
-          content={
+          title="Confirm member removal"
+        >
+          <>
             <div>
               You are about to kick member{" "}
               <UserLink user={member.username}>
@@ -78,16 +80,13 @@ export function TeamMemberList(props: Props) {
                 .
               </UserLink>
             </div>
-          }
-          acceptButton={
-            <Button.Root colorScheme="danger" paddingSize="large">
-              <Button.ButtonLabel>Kick member</Button.ButtonLabel>
-            </Button.Root>
-          }
-          cancelButton="default"
-          showFooterBorder
-          title="Confirm member removal"
-        />
+            <div className={styles.dialogFooter}>
+              <Button.Root colorScheme="danger" paddingSize="large">
+                <Button.ButtonLabel>Kick member</Button.ButtonLabel>
+              </Button.Root>
+            </div>
+          </>
+        </Dialog.Root>
       ),
       sortValue: 0,
     },

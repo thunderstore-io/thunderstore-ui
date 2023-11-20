@@ -1,5 +1,5 @@
 import { StoryFn, Meta } from "@storybook/react";
-import { Toast, ToastProps } from "@thunderstore/cyberstorm";
+import { Toast } from "@thunderstore/cyberstorm";
 import React from "react";
 import { v4 as uuid } from "uuid";
 
@@ -8,10 +8,10 @@ const meta = {
   component: Toast,
 } as Meta<typeof Toast>;
 
-const defaultArgs: ToastProps = {
+const defaultArgs = {
   id: uuid(),
   message: "-",
-  variant: "info",
+  variant: "info" as const,
 };
 
 const Template: StoryFn<typeof Toast> = (args) => (

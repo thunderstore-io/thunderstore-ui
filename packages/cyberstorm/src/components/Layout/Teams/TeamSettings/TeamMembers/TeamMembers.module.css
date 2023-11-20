@@ -50,3 +50,8 @@
 .kickDescriptionUserName {
   color: var(--color-highlight);
 }
+
+.dialogFooter {
+  display: flex;
+  flex-direction: row-reverse;
+}
