@@ -1,42 +1,50 @@
-import { RequestConfig } from "./index";
+import { ApiError, RequestConfig } from "./index";
 
-/**
- * TODO: plug Sentry to error handling.
- */
-export async function apiFetch(
-  config: RequestConfig,
-  path: string,
-  query?: string
-) {
-  const url = getUrl(config, path, query);
-  const settings = getSettings(config);
+const BASE_HEADERS = {
+  Accept: "application/json",
+  "Content-Type": "application/json",
+};
 
-  let response;
+export type apiFetchArgs = {
+  config: RequestConfig;
+  path: string;
+  method: RequestInit["method"];
+  query?: string;
+  body?: RequestInit["body"];
+};
+export async function apiFetch2(args: apiFetchArgs) {
+  const url = getUrl(args.config, args.path, args.query);
 
-  try {
-    response = await fetch(url, settings);
-  } catch (e) {
-    throw new Error(e instanceof Error ? e.message : "Data fetching error");
-  }
+  const response = await fetch(url, {
+    headers: {
+      ...BASE_HEADERS,
+      ...getAuthHeaders(args.config),
+    },
+    body: args.body,
+  });
 
   if (!response.ok) {
-    throw new Error(`${response.status}: ${response.statusText}`);
+    throw ApiError.createFromResponse(response);
   }
 
-  let values;
-
-  try {
-    values = await response.json();
-  } catch (e) {
-    throw new Error(e instanceof Error ? e.message : "Deserialization error");
-  }
-
-  return values;
+  return response.json();
 }
 
-function getSettings(config: RequestConfig) {
+export function apiFetch(config: RequestConfig, path: string, query?: string) {
+  // TODO: Update the apiFetch signature to take in object args instead
+  //       of positional arguments and then merge apiFetch and apiFetch2
+  //       together. Someone else's job for now.
+  return apiFetch2({
+    config,
+    path,
+    query,
+    method: "GET",
+  });
+}
+
+function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {
   return config.sessionId
-    ? { headers: { authorization: `Session ${config.sessionId}` } }
+    ? { Authorization: `Session ${config.sessionId}` }
     : {};
 }
 

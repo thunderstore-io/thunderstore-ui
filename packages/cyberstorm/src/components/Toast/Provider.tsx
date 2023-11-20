@@ -1,6 +1,12 @@
-import { createContext, PropsWithChildren, useReducer } from "react";
-import { v4 as uuid } from "uuid";
+"use client";
 import * as RadixToast from "@radix-ui/react-toast";
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useReducer,
+} from "react";
+import { v4 as uuid } from "uuid";
 import { ToastProps } from "./Toast";
 import { Viewport } from "./Viewport";
 
@@ -37,7 +43,7 @@ const toastReducer = (
 };
 
 interface ContextInterface {
-  addToast: (props: Omit<ToastProps, "id">) => void;
+  addToast: ({ ...props }: Omit<ToastProps, "id">) => void;
   remove: (id: string) => void;
 }
 
@@ -46,7 +52,7 @@ const ToastContext = createContext<ContextInterface | null>(null);
 export function Provider(props: { toastDuration: number } & PropsWithChildren) {
   const [state, dispatch] = useReducer(toastReducer, initState);
 
-  const addToast = (props: Omit<ToastProps, "id">) => {
+  const addToast = ({ ...props }: Omit<ToastProps, "id">) => {
     const id = uuid();
     dispatch({ type: "add", toast: { id, ...props } });
   };
@@ -69,3 +75,13 @@ export function Provider(props: { toastDuration: number } & PropsWithChildren) {
     </ToastContext.Provider>
   );
 }
+
+export const useToast = (): ContextInterface => {
+  const contextState = useContext(ToastContext);
+
+  if (contextState === null) {
+    throw new Error("useToast must be used within a Toast.Provider tag");
+  }
+
+  return contextState;
+};

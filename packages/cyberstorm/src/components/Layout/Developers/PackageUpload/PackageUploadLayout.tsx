@@ -9,6 +9,8 @@ import * as Button from "../../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
+import { CreateTeamForm } from "@thunderstore/cyberstorm-forms";
+import { Dialog } from "../../../..";
 
 /**
  * Cyberstorm PackageUpload Layout
@@ -34,14 +36,19 @@ export function PackageUploadLayout() {
             title="Team"
             description="No teams available?"
             additionalLeftColumnContent={
-              <div>
-                <Button.Root>
-                  <Button.ButtonLabel>Create Team</Button.ButtonLabel>
-                  <Button.ButtonIcon>
-                    <FontAwesomeIcon icon={faPlus} />
-                  </Button.ButtonIcon>
-                </Button.Root>
-              </div>
+              <Dialog.Root
+                title="Create Team"
+                trigger={
+                  <Button.Root colorScheme="primary" paddingSize="large">
+                    <Button.ButtonLabel>Create team</Button.ButtonLabel>
+                    <Button.ButtonIcon>
+                      <FontAwesomeIcon icon={faPlus} />
+                    </Button.ButtonIcon>
+                  </Button.Root>
+                }
+              >
+                <CreateTeamForm />
+              </Dialog.Root>
             }
             content={<TextInput />}
           />

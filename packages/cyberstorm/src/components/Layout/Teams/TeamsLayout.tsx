@@ -7,14 +7,15 @@ import * as Button from "../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { TeamList } from "./TeamList/TeamList";
-import { TextInput } from "../../TextInput/TextInput";
+import { Dialog } from "../../../index";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { Alert } from "../../Alert/Alert";
-import { Dialog } from "../../..";
+import { CreateTeamForm } from "@thunderstore/cyberstorm-forms";
 
 /**
  * View for listing and managing authenticated user's teams.
  */
+
 export function TeamsLayout() {
   return (
     <BaseLayout
@@ -41,21 +42,7 @@ export function TeamsLayout() {
                   </Button.Root>
                 }
               >
-                <>
-                  <div className={styles.createTeamDialog}>
-                    <div className={styles.createTeamDialogText}>
-                      Enter the name of the team you wish to create. Team names
-                      can contain the characters a-z A-Z 0-9 _ and must not
-                      start or end with an _
-                    </div>
-                    <TextInput placeHolder="Team name" />
-                  </div>
-                  <div className={styles.createTeamDialogFooter}>
-                    <Button.Root paddingSize="large" colorScheme="success">
-                      <Button.ButtonLabel>Create</Button.ButtonLabel>
-                    </Button.Root>
-                  </div>
-                </>
+                <CreateTeamForm />
               </Dialog.Root>
             }
             content={

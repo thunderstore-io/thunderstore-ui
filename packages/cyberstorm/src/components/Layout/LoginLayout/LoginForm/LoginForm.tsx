@@ -40,9 +40,9 @@ export function LoginForm() {
                 </label>
                 <TextInput
                   value={email}
-                  setValue={setEmail}
+                  onChange={(e) => setEmail(e.target.value)}
                   id="login_email"
-                  placeHolder="Email"
+                  placeholder="Email"
                 />
               </div>
               <div>
@@ -52,9 +52,9 @@ export function LoginForm() {
                 <TextInput
                   type="password"
                   value={password}
-                  setValue={setPassword}
+                  onChange={(e) => setPassword(e.target.value)}
                   id="login_password"
-                  placeHolder="Password"
+                  placeholder="Password"
                 />
               </div>
             </div>

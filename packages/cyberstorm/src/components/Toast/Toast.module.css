@@ -31,12 +31,18 @@
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
+  width: 1.875em;
+  height: 1.875em;
   background-color: transparent;
 }
 
 .closeIcon {
   display: flex;
-  color: var(--color-text--tertiary);
+  align-items: center;
+  justify-content: center;
+  width: 0.875em;
+  height: 0.875em;
+  color: var(--text-color);
 }
 
 .progress {

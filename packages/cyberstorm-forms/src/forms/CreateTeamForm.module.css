@@ -1,0 +1,27 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dialogText {
+  color: var(--color-text--secondary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size--l);
+  line-height: var(--line-height--l);
+}
+
+.footer {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 1rem;
+  justify-content: space-between;
+  padding-top: var(--space--16);
+  border-top: var(--border);
+}

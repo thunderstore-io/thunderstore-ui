@@ -50,6 +50,7 @@ export interface ButtonProps {
   style?: { [key: string]: string };
   type?: "button" | "submit" | "reset";
   tooltipText?: string;
+  disabled?: boolean;
 }
 
 const TooltipWrapper = (props: TooltipWrapperProps) =>
@@ -82,6 +83,7 @@ const Button = React.forwardRef<
     paddingSize = "medium",
     iconAlignment = "default",
     tooltipText,
+    disabled = false,
     ...forwardedProps
   } = props;
 
@@ -90,6 +92,7 @@ const Button = React.forwardRef<
   if (plain) {
     const fRef = forwardedRef as React.ForwardedRef<HTMLDivElement>;
     const ref = fRef || fallbackRef;
+    // TODO: Add disabled mode
     return (
       <TooltipWrapper tooltipText={tooltipText}>
         <div
@@ -124,6 +127,7 @@ const Button = React.forwardRef<
             getPaddingSize(paddingSize)
           )}
           onClick={onClick}
+          disabled={disabled}
         >
           {children}
         </button>

@@ -45,7 +45,7 @@ export function Account(props: AccountProps) {
                 <i>{username}</i> to the field below
               </p>
               <div className={styles.verificationInput}>
-                <TextInput placeHolder="Verification..." />
+                <TextInput placeholder="Verification..." />
               </div>
               <div>
                 <Button.Root colorScheme="danger" paddingSize="large">

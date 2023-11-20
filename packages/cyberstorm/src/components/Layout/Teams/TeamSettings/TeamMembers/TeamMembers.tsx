@@ -45,7 +45,7 @@ export function TeamMembers(props: Props) {
           </p>
           <div className={styles.dialogInput}>
             <div className={styles.textInput}>
-              <TextInput placeHolder="Username" />
+              <TextInput placeholder="Username" />
             </div>
             <Select options={userRoles} value={"Member"} />
           </div>

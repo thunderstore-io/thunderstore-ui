@@ -31,8 +31,8 @@ export function TeamDetails(props: Props) {
               <div className={styles.donationLinkActions}>
                 <div className={styles.donationLinkTextInput}>
                   <TextInput
-                    placeHolder="https://"
-                    setValue={setDonationLink}
+                    placeholder="https://"
+                    onChange={(e) => setDonationLink(e.target.value)}
                     value={donationLink}
                   />
                 </div>
@@ -76,12 +76,12 @@ export function TeamDetails(props: Props) {
         <SettingItem
           title="Profile Summary"
           description="A short description shown in header and profile cards"
-          content={<TextInput placeHolder={teamData.description} />}
+          content={<TextInput placeholder="This is an description" />}
         />
         <SettingItem
           title="Abut Us"
           description="A more comprehensive description shown on the profile page"
-          content={<TextInput placeHolder={teamData.about} />}
+          content={<TextInput placeholder={teamData.about} />}
         />
 
         <div className={styles.line} />
@@ -95,7 +95,7 @@ export function TeamDetails(props: Props) {
         <div className={styles.section}>
           <SettingItem
             title="Team donation link"
-            content={<TextInput placeHolder="https://" />}
+            content={<TextInput placeholder="https://" />}
           />
         </div>
       </div>
