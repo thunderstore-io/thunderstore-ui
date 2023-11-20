@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const PackageCategory = z.object({
-  id: z.number().nonnegative(),
+  id: z.string().nonempty(),
   name: z.string().nonempty(),
   slug: z.string().nonempty(),
 });

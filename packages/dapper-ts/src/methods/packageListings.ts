@@ -34,8 +34,8 @@ export async function getPackageListings(
   ordering = "last-updated",
   page = 1,
   q = "",
-  includedCategories: number[] = [],
-  excludedCategories: number[] = [],
+  includedCategories: string[] = [],
+  excludedCategories: string[] = [],
   section = "",
   nsfw = false,
   deprecated = false

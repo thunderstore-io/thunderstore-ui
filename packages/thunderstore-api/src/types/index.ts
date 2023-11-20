@@ -9,9 +9,9 @@ export interface PackageListingQueryParams {
   /** Free text search for filtering e.g. by package name */
   q: string;
   /** Ids of categories the package MUST belong to */
-  includedCategories: number[];
+  includedCategories: string[];
   /** Ids of categories the package MUST NOT belong to */
-  excludedCategories: number[];
+  excludedCategories: string[];
   /**
    * UUID of community's section the package MUST fit.
    *

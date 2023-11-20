@@ -36,8 +36,8 @@ export type GetPackageListings = (
   ordering?: string,
   page?: number,
   q?: string,
-  includedCategories?: number[],
-  excludedCategories?: number[],
+  includedCategories?: string[],
+  excludedCategories?: string[],
   section?: string,
   nsfw?: boolean,
   deprecated?: boolean

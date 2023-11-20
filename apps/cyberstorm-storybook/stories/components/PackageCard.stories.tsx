@@ -50,8 +50,8 @@ ReferencePackageCard.args = {
     is_nsfw: false,
     is_deprecated: false,
     categories: [
-      { id: 1, name: "Misc", slug: "misc" },
-      { id: 2, name: "Mods", slug: "mods" },
+      { id: "1", name: "Misc", slug: "misc" },
+      { id: "2", name: "Mods", slug: "mods" },
     ],
   },
 };

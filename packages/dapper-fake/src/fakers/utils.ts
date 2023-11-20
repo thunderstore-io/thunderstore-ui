@@ -10,17 +10,17 @@ export const getFakeLink = () => ({
 
 export const getFakePackageCategories = (returnAmount?: number) => {
   const categories = [
-    { id: 1, name: "Mods", slug: "mods" },
-    { id: 2, name: "Tools", slug: "tools" },
-    { id: 3, name: "Libraries", slug: "libraries" },
-    { id: 4, name: "Modpacks", slug: "modpacks" },
-    { id: 5, name: "Skins", slug: "skins" },
-    { id: 6, name: "Maps", slug: "maps" },
-    { id: 7, name: "Tweaks", slug: "tweaks" },
-    { id: 8, name: "Items", slug: "items" },
-    { id: 9, name: "Language", slug: "language" },
-    { id: 10, name: "Audio", slug: "audio" },
-    { id: 11, name: "Enemies", slug: "enemies" },
+    { id: "1", name: "Mods", slug: "mods" },
+    { id: "2", name: "Tools", slug: "tools" },
+    { id: "3", name: "Libraries", slug: "libraries" },
+    { id: "4", name: "Modpacks", slug: "modpacks" },
+    { id: "5", name: "Skins", slug: "skins" },
+    { id: "6", name: "Maps", slug: "maps" },
+    { id: "7", name: "Tweaks", slug: "tweaks" },
+    { id: "potato", name: "Items", slug: "items" },
+    { id: "9", name: "Language", slug: "language" },
+    { id: "10", name: "Audio", slug: "audio" },
+    { id: "11", name: "Enemies", slug: "enemies" },
   ];
 
   return faker.helpers.arrayElements(categories, {
