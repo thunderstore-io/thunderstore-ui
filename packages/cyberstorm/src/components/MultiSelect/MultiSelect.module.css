@@ -1,10 +1,46 @@
 .selectBox {
   display: flex;
-  flex: 1 0 0;
-  gap: 1rem;
+  flex-direction: row;
   align-items: center;
-  height: 2.75rem;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  background: rgb(67 67 132 / 0.32);
+  width: 100%;
+  padding: var(--space--10) var(--space--14);
+  border: var(--border-width--2) solid var(--border-color);
+
+  border-radius: var(--border-radius--8);
+  font-weight: var(--font-weight-medium);
+
+  font-size: var(--font-size--l);
+  line-height: normal;
+  background-color: var(--color-surface--4);
+
+  --border-color: transparent;
+
+  transition: ease-out 300ms;
+}
+
+.selectBox:hover {
+  --border-color: var(--color-border--highlight);
+}
+
+.selectBox:focus-within {
+  color: var(--color-text--default);
+  background-color: var(--color-black);
+
+  --border-color: var(--color-border--highlight);
+}
+
+.selectBox[data-color="red"] {
+  --border-color: var(--color-red--5);
+}
+
+.selectBox[data-color="red"]:hover {
+  --border-color: var(--color-red--3);
+}
+
+.selectBox[data-color="green"] {
+  --border-color: var(--color-cyber-green--50);
+}
+
+.selectBox[data-color="green"]:hover {
+  --border-color: var(--color-cyber-green--80);
 }

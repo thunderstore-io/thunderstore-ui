@@ -15,15 +15,15 @@ type Props = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange: (v: any) => void;
   onBlur: () => void;
-  value: Option[];
-  disabled: boolean;
+  disabled?: boolean;
   name: string;
-  placeholder: string;
+  placeholder?: string;
+  color?: "red" | "green";
 };
 
 export const MultiSelect = React.forwardRef<HTMLDivElement, Props>(
   (props, ref) => {
-    const { options, onChange, onBlur, placeholder } = props;
+    const { options, onChange, onBlur, placeholder, color } = props;
 
     const [list, setList] = React.useState<Option[]>([]);
 
@@ -57,7 +57,7 @@ export const MultiSelect = React.forwardRef<HTMLDivElement, Props>(
       <div ref={ref} onBlur={onBlur}>
         <DropDown
           trigger={
-            <div className={styles.selectBox}>
+            <div className={styles.selectBox} data-color={color}>
               {list.length === 0 ? placeholder : null}
               {list.map((item, key) => (
                 <Button.Root
