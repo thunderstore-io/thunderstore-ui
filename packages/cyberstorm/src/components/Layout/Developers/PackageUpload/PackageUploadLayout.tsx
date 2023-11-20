@@ -9,7 +9,7 @@ import * as Button from "../../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
-import { CreateTeamForm } from "../../../Forms/CreateTeamForm/CreateTeamForm";
+import { CreateTeamForm } from "@thunderstore/cyberstorm-forms";
 import { Dialog } from "../../../..";
 
 /**

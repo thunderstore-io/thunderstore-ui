@@ -1,0 +1,25 @@
+{
+  "name": "@thunderstore/ts-api-react",
+  "version": "0.1.0",
+  "description": "Thunderstore API React integration",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "main": "dist/thunderstore-ts-api-react.cjs.js",
+  "module": "dist/thunderstore-ts-api-react.esm.js",
+  "types": "dist/thunderstore-ts-api-react.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@thunderstore/thunderstore-api": "*",
+    "@types/react": "^18.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "typescript-plugin-css-modules": "^3.4.0"
+  }
+}

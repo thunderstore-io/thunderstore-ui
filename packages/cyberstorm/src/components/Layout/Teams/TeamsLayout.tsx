@@ -10,7 +10,7 @@ import { TeamList } from "./TeamList/TeamList";
 import { Dialog } from "../../../index";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { Alert } from "../../Alert/Alert";
-import { CreateTeamForm } from "../../Forms/CreateTeamForm/CreateTeamForm";
+import { CreateTeamForm } from "@thunderstore/cyberstorm-forms";
 
 /**
  * View for listing and managing authenticated user's teams.

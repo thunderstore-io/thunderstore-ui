@@ -1,4 +1,4 @@
-import { RequestConfig } from "./index";
+import { ApiError, RequestConfig } from "./index";
 
 const BASE_HEADERS = {
   Accept: "application/json",
@@ -24,9 +24,7 @@ export async function apiFetch2(args: apiFetchArgs) {
   });
 
   if (!response.ok) {
-    // TODO: Implement some actual API error class we can use downstream
-    //       for something.
-    throw new Error(`${response.status}: ${response.statusText}`);
+    throw ApiError.createFromResponse(response);
   }
 
   return response.json();
