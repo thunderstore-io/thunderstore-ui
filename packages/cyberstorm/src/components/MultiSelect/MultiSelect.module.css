@@ -1,0 +1,10 @@
+.selectBox {
+  display: flex;
+  flex: 1 0 0;
+  gap: 1rem;
+  align-items: center;
+  height: 2.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: rgb(67 67 132 / 0.32);
+}
