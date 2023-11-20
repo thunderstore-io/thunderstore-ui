@@ -6,11 +6,10 @@ import { classnames } from "../../utils/utils";
 
 export interface TextInputProps
   extends React.ComponentPropsWithoutRef<"input"> {
-  value?: string;
   leftIcon?: JSX.Element;
   rightIcon?: JSX.Element;
   color?: string;
-  enterHook?: (value: string) => string | void;
+  enterHook?: (value: string | number | readonly string[]) => string | void;
 }
 
 /**
@@ -28,7 +27,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
     } = props;
     const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (enterHook && e.key === "Enter") {
-        enterHook(value.toLowerCase());
+        enterHook(value);
       }
     };
 
@@ -47,7 +46,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
             leftIcon ? styles.hasLeftIcon : null
           )}
           value={value}
-          onKeyDown={(e) => onEnter(e)}
+          onKeyDown={onEnter}
           data-color={color}
         />
         {rightIcon ? (

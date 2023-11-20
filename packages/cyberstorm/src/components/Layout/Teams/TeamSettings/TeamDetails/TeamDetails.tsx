@@ -76,7 +76,7 @@ export function TeamDetails(props: Props) {
         <SettingItem
           title="Profile Summary"
           description="A short description shown in header and profile cards"
-          content={<TextInput placeholder={teamData.description} />}
+          content={<TextInput placeholder="This is an description" />}
         />
         <SettingItem
           title="Abut Us"

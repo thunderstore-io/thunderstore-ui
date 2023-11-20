@@ -46,7 +46,7 @@ interface ContextInterface {
   remove: (id: string) => void;
 }
 
-export const ToastContext = createContext<ContextInterface | null>(null);
+const ToastContext = createContext<ContextInterface | null>(null);
 
 export function Provider(props: { toastDuration: number } & PropsWithChildren) {
   const [state, dispatch] = useReducer(toastReducer, initState);

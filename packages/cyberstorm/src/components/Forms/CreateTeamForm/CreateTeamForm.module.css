@@ -30,6 +30,12 @@
   animation: rotate 2s linear infinite;
 }
 
+.errorMessage {
+  color: #f1385a;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
 @keyframes rotate {
   100% {
     transform: rotate(360deg);

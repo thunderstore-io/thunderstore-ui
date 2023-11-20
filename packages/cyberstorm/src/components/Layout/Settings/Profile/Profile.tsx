@@ -43,12 +43,12 @@ export function Profile(props: ProfileProps) {
         <SettingItem
           title="Profile Summary"
           description="A short introduction of a max of 160 characters"
-          content={<TextInput placeholder={userData.description} />}
+          content={<TextInput placeholder="This is an description" />}
         />
         <SettingItem
           title="Abut Me"
           description="A more comprehensive introduction of yourself shown in the About-tab on your user page"
-          content={<TextInput placeholder={userData.about} />}
+          content={<TextInput placeholder="It's about me" />}
         />
         <div className={styles.save}>
           <Button.Root>
