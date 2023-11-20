@@ -30,8 +30,12 @@
   opacity: 0.9;
 }
 
-.medium {
+.small {
   --size: 2.5rem;
+}
+
+.medium {
+  --size: 3rem;
 }
 
 .large {

@@ -5,7 +5,7 @@ import React, { PropsWithChildren, useRef } from "react";
 
 export interface AvatarButtonProps {
   src?: string | null;
-  size?: "medium" | "large";
+  size?: "small" | "medium" | "large";
   colorScheme?: "default";
   username: string;
 }
@@ -53,6 +53,7 @@ AvatarButton.displayName = "AvatarButton";
 
 const getSize = (scheme: AvatarButtonProps["size"] = "medium") => {
   return {
+    small: styles.small,
     medium: styles.medium,
     large: styles.large,
   }[scheme];

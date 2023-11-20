@@ -33,7 +33,11 @@ export function TeamMemberList(props: Props) {
       value: (
         <UserLink key={`user_${index}`} user={member.username}>
           <div className={styles.userInfo}>
-            <Avatar src={member.avatar} username={member.username} />
+            <Avatar
+              src={member.avatar}
+              username={member.username}
+              size="small"
+            />
             <span className={styles.userInfoName}>{member.username}</span>
           </div>
         </UserLink>

@@ -3,7 +3,7 @@ import styles from "./Avatar.module.css";
 
 export interface AvatarProps {
   src?: string | null;
-  size?: "medium" | "large";
+  size?: "small" | "medium" | "large";
   username: string;
 }
 
@@ -34,6 +34,7 @@ Avatar.displayName = "Avatar";
 
 const getSize = (scheme: AvatarProps["size"] = "medium") => {
   return {
+    small: styles.small,
     medium: styles.medium,
     large: styles.large,
   }[scheme];
