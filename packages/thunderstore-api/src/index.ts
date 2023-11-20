@@ -1,5 +1,8 @@
 export interface RequestConfig {
   apiHost: string;
+
+  // TODO: This should not be explicitly bound to a session ID but rather just
+  //       accept any authorization header. Noting as currently out of scope.
   sessionId?: string;
 }
 
@@ -10,3 +13,5 @@ export * from "./fetch/currentUser";
 export * from "./fetch/teamDetails";
 export * from "./fetch/teamMembers";
 export * from "./fetch/teamServiceAccounts";
+export * from "./fetch/teamCreate";
+export * from "./errors";
