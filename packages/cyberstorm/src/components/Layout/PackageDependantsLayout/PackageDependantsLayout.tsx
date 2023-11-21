@@ -1,5 +1,4 @@
 import { useDapper } from "@thunderstore/dapper";
-import { Package } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
 
 import styles from "./PackageDependantsLayout.module.css";
@@ -13,28 +12,27 @@ import {
 } from "../../Links/Links";
 import { PackageSearch } from "../../PackageSearch/PackageSearch";
 
-interface PackageDependantsLayoutProps {
-  package: Package;
+interface Props {
+  communityId: string;
+  namespaceId: string;
+  packageName: string;
 }
 
 /**
  * View for listing the packages depending on a given package.
- *
- * TODO: Currently this lists Community's packages as the
- * PackageSearch doesn't support showing dependants.
  */
-export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
-  const { package: pkg } = props;
+export function PackageDependantsLayout(props: Props) {
+  const { communityId, namespaceId, packageName } = props;
 
   const dapper = useDapper();
-  const community = usePromise(dapper.getCommunity, [pkg.community_identifier]);
-  const filters = usePromise(dapper.getCommunityFilters, [
-    pkg.community_identifier,
-  ]);
+  const community = usePromise(dapper.getCommunity, [communityId]);
+  const filters = usePromise(dapper.getCommunityFilters, [communityId]);
 
   const listingType = {
-    kind: "community" as const,
-    communityId: pkg.community_identifier,
+    kind: "package-dependants" as const,
+    communityId,
+    namespaceId,
+    packageName,
   };
 
   return (
@@ -45,19 +43,19 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
       breadCrumb={
         <BreadCrumbs>
           <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={community.identifier}>
+          <CommunityLink community={communityId}>
             {community.name}
           </CommunityLink>
           Packages
-          <TeamLink community={pkg.community_identifier} team={pkg.namespace}>
-            {pkg.namespace}
+          <TeamLink community={communityId} team={namespaceId}>
+            {namespaceId}
           </TeamLink>
           <PackageLink
-            community={pkg.community_identifier}
-            namespace={pkg.namespace}
-            package={pkg.name}
+            community={communityId}
+            namespace={namespaceId}
+            package={packageName}
           >
-            {pkg.name}
+            {packageName}
           </PackageLink>
           Dependants
         </BreadCrumbs>
@@ -66,15 +64,15 @@ export function PackageDependantsLayout(props: PackageDependantsLayoutProps) {
         <div className={styles.header}>
           Mods that depend on{" "}
           <PackageLink
-            community={pkg.community_identifier}
-            namespace={pkg.namespace}
-            package={pkg.name}
+            community={communityId}
+            namespace={namespaceId}
+            package={packageName}
           >
-            {pkg.name}
+            {packageName}
           </PackageLink>
           {" by "}
-          <TeamLink community={pkg.community_identifier} team={pkg.namespace}>
-            {pkg.namespace}
+          <TeamLink community={communityId} team={namespaceId}>
+            {namespaceId}
           </TeamLink>
         </div>
       }
