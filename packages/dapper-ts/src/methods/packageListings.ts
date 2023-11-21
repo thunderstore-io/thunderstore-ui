@@ -3,6 +3,7 @@ import { PackageListingType } from "@thunderstore/dapper/types";
 import {
   fetchCommunityPackageListings,
   fetchNamespacePackageListings,
+  fetchPackageDependantsListings,
 } from "@thunderstore/thunderstore-api";
 import { PackageListingQueryParams } from "@thunderstore/thunderstore-api/types";
 
@@ -63,6 +64,14 @@ export async function getPackageListings(
       this.config,
       type.communityId,
       type.namespaceId,
+      options
+    );
+  } else if (type.kind === "package-dependants") {
+    data = await fetchPackageDependantsListings(
+      this.config,
+      type.communityId,
+      type.namespaceId,
+      type.packageName,
       options
     );
   } else {
