@@ -1,17 +1,6 @@
 "use client";
-import styles from "./PackageDetailLayout.module.css";
-import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import {
-  CommunitiesLink,
-  CommunityLink,
-  PackageDependantsLink,
-  TeamLink,
-} from "../../Links/Links";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as Button from "../../Button/";
-import { PackageManagementForm } from "./PackageManagementForm/PackageManagementForm";
-import { BaseLayout } from "../BaseLayout/BaseLayout";
-import { MetaInfoItemList } from "../../MetaInfoItemList/MetaInfoItemList";
+import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import {
   faDonate,
   faDownload,
@@ -24,28 +13,40 @@ import {
   faArrowUpRight,
   faBoxes,
 } from "@fortawesome/pro-solid-svg-icons";
-import { faUsers } from "@fortawesome/pro-regular-svg-icons";
-import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
-import { CopyButton } from "../../CopyButton/CopyButton";
-import { formatFileSize, formatInteger } from "../../../utils/utils";
-import { useState } from "react";
-import { Tabs } from "../../Tabs/Tabs";
-import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
-import { PackageVersions } from "./PackageVersions/PackageVersions";
-import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
-import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDapper } from "@thunderstore/dapper";
 import { Package } from "@thunderstore/dapper/types";
+import { usePromise } from "@thunderstore/use-promise";
+import { useState } from "react";
+
+import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
+import styles from "./PackageDetailLayout.module.css";
+import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
+import { PackageManagementForm } from "./PackageManagementForm/PackageManagementForm";
 import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
-import { ThunderstoreLogo } from "../../../svg/svg";
-import { usePromise } from "@thunderstore/use-promise";
-import { WrapperCard } from "../../WrapperCard/WrapperCard";
-import { Tag } from "../../Tag/Tag";
-import { Icon } from "../../Icon/Icon";
+import { PackageVersions } from "./PackageVersions/PackageVersions";
+import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { PLACEHOLDER } from "../Developers/MarkdownPreview/MarkdownPlaceholder";
+import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
+import * as Button from "../../Button/";
+import {
+  CommunitiesLink,
+  CommunityLink,
+  PackageDependantsLink,
+  TeamLink,
+} from "../../Links/Links";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
+import { CopyButton } from "../../CopyButton/CopyButton";
+import * as Dialog from "../../Dialog";
+import { Icon } from "../../Icon/Icon";
 import markdownStyles from "../../Markdown/Markdown.module.css";
-import { Dialog } from "../../..";
+import { MetaInfoItemList } from "../../MetaInfoItemList/MetaInfoItemList";
+import { Tabs } from "../../Tabs/Tabs";
+import { Tag } from "../../Tag/Tag";
+import { WrapperCard } from "../../WrapperCard/WrapperCard";
+import { ThunderstoreLogo } from "../../../svg/svg";
+import { formatFileSize, formatInteger } from "../../../utils/utils";
 
 export interface PackageDetailLayoutProps {
   community: string;
@@ -69,15 +70,16 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
     namespace,
     packageName,
   } = props;
+
+  const [currentTab, setCurrentTab] = useState(1);
   const dapper = useDapper();
   const packageData = usePromise(dapper.getPackage, [
     community,
     namespace,
     packageName,
   ]);
-  const metaInfoData = getMetaInfoData(packageData);
 
-  const [currentTab, setCurrentTab] = useState(1);
+  const metaInfoData = getMetaInfoData(packageData);
 
   const mappedPackageTagList = packageData.categories.map((category) => {
     return (
