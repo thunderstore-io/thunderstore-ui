@@ -13,4 +13,10 @@ export type PackageListingType =
       kind: "namespace";
       communityId: string;
       namespaceId: string;
+    }
+  | {
+      kind: "package-dependants";
+      communityId: string;
+      namespaceId: string;
+      packageName: string;
     };

@@ -1,6 +1,5 @@
 import { StoryFn, Meta } from "@storybook/react";
 import { PackageDependantsLayout } from "@thunderstore/cyberstorm";
-import { Package } from "@thunderstore/dapper/types";
 import React from "react";
 
 const meta = {
@@ -8,14 +7,12 @@ const meta = {
   component: PackageDependantsLayout,
 } as Meta<typeof PackageDependantsLayout>;
 
-const packageData = {
-  community_identifier: "brotato",
-  namespace: "otDan",
-  name: "WaveTimer",
-} as Package;
-
 const Template: StoryFn<typeof PackageDependantsLayout> = () => (
-  <PackageDependantsLayout package={packageData} />
+  <PackageDependantsLayout
+    communityId="brotato"
+    namespaceId="otDan"
+    packageName="WaveTimer"
+  />
 );
 const PackageDependants = Template.bind({});
 

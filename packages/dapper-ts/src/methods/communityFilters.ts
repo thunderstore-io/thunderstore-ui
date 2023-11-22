@@ -2,12 +2,8 @@ import { z } from "zod";
 import { fetchCommunityFilters } from "@thunderstore/thunderstore-api";
 
 import { DapperTsInterface } from "../index";
-
-const PackageCategory = z.object({
-  id: z.number().nonnegative(),
-  name: z.string().nonempty(),
-  slug: z.string().nonempty(),
-});
+import { PackageCategory } from "../sharedSchemas";
+import { formatErrorMessage } from "../utils";
 
 const Section = z.object({
   uuid: z.string().uuid(),
@@ -29,8 +25,7 @@ export async function getCommunityFilters(
   const parsed = schema.safeParse(data);
 
   if (!parsed.success) {
-    // TODO: add Sentry support and log parsed.error.
-    throw new Error("Invalid data received from backend");
+    throw new Error(formatErrorMessage(parsed.error));
   }
 
   return parsed.data;

@@ -1,0 +1,4 @@
+{
+  "main": "dist/thunderstore-thunderstore-api-types.cjs.js",
+  "module": "dist/thunderstore-thunderstore-api-types.esm.js"
+}

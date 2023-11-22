@@ -6,6 +6,7 @@ import {
 } from "@thunderstore/thunderstore-api";
 
 import { DapperTsInterface } from "../index";
+import { formatErrorMessage } from "../utils";
 
 const detailsSchema = z.object({
   identifier: z.number().int().gt(0),
@@ -45,8 +46,7 @@ export async function getTeamMembers(
   const parsed = membersSchema.safeParse(data);
 
   if (!parsed.success) {
-    // TODO: add Sentry support and log parsed.error.
-    throw new Error("Invalid data received from backend");
+    throw new Error(formatErrorMessage(parsed.error));
   }
 
   return parsed.data;
@@ -68,8 +68,7 @@ export async function getTeamServiceAccounts(
   const parsed = serviceAccountSchema.safeParse(data);
 
   if (!parsed.success) {
-    // TODO: add Sentry support and log parsed.error.
-    throw new Error("Invalid data received from backend");
+    throw new Error(formatErrorMessage(parsed.error));
   }
 
   return parsed.data;

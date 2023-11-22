@@ -5,9 +5,20 @@
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
   "main": "dist/thunderstore-thunderstore-api.cjs.js",
   "module": "dist/thunderstore-thunderstore-api.esm.js",
-  "types": "dist/thunderstore-thunderstore-api.cjs.d.ts",
+  "exports": {
+    ".": {
+      "module": "./dist/thunderstore-thunderstore-api.esm.js",
+      "default": "./dist/thunderstore-thunderstore-api.cjs.js"
+    },
+    "./types": {
+      "module": "./types/dist/thunderstore-thunderstore-api-types.esm.js",
+      "default": "./types/dist/thunderstore-thunderstore-api-types.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "scripts": {
     "build": "tsc",
@@ -20,5 +31,12 @@
     "@types/jest": "^29.5.3",
     "jest": "^29.6.3",
     "ts-jest": "^29.1.1"
+  },
+  "preconstruct": {
+    "entrypoints": [
+      "index.ts",
+      "types/index.ts"
+    ],
+    "exports": true
   }
 }

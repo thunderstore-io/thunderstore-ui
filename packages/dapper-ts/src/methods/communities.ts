@@ -6,6 +6,7 @@ import {
 
 import { DapperTsInterface } from "../index";
 import { paginatedResults } from "../sharedSchemas";
+import { formatErrorMessage } from "../utils";
 
 const communitySchema = z.object({
   name: z.string().nonempty(),
@@ -31,8 +32,7 @@ export async function getCommunities(
   const parsed = communitiesSchema.safeParse(data);
 
   if (!parsed.success) {
-    // TODO: add Sentry support and log parsed.error.
-    throw new Error("Invalid data received from backend");
+    throw new Error(formatErrorMessage(parsed.error));
   }
 
   return {
@@ -50,8 +50,7 @@ export async function getCommunity(
   const parsed = communitySchema.safeParse(data);
 
   if (!parsed.success) {
-    // TODO: add Sentry support and log parsed.error.
-    throw new Error("Invalid data received from backend");
+    throw new Error(formatErrorMessage(parsed.error));
   }
 
   return parsed.data;

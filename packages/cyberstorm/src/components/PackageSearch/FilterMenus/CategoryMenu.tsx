@@ -21,7 +21,7 @@ interface Props {
 export const CategoryMenu = (props: Props) => {
   const { categories, setCategories } = props;
 
-  const toggleCategory = (id: number) => setCategories(toggle(categories, id));
+  const toggleCategory = (id: string) => setCategories(toggle(categories, id));
 
   return (
     <div className={styles.root}>
@@ -65,7 +65,7 @@ CategoryMenu.displayName = "CategoryMenu";
  *
  * Toggling "off" -> "include" -> "exclude" -> "off"
  */
-const toggle = (categories: CategorySelection[], targetId: number) =>
+const toggle = (categories: CategorySelection[], targetId: string) =>
   categories.map((c) => {
     if (c.id === targetId) {
       const nextIndex = (STATES.indexOf(c.selection) + 1) % STATES.length;

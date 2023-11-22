@@ -4,7 +4,7 @@ export type DynamicLink = {
 };
 
 export interface PackageCategory {
-  id: number;
+  id: string;
   name: string;
   slug: string;
 }

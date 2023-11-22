@@ -24,7 +24,7 @@ export const CategoryTagCloud = (props: Props) => {
     return null;
   }
 
-  const clearCategory = (id: number) =>
+  const clearCategory = (id: string) =>
     setCategories(
       categories.map((c) => (c.id === id ? { ...c, selection: OFF } : c))
     );
