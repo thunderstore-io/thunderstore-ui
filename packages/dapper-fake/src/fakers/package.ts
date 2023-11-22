@@ -106,10 +106,10 @@ const getPackageBase = (
 });
 
 const getPackageVersion = () => ({
-  version: getVersionNumber(),
+  version_number: getVersionNumber(),
   changelog: faker.company.buzzPhrase(),
-  uploadDate: faker.date.recent({ days: 700 }).toDateString(),
-  downloadCount: faker.number.int({ min: 1000000, max: 10000000 }),
+  datetime_created: faker.date.recent({ days: 700 }).toISOString(),
+  download_count: faker.number.int({ min: 1000000, max: 10000000 }),
 });
 
 const getVersionNumber = (min = 0, max = 10) => {

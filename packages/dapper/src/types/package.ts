@@ -26,7 +26,7 @@ export interface Package extends PackagePreview {
   dependencies?: PackageDependency[];
   full_version_name: string;
   team: PackageTeam;
-  versions?: PackageVersion[];
+  versions: PackageVersion[];
   website_url: string;
 }
 
@@ -45,8 +45,8 @@ interface PackageTeam {
 }
 
 interface PackageVersion {
-  version: string;
+  version_number: string;
   changelog: string;
-  uploadDate: string;
-  downloadCount: number;
+  datetime_created: string;
+  download_count: number;
 }
