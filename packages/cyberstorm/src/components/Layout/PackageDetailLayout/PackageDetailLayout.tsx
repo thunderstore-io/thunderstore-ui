@@ -1,5 +1,4 @@
 "use client";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import {
   faDonate,
@@ -99,23 +98,16 @@ export function PackageDetailLayout(props: Props) {
         <Button.ButtonLabel>{packageData.namespace}</Button.ButtonLabel>
       </Button.Root>
     </TeamLink>,
-  ];
 
-  if (packageData.gitHubLink) {
-    packageDetailsMeta.push(
-      <a key="github" href={packageData.gitHubLink}>
-        <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
-          <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faGithub} />
-          </Button.ButtonIcon>
-          <Button.ButtonLabel>GitHub</Button.ButtonLabel>
-          <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faArrowUpRight} />
-          </Button.ButtonIcon>
-        </Button.Root>
-      </a>
-    );
-  }
+    <a key="website" href={packageData.website_url}>
+      <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
+        <Button.ButtonLabel>{packageData.website_url}</Button.ButtonLabel>
+        <Button.ButtonIcon>
+          <FontAwesomeIcon icon={faArrowUpRight} />
+        </Button.ButtonIcon>
+      </Button.Root>
+    </a>,
+  ];
 
   return (
     <BaseLayout
@@ -263,8 +255,8 @@ function getMetaInfoData(packageData: Package) {
     },
     {
       key: "2",
-      label: "First Updated",
-      content: <>{packageData.firstUploaded}</>,
+      label: "First Uploaded",
+      content: <>{packageData.datetime_created}</>,
     },
     {
       key: "3",
@@ -287,12 +279,12 @@ function getMetaInfoData(packageData: Package) {
       content: (
         <div className={styles.dependencyStringWrapper}>
           <div
-            title={packageData.dependencyString}
+            title={packageData.full_version_name}
             className={styles.dependencyString}
           >
-            {packageData.dependencyString}
+            {packageData.full_version_name}
           </div>
-          <CopyButton text={packageData.dependencyString} />
+          <CopyButton text={packageData.full_version_name} />
         </div>
       ),
     },
@@ -306,7 +298,7 @@ function getMetaInfoData(packageData: Package) {
           package={packageData.name}
         >
           <div className={styles.dependantsLink}>
-            {packageData.dependantCount + " other mods"}
+            {packageData.dependant_count + " other mods"}
           </div>
         </PackageDependantsLink>
       ),

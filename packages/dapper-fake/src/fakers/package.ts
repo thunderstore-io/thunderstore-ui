@@ -18,7 +18,7 @@ const getFakePackagePreview = (community?: string, namespace?: string) => {
     is_deprecated: faker.datatype.boolean(0.1),
     is_nsfw: faker.datatype.boolean(0.1),
     is_pinned: faker.datatype.boolean(0.1),
-    last_updated: faker.date.recent({ days: 700 }).toDateString(),
+    last_updated: faker.date.recent({ days: 700 }).toISOString(),
     name: faker.word.words(3).split(" ").join("_"),
     namespace: namespace ?? faker.word.sample(),
     rating_count: faker.number.int({ min: 0, max: 100000 }),
@@ -80,17 +80,16 @@ export const getFakePackage = async (
     ...getFakePackagePreview(community, namespace),
 
     community_name: faker.word.sample(),
-    author: faker.person.fullName(),
-    dependantCount: faker.number.int({ min: 0, max: 2000 }),
+    datetime_created: faker.date.past({ years: 2 }).toISOString(),
+    dependant_count: faker.number.int({ min: 0, max: 2000 }),
     dependencies: await getFakeDependencies(community, namespace, name),
-    dependencyString: faker.string.uuid(),
-    firstUploaded: faker.date.past({ years: 2 }).toDateString(),
-    gitHubLink: faker.internet.url(),
+    full_version_name: `${namespace}-${name}-${getVersionNumber()}`,
     team: {
       name: faker.word.words(3),
       members: await getFakeTeamMembers(seed),
     },
     versions: range(20).map(getPackageVersion),
+    website_url: faker.internet.url(),
   };
 };
 

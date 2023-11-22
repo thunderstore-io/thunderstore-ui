@@ -21,13 +21,13 @@ export type PackagePreviews = PaginatedList<PackagePreview>;
 
 export interface Package extends PackagePreview {
   community_name: string;
-  gitHubLink?: string;
-  firstUploaded?: string;
-  dependencyString: string;
+  datetime_created: string;
+  dependant_count: number;
   dependencies?: PackageDependency[];
-  dependantCount: number;
+  full_version_name: string;
   team: PackageTeam;
   versions?: PackageVersion[];
+  website_url: string;
 }
 
 export interface PackageDependency {
