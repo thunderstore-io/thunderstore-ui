@@ -16,15 +16,18 @@ export async function apiFetch2(args: apiFetchArgs) {
   const url = getUrl(args.config, args.path, args.query);
 
   const response = await fetch(url, {
+    method: args.method ? args.method : "GET",
     headers: {
       ...BASE_HEADERS,
       ...getAuthHeaders(args.config),
     },
-    body: args.body,
+    ...(args.method === "GET" || args.method === "HEAD" || args.method === null
+      ? {}
+      : { body: args.body }),
   });
 
   if (!response.ok) {
-    throw ApiError.createFromResponse(response);
+    throw await ApiError.createFromResponse(response);
   }
 
   return response.json();
