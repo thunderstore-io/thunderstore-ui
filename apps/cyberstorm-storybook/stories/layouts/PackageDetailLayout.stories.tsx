@@ -8,28 +8,14 @@ const meta = {
 } as Meta<typeof PackageDetailLayout>;
 
 const Template: StoryFn<typeof PackageDetailLayout> = (args) => (
-  <div>
-    <PackageDetailLayout {...args} />
-  </div>
+  <PackageDetailLayout {...args} />
 );
 
-const defaultArgs = {
-  community: "Train City 2042",
-  namespace: "Mechanics",
-  packagepackageNameId: "Thomas the Dankiest Engine",
-};
-
 const ReferencePackageDetailLayout = Template.bind({});
-ReferencePackageDetailLayout.args = defaultArgs;
-
-const ManagePackageDetailLayout = Template.bind({});
-ManagePackageDetailLayout.args = {
-  ...defaultArgs,
-  managementDialogIsOpen: true,
+ReferencePackageDetailLayout.args = {
+  communityId: "Train City 2042",
+  namespaceId: "Mechanics",
+  packageName: "Thomas the Dankiest Engine",
 };
 
-export {
-  meta as default,
-  ReferencePackageDetailLayout as PackageDetails,
-  ManagePackageDetailLayout as PackageDetailsDialog,
-};
+export { meta as default, ReferencePackageDetailLayout as PackageDetails };

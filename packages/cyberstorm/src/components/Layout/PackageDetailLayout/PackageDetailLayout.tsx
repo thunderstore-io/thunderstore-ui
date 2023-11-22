@@ -48,11 +48,10 @@ import { WrapperCard } from "../../WrapperCard/WrapperCard";
 import { ThunderstoreLogo } from "../../../svg/svg";
 import { formatFileSize, formatInteger } from "../../../utils/utils";
 
-export interface PackageDetailLayoutProps {
-  community: string;
-  namespace: string;
+export interface Props {
+  communityId: string;
+  namespaceId: string;
   packageName: string;
-  managementDialogIsOpen?: boolean;
 }
 
 /**
@@ -63,19 +62,14 @@ export interface PackageDetailLayoutProps {
  *       than undefined if image URLs are not available, as this is what
  *       backend returns. (Unless we have a default image.)
  */
-export function PackageDetailLayout(props: PackageDetailLayoutProps) {
-  const {
-    managementDialogIsOpen = false,
-    community,
-    namespace,
-    packageName,
-  } = props;
+export function PackageDetailLayout(props: Props) {
+  const { communityId, namespaceId, packageName } = props;
 
   const [currentTab, setCurrentTab] = useState(1);
   const dapper = useDapper();
   const packageData = usePromise(dapper.getPackage, [
-    community,
-    namespace,
+    communityId,
+    namespaceId,
     packageName,
   ]);
 
@@ -175,7 +169,6 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
           />
           <div className={styles.headerActions}>
             <Dialog.Root
-              defaultOpen={managementDialogIsOpen}
               title="Manage Package"
               trigger={
                 <Button.Root colorScheme="primary" paddingSize="medium">
@@ -259,7 +252,10 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
             }
           />
           <PackageTagList packageData={packageData} />
-          <PackageDependencyList namespace={namespace} community={community} />
+          <PackageDependencyList
+            namespace={namespaceId}
+            community={communityId}
+          />
           <PackageTeamMemberList
             community={packageData.community_identifier}
             teamName={packageData.namespace}
