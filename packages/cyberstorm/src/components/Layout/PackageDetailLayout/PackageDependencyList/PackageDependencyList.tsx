@@ -28,23 +28,19 @@ function PackageDependencyListItem(props: PackageDependencyListItemProps) {
 
   return (
     <PackageLink
-      package={packageData.name}
-      community={packageData.community}
+      community={packageData.community_identifier}
       namespace={packageData.namespace}
+      package={packageData.name}
     >
       <div className={styles.item}>
         <img
-          src={
-            packageData.imageSource ? packageData.imageSource : defaultImageSrc
-          }
+          src={packageData.icon_url ?? defaultImageSrc}
           className={styles.itemImage}
-          alt={packageData.name}
+          alt=""
         />
         <div>
           <div className={styles.itemTitle}>{packageData.name}</div>
-          <p className={styles.itemDescription}>
-            {packageData.shortDescription}
-          </p>
+          <p className={styles.itemDescription}>{packageData.description}</p>
         </div>
       </div>
     </PackageLink>

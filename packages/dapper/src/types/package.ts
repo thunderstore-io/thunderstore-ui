@@ -23,7 +23,6 @@ export interface Package extends PackagePreview {
   community_name: string;
   datetime_created: string;
   dependant_count: number;
-  dependencies?: PackageDependency[];
   full_version_name: string;
   team: PackageTeam;
   versions: PackageVersion[];
@@ -31,12 +30,12 @@ export interface Package extends PackagePreview {
 }
 
 export interface PackageDependency {
+  community_identifier: string;
+  description: string;
+  icon_url: string | null;
   name: string;
   namespace: string;
-  community: string;
-  shortDescription: string;
-  imageSource?: string;
-  version: string;
+  version_number: string;
 }
 
 interface PackageTeam {

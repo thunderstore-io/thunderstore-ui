@@ -1,55 +1,49 @@
-import styles from "../PackageDependencyDialog/PackageDependencyDialog.module.css";
 import { PackageDependency } from "@thunderstore/dapper/types";
+
+import styles from "../PackageDependencyDialog/PackageDependencyDialog.module.css";
 import { PackageLink, PackageVersionLink } from "../../../../Links/Links";
 
-export interface PackageDependencyDialogProps {
-  packages?: PackageDependency[];
+export interface Props {
+  packages: PackageDependency[];
 }
 
-export function PackageDependencyDialog(props: PackageDependencyDialogProps) {
-  const { packages = [] } = props;
-  return (
-    <div className={styles.root}>
-      {packages.map((packageData, index) => {
-        return (
-          <div key={index} className={styles.item}>
-            <img
-              className={styles.image}
-              src={packageData.imageSource}
-              alt={`Thumbnail of the package ${packageData.name}`}
-            />
-            <div>
-              <div className={styles.title}>
-                <PackageLink
-                  community={packageData.community}
-                  namespace={packageData.namespace}
-                  package={packageData.name}
-                >
-                  {packageData.name}
-                </PackageLink>
-              </div>
-              <div className={styles.description}>
-                {packageData.shortDescription}
-              </div>
-              <p className={styles.preferredVersion}>
-                Preferred version:{" "}
-                <span className={styles.preferredVersion__version}>
-                  <PackageVersionLink
-                    community={packageData.community}
-                    namespace={packageData.namespace}
-                    package={packageData.name}
-                    version={packageData.version}
-                  >
-                    {packageData.version}
-                  </PackageVersionLink>
-                </span>
-              </p>
-            </div>
+export const PackageDependencyDialog = (props: Props) => (
+  <div className={styles.root}>
+    {props.packages.map((packageData, index) => (
+      <div key={index} className={styles.item}>
+        <img
+          className={styles.image}
+          src={packageData.icon_url ?? undefined}
+          alt=""
+        />
+        <div>
+          <div className={styles.title}>
+            <PackageLink
+              community={packageData.community_identifier}
+              namespace={packageData.namespace}
+              package={packageData.name}
+            >
+              {packageData.name}
+            </PackageLink>
           </div>
-        );
-      })}
-    </div>
-  );
-}
+          <div className={styles.description}>{packageData.description}</div>
+          <p className={styles.preferredVersion}>
+            Preferred version:{" "}
+            <span className={styles.preferredVersion__version}>
+              <PackageVersionLink
+                community={packageData.community_identifier}
+                namespace={packageData.namespace}
+                package={packageData.name}
+                version={packageData.version_number}
+              >
+                {packageData.version_number}
+              </PackageVersionLink>
+            </span>
+          </p>
+        </div>
+      </div>
+    ))}
+  </div>
+);
 
 PackageDependencyDialog.displayName = "PackageDependencyDialog";

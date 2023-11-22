@@ -51,9 +51,6 @@ export const getFakePackageListings = async (
   ),
 });
 
-// TODO: the methods below this point don't yet match what the backend
-// will be actually returning.
-
 export const getFakeDependencies = async (
   community: string,
   namespace: string,
@@ -63,11 +60,16 @@ export const getFakeDependencies = async (
   setSeed(`${community}-${namespace}-${name ?? "package"}`);
 
   return range(count).map(() => ({
-    ...getPackageBase(community, namespace),
-    version: getVersionNumber(),
+    community_identifier: community,
+    description: faker.company.buzzPhrase(),
+    icon_url: faker.helpers.maybe(getFakeImg, { probability: 0.9 }) ?? null,
+    name: (name ?? faker.word.words(3)).split(" ").join("_"),
+    namespace,
+    version_number: getVersionNumber(),
   }));
 };
 
+// Content used to render Package's detail view.
 export const getFakePackage = async (
   community: string,
   namespace: string,
@@ -92,18 +94,6 @@ export const getFakePackage = async (
     website_url: faker.internet.url(),
   };
 };
-
-const getPackageBase = (
-  community?: string,
-  namespace?: string,
-  name?: string
-) => ({
-  community: community ?? faker.word.sample(),
-  namespace: namespace ?? faker.word.sample(),
-  name: (name ?? faker.word.words(3)).split(" ").join("_"),
-  shortDescription: faker.company.buzzPhrase(),
-  imageSource: getFakeImg(),
-});
 
 const getPackageVersion = () => ({
   version_number: getVersionNumber(),
