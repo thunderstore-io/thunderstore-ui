@@ -79,16 +79,13 @@ export const getFakePackage = async (
   return {
     ...getFakePackagePreview(community, namespace),
 
-    community_identifier: community,
     community_name: faker.word.sample(),
-    discordLink: faker.internet.url(),
     author: faker.person.fullName(),
     dependantCount: faker.number.int({ min: 0, max: 2000 }),
     dependencies: await getFakeDependencies(community, namespace, name),
     dependencyString: faker.string.uuid(),
     firstUploaded: faker.date.past({ years: 2 }).toDateString(),
     gitHubLink: faker.internet.url(),
-    shortDescription: faker.company.buzzPhrase(),
     team: {
       name: faker.word.words(3),
       members: await getFakeTeamMembers(seed),

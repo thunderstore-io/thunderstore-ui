@@ -21,10 +21,7 @@ export type PackagePreviews = PaginatedList<PackagePreview>;
 
 export interface Package extends PackagePreview {
   community_name: string;
-  shortDescription?: string;
-  additionalImages?: string[];
   gitHubLink?: string;
-  discordLink?: string;
   firstUploaded?: string;
   dependencyString: string;
   dependencies?: PackageDependency[];

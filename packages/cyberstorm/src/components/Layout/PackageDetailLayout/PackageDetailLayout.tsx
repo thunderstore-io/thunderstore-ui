@@ -1,5 +1,5 @@
 "use client";
-import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import {
   faDonate,
@@ -116,21 +116,6 @@ export function PackageDetailLayout(props: Props) {
       </a>
     );
   }
-  if (packageData.discordLink) {
-    packageDetailsMeta.push(
-      <a key="discord" href={packageData.discordLink}>
-        <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
-          <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faDiscord} />
-          </Button.ButtonIcon>
-          <Button.ButtonLabel>Discord</Button.ButtonLabel>
-          <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faArrowUpRight} />
-          </Button.ButtonIcon>
-        </Button.Root>
-      </a>
-    );
-  }
 
   return (
     <BaseLayout
@@ -164,7 +149,7 @@ export function PackageDetailLayout(props: Props) {
                 />
               ) : undefined
             }
-            description={packageData.shortDescription}
+            description={packageData.description}
             meta={packageDetailsMeta}
           />
           <div className={styles.headerActions}>
