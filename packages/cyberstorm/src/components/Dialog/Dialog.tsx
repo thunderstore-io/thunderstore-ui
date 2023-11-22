@@ -12,7 +12,6 @@ interface DialogProps extends PropsWithChildren {
   defaultOpen?: boolean;
   trigger?: ReactNode;
   title?: string;
-  disableDialogContentStyles?: boolean;
   showHeaderBorder?: boolean;
 }
 
@@ -25,7 +24,6 @@ export function Dialog(props: DialogProps) {
     defaultOpen = false,
     trigger,
     title = undefined,
-    disableDialogContentStyles = false,
     showHeaderBorder = false,
   } = props;
 
@@ -72,14 +70,7 @@ export function Dialog(props: DialogProps) {
                 {title ? <div className={styles.title}>{title}</div> : null}
               </div>
 
-              <div
-                className={classnames(
-                  styles.body,
-                  disableDialogContentStyles ? null : styles.bodyPadding
-                )}
-              >
-                {children}
-              </div>
+              <div className={styles.body}>{children}</div>
             </RadixDialog.Content>
           </RadixDialog.Overlay>
         </RadixDialog.Portal>
