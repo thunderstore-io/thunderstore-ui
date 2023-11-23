@@ -52,6 +52,10 @@ export * as MenuItem from "./components/MenuItem/";
 export type { MenuItemProps } from "./components/MenuItem/";
 export { MetaItem, type MetaItemProps } from "./components/MetaItem/MetaItem";
 export {
+  MultiSelectSearch,
+  type MultiSelectSearchOption,
+} from "./components/MultiSelectSearch/MultiSelectSearch";
+export {
   MetaInfoItem,
   type MetaInfoItemProps,
 } from "./components/MetaInfoItem/MetaInfoItem";

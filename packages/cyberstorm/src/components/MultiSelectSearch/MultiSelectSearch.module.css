@@ -79,7 +79,7 @@
   --border-color: var(--color-cyber-green--80);
 }
 
-.removeAllButton {
+.clearSearch {
   width: 3rem;
   height: 100%;
   color: #c6c3ff;

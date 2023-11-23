@@ -13,14 +13,16 @@ import {
 import { useRef } from "react";
 import { assertIsNode } from "../../utils/type_guards";
 
-type Option = {
+export type MultiSelectSearchOption = {
   label: string;
   value: string;
 };
+
 type Props = {
-  options: Option[];
+  options: MultiSelectSearchOption[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onChange: (v: any) => void;
+  parseBeforeOnChange?: (options: MultiSelectSearchOption[]) => any;
+  onChange: (v: { value: string; label: string }[]) => void;
   onBlur: () => void;
   disabled?: boolean;
   name: string;
@@ -34,23 +36,32 @@ type Props = {
  */
 export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
   function MultiSelectSearch(props, ref) {
-    const { options, onChange, onBlur, placeholder, color } = props;
+    const {
+      options,
+      parseBeforeOnChange,
+      onChange,
+      onBlur,
+      placeholder,
+      color,
+    } = props;
     const menuRef = useRef<HTMLDivElement | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     const [isVisible, setIsVisible] = React.useState(false);
     const [search, setSearch] = React.useState("");
-    const [selected, setList] = React.useState<Option[]>([]);
+    const [selected, setSelected] = React.useState<MultiSelectSearchOption[]>(
+      []
+    );
     const [filteredOptions, setFilteredOptions] = React.useState(options);
 
-    function add(incomingOption: Option) {
+    function add(incomingOption: MultiSelectSearchOption) {
       if (!selected.some((option) => option.value === incomingOption.value)) {
-        setList([...selected, incomingOption]);
+        setSelected([...selected, incomingOption]);
       }
     }
 
-    function remove(incomingOption: Option) {
-      setList(
+    function remove(incomingOption: MultiSelectSearchOption) {
+      setSelected(
         selected.filter((option) => option.value !== incomingOption.value)
       );
     }
@@ -89,7 +100,11 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
     });
 
     React.useEffect(() => {
-      onChange(selected);
+      if (parseBeforeOnChange) {
+        onChange(parseBeforeOnChange(selected));
+      } else {
+        onChange(selected);
+      }
       const updatedOptions = options.filter(
         (option) => !selected.includes(option) && option.label.includes(search)
       );
@@ -139,8 +154,8 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
               placeholder={placeholder}
             />
             <button
-              onClick={(e) => handleParentClick(e, () => setList([]))}
-              className={styles.removeAllButton}
+              onClick={(e) => handleParentClick(e, () => setSearch(""))}
+              className={styles.clearSearch}
             >
               <Icon inline>
                 <FontAwesomeIcon icon={faCircleXmark} />
@@ -185,7 +200,7 @@ MultiSelectSearch.displayName = "MultiSelectSearch";
 const MultiSelectItem = (props: {
   key: number;
   onClick: (e: React.MouseEvent | React.KeyboardEvent) => void;
-  option: Option;
+  option: MultiSelectSearchOption;
   focus?: boolean;
 }) => {
   return (
