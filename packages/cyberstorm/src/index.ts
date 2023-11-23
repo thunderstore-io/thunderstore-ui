@@ -51,10 +51,7 @@ export { Markdown } from "./components/Markdown/Markdown";
 export * as MenuItem from "./components/MenuItem/";
 export type { MenuItemProps } from "./components/MenuItem/";
 export { MetaItem, type MetaItemProps } from "./components/MetaItem/MetaItem";
-export {
-  MetaInfoItem,
-  type MetaInfoItemProps,
-} from "./components/MetaInfoItem/MetaInfoItem";
+export { MetaInfoItem } from "./components/MetaInfoItem/MetaInfoItem";
 export {
   MetaInfoItemList,
   type MetaInfoItemListProps,
