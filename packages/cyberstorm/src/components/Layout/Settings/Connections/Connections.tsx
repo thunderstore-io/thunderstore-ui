@@ -98,7 +98,7 @@ function Connection(props: ConnectionProps) {
               </div>
             </div>
           ) : null}
-          <Switch state={connection !== undefined} />
+          <Switch value={connection !== undefined} />
         </div>
       </div>
     </div>
