@@ -214,7 +214,7 @@ export function PackageDetailLayout(props: Props) {
               </Button.ButtonIcon>
             </Button.Root>
           </div>
-          <MetaInfoItemList metaInfoData={metaInfoData} />
+          <MetaInfoItemList items={metaInfoData} />
           <WrapperCard
             title="Categories"
             content={
