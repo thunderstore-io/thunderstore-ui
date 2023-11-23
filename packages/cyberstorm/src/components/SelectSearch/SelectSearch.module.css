@@ -1,0 +1,141 @@
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+  justify-content: flex-end;
+  width: auto;
+  min-height: 6rem;
+  color: var(--color-text--tertiary);
+}
+
+.selected {
+  display: flex;
+  flex-flow: row wrap;
+  gap: var(--space--8);
+}
+
+.search {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  height: 2.75rem;
+  color: var(--color-text--tertiary);
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  border: var(--border-width--2) solid var(--border-color);
+
+  border-radius: var(--border-radius--8);
+  background-color: var(--color-surface--4);
+
+  --border-color: transparent;
+
+  transition: ease-out 300ms;
+}
+
+.input {
+  width: 100%;
+  margin: var(--space--10) var(--space--14);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size--l);
+  line-height: normal;
+  background-color: transparent;
+}
+
+.inputContainer:hover {
+  --border-color: var(--color-border--highlight);
+}
+
+.inputContainer:focus-within {
+  color: var(--color-text--default);
+  background-color: var(--color-black);
+
+  --border-color: var(--color-border--highlight);
+}
+
+.input::placeholder {
+  color: var(--color-text--tertiary);
+}
+
+.inputContainer[data-color="red"] {
+  --border-color: var(--color-red--5);
+}
+
+.inputContainer[data-color="red"]:hover {
+  --border-color: var(--color-red--3);
+}
+
+.inputContainer[data-color="green"] {
+  --border-color: var(--color-cyber-green--50);
+}
+
+.inputContainer[data-color="green"]:hover {
+  --border-color: var(--color-cyber-green--80);
+}
+
+.clearSearch {
+  width: 3rem;
+  height: 100%;
+  color: #c6c3ff;
+  background: transparent;
+  opacity: 0.5;
+}
+
+.openMenuButton {
+  width: 3rem;
+  height: 100%;
+  color: #9c9cc4;
+  background: transparent;
+}
+
+.inputButtonDivider {
+  width: 0.063rem;
+  height: 1.375rem;
+  background: #4343a3;
+}
+
+.menu {
+  position: absolute;
+  top: 3.25rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--4);
+  width: 100%;
+  min-height: 1.5rem;
+  max-height: 12rem;
+  padding: var(--space--8) 0;
+  border: var(--space--px) var(--color-surface--6) solid;
+  border-radius: var(--border-radius--8);
+  overflow: hidden;
+  overflow-y: auto !important;
+  color: var(--text-color);
+  background-color: var(--color-surface--2);
+  box-shadow: var(--box-shadow-default);
+  visibility: hidden;
+
+  --text-color: var(--color-white);
+  --bg-color: var(--color-surface--4);
+}
+
+.menu:where(.visible) {
+  visibility: visible;
+}
+
+.menuLabel {
+  font-weight: var(--font-weight-medium);
+}
+
+.multiSelectItemWrapper {
+  padding: var(--space--12) var(--space--16);
+}
+
+.multiSelectItemWrapper:where(.highlighted) {
+  background-color: var(--color-surface--6);
+}

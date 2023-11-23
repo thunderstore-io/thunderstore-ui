@@ -56,6 +56,10 @@ export {
   type MultiSelectSearchOption,
 } from "./components/MultiSelectSearch/MultiSelectSearch";
 export {
+  SelectSearch,
+  type SelectSearchOption,
+} from "./components/SelectSearch/SelectSearch";
+export {
   MetaInfoItem,
   type MetaInfoItemProps,
 } from "./components/MetaInfoItem/MetaInfoItem";
