@@ -7,21 +7,23 @@ import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import { useFormState } from "react-hook-form";
 import styles from "./FormSubmitButton.module.css";
 
-const SubmitButtonContent = React.memo((props: { isSubmitting: boolean }) => {
-  if (props.isSubmitting) {
-    return (
-      <Button.ButtonIcon iconClasses={styles.spinningIcon}>
-        <FontAwesomeIcon icon={faArrowsRotate} />
-      </Button.ButtonIcon>
-    );
-  } else {
-    return <Button.ButtonLabel>Create</Button.ButtonLabel>;
+const SubmitButtonContent = React.memo(
+  (props: { isSubmitting: boolean; text: string }) => {
+    if (props.isSubmitting) {
+      return (
+        <Button.ButtonIcon iconClasses={styles.spinningIcon}>
+          <FontAwesomeIcon icon={faArrowsRotate} />
+        </Button.ButtonIcon>
+      );
+    } else {
+      return <Button.ButtonLabel>{props.text}</Button.ButtonLabel>;
+    }
   }
-});
+);
 
 SubmitButtonContent.displayName = "SubmitButtonContent";
 
-export function FormSubmitButton() {
+export function FormSubmitButton({ text }: { text: string }) {
   const { isSubmitting, disabled } = useFormState();
 
   return (
@@ -31,7 +33,7 @@ export function FormSubmitButton() {
       colorScheme="success"
       disabled={isSubmitting || disabled}
     >
-      <SubmitButtonContent isSubmitting={isSubmitting} />
+      <SubmitButtonContent isSubmitting={isSubmitting} text={text} />
     </Button.Root>
   );
 }
