@@ -55,6 +55,10 @@ export { MetaInfoItem } from "./components/MetaInfoItem/MetaInfoItem";
 export { MetaInfoItemList } from "./components/MetaInfoItemList/MetaInfoItemList";
 export { default as NewTabs } from "./components/NewTabs/Tabs";
 export { SelectSearch } from "./components/SelectSearch/SelectSearch";
+export {
+  MultiSelectSearch,
+  type MultiSelectSearchOption,
+} from "./components/MultiSelectSearch/MultiSelectSearch";
 export { Switch, type SwitchProps } from "./components/Switch/Switch";
 export { PackageCard } from "./components/PackageCard/PackageCard";
 export {
