@@ -8,23 +8,22 @@ const BASE_HEADERS = {
 export type apiFetchArgs = {
   config: RequestConfig;
   path: string;
-  method: RequestInit["method"];
   query?: string;
-  body?: RequestInit["body"];
+  request?: Omit<RequestInit, "headers">;
 };
 export async function apiFetch2(args: apiFetchArgs) {
   const url = getUrl(args.config, args.path, args.query);
 
   const response = await fetch(url, {
+    ...(args.request ?? {}),
     headers: {
       ...BASE_HEADERS,
       ...getAuthHeaders(args.config),
     },
-    body: args.body,
   });
 
   if (!response.ok) {
-    throw ApiError.createFromResponse(response);
+    throw await ApiError.createFromResponse(response);
   }
 
   return response.json();
@@ -38,7 +37,6 @@ export function apiFetch(config: RequestConfig, path: string, query?: string) {
     config,
     path,
     query,
-    method: "GET",
   });
 }
 

@@ -11,7 +11,9 @@ export function createTeam(config: RequestConfig, data: CreateTeamApiArgs) {
   return apiFetch2({
     config,
     path,
-    method: "POST",
-    body: JSON.stringify(data),
+    request: {
+      method: "POST",
+      body: JSON.stringify(data),
+    },
   });
 }

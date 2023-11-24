@@ -1,13 +1,14 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
 }
 
 .dialog {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  padding: var(--space--32);
+  border-top: var(--border-width--px) solid var(--color-surface--5);
 }
 
 .dialogText {
@@ -22,6 +23,6 @@
   flex-direction: row-reverse;
   gap: 1rem;
   justify-content: space-between;
-  padding-top: var(--space--16);
-  border-top: var(--border);
+  padding: var(--space--16) var(--space--24);
+  border-top: var(--border-width--px) solid var(--color-surface--5);
 }

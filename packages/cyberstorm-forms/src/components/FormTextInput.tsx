@@ -31,7 +31,7 @@ export function FormTextInput<
         {...field}
         ref={field.ref}
         placeholder={placeholder}
-        color={isDirty ? (invalid ? "red" : "green") : undefined}
+        color={isDirty || invalid ? (invalid ? "red" : "green") : undefined}
         disabled={isSubmitting || disabled}
       />
       {error && <span className={styles.errorMessage}>{error.message}</span>}

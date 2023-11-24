@@ -84,7 +84,6 @@ export function PackageDependencyList(props: PackageDependencyListProps) {
         headerIcon={<FontAwesomeIcon icon={faBoxOpen} />}
         headerRightContent={
           <Dialog.Root
-            disableDialogContentStyles
             showHeaderBorder
             title="Required mods"
             trigger={
