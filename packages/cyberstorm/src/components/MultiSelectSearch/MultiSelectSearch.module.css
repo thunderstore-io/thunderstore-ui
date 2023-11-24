@@ -79,7 +79,7 @@
   --border-color: var(--color-cyber-green--80);
 }
 
-.removeAllButton {
+.clearSearch {
   width: 3rem;
   height: 100%;
   color: #c6c3ff;
@@ -87,7 +87,7 @@
   opacity: 0.5;
 }
 
-.openMenuButton {
+.showMenuButton {
   width: 3rem;
   height: 100%;
   color: #9c9cc4;

@@ -1,9 +1,8 @@
 "use client";
 import React from "react";
 import styles from "./MultiSelectSearch.module.css";
-import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
-import { Button } from "../../index";
+import { Button, Icon } from "../../index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCaretDown,
@@ -12,19 +11,17 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { isNode } from "../../utils/type_guards";
 
-type Option = {
+export type MultiSelectSearchOption = {
   label: string;
   value: string;
 };
 type Props = {
-  options: Option[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  value: Option[];
-  onChange: (v: Option[]) => void;
+  options: MultiSelectSearchOption[];
+  value: MultiSelectSearchOption[];
+  onChange: (v: MultiSelectSearchOption[]) => void;
   onBlur: () => void;
   // TODO: Implement disabled state
   disabled?: boolean;
-  name: string;
   placeholder?: string;
   color?: "red" | "green";
 };
@@ -35,8 +32,7 @@ type Props = {
  */
 export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
   function MultiSelectSearch(props, ref) {
-    const { name, options, value, onChange, onBlur, placeholder, color } =
-      props;
+    const { options, value, onChange, onBlur, placeholder, color } = props;
     const menuRef = React.useRef<HTMLDivElement | null>(null);
     const inputRef = React.useRef<HTMLInputElement | null>(null);
 
@@ -44,13 +40,13 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
     const [search, setSearch] = React.useState("");
     const [filteredOptions, setFilteredOptions] = React.useState(options);
 
-    function add(incomingOption: Option) {
+    function add(incomingOption: MultiSelectSearchOption) {
       if (!value.some((option) => option.value === incomingOption.value)) {
         onChange([...value, incomingOption]);
       }
     }
 
-    function remove(incomingOption: Option) {
+    function remove(incomingOption: MultiSelectSearchOption) {
       onChange(value.filter((option) => option.value !== incomingOption.value));
     }
 
@@ -89,7 +85,7 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
 
     return (
       <div className={styles.root} ref={ref}>
-        <div className={styles.value}>
+        <div className={styles.selected}>
           {value.map((option) => {
             return (
               <Button.Root
@@ -109,8 +105,8 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
         <div
           className={styles.search}
           onFocus={(e) => {
-            e.stopPropagation();
             inputRef.current && inputRef.current.focus();
+            e.stopPropagation();
           }}
           role="button"
           tabIndex={0}
@@ -118,7 +114,6 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
         >
           <div className={styles.inputContainer} data-color={color}>
             <input
-              name={name}
               className={styles.input}
               value={search}
               data-color={color}
@@ -129,10 +124,10 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
             />
             <button
               onClick={(e) => {
-                e.stopPropagation();
                 setSearch("");
+                e.stopPropagation();
               }}
-              className={styles.removeAllButton}
+              className={styles.clearSearch}
             >
               <Icon inline>
                 <FontAwesomeIcon icon={faCircleXmark} />
@@ -141,10 +136,10 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
             <div className={styles.inputButtonDivider}></div>
             <button
               onClick={(e) => {
-                e.stopPropagation();
                 setIsVisible(!isVisible);
+                e.stopPropagation();
               }}
-              className={styles.openMenuButton}
+              className={styles.showMenuButton}
             >
               <Icon inline>
                 <FontAwesomeIcon icon={faCaretDown} />
@@ -162,8 +157,8 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
                 <MultiSelectItem
                   key={option.value}
                   onClick={(e) => {
-                    e.stopPropagation();
                     add(option);
+                    e.stopPropagation();
                   }}
                   option={option}
                 />
@@ -180,7 +175,7 @@ MultiSelectSearch.displayName = "MultiSelectSearch";
 
 const MultiSelectItem = (props: {
   onClick: (e: React.MouseEvent | React.KeyboardEvent) => void;
-  option: Option;
+  option: MultiSelectSearchOption;
 }) => {
   return (
     <div
