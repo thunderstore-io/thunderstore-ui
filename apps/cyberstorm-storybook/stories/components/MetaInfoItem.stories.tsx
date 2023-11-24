@@ -1,17 +1,11 @@
 import { StoryFn, Meta } from "@storybook/react";
-import {
-  CopyButton,
-  MetaInfoItem,
-  MetaInfoItemProps,
-} from "@thunderstore/cyberstorm";
+import { CopyButton, MetaInfoItem } from "@thunderstore/cyberstorm";
 import React from "react";
 
 const meta = {
   title: "Cyberstorm/Components/MetaInfoItem",
   component: MetaInfoItem,
 } as Meta<typeof MetaInfoItem>;
-
-const defaultArgs: MetaInfoItemProps = {};
 
 const Template: StoryFn<typeof MetaInfoItem> = (args) => (
   <div style={{ width: "400px" }}>
@@ -21,14 +15,12 @@ const Template: StoryFn<typeof MetaInfoItem> = (args) => (
 
 const ReferenceMetaInfoItem = Template.bind({});
 ReferenceMetaInfoItem.args = {
-  ...defaultArgs,
   label: "Likes",
   content: "375",
 };
 
 const MetaInfoItemWithCopyButton = Template.bind({});
 MetaInfoItemWithCopyButton.args = {
-  ...defaultArgs,
   label: "Server code",
   content: (
     <>

@@ -51,14 +51,8 @@ export { Markdown } from "./components/Markdown/Markdown";
 export * as MenuItem from "./components/MenuItem/";
 export type { MenuItemProps } from "./components/MenuItem/";
 export { MetaItem, type MetaItemProps } from "./components/MetaItem/MetaItem";
-export {
-  MetaInfoItem,
-  type MetaInfoItemProps,
-} from "./components/MetaInfoItem/MetaInfoItem";
-export {
-  MetaInfoItemList,
-  type MetaInfoItemListProps,
-} from "./components/MetaInfoItemList/MetaInfoItemList";
+export { MetaInfoItem } from "./components/MetaInfoItem/MetaInfoItem";
+export { MetaInfoItemList } from "./components/MetaInfoItemList/MetaInfoItemList";
 export { Switch, type SwitchProps } from "./components/Switch/Switch";
 export { PackageCard } from "./components/PackageCard/PackageCard";
 export {

@@ -22,6 +22,7 @@ import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
 import styles from "./PackageDetailLayout.module.css";
 import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
 import { PackageManagementForm } from "./PackageManagementForm/PackageManagementForm";
+import { PackageMetaItems } from "./PackageMetaItems/PackageMetaItems";
 import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
 import { PackageVersions } from "./PackageVersions/PackageVersions";
@@ -29,23 +30,15 @@ import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { PLACEHOLDER } from "../Developers/MarkdownPreview/MarkdownPlaceholder";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import * as Button from "../../Button/";
-import {
-  CommunitiesLink,
-  CommunityLink,
-  PackageDependantsLink,
-  TeamLink,
-} from "../../Links/Links";
+import { CommunitiesLink, CommunityLink, TeamLink } from "../../Links/Links";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
-import { CopyButton } from "../../CopyButton/CopyButton";
 import * as Dialog from "../../Dialog";
 import { Icon } from "../../Icon/Icon";
 import markdownStyles from "../../Markdown/Markdown.module.css";
-import { MetaInfoItemList } from "../../MetaInfoItemList/MetaInfoItemList";
 import { Tabs } from "../../Tabs/Tabs";
 import { Tag } from "../../Tag/Tag";
 import { WrapperCard } from "../../WrapperCard/WrapperCard";
 import { ThunderstoreLogo } from "../../../svg/svg";
-import { formatFileSize, formatInteger } from "../../../utils/utils";
 
 export interface Props {
   communityId: string;
@@ -71,8 +64,6 @@ export function PackageDetailLayout(props: Props) {
     namespaceId,
     packageName,
   ]);
-
-  const metaInfoData = getMetaInfoData(packageData);
 
   const mappedPackageTagList = packageData.categories.map((category) => {
     return (
@@ -214,7 +205,7 @@ export function PackageDetailLayout(props: Props) {
               </Button.ButtonIcon>
             </Button.Root>
           </div>
-          <MetaInfoItemList metaInfoData={metaInfoData} />
+          <PackageMetaItems package={packageData} />
           <WrapperCard
             title="Categories"
             content={
@@ -245,66 +236,6 @@ export function PackageDetailLayout(props: Props) {
 }
 
 PackageDetailLayout.displayName = "PackageDetailLayout";
-
-function getMetaInfoData(packageData: Package) {
-  return [
-    {
-      key: "1",
-      label: "Last Updated",
-      content: <>{packageData.last_updated}</>,
-    },
-    {
-      key: "2",
-      label: "First Uploaded",
-      content: <>{packageData.datetime_created}</>,
-    },
-    {
-      key: "3",
-      label: "Downloads",
-      content: <>{formatInteger(packageData.download_count)}</>,
-    },
-    {
-      key: "4",
-      label: "Likes",
-      content: <>{formatInteger(packageData.rating_count)}</>,
-    },
-    {
-      key: "5",
-      label: "Size",
-      content: <>{formatFileSize(packageData.size)}</>,
-    },
-    {
-      key: "6",
-      label: "Dependency string",
-      content: (
-        <div className={styles.dependencyStringWrapper}>
-          <div
-            title={packageData.full_version_name}
-            className={styles.dependencyString}
-          >
-            {packageData.full_version_name}
-          </div>
-          <CopyButton text={packageData.full_version_name} />
-        </div>
-      ),
-    },
-    {
-      key: "7",
-      label: "Dependants",
-      content: (
-        <PackageDependantsLink
-          community={packageData.community_identifier}
-          namespace={packageData.namespace}
-          package={packageData.name}
-        >
-          <div className={styles.dependantsLink}>
-            {packageData.dependant_count + " other mods"}
-          </div>
-        </PackageDependantsLink>
-      ),
-    },
-  ];
-}
 
 const tabs = [
   {

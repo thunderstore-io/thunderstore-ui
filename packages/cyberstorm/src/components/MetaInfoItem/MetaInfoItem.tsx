@@ -2,11 +2,12 @@
 import React, { ReactNode, useRef } from "react";
 import styles from "./MetaInfoItem.module.css";
 
-export type MetaInfoItemProps = {
-  label?: string;
+type Props = {
+  label: string;
   content?: ReactNode;
 };
-export const MetaInfoItem = React.forwardRef<HTMLDivElement, MetaInfoItemProps>(
+
+export const MetaInfoItem = React.forwardRef<HTMLDivElement, Props>(
   (props, forwardedRef) => {
     const { label, content, ...forwardedProps } = props;
 
@@ -16,7 +17,7 @@ export const MetaInfoItem = React.forwardRef<HTMLDivElement, MetaInfoItemProps>(
     return (
       <div {...forwardedProps} ref={ref} className={styles.root}>
         <div className={styles.label}>{label}</div>
-        <>{content}</>
+        {content}
       </div>
     );
   }
