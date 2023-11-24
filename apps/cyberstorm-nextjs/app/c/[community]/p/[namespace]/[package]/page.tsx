@@ -7,8 +7,8 @@ export default function Page({
 }) {
   return (
     <PackageDetailLayout
-      community={params.community}
-      namespace={params.namespace}
+      communityId={params.community}
+      namespaceId={params.namespace}
       packageName={params.package}
     />
   );

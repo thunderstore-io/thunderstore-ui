@@ -1,17 +1,5 @@
 "use client";
-import styles from "./PackageDetailLayout.module.css";
-import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import {
-  CommunitiesLink,
-  CommunityLink,
-  PackageDependantsLink,
-  TeamLink,
-} from "../../Links/Links";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as Button from "../../Button/";
-import { PackageManagementForm } from "./PackageManagementForm/PackageManagementForm";
-import { BaseLayout } from "../BaseLayout/BaseLayout";
-import { MetaInfoItemList } from "../../MetaInfoItemList/MetaInfoItemList";
+import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import {
   faDonate,
   faDownload,
@@ -24,34 +12,45 @@ import {
   faArrowUpRight,
   faBoxes,
 } from "@fortawesome/pro-solid-svg-icons";
-import { faUsers } from "@fortawesome/pro-regular-svg-icons";
-import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
-import { CopyButton } from "../../CopyButton/CopyButton";
-import { formatFileSize, formatInteger } from "../../../utils/utils";
-import { useState } from "react";
-import { Tabs } from "../../Tabs/Tabs";
-import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
-import { PackageVersions } from "./PackageVersions/PackageVersions";
-import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
-import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDapper } from "@thunderstore/dapper";
 import { Package } from "@thunderstore/dapper/types";
+import { usePromise } from "@thunderstore/use-promise";
+import { useState } from "react";
+
+import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
+import styles from "./PackageDetailLayout.module.css";
+import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
+import { PackageManagementForm } from "./PackageManagementForm/PackageManagementForm";
 import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
-import { ThunderstoreLogo } from "../../../svg/svg";
-import { usePromise } from "@thunderstore/use-promise";
-import { WrapperCard } from "../../WrapperCard/WrapperCard";
-import { Tag } from "../../Tag/Tag";
-import { Icon } from "../../Icon/Icon";
+import { PackageVersions } from "./PackageVersions/PackageVersions";
+import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { PLACEHOLDER } from "../Developers/MarkdownPreview/MarkdownPlaceholder";
+import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
+import * as Button from "../../Button/";
+import {
+  CommunitiesLink,
+  CommunityLink,
+  PackageDependantsLink,
+  TeamLink,
+} from "../../Links/Links";
+import { BaseLayout } from "../BaseLayout/BaseLayout";
+import { CopyButton } from "../../CopyButton/CopyButton";
+import * as Dialog from "../../Dialog";
+import { Icon } from "../../Icon/Icon";
 import markdownStyles from "../../Markdown/Markdown.module.css";
-import { Dialog } from "../../..";
+import { MetaInfoItemList } from "../../MetaInfoItemList/MetaInfoItemList";
+import { Tabs } from "../../Tabs/Tabs";
+import { Tag } from "../../Tag/Tag";
+import { WrapperCard } from "../../WrapperCard/WrapperCard";
+import { ThunderstoreLogo } from "../../../svg/svg";
+import { formatFileSize, formatInteger } from "../../../utils/utils";
 
-export interface PackageDetailLayoutProps {
-  community: string;
-  namespace: string;
+export interface Props {
+  communityId: string;
+  namespaceId: string;
   packageName: string;
-  managementDialogIsOpen?: boolean;
 }
 
 /**
@@ -62,22 +61,18 @@ export interface PackageDetailLayoutProps {
  *       than undefined if image URLs are not available, as this is what
  *       backend returns. (Unless we have a default image.)
  */
-export function PackageDetailLayout(props: PackageDetailLayoutProps) {
-  const {
-    managementDialogIsOpen = false,
-    community,
-    namespace,
-    packageName,
-  } = props;
-  const dapper = useDapper();
-  const packageData = usePromise(dapper.getPackage, [
-    community,
-    namespace,
-    packageName,
-  ]);
-  const metaInfoData = getMetaInfoData(packageData);
+export function PackageDetailLayout(props: Props) {
+  const { communityId, namespaceId, packageName } = props;
 
   const [currentTab, setCurrentTab] = useState(1);
+  const dapper = useDapper();
+  const packageData = usePromise(dapper.getPackage, [
+    communityId,
+    namespaceId,
+    packageName,
+  ]);
+
+  const metaInfoData = getMetaInfoData(packageData);
 
   const mappedPackageTagList = packageData.categories.map((category) => {
     return (
@@ -103,38 +98,16 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
         <Button.ButtonLabel>{packageData.namespace}</Button.ButtonLabel>
       </Button.Root>
     </TeamLink>,
-  ];
 
-  if (packageData.gitHubLink) {
-    packageDetailsMeta.push(
-      <a key="github" href={packageData.gitHubLink}>
-        <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
-          <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faGithub} />
-          </Button.ButtonIcon>
-          <Button.ButtonLabel>GitHub</Button.ButtonLabel>
-          <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faArrowUpRight} />
-          </Button.ButtonIcon>
-        </Button.Root>
-      </a>
-    );
-  }
-  if (packageData.discordLink) {
-    packageDetailsMeta.push(
-      <a key="discord" href={packageData.discordLink}>
-        <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
-          <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faDiscord} />
-          </Button.ButtonIcon>
-          <Button.ButtonLabel>Discord</Button.ButtonLabel>
-          <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faArrowUpRight} />
-          </Button.ButtonIcon>
-        </Button.Root>
-      </a>
-    );
-  }
+    <a key="website" href={packageData.website_url}>
+      <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
+        <Button.ButtonLabel>{packageData.website_url}</Button.ButtonLabel>
+        <Button.ButtonIcon>
+          <FontAwesomeIcon icon={faArrowUpRight} />
+        </Button.ButtonIcon>
+      </Button.Root>
+    </a>,
+  ];
 
   return (
     <BaseLayout
@@ -168,12 +141,11 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
                 />
               ) : undefined
             }
-            description={packageData.shortDescription}
+            description={packageData.description}
             meta={packageDetailsMeta}
           />
           <div className={styles.headerActions}>
             <Dialog.Root
-              defaultOpen={managementDialogIsOpen}
               title="Manage Package"
               trigger={
                 <Button.Root colorScheme="primary" paddingSize="medium">
@@ -257,7 +229,10 @@ export function PackageDetailLayout(props: PackageDetailLayoutProps) {
             }
           />
           <PackageTagList packageData={packageData} />
-          <PackageDependencyList namespace={namespace} community={community} />
+          <PackageDependencyList
+            namespace={namespaceId}
+            community={communityId}
+          />
           <PackageTeamMemberList
             community={packageData.community_identifier}
             teamName={packageData.namespace}
@@ -280,8 +255,8 @@ function getMetaInfoData(packageData: Package) {
     },
     {
       key: "2",
-      label: "First Updated",
-      content: <>{packageData.firstUploaded}</>,
+      label: "First Uploaded",
+      content: <>{packageData.datetime_created}</>,
     },
     {
       key: "3",
@@ -304,12 +279,12 @@ function getMetaInfoData(packageData: Package) {
       content: (
         <div className={styles.dependencyStringWrapper}>
           <div
-            title={packageData.dependencyString}
+            title={packageData.full_version_name}
             className={styles.dependencyString}
           >
-            {packageData.dependencyString}
+            {packageData.full_version_name}
           </div>
-          <CopyButton text={packageData.dependencyString} />
+          <CopyButton text={packageData.full_version_name} />
         </div>
       ),
     },
@@ -323,7 +298,7 @@ function getMetaInfoData(packageData: Package) {
           package={packageData.name}
         >
           <div className={styles.dependantsLink}>
-            {packageData.dependantCount + " other mods"}
+            {packageData.dependant_count + " other mods"}
           </div>
         </PackageDependantsLink>
       ),

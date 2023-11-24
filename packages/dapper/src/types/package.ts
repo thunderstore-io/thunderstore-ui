@@ -21,25 +21,21 @@ export type PackagePreviews = PaginatedList<PackagePreview>;
 
 export interface Package extends PackagePreview {
   community_name: string;
-  shortDescription?: string;
-  additionalImages?: string[];
-  gitHubLink?: string;
-  discordLink?: string;
-  firstUploaded?: string;
-  dependencyString: string;
-  dependencies?: PackageDependency[];
-  dependantCount: number;
+  datetime_created: string;
+  dependant_count: number;
+  full_version_name: string;
   team: PackageTeam;
-  versions?: PackageVersion[];
+  versions: PackageVersion[];
+  website_url: string;
 }
 
 export interface PackageDependency {
+  community_identifier: string;
+  description: string;
+  icon_url: string | null;
   name: string;
   namespace: string;
-  community: string;
-  shortDescription: string;
-  imageSource?: string;
-  version: string;
+  version_number: string;
 }
 
 interface PackageTeam {
@@ -48,8 +44,8 @@ interface PackageTeam {
 }
 
 interface PackageVersion {
-  version: string;
+  version_number: string;
   changelog: string;
-  uploadDate: string;
-  downloadCount: number;
+  datetime_created: string;
+  download_count: number;
 }

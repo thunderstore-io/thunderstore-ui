@@ -18,7 +18,7 @@ const getFakePackagePreview = (community?: string, namespace?: string) => {
     is_deprecated: faker.datatype.boolean(0.1),
     is_nsfw: faker.datatype.boolean(0.1),
     is_pinned: faker.datatype.boolean(0.1),
-    last_updated: faker.date.recent({ days: 700 }).toDateString(),
+    last_updated: faker.date.recent({ days: 700 }).toISOString(),
     name: faker.word.words(3).split(" ").join("_"),
     namespace: namespace ?? faker.word.sample(),
     rating_count: faker.number.int({ min: 0, max: 100000 }),
@@ -51,9 +51,6 @@ export const getFakePackageListings = async (
   ),
 });
 
-// TODO: the methods below this point don't yet match what the backend
-// will be actually returning.
-
 export const getFakeDependencies = async (
   community: string,
   namespace: string,
@@ -63,11 +60,16 @@ export const getFakeDependencies = async (
   setSeed(`${community}-${namespace}-${name ?? "package"}`);
 
   return range(count).map(() => ({
-    ...getPackageBase(community, namespace),
-    version: getVersionNumber(),
+    community_identifier: community,
+    description: faker.company.buzzPhrase(),
+    icon_url: faker.helpers.maybe(getFakeImg, { probability: 0.9 }) ?? null,
+    name: (name ?? faker.word.words(3)).split(" ").join("_"),
+    namespace,
+    version_number: getVersionNumber(),
   }));
 };
 
+// Content used to render Package's detail view.
 export const getFakePackage = async (
   community: string,
   namespace: string,
@@ -79,41 +81,25 @@ export const getFakePackage = async (
   return {
     ...getFakePackagePreview(community, namespace),
 
-    community_identifier: community,
     community_name: faker.word.sample(),
-    discordLink: faker.internet.url(),
-    author: faker.person.fullName(),
-    dependantCount: faker.number.int({ min: 0, max: 2000 }),
+    datetime_created: faker.date.past({ years: 2 }).toISOString(),
+    dependant_count: faker.number.int({ min: 0, max: 2000 }),
     dependencies: await getFakeDependencies(community, namespace, name),
-    dependencyString: faker.string.uuid(),
-    firstUploaded: faker.date.past({ years: 2 }).toDateString(),
-    gitHubLink: faker.internet.url(),
-    shortDescription: faker.company.buzzPhrase(),
+    full_version_name: `${namespace}-${name}-${getVersionNumber()}`,
     team: {
       name: faker.word.words(3),
       members: await getFakeTeamMembers(seed),
     },
     versions: range(20).map(getPackageVersion),
+    website_url: faker.internet.url(),
   };
 };
 
-const getPackageBase = (
-  community?: string,
-  namespace?: string,
-  name?: string
-) => ({
-  community: community ?? faker.word.sample(),
-  namespace: namespace ?? faker.word.sample(),
-  name: (name ?? faker.word.words(3)).split(" ").join("_"),
-  shortDescription: faker.company.buzzPhrase(),
-  imageSource: getFakeImg(),
-});
-
 const getPackageVersion = () => ({
-  version: getVersionNumber(),
+  version_number: getVersionNumber(),
   changelog: faker.company.buzzPhrase(),
-  uploadDate: faker.date.recent({ days: 700 }).toDateString(),
-  downloadCount: faker.number.int({ min: 1000000, max: 10000000 }),
+  datetime_created: faker.date.recent({ days: 700 }).toISOString(),
+  download_count: faker.number.int({ min: 1000000, max: 10000000 }),
 });
 
 const getVersionNumber = (min = 0, max = 10) => {
