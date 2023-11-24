@@ -10,40 +10,40 @@ const meta = {
 const Template: StoryFn<typeof Switch> = (args) => <Switch {...args} />;
 
 const SameStateSwitchTemplate: StoryFn<typeof Switch> = () => {
-  const [state, setState] = useState(false);
+  const [value, setValue] = useState(false);
   return (
     <div>
       <div>
-        <Switch state={state} onChange={setState} />
+        <Switch value={value} onChange={setValue} />
       </div>
       <div>
-        <Switch state={state} onChange={setState} />
+        <Switch value={value} onChange={setValue} />
       </div>
     </div>
   );
 };
 const SwitchLabelIdTemplate: StoryFn<typeof Switch> = () => {
-  const [state, setState] = useState(false);
+  const [value, setValue] = useState(false);
   return (
     <>
       <label htmlFor="my-switch">My switch</label>
-      <Switch state={state} onChange={setState} id="my-switch" />
+      <Switch value={value} onChange={setValue} id="my-switch" />
     </>
   );
 };
 const SwitchNestedLabelTemplate: StoryFn<typeof Switch> = () => {
-  const [state, setState] = useState(false);
+  const [value, setValue] = useState(false);
   return (
     <label>
       My switch
-      <Switch state={state} onChange={setState} />
+      <Switch value={value} onChange={setValue} />
     </label>
   );
 };
 
 const RegularSwitch = Template.bind({});
 const DisabledSwitch = Template.bind({});
-DisabledSwitch.args = { state: false, disabled: true };
+DisabledSwitch.args = { value: false, disabled: true };
 const SameStateSwitch = SameStateSwitchTemplate.bind({});
 const SwitchNestedLabel = SwitchNestedLabelTemplate.bind({});
 const SwitchLabelId = SwitchLabelIdTemplate.bind({});
