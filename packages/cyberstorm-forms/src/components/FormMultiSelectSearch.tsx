@@ -18,10 +18,11 @@ export type FormMultiSelectSearchProps<
   name: Path<z.infer<Schema>>;
   placeholder?: string;
   options: MultiSelectSearchOption[];
-  onChange: (v: z.infer<Schema>) => void;
   onChangeParse: (
     selected: MultiSelectSearchOption[],
-    onChange: (v: z.infer<Schema>) => void
+    // TODO: To Mythic. How do I get the right type for this? Tried to get it to be the zod fields value.
+    //  You can check if it's correct in the UploadPackageForm.tsx's this component usages onChangeParse.
+    onChange: (v: unknown) => void
   ) => void;
 };
 export function FormMultiSelectSearch<
@@ -31,7 +32,6 @@ export function FormMultiSelectSearch<
   name,
   placeholder,
   options,
-  onChange,
   onChangeParse,
 }: FormMultiSelectSearchProps<Schema, Z>) {
   const {
@@ -44,7 +44,7 @@ export function FormMultiSelectSearch<
     <>
       <MultiSelectSearch
         {...field}
-        onChange={(selected) => onChangeParse(selected, onChange)}
+        onChange={(selected) => onChangeParse(selected, field.onChange)}
         ref={field.ref}
         placeholder={placeholder}
         color={isDirty || invalid ? (invalid ? "red" : "green") : undefined}
