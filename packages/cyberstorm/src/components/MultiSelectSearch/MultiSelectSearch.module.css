@@ -136,6 +136,6 @@
   padding: var(--space--12) var(--space--16);
 }
 
-.multiSelectItemWrapper:where(.highlighted) {
+.multiSelectItemWrapper:focus {
   background-color: var(--color-surface--6);
 }

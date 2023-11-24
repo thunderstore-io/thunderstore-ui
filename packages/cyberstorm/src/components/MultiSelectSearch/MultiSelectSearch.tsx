@@ -10,8 +10,7 @@ import {
   faCircleXmark,
   faXmark,
 } from "@fortawesome/pro-solid-svg-icons";
-import { useRef } from "react";
-import { assertIsNode } from "../../utils/type_guards";
+import { isNode } from "../../utils/type_guards";
 
 type Option = {
   label: string;
@@ -20,8 +19,10 @@ type Option = {
 type Props = {
   options: Option[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onChange: (v: any) => void;
+  value: Option[];
+  onChange: (v: Option[]) => void;
   onBlur: () => void;
+  // TODO: Implement disabled state
   disabled?: boolean;
   name: string;
   placeholder?: string;
@@ -34,77 +35,66 @@ type Props = {
  */
 export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
   function MultiSelectSearch(props, ref) {
-    const { options, onChange, onBlur, placeholder, color } = props;
-    const menuRef = useRef<HTMLDivElement | null>(null);
-    const inputRef = useRef<HTMLInputElement | null>(null);
+    const { name, options, value, onChange, onBlur, placeholder, color } =
+      props;
+    const menuRef = React.useRef<HTMLDivElement | null>(null);
+    const inputRef = React.useRef<HTMLInputElement | null>(null);
 
     const [isVisible, setIsVisible] = React.useState(false);
     const [search, setSearch] = React.useState("");
-    const [selected, setList] = React.useState<Option[]>([]);
     const [filteredOptions, setFilteredOptions] = React.useState(options);
 
     function add(incomingOption: Option) {
-      if (!selected.some((option) => option.value === incomingOption.value)) {
-        setList([...selected, incomingOption]);
+      if (!value.some((option) => option.value === incomingOption.value)) {
+        onChange([...value, incomingOption]);
       }
     }
 
     function remove(incomingOption: Option) {
-      setList(
-        selected.filter((option) => option.value !== incomingOption.value)
-      );
+      onChange(value.filter((option) => option.value !== incomingOption.value));
     }
 
-    // Helper function for preventing focusing on input, when clicking on a child.
-    function handleParentClick(
-      event: React.MouseEvent | React.KeyboardEvent,
-      onClick: () => void
-    ) {
-      onClick();
-      event.stopPropagation();
-    }
-
-    const closeOpenMenu = React.useCallback(
+    const hideMenu = React.useCallback(
       (e: MouseEvent | TouchEvent) => {
         if (
           menuRef.current &&
           isVisible &&
-          !menuRef.current.contains(assertIsNode(e.target) ? e.target : null)
+          !menuRef.current.contains(isNode(e.target) ? e.target : null)
         ) {
           setIsVisible(false);
           onBlur();
         }
       },
-      [setIsVisible, isVisible]
+      [setIsVisible, isVisible, onBlur, menuRef]
     );
 
     // Event listeners for closing menu when clicking or touching outside.
     React.useEffect(() => {
-      document.addEventListener("mousedown", closeOpenMenu);
-      document.addEventListener("touchstart", closeOpenMenu);
+      document.addEventListener("mousedown", hideMenu);
+      document.addEventListener("touchstart", hideMenu);
       return () => {
-        document.removeEventListener("mousedown", closeOpenMenu);
-        document.removeEventListener("touchstart", closeOpenMenu);
+        document.removeEventListener("mousedown", hideMenu);
+        document.removeEventListener("touchstart", hideMenu);
       };
     });
 
     React.useEffect(() => {
-      onChange(selected);
       const updatedOptions = options.filter(
-        (option) => !selected.includes(option) && option.label.includes(search)
+        (option) =>
+          !value.includes(option) &&
+          option.label.toLowerCase().includes(search.toLowerCase())
       );
       setFilteredOptions(updatedOptions);
-    }, [selected, search]);
+    }, [value, search, options, setFilteredOptions]);
 
     return (
       <div className={styles.root} ref={ref}>
-        <div className={styles.selected}>
-          {selected.map((option, key) => {
+        <div className={styles.value}>
+          {value.map((option) => {
             return (
               <Button.Root
-                key={key}
+                key={option.value}
                 onClick={() => remove(option)}
-                colorScheme="default"
                 paddingSize="small"
                 style={{ gap: "0.5rem" }}
               >
@@ -116,20 +106,19 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
             );
           })}
         </div>
-        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
         <div
           className={styles.search}
-          onClick={(e) =>
-            handleParentClick(e, () => {
-              inputRef.current && inputRef.current.focus();
-            })
-          }
+          onFocus={(e) => {
+            e.stopPropagation();
+            inputRef.current && inputRef.current.focus();
+          }}
           role="button"
           tabIndex={0}
           ref={menuRef}
         >
           <div className={styles.inputContainer} data-color={color}>
             <input
+              name={name}
               className={styles.input}
               value={search}
               data-color={color}
@@ -139,7 +128,10 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
               placeholder={placeholder}
             />
             <button
-              onClick={(e) => handleParentClick(e, () => setList([]))}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSearch("");
+              }}
               className={styles.removeAllButton}
             >
               <Icon inline>
@@ -148,9 +140,10 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
             </button>
             <div className={styles.inputButtonDivider}></div>
             <button
-              onClick={(e) =>
-                handleParentClick(e, () => setIsVisible(!isVisible))
-              }
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsVisible(!isVisible);
+              }}
               className={styles.openMenuButton}
             >
               <Icon inline>
@@ -164,11 +157,14 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
               isVisible ? styles.visible : null
             )}
           >
-            {filteredOptions.map((option, key) => {
+            {filteredOptions.map((option) => {
               return (
                 <MultiSelectItem
-                  key={key}
-                  onClick={(e) => handleParentClick(e, () => add(option))}
+                  key={option.value}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    add(option);
+                  }}
                   option={option}
                 />
               );
@@ -183,18 +179,13 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
 MultiSelectSearch.displayName = "MultiSelectSearch";
 
 const MultiSelectItem = (props: {
-  key: number;
   onClick: (e: React.MouseEvent | React.KeyboardEvent) => void;
   option: Option;
-  focus?: boolean;
 }) => {
   return (
     <div
-      className={classnames(
-        styles.multiSelectItemWrapper,
-        props.focus ? styles.highlighted : null
-      )}
-      onClick={(e) => props.onClick(e)}
+      className={styles.multiSelectItemWrapper}
+      onClick={props.onClick}
       onKeyDown={(e) => (e.code === "Enter" ? props.onClick(e) : null)}
       tabIndex={0}
       role="button"
