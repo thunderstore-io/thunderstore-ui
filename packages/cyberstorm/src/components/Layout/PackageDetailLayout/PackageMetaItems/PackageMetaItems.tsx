@@ -4,6 +4,7 @@ import styles from "../PackageDetailLayout.module.css";
 import { CopyButton } from "../../../CopyButton/CopyButton";
 import { PackageDependantsLink } from "../../../Links/Links";
 import { MetaInfoItemList } from "../../../MetaInfoItemList/MetaInfoItemList";
+import { RelativeTime } from "../../../RelativeTime/RelativeTime";
 import { formatFileSize, formatInteger } from "../../../../utils/utils";
 
 interface Props {
@@ -16,12 +17,12 @@ export const PackageMetaItems = (props: Props) => (
       {
         key: "last-updated",
         label: "Last Updated",
-        content: props.package.last_updated,
+        content: <RelativeTime time={props.package.last_updated} />,
       },
       {
         key: "first-uploaded",
         label: "First Uploaded",
-        content: props.package.datetime_created,
+        content: <RelativeTime time={props.package.datetime_created} />,
       },
       {
         key: "downloads",
