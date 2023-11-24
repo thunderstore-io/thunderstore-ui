@@ -5,8 +5,12 @@ import { getFakeImg, getFakePackageCategories, range, setSeed } from "./utils";
 import { getFakeTeamMembers } from "./team";
 
 // Content used to render one PackageCard in a list view.
-const getFakePackagePreview = (community?: string, namespace?: string) => {
-  const seed = `${community}-${namespace}`;
+const getFakePackagePreview = (
+  community?: string,
+  namespace?: string,
+  name?: string
+) => {
+  const seed = `${community}-${namespace}-${name}`;
   setSeed(seed);
 
   return {
@@ -19,7 +23,7 @@ const getFakePackagePreview = (community?: string, namespace?: string) => {
     is_nsfw: faker.datatype.boolean(0.1),
     is_pinned: faker.datatype.boolean(0.1),
     last_updated: faker.date.recent({ days: 700 }).toISOString(),
-    name: faker.word.words(3).split(" ").join("_"),
+    name: name ?? faker.word.words(3).split(" ").join("_"),
     namespace: namespace ?? faker.word.sample(),
     rating_count: faker.number.int({ min: 0, max: 100000 }),
     size: faker.number.int({ min: 20000, max: 4000000000 }),
@@ -79,28 +83,29 @@ export const getFakePackage = async (
   setSeed(seed);
 
   return {
-    ...getFakePackagePreview(community, namespace),
+    ...getFakePackagePreview(community, namespace, name),
 
     community_name: faker.word.sample(),
     datetime_created: faker.date.past({ years: 2 }).toISOString(),
     dependant_count: faker.number.int({ min: 0, max: 2000 }),
     dependencies: await getFakeDependencies(community, namespace, name),
     full_version_name: `${namespace}-${name}-${getVersionNumber()}`,
+    has_changelog: true,
+    latest_version_number: getVersionNumber(),
     team: {
       name: faker.word.words(3),
       members: await getFakeTeamMembers(seed),
     },
-    versions: range(20).map(getPackageVersion),
     website_url: faker.internet.url(),
   };
 };
 
-const getPackageVersion = () => ({
-  version_number: getVersionNumber(),
-  changelog: faker.company.buzzPhrase(),
-  datetime_created: faker.date.recent({ days: 700 }).toISOString(),
-  download_count: faker.number.int({ min: 1000000, max: 10000000 }),
-});
+// const getPackageVersion = () => ({
+//   version_number: getVersionNumber(),
+//   changelog: faker.company.buzzPhrase(),
+//   datetime_created: faker.date.recent({ days: 700 }).toISOString(),
+//   download_count: faker.number.int({ min: 1000000, max: 10000000 }),
+// });
 
 const getVersionNumber = (min = 0, max = 10) => {
   const major = faker.number.int({ min, max });
