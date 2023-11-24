@@ -37,9 +37,7 @@ export function PackageDependantsLayout(props: Props) {
 
   return (
     <BaseLayout
-      backGroundImageSource={
-        community.background_image_url || "/images/community_bg.png"
-      }
+      backGroundImageSource={community.background_image_url}
       breadCrumb={
         <BreadCrumbs>
           <CommunitiesLink>Communities</CommunitiesLink>

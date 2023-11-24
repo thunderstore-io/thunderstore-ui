@@ -45,19 +45,12 @@ export interface Props {
   packageName: string;
 }
 
-/**
- * Cyberstorm PackageDetail Layout
- *
- * TODO: Use community.background_image_url as the background
- * TODO: Change BaseLayout.backGroundImageSource to accept null rather
- *       than undefined if image URLs are not available, as this is what
- *       backend returns. (Unless we have a default image.)
- */
 export function PackageDetailLayout(props: Props) {
   const { communityId, namespaceId, packageName } = props;
   const displayName = packageName.replace(/_/g, " ");
 
   const dapper = useDapper();
+  const community = usePromise(dapper.getCommunity, [communityId]);
   const packageData = usePromise(dapper.getPackage, [
     communityId,
     namespaceId,
@@ -101,7 +94,7 @@ export function PackageDetailLayout(props: Props) {
 
   return (
     <BaseLayout
-      backGroundImageSource={packageData.icon_url || undefined}
+      backGroundImageSource={community.icon_url}
       breadCrumb={
         <BreadCrumbs>
           <CommunitiesLink>Communities</CommunitiesLink>
