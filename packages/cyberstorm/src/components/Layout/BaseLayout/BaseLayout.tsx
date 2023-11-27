@@ -4,7 +4,7 @@ import { Footer } from "../../Footer/Footer";
 import { ReactElement } from "react";
 
 export interface BaseLayoutProps {
-  backGroundImageSource?: string;
+  backGroundImageSource?: string | null;
   breadCrumb?: ReactElement;
   header?: ReactElement;
   mainContent?: ReactElement;
@@ -32,7 +32,7 @@ export function BaseLayout(props: BaseLayoutProps) {
         <div className={styles.background}>
           <div
             className={styles.backgroundImg}
-            style={{ backgroundImage: "url(" + backGroundImageSource + ")" }}
+            style={{ backgroundImage: `url(${backGroundImageSource})` }}
           />
         </div>
       ) : null}
