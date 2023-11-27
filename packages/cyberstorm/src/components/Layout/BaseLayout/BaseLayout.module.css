@@ -14,7 +14,7 @@
   --w: 56vw;
 
   position: absolute;
-  top: -3.5rem;
+  top: calc(var(--header-height) - var(--header-height) *2);
   right: 0;
 
   z-index: -1;

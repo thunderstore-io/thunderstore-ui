@@ -6,7 +6,7 @@
 
 .buttons {
   display: flex;
-  overflow: auto;
+  border-bottom: 3px solid var(--color-purple--5);
 }
 
 .button {
@@ -16,6 +16,7 @@
   gap: var(--space--12);
   align-items: center;
   justify-content: center;
+  margin-bottom: -3px;
 
   padding: var(--space--12) var(--space--16);
   border-bottom: 3px solid var(--color-purple--5);

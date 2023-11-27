@@ -65,6 +65,9 @@
   --font-weight-bold: 600;
   --font-weight-boldest: 700;
   --font-weight-heavy: 800;
+
+  /* Header dimensions */
+  --header-height: 3.5rem;
 }
 
 a {
