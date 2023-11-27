@@ -42,7 +42,11 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
 
     function add(incomingOption: MultiSelectSearchOption) {
       if (!value.some((option) => option.value === incomingOption.value)) {
-        onChange([...value, incomingOption]);
+        onChange(
+          [...value, incomingOption].sort((o1, o2) =>
+            o1.value > o2.value ? 1 : o1.value < o2.value ? -1 : 0
+          )
+        );
       }
     }
 
@@ -105,7 +109,9 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
         <div
           className={styles.search}
           onFocus={(e) => {
-            inputRef.current && inputRef.current.focus();
+            if (e.target === menuRef.current) {
+              inputRef.current && inputRef.current.focus();
+            }
             e.stopPropagation();
           }}
           role="button"

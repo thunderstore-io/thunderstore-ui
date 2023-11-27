@@ -30,7 +30,9 @@ const defaultArgs = {
 };
 
 const Template: StoryFn<typeof MultiSelectSearch> = (args) => {
-  const [selected, setSelected] = useState(options);
+  const [selected, setSelected] = useState<{ label: string; value: string }[]>(
+    []
+  );
   const defaultProps = {
     ...args,
     onChange: (x: { label: string; value: string }[]) => setSelected(x),
@@ -39,12 +41,7 @@ const Template: StoryFn<typeof MultiSelectSearch> = (args) => {
   return (
     <div>
       <div style={{ color: "white" }}>
-        Value in state:{" "}
-        {selected
-          .map((s) => {
-            return s.label;
-          })
-          .join(", ")}
+        Value in state: {selected.map((s) => s.label).join(", ")}
       </div>
       <MultiSelectSearch {...defaultProps} />
     </div>
