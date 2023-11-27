@@ -125,18 +125,22 @@ export const SelectSearch = React.forwardRef<HTMLInputElement, Props>(
               isVisible ? styles.visible : null
             )}
           >
-            {options.map((option) => {
-              return (
-                <SelectItem
-                  key={option}
-                  onClick={(e) => {
-                    onChange(option);
-                    e.stopPropagation();
-                  }}
-                  option={option}
-                />
-              );
-            })}
+            {options
+              .filter((option) =>
+                option.toLowerCase().includes(search.toLowerCase())
+              )
+              .map((option) => {
+                return (
+                  <SelectItem
+                    key={option}
+                    onClick={(e) => {
+                      onChange(option);
+                      e.stopPropagation();
+                    }}
+                    option={option}
+                  />
+                );
+              })}
           </div>
         </div>
       </div>
