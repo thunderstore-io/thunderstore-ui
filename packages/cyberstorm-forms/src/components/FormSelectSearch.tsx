@@ -35,7 +35,7 @@ export function FormSelectSearch<
         disabled={isSubmitting || disabled}
         options={options}
       />
-      {error && <span className={styles.errorMessage}>{error.message}</span>}
+      {error && <div className={styles.errorMessage}>{error.message}</div>}
     </>
   );
 }

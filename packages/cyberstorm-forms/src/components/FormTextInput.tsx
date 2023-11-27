@@ -33,7 +33,7 @@ export function FormTextInput<
         color={isDirty || invalid ? (invalid ? "red" : "green") : undefined}
         disabled={isSubmitting || disabled}
       />
-      {error && <span className={styles.errorMessage}>{error.message}</span>}
+      {error && <div className={styles.errorMessage}>{error.message}</div>}
     </>
   );
 }
