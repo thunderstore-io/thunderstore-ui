@@ -30,7 +30,7 @@ export function FormSubmitButton({ text }: { text: string }) {
     <Button.Root
       type="submit"
       paddingSize="large"
-      colorScheme="success"
+      colorScheme="accent"
       disabled={isSubmitting || disabled}
     >
       <SubmitButtonContent isSubmitting={isSubmitting} text={text} />

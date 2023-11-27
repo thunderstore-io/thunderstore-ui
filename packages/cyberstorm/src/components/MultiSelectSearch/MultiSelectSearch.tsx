@@ -17,8 +17,8 @@ export type MultiSelectSearchOption = {
 };
 type Props = {
   options: MultiSelectSearchOption[];
-  value: MultiSelectSearchOption[];
-  onChange: (v: MultiSelectSearchOption[]) => void;
+  fieldFormFormatParser?: (v: MultiSelectSearchOption[]) => unknown;
+  onChange: (v: MultiSelectSearchOption[] | unknown) => void;
   onBlur: () => void;
   // TODO: Implement disabled state
   disabled?: boolean;
@@ -32,18 +32,28 @@ type Props = {
  */
 export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
   function MultiSelectSearch(props, ref) {
-    const { options, value, onChange, onBlur, placeholder, color } = props;
+    const {
+      options,
+      fieldFormFormatParser,
+      onChange,
+      onBlur,
+      placeholder,
+      color,
+    } = props;
     const menuRef = React.useRef<HTMLDivElement | null>(null);
     const inputRef = React.useRef<HTMLInputElement | null>(null);
 
     const [isVisible, setIsVisible] = React.useState(false);
     const [search, setSearch] = React.useState("");
     const [filteredOptions, setFilteredOptions] = React.useState(options);
+    const [selected, setSelected] = React.useState<MultiSelectSearchOption[]>(
+      []
+    );
 
     function add(incomingOption: MultiSelectSearchOption) {
-      if (!value.some((option) => option.value === incomingOption.value)) {
-        onChange(
-          [...value, incomingOption].sort((o1, o2) =>
+      if (!selected.some((option) => option.value === incomingOption.value)) {
+        setSelected(
+          [...selected, incomingOption].sort((o1, o2) =>
             o1.value > o2.value ? 1 : o1.value < o2.value ? -1 : 0
           )
         );
@@ -51,7 +61,9 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
     }
 
     function remove(incomingOption: MultiSelectSearchOption) {
-      onChange(value.filter((option) => option.value !== incomingOption.value));
+      setSelected(
+        selected.filter((option) => option.value !== incomingOption.value)
+      );
     }
 
     const hideMenu = React.useCallback(
@@ -81,16 +93,24 @@ export const MultiSelectSearch = React.forwardRef<HTMLInputElement, Props>(
     React.useEffect(() => {
       const updatedOptions = options.filter(
         (option) =>
-          !value.includes(option) &&
+          !selected.includes(option) &&
           option.label.toLowerCase().includes(search.toLowerCase())
       );
       setFilteredOptions(updatedOptions);
-    }, [value, search, options, setFilteredOptions]);
+    }, [selected, search, options, setFilteredOptions]);
+
+    React.useEffect(() => {
+      if (fieldFormFormatParser) {
+        onChange(fieldFormFormatParser(selected));
+      } else {
+        onChange(selected);
+      }
+    }, [selected, onChange, fieldFormFormatParser]);
 
     return (
       <div className={styles.root} ref={ref}>
         <div className={styles.selected}>
-          {value.map((option) => {
+          {selected.map((option) => {
             return (
               <Button.Root
                 key={option.value}
