@@ -37,6 +37,7 @@ import Tabs from "../../NewTabs/Tabs";
 import { Tag } from "../../Tag/Tag";
 import { WrapperCard } from "../../WrapperCard/WrapperCard";
 import { ThunderstoreLogo } from "../../../svg/svg";
+import { getDownloadUrl, getInstallUrl } from "../../../utils/utils";
 
 export interface Props {
   communityId: string;
@@ -54,6 +55,7 @@ export interface Props {
  */
 export function PackageDetailLayout(props: Props) {
   const { communityId, namespaceId, packageName } = props;
+  const displayName = packageName.replace(/_/g, " ");
 
   const dapper = useDapper();
   const packageData = usePromise(dapper.getPackage, [
@@ -113,13 +115,13 @@ export function PackageDetailLayout(props: Props) {
           >
             {packageData.namespace}
           </TeamLink>
-          {packageData.name}
+          {displayName}
         </BreadCrumbs>
       }
       header={
         <div className={styles.packageInfo}>
           <PageHeader
-            title={packageData.name}
+            title={displayName}
             image={
               packageData.icon_url ? (
                 <img
@@ -133,28 +135,14 @@ export function PackageDetailLayout(props: Props) {
             meta={packageDetailsMeta}
           />
           <div className={styles.headerActions}>
-            <Dialog.Root
-              title="Manage Package"
-              trigger={
-                <Button.Root colorScheme="primary" paddingSize="medium">
-                  <Button.ButtonIcon>
-                    <FontAwesomeIcon icon={faCog} />
-                  </Button.ButtonIcon>
-                  <Button.ButtonLabel>Manage</Button.ButtonLabel>
-                </Button.Root>
-              }
-            >
+            <Dialog.Root title="Manage Package" trigger={<ManageButton />}>
               <PackageManagementForm isDeprecated={packageData.is_deprecated} />
             </Dialog.Root>
-            <a className={styles.installButton} href="/">
-              <Button.Root plain paddingSize="huge" colorScheme="fancyAccent">
-                <Button.ButtonIcon iconSize="big">
-                  <ThunderstoreLogo />
-                </Button.ButtonIcon>
-                <Button.ButtonLabel fontSize="huge" fontWeight="800">
-                  Install
-                </Button.ButtonLabel>
-              </Button.Root>
+            <a
+              href={getInstallUrl(packageData)}
+              className={styles.installButton}
+            >
+              <InstallButton />
             </a>
           </div>
         </div>
@@ -180,41 +168,15 @@ export function PackageDetailLayout(props: Props) {
       rightSidebarContent={
         <div className={styles.metaInfo}>
           <div className={styles.metaButtonWrapper}>
-            <a href="/" className={styles.metaDownloadButton}>
-              <Button.Root plain colorScheme="primary" paddingSize="medium">
-                <Button.ButtonIcon>
-                  <FontAwesomeIcon icon={faDownload} />
-                </Button.ButtonIcon>
-                <Button.ButtonLabel>Download</Button.ButtonLabel>
-              </Button.Root>
+            <a
+              href={getDownloadUrl(packageData)}
+              className={styles.metaDownloadButton}
+            >
+              <DownloadButton />
             </a>
-            <Button.Root
-              tooltipText="Donate to author"
-              colorScheme="primary"
-              paddingSize="mediumSquare"
-            >
-              <Button.ButtonIcon>
-                <FontAwesomeIcon icon={faDonate} />
-              </Button.ButtonIcon>
-            </Button.Root>
-            <Button.Root
-              tooltipText="Like"
-              colorScheme="primary"
-              paddingSize="mediumSquare"
-            >
-              <Button.ButtonIcon>
-                <FontAwesomeIcon icon={faThumbsUp} />
-              </Button.ButtonIcon>
-            </Button.Root>
-            <Button.Root
-              tooltipText="Report"
-              colorScheme="primary"
-              paddingSize="mediumSquare"
-            >
-              <Button.ButtonIcon>
-                <FontAwesomeIcon icon={faFlag} />
-              </Button.ButtonIcon>
-            </Button.Root>
+            <DonateButton onClick={TODO} />
+            <LikeButton onClick={TODO} />
+            <ReportButton onClick={TODO} />
           </div>
           <PackageMetaItems package={packageData} />
           <WrapperCard
@@ -245,3 +207,77 @@ export function PackageDetailLayout(props: Props) {
     />
   );
 }
+
+const TODO = () => Promise.resolve();
+
+interface Clickable {
+  onClick: () => Promise<void>;
+}
+
+const LikeButton = (props: Clickable) => (
+  <Button.Root
+    onClick={props.onClick}
+    tooltipText="Like"
+    colorScheme="primary"
+    paddingSize="mediumSquare"
+  >
+    <Button.ButtonIcon>
+      <FontAwesomeIcon icon={faThumbsUp} />
+    </Button.ButtonIcon>
+  </Button.Root>
+);
+
+const DonateButton = (props: Clickable) => (
+  <Button.Root
+    onClick={props.onClick}
+    tooltipText="Donate to author"
+    colorScheme="primary"
+    paddingSize="mediumSquare"
+  >
+    <Button.ButtonIcon>
+      <FontAwesomeIcon icon={faDonate} />
+    </Button.ButtonIcon>
+  </Button.Root>
+);
+
+const ReportButton = (props: Clickable) => (
+  <Button.Root
+    onClick={props.onClick}
+    tooltipText="Report"
+    colorScheme="primary"
+    paddingSize="mediumSquare"
+  >
+    <Button.ButtonIcon>
+      <FontAwesomeIcon icon={faFlag} />
+    </Button.ButtonIcon>
+  </Button.Root>
+);
+
+const ManageButton = () => (
+  <Button.Root colorScheme="primary" paddingSize="medium">
+    <Button.ButtonIcon>
+      <FontAwesomeIcon icon={faCog} />
+    </Button.ButtonIcon>
+    <Button.ButtonLabel>Manage</Button.ButtonLabel>
+  </Button.Root>
+);
+
+const InstallButton = () => (
+  <Button.Root plain paddingSize="huge" colorScheme="fancyAccent">
+    <Button.ButtonIcon iconSize="big">
+      <ThunderstoreLogo />
+    </Button.ButtonIcon>
+    <Button.ButtonLabel fontSize="huge" fontWeight="800">
+      Install
+    </Button.ButtonLabel>
+  </Button.Root>
+);
+
+const DownloadButton = () => (
+  <Button.Root plain colorScheme="primary" paddingSize="medium">
+    <Button.ButtonIcon>
+      <FontAwesomeIcon icon={faDownload} />
+    </Button.ButtonIcon>
+    <Button.ButtonLabel>Download</Button.ButtonLabel>
+  </Button.Root>
+);

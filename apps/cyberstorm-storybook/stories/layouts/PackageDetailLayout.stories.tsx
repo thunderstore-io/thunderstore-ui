@@ -15,7 +15,7 @@ const ReferencePackageDetailLayout = Template.bind({});
 ReferencePackageDetailLayout.args = {
   communityId: "Train City 2042",
   namespaceId: "Mechanics",
-  packageName: "Thomas the Dankiest Engine",
+  packageName: "Thomas_the_Dankiest_Engine",
 };
 
 export { meta as default, ReferencePackageDetailLayout as PackageDetails };
