@@ -38,7 +38,7 @@ export function CreateTeamForm() {
         </div>
       </div>
       <div className={styles.footer}>
-        <FormSubmitButton />
+        <FormSubmitButton text="Create" />
       </div>
     </ApiForm>
   );
