@@ -14,9 +14,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDapper } from "@thunderstore/dapper";
-import { Package } from "@thunderstore/dapper/types";
 import { usePromise } from "@thunderstore/use-promise";
-import { useState } from "react";
 
 import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
 import styles from "./PackageDetailLayout.module.css";
@@ -35,7 +33,7 @@ import { BaseLayout } from "../BaseLayout/BaseLayout";
 import * as Dialog from "../../Dialog";
 import { Icon } from "../../Icon/Icon";
 import markdownStyles from "../../Markdown/Markdown.module.css";
-import { Tabs } from "../../Tabs/Tabs";
+import Tabs from "../../NewTabs/Tabs";
 import { Tag } from "../../Tag/Tag";
 import { WrapperCard } from "../../WrapperCard/WrapperCard";
 import { ThunderstoreLogo } from "../../../svg/svg";
@@ -57,7 +55,6 @@ export interface Props {
 export function PackageDetailLayout(props: Props) {
   const { communityId, namespaceId, packageName } = props;
 
-  const [currentTab, setCurrentTab] = useState(1);
   const dapper = useDapper();
   const packageData = usePromise(dapper.getPackage, [
     communityId,
@@ -162,10 +159,24 @@ export function PackageDetailLayout(props: Props) {
           </div>
         </div>
       }
-      tabs={
-        <Tabs tabs={tabs} onTabChange={setCurrentTab} currentTab={currentTab} />
+      mainContent={
+        <Tabs>
+          <Tabs.Tab name="details" label="Details" icon={faFileLines}>
+            <div
+              dangerouslySetInnerHTML={{ __html: PLACEHOLDER() }}
+              className={markdownStyles.root}
+            />
+          </Tabs.Tab>
+
+          <Tabs.Tab name="changelog" label="Changelog" icon={faFilePlus}>
+            <PackageChangeLog packageId={packageData.name} />
+          </Tabs.Tab>
+
+          <Tabs.Tab name="versions" label="Versions" icon={faCodeBranch}>
+            <PackageVersions />
+          </Tabs.Tab>
+        </Tabs>
       }
-      mainContent={<>{getTabContent(currentTab, packageData)}</>}
       rightSidebarContent={
         <div className={styles.metaInfo}>
           <div className={styles.metaButtonWrapper}>
@@ -233,42 +244,4 @@ export function PackageDetailLayout(props: Props) {
       }
     />
   );
-}
-
-PackageDetailLayout.displayName = "PackageDetailLayout";
-
-const tabs = [
-  {
-    key: 1,
-    label: "Details",
-    icon: <FontAwesomeIcon icon={faFileLines} className={styles.tabIcon} />,
-  },
-  {
-    key: 2,
-    label: "Changelog",
-    icon: <FontAwesomeIcon icon={faFilePlus} className={styles.tabIcon} />,
-  },
-  {
-    key: 3,
-    label: "Versions",
-    icon: <FontAwesomeIcon icon={faCodeBranch} className={styles.tabIcon} />,
-  },
-];
-
-function getTabContent(currentTab: number, packageData: Package) {
-  const placeholder = PLACEHOLDER();
-  let tabContent = null;
-  if (currentTab === 1) {
-    tabContent = (
-      <div
-        dangerouslySetInnerHTML={{ __html: placeholder }}
-        className={markdownStyles.root}
-      />
-    );
-  } else if (currentTab === 2) {
-    tabContent = <PackageChangeLog packageId={packageData.name} />;
-  } else if (currentTab === 3) {
-    tabContent = <PackageVersions />;
-  }
-  return tabContent;
 }
