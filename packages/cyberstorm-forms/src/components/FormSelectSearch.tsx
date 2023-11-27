@@ -2,10 +2,10 @@
 
 import { z, ZodObject, ZodRawShape } from "zod";
 import { Path, useController } from "react-hook-form";
-import { TextInput } from "@thunderstore/cyberstorm";
+import { SelectSearch } from "@thunderstore/cyberstorm";
 import styles from "./FormTextInput.module.css";
 
-export type FormTextInputProps<
+export type FormSelectSearchProps<
   Schema extends ZodObject<Z>,
   Z extends ZodRawShape
 > = {
@@ -13,11 +13,12 @@ export type FormTextInputProps<
   schema: Schema;
   name: Path<z.infer<Schema>>;
   placeholder?: string;
+  options: string[];
 };
-export function FormTextInput<
+export function FormSelectSearch<
   Schema extends ZodObject<Z>,
   Z extends ZodRawShape
->({ name, placeholder }: FormTextInputProps<Schema, Z>) {
+>({ name, placeholder, options }: FormSelectSearchProps<Schema, Z>) {
   const {
     field,
     fieldState: { isDirty, invalid, error },
@@ -26,16 +27,17 @@ export function FormTextInput<
 
   return (
     <>
-      <TextInput
+      <SelectSearch
         {...field}
         ref={field.ref}
         placeholder={placeholder}
         color={isDirty || invalid ? (invalid ? "red" : "green") : undefined}
         disabled={isSubmitting || disabled}
+        options={options}
       />
       {error && <span className={styles.errorMessage}>{error.message}</span>}
     </>
   );
 }
 
-FormTextInput.displayName = "FormTextInput";
+FormSelectSearch.displayName = "FormSelectSearch";

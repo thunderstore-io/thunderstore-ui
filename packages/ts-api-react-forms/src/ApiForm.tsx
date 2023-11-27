@@ -1,8 +1,7 @@
 "use client";
 
 import { HTMLAttributes, PropsWithChildren, useCallback } from "react";
-import { z, ZodObject } from "zod";
-import { ZodRawShape } from "zod/lib/types";
+import { z, ZodObject, ZodRawShape } from "zod";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { ApiEndpoint } from "@thunderstore/ts-api-react";
 import { FormProvider } from "react-hook-form";

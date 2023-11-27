@@ -1,7 +1,6 @@
 "use client";
 
-import { z, ZodObject } from "zod";
-import { ZodRawShape } from "zod/lib/types";
+import { z, ZodObject, ZodRawShape } from "zod";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { handleFormApiErrors } from "./errors";
