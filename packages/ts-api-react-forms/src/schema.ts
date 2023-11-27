@@ -13,5 +13,5 @@ export const uploadPackageFormSchema = z.object({
   team: z.string(),
   community_categories: z.record(z.array(z.string())),
   communities: z.array(z.string()).nonempty(),
-  has_nsfw_content: z.boolean(),
+  has_nsfw_content: z.boolean().default(false),
 });

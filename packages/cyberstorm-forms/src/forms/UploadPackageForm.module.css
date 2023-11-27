@@ -13,3 +13,30 @@
   flex-direction: row;
   gap: var(--gap--16);
 }
+
+.submit > :last-child {
+  flex-grow: 1;
+}
+
+.teamContentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space--12);
+}
+
+.createTeamModalLink {
+  color: #39e9aa;
+  font-weight: var(--font-weight-medium);
+  background: transparent;
+}
+
+.createTeamSentence {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space--8);
+  color: var(--text-tertiary, #9c9cc4);
+  font-weight: var(--font-weight-semibold);
+
+  font-size: 0.875rem;
+  line-height: 1.7;
+}

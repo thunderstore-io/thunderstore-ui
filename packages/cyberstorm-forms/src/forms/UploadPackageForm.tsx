@@ -13,62 +13,51 @@ import {
   CreateTeamForm,
   FormSwitch,
 } from "@thunderstore/cyberstorm-forms";
-import { TextInput, Dialog, Button } from "@thunderstore/cyberstorm";
+import { Dialog, Button } from "@thunderstore/cyberstorm";
 import { SettingItem } from "@thunderstore/cyberstorm/src/components/SettingItem/SettingItem";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { packageUpload } from "@thunderstore/thunderstore-api";
+import { usePromise } from "@thunderstore/use-promise";
+import { useDapper } from "@thunderstore/dapper";
 
 const options = [
-  { label: "Asd", value: "asd" },
-  { label: "Asd2", value: "asd2" },
-  { label: "Asd3", value: "asd3" },
-  { label: "Asd4", value: "asd4" },
-  { label: "Asd5", value: "asd5" },
-  { label: "Asd6", value: "asd6" },
-  { label: "Asd7", value: "asd7" },
-  { label: "Asd8", value: "asd8" },
-  { label: "Asd9", value: "asd9" },
-  { label: "Asd10", value: "asd10" },
-  { label: "Asd11", value: "asd11" },
-  { label: "Asd12", value: "asd12" },
-  { label: "Asd13", value: "asd13" },
-  { label: "Asd14", value: "asd14" },
+  { label: "Asd", value: "asd asd" },
+  { label: "Asd2", value: "asd2 asd2" },
+  { label: "Asd3", value: "asd3 asd3" },
+  { label: "Asd4", value: "asd4 asd4" },
+  { label: "Asd5", value: "asd5 asd5" },
+  { label: "Asd6", value: "asd6 asd6" },
 ];
 
-interface UploadPackageFormProps {
-  teams: {
-    name: string;
-  }[];
-}
+export function UploadPackageForm() {
+  const dapper = useDapper();
+  const user = usePromise(dapper.getCurrentUser, []);
+  const communities = usePromise(dapper.getCommunities, []);
 
-export function UploadPackageForm(props: UploadPackageFormProps) {
   const toaster = useFormToaster({
     successMessage: "Package submitted",
   });
 
-  // Parse categories to the right format for form
-  function communityCategoriesParse(
-    selected: {
-      label: string;
-      value: string;
-    }[],
-    onChange: (selected: { [key: string]: string[] }) => void
-  ) {
-    const communityCategories: { [key: string]: string[] } = {};
-    selected.map((x) => (communityCategories[x.value] = [x.value]));
-    onChange(communityCategories);
-  }
-
-  // Parse communities to the right format for form
   function communitiesParse(
     selected: {
       label: string;
       value: string;
-    }[],
-    onChange: (selected: string[]) => void
+    }[]
   ) {
-    onChange(selected.map((x) => x.value));
+    return selected.map((x) => x.value);
+  }
+
+  function communityCategoriesParse(
+    selected: {
+      label: string;
+      value: string;
+    }[]
+  ) {
+    const communityCategories: { [key: string]: string[] } = {};
+    // TODO: Instead of getting the value from splitting a string, have it be passed in an object
+    selected.map(
+      (x) => (communityCategories["community_identifier"] = [x.value])
+    );
+    return communityCategories;
   }
 
   return (
@@ -82,46 +71,48 @@ export function UploadPackageForm(props: UploadPackageFormProps) {
         <SettingItem
           title="Upload file"
           description="Upload your package as a ZIP file."
-          content={<TextInput />}
+          content={<>upload block here</>}
         />
         <div className={styles.line} />
         <SettingItem
           title="Team"
-          description="No teams available?"
-          additionalLeftColumnContent={
-            <Dialog.Root
-              title="Create Team"
-              trigger={
-                <Button.Root colorScheme="primary" paddingSize="large">
-                  <Button.ButtonLabel>Create team</Button.ButtonLabel>
-                  <Button.ButtonIcon>
-                    <FontAwesomeIcon icon={faPlus} />
-                  </Button.ButtonIcon>
-                </Button.Root>
-              }
-            >
-              <CreateTeamForm />
-            </Dialog.Root>
-          }
+          description="Select the team you want your package to be associated with."
           content={
-            <FormSelectSearch
-              name="team"
-              schema={uploadPackageFormSchema}
-              options={props.teams.map((t) => t.name)}
-              placeholder="Choose a team..."
-            />
+            <div className={styles.teamContentWrapper}>
+              <FormSelectSearch
+                name="team"
+                schema={uploadPackageFormSchema}
+                options={user.teams.map((t) => t.name)}
+                placeholder="Choose a team..."
+              />
+              <div className={styles.createTeamSentence}>
+                <span>No teams available?</span>
+                <Dialog.Root
+                  title="Create Team"
+                  trigger={
+                    <button className={styles.createTeamModalLink}>
+                      Create Team
+                    </button>
+                  }
+                >
+                  <CreateTeamForm />
+                </Dialog.Root>
+              </div>
+            </div>
           }
         />
         <SettingItem
           title="Communities"
-          description="Select communities you want your package to be listed under. Current community is selected by default."
+          description="Select communities you want your package to be listed under."
           content={
             <FormMultiSelectSearch
               name="communities"
               schema={uploadPackageFormSchema}
-              options={options}
+              options={communities.results.map((c) => {
+                return { label: c.name, value: c.identifier };
+              })}
               placeholder="Choose community..."
-              onChangeParse={communitiesParse}
+              fieldFormFormatParser={communitiesParse}
             />
           }
         />
@@ -134,7 +125,7 @@ export function UploadPackageForm(props: UploadPackageFormProps) {
               schema={uploadPackageFormSchema}
               options={options}
               placeholder="Choose categories..."
-              onChangeParse={communityCategoriesParse}
+              fieldFormFormatParser={communityCategoriesParse}
             />
           }
         />
