@@ -1,7 +1,6 @@
 "use client";
 
-import { z, ZodObject } from "zod";
-import { ZodRawShape } from "zod/lib/types";
+import { z, ZodObject, ZodRawShape } from "zod";
 import { Path, useController } from "react-hook-form";
 import { TextInput } from "@thunderstore/cyberstorm";
 import styles from "./FormTextInput.module.css";

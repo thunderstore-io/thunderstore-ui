@@ -1,6 +1,5 @@
 import { ApiError, isApiError } from "@thunderstore/thunderstore-api";
-import { TypeOf, z, ZodObject } from "zod";
-import { ZodRawShape } from "zod/lib/types";
+import { TypeOf, z, ZodObject, ZodRawShape } from "zod";
 import { Path, UseFormReturn } from "react-hook-form";
 
 export function getErrorFormKey<T extends ZodObject<Z>, Z extends ZodRawShape>(
