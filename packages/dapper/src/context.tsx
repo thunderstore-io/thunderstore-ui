@@ -1,4 +1,5 @@
 import { PropsWithChildren } from "react";
+import { DapperFake } from "../../dapper-fake/src/index";
 import { DapperInterface } from "./dapper";
 import { getDapperContext } from "./singleton";
 
@@ -21,6 +22,7 @@ export function DapperProvider(props: DapperProviderProps) {
 }
 
 export const useDapper = (): DapperInterface => {
+  return new DapperFake();
   const dapperContext = getDapperContext();
   return dapperContext.getDapper();
 };
