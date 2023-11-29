@@ -27,7 +27,7 @@ export function AddTeamMemberForm(props: { teamName: string }) {
     <ApiForm
       {...toaster}
       schema={teamAddMemberFormSchema}
-      metaData={{ identifier: props.teamName }}
+      metaData={{ teamIdentifier: props.teamName }}
       endpoint={teamAddMember}
       formProps={{ className: styles.root }}
     >
@@ -37,11 +37,13 @@ export function AddTeamMemberForm(props: { teamName: string }) {
           <span className={styles.teamNameText}>{props.teamName}</span>
         </div>
         <div className={styles.fields}>
-          <FormTextInput
-            schema={teamAddMemberFormSchema}
-            name={"user"}
-            placeholder={"Enter username..."}
-          />
+          <div className={styles.usernameWrapper}>
+            <FormTextInput
+              schema={teamAddMemberFormSchema}
+              name={"user"}
+              placeholder={"Enter username..."}
+            />
+          </div>
           <FormSelect
             schema={teamAddMemberFormSchema}
             name={"role"}

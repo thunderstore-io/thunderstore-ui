@@ -24,6 +24,11 @@
   gap: 1rem;
 }
 
+.usernameWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .fields > :first-child {
   flex-grow: 1;
 }

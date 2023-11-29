@@ -16,7 +16,7 @@ export function RemoveTeamMemberForm(props: {
   teamName: string;
 }) {
   const toaster = useFormToaster({
-    successMessage: "Team created",
+    successMessage: `User ${"TODO"} removed from team ${"TODO"}`,
   });
 
   return (
@@ -25,7 +25,7 @@ export function RemoveTeamMemberForm(props: {
       schema={z.object({})}
       endpoint={teamRemoveMember}
       formProps={{ className: styles.root }}
-      metaData={{ identifier: props.teamName, user: props.userName }}
+      metaData={{ teamIdentifier: props.teamName, user: props.userName }}
     >
       <div className={styles.dialog}>
         <div className={styles.dialogText}>

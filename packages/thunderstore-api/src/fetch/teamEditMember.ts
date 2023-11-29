@@ -2,7 +2,7 @@ import { RequestConfig } from "../index";
 import { apiFetch2 } from "../apiFetch";
 
 export type teamEditMemberMetaData = {
-  identifier: string;
+  teamIdentifier: string;
 };
 
 export type teamEditMemberApiArgs = {
@@ -15,7 +15,7 @@ export function teamEditMember(
   data: teamEditMemberApiArgs,
   metaData: teamEditMemberMetaData
 ) {
-  const path = `/api/cyberstorm/team/${metaData.identifier}/members/remove/`;
+  const path = `/api/cyberstorm/team/${metaData.teamIdentifier}/members/edit/`;
 
   return apiFetch2({
     config,

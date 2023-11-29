@@ -7,19 +7,16 @@ import { Avatar } from "../../../../Avatar/Avatar";
 import * as Button from "../../../../Button/";
 import { Dialog } from "../../../../../index";
 import { UserLink } from "../../../../Links/Links";
-import { Select } from "../../../../Select/Select";
 import { Table, Sort } from "../../../../Table/Table";
-import { RemoveTeamMemberForm } from "@thunderstore/cyberstorm-forms";
+import {
+  RemoveTeamMemberForm,
+  TeamMemberChangeRoleAction,
+} from "@thunderstore/cyberstorm-forms";
 
 const teamMemberColumns = [
   { value: "User", disableSort: false },
   { value: "Role", disableSort: false },
   { value: "Actions", disableSort: true },
-];
-
-const userRoles = [
-  { value: "member", label: "Member" },
-  { value: "owner", label: "Owner" },
 ];
 
 interface Props {
@@ -49,10 +46,10 @@ export function TeamMemberList(props: Props) {
     {
       value: (
         <div key={`role_${index}`} className={styles.roleSelect}>
-          <Select
-            triggerFontSize="medium"
-            options={userRoles}
-            value={member.role}
+          <TeamMemberChangeRoleAction
+            teamName={props.teamName}
+            userName={member.username}
+            currentRole={member.role}
           />
         </div>
       ),
