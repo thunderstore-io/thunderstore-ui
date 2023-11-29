@@ -9,6 +9,7 @@ import { Dialog } from "../../../../../index";
 import { UserLink } from "../../../../Links/Links";
 import { Select } from "../../../../Select/Select";
 import { Table, Sort } from "../../../../Table/Table";
+import { RemoveTeamMemberForm } from "@thunderstore/cyberstorm-forms";
 
 const teamMemberColumns = [
   { value: "User", disableSort: false },
@@ -23,6 +24,7 @@ const userRoles = [
 
 interface Props {
   members: TeamMember[];
+  teamName: string;
 }
 
 export function TeamMemberList(props: Props) {
@@ -60,6 +62,7 @@ export function TeamMemberList(props: Props) {
       value: (
         <Dialog.Root
           key={`action_${index}`}
+          title="Confirm member removal"
           trigger={
             <Button.Root colorScheme="danger" paddingSize="large">
               <Button.ButtonIcon>
@@ -68,24 +71,11 @@ export function TeamMemberList(props: Props) {
               <Button.ButtonLabel>Kick</Button.ButtonLabel>
             </Button.Root>
           }
-          title="Confirm member removal"
         >
-          <>
-            <div>
-              You are about to kick member{" "}
-              <UserLink user={member.username}>
-                <span className={styles.kickDescriptionUserName}>
-                  {member.username}
-                </span>
-                .
-              </UserLink>
-            </div>
-            <div className={styles.dialogFooter}>
-              <Button.Root colorScheme="danger" paddingSize="large">
-                <Button.ButtonLabel>Kick member</Button.ButtonLabel>
-              </Button.Root>
-            </div>
-          </>
+          <RemoveTeamMemberForm
+            teamName={props.teamName}
+            userName={member.username}
+          />
         </Dialog.Root>
       ),
       sortValue: 0,
