@@ -13,3 +13,4 @@ export { AddServiceAccountForm } from "./forms/AddServiceAccountForm";
 export { RemoveServiceAccountForm } from "./forms/RemoveServiceAccountForm";
 export { DeleteAccountForm } from "./forms/DeleteAccountForm";
 export { DisbandTeamForm } from "./forms/DisbandTeamForm";
+export { LeaveTeamForm } from "./forms/LeaveTeamForm";
