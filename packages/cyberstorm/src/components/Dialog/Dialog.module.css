@@ -1,15 +1,15 @@
 .overlay {
   position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: var(--color-shadow-1);
   animation: overlayShow var(--animation-length-m) cubic-bezier(0.16, 1, 0.3, 1);
   inset: 0;
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .content {
   position: fixed;
+  top: 50%;
+  left: 50%;
   display: flex;
   flex-direction: column;
   max-width: 40rem;
@@ -17,6 +17,10 @@
   border: var(--border);
   border-radius: var(--border-radius--8);
   background-color: var(--color-surface--2);
+
+  box-shadow: hsl(206deg 22% 7% / 0.35) 0 10px 38px -10px, hsl(206deg 22% 7% / 0.2) 0 10px 20px -15px;
+  transform: translate(-50%, -50%);
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 
   box-shadow: hsl(206deg 22% 7% / 0.35) 0 10px 38px -10px, hsl(206deg 22% 7% / 0.2) 0 10px 20px -15px;
   animation: contentShow var(--animation-length-m) cubic-bezier(0.16, 1, 0.3, 1);
