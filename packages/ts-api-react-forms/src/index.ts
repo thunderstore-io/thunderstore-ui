@@ -10,4 +10,5 @@ export {
   teamEditMemberFormSchema,
   teamDisbandFormSchema,
   teamAddServiceAccountFormSchema,
+  userDeleteFormSchema,
 } from "./schema";

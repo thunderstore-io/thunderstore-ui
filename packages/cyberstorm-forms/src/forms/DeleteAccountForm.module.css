@@ -1,32 +1,30 @@
 .root {
   display: flex;
   flex-direction: column;
+  gap: var(--gap--16);
 }
 
-.dialog {
+.username {
+  color: var(--color-highlight);
+}
+
+.section {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: var(--space--32);
-  border-top: var(--border-width--px) solid var(--color-surface--5);
+  gap: var(--gap--32);
 }
 
-.dialogText {
-  color: var(--color-text--secondary);
-  font-weight: var(--font-weight-medium);
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.instructionText {
   font-size: var(--font-size--l);
   line-height: var(--line-height--l);
 }
 
-.footer {
-  display: flex;
-  flex-direction: row-reverse;
-  gap: 1rem;
-  justify-content: space-between;
-  padding: var(--space--16) var(--space--24);
-  border-top: var(--border-width--px) solid var(--color-surface--5);
-}
-
-.kickDescriptionUserName {
-  color: var(--color-highlight);
+.verificationInput {
+  max-width: 436px;
 }

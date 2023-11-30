@@ -1,10 +1,10 @@
 "use client";
 
 import styles from "./DeleteAccountForm.module.css";
-import { teamDisbandTeam } from "@thunderstore/thunderstore-api";
+import { userDelete } from "@thunderstore/thunderstore-api";
 import {
   ApiForm,
-  teamDisbandFormSchema,
+  userDeleteFormSchema,
 } from "@thunderstore/ts-api-react-forms";
 import {
   FormSubmitButton,
@@ -12,49 +12,53 @@ import {
   useFormToaster,
 } from "@thunderstore/cyberstorm-forms";
 
-import { TeamLink } from "@thunderstore/cyberstorm";
+import { Alert } from "@thunderstore/cyberstorm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan, faWarning } from "@fortawesome/pro-solid-svg-icons";
 
-export function DeleteAccountForm(props: {
-  dialogOnChange: (v: boolean) => void;
-  teamName: string;
-}) {
-  const { onSubmitSuccess, onSubmitError } = useFormToaster({
-    successMessage: `Team ${props.teamName} disbanded`,
+export function DeleteAccountForm(props: { userName: string }) {
+  const toast = useFormToaster({
+    successMessage: `User ${props.userName} deleted`,
   });
 
   return (
     <ApiForm
-      onSubmitSuccess={() => {
-        onSubmitSuccess();
-        props.dialogOnChange(false);
-      }}
-      onSubmitError={onSubmitError}
-      schema={teamDisbandFormSchema}
-      endpoint={teamDisbandTeam}
+      {...toast}
+      schema={userDeleteFormSchema}
+      endpoint={userDelete}
       formProps={{ className: styles.root }}
-      metaData={{ teamIdentifier: props.teamName }}
+      metaData={{ username: props.userName }}
     >
-      <div className={styles.dialog}>
-        <p className={styles.description}>
-          As a precaution, to disband your team, please input {props.teamName}{" "}
-          into the field below.
-        </p>
+      <Alert
+        icon={<FontAwesomeIcon icon={faWarning} />}
+        content={
+          "You are about to delete your account. Once deleted, it will be gone forever. Please be certain."
+        }
+        variant="warning"
+      />
+      <p className={styles.instructionText}>
+        The mods that have been uploaded on this account will remain public on
+        the site even after deletion. If you need them to be taken down as well,
+        please contact an administrator on the community Discord server.
+      </p>
+      <p className={styles.instructionText}>
+        As a precaution, to delete your account, please input{" "}
+        <span className={styles.username}>{props.userName}</span> into the field
+        below.
+      </p>
+      <div className={styles.verificationInput}>
         <FormTextInput
-          schema={teamDisbandFormSchema}
+          schema={userDeleteFormSchema}
           name={"verification"}
-          placeholder={"Verification"}
+          placeholder={"Verification..."}
         />
-        <div className={styles.dialogText}>
-          You are about to disband the team{" "}
-          <TeamLink team={props.teamName}>
-            <span className={styles.kickDescriptionUserName}>
-              {props.teamName}
-            </span>
-          </TeamLink>
-        </div>
       </div>
-      <div className={styles.footer}>
-        <FormSubmitButton text="Disband team" colorScheme="danger" />
+      <div>
+        <FormSubmitButton
+          text="I understand this action is irrevocable and want to continue"
+          icon={<FontAwesomeIcon icon={faTrashCan} />}
+          colorScheme="danger"
+        />
       </div>
     </ApiForm>
   );

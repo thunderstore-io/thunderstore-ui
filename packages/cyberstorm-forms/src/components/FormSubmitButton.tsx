@@ -26,6 +26,7 @@ SubmitButtonContent.displayName = "SubmitButtonContent";
 export function FormSubmitButton({
   text,
   colorScheme = "accent",
+  icon,
 }: {
   text: string;
   colorScheme?:
@@ -48,6 +49,7 @@ export function FormSubmitButton({
     | "transparentAccent"
     | "transparentPrimary"
     | "wideDarker";
+  icon: JSX.Element;
 }) {
   const { isSubmitting, disabled } = useFormState();
 
@@ -58,6 +60,7 @@ export function FormSubmitButton({
       colorScheme={colorScheme}
       disabled={isSubmitting || disabled}
     >
+      {icon && <Button.ButtonIcon>{icon}</Button.ButtonIcon>}
       <SubmitButtonContent isSubmitting={isSubmitting} text={text} />
     </Button.Root>
   );

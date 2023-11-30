@@ -1,10 +1,6 @@
 import styles from "./Account.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
-import * as Button from "../../../Button/";
-import { TextInput } from "../../../TextInput/TextInput";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan, faWarning } from "@fortawesome/pro-solid-svg-icons";
-import { Alert } from "../../../Alert/Alert";
+import { DeleteAccountForm } from "@thunderstore/cyberstorm-forms";
 
 export interface AccountProps {
   username: string | null;
@@ -25,40 +21,7 @@ export function Account(props: AccountProps) {
         <SettingItem
           title="Delete Account"
           description="Delete your Thunderstore account permanently"
-          content={
-            <div className={styles.content}>
-              <Alert
-                icon={<FontAwesomeIcon icon={faWarning} />}
-                content={
-                  "You are about to delete your account. Once deleted, it will be gone forever. Please be certain."
-                }
-                variant="warning"
-              />
-              <p className={styles.instructionText}>
-                The mods that have been uploaded on this account will remain
-                public on the site even after deletion. If you need them to be
-                taken down as well, please contact an administrator on the
-                community Discord server.
-              </p>
-              <p>
-                As a precaution, to delete your account, please input{" "}
-                <i>{username}</i> to the field below
-              </p>
-              <div className={styles.verificationInput}>
-                <TextInput placeholder="Verification..." />
-              </div>
-              <div>
-                <Button.Root colorScheme="danger" paddingSize="large">
-                  <Button.ButtonIcon>
-                    <FontAwesomeIcon icon={faTrashCan} />
-                  </Button.ButtonIcon>
-                  <Button.ButtonLabel>
-                    I understand this action is irrevocable and want to continue
-                  </Button.ButtonLabel>
-                </Button.Root>
-              </div>
-            </div>
-          }
+          content={<DeleteAccountForm userName={username} />}
         />
       </div>
     </div>
