@@ -49,7 +49,7 @@ export function FormSubmitButton({
     | "transparentAccent"
     | "transparentPrimary"
     | "wideDarker";
-  icon: JSX.Element;
+  icon?: JSX.Element;
 }) {
   const { isSubmitting, disabled } = useFormState();
 
