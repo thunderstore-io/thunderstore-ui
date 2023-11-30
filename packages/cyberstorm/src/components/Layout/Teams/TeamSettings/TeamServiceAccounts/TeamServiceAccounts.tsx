@@ -41,9 +41,10 @@ export function TeamServiceAccounts(props: Props) {
           </div>
         }
         content={
-          <div className={styles.content}>
-            <ServiceAccountList serviceAccounts={serviceAccounts} />
-          </div>
+          <ServiceAccountList
+            serviceAccounts={serviceAccounts}
+            teamName={props.teamName}
+          />
         }
       />
     </div>
