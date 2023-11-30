@@ -23,4 +23,5 @@ export * from "./fetch/teamServiceAccounts";
 export * from "./fetch/teamCreate";
 export * from "./fetch/teamAddMember";
 export * from "./fetch/teamDetailsEdit";
+export * from "./fetch/teamAddServiceAccount";
 export * from "./errors";

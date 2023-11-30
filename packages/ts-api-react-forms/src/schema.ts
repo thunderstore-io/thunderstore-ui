@@ -20,3 +20,9 @@ export const teamDetailsEditFormSchema = z.object({
     .string({ required_error: "Donation link is required" })
     .min(1, { message: "Donation link is required" }),
 });
+
+export const teamAddServiceAccountFormSchema = z.object({
+  nickname: z
+    .string({ required_error: "Nickname is required" })
+    .min(1, { message: "Nickname is required" }),
+});
