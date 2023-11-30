@@ -32,3 +32,9 @@ export const userDeleteFormSchema = z.object({
     .string({ required_error: "Verification is required" })
     .min(1, { message: "Verification is required" }),
 });
+
+export const teamDisbandFormSchema = z.object({
+  verification: z
+    .string({ required_error: "Verification is required" })
+    .min(1, { message: "Verification is required" }),
+});
