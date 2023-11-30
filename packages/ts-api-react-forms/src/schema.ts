@@ -26,3 +26,9 @@ export const teamAddServiceAccountFormSchema = z.object({
     .string({ required_error: "Nickname is required" })
     .min(1, { message: "Nickname is required" }),
 });
+
+export const userDeleteFormSchema = z.object({
+  verification: z
+    .string({ required_error: "Verification is required" })
+    .min(1, { message: "Verification is required" }),
+});
