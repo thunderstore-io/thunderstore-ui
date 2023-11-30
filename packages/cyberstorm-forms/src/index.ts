@@ -6,3 +6,4 @@ export { FormSwitch } from "./components/FormSwitch";
 export { FormTextInput } from "./components/FormTextInput";
 export { AddTeamMemberForm } from "./forms/AddTeamMemberForm";
 export { CreateTeamForm } from "./forms/CreateTeamForm";
+export { TeamDetailsEdit } from "./forms/TeamDetailsEdit";
