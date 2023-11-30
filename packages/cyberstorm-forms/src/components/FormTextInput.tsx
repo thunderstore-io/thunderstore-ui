@@ -4,6 +4,7 @@ import { z, ZodObject, ZodRawShape } from "zod";
 import { Path, useController } from "react-hook-form";
 import { TextInput } from "@thunderstore/cyberstorm";
 import styles from "./FormTextInput.module.css";
+import React from "react";
 
 export type FormTextInputProps<
   Schema extends ZodObject<Z>,
@@ -13,16 +14,23 @@ export type FormTextInputProps<
   schema: Schema;
   name: Path<z.infer<Schema>>;
   placeholder?: string;
+  existingValue?: string;
 };
 export function FormTextInput<
   Schema extends ZodObject<Z>,
   Z extends ZodRawShape
->({ name, placeholder }: FormTextInputProps<Schema, Z>) {
+>({ name, placeholder, existingValue }: FormTextInputProps<Schema, Z>) {
   const {
     field,
     fieldState: { isDirty, invalid, error },
     formState: { isSubmitting, disabled },
   } = useController({ name });
+
+  if (existingValue) {
+    React.useEffect(() => {
+      field.onChange(existingValue);
+    }, [existingValue]);
+  }
 
   return (
     <>
