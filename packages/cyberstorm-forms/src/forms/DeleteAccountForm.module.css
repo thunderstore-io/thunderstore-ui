@@ -1,0 +1,30 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.username {
+  color: var(--color-highlight);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--32);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.instructionText {
+  font-size: var(--font-size--l);
+  line-height: var(--line-height--l);
+}
+
+.verificationInput {
+  max-width: 436px;
+}
