@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "./RemoveTeamMemberForm.module.css";
+import styles from "./LeaveTeamForm.module.css";
 import { teamRemoveMember } from "@thunderstore/thunderstore-api";
 import { ApiForm } from "@thunderstore/ts-api-react-forms";
 import {
@@ -9,15 +9,15 @@ import {
 } from "@thunderstore/cyberstorm-forms";
 
 import { z } from "zod";
-import { UserLink } from "@thunderstore/cyberstorm";
+import { TeamLink } from "@thunderstore/cyberstorm";
 
-export function RemoveTeamMemberForm(props: {
+export function LeaveTeamForm(props: {
   dialogOnChange: (v: boolean) => void;
   userName: string;
   teamName: string;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
-    successMessage: `User ${"TODO"} removed from team ${"TODO"}`,
+    successMessage: `${props.userName} left team ${props.teamName}`,
   });
 
   return (
@@ -34,19 +34,19 @@ export function RemoveTeamMemberForm(props: {
     >
       <div className={styles.dialog}>
         <div className={styles.dialogText}>
-          You are about to kick member{" "}
-          <UserLink user={props.userName}>
-            <span className={styles.kickDescriptionUserName}>
+          You are about to leave the team{" "}
+          <TeamLink team={props.teamName}>
+            <span className={styles.leaveDescriptionTeamName}>
               {props.userName}
             </span>
-          </UserLink>
+          </TeamLink>
         </div>
       </div>
       <div className={styles.footer}>
-        <FormSubmitButton text="Kick member" colorScheme="danger" />
+        <FormSubmitButton text="Leave team" colorScheme="danger" />
       </div>
     </ApiForm>
   );
 }
 
-RemoveTeamMemberForm.displayName = "RemoveTeamMemberForm";
+LeaveTeamForm.displayName = "LeaveTeamForm";

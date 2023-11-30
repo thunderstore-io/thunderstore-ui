@@ -13,8 +13,11 @@ import {
 } from "@thunderstore/cyberstorm-forms";
 import { FormSelect } from "../components/FormSelect";
 
-export function AddTeamMemberForm(props: { teamName: string }) {
-  const toaster = useFormToaster({
+export function AddTeamMemberForm(props: {
+  dialogOnChange: (v: boolean) => void;
+  teamName: string;
+}) {
+  const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: `Member TODO added to ${props.teamName}`,
   });
 
@@ -25,7 +28,11 @@ export function AddTeamMemberForm(props: { teamName: string }) {
 
   return (
     <ApiForm
-      {...toaster}
+      onSubmitSuccess={() => {
+        onSubmitSuccess();
+        props.dialogOnChange(false);
+      }}
+      onSubmitError={onSubmitError}
       schema={teamAddMemberFormSchema}
       metaData={{ teamIdentifier: props.teamName }}
       endpoint={teamAddMember}

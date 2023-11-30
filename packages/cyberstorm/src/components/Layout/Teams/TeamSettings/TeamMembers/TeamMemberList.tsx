@@ -12,6 +12,7 @@ import {
   RemoveTeamMemberForm,
   TeamMemberChangeRoleAction,
 } from "@thunderstore/cyberstorm-forms";
+import { useState } from "react";
 
 const teamMemberColumns = [
   { value: "User", disableSort: false },
@@ -27,57 +28,63 @@ interface Props {
 export function TeamMemberList(props: Props) {
   const { members } = props;
 
-  const tableData = members.map((member, index) => [
-    {
-      value: (
-        <UserLink key={`user_${index}`} user={member.username}>
-          <div className={styles.userInfo}>
-            <Avatar
-              src={member.avatar}
-              username={member.username}
-              size="small"
+  const tableData = members.map((member, index) => {
+    const [dialogOpen, setOpenDialog] = useState(false);
+    return [
+      {
+        value: (
+          <UserLink key={`user_${index}`} user={member.username}>
+            <div className={styles.userInfo}>
+              <Avatar
+                src={member.avatar}
+                username={member.username}
+                size="small"
+              />
+              <span className={styles.userInfoName}>{member.username}</span>
+            </div>
+          </UserLink>
+        ),
+        sortValue: member.username,
+      },
+      {
+        value: (
+          <div key={`role_${index}`} className={styles.roleSelect}>
+            <TeamMemberChangeRoleAction
+              teamName={props.teamName}
+              userName={member.username}
+              currentRole={member.role}
             />
-            <span className={styles.userInfoName}>{member.username}</span>
           </div>
-        </UserLink>
-      ),
-      sortValue: member.username,
-    },
-    {
-      value: (
-        <div key={`role_${index}`} className={styles.roleSelect}>
-          <TeamMemberChangeRoleAction
-            teamName={props.teamName}
-            userName={member.username}
-            currentRole={member.role}
-          />
-        </div>
-      ),
-      sortValue: member.role,
-    },
-    {
-      value: (
-        <Dialog.Root
-          key={`action_${index}`}
-          title="Confirm member removal"
-          trigger={
-            <Button.Root colorScheme="danger" paddingSize="large">
-              <Button.ButtonIcon>
-                <FontAwesomeIcon icon={faTrashCan} />
-              </Button.ButtonIcon>
-              <Button.ButtonLabel>Kick</Button.ButtonLabel>
-            </Button.Root>
-          }
-        >
-          <RemoveTeamMemberForm
-            teamName={props.teamName}
-            userName={member.username}
-          />
-        </Dialog.Root>
-      ),
-      sortValue: 0,
-    },
-  ]);
+        ),
+        sortValue: member.role,
+      },
+      {
+        value: (
+          <Dialog.Root
+            open={dialogOpen}
+            onOpenChange={setOpenDialog}
+            key={`action_${index}`}
+            title="Confirm member removal"
+            trigger={
+              <Button.Root colorScheme="danger" paddingSize="large">
+                <Button.ButtonIcon>
+                  <FontAwesomeIcon icon={faTrashCan} />
+                </Button.ButtonIcon>
+                <Button.ButtonLabel>Kick</Button.ButtonLabel>
+              </Button.Root>
+            }
+          >
+            <RemoveTeamMemberForm
+              dialogOnChange={setOpenDialog}
+              teamName={props.teamName}
+              userName={member.username}
+            />
+          </Dialog.Root>
+        ),
+        sortValue: 0,
+      },
+    ];
+  });
 
   return (
     <Table
