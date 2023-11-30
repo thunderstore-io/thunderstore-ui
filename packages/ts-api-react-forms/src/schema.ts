@@ -15,6 +15,15 @@ export const teamAddMemberFormSchema = z.object({
     .min(1, { message: "Role is required" }),
 });
 
+export const teamEditMemberFormSchema = z.object({
+  user: z
+    .string({ required_error: "Username is required" })
+    .min(1, { message: "Username is required" }),
+  role: z
+    .string({ required_error: "Role is required" })
+    .min(1, { message: "Role is required" }),
+});
+
 export const teamDetailsEditFormSchema = z.object({
   donation_link: z
     .string({ required_error: "Donation link is required" })
