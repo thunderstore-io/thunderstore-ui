@@ -23,6 +23,7 @@ export function useFormToaster({
       });
     },
     onSubmitError: () => {
+      // TODO: Display submit errors that server gives.
       toast.addToast({
         variant: "danger",
         message: "Unknown error occurred. The error has been logged",
