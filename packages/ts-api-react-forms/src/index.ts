@@ -5,3 +5,4 @@ export { useApiForm } from "./useApiForm";
 export type { UseApiFormReturn, UseApiFormArgs } from "./useApiForm";
 export { createTeamFormSchema } from "./schema";
 export { teamAddMemberFormSchema } from "./schema";
+export { teamEditMemberFormSchema } from "./schema";
