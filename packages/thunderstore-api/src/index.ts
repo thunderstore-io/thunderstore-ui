@@ -20,4 +20,5 @@ export * from "./fetch/teamCreate";
 export * from "./fetch/teamAddMember";
 export * from "./fetch/teamEditMember";
 export * from "./fetch/teamRemoveMember";
+export * from "./fetch/teamDetailsEdit";
 export * from "./errors";
