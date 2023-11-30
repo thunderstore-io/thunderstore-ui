@@ -17,7 +17,7 @@ import { useState } from "react";
  * Cyberstorm PackageUpload Layout
  */
 export function PackageUploadLayout() {
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen, setOpenDialog] = useState(false);
   return (
     <BaseLayout
       breadCrumb={
@@ -40,7 +40,7 @@ export function PackageUploadLayout() {
             additionalLeftColumnContent={
               <Dialog.Root
                 open={dialogOpen}
-                onOpenChange={setDialogOpen}
+                onOpenChange={setOpenDialog}
                 title="Create Team"
                 trigger={
                   <Button.Root colorScheme="primary" paddingSize="large">
@@ -51,7 +51,7 @@ export function PackageUploadLayout() {
                   </Button.Root>
                 }
               >
-                <CreateTeamForm closeDialog={() => setDialogOpen(false)} />
+                <CreateTeamForm dialogOnChange={setOpenDialog} />
               </Dialog.Root>
             }
             content={<TextInput />}
