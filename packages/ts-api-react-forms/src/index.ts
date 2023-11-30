@@ -7,3 +7,4 @@ export { createTeamFormSchema } from "./schema";
 export { teamAddMemberFormSchema } from "./schema";
 export { teamDetailsEditFormSchema } from "./schema";
 export { teamAddServiceAccountFormSchema } from "./schema";
+export { userDeleteFormSchema } from "./schema";
