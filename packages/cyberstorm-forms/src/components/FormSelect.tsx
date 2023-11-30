@@ -1,9 +1,10 @@
 "use client";
 
-import { z, ZodObject, ZodRawShape } from "zod";
+import { z, ZodObject } from "zod";
+import { ZodRawShape } from "zod/lib/types";
 import { Path, useController } from "react-hook-form";
 import styles from "./FormSelect.module.css";
-import * as RadixSelect from "@radix-ui/react-select";
+import * as Select from "@radix-ui/react-select";
 import React, { PropsWithChildren } from "react";
 import { Icon } from "@thunderstore/cyberstorm";
 import { faCaretDown, faCheckCircle } from "@fortawesome/pro-solid-svg-icons";
@@ -18,12 +19,13 @@ export type FormSelectProps<
   name: Path<z.infer<Schema>>;
   options: { value: string; label: string }[];
   placeholder?: string;
-  ariaLabel: string;
+  defaultValue?: string;
+  ariaLabel?: string;
 };
 export function FormSelect<Schema extends ZodObject<Z>, Z extends ZodRawShape>({
   name,
+  defaultValue,
   options,
-  placeholder,
   ariaLabel,
 }: FormSelectProps<Schema, Z>) {
   const {
@@ -32,14 +34,20 @@ export function FormSelect<Schema extends ZodObject<Z>, Z extends ZodRawShape>({
     formState: { isSubmitting, disabled },
   } = useController({ name });
 
+  if (defaultValue) {
+    React.useEffect(() => {
+      field.onChange(defaultValue);
+    }, [defaultValue]);
+  }
+
   return (
     <>
-      <Select
+      <TempSelect
         {...field}
-        disabled={isSubmitting || disabled}
         options={options}
-        placeholder={placeholder}
         ariaLabel={ariaLabel}
+        disabled={isSubmitting || disabled}
+        defaultValue={defaultValue}
       />
       {error && <span className={styles.errorMessage}>{error.message}</span>}
     </>
@@ -48,53 +56,50 @@ export function FormSelect<Schema extends ZodObject<Z>, Z extends ZodRawShape>({
 
 FormSelect.displayName = "FormSelect";
 
-interface SelectProps {
+interface TempSelectProps {
   options: { value: string; label: string }[];
   onChange: (val: string) => void;
   placeholder?: string;
   value?: string;
   disabled?: boolean;
   ariaLabel?: string;
+  defaultValue?: string;
 }
 
-/**
- * TODO: THIS COMPONENT SHOULD BE REMOVED AND REPLACED WHEN CYBERSTORM Select component SUPPORTS FORMS
- */
-const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
+const TempSelect = React.forwardRef<HTMLButtonElement, TempSelectProps>(
   function SelectDemo(props, ref) {
     return (
-      <RadixSelect.Root
+      <Select.Root
         disabled={props.disabled}
         onValueChange={props.onChange}
+        defaultValue={props.defaultValue}
       >
-        <RadixSelect.Trigger
-          className={styles.trigger}
+        <Select.Trigger
+          className={styles.SelectTrigger}
           aria-label={props.ariaLabel}
         >
-          <RadixSelect.Value placeholder={props.placeholder} ref={ref} />
-          <RadixSelect.Icon className={styles.icon}>
+          <Select.Value placeholder={props.placeholder} ref={ref} />
+          <Select.Icon className={styles.SelectIcon}>
             <Icon inline>
               <FontAwesomeIcon icon={faCaretDown} />
             </Icon>
-          </RadixSelect.Icon>
-        </RadixSelect.Trigger>
-        <RadixSelect.Portal>
-          <RadixSelect.Content position="popper" className={styles.content}>
-            <RadixSelect.Viewport className={styles.viewport}>
+          </Select.Icon>
+        </Select.Trigger>
+        <Select.Portal>
+          <Select.Content position="popper" className={styles.SelectContent}>
+            <Select.Viewport className={styles.SelectViewport}>
               {props.options.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
               ))}
-            </RadixSelect.Viewport>
-          </RadixSelect.Content>
-        </RadixSelect.Portal>
-      </RadixSelect.Root>
+            </Select.Viewport>
+          </Select.Content>
+        </Select.Portal>
+      </Select.Root>
     );
   }
 );
-
-Select.displayName = "Select";
 
 interface SelectItemProps {
   value: string;
@@ -107,14 +112,14 @@ const SelectItem = React.forwardRef<
 >((props: PropsWithChildren<SelectItemProps>, forwardedRef) => {
   const { value, disabled = false, children } = props;
   return (
-    <RadixSelect.Item value={value} disabled={disabled} ref={forwardedRef}>
-      <RadixSelect.ItemText>{children}</RadixSelect.ItemText>
-      <RadixSelect.ItemIndicator className={styles.SelectItemIndicator}>
+    <Select.Item value={value} disabled={disabled} ref={forwardedRef}>
+      <Select.ItemText>{children}</Select.ItemText>
+      <Select.ItemIndicator className={styles.SelectItemIndicator}>
         <Icon inline>
           <FontAwesomeIcon icon={faCheckCircle} />
         </Icon>
-      </RadixSelect.ItemIndicator>
-    </RadixSelect.Item>
+      </Select.ItemIndicator>
+    </Select.Item>
   );
 });
 
