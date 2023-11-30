@@ -46,7 +46,7 @@ export function TeamMembers(props: Props) {
             />
           </Dialog.Root>
         }
-        content={<TeamMemberList members={members} />}
+        content={<TeamMemberList members={members} teamName={teamName} />}
       />
     </div>
   );
