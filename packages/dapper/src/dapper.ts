@@ -5,7 +5,6 @@ export interface DapperInterface {
   getCommunity: methods.GetCommunity;
   getCommunityFilters: methods.GetCommunityFilters;
   getCurrentUser: methods.GetCurrentUser;
-  getPackageDependencies: methods.GetPackageDependencies;
   getPackageListingDetails: methods.GetPackageListingDetails;
   getPackageListings: methods.GetPackageListings;
   getTeamDetails: methods.GetTeamDetails;

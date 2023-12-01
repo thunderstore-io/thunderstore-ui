@@ -55,7 +55,7 @@ export const getFakePackageListings = async (
   ),
 });
 
-export const getFakeDependencies = async (
+const getFakeDependencies = async (
   community: string,
   namespace: string,
   name?: string,
