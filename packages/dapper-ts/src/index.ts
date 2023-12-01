@@ -4,7 +4,10 @@ import { RequestConfig } from "@thunderstore/thunderstore-api";
 import { getCommunities, getCommunity } from "./methods/communities";
 import { getCommunityFilters } from "./methods/communityFilters";
 import { getCurrentUser } from "./methods/currentUser";
-import { getPackageListings } from "./methods/packageListings";
+import {
+  getPackageListingDetails,
+  getPackageListings,
+} from "./methods/packageListings";
 import {
   getTeamDetails,
   getTeamMembers,
@@ -34,6 +37,7 @@ export class DapperTs implements DapperTsInterface {
     this.getCommunityFilters = this.getCommunityFilters.bind(this);
     this.getCurrentUser = this.getCurrentUser.bind(this);
     this.getPackageListings = this.getPackageListings.bind(this);
+    this.getPackageListingDetails = this.getPackageListingDetails.bind(this);
     this.getTeamDetails = this.getTeamDetails.bind(this);
     this.getTeamMembers = this.getTeamMembers.bind(this);
     this.getTeamServiceAccounts = this.getTeamServiceAccounts.bind(this);
@@ -44,10 +48,10 @@ export class DapperTs implements DapperTsInterface {
   public getCommunityFilters = getCommunityFilters;
   public getCurrentUser = getCurrentUser;
   public getPackageListings = getPackageListings;
+  public getPackageListingDetails = getPackageListingDetails;
   public getTeamDetails = getTeamDetails;
   public getTeamMembers = getTeamMembers;
   public getTeamServiceAccounts = getTeamServiceAccounts;
 
   public getPackageDependencies = NotImplemented;
-  public getPackageListingDetails = NotImplemented;
 }

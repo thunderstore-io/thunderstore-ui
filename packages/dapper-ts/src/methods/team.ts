@@ -29,7 +29,7 @@ export async function getTeamDetails(
   return parsed.data;
 }
 
-const membersSchema = z
+export const membersSchema = z
   .object({
     identifier: z.number().int().gt(0),
     username: z.string().nonempty(),
