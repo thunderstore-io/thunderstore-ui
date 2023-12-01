@@ -5,7 +5,7 @@ import { getFakeImg, getFakePackageCategories, range, setSeed } from "./utils";
 import { getFakeTeamMembers } from "./team";
 
 // Content used to render one PackageCard in a list view.
-const getFakePackagePreview = (
+const getFakePackageListing = (
   community?: string,
   namespace?: string,
   name?: string
@@ -48,7 +48,7 @@ export const getFakePackageListings = async (
   count: 200,
   hasMore: true,
   results: range(20).map(() =>
-    getFakePackagePreview(
+    getFakePackageListing(
       type.communityId,
       type.kind === "namespace" ? type.namespaceId : faker.word.sample()
     )
@@ -83,7 +83,7 @@ export const getFakePackage = async (
   setSeed(seed);
 
   return {
-    ...getFakePackagePreview(community, namespace, name),
+    ...getFakePackageListing(community, namespace, name),
 
     community_name: faker.word.sample(),
     datetime_created: faker.date.past({ years: 2 }).toISOString(),
