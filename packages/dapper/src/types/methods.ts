@@ -22,7 +22,7 @@ export type GetCommunityFilters = (
 
 export type GetCurrentUser = () => Promise<CurrentUser>;
 
-export type GetPackage = (
+export type GetPackageListingDetails = (
   community: string,
   namespace: string,
   name: string

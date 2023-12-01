@@ -19,8 +19,8 @@ export class DapperFake implements DapperInterface {
   public getCommunity = getFakeCommunity;
   public getCommunityFilters = getFakeCommunityFilters;
   public getCurrentUser = getFakeCurrentUser;
-  public getPackage = getFakePackageListingDetails;
   public getPackageDependencies = getFakeDependencies;
+  public getPackageListingDetails = getFakePackageListingDetails;
   public getPackageListings = getFakePackageListings;
   public getTeamDetails = getFakeTeamDetails;
   public getTeamMembers = getFakeTeamMembers;
