@@ -13,6 +13,7 @@ export * from "./fetch/communityPackageListings";
 export * from "./fetch/currentUser";
 export * from "./fetch/namespacePackageListings";
 export * from "./fetch/packageDependantsListings";
+export * from "./fetch/packageListingDetails";
 export * from "./fetch/teamDetails";
 export * from "./fetch/teamMembers";
 export * from "./fetch/teamServiceAccounts";
