@@ -1,10 +1,8 @@
-import { config } from "./defaultConfig";
+import { config, testData } from "./defaultConfig";
 import { fetchPackageListingDetails } from "../packageListingDetails";
 
 it("ensures default package is listed in default community", async () => {
-  const communityId = "riskofrain2";
-  const namespaceId = "testteam";
-  const packageName = "packagename";
+  const { communityId, namespaceId, packageName } = testData;
   const response = await fetchPackageListingDetails(
     config,
     communityId,

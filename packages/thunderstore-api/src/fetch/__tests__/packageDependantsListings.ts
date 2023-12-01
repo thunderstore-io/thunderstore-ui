@@ -1,4 +1,4 @@
-import { config } from "./defaultConfig";
+import { config, testData } from "./defaultConfig";
 import { fetchPackageDependantsListings } from "../packageDependantsListings";
 
 interface PartialPackage {
@@ -7,9 +7,7 @@ interface PartialPackage {
 }
 
 it("receives listing of packages depending on given package", async () => {
-  const communityId = "riskofrain2";
-  const namespaceId = "testteam";
-  const packageName = "packagename";
+  const { communityId, namespaceId, packageName } = testData;
   const response = await fetchPackageDependantsListings(
     config,
     communityId,

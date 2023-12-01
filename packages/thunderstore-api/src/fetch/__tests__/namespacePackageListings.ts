@@ -1,4 +1,4 @@
-import { config } from "./defaultConfig";
+import { config, testData } from "./defaultConfig";
 import { fetchNamespacePackageListings } from "../namespacePackageListings";
 
 interface PartialPackage {
@@ -7,8 +7,7 @@ interface PartialPackage {
 }
 
 it("receives namespace scoped paginated package listing", async () => {
-  const communityId = "riskofrain2";
-  const namespaceId = "testteam";
+  const { communityId, namespaceId } = testData;
   const response = await fetchNamespacePackageListings(
     config,
     communityId,
@@ -19,7 +18,7 @@ it("receives namespace scoped paginated package listing", async () => {
   expect(Array.isArray(response.results)).toEqual(true);
 
   response.results.forEach((pkg: PartialPackage) => {
-    expect(pkg.community_identifier.toLowerCase()).toStrictEqual(communityId);
-    expect(pkg.namespace.toLowerCase()).toStrictEqual(namespaceId);
+    expect(pkg.community_identifier).toStrictEqual(communityId);
+    expect(pkg.namespace).toStrictEqual(namespaceId);
   });
 });

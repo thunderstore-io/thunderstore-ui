@@ -1,4 +1,4 @@
-import { config } from "./defaultConfig";
+import { config, testData } from "./defaultConfig";
 import { fetchCommunityList } from "../communityList";
 
 it("finds RoR2 in community listing", async () => {
@@ -7,7 +7,7 @@ it("finds RoR2 in community listing", async () => {
   expect(Array.isArray(response.results)).toEqual(true);
 
   const ror = response.results.find(
-    (x: { identifier: string }) => x.identifier === "riskofrain2"
+    (x: { identifier: string }) => x.identifier === testData.communityId
   );
 
   expect(ror).toBeDefined();
