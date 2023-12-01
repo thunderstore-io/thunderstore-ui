@@ -190,10 +190,7 @@ export function PackageDetailLayout(props: Props) {
             }
           />
           <PackageTagList packageData={packageData} />
-          <PackageDependencyList
-            namespace={namespaceId}
-            community={communityId}
-          />
+          <PackageDependencyList dependencies={packageData.dependencies} />
           <PackageTeamMemberList
             community={packageData.community_identifier}
             teamName={packageData.namespace}
