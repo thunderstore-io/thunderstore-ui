@@ -74,7 +74,7 @@ export const getFakeDependencies = async (
 };
 
 // Content used to render Package's detail view.
-export const getFakePackage = async (
+export const getFakePackageListingDetails = async (
   community: string,
   namespace: string,
   name: string

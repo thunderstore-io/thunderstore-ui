@@ -1,5 +1,5 @@
 import styles from "./PackageTagList.module.css";
-import { Package } from "@thunderstore/dapper/types";
+import { PackageListingDetails } from "@thunderstore/dapper/types";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTag } from "@fortawesome/pro-regular-svg-icons";
@@ -13,7 +13,7 @@ import {
 import { ReactNode } from "react";
 
 export interface PackageTagListProps {
-  packageData: Package;
+  packageData: PackageListingDetails;
 }
 
 export function PackageTagList(props: PackageTagListProps) {
@@ -34,7 +34,7 @@ export function PackageTagList(props: PackageTagListProps) {
 
 PackageTagList.displayName = "PackageTagList";
 
-function getPackageFlags(packageData: Package) {
+function getPackageFlags(packageData: PackageListingDetails) {
   const updateTimeDelta = Math.round(
     (Date.now() - Date.parse(packageData.last_updated)) / 86400000
   );

@@ -1,4 +1,4 @@
-import { Package } from "@thunderstore/dapper/types";
+import { PackageListingDetails } from "@thunderstore/dapper/types";
 
 import styles from "../PackageDetailLayout.module.css";
 import { CopyButton } from "../../../CopyButton/CopyButton";
@@ -8,7 +8,7 @@ import { RelativeTime } from "../../../RelativeTime/RelativeTime";
 import { formatFileSize, formatInteger } from "../../../../utils/utils";
 
 interface Props {
-  package: Package;
+  package: PackageListingDetails;
 }
 
 export const PackageMetaItems = (props: Props) => (

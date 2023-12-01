@@ -19,7 +19,7 @@ export interface PackageListing {
 
 export type PackageListings = PaginatedList<PackageListing>;
 
-export interface Package extends PackageListing {
+export interface PackageListingDetails extends PackageListing {
   community_name: string;
   datetime_created: string;
   dependant_count: number;
