@@ -9,7 +9,8 @@ import { Tooltip } from "../..";
 import { classnames } from "../../utils/utils";
 
 interface DialogProps extends PropsWithChildren {
-  defaultOpen?: boolean;
+  open?: boolean;
+  onOpenChange?: (v: boolean) => void;
   trigger?: ReactNode;
   title?: string;
   showHeaderBorder?: boolean;
@@ -21,21 +22,18 @@ interface DialogProps extends PropsWithChildren {
 export function Dialog(props: DialogProps) {
   const {
     children,
-    defaultOpen = false,
+    open,
+    onOpenChange,
     trigger,
     title = undefined,
     showHeaderBorder = false,
   } = props;
 
-  const [isOpen, setOpen] = useState<boolean>(
-    defaultOpen ? defaultOpen : false
-  );
-
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
   return (
     <div>
-      <RadixDialog.Root open={isOpen} onOpenChange={setOpen}>
+      <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
         <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>
         <RadixDialog.Portal>
           <RadixDialog.Overlay className={styles.overlay}>

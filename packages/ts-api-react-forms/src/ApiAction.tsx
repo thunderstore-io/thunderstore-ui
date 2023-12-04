@@ -1,32 +1,30 @@
 "use client";
 
-import { HTMLAttributes, PropsWithChildren, useCallback } from "react";
+import { useCallback } from "react";
 import { z, ZodObject, ZodRawShape } from "zod";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { ApiEndpoint } from "@thunderstore/ts-api-react";
-import { FormProvider } from "react-hook-form";
-import { useApiForm } from "./useApiForm";
+import { useApiAction } from "./useApiAction";
 
-export type ApiFormProps<
+export interface ApiActionProps<
   Schema extends ZodObject<Z>,
   Result extends object,
   Z extends ZodRawShape
-> = {
+> {
   schema: Schema;
   endpoint: ApiEndpoint<z.infer<Schema>, Result>;
   metaData: any;
   onSubmitSuccess?: (result: Result) => void;
   onSubmitError?: (error: Error | ApiError | unknown) => void;
-  formProps?: Omit<HTMLAttributes<HTMLFormElement>, "onSubmit">;
-};
-export function ApiForm<
+}
+
+export function ApiAction<
   Schema extends ZodObject<Z>,
   Result extends object,
   Z extends ZodRawShape
->(props: PropsWithChildren<ApiFormProps<Schema, Result, Z>>) {
-  const { schema, metaData, endpoint, onSubmitSuccess, onSubmitError } = props;
-  const { form, submitHandler } = useApiForm({
-    schema: schema,
+>(props: ApiActionProps<Schema, Result, Z>) {
+  const { metaData, endpoint, onSubmitSuccess, onSubmitError } = props;
+  const submitHandler = useApiAction({
     metaData: metaData,
     endpoint: endpoint,
   });
@@ -48,13 +46,7 @@ export function ApiForm<
     [onSubmitSuccess, onSubmitError]
   );
 
-  return (
-    <FormProvider {...form}>
-      <form {...props.formProps} onSubmit={form.handleSubmit(onSubmit)}>
-        {props.children}
-      </form>
-    </FormProvider>
-  );
+  return onSubmit;
 }
 
-ApiForm.displayName = "ApiForm";
+ApiAction.displayName = "ApiAction";

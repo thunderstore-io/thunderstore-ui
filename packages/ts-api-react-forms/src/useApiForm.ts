@@ -12,6 +12,7 @@ export type UseApiFormArgs<
   Z extends ZodRawShape
 > = {
   schema: Schema;
+  metaData: any;
   endpoint: ApiEndpoint<z.infer<Schema>, Result>;
 };
 export type UseApiFormReturn<
@@ -29,7 +30,7 @@ export function useApiForm<
 >(
   args: UseApiFormArgs<Schema, Result, Z>
 ): UseApiFormReturn<Schema, Result, Z> {
-  const { schema, endpoint } = args;
+  const { schema, metaData, endpoint } = args;
   const apiCall = useApiCall(endpoint);
 
   const form = useForm<z.infer<Schema>>({
@@ -38,7 +39,7 @@ export function useApiForm<
   });
   const submitHandler = async (data: z.infer<Schema>) => {
     try {
-      return await apiCall(data);
+      return await apiCall(data, metaData);
     } catch (e) {
       handleFormApiErrors(e, schema, form.setError);
       throw e;
