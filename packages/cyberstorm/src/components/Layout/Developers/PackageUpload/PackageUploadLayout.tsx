@@ -11,11 +11,13 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { CreateTeamForm } from "@thunderstore/cyberstorm-forms";
 import { Dialog } from "../../../..";
+import { useState } from "react";
 
 /**
  * Cyberstorm PackageUpload Layout
  */
 export function PackageUploadLayout() {
+  const [dialogOpen, setOpenDialog] = useState(false);
   return (
     <BaseLayout
       breadCrumb={
@@ -37,6 +39,8 @@ export function PackageUploadLayout() {
             description="No teams available?"
             additionalLeftColumnContent={
               <Dialog.Root
+                open={dialogOpen}
+                onOpenChange={setOpenDialog}
                 title="Create Team"
                 trigger={
                   <Button.Root colorScheme="primary" paddingSize="large">
@@ -47,7 +51,7 @@ export function PackageUploadLayout() {
                   </Button.Root>
                 }
               >
-                <CreateTeamForm />
+                <CreateTeamForm dialogOnChange={setOpenDialog} />
               </Dialog.Root>
             }
             content={<TextInput />}
