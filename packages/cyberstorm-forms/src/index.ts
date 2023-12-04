@@ -9,3 +9,4 @@ export { CreateTeamForm } from "./forms/CreateTeamForm";
 export { TeamDetailsEdit } from "./forms/TeamDetailsEdit";
 export { AddServiceAccountForm } from "./forms/AddServiceAccountForm";
 export { RemoveServiceAccountForm } from "./forms/RemoveServiceAccountForm";
+export { DeleteAccountForm } from "./forms/DeleteAccountForm";
