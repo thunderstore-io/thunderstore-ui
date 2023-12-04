@@ -4,3 +4,9 @@
   grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
   gap: 3rem 1.5rem;
 }
+
+.card {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+}

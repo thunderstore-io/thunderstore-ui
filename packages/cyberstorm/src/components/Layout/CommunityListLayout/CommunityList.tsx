@@ -14,11 +14,6 @@ interface Props {
 export function CommunityList(props: Props) {
   const { order, search } = props;
   const dapper = useDapper();
-  /* KVG how to test next js / react suspense */
-  setTimeout(() => {
-    console.log("ads");
-  }, 50000);
-
   // TODO: the component doesn't currently support pagination, while this
   // only returns the first 100 items (we don't have 100 communities).
   const communities = usePromise(dapper.getCommunities, [
