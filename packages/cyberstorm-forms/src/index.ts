@@ -7,3 +7,4 @@ export { FormTextInput } from "./components/FormTextInput";
 export { AddTeamMemberForm } from "./forms/AddTeamMemberForm";
 export { CreateTeamForm } from "./forms/CreateTeamForm";
 export { TeamDetailsEdit } from "./forms/TeamDetailsEdit";
+export { AddServiceAccountForm } from "./forms/AddServiceAccountForm";
