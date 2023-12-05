@@ -21,6 +21,7 @@ export function CreateTeamForm() {
     <ApiForm
       {...toaster}
       schema={createTeamFormSchema}
+      meta={{}}
       endpoint={createTeam}
       formProps={{ className: styles.root }}
     >
