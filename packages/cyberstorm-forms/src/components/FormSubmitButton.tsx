@@ -23,16 +23,25 @@ const SubmitButtonContent = React.memo(
 
 SubmitButtonContent.displayName = "SubmitButtonContent";
 
-export function FormSubmitButton({ text }: { text: string }) {
+export function FormSubmitButton({
+  text,
+  colorScheme = "accent",
+  icon,
+}: {
+  text: string;
+  colorScheme?: React.ComponentProps<typeof Button.Root>["colorScheme"];
+  icon?: JSX.Element;
+}) {
   const { isSubmitting, disabled } = useFormState();
 
   return (
     <Button.Root
       type="submit"
       paddingSize="large"
-      colorScheme="accent"
+      colorScheme={colorScheme}
       disabled={isSubmitting || disabled}
     >
+      {icon && <Button.ButtonIcon>{icon}</Button.ButtonIcon>}
       <SubmitButtonContent isSubmitting={isSubmitting} text={text} />
     </Button.Root>
   );
