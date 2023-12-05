@@ -12,14 +12,23 @@ import {
   useFormToaster,
 } from "@thunderstore/cyberstorm-forms";
 
-export function CreateTeamForm() {
-  const toaster = useFormToaster({
+interface Props {
+  /** Function that will be called when the form submission is successful */
+  closeDialog: () => void;
+}
+
+export function CreateTeamForm(props: Props) {
+  const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: "Team created",
   });
 
   return (
     <ApiForm
-      {...toaster}
+      onSubmitSuccess={() => {
+        onSubmitSuccess();
+        props.closeDialog();
+      }}
+      onSubmitError={onSubmitError}
       schema={createTeamFormSchema}
       endpoint={createTeam}
       formProps={{ className: styles.root }}
