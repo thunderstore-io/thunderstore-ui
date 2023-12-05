@@ -11,11 +11,7 @@ export const PackageDependencyDialog = (props: Props) => (
   <div className={styles.root}>
     {props.packages.map((packageData, index) => (
       <div key={index} className={styles.item}>
-        <img
-          className={styles.image}
-          src={packageData.icon_url ?? undefined}
-          alt=""
-        />
+        <img className={styles.image} src={packageData.icon_url} alt="" />
         <div>
           <div className={styles.title}>
             <PackageLink
