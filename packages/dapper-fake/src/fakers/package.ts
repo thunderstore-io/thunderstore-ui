@@ -18,7 +18,7 @@ const getFakePackageListing = (
     community_identifier: community ?? faker.word.sample(),
     description: faker.company.buzzPhrase(),
     download_count: faker.number.int({ min: 100, max: 10000000 }),
-    icon_url: faker.helpers.maybe(getFakeImg, { probability: 0.9 }) ?? null,
+    icon_url: getFakeImg(),
     is_deprecated: faker.datatype.boolean(0.1),
     is_nsfw: faker.datatype.boolean(0.1),
     is_pinned: faker.datatype.boolean(0.1),
@@ -66,7 +66,7 @@ const getFakeDependencies = async (
   return range(count).map(() => ({
     community_identifier: community,
     description: faker.company.buzzPhrase(),
-    icon_url: faker.helpers.maybe(getFakeImg, { probability: 0.9 }) ?? null,
+    icon_url: getFakeImg(),
     name: (name ?? faker.word.words(3)).split(" ").join("_"),
     namespace,
     version_number: getVersionNumber(),

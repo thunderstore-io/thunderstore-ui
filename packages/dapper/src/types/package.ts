@@ -6,7 +6,7 @@ export interface PackageListing {
   community_identifier: string;
   description: string;
   download_count: number;
-  icon_url: string | null;
+  icon_url: string;
   is_deprecated: boolean;
   is_nsfw: boolean;
   is_pinned: boolean;
@@ -34,7 +34,7 @@ export interface PackageListingDetails extends PackageListing {
 export interface PackageDependency {
   community_identifier: string;
   description: string;
-  icon_url: string | null;
+  icon_url: string;
   name: string;
   namespace: string;
   version_number: string;
