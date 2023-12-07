@@ -15,24 +15,24 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
+import { Suspense } from "react";
 
 import { PackageChangeLog } from "./PackageChangeLog/PackageChangeLog";
 import styles from "./PackageDetailLayout.module.css";
 import { PackageDependencyList } from "./PackageDependencyList/PackageDependencyList";
 import { PackageManagementForm } from "./PackageManagementForm/PackageManagementForm";
 import { PackageMetaItems } from "./PackageMetaItems/PackageMetaItems";
+import { PackageReadme } from "./PackageReadme/PackageReadme";
 import { PackageTagList } from "./PackageTagList/PackageTagList";
 import { PackageTeamMemberList } from "./PackageTeamMemberList/PackageTeamMemberList";
 import { PackageVersions } from "./PackageVersions/PackageVersions";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
-import { PLACEHOLDER } from "../Developers/MarkdownPreview/MarkdownPlaceholder";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import * as Button from "../../Button/";
 import { CommunitiesLink, CommunityLink, TeamLink } from "../../Links/Links";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import * as Dialog from "../../Dialog";
 import { Icon } from "../../Icon/Icon";
-import markdownStyles from "../../Markdown/Markdown.module.css";
 import Tabs from "../../NewTabs/Tabs";
 import { Tag } from "../../Tag/Tag";
 import { WrapperCard } from "../../WrapperCard/WrapperCard";
@@ -145,14 +145,15 @@ export function PackageDetailLayout(props: Props) {
       mainContent={
         <Tabs>
           <Tabs.Tab name="details" label="Details" icon={faFileLines}>
-            <div
-              dangerouslySetInnerHTML={{ __html: PLACEHOLDER() }}
-              className={markdownStyles.root}
-            />
+            <Suspense fallback={<p>TODO</p>}>
+              <PackageReadme {...props} />
+            </Suspense>
           </Tabs.Tab>
 
           <Tabs.Tab name="changelog" label="Changelog" icon={faFilePlus}>
-            <PackageChangeLog packageId={packageData.name} />
+            <Suspense fallback={<p>TODO</p>}>
+              <PackageChangeLog {...props} />
+            </Suspense>
           </Tabs.Tab>
 
           <Tabs.Tab name="versions" label="Versions" icon={faCodeBranch}>

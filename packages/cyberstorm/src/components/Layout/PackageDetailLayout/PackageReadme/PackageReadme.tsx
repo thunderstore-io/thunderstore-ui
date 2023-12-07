@@ -9,10 +9,10 @@ interface Props {
   versionNumber?: string;
 }
 
-export function PackageChangeLog(props: Props) {
+export function PackageReadme(props: Props) {
   const { namespaceId, packageName, versionNumber } = props;
   const dapper = useDapper();
-  const { html: __html } = usePromise(dapper.getPackageChangelog, [
+  const { html: __html } = usePromise(dapper.getPackageReadme, [
     namespaceId,
     packageName,
     versionNumber,
@@ -21,4 +21,4 @@ export function PackageChangeLog(props: Props) {
   return <div dangerouslySetInnerHTML={{ __html }} className={styles.root} />;
 }
 
-PackageChangeLog.displayName = "PackageChangeLog";
+PackageReadme.displayName = "PackageReadme";
