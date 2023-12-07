@@ -4,6 +4,7 @@ import { RequestConfig } from "@thunderstore/thunderstore-api";
 import { getCommunities, getCommunity } from "./methods/communities";
 import { getCommunityFilters } from "./methods/communityFilters";
 import { getCurrentUser } from "./methods/currentUser";
+import { getPackageChangelog, getPackageReadme } from "./methods/package";
 import {
   getPackageListingDetails,
   getPackageListings,
@@ -27,8 +28,10 @@ export class DapperTs implements DapperTsInterface {
     this.getCommunity = this.getCommunity.bind(this);
     this.getCommunityFilters = this.getCommunityFilters.bind(this);
     this.getCurrentUser = this.getCurrentUser.bind(this);
+    this.getPackageChangelog = this.getPackageChangelog.bind(this);
     this.getPackageListings = this.getPackageListings.bind(this);
     this.getPackageListingDetails = this.getPackageListingDetails.bind(this);
+    this.getPackageReadme = this.getPackageReadme.bind(this);
     this.getTeamDetails = this.getTeamDetails.bind(this);
     this.getTeamMembers = this.getTeamMembers.bind(this);
     this.getTeamServiceAccounts = this.getTeamServiceAccounts.bind(this);
@@ -38,8 +41,10 @@ export class DapperTs implements DapperTsInterface {
   public getCommunity = getCommunity;
   public getCommunityFilters = getCommunityFilters;
   public getCurrentUser = getCurrentUser;
+  public getPackageChangelog = getPackageChangelog;
   public getPackageListings = getPackageListings;
   public getPackageListingDetails = getPackageListingDetails;
+  public getPackageReadme = getPackageReadme;
   public getTeamDetails = getTeamDetails;
   public getTeamMembers = getTeamMembers;
   public getTeamServiceAccounts = getTeamServiceAccounts;

@@ -28,6 +28,12 @@ it("executes getCurrentUser without errors", async () => {
   await expect(dapper.getCurrentUser()).resolves.not.toThrowError();
 });
 
+it("executes getPackageChangelog without errors", async () => {
+  await expect(
+    dapper.getPackageChangelog(namespaceId, packageName)
+  ).resolves.not.toThrowError();
+});
+
 it("executes getPackageListingDetails without errors", async () => {
   await expect(
     dapper.getPackageListingDetails(communityId, namespaceId, packageName)
@@ -47,6 +53,12 @@ it("executes getPackageListings for namespace without errors", async () => {
       communityId,
       namespaceId,
     })
+  ).resolves.not.toThrowError();
+});
+
+it("executes getPackageReadme without errors", async () => {
+  await expect(
+    dapper.getPackageReadme(namespaceId, packageName)
   ).resolves.not.toThrowError();
 });
 
