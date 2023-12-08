@@ -153,7 +153,9 @@ export function PackageDetailLayout(props: Props) {
           </Tabs.Tab>
 
           <Tabs.Tab name="versions" label="Versions" icon={faCodeBranch}>
-            <PackageVersions />
+            <Suspense fallback={<p>TODO</p>}>
+              <PackageVersions {...props} />
+            </Suspense>
           </Tabs.Tab>
         </Tabs>
       }
