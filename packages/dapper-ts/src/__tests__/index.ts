@@ -62,6 +62,12 @@ it("executes getPackageReadme without errors", async () => {
   ).resolves.not.toThrowError();
 });
 
+it("executes getPackageVersions without errors", async () => {
+  await expect(
+    dapper.getPackageVersions(namespaceId, packageName)
+  ).resolves.not.toThrowError();
+});
+
 it("executes getTeamDetails without errors", async () => {
   await expect(dapper.getTeamDetails(namespaceId)).resolves.not.toThrowError();
 });
