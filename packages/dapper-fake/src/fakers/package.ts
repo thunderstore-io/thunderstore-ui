@@ -105,12 +105,38 @@ export const getFakePackageListingDetails = async (
   };
 };
 
-// const getPackageVersion = () => ({
-//   version_number: getVersionNumber(),
-//   changelog: faker.company.buzzPhrase(),
-//   datetime_created: faker.date.recent({ days: 700 }).toISOString(),
-//   download_count: faker.number.int({ min: 1000000, max: 10000000 }),
-// });
+// Shown on a tab on Package's detail view.
+export const getFakePackageVersions = async (
+  namespace: string,
+  name: string
+) => {
+  setSeed(`${namespace}-${name}`);
+  const version = [0, 1, 0];
+
+  return range(50).map(() => {
+    const versionNumber = `${version[0]}.${version[1]}.${version[2]}`;
+    const r = Math.random();
+
+    if (r < 0.2) {
+      version[0] += 1;
+      version[1] = 0;
+      version[2] = 0;
+    } else if (r < 0.5) {
+      version[1] += 1;
+      version[2] = 0;
+    } else {
+      version[2] += 1;
+    }
+
+    return {
+      version_number: versionNumber,
+      datetime_created: faker.date.recent({ days: 700 }).toISOString(),
+      download_count: faker.number.int({ min: 0, max: 200000 }),
+      download_url: `https://thunderstore.io/package/download/${namespace}/${name}/${versionNumber}/`,
+      install_url: `ror2mm://v1/install/thunderstore.io/${namespace}/${name}/${versionNumber}/`,
+    };
+  });
+};
 
 const getVersionNumber = (min = 0, max = 10) => {
   const major = faker.number.int({ min, max });
