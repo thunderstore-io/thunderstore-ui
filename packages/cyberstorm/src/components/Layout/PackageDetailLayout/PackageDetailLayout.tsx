@@ -37,7 +37,6 @@ import Tabs from "../../NewTabs/Tabs";
 import { Tag } from "../../Tag/Tag";
 import { WrapperCard } from "../../WrapperCard/WrapperCard";
 import { ThunderstoreLogo } from "../../../svg/svg";
-import { getDownloadUrl, getInstallUrl } from "../../../utils/utils";
 
 export interface Props {
   communityId: string;
@@ -133,10 +132,7 @@ export function PackageDetailLayout(props: Props) {
             <Dialog.Root title="Manage Package" trigger={<ManageButton />}>
               <PackageManagementForm isDeprecated={packageData.is_deprecated} />
             </Dialog.Root>
-            <a
-              href={getInstallUrl(packageData)}
-              className={styles.installButton}
-            >
+            <a href={packageData.install_url} className={styles.installButton}>
               <InstallButton />
             </a>
           </div>
@@ -165,7 +161,7 @@ export function PackageDetailLayout(props: Props) {
         <div className={styles.metaInfo}>
           <div className={styles.metaButtonWrapper}>
             <a
-              href={getDownloadUrl(packageData)}
+              href={packageData.download_url}
               className={styles.metaDownloadButton}
             >
               <DownloadButton />

@@ -1,5 +1,3 @@
-import { PackageListingDetails } from "@thunderstore/dapper/types";
-
 export const range = (start: number, end: number) => {
   const length = end - start + 1;
   return Array.from({ length }, (_, idx) => idx + start);
@@ -30,12 +28,3 @@ export const classnames = (
 ): string => {
   return classnames.filter(String).join(" ");
 };
-
-export const getDownloadUrl = (p: PackageListingDetails) =>
-  `https://thunderstore.io/package/download/${getPath(p)}/`;
-
-export const getInstallUrl = (p: PackageListingDetails) =>
-  `ror2mm://v1/install/thunderstore.io/${getPath(p)}/`;
-
-const getPath = (p: PackageListingDetails) =>
-  `${p.namespace}/${p.name}/${p.latest_version_number}`;

@@ -82,6 +82,8 @@ export const getFakePackageListingDetails = async (
   const seed = `${community}-${namespace}-${name}`;
   setSeed(seed);
 
+  const version = getVersionNumber();
+
   return {
     ...getFakePackageListing(community, namespace, name),
 
@@ -89,8 +91,10 @@ export const getFakePackageListingDetails = async (
     datetime_created: faker.date.past({ years: 2 }).toISOString(),
     dependant_count: faker.number.int({ min: 0, max: 2000 }),
     dependencies: await getFakeDependencies(community, namespace, name),
-    full_version_name: `${namespace}-${name}-${getVersionNumber()}`,
+    download_url: `https://thunderstore.io/package/download/${namespace}/${name}/${version}/`,
+    full_version_name: `${namespace}-${name}-${version}}`,
     has_changelog: true,
+    install_url: `ror2mm://v1/install/thunderstore.io/${namespace}/${name}/${version}/`,
     latest_version_number: getVersionNumber(),
     team: {
       name: faker.word.words(3),
