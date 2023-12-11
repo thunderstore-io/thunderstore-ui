@@ -4,46 +4,12 @@
   gap: var(--space--12);
 }
 
-.imageWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--border-radius--8);
-  overflow: hidden;
-  color: var(--color-purple--9);
-  background-color: var(--color-purple--4);
-  transition: 0.2s;
-  aspect-ratio: 3 / 4;
-}
-
 .root:hover .imageWrapper {
   filter: brightness(1.15);
 }
 
-.imageContent {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30%;
-  aspect-ratio: 1;
-  transition: 0.2s;
-}
-
-.root:hover .imageContent {
+.root:hover .imageWrapper > div {
   transform: scale(1.05);
-}
-
-.fullWidth {
-  width: 100%;
-}
-
-.image {
-  object-fit: cover;
-  aspect-ratio: 3 / 4;
-}
-
-.imageContent svg {
-  height: auto;
 }
 
 .title {

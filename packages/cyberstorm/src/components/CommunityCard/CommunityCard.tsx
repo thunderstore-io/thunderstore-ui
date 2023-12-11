@@ -1,12 +1,12 @@
-import styles from "./CommunityCard.module.css";
-import { MetaItem } from "../MetaItem/MetaItem";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBoxOpen, faDownload } from "@fortawesome/free-solid-svg-icons";
-import { faGamepadModern } from "@fortawesome/pro-solid-svg-icons";
-import { classnames, formatInteger } from "../../utils/utils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Community } from "@thunderstore/dapper/types";
+
+import styles from "./CommunityCard.module.css";
+import { ImageWithFallback } from "../ImageWithFallback/ImageWithFallback";
 import { CommunityLink } from "../Links/Links";
-import { Icon } from "../Icon/Icon";
+import { MetaItem } from "../MetaItem/MetaItem";
+import { formatInteger } from "../../utils/utils";
 
 interface Props {
   community: Community;
@@ -21,17 +21,11 @@ export function CommunityCard(props: Props) {
   return (
     <CommunityLink community={community.identifier}>
       <div className={styles.root}>
-        <div className={styles.imageWrapper}>
-          {community.icon_url ? (
-            <div className={classnames(styles.imageContent, styles.fullWidth)}>
-              <img className={styles.image} alt="" src={community.icon_url} />
-            </div>
-          ) : (
-            <Icon wrapperClasses={styles.imageContent}>
-              <FontAwesomeIcon icon={faGamepadModern} />
-            </Icon>
-          )}
-        </div>
+        <ImageWithFallback
+          src={community.icon_url}
+          type="community"
+          rootClass={styles.imageWrapper}
+        />
         <div className={styles.title} title={community.name}>
           {community.name}
         </div>
