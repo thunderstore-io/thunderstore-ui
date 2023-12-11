@@ -1,0 +1,33 @@
+.imageWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius--8);
+  overflow: hidden;
+  color: var(--color-purple--9);
+  background-color: var(--color-purple--4);
+  transition: 0.2s;
+  aspect-ratio: 3 / 4;
+}
+
+.imageContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  aspect-ratio: 1;
+  transition: 0.2s;
+}
+
+.imageContent svg {
+  height: auto;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.image {
+  object-fit: cover;
+  aspect-ratio: 3 / 4;
+}
