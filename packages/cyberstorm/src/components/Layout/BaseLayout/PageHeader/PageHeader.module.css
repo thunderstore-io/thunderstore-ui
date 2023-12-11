@@ -4,6 +4,10 @@
   gap: var(--space--32);
 }
 
+.image {
+  flex: 0 0 9rem;
+}
+
 .info {
   display: flex;
   flex-direction: column;
