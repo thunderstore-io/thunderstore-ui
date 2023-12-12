@@ -1,0 +1,44 @@
+.root {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space--12);
+  }
+  
+ /*  .card {
+  height: 470px;
+  width: 248px;
+  background-color: #191B38;
+  gap: 16px;
+  border-radius: var(--border-radius--8);
+  }
+ */
+  .imageWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius--8);
+    overflow: hidden;
+    color: var(--color-purple--9);
+    background-color: #191B38;
+    transition: 0.2s;
+    aspect-ratio: 3 / 4;
+  }
+  
+
+  .title {
+    overflow: hidden;
+    color: var(--color-text--default);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size--l);
+    line-height: normal;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .metaItemList {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: auto;
+  }
+  
