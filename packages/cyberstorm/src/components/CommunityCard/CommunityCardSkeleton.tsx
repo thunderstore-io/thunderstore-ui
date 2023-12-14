@@ -7,9 +7,9 @@ import styles from "./CommunityCardSkeleton.module.css";
 export const CommunityCardSkeleton = () => {
   return (
     <div className={styles.root}>
-      <div className={styles.imageWrapper}></div>
-      <div className={styles.title}></div>
-      <div className={styles.metaItemList}></div>
+      <div className={styles.image} />
+      <div className={styles.title} />
+      <div className={styles.meta} />
     </div>
   );
 };
