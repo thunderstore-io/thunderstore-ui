@@ -12,33 +12,26 @@
   border-radius: var(--border-radius--8);
   }
  */
-  .imageWrapper {
+  .image {
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: var(--border-radius--8);
     overflow: hidden;
     color: var(--color-purple--9);
-    background-color: #191B38;
-    transition: 0.2s;
-    aspect-ratio: 3 / 4;
+    background-color: red;
   }
   
 
   .title {
-    overflow: hidden;
-    color: var(--color-text--default);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size--l);
-    line-height: normal;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+background-color: blue;
   }
 
-  .metaItemList {
+  .meta {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     margin-top: auto;
+    background-color: green;
   }
   
