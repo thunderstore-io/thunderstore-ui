@@ -1,4 +1,4 @@
-import { config } from "./defaultConfig";
+import { config, testData } from "./defaultConfig";
 import { fetchCommunityPackageListings } from "../communityPackageListings";
 
 interface PartialPackage {
@@ -6,7 +6,7 @@ interface PartialPackage {
 }
 
 it("receives community scoped paginated package listing", async () => {
-  const communityId = "riskofrain2";
+  const { communityId } = testData;
   const response = await fetchCommunityPackageListings(config, communityId);
 
   expect(typeof response.count).toEqual("number");

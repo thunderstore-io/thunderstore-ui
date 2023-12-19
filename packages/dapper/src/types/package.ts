@@ -23,6 +23,7 @@ export interface PackageListingDetails extends PackageListing {
   community_name: string;
   datetime_created: string;
   dependant_count: number;
+  dependencies: PackageDependency[];
   full_version_name: string;
   has_changelog: boolean;
   latest_version_number: string;
