@@ -1,5 +1,6 @@
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { faBoxOpen, faDownload } from "@fortawesome/pro-regular-svg-icons";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
@@ -8,12 +9,11 @@ import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import * as Button from "../../Button/";
-import { CommunityImage } from "../../CommunityImage/CommunityImage";
+import { ImageWithFallback } from "../../ImageWithFallback/ImageWithFallback";
 import { CommunitiesLink, CommunityLink } from "../../Links/Links";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { PackageSearch } from "../../PackageSearch/PackageSearch";
 import { formatInteger } from "../../../utils/utils";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 
 interface Props {
   communityId: string;
@@ -47,7 +47,7 @@ export function CommunityProfileLayout(props: Props) {
           title={community.name}
           description={community.description}
           image={
-            <CommunityImage src={community.icon_url ?? "/images/game.png"} />
+            <ImageWithFallback src={community.icon_url} type="community" />
           }
           meta={[
             <MetaItem
