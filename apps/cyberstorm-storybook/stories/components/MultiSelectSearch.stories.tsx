@@ -29,19 +29,22 @@ const defaultArgs = {
   options: options,
 };
 
+/**
+ * TODO: the typing of useState and its returned values is odd because
+ * the props of MultiSelectSearch are odd due to usage of unknown. IDK
+ * how to fix the actual types since IDK how the component will
+ * eventually be used. This hopefully temporary fix was required since
+ * the story breaks the CI pipeline.
+ */
 const Template: StoryFn<typeof MultiSelectSearch> = (args) => {
-  const [selected, setSelected] = useState<{ label: string; value: string }[]>(
-    []
-  );
-  const defaultProps = {
-    ...args,
-    onChange: (x: { label: string; value: string }[]) => setSelected(x),
-    value: selected,
-  };
+  const [selected, setSelected] = useState<unknown>([]);
+  const defaultProps = { ...args, onChange: setSelected, value: selected };
+
   return (
     <div>
       <div style={{ color: "white" }}>
-        Value in state: {selected.map((s) => s.label).join(", ")}
+        Value in state:{" "}
+        {(selected as { label: string }[]).map((s) => s.label).join(", ")}
       </div>
       <MultiSelectSearch {...defaultProps} />
     </div>
