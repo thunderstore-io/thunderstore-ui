@@ -1,6 +1,7 @@
 import { Communities, Community, CommunityFilters } from "./community";
 import { PackageListingDetails, PackageListings } from "./package";
 import { PackageListingType } from "./props";
+import { MarkdownResponse } from "./shared";
 import { TeamDetails, ServiceAccount, TeamMember } from "./team";
 import { CurrentUser } from "./user";
 
@@ -17,6 +18,12 @@ export type GetCommunityFilters = (
 ) => Promise<CommunityFilters>;
 
 export type GetCurrentUser = () => Promise<CurrentUser>;
+
+export type GetPackageChangelog = (
+  namespace: string,
+  name: string,
+  version?: string
+) => Promise<MarkdownResponse>;
 
 export type GetPackageListingDetails = (
   community: string,
@@ -35,6 +42,12 @@ export type GetPackageListings = (
   nsfw?: boolean,
   deprecated?: boolean
 ) => Promise<PackageListings>;
+
+export type GetPackageReadme = (
+  namespace: string,
+  name: string,
+  version?: string
+) => Promise<MarkdownResponse>;
 
 export type GetTeamDetails = (teamName: string) => Promise<TeamDetails>;
 

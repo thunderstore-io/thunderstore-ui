@@ -3,6 +3,10 @@ export type DynamicLink = {
   url: string;
 };
 
+export type MarkdownResponse = {
+  html: string;
+};
+
 export interface PackageCategory {
   id: string;
   name: string;
