@@ -1,35 +1,46 @@
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { faBoltLightning } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useDapper } from "@thunderstore/dapper";
+import { usePromise } from "@thunderstore/use-promise";
+
 import styles from "./PackageVersions.module.css";
 import * as Button from "../../../Button/";
 import { Table, Sort } from "../../../Table/Table";
 import { Alert } from "../../../Alert/Alert";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBoltLightning } from "@fortawesome/pro-solid-svg-icons";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
-export function PackageVersions() {
+interface Props {
+  namespaceId: string;
+  packageName: string;
+}
+
+export function PackageVersions(props: Props) {
+  const { namespaceId, packageName } = props;
+
+  const dapper = useDapper();
+  const versions = usePromise(dapper.getPackageVersions, [
+    namespaceId,
+    packageName,
+  ]);
+
+  const tableRows = versions.map((v) => [
+    { value: v.version_number, sortValue: v.version_number },
+    {
+      value: new Date(v.datetime_created).toLocaleDateString(),
+      sortValue: v.datetime_created,
+    },
+    { value: v.download_count.toLocaleString(), sortValue: v.download_count },
+    { value: <DownloadLink {...v} />, sortValue: 0 },
+    { value: <InstallLink {...v} />, sortValue: 0 },
+  ]);
+
   return (
     <div>
-      <Alert
-        content={
-          <span>
-            Please note that the install buttons only work if you have
-            compatible client software installed, such as the{" "}
-            <a
-              href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
-              className={styles.alertLink}
-            >
-              Thunderstore Mod Manager.
-            </a>{" "}
-            Otherwise use the zip download links instead.
-          </span>
-        }
-        variant={"info"}
-        icon={<FontAwesomeIcon icon={faCircleExclamation} />}
-      />
+      <ModManagerBanner />
       <div className={styles.title}>Versions</div>
       <Table
         headers={columns}
-        rows={packageVersionData}
+        rows={tableRows}
         sortDirection={Sort.ASC}
         variant="itemListSmall"
       />
@@ -47,69 +58,41 @@ const columns = [
   { value: "", disableSort: true },
 ];
 
-const a = 115191;
-const b = 342563;
-const c = 75163;
-const d = 678538;
+const ModManagerBanner = () => (
+  <Alert
+    content={
+      <span>
+        Please note that the install buttons only work if you have compatible
+        client software installed, such as the{" "}
+        <a
+          href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+          className={styles.alertLink}
+        >
+          Thunderstore Mod Manager.
+        </a>{" "}
+        Otherwise use the zip download links instead.
+      </span>
+    }
+    variant={"info"}
+    icon={<FontAwesomeIcon icon={faCircleExclamation} />}
+  />
+);
 
-const packageVersionData = [
-  [
-    { value: "1.1.0", sortValue: "1.1.0" },
-    { value: "2022-02-25", sortValue: "2022-02-25" },
-    { value: a.toLocaleString(), sortValue: a },
-    { value: getDownload("1.1.0"), sortValue: 0 },
-    { value: getInstall("1.1.0"), sortValue: 0 },
-  ],
-  [
-    { value: "1.2.1", sortValue: "1.2.1" },
-    { value: "2022-02-26", sortValue: "2022-02-26" },
-    { value: b.toLocaleString(), sortValue: b },
-    { value: getDownload("1.2.1"), sortValue: 0 },
-    { value: getInstall("1.2.1"), sortValue: 0 },
-  ],
-  [
-    { value: "1.2.2", sortValue: "1.2.2" },
-    { value: "2022-02-27", sortValue: "2022-02-27" },
-    { value: c.toLocaleString(), sortValue: c },
-    { value: getDownload("1.2.3"), sortValue: 0 },
-    { value: getInstall("1.2.3"), sortValue: 0 },
-  ],
-  [
-    { value: "1.2.3", sortValue: "1.2.3" },
-    { value: "2022-02-28", sortValue: "2022-02-28" },
-    { value: d.toLocaleString(), sortValue: d },
-    { value: getDownload("1.2.3"), sortValue: 0 },
-    { value: getInstall("1.2.3"), sortValue: 0 },
-  ],
-];
-
-function getDownload(versionNumber: string) {
-  return (
-    <Button.Root
-      paddingSize="large"
-      colorScheme="transparentAccent"
-      onClick={() => {
-        console.log("Download " + versionNumber);
-      }}
-    >
+const DownloadLink = (props: { download_url: string }) => (
+  <a href={props.download_url}>
+    <Button.Root plain paddingSize="large" colorScheme="transparentAccent">
       <Button.ButtonLabel>Download</Button.ButtonLabel>
     </Button.Root>
-  );
-}
+  </a>
+);
 
-function getInstall(versionNumber: string) {
-  return (
-    <Button.Root
-      paddingSize="large"
-      colorScheme="primary"
-      onClick={() => {
-        console.log("Install " + versionNumber);
-      }}
-    >
+const InstallLink = (props: { install_url: string }) => (
+  <a href={props.install_url}>
+    <Button.Root plain paddingSize="large" colorScheme="primary">
       <Button.ButtonIcon>
         <FontAwesomeIcon icon={faBoltLightning} />
       </Button.ButtonIcon>
       <Button.ButtonLabel>Install</Button.ButtonLabel>
     </Button.Root>
-  );
-}
+  </a>
+);

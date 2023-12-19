@@ -1,26 +1,8 @@
-.actionButtons {
-  display: flex;
-  gap: var(--gap--24);
-  align-items: center;
-  justify-content: flex-end;
-}
-
 .title {
   padding: 1.5rem 0;
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size--xxl);
   line-height: var(--line-height--xxl);
-}
-
-.installButtonIcon {
-  font-weight: var(--font-weight-heavy);
-  font-size: 0.875rem;
-}
-
-.downloadAndInstall {
-  display: flex;
-  flex-direction: row;
-  gap: 1.5rem;
 }
 
 .alertLink {
