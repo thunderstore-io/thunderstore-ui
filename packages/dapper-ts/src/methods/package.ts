@@ -1,6 +1,7 @@
 import {
   fetchPackageChangelog,
   fetchPackageReadme,
+  fetchPackageVersions,
 } from "@thunderstore/thunderstore-api";
 import { z } from "zod";
 
@@ -45,6 +46,35 @@ export async function getPackageReadme(
     versionNumber
   );
   const parsed = prerenderedMarkup.safeParse(data);
+
+  if (!parsed.success) {
+    throw new Error(formatErrorMessage(parsed.error));
+  }
+
+  return parsed.data;
+}
+
+const versionsSchema = z
+  .object({
+    version_number: z.string().nonempty(),
+    datetime_created: z.string().datetime(),
+    download_count: z.number().int().gte(0),
+    download_url: z.string().nonempty(),
+    install_url: z.string().nonempty(),
+  })
+  .array();
+
+export async function getPackageVersions(
+  this: DapperTsInterface,
+  namespaceId: string,
+  packageName: string
+) {
+  const data = await fetchPackageVersions(
+    this.config,
+    namespaceId,
+    packageName
+  );
+  const parsed = versionsSchema.safeParse(data);
 
   if (!parsed.success) {
     throw new Error(formatErrorMessage(parsed.error));
