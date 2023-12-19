@@ -96,7 +96,8 @@ export const getFakePackageListingDetails = async (
       name: faker.word.words(3),
       members: await getFakeTeamMembers(seed),
     },
-    website_url: faker.internet.url(),
+    website_url:
+      faker.helpers.maybe(faker.internet.url, { probability: 0.9 }) ?? null,
   };
 };
 

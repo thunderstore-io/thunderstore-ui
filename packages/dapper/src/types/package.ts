@@ -27,7 +27,7 @@ export interface PackageListingDetails extends PackageListing {
   has_changelog: boolean;
   latest_version_number: string;
   team: PackageTeam;
-  website_url: string;
+  website_url: string | null;
 }
 
 export interface PackageDependency {
