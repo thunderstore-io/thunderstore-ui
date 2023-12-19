@@ -81,16 +81,20 @@ export function PackageDetailLayout(props: Props) {
         <Button.ButtonLabel>{packageData.namespace}</Button.ButtonLabel>
       </Button.Root>
     </TeamLink>,
-
-    <a key="website" href={packageData.website_url}>
-      <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
-        <Button.ButtonLabel>{packageData.website_url}</Button.ButtonLabel>
-        <Button.ButtonIcon>
-          <FontAwesomeIcon icon={faArrowUpRight} />
-        </Button.ButtonIcon>
-      </Button.Root>
-    </a>,
   ];
+
+  if (packageData.website_url) {
+    packageDetailsMeta.push(
+      <a key="website" href={packageData.website_url}>
+        <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
+          <Button.ButtonLabel>{packageData.website_url}</Button.ButtonLabel>
+          <Button.ButtonIcon>
+            <FontAwesomeIcon icon={faArrowUpRight} />
+          </Button.ButtonIcon>
+        </Button.Root>
+      </a>
+    );
+  }
 
   return (
     <BaseLayout
