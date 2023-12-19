@@ -18,7 +18,7 @@ const packageListingSchema = z.object({
   community_identifier: z.string().nonempty(),
   description: z.string(),
   download_count: z.number().int().gte(0),
-  icon_url: z.string().nullable(),
+  icon_url: z.string().nonempty(),
   is_deprecated: z.boolean(),
   is_nsfw: z.boolean(),
   is_pinned: z.boolean(),

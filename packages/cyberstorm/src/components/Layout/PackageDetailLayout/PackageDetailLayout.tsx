@@ -120,13 +120,11 @@ export function PackageDetailLayout(props: Props) {
           <PageHeader
             title={displayName}
             image={
-              packageData.icon_url ? (
-                <img
-                  className={styles.modImage}
-                  alt=""
-                  src={packageData.icon_url}
-                />
-              ) : undefined
+              <img
+                className={styles.modImage}
+                alt=""
+                src={packageData.icon_url}
+              />
             }
             description={packageData.description}
             meta={packageDetailsMeta}

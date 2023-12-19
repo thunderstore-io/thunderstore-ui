@@ -33,9 +33,7 @@ export function PackageCard(props: Props) {
           namespace={p.namespace}
           package={p.name}
         >
-          {p.icon_url ? (
-            <img className={styles.image} src={p.icon_url} alt={p.name} />
-          ) : null}
+          <img className={styles.image} src={p.icon_url} alt={p.name} />
           {getPackageFlags(p)}
         </PackageLink>
       </div>

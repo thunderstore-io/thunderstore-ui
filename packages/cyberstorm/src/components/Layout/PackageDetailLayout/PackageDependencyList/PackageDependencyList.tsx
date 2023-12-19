@@ -10,9 +10,6 @@ import { PackageLink } from "../../../Links/Links";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { Dialog } from "../../../../index";
 
-// TODO: actual placeholder
-const defaultImageSrc = "/images/logo.png";
-
 interface Props {
   dependencies: PackageDependency[];
 }
@@ -75,11 +72,7 @@ const PackageDependencyListItem = (props: PackageDependency) => (
     package={props.name}
   >
     <div className={styles.item}>
-      <img
-        src={props.icon_url ?? defaultImageSrc}
-        className={styles.itemImage}
-        alt=""
-      />
+      <img src={props.icon_url} className={styles.itemImage} alt="" />
       <div>
         <div className={styles.itemTitle}>{props.name}</div>
         <p className={styles.itemDescription}>{props.description}</p>
