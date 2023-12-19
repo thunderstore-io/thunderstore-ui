@@ -47,9 +47,10 @@ interface PackageTeam {
   members: TeamMember[];
 }
 
-// interface PackageVersion {
-//   version_number: string;
-//   changelog: string;
-//   datetime_created: string;
-//   download_count: number;
-// }
+export interface PackageVersion {
+  version_number: string;
+  datetime_created: string;
+  download_count: number;
+  download_url: string;
+  install_url: string;
+}

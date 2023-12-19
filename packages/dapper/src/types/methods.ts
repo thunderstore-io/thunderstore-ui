@@ -1,5 +1,9 @@
 import { Communities, Community, CommunityFilters } from "./community";
-import { PackageListingDetails, PackageListings } from "./package";
+import {
+  PackageListingDetails,
+  PackageListings,
+  PackageVersion,
+} from "./package";
 import { PackageListingType } from "./props";
 import { MarkdownResponse } from "./shared";
 import { TeamDetails, ServiceAccount, TeamMember } from "./team";
@@ -48,6 +52,11 @@ export type GetPackageReadme = (
   name: string,
   version?: string
 ) => Promise<MarkdownResponse>;
+
+export type GetPackageVersions = (
+  namespace: string,
+  name: string
+) => Promise<PackageVersion[]>;
 
 export type GetTeamDetails = (teamName: string) => Promise<TeamDetails>;
 

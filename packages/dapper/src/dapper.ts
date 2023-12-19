@@ -9,6 +9,7 @@ export interface DapperInterface {
   getPackageListingDetails: methods.GetPackageListingDetails;
   getPackageListings: methods.GetPackageListings;
   getPackageReadme: methods.GetPackageReadme;
+  getPackageVersions: methods.GetPackageVersions;
   getTeamDetails: methods.GetTeamDetails;
   getTeamMembers: methods.GetTeamMembers;
   getTeamServiceAccounts: methods.GetTeamServiceAccounts;
