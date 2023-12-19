@@ -16,6 +16,7 @@ export * from "./fetch/packageChangelog";
 export * from "./fetch/packageDependantsListings";
 export * from "./fetch/packageListingDetails";
 export * from "./fetch/packageReadme";
+export * from "./fetch/packageVersions";
 export * from "./fetch/teamDetails";
 export * from "./fetch/teamMembers";
 export * from "./fetch/teamServiceAccounts";
