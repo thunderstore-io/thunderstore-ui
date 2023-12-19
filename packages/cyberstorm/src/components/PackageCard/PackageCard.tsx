@@ -11,12 +11,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Tag } from "../Tag/Tag";
 import { classnames, formatInteger } from "../../utils/utils";
-import { PackagePreview } from "@thunderstore/dapper/types";
+import { PackageListing } from "@thunderstore/dapper/types";
 import { PackageLink, TeamLink } from "../Links/Links";
 import { faLips, faSparkles } from "@fortawesome/pro-solid-svg-icons";
 
 interface Props {
-  package: PackagePreview;
+  package: PackageListing;
 }
 
 /**
@@ -78,7 +78,7 @@ export function PackageCard(props: Props) {
 
 PackageCard.displayName = "PackageCard";
 
-function getPackageFlags(packageData: PackagePreview) {
+function getPackageFlags(packageData: PackageListing) {
   const updateTimeDelta = Math.round(
     (Date.now() - Date.parse(packageData.last_updated)) / 86400000
   );
@@ -135,7 +135,7 @@ function getPackageFlags(packageData: PackagePreview) {
   return <div className={styles.flagWrapper}>{flagList}</div>;
 }
 
-function getMetaItemList(packageData: PackagePreview) {
+function getMetaItemList(packageData: PackageListing) {
   const updateTimeDelta = Math.round(
     (Date.now() - Date.parse(packageData.last_updated)) / 86400000
   );

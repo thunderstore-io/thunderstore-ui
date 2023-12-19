@@ -1,5 +1,9 @@
 import { Communities, Community, CommunityFilters } from "./community";
-import { Package, PackageDependency, PackagePreviews } from "./package";
+import {
+  PackageDependency,
+  PackageListingDetails,
+  PackageListings,
+} from "./package";
 import { PackageListingType } from "./props";
 import { TeamDetails, ServiceAccount, TeamMember } from "./team";
 import { CurrentUser } from "./user";
@@ -18,11 +22,11 @@ export type GetCommunityFilters = (
 
 export type GetCurrentUser = () => Promise<CurrentUser>;
 
-export type GetPackage = (
+export type GetPackageListingDetails = (
   community: string,
   namespace: string,
   name: string
-) => Promise<Package>;
+) => Promise<PackageListingDetails>;
 
 // TODO: is this right? how do we fetch dependencies without knowing the
 // package name?
@@ -41,7 +45,7 @@ export type GetPackageListings = (
   section?: string,
   nsfw?: boolean,
   deprecated?: boolean
-) => Promise<PackagePreviews>;
+) => Promise<PackageListings>;
 
 export type GetTeamDetails = (teamName: string) => Promise<TeamDetails>;
 

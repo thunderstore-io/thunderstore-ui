@@ -1,7 +1,7 @@
 import { PackageCategory, PaginatedList } from "./shared";
 import { TeamMember } from "./team";
 
-export interface PackagePreview {
+export interface PackageListing {
   categories: PackageCategory[];
   community_identifier: string;
   description: string;
@@ -17,9 +17,9 @@ export interface PackagePreview {
   size: number;
 }
 
-export type PackagePreviews = PaginatedList<PackagePreview>;
+export type PackageListings = PaginatedList<PackageListing>;
 
-export interface Package extends PackagePreview {
+export interface PackageListingDetails extends PackageListing {
   community_name: string;
   datetime_created: string;
   dependant_count: number;

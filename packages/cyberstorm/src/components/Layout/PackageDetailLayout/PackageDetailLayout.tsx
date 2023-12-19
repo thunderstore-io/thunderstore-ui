@@ -51,7 +51,7 @@ export function PackageDetailLayout(props: Props) {
 
   const dapper = useDapper();
   const community = usePromise(dapper.getCommunity, [communityId]);
-  const packageData = usePromise(dapper.getPackage, [
+  const packageData = usePromise(dapper.getPackageListingDetails, [
     communityId,
     namespaceId,
     packageName,
