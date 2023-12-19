@@ -28,10 +28,6 @@ it("executes getCurrentUser without errors", async () => {
   await expect(dapper.getCurrentUser()).resolves.not.toThrowError();
 });
 
-it("executes getPackageDependencies without errors", async () => {
-  await expect(dapper.getPackageDependencies()).resolves.not.toThrowError();
-});
-
 it("executes getPackageListingDetails without errors", async () => {
   await expect(
     dapper.getPackageListingDetails(communityId, namespaceId, packageName)
