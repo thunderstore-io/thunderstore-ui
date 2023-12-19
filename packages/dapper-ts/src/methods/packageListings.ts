@@ -4,9 +4,11 @@ import {
   fetchCommunityPackageListings,
   fetchNamespacePackageListings,
   fetchPackageDependantsListings,
+  fetchPackageListingDetails,
 } from "@thunderstore/thunderstore-api";
 import { PackageListingQueryParams } from "@thunderstore/thunderstore-api/types";
 
+import { membersSchema } from "./team";
 import { DapperTsInterface } from "../index";
 import { PackageCategory, paginatedResults } from "../sharedSchemas";
 import { formatErrorMessage } from "../utils";
@@ -91,4 +93,49 @@ export async function getPackageListings(
     hasMore: Boolean(parsed.data.next),
     results: parsed.data.results,
   };
+}
+
+const dependencyShema = z.object({
+  community_identifier: z.string().nonempty(),
+  description: z.string(),
+  icon_url: z.string().nonempty(),
+  name: z.string().nonempty(),
+  namespace: z.string().nonempty(),
+  version_number: z.string().nonempty(),
+});
+
+const packageListingDetailSchema = packageListingSchema.extend({
+  community_name: z.string().nonempty(),
+  datetime_created: z.string().datetime(),
+  dependant_count: z.number().int().gte(0),
+  dependencies: dependencyShema.array(),
+  full_version_name: z.string().nonempty(),
+  has_changelog: z.boolean(),
+  latest_version_number: z.string().nonempty(),
+  team: z.object({
+    name: z.string().nonempty(),
+    members: membersSchema,
+  }),
+  website_url: z.string().nonempty().nullable(),
+});
+
+export async function getPackageListingDetails(
+  this: DapperTsInterface,
+  communityId: string,
+  namespaceId: string,
+  packageName: string
+) {
+  const data = await fetchPackageListingDetails(
+    this.config,
+    communityId,
+    namespaceId,
+    packageName
+  );
+  const parsed = packageListingDetailSchema.safeParse(data);
+
+  if (!parsed.success) {
+    throw new Error(formatErrorMessage(parsed.error));
+  }
+
+  return parsed.data;
 }

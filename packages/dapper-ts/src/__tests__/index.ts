@@ -2,6 +2,7 @@ import { DapperTs } from "../index";
 
 const communityId = "riskofrain2";
 const namespaceId = "TestTeam";
+const packageName = "ExamplePackage";
 let dapper: DapperTs;
 
 beforeAll(() => {
@@ -32,7 +33,9 @@ it("executes getPackageDependencies without errors", async () => {
 });
 
 it("executes getPackageListingDetails without errors", async () => {
-  await expect(dapper.getPackageListingDetails()).resolves.not.toThrowError();
+  await expect(
+    dapper.getPackageListingDetails(communityId, namespaceId, packageName)
+  ).resolves.not.toThrowError();
 });
 
 it("executes getPackageListings for community without errors", async () => {
