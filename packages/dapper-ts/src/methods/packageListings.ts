@@ -109,8 +109,10 @@ const packageListingDetailSchema = packageListingSchema.extend({
   datetime_created: z.string().datetime(),
   dependant_count: z.number().int().gte(0),
   dependencies: dependencyShema.array(),
+  download_url: z.string().nonempty(),
   full_version_name: z.string().nonempty(),
   has_changelog: z.boolean(),
+  install_url: z.string().nonempty(),
   latest_version_number: z.string().nonempty(),
   team: z.object({
     name: z.string().nonempty(),
