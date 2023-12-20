@@ -146,7 +146,12 @@ export function PackageDetailLayout(props: Props) {
             </Suspense>
           </Tabs.Tab>
 
-          <Tabs.Tab name="changelog" label="Changelog" icon={faFilePlus}>
+          <Tabs.Tab
+            name="changelog"
+            label="Changelog"
+            icon={faFilePlus}
+            disabled={!packageData.has_changelog}
+          >
             <Suspense fallback={<p>TODO</p>}>
               <PackageChangeLog {...props} />
             </Suspense>
