@@ -8,7 +8,7 @@ export async function fetchCommunityPackageListings(
   communityId: string,
   options?: PackageListingQueryParams
 ) {
-  const path = `api/cyberstorm/package/${communityId.toLowerCase()}/`;
+  const path = `api/cyberstorm/listing/${communityId.toLowerCase()}/`;
 
   const queryParams = [
     { key: "ordering", value: options?.ordering, impotent: "last-updated" },

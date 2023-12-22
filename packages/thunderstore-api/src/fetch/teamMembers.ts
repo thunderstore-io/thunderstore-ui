@@ -5,7 +5,7 @@ export async function fetchTeamMembers(
   config: RequestConfig,
   teamName: string
 ) {
-  const path = `api/cyberstorm/team/${teamName}/members/`;
+  const path = `api/cyberstorm/team/${teamName}/member/`;
 
   return await apiFetch(config, path);
 }
