@@ -10,12 +10,22 @@ import { PackageLink } from "../../../Links/Links";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { Dialog } from "../../../../index";
 
+const PREVIEW_LIMIT = 4;
+
 interface Props {
   dependencies: PackageDependency[];
+  totalCount: number;
 }
 
 export function PackageDependencyList(props: Props) {
-  const { dependencies } = props;
+  const { dependencies, totalCount } = props;
+  let countDescription = "";
+
+  if (totalCount === 0) {
+    countDescription = "This mod doesn't depend on other mods.";
+  } else if (totalCount > PREVIEW_LIMIT) {
+    countDescription = `+ ${totalCount - PREVIEW_LIMIT} more`;
+  }
 
   return (
     <WrapperCard
@@ -24,7 +34,7 @@ export function PackageDependencyList(props: Props) {
         <div className={styles.root}>
           <div className={styles.listWrapper}>
             <div className={styles.list}>
-              {dependencies.map((d) => (
+              {dependencies.slice(0, PREVIEW_LIMIT).map((d) => (
                 <PackageDependencyListItem
                   {...d}
                   key={`${d.namespace}-${d.name}`}
@@ -32,32 +42,37 @@ export function PackageDependencyList(props: Props) {
               ))}
             </div>
           </div>
+          {countDescription === "" ? null : (
+            <p className={styles.countDescription}>{countDescription}</p>
+          )}
         </div>
       }
       headerIcon={<FontAwesomeIcon icon={faBoxOpen} />}
       headerRightContent={
-        <Dialog.Root
-          showHeaderBorder
-          title="Required mods"
-          trigger={
-            <div className={styles.dependencyDialogTrigger}>
-              <Button.Root
-                fontSize="medium"
-                paddingSize="none"
-                colorScheme="transparentPrimary"
-              >
-                <Button.ButtonLabel fontWeight="600">
-                  See all
-                </Button.ButtonLabel>
-                <Button.ButtonIcon>
-                  <FontAwesomeIcon icon={faCaretRight} />
-                </Button.ButtonIcon>
-              </Button.Root>
-            </div>
-          }
-        >
-          <PackageDependencyDialog packages={dependencies} />
-        </Dialog.Root>
+        totalCount > PREVIEW_LIMIT ? (
+          <Dialog.Root
+            showHeaderBorder
+            title="Required mods"
+            trigger={
+              <div className={styles.dependencyDialogTrigger}>
+                <Button.Root
+                  fontSize="medium"
+                  paddingSize="none"
+                  colorScheme="transparentPrimary"
+                >
+                  <Button.ButtonLabel fontWeight="600">
+                    See all
+                  </Button.ButtonLabel>
+                  <Button.ButtonIcon>
+                    <FontAwesomeIcon icon={faCaretRight} />
+                  </Button.ButtonIcon>
+                </Button.Root>
+              </div>
+            }
+          >
+            <PackageDependencyDialog packages={dependencies} />
+          </Dialog.Root>
+        ) : null
       }
     />
   );

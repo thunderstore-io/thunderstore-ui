@@ -192,7 +192,10 @@ export function PackageDetailLayout(props: Props) {
             }
           />
           <PackageTagList packageData={packageData} />
-          <PackageDependencyList dependencies={packageData.dependencies} />
+          <PackageDependencyList
+            dependencies={packageData.dependencies}
+            totalCount={packageData.dependency_count}
+          />
           <PackageTeamMemberList
             community={packageData.community_identifier}
             teamName={packageData.namespace}
