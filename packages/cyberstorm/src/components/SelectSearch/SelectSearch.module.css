@@ -36,7 +36,7 @@
 
   --border-color: transparent;
 
-  transition: ease-out 300ms;
+  transition: ease-out var(--animation-length-l);
 }
 
 .input {

@@ -13,7 +13,7 @@
   background-color: var(--background-color);
 
   box-shadow: var(--box-shadow-default);
-  animation-duration: var(--animation-duration-default);
+  animation-duration: var(--animation-length-l);
   animation-timing-function: var(--animation-timing-1);
   user-select: none;
   will-change: transform, opacity;

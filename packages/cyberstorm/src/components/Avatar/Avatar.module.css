@@ -10,7 +10,7 @@
   width: var(--size);
   height: var(--size);
   border-radius: calc(var(--size) * 4.92);
-  transition: opacity 150ms ease-in-out;
+  transition: opacity var(--animation-length-m) ease-in-out;
 }
 
 .image:where(.placeholder) {

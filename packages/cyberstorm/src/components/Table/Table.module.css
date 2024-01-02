@@ -50,7 +50,7 @@
 
 .grid__Row:hover {
   background-color: #191b38;
-  transition: 50ms;
+  transition: var(--animation-length-xs);
 }
 
 .grid__Cell {
