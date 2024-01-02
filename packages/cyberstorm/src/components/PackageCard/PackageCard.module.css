@@ -6,8 +6,10 @@
   align-items: flex-start;
   border-radius: 0.5em;
   overflow: hidden;
+  transition: ease-in-out var(--animation-length-l);
 }
 
+.root:focus-within,
 .root:hover {
   background-color: #23234d;
   box-shadow: 0 12px 24px 5px rgb(0 0 0 / 0.65);

@@ -12,7 +12,7 @@ interface CyberstormProvidersProps {
 export function CyberstormProviders(props: CyberstormProvidersProps) {
   return (
     <Toast.Provider toastDuration={props.toastDuration ?? 10000}>
-      <RadixTooltip.Provider delayDuration={props.toastDuration ?? 80}>
+      <RadixTooltip.Provider delayDuration={props.tooltipDelay ?? 300}>
         {props.children}
       </RadixTooltip.Provider>
     </Toast.Provider>
