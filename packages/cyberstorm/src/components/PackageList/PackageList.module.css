@@ -29,3 +29,27 @@
   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
   gap: var(--gap--24);
 }
+
+.packageCardSkeleton {
+  aspect-ratio: 3/5;
+}
+
+.packageOrderBySkeletonBar {
+  width: 14rem;
+  height: var(--space--38);
+}
+
+.packageCountSkeletonBar {
+  width: 14rem;
+  height: var(--space--20);
+}
+
+.packagePaginationSkeletonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.packagePaginationSkeletonBar {
+  width: 14rem;
+  height: var(--space--36);
+}

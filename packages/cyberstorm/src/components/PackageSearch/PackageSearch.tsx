@@ -6,7 +6,7 @@ import {
   PackageListingType,
   Section,
 } from "@thunderstore/dapper/types";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 import { CategoryTagCloud } from "./CategoryTagCloud/CategoryTagCloud";
@@ -17,6 +17,7 @@ import styles from "./PackageSearch.module.css";
 import { CategorySelection } from "./types";
 import { PackageList } from "../PackageList/PackageList";
 import { TextInput } from "../TextInput/TextInput";
+import { PackageListSkeleton } from "../PackageList/PackageListSkeleton";
 
 interface Props {
   listingType: PackageListingType;
@@ -74,15 +75,16 @@ export function PackageSearch(props: Props) {
             categories={categories}
             setCategories={setCategories}
           />
-
-          <PackageList
-            listingType={listingType}
-            searchQuery={debouncedSearchValue}
-            categories={categories}
-            section={section}
-            deprecated={deprecated}
-            nsfw={nsfw}
-          />
+          <Suspense fallback={<PackageListSkeleton />}>
+            <PackageList
+              listingType={listingType}
+              searchQuery={debouncedSearchValue}
+              categories={categories}
+              section={section}
+              deprecated={deprecated}
+              nsfw={nsfw}
+            />
+          </Suspense>
         </div>
       </div>
     </div>
