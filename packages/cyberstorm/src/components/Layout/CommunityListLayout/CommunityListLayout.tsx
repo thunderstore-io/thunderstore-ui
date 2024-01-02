@@ -14,7 +14,7 @@ import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDebounce } from "use-debounce";
 import { CommunityList } from "./CommunityList";
-import { Loading } from "./Loading";
+import { CommunityListSkeleton } from "./CommunityListSkeleton";
 
 export enum SortOptions {
   Name = "name",
@@ -56,7 +56,7 @@ export function CommunityListLayout() {
         </div>
       }
       mainContent={
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<CommunityListSkeleton />}>
           <CommunityList order={order} search={debouncedSearchValue} />
         </Suspense>
       }
