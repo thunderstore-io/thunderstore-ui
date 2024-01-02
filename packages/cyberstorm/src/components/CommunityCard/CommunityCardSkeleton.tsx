@@ -1,3 +1,4 @@
+import { SkeletonBox } from "../SkeletonBox/SkeletonBox";
 import styles from "./CommunityCardSkeleton.module.css";
 
 /**
@@ -7,9 +8,9 @@ import styles from "./CommunityCardSkeleton.module.css";
 export const CommunityCardSkeleton = () => {
   return (
     <div className={styles.root}>
-      <div className={styles.image} />
-      <div className={styles.title} />
-      <div className={styles.meta} />
+      <SkeletonBox className={styles.image} />
+      <SkeletonBox className={styles.title} />
+      <SkeletonBox className={styles.meta} />
     </div>
   );
 };
