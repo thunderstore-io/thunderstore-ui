@@ -24,6 +24,7 @@ export interface PackageListingDetails extends PackageListing {
   datetime_created: string;
   dependant_count: number;
   dependencies: PackageDependency[];
+  dependency_count: number;
   download_url: string;
   full_version_name: string;
   has_changelog: boolean;
