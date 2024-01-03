@@ -1,3 +1,17 @@
+.isSquare {
+  --aspect-ratio: 1;
+  --image-width: 50%;
+}
+
+.is3By4 {
+  --aspect-ratio: 3 / 4;
+  --image-width: 30%;
+}
+
+.fullWidth {
+  --image-width: 100%;
+}
+
 .imageWrapper {
   display: flex;
   align-items: center;
@@ -7,14 +21,14 @@
   color: var(--color-purple--9);
   background-color: var(--color-purple--4);
   transition: 0.2s;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: var(--aspect-ratio);
 }
 
 .imageContent {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30%;
+  width: var(--image-width);
   aspect-ratio: 1;
   transition: 0.2s;
 }
@@ -23,11 +37,7 @@
   height: auto;
 }
 
-.fullWidth {
-  width: 100%;
-}
-
 .image {
   object-fit: cover;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: var(--aspect-ratio);
 }

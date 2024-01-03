@@ -23,9 +23,7 @@
 }
 
 .itemImage {
-  width: auto;
-  height: 3rem;
-  border-radius: var(--border-radius--8);
+  width: 5rem;
 }
 
 .itemTitle {

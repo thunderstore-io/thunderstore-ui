@@ -2,6 +2,7 @@ import { PackageDependency } from "@thunderstore/dapper/types";
 
 import styles from "../PackageDependencyDialog/PackageDependencyDialog.module.css";
 import { PackageLink, PackageVersionLink } from "../../../../Links/Links";
+import { ImageWithFallback } from "../../../../ImageWithFallback/ImageWithFallback";
 
 export interface Props {
   packages: PackageDependency[];
@@ -11,7 +12,9 @@ export const PackageDependencyDialog = (props: Props) => (
   <div className={styles.root}>
     {props.packages.map((packageData, index) => (
       <div key={index} className={styles.item}>
-        <img className={styles.image} src={packageData.icon_url} alt="" />
+        <div className={styles.image}>
+          <ImageWithFallback src={packageData.icon_url} type="package" square />
+        </div>
         <div>
           <div className={styles.title}>
             <PackageLink

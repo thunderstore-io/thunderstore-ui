@@ -9,6 +9,7 @@ import * as Button from "../../../Button/";
 import { PackageLink } from "../../../Links/Links";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { Dialog } from "../../../../index";
+import { ImageWithFallback } from "../../../ImageWithFallback/ImageWithFallback";
 
 const PREVIEW_LIMIT = 4;
 
@@ -87,7 +88,9 @@ const PackageDependencyListItem = (props: PackageDependency) => (
     package={props.name}
   >
     <div className={styles.item}>
-      <img src={props.icon_url} className={styles.itemImage} alt="" />
+      <div className={styles.itemImage}>
+        <ImageWithFallback src={props.icon_url} type="package" square />
+      </div>
       <div>
         <div className={styles.itemTitle}>{props.name}</div>
         <p className={styles.itemDescription}>{props.description}</p>
