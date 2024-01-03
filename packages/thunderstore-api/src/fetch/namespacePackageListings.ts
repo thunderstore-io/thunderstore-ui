@@ -9,7 +9,7 @@ export async function fetchNamespacePackageListings(
   namespaceId: string,
   options?: PackageListingQueryParams
 ) {
-  const path = `api/cyberstorm/package/${communityId.toLowerCase()}/${namespaceId.toLowerCase()}/`;
+  const path = `api/cyberstorm/listing/${communityId.toLowerCase()}/${namespaceId.toLowerCase()}/`;
 
   const queryParams = [
     { key: "ordering", value: options?.ordering, impotent: "last-updated" },

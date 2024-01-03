@@ -1,7 +1,7 @@
 import { config, testData } from "./defaultConfig";
 import { fetchPackageListingDetails } from "../packageListingDetails";
 
-it("ensures default package is listed in default community", async () => {
+it("ensures a package is listed in a community", async () => {
   const { communityId, namespaceId, packageName } = testData;
   const response = await fetchPackageListingDetails(
     config,

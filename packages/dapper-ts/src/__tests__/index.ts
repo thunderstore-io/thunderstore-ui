@@ -1,8 +1,8 @@
 import { DapperTs } from "../index";
 
-const communityId = "riskofrain2";
-const namespaceId = "TestTeam";
-const packageName = "ExamplePackage";
+const communityId = "test";
+const namespaceId = "Testruction";
+const packageName = "Testitute";
 let dapper: DapperTs;
 
 beforeAll(() => {

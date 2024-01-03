@@ -8,7 +8,7 @@ export async function fetchPackageVersions(
 ) {
   const n = namespaceId.toLocaleLowerCase();
   const p = packageName.toLocaleLowerCase();
-  const path = `api/cyberstorm/versions/${n}/${p}/`;
+  const path = `api/cyberstorm/package/${n}/${p}/versions/`;
 
   return await apiFetch(config, path);
 }

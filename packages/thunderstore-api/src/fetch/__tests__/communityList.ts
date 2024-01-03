@@ -1,7 +1,7 @@
 import { config, testData } from "./defaultConfig";
 import { fetchCommunityList } from "../communityList";
 
-it("finds RoR2 in community listing", async () => {
+it("finds a community in the community listing", async () => {
   const response = await fetchCommunityList(config);
 
   expect(Array.isArray(response.results)).toEqual(true);
