@@ -4,9 +4,7 @@
 }
 
 .image {
-  height: 80px;
-  aspect-ratio: 1 / 1;
-  border-radius: var(--border-radius--8);
+  width: 5rem;
 }
 
 .title {
