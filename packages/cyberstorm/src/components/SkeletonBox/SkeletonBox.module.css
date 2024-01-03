@@ -1,0 +1,5 @@
+.root {
+  display: flex;
+  border-radius: var(--border-radius--4);
+  background: #191b38;
+}
