@@ -98,7 +98,8 @@ export async function getPackageListings(
 const dependencyShema = z.object({
   community_identifier: z.string().nonempty(),
   description: z.string(),
-  icon_url: z.string().nonempty(),
+  icon_url: z.string().nonempty().nullable(),
+  is_active: z.boolean(),
   name: z.string().nonempty(),
   namespace: z.string().nonempty(),
   version_number: z.string().nonempty(),

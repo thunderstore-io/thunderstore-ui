@@ -63,14 +63,29 @@ const getFakeDependencies = async (
 ) => {
   setSeed(`${community}-${namespace}-${name ?? "package"}`);
 
-  return range(count).map(() => ({
-    community_identifier: community,
-    description: faker.company.buzzPhrase(),
-    icon_url: getFakeImg(),
-    name: (name ?? faker.word.words(3)).split(" ").join("_"),
-    namespace,
-    version_number: getVersionNumber(),
-  }));
+  return range(count).map(() => {
+    // Deactivated packages show no description or icon.
+    const deactivatableFields = faker.helpers.maybe(
+      () => ({
+        description: faker.company.buzzPhrase(),
+        icon_url: getFakeImg(256, 256),
+        is_active: true,
+      }),
+      { probability: 0.8 }
+    ) ?? {
+      description: "This package has been removed.",
+      icon_url: null,
+      is_active: false,
+    };
+
+    return {
+      ...deactivatableFields,
+      community_identifier: community,
+      name: (name ?? faker.word.words(3)).split(" ").join("_"),
+      namespace,
+      version_number: getVersionNumber(),
+    };
+  });
 };
 
 // Content used to render Package's detail view.

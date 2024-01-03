@@ -37,7 +37,8 @@ export interface PackageListingDetails extends PackageListing {
 export interface PackageDependency {
   community_identifier: string;
   description: string;
-  icon_url: string;
+  icon_url: string | null;
+  is_active: boolean;
   name: string;
   namespace: string;
   version_number: string;
