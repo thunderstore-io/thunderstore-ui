@@ -1,0 +1,27 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space--12);
+
+  --skeleton-background: #191b38;
+  --skeleton-border-radius: var(--border-radius--4);
+}
+
+.image {
+  border-radius: var(--skeleton-border-radius);
+  background: var(--skeleton-background);
+  aspect-ratio: 3 / 4;
+}
+
+.title {
+  width: 75%;
+  height: var(--space--18);
+  border-radius: var(--skeleton-border-radius);
+  background: var(--skeleton-background);
+}
+
+.meta {
+  height: var(--font-size--m);
+  border-radius: var(--skeleton-border-radius);
+  background: var(--skeleton-background);
+}
