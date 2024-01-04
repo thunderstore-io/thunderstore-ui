@@ -5,6 +5,10 @@
   color: var(--color-text--tertiary);
 }
 
+.root > input {
+  outline: none;
+}
+
 .input {
   display: flex;
   flex-direction: row;
