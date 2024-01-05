@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /**
- *     "react-promise-suspense": "^0.3.4"
+ * Based on react-promise-suspense v0.3.4. Improves caching by comparing
+ * the names of the functions passed to usePromise.
  */
 
 // Changed for Thunderstore: use lodash instead of fast-deep-equal
