@@ -10,6 +10,7 @@ import styles from "./PackageList.module.css";
 import { CategorySelection } from "../PackageSearch/types";
 import { PackageCard } from "../PackageCard/PackageCard";
 import { Pagination } from "../Pagination/Pagination";
+import { StalenessIndicator } from "../StalenessIndicator/StalenessIndicator";
 
 interface Props {
   listingType: PackageListingType;
@@ -24,10 +25,6 @@ const PER_PAGE = 20;
 
 /**
  * Fetches packages based on props and shows them as a list.
- *
- * TODO: add loading indicator over the PackageCard section. Doing so
- *       properly might require rethinking the structure of things, i.e.
- *       adding another wrapping component.
  */
 export function PackageList(props: Props) {
   const { categories, deprecated, listingType, nsfw, searchQuery, section } =
@@ -69,32 +66,44 @@ export function PackageList(props: Props) {
     deferredDeprecated,
   ]);
 
+  const isStale =
+    deferredOrder !== order ||
+    deferredPage !== page ||
+    deferredSearchQuery !== searchQuery ||
+    deferredCategories !== categories ||
+    deferredSection !== section ||
+    deferredNsfw !== nsfw ||
+    deferredDeprecated !== deprecated;
+
   return (
     <div className={styles.root}>
       <div className={styles.top}>
-        <PackageCount
-          page={page}
-          pageSize={PER_PAGE}
-          searchQuery={searchQuery}
-          totalCount={packages.count}
-        />
+        <StalenessIndicator isStale={isStale}>
+          <PackageCount
+            page={page}
+            pageSize={PER_PAGE}
+            searchQuery={searchQuery}
+            totalCount={packages.count}
+          />
+        </StalenessIndicator>
 
         <PackageOrder order={order} setOrder={setOrder} />
       </div>
 
-      <div className={styles.packages}>
+      <StalenessIndicator isStale={isStale} className={styles.packages}>
         {packages.results.map((p) => (
           <PackageCard key={`${p.namespace}-${p.name}`} package={p} />
         ))}
-      </div>
-
-      <Pagination
-        currentPage={page}
-        onPageChange={setPage}
-        pageSize={PER_PAGE}
-        siblingCount={2}
-        totalCount={packages.count}
-      />
+      </StalenessIndicator>
+      <StalenessIndicator isStale={isStale}>
+        <Pagination
+          currentPage={page}
+          onPageChange={setPage}
+          pageSize={PER_PAGE}
+          siblingCount={2}
+          totalCount={packages.count}
+        />
+      </StalenessIndicator>
     </div>
   );
 }
