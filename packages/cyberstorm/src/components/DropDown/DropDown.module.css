@@ -16,6 +16,8 @@
   color: var(--text-color);
   background-color: var(--color-surface--2);
   box-shadow: var(--box-shadow-default);
+  transform-origin: var(--radix-dropdown-menu-content-transform-origin);
+  animation: fade-in var(--animation-length-l) ease;
 
   --text-color: var(--color-white);
   --bg-color: var(--color-surface--4);
@@ -35,4 +37,14 @@
   height: var(--space--px);
   margin: var(--space--8) 0;
   background-color: var(--color-surface--6);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

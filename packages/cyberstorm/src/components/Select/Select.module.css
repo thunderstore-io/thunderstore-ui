@@ -23,6 +23,7 @@
   color: var(--text-color);
   background-color: var(--color-surface--2);
   box-shadow: var(--box-shadow-default);
+  animation: fade-in var(--animation-length-l) ease;
 }
 
 /* Different Select variant schemes */
@@ -38,4 +39,14 @@
 
 .content__wide {
   justify-content: space-between;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

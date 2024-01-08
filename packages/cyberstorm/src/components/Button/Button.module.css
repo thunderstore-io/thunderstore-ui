@@ -16,6 +16,7 @@
   line-height: 1;
   text-align: center;
   background-color: var(--bg-color);
+  transition: ease-in-out var(--animation-length-l);
   user-select: none;
 
   --font-size: var(--font-size--l);
@@ -23,10 +24,6 @@
   --bg-color: var(--color-surface--7);
   --button-border-color: transparent;
   --button-border-width: var(--border-width--2);
-}
-
-.root:hover {
-  transition: ease-out var(--animation-length-xs);
 }
 
 .iconAlignment__default {
@@ -162,7 +159,7 @@
 .button__specialGreen {
   position: relative;
   z-index: 1;
-  transition: all var(--animation-length-s);
+  transition: all var(--animation-length-l);
 }
 
 .button__specialGreen {
@@ -197,7 +194,7 @@
   border: var(--button-border-width) solid transparent;
   border-radius: var(--border-radius--8);
   opacity: 0;
-  transition: all var(--animation-length-s);
+  transition: all var(--animation-length-l);
   content: "";
 }
 
