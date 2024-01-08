@@ -62,6 +62,5 @@
   --alert-success-text-color: rgb(185 240 217);
   --alert-warning-text-color: rgb(250 236 185);
   --alert-danger-text-color: rgb(249 175 189);
-  --animation-duration-default: 400ms;
   --animation-timing-1: cubic-bezier(0.16, 1, 0.3, 1);
 }

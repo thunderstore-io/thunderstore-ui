@@ -20,7 +20,7 @@
   overflow: hidden;
   color: var(--color-purple--9);
   background-color: var(--color-purple--4);
-  transition: 0.2s;
+  transition: var(--animation-length-l);
   aspect-ratio: var(--aspect-ratio);
 }
 
@@ -30,7 +30,7 @@
   justify-content: center;
   width: var(--image-width);
   aspect-ratio: 1;
-  transition: 0.2s;
+  transition: var(--animation-length-l);
 }
 
 .imageContent svg {

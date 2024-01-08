@@ -23,7 +23,7 @@
   color: var(--color-text--secondary);
   font-weight: var(--font-weight-bold);
   cursor: pointer;
-  transition: 60ms;
+  transition: var(--animation-length-xs);
   user-select: none;
 
   --mark-color: var(--color-purple--6);
@@ -40,7 +40,7 @@
   height: var(--space--18);
   border-radius: var(--border-radius--2);
   background-color: var(--mark-color);
-  transition: ease-out 60ms;
+  transition: ease-out var(--animation-length-xs);
 }
 
 .label:hover .checkbox { --mark-color: #4343a3; }
@@ -73,7 +73,7 @@
   border: var(--space--2) solid var(--color-surface--7);
   border-radius: var(--border-radius--8);
   background-color: transparent;
-  transition: ease-out 60ms;
+  transition: ease-out var(--animation-length-xs);
 }
 
 .radio.radioSelected {
