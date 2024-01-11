@@ -4,12 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Button from "../Button/";
 import { DropDown, DropDownItem } from "../DropDown/DropDown";
 import { DropDownLink } from "../DropDown/DropDownLink";
-import {
-  ManifestValidatorLink,
-  MarkdownPreviewLink,
-  PackageFormatDocsLink,
-  PackageUploadLink,
-} from "../Links/Links";
 
 export const DevelopersDropDown = () => (
   <DropDown
@@ -25,31 +19,23 @@ export const DevelopersDropDown = () => (
       </Button.Root>
     }
     content={[
-      <a href="/wiki" key="wiki">
-        <DropDownItem
-          content={<DropDownLink label="Modding Wiki" isExternal />}
-        />
+      <a href="/api/docs" key="docs">
+        <DropDownItem content={<DropDownLink label="API Docs" />} />
       </a>,
-      <a href="/docs" key="docs">
-        <DropDownItem content={<DropDownLink label="API Docs" isExternal />} />
-      </a>,
-      <a href="/git" key="github">
+      <a href="https://github.com/thunderstore-io/thunderstore-ui" key="github">
         <DropDownItem
           content={<DropDownLink label="GitHub Repo" isExternal />}
         />
       </a>,
-      <PackageFormatDocsLink key="package-format">
+      <a href="/package/create/docs/" key="old_format_docs">
         <DropDownItem content={<DropDownLink label="Package Format Docs" />} />
-      </PackageFormatDocsLink>,
-      <MarkdownPreviewLink key="markdown-preview">
+      </a>,
+      <a href="/tools/markdown-preview/" key="old_format_docs">
         <DropDownItem content={<DropDownLink label="Markdown Preview" />} />
-      </MarkdownPreviewLink>,
-      <ManifestValidatorLink key="manifest-validator">
+      </a>,
+      <a href="/tools/manifest-v1-validator/" key="old_manifest_validator">
         <DropDownItem content={<DropDownLink label="Manifest Validator" />} />
-      </ManifestValidatorLink>,
-      <PackageUploadLink key="upload-package">
-        <DropDownItem content={<DropDownLink label="Upload Package" />} />
-      </PackageUploadLink>,
+      </a>,
     ]}
   />
 );

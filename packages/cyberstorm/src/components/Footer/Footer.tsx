@@ -6,14 +6,7 @@ import {
   faGithub,
   faReddit,
 } from "@fortawesome/free-brands-svg-icons";
-import {
-  CommunitiesLink,
-  ManifestValidatorLink,
-  MarkdownPreviewLink,
-  PackageFormatDocsLink,
-  PrivacyPolicyLink,
-  TermsOfServiceLink,
-} from "../Links/Links";
+import { CommunitiesLink } from "../Links/Links";
 import {
   faArrowUpRight,
   faBoltLightning,
@@ -23,7 +16,7 @@ import { Tooltip } from "../Tooltip/Tooltip";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
 
-const AD_IMAGE_SRC = "/images/tsmm_screenshot.png";
+const AD_IMAGE_SRC = "/cyberstorm/images/tsmm_screenshot.png";
 const DISCORD_URL = "https://discord.thunderstore.io/";
 const GITHUB_URL = "https://github.com/thunderstore-io/thunderstore-ui";
 const REDDIT_URL = "https://www.reddit.com/r/thunderstore";
@@ -79,32 +72,42 @@ export function Footer() {
                     <CommunitiesLink>
                       <li>Communities</li>
                     </CommunitiesLink>
-                    <li>About us</li>
                   </ul>
                 </div>
                 <div className={styles.navSection}>
                   <div className={styles.navTitle}>Developers</div>
                   <ul className={styles.links}>
-                    <li>Modding Wiki</li>
-                    <li>API Documentation</li>
-                    <li>GitHub Repo</li>
-                    <PackageFormatDocsLink>
-                      <li>Package Format Docs</li>
-                    </PackageFormatDocsLink>
-                    <MarkdownPreviewLink>
-                      <li>Markdown Preview</li>
-                    </MarkdownPreviewLink>
-                    <ManifestValidatorLink>
-                      <li>Manifest Validator</li>
-                    </ManifestValidatorLink>
-                  </ul>
-                </div>
-                <div className={styles.navSection}>
-                  <div className={styles.navTitle}>Support</div>
-                  <ul className={styles.links}>
-                    <li>FAQ</li>
-                    <li>Give Feedback</li>
-                    <li>Contact Us</li>
+                    <li>
+                      <a href="/api/docs" key="docs">
+                        API Documentation
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://github.com/thunderstore-io/thunderstore-ui"
+                        key="github"
+                      >
+                        GitHub Repo
+                      </a>
+                    </li>
+                    <li>
+                      <a href="/package/create/docs/" key="old_format_docs">
+                        Package Format Docs
+                      </a>
+                    </li>
+                    <li>
+                      <a href="/tools/markdown-preview/" key="old_format_docs">
+                        Markdown Preview
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="/tools/manifest-v1-validator/"
+                        key="old_manifest_validator"
+                      >
+                        Manifest Validator
+                      </a>
+                    </li>
                   </ul>
                 </div>
               </nav>
@@ -150,14 +153,6 @@ export function Footer() {
 
       <div className={classnames(styles.item, styles.footnote)}>
         <div className={styles.footnoteInner}>
-          <div className={styles.footnoteLinks}>
-            <TermsOfServiceLink>
-              <div className={styles.footnoteLink}>Terms Of Service</div>
-            </TermsOfServiceLink>
-            <PrivacyPolicyLink>
-              <div className={styles.footnoteLink}>Privacy Policy</div>
-            </PrivacyPolicyLink>
-          </div>
           <div className={styles.footnoteCopyright}>
             © 2023 Thunderstore and contributors. This page is open-source.
             Please{" "}

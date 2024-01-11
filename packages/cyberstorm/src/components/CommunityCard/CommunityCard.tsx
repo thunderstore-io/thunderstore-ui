@@ -4,7 +4,6 @@ import { Community } from "@thunderstore/dapper/types";
 
 import styles from "./CommunityCard.module.css";
 import { ImageWithFallback } from "../ImageWithFallback/ImageWithFallback";
-import { CommunityLink } from "../Links/Links";
 import { MetaItem } from "../MetaItem/MetaItem";
 import { formatInteger } from "../../utils/utils";
 
@@ -19,7 +18,7 @@ export function CommunityCard(props: Props) {
   const { community } = props;
 
   return (
-    <CommunityLink community={community.identifier}>
+    <a href={`/c/${community.identifier}`}>
       <div className={styles.root}>
         <ImageWithFallback
           src={community.icon_url}
@@ -42,7 +41,7 @@ export function CommunityCard(props: Props) {
           />
         </div>
       </div>
-    </CommunityLink>
+    </a>
   );
 }
 
