@@ -1,3 +1,4 @@
+"use client";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { faBoltLightning } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

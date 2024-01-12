@@ -1,3 +1,4 @@
+"use client";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 

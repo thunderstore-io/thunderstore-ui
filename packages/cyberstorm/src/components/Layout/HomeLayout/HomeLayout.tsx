@@ -1,3 +1,4 @@
+"use client";
 import styles from "./HomeLayout.module.css";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
 import { PackageCard } from "../../PackageCard/PackageCard";
