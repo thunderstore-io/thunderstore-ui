@@ -1,3 +1,4 @@
+"use client";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { faBoxOpen, faDownload } from "@fortawesome/pro-regular-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";

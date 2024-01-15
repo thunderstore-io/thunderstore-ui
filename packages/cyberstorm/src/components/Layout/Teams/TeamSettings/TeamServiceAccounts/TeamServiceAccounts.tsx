@@ -1,3 +1,4 @@
+"use client";
 import styles from "./TeamServiceAccounts.module.css";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import * as Button from "../../../../Button/";
