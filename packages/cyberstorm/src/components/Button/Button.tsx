@@ -11,7 +11,9 @@ import { classnames } from "../../utils/utils";
 
 export interface ButtonProps {
   children?: ReactNode | ReactNode[];
+  className?: string;
   plain?: boolean;
+  href?: string;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   iconAlignment?: "default" | "side";
@@ -75,6 +77,7 @@ const Button = React.forwardRef<
 >((props: PropsWithChildren<ButtonProps>, forwardedRef) => {
   const {
     children,
+    className,
     plain = false,
     type,
     colorScheme = "default",
@@ -90,6 +93,29 @@ const Button = React.forwardRef<
   const fallbackRef = useRef(null);
 
   if (plain) {
+    if (forwardedProps.href) {
+      const fRef = forwardedRef as React.ForwardedRef<HTMLAnchorElement>;
+      const ref = fRef || fallbackRef;
+      // TODO: Add disabled mode
+      return (
+        <TooltipWrapper tooltipText={tooltipText}>
+          <a
+            {...forwardedProps}
+            ref={ref}
+            className={classnames(
+              styles.root,
+              getFontSize(fontSize),
+              getIconAlignment(iconAlignment),
+              getStyle(colorScheme),
+              getPaddingSize(paddingSize),
+              className
+            )}
+          >
+            {children}
+          </a>
+        </TooltipWrapper>
+      );
+    }
     const fRef = forwardedRef as React.ForwardedRef<HTMLDivElement>;
     const ref = fRef || fallbackRef;
     // TODO: Add disabled mode
@@ -103,7 +129,8 @@ const Button = React.forwardRef<
             getFontSize(fontSize),
             getIconAlignment(iconAlignment),
             getStyle(colorScheme),
-            getPaddingSize(paddingSize)
+            getPaddingSize(paddingSize),
+            className
           )}
         >
           {children}
@@ -124,7 +151,8 @@ const Button = React.forwardRef<
             getFontSize(fontSize),
             getIconAlignment(iconAlignment),
             getStyle(colorScheme),
-            getPaddingSize(paddingSize)
+            getPaddingSize(paddingSize),
+            className
           )}
           onClick={onClick}
           disabled={disabled}
