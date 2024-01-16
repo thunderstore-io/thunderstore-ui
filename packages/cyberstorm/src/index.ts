@@ -48,6 +48,7 @@ export {
 } from "./components/Links/Links";
 export { ValidationBar } from "./components/ValidationBar/ValidationBar";
 export { Markdown } from "./components/Markdown/Markdown";
+export * as AntiResult from "./components/AntiResult/";
 export * as MenuItem from "./components/MenuItem/";
 export type { MenuItemProps } from "./components/MenuItem/";
 export { MetaItem, type MetaItemProps } from "./components/MetaItem/MetaItem";
