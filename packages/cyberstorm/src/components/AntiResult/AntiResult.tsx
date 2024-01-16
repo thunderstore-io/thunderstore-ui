@@ -1,9 +1,8 @@
-import { ReactNode } from "react";
+import { PropsWithChildren } from "react";
 import styles from "./AntiResult.module.css";
 import { classnames } from "../../utils/utils";
 
-export interface Props {
-  children?: ReactNode | ReactNode[];
+interface Props extends PropsWithChildren {
   className?: string;
 }
 
@@ -12,13 +11,9 @@ export interface Props {
  * place where content is missing
  */
 export function AntiResult(props: Props) {
-  const { children, className, ...forwardedProps } = props;
+  const { children, className } = props;
 
-  return (
-    <div {...forwardedProps} className={classnames(styles.root, className)}>
-      {children}
-    </div>
-  );
+  return <div className={classnames(styles.root, className)}>{children}</div>;
 }
 
 AntiResult.displayName = "AntiResult";

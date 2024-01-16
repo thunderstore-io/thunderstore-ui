@@ -1,18 +1,15 @@
-import { ReactNode } from "react";
+import { PropsWithChildren } from "react";
 import styles from "./AntiResult.module.css";
 import { classnames } from "../../utils/utils";
 
-interface Props {
-  children?: ReactNode | ReactNode[];
+interface Props extends PropsWithChildren {
   className?: string;
 }
 
 export function AntiResultTitle(props: Props) {
   const { children, className } = props;
   return (
-    <span className={classnames(styles.antiResultTitle, className)}>
-      {children}
-    </span>
+    <span className={classnames(styles.title, className)}>{children}</span>
   );
 }
 

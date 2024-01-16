@@ -12,7 +12,7 @@ export function AntiResultIcon(props: Props) {
   const { children, iconClasses, wrapperClasses } = props;
   return (
     <Icon
-      wrapperClasses={classnames(styles.antiResultIcon, wrapperClasses)}
+      wrapperClasses={classnames(styles.icon, wrapperClasses)}
       iconClasses={iconClasses}
     >
       {children}

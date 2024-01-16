@@ -5,13 +5,13 @@
   color: var(--color-text--default);
 }
 
-.antiResultIcon {
+.icon {
   height: 6.5rem;
   color: rgb(99 90 159);
   background: transparent;
 }
 
-.antiResultTitle {
+.title {
   color: #c9c5d8;
   font-weight: var(--font-weight-boldest);
 
@@ -19,7 +19,7 @@
   text-align: center;
 }
 
-.antiResultMessage {
+.message {
   color: #9c9cc4;
   font-weight: var(--font-weight-medium);
 
