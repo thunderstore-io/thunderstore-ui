@@ -1,8 +1,4 @@
-import {
-  faArrowUpRight,
-  faUpload,
-  faUser,
-} from "@fortawesome/pro-solid-svg-icons";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Header.module.css";
@@ -10,8 +6,9 @@ import { DevelopersDropDown } from "./DevelopersDropDown";
 import * as Button from "../Button/";
 import { CommunitiesLink, IndexLink } from "../Links/Links";
 import { ThunderstoreLogo } from "../../svg/svg";
-import { UserDropDown } from "./UserDropDown";
 import { Suspense } from "react";
+import { HeaderUserNav } from "./HeaderUserNav";
+import { AvatarButton } from "../Avatar/AvatarButton";
 
 /**
  * Horizontal navigation bar shown at the top of the site.
@@ -64,34 +61,9 @@ export function Header() {
               </Button.ButtonIcon>
             </Button.Root>
           </li>
-          <li>
-            {/* TODO: This is a bit bad, since old upload pages exist on per community basis. Good enough until new upload page is deployed. */}
-            {/* When new upload page is deployed change to use PackageUploadLink instead */}
-            <a href="/package/create/" key="old_upload">
-              <Button.Root
-                paddingSize="mediumSquare"
-                colorScheme="transparentAccent"
-                tooltipText="Upload"
-              >
-                <Button.ButtonIcon>
-                  <FontAwesomeIcon icon={faUpload} />
-                </Button.ButtonIcon>
-              </Button.Root>
-            </a>
-          </li>
-          <li>
-            <Suspense
-              fallback={
-                <Button.Root>
-                  <Button.ButtonIcon>
-                    <FontAwesomeIcon icon={faUser} />
-                  </Button.ButtonIcon>
-                </Button.Root>
-              }
-            >
-              <UserDropDown />
-            </Suspense>
-          </li>
+          <Suspense fallback={<AvatarButton size="small" />}>
+            <HeaderUserNav />
+          </Suspense>
         </ul>
       </nav>
     </header>

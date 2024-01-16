@@ -18,12 +18,24 @@
   align-items: center;
   justify-content: center;
   border-radius: calc(var(--size) * 4.92);
+  background: rgb(67 67 132 / 0.32);
+}
+
+.image:where(.placeholderLetter) {
   color: #39e9aa;
   font: var(--font-body);
   font-weight: var(--font-weight-semibold);
   font-size: calc(var(--size) / 1.9);
   line-height: 1.2;
-  background: rgb(67 67 132 / 0.32);
+}
+
+.image:where(.placeholderIcon) {
+  color: var(--color-purple--9);
+}
+
+.image:where(.placeholderIcon):hover {
+  color: #6060bd;
+  background: #2a2a56;
 }
 
 .root:hover > .image {
