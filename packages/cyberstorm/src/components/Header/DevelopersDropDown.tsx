@@ -22,10 +22,8 @@ export const DevelopersDropDown = () => (
       <a href="/api/docs" key="docs">
         <DropDownItem content={<DropDownLink label="API Docs" />} />
       </a>,
-      <a href="https://github.com/thunderstore-io/thunderstore-ui" key="github">
-        <DropDownItem
-          content={<DropDownLink label="GitHub Repo" isExternal />}
-        />
+      <a href="https://github.com/thunderstore-io" key="github">
+        <DropDownItem content={<DropDownLink label="GitHub" isExternal />} />
       </a>,
       <a href="/package/create/docs/" key="old_format_docs">
         <DropDownItem content={<DropDownLink label="Package Format Docs" />} />
