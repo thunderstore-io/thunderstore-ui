@@ -26,6 +26,7 @@
 .itemWrapper {
   padding: var(--space--12) var(--space--16);
   overflow: hidden;
+  outline: none;
 }
 
 .itemWrapper[data-highlighted] {
