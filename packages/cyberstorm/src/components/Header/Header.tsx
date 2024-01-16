@@ -1,4 +1,8 @@
-import { faUpload, faUser } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faArrowUpRight,
+  faUpload,
+  faUser,
+} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Header.module.css";
@@ -46,13 +50,19 @@ export function Header() {
       <nav className={styles.item}>
         <ul className={styles.nav}>
           <li className={styles.navButtons}>
-            <a href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager">
-              <Button.Root paddingSize="large" colorScheme="accent">
-                <Button.ButtonLabel fontWeight="800">
-                  Get Manager
-                </Button.ButtonLabel>
-              </Button.Root>
-            </a>
+            <Button.Root
+              paddingSize="large"
+              colorScheme="accent"
+              plain
+              href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+            >
+              <Button.ButtonLabel fontWeight="800">
+                Get Manager
+              </Button.ButtonLabel>
+              <Button.ButtonIcon>
+                <FontAwesomeIcon icon={faArrowUpRight} />
+              </Button.ButtonIcon>
+            </Button.Root>
           </li>
           <li>
             {/* TODO: This is a bit bad, since old upload pages exist on per community basis. Good enough until new upload page is deployed. */}
