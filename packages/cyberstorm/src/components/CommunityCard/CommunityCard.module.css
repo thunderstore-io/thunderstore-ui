@@ -25,6 +25,6 @@
 .metaItemList {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  gap: var(--gap--16);
   margin-top: auto;
 }

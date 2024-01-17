@@ -1,11 +1,7 @@
 import styles from "./Footer.module.css";
 import * as Button from "../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faDiscord,
-  faGithub,
-  faReddit,
-} from "@fortawesome/free-brands-svg-icons";
+import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { CommunitiesLink } from "../Links/Links";
 import {
   faArrowUpRight,
@@ -18,8 +14,7 @@ import { classnames } from "../../utils/utils";
 
 const AD_IMAGE_SRC = "/cyberstorm/images/tsmm_screenshot.png";
 const DISCORD_URL = "https://discord.thunderstore.io/";
-const GITHUB_URL = "https://github.com/thunderstore-io/thunderstore-ui";
-const REDDIT_URL = "https://www.reddit.com/r/thunderstore";
+const GITHUB_URL = "https://github.com/thunderstore-io";
 
 /**
  * Cyberstorm Footer Component
@@ -46,13 +41,6 @@ export function Footer() {
                   <a href={GITHUB_URL}>
                     <Icon wrapperClasses={styles.iconLink}>
                       <FontAwesomeIcon icon={faGithub} />
-                    </Icon>
-                  </a>
-                </Tooltip>
-                <Tooltip content="Talk to us on Reddit" side="bottom">
-                  <a href={REDDIT_URL}>
-                    <Icon wrapperClasses={styles.iconLink}>
-                      <FontAwesomeIcon icon={faReddit} />
                     </Icon>
                   </a>
                 </Tooltip>
@@ -83,11 +71,8 @@ export function Footer() {
                       </a>
                     </li>
                     <li>
-                      <a
-                        href="https://github.com/thunderstore-io/thunderstore-ui"
-                        key="github"
-                      >
-                        GitHub Repo
+                      <a href="https://github.com/thunderstore-io" key="github">
+                        GitHub
                       </a>
                     </li>
                     <li>
@@ -122,7 +107,7 @@ export function Footer() {
                 <div className={styles.adText}>
                   <div className={styles.adTitle}>Thunderstore Mod Manager</div>
                   <div className={styles.adDescription}>
-                    You are prepared. Download Thunderstore Bolt
+                    You are prepared. Download Thunderstore Mod Manager
                     <br />
                     for desktop and enter a world of Thunder{" "}
                     <Icon inline wrapperClasses={styles.inlineIcon}>
@@ -158,7 +143,7 @@ export function Footer() {
       <div className={classnames(styles.item, styles.footnote)}>
         <div className={styles.footnoteInner}>
           <div className={styles.footnoteCopyright}>
-            © 2023 Thunderstore and contributors. This page is open-source.
+            © 2024 Thunderstore and contributors. This page is open-source.
             Please{" "}
             <a href="https://github.com/thunderstore-io/thunderstore-ui/">
               help improve it ❤
