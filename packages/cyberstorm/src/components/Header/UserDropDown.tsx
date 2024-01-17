@@ -1,45 +1,33 @@
-"use client";
-import { faSignOut, faUser, faUsers } from "@fortawesome/pro-solid-svg-icons";
+import { faSignOut, faUsers } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as RadixDropDown from "@radix-ui/react-dropdown-menu";
-import { useDapper } from "@thunderstore/dapper";
-import { usePromise } from "@thunderstore/use-promise";
 
 import styles from "./Header.module.css";
 import { Avatar } from "../Avatar/Avatar";
 import { AvatarButton } from "../Avatar/AvatarButton";
-import * as Button from "../Button/";
 import { DropDown, DropDownDivider, DropDownItem } from "../DropDown/DropDown";
 import { DropDownLink } from "../DropDown/DropDownLink";
 
-export const UserDropDown = () => {
-  const dapper = useDapper();
-  const user = usePromise(dapper.getCurrentUser, []);
-  const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
+interface Props {
+  username: string | null;
+  avatar?: string | null;
+}
 
+export function UserDropDown(props: Props) {
+  const { avatar, username } = props;
   return (
     <DropDown
       contentAlignment="end"
-      trigger={
-        avatar && user.username ? (
-          <AvatarButton src={avatar} username={user.username} size="small" />
-        ) : (
-          <Button.Root>
-            <Button.ButtonIcon>
-              <FontAwesomeIcon icon={faUser} />
-            </Button.ButtonIcon>
-          </Button.Root>
-        )
-      }
+      trigger={<AvatarButton src={avatar} username={username} size="small" />}
       content={
-        user.username
+        username
           ? [
               <RadixDropDown.Item key="user">
                 <div className={styles.dropDownUserInfo}>
-                  <Avatar src={avatar} username={user.username} size="small" />
+                  <Avatar src={avatar} username={username} size="small" />
                   <div className={styles.dropdownUserInfoDetails}>
                     <div className={styles.dropdownUserInfoDetails_userName}>
-                      {user.username}
+                      {username}
                     </div>
                   </div>
                 </div>
@@ -73,6 +61,6 @@ export const UserDropDown = () => {
       }
     />
   );
-};
+}
 
 UserDropDown.displayName = "UserDropDown";
