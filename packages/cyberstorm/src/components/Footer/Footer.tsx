@@ -129,16 +129,20 @@ export function Footer() {
                       <FontAwesomeIcon icon={faBoltLightning} />
                     </Icon>
                   </div>
-                  <a href="/" className={styles.adButton}>
-                    <Button.Root plain colorScheme="accent" paddingSize="large">
-                      <Button.ButtonLabel fontSize="large">
-                        Get Manager
-                      </Button.ButtonLabel>
-                      <Button.ButtonIcon>
-                        <FontAwesomeIcon icon={faArrowUpRight} />
-                      </Button.ButtonIcon>
-                    </Button.Root>
-                  </a>
+                  <Button.Root
+                    plain
+                    colorScheme="accent"
+                    paddingSize="large"
+                    href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+                    className={styles.adButton}
+                  >
+                    <Button.ButtonLabel fontSize="large">
+                      Get Manager
+                    </Button.ButtonLabel>
+                    <Button.ButtonIcon>
+                      <FontAwesomeIcon icon={faArrowUpRight} />
+                    </Button.ButtonIcon>
+                  </Button.Root>
                 </div>
                 <img
                   alt="Screenshot of the Thunderstore Mod Manager"
