@@ -160,19 +160,8 @@ a:not([class]) {
   cursor: pointer;
 }
 
-/* Animate focus outline */
-@media (prefers-reduced-motion: no-preference) {
-  :focus-visible {
-    transition: outline-offset 145ms cubic-bezier(0.25, 0, 0.4, 1);
-  }
-
-  :where(:not(:active)):focus-visible {
-    transition-duration: 0.25s;
-  }
-}
-
 :where(:not(:active)):focus-visible {
-  outline-offset: 5px;
+  outline: 0.2rem solid var(--color-cyber-green--50);
 }
 
 /* Make sure users can't select button text */

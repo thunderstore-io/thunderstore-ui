@@ -6,6 +6,7 @@
   align-items: center;
   padding: var(--space--12) var(--space--16);
   color: var(--text-color);
+  outline: none;
   cursor: pointer;
 
   --text-color: var(--color-text--default);
