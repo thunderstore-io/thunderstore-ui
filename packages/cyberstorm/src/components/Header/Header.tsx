@@ -1,13 +1,13 @@
-"use client";
-import { faUpload } from "@fortawesome/pro-solid-svg-icons";
+import { faUpload, faUser } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Header.module.css";
 import { DevelopersDropDown } from "./DevelopersDropDown";
 import * as Button from "../Button/";
-import { CommunitiesLink, IndexLink, PackageUploadLink } from "../Links/Links";
+import { CommunitiesLink, IndexLink } from "../Links/Links";
 import { ThunderstoreLogo } from "../../svg/svg";
 import { UserDropDown } from "./UserDropDown";
+import { Suspense } from "react";
 
 /**
  * Horizontal navigation bar shown at the top of the site.
@@ -24,18 +24,6 @@ export function Header() {
               </div>
             </IndexLink>
           </li>
-          {/* Disabled temporarily, ref. TS-1828 */}
-          {/* <li>
-            <IndexLink>
-              <Button.Root
-                plain
-                paddingSize="large"
-                colorScheme="transparentDefault"
-              >
-                <Button.ButtonLabel fontSize="large">Browse</Button.ButtonLabel>
-              </Button.Root>
-            </IndexLink>
-          </li> */}
           <li>
             <CommunitiesLink>
               <Button.Root
@@ -58,14 +46,7 @@ export function Header() {
       <nav className={styles.item}>
         <ul className={styles.nav}>
           <li className={styles.navButtons}>
-            <a href="/">
-              <Button.Root paddingSize="large" colorScheme="specialPurple">
-                <Button.ButtonLabel fontWeight="600">
-                  Go Premium
-                </Button.ButtonLabel>
-              </Button.Root>
-            </a>
-            <a href="/">
+            <a href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager">
               <Button.Root paddingSize="large" colorScheme="accent">
                 <Button.ButtonLabel fontWeight="800">
                   Get Manager
@@ -74,7 +55,9 @@ export function Header() {
             </a>
           </li>
           <li>
-            <PackageUploadLink>
+            {/* TODO: This is a bit bad, since old upload pages exist on per community basis. Good enough until new upload page is deployed. */}
+            {/* When new upload page is deployed change to use PackageUploadLink instead */}
+            <a href="/package/create/" key="old_upload">
               <Button.Root
                 paddingSize="mediumSquare"
                 colorScheme="transparentAccent"
@@ -84,10 +67,20 @@ export function Header() {
                   <FontAwesomeIcon icon={faUpload} />
                 </Button.ButtonIcon>
               </Button.Root>
-            </PackageUploadLink>
+            </a>
           </li>
           <li>
-            <UserDropDown />
+            <Suspense
+              fallback={
+                <Button.Root>
+                  <Button.ButtonIcon>
+                    <FontAwesomeIcon icon={faUser} />
+                  </Button.ButtonIcon>
+                </Button.Root>
+              }
+            >
+              <UserDropDown />
+            </Suspense>
           </li>
         </ul>
       </nav>
