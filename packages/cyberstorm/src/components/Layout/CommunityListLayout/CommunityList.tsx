@@ -5,6 +5,10 @@ import { usePromise } from "@thunderstore/use-promise";
 import styles from "./CommunityList.module.css";
 import { SortOptions } from "./CommunityListLayout";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
+import { AntiResult } from "../../AntiResult/AntiResult";
+import { AntiResultIcon, AntiResultTitle } from "../../AntiResult";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGhost } from "@fortawesome/pro-solid-svg-icons";
 
 interface Props {
   order: SortOptions;
@@ -23,11 +27,18 @@ export function CommunityList(props: Props) {
     search,
   ]);
 
-  return (
-    <div className={styles.root}>
-      {communities.results.map((community) => (
-        <CommunityCard key={community.identifier} community={community} />
-      ))}
-    </div>
+  const cards = communities.results.map((community) => (
+    <CommunityCard key={community.identifier} community={community} />
+  ));
+
+  return cards.length > 0 ? (
+    <div className={styles.root}>{cards}</div>
+  ) : (
+    <AntiResult className={styles.noResultPadding}>
+      <AntiResultIcon wrapperClasses={styles.ghostBounce}>
+        <FontAwesomeIcon icon={faGhost} />
+      </AntiResultIcon>
+      <AntiResultTitle>It&apos;s empty in there.</AntiResultTitle>
+    </AntiResult>
   );
 }

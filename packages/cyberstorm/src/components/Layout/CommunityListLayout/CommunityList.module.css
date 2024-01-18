@@ -4,3 +4,26 @@
   grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
   gap: 3rem 1.5rem;
 }
+
+.noResultPadding {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+.ghostBounce {
+  animation: ghost-bounce 3s ease-in-out infinite;
+}
+
+@keyframes ghost-bounce {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
