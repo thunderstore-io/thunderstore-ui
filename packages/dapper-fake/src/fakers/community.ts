@@ -63,6 +63,10 @@ export const getFakeCommunities: GetCommunities = async (
     communities.sort((a, b) => a.name.localeCompare(b.name));
   } else if (ordering === "-name") {
     communities.sort((a, b) => b.name.localeCompare(a.name));
+  } else if (ordering === "aggregated_fields__download_count") {
+    communities.sort((a, b) => a.total_download_count - b.total_download_count);
+  } else if (ordering === "-aggregated_fields__download_count") {
+    communities.sort((a, b) => b.total_download_count - a.total_download_count);
   }
 
   const count = communities.length;
