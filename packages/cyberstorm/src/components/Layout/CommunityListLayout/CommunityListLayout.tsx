@@ -8,6 +8,7 @@ import {
   faSearch,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
+import { faFire } from "@fortawesome/pro-solid-svg-icons";
 import { TextInput } from "../../TextInput/TextInput";
 import { Select } from "../../Select/Select";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
@@ -19,13 +20,14 @@ import { CommunityListSkeleton } from "./CommunityListSkeleton";
 export enum SortOptions {
   Name = "name",
   Latest = "-datetime_created",
+  Popular = "-aggregated_fields__download_count",
 }
 
 /**
  * Cyberstorm CommunityList Layout
  */
 export function CommunityListLayout() {
-  const [order, setOrder] = useState(SortOptions.Name);
+  const [order, setOrder] = useState(SortOptions.Popular);
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue] = useDebounce(searchValue, 300);
 
@@ -76,5 +78,10 @@ const selectOptions = [
     value: SortOptions.Latest,
     label: "Latest",
     leftIcon: <FontAwesomeIcon icon={faStar} />,
+  },
+  {
+    value: SortOptions.Popular,
+    label: "Popular",
+    leftIcon: <FontAwesomeIcon icon={faFire} />,
   },
 ];
