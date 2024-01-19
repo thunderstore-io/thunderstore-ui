@@ -17,5 +17,3 @@ export function EmptyState(props: Props) {
 }
 
 EmptyState.displayName = "EmptyState";
-
-export { EmptyState as Root };

@@ -7,8 +7,7 @@ import { usePromise } from "@thunderstore/use-promise";
 import styles from "./CommunityList.module.css";
 import { SortOptions } from "./CommunityListLayout";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
-import { EmptyState } from "../../EmptyState/EmptyState";
-import { EmptyStateIcon, EmptyStateTitle } from "../../EmptyState";
+import * as EmptyState from "../../EmptyState";
 
 interface Props {
   order: SortOptions;
@@ -34,11 +33,11 @@ export function CommunityList(props: Props) {
   return cards.length > 0 ? (
     <div className={styles.root}>{cards}</div>
   ) : (
-    <EmptyState className={styles.noResultPadding}>
-      <EmptyStateIcon wrapperClasses={styles.ghostBounce}>
+    <EmptyState.Root className={styles.noResultPadding}>
+      <EmptyState.Icon wrapperClasses={styles.ghostBounce}>
         <FontAwesomeIcon icon={faGhost} />
-      </EmptyStateIcon>
-      <EmptyStateTitle>It&apos;s empty in there.</EmptyStateTitle>
-    </EmptyState>
+      </EmptyState.Icon>
+      <EmptyState.Title>It&apos;s empty in there.</EmptyState.Title>
+    </EmptyState.Root>
   );
 }
