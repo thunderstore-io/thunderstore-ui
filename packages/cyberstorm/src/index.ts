@@ -14,6 +14,7 @@ export {
   DropDownItem,
   DropDownDivider,
 } from "./components/DropDown/DropDown";
+export * as EmptyState from "./components/EmptyState/";
 export { Footer } from "./components/Footer/Footer";
 export { Icon } from "./components/Icon/Icon";
 export { Header } from "./components/Header/Header";
@@ -48,7 +49,6 @@ export {
 } from "./components/Links/Links";
 export { ValidationBar } from "./components/ValidationBar/ValidationBar";
 export { Markdown } from "./components/Markdown/Markdown";
-export * as AntiResult from "./components/AntiResult/";
 export * as MenuItem from "./components/MenuItem/";
 export type { MenuItemProps } from "./components/MenuItem/";
 export { MetaItem, type MetaItemProps } from "./components/MetaItem/MetaItem";

@@ -1,4 +1,4 @@
-import styles from "./AntiResult.module.css";
+import styles from "./EmptyState.module.css";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
 
@@ -8,7 +8,7 @@ interface Props {
   wrapperClasses?: string;
 }
 
-export function AntiResultIcon(props: Props) {
+export function EmptyStateIcon(props: Props) {
   const { children, iconClasses, wrapperClasses } = props;
   return (
     <Icon
@@ -20,4 +20,4 @@ export function AntiResultIcon(props: Props) {
   );
 }
 
-AntiResultIcon.displayName = "AntiResultIcon";
+EmptyStateIcon.displayName = "EmptyStateIcon";

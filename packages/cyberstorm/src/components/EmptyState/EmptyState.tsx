@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import styles from "./AntiResult.module.css";
+import styles from "./EmptyState.module.css";
 import { classnames } from "../../utils/utils";
 
 interface Props extends PropsWithChildren {
@@ -10,12 +10,12 @@ interface Props extends PropsWithChildren {
  * Ease of use component set for adding helpful content in
  * place where content is missing
  */
-export function AntiResult(props: Props) {
+export function EmptyState(props: Props) {
   const { children, className } = props;
 
   return <div className={classnames(styles.root, className)}>{children}</div>;
 }
 
-AntiResult.displayName = "AntiResult";
+EmptyState.displayName = "EmptyState";
 
-export { AntiResult as Root };
+export { EmptyState as Root };
