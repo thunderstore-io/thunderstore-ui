@@ -78,3 +78,5 @@ const selectOptions = [
     leftIcon: <FontAwesomeIcon icon={faStar} />,
   },
 ];
+
+export default CommunityListLayout;
