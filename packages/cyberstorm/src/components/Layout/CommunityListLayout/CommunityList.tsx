@@ -1,14 +1,13 @@
 "use client";
+import { faGhost } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 
 import styles from "./CommunityList.module.css";
 import { SortOptions } from "./CommunityListLayout";
 import { CommunityCard } from "../../CommunityCard/CommunityCard";
-import { AntiResult } from "../../AntiResult/AntiResult";
-import { AntiResultIcon, AntiResultTitle } from "../../AntiResult";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGhost } from "@fortawesome/pro-solid-svg-icons";
+import * as EmptyState from "../../EmptyState";
 
 interface Props {
   order: SortOptions;
@@ -34,11 +33,11 @@ export function CommunityList(props: Props) {
   return cards.length > 0 ? (
     <div className={styles.root}>{cards}</div>
   ) : (
-    <AntiResult className={styles.noResultPadding}>
-      <AntiResultIcon wrapperClasses={styles.ghostBounce}>
+    <EmptyState.Root className={styles.noResultPadding}>
+      <EmptyState.Icon wrapperClasses={styles.ghostBounce}>
         <FontAwesomeIcon icon={faGhost} />
-      </AntiResultIcon>
-      <AntiResultTitle>It&apos;s empty in there.</AntiResultTitle>
-    </AntiResult>
+      </EmptyState.Icon>
+      <EmptyState.Title>It&apos;s empty in there.</EmptyState.Title>
+    </EmptyState.Root>
   );
 }
