@@ -11,7 +11,13 @@ import { CurrentUser } from "./user";
 
 export type GetCommunities = (
   page?: number,
-  ordering?: "datetime_created" | "-datetime_created" | "name" | "-name",
+  ordering?:
+    | "aggregated_fields__download_count"
+    | "-aggregated_fields__download_count"
+    | "datetime_created"
+    | "-datetime_created"
+    | "name"
+    | "-name",
   search?: string
 ) => Promise<Communities>;
 
