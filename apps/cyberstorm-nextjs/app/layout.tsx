@@ -1,6 +1,7 @@
 import "@thunderstore/cyberstorm-styles";
+import styles from "./RootLayout.module.css";
 import Providers from "@/utils/provider";
-import { CyberstormProviders } from "@thunderstore/cyberstorm";
+import { CyberstormProviders, Footer, Header } from "@thunderstore/cyberstorm";
 import React from "react";
 import { ServerDapper } from "@/dapper/server";
 import { ClientDapper } from "@/dapper/client";
@@ -12,7 +13,13 @@ export default function RootLayout(props: React.PropsWithChildren) {
         <ServerDapper>
           <ClientDapper>
             <CyberstormProviders>
-              <Providers>{props.children}</Providers>
+              <Providers>
+                <div className={styles.root}>
+                  <Header />
+                  {props.children}
+                  <Footer />
+                </div>
+              </Providers>
             </CyberstormProviders>
           </ClientDapper>
         </ServerDapper>

@@ -1,11 +1,17 @@
 import React from "react";
 
-import { LinkingProvider, CyberstormProviders } from "@thunderstore/cyberstorm";
+import {
+  LinkingProvider,
+  CyberstormProviders,
+  Footer,
+  Header,
+} from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-styles";
 import { DapperProvider } from "@thunderstore/dapper";
 import { DapperFake } from "@thunderstore/dapper-fake";
 import { LinkLibrary } from "../LinkLibrary";
 import { SessionProvider } from "../SessionContext";
+import styles from "../../cyberstorm-nextjs/app/RootLayout.module.css";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -30,7 +36,11 @@ export const decorators = [
           <SessionProvider>
             <DapperProvider dapperConstructor={() => new DapperFake()}>
               <LinkingProvider value={LinkLibrary}>
-                <Story />
+                <div className={styles.root}>
+                  <Header />
+                  <Story />
+                  <Footer />
+                </div>
               </LinkingProvider>
             </DapperProvider>
           </SessionProvider>

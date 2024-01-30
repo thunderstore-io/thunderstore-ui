@@ -86,7 +86,6 @@ export { Title, type TitleProps } from "./components/Title/Title";
 export { Tooltip, type TooltipProps } from "./components/Tooltip/Tooltip";
 export { Alert, type AlertProps } from "./components/Alert/Alert";
 export { Toast } from "./components/Toast/Toast";
-export { CommunityListLayout } from "./components/Layout/CommunityListLayout/CommunityListLayout";
 export { ErrorLayout } from "./components/Layout/ErrorLayout/ErrorLayout";
 export { HomeLayout } from "./components/Layout/HomeLayout/HomeLayout";
 export { LoginLayout } from "./components/Layout/LoginLayout/LoginLayout";

@@ -5,9 +5,14 @@ import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 
 import styles from "./CommunityList.module.css";
-import { SortOptions } from "./CommunityListLayout";
-import { CommunityCard } from "../../CommunityCard/CommunityCard";
-import * as EmptyState from "../../EmptyState";
+import { CommunityCard } from "@thunderstore/cyberstorm/src/components/CommunityCard/CommunityCard";
+import { EmptyState } from "@thunderstore/cyberstorm";
+
+enum SortOptions {
+  Name = "name",
+  Latest = "-datetime_created",
+  Popular = "-aggregated_fields__download_count",
+}
 
 interface Props {
   order: SortOptions;
