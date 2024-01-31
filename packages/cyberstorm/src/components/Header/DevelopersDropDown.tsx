@@ -28,7 +28,7 @@ export const DevelopersDropDown = () => (
       <a href="/package/create/docs/" key="old_format_docs">
         <DropDownItem content={<DropDownLink label="Package Format Docs" />} />
       </a>,
-      <a href="/tools/markdown-preview/" key="old_format_docs">
+      <a href="/tools/markdown-preview/" key="old_markdown_preview">
         <DropDownItem content={<DropDownLink label="Markdown Preview" />} />
       </a>,
       <a href="/tools/manifest-v1-validator/" key="old_manifest_validator">
