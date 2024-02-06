@@ -1,4 +1,3 @@
-"use client";
 import Router from "next/router";
 import {
   createContext,
@@ -10,7 +9,6 @@ import {
   useState,
 } from "react";
 
-import { API_DOMAIN } from "./constants";
 import { StorageManager } from "./storage";
 
 interface ContextInterface {
@@ -26,6 +24,8 @@ interface ContextInterface {
   setSession: (sessionData: LoginResponse) => void;
   /** Username from provider's state or localStorage. */
   username?: string;
+  /** Domain of the session */
+  domain?: string;
 }
 
 interface LoginResponse {
@@ -39,6 +39,10 @@ const EMAIL_KEY = "email";
 const ID_KEY = "id";
 const USERNAME_KEY = "username";
 
+interface Props extends PropsWithChildren {
+  domain?: string;
+}
+
 /**
  * For managing data API's session id.
  *
@@ -49,13 +53,29 @@ const USERNAME_KEY = "username";
  */
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function SessionProvider(props: PropsWithChildren) {
+export function SessionProvider(props: Props) {
   const [_session, _setSession] = useState<LoginResponse>();
   const _storage = new StorageManager("Session");
+
+  // Check if the browser has a Django "sessionid" cookie
+  // Same code is repeated inside useValidateSession
+  // TODO: There's something weird going on, because the first load
+  // of the page after login, doesn't grab the sessionid
+  if (_storage.safeGetValue(ID_KEY) === null) {
+    const sessionid = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("sessionid="))
+      ?.split("=")[1];
+    if (sessionid) {
+      _storage.setValue(ID_KEY, sessionid);
+    }
+  }
+
   const [isReady, sessionId] = useValidateSession(
     _session,
     _setSession,
-    _storage
+    _storage,
+    props.domain
   );
 
   const setSession = (sessionData: LoginResponse) => {
@@ -79,6 +99,7 @@ export function SessionProvider(props: PropsWithChildren) {
     sessionId,
     setSession,
     username: _session?.username,
+    domain: props.domain,
   };
 
   return (
@@ -117,7 +138,8 @@ export const useSession = (): ContextInterface => {
 const useValidateSession = (
   _session: LoginResponse | undefined,
   _setSession: Dispatch<SetStateAction<LoginResponse | undefined>>,
-  _storage: StorageManager
+  _storage: StorageManager,
+  domain?: string
 ): [
   /** Is the validation process ready? */
   boolean,
@@ -147,7 +169,7 @@ const useValidateSession = (
     }
 
     (async () => {
-      const res = await fetch(`${API_DOMAIN}/api/experimental/auth/validate/`, {
+      const res = await fetch(`${domain}/api/experimental/auth/validate/`, {
         headers: {
           authorization: `Session ${storedSessionId}`,
           "Content-Type": "application/json",
