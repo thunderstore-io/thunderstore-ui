@@ -1,5 +1,5 @@
 import { RequestConfig } from "@thunderstore/thunderstore-api";
-import { useApiConfig } from "./useApiConfig";
+import { useSession } from "./SessionContext";
 
 export type ApiEndpoint<Data, Result> = (
   config: RequestConfig,
@@ -9,6 +9,10 @@ export type ApiEndpoint<Data, Result> = (
 export function useApiCall<Data, Result>(
   endpoint: ApiEndpoint<Data, Result>
 ): (data: Data, metaData: any) => Promise<Result> {
-  const apiConfig = useApiConfig();
+  const session = useSession();
+  const apiConfig = {
+    apiHost: session.domain,
+    sessionId: session.sessionId,
+  };
   return (data: Data, metaData: any) => endpoint(apiConfig, data, metaData);
 }
