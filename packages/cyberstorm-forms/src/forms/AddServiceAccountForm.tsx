@@ -42,14 +42,19 @@ export function AddServiceAccountForm(props: { teamName: string }) {
   const [addedServiceAccountNickname, setAddedServiceAccountNickname] =
     useState("");
 
-  function onSubmitSuccessExtra(responseBodyString: string) {
-    const responseJson = JSON.parse(responseBodyString);
-    console.log(isServiceAccountSuccessResponse(responseJson));
-    if (isServiceAccountSuccessResponse(responseJson)) {
-      setServiceAccountAdded(true);
-      setAddedServiceAccountToken(responseJson.service_account_token);
-      setAddedServiceAccountNickname(responseJson.service_account_nickname);
-      onSubmitSuccess();
+  function onSubmitSuccessExtra(responseBodyString: object) {
+    // TODO: Fix the Result type resolving in the whole chain of ApiForm
+    // It's now just assumed all results are objects
+    if (typeof responseBodyString === "string") {
+      const responseJson = JSON.parse(responseBodyString);
+      if (isServiceAccountSuccessResponse(responseJson)) {
+        setServiceAccountAdded(true);
+        setAddedServiceAccountToken(responseJson.service_account_token);
+        setAddedServiceAccountNickname(responseJson.service_account_nickname);
+        onSubmitSuccess();
+      } else {
+        onSubmitError();
+      }
     } else {
       onSubmitError();
     }
