@@ -1,7 +1,7 @@
 import { RequestConfig } from "../index";
 import { apiFetch2 } from "../apiFetch";
 
-export type teamDisbandTeamMetaData = {
+export type teamDisbandTeamMetaArgs = {
   teamIdentifier: string;
 };
 
@@ -12,9 +12,9 @@ export interface teamDisbandTeamApiArgs {
 export function teamDisbandTeam(
   config: RequestConfig,
   data: teamDisbandTeamApiArgs,
-  metaData: teamDisbandTeamMetaData
+  meta: teamDisbandTeamMetaArgs
 ) {
-  const path = `/api/cyberstorm/team/${metaData.teamIdentifier}/disband/`;
+  const path = `/api/cyberstorm/team/${meta.teamIdentifier}/disband/`;
 
   return apiFetch2({
     config,

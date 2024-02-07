@@ -27,7 +27,7 @@ export function DeleteAccountForm(props: { userName: string }) {
       schema={userDeleteFormSchema}
       endpoint={userDelete}
       formProps={{ className: styles.root }}
-      metaData={{ username: props.userName }}
+      meta={{ username: props.userName }}
     >
       <Alert
         icon={<FontAwesomeIcon icon={faWarning} />}

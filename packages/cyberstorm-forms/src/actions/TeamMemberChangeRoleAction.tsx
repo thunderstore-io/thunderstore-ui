@@ -2,10 +2,8 @@
 
 import { useFormToaster } from "@thunderstore/cyberstorm-forms";
 import { Select } from "@thunderstore/cyberstorm";
-import {
-  ApiAction,
-  teamEditMemberFormSchema,
-} from "@thunderstore/ts-api-react-forms";
+import { teamEditMemberFormSchema } from "@thunderstore/ts-api-react-forms";
+import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { teamEditMember } from "@thunderstore/thunderstore-api";
 
 export function TeamMemberChangeRoleAction(props: {
@@ -24,7 +22,7 @@ export function TeamMemberChangeRoleAction(props: {
 
   const onSubmit = ApiAction({
     schema: teamEditMemberFormSchema,
-    metaData: { teamIdentifier: props.teamName },
+    meta: { teamIdentifier: props.teamName },
     endpoint: teamEditMember,
     onSubmitSuccess: onSubmitSuccess,
     onSubmitError: onSubmitError,

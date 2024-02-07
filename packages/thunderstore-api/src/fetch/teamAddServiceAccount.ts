@@ -1,7 +1,7 @@
 import { RequestConfig } from "../index";
 import { apiFetch2 } from "../apiFetch";
 
-export type teamAddServiceAccountMetaData = {
+export type teamAddServiceAccountMetaArgs = {
   teamIdentifier: string;
 };
 
@@ -12,9 +12,9 @@ export type teamAddServiceAccountApiArgs = {
 export function teamAddServiceAccount(
   config: RequestConfig,
   data: teamAddServiceAccountApiArgs,
-  metaData: teamAddServiceAccountMetaData
+  meta: teamAddServiceAccountMetaArgs
 ) {
-  const path = `api/cyberstorm/team/${metaData.teamIdentifier}/service-accounts/create/`;
+  const path = `api/cyberstorm/team/${meta.teamIdentifier}/service-accounts/create/`;
 
   return apiFetch2({
     config,

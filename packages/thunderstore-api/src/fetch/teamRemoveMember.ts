@@ -1,7 +1,7 @@
 import { RequestConfig } from "../index";
 import { apiFetch2 } from "../apiFetch";
 
-export type teamRemoveMemberMetaData = {
+export type teamRemoveMemberMetaArgs = {
   teamIdentifier: string;
   user: string;
 };
@@ -12,16 +12,16 @@ export interface teamRemoveMemberApiArgs {}
 export function teamRemoveMember(
   config: RequestConfig,
   data: teamRemoveMemberApiArgs,
-  metaData: teamRemoveMemberMetaData
+  meta: teamRemoveMemberMetaArgs
 ) {
-  const path = `/api/cyberstorm/team/${metaData.teamIdentifier}/members/remove/`;
+  const path = `/api/cyberstorm/team/${meta.teamIdentifier}/members/remove/`;
 
   return apiFetch2({
     config,
     path,
     request: {
       method: "POST",
-      body: JSON.stringify({ user: metaData.user }),
+      body: JSON.stringify({ user: meta.user }),
     },
   });
 }
