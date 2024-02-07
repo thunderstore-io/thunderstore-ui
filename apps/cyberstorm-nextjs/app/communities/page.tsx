@@ -2,7 +2,7 @@
 
 import rootStyles from "../RootLayout.module.css";
 import styles from "./CommunitiesLayout.module.css";
-import { TextInput, Select } from "@thunderstore/cyberstorm";
+import { TextInput, Select, BreadCrumbs } from "@thunderstore/cyberstorm";
 import { Suspense, startTransition, useState } from "react";
 import { useDebounce } from "use-debounce";
 
@@ -15,6 +15,7 @@ import {
 import { faFire } from "@fortawesome/pro-solid-svg-icons";
 import { CommunityList } from "./CommunityList";
 import { CommunityListSkeleton } from "./CommunityListSkeleton";
+import { PageHeader } from "@thunderstore/cyberstorm/src/components/Layout/BaseLayout/PageHeader/PageHeader";
 
 enum SortOptions {
   Name = "name",
@@ -32,29 +33,35 @@ export default function Page() {
   const changeOrder = (v: SortOptions) => startTransition(() => setOrder(v));
 
   return (
-    <main className={rootStyles.main}>
-      <div className={styles.filters}>
-        <div className={styles.searchTextInput}>
-          <TextInput
-            onChange={(e) => setSearchValue(e.target.value)}
-            value={searchValue}
-            placeholder="Search communities..."
-            leftIcon={<FontAwesomeIcon icon={faSearch} />}
-          />
+    <>
+      <BreadCrumbs>Communities</BreadCrumbs>
+      <header className={rootStyles.pageHeader}>
+        <PageHeader title="Communities" />
+      </header>
+      <main className={rootStyles.main}>
+        <div className={styles.filters}>
+          <div className={styles.searchTextInput}>
+            <TextInput
+              onChange={(e) => setSearchValue(e.target.value)}
+              value={searchValue}
+              placeholder="Search communities..."
+              leftIcon={<FontAwesomeIcon icon={faSearch} />}
+            />
+          </div>
+          <div className={styles.searchFilters}>
+            <div className={styles.searchFiltersSortLabel}>Sort by</div>
+            <Select
+              onChange={changeOrder}
+              options={selectOptions}
+              value={order}
+            />
+          </div>
         </div>
-        <div className={styles.searchFilters}>
-          <div className={styles.searchFiltersSortLabel}>Sort by</div>
-          <Select
-            onChange={changeOrder}
-            options={selectOptions}
-            value={order}
-          />
-        </div>
-      </div>
-      <Suspense fallback={<CommunityListSkeleton />}>
-        <CommunityList order={order} search={debouncedSearchValue} />
-      </Suspense>
-    </main>
+        <Suspense fallback={<CommunityListSkeleton />}>
+          <CommunityList order={order} search={debouncedSearchValue} />
+        </Suspense>
+      </main>
+    </>
   );
 }
 
