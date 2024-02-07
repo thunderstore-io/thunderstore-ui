@@ -109,7 +109,7 @@ export function AddServiceAccountForm(props: { teamName: string }) {
         onSubmitSuccess={onSubmitSuccessExtra}
         onSubmitError={onSubmitError}
         schema={teamAddServiceAccountFormSchema}
-        metaData={{ teamIdentifier: props.teamName }}
+        meta={{ teamIdentifier: props.teamName }}
         endpoint={teamAddServiceAccount}
         formProps={{ className: styles.root }}
       >

@@ -27,7 +27,7 @@ export function CreateTeamForm(props: {
       }}
       onSubmitError={onSubmitError}
       schema={createTeamFormSchema}
-      metaData={{}}
+      meta={{}}
       endpoint={createTeam}
       formProps={{ className: styles.root }}
     >

@@ -32,7 +32,7 @@ export function DisbandTeamForm(props: {
       schema={teamDisbandFormSchema}
       endpoint={teamDisbandTeam}
       formProps={{ className: styles.root }}
-      metaData={{ teamIdentifier: props.teamName }}
+      meta={{ teamIdentifier: props.teamName }}
     >
       <div className={styles.dialog}>
         <p className={styles.description}>

@@ -27,7 +27,7 @@ export function TeamDetailsEdit({ teamName }: { teamName: string }) {
     <ApiForm
       {...toaster}
       schema={teamDetailsEditFormSchema}
-      metaData={{ teamIdentifier: team.name }}
+      meta={{ teamIdentifier: team.name }}
       endpoint={teamDetailsEdit}
       formProps={{ className: styles.root }}
     >

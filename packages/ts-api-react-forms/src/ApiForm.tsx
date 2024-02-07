@@ -9,25 +9,27 @@ import { useApiForm } from "./useApiForm";
 
 export type ApiFormProps<
   Schema extends ZodObject<Z>,
+  Meta extends object,
   Result extends object,
   Z extends ZodRawShape
 > = {
   schema: Schema;
-  endpoint: ApiEndpoint<z.infer<Schema>, Result>;
-  metaData: any;
+  endpoint: ApiEndpoint<z.infer<Schema>, Meta, Result>;
+  meta: Meta;
   onSubmitSuccess?: (result: Result) => void;
   onSubmitError?: (error: Error | ApiError | unknown) => void;
   formProps?: Omit<HTMLAttributes<HTMLFormElement>, "onSubmit">;
 };
 export function ApiForm<
   Schema extends ZodObject<Z>,
+  Meta extends object,
   Result extends object,
   Z extends ZodRawShape
->(props: PropsWithChildren<ApiFormProps<Schema, Result, Z>>) {
-  const { schema, metaData, endpoint, onSubmitSuccess, onSubmitError } = props;
+>(props: PropsWithChildren<ApiFormProps<Schema, Meta, Result, Z>>) {
+  const { schema, meta, endpoint, onSubmitSuccess, onSubmitError } = props;
   const { form, submitHandler } = useApiForm({
     schema: schema,
-    metaData: metaData,
+    meta: meta,
     endpoint: endpoint,
   });
   const onSubmit = useCallback(
