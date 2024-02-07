@@ -24,14 +24,6 @@ export async function middleware(request: NextRequest) {
   const req = request;
   const response = NextResponse.next();
 
-  // The project root is set to /cyberstorm while the NextJs site is
-  // served from the same domain as the old Django site.
-  // Communities page acts as the front page until we have a proper
-  // landing page.
-  if (request.nextUrl.pathname === "/communities") {
-    return NextResponse.redirect(new URL("/cyberstorm", request.url));
-  }
-
   // For the sake of keeping dev configuration easy and not confusing
   if (!process.env.AUTH_ENABLED) {
     return response;
