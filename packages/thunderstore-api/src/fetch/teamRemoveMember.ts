@@ -11,7 +11,7 @@ export interface teamRemoveMemberApiArgs {}
 
 export function teamRemoveMember(
   config: RequestConfig,
-  data: teamRemoveMemberApiArgs,
+  _data: teamRemoveMemberApiArgs,
   meta: teamRemoveMemberMetaArgs
 ) {
   const path = `/api/cyberstorm/team/${meta.teamIdentifier}/members/remove/`;

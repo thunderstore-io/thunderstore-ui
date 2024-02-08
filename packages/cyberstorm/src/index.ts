@@ -108,5 +108,11 @@ export { PackageUploadLayout } from "./components/Layout/Developers/PackageUploa
 
 export { PrivacyPolicyLayout } from "./components/Layout/SimplePages/PrivacyPolicy/PrivacyPolicyLayout";
 export { TermsOfServiceLayout } from "./components/Layout/SimplePages/TermsOfService/TermsOfServiceLayout";
+export { TeamDetails } from "./components/Layout/Teams/TeamSettings/TeamDetails/TeamDetails";
+export { TeamLeaveAndDisband } from "./components/Layout/Teams/TeamSettings/TeamLeaveAndDisband/TeamLeaveAndDisband";
+export { TeamMembers } from "./components/Layout/Teams/TeamSettings/TeamMembers/TeamMembers";
+export { TeamServiceAccounts } from "./components/Layout/Teams/TeamSettings/TeamServiceAccounts/TeamServiceAccounts";
 export { range } from "./utils/utils";
 export { PageHeader } from "./components/Layout/BaseLayout/PageHeader/PageHeader";
+export { SettingItem } from "./components/SettingItem/SettingItem";
+export { TeamList } from "./components/Layout/Teams/TeamList/TeamList";
