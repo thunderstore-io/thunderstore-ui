@@ -34,7 +34,7 @@ export function AddTeamMemberForm(props: {
       }}
       onSubmitError={onSubmitError}
       schema={teamAddMemberFormSchema}
-      metaData={{ teamIdentifier: props.teamName }}
+      meta={{ teamIdentifier: props.teamName }}
       endpoint={teamAddMember}
       formProps={{ className: styles.root }}
     >

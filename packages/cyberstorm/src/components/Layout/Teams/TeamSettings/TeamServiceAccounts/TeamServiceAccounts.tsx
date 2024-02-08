@@ -1,3 +1,4 @@
+"use client";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import * as Button from "../../../../Button/";
 import { ServiceAccountList } from "./ServiceAccountList/ServiceAccountList";
