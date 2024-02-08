@@ -11,7 +11,7 @@ import { DapperProvider } from "@thunderstore/dapper";
 import { DapperFake } from "@thunderstore/dapper-fake";
 import { LinkLibrary } from "../LinkLibrary";
 import { SessionProvider } from "../SessionContext";
-import styles from "../../cyberstorm-nextjs/app/RootLayout.module.css";
+// import styles from "../../cyberstorm-nextjs/app/RootLayout.module.css";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -36,11 +36,12 @@ export const decorators = [
           <SessionProvider>
             <DapperProvider dapperConstructor={() => new DapperFake()}>
               <LinkingProvider value={LinkLibrary}>
-                <div className={styles.root}>
+                {/* <div className={styles.root}>
                   <Header />
                   <Story />
                   <Footer />
-                </div>
+                </div> */}
+                <Story />
               </LinkingProvider>
             </DapperProvider>
           </SessionProvider>
