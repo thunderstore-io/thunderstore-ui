@@ -57,19 +57,21 @@ export function SessionProvider(props: Props) {
   const [_session, _setSession] = useState<LoginResponse>();
   const _storage = new StorageManager("Session");
 
-  // Check if the browser has a Django "sessionid" cookie
-  // Same code is repeated inside useValidateSession
-  // TODO: There's something weird going on, because the first load
-  // of the page after login, doesn't grab the sessionid
-  if (_storage.safeGetValue(ID_KEY) === null) {
-    const sessionid = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("sessionid="))
-      ?.split("=")[1];
-    if (sessionid) {
-      _storage.setValue(ID_KEY, sessionid);
+  useEffect(() => {
+    // Check if the browser has a Django "sessionid" cookie
+    // Same code is repeated inside useValidateSession
+    // TODO: There's something weird going on, because the first load
+    // of the page after login, doesn't grab the sessionid
+    if (_storage.safeGetValue(ID_KEY) === null) {
+      const sessionid = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("sessionid="))
+        ?.split("=")[1];
+      if (sessionid) {
+        _storage.setValue(ID_KEY, sessionid);
+      }
     }
-  }
+  }, []);
 
   const [isReady, sessionId] = useValidateSession(
     _session,
