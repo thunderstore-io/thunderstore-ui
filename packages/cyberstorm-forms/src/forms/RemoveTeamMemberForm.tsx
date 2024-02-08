@@ -30,7 +30,7 @@ export function RemoveTeamMemberForm(props: {
       schema={z.object({})}
       endpoint={teamRemoveMember}
       formProps={{ className: styles.root }}
-      metaData={{ teamIdentifier: props.teamName, user: props.userName }}
+      meta={{ teamIdentifier: props.teamName, user: props.userName }}
     >
       <div className={styles.dialog}>
         <div className={styles.dialogText}>

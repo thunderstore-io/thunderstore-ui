@@ -1,7 +1,7 @@
 import { RequestConfig } from "../index";
 import { apiFetch2 } from "../apiFetch";
 
-export type teamServiceAccountRemoveMetaData = {
+export type teamServiceAccountRemoveMetaArgs = {
   serviceAccountIdentifier: string;
   teamName: string;
 };
@@ -11,10 +11,10 @@ export interface teamServiceAccountRemoveApiArgs {}
 
 export function teamServiceAccountRemove(
   config: RequestConfig,
-  data: teamServiceAccountRemoveApiArgs,
-  metaData: teamServiceAccountRemoveMetaData
+  _data: teamServiceAccountRemoveApiArgs,
+  meta: teamServiceAccountRemoveMetaArgs
 ) {
-  const path = `/api/cyberstorm/team/${metaData.teamName}/service-accounts/delete/`;
+  const path = `/api/cyberstorm/team/${meta.teamName}/service-accounts/delete/`;
 
   return apiFetch2({
     config,
@@ -22,7 +22,7 @@ export function teamServiceAccountRemove(
     request: {
       method: "POST",
       body: JSON.stringify({
-        service_account_uuid: metaData.serviceAccountIdentifier,
+        service_account_uuid: meta.serviceAccountIdentifier,
       }),
     },
   });
