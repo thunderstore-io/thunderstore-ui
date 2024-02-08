@@ -1,13 +1,4 @@
-"use client";
-import { useDapper } from "@thunderstore/dapper";
-import { usePromise } from "@thunderstore/use-promise";
-import styles from "./TeamDetails.module.css";
-import { SettingItem } from "../../../../SettingItem/SettingItem";
-import { TextInput } from "../../../../TextInput/TextInput";
-import * as Button from "../../../../Button/";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { TeamDetailsEdit } from "@thunderstore/cyberstorm-forms";
 
 interface Props {
   teamName: string;
@@ -16,42 +7,7 @@ interface Props {
 export function TeamDetails(props: Props) {
   const { teamName } = props;
 
-  const dapper = useDapper();
-  const team = usePromise(dapper.getTeamDetails, [teamName]);
-
-  const [donationLink, setDonationLink] = useState(team.donation_link ?? "");
-
-  return (
-    <div className={styles.root}>
-      <div className={styles.section}>
-        <SettingItem
-          title="Team donation link"
-          content={
-            <div className={styles.donationLink}>
-              <div className={styles.donationLinkLabel}>URL</div>
-              <div className={styles.donationLinkActions}>
-                <div className={styles.donationLinkTextInput}>
-                  <TextInput
-                    placeholder="https://"
-                    onChange={(e) => setDonationLink(e.target.value)}
-                    value={donationLink}
-                  />
-                </div>
-                <Button.Root
-                  paddingSize="mediumSquare"
-                  colorScheme="transparentDanger"
-                >
-                  <Button.ButtonIcon>
-                    <FontAwesomeIcon icon={faXmarkLarge} />
-                  </Button.ButtonIcon>
-                </Button.Root>
-              </div>
-            </div>
-          }
-        />
-      </div>
-    </div>
-  );
+  return <TeamDetailsEdit teamName={teamName} />;
 
   /*
   return (

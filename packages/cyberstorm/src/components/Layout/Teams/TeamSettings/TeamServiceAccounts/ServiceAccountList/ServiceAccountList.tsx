@@ -1,10 +1,10 @@
-import styles from "./ServiceAccountList.module.css";
+"use client";
 import { ServiceAccount } from "@thunderstore/dapper/types";
 import * as Button from "../../../../../Button";
 import { Table } from "../../../../../Table/Table";
-import { Alert, Dialog } from "../../../../../../index";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTriangleExclamation } from "@fortawesome/pro-solid-svg-icons";
+import { Dialog } from "../../../../../../index";
+import { RemoveServiceAccountForm } from "@thunderstore/cyberstorm-forms";
+import { useState } from "react";
 
 const serviceAccountColumns = [
   { value: "Nickname", disableSort: false },
@@ -13,57 +13,47 @@ const serviceAccountColumns = [
 ];
 
 interface Props {
+  teamName: string;
   serviceAccounts: ServiceAccount[];
 }
 
 export function ServiceAccountList(props: Props) {
   const { serviceAccounts } = props;
 
-  const tableData = serviceAccounts.map((serviceAccount, index) => [
-    { value: serviceAccount.name, sortValue: serviceAccount.name },
-    {
-      value: serviceAccount.last_used ?? "Never",
-      sortValue: serviceAccount.last_used ?? "Never",
-    },
-    {
-      value: (
-        <Dialog.Root
-          key={`${serviceAccount.name}_${index}`}
-          title="Confirm service account removal"
-          trigger={
-            <Button.Root colorScheme="danger" paddingSize="large">
-              <Button.ButtonLabel>Remove</Button.ButtonLabel>
-            </Button.Root>
-          }
-        >
-          <>
-            <div className={styles.content}>
-              <Alert
-                icon={<FontAwesomeIcon icon={faTriangleExclamation} />}
-                content={
-                  "This cannot be undone! Related API token will stop working immediately if the service account is removed."
-                }
-                variant="warning"
-              />
-              <span>
-                You are about to remove service account{" "}
-                <span className={styles.removeDescriptionAccountName}>
-                  {serviceAccount.name}
-                </span>
-                .
-              </span>
-            </div>
-            <div className={styles.removeServiceAccountFooter}>
+  const tableData = serviceAccounts.map((serviceAccount, index) => {
+    const [dialogOpen, setOpenDialog] = useState(false);
+
+    return [
+      { value: serviceAccount.name, sortValue: serviceAccount.name },
+      {
+        value: serviceAccount.last_used ?? "Never",
+        sortValue: serviceAccount.last_used ?? "Never",
+      },
+      {
+        value: (
+          <Dialog.Root
+            open={dialogOpen}
+            onOpenChange={setOpenDialog}
+            key={`${serviceAccount.name}_${index}`}
+            title="Confirm service account removal"
+            trigger={
               <Button.Root colorScheme="danger" paddingSize="large">
-                <Button.ButtonLabel>Remove service account</Button.ButtonLabel>
+                <Button.ButtonLabel>Remove</Button.ButtonLabel>
               </Button.Root>
-            </div>
-          </>
-        </Dialog.Root>
-      ),
-      sortValue: 0,
-    },
-  ]);
+            }
+          >
+            <RemoveServiceAccountForm
+              dialogOnChange={setOpenDialog}
+              teamName={props.teamName}
+              serviceAccountNickname={serviceAccount.name}
+              serviceAccountIdentifier={serviceAccount.identifier}
+            />
+          </Dialog.Root>
+        ),
+        sortValue: 0,
+      },
+    ];
+  });
 
   return <Table headers={serviceAccountColumns} rows={tableData} />;
 }

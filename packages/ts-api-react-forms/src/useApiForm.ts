@@ -8,11 +8,13 @@ import { ApiEndpoint, useApiCall } from "@thunderstore/ts-api-react";
 
 export type UseApiFormArgs<
   Schema extends ZodObject<Z>,
+  Meta extends object,
   Result extends object,
   Z extends ZodRawShape
 > = {
   schema: Schema;
-  endpoint: ApiEndpoint<z.infer<Schema>, Result>;
+  meta: Meta;
+  endpoint: ApiEndpoint<z.infer<Schema>, Meta, Result>;
 };
 export type UseApiFormReturn<
   Schema extends ZodObject<Z>,
@@ -24,12 +26,13 @@ export type UseApiFormReturn<
 };
 export function useApiForm<
   Schema extends ZodObject<Z>,
+  Meta extends object,
   Result extends object,
   Z extends ZodRawShape
 >(
-  args: UseApiFormArgs<Schema, Result, Z>
+  args: UseApiFormArgs<Schema, Meta, Result, Z>
 ): UseApiFormReturn<Schema, Result, Z> {
-  const { schema, endpoint } = args;
+  const { schema, meta, endpoint } = args;
   const apiCall = useApiCall(endpoint);
 
   const form = useForm<z.infer<Schema>>({
@@ -38,7 +41,7 @@ export function useApiForm<
   });
   const submitHandler = async (data: z.infer<Schema>) => {
     try {
-      return await apiCall(data);
+      return await apiCall(data, meta);
     } catch (e) {
       handleFormApiErrors(e, schema, form.setError);
       throw e;

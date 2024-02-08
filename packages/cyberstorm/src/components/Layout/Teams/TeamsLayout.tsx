@@ -19,7 +19,7 @@ import { useState } from "react";
  */
 
 export function TeamsLayout() {
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen, setOpenDialog] = useState(false);
 
   return (
     <BaseLayout
@@ -37,7 +37,7 @@ export function TeamsLayout() {
             additionalLeftColumnContent={
               <Dialog.Root
                 open={dialogOpen}
-                onOpenChange={setDialogOpen}
+                onOpenChange={setOpenDialog}
                 title="Create Team"
                 trigger={
                   <Button.Root colorScheme="primary" paddingSize="large">
@@ -48,7 +48,7 @@ export function TeamsLayout() {
                   </Button.Root>
                 }
               >
-                <CreateTeamForm closeDialog={() => setDialogOpen(false)} />
+                <CreateTeamForm dialogOnChange={setOpenDialog} />
               </Dialog.Root>
             }
             content={

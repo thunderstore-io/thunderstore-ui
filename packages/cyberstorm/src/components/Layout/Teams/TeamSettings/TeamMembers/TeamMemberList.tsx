@@ -1,3 +1,4 @@
+"use client";
 import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TeamMember } from "@thunderstore/dapper/types";
@@ -7,8 +8,12 @@ import { Avatar } from "../../../../Avatar/Avatar";
 import * as Button from "../../../../Button/";
 import { Dialog } from "../../../../../index";
 import { UserLink } from "../../../../Links/Links";
-import { Select } from "../../../../Select/Select";
 import { Table, Sort } from "../../../../Table/Table";
+import {
+  RemoveTeamMemberForm,
+  TeamMemberChangeRoleAction,
+} from "@thunderstore/cyberstorm-forms";
+import { useState } from "react";
 
 const teamMemberColumns = [
   { value: "User", disableSort: false },
@@ -16,81 +21,71 @@ const teamMemberColumns = [
   { value: "Actions", disableSort: true },
 ];
 
-const userRoles = [
-  { value: "member", label: "Member" },
-  { value: "owner", label: "Owner" },
-];
-
 interface Props {
   members: TeamMember[];
+  teamName: string;
 }
 
 export function TeamMemberList(props: Props) {
   const { members } = props;
 
-  const tableData = members.map((member, index) => [
-    {
-      value: (
-        <UserLink key={`user_${index}`} user={member.username}>
-          <div className={styles.userInfo}>
-            <Avatar
-              src={member.avatar}
-              username={member.username}
-              size="small"
+  const tableData = members.map((member, index) => {
+    const [dialogOpen, setOpenDialog] = useState(false);
+    return [
+      {
+        value: (
+          <UserLink key={`user_${index}`} user={member.username}>
+            <div className={styles.userInfo}>
+              <Avatar
+                src={member.avatar}
+                username={member.username}
+                size="small"
+              />
+              <span className={styles.userInfoName}>{member.username}</span>
+            </div>
+          </UserLink>
+        ),
+        sortValue: member.username,
+      },
+      {
+        value: (
+          <div key={`role_${index}`} className={styles.roleSelect}>
+            <TeamMemberChangeRoleAction
+              teamName={props.teamName}
+              userName={member.username}
+              currentRole={member.role}
             />
-            <span className={styles.userInfoName}>{member.username}</span>
           </div>
-        </UserLink>
-      ),
-      sortValue: member.username,
-    },
-    {
-      value: (
-        <div key={`role_${index}`} className={styles.roleSelect}>
-          <Select
-            triggerFontSize="medium"
-            options={userRoles}
-            value={member.role}
-          />
-        </div>
-      ),
-      sortValue: member.role,
-    },
-    {
-      value: (
-        <Dialog.Root
-          key={`action_${index}`}
-          trigger={
-            <Button.Root colorScheme="danger" paddingSize="large">
-              <Button.ButtonIcon>
-                <FontAwesomeIcon icon={faTrashCan} />
-              </Button.ButtonIcon>
-              <Button.ButtonLabel>Kick</Button.ButtonLabel>
-            </Button.Root>
-          }
-          title="Confirm member removal"
-        >
-          <>
-            <div>
-              You are about to kick member{" "}
-              <UserLink user={member.username}>
-                <span className={styles.kickDescriptionUserName}>
-                  {member.username}
-                </span>
-                .
-              </UserLink>
-            </div>
-            <div className={styles.dialogFooter}>
+        ),
+        sortValue: member.role,
+      },
+      {
+        value: (
+          <Dialog.Root
+            open={dialogOpen}
+            onOpenChange={setOpenDialog}
+            key={`action_${index}`}
+            title="Confirm member removal"
+            trigger={
               <Button.Root colorScheme="danger" paddingSize="large">
-                <Button.ButtonLabel>Kick member</Button.ButtonLabel>
+                <Button.ButtonIcon>
+                  <FontAwesomeIcon icon={faTrashCan} />
+                </Button.ButtonIcon>
+                <Button.ButtonLabel>Kick</Button.ButtonLabel>
               </Button.Root>
-            </div>
-          </>
-        </Dialog.Root>
-      ),
-      sortValue: 0,
-    },
-  ]);
+            }
+          >
+            <RemoveTeamMemberForm
+              dialogOnChange={setOpenDialog}
+              teamName={props.teamName}
+              userName={member.username}
+            />
+          </Dialog.Root>
+        ),
+        sortValue: 0,
+      },
+    ];
+  });
 
   return (
     <Table

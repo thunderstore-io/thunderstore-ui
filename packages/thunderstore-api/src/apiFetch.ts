@@ -14,6 +14,9 @@ export type apiFetchArgs = {
 export async function apiFetch2(args: apiFetchArgs) {
   const url = getUrl(args.config, args.path, args.query);
 
+  console.log(args.config);
+  console.log(getAuthHeaders(args.config));
+
   const response = await fetch(url, {
     ...(args.request ?? {}),
     headers: {

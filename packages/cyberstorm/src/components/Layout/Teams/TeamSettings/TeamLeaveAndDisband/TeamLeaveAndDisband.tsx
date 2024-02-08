@@ -1,13 +1,18 @@
+"use client";
 import styles from "./TeamLeaveAndDisband.module.css";
 import * as Button from "../../../../Button/";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
-import { TextInput } from "../../../../TextInput/TextInput";
-import { Alert } from "../../../../..";
+import { Alert, Dialog } from "../../../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faOctagonExclamation,
   faTrashCan,
 } from "@fortawesome/pro-solid-svg-icons";
+import { DisbandTeamForm } from "@thunderstore/cyberstorm-forms";
+import { LeaveTeamForm } from "@thunderstore/cyberstorm-forms";
+import { useDapper } from "@thunderstore/dapper";
+import { usePromise } from "@thunderstore/use-promise";
+import { useState } from "react";
 
 interface Props {
   teamName: string;
@@ -15,6 +20,12 @@ interface Props {
 
 export function TeamLeaveAndDisband(props: Props) {
   const { teamName } = props;
+  const [disbandTeamDialogOpen, setDisbandTeamDialogOpen] = useState(false);
+  const dapper = useDapper();
+  const user = usePromise(dapper.getCurrentUser, []);
+  // TODO: Make sure user is redirected of this page, if the user is not logged in
+  const userName = user.username ? user.username : "";
+  const [leaveTeamDialogOpen, setLeaveTeamDialogOpen] = useState(false);
 
   return (
     <div>
@@ -30,20 +41,30 @@ export function TeamLeaveAndDisband(props: Props) {
               }
               variant="danger"
             />
-            <p
-              className={styles.description}
-            >{`You are about to leave the team ${teamName}`}</p>
             <p className={styles.description}>
               If you are the owner of the team, you can only leave if the team
               has another owner assigned.
             </p>
             <div>
-              <Button.Root colorScheme="danger" paddingSize="large">
-                <Button.ButtonIcon>
-                  <FontAwesomeIcon icon={faTrashCan} />
-                </Button.ButtonIcon>
-                <Button.ButtonLabel>Leave team</Button.ButtonLabel>
-              </Button.Root>
+              <Dialog.Root
+                open={leaveTeamDialogOpen}
+                onOpenChange={setLeaveTeamDialogOpen}
+                title="Confirm leaving the team"
+                trigger={
+                  <Button.Root colorScheme="danger" paddingSize="large">
+                    <Button.ButtonIcon>
+                      <FontAwesomeIcon icon={faTrashCan} />
+                    </Button.ButtonIcon>
+                    <Button.ButtonLabel>Leave team</Button.ButtonLabel>
+                  </Button.Root>
+                }
+              >
+                <LeaveTeamForm
+                  dialogOnChange={setLeaveTeamDialogOpen}
+                  teamName={teamName}
+                  userName={userName}
+                />
+              </Dialog.Root>
             </div>
           </div>
         }
@@ -69,20 +90,25 @@ export function TeamLeaveAndDisband(props: Props) {
               you need to archive a team with existing pages, contact
               Mythic#0001 on the Thunderstore Discord.
             </p>
-            <p className={styles.description}>
-              As a precaution, to disband your team, please input {teamName}{" "}
-              into the field below.
-            </p>
-            <div className={styles.disbandVerificationInput}>
-              <TextInput placeholder="Verification" />
-            </div>
             <div>
-              <Button.Root colorScheme="danger" paddingSize="large">
-                <Button.ButtonIcon>
-                  <FontAwesomeIcon icon={faTrashCan} />
-                </Button.ButtonIcon>
-                <Button.ButtonLabel>Disband team</Button.ButtonLabel>
-              </Button.Root>
+              <Dialog.Root
+                open={disbandTeamDialogOpen}
+                onOpenChange={setDisbandTeamDialogOpen}
+                title="Confirm team disband"
+                trigger={
+                  <Button.Root colorScheme="danger" paddingSize="large">
+                    <Button.ButtonIcon>
+                      <FontAwesomeIcon icon={faTrashCan} />
+                    </Button.ButtonIcon>
+                    <Button.ButtonLabel>Disband team</Button.ButtonLabel>
+                  </Button.Root>
+                }
+              >
+                <DisbandTeamForm
+                  dialogOnChange={setDisbandTeamDialogOpen}
+                  teamName={teamName}
+                />
+              </Dialog.Root>
             </div>
           </div>
         }
