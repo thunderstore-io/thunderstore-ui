@@ -1,0 +1,47 @@
+.root {
+  display: flex;
+  justify-content: flex-start;
+  overflow: auto;
+}
+
+.tab {
+  display: flex;
+  flex: none;
+  flex-direction: row;
+  gap: var(--space--12);
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--space--12) var(--space--16);
+  border-bottom: 3px solid #1f1f42;
+  color: var(--color-text--default);
+  background-color: transparent;
+}
+
+.icon {
+  display: flex;
+  height: 1em;
+}
+
+.label {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size--l);
+  line-height: 1.3;
+}
+
+.tab > .icon {
+  color: var(--color-border--highlight);
+}
+
+.tab:hover > .icon {
+  color: var(--color-text--tertiary);
+}
+
+.tab:hover {
+  --bg-color: var(--color-surface--7);
+}
+
+.tab_selected {
+  border-bottom: 3px solid #50d99f;
+  color: #50d99f;
+}
