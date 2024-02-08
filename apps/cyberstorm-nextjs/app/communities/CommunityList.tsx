@@ -5,8 +5,7 @@ import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 
 import styles from "./CommunityList.module.css";
-import { CommunityCard } from "@thunderstore/cyberstorm/src/components/CommunityCard/CommunityCard";
-import { EmptyState } from "@thunderstore/cyberstorm";
+import { EmptyState, CommunityCard } from "@thunderstore/cyberstorm";
 
 enum SortOptions {
   Name = "name",

@@ -1,6 +1,5 @@
-import { range } from "@thunderstore/cyberstorm/src/utils/utils";
 import styles from "./CommunityList.module.css";
-import { CommunityCardSkeleton } from "@thunderstore/cyberstorm/src/components/CommunityCard/CommunityCardSkeleton";
+import { CommunityCardSkeleton, range } from "@thunderstore/cyberstorm";
 
 export const CommunityListSkeleton = () => {
   return (
