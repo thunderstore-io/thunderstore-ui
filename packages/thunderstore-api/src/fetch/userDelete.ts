@@ -1,7 +1,7 @@
 import { RequestConfig } from "../index";
 import { apiFetch2 } from "../apiFetch";
 
-export type userDeleteMetaData = {
+export type userDeleteMetaArgs = {
   username: string;
 };
 
@@ -12,9 +12,9 @@ export interface userDeleteApiArgs {
 export function userDelete(
   config: RequestConfig,
   data: userDeleteApiArgs,
-  metaData: userDeleteMetaData
+  meta: userDeleteMetaArgs
 ) {
-  const path = `/api/cyberstorm/user/${metaData.username}/delete/`;
+  const path = `/api/cyberstorm/user/${meta.username}/delete/`;
 
   return apiFetch2({
     config,

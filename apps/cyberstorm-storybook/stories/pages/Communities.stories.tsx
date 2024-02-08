@@ -9,11 +9,9 @@ const meta = {
 } as Meta<typeof CommunitiesLayout>;
 
 const Template: StoryFn<typeof CommunitiesLayout> = () => (
-  <div>
-    <CommunitiesLayout>
-      <Page />
-    </CommunitiesLayout>
-  </div>
+  <CommunitiesLayout>
+    <Page />
+  </CommunitiesLayout>
 );
 
 const DefaultCommunityListLayout = Template.bind({});

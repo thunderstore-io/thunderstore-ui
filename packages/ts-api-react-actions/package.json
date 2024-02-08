@@ -1,0 +1,23 @@
+{
+  "name": "@thunderstore/ts-api-react-actions",
+  "version": "0.1.0",
+  "description": "React actions logic for the Thunderstore API",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "main": "dist/thunderstore-ts-api-react-actions.cjs.js",
+  "module": "dist/thunderstore-ts-api-react-actions.esm.js",
+  "types": "dist/thunderstore-ts-api-react-actions.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@thunderstore/thunderstore-api": "*",
+    "@types/react": "^18.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "zod": "^3.22.2"
+  }
+}

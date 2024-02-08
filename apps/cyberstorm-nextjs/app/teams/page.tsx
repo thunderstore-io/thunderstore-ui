@@ -11,10 +11,10 @@ import {
   Button,
   Dialog,
   TeamsLink,
+  SettingItem,
+  TeamList,
+  PageHeader,
 } from "@thunderstore/cyberstorm";
-import { SettingItem } from "@thunderstore/cyberstorm/src/components/SettingItem/SettingItem";
-import { TeamList } from "@thunderstore/cyberstorm/src/components/Layout/Teams/TeamList/TeamList";
-import { PageHeader } from "@thunderstore/cyberstorm/src/components/Layout/BaseLayout/PageHeader/PageHeader";
 import { CommunityListSkeleton } from "../communities/CommunityListSkeleton";
 
 export default function Page() {

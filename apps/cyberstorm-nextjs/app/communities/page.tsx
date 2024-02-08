@@ -2,7 +2,12 @@
 
 import rootStyles from "../RootLayout.module.css";
 import styles from "./CommunitiesLayout.module.css";
-import { TextInput, Select, BreadCrumbs } from "@thunderstore/cyberstorm";
+import {
+  TextInput,
+  Select,
+  BreadCrumbs,
+  PageHeader,
+} from "@thunderstore/cyberstorm";
 import { Suspense, startTransition, useState } from "react";
 import { useDebounce } from "use-debounce";
 
@@ -15,7 +20,6 @@ import {
 import { faFire } from "@fortawesome/pro-solid-svg-icons";
 import { CommunityList } from "./CommunityList";
 import { CommunityListSkeleton } from "./CommunityListSkeleton";
-import { PageHeader } from "@thunderstore/cyberstorm/src/components/Layout/BaseLayout/PageHeader/PageHeader";
 
 enum SortOptions {
   Name = "name",

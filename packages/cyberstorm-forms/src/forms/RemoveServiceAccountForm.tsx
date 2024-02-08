@@ -33,7 +33,7 @@ export function RemoveServiceAccountForm(props: {
       schema={z.object({})}
       endpoint={teamServiceAccountRemove}
       formProps={{ className: styles.root }}
-      metaData={{
+      meta={{
         serviceAccountIdentifier: props.serviceAccountIdentifier,
         teamName: props.teamName,
       }}

@@ -1,3 +1,4 @@
+"use client";
 import styles from "./TeamLeaveAndDisband.module.css";
 import * as Button from "../../../../Button/";
 import { SettingItem } from "../../../../SettingItem/SettingItem";

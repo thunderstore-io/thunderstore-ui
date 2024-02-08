@@ -8,24 +8,26 @@ import { useApiAction } from "./useApiAction";
 
 export interface ApiActionProps<
   Schema extends ZodObject<Z>,
+  Meta extends object,
   Result extends object,
   Z extends ZodRawShape
 > {
   schema: Schema;
-  endpoint: ApiEndpoint<z.infer<Schema>, Result>;
-  metaData: any;
+  endpoint: ApiEndpoint<z.infer<Schema>, Meta, Result>;
+  meta: Meta;
   onSubmitSuccess?: (result: Result) => void;
   onSubmitError?: (error: Error | ApiError | unknown) => void;
 }
 
 export function ApiAction<
   Schema extends ZodObject<Z>,
+  Meta extends object,
   Result extends object,
   Z extends ZodRawShape
->(props: ApiActionProps<Schema, Result, Z>) {
-  const { metaData, endpoint, onSubmitSuccess, onSubmitError } = props;
+>(props: ApiActionProps<Schema, Meta, Result, Z>) {
+  const { meta, endpoint, onSubmitSuccess, onSubmitError } = props;
   const submitHandler = useApiAction({
-    metaData: metaData,
+    meta: meta,
     endpoint: endpoint,
   });
   const onSubmit = useCallback(

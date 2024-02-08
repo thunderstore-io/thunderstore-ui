@@ -4,8 +4,12 @@ import {
   Tabs,
   TeamSettingsLink,
   TeamsLink,
+  PageHeader,
+  TeamDetails,
+  TeamLeaveAndDisband,
+  TeamMembers,
+  TeamServiceAccounts,
 } from "@thunderstore/cyberstorm";
-import { PageHeader } from "@thunderstore/cyberstorm/src/components/Layout/BaseLayout/PageHeader/PageHeader";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,10 +18,6 @@ import {
   faUserCog,
   faCog,
 } from "@fortawesome/pro-regular-svg-icons";
-import { TeamDetails } from "@thunderstore/cyberstorm/src/components/Layout/Teams/TeamSettings/TeamDetails/TeamDetails";
-import { TeamLeaveAndDisband } from "@thunderstore/cyberstorm/src/components/Layout/Teams/TeamSettings/TeamLeaveAndDisband/TeamLeaveAndDisband";
-import { TeamMembers } from "@thunderstore/cyberstorm/src/components/Layout/Teams/TeamSettings/TeamMembers/TeamMembers";
-import { TeamServiceAccounts } from "@thunderstore/cyberstorm/src/components/Layout/Teams/TeamSettings/TeamServiceAccounts/TeamServiceAccounts";
 import { useState } from "react";
 import rootStyles from "../../RootLayout.module.css";
 import styles from "./TeamSettingsLayout.module.css";
