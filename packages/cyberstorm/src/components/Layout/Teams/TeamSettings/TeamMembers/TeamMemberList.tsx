@@ -1,3 +1,4 @@
+"use client";
 import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TeamMember } from "@thunderstore/dapper/types";

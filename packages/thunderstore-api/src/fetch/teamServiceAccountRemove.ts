@@ -11,7 +11,7 @@ export interface teamServiceAccountRemoveApiArgs {}
 
 export function teamServiceAccountRemove(
   config: RequestConfig,
-  data: teamServiceAccountRemoveApiArgs,
+  _data: teamServiceAccountRemoveApiArgs,
   meta: teamServiceAccountRemoveMetaArgs
 ) {
   const path = `/api/cyberstorm/team/${meta.teamName}/service-accounts/delete/`;

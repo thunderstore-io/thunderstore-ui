@@ -1,3 +1,4 @@
+"use client";
 import { ServiceAccount } from "@thunderstore/dapper/types";
 import * as Button from "../../../../../Button";
 import { Table } from "../../../../../Table/Table";
