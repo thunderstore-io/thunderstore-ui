@@ -1,4 +1,3 @@
-"use client";
 import { faGhost } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDapper } from "@thunderstore/dapper";
@@ -6,6 +5,7 @@ import { usePromise } from "@thunderstore/use-promise";
 
 import styles from "./CommunityList.module.css";
 import { EmptyState, CommunityCard } from "@thunderstore/cyberstorm";
+import { isStringArray } from "@thunderstore/cyberstorm/src/utils/type_guards";
 
 enum SortOptions {
   Name = "name",
@@ -14,16 +14,32 @@ enum SortOptions {
 }
 
 interface Props {
-  order: SortOptions;
-  search: string;
+  searchParams: {
+    order: SortOptions[] | SortOptions;
+    search: string[] | string;
+  };
 }
 
-export function CommunityList(props: Props) {
-  const { order, search } = props;
+export default function Page(props: Props) {
+  const { searchParams } = props;
+
+  const order = isStringArray(searchParams.order)
+    ? searchParams.order[0]
+    : typeof searchParams.order === "string"
+    ? searchParams.order
+    : SortOptions.Popular;
+
+  const search = isStringArray(searchParams.search)
+    ? searchParams.search.join(" ")
+    : typeof searchParams.search === "string"
+    ? searchParams.search
+    : "";
+
   const dapper = useDapper();
 
   // TODO: the component doesn't currently support pagination, while this
   // only returns the first 100 items (we don't have 100 communities).
+  // Pagination support should be added with NextJS and query params
   const communities = usePromise(dapper.getCommunities, [
     undefined,
     order,

@@ -15,7 +15,7 @@ import {
   TeamList,
   PageHeader,
 } from "@thunderstore/cyberstorm";
-import { CommunityListSkeleton } from "../communities/CommunityListSkeleton";
+import { CommunityListSkeleton } from "../communities/@communityList/CommunityListSkeleton";
 
 export default function Page() {
   const [dialogOpen, setOpenDialog] = useState(false);
