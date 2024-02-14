@@ -120,3 +120,4 @@ export { SettingItem } from "./components/SettingItem/SettingItem";
 export { TeamList } from "./components/Layout/Teams/TeamList/TeamList";
 export { ImageWithFallback } from "./components/ImageWithFallback/ImageWithFallback";
 export { CollapsibleText } from "./components/CollapsibleText/CollapsibleText";
+export { PackageSearch } from "./components/PackageSearch/PackageSearch";
