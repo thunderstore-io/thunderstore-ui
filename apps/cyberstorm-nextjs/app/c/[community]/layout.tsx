@@ -2,8 +2,19 @@ import { ReactNode, Suspense } from "react";
 
 export default function CommunityLayout({
   community,
+  children,
 }: {
   community: ReactNode;
+  children: ReactNode;
 }) {
-  return <Suspense fallback={<p>TODO: SKELETON</p>}>{community}</Suspense>;
+  if (children) {
+    return (
+      <Suspense fallback={<p>TODO: CHILDREN SKELETON</p>}>{children}</Suspense>
+    );
+  }
+  return (
+    <Suspense fallback={<p>TODO: COMMUNITY SLOT SKELETON</p>}>
+      {community}
+    </Suspense>
+  );
 }
