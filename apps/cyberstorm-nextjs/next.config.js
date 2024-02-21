@@ -2,7 +2,7 @@ const withPreconstruct = require("@preconstruct/next");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = withPreconstruct({
-  basePath: "/cyberstorm",
+  assetPrefix: "/cyberstorm",
   reactStrictMode: true,
   transpilePackages: ["react"],
   experimental: {
