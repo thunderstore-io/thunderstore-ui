@@ -2,7 +2,7 @@ import "@thunderstore/cyberstorm-styles";
 import styles from "./RootLayout.module.css";
 import Providers from "@/utils/provider";
 import { CyberstormProviders, Footer, Header } from "@thunderstore/cyberstorm";
-import React from "react";
+import React, { Suspense } from "react";
 import { ServerDapper } from "@/dapper/server";
 import { ClientDapper } from "@/dapper/client";
 
@@ -16,7 +16,9 @@ export default function RootLayout(props: React.PropsWithChildren) {
               <Providers>
                 <div className={styles.root}>
                   <Header />
-                  {props.children}
+                  <Suspense fallback={<p>TODO: SKELETON</p>}>
+                    {props.children}
+                  </Suspense>
                   <Footer />
                 </div>
               </Providers>
