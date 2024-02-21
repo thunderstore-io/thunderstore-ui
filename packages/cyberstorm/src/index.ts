@@ -118,3 +118,5 @@ export { range } from "./utils/utils";
 export { PageHeader } from "./components/Layout/BaseLayout/PageHeader/PageHeader";
 export { SettingItem } from "./components/SettingItem/SettingItem";
 export { TeamList } from "./components/Layout/Teams/TeamList/TeamList";
+export { ImageWithFallback } from "./components/ImageWithFallback/ImageWithFallback";
+export { CollapsibleText } from "./components/CollapsibleText/CollapsibleText";
