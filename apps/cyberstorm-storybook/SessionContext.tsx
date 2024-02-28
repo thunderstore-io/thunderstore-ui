@@ -9,7 +9,6 @@ import {
   useState,
 } from "react";
 
-import { API_DOMAIN } from "./constants";
 import { StorageManager } from "./storage";
 
 interface ContextInterface {
@@ -146,12 +145,17 @@ const useValidateSession = (
     }
 
     (async () => {
-      const res = await fetch(`${API_DOMAIN}/api/experimental/auth/validate/`, {
-        headers: {
-          authorization: `Session ${storedSessionId}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_API_DOMAIN || "https://thunderstore.io"
+        }/api/experimental/auth/validate/`,
+        {
+          headers: {
+            authorization: `Session ${storedSessionId}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (res.status === 401) {
         _storage.removeValue(EMAIL_KEY);

@@ -20,4 +20,4 @@ ENV NODE_ENV production
 ENV PORT 3000
 EXPOSE 3000
 
-CMD ["yarn", "workspace", "@thunderstore/cyberstorm-nextjs", "start"]
+ENTRYPOINT ["/bin/sh", "-c", "yarn workspace @thunderstore/cyberstorm-nextjs prepare-production-container && yarn workspace @thunderstore/cyberstorm-nextjs next start"]
