@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "prepare-production-container": "ts-node ./scripts/prepare_production_container.ts .next",
     "lint": "next lint"
   },
   "dependencies": {
@@ -21,11 +22,11 @@
     "@types/uuid": "^9.0.3",
     "axios": "^1.4.0",
     "eslint": "8.38.0",
-    "eslint-config-next": "13.3.0",
+    "eslint-config-next": "^14.1.0",
     "jose": "^4.14.4",
-    "next": "^13.5.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "next": "^14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "typescript": "5.0.4",
     "uuid": "^9.0.0"
   },
