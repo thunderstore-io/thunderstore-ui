@@ -29,7 +29,7 @@ async function findAndReplaceInFile(filePath: string) {
       return console.log(err);
     }
 
-    var result = data;
+    let result = data;
     for (const key in variablesToReplace) {
       const newValue =
         variablesToReplace[key as keyof typeof variablesToReplace];
@@ -45,4 +45,3 @@ async function findAndReplaceInFile(filePath: string) {
 }
 console.log("Replacing built public environment variables");
 iterateFiles(process.argv[2]);
-console.log("Done!");

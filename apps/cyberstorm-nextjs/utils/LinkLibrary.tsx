@@ -1,7 +1,6 @@
 import { LinkLibrary, ThunderstoreLinkProps } from "@thunderstore/cyberstorm";
 import NextLink from "next/link";
 import { PropsWithChildren } from "react";
-import { ROOT_DOMAIN } from "./constants";
 
 interface LinkProps extends PropsWithChildren, ThunderstoreLinkProps {
   queryParams?: string;
@@ -24,14 +23,18 @@ const library: LinkLibrary = {
   Communities: (p) =>
     Link({
       ...p,
-      url: `${ROOT_DOMAIN}/communities`,
+      url: `${
+        process.env.NEXT_PUBLIC_ROOT_DOMAIN || "https://thunderstore.io"
+      }/communities`,
     }),
   Community: (p) => Link({ ...p, url: `/c/${p.community}/` }),
   CommunityPackages: (p) => Link({ ...p, url: `/c/${p.community}/packages/` }),
   Index: (p) =>
     Link({
       ...p,
-      url: `${ROOT_DOMAIN}/communities`,
+      url: `${
+        process.env.NEXT_PUBLIC_ROOT_DOMAIN || "https://thunderstore.io"
+      }/communities`,
     }), // /communities temporarily the frontpage
   ManifestValidator: (p) =>
     Link({ ...p, url: "/developers/manifest-validator/" }),
