@@ -1,22 +1,39 @@
-import { faCaretDown } from "@fortawesome/pro-solid-svg-icons";
+import { faCaretDown, faCode } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import * as Button from "../Button/";
 import { DropDown, DropDownItem } from "../DropDown/DropDown";
 import { DropDownLink } from "../DropDown/DropDownLink";
+import styles from "./Header.module.css";
 
-export const DevelopersDropDown = () => (
+interface Props {
+  squareButton?: boolean;
+}
+
+export const DevelopersDropDown = (props: Props) => (
   <DropDown
-    triggerColorScheme="transparentDefault"
     trigger={
-      <Button.Root paddingSize="large">
-        <Button.ButtonLabel fontSize="large" fontWeight="600">
-          Developers
-        </Button.ButtonLabel>
-        <Button.ButtonIcon>
-          <FontAwesomeIcon icon={faCaretDown} />
-        </Button.ButtonIcon>
-      </Button.Root>
+      props.squareButton ? (
+        <Button.Root
+          paddingSize="mediumSquare"
+          colorScheme="default"
+          tooltipText="Developers"
+          className={styles.developersSquareButton}
+        >
+          <Button.ButtonIcon>
+            <FontAwesomeIcon icon={faCode} />
+          </Button.ButtonIcon>
+        </Button.Root>
+      ) : (
+        <Button.Root paddingSize="large" colorScheme="transparentDefault">
+          <Button.ButtonLabel fontSize="large" fontWeight="600">
+            Developers
+          </Button.ButtonLabel>
+          <Button.ButtonIcon>
+            <FontAwesomeIcon icon={faCaretDown} />
+          </Button.ButtonIcon>
+        </Button.Root>
+      )
     }
     content={[
       <a href="/api/docs" key="docs">

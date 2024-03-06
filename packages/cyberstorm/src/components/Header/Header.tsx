@@ -1,14 +1,19 @@
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faArrowUpRight,
+  faGamepadModern,
+} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Header.module.css";
 import { DevelopersDropDown } from "./DevelopersDropDown";
-import * as Button from "../Button/";
 import { CommunitiesLink, IndexLink } from "../Links/Links";
 import { ThunderstoreLogo } from "../../svg/svg";
 import { Suspense } from "react";
 import { HeaderUserNav } from "./HeaderUserNav";
 import { AvatarButton } from "../Avatar/AvatarButton";
+import { Icon } from "../Icon/Icon";
+import { classnames } from "../../utils/utils";
+import { Button } from "../..";
 
 /**
  * Horizontal navigation bar shown at the top of the site.
@@ -16,7 +21,27 @@ import { AvatarButton } from "../Avatar/AvatarButton";
 export function Header() {
   return (
     <header className={styles.root}>
-      <nav className={styles.item}>
+      <div className={styles.narrowHeader}>
+        <IndexLink>
+          <Icon wrapperClasses={styles.logoWrapper}>
+            <ThunderstoreLogo />
+          </Icon>
+        </IndexLink>
+        <Button.Root
+          plain
+          href="/communities"
+          paddingSize="mediumSquare"
+          colorScheme="default"
+          tooltipText="Communities"
+        >
+          <Button.ButtonIcon>
+            <FontAwesomeIcon icon={faGamepadModern} />
+          </Button.ButtonIcon>
+        </Button.Root>
+        <DevelopersDropDown squareButton />
+      </div>
+
+      <nav className={classnames(styles.item, styles.wideHeader)}>
         <ul className={styles.nav}>
           <li>
             <IndexLink>

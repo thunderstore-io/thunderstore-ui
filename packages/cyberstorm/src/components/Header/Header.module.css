@@ -13,14 +13,8 @@
 }
 
 .item {
-  display: none;
+  display: flex;
   flex: 2 1 100%;
-}
-
-@media (min-width: 60rem) {
-  .item {
-    display: flex;
-  }
 }
 
 .item:last-child {
@@ -85,4 +79,37 @@
   color: var(--color-text--tertiary);
   font-size: var(--font-size--m);
   line-height: 1;
+}
+
+.narrowHeader {
+  display: none;
+}
+
+.narrowHeader > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.developersSquareButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 63.5rem) {
+  .root {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .narrowHeader {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .wideHeader,
+  .navButtons {
+    display: none;
+  }
 }

@@ -7,7 +7,6 @@
 .container {
   width: 100%;
   max-width: 83.5rem;
-  padding: 0;
 }
 
 .background {
@@ -54,7 +53,7 @@
   align-items: center;
   width: 100%;
   max-width: 100%;
-  padding: 2rem 0 6rem;
+  padding: 2rem 1rem 6rem;
 }
 
 .pageHeader {

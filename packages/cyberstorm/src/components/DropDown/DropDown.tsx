@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode, ReactElement } from "react";
+import { ReactNode, ReactElement } from "react";
 import styles from "./DropDown.module.css";
 
 import * as RadixDropDown from "@radix-ui/react-dropdown-menu";
@@ -10,7 +10,6 @@ type DropDownProps = {
   content?: ReactElement[];
   contentAlignment?: "start" | "center" | "end";
   trigger: ReactNode | ReactElement;
-  triggerColorScheme?: "default" | "accent" | "transparentDefault";
 };
 type DropDownItemProps = {
   content?: ReactElement;
@@ -18,23 +17,17 @@ type DropDownItemProps = {
 
 export function DropDown(props: DropDownProps) {
   const {
-    colorScheme = "default",
     defaultOpen = false,
     content = null,
     contentAlignment = "start",
     trigger,
-    triggerColorScheme,
   } = props;
 
   return (
     <div className={styles.root}>
       <RadixDropDown.Root modal={false} defaultOpen={defaultOpen}>
         <RadixDropDown.Trigger asChild disabled={!content}>
-          {React.isValidElement(trigger)
-            ? React.cloneElement(trigger as ReactElement, {
-                colorScheme: triggerColorScheme ?? colorScheme,
-              })
-            : trigger}
+          {trigger}
         </RadixDropDown.Trigger>
 
         <RadixDropDown.Portal>
