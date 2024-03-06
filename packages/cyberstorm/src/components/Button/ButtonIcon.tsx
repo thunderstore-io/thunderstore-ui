@@ -19,6 +19,7 @@ export function ButtonIcon(props: ButtonIconProps) {
   return (
     <Icon
       wrapperClasses={classnames(
+        styles.ButtonIconCenter,
         getIconSize(iconSize),
         getIconColor(iconColor)
       )}

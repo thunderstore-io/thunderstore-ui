@@ -311,6 +311,12 @@
 
 /* Button Icon */
 
+.ButtonIconCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .ButtonIcon__IconSize__default {
   width: 1em;
   height: 1em;

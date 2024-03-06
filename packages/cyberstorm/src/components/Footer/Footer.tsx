@@ -48,7 +48,7 @@ export function Footer() {
             </div>
           </div>
           <div className={classnames(styles.item, styles.linksWrapper)}>
-            <div className={styles.inner}>
+            <div className={classnames(styles.inner, styles.navLinks)}>
               <nav className={styles.nav}>
                 <div className={styles.navSection}>
                   <div className={styles.navTitle}>Thunderstore</div>
@@ -57,9 +57,9 @@ export function Footer() {
                     {/* <IndexLink>
                       <li>Browse</li>
                     </IndexLink> */}
-                    <CommunitiesLink>
-                      <li>Communities</li>
-                    </CommunitiesLink>
+                    <li>
+                      <CommunitiesLink>Communities</CommunitiesLink>
+                    </li>
                   </ul>
                 </div>
                 <div className={styles.navSection}>

@@ -58,22 +58,18 @@ const ReferenceDropDown = Template.bind({});
 ReferenceDropDown.args = {
   ...defaultArgs,
   content: content,
-  colorScheme: "default",
 };
 
 const PrimaryDropDown = Template.bind({});
 PrimaryDropDown.args = {
   ...defaultArgs,
   content: content,
-  colorScheme: "accent",
 };
 
 const TriggerColorDropDown = Template.bind({});
 TriggerColorDropDown.args = {
   ...defaultArgs,
-  triggerColorScheme: "accent",
   content: content,
-  colorScheme: "default",
 };
 
 const TagTriggerDropDown = Template.bind({});
@@ -91,7 +87,6 @@ DefaultOpenDropDown.args = {
   ...defaultArgs,
   content: content,
   defaultOpen: true,
-  colorScheme: "default",
 };
 
 export {
