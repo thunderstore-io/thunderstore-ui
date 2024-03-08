@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prepare-production-container": "ts-node ./scripts/prepare_production_container.ts .next",
+    "track-files-containing-env-vars": "ts-node ./scripts/track_files_containing_env_vars.ts",
+    "prepare-production-container": "ts-node ./scripts/prepare_production_container.ts",
     "lint": "next lint"
   },
   "dependencies": {
