@@ -15,6 +15,8 @@ USER node
 RUN --mount=type=secret,id=npmrc,target=/home/node/.npmrc,uid=1000 yarn install --frozen-lockfile
  RUN yarn workspace @thunderstore/cyberstorm-nextjs run build
 
+RUN yarn workspace @thunderstore/cyberstorm-nextjs track-files-containing-env-vars
+
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV NODE_ENV production
 ENV PORT 3000
