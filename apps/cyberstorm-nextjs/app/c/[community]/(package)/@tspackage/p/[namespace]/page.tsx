@@ -2,7 +2,7 @@
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 
-import rootStyles from "../../../../RootLayout.module.css";
+import rootStyles from "../../../../../../RootLayout.module.css";
 import styles from "./TeamProfileLayout.module.css";
 import {
   BreadCrumbs,
