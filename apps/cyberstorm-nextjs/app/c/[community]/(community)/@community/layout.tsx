@@ -1,4 +1,4 @@
-import rootStyles from "../../../RootLayout.module.css";
+import rootStyles from "../../../../RootLayout.module.css";
 import {
   BreadCrumbs,
   CommunitiesLink,
