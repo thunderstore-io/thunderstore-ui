@@ -1,0 +1,28 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--32);
+  max-height: 70%;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.statusTag {
+  display: flex;
+}
+
+.title {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size--l);
+  line-height: var(--line-height--l);
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
