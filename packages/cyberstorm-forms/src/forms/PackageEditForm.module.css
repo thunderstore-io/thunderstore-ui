@@ -1,0 +1,48 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--32);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space--32);
+  padding: var(--space--32);
+}
+
+.dialog {
+  border-top: var(--border-width--px) solid var(--color-surface--5);
+}
+
+.statusSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.statusTag {
+  display: flex;
+}
+
+.title {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size--l);
+  line-height: var(--line-height--l);
+}
+
+.footer {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: var(--space--16) var(--space--24);
+  border-top: var(--border-width--px) solid var(--color-surface--5);
+}
+
+.currentCategories {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.5rem;
+  row-gap: 0.5rem;
+}

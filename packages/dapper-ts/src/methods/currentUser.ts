@@ -21,6 +21,7 @@ const schema = z.object({
   capabilities: z.string().array(),
   connections: oAuthConnectionSchema.array(),
   rated_packages: z.string().array(),
+  rated_packages_cyberstorm: z.string().array(),
   subscription: z.object({
     expires: z.string().datetime().nullable(),
   }),
@@ -34,6 +35,7 @@ export async function getCurrentUser(this: DapperTsInterface) {
       capabilities: [],
       connections: [],
       rated_packages: [],
+      rated_packages_cyberstorm: [],
       subscription: { expires: null },
       teams: [],
     };

@@ -264,6 +264,16 @@
   --bg-color: #27275d;
 }
 
+.button__likeBlue {
+  background: #0b4162;
+
+  --button-border-color: #1ca3f5;
+}
+
+.button__likeBlue:hover {
+  background: #083149;
+}
+
 /* Button padding sizes */
 
 .padding__none {

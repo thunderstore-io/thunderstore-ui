@@ -10,6 +10,7 @@ export function ClientDapper(props: React.PropsWithChildren) {
   const config = {
     apiHost: process.env.NEXT_PUBLIC_API_DOMAIN || "https://thunderstore.io",
     sessionId: getCookie("sessionid"),
+    csrfToken: getCookie("csrftoken"),
   };
   const dapperConstructor = () => new DapperTs(config);
 
