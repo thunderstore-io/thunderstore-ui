@@ -1,0 +1,56 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--8);
+  border-radius: 8px;
+}
+
+.countDescription {
+  padding: 0 var(--space--8);
+  color: var(--color-text--tertiary);
+  font-size: var(--font-size--m);
+}
+
+.item {
+  display: flex;
+  gap: var(--gap--16);
+  padding: var(--space--8);
+  border-radius: var(--border-radius--8);
+}
+
+.item:hover {
+  background-color: var(--color-surface--4);
+}
+
+.itemImage {
+  width: 5rem;
+}
+
+.itemTitle {
+  overflow: hidden;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.itemDescription {
+  overflow: hidden;
+  color: var(--color-text--tertiary);
+  font-size: var(--font-size--m);
+  line-height: var(--line-height--m);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 60rem) {
+  .itemDescription,
+  .itemTitle {
+    max-width: 250px;
+  }
+}
+
+.dependencyDialogTrigger {
+  align-items: center;
+}

@@ -1,0 +1,28 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+  min-width: 354px;
+}
+
+.buttons {
+  display: flex;
+  gap: var(--gap--8);
+}
+
+.download {
+  display: flex;
+  flex-grow: 1;
+}
+
+.download > div {
+  display: flex;
+  flex-grow: 1;
+}
+
+.categories {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.5rem;
+  row-gap: 0.5rem;
+}

@@ -1,7 +1,3 @@
-/*
-  TODO: NextJS has a copy of this file, figure out a way to import from here to
-   there without relative imports
-*/
 .root {
   display: flex;
   flex-direction: column;
