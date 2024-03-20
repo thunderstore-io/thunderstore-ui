@@ -103,6 +103,7 @@ export const getFakePackageListingDetails = async (
   return {
     ...getFakePackageListing(community, namespace, name),
 
+    uuid4: faker.string.uuid(),
     community_name: faker.word.sample(),
     datetime_created: faker.date.past({ years: 2 }).toISOString(),
     dependant_count: faker.number.int({ min: 0, max: 2000 }),

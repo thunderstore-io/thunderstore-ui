@@ -22,6 +22,8 @@ interface ContextInterface {
   sessionId?: string;
   /** Store session data in provider's state and localStorage. */
   setSession: (sessionData: LoginResponse) => void;
+  /** Session id from provider's state or localStorage. */
+  csrfToken?: string;
   /** Username from provider's state or localStorage. */
   username?: string;
   /** Domain of the session */
@@ -32,11 +34,13 @@ interface LoginResponse {
   email: string;
   sessionId: string;
   username: string;
+  csrfToken?: string;
 }
 
 const SessionContext = createContext<ContextInterface | null>(null);
 const EMAIL_KEY = "email";
 const ID_KEY = "id";
+const CSRF_TOKEN = "csrftoken";
 const USERNAME_KEY = "username";
 
 interface Props extends PropsWithChildren {
@@ -70,10 +74,17 @@ export function SessionProvider(props: Props) {
       if (sessionid) {
         _storage.setValue(ID_KEY, sessionid);
       }
+      const csrftoken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("csrftoken="))
+        ?.split("=")[1];
+      if (csrftoken) {
+        _storage.setValue(CSRF_TOKEN, csrftoken);
+      }
     }
   }, []);
 
-  const [isReady, sessionId] = useValidateSession(
+  const [isReady, sessionId, csrfToken] = useValidateSession(
     _session,
     _setSession,
     _storage,
@@ -84,6 +95,9 @@ export function SessionProvider(props: Props) {
     _setSession(sessionData);
     _storage.setValue(EMAIL_KEY, sessionData.email);
     _storage.setValue(ID_KEY, sessionData.sessionId);
+    if (sessionData.csrfToken) {
+      _storage.setValue(CSRF_TOKEN, sessionData.csrfToken);
+    }
     _storage.setValue(USERNAME_KEY, sessionData.username);
   };
 
@@ -91,6 +105,7 @@ export function SessionProvider(props: Props) {
     _setSession(undefined);
     _storage.removeValue(EMAIL_KEY);
     _storage.removeValue(ID_KEY);
+    _storage.removeValue(CSRF_TOKEN);
     _storage.removeValue(USERNAME_KEY);
   };
 
@@ -99,6 +114,7 @@ export function SessionProvider(props: Props) {
     email: _session?.email,
     isReady,
     sessionId,
+    csrfToken,
     setSession,
     username: _session?.username,
     domain: props.domain,
@@ -116,6 +132,7 @@ export function SessionProvider(props: Props) {
  *
  * * isReady: boolean
  * * sessionId?: string
+ * * csrfToken?: string
  * * username?: string
  * * email?: string
  * * setSession: ({email: string, sessionId: string, username: string}) => void
@@ -146,16 +163,20 @@ const useValidateSession = (
   /** Is the validation process ready? */
   boolean,
   /** Session id if it's valid, otherwise undefined */
+  string | undefined,
+  /** Session id if it's valid, otherwise undefined */
   string | undefined
 ] => {
   const [isValid, setIsValid] = useState<boolean>();
   const stateSessionId = _session?.sessionId;
+  const stateCsrfToken = _session?.csrfToken;
   const storedSessionId = _storage.safeGetValue(ID_KEY);
+  const storedCsrfToken = _storage.safeGetValue(CSRF_TOKEN);
 
   useEffect(() => {
     // Session id stored in SessionProvider's state is always valid, no
     // need to call backend to check it nor read values from localStorage.
-    if (stateSessionId !== undefined) {
+    if (stateSessionId !== undefined && stateCsrfToken !== undefined) {
       if (isValid !== true) {
         setIsValid(true);
       }
@@ -181,6 +202,7 @@ const useValidateSession = (
       if (res.status === 401) {
         _storage.removeValue(EMAIL_KEY);
         _storage.removeValue(ID_KEY);
+        _storage.removeValue(CSRF_TOKEN);
         _storage.removeValue(USERNAME_KEY);
         Router.push("/");
         return;
@@ -189,13 +211,22 @@ const useValidateSession = (
       _setSession({
         email: _storage.safeGetValue(EMAIL_KEY) || "",
         sessionId: storedSessionId,
+        csrfToken: storedCsrfToken === null ? undefined : storedCsrfToken,
         username: _storage.safeGetValue(USERNAME_KEY) || "",
       });
       setIsValid(true);
     })();
-  }, [isValid, setIsValid, stateSessionId, storedSessionId]);
+  }, [
+    isValid,
+    setIsValid,
+    stateSessionId,
+    storedSessionId,
+    stateCsrfToken,
+    storedCsrfToken,
+  ]);
 
   const isReady = isValid !== undefined;
   const sessionId = isValid ? storedSessionId || undefined : undefined;
-  return [isReady, sessionId];
+  const csrfToken = isValid ? storedCsrfToken || undefined : undefined;
+  return [isReady, sessionId, csrfToken];
 };

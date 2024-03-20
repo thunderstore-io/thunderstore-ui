@@ -1,5 +1,6 @@
 export { useFormToaster } from "./useFormToaster";
 export { TeamMemberChangeRoleAction } from "./actions/TeamMemberChangeRoleAction";
+export { PackageLikeAction } from "./actions/PackageLikeAction";
 export { FormSubmitButton } from "./components/FormSubmitButton";
 export { FormSelectSearch } from "./components/FormSelectSearch";
 export { FormMultiSelectSearch } from "./components/FormMultiSelectSearch";
