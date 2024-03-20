@@ -106,6 +106,7 @@ const dependencyShema = z.object({
 });
 
 const packageListingDetailSchema = packageListingSchema.extend({
+  uuid4: z.string().nonempty(),
   community_name: z.string().nonempty(),
   datetime_created: z.string().datetime(),
   dependant_count: z.number().int().gte(0),

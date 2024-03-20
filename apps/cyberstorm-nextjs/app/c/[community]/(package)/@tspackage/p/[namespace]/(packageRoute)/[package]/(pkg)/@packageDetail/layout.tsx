@@ -5,14 +5,15 @@ import {
   faDonate,
   faDownload,
   faThumbsUp,
-  faFlag,
+  // faFlag,
   faBoxes,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./PackageDetailsLayout.module.css";
 import { Button, Icon, Tag } from "@thunderstore/cyberstorm";
-import { ReactNode, Suspense } from "react";
+import { ReactNode, Suspense, useState } from "react";
 import { WrapperCard } from "@thunderstore/cyberstorm/src/components/WrapperCard/WrapperCard";
+import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 
 export default function PackageDetailsLayout({
   packageMeta,
@@ -33,6 +34,22 @@ export default function PackageDetailsLayout({
     params.namespace,
     params.package,
   ]);
+  const teamData = usePromise(dapper.getTeamDetails, [params.namespace]);
+  const currentUser = usePromise(dapper.getCurrentUser, []);
+
+  const [isLiked, setIsLiked] = useState(
+    currentUser.rated_packages.includes(packageData.uuid4)
+  );
+
+  async function useUpdateLikeStatus() {
+    const dapper = useDapper();
+    const currentUser = await dapper.getCurrentUser();
+    if (currentUser.rated_packages.includes(packageData.uuid4)) {
+      setIsLiked(true);
+    } else {
+      setIsLiked(false);
+    }
+  }
 
   const mappedPackageTagList = packageData.categories.map((category) => {
     return (
@@ -51,9 +68,25 @@ export default function PackageDetailsLayout({
         <a href={packageData.download_url} className={styles.download}>
           <DownloadButton />
         </a>
-        <DonateButton onClick={TODO} />
-        <LikeButton onClick={TODO} />
-        <ReportButton onClick={TODO} />
+        {teamData.donation_link ? (
+          <DonateButton donationLink={teamData.donation_link} />
+        ) : null}
+        <Button.Root
+          onClick={PackageLikeAction({
+            packageName: params.package,
+            uuid4: packageData.uuid4,
+            isLiked: isLiked,
+            currentUserUpdateTrigger: useUpdateLikeStatus,
+          })}
+          tooltipText="Like"
+          colorScheme={isLiked ? "likeBlue" : "primary"}
+          paddingSize="mediumSquare"
+        >
+          <Button.ButtonIcon>
+            <FontAwesomeIcon icon={faThumbsUp} />
+          </Button.ButtonIcon>
+        </Button.Root>
+        {/* <ReportButton onClick={TODO} /> */}
       </div>
       <Suspense fallback={<p>TODO: SKELETON packageMeta</p>}>
         {packageMeta}
@@ -82,28 +115,16 @@ export default function PackageDetailsLayout({
   );
 }
 
-const TODO = () => Promise.resolve();
+// const TODO = () => Promise.resolve();
 
-interface Clickable {
-  onClick: () => Promise<void>;
-}
+// interface Clickable {
+//   onClick: () => Promise<void>;
+// }
 
-const LikeButton = (props: Clickable) => (
+const DonateButton = (props: { donationLink: string }) => (
   <Button.Root
-    onClick={props.onClick}
-    tooltipText="Like"
-    colorScheme="primary"
-    paddingSize="mediumSquare"
-  >
-    <Button.ButtonIcon>
-      <FontAwesomeIcon icon={faThumbsUp} />
-    </Button.ButtonIcon>
-  </Button.Root>
-);
-
-const DonateButton = (props: Clickable) => (
-  <Button.Root
-    onClick={props.onClick}
+    plain
+    href={props.donationLink}
     tooltipText="Donate to author"
     colorScheme="primary"
     paddingSize="mediumSquare"
@@ -114,18 +135,19 @@ const DonateButton = (props: Clickable) => (
   </Button.Root>
 );
 
-const ReportButton = (props: Clickable) => (
-  <Button.Root
-    onClick={props.onClick}
-    tooltipText="Report"
-    colorScheme="primary"
-    paddingSize="mediumSquare"
-  >
-    <Button.ButtonIcon>
-      <FontAwesomeIcon icon={faFlag} />
-    </Button.ButtonIcon>
-  </Button.Root>
-);
+// TODO: Enable and finish, when we have endpoint for submitting
+// const ReportButton = (props: Clickable) => (
+//   <Button.Root
+//     onClick={props.onClick}
+//     tooltipText="Report"
+//     colorScheme="primary"
+//     paddingSize="mediumSquare"
+//   >
+//     <Button.ButtonIcon>
+//       <FontAwesomeIcon icon={faFlag} />
+//     </Button.ButtonIcon>
+//   </Button.Root>
+// );
 
 const DownloadButton = () => (
   <Button.Root plain colorScheme="primary" paddingSize="medium">
