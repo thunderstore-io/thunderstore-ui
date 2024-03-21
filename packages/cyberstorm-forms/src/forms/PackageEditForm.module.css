@@ -2,10 +2,20 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap--32);
-  max-height: 70%;
 }
 
-.section {
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space--32);
+  padding: var(--space--32);
+}
+
+.dialog {
+  border-top: var(--border-width--px) solid var(--color-surface--5);
+}
+
+.statusSection {
   display: flex;
   flex-direction: column;
   gap: var(--gap--16);
@@ -23,6 +33,9 @@
 
 .footer {
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
+  gap: 1rem;
   justify-content: space-between;
+  padding: var(--space--16) var(--space--24);
+  border-top: var(--border-width--px) solid var(--color-surface--5);
 }

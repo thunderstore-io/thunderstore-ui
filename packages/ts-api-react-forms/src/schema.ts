@@ -47,3 +47,7 @@ export const teamDisbandFormSchema = z.object({
     .string({ required_error: "Verification is required" })
     .min(1, { message: "Verification is required" }),
 });
+
+export const packageEditFormSchema = z.object({
+  new_categories: z.array(z.string()),
+});

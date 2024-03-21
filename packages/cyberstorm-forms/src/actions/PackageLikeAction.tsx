@@ -8,6 +8,7 @@ import {
 import { packageLike } from "@thunderstore/thunderstore-api";
 
 export function PackageLikeAction(props: {
+  isLoggedIn: boolean;
   packageName: string;
   uuid4: string;
   isLiked: boolean;
@@ -17,6 +18,9 @@ export function PackageLikeAction(props: {
     successMessage: `${props.isLiked ? "Unliked" : "Liked"} package ${
       props.packageName
     }`,
+    errorMessage: props.isLoggedIn
+      ? "Unknown error occurred. The error has been logged"
+      : "You must be logged in to like a package!",
   });
 
   function onActionSuccess() {

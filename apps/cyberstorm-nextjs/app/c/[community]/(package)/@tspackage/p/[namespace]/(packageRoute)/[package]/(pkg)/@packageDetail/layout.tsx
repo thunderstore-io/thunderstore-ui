@@ -41,6 +41,8 @@ export default function PackageDetailsLayout({
     currentUser.rated_packages.includes(packageData.uuid4)
   );
 
+  // TODO: Convert to using usePromise's cache when it can handle manual busts
+  // Or React Query stuff
   async function useUpdateLikeStatus() {
     const dapper = useDapper();
     const currentUser = await dapper.getCurrentUser();
@@ -73,6 +75,7 @@ export default function PackageDetailsLayout({
         ) : null}
         <Button.Root
           onClick={PackageLikeAction({
+            isLoggedIn: Boolean(currentUser.username),
             packageName: params.package,
             uuid4: packageData.uuid4,
             isLiked: isLiked,
