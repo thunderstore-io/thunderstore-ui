@@ -30,5 +30,7 @@ export * from "./fetch/userDelete";
 export * from "./fetch/teamDisbandTeam";
 export * from "./fetch/teamEditMember";
 export * from "./fetch/packageLike";
+export * from "./fetch/packageEditCategories";
+export * from "./fetch/packageDeprecate";
 export * from "./fetch/teamRemoveMember";
 export * from "./errors";
