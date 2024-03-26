@@ -39,3 +39,10 @@
   padding: var(--space--16) var(--space--24);
   border-top: var(--border-width--px) solid var(--color-surface--5);
 }
+
+.currentCategories {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.5rem;
+  row-gap: 0.5rem;
+}

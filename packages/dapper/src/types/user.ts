@@ -5,6 +5,7 @@ export interface CurrentUser {
   capabilities: string[];
   connections: OAuthConnection[];
   rated_packages: string[];
+  rated_packages_cyberstorm: string[];
   subscription: {
     expires: string | null;
   };

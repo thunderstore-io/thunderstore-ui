@@ -28,7 +28,7 @@ export default function Page({
 
   const [packageData, setPackageData] = useState(packageDataInitial);
 
-  // TODO: Convert to using usePromise's cache when it can handle manual busts
+  // TODO: Convert to using usePromise's cache replace, when it can handle manual busts
   // Or React Query stuff
   async function useUpdatePackageData() {
     const dapper = useDapper();
@@ -46,8 +46,9 @@ export default function Page({
       community={params.community}
       namespace={params.namespace}
       package={params.package}
-      current_categories={packageData.categories.map((cat) => cat.slug)}
+      current_categories={packageData.categories}
       isDeprecated={packageData.is_deprecated}
+      packageDataUpdateTrigger={useUpdatePackageData}
       deprecationButton={
         <Button.Root
           type="button"

@@ -14,6 +14,7 @@ export const getFakeCurrentUser = async () => {
       getFakeOAuthConnection("Overwolf"),
     ],
     rated_packages: [],
+    rated_packages_cyberstorm: [],
     subscription: {
       expires:
         faker.helpers.maybe(() =>
