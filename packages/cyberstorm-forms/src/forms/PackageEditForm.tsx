@@ -26,9 +26,10 @@ export function PackageEditForm(props: {
   community: string;
   namespace: string;
   package: string;
-  current_categories: string[];
+  current_categories: { slug: string; name: string }[];
   isDeprecated: boolean;
   deprecationButton: ReactNode;
+  packageDataUpdateTrigger: () => Promise<void>;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: "Changes saved!",
@@ -36,14 +37,17 @@ export function PackageEditForm(props: {
 
   return (
     <ApiForm
-      onSubmitSuccess={onSubmitSuccess}
+      onSubmitSuccess={() => {
+        props.packageDataUpdateTrigger();
+        onSubmitSuccess();
+      }}
       onSubmitError={onSubmitError}
       schema={packageEditFormSchema}
       meta={{
         community: props.community,
         namespace: props.namespace,
         package: props.package,
-        current_categories: props.current_categories,
+        current_categories: props.current_categories.map((cat) => cat.slug),
       }}
       endpoint={packageEditCategories}
       formProps={{ className: styles.root }}
@@ -74,7 +78,7 @@ export function PackageEditForm(props: {
           <div className={styles.categoriesSelect}>
             <div className={styles.title}>Edit categories</div>
             <div className={styles.title}>Current categories</div>
-            {props.current_categories}
+            {renderCurrentCategories(props.current_categories)}
             <div className={styles.title}>New categories</div>
             <FormMultiSelectSearch
               schema={packageEditFormSchema}
@@ -97,3 +101,22 @@ export function PackageEditForm(props: {
 }
 
 PackageEditForm.displayName = "PackageEditForm";
+
+function renderCurrentCategories(
+  categories: { name: string; slug: string }[]
+): ReactNode {
+  return (
+    <div className={styles.currentCategories}>
+      {categories.map((cat) => {
+        return (
+          <Tag
+            colorScheme="borderless_no_hover"
+            size="mediumPlus"
+            key={cat.slug}
+            label={cat.name.toUpperCase()}
+          />
+        );
+      })}
+    </div>
+  );
+}

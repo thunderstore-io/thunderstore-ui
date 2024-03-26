@@ -38,7 +38,9 @@ export default function PackageDetailsLayout({
   const currentUser = usePromise(dapper.getCurrentUser, []);
 
   const [isLiked, setIsLiked] = useState(
-    currentUser.rated_packages.includes(packageData.uuid4)
+    currentUser.rated_packages_cyberstorm.includes(
+      `${packageData.namespace}-${packageData.name}`
+    )
   );
 
   // TODO: Convert to using usePromise's cache when it can handle manual busts
@@ -46,7 +48,11 @@ export default function PackageDetailsLayout({
   async function useUpdateLikeStatus() {
     const dapper = useDapper();
     const currentUser = await dapper.getCurrentUser();
-    if (currentUser.rated_packages.includes(packageData.uuid4)) {
+    if (
+      currentUser.rated_packages_cyberstorm.includes(
+        `${packageData.namespace}-${packageData.name}`
+      )
+    ) {
       setIsLiked(true);
     } else {
       setIsLiked(false);
@@ -77,7 +83,7 @@ export default function PackageDetailsLayout({
           onClick={PackageLikeAction({
             isLoggedIn: Boolean(currentUser.username),
             packageName: params.package,
-            uuid4: packageData.uuid4,
+            namespace: packageData.namespace,
             isLiked: isLiked,
             currentUserUpdateTrigger: useUpdateLikeStatus,
           })}

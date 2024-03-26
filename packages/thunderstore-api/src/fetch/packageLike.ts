@@ -2,7 +2,8 @@ import { RequestConfig } from "../index";
 import { apiFetch2 } from "../apiFetch";
 
 export type packageLikeMetaArgs = {
-  uuid4: string;
+  namespace_id: string;
+  package_name: string;
 };
 
 export type packageLikeApiArgs = {
@@ -14,7 +15,7 @@ export function packageLike(
   data: packageLikeApiArgs,
   meta: packageLikeMetaArgs
 ) {
-  const path = `/api/v1/package/${meta.uuid4}/rate/`;
+  const path = `/api/cyberstorm/package/${meta.namespace_id}/${meta.package_name}/rate/`;
 
   return apiFetch2({
     config,

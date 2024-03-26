@@ -10,7 +10,7 @@ import { packageLike } from "@thunderstore/thunderstore-api";
 export function PackageLikeAction(props: {
   isLoggedIn: boolean;
   packageName: string;
-  uuid4: string;
+  namespace: string;
   isLiked: boolean;
   currentUserUpdateTrigger: () => Promise<void>;
 }) {
@@ -34,7 +34,7 @@ export function PackageLikeAction(props: {
 
   const onSubmit = ApiAction({
     schema: packageLikeActionSchema,
-    meta: { uuid4: props.uuid4 },
+    meta: { namespace_id: props.namespace, package_name: props.packageName },
     endpoint: packageLike,
     onSubmitSuccess: onActionSuccess,
     onSubmitError: onActionError,
