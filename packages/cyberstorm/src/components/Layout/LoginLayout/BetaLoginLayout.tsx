@@ -88,7 +88,7 @@ export function BetaLoginLayout(props: Props) {
       <div className={styles.advertisementWrapper}>
         <img
           className={styles.advertisementBackground}
-          src="/images/communitygrid.png"
+          src="/cyberstorm-static/images/communitygrid.png"
           alt="community thumbnails displayed in a skewed grid"
         />
         <div className={styles.advertisement}>
