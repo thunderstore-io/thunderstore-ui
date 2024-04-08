@@ -20,7 +20,7 @@ export function LoginLayout() {
           </div>
           <img
             className={styles.graphicsImage}
-            src="/images/login_hexagon.png"
+            src="/cyberstorm-static/images/login_hexagon.png"
             alt="A cyberstorm-styled cube with hexagonal backdrop"
           />
           <div className={styles.legal}>

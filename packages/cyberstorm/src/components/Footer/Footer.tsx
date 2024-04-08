@@ -12,7 +12,7 @@ import { Tooltip } from "../Tooltip/Tooltip";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
 
-const AD_IMAGE_SRC = "/cyberstorm/images/tsmm_screenshot.png";
+const AD_IMAGE_SRC = "/cyberstorm-static/images/tsmm_screenshot.png";
 const DISCORD_URL = "https://discord.thunderstore.io/";
 const GITHUB_URL = "https://github.com/thunderstore-io";
 
