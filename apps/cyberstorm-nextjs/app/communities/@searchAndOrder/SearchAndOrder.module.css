@@ -32,3 +32,12 @@
   color: var(--color-text--tertiary);
   font-weight: var(--font-weight-bold);
 }
+
+.skeletonSearch {
+  height: 2.75rem;
+}
+
+.skeletonSort {
+  width: 13rem;
+  height: 2.75rem;
+}
