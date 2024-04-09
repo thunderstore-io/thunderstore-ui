@@ -5,11 +5,11 @@ import { DapperProvider } from "@thunderstore/dapper";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
 import { getCookie } from "@/utils/cookie";
-import { getPublicApiHost } from "@/config";
+import { getPublicApiUrl } from "@/config";
 
 export function ClientDapper(props: React.PropsWithChildren) {
   const config = {
-    apiHost: getPublicApiHost(),
+    apiHost: getPublicApiUrl(),
     sessionId: getCookie("sessionid"),
   };
   const dapperConstructor = () => new DapperTs(config);

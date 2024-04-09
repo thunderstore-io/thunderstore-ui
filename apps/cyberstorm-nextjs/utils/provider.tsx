@@ -4,11 +4,11 @@ import React from "react";
 import { LinkLibrary } from "@/utils/LinkLibrary";
 import { LinkingProvider } from "@thunderstore/cyberstorm";
 import { SessionProvider } from "@thunderstore/ts-api-react";
-import { getPublicApiHost } from "@/config";
+import { getPublicApiUrl } from "@/config";
 
 function Providers({ children }: React.PropsWithChildren) {
   return (
-    <SessionProvider domain={getPublicApiHost()}>
+    <SessionProvider domain={getPublicApiUrl()}>
       <LinkingProvider value={LinkLibrary}>{children}</LinkingProvider>
     </SessionProvider>
   );
