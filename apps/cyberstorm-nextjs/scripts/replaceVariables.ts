@@ -21,7 +21,7 @@ async function loadMatchesForVariable(variableName: string): Promise<string[]> {
   for await (const line of grepLogStream) {
     const filename = line.split(":")[0];
     if (result.indexOf(filename) < 0) {
-      result.push(line);
+      result.push(filename);
     }
   }
   return result;
