@@ -33,10 +33,6 @@
   transition: var(--animation-length-l);
 }
 
-.imageContent svg {
-  height: auto;
-}
-
 .image {
   object-fit: cover;
   aspect-ratio: var(--aspect-ratio);
