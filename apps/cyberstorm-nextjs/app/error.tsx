@@ -20,12 +20,7 @@ export default function Error({
             <span>{500}</span>
           </div>
           <div className={errorStyles.description}>Internal server error</div>
-          <div className={errorStyles.flavor}>
-            Beep boop. Server something error happens.
-          </div>
-          <Button.Root onClick={() => reset()}>
-            <Button.ButtonLabel>Try again</Button.ButtonLabel>
-          </Button.Root>
+          <div className={errorStyles.flavor}>Failed to fetch data.</div>
         </div>
       </div>
     </section>
