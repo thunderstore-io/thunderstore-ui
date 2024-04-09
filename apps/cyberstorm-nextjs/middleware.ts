@@ -7,6 +7,7 @@ import {
   redirectToLogin,
 } from "./utils/auth";
 import { errors } from "jose";
+import { getAuthEnabled } from "@/config";
 
 export const config = {
   matcher: [
@@ -25,7 +26,7 @@ export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
   // For the sake of keeping dev configuration easy and not confusing
-  if (!process.env.AUTH_ENABLED) {
+  if (!getAuthEnabled()) {
     return response;
   }
 

@@ -4,9 +4,6 @@ const withPreconstruct = require("@preconstruct/next");
 const nextConfig = withPreconstruct({
   reactStrictMode: true,
   transpilePackages: ["react"],
-  experimental: {
-    serverActions: true,
-  },
 });
 
 let result = nextConfig;

@@ -4,6 +4,7 @@ import hkdf from "@panva/hkdf";
 import { EncryptJWT, jwtDecrypt } from "jose";
 import { v4 as uuid } from "uuid";
 import { isRecord } from "./typeChecks";
+import { getAuthSecret } from "@/config";
 
 interface PartialUserStatus {
   username: string;
@@ -37,10 +38,9 @@ async function getDerivedEncryptionKey(secret: string | Buffer) {
 }
 
 async function encode(token: { username: string; expires: number }) {
-  if (process.env.AUTH_SECRET) {
-    const encryptionSecret = await getDerivedEncryptionKey(
-      process.env.AUTH_SECRET
-    );
+  const authSecret = getAuthSecret();
+  if (authSecret) {
+    const encryptionSecret = await getDerivedEncryptionKey(authSecret);
     return await new EncryptJWT(token)
       .setProtectedHeader({ alg: "dir", enc: "A256GCM" })
       .setIssuedAt()
@@ -53,10 +53,9 @@ async function encode(token: { username: string; expires: number }) {
 }
 
 export async function decode(token: string) {
-  if (process.env.AUTH_SECRET) {
-    const encryptionSecret = await getDerivedEncryptionKey(
-      process.env.AUTH_SECRET
-    );
+  const authSecret = getAuthSecret();
+  if (authSecret) {
+    const encryptionSecret = await getDerivedEncryptionKey(authSecret);
     const { payload } = await jwtDecrypt(token, encryptionSecret, {
       clockTolerance: 15,
     });
