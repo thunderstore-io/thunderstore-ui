@@ -21,3 +21,16 @@
   flex-direction: column;
   gap: var(--gap--16);
 }
+
+.skeletonSearch {
+  width: auto;
+  height: 2.75rem;
+}
+
+.skeletonFilters {
+  height: 18rem;
+}
+
+.skeletonContent {
+  height: 38rem;
+}

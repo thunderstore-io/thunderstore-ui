@@ -27,3 +27,18 @@
   gap: var(--space--16);
   padding-top: var(--space--16);
 }
+
+.skeletonImage {
+  height: 12rem;
+  aspect-ratio: 3/4;
+}
+
+.skeletonTitle {
+  width: 22rem;
+  height: 2.875rem;
+}
+
+.skeletonMetas {
+  width: 6.5rem;
+  height: 1rem;
+}

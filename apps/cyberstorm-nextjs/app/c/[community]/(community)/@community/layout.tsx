@@ -3,8 +3,10 @@ import {
   BreadCrumbs,
   CommunitiesLink,
   CommunityLink,
+  PackageSearchSkeleton,
 } from "@thunderstore/cyberstorm";
 import { ReactNode, Suspense } from "react";
+import { CommunityCardSkeleton } from "./@communityCard/communityCardSkeleton";
 
 export default function CommunityProfileLayout({
   communityCard,
@@ -26,12 +28,12 @@ export default function CommunityProfileLayout({
             </CommunityLink>
           </BreadCrumbs>
           <header className={rootStyles.pageHeader}>
-            <Suspense fallback={<p>TODO: SKELETON communityCard</p>}>
+            <Suspense fallback={<CommunityCardSkeleton />}>
               {communityCard}
             </Suspense>
           </header>
           <main className={rootStyles.main}>
-            <Suspense fallback={<p>TODO: SKELETON packageSearch</p>}>
+            <Suspense fallback={<PackageSearchSkeleton />}>
               {packageSearch}
             </Suspense>
           </main>

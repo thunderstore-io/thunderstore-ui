@@ -1,13 +1,9 @@
-import { ReactNode, Suspense } from "react";
+import { ReactNode } from "react";
 
 export default function CommunityLayout({
   community,
 }: {
   community: ReactNode;
 }) {
-  return (
-    <Suspense fallback={<p>TODO: COMMUNITY SLOT SKELETON</p>}>
-      {community}
-    </Suspense>
-  );
+  return <>{community}</>;
 }
