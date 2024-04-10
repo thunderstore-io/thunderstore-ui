@@ -121,5 +121,6 @@ export { TeamList } from "./components/Layout/Teams/TeamList/TeamList";
 export { ImageWithFallback } from "./components/ImageWithFallback/ImageWithFallback";
 export { CollapsibleText } from "./components/CollapsibleText/CollapsibleText";
 export { PackageSearch } from "./components/PackageSearch/PackageSearch";
+export { PackageSearchSkeleton } from "./components/PackageSearch/PackageSearchSkeleton";
 export { SkeletonBox } from "./components/SkeletonBox/SkeletonBox";
 export { isNode, isRecord, isStringArray } from "./utils/type_guards";

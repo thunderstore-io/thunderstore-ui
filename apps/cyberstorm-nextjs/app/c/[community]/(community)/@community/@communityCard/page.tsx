@@ -1,5 +1,5 @@
 "use client";
-import styles from "./PageHeader.module.css";
+import styles from "./CommunityCard.module.css";
 import {
   Button,
   CollapsibleText,
