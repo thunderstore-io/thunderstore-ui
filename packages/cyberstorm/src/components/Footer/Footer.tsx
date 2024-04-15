@@ -30,7 +30,7 @@ export function Footer() {
                 <ThunderstoreLogoHorizontal />
               </div>
               <div className={styles.iconLinks}>
-                <Tooltip content="Join our discord" side="bottom">
+                <Tooltip content="Join our Discord" side="bottom">
                   <a href={DISCORD_URL}>
                     <Icon wrapperClasses={styles.iconLink}>
                       <FontAwesomeIcon icon={faDiscord} />

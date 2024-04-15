@@ -39,7 +39,14 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
   });
 
   const home = (
-    <div key={0} className={classnames(styles.outer__start, styles.outer)}>
+    <div
+      key={0}
+      className={classnames(
+        styles.outer__start,
+        styles.outer,
+        styles.outerHome
+      )}
+    >
       <div className={classnames(styles.inner, styles.innerHome)}>
         <DefaultHomeCrumb />
       </div>

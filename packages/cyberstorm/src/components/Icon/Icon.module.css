@@ -15,6 +15,7 @@
 }
 
 .inline {
-  width: 1em;
-  height: 1em;
+  display: inline-flex;
+  block-size: 1em;
+  vertical-align: -0.125em;
 }
