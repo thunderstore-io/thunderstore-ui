@@ -175,7 +175,7 @@
 .logoAndLinks {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--16);
+  gap: var(--gap--32);
   align-items: center;
 }
 

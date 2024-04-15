@@ -10,17 +10,20 @@
   cursor: pointer;
 
   --text-color: var(--color-text--default);
+  --icon-color: var(--color-text--accent);
 }
 
 .root:hover {
   background-color: var(--color-surface--6);
+
+  --icon-color: var(--color-text--default);
 }
 
 /* MenuItemIcon */
 .menuItemIcon {
   width: 1em;
   height: 1em;
-  color: var(--color-text--tertiary);
+  color: var(--icon-color);
 }
 
 /* MenuItemLabel */
