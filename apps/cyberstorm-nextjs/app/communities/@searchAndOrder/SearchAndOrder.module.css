@@ -1,34 +1,25 @@
 .root {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: var(--gap--16);
+  justify-content: space-between;
 }
 
 .searchTextInput {
-  width: 100%;
-}
-
-@media (min-width: 40rem) {
-  .searchTextInput {
-    width: 50%;
-  }
-
-  .root {
-    flex-direction: row;
-    justify-content: space-between;
-  }
+  width: 50%;
 }
 
 .searchFilters {
   display: flex;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   gap: var(--gap--16);
-  align-content: center;
   justify-content: flex-end;
 }
 
 .searchFiltersSortLabel {
   align-self: center;
+  width: fill-available;
+  width: available;
   color: var(--color-text--tertiary);
   font-weight: var(--font-weight-bold);
 }
@@ -40,4 +31,22 @@
 .skeletonSort {
   width: 13rem;
   height: 2.75rem;
+}
+
+@media (max-width: 40rem) {
+  .searchTextInput {
+    width: 100%;
+  }
+
+  .root {
+    flex-direction: column;
+  }
+
+  .searchFiltersSortLabel {
+    display: none;
+  }
+
+  .searchFilters {
+    width: 100%;
+  }
 }

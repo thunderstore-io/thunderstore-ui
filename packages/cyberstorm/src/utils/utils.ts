@@ -7,6 +7,10 @@ export const formatInteger = (inputNumber: number) => {
   return Intl.NumberFormat("en", { notation: "compact" }).format(inputNumber);
 };
 
+export const numberWithSpaces = (x: number) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+};
+
 export const formatFileSize = (bytes: number) => {
   // NumberFormat with byte unit type, renders GBs as BBs "Billion bytes", so correct that mistake here.
   if (bytes > 999999999 && bytes < 1000000000000) {
