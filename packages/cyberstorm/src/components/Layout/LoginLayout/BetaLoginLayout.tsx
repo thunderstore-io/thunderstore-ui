@@ -3,7 +3,7 @@ import * as Button from "../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { OverwolfLogo, ThunderstoreLogo } from "../../../svg/svg";
-import { PrivacyPolicyLink, TermsOfServiceLink } from "../../Links/Links";
+import { CyberstormLink } from "../../Links/Links";
 
 interface Props {
   discordAuthUrl?: string;
@@ -76,13 +76,13 @@ export function BetaLoginLayout(props: Props) {
         </div>
         <div className={styles.legal}>
           By logging in and accessing the site you agree to{" "}
-          <TermsOfServiceLink>
+          <CyberstormLink linkId="TermsOfService">
             <span className={styles.legalLink}>Terms and Conditions</span>
-          </TermsOfServiceLink>{" "}
+          </CyberstormLink>{" "}
           and{" "}
-          <PrivacyPolicyLink>
+          <CyberstormLink linkId="PrivacyPolicy">
             <span className={styles.legalLink}>Privacy Policy</span>
-          </PrivacyPolicyLink>
+          </CyberstormLink>
         </div>
       </div>
       <div className={styles.advertisementWrapper}>

@@ -1,7 +1,7 @@
 "use client";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { MarkdownPreviewLink } from "../../../Links/Links";
+import { CyberstormLink } from "../../../Links/Links";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 import { useState, useEffect } from "react";
@@ -82,7 +82,9 @@ export function MarkdownPreviewLayout() {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <MarkdownPreviewLink>Markdown Preview</MarkdownPreviewLink>
+          <CyberstormLink linkId="MarkdownPreview">
+            Markdown Preview
+          </CyberstormLink>
         </BreadCrumbs>
       }
       header={<PageHeader title="Markdown Preview" />}

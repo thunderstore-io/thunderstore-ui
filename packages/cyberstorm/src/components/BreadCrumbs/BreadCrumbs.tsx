@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from "react";
 import { faHouse } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./BreadCrumbs.module.css";
-import { IndexLink } from "../Links/Links";
+import { CyberstormLink } from "../Links/Links";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
 
@@ -63,10 +63,10 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
 
 export function DefaultHomeCrumb() {
   return (
-    <IndexLink>
+    <CyberstormLink linkId="Index">
       <Icon>
         <FontAwesomeIcon icon={faHouse} className={styles.home} />
       </Icon>
-    </IndexLink>
+    </CyberstormLink>
   );
 }

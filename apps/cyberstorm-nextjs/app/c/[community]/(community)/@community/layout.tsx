@@ -1,8 +1,7 @@
 import rootStyles from "../../../../RootLayout.module.css";
 import {
   BreadCrumbs,
-  CommunitiesLink,
-  CommunityLink,
+  CyberstormLink,
   PackageSearchSkeleton,
 } from "@thunderstore/cyberstorm";
 import { ReactNode, Suspense } from "react";
@@ -22,10 +21,10 @@ export default function CommunityProfileLayout({
       <div className={rootStyles.container}>
         <>
           <BreadCrumbs>
-            <CommunitiesLink>Communities</CommunitiesLink>
-            <CommunityLink community={params.community}>
+            <CyberstormLink linkId="Communities">Communities</CyberstormLink>
+            <CyberstormLink linkId="Community" community={params.community}>
               {params.community}
-            </CommunityLink>
+            </CyberstormLink>
           </BreadCrumbs>
           <header className={rootStyles.pageHeader}>
             <Suspense fallback={<CommunityCardSkeleton />}>

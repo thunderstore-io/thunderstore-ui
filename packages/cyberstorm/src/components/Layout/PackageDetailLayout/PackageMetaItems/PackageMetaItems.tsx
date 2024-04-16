@@ -2,7 +2,7 @@ import { PackageListingDetails } from "@thunderstore/dapper/types";
 
 import styles from "../PackageDetailLayout.module.css";
 import { CopyButton } from "../../../CopyButton/CopyButton";
-import { PackageDependantsLink } from "../../../Links/Links";
+import { CyberstormLink } from "../../../Links/Links";
 import { MetaInfoItemList } from "../../../MetaInfoItemList/MetaInfoItemList";
 import { RelativeTime } from "../../../RelativeTime/RelativeTime";
 import { formatFileSize, formatInteger } from "../../../../utils/utils";
@@ -58,7 +58,8 @@ export const PackageMetaItems = (props: Props) => (
         key: "dependants",
         label: "Dependants",
         content: (
-          <PackageDependantsLink
+          <CyberstormLink
+            linkId="PackageDependants"
             community={props.package.community_identifier}
             namespace={props.package.namespace}
             package={props.package.name}
@@ -66,7 +67,7 @@ export const PackageMetaItems = (props: Props) => (
             <div className={styles.dependantsLink}>
               {props.package.dependant_count} other mods
             </div>
-          </PackageDependantsLink>
+          </CyberstormLink>
         ),
       },
     ]}

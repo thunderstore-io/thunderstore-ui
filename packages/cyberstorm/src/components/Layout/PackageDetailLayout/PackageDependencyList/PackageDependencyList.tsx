@@ -6,7 +6,7 @@ import { PackageDependency } from "@thunderstore/dapper/types";
 import { PackageDependencyDialog } from "./PackageDependencyDialog/PackageDependencyDialog";
 import styles from "./PackageDependencyList.module.css";
 import * as Button from "../../../Button/";
-import { PackageLink } from "../../../Links/Links";
+import { CyberstormLink } from "../../../Links/Links";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { Dialog } from "../../../../index";
 import { ImageWithFallback } from "../../../ImageWithFallback/ImageWithFallback";
@@ -82,7 +82,8 @@ export function PackageDependencyList(props: Props) {
 PackageDependencyList.displayName = "PackageDependencyList";
 
 const PackageDependencyListItem = (props: PackageDependency) => (
-  <PackageLink
+  <CyberstormLink
+    linkId="Package"
     community={props.community_identifier}
     namespace={props.namespace}
     package={props.name}
@@ -96,7 +97,7 @@ const PackageDependencyListItem = (props: PackageDependency) => (
         <p className={styles.itemDescription}>{props.description}</p>
       </div>
     </div>
-  </PackageLink>
+  </CyberstormLink>
 );
 
 PackageDependencyListItem.displayName = "PackageDependencyListItem";

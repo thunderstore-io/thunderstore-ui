@@ -1,6 +1,6 @@
 import {
   BreadCrumbs,
-  MarkdownPreviewLink,
+  CyberstormLink,
   PageHeader,
 } from "@thunderstore/cyberstorm";
 import rootStyles from "../../RootLayout.module.css";
@@ -17,7 +17,9 @@ export default function ManifestValidatorLayout({
       <div className={rootStyles.container}>
         <>
           <BreadCrumbs>
-            <MarkdownPreviewLink>Markdown Preview</MarkdownPreviewLink>
+            <CyberstormLink linkId="MarkdownPreview">
+              Markdown Preview
+            </CyberstormLink>
           </BreadCrumbs>
           <header className={rootStyles.pageHeader}>
             <PageHeader title="Markdown Preview" />

@@ -3,7 +3,7 @@ import styles from "./ManifestValidatorLayout.module.css";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
-import { ManifestValidatorLink } from "../../../Links/Links";
+import { CyberstormLink } from "../../../Links/Links";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 import { useState, useEffect } from "react";
 import { CodeInput } from "../../../CodeInput/CodeInput";
@@ -128,7 +128,9 @@ export function ManifestValidatorLayout() {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <ManifestValidatorLink>Manifest Validator</ManifestValidatorLink>
+          <CyberstormLink linkId="ManifestValidator">
+            Manifest Validator
+          </CyberstormLink>
         </BreadCrumbs>
       }
       header={<PageHeader title="Manifest Validator" />}

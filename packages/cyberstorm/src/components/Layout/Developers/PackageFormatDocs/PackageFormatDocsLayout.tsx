@@ -1,6 +1,6 @@
 import styles from "./PackageFormatDocsLayout.module.css";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { PackageFormatDocsLink } from "../../../Links/Links";
+import { CyberstormLink } from "../../../Links/Links";
 import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 import { Table } from "../../../Table/Table";
@@ -36,7 +36,9 @@ export function PackageFormatDocsLayout() {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <PackageFormatDocsLink>Package Format Docs</PackageFormatDocsLink>
+          <CyberstormLink linkId="PackageFormatDocs">
+            Package Format Docs
+          </CyberstormLink>
         </BreadCrumbs>
       }
       header={<PageHeader title="Package Format Docs" />}

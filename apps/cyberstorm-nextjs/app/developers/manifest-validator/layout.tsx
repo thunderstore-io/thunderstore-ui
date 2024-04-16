@@ -1,6 +1,6 @@
 import {
   BreadCrumbs,
-  ManifestValidatorLink,
+  CyberstormLink,
   PageHeader,
   SettingItem,
 } from "@thunderstore/cyberstorm";
@@ -18,7 +18,9 @@ export default function ManifestValidatorLayout({
       <div className={rootStyles.container}>
         <>
           <BreadCrumbs>
-            <ManifestValidatorLink>Manifest Validator</ManifestValidatorLink>
+            <CyberstormLink linkId="ManifestValidator">
+              Manifest Validator
+            </CyberstormLink>
           </BreadCrumbs>
           <header className={rootStyles.pageHeader}>
             <PageHeader title="Manifest Validator" />

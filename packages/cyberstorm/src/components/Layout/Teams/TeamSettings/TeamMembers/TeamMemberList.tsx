@@ -7,7 +7,7 @@ import styles from "./TeamMembers.module.css";
 import { Avatar } from "../../../../Avatar/Avatar";
 import * as Button from "../../../../Button/";
 import { Dialog } from "../../../../../index";
-import { UserLink } from "../../../../Links/Links";
+import { CyberstormLink } from "../../../../Links/Links";
 import { Table, Sort } from "../../../../Table/Table";
 import {
   RemoveTeamMemberForm,
@@ -34,7 +34,11 @@ export function TeamMemberList(props: Props) {
     return [
       {
         value: (
-          <UserLink key={`user_${index}`} user={member.username}>
+          <CyberstormLink
+            linkId="User"
+            key={`user_${index}`}
+            user={member.username}
+          >
             <div className={styles.userInfo}>
               <Avatar
                 src={member.avatar}
@@ -43,7 +47,7 @@ export function TeamMemberList(props: Props) {
               />
               <span className={styles.userInfoName}>{member.username}</span>
             </div>
-          </UserLink>
+          </CyberstormLink>
         ),
         sortValue: member.username,
       },

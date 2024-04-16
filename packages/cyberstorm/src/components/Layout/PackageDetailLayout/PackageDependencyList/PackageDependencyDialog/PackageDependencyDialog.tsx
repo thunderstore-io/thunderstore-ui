@@ -1,7 +1,7 @@
 import { PackageDependency } from "@thunderstore/dapper/types";
 
 import styles from "../PackageDependencyDialog/PackageDependencyDialog.module.css";
-import { PackageLink, PackageVersionLink } from "../../../../Links/Links";
+import { CyberstormLink } from "../../../../Links/Links";
 import { ImageWithFallback } from "../../../../ImageWithFallback/ImageWithFallback";
 
 export interface Props {
@@ -17,26 +17,28 @@ export const PackageDependencyDialog = (props: Props) => (
         </div>
         <div>
           <div className={styles.title}>
-            <PackageLink
+            <CyberstormLink
+              linkId="Package"
               community={packageData.community_identifier}
               namespace={packageData.namespace}
               package={packageData.name}
             >
               {packageData.name}
-            </PackageLink>
+            </CyberstormLink>
           </div>
           <div className={styles.description}>{packageData.description}</div>
           <p className={styles.preferredVersion}>
             Preferred version:{" "}
             <span className={styles.preferredVersion__version}>
-              <PackageVersionLink
+              <CyberstormLink
+                linkId="PackageVersion"
                 community={packageData.community_identifier}
                 namespace={packageData.namespace}
                 package={packageData.name}
                 version={packageData.version_number}
               >
                 {packageData.version_number}
-              </PackageVersionLink>
+              </CyberstormLink>
             </span>
           </p>
         </div>

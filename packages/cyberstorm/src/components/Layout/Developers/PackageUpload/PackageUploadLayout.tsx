@@ -2,7 +2,7 @@
 import styles from "./PackageUploadLayout.module.css";
 import { Title } from "../../../Title/Title";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { PackageUploadLink } from "../../../Links/Links";
+import { CyberstormLink } from "../../../Links/Links";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { TextInput } from "../../../TextInput/TextInput";
 import * as Button from "../../../Button/";
@@ -22,7 +22,7 @@ export function PackageUploadLayout() {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <PackageUploadLink>Package Upload</PackageUploadLink>
+          <CyberstormLink linkId="PackageUpload">Package Upload</CyberstormLink>
         </BreadCrumbs>
       }
       header={<Title text="Upload Package" />}

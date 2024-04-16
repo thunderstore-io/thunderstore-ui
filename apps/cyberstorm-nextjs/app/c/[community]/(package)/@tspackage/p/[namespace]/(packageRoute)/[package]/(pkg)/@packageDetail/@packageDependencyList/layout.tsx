@@ -3,7 +3,7 @@ import {
   Button,
   Dialog,
   ImageWithFallback,
-  PackageLink,
+  CyberstormLink,
 } from "@thunderstore/cyberstorm";
 import { faBoxOpen } from "@fortawesome/pro-regular-svg-icons";
 import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
@@ -93,7 +93,8 @@ export default function PackageDependencyListLayout({
 }
 
 const PackageDependencyListItem = (props: PackageDependency) => (
-  <PackageLink
+  <CyberstormLink
+    linkId="Package"
     community={props.community_identifier}
     namespace={props.namespace}
     package={props.name}
@@ -107,7 +108,7 @@ const PackageDependencyListItem = (props: PackageDependency) => (
         <p className={styles.itemDescription}>{props.description}</p>
       </div>
     </div>
-  </PackageLink>
+  </CyberstormLink>
 );
 
 PackageDependencyListItem.displayName = "PackageDependencyListItem";

@@ -1,7 +1,7 @@
 import styles from "./UserProfileLayout.module.css";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import { UserLink } from "../../Links/Links";
+import { CyberstormLink } from "../../Links/Links";
 import { PackageSearch } from "../../PackageSearch/PackageSearch";
 
 interface Props {
@@ -22,12 +22,17 @@ export function UserProfileLayout(props: Props) {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <UserLink user={userId}>{userId}</UserLink>
+          <CyberstormLink linkId="User" user={userId}>
+            {userId}
+          </CyberstormLink>
         </BreadCrumbs>
       }
       header={
         <div className={styles.header}>
-          Mods uploaded by <UserLink user={userId}>{userId}</UserLink>
+          Mods uploaded by{" "}
+          <CyberstormLink linkId="User" user={userId}>
+            {userId}
+          </CyberstormLink>
         </div>
       }
       mainContent={

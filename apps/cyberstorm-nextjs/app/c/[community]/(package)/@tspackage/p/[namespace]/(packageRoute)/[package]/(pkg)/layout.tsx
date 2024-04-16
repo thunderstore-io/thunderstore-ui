@@ -1,11 +1,6 @@
 import rootStyles from "../../../../../../../../../RootLayout.module.css";
 import styles from "./PackageLayout.module.css";
-import {
-  BreadCrumbs,
-  CommunitiesLink,
-  CommunityLink,
-  TeamLink,
-} from "@thunderstore/cyberstorm";
+import { BreadCrumbs, CyberstormLink } from "@thunderstore/cyberstorm";
 import { ReactNode, Suspense } from "react";
 
 export default function PackageLayout({
@@ -25,11 +20,13 @@ export default function PackageLayout({
       <div className={rootStyles.container}>
         <>
           <BreadCrumbs>
-            <CommunitiesLink>Communities</CommunitiesLink>
-            <CommunityLink community={params.community}>
+            <CyberstormLink linkId="Communities">Communities</CyberstormLink>
+            <CyberstormLink linkId="Community" community={params.community}>
               {params.community}
-            </CommunityLink>
-            <TeamLink team={params.namespace}>{params.namespace}</TeamLink>
+            </CyberstormLink>
+            <CyberstormLink linkId="Team" team={params.namespace}>
+              {params.namespace}
+            </CyberstormLink>
             {displayName}
           </BreadCrumbs>
           <header className={rootStyles.pageHeader}>

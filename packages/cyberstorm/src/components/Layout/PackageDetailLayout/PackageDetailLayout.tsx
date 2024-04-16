@@ -29,7 +29,7 @@ import { PackageVersions } from "./PackageVersions/PackageVersions";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import * as Button from "../../Button/";
-import { CommunitiesLink, CommunityLink, TeamLink } from "../../Links/Links";
+import { CyberstormLink } from "../../Links/Links";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import * as Dialog from "../../Dialog";
 import { Icon } from "../../Icon/Icon";
@@ -68,7 +68,8 @@ export function PackageDetailLayout(props: Props) {
   });
 
   const packageDetailsMeta = [
-    <TeamLink
+    <CyberstormLink
+      linkId="Team"
       key="team"
       community={packageData.community_identifier}
       team={packageData.namespace}
@@ -79,7 +80,7 @@ export function PackageDetailLayout(props: Props) {
         </Button.ButtonIcon>
         <Button.ButtonLabel>{packageData.namespace}</Button.ButtonLabel>
       </Button.Root>
-    </TeamLink>,
+    </CyberstormLink>,
   ];
 
   if (packageData.website_url) {
@@ -100,17 +101,21 @@ export function PackageDetailLayout(props: Props) {
       backGroundImageSource={community.icon_url}
       breadCrumb={
         <BreadCrumbs>
-          <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={packageData.community_identifier}>
+          <CyberstormLink linkId="Communities">Communities</CyberstormLink>
+          <CyberstormLink
+            linkId="Community"
+            community={packageData.community_identifier}
+          >
             {packageData.community_name}
-          </CommunityLink>
+          </CyberstormLink>
           Packages
-          <TeamLink
+          <CyberstormLink
+            linkId="Team"
             community={packageData.community_identifier}
             team={packageData.namespace}
           >
             {packageData.namespace}
-          </TeamLink>
+          </CyberstormLink>
           {displayName}
         </BreadCrumbs>
       }

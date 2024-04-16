@@ -6,10 +6,8 @@ import rootStyles from "../../../../../../../RootLayout.module.css";
 import styles from "./TeamProfileLayout.module.css";
 import {
   BreadCrumbs,
-  CommunitiesLink,
-  CommunityLink,
   PackageSearch,
-  TeamLink,
+  CyberstormLink,
 } from "@thunderstore/cyberstorm";
 
 export default function Page({
@@ -33,17 +31,23 @@ export default function Page({
       <div className={rootStyles.container}>
         <>
           <BreadCrumbs>
-            <CommunitiesLink>Communities</CommunitiesLink>
-            <CommunityLink community={community}>{community}</CommunityLink>
+            <CyberstormLink linkId="Communities">Communities</CyberstormLink>
+            <CyberstormLink linkId="Community" community={community}>
+              {community}
+            </CyberstormLink>
             Packages
             {namespace}
           </BreadCrumbs>
           <header className={rootStyles.pageHeader}>
             <div className={styles.header}>
               Mods uploaded by{" "}
-              <TeamLink community={community} team={namespace}>
+              <CyberstormLink
+                linkId="Team"
+                community={community}
+                team={namespace}
+              >
                 {namespace}
-              </TeamLink>
+              </CyberstormLink>
             </div>
           </header>
           <main className={rootStyles.main}>

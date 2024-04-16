@@ -10,7 +10,7 @@ import {
 } from "@thunderstore/cyberstorm-forms";
 import { useState } from "react";
 import {
-  UserLink,
+  CyberstormLink,
   Dialog,
   Button,
   Avatar,
@@ -37,7 +37,11 @@ export function TeamMemberList(props: Props) {
     return [
       {
         value: (
-          <UserLink key={`user_${index}`} user={member.username}>
+          <CyberstormLink
+            linkId="User"
+            key={`user_${index}`}
+            user={member.username}
+          >
             <div className={styles.userInfo}>
               <Avatar
                 src={member.avatar}
@@ -46,7 +50,7 @@ export function TeamMemberList(props: Props) {
               />
               <span className={styles.userInfoName}>{member.username}</span>
             </div>
-          </UserLink>
+          </CyberstormLink>
         ),
         sortValue: member.username,
       },

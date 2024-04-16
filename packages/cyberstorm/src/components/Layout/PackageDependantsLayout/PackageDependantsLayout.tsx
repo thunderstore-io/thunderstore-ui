@@ -5,12 +5,7 @@ import { usePromise } from "@thunderstore/use-promise";
 import styles from "./PackageDependantsLayout.module.css";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import {
-  CommunitiesLink,
-  CommunityLink,
-  PackageLink,
-  TeamLink,
-} from "../../Links/Links";
+import { CyberstormLink } from "../../Links/Links";
 import { PackageSearch } from "../../PackageSearch/PackageSearch";
 
 interface Props {
@@ -41,38 +36,48 @@ export function PackageDependantsLayout(props: Props) {
       backGroundImageSource={community.background_image_url}
       breadCrumb={
         <BreadCrumbs>
-          <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={communityId}>
+          <CyberstormLink linkId="Communities">Communities</CyberstormLink>
+          <CyberstormLink linkId="Community" community={communityId}>
             {community.name}
-          </CommunityLink>
+          </CyberstormLink>
           Packages
-          <TeamLink community={communityId} team={namespaceId}>
+          <CyberstormLink
+            linkId="Team"
+            community={communityId}
+            team={namespaceId}
+          >
             {namespaceId}
-          </TeamLink>
-          <PackageLink
+          </CyberstormLink>
+          <CyberstormLink
+            linkId="Package"
             community={communityId}
             namespace={namespaceId}
             package={packageName}
           >
             {packageName}
-          </PackageLink>
+          </CyberstormLink>
           Dependants
         </BreadCrumbs>
       }
       header={
         <div className={styles.header}>
           Mods that depend on{" "}
-          <PackageLink
+          <CyberstormLink
+            linkId="Package"
             community={communityId}
             namespace={namespaceId}
             package={packageName}
           >
             {packageName}
-          </PackageLink>
+          </CyberstormLink>
           {" by "}
-          <TeamLink community={communityId} team={namespaceId}>
+          <CyberstormLink
+            linkId="Team"
+            community={communityId}
+            team={namespaceId}
+          >
             {namespaceId}
-          </TeamLink>
+          </CyberstormLink>
         </div>
       }
       mainContent={

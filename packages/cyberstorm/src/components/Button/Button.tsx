@@ -8,6 +8,7 @@ import React, {
 import styles from "./Button.module.css";
 import { Tooltip } from "../Tooltip/Tooltip";
 import { classnames } from "../../utils/utils";
+import { CyberstormLinkIds, CyberstormLink } from "../Links/Links";
 
 export interface ButtonProps {
   children?: ReactNode | ReactNode[];
@@ -53,6 +54,7 @@ export interface ButtonProps {
   type?: "button" | "submit" | "reset";
   tooltipText?: string;
   disabled?: boolean;
+  CyberstormLinkId?: CyberstormLinkIds;
 }
 
 const TooltipWrapper = (props: TooltipWrapperProps) =>
@@ -87,35 +89,13 @@ const Button = React.forwardRef<
     iconAlignment = "default",
     tooltipText,
     disabled = false,
+    CyberstormLinkId,
     ...forwardedProps
   } = props;
 
   const fallbackRef = useRef(null);
 
   if (plain) {
-    if (forwardedProps.href) {
-      const fRef = forwardedRef as React.ForwardedRef<HTMLAnchorElement>;
-      const ref = fRef || fallbackRef;
-      // TODO: Add disabled mode
-      return (
-        <TooltipWrapper tooltipText={tooltipText}>
-          <a
-            {...forwardedProps}
-            ref={ref}
-            className={classnames(
-              styles.root,
-              getFontSize(fontSize),
-              getIconAlignment(iconAlignment),
-              getStyle(colorScheme),
-              getPaddingSize(paddingSize),
-              className
-            )}
-          >
-            {children}
-          </a>
-        </TooltipWrapper>
-      );
-    }
     const fRef = forwardedRef as React.ForwardedRef<HTMLDivElement>;
     const ref = fRef || fallbackRef;
     // TODO: Add disabled mode
@@ -135,6 +115,51 @@ const Button = React.forwardRef<
         >
           {children}
         </div>
+      </TooltipWrapper>
+    );
+  } else if (forwardedProps.href) {
+    const fRef = forwardedRef as React.ForwardedRef<HTMLAnchorElement>;
+    const ref = fRef || fallbackRef;
+    // TODO: Add disabled mode
+    return (
+      <TooltipWrapper tooltipText={tooltipText}>
+        <a
+          {...forwardedProps}
+          ref={ref}
+          className={classnames(
+            styles.root,
+            getFontSize(fontSize),
+            getIconAlignment(iconAlignment),
+            getStyle(colorScheme),
+            getPaddingSize(paddingSize),
+            className
+          )}
+        >
+          {children}
+        </a>
+      </TooltipWrapper>
+    );
+  } else if (CyberstormLinkId) {
+    const fRef = forwardedRef as React.ForwardedRef<HTMLAnchorElement>;
+    const ref = fRef || fallbackRef;
+    // TODO: Add disabled mode
+    return (
+      <TooltipWrapper tooltipText={tooltipText}>
+        <CyberstormLink
+          forwardedProps={forwardedProps}
+          ref={ref}
+          className={classnames(
+            styles.root,
+            getFontSize(fontSize),
+            getIconAlignment(iconAlignment),
+            getStyle(colorScheme),
+            getPaddingSize(paddingSize),
+            className
+          )}
+          linkId={CyberstormLinkId}
+        >
+          {children}
+        </CyberstormLink>
       </TooltipWrapper>
     );
   } else {

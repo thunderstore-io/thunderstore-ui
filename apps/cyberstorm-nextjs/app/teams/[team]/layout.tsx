@@ -1,8 +1,7 @@
 "use client";
 import {
   BreadCrumbs,
-  TeamSettingsLink,
-  TeamsLink,
+  CyberstormLink,
   PageHeader,
 } from "@thunderstore/cyberstorm";
 
@@ -18,10 +17,10 @@ export default function TeamsLayout(props: {
   return (
     <>
       <BreadCrumbs>
-        <TeamsLink>Teams</TeamsLink>
-        <TeamSettingsLink team={props.params.team}>
+        <CyberstormLink linkId="Teams">Teams</CyberstormLink>
+        <CyberstormLink linkId="TeamSettings" team={props.params.team}>
           {props.params.team}
-        </TeamSettingsLink>
+        </CyberstormLink>
       </BreadCrumbs>
       <header className={rootStyles.pageHeader}>
         <PageHeader title={props.params.team} />

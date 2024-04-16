@@ -4,7 +4,7 @@ import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import { faCaretRight, faCrown } from "@fortawesome/pro-solid-svg-icons";
-import { TeamLink, UserLink } from "../../../Links/Links";
+import { CyberstormLink } from "../../../Links/Links";
 import { Icon } from "../../../Icon/Icon";
 import { Avatar } from "../../../Avatar/Avatar";
 
@@ -22,7 +22,7 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
   const { teamMember } = props;
 
   return (
-    <UserLink user={teamMember.username}>
+    <CyberstormLink linkId="User" user={teamMember.username}>
       <div className={styles.item}>
         <Avatar username={teamMember.username} src={teamMember.avatar} />
         <div>
@@ -37,7 +37,7 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
           <div className={styles.itemDescription}>{teamMember.role}</div>
         </div>
       </div>
-    </UserLink>
+    </CyberstormLink>
   );
 }
 
@@ -70,14 +70,14 @@ export function PackageTeamMemberList(props: PackageTeamListProps) {
         headerIcon={<FontAwesomeIcon icon={faUsers} />}
         headerRightContent={
           teamName ? (
-            <TeamLink community={community} team={teamName}>
+            <CyberstormLink linkId="Team" community={community} team={teamName}>
               <div className={styles.teamLink}>
                 See team
                 <Icon inline wrapperClasses={styles.teamLinkIcon}>
                   <FontAwesomeIcon icon={faCaretRight} />
                 </Icon>
               </div>
-            </TeamLink>
+            </CyberstormLink>
           ) : null
         }
       />

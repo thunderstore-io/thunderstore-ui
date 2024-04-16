@@ -6,11 +6,8 @@ import rootStyles from "../../../../../../../../../../RootLayout.module.css";
 import styles from "./DependantsPage.module.css";
 import {
   BreadCrumbs,
-  CommunitiesLink,
-  CommunityLink,
-  PackageLink,
+  CyberstormLink,
   PackageSearch,
-  TeamLink,
 } from "@thunderstore/cyberstorm";
 
 export default function Page({
@@ -34,37 +31,47 @@ export default function Page({
       <div className={rootStyles.container}>
         <>
           <BreadCrumbs>
-            <CommunitiesLink>Communities</CommunitiesLink>
-            <CommunityLink community={params.community}>
+            <CyberstormLink linkId="Communities">Communities</CyberstormLink>
+            <CyberstormLink linkId="Community" community={params.community}>
               {community.name}
-            </CommunityLink>
+            </CyberstormLink>
             Packages
-            <TeamLink community={params.community} team={params.namespace}>
+            <CyberstormLink
+              linkId="Team"
+              community={params.community}
+              team={params.namespace}
+            >
               {params.namespace}
-            </TeamLink>
-            <PackageLink
+            </CyberstormLink>
+            <CyberstormLink
+              linkId="Package"
               community={params.community}
               namespace={params.namespace}
               package={params.package}
             >
               {params.package}
-            </PackageLink>
+            </CyberstormLink>
             Dependants
           </BreadCrumbs>
           <header className={rootStyles.pageHeader}>
             <div className={styles.header}>
               Mods that depend on{" "}
-              <PackageLink
+              <CyberstormLink
+                linkId="Package"
                 community={params.community}
                 namespace={params.namespace}
                 package={params.package}
               >
                 {params.package}
-              </PackageLink>
+              </CyberstormLink>
               {" by "}
-              <TeamLink community={params.community} team={params.namespace}>
+              <CyberstormLink
+                linkId="Team"
+                community={params.community}
+                team={params.namespace}
+              >
                 {params.namespace}
-              </TeamLink>
+              </CyberstormLink>
             </div>
           </header>
           <main className={rootStyles.main}>

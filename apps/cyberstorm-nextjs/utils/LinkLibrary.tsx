@@ -4,16 +4,25 @@ import { PropsWithChildren } from "react";
 import { getPublicSiteUrl } from "@/config";
 
 interface LinkProps extends PropsWithChildren, ThunderstoreLinkProps {
+  className?: string;
   queryParams?: string;
   url: string;
+  forwardedProps?: object;
+  ref?: React.ForwardedRef<HTMLAnchorElement>;
 }
 
 export const Link = (props: LinkProps): React.ReactElement => {
-  const { children, queryParams, url } = props;
+  const { children, queryParams, className, url, forwardedProps, ref } = props;
   const q = queryParams ? `?${queryParams}` : "";
 
   return (
-    <NextLink href={`${url}${q}`} passHref>
+    <NextLink
+      href={`${url}${q}`}
+      passHref
+      {...forwardedProps}
+      className={className}
+      ref={ref}
+    >
       {children}
     </NextLink>
   );

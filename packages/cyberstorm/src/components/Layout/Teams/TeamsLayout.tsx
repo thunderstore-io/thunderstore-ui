@@ -1,7 +1,7 @@
 "use client";
 import styles from "./TeamsLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import { TeamsLink } from "../../Links/Links";
+import { CyberstormLink } from "../../Links/Links";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { SettingItem } from "../../SettingItem/SettingItem";
 import * as Button from "../../Button/";
@@ -25,7 +25,7 @@ export function TeamsLayout() {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <TeamsLink>Teams</TeamsLink>
+          <CyberstormLink linkId="Teams">Teams</CyberstormLink>
         </BreadCrumbs>
       }
       header={<PageHeader title="Teams" />}
