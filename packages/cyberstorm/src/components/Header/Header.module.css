@@ -106,6 +106,15 @@
   .narrowHeader {
     display: flex;
     gap: 1rem;
+    align-items: center;
+  }
+
+  .logoWrapper {
+    display: flex;
+    width: 2rem;
+    height: 2rem;
+    margin: 0.625rem;
+    color: var(--color-highlight);
   }
 
   .wideHeader,

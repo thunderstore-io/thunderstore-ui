@@ -140,14 +140,11 @@ const Button = React.forwardRef<
       </TooltipWrapper>
     );
   } else if (CyberstormLinkId) {
-    const fRef = forwardedRef as React.ForwardedRef<HTMLAnchorElement>;
-    const ref = fRef || fallbackRef;
     // TODO: Add disabled mode
     return (
       <TooltipWrapper tooltipText={tooltipText}>
         <CyberstormLink
           forwardedProps={forwardedProps}
-          ref={ref}
           className={classnames(
             styles.root,
             getFontSize(fontSize),

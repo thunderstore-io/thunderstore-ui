@@ -23,7 +23,7 @@ export function Header() {
     <header className={styles.root}>
       <div className={styles.narrowHeader}>
         <CyberstormLink linkId="Index" className={styles.logoWrapper}>
-          <Icon>
+          <Icon noWrapper>
             <ThunderstoreLogo />
           </Icon>
         </CyberstormLink>

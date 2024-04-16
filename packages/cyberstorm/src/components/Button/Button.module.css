@@ -16,7 +16,7 @@
   line-height: 1;
   text-align: center;
   background-color: var(--bg-color);
-  transition: ease-in-out var(--animation-length-l);
+  transition: ease-in-out var(--animation-length-s);
   user-select: none;
 
   --font-size: var(--font-size--l);

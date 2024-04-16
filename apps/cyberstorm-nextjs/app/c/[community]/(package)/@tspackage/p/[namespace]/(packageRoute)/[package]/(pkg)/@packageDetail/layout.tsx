@@ -58,17 +58,19 @@ export default function PackageDetailsLayout({
       <Suspense fallback={<p>TODO: SKELETON packageMeta</p>}>
         {packageMeta}
       </Suspense>
-      <WrapperCard
-        title="Categories"
-        content={
-          <div className={styles.categories}>{mappedPackageTagList}</div>
-        }
-        headerIcon={
-          <Icon>
-            <FontAwesomeIcon icon={faBoxes} />
-          </Icon>
-        }
-      />
+      {packageData.categories.length > 0 ? (
+        <WrapperCard
+          title="Categories"
+          content={
+            <div className={styles.categories}>{mappedPackageTagList}</div>
+          }
+          headerIcon={
+            <Icon>
+              <FontAwesomeIcon icon={faBoxes} />
+            </Icon>
+          }
+        />
+      ) : null}
       <Suspense fallback={<p>TODO: SKELETON packageTagList</p>}>
         {packageTagList}
       </Suspense>
