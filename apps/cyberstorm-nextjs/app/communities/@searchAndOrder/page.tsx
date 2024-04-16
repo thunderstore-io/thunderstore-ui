@@ -64,6 +64,7 @@ export default function Page() {
           onChange={(e) => setSearchValue(e.target.value)}
           value={searchValue}
           placeholder="Search communities..."
+          clearValue={() => setSearchValue("")}
           leftIcon={<FontAwesomeIcon icon={faSearch} />}
         />
       </div>

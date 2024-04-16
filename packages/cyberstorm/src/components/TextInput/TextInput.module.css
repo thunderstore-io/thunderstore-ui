@@ -1,4 +1,5 @@
 .root {
+  position: relative;
   display: flex;
   align-items: center;
   width: auto;
@@ -64,10 +65,12 @@
   padding-left: 2.875rem;
 }
 
+.hasClearValue {
+  padding-right: 2.875rem;
+}
+
 .leftIcon {
   position: absolute;
-  width: 1em;
-  height: 0.875em;
   margin: var(--space--16);
   color: var(--color-text--tertiary);
   line-height: normal;
@@ -78,4 +81,12 @@
   position: absolute;
   padding: var(--space--14) var(--space--16);
   color: var(--color-text--tertiary);
+}
+
+.clearValueButton {
+  position: absolute;
+  right: 1rem;
+  display: flex;
+  color: inherit;
+  background: inherit;
 }

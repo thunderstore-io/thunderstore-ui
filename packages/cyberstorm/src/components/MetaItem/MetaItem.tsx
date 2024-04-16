@@ -1,43 +1,33 @@
-"use client";
-import React, { useRef } from "react";
 import styles from "./MetaItem.module.css";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
 
-type _MetaItemProps = {
+export interface MetaItemProps {
   label?: string;
   icon?: JSX.Element;
   colorScheme?: "default" | "accent" | "tertiary";
   size?: "medium" | "large" | "bold_large";
-  ref?: React.Ref<HTMLDivElement>;
-};
-export type MetaItemProps = _MetaItemProps &
-  Omit<React.HTMLProps<HTMLDivElement>, keyof _MetaItemProps>;
+}
 
 /**
  * Cyberstorm MetaItem component
  * Used for displaying a single data point (e.g. an amount
  * of likes or a size of a package) with an icon next to it
  */
-export const MetaItem = React.forwardRef<HTMLDivElement, MetaItemProps>(
-  (props, forwardedRef) => {
-    const { label, icon, colorScheme = "default", size = "medium" } = props;
+export function MetaItem(props: MetaItemProps) {
+  const { label, icon, colorScheme = "default", size = "medium" } = props;
 
-    const fallbackRef = useRef(null);
-    const ref = forwardedRef || fallbackRef;
-
-    return (
-      <div ref={ref} className={classnames(styles.root, getStyle(colorScheme))}>
-        <Icon inline wrapperClasses={styles.icon}>
-          {icon}
-        </Icon>
-        {label ? (
-          <div className={classnames(styles.label, getSize(size))}>{label}</div>
-        ) : null}
-      </div>
-    );
-  }
-);
+  return (
+    <div className={classnames(styles.root, getStyle(colorScheme))}>
+      <Icon inline wrapperClasses={styles.icon}>
+        {icon}
+      </Icon>
+      {label ? (
+        <div className={classnames(styles.label, getSize(size))}>{label}</div>
+      ) : null}
+    </div>
+  );
+}
 
 MetaItem.displayName = "MetaItem";
 

@@ -3,6 +3,8 @@ import React from "react";
 import styles from "./TextInput.module.css";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
 
 export interface TextInputProps
   extends React.ComponentPropsWithoutRef<"input"> {
@@ -10,6 +12,7 @@ export interface TextInputProps
   rightIcon?: JSX.Element;
   color?: string;
   enterHook?: (value: string | number | readonly string[]) => string | void;
+  clearValue?: () => void;
 }
 
 /**
@@ -23,6 +26,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
       rightIcon,
       color,
       enterHook,
+      clearValue,
       ...elementProps
     } = props;
     const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -43,12 +47,23 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
           ref={ref}
           className={classnames(
             styles.input,
-            leftIcon ? styles.hasLeftIcon : null
+            leftIcon ? styles.hasLeftIcon : null,
+            clearValue ? styles.hasClearValue : null
           )}
           value={value}
           onKeyDown={onEnter}
           data-color={color}
         />
+        {clearValue ? (
+          <button
+            onClick={() => clearValue()}
+            className={styles.clearValueButton}
+          >
+            <Icon inline noWrapper>
+              <FontAwesomeIcon icon={faCircleXmark} />
+            </Icon>
+          </button>
+        ) : null}
         {rightIcon ? (
           <Icon inline wrapperClasses={styles.rightIcon}>
             {rightIcon}
