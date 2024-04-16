@@ -22,7 +22,7 @@ export default function Page({ params }: { params: { community: string } }) {
   return (
     <div className={styles.root}>
       <div className={styles.image}>
-        <ImageWithFallback src={community.icon_url} type="community" />
+        <ImageWithFallback src={community.cover_image_url} type="community" />
       </div>
       <div className={styles.info}>
         <Title text={community.name} />

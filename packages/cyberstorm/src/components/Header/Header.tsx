@@ -1,7 +1,4 @@
-import {
-  faArrowUpRight,
-  faGamepadModern,
-} from "@fortawesome/pro-solid-svg-icons";
+import { faGamepadModern } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Header.module.css";
@@ -74,12 +71,7 @@ export function Header() {
               colorScheme="accent"
               href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
             >
-              <Button.ButtonLabel fontWeight="800">
-                Get Manager
-              </Button.ButtonLabel>
-              <Button.ButtonIcon>
-                <FontAwesomeIcon icon={faArrowUpRight} />
-              </Button.ButtonIcon>
+              <Button.ButtonLabel fontWeight="700">Get App</Button.ButtonLabel>
             </Button.Root>
           </li>
           <Suspense fallback={<AvatarButton size="small" />}>
