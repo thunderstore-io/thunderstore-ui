@@ -1,9 +1,5 @@
 import { StoryFn, Meta } from "@storybook/react";
-import {
-  BreadCrumbs,
-  CommunityLink,
-  CommunityPackagesLink,
-} from "@thunderstore/cyberstorm";
+import { BreadCrumbs, CyberstormLink } from "@thunderstore/cyberstorm";
 
 export default {
   title: "Cyberstorm/Components/BreadCrumbs",
@@ -22,10 +18,12 @@ const community = "riskofrain2";
 
 export const FullCrumbs: BreadCrumbsStory = (args) => (
   <BreadCrumbs {...args}>
-    <CommunityLink community={community}>Risk of Rain 2</CommunityLink>
-    <CommunityPackagesLink community={community}>
+    <CyberstormLink linkId="Community" community={community}>
+      Risk of Rain 2
+    </CyberstormLink>
+    <CyberstormLink linkId="CommunityPackages" community={community}>
       Packages
-    </CommunityPackagesLink>
+    </CyberstormLink>
     Popular
   </BreadCrumbs>
 );
@@ -34,15 +32,19 @@ export const HomeOnly: BreadCrumbsStory = (args) => <BreadCrumbs {...args} />;
 
 export const OneCrumb: BreadCrumbsStory = (args) => (
   <BreadCrumbs {...args}>
-    <CommunityLink community={community}>Risk of Rain 2</CommunityLink>
+    <CyberstormLink linkId="Community" community={community}>
+      Risk of Rain 2
+    </CyberstormLink>
   </BreadCrumbs>
 );
 
 export const TwoCrumbs: BreadCrumbsStory = (args) => (
   <BreadCrumbs {...args}>
-    <CommunityLink community={community}>Risk of Rain 2</CommunityLink>
-    <CommunityPackagesLink community={community}>
+    <CyberstormLink linkId="Community" community={community}>
+      Risk of Rain 2
+    </CyberstormLink>
+    <CyberstormLink linkId="CommunityPackages" community={community}>
       Packages
-    </CommunityPackagesLink>
+    </CyberstormLink>
   </BreadCrumbs>
 );

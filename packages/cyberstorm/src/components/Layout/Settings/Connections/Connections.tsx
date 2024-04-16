@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OAuthConnection } from "@thunderstore/dapper/types";
 
 import styles from "./Connections.module.css";
-import { PrivacyPolicyLink } from "../../../Links/Links";
+import { CyberstormLink } from "../../../Links/Links";
 import { SettingItem } from "../../../SettingItem/SettingItem";
 import { Switch } from "../../../Switch/Switch";
 import { Icon } from "../../../Icon/Icon";
@@ -38,7 +38,9 @@ export function Connections(props: ConnectionsProps) {
               This information will not be shared outside of Thunderstore. Read
               more on our{" "}
               <span className={styles.privacyPolicyLink}>
-                <PrivacyPolicyLink>Privacy Policy</PrivacyPolicyLink>
+                <CyberstormLink linkId="PrivacyPolicy">
+                  Privacy Policy
+                </CyberstormLink>
               </span>
               .
             </>

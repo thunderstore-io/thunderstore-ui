@@ -1,9 +1,5 @@
 "use client";
-import {
-  ImageWithFallback,
-  PackageLink,
-  PackageVersionLink,
-} from "@thunderstore/cyberstorm";
+import { ImageWithFallback, CyberstormLink } from "@thunderstore/cyberstorm";
 import styles from "./PackageDependencyDialog.module.css";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
@@ -31,26 +27,28 @@ export default function Page({
           </div>
           <div>
             <div className={styles.title}>
-              <PackageLink
+              <CyberstormLink
+                linkId="Package"
                 community={depData.community_identifier}
                 namespace={depData.namespace}
                 package={depData.name}
               >
                 {depData.name}
-              </PackageLink>
+              </CyberstormLink>
             </div>
             <div className={styles.description}>{depData.description}</div>
             <p className={styles.preferredVersion}>
               Preferred version:{" "}
               <span className={styles.preferredVersion__version}>
-                <PackageVersionLink
+                <CyberstormLink
+                  linkId="PackageVersion"
                   community={depData.community_identifier}
                   namespace={depData.namespace}
                   package={depData.name}
                   version={depData.version_number}
                 >
                   {depData.version_number}
-                </PackageVersionLink>
+                </CyberstormLink>
               </span>
             </p>
           </div>

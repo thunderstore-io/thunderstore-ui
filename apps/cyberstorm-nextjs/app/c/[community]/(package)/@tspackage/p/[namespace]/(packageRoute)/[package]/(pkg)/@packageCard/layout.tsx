@@ -1,5 +1,10 @@
 "use client";
-import { PageHeader, Dialog, Button, TeamLink } from "@thunderstore/cyberstorm";
+import {
+  PageHeader,
+  Dialog,
+  Button,
+  CyberstormLink,
+} from "@thunderstore/cyberstorm";
 import styles from "./PackageDetailLayout.module.css";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
@@ -28,7 +33,8 @@ export default function PackageCardLayout({
   const displayName = params.package.replace(/_/g, " ");
 
   const packageDetailsMeta = [
-    <TeamLink
+    <CyberstormLink
+      linkId="Team"
       key="team"
       community={packageData.community_identifier}
       team={packageData.namespace}
@@ -39,7 +45,7 @@ export default function PackageCardLayout({
         </Button.ButtonIcon>
         <Button.ButtonLabel>{packageData.namespace}</Button.ButtonLabel>
       </Button.Root>
-    </TeamLink>,
+    </CyberstormLink>,
   ];
 
   if (packageData.website_url) {

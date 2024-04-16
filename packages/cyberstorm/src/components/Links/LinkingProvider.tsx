@@ -47,6 +47,7 @@ export const thunderstoreLinkProps: ThunderstoreLinkProps = {
 export interface AnyProps {
   [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   queryParams?: string;
+  className?: string;
 }
 
 type NoRequiredProps = (props: AnyProps) => RE | null;

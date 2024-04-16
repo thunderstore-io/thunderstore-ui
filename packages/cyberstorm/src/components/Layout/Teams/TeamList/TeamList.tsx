@@ -4,7 +4,7 @@ import { usePromise } from "@thunderstore/use-promise";
 
 import styles from "./TeamList.module.css";
 import { Table } from "../../../Table/Table";
-import { TeamSettingsLink } from "../../../Links/Links";
+import { CyberstormLink } from "../../../Links/Links";
 
 export function TeamList() {
   const dapper = useDapper();
@@ -20,9 +20,13 @@ export function TeamList() {
       rows={user.teams.map((team) => [
         {
           value: (
-            <TeamSettingsLink key={team.name} team={team.name}>
+            <CyberstormLink
+              linkId="TeamSettings"
+              key={team.name}
+              team={team.name}
+            >
               <span className={styles.nameColumn}>{team.name}</span>
-            </TeamSettingsLink>
+            </CyberstormLink>
           ),
           sortValue: team.name,
         },

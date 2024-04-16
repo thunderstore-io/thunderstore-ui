@@ -5,7 +5,7 @@ import { usePromise } from "@thunderstore/use-promise";
 import styles from "./TeamProfileLayout.module.css";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import { CommunitiesLink, CommunityLink, TeamLink } from "../../Links/Links";
+import { CyberstormLink } from "../../Links/Links";
 import { PackageSearch } from "../../PackageSearch/PackageSearch";
 
 interface Props {
@@ -41,8 +41,10 @@ export function TeamProfileLayout(props: Props) {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={community}>{community}</CommunityLink>
+          <CyberstormLink linkId="Communities">Communities</CyberstormLink>
+          <CyberstormLink linkId="Community" community={community}>
+            {community}
+          </CyberstormLink>
           Packages
           {namespace}
         </BreadCrumbs>
@@ -50,9 +52,9 @@ export function TeamProfileLayout(props: Props) {
       header={
         <div className={styles.header}>
           Mods uploaded by{" "}
-          <TeamLink community={community} team={namespace}>
+          <CyberstormLink linkId="Team" community={community} team={namespace}>
             {namespace}
-          </TeamLink>
+          </CyberstormLink>
         </div>
       }
       mainContent={

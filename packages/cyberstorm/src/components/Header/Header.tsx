@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Header.module.css";
 import { DevelopersDropDown } from "./DevelopersDropDown";
-import { CommunitiesLink, IndexLink } from "../Links/Links";
+import { CyberstormLink } from "../Links/Links";
 import { ThunderstoreLogo } from "../../svg/svg";
 import { Suspense } from "react";
 import { HeaderUserNav } from "./HeaderUserNav";
@@ -22,13 +22,12 @@ export function Header() {
   return (
     <header className={styles.root}>
       <div className={styles.narrowHeader}>
-        <IndexLink>
-          <Icon wrapperClasses={styles.logoWrapper}>
+        <CyberstormLink linkId="Index" className={styles.logoWrapper}>
+          <Icon>
             <ThunderstoreLogo />
           </Icon>
-        </IndexLink>
+        </CyberstormLink>
         <Button.Root
-          plain
           href="/communities"
           paddingSize="mediumSquare"
           colorScheme="default"
@@ -44,24 +43,22 @@ export function Header() {
       <nav className={classnames(styles.item, styles.wideHeader)}>
         <ul className={styles.nav}>
           <li>
-            <IndexLink>
-              <div className={styles.logoWrapper}>
+            <CyberstormLink linkId="Index" className={styles.logoWrapper}>
+              <Icon noWrapper>
                 <ThunderstoreLogo />
-              </div>
-            </IndexLink>
+              </Icon>
+            </CyberstormLink>
           </li>
           <li>
-            <CommunitiesLink>
-              <Button.Root
-                plain
-                paddingSize="large"
-                colorScheme="transparentDefault"
-              >
-                <Button.ButtonLabel fontSize="large" fontWeight="600">
-                  Communities
-                </Button.ButtonLabel>
-              </Button.Root>
-            </CommunitiesLink>
+            <Button.Root
+              paddingSize="large"
+              colorScheme="transparentDefault"
+              CyberstormLinkId="Communities"
+            >
+              <Button.ButtonLabel fontSize="large" fontWeight="600">
+                Communities
+              </Button.ButtonLabel>
+            </Button.Root>
           </li>
           <li>
             <DevelopersDropDown />
@@ -75,7 +72,6 @@ export function Header() {
             <Button.Root
               paddingSize="large"
               colorScheme="accent"
-              plain
               href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
             >
               <Button.ButtonLabel fontWeight="800">

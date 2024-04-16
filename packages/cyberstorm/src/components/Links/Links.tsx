@@ -5,34 +5,91 @@
  * useContext. LinkingContext can also be used "manually" if one so
  * wishes.
  */
-import React from "react";
-import { LinkingContext, LinkLibrary } from "./LinkingProvider";
+import React, { PropsWithChildren } from "react";
+import {
+  LinkingContext,
+  LinkLibrary,
+  ThunderstoreLinkProps,
+} from "./LinkingProvider";
 
-const wrap = <T extends keyof LinkLibrary>(key: T): LinkLibrary[T] => {
+const wrap = <T extends keyof LinkLibrary>(
+  key: T,
+  className?: string,
+  ref?: React.ForwardedRef<HTMLAnchorElement>,
+  forwardedProps?: object
+): LinkLibrary[T] => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, react/display-name
   return (props: any) => {
     const Links = React.useContext(LinkingContext);
     const Link = Links[key];
-    return <Link {...props} />;
+    return (
+      <Link
+        {...props}
+        className={className}
+        forwardedProps={forwardedProps}
+        ref={ref}
+      />
+    );
   };
 };
 
-export const AnonymousLink = wrap("Anonymous");
-export const CommunitiesLink = wrap("Communities");
-export const CommunityLink = wrap("Community");
-export const CommunityPackagesLink = wrap("CommunityPackages");
-export const IndexLink = wrap("Index");
-export const ManifestValidatorLink = wrap("ManifestValidator");
-export const MarkdownPreviewLink = wrap("MarkdownPreview");
-export const PackageLink = wrap("Package");
-export const PackageDependantsLink = wrap("PackageDependants");
-export const PackageFormatDocsLink = wrap("PackageFormatDocs");
-export const PackageVersionLink = wrap("PackageVersion");
-export const PackageUploadLink = wrap("PackageUpload");
-export const PrivacyPolicyLink = wrap("PrivacyPolicy");
-export const SettingsLink = wrap("Settings");
-export const TeamLink = wrap("Team");
-export const TeamsLink = wrap("Teams");
-export const TeamSettingsLink = wrap("TeamSettings");
-export const TermsOfServiceLink = wrap("TermsOfService");
-export const UserLink = wrap("User");
+interface typeWorkaroundProps extends PropsWithChildren {
+  community?: string;
+  namespace?: string;
+  package?: string;
+  version?: string;
+  team?: string;
+  user?: string;
+  url?: string;
+}
+
+export type CyberstormLinkIds =
+  | "Anonymous"
+  | "Communities"
+  | "Community"
+  | "CommunityPackages"
+  | "Index"
+  | "ManifestValidator"
+  | "MarkdownPreview"
+  | "Package"
+  | "PackageDependants"
+  | "PackageFormatDocs"
+  | "PackageVersion"
+  | "PackageUpload"
+  | "PrivacyPolicy"
+  | "Settings"
+  | "Team"
+  | "Teams"
+  | "TeamSettings"
+  | "TermsOfService"
+  | "User";
+
+interface CyberstormLinkProps
+  extends ThunderstoreLinkProps,
+    typeWorkaroundProps {
+  linkId: CyberstormLinkIds;
+  className?: string;
+  forwardedProps?: object;
+  ref?: React.ForwardedRef<HTMLAnchorElement>;
+}
+
+// This exists for typescripts type checking.
+// And partly because I couldn't be bothered to figure out how to correctly structure the types
+function typeWorkaround(props: typeWorkaroundProps) {
+  return {
+    children: props.children,
+    url: props.url ? props.url : "",
+    community: props.community ? props.community : "",
+    namespace: props.namespace ? props.namespace : "",
+    package: props.package ? props.package : "",
+    version: props.version ? props.version : "",
+    team: props.team ? props.team : "",
+    user: props.user ? props.user : "",
+  };
+}
+
+export function CyberstormLink(props: CyberstormLinkProps) {
+  const { linkId, className, forwardedProps, ref, ...remainingProps } = props;
+  const LinkGen = wrap(linkId, className, ref, forwardedProps);
+  return LinkGen(typeWorkaround(remainingProps));
+}

@@ -11,7 +11,7 @@ import {
   BreadCrumbs,
   Button,
   Dialog,
-  TeamsLink,
+  CyberstormLink,
   SettingItem,
   PageHeader,
 } from "@thunderstore/cyberstorm";
@@ -27,7 +27,7 @@ export default function TeamsLayout(props: { teamList: ReactNode }) {
     <section className={rootStyles.content}>
       <div className={rootStyles.container}>
         <BreadCrumbs>
-          <TeamsLink>Teams</TeamsLink>
+          <CyberstormLink linkId="Teams">Teams</CyberstormLink>
         </BreadCrumbs>
         <header className={rootStyles.pageHeader}>
           <PageHeader title="Teams" />

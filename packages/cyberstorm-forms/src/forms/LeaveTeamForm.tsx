@@ -9,7 +9,7 @@ import {
 } from "@thunderstore/cyberstorm-forms";
 
 import { z } from "zod";
-import { TeamLink } from "@thunderstore/cyberstorm";
+import { CyberstormLink } from "@thunderstore/cyberstorm";
 
 export function LeaveTeamForm(props: {
   dialogOnChange: (v: boolean) => void;
@@ -35,11 +35,11 @@ export function LeaveTeamForm(props: {
       <div className={styles.dialog}>
         <div className={styles.dialogText}>
           You are about to leave the team{" "}
-          <TeamLink team={props.teamName}>
+          <CyberstormLink linkId="Team" team={props.teamName}>
             <span className={styles.leaveDescriptionTeamName}>
               {props.userName}
             </span>
-          </TeamLink>
+          </CyberstormLink>
         </div>
       </div>
       <div className={styles.footer}>

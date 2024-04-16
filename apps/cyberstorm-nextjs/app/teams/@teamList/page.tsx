@@ -1,6 +1,6 @@
 "use client";
 import styles from "./TeamList.module.css";
-import { Table, TeamSettingsLink } from "@thunderstore/cyberstorm";
+import { Table, CyberstormLink } from "@thunderstore/cyberstorm";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 
@@ -18,9 +18,13 @@ export default function Page() {
       rows={user.teams.map((team) => [
         {
           value: (
-            <TeamSettingsLink key={team.name} team={team.name}>
+            <CyberstormLink
+              linkId="TeamSettings"
+              key={team.name}
+              team={team.name}
+            >
               <span className={styles.nameColumn}>{team.name}</span>
-            </TeamSettingsLink>
+            </CyberstormLink>
           ),
           sortValue: team.name,
         },

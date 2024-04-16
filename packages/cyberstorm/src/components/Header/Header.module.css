@@ -38,9 +38,9 @@
 }
 
 .logoWrapper {
+  display: flex;
   width: 1.655rem;
   height: 1.463rem;
-  margin: 0 var(--space--18);
   margin: 0 0.75rem 0 1.25rem;
   color: var(--color-highlight);
 }

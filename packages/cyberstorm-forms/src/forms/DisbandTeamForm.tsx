@@ -12,7 +12,7 @@ import {
   useFormToaster,
 } from "@thunderstore/cyberstorm-forms";
 
-import { TeamLink } from "@thunderstore/cyberstorm";
+import { CyberstormLink } from "@thunderstore/cyberstorm";
 
 export function DisbandTeamForm(props: {
   dialogOnChange: (v: boolean) => void;
@@ -46,11 +46,11 @@ export function DisbandTeamForm(props: {
         />
         <div className={styles.dialogText}>
           You are about to disband the team{" "}
-          <TeamLink team={props.teamName}>
+          <CyberstormLink linkId="Team" team={props.teamName}>
             <span className={styles.kickDescriptionUserName}>
               {props.teamName}
             </span>
-          </TeamLink>
+          </CyberstormLink>
         </div>
       </div>
       <div className={styles.footer}>

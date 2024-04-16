@@ -11,7 +11,7 @@ import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
 import * as Button from "../../Button/";
 import { ImageWithFallback } from "../../ImageWithFallback/ImageWithFallback";
-import { CommunitiesLink, CommunityLink } from "../../Links/Links";
+import { CyberstormLink } from "../../Links/Links";
 import { MetaItem } from "../../MetaItem/MetaItem";
 import { PackageSearch } from "../../PackageSearch/PackageSearch";
 import { formatInteger } from "../../../utils/utils";
@@ -37,10 +37,10 @@ export function CommunityProfileLayout(props: Props) {
       backGroundImageSource={community.background_image_url}
       breadCrumb={
         <BreadCrumbs>
-          <CommunitiesLink>Communities</CommunitiesLink>
-          <CommunityLink community={community.identifier}>
+          <CyberstormLink linkId="Communities">Communities</CyberstormLink>
+          <CyberstormLink linkId="Community" community={community.identifier}>
             {community.name}
-          </CommunityLink>
+          </CyberstormLink>
         </BreadCrumbs>
       }
       header={

@@ -9,7 +9,7 @@ import {
 } from "@thunderstore/cyberstorm-forms";
 
 import { z } from "zod";
-import { UserLink } from "@thunderstore/cyberstorm";
+import { CyberstormLink } from "@thunderstore/cyberstorm";
 
 export function RemoveTeamMemberForm(props: {
   dialogOnChange: (v: boolean) => void;
@@ -35,11 +35,11 @@ export function RemoveTeamMemberForm(props: {
       <div className={styles.dialog}>
         <div className={styles.dialogText}>
           You are about to kick member{" "}
-          <UserLink user={props.userName}>
+          <CyberstormLink linkId="User" user={props.userName}>
             <span className={styles.kickDescriptionUserName}>
               {props.userName}
             </span>
-          </UserLink>
+          </CyberstormLink>
         </div>
       </div>
       <div className={styles.footer}>

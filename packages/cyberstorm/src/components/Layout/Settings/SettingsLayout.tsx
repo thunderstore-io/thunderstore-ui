@@ -2,7 +2,7 @@
 import { useState } from "react";
 import styles from "./SettingsLayout.module.css";
 import { BreadCrumbs } from "../../BreadCrumbs/BreadCrumbs";
-import { SettingsLink } from "../../Links/Links";
+import { CyberstormLink } from "../../Links/Links";
 import { Tabs } from "../../Tabs/Tabs";
 import { Connections } from "./Connections/Connections";
 import { Account } from "./Account/Account";
@@ -27,7 +27,7 @@ export function SettingsLayout() {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <SettingsLink>Settings</SettingsLink>
+          <CyberstormLink linkId="Settings">Settings</CyberstormLink>
         </BreadCrumbs>
       }
       header={<PageHeader title="Settings" />}

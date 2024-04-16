@@ -2,7 +2,7 @@
 import { useState } from "react";
 import styles from "./TeamSettingsLayout.module.css";
 import { BreadCrumbs } from "../../../BreadCrumbs/BreadCrumbs";
-import { TeamSettingsLink, TeamsLink } from "../../../Links/Links";
+import { CyberstormLink } from "../../../Links/Links";
 import { Tabs } from "../../../Tabs/Tabs";
 import { TeamMembers } from "./TeamMembers/TeamMembers";
 import { TeamServiceAccounts } from "./TeamServiceAccounts/TeamServiceAccounts";
@@ -34,8 +34,10 @@ export function TeamSettingsLayout(props: Props) {
     <BaseLayout
       breadCrumb={
         <BreadCrumbs>
-          <TeamsLink>Teams</TeamsLink>
-          <TeamSettingsLink team={teamName}>{teamName}</TeamSettingsLink>
+          <CyberstormLink linkId="Teams">Teams</CyberstormLink>
+          <CyberstormLink linkId="TeamSettings" team={teamName}>
+            {teamName}
+          </CyberstormLink>
         </BreadCrumbs>
       }
       header={<PageHeader title={teamName} />}

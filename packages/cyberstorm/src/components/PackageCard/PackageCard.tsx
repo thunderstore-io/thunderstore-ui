@@ -12,7 +12,7 @@ import {
 import { Tag } from "../Tag/Tag";
 import { classnames, formatInteger } from "../../utils/utils";
 import { PackageListing } from "@thunderstore/dapper/types";
-import { PackageLink, TeamLink } from "../Links/Links";
+import { CyberstormLink } from "../Links/Links";
 import { faLips, faSparkles } from "@fortawesome/pro-solid-svg-icons";
 
 interface Props {
@@ -28,30 +28,36 @@ export function PackageCard(props: Props) {
   return (
     <div className={classnames(styles.root, styles.packageCard__default)}>
       <div className={styles.imageWrapper}>
-        <PackageLink
+        <CyberstormLink
+          linkId="Package"
           community={p.community_identifier}
           namespace={p.namespace}
           package={p.name}
         >
           <img className={styles.image} src={p.icon_url} alt={p.name} />
           {getPackageFlags(p)}
-        </PackageLink>
+        </CyberstormLink>
       </div>
 
       <div className={styles.content}>
-        <PackageLink
+        <CyberstormLink
+          linkId="Package"
           community={p.community_identifier}
           namespace={p.namespace}
           package={p.name}
         >
           <div className={styles.title}>{p.name}</div>
-        </PackageLink>
+        </CyberstormLink>
 
         <div className={styles.author}>
           <span className={styles.author_prefix}>by</span>
-          <TeamLink community={p.community_identifier} team={p.namespace}>
+          <CyberstormLink
+            linkId="Team"
+            community={p.community_identifier}
+            team={p.namespace}
+          >
             <div className={styles.author_label}>{p.namespace}</div>
-          </TeamLink>
+          </CyberstormLink>
         </div>
 
         {p.description ? (

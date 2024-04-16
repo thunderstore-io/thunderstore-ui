@@ -2,7 +2,7 @@ import styles from "./Footer.module.css";
 import * as Button from "../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
-import { CommunitiesLink } from "../Links/Links";
+import { CyberstormLink } from "../Links/Links";
 import {
   faArrowUpRight,
   faBoltLightning,
@@ -54,11 +54,13 @@ export function Footer() {
                   <div className={styles.navTitle}>Thunderstore</div>
                   <ul className={styles.links}>
                     {/* Disabled temporarily, ref. TS-1828 */}
-                    {/* <IndexLink>
+                    {/* <CyberstormLink linkId="Index">
                       <li>Browse</li>
-                    </IndexLink> */}
+                    </CyberstormLink> */}
                     <li>
-                      <CommunitiesLink>Communities</CommunitiesLink>
+                      <CyberstormLink linkId="Communities">
+                        Communities
+                      </CyberstormLink>
                     </li>
                   </ul>
                 </div>
@@ -115,7 +117,6 @@ export function Footer() {
                     </Icon>
                   </div>
                   <Button.Root
-                    plain
                     colorScheme="accent"
                     paddingSize="large"
                     href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"

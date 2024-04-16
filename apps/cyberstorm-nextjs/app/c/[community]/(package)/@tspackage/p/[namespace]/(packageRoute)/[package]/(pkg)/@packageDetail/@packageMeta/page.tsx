@@ -1,8 +1,8 @@
 "use client";
 import {
   CopyButton,
+  CyberstormLink,
   MetaInfoItemList,
-  PackageDependantsLink,
 } from "@thunderstore/cyberstorm";
 import styles from "./PackageMeta.module.css";
 import { useDapper } from "@thunderstore/dapper";
@@ -72,7 +72,8 @@ export default function Page({
           key: "dependants",
           label: "Dependants",
           content: (
-            <PackageDependantsLink
+            <CyberstormLink
+              linkId="PackageDependants"
               community={packageData.community_identifier}
               namespace={packageData.namespace}
               package={packageData.name}
@@ -80,7 +81,7 @@ export default function Page({
               <div className={styles.dependantsLink}>
                 {packageData.dependant_count} other mods
               </div>
-            </PackageDependantsLink>
+            </CyberstormLink>
           ),
         },
       ]}

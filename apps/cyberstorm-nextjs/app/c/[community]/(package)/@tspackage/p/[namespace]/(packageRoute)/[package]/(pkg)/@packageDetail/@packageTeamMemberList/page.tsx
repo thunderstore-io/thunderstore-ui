@@ -1,5 +1,5 @@
 "use client";
-import { Avatar, Icon, TeamLink, UserLink } from "@thunderstore/cyberstorm";
+import { Avatar, Icon, CyberstormLink } from "@thunderstore/cyberstorm";
 import {
   faUsers,
   faCaretRight,
@@ -42,7 +42,8 @@ export default function Page({
         headerIcon={<FontAwesomeIcon icon={faUsers} />}
         headerRightContent={
           packageData.team ? (
-            <TeamLink
+            <CyberstormLink
+              linkId="Team"
               community={packageData.community_identifier}
               team={packageData.team.name}
             >
@@ -52,7 +53,7 @@ export default function Page({
                   <FontAwesomeIcon icon={faCaretRight} />
                 </Icon>
               </div>
-            </TeamLink>
+            </CyberstormLink>
           ) : null
         }
       />
@@ -68,7 +69,7 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
   const { teamMember } = props;
 
   return (
-    <UserLink user={teamMember.username}>
+    <CyberstormLink linkId="User" user={teamMember.username}>
       <div className={styles.item}>
         <Avatar username={teamMember.username} src={teamMember.avatar} />
         <div>
@@ -83,7 +84,7 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
           <div className={styles.itemDescription}>{teamMember.role}</div>
         </div>
       </div>
-    </UserLink>
+    </CyberstormLink>
   );
 }
 
