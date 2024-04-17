@@ -24,6 +24,9 @@ export const getFakeCommunity = async (communityId: string) => {
     icon_url:
       faker.helpers.maybe(() => getFakeImg(300, 450), { probability: 0.9 }) ??
       null,
+    cover_image_url:
+      faker.helpers.maybe(() => getFakeImg(360, 480), { probability: 0.9 }) ??
+      null,
     total_download_count: faker.number.int({ min: 1000000, max: 10000000 }),
     total_package_count: faker.number.int({ min: 0, max: 100000 }),
   };

@@ -48,7 +48,10 @@ export function CommunityProfileLayout(props: Props) {
           title={community.name}
           description={community.description}
           image={
-            <ImageWithFallback src={community.icon_url} type="community" />
+            <ImageWithFallback
+              src={community.cover_image_url}
+              type="community"
+            />
           }
           meta={[
             <MetaItem

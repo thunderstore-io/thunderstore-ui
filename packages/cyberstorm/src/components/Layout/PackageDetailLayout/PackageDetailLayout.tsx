@@ -98,7 +98,7 @@ export function PackageDetailLayout(props: Props) {
 
   return (
     <BaseLayout
-      backGroundImageSource={community.icon_url}
+      backGroundImageSource={community.cover_image_url}
       breadCrumb={
         <BreadCrumbs>
           <CyberstormLink linkId="Communities">Communities</CyberstormLink>

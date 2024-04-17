@@ -22,7 +22,7 @@ export function CommunityCard(props: Props) {
     <div className={styles.root}>
       <a href={`/c/${community.identifier}`}>
         <ImageWithFallback
-          src={community.icon_url}
+          src={community.cover_image_url}
           type="community"
           rootClass={styles.imageWrapper}
         />

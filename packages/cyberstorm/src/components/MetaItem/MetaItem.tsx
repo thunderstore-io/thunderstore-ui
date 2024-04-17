@@ -19,7 +19,7 @@ export function MetaItem(props: MetaItemProps) {
 
   return (
     <div className={classnames(styles.root, getStyle(colorScheme))}>
-      <Icon inline wrapperClasses={styles.icon}>
+      <Icon wrapperClasses={styles.iconWrapper} iconClasses={styles.icon}>
         {icon}
       </Icon>
       {label ? (

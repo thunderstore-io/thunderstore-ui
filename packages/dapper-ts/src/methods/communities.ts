@@ -15,6 +15,7 @@ const communitySchema = z.object({
   discord_url: z.string().nullable(),
   datetime_created: z.string().datetime(),
   background_image_url: z.string().url().nullable(),
+  cover_image_url: z.string().url().nullable(),
   icon_url: z.string().url().nullable(),
   total_download_count: z.number().int(),
   total_package_count: z.number().int(),
