@@ -13,23 +13,19 @@ export default function CommunitiesLayout({
   searchAndOrder: ReactNode;
 }) {
   return (
-    <section className={rootStyles.content}>
-      <div className={rootStyles.container}>
-        <>
-          <BreadCrumbs>Communities</BreadCrumbs>
-          <header className={rootStyles.pageHeader}>
-            <PageHeader title="Communities" />
-          </header>
-          <main className={rootStyles.main}>
-            <Suspense fallback={<SearchAndOrderSkeleton />}>
-              {searchAndOrder}
-            </Suspense>
-            <Suspense fallback={<CommunityListSkeleton />}>
-              {communityList}
-            </Suspense>
-          </main>
-        </>
-      </div>
-    </section>
+    <>
+      <BreadCrumbs>Communities</BreadCrumbs>
+      <header className={rootStyles.pageHeader}>
+        <PageHeader title="Communities" />
+      </header>
+      <main className={rootStyles.main}>
+        <Suspense fallback={<SearchAndOrderSkeleton />}>
+          {searchAndOrder}
+        </Suspense>
+        <Suspense fallback={<CommunityListSkeleton />}>
+          {communityList}
+        </Suspense>
+      </main>
+    </>
   );
 }

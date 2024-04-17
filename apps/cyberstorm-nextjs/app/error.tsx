@@ -13,21 +13,17 @@ export default function Error({
 }) {
   // TODO: Unify and improve errors into a single component
   return (
-    <section className={rootStyles.content}>
-      <div className={rootStyles.container}>
-        <div className={errorStyles.root}>
-          <div className={errorStyles.glitch} data-text={500}>
-            <span>{500}</span>
-          </div>
-          <div className={errorStyles.description}>Internal server error</div>
-          <div className={errorStyles.flavor}>
-            Beep boop. Server something error happens.
-          </div>
-          <Button.Root onClick={() => reset()}>
-            <Button.ButtonLabel>Try again</Button.ButtonLabel>
-          </Button.Root>
-        </div>
+    <div className={errorStyles.root}>
+      <div className={errorStyles.glitch} data-text={500}>
+        <span>{500}</span>
       </div>
-    </section>
+      <div className={errorStyles.description}>Internal server error</div>
+      <div className={errorStyles.flavor}>
+        Beep boop. Server something error happens.
+      </div>
+      <Button.Root onClick={() => reset()}>
+        <Button.ButtonLabel>Try again</Button.ButtonLabel>
+      </Button.Root>
+    </div>
   );
 }

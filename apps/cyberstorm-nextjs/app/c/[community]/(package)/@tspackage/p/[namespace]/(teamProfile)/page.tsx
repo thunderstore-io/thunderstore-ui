@@ -27,38 +27,30 @@ export default function Page({
   };
 
   return (
-    <section className={rootStyles.content}>
-      <div className={rootStyles.container}>
-        <>
-          <BreadCrumbs>
-            <CyberstormLink linkId="Communities">Communities</CyberstormLink>
-            <CyberstormLink linkId="Community" community={community}>
-              {community}
-            </CyberstormLink>
-            Packages
+    <>
+      <BreadCrumbs>
+        <CyberstormLink linkId="Communities">Communities</CyberstormLink>
+        <CyberstormLink linkId="Community" community={community}>
+          {community}
+        </CyberstormLink>
+        Packages
+        {namespace}
+      </BreadCrumbs>
+      <header className={rootStyles.pageHeader}>
+        <div className={styles.header}>
+          Mods uploaded by{" "}
+          <CyberstormLink linkId="Team" community={community} team={namespace}>
             {namespace}
-          </BreadCrumbs>
-          <header className={rootStyles.pageHeader}>
-            <div className={styles.header}>
-              Mods uploaded by{" "}
-              <CyberstormLink
-                linkId="Team"
-                community={community}
-                team={namespace}
-              >
-                {namespace}
-              </CyberstormLink>
-            </div>
-          </header>
-          <main className={rootStyles.main}>
-            <PackageSearch
-              listingType={listingType}
-              packageCategories={filters.package_categories}
-              sections={filters.sections}
-            />
-          </main>
-        </>
-      </div>
-    </section>
+          </CyberstormLink>
+        </div>
+      </header>
+      <main className={rootStyles.main}>
+        <PackageSearch
+          listingType={listingType}
+          packageCategories={filters.package_categories}
+          sections={filters.sections}
+        />
+      </main>
+    </>
   );
 }

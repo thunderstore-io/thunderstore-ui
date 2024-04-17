@@ -14,30 +14,24 @@ export default function ManifestValidatorLayout({
   validator: ReactNode;
 }) {
   return (
-    <section className={rootStyles.content}>
-      <div className={rootStyles.container}>
-        <>
-          <BreadCrumbs>
-            <CyberstormLink linkId="ManifestValidator">
-              Manifest Validator
-            </CyberstormLink>
-          </BreadCrumbs>
-          <header className={rootStyles.pageHeader}>
-            <PageHeader title="Manifest Validator" />
-          </header>
-          <main className={rootStyles.main}>
-            <SettingItem
-              title="Manifest Validator"
-              description="Select a team to validate a package"
-              content={
-                <Suspense fallback={<ValidatorSkeleton />}>
-                  {validator}
-                </Suspense>
-              }
-            />
-          </main>
-        </>
-      </div>
-    </section>
+    <>
+      <BreadCrumbs>
+        <CyberstormLink linkId="ManifestValidator">
+          Manifest Validator
+        </CyberstormLink>
+      </BreadCrumbs>
+      <header className={rootStyles.pageHeader}>
+        <PageHeader title="Manifest Validator" />
+      </header>
+      <main className={rootStyles.main}>
+        <SettingItem
+          title="Manifest Validator"
+          description="Select a team to validate a package"
+          content={
+            <Suspense fallback={<ValidatorSkeleton />}>{validator}</Suspense>
+          }
+        />
+      </main>
+    </>
   );
 }

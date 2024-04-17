@@ -97,6 +97,7 @@ export { TeamServiceAccounts } from "./components/Layout/Teams/TeamSettings/Team
 export { range } from "./utils/utils";
 export { PageHeader } from "./components/Layout/BaseLayout/PageHeader/PageHeader";
 export { SettingItem } from "./components/SettingItem/SettingItem";
+export { AdContainer } from "./components/AdContainer/AdContainer";
 export { TeamList } from "./components/Layout/Teams/TeamList/TeamList";
 export { ImageWithFallback } from "./components/ImageWithFallback/ImageWithFallback";
 export { CollapsibleText } from "./components/CollapsibleText/CollapsibleText";

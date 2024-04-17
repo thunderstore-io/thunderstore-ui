@@ -27,62 +27,58 @@ export default function Page({
   };
 
   return (
-    <section className={rootStyles.content}>
-      <div className={rootStyles.container}>
-        <>
-          <BreadCrumbs>
-            <CyberstormLink linkId="Communities">Communities</CyberstormLink>
-            <CyberstormLink linkId="Community" community={params.community}>
-              {community.name}
-            </CyberstormLink>
-            Packages
-            <CyberstormLink
-              linkId="Team"
-              community={params.community}
-              team={params.namespace}
-            >
-              {params.namespace}
-            </CyberstormLink>
-            <CyberstormLink
-              linkId="Package"
-              community={params.community}
-              namespace={params.namespace}
-              package={params.package}
-            >
-              {params.package}
-            </CyberstormLink>
-            Dependants
-          </BreadCrumbs>
-          <header className={rootStyles.pageHeader}>
-            <div className={styles.header}>
-              Mods that depend on{" "}
-              <CyberstormLink
-                linkId="Package"
-                community={params.community}
-                namespace={params.namespace}
-                package={params.package}
-              >
-                {params.package}
-              </CyberstormLink>
-              {" by "}
-              <CyberstormLink
-                linkId="Team"
-                community={params.community}
-                team={params.namespace}
-              >
-                {params.namespace}
-              </CyberstormLink>
-            </div>
-          </header>
-          <main className={rootStyles.main}>
-            <PackageSearch
-              listingType={listingType}
-              packageCategories={filters.package_categories}
-              sections={filters.sections}
-            />
-          </main>
-        </>
-      </div>
-    </section>
+    <>
+      <BreadCrumbs>
+        <CyberstormLink linkId="Communities">Communities</CyberstormLink>
+        <CyberstormLink linkId="Community" community={params.community}>
+          {community.name}
+        </CyberstormLink>
+        Packages
+        <CyberstormLink
+          linkId="Team"
+          community={params.community}
+          team={params.namespace}
+        >
+          {params.namespace}
+        </CyberstormLink>
+        <CyberstormLink
+          linkId="Package"
+          community={params.community}
+          namespace={params.namespace}
+          package={params.package}
+        >
+          {params.package}
+        </CyberstormLink>
+        Dependants
+      </BreadCrumbs>
+      <header className={rootStyles.pageHeader}>
+        <div className={styles.header}>
+          Mods that depend on{" "}
+          <CyberstormLink
+            linkId="Package"
+            community={params.community}
+            namespace={params.namespace}
+            package={params.package}
+          >
+            {params.package}
+          </CyberstormLink>
+          {" by "}
+          <CyberstormLink
+            linkId="Team"
+            community={params.community}
+            team={params.namespace}
+          >
+            {params.namespace}
+          </CyberstormLink>
+        </div>
+      </header>
+      <main className={rootStyles.main}>
+        <PackageSearch
+          listingType={listingType}
+          packageCategories={filters.package_categories}
+          sections={filters.sections}
+        />
+      </main>
+    </>
   );
 }

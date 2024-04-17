@@ -17,27 +17,23 @@ export default function CommunityProfileLayout({
   params: { community: string };
 }) {
   return (
-    <section className={rootStyles.content}>
-      <div className={rootStyles.container}>
-        <>
-          <BreadCrumbs>
-            <CyberstormLink linkId="Communities">Communities</CyberstormLink>
-            <CyberstormLink linkId="Community" community={params.community}>
-              {params.community}
-            </CyberstormLink>
-          </BreadCrumbs>
-          <header className={rootStyles.pageHeader}>
-            <Suspense fallback={<CommunityCardSkeleton />}>
-              {communityCard}
-            </Suspense>
-          </header>
-          <main className={rootStyles.main}>
-            <Suspense fallback={<PackageSearchSkeleton />}>
-              {packageSearch}
-            </Suspense>
-          </main>
-        </>
-      </div>
-    </section>
+    <>
+      <BreadCrumbs>
+        <CyberstormLink linkId="Communities">Communities</CyberstormLink>
+        <CyberstormLink linkId="Community" community={params.community}>
+          {params.community}
+        </CyberstormLink>
+      </BreadCrumbs>
+      <header className={rootStyles.pageHeader}>
+        <Suspense fallback={<CommunityCardSkeleton />}>
+          {communityCard}
+        </Suspense>
+      </header>
+      <main className={rootStyles.main}>
+        <Suspense fallback={<PackageSearchSkeleton />}>
+          {packageSearch}
+        </Suspense>
+      </main>
+    </>
   );
 }
