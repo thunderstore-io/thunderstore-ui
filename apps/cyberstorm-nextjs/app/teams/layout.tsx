@@ -24,45 +24,43 @@ export default function TeamsLayout(props: { teamList: ReactNode }) {
   const [dialogOpen, setOpenDialog] = useState(false);
 
   return (
-    <section className={rootStyles.content}>
-      <div className={rootStyles.container}>
-        <BreadCrumbs>
-          <CyberstormLink linkId="Teams">Teams</CyberstormLink>
-        </BreadCrumbs>
-        <header className={rootStyles.pageHeader}>
-          <PageHeader title="Teams" />
-        </header>
-        <main className={rootStyles.main}>
-          <SettingItem
-            title="Teams"
-            description="Manage your teams"
-            additionalLeftColumnContent={
-              <Dialog.Root
-                open={dialogOpen}
-                onOpenChange={setOpenDialog}
-                title="Create Team"
-                trigger={
-                  <Button.Root colorScheme="primary" paddingSize="large">
-                    <Button.ButtonLabel>Create team</Button.ButtonLabel>
-                    <Button.ButtonIcon>
-                      <FontAwesomeIcon icon={faPlus} />
-                    </Button.ButtonIcon>
-                  </Button.Root>
-                }
-              >
-                <CreateTeamForm dialogOnChange={setOpenDialog} />
-              </Dialog.Root>
-            }
-            content={
-              <div className={styles.contentWrapper}>
-                <Suspense fallback={<CommunityListSkeleton />}>
-                  {props.teamList}
-                </Suspense>
-              </div>
-            }
-          />
-        </main>
-      </div>
-    </section>
+    <>
+      <BreadCrumbs>
+        <CyberstormLink linkId="Teams">Teams</CyberstormLink>
+      </BreadCrumbs>
+      <header className={rootStyles.pageHeader}>
+        <PageHeader title="Teams" />
+      </header>
+      <main className={rootStyles.main}>
+        <SettingItem
+          title="Teams"
+          description="Manage your teams"
+          additionalLeftColumnContent={
+            <Dialog.Root
+              open={dialogOpen}
+              onOpenChange={setOpenDialog}
+              title="Create Team"
+              trigger={
+                <Button.Root colorScheme="primary" paddingSize="large">
+                  <Button.ButtonLabel>Create team</Button.ButtonLabel>
+                  <Button.ButtonIcon>
+                    <FontAwesomeIcon icon={faPlus} />
+                  </Button.ButtonIcon>
+                </Button.Root>
+              }
+            >
+              <CreateTeamForm dialogOnChange={setOpenDialog} />
+            </Dialog.Root>
+          }
+          content={
+            <div className={styles.contentWrapper}>
+              <Suspense fallback={<CommunityListSkeleton />}>
+                {props.teamList}
+              </Suspense>
+            </div>
+          }
+        />
+      </main>
+    </>
   );
 }

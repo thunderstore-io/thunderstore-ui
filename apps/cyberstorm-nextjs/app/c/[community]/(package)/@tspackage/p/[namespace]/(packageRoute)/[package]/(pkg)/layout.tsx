@@ -16,36 +16,32 @@ export default function PackageLayout({
 }) {
   const displayName = params.package.replace(/_/g, " ");
   return (
-    <section className={rootStyles.content}>
-      <div className={rootStyles.container}>
-        <>
-          <BreadCrumbs>
-            <CyberstormLink linkId="Communities">Communities</CyberstormLink>
-            <CyberstormLink linkId="Community" community={params.community}>
-              {params.community}
-            </CyberstormLink>
-            <CyberstormLink linkId="Team" team={params.namespace}>
-              {params.namespace}
-            </CyberstormLink>
-            {displayName}
-          </BreadCrumbs>
-          <header className={rootStyles.pageHeader}>
-            <Suspense fallback={<p>TODO: SKELETON communityCard</p>}>
-              {packageCard}
-            </Suspense>
-          </header>
-          <main className={rootStyles.main}>
-            <div className={styles.packageContainer}>
-              <Suspense fallback={<p>TODO: SKELETON packageTabs</p>}>
-                {packageTabs}
-              </Suspense>
-              <Suspense fallback={<p>TODO: SKELETON packageDetail</p>}>
-                {packageDetail}
-              </Suspense>
-            </div>
-          </main>
-        </>
-      </div>
-    </section>
+    <>
+      <BreadCrumbs>
+        <CyberstormLink linkId="Communities">Communities</CyberstormLink>
+        <CyberstormLink linkId="Community" community={params.community}>
+          {params.community}
+        </CyberstormLink>
+        <CyberstormLink linkId="Team" team={params.namespace}>
+          {params.namespace}
+        </CyberstormLink>
+        {displayName}
+      </BreadCrumbs>
+      <header className={rootStyles.pageHeader}>
+        <Suspense fallback={<p>TODO: SKELETON communityCard</p>}>
+          {packageCard}
+        </Suspense>
+      </header>
+      <main className={rootStyles.main}>
+        <div className={styles.packageContainer}>
+          <Suspense fallback={<p>TODO: SKELETON packageTabs</p>}>
+            {packageTabs}
+          </Suspense>
+          <Suspense fallback={<p>TODO: SKELETON packageDetail</p>}>
+            {packageDetail}
+          </Suspense>
+        </div>
+      </main>
+    </>
   );
 }
