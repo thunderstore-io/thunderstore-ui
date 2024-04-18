@@ -144,10 +144,9 @@ export function Footer() {
       <div className={classnames(styles.item, styles.footnote)}>
         <div className={styles.footnoteInner}>
           <div className={styles.footnoteCopyright}>
-            © 2024 Thunderstore and contributors. This page is open-source.
-            Please{" "}
+            © 2024 Thunderstore and contributors. This page is{" "}
             <a href="https://github.com/thunderstore-io/thunderstore-ui/">
-              help improve it ❤
+              open-source ❤
             </a>
           </div>
         </div>

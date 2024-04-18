@@ -17,7 +17,8 @@ import { useRouter } from "next/navigation";
 enum SortOptions {
   Name = "name",
   Latest = "-datetime_created",
-  Popular = "-aggregated_fields__download_count",
+  Popular = "-aggregated_fields__package_count",
+  MostDownloads = "-aggregated_fields__download_count",
 }
 
 export default function Page() {

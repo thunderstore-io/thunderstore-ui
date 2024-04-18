@@ -13,15 +13,14 @@
   display: flex;
   flex: 0 1 auto;
   gap: var(--gap--16);
+  align-items: center;
   justify-content: flex-end;
 }
 
 .searchFiltersSortLabel {
-  align-self: center;
-  width: fill-available;
-  width: available;
   color: var(--color-text--tertiary);
   font-weight: var(--font-weight-bold);
+  white-space: nowrap;
 }
 
 .skeletonSearch {
