@@ -13,7 +13,7 @@
 const PUBLIC_PAYLOAD = "eyJjb25maWciOiAicGxhY2Vob2xkZXIifQ==";
 
 type PublicConfigType = {
-  PUBLIC_API_URL: string;
+  PUBLIC_API_DOMAIN: string;
   PUBLIC_SITE_URL: string;
 
   // OAuth
@@ -26,7 +26,7 @@ type PublicConfigType = {
 // Defaults are initialized as a standalone object to benefit from type checks
 // fully.
 const DEFAULT_CONFIG: PublicConfigType = {
-  PUBLIC_API_URL: "https://thunderstore.io",
+  PUBLIC_API_DOMAIN: "https://thunderstore.io",
   PUBLIC_SITE_URL: "https://thunderstore.io",
 
   PUBLIC_AUTH_DISCORD_URL: undefined,
@@ -42,26 +42,39 @@ const PUBLIC_CONFIG: PublicConfigType = {
 
 // To retain dev environment configurability, explicitly set environment
 // variables are patched in when the server is ran in development mode
-const DEV_CONFIG: Partial<PublicConfigType> = {
-  PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-  PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-  PUBLIC_AUTH_DISCORD_URL: process.env.NEXT_PUBLIC_AUTH_DISCORD_URL,
-  PUBLIC_AUTH_GITHUB_URL: process.env.NEXT_PUBLIC_AUTH_GITHUB_URL,
-  PUBLIC_AUTH_OVERWOLF_URL: process.env.NEXT_PUBLIC_AUTH_OVERWOLF_URL,
-  PUBLIC_AUTH_RETURN_URL: process.env.NEXT_PUBLIC_AUTH_RETURN_URL,
-};
-
-if (process.env.NODE_ENV === "development") {
-  for (const key in Object.keys(DEV_CONFIG)) {
-    const val = DEV_CONFIG[key as keyof PublicConfigType];
-    if (val !== undefined) {
-      PUBLIC_CONFIG[key as keyof PublicConfigType] = val;
+function setDevModeVars() {
+  // We can't place process.env calls in any constants, since NextJS will otherwise
+  // bundle that into a pre-build, which then causes these not to update.
+  if (process.env.NODE_ENV === "development") {
+    if (process.env.NEXT_PUBLIC_API_DOMAIN !== undefined) {
+      PUBLIC_CONFIG["PUBLIC_API_DOMAIN"] = process.env.NEXT_PUBLIC_API_DOMAIN;
+    }
+    if (process.env.NEXT_PUBLIC_SITE_URL !== undefined) {
+      PUBLIC_CONFIG["PUBLIC_SITE_URL"] = process.env.NEXT_PUBLIC_SITE_URL;
+    }
+    if (process.env.NEXT_PUBLIC_AUTH_DISCORD_URL !== undefined) {
+      PUBLIC_CONFIG["PUBLIC_AUTH_DISCORD_URL"] =
+        process.env.NEXT_PUBLIC_AUTH_DISCORD_URL;
+    }
+    if (process.env.NEXT_PUBLIC_AUTH_GITHUB_URL !== undefined) {
+      PUBLIC_CONFIG["PUBLIC_AUTH_GITHUB_URL"] =
+        process.env.NEXT_PUBLIC_AUTH_GITHUB_URL;
+    }
+    if (process.env.NEXT_PUBLIC_AUTH_OVERWOLF_URL !== undefined) {
+      PUBLIC_CONFIG["PUBLIC_AUTH_OVERWOLF_URL"] =
+        process.env.NEXT_PUBLIC_AUTH_OVERWOLF_URL;
+    }
+    if (process.env.NEXT_PUBLIC_AUTH_RETURN_URL !== undefined) {
+      PUBLIC_CONFIG["PUBLIC_AUTH_RETURN_URL"] =
+        process.env.NEXT_PUBLIC_AUTH_RETURN_URL;
     }
   }
 }
 
-export function getPublicApiUrl(): string {
-  return PUBLIC_CONFIG.PUBLIC_API_URL;
+setDevModeVars();
+
+export function getPublicApiDomain(): string {
+  return PUBLIC_CONFIG.PUBLIC_API_DOMAIN;
 }
 
 export function getPublicSiteUrl(): string | undefined {

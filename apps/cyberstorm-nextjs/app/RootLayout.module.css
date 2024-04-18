@@ -109,3 +109,9 @@
     flex: 0 0 100%;
   }
 }
+
+@media (max-width: 92.125rem) {
+  .sideContainers > div {
+    display: none;
+  }
+}
