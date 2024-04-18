@@ -10,7 +10,8 @@ import { isStringArray } from "@thunderstore/cyberstorm/src/utils/type_guards";
 enum SortOptions {
   Name = "name",
   Latest = "-datetime_created",
-  Popular = "-aggregated_fields__download_count",
+  Popular = "-aggregated_fields__package_count",
+  MostDownloads = "-aggregated_fields__download_count",
 }
 
 interface Props {

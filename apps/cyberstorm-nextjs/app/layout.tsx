@@ -33,14 +33,17 @@ export default function RootLayout(props: React.PropsWithChildren) {
                       <AdContainer
                         containerId="right-column-1"
                         context={AdContext}
+                        noHeader
                       />
                       <AdContainer
                         containerId="right-column-2"
                         context={AdContext}
+                        noHeader
                       />
                       <AdContainer
                         containerId="right-column-3"
                         context={AdContext}
+                        noHeader
                       />
                     </div>
                   </section>

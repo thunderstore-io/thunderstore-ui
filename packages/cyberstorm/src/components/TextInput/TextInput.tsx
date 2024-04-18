@@ -54,7 +54,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
           onKeyDown={onEnter}
           data-color={color}
         />
-        {clearValue ? (
+        {clearValue && value !== "" ? (
           <button
             onClick={() => clearValue()}
             className={styles.clearValueButton}

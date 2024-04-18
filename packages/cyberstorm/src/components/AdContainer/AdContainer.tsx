@@ -13,10 +13,11 @@ interface Window {
 interface AdContainerProps {
   containerId: string;
   context: React.Context<boolean>;
+  noHeader?: boolean;
 }
 
 export function AdContainer(props: AdContainerProps) {
-  const { containerId, context } = props;
+  const { containerId, context, noHeader = false } = props;
 
   const isLoaded = useContext(context);
 
@@ -44,9 +45,11 @@ export function AdContainer(props: AdContainerProps) {
 
   return (
     <div className={styles.root}>
-      <div className={styles.header}>
-        <p className={styles.adTitle}>AD</p>
-      </div>
+      {noHeader ? null : (
+        <div className={styles.header}>
+          <p className={styles.adTitle}>AD</p>
+        </div>
+      )}
       <div className={styles.fallback}>
         <p className={styles.adText}>
           Thunderstore development is made possible with ads.

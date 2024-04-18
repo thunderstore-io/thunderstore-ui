@@ -261,7 +261,11 @@
 .button__wideDarker {
   justify-content: space-between;
 
-  --bg-color: #27275d;
+  --bg-color: rgb(63 63 136 / 0.55);
+}
+
+.button__wideDarker:hover {
+  --bg-color: rgb(70 70 149 / 0.66);
 }
 
 /* Button padding sizes */
@@ -339,6 +343,7 @@
 /* Button Label */
 
 .ButtonLabel {
+  width: max-content;
   font-weight: var(--font-weight);
   font-size: var(--font-size);
   line-height: 1;

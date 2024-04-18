@@ -12,6 +12,8 @@ import { CurrentUser } from "./user";
 export type GetCommunities = (
   page?: number,
   ordering?:
+    | "aggregated_fields__package_count"
+    | "-aggregated_fields__package_count"
     | "aggregated_fields__download_count"
     | "-aggregated_fields__download_count"
     | "datetime_created"
