@@ -42,6 +42,10 @@
   opacity: 0.9;
 }
 
+.verySmoll {
+  --size: 1.75rem;
+}
+
 .small {
   --size: 2.5rem;
 }

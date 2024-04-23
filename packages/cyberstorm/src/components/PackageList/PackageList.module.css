@@ -19,9 +19,13 @@
   display: flex;
   gap: var(--gap--16);
   align-items: center;
+}
+
+.sortByText {
   color: var(--color-text--tertiary);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size--m);
+  white-space: nowrap;
 }
 
 .packages {
@@ -52,4 +56,19 @@
 .packagePaginationSkeletonBar {
   width: 14rem;
   height: var(--space--36);
+}
+
+@media (max-width: 43.75rem) {
+  .top {
+    flex-direction: column-reverse;
+    gap: 1rem;
+  }
+
+  .order {
+    width: 100%;
+  }
+
+  .sortByText {
+    display: none;
+  }
 }
