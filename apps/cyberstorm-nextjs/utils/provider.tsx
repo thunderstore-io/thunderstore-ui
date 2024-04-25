@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { LinkLibrary } from "@/utils/LinkLibrary";
 import { LinkingProvider } from "@thunderstore/cyberstorm";
 import { SessionProvider } from "@thunderstore/ts-api-react";
-import { getPublicApiDomain } from "@/config";
+import { getPublicApiUrl } from "@/config";
 import { AdProvider } from "./adProvider";
 import Script from "next/script";
 
@@ -12,7 +12,7 @@ function Providers({ children }: React.PropsWithChildren) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <SessionProvider domain={getPublicApiDomain()}>
+    <SessionProvider domain={getPublicApiUrl()}>
       <LinkingProvider value={LinkLibrary}>
         <Script
           id="nitroAds"

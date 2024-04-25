@@ -147,7 +147,7 @@ const useValidateSession = (
     (async () => {
       const res = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_DOMAIN || "https://thunderstore.io"
+          process.env.NEXT_PUBLIC_API_URL || "https://thunderstore.io"
         }/api/experimental/auth/validate/`,
         {
           headers: {

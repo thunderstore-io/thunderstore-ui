@@ -13,7 +13,7 @@
 const PUBLIC_PAYLOAD = "eyJjb25maWciOiAicGxhY2Vob2xkZXIifQ==";
 
 type PublicConfigType = {
-  PUBLIC_API_DOMAIN: string;
+  PUBLIC_API_URL: string;
   PUBLIC_SITE_URL: string;
 
   // OAuth
@@ -26,7 +26,7 @@ type PublicConfigType = {
 // Defaults are initialized as a standalone object to benefit from type checks
 // fully.
 const DEFAULT_CONFIG: PublicConfigType = {
-  PUBLIC_API_DOMAIN: "https://thunderstore.io",
+  PUBLIC_API_URL: "https://thunderstore.io",
   PUBLIC_SITE_URL: "https://thunderstore.io",
 
   PUBLIC_AUTH_DISCORD_URL: undefined,
@@ -46,8 +46,8 @@ function setDevModeVars() {
   // We can't place process.env calls in any constants, since NextJS will otherwise
   // bundle that into a pre-build, which then causes these not to update.
   if (process.env.NODE_ENV === "development") {
-    if (process.env.NEXT_PUBLIC_API_DOMAIN !== undefined) {
-      PUBLIC_CONFIG["PUBLIC_API_DOMAIN"] = process.env.NEXT_PUBLIC_API_DOMAIN;
+    if (process.env.NEXT_PUBLIC_API_URL !== undefined) {
+      PUBLIC_CONFIG["PUBLIC_API_URL"] = process.env.NEXT_PUBLIC_API_URL;
     }
     if (process.env.NEXT_PUBLIC_SITE_URL !== undefined) {
       PUBLIC_CONFIG["PUBLIC_SITE_URL"] = process.env.NEXT_PUBLIC_SITE_URL;
@@ -73,8 +73,8 @@ function setDevModeVars() {
 
 setDevModeVars();
 
-export function getPublicApiDomain(): string {
-  return PUBLIC_CONFIG.PUBLIC_API_DOMAIN;
+export function getPublicApiUrl(): string {
+  return PUBLIC_CONFIG.PUBLIC_API_URL;
 }
 
 export function getPublicSiteUrl(): string | undefined {
