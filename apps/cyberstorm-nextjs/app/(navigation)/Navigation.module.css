@@ -172,7 +172,112 @@
   background: transparent;
 }
 
+.navAccountPopoverCloseButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: #635a9f;
+  font-weight: 900;
+  font-size: 1rem;
+  background: transparent;
+}
+
 .popoverCloseButtonIcon {
+  color: #635a9f;
+  font-weight: 900;
+  font-size: 1rem;
+}
+
+.mobileTSLoginLogo {
+  width: 3.12rem;
+  height: 2.79rem;
+}
+
+.mobileTSLoginLogo > svg {
+  fill: var(--color-cyber-green--60);
+}
+
+.mobileLoginTitle {
+  color: #f5f5f6;
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.mobileLoginList {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.mobileLoginLinkList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.loginLink {
+  display: flex;
+  flex: 1 0 0;
+  gap: 2.5rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  color: #f5f5f6;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.loginLinkDiscord {
+  background: #5865f2;
+}
+
+.loginLinkGithub {
+  background: #333;
+}
+
+.loginLinkOverwolf {
+  background: #d34037;
+}
+
+.navAccountPopoverRoot {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  float: left;
+  border: 1px solid #29295b;
+  border-radius: 0.5rem;
+  background: #15152d;
+  transform: translate(-50%, -50%);
+}
+
+.navAccountPopoverWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: flex-start;
+  align-self: stretch;
+  justify-content: center;
+  padding: 3rem 5.5rem;
+  background: transparent;
+}
+
+.navAccountPopoverCloseButtonIconWrapper {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
   color: #635a9f;
   font-weight: 900;
   font-size: 1rem;
