@@ -2,12 +2,12 @@ import React from "react";
 
 import { DapperProvider } from "@thunderstore/dapper";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getPublicApiDomain } from "@/config";
+import { getPublicApiUrl } from "@/config";
 
 export function ServerDapper(props: React.PropsWithChildren) {
   const dapperConstructor = () =>
     new DapperTs({
-      apiHost: getPublicApiDomain(),
+      apiHost: getPublicApiUrl(),
     });
 
   return (
