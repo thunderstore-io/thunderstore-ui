@@ -53,6 +53,7 @@ export {
 export { CyberstormProviders } from "./components/Providers";
 export { Select, type SelectProps } from "./components/Select/Select";
 export { Tabs, type TabsProps } from "./components/Tabs/Tabs";
+export { Popover } from "./components/Popover/Popover";
 export { Tag, type TagProps } from "./components/Tag/Tag";
 export {
   TextInput,

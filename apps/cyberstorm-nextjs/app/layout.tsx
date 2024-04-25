@@ -5,12 +5,12 @@ import {
   AdContainer,
   CyberstormProviders,
   Footer,
-  Header,
 } from "@thunderstore/cyberstorm";
 import React, { Suspense } from "react";
 import { ServerDapper } from "@/dapper/server";
 import { ClientDapper } from "@/dapper/client";
 import { AdContext } from "@/utils/adProvider";
+import { Navigation } from "./(navigation)/Navigation";
 
 export default function RootLayout(props: React.PropsWithChildren) {
   return (
@@ -21,7 +21,7 @@ export default function RootLayout(props: React.PropsWithChildren) {
             <CyberstormProviders>
               <Providers>
                 <div className={styles.root}>
-                  <Header />
+                  <Navigation />
                   <section className={styles.content}>
                     <div className={styles.sideContainers} />
                     <div className={styles.middleContainer}>

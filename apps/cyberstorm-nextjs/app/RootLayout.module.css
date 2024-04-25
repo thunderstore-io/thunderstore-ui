@@ -10,7 +10,7 @@
   flex-direction: row;
   gap: 3rem;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
   max-width: 100%;
   padding: 2rem 1rem 6rem;
@@ -111,7 +111,7 @@
 }
 
 @media (max-width: 92.125rem) {
-  .sideContainers > div {
+  .sideContainers {
     display: none;
   }
 }

@@ -8,10 +8,12 @@ import { Icon } from "../Icon/Icon";
 
 export interface AvatarButtonProps {
   src?: string | null;
-  size?: "small" | "medium" | "large";
+  size?: "verySmoll" | "small" | "medium" | "large";
   colorScheme?: "default";
   username?: string | null;
   icon?: JSX.Element;
+  popovertarget?: string;
+  popovertargetaction?: string;
 }
 
 /**
@@ -93,6 +95,7 @@ AvatarButton.displayName = "AvatarButton";
 
 const getSize = (scheme: AvatarButtonProps["size"] = "medium") => {
   return {
+    verySmoll: styles.verySmoll,
     small: styles.small,
     medium: styles.medium,
     large: styles.large,

@@ -17,7 +17,7 @@ interface Props {
 
 export const PackageOrder = (props: Props) => (
   <label className={styles.order}>
-    Sort By
+    <p className={styles.sortByText}>Sort By</p>
     <Select
       options={selectOptions}
       value={props.order}
