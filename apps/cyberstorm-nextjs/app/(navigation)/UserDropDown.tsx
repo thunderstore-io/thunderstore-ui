@@ -11,6 +11,7 @@ import {
 } from "@thunderstore/cyberstorm";
 import { AvatarButton } from "@thunderstore/cyberstorm/src/components/Avatar/AvatarButton";
 import { DropDownLink } from "@thunderstore/cyberstorm/src/components/DropDown/DropDownLink";
+import { buildAuthLoginUrl } from "@/utils/ThunderstoreAuth";
 
 interface Props {
   username: string | null;
@@ -51,7 +52,7 @@ export function UserDropDown(props: Props) {
               </a>,
             ]
           : [
-              <a href="/" key="login_link">
+              <a href={buildAuthLoginUrl({ type: "discord" })} key="login_link">
                 <DropDownItem
                   content={
                     <DropDownLink
