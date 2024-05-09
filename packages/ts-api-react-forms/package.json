@@ -23,6 +23,6 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "typescript-plugin-css-modules": "^3.4.0"
+    "typescript-plugin-css-modules": "^5.1.0"
   }
 }

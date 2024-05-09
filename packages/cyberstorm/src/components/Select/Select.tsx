@@ -6,7 +6,7 @@ import * as MenuItem from "../MenuItem/";
 import { faCaretDown } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import * as RadixSelect from "@radix-ui/react-select";
+import { Root, Content, Item, Portal, Trigger } from "@radix-ui/react-select";
 import { classnames } from "../../utils/utils";
 
 type SelectOption<T extends string = string> = {
@@ -46,13 +46,13 @@ export function Select<T extends string>(props: SelectProps<T>) {
 
   return (
     <div {...forwardedProps} className={styles.root}>
-      <RadixSelect.Root
+      <Root
         defaultOpen={defaultOpen}
         value={value}
         onValueChange={onChange}
         disabled={options.length === 0}
       >
-        <RadixSelect.Trigger asChild>
+        <Trigger asChild>
           <Button.Root
             iconAlignment="side"
             colorScheme="wideDarker"
@@ -63,18 +63,18 @@ export function Select<T extends string>(props: SelectProps<T>) {
             </Button.ButtonLabel>
             <Button.ButtonIcon iconColor="darker">{icon}</Button.ButtonIcon>
           </Button.Root>
-        </RadixSelect.Trigger>
+        </Trigger>
 
-        <RadixSelect.Portal>
-          <RadixSelect.Content
+        <Portal>
+          <Content
             position="popper"
             sideOffset={4}
             className={classnames(styles.content, getContentStyle(variant))}
           >
             {selectItemElements}
-          </RadixSelect.Content>
-        </RadixSelect.Portal>
-      </RadixSelect.Root>
+          </Content>
+        </Portal>
+      </Root>
     </div>
   );
 }
@@ -91,7 +91,7 @@ const getContentStyle = (scheme: SelectProps["variant"] = "default") => {
 
 const mapSelectData = (options: SelectOption[]) => {
   return options.map((option, index) => (
-    <RadixSelect.Item value={option.value} key={index} asChild>
+    <Item value={option.value} key={index} asChild>
       <MenuItem.Root>
         {option.leftIcon ? (
           <MenuItem.MenuItemIcon>{option.leftIcon}</MenuItem.MenuItemIcon>
@@ -107,6 +107,6 @@ const mapSelectData = (options: SelectOption[]) => {
           </MenuItem.MenuItemLabel>
         ) : null}
       </MenuItem.Root>
-    </RadixSelect.Item>
+    </Item>
   ));
 };

@@ -3,7 +3,8 @@ import { RequestConfig } from "@thunderstore/thunderstore-api";
 
 import { getCommunities, getCommunity } from "./methods/communities";
 import { getCommunityFilters } from "./methods/communityFilters";
-import { getCurrentUser } from "./methods/currentUser";
+import { getCurrentUser, emptyUser } from "./methods/currentUser";
+export const getEmptyUser = emptyUser;
 import {
   getPackageChangelog,
   getPackageReadme,

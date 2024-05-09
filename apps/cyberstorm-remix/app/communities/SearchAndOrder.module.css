@@ -1,0 +1,51 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--16);
+  justify-content: space-between;
+}
+
+.searchTextInput {
+  width: 50%;
+}
+
+.searchFilters {
+  display: flex;
+  flex: 0 1 auto;
+  gap: var(--gap--16);
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.searchFiltersSortLabel {
+  color: var(--color-text--tertiary);
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+}
+
+.skeletonSearch {
+  height: 2.75rem;
+}
+
+.skeletonSort {
+  width: 13rem;
+  height: 2.75rem;
+}
+
+@media (max-width: 40rem) {
+  .searchTextInput {
+    width: 100%;
+  }
+
+  .root {
+    flex-direction: column;
+  }
+
+  .searchFiltersSortLabel {
+    display: none;
+  }
+
+  .searchFilters {
+    width: 100%;
+  }
+}

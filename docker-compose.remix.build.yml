@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  cyberstorm-remix:
+    build:
+      context: "./"
+      dockerfile: "apps/cyberstorm-remix/Dockerfile"
+      secrets:
+        - "npmrc"
+    image: thunderstore/thunderstore-ui.cyberstorm-remix:${IMAGE_TAG:-dev}
+    ports:
+      - "127.0.0.1:3000:3000"
+
+secrets:
+  npmrc:
+    file: "./build-secrets/.npmrc"

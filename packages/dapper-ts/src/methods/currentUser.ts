@@ -27,16 +27,18 @@ const schema = z.object({
   teams_full: teamSchema.array(),
 });
 
+export const emptyUser = {
+  username: null,
+  capabilities: [],
+  connections: [],
+  rated_packages: [],
+  subscription: { expires: null },
+  teams: [],
+};
+
 export async function getCurrentUser(this: DapperTsInterface) {
-  if (this.config.sessionId === undefined) {
-    return {
-      username: null,
-      capabilities: [],
-      connections: [],
-      rated_packages: [],
-      subscription: { expires: null },
-      teams: [],
-    };
+  if (typeof this.config.sessionId !== "string") {
+    return emptyUser;
   }
 
   const data = await fetchCurrentUser(this.config);

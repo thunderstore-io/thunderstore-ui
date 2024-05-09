@@ -5,7 +5,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styles from "./CopyButton.module.css";
 import { Tooltip } from "../Tooltip/Tooltip";
 import * as Button from "../Button/";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 type CopyButtonProps = {
   text: string;
@@ -63,30 +62,28 @@ export function CopyButton(props: CopyButtonProps) {
   }, [setIsSupported]);
 
   return isSupported ? (
-    <TooltipProvider>
-      <Tooltip
-        content={wasRecentlyCopied ? "Copied!" : "Copy"}
-        open={isTooltipOpen}
-        side="bottom"
-      >
-        <div className={styles.root}>
-          <Button.Root
-            paddingSize={paddingSize}
-            colorScheme={colorScheme}
-            onClick={() => useCopyToClipboard(text, setWasRecentlyCopied)}
-            onMouseOver={() => setIsTooltipOpen(true)}
-            onMouseOut={() => setIsTooltipOpen(false)}
-          >
-            <Button.ButtonIcon>
-              <FontAwesomeIcon
-                icon={wasRecentlyCopied ? faCheck : faClone}
-                className={wasRecentlyCopied ? styles.checkmark : styles.copy}
-              />
-            </Button.ButtonIcon>
-          </Button.Root>
-        </div>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip
+      content={wasRecentlyCopied ? "Copied!" : "Copy"}
+      open={isTooltipOpen}
+      side="bottom"
+    >
+      <div className={styles.root}>
+        <Button.Root
+          paddingSize={paddingSize}
+          colorScheme={colorScheme}
+          onClick={() => useCopyToClipboard(text, setWasRecentlyCopied)}
+          onMouseOver={() => setIsTooltipOpen(true)}
+          onMouseOut={() => setIsTooltipOpen(false)}
+        >
+          <Button.ButtonIcon>
+            <FontAwesomeIcon
+              icon={wasRecentlyCopied ? faCheck : faClone}
+              className={wasRecentlyCopied ? styles.checkmark : styles.copy}
+            />
+          </Button.ButtonIcon>
+        </Button.Root>
+      </div>
+    </Tooltip>
   ) : null;
 }
 

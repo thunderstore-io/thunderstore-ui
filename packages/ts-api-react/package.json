@@ -20,6 +20,6 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "typescript-plugin-css-modules": "^3.4.0"
+    "typescript-plugin-css-modules": "^5.1.0"
   }
 }

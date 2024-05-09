@@ -8,9 +8,9 @@ import {
   faPenToSquare,
   faArrowsRotate,
 } from "@fortawesome/free-solid-svg-icons";
-import { Suspense } from "react";
+import react from "react";
+const { Suspense, use } = react;
 
-import { usePromise } from "@thunderstore/use-promise";
 import { classnames } from "../../utils/utils";
 
 const waitingElement = (
@@ -70,9 +70,7 @@ function Validator(props: {
     return waitingElement;
   }
 
-  const validation = usePromise(validator.validationFunc, [
-    { ...validator.args },
-  ]);
+  const validation = use(validator.validationFunc({ ...validator.args }));
 
   if (validation.status === "success") {
     if (setStatus) setStatus("success");

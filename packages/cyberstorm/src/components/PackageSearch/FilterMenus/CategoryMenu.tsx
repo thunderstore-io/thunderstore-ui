@@ -1,3 +1,4 @@
+"use client";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Checkbox from "@radix-ui/react-checkbox";

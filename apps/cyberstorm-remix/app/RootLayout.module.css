@@ -1,0 +1,117 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  gap: 3rem;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  padding: 2rem 1rem 6rem;
+}
+
+.middleContainer {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 83.5rem;
+}
+
+.sideContainers {
+  position: sticky;
+  top: var(--header-height);
+  display: flex;
+  flex-basis: 0;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 2rem;
+  align-items: flex-start;
+  padding-top: 1rem;
+}
+
+.background {
+  --w: 56vw;
+
+  position: absolute;
+  top: calc(-1 * var(--header-height));
+  right: 0;
+
+  z-index: -1;
+  width: var(--w);
+  height: calc(var(--w) * 0.45);
+}
+
+.backgroundImg {
+  --w: 56vw;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--w);
+  height: calc(var(--w) * 0.45);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: cover;
+
+  --gradients:
+    linear-gradient(90deg, transparent 0%, white 70%, transparent 100%),
+    linear-gradient(180deg, white 40%, transparent 95%);
+
+  /* stylelint-disable property-no-vendor-prefix */
+  -webkit-mask-image: var(--gradients);
+  -webkit-mask-composite: source-in;
+  /* stylelint-enable property-no-vendor-prefix */
+  mask-image: var(--gradients);
+  mask-composite: intersect;
+  opacity: 0.3;
+}
+
+.pageHeader {
+  padding: 2.5rem 0;
+}
+
+.pageBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.layoutSidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 60rem) {
+  .layoutSidebar {
+    flex-flow: row wrap;
+  }
+
+  .sidebar {
+    flex: 0 1 16rem;
+  }
+
+  .main {
+    flex: 1;
+  }
+
+  .fullWidth {
+    flex: 0 0 100%;
+  }
+}
+
+@media (max-width: 92.125rem) {
+  .sideContainers {
+    display: none;
+  }
+}

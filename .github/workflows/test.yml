@@ -63,6 +63,8 @@ jobs:
     env:
       NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
       NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+      PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+      PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node ${{ needs.get-node-version.outputs.node-version }}
@@ -94,6 +96,8 @@ jobs:
         run: yarn workspace @thunderstore/use-promise build
       - name: Build @thunderstore/cyberstorm-nextjs
         run: yarn workspace @thunderstore/cyberstorm-nextjs build
+      - name: Build @thunderstore/cyberstorm-remix
+        run: yarn workspace @thunderstore/cyberstorm-remix build
 
 #  TODO: Enable but as a separate job once needed
 #  deploy:

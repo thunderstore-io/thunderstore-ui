@@ -5,7 +5,8 @@
  */
 
 // Changed for Thunderstore: use lodash instead of fast-deep-equal
-import { isEqual } from "lodash";
+import lodash from "lodash";
+const { isEqual } = lodash;
 
 interface PromiseCache {
   promise: Promise<void>;
