@@ -4,6 +4,7 @@ export interface RequestConfig {
   // TODO: This should not be explicitly bound to a session ID but rather just
   //       accept any authorization header. Noting as currently out of scope.
   sessionId?: string;
+  csrfToken?: string;
 }
 
 export * from "./fetch/community";
@@ -28,5 +29,8 @@ export * from "./fetch/teamServiceAccountRemove";
 export * from "./fetch/userDelete";
 export * from "./fetch/teamDisbandTeam";
 export * from "./fetch/teamEditMember";
+export * from "./fetch/packageLike";
+export * from "./fetch/packageEditCategories";
+export * from "./fetch/packageDeprecate";
 export * from "./fetch/teamRemoveMember";
 export * from "./errors";

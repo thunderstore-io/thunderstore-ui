@@ -1,10 +1,12 @@
 "use client";
-import { Alert, Button, Tag, TextInput } from "@thunderstore/cyberstorm";
-import styles from "./PackageManagementForm.module.css";
+import { Button } from "@thunderstore/cyberstorm";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
-import { faCircleExclamation } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  PackageDeprecateAction,
+  PackageEditForm,
+} from "@thunderstore/cyberstorm-forms";
+import { useState } from "react";
 
 export default function Page({
   params,
@@ -12,49 +14,60 @@ export default function Page({
   params: { community: string; namespace: string; package: string };
 }) {
   const dapper = useDapper();
-  const packageData = usePromise(dapper.getPackageListingDetails, [
+  const packageDataInitial = usePromise(dapper.getPackageListingDetails, [
     params.community,
     params.namespace,
     params.package,
   ]);
+  const communityData = usePromise(dapper.getCommunityFilters, [
+    params.community,
+  ]);
+  const options = communityData.package_categories.map((cat) => {
+    return { label: cat.name, value: cat.slug };
+  });
+
+  const [packageData, setPackageData] = useState(packageDataInitial);
+
+  // TODO: Convert to using usePromise's cache replace, when it can handle manual busts
+  // Or React Query stuff
+  async function useUpdatePackageData() {
+    const dapper = useDapper();
+    const packageDataUpdate = await dapper.getPackageListingDetails(
+      params.community,
+      params.namespace,
+      params.package
+    );
+    setPackageData(packageDataUpdate);
+  }
 
   return (
-    <div className={styles.root}>
-      <div className={styles.section}>
-        <Alert
-          icon={<FontAwesomeIcon icon={faCircleExclamation} />}
-          content={
-            "Changes might take several minutes to show publicly! Info shown below is always up to date."
-          }
-          variant="info"
-        />
-        <div className={styles.title}>Package status</div>
-        <div className={styles.statusTag}>
-          <Tag
-            size="medium"
-            label={packageData.is_deprecated ? "DEPRECATED" : "ACTIVE"}
-            colorScheme={packageData.is_deprecated ? "yellow" : "success"}
-          />
-        </div>
-      </div>
-      <div className={styles.section}>
-        <div className={styles.title}>Edit categories</div>
-        <TextInput />
-      </div>
-      <div className={styles.footer}>
-        {packageData.is_deprecated ? (
-          <Button.Root paddingSize="large" colorScheme="default">
+    <PackageEditForm
+      options={options}
+      community={params.community}
+      namespace={params.namespace}
+      package={params.package}
+      current_categories={packageData.categories}
+      isDeprecated={packageData.is_deprecated}
+      packageDataUpdateTrigger={useUpdatePackageData}
+      deprecationButton={
+        <Button.Root
+          type="button"
+          onClick={PackageDeprecateAction({
+            packageName: params.package,
+            namespace: packageData.namespace,
+            isDeprecated: packageData.is_deprecated,
+            packageDataUpdateTrigger: useUpdatePackageData,
+          })}
+          colorScheme={packageData.is_deprecated ? "warning" : "default"}
+          paddingSize="large"
+        >
+          {packageData.is_deprecated ? (
             <Button.ButtonLabel>Undeprecate</Button.ButtonLabel>
-          </Button.Root>
-        ) : (
-          <Button.Root paddingSize="large" colorScheme="warning">
+          ) : (
             <Button.ButtonLabel>Deprecate</Button.ButtonLabel>
-          </Button.Root>
-        )}
-        <Button.Root paddingSize="large" colorScheme="success">
-          <Button.ButtonLabel>Save changes</Button.ButtonLabel>
+          )}
         </Button.Root>
-      </div>
-    </div>
+      }
+    />
   );
 }

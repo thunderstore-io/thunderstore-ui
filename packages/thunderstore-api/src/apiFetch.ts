@@ -29,7 +29,12 @@ export async function apiFetch2(args: apiFetchArgs) {
   return response.json();
 }
 
-export function apiFetch(config: RequestConfig, path: string, query?: string) {
+export function apiFetch(
+  config: RequestConfig,
+  path: string,
+  query?: string,
+  request?: Omit<RequestInit, "headers">
+) {
   // TODO: Update the apiFetch signature to take in object args instead
   //       of positional arguments and then merge apiFetch and apiFetch2
   //       together. Someone else's job for now.
@@ -37,12 +42,16 @@ export function apiFetch(config: RequestConfig, path: string, query?: string) {
     config,
     path,
     query,
+    request,
   });
 }
 
 function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {
   return config.sessionId
-    ? { Authorization: `Session ${config.sessionId}` }
+    ? {
+        Authorization: `Session ${config.sessionId}`,
+        "X-Csrftoken": config.csrfToken ? config.csrfToken : "",
+      }
     : {};
 }
 
