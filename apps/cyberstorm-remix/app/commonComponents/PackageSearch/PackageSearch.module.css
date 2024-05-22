@@ -1,0 +1,36 @@
+.root,
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: var(--gap--32);
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--24);
+  align-items: flex-start;
+}
+
+.sidebar {
+  position: sticky;
+  top: var(--header-height);
+  display: flex;
+  flex-basis: 20%;
+  flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.skeletonSearch {
+  width: auto;
+  height: 2.75rem;
+}
+
+.skeletonFilters {
+  height: 18rem;
+}
+
+.skeletonContent {
+  height: 38rem;
+}

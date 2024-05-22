@@ -1,6 +1,8 @@
 "use client";
 import { ReactNode } from "react";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
+const { Root, Trigger, Portal, Content, Arrow } = RadixTooltip;
+
 import styles from "./Tooltip.module.css";
 
 export interface TooltipProps {
@@ -28,10 +30,10 @@ export function Tooltip({
   open,
 }: TooltipProps) {
   return (
-    <RadixTooltip.Root open={open}>
-      <RadixTooltip.Trigger asChild>{children}</RadixTooltip.Trigger>
-      <RadixTooltip.Portal>
-        <RadixTooltip.Content
+    <Root open={open}>
+      <Trigger asChild>{children}</Trigger>
+      <Portal>
+        <Content
           className={styles.root}
           sideOffset={sideOffset ? sideOffset : 5}
           side={side ? side : "right"}
@@ -42,9 +44,9 @@ export function Tooltip({
           }
         >
           {content}
-          <RadixTooltip.Arrow className={styles.arrow} />
-        </RadixTooltip.Content>
-      </RadixTooltip.Portal>
-    </RadixTooltip.Root>
+          <Arrow className={styles.arrow} />
+        </Content>
+      </Portal>
+    </Root>
   );
 }

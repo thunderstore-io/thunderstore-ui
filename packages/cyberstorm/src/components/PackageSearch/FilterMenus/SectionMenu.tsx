@@ -1,3 +1,4 @@
+"use client";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import { Section } from "@thunderstore/dapper/types";
 import { Dispatch, SetStateAction } from "react";

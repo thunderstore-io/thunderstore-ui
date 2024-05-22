@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  cyberstorm-remix:
+    container_name: cyberstorm-remix
+    command: /bin/sh -c "tail -f /dev/null"
+    # command: yarn workspace @thunderstore/cyberstorm-remix dev --port 3000 --host 0.0.0.0
+    build:
+      context: "./"
+      dockerfile: "apps/cyberstorm-remix/Dockerfile.development"
+      secrets:
+        - "npmrc"
+    image: thunderstore/thunderstore-ui.cyberstorm-remix-development:${IMAGE_TAG:-dev}
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./apps/cyberstorm-remix:/app/apps/cyberstorm-remix
+      - ./packages:/app/packages
+    networks:
+        - thunderstore_default
+    environment:
+      - NODE_ENV=development
+
+  remix-nginx-proxy:
+    image: nginx
+    container_name: remix-nginx-proxy
+    restart: always
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx/www:/var/www:ro
+      - ./nginx/conf.d/remixdefault.conf:/etc/nginx/conf.d/default.conf:ro
+      # - ./ssl:/etc/nginx/ssl:ro
+      # - ./snippets:/etc/nginx/snippets:ro
+      # - ./protect:/etc/nginx/protect:ro
+    hostname: thunderstore.temp
+    networks:
+        - thunderstore_default
+
+secrets:
+  npmrc:
+    file: "./build-secrets/.npmrc"
+
+networks:
+  thunderstore_default:
+    name: thunderstore_default
+    external: true

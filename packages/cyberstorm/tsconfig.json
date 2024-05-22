@@ -27,7 +27,8 @@
       {
         "name": "typescript-plugin-css-modules"
       }
-    ]
+    ],
+    "types": ["react/next"]
   },
   "include": ["./src/**/*.tsx", "./src/**/*.ts"],
   "exclude": ["node_modules"]
