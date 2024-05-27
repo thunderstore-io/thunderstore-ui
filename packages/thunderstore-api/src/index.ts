@@ -6,6 +6,7 @@ export interface RequestConfig {
   sessionId?: string;
 }
 
+export * from "./fetch/dynamicHTML";
 export * from "./fetch/community";
 export * from "./fetch/communityFilters";
 export * from "./fetch/communityList";
