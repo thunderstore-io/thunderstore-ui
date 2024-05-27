@@ -3,6 +3,7 @@ import { installGlobals } from "@remix-run/node";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { cjsInterop } from "vite-plugin-cjs-interop";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 installGlobals();
 
@@ -53,10 +54,16 @@ export default defineConfig({
         // "@some-scope/**",
       ],
     }),
+    sentryVitePlugin({
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+    }),
   ],
   build: {
     // For building the assets under right path.
     // TODO: Remove when moving fully under TS main domain.
     assetsDir: "cyberstorm",
+    sourcemap: true,
   },
 });

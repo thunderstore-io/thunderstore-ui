@@ -24,6 +24,8 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { CurrentUser } from "@thunderstore/dapper/types";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 
+import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
+
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
@@ -40,7 +42,9 @@ export const meta: MetaFunction = () => {
 declare global {
   interface Window {
     ENV: {
+      PUBLIC_SITE_URL: string;
       PUBLIC_API_URL: string;
+      SENTRY_DSN: string | undefined;
     };
     Dapper: DapperTs;
   }
@@ -52,7 +56,9 @@ export async function loader() {
   return {
     envStuff: {
       ENV: {
+        PUBLIC_SITE_URL: process.env.PUBLIC_SITE_URL,
         PUBLIC_API_URL: process.env.PUBLIC_API_URL,
+        SENTRY_DSN: process.env.SENTRY_DSN,
       },
     },
     currentUser: await dapper.getCurrentUser(),
@@ -65,7 +71,9 @@ export async function clientLoader() {
   return {
     envStuff: {
       ENV: {
+        PUBLIC_SITE_URL: window.ENV.PUBLIC_SITE_URL,
         PUBLIC_API_URL: window.ENV.PUBLIC_API_URL,
+        SENTRY_DSN: window.ENV.SENTRY_DSN,
       },
     },
     currentUser: await dapper.getCurrentUser(),
@@ -75,10 +83,16 @@ export async function clientLoader() {
 // REMIX TODO: Do we want to force a hydration at the root level?
 // clientLoader.hydrate = true;
 
-export default function Root() {
+function Root() {
   const loaderOutput = useLoaderData<typeof loader | typeof clientLoader>();
   const parsedLoaderOutput: {
-    envStuff: { ENV: { PUBLIC_API_URL: string } };
+    envStuff: {
+      ENV: {
+        PUBLIC_API_URL: string;
+        PUBLIC_SITE_URL: string;
+        SENTRY_DSN: string | undefined;
+      };
+    };
     sessionId: string | null;
     currentUser: CurrentUser;
   } = JSON.parse(JSON.stringify(loaderOutput));
@@ -149,6 +163,9 @@ export function ErrorBoundary() {
   //   currentUser: CurrentUser;
   // } = JSON.parse(JSON.stringify(loaderOutput));
   const error = useRouteError();
+  if (process.env.NODE_ENV === "production") {
+    captureRemixErrorBoundaryError(error);
+  }
   const isResponseError = isRouteErrorResponse(error);
   return (
     <html lang="en">
@@ -214,3 +231,5 @@ export function ErrorBoundary() {
     </html>
   );
 }
+
+export default withSentry(Root);
