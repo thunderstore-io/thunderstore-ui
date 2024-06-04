@@ -14,6 +14,7 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
     volumes:
+      - remix_node_modules:/app/apps/cyberstorm-remix/node_modules
       - ./apps/cyberstorm-remix:/app/apps/cyberstorm-remix
       - ./packages:/app/packages
     networks:
@@ -37,6 +38,9 @@ services:
     hostname: thunderstore.temp
     networks:
         - thunderstore_default
+
+volumes:
+  remix_node_modules:
 
 secrets:
   npmrc:

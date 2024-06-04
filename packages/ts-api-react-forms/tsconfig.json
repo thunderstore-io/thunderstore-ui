@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "ES2020",
+    "target": "ESNext",
+    "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "node",
     "removeComments": true,
@@ -27,7 +27,8 @@
       {
         "name": "typescript-plugin-css-modules"
       }
-    ]
+    ],
+    "types": ["react/next"]
   },
   "include": ["./src/**/*.tsx", "./src/**/*.ts"],
   "exclude": ["node_modules"]

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Implementation of Dapper using Thunderstore API as the data source",
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "type": "module",
   "main": "dist/thunderstore-dapper-ts.cjs.js",
   "module": "dist/thunderstore-dapper-ts.esm.js",
   "types": "dist/thunderstore-dapper-ts.cjs.d.ts",
@@ -16,11 +17,12 @@
     "watch": "jest --watch"
   },
   "dependencies": {
+    "@babel/runtime": "^7.17.0",
     "@thunderstore/dapper": "^0.1.0",
     "@thunderstore/thunderstore-api": "^0.1.0",
     "jest": "^29.6.3",
     "ts-jest": "^29.1.1",
+    "typescript": "^5.1.6",
     "zod": "^3.22.2"
-  },
-  "devDependencies": {}
+  }
 }

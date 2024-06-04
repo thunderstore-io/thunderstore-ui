@@ -2,6 +2,7 @@
   "name": "@thunderstore/dapper",
   "version": "0.1.0",
   "description": "Data Provider using React Context for Thunderstore",
+  "type": "module",
   "main": "dist/thunderstore-dapper.cjs.js",
   "module": "dist/thunderstore-dapper.esm.js",
   "exports": {
@@ -30,7 +31,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
-  "devDependencies": {},
   "preconstruct": {
     "entrypoints": [
       "index.ts",
