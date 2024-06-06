@@ -64,6 +64,5 @@ export default defineConfig({
     // For building the assets under right path.
     // TODO: Remove when moving fully under TS main domain.
     assetsDir: "cyberstorm",
-    sourcemap: true,
   },
 });
