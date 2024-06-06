@@ -1,5 +1,6 @@
 # For running @thunderstore/cyberstorm-remix in Docker container.
 FROM node:18-alpine3.17
+RUN apk add --no-cache libc6-compat
 
 ENV NODE_ENV development
 
@@ -12,7 +13,7 @@ COPY apps/cyberstorm-remix ./apps/cyberstorm-remix
 RUN chown node:node -R /app
 
 USER node
-RUN --mount=type=secret,id=npmrc,target=/home/node/.npmrc,uid=1000 yarn install --frozen-lockfile
+RUN --mount=type=secret,id=npmrc,target=/home/node/.npmrc,uid=1000 yarn install --frozen-lockfile --production=false
 
 ENV PORT 3000
 EXPOSE 3000

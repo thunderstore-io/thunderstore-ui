@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Cyberstorm styles",
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/cyberstorm-styles",
+  "type": "module",
   "main": "dist/thunderstore-cyberstorm-styles.cjs.js",
   "module": "dist/thunderstore-cyberstorm-styles.esm.js",
   "types": "dist/thunderstore-cyberstorm-styles.cjs.d.ts",
   "files": [
     "dist"
-  ],
-  "scripts": {}
+  ]
 }

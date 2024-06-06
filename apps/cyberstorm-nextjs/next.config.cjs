@@ -1,4 +1,5 @@
-const withPreconstruct = require("@preconstruct/next");
+import { default as withPreconstruct } from "@preconstruct/next";
+import bundleAnalyzer from "@next/bundle-analyzer";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = withPreconstruct({
@@ -9,7 +10,7 @@ const nextConfig = withPreconstruct({
 let result = nextConfig;
 
 if (process.env.ANALYZE === "true") {
-  const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  const withBundleAnalyzer = bundleAnalyzer({
     enabled: process.env.ANALYZE === "true",
   });
   result = withBundleAnalyzer(result);

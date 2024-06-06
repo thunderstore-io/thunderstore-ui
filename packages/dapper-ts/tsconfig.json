@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "ES2020",
+    "target": "ESNext",
+    "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "node",
     "removeComments": true,

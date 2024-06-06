@@ -14,8 +14,8 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
+    "@babel/runtime": "^7.17.0",
     "@faker-js/faker": "^8.0.2",
     "@thunderstore/dapper": "^0.1.0"
-  },
-  "devDependencies": {}
+  }
 }

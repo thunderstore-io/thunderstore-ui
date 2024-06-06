@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Cyberstorm form components",
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "type": "module",
   "main": "dist/thunderstore-cyberstorm-forms.cjs.js",
   "module": "dist/thunderstore-cyberstorm-forms.esm.js",
   "types": "dist/thunderstore-cyberstorm-forms.cjs.d.ts",
@@ -14,14 +15,27 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
+    "@babel/runtime": "^7.17.0",
+    "@fortawesome/fontawesome-svg-core": "6.2.0",
+    "@fortawesome/free-solid-svg-icons": "6.2.0",
+    "@fortawesome/pro-solid-svg-icons": "6.2.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@radix-ui/react-select": "^2.0.0",
     "@thunderstore/cyberstorm": "*",
+    "@thunderstore/dapper": "^0.1.0",
+    "@thunderstore/thunderstore-api": "*",
+    "@thunderstore/ts-api-react-actions": "*",
+    "@thunderstore/ts-api-react-forms": "*",
+    "@thunderstore/use-promise": "^0.1.0",
     "@types/react": "^18.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
+    "styled-components": "^6.0.0-rc.5",
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "typescript": "^5.1.6",
     "typescript-plugin-css-modules": "^5.1.0"
   }
 }
