@@ -1,4 +1,4 @@
-import Router from "next/router";
+// import Router from "next/router";
 import {
   createContext,
   Dispatch,
@@ -182,7 +182,7 @@ const useValidateSession = (
         _storage.removeValue(EMAIL_KEY);
         _storage.removeValue(ID_KEY);
         _storage.removeValue(USERNAME_KEY);
-        Router.push("/");
+        // Router.push("/");
         return;
       }
 

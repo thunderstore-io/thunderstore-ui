@@ -63,6 +63,6 @@ export default defineConfig({
   build: {
     // For building the assets under right path.
     // TODO: Remove when moving fully under TS main domain.
-    assetsDir: "cyberstorm",
+    assetsDir: "__remix",
   },
 });

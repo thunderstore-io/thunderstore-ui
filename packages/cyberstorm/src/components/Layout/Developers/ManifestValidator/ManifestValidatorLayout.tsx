@@ -14,6 +14,7 @@ import { Select } from "../../../Select/Select";
 import { isRecord, isStringArray } from "../../../../utils/type_guards";
 import { usePromise } from "@thunderstore/use-promise";
 import { useDapper } from "@thunderstore/dapper";
+import { Buffer } from "buffer";
 
 interface HTMLResponse {
   success?: string;
