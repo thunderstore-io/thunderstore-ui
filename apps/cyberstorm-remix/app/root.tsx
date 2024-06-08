@@ -23,6 +23,7 @@ import { LinkingProvider } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { CurrentUser } from "@thunderstore/dapper/types";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
+import { replaceDjangoUnicode } from "cyberstorm/utils/utils";
 
 import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 
@@ -62,6 +63,12 @@ export async function loader() {
       },
     },
     currentUser: await dapper.getCurrentUser(),
+    // dynamicHeaders: await dapper.getDynamicHTML("cyberstorm_content_left"),
+    dynamicBodyBeginning: await dapper.getDynamicHTML(
+      "cyberstorm_body_beginning"
+    ),
+    // dynamicLeftColumn: await dapper.getDynamicHTML("cyberstorm_header"),
+    // dynamicRightColumn: await dapper.getDynamicHTML("cyberstorm_content_right"),
   };
 }
 
@@ -77,6 +84,12 @@ export async function clientLoader() {
       },
     },
     currentUser: await dapper.getCurrentUser(),
+    // dynamicHeader: await dapper.getDynamicHTML("cyberstorm_content_left"),
+    dynamicBodyBeginning: await dapper.getDynamicHTML(
+      "cyberstorm_body_beginning"
+    ),
+    // dynamicLeftColumn: await dapper.getDynamicHTML("cyberstorm_header"),
+    // dynamicRightColumn: await dapper.getDynamicHTML("cyberstorm_content_right"),
   };
 }
 
@@ -95,7 +108,16 @@ function Root() {
     };
     sessionId: string | null;
     currentUser: CurrentUser;
+    // dynamicHeader: string[];
+    dynamicBodyBeginning: string[];
+    // dynamicLeftColumn: string[];
+    // dynamicRightColumn: string[];
   } = JSON.parse(JSON.stringify(loaderOutput));
+  console.log(
+    parsedLoaderOutput.dynamicBodyBeginning.map((dhtml) =>
+      replaceDjangoUnicode(dhtml)
+    )
+  );
 
   return (
     <html lang="en">
@@ -104,6 +126,7 @@ function Root() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        {/* {parsedLoaderOutput.dynamicHeader} */}
       </head>
       <body>
         <ScrollRestoration />
@@ -116,7 +139,14 @@ function Root() {
         />
         <Scripts />
         {/* REMIX TODO: This Ads script seem to break hydration for styles in the head. */}
-        {/* <script async src={`https://s.nitropay.com/ads-785.js`} /> */}
+        <div
+          dangerouslySetInnerHTML={{
+            __html: parsedLoaderOutput.dynamicBodyBeginning.map((dhtml) =>
+              replaceDjangoUnicode(dhtml)
+            ),
+          }}
+        />
+
         <LinkingProvider value={LinkLibrary}>
           <TooltipProvider>
             <div className={styles.root}>
