@@ -1,24 +1,17 @@
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+
 interface Props {
   type: "discord" | "github" | "overwolf";
   nextUrl?: string;
 }
 
 export function buildAuthLoginUrl(props: Props) {
-  const siteUrl =
-    typeof process !== "undefined" &&
-    process.env &&
-    process.env.PUBLIC_API_URL &&
-    typeof process.env.PUBLIC_API_URL === "string"
-      ? process.env.PUBLIC_API_URL
-      : window &&
-        window.ENV &&
-        window.ENV.PUBLIC_API_URL &&
-        typeof window.ENV.PUBLIC_API_URL === "string"
-      ? window.ENV.PUBLIC_API_URL
-      : undefined;
-  return `${siteUrl}/auth/login/${props.type}/${
+  const PUBLIC_API_URL = getPublicEnvVariables([
+    "PUBLIC_API_URL",
+  ]).PUBLIC_API_URL;
+  return `${PUBLIC_API_URL}/auth/login/${props.type}/${
     props.nextUrl
       ? `?next=${encodeURIComponent(props.nextUrl)}`
-      : `?next=${encodeURIComponent(`${siteUrl}/communities/`)}`
+      : `?next=${encodeURIComponent(`${PUBLIC_API_URL}/communities/`)}`
   }`;
 }
