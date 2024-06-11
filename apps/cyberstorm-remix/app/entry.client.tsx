@@ -5,9 +5,12 @@ import { hydrateRoot } from "react-dom/client";
 import { useLocation, useMatches } from "@remix-run/react";
 import * as Sentry from "@sentry/remix";
 import { useEffect } from "react";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+
+const publicEnvVars = getPublicEnvVariables(["PUBLIC_CLIENT_SENTRY_DSN"]);
 
 Sentry.init({
-  dsn: window.ENV?.SENTRY_DSN,
+  dsn: publicEnvVars.PUBLIC_CLIENT_SENTRY_DSN,
   integrations: [
     Sentry.browserTracingIntegration({
       useEffect,
@@ -24,10 +27,7 @@ Sentry.init({
   tracesSampleRate: 1.0,
 
   // Set `tracePropagationTargets` to control for which URLs distributed tracing should be enabled
-  tracePropagationTargets: [
-    window.ENV?.PUBLIC_SITE_URL,
-    window.ENV?.PUBLIC_API_URL,
-  ],
+  tracePropagationTargets: [],
 
   // Capture Replay for 10% of all sessions,
   // plus for 100% of sessions with an error

@@ -25,6 +25,10 @@ import { CurrentUser } from "@thunderstore/dapper/types";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 
 import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
+import {
+  getPublicEnvVariables,
+  publicEnvVariables,
+} from "cyberstorm/security/publicEnvVariables";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -41,11 +45,7 @@ export const meta: MetaFunction = () => {
 
 declare global {
   interface Window {
-    ENV: {
-      PUBLIC_SITE_URL: string;
-      PUBLIC_API_URL: string;
-      SENTRY_DSN: string | undefined;
-    };
+    ENV: publicEnvVariables;
     Dapper: DapperTs;
   }
 }
@@ -55,11 +55,11 @@ export async function loader() {
 
   return {
     envStuff: {
-      ENV: {
-        PUBLIC_SITE_URL: process.env.PUBLIC_SITE_URL,
-        PUBLIC_API_URL: process.env.PUBLIC_API_URL,
-        SENTRY_DSN: process.env.SENTRY_DSN,
-      },
+      ENV: getPublicEnvVariables([
+        "PUBLIC_API_URL",
+        "PUBLIC_CLIENT_SENTRY_DSN",
+        "PUBLIC_SITE_URL",
+      ]),
     },
     currentUser: await dapper.getCurrentUser(),
   };
@@ -70,11 +70,11 @@ export async function clientLoader() {
 
   return {
     envStuff: {
-      ENV: {
-        PUBLIC_SITE_URL: window.ENV.PUBLIC_SITE_URL,
-        PUBLIC_API_URL: window.ENV.PUBLIC_API_URL,
-        SENTRY_DSN: window.ENV.SENTRY_DSN,
-      },
+      ENV: getPublicEnvVariables([
+        "PUBLIC_API_URL",
+        "PUBLIC_CLIENT_SENTRY_DSN",
+        "PUBLIC_SITE_URL",
+      ]),
     },
     currentUser: await dapper.getCurrentUser(),
   };
@@ -87,11 +87,7 @@ function Root() {
   const loaderOutput = useLoaderData<typeof loader | typeof clientLoader>();
   const parsedLoaderOutput: {
     envStuff: {
-      ENV: {
-        PUBLIC_API_URL: string;
-        PUBLIC_SITE_URL: string;
-        SENTRY_DSN: string | undefined;
-      };
+      ENV: publicEnvVariables;
     };
     sessionId: string | null;
     currentUser: CurrentUser;
