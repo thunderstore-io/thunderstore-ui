@@ -1,47 +1,15 @@
-"use client";
-import { useContext, useEffect } from "react";
 import styles from "./AdContainer.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/pro-solid-svg-icons";
 import { Icon } from "../Icon/Icon";
 
-interface Window {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any; // Add index signature
-}
-
 interface AdContainerProps {
   containerId: string;
-  context: React.Context<boolean>;
   noHeader?: boolean;
 }
 
 export function AdContainer(props: AdContainerProps) {
-  const { containerId, context, noHeader = false } = props;
-
-  const isLoaded = useContext(context);
-
-  useEffect(() => {
-    const typedWindow: Window = window;
-
-    if (isLoaded) {
-      typedWindow["nitroAds"].createAd(containerId, {
-        demo: false,
-        format: "display",
-        refreshLimit: 0,
-        refreshTime: 30,
-        renderVisibleOnly: true,
-        refreshVisibleOnly: true,
-        sizes: [["300", "250"]],
-        report: {
-          enabled: true,
-          wording: "Report Ad",
-          position: "bottom-right",
-        },
-        mediaQuery: "(min-width: 1475px) and (min-height: 400px)",
-      });
-    }
-  }, [isLoaded]);
+  const { containerId, noHeader = false } = props;
 
   return (
     <div className={styles.root}>

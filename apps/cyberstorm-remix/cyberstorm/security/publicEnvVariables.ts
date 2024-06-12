@@ -13,13 +13,13 @@ export function getPublicEnvVariables(
   vars: PublicPrefix<publicEnvVariablesKeys>[]
 ): publicEnvVariables {
   const returnedVars: publicEnvVariables = {};
-  if (process.env) {
+  if (typeof process !== "undefined" && process.env) {
     vars.forEach((envVar) => {
       if (envVar.startsWith("PUBLIC_") && envVar in process.env) {
         returnedVars[envVar] = process.env[envVar];
       }
     });
-  } else {
+  } else if (typeof window !== "undefined" && window.ENV) {
     vars.forEach((envVar) => {
       if (envVar.startsWith("PUBLIC_") && envVar in window.ENV) {
         returnedVars[envVar] = window.ENV[envVar];

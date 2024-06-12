@@ -19,7 +19,7 @@ const { TooltipProvider } = RadixTooltip;
 
 import { Navigation } from "cyberstorm/navigation/Navigation";
 import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
-import { LinkingProvider } from "@thunderstore/cyberstorm";
+import { AdContainer, LinkingProvider } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { CurrentUser } from "@thunderstore/dapper/types";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
@@ -29,9 +29,38 @@ import {
   getPublicEnvVariables,
   publicEnvVariables,
 } from "cyberstorm/security/publicEnvVariables";
+import { useEffect, useRef } from "react";
+import { useHydrated } from "remix-utils/use-hydrated";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+
+declare global {
+  interface Window {
+    ENV: publicEnvVariables;
+    Dapper: DapperTs;
+    nitroAds?: {
+      createAd: (
+        containerId: string,
+        params: {
+          demo: boolean;
+          format: string;
+          refreshLimit: number;
+          refreshTime: number;
+          renderVisibleOnly: boolean;
+          refreshVisibleOnly: boolean;
+          sizes: string[][];
+          report: {
+            enabled: boolean;
+            wording: string;
+            position: string;
+          };
+          mediaQuery: string;
+        }
+      ) => void;
+    };
+  }
+}
 
 export const meta: MetaFunction = () => {
   return [
@@ -42,13 +71,6 @@ export const meta: MetaFunction = () => {
     },
   ];
 };
-
-declare global {
-  interface Window {
-    ENV: publicEnvVariables;
-    Dapper: DapperTs;
-  }
-}
 
 export async function loader() {
   const dapper = await getDapper();
@@ -83,6 +105,8 @@ export async function clientLoader() {
 // REMIX TODO: Do we want to force a hydration at the root level?
 // clientLoader.hydrate = true;
 
+const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
+
 function Root() {
   const loaderOutput = useLoaderData<typeof loader | typeof clientLoader>();
   const parsedLoaderOutput: {
@@ -102,7 +126,6 @@ function Root() {
         <Links />
       </head>
       <body>
-        <ScrollRestoration />
         <script
           dangerouslySetInnerHTML={{
             __html: `window.ENV = ${JSON.stringify(
@@ -110,9 +133,6 @@ function Root() {
             )}`,
           }}
         />
-        <Scripts />
-        {/* REMIX TODO: This Ads script seem to break hydration for styles in the head. */}
-        {/* <script async src={`https://s.nitropay.com/ads-785.js`} /> */}
         <LinkingProvider value={LinkLibrary}>
           <TooltipProvider>
             <div className={styles.root}>
@@ -123,27 +143,18 @@ function Root() {
                   <Outlet />
                 </div>
                 <div className={styles.sideContainers}>
-                  {/* <AdContainer
-                  containerId="right-column-1"
-                  context={AdContext}
-                  noHeader
-                />
-                <AdContainer
-                  containerId="right-column-2"
-                  context={AdContext}
-                  noHeader
-                />
-                <AdContainer
-                  containerId="right-column-3"
-                  context={AdContext}
-                  noHeader
-                /> */}
+                  {adContainerIds.map((cid, k_i) => (
+                    <AdContainer key={k_i} containerId={cid} noHeader />
+                  ))}
                 </div>
               </section>
               <Footer />
             </div>
           </TooltipProvider>
         </LinkingProvider>
+        <ScrollRestoration />
+        <Scripts />
+        <AdsInit />
       </body>
     </html>
   );
@@ -161,6 +172,8 @@ export function ErrorBoundary() {
   const error = useRouteError();
   if (process.env.NODE_ENV === "production") {
     captureRemixErrorBoundaryError(error);
+  } else if (process.env.NODE_ENV === "development") {
+    console.log(error);
   }
   const isResponseError = isRouteErrorResponse(error);
   return (
@@ -201,23 +214,7 @@ export function ErrorBoundary() {
                     )}
                   </div>
                 </div>
-                <div className={styles.sideContainers}>
-                  {/* <AdContainer
-                  containerId="right-column-1"
-                  context={AdContext}
-                  noHeader
-                />
-                <AdContainer
-                  containerId="right-column-2"
-                  context={AdContext}
-                  noHeader
-                />
-                <AdContainer
-                  containerId="right-column-3"
-                  context={AdContext}
-                  noHeader
-                /> */}
-                </div>
+                <div className={styles.sideContainers}></div>
               </section>
               <Footer />
             </div>
@@ -229,3 +226,56 @@ export function ErrorBoundary() {
 }
 
 export default withSentry(Root);
+
+// Temporary solution for implementing ads
+// REMIX TODO: Move to dynamic html
+function AdsInit() {
+  const isHydrated = useHydrated();
+  const startsHydrated = useRef(isHydrated);
+
+  // This will be loaded 2 times in development because of:
+  // https://react.dev/reference/react/StrictMode
+  // If strict mode is removed from the entry.client.tsx, this should only run once
+  useEffect(() => {
+    if (!startsHydrated.current && isHydrated) return;
+    if (
+      typeof window !== "undefined" &&
+      typeof window.nitroAds === "undefined"
+    ) {
+      const $script = document.createElement("script");
+      $script.src = "https://s.nitropay.com/ads-785.js";
+      $script.setAttribute("async", "true");
+
+      document.body.append($script);
+
+      return () => $script.remove();
+    }
+  }, []);
+
+  const nitroAds = typeof window !== "undefined" ? window.nitroAds : undefined;
+  useEffect(() => {
+    if (nitroAds !== undefined) {
+      adContainerIds.forEach((cid) => {
+        if (nitroAds !== undefined) {
+          nitroAds.createAd(cid, {
+            demo: false,
+            format: "display",
+            refreshLimit: 0,
+            refreshTime: 30,
+            renderVisibleOnly: true,
+            refreshVisibleOnly: true,
+            sizes: [["300", "250"]],
+            report: {
+              enabled: true,
+              wording: "Report Ad",
+              position: "bottom-right",
+            },
+            mediaQuery: "(min-width: 1475px) and (min-height: 400px)",
+          });
+        }
+      });
+    }
+  }, [nitroAds]);
+
+  return <></>;
+}

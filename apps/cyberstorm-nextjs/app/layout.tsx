@@ -2,14 +2,14 @@ import "@thunderstore/cyberstorm-styles";
 import styles from "./RootLayout.module.css";
 import Providers from "@/utils/provider";
 import {
-  AdContainer,
+  // AdContainer,
   CyberstormProviders,
   Footer,
 } from "@thunderstore/cyberstorm";
 import React, { Suspense } from "react";
 import { ServerDapper } from "@/dapper/server";
 import { ClientDapper } from "@/dapper/client";
-import { AdContext } from "@/utils/adProvider";
+// import { AdContext } from "@/utils/adProvider";
 import { Navigation } from "./(navigation)/Navigation";
 
 export default function RootLayout(props: React.PropsWithChildren) {
@@ -30,7 +30,7 @@ export default function RootLayout(props: React.PropsWithChildren) {
                       </Suspense>
                     </div>
                     <div className={styles.sideContainers}>
-                      <AdContainer
+                      {/* <AdContainer
                         containerId="right-column-1"
                         context={AdContext}
                         noHeader
@@ -44,7 +44,7 @@ export default function RootLayout(props: React.PropsWithChildren) {
                         containerId="right-column-3"
                         context={AdContext}
                         noHeader
-                      />
+                      /> */}
                     </div>
                   </section>
                   <Footer />
