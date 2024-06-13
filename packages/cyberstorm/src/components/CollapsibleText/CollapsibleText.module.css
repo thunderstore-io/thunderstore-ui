@@ -7,7 +7,7 @@
   color: var(--color-text--secondary);
   font-size: var(--font-size--l);
   line-height: var(--line-height--l);
-  white-space: nowrap;
+  white-space: pre-wrap;
   text-overflow: ellipsis;
 }
 

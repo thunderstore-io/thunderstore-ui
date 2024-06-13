@@ -27,6 +27,15 @@ export default defineConfig({
             id: "landing-page",
           });
           route("/c/:communityId", "c/community.tsx");
+          route(
+            "/c/:communityId/p/:namespaceId/:packageId",
+            "p/packageListing.tsx",
+            () => {
+              route("", "p/tabs/Readme/Readme.tsx", { index: true });
+              route("changelog", "p/tabs/Changelog/Changelog.tsx");
+              route("versions", "p/tabs/Versions/Versions.tsx");
+            }
+          );
         });
       },
     }),

@@ -47,6 +47,16 @@ const library: LinkLibrary = {
   MarkdownPreview: (p) => Link({ ...p, url: "/developers/markdown-preview/" }),
   Package: (p) =>
     Link({ ...p, url: `/c/${p.community}/p/${p.namespace}/${p.package}/` }),
+  PackageChangelog: (p) =>
+    Link({
+      ...p,
+      url: `/c/${p.community}/p/${p.namespace}/${p.package}/changelog`,
+    }),
+  PackageVersions: (p) =>
+    Link({
+      ...p,
+      url: `/c/${p.community}/p/${p.namespace}/${p.package}/versions`,
+    }),
   PackageDependants: (p) =>
     Link({
       ...p,

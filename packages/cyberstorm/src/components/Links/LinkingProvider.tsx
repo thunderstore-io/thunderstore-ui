@@ -78,6 +78,10 @@ export interface LinkLibrary {
   MarkdownPreview: NoRequiredProps;
   /** Package's detail view */
   Package: (props: AnyProps & PackageProps) => RE | null;
+  /** Package's changelog view */
+  PackageChangelog: (props: AnyProps & PackageProps) => RE | null;
+  /** Package's versions view */
+  PackageVersions: (props: AnyProps & PackageProps) => RE | null;
   /** View listing other packages that depend on this package */
   PackageDependants: (props: AnyProps & PackageProps) => RE | null;
   /** Package format docs */
@@ -115,6 +119,8 @@ const library: LinkLibrary = {
   ManifestValidator: noop,
   MarkdownPreview: noop,
   Package: noop,
+  PackageChangelog: noop,
+  PackageVersions: noop,
   PackageDependants: noop,
   PackageFormatDocs: noop,
   PackageVersion: noop,
