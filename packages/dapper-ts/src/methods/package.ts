@@ -54,7 +54,7 @@ export async function getPackageReadme(
   return parsed.data;
 }
 
-const versionsSchema = z
+export const versionsSchema = z
   .object({
     version_number: z.string().nonempty(),
     datetime_created: z.string().datetime(),
