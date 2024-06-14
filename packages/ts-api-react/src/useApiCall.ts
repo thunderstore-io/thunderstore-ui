@@ -13,6 +13,7 @@ export function useApiCall<Data, Meta, Result>(
   const apiConfig = {
     apiHost: session.domain,
     sessionId: session.sessionId,
+    csrfToken: session.csrfToken,
   };
   return (data: Data, meta: Meta) => endpoint(apiConfig, data, meta);
 }
