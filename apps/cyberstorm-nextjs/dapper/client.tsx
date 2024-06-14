@@ -11,6 +11,7 @@ export function ClientDapper(props: React.PropsWithChildren) {
   const config = {
     apiHost: getPublicApiUrl(),
     sessionId: getCookie("sessionid"),
+    csrfToken: getCookie("csrftoken"),
   };
   const dapperConstructor = () => new DapperTs(config);
 
