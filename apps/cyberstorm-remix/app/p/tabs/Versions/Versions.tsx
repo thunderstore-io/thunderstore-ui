@@ -2,7 +2,7 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { faBoltLightning } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import styles from "../../../Markdown.module.css";
+import styles from "./Versions.module.css";
 import { Table, Sort, Alert, Button } from "@thunderstore/cyberstorm";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
@@ -86,7 +86,7 @@ export default function Versions() {
   const tableRows = versions.map((v) => [
     { value: v.version_number, sortValue: v.version_number },
     {
-      value: new Date(v.datetime_created).toLocaleDateString(),
+      value: new Date(v.datetime_created).toUTCString(),
       sortValue: v.datetime_created,
     },
     { value: v.download_count.toLocaleString(), sortValue: v.download_count },
@@ -95,9 +95,8 @@ export default function Versions() {
   ]);
 
   return (
-    <div>
+    <div className={styles.main}>
       <ModManagerBanner />
-      <div className={styles.title}>Versions</div>
       <Table
         headers={columns}
         rows={tableRows}

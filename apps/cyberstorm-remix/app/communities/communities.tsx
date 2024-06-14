@@ -67,7 +67,7 @@ const selectOptions = [
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const searchParams = new URL(request.url).searchParams;
-  const order = searchParams.get("order");
+  const order = searchParams.get("order") ?? SortOptions.Popular;
   const search = searchParams.get("search");
   const page = undefined;
   const dapper = await getDapper();
@@ -78,7 +78,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function clientLoader({ request }: LoaderFunctionArgs) {
   const searchParams = new URL(request.url).searchParams;
-  const order = searchParams.get("order");
+  const order = searchParams.get("order") ?? SortOptions.Popular;
   const search = searchParams.get("search");
   const page = undefined;
   const dapper = await getDapper(true);
@@ -136,7 +136,7 @@ export default function CommunitiesPage() {
             <Select
               onChange={changeOrder}
               options={selectOptions}
-              value={searchParams.get("order") ?? ""}
+              value={searchParams.get("order") ?? SortOptions.Popular}
             />
           </div>
         </div>
