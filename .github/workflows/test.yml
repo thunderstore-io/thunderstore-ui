@@ -34,9 +34,9 @@ jobs:
         with:
           python-version: '3.8'
       - name: Install pre-commit
-        run: curl https://pre-commit.com/install-local.py | python -
+        run: pip install pre-commit
       - name: Run pre-commit
-        run: ~/bin/pre-commit run --show-diff-on-failure --color=always --all-files
+        run: python -m pre-commit run --show-diff-on-failure --color=always --all-files
 
 #  TODO: Configure build secrets & re-enable
 #  build:

@@ -1,7 +1,11 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import {
-  Alert,
+  Outlet,
+  useLoaderData,
+  useLocation,
+  useRevalidator,
+} from "@remix-run/react";
+import {
   BreadCrumbs,
   Button,
   CyberstormLink,
@@ -9,10 +13,8 @@ import {
   Icon,
   PageHeader,
   Tag,
-  TextInput,
 } from "@thunderstore/cyberstorm";
 import headerStyles from "./headerPackageDetailLayout.module.css";
-import headerManagementStyles from "./headerPackageManagementForm.module.css";
 import sidebarStyles from "./sidebarPackageDetailsLayout.module.css";
 import tabsStyles from "./Tabs.module.css";
 import styles from "./mainPackageLayout.module.css";
@@ -22,7 +24,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import {
-  faCircleExclamation,
   faCog,
   faArrowUpRight,
   faUsers,
@@ -41,6 +42,13 @@ import TagList from "./components/TagList/TagList";
 import Dependencies from "./components/Dependencies/Dependencies";
 import TeamMembers from "./components/TeamMembers/TeamMembers";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { useEffect, useRef, useState } from "react";
+import { useHydrated } from "remix-utils/use-hydrated";
+import {
+  PackageDeprecateAction,
+  PackageEditForm,
+  PackageLikeAction,
+} from "@thunderstore/cyberstorm-forms";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -55,11 +63,14 @@ export async function loader({ params }: LoaderFunctionArgs) {
       const dapper = await getDapper();
       return {
         community: await dapper.getCommunity(params.communityId),
+        communityFilters: await dapper.getCommunityFilters(params.communityId),
         listing: await dapper.getPackageListingDetails(
           params.communityId,
           params.namespaceId,
           params.packageId
         ),
+        team: await dapper.getTeamDetails(params.namespaceId),
+        currentUser: await dapper.getCurrentUser(),
       };
     } catch (error) {
       if (error instanceof ApiError) {
@@ -79,11 +90,14 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       const dapper = await getDapper(true);
       return {
         community: await dapper.getCommunity(params.communityId),
+        communityFilters: await dapper.getCommunityFilters(params.communityId),
         listing: await dapper.getPackageListingDetails(
           params.communityId,
           params.namespaceId,
           params.packageId
         ),
+        team: await dapper.getTeamDetails(params.namespaceId),
+        currentUser: await dapper.getCurrentUser(),
       };
     } catch (error) {
       if (error instanceof ApiError) {
@@ -98,10 +112,47 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 }
 
 export default function Community() {
-  const { community, listing } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { community, communityFilters, listing, team, currentUser } =
+    useLoaderData<typeof loader | typeof clientLoader>();
+  const revalidator = useRevalidator();
   const location = useLocation();
+
+  const rpc = currentUser.rated_packages_cyberstorm as string[];
+  const [isLiked, setIsLiked] = useState(
+    rpc.includes(`${listing.namespace}-${listing.name}`)
+  );
+  const [isRefetching, setIsRefetching] = useState(false);
+  const isHydrated = useHydrated();
+  const startsHydrated = useRef(isHydrated);
+
+  useEffect(() => {
+    if (!startsHydrated.current && isHydrated) return;
+    console.log(currentUser);
+    if (
+      currentUser.rated_packages_cyberstorm.length > 0 &&
+      typeof currentUser.rated_packages_cyberstorm[0] === "string"
+    ) {
+      const rpc = currentUser.rated_packages_cyberstorm as string[];
+      setIsLiked(rpc.includes(`${listing.namespace}-${listing.name}`));
+    }
+    setIsRefetching(false);
+  }, [currentUser]);
+
+  // REMIX TODO: Move current user to stand-alone loader and revalidate only currentUser
+  async function useUpdateLikeStatus() {
+    if (!isRefetching) {
+      setIsRefetching(true);
+      revalidator.revalidate();
+    }
+  }
+
+  // REMIX TODO: Move current user to stand-alone loader and revalidate only currentUser
+  async function useUpdatePackageData() {
+    if (!isRefetching) {
+      setIsRefetching(true);
+      revalidator.revalidate();
+    }
+  }
 
   // Header helpers
   const packageDetailsMeta = [
@@ -178,60 +229,6 @@ export default function Community() {
             meta={packageDetailsMeta}
           />
           <div className={headerStyles.headerActions}>
-            <Dialog.Root
-              title="Manage Package"
-              trigger={
-                <Button.Root colorScheme="primary" paddingSize="medium">
-                  <Button.ButtonIcon>
-                    <FontAwesomeIcon icon={faCog} />
-                  </Button.ButtonIcon>
-                  <Button.ButtonLabel>Manage</Button.ButtonLabel>
-                </Button.Root>
-              }
-            >
-              {/* package management */}
-              <div className={headerManagementStyles.root}>
-                <div className={headerManagementStyles.section}>
-                  <Alert
-                    icon={<FontAwesomeIcon icon={faCircleExclamation} />}
-                    content={
-                      "Changes might take several minutes to show publicly! Info shown below is always up to date."
-                    }
-                    variant="info"
-                  />
-                  <div className={headerManagementStyles.title}>
-                    Package status
-                  </div>
-                  <div className={headerManagementStyles.statusTag}>
-                    <Tag
-                      size="medium"
-                      label={listing.is_deprecated ? "DEPRECATED" : "ACTIVE"}
-                      colorScheme={listing.is_deprecated ? "yellow" : "success"}
-                    />
-                  </div>
-                </div>
-                <div className={headerManagementStyles.section}>
-                  <div className={headerManagementStyles.title}>
-                    Edit categories
-                  </div>
-                  <TextInput />
-                </div>
-                <div className={headerManagementStyles.footer}>
-                  {listing.is_deprecated ? (
-                    <Button.Root paddingSize="large" colorScheme="default">
-                      <Button.ButtonLabel>Undeprecate</Button.ButtonLabel>
-                    </Button.Root>
-                  ) : (
-                    <Button.Root paddingSize="large" colorScheme="warning">
-                      <Button.ButtonLabel>Deprecate</Button.ButtonLabel>
-                    </Button.Root>
-                  )}
-                  <Button.Root paddingSize="large" colorScheme="success">
-                    <Button.ButtonLabel>Save changes</Button.ButtonLabel>
-                  </Button.Root>
-                </div>
-              </div>
-            </Dialog.Root>
             <a
               href={listing.install_url}
               className={headerStyles.installButton}
@@ -245,6 +242,55 @@ export default function Community() {
                 </Button.ButtonLabel>
               </Button.Root>
             </a>
+            {currentUser.teams.some(function (cuTeam) {
+              return cuTeam?.name === listing.team.name;
+            }) ? (
+              <Dialog.Root
+                title="Manage Package"
+                trigger={
+                  <Button.Root colorScheme="primary" paddingSize="medium">
+                    <Button.ButtonIcon>
+                      <FontAwesomeIcon icon={faCog} />
+                    </Button.ButtonIcon>
+                    <Button.ButtonLabel>Manage</Button.ButtonLabel>
+                  </Button.Root>
+                }
+              >
+                {/* package management */}
+                <PackageEditForm
+                  options={communityFilters.package_categories.map((cat) => {
+                    return { label: cat.name, value: cat.slug };
+                  })}
+                  community={listing.community_identifier}
+                  namespace={listing.namespace}
+                  package={listing.name}
+                  current_categories={listing.categories}
+                  isDeprecated={listing.is_deprecated}
+                  packageDataUpdateTrigger={useUpdatePackageData}
+                  deprecationButton={
+                    <Button.Root
+                      type="button"
+                      onClick={PackageDeprecateAction({
+                        packageName: listing.name,
+                        namespace: listing.namespace,
+                        isDeprecated: listing.is_deprecated,
+                        packageDataUpdateTrigger: useUpdatePackageData,
+                      })}
+                      colorScheme={
+                        listing.is_deprecated ? "warning" : "default"
+                      }
+                      paddingSize="large"
+                    >
+                      {listing.is_deprecated ? (
+                        <Button.ButtonLabel>Undeprecate</Button.ButtonLabel>
+                      ) : (
+                        <Button.ButtonLabel>Deprecate</Button.ButtonLabel>
+                      )}
+                    </Button.Root>
+                  }
+                />
+              </Dialog.Root>
+            ) : null}
           </div>
         </div>
       </header>
@@ -310,8 +356,25 @@ export default function Community() {
               <a href={listing.download_url} className={sidebarStyles.download}>
                 <DownloadButton />
               </a>
-              <DonateButton onClick={TODO} />
-              <LikeButton onClick={TODO} />
+              {team.donation_link ? (
+                <DonateButton donationLink={team.donation_link} />
+              ) : null}
+              <Button.Root
+                onClick={PackageLikeAction({
+                  isLoggedIn: Boolean(currentUser.username),
+                  packageName: listing.name,
+                  namespace: listing.namespace,
+                  isLiked: isLiked,
+                  currentUserUpdateTrigger: useUpdateLikeStatus,
+                })}
+                tooltipText="Like"
+                colorScheme={isLiked ? "likeBlue" : "primary"}
+                paddingSize="mediumSquare"
+              >
+                <Button.ButtonIcon>
+                  <FontAwesomeIcon icon={faThumbsUp} />
+                </Button.ButtonIcon>
+              </Button.Root>
               {/* <ReportButton onClick={TODO} /> */}
             </div>
             <Meta listing={listing} />
@@ -340,28 +403,9 @@ export default function Community() {
   );
 }
 
-const TODO = () => Promise.resolve();
-
-interface Clickable {
-  onClick: () => Promise<void>;
-}
-
-const LikeButton = (props: Clickable) => (
+const DonateButton = (props: { donationLink: string }) => (
   <Button.Root
-    onClick={props.onClick}
-    tooltipText="Like"
-    colorScheme="primary"
-    paddingSize="mediumSquare"
-  >
-    <Button.ButtonIcon>
-      <FontAwesomeIcon icon={faThumbsUp} />
-    </Button.ButtonIcon>
-  </Button.Root>
-);
-
-const DonateButton = (props: Clickable) => (
-  <Button.Root
-    onClick={props.onClick}
+    href={props.donationLink}
     tooltipText="Donate to author"
     colorScheme="primary"
     paddingSize="mediumSquare"
