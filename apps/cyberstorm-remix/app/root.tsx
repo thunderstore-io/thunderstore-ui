@@ -31,6 +31,8 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import { useEffect, useRef } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
+import Toast from "@thunderstore/cyberstorm/src/components/Toast";
+import { SessionProvider } from "@thunderstore/ts-api-react";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -133,25 +135,31 @@ function Root() {
             )}`,
           }}
         />
-        <LinkingProvider value={LinkLibrary}>
-          <TooltipProvider>
-            <div className={styles.root}>
-              <Navigation user={parsedLoaderOutput.currentUser} />
-              <section className={styles.content}>
-                <div className={styles.sideContainers} />
-                <div className={styles.middleContainer}>
-                  <Outlet />
+        <SessionProvider
+          domain={parsedLoaderOutput.envStuff.ENV.PUBLIC_API_URL}
+        >
+          <LinkingProvider value={LinkLibrary}>
+            <Toast.Provider toastDuration={10000}>
+              <TooltipProvider delayDuration={300}>
+                <div className={styles.root}>
+                  <Navigation user={parsedLoaderOutput.currentUser} />
+                  <section className={styles.content}>
+                    <div className={styles.sideContainers} />
+                    <div className={styles.middleContainer}>
+                      <Outlet />
+                    </div>
+                    <div className={styles.sideContainers}>
+                      {adContainerIds.map((cid, k_i) => (
+                        <AdContainer key={k_i} containerId={cid} noHeader />
+                      ))}
+                    </div>
+                  </section>
+                  <Footer />
                 </div>
-                <div className={styles.sideContainers}>
-                  {adContainerIds.map((cid, k_i) => (
-                    <AdContainer key={k_i} containerId={cid} noHeader />
-                  ))}
-                </div>
-              </section>
-              <Footer />
-            </div>
-          </TooltipProvider>
-        </LinkingProvider>
+              </TooltipProvider>
+            </Toast.Provider>
+          </LinkingProvider>
+        </SessionProvider>
         <ScrollRestoration />
         <Scripts />
         <AdsInit />
@@ -191,34 +199,36 @@ export function ErrorBoundary() {
         /> */}
         <Scripts />
         <LinkingProvider value={LinkLibrary}>
-          <TooltipProvider>
-            <div className={styles.root}>
-              {/* <Navigation user={getEmptyUser} /> */}
-              <section className={styles.content}>
-                <div className={styles.sideContainers} />
-                <div className={styles.middleContainer}>
-                  <div className={errorStyles.root}>
-                    <div
-                      className={errorStyles.glitch}
-                      data-text={isResponseError ? error.status : 500}
-                    >
-                      <span>{isResponseError ? error.status : 500}</span>
-                    </div>
-                    <div className={errorStyles.description}>
-                      {isResponseError ? error.data : "Internal server error"}
-                    </div>
-                    {!isResponseError && (
-                      <div className={errorStyles.flavor}>
-                        Beep boop. Server something error happens.
+          <Toast.Provider toastDuration={10000}>
+            <TooltipProvider delayDuration={300}>
+              <div className={styles.root}>
+                {/* <Navigation user={getEmptyUser} /> */}
+                <section className={styles.content}>
+                  <div className={styles.sideContainers} />
+                  <div className={styles.middleContainer}>
+                    <div className={errorStyles.root}>
+                      <div
+                        className={errorStyles.glitch}
+                        data-text={isResponseError ? error.status : 500}
+                      >
+                        <span>{isResponseError ? error.status : 500}</span>
                       </div>
-                    )}
+                      <div className={errorStyles.description}>
+                        {isResponseError ? error.data : "Internal server error"}
+                      </div>
+                      {!isResponseError && (
+                        <div className={errorStyles.flavor}>
+                          Beep boop. Server something error happens.
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div className={styles.sideContainers}></div>
-              </section>
-              <Footer />
-            </div>
-          </TooltipProvider>
+                  <div className={styles.sideContainers}></div>
+                </section>
+                <Footer />
+              </div>
+            </TooltipProvider>
+          </Toast.Provider>
         </LinkingProvider>
       </body>
     </html>
