@@ -34,3 +34,50 @@
 .skeletonContent {
   height: 38rem;
 }
+
+.dateFilterHeader {
+  padding: var(--space--8) var(--space--12);
+  font-size: var(--font-size--m);
+}
+
+.dateFilterInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: fit-content;
+}
+
+.dateFilterInput {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: var(--space--10) var(--space--14);
+  border: var(--border-width--2) solid var(--border-color);
+
+  border-radius: var(--border-radius--8);
+  color: var(--color-text--tertiary);
+  font-weight: var(--font-weight-medium);
+
+  font-size: var(--font-size--l);
+  line-height: normal;
+  background-color: var(--color-surface--4);
+  outline: none;
+  transition: ease-out var(--animation-length-l);
+
+  --border-color: transparent;
+}
+
+.dateFilterInput:hover {
+  --border-color: var(--color-border--highlight);
+}
+
+.dateFilterInput:focus-within {
+  color: var(--color-text--default);
+  background-color: var(--color-black);
+
+  --border-color: var(--color-border--highlight);
+}
+
+.dateFilterInput::placeholder {
+  color: var(--color-text--tertiary);
+}

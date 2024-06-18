@@ -53,6 +53,10 @@ export function PackageSearch(props: Props) {
   const [nsfw, setNsfw] = useState(false);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState(PackageOrderOptions.Updated);
+  const [createdAfter, setCreatedAfter] = useState("");
+  const [createdBefore, setCreatedBefore] = useState("");
+  const [updatedAfter, setUpdatedAfter] = useState("");
+  const [updatedBefore, setUpdatedBefore] = useState("");
 
   const deferredCategories = useDeferredValue(categories);
   const deferredDeprecated = useDeferredValue(deprecated);
@@ -70,6 +74,11 @@ export function PackageSearch(props: Props) {
     .map((c) => c.id);
 
   const [debouncedSearchValue] = useDebounce(searchValue, 300);
+
+  const deferredCreatedAfter = useDeferredValue(createdAfter);
+  const deferredCreatedBefore = useDeferredValue(createdBefore);
+  const deferredUpdatedAfter = useDeferredValue(updatedAfter);
+  const deferredUpdatedBefore = useDeferredValue(updatedBefore);
 
   useEffect(() => {
     if (debouncedSearchValue === "") {
@@ -126,6 +135,30 @@ export function PackageSearch(props: Props) {
       searchParams.set("order", deferredOrder);
     }
 
+    if (deferredCreatedAfter === "") {
+      searchParams.delete("created_after");
+    } else {
+      searchParams.set("created_after", deferredCreatedAfter);
+    }
+
+    if (deferredCreatedBefore === "") {
+      searchParams.delete("created_before");
+    } else {
+      searchParams.set("created_before", deferredCreatedBefore);
+    }
+
+    if (deferredUpdatedAfter === "") {
+      searchParams.delete("updated_after");
+    } else {
+      searchParams.set("updated_after", deferredUpdatedAfter);
+    }
+
+    if (deferredUpdatedBefore === "") {
+      searchParams.delete("updated_before");
+    } else {
+      searchParams.set("updated_before", deferredUpdatedBefore);
+    }
+
     setSearchParams(searchParams);
   }, [
     debouncedSearchValue,
@@ -135,6 +168,10 @@ export function PackageSearch(props: Props) {
     deferredCategories,
     deferredPage,
     deferredOrder,
+    deferredCreatedAfter,
+    deferredCreatedBefore,
+    deferredUpdatedAfter,
+    deferredUpdatedBefore,
   ]);
 
   return (
@@ -148,6 +185,32 @@ export function PackageSearch(props: Props) {
 
       <div className={styles.contentWrapper}>
         <div className={styles.sidebar}>
+          <div className={styles.dateFilterInputs}>
+            <h2 className={styles.dateFilterHeader}>Updated</h2>
+            <input
+              type="date"
+              className={styles.dateFilterInput}
+              onChange={(e) => setUpdatedAfter(e.target.value)}
+            />
+            <input
+              type="date"
+              className={styles.dateFilterInput}
+              onChange={(e) => setUpdatedBefore(e.target.value)}
+            />
+          </div>
+          <div className={styles.dateFilterInputs}>
+            <h2 className={styles.dateFilterHeader}>Created</h2>
+            <input
+              type="date"
+              className={styles.dateFilterInput}
+              onChange={(e) => setCreatedAfter(e.target.value)}
+            />
+            <input
+              type="date"
+              className={styles.dateFilterInput}
+              onChange={(e) => setCreatedBefore(e.target.value)}
+            />
+          </div>
           <SectionMenu
             allSections={allSections}
             selected={section}
