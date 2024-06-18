@@ -127,7 +127,6 @@ export default function Community() {
 
   useEffect(() => {
     if (!startsHydrated.current && isHydrated) return;
-    console.log(currentUser);
     if (
       currentUser.rated_packages_cyberstorm.length > 0 &&
       typeof currentUser.rated_packages_cyberstorm[0] === "string"

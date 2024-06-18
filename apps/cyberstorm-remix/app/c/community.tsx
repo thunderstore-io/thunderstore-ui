@@ -43,6 +43,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
+      const created_after = searchParams.get("created_after");
+      const created_before = searchParams.get("created_before");
+      const updated_after = searchParams.get("updated_after");
+      const updated_before = searchParams.get("updated_before");
       return {
         community: await dapper.getCommunity(params.communityId),
         filters: await dapper.getCommunityFilters(params.communityId),
@@ -58,7 +62,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
           excludedCategories?.split(",") ?? undefined,
           section ?? "",
           nsfw === "true" ? true : false,
-          deprecated === "true" ? true : false
+          deprecated === "true" ? true : false,
+          created_after ?? "",
+          created_before ?? "",
+          updated_after ?? "",
+          updated_before ?? ""
         ),
       };
     } catch (error) {
@@ -86,6 +94,10 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
+      const created_after = searchParams.get("created_after");
+      const created_before = searchParams.get("created_before");
+      const updated_after = searchParams.get("updated_after");
+      const updated_before = searchParams.get("updated_before");
       return {
         community: await dapper.getCommunity(params.communityId),
         filters: await dapper.getCommunityFilters(params.communityId),
@@ -101,7 +113,11 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
           excludedCategories?.split(",") ?? undefined,
           section ?? "",
           nsfw === "true" ? true : false,
-          deprecated === "true" ? true : false
+          deprecated === "true" ? true : false,
+          created_after ?? "",
+          created_before ?? "",
+          updated_after ?? "",
+          updated_before ?? ""
         ),
       };
     } catch (error) {
