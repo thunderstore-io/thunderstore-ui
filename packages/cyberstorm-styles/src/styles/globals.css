@@ -70,6 +70,7 @@
 
   /* Header dimensions */
   --header-height: 3.5rem;
+  --content-padding-top-desktop: 2rem;
 
   /* Animation lengths */
   --animation-length-xs: 80ms;

@@ -139,6 +139,14 @@ export default function Community() {
 
   return (
     <>
+      {community.background_image_url ? (
+        <div
+          className={styles.backgroundImg}
+          style={{
+            backgroundImage: `url(${community.background_image_url})`,
+          }}
+        />
+      ) : null}
       <BreadCrumbs>
         <CyberstormLink linkId="Communities">Communities</CyberstormLink>
         <CyberstormLink linkId="Community" community={community.identifier}>
