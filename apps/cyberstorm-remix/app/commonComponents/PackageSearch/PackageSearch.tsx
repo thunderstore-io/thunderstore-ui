@@ -1,4 +1,5 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faXmarkLarge, faSlidersUp } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   PackageCategory,
@@ -15,7 +16,12 @@ import { SectionMenu } from "./FilterMenus/SectionMenu";
 import styles from "./PackageSearch.module.css";
 import packageListStyles from "./PackageList.module.css";
 import { CategorySelection } from "./types";
-import { PackageCard, Pagination, TextInput } from "@thunderstore/cyberstorm";
+import {
+  Button,
+  PackageCard,
+  Pagination,
+  TextInput,
+} from "@thunderstore/cyberstorm";
 import { useNavigation, useSearchParams } from "@remix-run/react";
 import { StalenessIndicator } from "@thunderstore/cyberstorm/src/components/StalenessIndicator/StalenessIndicator";
 import { PackageCount } from "./PackageCount";
@@ -199,9 +205,31 @@ export function PackageSearch(props: Props) {
     deferredRecentUpdate,
   ]);
 
+  const [isFiltersVisible, setIsFiltersVisible] = useState(true);
+
   return (
     <div className={styles.root}>
       <div className={styles.searchWrapper}>
+        <div className={styles.searchRowItemWrapper}>
+          <label className={styles.searchText} htmlFor="packageOrder">
+            Sort by
+          </label>
+          <Button.Root
+            iconAlignment="side"
+            colorScheme="primary"
+            paddingSize="largeBorderCompensated"
+            onClick={() => setIsFiltersVisible(!isFiltersVisible)}
+          >
+            <Button.ButtonIcon>
+              <FontAwesomeIcon
+                icon={isFiltersVisible ? faXmarkLarge : faSlidersUp}
+              />
+            </Button.ButtonIcon>
+            <Button.ButtonLabel>
+              {isFiltersVisible ? "Close" : "Open"}
+            </Button.ButtonLabel>
+          </Button.Root>
+        </div>
         <div
           className={classnames(
             styles.searchInputWrapper,
@@ -248,7 +276,13 @@ export function PackageSearch(props: Props) {
       </div>
 
       <div className={styles.contentWrapper}>
-        <div className={styles.sidebar} id="desktopSidebar">
+        <div
+          className={classnames(
+            styles.sidebar,
+            isFiltersVisible ? undefined : styles.sidebarIsHidden
+          )}
+          id="desktopSidebar"
+        >
           <CollapsibleMenu headerTitle="Date filters" defaultOpen={false}>
             <div className={styles.dateFilterInputs}>
               <div className={styles.dateFilterInputsSet}>
@@ -340,10 +374,6 @@ export function PackageSearch(props: Props) {
         </div>
 
         <div className={styles.content}>
-          <CategoryTagCloud
-            categories={categories}
-            setCategories={setCategories}
-          />
           <div className={styles.root}>
             <div className={packageListStyles.top}>
               <StalenessIndicator
@@ -356,11 +386,20 @@ export function PackageSearch(props: Props) {
                   totalCount={listings.count}
                 />
               </StalenessIndicator>
+              <CategoryTagCloud
+                categories={categories}
+                setCategories={setCategories}
+              />
             </div>
 
             <StalenessIndicator
               isStale={navigation.state === "loading" ? true : false}
-              className={packageListStyles.packages}
+              className={classnames(
+                packageListStyles.packages,
+                isFiltersVisible
+                  ? undefined
+                  : packageListStyles.packagesIsFiltersVisible
+              )}
             >
               {listings.results.map((p) => (
                 <PackageCard key={`${p.namespace}-${p.name}`} package={p} />
