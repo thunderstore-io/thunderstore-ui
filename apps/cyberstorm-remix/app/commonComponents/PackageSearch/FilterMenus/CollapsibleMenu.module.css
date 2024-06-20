@@ -1,0 +1,95 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-size--m);
+}
+
+.header,
+.empty {
+  padding: var(--space--8) var(--space--12);
+  font-weight: var(--font-weight-boldest);
+  font-size: var(--font-size--l);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.list {
+  list-style: none;
+}
+
+.label {
+  display: flex;
+  gap: var(--gap--12);
+  align-items: center;
+  padding: var(--space--8) var(--space--12);
+  border-radius: var(--border-radius--8);
+  color: var(--color-text--secondary);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: var(--animation-length-xs);
+  user-select: none;
+
+  --mark-color: var(--color-purple--6);
+}
+
+.label:hover {
+  background-color: var(--color-surface--4);
+
+  --mark-color: var(--color-purple--2);
+}
+
+.checkbox {
+  width: var(--space--18);
+  height: var(--space--18);
+  border-radius: var(--border-radius--2);
+  background-color: var(--mark-color);
+  transition: ease-out var(--animation-length-xs);
+}
+
+.label:hover .checkbox { --mark-color: #4343a3; }
+
+.label.include,
+.label.include .checkbox {
+  color: var(--color-highlight);
+
+  --mark-color: var(--color-highlight);
+}
+
+.label.exclude,
+.label.exclude .checkbox {
+  color: var(--color-danger);
+
+  --mark-color: var(--color-danger);
+}
+
+.icon {
+  height: var(--space--16);
+  color: var(--color-surface--0);
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space--16);
+  height: var(--space--16);
+  border: var(--space--2) solid var(--color-surface--7);
+  border-radius: var(--border-radius--8);
+  background-color: transparent;
+  transition: ease-out var(--animation-length-xs);
+}
+
+.radio.radioSelected {
+  border-color: var(--mark-color);
+}
+
+.radioIndicator {
+  display: block;
+  width: var(--space--6);
+  height: var(--space--6);
+  border-radius: 50%;
+  background-color: var(--mark-color);
+}
