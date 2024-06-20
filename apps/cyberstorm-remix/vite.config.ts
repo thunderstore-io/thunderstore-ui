@@ -36,6 +36,10 @@ export default defineConfig({
               route("versions", "p/tabs/Versions/Versions.tsx");
             }
           );
+          route(
+            "/c/:communityId/p/:namespaceId/:packageId/dependants",
+            "p/dependants/Dependants.tsx"
+          );
         });
       },
     }),
