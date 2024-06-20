@@ -27,7 +27,7 @@ import {
   faCog,
   faArrowUpRight,
   faUsers,
-  faDonate,
+  faHandHoldingHeart,
   faDownload,
   faThumbsUp,
   // faFlag,
@@ -35,6 +35,8 @@ import {
   faFileLines,
   faFilePlus,
   faCodeBranch,
+  faBook,
+  faCodeSimple,
 } from "@fortawesome/pro-solid-svg-icons";
 import { WrapperCard } from "@thunderstore/cyberstorm/src/components/WrapperCard/WrapperCard";
 import Meta from "./components/Meta/Meta";
@@ -199,6 +201,10 @@ export default function Community() {
     ? "changelog"
     : location.pathname.endsWith("/versions")
     ? "versions"
+    : location.pathname.endsWith("/wiki")
+    ? "wiki"
+    : location.pathname.endsWith("/source")
+    ? "source"
     : "details";
 
   return (
@@ -308,10 +314,26 @@ export default function Community() {
                   currentTab === "details" ? tabsStyles.active : ""
                 )}
               >
-                <Icon inline wrapperClasses={styles.icon}>
+                <Icon inline wrapperClasses={tabsStyles.icon}>
                   <FontAwesomeIcon icon={faFileLines} />
                 </Icon>
                 <span className={tabsStyles.label}>Details</span>
+              </CyberstormLink>
+              <CyberstormLink
+                linkId="PackageWiki"
+                community={listing.community_identifier}
+                namespace={listing.namespace}
+                package={listing.name}
+                aria-current={currentTab === "wiki"}
+                className={classnames(
+                  tabsStyles.button,
+                  currentTab === "wiki" ? tabsStyles.active : ""
+                )}
+              >
+                <Icon inline wrapperClasses={tabsStyles.icon}>
+                  <FontAwesomeIcon icon={faBook} />
+                </Icon>
+                <span className={tabsStyles.label}>Wiki</span>
               </CyberstormLink>
               {listing.has_changelog ? (
                 <CyberstormLink
@@ -325,7 +347,7 @@ export default function Community() {
                     currentTab === "changelog" ? tabsStyles.active : ""
                   )}
                 >
-                  <Icon inline wrapperClasses={styles.icon}>
+                  <Icon inline wrapperClasses={tabsStyles.icon}>
                     <FontAwesomeIcon icon={faFilePlus} />
                   </Icon>
                   <span className={tabsStyles.label}>Changelog</span>
@@ -342,10 +364,26 @@ export default function Community() {
                   currentTab === "versions" ? tabsStyles.active : ""
                 )}
               >
-                <Icon inline wrapperClasses={styles.icon}>
+                <Icon inline wrapperClasses={tabsStyles.icon}>
                   <FontAwesomeIcon icon={faCodeBranch} />
                 </Icon>
                 <span className={tabsStyles.label}>Versions</span>
+              </CyberstormLink>
+              <CyberstormLink
+                linkId="PackageSource"
+                community={listing.community_identifier}
+                namespace={listing.namespace}
+                package={listing.name}
+                aria-current={currentTab === "source"}
+                className={classnames(
+                  tabsStyles.button,
+                  currentTab === "source" ? tabsStyles.active : ""
+                )}
+              >
+                <Icon inline wrapperClasses={tabsStyles.icon}>
+                  <FontAwesomeIcon icon={faCodeSimple} />
+                </Icon>
+                <span className={tabsStyles.label}>Source</span>
               </CyberstormLink>
             </div>
             <Outlet />
@@ -385,11 +423,7 @@ export default function Community() {
                     {mappedPackageTagList}
                   </div>
                 }
-                headerIcon={
-                  <Icon>
-                    <FontAwesomeIcon icon={faBoxes} />
-                  </Icon>
-                }
+                headerIcon={<FontAwesomeIcon icon={faBoxes} />}
               />
             ) : null}
             <TagList listing={listing} />
@@ -410,7 +444,7 @@ const DonateButton = (props: { donationLink: string }) => (
     paddingSize="mediumSquare"
   >
     <Button.ButtonIcon>
-      <FontAwesomeIcon icon={faDonate} />
+      <FontAwesomeIcon icon={faHandHoldingHeart} />
     </Button.ButtonIcon>
   </Button.Root>
 );
