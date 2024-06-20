@@ -24,35 +24,31 @@ export const OthersMenu = (props: Props) => {
   ];
 
   return (
-    <div className={styles.root}>
-      <h2 className={styles.header}>Other filters</h2>
-
-      <ol className={styles.list}>
-        {filters.map(([checked, setChecked, label]) => (
-          <li key={label}>
-            <label
-              className={classnames(
-                styles.label,
-                checked ? styles.include : null
-              )}
+    <ol className={styles.list}>
+      {filters.map(([checked, setChecked, label]) => (
+        <li key={label}>
+          <label
+            className={classnames(
+              styles.label,
+              checked ? styles.include : null
+            )}
+          >
+            <Checkbox.Root
+              checked={checked}
+              onCheckedChange={() => setChecked(!checked)}
+              className={styles.checkbox}
             >
-              <Checkbox.Root
-                checked={checked}
-                onCheckedChange={() => setChecked(!checked)}
-                className={styles.checkbox}
-              >
-                <Checkbox.Indicator>
-                  <Icon>
-                    <FontAwesomeIcon icon={faCheck} className={styles.icon} />
-                  </Icon>
-                </Checkbox.Indicator>
-              </Checkbox.Root>
-              {label}
-            </label>
-          </li>
-        ))}
-      </ol>
-    </div>
+              <Checkbox.Indicator>
+                <Icon>
+                  <FontAwesomeIcon icon={faCheck} className={styles.icon} />
+                </Icon>
+              </Checkbox.Indicator>
+            </Checkbox.Root>
+            {label}
+          </label>
+        </li>
+      ))}
+    </ol>
   );
 };
 
