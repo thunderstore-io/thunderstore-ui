@@ -24,6 +24,8 @@ export async function fetchPackageDependantsListings(
     { key: "section", value: options?.section },
     { key: "nsfw", value: options?.nsfw, impotent: false },
     { key: "deprecated", value: options?.deprecated, impotent: false },
+    { key: "created_recent", value: options?.created_recent },
+    { key: "updated_recent", value: options?.updated_recent },
     { key: "created_after", value: options?.created_after },
     { key: "created_before", value: options?.created_before },
     { key: "updated_after", value: options?.updated_after },
