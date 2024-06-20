@@ -20,6 +20,7 @@ import { useNavigation, useSearchParams } from "@remix-run/react";
 import { StalenessIndicator } from "@thunderstore/cyberstorm/src/components/StalenessIndicator/StalenessIndicator";
 import { PackageCount } from "./PackageCount";
 import { PackageOrder, PackageOrderOptions } from "./PackageOrder";
+import { CollapsibleMenu } from "./FilterMenus/CollapsibleMenu";
 
 const PER_PAGE = 20;
 
@@ -184,47 +185,61 @@ export function PackageSearch(props: Props) {
       />
 
       <div className={styles.contentWrapper}>
-        <div className={styles.sidebar}>
-          <div className={styles.dateFilterInputs}>
-            <h2 className={styles.dateFilterHeader}>Updated</h2>
-            <input
-              type="date"
-              className={styles.dateFilterInput}
-              onChange={(e) => setUpdatedAfter(e.target.value)}
-            />
-            <input
-              type="date"
-              className={styles.dateFilterInput}
-              onChange={(e) => setUpdatedBefore(e.target.value)}
-            />
-          </div>
-          <div className={styles.dateFilterInputs}>
-            <h2 className={styles.dateFilterHeader}>Created</h2>
-            <input
-              type="date"
-              className={styles.dateFilterInput}
-              onChange={(e) => setCreatedAfter(e.target.value)}
-            />
-            <input
-              type="date"
-              className={styles.dateFilterInput}
-              onChange={(e) => setCreatedBefore(e.target.value)}
-            />
-          </div>
-          <SectionMenu
-            allSections={allSections}
-            selected={section}
-            setSelected={setSection}
-          />
+        <div className={styles.sidebar} id="desktopSidebar">
+          <CollapsibleMenu headerTitle="Dates" defaultOpen={false}>
+            <div className={styles.dateFilterInputs}>
+              <h3 className={styles.dateFilterHeader}>Updated</h3>
+              <input
+                type="date"
+                className={styles.dateFilterInput}
+                onChange={(e) => setUpdatedAfter(e.target.value)}
+              />
+              <input
+                type="date"
+                className={styles.dateFilterInput}
+                onChange={(e) => setUpdatedBefore(e.target.value)}
+              />
+            </div>
+            <div className={styles.dateFilterInputs}>
+              <h3 className={styles.dateFilterHeader}>Created</h3>
+              <input
+                type="date"
+                className={styles.dateFilterInput}
+                onChange={(e) => setCreatedAfter(e.target.value)}
+              />
+              <input
+                type="date"
+                className={styles.dateFilterInput}
+                onChange={(e) => setCreatedBefore(e.target.value)}
+              />
+            </div>
+          </CollapsibleMenu>
 
-          <CategoryMenu categories={categories} setCategories={setCategories} />
+          {allSections.length > 0 ? (
+            <CollapsibleMenu headerTitle="Sections" defaultOpen>
+              <SectionMenu
+                allSections={allSections}
+                selected={section}
+                setSelected={setSection}
+              />
+            </CollapsibleMenu>
+          ) : null}
 
-          <OthersMenu
-            deprecated={deprecated}
-            setDeprecated={setDeprecated}
-            nsfw={nsfw}
-            setNsfw={setNsfw}
-          />
+          <CollapsibleMenu headerTitle="Categories" defaultOpen>
+            <CategoryMenu
+              categories={categories}
+              setCategories={setCategories}
+            />
+          </CollapsibleMenu>
+
+          <CollapsibleMenu headerTitle="Other filters" defaultOpen>
+            <OthersMenu
+              deprecated={deprecated}
+              setDeprecated={setDeprecated}
+              nsfw={nsfw}
+              setNsfw={setNsfw}
+            />
+          </CollapsibleMenu>
         </div>
 
         <div className={styles.content}>

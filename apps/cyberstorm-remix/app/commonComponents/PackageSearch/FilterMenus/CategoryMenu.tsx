@@ -23,44 +23,40 @@ export const CategoryMenu = (props: Props) => {
 
   const toggleCategory = (id: string) => setCategories(toggle(categories, id));
 
-  return (
-    <div className={styles.root}>
-      <h2 className={styles.header}>Categories</h2>
-
-      {categories.length ? (
-        <ol className={styles.list}>
-          {categories.map((c) => (
-            <li key={c.slug}>
-              <label
-                className={classnames(
-                  styles.label,
-                  c.selection !== "off" ? styles[c.selection] : undefined
-                )}
+  if (categories.length) {
+    return (
+      <ol className={styles.list}>
+        {categories.map((c) => (
+          <li key={c.slug}>
+            <label
+              className={classnames(
+                styles.label,
+                c.selection !== "off" ? styles[c.selection] : undefined
+              )}
+            >
+              <Checkbox.Root
+                checked={c.selection !== "off"}
+                onCheckedChange={() => toggleCategory(c.id)}
+                className={styles.checkbox}
               >
-                <Checkbox.Root
-                  checked={c.selection !== "off"}
-                  onCheckedChange={() => toggleCategory(c.id)}
-                  className={styles.checkbox}
-                >
-                  <Checkbox.Indicator>
-                    <Icon>
-                      <FontAwesomeIcon
-                        icon={c.selection === "include" ? faCheck : faXmark}
-                        className={styles.icon}
-                      />
-                    </Icon>
-                  </Checkbox.Indicator>
-                </Checkbox.Root>
-                {c.name}
-              </label>
-            </li>
-          ))}
-        </ol>
-      ) : (
-        <p className={styles.empty}>No categories</p>
-      )}
-    </div>
-  );
+                <Checkbox.Indicator>
+                  <Icon>
+                    <FontAwesomeIcon
+                      icon={c.selection === "include" ? faCheck : faXmark}
+                      className={styles.icon}
+                    />
+                  </Icon>
+                </Checkbox.Indicator>
+              </Checkbox.Root>
+              {c.name}
+            </label>
+          </li>
+        ))}
+      </ol>
+    );
+  } else {
+    return <p className={styles.empty}>No categories</p>;
+  }
 };
 
 CategoryMenu.displayName = "CategoryMenu";

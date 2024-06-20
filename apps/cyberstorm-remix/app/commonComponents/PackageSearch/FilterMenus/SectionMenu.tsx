@@ -17,37 +17,29 @@ interface Props {
 export const SectionMenu = (props: Props) => {
   const { allSections, selected, setSelected } = props;
 
-  if (!allSections.length) {
-    return null;
-  }
-
   return (
-    <div className={styles.root}>
-      <h2 className={styles.header}>Sections</h2>
-
-      <RadioGroup.Root value={selected} onValueChange={setSelected}>
-        {allSections.map((s) => (
-          <label
-            key={s.slug}
+    <RadioGroup.Root value={selected} onValueChange={setSelected}>
+      {allSections.map((s) => (
+        <label
+          key={s.slug}
+          className={classnames(
+            styles.label,
+            s.uuid === selected ? styles.include : null
+          )}
+        >
+          <RadioGroup.Item
+            value={s.uuid}
             className={classnames(
-              styles.label,
-              s.uuid === selected ? styles.include : null
+              styles.radio,
+              s.uuid === selected ? styles.radioSelected : null
             )}
           >
-            <RadioGroup.Item
-              value={s.uuid}
-              className={classnames(
-                styles.radio,
-                s.uuid === selected ? styles.radioSelected : null
-              )}
-            >
-              <RadioGroup.Indicator className={styles.radioIndicator} />
-            </RadioGroup.Item>
-            {s.name}
-          </label>
-        ))}
-      </RadioGroup.Root>
-    </div>
+            <RadioGroup.Indicator className={styles.radioIndicator} />
+          </RadioGroup.Item>
+          {s.name}
+        </label>
+      ))}
+    </RadioGroup.Root>
   );
 };
 
