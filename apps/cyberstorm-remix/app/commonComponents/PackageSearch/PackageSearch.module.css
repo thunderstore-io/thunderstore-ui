@@ -36,14 +36,22 @@
 }
 
 .dateFilterHeader {
-  padding: var(--space--8) var(--space--12);
+  color: var(--color-text--tertiary);
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size--m);
+  white-space: nowrap;
 }
 
 .dateFilterInputs {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.dateFilterInputsSet {
+  display: flex;
+  flex-direction: column;
   max-width: fit-content;
 }
 
@@ -80,4 +88,36 @@
 
 .dateFilterInput::placeholder {
   color: var(--color-text--tertiary);
+}
+
+.searchWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.searchRowItemWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.searchInputWrapper {
+  width: 100%;
+}
+
+.searchText {
+  color: var(--color-text--tertiary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size--m);
+  white-space: nowrap;
+}
+
+.sortByButton {
+  --border-color: transparent;
+
+  border: var(--border-width--2) solid var(--border-color);
+}
+
+.sortByButton:hover {
+  --border-color: var(--color-border--highlight);
 }
