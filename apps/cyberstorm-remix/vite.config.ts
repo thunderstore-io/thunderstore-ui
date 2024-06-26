@@ -40,6 +40,7 @@ export default defineConfig({
             "/c/:communityId/p/:namespaceId/:packageId/dependants",
             "p/dependants/Dependants.tsx"
           );
+          route("/teams", "settings/teams/Teams.tsx");
         });
       },
     }),

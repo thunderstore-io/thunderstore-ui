@@ -14,6 +14,7 @@ import {
 
 export function CreateTeamForm(props: {
   dialogOnChange: (v: boolean) => void;
+  updateTrigger: () => Promise<void>;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: "Team created",
@@ -22,6 +23,7 @@ export function CreateTeamForm(props: {
   return (
     <ApiForm
       onSubmitSuccess={() => {
+        props.updateTrigger();
         onSubmitSuccess();
         props.dialogOnChange(false);
       }}
