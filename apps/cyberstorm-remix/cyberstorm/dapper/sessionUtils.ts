@@ -6,10 +6,17 @@ export async function getDapper(isClient = false) {
     const dapper = window.Dapper;
 
     let shouldRemakeDapper = false;
+
+    const allCookies = new URLSearchParams(
+      window.document.cookie.replaceAll("&", "%26").replaceAll("; ", "&")
+    );
+    const cookie = allCookies.get("sessionid");
+    const csrftoken = allCookies.get("csrftoken");
+
     const newConfig: RequestConfig = {
       apiHost: window.ENV.PUBLIC_API_URL,
-      sessionId: undefined,
-      csrfToken: undefined,
+      sessionId: cookie ?? undefined,
+      csrfToken: csrftoken ?? undefined,
     };
 
     if (dapper) {
@@ -19,12 +26,6 @@ export async function getDapper(isClient = false) {
       //   newConfig.apiHost = window.ENV.PUBLIC_API_URL;
       //   shouldRemakeDapper = true;
       // }
-
-      const allCookies = new URLSearchParams(
-        window.document.cookie.replaceAll("&", "%26").replaceAll("; ", "&")
-      );
-      const cookie = allCookies.get("sessionid");
-      const csrftoken = allCookies.get("csrftoken");
 
       // sessionId is old
       if (
