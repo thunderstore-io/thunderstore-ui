@@ -8,6 +8,7 @@ import {
   Avatar,
   DropDownDivider,
   DropDownItem,
+  CyberstormLink,
 } from "@thunderstore/cyberstorm";
 import { AvatarButton } from "@thunderstore/cyberstorm/src/components/Avatar/AvatarButton";
 import { DropDownLink } from "@thunderstore/cyberstorm/src/components/DropDown/DropDownLink";
@@ -37,6 +38,19 @@ export function UserDropDown(props: Props) {
                   </div>
                 </div>
               </RadixDropDown.Item>,
+
+              <DropDownDivider key="divider-first" />,
+
+              <CyberstormLink linkId="Teams" key="teams">
+                <DropDownItem
+                  content={
+                    <DropDownLink
+                      leftIcon={<FontAwesomeIcon icon={faUsers} />}
+                      label="Teams"
+                    />
+                  }
+                />
+              </CyberstormLink>,
 
               <DropDownDivider key="divider-first" />,
 

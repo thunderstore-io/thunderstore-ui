@@ -1,0 +1,18 @@
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--16);
+}
+
+.boldText {
+  font-weight: var(--font-weight-bold);
+}
+
+/* TODO: Text in header row and content rows are not aligned */
+
+/* TODO: why do we have this hover color, and should it apply to hover
+   on the whole row, not just one column?
+*/
+.nameColumn:hover {
+  color: rgb(57 233 170);
+}

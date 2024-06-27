@@ -10,6 +10,7 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   useLoaderData,
+  useLocation,
   useRouteError,
 } from "@remix-run/react";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
@@ -105,6 +106,9 @@ export async function clientLoader() {
 }
 
 // REMIX TODO: Do we want to force a hydration at the root level?
+// Answer: Yes and no, without manual hydrating the header will not update
+// to have the user stuff, since the initial data from server loader will be used
+// until data changes or updates
 // clientLoader.hydrate = true;
 
 const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
@@ -118,6 +122,9 @@ function Root() {
     sessionId: string | null;
     currentUser: CurrentUser;
   } = JSON.parse(JSON.stringify(loaderOutput));
+
+  const location = useLocation();
+  const shouldShowAds = !location.pathname.startsWith("/teams");
 
   return (
     <html lang="en">
@@ -149,9 +156,11 @@ function Root() {
                       <Outlet />
                     </div>
                     <div className={styles.sideContainers}>
-                      {adContainerIds.map((cid, k_i) => (
-                        <AdContainer key={k_i} containerId={cid} noHeader />
-                      ))}
+                      {shouldShowAds
+                        ? adContainerIds.map((cid, k_i) => (
+                            <AdContainer key={k_i} containerId={cid} noHeader />
+                          ))
+                        : null}
                     </div>
                   </section>
                   <Footer />
@@ -162,7 +171,7 @@ function Root() {
         </SessionProvider>
         <ScrollRestoration />
         <Scripts />
-        <AdsInit />
+        {shouldShowAds ? <AdsInit /> : null}
       </body>
     </html>
   );
@@ -264,9 +273,9 @@ function AdsInit() {
 
   const nitroAds = typeof window !== "undefined" ? window.nitroAds : undefined;
   useEffect(() => {
-    if (nitroAds !== undefined) {
+    if (nitroAds !== undefined && nitroAds.createAd !== undefined) {
       adContainerIds.forEach((cid) => {
-        if (nitroAds !== undefined) {
+        if (nitroAds !== undefined && nitroAds.createAd !== undefined) {
           nitroAds.createAd(cid, {
             demo: false,
             format: "display",
