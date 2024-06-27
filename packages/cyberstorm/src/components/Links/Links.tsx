@@ -65,6 +65,9 @@ export type CyberstormLinkIds =
   | "Team"
   | "Teams"
   | "TeamSettings"
+  | "TeamSettingsMembers"
+  | "TeamSettingsServiceAccounts"
+  | "TeamSettingsSettings"
   | "TermsOfService"
   | "User";
 

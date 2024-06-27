@@ -16,6 +16,7 @@ import { CyberstormLink } from "@thunderstore/cyberstorm";
 
 export function DisbandTeamForm(props: {
   dialogOnChange: (v: boolean) => void;
+  onSuccess: () => void;
   teamName: string;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({

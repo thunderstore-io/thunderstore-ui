@@ -13,6 +13,7 @@ import { CyberstormLink } from "@thunderstore/cyberstorm";
 
 export function LeaveTeamForm(props: {
   dialogOnChange: (v: boolean) => void;
+  onSuccess: () => void;
   userName: string;
   teamName: string;
 }) {
@@ -25,6 +26,7 @@ export function LeaveTeamForm(props: {
       onSubmitSuccess={() => {
         onSubmitSuccess();
         props.dialogOnChange(false);
+        props.onSuccess();
       }}
       onSubmitError={onSubmitError}
       schema={z.object({})}

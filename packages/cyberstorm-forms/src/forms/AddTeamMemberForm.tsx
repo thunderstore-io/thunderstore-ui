@@ -15,6 +15,7 @@ import { FormSelect } from "../components/FormSelect";
 
 export function AddTeamMemberForm(props: {
   dialogOnChange: (v: boolean) => void;
+  updateTrigger: () => void;
   teamName: string;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
@@ -30,6 +31,7 @@ export function AddTeamMemberForm(props: {
     <ApiForm
       onSubmitSuccess={() => {
         onSubmitSuccess();
+        props.updateTrigger();
         props.dialogOnChange(false);
       }}
       onSubmitError={onSubmitError}

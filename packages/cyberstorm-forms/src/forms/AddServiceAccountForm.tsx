@@ -32,7 +32,10 @@ function isServiceAccountSuccessResponse(
   );
 }
 
-export function AddServiceAccountForm(props: { teamName: string }) {
+export function AddServiceAccountForm(props: {
+  teamName: string;
+  updateTrigger: () => void;
+}) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: "Service account created",
   });
@@ -51,6 +54,7 @@ export function AddServiceAccountForm(props: { teamName: string }) {
         setServiceAccountAdded(true);
         setAddedServiceAccountToken(responseJson.service_account_token);
         setAddedServiceAccountNickname(responseJson.service_account_nickname);
+        props.updateTrigger();
         onSubmitSuccess();
       } else {
         onSubmitError();
