@@ -1,0 +1,12 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--32);
+  justify-content: space-between;
+}
+
+.teamContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}

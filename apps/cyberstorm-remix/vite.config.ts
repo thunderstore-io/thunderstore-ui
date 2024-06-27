@@ -41,6 +41,24 @@ export default defineConfig({
             "p/dependants/Dependants.tsx"
           );
           route("/teams", "settings/teams/Teams.tsx");
+          route(
+            "/teams/:namespaceId",
+            "settings/teams/team/teamSettings.tsx",
+            () => {
+              route("", "settings/teams/team/tabs/Profile/Profile.tsx", {
+                index: true,
+              });
+              route("members", "settings/teams/team/tabs/Members/Members.tsx");
+              route(
+                "service-accounts",
+                "settings/teams/team/tabs/ServiceAccounts/ServiceAccounts.tsx"
+              );
+              route(
+                "settings",
+                "settings/teams/team/tabs/Settings/Settings.tsx"
+              );
+            }
+          );
         });
       },
     }),
