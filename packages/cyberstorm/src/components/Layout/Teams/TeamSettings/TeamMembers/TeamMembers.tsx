@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { Dialog } from "../../../../..";
 import { AddTeamMemberForm } from "@thunderstore/cyberstorm-forms";
-import { useState } from "react";
 
 interface Props {
   teamName: string;
@@ -19,7 +18,6 @@ export function TeamMembers(props: Props) {
 
   const dapper = useDapper();
   const members = usePromise(dapper.getTeamMembers, [teamName]);
-  const [dialogOpen, setOpenDialog] = useState(false);
 
   return (
     <div>
@@ -28,8 +26,6 @@ export function TeamMembers(props: Props) {
         description="Your best buddies"
         additionalLeftColumnContent={
           <Dialog.Root
-            open={dialogOpen}
-            onOpenChange={setOpenDialog}
             title="Add Member"
             trigger={
               <Button.Root colorScheme="primary" paddingSize="large">
@@ -40,10 +36,7 @@ export function TeamMembers(props: Props) {
               </Button.Root>
             }
           >
-            <AddTeamMemberForm
-              dialogOnChange={setOpenDialog}
-              teamName={teamName}
-            />
+            <AddTeamMemberForm teamName={teamName} />
           </Dialog.Root>
         }
         content={<TeamMemberList members={members} teamName={teamName} />}

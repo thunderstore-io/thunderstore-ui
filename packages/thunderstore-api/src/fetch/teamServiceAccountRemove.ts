@@ -14,7 +14,7 @@ export function teamServiceAccountRemove(
   _data: teamServiceAccountRemoveApiArgs,
   meta: teamServiceAccountRemoveMetaArgs
 ) {
-  const path = `/api/cyberstorm/team/${meta.teamName}/service-accounts/delete/`;
+  const path = `/api/cyberstorm/team/${meta.teamName}/service-account/delete/`;
 
   return apiFetch2({
     config,

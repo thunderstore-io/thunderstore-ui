@@ -11,21 +11,27 @@ import {
   FormTextInput,
   useFormToaster,
 } from "@thunderstore/cyberstorm-forms";
-import { useDapper } from "@thunderstore/dapper";
-import { usePromise } from "@thunderstore/use-promise";
 import { SettingItem } from "@thunderstore/cyberstorm/src/components/SettingItem/SettingItem";
+import { TeamDetails } from "@thunderstore/dapper/types";
 
-export function TeamDetailsEdit({ teamName }: { teamName: string }) {
-  const toaster = useFormToaster({
+export function TeamDetailsEdit({
+  team,
+  updateTrigger,
+}: {
+  team: TeamDetails;
+  updateTrigger: () => Promise<void>;
+}) {
+  const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: "Changes saved",
   });
 
-  const dapper = useDapper();
-  const team = usePromise(dapper.getTeamDetails, [teamName]);
-
   return (
     <ApiForm
-      {...toaster}
+      onSubmitSuccess={() => {
+        onSubmitSuccess();
+        updateTrigger();
+      }}
+      onSubmitError={onSubmitError}
       schema={teamDetailsEditFormSchema}
       meta={{ teamIdentifier: team.name }}
       endpoint={teamDetailsEdit}

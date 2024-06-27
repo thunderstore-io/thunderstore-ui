@@ -83,7 +83,11 @@ const library: LinkLibrary = {
   Settings: (p) => Link({ ...p, url: `/settings/` }),
   Team: (p) => Link({ ...p, url: `/c/${p.community}/p/${p.team}/` }),
   Teams: (p) => Link({ ...p, url: `/teams/` }),
-  TeamSettings: (p) => Link({ ...p, url: `/teams/${p.team}/profile` }),
+  TeamSettings: (p) => Link({ ...p, url: `/teams/${p.team}` }),
+  TeamSettingsMembers: (p) => Link({ ...p, url: `/teams/${p.team}/members` }),
+  TeamSettingsServiceAccounts: (p) =>
+    Link({ ...p, url: `/teams/${p.team}/service-accounts` }),
+  TeamSettingsSettings: (p) => Link({ ...p, url: `/teams/${p.team}/settings` }),
   TermsOfService: (p) => Link({ ...p, url: "/terms-of-service/" }),
   User: (p) => Link({ ...p, url: `/u/${p.user}/` }),
 };

@@ -16,13 +16,16 @@ interface DialogProps extends PropsWithChildren {
   showHeaderBorder?: boolean;
 }
 
+// TODO: This needs to be reworked to use Popover API
 /**
  * Cyberstorm Dialog Component
  */
 export function Dialog(props: DialogProps) {
   const {
     children,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     open,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onOpenChange,
     trigger,
     title = undefined,
@@ -33,7 +36,7 @@ export function Dialog(props: DialogProps) {
 
   return (
     <div>
-      <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
+      <RadixDialog.Root>
         <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>
         <RadixDialog.Portal>
           <RadixDialog.Overlay className={styles.overlay}>

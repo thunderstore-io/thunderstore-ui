@@ -11,33 +11,28 @@ import {
 import { z } from "zod";
 import { CyberstormLink } from "@thunderstore/cyberstorm";
 
-export function LeaveTeamForm(props: {
-  dialogOnChange: (v: boolean) => void;
-  userName: string;
-  teamName: string;
-}) {
+export function LeaveTeamForm(props: { username: string; teamName: string }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
-    successMessage: `${props.userName} left team ${props.teamName}`,
+    successMessage: `${props.username} left team ${props.teamName}`,
   });
 
   return (
     <ApiForm
       onSubmitSuccess={() => {
         onSubmitSuccess();
-        props.dialogOnChange(false);
       }}
       onSubmitError={onSubmitError}
       schema={z.object({})}
       endpoint={teamRemoveMember}
       formProps={{ className: styles.root }}
-      meta={{ teamIdentifier: props.teamName, user: props.userName }}
+      meta={{ teamIdentifier: props.teamName, username: props.username }}
     >
       <div className={styles.dialog}>
         <div className={styles.dialogText}>
           You are about to leave the team{" "}
           <CyberstormLink linkId="Team" team={props.teamName}>
             <span className={styles.leaveDescriptionTeamName}>
-              {props.userName}
+              {props.username}
             </span>
           </CyberstormLink>
         </div>

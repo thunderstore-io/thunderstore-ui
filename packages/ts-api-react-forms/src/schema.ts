@@ -7,7 +7,7 @@ export const createTeamFormSchema = z.object({
 });
 
 export const teamAddMemberFormSchema = z.object({
-  user: z
+  username: z
     .string({ required_error: "Username is required" })
     .min(1, { message: "Username is required" }),
   role: z
@@ -16,7 +16,7 @@ export const teamAddMemberFormSchema = z.object({
 });
 
 export const teamEditMemberFormSchema = z.object({
-  user: z
+  username: z
     .string({ required_error: "Username is required" })
     .min(1, { message: "Username is required" }),
   role: z

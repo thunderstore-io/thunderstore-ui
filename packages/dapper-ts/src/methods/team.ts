@@ -52,7 +52,7 @@ export async function getTeamMembers(
   return parsed.data;
 }
 
-const serviceAccountSchema = z
+export const serviceAccountSchema = z
   .object({
     identifier: z.string().uuid(),
     name: z.string().nonempty(),
