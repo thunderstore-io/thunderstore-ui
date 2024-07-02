@@ -5,9 +5,9 @@ import { ReactNode, Suspense } from "react";
 import Tabs from "@thunderstore/cyberstorm/src/components/NewTabs/Tabs";
 import {
   faFileLines,
-  faFilePlus,
+  faFileCirclePlus,
   faCodeBranch,
-} from "@fortawesome/pro-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function PacakgeTabsLayout({
   packageReadme,
@@ -38,7 +38,7 @@ export default function PacakgeTabsLayout({
       <Tabs.Tab
         name="changelog"
         label="Changelog"
-        icon={faFilePlus}
+        icon={faFileCirclePlus}
         disabled={!packageData.has_changelog}
       >
         <Suspense fallback={<p>TODO: Changelog Skeleton</p>}>

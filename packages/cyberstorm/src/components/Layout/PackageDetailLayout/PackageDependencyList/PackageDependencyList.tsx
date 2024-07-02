@@ -1,5 +1,4 @@
-import { faBoxOpen } from "@fortawesome/pro-regular-svg-icons";
-import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
+import { faCaretRight, faBoxOpen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PackageDependency } from "@thunderstore/dapper/types";
 

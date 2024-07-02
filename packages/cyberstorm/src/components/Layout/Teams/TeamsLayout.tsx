@@ -6,7 +6,7 @@ import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { SettingItem } from "../../SettingItem/SettingItem";
 import * as Button from "../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck, faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faCircleCheck, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { TeamList } from "./TeamList/TeamList";
 import { Dialog } from "../../../index";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";

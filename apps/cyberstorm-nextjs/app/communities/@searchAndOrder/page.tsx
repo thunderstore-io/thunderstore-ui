@@ -10,7 +10,7 @@ import {
   faArrowDownAZ,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
-import { faFire } from "@fortawesome/pro-solid-svg-icons";
+import { faFire } from "@fortawesome/free-solid-svg-icons";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 

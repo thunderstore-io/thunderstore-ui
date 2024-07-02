@@ -10,7 +10,7 @@ import {
   faUsers,
   faUserCog,
   faCog,
-} from "@fortawesome/pro-regular-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 
 export default function TeamsLayout(props: {

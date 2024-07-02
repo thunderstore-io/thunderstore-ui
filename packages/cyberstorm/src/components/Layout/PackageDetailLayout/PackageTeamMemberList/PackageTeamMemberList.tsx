@@ -2,8 +2,11 @@ import styles from "./PackageTeamMemberList.module.css";
 import { TeamMember } from "@thunderstore/dapper/types";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsers } from "@fortawesome/pro-regular-svg-icons";
-import { faCaretRight, faCrown } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faCaretRight,
+  faCrown,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 import { CyberstormLink } from "../../../Links/Links";
 import { Icon } from "../../../Icon/Icon";
 import { Avatar } from "../../../Avatar/Avatar";

@@ -5,8 +5,8 @@ import {
   ImageWithFallback,
   CyberstormLink,
 } from "@thunderstore/cyberstorm";
-import { faBoxOpen } from "@fortawesome/pro-regular-svg-icons";
-import { faCaretRight } from "@fortawesome/pro-solid-svg-icons";
+import { faBoxOpen } from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./PackageDependencyList.module.css";
 import { useDapper } from "@thunderstore/dapper";

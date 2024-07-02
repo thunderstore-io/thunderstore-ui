@@ -15,7 +15,7 @@ import {
   faUsers,
   faUserCog,
   faCog,
-} from "@fortawesome/pro-regular-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { TeamLeaveAndDisband } from "./TeamLeaveAndDisband/TeamLeaveAndDisband";
 
 interface Props {

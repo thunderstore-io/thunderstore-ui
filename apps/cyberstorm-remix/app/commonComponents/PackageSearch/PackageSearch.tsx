@@ -1,5 +1,5 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { faXmarkLarge, faSlidersUp } from "@fortawesome/pro-regular-svg-icons";
+import { faXmarkLarge, faSlidersUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   PackageCategory,

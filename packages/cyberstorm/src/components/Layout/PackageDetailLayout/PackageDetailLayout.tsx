@@ -1,5 +1,4 @@
 "use client";
-import { faUsers } from "@fortawesome/pro-regular-svg-icons";
 import {
   faDonate,
   faDownload,
@@ -8,10 +7,11 @@ import {
   faFlag,
   faCodeBranch,
   faFileLines,
-  faFilePlus,
-  faArrowUpRight,
+  faFileCirclePlus,
+  faArrowUpRightFromSquare,
   faBoxes,
-} from "@fortawesome/pro-solid-svg-icons";
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
@@ -89,7 +89,7 @@ export function PackageDetailLayout(props: Props) {
         <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
           <Button.ButtonLabel>{packageData.website_url}</Button.ButtonLabel>
           <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faArrowUpRight} />
+            <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
           </Button.ButtonIcon>
         </Button.Root>
       </a>
@@ -154,7 +154,7 @@ export function PackageDetailLayout(props: Props) {
           <Tabs.Tab
             name="changelog"
             label="Changelog"
-            icon={faFilePlus}
+            icon={faFileCirclePlus}
             disabled={!packageData.has_changelog}
           >
             <Suspense fallback={<p>TODO</p>}>

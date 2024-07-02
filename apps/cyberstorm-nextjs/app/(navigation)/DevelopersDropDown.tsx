@@ -1,4 +1,4 @@
-import { faCaretDown, faCode } from "@fortawesome/pro-solid-svg-icons";
+import { faCaretDown, faCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Navigation.module.css";

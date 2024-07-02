@@ -1,7 +1,10 @@
 "use client";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
-import { faBoxOpen, faDownload } from "@fortawesome/pro-regular-svg-icons";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faArrowUpRightFromSquare,
+  faBoxOpen,
+  faDownload,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
@@ -78,7 +81,7 @@ export function CommunityProfileLayout(props: Props) {
                   </Button.ButtonIcon>
                   <Button.ButtonLabel>Join our community</Button.ButtonLabel>
                   <Button.ButtonIcon>
-                    <FontAwesomeIcon icon={faArrowUpRight} />
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                   </Button.ButtonIcon>
                 </Button.Root>
               </a>

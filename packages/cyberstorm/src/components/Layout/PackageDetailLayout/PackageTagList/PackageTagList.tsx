@@ -2,14 +2,13 @@ import styles from "./PackageTagList.module.css";
 import { PackageListingDetails } from "@thunderstore/dapper/types";
 import { WrapperCard } from "../../../WrapperCard/WrapperCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTag } from "@fortawesome/pro-regular-svg-icons";
+import { faTag } from "@fortawesome/free-solid-svg-icons";
 import { Tag } from "../../../Tag/Tag";
 import {
   faThumbtack,
   faWarning,
-  faLips,
-  faSparkles,
-} from "@fortawesome/pro-solid-svg-icons";
+  faBomb,
+} from "@fortawesome/free-solid-svg-icons";
 import { ReactNode } from "react";
 
 export interface PackageTagListProps {
@@ -77,7 +76,7 @@ function getPackageFlags(packageData: PackageListingDetails) {
         label="NSFW"
         colorScheme="pink"
         size="mediumPlus"
-        leftIcon={<FontAwesomeIcon icon={faLips} />}
+        leftIcon={<FontAwesomeIcon icon={faBomb} />}
       />
     );
   }
@@ -88,7 +87,7 @@ function getPackageFlags(packageData: PackageListingDetails) {
         label="New"
         colorScheme="green"
         size="mediumPlus"
-        leftIcon={<FontAwesomeIcon icon={faSparkles} />}
+        leftIcon={<FontAwesomeIcon icon={faBomb} />}
       />
     );
   }

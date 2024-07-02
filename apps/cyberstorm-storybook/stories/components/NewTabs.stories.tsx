@@ -2,7 +2,7 @@ import { StoryFn, Meta } from "@storybook/react";
 import { NewTabs } from "@thunderstore/cyberstorm";
 import { usePromise } from "@thunderstore/use-promise";
 import { Suspense } from "react";
-import { faCog, faFlag, faThumbsUp } from "@fortawesome/pro-solid-svg-icons";
+import { faCog, faFlag, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 const meta = {
   title: "Cyberstorm/Components/Tabs",

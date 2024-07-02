@@ -8,7 +8,7 @@ import { Connections } from "./Connections/Connections";
 import { Account } from "./Account/Account";
 import { BaseLayout } from "../BaseLayout/BaseLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleNodes, faCog } from "@fortawesome/pro-regular-svg-icons";
+import { faCircleNodes, faCog } from "@fortawesome/free-solid-svg-icons";
 import { PageHeader } from "../BaseLayout/PageHeader/PageHeader";
 import { useDapper } from "@thunderstore/dapper";
 import { CurrentUser } from "@thunderstore/dapper/types";

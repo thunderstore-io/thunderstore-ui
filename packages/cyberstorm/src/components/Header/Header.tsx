@@ -1,4 +1,4 @@
-import { faGamepadModern } from "@fortawesome/pro-solid-svg-icons";
+import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Header.module.css";
@@ -31,7 +31,7 @@ export function Header() {
           tooltipText="Communities"
         >
           <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faGamepadModern} />
+            <FontAwesomeIcon icon={faGamepad} />
           </Button.ButtonIcon>
         </Button.Root>
         <DevelopersDropDown squareButton />

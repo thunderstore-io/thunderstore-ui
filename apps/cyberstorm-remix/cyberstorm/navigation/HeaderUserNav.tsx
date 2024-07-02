@@ -1,4 +1,4 @@
-import { faUpload, faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { faUpload, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { UserDropDown } from "./UserDropDown";
@@ -57,7 +57,7 @@ export const HeaderUserNav = (props: { user: CurrentUser }) => {
               className={styles.navAccountPopoverCloseButton}
             >
               <Icon inline noWrapper>
-                <FontAwesomeIcon icon={faXmarkLarge} />
+                <FontAwesomeIcon icon={faXmark} />
               </Icon>
             </button>
             <nav className={styles.mobileNavPopoverList}>

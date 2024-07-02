@@ -7,7 +7,7 @@ import {
   faThumbsUp,
   faFlag,
   faBoxes,
-} from "@fortawesome/pro-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./PackageDetailsLayout.module.css";
 import { Button, Icon, Tag } from "@thunderstore/cyberstorm";

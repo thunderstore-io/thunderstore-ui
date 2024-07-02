@@ -3,7 +3,7 @@ import { SettingItem } from "../../../../SettingItem/SettingItem";
 import * as Button from "../../../../Button/";
 import { ServiceAccountList } from "./ServiceAccountList/ServiceAccountList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 import { Dialog } from "../../../../../index";

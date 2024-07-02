@@ -1,6 +1,6 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClone, faCheck } from "@fortawesome/pro-regular-svg-icons";
+import { faClone, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styles from "./CopyButton.module.css";
 import { Tooltip } from "../Tooltip/Tooltip";

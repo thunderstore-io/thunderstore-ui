@@ -1,5 +1,5 @@
 "use client";
-import { faSignOut } from "@fortawesome/pro-solid-svg-icons";
+import { faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

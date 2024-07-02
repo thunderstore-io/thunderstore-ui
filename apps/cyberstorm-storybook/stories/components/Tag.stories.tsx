@@ -2,7 +2,7 @@ import { StoryFn, Meta } from "@storybook/react";
 import { Tag } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTag, faXmark } from "@fortawesome/pro-solid-svg-icons";
+import { faTag, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const meta = {
   title: "Cyberstorm/Components/Tag",

@@ -19,7 +19,7 @@ import {
   faArrowDownAZ,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
-import { faGhost, faFire } from "@fortawesome/pro-solid-svg-icons";
+import { faGhost, faFire } from "@fortawesome/free-solid-svg-icons";
 import { useDebounce } from "use-debounce";
 import {
   useLoaderData,

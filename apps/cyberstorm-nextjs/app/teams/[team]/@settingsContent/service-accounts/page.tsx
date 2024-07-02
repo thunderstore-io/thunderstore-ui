@@ -5,7 +5,7 @@ import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 import { ServiceAccountList } from "./ServiceAccountList/ServiceAccountList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function Page(props: { params: { team: string } }) {
   const dapper = useDapper();

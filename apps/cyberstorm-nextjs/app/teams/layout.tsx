@@ -5,7 +5,7 @@ import React, { ReactNode, Suspense, useState } from "react";
 
 import styles from "./TeamsLayout.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { CreateTeamForm } from "@thunderstore/cyberstorm-forms";
 import {
   BreadCrumbs,

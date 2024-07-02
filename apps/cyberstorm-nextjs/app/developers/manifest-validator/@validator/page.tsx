@@ -1,5 +1,5 @@
 "use client";
-import { faWarning } from "@fortawesome/pro-solid-svg-icons";
+import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";

@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import { CodeInput } from "../../../CodeInput/CodeInput";
 import { Alert } from "../../../Alert/Alert";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWarning } from "@fortawesome/pro-solid-svg-icons";
+import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { Select } from "../../../Select/Select";
 import { isRecord, isStringArray } from "../../../../utils/type_guards";
 import { usePromise } from "@thunderstore/use-promise";

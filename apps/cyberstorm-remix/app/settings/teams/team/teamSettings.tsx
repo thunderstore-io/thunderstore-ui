@@ -17,7 +17,7 @@ import {
   faFilePlus,
   faCodeBranch,
   faBook,
-} from "@fortawesome/pro-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

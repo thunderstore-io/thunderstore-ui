@@ -3,7 +3,7 @@ import {
   faGamepad,
   faLongArrowLeft,
   faCaretRight,
-} from "@fortawesome/pro-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Navigation.module.css";

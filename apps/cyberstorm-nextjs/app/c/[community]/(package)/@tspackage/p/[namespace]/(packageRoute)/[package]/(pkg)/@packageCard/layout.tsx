@@ -10,10 +10,10 @@ import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import {
-  faArrowUpRight,
+  faArrowUpRightFromSquare,
   faUsers,
   faCog,
-} from "@fortawesome/pro-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactNode, Suspense } from "react";
 
@@ -54,7 +54,7 @@ export default function PackageCardLayout({
         <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
           <Button.ButtonLabel>{packageData.website_url}</Button.ButtonLabel>
           <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faArrowUpRight} />
+            <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
           </Button.ButtonIcon>
         </Button.Root>
       </a>

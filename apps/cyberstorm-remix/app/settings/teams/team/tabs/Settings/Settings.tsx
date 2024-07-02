@@ -3,10 +3,7 @@ import { SettingItem, Alert, Dialog, Button } from "@thunderstore/cyberstorm";
 import { LeaveTeamForm, DisbandTeamForm } from "@thunderstore/cyberstorm-forms";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faOctagonExclamation,
-  faTrashCan,
-} from "@fortawesome/pro-solid-svg-icons";
+import { faBomb, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { currentUserSchema } from "@thunderstore/dapper-ts";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { LoaderFunctionArgs } from "@remix-run/node";
@@ -75,7 +72,7 @@ export default function Settings() {
         content={
           <div className={styles.content}>
             <Alert
-              icon={<FontAwesomeIcon icon={faOctagonExclamation} />}
+              icon={<FontAwesomeIcon icon={faBomb} />}
               content={
                 "You cannot currently leave this team as you are it's last owner."
               }
@@ -113,7 +110,7 @@ export default function Settings() {
         content={
           <div className={styles.content}>
             <Alert
-              icon={<FontAwesomeIcon icon={faOctagonExclamation} />}
+              icon={<FontAwesomeIcon icon={faBomb} />}
               content={
                 "You cannot currently disband this team as it has packages."
               }

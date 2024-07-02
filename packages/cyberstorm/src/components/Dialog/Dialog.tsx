@@ -4,7 +4,7 @@ import styles from "./Dialog.module.css";
 import * as RadixDialog from "@radix-ui/react-dialog";
 import * as Button from "../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "../..";
 import { classnames } from "../../utils/utils";
 
@@ -62,7 +62,7 @@ export function Dialog(props: DialogProps) {
                       <Button.ButtonIcon>
                         <FontAwesomeIcon
                           className={styles.closeIcon}
-                          icon={faXmarkLarge}
+                          icon={faXmark}
                         />
                       </Button.ButtonIcon>
                     </Button.Root>

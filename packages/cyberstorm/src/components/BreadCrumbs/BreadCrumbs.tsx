@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 
-import { faHouse } from "@fortawesome/pro-regular-svg-icons";
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./BreadCrumbs.module.css";
 import { CyberstormLink } from "../Links/Links";

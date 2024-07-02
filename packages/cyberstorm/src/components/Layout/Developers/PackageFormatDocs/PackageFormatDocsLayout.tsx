@@ -5,7 +5,7 @@ import { BaseLayout } from "../../BaseLayout/BaseLayout";
 import { PageHeader } from "../../BaseLayout/PageHeader/PageHeader";
 import { Table } from "../../../Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/pro-solid-svg-icons";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { CodeBox } from "../../../CodeBox/CodeBox";
 import { Icon } from "../../../Icon/Icon";
 

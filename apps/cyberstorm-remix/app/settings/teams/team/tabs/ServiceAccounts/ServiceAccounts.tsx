@@ -2,7 +2,7 @@ import { SettingItem, Dialog, Button } from "@thunderstore/cyberstorm";
 import { AddServiceAccountForm } from "@thunderstore/cyberstorm-forms";
 import { ServiceAccountList } from "./ServiceAccountList/ServiceAccountList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useRevalidator } from "@remix-run/react";
 import { serviceAccountSchema } from "@thunderstore/dapper-ts/src/methods/team";

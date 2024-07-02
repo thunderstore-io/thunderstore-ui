@@ -3,7 +3,7 @@ import { Alert, Button, Tag, TextInput } from "@thunderstore/cyberstorm";
 import styles from "./PackageManagementForm.module.css";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
-import { faCircleExclamation } from "@fortawesome/pro-solid-svg-icons";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Page({
