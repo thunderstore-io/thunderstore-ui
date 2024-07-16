@@ -1,4 +1,4 @@
-import { faSignOut, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faSignOut, faUsers, faCog } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -28,6 +28,16 @@ export function UserActions(props: { user: CurrentUser }) {
               </div>
             </div>
           </div>,
+          <CyberstormLink
+            linkId="Settings"
+            key="settings"
+            className={styles.mobileNavAccountPopoverItem}
+          >
+            <DropDownLink
+              leftIcon={<FontAwesomeIcon icon={faCog} />}
+              label="Settings"
+            />
+          </CyberstormLink>,
           <CyberstormLink
             linkId="Teams"
             key="teams"

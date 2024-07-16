@@ -1,4 +1,4 @@
-import { faSignOut, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faSignOut, faUsers, faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as RadixDropDown from "@radix-ui/react-dropdown-menu";
 
@@ -41,6 +41,17 @@ export function UserDropDown(props: Props) {
 
               <DropDownDivider key="divider-first" />,
 
+              <CyberstormLink linkId="Settings" key="settings">
+                <DropDownItem
+                  content={
+                    <DropDownLink
+                      leftIcon={<FontAwesomeIcon icon={faCog} />}
+                      label="Settings"
+                    />
+                  }
+                />
+              </CyberstormLink>,
+
               <CyberstormLink linkId="Teams" key="teams">
                 <DropDownItem
                   content={
@@ -52,7 +63,7 @@ export function UserDropDown(props: Props) {
                 />
               </CyberstormLink>,
 
-              <DropDownDivider key="divider-first" />,
+              <DropDownDivider key="divider-second" />,
 
               <a href="/logout" key="logout">
                 <DropDownItem

@@ -98,6 +98,8 @@ export interface LinkLibrary {
   PrivacyPolicy: NoRequiredProps;
   /** Settings */
   Settings: NoRequiredProps;
+  /** Settings Account page */
+  SettingsAccount: NoRequiredProps;
   /** Team's public profile page */
   Team: (props: AnyProps & { team: string }) => RE | null;
   /** Teams */
@@ -142,6 +144,7 @@ const library: LinkLibrary = {
   PrivacyPolicy: noop,
   User: noop,
   Settings: noop,
+  SettingsAccount: noop,
   Team: noop,
   Teams: noop,
   TeamSettings: noop,

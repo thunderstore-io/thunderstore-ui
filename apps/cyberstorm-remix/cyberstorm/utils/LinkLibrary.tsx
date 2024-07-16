@@ -81,6 +81,7 @@ const library: LinkLibrary = {
   PackageUpload: (p) => Link({ ...p, url: "/developers/upload-package/" }),
   PrivacyPolicy: (p) => Link({ ...p, url: "/privacy-policy/" }),
   Settings: (p) => Link({ ...p, url: `/settings/` }),
+  SettingsAccount: (p) => Link({ ...p, url: `/settings/account/` }),
   Team: (p) => Link({ ...p, url: `/c/${p.community}/p/${p.team}/` }),
   Teams: (p) => Link({ ...p, url: `/teams/` }),
   TeamSettings: (p) => Link({ ...p, url: `/teams/${p.team}` }),
