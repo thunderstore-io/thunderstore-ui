@@ -18,8 +18,9 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { isRecord } from "@thunderstore/cyberstorm/src/utils/type_guards";
 
 interface ServiceAccountSuccessResponse {
-  service_account_token: string;
-  service_account_nickname: string;
+  api_token: string;
+  nickname: string;
+  team_name: string;
 }
 
 function isServiceAccountSuccessResponse(
@@ -27,8 +28,9 @@ function isServiceAccountSuccessResponse(
 ): responseBodyJson is ServiceAccountSuccessResponse {
   return (
     isRecord(responseBodyJson) &&
-    typeof responseBodyJson.service_account_token === "string" &&
-    typeof responseBodyJson.service_account_nickname === "string"
+    typeof responseBodyJson.api_token === "string" &&
+    typeof responseBodyJson.nickname === "string" &&
+    typeof responseBodyJson.team_name === "string"
   );
 }
 
@@ -48,17 +50,12 @@ export function AddServiceAccountForm(props: {
   function onSubmitSuccessExtra(responseBodyString: object) {
     // TODO: Fix the Result type resolving in the whole chain of ApiForm
     // It's now just assumed all results are objects
-    if (typeof responseBodyString === "string") {
-      const responseJson = JSON.parse(responseBodyString);
-      if (isServiceAccountSuccessResponse(responseJson)) {
-        setServiceAccountAdded(true);
-        setAddedServiceAccountToken(responseJson.service_account_token);
-        setAddedServiceAccountNickname(responseJson.service_account_nickname);
-        props.updateTrigger();
-        onSubmitSuccess();
-      } else {
-        onSubmitError();
-      }
+    if (isServiceAccountSuccessResponse(responseBodyString)) {
+      setServiceAccountAdded(true);
+      setAddedServiceAccountToken(responseBodyString.api_token);
+      setAddedServiceAccountNickname(responseBodyString.nickname);
+      props.updateTrigger();
+      onSubmitSuccess();
     } else {
       onSubmitError();
     }

@@ -17,3 +17,4 @@ export { DeleteAccountForm } from "./forms/DeleteAccountForm";
 export { DisbandTeamForm } from "./forms/DisbandTeamForm";
 export { LeaveTeamForm } from "./forms/LeaveTeamForm";
 export { PackageEditForm } from "./forms/PackageEditForm";
+export { UserConnectionsForm } from "./forms/UserConnectionsForm";

@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import {
   faFileLines,
-  faFilePlus,
+  faFolderPlus,
   faCodeBranch,
   faBook,
 } from "@fortawesome/free-solid-svg-icons";
@@ -133,7 +133,7 @@ export default function Community() {
                 )}
               >
                 <Icon inline wrapperClasses={tabsStyles.icon}>
-                  <FontAwesomeIcon icon={faFilePlus} />
+                  <FontAwesomeIcon icon={faFolderPlus} />
                 </Icon>
                 <span className={tabsStyles.label}>Service Accounts</span>
               </CyberstormLink>

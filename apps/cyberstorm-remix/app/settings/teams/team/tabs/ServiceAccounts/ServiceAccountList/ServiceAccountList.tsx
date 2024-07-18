@@ -13,6 +13,7 @@ const serviceAccountColumns = [
 interface Props {
   teamName: string;
   serviceAccounts: ServiceAccount[];
+  updateTrigger: () => void;
 }
 
 export function ServiceAccountList(props: Props) {
@@ -44,6 +45,7 @@ export function ServiceAccountList(props: Props) {
               teamName={props.teamName}
               serviceAccountNickname={serviceAccount.name}
               serviceAccountIdentifier={serviceAccount.identifier}
+              updateTrigger={props.updateTrigger}
             />
           </Dialog.Root>
         ),

@@ -42,6 +42,14 @@ export const userDeleteFormSchema = z.object({
     .min(1, { message: "Verification is required" }),
 });
 
+export const userLinkedAccountDisconnectFormSchema = z.object({
+  provider: z.union([
+    z.literal("discord"),
+    z.literal("github"),
+    z.literal("overwolf"),
+  ]),
+});
+
 export const teamDisbandFormSchema = z.object({
   verification: z
     .string({ required_error: "Verification is required" })
