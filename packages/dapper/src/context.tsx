@@ -10,7 +10,7 @@ export function DapperProvider(props: DapperProviderProps) {
   /**
    * Does NOT support changing the dapper instance after initialization. The
    * dapper instance will be created only once regardless of prop changes and
-   * bound to the global scope. On NextJS the instance may be shared between all
+   * bound to the global scope. On Remix the instance may be shared between all
    * requests handled by the server depending on the server configuration.
    *
    * TREAT AS A GLOBAL SINGLETON THAT'S SHARED ACROSS THE ENTIRE PROCESS.

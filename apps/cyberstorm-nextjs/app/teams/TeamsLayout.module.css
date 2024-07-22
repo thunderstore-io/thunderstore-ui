@@ -1,9 +1,0 @@
-.contentWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap--16);
-}
-
-.boldText {
-  font-weight: var(--font-weight-bold);
-}

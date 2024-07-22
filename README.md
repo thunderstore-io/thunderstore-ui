@@ -1,6 +1,6 @@
 # Thunderstore UI
 
-Monorepo containing Next.js frontend for [thunderstore.io](https://thunderstore.io)
+Monorepo containing Remix frontend for [thunderstore.io](https://thunderstore.io)
 and reusable UI components.
 
 ## Monorepo Setup
@@ -21,11 +21,11 @@ git clone git@github.com:thunderstore-io/thunderstore-ui.git thunderstore-ui
 cd thunderstore-ui
 yarn install
 
-// start Next.js dev server
-yarn workspace @thunderstore/cyberstorm-nextjs dev
+// start Remix dev server
+yarn workspace @thunderstore/cyberstorm-remix dev
 ```
 
-That's it. Changes done to `apps/cyberstorm-nextjs` and
+That's it. Changes done to `apps/cyberstorm-remix` and
 `packages/cyberstorm` should both be automatically visible at
 [http://localhost:3000/].
 
@@ -34,9 +34,9 @@ That's it. Changes done to `apps/cyberstorm-nextjs` and
 // build packages/* with preconstruct
 yarn build
 
-// build and start Next.js prod server
-yarn workspace @thunderstore/cyberstorm-nextjs build
-yarn workspace @thunderstore/cyberstorm-nextjs start
+// build and start Remix prod server
+yarn workspace @thunderstore/cyberstorm-remix build
+yarn workspace @thunderstore/cyberstorm-remix start
 ```
 
 ### Troubleshooting
