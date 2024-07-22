@@ -20,7 +20,8 @@ export function Markdown(props: MarkdownProps) {
     return (
       <div
         dangerouslySetInnerHTML={{
-          __html: input ? input : placeholder ? placeholder : "",
+          __html:
+            input && input !== "" ? input : placeholder ? placeholder : "",
         }}
         className={styles.root}
       />
@@ -28,7 +29,7 @@ export function Markdown(props: MarkdownProps) {
   }
   return (
     <ReactMarkdown className={styles.root} remarkPlugins={[gfm]}>
-      {input ? input : placeholder ? placeholder : ""}
+      {input && input !== "" ? input : placeholder ? placeholder : ""}
     </ReactMarkdown>
   );
 }

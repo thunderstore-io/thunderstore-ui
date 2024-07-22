@@ -65,6 +65,18 @@ export default defineConfig({
             });
             route("account", "settings/user/Account/Account.tsx");
           });
+          route(
+            "/package/create/docs",
+            "tools/package-format-docs/packageFormatDocs.tsx"
+          );
+          route(
+            "/tools/markdown-preview",
+            "tools/markdown-preview/markdownPreview.tsx"
+          );
+          route(
+            "/tools/manifest-v1-validator",
+            "tools/manifest-validator/manifestValidator.tsx"
+          );
         });
       },
     }),

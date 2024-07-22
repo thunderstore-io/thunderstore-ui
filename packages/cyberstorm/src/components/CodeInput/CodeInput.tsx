@@ -13,7 +13,10 @@ interface CodeInputProps {
     validationFunc: (
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       props: any
-    ) => Promise<{ status: "failure" | "success"; message: string }>;
+    ) => Promise<{
+      status: "failure" | "success" | "waiting";
+      message: string;
+    }>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     args: { [key: string]: any };
   };
