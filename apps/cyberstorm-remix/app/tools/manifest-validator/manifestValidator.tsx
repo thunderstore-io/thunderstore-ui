@@ -3,7 +3,6 @@ import {
   BreadCrumbs,
   CodeInput,
   CyberstormLink,
-  PageHeader,
   Select,
   SettingItem,
   isRecord,
@@ -19,6 +18,7 @@ import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Buffer } from "buffer";
 import { toolsManifestValidate } from "@thunderstore/thunderstore-api";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export async function loader() {
   const dapper = await getDapper();

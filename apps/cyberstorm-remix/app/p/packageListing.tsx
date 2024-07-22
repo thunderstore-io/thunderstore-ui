@@ -11,7 +11,6 @@ import {
   CyberstormLink,
   Dialog,
   Icon,
-  PageHeader,
   Tag,
 } from "@thunderstore/cyberstorm";
 import headerStyles from "./headerPackageDetailLayout.module.css";
@@ -51,6 +50,7 @@ import {
   PackageEditForm,
   PackageLikeAction,
 } from "@thunderstore/cyberstorm-forms";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [

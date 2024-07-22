@@ -7,7 +7,6 @@ import {
   CodeInput,
   CyberstormLink,
   Markdown,
-  PageHeader,
   SettingItem,
   isRecord,
 } from "@thunderstore/cyberstorm";
@@ -15,6 +14,7 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { toolsMarkdownPreview } from "@thunderstore/thunderstore-api";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { useState, useEffect } from "react";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export async function loader() {
   const dapper = await getDapper();

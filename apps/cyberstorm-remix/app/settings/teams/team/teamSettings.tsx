@@ -1,11 +1,6 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
-import {
-  BreadCrumbs,
-  CyberstormLink,
-  Icon,
-  PageHeader,
-} from "@thunderstore/cyberstorm";
+import { BreadCrumbs, CyberstormLink, Icon } from "@thunderstore/cyberstorm";
 import tabsStyles from "./Tabs.module.css";
 import styles from "./teamSettingsLayout.module.css";
 import rootStyles from "../../../RootLayout.module.css";
@@ -19,6 +14,7 @@ import {
   faBook,
 } from "@fortawesome/free-solid-svg-icons";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [

@@ -5,7 +5,6 @@ import {
   Button,
   CyberstormLink,
   Dialog,
-  PageHeader,
   SettingItem,
   Table,
 } from "@thunderstore/cyberstorm";
@@ -17,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { CreateTeamForm } from "@thunderstore/cyberstorm-forms";
 import { currentUserSchema } from "@thunderstore/dapper-ts";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction<typeof loader | typeof clientLoader> = ({
   data,
