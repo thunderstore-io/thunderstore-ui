@@ -1,5 +1,3 @@
-"use client";
-
 import { useToast } from "@thunderstore/cyberstorm/src/components/Toast/Provider";
 
 export type UseFormToasterArgs = {

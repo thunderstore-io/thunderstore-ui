@@ -1,4 +1,4 @@
-// import Router from "next/router";
+"use client";
 import {
   createContext,
   Dispatch,

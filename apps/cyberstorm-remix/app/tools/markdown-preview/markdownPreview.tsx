@@ -1,4 +1,3 @@
-"use client";
 import { useLoaderData } from "@remix-run/react";
 import rootStyles from "../../RootLayout.module.css";
 import styles from "./MarkdownPreview.module.css";
@@ -46,9 +45,6 @@ export default function MarkdownPreview() {
     args: { markdownPreviewInput, setHTML, dapper },
   };
 
-  // REMIX TODO: For some reason the fetch is done three times when
-  // initially adding something to the field and twice when editing
-  // REMIX TODO: Add the delay input here, so that it doesn't try to validate immediately
   useEffect(() => {
     if (markdownPreviewInput && dapper && markdownPreviewInput !== "") {
       setValidationTrigger(true);

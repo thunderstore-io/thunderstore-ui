@@ -1,4 +1,3 @@
-"use client";
 import { faSignOut, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as RadixDropDown from "@radix-ui/react-dropdown-menu";

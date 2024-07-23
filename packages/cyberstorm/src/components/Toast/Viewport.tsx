@@ -1,4 +1,3 @@
-"use client";
 import { Toast, ToastProps } from "./Toast";
 import styles from "./Toast.module.css";
 import * as RadixToast from "@radix-ui/react-toast";

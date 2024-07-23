@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

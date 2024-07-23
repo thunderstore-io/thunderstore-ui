@@ -1,5 +1,3 @@
-"use client";
-
 import styles from "./UserConnectionsForm.module.css";
 import { userLinkedAccountDisconnect } from "@thunderstore/thunderstore-api";
 import {

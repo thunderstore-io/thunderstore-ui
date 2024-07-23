@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback } from "react";
 import { z, ZodObject, ZodRawShape } from "zod";
 import { ApiError } from "@thunderstore/thunderstore-api";

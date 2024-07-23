@@ -17,7 +17,10 @@ import { useLoaderData } from "@remix-run/react";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Buffer } from "buffer";
-import { toolsManifestValidate } from "@thunderstore/thunderstore-api";
+import {
+  isApiError,
+  toolsManifestValidate,
+} from "@thunderstore/thunderstore-api";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export async function loader() {
@@ -58,9 +61,6 @@ export default function ManifestValidator() {
     args: { teamInput, manifestInput, dapper },
   };
 
-  // REMIX TODO: For some reason the fetch is done twice when
-  // initially adding something to the field
-  // REMIX TODO: Add the delay input here, so that it doesn't try to validate immediately
   useEffect(() => {
     if (teamInput && manifestInput && dapper && manifestInput !== "") {
       setValidationTrigger(true);
@@ -154,30 +154,35 @@ async function ManifestValidationResult(
   message: string;
 }> {
   const { teamInput, manifestInput } = props;
-  const response = await toolsManifestValidate(props.dapper.config, {
-    namespace: teamInput,
-    manifest_data: encode(manifestInput),
-  });
-
-  if (response.status === 200 || response.status === 400) {
+  try {
+    const response = await toolsManifestValidate(props.dapper.config, {
+      namespace: teamInput,
+      manifest_data: encode(manifestInput),
+    });
     const parsedResponse = await response.json();
     if (isHTMLResponse(parsedResponse)) {
-      if (parsedResponse.success) {
-        return { status: "success", message: "All systems go!" };
-      } else if (parsedResponse.non_field_errors) {
-        return {
-          status: "failure",
-          message: parsedResponse.non_field_errors[0],
-        };
-      } else if (
-        parsedResponse.namespace &&
-        parsedResponse.namespace[0] === "Object not found"
-      ) {
-        return {
-          status: "failure",
-          message: "Namespace not found",
-        };
+      return { status: "success", message: "All systems go!" };
+    }
+  } catch (e) {
+    if (isApiError(e)) {
+      if (isHTMLResponse(e.responseJson)) {
+        if (e.responseJson.non_field_errors) {
+          return {
+            status: "failure",
+            message: e.responseJson.non_field_errors[0],
+          };
+        } else if (
+          e.responseJson.namespace &&
+          e.responseJson.namespace[0] === "Object not found"
+        ) {
+          return {
+            status: "failure",
+            message: "Namespace not found",
+          };
+        }
       }
+    } else {
+      throw e;
     }
   }
   return { status: "failure", message: "Server error" };

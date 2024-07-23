@@ -1,5 +1,3 @@
-"use client";
-
 import styles from "./PackageEditForm.module.css";
 import { packageEditCategories } from "@thunderstore/thunderstore-api";
 import {

@@ -1,5 +1,3 @@
-"use client";
-
 import styles from "./DisbandTeamForm.module.css";
 import { teamDisbandTeam } from "@thunderstore/thunderstore-api";
 import {

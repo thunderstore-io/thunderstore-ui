@@ -1,4 +1,3 @@
-"use client";
 import { ServiceAccount } from "@thunderstore/dapper/types";
 import { RemoveServiceAccountForm } from "@thunderstore/cyberstorm-forms";
 import { useState } from "react";

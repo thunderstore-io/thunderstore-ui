@@ -11,6 +11,8 @@ import {
 
 import { classnames } from "../../utils/utils";
 import { Suspense, useEffect, useState } from "react";
+import { usePromise } from "@thunderstore/use-promise";
+import { useDebounce } from "use-debounce";
 
 const waitingElement = (
   <div className={styles.statusBar}>
@@ -21,12 +23,12 @@ const waitingElement = (
   </div>
 );
 
-const validatingElement = (
+const processingElement = (
   <div className={styles.statusBar}>
     <Icon inline wrapperClasses={classnames(styles.icon, styles.spinningIcon)}>
       <FontAwesomeIcon icon={faArrowsRotate} />
     </Icon>
-    Validating...
+    Processing...
   </div>
 );
 
@@ -52,48 +54,40 @@ const failureElement = (message: string) => {
   );
 };
 
-function Validator(props: {
+function ValidationElement(props: {
   validator: {
     validationFunc: (props: unknown) => Promise<{
-      status: "failure" | "success" | "waiting";
+      status: "waiting" | "processing" | "success" | "failure";
       message: string;
     }>;
     args: { [key: string]: unknown };
   };
   shouldValidate: boolean;
-  setStatus?: React.Dispatch<React.SetStateAction<string>>;
-}): JSX.Element {
-  const { validator, shouldValidate, setStatus } = props;
+}) {
+  const { validator, shouldValidate } = props;
 
-  if (!shouldValidate) {
-    if (setStatus) setStatus("waiting");
-    return waitingElement;
-  }
+  const [validation, setValidation] = useState<{
+    status: "waiting" | "processing" | "success" | "failure";
+    message: string;
+  }>({ status: "waiting", message: "Waiting for input" });
 
-  const [validation, setValidation] = useState({
-    status: "waiting",
-    message: "",
-  });
+  const [valArgs] = useDebounce({ ...validator.args }, 300);
+
+  const getValidation = () => usePromise(validator.validationFunc, [valArgs]);
 
   useEffect(() => {
-    async function getStatus() {
-      setValidation(await validator.validationFunc({ ...validator.args }));
+    if (shouldValidate) {
+      setValidation(getValidation);
     }
-    getStatus();
-  }, [validator.args]);
+  }, [valArgs]);
 
-  if (validation.status === "waiting") {
-    return waitingElement;
-  } else if (validation.status === "success") {
-    if (setStatus) setStatus("success");
-    return successElement;
-  } else if (validation.status === "failure" && validation.message) {
-    if (setStatus) setStatus("failure");
-    return failureElement(validation.message);
-  } else {
-    if (setStatus) setStatus("failure");
-    return failureElement("Validator internal error");
-  }
+  return !shouldValidate
+    ? waitingElement
+    : validation.status === "success"
+    ? successElement
+    : validation.status === "failure" && validation.message
+    ? failureElement(validation.message)
+    : failureElement("Internal error");
 }
 
 /**
@@ -102,22 +96,21 @@ function Validator(props: {
  */
 export function ValidationBar(props: {
   validator: {
-    validationFunc: (
-      props: unknown
-    ) => Promise<{ status: "failure" | "success"; message: string }>;
+    validationFunc: (props: unknown) => Promise<{
+      status: "waiting" | "processing" | "success" | "failure";
+      message: string;
+    }>;
     args: { [key: string]: unknown };
   };
   shouldValidate: boolean;
-  setStatus?: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element {
-  const { validator, shouldValidate, setStatus } = props;
+  const { validator, shouldValidate } = props;
 
   return (
-    <Suspense fallback={validatingElement}>
-      <Validator
+    <Suspense fallback={processingElement}>
+      <ValidationElement
         validator={validator}
         shouldValidate={shouldValidate}
-        setStatus={setStatus}
       />
     </Suspense>
   );

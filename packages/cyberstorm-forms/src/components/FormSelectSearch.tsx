@@ -1,5 +1,3 @@
-"use client";
-
 import { z, ZodObject, ZodRawShape } from "zod";
 import { Path, useController } from "react-hook-form";
 import { SelectSearch } from "@thunderstore/cyberstorm";
