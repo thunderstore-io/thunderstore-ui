@@ -23,25 +23,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ];
 };
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  if (params.namespaceId) {
-    try {
-      const dapper = await getDapper();
-      return {
-        team: await dapper.getTeamDetails(params.namespaceId),
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team not found", { status: 404 });
-      } else {
-        // REMIX TODO: Add sentry
-        throw error;
-      }
-    }
-  }
-  throw new Response("Team not found", { status: 404 });
-}
-
 // REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
@@ -62,10 +43,12 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   throw new Response("Team not found", { status: 404 });
 }
 
-clientLoader.hydrate = true;
+export function HydrateFallback() {
+  return "Loading...";
+}
 
 export default function Community() {
-  const { team } = useLoaderData<typeof loader | typeof clientLoader>();
+  const { team } = useLoaderData<typeof clientLoader>();
   const location = useLocation();
 
   const currentTab = location.pathname.endsWith("/settings")

@@ -15,15 +15,14 @@ import {
 } from "@thunderstore/cyberstorm";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import { Suspense } from "react";
-import { AvatarButton } from "@thunderstore/cyberstorm/src/components/Avatar/AvatarButton";
 import { DevelopersDropDown } from "./DevelopersDropDown";
-import { HeaderUserNav } from "./HeaderUserNav";
-import { UserActions } from "./UserActions";
-import { CurrentUser } from "@thunderstore/dapper/types";
+import { MobileUserPopover } from "./MobileUserPopover";
+import { DesktopUserDropdown } from "./DesktopUserDropdown";
+import { DesktopLoginPopover } from "./DesktopLoginPopover";
+import { MobileUserPopoverContent } from "./MobileUserPopoverContent";
+import { getEmptyUser } from "@thunderstore/dapper-ts";
 
-export function Navigation(props: { user: CurrentUser }) {
-  const avatar = props.user.connections.find((c) => c.avatar !== null)?.avatar;
-
+export function Navigation() {
   return (
     <>
       <header className={styles.desktopNavRoot}>
@@ -66,9 +65,9 @@ export function Navigation(props: { user: CurrentUser }) {
                 </Button.ButtonLabel>
               </Button.Root>
             </li>
-            {/* <Suspense fallback={<AvatarButton size="small" />}> */}
-            <HeaderUserNav user={props.user} />
-            {/* </Suspense> */}
+            <Suspense fallback={<DesktopLoginPopover />}>
+              <DesktopUserDropdown />
+            </Suspense>
           </ul>
         </nav>
       </header>
@@ -208,52 +207,9 @@ export function Navigation(props: { user: CurrentUser }) {
             Browse
           </CyberstormLink>
         </div>
-        <div className={styles.mobileNavItem}>
-          <Popover
-            popoverId={"mobileNavAccount"}
-            popoverRootClasses={styles.mobileNavAccountPopoverRoot}
-            popoverWrapperClasses={styles.mobileNavAccountPopoverWrapper}
-            trigger={
-              <Suspense
-                fallback={
-                  <AvatarButton
-                    size="verySmoll"
-                    popovertarget="mobileNavAccount"
-                    popovertargetaction="open"
-                  />
-                }
-              >
-                <AvatarButton
-                  src={avatar}
-                  username={props.user.username}
-                  size="verySmoll"
-                  popovertarget={"mobileNavAccount"}
-                  popovertargetaction={"open"}
-                />
-              </Suspense>
-            }
-          >
-            <button
-              {...{
-                popovertarget: "mobileNavAccount",
-                popovertargetaction: "close",
-              }}
-              className={styles.popoverCloseButton}
-            >
-              <Icon
-                inline
-                noWrapper
-                iconClasses={styles.popoverCloseButtonIcon}
-              >
-                <FontAwesomeIcon icon={faLongArrowLeft} />
-              </Icon>
-            </button>
-            <nav className={styles.mobileNavPopoverList}>
-              <UserActions user={props.user} />
-            </nav>
-          </Popover>
-          Account
-        </div>
+        <Suspense fallback={<MobileUserPopoverContent user={getEmptyUser} />}>
+          <MobileUserPopover />
+        </Suspense>
       </nav>
     </>
   );

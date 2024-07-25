@@ -1,7 +1,6 @@
 import styles from "./TeamLeaveAndDisband.module.css";
 import { SettingItem, Alert, Dialog, Button } from "@thunderstore/cyberstorm";
 import { LeaveTeamForm, DisbandTeamForm } from "@thunderstore/cyberstorm-forms";
-import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBomb, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { currentUserSchema } from "@thunderstore/dapper-ts";
@@ -9,27 +8,6 @@ import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useRevalidator } from "@remix-run/react";
 import { ApiError } from "@thunderstore/thunderstore-api";
-
-export async function loader({ params }: LoaderFunctionArgs) {
-  if (params.namespaceId) {
-    try {
-      const dapper = await getDapper();
-      const currentUser = await dapper.getCurrentUser();
-      return {
-        teamName: params.namespaceId,
-        currentUser: currentUser as typeof currentUserSchema._type,
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team not found", { status: 404 });
-      } else {
-        // REMIX TODO: Add sentry
-        throw error;
-      }
-    }
-  }
-  throw new Response("Team not found", { status: 404 });
-}
 
 // REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader({ params }: LoaderFunctionArgs) {
@@ -56,7 +34,9 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   throw new Response("Team not found", { status: 404 });
 }
 
-clientLoader.hydrate = true;
+export function HydrateFallback() {
+  return "Loading...";
+}
 
 // REMIX TODO: Make sure user is redirected of this page, if the user is not logged in
 export default function Settings() {

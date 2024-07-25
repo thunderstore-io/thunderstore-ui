@@ -18,22 +18,12 @@ import { CreateTeamForm } from "@thunderstore/cyberstorm-forms";
 import { currentUserSchema } from "@thunderstore/dapper-ts";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
-export const meta: MetaFunction<typeof loader | typeof clientLoader> = ({
-  data,
-}) => {
+export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
   return [
     { title: `Teams of ${data?.currentUser.username}` },
     { name: "description", content: `Teams of ${data?.currentUser.username}` },
   ];
 };
-
-export async function loader() {
-  const dapper = await getDapper();
-  const currentUser = await dapper.getCurrentUser();
-  return {
-    currentUser: currentUser as typeof currentUserSchema._type,
-  };
-}
 
 export async function clientLoader() {
   const dapper = await getDapper(true);
@@ -47,12 +37,13 @@ export async function clientLoader() {
   }
 }
 
-clientLoader.hydrate = true;
+export function HydrateFallback() {
+  return "Loading...";
+}
 
-// REMIX TODO: The "Create team" form is missing data refetching after creating a team
-// Copy the stuff from package liking
 export default function Teams() {
-  const { currentUser } = useLoaderData<typeof loader | typeof clientLoader>();
+  // REMIX TODO: Move current user to stand-alone loader and revalidate only currentUser
+  const { currentUser } = useLoaderData<typeof clientLoader>();
   const [dialogOpen, setOpenDialog] = useState(false);
   const revalidator = useRevalidator();
   const [isRefetching, setIsRefetching] = useState(false);
@@ -61,7 +52,6 @@ export default function Teams() {
     setIsRefetching(false);
   }, [currentUser]);
 
-  // REMIX TODO: Move current user to stand-alone loader and revalidate only currentUser
   async function createTeamRevalidate() {
     if (!isRefetching) {
       setIsRefetching(true);

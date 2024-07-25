@@ -5,33 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useRevalidator } from "@remix-run/react";
-import { serviceAccountSchema } from "@thunderstore/dapper-ts/src/methods/team";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
-
-// REMIX TODO: Since the server loader has to exist for whatever reason?
-// We have to return empty list for the members
-// as permissions are needed for retrieving that data
-// which the server doesn't have
-// Fix this to not be stupid
-export async function loader({ params }: LoaderFunctionArgs) {
-  if (params.namespaceId) {
-    try {
-      return {
-        teamName: params.namespaceId,
-        serviceAccounts: [] as typeof serviceAccountSchema._type,
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team not found", { status: 404 });
-      } else {
-        // REMIX TODO: Add sentry
-        throw error;
-      }
-    }
-  }
-  throw new Response("Team not found", { status: 404 });
-}
 
 // REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader({ params }: LoaderFunctionArgs) {
@@ -61,12 +36,12 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   throw new Response("Team not found", { status: 404 });
 }
 
-clientLoader.hydrate = true;
+export function HydrateFallback() {
+  return "Loading...";
+}
 
 export default function ServiceAccounts() {
-  const { teamName, serviceAccounts } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { teamName, serviceAccounts } = useLoaderData<typeof clientLoader>();
 
   const revalidator = useRevalidator();
 
