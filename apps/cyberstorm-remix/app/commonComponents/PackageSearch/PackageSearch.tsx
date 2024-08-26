@@ -116,7 +116,7 @@ export function PackageSearch(props: Props) {
       searchParams.set("nsfw", "true");
     }
 
-    if (deferredSection === "") {
+    if (deferredSection === allSections[0]?.uuid) {
       searchParams.delete("section");
     } else {
       searchParams.set("section", deferredSection);
