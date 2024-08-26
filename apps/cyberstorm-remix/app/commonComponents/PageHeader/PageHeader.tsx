@@ -1,7 +1,6 @@
+import { CollapsibleText, Title } from "@thunderstore/cyberstorm";
 import styles from "./PageHeader.module.css";
 import { ReactElement } from "react";
-import { CollapsibleText } from "../../../CollapsibleText/CollapsibleText";
-import { Title } from "../../../Title/Title";
 
 export interface PageHeaderProps {
   image?: ReactElement;

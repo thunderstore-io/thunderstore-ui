@@ -4,7 +4,6 @@ import {
   CommunityCard,
   CommunityCardSkeleton,
   EmptyState,
-  PageHeader,
   Select,
   TextInput,
   range,
@@ -28,6 +27,7 @@ import {
 } from "@remix-run/react";
 import { Communities } from "@thunderstore/dapper/types";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction = () => {
   return [

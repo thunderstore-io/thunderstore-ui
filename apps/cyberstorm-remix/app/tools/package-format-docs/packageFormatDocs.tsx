@@ -5,11 +5,11 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import {
   BreadCrumbs,
   CyberstormLink,
-  PageHeader,
   Table,
   CodeBox,
   Icon,
 } from "@thunderstore/cyberstorm";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export default function PackageFormatDocs() {
   return (
