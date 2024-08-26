@@ -62,6 +62,7 @@ export type CyberstormLinkIds =
   | "PackageUpload"
   | "PrivacyPolicy"
   | "Settings"
+  | "SettingsAccount"
   | "Team"
   | "Teams"
   | "TeamSettings"

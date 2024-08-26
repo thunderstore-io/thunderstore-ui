@@ -59,6 +59,12 @@ export default defineConfig({
               );
             }
           );
+          route("/settings", "settings/user/Settings.tsx", () => {
+            route("", "settings/user/Connections/Connections.tsx", {
+              index: true,
+            });
+            route("account", "settings/user/Account/Account.tsx");
+          });
         });
       },
     }),

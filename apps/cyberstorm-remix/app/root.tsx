@@ -123,7 +123,11 @@ function Root() {
   } = JSON.parse(JSON.stringify(loaderOutput));
 
   const location = useLocation();
-  const shouldShowAds = !location.pathname.startsWith("/teams");
+  const shouldShowAds = location.pathname.startsWith("/teams")
+    ? false
+    : location.pathname.startsWith("/settings")
+    ? false
+    : true;
 
   return (
     <html lang="en">
