@@ -1,0 +1,10 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--40);
+}
+
+.greenWrap {
+  height: 1rem;
+  color: var(--color-cyber-green--60);
+}

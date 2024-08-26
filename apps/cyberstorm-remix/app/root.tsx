@@ -127,6 +127,10 @@ function Root() {
     ? false
     : location.pathname.startsWith("/settings")
     ? false
+    : location.pathname.startsWith("/package/create")
+    ? false
+    : location.pathname.startsWith("/tools")
+    ? false
     : true;
 
   return (

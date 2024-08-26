@@ -35,4 +35,6 @@ export * from "./fetch/packageEditCategories";
 export * from "./fetch/packageDeprecate";
 export * from "./fetch/teamRemoveMember";
 export * from "./fetch/userLinkedAccountDisconnect";
+export * from "./fetch/toolsManifestValidate";
+export * from "./fetch/toolsMarkdownPreview";
 export * from "./errors";

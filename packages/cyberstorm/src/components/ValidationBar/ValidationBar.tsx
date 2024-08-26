@@ -8,10 +8,9 @@ import {
   faPenToSquare,
   faArrowsRotate,
 } from "@fortawesome/free-solid-svg-icons";
-import react from "react";
-const { Suspense, use } = react;
 
 import { classnames } from "../../utils/utils";
+import { Suspense, useEffect, useState } from "react";
 
 const waitingElement = (
   <div className={styles.statusBar}>
@@ -55,9 +54,10 @@ const failureElement = (message: string) => {
 
 function Validator(props: {
   validator: {
-    validationFunc: (
-      props: unknown
-    ) => Promise<{ status: "failure" | "success"; message: string }>;
+    validationFunc: (props: unknown) => Promise<{
+      status: "failure" | "success" | "waiting";
+      message: string;
+    }>;
     args: { [key: string]: unknown };
   };
   shouldValidate: boolean;
@@ -70,9 +70,21 @@ function Validator(props: {
     return waitingElement;
   }
 
-  const validation = use(validator.validationFunc({ ...validator.args }));
+  const [validation, setValidation] = useState({
+    status: "waiting",
+    message: "",
+  });
 
-  if (validation.status === "success") {
+  useEffect(() => {
+    async function getStatus() {
+      setValidation(await validator.validationFunc({ ...validator.args }));
+    }
+    getStatus();
+  }, [validator.args]);
+
+  if (validation.status === "waiting") {
+    return waitingElement;
+  } else if (validation.status === "success") {
     if (setStatus) setStatus("success");
     return successElement;
   } else if (validation.status === "failure" && validation.message) {
