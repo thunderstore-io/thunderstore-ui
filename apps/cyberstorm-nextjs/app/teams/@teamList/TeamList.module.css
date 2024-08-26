@@ -1,8 +1,0 @@
-/* TODO: Text in header row and content rows are not aligned */
-
-/* TODO: why do we have this hover color, and should it apply to hover
-   on the whole row, not just one column?
-*/
-.nameColumn:hover {
-  color: rgb(57 233 170);
-}
