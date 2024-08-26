@@ -1,5 +1,3 @@
-"use client";
-
 import { Dispatch, SetStateAction } from "react";
 import styles from "./Switch.module.css";
 import * as RadixSwitch from "@radix-ui/react-switch";

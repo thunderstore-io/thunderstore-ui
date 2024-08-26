@@ -1,4 +1,3 @@
-"use client";
 import React, { ReactNode } from "react";
 import styles from "./Alert.module.css";
 import { Icon } from "../Icon/Icon";

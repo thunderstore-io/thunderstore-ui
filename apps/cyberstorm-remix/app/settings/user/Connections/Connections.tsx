@@ -1,5 +1,3 @@
-"use client";
-
 import styles from "./Connections.module.css";
 import { SettingItem } from "@thunderstore/cyberstorm";
 import { CyberstormLink } from "@thunderstore/cyberstorm/src/components/Links/Links";

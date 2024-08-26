@@ -1,5 +1,3 @@
-"use client";
-
 import styles from "./TeamDetailsEdit.module.css";
 import { teamDetailsEdit } from "@thunderstore/thunderstore-api";
 import {

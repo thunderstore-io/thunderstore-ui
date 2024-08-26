@@ -1,5 +1,3 @@
-"use client";
-
 import { useFormToaster } from "@thunderstore/cyberstorm-forms";
 import { Select } from "@thunderstore/cyberstorm";
 import { teamEditMemberFormSchema } from "@thunderstore/ts-api-react-forms";

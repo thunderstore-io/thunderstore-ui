@@ -1,6 +1,5 @@
 "use client";
 import styles from "./CodeInput.module.css";
-import { useState } from "react";
 import { TextAreaInput } from "../TextAreaInput/TextAreaInput";
 import { ValidationBar } from "../ValidationBar/ValidationBar";
 import { classnames } from "../../utils/utils";
@@ -36,24 +35,14 @@ export function CodeInput(props: CodeInputProps) {
   } = props;
 
   if (validator) {
-    const [validationStatus, setValidationStatus] = useState("");
     return (
-      <div
-        className={classnames(
-          styles.inputContainer,
-          validationStatus === "failure" ? styles.inputContainerFailure : null
-        )}
-      >
+      <div className={styles.inputContainer}>
         <TextAreaInput
           placeHolder={placeholder}
           setValue={setValue}
           value={value}
         />
-        <ValidationBar
-          validator={validator}
-          shouldValidate={shouldValidate}
-          setStatus={setValidationStatus}
-        />
+        <ValidationBar validator={validator} shouldValidate={shouldValidate} />
       </div>
     );
   } else {

@@ -1,5 +1,3 @@
-"use client";
-
 import { z, ZodObject, ZodRawShape } from "zod";
 import { ApiEndpoint, useApiCall } from "@thunderstore/ts-api-react";
 

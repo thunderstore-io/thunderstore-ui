@@ -1,5 +1,3 @@
-"use client";
-
 import { useFormToaster } from "@thunderstore/cyberstorm-forms";
 import {
   ApiAction,

@@ -1,5 +1,3 @@
-"use client";
-
 import styles from "./RemoveServiceAccountForm.module.css";
 import { teamServiceAccountRemove } from "@thunderstore/thunderstore-api";
 import { ApiForm } from "@thunderstore/ts-api-react-forms";

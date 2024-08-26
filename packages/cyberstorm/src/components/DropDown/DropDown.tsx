@@ -1,4 +1,3 @@
-"use client";
 import { ReactNode, ReactElement } from "react";
 import styles from "./DropDown.module.css";
 

@@ -1,20 +1,16 @@
-"use client";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useDapper } from "@thunderstore/dapper";
-import { usePromise } from "@thunderstore/use-promise";
 
 import * as Button from "../Button/";
 import { UserDropDown } from "./UserDropDown";
+import { CurrentUser } from "@thunderstore/dapper/types";
 
-export const HeaderUserNav = () => {
-  const dapper = useDapper();
-  const user = usePromise(dapper.getCurrentUser, []);
-  const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
+export const HeaderUserNav = (props: { user: CurrentUser }) => {
+  const avatar = props.user.connections.find((c) => c.avatar !== null)?.avatar;
 
   return (
     <>
-      {user.username ? (
+      {props.user.username ? (
         <li>
           {/* TODO: This is a bit bad, since old upload pages exist on per community basis. Good enough until new upload page is deployed. */}
           {/* When new upload page is deployed change to use PackageUploadLink instead */}
@@ -32,7 +28,7 @@ export const HeaderUserNav = () => {
         </li>
       ) : null}
       <li>
-        <UserDropDown username={user.username} avatar={avatar} />
+        <UserDropDown username={props.user.username} avatar={avatar} />
       </li>
     </>
   );

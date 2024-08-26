@@ -1,4 +1,3 @@
-"use client";
 import { ReactNode } from "react";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
 const { Root, Trigger, Portal, Content, Arrow } = RadixTooltip;

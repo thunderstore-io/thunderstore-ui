@@ -24,7 +24,7 @@ import { ApiError } from "@thunderstore/thunderstore-api";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import {
   faCog,
-  faArrowUpRight,
+  faArrowUpRightFromSquare,
   faUsers,
   faHandHoldingHeart,
   faDownload,
@@ -32,10 +32,10 @@ import {
   // faFlag,
   faBoxes,
   faFileLines,
-  faFilePlus,
+  faFolderPlus,
   faCodeBranch,
   faBook,
-  faCodeSimple,
+  faCode,
 } from "@fortawesome/free-solid-svg-icons";
 import { WrapperCard } from "@thunderstore/cyberstorm/src/components/WrapperCard/WrapperCard";
 import Meta from "./components/Meta/Meta";
@@ -178,7 +178,7 @@ export default function Community() {
         <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
           <Button.ButtonLabel>{listing.website_url}</Button.ButtonLabel>
           <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faArrowUpRight} />
+            <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
           </Button.ButtonIcon>
         </Button.Root>
       </a>
@@ -348,7 +348,7 @@ export default function Community() {
                   )}
                 >
                   <Icon inline wrapperClasses={tabsStyles.icon}>
-                    <FontAwesomeIcon icon={faFilePlus} />
+                    <FontAwesomeIcon icon={faFolderPlus} />
                   </Icon>
                   <span className={tabsStyles.label}>Changelog</span>
                 </CyberstormLink>
@@ -381,7 +381,7 @@ export default function Community() {
                 )}
               >
                 <Icon inline wrapperClasses={tabsStyles.icon}>
-                  <FontAwesomeIcon icon={faCodeSimple} />
+                  <FontAwesomeIcon icon={faCode} />
                 </Icon>
                 <span className={tabsStyles.label}>Source</span>
               </CyberstormLink>

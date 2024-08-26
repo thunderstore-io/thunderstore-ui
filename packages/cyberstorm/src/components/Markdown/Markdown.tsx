@@ -1,4 +1,3 @@
-"use client";
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
 

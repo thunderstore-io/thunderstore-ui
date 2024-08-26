@@ -3,7 +3,7 @@ import {
   faDownload,
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { faSparkles } from "@fortawesome/free-solid-svg-icons";
+import { faHandSparkles } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dispatch, SetStateAction } from "react";
 
@@ -39,7 +39,7 @@ const selectOptions = [
   {
     value: PackageOrderOptions.Created,
     label: "Newest",
-    leftIcon: <FontAwesomeIcon icon={faSparkles} />,
+    leftIcon: <FontAwesomeIcon icon={faHandSparkles} />,
   },
   {
     value: PackageOrderOptions.Downloaded,

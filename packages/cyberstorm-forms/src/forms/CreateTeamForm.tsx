@@ -1,5 +1,3 @@
-"use client";
-
 import styles from "./CreateTeamForm.module.css";
 import { createTeam } from "@thunderstore/thunderstore-api";
 import {

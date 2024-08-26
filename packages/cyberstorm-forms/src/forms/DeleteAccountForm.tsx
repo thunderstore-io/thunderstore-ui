@@ -1,5 +1,3 @@
-"use client";
-
 import styles from "./DeleteAccountForm.module.css";
 import { userDelete } from "@thunderstore/thunderstore-api";
 import {

@@ -1,5 +1,5 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { faXmarkLarge, faSlidersUp } from "@fortawesome/free-solid-svg-icons";
+import { faXmark, faSliders } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   PackageCategory,
@@ -221,9 +221,7 @@ export function PackageSearch(props: Props) {
             onClick={() => setIsFiltersVisible(!isFiltersVisible)}
           >
             <Button.ButtonIcon>
-              <FontAwesomeIcon
-                icon={isFiltersVisible ? faXmarkLarge : faSlidersUp}
-              />
+              <FontAwesomeIcon icon={isFiltersVisible ? faXmark : faSliders} />
             </Button.ButtonIcon>
             <Button.ButtonLabel>
               {isFiltersVisible ? "Close" : "Open"}

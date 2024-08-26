@@ -1,4 +1,3 @@
-"use client";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TeamMember } from "@thunderstore/dapper/types";
@@ -8,7 +7,6 @@ import {
   RemoveTeamMemberForm,
   TeamMemberChangeRoleAction,
 } from "@thunderstore/cyberstorm-forms";
-import { useState } from "react";
 import {
   CyberstormLink,
   Dialog,

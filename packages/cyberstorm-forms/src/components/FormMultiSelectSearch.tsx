@@ -1,5 +1,3 @@
-"use client";
-
 import { z, ZodObject } from "zod";
 import { ZodRawShape } from "zod/lib/types";
 import { Path, useController } from "react-hook-form";

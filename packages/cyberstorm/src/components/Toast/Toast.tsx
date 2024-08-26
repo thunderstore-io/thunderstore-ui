@@ -1,4 +1,3 @@
-"use client";
 import React, { CSSProperties, ReactNode } from "react";
 import styles from "./Toast.module.css";
 import { Icon } from "../Icon/Icon";
