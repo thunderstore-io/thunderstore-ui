@@ -6,10 +6,7 @@ import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faOctagonExclamation,
-  faTrashCan,
-} from "@fortawesome/pro-solid-svg-icons";
+import { faBomb, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 export default function Page(props: { params: { team: string } }) {
   const [disbandTeamDialogOpen, setDisbandTeamDialogOpen] = useState(false);
@@ -27,7 +24,7 @@ export default function Page(props: { params: { team: string } }) {
         content={
           <div className={styles.content}>
             <Alert
-              icon={<FontAwesomeIcon icon={faOctagonExclamation} />}
+              icon={<FontAwesomeIcon icon={faBomb} />}
               content={
                 "You cannot currently leave this team as you are it's last owner."
               }
@@ -68,7 +65,7 @@ export default function Page(props: { params: { team: string } }) {
         content={
           <div className={styles.content}>
             <Alert
-              icon={<FontAwesomeIcon icon={faOctagonExclamation} />}
+              icon={<FontAwesomeIcon icon={faBomb} />}
               content={
                 "You cannot currently disband this team as it has packages."
               }

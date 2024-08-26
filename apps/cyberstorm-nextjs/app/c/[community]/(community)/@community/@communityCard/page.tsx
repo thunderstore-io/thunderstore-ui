@@ -11,8 +11,8 @@ import { formatInteger } from "@thunderstore/cyberstorm/src/utils/utils";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
-import { faBoxOpen, faDownload } from "@fortawesome/pro-regular-svg-icons";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import { faBoxOpen, faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Page({ params }: { params: { community: string } }) {
@@ -55,7 +55,7 @@ export default function Page({ params }: { params: { community: string } }) {
                   </Button.ButtonIcon>
                   <Button.ButtonLabel>Join our community</Button.ButtonLabel>
                   <Button.ButtonIcon>
-                    <FontAwesomeIcon icon={faArrowUpRight} />
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                   </Button.ButtonIcon>
                 </Button.Root>
               </a>

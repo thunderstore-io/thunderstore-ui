@@ -9,7 +9,7 @@ import {
   SettingItem,
   Table,
 } from "@thunderstore/cyberstorm";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import styles from "./TeamsLayout.module.css";
 import rootStyles from "../../RootLayout.module.css";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";

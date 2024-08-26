@@ -4,9 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { CyberstormLink } from "../Links/Links";
 import {
-  faArrowUpRight,
+  faArrowUpRightFromSquare,
   faBoltLightning,
-} from "@fortawesome/pro-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { ThunderstoreLogoHorizontal } from "../../svg/svg";
 import { Tooltip } from "../Tooltip/Tooltip";
 import { Icon } from "../Icon/Icon";
@@ -126,7 +126,7 @@ export function Footer() {
                       Get Manager
                     </Button.ButtonLabel>
                     <Button.ButtonIcon>
-                      <FontAwesomeIcon icon={faArrowUpRight} />
+                      <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                     </Button.ButtonIcon>
                   </Button.Root>
                 </div>

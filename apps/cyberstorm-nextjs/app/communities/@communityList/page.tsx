@@ -1,4 +1,4 @@
-import { faGhost } from "@fortawesome/pro-solid-svg-icons";
+import { faGhost } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDapper } from "@thunderstore/dapper";
 

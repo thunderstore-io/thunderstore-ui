@@ -4,7 +4,7 @@ import {
   faUsers,
   faCaretRight,
   faCrown,
-} from "@fortawesome/pro-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./PackageTeamMemberList.module.css";
 import { useDapper } from "@thunderstore/dapper";

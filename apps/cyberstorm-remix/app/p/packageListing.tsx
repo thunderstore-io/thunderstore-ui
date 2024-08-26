@@ -37,7 +37,7 @@ import {
   faCodeBranch,
   faBook,
   faCodeSimple,
-} from "@fortawesome/pro-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { WrapperCard } from "@thunderstore/cyberstorm/src/components/WrapperCard/WrapperCard";
 import Meta from "./components/Meta/Meta";
 import TagList from "./components/TagList/TagList";

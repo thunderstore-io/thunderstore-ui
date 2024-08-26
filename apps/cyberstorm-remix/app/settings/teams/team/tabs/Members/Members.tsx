@@ -1,6 +1,6 @@
 import { TeamMemberList } from "./TeamMemberList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { AddTeamMemberForm } from "@thunderstore/cyberstorm-forms";
 import { SettingItem, Dialog, Button } from "@thunderstore/cyberstorm";
 import { LoaderFunctionArgs } from "@remix-run/node";

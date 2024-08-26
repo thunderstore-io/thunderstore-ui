@@ -5,7 +5,7 @@ import { TeamMemberList } from "./TeamMemberList";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import * as Button from "../../../../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Dialog } from "../../../../..";
 import { AddTeamMemberForm } from "@thunderstore/cyberstorm-forms";
 

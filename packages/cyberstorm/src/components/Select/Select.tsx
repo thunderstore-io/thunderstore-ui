@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./Select.module.css";
 import * as Button from "../Button/";
 import * as MenuItem from "../MenuItem/";
-import { faCaretDown } from "@fortawesome/pro-solid-svg-icons";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { Root, Content, Item, Portal, Trigger } from "@radix-ui/react-select";

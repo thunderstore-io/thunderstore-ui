@@ -18,8 +18,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBoxOpen,
   faDownload,
-  faArrowUpRight,
-} from "@fortawesome/pro-regular-svg-icons";
+  faArrowUpRightFromSquare,
+} from "@fortawesome/free-solid-svg-icons";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { ApiError } from "@thunderstore/thunderstore-api";
 
@@ -204,7 +204,7 @@ export default function Community() {
                         Join our community
                       </Button.ButtonLabel>
                       <Button.ButtonIcon>
-                        <FontAwesomeIcon icon={faArrowUpRight} />
+                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
                       </Button.ButtonIcon>
                     </Button.Root>
                   </a>

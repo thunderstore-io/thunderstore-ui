@@ -3,7 +3,7 @@ import { Tag } from "../../../Tag/Tag";
 import { TextInput } from "../../../TextInput/TextInput";
 import { Alert } from "../../../Alert/Alert";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleExclamation } from "@fortawesome/pro-solid-svg-icons";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../../../../index";
 
 export interface PackageManagementFormProps {

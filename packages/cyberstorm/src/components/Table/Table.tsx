@@ -1,7 +1,11 @@
 "use client";
 import { CSSProperties, ReactNode, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSort, faSortDown, faSortUp } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faSort,
+  faSortDown,
+  faSortUp,
+} from "@fortawesome/free-solid-svg-icons";
 import styles from "./Table.module.css";
 import * as Button from "../Button";
 

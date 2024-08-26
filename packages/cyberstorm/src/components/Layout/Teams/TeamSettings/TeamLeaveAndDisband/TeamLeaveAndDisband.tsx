@@ -4,10 +4,7 @@ import * as Button from "../../../../Button/";
 import { SettingItem } from "../../../../SettingItem/SettingItem";
 import { Alert, Dialog } from "../../../../..";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faOctagonExclamation,
-  faTrashCan,
-} from "@fortawesome/pro-solid-svg-icons";
+import { faBomb, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { DisbandTeamForm } from "@thunderstore/cyberstorm-forms";
 import { LeaveTeamForm } from "@thunderstore/cyberstorm-forms";
 import { useDapper } from "@thunderstore/dapper";
@@ -35,7 +32,7 @@ export function TeamLeaveAndDisband(props: Props) {
         content={
           <div className={styles.content}>
             <Alert
-              icon={<FontAwesomeIcon icon={faOctagonExclamation} />}
+              icon={<FontAwesomeIcon icon={faBomb} />}
               content={
                 "You cannot currently leave this team as you are it's last owner."
               }
@@ -76,7 +73,7 @@ export function TeamLeaveAndDisband(props: Props) {
         content={
           <div className={styles.content}>
             <Alert
-              icon={<FontAwesomeIcon icon={faOctagonExclamation} />}
+              icon={<FontAwesomeIcon icon={faBomb} />}
               content={
                 "You cannot currently disband this team as it has packages."
               }

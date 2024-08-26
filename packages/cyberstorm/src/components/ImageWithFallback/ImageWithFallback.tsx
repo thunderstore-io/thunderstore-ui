@@ -1,4 +1,4 @@
-import { faBan, faGamepadModern } from "@fortawesome/pro-solid-svg-icons";
+import { faBan, faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./ImageWithFallback.module.css";
@@ -57,6 +57,6 @@ ImageWithFallback.displayName = "ImageWithFallback";
 
 const getIcon = (type: Props["type"] = "community") =>
   ({
-    community: faGamepadModern,
+    community: faGamepad,
     package: faBan,
   }[type]);

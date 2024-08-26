@@ -5,13 +5,12 @@ import { PackageListingDetails } from "@thunderstore/dapper/types";
 import { ReactNode } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTag } from "@fortawesome/pro-regular-svg-icons";
 import {
   faThumbtack,
   faWarning,
-  faLips,
-  faSparkles,
-} from "@fortawesome/pro-solid-svg-icons";
+  faBomb,
+  faTag,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function TagList(props: { listing: PackageListingDetails }) {
   return (
@@ -70,7 +69,7 @@ function getPackageFlags(packageData: PackageListingDetails) {
         label="NSFW"
         colorScheme="pink"
         size="mediumPlus"
-        leftIcon={<FontAwesomeIcon icon={faLips} />}
+        leftIcon={<FontAwesomeIcon icon={faBomb} />}
       />
     );
   }
@@ -81,7 +80,7 @@ function getPackageFlags(packageData: PackageListingDetails) {
         label="New"
         colorScheme="green"
         size="mediumPlus"
-        leftIcon={<FontAwesomeIcon icon={faSparkles} />}
+        leftIcon={<FontAwesomeIcon icon={faBomb} />}
       />
     );
   }

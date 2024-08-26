@@ -14,7 +14,7 @@ import {
 
 import { Alert } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan, faWarning } from "@fortawesome/pro-solid-svg-icons";
+import { faTrashCan, faWarning } from "@fortawesome/free-solid-svg-icons";
 
 export function DeleteAccountForm(props: { userName: string }) {
   const toast = useFormToaster({

@@ -3,7 +3,7 @@ import {
   faUsers,
   faCaretRight,
   faCrown,
-} from "@fortawesome/pro-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./TeamMembers.module.css";
 import { WrapperCard } from "@thunderstore/cyberstorm/src/components/WrapperCard/WrapperCard";

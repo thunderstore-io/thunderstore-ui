@@ -10,7 +10,7 @@ import {
 
 import { z } from "zod";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTriangleExclamation } from "@fortawesome/pro-solid-svg-icons";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { Alert } from "@thunderstore/cyberstorm";
 
 export function RemoveServiceAccountForm(props: {

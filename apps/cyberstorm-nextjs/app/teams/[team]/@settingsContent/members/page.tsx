@@ -3,7 +3,7 @@ import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 import { TeamMemberList } from "./TeamMemberList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { AddTeamMemberForm } from "@thunderstore/cyberstorm-forms";
 import { useState } from "react";
 import { SettingItem, Dialog, Button } from "@thunderstore/cyberstorm";

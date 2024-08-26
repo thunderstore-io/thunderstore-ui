@@ -1,5 +1,5 @@
 "use client";
-import { faUpload, faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { faUpload, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDapper } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
@@ -61,7 +61,7 @@ export const HeaderUserNav = () => {
               className={styles.navAccountPopoverCloseButton}
             >
               <Icon inline noWrapper>
-                <FontAwesomeIcon icon={faXmarkLarge} />
+                <FontAwesomeIcon icon={faXmark} />
               </Icon>
             </button>
             <nav className={styles.mobileNavPopoverList}>

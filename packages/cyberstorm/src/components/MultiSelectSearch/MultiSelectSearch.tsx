@@ -8,7 +8,7 @@ import {
   faCaretDown,
   faCircleXmark,
   faXmark,
-} from "@fortawesome/pro-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons";
 import { isNode } from "../../utils/type_guards";
 
 export type MultiSelectSearchOption = {

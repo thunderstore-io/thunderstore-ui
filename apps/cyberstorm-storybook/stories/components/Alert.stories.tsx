@@ -7,7 +7,7 @@ import {
   faCircleCheck,
   faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
-import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
+import { faBomb } from "@fortawesome/free-solid-svg-icons";
 
 const meta = {
   title: "Cyberstorm/Components/Alert",
@@ -45,7 +45,7 @@ DangerAlert.args = {
   content:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
   variant: "danger",
-  icon: <FontAwesomeIcon icon={faOctagonExclamation} />,
+  icon: <FontAwesomeIcon icon={faBomb} />,
 };
 
 const WarningAlert = Template.bind({});

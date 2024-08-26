@@ -7,7 +7,7 @@ import styles from "./FormSelect.module.css";
 import * as Select from "@radix-ui/react-select";
 import React, { PropsWithChildren } from "react";
 import { Icon } from "@thunderstore/cyberstorm";
-import { faCaretDown, faCheckCircle } from "@fortawesome/pro-solid-svg-icons";
+import { faCaretDown, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export type FormSelectProps<

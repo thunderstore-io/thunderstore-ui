@@ -13,7 +13,7 @@ import {
 } from "@thunderstore/cyberstorm-forms";
 import { Alert, MultiSelectSearchOption, Tag } from "@thunderstore/cyberstorm";
 import { ReactNode } from "react";
-import { faCircleExclamation } from "@fortawesome/pro-solid-svg-icons";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // TODO: Separate deprecation action from this form

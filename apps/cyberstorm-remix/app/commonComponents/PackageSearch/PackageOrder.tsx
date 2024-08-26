@@ -3,7 +3,7 @@ import {
   faDownload,
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
+import { faSparkles } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dispatch, SetStateAction } from "react";
 

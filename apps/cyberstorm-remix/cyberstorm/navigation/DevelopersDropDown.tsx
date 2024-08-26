@@ -1,4 +1,4 @@
-import { faCaretDown } from "@fortawesome/pro-solid-svg-icons";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { DropDown, Button, DropDownItem } from "@thunderstore/cyberstorm";

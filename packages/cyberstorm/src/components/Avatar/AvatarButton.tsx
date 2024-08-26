@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { classnames } from "../../utils/utils";
 import styles from "./Avatar.module.css";
 import React, { PropsWithChildren, useRef } from "react";
-import { faUser } from "@fortawesome/pro-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Icon } from "../Icon/Icon";
 
 export interface AvatarButtonProps {

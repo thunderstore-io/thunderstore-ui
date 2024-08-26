@@ -13,7 +13,7 @@ import { Tag } from "../Tag/Tag";
 import { classnames, formatInteger } from "../../utils/utils";
 import { PackageListing } from "@thunderstore/dapper/types";
 import { CyberstormLink } from "../Links/Links";
-import { faLips, faSparkles } from "@fortawesome/pro-solid-svg-icons";
+import { faBomb } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   package: PackageListing;
@@ -122,7 +122,7 @@ function getPackageFlags(packageData: PackageListing) {
         key="flag_nsfw"
         label="NSFW"
         colorScheme="pink"
-        leftIcon={<FontAwesomeIcon icon={faLips} />}
+        leftIcon={<FontAwesomeIcon icon={faBomb} />}
       />
     );
   }
@@ -132,7 +132,7 @@ function getPackageFlags(packageData: PackageListing) {
         key="flag_nsfw"
         label="New"
         colorScheme="green"
-        leftIcon={<FontAwesomeIcon icon={faSparkles} />}
+        leftIcon={<FontAwesomeIcon icon={faBomb} />}
       />
     );
   }

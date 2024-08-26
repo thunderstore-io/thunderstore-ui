@@ -8,13 +8,12 @@ import { usePromise } from "@thunderstore/use-promise";
 import { ReactNode } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTag } from "@fortawesome/pro-regular-svg-icons";
+import { faTag } from "@fortawesome/free-solid-svg-icons";
 import {
   faThumbtack,
   faWarning,
-  faLips,
-  faSparkles,
-} from "@fortawesome/pro-solid-svg-icons";
+  faBomb,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Page({
   params,
@@ -84,7 +83,7 @@ function getPackageFlags(packageData: PackageListingDetails) {
         label="NSFW"
         colorScheme="pink"
         size="mediumPlus"
-        leftIcon={<FontAwesomeIcon icon={faLips} />}
+        leftIcon={<FontAwesomeIcon icon={faBomb} />}
       />
     );
   }
@@ -95,7 +94,7 @@ function getPackageFlags(packageData: PackageListingDetails) {
         label="New"
         colorScheme="green"
         size="mediumPlus"
-        leftIcon={<FontAwesomeIcon icon={faSparkles} />}
+        leftIcon={<FontAwesomeIcon icon={faBomb} />}
       />
     );
   }

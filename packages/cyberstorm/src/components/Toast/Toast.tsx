@@ -7,10 +7,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleCheck,
   faCircleExclamation,
-  faOctagonExclamation,
+  faBomb,
   faTriangleExclamation,
-  faXmarkLarge,
-} from "@fortawesome/pro-solid-svg-icons";
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import * as RadixToast from "@radix-ui/react-toast";
 
 export type ToastProps = {
@@ -46,7 +46,7 @@ export function Toast(props: Props) {
             aria-label="Close"
           >
             <Icon iconClasses={styles.closeIcon} inline>
-              <FontAwesomeIcon icon={faXmarkLarge} />
+              <FontAwesomeIcon icon={faXmark} />
             </Icon>
           </RadixToast.Close>
         </div>
@@ -67,7 +67,7 @@ const getStyle = (scheme: Props["variant"] = "info") => {
 const getIcon = (scheme: Props["variant"] = "info") => {
   return {
     info: <FontAwesomeIcon icon={faCircleExclamation} />,
-    danger: <FontAwesomeIcon icon={faOctagonExclamation} />,
+    danger: <FontAwesomeIcon icon={faBomb} />,
     warning: <FontAwesomeIcon icon={faTriangleExclamation} />,
     success: <FontAwesomeIcon icon={faCircleCheck} />,
   }[scheme];
