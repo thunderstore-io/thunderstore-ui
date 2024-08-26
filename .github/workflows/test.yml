@@ -125,8 +125,6 @@ jobs:
         run: yarn workspace @thunderstore/dapper-ts test
       - name: Build @thunderstore/use-promise
         run: yarn workspace @thunderstore/use-promise build
-      - name: Build @thunderstore/cyberstorm-nextjs
-        run: yarn workspace @thunderstore/cyberstorm-nextjs build
       - name: Build @thunderstore/cyberstorm-remix
         run: yarn workspace @thunderstore/cyberstorm-remix build
 
