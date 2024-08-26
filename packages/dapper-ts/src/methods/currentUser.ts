@@ -16,6 +16,18 @@ const teamSchema = z.object({
   member_count: z.number().int().gte(1),
 });
 
+export const currentUserSchema = z.object({
+  username: z.string().nonempty(),
+  capabilities: z.string().array(),
+  connections: oAuthConnectionSchema.array(),
+  rated_packages: z.string().array(),
+  rated_packages_cyberstorm: z.string().array(),
+  subscription: z.object({
+    expires: z.string().datetime().nullable(),
+  }),
+  teams: teamSchema.array(),
+});
+
 const schema = z.object({
   username: z.string().nonempty(),
   capabilities: z.string().array(),

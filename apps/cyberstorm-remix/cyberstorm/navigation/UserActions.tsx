@@ -1,9 +1,9 @@
-import { faSignOut } from "@fortawesome/pro-solid-svg-icons";
+import { faSignOut, faUsers } from "@fortawesome/pro-solid-svg-icons";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Navigation.module.css";
-import { Avatar, Icon } from "@thunderstore/cyberstorm";
+import { Avatar, CyberstormLink, Icon } from "@thunderstore/cyberstorm";
 import { DropDownLink } from "@thunderstore/cyberstorm/src/components/DropDown/DropDownLink";
 import {
   OverwolfLogo,
@@ -28,6 +28,16 @@ export function UserActions(props: { user: CurrentUser }) {
               </div>
             </div>
           </div>,
+          <CyberstormLink
+            linkId="Teams"
+            key="teams"
+            className={styles.mobileNavAccountPopoverItem}
+          >
+            <DropDownLink
+              leftIcon={<FontAwesomeIcon icon={faUsers} />}
+              label="Teams"
+            />
+          </CyberstormLink>,
           <a
             href="/logout"
             key="logout"
