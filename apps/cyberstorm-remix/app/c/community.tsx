@@ -43,6 +43,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
+      const created_recent = searchParams.get("created_recent");
+      const updated_recent = searchParams.get("updated_recent");
       const created_after = searchParams.get("created_after");
       const created_before = searchParams.get("created_before");
       const updated_after = searchParams.get("updated_after");
@@ -63,6 +65,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
           section ?? "",
           nsfw === "true" ? true : false,
           deprecated === "true" ? true : false,
+          created_recent ?? "",
+          updated_recent ?? "",
           created_after ?? "",
           created_before ?? "",
           updated_after ?? "",
@@ -94,6 +98,8 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
+      const created_recent = searchParams.get("created_recent");
+      const updated_recent = searchParams.get("updated_recent");
       const created_after = searchParams.get("created_after");
       const created_before = searchParams.get("created_before");
       const updated_after = searchParams.get("updated_after");
@@ -114,6 +120,8 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
           section ?? "",
           nsfw === "true" ? true : false,
           deprecated === "true" ? true : false,
+          created_recent ?? "",
+          updated_recent ?? "",
           created_after ?? "",
           created_before ?? "",
           updated_after ?? "",

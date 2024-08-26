@@ -17,8 +17,9 @@
 
 .order {
   display: flex;
+  flex-direction: column;
   gap: var(--gap--16);
-  align-items: center;
+  align-items: flex-start;
 }
 
 .sortByText {
@@ -65,6 +66,8 @@
   }
 
   .order {
+    flex-direction: row;
+    align-items: center;
     width: 100%;
   }
 

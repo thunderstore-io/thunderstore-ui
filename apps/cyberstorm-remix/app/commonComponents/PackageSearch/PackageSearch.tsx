@@ -21,6 +21,8 @@ import { StalenessIndicator } from "@thunderstore/cyberstorm/src/components/Stal
 import { PackageCount } from "./PackageCount";
 import { PackageOrder, PackageOrderOptions } from "./PackageOrder";
 import { CollapsibleMenu } from "./FilterMenus/CollapsibleMenu";
+import { PackageRecent, PackageRecentOptions } from "./PackageRecent";
+import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 
 const PER_PAGE = 20;
 
@@ -54,6 +56,12 @@ export function PackageSearch(props: Props) {
   const [nsfw, setNsfw] = useState(false);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState(PackageOrderOptions.Updated);
+  const [recentUpload, setRecentUpload] = useState(
+    PackageRecentOptions.AllTime
+  );
+  const [recentUpdate, setRecentUpdate] = useState(
+    PackageRecentOptions.AllTime
+  );
   const [createdAfter, setCreatedAfter] = useState("");
   const [createdBefore, setCreatedBefore] = useState("");
   const [updatedAfter, setUpdatedAfter] = useState("");
@@ -66,6 +74,8 @@ export function PackageSearch(props: Props) {
 
   const deferredPage = useDeferredValue(page);
   const deferredOrder = useDeferredValue(order);
+  const deferredRecentUpload = useDeferredValue(recentUpload);
+  const deferredRecentUpdate = useDeferredValue(recentUpdate);
 
   const deferredIncludedCategories = deferredCategories
     .filter((c) => c.selection === "include")
@@ -136,6 +146,18 @@ export function PackageSearch(props: Props) {
       searchParams.set("order", deferredOrder);
     }
 
+    if (deferredRecentUpload === PackageRecentOptions.AllTime) {
+      searchParams.delete("created_recent");
+    } else {
+      searchParams.set("created_recent", deferredRecentUpload);
+    }
+
+    if (deferredRecentUpdate === PackageRecentOptions.AllTime) {
+      searchParams.delete("updated_recent");
+    } else {
+      searchParams.set("updated_recent", deferredRecentUpdate);
+    }
+
     if (deferredCreatedAfter === "") {
       searchParams.delete("created_after");
     } else {
@@ -173,45 +195,120 @@ export function PackageSearch(props: Props) {
     deferredCreatedBefore,
     deferredUpdatedAfter,
     deferredUpdatedBefore,
+    deferredRecentUpload,
+    deferredRecentUpdate,
   ]);
 
   return (
     <div className={styles.root}>
-      <TextInput
-        placeholder="Filter Mods..."
-        value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
-        leftIcon={<FontAwesomeIcon icon={faSearch} />}
-      />
+      <div className={styles.searchWrapper}>
+        <div
+          className={classnames(
+            styles.searchInputWrapper,
+            styles.searchRowItemWrapper
+          )}
+        >
+          <label className={styles.searchText} htmlFor="searchInput">
+            Search
+          </label>
+          <TextInput
+            placeholder="Filter Mods..."
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            leftIcon={<FontAwesomeIcon icon={faSearch} />}
+            id="searchInput"
+          />
+        </div>
+        <div className={styles.searchRowItemWrapper}>
+          <label className={styles.searchText} htmlFor="packageOrder">
+            Sort by
+          </label>
+          <PackageOrder order={order} setOrder={setOrder} />
+        </div>
+        <div className={styles.searchRowItemWrapper}>
+          <label className={styles.searchText} htmlFor="packageRecentUpload">
+            Upload time
+          </label>
+          <PackageRecent
+            id={"packageRecentUpload"}
+            value={recentUpload}
+            setValue={setRecentUpload}
+          />
+        </div>
+        <div className={styles.searchRowItemWrapper}>
+          <label className={styles.searchText} htmlFor="packageRecentUpdate">
+            Update time
+          </label>
+          <PackageRecent
+            id={"packageRecentUpdate"}
+            value={recentUpdate}
+            setValue={setRecentUpdate}
+          />
+        </div>
+      </div>
 
       <div className={styles.contentWrapper}>
         <div className={styles.sidebar} id="desktopSidebar">
-          <CollapsibleMenu headerTitle="Dates" defaultOpen={false}>
+          <CollapsibleMenu headerTitle="Date filters" defaultOpen={false}>
             <div className={styles.dateFilterInputs}>
-              <h3 className={styles.dateFilterHeader}>Updated</h3>
-              <input
-                type="date"
-                className={styles.dateFilterInput}
-                onChange={(e) => setUpdatedAfter(e.target.value)}
-              />
-              <input
-                type="date"
-                className={styles.dateFilterInput}
-                onChange={(e) => setUpdatedBefore(e.target.value)}
-              />
+              <div className={styles.dateFilterInputsSet}>
+                <label
+                  className={styles.dateFilterHeader}
+                  htmlFor="updatedAfter"
+                >
+                  Updated after
+                </label>
+                <input
+                  type="date"
+                  className={styles.dateFilterInput}
+                  onChange={(e) => setUpdatedAfter(e.target.value)}
+                  id="updatedAfter"
+                />
+              </div>
+              <div className={styles.dateFilterInputsSet}>
+                <label
+                  className={styles.dateFilterHeader}
+                  htmlFor="updatedBefore"
+                >
+                  Updated before
+                </label>
+                <input
+                  type="date"
+                  className={styles.dateFilterInput}
+                  onChange={(e) => setUpdatedBefore(e.target.value)}
+                  id="updatedBefore"
+                />
+              </div>
             </div>
             <div className={styles.dateFilterInputs}>
-              <h3 className={styles.dateFilterHeader}>Created</h3>
-              <input
-                type="date"
-                className={styles.dateFilterInput}
-                onChange={(e) => setCreatedAfter(e.target.value)}
-              />
-              <input
-                type="date"
-                className={styles.dateFilterInput}
-                onChange={(e) => setCreatedBefore(e.target.value)}
-              />
+              <div className={styles.dateFilterInputsSet}>
+                <label
+                  className={styles.dateFilterHeader}
+                  htmlFor="createdAfter"
+                >
+                  Created after
+                </label>
+                <input
+                  type="date"
+                  className={styles.dateFilterInput}
+                  onChange={(e) => setCreatedAfter(e.target.value)}
+                  id="createdAfter"
+                />
+              </div>
+              <div className={styles.dateFilterInputsSet}>
+                <label
+                  className={styles.dateFilterHeader}
+                  htmlFor="createdBefore"
+                >
+                  Created before
+                </label>
+                <input
+                  type="date"
+                  className={styles.dateFilterInput}
+                  onChange={(e) => setCreatedBefore(e.target.value)}
+                  id="createdBefore"
+                />
+              </div>
             </div>
           </CollapsibleMenu>
 
@@ -259,8 +356,6 @@ export function PackageSearch(props: Props) {
                   totalCount={listings.count}
                 />
               </StalenessIndicator>
-
-              <PackageOrder order={order} setOrder={setOrder} />
             </div>
 
             <StalenessIndicator

@@ -7,7 +7,6 @@ import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dispatch, SetStateAction } from "react";
 
-import styles from "./PackageList.module.css";
 import { Select } from "@thunderstore/cyberstorm";
 
 interface Props {
@@ -16,14 +15,12 @@ interface Props {
 }
 
 export const PackageOrder = (props: Props) => (
-  <label className={styles.order}>
-    <p className={styles.sortByText}>Sort By</p>
-    <Select
-      options={selectOptions}
-      value={props.order}
-      onChange={props.setOrder}
-    />
-  </label>
+  <Select
+    options={selectOptions}
+    value={props.order}
+    onChange={props.setOrder}
+    id="packageOrder"
+  />
 );
 
 export enum PackageOrderOptions {
