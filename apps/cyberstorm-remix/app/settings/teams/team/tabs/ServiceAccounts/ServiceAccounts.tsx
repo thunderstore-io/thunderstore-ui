@@ -104,6 +104,7 @@ export default function ServiceAccounts() {
           <ServiceAccountList
             serviceAccounts={serviceAccounts}
             teamName={teamName}
+            updateTrigger={addServiceAccountRevalidate}
           />
         }
       />

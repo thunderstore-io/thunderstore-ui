@@ -10,3 +10,4 @@ export { userDeleteFormSchema } from "./schema";
 export { teamDisbandFormSchema } from "./schema";
 export { teamEditMemberFormSchema } from "./schema";
 export { packageEditFormSchema } from "./schema";
+export { userLinkedAccountDisconnectFormSchema } from "./schema";

@@ -18,6 +18,7 @@ export function RemoveServiceAccountForm(props: {
   serviceAccountIdentifier: string;
   serviceAccountNickname: string;
   teamName: string;
+  updateTrigger: () => void;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: `Service account ${props.serviceAccountNickname} removed from team ${props.teamName}`,
@@ -27,6 +28,7 @@ export function RemoveServiceAccountForm(props: {
     <ApiForm
       onSubmitSuccess={() => {
         onSubmitSuccess();
+        props.updateTrigger();
         props.dialogOnChange(false);
       }}
       onSubmitError={onSubmitError}
