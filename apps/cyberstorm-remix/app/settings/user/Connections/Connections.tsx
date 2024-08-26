@@ -8,14 +8,6 @@ import { useLoaderData } from "@remix-run/react";
 import { UserConnectionsForm } from "@thunderstore/cyberstorm-forms";
 import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
 
-export async function loader() {
-  const dapper = await getDapper();
-  const currentUser = await dapper.getCurrentUser();
-  return {
-    currentUser: currentUser as typeof currentUserSchema._type,
-  };
-}
-
 // REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader() {
   const dapper = await getDapper(true);
@@ -28,10 +20,12 @@ export async function clientLoader() {
   };
 }
 
-clientLoader.hydrate = true;
+export function HydrateFallback() {
+  return "Loading...";
+}
 
 export default function Connections() {
-  const { currentUser } = useLoaderData<typeof loader | typeof clientLoader>();
+  const { currentUser } = useLoaderData<typeof clientLoader>();
 
   return (
     <div className={styles.root}>

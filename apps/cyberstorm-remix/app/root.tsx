@@ -22,7 +22,7 @@ import { Navigation } from "cyberstorm/navigation/Navigation";
 import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
 import { AdContainer, LinkingProvider } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { CurrentUser } from "@thunderstore/dapper/types";
+// import { CurrentUser } from "@thunderstore/dapper/types";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 
 import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
@@ -76,7 +76,7 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader() {
-  const dapper = await getDapper();
+  // const dapper = await getDapper();
 
   return {
     envStuff: {
@@ -86,40 +86,36 @@ export async function loader() {
         "PUBLIC_SITE_URL",
       ]),
     },
-    currentUser: await dapper.getCurrentUser(),
   };
 }
 
-export async function clientLoader() {
-  const dapper = await getDapper(true);
+// export async function clientLoader() {
+//   const dapper = await getDapper(true);
 
-  return {
-    envStuff: {
-      ENV: getPublicEnvVariables([
-        "PUBLIC_API_URL",
-        "PUBLIC_CLIENT_SENTRY_DSN",
-        "PUBLIC_SITE_URL",
-      ]),
-    },
-    currentUser: await dapper.getCurrentUser(),
-  };
+//   return {
+//     envStuff: {
+//       ENV: getPublicEnvVariables([
+//         "PUBLIC_API_URL",
+//         "PUBLIC_CLIENT_SENTRY_DSN",
+//         "PUBLIC_SITE_URL",
+//       ]),
+//     },
+//     currentUser: await dapper.getCurrentUser(),
+//   };
+// }
+
+export function shouldRevalidate() {
+  return false;
 }
-
-// REMIX TODO: Do we want to force a hydration at the root level?
-// Answer: Yes and no, without manual hydrating the header will not update
-// to have the user stuff, since the initial data from server loader will be used
-// until data changes or updates
-// clientLoader.hydrate = true;
 
 const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
 
 function Root() {
-  const loaderOutput = useLoaderData<typeof loader | typeof clientLoader>();
+  const loaderOutput = useLoaderData<typeof loader>();
   const parsedLoaderOutput: {
     envStuff: {
       ENV: publicEnvVariables;
     };
-    currentUser: CurrentUser;
   } = JSON.parse(JSON.stringify(loaderOutput));
 
   const location = useLocation();
@@ -156,7 +152,8 @@ function Root() {
             <Toast.Provider toastDuration={10000}>
               <TooltipProvider delayDuration={300}>
                 <div className={styles.root}>
-                  <Navigation user={parsedLoaderOutput.currentUser} />
+                  {/* REMIX TODO: For whatever reason the Navigation seems to cause suspense boundary errors. Couldn't find a reason why */}
+                  <Navigation />
                   <section className={styles.content}>
                     <div className={styles.sideContainers} />
                     <div className={styles.middleContainer}>

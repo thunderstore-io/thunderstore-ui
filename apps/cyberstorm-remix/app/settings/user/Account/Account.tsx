@@ -5,14 +5,6 @@ import { DeleteAccountForm } from "@thunderstore/cyberstorm-forms";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { currentUserSchema } from "@thunderstore/dapper-ts";
 
-export async function loader() {
-  const dapper = await getDapper();
-  const currentUser = await dapper.getCurrentUser();
-  return {
-    currentUser: currentUser as typeof currentUserSchema._type,
-  };
-}
-
 // REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader() {
   const dapper = await getDapper(true);
@@ -25,10 +17,12 @@ export async function clientLoader() {
   };
 }
 
-clientLoader.hydrate = true;
+export function HydrateFallback() {
+  return "Loading...";
+}
 
 export default function Account() {
-  const { currentUser } = useLoaderData<typeof loader | typeof clientLoader>();
+  const { currentUser } = useLoaderData<typeof clientLoader>();
 
   return (
     <div className={styles.root}>

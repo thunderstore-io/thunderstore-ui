@@ -10,19 +10,6 @@ import { faCircleNodes, faCog } from "@fortawesome/free-solid-svg-icons";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
-export const meta: MetaFunction<typeof loader> = () => {
-  return [{ title: "Settings" }, { name: "description", content: "Settings" }];
-};
-
-// REMIX TODO: Since the server loader has to exist for whatever reason?
-// We have to return empty list for the members
-// as permissions are needed for retrieving that data
-// which the server doesn't have
-// Fix this to not be stupid
-export async function loader() {
-  return { wowSuchData: undefined };
-}
-
 // REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader() {
   const dapper = await getDapper(true);
@@ -33,11 +20,13 @@ export async function clientLoader() {
   return { wowSuchData: undefined };
 }
 
-clientLoader.hydrate = true;
+export function HydrateFallback() {
+  return "Loading...";
+}
 
 export default function Community() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { wowSuchData } = useLoaderData<typeof loader | typeof clientLoader>();
+  const { wowSuchData } = useLoaderData<typeof clientLoader>();
   const location = useLocation();
 
   const currentTab = location.pathname.endsWith("/account/") ? "account" : "";
