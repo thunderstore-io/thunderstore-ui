@@ -26,7 +26,7 @@
 .headerActions {
   display: flex;
   flex-basis: 354px;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: flex-end;
   justify-content: space-between;
 }

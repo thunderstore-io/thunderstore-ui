@@ -41,6 +41,7 @@ export interface ButtonProps {
     | "overwolf"
     | "specialGreen"
     | "specialPurple"
+    | "likeBlue"
     | "transparentDanger"
     | "transparentDefault"
     | "transparentTertiary"
@@ -203,6 +204,7 @@ const getStyle = (scheme: string) => {
     overwolf: styles.button__overwolf,
     specialGreen: styles.button__specialGreen,
     specialPurple: styles.button__specialPurple,
+    likeBlue: styles.button__likeBlue,
     transparentDanger: styles.button__transparentDanger,
     transparentDefault: styles.button__transparentDefault,
     transparentTertiary: styles.button__transparentTertiary,
