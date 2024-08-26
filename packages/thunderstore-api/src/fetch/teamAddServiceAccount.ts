@@ -14,7 +14,7 @@ export function teamAddServiceAccount(
   data: teamAddServiceAccountApiArgs,
   meta: teamAddServiceAccountMetaArgs
 ) {
-  const path = `api/cyberstorm/team/${meta.teamIdentifier}/service-accounts/create/`;
+  const path = `api/cyberstorm/team/${meta.teamIdentifier}/service-account/create/`;
 
   return apiFetch2({
     config,

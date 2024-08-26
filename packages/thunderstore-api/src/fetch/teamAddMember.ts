@@ -6,7 +6,7 @@ export type teamAddMemberMetaArgs = {
 };
 
 export type teamAddMemberApiArgs = {
-  user: string;
+  username: string;
   role: string;
 };
 
@@ -15,7 +15,7 @@ export function teamAddMember(
   data: teamAddMemberApiArgs,
   meta: teamAddMemberMetaArgs
 ) {
-  const path = `/api/cyberstorm/team/${meta.teamIdentifier}/members/add/`;
+  const path = `/api/cyberstorm/team/${meta.teamIdentifier}/member/add/`;
 
   return apiFetch2({
     config,

@@ -14,10 +14,7 @@ import {
 
 import { CyberstormLink } from "@thunderstore/cyberstorm";
 
-export function DisbandTeamForm(props: {
-  dialogOnChange: (v: boolean) => void;
-  teamName: string;
-}) {
+export function DisbandTeamForm(props: { teamName: string }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: `Team ${props.teamName} disbanded`,
   });
@@ -26,7 +23,6 @@ export function DisbandTeamForm(props: {
     <ApiForm
       onSubmitSuccess={() => {
         onSubmitSuccess();
-        props.dialogOnChange(false);
       }}
       onSubmitError={onSubmitError}
       schema={teamDisbandFormSchema}

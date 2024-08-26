@@ -3,7 +3,7 @@ import { apiFetch2 } from "../apiFetch";
 
 export type teamRemoveMemberMetaArgs = {
   teamIdentifier: string;
-  user: string;
+  username: string;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -21,7 +21,7 @@ export function teamRemoveMember(
     path,
     request: {
       method: "POST",
-      body: JSON.stringify({ user: meta.user }),
+      body: JSON.stringify({ username: meta.username }),
     },
   });
 }

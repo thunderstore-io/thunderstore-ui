@@ -14,7 +14,7 @@ import {
 import { FormSelect } from "../components/FormSelect";
 
 export function AddTeamMemberForm(props: {
-  dialogOnChange: (v: boolean) => void;
+  updateTrigger?: () => void;
   teamName: string;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
@@ -30,7 +30,9 @@ export function AddTeamMemberForm(props: {
     <ApiForm
       onSubmitSuccess={() => {
         onSubmitSuccess();
-        props.dialogOnChange(false);
+        if (props.updateTrigger) {
+          props.updateTrigger();
+        }
       }}
       onSubmitError={onSubmitError}
       schema={teamAddMemberFormSchema}
@@ -47,7 +49,7 @@ export function AddTeamMemberForm(props: {
           <div className={styles.usernameWrapper}>
             <FormTextInput
               schema={teamAddMemberFormSchema}
-              name={"user"}
+              name={"username"}
               placeholder={"Enter username..."}
             />
           </div>

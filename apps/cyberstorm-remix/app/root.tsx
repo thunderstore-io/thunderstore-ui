@@ -119,7 +119,6 @@ function Root() {
     envStuff: {
       ENV: publicEnvVariables;
     };
-    sessionId: string | null;
     currentUser: CurrentUser;
   } = JSON.parse(JSON.stringify(loaderOutput));
 

@@ -12,9 +12,9 @@ import { z } from "zod";
 import { CyberstormLink } from "@thunderstore/cyberstorm";
 
 export function RemoveTeamMemberForm(props: {
-  dialogOnChange: (v: boolean) => void;
   userName: string;
   teamName: string;
+  updateTrigger: () => Promise<void>;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: `User ${"TODO"} removed from team ${"TODO"}`,
@@ -24,13 +24,13 @@ export function RemoveTeamMemberForm(props: {
     <ApiForm
       onSubmitSuccess={() => {
         onSubmitSuccess();
-        props.dialogOnChange(false);
+        props.updateTrigger();
       }}
       onSubmitError={onSubmitError}
       schema={z.object({})}
       endpoint={teamRemoveMember}
       formProps={{ className: styles.root }}
-      meta={{ teamIdentifier: props.teamName, user: props.userName }}
+      meta={{ teamIdentifier: props.teamName, username: props.userName }}
     >
       <div className={styles.dialog}>
         <div className={styles.dialogText}>

@@ -6,7 +6,7 @@ export type teamEditMemberMetaArgs = {
 };
 
 export type teamEditMemberApiArgs = {
-  user: string;
+  username: string;
   role: string;
 };
 

@@ -10,6 +10,7 @@ export function TeamMemberChangeRoleAction(props: {
   teamName: string;
   userName: string;
   currentRole: "member" | "owner";
+  updateTrigger: () => Promise<void>;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: `Changed the role of ${props.userName} to TODO`,
@@ -24,12 +25,15 @@ export function TeamMemberChangeRoleAction(props: {
     schema: teamEditMemberFormSchema,
     meta: { teamIdentifier: props.teamName },
     endpoint: teamEditMember,
-    onSubmitSuccess: onSubmitSuccess,
+    onSubmitSuccess: () => {
+      onSubmitSuccess();
+      props.updateTrigger();
+    },
     onSubmitError: onSubmitError,
   });
 
   function onChange(value: string) {
-    onSubmit({ user: props.userName, role: value });
+    onSubmit({ username: props.userName, role: value });
   }
 
   return (
