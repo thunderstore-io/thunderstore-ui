@@ -8,6 +8,10 @@
   filter: brightness(1.15);
 }
 
+.root .imageWrapper > div {
+  transform-origin: bottom;
+}
+
 .root:hover .imageWrapper > div {
   transform: scale(1.05);
 }
