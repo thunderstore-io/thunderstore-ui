@@ -41,7 +41,7 @@
     "stylelint-config-standard": "^29.0.0",
     "stylelint-order": "^5.0.0",
     "typescript-plugin-css-modules": "^5.1.0",
-    "webpack": "^5.0.0"
+    "webpack": "^5.94.0"
   },
   "preconstruct": {
     "packages": [
