@@ -12,7 +12,6 @@ import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { Alert } from "@thunderstore/cyberstorm";
 
 export function RemoveServiceAccountForm(props: {
-  dialogOnChange: (v: boolean) => void;
   serviceAccountIdentifier: string;
   serviceAccountNickname: string;
   teamName: string;
@@ -27,7 +26,6 @@ export function RemoveServiceAccountForm(props: {
       onSubmitSuccess={() => {
         onSubmitSuccess();
         props.updateTrigger();
-        props.dialogOnChange(false);
       }}
       onSubmitError={onSubmitError}
       schema={z.object({})}

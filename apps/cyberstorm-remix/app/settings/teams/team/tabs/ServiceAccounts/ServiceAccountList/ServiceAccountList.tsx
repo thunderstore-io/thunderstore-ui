@@ -18,7 +18,6 @@ interface Props {
 export function ServiceAccountList(props: Props) {
   const { serviceAccounts } = props;
 
-  const [dialogOpen, setOpenDialog] = useState(false);
   const tableData = serviceAccounts.map((serviceAccount, index) => {
     return [
       { value: serviceAccount.name, sortValue: serviceAccount.name },
@@ -29,8 +28,6 @@ export function ServiceAccountList(props: Props) {
       {
         value: (
           <Dialog.Root
-            open={dialogOpen}
-            onOpenChange={setOpenDialog}
             key={`${serviceAccount.name}_${index}`}
             title="Confirm service account removal"
             trigger={
@@ -40,7 +37,6 @@ export function ServiceAccountList(props: Props) {
             }
           >
             <RemoveServiceAccountForm
-              dialogOnChange={setOpenDialog}
               teamName={props.teamName}
               serviceAccountNickname={serviceAccount.name}
               serviceAccountIdentifier={serviceAccount.identifier}

@@ -10,10 +10,7 @@ import {
   useFormToaster,
 } from "@thunderstore/cyberstorm-forms";
 
-export function CreateTeamForm(props: {
-  dialogOnChange: (v: boolean) => void;
-  updateTrigger: () => Promise<void>;
-}) {
+export function CreateTeamForm(props: { updateTrigger: () => Promise<void> }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: "Team created",
   });
@@ -23,7 +20,6 @@ export function CreateTeamForm(props: {
       onSubmitSuccess={() => {
         props.updateTrigger();
         onSubmitSuccess();
-        props.dialogOnChange(false);
       }}
       onSubmitError={onSubmitError}
       schema={createTeamFormSchema}
