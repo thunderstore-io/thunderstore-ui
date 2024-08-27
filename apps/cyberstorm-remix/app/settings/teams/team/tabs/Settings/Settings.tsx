@@ -40,9 +40,7 @@ export function HydrateFallback() {
 
 // REMIX TODO: Make sure user is redirected of this page, if the user is not logged in
 export default function Settings() {
-  const { teamName, currentUser } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { teamName, currentUser } = useLoaderData<typeof clientLoader>();
 
   return (
     <div>

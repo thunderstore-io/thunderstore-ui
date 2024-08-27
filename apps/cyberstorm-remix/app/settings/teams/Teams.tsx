@@ -44,7 +44,6 @@ export function HydrateFallback() {
 export default function Teams() {
   // REMIX TODO: Move current user to stand-alone loader and revalidate only currentUser
   const { currentUser } = useLoaderData<typeof clientLoader>();
-  const [dialogOpen, setOpenDialog] = useState(false);
   const revalidator = useRevalidator();
   const [isRefetching, setIsRefetching] = useState(false);
 
@@ -73,8 +72,6 @@ export default function Teams() {
           description="Manage your teams"
           additionalLeftColumnContent={
             <Dialog.Root
-              open={dialogOpen}
-              onOpenChange={setOpenDialog}
               title="Create Team"
               trigger={
                 <Button.Root colorScheme="primary" paddingSize="large">
@@ -85,10 +82,7 @@ export default function Teams() {
                 </Button.Root>
               }
             >
-              <CreateTeamForm
-                dialogOnChange={setOpenDialog}
-                updateTrigger={createTeamRevalidate}
-              />
+              <CreateTeamForm updateTrigger={createTeamRevalidate} />
             </Dialog.Root>
           }
           content={

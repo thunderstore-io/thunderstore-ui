@@ -9,8 +9,6 @@ import { Tooltip } from "../..";
 import { classnames } from "../../utils/utils";
 
 interface DialogProps extends PropsWithChildren {
-  open?: boolean;
-  onOpenChange?: (v: boolean) => void;
   trigger?: ReactNode;
   title?: string;
   showHeaderBorder?: boolean;
@@ -23,8 +21,6 @@ interface DialogProps extends PropsWithChildren {
 export function Dialog(props: DialogProps) {
   const {
     children,
-    // open,
-    // onOpenChange,
     trigger,
     title = undefined,
     showHeaderBorder = false,
