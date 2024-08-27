@@ -16,35 +16,37 @@ export default {
 type BreadCrumbsStory = StoryFn<typeof BreadCrumbs>;
 const community = "riskofrain2";
 
-export const FullCrumbs: BreadCrumbsStory = (args) => (
-  <BreadCrumbs {...args}>
-    <CyberstormLink linkId="Community" community={community}>
-      Risk of Rain 2
-    </CyberstormLink>
-    <CyberstormLink linkId="CommunityPackages" community={community}>
-      Packages
-    </CyberstormLink>
-    Popular
-  </BreadCrumbs>
+const breadCrumbStory = (args: { excludeHome?: boolean | undefined }) => (
+  <>
+    <BreadCrumbs {...args} />
+
+    <BreadCrumbs {...args}>
+      <CyberstormLink linkId="Community" community={community}>
+        Risk of Rain 2
+      </CyberstormLink>
+    </BreadCrumbs>
+
+    <BreadCrumbs {...args}>
+      <CyberstormLink linkId="Community" community={community}>
+        Risk of Rain 2
+      </CyberstormLink>
+      <CyberstormLink linkId="CommunityPackages" community={community}>
+        Packages
+      </CyberstormLink>
+    </BreadCrumbs>
+
+    <BreadCrumbs {...args}>
+      <CyberstormLink linkId="Community" community={community}>
+        Risk of Rain 2
+      </CyberstormLink>
+      <CyberstormLink linkId="CommunityPackages" community={community}>
+        Packages
+      </CyberstormLink>
+      Popular
+    </BreadCrumbs>
+  </>
 );
 
-export const HomeOnly: BreadCrumbsStory = (args) => <BreadCrumbs {...args} />;
-
-export const OneCrumb: BreadCrumbsStory = (args) => (
-  <BreadCrumbs {...args}>
-    <CyberstormLink linkId="Community" community={community}>
-      Risk of Rain 2
-    </CyberstormLink>
-  </BreadCrumbs>
-);
-
-export const TwoCrumbs: BreadCrumbsStory = (args) => (
-  <BreadCrumbs {...args}>
-    <CyberstormLink linkId="Community" community={community}>
-      Risk of Rain 2
-    </CyberstormLink>
-    <CyberstormLink linkId="CommunityPackages" community={community}>
-      Packages
-    </CyberstormLink>
-  </BreadCrumbs>
-);
+export const DefaultCrumbs: BreadCrumbsStory = (args) => breadCrumbStory(args);
+export const ExcludeHomeCrumbs: BreadCrumbsStory = () =>
+  breadCrumbStory({ excludeHome: true });
