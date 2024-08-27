@@ -17,7 +17,6 @@ export {
 export * as EmptyState from "./components/EmptyState/";
 export { Footer } from "./components/Footer/Footer";
 export { Icon } from "./components/Icon/Icon";
-export { Header } from "./components/Header/Header";
 export { Link, type LinkProps } from "./components/Link/Link";
 export {
   LinkingProvider,
