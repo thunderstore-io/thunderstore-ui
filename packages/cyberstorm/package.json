@@ -34,6 +34,7 @@
     "@thunderstore/use-promise": "^0.1.0",
     "@types/node": "^20.14.2",
     "@types/react": "^18.0.0",
+    "@types/uuid": "^10.0.0",
     "react": "^18.2.0",
     "react-data-table-component": "^7.5.3",
     "react-dom": "^18.2.0",
@@ -41,7 +42,8 @@
     "remark-gfm": "^3.0.1",
     "s-ago": "^2.2.0",
     "styled-components": "^6.0.0-rc.5",
-    "use-debounce": "^9.0.4"
+    "use-debounce": "^9.0.4",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "typescript": "^5.1.6",

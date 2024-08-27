@@ -128,33 +128,34 @@ jobs:
       - name: Build @thunderstore/cyberstorm-remix
         run: yarn workspace @thunderstore/cyberstorm-remix build
 
-  chromatic-deployment:
-    runs-on: ubuntu-latest
-    needs: ["test", "pre-commit"]
-    strategy:
-      matrix:
-        projects: [
-          { dir: "apps/cyberstorm-storybook", token: "CHROMATIC_CYBERSTORM_TOKEN" },
-        ]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Set up Node ${{ needs.get-node-version.outputs.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ needs.get-node-version.outputs.node-version }}
-          cache: "yarn"
-      - name: Set fontawesome token
-        run: |
-          npm config set "@fortawesome:registry" https://npm.fontawesome.com/
-          npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
-      - name: Install Yarn dependencies
-        run: yarn install --frozen-lockfile
-      - name: Publish to Chromatic
-        uses: chromaui/action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          projectToken: ${{ secrets[matrix.projects.token] }}
-          workingDir: ${{ matrix.projects.dir }}
-          exitOnceUploaded: true
+  # Disabled since Storybook is currently broken
+  # chromatic-deployment:
+  #   runs-on: ubuntu-latest
+  #   needs: ["test", "pre-commit"]
+  #   strategy:
+  #     matrix:
+  #       projects: [
+  #         { dir: "apps/cyberstorm-storybook", token: "CHROMATIC_CYBERSTORM_TOKEN" },
+  #       ]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Set up Node ${{ needs.get-node-version.outputs.node-version }}
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: ${{ needs.get-node-version.outputs.node-version }}
+  #         cache: "yarn"
+  #     - name: Set fontawesome token
+  #       run: |
+  #         npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+  #         npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
+  #     - name: Install Yarn dependencies
+  #       run: yarn install --frozen-lockfile
+  #     - name: Publish to Chromatic
+  #       uses: chromaui/action@v1
+  #       with:
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         projectToken: ${{ secrets[matrix.projects.token] }}
+  #         workingDir: ${{ matrix.projects.dir }}
+  #         exitOnceUploaded: true
