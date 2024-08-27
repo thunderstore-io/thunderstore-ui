@@ -47,6 +47,7 @@ const breadCrumbStory = (args: { excludeHome?: boolean | undefined }) => (
   </>
 );
 
-export const DefaultCrumbs: BreadCrumbsStory = (args) => breadCrumbStory(args);
+export const ReferenceCrumbs: BreadCrumbsStory = (args) =>
+  breadCrumbStory(args);
 export const ExcludeHomeCrumbs: BreadCrumbsStory = () =>
   breadCrumbStory({ excludeHome: true });
