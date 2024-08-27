@@ -159,3 +159,29 @@ jobs:
   #         projectToken: ${{ secrets[matrix.projects.token] }}
   #         workingDir: ${{ matrix.projects.dir }}
   #         exitOnceUploaded: true
+
+  percy-visual-regression-test:
+    runs-on: ubuntu-latest
+    needs: ["test", "pre-commit"]
+    # strategy:
+    #   matrix:
+    #     projects: [
+    #       { token: "PERCY_TOKEN" },
+    #     ]
+    steps:
+      - uses: actions/checkout@v2
+      # TODO - name: Start backend server
+
+      - name: Start frontend server
+        run: yarn workspace @thunderstore/cyberstorm-remix run
+
+      - name: Wait for server to be ready
+        run: sleep 30  # Adjust timing based on your server's startup time
+
+      - name: Run Percy visual tests
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+        run: npx percy exec -- npx percy snapshot http://localhost:3000
+
+      - name: Stop application servers
+        run: kill $(jobs -p)  # Stops the server once tests are done
