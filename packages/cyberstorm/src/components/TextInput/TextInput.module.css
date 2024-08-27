@@ -24,10 +24,10 @@
   font-size: var(--font-size--l);
   line-height: normal;
   background-color: var(--color-surface--4);
+  cursor: text;
+  transition: ease-out var(--animation-length-l);
 
   --border-color: transparent;
-
-  transition: ease-out var(--animation-length-l);
 }
 
 .input:hover {
