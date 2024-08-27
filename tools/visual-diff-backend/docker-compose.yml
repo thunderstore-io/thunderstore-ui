@@ -1,0 +1,82 @@
+version: "3.8"
+
+x-django-service: &django-service
+  image: ${DJANGO_IMAGE:-thunderstore/thunderstore:release-0.130.0}
+  environment:
+    CORS_ALLOWED_ORIGINS: "*"
+    CELERY_BROKER_URL: "pyamqp://django:django@rabbitmq/django"
+    DATABASE_URL: "psql://django:django@db/django"
+    REDIS_URL: "redis://redis:6379/0"
+    SECRET_KEY: "hunter2"
+    AWS_ACCESS_KEY_ID: "thunderstore"
+    AWS_SECRET_ACCESS_KEY: "thunderstore"
+    AWS_S3_REGION_NAME: ""
+    AWS_S3_ENDPOINT_URL: "http://minio:9000/"
+    AWS_S3_CUSTOM_DOMAIN: "localhost:9000/thunderstore"
+    AWS_STORAGE_BUCKET_NAME: "thunderstore"
+    AWS_LOCATION: "development"
+    AWS_S3_SECURE_URLS: "False"
+    USERMEDIA_S3_ENDPOINT_URL: "http://minio:9000/"
+    USERMEDIA_S3_SIGNING_ENDPOINT_URL: "http://localhost:9000/"
+    USERMEDIA_S3_ACCESS_KEY_ID: "thunderstore"
+    USERMEDIA_S3_SECRET_ACCESS_KEY: "thunderstore"
+    USERMEDIA_S3_REGION_NAME: ""
+    USERMEDIA_S3_STORAGE_BUCKET_NAME: "thunderstore"
+    USERMEDIA_S3_LOCATION: "development"
+    CACHE_S3_ENDPOINT_URL: "http://minio:9000/"
+    CACHE_S3_SIGNING_ENDPOINT_URL: "http://localhost:9000/"
+    CACHE_S3_ACCESS_KEY_ID: "thunderstore"
+    CACHE_S3_SECRET_ACCESS_KEY: "thunderstore"
+    CACHE_S3_REGION_NAME: ""
+    CACHE_S3_STORAGE_BUCKET_NAME: "thunderstore"
+    CACHE_S3_LOCATION: "development/cache"
+    IS_CYBERSTORM_ENABLED: "True"
+    DEBUG: "True"
+    PROTOCOL: "http://"
+    SOURCE_VIEW_ENABLE_HIGHLIGHTING: "True"
+    USE_ASYNC_PACKAGE_SUBMISSION_FLOW: "True"
+    USE_TIME_SERIES_PACKAGE_DOWNLOAD_METRICS: "True"
+    ALLOWED_HOSTS: "*"
+    PRIMARY_HOST: "127.0.0.1:8000"
+  depends_on:
+    - db
+    - redis
+    - rabbitmq
+    - minio
+
+services:
+  db:
+    image: postgres:13.12-alpine
+    environment:
+      POSTGRES_PASSWORD: django
+      POSTGRES_USER: django
+      POSTGRES_DB: django
+
+  redis:
+    image: redis:6.2.1-alpine@sha256:daa795ebec4c206cc7f76e19c4bb26a98dfca671d7b5bedcb38862de078bdaa2
+    command: --maxmemory 200mb --maxmemory-policy allkeys-lru
+
+  rabbitmq:
+    image: rabbitmq:3.8.14-alpine@sha256:11d8cd02ac340e99de628053f76bb1182ce3df3b41d3e8f399377276ba489409
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: django
+      RABBITMQ_DEFAULT_PASS: django
+      RABBITMQ_DEFAULT_VHOST: django
+
+  minio:
+    image: thunderstore/minio:latest
+    environment:
+      MINIO_ROOT_USER: thunderstore
+      MINIO_ROOT_PASSWORD: thunderstore
+    command: server /data
+
+  django:
+    <<: *django-service
+    entrypoint: "python"
+    command: "run_test_backend.py"
+    volumes:
+      - ./run_test_backend.py:/app/run_test_backend.py
+      - ./fix_migration.py:/app/fix_migration.py
+    ports:
+      - "127.0.0.1:8000:8000"
