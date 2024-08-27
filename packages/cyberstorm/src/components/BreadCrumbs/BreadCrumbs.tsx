@@ -11,6 +11,7 @@ type BreadCrumbsProps = PropsWithChildren<{
   excludeHome?: boolean;
 }>;
 
+// TODO: Bug: when excludeHome is true, last element's style is wrong
 export function BreadCrumbs(props: BreadCrumbsProps) {
   const children = React.Children.toArray(props.children);
 
