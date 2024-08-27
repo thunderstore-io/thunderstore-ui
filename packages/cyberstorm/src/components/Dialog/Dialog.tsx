@@ -23,10 +23,8 @@ interface DialogProps extends PropsWithChildren {
 export function Dialog(props: DialogProps) {
   const {
     children,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    open,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onOpenChange,
+    // open,
+    // onOpenChange,
     trigger,
     title = undefined,
     showHeaderBorder = false,
