@@ -26,57 +26,62 @@ export default defineConfig({
             index: true,
             id: "landing-page",
           });
-          route("/c/:communityId", "c/community.tsx");
-          route(
-            "/c/:communityId/p/:namespaceId/:packageId",
-            "p/packageListing.tsx",
-            () => {
-              route("", "p/tabs/Readme/Readme.tsx", { index: true });
-              route("changelog", "p/tabs/Changelog/Changelog.tsx");
-              route("versions", "p/tabs/Versions/Versions.tsx");
-            }
-          );
-          route(
-            "/c/:communityId/p/:namespaceId/:packageId/dependants",
-            "p/dependants/Dependants.tsx"
-          );
-          route("/teams", "settings/teams/Teams.tsx");
-          route(
-            "/teams/:namespaceId",
-            "settings/teams/team/teamSettings.tsx",
-            () => {
-              route("", "settings/teams/team/tabs/Profile/Profile.tsx", {
+          if (process.env.ENABLE_BROKEN_PAGES) {
+            route("/c/:communityId", "c/community.tsx");
+            route(
+              "/c/:communityId/p/:namespaceId/:packageId",
+              "p/packageListing.tsx",
+              () => {
+                route("", "p/tabs/Readme/Readme.tsx", { index: true });
+                route("changelog", "p/tabs/Changelog/Changelog.tsx");
+                route("versions", "p/tabs/Versions/Versions.tsx");
+              }
+            );
+            route(
+              "/c/:communityId/p/:namespaceId/:packageId/dependants",
+              "p/dependants/Dependants.tsx"
+            );
+            route("/teams", "settings/teams/Teams.tsx");
+            route(
+              "/teams/:namespaceId",
+              "settings/teams/team/teamSettings.tsx",
+              () => {
+                route("", "settings/teams/team/tabs/Profile/Profile.tsx", {
+                  index: true,
+                });
+                route(
+                  "members",
+                  "settings/teams/team/tabs/Members/Members.tsx"
+                );
+                route(
+                  "service-accounts",
+                  "settings/teams/team/tabs/ServiceAccounts/ServiceAccounts.tsx"
+                );
+                route(
+                  "settings",
+                  "settings/teams/team/tabs/Settings/Settings.tsx"
+                );
+              }
+            );
+            route("/settings", "settings/user/Settings.tsx", () => {
+              route("", "settings/user/Connections/Connections.tsx", {
                 index: true,
               });
-              route("members", "settings/teams/team/tabs/Members/Members.tsx");
-              route(
-                "service-accounts",
-                "settings/teams/team/tabs/ServiceAccounts/ServiceAccounts.tsx"
-              );
-              route(
-                "settings",
-                "settings/teams/team/tabs/Settings/Settings.tsx"
-              );
-            }
-          );
-          route("/settings", "settings/user/Settings.tsx", () => {
-            route("", "settings/user/Connections/Connections.tsx", {
-              index: true,
+              route("account", "settings/user/Account/Account.tsx");
             });
-            route("account", "settings/user/Account/Account.tsx");
-          });
-          route(
-            "/package/create/docs",
-            "tools/package-format-docs/packageFormatDocs.tsx"
-          );
-          route(
-            "/tools/markdown-preview",
-            "tools/markdown-preview/markdownPreview.tsx"
-          );
-          route(
-            "/tools/manifest-v1-validator",
-            "tools/manifest-validator/manifestValidator.tsx"
-          );
+            route(
+              "/package/create/docs",
+              "tools/package-format-docs/packageFormatDocs.tsx"
+            );
+            route(
+              "/tools/markdown-preview",
+              "tools/markdown-preview/markdownPreview.tsx"
+            );
+            route(
+              "/tools/manifest-v1-validator",
+              "tools/manifest-validator/manifestValidator.tsx"
+            );
+          }
         });
       },
     }),
