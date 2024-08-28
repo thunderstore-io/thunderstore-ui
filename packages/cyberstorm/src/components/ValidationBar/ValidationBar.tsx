@@ -71,7 +71,9 @@ function ValidationElement(props: {
     message: string;
   }>({ status: "waiting", message: "Waiting for input" });
 
-  const [valArgs] = useDebounce({ ...validator.args }, 300);
+  const [valArgs] = useDebounce({ ...validator.args }, 300, {
+    maxWait: 300,
+  });
 
   const getValidation = () => usePromise(validator.validationFunc, [valArgs]);
 

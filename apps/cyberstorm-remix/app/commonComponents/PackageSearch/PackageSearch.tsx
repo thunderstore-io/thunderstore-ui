@@ -90,7 +90,9 @@ export function PackageSearch(props: Props) {
     .filter((c) => c.selection === "exclude")
     .map((c) => c.id);
 
-  const [debouncedSearchValue] = useDebounce(searchValue, 300);
+  const [debouncedSearchValue] = useDebounce(searchValue, 300, {
+    maxWait: 300,
+  });
 
   const deferredCreatedAfter = useDeferredValue(createdAfter);
   const deferredCreatedBefore = useDeferredValue(createdBefore);

@@ -100,7 +100,9 @@ export default function CommunitiesPage() {
   const [searchValue, setSearchValue] = useState(
     searchParams.getAll("search").join(" ")
   );
-  const [debouncedSearchValue] = useDebounce(searchValue, 300);
+  const [debouncedSearchValue] = useDebounce(searchValue, 300, {
+    maxWait: 300,
+  });
 
   useEffect(() => {
     if (debouncedSearchValue === "") {
