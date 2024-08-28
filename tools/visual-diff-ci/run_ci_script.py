@@ -211,6 +211,8 @@ def main():
         stop_backend()
         raise e
 
+    stop_backend()
+    process.kill()
     print("Done")
 
 
