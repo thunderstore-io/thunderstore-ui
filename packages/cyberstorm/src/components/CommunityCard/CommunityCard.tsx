@@ -20,14 +20,14 @@ export function CommunityCard(props: Props) {
 
   return (
     <div className={styles.root}>
-      <a href={`/c/${community.identifier}`}>
+      <a href={`/c/${community.identifier}`} title={community.name}>
         <ImageWithFallback
           src={community.cover_image_url}
           type="community"
           rootClass={styles.imageWrapper}
         />
       </a>
-      <div className={styles.title} title={community.name}>
+      <div className={styles.title}>
         <a href={`/c/${community.identifier}`}>{community.name}</a>
       </div>
       <div className={styles.metaItemList}>
