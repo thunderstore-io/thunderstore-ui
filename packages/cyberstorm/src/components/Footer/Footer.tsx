@@ -73,18 +73,8 @@ export function Footer() {
                       </a>
                     </li>
                     <li>
-                      <a href="https://github.com/thunderstore-io" key="github">
-                        GitHub
-                      </a>
-                    </li>
-                    <li>
                       <a href="/package/create/docs/" key="old_format_docs">
                         Package Format Docs
-                      </a>
-                    </li>
-                    <li>
-                      <a href="/tools/markdown-preview/" key="old_format_docs">
-                        Markdown Preview
                       </a>
                     </li>
                     <li>
@@ -93,6 +83,16 @@ export function Footer() {
                         key="old_manifest_validator"
                       >
                         Manifest Validator
+                      </a>
+                    </li>
+                    <li>
+                      <a href="/tools/markdown-preview/" key="old_format_docs">
+                        Markdown Preview
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/thunderstore-io" key="github">
+                        GitHub
                       </a>
                     </li>
                   </ul>
