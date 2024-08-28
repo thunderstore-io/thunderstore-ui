@@ -6,6 +6,7 @@ import styles from "./BreadCrumbs.module.css";
 import { CyberstormLink } from "../Links/Links";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
+import { Tooltip } from "../Tooltip/Tooltip";
 
 type BreadCrumbsProps = PropsWithChildren<{
   excludeHome?: boolean;
@@ -64,10 +65,12 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
 
 export function DefaultHomeCrumb() {
   return (
-    <CyberstormLink linkId="Index">
-      <Icon>
-        <FontAwesomeIcon icon={faHouse} className={styles.home} />
-      </Icon>
-    </CyberstormLink>
+    <Tooltip content={"Home"} side="bottom">
+      <CyberstormLink linkId="Index">
+        <Icon>
+          <FontAwesomeIcon icon={faHouse} className={styles.home} />
+        </Icon>
+      </CyberstormLink>
+    </Tooltip>
   );
 }
