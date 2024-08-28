@@ -77,6 +77,9 @@
   --animation-length-s: 120ms;
   --animation-length-m: 150ms;
   --animation-length-l: 300ms;
+
+  font-synthesis: none;
+  font-feature-settings: "liga" 1, "calt" 1; /* workaround for bug in Chrome, dunno if still present or not */
 }
 
 a {
