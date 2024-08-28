@@ -20,7 +20,11 @@ export function CommunityCard(props: Props) {
 
   return (
     <div className={styles.root}>
-      <a href={`/c/${community.identifier}`} title={community.name}>
+      <a
+        tabIndex={-1}
+        href={`/c/${community.identifier}`}
+        title={community.name}
+      >
         <ImageWithFallback
           src={community.cover_image_url}
           type="community"

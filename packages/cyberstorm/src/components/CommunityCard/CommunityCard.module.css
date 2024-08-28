@@ -8,11 +8,18 @@
   filter: brightness(1.15);
 }
 
+.root:focus-within {
+  border-radius: var(--border-radius--8);
+  outline: 0.2rem solid var(--color-cyber-green--50);
+  outline-offset: 0.5rem;
+}
+
 .root .imageWrapper > div {
   transform-origin: bottom;
 }
 
-.root:hover .imageWrapper > div {
+.root:hover .imageWrapper > div,
+.root:focus-within .imageWrapper > div {
   transform: scale(1.05);
 }
 
@@ -24,6 +31,10 @@
   line-height: normal;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.title > a:focus-visible {
+  outline: none !important;
 }
 
 .metaItemList {
