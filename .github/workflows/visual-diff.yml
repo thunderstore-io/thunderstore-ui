@@ -1,0 +1,75 @@
+name: "Visual diff"
+
+on:
+  push:
+    branches:
+      - "master"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  get-node-version:
+    name: Get Node version
+    if: (
+      github.event_name != 'pull_request' && (
+      github.event_name != 'push' ||
+      github.actor != 'dependabot[bot]'
+      )
+      ) || (
+      github.event_name == 'pull_request' && (
+      github.event.base.repo.id != github.event.head.repo.id ||
+      github.actor == 'dependabot[bot]'
+      )
+      )
+    runs-on: ubuntu-latest
+    outputs:
+      node-version: ${{ steps.get-node-version.outputs.node-version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check get-node-version version
+        uses: ./.github/actions/get-node-version
+        with:
+          package-json: .github/actions/get-node-version/package.json
+      - name: Get Node version
+        id: get-node-version
+        uses: ./.github/actions/get-node-version
+  visual-diff:
+    name: "Generate visual diffs"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+      - name: "Setup Python 3.10"
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: "Setup Node"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ needs.get-node-version.outputs.node-version }}
+      - uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      - name: Cache poetry venv
+        id: cache-poetry
+        uses: actions/cache@v4
+        with:
+          path: tools/visual-diff-ci/.venv
+          key: "poetry-${{ runner.os }}-\
+            ${{ steps.setup-python.outputs.python-version }}-\
+            ${{ hashFiles('tools/visual-diff-ci/poetry.lock') }}"
+          restore-keys: |
+            poetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-
+      - name: Install poetry dependencies
+        run: |
+          cd tools/visual-diff-ci/
+          poetry install
+      - name: Run visual diffing script
+        run: |
+          cd tools/visual-diff-ci/
+          poetry run python run_ci_script.py
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
