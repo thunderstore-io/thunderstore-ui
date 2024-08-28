@@ -14,7 +14,7 @@ import { CurrentUser } from "@thunderstore/dapper/types";
 import { faSignOut, faUsers, faCog } from "@fortawesome/free-solid-svg-icons";
 
 import { DropDownLink } from "@thunderstore/cyberstorm/src/components/DropDown/DropDownLink";
-import { Loginlist } from "./LoginList";
+import { LoginList } from "./LoginList";
 
 export function MobileUserPopoverContent(props: { user: CurrentUser }) {
   const { user } = props;
@@ -94,7 +94,7 @@ export function MobileUserPopoverContent(props: { user: CurrentUser }) {
               </a>,
             ]
           ) : (
-            <Loginlist />
+            <LoginList />
           )}
         </nav>
       </Popover>
