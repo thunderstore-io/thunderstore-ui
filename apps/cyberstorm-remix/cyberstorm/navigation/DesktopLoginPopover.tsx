@@ -2,9 +2,10 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Navigation.module.css";
-import { Popover, Icon } from "@thunderstore/cyberstorm";
+import { Popover } from "@thunderstore/cyberstorm";
 import { AvatarButton } from "@thunderstore/cyberstorm/src/components/Avatar/AvatarButton";
-import { Loginlist } from "./LoginList";
+import * as Button from "@thunderstore/cyberstorm/src/components/Button/index";
+import { LoginList } from "./LoginList";
 
 export function DesktopLoginPopover() {
   return (
@@ -20,19 +21,21 @@ export function DesktopLoginPopover() {
         />
       }
     >
-      <button
+      <Button.Root
         {...{
           popovertarget: "navAccount",
           popovertargetaction: "close",
         }}
+        colorScheme="transparentTertiary"
         className={styles.navAccountPopoverCloseButton}
+        tooltipText="Close"
       >
-        <Icon inline noWrapper>
+        <Button.ButtonIcon>
           <FontAwesomeIcon icon={faXmark} />
-        </Icon>
-      </button>
+        </Button.ButtonIcon>
+      </Button.Root>
       <nav className={styles.mobileNavPopoverList}>
-        <Loginlist />
+        <LoginList />
       </nav>
     </Popover>
   );

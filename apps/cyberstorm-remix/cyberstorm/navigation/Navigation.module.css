@@ -176,21 +176,12 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 2.75rem;
   height: 2.75rem;
-  color: #635a9f;
-  font-weight: 900;
-  font-size: 1rem;
-  background: transparent;
 }
 
 .popoverCloseButtonIcon {
-  color: #635a9f;
-  font-weight: 900;
-  font-size: 1rem;
+  color: var(--color-border--highlight);
 }
 
 .TSLoginLogo {
@@ -205,7 +196,7 @@
 .loginTitle {
   color: #f5f5f6;
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   text-align: center;
 }
 
@@ -214,6 +205,7 @@
   flex-direction: column;
   gap: 2rem;
   align-items: center;
+  max-width: 300px;
 }
 
 .loginLinkList {
@@ -258,6 +250,11 @@
   transform: translate(-50%, -50%);
 }
 
+.navAccountPopoverRoot::backdrop {
+  background: rgba(0 0 0 / 0.6);
+  backdrop-filter: blur(10px);
+}
+
 .navAccountPopoverWrapper {
   display: flex;
   flex-direction: column;
@@ -283,6 +280,18 @@
   font-size: 1rem;
 }
 
+.loginLegalText {
+  color: #8683be;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size--s);
+  line-height: var(--line-height--s);
+  text-align: center;
+}
+
+.loginLegalText > a {
+  color: var(--color-text--tertiary);
+}
+
 @media (max-width: 63.5rem) {
   .desktopNavRoot {
     display: none;
@@ -301,4 +310,9 @@
     background: rgb(16 16 40 / 0.85);
     backdrop-filter: blur(10px);
   }
+}
+
+.fixed {
+  block-size: 1em;
+  inline-size: 1em;
 }
