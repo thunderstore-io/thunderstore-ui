@@ -11,6 +11,11 @@ export default {
       files: "*.@(mdx|stories.*)",
       titlePrefix: "@thunderstore",
     },
+    {
+      directory: "../stories/newComponents",
+      files: "*.@(mdx|stories.*)",
+      titlePrefix: "@Components",
+    },
   ],
   addons: [
     "@storybook/addon-links",

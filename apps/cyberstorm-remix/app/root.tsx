@@ -23,7 +23,7 @@ import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
 import { AdContainer, LinkingProvider } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 // import { CurrentUser } from "@thunderstore/dapper/types";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
+// import { getDapper } from "cyberstorm/dapper/sessionUtils";
 
 import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 import {
@@ -183,7 +183,7 @@ function Root() {
                     <div className={styles.sideContainers}>
                       {shouldShowAds
                         ? adContainerIds.map((cid, k_i) => (
-                            <AdContainer key={k_i} containerId={cid} noHeader />
+                            <AdContainer key={k_i} containerId={cid} />
                           ))
                         : null}
                     </div>

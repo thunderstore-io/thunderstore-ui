@@ -6,32 +6,7 @@
  * wishes.
  */
 import React, { PropsWithChildren } from "react";
-import {
-  LinkingContext,
-  LinkLibrary,
-  ThunderstoreLinkProps,
-} from "./LinkingProvider";
-
-const wrap = <T extends keyof LinkLibrary>(
-  key: T,
-  className?: string,
-  ref?: React.ForwardedRef<HTMLAnchorElement>,
-  forwardedProps?: object
-): LinkLibrary[T] => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, react/display-name
-  return (props: any) => {
-    const Links = React.useContext(LinkingContext);
-    const Link = Links[key];
-    return (
-      <Link
-        {...props}
-        className={className}
-        forwardedProps={forwardedProps}
-        ref={ref}
-      />
-    );
-  };
-};
+import { LinkingContext, ThunderstoreLinkProps } from "./LinkingProvider";
 
 interface typeWorkaroundProps extends PropsWithChildren {
   community?: string;
@@ -73,31 +48,57 @@ export type CyberstormLinkIds =
   | "User";
 
 interface CyberstormLinkProps
-  extends ThunderstoreLinkProps,
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
+    ThunderstoreLinkProps,
     typeWorkaroundProps {
   linkId: CyberstormLinkIds;
   className?: string;
+  "data-color"?: string;
+  "data-size"?: string;
+  "data-variant"?: string;
   forwardedProps?: object;
-  ref?: React.ForwardedRef<HTMLAnchorElement>;
 }
 
-// This exists for typescripts type checking.
-// And partly because I couldn't be bothered to figure out how to correctly structure the types
-function typeWorkaround(props: typeWorkaroundProps) {
-  return {
-    children: props.children,
-    url: props.url ? props.url : "",
-    community: props.community ? props.community : "",
-    namespace: props.namespace ? props.namespace : "",
-    package: props.package ? props.package : "",
-    version: props.version ? props.version : "",
-    team: props.team ? props.team : "",
-    user: props.user ? props.user : "",
-  };
-}
+// TODO: Move to primitives
+export const CyberstormLink = React.forwardRef<
+  HTMLAnchorElement,
+  CyberstormLinkProps
+>((props: CyberstormLinkProps, forwardedRef) => {
+  const {
+    linkId,
+    className,
+    children,
+    url = "",
+    community = "",
+    namespace = "",
+    version = "",
+    team = "",
+    user = "",
+    ...forwardedProps
+  } = props;
+  const fProps =
+    forwardedProps as React.AnchorHTMLAttributes<HTMLAnchorElement>;
+  const Links = React.useContext(LinkingContext);
+  const Link = Links[linkId];
+  return (
+    <Link
+      {...fProps}
+      url={url}
+      className={className}
+      community={community}
+      namespace={namespace}
+      package={props.package ?? ""}
+      version={version}
+      team={team}
+      user={user}
+      customRef={forwardedRef}
+      data-color={props["data-color"]}
+      data-size={props["data-size"]}
+      data-variant={props["data-variant"]}
+    >
+      {children}
+    </Link>
+  );
+});
 
-export function CyberstormLink(props: CyberstormLinkProps) {
-  const { linkId, className, forwardedProps, ref, ...remainingProps } = props;
-  const LinkGen = wrap(linkId, className, ref, forwardedProps);
-  return LinkGen(typeWorkaround(remainingProps));
-}
+CyberstormLink.displayName = "CyberstormLink";

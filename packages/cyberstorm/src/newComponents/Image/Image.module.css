@@ -1,0 +1,67 @@
+.isSquare {
+  --aspect-ratio: 1;
+  --image-width: 50%;
+}
+
+.is3By4 {
+  --aspect-ratio: 3 / 4;
+  --image-width: 30%;
+}
+
+.fullWidth {
+  --image-width: 100%;
+}
+
+.imageWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius--8);
+  overflow: hidden;
+  color: var(--image-wrapper-color);
+  background-color: var(--image-wrapper-bg-color);
+  transition: var(--animation-length-s) ease-out;
+  aspect-ratio: var(--aspect-ratio);
+
+  --image-wrapper-color: var(--color-primary);
+  --image-wrapper-bg-color: var(--color-tertiary);
+}
+
+.imageContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--image-width);
+  aspect-ratio: 1;
+  transition: var(--animation-length-s) ease-out;
+}
+
+.image {
+  object-fit: cover;
+  aspect-ratio: var(--aspect-ratio);
+}
+
+.imageWrapper[data-variant="default"] {
+  --image-wrapper-color: var(--color-9);
+  --image-wrapper-bg-color: var(--color-4);
+}
+
+.imageWrapper[data-variant="primary"] {
+  --image-wrapper-color: var(--color-primary);
+  --image-wrapper-bg-color: var(--color-tertiary);
+}
+
+.imageWrapper[data-variant="secondary"] {
+  --image-wrapper-color: var(--color-secondary);
+  --image-wrapper-bg-color: var(--color-tertiary);
+}
+
+.imageWrapper[data-variant="tertiary"] {
+  --image-wrapper-color: var(--color-tertiary);
+  --image-wrapper-bg-color: var(--color-primary);
+}
+
+.imageWrapper[data-variant="accent"] {
+  --image-wrapper-color: var(--color-accent);
+  --image-wrapper-bg-color: var(--color-primary);
+}
