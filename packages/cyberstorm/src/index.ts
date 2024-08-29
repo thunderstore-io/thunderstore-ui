@@ -53,7 +53,19 @@ export {
 export { CyberstormProviders } from "./components/Providers";
 export { Select, type SelectProps } from "./components/Select/Select";
 export { Tabs, type TabsProps } from "./components/Tabs/Tabs";
-export { Popover } from "./components/Popover/Popover";
+export { Menu } from "./variants/Menu/Menu/Menu";
+export { Modal } from "./variants/Modal/Modal/Modal";
+export { Heading } from "./variants/Heading/Heading/Heading";
+export { CardCommunity } from "./variants/Card/CardCommunity/CardCommunity";
+export { Link as NewLink } from "./variants/Link/Link/Link";
+export { LinkButton } from "./variants/Link/LinkButton/LinkButton";
+export { Button as NewButton } from "./variants/Button/Button/Button";
+export { BreadCrumbs as NewBreadCrumbs } from "./variants/BreadCrumbs/BreadCrumbs";
+export { Container } from "./variants/Container/Container/Container";
+export { TextInput as NewTextInput } from "./variants/TextInput/TextInput/TextInput";
+export { Select as NewSelect } from "./variants/Select/Select";
+export { Image } from "./variants/Image/Image";
+export * as List from "./variants/List";
 export { Tag, type TagProps } from "./components/Tag/Tag";
 export {
   TextInput,
@@ -73,7 +85,7 @@ export { CommunityCard } from "./components/CommunityCard/CommunityCard";
 export { CommunityCardSkeleton } from "./components/CommunityCard/CommunityCardSkeleton";
 export { range } from "./utils/utils";
 export { SettingItem } from "./components/SettingItem/SettingItem";
-export { AdContainer } from "./components/AdContainer/AdContainer";
+export { AdContainer } from "./variants/AdContainer/AdContainer";
 export { ImageWithFallback } from "./components/ImageWithFallback/ImageWithFallback";
 export { CollapsibleText } from "./components/CollapsibleText/CollapsibleText";
 export { SkeletonBox } from "./components/SkeletonBox/SkeletonBox";

@@ -10,17 +10,18 @@ import styles from "./Navigation.module.css";
 import {
   CyberstormLink,
   Icon,
-  Button,
-  Popover,
+  Menu,
+  LinkButton,
+  NewLink,
 } from "@thunderstore/cyberstorm";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
-import { Suspense } from "react";
+// import { Suspense } from "react";
 import { DevelopersDropDown } from "./DevelopersDropDown";
-import { MobileUserPopover } from "./MobileUserPopover";
-import { DesktopUserDropdown } from "./DesktopUserDropdown";
-import { DesktopLoginPopover } from "./DesktopLoginPopover";
-import { MobileUserPopoverContent } from "./MobileUserPopoverContent";
-import { getEmptyUser } from "@thunderstore/dapper-ts";
+// import { MobileUserPopover } from "./MobileUserPopover";
+// import { DesktopUserDropdown } from "./DesktopUserDropdown";
+// import { DesktopLoginPopover } from "./DesktopLoginPopover";
+// import { MobileUserPopoverContent } from "./MobileUserPopoverContent";
+// import { getEmptyUser } from "@thunderstore/dapper-ts";
 
 export function Navigation() {
   return (
@@ -29,22 +30,29 @@ export function Navigation() {
         <nav className={styles.item}>
           <ul className={styles.nav}>
             <li>
-              <CyberstormLink linkId="Index" className={styles.logoWrapper}>
+              <NewLink
+                primitiveType="cyberstormLink"
+                linkId="Index"
+                rootClasses={styles.logoWrapper}
+                csVariant="default"
+                csColor="cyber-green"
+                csMode="body"
+              >
                 <Icon noWrapper>
                   <ThunderstoreLogo />
                 </Icon>
-              </CyberstormLink>
+              </NewLink>
             </li>
             <li>
-              <Button.Root
-                paddingSize="large"
-                colorScheme="transparentDefault"
-                CyberstormLinkId="Communities"
+              <LinkButton
+                primitiveType="cyberstormLink"
+                linkId="Communities"
+                csSize="l"
+                csColor="surface"
+                csVariant="tertiary"
               >
-                <Button.ButtonLabel fontSize="large" fontWeight="600">
-                  Communities
-                </Button.ButtonLabel>
-              </Button.Root>
+                Communities
+              </LinkButton>
             </li>
             <li>
               <DevelopersDropDown />
@@ -55,15 +63,15 @@ export function Navigation() {
         <nav className={styles.item}>
           <ul className={styles.nav}>
             <li className={styles.navButtons}>
-              <Button.Root
-                paddingSize="large"
-                colorScheme="accent"
+              <LinkButton
+                primitiveType="link"
                 href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+                csSize="s"
+                csColor="cyber-green"
+                csVariant="accent"
               >
-                <Button.ButtonLabel fontWeight="700">
-                  Get App
-                </Button.ButtonLabel>
-              </Button.Root>
+                Get App
+              </LinkButton>
             </li>
             {/* TODO: Enable once working */}
             {/*<Suspense fallback={<DesktopLoginPopover />}>*/}
@@ -74,12 +82,10 @@ export function Navigation() {
       </header>
 
       <nav className={styles.mobileNavRoot}>
-        <div className={styles.mobileNavItem}>
-          <Popover
-            popoverId={"mobileNavMenu"}
-            popoverRootClasses={styles.mobileNavAccountPopoverRoot}
-            popoverWrapperClasses={styles.mobileNavAccountPopoverWrapper}
-            trigger={
+        <Menu
+          popoverId={"mobileNavMenu"}
+          trigger={
+            <div className={styles.mobileNavItem}>
               <button
                 {...{
                   popovertarget: "mobileNavMenu",
@@ -91,8 +97,10 @@ export function Navigation() {
                   <FontAwesomeIcon icon={faBars} />
                 </Icon>
               </button>
-            }
-          >
+              Menu
+            </div>
+          }
+          controls={
             <button
               {...{
                 popovertarget: "mobileNavMenu",
@@ -108,35 +116,35 @@ export function Navigation() {
                 <FontAwesomeIcon icon={faLongArrowLeft} />
               </Icon>
             </button>
-            <nav className={styles.mobileNavPopoverList}>
-              <CyberstormLink
-                linkId="Communities"
-                className={styles.mobileNavPopoverListLink}
-              >
-                Communities
-              </CyberstormLink>
-              <Popover
-                popoverId={"mobileNavMenuDevelopers"}
-                popoverRootClasses={styles.mobileNavAccountPopoverRoot}
-                popoverWrapperClasses={styles.mobileNavAccountPopoverWrapper}
-                trigger={
-                  <button
-                    {...{
-                      popovertarget: "mobileNavMenuDevelopers",
-                      popovertargetaction: "open",
-                    }}
-                    className={styles.mobileNavMenuDevelopersButton}
+          }
+        >
+          <nav className={styles.mobileNavPopoverList}>
+            <CyberstormLink
+              linkId="Communities"
+              className={styles.mobileNavPopoverListLink}
+            >
+              Communities
+            </CyberstormLink>
+            <Menu
+              popoverId={"mobileNavMenuDevelopers"}
+              trigger={
+                <button
+                  {...{
+                    popovertarget: "mobileNavMenuDevelopers",
+                    popovertargetaction: "open",
+                  }}
+                  className={styles.mobileNavMenuDevelopersButton}
+                >
+                  Developers
+                  <Icon
+                    inline
+                    iconClasses={styles.mobileNavMenuDevelopersButtonIcon}
                   >
-                    Developers
-                    <Icon
-                      inline
-                      iconClasses={styles.mobileNavMenuDevelopersButtonIcon}
-                    >
-                      <FontAwesomeIcon icon={faCaretRight} />
-                    </Icon>
-                  </button>
-                }
-              >
+                    <FontAwesomeIcon icon={faCaretRight} />
+                  </Icon>
+                </button>
+              }
+              controls={
                 <button
                   {...{
                     popovertarget: "mobileNavMenuDevelopers",
@@ -152,54 +160,48 @@ export function Navigation() {
                     <FontAwesomeIcon icon={faLongArrowLeft} />
                   </Icon>
                 </button>
-                <nav className={styles.mobileNavPopoverList}>
-                  <CyberstormLink
-                    linkId="Communities"
-                    className={styles.mobileNavPopoverListLink}
-                  >
-                    Communities
-                  </CyberstormLink>
-                  <a
-                    href="/api/docs"
-                    key="docs"
-                    className={styles.mobileNavPopoverListLink}
-                  >
-                    API Docs
-                  </a>
-                  <a
-                    href="https://github.com/thunderstore-io"
-                    key="github"
-                    className={styles.mobileNavPopoverListLink}
-                  >
-                    GitHub
-                  </a>
-                  <a
-                    href="/package/create/docs/"
-                    key="old_format_docs"
-                    className={styles.mobileNavPopoverListLink}
-                  >
-                    Package Format Docs
-                  </a>
-                  <a
-                    href="/tools/markdown-preview/"
-                    key="old_markdown_preview"
-                    className={styles.mobileNavPopoverListLink}
-                  >
-                    Markdown Preview
-                  </a>
-                  <a
-                    href="/tools/manifest-v1-validator/"
-                    key="old_manifest_validator"
-                    className={styles.mobileNavPopoverListLink}
-                  >
-                    Manifest Validator
-                  </a>
-                </nav>
-              </Popover>
-            </nav>
-          </Popover>
-          Menu
-        </div>
+              }
+            >
+              <nav className={styles.mobileNavPopoverList}>
+                <a
+                  href="/api/docs"
+                  key="docs"
+                  className={styles.mobileNavPopoverListLink}
+                >
+                  API Docs
+                </a>
+                <a
+                  href="https://github.com/thunderstore-io"
+                  key="github"
+                  className={styles.mobileNavPopoverListLink}
+                >
+                  GitHub
+                </a>
+                <a
+                  href="/package/create/docs/"
+                  key="old_format_docs"
+                  className={styles.mobileNavPopoverListLink}
+                >
+                  Package Format Docs
+                </a>
+                <a
+                  href="/tools/markdown-preview/"
+                  key="old_markdown_preview"
+                  className={styles.mobileNavPopoverListLink}
+                >
+                  Markdown Preview
+                </a>
+                <a
+                  href="/tools/manifest-v1-validator/"
+                  key="old_manifest_validator"
+                  className={styles.mobileNavPopoverListLink}
+                >
+                  Manifest Validator
+                </a>
+              </nav>
+            </Menu>
+          </nav>
+        </Menu>
         <div className={styles.mobileNavItem}>
           <CyberstormLink linkId="Communities">
             <Icon wrapperClasses={styles.mobileNavItemIconWrapper}>

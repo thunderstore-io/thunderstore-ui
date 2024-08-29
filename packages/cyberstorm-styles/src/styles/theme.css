@@ -15,7 +15,8 @@
   --color-crown: var(--color-yellow--5);
   --color-info: var(--color-blue--70);
   --color-info-background: var(--color-blue--10);
-  --color-surface--0: var(--color-purple--0);
+
+  /* --color-surface--0: var(--color-purple--0);
   --color-surface--1: var(--color-purple--1);
   --color-surface--2: var(--color-purple--2);
   --color-surface--3: var(--color-purple--3);
@@ -26,7 +27,7 @@
   --color-surface--8: var(--color-purple--8);
   --color-surface--9: var(--color-purple--9);
   --color-surface--10: var(--color-purple--10);
-  --color-surface--10--hover: rgb(59 42 126 / 1);
+  --color-surface--10--hover: rgb(59 42 126 / 1); */
   --color-border: rgb(54 52 91 / 1);
   --color-border--highlight: rgb(93 90 159);
   --color-shadow-1: rgb(0 0 0 / 0.7);

@@ -1,12 +1,14 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
-  BreadCrumbs,
-  CommunityCard,
+  Container,
+  CardCommunity,
   CommunityCardSkeleton,
   EmptyState,
-  Select,
-  TextInput,
+  Heading,
+  NewBreadCrumbs,
   range,
+  NewTextInput,
+  NewSelect,
 } from "@thunderstore/cyberstorm";
 import rootStyles from "../RootLayout.module.css";
 import searchAndOrderStyles from "./SearchAndOrder.module.css";
@@ -27,7 +29,6 @@ import {
 } from "@remix-run/react";
 import { Communities } from "@thunderstore/dapper/types";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction = () => {
   return [
@@ -115,32 +116,40 @@ export default function CommunitiesPage() {
 
   return (
     <>
-      <BreadCrumbs>Communities</BreadCrumbs>
+      <NewBreadCrumbs>Communities</NewBreadCrumbs>
       <header className={rootStyles.pageHeader}>
-        <PageHeader title="Communities" />
+        <Heading level="2" variant="primary" mode="display">
+          Communities
+        </Heading>
       </header>
       <main className={rootStyles.main}>
-        <div className={searchAndOrderStyles.root}>
+        <Container
+          rootClasses={searchAndOrderStyles.root}
+          csVariant="tertiary"
+          csSize="s"
+          csWeight="bold"
+          csMode="auto"
+        >
           <div className={searchAndOrderStyles.searchTextInput}>
-            <TextInput
+            Search
+            <NewTextInput
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
               placeholder="Search communities..."
               clearValue={() => setSearchValue("")}
               leftIcon={<FontAwesomeIcon icon={faSearch} />}
+              csColor="cyber-green"
             />
           </div>
           <div className={searchAndOrderStyles.searchFilters}>
-            <div className={searchAndOrderStyles.searchFiltersSortLabel}>
-              Sort by
-            </div>
-            <Select
+            Sort by
+            <NewSelect
               onChange={changeOrder}
               options={selectOptions}
               value={searchParams.get("order") ?? SortOptions.Popular}
             />
           </div>
-        </div>
+        </Container>
 
         {navigation.state === "loading" ? (
           <CommunitiesListSkeleton />
@@ -159,7 +168,7 @@ function CommunitiesList(props: { communitiesData: Communities }) {
     return (
       <div className={communitiesListStyles.root}>
         {communitiesData.results.map((community) => (
-          <CommunityCard key={community.identifier} community={community} />
+          <CardCommunity key={community.identifier} community={community} />
         ))}
       </div>
     );

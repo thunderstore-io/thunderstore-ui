@@ -13,11 +13,15 @@
   --space--20: 1.25rem;
   --space--22: 1.375rem;
   --space--24: 1.5rem;
+  --space--30: 1.875rem;
   --space--32: 2rem;
   --space--36: 2.25rem;
   --space--38: 2.375rem;
   --space--40: 2.5rem;
+  --space--44: 2.75rem;
   --space--48: 3rem;
+  --space--51: 3.188rem;
+  --space--54: 3.375rem;
 
   /* Space affecting layout values */
   --gap--2: var(--space--2);
@@ -82,6 +86,28 @@
   font-feature-settings: "liga" 1, "calt" 1; /* workaround for bug in Chrome, dunno if still present or not */
 }
 
+/* DESIGN SYSTEM TODO: Add different sizes of scaling? */
+
+/* e.g --scaling-s --scaling-m --scaling-l */
+
+@media (max-width: calc(40rem - 1px)) {
+  :root {
+    --scaling: 0.7;
+  }
+}
+
+@media (min-width: 40rem) {
+  :root {
+    --scaling: 0.9;
+  }
+}
+
+@media (min-width: 63.5rem) {
+  :root {
+    --scaling: 1;
+  }
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -128,4 +154,44 @@ body {
 
 *::-webkit-scrollbar-thumb:active {
   background-color: var(--color-surface--7);
+}
+
+[data-mode="auto"] {
+  --line-height: normal;
+}
+
+[data-mode="body"] {
+  --line-height: 170%;
+}
+
+[data-weight="regular"] {
+  --font-weight: 400;
+}
+
+[data-weight="medium"] {
+  --font-weight: 600;
+}
+
+[data-weight="semiBold"] {
+  --font-weight: 700;
+}
+
+[data-weight="bold"] {
+  --font-weight: 700;
+}
+
+[data-size="xs"] {
+  --font-size: 0.75rem;
+}
+
+[data-size="s"] {
+  --font-size: 0.875rem;
+}
+
+[data-size="m"] {
+  --font-size: 1rem;
+}
+
+[data-size="l"] {
+  --font-size: 1.25rem;
 }
