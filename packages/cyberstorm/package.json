@@ -32,7 +32,7 @@
     "@thunderstore/dapper": "^0.1.0",
     "@thunderstore/thunderstore-api": "*",
     "@thunderstore/use-promise": "^0.1.0",
-    "@types/node": "^20.14.2",
+    "@types/node": "^22.5.3",
     "@types/react": "^18.0.0",
     "@types/uuid": "^10.0.0",
     "react": "^18.2.0",
