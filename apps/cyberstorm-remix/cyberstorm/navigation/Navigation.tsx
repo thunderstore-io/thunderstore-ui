@@ -65,9 +65,10 @@ export function Navigation() {
                 </Button.ButtonLabel>
               </Button.Root>
             </li>
-            <Suspense fallback={<DesktopLoginPopover />}>
-              <DesktopUserDropdown />
-            </Suspense>
+            {/* TODO: Enable once working */}
+            {/*<Suspense fallback={<DesktopLoginPopover />}>*/}
+            {/*  <DesktopUserDropdown />*/}
+            {/*</Suspense>*/}
           </ul>
         </nav>
       </header>
@@ -207,9 +208,10 @@ export function Navigation() {
             Browse
           </CyberstormLink>
         </div>
-        <Suspense fallback={<MobileUserPopoverContent user={getEmptyUser} />}>
-          <MobileUserPopover />
-        </Suspense>
+        {/* TODO: Enable once working */}
+        {/*<Suspense fallback={<MobileUserPopoverContent user={getEmptyUser} />}>*/}
+        {/*  <MobileUserPopover />*/}
+        {/*</Suspense>*/}
       </nav>
     </>
   );
