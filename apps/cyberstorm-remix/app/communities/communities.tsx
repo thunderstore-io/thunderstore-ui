@@ -31,11 +31,10 @@ import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Communities" },
+    { title: "Communities | Thunderstore" },
     {
       name: "description",
-      content:
-        "Browse all the available communities for games in Thunderstore!",
+      content: "Browse all communities on Thunderstore",
     },
   ];
 };
