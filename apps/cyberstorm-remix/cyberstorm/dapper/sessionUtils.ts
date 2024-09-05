@@ -7,11 +7,13 @@ export async function getDapper(isClient = false) {
 
     let shouldRemakeDapper = false;
 
-    const allCookies = new URLSearchParams(
-      window.document.cookie.replaceAll("&", "%26").replaceAll("; ", "&")
-    );
-    const cookie = allCookies.get("sessionid");
-    const csrftoken = allCookies.get("csrftoken");
+    // const allCookies = new URLSearchParams(
+    //  window.document.cookie.replaceAll("&", "%26").replaceAll("; ", "&")
+    // );
+    // const cookie = allCookies.get("sessionid");
+    // const csrftoken = allCookies.get("csrftoken");
+    const cookie = null;
+    const csrftoken = null;
 
     const newConfig: RequestConfig = {
       apiHost: window.ENV.PUBLIC_API_URL,
