@@ -1,6 +1,6 @@
 {
-  "name": "Thunderstore",
-  "short_name": "Thunderstore",
+  "name": "Thunderstore.io",
+  "short_name": "Thunderstore.io",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#1f1f42",
-  "background_color": "#1f1f42",
+  "theme_color": "#29295b",
+  "background_color": "#29295b",
   "display": "standalone"
 }

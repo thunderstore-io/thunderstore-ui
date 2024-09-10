@@ -151,8 +151,8 @@ function Root() {
         />
         <link rel="manifest" href="/site.webmanifest" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#23ffb0" />
-        <meta name="msapplication-TileColor" content="#1f1f42" />
-        <meta name="theme-color" content="#1f1f42" />
+        <meta name="msapplication-TileColor" content="#29295b" />
+        <meta name="theme-color" content="#29295b" />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
