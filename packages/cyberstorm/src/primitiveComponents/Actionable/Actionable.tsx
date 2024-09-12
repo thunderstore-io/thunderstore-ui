@@ -1,86 +1,42 @@
-import { PropsWithChildren } from "react";
 import {
   CyberstormLink,
   CyberstormLinkIds,
 } from "../../components/Links/Links";
 import React from "react";
-import { Tooltip } from "../../components/Tooltip/Tooltip";
 import { ThunderstoreLinkProps } from "../../components/Links/LinkingProvider";
+import { PrimitiveComponentDefaultProps, TooltipWrapper } from "../utils/utils";
+import { classnames } from "../../utils/utils";
 
-type variants =
-  | "default"
-  | "primary"
-  | "secondary"
-  | "tertiary"
-  | "accent"
-  | "special";
-type colors =
-  | "surface"
-  | "surface-alpha"
-  | "blue"
-  | "pink"
-  | "red"
-  | "orange"
-  | "green"
-  | "yellow"
-  | "purple"
-  | "cyber-green";
-type sizes = "xs" | "s" | "m" | "l";
-type modes = "auto" | "body";
-type weights = "regular" | "medium" | "semiBold" | "bold";
-
-export interface ActionableDefaultProps extends PropsWithChildren {
-  csColor?: colors;
-  csSize?: sizes;
-  csVariant?: variants;
-  csMode?: modes;
-  csWeight?: weights;
-  rootClasses?: string;
-  tooltipText?: string;
-  tooltipSide?: "bottom" | "left" | "right" | "top";
-}
-
-interface ButtonProps
+export interface ActionableButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    ActionableDefaultProps {
+    PrimitiveComponentDefaultProps {
   primitiveType: "button";
 }
 
 export interface ActionableLinkProps
   extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    ActionableDefaultProps {
+    PrimitiveComponentDefaultProps {
   primitiveType: "link";
   href: string;
 }
 
 export interface ActionableCyberstormLinkProps
   extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    ActionableDefaultProps,
+    PrimitiveComponentDefaultProps,
     ThunderstoreLinkProps {
   primitiveType: "cyberstormLink";
   linkId: CyberstormLinkIds;
 }
 
-interface TooltipWrapperProps extends PropsWithChildren {
-  tooltipText?: string;
-  side?: "bottom" | "left" | "right" | "top";
-}
-
-const TooltipWrapper = (props: TooltipWrapperProps) =>
-  props.tooltipText ? (
-    <Tooltip content={props.tooltipText} side={props.side ?? "bottom"}>
-      {props.children}
-    </Tooltip>
-  ) : (
-    <>{props.children}</>
-  );
-
 export const Actionable = React.forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
-  ButtonProps | ActionableLinkProps | ActionableCyberstormLinkProps
+  ActionableButtonProps | ActionableLinkProps | ActionableCyberstormLinkProps
 >(
   (
-    props: ButtonProps | ActionableLinkProps | ActionableCyberstormLinkProps,
+    props:
+      | ActionableButtonProps
+      | ActionableLinkProps
+      | ActionableCyberstormLinkProps,
     forwardedRef
   ) => {
     const {
@@ -88,10 +44,9 @@ export const Actionable = React.forwardRef<
       primitiveType,
       rootClasses,
       csColor,
-      csSize,
       csVariant,
-      csMode,
-      csWeight,
+      csSize,
+      csTextStyles,
       tooltipText,
       tooltipSide,
       ...forwardedProps
@@ -99,18 +54,19 @@ export const Actionable = React.forwardRef<
 
     if (primitiveType === "button") {
       const fRef = forwardedRef as React.ForwardedRef<HTMLButtonElement>;
-      const fProps = forwardedProps as ButtonProps;
+      const fProps = forwardedProps as ActionableButtonProps;
 
       return (
-        <TooltipWrapper tooltipText={tooltipText} side={tooltipSide}>
+        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
           <button
             {...fProps}
-            className={rootClasses}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              rootClasses
+            )}
             data-color={csColor}
             data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
             ref={fRef}
           >
             {children}
@@ -122,15 +78,16 @@ export const Actionable = React.forwardRef<
       const fRef = forwardedRef as React.ForwardedRef<HTMLAnchorElement>;
       const fProps = forwardedProps as ActionableLinkProps;
       return (
-        <TooltipWrapper tooltipText={tooltipText} side={tooltipSide}>
+        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
           <a
             {...fProps}
-            className={rootClasses}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {children}
@@ -143,15 +100,16 @@ export const Actionable = React.forwardRef<
       const { linkId, ...strippedForwardedProps } =
         forwardedProps as ActionableCyberstormLinkProps;
       return (
-        <TooltipWrapper tooltipText={tooltipText} side={tooltipSide}>
+        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
           <CyberstormLink
             {...strippedForwardedProps}
-            className={rootClasses}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             linkId={linkId}
             ref={fRef}
           >

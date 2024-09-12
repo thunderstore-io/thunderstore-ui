@@ -3,10 +3,6 @@
   color: var(--link-color);
 
   --link-color: var(--text-color);
-
-  font-weight: var(--font-weight);
-  font-size: var(--font-size);
-  line-height: var(--line-height);
 }
 
 .link:hover {

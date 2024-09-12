@@ -1,5 +1,0 @@
-.button {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space--12);
-}

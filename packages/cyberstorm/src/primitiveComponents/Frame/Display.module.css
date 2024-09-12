@@ -19,7 +19,7 @@ h2.display {
 }
 
 h3.display {
-  font-weight: var(--font-weight-bold);
+  font-weight: 700;
   font-size: calc(var(--space--38) * var(--scaling, 1));
   font-family: Hubot-Sans, sans-serif;
 }

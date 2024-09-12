@@ -36,7 +36,6 @@ export function Navigation() {
                 rootClasses={styles.logoWrapper}
                 csVariant="default"
                 csColor="cyber-green"
-                csMode="body"
               >
                 <Icon noWrapper>
                   <ThunderstoreLogo />

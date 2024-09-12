@@ -126,9 +126,7 @@ export default function CommunitiesPage() {
         <Container
           rootClasses={searchAndOrderStyles.root}
           csVariant="tertiary"
-          csSize="s"
-          csWeight="bold"
-          csMode="auto"
+          csTextStyles={["fontWeightBold", "lineHeightAuto", "fontSizeS"]}
         >
           <div className={searchAndOrderStyles.searchTextInput}>
             Search

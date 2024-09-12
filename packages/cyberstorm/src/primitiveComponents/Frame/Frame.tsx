@@ -1,113 +1,67 @@
-import { PropsWithChildren } from "react";
 import popooverStyles from "./Popover.module.css";
 import modalStyles from "./Modal.module.css";
 import headingStyles from "./Heading.module.css";
 import displayStyles from "./Display.module.css";
 import { classnames } from "./../../utils/utils";
-import { Tooltip } from "../../components/Tooltip/Tooltip";
 import React from "react";
-
-type variants =
-  | "default"
-  | "primary"
-  | "secondary"
-  | "tertiary"
-  | "accent"
-  | "special";
-type colors =
-  | "surface"
-  | "surface-alpha"
-  | "blue"
-  | "pink"
-  | "red"
-  | "orange"
-  | "green"
-  | "yellow"
-  | "purple"
-  | "cyber-green";
-type sizes = "xs" | "s" | "m" | "l";
-type modes = "auto" | "body";
-type weights = "regular" | "medium" | "semiBold" | "bold";
-
-interface DefaultProps extends PropsWithChildren {
-  csColor?: colors;
-  csSize?: sizes;
-  csVariant?: variants;
-  csMode?: modes;
-  csWeight?: weights;
-  rootClasses?: string;
-  tooltipText?: string;
-}
+import { PrimitiveComponentDefaultProps, TooltipWrapper } from "../utils/utils";
 
 export interface FrameWindowProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    DefaultProps {
+    PrimitiveComponentDefaultProps {
   primitiveType: "window";
 }
 
 export interface FrameListProps
   extends React.HTMLAttributes<HTMLUListElement>,
-    DefaultProps {
+    PrimitiveComponentDefaultProps {
   primitiveType: "list";
 }
 
 export interface FrameListItemProps
   extends React.HTMLAttributes<HTMLLIElement>,
-    DefaultProps {
+    PrimitiveComponentDefaultProps {
   primitiveType: "listItem";
 }
 
 // TODO: Turn this into the new "attachable window", used for dropdowns etc
-interface FloaterProps extends DefaultProps {
+interface FloaterProps extends PrimitiveComponentDefaultProps {
   primitiveType: "floater";
 }
 
 export interface FrameHeadingProps
   extends React.HTMLAttributes<HTMLHeadingElement>,
-    DefaultProps {
+    PrimitiveComponentDefaultProps {
   primitiveType: "heading";
   csLevel: "1" | "2" | "3" | "4" | "5" | "6";
 }
 
 export interface FrameDisplayProps
   extends React.HTMLAttributes<HTMLHeadingElement>,
-    DefaultProps {
+    PrimitiveComponentDefaultProps {
   primitiveType: "display";
   csLevel: "1" | "2" | "3" | "4" | "5" | "6";
 }
 
 interface TextProps
   extends React.HTMLAttributes<HTMLParagraphElement>,
-    DefaultProps {
+    PrimitiveComponentDefaultProps {
   primitiveType: "text";
 }
 
-interface PopoverProps extends DefaultProps {
+interface PopoverProps extends PrimitiveComponentDefaultProps {
   primitiveType: "popover";
   popoverId: string;
   wrapperClasses?: string;
   noWrapper?: boolean;
 }
 
-interface ModalProps extends DefaultProps {
+interface ModalProps extends PrimitiveComponentDefaultProps {
   primitiveType: "modal";
   popoverId: string;
   wrapperClasses?: string;
   noWrapper?: boolean;
 }
-
-interface TooltipWrapperProps extends PropsWithChildren {
-  tooltipText?: string;
-}
-
-const TooltipWrapper = (props: TooltipWrapperProps) =>
-  props.tooltipText ? (
-    <Tooltip content={props.tooltipText} side="bottom">
-      {props.children}
-    </Tooltip>
-  ) : (
-    <>{props.children}</>
-  );
 
 export const Frame = React.forwardRef<
   | HTMLDivElement
@@ -141,28 +95,29 @@ export const Frame = React.forwardRef<
     const {
       children,
       primitiveType,
-      rootClasses,
+      csTextStyles,
       csColor,
-      csSize,
       csVariant,
-      csMode,
-      csWeight,
+      csSize,
+      rootClasses,
       tooltipText,
+      tooltipSide,
       ...forwardedProps
     } = props;
     if (primitiveType === "window") {
       const fRef = forwardedRef as React.ForwardedRef<HTMLDivElement>;
       const fProps = forwardedProps as FrameWindowProps;
       return (
-        <TooltipWrapper tooltipText={tooltipText}>
+        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
           <div
             {...fProps}
-            className={rootClasses}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {children}
@@ -174,15 +129,16 @@ export const Frame = React.forwardRef<
       const fRef = forwardedRef as React.ForwardedRef<HTMLUListElement>;
       const fProps = forwardedProps as FrameListProps;
       return (
-        <TooltipWrapper tooltipText={tooltipText}>
+        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
           <ul
             {...fProps}
-            className={rootClasses}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {children}
@@ -194,15 +150,16 @@ export const Frame = React.forwardRef<
       const fRef = forwardedRef as React.ForwardedRef<HTMLLIElement>;
       const fProps = forwardedProps as FrameListItemProps;
       return (
-        <TooltipWrapper tooltipText={tooltipText}>
+        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
           <li
             {...fProps}
-            className={rootClasses}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {children}
@@ -224,12 +181,14 @@ export const Frame = React.forwardRef<
         element = (
           <h1
             {...strippedForwardedProps}
-            className={classnames(primitiveStyles, rootClasses)}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              primitiveStyles,
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {children}
@@ -239,12 +198,14 @@ export const Frame = React.forwardRef<
         element = (
           <h2
             {...strippedForwardedProps}
-            className={classnames(primitiveStyles, rootClasses)}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              primitiveStyles,
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {children}
@@ -254,12 +215,14 @@ export const Frame = React.forwardRef<
         element = (
           <h3
             {...strippedForwardedProps}
-            className={classnames(primitiveStyles, rootClasses)}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              primitiveStyles,
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {children}
@@ -269,12 +232,14 @@ export const Frame = React.forwardRef<
         element = (
           <h4
             {...strippedForwardedProps}
-            className={classnames(primitiveStyles, rootClasses)}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              primitiveStyles,
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {children}
@@ -284,12 +249,14 @@ export const Frame = React.forwardRef<
         element = (
           <h5
             {...strippedForwardedProps}
-            className={classnames(primitiveStyles, rootClasses)}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              primitiveStyles,
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {children}
@@ -299,12 +266,14 @@ export const Frame = React.forwardRef<
         element = (
           <h6
             {...strippedForwardedProps}
-            className={classnames(primitiveStyles, rootClasses)}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              primitiveStyles,
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {children}
@@ -312,23 +281,25 @@ export const Frame = React.forwardRef<
         );
       }
       return (
-        <TooltipWrapper tooltipText={tooltipText}>{element}</TooltipWrapper>
+        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
+          {element}
+        </TooltipWrapper>
       );
     }
     if (primitiveType === "text") {
       const fRef = forwardedRef as React.ForwardedRef<HTMLParagraphElement>;
-      const { csWeight, ...strippedForwardedProps } =
-        forwardedProps as TextProps;
+      const textProps = forwardedProps as TextProps;
       return (
-        <TooltipWrapper tooltipText={tooltipText}>
+        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
           <p
-            {...strippedForwardedProps}
-            className={rootClasses}
+            {...textProps}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {children}
@@ -345,17 +316,19 @@ export const Frame = React.forwardRef<
         ...strippedForwardedProps
       } = forwardedProps as PopoverProps;
       return (
-        <TooltipWrapper tooltipText={tooltipText}>
+        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
           <div
             {...strippedForwardedProps}
             id={popoverId}
             {...{ popover: "auto" }}
-            className={classnames(popooverStyles.popover, rootClasses)}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              popooverStyles.popover,
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {noWrapper ? (
@@ -376,17 +349,18 @@ export const Frame = React.forwardRef<
         ...strippedForwardedProps
       } = forwardedProps as ModalProps;
       return (
-        <TooltipWrapper tooltipText={tooltipText}>
+        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
           <div
             {...strippedForwardedProps}
             id={popoverId}
             {...{ popover: "auto" }}
-            className={modalStyles.modal}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              modalStyles.modal
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {noWrapper ? (

@@ -1,58 +1,54 @@
-import { PropsWithChildren } from "react";
-import { Actionable } from "../../../primitiveComponents/Actionable/Actionable";
+import {
+  Actionable,
+  ActionableButtonProps,
+} from "../../../primitiveComponents/Actionable/Actionable";
 import styles from "../../../sharedVariantStyles/ButtonStyles/Button.module.css";
 import React from "react";
+import { classnames } from "../../../utils/utils";
 
-type colors =
-  | "surface"
-  | "surface-alpha"
-  | "blue"
-  | "pink"
-  | "red"
-  | "orange"
-  | "green"
-  | "yellow"
-  | "purple"
-  | "cyber-green";
+export const Button = React.forwardRef<
+  HTMLButtonElement,
+  Omit<ActionableButtonProps, "primitiveType">
+>((props: Omit<ActionableButtonProps, "primitiveType">, forwardedRef) => {
+  const {
+    children,
+    rootClasses,
+    csVariant = "default",
+    csColor = "purple",
+    csSize = "m",
+    csTextStyles,
+    ...forwardedProps
+  } = props;
 
-type sizes = "xs" | "s" | "m" | "l";
+  // TODO: Turn into a proper resolver function
+  // Same logic is in LinkButton too
+  const fontStyles = (size: typeof csSize) => {
+    if (size === "xs") {
+      return ["fontSizeXS", "fontWeightBold", "lineHeightAuto"];
+    } else if (size === "s") {
+      return ["fontSizeS", "fontWeightBold", "lineHeightAuto"];
+    } else {
+      return ["fontSizeM", "fontWeightBold", "lineHeightAuto"];
+    }
+  };
 
-interface DefaultProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    PropsWithChildren {
-  color?: colors;
-  size?: sizes;
-  variant?:
-    | "default"
-    | "primary"
-    | "secondary"
-    | "tertiary"
-    | "accent"
-    | "special";
-}
-
-export const Button = React.forwardRef<HTMLButtonElement, DefaultProps>(
-  (props: DefaultProps, forwardedRef) => {
-    const {
-      variant = "default",
-      color = "purple",
-      size = "m",
-      ...forwardedProps
-    } = props;
-    return (
-      <Actionable
-        {...forwardedProps}
-        primitiveType={"button"}
-        rootClasses={styles.button}
-        csColor={color}
-        csSize={size}
-        csVariant={variant}
-        ref={forwardedRef}
-      >
-        {props.children}
-      </Actionable>
-    );
-  }
-);
+  return (
+    <Actionable
+      primitiveType="button"
+      {...forwardedProps}
+      rootClasses={classnames(
+        ...(csTextStyles ? csTextStyles : fontStyles(csSize)),
+        styles.button,
+        rootClasses
+      )}
+      csColor={csColor}
+      csSize={csSize}
+      csVariant={csVariant}
+      ref={forwardedRef}
+    >
+      {children}
+    </Actionable>
+  );
+});
 
 Button.displayName = "Button";

@@ -16,8 +16,7 @@ export function CardCommunity(props: Props) {
   return (
     <Container
       csColor="surface"
-      csSize="m"
-      csWeight="bold"
+      csTextStyles={["fontSizeM", "fontWeightBold"]}
       csVariant="primary"
       rootClasses={styles.root}
     >
@@ -40,13 +39,14 @@ export function CardCommunity(props: Props) {
         community={community.identifier}
         rootClasses={styles.title}
         csVariant="primary"
+        csTextStyles={["lineHeightAuto"]}
       >
         {community.name}
       </NewLink>
       <Container rootClasses={styles.metaItemList}>
         <Container
           csVariant="accent"
-          csSize="xs"
+          csTextStyles={["fontSizeXS"]}
           tooltipText={`${numberWithSpaces(
             community.total_package_count
           )} Packages`}
@@ -59,7 +59,7 @@ export function CardCommunity(props: Props) {
         </Container>
         <Container
           csVariant="accent"
-          csSize="xs"
+          csTextStyles={["fontSizeXS"]}
           tooltipText={`${numberWithSpaces(
             community.total_download_count
           )} Downloads`}

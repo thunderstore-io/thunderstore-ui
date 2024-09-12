@@ -116,7 +116,7 @@ a {
 body {
   color: var(--color-text--default);
   font: var(--font-body);
-  line-height: var(--line-height--m);
+  line-height: normal;
   background-color: var(--color-background);
 }
 

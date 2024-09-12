@@ -15,9 +15,6 @@
   border-radius: var(--button-border-radius);
   color: var(--button-color);
 
-  font-weight: var(--button-font-weight);
-  font-size: var(--button-font-size);
-
   line-height: 1;
   text-align: center;
   background-color: var(--button-bg-color);
@@ -158,8 +155,6 @@
   --button-padding: var(--space--12);
   --button-gap: var(--gap--16);
   --button-border-radius: var(--border-radius--8);
-  --button-font-weight: var(--font-weight-boldest);
-  --button-font-size: var(--font-size--s);
 }
 
 /* s */
@@ -169,8 +164,6 @@
   --button-padding: var(--space--12);
   --button-gap: var(--gap--16);
   --button-border-radius: var(--border-radius--8);
-  --button-font-weight: var(--font-weight-boldest);
-  --button-font-size: var(--font-size--m);
 }
 
 /* m */
@@ -180,8 +173,6 @@
   --button-padding: var(--space--12) var(--space--16);
   --button-gap: var(--gap--16);
   --button-border-radius: var(--border-radius--8);
-  --button-font-weight: var(--font-weight-boldest);
-  --button-font-size: var(--font-size--m);
 }
 
 /* l */
@@ -191,6 +182,4 @@
   --button-padding: var(--space--12) var(--space--16);
   --button-gap: var(--gap--16);
   --button-border-radius: var(--border-radius--8);
-  --button-font-weight: var(--font-weight-boldest);
-  --button-font-size: var(--font-size--l);
 }

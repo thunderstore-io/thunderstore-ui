@@ -15,13 +15,11 @@ export const Link = React.forwardRef<
     props: ActionableLinkProps | ActionableCyberstormLinkProps,
     forwardedRef
   ) => {
-    const { children, rootClasses, csMode, csVariant, ...forwardedProps } =
-      props;
+    const { children, rootClasses, csVariant, ...forwardedProps } = props;
     return (
       <Actionable
         {...forwardedProps}
         csVariant={csVariant ?? "accent"}
-        csMode={csMode ?? "auto"}
         rootClasses={classnames(styles.link, rootClasses)}
         ref={forwardedRef}
       >

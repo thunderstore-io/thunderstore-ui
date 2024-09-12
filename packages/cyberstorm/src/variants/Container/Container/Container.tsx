@@ -14,10 +14,7 @@ export const Container = React.forwardRef<
     children,
     rootClasses,
     csColor = "purple",
-    csSize = "m",
     csVariant = "primary",
-    csMode = "auto",
-    csWeight = "medium",
     ...forwardedProps
   } = props;
   const fProps = forwardedProps as FrameWindowProps;
@@ -27,10 +24,7 @@ export const Container = React.forwardRef<
       primitiveType={"window"}
       rootClasses={classnames(styles.container, rootClasses)}
       csColor={csColor}
-      csSize={csSize}
       csVariant={csVariant}
-      csMode={csMode}
-      csWeight={csWeight}
       ref={forwardedRef}
     >
       {children}

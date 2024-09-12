@@ -14,10 +14,7 @@ export const List = React.forwardRef<
     children,
     rootClasses,
     csColor = "purple",
-    csSize = "s",
     csVariant = "accent",
-    csMode = "body",
-    csWeight = "regular",
     ...forwardedProps
   } = props;
   const fProps = forwardedProps as FrameListProps;
@@ -27,10 +24,7 @@ export const List = React.forwardRef<
       primitiveType={"list"}
       rootClasses={classnames(styles.list, rootClasses)}
       csColor={csColor}
-      csSize={csSize}
       csVariant={csVariant}
-      csMode={csMode}
-      csWeight={csWeight}
       ref={forwardedRef}
     >
       {children}

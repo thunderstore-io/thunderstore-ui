@@ -50,7 +50,12 @@ export function Select<T extends string>(props: SelectProps<T>) {
       disabled={options.length === 0}
     >
       <Trigger asChild>
-        <NewButton variant="secondary" size="m" color="surface">
+        <NewButton
+          csVariant="secondary"
+          csSize="m"
+          csColor="surface"
+          csTextStyles={["fontSizeS", "fontWeightBold", "lineHeightAuto"]}
+        >
           {options?.find((o) => o.value === value)?.label ?? placeholder}
           {icon}
         </NewButton>
@@ -77,9 +82,8 @@ const mapSelectData = (options: SelectOption[]) => {
       <Container
         rootClasses={styles.item}
         csVariant="secondary"
-        csSize="s"
         csColor="surface"
-        csWeight="medium"
+        csTextStyles={["fontSizeS", "fontWeightMedium"]}
       >
         <Icon inline>{option.leftIcon}</Icon>
         {option.label}

@@ -58,7 +58,7 @@ export function Footer() {
                   <Heading variant="primary" mode="heading" level="4">
                     Thunderstore
                   </Heading>
-                  <List.Root csMode="body">
+                  <List.Root csTextStyles={["lineHeightBody", "fontSizeS"]}>
                     <List.ListItem>
                       <NewLink
                         primitiveType="cyberstormLink"
@@ -74,7 +74,7 @@ export function Footer() {
                   <Heading variant="primary" mode="heading" level="4">
                     Developers
                   </Heading>
-                  <List.Root csMode="body">
+                  <List.Root csTextStyles={["lineHeightBody", "fontSizeS"]}>
                     <List.ListItem>
                       <NewLink
                         primitiveType="link"
@@ -174,9 +174,7 @@ export function Footer() {
         <div className={styles.footnoteInner}>
           <Container
             csVariant="accent"
-            csMode="body"
-            csSize="xs"
-            csWeight="regular"
+            csTextStyles={["lineHeightBody", "fontWeightRegular", "fontSizeXS"]}
             rootClasses={styles.footnoteCopyright}
           >
             © 2024 Thunderstore and contributors. This page is{" "}

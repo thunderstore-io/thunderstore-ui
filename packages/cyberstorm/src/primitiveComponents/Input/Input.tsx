@@ -1,57 +1,12 @@
-import { PropsWithChildren } from "react";
 import React from "react";
-import { Tooltip } from "../../components/Tooltip/Tooltip";
-
-export type variants =
-  | "default"
-  | "primary"
-  | "secondary"
-  | "tertiary"
-  | "accent"
-  | "special";
-export type colors =
-  | "surface"
-  | "surface-alpha"
-  | "blue"
-  | "pink"
-  | "red"
-  | "orange"
-  | "green"
-  | "yellow"
-  | "purple"
-  | "cyber-green";
-type sizes = "xs" | "s" | "m" | "l";
-type modes = "auto" | "body";
-type weights = "regular" | "medium" | "semiBold" | "bold";
-
-export interface InputDefaultProps extends PropsWithChildren {
-  csColor?: colors;
-  csSize?: sizes;
-  csVariant?: variants;
-  csMode?: modes;
-  csWeight?: weights;
-  rootClasses?: string;
-  tooltipText?: string;
-}
+import { PrimitiveComponentDefaultProps, TooltipWrapper } from "../utils/utils";
+import { classnames } from "../../utils/utils";
 
 export interface InputTextInputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
-    InputDefaultProps {
+    PrimitiveComponentDefaultProps {
   primitiveType: "textInput";
 }
-
-interface TooltipWrapperProps extends PropsWithChildren {
-  tooltipText?: string;
-}
-
-const TooltipWrapper = (props: TooltipWrapperProps) =>
-  props.tooltipText ? (
-    <Tooltip content={props.tooltipText} side="bottom">
-      {props.children}
-    </Tooltip>
-  ) : (
-    <>{props.children}</>
-  );
 
 export const Input = React.forwardRef<HTMLInputElement, InputTextInputProps>(
   (props: InputTextInputProps, forwardedRef) => {
@@ -59,12 +14,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputTextInputProps>(
       children,
       primitiveType,
       rootClasses,
+      csTextStyles,
       csColor,
-      csSize,
       csVariant,
-      csMode,
-      csWeight,
+      csSize,
       tooltipText,
+      tooltipSide,
       ...forwardedProps
     } = props;
 
@@ -73,15 +28,16 @@ export const Input = React.forwardRef<HTMLInputElement, InputTextInputProps>(
       const fProps = forwardedProps as InputTextInputProps;
 
       return (
-        <TooltipWrapper tooltipText={tooltipText}>
+        <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
           <input
             {...fProps}
-            className={rootClasses}
+            className={classnames(
+              ...(csTextStyles ? csTextStyles : []),
+              rootClasses
+            )}
             data-color={csColor}
-            data-size={csSize}
             data-variant={csVariant}
-            data-mode={csMode}
-            data-weight={csWeight}
+            data-size={csSize}
             ref={fRef}
           >
             {children}
@@ -89,26 +45,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputTextInputProps>(
         </TooltipWrapper>
       );
     }
-    // if (primitiveType === "link") {
-    //   const fRef = forwardedRef as React.ForwardedRef<HTMLAnchorElement>;
-    //   const fProps = forwardedProps as InputLinkProps;
-    //   return (
-    //     <TooltipWrapper tooltipText={tooltipText}>
-    //       <a
-    //         {...fProps}
-    //         className={rootClasses}
-    //         data-color={csColor}
-    //         data-size={csSize}
-    //         data-variant={csVariant}
-    //         data-mode={csMode}
-    //         data-weight={csWeight}
-    //         ref={fRef}
-    //       >
-    //         {children}
-    //       </a>
-    //     </TooltipWrapper>
-    //   );
-    // }
     return <p>Errored Input</p>;
   }
 );

@@ -3,8 +3,6 @@ import React from "react";
 import {
   Input,
   InputTextInputProps,
-  colors,
-  variants,
 } from "../../../primitiveComponents/Input/Input";
 import { classnames } from "../../../utils/utils";
 import { Frame } from "../../../primitiveComponents/Frame/Frame";
@@ -12,6 +10,7 @@ import { Icon } from "../../../components/Icon/Icon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { Actionable } from "../../../primitiveComponents/Actionable/Actionable";
+import { colors, variants } from "../../../primitiveComponents/utils/utils";
 
 interface TextInputProps extends Omit<InputTextInputProps, "primitiveType"> {
   leftIcon?: JSX.Element;
@@ -36,8 +35,6 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
       csColor = "purple",
       csSize = "m",
       csVariant = "primary",
-      csMode = "auto",
-      csWeight = "regular",
       ...forwardedProps
     } = props;
     const fProps = forwardedProps as InputTextInputProps;
@@ -52,6 +49,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
         rootClasses={styles.wrapper}
         csColor={wrapperColor}
         csVariant={wrapperVariant}
+        csTextStyles={["lineHeightAuto", "fontWeightRegular", "fontSizeM"]}
       >
         {leftIcon ? (
           <Icon inline wrapperClasses={styles.leftIcon}>
@@ -69,8 +67,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
           csColor={csColor}
           csSize={csSize}
           csVariant={csVariant}
-          csMode={csMode}
-          csWeight={csWeight}
+          csTextStyles={["fontSizeS"]}
           ref={forwardedRef}
           onKeyDown={onEnter}
         >

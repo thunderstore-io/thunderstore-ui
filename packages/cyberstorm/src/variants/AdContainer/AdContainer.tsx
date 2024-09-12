@@ -15,8 +15,8 @@ export function AdContainer(props: AdContainerProps) {
     <Container
       rootClasses={styles.root}
       csSize="s"
-      csWeight="regular"
       csVariant="secondary"
+      csTextStyles={["fontWeightRegular"]}
     >
       <div className={styles.fallback}>
         Thunderstore development is made possible with ads.

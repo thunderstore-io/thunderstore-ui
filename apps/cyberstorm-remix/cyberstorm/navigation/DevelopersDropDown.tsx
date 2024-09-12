@@ -14,7 +14,7 @@ export function DevelopersDropDown() {
     <>
       <DropDown
         trigger={
-          <NewButton size="l" variant="tertiary" color="surface">
+          <NewButton csSize="l" csVariant="tertiary" csColor="surface">
             Developers
             <Icon inline>
               <FontAwesomeIcon icon={faCaretDown} />

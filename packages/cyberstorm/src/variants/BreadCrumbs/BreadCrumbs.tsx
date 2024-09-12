@@ -64,9 +64,7 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
       rootClasses={styles.root}
       csColor="surface"
       csVariant="default"
-      csWeight="medium"
-      csSize="xs"
-      csMode="auto"
+      csTextStyles={["fontWeightMedium", "fontSizeXS", "lineHeightAuto"]}
     >
       {props.excludeHome ? null : home}
       {nodes}
@@ -82,8 +80,7 @@ export function DefaultHomeCrumb() {
       csColor="cyber-green"
       csVariant="default"
       tooltipText="Home"
-      csSize="s"
-      csWeight="regular"
+      csTextStyles={["fontSizeS", "fontWeightRegular"]}
     >
       <Icon noWrapper>
         <FontAwesomeIcon icon={faHouse} className={styles.home} />
