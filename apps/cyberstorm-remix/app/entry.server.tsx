@@ -1,12 +1,18 @@
 import { PassThrough } from "node:stream";
 
-import type { AppLoadContext, EntryContext } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  AppLoadContext,
+  EntryContext,
+  LoaderFunctionArgs,
+} from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import * as isbotModule from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 
 import * as Sentry from "@sentry/remix";
+import { DataFunctionArgs } from "node_modules/@sentry/remix/types/utils/vendor/types";
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
@@ -165,4 +171,21 @@ function handleBrowserRequest(
   });
 }
 
-export const handleError = Sentry.sentryHandleError;
+export const handleError = (
+  err: unknown | object,
+  { request }: LoaderFunctionArgs | ActionFunctionArgs
+) => {
+  const message =
+    err instanceof Object && "message" in err && err.message
+      ? err.message
+      : "No message";
+  const stack =
+    err instanceof Object && "stack" in err && err.stack
+      ? err.stack
+      : "No stack";
+  process.stderr.write(
+    `Error: ${err}\nError message: ${message}\nError stack: ${stack}\n`
+  );
+  const remixRequest = { request } as DataFunctionArgs;
+  Sentry.sentryHandleError(err, remixRequest);
+};
