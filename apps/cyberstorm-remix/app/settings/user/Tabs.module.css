@@ -7,7 +7,7 @@
 
 .buttons {
   display: flex;
-  border-bottom: 3px solid var(--color-purple--5);
+  border-bottom: 3px solid var(--old--color-purple--5);
 }
 
 .button {
@@ -20,7 +20,7 @@
   margin-bottom: -3px;
 
   padding: var(--space--12) var(--space--16);
-  border-bottom: 3px solid var(--color-purple--5);
+  border-bottom: 3px solid var(--old--color-purple--5);
   color: var(--tab-color);
   background-color: transparent;
 
@@ -30,7 +30,7 @@
 .button.active {
   border-color: var(--tab-color);
 
-  --tab-color: var(--color-green--5);
+  --tab-color: var(--old--color-green--5);
 }
 
 .button:disabled {

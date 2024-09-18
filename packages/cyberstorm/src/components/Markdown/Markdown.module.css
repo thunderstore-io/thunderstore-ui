@@ -118,9 +118,7 @@
   color: #f5f5f6;
 }
 
-.root a {
-  color: var(--color-cyber-green--50);
-}
+.root a { color: var(--old--color-cyber-green--50); }
 
 .root blockquote {
   display: flex;

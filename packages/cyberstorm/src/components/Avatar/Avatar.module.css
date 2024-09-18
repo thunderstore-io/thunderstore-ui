@@ -30,7 +30,7 @@
 }
 
 .image:where(.placeholderIcon) {
-  color: var(--color-purple--9);
+  color: var(--old--color-purple--9);
 }
 
 .image:where(.placeholderIcon):hover {

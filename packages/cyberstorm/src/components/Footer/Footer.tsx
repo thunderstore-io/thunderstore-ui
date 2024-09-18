@@ -1,16 +1,13 @@
 import styles from "./Footer.module.css";
-import * as Button from "../Button/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
-import { CyberstormLink } from "../Links/Links";
 import {
   faArrowUpRightFromSquare,
   faBoltLightning,
 } from "@fortawesome/free-solid-svg-icons";
 import { ThunderstoreLogoHorizontal } from "../../svg/svg";
-import { Tooltip } from "../Tooltip/Tooltip";
-import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
+import { Container, Heading, LinkButton, List, NewIcon, NewLink } from "../..";
 
 const AD_IMAGE_SRC = "/cyberstorm-static/images/tsmm_screenshot.png";
 const DISCORD_URL = "https://discord.thunderstore.io/";
@@ -21,82 +18,121 @@ const GITHUB_URL = "https://github.com/thunderstore-io";
  */
 export function Footer() {
   return (
-    <footer className={styles.root}>
+    <footer className={styles.root} aria-label="Footer">
       <div className={styles.main}>
         <div className={classnames(styles.section, styles.info)}>
           <div className={classnames(styles.item, styles.company)}>
             <div className={classnames(styles.inner, styles.logoAndLinks)}>
-              <div className={styles.logo}>
+              <NewIcon csVariant="accent" wrapperClasses={styles.logo}>
                 <ThunderstoreLogoHorizontal />
-              </div>
-              <div className={styles.iconLinks}>
-                <Tooltip content="Join our Discord" side="bottom">
-                  <a href={DISCORD_URL}>
-                    <Icon wrapperClasses={styles.iconLink}>
-                      <FontAwesomeIcon icon={faDiscord} />
-                    </Icon>
-                  </a>
-                </Tooltip>
-                <Tooltip content="Check out our GitHub" side="bottom">
-                  <a href={GITHUB_URL}>
-                    <Icon wrapperClasses={styles.iconLink}>
-                      <FontAwesomeIcon icon={faGithub} />
-                    </Icon>
-                  </a>
-                </Tooltip>
-              </div>
+              </NewIcon>
+              <Container rootClasses={styles.iconLinks} csVariant="accent">
+                <NewLink
+                  primitiveType="link"
+                  tooltipText="Join our Discord"
+                  href={DISCORD_URL}
+                  rootClasses={styles.iconLink}
+                  aria-label="Invite link to Thunderstores Discord server"
+                >
+                  <NewIcon noWrapper csVariant="accent">
+                    <FontAwesomeIcon icon={faDiscord} />
+                  </NewIcon>
+                </NewLink>
+                <NewLink
+                  primitiveType="link"
+                  tooltipText="Check out our GitHub"
+                  href={GITHUB_URL}
+                  rootClasses={styles.iconLink}
+                  aria-label="Link to Thunderstores Github"
+                >
+                  <NewIcon noWrapper csVariant="accent">
+                    <FontAwesomeIcon icon={faGithub} />
+                  </NewIcon>
+                </NewLink>
+              </Container>
             </div>
           </div>
           <div className={classnames(styles.item, styles.linksWrapper)}>
             <div className={classnames(styles.inner, styles.navLinks)}>
-              <nav className={styles.nav}>
-                <div className={styles.navSection}>
-                  <div className={styles.navTitle}>Thunderstore</div>
-                  <ul className={styles.links}>
-                    {/* Disabled temporarily, ref. TS-1828 */}
-                    {/* <CyberstormLink linkId="Index">
-                      <li>Browse</li>
-                    </CyberstormLink> */}
-                    <li>
-                      <CyberstormLink linkId="Communities">
+              <nav className={styles.nav} aria-label="Footer links">
+                <Container rootClasses={styles.navSection}>
+                  <Heading
+                    variant="primary"
+                    mode="heading"
+                    level="2"
+                    styleLevel="4"
+                  >
+                    Thunderstore
+                  </Heading>
+                  <List.Root csTextStyles={["lineHeightBody", "fontSizeS"]}>
+                    <List.ListItem>
+                      <NewLink
+                        primitiveType="cyberstormLink"
+                        linkId="Communities"
+                        csVariant="accent"
+                      >
                         Communities
-                      </CyberstormLink>
-                    </li>
-                  </ul>
-                </div>
-                <div className={styles.navSection}>
-                  <div className={styles.navTitle}>Developers</div>
-                  <ul className={styles.links}>
-                    <li>
-                      <a href="/api/docs" key="docs">
+                      </NewLink>
+                    </List.ListItem>
+                  </List.Root>
+                </Container>
+                <Container rootClasses={styles.navSection}>
+                  <Heading
+                    variant="primary"
+                    mode="heading"
+                    level="2"
+                    styleLevel="4"
+                  >
+                    Developers
+                  </Heading>
+                  <List.Root csTextStyles={["lineHeightBody", "fontSizeS"]}>
+                    <List.ListItem>
+                      <NewLink
+                        primitiveType="link"
+                        href="/api/docs"
+                        csVariant="accent"
+                      >
                         API Documentation
-                      </a>
-                    </li>
-                    <li>
-                      <a href="/package/create/docs/" key="old_format_docs">
+                      </NewLink>
+                    </List.ListItem>
+                    <List.ListItem>
+                      <NewLink
+                        primitiveType="link"
+                        href="/package/create/docs/"
+                        csVariant="accent"
+                      >
                         Package Format Docs
-                      </a>
-                    </li>
-                    <li>
-                      <a
+                      </NewLink>
+                    </List.ListItem>
+                    <List.ListItem>
+                      <NewLink
+                        primitiveType="link"
                         href="/tools/manifest-v1-validator/"
-                        key="old_manifest_validator"
+                        csVariant="accent"
                       >
                         Manifest Validator
-                      </a>
-                    </li>
-                    <li>
-                      <a href="/tools/markdown-preview/" key="old_format_docs">
+                      </NewLink>
+                    </List.ListItem>
+                    <List.ListItem>
+                      <NewLink
+                        primitiveType="link"
+                        href="/tools/markdown-preview/"
+                        csVariant="accent"
+                      >
                         Markdown Preview
-                      </a>
-                    </li>
-                    <li>
-                      <a href="https://github.com/thunderstore-io" key="github">
+                      </NewLink>
+                    </List.ListItem>
+                    <List.ListItem>
+                      <NewLink
+                        primitiveType="link"
+                        href="https://github.com/thunderstore-io"
+                        csVariant="accent"
+                      >
                         GitHub
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+                      </NewLink>
+                    </List.ListItem>
+                  </List.Root>
+                </Container>
               </nav>
             </div>
           </div>
@@ -107,28 +143,32 @@ export function Footer() {
             <div className={styles.inner}>
               <div className={styles.ad}>
                 <div className={styles.adText}>
-                  <div className={styles.adTitle}>Thunderstore Mod Manager</div>
-                  <div className={styles.adDescription}>
-                    You are prepared. Download Thunderstore Mod Manager
-                    <br />
-                    for desktop and enter a world of Thunder{" "}
-                    <Icon inline wrapperClasses={styles.inlineIcon}>
-                      <FontAwesomeIcon icon={faBoltLightning} />
-                    </Icon>
-                  </div>
-                  <Button.Root
-                    colorScheme="accent"
-                    paddingSize="large"
-                    href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
-                    className={styles.adButton}
+                  <Heading mode="display" level="2" styleLevel="3">
+                    Thunderstore Mod Manager
+                  </Heading>
+                  <Container
+                    rootClasses={styles.adDescription}
+                    csVariant="accent"
                   >
-                    <Button.ButtonLabel fontSize="large">
-                      Get Manager
-                    </Button.ButtonLabel>
-                    <Button.ButtonIcon>
+                    You are prepared. Download Thunderstore Mod Manager for
+                    desktop and enter a world of Thunder{" "}
+                    <NewIcon csMode="inline" noWrapper>
+                      <FontAwesomeIcon icon={faBoltLightning} />
+                    </NewIcon>
+                  </Container>
+                  <LinkButton
+                    primitiveType="link"
+                    href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+                    csSize="l"
+                    csColor="cyber-green"
+                    csVariant="accent"
+                    rootClasses={styles.getManagerButton}
+                  >
+                    Get Manager
+                    <NewIcon csMode="inline" noWrapper>
                       <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-                    </Button.ButtonIcon>
-                  </Button.Root>
+                    </NewIcon>
+                  </LinkButton>
                 </div>
                 <img
                   alt="Screenshot of the Thunderstore Mod Manager"
@@ -143,12 +183,20 @@ export function Footer() {
 
       <div className={classnames(styles.item, styles.footnote)}>
         <div className={styles.footnoteInner}>
-          <div className={styles.footnoteCopyright}>
+          <Container
+            csVariant="accent"
+            csTextStyles={["lineHeightBody", "fontWeightRegular", "fontSizeXS"]}
+            rootClasses={styles.footnoteCopyright}
+          >
             © 2024 Thunderstore and contributors. This page is{" "}
-            <a href="https://github.com/thunderstore-io/thunderstore-ui/">
+            <NewLink
+              primitiveType="link"
+              href="https://github.com/thunderstore-io/thunderstore-ui/"
+              aria-label="This page is open source, link to Thunderstore UIs Github page"
+            >
               open-source ❤
-            </a>
-          </div>
+            </NewLink>
+          </Container>
         </div>
       </div>
     </footer>

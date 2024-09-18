@@ -1,0 +1,25 @@
+.container {
+  color: var(--container-color);
+
+  --container-color: var(--color-primary);
+}
+
+.container[data-variant="default"] {
+  --container-color: var(--color-5);
+}
+
+.container[data-variant="primary"] {
+  --container-color: var(--color-primary);
+}
+
+.container[data-variant="secondary"] {
+  --container-color: var(--color-secondary);
+}
+
+.container[data-variant="tertiary"] {
+  --container-color: var(--color-tertiary);
+}
+
+.container[data-variant="accent"] {
+  --container-color: var(--color-accent);
+}
