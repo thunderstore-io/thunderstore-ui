@@ -1,0 +1,59 @@
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space--12);
+}
+
+.root:hover .imageWrapper {
+  filter: brightness(1.15);
+}
+
+.root:focus-within {
+  border-radius: var(--border-radius--8);
+  outline: 0.2rem solid var(--color-cyber-green--5);
+  outline-offset: 0.5rem;
+}
+
+.root .imageWrapper > div {
+  transform-origin: bottom;
+}
+
+.root:hover .imageWrapper > div,
+.root:focus-within .imageWrapper > div {
+  transform: scale(1.05);
+}
+
+.title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.title:focus-visible {
+  outline: none !important;
+}
+
+.metaItemList {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap--16);
+  margin-top: auto;
+}
+
+.metaItem {
+  display: flex;
+  gap: var(--gap--8);
+  align-items: center;
+}
+
+.tag {
+  position: absolute;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  flex-flow: row-reverse;
+  flex-wrap: wrap;
+  gap: var(--space--8);
+  margin: var(--space--8);
+}

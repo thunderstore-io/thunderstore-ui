@@ -1,0 +1,18 @@
+.modal {
+  width: 100%;
+  height: 100%;
+  background: rgba(0 0 0 / 0.6);
+  backdrop-filter: blur(10px);
+}
+
+.modal[data-size="s"] {
+  --frame-modal-gap: 1rem;
+  --frame-modal-padding: 1.5rem 2.25rem;
+  --frame-modal-border-radius: 0.25rem;
+}
+
+.modal[data-size="m"] {
+  --frame-modal-gap: 2rem;
+  --frame-modal-padding: 3rem 5.5rem;
+  --frame-modal-border-radius: 0.5rem;
+}

@@ -16,8 +16,8 @@
 }
 
 .tag.exclude {
-  --text-color: var(--color-red--3);
-  --bg-color: var(--color-red--10);
+  --text-color: var(--old--color-red--3);
+  --bg-color: var(--old--color-red--10);
 }
 
 .icon {
@@ -26,5 +26,5 @@
 }
 
 .tag.exclude .icon {
-  --text-color: var(--color-red--3);
+  --text-color: var(--old--color-red--3);
 }

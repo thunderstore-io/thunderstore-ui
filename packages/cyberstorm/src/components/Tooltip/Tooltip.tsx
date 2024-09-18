@@ -18,16 +18,17 @@ export interface TooltipProps {
 /**
  * Cyberstorm Tooltip Component
  */
-export function Tooltip({
-  content,
-  sideOffset = 5,
-  side = "right",
-  collisionPadding = 20,
-  sticky = "always",
-  avoidCollisions = true,
-  children,
-  open,
-}: TooltipProps) {
+export function Tooltip(props: TooltipProps) {
+  const {
+    content,
+    sideOffset = 5,
+    side = "right",
+    collisionPadding = 20,
+    sticky = "always",
+    avoidCollisions = true,
+    children,
+    open,
+  } = props;
   return (
     <Root open={open}>
       <Trigger asChild>{children}</Trigger>
