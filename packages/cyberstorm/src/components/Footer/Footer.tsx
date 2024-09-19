@@ -57,10 +57,10 @@ export function Footer() {
               <nav className={styles.nav} aria-label="Footer links">
                 <Container rootClasses={styles.navSection}>
                   <Heading
-                    variant="primary"
+                    csVariant="primary"
                     mode="heading"
-                    level="2"
-                    styleLevel="4"
+                    csLevel="2"
+                    csStyleLevel="4"
                   >
                     Thunderstore
                   </Heading>
@@ -78,10 +78,10 @@ export function Footer() {
                 </Container>
                 <Container rootClasses={styles.navSection}>
                   <Heading
-                    variant="primary"
+                    csVariant="primary"
                     mode="heading"
-                    level="2"
-                    styleLevel="4"
+                    csLevel="2"
+                    csStyleLevel="4"
                   >
                     Developers
                   </Heading>
@@ -143,7 +143,7 @@ export function Footer() {
             <div className={styles.inner}>
               <div className={styles.ad}>
                 <div className={styles.adText}>
-                  <Heading mode="display" level="2" styleLevel="3">
+                  <Heading mode="display" csLevel="2" csStyleLevel="3">
                     Thunderstore Mod Manager
                   </Heading>
                   <Container

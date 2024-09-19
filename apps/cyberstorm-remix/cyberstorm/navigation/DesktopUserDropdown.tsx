@@ -1,96 +1,97 @@
 import { faSignOut, faUsers, faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as RadixDropDown from "@radix-ui/react-dropdown-menu";
 
 import styles from "./Navigation.module.css";
+import dropdownStyles from "../../../../packages/cyberstorm/src/newComponents/DropDown/DropDown.module.css";
 import {
   Avatar,
-  DropDownDivider,
-  DropDownItem,
-  CyberstormLink,
-  DropDown,
+  NewDropDown,
+  NewText,
+  NewDropDownItem,
+  NewDropDownDivider,
+  NewLink,
+  NewIcon,
 } from "@thunderstore/cyberstorm";
-import { DropDownLink } from "@thunderstore/cyberstorm/src/components/DropDown/DropDownLink";
-import { emptyUser } from "@thunderstore/dapper-ts/src/methods/currentUser";
 import { CurrentUser } from "@thunderstore/dapper/types";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
-import { useState, useEffect } from "react";
 import { AvatarButton } from "@thunderstore/cyberstorm/src/components/Avatar/AvatarButton";
-import { DesktopLoginPopover } from "./DesktopLoginPopover";
+import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 
-export function DesktopUserDropdown() {
-  const [user, setUser] = useState<CurrentUser>(emptyUser);
+export function DesktopUserDropdown(props: { user: CurrentUser }) {
+  const { user } = props;
+
   const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
-
-  useEffect(() => {
-    const fetchAndSetUser = async () => {
-      const dapper = await getDapper(true);
-      const fetchedUser = await dapper.getCurrentUser();
-      setUser(fetchedUser);
-    };
-    fetchAndSetUser();
-  }, []);
-
-  if (!user.username) {
-    return <DesktopLoginPopover />;
-  }
 
   // REMIX TODO: Turn this into a popover
   return (
-    <DropDown
+    <NewDropDown
       contentAlignment="end"
       trigger={
         <AvatarButton src={avatar} username={user.username} size="small" />
       }
-      content={[
-        <RadixDropDown.Item key="user">
-          <div className={styles.dropDownUserInfo}>
-            <Avatar src={avatar} username={user.username} size="small" />
-            <div className={styles.dropdownUserInfoDetails}>
-              <div className={styles.dropdownUserInfoDetails_userName}>
-                {user.username}
-              </div>
-            </div>
-          </div>
-        </RadixDropDown.Item>,
-
-        <DropDownDivider key="divider-first" />,
-
-        <CyberstormLink linkId="Settings" key="settings">
-          <DropDownItem
-            content={
-              <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faCog} />}
-                label="Settings"
-              />
-            }
-          />
-        </CyberstormLink>,
-
-        <CyberstormLink linkId="Teams" key="teams">
-          <DropDownItem
-            content={
-              <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faUsers} />}
-                label="Teams"
-              />
-            }
-          />
-        </CyberstormLink>,
-
-        <DropDownDivider key="divider-second" />,
-
-        <a href="/logout" key="logout">
-          <DropDownItem
-            content={
-              <DropDownLink
-                leftIcon={<FontAwesomeIcon icon={faSignOut} />}
-                label="Log Out"
-              />
-            }
-          />
-        </a>,
-      ]}
-    />
+      csVariant="default"
+      csColor="surface"
+    >
+      <NewDropDownItem rootClasses={styles.dropDownUserInfo}>
+        <Avatar src={avatar} username={user.username} size="small" />
+        <NewText rootClasses={styles.dropdownUserInfoDetails}>
+          {user.username}
+        </NewText>
+      </NewDropDownItem>
+      <NewDropDownDivider csVariant="default" csColor="surface" />
+      <NewDropDownItem asChild>
+        <NewLink
+          primitiveType="cyberstormLink"
+          linkId="Settings"
+          csVariant="default"
+          csColor="surface"
+          rootClasses={classnames(
+            dropdownStyles.dropdownItem,
+            styles.dropDownItem
+          )}
+          csTextStyles={["fontSizeS", "fontWeightRegular"]}
+        >
+          <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+            <FontAwesomeIcon icon={faCog} />
+          </NewIcon>
+          Settings
+        </NewLink>
+      </NewDropDownItem>
+      <NewDropDownItem asChild>
+        <NewLink
+          primitiveType="cyberstormLink"
+          linkId="Teams"
+          csVariant="default"
+          csColor="surface"
+          rootClasses={classnames(
+            dropdownStyles.dropdownItem,
+            styles.dropDownItem
+          )}
+          csTextStyles={["fontSizeS", "fontWeightRegular"]}
+        >
+          <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+            <FontAwesomeIcon icon={faUsers} />
+          </NewIcon>
+          Teams
+        </NewLink>
+      </NewDropDownItem>
+      <NewDropDownItem asChild>
+        <NewLink
+          primitiveType="link"
+          href="/logout"
+          csVariant="default"
+          csColor="surface"
+          rootClasses={classnames(
+            dropdownStyles.dropdownItem,
+            styles.dropDownItem
+          )}
+          csTextStyles={["fontSizeS", "fontWeightRegular"]}
+        >
+          <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+            <FontAwesomeIcon icon={faSignOut} />
+          </NewIcon>
+          Log Out
+        </NewLink>
+      </NewDropDownItem>
+    </NewDropDown>
   );
 }

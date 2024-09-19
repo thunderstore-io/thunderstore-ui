@@ -51,12 +51,24 @@ export function DropDown(props: DropDownProps) {
   );
 }
 
-export function DropDownItem(props: PrimitiveComponentDefaultProps) {
-  const { children, rootClasses, csTextStyles, csColor, csVariant, csSize } =
-    props;
+interface DropDownItemProps
+  extends PrimitiveComponentDefaultProps,
+    RadixDropDown.MenuItemProps {}
+
+export function DropDownItem(props: DropDownItemProps) {
+  const {
+    children,
+    rootClasses,
+    csTextStyles,
+    csColor,
+    csVariant,
+    csSize,
+    ...fProps
+  } = props;
 
   return (
     <RadixDropDown.Item
+      {...fProps}
       className={classnames(
         styles.dropdownItem,
         ...(csTextStyles ? csTextStyles : []),
@@ -71,8 +83,14 @@ export function DropDownItem(props: PrimitiveComponentDefaultProps) {
   );
 }
 
-export function DropDownDivider() {
-  return <Container rootClasses={styles.divider} />;
+export function DropDownDivider(props: PrimitiveComponentDefaultProps) {
+  const { rootClasses, ...fProps } = props;
+  return (
+    <Container
+      rootClasses={classnames(styles.divider, rootClasses)}
+      {...fProps}
+    />
+  );
 }
 
 DropDown.displayName = "DropDown";

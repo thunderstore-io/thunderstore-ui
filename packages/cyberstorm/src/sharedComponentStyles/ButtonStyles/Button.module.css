@@ -46,22 +46,22 @@
 /* primary */
 
 .button[data-variant="primary"] {
-  --button-color: var(--color-text--default);
-  --button-bg-color: var(--color-surface--10);
+  --button-color: var(--color-primary);
+  --button-bg-color: hsl(256deg 60% 52% / 1);
 }
 
 .button[data-variant="primary"]:hover {
-  --button-bg-color: var(--color-surface--10--hover);
+  --button-bg-color: hsl(256deg 67% 56% / 1);
 }
 
 .button[data-variant="primary"]:active {
-  background-color: var(--button-bg-color-active);
+  background-color: hsl(256deg 60% 52% / 1);
 }
 
 /* secondary */
 
 .button[data-variant="secondary"] {
-  --button-color: var(--color-text--default);
+  --button-color: var(--color-primary);
   --button-bg-color: var(--color-6);
 }
 
@@ -76,7 +76,7 @@
 /* tertiary */
 
 .button[data-variant="tertiary"] {
-  --button-color: var(--color-text--default);
+  --button-color: var(--color-primary);
   --button-bg-color: transparent;
 }
 
