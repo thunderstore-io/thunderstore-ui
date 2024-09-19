@@ -1,7 +1,14 @@
 import { ReactNode, ReactElement } from "react";
 import styles from "./DropDown.module.css";
 
-import * as RadixDropDown from "@radix-ui/react-dropdown-menu";
+import {
+  Root,
+  Trigger,
+  Portal,
+  Content,
+  DropdownMenuItemProps,
+  Item,
+} from "@radix-ui/react-dropdown-menu";
 import { Container } from "../Container/Container";
 import { classnames } from "../../utils/utils";
 import { PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
@@ -26,13 +33,13 @@ export function DropDown(props: DropDownProps) {
   } = props;
 
   return (
-    <RadixDropDown.Root modal={false} defaultOpen={defaultOpen}>
-      <RadixDropDown.Trigger asChild disabled={!children}>
+    <Root modal={false} defaultOpen={defaultOpen}>
+      <Trigger asChild disabled={!children}>
         {trigger}
-      </RadixDropDown.Trigger>
+      </Trigger>
 
-      <RadixDropDown.Portal>
-        <RadixDropDown.Content
+      <Portal>
+        <Content
           align={contentAlignment}
           sideOffset={8}
           className={classnames(
@@ -45,18 +52,30 @@ export function DropDown(props: DropDownProps) {
           data-size={csSize}
         >
           {children}
-        </RadixDropDown.Content>
-      </RadixDropDown.Portal>
-    </RadixDropDown.Root>
+        </Content>
+      </Portal>
+    </Root>
   );
 }
 
-export function DropDownItem(props: PrimitiveComponentDefaultProps) {
-  const { children, rootClasses, csTextStyles, csColor, csVariant, csSize } =
-    props;
+interface DropDownItemProps
+  extends PrimitiveComponentDefaultProps,
+    DropdownMenuItemProps {}
+
+export function DropDownItem(props: DropDownItemProps) {
+  const {
+    children,
+    rootClasses,
+    csTextStyles,
+    csColor,
+    csVariant,
+    csSize,
+    ...fProps
+  } = props;
 
   return (
-    <RadixDropDown.Item
+    <Item
+      {...fProps}
       className={classnames(
         styles.dropdownItem,
         ...(csTextStyles ? csTextStyles : []),
@@ -67,12 +86,18 @@ export function DropDownItem(props: PrimitiveComponentDefaultProps) {
       data-size={csSize}
     >
       {children}
-    </RadixDropDown.Item>
+    </Item>
   );
 }
 
-export function DropDownDivider() {
-  return <Container rootClasses={styles.divider} />;
+export function DropDownDivider(props: PrimitiveComponentDefaultProps) {
+  const { rootClasses, ...fProps } = props;
+  return (
+    <Container
+      rootClasses={classnames(styles.divider, rootClasses)}
+      {...fProps}
+    />
+  );
 }
 
 DropDown.displayName = "DropDown";

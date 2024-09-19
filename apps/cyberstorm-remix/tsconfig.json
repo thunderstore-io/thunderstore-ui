@@ -26,6 +26,7 @@
       "~/*": ["app/*"],
       "react": ["./node_modules/@types/react"]
     },
+    // "verbatimModuleSyntax": true,
 
     // Vite takes care of building everything, not tsc.
     "noEmit": true,
