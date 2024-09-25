@@ -4,7 +4,7 @@
   --border: var(--space--px) solid #27275d;
 }
 
-@media (max-width: 63.5rem) {
+@media (width <= 63.5rem) {
   .item {
     padding-right: 1.5rem;
     padding-left: 1.5rem;
@@ -39,7 +39,11 @@
   z-index: -1;
   height: 100%;
   max-height: 24rem;
-  background-image: linear-gradient(165deg, hsl(276deg 39% 38% / 0) 60%, hsl(276deg 39% 38%) 100%);
+  background-image: linear-gradient(
+    165deg,
+    hsl(276deg 39% 38% / 0) 60%,
+    hsl(276deg 39% 38%) 100%
+  );
   background-repeat: no-repeat;
   background-position: 100% 100%;
   content: "\0020";
@@ -68,10 +72,15 @@
 
 .footnoteCopyright {
   color: rgb(197 194 255 / 0.6) !important;
+  text-align: center;
 }
 
 .footnoteInner {
   display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  align-self: stretch;
   justify-content: center;
   width: 100%;
   max-width: 80rem;
@@ -150,14 +159,19 @@
   border-radius: var(--border-radius--8);
 }
 
-@media (min-width: calc(63.5rem + 1px)) {
+.footerPagesLinks {
+  display: flex;
+  gap: var(--gap--32);
+}
+
+@media (width >= calc(63.5rem + 1px)) {
   .logoAndLinks {
     flex-direction: row;
     justify-content: space-between;
   }
 }
 
-@media (min-width: calc(63.5rem + 1px)) {
+@media (width >= calc(63.5rem + 1px)) {
   .main {
     flex-direction: row;
   }
@@ -211,7 +225,8 @@
   }
 
   .footnoteInner {
-    justify-content: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .ad {
@@ -219,7 +234,7 @@
   }
 }
 
-@media (max-width: 23.25rem) {
+@media (width <= 23.25rem) {
   .nav {
     flex-flow: wrap;
     justify-content: flex-start;

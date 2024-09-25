@@ -15,11 +15,11 @@
   /* skew the container */
   transform: skew(-30deg);
 
-  --breadcrumb-bg-color: var(--color-4);
+  --breadcrumb-bg-color: var(--color-6);
 }
 
 .outer:hover {
-  --breadcrumb-bg-color: var(--color-7);
+  --breadcrumb-bg-color: var(--color-8);
 }
 
 .outerHome {
@@ -33,7 +33,7 @@
 .outer__end {
   padding-right: 0;
 
-  /* --breadcrumb-bg-color: var(--color-7); */
+  --breadcrumb-bg-color: var(--color-8);
 }
 
 .outer__start::before,

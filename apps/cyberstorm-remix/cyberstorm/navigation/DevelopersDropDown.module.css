@@ -4,6 +4,10 @@
   justify-content: space-between;
 }
 
+.focus:not([data-highlighted]) a svg {
+  color: var(--color-tertiary);
+}
+
 .root {
   min-width: 14rem;
 }

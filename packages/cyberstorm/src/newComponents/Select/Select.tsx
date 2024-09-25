@@ -66,7 +66,7 @@ export function Select<T extends string>(props: SelectProps<T>) {
         <NewButton
           csVariant="secondary"
           csSize="m"
-          csColor="surface"
+          csColor="surface-alpha"
           csTextStyles={["fontSizeS", "fontWeightBold", "lineHeightAuto"]}
           aria-label={forwardedProps["aria-label"]}
           rootClasses={classnames(styles.trigger, forwardedProps.rootClasses)}
