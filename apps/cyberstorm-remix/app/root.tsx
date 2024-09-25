@@ -17,7 +17,11 @@ import {
 import { Footer } from "@thunderstore/cyberstorm/src/components/Footer/Footer";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 
-import { Navigation } from "cyberstorm/navigation/Navigation";
+import {
+  MobileNavigationMenu,
+  MobileUserPopoverContent,
+  Navigation,
+} from "cyberstorm/navigation/Navigation";
 import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
 import { AdContainer, LinkingProvider } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -29,10 +33,12 @@ import {
   getPublicEnvVariables,
   publicEnvVariables,
 } from "cyberstorm/security/publicEnvVariables";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import Toast from "@thunderstore/cyberstorm/src/components/Toast";
 import { SessionProvider } from "@thunderstore/ts-api-react";
+import { CurrentUser } from "@thunderstore/dapper/types";
+import { getDapper } from "cyberstorm/dapper/sessionUtils";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -128,6 +134,22 @@ function Root() {
     ? false
     : true;
 
+  const isHydrated = useHydrated();
+  const startsHydrated = useRef(isHydrated);
+  const [currentUser, setCurrentUser] = useState<CurrentUser>();
+
+  useEffect(() => {
+    if (!startsHydrated.current && isHydrated) return;
+    const fetchAndSetUser = async () => {
+      const dapper = await getDapper(true);
+      const fetchedUser = await dapper.getCurrentUser();
+      if (fetchedUser?.username) {
+        setCurrentUser(fetchedUser);
+      }
+    };
+    fetchAndSetUser();
+  }, []);
+
   return (
     <html lang="en">
       <head>
@@ -173,7 +195,16 @@ function Root() {
               <RadixTooltip delayDuration={300}>
                 <div className={styles.root}>
                   {/* REMIX TODO: For whatever reason the Navigation seems to cause suspense boundary errors. Couldn't find a reason why */}
-                  <Navigation />
+                  <Navigation
+                    hydrationCheck={!startsHydrated.current && isHydrated}
+                    currentUser={currentUser}
+                  />
+                  <MobileNavigationMenu />
+                  {!startsHydrated.current && isHydrated && currentUser ? (
+                    <MobileUserPopoverContent user={currentUser} />
+                  ) : (
+                    <MobileUserPopoverContent />
+                  )}
                   <section className={styles.content}>
                     <div className={styles.sideContainers} />
                     <div className={styles.middleContainer}>
