@@ -23,6 +23,16 @@
   white-space: nowrap;
 }
 
+@media (width <= 40rem) {
+  .root {
+    flex-direction: column;
+  }
+
+.skeletonSort {
+  width: 13rem;
+  height: 2.75rem;
+}
+
 @media (max-width: 40rem) {
   .root {
     flex-direction: column;

@@ -12,7 +12,9 @@
   line-height: 1.6rem;
 }
 
-.root > :first-child { padding-top: 0; }
+.root > :first-child {
+  padding-top: 0;
+}
 
 /*
   We can't control the elements inside the Markdown wrapper, e.g. to
@@ -47,11 +49,25 @@
   padding-top: 1rem;
 }
 
-.root h1 { font-size: 2.25rem; }
-.root h2 { font-size: 1.75rem; }
-.root h3 { font-size: 1.25rem; }
-.root h4 { font-size: 1rem; }
-.root h5 { font-size: 0.875rem; }
+.root h1 {
+  font-size: 2.25rem;
+}
+
+.root h2 {
+  font-size: 1.75rem;
+}
+
+.root h3 {
+  font-size: 1.25rem;
+}
+
+.root h4 {
+  font-size: 1rem;
+}
+
+.root h5 {
+  font-size: 0.875rem;
+}
 
 .root h6 {
   color: #9c9cc4;
@@ -63,7 +79,9 @@
   margin-inline-start: 0.75rem;
 }
 
-.root img { display: inline-block; }
+.root img {
+  display: inline-block;
+}
 
 .root li > ul,
 .root li > ol {
@@ -100,7 +118,9 @@
   color: #f5f5f6;
 }
 
-.root a { color: var(--old--color-cyber-green--50); }
+.root a {
+  color: var(--old--color-cyber-green--50);
+}
 
 .root blockquote {
   display: flex;
@@ -115,9 +135,13 @@
   border-spacing: 0;
 }
 
-.root tbody tr:nth-child(even) { background: #0d0d21; }
+.root tbody tr:nth-child(even) {
+  background: #0d0d21;
+}
 
-.root tbody tr:nth-child(odd) { background: #15152d; }
+.root tbody tr:nth-child(odd) {
+  background: #15152d;
+}
 
 .root table tr th,
 .root table tr td {

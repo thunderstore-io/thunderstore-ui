@@ -91,19 +91,19 @@
 
 /* e.g --scaling-s --scaling-m --scaling-l */
 
-@media (max-width: calc(40rem - 1px)) {
+@media (width <= calc(40rem - 1px)) {
   :root {
     --scaling: 0.7;
   }
 }
 
-@media (min-width: 40rem) {
+@media (width >= 40rem) {
   :root {
     --scaling: 0.9;
   }
 }
 
-@media (min-width: 63.5rem) {
+@media (width >= 63.5rem) {
   :root {
     --scaling: 1;
   }

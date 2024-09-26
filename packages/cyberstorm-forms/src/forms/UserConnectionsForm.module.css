@@ -103,7 +103,7 @@
   font-size: 0.875rem;
 }
 
-@media (max-width: 30rem) {
+@media (width <= 30rem) {
   .item {
     flex-direction: column;
     gap: var(--gap--8);

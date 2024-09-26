@@ -59,7 +59,7 @@
   gap: 2rem;
 }
 
-@media (min-width: 60rem) {
+@media (width >= 60rem) {
   .layoutSidebar {
     flex-flow: row wrap;
   }
@@ -85,7 +85,7 @@
   }
 }
 
-@media (max-width: 92.125rem) {
+@media (width <= 92.125rem) {
   .sideContainers {
     display: none;
   }

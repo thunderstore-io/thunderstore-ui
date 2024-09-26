@@ -15,7 +15,7 @@
   white-space: normal;
 }
 
-@media (max-width: 30rem) {
+@media (width <= 30rem) {
   .text {
     font-size: var(--font-size--s);
     line-height: var(--line-height--s);

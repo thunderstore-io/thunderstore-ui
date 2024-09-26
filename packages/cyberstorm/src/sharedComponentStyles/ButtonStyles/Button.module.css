@@ -107,45 +107,48 @@
 
 .button[data-variant="special"] {
   border: 2px solid transparent;
-  background:
+  background: linear-gradient(
+        284deg,
+        hsl(275deg 64% 11% / 1) 0%,
+        hsl(156deg 46% 12% / 1) 100%
+      )
+      padding-box,
     linear-gradient(
-      284deg,
-      hsl(275deg 64% 11% / 1) 0%,
-      hsl(156deg 46% 12% / 1) 100%
-    ) padding-box,
-    linear-gradient(
-      284deg,
-      hsl(276deg 77% 54% / 1) 0%,
-      hsl(158deg 100% 57% / 1) 100%
-    ) border-box;
+        284deg,
+        hsl(276deg 77% 54% / 1) 0%,
+        hsl(158deg 100% 57% / 1) 100%
+      )
+      border-box;
 }
 
 .button[data-variant="special"]:hover {
-  background:
+  background: linear-gradient(
+        284deg,
+        hsl(203deg 80% 21% / 1) 0%,
+        hsl(155deg 46% 23% / 1) 100%
+      )
+      padding-box,
     linear-gradient(
-      284deg,
-      hsl(203deg 80% 21% / 1) 0%,
-      hsl(155deg 46% 23% / 1) 100%
-    ) padding-box,
-    linear-gradient(
-      284deg,
-      hsl(154deg 65% 67% / 1) 0%,
-      hsl(203deg 92% 63% / 1) 100%
-    ) border-box;
+        284deg,
+        hsl(154deg 65% 67% / 1) 0%,
+        hsl(203deg 92% 63% / 1) 100%
+      )
+      border-box;
 }
 
 .button[data-variant="special"]:active {
-  background:
+  background: linear-gradient(
+        284deg,
+        hsl(203deg 80% 21% / 1) 0%,
+        hsl(155deg 46% 23% / 1) 100%
+      )
+      padding-box,
     linear-gradient(
-      284deg,
-      hsl(203deg 80% 21% / 1) 0%,
-      hsl(155deg 46% 23% / 1) 100%
-    ) padding-box,
-    linear-gradient(
-      284deg,
-      hsl(154deg 65% 67% / 1) 0%,
-      hsl(203deg 92% 63% / 1) 100%
-    ) border-box;
+        284deg,
+        hsl(154deg 65% 67% / 1) 0%,
+        hsl(203deg 92% 63% / 1) 100%
+      )
+      border-box;
 }
 
 /* Button sizes */

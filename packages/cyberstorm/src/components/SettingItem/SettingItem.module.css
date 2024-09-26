@@ -36,7 +36,7 @@
   gap: var(--gap--24);
 }
 
-@media (min-width: 60rem) {
+@media (width >= 60rem) {
   .wrapper {
     flex-flow: row wrap;
     gap: var(--gap--32);

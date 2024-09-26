@@ -4,7 +4,7 @@
   gap: var(--space--32);
 }
 
-@media (max-width: 30rem) {
+@media (width <= 30rem) {
   .root {
     gap: var(--space--16);
   }
@@ -32,8 +32,12 @@
   mask-image: var(--gradients);
   mask-composite: intersect;
 
-  --gradients:
-    linear-gradient(90deg, transparent 0%, white 70%, transparent 100%),
+  --gradients: linear-gradient(
+      90deg,
+      transparent 0%,
+      white 70%,
+      transparent 100%
+    ),
     linear-gradient(180deg, white 40%, transparent 95%);
 }
 

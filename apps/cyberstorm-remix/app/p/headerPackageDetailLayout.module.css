@@ -87,7 +87,7 @@
   color: var(--color-highlight);
 }
 
-@media (max-width: 60rem) {
+@media (width <= 60rem) {
   .packageInfo {
     flex-direction: column;
     gap: 0;

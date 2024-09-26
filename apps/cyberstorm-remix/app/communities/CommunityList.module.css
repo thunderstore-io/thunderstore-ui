@@ -28,7 +28,7 @@
   }
 }
 
-@media (max-width: 27.5rem) {
+@media (width <= 27.5rem) {
   .root {
     grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
   }
