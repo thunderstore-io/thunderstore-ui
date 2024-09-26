@@ -15,8 +15,7 @@ import {
 } from "@remix-run/react";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Footer } from "@thunderstore/cyberstorm/src/components/Footer/Footer";
-import * as RadixTooltip from "@radix-ui/react-tooltip";
-const { TooltipProvider } = RadixTooltip;
+import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 
 import { Navigation } from "cyberstorm/navigation/Navigation";
 import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
@@ -171,7 +170,7 @@ function Root() {
         >
           <LinkingProvider value={LinkLibrary}>
             <Toast.Provider toastDuration={10000}>
-              <TooltipProvider delayDuration={300}>
+              <RadixTooltip delayDuration={300}>
                 <div className={styles.root}>
                   {/* REMIX TODO: For whatever reason the Navigation seems to cause suspense boundary errors. Couldn't find a reason why */}
                   <Navigation />
@@ -190,7 +189,7 @@ function Root() {
                   </section>
                   <Footer />
                 </div>
-              </TooltipProvider>
+              </RadixTooltip>
             </Toast.Provider>
           </LinkingProvider>
         </SessionProvider>
@@ -234,7 +233,7 @@ export function ErrorBoundary() {
         <Scripts />
         <LinkingProvider value={LinkLibrary}>
           <Toast.Provider toastDuration={10000}>
-            <TooltipProvider delayDuration={300}>
+            <RadixTooltip delayDuration={300}>
               <div className={styles.root}>
                 {/* <Navigation user={getEmptyUser} /> */}
                 <section className={styles.content}>
@@ -261,7 +260,7 @@ export function ErrorBoundary() {
                 </section>
                 <Footer />
               </div>
-            </TooltipProvider>
+            </RadixTooltip>
           </Toast.Provider>
         </LinkingProvider>
       </body>

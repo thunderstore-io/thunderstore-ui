@@ -1,4 +1,4 @@
-import path from "path";
+import path, { dirname, join } from "path";
 
 export default {
   core: {
@@ -13,9 +13,9 @@ export default {
     },
   ],
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-interactions",
+    getAbsolutePath("@storybook/addon-links"),
+    getAbsolutePath("@storybook/addon-essentials"),
+    getAbsolutePath("@storybook/addon-interactions"),
     {
       name: "storybook-css-modules",
       options: {
@@ -27,20 +27,24 @@ export default {
         },
       },
     },
+    getAbsolutePath("@storybook/addon-webpack5-compiler-babel"),
   ],
   framework: {
-    name: "@storybook/react-webpack5",
+    name: getAbsolutePath("@storybook/react-webpack5"),
     options: {},
   },
   staticDirs: ["../public"],
-  docs: {
-    autodocs: true,
-  },
+  docs: {},
   babel: (config) => ({
     ...config,
     configFile: path.resolve(__dirname, "../../../babel.config.js"),
   }),
   typescript: {
     check: true,
+    reactDocgen: "react-docgen-typescript",
   },
 };
+
+function getAbsolutePath(value) {
+  return dirname(require.resolve(join(value, "package.json")));
+}
