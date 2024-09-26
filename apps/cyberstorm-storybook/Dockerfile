@@ -1,7 +1,7 @@
 # For running @thunderstore/cyberstorm-storybook in Docker container.
 
 # Build Storybook to static files
-FROM node:18-alpine3.17 AS builder
+FROM node:20-alpine3.19 AS builder
 WORKDIR /app
 COPY package.json yarn.lock babel.config.js ./
 COPY apps/cyberstorm-storybook ./apps/cyberstorm-storybook

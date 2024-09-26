@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
-import * as RadixTooltip from "@radix-ui/react-tooltip";
-const { Root, Trigger, Portal, Content, Arrow } = RadixTooltip;
+import { Root, Trigger, Portal, Content, Arrow } from "@radix-ui/react-tooltip";
 
 import styles from "./Tooltip.module.css";
 
