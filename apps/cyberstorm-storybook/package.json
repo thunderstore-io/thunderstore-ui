@@ -5,22 +5,29 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@storybook/addon-essentials": "^7.4.5",
-    "@storybook/addon-interactions": "^7.4.5",
-    "@storybook/addon-links": "^7.4.5",
-    "@storybook/react-webpack5": "^7.4.5",
+    "@storybook/addon-essentials": "^8.3.3",
+    "@storybook/addon-interactions": "^8.3.3",
+    "@storybook/addon-links": "^8.3.3",
+    "@storybook/react-webpack5": "^8.3.3",
     "@thunderstore/cyberstorm": "^0.1.0",
     "@thunderstore/cyberstorm-styles": "^0.1.0",
     "@thunderstore/dapper": "^0.1.0",
     "@thunderstore/dapper-fake": "^0.1.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "storybook": "^7.4.5",
-    "storybook-css-modules": "^1.0.8"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "storybook": "^8.3.3",
+    "storybook-css-modules": "^1.0.8",
+    "typescript": "^5.6.2"
   },
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "chromatic": "chromatic --exit-zero-on-changes"
+  },
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-webpack5-compiler-babel": "3.0.3"
   }
 }
