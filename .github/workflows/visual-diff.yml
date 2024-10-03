@@ -11,7 +11,7 @@ on:
 jobs:
   get-node-version:
     name: Get Node version
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
     runs-on: ubuntu-latest
     outputs:
       node-version: ${{ steps.get-node-version.outputs.node-version }}
