@@ -38,7 +38,8 @@
     "@typescript-eslint/no-unused-vars": [
       "error",
       { "ignoreRestSiblings": true }
-    ]
+    ],
+    "linebreak-style": ["error", "unix"]
   },
   "overrides": [
     {

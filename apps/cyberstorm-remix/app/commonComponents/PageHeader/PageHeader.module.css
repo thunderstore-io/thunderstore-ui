@@ -15,7 +15,7 @@
   min-width: 0;
 }
 
-@media (max-width: 30rem) {
+@media (width <= 30rem) {
   .root {
     gap: var(--space--16);
   }

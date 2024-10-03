@@ -64,7 +64,7 @@
   height: var(--space--36);
 }
 
-@media (max-width: 43.75rem) {
+@media (width <= 43.75rem) {
   .top {
     flex-direction: column-reverse;
     gap: 1rem;

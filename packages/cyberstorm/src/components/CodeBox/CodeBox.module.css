@@ -5,8 +5,7 @@
   border: 1px solid #333370;
 
   border-radius: var(--border-radius--8);
-  overflow-x: auto;
-  overflow-y: auto;
+  overflow: auto;
   font-weight: var(--font-weight-regular);
   font-size: 0.875rem;
 

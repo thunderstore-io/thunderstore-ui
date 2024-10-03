@@ -292,7 +292,7 @@
   color: var(--color-text--tertiary);
 }
 
-@media (max-width: 63.5rem) {
+@media (width <= 63.5rem) {
   .desktopNavRoot {
     display: none;
   }

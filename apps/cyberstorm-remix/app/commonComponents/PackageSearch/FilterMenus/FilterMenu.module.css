@@ -43,7 +43,9 @@
   transition: ease-out var(--animation-length-xs);
 }
 
-.label:hover .checkbox { --mark-color: #4343a3; }
+.label:hover .checkbox {
+  --mark-color: #4343a3;
+}
 
 .label.include,
 .label.include .checkbox {

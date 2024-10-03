@@ -23,8 +23,6 @@
     ],
     "font-weight-notation": "numeric",
     "import-notation": "string",
-    "linebreaks": "unix",
-    "max-line-length": [80, { "ignore": "non-comments" }],
     "number-max-precision": 3,
     "selector-class-pattern": [
       "^((?!\\-).)*$",
@@ -36,9 +34,6 @@
     ],
     "selector-no-vendor-prefix": null,
     "selector-pseudo-element-colon-notation": "double",
-    "value-list-comma-newline-after": "always-multi-line",
-    "value-list-comma-space-after": "always-single-line",
-    "value-list-comma-space-before": "never",
     "property-no-vendor-prefix": [
       true,
       { "ignoreProperties": ["background-clip"] }
