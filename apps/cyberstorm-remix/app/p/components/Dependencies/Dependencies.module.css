@@ -44,7 +44,7 @@
   text-overflow: ellipsis;
 }
 
-@media (min-width: 60rem) {
+@media (width >= 60rem) {
   .itemDescription,
   .itemTitle {
     max-width: 250px;

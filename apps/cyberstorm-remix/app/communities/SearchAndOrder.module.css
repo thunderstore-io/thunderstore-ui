@@ -32,7 +32,7 @@
   height: 2.75rem;
 }
 
-@media (max-width: 40rem) {
+@media (width <= 40rem) {
   .searchTextInput {
     width: 100%;
   }

@@ -14,12 +14,12 @@ repos:
       - id: prettier
         exclude_types: [markdown, yaml]
   - repo: https://github.com/thibaudcolas/pre-commit-stylelint
-    rev: v14.4.0
+    rev: v16.9.0
     hooks:
       - id: stylelint
         args: [--fix]
         additional_dependencies:
           # stylelint itself needs to be here when using additional_dependencies.
-          - stylelint@14.14.0
-          - stylelint-config-standard@29.0.0
+          - stylelint@16.9.0
+          - stylelint-config-standard@36.0.1
           - stylelint-config-rational-order@0.1.2
