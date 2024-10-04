@@ -21,7 +21,7 @@ export type colors =
   | "cyber-green";
 export type sizes = "xxs" | "xs" | "s" | "m" | "l";
 
-const textStyleOptions = [
+export const textStyleOptions = [
   "lineHeightAuto",
   "lineHeightBody",
   "fontSizeXXS",
@@ -37,8 +37,7 @@ const textStyleOptions = [
   "fontFamilyHubot",
 ] as const;
 
-// eslint-disable-next-line prettier/prettier
-export type TextStyles = typeof textStyleOptions[number];
+export type TextStyles = (typeof textStyleOptions)[number];
 
 interface TooltipWrapperProps extends PropsWithChildren {
   tooltipText?: string;

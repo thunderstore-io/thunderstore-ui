@@ -51,7 +51,10 @@
   padding: var(--space--12) var(--space--16);
   overflow: hidden;
   color: var(--dropdown-item-color, var(--dropdown-color));
-  background-color: var(--dropdown-item-background-color, var(--dropdown-background-color));
+  background-color: var(
+    --dropdown-item-background-color,
+    var(--dropdown-background-color)
+  );
   outline: none;
 
   --dropdown-item-color: var(--color-tertiary);
@@ -61,7 +64,10 @@
 
 .dropdownItem[data-highlighted] {
   z-index: 999;
-  background-color: var(--dropdown-item-highlighted-background-color, var(--color-primary));
+  background-color: var(
+    --dropdown-item-highlighted-background-color,
+    var(--color-primary)
+  );
 }
 
 .dropdownItem[data-variant="default"] {

@@ -23,7 +23,7 @@
   white-space: nowrap;
 }
 
-@media (max-width: 40rem) {
+@media (width <= 40rem) {
   .root {
     flex-direction: column;
   }

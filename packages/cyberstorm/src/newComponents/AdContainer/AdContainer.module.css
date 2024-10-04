@@ -10,9 +10,8 @@
   display: flex;
   flex-flow: wrap;
   gap: var(--gap--8);
-  align-content: center;
+  place-content: center center;
   align-items: center;
-  justify-content: center;
   width: 18.75rem;
   height: 15.625rem;
   padding: var(--space--24);

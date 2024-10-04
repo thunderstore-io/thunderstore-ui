@@ -154,7 +154,7 @@
   border-radius: var(--border-radius--8);
 }
 
-@media (min-width: calc(63.5rem + 1px)) {
+@media (width >= calc(63.5rem + 1px)) {
   .logoAndLinks {
     flex-direction: row;
     justify-content: space-between;
@@ -223,7 +223,7 @@
   }
 }
 
-@media (max-width: 23.25rem) {
+@media (width <= 23.25rem) {
   .nav {
     flex-flow: wrap;
     justify-content: flex-start;

@@ -71,4 +71,4 @@ const getIcon = (type: ImageProps["cardType"] = "community") =>
   ({
     community: faGamepad,
     package: faBan,
-  }[type]);
+  })[type];
