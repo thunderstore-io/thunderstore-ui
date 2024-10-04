@@ -37,6 +37,9 @@ export const textStyleOptions = [
   "fontFamilyHubot",
 ] as const;
 
+// There is an issue with Typescript (eslint) and prettier disagreeing if
+// the type should have parentheses
+// prettier-ignore
 export type TextStyles = (typeof textStyleOptions)[number];
 
 interface TooltipWrapperProps extends PropsWithChildren {

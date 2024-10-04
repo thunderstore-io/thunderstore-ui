@@ -67,8 +67,11 @@ export const Image = React.forwardRef<HTMLDivElement, ImageProps>(
 
 Image.displayName = "Image";
 
+// There is an issue with Typescript (eslint) and prettier disagreeing if
+// the type should have parentheses
+// prettier-ignore
 const getIcon = (type: ImageProps["cardType"] = "community") =>
   ({
     community: faGamepad,
     package: faBan,
-  })[type];
+  }[type]);
