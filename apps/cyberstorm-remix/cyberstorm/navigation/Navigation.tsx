@@ -15,15 +15,33 @@ import {
   NewIcon,
 } from "@thunderstore/cyberstorm";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
-// import { Suspense } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DevelopersDropDown } from "./DevelopersDropDown";
-// import { MobileUserPopover } from "./MobileUserPopover";
-// import { DesktopUserDropdown } from "./DesktopUserDropdown";
-// import { DesktopLoginPopover } from "./DesktopLoginPopover";
-// import { MobileUserPopoverContent } from "./MobileUserPopoverContent";
-// import { getEmptyUser } from "@thunderstore/dapper-ts";
+import { DesktopUserDropdown } from "./DesktopUserDropdown";
+import { DesktopLoginPopover } from "./DesktopLoginPopover";
+import { MobileUserPopoverContent } from "./MobileUserPopoverContent";
+import { emptyUser } from "@thunderstore/dapper-ts/src/methods/currentUser";
+import { CurrentUser } from "@thunderstore/dapper/types";
+import { getDapper } from "cyberstorm/dapper/sessionUtils";
+import { useHydrated } from "remix-utils/use-hydrated";
 
 export function Navigation() {
+  const isHydrated = useHydrated();
+  const startsHydrated = useRef(isHydrated);
+  const [currentUser, setCurrentUser] = useState<CurrentUser>();
+
+  useEffect(() => {
+    if (!startsHydrated.current && isHydrated) return;
+    const fetchAndSetUser = async () => {
+      const dapper = await getDapper(true);
+      const fetchedUser = await dapper.getCurrentUser();
+      if (fetchedUser?.username) {
+        setCurrentUser(fetchedUser);
+      }
+    };
+    fetchAndSetUser();
+  }, []);
+
   return (
     <>
       <header className={styles.desktopNavRoot} aria-label="Header">
@@ -51,23 +69,24 @@ export function Navigation() {
           </LinkButton>
           <DevelopersDropDown />
         </nav>
-        {/* <div className={styles.item} aria-label=""> */}
-        <LinkButton
-          primitiveType="link"
-          href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
-          csSize="s"
-          csColor="cyber-green"
-          csVariant="accent"
-          rootClasses={styles.getAppButton}
-          aria-label="Get Thunderstore Mod Manager App"
-        >
-          Get App
-        </LinkButton>
-        {/* TODO: Enable once working */}
-        {/*<Suspense fallback={<DesktopLoginPopover />}>*/}
-        {/*  <DesktopUserDropdown />*/}
-        {/*</Suspense>*/}
-        {/* </div> */}
+        <div className={styles.headerRightSide}>
+          <LinkButton
+            primitiveType="link"
+            href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+            csSize="s"
+            csColor="cyber-green"
+            csVariant="accent"
+            rootClasses={styles.getAppButton}
+            aria-label="Get Thunderstore Mod Manager App"
+          >
+            Get App
+          </LinkButton>
+          {!startsHydrated.current && isHydrated && currentUser ? (
+            <DesktopUserDropdown user={currentUser} />
+          ) : (
+            <DesktopLoginPopover />
+          )}
+        </div>
       </header>
 
       <nav className={styles.mobileNavRoot}>
@@ -103,7 +122,7 @@ export function Navigation() {
             </button>
           }
         >
-          <nav className={styles.mobileNavPopoverList}>
+          <nav className={styles.mobileNavPopover}>
             <CyberstormLink
               linkId="Communities"
               className={styles.mobileNavPopoverListLink}
@@ -144,42 +163,52 @@ export function Navigation() {
                 </button>
               }
             >
-              <nav className={styles.mobileNavPopoverList}>
-                <a
+              <nav className={styles.mobileNavPopover}>
+                <NewLink
+                  primitiveType="link"
                   href="/api/docs"
-                  key="docs"
-                  className={styles.mobileNavPopoverListLink}
+                  csVariant="primary"
+                  csTextStyles={["fontWeightRegular", "fontSizeS"]}
+                  rootClasses={styles.mobileNavPopoverListLink}
                 >
                   API Docs
-                </a>
-                <a
+                </NewLink>
+                <NewLink
+                  primitiveType="link"
                   href="https://github.com/thunderstore-io"
-                  key="github"
-                  className={styles.mobileNavPopoverListLink}
+                  csVariant="primary"
+                  csTextStyles={["fontWeightRegular", "fontSizeS"]}
+                  rootClasses={styles.mobileNavPopoverListLink}
                 >
                   GitHub
-                </a>
-                <a
+                </NewLink>
+                <NewLink
+                  primitiveType="link"
                   href="/package/create/docs/"
-                  key="old_format_docs"
-                  className={styles.mobileNavPopoverListLink}
+                  csVariant="primary"
+                  csTextStyles={["fontWeightRegular", "fontSizeS"]}
+                  rootClasses={styles.mobileNavPopoverListLink}
                 >
                   Package Format Docs
-                </a>
-                <a
+                </NewLink>
+                <NewLink
+                  primitiveType="link"
                   href="/tools/markdown-preview/"
-                  key="old_markdown_preview"
-                  className={styles.mobileNavPopoverListLink}
+                  csVariant="primary"
+                  csTextStyles={["fontWeightRegular", "fontSizeS"]}
+                  rootClasses={styles.mobileNavPopoverListLink}
                 >
                   Markdown Preview
-                </a>
-                <a
+                </NewLink>
+                <NewLink
+                  primitiveType="link"
                   href="/tools/manifest-v1-validator/"
-                  key="old_manifest_validator"
-                  className={styles.mobileNavPopoverListLink}
+                  csVariant="primary"
+                  csTextStyles={["fontWeightRegular", "fontSizeS"]}
+                  rootClasses={styles.mobileNavPopoverListLink}
                 >
                   Manifest Validator
-                </a>
+                </NewLink>
               </nav>
             </Menu>
           </nav>
@@ -195,10 +224,11 @@ export function Navigation() {
             Browse
           </CyberstormLink>
         </div>
-        {/* TODO: Enable once working */}
-        {/*<Suspense fallback={<MobileUserPopoverContent user={getEmptyUser} />}>*/}
-        {/*  <MobileUserPopover />*/}
-        {/*</Suspense>*/}
+        {!startsHydrated.current && isHydrated && currentUser ? (
+          <MobileUserPopoverContent user={currentUser} />
+        ) : (
+          <MobileUserPopoverContent user={emptyUser} />
+        )}
       </nav>
     </>
   );

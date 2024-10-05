@@ -4,7 +4,7 @@ import styles from "./Avatar.module.css";
 export interface AvatarProps {
   src?: string | null;
   size?: "small" | "medium" | "large";
-  username: string;
+  username: string | null;
 }
 
 /**
@@ -23,7 +23,7 @@ export function Avatar(props: AvatarProps) {
         />
       ) : (
         <div className={classnames(styles.image, styles.placeholder)}>
-          {username.charAt(0).toUpperCase()}
+          {username ? username.charAt(0).toUpperCase() : "U"}
         </div>
       )}
     </div>

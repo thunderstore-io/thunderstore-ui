@@ -1,23 +1,33 @@
 import styles from "./Navigation.module.css";
-import { Modal } from "@thunderstore/cyberstorm";
-import { AvatarButton } from "@thunderstore/cyberstorm/src/components/Avatar/AvatarButton";
+import { Modal, NewButton, NewIcon } from "@thunderstore/cyberstorm";
 import { LoginList } from "./LoginList";
+import { faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function DesktopLoginPopover() {
   return (
     <Modal
       popoverId={"navAccount"}
       trigger={
-        <AvatarButton
-          size="small"
-          popovertarget="navAccount"
-          popovertargetaction="open"
-        />
+        <NewButton
+          csVariant="primary"
+          csColor="purple"
+          csSize="l"
+          rootClasses={styles.loginButton}
+          {...{
+            popovertarget: "navAccount",
+            popovertargetaction: "open",
+          }}
+          csTextStyles={["fontSizeS", "fontWeightBold", "lineHeightAuto"]}
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faArrowRightToBracket} />
+          </NewIcon>
+          Log In
+        </NewButton>
       }
     >
-      <nav className={styles.mobileNavPopoverList}>
-        <LoginList />
-      </nav>
+      <LoginList />
     </Modal>
   );
 }

@@ -120,6 +120,7 @@ export { Button as NewButton } from "./newComponents/Button/Button";
 export { BreadCrumbs as NewBreadCrumbs } from "./newComponents/BreadCrumbs/BreadCrumbs";
 export { Container } from "./newComponents/Container/Container";
 export { TextInput as NewTextInput } from "./newComponents/TextInput/TextInput";
+export { Text as NewText } from "./newComponents/Text/Text";
 export {
   Select as NewSelect,
   type SelectProps as NewSelectProps,

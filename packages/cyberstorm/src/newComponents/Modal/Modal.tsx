@@ -11,13 +11,16 @@ interface Props extends Omit<FrameModalProps, "primitiveType"> {
 
 // TODO: Add storybook story
 export function Modal(props: Props) {
+  const { csColor = "surface", csVariant = "default" } = props;
+
   return (
     <>
       {props.trigger}
       <Frame
         primitiveType="modal"
         popoverId={props.popoverId}
-        csColor="purple"
+        csVariant={csVariant}
+        csColor={csColor}
         csSize="m"
         rootClasses={styles.modalRoot}
         wrapperClasses={styles.modalWrapper}
@@ -28,10 +31,11 @@ export function Modal(props: Props) {
             popovertargetaction: "close",
           }}
           csVariant="tertiary"
-          className={styles.modalCloseButton}
+          csColor={csColor}
+          rootClasses={styles.modalCloseButton}
           tooltipText="Close"
         >
-          <NewIcon csMode="inline" noWrapper>
+          <NewIcon noWrapper>
             <FontAwesomeIcon icon={faXmark} />
           </NewIcon>
         </NewButton>

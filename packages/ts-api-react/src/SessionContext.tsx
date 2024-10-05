@@ -191,6 +191,12 @@ const useValidateSession = (
       return;
     }
 
+    const deleteCookie = (name: string) => {
+      const date = new Date();
+      date.setTime(0);
+      document.cookie = `${name}=${null}; expires=${date.toUTCString()}; path=/`;
+    };
+
     (async () => {
       const res = await fetch(`${domain}/api/experimental/auth/validate/`, {
         headers: {
@@ -204,6 +210,8 @@ const useValidateSession = (
         _storage.removeValue(ID_KEY);
         _storage.removeValue(CSRF_TOKEN);
         _storage.removeValue(USERNAME_KEY);
+        deleteCookie("sessionid");
+        deleteCookie("csrftoken");
         // Router.push("/");
         return;
       }

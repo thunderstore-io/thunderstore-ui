@@ -49,6 +49,18 @@
   --link-color: var(--color-primary);
 }
 
+.link[data-variant="tertiary"] {
+  --link-color: var(--color-tertiary);
+}
+
+.link[data-variant="tertiary"]:hover {
+  --link-color: var(--color-primary);
+}
+
+.link[data-variant="tertiary"]:active {
+  --link-color: var(--color-primary);
+}
+
 .link[data-variant="accent"] {
   --link-color: var(--color-accent);
 }

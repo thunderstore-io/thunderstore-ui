@@ -10,15 +10,20 @@ export type apiFetchArgs = {
   path: string;
   query?: string;
   request?: Omit<RequestInit, "headers">;
+  useSession?: boolean;
 };
 export async function apiFetch2(args: apiFetchArgs) {
-  const url = getUrl(args.config, args.path, args.query);
+  const { config, path, request, query, useSession = false } = args;
+  const usedConfig: RequestConfig = useSession
+    ? config
+    : { apiHost: config.apiHost, csrfToken: undefined, sessionId: undefined };
+  const url = getUrl(usedConfig, path, query);
 
   const response = await fetch(url, {
-    ...(args.request ?? {}),
+    ...(request ?? {}),
     headers: {
       ...BASE_HEADERS,
-      ...getAuthHeaders(args.config),
+      ...getAuthHeaders(usedConfig),
     },
   });
 
@@ -33,7 +38,8 @@ export function apiFetch(
   config: RequestConfig,
   path: string,
   query?: string,
-  request?: Omit<RequestInit, "headers">
+  request?: Omit<RequestInit, "headers">,
+  useSession?: boolean
 ) {
   // TODO: Update the apiFetch signature to take in object args instead
   //       of positional arguments and then merge apiFetch and apiFetch2
@@ -43,6 +49,7 @@ export function apiFetch(
     path,
     query,
     request,
+    useSession,
   });
 }
 

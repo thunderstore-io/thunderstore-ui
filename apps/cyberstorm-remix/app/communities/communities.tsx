@@ -121,7 +121,12 @@ export default function CommunitiesPage() {
         Communities
       </NewBreadCrumbs>
       <header className={rootStyles.pageHeader}>
-        <Heading level="1" styleLevel="2" variant="primary" mode="display">
+        <Heading
+          csLevel="1"
+          csStyleLevel="2"
+          csVariant="primary"
+          mode="display"
+        >
           Communities
         </Heading>
       </header>

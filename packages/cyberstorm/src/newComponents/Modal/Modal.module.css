@@ -25,4 +25,7 @@
   right: 1rem;
   width: 2.75rem;
   height: 2.75rem;
+
+  /* TODO: Fix the specifity issue with button styles */
+  --button-color: var(--color-tertiary) !important;
 }

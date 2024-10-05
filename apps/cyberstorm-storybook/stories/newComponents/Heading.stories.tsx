@@ -18,8 +18,8 @@ const Template: StoryFn<typeof Heading> = (args) => {
         <Heading
           {...args}
           key={`${level}-${styleLevel}`}
-          level={level}
-          styleLevel={styleLevel}
+          csLevel={level}
+          csStyleLevel={styleLevel}
         >
           Test Heading
         </Heading>

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { fetchCurrentUser } from "@thunderstore/thunderstore-api";
+import { ApiError, fetchCurrentUser } from "@thunderstore/thunderstore-api";
 
 import { DapperTsInterface } from "../index";
 import { formatErrorMessage } from "../utils";
@@ -55,20 +55,33 @@ export async function getCurrentUser(this: DapperTsInterface) {
     return emptyUser;
   }
 
-  const data = await fetchCurrentUser(this.config);
-  const parsed = schema.safeParse(data);
+  try {
+    const data = await fetchCurrentUser(this.config);
+    const parsed = schema.safeParse(data);
 
-  if (!parsed.success) {
-    throw new Error(formatErrorMessage(parsed.error));
+    if (!parsed.success) {
+      throw new Error(formatErrorMessage(parsed.error));
+    }
+
+    // For legacy support, the backend returns teams in two formats.
+    // Clients don't need to know about the old one, so replace it with
+    // the new one.
+    const { teams_full, ...currentUser } = {
+      ...parsed.data,
+      teams: parsed.data.teams_full,
+    };
+
+    return currentUser;
+  } catch (err) {
+    if (
+      err instanceof ApiError &&
+      err.response.status === 401 &&
+      this.removeSessionHook
+    ) {
+      this.removeSessionHook();
+      return emptyUser;
+    } else {
+      throw err;
+    }
   }
-
-  // For legacy support, the backend returns teams in two formats.
-  // Clients don't need to know about the old one, so replace it with
-  // the new one.
-  const { teams_full, ...currentUser } = {
-    ...parsed.data,
-    teams: parsed.data.teams_full,
-  };
-
-  return currentUser;
 }
