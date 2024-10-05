@@ -2,7 +2,7 @@
   "name": "@thunderstore/ts-api-react",
   "version": "0.1.0",
   "description": "Thunderstore API React integration",
-  "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/ts-api-react",
   "main": "dist/thunderstore-ts-api-react.cjs.js",
   "module": "dist/thunderstore-ts-api-react.esm.js",
   "types": "dist/thunderstore-ts-api-react.cjs.d.ts",

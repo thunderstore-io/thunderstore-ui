@@ -2,7 +2,7 @@
   "name": "@thunderstore/thunderstore-api",
   "version": "0.1.0",
   "description": "Thunderstore API client",
-  "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/thunderstore-api",
   "main": "dist/thunderstore-thunderstore-api.cjs.js",
   "module": "dist/thunderstore-thunderstore-api.esm.js",
   "exports": {

@@ -29,5 +29,6 @@
   },
   "devDependencies": {
     "@storybook/addon-webpack5-compiler-babel": "3.0.3"
-  }
+  },
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/apps/cyberstorm-storybook"
 }
