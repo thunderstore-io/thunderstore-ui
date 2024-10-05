@@ -21,7 +21,7 @@
 
   --font-size: var(--font-size--l);
   --text-color: var(--color-text--default);
-  --bg-color: var(--color-surface--7);
+  --bg-color: var(--old--color-surface--7);
   --button-border-color: transparent;
   --button-border-width: var(--border-width--2);
 }
@@ -38,42 +38,42 @@
 
 .button__default {
   --text-color: var(--color-text--default);
-  --bg-color: var(--color-surface--7);
+  --bg-color: var(--old--color-surface--7);
 }
 
 .button__default:hover {
-  --bg-color: var(--color-surface--10);
+  --bg-color: var(--old--color-surface--10);
   --button-border-color: transparent;
 }
 
 .button__primary {
-  --bg-color: var(--color-surface--10);
+  --bg-color: var(--old--color-surface--10);
 }
 
 .button__primary:hover {
-  --bg-color: var(--color-surface--10--hover);
+  --bg-color: var(--old--color-surface--10--hover);
 }
 
 .button__fancyAccent {
   border: none;
 
-  --bg-color: var(--color-cyber-green--60);
-  --text-color: var(--color-cyber-green--10);
+  --bg-color: var(--old--color-cyber-green--60);
+  --text-color: var(--old--color-cyber-green--10);
 
   box-shadow: inset 0 -3px 0 0 rgb(0 0 0 / 0.35),
     inset 0 var(--space--px) 0 0 rgb(255 255 255 / 0.2),
-    inset 0 0 var(--space--16) 0 var(--color-green--6);
+    inset 0 0 var(--space--16) 0 var(--old--color-green--6);
 }
 
 .button__fancyAccent:hover {
   box-shadow: inset 0 -3px 0 0 rgb(0 0 0 / 0.35),
     inset 0 var(--space--px) 0 0 rgb(255 255 255 / 0.2),
-    inset 0 0 var(--space--16) 0 var(--color-green--3),
+    inset 0 0 var(--space--16) 0 var(--old--color-green--3),
     0 0 var(--space--10) 0 rgb(79 216 159 / 0.5);
 }
 
 .button__fancyAccent:active {
-  --bg-color: var(--color-cyber-green--50);
+  --bg-color: var(--old--color-cyber-green--50);
 
   box-shadow: inset 0 var(--space--2) 0 0 rgb(0 0 0 / 0.25),
     0 0 var(--space--10) 0 rgb(79 216 159 / 0.5);
@@ -93,7 +93,7 @@
 }
 
 .button__tertiary:hover {
-  --bg-color: var(--color-surface--7);
+  --bg-color: var(--old--color-surface--7);
 }
 
 .button__success {
@@ -215,7 +215,7 @@
 }
 
 .button__transparentDefault:hover {
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--old--color-surface--4);
 }
 
 .button__transparentDanger {
@@ -234,7 +234,7 @@
 }
 
 .button__transparentTertiary:hover {
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--old--color-surface--4);
 }
 
 .button__transparentPrimary {
@@ -244,7 +244,7 @@
 
 .button__transparentPrimary:hover {
   --text-color: var(--color-highlight--hover);
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--old--color-surface--4);
 }
 
 .button__transparentAccent {
@@ -254,7 +254,7 @@
 
 .button__transparentAccent:hover {
   --text-color: var(--color-text--accent);
-  --bg-color: var(--color-surface--7);
+  --bg-color: var(--old--color-surface--7);
 }
 
 .button__wideDarker {

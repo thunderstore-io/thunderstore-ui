@@ -111,20 +111,20 @@
 }
 
 .tag__success {
-  --bg-color: var(--color-green--10);
+  --bg-color: var(--old--color-green--10);
   --border-color: transparent;
-  --text-color: var(--color-green--5);
+  --text-color: var(--old--color-green--5);
 }
 
 .tag__success:hover {
-  --bg-color: var(--color-green--10);
-  --border-color: var(--color-green--5);
-  --text-color: var(--color-green--5);
+  --bg-color: var(--old--color-green--10);
+  --border-color: var(--old--color-green--5);
+  --text-color: var(--old--color-green--5);
 }
 
 .tag__info {
   --bg-color: var(--color-info-background);
-  --border-color: var(--color-blue--20);
+  --border-color: var(--old--color-blue--20);
   --text-color: var(--color-info);
   --icon-color: var(--color-info);
 

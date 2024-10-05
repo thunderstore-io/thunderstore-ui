@@ -3,8 +3,11 @@ export const range = (start: number, end: number) => {
   return Array.from({ length }, (_, idx) => idx + start);
 };
 
-export const formatInteger = (inputNumber: number) => {
-  return Intl.NumberFormat("en", { notation: "compact" }).format(inputNumber);
+export const formatInteger = (
+  inputNumber: number,
+  notation: "standard" | "scientific" | "engineering" | "compact" = "compact"
+) => {
+  return Intl.NumberFormat("en", { notation: notation }).format(inputNumber);
 };
 
 export const numberWithSpaces = (x: number) => {

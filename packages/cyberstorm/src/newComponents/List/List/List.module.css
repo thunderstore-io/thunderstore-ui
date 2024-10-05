@@ -1,0 +1,29 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap--8);
+  color: var(--list-color);
+  list-style-type: none;
+
+  --list-color: var(--color-accent);
+}
+
+.list[data-variant="default"] {
+  --list-color: var(--color-5);
+}
+
+.list[data-variant="primary"] {
+  --list-color: var(--color-primary);
+}
+
+.list[data-variant="secondary"] {
+  --list-color: var(--color-secondary);
+}
+
+.list[data-variant="tertiary"] {
+  --list-color: var(--color-tertiary);
+}
+
+.list[data-variant="accent"] {
+  --list-color: var(--color-accent);
+}

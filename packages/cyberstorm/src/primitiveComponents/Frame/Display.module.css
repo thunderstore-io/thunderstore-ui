@@ -1,0 +1,37 @@
+.display {
+  font-weight: 700;
+  font-family: inter, sans-serif;
+  font-style: normal;
+  line-height: normal;
+}
+
+.display[data-stylelevel="1"] {
+  font-weight: var(--font-weight-heavy);
+  font-size: calc(var(--space--54) * var(--scaling, 1));
+  font-family: Hubot-Sans, sans-serif;
+  line-height: 115%; /* 62.1px */
+}
+
+.display[data-stylelevel="2"] {
+  font-weight: var(--font-weight-heavy);
+  font-size: calc(var(--space--51) * var(--scaling, 1));
+  font-family: Hubot-Sans, sans-serif;
+}
+
+.display[data-stylelevel="3"] {
+  font-weight: 700;
+  font-size: calc(var(--space--38) * var(--scaling, 1));
+  font-family: Hubot-Sans, sans-serif;
+}
+
+.display[data-stylelevel="4"] {
+  font-size: calc(var(--space--16) * var(--scaling, 1));
+}
+
+.display[data-stylelevel="5"] {
+  font-size: calc(var(--space--14) * var(--scaling, 1));
+}
+
+.display[data-stylelevel="6"] {
+  font-size: calc(var(--space--12) * var(--scaling, 1));
+}

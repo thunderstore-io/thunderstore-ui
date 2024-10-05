@@ -5,8 +5,8 @@
   align-items: center;
   justify-content: center;
 
-  --glitch-color-1: var(--color-cyber-green--50);
-  --glitch-color-2: var(--color-pink--50);
+  --glitch-color-1: var(--old--color-cyber-green--50);
+  --glitch-color-2: var(--old--color-pink--50);
 }
 
 .description {

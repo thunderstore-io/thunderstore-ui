@@ -1,14 +1,17 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
-  BreadCrumbs,
-  CommunityCard,
+  Container,
+  CardCommunity,
   CommunityCardSkeleton,
   EmptyState,
-  Select,
-  TextInput,
+  Heading,
+  NewBreadCrumbs,
   range,
+  NewTextInput,
+  NewSelect,
 } from "@thunderstore/cyberstorm";
 import rootStyles from "../RootLayout.module.css";
+import styles from "./Communities.module.css";
 import searchAndOrderStyles from "./SearchAndOrder.module.css";
 import communitiesListStyles from "./CommunityList.module.css";
 import { useState, useEffect } from "react";
@@ -25,9 +28,8 @@ import {
   useNavigation,
   useSearchParams,
 } from "@remix-run/react";
-import { Communities } from "@thunderstore/dapper/types";
+import { Communities, Community } from "@thunderstore/dapper/types";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction = () => {
   return [
@@ -115,32 +117,42 @@ export default function CommunitiesPage() {
 
   return (
     <>
-      <BreadCrumbs>Communities</BreadCrumbs>
+      <NewBreadCrumbs rootClasses={styles.breadcrumbs}>
+        Communities
+      </NewBreadCrumbs>
       <header className={rootStyles.pageHeader}>
-        <PageHeader title="Communities" />
+        <Heading level="1" styleLevel="2" variant="primary" mode="display">
+          Communities
+        </Heading>
       </header>
       <main className={rootStyles.main}>
-        <div className={searchAndOrderStyles.root}>
+        <Container
+          rootClasses={searchAndOrderStyles.root}
+          csVariant="tertiary"
+          csTextStyles={["fontWeightBold", "lineHeightAuto", "fontSizeS"]}
+        >
           <div className={searchAndOrderStyles.searchTextInput}>
-            <TextInput
+            <span>Search</span>
+            <NewTextInput
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
               placeholder="Search communities..."
               clearValue={() => setSearchValue("")}
               leftIcon={<FontAwesomeIcon icon={faSearch} />}
+              csColor="cyber-green"
+              rootClasses={searchAndOrderStyles.searchInput}
             />
           </div>
           <div className={searchAndOrderStyles.searchFilters}>
-            <div className={searchAndOrderStyles.searchFiltersSortLabel}>
-              Sort by
-            </div>
-            <Select
+            <span>Sort by</span>
+            <NewSelect
               onChange={changeOrder}
               options={selectOptions}
               value={searchParams.get("order") ?? SortOptions.Popular}
+              aria-label="Sort communities by"
             />
           </div>
-        </div>
+        </Container>
 
         {navigation.state === "loading" ? (
           <CommunitiesListSkeleton />
@@ -152,14 +164,51 @@ export default function CommunitiesPage() {
   );
 }
 
+function comparePackageCount(a: Community, b: Community) {
+  if (a.total_package_count < b.total_package_count) {
+    return 1;
+  }
+  if (a.total_package_count > b.total_package_count) {
+    return -1;
+  }
+  return 0;
+}
+
 function CommunitiesList(props: { communitiesData: Communities }) {
   const { communitiesData } = props;
+
+  const topDogs: Community[] = [];
+  communitiesData.results.reduce((prevCommunity, currentCommunity) => {
+    if (topDogs.length > 4) {
+      topDogs.sort(comparePackageCount);
+      const lastDog = topDogs.at(-1);
+      if (
+        (lastDog ? lastDog.total_package_count : 0) <
+        currentCommunity.total_package_count
+      ) {
+        topDogs.pop();
+        topDogs.push(currentCommunity);
+      }
+    } else {
+      topDogs.push(currentCommunity);
+    }
+    return topDogs;
+  }, topDogs);
+  const flatDogs = topDogs.map((community) => community.identifier);
 
   if (communitiesData.results.length > 0) {
     return (
       <div className={communitiesListStyles.root}>
         {communitiesData.results.map((community) => (
-          <CommunityCard key={community.identifier} community={community} />
+          <CardCommunity
+            key={community.identifier}
+            community={community}
+            isPopular={flatDogs.includes(community.identifier)}
+            isNew={
+              new Date(community.datetime_created).getTime() >
+              new Date().getTime() - 1000 * 60 * 60 * 336
+            }
+          />
         ))}
       </div>
     );

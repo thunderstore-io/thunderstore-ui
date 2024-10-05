@@ -23,6 +23,7 @@ export interface ThunderstoreLinkProps {
   community?: string;
   namespace?: string;
   package?: string;
+  version?: string;
   team?: string;
   user?: string;
 }
@@ -37,6 +38,7 @@ export const thunderstoreLinkProps: ThunderstoreLinkProps = {
   community: "",
   namespace: "",
   package: "",
+  version: "",
   team: "",
   user: "",
 };
@@ -52,7 +54,7 @@ export interface AnyProps {
 
 type NoRequiredProps = (props: AnyProps) => RE | null;
 type PackageProps = { community: string; namespace: string; package: string };
-type PackageVersionProps = {
+export type PackageVersionProps = {
   community: string;
   namespace: string;
   package: string;

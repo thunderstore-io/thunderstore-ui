@@ -32,13 +32,13 @@
   transition: var(--animation-length-xs);
   user-select: none;
 
-  --mark-color: var(--color-purple--6);
+  --mark-color: var(--old--color-purple--6);
 }
 
 .label:hover {
   background-color: var(--color-surface--4);
 
-  --mark-color: var(--color-purple--2);
+  --mark-color: var(--old--color-purple--2);
 }
 
 .checkbox {

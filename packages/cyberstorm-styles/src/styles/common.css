@@ -1,0 +1,51 @@
+.lineHeightAuto {
+  line-height: normal;
+}
+
+.lineHeightBody {
+  line-height: 170%;
+}
+
+.fontSizeXXS {
+  font-size: 0.625rem;
+}
+
+.fontSizeXS {
+  font-size: 0.75rem;
+}
+
+.fontSizeS {
+  font-size: 0.875rem;
+}
+
+.fontSizeM {
+  font-size: 1rem;
+}
+
+.fontSizeL {
+  font-size: 1.5rem;
+}
+
+.fontWeightRegular {
+  font-weight: 400;
+}
+
+.fontWeightMedium {
+  font-weight: 500;
+}
+
+.fontWeightSemiBold {
+  font-weight: 600;
+}
+
+.fontWeightBold {
+  font-weight: 700;
+}
+
+.fontFamilyInter {
+  font-family: inter, sans-serif;
+}
+
+.fontFamilyHubot {
+  font-family: Hubot-Sans, sans-serif;
+}

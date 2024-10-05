@@ -8,7 +8,7 @@ export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   backgrounds: {
     default: "thunderstore",
-    values: [{ name: "thunderstore", value: "var(--color-background)" }],
+    values: [{ name: "thunderstore", value: "var(--body-bg-color)" }],
   },
   controls: {
     matchers: {

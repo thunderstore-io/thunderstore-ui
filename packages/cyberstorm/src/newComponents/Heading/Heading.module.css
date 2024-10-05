@@ -1,0 +1,21 @@
+.heading {
+  color: var(--heading-color);
+
+  --heading-color: var(--color-primary);
+}
+
+.heading[data-variant="primary"] {
+  --heading-color: var(--color-primary);
+}
+
+.heading[data-variant="secondary"] {
+  --heading-color: var(--color-secondary);
+}
+
+.heading[data-variant="tertiary"] {
+  --heading-color: var(--color-tertiary);
+}
+
+.heading[data-variant="accent"] {
+  --heading-color: var(--color-accent);
+}

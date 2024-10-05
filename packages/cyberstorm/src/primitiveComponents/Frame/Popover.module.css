@@ -1,0 +1,11 @@
+.popover[data-size="s"] {
+  --frame-popover-gap: 1rem;
+  --frame-popover-padding: 1.5rem 2.25rem;
+  --frame-popover-border-radius: 0.25rem;
+}
+
+.popover[data-size="m"] {
+  --frame-popover-gap: 2rem;
+  --frame-popover-padding: 3rem 5.5rem;
+  --frame-popover-border-radius: 0.5rem;
+}
