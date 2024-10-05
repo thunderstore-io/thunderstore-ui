@@ -2,7 +2,7 @@
   "name": "@thunderstore/ts-api-react-forms",
   "version": "0.1.0",
   "description": "React forms logic for the Thunderstore API",
-  "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/ts-api-react-forms",
   "main": "dist/thunderstore-ts-api-react-forms.cjs.js",
   "module": "dist/thunderstore-ts-api-react-forms.esm.js",
   "types": "dist/thunderstore-ts-api-react-forms.cjs.d.ts",

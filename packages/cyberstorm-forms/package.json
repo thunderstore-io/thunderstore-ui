@@ -2,7 +2,7 @@
   "name": "@thunderstore/cyberstorm-forms",
   "version": "0.1.0",
   "description": "Cyberstorm form components",
-  "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/cyberstorm-forms",
   "type": "module",
   "main": "dist/thunderstore-cyberstorm-forms.cjs.js",
   "module": "dist/thunderstore-cyberstorm-forms.esm.js",

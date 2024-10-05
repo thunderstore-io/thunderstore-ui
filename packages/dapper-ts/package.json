@@ -2,7 +2,7 @@
   "name": "@thunderstore/dapper-ts",
   "version": "0.1.0",
   "description": "Implementation of Dapper using Thunderstore API as the data source",
-  "repository": "https://github.com/thunderstore-io/thunderstore-ui/",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/dapper-ts",
   "type": "module",
   "main": "dist/thunderstore-dapper-ts.cjs.js",
   "module": "dist/thunderstore-dapper-ts.esm.js",
