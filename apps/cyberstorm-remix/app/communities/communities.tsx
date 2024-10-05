@@ -137,7 +137,7 @@ export default function CommunitiesPage() {
           csTextStyles={["fontWeightBold", "lineHeightAuto", "fontSizeS"]}
         >
           <div className={searchAndOrderStyles.searchTextInput}>
-            <span>Search</span>
+            <label htmlFor="communitiesSearchInput">Search</label>
             <NewTextInput
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
@@ -146,15 +146,17 @@ export default function CommunitiesPage() {
               leftIcon={<FontAwesomeIcon icon={faSearch} />}
               csColor="cyber-green"
               rootClasses={searchAndOrderStyles.searchInput}
+              id="communitiesSearchInput"
             />
           </div>
           <div className={searchAndOrderStyles.searchFilters}>
-            <span>Sort by</span>
+            <label htmlFor="communitiesSortBy">Sort by</label>
             <NewSelect
               onChange={changeOrder}
               options={selectOptions}
               value={searchParams.get("order") ?? SortOptions.Popular}
               aria-label="Sort communities by"
+              id="communitiesSortBy"
             />
           </div>
         </Container>
@@ -208,7 +210,7 @@ function CommunitiesList(props: { communitiesData: Communities }) {
           <CardCommunity
             key={community.identifier}
             community={community}
-            isPopular={flatDogs.includes(community.identifier)}
+            isPopular={community.total_package_count > 1000}
             isNew={
               new Date(community.datetime_created).getTime() >
               new Date().getTime() - 1000 * 60 * 60 * 336

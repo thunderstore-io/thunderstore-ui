@@ -72,10 +72,15 @@
 
 .footnoteCopyright {
   color: rgb(197 194 255 / 0.6) !important;
+  text-align: center;
 }
 
 .footnoteInner {
   display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  align-self: stretch;
   justify-content: center;
   width: 100%;
   max-width: 80rem;
@@ -154,6 +159,11 @@
   border-radius: var(--border-radius--8);
 }
 
+.footerPagesLinks {
+  display: flex;
+  gap: var(--gap--32);
+}
+
 @media (width >= calc(63.5rem + 1px)) {
   .logoAndLinks {
     flex-direction: row;
@@ -215,7 +225,8 @@
   }
 
   .footnoteInner {
-    justify-content: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .ad {

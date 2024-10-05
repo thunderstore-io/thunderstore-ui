@@ -24,7 +24,7 @@ export function DevelopersDropDown() {
           </NewButton>
         }
         csVariant="default"
-        csColor="surface"
+        csColor="surface-alpha"
         rootClasses={styles.root}
       >
         <NewDropDownItem>
@@ -67,7 +67,7 @@ export function DevelopersDropDown() {
             Markdown Preview
           </NewLink>
         </NewDropDownItem>
-        <NewDropDownItem>
+        <NewDropDownItem rootClasses={styles.focus}>
           <NewLink
             primitiveType="link"
             csVariant="primary"
@@ -76,7 +76,7 @@ export function DevelopersDropDown() {
             rootClasses={styles.externalLink}
           >
             Github
-            <NewIcon csMode="inline" csVariant="tertiary">
+            <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
             </NewIcon>
           </NewLink>

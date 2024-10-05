@@ -34,7 +34,7 @@ export function Footer() {
                   rootClasses={styles.iconLink}
                   aria-label="Invite link to Thunderstores Discord server"
                 >
-                  <NewIcon noWrapper csVariant="accent">
+                  <NewIcon noWrapper>
                     <FontAwesomeIcon icon={faDiscord} />
                   </NewIcon>
                 </NewLink>
@@ -45,7 +45,7 @@ export function Footer() {
                   rootClasses={styles.iconLink}
                   aria-label="Link to Thunderstores Github"
                 >
-                  <NewIcon noWrapper csVariant="accent">
+                  <NewIcon noWrapper>
                     <FontAwesomeIcon icon={faGithub} />
                   </NewIcon>
                 </NewLink>
@@ -183,6 +183,23 @@ export function Footer() {
 
       <div className={classnames(styles.item, styles.footnote)}>
         <div className={styles.footnoteInner}>
+          <Container
+            rootClasses={styles.footerPagesLinks}
+            csTextStyles={["fontSizeXS", "fontWeightRegular", "lineHeightAuto"]}
+          >
+            <NewLink
+              primitiveType="link"
+              href="https://pages.thunderstore.io/p/contact-us"
+            >
+              Contact Us
+            </NewLink>
+            <NewLink
+              primitiveType="link"
+              href="https://pages.thunderstore.io/p/privacy-policy"
+            >
+              Privacy Policy
+            </NewLink>
+          </Container>
           <Container
             csVariant="accent"
             csTextStyles={["lineHeightBody", "fontWeightRegular", "fontSizeXS"]}

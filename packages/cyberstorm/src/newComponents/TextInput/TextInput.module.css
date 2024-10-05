@@ -41,22 +41,26 @@
   border: var(--border-width--2) solid var(--border-color);
   border-radius: var(--border-radius--8);
   color: var(--input-text-color);
-  background-color: var(--color-surface--4);
+  background-color: var(--input-background-color);
   cursor: text;
   transition: ease-out var(--animation-length-xs);
 
   --border-color: transparent;
   --input-text-color: var(--color-primary);
+  --input-background-color: var(--color-surface-alpha--5);
+}
+
+.textInput[value] {
+  --input-text-color: var(--color-secondary);
 }
 
 .textInput:hover {
-  --border-color: var(--color-border--highlight);
+  --border-color: var(--color-surface-alpha--6);
 }
 
 .textInput:focus-within {
-  color: var(--color-text--default);
-  background-color: var(--color-black);
-
+  --input-text-color: var(--color-text--default);
+  --input-background-color: var(--color-black);
   --border-color: var(--color-7);
 }
 
@@ -78,6 +82,10 @@
 
 .wrapper[data-variant="accent"] > .textInput {
   --input-text-color: var(--color-accent);
+}
+
+.textInput:has(+ .clearValueButton:hover):not(:focus-within) {
+  --border-color: var(--color-surface-alpha--6);
 }
 
 /* DESIGN SYSTEM TODO: Add support for other variants and colors */
