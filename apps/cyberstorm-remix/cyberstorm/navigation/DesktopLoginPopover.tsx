@@ -14,12 +14,6 @@ import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 
-import styles from "./Navigation.module.css";
-import { Modal, NewButton, NewIcon } from "@thunderstore/cyberstorm";
-import { LoginList } from "./LoginList";
-import { faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 export function DesktopLoginPopover() {
   return (
     <Modal
