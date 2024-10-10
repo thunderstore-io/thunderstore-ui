@@ -1,54 +1,116 @@
-import styles from "../../sharedComponentStyles/ButtonStyles/Button.module.css";
+import buttonStyles from "../../sharedComponentStyles/ButtonStyles/Button.module.css";
+import iconButtonStyles from "../../sharedComponentStyles/ButtonStyles/IconButton.module.css";
 import React from "react";
 import { classnames } from "../../utils/utils";
 import {
   ActionableButtonProps,
   Actionable,
 } from "../../primitiveComponents/Actionable/Actionable";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { NewIcon } from "../..";
 
-export const Button = React.forwardRef<
-  HTMLButtonElement,
-  Omit<ActionableButtonProps, "primitiveType">
->((props: Omit<ActionableButtonProps, "primitiveType">, forwardedRef) => {
-  const {
-    children,
-    rootClasses,
-    csVariant = "default",
-    csColor = "purple",
-    csSize = "m",
-    csTextStyles,
-    ...forwardedProps
-  } = props;
+interface ButtonProps extends Omit<ActionableButtonProps, "primitiveType"> {
+  csVariant?:
+    | "default"
+    | "defaultPeek"
+    | "primary"
+    | "secondary"
+    | "tertiary"
+    | "minimal"
+    | "accent"
+    | "special";
+  csSize?: "xs" | "s" | "m" | "l";
+}
 
-  // TODO: Turn into a proper resolver function
-  // Same logic is in LinkButton too
-  const fontStyles = (size: typeof csSize) => {
-    if (size === "xs") {
-      return ["fontSizeXS", "fontWeightBold", "lineHeightAuto"];
-    } else if (size === "s") {
-      return ["fontSizeS", "fontWeightBold", "lineHeightAuto"];
-    } else {
-      return ["fontSizeM", "fontWeightBold", "lineHeightAuto"];
+interface IconButtonProps
+  extends Omit<
+    ActionableButtonProps,
+    "primitiveType" | "csVariant" | "csSize" | "children"
+  > {
+  csVariant?:
+    | "default"
+    | "defaultPeek"
+    | "primary"
+    | "secondary"
+    | "tertiary"
+    | "tertiaryDimmed"
+    | "minimal";
+  csSize?: "xs" | "s" | "m";
+  icon: IconProp;
+}
+
+export type ButtonComponentProps =
+  | ({ icon?: false } & ButtonProps)
+  | ({ icon: IconProp } & IconButtonProps);
+
+export const Button = React.forwardRef<HTMLButtonElement, ButtonComponentProps>(
+  (props: ButtonComponentProps, forwardedRef) => {
+    const { rootClasses, csTextStyles, icon, ...forwardedProps } = props;
+
+    if (icon) {
+      const {
+        csVariant = "default",
+        csColor = "purple",
+        csSize = "m",
+        ...fProps
+      } = forwardedProps as IconButtonProps;
+
+      return (
+        <Actionable
+          primitiveType="button"
+          {...fProps}
+          rootClasses={classnames(iconButtonStyles.iconButton, rootClasses)}
+          csColor={csColor}
+          csSize={csSize}
+          csVariant={csVariant}
+          ref={forwardedRef}
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={icon} />
+          </NewIcon>
+        </Actionable>
+      );
     }
-  };
 
-  return (
-    <Actionable
-      primitiveType="button"
-      {...forwardedProps}
-      rootClasses={classnames(
-        ...(csTextStyles ? csTextStyles : fontStyles(csSize)),
-        styles.button,
-        rootClasses
-      )}
-      csColor={csColor}
-      csSize={csSize}
-      csVariant={csVariant}
-      ref={forwardedRef}
-    >
-      {children}
-    </Actionable>
-  );
-});
+    const {
+      children,
+      csVariant = "default",
+      csColor = "purple",
+      csSize = "m",
+      ...fProps
+    } = forwardedProps as ButtonProps;
+
+    // TODO: Turn into a proper resolver function
+    // Same logic is in LinkButton too
+    const fontStyles = (size: typeof csSize) => {
+      if (size === "xs") {
+        return ["fontSizeXS", "fontWeightBold", "lineHeightAuto"];
+      } else if (size === "s") {
+        return ["fontSizeS", "fontWeightBold", "lineHeightAuto"];
+      } else {
+        return ["fontSizeM", "fontWeightBold", "lineHeightAuto"];
+      }
+    };
+
+    return (
+      <Actionable
+        primitiveType="button"
+        {...fProps}
+        rootClasses={classnames(
+          ...(csTextStyles ? csTextStyles : fontStyles(csSize)),
+          buttonStyles.button,
+          rootClasses
+        )}
+        csColor={csColor}
+        csSize={csSize}
+        csVariant={csVariant}
+        ref={forwardedRef}
+      >
+        {children}
+      </Actionable>
+    );
+  }
+);
 
 Button.displayName = "Button";

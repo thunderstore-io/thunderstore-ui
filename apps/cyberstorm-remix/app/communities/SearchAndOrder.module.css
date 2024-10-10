@@ -7,13 +7,9 @@
 
 .searchTextInput {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: var(--space--8);
-  width: 50%;
-}
-
-.searchInput {
-  max-width: 26.25rem;
 }
 
 .searchFilters {
@@ -43,8 +39,10 @@
   .searchFilters > span {
     display: none;
   }
+}
 
-  .searchInput {
-    max-width: 100%;
+@media (width > 40rem) {
+  .searchTextInput {
+    max-width: 26.25rem;
   }
 }

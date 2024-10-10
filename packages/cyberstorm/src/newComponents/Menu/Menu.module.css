@@ -21,7 +21,7 @@
 }
 
 .menuRoot::backdrop {
-  backdrop-filter: blur(10px);
+  background: hsl(0deg 0% 0% / 0.6);
 }
 
 .menuWrapper {
@@ -31,7 +31,6 @@
   width: 80%;
   height: 100%;
   padding: 1.5rem;
-  padding-top: 7rem;
   background: #15152d;
 }
 
@@ -49,6 +48,4 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  width: 2.75rem;
-  height: 2.75rem;
 }

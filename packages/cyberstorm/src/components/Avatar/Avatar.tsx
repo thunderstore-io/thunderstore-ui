@@ -34,11 +34,13 @@ export function Avatar(props: AvatarProps) {
     );
   } else {
     return (
-      <div className={classnames(styles.root, getSize(size))}>
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faUser} />
-        </NewIcon>
-      </div>
+      <NewIcon
+        csMode="inline"
+        noWrapper
+        rootClasses={classnames(styles.placeholderRoot, getSize(size))}
+      >
+        <FontAwesomeIcon icon={faUser} />
+      </NewIcon>
     );
   }
 }

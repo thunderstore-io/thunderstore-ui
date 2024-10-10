@@ -145,7 +145,6 @@ export default function CommunitiesPage() {
               clearValue={() => setSearchValue("")}
               leftIcon={<FontAwesomeIcon icon={faSearch} />}
               csColor="cyber-green"
-              rootClasses={searchAndOrderStyles.searchInput}
               id="communitiesSearchInput"
             />
           </div>
@@ -171,37 +170,8 @@ export default function CommunitiesPage() {
   );
 }
 
-function comparePackageCount(a: Community, b: Community) {
-  if (a.total_package_count < b.total_package_count) {
-    return 1;
-  }
-  if (a.total_package_count > b.total_package_count) {
-    return -1;
-  }
-  return 0;
-}
-
 function CommunitiesList(props: { communitiesData: Communities }) {
   const { communitiesData } = props;
-
-  const topDogs: Community[] = [];
-  communitiesData.results.reduce((prevCommunity, currentCommunity) => {
-    if (topDogs.length > 4) {
-      topDogs.sort(comparePackageCount);
-      const lastDog = topDogs.at(-1);
-      if (
-        (lastDog ? lastDog.total_package_count : 0) <
-        currentCommunity.total_package_count
-      ) {
-        topDogs.pop();
-        topDogs.push(currentCommunity);
-      }
-    } else {
-      topDogs.push(currentCommunity);
-    }
-    return topDogs;
-  }, topDogs);
-  const flatDogs = topDogs.map((community) => community.identifier);
 
   if (communitiesData.results.length > 0) {
     return (

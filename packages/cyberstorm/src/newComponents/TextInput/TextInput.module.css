@@ -55,11 +55,12 @@
 }
 
 .textInput:hover {
-  --border-color: var(--color-surface-alpha--6);
+  --input-background-color: var(--color-surface-alpha--6);
+  --border-color: var(--color-surface-alpha--10);
 }
 
 .textInput:focus-within {
-  --input-text-color: var(--color-text--default);
+  --input-text-color: var(--color-primary);
   --input-background-color: var(--color-black);
   --border-color: var(--color-7);
 }
@@ -92,6 +93,7 @@
 
 .textInput::placeholder {
   color: var(--color-text--tertiary);
+  opacity: 1;
 }
 
 .textInput[data-size="m"] {
@@ -119,13 +121,14 @@
 .leftIcon {
   position: absolute;
   margin: var(--space--10) var(--space--16);
-  color: var(--color-accent);
+  color: var(--color-tertiary);
   pointer-events: none;
 }
 
 .rightIcon {
   position: absolute;
   padding: var(--space--14) var(--space--16);
+  color: var(--color-secondary);
 }
 
 .clearValueButton {

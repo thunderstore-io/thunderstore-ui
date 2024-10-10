@@ -5,6 +5,7 @@ import styles from "./Navigation.module.css";
 import {
   Avatar,
   Menu,
+  NewButton,
   NewIcon,
   NewLink,
   NewText,
@@ -36,17 +37,17 @@ export function MobileUserPopoverContent(props: { user: CurrentUser }) {
         </div>
       }
       controls={
-        <button
+        <NewButton
           {...{
             popovertarget: "mobileNavAccount",
             popovertargetaction: "close",
           }}
-          className={styles.popoverCloseButton}
-        >
-          <NewIcon csMode="inline" csVariant="tertiary" noWrapper>
-            <FontAwesomeIcon icon={faLongArrowLeft} />
-          </NewIcon>
-        </button>
+          aria-label="Back"
+          mode="iconButton"
+          csSize="m"
+          csVariant="tertiaryDimmed"
+          icon={faLongArrowLeft}
+        />
       }
     >
       {user.username ? (

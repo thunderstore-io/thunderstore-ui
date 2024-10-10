@@ -1,9 +1,8 @@
 import { ReactNode } from "react";
 
 import styles from "./Menu.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { NewButton, NewIcon } from "../..";
+import { NewButton } from "../..";
 import {
   FramePopoverProps,
   Frame,
@@ -41,15 +40,11 @@ export function Menu(props: Props) {
                 popovertarget: props.popoverId,
                 popovertargetaction: "close",
               }}
-              csVariant="tertiary"
-              className={styles.menuCloseButton}
+              csVariant="tertiaryDimmed"
               tooltipText="Close"
               aria-label="Close"
-            >
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faXmark} />
-              </NewIcon>
-            </NewButton>
+              icon={faXmark}
+            />
           )}
           {props.children}
         </div>

@@ -85,6 +85,7 @@
 
   font-synthesis: none;
   font-feature-settings: "liga" 1, "calt" 1; /* workaround for bug in Chrome, dunno if still present or not */
+  scrollbar-color: var(--color-surface--8) var(--color-surface--1);
 }
 
 /* DESIGN SYSTEM TODO: Add different sizes of scaling? */
@@ -121,7 +122,6 @@ body {
   background-color: var(--body-bg-color);
 }
 
-* {
+* > * {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-surface--8) var(--color-surface--1);
 }

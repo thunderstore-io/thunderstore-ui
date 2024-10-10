@@ -68,11 +68,9 @@
 
 .mobileNavMenuDevelopersButton {
   display: flex;
-  gap: 1rem;
   align-items: center;
   align-self: stretch;
   justify-content: space-between;
-  padding: 1rem;
   color: var(--color-primary);
   background: transparent;
 }
@@ -94,6 +92,14 @@
 
 button.mobileNavItem {
   background: transparent;
+}
+
+.mobileNavItem:active {
+  color: var(--color-cyber-green--5);
+}
+
+.mobileNavItem:hover {
+  color: var(--color-secondary);
 }
 
 .mobileNavItemIcon {
@@ -121,14 +127,6 @@ button.mobileNavItem {
   display: flex;
   flex-direction: column;
   width: 100%;
-}
-
-.mobileNavPopoverListLink {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  align-self: stretch;
-  padding: 1rem;
 }
 
 .popoverCloseButton {
@@ -251,4 +249,24 @@ button.mobileNavItem {
 .headerRightSide {
   display: flex;
   gap: 1rem;
+}
+
+.divider {
+  align-self: stretch;
+  height: 1px;
+  margin: var(--space--16) var(--space--8);
+  background: var(--color-surface--7);
+}
+
+.navMenuItem {
+  display: flex;
+  gap: var(--gap--16);
+  align-items: center;
+  align-self: stretch;
+  padding: var(--space--16);
+  border-radius: var(--border-radius--8);
+}
+
+.navMenuItem:hover {
+  background: var(--color-surface--9);
 }

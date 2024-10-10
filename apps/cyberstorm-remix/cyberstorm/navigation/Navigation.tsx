@@ -3,7 +3,6 @@ import {
   faGamepad,
   faLongArrowLeft,
   faCaretRight,
-  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -16,6 +15,7 @@ import {
   Avatar,
   NewText,
   Heading,
+  NewButton,
 } from "@thunderstore/cyberstorm";
 import {
   OverwolfLogo,
@@ -92,11 +92,7 @@ export function Navigation(props: {
           }}
           className={styles.mobileNavItem}
         >
-          <NewIcon
-            noWrapper
-            csVariant="tertiary"
-            rootClasses={styles.mobileNavItemIcon}
-          >
+          <NewIcon noWrapper rootClasses={styles.mobileNavItemIcon}>
             <FontAwesomeIcon icon={faBars} />
           </NewIcon>
           Menu
@@ -134,31 +130,14 @@ export function Navigation(props: {
 
 export function MobileNavigationMenu() {
   return (
-    <Menu
-      popoverId={"mobileNavMenu"}
-      controls={
-        <button
-          {...{
-            popovertarget: "mobileNavMenu",
-            popovertargetaction: "close",
-          }}
-          className={styles.popoverCloseButton}
-          aria-label="Close"
-        >
-          <NewIcon csMode="inline" csVariant="tertiary" noWrapper>
-            <FontAwesomeIcon icon={faXmark} />
-          </NewIcon>
-        </button>
-      }
-      rootClasses={styles.mobileMenu}
-    >
+    <Menu popoverId={"mobileNavMenu"} rootClasses={styles.mobileMenu}>
       <nav className={styles.mobileNavPopover}>
         <NewLink
           primitiveType="cyberstormLink"
           linkId="Communities"
-          rootClasses={styles.mobileNavPopoverListLink}
+          rootClasses={styles.navMenuItem}
           csVariant="primary"
-          csTextStyles={["fontSizeM", "fontWeightRegular", "lineHeightAuto"]}
+          csTextStyles={["fontSizeM", "fontWeightBold", "lineHeightAuto"]}
         >
           Communities
         </NewLink>
@@ -172,8 +151,9 @@ export function MobileNavigationMenu() {
               }}
               className={classnames(
                 "fontSizeM",
-                "fontWeightRegular",
+                "fontWeightBold",
                 "lineHeightAuto",
+                styles.navMenuItem,
                 styles.mobileNavMenuDevelopersButton
               )}
             >
@@ -188,18 +168,17 @@ export function MobileNavigationMenu() {
             </button>
           }
           controls={
-            <button
+            <NewButton
               {...{
                 popovertarget: "mobileNavMenuDevelopers",
                 popovertargetaction: "close",
               }}
-              className={styles.popoverCloseButton}
               aria-label="Back to previous menu"
-            >
-              <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-                <FontAwesomeIcon icon={faLongArrowLeft} />
-              </NewIcon>
-            </button>
+              mode="iconButton"
+              csSize="m"
+              csVariant="tertiaryDimmed"
+              icon={faLongArrowLeft}
+            />
           }
         >
           <nav className={styles.mobileNavPopover}>
@@ -207,12 +186,8 @@ export function MobileNavigationMenu() {
               primitiveType="link"
               href="/api/docs"
               csVariant="primary"
-              csTextStyles={[
-                "fontSizeM",
-                "fontWeightRegular",
-                "lineHeightAuto",
-              ]}
-              rootClasses={styles.mobileNavPopoverListLink}
+              csTextStyles={["fontSizeM", "fontWeightBold", "lineHeightAuto"]}
+              rootClasses={styles.navMenuItem}
             >
               API Docs
             </NewLink>
@@ -220,12 +195,8 @@ export function MobileNavigationMenu() {
               primitiveType="link"
               href="https://github.com/thunderstore-io"
               csVariant="primary"
-              csTextStyles={[
-                "fontSizeM",
-                "fontWeightRegular",
-                "lineHeightAuto",
-              ]}
-              rootClasses={styles.mobileNavPopoverListLink}
+              csTextStyles={["fontSizeM", "fontWeightBold", "lineHeightAuto"]}
+              rootClasses={styles.navMenuItem}
             >
               GitHub
             </NewLink>
@@ -233,12 +204,8 @@ export function MobileNavigationMenu() {
               primitiveType="link"
               href="/package/create/docs/"
               csVariant="primary"
-              csTextStyles={[
-                "fontSizeM",
-                "fontWeightRegular",
-                "lineHeightAuto",
-              ]}
-              rootClasses={styles.mobileNavPopoverListLink}
+              csTextStyles={["fontSizeM", "fontWeightBold", "lineHeightAuto"]}
+              rootClasses={styles.navMenuItem}
             >
               Package Format Docs
             </NewLink>
@@ -246,12 +213,8 @@ export function MobileNavigationMenu() {
               primitiveType="link"
               href="/tools/markdown-preview/"
               csVariant="primary"
-              csTextStyles={[
-                "fontSizeM",
-                "fontWeightRegular",
-                "lineHeightAuto",
-              ]}
-              rootClasses={styles.mobileNavPopoverListLink}
+              csTextStyles={["fontSizeM", "fontWeightBold", "lineHeightAuto"]}
+              rootClasses={styles.navMenuItem}
             >
               Markdown Preview
             </NewLink>
@@ -259,17 +222,41 @@ export function MobileNavigationMenu() {
               primitiveType="link"
               href="/tools/manifest-v1-validator/"
               csVariant="primary"
-              csTextStyles={[
-                "fontSizeM",
-                "fontWeightRegular",
-                "lineHeightAuto",
-              ]}
-              rootClasses={styles.mobileNavPopoverListLink}
+              csTextStyles={["fontSizeM", "fontWeightBold", "lineHeightAuto"]}
+              rootClasses={styles.navMenuItem}
             >
               Manifest Validator
             </NewLink>
           </nav>
         </Menu>
+        <div className={styles.divider} />
+        <NewLink
+          primitiveType="link"
+          csVariant="primary"
+          href="https://pages.thunderstore.io/p/contact-us"
+          csTextStyles={["fontSizeS", "fontWeightRegular", "lineHeightAuto"]}
+          rootClasses={styles.navMenuItem}
+        >
+          Contact Us
+        </NewLink>
+        <NewLink
+          primitiveType="link"
+          csVariant="primary"
+          href="https://pages.thunderstore.io/p/privacy-policy"
+          csTextStyles={["fontSizeS", "fontWeightRegular", "lineHeightAuto"]}
+          rootClasses={styles.navMenuItem}
+        >
+          Privacy Policy
+        </NewLink>
+        <NewLink
+          primitiveType="link"
+          csVariant="primary"
+          href="https://blog.thunderstore.io/"
+          csTextStyles={["fontSizeS", "fontWeightRegular", "lineHeightAuto"]}
+          rootClasses={styles.navMenuItem}
+        >
+          News
+        </NewLink>
       </nav>
     </Menu>
   );
@@ -280,23 +267,7 @@ export function MobileUserPopoverContent(props: { user?: CurrentUser }) {
   const avatar = user?.connections.find((c) => c.avatar !== null)?.avatar;
 
   return (
-    <Menu
-      popoverId={"mobileNavAccount"}
-      controls={
-        <button
-          {...{
-            popovertarget: "mobileNavAccount",
-            popovertargetaction: "close",
-          }}
-          className={styles.popoverCloseButton}
-          aria-label="Close"
-        >
-          <NewIcon csMode="inline" csVariant="tertiary" noWrapper>
-            <FontAwesomeIcon icon={faXmark} />
-          </NewIcon>
-        </button>
-      }
-    >
+    <Menu popoverId={"mobileNavAccount"}>
       {user && user.username ? (
         <div className={styles.mobileNavPopover}>
           <div className={styles.accountPopoverUser}>
