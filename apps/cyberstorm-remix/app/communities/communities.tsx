@@ -25,10 +25,10 @@ import { faGhost, faFire } from "@fortawesome/free-solid-svg-icons";
 import { useDebounce } from "use-debounce";
 import {
   useLoaderData,
-  useNavigation,
+  // useNavigation,
   useSearchParams,
 } from "@remix-run/react";
-import { Communities, Community } from "@thunderstore/dapper/types";
+import { Communities } from "@thunderstore/dapper/types";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 
 export const meta: MetaFunction = () => {
@@ -91,7 +91,8 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
 export default function CommunitiesPage() {
   const communitiesData = useLoaderData<typeof loader | typeof clientLoader>();
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigation = useNavigation();
+  // TODO: Disabled until we can figure out how a proper way to display skeletons
+  // const navigation = useNavigation();
 
   const changeOrder = (v: SortOptions) => {
     searchParams.set("order", v);
@@ -160,11 +161,12 @@ export default function CommunitiesPage() {
           </div>
         </Container>
 
-        {navigation.state === "loading" ? (
+        <CommunitiesList communitiesData={communitiesData} />
+        {/* {navigation.state === "loading" ? (
           <CommunitiesListSkeleton />
         ) : (
           <CommunitiesList communitiesData={communitiesData} />
-        )}
+        )} */}
       </main>
     </>
   );
