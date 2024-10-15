@@ -81,6 +81,7 @@ export function DefaultHomeCrumb() {
       tooltipText="Home"
       csTextStyles={["fontSizeS", "fontWeightRegular"]}
       aria-label="Home"
+      rootClasses={styles.homeLink}
     >
       <NewIcon noWrapper csColor="cyber-green" csVariant="default">
         <FontAwesomeIcon icon={faHouse} className={styles.home} />

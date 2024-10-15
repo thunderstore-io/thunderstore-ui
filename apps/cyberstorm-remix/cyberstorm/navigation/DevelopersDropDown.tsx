@@ -24,7 +24,7 @@ export function DevelopersDropDown() {
           </NewButton>
         }
         csVariant="default"
-        csColor="surface-alpha"
+        csColor="surface"
         rootClasses={styles.root}
       >
         <NewDropDownItem>

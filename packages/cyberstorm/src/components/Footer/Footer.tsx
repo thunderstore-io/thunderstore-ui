@@ -199,6 +199,9 @@ export function Footer() {
             >
               Privacy Policy
             </NewLink>
+            <NewLink primitiveType="link" href="https://blog.thunderstore.io/">
+              News
+            </NewLink>
           </Container>
           <Container
             csVariant="accent"

@@ -70,6 +70,8 @@
 }
 
 .innerHome {
+  display: flex;
+  align-items: center;
   width: 1em;
   height: 1em;
 }
@@ -87,4 +89,9 @@
 .home {
   font-weight: var(--font-weight-regular);
   text-decoration: none;
+}
+
+.homeLink {
+  display: inline-block;
+  height: 1em;
 }
