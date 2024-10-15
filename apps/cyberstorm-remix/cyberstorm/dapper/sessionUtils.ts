@@ -83,8 +83,8 @@ export async function getDapper(isClient = false) {
     const existingDapper = shouldRemakeDapper
       ? createNewDapper()
       : dapper
-      ? dapper
-      : new DapperTs(newConfig, removeSession);
+        ? dapper
+        : new DapperTs(newConfig, removeSession);
 
     return existingDapper;
   } else {
