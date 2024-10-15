@@ -86,7 +86,8 @@
 }
 
 .textInput:has(+ .clearValueButton:hover):not(:focus-within) {
-  --border-color: var(--color-surface-alpha--6);
+  --input-background-color: var(--color-surface-alpha--6);
+  --border-color: var(--color-surface-alpha--10);
 }
 
 /* DESIGN SYSTEM TODO: Add support for other variants and colors */
@@ -135,7 +136,11 @@
   position: absolute;
   right: var(--space--16);
   display: flex;
-  color: var(--color-accent);
+  color: var(--color-secondary);
   background: inherit;
   opacity: 0.5;
+}
+
+.clearValueButton:hover {
+  opacity: 1;
 }
