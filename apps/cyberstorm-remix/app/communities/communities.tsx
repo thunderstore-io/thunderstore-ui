@@ -25,6 +25,7 @@ import { faGhost, faFire } from "@fortawesome/free-solid-svg-icons";
 import { useDebounce } from "use-debounce";
 import {
   useLoaderData,
+  useNavigationType,
   // useNavigation,
   useSearchParams,
 } from "@remix-run/react";
@@ -90,6 +91,8 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
 
 export default function CommunitiesPage() {
   const communitiesData = useLoaderData<typeof loader | typeof clientLoader>();
+  const navigationType = useNavigationType();
+
   const [searchParams, setSearchParams] = useSearchParams();
   // TODO: Disabled until we can figure out how a proper way to display skeletons
   // const navigation = useNavigation();
@@ -102,6 +105,13 @@ export default function CommunitiesPage() {
   const [searchValue, setSearchValue] = useState(
     searchParams.getAll("search").join(" ")
   );
+
+  useEffect(() => {
+    if (navigationType === "POP") {
+      setSearchValue(searchParams.getAll("search").join(" "));
+    }
+  }, [searchParams]);
+
   const [debouncedSearchValue] = useDebounce(searchValue, 300, {
     maxWait: 300,
   });
