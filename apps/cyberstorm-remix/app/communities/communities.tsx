@@ -109,10 +109,10 @@ export default function CommunitiesPage() {
   useEffect(() => {
     if (debouncedSearchValue === "") {
       searchParams.delete("search");
-      setSearchParams(searchParams);
+      setSearchParams(searchParams, { replace: true });
     } else {
       searchParams.set("search", debouncedSearchValue);
-      setSearchParams(searchParams);
+      setSearchParams(searchParams, { replace: true });
     }
   }, [debouncedSearchValue]);
 
