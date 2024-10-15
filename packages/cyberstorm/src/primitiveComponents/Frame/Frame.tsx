@@ -60,6 +60,7 @@ export interface FramePopoverProps
   popoverId: string;
   wrapperClasses?: string;
   noWrapper?: boolean;
+  popoverMode?: "auto" | "manual";
 }
 
 export interface FrameModalProps
@@ -340,6 +341,7 @@ export const Frame = React.forwardRef<
         wrapperClasses,
         popoverId,
         noWrapper,
+        popoverMode = "auto",
         ...strippedForwardedProps
       } = forwardedProps as FramePopoverProps;
       return (
@@ -347,7 +349,7 @@ export const Frame = React.forwardRef<
           <div
             {...strippedForwardedProps}
             id={popoverId}
-            {...{ popover: "auto" }}
+            {...{ popover: popoverMode }}
             className={classnames(
               ...(csTextStyles ? csTextStyles : []),
               popooverStyles.popover,

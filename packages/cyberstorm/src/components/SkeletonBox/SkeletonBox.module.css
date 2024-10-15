@@ -1,24 +1,24 @@
 .root {
   display: flex;
   border-radius: var(--border-radius--4);
-  background: #191b38;
+  background: hsl(236deg 36% 36% / 0.24);
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
   0% {
-    background-color: #191b38;
+    opacity: 1;
   }
 
   25% {
-    background-color: #191b387c;
+    opacity: 0.25;
   }
 
   75% {
-    background-color: #191b387c;
+    opacity: 0.75;
   }
 
   100% {
-    background-color: #191b38;
+    opacity: 1;
   }
 }

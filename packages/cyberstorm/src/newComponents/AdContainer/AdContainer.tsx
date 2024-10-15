@@ -15,21 +15,12 @@ export function AdContainer(props: AdContainerProps) {
       rootClasses={styles.root}
       csSize="s"
       csVariant="default"
-      csColor="surface"
+      csColor="surface-alpha"
       csTextStyles={["fontWeightRegular", "fontSizeS", "lineHeightBody"]}
     >
       <div className={styles.fallback}>
-        Thunderstore development is made possible with ads.
-        <NewIcon
-          noWrapper
-          csMode="inline"
-          rootClasses={styles.icon}
-          csColor="red"
-          csVariant="default"
-        >
-          <FontAwesomeIcon icon={faHeart} />
-        </NewIcon>
-        Thanks
+        Thunderstore development is made possible with ads. Please consider
+        making an exception to your adblock.
         <NewIcon
           noWrapper
           csMode="inline"

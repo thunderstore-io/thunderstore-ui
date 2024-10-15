@@ -24,13 +24,16 @@ import {
 
 export interface DapperTsInterface extends DapperInterface {
   config: RequestConfig;
+  removeSessionHook?: () => void;
 }
 
 export class DapperTs implements DapperTsInterface {
   config: RequestConfig;
+  removeSessionHook?: () => void;
 
-  constructor(config: RequestConfig) {
+  constructor(config: RequestConfig, removeSessionHook?: () => void) {
     this.config = config;
+    this.removeSessionHook = removeSessionHook;
     this.getDynamicHTML = this.getDynamicHTML.bind(this);
     this.getCommunities = this.getCommunities.bind(this);
     this.getCommunity = this.getCommunity.bind(this);

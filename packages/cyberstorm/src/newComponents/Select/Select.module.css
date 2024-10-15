@@ -30,8 +30,8 @@
   cursor: pointer;
 }
 
-.item:hover,
-.item:focus {
+.item[data-highlighted] {
+  color: var(--color-primary);
   background-color: var(--color-surface--6, var(--color-primary, red));
 }
 

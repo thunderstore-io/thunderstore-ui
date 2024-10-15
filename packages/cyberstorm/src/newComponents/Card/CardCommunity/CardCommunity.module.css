@@ -6,10 +6,10 @@
 }
 
 .root:hover .imageWrapper {
-  filter: brightness(1.15);
+  filter: brightness(1.2);
 }
 
-.root:focus-within {
+.root:has(:focus-visible) {
   border-radius: var(--border-radius--8);
   outline: 0.2rem solid var(--color-cyber-green--5);
   outline-offset: 0.5rem;
@@ -21,7 +21,7 @@
 
 .root:hover .imageWrapper > div,
 .root:focus-within .imageWrapper > div {
-  transform: scale(1.05);
+  transform: scale(1.035);
 }
 
 .title {

@@ -1,6 +1,12 @@
 :root {
-  --body-bg-color: hsl(240deg 38% 13% / 1);
+  --skeletor-bg: var(--color-surface-alpha--3);
+  --body-bg-color: var(--color-surface--2);
   --body-bg-color-a: hsl(240deg 39% 13% / 0.85);
+  --border-default: var(--color-surface-alpha--7);
+  --border-dim: var(--color-surface-alpha--6);
+  --datalist-row-bg-color: var(--color-surface-alpha--3);
+  --surface-dim: var(--color-surface-alpha--3);
+  --surface-dimmer: var(--color-surface-alpha--2);
 
   /* OLD STYLES FROM THIS POINT ONWARDS */
   --color-danger: var(--old--color-red--5);
