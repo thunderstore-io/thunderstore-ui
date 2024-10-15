@@ -64,6 +64,7 @@
 
 .dropdownItem[data-highlighted] {
   z-index: 999;
+  color: var(--dropdown-item-highlighted-color, var(--color-primary));
   background-color: var(
     --dropdown-item-highlighted-background-color,
     var(--color-primary)
@@ -73,31 +74,36 @@
 .dropdownItem[data-variant="default"] {
   --dropdown-item-color: var(--color-8);
   --dropdown-item-background-color: var(--color-2);
+  --dropdown-item-highlighted-color: var(--color-2);
   --dropdown-item-highlighted-background-color: var(--color-6);
 }
 
 .dropdownItem[data-variant="primary"] {
   --dropdown-item-color: var(--color-primary);
   --dropdown-item-background-color: var(--color-secondary);
-  --dropdown-item-highlighted-background-color: var(--color-tertiary);
+  --dropdown-item-highlighted-color: var(--color-secondary);
+  --dropdown-item-highlighted-background-color: var(--color-primary);
 }
 
 .dropdownItem[data-variant="secondary"] {
   --dropdown-item-color: var(--color-secondary);
   --dropdown-item-background-color: var(--color-primary);
-  --dropdown-item-highlighted-background-color: var(--color-tertiary);
+  --dropdown-item-highlighted-color: var(--color-primary);
+  --dropdown-item-highlighted-background-color: var(--color-secondary);
 }
 
 .dropdownItem[data-variant="tertiary"] {
   --dropdown-item-color: var(--color-tertiary);
   --dropdown-item-background-color: var(--color-accent);
-  --dropdown-item-highlighted-background-color: var(--color-accent);
+  --dropdown-item-highlighted-color: var(--color-accent);
+  --dropdown-item-highlighted-background-color: var(--color-tertiary);
 }
 
 .dropdownItem[data-variant="accent"] {
   --dropdown-item-color: var(--color-accent);
   --dropdown-item-background-color: var(--color-tertiary);
-  --dropdown-item-highlighted-background-color: var(--color-secondary);
+  --dropdown-item-highlighted-color: var(--color-tertiary);
+  --dropdown-item-highlighted-background-color: var(--color-accent);
 }
 
 .divider {

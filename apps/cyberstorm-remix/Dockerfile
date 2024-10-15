@@ -4,7 +4,7 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
-COPY package.json yarn.lock babel.config.js .eslintrc.json .eslintignore .yarnrc .prettierrc .prettierignore .stylelintrc ./
+COPY package.json yarn.lock babel.config.js eslint.config.mjs .eslintignore .yarnrc .prettierrc .prettierignore .stylelintrc ./
 COPY .yarn ./.yarn
 COPY packages ./packages
 COPY apps/cyberstorm-remix ./apps/cyberstorm-remix

@@ -1,13 +1,22 @@
 import { PropsWithChildren } from "react";
 import { Tooltip } from "../..";
 
+// TODO: It would be nice if we forced storybook generation of all of the possible combinations.
+// If we do that, we'll have to handle the "unsupported combinations" gracefully somehow.
+// Best would be if we could have typescript warnings and force each "non-supported combination" to be explicitly
+// unsupported. See NewButtons story in storybook for reference
+
 export type variants =
   | "default"
+  | "defaultPeek"
   | "primary"
   | "secondary"
   | "tertiary"
+  | "tertiaryDimmed"
+  | "minimal"
   | "accent"
   | "special";
+
 export type colors =
   | "surface"
   | "surface-alpha"
@@ -19,6 +28,19 @@ export type colors =
   | "yellow"
   | "purple"
   | "cyber-green";
+export const colorsList = [
+  "surface",
+  "surface-alpha",
+  "blue",
+  "pink",
+  "red",
+  "orange",
+  "green",
+  "yellow",
+  "purple",
+  "cyber-green",
+] as const;
+
 export type sizes = "xxs" | "xs" | "s" | "m" | "l";
 
 export const textStyleOptions = [

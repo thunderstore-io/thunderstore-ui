@@ -15,11 +15,11 @@
   /* skew the container */
   transform: skew(-30deg);
 
-  --breadcrumb-bg-color: var(--color-4);
+  --breadcrumb-bg-color: var(--color-6);
 }
 
 .outer:hover {
-  --breadcrumb-bg-color: var(--color-7);
+  --breadcrumb-bg-color: var(--color-8);
 }
 
 .outerHome {
@@ -33,7 +33,7 @@
 .outer__end {
   padding-right: 0;
 
-  /* --breadcrumb-bg-color: var(--color-7); */
+  --breadcrumb-bg-color: var(--color-8);
 }
 
 .outer__start::before,
@@ -70,6 +70,8 @@
 }
 
 .innerHome {
+  display: flex;
+  align-items: center;
   width: 1em;
   height: 1em;
 }
@@ -87,4 +89,9 @@
 .home {
   font-weight: var(--font-weight-regular);
   text-decoration: none;
+}
+
+.homeLink {
+  display: inline-block;
+  height: 1em;
 }
