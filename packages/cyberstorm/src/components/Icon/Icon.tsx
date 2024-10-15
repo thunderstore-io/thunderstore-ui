@@ -10,6 +10,8 @@ interface IconProps {
   wrapperClasses?: string;
 }
 
+// TODO: Needs to be converted to the new system in a way that it handles
+// csSize to width or something like that
 export function Icon(props: IconProps) {
   const {
     children,

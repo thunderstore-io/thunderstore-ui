@@ -1,0 +1,146 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: auto;
+  color: var(--input-wrapper-text-color);
+
+  --input-wrapper-text-color: var(--color-primary);
+}
+
+.wrapper[data-variant="default"] {
+  --input-wrapper-text-color: var(--color-5);
+}
+
+.wrapper[data-variant="primary"] {
+  --input-wrapper-text-color: var(--color-primary);
+}
+
+.wrapper[data-variant="secondary"] {
+  --input-wrapper-text-color: var(--color-secondary);
+}
+
+.wrapper[data-variant="tertiary"] {
+  --input-wrapper-text-color: var(--color-tertiary);
+}
+
+.wrapper[data-variant="accent"] {
+  --input-wrapper-text-color: var(--color-accent);
+}
+
+.wrapper > input {
+  outline: none;
+}
+
+.textInput {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  padding: var(--space--8) var(--space--14);
+  border: var(--border-width--2) solid var(--border-color);
+  border-radius: var(--border-radius--8);
+  color: var(--input-text-color);
+  background-color: var(--input-background-color);
+  cursor: text;
+  transition: ease-out var(--animation-length-xs);
+
+  --border-color: transparent;
+  --input-text-color: var(--color-primary);
+  --input-background-color: var(--color-surface-alpha--5);
+}
+
+.textInput[value] {
+  --input-text-color: var(--color-secondary);
+}
+
+.textInput:hover {
+  --input-background-color: var(--color-surface-alpha--6);
+  --border-color: var(--color-surface-alpha--10);
+}
+
+.textInput:focus-within {
+  --input-text-color: var(--color-primary);
+  --input-background-color: var(--color-black);
+  --border-color: var(--color-7);
+}
+
+.wrapper[data-variant="default"] > .textInput {
+  --input-text-color: var(--color-5);
+}
+
+.wrapper[data-variant="primary"] > .textInput {
+  --input-text-color: var(--color-primary);
+}
+
+.wrapper[data-variant="secondary"] > .textInput {
+  --input-text-color: var(--color-secondary);
+}
+
+.wrapper[data-variant="tertiary"] > .textInput {
+  --input-text-color: var(--color-tertiary);
+}
+
+.wrapper[data-variant="accent"] > .textInput {
+  --input-text-color: var(--color-accent);
+}
+
+.textInput:has(+ .clearValueButton:hover):not(:focus-within) {
+  --input-background-color: var(--color-surface-alpha--6);
+  --border-color: var(--color-surface-alpha--10);
+}
+
+/* DESIGN SYSTEM TODO: Add support for other variants and colors */
+
+.textInput::placeholder {
+  color: var(--color-text--tertiary);
+  opacity: 1;
+}
+
+.textInput[data-size="m"] {
+  height: var(--space--44);
+  padding: var(--space--12)
+    calc(var(--space--16) + var(--right-padding-bonus, 0px)) var(--space--12)
+    calc(var(--space--16) + var(--left-padding-bonus, 0px));
+}
+
+.textInput[data-size="s"] {
+  height: var(--space--36);
+  padding: var(--space--10)
+    calc(var(--space--16) + var(--right-padding-bonus, 0px)) var(--space--10)
+    calc(var(--space--16) + var(--left-padding-bonus, 0px));
+}
+
+.hasLeftIcon {
+  --left-padding-bonus: var(--space--24);
+}
+
+.hasClearValue {
+  --right-padding-bonus: var(--space--16);
+}
+
+.leftIcon {
+  position: absolute;
+  margin: var(--space--10) var(--space--16);
+  color: var(--color-tertiary);
+  pointer-events: none;
+}
+
+.rightIcon {
+  position: absolute;
+  padding: var(--space--14) var(--space--16);
+  color: var(--color-secondary);
+}
+
+.clearValueButton {
+  position: absolute;
+  right: var(--space--16);
+  display: flex;
+  color: var(--color-secondary);
+  background: inherit;
+  opacity: 0.5;
+}
+
+.clearValueButton:hover {
+  opacity: 1;
+}

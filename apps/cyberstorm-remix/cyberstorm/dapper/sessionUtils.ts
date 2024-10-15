@@ -1,19 +1,29 @@
+/* eslint-disable prettier/prettier */
+import { redirect } from "@remix-run/react";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { RequestConfig } from "@thunderstore/thunderstore-api";
 
 export async function getDapper(isClient = false) {
   if (isClient) {
+    const getCookie = (cookieName: string) =>
+      new RegExp(`${cookieName}=([^;]+);`).exec(document.cookie)?.[1];
+    const deleteCookie = (name: string) => {
+      const date = new Date();
+      date.setTime(0);
+      document.cookie = `${name}=${null}; expires=${date.toUTCString()}; path=/`;
+    };
+
+    const removeSession = () => {
+      deleteCookie("sessionid");
+      deleteCookie("csrftoken");
+      redirect("/communities");
+    };
     const dapper = window.Dapper;
 
     let shouldRemakeDapper = false;
 
-    // const allCookies = new URLSearchParams(
-    //  window.document.cookie.replaceAll("&", "%26").replaceAll("; ", "&")
-    // );
-    // const cookie = allCookies.get("sessionid");
-    // const csrftoken = allCookies.get("csrftoken");
-    const cookie = null;
-    const csrftoken = null;
+    const cookie = getCookie("sessionid");
+    const csrftoken = getCookie("csrftoken");
 
     const newConfig: RequestConfig = {
       apiHost: window.ENV.PUBLIC_API_URL,
@@ -65,7 +75,7 @@ export async function getDapper(isClient = false) {
     }
 
     const createNewDapper = () => {
-      const newDapper = new DapperTs(newConfig);
+      const newDapper = new DapperTs(newConfig, removeSession);
       window.Dapper = newDapper;
       return newDapper;
     };
@@ -75,7 +85,7 @@ export async function getDapper(isClient = false) {
       ? createNewDapper()
       : dapper
       ? dapper
-      : new DapperTs(newConfig);
+      : new DapperTs(newConfig, removeSession);
 
     return existingDapper;
   } else {

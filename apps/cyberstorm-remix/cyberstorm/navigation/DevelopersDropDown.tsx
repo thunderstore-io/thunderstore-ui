@@ -1,43 +1,88 @@
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import styles from "./DevelopersDropDown.module.css";
 
-import { DropDown, Button, DropDownItem } from "@thunderstore/cyberstorm";
-import { DropDownLink } from "@thunderstore/cyberstorm/src/components/DropDown/DropDownLink";
-const { Root, ButtonLabel, ButtonIcon } = Button;
+import {
+  NewDropDown,
+  NewDropDownItem,
+  NewIcon,
+  NewButton,
+  NewLink,
+} from "@thunderstore/cyberstorm";
 
 export function DevelopersDropDown() {
   return (
-    <DropDown
-      trigger={
-        <Root paddingSize="large" colorScheme="transparentDefault">
-          <ButtonLabel fontSize="large" fontWeight="600">
+    <>
+      <NewDropDown
+        trigger={
+          <NewButton csSize="l" csVariant="tertiary" csColor="surface">
             Developers
-          </ButtonLabel>
-          <ButtonIcon>
-            <FontAwesomeIcon icon={faCaretDown} />
-          </ButtonIcon>
-        </Root>
-      }
-      content={[
-        <a href="/api/docs" key="docs">
-          <DropDownItem content={<DropDownLink label="API Docs" />} />
-        </a>,
-        <a href="/package/create/docs/" key="old_format_docs">
-          <DropDownItem
-            content={<DropDownLink label="Package Format Docs" />}
-          />
-        </a>,
-        <a href="/tools/manifest-v1-validator/" key="old_manifest_validator">
-          <DropDownItem content={<DropDownLink label="Manifest Validator" />} />
-        </a>,
-        <a href="/tools/markdown-preview/" key="old_markdown_preview">
-          <DropDownItem content={<DropDownLink label="Markdown Preview" />} />
-        </a>,
-        <a href="https://github.com/thunderstore-io" key="github">
-          <DropDownItem content={<DropDownLink label="GitHub" isExternal />} />
-        </a>,
-      ]}
-    />
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faCaretDown} />
+            </NewIcon>
+          </NewButton>
+        }
+        csVariant="default"
+        csColor="surface"
+        rootClasses={styles.root}
+      >
+        <NewDropDownItem>
+          <NewLink
+            primitiveType="link"
+            csVariant="primary"
+            csTextStyles={["fontSizeS", "fontWeightRegular"]}
+            href="/api/docs"
+          >
+            API Docs
+          </NewLink>
+        </NewDropDownItem>
+        <NewDropDownItem>
+          <NewLink
+            primitiveType="link"
+            csVariant="primary"
+            csTextStyles={["fontSizeS", "fontWeightRegular"]}
+            href="/package/create/docs/"
+          >
+            Package Format Docs
+          </NewLink>
+        </NewDropDownItem>
+        <NewDropDownItem>
+          <NewLink
+            primitiveType="link"
+            csVariant="primary"
+            csTextStyles={["fontSizeS", "fontWeightRegular"]}
+            href="/tools/manifest-v1-validator/"
+          >
+            Manifest Validator
+          </NewLink>
+        </NewDropDownItem>
+        <NewDropDownItem>
+          <NewLink
+            primitiveType="link"
+            csVariant="primary"
+            csTextStyles={["fontSizeS", "fontWeightRegular"]}
+            href="/tools/markdown-preview/"
+          >
+            Markdown Preview
+          </NewLink>
+        </NewDropDownItem>
+        <NewDropDownItem rootClasses={styles.focus}>
+          <NewLink
+            primitiveType="link"
+            csVariant="primary"
+            csTextStyles={["fontSizeS", "fontWeightRegular"]}
+            href="https://github.com/thunderstore-io"
+            rootClasses={styles.externalLink}
+          >
+            Github
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+            </NewIcon>
+          </NewLink>
+        </NewDropDownItem>
+      </NewDropDown>
+    </>
   );
 }
 

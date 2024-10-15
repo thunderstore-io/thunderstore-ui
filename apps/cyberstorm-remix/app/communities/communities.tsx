@@ -1,14 +1,17 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
-  BreadCrumbs,
-  CommunityCard,
+  Container,
+  CardCommunity,
   CommunityCardSkeleton,
   EmptyState,
-  Select,
-  TextInput,
+  Heading,
+  NewBreadCrumbs,
   range,
+  NewTextInput,
+  NewSelect,
 } from "@thunderstore/cyberstorm";
 import rootStyles from "../RootLayout.module.css";
+import styles from "./Communities.module.css";
 import searchAndOrderStyles from "./SearchAndOrder.module.css";
 import communitiesListStyles from "./CommunityList.module.css";
 import { useState, useEffect } from "react";
@@ -22,12 +25,12 @@ import { faGhost, faFire } from "@fortawesome/free-solid-svg-icons";
 import { useDebounce } from "use-debounce";
 import {
   useLoaderData,
-  useNavigation,
+  useNavigationType,
+  // useNavigation,
   useSearchParams,
 } from "@remix-run/react";
 import { Communities } from "@thunderstore/dapper/types";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction = () => {
   return [
@@ -88,8 +91,11 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
 
 export default function CommunitiesPage() {
   const communitiesData = useLoaderData<typeof loader | typeof clientLoader>();
+  const navigationType = useNavigationType();
+
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigation = useNavigation();
+  // TODO: Disabled until we can figure out how a proper way to display skeletons
+  // const navigation = useNavigation();
 
   const changeOrder = (v: SortOptions) => {
     searchParams.set("order", v);
@@ -99,6 +105,13 @@ export default function CommunitiesPage() {
   const [searchValue, setSearchValue] = useState(
     searchParams.getAll("search").join(" ")
   );
+
+  useEffect(() => {
+    if (navigationType === "POP") {
+      setSearchValue(searchParams.getAll("search").join(" "));
+    }
+  }, [searchParams]);
+
   const [debouncedSearchValue] = useDebounce(searchValue, 300, {
     maxWait: 300,
   });
@@ -106,47 +119,64 @@ export default function CommunitiesPage() {
   useEffect(() => {
     if (debouncedSearchValue === "") {
       searchParams.delete("search");
-      setSearchParams(searchParams);
+      setSearchParams(searchParams, { replace: true });
     } else {
       searchParams.set("search", debouncedSearchValue);
-      setSearchParams(searchParams);
+      setSearchParams(searchParams, { replace: true });
     }
   }, [debouncedSearchValue]);
 
   return (
     <>
-      <BreadCrumbs>Communities</BreadCrumbs>
+      <NewBreadCrumbs rootClasses={styles.breadcrumbs}>
+        Communities
+      </NewBreadCrumbs>
       <header className={rootStyles.pageHeader}>
-        <PageHeader title="Communities" />
+        <Heading
+          csLevel="1"
+          csStyleLevel="2"
+          csVariant="primary"
+          mode="display"
+        >
+          Communities
+        </Heading>
       </header>
       <main className={rootStyles.main}>
-        <div className={searchAndOrderStyles.root}>
+        <Container
+          rootClasses={searchAndOrderStyles.root}
+          csVariant="tertiary"
+          csTextStyles={["fontWeightBold", "lineHeightAuto", "fontSizeS"]}
+        >
           <div className={searchAndOrderStyles.searchTextInput}>
-            <TextInput
+            <label htmlFor="communitiesSearchInput">Search</label>
+            <NewTextInput
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
               placeholder="Search communities..."
               clearValue={() => setSearchValue("")}
               leftIcon={<FontAwesomeIcon icon={faSearch} />}
+              csColor="cyber-green"
+              id="communitiesSearchInput"
             />
           </div>
           <div className={searchAndOrderStyles.searchFilters}>
-            <div className={searchAndOrderStyles.searchFiltersSortLabel}>
-              Sort by
-            </div>
-            <Select
+            <label htmlFor="communitiesSortBy">Sort by</label>
+            <NewSelect
               onChange={changeOrder}
               options={selectOptions}
               value={searchParams.get("order") ?? SortOptions.Popular}
+              aria-label="Sort communities by"
+              id="communitiesSortBy"
             />
           </div>
-        </div>
+        </Container>
 
-        {navigation.state === "loading" ? (
+        <CommunitiesList communitiesData={communitiesData} />
+        {/* {navigation.state === "loading" ? (
           <CommunitiesListSkeleton />
         ) : (
           <CommunitiesList communitiesData={communitiesData} />
-        )}
+        )} */}
       </main>
     </>
   );
@@ -159,7 +189,15 @@ function CommunitiesList(props: { communitiesData: Communities }) {
     return (
       <div className={communitiesListStyles.root}>
         {communitiesData.results.map((community) => (
-          <CommunityCard key={community.identifier} community={community} />
+          <CardCommunity
+            key={community.identifier}
+            community={community}
+            isPopular={community.total_package_count > 1000}
+            isNew={
+              new Date(community.datetime_created).getTime() >
+              new Date().getTime() - 1000 * 60 * 60 * 336
+            }
+          />
         ))}
       </div>
     );

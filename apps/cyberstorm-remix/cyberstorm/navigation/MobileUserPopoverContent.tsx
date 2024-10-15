@@ -4,16 +4,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./Navigation.module.css";
 import {
   Avatar,
-  CyberstormLink,
-  Icon,
-  Popover,
+  Menu,
+  NewButton,
+  NewIcon,
+  NewLink,
+  NewText,
 } from "@thunderstore/cyberstorm";
 import { AvatarButton } from "@thunderstore/cyberstorm/src/components/Avatar/AvatarButton";
 import { CurrentUser } from "@thunderstore/dapper/types";
 
 import { faSignOut, faUsers, faCog } from "@fortawesome/free-solid-svg-icons";
 
-import { DropDownLink } from "@thunderstore/cyberstorm/src/components/DropDown/DropDownLink";
 import { LoginList } from "./LoginList";
 
 export function MobileUserPopoverContent(props: { user: CurrentUser }) {
@@ -21,12 +22,10 @@ export function MobileUserPopoverContent(props: { user: CurrentUser }) {
   const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
 
   return (
-    <div className={styles.mobileNavItem}>
-      <Popover
-        popoverId={"mobileNavAccount"}
-        popoverRootClasses={styles.mobileNavAccountPopoverRoot}
-        popoverWrapperClasses={styles.mobileNavAccountPopoverWrapper}
-        trigger={
+    <Menu
+      popoverId={"mobileNavAccount"}
+      trigger={
+        <div className={styles.mobileNavItem}>
           <AvatarButton
             src={avatar}
             username={user.username}
@@ -34,71 +33,71 @@ export function MobileUserPopoverContent(props: { user: CurrentUser }) {
             popovertarget={"mobileNavAccount"}
             popovertargetaction={"open"}
           />
-        }
-      >
-        <button
+          Account
+        </div>
+      }
+      controls={
+        <NewButton
           {...{
             popovertarget: "mobileNavAccount",
             popovertargetaction: "close",
           }}
-          className={styles.popoverCloseButton}
-        >
-          <Icon inline noWrapper iconClasses={styles.popoverCloseButtonIcon}>
-            <FontAwesomeIcon icon={faLongArrowLeft} />
-          </Icon>
-        </button>
-        <nav className={styles.mobileNavPopoverList}>
-          {user.username ? (
-            [
-              <div className={styles.accountPopoverItem} key="user">
-                <AvatarButton
-                  src={avatar}
-                  username={user.username}
-                  size="small"
-                />
-                <div className={styles.dropdownUserInfoDetails}>
-                  <div className={styles.dropdownUserInfoDetails_userName}>
-                    {user.username}
-                  </div>
-                </div>
-              </div>,
-              <CyberstormLink
-                linkId="Settings"
-                key="settings"
-                className={styles.accountPopoverItem}
-              >
-                <DropDownLink
-                  leftIcon={<FontAwesomeIcon icon={faCog} />}
-                  label="Settings"
-                />
-              </CyberstormLink>,
-              <CyberstormLink
-                linkId="Teams"
-                key="teams"
-                className={styles.accountPopoverItem}
-              >
-                <DropDownLink
-                  leftIcon={<FontAwesomeIcon icon={faUsers} />}
-                  label="Teams"
-                />
-              </CyberstormLink>,
-              <a
-                href="/logout"
-                key="logout"
-                className={styles.accountPopoverItem}
-              >
-                <DropDownLink
-                  leftIcon={<FontAwesomeIcon icon={faSignOut} />}
-                  label="Log Out"
-                />
-              </a>,
-            ]
-          ) : (
-            <LoginList />
-          )}
-        </nav>
-      </Popover>
-      Account
-    </div>
+          aria-label="Back"
+          mode="iconButton"
+          csSize="m"
+          csVariant="tertiaryDimmed"
+          icon={faLongArrowLeft}
+        />
+      }
+    >
+      {user.username ? (
+        <div className={styles.mobileNavPopover}>
+          <div className={styles.accountPopoverUser}>
+            <Avatar src={avatar} username={user.username} size="small" />
+            <NewText
+              rootClasses={styles.dropdownUserInfoDetails}
+              csTextStyles={["fontSizeM", "fontWeightBold"]}
+            >
+              {user.username}
+            </NewText>
+          </div>
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Settings"
+            csVariant="primary"
+            rootClasses={styles.accountPopoverItem}
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faCog} />
+            </NewIcon>
+            Settings
+          </NewLink>
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Teams"
+            csVariant="primary"
+            rootClasses={styles.accountPopoverItem}
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faUsers} />
+            </NewIcon>
+            Teams
+          </NewLink>
+          <NewLink
+            primitiveType="link"
+            href="/logout"
+            csVariant="primary"
+            rootClasses={styles.accountPopoverItem}
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faSignOut} />
+            </NewIcon>
+            Log Out
+          </NewLink>
+        </div>
+      ) : (
+        <LoginList />
+      )}
+    </Menu>
   );
 }

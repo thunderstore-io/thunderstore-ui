@@ -6,6 +6,10 @@
   background: transparent;
 }
 
+.placeholderRoot {
+  --icon-inline-size: var(--size);
+}
+
 .image {
   width: var(--size);
   height: var(--size);
@@ -30,7 +34,7 @@
 }
 
 .image:where(.placeholderIcon) {
-  color: var(--color-purple--9);
+  color: var(--old--color-purple--9);
 }
 
 .image:where(.placeholderIcon):hover {
@@ -43,7 +47,7 @@
 }
 
 .verySmoll {
-  --size: 1.75rem;
+  --size: 1.375rem;
 }
 
 .small {

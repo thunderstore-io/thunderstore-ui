@@ -13,27 +13,16 @@
   justify-content: space-between;
   width: 100%;
   height: var(--header-height);
-  background-color: rgb(16 16 40 / 0.85);
+  padding: 0 var(--space--12);
+  background: var(--body-bg-color-a);
+  box-shadow: 0 1px 10px 0 var(--body-bg-color);
   backdrop-filter: blur(10px);
 }
 
 .item {
   display: flex;
-  flex: 2 1 100%;
-}
-
-.item:last-child {
-  justify-content: flex-end;
-  padding-right: 0.75rem;
-}
-
-.nav {
-  display: flex;
   gap: var(--gap--16);
   align-items: center;
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 
 .search {
@@ -46,25 +35,25 @@
   display: flex;
   width: 1.655rem;
   height: 1.463rem;
-  margin: 0 0.75rem 0 1.25rem;
-  color: var(--color-highlight);
+  margin: 0 0.75rem;
 }
 
-.navButtons {
+.dropDownItem {
   display: flex;
-  gap: var(--space--8);
+  gap: var(--space--16);
+  align-items: center;
+}
+
+.dropDownItem[data-highlighted] svg,
+.dropDownItem[data-highlighted],
+.dropDownItem {
+  color: var(--color-primary);
 }
 
 .dropDownUserInfo {
   display: flex;
   gap: var(--gap--16);
-  margin: 0 var(--space--8);
-  padding: var(--space--8) var(--space--16);
-  border-radius: var(--border-radius--8);
-}
-
-.dropDownUserInfo:hover {
-  background-color: var(--color-surface--6);
+  padding: var(--space--6) var(--space--16);
 }
 
 .dropdownUserInfoDetails {
@@ -73,38 +62,16 @@
   justify-content: space-around;
 }
 
-.dropdownUserInfoDetails_userName {
-  color: var(--color-text--default);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size--m);
-  line-height: 1;
-}
-
-.dropdownUserInfoDetails_description {
-  color: var(--color-text--tertiary);
-  font-size: var(--font-size--m);
-  line-height: 1;
-}
-
 .mobileNavRoot {
   display: none;
 }
 
-.mobileNavItemIconWrapper {
-  height: 1.75rem;
-  background: transparent;
-}
-
 .mobileNavMenuDevelopersButton {
   display: flex;
-  gap: 1rem;
   align-items: center;
   align-self: stretch;
   justify-content: space-between;
-  padding: 1rem;
-  color: #f5f5f6;
-  font-weight: 400;
-  font-size: 0.875rem;
+  color: var(--color-primary);
   background: transparent;
 }
 
@@ -117,27 +84,26 @@
   flex-direction: column;
   flex-grow: 1;
   align-items: center;
-  color: #9c9cc4;
+  color: var(--color-tertiary);
   font-weight: 400;
   font-size: 0.75rem;
   line-height: 1.2rem;
 }
 
-.mobileNavAccountPopoverRoot {
-  width: 100%;
-  height: 100%;
+button.mobileNavItem {
+  background: transparent;
 }
 
-.mobileNavAccountPopoverWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  align-items: flex-start;
-  width: 100%;
-  height: 100%;
-  padding: 1.5rem;
-  padding-top: 7rem;
-  background: #15152d;
+.mobileNavItem:active {
+  color: var(--color-cyber-green--5);
+}
+
+.mobileNavItem:hover {
+  color: var(--color-secondary);
+}
+
+.mobileNavItemIcon {
+  height: 1.375rem;
 }
 
 .accountPopoverItem {
@@ -148,55 +114,36 @@
   padding: 1rem;
 }
 
-.mobileNavPopoverList {
+.accountPopoverUser {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  align-self: stretch;
+  padding: 1rem;
+}
+
+.mobileNavPopover {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 
-.mobileNavPopoverListLink {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  align-self: stretch;
-  padding: 1rem;
-  color: #f5f5f6;
-  font-weight: 400;
-  font-size: 0.875rem;
-}
-
 .popoverCloseButton {
-  width: 2.5rem;
-  height: 2.5rem;
-  margin: 0 1.5rem;
-  background: transparent;
-}
-
-.navAccountPopoverCloseButton {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
   width: 2.75rem;
-  height: 2.75rem;
-}
-
-.popoverCloseButtonIcon {
-  color: var(--color-border--highlight);
+  height: 2.875rem;
+  padding: 0 0.75rem;
+  background: transparent;
 }
 
 .TSLoginLogo {
   width: 3.12rem;
   height: 2.79rem;
-}
-
-.TSLoginLogo > svg {
-  fill: var(--color-cyber-green--60);
+  color: currentcolor;
+  fill: currentcolor;
 }
 
 .loginTitle {
-  color: #f5f5f6;
-  font-weight: 700;
-  font-size: 1.25rem;
   text-align: center;
 }
 
@@ -206,6 +153,15 @@
   gap: 2rem;
   align-items: center;
   max-width: 300px;
+}
+
+.loginListMobile {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+
+  /* justify-content: center; */
 }
 
 .loginLinkList {
@@ -220,11 +176,19 @@
   flex: 1 0 0;
   gap: 2.5rem;
   align-items: center;
+  padding: 0.75rem 3rem 0.75rem 1rem;
+  border-radius: 0.5rem;
+  color: #f5f5f6;
+}
+
+.loginLinkMobile {
+  display: flex;
+  flex: 1 0 0;
+  gap: 1rem;
+  align-items: center;
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   color: #f5f5f6;
-  font-weight: 700;
-  font-size: 0.875rem;
 }
 
 .loginLinkDiscord {
@@ -239,60 +203,21 @@
   background: #d34037;
 }
 
-.navAccountPopoverRoot {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  float: left;
-  border: 1px solid #29295b;
-  border-radius: 0.5rem;
-  background: #15152d;
-  transform: translate(-50%, -50%);
-}
-
-.navAccountPopoverRoot::backdrop {
-  background: rgba(0 0 0 / 0.6);
-  backdrop-filter: blur(10px);
-}
-
-.navAccountPopoverWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  align-items: flex-start;
-  align-self: stretch;
-  justify-content: center;
-  padding: 3rem 5.5rem;
-  background: transparent;
-}
-
-.navAccountPopoverCloseButtonIconWrapper {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  color: #635a9f;
-  font-weight: 900;
-  font-size: 1rem;
-}
-
 .loginLegalText {
-  color: #8683be;
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size--s);
-  line-height: var(--line-height--s);
   text-align: center;
+
+  --text-color: #8683be;
 }
 
-.loginLegalText > a {
-  color: var(--color-text--tertiary);
+.mobileMenu {
+  display: none;
 }
 
 @media (width <= 63.5rem) {
+  .mobileMenu {
+    display: flex;
+  }
+
   .desktopNavRoot {
     display: none;
   }
@@ -307,12 +232,41 @@
     justify-content: space-evenly;
     width: 100%;
     padding: 0.5rem 1.5rem 0.25rem;
-    background: rgb(16 16 40 / 0.85);
+    background: var(--body-bg-color-a);
     backdrop-filter: blur(10px);
   }
 }
 
-.fixed {
-  block-size: 1em;
-  inline-size: 1em;
+.getAppButton {
+  padding: 0.75rem 0.812rem;
+}
+
+.loginButton {
+  height: 2.25rem !important;
+  padding: 0.75rem !important;
+}
+
+.headerRightSide {
+  display: flex;
+  gap: 1rem;
+}
+
+.divider {
+  align-self: stretch;
+  height: 1px;
+  margin: var(--space--16) var(--space--8);
+  background: var(--color-surface--7);
+}
+
+.navMenuItem {
+  display: flex;
+  gap: var(--gap--16);
+  align-items: center;
+  align-self: stretch;
+  padding: var(--space--16);
+  border-radius: var(--border-radius--8);
+}
+
+.navMenuItem:hover {
+  background: var(--color-surface--9);
 }

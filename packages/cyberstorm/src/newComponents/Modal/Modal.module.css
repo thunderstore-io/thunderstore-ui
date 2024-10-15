@@ -1,0 +1,31 @@
+.modalRoot {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border: 1px solid var(--color-6);
+  border-radius: var(--frame-modal-border-radius);
+  background: var(--color-2);
+  transform: translate(-50%, -50%);
+}
+
+.modalWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--frame-modal-gap);
+  align-items: flex-start;
+  align-self: stretch;
+  justify-content: center;
+  padding: var(--frame-modal-padding);
+  background: transparent;
+}
+
+.modalCloseButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.75rem;
+  height: 2.75rem;
+
+  /* TODO: Fix the specifity issue with button styles */
+  --button-color: var(--color-tertiary) !important;
+}

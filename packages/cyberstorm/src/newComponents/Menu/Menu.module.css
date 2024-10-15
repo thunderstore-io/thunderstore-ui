@@ -1,0 +1,51 @@
+.menuRoot {
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+
+  transform: translateX(-100%);
+  transition: transform var(--animation-length-s),
+    display var(--animation-length-s) allow-discrete;
+
+  &:popover-open {
+    transform: none;
+
+    @starting-style {
+      & {
+        transform: translateX(-100%);
+      }
+    }
+  }
+}
+
+.menuRoot::backdrop {
+  background: hsl(0deg 0% 0% / 0.6);
+}
+
+.menuWrapper {
+  display: none;
+  flex-direction: column;
+  gap: 2rem;
+  width: 80%;
+  height: 100%;
+  padding: 1.5rem;
+  background: #15152d;
+}
+
+.menuRoot:popover-open > .menuWrapper {
+  display: flex;
+}
+
+.fakeBackdrop {
+  width: 20%;
+  height: 100%;
+  background: transparent;
+}
+
+.menuCloseButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
