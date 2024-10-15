@@ -10,16 +10,23 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NewIcon } from "../..";
 
-interface ButtonProps extends Omit<ActionableButtonProps, "primitiveType"> {
+interface Modifiers {
+  dimmed?: boolean;
+  subtle?: boolean;
+  disabled?: boolean;
+}
+
+interface ButtonProps extends Omit<ActionableButtonProps, "primitiveType" | "csVariant">, Modifiers {
   csVariant?:
-    | "default"
-    | "defaultPeek"
     | "primary"
     | "secondary"
     | "tertiary"
-    | "minimal"
     | "accent"
-    | "special";
+    | "special"
+    | "info"
+    | "success"
+    | "warning"
+    | "danger";
   csSize?: "xs" | "s" | "m" | "l";
 }
 
@@ -27,14 +34,12 @@ interface IconButtonProps
   extends Omit<
     ActionableButtonProps,
     "primitiveType" | "csVariant" | "csSize" | "children"
-  > {
+  >, Modifiers {
   csVariant?:
-    | "default"
-    | "defaultPeek"
     | "primary"
     | "secondary"
     | "tertiary"
-    | "tertiaryDimmed"
+    | "danger"
     | "minimal";
   csSize?: "xs" | "s" | "m";
   icon: IconProp;
@@ -46,12 +51,11 @@ export type ButtonComponentProps =
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonComponentProps>(
   (props: ButtonComponentProps, forwardedRef) => {
-    const { rootClasses, csTextStyles, icon, ...forwardedProps } = props;
+    const { rootClasses, csTextStyles, icon, dimmed, subtle, disabled,  ...forwardedProps } = props;
 
     if (icon) {
       const {
         csVariant = "default",
-        csColor = "purple",
         csSize = "m",
         ...fProps
       } = forwardedProps as IconButtonProps;
@@ -61,9 +65,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonComponentProps>(
           primitiveType="button"
           {...fProps}
           rootClasses={classnames(iconButtonStyles.iconButton, rootClasses)}
-          csColor={csColor}
-          csSize={csSize}
-          csVariant={csVariant}
           ref={forwardedRef}
         >
           <NewIcon csMode="inline" noWrapper>
@@ -75,36 +76,25 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonComponentProps>(
 
     const {
       children,
-      csVariant = "default",
-      csColor = "purple",
+      csVariant = "primary",
       csSize = "m",
       ...fProps
     } = forwardedProps as ButtonProps;
-
-    // TODO: Turn into a proper resolver function
-    // Same logic is in LinkButton too
-    const fontStyles = (size: typeof csSize) => {
-      if (size === "xs") {
-        return ["fontSizeXS", "fontWeightBold", "lineHeightAuto"];
-      } else if (size === "s") {
-        return ["fontSizeS", "fontWeightBold", "lineHeightAuto"];
-      } else {
-        return ["fontSizeM", "fontWeightBold", "lineHeightAuto"];
-      }
-    };
 
     return (
       <Actionable
         primitiveType="button"
         {...fProps}
+        disabled={disabled}
         rootClasses={classnames(
-          ...(csTextStyles ? csTextStyles : fontStyles(csSize)),
           buttonStyles.button,
+          getSize(csSize),
+          getVariant(csVariant),
+          dimmed ? buttonStyles["button--dimmed"] : null,
+          subtle ? buttonStyles["button--subtle"] : null,
+          disabled ? buttonStyles["button--disabled"] : null,
           rootClasses
         )}
-        csColor={csColor}
-        csSize={csSize}
-        csVariant={csVariant}
         ref={forwardedRef}
       >
         {children}
@@ -114,3 +104,26 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonComponentProps>(
 );
 
 Button.displayName = "Button";
+
+const getVariant = (scheme: string) => {
+  return {
+    primary: buttonStyles.button__primary,
+    secondary: buttonStyles.button__secondary,
+    tertiary: buttonStyles.button__tertiary,
+    accent: buttonStyles.button__accent,
+    special: buttonStyles.button__special,
+    info: buttonStyles.button__info,
+    success: buttonStyles.button__success,
+    warning: buttonStyles.button__warning,
+    danger: buttonStyles.button__danger,
+  }[scheme];
+};
+
+const getSize = (scheme: string) => {
+  return {
+    xs: buttonStyles["button--size-xs"],
+    s: buttonStyles["button--size-s"],
+    m: buttonStyles["button--size-m"],
+    l: buttonStyles["button--size-l"],
+  }[scheme];
+};

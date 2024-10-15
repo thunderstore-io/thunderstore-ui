@@ -1,0 +1,174 @@
+:root {
+    /* COMPONENT */
+    --button---font-weight: var(--global--font-weight--bold);
+    --button---line-height: var(--global--line-height--auto);
+    --button---animation-length: ease-in-out var(--animation-length-s);
+    /* VARIANTS */
+    /* primary */
+    --button--primary---color: var(--color-primary);
+    --button--primary---bg-color: hsl(256deg 60% 52% / 1);
+    --button--primary--hover---bg-color: hsl(256deg 67% 56% / 1);
+    --button--primary--active---bg-color: hsl(256deg 60% 52% / 1);
+    /* primary modifiers */
+    --button--primary--subtle---color: var(--color-primary);
+    --button--primary--subtle---bg-color: transparent;
+    --button--primary--subtle--hover---color: var(--color-primary);
+    --button--primary--subtle--hover---bg-color: hsl(256deg 60% 52% / 1);
+    --button--primary--subtle--active---color: var(--color-primary);
+    --button--primary--subtle--active---bg-color: hsl(256deg 67% 56% / 1);
+    /* secondary */
+    --button--secondary---color: var(--color-primary);
+    --button--secondary---bg-color: var(--color-surface-alpha--6);
+    --button--secondary--hover---bg-color: var(--color-surface-alpha--7);
+    --button--secondary--active---bg-color: var(--color-surface-alpha--5);
+    /* secondary modifiers */
+    --button--secondary--subtle---color: var(--color-primary);
+    --button--secondary--subtle---bg-color: transparent;
+    --button--secondary--subtle--hover---color: var(--color-surface-alpha--6);
+    --button--secondary--subtle--hover---bg-color: var(--color-primary);
+    --button--secondary--subtle--active---color: var(--color-surface-alpha--7);
+    --button--secondary--subtle--active---bg-color: var(--color-primary);
+    /* tertiary */
+    --button--tertiary---color: var(--color-primary);
+    --button--tertiary---bg-color: transparent;
+    --button--tertiary--hover---bg-color: var(--color-surface-alpha--6);
+    --button--tertiary--active---bg-color: var(--color-surface-alpha--5);
+    /* tertiary modifiers */
+    --button--tertiary--subtle---color: var(--color-primary);
+    --button--tertiary--subtle---bg-color: transparent;
+    --button--tertiary--subtle--hover---color: var(--color-primary);
+    --button--tertiary--subtle--hover---bg-color: var(--button--tertiary--hover---bg-color);
+    --button--tertiary--subtle--active---color: var(--color-primary);
+    --button--tertiary--subtle--active---bg-color: var(--button--tertiary--active---bg-color);
+    /* accent */
+    --button--accent---color: var(--color-cyber-green--2);
+    --button--accent---bg-color: var(--color-cyber-green--7);
+    --button--accent--hover---bg-color: var(--color-cyber-green--9);
+    --button--accent--active---bg-color: var(--color-cyber-green--6);
+    /* accent modifiers */
+    --button--accent--subtle---color: var(--color-primary);
+    --button--accent--subtle---bg-color: transparent;
+    --button--accent--subtle--hover---color: var(--color-cyber-green--2);
+    --button--accent--subtle--hover---bg-color: var(--color-cyber-green--7);
+    --button--accent--subtle--active---color: var(--color-cyber-green--2);
+    --button--accent--subtle--active---bg-color: var(--color-cyber-green--9);
+    /* special */
+    --button--special---color: var(--color-primary);
+    --button--special---bg: linear-gradient(
+        284deg,
+        hsl(275deg 64% 11% / 1) 0%,
+        hsl(156deg 46% 12% / 1) 100%
+      )
+      padding-box,
+    linear-gradient(
+        284deg,
+        hsl(276deg 77% 54% / 1) 0%,
+        hsl(158deg 100% 57% / 1) 100%
+      )
+      border-box;;
+    --button--special--hover---bg: linear-gradient(
+        284deg,
+        hsl(203deg 80% 21% / 1) 0%,
+        hsl(155deg 46% 23% / 1) 100%
+      )
+      padding-box,
+    linear-gradient(
+        284deg,
+        hsl(154deg 65% 67% / 1) 0%,
+        hsl(203deg 92% 63% / 1) 100%
+      )
+      border-box;
+    --button--special--active---bg: linear-gradient(
+        284deg,
+        hsl(203deg 80% 21% / 1) 0%,
+        hsl(155deg 46% 23% / 1) 100%
+      )
+      padding-box,
+    linear-gradient(
+        284deg,
+        hsl(154deg 65% 67% / 1) 0%,
+        hsl(203deg 92% 63% / 1) 100%
+      )
+      border-box;
+    --button--special---border: 2px solid transparent;
+    /* special modifiers */
+    --button--special--subtle---color: var(--color-primary);
+    --button--special--subtle---bg: transparent;
+    --button--special--subtle--hover---color: var(--color-primary);
+    --button--special--subtle--hover---bg: var(--button--special---bg);
+    --button--special--subtle--active---color: var(--color-primary);
+    --button--special--subtle--active---bg: var(--button--special--hover---bg);
+    /* info */
+    --button--info---color: var(--color-blue--11);
+    --button--info---bg-color: var(--color-blue--4);
+    --button--info--hover---bg-color: var(--color-blue--3);
+    --button--info--active---bg-color: var(--color-blue--2);
+    /* info modifiers */
+    --button--info--subtle---color: var(--color-primary);
+    --button--info--subtle---bg-color: transparent;
+    --button--info--subtle--hover---color: var(--color-blue--11);
+    --button--info--subtle--hover---bg-color: var(--color-blue--4);
+    --button--info--subtle--active---color: var(--color-blue--11);
+    --button--info--subtle--active---bg-color: var(--color-blue--3);
+    /* success */
+    --button--success---color: var(--color-green--11);
+    --button--success---bg-color: var(--color-green--4);
+    --button--success--hover---bg-color: var(--color-green--3);
+    --button--success--active---bg-color: var(--color-green--2);
+    /* success modifiers */
+    --button--success--subtle---color: var(--color-primary);
+    --button--success--subtle---bg-color: transparent;
+    --button--success--subtle--hover---color: var(--color-green--11);
+    --button--success--subtle--hover---bg-color: var(--color-green--4);
+    --button--success--subtle--active---color: var(--color-green--11);
+    --button--success--subtle--active---bg-color: var(--color-green--3);
+    /* warning */
+    --button--warning---color: var(--color-yellow--11);
+    --button--warning---bg-color: var(--color-yellow--4);
+    --button--warning--hover---bg-color: var(--color-yellow--3);
+    --button--warning--active---bg-color: var(--color-yellow--2);
+    /* warning modifiers */
+    --button--warning--subtle---color: var(--color-primary);
+    --button--warning--subtle---bg-color: transparent;
+    --button--warning--subtle--hover---color: var(--color-yellow--11);
+    --button--warning--subtle--hover---bg-color: var(--color-yellow--4);
+    --button--warning--subtle--active---color: var(--color-yellow--11);
+    --button--warning--subtle--active---bg-color: var(--color-yellow--3);
+    /* danger */
+    --button--danger---color: var(--color-red--11);
+    --button--danger---bg-color: var(--color-red--4);
+    --button--danger--hover---bg-color: var(--color-red--3);
+    --button--danger--active---bg-color: var(--color-red--2);
+    /* danger modifiers */
+    --button--danger--subtle---color: var(--color-primary);
+    --button--danger--subtle---bg-color: transparent;
+    --button--danger--subtle--hover---color: var(--color-red--11);
+    --button--danger--subtle--hover---bg-color: var(--color-red--4);
+    --button--danger--subtle--active---color: var(--color-red--11);
+    --button--danger--subtle--active---bg-color: var(--color-red--3);
+    /* SIZES */
+    /* xs */
+    --button--size-xs---font-size: var(--global--font-size--xs);
+    --button--size-xs---height: var(--space--30);
+    --button--size-xs---padding: var(--space--12);
+    --button--size-xs---gap: var(--gap--16);
+    --button--size-xs---border-radius: var(--border-radius--8);
+    /* s */
+    --button--size-s---font-size: var(--global--font-size--s);
+    --button--size-s---height: var(--space--36);
+    --button--size-s---padding: var(--space--12);
+    --button--size-s---gap: var(--gap--16);
+    --button--size-s---border-radius: var(--border-radius--8);
+    /* m */
+    --button--size-m---font-size: var(--global--font-size--s);
+    --button--size-m---height: var(--space--44);
+    --button--size-m---padding: var(--space--12) var(--space--16);
+    --button--size-m---gap: var(--gap--16);
+    --button--size-m---border-radius: var(--border-radius--8);
+    /* l */
+    --button--size-l---font-size: var(--global--font-size--m);
+    --button--size-l---height: var(--space--44);
+    --button--size-l---padding: var(--space--12) var(--space--16);
+    --button--size-l---gap: var(--gap--16);
+    --button--size-l---border-radius: var(--border-radius--8);
+}

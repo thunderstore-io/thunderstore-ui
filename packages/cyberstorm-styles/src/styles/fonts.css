@@ -15,3 +15,19 @@
   font-family: Hubot-Sans;
   src: url("../fonts/HubotSans.ttf") format("truetype-variations");
 }
+
+:root {
+  --global--line-height--auto: normal;
+  --global--line-height--body: 170%;
+  --global--font-size--xxs: 0.625rem;
+  --global--font-size--xs: 0.75rem;
+  --global--font-size--s: 0.875rem;
+  --global--font-size--m: 1rem;
+  --global--font-size--l: 1.5rem;
+  --global--font-weight--regular: 400;
+  --global--font-weight--medium: 500;
+  --global--font-weight--semiBold: 600;
+  --global--font-weight--bold: 700;
+  --global--font-family--inter: inter, sans-serif;
+  --global--font-family--hubot: Hubot-Sans, sans-serif;
+}
