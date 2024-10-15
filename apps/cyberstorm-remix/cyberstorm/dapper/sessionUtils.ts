@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { redirect } from "@remix-run/react";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { RequestConfig } from "@thunderstore/thunderstore-api";
@@ -83,8 +84,8 @@ export async function getDapper(isClient = false) {
     const existingDapper = shouldRemakeDapper
       ? createNewDapper()
       : dapper
-        ? dapper
-        : new DapperTs(newConfig, removeSession);
+      ? dapper
+      : new DapperTs(newConfig, removeSession);
 
     return existingDapper;
   } else {
