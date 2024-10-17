@@ -33,6 +33,9 @@ const Template: StoryFn<typeof PackageCard> = (args) => (
   </div>
 );
 
+const updatedString = new Date();
+updatedString.setDate(updatedString.getDate() - 1234);
+
 const ReferencePackageCard = Template.bind({});
 ReferencePackageCard.args = {
   package: {
@@ -45,7 +48,7 @@ ReferencePackageCard.args = {
     download_count: 2707,
     rating_count: 1,
     size: 106299,
-    last_updated: "2023-02-28T11:23:42.000000Z",
+    last_updated: updatedString.toISOString(),
     is_pinned: false,
     is_nsfw: false,
     is_deprecated: false,
