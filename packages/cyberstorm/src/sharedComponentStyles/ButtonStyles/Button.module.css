@@ -55,22 +55,22 @@
 }
 
 .button[data-variant="primary"]:active {
-  background-color: hsl(256deg 60% 52% / 1);
+  background-color: hsl(256deg 60% 42% / 1);
 }
 
 /* secondary */
 
 .button[data-variant="secondary"] {
   --button-color: var(--color-primary);
-  --button-bg-color: var(--color-6);
+  --button-bg-color: var(--color-surface-alpha--7);
 }
 
 .button[data-variant="secondary"]:hover {
-  --button-bg-color: var(--color-7);
+  --button-bg-color: var(--color-surface-alpha--8);
 }
 
 .button[data-variant="secondary"]:active {
-  --button-bg-color: var(--color-5);
+  --button-bg-color: var(--color-surface-alpha--6);
 }
 
 /* tertiary */
@@ -81,11 +81,11 @@
 }
 
 .button[data-variant="tertiary"]:hover {
-  --button-bg-color: var(--color-6);
+  --button-bg-color: var(--color-surface-alpha--8);
 }
 
 .button[data-variant="tertiary"]:active {
-  --button-bg-color: var(--color-5);
+  --button-bg-color: var(--color-surface-alpha--6);
 }
 
 /* accent */
