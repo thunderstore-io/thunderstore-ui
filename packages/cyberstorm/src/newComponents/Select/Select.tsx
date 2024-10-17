@@ -110,7 +110,7 @@ const mapSelectData = (options: SelectOption[]) => {
         csColor="surface"
         csTextStyles={["fontSizeS", "fontWeightMedium"]}
       >
-        <NewIcon csMode="inline" noWrapper>
+        <NewIcon csMode="inline" noWrapper rootClasses={styles.itemIcon}>
           {option.leftIcon}
         </NewIcon>
         {option.label}

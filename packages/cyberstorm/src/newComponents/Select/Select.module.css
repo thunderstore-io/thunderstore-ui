@@ -13,7 +13,7 @@
   border: var(--space--px) var(--color-surface--6) solid;
   border-radius: var(--border-radius--8);
   overflow: hidden;
-  color: var(--text-color);
+  color: var(--color-primary);
   background-color: var(--color-surface--2);
   box-shadow: var(--box-shadow-default);
   animation: fade-in var(--animation-length-l) ease;
@@ -26,6 +26,7 @@
   gap: var(--gap--12);
   align-items: center;
   padding: var(--space--12) var(--space--16);
+  color: var(--color-primary);
   outline: none;
   cursor: pointer;
 }
@@ -33,6 +34,15 @@
 .item[data-highlighted] {
   color: var(--color-primary);
   background-color: var(--color-surface--6, var(--color-primary, red));
+}
+
+.item > .itemIcon {
+  width: 1em;
+  color: var(--color-tertiary);
+}
+
+.item[data-highlighted] > .itemIcon {
+  color: var(--color-primary);
 }
 
 .content__wide {
