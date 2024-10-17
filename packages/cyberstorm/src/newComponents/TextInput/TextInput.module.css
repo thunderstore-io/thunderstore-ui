@@ -65,26 +65,6 @@
   --border-color: var(--color-7);
 }
 
-.wrapper[data-variant="default"] > .textInput {
-  --input-text-color: var(--color-5);
-}
-
-.wrapper[data-variant="primary"] > .textInput {
-  --input-text-color: var(--color-primary);
-}
-
-.wrapper[data-variant="secondary"] > .textInput {
-  --input-text-color: var(--color-secondary);
-}
-
-.wrapper[data-variant="tertiary"] > .textInput {
-  --input-text-color: var(--color-tertiary);
-}
-
-.wrapper[data-variant="accent"] > .textInput {
-  --input-text-color: var(--color-accent);
-}
-
 .textInput:has(+ .clearValueButton:hover):not(:focus-within) {
   --input-background-color: var(--color-surface-alpha--6);
   --border-color: var(--color-surface-alpha--10);
