@@ -5,8 +5,9 @@ import { RequestConfig } from "@thunderstore/thunderstore-api";
 
 export async function getDapper(isClient = false) {
   if (isClient) {
-    const getCookie = (cookieName: string) =>
-      new RegExp(`${cookieName}=([^;]+);`).exec(document.cookie)?.[1];
+    // Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint
+    // const getCookie = (cookieName: string) =>
+    //   new RegExp(`${cookieName}=([^;]+);`).exec(document.cookie[-1] === ";" ? document.cookie : document.cookie + ";")?.[1];
     const deleteCookie = (name: string) => {
       const date = new Date();
       date.setTime(0);
@@ -22,8 +23,12 @@ export async function getDapper(isClient = false) {
 
     let shouldRemakeDapper = false;
 
-    const cookie = getCookie("sessionid");
-    const csrftoken = getCookie("csrftoken");
+    // Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint
+    // const cookie = getCookie("sessionid");
+    // const csrftoken = getCookie("csrftoken");
+
+    const cookie = undefined;
+    const csrftoken = undefined;
 
     const newConfig: RequestConfig = {
       apiHost: window.ENV.PUBLIC_API_URL,
