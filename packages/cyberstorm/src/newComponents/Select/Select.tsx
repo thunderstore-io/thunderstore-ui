@@ -108,7 +108,7 @@ const mapSelectData = (options: SelectOption[]) => {
         rootClasses={styles.item}
         csVariant="secondary"
         csColor="surface"
-        csTextStyles={["fontSizeS", "fontWeightMedium"]}
+        csTextStyles={["fontSizeS", "fontWeightRegular"]}
       >
         <NewIcon csMode="inline" noWrapper rootClasses={styles.itemIcon}>
           {option.leftIcon}
