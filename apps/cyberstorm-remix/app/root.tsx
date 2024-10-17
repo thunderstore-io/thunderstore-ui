@@ -38,7 +38,8 @@ import { useHydrated } from "remix-utils/use-hydrated";
 import Toast from "@thunderstore/cyberstorm/src/components/Toast";
 import { SessionProvider } from "@thunderstore/ts-api-react";
 import { CurrentUser } from "@thunderstore/dapper/types";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
+// Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint
+// import { getDapper } from "cyberstorm/dapper/sessionUtils";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -136,19 +137,22 @@ function Root() {
 
   const isHydrated = useHydrated();
   const startsHydrated = useRef(isHydrated);
+  // Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
 
-  useEffect(() => {
-    if (!startsHydrated.current && isHydrated) return;
-    const fetchAndSetUser = async () => {
-      const dapper = await getDapper(true);
-      const fetchedUser = await dapper.getCurrentUser();
-      if (fetchedUser?.username) {
-        setCurrentUser(fetchedUser);
-      }
-    };
-    fetchAndSetUser();
-  }, []);
+  // Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint
+  // useEffect(() => {
+  //   if (!startsHydrated.current && isHydrated) return;
+  //   const fetchAndSetUser = async () => {
+  //     const dapper = await getDapper(true);
+  //     const fetchedUser = await dapper.getCurrentUser();
+  //     if (fetchedUser?.username) {
+  //       setCurrentUser(fetchedUser);
+  //     }
+  //   };
+  //   fetchAndSetUser();
+  // }, []);
 
   return (
     <html lang="en">
