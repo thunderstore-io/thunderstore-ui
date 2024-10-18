@@ -45,13 +45,6 @@ html {
   text-size-adjust: none;
 }
 
-/* Smooth scrolling for users that don't prefer reduced motion */
-@media (prefers-reduced-motion: no-preference) {
-  html:focus-within {
-    scroll-behavior: smooth;
-  }
-}
-
 body {
   /* https://marco.org/2012/11/15/text-rendering-optimize-legibility */
   text-rendering: optimizespeed;
