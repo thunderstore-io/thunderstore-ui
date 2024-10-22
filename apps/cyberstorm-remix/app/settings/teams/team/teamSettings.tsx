@@ -3,7 +3,6 @@ import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import { BreadCrumbs, CyberstormLink, Icon } from "@thunderstore/cyberstorm";
 import tabsStyles from "./Tabs.module.css";
 import styles from "./teamSettingsLayout.module.css";
-import rootStyles from "../../../RootLayout.module.css";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ApiError } from "@thunderstore/thunderstore-api";
@@ -16,7 +15,7 @@ import {
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
   return [
     { title: `${data?.team.name} settings` },
     { name: "description", content: `${data?.team.name} settings` },
@@ -65,12 +64,12 @@ export default function Community() {
         <CyberstormLink linkId="Teams">Teams</CyberstormLink>
         {team.name}
       </BreadCrumbs>
-      <header className={rootStyles.pageHeader}>
+      <header className="project-root__page-header">
         <div className={styles.header}>
           <PageHeader title="Teams" />
         </div>
       </header>
-      <main className={rootStyles.main}>
+      <main className="project-root__main">
         <div className={styles.teamContainer}>
           <div className={tabsStyles.root}>
             <div className={tabsStyles.buttons}>

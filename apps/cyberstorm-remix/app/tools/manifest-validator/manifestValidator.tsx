@@ -8,7 +8,6 @@ import {
   isRecord,
   isStringArray,
 } from "@thunderstore/cyberstorm";
-import rootStyles from "../../RootLayout.module.css";
 import styles from "./manifestValidator.module.css";
 import { useEffect, useState } from "react";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
@@ -76,10 +75,10 @@ export default function ManifestValidator() {
           Manifest Validator
         </CyberstormLink>
       </BreadCrumbs>
-      <header className={rootStyles.pageHeader}>
+      <header className="project-root__page-header">
         <PageHeader title="Manifest Validator" />
       </header>
-      <main className={rootStyles.main}>
+      <main className="project-root__main">
         <SettingItem
           title="Manifest Validator"
           description="Select a team to validate a package"

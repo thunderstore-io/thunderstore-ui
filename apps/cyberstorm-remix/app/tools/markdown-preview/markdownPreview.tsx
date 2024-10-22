@@ -1,5 +1,4 @@
 import { useLoaderData } from "@remix-run/react";
-import rootStyles from "../../RootLayout.module.css";
 import styles from "./MarkdownPreview.module.css";
 import {
   BreadCrumbs,
@@ -61,10 +60,10 @@ export default function MarkdownPreview() {
           Markdown Preview
         </CyberstormLink>
       </BreadCrumbs>
-      <header className={rootStyles.pageHeader}>
+      <header className="project-root__page-header">
         <PageHeader title="Markdown Preview" />
       </header>
-      <main className={rootStyles.main}>
+      <main className="project-root__main">
         <div className={styles.root}>
           <SettingItem
             title="Markdown input"

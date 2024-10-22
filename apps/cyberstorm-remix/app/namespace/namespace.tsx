@@ -10,7 +10,6 @@ import {
   Title,
 } from "@thunderstore/cyberstorm";
 import styles from "./CommunityCard.module.css";
-import rootStyles from "../RootLayout.module.css";
 import { formatInteger } from "@thunderstore/cyberstorm/src/utils/utils";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
@@ -129,7 +128,7 @@ export default function Community() {
           {community.name}
         </CyberstormLink>
       </BreadCrumbs>
-      <header className={rootStyles.pageHeader}>
+      <header className="project-root__page-header">
         <div className={styles.root}>
           <div className={styles.image}>
             <ImageWithFallback
@@ -182,7 +181,7 @@ export default function Community() {
           </div>
         </div>
       </header>
-      <main className={rootStyles.main}>
+      <main className="project-root__main">
         <PackageSearch
           listings={listings}
           packageCategories={filters.package_categories}

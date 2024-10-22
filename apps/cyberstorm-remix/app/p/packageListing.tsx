@@ -17,7 +17,6 @@ import headerStyles from "./headerPackageDetailLayout.module.css";
 import sidebarStyles from "./sidebarPackageDetailsLayout.module.css";
 import tabsStyles from "./Tabs.module.css";
 import styles from "./mainPackageLayout.module.css";
-import rootStyles from "../RootLayout.module.css";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ApiError } from "@thunderstore/thunderstore-api";
@@ -219,7 +218,7 @@ export default function Community() {
         </CyberstormLink>
         {listing.name}
       </BreadCrumbs>
-      <header className={rootStyles.pageHeader}>
+      <header className="project-root__page-header">
         <div className={headerStyles.packageInfo}>
           <PageHeader
             title={listing.name}
@@ -299,7 +298,7 @@ export default function Community() {
           </div>
         </div>
       </header>
-      <main className={rootStyles.main}>
+      <main className="project-root__main">
         <div className={styles.packageContainer}>
           <div className={tabsStyles.root}>
             <div className={tabsStyles.buttons}>

@@ -10,7 +10,6 @@ import {
   NewTextInput,
   NewSelect,
 } from "@thunderstore/cyberstorm";
-import rootStyles from "../RootLayout.module.css";
 import styles from "./Communities.module.css";
 import searchAndOrderStyles from "./SearchAndOrder.module.css";
 import communitiesListStyles from "./CommunityList.module.css";
@@ -131,7 +130,7 @@ export default function CommunitiesPage() {
       <NewBreadCrumbs rootClasses={styles.breadcrumbs}>
         Communities
       </NewBreadCrumbs>
-      <header className={rootStyles.pageHeader}>
+      <header className="project-root__page-header">
         <Heading
           csLevel="1"
           csStyleLevel="2"
@@ -141,7 +140,7 @@ export default function CommunitiesPage() {
           Communities
         </Heading>
       </header>
-      <main className={rootStyles.main}>
+      <main className="project-root__main">
         <Container
           rootClasses={searchAndOrderStyles.root}
           csVariant="tertiary"

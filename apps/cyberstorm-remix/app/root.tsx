@@ -1,6 +1,5 @@
 import "@thunderstore/cyberstorm-styles";
-import styles from "./RootLayout.module.css";
-import errorStyles from "./Error.module.css";
+import "./styles/index.css";
 import {
   Links,
   Meta,
@@ -197,7 +196,7 @@ function Root() {
           <LinkingProvider value={LinkLibrary}>
             <Toast.Provider toastDuration={10000}>
               <RadixTooltip delayDuration={300}>
-                <div className={styles.root}>
+                <div className="project-root">
                   {/* REMIX TODO: For whatever reason the Navigation seems to cause suspense boundary errors. Couldn't find a reason why */}
                   <Navigation
                     hydrationCheck={!startsHydrated.current && isHydrated}
@@ -209,12 +208,12 @@ function Root() {
                   ) : (
                     <MobileUserPopoverContent />
                   )}
-                  <section className={styles.content}>
-                    <div className={styles.sideContainers} />
-                    <div className={styles.middleContainer}>
+                  <section className="project-root__content">
+                    <div className="project-root__side-containers" />
+                    <div className="project-root__middle-container">
                       <Outlet />
                     </div>
-                    <div className={styles.sideContainers}>
+                    <div className="project-root__side-containers">
                       {shouldShowAds
                         ? adContainerIds.map((cid, k_i) => (
                             <AdContainer key={k_i} containerId={cid} />
@@ -269,29 +268,29 @@ export function ErrorBoundary() {
         <LinkingProvider value={LinkLibrary}>
           <Toast.Provider toastDuration={10000}>
             <RadixTooltip delayDuration={300}>
-              <div className={styles.root}>
+              <div className="project-root">
                 {/* <Navigation user={getEmptyUser} /> */}
-                <section className={styles.content}>
-                  <div className={styles.sideContainers} />
-                  <div className={styles.middleContainer}>
-                    <div className={errorStyles.root}>
+                <section className="project-root__content">
+                  <div className="project-root__side-containers" />
+                  <div className="project-root__middle-container">
+                    <div className="project-error">
                       <div
-                        className={errorStyles.glitch}
+                        className="project-error__glitch"
                         data-text={isResponseError ? error.status : 500}
                       >
                         <span>{isResponseError ? error.status : 500}</span>
                       </div>
-                      <div className={errorStyles.description}>
+                      <div className="project-error__description">
                         {isResponseError ? error.data : "Internal server error"}
                       </div>
                       {!isResponseError && (
-                        <div className={errorStyles.flavor}>
+                        <div className="project-error__flavor">
                           Beep boop. Server something error happens.
                         </div>
                       )}
                     </div>
                   </div>
-                  <div className={styles.sideContainers}></div>
+                  <div className="project-root__side-containers"></div>
                 </section>
                 <Footer />
               </div>

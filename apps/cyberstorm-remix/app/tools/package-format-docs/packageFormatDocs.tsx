@@ -1,4 +1,3 @@
-import rootStyles from "../../RootLayout.module.css";
 import styles from "./PackageFormatDocs.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -19,10 +18,10 @@ export default function PackageFormatDocs() {
           Package Format Docs
         </CyberstormLink>
       </BreadCrumbs>
-      <header className={rootStyles.pageHeader}>
+      <header className="project-root__page-header">
         <PageHeader title="Package Format Docs" />
       </header>
-      <main className={rootStyles.main}>
+      <main className="project-root__main">
         <div className={styles.root}>
           <p>
             A valid package is a zip file that contains the following files:
