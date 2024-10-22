@@ -1,6 +1,6 @@
 .root {
   display: flex;
-  border-radius: var(--border-radius--4);
+  border-radius: var(--radius-sm);
   background: hsl(236deg 36% 36% / 0.24);
   animation: pulse 2s infinite;
 }

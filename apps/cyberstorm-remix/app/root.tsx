@@ -1,5 +1,6 @@
-import "@thunderstore/cyberstorm-styles";
 import "./styles/index.css";
+import "@thunderstore/cyberstorm-styles";
+import "@thunderstore/cyberstorm-theme";
 import {
   Links,
   Meta,
@@ -13,7 +14,6 @@ import {
   useRouteError,
 } from "@remix-run/react";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
-import { Footer } from "@thunderstore/cyberstorm/src/components/Footer/Footer";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 
 import {
@@ -37,6 +37,7 @@ import { useHydrated } from "remix-utils/use-hydrated";
 import Toast from "@thunderstore/cyberstorm/src/components/Toast";
 import { SessionProvider } from "@thunderstore/ts-api-react";
 import { CurrentUser } from "@thunderstore/dapper/types";
+import { Footer } from "./commonComponents/Footer/Footer";
 // Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint
 // import { getDapper } from "cyberstorm/dapper/sessionUtils";
 

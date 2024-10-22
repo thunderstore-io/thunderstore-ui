@@ -1,24 +1,29 @@
-import styles from "./TextInput.module.css";
+import "./TextInput.css";
 import React from "react";
 import {
   Input,
   InputTextInputProps,
 } from "../../primitiveComponents/Input/Input";
-import { classnames } from "../../utils/utils";
+import { classnames, componentClasses } from "../../utils/utils";
 import { Frame } from "../../primitiveComponents/Frame/Frame";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Actionable } from "../../primitiveComponents/Actionable/Actionable";
-import { colors, variants } from "../../primitiveComponents/utils/utils";
 import { NewIcon } from "../..";
+import {
+  TextInputVariants,
+  TextInputSizes,
+  TextInputModifiers,
+} from "@thunderstore/cyberstorm-theme/src/components";
 
 interface TextInputProps extends Omit<InputTextInputProps, "primitiveType"> {
   leftIcon?: JSX.Element;
   rightIcon?: JSX.Element;
   enterHook?: (value: string | number | readonly string[]) => string | void;
   clearValue?: () => void;
-  wrapperColor?: colors;
-  wrapperVariant?: variants;
+  csVariant?: TextInputVariants;
+  csSize?: TextInputSizes;
+  csModifiers?: TextInputModifiers[];
 }
 
 // TODO: Finish the styles conversion to new system
@@ -30,12 +35,10 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
       rightIcon,
       clearValue,
       enterHook,
-      wrapperColor = "purple",
-      wrapperVariant = "tertiary",
       rootClasses,
-      csColor = "purple",
-      csSize = "m",
       csVariant = "primary",
+      csSize = "default",
+      csModifiers,
       ...forwardedProps
     } = props;
     const fProps = forwardedProps as InputTextInputProps;
@@ -47,17 +50,17 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
     return (
       <Frame
         primitiveType="window"
-        rootClasses={classnames(styles.wrapper, rootClasses)}
-        csColor={wrapperColor}
-        csVariant={wrapperVariant}
-        csTextStyles={["lineHeightAuto", "fontWeightRegular", "fontSizeM"]}
+        rootClasses={classnames(
+          "ts-textinput__wrapper",
+          ...componentClasses(csVariant, csSize, csModifiers),
+          rootClasses
+        )}
       >
         {leftIcon ? (
           <NewIcon
             csMode="inline"
             noWrapper
-            rootClasses={styles.leftIcon}
-            csTextStyles={["fontWeightRegular"]}
+            rootClasses="ts-textinput__lefticon"
           >
             {leftIcon}
           </NewIcon>
@@ -66,14 +69,11 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
           {...fProps}
           primitiveType={"textInput"}
           rootClasses={classnames(
-            styles.textInput,
-            leftIcon ? styles.hasLeftIcon : null,
-            clearValue ? styles.hasClearValue : null
+            "ts-textinput",
+            leftIcon ? "ts-textinput__haslefticon" : null,
+            clearValue ? "ts-textinput__hasclearvalue" : null,
+            ...componentClasses(csVariant, csSize, csModifiers)
           )}
-          csColor={csColor}
-          csSize={csSize}
-          csVariant={csVariant}
-          csTextStyles={["fontSizeM", "fontWeightRegular"]}
           ref={forwardedRef}
           onKeyDown={onEnter}
         >
@@ -83,11 +83,12 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
           <Actionable
             primitiveType="button"
             onClick={() => clearValue()}
-            rootClasses={styles.clearValueButton}
+            rootClasses={classnames(
+              "ts-textinput__clearvaluebutton",
+              ...componentClasses(csVariant, csSize, csModifiers)
+            )}
             tooltipText="Clear"
             tooltipSide="left"
-            csColor={csColor}
-            csVariant={"default"}
             aria-label="Clear search input"
           >
             <NewIcon csMode="inline" noWrapper>

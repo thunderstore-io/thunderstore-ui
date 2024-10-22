@@ -1,0 +1,18 @@
+@layer theme-components {
+  /* VARIANTS DEFAULT STATE */
+  .ts-modal:where(.ts-variant--primary) {
+    --modal-color: var(--modal-primary-color--default);
+  }
+
+  .ts-modal:where(.ts-variant--primary):hover {
+    --modal-color: var(--modal-primary-color--hover);
+
+    text-decoration: none;
+  }
+
+  /* TOKENS */
+  :root {
+    --modal-primary-color--default: var(--color-text-accent);
+    --modal-primary-color--hover: var(--color-text-primary);
+  }
+}

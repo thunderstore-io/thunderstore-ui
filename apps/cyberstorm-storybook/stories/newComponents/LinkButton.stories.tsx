@@ -56,8 +56,8 @@ const Template: StoryFn<typeof LinkButton> = (args) => (
         </NewIcon>
       </LinkButton>
       <LinkButton
-        csVariant="tertiary"
-        csColor="surface"
+        csVariant="secondary"
+        csModifiers={["subtle"]}
         {...args}
         primitiveType="link"
         href="https://example.com"
@@ -79,8 +79,7 @@ const Template: StoryFn<typeof LinkButton> = (args) => (
         </NewIcon>
       </LinkButton>
       <LinkButton
-        csVariant="default"
-        csColor="green"
+        csVariant="success"
         {...args}
         primitiveType="link"
         href="https://example.com"
@@ -91,8 +90,7 @@ const Template: StoryFn<typeof LinkButton> = (args) => (
         </NewIcon>
       </LinkButton>
       <LinkButton
-        csVariant="default"
-        csColor="yellow"
+        csVariant="warning"
         {...args}
         primitiveType="link"
         href="https://example.com"
@@ -103,8 +101,7 @@ const Template: StoryFn<typeof LinkButton> = (args) => (
         </NewIcon>
       </LinkButton>
       <LinkButton
-        csVariant="default"
-        csColor="red"
+        csVariant="danger"
         {...args}
         primitiveType="link"
         href="https://example.com"
@@ -163,8 +160,8 @@ const Template: StoryFn<typeof LinkButton> = (args) => (
         </NewIcon>
       </LinkButton>
       <LinkButton
-        csVariant="tertiary"
-        csColor="surface"
+        csVariant="secondary"
+        csModifiers={["subtle"]}
         {...args}
         primitiveType="cyberstormLink"
         linkId="Communities"
@@ -186,8 +183,7 @@ const Template: StoryFn<typeof LinkButton> = (args) => (
         </NewIcon>
       </LinkButton>
       <LinkButton
-        csVariant="default"
-        csColor="green"
+        csVariant="success"
         {...args}
         primitiveType="cyberstormLink"
         linkId="Communities"
@@ -198,8 +194,7 @@ const Template: StoryFn<typeof LinkButton> = (args) => (
         </NewIcon>
       </LinkButton>
       <LinkButton
-        csVariant="default"
-        csColor="yellow"
+        csVariant="warning"
         {...args}
         primitiveType="cyberstormLink"
         linkId="Communities"
@@ -210,8 +205,7 @@ const Template: StoryFn<typeof LinkButton> = (args) => (
         </NewIcon>
       </LinkButton>
       <LinkButton
-        csVariant="default"
-        csColor="red"
+        csVariant="danger"
         {...args}
         primitiveType="cyberstormLink"
         linkId="Communities"

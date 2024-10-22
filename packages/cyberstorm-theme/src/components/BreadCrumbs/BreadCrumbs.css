@@ -1,0 +1,40 @@
+@layer theme-components {
+  /* VARIANTS STATELESS */
+  .ts-breadcrumbs__outer:where(.ts-variant--default) {
+    --breadcrumbs__outer-background-color: var(
+      --breadcrumbs__outer-background-color--default
+    );
+  }
+
+  .ts-breadcrumbs__outerend:where(.ts-variant--default) {
+    --breadcrumbs__outer-background-color: var(
+      --breadcrumbs__outer-background-color--hover
+    );
+  }
+
+  .ts-breadcrumbs__innerend:where(.ts-variant--default) {
+    --ts-breadcrumbs__innerend-text-color: var(
+      --breadcrumbs__innerend-text-color--default
+    );
+  }
+
+  /* MODIFIERS */
+  .ts-button:where(.ts-modifier--dimmed) {
+    filter: brightness(85%);
+  }
+
+  /* VARIANTS STATES */
+  .ts-breadcrumbs__outer:where(.ts-variant--default):hover {
+    --breadcrumbs__outer-background-color: var(
+      --breadcrumbs__outer-background-color--hover
+    );
+  }
+
+  /* TOKENS */
+  :root {
+    --breadcrumbs__outer-background-color--default: var(--color-surface-6);
+    --breadcrumbs__outer-background-color--hover: var(--color-surface-8);
+    --breadcrumbs__outerend-background-color--default: var(--color-surface-8);
+    --breadcrumbs__innerend-text-color--default: var(--color-text-primary);
+  }
+}

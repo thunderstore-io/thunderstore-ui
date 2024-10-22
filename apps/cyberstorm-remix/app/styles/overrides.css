@@ -1,0 +1,5 @@
+@layer project-overrides {
+  :root {
+    --project-not-used-token: black;
+  }
+}

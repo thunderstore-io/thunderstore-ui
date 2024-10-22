@@ -1,7 +1,7 @@
 .header {
   display: flex;
   flex-direction: row;
-  gap: var(--gap--32);
+  gap: var(--gap-xxxl);
   justify-content: space-between;
 }
 

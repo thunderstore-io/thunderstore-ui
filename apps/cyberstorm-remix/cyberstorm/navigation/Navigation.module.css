@@ -8,12 +8,12 @@
   top: 0;
   z-index: 99999;
   display: flex;
-  gap: var(--gap--32);
+  gap: var(--gap-xxxl);
   align-items: center;
   justify-content: space-between;
   width: 100%;
   height: var(--header-height);
-  padding: 0 var(--space--12);
+  padding: 0 var(--space-12);
   background: var(--body-bg-color-a);
   box-shadow: 0 1px 10px 0 var(--body-bg-color);
   backdrop-filter: blur(10px);
@@ -21,7 +21,7 @@
 
 .item {
   display: flex;
-  gap: var(--gap--16);
+  gap: var(--gap-md);
   align-items: center;
 }
 
@@ -36,30 +36,39 @@
   width: 1.655rem;
   height: 1.463rem;
   margin: 0 0.75rem;
+  color: var(--color-cyber-green-7);
+}
+
+.logoWrapper:hover {
+  color: var(--color-cyber-green-9);
 }
 
 .dropDownItem {
   display: flex;
-  gap: var(--space--16);
+  gap: var(--space-16);
   align-items: center;
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-body-md);
 }
 
 .dropDownItem[data-highlighted] svg,
 .dropDownItem[data-highlighted],
 .dropDownItem {
-  color: var(--color-primary);
+  color: var(--color-text-primary);
 }
 
 .dropDownUserInfo {
   display: flex;
-  gap: var(--gap--16);
-  padding: var(--space--6) var(--space--16);
+  gap: var(--gap-md);
+  padding: var(--space-6) var(--space-16);
 }
 
 .dropdownUserInfoDetails {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-lg);
 }
 
 .mobileNavRoot {
@@ -71,12 +80,12 @@
   align-items: center;
   align-self: stretch;
   justify-content: space-between;
-  color: var(--color-primary);
   background: transparent;
 }
 
 .mobileNavMenuDevelopersButtonIcon {
   height: 0.875rem;
+  color: var(--color-text-tertiary);
 }
 
 .mobileNavItem {
@@ -84,7 +93,7 @@
   flex-direction: column;
   flex-grow: 1;
   align-items: center;
-  color: var(--color-tertiary);
+  color: var(--color-text-tertiary);
   font-weight: 400;
   font-size: 0.75rem;
   line-height: 1.2rem;
@@ -95,11 +104,11 @@ button.mobileNavItem {
 }
 
 .mobileNavItem:active {
-  color: var(--color-cyber-green--5);
+  color: var(--color-cyber-green-5);
 }
 
 .mobileNavItem:hover {
-  color: var(--color-secondary);
+  color: var(--color-text-secondary);
 }
 
 .mobileNavItemIcon {
@@ -112,6 +121,9 @@ button.mobileNavItem {
   align-items: center;
   align-self: stretch;
   padding: 1rem;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-body-lg);
 }
 
 .accountPopoverUser {
@@ -179,6 +191,8 @@ button.mobileNavItem {
   padding: 0.75rem 3rem 0.75rem 1rem;
   border-radius: 0.5rem;
   color: #f5f5f6;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-md);
 }
 
 .loginLinkMobile {
@@ -189,6 +203,8 @@ button.mobileNavItem {
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
   color: #f5f5f6;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-md);
 }
 
 .loginLinkDiscord {
@@ -204,9 +220,16 @@ button.mobileNavItem {
 }
 
 .loginLegalText {
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-lg);
   text-align: center;
 
   --text-color: #8683be;
+}
+
+.loginLegalTextLinks {
+  color: var(--color-text-tertiary);
 }
 
 .mobileMenu {
@@ -238,12 +261,15 @@ button.mobileNavItem {
 }
 
 .getAppButton {
+  height: 2.25rem;
   padding: 0.75rem 0.812rem;
 }
 
 .loginButton {
   height: 2.25rem !important;
   padding: 0.75rem !important;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-md);
 }
 
 .headerRightSide {
@@ -254,19 +280,30 @@ button.mobileNavItem {
 .divider {
   align-self: stretch;
   height: 1px;
-  margin: var(--space--16) var(--space--8);
-  background: var(--color-surface--7);
+  margin: var(--space-16) var(--space-8);
+  background: var(--color-surface-7);
 }
 
 .navMenuItem {
   display: flex;
-  gap: var(--gap--16);
+  gap: var(--gap-md);
   align-items: center;
   align-self: stretch;
-  padding: var(--space--16);
-  border-radius: var(--border-radius--8);
+  padding: var(--space-16);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
 }
 
 .navMenuItem:hover {
-  background: var(--color-surface--9);
+  background: var(--color-surface-9);
+}
+
+.navMenuItemFirst {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-lg);
+}
+
+.navMenuItemSecond {
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-body-md);
 }

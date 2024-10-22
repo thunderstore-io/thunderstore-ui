@@ -1,0 +1,22 @@
+@layer components {
+  .ts-iconbutton {
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--iconbutton-gap);
+    align-items: center;
+    justify-content: center;
+    width: var(--iconbutton-width);
+    height: var(--iconbutton-height);
+    padding: var(--iconbutton-padding);
+    border: var(--iconbutton-border);
+    border-color: var(--iconbutton-border-color);
+    border-radius: var(--iconbutton-border-radius);
+    color: var(--iconbutton-icon-color);
+    background-color: var(--iconbutton-background-color);
+    user-select: none;
+  }
+
+  .ts-iconbutton__icon {
+    --icon-inline-size: 1rem;
+  }
+}

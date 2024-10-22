@@ -1,0 +1,259 @@
+@layer theme-components {
+  /* theme base styles */
+  .ts-tag {
+    --tag-gap: 1rem;
+    --tag-font-weight: var(--font-weight-bold);
+  }
+
+  /* SIZES */
+  .ts-tag:where(.ts-size--small) {
+    --tag-gap: var(--gap-xxs);
+    --tag-padding-block: var(--tag-md-padding-block);
+    --tag-padding-inline: var(--tag-md-padding-inline);
+    --tag-border-radius: 6px;
+    --tag-font-size: var(--tag-md-font-size);
+  }
+
+  .ts-tag:where(.ts-size--medium) {
+    --tag-gap: var(--space-8);
+    --tag-padding-block: var(--tag-xs-padding-block);
+    --tag-padding-inline: var(--tag-xs-padding-inline);
+    --tag-border-radius: var(--radius-md);
+    --tag-font-size: var(--tag-xs-font-size);
+  }
+
+  /* VARIANTS DEFAULT STATE */
+  .ts-tag:where(.ts-variant--primary) {
+    --tag-color: var(--tag-light-primary-text-color--default);
+    --tag-background-color: var(--tag-light-primary-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--primary):where(.ts-modifier--dark) {
+    --tag-color: var(--tag-dark-primary-text-color--default);
+    --tag-background-color: var(--tag-dark-primary-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--blue) {
+    --tag-color: var(--tag-light-blue-text-color--default);
+    --tag-background-color: var(--tag-light-blue-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--blue):where(.ts-modifier--dark) {
+    --tag-color: var(--tag-dark-blue-text-color--default);
+    --tag-background-color: var(--tag-dark-blue-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--green) {
+    --tag-color: var(--tag-light-green-text-color--default);
+    --tag-background-color: var(--tag-light-green-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--green):where(.ts-modifier--dark) {
+    --tag-color: var(--tag-dark-green-text-color--default);
+    --tag-background-color: var(--tag-dark-green-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--yellow) {
+    --tag-color: var(--tag-light-yellow-text-color--default);
+    --tag-background-color: var(--tag-light-yellow-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--yellow):where(.ts-modifier--dark) {
+    --tag-color: var(--tag-dark-yellow-text-color--default);
+    --tag-background-color: var(--tag-dark-yellow-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--red) {
+    --tag-color: var(--tag-light-red-text-color--default);
+    --tag-background-color: var(--tag-light-red-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--red):where(.ts-modifier--dark) {
+    --tag-color: var(--tag-dark-red-text-color--default);
+    --tag-background-color: var(--tag-dark-red-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--pink) {
+    --tag-color: var(--tag-light-pink-text-color--default);
+    --tag-background-color: var(--tag-light-pink-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--pink):where(.ts-modifier--dark) {
+    --tag-color: var(--tag-dark-pink-text-color--default);
+    --tag-background-color: var(--tag-dark-pink-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--orange) {
+    --tag-color: var(--tag-light-orange-text-color--default);
+    --tag-background-color: var(--tag-light-orange-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--orange):where(.ts-modifier--dark) {
+    --tag-color: var(--tag-dark-orange-text-color--default);
+    --tag-background-color: var(--tag-dark-orange-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--purple) {
+    --tag-color: var(--tag-light-purple-text-color--default);
+    --tag-background-color: var(--tag-light-purple-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--purple):where(.ts-modifier--dark) {
+    --tag-color: var(--tag-dark-purple-text-color--default);
+    --tag-background-color: var(--tag-dark-purple-bg-color--default);
+  }
+
+  .ts-tag:where(.ts-variant--primary):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-light-primary-text-color--hover);
+    --tag-background-color: var(--tag-light-primary-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--primary):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-dark-primary-text-color--hover);
+    --tag-background-color: var(--tag-dark-primary-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--blue):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-light-blue-text-color--hover);
+    --tag-background-color: var(--tag-light-blue-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--blue):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-dark-blue-text-color--hover);
+    --tag-background-color: var(--tag-dark-blue-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--green):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-light-green-text-color--hover);
+    --tag-background-color: var(--tag-light-green-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--green):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-dark-green-text-color--hover);
+    --tag-background-color: var(--tag-dark-green-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--yellow):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-light-yellow-text-color--hover);
+    --tag-background-color: var(--tag-light-yellow-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--yellow):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-dark-yellow-text-color--hover);
+    --tag-background-color: var(--tag-dark-yellow-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--red):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-light-red-text-color--hover);
+    --tag-background-color: var(--tag-light-red-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--red):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-dark-red-text-color--hover);
+    --tag-background-color: var(--tag-dark-red-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--pink):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-light-pink-text-color--hover);
+    --tag-background-color: var(--tag-light-pink-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--pink):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-dark-pink-text-color--hover);
+    --tag-background-color: var(--tag-dark-pink-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--orange):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-light-orange-text-color--hover);
+    --tag-background-color: var(--tag-light-orange-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--orange):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-dark-orange-text-color--hover);
+    --tag-background-color: var(--tag-dark-orange-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--purple):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-light-purple-text-color--hover);
+    --tag-background-color: var(--tag-light-purple-bg-color--hover);
+  }
+
+  .ts-tag:where(.ts-variant--purple):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
+    --tag-color: var(--tag-dark-purple-text-color--hover);
+    --tag-background-color: var(--tag-dark-purple-bg-color--hover);
+  }
+
+  /* TOKENS */
+  :root {
+    --tag-dark-blue-bg-color--default: var(--color-accent-blue-2);
+    --tag-dark-blue-bg-color--hover: var(--color-accent-blue-3);
+    --tag-dark-blue-text-color--default: var(--color-accent-blue-9);
+    --tag-dark-blue-text-color--hover: var(--color-accent-blue-9);
+    --tag-dark-green-bg-color--default: var(--color-accent-green-2);
+    --tag-dark-green-bg-color--hover: var(--color-accent-green-3);
+    --tag-dark-green-text-color--default: var(--color-accent-green-9);
+    --tag-dark-green-text-color--hover: var(--color-accent-green-9);
+    --tag-dark-orange-bg-color--default: var(--color-accent-orange-2);
+    --tag-dark-orange-bg-color--hover: var(--color-accent-orange-3);
+    --tag-dark-orange-text-color--default: var(--color-accent-orange-9);
+    --tag-dark-orange-text-color--hover: var(--color-accent-orange-9);
+    --tag-dark-pink-bg-color--default: var(--color-accent-pink-2);
+    --tag-dark-pink-bg-color--hover: var(--color-accent-pink-3);
+    --tag-dark-pink-text-color--default: var(--color-accent-pink-9);
+    --tag-dark-pink-text-color--hover: var(--color-accent-pink-9);
+    --tag-dark-primary-bg-color--default: var(--color-surface-8);
+    --tag-dark-primary-bg-color--hover: var(--color-surface-9);
+    --tag-dark-primary-text-color--default: var(--color--primary);
+    --tag-dark-primary-text-color--hover: var(--color--primary);
+    --tag-dark-purple-bg-color--default: var(--color-purple-2);
+    --tag-dark-purple-bg-color--hover: var(--color-accent-purple-3);
+    --tag-dark-purple-text-color--default: var(--color-accent-purple-9);
+    --tag-dark-purple-text-color--hover: var(--color-accent-purple-9);
+    --tag-dark-red-bg-color--default: var(--color-accent-red-2);
+    --tag-dark-red-bg-color--hover: var(--color-accent-red-3);
+    --tag-dark-red-text-color--default: var(--color-accent-red-9);
+    --tag-dark-red-text-color--hover: var(--color-accent-red-9);
+    --tag-dark-yellow-bg-color--default: var(--color-accent-yellow-2);
+    --tag-dark-yellow-bg-color--hover: var(--color-accent-yellow-3);
+    --tag-dark-yellow-text-color--default: var(--color-accent-yellow-9);
+    --tag-dark-yellow-text-color--hover: var(--color-accent-yellow-9);
+    --tag-light-blue-bg-color--default: var(--color-accent-blue-7);
+    --tag-light-blue-bg-color--hover: var(--color-accent-blue-8);
+    --tag-light-blue-text-color--default: var(--color-accent-blue-1);
+    --tag-light-blue-text-color--hover: var(--color-accent-blue-1);
+    --tag-light-green-bg-color--default: var(--color-accent-green-7);
+    --tag-light-green-bg-color--hover: var(--color-accent-green-8);
+    --tag-light-green-text-color--default: var(--color-accent-green-1);
+    --tag-light-green-text-color--hover: var(--color-accent-green-1);
+    --tag-light-orange-bg-color--default: var(--color-accent-orange-7);
+    --tag-light-orange-bg-color--hover: var(--color-accent-orange-8);
+    --tag-light-orange-text-color--default: var(--color-accent-orange-1);
+    --tag-light-orange-text-color--hover: var(--color-accent-orange-1);
+    --tag-light-pink-bg-color--default: var(--color-accent-pink-7);
+    --tag-light-pink-bg-color--hover: var(--color-accent-pink-8);
+    --tag-light-pink-text-color--default: var(--color-accent-pink-1);
+    --tag-light-pink-text-color--hover: var(--color-accent-pink-1);
+    --tag-light-primary-bg-color--default: var(--color-surface-10);
+    --tag-light-primary-bg-color--hover: hsl(240deg 44% 55%);
+    --tag-light-primary-text-color--default: var(--color-text-primary);
+    --tag-light-primary-text-color--hover: var(--color-text-primary);
+    --tag-light-purple-bg-color--default: var(--color-accent-purple-7);
+    --tag-light-purple-bg-color--hover: var(--color-accent-purple-8);
+    --tag-light-purple-text-color--default: var(--color-accent-purple-1);
+    --tag-light-purple-text-color--hover: var(--color-accent-purple-1);
+    --tag-light-red-bg-color--default: var(--color-accent-red-7);
+    --tag-light-red-bg-color--hover: var(--color-accent-red-8);
+    --tag-light-red-text-color--default: var(--color-accent-red-1);
+    --tag-light-red-text-color--hover: var(--color-accent-red-1);
+    --tag-light-yellow-bg-color--default: var(--color-accent-yellow-7);
+    --tag-light-yellow-bg-color--hover: var(--color-accent-yellow-8);
+    --tag-light-yellow-text-color--default: var(--color-accent-yellow-1);
+    --tag-light-yellow-text-color--hover: var(--color-accent-yellow-1);
+    --tag-md-padding-block: var(--space-6);
+    --tag-md-padding-inline: var(--space-8);
+    --tag-md-font-size: var(--font-size-body-sm);
+    --tag-xs-padding-block: var(--space-4);
+    --tag-xs-padding-inline: var(--space-6);
+    --tag-xs-font-size: var(--font-size-body-sm);
+  }
+}

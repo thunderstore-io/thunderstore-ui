@@ -5,7 +5,6 @@ import {
   NewButton,
   NewIcon,
   NewLink,
-  NewText,
 } from "@thunderstore/cyberstorm";
 import { faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,14 +20,12 @@ export function DesktopLoginPopover() {
       trigger={
         <NewButton
           csVariant="primary"
-          csColor="purple"
-          csSize="l"
+          csSize="big"
           rootClasses={styles.loginButton}
           {...{
             popovertarget: "navAccount",
             popovertargetaction: "open",
           }}
-          csTextStyles={["fontSizeS", "fontWeightBold", "lineHeightAuto"]}
         >
           <NewIcon csMode="inline" noWrapper>
             <FontAwesomeIcon icon={faArrowRightToBracket} />
@@ -67,7 +64,7 @@ export function DesktopLoginPopover() {
         <Heading
           mode="heading"
           csLevel="2"
-          csStyleLevel="3"
+          csSize="3"
           rootClasses={styles.loginTitle}
         >
           Log in to Thunderstore
@@ -77,7 +74,6 @@ export function DesktopLoginPopover() {
             primitiveType="link"
             href={buildAuthLoginUrl({ type: "discord" })}
             rootClasses={classnames(styles.loginLink, styles.loginLinkDiscord)}
-            csTextStyles={["fontSizeS", "fontWeightBold"]}
           >
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faDiscord} />
@@ -88,7 +84,6 @@ export function DesktopLoginPopover() {
             primitiveType="link"
             href={buildAuthLoginUrl({ type: "github" })}
             rootClasses={classnames(styles.loginLink, styles.loginLinkGithub)}
-            csTextStyles={["fontSizeS", "fontWeightBold"]}
           >
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faGithub} />
@@ -99,7 +94,6 @@ export function DesktopLoginPopover() {
             primitiveType="link"
             href={buildAuthLoginUrl({ type: "overwolf" })}
             rootClasses={classnames(styles.loginLink, styles.loginLinkOverwolf)}
-            csTextStyles={["fontSizeS", "fontWeightBold"]}
           >
             <NewIcon csMode="inline" noWrapper>
               <OverwolfLogo />
@@ -107,15 +101,12 @@ export function DesktopLoginPopover() {
             Connect with Overwolf
           </NewLink>
         </div>
-        <NewText
-          rootClasses={styles.loginLegalText}
-          csTextStyles={["lineHeightBody", "fontSizeXS", "fontWeightRegular"]}
-        >
+        <p className={styles.loginLegalText}>
           By logging in and accessing the site you agree to{" "}
           <NewLink
             primitiveType="cyberstormLink"
             linkId="TermsOfService"
-            csVariant="tertiary"
+            csVariant="primary"
           >
             Terms and Conditions
           </NewLink>{" "}
@@ -123,11 +114,11 @@ export function DesktopLoginPopover() {
           <NewLink
             primitiveType="cyberstormLink"
             linkId="PrivacyPolicy"
-            csVariant="tertiary"
+            csVariant="primary"
           >
             Privacy Policy
           </NewLink>
-        </NewText>
+        </p>
       </div>
     </Modal>
   );

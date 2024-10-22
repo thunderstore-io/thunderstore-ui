@@ -1,0 +1,90 @@
+@layer theme-components {
+  .ts-textinput {
+    --textinput-width: 100%;
+    --textinput-padding: var(--space-8) var(--space-10);
+    --textinput-border: var(--border-width--2) solid
+      var(--textinput-border-color);
+    --textinput-border-radius: var(--radius-md);
+    --textinput-transition: ease-out var(--animation-duration-xs);
+    --textinput-border-color: transparent;
+    --textinput-text-color: var(--color-text-primary);
+    --textinput-background-color: var(--color-surface-a5);
+  }
+
+  .ts-textinput__wrapper {
+    --textinput__wrapper-width: auto;
+    --textinput__wrapper-line-height: var(--line-height-auto);
+    --textinput__wrapper-font-weight: var(--font-weight-regular);
+    --textinput__wrapper-font-size: var(--font-size-body-lg);
+  }
+
+  .ts-textinput[value] {
+    --textinput-text-color: var(--color-text-secondary);
+  }
+
+  .ts-textinput:where(.ts-size--default) {
+    --textinput-height: var(--space-44);
+    --textinput-padding: var(--space-10)
+      calc(var(--space-16) + var(--right-padding-bonus, 0px)) var(--space-10)
+      calc(var(--space-16) + var(--left-padding-bonus, 0px));
+  }
+
+  .ts-textinput:where(.ts-size--small) {
+    --textinput-height: var(--space-36);
+    --textinput-padding: var(--space-8)
+      calc(var(--space-16) + var(--right-padding-bonus, 0px)) var(--space-10)
+      calc(var(--space-16) + var(--left-padding-bonus, 0px));
+  }
+
+  .ts-textinput:where(.ts-textinput__haslefticon) {
+    --left-padding-bonus: var(--space-24);
+  }
+
+  .ts-textinput:where(.ts-textinput__hasclearvalue) {
+    --right-padding-bonus: var(--space-16);
+  }
+
+  .ts-textinput:hover {
+    --textinput-background-color: var(--color-surface-a6);
+    --textinput-border-color: var(--color-surface-a10);
+  }
+
+  .ts-textinput:focus-within {
+    --textinput-text-color: var(--color-text-primary);
+    --textinput-background-color: var(--color-black);
+    --textinput-border-color: var(--color-cyber-green-7);
+  }
+
+  .ts-textinput:has(+ .ts-textinput__clearvaluebutton:hover):not(:focus-within) {
+    --input-background-color: var(--color-surface-a6);
+    --border-color: var(--color-surface-a10);
+  }
+
+  .ts-textinput::placeholder {
+    --textinput__placeholder-color: var(--color-text--tertiary);
+    --textinput__placeholder-opacity: 1;
+  }
+
+  .ts-textinput__lefticon {
+    --ts-textinput__lefticon-position: absolute;
+    --ts-textinput__lefticon-margin: var(--space-10) var(--space-16);
+    --ts-textinput__lefticon-color: var(--color-text-tertiary);
+    --ts-textinput__lefticon-pointer-events: none;
+  }
+
+  .ts-textinput__righticon {
+    --ts-textinput__righticon-position: absolute;
+    --ts-textinput__righticon-padding: var(--space-14) var(--space-16);
+    --ts-textinput__righticon-color: var(--color-text-secondary);
+  }
+
+  .ts-textinput__clearvaluebutton {
+    --ts-textinput__clearvaluebutton-right: var(--space-16);
+    --ts-textinput__clearvaluebutton-color: var(--color-text-secondary);
+    --ts-textinput__clearvaluebutton-opacity: 0.5;
+  }
+
+  .ts-textinput__clearvaluebutton:hover {
+    --ts-textinput__clearvaluebutton-opacity: 1;
+  }
+}

@@ -1,0 +1,18 @@
+@layer theme-components {
+  /* VARIANTS DEFAULT STATE */
+  .ts-menu:where(.ts-variant--primary) {
+    --menu-color: var(--menu-primary-color--default);
+  }
+
+  .ts-menu:where(.ts-variant--primary):hover {
+    --menu-color: var(--menu-primary-color--hover);
+
+    text-decoration: none;
+  }
+
+  /* TOKENS */
+  :root {
+    --menu-primary-color--default: var(--color-text-accent);
+    --menu-primary-color--hover: var(--color-text-primary);
+  }
+}

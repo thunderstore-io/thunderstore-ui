@@ -15,23 +15,23 @@
   z-index: 999;
   display: flex;
   flex-direction: column;
-  gap: var(--gap--2);
+  gap: var(--gap-xxxs);
   min-width: var(--radix-popper-anchor-width);
   max-width: max-content;
-  padding: var(--space--8) 0;
-  border: var(--space--px) var(--color-surface--6) solid;
-  border-radius: var(--border-radius--8);
+  padding: var(--space-8) 0;
+  border: var(--space-px) var(--color-surface-6) solid;
+  border-radius: var(--radius-md);
   overflow: hidden;
   color: var(--text-color);
-  background-color: var(--color-surface--2);
-  box-shadow: var(--box-shadow-default);
-  animation: fade-in var(--animation-length-l) ease;
+  background-color: var(--color-surface-2);
+  box-shadow: var(--shadow-lg);
+  animation: fade-in var(--animation-duration-lg) ease;
 }
 
 /* Different Select variant schemes */
 .content__default {
   --text-color: var(--color-white);
-  --bg-color: var(--color-surface--5);
+  --bg-color: var(--color-surface-5);
 }
 
 .content__accent {

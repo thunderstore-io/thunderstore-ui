@@ -1,6 +1,6 @@
 .dependencyStringWrapper {
   display: flex;
-  gap: var(--gap--8);
+  gap: var(--gap-xs);
   align-items: center;
   max-width: 180px;
   max-height: 21px;

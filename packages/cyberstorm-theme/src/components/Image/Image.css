@@ -1,0 +1,15 @@
+@layer theme-components {
+  /* VARIANTS DEFAULT STATE */
+  .ts-image__wrapper:where(.ts-variant--primary) {
+    --image__wrapper-color: var(--image-wrapper-primary-color--default);
+    --image__wrapper-bg-color: var(
+      --image-wrapper-primary-background-color--default
+    );
+  }
+
+  /* TOKENS */
+  :root {
+    --image-wrapper-primary-color--default: hsl(240deg 42% 45%);
+    --image-wrapper-primary-background-color--default: var(--color-surface-a4);
+  }
+}

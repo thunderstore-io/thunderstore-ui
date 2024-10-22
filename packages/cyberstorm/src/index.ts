@@ -15,7 +15,6 @@ export {
   DropDownDivider,
 } from "./components/DropDown/DropDown";
 export * as EmptyState from "./components/EmptyState/";
-export { Footer } from "./components/Footer/Footer";
 export { Icon } from "./components/Icon/Icon";
 export { Link, type LinkProps } from "./components/Link/Link";
 export {
@@ -90,8 +89,6 @@ export {
   type FrameFloaterProps,
   type FrameHeadingProps,
   type FrameIconProps,
-  type FrameListItemProps,
-  type FrameListProps,
   type FrameModalProps,
   type FramePopoverProps,
   type FrameTextProps,
@@ -101,13 +98,7 @@ export {
   Input,
   type InputTextInputProps,
 } from "./primitiveComponents/Input/Input";
-export {
-  type variants,
-  type colors,
-  type sizes,
-  type TextStyles,
-  type PrimitiveComponentDefaultProps,
-} from "./primitiveComponents/utils/utils";
+export { type PrimitiveComponentDefaultProps } from "./primitiveComponents/utils/utils";
 
 // newComponents
 export { Menu } from "./newComponents/Menu/Menu";
@@ -118,9 +109,7 @@ export { Link as NewLink } from "./newComponents/Link/Link/Link";
 export { LinkButton } from "./newComponents/Link/LinkButton/LinkButton";
 export { Button as NewButton } from "./newComponents/Button/Button";
 export { BreadCrumbs as NewBreadCrumbs } from "./newComponents/BreadCrumbs/BreadCrumbs";
-export { Container } from "./newComponents/Container/Container";
 export { TextInput as NewTextInput } from "./newComponents/TextInput/TextInput";
-export { Text as NewText } from "./newComponents/Text/Text";
 export {
   Select as NewSelect,
   type SelectProps as NewSelectProps,
@@ -133,5 +122,4 @@ export {
   DropDownDivider as NewDropDownDivider,
 } from "./newComponents/DropDown/DropDown";
 export { Image } from "./newComponents/Image/Image";
-export * as List from "./newComponents/List";
 export { AdContainer } from "./newComponents/AdContainer/AdContainer";

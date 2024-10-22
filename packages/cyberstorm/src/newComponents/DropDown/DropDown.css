@@ -1,0 +1,35 @@
+@layer components {
+  .ts-dropdown {
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    padding: var(--dropdown-padding);
+    border: var(--dropdown-border);
+    border-color: var(--dropdown-border-color);
+    border-radius: var(--dropdown-border-radius);
+    overflow: hidden;
+    color: var(--dropdown-text-color);
+    background-color: var(--dropdown-background-color);
+    box-shadow: var(--dropdown-box-shadow);
+    transform-origin: var(--radix-dropdown-menu-content-transform-origin);
+    animation: var(--dropdown-animation);
+  }
+
+  .ts-dropdown__item {
+    padding: var(--dropdown__item-padding);
+    overflow: hidden;
+    color: var(--dropdown__item-color);
+    background-color: var(--dropdown__item-background-color);
+    outline: none;
+  }
+
+  .ts-dropdown__item[data-highlighted] {
+    z-index: 999;
+  }
+
+  .ts-dropdown__divider {
+    height: var(--dropdown__divider-height);
+    margin: var(--dropdown__divider-margin);
+    background-color: var(--dropdown__divider-background-color);
+  }
+}

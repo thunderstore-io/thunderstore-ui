@@ -1,0 +1,61 @@
+@layer components {
+  .ts-textinput__wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: var(--textinput__wrapper-width);
+    font-weight: var(--textinput__wrapper-font-weight);
+    font-size: var(--textinput__wrapper-font-size);
+    line-height: var(--textinput__wrapper-line-height);
+  }
+
+  .ts-textinput__wrapper > input {
+    outline: none;
+  }
+
+  .ts-textinput {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: var(--textinput-width);
+    padding: var(--textinput-padding);
+    border: var(--textinput-border);
+    border-color: var(--textinput-border-color);
+    border-radius: var(--textinput-border-radius);
+    color: var(--textinput-text-color);
+    background-color: var(--textinput-background-color);
+    cursor: text;
+    transition: var(--textinput-transition);
+  }
+
+  .ts-textinput::placeholder {
+    color: var(--textinput__placeholder-color);
+    opacity: var(--textinput__placeholder-opacity);
+  }
+
+  .ts-textinput:focus-within::placeholder {
+    color: transparent;
+  }
+
+  .ts-textinput__lefticon {
+    position: var(--ts-textinput__lefticon-position);
+    margin: var(--ts-textinput__lefticon-margin);
+    color: var(--ts-textinput__lefticon-color);
+    pointer-events: none;
+  }
+
+  .ts-textinput__righticon {
+    position: var(--ts-textinput__righticon-position);
+    padding: var(--ts-textinput__righticon-padding);
+    color: var(--ts-textinput__righticon-color);
+  }
+
+  .ts-textinput__clearvaluebutton {
+    position: absolute;
+    right: var(--ts-textinput__clearvaluebutton-right);
+    display: flex;
+    color: var(--ts-textinput__clearvaluebutton-color);
+    background: inherit;
+    opacity: var(--ts-textinput__clearvaluebutton-opacity);
+  }
+}

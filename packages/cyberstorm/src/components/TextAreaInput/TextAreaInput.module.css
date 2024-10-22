@@ -4,16 +4,16 @@
   align-items: center;
   width: 100%;
   min-height: 300px;
-  padding: var(--space--12) var(--space--16);
+  padding: var(--space-12) var(--space-16);
   border: var(--border-width--2) solid var(--border-color);
 
-  border-radius: var(--border-radius--8);
+  border-radius: var(--radius-md);
   font-weight: var(--font-weight-medium);
 
-  font-size: var(--font-size--l);
+  font-size: var(--font-size-body-xxxxl);
   font-family: "Courier New", monospace;
   line-height: var(--line-height--l);
-  background-color: var(--color-surface--4);
+  background-color: var(--color-surface-4);
   resize: vertical;
 
   --border-color: transparent;

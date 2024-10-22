@@ -1,0 +1,51 @@
+@layer theme-components {
+  /* DROPDOWN ROOT */
+
+  /* Missing tokens */
+  .ts-dropdown:where(.ts-variant--primary) {
+    --dropdown-color: var(--color-surface-5);
+    --dropdown-background-color: var(--color-surface-2);
+    --dropdown-border-color: var(--color-surface-6);
+    --dropdown-border: var(--space-px) var(--dropdown-border-color) solid;
+    --dropdown-border-radius: var(--radius-md);
+    --dropdown-box-shadow: var(--shadow-lg);
+    --dropdown-animation: fade-in var(--animation-duration-md) ease;
+    --dropdown-padding: var(--space-8) 0;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* DROPDOWN ITEM */
+
+  /* Missing tokens */
+  .ts-dropdown__item:where(.ts-variant--primary) {
+    --dropdown__item-padding: var(--space-12) var(--space-16);
+    --dropdown__item-color: var(--color-surface-8);
+    --dropdown__item-background-color: var(--color-surface-2);
+  }
+
+  .ts-dropdown__item:where(.ts-variant--primary)[data-highlighted] {
+    --dropdown__item-color: var(--color-surface-2);
+    --dropdown__item-background-color: var(--color-surface-6);
+  }
+
+  /* DROPDOWN DIVIDER */
+
+  /* Missing tokens */
+  .ts-dropdown__divider:where(.ts-variant--primary) {
+    --dropdown__divider-height: var(--space-px);
+    --dropdown__divider-margin: var(--space-8) 0;
+    --dropdown__divider-background-color: var(
+      --color-surface-6,
+      var(--color-text-primary, red)
+    );
+  }
+}

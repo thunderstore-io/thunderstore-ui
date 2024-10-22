@@ -1,11 +1,12 @@
 import { faBan, faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import styles from "./Image.module.css";
-import { classnames } from "../../utils/utils";
+import "./Image.css";
+import { classnames, componentClasses } from "../../utils/utils";
 import { Frame, FrameWindowProps } from "../../primitiveComponents/Frame/Frame";
-import { Icon } from "../..";
+import { NewIcon } from "../..";
 import React from "react";
+import { ImageVariants } from "@thunderstore/cyberstorm-theme/src/components";
 
 interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
   src: string | null;
@@ -15,6 +16,7 @@ interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
   alt?: string;
   /** Force 1:1 aspect ratio */
   square?: boolean;
+  csVariant?: ImageVariants;
 }
 
 // TODO: Needs a storybook story
@@ -29,8 +31,7 @@ export const Image = React.forwardRef<HTMLDivElement, ImageProps>(
       alt = "",
       rootClasses,
       square = false,
-      csColor = "surface",
-      csVariant = "default",
+      csVariant = "primary",
       ...forwardedProps
     } = props;
     const fProps = forwardedProps as ImageProps;
@@ -40,25 +41,33 @@ export const Image = React.forwardRef<HTMLDivElement, ImageProps>(
         {...fProps}
         primitiveType="window"
         rootClasses={classnames(
-          styles.imageWrapper,
+          "ts-image__wrapper",
+          ...componentClasses(csVariant, undefined, undefined),
           rootClasses,
-          square ? styles.isSquare : styles.is3By4
+          square ? "ts-image--issquare" : "ts-image--is3by4"
         )}
-        csColor={csColor}
-        csVariant={csVariant}
         ref={forwardedRef}
       >
         {src ? (
           <Frame
             primitiveType="window"
-            rootClasses={classnames(styles.imageContent, styles.fullWidth)}
+            rootClasses={classnames(
+              "ts-image__content",
+              ...componentClasses(csVariant, undefined, undefined),
+              "ts-image--fullwidth"
+            )}
           >
-            <img src={src} alt={alt} className={styles.image} />
+            <img src={src} alt={alt} className="ts-image" />
           </Frame>
         ) : (
-          <Icon wrapperClasses={styles.imageContent}>
+          <NewIcon
+            wrapperClasses={classnames(
+              "ts-image__content",
+              ...componentClasses(csVariant, undefined, undefined)
+            )}
+          >
             <FontAwesomeIcon icon={getIcon(cardType)} />
-          </Icon>
+          </NewIcon>
         )}
       </Frame>
     );

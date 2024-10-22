@@ -8,7 +8,6 @@ import {
   NewButton,
   NewIcon,
   NewLink,
-  NewText,
 } from "@thunderstore/cyberstorm";
 import { AvatarButton } from "@thunderstore/cyberstorm/src/components/Avatar/AvatarButton";
 import { CurrentUser } from "@thunderstore/dapper/types";
@@ -43,9 +42,9 @@ export function MobileUserPopoverContent(props: { user: CurrentUser }) {
             popovertargetaction: "close",
           }}
           aria-label="Back"
-          mode="iconButton"
-          csSize="m"
-          csVariant="tertiaryDimmed"
+          csSize="medium"
+          csVariant="secondary"
+          csModifiers={["subtle", "dimmed"]}
           icon={faLongArrowLeft}
         />
       }
@@ -54,12 +53,7 @@ export function MobileUserPopoverContent(props: { user: CurrentUser }) {
         <div className={styles.mobileNavPopover}>
           <div className={styles.accountPopoverUser}>
             <Avatar src={avatar} username={user.username} size="small" />
-            <NewText
-              rootClasses={styles.dropdownUserInfoDetails}
-              csTextStyles={["fontSizeM", "fontWeightBold"]}
-            >
-              {user.username}
-            </NewText>
+            <p className={styles.dropdownUserInfoDetails}>{user.username}</p>
           </div>
           <NewLink
             primitiveType="cyberstormLink"

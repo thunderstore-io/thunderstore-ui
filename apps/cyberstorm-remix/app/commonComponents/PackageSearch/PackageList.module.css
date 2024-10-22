@@ -1,7 +1,7 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--32);
+  gap: var(--gap-xxxl);
 }
 
 .top {
@@ -13,27 +13,27 @@
 
 .packageCount {
   color: var(--color-text--tertiary);
-  font-size: var(--font-size--m);
+  font-size: var(--font-size-body-lg);
 }
 
 .order {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--16);
+  gap: var(--gap-md);
   align-items: flex-start;
 }
 
 .sortByText {
   color: var(--color-text--tertiary);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size--m);
+  font-size: var(--font-size-body-lg);
   white-space: nowrap;
 }
 
 .packages {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  gap: var(--gap--24);
+  gap: var(--gap-xl);
 }
 
 .packagesIsFiltersVisible {
@@ -46,12 +46,12 @@
 
 .packageOrderBySkeletonBar {
   width: 14rem;
-  height: var(--space--38);
+  height: var(--space-38);
 }
 
 .packageCountSkeletonBar {
   width: 14rem;
-  height: var(--space--20);
+  height: var(--space-20);
 }
 
 .packagePaginationSkeletonContainer {
@@ -61,7 +61,7 @@
 
 .packagePaginationSkeletonBar {
   width: 14rem;
-  height: var(--space--36);
+  height: var(--space-36);
 }
 
 @media (width <= 43.75rem) {

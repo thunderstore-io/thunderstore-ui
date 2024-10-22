@@ -1,6 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
-  Container,
   CardCommunity,
   CommunityCardSkeleton,
   EmptyState,
@@ -131,21 +130,12 @@ export default function CommunitiesPage() {
         Communities
       </NewBreadCrumbs>
       <header className="project-root__page-header">
-        <Heading
-          csLevel="1"
-          csStyleLevel="2"
-          csVariant="primary"
-          mode="display"
-        >
+        <Heading csLevel="1" csSize="2" csVariant="primary" mode="display">
           Communities
         </Heading>
       </header>
       <main className="project-root__main">
-        <Container
-          rootClasses={searchAndOrderStyles.root}
-          csVariant="tertiary"
-          csTextStyles={["fontWeightBold", "lineHeightAuto", "fontSizeS"]}
-        >
+        <div className={searchAndOrderStyles.root}>
           <div className={searchAndOrderStyles.searchTextInput}>
             <label htmlFor="communitiesSearchInput">Search</label>
             <NewTextInput
@@ -154,7 +144,6 @@ export default function CommunitiesPage() {
               placeholder="Search communities..."
               clearValue={() => setSearchValue("")}
               leftIcon={<FontAwesomeIcon icon={faSearch} />}
-              csColor="cyber-green"
               id="communitiesSearchInput"
             />
           </div>
@@ -168,7 +157,7 @@ export default function CommunitiesPage() {
               id="communitiesSortBy"
             />
           </div>
-        </Container>
+        </div>
 
         <CommunitiesList communitiesData={communitiesData} />
         {/* {navigation.state === "loading" ? (

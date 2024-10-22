@@ -1,23 +1,25 @@
 import { ReactNode } from "react";
 
-import styles from "./Menu.module.css";
+import "./Menu.css";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { NewButton } from "../..";
 import {
   FramePopoverProps,
   Frame,
 } from "../../primitiveComponents/Frame/Frame";
-import { classnames } from "../../utils/utils";
+import { classnames, componentClasses } from "../../utils/utils";
+import { MenuVariants } from "@thunderstore/cyberstorm-theme/src/components";
 
 interface Props extends Omit<FramePopoverProps, "primitiveType"> {
   trigger?: ReactNode;
   controls?: ReactNode;
+  csVariant?: MenuVariants;
 }
 
 // TODO: Add storybook story
 // TODO: Add support for color, size and text systems
 export function Menu(props: Props) {
-  const { rootClasses } = props;
+  const { rootClasses, csVariant } = props;
 
   return (
     <>
@@ -25,13 +27,20 @@ export function Menu(props: Props) {
       <Frame
         primitiveType="popover"
         popoverId={props.popoverId}
-        csColor="pink"
-        csSize="m"
-        rootClasses={classnames(styles.menuRoot, rootClasses)}
+        rootClasses={classnames(
+          "ts-menu",
+          ...componentClasses(csVariant, undefined, undefined),
+          rootClasses
+        )}
         noWrapper
         popoverMode="manual"
       >
-        <div className={styles.menuWrapper}>
+        <div
+          className={classnames(
+            "ts-menu__wrapper",
+            ...componentClasses(csVariant, undefined, undefined)
+          )}
+        >
           {props.controls ? (
             props.controls
           ) : (
@@ -40,7 +49,8 @@ export function Menu(props: Props) {
                 popovertarget: props.popoverId,
                 popovertargetaction: "close",
               }}
-              csVariant="tertiaryDimmed"
+              csVariant="secondary"
+              csModifiers={["subtle", "dimmed"]}
               tooltipText="Close"
               aria-label="Close"
               icon={faXmark}
@@ -49,7 +59,10 @@ export function Menu(props: Props) {
           {props.children}
         </div>
         <button
-          className={styles.fakeBackdrop}
+          className={classnames(
+            "ts-menu__fakebackdrop",
+            ...componentClasses(csVariant, undefined, undefined)
+          )}
           {...{
             popovertarget: props.popoverId,
             popovertargetaction: "close",

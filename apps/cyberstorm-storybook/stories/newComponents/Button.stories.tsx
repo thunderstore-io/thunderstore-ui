@@ -3,7 +3,14 @@ import { NewButton, NewIcon } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { colorsList } from "@thunderstore/cyberstorm/src/primitiveComponents/utils/utils";
+import {
+  ButtonModifiersList,
+  ButtonSizesList,
+  ButtonVariantsList,
+  IconButtonModifiersList,
+  IconButtonSizesList,
+  IconButtonVariantsList,
+} from "@thunderstore/cyberstorm-theme/src/components";
 
 const meta = {
   title: "Button",
@@ -12,40 +19,18 @@ const meta = {
 
 const defaultArgs = {};
 
-const buttonVariants = [
-  "default",
-  "defaultPeek",
-  "primary",
-  "secondary",
-  "tertiary",
-  "minimal",
-  "accent",
-  "special",
-] as const;
-const buttonSizes = ["xs", "s", "m", "l"] as const;
-const IconButtonVariants = [
-  "default",
-  "defaultPeek",
-  "primary",
-  "secondary",
-  "tertiary",
-  "tertiaryDimmed",
-  "minimal",
-] as const;
-const IconButtonSizes = ["xs", "s", "m"] as const;
-
 const Template: StoryFn<typeof NewButton> = () => {
-  const Buttons = buttonSizes.map((size) => {
-    const variantBlock = buttonVariants.map((variant) => {
-      const colorBlock = colorsList.map((color) => {
+  const Buttons = ButtonSizesList.map((size) => {
+    const variantBlock = ButtonVariantsList.map((variant) => {
+      const modifierBlock = ButtonModifiersList.map((modifier) => {
         return (
           <NewButton
-            key={`${size}-${variant}-${color}`}
+            key={`${size}-${variant}-${modifier}`}
             csVariant={variant}
             csSize={size}
-            csColor={color}
+            csModifiers={[modifier]}
           >
-            {size}-{variant}-{color}
+            {size}-{variant}-{modifier}
             <NewIcon csMode={"inline"} noWrapper>
               <FontAwesomeIcon icon={faChevronDown} />
             </NewIcon>
@@ -61,7 +46,17 @@ const Template: StoryFn<typeof NewButton> = () => {
             gap: "0.5rem",
           }}
         >
-          {colorBlock}
+          <NewButton
+            key={`${size}-${variant}-noModifier`}
+            csVariant={variant}
+            csSize={size}
+          >
+            {size}-{variant}-noModifier
+            <NewIcon csMode={"inline"} noWrapper>
+              <FontAwesomeIcon icon={faChevronDown} />
+            </NewIcon>
+          </NewButton>
+          {modifierBlock}
         </div>
       );
     });
@@ -91,15 +86,15 @@ const Template: StoryFn<typeof NewButton> = () => {
     </div>
   );
 
-  const IconButtons = IconButtonSizes.map((size) => {
-    const variantBlock = IconButtonVariants.map((variant) => {
-      const colorBlock = colorsList.map((color) => {
+  const IconButtons = IconButtonSizesList.map((size) => {
+    const variantBlock = IconButtonVariantsList.map((variant) => {
+      const modifierBlock = IconButtonModifiersList.map((modifier) => {
         return (
           <NewButton
-            key={`${size}-${variant}-${color}`}
+            key={`${size}-${variant}-${modifier}`}
             csVariant={variant}
             csSize={size}
-            csColor={color}
+            csModifiers={[modifier]}
             icon={faChevronDown}
           />
         );
@@ -113,7 +108,13 @@ const Template: StoryFn<typeof NewButton> = () => {
             gap: "0.5rem",
           }}
         >
-          {colorBlock}
+          <NewButton
+            key={`${size}-${variant}-noModifier`}
+            csVariant={variant}
+            csSize={size}
+            icon={faChevronDown}
+          />
+          {modifierBlock}
         </div>
       );
     });
@@ -154,67 +155,6 @@ const Template: StoryFn<typeof NewButton> = () => {
     >
       {buttonOptions}
       {iconButtonOptions}
-      <NewButton>
-        default
-        <NewIcon csMode={"inline"} noWrapper>
-          <FontAwesomeIcon icon={faChevronDown} />
-        </NewIcon>
-      </NewButton>
-      <NewButton tooltipText="tooltip text">
-        tooltipDefault
-        <NewIcon csMode={"inline"} noWrapper>
-          <FontAwesomeIcon icon={faChevronDown} />
-        </NewIcon>
-      </NewButton>
-      <NewButton csVariant="primary">
-        primary
-        <NewIcon csMode={"inline"} noWrapper>
-          <FontAwesomeIcon icon={faChevronDown} />
-        </NewIcon>
-      </NewButton>
-      <NewButton csVariant="tertiary" csColor="surface">
-        tertiary
-        <NewIcon csMode={"inline"} noWrapper>
-          <FontAwesomeIcon icon={faChevronDown} />
-        </NewIcon>
-      </NewButton>
-      <NewButton csVariant="accent">
-        accent
-        <NewIcon csMode={"inline"} noWrapper>
-          <FontAwesomeIcon icon={faChevronDown} />
-        </NewIcon>
-      </NewButton>
-      <NewButton csVariant="default" csColor="green">
-        success
-        <NewIcon csMode={"inline"} noWrapper>
-          <FontAwesomeIcon icon={faChevronDown} />
-        </NewIcon>
-      </NewButton>
-      <NewButton csVariant="default" csColor="yellow">
-        warning
-        <NewIcon csMode={"inline"} noWrapper>
-          <FontAwesomeIcon icon={faChevronDown} />
-        </NewIcon>
-      </NewButton>
-      <NewButton csVariant="default" csColor="red">
-        danger
-        <NewIcon csMode={"inline"} noWrapper>
-          <FontAwesomeIcon icon={faChevronDown} />
-        </NewIcon>
-      </NewButton>
-      <NewButton csVariant="special">
-        specialGreen
-        <NewIcon csMode={"inline"} noWrapper>
-          <FontAwesomeIcon icon={faChevronDown} />
-        </NewIcon>
-      </NewButton>
-      <NewButton icon={faChevronDown} csVariant="default" />
-      <NewButton icon={faChevronDown} csVariant="defaultPeek" />
-      <NewButton icon={faChevronDown} csVariant="primary" />
-      <NewButton icon={faChevronDown} csVariant="secondary" />
-      <NewButton icon={faChevronDown} csVariant="tertiary" />
-      <NewButton icon={faChevronDown} csVariant="tertiaryDimmed" />
-      <NewButton icon={faChevronDown} csVariant="minimal" />
     </div>
   );
 };

@@ -1,0 +1,264 @@
+@layer theme-components {
+  /* theme base styles */
+  .ts-iconbutton {
+    --iconbutton-border-radius: 0.5rem;
+  }
+
+  /* SIZES */
+  .ts-iconbutton:where(.ts-size--xsmall) {
+    --iconbutton-height: var(--space-30);
+    --iconbutton-width: var(--space-30);
+  }
+
+  .ts-iconbutton:where(.ts-size--small) {
+    --iconbutton-height: var(--space-36);
+    --iconbutton-width: var(--space-36);
+  }
+
+  .ts-iconbutton:where(.ts-size--medium) {
+    --iconbutton-height: var(--space-44);
+    --iconbutton-width: var(--space-44);
+  }
+
+  /* VARIANTS DEFAULT STATE */
+  .ts-iconbutton:where(.ts-variant--primary) {
+    --iconbutton-background-color: var(--iconbutton-primary-bg-color--default);
+    --iconbutton-icon-color: var(--iconbutton-primary-icon-color--default);
+  }
+
+  .ts-iconbutton:where(.ts-variant--secondary) {
+    --iconbutton-background-color: var(
+      --iconbutton-secondary-bg-color--default
+    );
+    --iconbutton-icon-color: var(--iconbutton-secondary-icon-color--default);
+  }
+
+  .ts-iconbutton:where(.ts-variant--accent) {
+    --iconbutton-background-color: var(--iconbutton-accent-bg-color--default);
+    --iconbutton-icon-color: var(--iconbutton-accent-icon-color--default);
+  }
+
+  .ts-iconbutton:where(.ts-variant--special) {
+    --iconbutton-icon-color: var(--iconbutton-special-icon-color--default);
+    --iconbutton-border: var(--iconbutton-special-border--default);
+    --iconbutton-border-color: var(--button-special-border-color--default);
+
+    background: var(--iconbutton-special-background--default);
+  }
+
+  .ts-iconbutton:where(.ts-variant--success) {
+    --iconbutton-background-color: var(--iconbutton-success-bg-color--default);
+    --iconbutton-icon-color: var(--iconbutton-success-icon-color--default);
+  }
+
+  .ts-iconbutton:where(.ts-variant--info) {
+    --iconbutton-background-color: var(--iconbutton-info-bg-color--default);
+    --iconbutton-icon-color: var(--iconbutton-info-icon-color--default);
+  }
+
+  .ts-iconbutton:where(.ts-variant--warning) {
+    --iconbutton-background-color: var(--iconbutton-warning-bg-color--default);
+    --iconbutton-icon-color: var(--iconbutton-warning-icon-color--default);
+  }
+
+  .ts-iconbutton:where(.ts-variant--danger) {
+    --iconbutton-background-color: var(--iconbutton-danger-bg-color--default);
+    --iconbutton-icon-color: var(--iconbutton-danger-icon-color--default);
+  }
+
+  /* MODIFIERS */
+  .ts-iconbutton:where(:not(.ts-variant--special)):where(.ts-modifier--subtle):where(:not(:hover, :active)) {
+    --iconbutton-background-color: transparent;
+  }
+
+  .ts-iconbutton:where(.ts-variant--special):where(.ts-modifier--subtle):where(:not(:hover, :active)) {
+    background: transparent;
+  }
+
+  .ts-iconbutton[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .ts-button:where(.ts-modifier--dimmed) {
+    filter: brightness(85%);
+  }
+
+  /* VARIANTS STATES */
+  .ts-iconbutton:where(.ts-variant--primary):hover {
+    --iconbutton-background-color: var(--iconbutton-primary-bg-color--hover);
+    --iconbutton-icon-color: var(--iconbutton-primary-icon-color--hover);
+  }
+
+  .ts-iconbutton:where(.ts-variant--secondary):hover {
+    --iconbutton-background-color: var(--iconbutton-secondary-bg-color--hover);
+    --iconbutton-icon-color: var(--iconbutton-secondary-icon-color--hover);
+  }
+
+  .ts-iconbutton:where(.ts-variant--accent):hover {
+    --iconbutton-background-color: var(--iconbutton-accent-bg-color--hover);
+    --iconbutton-icon-color: var(--iconbutton-accent-icon-color--hover);
+  }
+
+  .ts-iconbutton:where(.ts-variant--special):hover {
+    --iconbutton-icon-color: var(--iconbutton-special-icon-color--hover);
+    --iconbutton-border: var(--iconbutton-special-border--hover);
+    --iconbutton-border-color: var(--button-special-border-color--hover);
+
+    background: var(--iconbutton-special-background--hover);
+  }
+
+  .ts-iconbutton:where(.ts-variant--success):hover {
+    --iconbutton-background-color: var(--iconbutton-success-bg-color--hover);
+    --iconbutton-icon-color: var(--iconbutton-success-icon-color--hover);
+  }
+
+  .ts-iconbutton:where(.ts-variant--info):hover {
+    --iconbutton-background-color: var(--iconbutton-info-bg-color--hover);
+    --iconbutton-icon-color: var(--iconbutton-info-icon-color--hover);
+  }
+
+  .ts-iconbutton:where(.ts-variant--warning):hover {
+    --iconbutton-background-color: var(--iconbutton-warning-bg-color--hover);
+    --iconbutton-icon-color: var(--iconbutton-warning-icon-color--hover);
+  }
+
+  .ts-iconbutton:where(.ts-variant--danger):hover {
+    --iconbutton-background-color: var(--iconbutton-danger-bg-color--hover);
+    --iconbutton-icon-color: var(--iconbutton-danger-icon-color--hover);
+  }
+
+  .ts-iconbutton:where(.ts-variant--primary):active {
+    --iconbutton-background-color: var(--iconbutton-primary-bg-color--active);
+    --iconbutton-icon-color: var(--iconbutton-primary-icon-color--active);
+  }
+
+  .ts-iconbutton:where(.ts-variant--secondary):active {
+    --iconbutton-background-color: var(--iconbutton-secondary-bg-color--active);
+    --iconbutton-icon-color: var(--iconbutton-secondary-icon-color--active);
+  }
+
+  .ts-iconbutton:where(.ts-variant--accent):active {
+    --iconbutton-background-color: var(--iconbutton-accent-bg-color--active);
+    --iconbutton-icon-color: var(--iconbutton-accent-icon-color--active);
+  }
+
+  .ts-iconbutton:where(.ts-variant--special):active {
+    --iconbutton-icon-color: var(--iconbutton-special-icon-color--active);
+    --iconbutton-border: var(--iconbutton-special-border--active);
+    --iconbutton-border-color: var(--button-special-border-color--active);
+
+    background: var(--iconbutton-special-background--active);
+  }
+
+  .ts-iconbutton:where(.ts-variant--success):active {
+    --iconbutton-background-color: var(--iconbutton-success-bg-color--active);
+    --iconbutton-icon-color: var(--iconbutton-success-icon-color--active);
+  }
+
+  .ts-iconbutton:where(.ts-variant--info):active {
+    --iconbutton-background-color: var(--iconbutton-info-bg-color--active);
+    --iconbutton-icon-color: var(--iconbutton-info-icon-color--active);
+  }
+
+  .ts-iconbutton:where(.ts-variant--warning):active {
+    --iconbutton-background-color: var(--iconbutton-warning-bg-color--active);
+    --iconbutton-icon-color: var(--iconbutton-warning-icon-color--active);
+  }
+
+  .ts-iconbutton:where(.ts-variant--danger):active {
+    --iconbutton-background-color: var(--iconbutton-danger-bg-color--active);
+    --iconbutton-icon-color: var(--iconbutton-danger-icon-color--active);
+  }
+
+  /* TOKENS */
+  :root {
+    --iconbutton-danger-bg-color--active: var(--color-accent-red-2);
+    --iconbutton-danger-bg-color--default: var(--color-accent-red-4);
+    --iconbutton-danger-bg-color--hover: var(--color-accent-red-3);
+    --iconbutton-danger-icon-color--active: var(--color-accent-red-11);
+    --iconbutton-danger-icon-color--default: var(--color-accent-red-11);
+    --iconbutton-danger-icon-color--hover: var(--color-accent-red-11);
+    --iconbutton-info-bg-color--active: var(--color-accent-blue-2);
+    --iconbutton-info-bg-color--default: var(--color-accent-blue-4);
+    --iconbutton-info-bg-color--hover: var(--color-accent-blue-3);
+    --iconbutton-info-icon-color--active: var(--color-accent-blue-11);
+    --iconbutton-info-icon-color--default: var(--color-accent-blue-11);
+    --iconbutton-info-icon-color--hover: var(--color-accent-blue-11);
+    --iconbutton-primary-bg-color--active: hsl(256deg 60% 42%);
+    --iconbutton-primary-bg-color--default: hsl(256deg 60% 52%);
+    --iconbutton-primary-bg-color--hover: hsl(256deg 67% 56%);
+    --iconbutton-primary-icon-color--active: var(--color-text-primary);
+    --iconbutton-primary-icon-color--default: var(--color-text-primary);
+    --iconbutton-primary-icon-color--hover: var(--color-text-primary);
+    --iconbutton-secondary-bg-color--active: var(--color-surface-a6);
+    --iconbutton-secondary-bg-color--default: var(--color-surface-a7);
+    --iconbutton-secondary-bg-color--hover: var(--color-surface-a8);
+    --iconbutton-secondary-icon-color--active: var(--color-text-primary);
+    --iconbutton-secondary-icon-color--default: var(--color-text-primary);
+    --iconbutton-secondary-icon-color--hover: var(--color-text-primary);
+    --iconbutton-success-bg-color--active: var(--color-accent-green-2);
+    --iconbutton-success-bg-color--default: var(--color-accent-green-4);
+    --iconbutton-success-bg-color--hover: var(--color-accent-green-3);
+    --iconbutton-success-icon-color--active: var(--color-accent-green-11);
+    --iconbutton-success-icon-color--default: var(--color-accent-green-11);
+    --iconbutton-success-icon-color--hover: var(--color-accent-green-11);
+    --iconbutton-warning-bg-color--active: var(--color-accent-yellow-2);
+    --iconbutton-warning-bg-color--default: var(--color-accent-yellow-4);
+    --iconbutton-warning-bg-color--hover: var(--color-accent-yellow-3);
+    --iconbutton-warning-icon-color--active: var(--color-accent-yellow-11);
+    --iconbutton-warning-icon-color--default: var(--color-accent-yellow-11);
+    --iconbutton-warning-icon-color--hover: var(--color-accent-yellow-11);
+    --iconbutton-special-icon-color--active: var(--color-text-primary);
+    --iconbutton-special-icon-color--default: var(--color-text-primary);
+    --iconbutton-special-icon-color--hover: var(--color-text-primary);
+    --iconbutton-special-border--active: 2px solid;
+    --iconbutton-special-border--default: 2px solid;
+    --iconbutton-special-border--hover: 2px solid;
+    --iconbutton-special-border-color--active: transparent;
+    --iconbutton-special-border-color--default: transparent;
+    --iconbutton-special-border-color--hover: transparent;
+    --iconbutton-special-background--active: linear-gradient(
+          284deg,
+          hsl(203deg 80% 21% / 1) 0%,
+          hsl(155deg 46% 23% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(154deg 65% 67% / 1) 0%,
+          hsl(203deg 92% 63% / 1) 100%
+        )
+        border-box;
+    --iconbutton-special-background--default: linear-gradient(
+          284deg,
+          hsl(275deg 64% 11% / 1) 0%,
+          hsl(156deg 46% 12% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(276deg 77% 54% / 1) 0%,
+          hsl(158deg 100% 57% / 1) 100%
+        )
+        border-box;
+    --iconbutton-special-background--hover: linear-gradient(
+          284deg,
+          hsl(203deg 80% 21% / 1) 0%,
+          hsl(155deg 46% 23% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(154deg 65% 67% / 1) 0%,
+          hsl(203deg 92% 63% / 1) 100%
+        )
+        border-box;
+    --iconbutton-accent-bg-color--active: var(--color-cyber-green-6);
+    --iconbutton-accent-bg-color--default: var(--color-cyber-green-7);
+    --iconbutton-accent-bg-color--hover: var(--color-cyber-green-9);
+    --iconbutton-accent-icon-color--active: var(--color-cyber-green-2);
+    --iconbutton-accent-icon-color--default: var(--color-cyber-green-2);
+    --iconbutton-accent-icon-color--hover: var(--color-cyber-green-2);
+  }
+}

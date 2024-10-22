@@ -5,14 +5,14 @@
   width: 12rem;
   color: var(--color-text--default);
   font-weight: var(--font-weight-medium);
-  font-size: var(--font-size--m);
+  font-size: var(--font-size-body-lg);
   line-height: 1;
 }
 
 .label {
   display: flex;
   flex-direction: row;
-  gap: var(--space--12);
+  gap: var(--space-12);
   align-items: center;
 }
 

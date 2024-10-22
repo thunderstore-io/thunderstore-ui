@@ -1,12 +1,12 @@
 .root {
   display: flex;
   flex-direction: row;
-  gap: var(--space--32);
+  gap: var(--space-32);
 }
 
 @media (width <= 30rem) {
   .root {
-    gap: var(--space--16);
+    gap: var(--space-16);
   }
 }
 
@@ -46,9 +46,9 @@
   color: var(--color-text--default);
   font-weight: var(--font-weight-bold);
   font-size: 1.75rem;
-  line-height: 120%;
+  line-height: var(--line-height-xs);
 }
 
 .header a {
-  color: var(--old--color-cyber-green--60);
+  color: var(--old--color-cyber-green-60);
 }

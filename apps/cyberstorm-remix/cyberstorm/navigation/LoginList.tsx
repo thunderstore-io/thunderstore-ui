@@ -2,7 +2,7 @@ import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Navigation.module.css";
-import { Heading, NewIcon, NewLink, NewText } from "@thunderstore/cyberstorm";
+import { Heading, NewIcon, NewLink } from "@thunderstore/cyberstorm";
 import { OverwolfLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
@@ -39,7 +39,7 @@ export function LoginList() {
       <Heading
         mode="heading"
         csLevel="2"
-        csStyleLevel="3"
+        csSize="3"
         rootClasses={styles.loginTitle}
       >
         Log in to Thunderstore
@@ -49,7 +49,6 @@ export function LoginList() {
           primitiveType="link"
           href={buildAuthLoginUrl({ type: "discord" })}
           rootClasses={classnames(styles.loginLink, styles.loginLinkDiscord)}
-          csTextStyles={["fontSizeS", "fontWeightBold"]}
         >
           <NewIcon csMode="inline" noWrapper>
             <FontAwesomeIcon icon={faDiscord} />
@@ -60,7 +59,6 @@ export function LoginList() {
           primitiveType="link"
           href={buildAuthLoginUrl({ type: "github" })}
           rootClasses={classnames(styles.loginLink, styles.loginLinkGithub)}
-          csTextStyles={["fontSizeS", "fontWeightBold"]}
         >
           <NewIcon csMode="inline" noWrapper>
             <FontAwesomeIcon icon={faGithub} />
@@ -71,7 +69,6 @@ export function LoginList() {
           primitiveType="link"
           href={buildAuthLoginUrl({ type: "overwolf" })}
           rootClasses={classnames(styles.loginLink, styles.loginLinkOverwolf)}
-          csTextStyles={["fontSizeS", "fontWeightBold"]}
         >
           <NewIcon csMode="inline" noWrapper>
             <OverwolfLogo />
@@ -79,15 +76,12 @@ export function LoginList() {
           Connect with Overwolf
         </NewLink>
       </div>
-      <NewText
-        rootClasses={styles.loginLegalText}
-        csTextStyles={["lineHeightBody", "fontSizeXS", "fontWeightRegular"]}
-      >
+      <p className={styles.loginLegalText}>
         By logging in and accessing the site you agree to{" "}
         <NewLink
           primitiveType="cyberstormLink"
           linkId="TermsOfService"
-          csVariant="tertiary"
+          csVariant="primary"
         >
           Terms and Conditions
         </NewLink>{" "}
@@ -95,11 +89,11 @@ export function LoginList() {
         <NewLink
           primitiveType="cyberstormLink"
           linkId="PrivacyPolicy"
-          csVariant="tertiary"
+          csVariant="primary"
         >
           Privacy Policy
         </NewLink>
-      </NewText>
+      </p>
     </div>
   );
 }

@@ -2,9 +2,9 @@
   display: flex;
   flex-direction: row;
 
-  gap: var(--gap--12);
+  gap: var(--gap-sm);
   align-items: center;
-  padding: var(--space--12) var(--space--16);
+  padding: var(--space-12) var(--space-16);
   color: var(--text-color);
   outline: none;
   cursor: pointer;
@@ -14,7 +14,7 @@
 }
 
 .root:hover {
-  background-color: var(--color-surface--6);
+  background-color: var(--color-surface-6);
 
   --icon-color: var(--color-text--default);
 }
@@ -32,9 +32,9 @@
 }
 
 .menuItemLabel__fontSize__small {
-  font-size: var(--font-size--m);
+  font-size: var(--font-size-body-lg);
 }
 
 .menuItemLabel__fontSize__medium {
-  font-size: var(--font-size--l);
+  font-size: var(--font-size-body-xxxxl);
 }

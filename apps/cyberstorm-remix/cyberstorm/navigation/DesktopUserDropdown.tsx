@@ -6,7 +6,6 @@ import dropdownStyles from "../../../../packages/cyberstorm/src/newComponents/Dr
 import {
   Avatar,
   NewDropDown,
-  NewText,
   NewDropDownItem,
   NewDropDownDivider,
   NewLink,
@@ -28,27 +27,20 @@ export function DesktopUserDropdown(props: { user: CurrentUser }) {
       trigger={
         <AvatarButton src={avatar} username={user.username} size="small" />
       }
-      csVariant="default"
-      csColor="surface"
     >
       <NewDropDownItem rootClasses={styles.dropDownUserInfo}>
         <Avatar src={avatar} username={user.username} size="small" />
-        <NewText rootClasses={styles.dropdownUserInfoDetails}>
-          {user.username}
-        </NewText>
+        <p className={styles.dropdownUserInfoDetails}>{user.username}</p>
       </NewDropDownItem>
-      <NewDropDownDivider csVariant="default" csColor="surface" />
+      <NewDropDownDivider />
       <NewDropDownItem asChild>
         <NewLink
           primitiveType="cyberstormLink"
           linkId="Settings"
-          csVariant="default"
-          csColor="surface"
           rootClasses={classnames(
             dropdownStyles.dropdownItem,
             styles.dropDownItem
           )}
-          csTextStyles={["fontSizeS", "fontWeightRegular"]}
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
             <FontAwesomeIcon icon={faCog} />
@@ -60,13 +52,10 @@ export function DesktopUserDropdown(props: { user: CurrentUser }) {
         <NewLink
           primitiveType="cyberstormLink"
           linkId="Teams"
-          csVariant="default"
-          csColor="surface"
           rootClasses={classnames(
             dropdownStyles.dropdownItem,
             styles.dropDownItem
           )}
-          csTextStyles={["fontSizeS", "fontWeightRegular"]}
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
             <FontAwesomeIcon icon={faUsers} />
@@ -78,13 +67,10 @@ export function DesktopUserDropdown(props: { user: CurrentUser }) {
         <NewLink
           primitiveType="link"
           href="/logout"
-          csVariant="default"
-          csColor="surface"
           rootClasses={classnames(
             dropdownStyles.dropdownItem,
             styles.dropDownItem
           )}
-          csTextStyles={["fontSizeS", "fontWeightRegular"]}
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
             <FontAwesomeIcon icon={faSignOut} />

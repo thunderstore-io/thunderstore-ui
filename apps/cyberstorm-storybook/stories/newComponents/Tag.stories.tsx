@@ -1,140 +1,103 @@
 import { StoryFn, Meta } from "@storybook/react";
-import { NewIcon, NewTag } from "@thunderstore/cyberstorm";
+import { NewTag, NewIcon } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTag, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import {
+  TagModifiersList,
+  TagSizesList,
+  TagVariantsList,
+} from "@thunderstore/cyberstorm-theme/src/components";
 
 const meta = {
   title: "Tag",
   component: NewTag,
 } as Meta<typeof NewTag>;
 
-const Template: StoryFn<typeof NewTag> = (args) => (
-  <div
-    style={{
-      display: "flex",
-      gap: "0.25em",
-      flexDirection: "column",
-      width: "3rem",
-    }}
-  >
-    <div style={{ display: "flex", gap: "0.25em" }}>
-      <NewTag {...args} csVariant="default" csColor="surface" hoverable />
-      <NewTag {...args} csVariant="default" csColor="surface" hoverable dark />
-      <NewTag {...args} csVariant="default" csColor="surface" />
-      <NewTag {...args} csVariant="default" csColor="surface" dark />
-    </div>
-    <div style={{ display: "flex", gap: "0.25em" }}>
-      <NewTag {...args} csVariant="default" csColor="surface-alpha" hoverable />
-      <NewTag
-        {...args}
-        csVariant="default"
-        csColor="surface-alpha"
-        hoverable
-        dark
-      />
-      <NewTag {...args} csVariant="default" csColor="surface-alpha" />
-      <NewTag {...args} csVariant="default" csColor="surface-alpha" dark />
-    </div>
-    <div style={{ display: "flex", gap: "0.25em" }}>
-      <NewTag {...args} csVariant="default" csColor="cyber-green" hoverable />
-      <NewTag
-        {...args}
-        csVariant="default"
-        csColor="cyber-green"
-        hoverable
-        dark
-      />
-      <NewTag {...args} csVariant="default" csColor="cyber-green" />
-      <NewTag {...args} csVariant="default" csColor="cyber-green" dark />
-    </div>
-    <div style={{ display: "flex", gap: "0.25em" }}>
-      <NewTag {...args} csVariant="default" csColor="green" hoverable />
-      <NewTag {...args} csVariant="default" csColor="green" hoverable dark />
-      <NewTag {...args} csVariant="default" csColor="green" />
-      <NewTag {...args} csVariant="default" csColor="green" dark />
-    </div>
-    <div style={{ display: "flex", gap: "0.25em" }}>
-      <NewTag {...args} csVariant="default" csColor="yellow" hoverable />
-      <NewTag {...args} csVariant="default" csColor="yellow" hoverable dark />
-      <NewTag {...args} csVariant="default" csColor="yellow" />
-      <NewTag {...args} csVariant="default" csColor="yellow" dark />
-    </div>
-    <div style={{ display: "flex", gap: "0.25em" }}>
-      <NewTag {...args} csVariant="default" csColor="blue" hoverable />
-      <NewTag {...args} csVariant="default" csColor="blue" hoverable dark />
-      <NewTag {...args} csVariant="default" csColor="blue" />
-      <NewTag {...args} csVariant="default" csColor="blue" dark />
-    </div>
-    <div style={{ display: "flex", gap: "0.25em" }}>
-      <NewTag {...args} csVariant="default" csColor="red" hoverable />
-      <NewTag {...args} csVariant="default" csColor="red" hoverable dark />
-      <NewTag {...args} csVariant="default" csColor="red" />
-      <NewTag {...args} csVariant="default" csColor="red" dark />
-    </div>
-  </div>
-);
+const defaultArgs = {};
 
-const MinimalTag = Template.bind({});
-MinimalTag.args = {};
+const Template: StoryFn<typeof NewTag> = () => {
+  const tags = TagSizesList.map((size) => {
+    const variantBlock = TagVariantsList.map((variant) => {
+      const modifierBlock = TagModifiersList.map((modifier) => {
+        return (
+          <NewTag
+            key={`${size}-${variant}-${modifier}`}
+            csVariant={variant}
+            csSize={size}
+            csModifiers={[modifier]}
+          >
+            {size}-{variant}-{modifier}
+            <NewIcon csMode={"inline"} noWrapper>
+              <FontAwesomeIcon icon={faChevronDown} />
+            </NewIcon>
+          </NewTag>
+        );
+      });
+      return (
+        <div
+          key={`${size}-${variant}`}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: "0.5rem",
+          }}
+        >
+          <NewTag
+            key={`${size}-${variant}-noModifier`}
+            csVariant={variant}
+            csSize={size}
+          >
+            {size}-{variant}-noModifier
+            <NewIcon csMode={"inline"} noWrapper>
+              <FontAwesomeIcon icon={faChevronDown} />
+            </NewIcon>
+          </NewTag>
+          {modifierBlock}
+        </div>
+      );
+    });
+    return (
+      <div
+        key={`${size}`}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "0.5rem",
+        }}
+      >
+        {variantBlock}
+      </div>
+    );
+  });
+
+  const tagOptions = (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "0.5rem",
+      }}
+    >
+      {tags}
+    </div>
+  );
+
+  return (
+    <div
+      style={{
+        width: "12rem",
+        display: "flex",
+        flexDirection: "column",
+        gap: "0.5rem",
+      }}
+    >
+      {tagOptions}
+    </div>
+  );
+};
 
 const DefaultTag = Template.bind({});
-DefaultTag.args = {
-  children: (
-    <>
-      tag
-      <NewIcon csMode="inline" noWrapper>
-        <FontAwesomeIcon icon={faXmark} />
-      </NewIcon>
-    </>
-  ),
-};
+DefaultTag.args = defaultArgs;
 
-const IconOnlyTag = Template.bind({});
-IconOnlyTag.args = {
-  children: (
-    <NewIcon csMode="inline" noWrapper>
-      <FontAwesomeIcon icon={faTag} />
-    </NewIcon>
-  ),
-};
-const TextOnlyTag = Template.bind({});
-TextOnlyTag.args = {
-  children: <>tag</>,
-};
-
-const SmallTag = Template.bind({});
-SmallTag.args = {
-  children: (
-    <>
-      tag
-      <NewIcon csMode="inline" noWrapper>
-        <FontAwesomeIcon icon={faXmark} />
-      </NewIcon>
-    </>
-  ),
-  csSize: "m",
-};
-
-const TinyTag = Template.bind({});
-TinyTag.args = {
-  children: (
-    <>
-      tag
-      <NewIcon csMode="inline" noWrapper>
-        <FontAwesomeIcon icon={faXmark} />
-      </NewIcon>
-    </>
-  ),
-  csSize: "s",
-};
-
-export {
-  meta as default,
-  MinimalTag,
-  DefaultTag,
-  IconOnlyTag,
-  TextOnlyTag,
-  SmallTag,
-  TinyTag,
-};
+export { meta as default, DefaultTag as Tags };

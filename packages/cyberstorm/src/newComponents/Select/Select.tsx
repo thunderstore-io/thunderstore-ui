@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Select.module.css";
+import "./Select.css";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -11,8 +11,13 @@ import {
   Trigger,
   Viewport,
 } from "@radix-ui/react-select";
-import { classnames } from "../../utils/utils";
-import { Container, NewButton, NewIcon } from "../..";
+import { classnames, componentClasses } from "../../utils/utils";
+import { NewButton, NewIcon } from "../..";
+import {
+  SelectModifiers,
+  SelectSizes,
+  SelectVariants,
+} from "@thunderstore/cyberstorm-theme/src/components";
 
 type SelectOption<T extends string = string> = {
   value: T;
@@ -29,6 +34,9 @@ type _SelectProps<T extends string = string> = {
   placeholder?: string;
   value?: string;
   rootClasses?: string;
+  csVariant?: SelectVariants;
+  csSize?: SelectSizes;
+  csModifiers?: SelectModifiers[];
 };
 
 export type SelectProps<T extends string = string> = _SelectProps<T> &
@@ -49,10 +57,15 @@ export function Select<T extends string>(props: SelectProps<T>) {
     onChange,
     placeholder = "Select",
     value,
+    csVariant = "default",
+    csSize = "medium",
+    csModifiers,
     ...forwardedProps
   } = props;
 
-  const selectItemElements = options ? mapSelectData(options) : null;
+  const selectItemElements = options
+    ? mapSelectData(options, csVariant, csSize, csModifiers)
+    : null;
   const selectedOption = options?.find((o) => o.value === value);
 
   return (
@@ -65,23 +78,23 @@ export function Select<T extends string>(props: SelectProps<T>) {
       <Trigger asChild>
         <NewButton
           csVariant="secondary"
-          csSize="m"
-          csColor="surface-alpha"
-          csTextStyles={["fontSizeS", "fontWeightBold", "lineHeightAuto"]}
+          csSize="medium"
           aria-label={forwardedProps["aria-label"]}
-          rootClasses={classnames(styles.trigger, forwardedProps.rootClasses)}
+          rootClasses={classnames(
+            "ts-select__trigger",
+            ...componentClasses(csVariant, csSize, csModifiers),
+            forwardedProps.rootClasses
+          )}
         >
-          <span className={styles.iconAndLabel}>
-            {selectedOption?.leftIcon ? (
-              <NewIcon csMode="inline" noWrapper csVariant="accent">
-                {selectedOption?.leftIcon}
-              </NewIcon>
-            ) : null}
-            {selectedOption?.label ?? placeholder}
-            {!selectedOption?.label && !selectedOption?.leftIcon
-              ? selectedOption?.value
-              : null}
-          </span>
+          {selectedOption?.leftIcon ? (
+            <NewIcon csMode="inline" noWrapper csVariant="accent">
+              {selectedOption?.leftIcon}
+            </NewIcon>
+          ) : null}
+          {selectedOption?.label ?? placeholder}
+          {!selectedOption?.label && !selectedOption?.leftIcon
+            ? selectedOption?.value
+            : null}
           {icon}
         </NewButton>
       </Trigger>
@@ -90,7 +103,10 @@ export function Select<T extends string>(props: SelectProps<T>) {
         <Content
           position="popper"
           sideOffset={4}
-          className={classnames(styles.content)}
+          className={classnames(
+            "ts-select",
+            ...componentClasses(csVariant, csSize, csModifiers)
+          )}
         >
           <Viewport>{selectItemElements}</Viewport>
         </Content>
@@ -101,21 +117,26 @@ export function Select<T extends string>(props: SelectProps<T>) {
 
 Select.displayName = "Select";
 
-const mapSelectData = (options: SelectOption[]) => {
+const mapSelectData = (
+  options: SelectOption[],
+  csVariant: SelectVariants,
+  csSize: SelectSizes,
+  csModifiers?: SelectModifiers[]
+) => {
   return options.map((option, index) => (
     <Item value={option.value} key={index} asChild>
-      <Container
-        rootClasses={styles.item}
-        csVariant="secondary"
-        csColor="surface"
-        csTextStyles={["fontSizeS", "fontWeightRegular"]}
+      <div
+        className={classnames(
+          "ts-select__item",
+          ...componentClasses(csVariant, csSize, csModifiers)
+        )}
       >
-        <NewIcon csMode="inline" noWrapper rootClasses={styles.itemIcon}>
+        <NewIcon csMode="inline" noWrapper rootClasses="ts-select__item__icon">
           {option.leftIcon}
         </NewIcon>
         {option.label}
         {!option.label && !option.leftIcon ? option.value : null}
-      </Container>
+      </div>
     </Item>
   ));
 };

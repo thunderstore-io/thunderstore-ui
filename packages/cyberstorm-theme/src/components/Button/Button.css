@@ -1,0 +1,274 @@
+@layer theme-components {
+  /* theme base styles */
+  .ts-button {
+    --button-line-height: var(--line-height-auto);
+    --button-gap: 1rem;
+    --button-border-radius: 0.5rem;
+    --button-font-weight: var(--font-weight-bold);
+  }
+
+  /* SIZES */
+  .ts-button:where(.ts-size--xsmall) {
+    --button-height: var(--space-30);
+    --button-padding: var(--space-12);
+    --button-font-size: var(--font-size-body-sm);
+  }
+
+  .ts-button:where(.ts-size--small) {
+    --button-height: var(--space-36);
+    --button-padding: var(--space-12);
+    --button-font-size: var(--font-size-body-md);
+  }
+
+  .ts-button:where(.ts-size--medium) {
+    --button-height: var(--space-44);
+    --button-padding: var(--space-12) var(--space-16);
+    --button-font-size: var(--font-size-body-md);
+  }
+
+  .ts-button:where(.ts-size--big) {
+    --button-height: var(--space-44);
+    --button-padding: var(--space-12) var(--space-16);
+    --button-font-size: var(--font-size-body-lg);
+  }
+
+  /* VARIANTS DEFAULT STATE */
+  .ts-button:where(.ts-variant--primary) {
+    --button-background-color: var(--button-primary-bg-color--default);
+    --button-text-color: var(--button-primary-text-color--default);
+  }
+
+  .ts-button:where(.ts-variant--secondary) {
+    --button-background-color: var(--button-secondary-bg-color--default);
+    --button-text-color: var(--button-secondary-text-color--default);
+  }
+
+  .ts-button:where(.ts-variant--accent) {
+    --button-background-color: var(--button-accent-bg-color--default);
+    --button-text-color: var(--button-accent-text-color--default);
+  }
+
+  .ts-button:where(.ts-variant--special) {
+    --button-text-color: var(--button-special-text-color--default);
+    --button-border: var(--button-special-border--default);
+    --button-border-color: var(--button-special-border-color--default);
+
+    background: var(--button-special-background--default);
+  }
+
+  .ts-button:where(.ts-variant--success) {
+    --button-background-color: var(--button-success-bg-color--default);
+    --button-text-color: var(--button-success-text-color--default);
+  }
+
+  .ts-button:where(.ts-variant--info) {
+    --button-background-color: var(--button-info-bg-color--default);
+    --button-text-color: var(--button-info-text-color--default);
+  }
+
+  .ts-button:where(.ts-variant--warning) {
+    --button-background-color: var(--button-warning-bg-color--default);
+    --button-text-color: var(--button-warning-text-color--default);
+  }
+
+  .ts-button:where(.ts-variant--danger) {
+    --button-background-color: var(--button-danger-bg-color--default);
+    --button-text-color: var(--button-danger-text-color--default);
+  }
+
+  /* MODIFIERS */
+  .ts-button:where(:not(.ts-variant--special)):where(.ts-modifier--subtle):where(:not(:hover, :active)) {
+    --button-background-color: transparent;
+  }
+
+  .ts-button:where(.ts-variant--special):where(.ts-modifier--subtle):where(:not(:hover, :active)) {
+    background: transparent;
+  }
+
+  .ts-button[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .ts-button:where(.ts-modifier--dimmed) {
+    filter: brightness(85%);
+  }
+
+  /* VARIANTS STATES */
+  .ts-button:where(.ts-variant--primary):hover {
+    --button-background-color: var(--button-primary-bg-color--hover);
+    --button-text-color: var(--button-primary-text-color--hover);
+  }
+
+  .ts-button:where(.ts-variant--secondary):hover {
+    --button-background-color: var(--button-secondary-bg-color--hover);
+    --button-text-color: var(--button-secondary-text-color--hover);
+  }
+
+  .ts-button:where(.ts-variant--accent):hover {
+    --button-background-color: var(--button-accent-bg-color--hover);
+    --button-text-color: var(--button-accent-text-color--hover);
+  }
+
+  .ts-button:where(.ts-variant--special):hover {
+    --button-text-color: var(--button-special-text-color--hover);
+    --button-border: var(--button-special-border--hover);
+    --button-border-color: var(--button-special-border-color--hover);
+
+    background: var(--button-special-background--hover);
+  }
+
+  .ts-button:where(.ts-variant--success):hover {
+    --button-background-color: var(--button-success-bg-color--hover);
+    --button-text-color: var(--button-success-text-color--hover);
+  }
+
+  .ts-button:where(.ts-variant--info):hover {
+    --button-background-color: var(--button-info-bg-color--hover);
+    --button-text-color: var(--button-info-text-color--hover);
+  }
+
+  .ts-button:where(.ts-variant--warning):hover {
+    --button-background-color: var(--button-warning-bg-color--hover);
+    --button-text-color: var(--button-warning-text-color--hover);
+  }
+
+  .ts-button:where(.ts-variant--danger):hover {
+    --button-background-color: var(--button-danger-bg-color--hover);
+    --button-text-color: var(--button-danger-text-color--hover);
+  }
+
+  .ts-button:where(.ts-variant--primary):active {
+    --button-background-color: var(--button-primary-bg-color--active);
+    --button-text-color: var(--button-primary-text-color--active);
+  }
+
+  .ts-button:where(.ts-variant--secondary):active {
+    --button-background-color: var(--button-secondary-bg-color--active);
+    --button-text-color: var(--button-secondary-text-color--active);
+  }
+
+  .ts-button:where(.ts-variant--accent):active {
+    --button-background-color: var(--button-accent-bg-color--active);
+    --button-text-color: var(--button-accent-text-color--active);
+  }
+
+  .ts-button:where(.ts-variant--special):active {
+    --button-text-color: var(--button-special-text-color--active);
+    --button-border: var(--button-special-border--active);
+    --button-border-color: var(--button-special-border-color--active);
+
+    background: var(--button-special-background--active);
+  }
+
+  .ts-button:where(.ts-variant--success):active {
+    --button-background-color: var(--button-success-bg-color--active);
+    --button-text-color: var(--button-success-text-color--active);
+  }
+
+  .ts-button:where(.ts-variant--info):active {
+    --button-background-color: var(--button-info-bg-color--active);
+    --button-text-color: var(--button-info-text-color--active);
+  }
+
+  .ts-button:where(.ts-variant--warning):active {
+    --button-background-color: var(--button-warning-bg-color--active);
+    --button-text-color: var(--button-warning-text-color--active);
+  }
+
+  .ts-button:where(.ts-variant--danger):active {
+    --button-background-color: var(--button-danger-bg-color--active);
+    --button-text-color: var(--button-danger-text-color--active);
+  }
+
+  /* TOKENS */
+  :root {
+    --button-danger-bg-color--active: var(--color-accent-red-2);
+    --button-danger-bg-color--default: var(--color-accent-red-4);
+    --button-danger-bg-color--hover: var(--color-accent-red-3);
+    --button-danger-text-color--active: var(--color-accent-red-11);
+    --button-danger-text-color--default: var(--color-accent-red-11);
+    --button-danger-text-color--hover: var(--color-accent-red-11);
+    --button-info-bg-color--active: var(--color-accent-blue-2);
+    --button-info-bg-color--default: var(--color-accent-blue-4);
+    --button-info-bg-color--hover: var(--color-accent-blue-3);
+    --button-info-text-color--active: var(--color-accent-blue-11);
+    --button-info-text-color--default: var(--color-accent-blue-11);
+    --button-info-text-color--hover: var(--color-accent-blue-11);
+    --button-primary-bg-color--active: hsl(256deg 60% 42%);
+    --button-primary-bg-color--default: hsl(256deg 60% 52%);
+    --button-primary-bg-color--hover: hsl(256deg 67% 56%);
+    --button-primary-text-color--active: var(--color-text-primary);
+    --button-primary-text-color--default: var(--color-text-primary);
+    --button-primary-text-color--hover: var(--color-text-primary);
+    --button-secondary-bg-color--active: var(--color-surface-a6);
+    --button-secondary-bg-color--default: var(--color-surface-a7);
+    --button-secondary-bg-color--hover: var(--color-surface-a8);
+    --button-secondary-text-color--active: var(--color-text-primary);
+    --button-secondary-text-color--default: var(--color-text-primary);
+    --button-secondary-text-color--hover: var(--color-text-primary);
+    --button-success-bg-color--active: var(--color-accent-green-2);
+    --button-success-bg-color--default: var(--color-accent-green-4);
+    --button-success-bg-color--hover: var(--color-accent-green-3);
+    --button-success-text-color--active: var(--color-accent-green-11);
+    --button-success-text-color--default: var(--color-accent-green-11);
+    --button-success-text-color--hover: var(--color-accent-green-11);
+    --button-warning-bg-color--active: var(--color-accent-yellow-2);
+    --button-warning-bg-color--default: var(--color-accent-yellow-4);
+    --button-warning-bg-color--hover: var(--color-accent-yellow-3);
+    --button-warning-text-color--active: var(--color-accent-yellow-11);
+    --button-warning-text-color--default: var(--color-accent-yellow-11);
+    --button-warning-text-color--hover: var(--color-accent-yellow-11);
+    --button-special-text-color--active: var(--color-text-primary);
+    --button-special-text-color--default: var(--color-text-primary);
+    --button-special-text-color--hover: var(--color-text-primary);
+    --button-special-border--active: 2px solid;
+    --button-special-border--default: 2px solid;
+    --button-special-border--hover: 2px solid;
+    --button-special-border-color--active: transparent;
+    --button-special-border-color--default: transparent;
+    --button-special-border-color--hover: transparent;
+    --button-special-background--active: linear-gradient(
+          284deg,
+          hsl(203deg 80% 21% / 1) 0%,
+          hsl(155deg 46% 23% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(154deg 65% 67% / 1) 0%,
+          hsl(203deg 92% 63% / 1) 100%
+        )
+        border-box;
+    --button-special-background--default: linear-gradient(
+          284deg,
+          hsl(275deg 64% 11% / 1) 0%,
+          hsl(156deg 46% 12% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(276deg 77% 54% / 1) 0%,
+          hsl(158deg 100% 57% / 1) 100%
+        )
+        border-box;
+    --button-special-background--hover: linear-gradient(
+          284deg,
+          hsl(203deg 80% 21% / 1) 0%,
+          hsl(155deg 46% 23% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(154deg 65% 67% / 1) 0%,
+          hsl(203deg 92% 63% / 1) 100%
+        )
+        border-box;
+    --button-accent-bg-color--active: var(--color-cyber-green-6);
+    --button-accent-bg-color--default: var(--color-cyber-green-7);
+    --button-accent-bg-color--hover: var(--color-cyber-green-9);
+    --button-accent-text-color--active: var(--color-cyber-green-2);
+    --button-accent-text-color--default: var(--color-cyber-green-2);
+    --button-accent-text-color--hover: var(--color-cyber-green-2);
+  }
+}

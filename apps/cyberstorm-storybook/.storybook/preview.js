@@ -1,7 +1,9 @@
 import React from "react";
 
+import "./storybook.css";
 import { CyberstormProviders, LinkingProvider } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-styles";
+import "@thunderstore/cyberstorm-theme";
 import { LinkLibrary } from "../LinkLibrary";
 
 export const parameters = {
