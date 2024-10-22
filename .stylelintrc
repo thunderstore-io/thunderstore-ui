@@ -2,12 +2,6 @@
   "extends": ["stylelint-config-standard", "stylelint-config-rational-order"],
   "rules": {
     "alpha-value-notation": "number",
-    "custom-property-pattern": [
-      "^(-{0,2}[a-z0-9]+)*$",
-      {
-        "message": "Expected custom property name \"${name}\" to be kebab-case + double hyphens"
-      }
-    ],
     "declaration-block-no-duplicate-properties": [
       true,
       {
@@ -24,14 +18,9 @@
     "font-weight-notation": "numeric",
     "import-notation": "string",
     "number-max-precision": 3,
-    "selector-class-pattern": [
-      "^((?!\\-).)*$",
-      { "message": "Don't use hyphens in class selectors" }
-    ],
-    "selector-id-pattern": [
-      "^((?!\\-).)*$",
-      { "message": "Don't use hyphens in id selectors" }
-    ],
+    "custom-property-pattern": null,
+    "selector-class-pattern": null,
+    "selector-id-pattern": null,
     "selector-no-vendor-prefix": null,
     "selector-pseudo-element-colon-notation": "double",
     "property-no-vendor-prefix": [

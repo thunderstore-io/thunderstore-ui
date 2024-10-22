@@ -2,7 +2,6 @@ import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { BreadCrumbs, CyberstormLink } from "@thunderstore/cyberstorm";
 import styles from "./Dependants.module.css";
-import rootStyles from "../../RootLayout.module.css";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { ApiError } from "@thunderstore/thunderstore-api";
@@ -171,7 +170,7 @@ export default function Community() {
         </CyberstormLink>
         Dependants
       </BreadCrumbs>
-      <header className={rootStyles.pageHeader}>
+      <header className="project-root__page-header">
         <div className={styles.root}>
           <div className={styles.header}>
             Mods that depend on{" "}
@@ -194,7 +193,7 @@ export default function Community() {
           </div>
         </div>
       </header>
-      <main className={rootStyles.main}>
+      <main className="project-root__main">
         <PackageSearch
           listings={listings}
           packageCategories={filters.package_categories}

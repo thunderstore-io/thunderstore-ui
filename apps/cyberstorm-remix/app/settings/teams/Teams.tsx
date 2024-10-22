@@ -10,7 +10,6 @@ import {
 } from "@thunderstore/cyberstorm";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import styles from "./TeamsLayout.module.css";
-import rootStyles from "../../RootLayout.module.css";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
@@ -63,10 +62,10 @@ export default function Teams() {
       <BreadCrumbs>
         <CyberstormLink linkId="Teams">Teams</CyberstormLink>
       </BreadCrumbs>
-      <header className={rootStyles.pageHeader}>
+      <header className="project-root__page-header">
         <PageHeader title="Teams" />
       </header>
-      <main className={rootStyles.main}>
+      <main className="project-root__main">
         <SettingItem
           title="Teams"
           description="Manage your teams"
