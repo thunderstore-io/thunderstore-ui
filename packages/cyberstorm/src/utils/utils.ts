@@ -35,3 +35,12 @@ export const classnames = (
 ): string => {
   return classnames.filter(String).join(" ");
 };
+
+export const componentClasses = (
+  variant: string,
+  size: string,
+  modifiers?: string[]
+): string[] => {
+  const asd = modifiers ? modifiers?.map((csm) => `ts-modifier--${csm}`) : [];
+  return [`ts-variant--${variant}`, `ts-size--${size}`, ...asd];
+};

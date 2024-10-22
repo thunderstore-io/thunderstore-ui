@@ -1,0 +1,21 @@
+/* Missing tokens */
+.ts-dropdown:where(.ts-variant--primary) {
+  --dropdown-color: var(--color-surface--5);
+  --dropdown-background-color: var(--color-surface--2);
+  --dropdown-border-color: var(--color-surface--6);
+  --dropdown-border: var(--space--px) var(--dropdown-border-color) solid;
+  --dropdown-border-radius: var(--border-radius--8);
+  --dropdown-box-shadow: var(--box-shadow-default);
+  --dropdown-animation: fade-in var(--animation-length-m) ease;
+  --dropdown-padding: var(--space--8) 0;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

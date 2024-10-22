@@ -67,7 +67,7 @@ export function DesktopLoginPopover() {
         <Heading
           mode="heading"
           csLevel="2"
-          csStyleLevel="3"
+          csSize="3"
           rootClasses={styles.loginTitle}
         >
           Log in to Thunderstore

@@ -1,6 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
-  Container,
   CardCommunity,
   CommunityCardSkeleton,
   EmptyState,
@@ -30,6 +29,7 @@ import {
 } from "@remix-run/react";
 import { Communities } from "@thunderstore/dapper/types";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
+import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 
 export const meta: MetaFunction = () => {
   return [
@@ -131,20 +131,18 @@ export default function CommunitiesPage() {
         Communities
       </NewBreadCrumbs>
       <header className="project-root__page-header">
-        <Heading
-          csLevel="1"
-          csStyleLevel="2"
-          csVariant="primary"
-          mode="display"
-        >
+        <Heading csLevel="1" csSize="2" csVariant="primary" mode="display">
           Communities
         </Heading>
       </header>
       <main className="project-root__main">
-        <Container
-          rootClasses={searchAndOrderStyles.root}
-          csVariant="tertiary"
-          csTextStyles={["fontWeightBold", "lineHeightAuto", "fontSizeS"]}
+        <div
+          className={classnames(
+            searchAndOrderStyles.root,
+            "fontWeightBold",
+            "lineHeightAuto",
+            "fontSizeS"
+          )}
         >
           <div className={searchAndOrderStyles.searchTextInput}>
             <label htmlFor="communitiesSearchInput">Search</label>
@@ -154,7 +152,6 @@ export default function CommunitiesPage() {
               placeholder="Search communities..."
               clearValue={() => setSearchValue("")}
               leftIcon={<FontAwesomeIcon icon={faSearch} />}
-              csColor="cyber-green"
               id="communitiesSearchInput"
             />
           </div>
@@ -168,7 +165,7 @@ export default function CommunitiesPage() {
               id="communitiesSortBy"
             />
           </div>
-        </Container>
+        </div>
 
         <CommunitiesList communitiesData={communitiesData} />
         {/* {navigation.state === "loading" ? (

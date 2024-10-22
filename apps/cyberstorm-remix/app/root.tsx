@@ -1,4 +1,5 @@
 import "@thunderstore/cyberstorm-styles";
+import "@thunderstore/cyberstorm-theme";
 import "./styles/index.css";
 import {
   Links,

@@ -1,7 +1,3 @@
-import popooverStyles from "./Popover.module.css";
-import modalStyles from "./Modal.module.css";
-import headingStyles from "./Heading.module.css";
-import displayStyles from "./Display.module.css";
 import iconStyles from "./Icon.module.css";
 import { classnames } from "./../../utils/utils";
 import React from "react";
@@ -35,7 +31,6 @@ export interface FrameHeadingProps
   extends React.HTMLAttributes<HTMLHeadingElement>,
     PrimitiveComponentDefaultProps {
   primitiveType: "heading";
-  csStyleLevel: "1" | "2" | "3" | "4" | "5" | "6";
   csLevel: "1" | "2" | "3" | "4" | "5" | "6";
 }
 
@@ -43,7 +38,6 @@ export interface FrameDisplayProps
   extends React.HTMLAttributes<HTMLHeadingElement>,
     PrimitiveComponentDefaultProps {
   primitiveType: "display";
-  csStyleLevel: "1" | "2" | "3" | "4" | "5" | "6";
   csLevel: "1" | "2" | "3" | "4" | "5" | "6";
 }
 
@@ -118,10 +112,6 @@ export const Frame = React.forwardRef<
     const {
       children,
       primitiveType,
-      csTextStyles,
-      csColor,
-      csVariant,
-      csSize,
       rootClasses,
       tooltipText,
       tooltipSide,
@@ -132,17 +122,7 @@ export const Frame = React.forwardRef<
       const fProps = forwardedProps as FrameWindowProps;
       return (
         <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
-          <div
-            {...fProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
-            ref={fRef}
-          >
+          <div {...fProps} className={rootClasses} ref={fRef}>
             {children}
           </div>
         </TooltipWrapper>
@@ -153,17 +133,7 @@ export const Frame = React.forwardRef<
       const fProps = forwardedProps as FrameListProps;
       return (
         <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
-          <ul
-            {...fProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
-            ref={fRef}
-          >
+          <ul {...fProps} className={rootClasses} ref={fRef}>
             {children}
           </ul>
         </TooltipWrapper>
@@ -174,17 +144,7 @@ export const Frame = React.forwardRef<
       const fProps = forwardedProps as FrameListItemProps;
       return (
         <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
-          <li
-            {...fProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
-            ref={fRef}
-          >
+          <li {...fProps} className={rootClasses} ref={fRef}>
             {children}
           </li>
         </TooltipWrapper>
@@ -192,118 +152,43 @@ export const Frame = React.forwardRef<
     }
     if (primitiveType === "heading" || primitiveType == "display") {
       const fRef = forwardedRef as React.ForwardedRef<HTMLHeadingElement>;
-      const { csLevel, csStyleLevel, ...strippedForwardedProps } =
-        forwardedProps as FrameHeadingProps | FrameDisplayProps;
-      const primitiveStyles =
-        primitiveType === "heading"
-          ? headingStyles.heading
-          : displayStyles.display;
+      const { csLevel, ...strippedForwardedProps } = forwardedProps as
+        | FrameHeadingProps
+        | FrameDisplayProps;
       let element;
       if (csLevel === "1") {
         element = (
-          <h1
-            {...strippedForwardedProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              primitiveStyles,
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
-            data-stylelevel={csStyleLevel}
-            ref={fRef}
-          >
+          <h1 {...strippedForwardedProps} className={rootClasses} ref={fRef}>
             {children}
           </h1>
         );
       } else if (csLevel === "2") {
         element = (
-          <h2
-            {...strippedForwardedProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              primitiveStyles,
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
-            data-stylelevel={csStyleLevel}
-            ref={fRef}
-          >
+          <h2 {...strippedForwardedProps} className={rootClasses} ref={fRef}>
             {children}
           </h2>
         );
       } else if (csLevel === "3") {
         element = (
-          <h3
-            {...strippedForwardedProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              primitiveStyles,
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
-            data-stylelevel={csStyleLevel}
-            ref={fRef}
-          >
+          <h3 {...strippedForwardedProps} className={rootClasses} ref={fRef}>
             {children}
           </h3>
         );
       } else if (csLevel === "4") {
         element = (
-          <h4
-            {...strippedForwardedProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              primitiveStyles,
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
-            data-stylelevel={csStyleLevel}
-            ref={fRef}
-          >
+          <h4 {...strippedForwardedProps} className={rootClasses} ref={fRef}>
             {children}
           </h4>
         );
       } else if (csLevel === "5") {
         element = (
-          <h5
-            {...strippedForwardedProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              primitiveStyles,
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
-            data-stylelevel={csStyleLevel}
-            ref={fRef}
-          >
+          <h5 {...strippedForwardedProps} className={rootClasses} ref={fRef}>
             {children}
           </h5>
         );
       } else if (csLevel === "6") {
         element = (
-          <h6
-            {...strippedForwardedProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              primitiveStyles,
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
-            data-stylelevel={csStyleLevel}
-            ref={fRef}
-          >
+          <h6 {...strippedForwardedProps} className={rootClasses} ref={fRef}>
             {children}
           </h6>
         );
@@ -319,17 +204,7 @@ export const Frame = React.forwardRef<
       const textProps = forwardedProps as FrameTextProps;
       return (
         <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
-          <p
-            {...textProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
-            ref={fRef}
-          >
+          <p {...textProps} className={rootClasses} ref={fRef}>
             {children}
           </p>
         </TooltipWrapper>
@@ -350,14 +225,7 @@ export const Frame = React.forwardRef<
             {...strippedForwardedProps}
             id={popoverId}
             {...{ popover: popoverMode }}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              popooverStyles.popover,
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
+            className={rootClasses}
             ref={fRef}
           >
             {noWrapper ? (
@@ -383,13 +251,7 @@ export const Frame = React.forwardRef<
             {...strippedForwardedProps}
             id={popoverId}
             {...{ popover: "auto" }}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              modalStyles.modal
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
+            className={rootClasses}
             ref={fRef}
           >
             {noWrapper ? (
@@ -425,13 +287,9 @@ export const Frame = React.forwardRef<
             child.props.className,
             iconStyles.icon,
             noWrapper && csMode === "inline" ? iconStyles.inline : null,
-            ...(csTextStyles ? csTextStyles : []),
             rootClasses
           ),
           ref: noWrapper ? svgIconRef : null,
-          "data-color": csColor ? csColor : null,
-          "data-variant": csVariant ? csVariant : null,
-          "data-size": csSize ? csSize : null,
           ...svgFProps,
         })
       );
@@ -448,12 +306,8 @@ export const Frame = React.forwardRef<
             className={classnames(
               iconStyles.iconWrapper,
               iconStyles.inline,
-              wrapperClasses,
-              ...(csTextStyles ? csTextStyles : [])
+              wrapperClasses
             )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
             ref={spanIconRef}
           >
             {clones}
@@ -464,14 +318,7 @@ export const Frame = React.forwardRef<
         content = (
           <div
             {...strippedForwardedProps}
-            className={classnames(
-              iconStyles.iconWrapper,
-              wrapperClasses,
-              ...(csTextStyles ? csTextStyles : [])
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
+            className={classnames(iconStyles.iconWrapper, wrapperClasses)}
             ref={divIconRef}
           >
             {clones}

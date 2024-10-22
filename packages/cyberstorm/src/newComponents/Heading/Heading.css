@@ -1,0 +1,8 @@
+.ts-heading {
+  color: var(--heading-text-color);
+  font-weight: var(--heading-font-weight);
+  font-size: var(--heading-font-size);
+  font-family: var(--heading-font-family);
+  font-style: var(--heading-font-style);
+  line-height: var(--heading-line-height);
+}

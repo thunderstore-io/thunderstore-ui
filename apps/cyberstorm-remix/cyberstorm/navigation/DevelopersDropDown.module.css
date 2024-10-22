@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  color: var(--color-primary);
 }
 
 .focus:not([data-highlighted]) a svg {
@@ -10,4 +11,8 @@
 
 .root {
   min-width: 14rem;
+}
+
+.link {
+  color: var(--color-primary);
 }

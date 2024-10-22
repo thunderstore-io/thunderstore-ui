@@ -1,0 +1,9 @@
+/* Missing tokens */
+.ts-dropdown__divider:where(.ts-variant--primary) {
+  --dropdown__divider-height: var(--space--px);
+  --dropdown__divider-margin: var(--space--8) 0;
+  --dropdown__divider-background-color: var(
+    --color-surface--6,
+    var(--color-primary, red)
+  );
+}

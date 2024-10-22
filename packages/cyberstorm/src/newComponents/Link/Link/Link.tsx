@@ -3,9 +3,7 @@ import {
   ActionableCyberstormLinkProps,
   ActionableLinkProps,
 } from "../../../primitiveComponents/Actionable/Actionable";
-import styles from "./Link.module.css";
 import React from "react";
-import { classnames } from "../../../utils/utils";
 
 export const Link = React.forwardRef<
   HTMLAnchorElement,
@@ -15,12 +13,11 @@ export const Link = React.forwardRef<
     props: ActionableLinkProps | ActionableCyberstormLinkProps,
     forwardedRef
   ) => {
-    const { children, rootClasses, csVariant, ...forwardedProps } = props;
+    const { children, rootClasses, ...forwardedProps } = props;
     return (
       <Actionable
         {...forwardedProps}
-        csVariant={csVariant ?? "accent"}
-        rootClasses={classnames(styles.link, rootClasses)}
+        rootClasses={rootClasses}
         ref={forwardedRef}
       >
         {children}

@@ -1,0 +1,64 @@
+/* theme base styles */
+.ts-button {
+  --button-height: 2rem;
+  --button-padding: 0 1rem;
+  --button-border-radius: 0.5rem;
+}
+
+.ts-button:where(.ts-button--ghost):where(:not(:hover, :active)) {
+  background-color: transparent;
+}
+
+.ts-button[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* SIZES */
+.ts-button:where(.ts-size--big) {
+  --button-height: 3rem;
+  --button-font-size: 1.4rem;
+}
+
+/* VARIANTS */
+.ts-button:where(.ts-variant--primary) {
+  --button-background-color: var(--color-background-button-primary-default);
+  --button-text-color: var(--color-text-button-primary-default);
+}
+
+.ts-button:where(.ts-variant--tertiary) {
+  --button-background-color: var(--color-background-button-primary-default);
+  --button-text-color: var(--color-text-button-primary-default);
+}
+
+.ts-button:where(.ts-variant--danger) {
+  --button-background-color: var(--color-background-button-danger-default);
+  --button-text-color: var(--color-text-button-danger-hover);
+}
+
+.ts-button:where(.ts-variant--primary):hover {
+  --button-background-color: var(--color-background-button-primary-hover);
+  --button-text-color: var(--color-text-button-primary-hover);
+}
+
+.ts-button:where(.ts-variant--tertiary):hover {
+  --button-background-color: var(--color-background-button-primary-hover);
+  --button-text-color: var(--color-text-button-primary-hover);
+}
+
+.ts-button:where(.ts-variant--danger):hover {
+  --button-background-color: var(--color-background-button-danger-hover);
+  --button-text-color: var(--color-text-button-danger-hover);
+}
+
+/* TOKENS */
+:root {
+  --color-background-button-primary-default: green;
+  --color-background-button-primary-hover: forestgreen;
+  --color-text-button-primary-default: #fff;
+  --color-text-button-primary-hover: #fff;
+  --color-background-button-danger-default: darkred;
+  --color-background-button-danger-hover: red;
+  --color-text-button-danger-default: #fcd7de;
+  --color-text-button-danger-hover: #fcd7de;
+}

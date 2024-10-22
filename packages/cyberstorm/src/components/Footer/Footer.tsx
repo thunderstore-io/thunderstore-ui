@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { ThunderstoreLogoHorizontal } from "../../svg/svg";
 import { classnames } from "../../utils/utils";
-import { Container, Heading, LinkButton, List, NewIcon, NewLink } from "../..";
+import { Heading, LinkButton, List, NewIcon, NewLink } from "../..";
 
 const AD_IMAGE_SRC = "/cyberstorm-static/images/tsmm_screenshot.png";
 const DISCORD_URL = "https://discord.thunderstore.io/";
@@ -26,7 +26,7 @@ export function Footer() {
               <NewIcon csVariant="accent" wrapperClasses={styles.logo}>
                 <ThunderstoreLogoHorizontal />
               </NewIcon>
-              <Container rootClasses={styles.iconLinks} csVariant="accent">
+              <div className={styles.iconLinks}>
                 <NewLink
                   primitiveType="link"
                   tooltipText="Join our Discord"
@@ -49,18 +49,18 @@ export function Footer() {
                     <FontAwesomeIcon icon={faGithub} />
                   </NewIcon>
                 </NewLink>
-              </Container>
+              </div>
             </div>
           </div>
           <div className={classnames(styles.item, styles.linksWrapper)}>
             <div className={classnames(styles.inner, styles.navLinks)}>
               <nav className={styles.nav} aria-label="Footer links">
-                <Container rootClasses={styles.navSection}>
+                <div className={styles.navSection}>
                   <Heading
                     csVariant="primary"
                     mode="heading"
                     csLevel="2"
-                    csStyleLevel="4"
+                    csSize="4"
                   >
                     Thunderstore
                   </Heading>
@@ -75,13 +75,13 @@ export function Footer() {
                       </NewLink>
                     </List.ListItem>
                   </List.Root>
-                </Container>
-                <Container rootClasses={styles.navSection}>
+                </div>
+                <div className={styles.navSection}>
                   <Heading
                     csVariant="primary"
                     mode="heading"
                     csLevel="2"
-                    csStyleLevel="4"
+                    csSize="4"
                   >
                     Developers
                   </Heading>
@@ -132,7 +132,7 @@ export function Footer() {
                       </NewLink>
                     </List.ListItem>
                   </List.Root>
-                </Container>
+                </div>
               </nav>
             </div>
           </div>
@@ -143,24 +143,20 @@ export function Footer() {
             <div className={styles.inner}>
               <div className={styles.ad}>
                 <div className={styles.adText}>
-                  <Heading mode="display" csLevel="2" csStyleLevel="3">
+                  <Heading mode="display" csLevel="2" csSize="3">
                     Thunderstore Mod Manager
                   </Heading>
-                  <Container
-                    rootClasses={styles.adDescription}
-                    csVariant="accent"
-                  >
+                  <div className={styles.adDescription}>
                     You are prepared. Download Thunderstore Mod Manager for
                     desktop and enter a world of Thunder{" "}
                     <NewIcon csMode="inline" noWrapper>
                       <FontAwesomeIcon icon={faBoltLightning} />
                     </NewIcon>
-                  </Container>
+                  </div>
                   <LinkButton
                     primitiveType="link"
                     href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
-                    csSize="l"
-                    csColor="cyber-green"
+                    csSize="big"
                     csVariant="accent"
                     rootClasses={styles.getManagerButton}
                   >
@@ -183,9 +179,13 @@ export function Footer() {
 
       <div className={classnames(styles.item, styles.footnote)}>
         <div className={styles.footnoteInner}>
-          <Container
-            rootClasses={styles.footerPagesLinks}
-            csTextStyles={["fontSizeXS", "fontWeightRegular", "lineHeightAuto"]}
+          <div
+            className={classnames(
+              styles.footerPagesLinks,
+              "fontSizeXS",
+              "fontWeightRegular",
+              "lineHeightAuto"
+            )}
           >
             <NewLink
               primitiveType="link"
@@ -202,11 +202,14 @@ export function Footer() {
             <NewLink primitiveType="link" href="https://blog.thunderstore.io/">
               News
             </NewLink>
-          </Container>
-          <Container
-            csVariant="accent"
-            csTextStyles={["lineHeightBody", "fontWeightRegular", "fontSizeXS"]}
-            rootClasses={styles.footnoteCopyright}
+          </div>
+          <div
+            className={
+              (styles.footnoteCopyright,
+              "lineHeightBody",
+              "fontWeightRegular",
+              "fontSizeXS")
+            }
           >
             © 2024 Thunderstore and contributors. This page is{" "}
             <NewLink
@@ -216,7 +219,7 @@ export function Footer() {
             >
               open-source ❤
             </NewLink>
-          </Container>
+          </div>
         </div>
       </div>
     </footer>

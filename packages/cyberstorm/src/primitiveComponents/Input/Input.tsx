@@ -1,6 +1,5 @@
 import React from "react";
 import { PrimitiveComponentDefaultProps, TooltipWrapper } from "../utils/utils";
-import { classnames } from "../../utils/utils";
 
 export interface InputTextInputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
@@ -14,10 +13,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputTextInputProps>(
       children,
       primitiveType,
       rootClasses,
-      csTextStyles,
-      csColor,
-      csVariant,
-      csSize,
       tooltipText,
       tooltipSide,
       ...forwardedProps
@@ -29,17 +24,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputTextInputProps>(
 
       return (
         <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
-          <input
-            {...fProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
-            ref={fRef}
-          >
+          <input {...fProps} className={rootClasses} ref={fRef}>
             {children}
           </input>
         </TooltipWrapper>
