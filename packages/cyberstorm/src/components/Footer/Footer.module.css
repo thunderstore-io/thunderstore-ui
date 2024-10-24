@@ -118,6 +118,7 @@
 
 .adDescription {
   max-width: 29rem;
+  color: var(--color-accent);
   font-weight: 400;
   font-size: 1.125rem;
   line-height: 160%;
@@ -149,6 +150,7 @@
 .iconLinks {
   display: flex;
   gap: 30px;
+  color: var(--color-accent);
 }
 
 .iconLink {

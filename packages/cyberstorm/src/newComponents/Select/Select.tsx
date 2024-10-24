@@ -12,7 +12,7 @@ import {
   Viewport,
 } from "@radix-ui/react-select";
 import { classnames } from "../../utils/utils";
-import { Container, NewButton, NewIcon } from "../..";
+import { NewButton, NewIcon } from "../..";
 
 type SelectOption<T extends string = string> = {
   value: T;
@@ -65,11 +65,15 @@ export function Select<T extends string>(props: SelectProps<T>) {
       <Trigger asChild>
         <NewButton
           csVariant="secondary"
-          csSize="m"
-          csColor="surface-alpha"
-          csTextStyles={["fontSizeS", "fontWeightBold", "lineHeightAuto"]}
+          csSize="medium"
           aria-label={forwardedProps["aria-label"]}
-          rootClasses={classnames(styles.trigger, forwardedProps.rootClasses)}
+          rootClasses={classnames(
+            styles.trigger,
+            "fontSizeS",
+            "fontWeightBold",
+            "lineHeightAuto",
+            forwardedProps.rootClasses
+          )}
         >
           <span className={styles.iconAndLabel}>
             {selectedOption?.leftIcon ? (
@@ -104,18 +108,15 @@ Select.displayName = "Select";
 const mapSelectData = (options: SelectOption[]) => {
   return options.map((option, index) => (
     <Item value={option.value} key={index} asChild>
-      <Container
-        rootClasses={styles.item}
-        csVariant="secondary"
-        csColor="surface"
-        csTextStyles={["fontSizeS", "fontWeightRegular"]}
+      <div
+        className={classnames(styles.item, "fontSizeS", "fontWeightRegular")}
       >
         <NewIcon csMode="inline" noWrapper rootClasses={styles.itemIcon}>
           {option.leftIcon}
         </NewIcon>
         {option.label}
         {!option.label && !option.leftIcon ? option.value : null}
-      </Container>
+      </div>
     </Item>
   ));
 };

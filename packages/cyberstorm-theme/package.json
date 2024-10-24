@@ -1,0 +1,13 @@
+{
+  "name": "@thunderstore/cyberstorm-theme",
+  "version": "0.1.0",
+  "description": "Cyberstorm theme",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/cyberstorm-theme",
+  "type": "module",
+  "main": "dist/thunderstore-cyberstorm-theme.cjs.js",
+  "module": "dist/thunderstore-cyberstorm-theme.esm.js",
+  "types": "dist/thunderstore-cyberstorm-theme.cjs.d.ts",
+  "files": [
+    "dist"
+  ]
+}

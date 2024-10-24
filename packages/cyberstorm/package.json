@@ -29,6 +29,7 @@
     "@radix-ui/react-switch": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
     "@radix-ui/react-tooltip": "^1.1.2",
+    "@thunderstore/cyberstorm-theme": "^0.1.0",
     "@thunderstore/dapper": "^0.1.0",
     "@thunderstore/thunderstore-api": "*",
     "@thunderstore/use-promise": "^0.1.0",

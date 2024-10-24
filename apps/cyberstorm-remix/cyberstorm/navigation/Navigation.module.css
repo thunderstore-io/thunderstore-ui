@@ -36,6 +36,11 @@
   width: 1.655rem;
   height: 1.463rem;
   margin: 0 0.75rem;
+  color: var(--color-cyber-green--7);
+}
+
+.logoWrapper:hover {
+  color: var(--color-cyber-green--9);
 }
 
 .dropDownItem {
@@ -71,12 +76,12 @@
   align-items: center;
   align-self: stretch;
   justify-content: space-between;
-  color: var(--color-primary);
   background: transparent;
 }
 
 .mobileNavMenuDevelopersButtonIcon {
   height: 0.875rem;
+  color: var(--color-tertiary);
 }
 
 .mobileNavItem {
@@ -112,6 +117,7 @@ button.mobileNavItem {
   align-items: center;
   align-self: stretch;
   padding: 1rem;
+  color: var(--color-primary);
 }
 
 .accountPopoverUser {
@@ -209,6 +215,10 @@ button.mobileNavItem {
   --text-color: #8683be;
 }
 
+.loginLegalTextLinks {
+  color: var(--color-tertiary);
+}
+
 .mobileMenu {
   display: none;
 }
@@ -265,6 +275,7 @@ button.mobileNavItem {
   align-self: stretch;
   padding: var(--space--16);
   border-radius: var(--border-radius--8);
+  color: var(--color-primary);
 }
 
 .navMenuItem:hover {

@@ -101,13 +101,7 @@ export {
   Input,
   type InputTextInputProps,
 } from "./primitiveComponents/Input/Input";
-export {
-  type variants,
-  type colors,
-  type sizes,
-  type TextStyles,
-  type PrimitiveComponentDefaultProps,
-} from "./primitiveComponents/utils/utils";
+export { type PrimitiveComponentDefaultProps } from "./primitiveComponents/utils/utils";
 
 // newComponents
 export { Menu } from "./newComponents/Menu/Menu";
@@ -118,7 +112,6 @@ export { Link as NewLink } from "./newComponents/Link/Link/Link";
 export { LinkButton } from "./newComponents/Link/LinkButton/LinkButton";
 export { Button as NewButton } from "./newComponents/Button/Button";
 export { BreadCrumbs as NewBreadCrumbs } from "./newComponents/BreadCrumbs/BreadCrumbs";
-export { Container } from "./newComponents/Container/Container";
 export { TextInput as NewTextInput } from "./newComponents/TextInput/TextInput";
 export { Text as NewText } from "./newComponents/Text/Text";
 export {

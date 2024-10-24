@@ -1,5 +1,6 @@
+import "./DropDown.css";
 import { ReactNode, ReactElement } from "react";
-import styles from "./DropDown.module.css";
+// import styles from "./DropDown.module.css";
 
 import {
   Root,
@@ -9,24 +10,36 @@ import {
   DropdownMenuItemProps,
   Item,
 } from "@radix-ui/react-dropdown-menu";
-import { Container } from "../Container/Container";
-import { classnames } from "../../utils/utils";
+import { classnames, componentClasses } from "../../utils/utils";
 import { PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
+import {
+  DropDownVariants,
+  DropDownSizes,
+  DropDownModifiers,
+  DropDownItemModifiers,
+  DropDownItemSizes,
+  DropDownItemVariants,
+  DropDownDividerModifiers,
+  DropDownDividerSizes,
+  DropDownDividerVariants,
+} from "@thunderstore/cyberstorm-theme/src/components";
 
 interface DropDownProps extends PrimitiveComponentDefaultProps {
   defaultOpen?: boolean;
   contentAlignment?: "start" | "center" | "end";
   trigger: ReactNode | ReactElement;
+  csVariant?: DropDownVariants;
+  csSize?: DropDownSizes;
+  csModifiers?: DropDownModifiers[];
 }
 
 export function DropDown(props: DropDownProps) {
   const {
     children,
     rootClasses,
-    csColor,
-    csVariant,
-    csSize,
-    csTextStyles,
+    csVariant = "primary",
+    csSize = "medium",
+    csModifiers,
     defaultOpen = false,
     contentAlignment = "start",
     trigger,
@@ -43,13 +56,10 @@ export function DropDown(props: DropDownProps) {
           align={contentAlignment}
           sideOffset={8}
           className={classnames(
-            styles.dropdown,
-            ...(csTextStyles ? csTextStyles : []),
+            "ts-dropdown",
+            ...componentClasses(csVariant, csSize, csModifiers),
             rootClasses
           )}
-          data-color={csColor}
-          data-variant={csVariant}
-          data-size={csSize}
         >
           {children}
         </Content>
@@ -60,16 +70,19 @@ export function DropDown(props: DropDownProps) {
 
 interface DropDownItemProps
   extends PrimitiveComponentDefaultProps,
-    DropdownMenuItemProps {}
+    DropdownMenuItemProps {
+  csVariant?: DropDownItemVariants;
+  csSize?: DropDownItemSizes;
+  csModifiers?: DropDownItemModifiers[];
+}
 
 export function DropDownItem(props: DropDownItemProps) {
   const {
     children,
     rootClasses,
-    csTextStyles,
-    csColor,
-    csVariant,
-    csSize,
+    csVariant = "primary",
+    csSize = "medium",
+    csModifiers,
     ...fProps
   } = props;
 
@@ -77,24 +90,37 @@ export function DropDownItem(props: DropDownItemProps) {
     <Item
       {...fProps}
       className={classnames(
-        styles.dropdownItem,
-        ...(csTextStyles ? csTextStyles : []),
+        "ts-dropdown__item",
+        ...componentClasses(csVariant, csSize, csModifiers),
         rootClasses
       )}
-      data-color={csColor}
-      data-variant={csVariant}
-      data-size={csSize}
     >
       {children}
     </Item>
   );
 }
 
-export function DropDownDivider(props: PrimitiveComponentDefaultProps) {
-  const { rootClasses, ...fProps } = props;
+interface DropDownDividerProps extends PrimitiveComponentDefaultProps {
+  csVariant?: DropDownDividerVariants;
+  csSize?: DropDownDividerSizes;
+  csModifiers?: DropDownDividerModifiers[];
+}
+
+export function DropDownDivider(props: DropDownDividerProps) {
+  const {
+    rootClasses,
+    csVariant = "primary",
+    csSize = "medium",
+    csModifiers,
+    ...fProps
+  } = props;
   return (
-    <Container
-      rootClasses={classnames(styles.divider, rootClasses)}
+    <div
+      className={classnames(
+        "ts-dropdown__divider",
+        ...componentClasses(csVariant, csSize, csModifiers),
+        rootClasses
+      )}
       {...fProps}
     />
   );
