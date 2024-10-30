@@ -1,9 +1,8 @@
-import type { MetaFunction } from "@remix-run/node";
+// import type { MetaFunction } from "@remix-run/node";
 import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import { BreadCrumbs, CyberstormLink, Icon } from "@thunderstore/cyberstorm";
 import tabsStyles from "./Tabs.module.css";
 import styles from "./SettingsLayout.module.css";
-import rootStyles from "../../RootLayout.module.css";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNodes, faCog } from "@fortawesome/free-solid-svg-icons";
@@ -36,12 +35,12 @@ export default function Community() {
       <BreadCrumbs>
         <CyberstormLink linkId="Settings">Settings</CyberstormLink>
       </BreadCrumbs>
-      <header className={rootStyles.pageHeader}>
+      <header className="project-root__page-header">
         <div className={styles.header}>
           <PageHeader title="Settings" />
         </div>
       </header>
-      <main className={rootStyles.main}>
+      <main className="project-root__main">
         <div className={styles.tabContent}>
           <div className={tabsStyles.root}>
             <div className={tabsStyles.buttons}>
