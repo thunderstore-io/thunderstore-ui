@@ -20,6 +20,35 @@ const Template: StoryFn<typeof NewTag> = () => {
   const tags = TagSizesList.map((size) => {
     const variantBlock = TagVariantsList.map((variant) => {
       const modifierBlock = TagModifiersList.map((modifier) => {
+        if (modifier == "dark") {
+          return (
+            <>
+              <NewTag
+                key={`${size}-${variant}-${modifier}`}
+                csVariant={variant}
+                csSize={size}
+                csModifiers={[modifier]}
+              >
+                {size}-{variant}-{modifier}
+                <NewIcon csMode={"inline"} noWrapper>
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </NewIcon>
+              </NewTag>
+              <NewTag
+                key={`${size}-${variant}-${modifier}-hoverable`}
+                csVariant={variant}
+                csSize={size}
+                csModifiers={[modifier, "hoverable"]}
+              >
+                {size}-{variant}-{modifier}-hoverable
+                <NewIcon csMode={"inline"} noWrapper>
+                  <FontAwesomeIcon icon={faChevronDown} />
+                </NewIcon>
+              </NewTag>
+            </>
+          );
+        }
+
         return (
           <NewTag
             key={`${size}-${variant}-${modifier}`}

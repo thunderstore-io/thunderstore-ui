@@ -2,12 +2,10 @@
   /* VARIANTS DEFAULT STATE */
   .ts-menu:where(.ts-variant--primary) {
     --menu-color: var(--menu-primary-color--default);
-  }
 
-  .ts-menu:where(.ts-variant--primary):hover {
-    --menu-color: var(--menu-primary-color--hover);
-
-    text-decoration: none;
+    &:where(:hover) {
+      --menu-color: var(--menu-primary-color--hover);
+    }
   }
 
   /* TOKENS */

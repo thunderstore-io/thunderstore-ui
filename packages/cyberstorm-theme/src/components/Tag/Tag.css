@@ -22,165 +22,165 @@
     --tag-font-size: var(--tag-xs-font-size);
   }
 
-  /* VARIANTS DEFAULT STATE */
+  /* VARIANTS */
   .ts-tag:where(.ts-variant--primary) {
     --tag-color: var(--tag-light-primary-text-color--default);
     --tag-background-color: var(--tag-light-primary-bg-color--default);
-  }
 
-  .ts-tag:where(.ts-variant--primary):where(.ts-modifier--dark) {
-    --tag-color: var(--tag-dark-primary-text-color--default);
-    --tag-background-color: var(--tag-dark-primary-bg-color--default);
+    &.ts-modifier--dark {
+      --tag-color: var(--tag-dark-primary-text-color--default);
+      --tag-background-color: var(--tag-dark-primary-bg-color--default);
+
+      &.ts-modifier--hoverable:hover {
+        --tag-color: var(--tag-dark-primary-text-color--hover);
+        --tag-background-color: var(--tag-dark-primary-bg-color--hover);
+      }
+    }
+
+    &.ts-modifier--hoverable:hover {
+      --tag-color: var(--tag-light-primary-text-color--hover);
+      --tag-background-color: var(--tag-light-primary-bg-color--hover);
+    }
   }
 
   .ts-tag:where(.ts-variant--blue) {
     --tag-color: var(--tag-light-blue-text-color--default);
     --tag-background-color: var(--tag-light-blue-bg-color--default);
-  }
 
-  .ts-tag:where(.ts-variant--blue):where(.ts-modifier--dark) {
-    --tag-color: var(--tag-dark-blue-text-color--default);
-    --tag-background-color: var(--tag-dark-blue-bg-color--default);
+    &.ts-modifier--dark {
+      --tag-color: var(--tag-dark-blue-text-color--default);
+      --tag-background-color: var(--tag-dark-blue-bg-color--default);
+
+      &.ts-modifier--hoverable:hover {
+        --tag-color: var(--tag-dark-blue-text-color--hover);
+        --tag-background-color: var(--tag-dark-blue-bg-color--hover);
+      }
+    }
+
+    &.ts-modifier--hoverable:hover {
+      --tag-color: var(--tag-light-blue-text-color--hover);
+      --tag-background-color: var(--tag-light-blue-bg-color--hover);
+    }
   }
 
   .ts-tag:where(.ts-variant--green) {
     --tag-color: var(--tag-light-green-text-color--default);
     --tag-background-color: var(--tag-light-green-bg-color--default);
-  }
 
-  .ts-tag:where(.ts-variant--green):where(.ts-modifier--dark) {
-    --tag-color: var(--tag-dark-green-text-color--default);
-    --tag-background-color: var(--tag-dark-green-bg-color--default);
+    &.ts-modifier--dark {
+      --tag-color: var(--tag-dark-green-text-color--default);
+      --tag-background-color: var(--tag-dark-green-bg-color--default);
+
+      &.ts-modifier--hoverable:hover {
+        --tag-color: var(--tag-dark-green-text-color--hover);
+        --tag-background-color: var(--tag-dark-green-bg-color--hover);
+      }
+    }
+
+    &.ts-modifier--hoverable:hover {
+      --tag-color: var(--tag-light-green-text-color--hover);
+      --tag-background-color: var(--tag-light-green-bg-color--hover);
+    }
   }
 
   .ts-tag:where(.ts-variant--yellow) {
     --tag-color: var(--tag-light-yellow-text-color--default);
     --tag-background-color: var(--tag-light-yellow-bg-color--default);
-  }
 
-  .ts-tag:where(.ts-variant--yellow):where(.ts-modifier--dark) {
-    --tag-color: var(--tag-dark-yellow-text-color--default);
-    --tag-background-color: var(--tag-dark-yellow-bg-color--default);
+    &.ts-modifier--dark {
+      --tag-color: var(--tag-dark-yellow-text-color--default);
+      --tag-background-color: var(--tag-dark-yellow-bg-color--default);
+
+      &.ts-modifier--hoverable:hover {
+        --tag-color: var(--tag-dark-yellow-text-color--hover);
+        --tag-background-color: var(--tag-dark-yellow-bg-color--hover);
+      }
+    }
+
+    &.ts-modifier--hoverable:hover {
+      --tag-color: var(--tag-light-yellow-text-color--hover);
+      --tag-background-color: var(--tag-light-yellow-bg-color--hover);
+    }
   }
 
   .ts-tag:where(.ts-variant--red) {
     --tag-color: var(--tag-light-red-text-color--default);
     --tag-background-color: var(--tag-light-red-bg-color--default);
-  }
 
-  .ts-tag:where(.ts-variant--red):where(.ts-modifier--dark) {
-    --tag-color: var(--tag-dark-red-text-color--default);
-    --tag-background-color: var(--tag-dark-red-bg-color--default);
+    &.ts-modifier--dark {
+      --tag-color: var(--tag-dark-red-text-color--default);
+      --tag-background-color: var(--tag-dark-red-bg-color--default);
+
+      &.ts-modifier--hoverable:hover {
+        --tag-color: var(--tag-dark-red-text-color--hover);
+        --tag-background-color: var(--tag-dark-red-bg-color--hover);
+      }
+    }
+
+    &.ts-modifier--hoverable:hover {
+      --tag-color: var(--tag-light-red-text-color--hover);
+      --tag-background-color: var(--tag-light-red-bg-color--hover);
+    }
   }
 
   .ts-tag:where(.ts-variant--pink) {
     --tag-color: var(--tag-light-pink-text-color--default);
     --tag-background-color: var(--tag-light-pink-bg-color--default);
-  }
 
-  .ts-tag:where(.ts-variant--pink):where(.ts-modifier--dark) {
-    --tag-color: var(--tag-dark-pink-text-color--default);
-    --tag-background-color: var(--tag-dark-pink-bg-color--default);
+    &.ts-modifier--dark {
+      --tag-color: var(--tag-dark-pink-text-color--default);
+      --tag-background-color: var(--tag-dark-pink-bg-color--default);
+
+      &.ts-modifier--hoverable:hover {
+        --tag-color: var(--tag-dark-pink-text-color--hover);
+        --tag-background-color: var(--tag-dark-pink-bg-color--hover);
+      }
+    }
+
+    &.ts-modifier--hoverable:hover {
+      --tag-color: var(--tag-light-pink-text-color--hover);
+      --tag-background-color: var(--tag-light-pink-bg-color--hover);
+    }
   }
 
   .ts-tag:where(.ts-variant--orange) {
     --tag-color: var(--tag-light-orange-text-color--default);
     --tag-background-color: var(--tag-light-orange-bg-color--default);
-  }
 
-  .ts-tag:where(.ts-variant--orange):where(.ts-modifier--dark) {
-    --tag-color: var(--tag-dark-orange-text-color--default);
-    --tag-background-color: var(--tag-dark-orange-bg-color--default);
+    &.ts-modifier--dark {
+      --tag-color: var(--tag-dark-orange-text-color--default);
+      --tag-background-color: var(--tag-dark-orange-bg-color--default);
+
+      &.ts-modifier--hoverable:hover {
+        --tag-color: var(--tag-dark-orange-text-color--hover);
+        --tag-background-color: var(--tag-dark-orange-bg-color--hover);
+      }
+    }
+
+    &.ts-modifier--hoverable:hover {
+      --tag-color: var(--tag-light-orange-text-color--hover);
+      --tag-background-color: var(--tag-light-orange-bg-color--hover);
+    }
   }
 
   .ts-tag:where(.ts-variant--purple) {
     --tag-color: var(--tag-light-purple-text-color--default);
     --tag-background-color: var(--tag-light-purple-bg-color--default);
-  }
 
-  .ts-tag:where(.ts-variant--purple):where(.ts-modifier--dark) {
-    --tag-color: var(--tag-dark-purple-text-color--default);
-    --tag-background-color: var(--tag-dark-purple-bg-color--default);
-  }
+    &.ts-modifier--dark {
+      --tag-color: var(--tag-dark-purple-text-color--default);
+      --tag-background-color: var(--tag-dark-purple-bg-color--default);
 
-  .ts-tag:where(.ts-variant--primary):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-light-primary-text-color--hover);
-    --tag-background-color: var(--tag-light-primary-bg-color--hover);
-  }
+      &.ts-modifier--hoverable:hover {
+        --tag-color: var(--tag-dark-purple-text-color--hover);
+        --tag-background-color: var(--tag-dark-purple-bg-color--hover);
+      }
+    }
 
-  .ts-tag:where(.ts-variant--primary):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-dark-primary-text-color--hover);
-    --tag-background-color: var(--tag-dark-primary-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--blue):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-light-blue-text-color--hover);
-    --tag-background-color: var(--tag-light-blue-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--blue):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-dark-blue-text-color--hover);
-    --tag-background-color: var(--tag-dark-blue-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--green):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-light-green-text-color--hover);
-    --tag-background-color: var(--tag-light-green-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--green):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-dark-green-text-color--hover);
-    --tag-background-color: var(--tag-dark-green-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--yellow):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-light-yellow-text-color--hover);
-    --tag-background-color: var(--tag-light-yellow-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--yellow):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-dark-yellow-text-color--hover);
-    --tag-background-color: var(--tag-dark-yellow-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--red):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-light-red-text-color--hover);
-    --tag-background-color: var(--tag-light-red-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--red):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-dark-red-text-color--hover);
-    --tag-background-color: var(--tag-dark-red-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--pink):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-light-pink-text-color--hover);
-    --tag-background-color: var(--tag-light-pink-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--pink):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-dark-pink-text-color--hover);
-    --tag-background-color: var(--tag-dark-pink-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--orange):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-light-orange-text-color--hover);
-    --tag-background-color: var(--tag-light-orange-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--orange):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-dark-orange-text-color--hover);
-    --tag-background-color: var(--tag-dark-orange-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--purple):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-light-purple-text-color--hover);
-    --tag-background-color: var(--tag-light-purple-bg-color--hover);
-  }
-
-  .ts-tag:where(.ts-variant--purple):where(.ts-modifier--dark):where(.ts-modifier--hoverable):hover {
-    --tag-color: var(--tag-dark-purple-text-color--hover);
-    --tag-background-color: var(--tag-dark-purple-bg-color--hover);
+    &.ts-modifier--hoverable:hover {
+      --tag-color: var(--tag-light-purple-text-color--hover);
+      --tag-background-color: var(--tag-light-purple-bg-color--hover);
+    }
   }
 
   /* TOKENS */
@@ -205,7 +205,7 @@
     --tag-dark-primary-bg-color--hover: var(--color-surface-9);
     --tag-dark-primary-text-color--default: var(--color--primary);
     --tag-dark-primary-text-color--hover: var(--color--primary);
-    --tag-dark-purple-bg-color--default: var(--color-purple-2);
+    --tag-dark-purple-bg-color--default: var(--color-accent-purple-2);
     --tag-dark-purple-bg-color--hover: var(--color-accent-purple-3);
     --tag-dark-purple-text-color--default: var(--color-accent-purple-9);
     --tag-dark-purple-text-color--hover: var(--color-accent-purple-9);
