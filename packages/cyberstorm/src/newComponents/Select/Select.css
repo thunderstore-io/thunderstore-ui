@@ -33,9 +33,12 @@
   }
 
   .ts-select__trigger {
-    justify-content: space-between;
     font-weight: var(--select__trigger-font-weight);
     font-size: var(--select__trigger-font-size);
+
+    & > svg:nth-child(2) {
+      margin-left: auto;
+    }
   }
 
   .ts-select__item__icon {
