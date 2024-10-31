@@ -94,6 +94,7 @@ export function DropDownItem(props: DropDownItemProps) {
         ...componentClasses(csVariant, csSize, csModifiers),
         rootClasses
       )}
+      asChild
     >
       {children}
     </Item>

@@ -35,10 +35,12 @@ const defaultArgs = {
 const children: ReactElement = (
   <>
     <NewDropDownItem>
-      <NewIcon csMode="inline" noWrapper>
-        <FontAwesomeIcon icon={faStar} />
-      </NewIcon>
-      New
+      <span>
+        <NewIcon csMode="inline" noWrapper>
+          <FontAwesomeIcon icon={faStar} />
+        </NewIcon>
+        New
+      </span>
     </NewDropDownItem>
     <NewDropDownItem>
       <NewLink
