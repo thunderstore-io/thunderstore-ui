@@ -185,6 +185,11 @@
     color: var(--color-text-accent);
   }
 
+  .project-footer__info {
+    --link-color: var(--color-text-accent);
+    --link-color-hover: var(--color-text-primary);
+  }
+
   @media (width >= calc(63.5rem + 1px)) {
     .project-footer__logoandlinks {
       flex-direction: row;
@@ -238,6 +243,9 @@
 
     .project-footer__footnote {
       padding-block-end: var(--space-32);
+
+      --link-color: var(--color-text-accent);
+      --link-color-hover: var(--color-text-primary);
     }
 
     .project-footer__nav {

@@ -2,20 +2,20 @@
   /* VARIANTS DEFAULT STATE */
   .ts-link:where(.ts-variant--primary) {
     --link-color: var(--link-primary-color--default);
+
+    &:where(:hover) {
+      --link-color-hover: var(--link-primary-color--hover);
+    }
   }
 
   .ts-link:where(.ts-variant--cyber) {
     --link-color: var(--link-cyber-color--default);
-  }
 
-  .ts-link:where(.ts-variant--primary):hover {
-    --link-color: var(--link-primary-color--hover);
-  }
+    &:where(:hover) {
+      --link-color-hover: var(--link-cyber-color--hover);
 
-  .ts-link:where(.ts-variant--cyber):hover {
-    --link-color: var(--link-cyber-color--hover);
-
-    text-decoration: underline;
+      text-decoration: underline;
+    }
   }
 
   /* TOKENS */
