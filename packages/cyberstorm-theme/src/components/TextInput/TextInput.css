@@ -61,7 +61,7 @@
   }
 
   .ts-textinput::placeholder {
-    --textinput__placeholder-color: var(--color-text--tertiary);
+    --textinput__placeholder-color: var(--color-text-tertiary);
     --textinput__placeholder-opacity: 1;
   }
 
