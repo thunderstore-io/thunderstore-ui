@@ -65,7 +65,7 @@ Storybook can then be accessed at [http://localhost:6006/](http://localhost:6006
 1. examples of global CSS variable names:
    - `--color-gradient-blue-green--darker`
    - `--font-weight-bold`
-   - `--old--color-cyber-green--70`
+   - `--old--color-cyber-green-70`
    - `--padding-m`
 
 2. When reasonable, don't use the `--size` variables directly, instead proxy them like this:

@@ -6,7 +6,7 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--32);
+  gap: var(--gap-xxxl);
 }
 
 .privacyPolicyLink {
@@ -16,12 +16,12 @@
 .connectionList {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--16);
+  gap: var(--gap-md);
 }
 
 .itemWrapper {
-  padding: var(--space--16) var(--space--32);
-  border-radius: var(--border-radius--8);
+  padding: var(--space-16) var(--space-32);
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 
@@ -31,16 +31,16 @@
 }
 
 .enabled {
-  background-color: var(--color-surface--3);
+  background-color: var(--color-surface-3);
 }
 
 .disabled {
-  background-color: var(--color-surface--1);
+  background-color: var(--color-surface-1);
 }
 
 .connectionTypeInfo {
   display: flex;
-  gap: var(--space--24);
+  gap: var(--space-24);
   align-items: center;
   justify-content: center;
 }
@@ -59,13 +59,13 @@
 .connectionTypeInfoName {
   color: var(--color-text--default);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size--l);
+  font-size: var(--font-size-body-xxxxl);
   line-height: 1;
 }
 
 .rightSection {
   display: flex;
-  gap: var(--gap--32);
+  gap: var(--gap-xxxl);
   align-items: center;
   justify-content: center;
 }
@@ -73,21 +73,21 @@
 .connectedAs {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--4);
+  gap: var(--gap-xxs);
   align-items: flex-end;
 }
 
 .connectedAsDescription {
   color: var(--color-text--tertiary);
   font-weight: var(--font-weight-medium);
-  font-size: var(--font-size--m);
+  font-size: var(--font-size-body-lg);
   line-height: 1;
 }
 
 .connectedAsUsername {
   color: var(--color-text--default);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size--m);
+  font-size: var(--font-size-body-lg);
   line-height: normal;
 }
 
@@ -106,6 +106,6 @@
 @media (width <= 30rem) {
   .item {
     flex-direction: column;
-    gap: var(--gap--8);
+    gap: var(--gap-xs);
   }
 }

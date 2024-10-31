@@ -23,9 +23,9 @@ const meta = {
 
 const defaultArgs = {
   trigger: (
-    <NewButton csVariant="default" csColor="red">
+    <NewButton csVariant="danger">
       Developers
-      <NewIcon csVariant="default" csColor="cyber-green">
+      <NewIcon csVariant="accent">
         <FontAwesomeIcon icon={faChevronDown} />
       </NewIcon>
     </NewButton>
@@ -44,11 +44,10 @@ const children: ReactElement = (
       <NewLink
         primitiveType="link"
         csVariant="primary"
-        csTextStyles={["fontSizeS", "fontWeightRegular"]}
         href="https://github.com/thunderstore-io"
       >
         Github
-        <NewIcon csMode="inline" csVariant="default" csColor="red">
+        <NewIcon csMode="inline" csVariant="danger">
           <FontAwesomeIcon icon={faThumbtack} />
         </NewIcon>
       </NewLink>
@@ -56,12 +55,7 @@ const children: ReactElement = (
     <NewDropDownItem>
       <NewButton csVariant="special" style={{ minWidth: "100%" }} key={3}>
         Nabbula
-        <NewIcon
-          csMode="inline"
-          noWrapper
-          csVariant="default"
-          csColor="cyber-green"
-        >
+        <NewIcon csMode="inline" noWrapper csVariant="cyber">
           <FontAwesomeIcon icon={faSkull} />
         </NewIcon>
       </NewButton>
@@ -73,7 +67,7 @@ const Template: StoryFn<typeof NewDropDown> = (args) => {
   const { children, ...restOfArgs } = args;
 
   return (
-    <NewDropDown {...restOfArgs} csVariant="default" csColor="surface">
+    <NewDropDown {...restOfArgs} csVariant="primary">
       {children}
     </NewDropDown>
   );

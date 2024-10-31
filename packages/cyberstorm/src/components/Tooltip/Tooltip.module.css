@@ -2,23 +2,23 @@
   z-index: 999;
   max-width: 75vw;
 
-  padding: var(--space--8) var(--space--12);
-  border-radius: var(--border-radius--8);
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--radius-md);
   color: var(--color-text--default);
 
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size--m);
+  font-size: var(--font-size-body-lg);
   line-height: normal;
   overflow-wrap: break-word;
   background-color: var(--background-color);
 
-  box-shadow: var(--box-shadow-default);
-  animation-duration: var(--animation-length-l);
+  box-shadow: var(--shadow-lg);
+  animation-duration: var(--animation-duration-lg);
   animation-timing-function: var(--animation-timing-1);
   user-select: none;
   will-change: transform, opacity;
 
-  --background-color: var(--color-surface--7);
+  --background-color: var(--color-surface-7);
 }
 
 .arrow {

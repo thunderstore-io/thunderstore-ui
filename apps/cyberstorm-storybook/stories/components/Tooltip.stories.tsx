@@ -12,9 +12,9 @@ const Template: StoryFn<typeof Tooltip> = (args) => (
     style={{
       display: "flex",
       flexDirection: "column",
-      gap: "var(--gap--4)",
-      backgroundColor: "var(--old--color-cyber-green--40)",
-      padding: "var(--space--16)",
+      gap: "var(--gap-xxs)",
+      backgroundColor: "var(--old--color-cyber-green-40)",
+      padding: "var(--space-16)",
     }}
   >
     <div>

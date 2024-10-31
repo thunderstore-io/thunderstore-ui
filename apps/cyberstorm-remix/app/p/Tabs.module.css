@@ -2,25 +2,25 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap: var(--space--32);
+  gap: var(--space-32);
 }
 
 .buttons {
   display: flex;
-  border-bottom: 3px solid var(--old--color-purple--5);
+  border-bottom: 3px solid var(--old--color-accent-purple-5);
 }
 
 .button {
   display: flex;
   flex: none;
   flex-direction: row;
-  gap: var(--space--12);
+  gap: var(--space-12);
   align-items: center;
   justify-content: center;
   margin-bottom: -3px;
 
-  padding: var(--space--12) var(--space--16);
-  border-bottom: 3px solid var(--old--color-purple--5);
+  padding: var(--space-12) var(--space-16);
+  border-bottom: 3px solid var(--old--color-accent-purple-5);
   color: var(--tab-color);
   background-color: transparent;
 
@@ -30,7 +30,7 @@
 .button.active {
   border-color: var(--tab-color);
 
-  --tab-color: var(--old--color-green--5);
+  --tab-color: var(--old--color-accent-green-5);
 }
 
 .button:disabled {
@@ -51,6 +51,6 @@
 
 .label {
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size--l);
+  font-size: var(--font-size-body-xxxxl);
   line-height: 1.3;
 }

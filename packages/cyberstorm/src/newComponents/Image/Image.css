@@ -1,0 +1,41 @@
+@layer components {
+  .ts-image {
+    object-fit: cover;
+    aspect-ratio: var(--aspect-ratio);
+  }
+
+  .ts-image--issquare {
+    --aspect-ratio: 1;
+    --image-width: 50%;
+  }
+
+  .ts-image--is3by4 {
+    --aspect-ratio: 3 / 4;
+    --image-width: 30%;
+  }
+
+  .ts-image--fullwidth {
+    --image-width: 100%;
+  }
+
+  .ts-image__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    color: var(--image__wrapper-color);
+    background-color: var(--image__wrapper-bg-color);
+    transition: var(--animation-duration-sm) ease-out;
+    aspect-ratio: var(--aspect-ratio);
+  }
+
+  .ts-image__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--image-width);
+    aspect-ratio: 1;
+    transition: var(--animation-duration-sm) ease-out;
+  }
+}

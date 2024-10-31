@@ -25,7 +25,7 @@ export function DropDownLink(props: DropDownLinkProps) {
         <NewIcon
           csMode="inline"
           noWrapper
-          csVariant="tertiary"
+          csVariant="secondary"
           rootClasses={styles.arrowUpRightIcon}
         >
           <FontAwesomeIcon icon={faArrowUpRightFromSquare} />

@@ -1,5 +1,5 @@
 .root {
-  font-size: var(--font-size--m);
+  font-size: var(--font-size-body-lg);
   line-height: var(--line-height--m);
 }
 
@@ -9,40 +9,40 @@
 
 .title {
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size--l);
+  font-size: var(--font-size-body-xxxxl);
   line-height: var(--line-height--l);
 }
 
 .description {
   color: var(--color-text--tertiary);
   font-weight: var(--font-weight-medium);
-  font-size: var(--font-size--m);
+  font-size: var(--font-size-body-lg);
   line-height: var(--line-height--m);
 }
 
 .item {
   display: flex;
-  gap: var(--gap--24);
-  padding: var(--space--16) var(--space--32);
+  gap: var(--gap-xl);
+  padding: var(--space-16) var(--space-32);
 }
 
 .item:hover {
-  gap: var(--gap--24);
-  padding: var(--space--16) var(--space--32);
-  background-color: var(--color-surface--5);
+  gap: var(--gap-xl);
+  padding: var(--space-16) var(--space-32);
+  background-color: var(--color-surface-5);
 }
 
 .preferredVersion {
-  padding-top: var(--space--6);
+  padding-top: var(--space-6);
   color: var(--color-text--accent);
   font-weight: var(--font-weight-medium);
-  font-size: var(--font-size--s);
+  font-size: var(--font-size-body-md);
   line-height: var(--line-height--s);
 }
 
 .preferredVersion__version {
   color: var(--color-highlight);
   font-weight: var(--font-weight-medium);
-  font-size: var(--font-size--s);
+  font-size: var(--font-size-body-md);
   line-height: var(--line-height--s);
 }

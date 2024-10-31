@@ -5,7 +5,7 @@
 .text {
   overflow: hidden;
   color: var(--color-text--secondary);
-  font-size: var(--font-size--l);
+  font-size: var(--font-size-body-xxxxl);
   line-height: var(--line-height--l);
   white-space: pre-wrap;
   text-overflow: ellipsis;
@@ -17,7 +17,7 @@
 
 @media (width <= 30rem) {
   .text {
-    font-size: var(--font-size--s);
+    font-size: var(--font-size-body-md);
     line-height: var(--line-height--s);
   }
 }

@@ -22,26 +22,22 @@ ReferenceTextInput.args = {};
 
 const IconTextInput = Template.bind({});
 IconTextInput.args = {
-  csColor: "cyber-green",
   leftIcon: <FontAwesomeIcon icon={faSearch} />,
 };
 
 const PlaceholderTextInput = Template.bind({});
 PlaceholderTextInput.args = {
-  csColor: "cyber-green",
   placeholder: "Placeholder text",
 };
 
 const ValueTextInput = Template.bind({});
 ValueTextInput.args = {
   ...defaultArgs,
-  csColor: "cyber-green",
   value: "Text value",
 };
 
 const ValueTextWithClearInput = Template.bind({});
 ValueTextWithClearInput.args = {
-  csColor: "cyber-green",
   value: "Text value",
   clearValue: () => {
     return;
@@ -50,7 +46,6 @@ ValueTextWithClearInput.args = {
 
 const PlaceholderClearValueLeftIcon = Template.bind({});
 PlaceholderClearValueLeftIcon.args = {
-  csColor: "cyber-green",
   placeholder: "Placeholder text",
   clearValue: () => {
     return;

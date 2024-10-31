@@ -1,11 +1,17 @@
-import styles from "../../sharedComponentStyles/TagStyles/Tag.module.css";
+import "./Tag.css";
 import React from "react";
 import { Frame, FrameWindowProps } from "../../primitiveComponents/Frame/Frame";
-import { classnames } from "../../utils/utils";
+import { classnames, componentClasses } from "../../utils/utils";
+import {
+  TagModifiers,
+  TagSizes,
+  TagVariants,
+} from "@thunderstore/cyberstorm-theme/src/components";
 
 interface TagProps extends Omit<FrameWindowProps, "primitiveType"> {
-  dark?: boolean;
-  hoverable?: boolean;
+  csVariant?: TagVariants;
+  csSize?: TagSizes;
+  csModifiers?: TagModifiers[];
 }
 
 export const Tag = React.forwardRef<HTMLDivElement, TagProps>(
@@ -13,12 +19,9 @@ export const Tag = React.forwardRef<HTMLDivElement, TagProps>(
     const {
       children,
       rootClasses,
-      csSize = "m",
-      csColor = "surface",
-      // Consume this prop since tag doesn't have other variants
-      csVariant,
-      dark,
-      hoverable,
+      csVariant = "primary",
+      csSize = "medium",
+      csModifiers,
       ...forwardedProps
     } = props;
     const fProps = forwardedProps as FrameWindowProps;
@@ -27,20 +30,10 @@ export const Tag = React.forwardRef<HTMLDivElement, TagProps>(
         {...fProps}
         primitiveType={"window"}
         rootClasses={classnames(
-          styles.tag,
-          hoverable ? styles.hoverable : null,
-          dark ? styles.dark : null,
+          "ts-tag",
+          ...componentClasses(csVariant, csSize, csModifiers),
           rootClasses
         )}
-        csSize={csSize}
-        csColor={csColor}
-        // Tag doesn't have other variants, just re-colors
-        csVariant={"default"}
-        csTextStyles={
-          csSize === "s"
-            ? ["fontSizeXXS", "fontWeightBold"]
-            : ["fontSizeXS", "fontWeightBold"]
-        }
         ref={forwardedRef}
       >
         {children}

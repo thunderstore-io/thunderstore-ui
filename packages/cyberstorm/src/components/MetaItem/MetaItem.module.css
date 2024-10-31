@@ -3,7 +3,7 @@
   display: flex;
   flex: none;
   flex-direction: row;
-  gap: var(--gap--8);
+  gap: var(--gap-xs);
   align-items: center;
   justify-content: center;
   color: var(--text-color);
@@ -42,16 +42,16 @@
 }
 
 .metaItem__medium {
-  --font-size: var(--font-size--s);
+  --font-size: var(--font-size-body-md);
   --font-weight: var(--font-weight-bold);
 }
 
 .metaItem__large {
-  --font-size: var(--font-size--m);
+  --font-size: var(--font-size-body-lg);
   --font-weight: var(--font-weight-semibold);
 }
 
 .metaItem__bold_large {
-  --font-size: var(--font-size--m);
+  --font-size: var(--font-size-body-lg);
   --font-weight: var(--font-weight-bold);
 }

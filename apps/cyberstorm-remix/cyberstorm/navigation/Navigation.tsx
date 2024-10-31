@@ -13,7 +13,6 @@ import {
   NewLink,
   NewIcon,
   Avatar,
-  NewText,
   Heading,
   NewButton,
 } from "@thunderstore/cyberstorm";
@@ -48,9 +47,8 @@ export function Navigation(props: {
             primitiveType="cyberstormLink"
             linkId="Index"
             rootClasses={styles.logoWrapper}
-            csVariant="default"
-            csColor="cyber-green"
             aria-label="Home"
+            csVariant="cyber"
           >
             <NewIcon noWrapper>
               <ThunderstoreLogo />
@@ -59,9 +57,9 @@ export function Navigation(props: {
           <LinkButton
             primitiveType="cyberstormLink"
             linkId="Communities"
-            csSize="l"
-            csColor="surface-alpha"
-            csVariant="tertiary"
+            csSize="big"
+            csVariant="secondary"
+            csModifiers={["subtle"]}
           >
             Communities
           </LinkButton>
@@ -71,8 +69,7 @@ export function Navigation(props: {
           <LinkButton
             primitiveType="link"
             href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
-            csSize="s"
-            csColor="cyber-green"
+            csSize="medium"
             csVariant="accent"
             rootClasses={styles.getAppButton}
             aria-label="Get Thunderstore Mod Manager App"
@@ -140,9 +137,7 @@ export function MobileNavigationMenu() {
         <NewLink
           primitiveType="cyberstormLink"
           linkId="Communities"
-          rootClasses={styles.navMenuItem}
-          csVariant="primary"
-          csTextStyles={["fontSizeM", "fontWeightBold", "lineHeightAuto"]}
+          rootClasses={classnames(styles.navMenuItem, styles.navMenuItemFirst)}
         >
           Communities
         </NewLink>
@@ -155,17 +150,14 @@ export function MobileNavigationMenu() {
                 popovertargetaction: "open",
               }}
               className={classnames(
-                "fontSizeM",
-                "fontWeightBold",
-                "lineHeightAuto",
                 styles.navMenuItem,
-                styles.mobileNavMenuDevelopersButton
+                styles.mobileNavMenuDevelopersButton,
+                styles.navMenuItemFirst
               )}
             >
               Developers
               <NewIcon
                 csMode="inline"
-                csVariant="tertiary"
                 wrapperClasses={styles.mobileNavMenuDevelopersButtonIcon}
               >
                 <FontAwesomeIcon icon={faCaretRight} />
@@ -179,8 +171,9 @@ export function MobileNavigationMenu() {
                 popovertargetaction: "close",
               }}
               aria-label="Back to previous menu"
-              csSize="m"
-              csVariant="tertiaryDimmed"
+              csSize="medium"
+              csVariant="secondary"
+              csModifiers={["subtle", "dimmed"]}
               icon={faLongArrowLeft}
             />
           }
@@ -189,45 +182,50 @@ export function MobileNavigationMenu() {
             <NewLink
               primitiveType="link"
               href="/api/docs"
-              csVariant="primary"
-              csTextStyles={["fontSizeM", "fontWeightBold", "lineHeightAuto"]}
-              rootClasses={styles.navMenuItem}
+              rootClasses={classnames(
+                styles.navMenuItem,
+                styles.navMenuItemFirst
+              )}
             >
               API Docs
             </NewLink>
             <NewLink
               primitiveType="link"
               href="https://github.com/thunderstore-io"
-              csVariant="primary"
-              csTextStyles={["fontSizeM", "fontWeightBold", "lineHeightAuto"]}
-              rootClasses={styles.navMenuItem}
+              rootClasses={classnames(
+                styles.navMenuItem,
+                styles.navMenuItemFirst
+              )}
             >
               GitHub
             </NewLink>
             <NewLink
               primitiveType="link"
               href="/package/create/docs/"
-              csVariant="primary"
-              csTextStyles={["fontSizeM", "fontWeightBold", "lineHeightAuto"]}
-              rootClasses={styles.navMenuItem}
+              rootClasses={classnames(
+                styles.navMenuItem,
+                styles.navMenuItemFirst
+              )}
             >
               Package Format Docs
             </NewLink>
             <NewLink
               primitiveType="link"
               href="/tools/markdown-preview/"
-              csVariant="primary"
-              csTextStyles={["fontSizeM", "fontWeightBold", "lineHeightAuto"]}
-              rootClasses={styles.navMenuItem}
+              rootClasses={classnames(
+                styles.navMenuItem,
+                styles.navMenuItemFirst
+              )}
             >
               Markdown Preview
             </NewLink>
             <NewLink
               primitiveType="link"
               href="/tools/manifest-v1-validator/"
-              csVariant="primary"
-              csTextStyles={["fontSizeM", "fontWeightBold", "lineHeightAuto"]}
-              rootClasses={styles.navMenuItem}
+              rootClasses={classnames(
+                styles.navMenuItem,
+                styles.navMenuItemFirst
+              )}
             >
               Manifest Validator
             </NewLink>
@@ -236,28 +234,22 @@ export function MobileNavigationMenu() {
         <div className={styles.divider} />
         <NewLink
           primitiveType="link"
-          csVariant="primary"
           href="https://pages.thunderstore.io/p/contact-us"
-          csTextStyles={["fontSizeS", "fontWeightRegular", "lineHeightAuto"]}
-          rootClasses={styles.navMenuItem}
+          rootClasses={classnames(styles.navMenuItem, styles.navMenuItemSecond)}
         >
           Contact Us
         </NewLink>
         <NewLink
           primitiveType="link"
-          csVariant="primary"
           href="https://pages.thunderstore.io/p/privacy-policy"
-          csTextStyles={["fontSizeS", "fontWeightRegular", "lineHeightAuto"]}
-          rootClasses={styles.navMenuItem}
+          rootClasses={classnames(styles.navMenuItem, styles.navMenuItemSecond)}
         >
           Privacy Policy
         </NewLink>
         <NewLink
           primitiveType="link"
-          csVariant="primary"
           href="https://blog.thunderstore.io/"
-          csTextStyles={["fontSizeS", "fontWeightRegular", "lineHeightAuto"]}
-          rootClasses={styles.navMenuItem}
+          rootClasses={classnames(styles.navMenuItem, styles.navMenuItemSecond)}
         >
           News
         </NewLink>
@@ -276,12 +268,7 @@ export function MobileUserPopoverContent(props: { user?: CurrentUser }) {
         <div className={styles.mobileNavPopover}>
           <div className={styles.accountPopoverUser}>
             <Avatar src={avatar} username={user.username} size="small" />
-            <NewText
-              rootClasses={styles.dropdownUserInfoDetails}
-              csTextStyles={["fontSizeM", "fontWeightBold"]}
-            >
-              {user.username}
-            </NewText>
+            <p className={styles.dropdownUserInfoDetails}>{user.username}</p>
           </div>
           {/* <NewLink
             primitiveType="cyberstormLink"
@@ -310,9 +297,7 @@ export function MobileUserPopoverContent(props: { user?: CurrentUser }) {
           <NewLink
             primitiveType="link"
             href="/logout"
-            csVariant="primary"
             rootClasses={styles.accountPopoverItem}
-            csTextStyles={["fontSizeM", "fontWeightRegular", "lineHeightAuto"]}
           >
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faSignOut} />
@@ -351,7 +336,7 @@ export function MobileUserPopoverContent(props: { user?: CurrentUser }) {
           <Heading
             mode="heading"
             csLevel="2"
-            csStyleLevel="3"
+            csSize="3"
             rootClasses={styles.loginTitle}
           >
             Log in to Thunderstore
@@ -364,7 +349,6 @@ export function MobileUserPopoverContent(props: { user?: CurrentUser }) {
                 styles.loginLinkMobile,
                 styles.loginLinkDiscord
               )}
-              csTextStyles={["fontSizeS", "fontWeightBold"]}
             >
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faDiscord} />
@@ -378,7 +362,6 @@ export function MobileUserPopoverContent(props: { user?: CurrentUser }) {
                 styles.loginLinkMobile,
                 styles.loginLinkGithub
               )}
-              csTextStyles={["fontSizeS", "fontWeightBold"]}
             >
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faGithub} />
@@ -392,7 +375,6 @@ export function MobileUserPopoverContent(props: { user?: CurrentUser }) {
                 styles.loginLinkMobile,
                 styles.loginLinkOverwolf
               )}
-              csTextStyles={["fontSizeS", "fontWeightBold"]}
             >
               <NewIcon csMode="inline" noWrapper>
                 <OverwolfLogo />
@@ -400,15 +382,12 @@ export function MobileUserPopoverContent(props: { user?: CurrentUser }) {
               Connect with Overwolf
             </NewLink>
           </div>
-          <NewText
-            rootClasses={styles.loginLegalText}
-            csTextStyles={["lineHeightBody", "fontSizeXS", "fontWeightRegular"]}
-          >
+          <p className={styles.loginLegalText}>
             By logging in and accessing the site you agree to{" "}
             <NewLink
               primitiveType="cyberstormLink"
               linkId="TermsOfService"
-              csVariant="tertiary"
+              rootClasses={styles.loginLegalTextLinks}
             >
               Terms and Conditions
             </NewLink>{" "}
@@ -416,11 +395,11 @@ export function MobileUserPopoverContent(props: { user?: CurrentUser }) {
             <NewLink
               primitiveType="cyberstormLink"
               linkId="PrivacyPolicy"
-              csVariant="tertiary"
+              rootClasses={styles.loginLegalTextLinks}
             >
               Privacy Policy
             </NewLink>
-          </NewText>
+          </p>
         </div>
       )}
     </Menu>

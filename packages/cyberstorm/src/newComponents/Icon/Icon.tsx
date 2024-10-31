@@ -1,19 +1,27 @@
 import { Frame, FrameIconProps } from "../../primitiveComponents/Frame/Frame";
 import React from "react";
-import styles from "./Icon.module.css";
-import { classnames } from "../../utils/utils";
+import "./Icon.css";
+import { classnames, componentClasses } from "../../utils/utils";
+import { IconVariants } from "@thunderstore/cyberstorm-theme/src/components";
+
+interface IconProps extends Omit<FrameIconProps, "primitiveType"> {
+  csVariant?: IconVariants;
+}
 
 export const Icon = React.forwardRef<
   HTMLDivElement | HTMLSpanElement | SVGElement,
-  Omit<FrameIconProps, "primitiveType">
->((props: Omit<FrameIconProps, "primitiveType">, forwardedRef) => {
-  const { rootClasses, ...forwardedProps } = props;
+  IconProps
+>((props: IconProps, forwardedRef) => {
+  const { rootClasses, csVariant, ...forwardedProps } = props;
   return (
     <Frame
       primitiveType="icon"
       {...forwardedProps}
       ref={forwardedRef}
-      rootClasses={classnames(styles.icon, rootClasses)}
+      rootClasses={classnames(
+        ...componentClasses(csVariant, undefined, undefined),
+        rootClasses
+      )}
     />
   );
 });

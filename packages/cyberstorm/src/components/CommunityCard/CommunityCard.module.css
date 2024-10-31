@@ -1,7 +1,7 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--space--12);
+  gap: var(--space-12);
 }
 
 .root:hover .imageWrapper {
@@ -9,8 +9,8 @@
 }
 
 .root:focus-within {
-  border-radius: var(--border-radius--8);
-  outline: 0.2rem solid var(--old--color-cyber-green--50);
+  border-radius: var(--radius-md);
+  outline: 0.2rem solid var(--old--color-cyber-green-50);
   outline-offset: 0.5rem;
 }
 
@@ -27,7 +27,7 @@
   overflow: hidden;
   color: var(--color-text--default);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size--l);
+  font-size: var(--font-size-body-xxxxl);
   line-height: normal;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -40,6 +40,6 @@
 .metaItemList {
   display: flex;
   flex-direction: row;
-  gap: var(--gap--16);
+  gap: var(--gap-md);
   margin-top: auto;
 }

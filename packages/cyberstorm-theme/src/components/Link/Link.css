@@ -1,0 +1,28 @@
+@layer theme-components {
+  /* VARIANTS DEFAULT STATE */
+  .ts-link:where(.ts-variant--primary) {
+    --link-color: var(--link-primary-color--default);
+  }
+
+  .ts-link:where(.ts-variant--cyber) {
+    --link-color: var(--link-cyber-color--default);
+  }
+
+  .ts-link:where(.ts-variant--primary):hover {
+    --link-color: var(--link-primary-color--hover);
+  }
+
+  .ts-link:where(.ts-variant--cyber):hover {
+    --link-color: var(--link-cyber-color--hover);
+
+    text-decoration: underline;
+  }
+
+  /* TOKENS */
+  :root {
+    --link-primary-color--default: var(--color-text-accent);
+    --link-primary-color--hover: var(--color-text-primary);
+    --link-cyber-color--default: var(--color-cyber-green-7);
+    --link-cyber-color--hover: var(--color-cyber-green-9);
+  }
+}

@@ -1,17 +1,25 @@
-import styles from "./Heading.module.css";
+import "./Heading.css";
 import React from "react";
 import {
   Frame,
   FrameHeadingProps,
   FrameDisplayProps,
 } from "../../primitiveComponents/Frame/Frame";
-import { classnames } from "../../utils/utils";
+import { classnames, componentClasses } from "../../utils/utils";
+import {
+  HeadingVariants,
+  HeadingSizes,
+  HeadingModifiers,
+} from "@thunderstore/cyberstorm-theme/src/components";
 
 interface DefaultProps
   extends React.HTMLAttributes<HTMLHeadingElement>,
     Omit<FrameHeadingProps, "primitiveType">,
     Omit<FrameDisplayProps, "primitiveType"> {
   mode?: "heading" | "display";
+  csVariant?: HeadingVariants;
+  csSize?: HeadingSizes;
+  csModifiers?: HeadingModifiers[];
 }
 
 export const Heading = React.forwardRef<HTMLHeadingElement, DefaultProps>(
@@ -19,21 +27,29 @@ export const Heading = React.forwardRef<HTMLHeadingElement, DefaultProps>(
     const {
       children,
       rootClasses,
-      csVariant = "primary",
       csLevel = "1",
-      csStyleLevel,
+      csVariant = "primary",
+      csModifiers,
+      csSize,
       mode = "heading",
       ...forwardedProps
     } = props;
     const fProps = forwardedProps as DefaultProps;
+
     return (
       <Frame
         {...fProps}
         primitiveType={mode}
-        rootClasses={classnames(styles.heading, rootClasses)}
-        csVariant={csVariant}
+        rootClasses={classnames(
+          `ts-${mode}`,
+          ...componentClasses(
+            csVariant,
+            csSize ? csSize : csLevel,
+            csModifiers
+          ),
+          rootClasses
+        )}
         csLevel={csLevel}
-        csStyleLevel={csStyleLevel ? csStyleLevel : csLevel}
         ref={forwardedRef}
       >
         {children}

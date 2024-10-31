@@ -1,7 +1,7 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--2);
-  border-radius: var(--border-radius--8);
+  gap: var(--gap-xxxs);
+  border-radius: var(--radius-md);
   overflow: hidden;
 }

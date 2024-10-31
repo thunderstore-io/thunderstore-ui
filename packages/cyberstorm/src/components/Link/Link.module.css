@@ -1,7 +1,7 @@
 .root {
   display: flex;
-  padding: var(--space--8) var(--space--12);
-  border-radius: var(--border-radius--8);
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--radius-md);
   color: var(--color-highlight);
   font-weight: var(--font-weight);
   font-size: var(--font-size);
@@ -11,27 +11,27 @@
 }
 
 .root:hover {
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--color-surface-4);
 }
 
 .leftIcon {
   display: flex;
   align-items: center;
-  margin-right: var(--space--8);
+  margin-right: var(--space-8);
 }
 
 .rightIcon {
   display: flex;
   align-items: center;
-  margin-left: var(--space--8);
+  margin-left: var(--space-8);
 }
 
 .link__thin {
-  --font-size: var(--font-size--m);
+  --font-size: var(--font-size-body-lg);
   --font-weight: var(--font-weight-regular);
 }
 
 .link__bold {
-  --font-size: var(--font-size--m);
+  --font-size: var(--font-size-body-lg);
   --font-weight: var(--font-weight-bold);
 }

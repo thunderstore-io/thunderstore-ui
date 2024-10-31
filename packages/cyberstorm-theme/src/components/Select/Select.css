@@ -1,0 +1,90 @@
+@layer theme-components {
+  /* SELECT ROOT */
+
+  /* VARIANTS */
+  .ts-select:where(.ts-variant--default) {
+    --select-border-color: var(--color-surface-6);
+    --select-border-radius: var(--radius-md);
+    --select-border: var(--space-px) var(--select-border-color) solid;
+    --select-text-color: var(--color-text-primary);
+    --select-background-color: var(--color-surface-2);
+    --select-box-shadow: var(--shadow-lg);
+    --select-animation: fade-in var(--animation-duration-lg) ease;
+  }
+
+  /* SIZES */
+  .ts-select:where(.ts-size--medium) {
+    --select-gap: var(--gap-xxxs);
+    --select-padding: var(--space-8) 0;
+  }
+
+  /* SELECT ITEM */
+
+  /* VARIANTS */
+  .ts-select__item:where(.ts-variant--default) {
+    --select__item-color: var(--color-text-primary);
+  }
+
+  .ts-select__item:where(.ts-variant--default) > .ts-select__item__icon {
+    --select__item__icon-color: var(--color-text-tertiary);
+  }
+
+  .ts-select__item:where(.ts-variant--default)[data-highlighted] {
+    --select__item-color: var(--color-text-primary);
+    --select__item-background-color: var(--color-surface-6);
+  }
+
+  .ts-select__item:where(.ts-variant--default)[data-highlighted]
+    > .ts-select__item__icon {
+    --select__item__icon-color: var(--color-text-primary);
+  }
+
+  /* SIZES */
+  .ts-select__item:where(.ts-size--medium) {
+    --select__item-gap: var(--gap-sm);
+    --select__item-padding: var(--space-12) var(--space-16);
+    --select__item-font-weight: var(--font-weight-regular);
+    --select__item-font-size: var(--font-size-body-md);
+  }
+
+  /* SELECT TRIGGER */
+
+  /* SIZES */
+  .ts-select__trigger:where(.ts-size--medium) {
+    --select__trigger-font-weight: var(--font-weight-bold);
+    --select__trigger-font-size: var(--font-size-body-md);
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  :root {
+    --select-bg-color--default: var(--color-surface-3);
+    --select-border-color--default: var(--color-surface-a7);
+    --select-item-bg-color--default: hsl(0deg 0 0% / 0);
+    --select-item-bg-color--hover: var(--color-surface-a9);
+    --select-item-icon-color--default: var(--color-text-tertiary);
+    --select-item-icon-color--hover: var(--color-text-primary);
+    --select-item-text-color--default: var(--color-text-primary);
+    --select-item-text-color--hover: var(--color-text-primary);
+    --select-item-danger-bg-color--default: hsl(0deg 0 0% / 0);
+    --select-item-danger-bg-color--hover: var(--color-accent-red-6);
+    --select-item-danger-icon-color--default: var(--color-accent-red-7);
+    --select-item-danger-icon-color--hover: hsl(0deg 0 100%);
+    --select-item-danger-text-color--default: var(--color-accent-red-7);
+    --select-item-danger-text-color--hover: hsl(0deg 0 100%);
+    --select-item-disabled-bg-color--default: hsl(0deg 0 0% / 0);
+    --select-item-disabled-bg-color--hover: hsl(0deg 0 0% / 0);
+    --select-item-disabled-icon-color--default: var(--color-text-tertiary);
+    --select-item-disabled-icon-color--hover: var(--color-text-tertiary);
+    --select-item-disabled-text-color--default: var(--color-text-tertiary);
+    --select-item-disabled-text-color--hover: var(--color-text-tertiary);
+  }
+}

@@ -35,3 +35,21 @@ export const classnames = (
 ): string => {
   return classnames.filter(String).join(" ");
 };
+
+export const componentClasses = (
+  variant?: string,
+  size?: string,
+  modifiers?: string[]
+): string[] => {
+  const listOfClasses = [];
+  if (variant) {
+    listOfClasses.push(`ts-variant--${variant}`);
+  }
+  if (size) {
+    listOfClasses.push(`ts-size--${size}`);
+  }
+  if (modifiers) {
+    listOfClasses.push(...modifiers.map((csm) => `ts-modifier--${csm}`));
+  }
+  return listOfClasses;
+};

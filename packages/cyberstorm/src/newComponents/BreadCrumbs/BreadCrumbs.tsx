@@ -2,39 +2,57 @@ import React, { PropsWithChildren } from "react";
 
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styles from "./BreadCrumbs.module.css";
-import { classnames } from "../../utils/utils";
+import "./BreadCrumbs.css";
+import { classnames, componentClasses } from "../../utils/utils";
 import { NewIcon, NewLink } from "../..";
 import { Frame } from "../../primitiveComponents/Frame/Frame";
+import {
+  BreadCrumbsVariants,
+  BreadCrumbsSizes,
+  BreadCrumbsModifiers,
+} from "@thunderstore/cyberstorm-theme/src/components";
 
 type BreadCrumbsProps = PropsWithChildren<{
   excludeHome?: boolean;
   rootClasses?: string;
+  csVariant?: BreadCrumbsVariants;
+  csSize?: BreadCrumbsSizes;
+  csModifiers?: BreadCrumbsModifiers[];
 }>;
 
 // TODO: This component is not complete and probably is in need of redesign
 // TODO: Bug: when excludeHome is true, last element's style is wrong
 export function BreadCrumbs(props: BreadCrumbsProps) {
-  const children = React.Children.toArray(props.children);
+  const {
+    children,
+    excludeHome,
+    rootClasses,
+    csVariant = "default",
+    csSize = "medium",
+    csModifiers,
+  } = props;
+  const childrenArray = React.Children.toArray(children);
 
-  const nodes = children.map((node, index) => {
-    const homifiedIndex = props.excludeHome ? index - 1 : index;
-    const isLast = homifiedIndex == children.length - 1;
+  const nodes = childrenArray.map((node, index) => {
+    const homifiedIndex = excludeHome ? index - 1 : index;
+    const isLast = homifiedIndex == childrenArray.length - 1;
     return (
       <Frame
         key={homifiedIndex}
         primitiveType="window"
         rootClasses={classnames(
-          homifiedIndex == -1 ? styles.outer__start : null,
-          styles.outer,
-          isLast ? styles.outer__end : null
+          homifiedIndex == -1 ? "ts-breadcrumbs__outerstart" : null,
+          "ts-breadcrumbs__outer",
+          isLast ? "ts-breadcrumbs__outerend" : null,
+          ...componentClasses(csVariant, csSize, csModifiers)
         )}
       >
         <Frame
           primitiveType="window"
           rootClasses={classnames(
-            styles.inner,
-            isLast ? styles.inner__end : null
+            "ts-breadcrumbs__inner",
+            isLast ? "ts-breadcrumbs__innerend" : null,
+            ...componentClasses(csVariant, csSize, csModifiers)
           )}
         >
           {node}
@@ -48,12 +66,18 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
       key={0}
       primitiveType="window"
       rootClasses={classnames(
-        styles.outer__start,
-        styles.outer,
-        styles.outerHome
+        "ts-breadcrumbs__outerstart",
+        "ts-breadcrumbs__outer",
+        "ts-breadcrumbs__outerhome",
+        ...componentClasses(csVariant, csSize, csModifiers)
       )}
     >
-      <div className={classnames(styles.inner, styles.innerHome)}>
+      <div
+        className={classnames(
+          "ts-breadcrumbs__inner",
+          "ts-breadcrumbs__innerhome"
+        )}
+      >
         <DefaultHomeCrumb />
       </div>
     </Frame>
@@ -62,12 +86,9 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
   return (
     <Frame
       primitiveType="window"
-      rootClasses={classnames(styles.root, props.rootClasses)}
-      csColor="surface"
-      csVariant="default"
-      csTextStyles={["fontWeightMedium", "fontSizeXS", "lineHeightAuto"]}
+      rootClasses={classnames("ts-breadcrumbs", rootClasses)}
     >
-      {props.excludeHome ? null : home}
+      {excludeHome ? null : home}
       {nodes}
     </Frame>
   );
@@ -79,12 +100,11 @@ export function DefaultHomeCrumb() {
       primitiveType="cyberstormLink"
       linkId="Index"
       tooltipText="Home"
-      csTextStyles={["fontSizeS", "fontWeightRegular"]}
       aria-label="Home"
-      rootClasses={styles.homeLink}
+      rootClasses={"ts-breadcrumbs__homelink"}
     >
-      <NewIcon noWrapper csColor="cyber-green" csVariant="default">
-        <FontAwesomeIcon icon={faHouse} className={styles.home} />
+      <NewIcon noWrapper csVariant="cyber">
+        <FontAwesomeIcon icon={faHouse} className={"ts-breadcrumbs__home"} />
       </NewIcon>
     </NewLink>
   );

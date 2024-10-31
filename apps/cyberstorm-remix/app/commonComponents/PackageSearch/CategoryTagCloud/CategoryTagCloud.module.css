@@ -1,7 +1,7 @@
 .root {
   display: flex;
   flex-flow: row wrap;
-  gap: var(--space--8);
+  gap: var(--space-8);
   list-style: none;
 }
 
@@ -12,19 +12,19 @@
   justify-content: center;
 
   --text-color: var(--color-text--default);
-  --bg-color: var(--color-surface--9);
+  --bg-color: var(--color-surface-9);
 }
 
 .tag.exclude {
-  --text-color: var(--old--color-red--3);
-  --bg-color: var(--old--color-red--10);
+  --text-color: var(--old--color-accent-red-3);
+  --bg-color: var(--old--color-accent-red-10);
 }
 
 .icon {
-  height: var(--space--16);
+  height: var(--space-16);
   color: var(--text-color);
 }
 
 .tag.exclude .icon {
-  --text-color: var(--old--color-red--3);
+  --text-color: var(--old--color-accent-red-3);
 }

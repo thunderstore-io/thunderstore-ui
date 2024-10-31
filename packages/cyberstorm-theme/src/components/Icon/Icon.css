@@ -1,0 +1,79 @@
+@layer theme-components {
+  /* VARIANTS DEFAULT STATE */
+  .ts-icon:where(.ts-variant--primary) {
+    --icon-color: var(--icon-primary-color--default);
+  }
+
+  .ts-icon:where(.ts-variant--secondary) {
+    --icon-color: var(--icon-secondary-color--default);
+  }
+
+  .ts-icon:where(.ts-variant--tertiary) {
+    --icon-color: var(--icon-tertiary-color--default);
+  }
+
+  .ts-icon:where(.ts-variant--accent) {
+    --icon-color: var(--icon-accent-color--default);
+  }
+
+  .ts-icon:where(.ts-variant--special) {
+    --icon-color: var(--icon-special-color--default);
+  }
+
+  .ts-icon:where(.ts-variant--success) {
+    --icon-color: var(--icon-success-color--default);
+  }
+
+  .ts-icon:where(.ts-variant--info) {
+    --icon-color: var(--icon-info-color--default);
+  }
+
+  .ts-icon:where(.ts-variant--warning) {
+    --icon-color: var(--icon-warning-color--default);
+  }
+
+  .ts-icon:where(.ts-variant--danger) {
+    --icon-color: var(--icon-danger-color--default);
+  }
+
+  .ts-icon:where(.ts-variant--cyber) {
+    --icon-color: var(--icon-cyber-color--default);
+  }
+
+  /* TOKENS */
+  :root {
+    --icon-danger-color--default: var(--color-accent-red-7);
+    --icon-info-color--default: var(--color-accent-blue-7);
+    --icon-primary-color--default: var(--color-text-primary);
+    --icon-secondary-color--default: var(--color-text-secondary);
+    --icon-tertiary-color--default: var(--color-text-tertiary);
+    --icon-success-color--default: var(--color-accent-green-7);
+    --icon-warning-color--default: var(--color-accent-yellow-7);
+    --icon-special-color--default: linear-gradient(
+          284deg,
+          hsl(275deg 64% 11% / 1) 0%,
+          hsl(156deg 46% 12% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(276deg 77% 54% / 1) 0%,
+          hsl(158deg 100% 57% / 1) 100%
+        )
+        border-box;
+    --icon-special-color--hover: linear-gradient(
+          284deg,
+          hsl(203deg 80% 21% / 1) 0%,
+          hsl(155deg 46% 23% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(154deg 65% 67% / 1) 0%,
+          hsl(203deg 92% 63% / 1) 100%
+        )
+        border-box;
+    --icon-accent-color--default: var(--color-text-accent);
+    --icon-cyber-color--default: var(--color-cyber-green-7);
+  }
+}

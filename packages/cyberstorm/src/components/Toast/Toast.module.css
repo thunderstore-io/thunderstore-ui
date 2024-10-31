@@ -10,7 +10,7 @@
   flex-direction: column;
   width: 100%;
   border-left: 3px solid var(--feature-color);
-  border-radius: var(--border-radius--4);
+  border-radius: var(--radius-sm);
   background-color: var(--background-color);
 
   --background-color: var(--alert-info-bg-color);
@@ -20,7 +20,7 @@
 
 .content {
   display: flex;
-  gap: var(--space--16);
+  gap: var(--space-16);
   align-items: flex-start;
   align-self: stretch;
   width: 100%;
@@ -64,14 +64,14 @@
   min-height: calc(1rem * var(--line-height--m));
   color: var(--text-color);
   font-weight: var(--font-weight-regular);
-  font-size: var(--font-size--m);
+  font-size: var(--font-size-body-lg);
   line-height: var(--line-height--m);
 }
 
 /* Styles for Toast's Icon */
 .icon {
-  width: var(--space--18);
-  height: var(--space--18);
+  width: var(--space-18);
+  height: var(--space-18);
   color: var(--feature-color);
 }
 

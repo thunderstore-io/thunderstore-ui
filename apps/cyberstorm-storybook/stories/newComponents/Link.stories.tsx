@@ -17,21 +17,14 @@ const Template: StoryFn<typeof NewLink> = (args) => (
     <NewLink {...args} primitiveType="cyberstormLink" linkId="Communities">
       Test Link
     </NewLink>
-    <NewLink
-      {...args}
-      primitiveType="link"
-      href="https://example.com"
-      csVariant="default"
-      csColor="cyber-green"
-    >
+    <NewLink {...args} primitiveType="link" href="https://example.com">
       Test Link
     </NewLink>
     <NewLink
       {...args}
       primitiveType="cyberstormLink"
       linkId="Communities"
-      csVariant="default"
-      csColor="cyber-green"
+      csVariant="primary"
     >
       Test Link
     </NewLink>

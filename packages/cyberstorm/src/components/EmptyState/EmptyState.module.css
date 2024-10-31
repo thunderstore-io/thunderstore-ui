@@ -1,7 +1,7 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--32);
+  gap: var(--gap-xxxl);
   color: var(--color-text--default);
 }
 
@@ -15,7 +15,7 @@
   color: #c9c5d8;
   font-weight: var(--font-weight-boldest);
 
-  line-height: 1.6;
+  line-height: var(--line-height-md);
   text-align: center;
 }
 
@@ -23,6 +23,6 @@
   color: #9c9cc4;
   font-weight: var(--font-weight-medium);
 
-  line-height: 1.6;
+  line-height: var(--line-height-md);
   text-align: center;
 }

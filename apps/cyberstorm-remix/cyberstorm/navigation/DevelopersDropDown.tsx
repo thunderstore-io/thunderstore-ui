@@ -16,22 +16,23 @@ export function DevelopersDropDown() {
     <>
       <NewDropDown
         trigger={
-          <NewButton csSize="l" csVariant="tertiary" csColor="surface">
+          <NewButton
+            csSize="big"
+            csVariant="secondary"
+            csModifiers={["subtle"]}
+          >
             Developers
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faCaretDown} />
             </NewIcon>
           </NewButton>
         }
-        csVariant="default"
-        csColor="surface"
         rootClasses={styles.root}
       >
         <NewDropDownItem>
           <NewLink
             primitiveType="link"
-            csVariant="primary"
-            csTextStyles={["fontSizeS", "fontWeightRegular"]}
+            rootClasses={styles.link}
             href="/api/docs"
           >
             API Docs
@@ -40,8 +41,7 @@ export function DevelopersDropDown() {
         <NewDropDownItem>
           <NewLink
             primitiveType="link"
-            csVariant="primary"
-            csTextStyles={["fontSizeS", "fontWeightRegular"]}
+            rootClasses={styles.link}
             href="/package/create/docs/"
           >
             Package Format Docs
@@ -50,8 +50,7 @@ export function DevelopersDropDown() {
         <NewDropDownItem>
           <NewLink
             primitiveType="link"
-            csVariant="primary"
-            csTextStyles={["fontSizeS", "fontWeightRegular"]}
+            rootClasses={styles.link}
             href="/tools/manifest-v1-validator/"
           >
             Manifest Validator
@@ -60,8 +59,7 @@ export function DevelopersDropDown() {
         <NewDropDownItem>
           <NewLink
             primitiveType="link"
-            csVariant="primary"
-            csTextStyles={["fontSizeS", "fontWeightRegular"]}
+            rootClasses={styles.link}
             href="/tools/markdown-preview/"
           >
             Markdown Preview
@@ -70,10 +68,8 @@ export function DevelopersDropDown() {
         <NewDropDownItem rootClasses={styles.focus}>
           <NewLink
             primitiveType="link"
-            csVariant="primary"
-            csTextStyles={["fontSizeS", "fontWeightRegular"]}
-            href="https://github.com/thunderstore-io"
             rootClasses={styles.externalLink}
+            href="https://github.com/thunderstore-io"
           >
             Github
             <NewIcon csMode="inline" noWrapper>

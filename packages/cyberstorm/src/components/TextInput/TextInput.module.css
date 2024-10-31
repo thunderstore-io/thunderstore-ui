@@ -15,17 +15,17 @@
   flex-direction: row;
   align-items: center;
   width: 100%;
-  padding: var(--space--8) var(--space--14);
+  padding: var(--space-8) var(--space-14);
   border: var(--border-width--2) solid var(--border-color);
 
-  border-radius: var(--border-radius--8);
+  border-radius: var(--radius-md);
   font-weight: var(--font-weight-medium);
 
-  font-size: var(--font-size--l);
+  font-size: var(--font-size-body-xxxxl);
   line-height: normal;
-  background-color: var(--color-surface--4);
+  background-color: var(--color-surface-4);
   cursor: text;
-  transition: ease-out var(--animation-length-l);
+  transition: ease-out var(--animation-duration-lg);
 
   --border-color: transparent;
 }
@@ -46,19 +46,19 @@
 }
 
 .input[data-color="red"] {
-  --border-color: var(--old--color-red--5);
+  --border-color: var(--old--color-accent-red-5);
 }
 
 .input[data-color="red"]:hover {
-  --border-color: var(--old--color-red--3);
+  --border-color: var(--old--color-accent-red-3);
 }
 
 .input[data-color="green"] {
-  --border-color: var(--old--color-cyber-green--50);
+  --border-color: var(--old--color-cyber-green-50);
 }
 
 .input[data-color="green"]:hover {
-  --border-color: var(--old--color-cyber-green--80);
+  --border-color: var(--old--color-cyber-green-80);
 }
 
 .hasLeftIcon {
@@ -71,7 +71,7 @@
 
 .leftIcon {
   position: absolute;
-  margin: var(--space--10) var(--space--16);
+  margin: var(--space-10) var(--space-16);
   color: var(--color-text--tertiary);
   line-height: normal;
   pointer-events: none;
@@ -79,7 +79,7 @@
 
 .rightIcon {
   position: absolute;
-  padding: var(--space--14) var(--space--16);
+  padding: var(--space-14) var(--space-16);
   color: var(--color-text--tertiary);
 }
 

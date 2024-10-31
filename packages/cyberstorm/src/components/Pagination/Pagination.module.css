@@ -1,7 +1,7 @@
 .list {
   display: flex;
   flex-direction: row;
-  gap: var(--gap--8);
+  gap: var(--gap-xs);
   align-items: center;
   justify-content: center;
   list-style: none;
@@ -18,8 +18,8 @@
   min-width: 2.25em;
   min-height: 2.25em;
 
-  padding: var(--space--8) var(--space--8);
-  border-radius: var(--border-radius--8);
+  padding: var(--space-8) var(--space-8);
+  border-radius: var(--radius-md);
   color: var(--color-text--secondary);
 
   font-weight: var(--font-weight-medium);

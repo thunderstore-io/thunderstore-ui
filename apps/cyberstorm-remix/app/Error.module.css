@@ -1,12 +1,12 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--space--32);
+  gap: var(--space-32);
   align-items: center;
   justify-content: center;
 
-  --glitch-color-1: var(--old--color-cyber-green--50);
-  --glitch-color-2: var(--old--color-pink--50);
+  --glitch-color-1: var(--old--color-cyber-green-50);
+  --glitch-color-2: var(--old--color-accent-pink-50);
 }
 
 .description {
@@ -17,16 +17,16 @@
 
 .flavor {
   font-weight: var(--font-weight-bold);
-  font-size: var(--space--32);
+  font-size: var(--space-32);
   line-height: 1;
   text-align: center;
 }
 
 .glitch {
   position: relative;
-  margin-top: var(--space--32);
-  margin-bottom: var(--space--48);
-  font-weight: var(--font-weight-heavy);
+  margin-top: var(--space-32);
+  margin-bottom: var(--space-48);
+  font-weight: var(--font-weight-extra-bold);
   font-size: 12rem;
   line-height: 1;
 }

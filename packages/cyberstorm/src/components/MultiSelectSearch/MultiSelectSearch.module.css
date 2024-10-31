@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--gap--16);
+  gap: var(--gap-md);
   justify-content: flex-end;
   width: auto;
   min-height: 6rem;
@@ -12,7 +12,7 @@
 .selected {
   display: flex;
   flex-flow: row wrap;
-  gap: var(--space--8);
+  gap: var(--space-8);
 }
 
 .search {
@@ -31,19 +31,19 @@
   width: 100%;
   border: var(--border-width--2) solid var(--border-color);
 
-  border-radius: var(--border-radius--8);
-  background-color: var(--color-surface--4);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-4);
 
   --border-color: transparent;
 
-  transition: ease-out var(--animation-length-l);
+  transition: ease-out var(--animation-duration-lg);
 }
 
 .input {
   width: 100%;
-  margin: var(--space--10) var(--space--14);
+  margin: var(--space-10) var(--space-14);
   font-weight: var(--font-weight-medium);
-  font-size: var(--font-size--l);
+  font-size: var(--font-size-body-xxxxl);
   line-height: normal;
   background-color: transparent;
 }
@@ -64,19 +64,19 @@
 }
 
 .inputContainer[data-color="red"] {
-  --border-color: var(--old--color-red--5);
+  --border-color: var(--old--color-accent-red-5);
 }
 
 .inputContainer[data-color="red"]:hover {
-  --border-color: var(--old--color-red--3);
+  --border-color: var(--old--color-accent-red-3);
 }
 
 .inputContainer[data-color="green"] {
-  --border-color: var(--old--color-cyber-green--50);
+  --border-color: var(--old--color-cyber-green-50);
 }
 
 .inputContainer[data-color="green"]:hover {
-  --border-color: var(--old--color-cyber-green--80);
+  --border-color: var(--old--color-cyber-green-80);
 }
 
 .clearSearch {
@@ -106,22 +106,22 @@
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  gap: var(--gap--4);
+  gap: var(--gap-xxs);
   width: 100%;
   min-height: 1.5rem;
   max-height: 12rem;
-  padding: var(--space--8) 0;
-  border: var(--space--px) var(--color-surface--6) solid;
-  border-radius: var(--border-radius--8);
+  padding: var(--space-8) 0;
+  border: var(--space-px) var(--color-surface-6) solid;
+  border-radius: var(--radius-md);
   overflow: hidden;
   overflow-y: auto !important;
   color: var(--text-color);
-  background-color: var(--color-surface--2);
-  box-shadow: var(--box-shadow-default);
+  background-color: var(--color-surface-2);
+  box-shadow: var(--shadow-lg);
   visibility: hidden;
 
   --text-color: var(--color-white);
-  --bg-color: var(--color-surface--4);
+  --bg-color: var(--color-surface-4);
 }
 
 .menu:where(.visible) {
@@ -133,9 +133,9 @@
 }
 
 .multiSelectItemWrapper {
-  padding: var(--space--12) var(--space--16);
+  padding: var(--space-12) var(--space-16);
 }
 
 .multiSelectItemWrapper:focus {
-  background-color: var(--color-surface--6);
+  background-color: var(--color-surface-6);
 }

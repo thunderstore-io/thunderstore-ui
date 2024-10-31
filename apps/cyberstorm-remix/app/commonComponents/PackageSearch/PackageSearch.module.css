@@ -3,13 +3,13 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap: var(--gap--32);
+  gap: var(--gap-xxxl);
 }
 
 .contentWrapper {
   display: flex;
   flex-direction: row;
-  gap: var(--gap--24);
+  gap: var(--gap-xl);
   align-items: flex-start;
 }
 
@@ -19,7 +19,7 @@
   display: flex;
   flex-basis: 20%;
   flex-direction: column;
-  gap: var(--gap--16);
+  gap: var(--gap-md);
 }
 
 .sidebarIsHidden {
@@ -42,7 +42,7 @@
 .dateFilterHeader {
   color: var(--color-text--tertiary);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size--m);
+  font-size: var(--font-size-body-lg);
   white-space: nowrap;
 }
 
@@ -63,18 +63,18 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: var(--space--10) var(--space--14);
+  padding: var(--space-10) var(--space-14);
   border: var(--border-width--2) solid var(--border-color);
 
-  border-radius: var(--border-radius--8);
+  border-radius: var(--radius-md);
   color: var(--color-text--tertiary);
   font-weight: var(--font-weight-medium);
 
-  font-size: var(--font-size--l);
+  font-size: var(--font-size-body-xxxxl);
   line-height: normal;
-  background-color: var(--color-surface--4);
+  background-color: var(--color-surface-4);
   outline: none;
-  transition: ease-out var(--animation-length-l);
+  transition: ease-out var(--animation-duration-lg);
 
   --border-color: transparent;
 }
@@ -112,7 +112,7 @@
 .searchText {
   color: var(--color-text--tertiary);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size--m);
+  font-size: var(--font-size-body-lg);
   white-space: nowrap;
 }
 

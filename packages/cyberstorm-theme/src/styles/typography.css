@@ -1,0 +1,69 @@
+@layer utils {
+  :root {
+    --line-height-auto: normal;
+    --line-height-xs: 120%;
+    --line-height-sm: 140%;
+    --line-height-md: 160%;
+    --line-height-lg: 170%;
+    --font-size-body-xs: 0.625rem;
+    --font-size-body-sm: 0.75rem;
+    --font-size-body-md: 0.875rem;
+    --font-size-body-lg: 1rem;
+    --font-size-body-xl: 1.125rem;
+    --font-size-body-xxl: 1.25rem;
+    --font-size-body-xxxl: 1.375rem;
+    --font-size-body-xxxxl: 1.5rem;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extra-bold: 800;
+    --font-family--inter: inter, sans-serif;
+    --font-family--hubot: hubot-sans, sans-serif;
+
+    font-synthesis: none;
+    font-feature-settings: "liga" 1, "calt" 1; /* workaround for bug in Chrome, dunno if still present or not */
+    scrollbar-color: var(--color-surface-8) var(--color-surface-1);
+
+    --font-body: normal var(--font-size-body-lg) var(--font-family--inter);
+    --font-heading: normal var(--font-size-body-lg) var(--font-family--hubot);
+    --font-family-monospace: sfmono-regular, menlo, consolas, courier, monospace;
+    --fa-fw-width: 1em;
+  }
+
+  body {
+    color: var(--color-text-primary);
+    font: var(--font-body);
+    line-height: normal;
+    background-color: var(--body-bg-color);
+  }
+
+  a {
+    color: var(--color-text-a--default);
+    text-decoration: none;
+  }
+
+  a:where(:hover),
+  a:where(:active) {
+    color: var(--color-text-a--hover);
+    text-decoration: underline;
+  }
+
+  @font-face {
+    font-weight: 100 1000;
+    font-family: Sora;
+    src: url("./fonts/Sora.ttf") format("truetype-variations");
+  }
+
+  @font-face {
+    font-weight: 100 1000;
+    font-family: Inter;
+    src: url("./fonts/Inter.ttf") format("truetype-variations");
+  }
+
+  @font-face {
+    font-weight: 200 900;
+    font-family: Hubot-Sans;
+    src: url("./fonts/HubotSans.ttf") format("truetype-variations");
+  }
+}

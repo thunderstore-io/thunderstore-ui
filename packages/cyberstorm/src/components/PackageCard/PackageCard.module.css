@@ -2,11 +2,11 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--16);
+  gap: var(--gap-md);
   align-items: flex-start;
   border-radius: 0.5em;
   overflow: hidden;
-  transition: ease-in-out var(--animation-length-l);
+  transition: ease-in-out var(--animation-duration-lg);
 }
 
 .root:focus-within,
@@ -20,7 +20,7 @@
   width: 100%;
   padding-bottom: 100%;
   overflow: hidden;
-  transition: var(--animation-length-m);
+  transition: var(--animation-duration-md);
 }
 
 .root:hover .imageWrapper {
@@ -35,7 +35,7 @@
   width: 100%;
   height: auto;
   transform: var(--transform-translate);
-  transition: var(--animation-length-m);
+  transition: var(--animation-duration-md);
 
   --transform-translate: translate(-50%, -50%);
 }
@@ -46,11 +46,11 @@
 
 .flagWrapper {
   position: absolute;
-  top: var(--space--8);
-  right: var(--space--8);
+  top: var(--space-8);
+  right: var(--space-8);
   display: flex;
   flex-flow: row wrap;
-  gap: var(--space--4);
+  gap: var(--space-4);
   align-items: flex-end;
 }
 
@@ -58,8 +58,8 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  gap: var(--gap--12);
-  padding: 0 var(--space--16);
+  gap: var(--gap-sm);
+  padding: 0 var(--space-16);
 }
 
 /* Styles for PackageCard's Package name (title) */
@@ -67,7 +67,7 @@
   color: var(--color-text--default);
   font: var(--font-body);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size--l);
+  font-size: var(--font-size-body-xxxxl);
   line-height: normal;
 }
 
@@ -75,7 +75,7 @@
 .author {
   display: flex;
   flex-direction: row;
-  font-size: var(--font-size--s);
+  font-size: var(--font-size-body-md);
   line-height: 1;
 }
 
@@ -86,7 +86,7 @@
 }
 
 .author_prefix {
-  padding-right: var(--space--4);
+  padding-right: var(--space-4);
   color: var(--color-text--tertiary);
 }
 
@@ -97,8 +97,8 @@
   color: var(--color-text--secondary);
   font: var(--font-body);
   font-weight: var(--font-weight-medium);
-  font-size: var(--font-size--m);
-  line-height: 1.7;
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-lg);
   text-overflow: ellipsis;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -109,24 +109,24 @@
   color: var(--color-text--tertiary);
   font: var(--font-body);
   font-weight: var(--font-weight-medium);
-  font-size: var(--font-size--s);
+  font-size: var(--font-size-body-md);
   line-height: 1;
 }
 
 .footer {
   display: flex;
   flex-direction: column;
-  gap: var(--gap--16);
+  gap: var(--gap-md);
   width: 100%;
-  padding: 0 var(--space--16) var(--space--16);
+  padding: 0 var(--space-16) var(--space-16);
 }
 
 .categoryWrapper {
   display: flex;
   flex-flow: row wrap;
-  gap: var(--gap--4);
+  gap: var(--gap-xxs);
   align-items: flex-start;
-  padding: 0 var(--space--16);
+  padding: 0 var(--space-16);
 }
 
 /* TODO: These are figma copy pasted */
@@ -149,7 +149,7 @@
   display: flex;
   flex-basis: 100%;
   flex-direction: row;
-  gap: var(--gap--16);
+  gap: var(--gap-md);
   align-items: flex-start;
 }
 

@@ -5,7 +5,6 @@ import {
 import React from "react";
 import { ThunderstoreLinkProps } from "../../components/Links/LinkingProvider";
 import { PrimitiveComponentDefaultProps, TooltipWrapper } from "../utils/utils";
-import { classnames } from "../../utils/utils";
 
 export interface ActionableButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -43,10 +42,6 @@ export const Actionable = React.forwardRef<
       children,
       primitiveType,
       rootClasses,
-      csColor,
-      csVariant,
-      csSize,
-      csTextStyles,
       tooltipText,
       tooltipSide,
       ...forwardedProps
@@ -58,17 +53,7 @@ export const Actionable = React.forwardRef<
 
       return (
         <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
-          <button
-            {...fProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              rootClasses
-            )}
-            data-color={csColor}
-            data-size={csSize}
-            data-variant={csVariant}
-            ref={fRef}
-          >
+          <button {...fProps} className={rootClasses} ref={fRef}>
             {children}
           </button>
         </TooltipWrapper>
@@ -79,17 +64,7 @@ export const Actionable = React.forwardRef<
       const fProps = forwardedProps as ActionableLinkProps;
       return (
         <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
-          <a
-            {...fProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
-            ref={fRef}
-          >
+          <a {...fProps} className={rootClasses} ref={fRef}>
             {children}
           </a>
         </TooltipWrapper>
@@ -103,13 +78,7 @@ export const Actionable = React.forwardRef<
         <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
           <CyberstormLink
             {...strippedForwardedProps}
-            className={classnames(
-              ...(csTextStyles ? csTextStyles : []),
-              rootClasses
-            )}
-            data-color={csColor}
-            data-variant={csVariant}
-            data-size={csSize}
+            className={rootClasses}
             linkId={linkId}
             ref={fRef}
           >

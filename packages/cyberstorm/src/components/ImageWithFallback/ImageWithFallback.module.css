@@ -16,11 +16,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--border-radius--8);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  color: var(--old--color-purple--9);
-  background-color: var(--old--color-purple--4);
-  transition: var(--animation-length-s) ease-out;
+  color: var(--old--color-accent-purple-9);
+  background-color: var(--old--color-accent-purple-4);
+  transition: var(--animation-duration-sm) ease-out;
   aspect-ratio: var(--aspect-ratio);
 }
 
@@ -30,7 +30,7 @@
   justify-content: center;
   width: var(--image-width);
   aspect-ratio: 1;
-  transition: var(--animation-length-s) ease-out;
+  transition: var(--animation-duration-sm) ease-out;
 }
 
 .image {
