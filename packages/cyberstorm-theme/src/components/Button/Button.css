@@ -77,11 +77,11 @@
   }
 
   /* MODIFIERS */
-  .ts-button:where(:not(.ts-variant--special)):where(.ts-modifier--subtle):where(:not(:hover, :active)) {
+  .ts-button:where(:not(.ts-variant--special)):where(.ts-modifier--ghost):where(:not(:hover, :active)) {
     --button-background-color: transparent;
   }
 
-  .ts-button:where(.ts-variant--special):where(.ts-modifier--subtle):where(:not(:hover, :active)) {
+  .ts-button:where(.ts-variant--special):where(.ts-modifier--ghost):where(:not(:hover, :active)) {
     background: transparent;
   }
 

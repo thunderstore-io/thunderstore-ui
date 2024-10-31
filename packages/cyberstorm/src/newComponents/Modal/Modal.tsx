@@ -37,7 +37,7 @@ export function Modal(props: Props) {
           }}
           csVariant="secondary"
           csSize="medium"
-          csModifiers={["subtle"]}
+          csModifiers={["ghost"]}
           tooltipText="Close"
           icon={faXmark}
         />

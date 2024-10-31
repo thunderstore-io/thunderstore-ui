@@ -59,7 +59,7 @@ export function Navigation(props: {
             linkId="Communities"
             csSize="big"
             csVariant="secondary"
-            csModifiers={["subtle"]}
+            csModifiers={["ghost"]}
           >
             Communities
           </LinkButton>
@@ -173,7 +173,7 @@ export function MobileNavigationMenu() {
               aria-label="Back to previous menu"
               csSize="medium"
               csVariant="secondary"
-              csModifiers={["subtle", "dimmed"]}
+              csModifiers={["ghost", "dimmed"]}
               icon={faLongArrowLeft}
             />
           }

@@ -16,11 +16,7 @@ export function DevelopersDropDown() {
     <>
       <NewDropDown
         trigger={
-          <NewButton
-            csSize="big"
-            csVariant="secondary"
-            csModifiers={["subtle"]}
-          >
+          <NewButton csSize="big" csVariant="secondary" csModifiers={["ghost"]}>
             Developers
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faCaretDown} />
