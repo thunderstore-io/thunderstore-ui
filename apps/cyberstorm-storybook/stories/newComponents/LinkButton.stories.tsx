@@ -57,7 +57,7 @@ const Template: StoryFn<typeof LinkButton> = (args) => (
       </LinkButton>
       <LinkButton
         csVariant="secondary"
-        csModifiers={["subtle"]}
+        csModifiers={["ghost"]}
         {...args}
         primitiveType="link"
         href="https://example.com"
@@ -161,7 +161,7 @@ const Template: StoryFn<typeof LinkButton> = (args) => (
       </LinkButton>
       <LinkButton
         csVariant="secondary"
-        csModifiers={["subtle"]}
+        csModifiers={["ghost"]}
         {...args}
         primitiveType="cyberstormLink"
         linkId="Communities"

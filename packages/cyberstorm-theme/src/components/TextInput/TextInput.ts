@@ -7,7 +7,7 @@ export const TextInputSizesList = ["default", "textarea", "small"] as const;
 export type TextInputSizes = "default" | "textarea" | "small";
 
 // Modifiers
-export const TextInputModifiersList = ["disabled", "subtle", "dimmed"] as const;
+export const TextInputModifiersList = ["disabled", "ghost", "dimmed"] as const;
 // There is an issue with Typescript (eslint) and prettier disagreeing if
 // the type should have parentheses
 // prettier-ignore
