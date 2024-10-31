@@ -15,7 +15,7 @@
     animation: var(--dropdown-animation);
   }
 
-  .ts-dropdown__item {
+  .ts-dropdown > *:where(:not(.ts-dropdown__divider)) {
     padding: var(--dropdown__item-padding);
     overflow: hidden;
     color: var(--dropdown__item-color);
@@ -23,7 +23,7 @@
     outline: none;
   }
 
-  .ts-dropdown__item[data-highlighted] {
+  .ts-dropdown > *:where(:not(.ts-dropdown__divider))[data-highlighted] {
     z-index: 999;
   }
 
