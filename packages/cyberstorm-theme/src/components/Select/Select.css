@@ -23,20 +23,19 @@
   /* VARIANTS */
   .ts-select__item:where(.ts-variant--default) {
     --select__item-color: var(--color-text-primary);
-  }
 
-  .ts-select__item:where(.ts-variant--default) > .ts-select__item__icon {
-    --select__item__icon-color: var(--color-text-tertiary);
-  }
+    & > .ts-select__item__icon {
+      --select__item__icon-color: var(--color-text-tertiary);
+    }
 
-  .ts-select__item:where(.ts-variant--default)[data-highlighted] {
-    --select__item-color: var(--color-text-primary);
-    --select__item-background-color: var(--color-surface-6);
-  }
+    &[data-highlighted] {
+      --select__item-color: var(--color-text-primary);
+      --select__item-background-color: var(--color-surface-6);
+    }
 
-  .ts-select__item:where(.ts-variant--default)[data-highlighted]
-    > .ts-select__item__icon {
-    --select__item__icon-color: var(--color-text-primary);
+    &[data-highlighted] > .ts-select__item__icon {
+      --select__item__icon-color: var(--color-text-primary);
+    }
   }
 
   /* SIZES */

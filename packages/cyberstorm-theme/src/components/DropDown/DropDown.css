@@ -1,16 +1,28 @@
 @layer theme-components {
   /* DROPDOWN ROOT */
-
-  /* Missing tokens */
-  .ts-dropdown:where(.ts-variant--primary) {
-    --dropdown-color: var(--color-surface-5);
-    --dropdown-background-color: var(--color-surface-2);
-    --dropdown-border-color: var(--color-surface-6);
+  .ts-dropdown {
     --dropdown-border: var(--space-px) var(--dropdown-border-color) solid;
     --dropdown-border-radius: var(--radius-md);
     --dropdown-box-shadow: var(--shadow-lg);
     --dropdown-animation: fade-in var(--animation-duration-md) ease;
     --dropdown-padding: var(--space-8) 0;
+  }
+
+  .ts-dropdown:where(.ts-variant--primary) {
+    --dropdown-color: var(--color-surface-5);
+    --dropdown-background-color: var(--color-surface-2);
+    --dropdown-border-color: var(--color-surface-6);
+
+    & > *:where(:not(.ts-dropdown__divider)) {
+      --dropdown__item-padding: var(--space-12) var(--space-16);
+      --dropdown__item-color: var(--color-surface-8);
+      --dropdown__item-background-color: var(--color-surface-2);
+    }
+
+    & > *:where(:not(.ts-dropdown__divider))[data-highlighted] {
+      --dropdown__item-color: var(--color-surface-2);
+      --dropdown__item-background-color: var(--color-surface-6);
+    }
   }
 
   @keyframes fade-in {
@@ -22,24 +34,6 @@
       opacity: 1;
     }
   }
-
-  /* DROPDOWN ITEM */
-
-  /* Missing tokens */
-  .ts-dropdown:where(.ts-variant--primary)
-    > *:where(:not(.ts-dropdown__divider)) {
-    --dropdown__item-padding: var(--space-12) var(--space-16);
-    --dropdown__item-color: var(--color-surface-8);
-    --dropdown__item-background-color: var(--color-surface-2);
-  }
-
-  .ts-dropdown:where(.ts-variant--primary)
-    > *:where(:not(.ts-dropdown__divider))[data-highlighted] {
-    --dropdown__item-color: var(--color-surface-2);
-    --dropdown__item-background-color: var(--color-surface-6);
-  }
-
-  /* DROPDOWN DIVIDER */
 
   /* Missing tokens */
   .ts-dropdown__divider:where(.ts-variant--primary) {

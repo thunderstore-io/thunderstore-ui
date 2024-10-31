@@ -4,6 +4,12 @@
     --breadcrumbs__outer-background-color: var(
       --breadcrumbs__outer-background-color--default
     );
+
+    &:where(:hover) {
+      --breadcrumbs__outer-background-color: var(
+        --breadcrumbs__outer-background-color--hover
+      );
+    }
   }
 
   .ts-breadcrumbs__outerend:where(.ts-variant--default) {
@@ -21,13 +27,6 @@
   /* MODIFIERS */
   .ts-button:where(.ts-modifier--dimmed) {
     filter: brightness(85%);
-  }
-
-  /* VARIANTS STATES */
-  .ts-breadcrumbs__outer:where(.ts-variant--default):hover {
-    --breadcrumbs__outer-background-color: var(
-      --breadcrumbs__outer-background-color--hover
-    );
   }
 
   /* TOKENS */

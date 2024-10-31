@@ -36,16 +36,49 @@
   .ts-button:where(.ts-variant--primary) {
     --button-background-color: var(--button-primary-bg-color--default);
     --button-text-color: var(--button-primary-text-color--default);
+
+    &:where(:hover),
+    &[data-state="open"] {
+      --button-background-color: var(--button-primary-bg-color--hover);
+      --button-text-color: var(--button-primary-text-color--hover);
+    }
+
+    &:where(:active) {
+      --button-background-color: var(--button-primary-bg-color--active);
+      --button-text-color: var(--button-primary-text-color--active);
+    }
   }
 
   .ts-button:where(.ts-variant--secondary) {
     --button-background-color: var(--button-secondary-bg-color--default);
     --button-text-color: var(--button-secondary-text-color--default);
+
+    &:where(:hover),
+    &[data-state="open"] {
+      --button-background-color: var(--button-secondary-bg-color--hover);
+      --button-text-color: var(--button-secondary-text-color--hover);
+    }
+
+    &:where(:active) {
+      --button-background-color: var(--button-secondary-bg-color--active);
+      --button-text-color: var(--button-secondary-text-color--active);
+    }
   }
 
   .ts-button:where(.ts-variant--accent) {
     --button-background-color: var(--button-accent-bg-color--default);
     --button-text-color: var(--button-accent-text-color--default);
+
+    &:where(:hover),
+    &[data-state="open"] {
+      --button-background-color: var(--button-accent-bg-color--hover);
+      --button-text-color: var(--button-accent-text-color--hover);
+    }
+
+    &:where(:active) {
+      --button-background-color: var(--button-accent-bg-color--active);
+      --button-text-color: var(--button-accent-text-color--active);
+    }
   }
 
   .ts-button:where(.ts-variant--special) {
@@ -54,26 +87,87 @@
     --button-border-color: var(--button-special-border-color--default);
 
     background: var(--button-special-background--default);
+
+    &:where(:hover),
+    &[data-state="open"] {
+      --button-text-color: var(--button-special-text-color--hover);
+      --button-border: var(--button-special-border--hover);
+      --button-border-color: var(--button-special-border-color--hover);
+
+      background: var(--button-special-background--hover);
+    }
+
+    &:where(:active) {
+      --button-text-color: var(--button-special-text-color--active);
+      --button-border: var(--button-special-border--active);
+      --button-border-color: var(--button-special-border-color--active);
+
+      background: var(--button-special-background--active);
+    }
   }
 
   .ts-button:where(.ts-variant--success) {
     --button-background-color: var(--button-success-bg-color--default);
     --button-text-color: var(--button-success-text-color--default);
+
+    &:where(:hover),
+    &[data-state="open"] {
+      --button-background-color: var(--button-success-bg-color--hover);
+      --button-text-color: var(--button-success-text-color--hover);
+    }
+
+    &:where(:active) {
+      --button-background-color: var(--button-success-bg-color--active);
+      --button-text-color: var(--button-success-text-color--active);
+    }
   }
 
   .ts-button:where(.ts-variant--info) {
     --button-background-color: var(--button-info-bg-color--default);
     --button-text-color: var(--button-info-text-color--default);
+
+    &:where(:hover),
+    &[data-state="open"] {
+      --button-background-color: var(--button-info-bg-color--hover);
+      --button-text-color: var(--button-info-text-color--hover);
+    }
+
+    &:where(:active) {
+      --button-background-color: var(--button-info-bg-color--active);
+      --button-text-color: var(--button-info-text-color--active);
+    }
   }
 
   .ts-button:where(.ts-variant--warning) {
     --button-background-color: var(--button-warning-bg-color--default);
     --button-text-color: var(--button-warning-text-color--default);
+
+    &:where(:hover),
+    &[data-state="open"] {
+      --button-background-color: var(--button-warning-bg-color--hover);
+      --button-text-color: var(--button-warning-text-color--hover);
+    }
+
+    &:where(:active) {
+      --button-background-color: var(--button-warning-bg-color--active);
+      --button-text-color: var(--button-warning-text-color--active);
+    }
   }
 
   .ts-button:where(.ts-variant--danger) {
     --button-background-color: var(--button-danger-bg-color--default);
     --button-text-color: var(--button-danger-text-color--default);
+
+    &:where(:hover),
+    &[data-state="open"] {
+      --button-background-color: var(--button-danger-bg-color--hover);
+      --button-text-color: var(--button-danger-text-color--hover);
+    }
+
+    &:where(:active) {
+      --button-background-color: var(--button-danger-bg-color--active);
+      --button-text-color: var(--button-danger-text-color--active);
+    }
   }
 
   /* MODIFIERS */
@@ -92,93 +186,6 @@
 
   .ts-button:where(.ts-modifier--dimmed) {
     filter: brightness(85%);
-  }
-
-  /* VARIANTS STATES */
-  .ts-button:where(.ts-variant--primary):hover {
-    --button-background-color: var(--button-primary-bg-color--hover);
-    --button-text-color: var(--button-primary-text-color--hover);
-  }
-
-  .ts-button:where(.ts-variant--secondary):hover {
-    --button-background-color: var(--button-secondary-bg-color--hover);
-    --button-text-color: var(--button-secondary-text-color--hover);
-  }
-
-  .ts-button:where(.ts-variant--accent):hover {
-    --button-background-color: var(--button-accent-bg-color--hover);
-    --button-text-color: var(--button-accent-text-color--hover);
-  }
-
-  .ts-button:where(.ts-variant--special):hover {
-    --button-text-color: var(--button-special-text-color--hover);
-    --button-border: var(--button-special-border--hover);
-    --button-border-color: var(--button-special-border-color--hover);
-
-    background: var(--button-special-background--hover);
-  }
-
-  .ts-button:where(.ts-variant--success):hover {
-    --button-background-color: var(--button-success-bg-color--hover);
-    --button-text-color: var(--button-success-text-color--hover);
-  }
-
-  .ts-button:where(.ts-variant--info):hover {
-    --button-background-color: var(--button-info-bg-color--hover);
-    --button-text-color: var(--button-info-text-color--hover);
-  }
-
-  .ts-button:where(.ts-variant--warning):hover {
-    --button-background-color: var(--button-warning-bg-color--hover);
-    --button-text-color: var(--button-warning-text-color--hover);
-  }
-
-  .ts-button:where(.ts-variant--danger):hover {
-    --button-background-color: var(--button-danger-bg-color--hover);
-    --button-text-color: var(--button-danger-text-color--hover);
-  }
-
-  .ts-button:where(.ts-variant--primary):active {
-    --button-background-color: var(--button-primary-bg-color--active);
-    --button-text-color: var(--button-primary-text-color--active);
-  }
-
-  .ts-button:where(.ts-variant--secondary):active {
-    --button-background-color: var(--button-secondary-bg-color--active);
-    --button-text-color: var(--button-secondary-text-color--active);
-  }
-
-  .ts-button:where(.ts-variant--accent):active {
-    --button-background-color: var(--button-accent-bg-color--active);
-    --button-text-color: var(--button-accent-text-color--active);
-  }
-
-  .ts-button:where(.ts-variant--special):active {
-    --button-text-color: var(--button-special-text-color--active);
-    --button-border: var(--button-special-border--active);
-    --button-border-color: var(--button-special-border-color--active);
-
-    background: var(--button-special-background--active);
-  }
-
-  .ts-button:where(.ts-variant--success):active {
-    --button-background-color: var(--button-success-bg-color--active);
-    --button-text-color: var(--button-success-text-color--active);
-  }
-
-  .ts-button:where(.ts-variant--info):active {
-    --button-background-color: var(--button-info-bg-color--active);
-    --button-text-color: var(--button-info-text-color--active);
-  }
-
-  .ts-button:where(.ts-variant--warning):active {
-    --button-background-color: var(--button-warning-bg-color--active);
-    --button-text-color: var(--button-warning-text-color--active);
-  }
-
-  .ts-button:where(.ts-variant--danger):active {
-    --button-background-color: var(--button-danger-bg-color--active);
-    --button-text-color: var(--button-danger-text-color--active);
   }
 
   /* TOKENS */

@@ -2,12 +2,10 @@
   /* VARIANTS DEFAULT STATE */
   .ts-modal:where(.ts-variant--primary) {
     --modal-color: var(--modal-primary-color--default);
-  }
 
-  .ts-modal:where(.ts-variant--primary):hover {
-    --modal-color: var(--modal-primary-color--hover);
-
-    text-decoration: none;
+    &:where(:hover) {
+      --modal-color: var(--modal-primary-color--hover);
+    }
   }
 
   /* TOKENS */
