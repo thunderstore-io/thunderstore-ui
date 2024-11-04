@@ -21,9 +21,6 @@ interface LinkProps
   className?: string;
   queryParams?: string;
   url: string;
-  "data-color"?: string;
-  "data-size"?: string;
-  "data-variant"?: string;
   customRef?: React.ForwardedRef<HTMLAnchorElement>;
   version?: string;
 }
@@ -54,9 +51,6 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         {...fProps}
         className={className}
         ref={forwardedRef}
-        data-color={props["data-color"]}
-        data-size={props["data-size"]}
-        data-variant={props["data-variant"]}
       >
         {children}
       </a>
