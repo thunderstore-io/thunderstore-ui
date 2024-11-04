@@ -53,9 +53,6 @@ interface CyberstormLinkProps
     typeWorkaroundProps {
   linkId: CyberstormLinkIds;
   className?: string;
-  "data-color"?: string;
-  "data-size"?: string;
-  "data-variant"?: string;
   forwardedProps?: object;
 }
 
@@ -92,9 +89,6 @@ export const CyberstormLink = React.forwardRef<
       team={team}
       user={user}
       customRef={forwardedRef}
-      data-color={props["data-color"]}
-      data-size={props["data-size"]}
-      data-variant={props["data-variant"]}
     >
       {children}
     </Link>
