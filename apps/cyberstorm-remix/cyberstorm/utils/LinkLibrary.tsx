@@ -2,10 +2,12 @@ import { LinkLibrary, ThunderstoreLinkProps } from "@thunderstore/cyberstorm";
 import { Link as RemixLink } from "@remix-run/react";
 import { PropsWithChildren } from "react";
 import React from "react";
+import { RemixLinkProps } from "@remix-run/react/dist/components";
 
 interface LinkProps
   extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
     PropsWithChildren,
+    Omit<RemixLinkProps, "to">,
     ThunderstoreLinkProps {
   className?: string;
   queryParams?: string;
@@ -46,6 +48,9 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         data-color={props["data-color"]}
         data-size={props["data-size"]}
         data-variant={props["data-variant"]}
+        // TODO: Remove this prop when community page is deployed
+        // OR there is someway to pass this prop in the needed places. e.g. CardCommunity
+        reloadDocument
       >
         {children}
       </RemixLink>
