@@ -145,6 +145,7 @@ export default function CommunitiesPage() {
               clearValue={() => setSearchValue("")}
               leftIcon={<FontAwesomeIcon icon={faSearch} />}
               id="communitiesSearchInput"
+              type="search"
             />
           </div>
           <div className={searchAndOrderStyles.searchFilters}>

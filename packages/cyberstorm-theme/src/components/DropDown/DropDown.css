@@ -16,7 +16,7 @@
     & > *:where(:not(.ts-dropdown__divider)) {
       --dropdown__item-padding: var(--space-12) var(--space-16);
       --dropdown__item-color: var(--color-surface-8);
-      --dropdown__item-background-color: var(--color-surface-2);
+      --dropdown__item-background-color: transparent;
     }
 
     & > *:where(:not(.ts-dropdown__divider))[data-highlighted] {
