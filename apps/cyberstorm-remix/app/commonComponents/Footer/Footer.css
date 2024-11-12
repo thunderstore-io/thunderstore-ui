@@ -69,6 +69,9 @@
   .project-footer__footnote {
     padding-block: var(--space-32);
     padding-block-end: 5.5rem;
+
+    --link-color: var(--color-text-accent);
+    --link-color-hover: var(--color-text-primary);
   }
 
   .project-footer__footnotecopyright {
@@ -87,9 +90,8 @@
     align-self: stretch;
     justify-content: center;
     width: 100%;
-    max-width: 80rem;
+    max-width: 83.5rem;
     margin-inline: auto;
-    padding-inline: var(--space-24);
   }
 
   .project-footer__nav {
@@ -181,10 +183,6 @@
     list-style-type: none;
   }
 
-  .project-footer__opensource {
-    color: var(--color-text-accent);
-  }
-
   .project-footer__info {
     --link-color: var(--color-text-accent);
     --link-color-hover: var(--color-text-primary);
@@ -243,9 +241,6 @@
 
     .project-footer__footnote {
       padding-block-end: var(--space-32);
-
-      --link-color: var(--color-text-accent);
-      --link-color-hover: var(--color-text-primary);
     }
 
     .project-footer__nav {
