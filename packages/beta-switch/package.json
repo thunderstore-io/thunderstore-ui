@@ -1,0 +1,16 @@
+{
+  "name": "@thunderstore/beta-switch",
+  "version": "0.1.0",
+  "description": "Small thing for switching between two projects running in the same domain",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/beta-switch",
+  "main": "dist/thunderstore-beta-switch.cjs.js",
+  "module": "dist/thunderstore-beta-switch.esm.js",
+  "types": "dist/thunderstore-beta-switch.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  }
+}

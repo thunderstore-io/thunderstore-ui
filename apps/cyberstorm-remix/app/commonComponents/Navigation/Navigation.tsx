@@ -141,6 +141,7 @@ export function Navigation(props: {
           </div>
         </nav>
         <div className="navigation-header__user">
+          <div id="nimbusBeta" suppressHydrationWarning />
           <div className="navigation-header__extra">
             <NewButton
               primitiveType="link"
