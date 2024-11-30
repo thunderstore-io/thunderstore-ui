@@ -66,6 +66,7 @@ export function Navigation(props: {
           <DevelopersDropDown />
         </nav>
         <div className={styles.headerRightSide}>
+          <div id="nimbusBeta" suppressHydrationWarning />
           <LinkButton
             primitiveType="link"
             href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
