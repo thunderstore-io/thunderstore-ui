@@ -11,7 +11,7 @@ export type ApiFormProps<
   Schema extends ZodObject<Z>,
   Meta extends object,
   Result extends object,
-  Z extends ZodRawShape
+  Z extends ZodRawShape,
 > = {
   schema: Schema;
   endpoint: ApiEndpoint<z.infer<Schema>, Meta, Result>;
@@ -24,7 +24,7 @@ export function ApiForm<
   Schema extends ZodObject<Z>,
   Meta extends object,
   Result extends object,
-  Z extends ZodRawShape
+  Z extends ZodRawShape,
 >(props: PropsWithChildren<ApiFormProps<Schema, Meta, Result, Z>>) {
   const { schema, meta, endpoint, onSubmitSuccess, onSubmitError } = props;
   const { form, submitHandler } = useApiForm({

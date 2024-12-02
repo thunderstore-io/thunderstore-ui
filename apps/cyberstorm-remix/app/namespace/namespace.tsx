@@ -3,7 +3,6 @@ import { useLoaderData } from "@remix-run/react";
 import {
   BreadCrumbs,
   Button,
-  CollapsibleText,
   CyberstormLink,
   ImageWithFallback,
   MetaItem,
@@ -14,13 +13,11 @@ import { formatInteger } from "@thunderstore/cyberstorm/src/utils/utils";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBoxOpen,
-  faDownload,
-  faArrowUpRightFromSquare,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBoxOpen, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { ApiError } from "@thunderstore/thunderstore-api";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import { CollapsibleText } from "~/commonComponents/CollapsibleText/CollapsibleText";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -128,7 +125,7 @@ export default function Community() {
           {community.name}
         </CyberstormLink>
       </BreadCrumbs>
-      <header className="project-root__page-header">
+      <header className="nimbus-root__page-header">
         <div className={styles.root}>
           <div className={styles.image}>
             <ImageWithFallback
@@ -171,7 +168,7 @@ export default function Community() {
                         Join our community
                       </Button.ButtonLabel>
                       <Button.ButtonIcon>
-                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+                        <FontAwesomeIcon icon={faArrowUpRight} />
                       </Button.ButtonIcon>
                     </Button.Root>
                   </a>
@@ -181,7 +178,7 @@ export default function Community() {
           </div>
         </div>
       </header>
-      <main className="project-root__main">
+      <main className="nimbus-root__main">
         <PackageSearch
           listings={listings}
           packageCategories={filters.package_categories}

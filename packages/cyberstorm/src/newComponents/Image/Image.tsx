@@ -17,6 +17,8 @@ interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
   /** Force 1:1 aspect ratio */
   square?: boolean;
   csVariant?: ImageVariants;
+  intrinsicWidth?: number;
+  intrinsicHeight?: number;
 }
 
 // TODO: Needs a storybook story
@@ -32,6 +34,8 @@ export const Image = React.forwardRef<HTMLDivElement, ImageProps>(
       rootClasses,
       square = false,
       csVariant = "primary",
+      intrinsicWidth,
+      intrinsicHeight,
       ...forwardedProps
     } = props;
     const fProps = forwardedProps as ImageProps;
@@ -42,6 +46,7 @@ export const Image = React.forwardRef<HTMLDivElement, ImageProps>(
         primitiveType="window"
         rootClasses={classnames(
           "ts-image__wrapper",
+          src ? undefined : "ts-image__wrapper--noimage",
           ...componentClasses(csVariant, undefined, undefined),
           rootClasses,
           square ? "ts-image--issquare" : "ts-image--is3by4"

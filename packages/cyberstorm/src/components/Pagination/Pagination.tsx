@@ -1,13 +1,12 @@
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dispatch, SetStateAction } from "react";
 import { classnames, range } from "../../utils/utils";
 import styles from "./Pagination.module.css";
 import { PaginationButton } from "./PaginationButton";
 
 export interface PaginationProps {
   currentPage: number;
-  onPageChange: Dispatch<SetStateAction<number>>;
+  onPageChange: (v: number) => void;
   totalCount: number;
   pageSize: number;
   disabled?: boolean;

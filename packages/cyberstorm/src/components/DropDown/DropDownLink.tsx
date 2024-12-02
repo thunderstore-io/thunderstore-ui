@@ -1,8 +1,8 @@
 import styles from "./DropDownLink.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactElement } from "react";
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { NewIcon } from "../..";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 
 export interface DropDownLinkProps {
   label: string;
@@ -28,7 +28,7 @@ export function DropDownLink(props: DropDownLinkProps) {
           csVariant="secondary"
           rootClasses={styles.arrowUpRightIcon}
         >
-          <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+          <FontAwesomeIcon icon={faArrowUpRight} />
         </NewIcon>
       ) : null}
     </div>

@@ -50,7 +50,7 @@ export function Menu(props: Props) {
                 popovertargetaction: "close",
               }}
               csVariant="secondary"
-              csModifiers={["ghost", "dimmed"]}
+              csModifiers={["ghost"]}
               tooltipText="Close"
               aria-label="Close"
               icon={faXmark}

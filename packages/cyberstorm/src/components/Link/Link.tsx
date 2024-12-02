@@ -1,9 +1,9 @@
 import styles from "./Link.module.css";
 import { ReactElement } from "react";
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 
 export interface LinkProps {
   label: string;
@@ -33,7 +33,7 @@ export function Link(props: LinkProps) {
         ) : null}
         {label}
         <Icon wrapperClasses={styles.rightIcon}>
-          <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+          <FontAwesomeIcon icon={faArrowUpRight} />
         </Icon>
       </a>
     );

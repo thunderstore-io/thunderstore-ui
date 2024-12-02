@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./Navigation.module.css";
 import {
   Menu,
-  LinkButton,
   NewLink,
   NewIcon,
   Avatar,
@@ -54,7 +53,7 @@ export function Navigation(props: {
               <ThunderstoreLogo />
             </NewIcon>
           </NewLink>
-          <LinkButton
+          <NewButton
             primitiveType="cyberstormLink"
             linkId="Communities"
             csSize="big"
@@ -62,11 +61,11 @@ export function Navigation(props: {
             csModifiers={["ghost"]}
           >
             Communities
-          </LinkButton>
+          </NewButton>
           <DevelopersDropDown />
         </nav>
         <div className={styles.headerRightSide}>
-          <LinkButton
+          <NewButton
             primitiveType="link"
             href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
             csSize="medium"
@@ -75,7 +74,7 @@ export function Navigation(props: {
             aria-label="Get Thunderstore Mod Manager App"
           >
             Get App
-          </LinkButton>
+          </NewButton>
           {/* Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint */}
           {/* {hydrationCheck && currentUser ? (
             <DesktopUserDropdown user={currentUser} />
@@ -173,7 +172,7 @@ export function MobileNavigationMenu() {
               aria-label="Back to previous menu"
               csSize="medium"
               csVariant="secondary"
-              csModifiers={["ghost", "dimmed"]}
+              csModifiers={["ghost"]}
               icon={faLongArrowLeft}
             />
           }

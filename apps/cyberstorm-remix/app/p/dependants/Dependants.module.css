@@ -4,7 +4,7 @@
   gap: var(--space-32);
 }
 
-@media (width <= 30rem) {
+@media (width <= 48rem) {
   .root {
     gap: var(--space-16);
   }

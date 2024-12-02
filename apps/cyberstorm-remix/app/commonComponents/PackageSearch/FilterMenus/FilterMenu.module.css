@@ -1,91 +1,125 @@
-.root {
-  display: flex;
-  flex-direction: column;
-  font-size: var(--font-size-body-lg);
-}
-
-.header,
-.empty {
-  padding: var(--space-8) var(--space-12);
-  font-size: var(--font-size-body-lg);
-}
-
-.list {
-  list-style: none;
-}
-
 .label {
   display: flex;
   gap: var(--gap-sm);
   align-items: center;
   padding: var(--space-8) var(--space-12);
   border-radius: var(--radius-md);
-  color: var(--color-text--secondary);
-  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-body-md);
   cursor: pointer;
   transition: var(--animation-duration-xs);
   user-select: none;
 
-  --mark-color: var(--old--color-accent-purple-6);
+  &.unselected {
+    --icon-color: var(--color-surface-a8);
+  }
+
+  &.selected {
+    color: var(--color-cyber-green-7);
+    font-weight: var(--font-weight-bold);
+
+    --icon-color: var(--color-cyber-green-7);
+  }
+
+  &.off {
+    color: var(--color-text-secondary);
+
+    & > .checkbox > svg {
+      --icon-color: var(--color-surface-a8);
+    }
+  }
+
+  &.include {
+    color: var(--color-cyber-green-7);
+    font-weight: var(--font-weight-bold);
+
+    & > .checkbox > svg {
+      --icon-color: var(--color-cyber-green-7);
+    }
+  }
+
+  &.exclude {
+    color: var(--color-accent-red-7);
+    font-weight: var(--font-weight-bold);
+
+    & > .checkbox > svg {
+      --icon-color: var(--color-accent-red-7);
+    }
+  }
+
+  &:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-surface-a5);
+
+    &.unselected {
+      --icon-color: var(--color-surface-a10);
+    }
+
+    &.selected {
+      color: var(--color-cyber-green-8);
+
+      --icon-color: var(--color-cyber-green-8);
+    }
+
+    &.off {
+      color: var(--color-text-primary);
+
+      & > .checkbox > svg {
+        --icon-color: var(--color-surface-a10);
+      }
+    }
+
+    &.include {
+      color: var(--color-cyber-green-8);
+
+      & > .checkbox > svg {
+        --icon-color: var(--color-cyber-green-8);
+      }
+    }
+
+    &.exclude {
+      color: var(--color-accent-red-8);
+
+      & > .checkbox > svg {
+        --icon-color: var(--color-accent-red-8);
+      }
+    }
+  }
 }
 
-.label:hover {
-  background-color: var(--color-surface-4);
-
-  --mark-color: var(--old--color-accent-purple-2);
-}
-
-.checkbox {
-  width: var(--space-18);
-  height: var(--space-18);
-  border-radius: var(--radius-xs);
-  background-color: var(--mark-color);
-  transition: ease-out var(--animation-duration-xs);
-}
-
-.label:hover .checkbox {
-  --mark-color: #4343a3;
-}
-
-.label.include,
-.label.include .checkbox {
-  color: var(--color-highlight);
-
-  --mark-color: var(--color-highlight);
-}
-
-.label.exclude,
-.label.exclude .checkbox {
-  color: var(--color-danger);
-
-  --mark-color: var(--color-danger);
-}
-
-.icon {
-  height: var(--space-16);
-  color: var(--color-surface-0);
-}
-
+/* RADIO GROUP */
 .radio {
   display: flex;
   align-items: center;
   justify-content: center;
   width: var(--space-16);
   height: var(--space-16);
-  border: var(--space-2) solid var(--color-surface-7);
-  border-radius: var(--radius-md);
   background-color: transparent;
   transition: ease-out var(--animation-duration-xs);
 }
 
-.radio.radioSelected {
-  border-color: var(--mark-color);
+.radioIndicator {
+  position: absolute;
+  display: block;
+  width: var(--space-16);
+  height: var(--space-16);
 }
 
-.radioIndicator {
-  display: block;
-  width: var(--space-6);
-  height: var(--space-6);
-  border-radius: 50%;
-  background-color: var(--mark-color);
+/* CATEGORY MENU */
+.list {
+  list-style: none;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-20);
+  height: var(--space-20);
+
+  --icon-inline-size: var(--space-20);
+
+  background-color: transparent;
+  transition: ease-out var(--animation-duration-xs);
 }

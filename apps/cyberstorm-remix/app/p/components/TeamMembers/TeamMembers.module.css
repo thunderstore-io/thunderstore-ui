@@ -20,7 +20,7 @@
 }
 
 .itemDescription {
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-body-lg);
   line-height: var(--line-height--m);

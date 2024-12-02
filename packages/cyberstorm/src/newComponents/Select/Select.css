@@ -33,17 +33,12 @@
   }
 
   .ts-select__trigger {
+    width: 100%;
     font-weight: var(--select__trigger-font-weight);
     font-size: var(--select__trigger-font-size);
 
     & > svg:nth-child(2) {
       margin-left: auto;
     }
-  }
-
-  .ts-select__item__icon {
-    width: 1em;
-
-    --icon-color: var(--select__item__icon-color);
   }
 }

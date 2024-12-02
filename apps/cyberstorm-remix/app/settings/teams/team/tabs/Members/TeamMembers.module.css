@@ -41,7 +41,7 @@
 }
 
 .description {
-  color: var(--color-text--secondary);
+  color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-body-xxxxl);
   line-height: var(--line-height--l);

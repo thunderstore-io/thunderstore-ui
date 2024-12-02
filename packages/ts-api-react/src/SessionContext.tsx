@@ -165,7 +165,7 @@ const useValidateSession = (
   /** Session id if it's valid, otherwise undefined */
   string | undefined,
   /** Session id if it's valid, otherwise undefined */
-  string | undefined
+  string | undefined,
 ] => {
   const [isValid, setIsValid] = useState<boolean>();
   const stateSessionId = _session?.sessionId;

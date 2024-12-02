@@ -1,17 +1,15 @@
 import "./Footer.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
-import {
-  faArrowUpRightFromSquare,
-  faBoltLightning,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBoltLightning } from "@fortawesome/free-solid-svg-icons";
 import { ThunderstoreLogoHorizontal } from "@thunderstore/cyberstorm/src/svg/svg";
 import {
   Heading,
-  LinkButton,
+  NewButton,
   NewIcon,
   NewLink,
 } from "@thunderstore/cyberstorm/src";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 
 const AD_IMAGE_SRC = "/cyberstorm-static/images/tsmm_screenshot.png";
 const DISCORD_URL = "https://discord.thunderstore.io/";
@@ -22,20 +20,20 @@ const GITHUB_URL = "https://github.com/thunderstore-io";
  */
 export function Footer() {
   return (
-    <footer className="project-footer" aria-label="Footer">
-      <div className="project-footer__main">
-        <div className="project-footer__section project-footer__info">
-          <div className="project-footer__item project-footer__company">
-            <div className="project-footer__inner project-footer__logoandlinks">
-              <NewIcon csVariant="accent" wrapperClasses="project-footer__logo">
+    <footer className="nimbus-footer" aria-label="Footer">
+      <div className="nimbus-footer__main">
+        <div className="nimbus-footer__section nimbus-footer__info">
+          <div className="nimbus-footer__item nimbus-footer__company">
+            <div className="nimbus-footer__inner nimbus-footer__logoandlinks">
+              <NewIcon csVariant="accent" wrapperClasses="nimbus-footer__logo">
                 <ThunderstoreLogoHorizontal />
               </NewIcon>
-              <div className="project-footer__iconlinks">
+              <div className="nimbus-footer__iconlinks">
                 <NewLink
                   primitiveType="link"
                   tooltipText="Join our Discord"
                   href={DISCORD_URL}
-                  rootClasses="project-footer__iconlink"
+                  rootClasses="nimbus-footer__iconlink"
                   aria-label="Invite link to Thunderstores Discord server"
                 >
                   <NewIcon noWrapper>
@@ -46,7 +44,7 @@ export function Footer() {
                   primitiveType="link"
                   tooltipText="Check out our GitHub"
                   href={GITHUB_URL}
-                  rootClasses="project-footer__iconlink"
+                  rootClasses="nimbus-footer__iconlink"
                   aria-label="Link to Thunderstores Github"
                 >
                   <NewIcon noWrapper>
@@ -56,10 +54,10 @@ export function Footer() {
               </div>
             </div>
           </div>
-          <div className="project-footer__item project-footer__linkswrapper">
-            <div className="project-footer__inner project-footer__navlinks">
-              <nav className="project-footer__nav" aria-label="Footer links">
-                <div className="project-footer__navsection">
+          <div className="nimbus-footer__item nimbus-footer__linkswrapper">
+            <div className="nimbus-footer__inner nimbus-footer__navlinks">
+              <nav className="nimbus-footer__nav" aria-label="Footer links">
+                <div className="nimbus-footer__navsection">
                   <Heading
                     csVariant="primary"
                     mode="heading"
@@ -68,7 +66,7 @@ export function Footer() {
                   >
                     Thunderstore
                   </Heading>
-                  <ul className="project-footer__footerlist">
+                  <ul className="nimbus-footer__footerlist">
                     <li>
                       <NewLink
                         primitiveType="cyberstormLink"
@@ -79,7 +77,7 @@ export function Footer() {
                     </li>
                   </ul>
                 </div>
-                <div className="project-footer__navsection">
+                <div className="nimbus-footer__navsection">
                   <Heading
                     csVariant="primary"
                     mode="heading"
@@ -88,7 +86,7 @@ export function Footer() {
                   >
                     Developers
                   </Heading>
-                  <ul className="project-footer__footerlist">
+                  <ul className="nimbus-footer__footerlist">
                     <li>
                       <NewLink primitiveType="link" href="/api/docs">
                         API Documentation
@@ -133,38 +131,40 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="project-footer__section project-footer__extra">
-          <div className="project-footer__item project-footer__adwrapper">
-            <div className="project-footer__inner">
-              <div className="project-footer__ad">
-                <div className="project-footer__adtext">
+        <div className="nimbus-footer__section nimbus-footer__extra">
+          <div className="nimbus-footer__item nimbus-footer__adwrapper">
+            <div className="nimbus-footer__inner">
+              <div className="nimbus-footer__ad">
+                <div className="nimbus-footer__adtext">
                   <Heading mode="display" csLevel="2" csSize="3">
                     Thunderstore Mod Manager
                   </Heading>
-                  <div className="project-footer__addescription">
+                  <div className="nimbus-footer__addescription">
                     You are prepared. Download Thunderstore Mod Manager for
                     desktop and enter a world of Thunder{" "}
                     <NewIcon csMode="inline" noWrapper>
                       <FontAwesomeIcon icon={faBoltLightning} />
                     </NewIcon>
                   </div>
-                  <LinkButton
+                  <NewButton
                     primitiveType="link"
                     href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
                     csSize="big"
                     csVariant="accent"
-                    rootClasses="project-footer__getmanagerbutton"
+                    rootClasses="nimbus-footer__getmanagerbutton"
                   >
                     Get Manager
                     <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+                      <FontAwesomeIcon icon={faArrowUpRight} />
                     </NewIcon>
-                  </LinkButton>
+                  </NewButton>
                 </div>
                 <img
                   alt="Screenshot of the Thunderstore Mod Manager"
+                  width="1350"
+                  height="811"
                   src={AD_IMAGE_SRC}
-                  className="project-footer__img"
+                  className="nimbus-footer__img"
                 />
               </div>
             </div>
@@ -172,9 +172,9 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="project-footer__item project-footer__footnote">
-        <div className="project-footer__footnoteinner">
-          <div className="project-footer__footerpageslinks">
+      <div className="nimbus-footer__item nimbus-footer__footnote">
+        <div className="nimbus-footer__footnoteinner">
+          <div className="nimbus-footer__footerpageslinks">
             <NewLink
               primitiveType="link"
               href="https://pages.thunderstore.io/p/contact-us"
@@ -191,13 +191,13 @@ export function Footer() {
               News
             </NewLink>
           </div>
-          <div className="project-footer__footnotecopyright">
+          <div className="nimbus-footer__footnotecopyright">
             © 2024 Thunderstore and contributors. This page is{" "}
             <NewLink
               primitiveType="link"
               href="https://github.com/thunderstore-io/thunderstore-ui/"
               aria-label="This page is open source, link to Thunderstore UIs Github page"
-              rootClasses="project-footer__opensource"
+              rootClasses="nimbus-footer__opensource"
             >
               open-source ❤
             </NewLink>

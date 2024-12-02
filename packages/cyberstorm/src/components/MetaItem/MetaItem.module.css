@@ -34,11 +34,11 @@
 }
 
 .metaItem__accent {
-  --text-color: var(--color-text--accent);
+  --text-color: var(--color-text-accent);
 }
 
 .metaItem__tertiary {
-  --text-color: var(--color-text--tertiary);
+  --text-color: var(--color-text-tertiary);
 }
 
 .metaItem__medium {

@@ -1,6 +1,8 @@
 import styles from "./StalenessIndicator.module.css";
 import { ReactNode } from "react";
 import { classnames } from "../../utils/utils";
+import { NewIcon } from "../..";
+import { ThunderstoreLogo } from "../../svg/svg";
 
 interface Props {
   children: ReactNode;
@@ -17,8 +19,15 @@ interface Props {
 export function StalenessIndicator(props: Props) {
   const { children, className, isStale = false } = props;
   return (
-    <div className={classnames(isStale ? styles.root : null, className)}>
-      {children}
+    <div style={{ position: "relative" }}>
+      {isStale ? (
+        <NewIcon wrapperClasses={styles.loader}>
+          <ThunderstoreLogo />
+        </NewIcon>
+      ) : undefined}
+      <div className={classnames(isStale ? styles.root : null, className)}>
+        {children}
+      </div>
     </div>
   );
 }

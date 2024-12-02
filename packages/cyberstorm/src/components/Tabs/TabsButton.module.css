@@ -32,7 +32,7 @@
 }
 
 .button__default:hover > .icon {
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
 }
 
 .button__default:hover {

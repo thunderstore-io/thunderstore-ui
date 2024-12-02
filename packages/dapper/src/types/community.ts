@@ -3,10 +3,12 @@ import { PackageCategory, PaginatedList } from "./shared";
 export interface Community {
   name: string;
   identifier: string;
+  short_description: string | null;
   description: string | null;
+  wiki_url: string | null;
   discord_url: string | null;
   datetime_created: string;
-  background_image_url: string | null;
+  hero_image_url: string | null;
   cover_image_url: string | null;
   icon_url: string | null;
   total_download_count: number;

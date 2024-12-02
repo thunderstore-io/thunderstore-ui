@@ -26,12 +26,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
-      const created_recent = searchParams.get("created_recent");
-      const updated_recent = searchParams.get("updated_recent");
-      const created_after = searchParams.get("created_after");
-      const created_before = searchParams.get("created_before");
-      const updated_after = searchParams.get("updated_after");
-      const updated_before = searchParams.get("updated_before");
       return {
         community: await dapper.getCommunity(params.communityId),
         filters: await dapper.getCommunityFilters(params.communityId),
@@ -54,13 +48,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
           excludedCategories?.split(",") ?? undefined,
           section ?? "",
           nsfw === "true" ? true : false,
-          deprecated === "true" ? true : false,
-          created_recent ?? "",
-          updated_recent ?? "",
-          created_after ?? "",
-          created_before ?? "",
-          updated_after ?? "",
-          updated_before ?? ""
+          deprecated === "true" ? true : false
         ),
       };
     } catch (error) {
@@ -88,12 +76,6 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
-      const created_recent = searchParams.get("created_recent");
-      const updated_recent = searchParams.get("updated_recent");
-      const created_after = searchParams.get("created_after");
-      const created_before = searchParams.get("created_before");
-      const updated_after = searchParams.get("updated_after");
-      const updated_before = searchParams.get("updated_before");
       return {
         community: await dapper.getCommunity(params.communityId),
         filters: await dapper.getCommunityFilters(params.communityId),
@@ -116,13 +98,7 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
           excludedCategories?.split(",") ?? undefined,
           section ?? "",
           nsfw === "true" ? true : false,
-          deprecated === "true" ? true : false,
-          created_recent ?? "",
-          updated_recent ?? "",
-          created_after ?? "",
-          created_before ?? "",
-          updated_after ?? "",
-          updated_before ?? ""
+          deprecated === "true" ? true : false
         ),
       };
     } catch (error) {
@@ -137,18 +113,18 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
   throw new Response("Community not found", { status: 404 });
 }
 
-export default function Community() {
+export default function Dependants() {
   const { community, filters, listing, listings } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
   return (
     <>
-      {community.background_image_url ? (
+      {community.hero_image_url ? (
         <div
           className={styles.backgroundImg}
           style={{
-            backgroundImage: `url(${community.background_image_url})`,
+            backgroundImage: `url(${community.hero_image_url})`,
           }}
         />
       ) : null}
@@ -170,7 +146,7 @@ export default function Community() {
         </CyberstormLink>
         Dependants
       </BreadCrumbs>
-      <header className="project-root__page-header">
+      <header className="nimbus-root__page-header">
         <div className={styles.root}>
           <div className={styles.header}>
             Mods that depend on{" "}
@@ -193,7 +169,7 @@ export default function Community() {
           </div>
         </div>
       </header>
-      <main className="project-root__main">
+      <main className="nimbus-root__main">
         <PackageSearch
           listings={listings}
           packageCategories={filters.package_categories}

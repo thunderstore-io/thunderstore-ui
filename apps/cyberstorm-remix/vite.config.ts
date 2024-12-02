@@ -25,8 +25,8 @@ export default defineConfig({
             index: true,
             id: "landing-page",
           });
+          route("/c/:communityId", "c/community.tsx");
           if (process.env.ENABLE_BROKEN_PAGES) {
-            route("/c/:communityId", "c/community.tsx");
             route(
               "/c/:communityId/p/:namespaceId/:packageId",
               "p/packageListing.tsx",

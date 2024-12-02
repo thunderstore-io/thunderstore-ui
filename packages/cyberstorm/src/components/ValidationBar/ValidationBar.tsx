@@ -86,10 +86,10 @@ function ValidationElement(props: {
   return !shouldValidate
     ? waitingElement
     : validation.status === "success"
-    ? successElement
-    : validation.status === "failure" && validation.message
-    ? failureElement(validation.message)
-    : failureElement("Internal error");
+      ? successElement
+      : validation.status === "failure" && validation.message
+        ? failureElement(validation.message)
+        : failureElement("Internal error");
 }
 
 /**

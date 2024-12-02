@@ -2,7 +2,8 @@ import { PropsWithChildren } from "react";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./CollapsibleMenu.module.css";
-import { Icon } from "@thunderstore/cyberstorm";
+import { NewIcon } from "@thunderstore/cyberstorm";
+import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 
 interface Props extends PropsWithChildren {
   headerTitle: string;
@@ -17,11 +18,16 @@ export const CollapsibleMenu = (props: Props) => {
 
   return (
     <details className={styles.root} open={defaultOpen}>
-      <summary className={styles.header}>
+      <summary
+        className={classnames(
+          "ts-button ts-variant--secondary ts-size--big ts-modifier--ghost",
+          styles.header
+        )}
+      >
         {headerTitle}
-        <Icon inline>
+        <NewIcon csMode="inline" noWrapper>
           <FontAwesomeIcon icon={faCaretDown} />
-        </Icon>
+        </NewIcon>
       </summary>
       {children}
     </details>

@@ -26,7 +26,7 @@ export const IconButtonSizesList = ["medium", "small", "xsmall"] as const;
 export type IconButtonSizes = "medium" | "small" | "xsmall";
 
 // Modifiers
-export const IconButtonModifiersList = ["disabled", "ghost", "dimmed"] as const;
+export const IconButtonModifiersList = ["disabled", "ghost"] as const;
 // There is an issue with Typescript (eslint) and prettier disagreeing if
 // the type should have parentheses
 // prettier-ignore

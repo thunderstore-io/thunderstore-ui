@@ -7,7 +7,7 @@ import {
   MetaFunction,
   Outlet,
   Scripts,
-  ScrollRestoration,
+  // ScrollRestoration,
   isRouteErrorResponse,
   useLoaderData,
   useLocation,
@@ -128,12 +128,12 @@ function Root() {
   const shouldShowAds = location.pathname.startsWith("/teams")
     ? false
     : location.pathname.startsWith("/settings")
-    ? false
-    : location.pathname.startsWith("/package/create")
-    ? false
-    : location.pathname.startsWith("/tools")
-    ? false
-    : true;
+      ? false
+      : location.pathname.startsWith("/package/create")
+        ? false
+        : location.pathname.startsWith("/tools")
+          ? false
+          : true;
 
   const isHydrated = useHydrated();
   const startsHydrated = useRef(isHydrated);
@@ -196,8 +196,8 @@ function Root() {
         >
           <LinkingProvider value={LinkLibrary}>
             <Toast.Provider toastDuration={10000}>
-              <RadixTooltip delayDuration={300}>
-                <div className="project-root">
+              <RadixTooltip delayDuration={80}>
+                <div className="nimbus-root">
                   {/* REMIX TODO: For whatever reason the Navigation seems to cause suspense boundary errors. Couldn't find a reason why */}
                   <Navigation
                     hydrationCheck={!startsHydrated.current && isHydrated}
@@ -209,12 +209,11 @@ function Root() {
                   ) : (
                     <MobileUserPopoverContent />
                   )}
-                  <section className="project-root__content">
-                    <div className="project-root__side-containers" />
-                    <div className="project-root__middle-container">
+                  <section className="nimbus-root__content">
+                    <div className="nimbus-root__outlet">
                       <Outlet />
                     </div>
-                    <div className="project-root__side-containers">
+                    <div className="nimbus-root__ads-container">
                       {shouldShowAds
                         ? adContainerIds.map((cid, k_i) => (
                             <AdContainer key={k_i} containerId={cid} />
@@ -228,7 +227,7 @@ function Root() {
             </Toast.Provider>
           </LinkingProvider>
         </SessionProvider>
-        <ScrollRestoration />
+        {/* <ScrollRestoration /> */}
         <Scripts />
         {shouldShowAds ? <AdsInit /> : null}
       </body>
@@ -269,29 +268,29 @@ export function ErrorBoundary() {
         <LinkingProvider value={LinkLibrary}>
           <Toast.Provider toastDuration={10000}>
             <RadixTooltip delayDuration={300}>
-              <div className="project-root">
+              <div className="nimbus-root">
                 {/* <Navigation user={getEmptyUser} /> */}
-                <section className="project-root__content">
-                  <div className="project-root__side-containers" />
-                  <div className="project-root__middle-container">
-                    <div className="project-error">
+                <section className="nimbus-root__content">
+                  <div className="nimbus-root__side-containers" />
+                  <div className="nimbus-root__middle-container">
+                    <div className="nimbus-error">
                       <div
-                        className="project-error__glitch"
+                        className="nimbus-error__glitch"
                         data-text={isResponseError ? error.status : 500}
                       >
                         <span>{isResponseError ? error.status : 500}</span>
                       </div>
-                      <div className="project-error__description">
+                      <div className="nimbus-error__description">
                         {isResponseError ? error.data : "Internal server error"}
                       </div>
                       {!isResponseError && (
-                        <div className="project-error__flavor">
+                        <div className="nimbus-error__flavor">
                           Beep boop. Server something error happens.
                         </div>
                       )}
                     </div>
                   </div>
-                  <div className="project-root__side-containers"></div>
+                  <div className="nimbus-root__side-containers"></div>
                 </section>
                 <Footer />
               </div>

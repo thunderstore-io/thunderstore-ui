@@ -7,13 +7,15 @@
 .top {
   display: flex;
   flex-direction: row-reverse;
+  gap: var(--gap-md);
   align-items: center;
   justify-content: space-between;
 }
 
 .packageCount {
-  color: var(--color-text--tertiary);
-  font-size: var(--font-size-body-lg);
+  width: max-content;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-body-md);
 }
 
 .order {
@@ -24,7 +26,7 @@
 }
 
 .sortByText {
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-body-lg);
   white-space: nowrap;
@@ -33,11 +35,7 @@
 .packages {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  gap: var(--gap-xl);
-}
-
-.packagesIsFiltersVisible {
-  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: var(--gap-sm);
 }
 
 .packageCardSkeleton {
@@ -64,6 +62,12 @@
   height: var(--space-36);
 }
 
+@media (width < 63.5rem) {
+  .packages {
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  }
+}
+
 @media (width <= 43.75rem) {
   .top {
     flex-direction: column-reverse;
@@ -78,5 +82,15 @@
 
   .sortByText {
     display: none;
+  }
+
+  .packages {
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  }
+}
+
+@media (width < 31rem) {
+  .packages {
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
   }
 }

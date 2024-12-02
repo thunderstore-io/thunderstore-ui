@@ -72,7 +72,6 @@ export { CommunityCardSkeleton } from "./components/CommunityCard/CommunityCardS
 export { range } from "./utils/utils";
 export { SettingItem } from "./components/SettingItem/SettingItem";
 export { ImageWithFallback } from "./components/ImageWithFallback/ImageWithFallback";
-export { CollapsibleText } from "./components/CollapsibleText/CollapsibleText";
 export { SkeletonBox } from "./components/SkeletonBox/SkeletonBox";
 export { isNode, isRecord, isStringArray } from "./utils/type_guards";
 
@@ -105,8 +104,8 @@ export { Menu } from "./newComponents/Menu/Menu";
 export { Modal } from "./newComponents/Modal/Modal";
 export { Heading } from "./newComponents/Heading/Heading";
 export { CardCommunity } from "./newComponents/Card/CardCommunity/CardCommunity";
+export { CardPackage } from "./newComponents/Card/CardPackage/CardPackage";
 export { Link as NewLink } from "./newComponents/Link/Link/Link";
-export { LinkButton } from "./newComponents/Link/LinkButton/LinkButton";
 export { Button as NewButton } from "./newComponents/Button/Button";
 export { BreadCrumbs as NewBreadCrumbs } from "./newComponents/BreadCrumbs/BreadCrumbs";
 export { TextInput as NewTextInput } from "./newComponents/TextInput/TextInput";
@@ -116,6 +115,8 @@ export {
 } from "./newComponents/Select/Select";
 export { Icon as NewIcon } from "./newComponents/Icon/Icon";
 export { Tag as NewTag } from "./newComponents/Tag/Tag";
+export { MetaItem as NewMetaItem } from "./newComponents/MetaItem/MetaItem";
+export { Pagination as NewPagination } from "./newComponents/Pagination/Pagination";
 export {
   DropDown as NewDropDown,
   DropDownItem as NewDropDownItem,

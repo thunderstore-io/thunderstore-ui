@@ -1,0 +1,36 @@
+@layer nimbus-layout {
+  .nimbus-noresult {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  .nimbus-noresult__ghostbounce {
+    animation: ghost-bounce 3s ease-in-out infinite;
+  }
+
+  .nimbus-noresult__info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nimbus-noresult__button {
+    width: fit-content;
+  }
+
+  @keyframes ghost-bounce {
+    0% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-5px);
+    }
+
+    100% {
+      transform: translateY(0);
+    }
+  }
+}

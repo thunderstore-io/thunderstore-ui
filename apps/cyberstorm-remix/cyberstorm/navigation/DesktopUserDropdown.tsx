@@ -2,7 +2,7 @@ import { faSignOut, faUsers, faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Navigation.module.css";
-import dropdownStyles from "../../../../packages/cyberstorm/src/newComponents/DropDown/DropDown.module.css";
+// import dropdownStyles from "../../../../packages/cyberstorm/src/newComponents/DropDown/DropDown.module.css";
 import {
   Avatar,
   NewDropDown,
@@ -37,10 +37,7 @@ export function DesktopUserDropdown(props: { user: CurrentUser }) {
         <NewLink
           primitiveType="cyberstormLink"
           linkId="Settings"
-          rootClasses={classnames(
-            dropdownStyles.dropdownItem,
-            styles.dropDownItem
-          )}
+          rootClasses={classnames("ts-dropdown__item", styles.dropDownItem)}
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
             <FontAwesomeIcon icon={faCog} />
@@ -52,10 +49,7 @@ export function DesktopUserDropdown(props: { user: CurrentUser }) {
         <NewLink
           primitiveType="cyberstormLink"
           linkId="Teams"
-          rootClasses={classnames(
-            dropdownStyles.dropdownItem,
-            styles.dropDownItem
-          )}
+          rootClasses={classnames("ts-dropdown__item", styles.dropDownItem)}
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
             <FontAwesomeIcon icon={faUsers} />
@@ -67,10 +61,7 @@ export function DesktopUserDropdown(props: { user: CurrentUser }) {
         <NewLink
           primitiveType="link"
           href="/logout"
-          rootClasses={classnames(
-            dropdownStyles.dropdownItem,
-            styles.dropDownItem
-          )}
+          rootClasses={classnames("ts-dropdown__item", styles.dropDownItem)}
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
             <FontAwesomeIcon icon={faSignOut} />

@@ -147,7 +147,17 @@
   }
 
   /* Make it clear that interactive elements are interactive */
-  :where(a[href], area, button, input, label[for], select, summary, textarea, [tabindex]:not([tabindex*="-"])) {
+  :where(
+      a[href],
+      area,
+      button,
+      input,
+      label[for],
+      select,
+      summary,
+      textarea,
+      [tabindex]:not([tabindex*="-"])
+    ) {
     cursor: pointer;
     touch-action: manipulation;
   }
@@ -166,7 +176,13 @@
   }
 
   /* Make sure users can't select button text */
-  :where(button, button[type], input[type="button"], input[type="submit"], input[type="reset"]),
+  :where(
+      button,
+      button[type],
+      input[type="button"],
+      input[type="submit"],
+      input[type="reset"]
+    ),
   :where(input[type="file"])::-webkit-file-upload-button,
   :where(input[type="file"])::file-selector-button {
     text-align: center;
@@ -176,8 +192,21 @@
   }
 
   /* Disabled cursor for disabled buttons */
-  :where(button, button[type], input[type="button"], input[type="submit"], input[type="reset"])[disabled] {
+  :where(
+      button,
+      button[type],
+      input[type="button"],
+      input[type="submit"],
+      input[type="reset"]
+    )[disabled] {
     cursor: not-allowed;
+  }
+
+  input[type="search"]::-webkit-search-decoration,
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-results-button,
+  input[type="search"]::-webkit-search-results-decoration {
+    appearance: none;
   }
 
   * > * {

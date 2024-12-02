@@ -5,6 +5,36 @@ const BASE_HEADERS = {
   "Content-Type": "application/json",
 };
 
+const MAX_NB_RETRY = 5;
+const RETRY_DELAY_MS = 200;
+
+async function fetchRetry(
+  input: RequestInfo | URL,
+  init?: RequestInit | undefined
+) {
+  let retryLeft = MAX_NB_RETRY;
+  let latestErr = null;
+  while (retryLeft > 0) {
+    try {
+      return await fetch(input, init);
+    } catch (err) {
+      latestErr = err;
+      await sleep(RETRY_DELAY_MS);
+    } finally {
+      retryLeft -= 1;
+    }
+  }
+  if (latestErr !== null) {
+    throw latestErr;
+  } else {
+    throw new Error(`Too many retries`);
+  }
+}
+
+function sleep(delay: number) {
+  return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
 export type apiFetchArgs = {
   config: RequestConfig;
   path: string;
@@ -19,7 +49,7 @@ export async function apiFetch2(args: apiFetchArgs) {
     : { apiHost: config.apiHost, csrfToken: undefined, sessionId: undefined };
   const url = getUrl(usedConfig, path, query);
 
-  const response = await fetch(url, {
+  const response = await fetchRetry(url, {
     ...(request ?? {}),
     headers: {
       ...BASE_HEADERS,

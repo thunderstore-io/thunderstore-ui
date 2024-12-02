@@ -1,0 +1,56 @@
+@layer theme-components {
+  .ts-pagination {
+    --pagination-gap: var(--gap-xs);
+  }
+
+  /* VARIANTS STATELESS */
+  .ts-pagination__item {
+    --pagination-item-height: var(--space-36);
+    --pagination-item-padding: var(--space-8) var(--space-12);
+    --pagination-item-font-weight: var(--font-weight-regular);
+    --pagination-item-border-radius: var(--radius-md);
+    --pagination-item-font-size: var(--font-size-body-lg);
+    --pagination-item-text-color: var(--pagination-item-text-color--default);
+    --pagination-item-background: var(--pagination-item-bg-color--default);
+  }
+
+  /* Only apply triggers to buttons */
+  button.ts-pagination__item {
+    &:hover {
+      --pagination-item-text-color: var(--pagination-item-text-color--hover);
+      --pagination-item-background: var(--pagination-item-bg-color--hover);
+    }
+
+    &:active {
+      --pagination-item-text-color: var(--pagination-item-text-color--active);
+      --pagination-item-background: var(--pagination-item-bg-color--active);
+    }
+
+    &.ts-pagination__item--selected {
+      --pagination-item-text-color: var(--pagination-item-text-color--current);
+      --pagination-item-background: var(--pagination-item-bg-color--current);
+
+      &:hover {
+        --pagination-item-text-color: var(--pagination-item-text-color--hover);
+        --pagination-item-background: var(--pagination-item-bg-color--hover);
+      }
+
+      &:active {
+        --pagination-item-text-color: var(--pagination-item-text-color--active);
+        --pagination-item-background: var(--pagination-item-bg-color--active);
+      }
+    }
+  }
+
+  /* TOKENS */
+  :root {
+    --pagination-item-bg-color--active: var(--color-surface-a6);
+    --pagination-item-bg-color--current: #623bce;
+    --pagination-item-bg-color--default: var(--color-surface-a7);
+    --pagination-item-bg-color--hover: var(--color-surface-a8);
+    --pagination-item-text-color--active: var(--color-text-primary);
+    --pagination-item-text-color--current: var(--color-text-primary);
+    --pagination-item-text-color--default: var(--color-text-secondary);
+    --pagination-item-text-color--hover: var(--color-text-primary);
+  }
+}

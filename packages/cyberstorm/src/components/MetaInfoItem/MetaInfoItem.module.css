@@ -14,5 +14,5 @@
 
 .label {
   flex-shrink: 0;
-  color: var(--color-text--accent);
+  color: var(--color-text-accent);
 }

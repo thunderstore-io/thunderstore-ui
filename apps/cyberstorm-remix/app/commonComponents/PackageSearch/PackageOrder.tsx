@@ -1,21 +1,20 @@
 import {
-  faClock,
+  faClockRotateLeft,
   faDownload,
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { faHandSparkles } from "@fortawesome/free-solid-svg-icons";
+import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dispatch, SetStateAction } from "react";
 
-import { Select } from "@thunderstore/cyberstorm";
+import { NewSelect } from "@thunderstore/cyberstorm";
 
 interface Props {
-  order: PackageOrderOptions;
-  setOrder: Dispatch<SetStateAction<PackageOrderOptions>>;
+  order: PackageOrderOptionsType;
+  setOrder: (val: PackageOrderOptionsType) => void;
 }
 
 export const PackageOrder = (props: Props) => (
-  <Select
+  <NewSelect
     options={selectOptions}
     value={props.order}
     onChange={props.setOrder}
@@ -29,17 +28,18 @@ export enum PackageOrderOptions {
   Rated = "top-rated",
   Updated = "last-updated",
 }
+export type PackageOrderOptionsType = `${PackageOrderOptions}`;
 
 const selectOptions = [
   {
     value: PackageOrderOptions.Updated,
     label: "Last updated",
-    leftIcon: <FontAwesomeIcon icon={faClock} />,
+    leftIcon: <FontAwesomeIcon icon={faClockRotateLeft} />,
   },
   {
     value: PackageOrderOptions.Created,
     label: "Newest",
-    leftIcon: <FontAwesomeIcon icon={faHandSparkles} />,
+    leftIcon: <FontAwesomeIcon icon={faSparkles} />,
   },
   {
     value: PackageOrderOptions.Downloaded,

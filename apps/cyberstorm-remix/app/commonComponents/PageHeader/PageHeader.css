@@ -1,0 +1,60 @@
+@layer nimbus-layout {
+  .nimbus-commoncomponents-page-header {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-32);
+    align-items: flex-start;
+    align-self: stretch;
+    padding: var(--space-24) 0;
+  }
+
+  .nimbus-commoncomponents-page-header__image {
+    flex: 0 0 6rem;
+  }
+
+  .nimbus-commoncomponents-page-header__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+
+    /* To ensure collapsibletext doesnt spill over */
+    min-width: 0;
+  }
+
+  .nimbus-commoncomponents-page-header__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: flex-start;
+    align-self: stretch;
+
+    > h1 {
+      --display-line-height: 1;
+    }
+  }
+
+  .nimbus-commoncomponents-page-header__meta {
+    display: flex;
+    flex-flow: row wrap;
+    gap: var(--space-32);
+  }
+
+  @media (width <= 48rem) {
+    .nimbus-commoncomponents-page-header {
+      gap: var(--space-16);
+      padding: var(--space-6) 0;
+    }
+
+    .nimbus-commoncomponents-page-header__info > h1 {
+      --display-font-size: 1.75rem;
+    }
+
+    .nimbus-commoncomponents-page-header__image {
+      flex: 0 0 5rem;
+    }
+
+    .nimbus-commoncomponents-page-header__meta {
+      gap: var(--space-16);
+    }
+  }
+}

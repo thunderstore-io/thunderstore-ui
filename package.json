@@ -34,7 +34,7 @@
     "eslint-plugin-react": "^7.36.1",
     "globals": "^15.10.0",
     "plop": "^4.0.1",
-    "prettier": "^3.3.3",
+    "prettier": "3.1.0",
     "stylelint": "^16.9.0",
     "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-standard": "^36.0.1",

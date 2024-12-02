@@ -35,12 +35,12 @@ export default function Community() {
       <BreadCrumbs>
         <CyberstormLink linkId="Settings">Settings</CyberstormLink>
       </BreadCrumbs>
-      <header className="project-root__page-header">
+      <header className="nimbus-root__page-header">
         <div className={styles.header}>
           <PageHeader title="Settings" />
         </div>
       </header>
-      <main className="project-root__main">
+      <main className="nimbus-root__main">
         <div className={styles.tabContent}>
           <div className={tabsStyles.root}>
             <div className={tabsStyles.buttons}>

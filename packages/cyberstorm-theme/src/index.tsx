@@ -11,6 +11,8 @@ import "./components/Icon/Icon.css";
 import "./components/BreadCrumbs/BreadCrumbs.css";
 import "./components/Select/Select.css";
 import "./components/Tag/Tag.css";
+import "./components/MetaItem/MetaItem.css";
 import "./components/Link/Link.css";
 import "./components/Image/Image.css";
 import "./components/AdContainer/AdContainer.css";
+import "./components/Pagination/Pagination.css";

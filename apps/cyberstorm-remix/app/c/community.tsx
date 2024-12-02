@@ -1,26 +1,21 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import {
-  BreadCrumbs,
-  Button,
-  CollapsibleText,
-  CyberstormLink,
-  ImageWithFallback,
-  MetaItem,
-  Title,
+  Image,
+  NewBreadCrumbs,
+  NewIcon,
+  NewLink,
 } from "@thunderstore/cyberstorm";
-import styles from "./CommunityCard.module.css";
-import { formatInteger } from "@thunderstore/cyberstorm/src/utils/utils";
+import "./Community.css";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBoxOpen,
-  faDownload,
-  faArrowUpRightFromSquare,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBook } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { ApiError } from "@thunderstore/thunderstore-api";
+import { PackageOrderOptions } from "~/commonComponents/PackageSearch/PackageOrder";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -34,7 +29,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     try {
       const dapper = await getDapper();
       const searchParams = new URL(request.url).searchParams;
-      const order = searchParams.get("order");
+      const ordering =
+        searchParams.get("ordering") ?? PackageOrderOptions.Updated;
       const page = searchParams.get("page");
       const search = searchParams.get("search");
       const includedCategories = searchParams.get("includedCategories");
@@ -42,34 +38,30 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
-      const created_recent = searchParams.get("created_recent");
-      const updated_recent = searchParams.get("updated_recent");
-      const created_after = searchParams.get("created_after");
-      const created_before = searchParams.get("created_before");
-      const updated_after = searchParams.get("updated_after");
-      const updated_before = searchParams.get("updated_before");
+      const community = await dapper.getCommunity(params.communityId);
+      const filters = await dapper.getCommunityFilters(params.communityId);
       return {
-        community: await dapper.getCommunity(params.communityId),
-        filters: await dapper.getCommunityFilters(params.communityId),
+        community: community,
+        filters: filters,
         listings: await dapper.getPackageListings(
           {
             kind: "community",
             communityId: params.communityId,
           },
-          order ?? "",
+          ordering ?? "",
           page === null ? undefined : Number(page),
           search ?? "",
           includedCategories?.split(",") ?? undefined,
           excludedCategories?.split(",") ?? undefined,
-          section ?? "",
+          section
+            ? section === "all"
+              ? ""
+              : section
+            : filters.sections && filters.sections[0]
+              ? filters.sections[0].uuid
+              : "",
           nsfw === "true" ? true : false,
-          deprecated === "true" ? true : false,
-          created_recent ?? "",
-          updated_recent ?? "",
-          created_after ?? "",
-          created_before ?? "",
-          updated_after ?? "",
-          updated_before ?? ""
+          deprecated === "true" ? true : false
         ),
       };
     } catch (error) {
@@ -89,7 +81,8 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
     try {
       const dapper = await getDapper(true);
       const searchParams = new URL(request.url).searchParams;
-      const order = searchParams.get("order");
+      const ordering =
+        searchParams.get("ordering") ?? PackageOrderOptions.Updated;
       const page = searchParams.get("page");
       const search = searchParams.get("search");
       const includedCategories = searchParams.get("includedCategories");
@@ -97,34 +90,30 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
       const section = searchParams.get("section");
       const nsfw = searchParams.get("nsfw");
       const deprecated = searchParams.get("deprecated");
-      const created_recent = searchParams.get("created_recent");
-      const updated_recent = searchParams.get("updated_recent");
-      const created_after = searchParams.get("created_after");
-      const created_before = searchParams.get("created_before");
-      const updated_after = searchParams.get("updated_after");
-      const updated_before = searchParams.get("updated_before");
+      const community = await dapper.getCommunity(params.communityId);
+      const filters = await dapper.getCommunityFilters(params.communityId);
       return {
-        community: await dapper.getCommunity(params.communityId),
-        filters: await dapper.getCommunityFilters(params.communityId),
+        community: community,
+        filters: filters,
         listings: await dapper.getPackageListings(
           {
             kind: "community",
             communityId: params.communityId,
           },
-          order ?? "",
+          ordering ?? "",
           page === null ? undefined : Number(page),
           search ?? "",
           includedCategories?.split(",") ?? undefined,
           excludedCategories?.split(",") ?? undefined,
-          section ?? "",
+          section
+            ? section === "all"
+              ? ""
+              : section
+            : filters.sections && filters.sections[0]
+              ? filters.sections[0].uuid
+              : "",
           nsfw === "true" ? true : false,
-          deprecated === "true" ? true : false,
-          created_recent ?? "",
-          updated_recent ?? "",
-          created_after ?? "",
-          created_before ?? "",
-          updated_after ?? "",
-          updated_before ?? ""
+          deprecated === "true" ? true : false
         ),
       };
     } catch (error) {
@@ -146,74 +135,89 @@ export default function Community() {
 
   return (
     <>
-      {community.background_image_url ? (
-        <div
-          className={styles.backgroundImg}
-          style={{
-            backgroundImage: `url(${community.background_image_url})`,
-          }}
-        />
-      ) : null}
-      <BreadCrumbs>
-        <CyberstormLink linkId="Communities">Communities</CyberstormLink>
-        <CyberstormLink linkId="Community" community={community.identifier}>
-          {community.name}
-        </CyberstormLink>
-      </BreadCrumbs>
-      <header className="project-root__page-header">
-        <div className={styles.root}>
-          <div className={styles.image}>
-            <ImageWithFallback
-              src={community.cover_image_url}
-              type="community"
-            />
-          </div>
-          <div className={styles.info}>
-            <Title text={community.name} />
-            {community.description ? (
-              <CollapsibleText text={community.description} maxLength={85} />
-            ) : null}
-            <div className={styles.meta}>
-              {[
-                <MetaItem
-                  key="meta-packages"
-                  label={`${formatInteger(
-                    community.total_package_count
-                  )} packages`}
-                  icon={<FontAwesomeIcon icon={faBoxOpen} />}
-                  colorScheme="accent"
-                  size="bold_large"
-                />,
-                <MetaItem
-                  key="meta-downloads"
-                  label={`${formatInteger(
-                    community.total_download_count
-                  )} downloads`}
-                  icon={<FontAwesomeIcon icon={faDownload} />}
-                  colorScheme="accent"
-                  size="bold_large"
-                />,
-                community.discord_url ? (
-                  <a key="meta-link" href="{community.discord_url}">
-                    <Button.Root colorScheme="transparentPrimary">
-                      <Button.ButtonIcon>
-                        <FontAwesomeIcon icon={faDiscord} />
-                      </Button.ButtonIcon>
-                      <Button.ButtonLabel>
-                        Join our community
-                      </Button.ButtonLabel>
-                      <Button.ButtonIcon>
-                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-                      </Button.ButtonIcon>
-                    </Button.Root>
-                  </a>
-                ) : null,
-              ]}
-            </div>
-          </div>
+      {community.hero_image_url ? (
+        <div className="nimbus-community__heroimg__wrapper">
+          <div
+            className="nimbus-community__heroimg"
+            style={{
+              backgroundImage: `url(${community.hero_image_url})`,
+            }}
+          />
         </div>
-      </header>
-      <main className="project-root__main">
+      ) : null}
+      <NewBreadCrumbs rootClasses="nimbus-root__breadcrumbs">
+        <NewLink
+          primitiveType="cyberstormLink"
+          linkId="Communities"
+          csVariant="cyber"
+        >
+          Communities
+        </NewLink>
+        {community.name}
+      </NewBreadCrumbs>
+      <PageHeader
+        image={
+          <Image
+            src={community.cover_image_url}
+            cardType="community"
+            intrinsicWidth={360}
+            intrinsicHeight={480}
+          />
+        }
+        heading={community.name}
+        headingLevel="1"
+        headingSize="3"
+        description={community.short_description}
+        meta={
+          <>
+            {community.wiki_url ? (
+              <NewLink
+                primitiveType="link"
+                href={community.wiki_url}
+                key="meta-wiki"
+                csVariant="cyber"
+                rootClasses="nimbus-community__metalink"
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faBook} />
+                </NewIcon>
+                <span className="nimbus-community__metaitem__text">
+                  <span className="nimbus-community__metaitem__text__prefix nimbus-hide-m">
+                    {community.name} modding{" "}
+                  </span>
+                  Wiki
+                </span>
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faArrowUpRight} />
+                </NewIcon>
+              </NewLink>
+            ) : null}
+            {community.discord_url ? (
+              <NewLink
+                primitiveType="link"
+                href={community.discord_url}
+                key="meta-discord"
+                csVariant="cyber"
+                rootClasses="nimbus-community__metalink"
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faDiscord} />
+                </NewIcon>
+                <span className="nimbus-community__metaitem__text">
+                  <span className="nimbus-community__metaitem__text__prefix nimbus-hide-m">
+                    {community.name} modding{" "}
+                  </span>
+                  Discord
+                </span>
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faArrowUpRight} />
+                </NewIcon>
+              </NewLink>
+            ) : null}
+          </>
+        }
+      />
+      <main className="nimbus-root__main">
         <PackageSearch
           listings={listings}
           packageCategories={filters.package_categories}

@@ -75,6 +75,12 @@ export {
   type TagModifiers,
   TagModifiersList,
 } from "./components/Tag/Tag";
+export {
+  type MetaItemVariants,
+  MetaItemVariantsList,
+  type MetaItemSizes,
+  MetaItemSizesList,
+} from "./components/MetaItem/MetaItem";
 export { type LinkVariants, LinkVariantsList } from "./components/Link/Link";
 export {
   type ImageVariants,

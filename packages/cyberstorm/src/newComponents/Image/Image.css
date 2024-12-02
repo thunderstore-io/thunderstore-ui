@@ -1,5 +1,6 @@
 @layer components {
   .ts-image {
+    width: inherit;
     object-fit: cover;
     aspect-ratio: var(--aspect-ratio);
   }
@@ -24,10 +25,13 @@
     justify-content: center;
     border-radius: var(--radius-md);
     overflow: hidden;
-    color: var(--image__wrapper-color);
-    background-color: var(--image__wrapper-bg-color);
     transition: var(--animation-duration-sm) ease-out;
     aspect-ratio: var(--aspect-ratio);
+  }
+
+  .ts-image__wrapper--noimage {
+    color: var(--image__wrapper-color);
+    background-color: var(--image__wrapper-bg-color);
   }
 
   .ts-image__content {

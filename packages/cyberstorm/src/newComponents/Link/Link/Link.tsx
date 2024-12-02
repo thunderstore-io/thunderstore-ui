@@ -25,7 +25,11 @@ export const Link = React.forwardRef<
     <Actionable
       {...forwardedProps}
       rootClasses={classnames(
-        csVariant === "primary" ? "ts-link ts-variant--primary" : "ts-link",
+        csVariant === "primary"
+          ? "ts-link ts-variant--primary"
+          : csVariant === "cyber"
+            ? "ts-link ts-variant--cyber"
+            : "ts-link",
         rootClasses
       )}
       ref={forwardedRef}

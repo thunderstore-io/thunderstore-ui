@@ -62,10 +62,10 @@ export default function Teams() {
       <BreadCrumbs>
         <CyberstormLink linkId="Teams">Teams</CyberstormLink>
       </BreadCrumbs>
-      <header className="project-root__page-header">
+      <header className="nimbus-root__page-header">
         <PageHeader title="Teams" />
       </header>
-      <main className="project-root__main">
+      <main className="nimbus-root__main">
         <SettingItem
           title="Teams"
           description="Manage your teams"

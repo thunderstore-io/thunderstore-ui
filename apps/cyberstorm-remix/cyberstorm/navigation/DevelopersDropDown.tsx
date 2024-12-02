@@ -1,6 +1,5 @@
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import styles from "./DevelopersDropDown.module.css";
 
 import {
@@ -10,6 +9,8 @@ import {
   NewButton,
   NewLink,
 } from "@thunderstore/cyberstorm";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 
 export function DevelopersDropDown() {
   return (
@@ -28,7 +29,7 @@ export function DevelopersDropDown() {
         <NewDropDownItem>
           <NewLink
             primitiveType="link"
-            rootClasses={styles.link}
+            rootClasses={classnames(styles.link, "ts-dropdown__item")}
             href="/api/docs"
           >
             API Docs
@@ -37,7 +38,7 @@ export function DevelopersDropDown() {
         <NewDropDownItem>
           <NewLink
             primitiveType="link"
-            rootClasses={styles.link}
+            rootClasses={classnames(styles.link, "ts-dropdown__item")}
             href="/package/create/docs/"
           >
             Package Format Docs
@@ -46,7 +47,7 @@ export function DevelopersDropDown() {
         <NewDropDownItem>
           <NewLink
             primitiveType="link"
-            rootClasses={styles.link}
+            rootClasses={classnames(styles.link, "ts-dropdown__item")}
             href="/tools/manifest-v1-validator/"
           >
             Manifest Validator
@@ -55,7 +56,7 @@ export function DevelopersDropDown() {
         <NewDropDownItem>
           <NewLink
             primitiveType="link"
-            rootClasses={styles.link}
+            rootClasses={classnames(styles.link, "ts-dropdown__item")}
             href="/tools/markdown-preview/"
           >
             Markdown Preview
@@ -64,12 +65,12 @@ export function DevelopersDropDown() {
         <NewDropDownItem rootClasses={styles.focus}>
           <NewLink
             primitiveType="link"
-            rootClasses={styles.externalLink}
+            rootClasses={classnames(styles.externalLink, "ts-dropdown__item")}
             href="https://github.com/thunderstore-io"
           >
             Github
             <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+              <FontAwesomeIcon icon={faArrowUpRight} />
             </NewIcon>
           </NewLink>
         </NewDropDownItem>

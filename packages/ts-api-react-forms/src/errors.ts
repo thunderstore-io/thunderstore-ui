@@ -14,7 +14,7 @@ export function getErrorFormKey<T extends ZodObject<Z>, Z extends ZodRawShape>(
 
 export function handleFormApiErrors<
   Schema extends ZodObject<Z>,
-  Z extends ZodRawShape
+  Z extends ZodRawShape,
 >(
   error: Error | ApiError | unknown,
   schema: Schema,

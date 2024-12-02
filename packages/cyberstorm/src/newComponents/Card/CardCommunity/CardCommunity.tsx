@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Community } from "@thunderstore/dapper/types";
 
 import { numberWithSpaces, formatInteger } from "../../../utils/utils";
-import { NewLink, NewIcon, Image, NewTag } from "../../..";
+import { NewLink, NewIcon, Image, NewTag, NewMetaItem } from "../../..";
 import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
 import "./CardCommunity.css";
 
@@ -54,6 +54,8 @@ export function CardCommunity(props: Props) {
           src={community.cover_image_url}
           cardType="community"
           rootClasses="ts-cardcommunity__imagewrapper"
+          intrinsicWidth={360}
+          intrinsicHeight={480}
         />
       </NewLink>
       <NewLink
@@ -70,24 +72,24 @@ export function CardCommunity(props: Props) {
             community.total_package_count
           )} Packages`}
         >
-          <div className="ts-cardcommunity__metaitem">
+          <NewMetaItem csSize="12">
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faBoxOpen} />
             </NewIcon>
             {formatInteger(community.total_package_count)}
-          </div>
+          </NewMetaItem>
         </TooltipWrapper>
         <TooltipWrapper
           tooltipText={`${numberWithSpaces(
             community.total_download_count
           )} Downloads`}
         >
-          <div className="ts-cardcommunity__metaitem">
+          <NewMetaItem csSize="12">
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faDownload} />
             </NewIcon>
             {formatInteger(community.total_download_count)}
-          </div>
+          </NewMetaItem>
         </TooltipWrapper>
       </div>
     </div>

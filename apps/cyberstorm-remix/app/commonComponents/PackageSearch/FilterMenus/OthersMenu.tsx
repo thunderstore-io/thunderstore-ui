@@ -1,24 +1,23 @@
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faSquare, faSquareCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Checkbox from "@radix-ui/react-checkbox";
-import { Dispatch, SetStateAction } from "react";
 
 import styles from "./FilterMenu.module.css";
-import { Icon } from "@thunderstore/cyberstorm";
+import { NewIcon } from "@thunderstore/cyberstorm";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 
 interface Props {
   deprecated: boolean;
-  setDeprecated: Dispatch<SetStateAction<boolean>>;
+  setDeprecated: (v: boolean) => void;
   nsfw: boolean;
-  setNsfw: Dispatch<SetStateAction<boolean>>;
+  setNsfw: (v: boolean) => void;
 }
 
 /**
  * Allow filtering packages by other attributes on PackageSearch.
  */
 export const OthersMenu = (props: Props) => {
-  const filters: [boolean, Dispatch<SetStateAction<boolean>>, string][] = [
+  const filters: [boolean, (v: boolean) => void, string][] = [
     [props.nsfw, props.setNsfw, "NSFW"],
     [props.deprecated, props.setDeprecated, "Deprecated"],
   ];
@@ -30,7 +29,7 @@ export const OthersMenu = (props: Props) => {
           <label
             className={classnames(
               styles.label,
-              checked ? styles.include : null
+              checked ? styles.include : styles.off
             )}
           >
             <Checkbox.Root
@@ -38,11 +37,9 @@ export const OthersMenu = (props: Props) => {
               onCheckedChange={() => setChecked(!checked)}
               className={styles.checkbox}
             >
-              <Checkbox.Indicator>
-                <Icon>
-                  <FontAwesomeIcon icon={faCheck} className={styles.icon} />
-                </Icon>
-              </Checkbox.Indicator>
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={checked ? faSquareCheck : faSquare} />
+              </NewIcon>
             </Checkbox.Root>
             {label}
           </label>
