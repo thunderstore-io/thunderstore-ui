@@ -18,10 +18,14 @@
     font-weight: var(--button-font-weight);
     font-size: var(--button-font-size);
     line-height: var(--button-line-height);
+    white-space: nowrap;
 
     text-align: center;
     text-decoration: none;
     background-color: var(--button-background-color);
+    transition: var(--button-transition);
     user-select: none;
+    padding-block: var(--button-padding-block);
+    padding-inline: var(--button-padding-inline);
   }
 }

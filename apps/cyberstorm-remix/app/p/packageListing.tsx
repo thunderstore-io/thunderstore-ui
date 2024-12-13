@@ -23,7 +23,6 @@ import { ApiError } from "@thunderstore/thunderstore-api";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import {
   faCog,
-  faArrowUpRightFromSquare,
   faUsers,
   faHandHoldingHeart,
   faDownload,
@@ -50,6 +49,7 @@ import {
   PackageLikeAction,
 } from "@thunderstore/cyberstorm-forms";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -154,35 +154,35 @@ export default function Community() {
     }
   }
 
-  // Header helpers
-  const packageDetailsMeta = [
-    <CyberstormLink
-      linkId="Team"
-      key="team"
-      community={listing.community_identifier}
-      team={listing.namespace}
-    >
-      <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
-        <Button.ButtonIcon>
-          <FontAwesomeIcon icon={faUsers} />
-        </Button.ButtonIcon>
-        <Button.ButtonLabel>{listing.namespace}</Button.ButtonLabel>
-      </Button.Root>
-    </CyberstormLink>,
-  ];
+  // // Header helpers
+  // const packageDetailsMeta = [
+  //   <CyberstormLink
+  //     linkId="Team"
+  //     key="team"
+  //     community={listing.community_identifier}
+  //     team={listing.namespace}
+  //   >
+  //     <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
+  //       <Button.ButtonIcon>
+  //         <FontAwesomeIcon icon={faUsers} />
+  //       </Button.ButtonIcon>
+  //       <Button.ButtonLabel>{listing.namespace}</Button.ButtonLabel>
+  //     </Button.Root>
+  //   </CyberstormLink>,
+  // ];
 
-  if (listing.website_url) {
-    packageDetailsMeta.push(
-      <a key="website" href={listing.website_url}>
-        <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
-          <Button.ButtonLabel>{listing.website_url}</Button.ButtonLabel>
-          <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-          </Button.ButtonIcon>
-        </Button.Root>
-      </a>
-    );
-  }
+  // if (listing.website_url) {
+  //   packageDetailsMeta.push(
+  //     <a key="website" href={listing.website_url}>
+  //       <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
+  //         <Button.ButtonLabel>{listing.website_url}</Button.ButtonLabel>
+  //         <Button.ButtonIcon>
+  //           <FontAwesomeIcon icon={faArrowUpRight} />
+  //         </Button.ButtonIcon>
+  //       </Button.Root>
+  //     </a>
+  //   );
+  // }
 
   // Sidebar helpers
   const mappedPackageTagList = listing.categories.map((category) => {
@@ -199,12 +199,12 @@ export default function Community() {
   const currentTab = location.pathname.endsWith("/changelog")
     ? "changelog"
     : location.pathname.endsWith("/versions")
-    ? "versions"
-    : location.pathname.endsWith("/wiki")
-    ? "wiki"
-    : location.pathname.endsWith("/source")
-    ? "source"
-    : "details";
+      ? "versions"
+      : location.pathname.endsWith("/wiki")
+        ? "wiki"
+        : location.pathname.endsWith("/source")
+          ? "source"
+          : "details";
 
   return (
     <>
@@ -218,19 +218,58 @@ export default function Community() {
         </CyberstormLink>
         {listing.name}
       </BreadCrumbs>
-      <header className="project-root__page-header">
+      <header className="nimbus-root__page-header">
         <div className={headerStyles.packageInfo}>
           <PageHeader
-            title={listing.name}
+            heading={listing.name}
+            headingLevel="1"
+            headingSize="3"
             image={
               <img
                 className={headerStyles.modImage}
                 alt=""
                 src={listing.icon_url}
+                // TODO: Add intrinsic width and height
               />
             }
             description={listing.description}
-            meta={packageDetailsMeta}
+            meta={
+              <>
+                <CyberstormLink
+                  linkId="Team"
+                  key="team"
+                  community={listing.community_identifier}
+                  team={listing.namespace}
+                >
+                  <Button.Root
+                    plain
+                    colorScheme="transparentPrimary"
+                    paddingSize="small"
+                  >
+                    <Button.ButtonIcon>
+                      <FontAwesomeIcon icon={faUsers} />
+                    </Button.ButtonIcon>
+                    <Button.ButtonLabel>{listing.namespace}</Button.ButtonLabel>
+                  </Button.Root>
+                </CyberstormLink>
+                {listing.website_url ? (
+                  <a key="website" href={listing.website_url}>
+                    <Button.Root
+                      plain
+                      colorScheme="transparentPrimary"
+                      paddingSize="small"
+                    >
+                      <Button.ButtonLabel>
+                        {listing.website_url}
+                      </Button.ButtonLabel>
+                      <Button.ButtonIcon>
+                        <FontAwesomeIcon icon={faArrowUpRight} />
+                      </Button.ButtonIcon>
+                    </Button.Root>
+                  </a>
+                ) : null}
+              </>
+            }
           />
           <div className={headerStyles.headerActions}>
             <a
@@ -298,7 +337,7 @@ export default function Community() {
           </div>
         </div>
       </header>
-      <main className="project-root__main">
+      <main className="nimbus-root__main">
         <div className={styles.packageContainer}>
           <div className={tabsStyles.root}>
             <div className={tabsStyles.buttons}>

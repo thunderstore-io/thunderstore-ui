@@ -18,10 +18,10 @@ export default function PackageFormatDocs() {
           Package Format Docs
         </CyberstormLink>
       </BreadCrumbs>
-      <header className="project-root__page-header">
+      <header className="nimbus-root__page-header">
         <PageHeader title="Package Format Docs" />
       </header>
-      <main className="project-root__main">
+      <main className="nimbus-root__main">
         <div className={styles.root}>
           <p>
             A valid package is a zip file that contains the following files:

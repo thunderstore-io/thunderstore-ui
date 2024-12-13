@@ -5,6 +5,8 @@ import { classnames, componentClasses } from "../../utils/utils";
 import {
   ActionableButtonProps,
   Actionable,
+  ActionableCyberstormLinkProps,
+  ActionableLinkProps,
 } from "../../primitiveComponents/Actionable/Actionable";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,78 +20,97 @@ import {
   IconButtonSizes,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
-interface ButtonProps extends Omit<ActionableButtonProps, "primitiveType"> {
+interface IButton {
   csVariant?: ButtonVariants;
   csSize?: ButtonSizes;
   csModifiers?: ButtonModifiers[];
 }
 
-interface IconButtonProps
-  extends Omit<ActionableButtonProps, "primitiveType" | "children"> {
+interface IIconButton {
   csVariant?: IconButtonVariants;
   csSize?: IconButtonSizes;
   csModifiers?: IconButtonModifiers[];
   icon: IconProp;
 }
 
+interface ButtonButton extends IButton, ActionableButtonProps {}
+interface ButtonLinkButton extends IButton, ActionableLinkProps {}
+interface ButtonCyberstormLinkButton
+  extends IButton,
+    ActionableCyberstormLinkProps {}
+
+interface IconButtonButton extends IIconButton, ActionableButtonProps {}
+interface IconButtonLinkButton extends IIconButton, ActionableLinkProps {}
+interface IconButtonCyberstormLinkButton
+  extends IIconButton,
+    ActionableCyberstormLinkProps {}
+
 export type ButtonComponentProps =
-  | ({ icon?: false } & ButtonProps)
-  | ({ icon: IconProp } & IconButtonProps);
+  | (Omit<ButtonButton, "primitiveType"> & {
+      icon?: false;
+      primitiveType?: "button";
+    })
+  | (ButtonLinkButton & { icon?: false; primitiveType: "link" })
+  | (ButtonCyberstormLinkButton & {
+      icon?: false;
+      primitiveType: "cyberstormLink";
+    })
+  | (Omit<IconButtonButton, "primitiveType"> & {
+      icon: IconProp;
+      primitiveType?: "button";
+    })
+  | (IconButtonLinkButton & { icon: IconProp; primitiveType: "link" })
+  | (IconButtonCyberstormLinkButton & {
+      icon: IconProp;
+      primitiveType: "cyberstormLink";
+    });
 
 // TODO: Add style support for disabled
-export const Button = React.forwardRef<HTMLButtonElement, ButtonComponentProps>(
-  (props: ButtonComponentProps, forwardedRef) => {
-    const { rootClasses, icon, ...forwardedProps } = props;
+export const Button = React.forwardRef<
+  HTMLButtonElement | HTMLAnchorElement,
+  ButtonComponentProps
+>((props: ButtonComponentProps, forwardedRef) => {
+  const {
+    children,
+    rootClasses,
+    csVariant = "primary",
+    csSize = "medium",
+    csModifiers,
+    icon,
+    ...forwardedProps
+  } = props;
 
-    if (icon) {
-      const {
-        csVariant = "primary",
-        csSize = "medium",
-        csModifiers,
-        ...fProps
-      } = forwardedProps as IconButtonProps;
-
-      return (
-        <Actionable
-          primitiveType="button"
-          {...fProps}
-          rootClasses={classnames(
-            "ts-iconbutton",
-            ...componentClasses(csVariant, csSize, csModifiers),
-            rootClasses
-          )}
-          ref={forwardedRef}
-        >
-          <NewIcon csMode="inline" noWrapper rootClasses="ts-iconbutton__icon">
-            <FontAwesomeIcon icon={icon} />
-          </NewIcon>
-        </Actionable>
-      );
-    }
-
-    const {
-      children,
-      csVariant = "primary",
-      csSize = "medium",
-      csModifiers,
-      ...fProps
-    } = forwardedProps as ButtonProps;
-
+  if (icon) {
     return (
       <Actionable
-        primitiveType="button"
-        {...fProps}
+        {...forwardedProps}
         rootClasses={classnames(
-          "ts-button",
+          "ts-iconbutton",
           ...componentClasses(csVariant, csSize, csModifiers),
           rootClasses
         )}
         ref={forwardedRef}
       >
-        {children}
+        <NewIcon csMode="inline" noWrapper rootClasses="ts-iconbutton__icon">
+          <FontAwesomeIcon icon={icon} />
+        </NewIcon>
       </Actionable>
     );
   }
-);
+
+  return (
+    <Actionable
+      {...forwardedProps}
+      rootClasses={classnames(
+        "ts-button",
+        ...componentClasses(csVariant, csSize, csModifiers),
+        rootClasses
+      )}
+      ref={forwardedRef}
+    >
+      {children}
+    </Actionable>
+  );
+});
 
 Button.displayName = "Button";

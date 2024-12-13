@@ -20,8 +20,8 @@ export type TagVariants =
   | "purple";
 
 // Sizes
-export const TagSizesList = ["medium", "small"] as const;
-export type TagSizes = "medium" | "small";
+export const TagSizesList = ["medium", "small", "xsmall"] as const;
+export type TagSizes = "medium" | "small" | "xsmall";
 
 // Modifiers
 export const TagModifiersList = ["dark", "hoverable"] as const;

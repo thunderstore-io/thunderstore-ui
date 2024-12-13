@@ -14,7 +14,7 @@
 }
 
 .description {
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-body-lg);
   line-height: var(--line-height--m);
@@ -34,7 +34,7 @@
 
 .preferredVersion {
   padding-top: var(--space-6);
-  color: var(--color-text--accent);
+  color: var(--color-text-accent);
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-body-md);
   line-height: var(--line-height--s);

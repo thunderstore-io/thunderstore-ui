@@ -1,5 +1,6 @@
-@layer utils, components, colors, theme, theme-components, project-layout, project-overrides;
+@layer utils, components, colors, theme, theme-components, nimbus-layout, nimbus-overrides;
 
 @import "layout.css";
 @import "overrides.css";
 @import "error.css";
+@import "emptyGhost.css";

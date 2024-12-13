@@ -60,10 +60,10 @@ export default function MarkdownPreview() {
           Markdown Preview
         </CyberstormLink>
       </BreadCrumbs>
-      <header className="project-root__page-header">
+      <header className="nimbus-root__page-header">
         <PageHeader title="Markdown Preview" />
       </header>
-      <main className="project-root__main">
+      <main className="nimbus-root__main">
         <div className={styles.root}>
           <SettingItem
             title="Markdown input"

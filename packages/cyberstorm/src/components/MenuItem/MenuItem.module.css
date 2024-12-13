@@ -10,7 +10,7 @@
   cursor: pointer;
 
   --text-color: var(--color-text--default);
-  --icon-color: var(--color-text--accent);
+  --icon-color: var(--color-text-accent);
 }
 
 .root:hover {

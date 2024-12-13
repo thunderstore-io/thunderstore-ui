@@ -18,6 +18,7 @@
     flex-direction: row;
     align-items: center;
     width: var(--textinput-width);
+    height: var(--textinput-height);
     padding: var(--textinput-padding);
     border: var(--textinput-border);
     border-color: var(--textinput-border-color);
@@ -40,14 +41,17 @@
   .ts-textinput__lefticon {
     position: var(--ts-textinput__lefticon-position);
     margin: var(--ts-textinput__lefticon-margin);
-    color: var(--ts-textinput__lefticon-color);
+
+    --icon-color: var(--ts-textinput__lefticon-color);
+
     pointer-events: none;
   }
 
   .ts-textinput__righticon {
     position: var(--ts-textinput__righticon-position);
     padding: var(--ts-textinput__righticon-padding);
-    color: var(--ts-textinput__righticon-color);
+
+    --icon-color: var(--ts-textinput__righticon-color);
   }
 
   .ts-textinput__clearvaluebutton {

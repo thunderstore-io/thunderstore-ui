@@ -59,4 +59,4 @@ const getIcon = (type: Props["type"] = "community") =>
   ({
     community: faGamepad,
     package: faBan,
-  }[type]);
+  })[type];

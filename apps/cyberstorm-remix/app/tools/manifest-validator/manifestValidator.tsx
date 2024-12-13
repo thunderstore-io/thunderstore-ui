@@ -75,10 +75,10 @@ export default function ManifestValidator() {
           Manifest Validator
         </CyberstormLink>
       </BreadCrumbs>
-      <header className="project-root__page-header">
+      <header className="nimbus-root__page-header">
         <PageHeader title="Manifest Validator" />
       </header>
-      <main className="project-root__main">
+      <main className="nimbus-root__main">
         <SettingItem
           title="Manifest Validator"
           description="Select a team to validate a package"

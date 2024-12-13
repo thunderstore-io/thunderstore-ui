@@ -41,13 +41,7 @@ export async function getPackageListings(
   excludedCategories: string[] = [],
   section = "",
   nsfw = false,
-  deprecated = false,
-  created_recent = "",
-  updated_recent = "",
-  created_after = "",
-  created_before = "",
-  updated_after = "",
-  updated_before = ""
+  deprecated = false
 ) {
   const options: PackageListingQueryParams = {
     ordering,
@@ -58,12 +52,6 @@ export async function getPackageListings(
     section,
     nsfw,
     deprecated,
-    created_recent,
-    updated_recent,
-    created_after,
-    created_before,
-    updated_after,
-    updated_before,
   };
   let data;
 

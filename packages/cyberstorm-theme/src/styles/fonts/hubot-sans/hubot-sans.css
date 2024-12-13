@@ -1,0 +1,81 @@
+@layer utils {
+  @font-face {
+    font-weight: 400;
+    font-family: Hubot-Sans;
+    font-style: normal;
+    src: url("HubotSans-Regular.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 500;
+    font-family: Hubot-Sans;
+    font-style: normal;
+    src: url("HubotSans-Medium.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 600;
+    font-family: Hubot-Sans;
+    font-style: normal;
+    src: url("HubotSans-SemiBold.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 700;
+    font-family: Hubot-Sans;
+    font-style: normal;
+    src: url("HubotSans-Bold.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 800;
+    font-family: Hubot-Sans;
+    font-style: normal;
+    src: url("HubotSans-ExtraBold.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 400;
+    font-family: Hubot-Sans;
+    font-style: italic;
+    src: url("HubotSans-Italic.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 500;
+    font-family: Hubot-Sans;
+    font-style: italic;
+    src: url("HubotSans-MediumItalic.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 600;
+    font-family: Hubot-Sans;
+    font-style: italic;
+    src: url("HubotSans-SemiBoldItalic.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 700;
+    font-family: Hubot-Sans;
+    font-style: italic;
+    src: url("HubotSans-BoldItalic.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 800;
+    font-family: Hubot-Sans;
+    font-style: italic;
+    src: url("HubotSans-ExtraBoldItalic.woff2") format("woff2");
+    font-display: swap;
+  }
+}

@@ -165,21 +165,21 @@
   }
 
   /* MODIFIERS */
-  .ts-iconbutton:where(:not(.ts-variant--special)):where(.ts-modifier--ghost):where(:not(:hover, :active)) {
+  .ts-iconbutton:where(:not(.ts-variant--special)):where(
+      .ts-modifier--ghost
+    ):where(:not(:hover, :active)) {
     --iconbutton-background-color: transparent;
   }
 
-  .ts-iconbutton:where(.ts-variant--special):where(.ts-modifier--ghost):where(:not(:hover, :active)) {
+  .ts-iconbutton:where(.ts-variant--special):where(.ts-modifier--ghost):where(
+      :not(:hover, :active)
+    ) {
     background: transparent;
   }
 
   .ts-iconbutton[disabled] {
     opacity: 0.5;
     pointer-events: none;
-  }
-
-  .ts-button:where(.ts-modifier--dimmed) {
-    filter: brightness(85%);
   }
 
   /* TOKENS */

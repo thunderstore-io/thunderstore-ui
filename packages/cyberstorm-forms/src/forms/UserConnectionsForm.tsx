@@ -89,8 +89,8 @@ export function UserConnectionsForm(props: {
             p.name === "discord"
               ? props.connectionLinks.discord
               : p.name === "github"
-              ? props.connectionLinks.github
-              : props.connectionLinks.overwolf
+                ? props.connectionLinks.github
+                : props.connectionLinks.overwolf
           }
           disconnectFunction={onSubmit}
         />
@@ -103,7 +103,7 @@ UserConnectionsForm.displayName = "UserConnectionsForm";
 
 interface ConnectionProps {
   // eslint-disable-next-line prettier/prettier
-  provider: typeof PROVIDERS[number];
+  provider: (typeof PROVIDERS)[number];
   connection?: OAuthConnection;
   connectionLink: string;
   disconnectFunction: (
@@ -130,8 +130,8 @@ function Connection(props: ConnectionProps) {
             {provider.name === "discord"
               ? "Discord"
               : provider.name === "github"
-              ? "Github"
-              : "Overwolf"}
+                ? "Github"
+                : "Overwolf"}
           </div>
         </div>
         <div className={styles.rightSection}>

@@ -7,7 +7,7 @@ import {
 import { classnames, componentClasses } from "../../utils/utils";
 import { Frame } from "../../primitiveComponents/Frame/Frame";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { Actionable } from "../../primitiveComponents/Actionable/Actionable";
 import { NewIcon } from "../..";
 import {
@@ -92,7 +92,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
             aria-label="Clear search input"
           >
             <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faXmark} />
+              <FontAwesomeIcon icon={faXmarkLarge} />
             </NewIcon>
           </Actionable>
         ) : null}

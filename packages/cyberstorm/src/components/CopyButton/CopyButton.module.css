@@ -1,6 +1,6 @@
 .copy {
   all: unset;
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
 }
 
 .root:hover .copy {

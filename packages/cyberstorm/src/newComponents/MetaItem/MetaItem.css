@@ -1,0 +1,17 @@
+@layer components {
+  .ts-metaitem {
+    display: inline-flex;
+    gap: var(--metaitem-gap);
+    align-items: center;
+    color: var(--metaitem-color);
+    font-weight: var(--metaitem-font-weight);
+    font-size: var(--metaitem-font-size);
+
+    > svg {
+      width: var(--metaitem-icon-width);
+      height: var(--metaitem-icon-height);
+
+      --icon-color: var(--metaitem-icon-color);
+    }
+  }
+}

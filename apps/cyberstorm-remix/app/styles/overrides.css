@@ -1,5 +1,23 @@
-@layer project-overrides {
+@layer nimbus-overrides {
   :root {
-    --project-not-used-token: black;
+    --nimbus-not-used-token: black;
+  }
+
+  @media (width <= 63.5rem) {
+    .nimbus-hide-l {
+      display: none;
+    }
+  }
+
+  @media (width <= 40rem) {
+    .nimbus-hide-m {
+      display: none;
+    }
+  }
+
+  @media (width <= 48rem) {
+    .nimbus-hide-s {
+      display: none;
+    }
   }
 }

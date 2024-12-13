@@ -2,13 +2,13 @@
   .ts-textinput {
     --textinput-width: 100%;
     --textinput-padding: var(--space-8) var(--space-10);
-    --textinput-border: var(--border-width--2) solid
+    --textinput-border: var(--border-width--px) solid
       var(--textinput-border-color);
     --textinput-border-radius: var(--radius-md);
     --textinput-transition: ease-out var(--animation-duration-xs);
-    --textinput-border-color: transparent;
-    --textinput-text-color: var(--color-text-primary);
-    --textinput-background-color: var(--color-surface-a5);
+    --textinput-border-color: var(--input-border-color--default);
+    --textinput-text-color: var(--input-text-color--default);
+    --textinput-background-color: var(--input-bg-color--default);
   }
 
   .ts-textinput__wrapper {
@@ -19,18 +19,18 @@
   }
 
   .ts-textinput[value] {
-    --textinput-text-color: var(--color-text-secondary);
+    --textinput-text-color: var(--input-text-color--hover);
   }
 
   .ts-textinput:where(.ts-size--default) {
-    --textinput-height: var(--space-44);
+    --textinput-height: var(--input-md-height);
     --textinput-padding: var(--space-10)
       calc(var(--space-16) + var(--right-padding-bonus, 0px)) var(--space-10)
       calc(var(--space-16) + var(--left-padding-bonus, 0px));
   }
 
   .ts-textinput:where(.ts-size--small) {
-    --textinput-height: var(--space-36);
+    --textinput-height: var(--input-sm-height);
     --textinput-padding: var(--space-8)
       calc(var(--space-16) + var(--right-padding-bonus, 0px)) var(--space-10)
       calc(var(--space-16) + var(--left-padding-bonus, 0px));
@@ -45,30 +45,32 @@
   }
 
   .ts-textinput:hover {
-    --textinput-background-color: var(--color-surface-a6);
-    --textinput-border-color: var(--color-surface-a10);
+    --textinput-background-color: var(--input-bg-color--hover);
+    --textinput-border-color: var(--input-border-color--hover);
   }
 
   .ts-textinput:focus-within {
-    --textinput-text-color: var(--color-text-primary);
-    --textinput-background-color: var(--color-black);
-    --textinput-border-color: var(--color-cyber-green-7);
+    --textinput-text-color: var(--input-text-color--focus);
+    --textinput-background-color: var(--input-bg-color--focus);
+    --textinput-border-color: var(--input-border-color--focus);
   }
 
-  .ts-textinput:has(+ .ts-textinput__clearvaluebutton:hover):not(:focus-within) {
-    --input-background-color: var(--color-surface-a6);
-    --border-color: var(--color-surface-a10);
+  .ts-textinput:has(+ .ts-textinput__clearvaluebutton:hover):not(
+      :focus-within
+    ) {
+    --input-background-color: var(--color-surface-a5);
+    --border-color: var(--input-border-color--hover);
   }
 
   .ts-textinput::placeholder {
-    --textinput__placeholder-color: var(--color-text-tertiary);
+    --textinput__placeholder-color: var(--input-placeholder-color);
     --textinput__placeholder-opacity: 1;
   }
 
   .ts-textinput__lefticon {
     --ts-textinput__lefticon-position: absolute;
     --ts-textinput__lefticon-margin: var(--space-10) var(--space-16);
-    --ts-textinput__lefticon-color: var(--color-text-tertiary);
+    --ts-textinput__lefticon-color: var(--input-icon-color--default);
     --ts-textinput__lefticon-pointer-events: none;
   }
 
@@ -86,5 +88,23 @@
 
   .ts-textinput__clearvaluebutton:hover {
     --ts-textinput__clearvaluebutton-opacity: 1;
+  }
+
+  :root {
+    --input-bg-color--default: var(--color-surface-a3);
+    --input-bg-color--focus: var(--color-surface-1);
+    --input-bg-color--hover: var(--color-surface-a5);
+    --input-border-color--default: var(--color-surface-a8);
+    --input-border-color--focus: var(--color-cyber-green-7);
+    --input-border-color--hover: var(--color-surface-a10);
+    --input-icon-color--default: var(--color-text-tertiary);
+    --input-placeholder-color: var(--color-text-tertiary);
+    --input-text-color--default: var(--color-text-secondary);
+    --input-text-color--focus: var(--color-text-primary);
+    --input-text-color--hover: var(--color-text-secondary);
+    --input-md-border-radius: var(--radius-md);
+    --input-md-height: 2.75rem;
+    --input-sm-border-radius: var(--radius-md);
+    --input-sm-height: 2.25rem;
   }
 }

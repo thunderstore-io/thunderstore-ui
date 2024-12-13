@@ -4,6 +4,7 @@
     gap: var(--tag-gap);
     align-items: center;
     justify-content: center;
+    height: var(--tag-height);
     border-radius: var(--tag-border-radius);
     color: var(--tag-color);
     font-weight: var(--tag-font-weight);

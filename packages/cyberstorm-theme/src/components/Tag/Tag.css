@@ -6,20 +6,31 @@
   }
 
   /* SIZES */
-  .ts-tag:where(.ts-size--small) {
-    --tag-gap: var(--gap-xxs);
+  .ts-tag:where(.ts-size--medium) {
+    --tag-gap: var(--tag-md-gap);
     --tag-padding-block: var(--tag-md-padding-block);
     --tag-padding-inline: var(--tag-md-padding-inline);
-    --tag-border-radius: 6px;
+    --tag-border-radius: var(--tag-md-border-radius);
     --tag-font-size: var(--tag-md-font-size);
+    --tag-height: var(--tag-md-height);
   }
 
-  .ts-tag:where(.ts-size--medium) {
-    --tag-gap: var(--space-8);
+  .ts-tag:where(.ts-size--small) {
+    --tag-gap: var(--tag-sm-gap);
+    --tag-padding-block: var(--tag-sm-padding-block);
+    --tag-padding-inline: var(--tag-sm-padding-inline);
+    --tag-border-radius: var(--tag-sm-border-radius);
+    --tag-font-size: var(--tag-sm-font-size);
+    --tag-height: var(--tag-sm-height);
+  }
+
+  .ts-tag:where(.ts-size--xsmall) {
+    --tag-gap: var(--tag-xs-gap);
     --tag-padding-block: var(--tag-xs-padding-block);
     --tag-padding-inline: var(--tag-xs-padding-inline);
-    --tag-border-radius: var(--radius-md);
+    --tag-border-radius: var(--tag-xs-border-radius);
     --tag-font-size: var(--tag-xs-font-size);
+    --tag-height: var(--tag-xs-height);
   }
 
   /* VARIANTS */
@@ -249,11 +260,23 @@
     --tag-light-yellow-bg-color--hover: var(--color-accent-yellow-8);
     --tag-light-yellow-text-color--default: var(--color-accent-yellow-1);
     --tag-light-yellow-text-color--hover: var(--color-accent-yellow-1);
-    --tag-md-padding-block: var(--space-6);
+    --tag-md-padding-block: var(--space-4);
+    --tag-md-gap: var(--space-6);
+    --tag-md-border-radius: var(--radius-md);
     --tag-md-padding-inline: var(--space-8);
-    --tag-md-font-size: var(--font-size-body-sm);
+    --tag-md-font-size: var(--font-size-body-md);
+    --tag-md-height: 1.875rem;
+    --tag-sm-padding-block: var(--space-4);
+    --tag-sm-gap: var(--space-6);
+    --tag-sm-padding-inline: var(--space-6);
+    --tag-sm-border-radius: var(--radius-md);
+    --tag-sm-font-size: var(--font-size-body-sm);
+    --tag-sm-height: 1.5rem;
+    --tag-xs-gap: var(--space-4);
     --tag-xs-padding-block: var(--space-4);
     --tag-xs-padding-inline: var(--space-6);
-    --tag-xs-font-size: var(--font-size-body-sm);
+    --tag-xs-border-radius: var(--radius-md);
+    --tag-xs-font-size: var(--font-size-body-xs);
+    --tag-xs-height: var(--space-20);
   }
 }

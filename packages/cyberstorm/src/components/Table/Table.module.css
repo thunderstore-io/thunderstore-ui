@@ -98,7 +98,7 @@
   width: fit-content;
   margin: 0 var(--space-24) var(--space-16) var(--space-24);
   border-radius: var(--radius-md);
-  color: var(--color-text--accent);
+  color: var(--color-text-accent);
   font-weight: var(--font-weight-bold);
   font-size: var(--space-14);
   line-height: normal;
@@ -140,7 +140,7 @@
   display: flex;
   align-items: center;
   padding: var(--space-16) var(--space-24);
-  color: var(--color-text--secondary);
+  color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height--l);
 }
@@ -172,7 +172,7 @@
   width: fit-content;
   margin: 0 var(--space-24) var(--space-8) var(--space-24);
   border-radius: var(--radius-md);
-  color: var(--color-text--accent);
+  color: var(--color-text-accent);
   font-weight: var(--font-weight-bold);
   font-size: var(--space-14);
   line-height: var(--line-height-lg);
@@ -210,7 +210,7 @@
   display: flex;
   align-items: center;
   padding: 0.425rem var(--space-24);
-  color: var(--color-text--secondary);
+  color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height--l);
 }

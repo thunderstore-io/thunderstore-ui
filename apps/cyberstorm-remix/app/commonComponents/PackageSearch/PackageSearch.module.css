@@ -1,127 +1,181 @@
-.root,
-.content {
+.root {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  gap: var(--space-24);
+}
+
+.content {
+  display: flex;
+  flex-basis: min-content;
+  flex-direction: column;
+  flex-grow: 1;
   gap: var(--gap-xxxl);
+  width: 100%;
 }
 
 .contentWrapper {
   display: flex;
   flex-direction: row;
-  gap: var(--gap-xl);
+  gap: var(--gap-md);
   align-items: flex-start;
 }
 
 .sidebar {
   position: sticky;
-  top: var(--header-height);
+  top: calc(var(--header-height) + 1rem);
   display: flex;
-  flex-basis: 20%;
   flex-direction: column;
   gap: var(--gap-md);
+  width: 16.6rem;
+  max-height: calc(100vh - var(--header-height) - 1rem);
+  padding-right: var(--space-8);
+  padding-bottom: var(--space-16);
+  overflow-y: auto;
+
+  /* Slightly modified version of this https://css-tricks.com/books/greatest-css-tricks/scroll-shadows/ */
+
+  /* to make it a bit clearer that the sidebar is scrollable */
+  background:
+  /* Shadow Cover TOP */
+    linear-gradient(var(--body-bg-color) 30%, rgb(255 255 255 / 0)) center top,
+    /* Shadow Cover BOTTOM */
+      linear-gradient(rgb(255 255 255 / 0), var(--body-bg-color) 70%) center
+      bottom,
+    /* Shadow TOP */
+      radial-gradient(farthest-side at 50% 0, rgb(0 0 0 / 0.2), rgb(0 0 0 / 0))
+      center top,
+    /* Shadow BOTTOM */
+      radial-gradient(
+        farthest-side at 50% 100%,
+        rgb(0 0 0 / 0.2),
+        rgb(0 0 0 / 0)
+      )
+      center bottom;
+
+  background-repeat: no-repeat;
+  background-size:
+    100% 40px,
+    100% 40px,
+    100% 14px,
+    100% 14px;
+  background-attachment: local, local, scroll, scroll;
+  transition: var(--animation-duration-md) all allow-discrete;
 }
 
 .sidebarIsHidden {
   display: none;
-}
-
-.skeletonSearch {
-  width: auto;
-  height: 2.75rem;
-}
-
-.skeletonFilters {
-  height: 18rem;
-}
-
-.skeletonContent {
-  height: 38rem;
+  opacity: 0;
 }
 
 .dateFilterHeader {
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-body-lg);
   white-space: nowrap;
 }
 
-.dateFilterInputs {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  margin-bottom: 1rem;
-}
-
-.dateFilterInputsSet {
-  display: flex;
-  flex-direction: column;
-  max-width: fit-content;
-}
-
-.dateFilterInput {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: var(--space-10) var(--space-14);
-  border: var(--border-width--2) solid var(--border-color);
-
-  border-radius: var(--radius-md);
-  color: var(--color-text--tertiary);
-  font-weight: var(--font-weight-medium);
-
-  font-size: var(--font-size-body-xxxxl);
-  line-height: normal;
-  background-color: var(--color-surface-4);
-  outline: none;
-  transition: ease-out var(--animation-duration-lg);
-
-  --border-color: transparent;
-}
-
-.dateFilterInput:hover {
-  --border-color: var(--color-border--highlight);
-}
-
-.dateFilterInput:focus-within {
-  color: var(--color-text--default);
-  background-color: var(--color-black);
-
-  --border-color: var(--color-border--highlight);
-}
-
-.dateFilterInput::placeholder {
-  color: var(--color-text--tertiary);
-}
-
 .searchWrapper {
   display: flex;
+  gap: var(--gap-md);
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.searchGroupOne {
+  display: flex;
+  flex: 1 0 0;
   flex-direction: row;
-  gap: 1rem;
+  gap: var(--gap-md);
+  width: 100%;
+}
+
+.searchRowItemGroup {
+  display: flex;
+  flex-direction: row;
+  gap: var(--gap-md);
+}
+
+.searchFilters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  align-items: flex-start;
+}
+
+.searchSearch {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  align-items: flex-start;
+}
+
+.listingOptions {
+  display: flex;
+  gap: var(--gap-md);
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .searchRowItemWrapper {
   display: flex;
   flex-direction: column;
+  gap: var(--gap-xs);
 }
 
 .searchInputWrapper {
   width: 100%;
 }
 
+.bgWrapper {
+  border-radius: var(--radius-md);
+  background-color: var(--body-bg-color);
+}
+
 .searchText {
-  color: var(--color-text--tertiary);
+  width: min-content;
+  color: var(--color-text-tertiary);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-body-lg);
+  font-size: var(--font-size-body-md);
   white-space: nowrap;
 }
 
-.sortByButton {
-  --border-color: transparent;
+@media (width <= 48rem) {
+  .searchWrapper {
+    flex-direction: column;
+  }
 
-  border: var(--border-width--2) solid var(--border-color);
+  .contentWrapper {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: static;
+    top: 0;
+    width: 100%;
+    max-height: max-content;
+    padding: 0;
+    background: transparent;
+    background-size: contain;
+    background-attachment: scroll;
+  }
+
+  .searchRowItemWrapper {
+    flex-grow: 1;
+  }
+
+  .listingOptions {
+    width: 100%;
+  }
 }
 
-.sortByButton:hover {
-  --border-color: var(--color-border--highlight);
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

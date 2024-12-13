@@ -1,33 +1,56 @@
-import { CollapsibleText, Title } from "@thunderstore/cyberstorm";
-import styles from "./PageHeader.module.css";
+import { Heading } from "@thunderstore/cyberstorm";
+import "./PageHeader.css";
 import { ReactElement } from "react";
+import { CollapsibleText } from "../CollapsibleText/CollapsibleText";
+import { HeadingSizes } from "@thunderstore/cyberstorm-theme/src/components";
 
 export interface PageHeaderProps {
   image?: ReactElement;
-  title: string;
+  heading: string;
+  headingSize: HeadingSizes;
+  headingLevel: "1" | "2" | "3" | "4" | "5" | "6";
   description?: string | null;
-  meta?: (ReactElement | null)[];
+  meta?: ReactElement;
 }
 
-/**
- * Cyberstorm PageHeader
- */
 export function PageHeader(props: PageHeaderProps) {
-  const { title, description = null, image = null, meta = [] } = props;
-  const metas = meta.filter(Boolean);
+  const {
+    heading,
+    headingSize,
+    headingLevel,
+    description = null,
+    image = null,
+    meta,
+  } = props;
 
   return (
-    <div className={styles.root}>
-      {image ? <div className={styles.image}>{image}</div> : null}
-      <div className={styles.info}>
-        <Title text={title} />
-        {description ? (
-          <CollapsibleText text={description} maxLength={85} />
+    <header className="nimbus-commoncomponents-page-header">
+      {image ? (
+        <div className="nimbus-commoncomponents-page-header__image nimbus-hide-s">
+          {image}
+        </div>
+      ) : null}
+      <div className="nimbus-commoncomponents-page-header__content">
+        <div className="nimbus-commoncomponents-page-header__info">
+          <Heading
+            csLevel={headingLevel}
+            csSize={headingSize}
+            csVariant="primary"
+            mode="display"
+          >
+            {heading}
+          </Heading>
+          {description ? (
+            <CollapsibleText text={description} maxLength={85} />
+          ) : null}
+        </div>
+        {meta ? (
+          <div className="nimbus-commoncomponents-page-header__meta">
+            {meta}
+          </div>
         ) : null}
-
-        {metas.length ? <div className={styles.meta}>{metas}</div> : null}
       </div>
-    </div>
+    </header>
   );
 }
 

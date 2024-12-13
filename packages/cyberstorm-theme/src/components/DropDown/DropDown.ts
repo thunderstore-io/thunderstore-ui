@@ -8,7 +8,7 @@ export const DropDownSizesList = ["medium"] as const;
 export type DropDownSizes = "medium";
 
 // Modifiers
-export const DropDownModifiersList = ["disabled", "ghost", "dimmed"] as const;
+export const DropDownModifiersList = ["disabled", "ghost"] as const;
 // There is an issue with Typescript (eslint) and prettier disagreeing if
 // the type should have parentheses
 // prettier-ignore
@@ -24,11 +24,7 @@ export const DropDownItemSizesList = ["medium"] as const;
 export type DropDownItemSizes = "medium";
 
 // Modifiers
-export const DropDownItemModifiersList = [
-  "disabled",
-  "ghost",
-  "dimmed",
-] as const;
+export const DropDownItemModifiersList = ["disabled", "ghost"] as const;
 // There is an issue with Typescript (eslint) and prettier disagreeing if
 // the type should have parentheses
 // prettier-ignore
@@ -44,7 +40,7 @@ export const DropDownDividerSizesList = ["medium"] as const;
 export type DropDownDividerSizes = "medium";
 
 // Modifiers
-export const DropDownDividerModifiersList = ["ghost", "dimmed"] as const;
+export const DropDownDividerModifiersList = ["ghost"] as const;
 // There is an issue with Typescript (eslint) and prettier disagreeing if
 // the type should have parentheses
 // prettier-ignore

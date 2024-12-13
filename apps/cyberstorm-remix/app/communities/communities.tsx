@@ -3,13 +3,11 @@ import {
   CardCommunity,
   CommunityCardSkeleton,
   EmptyState,
-  Heading,
   NewBreadCrumbs,
   range,
   NewTextInput,
   NewSelect,
 } from "@thunderstore/cyberstorm";
-import styles from "./Communities.module.css";
 import searchAndOrderStyles from "./SearchAndOrder.module.css";
 import communitiesListStyles from "./CommunityList.module.css";
 import { useState, useEffect } from "react";
@@ -29,6 +27,7 @@ import {
 } from "@remix-run/react";
 import { Communities } from "@thunderstore/dapper/types";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction = () => {
   return [
@@ -126,15 +125,16 @@ export default function CommunitiesPage() {
 
   return (
     <>
-      <NewBreadCrumbs rootClasses={styles.breadcrumbs}>
+      <NewBreadCrumbs rootClasses="nimbus-root__breadcrumbs">
         Communities
       </NewBreadCrumbs>
-      <header className="project-root__page-header">
+      <PageHeader heading="Communities" headingLevel="1" headingSize="2" />
+      {/* <header className="nimbus-root__page-header">
         <Heading csLevel="1" csSize="2" csVariant="primary" mode="display">
           Communities
         </Heading>
-      </header>
-      <main className="project-root__main">
+      </header> */}
+      <main className="nimbus-root__main">
         <div className={searchAndOrderStyles.root}>
           <div className={searchAndOrderStyles.searchTextInput}>
             <label htmlFor="communitiesSearchInput">Search</label>
@@ -192,8 +192,8 @@ function CommunitiesList(props: { communitiesData: Communities }) {
     );
   } else {
     return (
-      <EmptyState.Root className={communitiesListStyles.noResultPadding}>
-        <EmptyState.Icon wrapperClasses={communitiesListStyles.ghostBounce}>
+      <EmptyState.Root className="nimbus-noresult">
+        <EmptyState.Icon wrapperClasses="nimbus-noresult__ghostbounce">
           <FontAwesomeIcon icon={faGhost} />
         </EmptyState.Icon>
         <EmptyState.Title>It&apos;s empty in there.</EmptyState.Title>

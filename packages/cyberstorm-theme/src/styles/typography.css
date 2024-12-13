@@ -1,9 +1,14 @@
+@import "./fonts/inter/inter.css";
+@import "./fonts/inter/interDeferred.css";
+@import "./fonts/hubot-sans/hubot-sans.css";
+@import "./fonts/hubot-sans/hubot-sansDeferred.css";
+
 @layer utils {
   :root {
     --line-height-auto: normal;
-    --line-height-xs: 120%;
-    --line-height-sm: 140%;
-    --line-height-md: 160%;
+    --line-height-xs: 100%;
+    --line-height-sm: 120%;
+    --line-height-md: 150%;
     --line-height-lg: 170%;
     --font-size-body-xs: 0.625rem;
     --font-size-body-sm: 0.75rem;
@@ -22,8 +27,11 @@
     --font-family--hubot: hubot-sans, sans-serif;
 
     font-synthesis: none;
-    font-feature-settings: "liga" 1, "calt" 1; /* workaround for bug in Chrome, dunno if still present or not */
-    scrollbar-color: var(--color-surface-8) var(--color-surface-1);
+    font-feature-settings:
+      "liga" 1,
+      "calt" 1; /* workaround for bug in Chrome, dunno if still present or not */
+
+    scrollbar-color: var(--color-surface-a8) var(--color-surface-a1);
 
     --font-body: normal var(--font-size-body-lg) var(--font-family--inter);
     --font-heading: normal var(--font-size-body-lg) var(--font-family--hubot);
@@ -47,23 +55,5 @@
   a:where(:active) {
     color: var(--color-text-a--hover);
     text-decoration: underline;
-  }
-
-  @font-face {
-    font-weight: 100 1000;
-    font-family: Sora;
-    src: url("./fonts/Sora.ttf") format("truetype-variations");
-  }
-
-  @font-face {
-    font-weight: 100 1000;
-    font-family: Inter;
-    src: url("./fonts/Inter.ttf") format("truetype-variations");
-  }
-
-  @font-face {
-    font-weight: 200 900;
-    font-family: Hubot-Sans;
-    src: url("./fonts/HubotSans.ttf") format("truetype-variations");
   }
 }

@@ -6,7 +6,7 @@
   justify-content: flex-end;
   width: auto;
   min-height: 6rem;
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
 }
 
 .selected {
@@ -21,7 +21,7 @@
   flex-direction: column;
   width: auto;
   height: 2.75rem;
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
 }
 
 .inputContainer {
@@ -60,7 +60,7 @@
 }
 
 .input::placeholder {
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
 }
 
 .inputContainer[data-color="red"] {

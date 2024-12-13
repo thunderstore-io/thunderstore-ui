@@ -21,10 +21,16 @@
 }
 
 .icon {
-  height: var(--space-16);
+  width: var(--space-14);
+  height: var(--space-14);
   color: var(--text-color);
 }
 
 .tag.exclude .icon {
   --text-color: var(--old--color-accent-red-3);
+}
+
+.clearButton {
+  height: var(--button-xs-height);
+  color: var(--color-text-accent);
 }

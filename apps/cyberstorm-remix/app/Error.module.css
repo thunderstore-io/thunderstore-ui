@@ -10,7 +10,7 @@
 }
 
 .description {
-  color: var(--color-text--accent);
+  color: var(--color-text-accent);
   font-weight: var(--font-weight-semibold);
   line-height: 1;
 }
@@ -43,16 +43,22 @@
   top: 10px;
   left: 15px;
   color: var(--glitch-color-1);
-  animation: paths 5s step-end infinite, opacity 5s step-end infinite,
-    font 8s step-end infinite, movement 10s step-end infinite;
+  animation:
+    paths 5s step-end infinite,
+    opacity 5s step-end infinite,
+    font 8s step-end infinite,
+    movement 10s step-end infinite;
 }
 
 .glitch::after {
   top: 5px;
   left: -10px;
   color: var(--glitch-color-2);
-  animation: paths 5s step-end infinite, opacity 5s step-end infinite,
-    font 7s step-end infinite, movement 8s step-end infinite;
+  animation:
+    paths 5s step-end infinite,
+    opacity 5s step-end infinite,
+    font 7s step-end infinite,
+    movement 8s step-end infinite;
 }
 
 @keyframes paths {

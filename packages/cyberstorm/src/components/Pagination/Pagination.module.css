@@ -20,7 +20,7 @@
 
   padding: var(--space-8) var(--space-8);
   border-radius: var(--radius-md);
-  color: var(--color-text--secondary);
+  color: var(--color-text-secondary);
 
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height--18);

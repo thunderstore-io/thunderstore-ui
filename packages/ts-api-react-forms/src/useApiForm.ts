@@ -8,7 +8,7 @@ export type UseApiFormArgs<
   Schema extends ZodObject<Z>,
   Meta extends object,
   Result extends object,
-  Z extends ZodRawShape
+  Z extends ZodRawShape,
 > = {
   schema: Schema;
   meta: Meta;
@@ -17,7 +17,7 @@ export type UseApiFormArgs<
 export type UseApiFormReturn<
   Schema extends ZodObject<Z>,
   Result extends object,
-  Z extends ZodRawShape
+  Z extends ZodRawShape,
 > = {
   form: UseFormReturn<z.infer<Schema>>;
   submitHandler: (data: z.infer<Schema>) => Promise<Result>;
@@ -26,7 +26,7 @@ export function useApiForm<
   Schema extends ZodObject<Z>,
   Meta extends object,
   Result extends object,
-  Z extends ZodRawShape
+  Z extends ZodRawShape,
 >(
   args: UseApiFormArgs<Schema, Meta, Result, Z>
 ): UseApiFormReturn<Schema, Result, Z> {

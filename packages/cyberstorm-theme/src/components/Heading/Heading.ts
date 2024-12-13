@@ -12,7 +12,7 @@ export const HeadingSizesList = ["1", "2", "3", "4", "5", "6"] as const;
 export type HeadingSizes = "1" | "2" | "3" | "4" | "5" | "6";
 
 // Modifiers
-export const HeadingModifiersList = ["ghost", "dimmed"] as const;
+export const HeadingModifiersList = ["ghost"] as const;
 // There is an issue with Typescript (eslint) and prettier disagreeing if
 // the type should have parentheses
 // prettier-ignore

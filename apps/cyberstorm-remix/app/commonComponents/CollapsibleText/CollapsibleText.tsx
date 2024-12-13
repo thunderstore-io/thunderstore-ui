@@ -1,6 +1,5 @@
-"use client";
-import { classnames } from "../../utils/utils";
-import styles from "./CollapsibleText.module.css";
+import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import "./CollapsibleText.css";
 import { ReactElement, useState } from "react";
 
 export interface CollapsibleTextProps {
@@ -9,9 +8,6 @@ export interface CollapsibleTextProps {
   meta?: ReactElement[];
 }
 
-/**
- * Cyberstorm CollapsibleText
- */
 export function CollapsibleText(props: CollapsibleTextProps) {
   const { text = "", maxLength = 80 } = props;
 
@@ -19,12 +15,20 @@ export function CollapsibleText(props: CollapsibleTextProps) {
   const [opened, setOpened] = useState(!textIsTooLong);
 
   return (
-    <div className={styles.root}>
-      <p className={classnames(styles.text, opened ? styles.opened : null)}>
+    <div className="nimbus-commoncomponents-collapsibletext">
+      <p
+        className={classnames(
+          "nimbus-commoncomponents-collapsibletext__text",
+          opened ? "nimbus-commoncomponents-collapsibletext__opened" : null
+        )}
+      >
         {text}
       </p>
       {textIsTooLong ? (
-        <button className={styles.show} onClick={() => setOpened(!opened)}>
+        <button
+          className="nimbus-commoncomponents-collapsibletext__show"
+          onClick={() => setOpened(!opened)}
+        >
           {opened ? "Show less" : "Show more"}
         </button>
       ) : null}

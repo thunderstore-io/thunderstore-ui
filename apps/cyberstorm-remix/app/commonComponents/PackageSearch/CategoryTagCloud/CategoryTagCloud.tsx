@@ -1,16 +1,15 @@
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faBan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Dispatch, SetStateAction } from "react";
 
 import styles from "./CategoryTagCloud.module.css";
 import { CategorySelection, CATEGORY_STATES } from "../types";
-import { Button } from "@thunderstore/cyberstorm";
+import { NewButton, NewIcon, NewTag } from "@thunderstore/cyberstorm";
 
 const OFF = CATEGORY_STATES[0];
 
 interface Props {
   categories: CategorySelection[];
-  setCategories: Dispatch<SetStateAction<CategorySelection[]>>;
+  setCategories: (v: CategorySelection[]) => void;
 }
 
 /**
@@ -35,26 +34,39 @@ export const CategoryTagCloud = (props: Props) => {
   return (
     <div className={styles.root}>
       {visible.map((c) => (
-        <Button.Root
+        <NewTag
+          csMode="button"
           key={c.slug}
           onClick={() => clearCategory(c.id)}
-          colorScheme={c.selection === "exclude" ? "danger" : "default"}
-          paddingSize="small"
-          style={{ gap: "0.5rem" }}
+          csVariant={c.selection === "exclude" ? "red" : "primary"}
+          csSize="medium"
+          csModifiers={
+            c.selection === "exclude" ? ["dark", "hoverable"] : ["hoverable"]
+          }
         >
-          <Button.ButtonLabel>{c.name}</Button.ButtonLabel>
-          <Button.ButtonIcon>
-            <FontAwesomeIcon icon={faXmark} className={styles.icon} />
-          </Button.ButtonIcon>
-        </Button.Root>
+          {c.selection === "exclude" ? (
+            <NewIcon csMode="inline">
+              <FontAwesomeIcon icon={faBan} />
+            </NewIcon>
+          ) : undefined}
+          {c.name}
+          <NewIcon csMode="inline" noWrapper rootClasses={styles.icon}>
+            <FontAwesomeIcon icon={faXmark} />
+          </NewIcon>
+        </NewTag>
       ))}
-      <Button.Root
+      <NewButton
         onClick={clearAll}
-        colorScheme="transparentTertiary"
-        paddingSize="small"
+        csVariant="secondary"
+        csSize="small"
+        csModifiers={["ghost"]}
+        rootClasses={styles.clearButton}
       >
-        <Button.ButtonLabel>Clear all</Button.ButtonLabel>
-      </Button.Root>
+        Clear all
+        <NewIcon csMode="inline" noWrapper>
+          <FontAwesomeIcon icon={faXmark} className={styles.icon} />
+        </NewIcon>
+      </NewButton>
     </div>
   );
 };

@@ -9,7 +9,7 @@ import { PrimitiveComponentDefaultProps, TooltipWrapper } from "../utils/utils";
 export interface ActionableButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     PrimitiveComponentDefaultProps {
-  primitiveType: "button";
+  primitiveType?: "button";
 }
 
 export interface ActionableLinkProps
@@ -47,7 +47,7 @@ export const Actionable = React.forwardRef<
       ...forwardedProps
     } = props;
 
-    if (primitiveType === "button") {
+    if (primitiveType === "button" || primitiveType === undefined) {
       const fRef = forwardedRef as React.ForwardedRef<HTMLButtonElement>;
       const fProps = forwardedProps as ActionableButtonProps;
 

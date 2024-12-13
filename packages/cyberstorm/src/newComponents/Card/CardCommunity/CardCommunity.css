@@ -8,7 +8,7 @@
     font-size: var(--font-size-body-lg);
   }
 
-  .ts-cardcommunity:hover .ts-cardcommunity__imagewrapper {
+  .ts-cardcommunity__imagewrapper:hover {
     filter: brightness(1.2);
   }
 
@@ -45,14 +45,6 @@
     flex-direction: row;
     gap: var(--gap-md);
     margin-top: auto;
-  }
-
-  .ts-cardcommunity__metaitem {
-    display: flex;
-    gap: var(--gap-xs);
-    align-items: center;
-    color: var(--color-text-accent);
-    font-size: var(--font-size-body-sm);
   }
 
   .ts-cardcommunity__tag {

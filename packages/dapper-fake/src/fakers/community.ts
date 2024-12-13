@@ -15,10 +15,12 @@ export const getFakeCommunity = async (communityId: string) => {
   return {
     name: faker.word.words(3),
     identifier: communityId,
+    short_description: faker.helpers.maybe(() => faker.word.words(5)) ?? null,
     description: faker.helpers.maybe(() => faker.word.words(5)) ?? null,
+    wiki_url: faker.helpers.maybe(() => faker.internet.url()) ?? null,
     discord_url: faker.helpers.maybe(() => faker.internet.url()) ?? null,
     datetime_created: faker.date.past().toISOString(),
-    background_image_url:
+    hero_image_url:
       faker.helpers.maybe(() => getFakeImg(1080, 492), { probability: 0.9 }) ??
       null,
     icon_url:

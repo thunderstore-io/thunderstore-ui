@@ -1,12 +1,12 @@
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { faXmark, faSliders } from "@fortawesome/free-solid-svg-icons";
+import { faGhost, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faFilterList, faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   PackageCategory,
   PackageListings,
   Section,
 } from "@thunderstore/dapper/types";
-import { useDeferredValue, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 import { CategoryTagCloud } from "./CategoryTagCloud/CategoryTagCloud";
@@ -17,18 +17,28 @@ import styles from "./PackageSearch.module.css";
 import packageListStyles from "./PackageList.module.css";
 import { CategorySelection } from "./types";
 import {
-  Button,
-  PackageCard,
-  Pagination,
-  TextInput,
+  CardPackage,
+  EmptyState,
+  NewButton,
+  NewIcon,
+  NewPagination,
+  NewTextInput,
 } from "@thunderstore/cyberstorm";
-import { useNavigation, useSearchParams } from "@remix-run/react";
+import {
+  useNavigation,
+  useNavigationType,
+  useSearchParams,
+} from "@remix-run/react";
 import { StalenessIndicator } from "@thunderstore/cyberstorm/src/components/StalenessIndicator/StalenessIndicator";
 import { PackageCount } from "./PackageCount";
-import { PackageOrder, PackageOrderOptions } from "./PackageOrder";
+import {
+  PackageOrder,
+  PackageOrderOptions,
+  PackageOrderOptionsType,
+} from "./PackageOrder";
 import { CollapsibleMenu } from "./FilterMenus/CollapsibleMenu";
-import { PackageRecent, PackageRecentOptions } from "./PackageRecent";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
 const PER_PAGE = 20;
 
@@ -38,240 +48,302 @@ interface Props {
   sections: Section[];
 }
 
+type SearchParamsType = {
+  order?: PackageOrderOptionsType;
+  section: string;
+  deprecated: boolean;
+  nsfw: boolean;
+  page: number;
+  includedCategories: string;
+  excludedCategories: string;
+};
+
 /**
  * Component for filtering and rendering a PackageList
  */
 export function PackageSearch(props: Props) {
   const { listings, packageCategories: allCategories, sections } = props;
+  // TODO: Remove this customization when /p is doned
+  const domain = getPublicEnvVariables(["PUBLIC_SITE_URL"]).PUBLIC_SITE_URL;
   const allSections = sections.sort((a, b) => a.priority - b.priority);
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  // const [searchParams, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
 
+  // REMIX START
+
+  const navigationType = useNavigationType();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [searchParamsBlob, setSearchParamsBlob] = useState<SearchParamsType>({
+    order: undefined,
+    section: allSections.length === 0 ? "" : allSections[0]?.uuid,
+    deprecated: false,
+    nsfw: false,
+    page: 1,
+    includedCategories: "",
+    excludedCategories: "",
+  });
+
+  // TODO: Disabled until we can figure out how a proper way to display skeletons
+  // const navigation = useNavigation();
+
+  // Order start
+  const changeOrder = (v: PackageOrderOptionsType) => {
+    setSearchParamsBlob({ ...searchParamsBlob, order: v });
+  };
+  // Order end
+
+  // Search start
   const [searchValue, setSearchValue] = useState(
     searchParams.getAll("search").join(" ")
   );
 
-  const [categories, setCategories] = useState<CategorySelection[]>(
-    allCategories
-      .sort((a, b) => a.slug.localeCompare(b.slug))
-      .map((c) => ({ ...c, selection: "off" }))
-  );
-  const [section, setSection] = useState(allSections[0]?.uuid ?? "");
-  const [deprecated, setDeprecated] = useState(false);
-  const [nsfw, setNsfw] = useState(false);
-  const [page, setPage] = useState(1);
-  const [order, setOrder] = useState(PackageOrderOptions.Updated);
-  const [recentUpload, setRecentUpload] = useState(
-    PackageRecentOptions.AllTime
-  );
-  const [recentUpdate, setRecentUpdate] = useState(
-    PackageRecentOptions.AllTime
-  );
-  const [createdAfter, setCreatedAfter] = useState("");
-  const [createdBefore, setCreatedBefore] = useState("");
-  const [updatedAfter, setUpdatedAfter] = useState("");
-  const [updatedBefore, setUpdatedBefore] = useState("");
-
-  const deferredCategories = useDeferredValue(categories);
-  const deferredDeprecated = useDeferredValue(deprecated);
-  const deferredNsfw = useDeferredValue(nsfw);
-  const deferredSection = useDeferredValue(section);
-
-  const deferredPage = useDeferredValue(page);
-  const deferredOrder = useDeferredValue(order);
-  const deferredRecentUpload = useDeferredValue(recentUpload);
-  const deferredRecentUpdate = useDeferredValue(recentUpdate);
-
-  const deferredIncludedCategories = deferredCategories
-    .filter((c) => c.selection === "include")
-    .map((c) => c.id);
-  const deferredExcludedCategories = deferredCategories
-    .filter((c) => c.selection === "exclude")
-    .map((c) => c.id);
+  useEffect(() => {
+    if (navigationType === "POP") {
+      setSearchValue(searchParams.getAll("search").join(" "));
+    }
+  }, [searchParams]);
 
   const [debouncedSearchValue] = useDebounce(searchValue, 300, {
     maxWait: 300,
   });
 
-  const deferredCreatedAfter = useDeferredValue(createdAfter);
-  const deferredCreatedBefore = useDeferredValue(createdBefore);
-  const deferredUpdatedAfter = useDeferredValue(updatedAfter);
-  const deferredUpdatedBefore = useDeferredValue(updatedBefore);
-
   useEffect(() => {
     if (debouncedSearchValue === "") {
       searchParams.delete("search");
+      setSearchParams(searchParams, { replace: true });
     } else {
       searchParams.set("search", debouncedSearchValue);
+      setSearchParams(searchParams, { replace: true });
     }
+  }, [debouncedSearchValue]);
+  // Search end
 
-    if (deferredDeprecated === false) {
+  const setSection = (v: string) => {
+    setSearchParamsBlob({ ...searchParamsBlob, section: v });
+  };
+
+  const setDeprecated = (v: boolean) => {
+    setSearchParamsBlob({ ...searchParamsBlob, deprecated: v });
+  };
+
+  const setNsfw = (v: boolean) => {
+    setSearchParamsBlob({ ...searchParamsBlob, nsfw: v });
+  };
+
+  const setPage = (v: number) => {
+    setSearchParamsBlob({ ...searchParamsBlob, page: v });
+  };
+
+  // Categories start
+  const categories: CategorySelection[] = allCategories
+    .sort((a, b) => a.slug.localeCompare(b.slug))
+    .map((c) => ({ ...c, selection: "off" }));
+
+  const setCategories = (v: CategorySelection[]) => {
+    const newSearchParams = { ...searchParamsBlob };
+    const includedCategories = v
+      .filter((c) => c.selection === "include")
+      .map((c) => c.id);
+    if (includedCategories.length === 0) {
+      newSearchParams.includedCategories = "";
+    } else {
+      newSearchParams.includedCategories = includedCategories.join(",");
+    }
+    const excludedCategories = v
+      .filter((c) => c.selection === "exclude")
+      .map((c) => c.id);
+    if (excludedCategories.length === 0) {
+      newSearchParams.excludedCategories = "";
+    } else {
+      newSearchParams.excludedCategories = excludedCategories.join(",");
+    }
+    setSearchParamsBlob(newSearchParams);
+  };
+  // Categories end
+
+  const resetParams = () => {
+    setSearchParamsBlob({
+      order: undefined,
+      section: allSections.length === 0 ? "" : allSections[0]?.uuid,
+      deprecated: false,
+      nsfw: false,
+      page: 1,
+      includedCategories: "",
+      excludedCategories: "",
+    });
+    setSearchValue("");
+  };
+
+  const [debouncedSearchParamsBlob] = useDebounce(searchParamsBlob, 750, {
+    maxWait: 750,
+  });
+
+  useEffect(() => {
+    // Order
+    if (
+      debouncedSearchParamsBlob.order === undefined ||
+      debouncedSearchParamsBlob.order === PackageOrderOptions.Updated
+    ) {
+      searchParams.delete("ordering");
+    } else {
+      searchParams.set("ordering", debouncedSearchParamsBlob.order);
+    }
+    // Section
+    if (
+      allSections.length === 0 ||
+      debouncedSearchParamsBlob.section === allSections[0]?.uuid ||
+      debouncedSearchParamsBlob.section === ""
+    ) {
+      searchParams.delete("section");
+    } else {
+      searchParams.set("section", debouncedSearchParamsBlob.section);
+    }
+    // Deprecated
+    if (debouncedSearchParamsBlob.deprecated === false) {
       searchParams.delete("deprecated");
     } else {
       searchParams.set("deprecated", "true");
     }
-
-    if (deferredNsfw === false) {
+    // NSFW
+    if (debouncedSearchParamsBlob.nsfw === false) {
       searchParams.delete("nsfw");
     } else {
       searchParams.set("nsfw", "true");
     }
-
-    if (deferredSection === allSections[0]?.uuid) {
-      searchParams.delete("section");
+    // Page number
+    if (debouncedSearchParamsBlob.page === 1) {
+      searchParams.delete("page");
     } else {
-      searchParams.set("section", deferredSection);
+      searchParams.set("page", String(debouncedSearchParamsBlob.page));
     }
-
-    if (deferredIncludedCategories.length === 0) {
+    // Categories
+    if (debouncedSearchParamsBlob.includedCategories === "") {
       searchParams.delete("includedCategories");
     } else {
       searchParams.set(
         "includedCategories",
-        deferredIncludedCategories.join(",")
+        debouncedSearchParamsBlob.includedCategories
       );
     }
-
-    if (deferredExcludedCategories.length === 0) {
+    if (debouncedSearchParamsBlob.excludedCategories === "") {
       searchParams.delete("excludedCategories");
     } else {
       searchParams.set(
         "excludedCategories",
-        deferredExcludedCategories.join(",")
+        debouncedSearchParamsBlob.excludedCategories
       );
     }
-
-    if (deferredPage === 1) {
-      searchParams.delete("page");
-    } else {
-      searchParams.set("page", String(deferredPage));
-    }
-
-    if (deferredOrder === PackageOrderOptions.Updated) {
-      searchParams.delete("order");
-    } else {
-      searchParams.set("order", deferredOrder);
-    }
-
-    if (deferredRecentUpload === PackageRecentOptions.AllTime) {
-      searchParams.delete("created_recent");
-    } else {
-      searchParams.set("created_recent", deferredRecentUpload);
-    }
-
-    if (deferredRecentUpdate === PackageRecentOptions.AllTime) {
-      searchParams.delete("updated_recent");
-    } else {
-      searchParams.set("updated_recent", deferredRecentUpdate);
-    }
-
-    if (deferredCreatedAfter === "") {
-      searchParams.delete("created_after");
-    } else {
-      searchParams.set("created_after", deferredCreatedAfter);
-    }
-
-    if (deferredCreatedBefore === "") {
-      searchParams.delete("created_before");
-    } else {
-      searchParams.set("created_before", deferredCreatedBefore);
-    }
-
-    if (deferredUpdatedAfter === "") {
-      searchParams.delete("updated_after");
-    } else {
-      searchParams.set("updated_after", deferredUpdatedAfter);
-    }
-
-    if (deferredUpdatedBefore === "") {
-      searchParams.delete("updated_before");
-    } else {
-      searchParams.set("updated_before", deferredUpdatedBefore);
-    }
-
     setSearchParams(searchParams);
-  }, [
-    debouncedSearchValue,
-    deferredDeprecated,
-    deferredNsfw,
-    deferredSection,
-    deferredCategories,
-    deferredPage,
-    deferredOrder,
-    deferredCreatedAfter,
-    deferredCreatedBefore,
-    deferredUpdatedAfter,
-    deferredUpdatedBefore,
-    deferredRecentUpload,
-    deferredRecentUpdate,
-  ]);
+  }, [debouncedSearchParamsBlob]);
+
+  function parseCategories(
+    includedCategories: string,
+    excludedCategories: string
+  ): CategorySelection[] {
+    const iCArr = includedCategories.split(",");
+    const eCArr = excludedCategories.split(",");
+    return categories.map((c) =>
+      iCArr.includes(c.id)
+        ? { ...c, selection: "include" }
+        : eCArr.includes(c.id)
+          ? { ...c, selection: "exclude" }
+          : c
+    );
+  }
 
   const [isFiltersVisible, setIsFiltersVisible] = useState(true);
 
   return (
     <div className={styles.root}>
       <div className={styles.searchWrapper}>
-        <div className={styles.searchRowItemWrapper}>
-          <label className={styles.searchText} htmlFor="packageOrder">
-            Sort by
-          </label>
-          <Button.Root
-            iconAlignment="side"
-            colorScheme="primary"
-            paddingSize="largeBorderCompensated"
-            onClick={() => setIsFiltersVisible(!isFiltersVisible)}
+        <div className={styles.searchGroupOne}>
+          <div
+            className={classnames(
+              styles.searchRowItemGroup,
+              styles.searchFilters
+            )}
           >
-            <Button.ButtonIcon>
-              <FontAwesomeIcon icon={isFiltersVisible ? faXmark : faSliders} />
-            </Button.ButtonIcon>
-            <Button.ButtonLabel>
-              {isFiltersVisible ? "Close" : "Open"}
-            </Button.ButtonLabel>
-          </Button.Root>
+            <div className={styles.searchRowItemWrapper}>
+              <label
+                className={classnames(styles.searchText, "nimbus-hide-s")}
+                htmlFor="filtersMenuToggle"
+              >
+                Filters
+              </label>
+              <div className={styles.bgWrapper}>
+                <NewButton
+                  onClick={() => setIsFiltersVisible(!isFiltersVisible)}
+                  id="filtersMenuToggle"
+                  csVariant={isFiltersVisible ? "primary" : "secondary"}
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon
+                      icon={isFiltersVisible ? faXmarkLarge : faFilterList}
+                    />
+                  </NewIcon>
+                  <span className={"nimbus-hide-s"}>Filters</span>
+                </NewButton>
+              </div>
+            </div>
+          </div>
+          <div
+            className={classnames(
+              styles.searchRowItemGroup,
+              styles.searchSearch
+            )}
+          >
+            <div
+              className={classnames(
+                styles.searchInputWrapper,
+                styles.searchRowItemWrapper
+              )}
+            >
+              <label
+                className={classnames(styles.searchText, "nimbus-hide-s")}
+                htmlFor="searchInput"
+              >
+                Search
+              </label>
+              <div className={styles.bgWrapper}>
+                <NewTextInput
+                  placeholder="Filter Mods..."
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  clearValue={() => setSearchValue("")}
+                  leftIcon={<FontAwesomeIcon icon={faSearch} />}
+                  id="searchInput"
+                  type="search"
+                />
+              </div>
+            </div>
+          </div>
         </div>
         <div
           className={classnames(
-            styles.searchInputWrapper,
-            styles.searchRowItemWrapper
+            styles.searchRowItemGroup,
+            styles.listingOptions
           )}
         >
-          <label className={styles.searchText} htmlFor="searchInput">
-            Search
-          </label>
-          <TextInput
-            placeholder="Filter Mods..."
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            leftIcon={<FontAwesomeIcon icon={faSearch} />}
-            id="searchInput"
-          />
-        </div>
-        <div className={styles.searchRowItemWrapper}>
-          <label className={styles.searchText} htmlFor="packageOrder">
-            Sort by
-          </label>
-          <PackageOrder order={order} setOrder={setOrder} />
-        </div>
-        <div className={styles.searchRowItemWrapper}>
-          <label className={styles.searchText} htmlFor="packageRecentUpload">
-            Upload time
-          </label>
-          <PackageRecent
-            id={"packageRecentUpload"}
-            value={recentUpload}
-            setValue={setRecentUpload}
-          />
-        </div>
-        <div className={styles.searchRowItemWrapper}>
-          <label className={styles.searchText} htmlFor="packageRecentUpdate">
-            Update time
-          </label>
-          <PackageRecent
-            id={"packageRecentUpdate"}
-            value={recentUpdate}
-            setValue={setRecentUpdate}
-          />
+          <div className={styles.searchRowItemWrapper}>
+            <label
+              className={classnames(styles.searchText, "nimbus-hide-s")}
+              htmlFor="packageOrder"
+            >
+              Sort by
+            </label>
+            <div className={styles.bgWrapper}>
+              <PackageOrder
+                order={
+                  (searchParamsBlob.order as PackageOrderOptions) ??
+                  PackageOrderOptions.Updated
+                }
+                setOrder={changeOrder}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -283,91 +355,32 @@ export function PackageSearch(props: Props) {
           )}
           id="desktopSidebar"
         >
-          <CollapsibleMenu headerTitle="Date filters" defaultOpen={false}>
-            <div className={styles.dateFilterInputs}>
-              <div className={styles.dateFilterInputsSet}>
-                <label
-                  className={styles.dateFilterHeader}
-                  htmlFor="updatedAfter"
-                >
-                  Updated after
-                </label>
-                <input
-                  type="date"
-                  className={styles.dateFilterInput}
-                  onChange={(e) => setUpdatedAfter(e.target.value)}
-                  id="updatedAfter"
-                />
-              </div>
-              <div className={styles.dateFilterInputsSet}>
-                <label
-                  className={styles.dateFilterHeader}
-                  htmlFor="updatedBefore"
-                >
-                  Updated before
-                </label>
-                <input
-                  type="date"
-                  className={styles.dateFilterInput}
-                  onChange={(e) => setUpdatedBefore(e.target.value)}
-                  id="updatedBefore"
-                />
-              </div>
-            </div>
-            <div className={styles.dateFilterInputs}>
-              <div className={styles.dateFilterInputsSet}>
-                <label
-                  className={styles.dateFilterHeader}
-                  htmlFor="createdAfter"
-                >
-                  Created after
-                </label>
-                <input
-                  type="date"
-                  className={styles.dateFilterInput}
-                  onChange={(e) => setCreatedAfter(e.target.value)}
-                  id="createdAfter"
-                />
-              </div>
-              <div className={styles.dateFilterInputsSet}>
-                <label
-                  className={styles.dateFilterHeader}
-                  htmlFor="createdBefore"
-                >
-                  Created before
-                </label>
-                <input
-                  type="date"
-                  className={styles.dateFilterInput}
-                  onChange={(e) => setCreatedBefore(e.target.value)}
-                  id="createdBefore"
-                />
-              </div>
-            </div>
-          </CollapsibleMenu>
-
           {allSections.length > 0 ? (
             <CollapsibleMenu headerTitle="Sections" defaultOpen>
               <SectionMenu
                 allSections={allSections}
-                selected={section}
+                selected={searchParamsBlob.section ?? allSections[0]?.uuid}
                 setSelected={setSection}
               />
             </CollapsibleMenu>
           ) : null}
 
-          <CollapsibleMenu headerTitle="Categories" defaultOpen>
-            <CategoryMenu
-              categories={categories}
-              setCategories={setCategories}
-            />
-          </CollapsibleMenu>
+          {categories.length > 0 ? (
+            <CollapsibleMenu headerTitle="Categories" defaultOpen>
+              <CategoryMenu
+                categories={categories}
+                includedCategories={searchParamsBlob.includedCategories}
+                excludedCategories={searchParamsBlob.excludedCategories}
+                setCategories={setCategories}
+              />
+            </CollapsibleMenu>
+          ) : null}
 
           <CollapsibleMenu headerTitle="Other filters" defaultOpen>
             <OthersMenu
-              deprecated={deprecated}
+              deprecated={searchParamsBlob.deprecated ? true : false}
               setDeprecated={setDeprecated}
-              nsfw={nsfw}
+              nsfw={searchParamsBlob.nsfw ? true : false}
               setNsfw={setNsfw}
             />
           </CollapsibleMenu>
@@ -376,46 +389,78 @@ export function PackageSearch(props: Props) {
         <div className={styles.content}>
           <div className={styles.root}>
             <div className={packageListStyles.top}>
-              <StalenessIndicator
-                isStale={navigation.state === "loading" ? true : false}
-              >
-                <PackageCount
-                  page={page}
-                  pageSize={PER_PAGE}
-                  searchQuery={debouncedSearchValue}
-                  totalCount={listings.count}
-                />
-              </StalenessIndicator>
+              <PackageCount
+                page={searchParamsBlob.page ? Number(searchParamsBlob.page) : 1}
+                pageSize={PER_PAGE}
+                searchQuery={debouncedSearchValue}
+                totalCount={listings.count}
+              />
               <CategoryTagCloud
-                categories={categories}
+                categories={parseCategories(
+                  searchParamsBlob.includedCategories ?? "",
+                  searchParamsBlob.excludedCategories ?? ""
+                )}
                 setCategories={setCategories}
               />
             </div>
 
             <StalenessIndicator
               isStale={navigation.state === "loading" ? true : false}
-              className={classnames(
-                packageListStyles.packages,
-                isFiltersVisible
-                  ? undefined
-                  : packageListStyles.packagesIsFiltersVisible
+            >
+              {listings.results.length > 0 ? (
+                <div className={packageListStyles.packages}>
+                  {listings.results.map((p) => (
+                    <CardPackage
+                      key={`${p.namespace}-${p.name}`}
+                      packageData={p}
+                      // TODO: Remove this customization when /p is doned
+                      domain={domain ?? "https://thunderstore.io"}
+                    />
+                  ))}
+                </div>
+              ) : searchParams.size > 0 ? (
+                <EmptyState.Root className="nimbus-noresult">
+                  <EmptyState.Icon wrapperClasses="nimbus-noresult__ghostbounce">
+                    <FontAwesomeIcon icon={faSearch} />
+                  </EmptyState.Icon>
+                  <div className="nimbus-noresult__info">
+                    <EmptyState.Title>No results found</EmptyState.Title>
+                    <EmptyState.Message>
+                      Make sure all keywords are spelled correctly or try
+                      different search parameters.
+                    </EmptyState.Message>
+                  </div>
+                  <NewButton
+                    onClick={resetParams}
+                    rootClasses="nimbus-noresult__button"
+                  >
+                    Clean all filters
+                  </NewButton>
+                </EmptyState.Root>
+              ) : (
+                <EmptyState.Root className="nimbus-noresult">
+                  <EmptyState.Icon wrapperClasses="nimbus-noresult__ghostbounce">
+                    <FontAwesomeIcon icon={faGhost} />
+                  </EmptyState.Icon>
+                  <div className="nimbus-noresult__info">
+                    <EmptyState.Title>It&apos;s empty in here</EmptyState.Title>
+                    <EmptyState.Message>
+                      Be the first to upload a mod!
+                    </EmptyState.Message>
+                  </div>
+                </EmptyState.Root>
               )}
-            >
-              {listings.results.map((p) => (
-                <PackageCard key={`${p.namespace}-${p.name}`} package={p} />
-              ))}
             </StalenessIndicator>
-            <StalenessIndicator
-              isStale={navigation.state === "loading" ? true : false}
-            >
-              <Pagination
-                currentPage={page}
-                onPageChange={setPage}
-                pageSize={PER_PAGE}
-                siblingCount={2}
-                totalCount={listings.count}
-              />
-            </StalenessIndicator>
+
+            <NewPagination
+              currentPage={
+                searchParamsBlob.page ? Number(searchParamsBlob.page) : 1
+              }
+              onPageChange={setPage}
+              pageSize={PER_PAGE}
+              siblingCount={4}
+              totalCount={listings.count}
+            />
           </div>
         </div>
       </div>

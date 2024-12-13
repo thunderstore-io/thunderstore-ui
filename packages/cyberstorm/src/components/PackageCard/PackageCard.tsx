@@ -129,7 +129,7 @@ function getPackageFlags(packageData: PackageListing) {
   if (isNew) {
     flagList.push(
       <Tag
-        key="flag_nsfw"
+        key="flag_new"
         label="New"
         colorScheme="green"
         leftIcon={<FontAwesomeIcon icon={faBomb} />}

@@ -5,31 +5,44 @@
     --button-gap: 1rem;
     --button-border-radius: 0.5rem;
     --button-font-weight: var(--font-weight-bold);
+    --button-transition: ease-out var(--animation-duration-sm);
   }
 
   /* SIZES */
   .ts-button:where(.ts-size--xsmall) {
-    --button-height: var(--space-30);
-    --button-padding: var(--space-12);
-    --button-font-size: var(--font-size-body-sm);
+    --button-height: var(--button-xs-height);
+    --button-padding-block: var(--button-xs-padding-block);
+    --button-padding-inline: var(--button-xs-padding-inline);
+    --button-border-radius: var(--button-xs-border-radius);
+    --button-font-size: var(--button-xs-font-size);
+    --button-gap: var(--button-xs-gap);
   }
 
   .ts-button:where(.ts-size--small) {
-    --button-height: var(--space-36);
-    --button-padding: var(--space-12);
-    --button-font-size: var(--font-size-body-md);
+    --button-height: var(--button-sm-height);
+    --button-padding-block: var(--button-sm-padding-block);
+    --button-padding-inline: var(--button-sm-padding-inline);
+    --button-border-radius: var(--button-sm-border-radius);
+    --button-font-size: var(--button-sm-font-size);
+    --button-gap: var(--button-sm-gap);
   }
 
   .ts-button:where(.ts-size--medium) {
-    --button-height: var(--space-44);
-    --button-padding: var(--space-12) var(--space-16);
-    --button-font-size: var(--font-size-body-md);
+    --button-height: var(--button-md-height);
+    --button-padding-block: var(--button-md-padding-block);
+    --button-padding-inline: var(--button-md-padding-inline);
+    --button-border-radius: var(--button-md-border-radius);
+    --button-font-size: var(--button-md-font-size);
+    --button-gap: var(--button-md-gap);
   }
 
   .ts-button:where(.ts-size--big) {
-    --button-height: var(--space-44);
-    --button-padding: var(--space-12) var(--space-16);
-    --button-font-size: var(--font-size-body-lg);
+    --button-height: var(--button-lg-height);
+    --button-padding-block: var(--button-lg-padding-block);
+    --button-padding-inline: var(--button-lg-padding-inline);
+    --button-border-radius: var(--button-lg-border-radius);
+    --button-font-size: var(--button-lg-font-size);
+    --button-gap: var(--button-lg-gap);
   }
 
   /* VARIANTS DEFAULT STATE */
@@ -171,21 +184,21 @@
   }
 
   /* MODIFIERS */
-  .ts-button:where(:not(.ts-variant--special)):where(.ts-modifier--ghost):where(:not(:hover, :active)) {
+  .ts-button:where(:not(.ts-variant--special)):where(.ts-modifier--ghost):where(
+      :not(:hover, :active)
+    ) {
     --button-background-color: transparent;
   }
 
-  .ts-button:where(.ts-variant--special):where(.ts-modifier--ghost):where(:not(:hover, :active)) {
+  .ts-button:where(.ts-variant--special):where(.ts-modifier--ghost):where(
+      :not(:hover, :active)
+    ) {
     background: transparent;
   }
 
   .ts-button[disabled] {
     opacity: 0.5;
     pointer-events: none;
-  }
-
-  .ts-button:where(.ts-modifier--dimmed) {
-    filter: brightness(85%);
   }
 
   /* TOKENS */
@@ -277,5 +290,29 @@
     --button-accent-text-color--active: var(--color-cyber-green-2);
     --button-accent-text-color--default: var(--color-cyber-green-2);
     --button-accent-text-color--hover: var(--color-cyber-green-2);
+    --button-lg-padding-block: 0rem;
+    --button-lg-border-radius: var(--radius-md);
+    --button-lg-font-size: var(--font-size-body-lg);
+    --button-lg-gap: var(--space-16);
+    --button-lg-padding-inline: var(--space-16);
+    --button-lg-height: 2.75rem;
+    --button-md-padding-block: 0rem;
+    --button-md-border-radius: var(--radius-md);
+    --button-md-font-size: var(--font-size-body-md);
+    --button-md-gap: var(--space-16);
+    --button-md-padding-inline: var(--space-16);
+    --button-md-height: 2.75rem;
+    --button-sm-padding-block: 0rem;
+    --button-sm-border-radius: var(--radius-md);
+    --button-sm-gap: var(--space-12);
+    --button-sm-padding-inline: var(--space-12);
+    --button-sm-font-size: var(--font-size-body-md);
+    --button-sm-height: 2.25rem;
+    --button-xs-padding-block: 0rem;
+    --button-xs-border-radius: var(--radius-md);
+    --button-xs-font-size: var(--font-size-body-sm);
+    --button-xs-gap: var(--space-12);
+    --button-xs-padding-inline: var(--space-12);
+    --button-xs-height: 1.875rem;
   }
 }

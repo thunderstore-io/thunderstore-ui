@@ -1,0 +1,49 @@
+@layer utils {
+  @font-face {
+    font-weight: 200;
+    font-family: Hubot-Sans;
+    font-style: normal;
+    src: url("HubotSans-ExtraLight.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 300;
+    font-family: Hubot-Sans;
+    font-style: normal;
+    src: url("HubotSans-Light.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 900;
+    font-family: Hubot-Sans;
+    font-style: normal;
+    src: url("HubotSans-Black.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 200;
+    font-family: Hubot-Sans;
+    font-style: italic;
+    src: url("HubotSans-ExtraLightItalic.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 300;
+    font-family: Hubot-Sans;
+    font-style: italic;
+    src: url("HubotSans-LightItalic.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-weight: 900;
+    font-family: Hubot-Sans;
+    font-style: italic;
+    src: url("HubotSans-BlackItalic.woff2") format("woff2");
+    font-display: swap;
+  }
+}

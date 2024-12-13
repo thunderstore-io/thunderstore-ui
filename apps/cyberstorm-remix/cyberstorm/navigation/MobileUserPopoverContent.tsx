@@ -44,7 +44,7 @@ export function MobileUserPopoverContent(props: { user: CurrentUser }) {
           aria-label="Back"
           csSize="medium"
           csVariant="secondary"
-          csModifiers={["ghost", "dimmed"]}
+          csModifiers={["ghost"]}
           icon={faLongArrowLeft}
         />
       }

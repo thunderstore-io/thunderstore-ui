@@ -24,11 +24,6 @@
     );
   }
 
-  /* MODIFIERS */
-  .ts-button:where(.ts-modifier--dimmed) {
-    filter: brightness(85%);
-  }
-
   /* TOKENS */
   :root {
     --breadcrumbs__outer-background-color--default: var(--color-surface-6);

@@ -7,7 +7,7 @@
 
 .countDescription {
   padding: 0 var(--space-8);
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
   font-size: var(--font-size-body-lg);
 }
 
@@ -37,7 +37,7 @@
 
 .itemDescription {
   overflow: hidden;
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
   font-size: var(--font-size-body-lg);
   line-height: var(--line-height--m);
   white-space: nowrap;

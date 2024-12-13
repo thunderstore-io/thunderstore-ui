@@ -9,7 +9,7 @@ import styles from "./FormTextInput.module.css";
 
 export type FormMultiSelectSearchProps<
   Schema extends ZodObject<Z>,
-  Z extends ZodRawShape
+  Z extends ZodRawShape,
 > = {
   // The schema is required to allow TS to infer valid values for the name field
   schema: Schema;
@@ -21,7 +21,7 @@ export type FormMultiSelectSearchProps<
 };
 export function FormMultiSelectSearch<
   Schema extends ZodObject<Z>,
-  Z extends ZodRawShape
+  Z extends ZodRawShape,
 >({
   name,
   placeholder,

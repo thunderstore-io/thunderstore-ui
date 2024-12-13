@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export type FormSelectProps<
   Schema extends ZodObject<Z>,
-  Z extends ZodRawShape
+  Z extends ZodRawShape,
 > = {
   // The schema is required to allow TS to infer valid values for the name field
   schema: Schema;

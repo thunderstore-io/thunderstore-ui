@@ -1,16 +1,21 @@
-import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSquare,
+  faSquareCheck,
+  faSquareXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Checkbox from "@radix-ui/react-checkbox";
-import { Dispatch, SetStateAction } from "react";
 
 import styles from "./FilterMenu.module.css";
 import { CategorySelection, CATEGORY_STATES as STATES } from "../types";
-import { Icon } from "@thunderstore/cyberstorm";
+import { NewIcon } from "@thunderstore/cyberstorm";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 
 interface Props {
   categories: CategorySelection[];
-  setCategories: Dispatch<SetStateAction<CategorySelection[]>>;
+  includedCategories: string;
+  excludedCategories: string;
+  setCategories: (v: CategorySelection[]) => void;
 }
 
 /**
@@ -19,33 +24,43 @@ interface Props {
  * TODO TS-1715: show number of packages on each category.
  */
 export const CategoryMenu = (props: Props) => {
-  const { categories, setCategories } = props;
+  const { categories, includedCategories, excludedCategories, setCategories } =
+    props;
 
-  const toggleCategory = (id: string) => setCategories(toggle(categories, id));
+  const parsedCategories = parseCategories(
+    categories,
+    includedCategories,
+    excludedCategories
+  );
+  const toggleCategory = (id: string) =>
+    setCategories(toggle(parsedCategories, id));
 
-  if (categories.length) {
+  if (parsedCategories.length) {
     return (
       <ol className={styles.list}>
-        {categories.map((c) => (
+        {parsedCategories.map((c) => (
           <li key={c.slug}>
-            <label
-              className={classnames(
-                styles.label,
-                c.selection !== "off" ? styles[c.selection] : undefined
-              )}
-            >
+            <label className={classnames(styles.label, styles[c.selection])}>
               <Checkbox.Root
                 checked={c.selection !== "off"}
                 onCheckedChange={() => toggleCategory(c.id)}
                 className={styles.checkbox}
               >
-                <Checkbox.Indicator>
-                  <Icon>
+                {c.selection === "off" ? (
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faSquare} />
+                  </NewIcon>
+                ) : null}
+                <Checkbox.Indicator asChild>
+                  <NewIcon csMode="inline" noWrapper>
                     <FontAwesomeIcon
-                      icon={c.selection === "include" ? faCheck : faXmark}
-                      className={styles.icon}
+                      icon={
+                        c.selection === "include"
+                          ? faSquareCheck
+                          : faSquareXmark
+                      }
                     />
-                  </Icon>
+                  </NewIcon>
                 </Checkbox.Indicator>
               </Checkbox.Root>
               {c.name}
@@ -55,7 +70,7 @@ export const CategoryMenu = (props: Props) => {
       </ol>
     );
   } else {
-    return <p className={styles.empty}>No categories</p>;
+    return <p>No categories</p>;
   }
 };
 
@@ -74,3 +89,19 @@ const toggle = (categories: CategorySelection[], targetId: string) =>
     }
     return c;
   });
+
+function parseCategories(
+  categories: CategorySelection[],
+  includedCategories: string,
+  excludedCategories: string
+): CategorySelection[] {
+  const iCArr = includedCategories.split(",");
+  const eCArr = excludedCategories.split(",");
+  return categories.map((c) =>
+    iCArr.includes(c.id)
+      ? { ...c, selection: "include" }
+      : eCArr.includes(c.id)
+        ? { ...c, selection: "exclude" }
+        : c
+  );
+}

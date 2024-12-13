@@ -14,10 +14,12 @@ const style: React.CSSProperties = {
 const defaultCommunity = {
   name: "Risk of Rain 2",
   identifier: "",
+  short_description: "",
   description: "",
+  wiki_url: "",
   discord_url: "",
   datetime_created: "",
-  background_image_url: "",
+  hero_image_url: "",
   cover_image_url: "",
   icon_url: "",
   total_download_count: 0,

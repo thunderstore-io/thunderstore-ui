@@ -1,5 +1,5 @@
-@layer project-layout {
-  .project-error {
+@layer nimbus-layout {
+  .nimbus-error {
     display: flex;
     flex-direction: column;
     gap: var(--space-32);
@@ -10,20 +10,20 @@
     --glitch-color-2: var(--old--color-accent-pink-50);
   }
 
-  .project-error__description {
-    color: var(--color-text--accent);
+  .nimbus-error__description {
+    color: var(--color-text-accent);
     font-weight: var(--font-weight-semibold);
     line-height: 1;
   }
 
-  .project-error__flavor {
+  .nimbus-error__flavor {
     font-weight: var(--font-weight-bold);
     font-size: var(--space-32);
     line-height: 1;
     text-align: center;
   }
 
-  .project-error__glitch {
+  .nimbus-error__glitch {
     position: relative;
     margin-top: var(--space-32);
     margin-bottom: var(--space-48);
@@ -32,35 +32,37 @@
     line-height: 1;
   }
 
-  .project-error__glitch::before,
-  .project-error__glitch::after {
+  .nimbus-error__glitch::before,
+  .nimbus-error__glitch::after {
     position: absolute;
     z-index: -1;
     width: 110%;
     content: attr(data-text);
   }
 
-  .project-error__glitch::before {
+  .nimbus-error__glitch::before {
     top: 10px;
     left: 15px;
     color: var(--glitch-color-1);
-    animation: project-error-paths 5s step-end infinite,
-      project-error-opacity 5s step-end infinite,
-      project-error-font 8s step-end infinite,
-      project-error-movement 10s step-end infinite;
+    animation:
+      nimbus-error-paths 5s step-end infinite,
+      nimbus-error-opacity 5s step-end infinite,
+      nimbus-error-font 8s step-end infinite,
+      nimbus-error-movement 10s step-end infinite;
   }
 
-  .project-error__glitch::after {
+  .nimbus-error__glitch::after {
     top: 5px;
     left: -10px;
     color: var(--glitch-color-2);
-    animation: project-error-paths 5s step-end infinite,
-      project-error-opacity 5s step-end infinite,
-      project-error-font 7s step-end infinite,
-      project-error-movement 8s step-end infinite;
+    animation:
+      nimbus-error-paths 5s step-end infinite,
+      nimbus-error-opacity 5s step-end infinite,
+      nimbus-error-font 7s step-end infinite,
+      nimbus-error-movement 8s step-end infinite;
   }
 
-  @keyframes project-error-paths {
+  @keyframes nimbus-error-paths {
     0% {
       clip-path: polygon(
         0% 43%,
@@ -312,7 +314,7 @@
     }
   }
 
-  @keyframes project-error-movement {
+  @keyframes nimbus-error-movement {
     0% {
       top: 0;
       left: -20px;
@@ -339,7 +341,7 @@
     }
   }
 
-  @keyframes project-error-opacity {
+  @keyframes nimbus-error-opacity {
     0% {
       opacity: 0.1;
     }
@@ -374,7 +376,7 @@
     }
   }
 
-  @keyframes project-error-font {
+  @keyframes nimbus-error-font {
     0% {
       color: var(--glitch-color-1);
       font-weight: 100;
@@ -401,7 +403,7 @@
     }
   }
 
-  .project-error__glitch span {
+  .nimbus-error__glitch span {
     animation: paths 5s step-end infinite;
   }
 }

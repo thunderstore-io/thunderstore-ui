@@ -53,10 +53,10 @@ export default function Community() {
   const currentTab = location.pathname.endsWith("/settings")
     ? "settings"
     : location.pathname.endsWith("/members")
-    ? "members"
-    : location.pathname.endsWith("/service-accounts")
-    ? "service-accounts"
-    : "profile";
+      ? "members"
+      : location.pathname.endsWith("/service-accounts")
+        ? "service-accounts"
+        : "profile";
 
   return (
     <>
@@ -64,12 +64,12 @@ export default function Community() {
         <CyberstormLink linkId="Teams">Teams</CyberstormLink>
         {team.name}
       </BreadCrumbs>
-      <header className="project-root__page-header">
+      <header className="nimbus-root__page-header">
         <div className={styles.header}>
           <PageHeader title="Teams" />
         </div>
       </header>
-      <main className="project-root__main">
+      <main className="nimbus-root__main">
         <div className={styles.teamContainer}>
           <div className={tabsStyles.root}>
             <div className={tabsStyles.buttons}>

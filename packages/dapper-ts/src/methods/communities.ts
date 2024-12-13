@@ -11,10 +11,12 @@ import { formatErrorMessage } from "../utils";
 const communitySchema = z.object({
   name: z.string().nonempty(),
   identifier: z.string().nonempty(),
+  short_description: z.string().nullable(),
   description: z.string().nullable(),
+  wiki_url: z.string().nullable(),
   discord_url: z.string().nullable(),
   datetime_created: z.string().datetime(),
-  background_image_url: z.string().url().nullable(),
+  hero_image_url: z.string().url().nullable(),
   cover_image_url: z.string().url().nullable(),
   icon_url: z.string().url().nullable(),
   total_download_count: z.number().int(),

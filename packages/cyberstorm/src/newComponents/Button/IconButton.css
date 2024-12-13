@@ -8,6 +8,8 @@
     width: var(--iconbutton-width);
     height: var(--iconbutton-height);
     padding: var(--iconbutton-padding);
+    padding-block: var(--iconbutton-padding-block);
+    padding-inline: var(--iconbutton-padding-inline);
     border: var(--iconbutton-border);
     border-color: var(--iconbutton-border-color);
     border-radius: var(--iconbutton-border-radius);

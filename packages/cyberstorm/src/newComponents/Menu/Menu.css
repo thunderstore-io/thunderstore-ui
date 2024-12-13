@@ -7,7 +7,8 @@
     background: transparent;
 
     transform: translateX(-100%);
-    transition: transform var(--animation-duration-sm),
+    transition:
+      transform var(--animation-duration-sm),
       display var(--animation-duration-sm) allow-discrete;
 
     &:popover-open {

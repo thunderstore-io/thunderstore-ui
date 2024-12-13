@@ -8,7 +8,7 @@ import React from "react";
 
 export type FormTextInputProps<
   Schema extends ZodObject<Z>,
-  Z extends ZodRawShape
+  Z extends ZodRawShape,
 > = {
   // The schema is required to allow TS to infer valid values for the name field
   schema: Schema;
@@ -18,7 +18,7 @@ export type FormTextInputProps<
 };
 export function FormTextInput<
   Schema extends ZodObject<Z>,
-  Z extends ZodRawShape
+  Z extends ZodRawShape,
 >({ name, placeholder, existingValue }: FormTextInputProps<Schema, Z>) {
   const {
     field,

@@ -20,7 +20,7 @@
   --text-color: var(--color-text--default);
   --bg-color: var(--color-surface-5);
   --border-color: var(--color-surface-9);
-  --icon-color: var(--color-text--tertiary);
+  --icon-color: var(--color-text-tertiary);
 }
 
 .label {
@@ -60,7 +60,7 @@
 
 .tag__borderless_removable {
   --border-color: transparent;
-  --text-color: var(--color-text--secondary);
+  --text-color: var(--color-text-secondary);
 
   text-transform: uppercase;
 }
@@ -107,7 +107,7 @@
 .tag__simple {
   --bg-color: var(--color-surface-4);
   --border-color: transparent;
-  --text-color: var(--color-text--tertiary);
+  --text-color: var(--color-text-tertiary);
 }
 
 .tag__success {

@@ -10,7 +10,7 @@
 
   padding: var(--space-8) var(--space-8);
   border-radius: var(--radius-md);
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
   background-color: var(--bg-color);
 
   --bg-color: var(--color-surface-4);

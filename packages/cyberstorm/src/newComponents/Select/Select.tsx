@@ -42,7 +42,6 @@ type _SelectProps<T extends string = string> = {
 export type SelectProps<T extends string = string> = _SelectProps<T> &
   Omit<React.HTMLProps<HTMLDivElement>, keyof _SelectProps<T>>;
 
-// TODO: COLOR SYSTEM IMPLEMENTATION IS MISSING IN CSS
 // TODO: Rework to use regular select preferrably
 // or atleast ensure a11y stuff works
 export function Select<T extends string>(props: SelectProps<T>) {
@@ -131,7 +130,7 @@ const mapSelectData = (
           ...componentClasses(csVariant, csSize, csModifiers)
         )}
       >
-        <NewIcon csMode="inline" noWrapper rootClasses="ts-select__item__icon">
+        <NewIcon csMode="inline" noWrapper>
           {option.leftIcon}
         </NewIcon>
         {option.label}

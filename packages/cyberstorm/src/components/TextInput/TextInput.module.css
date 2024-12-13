@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   width: auto;
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
 }
 
 .root > input {
@@ -42,7 +42,7 @@
 }
 
 .input::placeholder {
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
 }
 
 .input[data-color="red"] {
@@ -72,7 +72,7 @@
 .leftIcon {
   position: absolute;
   margin: var(--space-10) var(--space-16);
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
   line-height: normal;
   pointer-events: none;
 }
@@ -80,7 +80,7 @@
 .rightIcon {
   position: absolute;
   padding: var(--space-14) var(--space-16);
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
 }
 
 .clearValueButton {

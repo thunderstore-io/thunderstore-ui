@@ -78,7 +78,7 @@
 }
 
 .connectedAsDescription {
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-body-lg);
   line-height: 1;
@@ -91,7 +91,7 @@
   line-height: normal;
 }
 
-@media (width <= 30rem) {
+@media (width <= 48rem) {
   .item {
     flex-direction: column;
     gap: var(--gap-xs);

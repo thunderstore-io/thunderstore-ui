@@ -46,7 +46,7 @@
 }
 
 .button:not(.active, :disabled):hover > .icon {
-  color: var(--color-text--tertiary);
+  color: var(--color-text-tertiary);
 }
 
 .label {

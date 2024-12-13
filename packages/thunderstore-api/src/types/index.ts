@@ -23,16 +23,5 @@ export interface PackageListingQueryParams {
   nsfw: boolean;
   /** Should deprecated packages be included (by default they're not) */
   deprecated: boolean;
-  // Amount of days that the package must be created on or after
-  created_recent: string;
-  // Amount of days that the package must be updated on or after
-  updated_recent: string;
-  // Date that the package must be created ON or AFTER
-  created_after: string;
-  // Date that the package must be created ON or BEFORE
-  created_before: string;
-  // Date when the package has to been last updated ON or AFTER
-  updated_after: string;
-  // Date when the package has to been last updated ON or BEFORE
-  updated_before: string;
+  // Disabled until the UX for date filtering is resolved
 }
