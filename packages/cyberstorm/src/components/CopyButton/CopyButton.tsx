@@ -4,7 +4,7 @@ import { faClone, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styles from "./CopyButton.module.css";
 import { Tooltip } from "../Tooltip/Tooltip";
-import * as Button from "../Button/";
+import { NewIcon } from "../..";
 
 type CopyButtonProps = {
   text: string;
@@ -44,11 +44,7 @@ function useCopyToClipboard(
 }
 
 export function CopyButton(props: CopyButtonProps) {
-  const {
-    text,
-    paddingSize = "none",
-    colorScheme = "transparentDefault",
-  } = props;
+  const { text } = props;
 
   const [isSupported, setIsSupported] = useState(false);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
@@ -67,22 +63,22 @@ export function CopyButton(props: CopyButtonProps) {
       open={isTooltipOpen}
       side="bottom"
     >
-      <div className={styles.root}>
-        <Button.Root
-          paddingSize={paddingSize}
-          colorScheme={colorScheme}
-          onClick={() => useCopyToClipboard(text, setWasRecentlyCopied)}
-          onMouseOver={() => setIsTooltipOpen(true)}
-          onMouseOut={() => setIsTooltipOpen(false)}
+      <button
+        onClick={() => useCopyToClipboard(text, setWasRecentlyCopied)}
+        onMouseOver={() => setIsTooltipOpen(true)}
+        onMouseOut={() => setIsTooltipOpen(false)}
+        onBlur={() => {}}
+        onFocus={() => {}}
+        className={styles.root}
+      >
+        <NewIcon
+          rootClasses={wasRecentlyCopied ? styles.checkmark : styles.copy}
+          csMode="inline"
+          noWrapper
         >
-          <Button.ButtonIcon>
-            <FontAwesomeIcon
-              icon={wasRecentlyCopied ? faCheck : faClone}
-              className={wasRecentlyCopied ? styles.checkmark : styles.copy}
-            />
-          </Button.ButtonIcon>
-        </Button.Root>
-      </div>
+          <FontAwesomeIcon icon={wasRecentlyCopied ? faCheck : faClone} />
+        </NewIcon>
+      </button>
     </Tooltip>
   ) : null;
 }

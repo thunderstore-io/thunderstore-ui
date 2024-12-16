@@ -1,76 +1,76 @@
-import { Avatar, Icon, CyberstormLink } from "@thunderstore/cyberstorm";
-import {
-  faUsers,
-  faCaretRight,
-  faCrown,
-} from "@fortawesome/free-solid-svg-icons";
+import { Avatar, Heading, NewIcon, NewLink } from "@thunderstore/cyberstorm";
+import { faCaretRight, faCrown } from "@fortawesome/free-solid-svg-icons";
+import "../../packageListing.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./TeamMembers.module.css";
-import { WrapperCard } from "@thunderstore/cyberstorm/src/components/WrapperCard/WrapperCard";
 import { PackageListingDetails, TeamMember } from "@thunderstore/dapper/types";
 
 export default function TeamMembers(props: { listing: PackageListingDetails }) {
   const mappedPackageTeamList = props.listing.team.members
     .sort(compare)
     .map((teamMember, index) => {
-      return (
-        <div key={index}>
-          <PackageTeamListItem teamMember={teamMember} />
-        </div>
-      );
+      return <PackageTeamListItem key={index} teamMember={teamMember} />;
     });
 
   return (
-    <>
-      <WrapperCard
-        title="Team"
-        content={<div className={styles.list}>{mappedPackageTeamList}</div>}
-        headerIcon={<FontAwesomeIcon icon={faUsers} />}
-        headerRightContent={
-          props.listing.team ? (
-            <CyberstormLink
-              linkId="Team"
-              community={props.listing.community_identifier}
-              team={props.listing.team.name}
-            >
-              <div className={styles.teamLink}>
-                See team
-                <Icon inline wrapperClasses={styles.teamLinkIcon}>
-                  <FontAwesomeIcon icon={faCaretRight} />
-                </Icon>
-              </div>
-            </CyberstormLink>
-          ) : null
-        }
-      />
-    </>
+    <div className="nimbus-packagelisting__sidebar__wrapper">
+      <div className="nimbus-packagelisting__sidebar__wrapper__header">
+        <Heading
+          csLevel="4"
+          csSize="4"
+          className="nimbus-packagelisting__sidebar__wrapper__title"
+        >
+          Team
+        </Heading>
+        <NewLink
+          primitiveType="cyberstormLink"
+          linkId="Team"
+          community={props.listing.community_identifier}
+          team={props.listing.team.name}
+          rootClasses={styles.teamLink}
+        >
+          See team
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faCaretRight} />
+          </NewIcon>
+        </NewLink>
+      </div>
+      <div className="nimbus-packagelisting__sidebar__wrapper__team_list">
+        {mappedPackageTeamList}
+      </div>
+    </div>
   );
 }
 
 interface PackageTeamListItemProps {
+  key: number;
   teamMember: TeamMember;
 }
 
 function PackageTeamListItem(props: PackageTeamListItemProps) {
-  const { teamMember } = props;
+  const { key, teamMember } = props;
 
   return (
-    <CyberstormLink linkId="User" user={teamMember.username}>
-      <div className={styles.item}>
-        <Avatar username={teamMember.username} src={teamMember.avatar} />
-        <div>
-          <div className={styles.itemTitle}>
-            {teamMember.username}
-            {teamMember.role === "owner" ? (
-              <Icon inline wrapperClasses={styles.crown}>
-                <FontAwesomeIcon icon={faCrown} />
-              </Icon>
-            ) : null}
-          </div>
-          <div className={styles.itemDescription}>{teamMember.role}</div>
+    <NewLink
+      key={key}
+      primitiveType="cyberstormLink"
+      linkId="User"
+      user={teamMember.username}
+      rootClasses={styles.item}
+    >
+      <Avatar username={teamMember.username} src={teamMember.avatar} />
+      <div>
+        <div className={styles.itemTitle}>
+          {teamMember.username}
+          {teamMember.role === "owner" ? (
+            <NewIcon csMode="inline" noWrapper rootClasses={styles.crown}>
+              <FontAwesomeIcon icon={faCrown} />
+            </NewIcon>
+          ) : null}
         </div>
+        <div className={styles.itemDescription}>{teamMember.role}</div>
       </div>
-    </CyberstormLink>
+    </NewLink>
   );
 }
 

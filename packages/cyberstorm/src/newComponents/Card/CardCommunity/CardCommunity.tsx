@@ -26,7 +26,7 @@ export function CardCommunity(props: Props) {
       {isPopular || isNew ? (
         <div className="ts-cardcommunity__tag">
           {isPopular ? (
-            <NewTag csModifiers={["dark"]} csVariant="orange">
+            <NewTag csModifiers={["dark"]} csVariant="orange" csSize="small">
               <NewIcon noWrapper csMode="inline">
                 <FontAwesomeIcon icon={faFire} />
               </NewIcon>
@@ -34,7 +34,7 @@ export function CardCommunity(props: Props) {
             </NewTag>
           ) : null}
           {isNew ? (
-            <NewTag csModifiers={["dark"]} csVariant="green">
+            <NewTag csModifiers={["dark"]} csVariant="green" csSize="small">
               <NewIcon noWrapper csMode="inline">
                 <FontAwesomeIcon icon={faHandSparkles} />
               </NewIcon>

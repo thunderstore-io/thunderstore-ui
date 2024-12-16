@@ -87,6 +87,13 @@ const library: LinkLibrary = {
       ref={p.customRef}
     />
   ),
+  PackageRequired: (p) => (
+    <Link
+      {...p}
+      url={`/c/${p.community}/p/${p.namespace}/${p.package}/required`}
+      ref={p.customRef}
+    />
+  ),
   PackageWiki: (p) => (
     <Link
       {...p}
