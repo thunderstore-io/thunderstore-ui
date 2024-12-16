@@ -12,8 +12,8 @@
 }
 
 .title {
-  color: #c9c5d8;
-  font-weight: var(--font-weight-boldest);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
 
   line-height: var(--line-height-md);
   text-align: center;

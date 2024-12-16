@@ -18,6 +18,10 @@
     }
   }
 
+  .ts-link > svg {
+    filter: var(--dropshadow-default);
+  }
+
   /* TOKENS */
   :root {
     --link-primary-color--default: var(--color-text-accent);

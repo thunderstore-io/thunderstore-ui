@@ -434,7 +434,7 @@ export function PackageSearch(props: Props) {
                     onClick={resetParams}
                     rootClasses="nimbus-noresult__button"
                   >
-                    Clean all filters
+                    Clear all filters
                   </NewButton>
                 </EmptyState.Root>
               ) : (

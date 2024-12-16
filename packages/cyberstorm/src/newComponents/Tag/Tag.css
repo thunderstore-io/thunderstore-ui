@@ -6,9 +6,13 @@
     justify-content: center;
     height: var(--tag-height);
     border-radius: var(--tag-border-radius);
+    overflow: hidden;
     color: var(--tag-color);
     font-weight: var(--tag-font-weight);
     font-size: var(--tag-font-size);
+    white-space: nowrap;
+    text-decoration: none;
+    text-overflow: ellipsis;
     background: var(--tag-background-color);
     padding-block: var(--tag-padding-block);
     padding-inline: var(--tag-padding-inline);

@@ -46,6 +46,7 @@
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-md);
     line-height: var(--line-height-lg);
+    text-shadow: var(--textshadow-default);
 
     & > svg {
       inline-size: var(--space-16);
