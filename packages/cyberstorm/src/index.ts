@@ -32,7 +32,6 @@ export type { MenuItemProps } from "./components/MenuItem/";
 export { MetaItem, type MetaItemProps } from "./components/MetaItem/MetaItem";
 export { MetaInfoItem } from "./components/MetaInfoItem/MetaInfoItem";
 export { MetaInfoItemList } from "./components/MetaInfoItemList/MetaInfoItemList";
-export { default as NewTabs } from "./components/NewTabs/Tabs";
 export { SearchFilter } from "./components/SearchFilter/SearchFilter";
 export { SelectSearch } from "./components/SelectSearch/SelectSearch";
 export {
@@ -51,7 +50,6 @@ export {
 } from "./components/Pagination/PaginationButton";
 export { CyberstormProviders } from "./components/Providers";
 export { Select, type SelectProps } from "./components/Select/Select";
-export { Tabs, type TabsProps } from "./components/Tabs/Tabs";
 export { Tag, type TagProps } from "./components/Tag/Tag";
 export {
   TextInput,
@@ -124,3 +122,4 @@ export {
 } from "./newComponents/DropDown/DropDown";
 export { Image } from "./newComponents/Image/Image";
 export { AdContainer } from "./newComponents/AdContainer/AdContainer";
+export { Tabs } from "./newComponents/Tabs/Tabs";

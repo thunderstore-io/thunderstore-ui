@@ -136,9 +136,9 @@ export default function Community() {
   return (
     <>
       {community.hero_image_url ? (
-        <div className="nimbus-community__heroimg__wrapper">
+        <div className="nimbus-root__outlet__heroimg__wrapper">
           <div
-            className="nimbus-community__heroimg"
+            className="nimbus-root__outlet__heroimg"
             style={{
               backgroundImage: `url(${community.hero_image_url})`,
             }}
@@ -174,9 +174,8 @@ export default function Community() {
               <NewLink
                 primitiveType="link"
                 href={community.wiki_url}
-                key="meta-wiki"
                 csVariant="cyber"
-                rootClasses="nimbus-community__metalink"
+                rootClasses="nimbus-commoncomponents-page-header__meta__item"
               >
                 <NewIcon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faBook} />
@@ -196,9 +195,8 @@ export default function Community() {
               <NewLink
                 primitiveType="link"
                 href={community.discord_url}
-                key="meta-discord"
                 csVariant="cyber"
-                rootClasses="nimbus-community__metalink"
+                rootClasses="nimbus-commoncomponents-page-header__meta__item"
               >
                 <NewIcon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faDiscord} />

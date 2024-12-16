@@ -16,3 +16,4 @@ import "./components/Link/Link.css";
 import "./components/Image/Image.css";
 import "./components/AdContainer/AdContainer.css";
 import "./components/Pagination/Pagination.css";
+import "./components/Tabs/Tabs.css";

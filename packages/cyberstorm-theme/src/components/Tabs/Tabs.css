@@ -1,0 +1,115 @@
+@layer theme-components {
+  /* Tabs */
+  .ts-tabs {
+    --tabs-border-bottom-width: 3px;
+    --tabs-border-bottom-style: solid;
+    --tabs-border-bottom-color: var(--color-surface-5);
+  }
+
+  /* Tabs Item */
+
+  /* SIZES */
+  .ts-tabs-item:where(.ts-size--medium) {
+    --tabs-item-height: 3.25rem;
+    --tabs-item-padding: 0.75rem 1rem;
+    --tabs-item-gap: 0.75rem;
+    --tabs-item-font-size: var(--font-size-body-lg);
+    --tabs-item-font-weight: 700;
+    --tabs-item-border-bottom-width: 3px;
+  }
+
+  /* VARIANTS */
+  .ts-tabs-item:where(.ts-variant--default) {
+    --tabs-item-color: var(--tab-nav-item-text-color--default);
+    --tabs-item-icon-color: var(--tab-nav-item-icon-color--default);
+    --tabs-item-border-bottom-style: var(--tab-nav-item-border-style--default);
+    --tabs-item-border-bottom-color: var(--tab-nav-item-border-color--default);
+
+    &:active {
+      --tabs-item-color: var(--tab-nav-item-text-color--active);
+      --tabs-item-icon-color: var(--tab-nav-item-icon-color--active);
+      --tabs-item-border-bottom-color: var(--tab-nav-item-border-color--active);
+    }
+
+    &:hover {
+      --tabs-item-color: var(--tab-nav-item-text-color--hover);
+      --tabs-item-icon-color: var(--tab-nav-item-icon-color--hover);
+      --tabs-item-border-bottom-color: var(--tab-nav-item-border-color--hover);
+    }
+
+    &.ts-tabs-item-current {
+      --tabs-item-color: var(--tab-nav-item-text-color--current);
+      --tabs-item-icon-color: var(--tab-nav-item-icon-color--current);
+      --tabs-item-border-bottom-color: var(
+        --tab-nav-item-border-color--current
+      );
+    }
+  }
+
+  /* Tabs Item Number Slate */
+
+  /* SIZES */
+  .ts-tabs-item-number-slate:where(.ts-size--medium) {
+    --tabs-item-number-slate-padding: var(--space-2) var(--space-4);
+    --tabs-item-number-slate-gap: 0.5rem;
+    --tabs-item-number-slate-border-radius: var(--radius-sm);
+    --tabs-item-number-slate-background-color: var(--color-surface-a4);
+  }
+
+  /* VARIANTS */
+  .ts-tabs-item-number-slate:where(.ts-variant--default) {
+    --tabs-item-number-slate-color: var(--tab-nav-item-text-color--default);
+    --tabs-item-number-slate-background-color: var(--color-surface-a4);
+
+    &:active {
+      --tabs-item-number-slate-color: var(--tab-nav-item-text-color--active);
+      --tabs-item-number-slate-border-bottom-color: var(
+        --tab-nav-item-border-color--active
+      );
+    }
+
+    &:hover {
+      --tabs-item-number-slate-color: var(--tab-nav-item-text-color--hover);
+      --tabs-item-number-slate-border-bottom-color: var(
+        --tab-nav-item-border-color--hover
+      );
+    }
+
+    &.ts-tabs-item-current {
+      --tabs-item-number-slate-color: var(--tab-nav-item-text-color--current);
+      --tabs-item-number-slate-border-bottom-color: var(
+        --tab-nav-item-border-color--current
+      );
+    }
+  }
+
+  /* TOKENS */
+  :root {
+    /* Tabs */
+
+    /* Tabs Item */
+    --tab-nav-item-border-style--default: solid;
+    --tab-nav-item-border-color--active: var(--color-surface-9);
+    --tab-nav-item-border-color--current: var(--color-cyber-green-7);
+    --tab-nav-item-border-color--default: #0000;
+    --tab-nav-item-border-color--hover: var(--color-surface-9);
+    --tab-nav-item-icon-color--active: var(--color-text-secondary);
+    --tab-nav-item-icon-color--current: var(--color-cyber-green-7);
+    --tab-nav-item-icon-color--default: var(--color-text-tertiary);
+    --tab-nav-item-icon-color--hover: var(--color-text-secondary);
+    --tab-nav-item-text-color--active: var(--color-text-primary);
+    --tab-nav-item-text-color--current: var(--color-cyber-green-7);
+    --tab-nav-item-text-color--default: var(--color-text-tertiary);
+    --tab-nav-item-text-color--hover: var(--color-text-primary);
+
+    /* Tabs Item Number Slate */
+    --tab-nav-item-number-background-color--active: var(--color-surface-a4);
+    --tab-nav-item-number-background-color--current: var(--color-cyber-green-3);
+    --tab-nav-item-number-background-color--default: var(--color-surface-a4);
+    --tab-nav-item-number-background-color--hover: var(--color-surface-a4);
+    --tab-nav-item-number-color--active: var(--color-text-tertiary);
+    --tab-nav-item-number-color--current: var(--color-cyber-green-6);
+    --tab-nav-item-number-color--default: var(--color-text-tertiary);
+    --tab-nav-item-number-color--hover: var(--color-text-tertiary);
+  }
+}

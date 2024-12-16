@@ -81,6 +81,12 @@ export {
   type MetaItemSizes,
   MetaItemSizesList,
 } from "./components/MetaItem/MetaItem";
+export {
+  type TabsVariants,
+  TabsVariantsList,
+  type TabsSizes,
+  TabsSizesList,
+} from "./components/Tabs/Tabs";
 export { type LinkVariants, LinkVariantsList } from "./components/Link/Link";
 export {
   type ImageVariants,

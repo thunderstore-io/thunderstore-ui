@@ -14,7 +14,7 @@
 
   .nimbus-root__content {
     display: flex;
-    gap: 4rem;
+    gap: 2.5rem;
     align-items: flex-start;
     justify-content: center;
     width: 100%;
@@ -28,6 +28,48 @@
     gap: 1rem;
     min-width: 0;
     padding: 1rem 0 2rem 2rem;
+  }
+
+  .nimbus-root__outlet__heroimg__wrapper {
+    --w: 56vw;
+
+    position: absolute;
+    top: calc(-1 * (var(--header-height) + var(--content-padding-top-desktop)));
+    right: 0;
+
+    z-index: -1;
+    width: var(--w);
+    height: calc(var(--w) * 0.45);
+    overflow: hidden;
+  }
+
+  .nimbus-root__outlet__heroimg {
+    --w: 56vw;
+
+    position: absolute;
+
+    right: 0;
+
+    z-index: -1;
+    width: var(--w);
+    height: calc(var(--w) * 0.45);
+    background-color: var(--body-bg-color);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: cover;
+
+    background-blend-mode: luminosity;
+    opacity: 0.3;
+    mask-image: var(--gradients);
+    mask-composite: intersect;
+
+    --gradients: linear-gradient(
+        90deg,
+        transparent 0%,
+        white 70%,
+        transparent 100%
+      ),
+      linear-gradient(180deg, white 40%, transparent 95%);
   }
 
   .nimbus-root__ads-container {
@@ -62,6 +104,31 @@
     }
   }
 
+  @media (width < 87.5rem) {
+    .nimbus-root__outlet__heroimg__wrapper {
+      width: 60vw;
+      height: 30vw;
+    }
+
+    .nimbus-root__outlet__heroimg {
+      width: 60vw;
+      height: 30vw;
+    }
+  }
+
+  @media (width <= 63.5rem) {
+    .nimbus-root__outlet__heroimg__wrapper {
+      top: calc(-1 * var(--header-height));
+      width: 75vw;
+      height: 40vw;
+    }
+
+    .nimbus-root__outlet__heroimg {
+      width: 75vw;
+      height: 40vw;
+    }
+  }
+
   @media (width >= 60rem) {
     .nimbus-root__main {
       flex: 1;
@@ -75,6 +142,22 @@
   @media (width <= 48rem) {
     .nimbus-root__outlet {
       padding: 1rem;
+    }
+
+    .nimbus-root__outlet__heroimg {
+      right: -2.5rem;
+    }
+  }
+
+  @media (width < 25rem) {
+    .nimbus-root__outlet__heroimg__wrapper {
+      width: 80vw;
+      height: 60vw;
+    }
+
+    .nimbus-root__outlet__heroimg {
+      width: 80vw;
+      height: 60vw;
     }
   }
 }
