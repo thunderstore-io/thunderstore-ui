@@ -17,6 +17,7 @@ export interface ActionableLinkProps
     PrimitiveComponentDefaultProps {
   primitiveType: "link";
   href: string;
+  disabled?: boolean;
 }
 
 export interface ActionableCyberstormLinkProps
@@ -25,6 +26,7 @@ export interface ActionableCyberstormLinkProps
     ThunderstoreLinkProps {
   primitiveType: "cyberstormLink";
   linkId: CyberstormLinkIds;
+  disabled?: boolean;
 }
 
 export const Actionable = React.forwardRef<
@@ -61,10 +63,15 @@ export const Actionable = React.forwardRef<
     }
     if (primitiveType === "link") {
       const fRef = forwardedRef as React.ForwardedRef<HTMLAnchorElement>;
-      const fProps = forwardedProps as ActionableLinkProps;
+      const { disabled, ...fProps } = forwardedProps as ActionableLinkProps;
       return (
         <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
-          <a {...fProps} className={rootClasses} ref={fRef}>
+          <a
+            {...fProps}
+            className={rootClasses}
+            ref={fRef}
+            aria-disabled={disabled}
+          >
             {children}
           </a>
         </TooltipWrapper>
@@ -72,7 +79,7 @@ export const Actionable = React.forwardRef<
     }
     if (primitiveType === "cyberstormLink") {
       const fRef = forwardedRef as React.ForwardedRef<HTMLAnchorElement>;
-      const { linkId, ...strippedForwardedProps } =
+      const { linkId, disabled, ...strippedForwardedProps } =
         forwardedProps as ActionableCyberstormLinkProps;
       return (
         <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
@@ -81,6 +88,7 @@ export const Actionable = React.forwardRef<
             className={rootClasses}
             linkId={linkId}
             ref={fRef}
+            aria-disabled={disabled}
           >
             {children}
           </CyberstormLink>

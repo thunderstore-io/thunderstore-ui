@@ -7,4 +7,13 @@
       color: var(--link-color-hover);
     }
   }
+
+  .ts-link[disabled],
+  .ts-link-disabled {
+    pointer-events: none;
+  }
+
+  .ts-link-strikethrough {
+    display: flex;
+  }
 }

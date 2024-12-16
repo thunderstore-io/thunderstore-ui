@@ -39,6 +39,19 @@
     gap: var(--space-32);
   }
 
+  .nimbus-commoncomponents-page-header__meta__item {
+    display: flex;
+    gap: var(--gap-xs);
+    align-items: center;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-lg);
+
+    & > svg {
+      inline-size: var(--space-16);
+    }
+  }
+
   @media (width <= 48rem) {
     .nimbus-commoncomponents-page-header {
       gap: var(--space-16);

@@ -30,11 +30,16 @@ export const Link = React.forwardRef<
           : csVariant === "cyber"
             ? "ts-link ts-variant--cyber"
             : "ts-link",
+        forwardedProps.disabled ? "ts-link-disabled" : undefined,
         rootClasses
       )}
       ref={forwardedRef}
     >
-      {children}
+      {forwardedProps.disabled ? (
+        <s className="ts-link-strikethrough">{children}</s>
+      ) : (
+        children
+      )}
     </Actionable>
   );
 });
