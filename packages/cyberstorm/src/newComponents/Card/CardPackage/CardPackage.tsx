@@ -50,7 +50,7 @@ export function CardPackage(props: Props) {
         isNew ? (
           <div className="ts-cardpackage__tag">
             {packageData.is_pinned ? (
-              <NewTag csModifiers={["dark"]} csVariant="blue">
+              <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
                 <NewIcon noWrapper csMode="inline">
                   <FontAwesomeIcon icon={faThumbTack} />
                 </NewIcon>
@@ -58,7 +58,7 @@ export function CardPackage(props: Props) {
               </NewTag>
             ) : null}
             {packageData.is_nsfw ? (
-              <NewTag csModifiers={["dark"]} csVariant="pink">
+              <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
                 <NewIcon noWrapper csMode="inline">
                   <FontAwesomeIcon icon={faLips} />
                 </NewIcon>
@@ -66,7 +66,7 @@ export function CardPackage(props: Props) {
               </NewTag>
             ) : null}
             {packageData.is_deprecated ? (
-              <NewTag csModifiers={["dark"]} csVariant="yellow">
+              <NewTag csSize="small" csModifiers={["dark"]} csVariant="yellow">
                 <NewIcon noWrapper csMode="inline">
                   <FontAwesomeIcon icon={faWarning} />
                 </NewIcon>
@@ -74,7 +74,7 @@ export function CardPackage(props: Props) {
               </NewTag>
             ) : null}
             {isNew ? (
-              <NewTag csModifiers={["dark"]} csVariant="green">
+              <NewTag csSize="small" csModifiers={["dark"]} csVariant="green">
                 <NewIcon noWrapper csMode="inline">
                   <FontAwesomeIcon icon={faSparkles} />
                 </NewIcon>
@@ -138,7 +138,7 @@ export function CardPackage(props: Props) {
                   href={`/c/${packageData.community_identifier}/?includedCategories=${c.id}`}
                   key={`category_${c}_${index}`}
                   csVariant="primary"
-                  csSize="small"
+                  csSize="xsmall"
                   csModifiers={["dark", "hoverable"]}
                 >
                   {c.name}

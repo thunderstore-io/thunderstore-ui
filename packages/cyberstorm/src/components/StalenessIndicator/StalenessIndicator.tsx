@@ -2,7 +2,8 @@ import styles from "./StalenessIndicator.module.css";
 import { ReactNode } from "react";
 import { classnames } from "../../utils/utils";
 import { NewIcon } from "../..";
-import { ThunderstoreLogo } from "../../svg/svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinnerThird } from "@fortawesome/pro-solid-svg-icons";
 
 interface Props {
   children: ReactNode;
@@ -22,7 +23,7 @@ export function StalenessIndicator(props: Props) {
     <div style={{ position: "relative" }}>
       {isStale ? (
         <NewIcon wrapperClasses={styles.loader}>
-          <ThunderstoreLogo />
+          <FontAwesomeIcon icon={faSpinnerThird} />
         </NewIcon>
       ) : undefined}
       <div className={classnames(isStale ? styles.root : null, className)}>

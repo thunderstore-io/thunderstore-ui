@@ -29,7 +29,6 @@
   gap: var(--gap-md);
   width: 16.6rem;
   max-height: calc(100vh - var(--header-height) - 1rem);
-  padding-right: var(--space-8);
   padding-bottom: var(--space-16);
   overflow-y: auto;
 
@@ -61,6 +60,10 @@
     100% 14px;
   background-attachment: local, local, scroll, scroll;
   transition: var(--animation-duration-md) all allow-discrete;
+
+  &:where(:not(:hover)) {
+    scrollbar-color: transparent transparent;
+  }
 }
 
 .sidebarIsHidden {
@@ -167,6 +170,10 @@
 
   .listingOptions {
     width: 100%;
+  }
+
+  .searchGroupOne {
+    flex-direction: row-reverse;
   }
 }
 

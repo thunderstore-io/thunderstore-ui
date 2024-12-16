@@ -229,14 +229,12 @@ export default function Community() {
   return (
     <>
       {community.hero_image_url ? (
-        <div className="nimbus-root__outlet__heroimg__wrapper">
-          <div
-            className="nimbus-root__outlet__heroimg"
-            style={{
-              backgroundImage: `url(${community.hero_image_url})`,
-            }}
-          />
-        </div>
+        <div
+          className="nimbus-root__outlet__heroimg"
+          style={{
+            backgroundImage: `url(${community.hero_image_url})`,
+          }}
+        />
       ) : null}
       <NewBreadCrumbs rootClasses="nimbus-root__breadcrumbs">
         <NewLink

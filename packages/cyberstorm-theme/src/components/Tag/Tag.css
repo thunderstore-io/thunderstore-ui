@@ -214,8 +214,8 @@
     --tag-dark-pink-text-color--hover: var(--color-accent-pink-9);
     --tag-dark-primary-bg-color--default: var(--color-surface-8);
     --tag-dark-primary-bg-color--hover: var(--color-surface-9);
-    --tag-dark-primary-text-color--default: var(--color--primary);
-    --tag-dark-primary-text-color--hover: var(--color--primary);
+    --tag-dark-primary-text-color--default: var(--color-text-primary);
+    --tag-dark-primary-text-color--hover: var(--color-text-primary);
     --tag-dark-purple-bg-color--default: var(--color-accent-purple-2);
     --tag-dark-purple-bg-color--hover: var(--color-accent-purple-3);
     --tag-dark-purple-text-color--default: var(--color-accent-purple-9);

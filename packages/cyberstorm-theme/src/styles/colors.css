@@ -17,6 +17,8 @@
       0px 6px 8px 0px rgb(0 0 0 / 0.5);
     --color-text-a--default: var(--color-cyber-green-7);
     --color-text-a--hover: var(--color-cyber-green-6);
+    --dropshadow-default: drop-shadow(0 1px 1px #0d0d21);
+    --textshadow-default: 0 1px 1px #0d0d21;
 
     /* Color tokens */
     --color-black: rgb(0 0 0);
