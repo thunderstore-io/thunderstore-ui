@@ -29,7 +29,9 @@ const Template: StoryFn<typeof NewTag> = () => {
                 csSize={size}
                 csModifiers={[modifier]}
               >
-                {size}-{variant}-{modifier}
+                <span>
+                  {size}-{variant}-{modifier}
+                </span>
                 <NewIcon csMode={"inline"} noWrapper>
                   <FontAwesomeIcon icon={faChevronDown} />
                 </NewIcon>
@@ -40,7 +42,9 @@ const Template: StoryFn<typeof NewTag> = () => {
                 csSize={size}
                 csModifiers={[modifier, "hoverable"]}
               >
-                {size}-{variant}-{modifier}-hoverable
+                <span>
+                  {size}-{variant}-{modifier}-hoverable
+                </span>
                 <NewIcon csMode={"inline"} noWrapper>
                   <FontAwesomeIcon icon={faChevronDown} />
                 </NewIcon>
@@ -56,7 +60,9 @@ const Template: StoryFn<typeof NewTag> = () => {
             csSize={size}
             csModifiers={[modifier]}
           >
-            {size}-{variant}-{modifier}
+            <span>
+              {size}-{variant}-{modifier}
+            </span>
             <NewIcon csMode={"inline"} noWrapper>
               <FontAwesomeIcon icon={faChevronDown} />
             </NewIcon>
@@ -77,7 +83,9 @@ const Template: StoryFn<typeof NewTag> = () => {
             csVariant={variant}
             csSize={size}
           >
-            {size}-{variant}-noModifier
+            <span>
+              {size}-{variant}-noModifier
+            </span>
             <NewIcon csMode={"inline"} noWrapper>
               <FontAwesomeIcon icon={faChevronDown} />
             </NewIcon>

@@ -142,7 +142,7 @@ export function CardPackage(props: Props) {
                   csSize="xsmall"
                   csModifiers={["dark", "hoverable"]}
                 >
-                  {c.name}
+                  <span>{c.name}</span>
                 </NewTag>
               ))
             : null}
