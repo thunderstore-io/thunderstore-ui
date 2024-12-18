@@ -9,13 +9,14 @@ import {
   Button,
   CopyButton,
   Dialog,
+  Heading,
   Image,
   NewBreadCrumbs,
   NewButton,
   NewIcon,
   NewLink,
+  NewTag,
   Tabs,
-  Tag,
 } from "@thunderstore/cyberstorm";
 import "./packageListing.css";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
@@ -28,13 +29,11 @@ import {
   faHandHoldingHeart,
   faDownload,
   faThumbsUp,
-  faBoxes,
+  faWarning,
+  faThumbTack,
 } from "@fortawesome/free-solid-svg-icons";
-import { WrapperCard } from "@thunderstore/cyberstorm/src/components/WrapperCard/WrapperCard";
-import TagList from "./components/TagList/TagList";
-import Dependencies from "./components/Dependencies/Dependencies";
 import TeamMembers from "./components/TeamMembers/TeamMembers";
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import {
   PackageDeprecateAction,
@@ -42,7 +41,11 @@ import {
   PackageLikeAction,
 } from "@thunderstore/cyberstorm-forms";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faArrowUpRight,
+  faLips,
+  faSparkles,
+} from "@fortawesome/pro-solid-svg-icons";
 import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTime/RelativeTime";
 import {
   formatFileSize,
@@ -207,24 +210,77 @@ export default function Community() {
   // Sidebar helpers
   const mappedPackageTagList = listing.categories.map((category) => {
     return (
-      <Tag
-        colorScheme="borderless_no_hover"
-        size="mediumPlus"
-        key={category.name}
-        label={category.name.toUpperCase()}
-      />
+      <NewTag key={category.name} csSize="small" csVariant="primary">
+        {category.name}
+      </NewTag>
     );
   });
 
   const currentTab = location.pathname.endsWith("/changelog")
     ? "changelog"
-    : location.pathname.endsWith("/versions")
-      ? "versions"
-      : location.pathname.endsWith("/wiki")
-        ? "wiki"
-        : location.pathname.endsWith("/source")
-          ? "source"
-          : "details";
+    : location.pathname.endsWith("/required")
+      ? "required"
+      : location.pathname.endsWith("/versions")
+        ? "versions"
+        : location.pathname.endsWith("/wiki")
+          ? "wiki"
+          : location.pathname.endsWith("/source")
+            ? "source"
+            : "details";
+
+  const updateTimeDelta = Math.round(
+    (Date.now() - Date.parse(listing.last_updated)) / 86400000
+  );
+  const isNew = updateTimeDelta < 3;
+  if (
+    !listing.is_pinned &&
+    !listing.is_nsfw &&
+    !listing.is_deprecated &&
+    !isNew
+  ) {
+    return null;
+  }
+  const flagList: ReactNode[] = [];
+  if (listing.is_pinned) {
+    flagList.push(
+      <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
+        <NewIcon noWrapper csMode="inline">
+          <FontAwesomeIcon icon={faThumbTack} />
+        </NewIcon>
+        Pinned
+      </NewTag>
+    );
+  }
+  if (listing.is_deprecated) {
+    flagList.push(
+      <NewTag csSize="small" csModifiers={["dark"]} csVariant="yellow">
+        <NewIcon noWrapper csMode="inline">
+          <FontAwesomeIcon icon={faWarning} />
+        </NewIcon>
+        Deprecated
+      </NewTag>
+    );
+  }
+  if (listing.is_nsfw) {
+    flagList.push(
+      <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
+        <NewIcon noWrapper csMode="inline">
+          <FontAwesomeIcon icon={faLips} />
+        </NewIcon>
+        NSFW
+      </NewTag>
+    );
+  }
+  if (isNew) {
+    flagList.push(
+      <NewTag csSize="small" csModifiers={["dark"]} csVariant="green">
+        <NewIcon noWrapper csMode="inline">
+          <FontAwesomeIcon icon={faSparkles} />
+        </NewIcon>
+        New
+      </NewTag>
+    );
+  }
 
   return (
     <>
@@ -394,6 +450,19 @@ export default function Community() {
                   children: <>Description</>,
                 },
                 current: currentTab === "details",
+              },
+              {
+                itemProps: {
+                  key: "required",
+                  primitiveType: "cyberstormLink",
+                  linkId: "PackageRequired",
+                  community: listing.community_identifier,
+                  namespace: listing.namespace,
+                  package: listing.name,
+                  "aria-current": currentTab === "required",
+                  children: <>Required</>,
+                },
+                current: currentTab === "required",
               },
               {
                 itemProps: {
@@ -584,19 +653,24 @@ export default function Community() {
               </div>
             </div>
           </div>
-          {listing.categories.length > 0 ? (
-            <WrapperCard
-              title="Categories"
-              content={
-                <div className="nimbus-packagelisting__sidebar__categories">
-                  {mappedPackageTagList}
-                </div>
-              }
-              headerIcon={<FontAwesomeIcon icon={faBoxes} />}
-            />
-          ) : null}
-          <TagList listing={listing} />
-          <Dependencies listing={listing} />
+          <div className="nimbus-packagelisting__sidebar__wrapper">
+            <div className="nimbus-packagelisting__sidebar__wrapper__header">
+              <Heading
+                csLevel="4"
+                csSize="4"
+                className="nimbus-packagelisting__sidebar__wrapper__title"
+              >
+                Categories
+              </Heading>
+            </div>
+            <div className="nimbus-packagelisting__sidebar__wrapper__categories_or_tags">
+              {mappedPackageTagList}
+            </div>
+            <div className="nimbus-packagelisting__sidebar__wrapper__categories_or_tags">
+              {flagList}
+            </div>
+          </div>
+
           <TeamMembers listing={listing} />
         </div>
       </main>

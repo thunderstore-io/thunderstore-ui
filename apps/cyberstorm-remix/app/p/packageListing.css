@@ -126,6 +126,7 @@
   .nimbus-packagelisting__sidebar__meta__item__content__dependencystring {
     display: -webkit-box;
     flex: 1 0 0;
+    max-width: 15ch;
     overflow: hidden;
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
@@ -148,5 +149,39 @@
     flex-flow: row wrap;
     gap: 0.5rem;
     row-gap: 0.5rem;
+  }
+
+  .nimbus-packagelisting__sidebar__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    align-self: stretch;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    background: rgb(59 63 125 / 0.24);
+  }
+
+  .nimbus-packagelisting__sidebar__wrapper__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .nimbus-packagelisting__sidebar__wrapper__categories_or_tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-content: flex-start;
+    align-items: flex-start;
+    align-self: stretch;
+  }
+
+  .nimbus-packagelisting__sidebar__wrapper__team_list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
   }
 }

@@ -1,6 +1,5 @@
-import { Tag } from "@thunderstore/cyberstorm";
-import { WrapperCard } from "@thunderstore/cyberstorm/src/components/WrapperCard/WrapperCard";
-import styles from "./TagList.module.css";
+import { Heading, Tag } from "@thunderstore/cyberstorm";
+import "../../packageListing.css";
 import { PackageListingDetails } from "@thunderstore/dapper/types";
 import { ReactNode } from "react";
 
@@ -9,19 +8,23 @@ import {
   faThumbtack,
   faWarning,
   faBomb,
-  faTag,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function TagList(props: { listing: PackageListingDetails }) {
   return (
     <>
-      <WrapperCard
-        title="Tags"
-        content={
-          <div className={styles.list}>{getPackageFlags(props.listing)}</div>
-        }
-        headerIcon={<FontAwesomeIcon icon={faTag} />}
-      />
+      <div className="nimbus-packagelisting__sidebar__wrapper">
+        <Heading
+          csLevel="4"
+          csSize="4"
+          className="nimbus-packagelisting__sidebar__wrapper__title"
+        >
+          Categories
+        </Heading>
+        <div className="nimbus-packagelisting__sidebar__wrapper__categories_or_tags">
+          {getPackageFlags(props.listing)}
+        </div>
+      </div>
     </>
   );
 }

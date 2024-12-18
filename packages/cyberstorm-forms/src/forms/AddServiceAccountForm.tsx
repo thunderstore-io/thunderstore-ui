@@ -74,11 +74,7 @@ export function AddServiceAccountForm(props: {
           </p>
           <div className={styles.token}>
             <pre className={styles.tokenField}>{addedServiceAccountToken}</pre>
-            <CopyButton
-              colorScheme="default"
-              paddingSize="mediumSquare"
-              text={addedServiceAccountToken}
-            />
+            <CopyButton text={addedServiceAccountToken} />
           </div>
           <Alert
             icon={<FontAwesomeIcon icon={faCircleExclamation} />}

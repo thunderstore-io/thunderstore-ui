@@ -4,8 +4,11 @@
 
 .item {
   display: flex;
-  gap: var(--gap-md);
-  padding: var(--space-8);
+  gap: 1rem;
+  align-items: center;
+  align-self: stretch;
+  width: 100%;
+  padding: 0.5rem;
   border-radius: var(--radius-md);
 }
 
@@ -14,41 +17,42 @@
 }
 
 .itemTitle {
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-body-lg);
-  line-height: var(--line-height--m);
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  overflow: hidden;
+  color: var(--color-text-primary);
+  font-weight: 700;
+  font-size: var(--font-size-body-md);
+  line-height: 150%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .itemDescription {
   color: var(--color-text-tertiary);
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-body-lg);
-  line-height: var(--line-height--m);
+  font-weight: 400;
+  font-size: var(--font-size-body-sm);
+  line-height: 170%;
 }
 
 .teamLink {
   display: flex;
   gap: var(--gap-xs);
   align-items: center;
-  color: var(--color-highlight);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-body-lg);
-  line-height: var(--line-height--m);
-}
+  color: var(--color-cyber-green-7, #23ffab);
+  font-weight: 400;
+  font-size: var(--font-size-body-md);
+  line-height: 150%;
 
-.teamLinkIcon {
-  width: 1em;
-  height: 1em;
-}
-
-.teamLink:hover {
-  color: var(--color-highlight--hover);
+  --icon-color: var(--color-cyber-green-7, #23ffab);
 }
 
 .crown {
   display: inline-flex;
+  align-items: center;
   width: 1em;
   height: 1em;
-  margin-left: var(--space-4);
   color: var(--color-crown);
+  line-height: 160%;
 }
