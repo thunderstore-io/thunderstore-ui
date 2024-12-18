@@ -322,6 +322,7 @@ function AdsInit() {
       const $script = document.createElement("script");
       $script.src = "https://s.nitropay.com/ads-785.js";
       $script.setAttribute("async", "true");
+      $script.setAttribute("data-log-level", "silent");
 
       document.body.append($script);
 
