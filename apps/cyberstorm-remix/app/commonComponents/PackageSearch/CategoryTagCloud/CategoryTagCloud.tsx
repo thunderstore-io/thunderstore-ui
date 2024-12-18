@@ -41,7 +41,7 @@ export const CategoryTagCloud = (props: Props) => {
           onClick={() => setSearchValue("")}
           csSize="medium"
         >
-          {`"${searchValue}"`}
+          <span>{`"${searchValue}"`}</span>
           <NewIcon csMode="inline" noWrapper>
             <FontAwesomeIcon icon={faXmark} className={styles.icon} />
           </NewIcon>
@@ -63,7 +63,7 @@ export const CategoryTagCloud = (props: Props) => {
               <FontAwesomeIcon icon={faBan} />
             </NewIcon>
           ) : undefined}
-          {c.name}
+          <span>{c.name}</span>
           <NewIcon csMode="inline" noWrapper rootClasses={styles.icon}>
             <FontAwesomeIcon icon={faXmark} />
           </NewIcon>
@@ -76,7 +76,7 @@ export const CategoryTagCloud = (props: Props) => {
         csModifiers={["ghost"]}
         rootClasses={styles.clearButton}
       >
-        Clear all
+        <span>Clear all</span>
         <NewIcon csMode="inline" noWrapper>
           <FontAwesomeIcon icon={faXmark} className={styles.icon} />
         </NewIcon>

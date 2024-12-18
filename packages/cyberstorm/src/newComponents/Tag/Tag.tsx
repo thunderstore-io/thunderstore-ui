@@ -53,7 +53,7 @@ export const Tag = React.forwardRef<
         )}
         ref={fRef}
       >
-        <div className="ts-tag__content">{children}</div>
+        {children}
       </Actionable>
     );
   }
@@ -72,7 +72,7 @@ export const Tag = React.forwardRef<
         )}
         ref={fRef}
       >
-        <div className="ts-tag__content">{children}</div>
+        {children}
       </Actionable>
     );
   }
@@ -89,7 +89,7 @@ export const Tag = React.forwardRef<
       )}
       ref={forwardedRef}
     >
-      <div className="ts-tag__content">{children}</div>
+      {children}
     </Frame>
   );
 });

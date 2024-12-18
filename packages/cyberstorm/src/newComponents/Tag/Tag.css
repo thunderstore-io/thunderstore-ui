@@ -15,11 +15,7 @@
     padding-inline: var(--tag-padding-inline);
   }
 
-  .ts-tag__content {
-    display: flex;
-    gap: var(--tag-gap);
-    align-items: center;
-    justify-content: center;
+  .ts-tag > span {
     min-width: 0;
     overflow-x: clip;
     white-space: nowrap;
