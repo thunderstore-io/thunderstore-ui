@@ -11,7 +11,7 @@
     align-items: center;
     width: 100%;
     min-height: 100dvh;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   .nimbus-root__content {

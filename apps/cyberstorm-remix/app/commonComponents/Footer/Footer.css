@@ -1,4 +1,8 @@
 @layer nimbus-layout {
+  :root {
+    --nimbus-footer-width: 90rem;
+  }
+
   .nimbus-footer {
     width: 100%;
     padding-top: 4.5rem;
@@ -91,7 +95,7 @@
     align-self: stretch;
     justify-content: center;
     width: 100%;
-    max-width: 83.5rem;
+    max-width: var(--nimbus-footer-width);
     margin-inline: auto;
   }
 

@@ -119,6 +119,7 @@ export function CardPackage(props: Props) {
               team={packageData.namespace}
               title={packageData.namespace}
               rootClasses="ts-cardpackage__author__link"
+              csVariant="cyber"
             >
               {packageData.namespace}
             </NewLink>

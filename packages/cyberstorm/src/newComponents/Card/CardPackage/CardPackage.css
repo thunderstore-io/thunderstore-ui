@@ -80,7 +80,7 @@
     color: var(--color-text--default);
     font: var(--font-body);
     font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-body-lg);
+    font-size: var(--font-size-body-xl);
     white-space: nowrap;
     text-overflow: ellipsis;
 
@@ -105,14 +105,6 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-
-    --link-color: var(--color-text-accent);
-  }
-
-  .ts-cardpackage__author__link:hover {
-    --link-color-hover: var(--color-text-a--hover);
-
-    text-decoration: underline;
   }
 
   .ts-cardpackage__author__prefix {

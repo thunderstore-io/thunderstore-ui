@@ -7,7 +7,6 @@
     max-width: 100%;
     height: var(--tag-height);
     border-radius: var(--tag-border-radius);
-    overflow: hidden;
     color: var(--tag-color);
     font-weight: var(--tag-font-weight);
     font-size: var(--tag-font-size);
@@ -17,6 +16,10 @@
   }
 
   .ts-tag__content {
+    display: flex;
+    gap: var(--tag-gap);
+    align-items: center;
+    justify-content: center;
     min-width: 0;
     overflow-x: clip;
     white-space: nowrap;
