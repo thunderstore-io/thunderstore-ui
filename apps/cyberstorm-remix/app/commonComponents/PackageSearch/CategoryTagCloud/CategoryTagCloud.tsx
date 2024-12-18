@@ -8,6 +8,8 @@ import { NewButton, NewIcon, NewTag } from "@thunderstore/cyberstorm";
 const OFF = CATEGORY_STATES[0];
 
 interface Props {
+  searchValue: string;
+  setSearchValue: (v: "") => void;
   categories: CategorySelection[];
   setCategories: (v: CategorySelection[]) => void;
 }
@@ -16,10 +18,10 @@ interface Props {
  * Show currently selected category filters.
  */
 export const CategoryTagCloud = (props: Props) => {
-  const { categories, setCategories } = props;
+  const { searchValue, setSearchValue, categories, setCategories } = props;
   const visible = categories.filter((c) => c.selection !== "off");
 
-  if (!visible.length) {
+  if (!visible.length && searchValue === "") {
     return null;
   }
 
@@ -33,6 +35,18 @@ export const CategoryTagCloud = (props: Props) => {
 
   return (
     <div className={styles.root}>
+      {searchValue !== "" ? (
+        <NewTag
+          csMode="button"
+          onClick={() => setSearchValue("")}
+          csSize="medium"
+        >
+          {`"${searchValue}"`}
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faXmark} className={styles.icon} />
+          </NewIcon>
+        </NewTag>
+      ) : null}
       {visible.map((c) => (
         <NewTag
           csMode="button"

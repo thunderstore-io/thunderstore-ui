@@ -28,6 +28,7 @@ export const SectionMenu = (props: Props) => {
             s.uuid === selected ? styles.selected : styles.unselected
           )}
         >
+          {s.name}
           <RadioGroup.Item value={s.uuid} className={styles.radio}>
             {s.uuid !== selected ? (
               <NewIcon csMode="inline" noWrapper>
@@ -44,7 +45,6 @@ export const SectionMenu = (props: Props) => {
               </NewIcon>
             </RadioGroup.Indicator>
           </RadioGroup.Item>
-          {s.name}
         </label>
       ))}
       <label
@@ -54,6 +54,7 @@ export const SectionMenu = (props: Props) => {
           selected === "all" ? styles.selected : styles.unselected
         )}
       >
+        All
         <RadioGroup.Item value={"all"} className={styles.radio}>
           {selected !== "all" ? (
             <NewIcon csMode="inline" noWrapper>
@@ -70,7 +71,6 @@ export const SectionMenu = (props: Props) => {
             </NewIcon>
           </RadioGroup.Indicator>
         </RadioGroup.Item>
-        All
       </label>
     </RadioGroup.Root>
   );

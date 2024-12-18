@@ -32,6 +32,7 @@ export const OthersMenu = (props: Props) => {
               checked ? styles.include : styles.off
             )}
           >
+            {label}
             <Checkbox.Root
               checked={checked}
               onCheckedChange={() => setChecked(!checked)}
@@ -41,7 +42,6 @@ export const OthersMenu = (props: Props) => {
                 <FontAwesomeIcon icon={checked ? faSquareCheck : faSquare} />
               </NewIcon>
             </Checkbox.Root>
-            {label}
           </label>
         </li>
       ))}

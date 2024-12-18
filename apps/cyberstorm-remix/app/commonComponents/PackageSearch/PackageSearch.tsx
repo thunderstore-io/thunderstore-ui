@@ -19,6 +19,7 @@ import { CategorySelection } from "./types";
 import {
   CardPackage,
   EmptyState,
+  Heading,
   NewButton,
   NewIcon,
   NewPagination,
@@ -164,9 +165,9 @@ export function PackageSearch(props: Props) {
   };
   // Categories end
 
-  const resetParams = () => {
+  const resetParams = (order?: PackageOrderOptionsType) => {
     setSearchParamsBlob({
-      order: undefined,
+      order: order,
       section: allSections.length === 0 ? "" : allSections[0]?.uuid,
       deprecated: false,
       nsfw: false,
@@ -355,27 +356,35 @@ export function PackageSearch(props: Props) {
           )}
           id="desktopSidebar"
         >
+          <Heading csLevel="3" csSize="3" rootClasses={styles.sidebarHeading}>
+            Filters
+          </Heading>
           {allSections.length > 0 ? (
-            <CollapsibleMenu headerTitle="Sections" defaultOpen>
-              <SectionMenu
-                allSections={allSections}
-                selected={searchParamsBlob.section ?? allSections[0]?.uuid}
-                setSelected={setSection}
-              />
-            </CollapsibleMenu>
+            <>
+              <div className={styles.sidebarDivider} />
+              <CollapsibleMenu headerTitle="Sections" defaultOpen>
+                <SectionMenu
+                  allSections={allSections}
+                  selected={searchParamsBlob.section ?? allSections[0]?.uuid}
+                  setSelected={setSection}
+                />
+              </CollapsibleMenu>
+            </>
           ) : null}
-
           {categories.length > 0 ? (
-            <CollapsibleMenu headerTitle="Categories" defaultOpen>
-              <CategoryMenu
-                categories={categories}
-                includedCategories={searchParamsBlob.includedCategories}
-                excludedCategories={searchParamsBlob.excludedCategories}
-                setCategories={setCategories}
-              />
-            </CollapsibleMenu>
+            <>
+              <div className={styles.sidebarDivider} />
+              <CollapsibleMenu headerTitle="Categories" defaultOpen>
+                <CategoryMenu
+                  categories={categories}
+                  includedCategories={searchParamsBlob.includedCategories}
+                  excludedCategories={searchParamsBlob.excludedCategories}
+                  setCategories={setCategories}
+                />
+              </CollapsibleMenu>
+            </>
           ) : null}
-
+          <div className={styles.sidebarDivider} />
           <CollapsibleMenu headerTitle="Other filters" defaultOpen>
             <OthersMenu
               deprecated={searchParamsBlob.deprecated ? true : false}
@@ -396,6 +405,8 @@ export function PackageSearch(props: Props) {
                 totalCount={listings.count}
               />
               <CategoryTagCloud
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
                 categories={parseCategories(
                   searchParamsBlob.includedCategories ?? "",
                   searchParamsBlob.excludedCategories ?? ""
@@ -418,7 +429,10 @@ export function PackageSearch(props: Props) {
                     />
                   ))}
                 </div>
-              ) : searchParams.size > 0 ? (
+              ) : (searchParamsBlob.order !== undefined &&
+                  searchParams.size > 1) ||
+                (searchParamsBlob.order === undefined &&
+                  searchParams.size > 0) ? (
                 <EmptyState.Root className="nimbus-noresult">
                   <EmptyState.Icon wrapperClasses="nimbus-noresult__ghostbounce">
                     <FontAwesomeIcon icon={faSearch} />
@@ -431,7 +445,7 @@ export function PackageSearch(props: Props) {
                     </EmptyState.Message>
                   </div>
                   <NewButton
-                    onClick={resetParams}
+                    onClick={() => resetParams(searchParamsBlob.order)}
                     rootClasses="nimbus-noresult__button"
                   >
                     Clear all filters

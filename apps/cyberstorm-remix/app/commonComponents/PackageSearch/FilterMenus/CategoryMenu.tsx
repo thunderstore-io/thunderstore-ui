@@ -41,6 +41,7 @@ export const CategoryMenu = (props: Props) => {
         {parsedCategories.map((c) => (
           <li key={c.slug}>
             <label className={classnames(styles.label, styles[c.selection])}>
+              {c.name}
               <Checkbox.Root
                 checked={c.selection !== "off"}
                 onCheckedChange={() => toggleCategory(c.id)}
@@ -63,7 +64,6 @@ export const CategoryMenu = (props: Props) => {
                   </NewIcon>
                 </Checkbox.Indicator>
               </Checkbox.Root>
-              {c.name}
             </label>
           </li>
         ))}
