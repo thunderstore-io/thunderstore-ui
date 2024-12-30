@@ -6,6 +6,7 @@ import { getCommunities, getCommunity } from "./methods/communities";
 import { getCommunityFilters } from "./methods/communityFilters";
 import { getCurrentUser, emptyUser } from "./methods/currentUser";
 export const getEmptyUser = emptyUser;
+export { dependencyShema } from "./methods/packageListings";
 export { currentUserSchema } from "./methods/currentUser";
 import {
   getPackageChangelog,

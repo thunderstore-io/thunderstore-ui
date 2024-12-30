@@ -95,7 +95,7 @@ export async function getPackageListings(
   };
 }
 
-const dependencyShema = z.object({
+export const dependencyShema = z.object({
   community_identifier: z.string().nonempty(),
   description: z.string(),
   icon_url: z.string().nonempty().nullable(),

@@ -34,7 +34,7 @@ yarn workspace @thunderstore/cyberstorm-remix dev --port 3000 --host 0.0.0.0
 1. Open hosts file as administrator (`C:\Windows\System32\drivers\etc`) and add this `127.0.0.1 thunderstore.temp` there
 2. Download and install Docker and docker-compose. For windows people, Docker for Windows should be enough.
 3. Open up a terminal and navigate to `thunderstore-ui/tools/ts-proxy`
-4. Run `docker-compose up`
+4. Run `docker compose up`
 5. Add these to your `.env.development` or `.env.production`
 ```
 PUBLIC_SITE_URL=http://thunderstore.temp
