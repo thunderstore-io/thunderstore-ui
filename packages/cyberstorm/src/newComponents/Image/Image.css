@@ -44,6 +44,8 @@
   }
 
   .ts-image__icon {
-    width: 100%;
+    width: 50px;
+    height: 50px;
+    color: var(--color-surface-a10);
   }
 }

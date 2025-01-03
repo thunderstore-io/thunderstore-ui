@@ -103,6 +103,8 @@
   font-family: var(--font-family-monospace);
   font-style: normal;
   line-height: 150%;
+  white-space: break-spaces;
+  overflow-wrap: break-word;
   background: #0d0d21;
 }
 

@@ -12,12 +12,6 @@
   .nimbus-commoncomponents-listingdependency__image {
     flex-shrink: 0;
     width: 80px;
-
-    > svg {
-      width: 40px;
-      height: 40px;
-      color: var(--color-surface-a10);
-    }
   }
 
   .nimbus-commoncomponents-listingdependency__info {

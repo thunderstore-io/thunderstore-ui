@@ -113,6 +113,7 @@ export {
 } from "./newComponents/Select/Select";
 export { Icon as NewIcon } from "./newComponents/Icon/Icon";
 export { Tag as NewTag } from "./newComponents/Tag/Tag";
+export { Alert as NewAlert } from "./newComponents/Alert/Alert";
 export { MetaItem as NewMetaItem } from "./newComponents/MetaItem/MetaItem";
 export { Pagination as NewPagination } from "./newComponents/Pagination/Pagination";
 export {
@@ -123,3 +124,9 @@ export {
 export { Image } from "./newComponents/Image/Image";
 export { AdContainer } from "./newComponents/AdContainer/AdContainer";
 export { Tabs } from "./newComponents/Tabs/Tabs";
+export {
+  Table as NewTable,
+  TableSort as NewTableSort,
+  type TableRows as NewTableRows,
+  type TableLabels as NewTableLabels,
+} from "./newComponents/Table/Table";

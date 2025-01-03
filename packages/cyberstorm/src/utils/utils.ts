@@ -30,6 +30,7 @@ export const formatFileSize = (bytes: number) => {
   }).format(bytes);
 };
 
+// TODO: FIX: Adds a empty space at the end when last item is undefined
 export const classnames = (
   ...classnames: (string | null | undefined)[]
 ): string => {

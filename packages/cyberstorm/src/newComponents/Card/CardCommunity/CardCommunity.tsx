@@ -53,7 +53,7 @@ export function CardCommunity(props: Props) {
         <Image
           src={community.cover_image_url}
           cardType="community"
-          rootClasses="ts-cardcommunity__imagewrapper"
+          rootClasses="ts-cardcommunity__image"
           intrinsicWidth={360}
           intrinsicHeight={480}
         />

@@ -1,0 +1,30 @@
+@layer components {
+  .ts-alert {
+    display: flex;
+
+    gap: var(--alert-gap);
+    align-items: flex-start;
+    align-self: stretch;
+
+    border-left: 3px solid var(--alert-border-color);
+    border-radius: var(--alert-border-radius);
+    background-color: var(--alert-background-color);
+    padding-block: var(--alert-padding-block);
+    padding-inline: var(--alert-padding-inline);
+
+    > .ts-alert__icon {
+      width: var(--alert-icon-width);
+      height: var(--alert-icon-height);
+
+      --icon-color: var(--alert-icon-color);
+    }
+
+    > .ts-alert__content {
+      min-width: 0;
+      color: var(--alert-color);
+      font-weight: var(--alert-font-weight);
+      font-size: var(--alert-font-size);
+      line-height: var(--alert-line-height);
+    }
+  }
+}
