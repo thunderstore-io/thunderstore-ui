@@ -42,4 +42,8 @@
     aspect-ratio: 1;
     transition: var(--animation-duration-sm) ease-out;
   }
+
+  .ts-image__icon {
+    width: 100%;
+  }
 }

@@ -1,0 +1,29 @@
+.nimbus-packagelisting__tabs__required {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nimbus-packagelisting__tabs__required__title {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  align-self: stretch;
+  padding-bottom: 24px;
+}
+
+.nimbus-packagelisting__tabs__required__title__description {
+  color: var(--color-text-secondary);
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.nimbus-packagelisting__tabs__required__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  align-self: stretch;
+  padding-bottom: 32px;
+}

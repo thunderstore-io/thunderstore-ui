@@ -32,6 +32,7 @@ export default defineConfig({
               "p/packageListing.tsx",
               () => {
                 route("", "p/tabs/Readme/Readme.tsx", { index: true });
+                route("required", "p/tabs/Required/Required.tsx");
                 route("changelog", "p/tabs/Changelog/Changelog.tsx");
                 route("versions", "p/tabs/Versions/Versions.tsx");
               }

@@ -66,10 +66,13 @@ export const Image = React.forwardRef<HTMLDivElement, ImageProps>(
           </Frame>
         ) : (
           <NewIcon
-            wrapperClasses={classnames(
+            rootClasses={classnames(
               "ts-image__content",
-              ...componentClasses(csVariant, undefined, undefined)
+              ...componentClasses(csVariant, undefined, undefined),
+              "ts-image__icon"
             )}
+            noWrapper
+            csMode="inline"
           >
             <FontAwesomeIcon icon={getIcon(cardType)} />
           </NewIcon>

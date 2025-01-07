@@ -59,9 +59,11 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
       rootClasses={styles.item}
     >
       <Avatar username={teamMember.username} src={teamMember.avatar} />
-      <div>
+      <div className={styles.itemTitleWrapper}>
         <div className={styles.itemTitle}>
-          {teamMember.username}
+          <span className={styles.itemTitleUsername}>
+            {teamMember.username}
+          </span>
           {teamMember.role === "owner" ? (
             <NewIcon csMode="inline" noWrapper rootClasses={styles.crown}>
               <FontAwesomeIcon icon={faCrown} />
