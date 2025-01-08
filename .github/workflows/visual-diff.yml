@@ -46,6 +46,7 @@ jobs:
           npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
       - uses: snok/install-poetry@v1
         with:
+          version: 1.4.1
           virtualenvs-create: true
           virtualenvs-in-project: true
       - name: Cache poetry venv
