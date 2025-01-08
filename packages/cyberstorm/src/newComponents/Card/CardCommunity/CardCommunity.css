@@ -8,7 +8,7 @@
     font-size: var(--font-size-body-lg);
   }
 
-  .ts-cardcommunity__imagewrapper:hover {
+  .ts-cardcommunity__image:hover {
     filter: brightness(1.2);
   }
 
@@ -18,12 +18,12 @@
     outline-offset: 0.5rem;
   }
 
-  .ts-cardcommunity .ts-cardcommunity__imagewrapper > div {
+  .ts-cardcommunity .ts-cardcommunity__image > div {
     transform-origin: bottom;
   }
 
-  .ts-cardcommunity:hover .ts-cardcommunity__imagewrapper > div,
-  .ts-cardcommunity:focus-within .ts-cardcommunity__imagewrapper > div {
+  .ts-cardcommunity:hover .ts-cardcommunity__image > div,
+  .ts-cardcommunity:focus-within .ts-cardcommunity__image > div {
     transform: scale(1.035);
   }
 

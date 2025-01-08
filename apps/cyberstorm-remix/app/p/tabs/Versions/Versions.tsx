@@ -1,9 +1,18 @@
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { faBoltLightning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import styles from "./Versions.module.css";
-import { Table, Sort, Alert, Button } from "@thunderstore/cyberstorm";
+import "./Versions.css";
+import {
+  NewTableSort,
+  NewButton,
+  NewIcon,
+  NewTable,
+  NewTableRows,
+  NewTableLabels,
+  Heading,
+  NewAlert,
+} from "@thunderstore/cyberstorm";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { ApiError } from "@thunderstore/thunderstore-api";
@@ -83,73 +92,99 @@ export default function Versions() {
     return <div>{message}</div>;
   }
 
-  const tableRows = versions.map((v) => [
+  const tableRows: NewTableRows = versions.map((v) => [
     { value: v.version_number, sortValue: v.version_number },
     {
       value: new Date(v.datetime_created).toUTCString(),
       sortValue: v.datetime_created,
     },
     { value: v.download_count.toLocaleString(), sortValue: v.download_count },
-    { value: <DownloadLink {...v} />, sortValue: 0 },
-    { value: <InstallLink {...v} />, sortValue: 0 },
+    {
+      value: (
+        <div className="nimbus-packagelisting__tabs__versions__actionscell">
+          <DownloadLink {...v} />
+          <InstallLink {...v} />
+        </div>
+      ),
+      sortValue: 0,
+    },
   ]);
 
   return (
-    <div className={styles.main}>
+    <div className="nimbus-packagelisting__tabs__versions">
       <ModManagerBanner />
-      <Table
+      <NewTable
+        titleRowContent={
+          <Heading csSize="3" csLevel="3">
+            Versions
+          </Heading>
+        }
         headers={columns}
         rows={tableRows}
-        sortDirection={Sort.ASC}
-        variant="itemListSmall"
+        sortDirection={NewTableSort.ASC}
       />
     </div>
   );
 }
 
-const columns = [
-  { value: "Version", disableSort: false },
-  { value: "Upload date", disableSort: false },
-  { value: "Downloads", disableSort: false },
-  { value: "", disableSort: true },
-  { value: "", disableSort: true },
+const columns: NewTableLabels = [
+  {
+    value: "Version",
+    disableSort: false,
+    columnClasses: "nimbus-packagelisting__tabs__versions__columns__version",
+  },
+  {
+    value: "Upload date",
+    disableSort: false,
+    columnClasses: "nimbus-packagelisting__tabs__versions__columns__uploaddate",
+  },
+  {
+    value: "Downloads",
+    disableSort: false,
+    columnClasses: "nimbus-packagelisting__tabs__versions__columns__downloads",
+  },
+  { value: "Actions", disableSort: true },
 ];
 
 const ModManagerBanner = () => (
-  <Alert
-    content={
-      <span>
-        Please note that the install buttons only work if you have compatible
-        client software installed, such as the{" "}
-        <a
-          href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
-          className={styles.alertLink}
-        >
-          Thunderstore Mod Manager.
-        </a>{" "}
-        Otherwise use the zip download links instead.
-      </span>
-    }
-    variant={"info"}
-    icon={<FontAwesomeIcon icon={faCircleExclamation} />}
-  />
+  <NewAlert csVariant="info">
+    Please note that the install buttons only work if you have compatible client
+    software installed, such as the{" "}
+    <a
+      href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+      // className={styles.alertLink}
+    >
+      Thunderstore Mod Manager.
+    </a>{" "}
+    Otherwise use the zip download links instead.
+  </NewAlert>
 );
 
 const DownloadLink = (props: { download_url: string }) => (
-  <a href={props.download_url}>
-    <Button.Root plain paddingSize="large" colorScheme="transparentAccent">
-      <Button.ButtonLabel>Download</Button.ButtonLabel>
-    </Button.Root>
-  </a>
+  <NewButton
+    csVariant="secondary"
+    csModifiers={["ghost"]}
+    csSize="small"
+    primitiveType="link"
+    href={props.download_url}
+  >
+    <NewIcon noWrapper csMode="inline">
+      <FontAwesomeIcon icon={faDownload} />
+    </NewIcon>
+    Download
+  </NewButton>
 );
 
 const InstallLink = (props: { install_url: string }) => (
-  <a href={props.install_url}>
-    <Button.Root plain paddingSize="large" colorScheme="primary">
-      <Button.ButtonIcon>
-        <FontAwesomeIcon icon={faBoltLightning} />
-      </Button.ButtonIcon>
-      <Button.ButtonLabel>Install</Button.ButtonLabel>
-    </Button.Root>
-  </a>
+  <NewButton
+    csVariant="secondary"
+    csSize="small"
+    primitiveType="link"
+    href={props.install_url}
+  >
+    <NewIcon noWrapper csMode="inline">
+      <FontAwesomeIcon icon={faBoltLightning} />
+    </NewIcon>
+    Install
+  </NewButton>
 );

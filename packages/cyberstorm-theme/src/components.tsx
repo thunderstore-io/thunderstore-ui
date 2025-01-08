@@ -51,6 +51,14 @@ export {
   SelectModifiersList,
 } from "./components/Select/Select";
 export {
+  type TableVariants,
+  TableVariantsList,
+  type TableSizes,
+  TableSizesList,
+  type TableModifiers,
+  TableModifiersList,
+} from "./components/Table/Table";
+export {
   type TextInputVariants,
   TextInputVariantsList,
   type TextInputSizes,
@@ -75,6 +83,12 @@ export {
   type TagModifiers,
   TagModifiersList,
 } from "./components/Tag/Tag";
+export {
+  type AlertVariants,
+  AlertVariantsList,
+  type AlertSizes,
+  AlertSizesList,
+} from "./components/Alert/Alert";
 export {
   type MetaItemVariants,
   MetaItemVariantsList,
