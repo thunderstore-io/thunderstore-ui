@@ -23,5 +23,6 @@ export function teamAddServiceAccount(
       method: "POST",
       body: JSON.stringify(data),
     },
+    useSession: true,
   });
 }

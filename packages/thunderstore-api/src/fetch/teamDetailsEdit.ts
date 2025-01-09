@@ -23,5 +23,6 @@ export function teamDetailsEdit(
       method: "POST",
       body: JSON.stringify(data),
     },
+    useSession: true,
   });
 }

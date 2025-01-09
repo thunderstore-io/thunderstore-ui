@@ -25,5 +25,6 @@ export function packageDeprecate(
       cache: "no-store",
       body: JSON.stringify(data),
     },
+    useSession: true,
   });
 }

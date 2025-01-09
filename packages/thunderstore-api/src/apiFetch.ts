@@ -46,7 +46,11 @@ export async function apiFetch2(args: apiFetchArgs) {
   const { config, path, request, query, useSession = false } = args;
   const usedConfig: RequestConfig = useSession
     ? config
-    : { apiHost: config.apiHost, csrfToken: undefined, sessionId: undefined };
+    : {
+        apiHost: config.apiHost,
+        csrfToken: undefined,
+        sessionId: undefined,
+      };
   const url = getUrl(usedConfig, path, query);
 
   const response = await fetchRetry(url, {

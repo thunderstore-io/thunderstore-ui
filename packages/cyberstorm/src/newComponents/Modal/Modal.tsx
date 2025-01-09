@@ -2,18 +2,20 @@ import { ReactNode } from "react";
 import { Frame, FrameModalProps } from "../../primitiveComponents/Frame/Frame";
 import "./Modal.css";
 import { NewButton } from "../..";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { ModalVariants } from "@thunderstore/cyberstorm-theme/src/components";
 import { classnames, componentClasses } from "../../utils/utils";
+import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { ModalSizes } from "@thunderstore/cyberstorm-theme/src/components/Modal/Modal";
 
 interface Props extends Omit<FrameModalProps, "primitiveType"> {
   trigger: ReactNode;
   csVariant?: ModalVariants;
+  csSize?: ModalSizes;
 }
 
 // TODO: Add storybook story
 export function Modal(props: Props) {
-  const { children, csVariant = "primary" } = props;
+  const { children, csVariant = "default", csSize = "medium" } = props;
 
   return (
     <>
@@ -23,11 +25,7 @@ export function Modal(props: Props) {
         popoverId={props.popoverId}
         rootClasses={classnames(
           "ts-modal",
-          ...componentClasses(csVariant, undefined, undefined)
-        )}
-        wrapperClasses={classnames(
-          "ts-modal__wrapper",
-          ...componentClasses(csVariant, undefined, undefined)
+          ...componentClasses(csVariant, csSize, undefined)
         )}
       >
         <NewButton
@@ -39,9 +37,10 @@ export function Modal(props: Props) {
           csSize="medium"
           csModifiers={["ghost"]}
           tooltipText="Close"
-          icon={faXmark}
+          icon={faXmarkLarge}
+          rootClasses="ts-modal__button"
         />
-        {children}
+        <div className="ts-modal__content">{children}</div>
       </Frame>
     </>
   );

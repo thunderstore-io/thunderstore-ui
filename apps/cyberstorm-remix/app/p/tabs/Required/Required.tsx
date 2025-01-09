@@ -1,15 +1,19 @@
 import "./Required.css";
 import { Heading } from "@thunderstore/cyberstorm";
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { useLoaderData } from "@remix-run/react";
 import { ListingDependency } from "~/commonComponents/ListingDependency/ListingDependency";
+import { DapperTs } from "@thunderstore/dapper-ts";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     try {
-      const dapper = await getDapper();
+      const dapper = new DapperTs({
+        apiHost: process.env.PUBLIC_API_URL,
+        sessionId: undefined,
+        csrfToken: undefined,
+      });
       return {
         listing: await dapper.getPackageListingDetails(
           params.communityId,
@@ -21,7 +25,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
       if (error instanceof ApiError) {
         throw new Response("Listing dependencies not found", { status: 404 });
       } else {
-        // REMIX TODO: Add sentry
         throw error;
       }
     }
@@ -32,7 +35,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     try {
-      const dapper = await getDapper(true);
+      const dapper = window.Dapper;
       return {
         listing: await dapper.getPackageListingDetails(
           params.communityId,
@@ -44,7 +47,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       if (error instanceof ApiError) {
         throw new Response("Listing dependencies not found", { status: 404 });
       } else {
-        // REMIX TODO: Add sentry
         throw error;
       }
     }

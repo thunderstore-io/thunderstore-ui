@@ -18,5 +18,6 @@ export function userLinkedAccountDisconnect(
       method: "POST",
       body: JSON.stringify(data),
     },
+    useSession: true,
   });
 }

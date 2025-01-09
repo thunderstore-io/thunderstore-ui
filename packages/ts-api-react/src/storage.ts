@@ -23,6 +23,7 @@ export class StorageManager {
   safeGetValue(key: string): string | null {
     try {
       return this.getValue(key);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       return null;
     }
@@ -43,5 +44,26 @@ export class StorageManager {
 
   _addNamespace(key: string): string {
     return this.namespace ? `${this.namespace}.${key}` : key;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setJsonValue(key: string, value: any): void {
+    this._storage.setItem(this._addNamespace(key), JSON.stringify(value));
+  }
+
+  /** Returns null if storage is unavailable, it contained no value or json threw an error. */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  safeGetJsonValue(key: string): any | null {
+    try {
+      const value = this.getValue(key);
+      if (value) {
+        return JSON.parse(value);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      console.warn(`JSON parse from ${this.namespace} storage failed`, e);
+      return null;
+    }
   }
 }

@@ -3,29 +3,27 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    border: 1px solid var(--color-6);
-    border-radius: var(--frame-modal-border-radius);
-    background: var(--color-2);
-    box-shadow: var(--shadow-lg);
+    border: var(--modal-border);
+    border-radius: var(--modal-border-radius);
+    background: var(--modal-background);
+
+    box-shadow: var(--modal-box-shadow);
     transform: translate(-50%, -50%);
   }
 
-  .ts-modal__wrapper {
+  .ts-modal__content {
     display: flex;
     flex-direction: column;
-    gap: var(--frame-modal-gap);
+    gap: var(--modal-content-gap);
     align-items: flex-start;
     align-self: stretch;
     justify-content: center;
-    padding: var(--frame-modal-padding);
-    background: transparent;
+    padding: var(--modal-content-padding);
   }
 
-  /* .modalCloseButton {
+  .ts-modal__button {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    width: 2.75rem;
-    height: 2.75rem;
-  } */
+  }
 }

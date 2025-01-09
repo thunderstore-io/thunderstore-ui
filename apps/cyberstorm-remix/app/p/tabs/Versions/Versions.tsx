@@ -14,15 +14,19 @@ import {
   NewAlert,
 } from "@thunderstore/cyberstorm";
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { useLoaderData } from "@remix-run/react";
 import { versionsSchema } from "@thunderstore/dapper-ts/src/methods/package";
+import { DapperTs } from "@thunderstore/dapper-ts";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
     try {
-      const dapper = await getDapper();
+      const dapper = new DapperTs({
+        apiHost: process.env.PUBLIC_API_URL,
+        sessionId: undefined,
+        csrfToken: undefined,
+      });
       return {
         status: "ok",
         message: "",
@@ -39,7 +43,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
           versions: versionsSchema.parse({}),
         };
       } else {
-        // REMIX TODO: Add sentry
         throw error;
       }
     }
@@ -54,7 +57,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
     try {
-      const dapper = await getDapper(true);
+      const dapper = window.Dapper;
       return {
         status: "ok",
         message: "",
@@ -71,7 +74,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           versions: versionsSchema.parse({}),
         };
       } else {
-        // REMIX TODO: Add sentry
         throw error;
       }
     }
@@ -150,12 +152,9 @@ const ModManagerBanner = () => (
   <NewAlert csVariant="info">
     Please note that the install buttons only work if you have compatible client
     software installed, such as the{" "}
-    <a
-      href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
-      // className={styles.alertLink}
-    >
+    <a href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager">
       Thunderstore Mod Manager.
-    </a>{" "}
+    </a>
     Otherwise use the zip download links instead.
   </NewAlert>
 );

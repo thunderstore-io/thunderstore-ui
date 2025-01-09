@@ -20,8 +20,6 @@ export const currentUserSchema = z.object({
   username: z.string().nonempty(),
   capabilities: z.string().array(),
   connections: oAuthConnectionSchema.array(),
-  rated_packages: z.string().array(),
-  rated_packages_cyberstorm: z.string().array(),
   subscription: z.object({
     expires: z.string().datetime().nullable(),
   }),
@@ -32,8 +30,6 @@ const schema = z.object({
   username: z.string().nonempty(),
   capabilities: z.string().array(),
   connections: oAuthConnectionSchema.array(),
-  rated_packages: z.string().array(),
-  rated_packages_cyberstorm: z.string().array(),
   subscription: z.object({
     expires: z.string().datetime().nullable(),
   }),
@@ -44,8 +40,6 @@ export const emptyUser = {
   username: null,
   capabilities: [],
   connections: [],
-  rated_packages: [],
-  rated_packages_cyberstorm: [],
   subscription: { expires: null },
   teams: [],
 };
@@ -60,6 +54,12 @@ export async function getCurrentUser(this: DapperTsInterface) {
     const parsed = schema.safeParse(data);
 
     if (!parsed.success) {
+      // Sometimes the endpoint will be called without auths and we need to return empty user manually here.
+      // If the username is null it's equivalent gracefully "saying no current user"
+      if (data.username === null) {
+        return emptyUser;
+      }
+
       throw new Error(formatErrorMessage(parsed.error));
     }
 

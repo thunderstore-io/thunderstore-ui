@@ -1,98 +1,19 @@
 /* eslint-disable prettier/prettier */
 import { redirect } from "@remix-run/react";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { RequestConfig } from "@thunderstore/thunderstore-api";
+import { emptyUser } from "@thunderstore/dapper-ts/src/methods/currentUser";
+import { CurrentUser } from "@thunderstore/dapper/types";
+import { useSession } from "@thunderstore/ts-api-react";
+import { createContext } from "react";
 
-export async function getDapper(isClient = false) {
+export function getDapper(isClient = false) {
   if (isClient) {
-    // Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint
-    // const getCookie = (cookieName: string) =>
-    //   new RegExp(`${cookieName}=([^;]+);`).exec(document.cookie[-1] === ";" ? document.cookie : document.cookie + ";")?.[1];
-    const deleteCookie = (name: string) => {
-      const date = new Date();
-      date.setTime(0);
-      document.cookie = `${name}=${null}; expires=${date.toUTCString()}; path=/`;
-    };
-
-    const removeSession = () => {
-      deleteCookie("sessionid");
-      deleteCookie("csrftoken");
+    const session = useSession();
+    // TODO: Add "ValidateDapper" and stop always returning a new dapper.
+    return new DapperTs(session.getConfig(), () => {
+      session.clearSession();
       redirect("/communities");
-    };
-    const dapper = window.Dapper;
-
-    let shouldRemakeDapper = false;
-
-    // Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint
-    // const cookie = getCookie("sessionid");
-    // const csrftoken = getCookie("csrftoken");
-
-    const cookie = undefined;
-    const csrftoken = undefined;
-
-    const newConfig: RequestConfig = {
-      apiHost: window.ENV.PUBLIC_API_URL,
-      sessionId: cookie ?? undefined,
-      csrfToken: csrftoken ?? undefined,
-    };
-
-    if (dapper) {
-      // REMIX TODO: Security issues?
-      // API url has changed
-      // if (dapper.config.apiHost !== window.ENV.PUBLIC_API_URL) {
-      //   newConfig.apiHost = window.ENV.PUBLIC_API_URL;
-      //   shouldRemakeDapper = true;
-      // }
-
-      // sessionId is old
-      if (
-        dapper.config.sessionId &&
-        typeof cookie === "string" &&
-        dapper.config.sessionId !== cookie
-      ) {
-        newConfig.sessionId = cookie;
-        shouldRemakeDapper = true;
-      }
-
-      // sessionId is not set and cookie exists
-      if (!dapper.config.sessionId && typeof cookie === "string") {
-        newConfig.sessionId = cookie;
-        shouldRemakeDapper = true;
-      }
-
-      // csrfToken is old
-      if (
-        dapper.config.csrfToken &&
-        typeof csrftoken === "string" &&
-        dapper.config.csrfToken !== csrftoken
-      ) {
-        newConfig.csrfToken = csrftoken;
-        shouldRemakeDapper = true;
-      }
-
-      // csrfToken is not set and cookie exists
-      if (!dapper.config.csrfToken && typeof csrftoken === "string") {
-        newConfig.csrfToken = csrftoken;
-        shouldRemakeDapper = true;
-      }
-    } else {
-      shouldRemakeDapper = true;
-    }
-
-    const createNewDapper = () => {
-      const newDapper = new DapperTs(newConfig, removeSession);
-      window.Dapper = newDapper;
-      return newDapper;
-    };
-
-    // Dapper should exist at this point, but we are ensuring it for type safety and idiot me safety
-    const existingDapper = shouldRemakeDapper
-      ? createNewDapper()
-      : dapper
-        ? dapper
-        : new DapperTs(newConfig, removeSession);
-
-    return existingDapper;
+    });
   } else {
     return new DapperTs({
       apiHost: process.env.PUBLIC_API_URL,
@@ -101,3 +22,6 @@ export async function getDapper(isClient = false) {
     });
   }
 }
+
+export const CurrentUserContext = createContext<CurrentUser>(emptyUser);
+export const CurrentUserProvider = CurrentUserContext.Provider;

@@ -26,8 +26,8 @@ import {
   useSearchParams,
 } from "@remix-run/react";
 import { Communities } from "@thunderstore/dapper/types";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { DapperTs } from "@thunderstore/dapper-ts";
 
 export const meta: MetaFunction = () => {
   return [
@@ -69,10 +69,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const order = searchParams.get("order") ?? SortOptions.Popular;
   const search = searchParams.get("search");
   const page = undefined;
-  const dapper = await getDapper();
+  const dapper = new DapperTs({
+    apiHost: process.env.PUBLIC_API_URL,
+    sessionId: undefined,
+    csrfToken: undefined,
+  });
   return await dapper.getCommunities(page, order ?? "", search ?? "");
-  // REMIX TODO: Add sentry and try except so, that we get a proper error page
-  // throw new Response("Community not found", { status: 404 });
 }
 
 export async function clientLoader({ request }: LoaderFunctionArgs) {
@@ -80,10 +82,8 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
   const order = searchParams.get("order") ?? SortOptions.Popular;
   const search = searchParams.get("search");
   const page = undefined;
-  const dapper = await getDapper(true);
+  const dapper = window.Dapper;
   return await dapper.getCommunities(page, order ?? "", search ?? "");
-  // REMIX TODO: Add sentry and try except so, that we get a proper error page
-  // throw new Response("Community not found", { status: 404 });
 }
 
 export default function CommunitiesPage() {
@@ -129,11 +129,6 @@ export default function CommunitiesPage() {
         Communities
       </NewBreadCrumbs>
       <PageHeader heading="Communities" headingLevel="1" headingSize="2" />
-      {/* <header className="nimbus-root__page-header">
-        <Heading csLevel="1" csSize="2" csVariant="primary" mode="display">
-          Communities
-        </Heading>
-      </header> */}
       <main className="nimbus-root__main">
         <div className={searchAndOrderStyles.root}>
           <div className={searchAndOrderStyles.searchTextInput}>

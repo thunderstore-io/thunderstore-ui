@@ -15,5 +15,6 @@ export function userDelete(config: RequestConfig, data: userDeleteApiArgs) {
       method: "POST",
       body: JSON.stringify(data),
     },
+    useSession: true,
   });
 }

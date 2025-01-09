@@ -1,5 +1,8 @@
 import styles from "./PackageEditForm.module.css";
-import { packageEditCategories } from "@thunderstore/thunderstore-api";
+import {
+  packageEditCategories,
+  RequestConfig,
+} from "@thunderstore/thunderstore-api";
 import {
   ApiForm,
   packageEditFormSchema,
@@ -27,7 +30,8 @@ export function PackageEditForm(props: {
   current_categories: { slug: string; name: string }[];
   isDeprecated: boolean;
   deprecationButton: ReactNode;
-  packageDataUpdateTrigger: () => Promise<void>;
+  dataUpdateTrigger: () => Promise<void>;
+  config: RequestConfig;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: "Changes saved!",
@@ -36,7 +40,7 @@ export function PackageEditForm(props: {
   return (
     <ApiForm
       onSubmitSuccess={() => {
-        props.packageDataUpdateTrigger();
+        props.dataUpdateTrigger();
         onSubmitSuccess();
       }}
       onSubmitError={onSubmitError}
@@ -48,6 +52,7 @@ export function PackageEditForm(props: {
         current_categories: props.current_categories.map((cat) => cat.slug),
       }}
       endpoint={packageEditCategories}
+      config={props.config}
       formProps={{ className: styles.root }}
     >
       <div className={styles.dialog}>

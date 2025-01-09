@@ -4,6 +4,8 @@ import { RequestConfig } from "@thunderstore/thunderstore-api";
 import { getDynamicHTML } from "./methods/dynamicHTML";
 import { getCommunities, getCommunity } from "./methods/communities";
 import { getCommunityFilters } from "./methods/communityFilters";
+import { getRatedPackages } from "./methods/ratedPackages";
+export { ratedPackagesSchema } from "./methods/ratedPackages";
 import { getCurrentUser, emptyUser } from "./methods/currentUser";
 export const getEmptyUser = emptyUser;
 export { dependencyShema } from "./methods/packageListings";
@@ -39,6 +41,7 @@ export class DapperTs implements DapperTsInterface {
     this.getCommunities = this.getCommunities.bind(this);
     this.getCommunity = this.getCommunity.bind(this);
     this.getCommunityFilters = this.getCommunityFilters.bind(this);
+    this.getRatedPackages = this.getRatedPackages.bind(this);
     this.getCurrentUser = this.getCurrentUser.bind(this);
     this.getPackageChangelog = this.getPackageChangelog.bind(this);
     this.getPackageListings = this.getPackageListings.bind(this);
@@ -54,6 +57,7 @@ export class DapperTs implements DapperTsInterface {
   public getCommunities = getCommunities;
   public getCommunity = getCommunity;
   public getCommunityFilters = getCommunityFilters;
+  public getRatedPackages = getRatedPackages;
   public getCurrentUser = getCurrentUser;
   public getPackageChangelog = getPackageChangelog;
   public getPackageListings = getPackageListings;

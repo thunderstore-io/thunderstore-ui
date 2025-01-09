@@ -9,23 +9,18 @@ import {
   Scripts,
   // ScrollRestoration,
   isRouteErrorResponse,
-  useLoaderData,
+  redirect,
   useLocation,
   useRouteError,
+  useRouteLoaderData,
 } from "@remix-run/react";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 
-import {
-  MobileNavigationMenu,
-  MobileUserPopoverContent,
-  Navigation,
-} from "cyberstorm/navigation/Navigation";
 import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
 import { AdContainer, LinkingProvider } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
-// import { CurrentUser } from "@thunderstore/dapper/types";
-// import { getDapper } from "cyberstorm/dapper/sessionUtils";
+import { CurrentUser } from "@thunderstore/dapper/types";
 
 import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 import {
@@ -35,11 +30,10 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import Toast from "@thunderstore/cyberstorm/src/components/Toast";
-import { SessionProvider } from "@thunderstore/ts-api-react";
-import { CurrentUser } from "@thunderstore/dapper/types";
+import { SessionProvider, useSession } from "@thunderstore/ts-api-react";
 import { Footer } from "./commonComponents/Footer/Footer";
-// Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint
-// import { getDapper } from "cyberstorm/dapper/sessionUtils";
+import { NavigationWrapper } from "cyberstorm/navigation/NavigationWrapper";
+import { RequestConfig } from "@thunderstore/thunderstore-api";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -71,6 +65,11 @@ declare global {
   }
 }
 
+export type OutletContextShape = {
+  currentUser: CurrentUser | undefined;
+  requestConfig: RequestConfig;
+};
+
 export const meta: MetaFunction = () => {
   return [
     { title: "Thunderstore" },
@@ -95,34 +94,16 @@ export async function loader() {
   };
 }
 
-// export async function clientLoader() {
-//   const dapper = await getDapper(true);
-
-//   return {
-//     envStuff: {
-//       ENV: getPublicEnvVariables([
-//         "PUBLIC_API_URL",
-//         "PUBLIC_CLIENT_SENTRY_DSN",
-//         "PUBLIC_SITE_URL",
-//       ]),
-//     },
-//     currentUser: await dapper.getCurrentUser(),
-//   };
-// }
-
 export function shouldRevalidate() {
   return false;
 }
 
 const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
 
-function Root() {
-  const loaderOutput = useLoaderData<typeof loader>();
-  const parsedLoaderOutput: {
-    envStuff: {
-      ENV: publicEnvVariables;
-    };
-  } = JSON.parse(JSON.stringify(loaderOutput));
+export function Layout({ children }: { children: React.ReactNode }) {
+  const data = useRouteLoaderData<typeof loader>("root");
+  // const error = useRouteError();
+  // console.log(error);
 
   const location = useLocation();
   const shouldShowAds = location.pathname.startsWith("/teams")
@@ -134,25 +115,6 @@ function Root() {
         : location.pathname.startsWith("/tools")
           ? false
           : true;
-
-  const isHydrated = useHydrated();
-  const startsHydrated = useRef(isHydrated);
-  // Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [currentUser, setCurrentUser] = useState<CurrentUser>();
-
-  // Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint
-  // useEffect(() => {
-  //   if (!startsHydrated.current && isHydrated) return;
-  //   const fetchAndSetUser = async () => {
-  //     const dapper = await getDapper(true);
-  //     const fetchedUser = await dapper.getCurrentUser();
-  //     if (fetchedUser?.username) {
-  //       setCurrentUser(fetchedUser);
-  //     }
-  //   };
-  //   fetchAndSetUser();
-  // }, []);
 
   return (
     <html lang="en">
@@ -184,35 +146,27 @@ function Root() {
         <Links />
       </head>
       <body>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.ENV = ${JSON.stringify(
-              parsedLoaderOutput.envStuff.ENV
-            )}`,
-          }}
-        />
         <SessionProvider
-          domain={parsedLoaderOutput.envStuff.ENV.PUBLIC_API_URL}
+          apiHost={
+            data?.envStuff.ENV.PUBLIC_API_URL ?? "APIHOST_MISSING_IN_ENV"
+          }
         >
           <LinkingProvider value={LinkLibrary}>
             <Toast.Provider toastDuration={10000}>
               <RadixTooltip delayDuration={80}>
-                <div className="nimbus-root">
-                  {/* REMIX TODO: For whatever reason the Navigation seems to cause suspense boundary errors. Couldn't find a reason why */}
-                  <Navigation
-                    hydrationCheck={!startsHydrated.current && isHydrated}
-                    currentUser={currentUser}
+                {data ? (
+                  <script
+                    dangerouslySetInnerHTML={{
+                      __html: `window.ENV = ${JSON.stringify(
+                        data.envStuff.ENV
+                      )}`,
+                    }}
                   />
-                  <MobileNavigationMenu />
-                  {!startsHydrated.current && isHydrated && currentUser ? (
-                    <MobileUserPopoverContent user={currentUser} />
-                  ) : (
-                    <MobileUserPopoverContent />
-                  )}
+                ) : null}
+                <div className="nimbus-root">
+                  <NavigationWrapper />
                   <section className="nimbus-root__content">
-                    <div className="nimbus-root__outlet">
-                      <Outlet />
-                    </div>
+                    <div className="nimbus-root__outlet">{children}</div>
                     <div className="nimbus-root__ads-container">
                       {shouldShowAds
                         ? adContainerIds.map((cid, k_i) => (
@@ -223,17 +177,43 @@ function Root() {
                   </section>
                   <Footer />
                 </div>
+                {shouldShowAds ? <AdsInit /> : null}
               </RadixTooltip>
             </Toast.Provider>
           </LinkingProvider>
         </SessionProvider>
         {/* <ScrollRestoration /> */}
         <Scripts />
-        {shouldShowAds ? <AdsInit /> : null}
       </body>
     </html>
   );
 }
+
+function App() {
+  const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>(
+    undefined
+  );
+  const [requestConfig, setRequestConfig] = useState<RequestConfig>();
+
+  const session = useSession();
+  useEffect(() => {
+    // INIT DAPPER
+    window.Dapper = new DapperTs(session.getConfig(), () => {
+      session.clearSession();
+      redirect("/communities");
+    });
+    setCurrentUser(session.getSessionCurrentUser(true));
+    setRequestConfig(session.getConfig());
+  }, []);
+
+  return (
+    <Outlet
+      context={{ currentUser: currentUser, requestConfig: requestConfig }}
+    />
+  );
+}
+
+export default withSentry(App);
 
 // REMIX TODO: We don't have any data available in the root ErrorBoundary, so we might want to change the designs
 export function ErrorBoundary() {
@@ -252,57 +232,24 @@ export function ErrorBoundary() {
   }
   const isResponseError = isRouteErrorResponse(error);
   return (
-    <html lang="en">
-      <head>
-        <title>Oh no!</title>
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        {/* <script
-          dangerouslySetInnerHTML={{
-            __html: `window.ENV = ${process.env.PUBLIC_API_URL}`,
-          }}
-        /> */}
-        <Scripts />
-        <LinkingProvider value={LinkLibrary}>
-          <Toast.Provider toastDuration={10000}>
-            <RadixTooltip delayDuration={300}>
-              <div className="nimbus-root">
-                {/* <Navigation user={getEmptyUser} /> */}
-                <section className="nimbus-root__content">
-                  <div className="nimbus-root__side-containers" />
-                  <div className="nimbus-root__middle-container">
-                    <div className="nimbus-error">
-                      <div
-                        className="nimbus-error__glitch"
-                        data-text={isResponseError ? error.status : 500}
-                      >
-                        <span>{isResponseError ? error.status : 500}</span>
-                      </div>
-                      <div className="nimbus-error__description">
-                        {isResponseError ? error.data : "Internal server error"}
-                      </div>
-                      {!isResponseError && (
-                        <div className="nimbus-error__flavor">
-                          Beep boop. Server something error happens.
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="nimbus-root__side-containers"></div>
-                </section>
-                <Footer />
-              </div>
-            </RadixTooltip>
-          </Toast.Provider>
-        </LinkingProvider>
-      </body>
-    </html>
+    <div className="nimbus-error">
+      <div
+        className="nimbus-error__glitch"
+        data-text={isResponseError ? error.status : 500}
+      >
+        <span>{isResponseError ? error.status : 500}</span>
+      </div>
+      <div className="nimbus-error__description">
+        {isResponseError ? error.data : "Internal server error"}
+      </div>
+      {!isResponseError && (
+        <div className="nimbus-error__flavor">
+          Beep boop. Server something error happens.
+        </div>
+      )}
+    </div>
   );
 }
-
-export default withSentry(Root);
 
 // Temporary solution for implementing ads
 // REMIX TODO: Move to dynamic html

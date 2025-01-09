@@ -7,7 +7,6 @@ import {
   NewLink,
 } from "@thunderstore/cyberstorm";
 import "./Community.css";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook } from "@fortawesome/free-solid-svg-icons";
@@ -16,6 +15,7 @@ import { ApiError } from "@thunderstore/thunderstore-api";
 import { PackageOrderOptions } from "~/commonComponents/PackageSearch/PackageOrder";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { DapperTs } from "@thunderstore/dapper-ts";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -27,7 +27,11 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   if (params.communityId) {
     try {
-      const dapper = await getDapper();
+      const dapper = new DapperTs({
+        apiHost: process.env.PUBLIC_API_URL,
+        sessionId: undefined,
+        csrfToken: undefined,
+      });
       const searchParams = new URL(request.url).searchParams;
       const ordering =
         searchParams.get("ordering") ?? PackageOrderOptions.Updated;
@@ -68,7 +72,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       if (error instanceof ApiError) {
         throw new Response("Community not found", { status: 404 });
       } else {
-        // REMIX TODO: Add sentry
         throw error;
       }
     }
@@ -79,7 +82,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export async function clientLoader({ request, params }: LoaderFunctionArgs) {
   if (params.communityId) {
     try {
-      const dapper = await getDapper(true);
+      const dapper = window.Dapper;
       const searchParams = new URL(request.url).searchParams;
       const ordering =
         searchParams.get("ordering") ?? PackageOrderOptions.Updated;
@@ -120,7 +123,6 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
       if (error instanceof ApiError) {
         throw new Response("Community not found", { status: 404 });
       } else {
-        // REMIX TODO: Add sentry
         throw error;
       }
     }

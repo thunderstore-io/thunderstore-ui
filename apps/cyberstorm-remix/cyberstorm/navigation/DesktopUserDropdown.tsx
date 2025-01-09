@@ -1,8 +1,7 @@
-import { faSignOut, faUsers, faCog } from "@fortawesome/free-solid-svg-icons";
+import { faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./Navigation.module.css";
-// import dropdownStyles from "../../../../packages/cyberstorm/src/newComponents/DropDown/DropDown.module.css";
 import {
   Avatar,
   NewDropDown,
@@ -29,11 +28,13 @@ export function DesktopUserDropdown(props: { user: CurrentUser }) {
       }
     >
       <NewDropDownItem rootClasses={styles.dropDownUserInfo}>
-        <Avatar src={avatar} username={user.username} size="small" />
-        <p className={styles.dropdownUserInfoDetails}>{user.username}</p>
+        <div>
+          <Avatar src={avatar} username={user.username} size="small" />
+          <p className={styles.dropdownUserInfoDetails}>{user.username}</p>
+        </div>
       </NewDropDownItem>
       <NewDropDownDivider />
-      <NewDropDownItem asChild>
+      {/* <NewDropDownItem asChild>
         <NewLink
           primitiveType="cyberstormLink"
           linkId="Settings"
@@ -44,8 +45,8 @@ export function DesktopUserDropdown(props: { user: CurrentUser }) {
           </NewIcon>
           Settings
         </NewLink>
-      </NewDropDownItem>
-      <NewDropDownItem asChild>
+      </NewDropDownItem> */}
+      {/* <NewDropDownItem asChild>
         <NewLink
           primitiveType="cyberstormLink"
           linkId="Teams"
@@ -56,7 +57,7 @@ export function DesktopUserDropdown(props: { user: CurrentUser }) {
           </NewIcon>
           Teams
         </NewLink>
-      </NewDropDownItem>
+      </NewDropDownItem> */}
       <NewDropDownItem asChild>
         <NewLink
           primitiveType="link"

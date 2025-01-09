@@ -3,14 +3,15 @@ import {
   ApiAction,
   packageLikeActionSchema,
 } from "@thunderstore/ts-api-react-actions";
-import { packageLike } from "@thunderstore/thunderstore-api";
+import { packageLike, RequestConfig } from "@thunderstore/thunderstore-api";
 
 export function PackageLikeAction(props: {
   isLoggedIn: boolean;
   packageName: string;
   namespace: string;
   isLiked: boolean;
-  currentUserUpdateTrigger: () => Promise<void>;
+  dataUpdateTrigger: () => Promise<void>;
+  config: RequestConfig;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: `${props.isLiked ? "Unliked" : "Liked"} package ${
@@ -22,20 +23,20 @@ export function PackageLikeAction(props: {
   });
 
   function onActionSuccess() {
-    props.currentUserUpdateTrigger();
+    props.dataUpdateTrigger();
     onSubmitSuccess();
   }
 
   function onActionError() {
     onSubmitError();
   }
-
   const onSubmit = ApiAction({
     schema: packageLikeActionSchema,
     meta: { namespace_id: props.namespace, package_name: props.packageName },
     endpoint: packageLike,
     onSubmitSuccess: onActionSuccess,
     onSubmitError: onActionError,
+    config: props.config,
   });
 
   return function () {

@@ -110,6 +110,8 @@ export { type MenuVariants, MenuVariantsList } from "./components/Menu/Menu";
 export {
   type ModalVariants,
   ModalVariantsList,
+  type ModalSizes,
+  ModalSizesList,
 } from "./components/Modal/Modal";
 export {
   type AdContainerVariants,

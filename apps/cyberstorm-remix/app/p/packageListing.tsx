@@ -3,14 +3,14 @@ import {
   Outlet,
   useLoaderData,
   useLocation,
+  useOutletContext,
   useRevalidator,
 } from "@remix-run/react";
 import {
-  Button,
   CopyButton,
-  Dialog,
   Heading,
   Image,
+  Modal,
   NewBreadCrumbs,
   NewButton,
   NewIcon,
@@ -19,7 +19,6 @@ import {
   Tabs,
 } from "@thunderstore/cyberstorm";
 import "./packageListing.css";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
@@ -33,7 +32,7 @@ import {
   faThumbTack,
 } from "@fortawesome/free-solid-svg-icons";
 import TeamMembers from "./components/TeamMembers/TeamMembers";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import {
   PackageDeprecateAction,
@@ -51,6 +50,8 @@ import {
   formatFileSize,
   formatInteger,
 } from "@thunderstore/cyberstorm/src/utils/utils";
+import { DapperTs } from "@thunderstore/dapper-ts";
+import { OutletContextShape } from "~/root";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -62,7 +63,11 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     try {
-      const dapper = await getDapper();
+      const dapper = new DapperTs({
+        apiHost: process.env.PUBLIC_API_URL,
+        sessionId: undefined,
+        csrfToken: undefined,
+      });
       return {
         community: await dapper.getCommunity(params.communityId),
         communityFilters: await dapper.getCommunityFilters(params.communityId),
@@ -72,7 +77,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
           params.packageId
         ),
         team: await dapper.getTeamDetails(params.namespaceId),
-        currentUser: await dapper.getCurrentUser(),
       };
     } catch (error) {
       if (error instanceof ApiError) {
@@ -86,44 +90,69 @@ export async function loader({ params }: LoaderFunctionArgs) {
   throw new Response("Package not found", { status: 404 });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
-    try {
-      const dapper = await getDapper(true);
-      return {
-        community: await dapper.getCommunity(params.communityId),
-        communityFilters: await dapper.getCommunityFilters(params.communityId),
-        listing: await dapper.getPackageListingDetails(
-          params.communityId,
-          params.namespaceId,
-          params.packageId
-        ),
-        team: await dapper.getTeamDetails(params.namespaceId),
-        currentUser: await dapper.getCurrentUser(),
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Package not found", { status: 404 });
-      } else {
-        // REMIX TODO: Add sentry
-        throw error;
-      }
-    }
-  }
-  throw new Response("Package not found", { status: 404 });
-}
+// export async function clientLoader({ params }: LoaderFunctionArgs) {
+//   if (params.communityId && params.namespaceId && params.packageId) {
+//     try {
+//       const dapper = window.Dapper;
+//       return {
+//         community: await dapper.getCommunity(params.communityId),
+//         communityFilters: await dapper.getCommunityFilters(params.communityId),
+//         listing: await dapper.getPackageListingDetails(
+//           params.communityId,
+//           params.namespaceId,
+//           params.packageId
+//         ),
+//         team: await dapper.getTeamDetails(params.namespaceId),
+//         currentUser: await dapper.getCurrentUser(),
+//       };
+//     } catch (error) {
+//       if (error instanceof ApiError) {
+//         throw new Response("Package not found", { status: 404 });
+//       } else {
+//         // REMIX TODO: Add sentry
+//         throw error;
+//       }
+//     }
+//   }
+//   throw new Response("Package not found", { status: 404 });
+// }
 
 export default function Community() {
-  const { community, communityFilters, listing, team, currentUser } =
-    useLoaderData<typeof loader | typeof clientLoader>();
-  const revalidator = useRevalidator();
+  const { community, communityFilters, listing, team } =
+    useLoaderData<typeof loader>();
+
   const location = useLocation();
 
-  const rpc = currentUser.rated_packages_cyberstorm as string[];
-  const [isLiked, setIsLiked] = useState(
-    rpc.includes(`${listing.namespace}-${listing.name}`)
-  );
-  const [isRefetching, setIsRefetching] = useState(false);
+  const outletContext = useOutletContext() as OutletContextShape;
+  const currentUser = outletContext.currentUser;
+  const config = outletContext.requestConfig;
+
+  const [isLiked, setIsLiked] = useState(false);
+
+  // TODO: VERY CRITICAL TO FIGURE OUT !!! Figure out if this is stupid or not? I'm not sure if Remix will let fetch part of the client loader.
+  // Ideally we could just tell Remix to use the clientLoader to fetch all related data, but it seems like it just doesnt do it, so we have to do this.
+  const fetchAndSetRatedPackages = async () => {
+    const dapper = window.Dapper;
+    if (currentUser?.username) {
+      const rp = await dapper.getRatedPackages();
+      setIsLiked(
+        rp.rated_packages.includes(`${listing.namespace}-${listing.name}`)
+      );
+    }
+  };
+
+  const revalidator = useRevalidator();
+
+  const revalidateLoaderData = async () => {
+    if (revalidator.state === "idle") {
+      revalidator.revalidate();
+    }
+  };
+
+  useEffect(() => {
+    fetchAndSetRatedPackages();
+  }, []);
+
   const isHydrated = useHydrated();
   const startsHydrated = useRef(isHydrated);
 
@@ -149,64 +178,6 @@ export default function Community() {
   }, []);
   // END: For sidebar meta dates
 
-  useEffect(() => {
-    if (!startsHydrated.current && isHydrated) return;
-    if (
-      currentUser.rated_packages_cyberstorm.length > 0 &&
-      typeof currentUser.rated_packages_cyberstorm[0] === "string"
-    ) {
-      const rpc = currentUser.rated_packages_cyberstorm as string[];
-      setIsLiked(rpc.includes(`${listing.namespace}-${listing.name}`));
-    }
-    setIsRefetching(false);
-  }, [currentUser]);
-
-  // REMIX TODO: Move current user to stand-alone loader and revalidate only currentUser
-  async function useUpdateLikeStatus() {
-    if (!isRefetching) {
-      setIsRefetching(true);
-      revalidator.revalidate();
-    }
-  }
-
-  // REMIX TODO: Move current user to stand-alone loader and revalidate only currentUser
-  async function useUpdatePackageData() {
-    if (!isRefetching) {
-      setIsRefetching(true);
-      revalidator.revalidate();
-    }
-  }
-
-  // // Header helpers
-  // const packageDetailsMeta = [
-  //   <CyberstormLink
-  //     linkId="Team"
-  //     key="team"
-  //     community={listing.community_identifier}
-  //     team={listing.namespace}
-  //   >
-  //     <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
-  //       <Button.ButtonIcon>
-  //         <FontAwesomeIcon icon={faUsers} />
-  //       </Button.ButtonIcon>
-  //       <Button.ButtonLabel>{listing.namespace}</Button.ButtonLabel>
-  //     </Button.Root>
-  //   </CyberstormLink>,
-  // ];
-
-  // if (listing.website_url) {
-  //   packageDetailsMeta.push(
-  //     <a key="website" href={listing.website_url}>
-  //       <Button.Root plain colorScheme="transparentPrimary" paddingSize="small">
-  //         <Button.ButtonLabel>{listing.website_url}</Button.ButtonLabel>
-  //         <Button.ButtonIcon>
-  //           <FontAwesomeIcon icon={faArrowUpRight} />
-  //         </Button.ButtonIcon>
-  //       </Button.Root>
-  //     </a>
-  //   );
-  // }
-
   // Sidebar helpers
   const mappedPackageTagList = listing.categories.map((category) => {
     return (
@@ -228,59 +199,53 @@ export default function Community() {
             ? "source"
             : "details";
 
-  const updateTimeDelta = Math.round(
-    (Date.now() - Date.parse(listing.last_updated)) / 86400000
+  const managementTools = (
+    <Modal
+      popoverId="packageManagementTools"
+      trigger={
+        <NewButton
+          csVariant="primary"
+          {...{
+            popovertarget: "packageManagementTools",
+            popovertargetaction: "open",
+          }}
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faCog} />
+          </NewIcon>
+          Manage
+        </NewButton>
+      }
+    >
+      <PackageEditForm
+        options={communityFilters.package_categories.map((cat) => {
+          return { label: cat.name, value: cat.slug };
+        })}
+        community={listing.community_identifier}
+        namespace={listing.namespace}
+        package={listing.name}
+        current_categories={listing.categories}
+        isDeprecated={listing.is_deprecated}
+        dataUpdateTrigger={revalidateLoaderData}
+        deprecationButton={
+          <NewButton
+            primitiveType="button"
+            onClick={PackageDeprecateAction({
+              packageName: listing.name,
+              namespace: listing.namespace,
+              isDeprecated: listing.is_deprecated,
+              dataUpdateTrigger: revalidateLoaderData,
+              config: config,
+            })}
+            csVariant={listing.is_deprecated ? "warning" : "primary"}
+          >
+            {listing.is_deprecated ? "Undeprecate" : "Deprecate"}
+          </NewButton>
+        }
+        config={config}
+      />
+    </Modal>
   );
-  const isNew = updateTimeDelta < 3;
-  if (
-    !listing.is_pinned &&
-    !listing.is_nsfw &&
-    !listing.is_deprecated &&
-    !isNew
-  ) {
-    return null;
-  }
-  const flagList: ReactNode[] = [];
-  if (listing.is_pinned) {
-    flagList.push(
-      <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
-        <NewIcon noWrapper csMode="inline">
-          <FontAwesomeIcon icon={faThumbTack} />
-        </NewIcon>
-        Pinned
-      </NewTag>
-    );
-  }
-  if (listing.is_deprecated) {
-    flagList.push(
-      <NewTag csSize="small" csModifiers={["dark"]} csVariant="yellow">
-        <NewIcon noWrapper csMode="inline">
-          <FontAwesomeIcon icon={faWarning} />
-        </NewIcon>
-        Deprecated
-      </NewTag>
-    );
-  }
-  if (listing.is_nsfw) {
-    flagList.push(
-      <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
-        <NewIcon noWrapper csMode="inline">
-          <FontAwesomeIcon icon={faLips} />
-        </NewIcon>
-        NSFW
-      </NewTag>
-    );
-  }
-  if (isNew) {
-    flagList.push(
-      <NewTag csSize="small" csModifiers={["dark"]} csVariant="green">
-        <NewIcon noWrapper csMode="inline">
-          <FontAwesomeIcon icon={faSparkles} />
-        </NewIcon>
-        New
-      </NewTag>
-    );
-  }
 
   return (
     <>
@@ -368,69 +333,12 @@ export default function Community() {
             }
           />
           <div className="headerActions">
-            {/* <a
-              href={listing.install_url}
-              className={headerStyles.installButton}
-            >
-              <Button.Root plain paddingSize="huge" colorScheme="fancyAccent">
-                <Button.ButtonIcon iconSize="big">
-                  <ThunderstoreLogo />
-                </Button.ButtonIcon>
-                <Button.ButtonLabel fontSize="huge" fontWeight="800">
-                  Install
-                </Button.ButtonLabel>
-              </Button.Root>
-            </a> */}
             {/* TODO: Admin tools */}
-            {currentUser.teams.some(function (cuTeam) {
+            {currentUser?.teams.some(function (cuTeam) {
               return cuTeam?.name === listing.team.name;
-            }) ? (
-              <Dialog.Root
-                title="Manage Package"
-                trigger={
-                  <Button.Root colorScheme="primary" paddingSize="medium">
-                    <Button.ButtonIcon>
-                      <FontAwesomeIcon icon={faCog} />
-                    </Button.ButtonIcon>
-                    <Button.ButtonLabel>Manage</Button.ButtonLabel>
-                  </Button.Root>
-                }
-              >
-                {/* package management */}
-                <PackageEditForm
-                  options={communityFilters.package_categories.map((cat) => {
-                    return { label: cat.name, value: cat.slug };
-                  })}
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  current_categories={listing.categories}
-                  isDeprecated={listing.is_deprecated}
-                  packageDataUpdateTrigger={useUpdatePackageData}
-                  deprecationButton={
-                    <Button.Root
-                      type="button"
-                      onClick={PackageDeprecateAction({
-                        packageName: listing.name,
-                        namespace: listing.namespace,
-                        isDeprecated: listing.is_deprecated,
-                        packageDataUpdateTrigger: useUpdatePackageData,
-                      })}
-                      colorScheme={
-                        listing.is_deprecated ? "warning" : "default"
-                      }
-                      paddingSize="large"
-                    >
-                      {listing.is_deprecated ? (
-                        <Button.ButtonLabel>Undeprecate</Button.ButtonLabel>
-                      ) : (
-                        <Button.ButtonLabel>Deprecate</Button.ButtonLabel>
-                      )}
-                    </Button.Root>
-                  }
-                />
-              </Dialog.Root>
-            ) : null}
+            })
+              ? managementTools
+              : null}
           </div>
         </div>
       </header>
@@ -566,15 +474,16 @@ export default function Community() {
             <NewButton
               primitiveType="button"
               onClick={PackageLikeAction({
-                isLoggedIn: Boolean(currentUser.username),
+                isLoggedIn: Boolean(currentUser?.username),
                 packageName: listing.name,
                 namespace: listing.namespace,
                 isLiked: isLiked,
-                currentUserUpdateTrigger: useUpdateLikeStatus,
+                dataUpdateTrigger: fetchAndSetRatedPackages,
+                config: config,
               })}
               tooltipText="Like"
               icon={faThumbsUp}
-              csVariant="secondary"
+              csVariant={isLiked ? "success" : "secondary"}
             />
             {/* <ReportButton onClick={TODO} /> */}
           </div>
@@ -667,7 +576,44 @@ export default function Community() {
               {mappedPackageTagList}
             </div>
             <div className="nimbus-packagelisting__sidebar__wrapper__categories_or_tags">
-              {flagList}
+              {listing.is_pinned ? (
+                <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faThumbTack} />
+                  </NewIcon>
+                  Pinned
+                </NewTag>
+              ) : null}
+              {listing.is_deprecated ? (
+                <NewTag
+                  csSize="small"
+                  csModifiers={["dark"]}
+                  csVariant="yellow"
+                >
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faWarning} />
+                  </NewIcon>
+                  Deprecated
+                </NewTag>
+              ) : null}
+              {listing.is_nsfw ? (
+                <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faLips} />
+                  </NewIcon>
+                  NSFW
+                </NewTag>
+              ) : null}
+              {Math.round(
+                (Date.now() - Date.parse(listing.last_updated)) / 86400000
+              ) < 3 ? (
+                <NewTag csSize="small" csModifiers={["dark"]} csVariant="green">
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faSparkles} />
+                  </NewIcon>
+                  New
+                </NewTag>
+              ) : null}
             </div>
           </div>
 
