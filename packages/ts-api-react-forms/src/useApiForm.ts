@@ -3,6 +3,7 @@ import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { handleFormApiErrors } from "./errors";
 import { ApiEndpoint, useApiCall } from "@thunderstore/ts-api-react";
+import { RequestConfig } from "@thunderstore/thunderstore-api";
 
 export type UseApiFormArgs<
   Schema extends ZodObject<Z>,
@@ -12,7 +13,7 @@ export type UseApiFormArgs<
 > = {
   schema: Schema;
   meta: Meta;
-  endpoint: ApiEndpoint<z.infer<Schema>, Meta, Result>;
+  endpoint: ApiEndpoint<RequestConfig, z.infer<Schema>, Meta, Result>;
 };
 export type UseApiFormReturn<
   Schema extends ZodObject<Z>,
@@ -20,7 +21,10 @@ export type UseApiFormReturn<
   Z extends ZodRawShape,
 > = {
   form: UseFormReturn<z.infer<Schema>>;
-  submitHandler: (data: z.infer<Schema>) => Promise<Result>;
+  submitHandler: (
+    config: RequestConfig,
+    data: z.infer<Schema>
+  ) => Promise<Result>;
 };
 export function useApiForm<
   Schema extends ZodObject<Z>,
@@ -37,9 +41,12 @@ export function useApiForm<
     mode: "onSubmit",
     resolver: zodResolver(schema),
   });
-  const submitHandler = async (data: z.infer<Schema>) => {
+  const submitHandler = async (
+    config: RequestConfig,
+    data: z.infer<Schema>
+  ) => {
     try {
-      return await apiCall(data, meta);
+      return await apiCall(config, data, meta);
     } catch (e) {
       handleFormApiErrors(e, schema, form.setError);
       throw e;

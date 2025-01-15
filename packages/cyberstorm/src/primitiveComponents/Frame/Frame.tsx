@@ -49,8 +49,6 @@ export interface FrameModalProps
     PrimitiveComponentDefaultProps {
   primitiveType: "modal";
   popoverId: string;
-  wrapperClasses?: string;
-  noWrapper?: boolean;
 }
 
 export interface FrameIconProps
@@ -198,12 +196,8 @@ export const Frame = React.forwardRef<
     }
     if (primitiveType === "modal") {
       const fRef = forwardedRef as React.ForwardedRef<HTMLDivElement>;
-      const {
-        wrapperClasses,
-        popoverId,
-        noWrapper,
-        ...strippedForwardedProps
-      } = forwardedProps as FrameModalProps;
+      const { popoverId, ...strippedForwardedProps } =
+        forwardedProps as FrameModalProps;
       return (
         <TooltipWrapper tooltipText={tooltipText} tooltipSide={tooltipSide}>
           <div
@@ -213,13 +207,7 @@ export const Frame = React.forwardRef<
             className={rootClasses}
             ref={fRef}
           >
-            {noWrapper ? (
-              children
-            ) : (
-              <div className={rootClasses}>
-                <div className={wrapperClasses}>{children}</div>
-              </div>
-            )}
+            {children}
           </div>
         </TooltipWrapper>
       );

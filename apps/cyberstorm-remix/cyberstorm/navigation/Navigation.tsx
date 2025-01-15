@@ -20,9 +20,8 @@ import {
   ThunderstoreLogo,
 } from "@thunderstore/cyberstorm/src/svg/svg";
 import { DevelopersDropDown } from "./DevelopersDropDown";
-// Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint
-// import { DesktopUserDropdown } from "./DesktopUserDropdown";
-// import { DesktopLoginPopover } from "./DesktopLoginPopover";
+import { DesktopUserDropdown } from "./DesktopUserDropdown";
+import { DesktopLoginPopover } from "./DesktopLoginPopover";
 import { CurrentUser } from "@thunderstore/dapper/types";
 
 import { faSignOut } from "@fortawesome/free-solid-svg-icons";
@@ -35,8 +34,6 @@ export function Navigation(props: {
   hydrationCheck: boolean;
   currentUser?: CurrentUser;
 }) {
-  // Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { hydrationCheck, currentUser } = props;
   return (
     <>
@@ -75,12 +72,11 @@ export function Navigation(props: {
           >
             Get App
           </NewButton>
-          {/* Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint */}
-          {/* {hydrationCheck && currentUser ? (
+          {hydrationCheck && currentUser ? (
             <DesktopUserDropdown user={currentUser} />
           ) : (
             <DesktopLoginPopover />
-          )} */}
+          )}
         </div>
       </header>
 
@@ -107,8 +103,7 @@ export function Navigation(props: {
           </NewIcon>
           Browse
         </NewLink>
-        {/* Disabled until we have "rated_packages_cyberstorm" available in the currentUser django endpoint */}
-        {/* <button
+        <button
           {...{
             popovertarget: "mobileNavAccount",
             popovertargetaction: "open",
@@ -123,7 +118,7 @@ export function Navigation(props: {
             size="verySmoll"
           />
           Account
-        </button> */}
+        </button>
       </nav>
     </>
   );

@@ -29,5 +29,6 @@ export function packageEditCategories(
         current_categories: meta.current_categories,
       }),
     },
+    useSession: true,
   });
 }

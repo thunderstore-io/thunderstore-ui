@@ -1,16 +1,25 @@
 @layer theme-components {
-  /* VARIANTS DEFAULT STATE */
-  .ts-modal:where(.ts-variant--primary) {
-    --modal-color: var(--modal-primary-color--default);
+  /* VARIANTS */
+  .ts-modal:where(.ts-variant--default) {
+    --modal-box-shadow: var(--modal-box-shadow--default);
+    --modal-background: var(--modal-background--default);
+    --modal-border: var(--modal-border--default);
+  }
 
-    &:where(:hover) {
-      --modal-color: var(--modal-primary-color--hover);
-    }
+  /* SIZES */
+  .ts-modal:where(.ts-size--medium) {
+    --modal-border-radius: var(--modal-md-border-radius);
+    --modal-content-padding: var(--modal-md-content-padding);
+    --modal-content-gap: var(--modal-md-content-gap);
   }
 
   /* TOKENS */
   :root {
-    --modal-primary-color--default: var(--color-text-accent);
-    --modal-primary-color--hover: var(--color-text-primary);
+    --modal-box-shadow--default: var(--shadow-lg);
+    --modal-background--default: var(--color-surface-2);
+    --modal-border--default: 1px solid var(--color-surface-7);
+    --modal-md-border-radius: var(--radius-md);
+    --modal-md-content-padding: 3rem 5.5rem;
+    --modal-md-content-gap: 2rem;
   }
 }

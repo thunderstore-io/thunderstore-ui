@@ -1,13 +1,17 @@
 import styles from "../../../Markdown.module.css";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { useLoaderData } from "@remix-run/react";
 import { LoaderFunctionArgs } from "@remix-run/node";
+import { DapperTs } from "@thunderstore/dapper-ts";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
     try {
-      const dapper = await getDapper();
+      const dapper = new DapperTs({
+        apiHost: process.env.PUBLIC_API_URL,
+        sessionId: undefined,
+        csrfToken: undefined,
+      });
       return {
         status: "ok",
         message: "",
@@ -24,7 +28,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
           changelog: { html: "" },
         };
       } else {
-        // REMIX TODO: Add sentry
         throw error;
       }
     }
@@ -39,7 +42,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
     try {
-      const dapper = await getDapper(true);
+      const dapper = window.Dapper;
       return {
         status: "ok",
         message: "",
@@ -56,7 +59,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           changelog: { html: "" },
         };
       } else {
-        // REMIX TODO: Add sentry
         throw error;
       }
     }

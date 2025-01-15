@@ -25,5 +25,6 @@ export function packageLike(
       cache: "no-store",
       body: JSON.stringify(data),
     },
+    useSession: true,
   });
 }

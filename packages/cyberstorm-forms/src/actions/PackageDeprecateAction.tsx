@@ -3,13 +3,17 @@ import {
   ApiAction,
   PackageDeprecateActionSchema,
 } from "@thunderstore/ts-api-react-actions";
-import { packageDeprecate } from "@thunderstore/thunderstore-api";
+import {
+  packageDeprecate,
+  RequestConfig,
+} from "@thunderstore/thunderstore-api";
 
 export function PackageDeprecateAction(props: {
   packageName: string;
   namespace: string;
   isDeprecated: boolean;
-  packageDataUpdateTrigger: () => Promise<void>;
+  dataUpdateTrigger: () => Promise<void>;
+  config: RequestConfig;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: `${
@@ -18,7 +22,7 @@ export function PackageDeprecateAction(props: {
   });
 
   function onActionSuccess() {
-    props.packageDataUpdateTrigger();
+    props.dataUpdateTrigger();
     onSubmitSuccess();
   }
 
@@ -32,6 +36,7 @@ export function PackageDeprecateAction(props: {
     endpoint: packageDeprecate,
     onSubmitSuccess: onActionSuccess,
     onSubmitError: onActionError,
+    config: props.config,
   });
 
   return function () {

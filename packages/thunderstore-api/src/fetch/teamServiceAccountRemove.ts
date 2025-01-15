@@ -6,12 +6,9 @@ export type teamServiceAccountRemoveMetaArgs = {
   teamName: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface teamServiceAccountRemoveApiArgs {}
-
 export function teamServiceAccountRemove(
   config: RequestConfig,
-  _data: teamServiceAccountRemoveApiArgs,
+  _data: object,
   meta: teamServiceAccountRemoveMetaArgs
 ) {
   const path = `/api/cyberstorm/team/${meta.teamName}/service-account/delete/`;
@@ -25,5 +22,6 @@ export function teamServiceAccountRemove(
         service_account_uuid: meta.serviceAccountIdentifier,
       }),
     },
+    useSession: true,
   });
 }

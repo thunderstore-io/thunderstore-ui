@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { z, ZodObject, ZodRawShape } from "zod";
-import { ApiError } from "@thunderstore/thunderstore-api";
+import { ApiError, RequestConfig } from "@thunderstore/thunderstore-api";
 import { ApiEndpoint } from "@thunderstore/ts-api-react";
 import { useApiAction } from "./useApiAction";
 
@@ -11,10 +11,11 @@ export interface ApiActionProps<
   Z extends ZodRawShape,
 > {
   schema: Schema;
-  endpoint: ApiEndpoint<z.infer<Schema>, Meta, Result>;
+  endpoint: ApiEndpoint<RequestConfig, z.infer<Schema>, Meta, Result>;
   meta: Meta;
   onSubmitSuccess?: (result: Result) => void;
   onSubmitError?: (error: Error | ApiError | unknown) => void;
+  config: RequestConfig;
 }
 
 export function ApiAction<
@@ -23,8 +24,9 @@ export function ApiAction<
   Result extends object,
   Z extends ZodRawShape,
 >(props: ApiActionProps<Schema, Meta, Result, Z>) {
-  const { meta, endpoint, onSubmitSuccess, onSubmitError } = props;
+  const { meta, endpoint, onSubmitSuccess, onSubmitError, config } = props;
   const submitHandler = useApiAction({
+    config,
     meta: meta,
     endpoint: endpoint,
   });

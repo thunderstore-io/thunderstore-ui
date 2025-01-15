@@ -6,12 +6,9 @@ export type teamRemoveMemberMetaArgs = {
   username: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface teamRemoveMemberApiArgs {}
-
 export function teamRemoveMember(
   config: RequestConfig,
-  _data: teamRemoveMemberApiArgs,
+  _data: object,
   meta: teamRemoveMemberMetaArgs
 ) {
   const path = `/api/cyberstorm/team/${meta.teamIdentifier}/members/remove/`;
@@ -23,5 +20,6 @@ export function teamRemoveMember(
       method: "POST",
       body: JSON.stringify({ username: meta.username }),
     },
+    useSession: true,
   });
 }

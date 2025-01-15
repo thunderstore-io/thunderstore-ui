@@ -4,8 +4,6 @@ export interface CurrentUser {
   username: string | null;
   capabilities: string[];
   connections: OAuthConnection[];
-  rated_packages: string[];
-  rated_packages_cyberstorm: string[];
   subscription: {
     expires: string | null;
   };

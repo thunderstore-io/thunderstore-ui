@@ -13,6 +13,7 @@ export * from "./fetch/communityFilters";
 export * from "./fetch/communityList";
 export * from "./fetch/communityPackageListings";
 export * from "./fetch/currentUser";
+export * from "./fetch/ratedPackages";
 export * from "./fetch/namespacePackageListings";
 export * from "./fetch/packageChangelog";
 export * from "./fetch/packageDependantsListings";

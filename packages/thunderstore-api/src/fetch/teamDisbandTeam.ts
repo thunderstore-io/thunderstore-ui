@@ -23,5 +23,6 @@ export function teamDisbandTeam(
       method: "POST",
       body: JSON.stringify(data),
     },
+    useSession: true,
   });
 }
