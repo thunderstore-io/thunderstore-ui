@@ -19,9 +19,8 @@ export function DesktopLoginPopover() {
       popoverId={"navAccount"}
       trigger={
         <NewButton
-          csVariant="primary"
-          csSize="big"
-          rootClasses={styles.loginButton}
+          csVariant="accent"
+          csSize="small"
           {...{
             popovertarget: "navAccount",
             popovertargetaction: "open",

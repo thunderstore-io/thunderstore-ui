@@ -9,12 +9,17 @@
   .ts-dropdown:where(.ts-size--medium) {
     --dropdown-border-radius: var(--dropdown-md-border-radius);
     --dropdown-padding: var(--dropdown-md-padding);
+    --dropdown-gap: var(--dropdown-md-gap);
 
     & > *:where(:not(.ts-dropdown__divider)) {
       --dropdown__item-gap: var(--dropdown-item-md-gap);
       --dropdown__item-padding: var(--dropdown-item-md-padding);
       --dropdown__item-font-weight: var(--dropdown-item-md-font-weight);
       --dropdown__item-font-size: var(--dropdown-item-md-font-size);
+    }
+
+    & > .ts-dropdown__divider {
+      --dropdown__divider-margin: var(--divider-md-margin);
     }
   }
 
@@ -33,8 +38,14 @@
       --dropdown__item-color: var(--dropdown-item-text-color--hover);
       --dropdown__item-icon-color: var(--dropdown-item-icon-color--hover);
     }
+
+    & > .ts-dropdown__divider:where(.ts-variant--primary) {
+      --dropdown__divider-height: var(--divider-height);
+      --dropdown__divider-background-color: var(--divider-bg-color);
+    }
   }
 
+  /* Dropdown Item */
   .ts-dropdown__item:where(.ts-modifier--danger) {
     --dropdown__item-background-color: var(
       --dropdown-item-danger-bg-color--default
@@ -75,11 +86,6 @@
     }
   }
 
-  .ts-dropdown__divider:where(.ts-variant--primary) {
-    --dropdown__divider-height: var(--divider-height);
-    --dropdown__divider-background-color: var(--divider-bg-color);
-  }
-
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -91,6 +97,7 @@
   }
 
   :root {
+    --dropdown-md-gap: 0.25rem;
     --dropdown-bg-color--default: var(--color-surface-4);
     --dropdown-border-color--default: var(--color-surface-a6);
     --dropdown-item-bg-color--default: #0000;
@@ -112,12 +119,13 @@
     --dropdown-item-disabled-text-color--default: var(--color-text-tertiary);
     --dropdown-item-disabled-text-color--hover: var(--color-text-tertiary);
     --dropdown-md-border-radius: var(--radius-md);
-    --dropdown-md-padding: var(--space-8) 0;
+    --dropdown-md-padding: var(--space-4) 0;
     --dropdown-item-md-gap: var(--gap-md);
     --dropdown-item-md-padding: var(--space-12) var(--space-16);
     --dropdown-item-md-font-weight: var(--font-weight-regular);
     --dropdown-item-md-font-size: var(--font-size-body-md);
     --divider-bg-color: var(--color-surface-a6);
     --divider-height: 0.063rem;
+    --divider-md-margin: 0.25rem 0rem;
   }
 }

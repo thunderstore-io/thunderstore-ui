@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 
 import "./Menu.css";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { NewButton } from "../..";
 import {
   FramePopoverProps,
@@ -9,6 +8,7 @@ import {
 } from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
 import { MenuVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 
 interface Props extends Omit<FramePopoverProps, "primitiveType"> {
   trigger?: ReactNode;
@@ -53,7 +53,7 @@ export function Menu(props: Props) {
               csModifiers={["ghost"]}
               tooltipText="Close"
               aria-label="Close"
-              icon={faXmark}
+              icon={faXmarkLarge}
             />
           )}
           {props.children}
