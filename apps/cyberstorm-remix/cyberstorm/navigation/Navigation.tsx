@@ -65,12 +65,11 @@ export function Navigation(props: {
           <NewButton
             primitiveType="link"
             href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
-            csSize="medium"
-            csVariant="accent"
-            rootClasses={styles.getAppButton}
+            csSize="small"
+            csVariant="secondary"
             aria-label="Get Thunderstore Mod Manager App"
           >
-            Get App
+            Get Manager
           </NewButton>
           {hydrationCheck && currentUser ? (
             <DesktopUserDropdown user={currentUser} />

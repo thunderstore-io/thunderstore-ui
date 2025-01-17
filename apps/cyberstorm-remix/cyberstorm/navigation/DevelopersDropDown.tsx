@@ -29,7 +29,7 @@ export function DevelopersDropDown() {
         <NewDropDownItem>
           <NewLink
             primitiveType="link"
-            rootClasses={classnames(styles.link, "ts-dropdown__item")}
+            rootClasses={"ts-dropdown__item"}
             href="/api/docs"
           >
             API Docs
@@ -38,7 +38,7 @@ export function DevelopersDropDown() {
         <NewDropDownItem>
           <NewLink
             primitiveType="link"
-            rootClasses={classnames(styles.link, "ts-dropdown__item")}
+            rootClasses={"ts-dropdown__item"}
             href="/package/create/docs/"
           >
             Package Format Docs
@@ -47,7 +47,7 @@ export function DevelopersDropDown() {
         <NewDropDownItem>
           <NewLink
             primitiveType="link"
-            rootClasses={classnames(styles.link, "ts-dropdown__item")}
+            rootClasses={"ts-dropdown__item"}
             href="/tools/manifest-v1-validator/"
           >
             Manifest Validator
@@ -56,7 +56,7 @@ export function DevelopersDropDown() {
         <NewDropDownItem>
           <NewLink
             primitiveType="link"
-            rootClasses={classnames(styles.link, "ts-dropdown__item")}
+            rootClasses={"ts-dropdown__item"}
             href="/tools/markdown-preview/"
           >
             Markdown Preview
