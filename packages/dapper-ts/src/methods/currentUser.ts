@@ -45,7 +45,7 @@ export const emptyUser = {
 };
 
 export async function getCurrentUser(this: DapperTsInterface) {
-  if (typeof this.config.sessionId !== "string") {
+  if (typeof this.config().sessionId !== "string") {
     return emptyUser;
   }
 

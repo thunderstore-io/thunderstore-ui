@@ -6,7 +6,7 @@ export interface userLinkedAccountDisconnectApiArgs {
 }
 
 export function userLinkedAccountDisconnect(
-  config: RequestConfig,
+  config: () => RequestConfig,
   data: userLinkedAccountDisconnectApiArgs
 ) {
   const path = `/api/cyberstorm/current-user/linked-account-disconnect/`;

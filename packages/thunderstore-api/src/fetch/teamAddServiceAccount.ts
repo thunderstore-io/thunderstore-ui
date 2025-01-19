@@ -10,7 +10,7 @@ export type teamAddServiceAccountApiArgs = {
 };
 
 export function teamAddServiceAccount(
-  config: RequestConfig,
+  config: () => RequestConfig,
   data: teamAddServiceAccountApiArgs,
   meta: teamAddServiceAccountMetaArgs
 ) {

@@ -2,7 +2,7 @@ import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
 
 export async function fetchDynamicHTML(
-  config: RequestConfig,
+  config: () => RequestConfig,
   placement: string
 ) {
   const path = `api/cyberstorm/dynamichtml/${placement}`;

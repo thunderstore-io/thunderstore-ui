@@ -36,7 +36,7 @@ function sleep(delay: number) {
 }
 
 export type apiFetchArgs = {
-  config: RequestConfig;
+  config: () => RequestConfig;
   path: string;
   query?: string;
   request?: Omit<RequestInit, "headers">;
@@ -45,9 +45,9 @@ export type apiFetchArgs = {
 export async function apiFetch2(args: apiFetchArgs) {
   const { config, path, request, query, useSession = false } = args;
   const usedConfig: RequestConfig = useSession
-    ? config
+    ? config()
     : {
-        apiHost: config.apiHost,
+        apiHost: config().apiHost,
         csrfToken: undefined,
         sessionId: undefined,
       };
@@ -69,7 +69,7 @@ export async function apiFetch2(args: apiFetchArgs) {
 }
 
 export function apiFetch(
-  config: RequestConfig,
+  config: () => RequestConfig,
   path: string,
   query?: string,
   request?: Omit<RequestInit, "headers">,

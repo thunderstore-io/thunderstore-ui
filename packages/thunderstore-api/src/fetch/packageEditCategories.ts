@@ -13,7 +13,7 @@ export type PackageEditApiArgs = {
 };
 
 export function packageEditCategories(
-  config: RequestConfig,
+  config: () => RequestConfig,
   data: PackageEditApiArgs,
   meta: PackageEditMetaArgs
 ) {

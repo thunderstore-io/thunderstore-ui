@@ -13,7 +13,7 @@ export function PackageDeprecateAction(props: {
   namespace: string;
   isDeprecated: boolean;
   dataUpdateTrigger: () => Promise<void>;
-  config: RequestConfig;
+  config: () => RequestConfig;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: `${

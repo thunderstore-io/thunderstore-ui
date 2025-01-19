@@ -2,7 +2,7 @@ import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
 
 export async function fetchPackageListingDetails(
-  config: RequestConfig,
+  config: () => RequestConfig,
   communityId: string,
   namespaceId: string,
   packageName: string

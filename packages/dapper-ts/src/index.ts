@@ -26,15 +26,15 @@ import {
 } from "./methods/team";
 
 export interface DapperTsInterface extends DapperInterface {
-  config: RequestConfig;
+  config: () => RequestConfig;
   removeSessionHook?: () => void;
 }
 
 export class DapperTs implements DapperTsInterface {
-  config: RequestConfig;
+  config: () => RequestConfig;
   removeSessionHook?: () => void;
 
-  constructor(config: RequestConfig, removeSessionHook?: () => void) {
+  constructor(config: () => RequestConfig, removeSessionHook?: () => void) {
     this.config = config;
     this.removeSessionHook = removeSessionHook;
     this.getDynamicHTML = this.getDynamicHTML.bind(this);

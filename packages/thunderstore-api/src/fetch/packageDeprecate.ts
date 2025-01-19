@@ -11,7 +11,7 @@ export type packageDeprecateApiArgs = {
 };
 
 export function packageDeprecate(
-  config: RequestConfig,
+  config: () => RequestConfig,
   data: packageDeprecateApiArgs,
   meta: packageDeprecateMetaArgs
 ) {

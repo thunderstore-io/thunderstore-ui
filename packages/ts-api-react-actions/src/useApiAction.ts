@@ -1,24 +1,23 @@
 import { z, ZodObject, ZodRawShape } from "zod";
 import { ApiEndpoint, useApiCall } from "@thunderstore/ts-api-react";
+import { RequestConfig } from "@thunderstore/thunderstore-api";
 
 export type UseApiActionArgs<
-  RequestConfig,
   Schema extends ZodObject<Z>,
   Meta extends object,
   Result extends object,
   Z extends ZodRawShape,
 > = {
-  config: RequestConfig;
+  config: () => RequestConfig;
   meta: Meta;
-  endpoint: ApiEndpoint<RequestConfig, z.infer<Schema>, Meta, Result>;
+  endpoint: ApiEndpoint<z.infer<Schema>, Meta, Result>;
 };
 export function useApiAction<
-  ConfigPromise,
   Schema extends ZodObject<Z>,
   Meta extends object,
   Result extends object,
   Z extends ZodRawShape,
->(args: UseApiActionArgs<ConfigPromise, Schema, Meta, Result, Z>) {
+>(args: UseApiActionArgs<Schema, Meta, Result, Z>) {
   const { config, meta, endpoint } = args;
   const apiCall = useApiCall(endpoint);
 

@@ -63,10 +63,12 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     try {
-      const dapper = new DapperTs({
-        apiHost: process.env.PUBLIC_API_URL,
-        sessionId: undefined,
-        csrfToken: undefined,
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: process.env.PUBLIC_API_URL,
+          sessionId: undefined,
+          csrfToken: undefined,
+        };
       });
       return {
         community: await dapper.getCommunity(params.communityId),
@@ -129,8 +131,6 @@ export default function Community() {
 
   const [isLiked, setIsLiked] = useState(false);
 
-  // TODO: VERY CRITICAL TO FIGURE OUT !!! Figure out if this is stupid or not? I'm not sure if Remix will let fetch part of the client loader.
-  // Ideally we could just tell Remix to use the clientLoader to fetch all related data, but it seems like it just doesnt do it, so we have to do this.
   const fetchAndSetRatedPackages = async () => {
     const dapper = window.Dapper;
     if (currentUser?.username) {

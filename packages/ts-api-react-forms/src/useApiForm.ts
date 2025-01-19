@@ -13,7 +13,7 @@ export type UseApiFormArgs<
 > = {
   schema: Schema;
   meta: Meta;
-  endpoint: ApiEndpoint<RequestConfig, z.infer<Schema>, Meta, Result>;
+  endpoint: ApiEndpoint<z.infer<Schema>, Meta, Result>;
 };
 export type UseApiFormReturn<
   Schema extends ZodObject<Z>,
@@ -22,7 +22,7 @@ export type UseApiFormReturn<
 > = {
   form: UseFormReturn<z.infer<Schema>>;
   submitHandler: (
-    config: RequestConfig,
+    config: () => RequestConfig,
     data: z.infer<Schema>
   ) => Promise<Result>;
 };
@@ -42,7 +42,7 @@ export function useApiForm<
     resolver: zodResolver(schema),
   });
   const submitHandler = async (
-    config: RequestConfig,
+    config: () => RequestConfig,
     data: z.infer<Schema>
   ) => {
     try {

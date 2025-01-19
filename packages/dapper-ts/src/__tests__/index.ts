@@ -6,7 +6,9 @@ const packageName = "Testitute";
 let dapper: DapperTs;
 
 beforeAll(() => {
-  dapper = new DapperTs({ apiHost: "https://thunderstore.dev" });
+  dapper = new DapperTs(() => {
+    return { apiHost: "https://thunderstore.dev" };
+  });
 });
 
 it("executes getCommunities without errors", async () => {

@@ -6,7 +6,7 @@ export interface toolsMarkdownPreviewApiArgs {
 }
 
 export function toolsMarkdownPreview(
-  config: RequestConfig,
+  config: () => RequestConfig,
   data: toolsMarkdownPreviewApiArgs
 ) {
   const path = `/api/experimental/frontend/render-markdown/`;

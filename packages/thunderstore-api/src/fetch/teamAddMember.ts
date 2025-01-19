@@ -11,7 +11,7 @@ export type teamAddMemberApiArgs = {
 };
 
 export function teamAddMember(
-  config: RequestConfig,
+  config: () => RequestConfig,
   data: teamAddMemberApiArgs,
   meta: teamAddMemberMetaArgs
 ) {

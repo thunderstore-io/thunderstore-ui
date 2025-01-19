@@ -31,7 +31,7 @@ export function PackageEditForm(props: {
   isDeprecated: boolean;
   deprecationButton: ReactNode;
   dataUpdateTrigger: () => Promise<void>;
-  config: RequestConfig;
+  config: () => RequestConfig;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: "Changes saved!",

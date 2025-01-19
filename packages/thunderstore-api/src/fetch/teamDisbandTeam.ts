@@ -10,7 +10,7 @@ export interface teamDisbandTeamApiArgs {
 }
 
 export function teamDisbandTeam(
-  config: RequestConfig,
+  config: () => RequestConfig,
   data: teamDisbandTeamApiArgs,
   meta: teamDisbandTeamMetaArgs
 ) {

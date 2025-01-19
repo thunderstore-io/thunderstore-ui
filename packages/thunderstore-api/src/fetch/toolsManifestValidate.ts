@@ -7,7 +7,7 @@ export interface toolsManifestValidateApiArgs {
 }
 
 export function toolsManifestValidate(
-  config: RequestConfig,
+  config: () => RequestConfig,
   data: toolsManifestValidateApiArgs
 ) {
   const path = `/api/experimental/submission/validate/manifest-v1/`;

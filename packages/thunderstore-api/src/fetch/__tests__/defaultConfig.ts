@@ -1,5 +1,7 @@
-export const config = {
-  apiHost: process.env.TEST_API_DOMAIN ?? "https://thunderstore.dev",
+export const config = () => {
+  return {
+    apiHost: process.env.TEST_API_DOMAIN ?? "https://thunderstore.dev",
+  };
 };
 
 /**

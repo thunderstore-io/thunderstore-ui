@@ -14,11 +14,11 @@ export type ApiFormProps<
   Z extends ZodRawShape,
 > = {
   schema: Schema;
-  endpoint: ApiEndpoint<RequestConfig, z.infer<Schema>, Meta, Result>;
+  endpoint: ApiEndpoint<z.infer<Schema>, Meta, Result>;
   meta: Meta;
   onSubmitSuccess?: (result: Result) => void;
   onSubmitError?: (error: Error | ApiError | unknown) => void;
-  config: RequestConfig;
+  config: () => RequestConfig;
   formProps?: Omit<HTMLAttributes<HTMLFormElement>, "onSubmit">;
 };
 export function ApiForm<
