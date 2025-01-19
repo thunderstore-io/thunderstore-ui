@@ -182,7 +182,7 @@ export function SessionProvider(props: Props) {
     const currentUser = _storage.safeGetJsonValue(CURRENT_USER_KEY);
     const parsed = currentUserSchema.safeParse(currentUser);
     if (!parsed.success) {
-      return currentUser.username === null ? emptyUser : currentUser;
+      return emptyUser;
     } else {
       return currentUser;
     }
