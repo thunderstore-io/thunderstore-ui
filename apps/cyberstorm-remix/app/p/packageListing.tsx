@@ -4,13 +4,13 @@ import {
   useLoaderData,
   useLocation,
   useOutletContext,
-  useRevalidator,
+  // useRevalidator,
 } from "@remix-run/react";
 import {
   CopyButton,
   Heading,
   Image,
-  Modal,
+  // Modal,
   NewBreadCrumbs,
   NewButton,
   NewIcon,
@@ -23,7 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import {
-  faCog,
+  // faCog,
   faUsers,
   faHandHoldingHeart,
   faDownload,
@@ -35,8 +35,8 @@ import TeamMembers from "./components/TeamMembers/TeamMembers";
 import { useEffect, useRef, useState } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import {
-  PackageDeprecateAction,
-  PackageEditForm,
+  // PackageDeprecateAction,
+  // PackageEditForm,
   PackageLikeAction,
 } from "@thunderstore/cyberstorm-forms";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
@@ -120,14 +120,17 @@ export async function loader({ params }: LoaderFunctionArgs) {
 // }
 
 export default function Community() {
-  const { community, communityFilters, listing, team } =
-    useLoaderData<typeof loader>();
+  // TODO: Enable when APIs are available
+  // const { community, communityFilters, listing, team } =
+  //   useLoaderData<typeof loader>();
+  const { community, listing, team } = useLoaderData<typeof loader>();
 
   const location = useLocation();
 
   const outletContext = useOutletContext() as OutletContextShape;
   const currentUser = outletContext.currentUser;
   const config = outletContext.requestConfig;
+  const domain = outletContext.domain;
 
   const [isLiked, setIsLiked] = useState(false);
 
@@ -139,13 +142,13 @@ export default function Community() {
     );
   };
 
-  const revalidator = useRevalidator();
-
-  const revalidateLoaderData = async () => {
-    if (revalidator.state === "idle") {
-      revalidator.revalidate();
-    }
-  };
+  // TODO: Enable when APIs are available
+  // const revalidator = useRevalidator();
+  // const revalidateLoaderData = async () => {
+  //   if (revalidator.state === "idle") {
+  //     revalidator.revalidate();
+  //   }
+  // };
 
   useEffect(() => {
     if (currentUser?.username) {
@@ -199,53 +202,54 @@ export default function Community() {
             ? "source"
             : "details";
 
-  const managementTools = (
-    <Modal
-      popoverId="packageManagementTools"
-      trigger={
-        <NewButton
-          csVariant="primary"
-          {...{
-            popovertarget: "packageManagementTools",
-            popovertargetaction: "open",
-          }}
-        >
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faCog} />
-          </NewIcon>
-          Manage
-        </NewButton>
-      }
-    >
-      <PackageEditForm
-        options={communityFilters.package_categories.map((cat) => {
-          return { label: cat.name, value: cat.slug };
-        })}
-        community={listing.community_identifier}
-        namespace={listing.namespace}
-        package={listing.name}
-        current_categories={listing.categories}
-        isDeprecated={listing.is_deprecated}
-        dataUpdateTrigger={revalidateLoaderData}
-        deprecationButton={
-          <NewButton
-            primitiveType="button"
-            onClick={PackageDeprecateAction({
-              packageName: listing.name,
-              namespace: listing.namespace,
-              isDeprecated: listing.is_deprecated,
-              dataUpdateTrigger: revalidateLoaderData,
-              config: config,
-            })}
-            csVariant={listing.is_deprecated ? "warning" : "primary"}
-          >
-            {listing.is_deprecated ? "Undeprecate" : "Deprecate"}
-          </NewButton>
-        }
-        config={config}
-      />
-    </Modal>
-  );
+  // TODO: Enable when APIs are available
+  // const managementTools = (
+  //   <Modal
+  //     popoverId="packageManagementTools"
+  //     trigger={
+  //       <NewButton
+  //         csVariant="primary"
+  //         {...{
+  //           popovertarget: "packageManagementTools",
+  //           popovertargetaction: "open",
+  //         }}
+  //       >
+  //         <NewIcon csMode="inline" noWrapper>
+  //           <FontAwesomeIcon icon={faCog} />
+  //         </NewIcon>
+  //         Manage
+  //       </NewButton>
+  //     }
+  //   >
+  //     <PackageEditForm
+  //       options={communityFilters.package_categories.map((cat) => {
+  //         return { label: cat.name, value: cat.slug };
+  //       })}
+  //       community={listing.community_identifier}
+  //       namespace={listing.namespace}
+  //       package={listing.name}
+  //       current_categories={listing.categories}
+  //       isDeprecated={listing.is_deprecated}
+  //       dataUpdateTrigger={revalidateLoaderData}
+  //       deprecationButton={
+  //         <NewButton
+  //           primitiveType="button"
+  //           onClick={PackageDeprecateAction({
+  //             packageName: listing.name,
+  //             namespace: listing.namespace,
+  //             isDeprecated: listing.is_deprecated,
+  //             dataUpdateTrigger: revalidateLoaderData,
+  //             config: config,
+  //           })}
+  //           csVariant={listing.is_deprecated ? "warning" : "primary"}
+  //         >
+  //           {listing.is_deprecated ? "Undeprecate" : "Deprecate"}
+  //         </NewButton>
+  //       }
+  //       config={config}
+  //     />
+  //   </Modal>
+  // );
 
   return (
     <>
@@ -333,12 +337,12 @@ export default function Community() {
             }
           />
           <div className="headerActions">
-            {/* TODO: Admin tools */}
-            {currentUser?.teams.some(function (cuTeam) {
+            {/* TODO: Admin tools // TODO: Enable when APIs are available*/}
+            {/* {currentUser?.teams.some(function (cuTeam) {
               return cuTeam?.name === listing.team.name;
             })
               ? managementTools
-              : null}
+              : null} */}
           </div>
         </div>
       </header>
@@ -372,14 +376,25 @@ export default function Community() {
                 },
                 current: currentTab === "required",
               },
+              // TODO: Once Analysis page is ready, enable it
+              // {
+              //   itemProps: {
+              //     key: "wiki",
+              //     primitiveType: "cyberstormLink",
+              //     linkId: "PackageWiki",
+              //     community: listing.community_identifier,
+              //     namespace: listing.namespace,
+              //     package: listing.name,
+              //     "aria-current": currentTab === "wiki",
+              //     children: <>Wiki</>,
+              //   },
+              //   current: currentTab === "wiki",
+              // },
               {
                 itemProps: {
                   key: "wiki",
-                  primitiveType: "cyberstormLink",
-                  linkId: "PackageWiki",
-                  community: listing.community_identifier,
-                  namespace: listing.namespace,
-                  package: listing.name,
+                  primitiveType: "link",
+                  href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/wiki`,
                   "aria-current": currentTab === "wiki",
                   children: <>Wiki</>,
                 },
@@ -414,14 +429,25 @@ export default function Community() {
                 // TODO: Version count field needs to be added to the endpoint
                 // numberSlateValue: listing.versionCount,
               },
+              // TODO: Once Analysis page is ready, enable it
+              // {
+              //   itemProps: {
+              //     key: "source",
+              //     primitiveType: "cyberstormLink",
+              //     linkId: "PackageSource",
+              //     community: listing.community_identifier,
+              //     namespace: listing.namespace,
+              //     package: listing.name,
+              //     "aria-current": currentTab === "source",
+              //     children: <>Analysis</>,
+              //   },
+              //   current: currentTab === "source",
+              // },
               {
                 itemProps: {
                   key: "source",
-                  primitiveType: "cyberstormLink",
-                  linkId: "PackageSource",
-                  community: listing.community_identifier,
-                  namespace: listing.namespace,
-                  package: listing.name,
+                  href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/source`,
+                  primitiveType: "link",
                   "aria-current": currentTab === "source",
                   children: <>Analysis</>,
                 },
