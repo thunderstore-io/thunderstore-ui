@@ -30,6 +30,11 @@ export enum PackageOrderOptions {
 }
 export type PackageOrderOptionsType = `${PackageOrderOptions}`;
 
+export function isPackageOrderOptions(value: string) {
+  const enumValues = Object.values(PackageOrderOptions) as string[];
+  return enumValues.includes(value);
+}
+
 const selectOptions = [
   {
     value: PackageOrderOptions.Updated,
