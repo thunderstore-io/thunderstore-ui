@@ -68,6 +68,7 @@ declare global {
 export type OutletContextShape = {
   currentUser: CurrentUser | undefined;
   requestConfig: () => RequestConfig;
+  domain: string;
 };
 
 export const meta: MetaFunction = () => {
@@ -190,6 +191,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
+  // TODO: Remove this customization when legacy site is removed
+  const domain =
+    getPublicEnvVariables(["PUBLIC_SITE_URL"]).PUBLIC_SITE_URL ??
+    "https://thunderstore.io";
+
   const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>(
     undefined
   );
@@ -208,7 +214,13 @@ function App() {
   }, []);
 
   return (
-    <Outlet context={{ currentUser: currentUser, requestConfig: rcCallable }} />
+    <Outlet
+      context={{
+        currentUser: currentUser,
+        requestConfig: rcCallable,
+        domain: domain,
+      }}
+    />
   );
 }
 
