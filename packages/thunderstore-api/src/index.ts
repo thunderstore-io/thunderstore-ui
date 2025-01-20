@@ -4,7 +4,6 @@ export interface RequestConfig {
   // TODO: This should not be explicitly bound to a session ID but rather just
   //       accept any authorization header. Noting as currently out of scope.
   sessionId?: string;
-  csrfToken?: string;
 }
 
 export * from "./fetch/dynamicHTML";

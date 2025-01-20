@@ -13,7 +13,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
         return {
           apiHost: process.env.PUBLIC_API_URL,
           sessionId: undefined,
-          csrfToken: undefined,
         };
       });
       return {

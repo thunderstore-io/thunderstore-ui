@@ -73,7 +73,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return {
       apiHost: process.env.PUBLIC_API_URL,
       sessionId: undefined,
-      csrfToken: undefined,
     };
   });
   return await dapper.getCommunities(page, order ?? "", search ?? "");
