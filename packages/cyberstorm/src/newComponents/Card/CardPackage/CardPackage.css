@@ -68,7 +68,7 @@
   .ts-cardpackage__info {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xs);
+    gap: var(--gap-xxs);
     width: 100%;
   }
 
@@ -97,7 +97,6 @@
     flex-direction: row;
     width: 100%;
     font-size: var(--font-size-body-md);
-    line-height: 1;
     text-decoration: none;
   }
 
