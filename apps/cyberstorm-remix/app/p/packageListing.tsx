@@ -307,10 +307,13 @@ export default function Community() {
             meta={
               <>
                 <NewLink
-                  primitiveType="cyberstormLink"
-                  linkId="Team"
-                  community={listing.community_identifier}
-                  team={listing.namespace}
+                  // TODO: Remove when team page is available
+                  primitiveType="link"
+                  href={`${domain}/c/${listing.community_identifier}/p/${listing.namespace}/`}
+                  // primitiveType="cyberstormLink"
+                  // linkId="Team"
+                  // community={listing.community_identifier}
+                  // team={listing.namespace}
                   csVariant="cyber"
                   rootClasses="nimbus-commoncomponents-page-header__meta__item"
                 >
@@ -642,7 +645,7 @@ export default function Community() {
             </div>
           </div>
 
-          <TeamMembers listing={listing} />
+          <TeamMembers listing={listing} domain={domain} />
         </div>
       </main>
     </>

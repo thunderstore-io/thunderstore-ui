@@ -26,17 +26,17 @@ export default defineConfig({
             id: "landing-page",
           });
           route("/c/:communityId", "c/community.tsx");
+          route(
+            "/c/:communityId/p/:namespaceId/:packageId",
+            "p/packageListing.tsx",
+            () => {
+              route("", "p/tabs/Readme/Readme.tsx", { index: true });
+              route("required", "p/tabs/Required/Required.tsx");
+              route("changelog", "p/tabs/Changelog/Changelog.tsx");
+              route("versions", "p/tabs/Versions/Versions.tsx");
+            }
+          );
           if (process.env.ENABLE_BROKEN_PAGES) {
-            route(
-              "/c/:communityId/p/:namespaceId/:packageId",
-              "p/packageListing.tsx",
-              () => {
-                route("", "p/tabs/Readme/Readme.tsx", { index: true });
-                route("required", "p/tabs/Required/Required.tsx");
-                route("changelog", "p/tabs/Changelog/Changelog.tsx");
-                route("versions", "p/tabs/Versions/Versions.tsx");
-              }
-            );
             route(
               "/c/:communityId/p/:namespaceId/:packageId/dependants",
               "p/dependants/Dependants.tsx"

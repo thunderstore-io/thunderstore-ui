@@ -2,9 +2,10 @@ import "./Required.css";
 import { Heading } from "@thunderstore/cyberstorm";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { ApiError } from "@thunderstore/thunderstore-api";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useOutletContext } from "@remix-run/react";
 import { ListingDependency } from "~/commonComponents/ListingDependency/ListingDependency";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import { OutletContextShape } from "~/root";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -57,6 +58,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 
 export default function Required() {
   const { listing } = useLoaderData<typeof loader | typeof clientLoader>();
+  const outletContext = useOutletContext() as OutletContextShape;
 
   return (
     <div className="nimbus-packagelisting__tabs__required">
@@ -74,7 +76,14 @@ export default function Required() {
       </div>
       <div className="nimbus-packagelisting__tabs__required__body">
         {listing.dependencies.map((dep, key) => {
-          return <ListingDependency key={key} dependency={dep} />;
+          return (
+            <ListingDependency
+              key={key}
+              dependency={dep}
+              // TODO: Remove when package versiond detail is available
+              domain={outletContext.domain}
+            />
+          );
         })}
       </div>
     </div>
