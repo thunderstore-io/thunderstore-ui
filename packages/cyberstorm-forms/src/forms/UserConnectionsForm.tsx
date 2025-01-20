@@ -14,7 +14,7 @@ import { OAuthConnection } from "@thunderstore/dapper/types";
 import { Icon } from "@thunderstore/cyberstorm/src/components/Icon/Icon";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { Button } from "@thunderstore/cyberstorm";
-import { useToast } from "@thunderstore/cyberstorm/src/components/Toast/Provider";
+import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 
 type ProvidersType = {
   name: "discord" | "github" | "overwolf";
