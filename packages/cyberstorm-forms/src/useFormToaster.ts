@@ -1,4 +1,4 @@
-import { useToast } from "@thunderstore/cyberstorm/src/components/Toast/Provider";
+import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 
 export type UseFormToasterArgs = {
   successMessage: string;
@@ -17,15 +17,15 @@ export function useFormToaster({
   return {
     onSubmitSuccess: () => {
       toast.addToast({
-        variant: "success",
-        message: successMessage,
+        csVariant: "success",
+        children: successMessage,
         duration: 30000,
       });
     },
     onSubmitError: () => {
       toast.addToast({
-        variant: "danger",
-        message: errorMessage
+        csVariant: "danger",
+        children: errorMessage
           ? errorMessage
           : "Unknown error occurred. The error has been logged",
       });

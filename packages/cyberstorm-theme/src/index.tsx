@@ -12,6 +12,7 @@ import "./components/BreadCrumbs/BreadCrumbs.css";
 import "./components/Select/Select.css";
 import "./components/Table/Table.css";
 import "./components/Tag/Tag.css";
+import "./components/Toast/Toast.css";
 import "./components/Alert/Alert.css";
 import "./components/MetaItem/MetaItem.css";
 import "./components/Link/Link.css";
