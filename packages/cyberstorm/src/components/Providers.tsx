@@ -1,7 +1,7 @@
 "use client";
 import { Provider } from "@radix-ui/react-tooltip";
 import { ReactNode } from "react";
-import Toast from "./Toast";
+import Toast from "../newComponents/Toast";
 
 interface CyberstormProvidersProps {
   children: ReactNode | ReactNode[];

@@ -28,33 +28,33 @@ MinimalToast.args = {
 const InfoToast = Template.bind({});
 InfoToast.args = {
   ...defaultArgs,
-  message:
+  children:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
-  variant: "info",
+  csVariant: "info",
 };
 
 const DangerToast = Template.bind({});
 DangerToast.args = {
   ...defaultArgs,
-  message:
+  children:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
-  variant: "danger",
+  csVariant: "danger",
 };
 
 const WarningToast = Template.bind({});
 WarningToast.args = {
   ...defaultArgs,
-  message:
+  children:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
-  variant: "warning",
+  csVariant: "warning",
 };
 
 const SuccessToast = Template.bind({});
 SuccessToast.args = {
   ...defaultArgs,
-  message:
+  children:
     "Lorem ipsum dolor sit amet, lollero pollero long ass text right here ellipsis just kidding it’s not that long.",
-  variant: "success",
+  csVariant: "success",
 };
 
 export {

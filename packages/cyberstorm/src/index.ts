@@ -62,7 +62,6 @@ export {
 export { Title, type TitleProps } from "./components/Title/Title";
 export { Tooltip, type TooltipProps } from "./components/Tooltip/Tooltip";
 export { Alert, type AlertProps } from "./components/Alert/Alert";
-export { Toast } from "./components/Toast/Toast";
 export { Avatar } from "./components/Avatar/Avatar";
 export { Table, Sort } from "./components/Table/Table";
 export { CommunityCard } from "./components/CommunityCard/CommunityCard";
@@ -107,6 +106,7 @@ export { Link as NewLink } from "./newComponents/Link/Link/Link";
 export { Button as NewButton } from "./newComponents/Button/Button";
 export { CycleButton } from "./newComponents/CycleButton/CycleButton";
 export { BreadCrumbs as NewBreadCrumbs } from "./newComponents/BreadCrumbs/BreadCrumbs";
+export { Toast } from "./newComponents/Toast/Toast";
 export { TextInput as NewTextInput } from "./newComponents/TextInput/TextInput";
 export {
   Select as NewSelect,

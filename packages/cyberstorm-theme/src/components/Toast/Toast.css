@@ -1,0 +1,102 @@
+@layer theme-components {
+  /* SIZES */
+  .ts-toast:where(.ts-size--medium) {
+    --toast-gap: var(--toast-md-gap);
+    --toast-padding-block: var(--toast-md-padding-block);
+    --toast-padding-inline: var(--toast-md-padding-inline);
+    --toast-font-size: var(--toast-md-font-size);
+    --toast-font-weight: var(--toast-md-font-weight);
+    --toast-line-height: var(--toast-md-line-height);
+    --toast-icon-width: var(--toast-md-icon-width);
+    --toast-icon-height: var(--toast-md-icon-height);
+    --toast-border-radius: var(--toast-md-border-radius);
+    --toast-close-width: var(--toast-md-close-width);
+    --toast-close-height: var(--toast-md-close-height);
+    --toast-close-icon-width: var(--toast-md-close-icon-width);
+    --toast-close-icon-height: var(--toast-md-close-icon-height);
+  }
+
+  /* VARIANTS */
+  .ts-toast:where(.ts-variant--danger) {
+    --toast-background-color: var(--toast-danger-bg-color--default);
+    --toast-border-color: var(--toast-danger-border-color--default);
+    --toast-icon-color: var(--toast-danger-icon-color--default);
+    --toast-color: var(--toast-danger-text-color--default);
+    --toast-close-icon-color: var(--toast-danger-close-color--default);
+    --toast-close-icon-color-hover: var(--toast-danger-close-color--hover);
+  }
+
+  .ts-toast:where(.ts-variant--info) {
+    --toast-background-color: var(--toast-info-bg-color--default);
+    --toast-border-color: var(--toast-info-border-color--default);
+    --toast-icon-color: var(--toast-info-icon-color--default);
+    --toast-color: var(--toast-info-text-color--default);
+    --toast-close-icon-color: var(--toast-info-close-color--default);
+    --toast-close-icon-color-hover: var(--toast-info-close-color--hover);
+  }
+
+  .ts-toast:where(.ts-variant--success) {
+    --toast-background-color: var(--toast-success-bg-color--default);
+    --toast-border-color: var(--toast-success-border-color--default);
+    --toast-icon-color: var(--toast-success-icon-color--default);
+    --toast-color: var(--toast-success-text-color--default);
+    --toast-close-icon-color: var(--toast-success-close-color--default);
+    --toast-close-icon-color-hover: var(--toast-success-close-color--hover);
+  }
+
+  .ts-toast:where(.ts-variant--warning) {
+    --toast-background-color: var(--toast-warning-bg-color--default);
+    --toast-border-color: var(--toast-warning-border-color--default);
+    --toast-icon-color: var(--toast-warning-icon-color--default);
+    --toast-color: var(--toast-warning-text-color--default);
+    --toast-close-icon-color: var(--toast-warning-close-color--default);
+    --toast-close-icon-color-hover: var(--toast-warning-close-color--hover);
+  }
+
+  /* TOKENS */
+  :root {
+    --toast-danger-bg-color--default: var(--color-accent-red-3);
+    --toast-danger-border-color--default: var(--color-accent-red-7);
+    --toast-danger-close-color--default: var(--color-accent-red-7);
+    --toast-danger-close-color--hover: var(--color-accent-red-10);
+    --toast-danger-icon-color--default: var(--color-accent-red-7);
+    --toast-danger-text-color--default: var(--color-accent-red-11);
+    --toast-default-bg-color--default: var(--color-surface-6);
+    --toast-default-border-color--default: #5d5a9f;
+    --toast-default-close-color--default: var(--color-text-tertiary);
+    --toast-default-close-color--hover: var(--color-text-secondary);
+    --toast-default-icon-color--default: var(--color-text-accent);
+    --toast-default-text-color--default: var(--color-text-secondary);
+    --toast-info-bg-color--default: var(--color-accent-blue-3);
+    --toast-info-border-color--default: var(--color-accent-blue-7);
+    --toast-info-close-color--default: var(--color-accent-blue-7);
+    --toast-info-close-color--hover: var(--color-accent-blue-10);
+    --toast-info-icon-color--default: var(--color-accent-blue-7);
+    --toast-info-text-color--default: var(--color-accent-blue-11);
+    --toast-success-bg-color--default: var(--color-accent-green-3);
+    --toast-success-border-color--default: var(--color-accent-green-7);
+    --toast-success-close-color--default: var(--color-accent-green-7);
+    --toast-success-close-color--hover: var(--color-accent-green-10);
+    --toast-success-icon-color--default: var(--color-accent-green-7);
+    --toast-success-text-color--default: var(--color-accent-green-11);
+    --toast-warning-bg-color--default: var(--color-accent-yellow-3);
+    --toast-warning-border-color--default: var(--color-accent-yellow-7);
+    --toast-warning-close-color--default: var(--color-accent-yellow-7);
+    --toast-warning-close-color--hover: var(--color-accent-yellow-10);
+    --toast-warning-icon-color--default: var(--color-accent-yellow-7);
+    --toast-warning-text-color--default: var(--color-accent-yellow-11);
+    --toast-md-gap: var(--space-16);
+    --toast-md-padding-block: var(--space-16);
+    --toast-md-padding-inline: var(--space-24);
+    --toast-md-font-size: var(--font-size-body-md);
+    --toast-md-font-weight: var(--font-weight-regular);
+    --toast-md-line-height: var(--line-height-md);
+    --toast-md-icon-width: 1.125rem;
+    --toast-md-icon-height: 1.375rem;
+    --toast-md-border-radius: var(--radius-sm);
+    --toast-md-close-width: 1.875rem;
+    --toast-md-close-height: 1.875rem;
+    --toast-md-close-icon-width: 0.875rem;
+    --toast-md-close-icon-height: 0.875rem;
+  }
+}

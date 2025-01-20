@@ -29,7 +29,7 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import { useEffect, useRef, useState } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
-import Toast from "@thunderstore/cyberstorm/src/components/Toast";
+import Toast from "@thunderstore/cyberstorm/src/newComponents/Toast";
 import { SessionProvider, useSession } from "@thunderstore/ts-api-react";
 import { Footer } from "./commonComponents/Footer/Footer";
 import { NavigationWrapper } from "cyberstorm/navigation/NavigationWrapper";
