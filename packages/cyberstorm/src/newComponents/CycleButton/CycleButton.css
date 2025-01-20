@@ -1,0 +1,6 @@
+@layer components {
+  .ts-cyclebutton {
+    display: inline-flex;
+    align-items: center;
+  }
+}

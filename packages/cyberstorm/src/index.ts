@@ -105,6 +105,7 @@ export { CardCommunity } from "./newComponents/Card/CardCommunity/CardCommunity"
 export { CardPackage } from "./newComponents/Card/CardPackage/CardPackage";
 export { Link as NewLink } from "./newComponents/Link/Link/Link";
 export { Button as NewButton } from "./newComponents/Button/Button";
+export { CycleButton } from "./newComponents/CycleButton/CycleButton";
 export { BreadCrumbs as NewBreadCrumbs } from "./newComponents/BreadCrumbs/BreadCrumbs";
 export { TextInput as NewTextInput } from "./newComponents/TextInput/TextInput";
 export {

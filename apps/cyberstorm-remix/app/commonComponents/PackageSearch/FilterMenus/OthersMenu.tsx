@@ -1,9 +1,8 @@
 import { faSquare, faSquareCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as Checkbox from "@radix-ui/react-checkbox";
 
 import styles from "./FilterMenu.module.css";
-import { NewIcon } from "@thunderstore/cyberstorm";
+import { CycleButton, NewIcon } from "@thunderstore/cyberstorm";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 
 interface Props {
@@ -33,15 +32,16 @@ export const OthersMenu = (props: Props) => {
             )}
           >
             {label}
-            <Checkbox.Root
-              checked={checked}
-              onCheckedChange={() => setChecked(!checked)}
-              className={styles.checkbox}
+            <CycleButton
+              onInteract={() => setChecked(!checked)}
+              rootClasses={styles.checkbox}
+              value={checked ? "on" : "off"}
+              noState
             >
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={checked ? faSquareCheck : faSquare} />
               </NewIcon>
-            </Checkbox.Root>
+            </CycleButton>
           </label>
         </li>
       ))}

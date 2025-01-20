@@ -4,11 +4,10 @@ import {
   faSquareXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as Checkbox from "@radix-ui/react-checkbox";
 
 import styles from "./FilterMenu.module.css";
 import { CategorySelection, CATEGORY_STATES as STATES } from "../types";
-import { NewIcon } from "@thunderstore/cyberstorm";
+import { CycleButton, NewIcon } from "@thunderstore/cyberstorm";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 
 interface Props {
@@ -42,28 +41,24 @@ export const CategoryMenu = (props: Props) => {
           <li key={c.slug}>
             <label className={classnames(styles.label, styles[c.selection])}>
               {c.name}
-              <Checkbox.Root
-                checked={c.selection !== "off"}
-                onCheckedChange={() => toggleCategory(c.id)}
-                className={styles.checkbox}
+              <CycleButton
+                onInteract={() => toggleCategory(c.id)}
+                rootClasses={styles.checkbox}
+                value={c.selection}
+                noState
               >
-                {c.selection === "off" ? (
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faSquare} />
-                  </NewIcon>
-                ) : null}
-                <Checkbox.Indicator asChild>
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon
-                      icon={
-                        c.selection === "include"
-                          ? faSquareCheck
-                          : faSquareXmark
-                      }
-                    />
-                  </NewIcon>
-                </Checkbox.Indicator>
-              </Checkbox.Root>
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon
+                    icon={
+                      c.selection === "include"
+                        ? faSquareCheck
+                        : c.selection === "exclude"
+                          ? faSquareXmark
+                          : faSquare
+                    }
+                  />
+                </NewIcon>
+              </CycleButton>
             </label>
           </li>
         ))}
