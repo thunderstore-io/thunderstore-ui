@@ -40,12 +40,10 @@ interface SessionData {
   apiHost: string;
   sessionId: string;
   username: string;
-  csrfToken?: string;
 }
 
 const SessionContext = createContext<ContextInterface | null>(null);
 const ID_KEY = "id";
-const CSRF_TOKEN_KEY = "csrftoken";
 const USERNAME_KEY = "username";
 const API_HOST_KEY = "apiHost";
 
@@ -70,12 +68,10 @@ export function SessionProvider(props: Props) {
 
   useEffect(() => {
     const sessionidCookie = getCookie("sessionid");
-    const csrftokenCookie = getCookie("csrftoken");
 
-    if (sessionidCookie && csrftokenCookie) {
+    if (sessionidCookie) {
       setSession({
         sessionId: sessionidCookie,
-        csrfToken: csrftokenCookie,
         username: "",
         apiHost: props.apiHost,
       });
@@ -88,53 +84,41 @@ export function SessionProvider(props: Props) {
   const setSession = (sessionData: SessionData) => {
     _storage.setValue(API_HOST_KEY, sessionData.apiHost);
     _storage.setValue(ID_KEY, sessionData.sessionId);
-    if (sessionData.csrfToken) {
-      _storage.setValue(CSRF_TOKEN_KEY, sessionData.csrfToken);
-    }
     _storage.setValue(USERNAME_KEY, sessionData.username);
   };
 
   const clearSession = () => {
     _storage.removeValue(ID_KEY);
-    _storage.removeValue(CSRF_TOKEN_KEY);
     _storage.removeValue(USERNAME_KEY);
     _storage.removeValue(API_HOST_KEY);
   };
 
   const clearCookies = () => {
     deleteCookie("sessionid");
-    deleteCookie("csrftoken");
   };
 
   const getConfig = (): RequestConfig => {
     const apiHost = _storage.safeGetValue(API_HOST_KEY);
     const sessionId = _storage.safeGetValue(ID_KEY);
-    const csrfToken = _storage.safeGetValue(CSRF_TOKEN_KEY);
     return {
       // THIS IS NOT KOSHER
       apiHost: apiHost ?? "",
       sessionId: sessionId ?? "",
-      csrfToken: csrfToken ?? "",
     };
   };
 
   // Check current session and try to fix it if cookies are not the same as storage
   const sessionValid = (): boolean => {
     const sessionidCookie = getCookie("sessionid");
-    const csrftokenCookie = getCookie("csrftoken");
     const storedSessionId = _storage.safeGetValue(ID_KEY);
-    const storedCsrfToken = _storage.safeGetValue(CSRF_TOKEN_KEY);
     const storedUsername = _storage.safeGetValue(USERNAME_KEY);
     const storedApiHost = _storage.safeGetValue(API_HOST_KEY);
 
-    if (storedSessionId && storedCsrfToken) {
+    if (storedSessionId) {
       // Has storage values
-      if (sessionidCookie && csrftokenCookie) {
+      if (sessionidCookie) {
         // Has cookies
-        if (
-          sessionidCookie === storedSessionId &&
-          csrftokenCookie === storedCsrfToken
-        ) {
+        if (sessionidCookie === storedSessionId) {
           // cookies match to storage yes
           return true;
         } else {
@@ -147,10 +131,9 @@ export function SessionProvider(props: Props) {
       }
     } else {
       // No storage values but cookies
-      if (sessionidCookie && csrftokenCookie) {
+      if (sessionidCookie) {
         setSession({
           sessionId: sessionidCookie,
-          csrfToken: csrftokenCookie,
           username: storedUsername ?? "",
           apiHost: storedApiHost ?? "",
         });

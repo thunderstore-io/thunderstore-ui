@@ -31,7 +31,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         return {
           apiHost: process.env.PUBLIC_API_URL,
           sessionId: undefined,
-          csrfToken: undefined,
         };
       });
       const searchParams = new URL(request.url).searchParams;

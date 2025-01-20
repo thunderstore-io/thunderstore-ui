@@ -48,7 +48,6 @@ export async function apiFetch2(args: apiFetchArgs) {
     ? config()
     : {
         apiHost: config().apiHost,
-        csrfToken: undefined,
         sessionId: undefined,
       };
   const url = getUrl(usedConfig, path, query);
@@ -91,7 +90,6 @@ function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {
   return config.sessionId
     ? {
         Authorization: `Session ${config.sessionId}`,
-        "X-Csrftoken": config.csrfToken ? config.csrfToken : "",
       }
     : {};
 }

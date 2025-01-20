@@ -19,7 +19,6 @@ export function getDapper(isClient = false) {
       return {
         apiHost: process.env.PUBLIC_API_URL,
         sessionId: undefined,
-        csrfToken: undefined,
       };
     });
   }
