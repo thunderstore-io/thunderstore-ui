@@ -16,32 +16,23 @@ import { RelativeTime } from "../../../components/RelativeTime/RelativeTime";
 
 interface Props {
   packageData: PackageListing;
-  // TODO: Remove this customization when /p is doned
-  domain: string;
 }
 
 export function CardPackage(props: Props) {
-  const { packageData, domain } = props;
+  const { packageData } = props;
   const updateTime = Date.parse(packageData.last_updated);
   const updateTimeDelta = Math.round((Date.now() - updateTime) / 86400000);
   const isNew = updateTimeDelta < 3;
-  // const currentUrlWithPath =
-  //   window.location.port !== ""
-  //     ? `${window.location.protocol}${window.location.hostname}${window.location.port}/${window.location.pathname}`
-  //     : `${window.location.protocol}${window.location.hostname}${window.location.port}/${window.location.pathname}`;
 
   return (
     <div className="ts-cardpackage">
       <NewLink
         tabIndex={-1}
-        // TODO: Remove this customization when /p is doned
-        primitiveType="link"
-        href={`${domain}/c/${packageData.community_identifier}/p/${packageData.namespace}/${packageData.name}/`}
-        // primitiveType="cyberstormLink"
-        // linkId="Package"
-        // community={packageData.community_identifier}
-        // namespace={packageData.namespace}
-        // package={packageData.name}
+        primitiveType="cyberstormLink"
+        linkId="Package"
+        community={packageData.community_identifier}
+        namespace={packageData.namespace}
+        package={packageData.name}
         title={`${packageData.name} by ${packageData.namespace}`}
       >
         {packageData.is_pinned ||
@@ -96,14 +87,11 @@ export function CardPackage(props: Props) {
       <div className="ts-cardpackage__content">
         <div className="ts-cardpackage__info">
           <NewLink
-            // TODO: Remove this customization when /p is doned
-            primitiveType="link"
-            href={`${domain}/c/${packageData.community_identifier}/p/${packageData.namespace}/${packageData.name}/`}
-            // primitiveType="cyberstormLink"
-            // linkId="Package"
-            // community={packageData.community_identifier}
-            // namespace={packageData.namespace}
-            // package={packageData.name}
+            primitiveType="cyberstormLink"
+            linkId="Package"
+            community={packageData.community_identifier}
+            namespace={packageData.namespace}
+            package={packageData.name}
             rootClasses="ts-cardpackage__title"
             title={packageData.name}
           >

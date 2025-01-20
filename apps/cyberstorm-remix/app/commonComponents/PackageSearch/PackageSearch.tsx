@@ -40,7 +40,6 @@ import {
 } from "./PackageOrder";
 import { CollapsibleMenu } from "./FilterMenus/CollapsibleMenu";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
-import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
 const PER_PAGE = 20;
 
@@ -65,8 +64,6 @@ type SearchParamsType = {
  */
 export function PackageSearch(props: Props) {
   const { listings, packageCategories: allCategories, sections } = props;
-  // TODO: Remove this customization when /p is doned
-  const domain = getPublicEnvVariables(["PUBLIC_SITE_URL"]).PUBLIC_SITE_URL;
   const allSections = sections.sort((a, b) => a.priority - b.priority);
 
   // const [searchParams, setSearchParams] = useSearchParams();
@@ -458,8 +455,6 @@ export function PackageSearch(props: Props) {
                     <CardPackage
                       key={`${p.namespace}-${p.name}`}
                       packageData={p}
-                      // TODO: Remove this customization when /p is doned
-                      domain={domain ?? "https://thunderstore.io"}
                     />
                   ))}
                 </div>

@@ -4,10 +4,12 @@ import { Image, NewLink } from "@thunderstore/cyberstorm";
 
 export interface ListingDependencyProps {
   dependency: typeof dependencyShema._type;
+  // TODO: Remove when package versiond detail is available
+  domain: string;
 }
 
 export function ListingDependency(props: ListingDependencyProps) {
-  const { dependency } = props;
+  const { dependency, domain } = props;
 
   return (
     <div className="nimbus-commoncomponents-listingdependency">
@@ -52,13 +54,15 @@ export function ListingDependency(props: ListingDependencyProps) {
         <div className="nimbus-commoncomponents-listingdependency__version">
           <span>Version:</span>
           <NewLink
-            // TODO: Remove this customization when /p is doned
-            primitiveType="cyberstormLink"
-            linkId="PackageVersion"
-            community={dependency.community_identifier}
-            namespace={dependency.namespace}
-            package={dependency.name}
-            version={dependency.version_number}
+            // TODO: Remove when package versiond detail is available
+            primitiveType="link"
+            href={`${domain}/c/${dependency.community_identifier}/p/${dependency.namespace}/${dependency.name}/v/${dependency.version_number}/`}
+            // primitiveType="cyberstormLink"
+            // linkId="PackageVersion"
+            // community={dependency.community_identifier}
+            // namespace={dependency.namespace}
+            // package={dependency.name}
+            // version={dependency.version_number}
             title={`${dependency.name} - ${dependency.version_number}`}
             csVariant="cyber"
           >

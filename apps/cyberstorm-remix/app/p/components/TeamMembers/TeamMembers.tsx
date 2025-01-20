@@ -5,7 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./TeamMembers.module.css";
 import { PackageListingDetails, TeamMember } from "@thunderstore/dapper/types";
 
-export default function TeamMembers(props: { listing: PackageListingDetails }) {
+export default function TeamMembers(props: {
+  listing: PackageListingDetails;
+  domain: string;
+}) {
   const mappedPackageTeamList = props.listing.team.members
     .sort(compare)
     .map((teamMember, index) => {
@@ -23,10 +26,13 @@ export default function TeamMembers(props: { listing: PackageListingDetails }) {
           Team
         </Heading>
         <NewLink
-          primitiveType="cyberstormLink"
-          linkId="Team"
-          community={props.listing.community_identifier}
-          team={props.listing.team.name}
+          // TODO: Remove when team page is available
+          primitiveType="link"
+          href={`${props.domain}/c/${props.listing.community_identifier}/p/${props.listing.namespace}/`}
+          // primitiveType="cyberstormLink"
+          // linkId="Team"
+          // community={props.listing.community_identifier}
+          // team={props.listing.team.name}
           rootClasses={styles.teamLink}
         >
           See team
@@ -51,12 +57,7 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
   const { teamMember } = props;
 
   return (
-    <NewLink
-      primitiveType="cyberstormLink"
-      linkId="User"
-      user={teamMember.username}
-      rootClasses={styles.item}
-    >
+    <div className={styles.item}>
       <Avatar username={teamMember.username} src={teamMember.avatar} />
       <div className={styles.itemTitleWrapper}>
         <div className={styles.itemTitle}>
@@ -71,8 +72,33 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
         </div>
         <div className={styles.itemDescription}>{teamMember.role}</div>
       </div>
-    </NewLink>
+    </div>
   );
+
+  // TODO: Enable when user page is available
+  // return (
+  //   <NewLink
+  //     primitiveType="cyberstormLink"
+  //     linkId="User"
+  //     user={teamMember.username}
+  //     rootClasses={styles.item}
+  //   >
+  //     <Avatar username={teamMember.username} src={teamMember.avatar} />
+  //     <div className={styles.itemTitleWrapper}>
+  //       <div className={styles.itemTitle}>
+  //         <span className={styles.itemTitleUsername}>
+  //           {teamMember.username}
+  //         </span>
+  //         {teamMember.role === "owner" ? (
+  //           <NewIcon csMode="inline" noWrapper rootClasses={styles.crown}>
+  //             <FontAwesomeIcon icon={faCrown} />
+  //           </NewIcon>
+  //         ) : null}
+  //       </div>
+  //       <div className={styles.itemDescription}>{teamMember.role}</div>
+  //     </div>
+  //   </NewLink>
+  // );
 }
 
 function compare(a: TeamMember, b: TeamMember) {
