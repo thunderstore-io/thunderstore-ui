@@ -133,12 +133,10 @@ export default function Community() {
 
   const fetchAndSetRatedPackages = async () => {
     const dapper = window.Dapper;
-    if (currentUser?.username) {
-      const rp = await dapper.getRatedPackages();
-      setIsLiked(
-        rp.rated_packages.includes(`${listing.namespace}-${listing.name}`)
-      );
-    }
+    const rp = await dapper.getRatedPackages();
+    setIsLiked(
+      rp.rated_packages.includes(`${listing.namespace}-${listing.name}`)
+    );
   };
 
   const revalidator = useRevalidator();
@@ -150,8 +148,10 @@ export default function Community() {
   };
 
   useEffect(() => {
-    fetchAndSetRatedPackages();
-  }, []);
+    if (currentUser?.username) {
+      fetchAndSetRatedPackages();
+    }
+  }, [currentUser]);
 
   const isHydrated = useHydrated();
   const startsHydrated = useRef(isHydrated);
