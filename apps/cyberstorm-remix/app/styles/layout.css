@@ -20,7 +20,7 @@
     align-items: flex-start;
     justify-content: center;
     width: 100%;
-    padding: 1.5rem 1.5rem 3rem;
+    padding: 1rem 3rem 2rem;
   }
 
   .nimbus-root__outlet {
@@ -82,10 +82,6 @@
   @media (width <= 92.125rem) {
     .nimbus-root__ads-container {
       display: none;
-    }
-
-    .nimbus-root__content {
-      padding: 1rem 2rem 2rem;
     }
   }
 
