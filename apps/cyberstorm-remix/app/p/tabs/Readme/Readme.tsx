@@ -7,10 +7,12 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
     try {
-      const dapper = new DapperTs({
-        apiHost: process.env.PUBLIC_API_URL,
-        sessionId: undefined,
-        csrfToken: undefined,
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: process.env.PUBLIC_API_URL,
+          sessionId: undefined,
+          csrfToken: undefined,
+        };
       });
       return {
         status: "ok",

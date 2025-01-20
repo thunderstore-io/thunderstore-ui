@@ -4,7 +4,7 @@ import { serializeQueryString } from "../queryString";
 import { PackageListingQueryParams } from "../types";
 
 export async function fetchPackageDependantsListings(
-  config: RequestConfig,
+  config: () => RequestConfig,
   communityId: string,
   namespaceId: string,
   packageName: string,

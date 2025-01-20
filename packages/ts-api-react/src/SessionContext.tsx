@@ -165,7 +165,7 @@ export function SessionProvider(props: Props) {
   };
 
   const updateCurrentUser = async () => {
-    const dapper = new DapperTs(getConfig(), clearSession);
+    const dapper = new DapperTs(getConfig, clearSession);
     const currentUser = await dapper.getCurrentUser();
     storeCurrentUser(currentUser);
   };

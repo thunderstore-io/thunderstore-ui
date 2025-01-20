@@ -2,7 +2,7 @@ import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
 
 export async function fetchPackageChangelog(
-  config: RequestConfig,
+  config: () => RequestConfig,
   namespaceId: string,
   packageName: string,
   versionNumber?: string

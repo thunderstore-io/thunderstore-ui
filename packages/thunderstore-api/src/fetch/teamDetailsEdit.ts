@@ -10,7 +10,7 @@ export type teamDetailsEditApiArgs = {
 };
 
 export function teamDetailsEdit(
-  config: RequestConfig,
+  config: () => RequestConfig,
   data: teamDetailsEditApiArgs,
   meta: teamDetailsEditMetaArgs
 ) {

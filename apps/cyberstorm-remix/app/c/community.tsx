@@ -27,10 +27,12 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   if (params.communityId) {
     try {
-      const dapper = new DapperTs({
-        apiHost: process.env.PUBLIC_API_URL,
-        sessionId: undefined,
-        csrfToken: undefined,
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: process.env.PUBLIC_API_URL,
+          sessionId: undefined,
+          csrfToken: undefined,
+        };
       });
       const searchParams = new URL(request.url).searchParams;
       const ordering =

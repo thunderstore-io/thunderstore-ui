@@ -3,7 +3,7 @@ import { apiFetch } from "../apiFetch";
 import { serializeQueryString } from "../queryString";
 
 export async function fetchCommunityList(
-  config: RequestConfig,
+  config: () => RequestConfig,
   page = 1,
   ordering = "name",
   search?: string

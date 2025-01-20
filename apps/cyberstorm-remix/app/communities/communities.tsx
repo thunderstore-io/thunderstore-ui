@@ -69,10 +69,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const order = searchParams.get("order") ?? SortOptions.Popular;
   const search = searchParams.get("search");
   const page = undefined;
-  const dapper = new DapperTs({
-    apiHost: process.env.PUBLIC_API_URL,
-    sessionId: undefined,
-    csrfToken: undefined,
+  const dapper = new DapperTs(() => {
+    return {
+      apiHost: process.env.PUBLIC_API_URL,
+      sessionId: undefined,
+      csrfToken: undefined,
+    };
   });
   return await dapper.getCommunities(page, order ?? "", search ?? "");
 }

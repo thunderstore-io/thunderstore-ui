@@ -5,7 +5,10 @@ export interface userDeleteApiArgs {
   verification: string;
 }
 
-export function userDelete(config: RequestConfig, data: userDeleteApiArgs) {
+export function userDelete(
+  config: () => RequestConfig,
+  data: userDeleteApiArgs
+) {
   const path = `/api/cyberstorm/current-user/delete/`;
 
   return apiFetch2({

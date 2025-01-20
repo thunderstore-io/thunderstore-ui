@@ -10,15 +10,17 @@ export function getDapper(isClient = false) {
   if (isClient) {
     const session = useSession();
     // TODO: Add "ValidateDapper" and stop always returning a new dapper.
-    return new DapperTs(session.getConfig(), () => {
+    return new DapperTs(session.getConfig, () => {
       session.clearSession();
       redirect("/communities");
     });
   } else {
-    return new DapperTs({
-      apiHost: process.env.PUBLIC_API_URL,
-      sessionId: undefined,
-      csrfToken: undefined,
+    return new DapperTs(() => {
+      return {
+        apiHost: process.env.PUBLIC_API_URL,
+        sessionId: undefined,
+        csrfToken: undefined,
+      };
     });
   }
 }

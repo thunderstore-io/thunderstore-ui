@@ -7,7 +7,7 @@ export type teamServiceAccountRemoveMetaArgs = {
 };
 
 export function teamServiceAccountRemove(
-  config: RequestConfig,
+  config: () => RequestConfig,
   _data: object,
   meta: teamServiceAccountRemoveMetaArgs
 ) {

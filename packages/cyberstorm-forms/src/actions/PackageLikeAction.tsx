@@ -11,7 +11,7 @@ export function PackageLikeAction(props: {
   namespace: string;
   isLiked: boolean;
   dataUpdateTrigger: () => Promise<void>;
-  config: RequestConfig;
+  config: () => RequestConfig;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: `${props.isLiked ? "Unliked" : "Liked"} package ${

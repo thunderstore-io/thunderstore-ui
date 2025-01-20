@@ -67,7 +67,7 @@ declare global {
 
 export type OutletContextShape = {
   currentUser: CurrentUser | undefined;
-  requestConfig: RequestConfig;
+  requestConfig: () => RequestConfig;
 };
 
 export const meta: MetaFunction = () => {
@@ -193,23 +193,22 @@ function App() {
   const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>(
     undefined
   );
-  const [requestConfig, setRequestConfig] = useState<RequestConfig>();
+  const [rcCallable, setRcCallable] = useState<() => RequestConfig>();
 
   const session = useSession();
   useEffect(() => {
     // INIT DAPPER
-    window.Dapper = new DapperTs(session.getConfig(), () => {
+    window.Dapper = new DapperTs(session.getConfig, () => {
       session.clearSession();
       redirect("/communities");
     });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    setRcCallable((prevRcCallable) => session.getConfig);
     setCurrentUser(session.getSessionCurrentUser(true));
-    setRequestConfig(session.getConfig());
   }, []);
 
   return (
-    <Outlet
-      context={{ currentUser: currentUser, requestConfig: requestConfig }}
-    />
+    <Outlet context={{ currentUser: currentUser, requestConfig: rcCallable }} />
   );
 }
 

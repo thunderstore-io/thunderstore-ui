@@ -11,7 +11,7 @@ export type packageLikeApiArgs = {
 };
 
 export function packageLike(
-  config: RequestConfig,
+  config: () => RequestConfig,
   data: packageLikeApiArgs,
   meta: packageLikeMetaArgs
 ) {
