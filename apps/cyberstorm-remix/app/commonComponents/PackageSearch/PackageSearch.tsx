@@ -33,6 +33,7 @@ import {
 import { StalenessIndicator } from "@thunderstore/cyberstorm/src/components/StalenessIndicator/StalenessIndicator";
 import { PackageCount } from "./PackageCount";
 import {
+  isPackageOrderOptions,
   PackageOrder,
   PackageOrderOptions,
   PackageOrderOptionsType,
@@ -77,14 +78,47 @@ export function PackageSearch(props: Props) {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const initialOrder = searchParams.get("ordering");
+  const initialSection = searchParams.get("section");
+  const initialDeprecated = searchParams.get("deprecated");
+  const initialNsfw = searchParams.get("nsfw");
+  const initialPage = searchParams.get("page");
+  const initialIncludedCategories = searchParams.get("includedCategories");
+  const initialExcludedCategories = searchParams.get("excludedCategories");
+
   const [searchParamsBlob, setSearchParamsBlob] = useState<SearchParamsType>({
-    order: undefined,
-    section: allSections.length === 0 ? "" : allSections[0]?.uuid,
-    deprecated: false,
-    nsfw: false,
-    page: 1,
-    includedCategories: "",
-    excludedCategories: "",
+    order:
+      initialOrder && isPackageOrderOptions(initialOrder)
+        ? (initialOrder as PackageOrderOptionsType)
+        : undefined,
+    section:
+      allSections.length === 0 ? "" : initialSection ?? allSections[0]?.uuid,
+    deprecated:
+      initialDeprecated === null
+        ? false
+        : initialDeprecated === "true"
+          ? true
+          : initialDeprecated === "false"
+            ? false
+            : false,
+    nsfw:
+      initialNsfw === null
+        ? false
+        : initialNsfw === "true"
+          ? true
+          : initialNsfw === "false"
+            ? false
+            : false,
+    page:
+      initialPage &&
+      !Number.isNaN(Number.parseInt(initialPage)) &&
+      Number.isSafeInteger(Number.parseInt(initialPage))
+        ? Number.parseInt(initialPage)
+        : 1,
+    includedCategories:
+      initialIncludedCategories !== null ? initialIncludedCategories : "",
+    excludedCategories:
+      initialExcludedCategories !== null ? initialExcludedCategories : "",
   });
 
   // TODO: Disabled until we can figure out how a proper way to display skeletons

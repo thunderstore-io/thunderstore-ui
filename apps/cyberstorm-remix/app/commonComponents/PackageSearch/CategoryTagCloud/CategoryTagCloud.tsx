@@ -9,7 +9,7 @@ const OFF = CATEGORY_STATES[0];
 
 interface Props {
   searchValue: string;
-  setSearchValue: (v: "") => void;
+  setSearchValue: (v: string) => void;
   categories: CategorySelection[];
   setCategories: (v: CategorySelection[]) => void;
 }
@@ -30,8 +30,10 @@ export const CategoryTagCloud = (props: Props) => {
       categories.map((c) => (c.id === id ? { ...c, selection: OFF } : c))
     );
 
-  const clearAll = () =>
+  const clearAll = () => {
     setCategories(categories.map((c) => ({ ...c, selection: OFF })));
+    setSearchValue("");
+  };
 
   return (
     <div className={styles.root}>
