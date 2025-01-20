@@ -48,11 +48,10 @@ interface PackageTeamListItemProps {
 }
 
 function PackageTeamListItem(props: PackageTeamListItemProps) {
-  const { key, teamMember } = props;
+  const { teamMember } = props;
 
   return (
     <NewLink
-      key={key}
       primitiveType="cyberstormLink"
       linkId="User"
       user={teamMember.username}
