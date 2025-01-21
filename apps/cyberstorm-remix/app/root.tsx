@@ -12,7 +12,7 @@ import {
   redirect,
   useLocation,
   useRouteError,
-  useRouteLoaderData,
+  // useRouteLoaderData,
 } from "@remix-run/react";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
@@ -82,8 +82,6 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader() {
-  // const dapper = await getDapper();
-
   return {
     envStuff: {
       ENV: getPublicEnvVariables([
@@ -102,9 +100,11 @@ export function shouldRevalidate() {
 const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const data = useRouteLoaderData<typeof loader>("root");
-  // const error = useRouteError();
-  // console.log(error);
+  // const data = useRouteLoaderData<typeof loader>("root");
+
+  const domain =
+    getPublicEnvVariables(["PUBLIC_SITE_URL"]).PUBLIC_SITE_URL ??
+    "https://thunderstore.io";
 
   const location = useLocation();
   const shouldShowAds = location.pathname.startsWith("/teams")
@@ -147,23 +147,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <SessionProvider
-          apiHost={
-            data?.envStuff.ENV.PUBLIC_API_URL ?? "APIHOST_MISSING_IN_ENV"
-          }
-        >
+        <SessionProvider apiHost={domain ?? "APIHOST_MISSING_IN_ENV"}>
           <LinkingProvider value={LinkLibrary}>
             <Toast.Provider toastDuration={10000}>
               <RadixTooltip delayDuration={80}>
-                {data ? (
-                  <script
-                    dangerouslySetInnerHTML={{
-                      __html: `window.ENV = ${JSON.stringify(
-                        data.envStuff.ENV
-                      )}`,
-                    }}
-                  />
-                ) : null}
                 <div className="nimbus-root">
                   <NavigationWrapper />
                   <section className="nimbus-root__content">

@@ -5,7 +5,6 @@ import {
   PropsWithChildren,
   // SetStateAction,
   useContext,
-  useEffect,
   // useState,
 } from "react";
 
@@ -25,7 +24,7 @@ interface ContextInterface {
   /** Remove session cookies. */
   clearCookies: () => void;
   /** Get RequestConfig for Dapper usage */
-  getConfig: () => RequestConfig;
+  getConfig: (domain?: string) => RequestConfig;
   /** Check if session is valid and try to repair if not */
   sessionValid: () => boolean;
   /** apiHost of the session */
@@ -66,21 +65,6 @@ interface Props extends PropsWithChildren {
 export function SessionProvider(props: Props) {
   const _storage = new StorageManager("Session");
 
-  useEffect(() => {
-    const sessionidCookie = getCookie("sessionid");
-
-    if (sessionidCookie) {
-      setSession({
-        sessionId: sessionidCookie,
-        username: "",
-        apiHost: props.apiHost,
-      });
-    } else {
-      _storage.setValue(API_HOST_KEY, props.apiHost);
-      sessionValid();
-    }
-  }, []);
-
   const setSession = (sessionData: SessionData) => {
     _storage.setValue(API_HOST_KEY, sessionData.apiHost);
     _storage.setValue(ID_KEY, sessionData.sessionId);
@@ -97,12 +81,12 @@ export function SessionProvider(props: Props) {
     deleteCookie("sessionid");
   };
 
-  const getConfig = (): RequestConfig => {
+  const getConfig = (domain?: string): RequestConfig => {
     const apiHost = _storage.safeGetValue(API_HOST_KEY);
     const sessionId = _storage.safeGetValue(ID_KEY);
     return {
       // THIS IS NOT KOSHER
-      apiHost: apiHost ?? "",
+      apiHost: apiHost ? apiHost : domain ? domain : "",
       sessionId: sessionId ?? "",
     };
   };
@@ -170,6 +154,21 @@ export function SessionProvider(props: Props) {
       return currentUser;
     }
   };
+
+  if (typeof window !== "undefined") {
+    const sessionidCookie = getCookie("sessionid");
+
+    if (sessionidCookie) {
+      setSession({
+        sessionId: sessionidCookie,
+        username: "",
+        apiHost: props.apiHost,
+      });
+    } else {
+      _storage.setValue(API_HOST_KEY, props.apiHost);
+      sessionValid();
+    }
+  }
 
   const value = {
     clearSession,
