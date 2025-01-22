@@ -6,6 +6,7 @@
   font: var(--font-body);
   font-weight: var(--font-weight-medium);
   line-height: 1.6rem;
+  word-break: break-word;
 }
 
 .root > :first-child {

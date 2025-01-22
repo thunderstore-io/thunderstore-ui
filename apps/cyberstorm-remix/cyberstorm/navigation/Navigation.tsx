@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import "./Navigation.css";
 import styles from "./Navigation.module.css";
 import {
   Menu,
@@ -37,12 +38,15 @@ export function Navigation(props: {
   const { hydrationCheck, currentUser } = props;
   return (
     <>
-      <header className={styles.desktopNavRoot} aria-label="Header">
-        <nav className={styles.item} aria-label="Main">
+      <header
+        className="ts-container ts-container--x ts-section-item nimbus-nav-header"
+        aria-label="Header"
+      >
+        <nav className="__global" aria-label="Main">
           <NewLink
             primitiveType="cyberstormLink"
             linkId="Index"
-            rootClasses={styles.logoWrapper}
+            rootClasses="__logo"
             aria-label="Home"
             csVariant="cyber"
           >
@@ -50,27 +54,35 @@ export function Navigation(props: {
               <ThunderstoreLogo />
             </NewIcon>
           </NewLink>
-          <NewButton
-            primitiveType="cyberstormLink"
-            linkId="Communities"
-            csSize="big"
-            csVariant="secondary"
-            csModifiers={["ghost"]}
-          >
-            Communities
-          </NewButton>
-          <DevelopersDropDown />
+          <div className="__main">
+            <NewButton
+              primitiveType="cyberstormLink"
+              linkId="Communities"
+              csSize="big"
+              csVariant="secondary"
+              csModifiers={["ghost"]}
+            >
+              Communities
+            </NewButton>
+            <DevelopersDropDown />
+          </div>
         </nav>
-        <div className={styles.headerRightSide}>
-          <NewButton
-            primitiveType="link"
-            href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
-            csSize="small"
-            csVariant="secondary"
-            aria-label="Get Thunderstore Mod Manager App"
-          >
-            Get Manager
-          </NewButton>
+        <div className="__user">
+          <div className="__extra">
+            <NewButton
+              primitiveType="link"
+              href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+              csSize="small"
+              csVariant="secondary"
+              aria-label="Get Thunderstore Mod Manager App"
+            >
+              Get Manager
+            </NewButton>
+          </div>
+          {/* TODO: Add when upload page and notifs are a thing */}
+          {/* <span className="__profile-actions">
+            UPLOAD AND NOTIFS
+          </span> */}
           {hydrationCheck && currentUser ? (
             <DesktopUserDropdown user={currentUser} />
           ) : (

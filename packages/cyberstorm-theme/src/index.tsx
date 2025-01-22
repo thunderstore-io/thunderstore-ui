@@ -2,6 +2,7 @@ import "./styles/colors.css";
 import "./styles/globals.css";
 import "./styles/typography.css";
 import "./styles/reset.css";
+import "./styles/layout.css";
 import "./components/Button/Button.css";
 import "./components/Button/IconButton.css";
 import "./components/Heading/Heading.css";

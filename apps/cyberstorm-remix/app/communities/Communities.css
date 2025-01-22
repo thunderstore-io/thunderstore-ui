@@ -1,0 +1,43 @@
+@layer nimbus-layout {
+  .nimbus-communities {
+    gap: var(--space-20);
+
+    > .__heading {
+      padding: var(--space-8) 0;
+    }
+
+    > .__content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-xxxl);
+      align-items: flex-start;
+      align-self: stretch;
+
+      > .__tools {
+        flex-direction: row;
+        gap: var(--gap-md);
+        justify-content: space-between;
+
+        > .__search {
+          display: flex;
+          flex-grow: 1;
+          min-width: max-content;
+          max-width: 26.25rem;
+        }
+      }
+
+      @media (width <= 39rem) {
+        .__tools {
+          flex-direction: column;
+
+          > .__search {
+            display: flex;
+            flex-grow: 1;
+            min-width: unset;
+            max-width: unset;
+          }
+        }
+      }
+    }
+  }
+}

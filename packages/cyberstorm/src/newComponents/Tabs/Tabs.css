@@ -5,11 +5,13 @@
     align-self: stretch;
     border-bottom: var(--tabs-border-bottom-width)
       var(--tabs-border-bottom-style) var(--tabs-border-bottom-color);
+    overflow-x: auto;
   }
 
   .ts-tabs-item {
     position: relative;
-    bottom: calc(-1 * var(--tabs-border-bottom-width));
+
+    /* bottom: calc(-1 * var(--tabs-border-bottom-width)); */
     display: inline-flex;
     flex-shrink: 0;
     gap: var(--tabs-item-gap);

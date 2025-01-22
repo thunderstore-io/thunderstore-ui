@@ -67,6 +67,7 @@
     font-size: var(--font-size-body-md);
     line-height: 150%; /* 21px */
     text-align: left;
+    text-wrap: nowrap;
     background: var(--color-surface-a4);
   }
 

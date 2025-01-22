@@ -1,5 +1,0 @@
-.list {
-  display: flex;
-  flex-flow: row wrap;
-  gap: var(--gap-xs);
-}

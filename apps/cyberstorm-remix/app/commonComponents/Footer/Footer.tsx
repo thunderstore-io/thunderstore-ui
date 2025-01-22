@@ -20,20 +20,24 @@ const GITHUB_URL = "https://github.com/thunderstore-io";
  */
 export function Footer() {
   return (
-    <footer className="nimbus-footer" aria-label="Footer">
-      <div className="nimbus-footer__main">
-        <div className="nimbus-footer__section nimbus-footer__info">
-          <div className="nimbus-footer__item nimbus-footer__company">
-            <div className="nimbus-footer__inner nimbus-footer__logoandlinks">
-              <NewIcon csVariant="accent" wrapperClasses="nimbus-footer__logo">
+    <footer
+      className="ts-container ts-container--y ts-section nimbus-footer"
+      aria-label="Footer"
+    >
+      <div className="ts-container ts-container--y ts-container--full ts-section __content">
+        <div className="ts-container ts-container--y ts-section __info">
+          <div className="ts-container ts-container--x ts-section-item __company">
+            <div className="__body">
+              <NewIcon csVariant="accent" wrapperClasses="__logo">
                 <ThunderstoreLogoHorizontal />
               </NewIcon>
-              <div className="nimbus-footer__iconlinks">
+              <div className="__iconLinks">
                 <NewLink
                   primitiveType="link"
                   tooltipText="Join our Discord"
                   href={DISCORD_URL}
-                  rootClasses="nimbus-footer__iconlink"
+                  rootClasses="__iconlink"
+                  csVariant="primary"
                   aria-label="Invite link to Thunderstores Discord server"
                 >
                   <NewIcon noWrapper>
@@ -44,8 +48,9 @@ export function Footer() {
                   primitiveType="link"
                   tooltipText="Check out our GitHub"
                   href={GITHUB_URL}
-                  rootClasses="nimbus-footer__iconlink"
+                  rootClasses="__iconlink"
                   aria-label="Link to Thunderstores Github"
+                  csVariant="primary"
                 >
                   <NewIcon noWrapper>
                     <FontAwesomeIcon icon={faGithub} />
@@ -54,127 +59,130 @@ export function Footer() {
               </div>
             </div>
           </div>
-          <div className="nimbus-footer__item nimbus-footer__linkswrapper">
-            <div className="nimbus-footer__inner nimbus-footer__navlinks">
-              <nav className="nimbus-footer__nav" aria-label="Footer links">
-                <div className="nimbus-footer__navsection">
-                  <Heading
-                    csVariant="primary"
-                    mode="heading"
-                    csLevel="2"
-                    csSize="4"
-                  >
-                    Thunderstore
-                  </Heading>
-                  <ul className="nimbus-footer__footerlist">
-                    <li>
-                      <NewLink
-                        primitiveType="cyberstormLink"
-                        linkId="Communities"
-                      >
-                        Communities
-                      </NewLink>
-                    </li>
-                  </ul>
-                </div>
-                <div className="nimbus-footer__navsection">
-                  <Heading
-                    csVariant="primary"
-                    mode="heading"
-                    csLevel="2"
-                    csSize="4"
-                  >
-                    Developers
-                  </Heading>
-                  <ul className="nimbus-footer__footerlist">
-                    <li>
-                      <NewLink primitiveType="link" href="/api/docs">
-                        API Documentation
-                      </NewLink>
-                    </li>
-                    <li>
-                      <NewLink
-                        primitiveType="link"
-                        href="/package/create/docs/"
-                      >
-                        Package Format Docs
-                      </NewLink>
-                    </li>
-                    <li>
-                      <NewLink
-                        primitiveType="link"
-                        href="/tools/manifest-v1-validator/"
-                      >
-                        Manifest Validator
-                      </NewLink>
-                    </li>
-                    <li>
-                      <NewLink
-                        primitiveType="link"
-                        href="/tools/markdown-preview/"
-                      >
-                        Markdown Preview
-                      </NewLink>
-                    </li>
-                    <li>
-                      <NewLink
-                        primitiveType="link"
-                        href="https://github.com/thunderstore-io"
-                      >
-                        GitHub
-                      </NewLink>
-                    </li>
-                  </ul>
-                </div>
+          <div className="ts-container ts-container--x ts-container--full ts-section-item __links">
+            <div className="__body">
+              <nav className="__nav" aria-label="Thunderstore links">
+                <Heading
+                  csVariant="primary"
+                  mode="heading"
+                  csLevel="2"
+                  csSize="4"
+                >
+                  Thunderstore
+                </Heading>
+                <ul>
+                  <li>
+                    <NewLink
+                      primitiveType="cyberstormLink"
+                      linkId="Communities"
+                      csVariant="primary"
+                    >
+                      Communities
+                    </NewLink>
+                  </li>
+                </ul>
+              </nav>
+              <nav className="__nav" aria-label="Developer links">
+                <Heading
+                  csVariant="primary"
+                  mode="heading"
+                  csLevel="2"
+                  csSize="4"
+                >
+                  Developers
+                </Heading>
+                <ul>
+                  <li>
+                    <NewLink
+                      primitiveType="link"
+                      href="/api/docs"
+                      csVariant="primary"
+                    >
+                      API Documentation
+                    </NewLink>
+                  </li>
+                  <li>
+                    <NewLink
+                      primitiveType="link"
+                      href="/package/create/docs/"
+                      csVariant="primary"
+                    >
+                      Package Format Docs
+                    </NewLink>
+                  </li>
+                  <li>
+                    <NewLink
+                      primitiveType="link"
+                      href="/tools/manifest-v1-validator/"
+                      csVariant="primary"
+                    >
+                      Manifest Validator
+                    </NewLink>
+                  </li>
+                  <li>
+                    <NewLink
+                      primitiveType="link"
+                      href="/tools/markdown-preview/"
+                      csVariant="primary"
+                    >
+                      Markdown Preview
+                    </NewLink>
+                  </li>
+                  <li>
+                    <NewLink
+                      primitiveType="link"
+                      href="https://github.com/thunderstore-io"
+                      csVariant="primary"
+                    >
+                      GitHub
+                    </NewLink>
+                  </li>
+                </ul>
               </nav>
             </div>
           </div>
         </div>
 
-        <div className="nimbus-footer__section nimbus-footer__extra">
-          <div className="nimbus-footer__item nimbus-footer__adwrapper">
-            <div className="nimbus-footer__inner">
-              <div className="nimbus-footer__ad">
-                <div className="nimbus-footer__adtext">
-                  <Heading mode="display" csLevel="2" csSize="3">
-                    Thunderstore Mod Manager
-                  </Heading>
-                  <div className="nimbus-footer__addescription">
-                    You are prepared. Download Thunderstore Mod Manager for
-                    desktop and enter a world of Thunder{" "}
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faBoltLightning} />
-                    </NewIcon>
-                  </div>
-                  <NewButton
-                    primitiveType="link"
-                    href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
-                    csSize="big"
-                    csVariant="accent"
-                    rootClasses="nimbus-footer__getmanagerbutton"
-                  >
-                    Get Manager
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faArrowUpRight} />
-                    </NewIcon>
-                  </NewButton>
-                </div>
-                <img
-                  alt="Screenshot of the Thunderstore Mod Manager"
-                  width="1350"
-                  height="811"
-                  src={AD_IMAGE_SRC}
-                  className="nimbus-footer__img"
-                />
-              </div>
+        <div className="ts-container ts-container--x ts-section-item __managerAd">
+          <div className="__content">
+            <Heading mode="display" csLevel="2" csSize="3">
+              Thunderstore Mod Manager
+            </Heading>
+            <p className="__description">
+              You are prepared. Download Thunderstore Mod Manager for desktop
+              and enter a world of Thunder{" "}
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faBoltLightning} />
+              </NewIcon>
+            </p>
+            <NewButton
+              primitiveType="link"
+              href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+              csSize="big"
+              csVariant="accent"
+              rootClasses="__getManagerButton"
+            >
+              Get Manager
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faArrowUpRight} />
+              </NewIcon>
+            </NewButton>
+            <div className="__imageWrapper">
+              <img
+                alt="Screenshot of the Thunderstore Mod Manager"
+                width="1350"
+                height="811"
+                src={AD_IMAGE_SRC}
+                className="__image"
+              />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="nimbus-footer__item nimbus-footer__footnote">
-        <div className="nimbus-footer__footnoteinner">
-          <div className="nimbus-footer__footerpageslinks">
+      <div className="ts-container ts-container--x ts-container--stretch ts-section-item __footnote">
+        <div className="__inner">
+          <div className="__links">
             <NewLink
               primitiveType="link"
               href="https://pages.thunderstore.io/p/contact-us"
@@ -191,17 +199,21 @@ export function Footer() {
               News
             </NewLink>
           </div>
-          <div className="nimbus-footer__footnotecopyright">
-            © 2024 Thunderstore and contributors. This page is{" "}
-            <NewLink
-              primitiveType="link"
-              href="https://github.com/thunderstore-io/thunderstore-ui/"
-              aria-label="This page is open source, link to Thunderstore UIs Github page"
-              rootClasses="nimbus-footer__opensource"
-            >
-              open-source ❤
-            </NewLink>
-          </div>
+          <p className="__copyright">
+            © 2024 Thunderstore and contributors.{" "}
+            <span>
+              This page is{" "}
+              <NewLink
+                primitiveType="link"
+                href="https://github.com/thunderstore-io/thunderstore-ui/"
+                aria-label="This page is open source, link to Thunderstore UIs Github page"
+                rootClasses="__opensource"
+                csVariant="primary"
+              >
+                open-source ❤
+              </NewLink>
+            </span>
+          </p>
         </div>
       </div>
     </footer>

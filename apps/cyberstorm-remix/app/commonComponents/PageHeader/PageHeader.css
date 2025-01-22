@@ -5,7 +5,7 @@
     gap: var(--space-32);
     align-items: flex-start;
     align-self: stretch;
-    padding: var(--space-24) 25rem var(--space-24) 0;
+    padding: var(--space-16);
   }
 
   .nimbus-commoncomponents-page-header__image {
@@ -47,6 +47,7 @@
     font-size: var(--font-size-body-md);
     line-height: var(--line-height-lg);
     text-shadow: var(--textshadow-default);
+    word-break: break-all;
 
     & > svg {
       inline-size: var(--space-16);

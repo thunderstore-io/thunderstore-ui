@@ -16,13 +16,9 @@ export default function TeamMembers(props: {
     });
 
   return (
-    <div className="nimbus-packagelisting__sidebar__wrapper">
-      <div className="nimbus-packagelisting__sidebar__wrapper__header">
-        <Heading
-          csLevel="4"
-          csSize="4"
-          className="nimbus-packagelisting__sidebar__wrapper__title"
-        >
+    <div className="__team">
+      <div className="__header">
+        <Heading csLevel="4" csSize="4" rootClasses="__title">
           Team
         </Heading>
         <NewLink
@@ -33,7 +29,8 @@ export default function TeamMembers(props: {
           // linkId="Team"
           // community={props.listing.community_identifier}
           // team={props.listing.team.name}
-          rootClasses={styles.teamLink}
+          csVariant="cyber"
+          rootClasses="__link"
         >
           See team
           <NewIcon csMode="inline" noWrapper>
@@ -41,9 +38,7 @@ export default function TeamMembers(props: {
           </NewIcon>
         </NewLink>
       </div>
-      <div className="nimbus-packagelisting__sidebar__wrapper__team_list">
-        {mappedPackageTeamList}
-      </div>
+      <div className="__body">{mappedPackageTeamList}</div>
     </div>
   );
 }

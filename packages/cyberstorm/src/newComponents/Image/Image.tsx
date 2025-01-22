@@ -11,7 +11,7 @@ import { ImageVariants } from "@thunderstore/cyberstorm-theme/src/components";
 interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
   src: string | null;
   /** Type of the image defines the icon used as the fallback. */
-  cardType: "community" | "package";
+  cardType: "community" | "communityIcon" | "package";
   /** Alt text for the image. Leave empty for decorative images. */
   alt?: string;
   /** Force 1:1 aspect ratio */
@@ -89,6 +89,7 @@ Image.displayName = "Image";
 // prettier-ignore
 const getIcon = (type: ImageProps["cardType"] = "community") =>
   ({
+    communityIcon: faGamepad,
     community: faGamepad,
     package: faBan,
   }[type]);
