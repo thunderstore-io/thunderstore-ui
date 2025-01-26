@@ -3,12 +3,13 @@ import {
   CardCommunity,
   CommunityCardSkeleton,
   EmptyState,
-  NewBreadCrumbs,
   range,
   NewTextInput,
   NewSelect,
+  Heading,
 } from "@thunderstore/cyberstorm";
-import searchAndOrderStyles from "./SearchAndOrder.module.css";
+// import searchAndOrderStyles from "./SearchAndOrder.module.css";
+import "./Communities.css";
 import communitiesListStyles from "./CommunityList.module.css";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,7 +27,7 @@ import {
   useSearchParams,
 } from "@remix-run/react";
 import { Communities } from "@thunderstore/dapper/types";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+// import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
 export const meta: MetaFunction = () => {
@@ -125,45 +126,49 @@ export default function CommunitiesPage() {
   }, [debouncedSearchValue]);
 
   return (
-    <>
-      <NewBreadCrumbs rootClasses="nimbus-root__breadcrumbs">
-        Communities
-      </NewBreadCrumbs>
-      <PageHeader heading="Communities" headingLevel="1" headingSize="2" />
-      <main className="nimbus-root__main">
-        <div className={searchAndOrderStyles.root}>
-          <div className={searchAndOrderStyles.searchTextInput}>
-            <label htmlFor="communitiesSearchInput">Search</label>
+    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+      <section className="ts-container ts-container--y nimbus-communities">
+        {/* <PageHeader heading="Communities" headingLevel="1" headingSize="2" /> */}
+        <Heading
+          csLevel="1"
+          csSize="2"
+          rootClasses="ts-container ts-container--stretch __heading"
+        >
+          Communities
+        </Heading>
+
+        <div className="ts-container ts-container--y ts-container--full __content">
+          <div className="ts-container ts-container--stretch __tools">
             <NewTextInput
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
               placeholder="Search communities..."
               clearValue={() => setSearchValue("")}
               leftIcon={<FontAwesomeIcon icon={faSearch} />}
-              id="communitiesSearchInput"
               type="search"
+              rootClasses="__search"
             />
+            <span className="ts-container ts-container--x">
+              <NewSelect
+                onChange={changeOrder}
+                options={selectOptions}
+                value={searchParams.get("order") ?? SortOptions.Popular}
+                aria-label="Sort communities by"
+              />
+            </span>
           </div>
-          <div className={searchAndOrderStyles.searchFilters}>
-            <label htmlFor="communitiesSortBy">Sort by</label>
-            <NewSelect
-              onChange={changeOrder}
-              options={selectOptions}
-              value={searchParams.get("order") ?? SortOptions.Popular}
-              aria-label="Sort communities by"
-              id="communitiesSortBy"
-            />
+
+          <div className="ts-container ts-container--x ts-container--stretch">
+            <CommunitiesList communitiesData={communitiesData} />
           </div>
         </div>
-
-        <CommunitiesList communitiesData={communitiesData} />
         {/* {navigation.state === "loading" ? (
           <CommunitiesListSkeleton />
         ) : (
           <CommunitiesList communitiesData={communitiesData} />
         )} */}
-      </main>
-    </>
+      </section>
+    </div>
   );
 }
 

@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import {
+  Heading,
   Image,
   NewBreadCrumbs,
   NewIcon,
@@ -14,7 +15,6 @@ import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { PackageOrderOptions } from "~/commonComponents/PackageSearch/PackageOrder";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -138,91 +138,78 @@ export default function Community() {
 
   return (
     <>
-      {community.hero_image_url ? (
-        <div
-          className="nimbus-root__outlet__heroimg"
-          style={{
-            backgroundImage: `url(${community.hero_image_url})`,
-          }}
-        />
-      ) : null}
-      <NewBreadCrumbs rootClasses="nimbus-root__breadcrumbs">
-        <NewLink
-          primitiveType="cyberstormLink"
-          linkId="Communities"
-          csVariant="cyber"
-        >
-          Communities
-        </NewLink>
-        {community.name}
-      </NewBreadCrumbs>
-      <PageHeader
-        image={
-          <Image
-            src={community.cover_image_url}
-            cardType="community"
-            intrinsicWidth={360}
-            intrinsicHeight={480}
+      <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+        <NewBreadCrumbs rootClasses="nimbus-root__breadcrumbs">
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Communities"
+            csVariant="cyber"
+          >
+            Communities
+          </NewLink>
+          {community.name}
+        </NewBreadCrumbs>
+        <section className="ts-container ts-container--y ts-container--full nimbus-community">
+          <span className="ts-container ts-container--x __heading">
+            <Image
+              src={community.cover_image_url}
+              cardType="community"
+              intrinsicWidth={56}
+              intrinsicHeight={56}
+              rootClasses="__communitySmallImage"
+            />
+            <span className="ts-container ts-container--full __content">
+              <Heading
+                csLevel="1"
+                csSize="3"
+                mode="display"
+                rootClasses="ts-container ts-container--full __info"
+              >
+                {community.name}
+              </Heading>
+              <span className="ts-container ts-container--x __meta">
+                {community.wiki_url ? (
+                  <NewLink
+                    primitiveType="link"
+                    href={community.wiki_url}
+                    csVariant="cyber"
+                    rootClasses="__item"
+                  >
+                    <NewIcon csMode="inline" noWrapper>
+                      <FontAwesomeIcon icon={faBook} />
+                    </NewIcon>
+                    <span>Modding Wiki</span>
+                    <NewIcon csMode="inline" noWrapper>
+                      <FontAwesomeIcon icon={faArrowUpRight} />
+                    </NewIcon>
+                  </NewLink>
+                ) : null}
+                {community.discord_url ? (
+                  <NewLink
+                    primitiveType="link"
+                    href={community.discord_url}
+                    csVariant="cyber"
+                    rootClasses="__item"
+                  >
+                    <NewIcon csMode="inline" noWrapper>
+                      <FontAwesomeIcon icon={faDiscord} />
+                    </NewIcon>
+                    <span>Modding Discord</span>
+                    <NewIcon csMode="inline" noWrapper>
+                      <FontAwesomeIcon icon={faArrowUpRight} />
+                    </NewIcon>
+                  </NewLink>
+                ) : null}
+              </span>
+            </span>
+          </span>
+          <PackageSearch
+            listings={listings}
+            packageCategories={filters.package_categories}
+            sections={filters.sections}
           />
-        }
-        heading={community.name}
-        headingLevel="1"
-        headingSize="3"
-        description={community.short_description}
-        meta={
-          <>
-            {community.wiki_url ? (
-              <NewLink
-                primitiveType="link"
-                href={community.wiki_url}
-                csVariant="cyber"
-                rootClasses="nimbus-commoncomponents-page-header__meta__item"
-              >
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faBook} />
-                </NewIcon>
-                <span className="nimbus-community__metaitem__text">
-                  <span className="nimbus-community__metaitem__text__prefix nimbus-hide-m">
-                    {community.name} modding{" "}
-                  </span>
-                  Wiki
-                </span>
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faArrowUpRight} />
-                </NewIcon>
-              </NewLink>
-            ) : null}
-            {community.discord_url ? (
-              <NewLink
-                primitiveType="link"
-                href={community.discord_url}
-                csVariant="cyber"
-                rootClasses="nimbus-commoncomponents-page-header__meta__item"
-              >
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faDiscord} />
-                </NewIcon>
-                <span className="nimbus-community__metaitem__text">
-                  <span className="nimbus-community__metaitem__text__prefix nimbus-hide-m">
-                    {community.name} modding{" "}
-                  </span>
-                  Discord
-                </span>
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faArrowUpRight} />
-                </NewIcon>
-              </NewLink>
-            ) : null}
-          </>
-        }
-      />
-      <main className="nimbus-root__main">
-        <PackageSearch
-          listings={listings}
-          packageCategories={filters.package_categories}
-          sections={filters.sections}
-        />
-      </main>
+        </section>
+      </div>
     </>
   );
 }

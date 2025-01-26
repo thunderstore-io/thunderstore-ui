@@ -1,0 +1,41 @@
+@layer theme-layout {
+  :root {
+    --section-bg: var(--color-surface-3);
+    --section-border-radius: var(--radius-sm);
+    --section-gap: var(--gap-xxs);
+  }
+
+  /* CONTAINER, basically flex wrapper utility class */
+  .ts-container {
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .ts-container--x {
+    flex-direction: row;
+  }
+
+  .ts-container--y {
+    flex-direction: column;
+  }
+
+  .ts-container--full {
+    flex: 1;
+  }
+
+  .ts-container--stretch {
+    align-self: stretch;
+  }
+
+  /* SECTIONS, visual helper classes for islands */
+  .ts-section {
+    display: flex;
+    gap: var(--section-gap);
+  }
+
+  .ts-section-item {
+    border-radius: var(--section-border-radius);
+    background-color: var(--section-bg);
+  }
+}

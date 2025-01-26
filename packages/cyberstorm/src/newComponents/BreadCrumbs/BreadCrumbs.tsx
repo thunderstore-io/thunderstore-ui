@@ -22,6 +22,7 @@ type BreadCrumbsProps = PropsWithChildren<{
 
 // TODO: This component is not complete and probably is in need of redesign
 // TODO: Bug: when excludeHome is true, last element's style is wrong
+// TODO: https://developers.google.com/search/docs/appearance/structured-data/breadcrumb#microdata
 export function BreadCrumbs(props: BreadCrumbsProps) {
   const {
     children,

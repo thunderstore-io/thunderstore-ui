@@ -147,31 +147,35 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <SessionProvider apiHost={domain ?? "APIHOST_MISSING_IN_ENV"}>
-          <LinkingProvider value={LinkLibrary}>
-            <Toast.Provider toastDuration={10000}>
-              <RadixTooltip delayDuration={80}>
-                <div className="nimbus-root">
+        <div className="ts-container ts-container--y ts-container--full ts-section nimbus-root">
+          <SessionProvider apiHost={domain ?? "APIHOST_MISSING_IN_ENV"}>
+            <LinkingProvider value={LinkLibrary}>
+              <Toast.Provider toastDuration={10000}>
+                <RadixTooltip delayDuration={80}>
                   <NavigationWrapper />
-                  <section className="nimbus-root__content">
-                    <div className="nimbus-root__outlet">{children}</div>
-                    <div className="nimbus-root__ads-container">
-                      {shouldShowAds
-                        ? adContainerIds.map((cid, k_i) => (
-                            <AdContainer key={k_i} containerId={cid} />
-                          ))
-                        : null}
+                  <div className="ts-container ts-container--x ts-container--full ts-section">
+                    <main className="ts-container ts-container--x ts-container--full ts-section-item nimbus-root__main">
+                      {children}
+                    </main>
+                    <div className="ts-container ts-container--y ts-section-item nimbus-root__ads">
+                      <div className="ts-container ts-container--y nimbus-root__ads__inner">
+                        {shouldShowAds
+                          ? adContainerIds.map((cid, k_i) => (
+                              <AdContainer key={k_i} containerId={cid} />
+                            ))
+                          : null}
+                      </div>
                     </div>
-                  </section>
+                  </div>
                   <Footer />
-                </div>
-                {shouldShowAds ? <AdsInit /> : null}
-              </RadixTooltip>
-            </Toast.Provider>
-          </LinkingProvider>
-        </SessionProvider>
-        {/* <ScrollRestoration /> */}
-        <Scripts />
+                  {shouldShowAds ? <AdsInit /> : null}
+                </RadixTooltip>
+              </Toast.Provider>
+            </LinkingProvider>
+          </SessionProvider>
+          {/* <ScrollRestoration /> */}
+          <Scripts />
+        </div>
       </body>
     </html>
   );

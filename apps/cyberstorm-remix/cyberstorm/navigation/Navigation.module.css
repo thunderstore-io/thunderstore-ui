@@ -236,7 +236,8 @@ button.mobileNavItem {
   display: none;
 }
 
-@media (width <= 63.5rem) {
+/* Mobile breakpoint */
+@media (width <= 475px) {
   .mobileMenu {
     display: flex;
   }

@@ -1,21 +1,69 @@
 @layer nimbus-layout {
-  .nimbus-community__metaitem {
-    display: flex;
-    gap: var(--gap-xs);
-    align-items: center;
-    color: var(--Meta-item-text-color--default, #c6c3ff);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-body-md);
-    line-height: var(--line-height-lg);
+  .nimbus-community {
+    > .__heading {
+      display: flex;
+      gap: var(--gap-xl);
+      align-items: center;
+      align-self: stretch;
+      padding: var(--space-8) 0 var(--space-20);
 
-    & > svg {
-      inline-size: var(--space-16);
-    }
-  }
+      > .__communitySmallImage {
+        width: 3.5rem;
+        height: 3.5rem;
 
-  @media (width <= 48rem) {
-    .nimbus-community__metaitem {
-      font-size: var(--font-size-body-sm);
+        --aspect-ratio: 1;
+
+        > svg {
+          width: 50%;
+        }
+      }
+
+      > .__content {
+        flex-wrap: wrap;
+
+        > .__info {
+          flex-shrink: 0;
+          min-width: 8ch;
+          overflow-wrap: anywhere;
+        }
+
+        > .__meta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: var(--gap-xxxl);
+          align-items: center;
+
+          > .__item {
+            display: flex;
+            gap: var(--gap-xs);
+            align-items: center;
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-body-md);
+            line-height: var(--line-height-md);
+
+            & > svg {
+              inline-size: var(--space-16);
+            }
+          }
+        }
+
+        @media (width <= 48rem) {
+          .__meta {
+            gap: var(--gap-xxs);
+
+            .__item {
+              font-size: var(--font-size-body-sm);
+            }
+          }
+        }
+
+        @media (width <= 24rem) {
+          > .__info {
+            font-size: 2rem;
+            line-height: var(--line-height-sm);
+          }
+        }
+      }
     }
   }
 }

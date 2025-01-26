@@ -155,7 +155,7 @@ const ModManagerBanner = () => (
     software installed, such as the{" "}
     <a href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager">
       Thunderstore Mod Manager.
-    </a>
+    </a>{" "}
     Otherwise use the zip download links instead.
   </NewAlert>
 );
