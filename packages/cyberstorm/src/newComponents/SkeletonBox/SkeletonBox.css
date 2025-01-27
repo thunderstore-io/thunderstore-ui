@@ -1,0 +1,24 @@
+.ts-skeleton {
+  display: flex;
+  border-radius: var(--radius-sm);
+  background: hsl(236deg 36% 36% / 0.24);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  25% {
+    opacity: 0.25;
+  }
+
+  75% {
+    opacity: 0.75;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

@@ -1,112 +1,120 @@
 import {
   Alert,
-  BreadCrumbs,
   CodeInput,
-  CyberstormLink,
+  NewBreadCrumbs,
+  NewLink,
   Select,
-  SettingItem,
   isRecord,
   isStringArray,
 } from "@thunderstore/cyberstorm";
-import styles from "./manifestValidator.module.css";
+import "./manifestValidator.css";
 import { useEffect, useState } from "react";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
-import { DapperTs, currentUserSchema } from "@thunderstore/dapper-ts";
-import { useLoaderData } from "@remix-run/react";
+import { useOutletContext } from "@remix-run/react";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Buffer } from "buffer";
 import {
   isApiError,
+  RequestConfig,
   toolsManifestValidate,
 } from "@thunderstore/thunderstore-api";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { OutletContextShape } from "../../root";
 
-export async function loader() {
-  const dapper = await getDapper();
-  const currentUser = await dapper.getCurrentUser();
-  return {
-    currentUser: currentUser as typeof currentUserSchema._type,
-    dapper: dapper,
-  };
-}
-
-export async function clientLoader() {
-  const dapper = await getDapper(true);
-  const currentUser = await dapper.getCurrentUser();
-  return {
-    currentUser: currentUser as typeof currentUserSchema._type,
-    dapper: dapper,
-  };
-}
-
-clientLoader.hydrate = true;
+import { useDebounce } from "use-debounce";
 
 export default function ManifestValidator() {
-  const { currentUser, dapper } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const outletContext = useOutletContext() as OutletContextShape;
+  const currentUser = outletContext.currentUser;
 
   const [teamInput, setTeamInput] = useState("");
   const [manifestInput, setManifestInput] = useState("");
-  const [validationTrigger, setValidationTrigger] = useState(false);
 
-  const selectOptions = currentUser.teams.map((team) => {
-    return { value: team.name, label: team.name };
+  const selectOptions = currentUser
+    ? currentUser.teams.map((team) => {
+        return { value: team.name, label: team.name };
+      })
+    : [];
+
+  const [validation, setValidation] = useState<{
+    status: "waiting" | "processing" | "success" | "failure";
+    message?: string;
+  }>({ status: "waiting", message: "Waiting for input" });
+
+  const [debouncedTeamInput] = useDebounce(teamInput, 300, {
+    maxWait: 300,
   });
 
-  const validator = {
-    validationFunc: ManifestValidationResult,
-    args: { teamInput, manifestInput, dapper },
-  };
+  const [debouncedManifestInput] = useDebounce(manifestInput, 300, {
+    maxWait: 300,
+  });
 
   useEffect(() => {
-    if (teamInput && manifestInput && dapper && manifestInput !== "") {
-      setValidationTrigger(true);
+    if (debouncedTeamInput !== "") {
+      if (debouncedManifestInput !== "") {
+        setValidation({ status: "processing" });
+        ManifestValidationResult(
+          debouncedTeamInput,
+          debouncedManifestInput,
+          outletContext.requestConfig,
+          setValidation
+        );
+      } else {
+        setValidation({
+          status: "waiting",
+          message: "Waiting for manifest text",
+        });
+      }
     } else {
-      setValidationTrigger(false);
+      setValidation({
+        status: "waiting",
+        message: "Waiting for team selection",
+      });
     }
-  }, [teamInput, manifestInput, dapper]);
+  }, [debouncedTeamInput, debouncedManifestInput, outletContext.requestConfig]);
 
   return (
-    <>
-      <BreadCrumbs>
-        <CyberstormLink linkId="ManifestValidator">
+    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+      <NewBreadCrumbs>
+        <NewLink primitiveType="cyberstormLink" linkId="ManifestValidator">
           Manifest Validator
-        </CyberstormLink>
-      </BreadCrumbs>
-      <header className="nimbus-root__page-header">
-        <PageHeader title="Manifest Validator" />
-      </header>
-      <main className="nimbus-root__main">
-        <SettingItem
-          title="Manifest Validator"
-          description="Select a team to validate a package"
-          content={
-            <div className={styles.root}>
+        </NewLink>
+      </NewBreadCrumbs>
+      <PageHeader
+        heading="Manifest Validator"
+        headingLevel="1"
+        headingSize="2"
+      />
+      <section className="ts-container ts-container--y ts-container--full nimbus-tools-manifestValidator">
+        <div className="ts-container ts-container--x ts-container--full __row">
+          <div className="__meta">
+            <p className="__title">Manifest Validator</p>
+            <p className="__description">Select a team to validate a package</p>
+          </div>
+          <div className="__content">
+            {currentUser && currentUser.username ? null : (
               <Alert
                 content="You must be logged in to see your teams"
                 variant="warning"
                 icon={<FontAwesomeIcon icon={faWarning} />}
               />
-              <Select
-                onChange={setTeamInput}
-                options={selectOptions}
-                value={teamInput}
-                placeholder="Select team"
-              />
-              <CodeInput
-                placeholder={PLACEHOLDER}
-                setValue={setManifestInput}
-                value={manifestInput}
-                validator={validator}
-                shouldValidate={validationTrigger}
-              />
-            </div>
-          }
-        />
-      </main>
-    </>
+            )}
+            <Select
+              onChange={setTeamInput}
+              options={selectOptions}
+              value={teamInput}
+              placeholder="Select team"
+            />
+            <CodeInput
+              placeholder={PLACEHOLDER}
+              setValue={setManifestInput}
+              value={manifestInput}
+              validationBarProps={validation}
+            />
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
 
@@ -140,49 +148,54 @@ const PLACEHOLDER = `{
 }
 `;
 
-interface IManifestValidationResult {
-  teamInput: string;
-  manifestInput: string;
-  dapper: DapperTs;
-}
-
 async function ManifestValidationResult(
-  props: IManifestValidationResult
-): Promise<{
-  status: "success" | "failure";
-  message: string;
-}> {
-  const { teamInput, manifestInput } = props;
+  teamInput: string,
+  manifestInput: string,
+  config: () => RequestConfig,
+  setValidation: (validation: {
+    status: "waiting" | "processing" | "success" | "failure";
+    message?: string;
+  }) => void
+) {
   try {
-    const response = await toolsManifestValidate(props.dapper.config, {
+    const response = await toolsManifestValidate(config, {
       namespace: teamInput,
       manifest_data: encode(manifestInput),
     });
-    const parsedResponse = await response.json();
-    if (isHTMLResponse(parsedResponse)) {
-      return { status: "success", message: "All systems go!" };
+    if (
+      isRecord(response) &&
+      typeof response.success === "boolean" &&
+      response.success
+    ) {
+      setValidation({ status: "success", message: "All systems go!" });
+    } else {
+      const parsedResponse = await response.json();
+      if (isHTMLResponse(parsedResponse)) {
+        setValidation({ status: "success", message: "All systems go!" });
+      }
     }
   } catch (e) {
     if (isApiError(e)) {
       if (isHTMLResponse(e.responseJson)) {
         if (e.responseJson.non_field_errors) {
-          return {
+          setValidation({
             status: "failure",
             message: e.responseJson.non_field_errors[0],
-          };
+          });
         } else if (
           e.responseJson.namespace &&
           e.responseJson.namespace[0] === "Object not found"
         ) {
-          return {
+          setValidation({
             status: "failure",
             message: "Namespace not found",
-          };
+          });
         }
       }
     } else {
+      // REMIX TODO: Add sentry logging here
+      setValidation({ status: "failure", message: "Unknown error" });
       throw e;
     }
   }
-  return { status: "failure", message: "Server error" };
 }

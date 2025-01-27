@@ -1,75 +1,77 @@
-@layer nimbus-layout {
-  .nimbus-commoncomponents-page-header {
+@layer nimbus-components {
+  .nimbus-commonComponents-pageHeader {
     display: flex;
     flex-direction: row;
     gap: var(--space-32);
     align-items: flex-start;
     align-self: stretch;
     padding: var(--space-16);
-  }
 
-  .nimbus-commoncomponents-page-header__image {
-    flex: 0 0 6rem;
-  }
-
-  .nimbus-commoncomponents-page-header__content {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-12);
-
-    /* To ensure collapsibletext doesnt spill over */
-    min-width: 0;
-  }
-
-  .nimbus-commoncomponents-page-header__info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-    align-items: flex-start;
-    align-self: stretch;
-
-    > h1 {
-      --display-line-height: 1;
+    > .__image {
+      flex: 0 0 6rem;
     }
-  }
 
-  .nimbus-commoncomponents-page-header__meta {
-    display: flex;
-    flex-flow: row wrap;
-    gap: var(--space-32);
-  }
+    > .__content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-12);
 
-  .nimbus-commoncomponents-page-header__meta__item {
-    display: flex;
-    gap: var(--gap-xs);
-    align-items: center;
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-body-md);
-    line-height: var(--line-height-lg);
-    text-shadow: var(--textshadow-default);
-    word-break: break-all;
+      /* To ensure collapsibletext doesnt spill over */
+      min-width: 0;
 
-    & > svg {
-      inline-size: var(--space-16);
+      > .__info {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+        align-items: flex-start;
+        align-self: stretch;
+
+        > h1 {
+          --display-line-height: 1;
+        }
+      }
+
+      .__meta {
+        display: flex;
+        flex-flow: row wrap;
+        gap: var(--space-32);
+
+        > .__item {
+          display: flex;
+          gap: var(--gap-xs);
+          align-items: center;
+          font-weight: var(--font-weight-bold);
+          font-size: var(--font-size-body-md);
+          line-height: var(--line-height-lg);
+          text-shadow: var(--textshadow-default);
+          word-break: break-all;
+
+          & > svg {
+            inline-size: var(--space-16);
+          }
+        }
+      }
     }
   }
 
   @media (width <= 48rem) {
-    .nimbus-commoncomponents-page-header {
+    .nimbus-commonComponents-pageHeader {
       gap: var(--space-16);
       padding: var(--space-6) 0;
-    }
 
-    .nimbus-commoncomponents-page-header__info > h1 {
-      --display-font-size: 1.75rem;
-    }
+      > .__image {
+        flex: 0 0 5rem;
+      }
 
-    .nimbus-commoncomponents-page-header__image {
-      flex: 0 0 5rem;
-    }
+      > .__content {
+        .__info > h1 {
+          --display-font-size: 1.75rem;
+        }
 
-    .nimbus-commoncomponents-page-header__meta {
-      gap: var(--space-16);
+        > .__meta {
+          gap: var(--space-16);
+        }
+      }
     }
   }
 }

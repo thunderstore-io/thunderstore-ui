@@ -1,0 +1,91 @@
+.ts-tooltip {
+  z-index: 999;
+  max-width: 75vw;
+
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--radius-md);
+  color: var(--color-text--default);
+
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body-md);
+  line-height: normal;
+  overflow-wrap: break-word;
+  background-color: var(--background-color);
+
+  box-shadow: var(--shadow-lg);
+  animation-duration: var(--animation-duration-lg);
+  animation-timing-function: var(--animation-timing-1);
+  user-select: none;
+  will-change: transform, opacity;
+
+  --background-color: var(--color-surface-7);
+
+  .__arrow {
+    color: var(--background-color);
+    fill: var(--background-color);
+  }
+}
+
+.ts-tooltip[data-state="delayed-open"][data-side="top"] {
+  animation-name: slide-down-and-fade;
+}
+
+.ts-tooltip[data-state="delayed-open"][data-side="right"] {
+  animation-name: slide-left-and-fade;
+}
+
+.ts-tooltip[data-state="delayed-open"][data-side="bottom"] {
+  animation-name: slide-up-and-fade;
+}
+
+.ts-tooltip[data-state="delayed-open"][data-side="left"] {
+  animation-name: slide-right-and-fade;
+}
+
+@keyframes slide-up-and-fade {
+  from {
+    transform: translateY(2px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-right-and-fade {
+  from {
+    transform: translateX(-2px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-down-and-fade {
+  from {
+    transform: translateY(-2px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-left-and-fade {
+  from {
+    transform: translateX(2px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

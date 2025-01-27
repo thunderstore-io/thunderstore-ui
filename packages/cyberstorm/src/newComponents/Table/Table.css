@@ -48,6 +48,24 @@
     tr:last-child > th:last-child {
       border-bottom-right-radius: var(--radius-md);
     }
+
+    .ts-table__sortbutton {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      background: transparent;
+    }
+
+    &.ts-modifier--alignLastColumnRight .ts-table__row {
+      :last-child {
+        text-align: right;
+
+        > .ts-table__sortbutton {
+          float: right;
+          text-align: right;
+        }
+      }
+    }
   }
 
   .ts-table__caption {
@@ -69,24 +87,6 @@
     text-align: left;
     text-wrap: nowrap;
     background: var(--color-surface-a4);
-  }
-
-  .ts-table__sortbutton {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    background: transparent;
-  }
-
-  .ts-table__row {
-    :last-child {
-      text-align: right;
-    }
-
-    :last-child > .ts-table__sortbutton {
-      float: right;
-      text-align: right;
-    }
   }
 
   .ts-table__item {

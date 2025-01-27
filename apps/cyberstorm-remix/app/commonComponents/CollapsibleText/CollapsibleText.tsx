@@ -15,20 +15,10 @@ export function CollapsibleText(props: CollapsibleTextProps) {
   const [opened, setOpened] = useState(!textIsTooLong);
 
   return (
-    <div className="nimbus-commoncomponents-collapsibletext">
-      <p
-        className={classnames(
-          "nimbus-commoncomponents-collapsibletext__text",
-          opened ? "nimbus-commoncomponents-collapsibletext__opened" : null
-        )}
-      >
-        {text}
-      </p>
+    <div className="nimbus-commonComponents-collapsibleText">
+      <p className={classnames("__text", opened ? "__opened" : null)}>{text}</p>
       {textIsTooLong ? (
-        <button
-          className="nimbus-commoncomponents-collapsibletext__show"
-          onClick={() => setOpened(!opened)}
-        >
+        <button className="__show" onClick={() => setOpened(!opened)}>
           {opened ? "Show less" : "Show more"}
         </button>
       ) : null}

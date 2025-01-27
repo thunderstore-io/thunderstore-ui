@@ -1,62 +1,62 @@
-@layer nimbus-layout {
-  .nimbus-commoncomponents-listingdependency {
+@layer nimbus-components {
+  .nimbus-commonComponents-listingDependency {
     display: flex;
-    gap: 24px;
+    gap: var(--gap-xl);
     align-items: flex-start;
     width: 100%;
-    padding: 16px;
-    border-radius: 8px;
+    padding: var(--space-16);
+    border-radius: var(--radius-md);
     background: var(--surface-dim);
   }
 
-  .nimbus-commoncomponents-listingdependency__image {
+  .nimbus-commonComponents-listingDependency__image {
     flex-shrink: 0;
     width: 80px;
   }
 
-  .nimbus-commoncomponents-listingdependency__info {
+  .nimbus-commonComponents-listingDependency__info {
     display: flex;
-    gap: 8px;
+    gap: var(--radius-md);
     align-items: center;
     align-self: stretch;
   }
 
-  .nimbus-commoncomponents-listingdependency__info__name {
+  .nimbus-commonComponents-listingDependency__info__name {
     color: var(--color-text-primary);
-    font-weight: 700;
-    line-height: 150%;
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-md);
   }
 
-  .nimbus-commoncomponents-listingdependency__info__title {
+  .nimbus-commonComponents-listingDependency__info__title {
     display: flex;
-    gap: 4px;
+    gap: var(--gap-xxs);
     align-items: center;
     align-self: stretch;
-    font-weight: 400;
+    font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-md);
-    line-height: 150%;
+    line-height: var(--line-height-md);
   }
 
-  .nimbus-commoncomponents-listingdependency__info__by {
+  .nimbus-commonComponents-listingDependency__info__by {
     color: var(--color-text-tertiary);
   }
 
-  .nimbus-commoncomponents-listingdependency__description {
+  .nimbus-commonComponents-listingDependency__description {
     align-self: stretch;
     color: var(--color-text-secondary);
-    font-weight: 400;
+    font-weight: var(--font-weight-regular);
 
-    font-size: var(--font-size-body-md, 14px);
-    line-height: 150%;
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
   }
 
-  .nimbus-commoncomponents-listingdependency__version {
+  .nimbus-commonComponents-listingDependency__version {
     display: flex;
     gap: 4px;
     align-items: flex-start;
     color: var(--color-text-tertiary);
-    font-weight: 400;
+    font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-sm);
-    line-height: 170%;
+    line-height: var(--line-height-lg);
   }
 }

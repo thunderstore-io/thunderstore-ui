@@ -1,16 +1,12 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
   CardCommunity,
-  CommunityCardSkeleton,
   EmptyState,
-  range,
   NewTextInput,
   NewSelect,
   Heading,
 } from "@thunderstore/cyberstorm";
-// import searchAndOrderStyles from "./SearchAndOrder.module.css";
 import "./Communities.css";
-import communitiesListStyles from "./CommunityList.module.css";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -158,7 +154,7 @@ export default function CommunitiesPage() {
             </span>
           </div>
 
-          <div className="ts-container ts-container--x ts-container--stretch">
+          <div className="ts-container ts-container--x ts-container--stretch __results">
             <CommunitiesList communitiesData={communitiesData} />
           </div>
         </div>
@@ -177,7 +173,7 @@ function CommunitiesList(props: { communitiesData: Communities }) {
 
   if (communitiesData.results.length > 0) {
     return (
-      <div className={communitiesListStyles.root}>
+      <div className="__communitiesList">
         {communitiesData.results.map((community) => (
           <CardCommunity
             key={community.identifier}
@@ -202,13 +198,3 @@ function CommunitiesList(props: { communitiesData: Communities }) {
     );
   }
 }
-
-export const CommunitiesListSkeleton = () => {
-  return (
-    <div className={communitiesListStyles.root}>
-      {range(1, 18).map((community) => (
-        <CommunityCardSkeleton key={community} />
-      ))}
-    </div>
-  );
-};

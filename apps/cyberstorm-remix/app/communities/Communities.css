@@ -26,6 +26,10 @@
         }
       }
 
+      > .__results {
+        justify-content: center;
+      }
+
       @media (width <= 39rem) {
         .__tools {
           flex-direction: column;
@@ -37,6 +41,20 @@
             max-width: unset;
           }
         }
+      }
+    }
+
+    .__communitiesList {
+      display: grid;
+      flex-flow: row wrap;
+      grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+      gap: var(--gap-xxxxxxxl) var(--gap-xl);
+      width: 100%;
+    }
+
+    @media (width <= 27.5rem) {
+      .__communitiesList {
+        grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
       }
     }
   }

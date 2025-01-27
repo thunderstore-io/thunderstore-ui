@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from "react";
 import styles from "./Button.module.css";
-import { Tooltip } from "../Tooltip/Tooltip";
+import { Tooltip } from "../../newComponents/Tooltip/Tooltip";
 import { classnames } from "../../utils/utils";
 import { CyberstormLinkIds, CyberstormLink } from "../Links/Links";
 

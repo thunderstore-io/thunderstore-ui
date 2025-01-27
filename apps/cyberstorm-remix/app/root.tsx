@@ -9,7 +9,6 @@ import {
   Scripts,
   // ScrollRestoration,
   isRouteErrorResponse,
-  redirect,
   useLocation,
   useRouteError,
   // useRouteLoaderData,
@@ -32,8 +31,8 @@ import { useHydrated } from "remix-utils/use-hydrated";
 import Toast from "@thunderstore/cyberstorm/src/newComponents/Toast";
 import { SessionProvider, useSession } from "@thunderstore/ts-api-react";
 import { Footer } from "./commonComponents/Footer/Footer";
-import { NavigationWrapper } from "cyberstorm/navigation/NavigationWrapper";
 import { RequestConfig } from "@thunderstore/thunderstore-api";
+import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];

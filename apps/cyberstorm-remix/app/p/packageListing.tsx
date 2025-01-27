@@ -7,7 +7,6 @@ import {
   // useRevalidator,
 } from "@remix-run/react";
 import {
-  CopyButton,
   Heading,
   Image,
   // Modal,
@@ -52,6 +51,7 @@ import {
 } from "@thunderstore/cyberstorm/src/utils/utils";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { OutletContextShape } from "~/root";
+import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -252,382 +252,367 @@ export default function Community() {
   // );
 
   return (
-    <>
-      <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
-        <NewBreadCrumbs rootClasses="nimbus-root__breadcrumbs">
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Communities"
-            csVariant="cyber"
-          >
-            Communities
-          </NewLink>
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Community"
-            community={community.identifier}
-            csVariant="cyber"
-          >
-            {community.name}
-          </NewLink>
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Team"
-            team={listing.namespace}
-            csVariant="cyber"
-          >
-            {listing.namespace}
-          </NewLink>
-          {listing.name}
-        </NewBreadCrumbs>
-        <div className="nimbus-packageListing">
-          <section className="__main">
-            <PageHeader
-              // rootClasses="__content-header"
-              heading={listing.name}
-              headingLevel="1"
-              headingSize="3"
-              image={
-                <Image
-                  // rootClasses={headerStyles.modImage}
-                  src={listing.icon_url}
-                  cardType="package"
-                  square
-                  intrinsicHeight={256}
-                  intrinsicWidth={256}
-                />
-              }
-              description={listing.description}
-              meta={
-                <>
+    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+      <NewBreadCrumbs rootClasses="nimbus-root__breadcrumbs">
+        <NewLink
+          primitiveType="cyberstormLink"
+          linkId="Communities"
+          csVariant="cyber"
+        >
+          Communities
+        </NewLink>
+        <NewLink
+          primitiveType="cyberstormLink"
+          linkId="Community"
+          community={community.identifier}
+          csVariant="cyber"
+        >
+          {community.name}
+        </NewLink>
+        <NewLink
+          primitiveType="cyberstormLink"
+          linkId="Team"
+          community={community.identifier}
+          team={listing.namespace}
+          csVariant="cyber"
+        >
+          {listing.namespace}
+        </NewLink>
+        {listing.name}
+      </NewBreadCrumbs>
+      <div className="nimbus-packageListing">
+        <section className="__main">
+          <PageHeader
+            // rootClasses="__content-header"
+            heading={listing.name}
+            headingLevel="1"
+            headingSize="3"
+            image={
+              <Image
+                // rootClasses={headerStyles.modImage}
+                src={listing.icon_url}
+                cardType="package"
+                square
+                intrinsicHeight={256}
+                intrinsicWidth={256}
+              />
+            }
+            description={listing.description}
+            meta={
+              <>
+                <NewLink
+                  // TODO: Remove when team page is available
+                  primitiveType="link"
+                  href={`${domain}/c/${listing.community_identifier}/p/${listing.namespace}/`}
+                  // primitiveType="cyberstormLink"
+                  // linkId="Team"
+                  // community={listing.community_identifier}
+                  // team={listing.namespace}
+                  csVariant="cyber"
+                  rootClasses="__item"
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faUsers} />
+                  </NewIcon>
+                  {listing.namespace}
+                </NewLink>
+                {listing.website_url ? (
                   <NewLink
-                    // TODO: Remove when team page is available
                     primitiveType="link"
-                    href={`${domain}/c/${listing.community_identifier}/p/${listing.namespace}/`}
-                    // primitiveType="cyberstormLink"
-                    // linkId="Team"
-                    // community={listing.community_identifier}
-                    // team={listing.namespace}
+                    href={listing.website_url}
                     csVariant="cyber"
-                    rootClasses="nimbus-commoncomponents-page-header__meta__item"
+                    rootClasses="__item"
                   >
+                    {listing.website_url}
                     <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faUsers} />
+                      <FontAwesomeIcon icon={faArrowUpRight} />
                     </NewIcon>
-                    {listing.namespace}
                   </NewLink>
-                  {listing.website_url ? (
-                    <NewLink
-                      primitiveType="link"
-                      href={listing.website_url}
-                      csVariant="cyber"
-                      rootClasses="nimbus-commoncomponents-page-header__meta__item"
-                    >
-                      {listing.website_url}
-                      <NewIcon csMode="inline" noWrapper>
-                        <FontAwesomeIcon icon={faArrowUpRight} />
-                      </NewIcon>
-                    </NewLink>
-                  ) : null}
-                </>
-              }
-            />
-            {/* TODO: Admin tools // TODO: Enable when APIs are available*/}
-            {/* <div className="headerActions">
+                ) : null}
+              </>
+            }
+          />
+          {/* TODO: Admin tools // TODO: Enable when APIs are available*/}
+          {/* <div className="headerActions">
               {currentUser?.teams.some(function (cuTeam) {
                 return cuTeam?.name === listing.team.name;
               })
                 ? managementTools
                 : null}
             </div> */}
-            <div className="__content">
-              <Tabs
-                tabItems={[
-                  {
-                    itemProps: {
-                      key: "description",
-                      primitiveType: "cyberstormLink",
-                      linkId: "Package",
-                      community: listing.community_identifier,
-                      namespace: listing.namespace,
-                      package: listing.name,
-                      "aria-current": currentTab === "details",
-                      children: <>Description</>,
-                    },
-                    current: currentTab === "details",
+          <div className="__content">
+            <Tabs
+              tabItems={[
+                {
+                  itemProps: {
+                    key: "description",
+                    primitiveType: "cyberstormLink",
+                    linkId: "Package",
+                    community: listing.community_identifier,
+                    namespace: listing.namespace,
+                    package: listing.name,
+                    "aria-current": currentTab === "details",
+                    children: <>Description</>,
                   },
-                  {
-                    itemProps: {
-                      key: "required",
-                      primitiveType: "cyberstormLink",
-                      linkId: "PackageRequired",
-                      community: listing.community_identifier,
-                      namespace: listing.namespace,
-                      package: listing.name,
-                      "aria-current": currentTab === "required",
-                      children: <>Required</>,
-                    },
-                    current: currentTab === "required",
+                  current: currentTab === "details",
+                },
+                {
+                  itemProps: {
+                    key: "required",
+                    primitiveType: "cyberstormLink",
+                    linkId: "PackageRequired",
+                    community: listing.community_identifier,
+                    namespace: listing.namespace,
+                    package: listing.name,
+                    "aria-current": currentTab === "required",
+                    children: <>Required</>,
                   },
-                  // TODO: Once Analysis page is ready, enable it
-                  // {
-                  //   itemProps: {
-                  //     key: "wiki",
-                  //     primitiveType: "cyberstormLink",
-                  //     linkId: "PackageWiki",
-                  //     community: listing.community_identifier,
-                  //     namespace: listing.namespace,
-                  //     package: listing.name,
-                  //     "aria-current": currentTab === "wiki",
-                  //     children: <>Wiki</>,
-                  //   },
-                  //   current: currentTab === "wiki",
-                  // },
-                  {
-                    itemProps: {
-                      key: "wiki",
-                      primitiveType: "link",
-                      href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/wiki`,
-                      "aria-current": currentTab === "wiki",
-                      children: <>Wiki</>,
-                    },
-                    current: currentTab === "wiki",
+                  current: currentTab === "required",
+                },
+                // TODO: Once Analysis page is ready, enable it
+                // {
+                //   itemProps: {
+                //     key: "wiki",
+                //     primitiveType: "cyberstormLink",
+                //     linkId: "PackageWiki",
+                //     community: listing.community_identifier,
+                //     namespace: listing.namespace,
+                //     package: listing.name,
+                //     "aria-current": currentTab === "wiki",
+                //     children: <>Wiki</>,
+                //   },
+                //   current: currentTab === "wiki",
+                // },
+                {
+                  itemProps: {
+                    key: "wiki",
+                    primitiveType: "link",
+                    href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/wiki`,
+                    "aria-current": currentTab === "wiki",
+                    children: <>Wiki</>,
                   },
-                  {
-                    itemProps: {
-                      key: "changelog",
-                      primitiveType: "cyberstormLink",
-                      linkId: "PackageChangelog",
-                      community: listing.community_identifier,
-                      namespace: listing.namespace,
-                      package: listing.name,
-                      "aria-current": currentTab === "changelog",
-                      children: <>Changelog</>,
-                      disabled: !listing.has_changelog,
-                    },
-                    current: currentTab === "changelog",
+                  current: currentTab === "wiki",
+                },
+                {
+                  itemProps: {
+                    key: "changelog",
+                    primitiveType: "cyberstormLink",
+                    linkId: "PackageChangelog",
+                    community: listing.community_identifier,
+                    namespace: listing.namespace,
+                    package: listing.name,
+                    "aria-current": currentTab === "changelog",
+                    children: <>Changelog</>,
+                    disabled: !listing.has_changelog,
                   },
-                  {
-                    itemProps: {
-                      key: "versions",
-                      primitiveType: "cyberstormLink",
-                      linkId: "PackageVersions",
-                      community: listing.community_identifier,
-                      namespace: listing.namespace,
-                      package: listing.name,
-                      "aria-current": currentTab === "versions",
-                      children: <>Versions</>,
-                    },
-                    current: currentTab === "versions",
-                    // TODO: Version count field needs to be added to the endpoint
-                    // numberSlateValue: listing.versionCount,
+                  current: currentTab === "changelog",
+                },
+                {
+                  itemProps: {
+                    key: "versions",
+                    primitiveType: "cyberstormLink",
+                    linkId: "PackageVersions",
+                    community: listing.community_identifier,
+                    namespace: listing.namespace,
+                    package: listing.name,
+                    "aria-current": currentTab === "versions",
+                    children: <>Versions</>,
                   },
-                  // TODO: Once Analysis page is ready, enable it
-                  // {
-                  //   itemProps: {
-                  //     key: "source",
-                  //     primitiveType: "cyberstormLink",
-                  //     linkId: "PackageSource",
-                  //     community: listing.community_identifier,
-                  //     namespace: listing.namespace,
-                  //     package: listing.name,
-                  //     "aria-current": currentTab === "source",
-                  //     children: <>Analysis</>,
-                  //   },
-                  //   current: currentTab === "source",
-                  // },
-                  {
-                    itemProps: {
-                      key: "source",
-                      href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/source`,
-                      primitiveType: "link",
-                      "aria-current": currentTab === "source",
-                      children: <>Analysis</>,
-                    },
-                    current: currentTab === "source",
+                  current: currentTab === "versions",
+                  // TODO: Version count field needs to be added to the endpoint
+                  // numberSlateValue: listing.versionCount,
+                },
+                // TODO: Once Analysis page is ready, enable it
+                // {
+                //   itemProps: {
+                //     key: "source",
+                //     primitiveType: "cyberstormLink",
+                //     linkId: "PackageSource",
+                //     community: listing.community_identifier,
+                //     namespace: listing.namespace,
+                //     package: listing.name,
+                //     "aria-current": currentTab === "source",
+                //     children: <>Analysis</>,
+                //   },
+                //   current: currentTab === "source",
+                // },
+                {
+                  itemProps: {
+                    key: "source",
+                    href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/source`,
+                    primitiveType: "link",
+                    "aria-current": currentTab === "source",
+                    children: <>Analysis</>,
                   },
-                ]}
-                renderTabItem={(itemProps, numberSlate) => {
-                  const { key, children, ...fItemProps } = itemProps;
-                  return (
-                    <NewLink key={key} {...fItemProps}>
-                      {children}
-                      {numberSlate}
-                    </NewLink>
-                  );
-                }}
-              />
-              <Outlet context={outletContext} />
-            </div>
-          </section>
-          <aside className="__sidebar">
-            <NewButton csVariant="accent" csSize="big" rootClasses="__install">
-              <NewIcon csMode="inline">
-                <ThunderstoreLogo />
-              </NewIcon>
-              Install
-            </NewButton>
-            <div className="__main">
-              <div className="__actions">
+                  current: currentTab === "source",
+                },
+              ]}
+              renderTabItem={(itemProps, numberSlate) => {
+                const { key, children, ...fItemProps } = itemProps;
+                return (
+                  <NewLink key={key} {...fItemProps}>
+                    {children}
+                    {numberSlate}
+                  </NewLink>
+                );
+              }}
+            />
+            <Outlet context={outletContext} />
+          </div>
+        </section>
+        <aside className="__sidebar">
+          <NewButton csVariant="accent" csSize="big" rootClasses="__install">
+            <NewIcon csMode="inline">
+              <ThunderstoreLogo />
+            </NewIcon>
+            Install
+          </NewButton>
+          <div className="__main">
+            <div className="__actions">
+              <NewButton
+                primitiveType="link"
+                href={listing.download_url}
+                csVariant="secondary"
+                rootClasses="__download"
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faDownload} />
+                </NewIcon>
+                Download
+              </NewButton>
+              {team.donation_link ? (
                 <NewButton
                   primitiveType="link"
-                  href={listing.download_url}
+                  href={team.donation_link}
+                  icon={faHandHoldingHeart}
                   csVariant="secondary"
-                  rootClasses="__download"
-                >
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faDownload} />
-                  </NewIcon>
-                  Download
-                </NewButton>
-                {team.donation_link ? (
-                  <NewButton
-                    primitiveType="link"
-                    href={team.donation_link}
-                    icon={faHandHoldingHeart}
-                    csVariant="secondary"
-                  />
-                ) : null}
-                <NewButton
-                  primitiveType="button"
-                  onClick={PackageLikeAction({
-                    isLoggedIn: Boolean(currentUser?.username),
-                    packageName: listing.name,
-                    namespace: listing.namespace,
-                    isLiked: isLiked,
-                    dataUpdateTrigger: fetchAndSetRatedPackages,
-                    config: config,
-                  })}
-                  tooltipText="Like"
-                  icon={faThumbsUp}
-                  csVariant={isLiked ? "success" : "secondary"}
                 />
-                {/* <ReportButton onClick={TODO} /> */}
+              ) : null}
+              <NewButton
+                primitiveType="button"
+                onClick={PackageLikeAction({
+                  isLoggedIn: Boolean(currentUser?.username),
+                  packageName: listing.name,
+                  namespace: listing.namespace,
+                  isLiked: isLiked,
+                  dataUpdateTrigger: fetchAndSetRatedPackages,
+                  config: config,
+                })}
+                tooltipText="Like"
+                icon={faThumbsUp}
+                csVariant={isLiked ? "success" : "secondary"}
+              />
+              {/* <ReportButton onClick={TODO} /> */}
+            </div>
+            <div className="__meta">
+              <div className="__item">
+                <div className="__label">Last Updated</div>
+                <div className="__content">{lastUpdated}</div>
               </div>
-              <div className="__meta">
-                <div className="__item">
-                  <div className="__label">Last Updated</div>
-                  <div className="__content">{lastUpdated}</div>
+              <div className="__item">
+                <div className="__label">First Uploaded</div>
+                <div className="__content">{firstUploaded}</div>
+              </div>
+              <div className="__item">
+                <div className="__label">Downloads</div>
+                <div className="__content">
+                  {formatInteger(listing.download_count)}
                 </div>
-                <div className="__item">
-                  <div className="__label">First Uploaded</div>
-                  <div className="__content">{firstUploaded}</div>
+              </div>
+              <div className="__item">
+                <div className="__label">Likes</div>
+                <div className="__content">
+                  {formatInteger(listing.rating_count)}
                 </div>
-                <div className="__item">
-                  <div className="__label">Downloads</div>
-                  <div className="__content">
-                    {formatInteger(listing.download_count)}
-                  </div>
-                </div>
-                <div className="__item">
-                  <div className="__label">Likes</div>
-                  <div className="__content">
-                    {formatInteger(listing.rating_count)}
-                  </div>
-                </div>
-                <div className="__item">
-                  <div className="__label">Size</div>
-                  <div className="__content">
-                    {formatFileSize(listing.size)}
-                  </div>
-                </div>
-                <div className="__item">
-                  <div className="__label">Dependency string</div>
-                  <div className="__content">
-                    <div className="__dependencystringwrapper">
-                      <div
-                        title={listing.full_version_name}
-                        className="__dependencystring"
-                      >
-                        {listing.full_version_name}
-                      </div>
-                      <CopyButton text={listing.full_version_name} />
-                    </div>
-                  </div>
-                </div>
-                <div className="__item">
-                  <div className="__label">Dependants</div>
-                  <div className="__content">
-                    <NewLink
-                      primitiveType="cyberstormLink"
-                      linkId="PackageDependants"
-                      community={listing.community_identifier}
-                      namespace={listing.namespace}
-                      package={listing.name}
-                      csVariant="cyber"
+              </div>
+              <div className="__item">
+                <div className="__label">Size</div>
+                <div className="__content">{formatFileSize(listing.size)}</div>
+              </div>
+              <div className="__item">
+                <div className="__label">Dependency string</div>
+                <div className="__content">
+                  <div className="__dependencystringwrapper">
+                    <div
+                      title={listing.full_version_name}
+                      className="__dependencystring"
                     >
-                      {listing.dependant_count} other mods
-                    </NewLink>
+                      {listing.full_version_name}
+                    </div>
+                    <CopyButton text={listing.full_version_name} />
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="__categories">
-              <div className="__header">
-                <Heading csLevel="4" csSize="4">
-                  Categories
-                </Heading>
-              </div>
-              <div className="__body">{mappedPackageTagList}</div>
-              <div className="__body">
-                {listing.is_pinned ? (
-                  <NewTag
-                    csSize="small"
-                    csModifiers={["dark"]}
-                    csVariant="blue"
+              <div className="__item">
+                <div className="__label">Dependants</div>
+                <div className="__content">
+                  <NewLink
+                    primitiveType="cyberstormLink"
+                    linkId="PackageDependants"
+                    community={listing.community_identifier}
+                    namespace={listing.namespace}
+                    package={listing.name}
+                    csVariant="cyber"
                   >
-                    <NewIcon noWrapper csMode="inline">
-                      <FontAwesomeIcon icon={faThumbTack} />
-                    </NewIcon>
-                    Pinned
-                  </NewTag>
-                ) : null}
-                {listing.is_deprecated ? (
-                  <NewTag
-                    csSize="small"
-                    csModifiers={["dark"]}
-                    csVariant="yellow"
-                  >
-                    <NewIcon noWrapper csMode="inline">
-                      <FontAwesomeIcon icon={faWarning} />
-                    </NewIcon>
-                    Deprecated
-                  </NewTag>
-                ) : null}
-                {listing.is_nsfw ? (
-                  <NewTag
-                    csSize="small"
-                    csModifiers={["dark"]}
-                    csVariant="pink"
-                  >
-                    <NewIcon noWrapper csMode="inline">
-                      <FontAwesomeIcon icon={faLips} />
-                    </NewIcon>
-                    NSFW
-                  </NewTag>
-                ) : null}
-                {Math.round(
-                  (Date.now() - Date.parse(listing.last_updated)) / 86400000
-                ) < 3 ? (
-                  <NewTag
-                    csSize="small"
-                    csModifiers={["dark"]}
-                    csVariant="green"
-                  >
-                    <NewIcon noWrapper csMode="inline">
-                      <FontAwesomeIcon icon={faSparkles} />
-                    </NewIcon>
-                    New
-                  </NewTag>
-                ) : null}
+                    {listing.dependant_count} other mods
+                  </NewLink>
+                </div>
               </div>
             </div>
+          </div>
+          <div className="__categories">
+            <div className="__header">
+              <Heading csLevel="4" csSize="4">
+                Categories
+              </Heading>
+            </div>
+            <div className="__body">{mappedPackageTagList}</div>
+            <div className="__body">
+              {listing.is_pinned ? (
+                <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faThumbTack} />
+                  </NewIcon>
+                  Pinned
+                </NewTag>
+              ) : null}
+              {listing.is_deprecated ? (
+                <NewTag
+                  csSize="small"
+                  csModifiers={["dark"]}
+                  csVariant="yellow"
+                >
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faWarning} />
+                  </NewIcon>
+                  Deprecated
+                </NewTag>
+              ) : null}
+              {listing.is_nsfw ? (
+                <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faLips} />
+                  </NewIcon>
+                  NSFW
+                </NewTag>
+              ) : null}
+              {Math.round(
+                (Date.now() - Date.parse(listing.last_updated)) / 86400000
+              ) < 3 ? (
+                <NewTag csSize="small" csModifiers={["dark"]} csVariant="green">
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faSparkles} />
+                  </NewIcon>
+                  New
+                </NewTag>
+              ) : null}
+            </div>
+          </div>
 
-            <TeamMembers listing={listing} domain={domain} />
-          </aside>
-        </div>
+          <TeamMembers listing={listing} domain={domain} />
+        </aside>
       </div>
-    </>
+    </div>
   );
 }
 

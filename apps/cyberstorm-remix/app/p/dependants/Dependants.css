@@ -1,0 +1,18 @@
+.nimbus-package-dependants {
+  display: flex;
+  flex-direction: column;
+
+  .__header {
+    padding: var(--space-40) 0;
+    color: var(--color-text--default);
+    font-weight: var(--font-weight-bold);
+    font-size: 1.75rem;
+    line-height: var(--line-height-xs);
+  }
+}
+
+@media (width <= 48rem) {
+  .nimbus-package-dependants {
+    gap: var(--space-16);
+  }
+}

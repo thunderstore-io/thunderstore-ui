@@ -34,6 +34,7 @@ export enum TableSort {
 interface TableItem {
   value: ReactNode;
   sortValue: string | number;
+  alignLastRight?: boolean;
 }
 
 export type TableLabels = {

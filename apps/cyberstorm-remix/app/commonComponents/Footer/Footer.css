@@ -1,5 +1,5 @@
-@layer nimbus-layout {
-  .nimbus-footer {
+@layer nimbus-components {
+  .nimbus-commonComponents-footer {
     > .__content {
       flex-direction: row;
       min-height: 34rem;
@@ -229,7 +229,7 @@
   }
 
   @media (width <= 72rem) {
-    .nimbus-footer {
+    .nimbus-commonComponents-footer {
       > .__content {
         flex-direction: column;
 

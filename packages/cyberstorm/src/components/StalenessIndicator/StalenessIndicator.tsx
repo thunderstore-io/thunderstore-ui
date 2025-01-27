@@ -20,7 +20,7 @@ interface Props {
 export function StalenessIndicator(props: Props) {
   const { children, className, isStale = false } = props;
   return (
-    <div style={{ position: "relative" }}>
+    <>
       {isStale ? (
         <NewIcon wrapperClasses={styles.loader}>
           <FontAwesomeIcon icon={faSpinnerThird} />
@@ -29,7 +29,7 @@ export function StalenessIndicator(props: Props) {
       <div className={classnames(isStale ? styles.root : null, className)}>
         {children}
       </div>
-    </div>
+    </>
   );
 }
 

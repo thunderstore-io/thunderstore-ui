@@ -1,5 +1,5 @@
 import { range } from "../../utils/utils";
-import { SkeletonBox } from "../SkeletonBox/SkeletonBox";
+import { SkeletonBox } from "../../newComponents/SkeletonBox/SkeletonBox";
 
 /**
  * Helper function for returning multiple SkeletonBox components

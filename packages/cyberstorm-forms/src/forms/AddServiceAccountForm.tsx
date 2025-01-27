@@ -12,7 +12,7 @@ import {
   useFormToaster,
 } from "@thunderstore/cyberstorm-forms";
 import { useState } from "react";
-import { Alert, Button, CopyButton, Dialog } from "@thunderstore/cyberstorm";
+import { Alert, Button, Dialog } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { isRecord } from "@thunderstore/cyberstorm/src/utils/type_guards";
@@ -74,7 +74,7 @@ export function AddServiceAccountForm(props: {
           </p>
           <div className={styles.token}>
             <pre className={styles.tokenField}>{addedServiceAccountToken}</pre>
-            <CopyButton text={addedServiceAccountToken} />
+            {/* <CopyButton text={addedServiceAccountToken} /> */}
           </div>
           <Alert
             icon={<FontAwesomeIcon icon={faCircleExclamation} />}

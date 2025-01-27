@@ -1,4 +1,4 @@
-import styles from "../../../Markdown.module.css";
+import "../../../styles/markdown.css";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { useLoaderData } from "@remix-run/react";
 import { LoaderFunctionArgs } from "@remix-run/node";
@@ -80,7 +80,7 @@ export default function Changelog() {
     return (
       <div
         dangerouslySetInnerHTML={{ __html: changelog.html }}
-        className={styles.root}
+        className="nimbus-markdown"
       />
     );
   }

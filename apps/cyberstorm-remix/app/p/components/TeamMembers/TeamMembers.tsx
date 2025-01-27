@@ -1,8 +1,7 @@
 import { Avatar, Heading, NewIcon, NewLink } from "@thunderstore/cyberstorm";
 import { faCaretRight, faCrown } from "@fortawesome/free-solid-svg-icons";
-import "../../packageListing.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styles from "./TeamMembers.module.css";
+import "./TeamMembers.css";
 import { PackageListingDetails, TeamMember } from "@thunderstore/dapper/types";
 
 export default function TeamMembers(props: {
@@ -16,7 +15,7 @@ export default function TeamMembers(props: {
     });
 
   return (
-    <div className="__team">
+    <div className="nimbus-packageListing-components-team">
       <div className="__header">
         <Heading csLevel="4" csSize="4" rootClasses="__title">
           Team
@@ -52,20 +51,18 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
   const { teamMember } = props;
 
   return (
-    <div className={styles.item}>
+    <div className="__item">
       <Avatar username={teamMember.username} src={teamMember.avatar} />
-      <div className={styles.itemTitleWrapper}>
-        <div className={styles.itemTitle}>
-          <span className={styles.itemTitleUsername}>
-            {teamMember.username}
-          </span>
+      <div className="__itemTitleWrapper">
+        <div className="__itemTitle">
+          <span className="__itemTitleUsername">{teamMember.username}</span>
           {teamMember.role === "owner" ? (
-            <NewIcon csMode="inline" noWrapper rootClasses={styles.crown}>
+            <NewIcon csMode="inline" noWrapper rootClasses="__crown">
               <FontAwesomeIcon icon={faCrown} />
             </NewIcon>
           ) : null}
         </div>
-        <div className={styles.itemDescription}>{teamMember.role}</div>
+        <div className="__itemDescription">{teamMember.role}</div>
       </div>
     </div>
   );

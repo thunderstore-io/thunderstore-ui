@@ -1,0 +1,10 @@
+@layer nimbus-components {
+  .nimbus-commonComponents-packageSearch-components-packageCount {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-body-md);
+    word-break: break-all;
+  }
+}
