@@ -194,11 +194,6 @@ function App() {
 
   const session = useSession();
   useEffect(() => {
-    // INIT DAPPER
-    window.Dapper = new DapperTs(session.getConfig, () => {
-      session.clearSession();
-      redirect("/communities");
-    });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     setRcCallable((prevRcCallable) => session.getConfig);
     setCurrentUser(session.getSessionCurrentUser(true));

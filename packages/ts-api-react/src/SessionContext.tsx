@@ -18,11 +18,13 @@ import {
   emptyUser,
 } from "@thunderstore/dapper-ts/src/methods/currentUser";
 
-interface ContextInterface {
+export interface ContextInterface {
   /** Remove session data from provider's state and localStorage. */
   clearSession: () => void;
   /** Remove session cookies. */
   clearCookies: () => void;
+  /** Set SessionData in storage */
+  setSession: (sessionData: SessionData) => void;
   /** Get RequestConfig for Dapper usage */
   getConfig: (domain?: string) => RequestConfig;
   /** Check if session is valid and try to repair if not */
@@ -42,12 +44,12 @@ interface SessionData {
 }
 
 const SessionContext = createContext<ContextInterface | null>(null);
-const ID_KEY = "id";
-const USERNAME_KEY = "username";
-const API_HOST_KEY = "apiHost";
+export const ID_KEY = "id";
+export const USERNAME_KEY = "username";
+export const API_HOST_KEY = "apiHost";
 
 // CurrentUser objects keys
-const CURRENT_USER_KEY = "currentUser";
+export const CURRENT_USER_KEY = "currentUser";
 
 interface Props extends PropsWithChildren {
   apiHost: string;

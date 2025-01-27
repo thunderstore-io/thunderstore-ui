@@ -457,7 +457,7 @@ export default function Community() {
                   );
                 }}
               />
-              <Outlet />
+              <Outlet context={outletContext} />
             </div>
           </section>
           <aside className="__sidebar">
