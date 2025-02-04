@@ -1,7 +1,0 @@
-.root {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-xxxs);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}

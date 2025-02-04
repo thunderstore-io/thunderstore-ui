@@ -125,6 +125,7 @@ export default function Versions() {
         headers={columns}
         rows={tableRows}
         sortDirection={NewTableSort.ASC}
+        csModifiers={["alignLastColumnRight"]}
       />
     </div>
   );

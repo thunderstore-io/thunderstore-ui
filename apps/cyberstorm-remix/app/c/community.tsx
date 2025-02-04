@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { ApiError } from "@thunderstore/thunderstore-api";
-import { PackageOrderOptions } from "~/commonComponents/PackageSearch/PackageOrder";
+import { PackageOrderOptions } from "~/commonComponents/PackageSearch/components/PackageOrder";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { DapperTs } from "@thunderstore/dapper-ts";
 

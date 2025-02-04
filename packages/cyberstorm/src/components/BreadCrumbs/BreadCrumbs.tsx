@@ -6,7 +6,7 @@ import styles from "./BreadCrumbs.module.css";
 import { CyberstormLink } from "../Links/Links";
 import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
-import { Tooltip } from "../Tooltip/Tooltip";
+import { Tooltip } from "../../newComponents/Tooltip/Tooltip";
 
 type BreadCrumbsProps = PropsWithChildren<{
   excludeHome?: boolean;

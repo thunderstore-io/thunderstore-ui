@@ -21,7 +21,7 @@ const GITHUB_URL = "https://github.com/thunderstore-io";
 export function Footer() {
   return (
     <footer
-      className="ts-container ts-container--y ts-section nimbus-footer"
+      className="ts-container ts-container--y ts-section nimbus-commonComponents-footer"
       aria-label="Footer"
     >
       <div className="ts-container ts-container--y ts-container--full ts-section __content">

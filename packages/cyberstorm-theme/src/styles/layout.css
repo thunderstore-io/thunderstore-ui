@@ -1,6 +1,6 @@
 @layer theme-layout {
   :root {
-    --section-bg: var(--color-surface-3);
+    --section-bg: var(--color-surface-2);
     --section-border-radius: var(--radius-sm);
     --section-gap: var(--gap-xxs);
   }

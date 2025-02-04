@@ -19,5 +19,6 @@ export function toolsManifestValidate(
       method: "POST",
       body: JSON.stringify(data),
     },
+    useSession: true,
   });
 }

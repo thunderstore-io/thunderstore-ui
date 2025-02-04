@@ -1,58 +1,58 @@
-.nimbus-commoncomponents-collapsibletext {
-  display: flex;
-  flex-direction: row;
-  gap: var(--space-8);
-  align-items: center;
-  min-width: 0;
-  max-width: 100%;
-}
+@layer nimbus-components {
+  .nimbus-commonComponents-collapsibleText {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-8);
+    align-items: center;
+    min-width: 0;
+    max-width: 100%;
 
-.nimbus-commoncomponents-collapsibletext:has(
-    .nimbus-commoncomponents-collapsibletext__opened
-  ) {
-  flex-direction: column;
-  align-items: flex-start;
-}
+    &:has(.__opened) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
 
-.nimbus-commoncomponents-collapsibletext__text {
-  width: 100%;
-  min-width: 0;
-  max-width: 80ch;
-  max-height: 1lh;
-  overflow: hidden;
-  color: var(--color-text-tertiary);
-  font-weight: var(--font-weight-regular);
-  font-size: var(--font-size-body-lg);
-  line-height: var(--line-height-md);
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  text-shadow: var(--textshadow-default);
-  transition: max-height 500ms cubic-bezier(0, 1, 0, 1);
-}
+    > .__text {
+      width: 100%;
+      min-width: 0;
+      max-width: 80ch;
+      max-height: 1lh;
+      overflow: hidden;
+      color: var(--color-text-tertiary);
+      font-weight: var(--font-weight-regular);
+      font-size: var(--font-size-body-lg);
+      line-height: var(--line-height-md);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      text-shadow: var(--textshadow-default);
+      transition: max-height 500ms cubic-bezier(0, 1, 0, 1);
+    }
 
-.nimbus-commoncomponents-collapsibletext__opened {
-  max-height: 30rem;
-  white-space: normal;
-  transition: max-height 500ms;
-}
+    > .__opened {
+      max-height: 30rem;
+      white-space: normal;
+      transition: max-height 500ms;
+    }
 
-.nimbus-commoncomponents-collapsibletext__show {
-  color: var(--color-text-accent);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-body-md);
-  line-height: normal;
-  text-wrap: nowrap;
-  text-shadow: var(--textshadow-default);
-  background-color: transparent;
-}
-
-@media (width <= 48rem) {
-  .nimbus-commoncomponents-collapsibletext__text {
-    font-size: var(--font-size-body-md);
-    line-height: var(--line-height-sm);
+    > .__show {
+      color: var(--color-text-accent);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-body-md);
+      line-height: normal;
+      text-wrap: nowrap;
+      text-shadow: var(--textshadow-default);
+      background-color: transparent;
+    }
   }
 
-  .nimbus-commoncomponents-collapsibletext__show {
-    font-size: var(--font-size-body-sm);
+  @media (width <= 48rem) {
+    .__text {
+      font-size: var(--font-size-body-md);
+      line-height: var(--line-height-sm);
+    }
+
+    .__show {
+      font-size: var(--font-size-body-sm);
+    }
   }
 }

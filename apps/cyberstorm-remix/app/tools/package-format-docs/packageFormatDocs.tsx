@@ -1,51 +1,49 @@
-import styles from "./PackageFormatDocs.module.css";
+import "./PackageFormatDocs.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import {
-  BreadCrumbs,
-  CyberstormLink,
-  Table,
   CodeBox,
-  Icon,
+  NewBreadCrumbs,
+  NewLink,
+  NewIcon,
+  NewTable,
 } from "@thunderstore/cyberstorm";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export default function PackageFormatDocs() {
   return (
-    <>
-      <BreadCrumbs>
-        <CyberstormLink linkId="PackageFormatDocs">
+    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+      <NewBreadCrumbs>
+        <NewLink primitiveType="cyberstormLink" linkId="PackageFormatDocs">
           Package Format Docs
-        </CyberstormLink>
-      </BreadCrumbs>
-      <header className="nimbus-root__page-header">
-        <PageHeader title="Package Format Docs" />
-      </header>
-      <main className="nimbus-root__main">
-        <div className={styles.root}>
-          <p>
-            A valid package is a zip file that contains the following files:
-          </p>
-          <Table
-            headers={firstTableDataColumns}
-            rows={firstTableData}
-            disableSort={true}
-            gridTemplateColumns="minmax(12.5rem, 0.5fr) minmax(auto, 3fr)"
-          />
-          <p>
-            Additionally, the manifest.json must contain the following fields:
-          </p>
-          <Table
-            headers={secondTableDataColumns}
-            rows={secondTableData}
-            disableSort={true}
-            gridTemplateColumns="minmax(22%, 0.5fr) minmax(18%, 0.5fr) minmax(30%, 1.25fr) minmax(30%, 1.25fr)"
-          />
-          <p>Example manifest.json content:</p>
-          <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} />
-        </div>
-      </main>
-    </>
+        </NewLink>
+      </NewBreadCrumbs>
+      <PageHeader
+        heading="Package Format Docs"
+        headingLevel="1"
+        headingSize="2"
+      />
+      <section className="ts-container ts-container--y ts-container--full nimbus-tools-packageFormatDocs">
+        <p>A valid package is a zip file that contains the following files:</p>
+        <NewTable
+          headers={firstTableDataColumns}
+          rows={firstTableData}
+          disableSort={true}
+          gridTemplateColumns="minmax(12.5rem, 0.5fr) minmax(auto, 3fr)"
+        />
+        <p>
+          Additionally, the manifest.json must contain the following fields:
+        </p>
+        <NewTable
+          headers={secondTableDataColumns}
+          rows={secondTableData}
+          disableSort={true}
+          gridTemplateColumns="minmax(22%, 0.5fr) minmax(18%, 0.5fr) minmax(30%, 1.25fr) minmax(30%, 1.25fr)"
+        />
+        <p>Example manifest.json content:</p>
+        <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} />
+      </section>
+    </div>
   );
 }
 
@@ -116,9 +114,9 @@ const secondTableData = [
     { value: "name", sortValue: 0 },
     {
       value: (
-        <Icon key="icon-1" inline wrapperClasses={styles.greenWrap}>
+        <NewIcon key="icon-1" noWrapper csMode="inline" rootClasses="__green">
           <FontAwesomeIcon icon={faCheck} />
-        </Icon>
+        </NewIcon>
       ),
       sortValue: 0,
     },
@@ -129,9 +127,9 @@ const secondTableData = [
     { value: "description", sortValue: 0 },
     {
       value: (
-        <Icon key="icon-2" inline wrapperClasses={styles.greenWrap}>
+        <NewIcon key="icon-2" noWrapper csMode="inline" rootClasses="__green">
           <FontAwesomeIcon icon={faCheck} />
-        </Icon>
+        </NewIcon>
       ),
       sortValue: 0,
     },
@@ -146,9 +144,9 @@ const secondTableData = [
     { value: "version number", sortValue: 0 },
     {
       value: (
-        <Icon key="icon-3" inline wrapperClasses={styles.greenWrap}>
+        <NewIcon key="icon-3" noWrapper csMode="inline" rootClasses="__green">
           <FontAwesomeIcon icon={faCheck} />
-        </Icon>
+        </NewIcon>
       ),
       sortValue: 0,
     },
@@ -163,9 +161,9 @@ const secondTableData = [
     { value: "dependencies", sortValue: 0 },
     {
       value: (
-        <Icon key="icon-4" inline wrapperClasses={styles.greenWrap}>
+        <NewIcon key="icon-4" noWrapper csMode="inline" rootClasses="__green">
           <FontAwesomeIcon icon={faCheck} />
-        </Icon>
+        </NewIcon>
       ),
       sortValue: 0,
     },
@@ -183,9 +181,9 @@ const secondTableData = [
     { value: "website_url", sortValue: 0 },
     {
       value: (
-        <Icon key="icon-5" inline wrapperClasses={styles.greenWrap}>
+        <NewIcon key="icon-5" noWrapper csMode="inline" rootClasses="__green">
           <FontAwesomeIcon icon={faCheck} />
-        </Icon>
+        </NewIcon>
       ),
       sortValue: 0,
     },

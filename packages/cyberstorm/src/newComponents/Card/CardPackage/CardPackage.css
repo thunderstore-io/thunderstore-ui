@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     border-radius: var(--radius-md);
-    background: var(--color-surface-a4);
+    background: var(--color-surface-3);
     transition: ease-out var(--animation-duration-xs);
   }
 

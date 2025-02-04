@@ -1,0 +1,26 @@
+@layer nimbus-components {
+  .nimbus-commonComponents-collapsible {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    font-size: var(--font-size-body-md);
+
+    > .__header {
+      display: flex;
+      gap: var(--gap-md);
+      justify-content: space-between;
+      padding: var(--space-8) var(--space-12);
+      font-weight: var(--font-weight-bold);
+      font-size: var(--font-size-body-lg);
+    }
+
+    > .__content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-xs);
+      align-items: stretch;
+      align-self: stretch;
+      padding-bottom: var(--gap-xs);
+    }
+  }
+}

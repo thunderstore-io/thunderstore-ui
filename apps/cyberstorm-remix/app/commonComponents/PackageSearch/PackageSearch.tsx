@@ -1,5 +1,4 @@
 import { faGhost, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { faFilterList, faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   PackageCategory,
@@ -9,19 +8,12 @@ import {
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 
-import { CategoryTagCloud } from "./CategoryTagCloud/CategoryTagCloud";
-import { CategoryMenu } from "./FilterMenus/CategoryMenu";
-import { OthersMenu } from "./FilterMenus/OthersMenu";
-import { SectionMenu } from "./FilterMenus/SectionMenu";
-import styles from "./PackageSearch.module.css";
-import packageListStyles from "./PackageList.module.css";
-import { CategorySelection } from "./types";
+import "./PackageSearch.css";
+import { CategorySelection, TRISTATE } from "../types";
 import {
   CardPackage,
   EmptyState,
-  Heading,
   NewButton,
-  NewIcon,
   NewPagination,
   NewTextInput,
 } from "@thunderstore/cyberstorm";
@@ -31,15 +23,17 @@ import {
   useSearchParams,
 } from "@remix-run/react";
 import { StalenessIndicator } from "@thunderstore/cyberstorm/src/components/StalenessIndicator/StalenessIndicator";
-import { PackageCount } from "./PackageCount";
+import { PackageCount } from "./components/PackageCount/PackageCount";
 import {
   isPackageOrderOptions,
   PackageOrder,
   PackageOrderOptions,
   PackageOrderOptionsType,
-} from "./PackageOrder";
-import { CollapsibleMenu } from "./FilterMenus/CollapsibleMenu";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+} from "./components/PackageOrder";
+import { RadioGroup } from "../RadioGroup/RadioGroup";
+import { CategoryTagCloud } from "./components/CategoryTagCloud/CategoryTagCloud";
+import { CollapsibleMenu } from "../Collapsible/Collapsible";
+import { CheckboxList } from "../CheckboxList/CheckboxList";
 
 const PER_PAGE = 20;
 
@@ -286,225 +280,195 @@ export function PackageSearch(props: Props) {
     );
   }
 
-  const [isFiltersVisible, setIsFiltersVisible] = useState(true);
+  const parsedCategories = parseCategories(
+    searchParamsBlob.includedCategories,
+    searchParamsBlob.excludedCategories
+  );
+
+  const updateCatSelection = (catId: string, v: TRISTATE) => {
+    setCategories(
+      parsedCategories.map((uc) => {
+        if (uc.id === catId) {
+          return {
+            ...uc,
+            selection: v,
+          };
+        }
+        return uc;
+      })
+    );
+  };
+
+  const filtersCategoriesItems = parsedCategories.map((c) => {
+    return {
+      state: c.selection,
+      setStateFunc: (v: boolean | TRISTATE) =>
+        updateCatSelection(
+          c.id,
+          typeof v === "string" ? v : v ? "include" : "off"
+        ),
+      label: c.name,
+    };
+  });
 
   return (
-    <div className={styles.root}>
-      <div className={styles.searchWrapper}>
-        <div className={styles.searchGroupOne}>
-          <div
-            className={classnames(
-              styles.searchRowItemGroup,
-              styles.searchFilters
-            )}
-          >
-            <div className={styles.searchRowItemWrapper}>
-              <label
-                className={classnames(styles.searchText, "nimbus-hide-s")}
-                htmlFor="filtersMenuToggle"
-              >
-                Filters
-              </label>
-              <div className={styles.bgWrapper}>
-                <NewButton
-                  onClick={() => setIsFiltersVisible(!isFiltersVisible)}
-                  id="filtersMenuToggle"
-                  csVariant={isFiltersVisible ? "primary" : "secondary"}
-                >
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon
-                      icon={isFiltersVisible ? faXmarkLarge : faFilterList}
-                    />
-                  </NewIcon>
-                  <span className={"nimbus-hide-s"}>Filters</span>
-                </NewButton>
-              </div>
-            </div>
-          </div>
-          <div
-            className={classnames(
-              styles.searchRowItemGroup,
-              styles.searchSearch
-            )}
-          >
-            <div
-              className={classnames(
-                styles.searchInputWrapper,
-                styles.searchRowItemWrapper
-              )}
-            >
-              <label
-                className={classnames(styles.searchText, "nimbus-hide-s")}
-                htmlFor="searchInput"
-              >
-                Search
-              </label>
-              <div className={styles.bgWrapper}>
-                <NewTextInput
-                  placeholder="Filter Mods..."
-                  value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  clearValue={() => setSearchValue("")}
-                  leftIcon={<FontAwesomeIcon icon={faSearch} />}
-                  id="searchInput"
-                  type="search"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className={classnames(
-            styles.searchRowItemGroup,
-            styles.listingOptions
-          )}
-        >
-          <div className={styles.searchRowItemWrapper}>
-            <label
-              className={classnames(styles.searchText, "nimbus-hide-s")}
-              htmlFor="packageOrder"
-            >
-              Sort by
-            </label>
-            <div className={styles.bgWrapper}>
-              <PackageOrder
-                order={
-                  (searchParamsBlob.order as PackageOrderOptions) ??
-                  PackageOrderOptions.Updated
-                }
-                setOrder={changeOrder}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.contentWrapper}>
-        <div
-          className={classnames(
-            styles.sidebar,
-            isFiltersVisible ? undefined : styles.sidebarIsHidden
-          )}
-          id="desktopSidebar"
-        >
-          <Heading csLevel="3" csSize="3" rootClasses={styles.sidebarHeading}>
-            Filters
-          </Heading>
+    <div className="nimbus-commonComponents-packageSearch">
+      <div className="__sidebar">
+        <NewTextInput
+          placeholder="Search Mods..."
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          clearValue={() => setSearchValue("")}
+          leftIcon={<FontAwesomeIcon icon={faSearch} />}
+          id="searchInput"
+          type="search"
+          rootClasses="__search"
+        />
+        <div className="__filters">
           {allSections.length > 0 ? (
-            <>
-              <div className={styles.sidebarDivider} />
-              <CollapsibleMenu headerTitle="Sections" defaultOpen>
-                <SectionMenu
-                  allSections={allSections}
-                  selected={searchParamsBlob.section ?? allSections[0]?.uuid}
-                  setSelected={setSection}
-                />
-              </CollapsibleMenu>
-            </>
+            <CollapsibleMenu headerTitle="Sections" defaultOpen>
+              <RadioGroup
+                allSections={[
+                  ...allSections,
+                  {
+                    uuid: "all",
+                    name: "All",
+                    slug: "all",
+                    priority: -999999999,
+                  },
+                ]}
+                selected={searchParamsBlob.section ?? allSections[0]?.uuid}
+                setSelected={setSection}
+              />
+            </CollapsibleMenu>
           ) : null}
           {categories.length > 0 ? (
-            <>
-              <div className={styles.sidebarDivider} />
-              <CollapsibleMenu headerTitle="Categories" defaultOpen>
-                <CategoryMenu
-                  categories={categories}
-                  includedCategories={searchParamsBlob.includedCategories}
-                  excludedCategories={searchParamsBlob.excludedCategories}
-                  setCategories={setCategories}
-                />
-              </CollapsibleMenu>
-            </>
+            <CollapsibleMenu headerTitle="Categories" defaultOpen>
+              <CheckboxList items={filtersCategoriesItems} />
+            </CollapsibleMenu>
           ) : null}
-          <div className={styles.sidebarDivider} />
           <CollapsibleMenu headerTitle="Other filters" defaultOpen>
-            <OthersMenu
-              deprecated={searchParamsBlob.deprecated ? true : false}
-              setDeprecated={setDeprecated}
-              nsfw={searchParamsBlob.nsfw ? true : false}
-              setNsfw={setNsfw}
+            <CheckboxList
+              items={[
+                {
+                  state: searchParamsBlob.deprecated,
+                  setStateFunc: (v: boolean | TRISTATE) =>
+                    setDeprecated(
+                      typeof v === "boolean"
+                        ? v
+                        : v === "include"
+                          ? true
+                          : false
+                    ),
+                  label: "Deprecated",
+                },
+                {
+                  state: searchParamsBlob.nsfw,
+                  setStateFunc: (v: boolean | TRISTATE) =>
+                    setNsfw(
+                      typeof v === "boolean"
+                        ? v
+                        : v === "include"
+                          ? true
+                          : false
+                    ),
+                  label: "NSFW",
+                },
+              ]}
             />
           </CollapsibleMenu>
         </div>
+      </div>
 
-        <div className={styles.content}>
-          <div className={styles.root}>
-            <div className={packageListStyles.top}>
+      <div className="__content">
+        <div className="__searchParams">
+          <CategoryTagCloud
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            categories={parseCategories(
+              searchParamsBlob.includedCategories ?? "",
+              searchParamsBlob.excludedCategories ?? ""
+            )}
+            setCategories={setCategories}
+            rootClasses="__tags"
+          />
+          <div className="__tools">
+            <div className="__results">
               <PackageCount
                 page={searchParamsBlob.page ? Number(searchParamsBlob.page) : 1}
                 pageSize={PER_PAGE}
                 searchQuery={debouncedSearchValue}
                 totalCount={listings.count}
               />
-              <CategoryTagCloud
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
-                categories={parseCategories(
-                  searchParamsBlob.includedCategories ?? "",
-                  searchParamsBlob.excludedCategories ?? ""
-                )}
-                setCategories={setCategories}
-              />
             </div>
-
-            <StalenessIndicator
-              isStale={navigation.state === "loading" ? true : false}
-            >
-              {listings.results.length > 0 ? (
-                <div className={packageListStyles.packages}>
-                  {listings.results.map((p) => (
-                    <CardPackage
-                      key={`${p.namespace}-${p.name}`}
-                      packageData={p}
-                    />
-                  ))}
-                </div>
-              ) : (searchParamsBlob.order !== undefined &&
-                  searchParams.size > 1) ||
-                (searchParamsBlob.order === undefined &&
-                  searchParams.size > 0) ? (
-                <EmptyState.Root className="nimbus-noresult">
-                  <EmptyState.Icon wrapperClasses="nimbus-noresult__ghostbounce">
-                    <FontAwesomeIcon icon={faSearch} />
-                  </EmptyState.Icon>
-                  <div className="nimbus-noresult__info">
-                    <EmptyState.Title>No results found</EmptyState.Title>
-                    <EmptyState.Message>
-                      Make sure all keywords are spelled correctly or try
-                      different search parameters.
-                    </EmptyState.Message>
-                  </div>
-                  <NewButton
-                    onClick={() => resetParams(searchParamsBlob.order)}
-                    rootClasses="nimbus-noresult__button"
-                  >
-                    Clear all filters
-                  </NewButton>
-                </EmptyState.Root>
-              ) : (
-                <EmptyState.Root className="nimbus-noresult">
-                  <EmptyState.Icon wrapperClasses="nimbus-noresult__ghostbounce">
-                    <FontAwesomeIcon icon={faGhost} />
-                  </EmptyState.Icon>
-                  <div className="nimbus-noresult__info">
-                    <EmptyState.Title>It&apos;s empty in here</EmptyState.Title>
-                    <EmptyState.Message>
-                      Be the first to upload a mod!
-                    </EmptyState.Message>
-                  </div>
-                </EmptyState.Root>
-              )}
-            </StalenessIndicator>
-
-            <NewPagination
-              currentPage={
-                searchParamsBlob.page ? Number(searchParamsBlob.page) : 1
-              }
-              onPageChange={setPage}
-              pageSize={PER_PAGE}
-              siblingCount={4}
-              totalCount={listings.count}
-            />
+            <div className="__listingActions">
+              {/* <div className="__display"></div> */}
+              <div className="__sorting">
+                <PackageOrder
+                  order={
+                    (searchParamsBlob.order as PackageOrderOptions) ??
+                    PackageOrderOptions.Updated
+                  }
+                  setOrder={changeOrder}
+                />
+              </div>
+            </div>
           </div>
+        </div>
+        <StalenessIndicator
+          isStale={navigation.state === "loading" ? true : false}
+          className="__packages"
+        >
+          {listings.results.length > 0 ? (
+            <div className="__grid">
+              {listings.results.map((p) => (
+                <CardPackage key={`${p.namespace}-${p.name}`} packageData={p} />
+              ))}
+            </div>
+          ) : (searchParamsBlob.order !== undefined && searchParams.size > 1) ||
+            (searchParamsBlob.order === undefined && searchParams.size > 0) ? (
+            <EmptyState.Root className="nimbus-noresult">
+              <EmptyState.Icon wrapperClasses="nimbus-noresult__ghostbounce">
+                <FontAwesomeIcon icon={faSearch} />
+              </EmptyState.Icon>
+              <div className="nimbus-noresult__info">
+                <EmptyState.Title>No results found</EmptyState.Title>
+                <EmptyState.Message>
+                  Make sure all keywords are spelled correctly or try different
+                  search parameters.
+                </EmptyState.Message>
+              </div>
+              <NewButton
+                onClick={() => resetParams(searchParamsBlob.order)}
+                rootClasses="nimbus-noresult__button"
+              >
+                Clear all filters
+              </NewButton>
+            </EmptyState.Root>
+          ) : (
+            <EmptyState.Root className="nimbus-noresult">
+              <EmptyState.Icon wrapperClasses="nimbus-noresult__ghostbounce">
+                <FontAwesomeIcon icon={faGhost} />
+              </EmptyState.Icon>
+              <div className="nimbus-noresult__info">
+                <EmptyState.Title>It&apos;s empty in here</EmptyState.Title>
+                <EmptyState.Message>
+                  Be the first to upload a mod!
+                </EmptyState.Message>
+              </div>
+            </EmptyState.Root>
+          )}
+        </StalenessIndicator>
+        <div className="__pagination">
+          <NewPagination
+            currentPage={
+              searchParamsBlob.page ? Number(searchParamsBlob.page) : 1
+            }
+            onPageChange={setPage}
+            pageSize={PER_PAGE}
+            siblingCount={4}
+            totalCount={listings.count}
+          />
         </div>
       </div>
     </div>

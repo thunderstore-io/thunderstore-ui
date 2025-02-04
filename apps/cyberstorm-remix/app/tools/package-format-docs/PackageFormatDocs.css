@@ -1,0 +1,9 @@
+@layer nimbus-layout {
+  .nimbus-tools-packageFormatDocs {
+    gap: var(--gap-xxxxxl);
+
+    .__green {
+      color: var(--old--color-cyber-green-60);
+    }
+  }
+}
