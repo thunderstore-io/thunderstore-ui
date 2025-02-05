@@ -1,5 +1,4 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import "../../../styles/markdown.css";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { useLoaderData } from "@remix-run/react";
 import { DapperTs } from "@thunderstore/dapper-ts";

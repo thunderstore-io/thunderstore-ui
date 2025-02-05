@@ -1,19 +1,15 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
-import { BreadCrumbs, CyberstormLink, Icon } from "@thunderstore/cyberstorm";
-import tabsStyles from "./Tabs.module.css";
-import styles from "./teamSettingsLayout.module.css";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ApiError } from "@thunderstore/thunderstore-api";
 import {
-  faFileLines,
-  faFolderPlus,
-  faCodeBranch,
-  faBook,
-} from "@fortawesome/free-solid-svg-icons";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+  Outlet,
+  useLoaderData,
+  useLocation,
+  useOutletContext,
+} from "@remix-run/react";
+import { NewBreadCrumbs, NewLink, Tabs } from "@thunderstore/cyberstorm";
+import { ApiError } from "@thunderstore/thunderstore-api";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { OutletContextShape } from "../../../root";
+import "./teamSettings.css";
 
 export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
   return [
@@ -26,7 +22,7 @@ export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
     try {
-      const dapper = await getDapper(true);
+      const dapper = window.Dapper;
       return {
         team: await dapper.getTeamDetails(params.namespaceId),
       };
@@ -43,12 +39,13 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 }
 
 export function HydrateFallback() {
-  return "Loading...";
+  return <div style={{ padding: "32px" }}>Loading...</div>;
 }
 
 export default function Community() {
   const { team } = useLoaderData<typeof clientLoader>();
   const location = useLocation();
+  const outletContext = useOutletContext() as OutletContextShape;
 
   const currentTab = location.pathname.endsWith("/settings")
     ? "settings"
@@ -59,81 +56,76 @@ export default function Community() {
         : "profile";
 
   return (
-    <>
-      <BreadCrumbs>
-        <CyberstormLink linkId="Teams">Teams</CyberstormLink>
+    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+      <NewBreadCrumbs>
+        <NewLink primitiveType="cyberstormLink" linkId="Teams">
+          Teams
+        </NewLink>
         {team.name}
-      </BreadCrumbs>
-      <header className="nimbus-root__page-header">
-        <div className={styles.header}>
-          <PageHeader title="Teams" />
-        </div>
-      </header>
-      <main className="nimbus-root__main">
-        <div className={styles.teamContainer}>
-          <div className={tabsStyles.root}>
-            <div className={tabsStyles.buttons}>
-              <CyberstormLink
-                linkId="TeamSettings"
-                team={team.name}
-                aria-current={currentTab === "profile"}
-                className={classnames(
-                  tabsStyles.button,
-                  currentTab === "profile" ? tabsStyles.active : ""
-                )}
-              >
-                <Icon inline wrapperClasses={tabsStyles.icon}>
-                  <FontAwesomeIcon icon={faFileLines} />
-                </Icon>
-                <span className={tabsStyles.label}>Profile</span>
-              </CyberstormLink>
-              <CyberstormLink
-                linkId="TeamSettingsMembers"
-                team={team.name}
-                aria-current={currentTab === "members"}
-                className={classnames(
-                  tabsStyles.button,
-                  currentTab === "members" ? tabsStyles.active : ""
-                )}
-              >
-                <Icon inline wrapperClasses={tabsStyles.icon}>
-                  <FontAwesomeIcon icon={faBook} />
-                </Icon>
-                <span className={tabsStyles.label}>Members</span>
-              </CyberstormLink>
-              <CyberstormLink
-                linkId="TeamSettingsServiceAccounts"
-                team={team.name}
-                aria-current={currentTab === "service-accounts"}
-                className={classnames(
-                  tabsStyles.button,
-                  currentTab === "service-accounts" ? tabsStyles.active : ""
-                )}
-              >
-                <Icon inline wrapperClasses={tabsStyles.icon}>
-                  <FontAwesomeIcon icon={faFolderPlus} />
-                </Icon>
-                <span className={tabsStyles.label}>Service Accounts</span>
-              </CyberstormLink>
-              <CyberstormLink
-                linkId="TeamSettingsSettings"
-                team={team.name}
-                aria-current={currentTab === "settings"}
-                className={classnames(
-                  tabsStyles.button,
-                  currentTab === "settings" ? tabsStyles.active : ""
-                )}
-              >
-                <Icon inline wrapperClasses={tabsStyles.icon}>
-                  <FontAwesomeIcon icon={faCodeBranch} />
-                </Icon>
-                <span className={tabsStyles.label}>Settings</span>
-              </CyberstormLink>
-            </div>
-            <Outlet />
-          </div>
-        </div>
-      </main>
-    </>
+      </NewBreadCrumbs>
+      <PageHeader heading={team.name} headingLevel="1" headingSize="2" />
+      <div className="nimbus-settings-teams-team">
+        <Tabs
+          tabItems={[
+            {
+              itemProps: {
+                key: "profile",
+                primitiveType: "cyberstormLink",
+                linkId: "TeamSettings",
+                team: team.name,
+                "aria-current": currentTab === "profile",
+                children: <>Profile</>,
+              },
+              current: currentTab === "profile",
+            },
+            {
+              itemProps: {
+                key: "members",
+                primitiveType: "cyberstormLink",
+                linkId: "TeamSettingsMembers",
+                team: team.name,
+                "aria-current": currentTab === "members",
+                children: <>Members</>,
+              },
+              current: currentTab === "members",
+            },
+            {
+              itemProps: {
+                key: "service-accounts",
+                primitiveType: "cyberstormLink",
+                linkId: "TeamSettingsServiceAccounts",
+                team: team.name,
+                "aria-current": currentTab === "service-accounts",
+                children: <>Service Accounts</>,
+              },
+              current: currentTab === "service-accounts",
+            },
+            {
+              itemProps: {
+                key: "settings",
+                primitiveType: "cyberstormLink",
+                linkId: "TeamSettingsSettings",
+                team: team.name,
+                "aria-current": currentTab === "settings",
+                children: <>Settings</>,
+              },
+              current: currentTab === "settings",
+            },
+          ]}
+          renderTabItem={(itemProps, numberSlate) => {
+            const { key, children, ...fItemProps } = itemProps;
+            return (
+              <NewLink key={key} {...fItemProps}>
+                {children}
+                {numberSlate}
+              </NewLink>
+            );
+          }}
+        />
+        <section>
+          <Outlet context={outletContext} />
+        </section>
+      </div>
+    </div>
   );
 }

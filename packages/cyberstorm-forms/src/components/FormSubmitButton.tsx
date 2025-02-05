@@ -1,48 +1,35 @@
-import { Button } from "@thunderstore/cyberstorm";
+import { NewButton, NewIcon } from "@thunderstore/cyberstorm";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import { useFormState } from "react-hook-form";
 import styles from "./FormSubmitButton.module.css";
+import { ButtonComponentProps } from "@thunderstore/cyberstorm/src/newComponents/Button/Button";
 
-const SubmitButtonContent = React.memo(
-  (props: { isSubmitting: boolean; text: string }) => {
-    if (props.isSubmitting) {
-      return (
-        <Button.ButtonIcon iconClasses={styles.spinningIcon}>
-          <FontAwesomeIcon icon={faArrowsRotate} />
-        </Button.ButtonIcon>
-      );
-    } else {
-      return <Button.ButtonLabel>{props.text}</Button.ButtonLabel>;
-    }
-  }
-);
-
-SubmitButtonContent.displayName = "SubmitButtonContent";
-
-export function FormSubmitButton({
-  text,
-  colorScheme = "accent",
-  icon,
-}: {
-  text: string;
-  colorScheme?: React.ComponentProps<typeof Button.Root>["colorScheme"];
-  icon?: JSX.Element;
-}) {
-  const { isSubmitting, disabled } = useFormState();
+// TODO: Add style support for disabled
+export const FormSubmitButton = React.forwardRef<
+  HTMLButtonElement,
+  ButtonComponentProps
+>((props: ButtonComponentProps, forwardedRef) => {
+  const { children, disabled, ...fProps } = props;
+  const formState = useFormState();
 
   return (
-    <Button.Root
+    <NewButton
+      ref={forwardedRef}
       type="submit"
-      paddingSize="large"
-      colorScheme={colorScheme}
-      disabled={isSubmitting || disabled}
+      disabled={formState.isSubmitting || formState.disabled || disabled}
+      {...fProps}
     >
-      {icon && <Button.ButtonIcon>{icon}</Button.ButtonIcon>}
-      <SubmitButtonContent isSubmitting={isSubmitting} text={text} />
-    </Button.Root>
+      {formState.isSubmitting ? (
+        <NewIcon csMode="inline" noWrapper rootClasses={styles.spinningIcon}>
+          <FontAwesomeIcon icon={faArrowsRotate} />
+        </NewIcon>
+      ) : (
+        children
+      )}
+    </NewButton>
   );
-}
+});
 
 FormSubmitButton.displayName = "FormSubmitButton";

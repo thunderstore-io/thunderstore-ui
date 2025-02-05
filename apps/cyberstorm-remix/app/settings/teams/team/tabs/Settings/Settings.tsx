@@ -1,22 +1,57 @@
-import styles from "./TeamLeaveAndDisband.module.css";
-import { SettingItem, Alert, Dialog, Button } from "@thunderstore/cyberstorm";
-import { LeaveTeamForm, DisbandTeamForm } from "@thunderstore/cyberstorm-forms";
+import {
+  NewAlert,
+  Modal,
+  NewButton,
+  NewIcon,
+  NewLink,
+} from "@thunderstore/cyberstorm";
+import {
+  FormSubmitButton,
+  FormTextInput,
+  useFormToaster,
+} from "@thunderstore/cyberstorm-forms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBomb, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { currentUserSchema } from "@thunderstore/dapper-ts";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData, useRevalidator } from "@remix-run/react";
-import { ApiError } from "@thunderstore/thunderstore-api";
+import { useLoaderData, useOutletContext } from "@remix-run/react";
+import {
+  ApiError,
+  teamDisbandTeam,
+  teamRemoveMember,
+} from "@thunderstore/thunderstore-api";
+import {
+  clearSession,
+  getSessionCurrentUser,
+  NamespacedStorageManager,
+} from "@thunderstore/ts-api-react";
+import {
+  ApiForm,
+  teamDisbandFormSchema,
+} from "@thunderstore/ts-api-react-forms";
+import { z } from "zod";
+import { OutletContextShape } from "~/root";
 
 // REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
-    const dapper = await getDapper(true);
-    const currentUser = await dapper.getCurrentUser();
-    if (!currentUser.username) {
+    const _storage = new NamespacedStorageManager("Session");
+    const currentUser = getSessionCurrentUser(_storage, true, undefined, () => {
+      clearSession(_storage);
+      throw new Response("Your session has expired, please log in again", {
+        status: 401,
+      });
+      // redirect("/");
+    });
+
+    if (
+      !currentUser.username ||
+      (currentUser.username && currentUser.username === "")
+    ) {
+      clearSession(_storage);
       throw new Response("Not logged in.", { status: 401 });
     }
+
     try {
       return {
         teamName: params.namespaceId,
@@ -35,91 +70,172 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 }
 
 export function HydrateFallback() {
-  return "Loading...";
+  return <div style={{ padding: "32px" }}>Loading...</div>;
 }
 
 // REMIX TODO: Make sure user is redirected of this page, if the user is not logged in
 export default function Settings() {
   const { teamName, currentUser } = useLoaderData<typeof clientLoader>();
+  const outletContext = useOutletContext() as OutletContextShape;
+
+  const leaveTeamToast = useFormToaster({
+    successMessage: `${teamName} left `,
+  });
+
+  const disbandTeamToast = useFormToaster({
+    successMessage: `${teamName} disbanded`,
+  });
 
   return (
-    <div>
-      <SettingItem
-        title="Leave team"
-        description="Leave your team"
-        content={
-          <div className={styles.content}>
-            <Alert
-              icon={<FontAwesomeIcon icon={faBomb} />}
-              content={
-                "You cannot currently leave this team as you are it's last owner."
-              }
-              variant="danger"
-            />
-            <p className={styles.description}>
-              If you are the owner of the team, you can only leave if the team
-              has another owner assigned.
-            </p>
-            <div>
-              <Dialog.Root
-                title="Confirm leaving the team"
-                trigger={
-                  <Button.Root colorScheme="danger" paddingSize="large">
-                    <Button.ButtonIcon>
-                      <FontAwesomeIcon icon={faTrashCan} />
-                    </Button.ButtonIcon>
-                    <Button.ButtonLabel>Leave team</Button.ButtonLabel>
-                  </Button.Root>
-                }
+    <div className="nimbus-settingsItems">
+      <div className="nimbus-settingsItems__item">
+        <div className="nimbus-settingsItems__meta">
+          <p className="nimbus-settingsItems__title">Leave team</p>
+        </div>
+        <div className="nimbus-settingsItems__content">
+          <NewAlert csVariant="danger">
+            You cannot currently leave this team as you are it&apos;s last
+            owner.
+          </NewAlert>
+          <p>
+            If you are the owner of the team, you can only leave if the team has
+            another owner assigned.
+          </p>
+          <Modal
+            popoverId={"teamLeaveTeam"}
+            csSize="small"
+            trigger={
+              <NewButton
+                {...{
+                  popovertarget: "teamLeaveTeam",
+                  popovertargetaction: "open",
+                }}
               >
-                <LeaveTeamForm
-                  teamName={teamName}
-                  username={currentUser.username}
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faTrashCan} />
+                </NewIcon>
+                Leave team
+              </NewButton>
+            }
+          >
+            <ApiForm
+              config={outletContext.requestConfig}
+              onSubmitSuccess={leaveTeamToast.onSubmitSuccess}
+              onSubmitError={leaveTeamToast.onSubmitError}
+              schema={z.object({})}
+              endpoint={teamRemoveMember}
+              meta={{
+                teamIdentifier: teamName,
+                username: currentUser.username,
+              }}
+              formProps={{
+                className: "nimbus-commonStyles-modalTempalate",
+              }}
+            >
+              <div className="nimbus-commonStyles-modalTempalate__header">
+                Leave team
+              </div>
+              <div className="nimbus-commonStyles-modalTempalate__content">
+                You are about to leave the team{" "}
+                <NewLink
+                  primitiveType="cyberstormLink"
+                  linkId="Team"
+                  team={teamName}
+                >
+                  {currentUser.username}
+                </NewLink>
+              </div>
+              <div className="nimbus-commonStyles-modalTempalate__footer">
+                <FormSubmitButton csVariant="danger">
+                  Leave team
+                </FormSubmitButton>
+              </div>
+            </ApiForm>
+          </Modal>
+        </div>
+      </div>
+      <div className="nimbus-settingsItems__separator" />
+      <div className="nimbus-settingsItems__item">
+        <div className="nimbus-settingsItems__meta">
+          <p className="nimbus-settingsItems__title">Disband team</p>
+          <p className="nimbus-settingsItems__description">
+            Disband your team completely
+          </p>
+        </div>
+        <div className="nimbus-settingsItems__content">
+          <NewAlert csVariant="danger">
+            You cannot currently disband this team as it has packages.
+          </NewAlert>
+          <p>You are about to disband the team {teamName}.</p>
+          <p>
+            Be aware you can currently only disband teams with no packages. If
+            you need to archive a team with existing pages, contact Mythic#0001
+            on the Thunderstore Discord.
+          </p>
+          <Modal
+            popoverId={"teamDisbandTeam"}
+            csSize="small"
+            trigger={
+              <NewButton
+                {...{
+                  popovertarget: "teamDisbandTeam",
+                  popovertargetaction: "open",
+                }}
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faTrashCan} />
+                </NewIcon>
+                Disband team
+              </NewButton>
+            }
+          >
+            <ApiForm
+              config={outletContext.requestConfig}
+              onSubmitSuccess={disbandTeamToast.onSubmitSuccess}
+              onSubmitError={disbandTeamToast.onSubmitError}
+              schema={teamDisbandFormSchema}
+              endpoint={teamDisbandTeam}
+              meta={{ teamIdentifier: teamName }}
+              formProps={{
+                className: "nimbus-commonStyles-modalTempalate",
+              }}
+            >
+              <div className="nimbus-commonStyles-modalTempalate__header">
+                Confirm disband team
+              </div>
+              <div className="nimbus-commonStyles-modalTempalate__content">
+                <p>
+                  As a precaution, to disband your team, please input {teamName}{" "}
+                  into the field below.
+                </p>
+                <FormTextInput
+                  schema={teamDisbandFormSchema}
+                  name={"verification"}
+                  placeholder={"Verification"}
                 />
-              </Dialog.Root>
-            </div>
-          </div>
-        }
-      />
-      <div className={styles.separator} />
-      <SettingItem
-        title="Disband Team"
-        description="Disband your team completely"
-        content={
-          <div className={styles.content}>
-            <Alert
-              icon={<FontAwesomeIcon icon={faBomb} />}
-              content={
-                "You cannot currently disband this team as it has packages."
-              }
-              variant="danger"
-            />
-            <p className={styles.description}>
-              You are about to disband the team {teamName}.
-            </p>
-            <p className={styles.description}>
-              Be aware you can currently only disband teams with no packages. If
-              you need to archive a team with existing pages, contact
-              Mythic#0001 on the Thunderstore Discord.
-            </p>
-            <div>
-              <Dialog.Root
-                title="Confirm team disband"
-                trigger={
-                  <Button.Root colorScheme="danger" paddingSize="large">
-                    <Button.ButtonIcon>
-                      <FontAwesomeIcon icon={faTrashCan} />
-                    </Button.ButtonIcon>
-                    <Button.ButtonLabel>Disband team</Button.ButtonLabel>
-                  </Button.Root>
-                }
-              >
-                <DisbandTeamForm teamName={teamName} />
-              </Dialog.Root>
-            </div>
-          </div>
-        }
-      />
+                <div>
+                  You are about to disband the team{" "}
+                  <NewLink
+                    primitiveType="cyberstormLink"
+                    linkId="Team"
+                    team={teamName}
+                  >
+                    {teamName}
+                  </NewLink>
+                </div>
+              </div>
+              <div className="nimbus-commonStyles-modalTempalate__footer">
+                <FormSubmitButton csVariant="danger">
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </NewIcon>
+                  Disband team
+                </FormSubmitButton>
+              </div>
+            </ApiForm>
+          </Modal>
+        </div>
+      </div>
     </div>
   );
 }

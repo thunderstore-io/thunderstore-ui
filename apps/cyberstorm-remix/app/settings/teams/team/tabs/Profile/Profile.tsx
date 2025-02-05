@@ -1,19 +1,27 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData, useRevalidator } from "@remix-run/react";
-import { TeamDetailsEdit } from "@thunderstore/cyberstorm-forms";
-import { ApiError } from "@thunderstore/thunderstore-api";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
+import {
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+} from "@remix-run/react";
+import {
+  FormSubmitButton,
+  FormTextInput,
+  // TeamDetailsEdit,
+  useFormToaster,
+} from "@thunderstore/cyberstorm-forms";
+import { ApiError, teamDetailsEdit } from "@thunderstore/thunderstore-api";
+import {
+  ApiForm,
+  teamDetailsEditFormSchema,
+} from "@thunderstore/ts-api-react-forms";
+import { OutletContextShape } from "~/root";
+import "./Profile.css";
 
-// REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
-    const dapper = await getDapper(true);
-    const currentUser = await dapper.getCurrentUser();
-    if (!currentUser.username) {
-      throw new Response("Not logged in.", { status: 401 });
-    }
     try {
-      const dapper = await getDapper(true);
+      const dapper = window.Dapper;
       return {
         team: await dapper.getTeamDetails(params.namespaceId),
       };
@@ -30,11 +38,12 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 }
 
 export function HydrateFallback() {
-  return "Loading...";
+  return <div style={{ padding: "32px" }}>Loading...</div>;
 }
 
 export default function Profile() {
-  const { team } = useLoaderData<typeof loader | typeof clientLoader>();
+  const { team } = useLoaderData<typeof clientLoader>();
+  const outletContext = useOutletContext() as OutletContextShape;
 
   const revalidator = useRevalidator();
 
@@ -42,5 +51,48 @@ export default function Profile() {
     revalidator.revalidate();
   }
 
-  return <TeamDetailsEdit team={team} updateTrigger={teamProfileRevalidate} />;
+  const { onSubmitSuccess, onSubmitError } = useFormToaster({
+    successMessage: "Changes saved",
+  });
+
+  return (
+    <div className="nimbus-settings-team-profile nimbus-settingsItems">
+      <ApiForm
+        onSubmitSuccess={() => {
+          onSubmitSuccess();
+          teamProfileRevalidate();
+        }}
+        onSubmitError={onSubmitError}
+        schema={teamDetailsEditFormSchema}
+        meta={{ teamIdentifier: team.name }}
+        endpoint={teamDetailsEdit}
+        formProps={{ className: "nimbus-settingsItems__item __form" }}
+        config={outletContext.requestConfig}
+      >
+        <div className="nimbus-settingsItems__meta __meta">
+          <p className="nimbus-settingsItems__title">Team donation link</p>
+          <p className="nimbus-settingsItems__description">
+            For example shown in the teams packages pages
+          </p>
+        </div>
+        <div className="nimbus-settingsItems__content __content">
+          <div className="nimbus-settingsItems__item">
+            <div className="__donationLink">
+              <span className="__label">URL</span>
+              <FormTextInput
+                schema={teamDetailsEditFormSchema}
+                name={"donation_link"}
+                placeholder={"https://"}
+                existingValue={
+                  team.donation_link === null ? undefined : team.donation_link
+                }
+                rootClasses="__input"
+              />
+            </div>
+          </div>
+          <FormSubmitButton rootClasses="__save">Save changes</FormSubmitButton>
+        </div>
+      </ApiForm>
+    </div>
+  );
 }

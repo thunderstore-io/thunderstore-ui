@@ -7,5 +7,5 @@ export async function fetchTeamServiceAccounts(
 ) {
   const path = `api/cyberstorm/team/${teamName}/service-account/`;
 
-  return await apiFetch(config, path);
+  return await apiFetch(config, path, undefined, undefined, true);
 }
