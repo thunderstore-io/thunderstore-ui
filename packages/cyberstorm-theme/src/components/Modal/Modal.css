@@ -13,6 +13,12 @@
     --modal-content-gap: var(--modal-md-content-gap);
   }
 
+  .ts-modal:where(.ts-size--small) {
+    --modal-border-radius: var(--modal-sm-border-radius);
+    --modal-content-padding: var(--modal-sm-content-padding);
+    --modal-content-gap: var(--modal-sm-content-gap);
+  }
+
   /* TOKENS */
   :root {
     --modal-box-shadow--default: var(--shadow-lg);
@@ -21,5 +27,8 @@
     --modal-md-border-radius: var(--radius-md);
     --modal-md-content-padding: 3rem 5.5rem;
     --modal-md-content-gap: 2rem;
+    --modal-sm-border-radius: var(--radius-md);
+    --modal-sm-content-padding: 0;
+    --modal-sm-content-gap: 0;
   }
 }

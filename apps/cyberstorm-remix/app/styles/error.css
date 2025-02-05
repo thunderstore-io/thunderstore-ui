@@ -5,61 +5,66 @@
     gap: var(--space-32);
     align-items: center;
     justify-content: center;
+    padding: var(--space-24) 0;
 
     --glitch-color-1: var(--old--color-cyber-green-50);
     --glitch-color-2: var(--old--color-accent-pink-50);
-  }
 
-  .nimbus-error__description {
-    color: var(--color-text-accent);
-    font-weight: var(--font-weight-semibold);
-    line-height: 1;
-  }
+    .__glitch {
+      position: relative;
+      margin-top: var(--space-32);
+      margin-bottom: var(--space-48);
+      font-weight: var(--font-weight-extra-bold);
+      font-size: 12rem;
+      line-height: 1;
 
-  .nimbus-error__flavor {
-    font-weight: var(--font-weight-bold);
-    font-size: var(--space-32);
-    line-height: 1;
-    text-align: center;
-  }
+      span {
+        animation: paths 5s step-end infinite;
+      }
+    }
 
-  .nimbus-error__glitch {
-    position: relative;
-    margin-top: var(--space-32);
-    margin-bottom: var(--space-48);
-    font-weight: var(--font-weight-extra-bold);
-    font-size: 12rem;
-    line-height: 1;
-  }
+    .__glitch::before,
+    .__glitch::after {
+      position: absolute;
+      z-index: -1;
+      width: 110%;
+      content: attr(data-text);
+    }
 
-  .nimbus-error__glitch::before,
-  .nimbus-error__glitch::after {
-    position: absolute;
-    z-index: -1;
-    width: 110%;
-    content: attr(data-text);
-  }
+    .__glitch::before {
+      top: 10px;
+      left: 15px;
+      color: var(--glitch-color-1);
+      animation:
+        nimbus-error-paths 5s step-end infinite,
+        nimbus-error-opacity 5s step-end infinite,
+        nimbus-error-font 8s step-end infinite,
+        nimbus-error-movement 10s step-end infinite;
+    }
 
-  .nimbus-error__glitch::before {
-    top: 10px;
-    left: 15px;
-    color: var(--glitch-color-1);
-    animation:
-      nimbus-error-paths 5s step-end infinite,
-      nimbus-error-opacity 5s step-end infinite,
-      nimbus-error-font 8s step-end infinite,
-      nimbus-error-movement 10s step-end infinite;
-  }
+    .__glitch::after {
+      top: 5px;
+      left: -10px;
+      color: var(--glitch-color-2);
+      animation:
+        nimbus-error-paths 5s step-end infinite,
+        nimbus-error-opacity 5s step-end infinite,
+        nimbus-error-font 7s step-end infinite,
+        nimbus-error-movement 8s step-end infinite;
+    }
 
-  .nimbus-error__glitch::after {
-    top: 5px;
-    left: -10px;
-    color: var(--glitch-color-2);
-    animation:
-      nimbus-error-paths 5s step-end infinite,
-      nimbus-error-opacity 5s step-end infinite,
-      nimbus-error-font 7s step-end infinite,
-      nimbus-error-movement 8s step-end infinite;
+    .__description {
+      color: var(--color-text-accent);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1;
+    }
+
+    .__flavor {
+      font-weight: var(--font-weight-bold);
+      font-size: var(--space-32);
+      line-height: 1;
+      text-align: center;
+    }
   }
 
   @keyframes nimbus-error-paths {
@@ -401,9 +406,5 @@
       color: var(--glitch-color-1);
       font-weight: var(--font-weight-medium);
     }
-  }
-
-  .nimbus-error__glitch span {
-    animation: paths 5s step-end infinite;
   }
 }
