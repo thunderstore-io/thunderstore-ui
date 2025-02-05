@@ -79,7 +79,10 @@ export { Button as NewButton } from "./newComponents/Button/Button";
 export { CycleButton } from "./newComponents/CycleButton/CycleButton";
 export { BreadCrumbs as NewBreadCrumbs } from "./newComponents/BreadCrumbs/BreadCrumbs";
 export { Toast } from "./newComponents/Toast/Toast";
-export { TextInput as NewTextInput } from "./newComponents/TextInput/TextInput";
+export {
+  TextInput as NewTextInput,
+  type TextInputProps as NewTextInputProps,
+} from "./newComponents/TextInput/TextInput";
 export {
   Select as NewSelect,
   type SelectProps as NewSelectProps,

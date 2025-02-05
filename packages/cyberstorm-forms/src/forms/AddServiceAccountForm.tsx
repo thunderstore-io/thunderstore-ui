@@ -110,6 +110,7 @@ export function AddServiceAccountForm(props: {
         endpoint={teamAddServiceAccount}
         formProps={{ className: styles.root }}
       >
+        <div className="__header">Confirm service account removal</div>
         <div className={styles.dialog}>
           <div className={styles.dialogText}>
             Enter the nickname of the service account you wish to add to the

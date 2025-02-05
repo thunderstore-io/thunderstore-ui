@@ -50,7 +50,9 @@ export const componentClasses = (
     listOfClasses.push(`ts-size--${size}`);
   }
   if (modifiers) {
-    listOfClasses.push(...modifiers.map((csm) => `ts-modifier--${csm}`));
+    listOfClasses.push(
+      ...modifiers.map((csm) => (csm !== "" ? `ts-modifier--${csm}` : ""))
+    );
   }
   return listOfClasses;
 };

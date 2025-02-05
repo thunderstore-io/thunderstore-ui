@@ -1,0 +1,14 @@
+@layer nimbus-layout {
+  .nimbus-settings-teams-team {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    align-items: flex-start;
+
+    > section {
+      display: flex;
+      flex: 1 1 0;
+      align-self: stretch;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import styles from "./TeamDetailsEdit.module.css";
-import { teamDetailsEdit } from "@thunderstore/thunderstore-api";
+import { RequestConfig, teamDetailsEdit } from "@thunderstore/thunderstore-api";
 import {
   ApiForm,
   teamDetailsEditFormSchema,
@@ -15,9 +15,11 @@ import { TeamDetails } from "@thunderstore/dapper/types";
 export function TeamDetailsEdit({
   team,
   updateTrigger,
+  config,
 }: {
   team: TeamDetails;
   updateTrigger: () => Promise<void>;
+  config: () => RequestConfig;
 }) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: "Changes saved",
@@ -34,6 +36,7 @@ export function TeamDetailsEdit({
       meta={{ teamIdentifier: team.name }}
       endpoint={teamDetailsEdit}
       formProps={{ className: styles.root }}
+      config={config}
     >
       <div className={styles.root}>
         <div className={styles.section}>
