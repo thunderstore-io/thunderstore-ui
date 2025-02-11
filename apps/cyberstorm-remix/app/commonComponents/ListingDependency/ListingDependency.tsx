@@ -21,37 +21,36 @@ export function ListingDependency(props: ListingDependencyProps) {
         intrinsicHeight={80}
         rootClasses="nimbus-commonComponents-listingDependency__image"
       />
-      <div className="nimbus-commonComponents-listingDependency__body">
-        <div className="nimbus-commonComponents-listingDependency__info">
+      <div>
+        <div className="nimbus-commonComponents-listingDependency-info">
           <NewLink
             primitiveType="cyberstormLink"
             linkId="Package"
             community={dependency.community_identifier}
             namespace={dependency.namespace}
             package={dependency.name}
-            rootClasses="nimbus-commonComponents-listingDependency__info__name"
+            rootClasses="nimbus-commonComponents-listingDependency-info__name"
           >
             {dependency.name}
           </NewLink>
-          <span className="nimbus-commonComponents-listingDependency__info__title">
-            <span className="nimbus-commonComponents-listingDependency__info__by">
+          <span className="nimbus-commonComponents-listingDependency-info-title">
+            <span className="nimbus-commonComponents-listingDependency-info-title__by">
               by
             </span>
             <NewLink
               primitiveType="cyberstormLink"
               linkId="Team"
               team={dependency.namespace}
-              rootClasses="nimbus-commonComponents-listingDependency__info__author"
               csVariant="primary"
             >
               {dependency.namespace}
             </NewLink>
           </span>
         </div>
-        <div className="nimbus-commonComponents-listingDependency__description">
+        <div className="nimbus-commonComponents-listingDependency-description">
           {dependency.description}
         </div>
-        <div className="nimbus-commonComponents-listingDependency__version">
+        <div className="nimbus-commonComponents-listingDependency-version">
           <span>Version:</span>
           <NewLink
             // TODO: Remove when package versiond detail is available

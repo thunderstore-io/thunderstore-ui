@@ -24,19 +24,22 @@ export function Footer() {
       className="ts-container ts-container--y ts-section nimbus-commonComponents-footer"
       aria-label="Footer"
     >
-      <div className="ts-container ts-container--y ts-container--full ts-section __content">
-        <div className="ts-container ts-container--y ts-section __info">
-          <div className="ts-container ts-container--x ts-section-item __company">
-            <div className="__body">
-              <NewIcon csVariant="accent" wrapperClasses="__logo">
+      <div className="ts-container ts-container--y ts-container--full ts-section nimbus-commonComponents-footer__content">
+        <div className="ts-container ts-container--y ts-section nimbus-commonComponents-footer-info">
+          <div className="ts-container ts-container--x ts-section-item nimbus-commonComponents-footer-info-company">
+            <div className="nimbus-commonComponents-footer-info-company__body">
+              <NewIcon
+                csVariant="accent"
+                wrapperClasses="nimbus-commonComponents-footer-info-company__logo"
+              >
                 <ThunderstoreLogoHorizontal />
               </NewIcon>
-              <div className="__iconLinks">
+              <div className="nimbus-commonComponents-footer-info-company__iconLinks">
                 <NewLink
                   primitiveType="link"
                   tooltipText="Join our Discord"
                   href={DISCORD_URL}
-                  rootClasses="__iconlink"
+                  rootClasses="nimbus-commonComponents-footer-info-company__iconLink"
                   csVariant="primary"
                   aria-label="Invite link to Thunderstores Discord server"
                 >
@@ -48,7 +51,7 @@ export function Footer() {
                   primitiveType="link"
                   tooltipText="Check out our GitHub"
                   href={GITHUB_URL}
-                  rootClasses="__iconlink"
+                  rootClasses="nimbus-commonComponents-footer-info-company__iconLink"
                   aria-label="Link to Thunderstores Github"
                   csVariant="primary"
                 >
@@ -59,9 +62,12 @@ export function Footer() {
               </div>
             </div>
           </div>
-          <div className="ts-container ts-container--x ts-container--full ts-section-item __links">
-            <div className="__body">
-              <nav className="__nav" aria-label="Thunderstore links">
+          <div className="ts-container ts-container--x ts-container--full ts-section-item nimbus-commonComponents-footer-info-links">
+            <div className="nimbus-commonComponents-footer-info-links__body">
+              <nav
+                className="nimbus-commonComponents-footer-info-links__nav"
+                aria-label="Thunderstore links"
+              >
                 <Heading
                   csVariant="primary"
                   mode="heading"
@@ -82,7 +88,10 @@ export function Footer() {
                   </li>
                 </ul>
               </nav>
-              <nav className="__nav" aria-label="Developer links">
+              <nav
+                className="nimbus-commonComponents-footer-info-links__nav"
+                aria-label="Developer links"
+              >
                 <Heading
                   csVariant="primary"
                   mode="heading"
@@ -143,12 +152,12 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="ts-container ts-container--x ts-section-item __managerAd">
-          <div className="__content">
+        <div className="ts-container ts-container--x ts-section-item nimbus-commonComponents-footer-managerAd">
+          <div className="nimbus-commonComponents-footer-managerAd__content">
             <Heading mode="display" csLevel="2" csSize="3">
               Thunderstore Mod Manager
             </Heading>
-            <p className="__description">
+            <p className="nimbus-commonComponents-footer-managerAd__description">
               You are prepared. Download Thunderstore Mod Manager for desktop
               and enter a world of Thunder{" "}
               <NewIcon csMode="inline" noWrapper>
@@ -160,29 +169,29 @@ export function Footer() {
               href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
               csSize="big"
               csVariant="accent"
-              rootClasses="__getManagerButton"
+              rootClasses="nimbus-commonComponents-footer-managerAd__getManagerButton"
             >
               Get Manager
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faArrowUpRight} />
               </NewIcon>
             </NewButton>
-            <div className="__imageWrapper">
+            <div className="nimbus-commonComponents-footer-managerAd__imageWrapper">
               <img
                 alt="Screenshot of the Thunderstore Mod Manager"
                 width="1350"
                 height="811"
                 src={AD_IMAGE_SRC}
-                className="__image"
+                className="nimbus-commonComponents-footer-managerAd__image"
               />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="ts-container ts-container--x ts-container--stretch ts-section-item __footnote">
-        <div className="__inner">
-          <div className="__links">
+      <div className="ts-container ts-container--x ts-container--stretch ts-section-item nimbus-commonComponents-footer-footnote">
+        <div className="nimbus-commonComponents-footer-footnote__inner">
+          <div className="nimbus-commonComponents-footer-footnote__links">
             <NewLink
               primitiveType="link"
               href="https://pages.thunderstore.io/p/contact-us"
@@ -199,7 +208,7 @@ export function Footer() {
               News
             </NewLink>
           </div>
-          <p className="__copyright">
+          <p className="nimbus-commonComponents-footer-footnote__copyright">
             © 2024 Thunderstore and contributors.{" "}
             <span>
               This page is{" "}
@@ -207,7 +216,6 @@ export function Footer() {
                 primitiveType="link"
                 href="https://github.com/thunderstore-io/thunderstore-ui/"
                 aria-label="This page is open source, link to Thunderstore UIs Github page"
-                rootClasses="__opensource"
                 csVariant="primary"
               >
                 open-source ❤

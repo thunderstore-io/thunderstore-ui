@@ -309,7 +309,7 @@ export default function Community() {
                   // community={listing.community_identifier}
                   // team={listing.namespace}
                   csVariant="cyber"
-                  rootClasses="__item"
+                  rootClasses="nimbus-commonComponents-pageHeader-meta-item"
                 >
                   <NewIcon csMode="inline" noWrapper>
                     <FontAwesomeIcon icon={faUsers} />
@@ -321,7 +321,7 @@ export default function Community() {
                     primitiveType="link"
                     href={listing.website_url}
                     csVariant="cyber"
-                    rootClasses="__item"
+                    rootClasses="nimbus-commonComponents-pageHeader-meta-item"
                   >
                     {listing.website_url}
                     <NewIcon csMode="inline" noWrapper>

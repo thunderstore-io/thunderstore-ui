@@ -39,14 +39,19 @@ export const CheckboxList = (props: Props) => {
         const cs = currentState(item.state);
         return (
           <li key={item.label}>
-            <label className={classnames("__label", cs)}>
+            <label
+              className={classnames(
+                "nimbus-commonComponents-checkboxList-label",
+                `nimbus-commonComponents-checkboxList-label--${cs}`
+              )}
+            >
               {item.label}
               <CycleButton
                 onInteract={() => {
                   item.setStateFunc(nextStateResolve(item.state));
                 }}
-                rootClasses="__checkbox"
-                value={cs}
+                rootClasses="nimbus-commonComponents-checkboxList-label__checkbox"
+                value={`nimbus-commonComponents-checkboxList-label--${cs}`}
                 noState
               >
                 <NewIcon csMode="inline" noWrapper>

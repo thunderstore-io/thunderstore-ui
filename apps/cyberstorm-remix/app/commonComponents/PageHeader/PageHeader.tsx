@@ -26,8 +26,8 @@ export function PageHeader(props: PageHeaderProps) {
   return (
     <header className="nimbus-commonComponents-pageHeader">
       {image ? <div className="__image nimbus-hide-s">{image}</div> : null}
-      <div className="__content">
-        <div className="__info">
+      <div className="nimbus-commonComponents-pageHeader-content">
+        <div className="nimbus-commonComponents-pageHeader-content__info">
           <Heading
             csLevel={headingLevel}
             csSize={headingSize}
@@ -40,7 +40,11 @@ export function PageHeader(props: PageHeaderProps) {
             <CollapsibleText text={description} maxLength={85} />
           ) : null}
         </div>
-        {meta ? <div className="__meta">{meta}</div> : null}
+        {meta ? (
+          <div className="nimbus-commonComponents-pageHeader-content__meta">
+            {meta}
+          </div>
+        ) : null}
       </div>
     </header>
   );

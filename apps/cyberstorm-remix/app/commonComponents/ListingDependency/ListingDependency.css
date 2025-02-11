@@ -14,20 +14,20 @@
     width: 80px;
   }
 
-  .nimbus-commonComponents-listingDependency__info {
+  .nimbus-commonComponents-listingDependency-info {
     display: flex;
     gap: var(--radius-md);
     align-items: center;
     align-self: stretch;
   }
 
-  .nimbus-commonComponents-listingDependency__info__name {
+  .nimbus-commonComponents-listingDependency-info__name {
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-md);
   }
 
-  .nimbus-commonComponents-listingDependency__info__title {
+  .nimbus-commonComponents-listingDependency-info-title {
     display: flex;
     gap: var(--gap-xxs);
     align-items: center;
@@ -37,11 +37,11 @@
     line-height: var(--line-height-md);
   }
 
-  .nimbus-commonComponents-listingDependency__info__by {
+  .nimbus-commonComponents-listingDependency-info-title__by {
     color: var(--color-text-tertiary);
   }
 
-  .nimbus-commonComponents-listingDependency__description {
+  .nimbus-commonComponents-listingDependency-description {
     align-self: stretch;
     color: var(--color-text-secondary);
     font-weight: var(--font-weight-regular);
@@ -50,7 +50,7 @@
     line-height: var(--line-height-md);
   }
 
-  .nimbus-commonComponents-listingDependency__version {
+  .nimbus-commonComponents-listingDependency-version {
     display: flex;
     gap: 4px;
     align-items: flex-start;

@@ -313,7 +313,7 @@ export function PackageSearch(props: Props) {
 
   return (
     <div className="nimbus-commonComponents-packageSearch">
-      <div className="__sidebar">
+      <div className="nimbus-commonComponents-packageSearch-sidebar">
         <NewTextInput
           placeholder="Search Mods..."
           value={searchValue}
@@ -322,9 +322,9 @@ export function PackageSearch(props: Props) {
           leftIcon={<FontAwesomeIcon icon={faSearch} />}
           id="searchInput"
           type="search"
-          rootClasses="__search"
+          rootClasses="nimbus-commonComponents-packageSearch__search"
         />
-        <div className="__filters">
+        <div className="nimbus-commonComponents-packageSearch__filters">
           {allSections.length > 0 ? (
             <CollapsibleMenu headerTitle="Sections" defaultOpen>
               <RadioGroup
@@ -380,8 +380,8 @@ export function PackageSearch(props: Props) {
         </div>
       </div>
 
-      <div className="__content">
-        <div className="__searchParams">
+      <div className="nimbus-commonComponents-packageSearch-content">
+        <div className="nimbus-commonComponents-packageSearch-searchParams">
           <CategoryTagCloud
             searchValue={searchValue}
             setSearchValue={setSearchValue}
@@ -390,10 +390,10 @@ export function PackageSearch(props: Props) {
               searchParamsBlob.excludedCategories ?? ""
             )}
             setCategories={setCategories}
-            rootClasses="__tags"
+            rootClasses="nimbus-commonComponents-packageSearch-searchParams__tags"
           />
-          <div className="__tools">
-            <div className="__results">
+          <div className="nimbus-commonComponents-packageSearch-tools">
+            <div className="nimbus-commonComponents-packageSearch-tools__results">
               <PackageCount
                 page={searchParamsBlob.page ? Number(searchParamsBlob.page) : 1}
                 pageSize={PER_PAGE}
@@ -401,9 +401,9 @@ export function PackageSearch(props: Props) {
                 totalCount={listings.count}
               />
             </div>
-            <div className="__listingActions">
+            <div className="nimbus-commonComponents-packageSearch-tools__listingActions">
               {/* <div className="__display"></div> */}
-              <div className="__sorting">
+              <div className="nimbus-commonComponents-packageSearch-tools__sorting">
                 <PackageOrder
                   order={
                     (searchParamsBlob.order as PackageOrderOptions) ??
@@ -417,10 +417,10 @@ export function PackageSearch(props: Props) {
         </div>
         <StalenessIndicator
           isStale={navigation.state === "loading" ? true : false}
-          className="__packages"
+          className="nimbus-commonComponents-packageSearch-packages"
         >
           {listings.results.length > 0 ? (
-            <div className="__grid">
+            <div className="nimbus-commonComponents-packageSearch-packages__grid">
               {listings.results.map((p) => (
                 <CardPackage key={`${p.namespace}-${p.name}`} packageData={p} />
               ))}
@@ -459,7 +459,7 @@ export function PackageSearch(props: Props) {
             </EmptyState.Root>
           )}
         </StalenessIndicator>
-        <div className="__pagination">
+        <div className="nimbus-commonComponents-packageSearch-content__pagination">
           <NewPagination
             currentPage={
               searchParamsBlob.page ? Number(searchParamsBlob.page) : 1

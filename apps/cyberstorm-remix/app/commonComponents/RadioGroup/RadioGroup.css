@@ -5,111 +5,61 @@
     justify-content: center;
     background-color: transparent;
     transition: ease-out var(--animation-duration-xs);
+  }
 
-    > label.__label {
-      display: flex;
-      gap: var(--gap-sm);
-      align-items: center;
-      justify-content: space-between;
-      padding: var(--space-8) var(--space-16);
-      border-radius: var(--radius-md);
-      color: var(--color-text-secondary);
-      font-weight: var(--font-weight-regular);
-      font-size: var(--font-size-body-md);
-      cursor: pointer;
-      transition: var(--animation-duration-xs);
-      user-select: none;
+  .nimbus-commonComponents-radioGroup__label {
+    display: flex;
+    gap: var(--gap-sm);
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-8) var(--space-16);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-body-md);
+    cursor: pointer;
+    transition: var(--animation-duration-xs);
+    user-select: none;
 
-      > .__radio {
-        display: flex;
-        align-items: center;
-        width: var(--space-18);
-        height: var(--space-18);
-        background: transparent;
+    &.nimbus-commonComponents-radioGroup__label--unselected {
+      --icon-color: var(--color-surface-a8);
+    }
 
-        > svg {
-          position: absolute;
-          display: block;
-          width: var(--space-18);
-          height: var(--space-18);
-        }
+    &.nimbus-commonComponents-radioGroup__label--selected {
+      color: var(--color-cyber-green-7);
+      font-weight: var(--font-weight-bold);
+
+      --icon-color: var(--color-cyber-green-7);
+    }
+
+    &:hover {
+      color: var(--color-text-primary);
+      background-color: var(--color-surface-a5);
+
+      &.nimbus-commonComponents-radioGroup__label--unselected {
+        --icon-color: var(--color-surface-a10);
       }
 
-      &.unselected {
-        --icon-color: var(--color-surface-a8);
+      &.nimbus-commonComponents-radioGroup__label--selected {
+        color: var(--color-cyber-green-8);
+
+        --icon-color: var(--color-cyber-green-8);
       }
+    }
+  }
 
-      &.selected {
-        color: var(--color-cyber-green-7);
-        font-weight: var(--font-weight-bold);
+  .nimbus-commonComponents-radioGroup-radio {
+    display: flex;
+    align-items: center;
+    width: var(--space-18);
+    height: var(--space-18);
+    background: transparent;
 
-        --icon-color: var(--color-cyber-green-7);
-      }
-
-      &.off {
-        color: var(--color-text-secondary);
-
-        & > .__checkbox > svg {
-          --icon-color: var(--color-surface-a8);
-        }
-      }
-
-      &.include {
-        color: var(--color-cyber-green-7);
-        font-weight: var(--font-weight-bold);
-
-        & > .__checkbox > svg {
-          --icon-color: var(--color-cyber-green-7);
-        }
-      }
-
-      &.exclude {
-        color: var(--color-accent-red-7);
-        font-weight: var(--font-weight-bold);
-
-        & > .__checkbox > svg {
-          --icon-color: var(--color-accent-red-7);
-        }
-      }
-
-      &:hover {
-        color: var(--color-text-primary);
-        background-color: var(--color-surface-a5);
-
-        &.unselected {
-          --icon-color: var(--color-surface-a10);
-        }
-
-        &.selected {
-          color: var(--color-cyber-green-8);
-
-          --icon-color: var(--color-cyber-green-8);
-        }
-
-        &.off {
-          color: var(--color-text-primary);
-
-          & > .__checkbox > svg {
-            --icon-color: var(--color-surface-a10);
-          }
-        }
-
-        &.include {
-          color: var(--color-cyber-green-8);
-
-          & > .__checkbox > svg {
-            --icon-color: var(--color-cyber-green-8);
-          }
-        }
-
-        &.exclude {
-          color: var(--color-accent-red-8);
-
-          & > .__checkbox > svg {
-            --icon-color: var(--color-accent-red-8);
-          }
-        }
-      }
+    > svg {
+      position: absolute;
+      display: block;
+      width: var(--space-18);
+      height: var(--space-18);
     }
   }
 }

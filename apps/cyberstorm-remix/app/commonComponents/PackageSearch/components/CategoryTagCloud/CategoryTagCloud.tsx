@@ -51,7 +51,7 @@ export const CategoryTagCloud = (props: Props) => {
           csMode="button"
           onClick={() => setSearchValue("")}
           csSize="medium"
-          rootClasses="__searchTag"
+          rootClasses="nimbus-commonComponents-packageSearch-components-categoryTagCloud__searchTag"
         >
           <span>{`"${searchValue}"`}</span>
           <NewIcon csMode="inline" noWrapper>
@@ -86,7 +86,7 @@ export const CategoryTagCloud = (props: Props) => {
         csVariant="secondary"
         csSize="small"
         csModifiers={["ghost"]}
-        rootClasses="__clearButton"
+        rootClasses="nimbus-commonComponents-packageSearch-components-categoryTagCloud__clearButton"
       >
         <span>Clear all</span>
         <NewIcon csMode="inline" noWrapper>

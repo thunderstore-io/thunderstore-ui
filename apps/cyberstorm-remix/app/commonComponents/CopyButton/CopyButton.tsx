@@ -41,7 +41,11 @@ export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
           {...forwardedProps}
         >
           <NewIcon
-            rootClasses={wasRecentlyCopied ? "__checkmark" : "__copy"}
+            rootClasses={
+              wasRecentlyCopied
+                ? "nimbus-commonComponents-copyButton__checkmark"
+                : "nimbus-commonComponents-copyButton__copy"
+            }
             csMode="inline"
             noWrapper
           >

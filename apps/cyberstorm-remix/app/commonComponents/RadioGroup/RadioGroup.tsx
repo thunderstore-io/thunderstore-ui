@@ -25,19 +25,32 @@ export const RadioGroup = (props: Props) => {
         <label
           key={s.slug}
           className={classnames(
-            "__label",
-            s.uuid === selected ? "selected" : "unselected"
+            "nimbus-commonComponents-radioGroup__label",
+            s.uuid === selected
+              ? "nimbus-commonComponents-radioGroup__label--selected"
+              : "nimbus-commonComponents-radioGroup__label--unselected"
           )}
         >
           {s.name}
-          <RadixRadioGroup.Item value={s.uuid} className="__radio">
+          <RadixRadioGroup.Item
+            value={s.uuid}
+            className="nimbus-commonComponents-radioGroup-radio"
+          >
             {s.uuid !== selected ? (
-              <NewIcon csMode="inline" noWrapper rootClasses="__radioIndicator">
+              <NewIcon
+                csMode="inline"
+                noWrapper
+                rootClasses="nimbus-commonComponents-radioGroup-radio__radioIndicator"
+              >
                 <FontAwesomeIcon icon={faCircle} />
               </NewIcon>
             ) : undefined}
             <RadixRadioGroup.Indicator asChild>
-              <NewIcon csMode="inline" noWrapper rootClasses="__radioIndicator">
+              <NewIcon
+                csMode="inline"
+                noWrapper
+                rootClasses="nimbus-commonComponents-radioGroup-radio__radioIndicator"
+              >
                 <FontAwesomeIcon icon={faCircleDot} />
               </NewIcon>
             </RadixRadioGroup.Indicator>
