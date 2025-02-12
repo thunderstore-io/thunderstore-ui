@@ -1,11 +1,11 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-packageSearch-components-categoryTagCloud {
+  .category-tag-cloud {
     display: flex;
     flex-flow: row wrap;
     gap: var(--space-8);
   }
 
-  .nimbus-commonComponents-packageSearch-components-categoryTagCloud__searchTag {
+  .category-tag-cloud__search-tag {
     display: flex;
     flex: 0 1 0;
     height: 100%;
@@ -17,7 +17,7 @@
     }
   }
 
-  .nimbus-commonComponents-packageSearch-components-categoryTagCloud__clearButton {
+  .category-tag-cloud__clear-button {
     height: var(--button-xs-height);
     color: var(--color-text-accent);
   }

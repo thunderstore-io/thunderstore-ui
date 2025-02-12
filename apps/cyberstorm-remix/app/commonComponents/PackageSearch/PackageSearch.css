@@ -1,12 +1,12 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-packageSearch {
+  .package-search {
     display: flex;
     gap: var(--gap-xl);
     align-items: flex-start;
     align-self: stretch;
   }
 
-  .nimbus-commonComponents-packageSearch-sidebar {
+  .package-search__sidebar {
     display: flex;
     flex-direction: column;
     gap: var(--gap-xs);
@@ -18,11 +18,11 @@
     background: var(--color-surface-3);
   }
 
-  .nimbus-commonComponents-packageSearch-sidebar__search {
+  .package-search__search {
     width: 100%;
   }
 
-  .nimbus-commonComponents-packageSearch-sidebar__filters {
+  .package-search__filters {
     display: flex;
     flex-direction: column;
     gap: var(--gap-xs);
@@ -30,7 +30,7 @@
     align-self: stretch;
   }
 
-  .nimbus-commonComponents-packageSearch-content {
+  .package-search__content {
     display: flex;
     flex: 0 1 100%;
     flex-direction: column;
@@ -38,7 +38,7 @@
     align-items: flex-start;
   }
 
-  .nimbus-commonComponents-packageSearch-content__pagination {
+  .package-search__pagination {
     display: flex;
     gap: var(--gap-xxs);
     align-items: center;
@@ -47,7 +47,7 @@
     padding-top: var(--space-40);
   }
 
-  .nimbus-commonComponents-packageSearch-searchParams {
+  .package-search__search-params {
     display: flex;
     flex: 1 1 0;
     flex-direction: column;
@@ -58,7 +58,7 @@
     min-width: 0;
   }
 
-  .nimbus-commonComponents-packageSearch-searchParams__tags {
+  .package-search__tags {
     display: flex;
     flex: 0 1 0;
     gap: var(--gap-sm);
@@ -66,7 +66,7 @@
     min-width: 0;
   }
 
-  .nimbus-commonComponents-packageSearch-tools {
+  .package-search__tools {
     display: flex;
     flex-wrap: wrap;
     gap: var(--gap-xl);
@@ -74,14 +74,14 @@
     align-self: stretch;
   }
 
-  .nimbus-commonComponents-packageSearch-tools__results {
+  .package-search__results {
     display: flex;
     flex: 1;
     gap: var(--gap-xxs);
     align-items: center;
   }
 
-  .nimbus-commonComponents-packageSearch-tools__listingActions {
+  .package-search__listing-actions {
     display: flex;
     gap: var(--gap-md);
     align-items: center;
@@ -95,13 +95,13 @@
     } */
   }
 
-  .nimbus-commonComponents-packageSearch-tools__sorting {
+  .package-search__sorting {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
 
-  .nimbus-commonComponents-packageSearch-packages {
+  .package-search__packages {
     display: flex;
     flex: 1 1 0;
     flex-direction: column;
@@ -110,7 +110,7 @@
     align-self: stretch;
   }
 
-  .nimbus-commonComponents-packageSearch-packages__grid {
+  .package-search__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
     gap: var(--gap-sm);
@@ -118,52 +118,52 @@
   }
 
   @media (width <= 48rem) {
-    .nimbus-commonComponents-packageSearch-tools {
+    .package-search__tools {
       flex-direction: column;
       align-items: stretch;
     }
 
-    .nimbus-commonComponents-packageSearch-tools__results {
+    .package-search__results {
       align-items: stretch;
       justify-content: center;
     }
 
-    .nimbus-commonComponents-packageSearch-tools__sorting {
+    .package-search__sorting {
       width: 100%;
     }
 
-    .nimbus-commonComponents-packageSearch-packages__grid {
+    .package-search__grid {
       grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
     }
   }
 
   @media (width <= 475px) {
-    .nimbus-commonComponents-packageSearch {
+    .package-search {
       flex-direction: column;
     }
 
-    .nimbus-commonComponents-packageSearch-sidebar {
+    .package-search__sidebar {
       width: 100%;
     }
 
-    .nimbus-commonComponents-packageSearch-tools {
+    .package-search__tools {
       flex-direction: column;
       align-items: stretch;
     }
 
-    .nimbus-commonComponents-packageSearch-tools__results {
+    .package-search__results {
       align-items: stretch;
       justify-content: center;
     }
 
-    .nimbus-commonComponents-packageSearch-packages__grid {
+    .package-search__grid {
       grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
     }
   }
 
   /* This is added for better grid on phones */
   @media (width <= 416px) {
-    .nimbus-commonComponents-packageSearch-packages__grid {
+    .package-search__grid {
       grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
     }
   }

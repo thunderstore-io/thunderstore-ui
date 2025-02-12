@@ -179,11 +179,11 @@ export default function Page() {
   });
 
   return (
-    <div className="nimbus-settings-team-members nimbus-settingsItems">
-      <div className="nimbus-settingsItems__item">
-        <div className="nimbus-settingsItems__meta">
-          <p className="nimbus-settingsItems__title">Teams</p>
-          <p className="nimbus-settingsItems__description">Manage your teams</p>
+    <div className="nimbus-settings-team-members settings-items">
+      <div className="settings-items__item">
+        <div className="settings-items__meta">
+          <p className="settings-items__title">Teams</p>
+          <p className="settings-items__description">Manage your teams</p>
           <Modal
             popoverId={"teamMembersAddMember"}
             csSize="small"
@@ -253,7 +253,7 @@ export default function Page() {
             </ApiForm>
           </Modal>
         </div>
-        <div className="nimbus-settingsItems__content">
+        <div className="settings-items__content">
           <NewTable
             headers={teamMemberColumns}
             rows={tableData}

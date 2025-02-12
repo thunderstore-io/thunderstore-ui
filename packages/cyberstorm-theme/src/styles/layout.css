@@ -6,35 +6,35 @@
   }
 
   /* CONTAINER, basically flex wrapper utility class */
-  .ts-container {
+  .container {
     display: flex;
     min-width: 0;
     min-height: 0;
   }
 
-  .ts-container--x {
+  .container--x {
     flex-direction: row;
   }
 
-  .ts-container--y {
+  .container--y {
     flex-direction: column;
   }
 
-  .ts-container--full {
+  .container--full {
     flex: 1;
   }
 
-  .ts-container--stretch {
+  .container--stretch {
     align-self: stretch;
   }
 
-  /* SECTIONS, visual helper classes for islands */
-  .ts-section {
+  /* ISLANDS, visual helper classes for islands */
+  .island {
     display: flex;
     gap: var(--section-gap);
   }
 
-  .ts-section-item {
+  .island-item {
     border-radius: var(--section-border-radius);
     background-color: var(--section-bg);
   }

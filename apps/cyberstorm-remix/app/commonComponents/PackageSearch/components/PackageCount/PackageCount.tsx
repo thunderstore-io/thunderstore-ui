@@ -22,15 +22,11 @@ export const PackageCount = (props: Props) => {
   const query = searchQuery !== "" ? ` for "${searchQuery}"` : "";
 
   if (totalCount === 0) {
-    return (
-      <p className="nimbus-commonComponents-packageSearch-components-packageCount">
-        No results{query}
-      </p>
-    );
+    return <p className="package-count">No results{query}</p>;
   }
 
   return (
-    <p className="nimbus-commonComponents-packageSearch-components-packageCount">
+    <p className="package-count">
       {`${first}${
         first !== totalCount ? `-${Math.min(last, totalCount)}` : ""
       } of ${totalCount} results ${query}`}

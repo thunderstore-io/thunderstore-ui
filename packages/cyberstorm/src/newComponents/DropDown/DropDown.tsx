@@ -55,8 +55,8 @@ export function DropDown(props: DropDownProps) {
           align={contentAlignment}
           sideOffset={8}
           className={classnames(
-            "ts-dropdown",
-            ...componentClasses(csVariant, csSize, csModifiers),
+            "dropdown",
+            ...componentClasses("dropdown", csVariant, csSize, csModifiers),
             rootClasses
           )}
         >
@@ -89,8 +89,8 @@ export function DropDownItem(props: DropDownItemProps) {
     <Item
       {...fProps}
       className={classnames(
-        "ts-dropdown__item",
-        ...componentClasses(csVariant, csSize, csModifiers),
+        "dropdown__item",
+        ...componentClasses("dropdown__item", csVariant, csSize, csModifiers),
         rootClasses
       )}
       asChild
@@ -117,8 +117,13 @@ export function DropDownDivider(props: DropDownDividerProps) {
   return (
     <div
       className={classnames(
-        "ts-dropdown__divider",
-        ...componentClasses(csVariant, csSize, csModifiers),
+        "dropdown__divider",
+        ...componentClasses(
+          "dropdown__divider",
+          csVariant,
+          csSize,
+          csModifiers
+        ),
         rootClasses
       )}
       {...fProps}

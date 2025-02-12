@@ -25,7 +25,7 @@ export function CardPackage(props: Props) {
   const isNew = updateTimeDelta < 3;
 
   return (
-    <div className="ts-cardpackage">
+    <div className="card-package">
       <NewLink
         tabIndex={-1}
         primitiveType="cyberstormLink"
@@ -39,7 +39,7 @@ export function CardPackage(props: Props) {
         packageData.is_nsfw ||
         packageData.is_deprecated ||
         isNew ? (
-          <div className="ts-cardpackage__tag">
+          <div className="card-package__tag">
             {packageData.is_pinned ? (
               <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
                 <NewIcon noWrapper csMode="inline">
@@ -77,36 +77,36 @@ export function CardPackage(props: Props) {
         <Image
           src={packageData.icon_url}
           cardType="package"
-          rootClasses="ts-cardpackage__imagewrapper"
+          rootClasses="card-package__image-wrapper"
           square
           intrinsicWidth={256}
           intrinsicHeight={256}
         />
       </NewLink>
 
-      <div className="ts-cardpackage__content">
-        <div className="ts-cardpackage__info">
+      <div className="card-package__content">
+        <div className="card-package__info">
           <NewLink
             primitiveType="cyberstormLink"
             linkId="Package"
             community={packageData.community_identifier}
             namespace={packageData.namespace}
             package={packageData.name}
-            rootClasses="ts-cardpackage__title"
+            rootClasses="card-package__title"
             title={packageData.name}
           >
             {packageData.name}
           </NewLink>
 
-          <div className="ts-cardpackage__author">
-            <span className="ts-cardpackage__author__prefix">by</span>
+          <div className="card-package__author">
+            <span className="card-package__prefix">by</span>
             <NewLink
               primitiveType="cyberstormLink"
               linkId="Team"
               community={packageData.community_identifier}
               team={packageData.namespace}
               title={packageData.namespace}
-              rootClasses="ts-cardpackage__author__link"
+              rootClasses="card-package__link"
               csVariant="cyber"
             >
               {packageData.namespace}
@@ -115,11 +115,9 @@ export function CardPackage(props: Props) {
         </div>
 
         {packageData.description ? (
-          <p className="ts-cardpackage__description">
-            {packageData.description}
-          </p>
+          <p className="card-package__description">{packageData.description}</p>
         ) : null}
-        <div className="ts-cardpackage__categoryWrapper">
+        <div className="card-package__tags">
           {packageData.categories.length
             ? packageData.categories.map((c, index) => (
                 <NewTag
@@ -136,8 +134,8 @@ export function CardPackage(props: Props) {
             : null}
         </div>
 
-        <div className="ts-cardpackage__footer">
-          <div className="ts-cardpackage__footer__metaItemWrapper">
+        <div className="card-package__footer">
+          <div className="card-package__meta">
             <TooltipWrapper
               tooltipText={`${numberWithSpaces(
                 packageData.download_count
@@ -153,7 +151,7 @@ export function CardPackage(props: Props) {
             {/* <TooltipWrapper
               tooltipText={`Latest version: TODO ADD FIELD TO ENDPOINT`}
             >
-              <div className="ts-cardpackage__footer__metaitem">
+              <div className="card-package__footer__metaitem">
                 <NewIcon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faCodeBranch} />
                 </NewIcon>
@@ -173,7 +171,7 @@ export function CardPackage(props: Props) {
               </NewMetaItem>
             </TooltipWrapper>
           </div>
-          <span className="ts-cardpackage__footer__updatetext">
+          <span className="card-package__updated">
             Last updated:
             <RelativeTime
               time={packageData.last_updated}

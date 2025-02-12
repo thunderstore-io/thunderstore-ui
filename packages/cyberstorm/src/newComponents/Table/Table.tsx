@@ -74,7 +74,7 @@ function SortButton(props: SortButtonProps) {
   }
 
   return (
-    <button className="ts-table__sortbutton" onClick={() => hook(hookParams)}>
+    <button className="table__sortbutton" onClick={() => hook(hookParams)}>
       {label}
       <NewIcon noWrapper csMode="inline">
         <FontAwesomeIcon icon={icon} />
@@ -133,8 +133,8 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
     return (
       <table
         className={classnames(
-          "ts-table",
-          ...componentClasses(csVariant, csSize, csModifiers),
+          "table",
+          ...componentClasses("table", csVariant, csSize, csModifiers),
           rootClasses
         )}
         ref={forwardedRef}
@@ -143,14 +143,14 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
           <col span={headers.length} />
         </colgroup>
         {titleRowContent ? (
-          <caption className="ts-table__caption">{titleRowContent}</caption>
+          <caption className="table__caption">{titleRowContent}</caption>
         ) : null}
         <thead>
-          <tr className="ts-table__row" style={columnCSSProps}>
+          <tr className="table__row" style={columnCSSProps}>
             {headers.map((header, headerI) => (
               <th
                 key={headerI}
-                className="ts-table__header"
+                className="table__header"
                 style={columnCSSProps}
                 scope="col"
               >
@@ -173,14 +173,14 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
           {rows.map((row, rowI) => (
             <tr
               key={`row${rowI}`}
-              className="ts-table__row"
+              className="table__row"
               style={columnCSSProps}
             >
               {row.map((col, colI) => (
                 <td
                   key={`row${rowI}_col${colI}`}
                   className={classnames(
-                    "ts-table__item",
+                    "table__item",
                     headers[colI] && headers[colI].columnClasses
                       ? `${headers[colI].columnClasses}`
                       : undefined

@@ -1,53 +1,65 @@
 @layer nimbus-layout {
-  .nimbus-tools-markdownPreview {
+  .markdown-preview {
     gap: var(--gap-xxxxxxxl);
+  }
 
-    > .__row {
-      gap: 5rem;
+  .markdown-preview__row {
+    gap: 5rem;
+  }
 
-      > .__meta {
-        display: flex;
-        flex-direction: column;
-        gap: var(--gap-xs);
-        align-items: flex-start;
-        align-self: stretch;
+  .markdown-preview__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    align-items: flex-start;
+    align-self: stretch;
+  }
 
-        > .__title {
-          align-self: stretch;
-          color: var(--color-text-primary);
-          font-weight: var(--font-weight-bold);
+  .markdown-preview__title {
+    align-self: stretch;
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-bold);
 
-          font-size: var(--font-size-body-lg);
-          line-height: var(--line-height-md);
-        }
+    font-size: var(--font-size-body-lg);
+    line-height: var(--line-height-md);
+  }
 
-        > .__description {
-          align-self: stretch;
-          color: var(--color-text-tertiary);
-          font-weight: var(--font-weight-medium);
+  .markdown-preview__description {
+    align-self: stretch;
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-medium);
 
-          font-size: var(--font-size-body-md);
-          line-height: var(--line-height-md);
-        }
-      }
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
+  }
 
-      > .__content {
-        display: flex;
-        flex-direction: column;
-        gap: var(--gap-md);
-        align-items: flex-start;
-        width: 57.5rem;
-      }
+  .markdown-preview__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-items: flex-start;
+    width: 57.5rem;
+  }
+
+  .markdown-preview__divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: stretch;
+    justify-content: center;
+    height: 0.063rem;
+    background-color: var(--border-default);
+  }
+
+  /* Mobile breakpoint */
+  @media (width <= 475px) {
+    .markdown-preview__row {
+      flex-direction: column;
+      gap: var(--gap-xxxl);
     }
 
-    > .__divider {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      align-self: stretch;
-      justify-content: center;
-      height: 0.063rem;
-      background-color: var(--border-default);
+    .markdown-preview__content {
+      width: auto;
     }
   }
 }

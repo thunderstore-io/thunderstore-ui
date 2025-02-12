@@ -1,5 +1,5 @@
 @layer components {
-  .ts-cyclebutton {
+  .cycle-button {
     display: inline-flex;
     align-items: center;
   }

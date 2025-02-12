@@ -1,5 +1,5 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-listingDependency {
+  .listing-dependency {
     display: flex;
     gap: var(--gap-xl);
     align-items: flex-start;
@@ -9,25 +9,25 @@
     background: var(--surface-dim);
   }
 
-  .nimbus-commonComponents-listingDependency__image {
+  .listing-dependency__image {
     flex-shrink: 0;
     width: 80px;
   }
 
-  .nimbus-commonComponents-listingDependency-info {
+  .listing-dependency__info {
     display: flex;
     gap: var(--radius-md);
     align-items: center;
     align-self: stretch;
   }
 
-  .nimbus-commonComponents-listingDependency-info__name {
+  .listing-dependency__name {
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-md);
   }
 
-  .nimbus-commonComponents-listingDependency-info-title {
+  .listing-dependency__title {
     display: flex;
     gap: var(--gap-xxs);
     align-items: center;
@@ -37,11 +37,11 @@
     line-height: var(--line-height-md);
   }
 
-  .nimbus-commonComponents-listingDependency-info-title__by {
+  .listing-dependency__title__by {
     color: var(--color-text-tertiary);
   }
 
-  .nimbus-commonComponents-listingDependency-description {
+  .listing-dependency__description {
     align-self: stretch;
     color: var(--color-text-secondary);
     font-weight: var(--font-weight-regular);
@@ -50,7 +50,7 @@
     line-height: var(--line-height-md);
   }
 
-  .nimbus-commonComponents-listingDependency-version {
+  .listing-dependency__version {
     display: flex;
     gap: 4px;
     align-items: flex-start;

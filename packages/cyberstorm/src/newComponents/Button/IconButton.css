@@ -1,24 +1,24 @@
 @layer components {
-  .ts-iconbutton {
+  .icon-button {
     display: flex;
     flex-shrink: 0;
-    gap: var(--iconbutton-gap);
+    gap: var(--icon-button-gap);
     align-items: center;
     justify-content: center;
-    width: var(--iconbutton-width);
-    height: var(--iconbutton-height);
-    padding: var(--iconbutton-padding);
-    padding-block: var(--iconbutton-padding-block);
-    padding-inline: var(--iconbutton-padding-inline);
-    border: var(--iconbutton-border);
-    border-color: var(--iconbutton-border-color);
-    border-radius: var(--iconbutton-border-radius);
-    color: var(--iconbutton-icon-color);
-    background-color: var(--iconbutton-background-color);
+    width: var(--icon-button-width);
+    height: var(--icon-button-height);
+    padding: var(--icon-button-padding);
+    padding-block: var(--icon-button-padding-block);
+    padding-inline: var(--icon-button-padding-inline);
+    border: var(--icon-button-border);
+    border-color: var(--icon-button-border-color);
+    border-radius: var(--icon-button-border-radius);
+    color: var(--icon-button-icon-color);
+    background-color: var(--icon-button-background-color);
     user-select: none;
   }
 
-  .ts-iconbutton__icon {
+  .icon-button__icon {
     --icon-inline-size: 1rem;
   }
 }

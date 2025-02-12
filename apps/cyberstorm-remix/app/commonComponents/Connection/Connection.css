@@ -1,5 +1,5 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-connection {
+  .connection {
     display: flex;
     gap: var(--gap-xxxl);
     align-items: center;
@@ -9,7 +9,7 @@
     background: rgb(62 68 158 / 0.24);
   }
 
-  .nimbus-commonComponents-connection-body {
+  .connection__body {
     display: flex;
     flex: 1 1 0;
     gap: var(--gap-xl);
@@ -17,12 +17,12 @@
     justify-content: center;
   }
 
-  .nimbus-commonComponents-connection-body__icon {
+  .connection__icon {
     width: var(--space-40);
     height: var(--space-40);
   }
 
-  .nimbus-commonComponents-connection-body__name {
+  .connection__name {
     display: flex;
     flex: 1 1 0;
     flex-direction: column;
@@ -35,25 +35,25 @@
     line-height: var(--line-height-md);
   }
 
-  .nimbus-commonComponents-connection.nimbus-commonComponents-connection--disabled {
+  .connection.connection--disabled {
     background: var(--surface-dim);
 
-    > .nimbus-commonComponents-connection-body {
-      > .nimbus-commonComponents-connection-body__icon,
-      > .nimbus-commonComponents-connection-body__name {
+    > .connection__body {
+      > .connection__icon,
+      > .connection__name {
         opacity: 0.5;
       }
     }
   }
 
-  .nimbus-commonComponents-connection-actions {
+  .connection__actions {
     display: flex;
     gap: var(--gap-xxxl);
     align-items: center;
     justify-content: flex-end;
   }
 
-  .nimbus-commonComponents-connection-description {
+  .connection__description {
     display: flex;
     flex-direction: column;
     gap: var(--gap-xxxs);
@@ -61,13 +61,13 @@
     justify-content: center;
   }
 
-  .nimbus-commonComponents-connection-description__connected {
+  .connection__connected {
     color: var(--color-text-tertiary);
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-md);
   }
 
-  .nimbus-commonComponents-connection-description__username {
+  .connection__username {
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-md);

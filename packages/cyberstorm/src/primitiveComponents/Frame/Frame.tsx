@@ -232,8 +232,8 @@ export const Frame = React.forwardRef<
         cloneElement(child, {
           className: classnames(
             child.props.className,
-            "ts-icon",
-            noWrapper && csMode === "inline" ? "ts-icon--inline" : null,
+            "icon",
+            noWrapper && csMode === "inline" ? "icon--inline" : null,
             rootClasses
           ),
           ref: noWrapper ? svgIconRef : null,
@@ -251,8 +251,8 @@ export const Frame = React.forwardRef<
           <span
             {...strippedForwardedProps}
             className={classnames(
-              "ts-icon__wrapper",
-              "ts-icon--inline",
+              "icon__wrapper",
+              "icon--inline",
               wrapperClasses
             )}
             ref={spanIconRef}
@@ -265,7 +265,7 @@ export const Frame = React.forwardRef<
         content = (
           <div
             {...strippedForwardedProps}
-            className={classnames("ts-icon__wrapper", wrapperClasses)}
+            className={classnames("icon__wrapper", wrapperClasses)}
             ref={divIconRef}
           >
             {clones}

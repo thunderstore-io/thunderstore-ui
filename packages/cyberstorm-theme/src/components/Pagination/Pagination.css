@@ -1,10 +1,10 @@
 @layer theme-components {
-  .ts-pagination {
+  .pagination {
     --pagination-gap: var(--gap-xs);
   }
 
   /* VARIANTS STATELESS */
-  .ts-pagination__item {
+  .pagination__item {
     --pagination-item-height: var(--space-36);
     --pagination-item-padding: var(--space-8) var(--space-12);
     --pagination-item-font-weight: var(--font-weight-regular);
@@ -15,7 +15,7 @@
   }
 
   /* Only apply triggers to buttons */
-  button.ts-pagination__item {
+  button.pagination__item {
     &:hover {
       --pagination-item-text-color: var(--pagination-item-text-color--hover);
       --pagination-item-background: var(--pagination-item-bg-color--hover);
@@ -26,7 +26,7 @@
       --pagination-item-background: var(--pagination-item-bg-color--active);
     }
 
-    &.ts-pagination__item--selected {
+    &.pagination__item--selected {
       --pagination-item-text-color: var(--pagination-item-text-color--current);
       --pagination-item-background: var(--pagination-item-bg-color--current);
 

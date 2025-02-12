@@ -1,5 +1,5 @@
 @layer components {
-  .ts-tag {
+  .tag {
     display: inline-flex;
     gap: var(--tag-gap);
     align-items: center;
@@ -15,7 +15,7 @@
     padding-inline: var(--tag-padding-inline);
   }
 
-  .ts-tag > span {
+  .tag > span {
     min-width: 0;
     overflow-x: clip;
     white-space: nowrap;

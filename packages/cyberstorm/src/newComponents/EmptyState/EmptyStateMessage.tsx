@@ -9,7 +9,7 @@ interface Props extends PropsWithChildren {
 export function EmptyStateMessage(props: Props) {
   const { children, className } = props;
   return (
-    <span className={classnames("ts-emptyState__message", className)}>
+    <span className={classnames("empty-state__message", className)}>
       {children}
     </span>
   );

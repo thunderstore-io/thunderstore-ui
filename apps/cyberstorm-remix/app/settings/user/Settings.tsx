@@ -53,14 +53,14 @@ export default function Community() {
     : "settings";
 
   return (
-    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+    <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
         <NewLink primitiveType="cyberstormLink" linkId="Settings">
           {currentUser.username}
         </NewLink>
       </NewBreadCrumbs>
       <PageHeader heading="Settings" headingLevel="1" headingSize="2" />
-      <div className="nimbus-settings-user">
+      <div className="settings-user">
         <Tabs
           tabItems={[
             {
@@ -94,7 +94,7 @@ export default function Community() {
             );
           }}
         />
-        <section>
+        <section className="settings-user__body">
           <Outlet context={outletContext} />
         </section>
       </div>

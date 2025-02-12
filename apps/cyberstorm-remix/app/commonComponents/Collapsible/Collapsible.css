@@ -1,12 +1,12 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-collapsible {
+  .collapsible {
     display: flex;
     flex: 1;
     flex-direction: column;
     font-size: var(--font-size-body-md);
   }
 
-  .nimbus-commonComponents-collapsible__header {
+  .collapsible__header {
     display: flex;
     gap: var(--gap-md);
     justify-content: space-between;
@@ -15,7 +15,7 @@
     font-size: var(--font-size-body-lg);
   }
 
-  .nimbus-commonComponents-collapsible__content {
+  .collapsible__content {
     display: flex;
     flex-direction: column;
     gap: var(--gap-xs);

@@ -2,7 +2,7 @@
   /* SELECT */
 
   /* VARIANTS */
-  .ts-select:where(.ts-variant--default) {
+  .select:where(.select--variant--default) {
     --select-background-color: var(--select-bg-color--default);
     --select-border-color: var(--select-border-color--default);
     --select-box-shadow: var(--shadow-lg);
@@ -11,7 +11,7 @@
   }
 
   /* SIZES */
-  .ts-select:where(.ts-size--medium) {
+  .select:where(.select--size--medium) {
     --select-border-radius: var(--select-md-border-radius);
     --select-padding: var(--select-md-padding);
   }
@@ -19,7 +19,7 @@
   /* SELECT ITEM */
 
   /* VARIANTS */
-  .ts-select__item:where(.ts-variant--default) {
+  .select__item:where(.select__item--variant--default) {
     --select__item-background-color: var(--select-item-bg-color--default);
     --select__item-color: var(--select-item-text-color--default);
     --icon-color: var(--select-item-icon-color--default);
@@ -31,7 +31,7 @@
     }
   }
 
-  .ts-select__item:where(.ts-variant--danger) {
+  .select__item:where(.select__item--variant--danger) {
     --select__item-background-color: var(
       --select-item-danger-bg-color--default
     );
@@ -47,7 +47,7 @@
     }
   }
 
-  .ts-select__item:where(.ts-variant--disabled) {
+  .select__item:where(.select__item--variant--disabled) {
     --select__item-background-color: var(
       --select-item-disabled-bg-color--default
     );
@@ -65,7 +65,7 @@
   }
 
   /* SIZES */
-  .ts-select__item:where(.ts-size--medium) {
+  .select__item:where(.select__item--size--medium) {
     --select__item-gap: var(--select-item-md-gap);
     --select__item-padding: var(--select-item-md-padding);
     --select__item-font-weight: var(--select-item-md-font-weight);
@@ -75,7 +75,7 @@
   /* SELECT TRIGGER */
 
   /* SIZES */
-  .ts-select__trigger:where(.ts-size--medium) {
+  .select__trigger:where(.select__trigger--size--medium) {
     --select__trigger-font-weight: var(--select-trigger-md-font-weight);
     --select__trigger-font-size: var(--select-trigger-md-font-size);
   }

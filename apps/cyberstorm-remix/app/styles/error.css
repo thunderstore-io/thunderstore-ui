@@ -1,5 +1,5 @@
 @layer nimbus-layout {
-  .nimbus-error {
+  .error {
     display: flex;
     flex-direction: column;
     gap: var(--space-32);
@@ -9,65 +9,65 @@
 
     --glitch-color-1: var(--old--color-cyber-green-50);
     --glitch-color-2: var(--old--color-accent-pink-50);
+  }
 
-    .__glitch {
-      position: relative;
-      margin-top: var(--space-32);
-      margin-bottom: var(--space-48);
-      font-weight: var(--font-weight-extra-bold);
-      font-size: 12rem;
-      line-height: 1;
+  .error__glitch {
+    position: relative;
+    margin-top: var(--space-32);
+    margin-bottom: var(--space-48);
+    font-weight: var(--font-weight-extra-bold);
+    font-size: 12rem;
+    line-height: 1;
 
-      span {
-        animation: paths 5s step-end infinite;
-      }
-    }
-
-    .__glitch::before,
-    .__glitch::after {
-      position: absolute;
-      z-index: -1;
-      width: 110%;
-      content: attr(data-text);
-    }
-
-    .__glitch::before {
-      top: 10px;
-      left: 15px;
-      color: var(--glitch-color-1);
-      animation:
-        nimbus-error-paths 5s step-end infinite,
-        nimbus-error-opacity 5s step-end infinite,
-        nimbus-error-font 8s step-end infinite,
-        nimbus-error-movement 10s step-end infinite;
-    }
-
-    .__glitch::after {
-      top: 5px;
-      left: -10px;
-      color: var(--glitch-color-2);
-      animation:
-        nimbus-error-paths 5s step-end infinite,
-        nimbus-error-opacity 5s step-end infinite,
-        nimbus-error-font 7s step-end infinite,
-        nimbus-error-movement 8s step-end infinite;
-    }
-
-    .__description {
-      color: var(--color-text-accent);
-      font-weight: var(--font-weight-semibold);
-      line-height: 1;
-    }
-
-    .__flavor {
-      font-weight: var(--font-weight-bold);
-      font-size: var(--space-32);
-      line-height: 1;
-      text-align: center;
+    span {
+      animation: paths 5s step-end infinite;
     }
   }
 
-  @keyframes nimbus-error-paths {
+  .error__glitch::before,
+  .error__glitch::after {
+    position: absolute;
+    z-index: -1;
+    width: 110%;
+    content: attr(data-text);
+  }
+
+  .error__glitch::before {
+    top: 10px;
+    left: 15px;
+    color: var(--glitch-color-1);
+    animation:
+      error-paths 5s step-end infinite,
+      error-opacity 5s step-end infinite,
+      error-font 8s step-end infinite,
+      error-movement 10s step-end infinite;
+  }
+
+  .error__glitch::after {
+    top: 5px;
+    left: -10px;
+    color: var(--glitch-color-2);
+    animation:
+      error-paths 5s step-end infinite,
+      error-opacity 5s step-end infinite,
+      error-font 7s step-end infinite,
+      error-movement 8s step-end infinite;
+  }
+
+  .error__description {
+    color: var(--color-text-accent);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1;
+  }
+
+  .error__flavor {
+    font-weight: var(--font-weight-bold);
+    font-size: var(--space-32);
+    line-height: 1;
+    text-align: center;
+  }
+
+  @keyframes error-paths {
     0% {
       clip-path: polygon(
         0% 43%,
@@ -319,7 +319,7 @@
     }
   }
 
-  @keyframes nimbus-error-movement {
+  @keyframes error-movement {
     0% {
       top: 0;
       left: -20px;
@@ -346,7 +346,7 @@
     }
   }
 
-  @keyframes nimbus-error-opacity {
+  @keyframes error-opacity {
     0% {
       opacity: 0.1;
     }
@@ -381,7 +381,7 @@
     }
   }
 
-  @keyframes nimbus-error-font {
+  @keyframes error-font {
     0% {
       color: var(--glitch-color-1);
       font-weight: 100;

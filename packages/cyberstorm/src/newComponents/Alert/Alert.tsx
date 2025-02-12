@@ -35,16 +35,16 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
       <div
         {...forwardedProps}
         className={classnames(
-          "ts-alert",
-          ...componentClasses(csVariant, csSize, undefined),
+          "alert",
+          ...componentClasses("alert", csVariant, csSize, undefined),
           rootClasses
         )}
         ref={forwardedRef}
       >
-        <NewIcon noWrapper csMode="inline" rootClasses="ts-alert__icon">
+        <NewIcon noWrapper csMode="inline" rootClasses="alert__icon">
           <FontAwesomeIcon icon={icon} />
         </NewIcon>
-        <span className="ts-alert__content">{children}</span>
+        <span className="alert__content">{children}</span>
       </div>
     );
   }

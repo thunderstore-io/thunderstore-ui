@@ -85,13 +85,13 @@ export const Button = React.forwardRef<
       <Actionable
         {...forwardedProps}
         rootClasses={classnames(
-          "ts-iconbutton",
-          ...componentClasses(csVariant, csSize, csModifiers),
+          "icon-button",
+          ...componentClasses("icon-button", csVariant, csSize, csModifiers),
           rootClasses
         )}
         ref={forwardedRef}
       >
-        <NewIcon csMode="inline" noWrapper rootClasses="ts-iconbutton__icon">
+        <NewIcon csMode="inline" noWrapper rootClasses="icon-button__icon">
           <FontAwesomeIcon icon={icon} />
         </NewIcon>
       </Actionable>
@@ -102,8 +102,8 @@ export const Button = React.forwardRef<
     <Actionable
       {...forwardedProps}
       rootClasses={classnames(
-        "ts-button",
-        ...componentClasses(csVariant, csSize, csModifiers),
+        "button",
+        ...componentClasses("button", csVariant, csSize, csModifiers),
         rootClasses
       )}
       ref={forwardedRef}

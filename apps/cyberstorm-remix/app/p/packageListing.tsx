@@ -252,8 +252,8 @@ export default function Community() {
   // );
 
   return (
-    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
-      <NewBreadCrumbs rootClasses="nimbus-root__breadcrumbs">
+    <div className="container container--y container--full layout__content">
+      <NewBreadCrumbs rootClasses="layout__breadcrumbs">
         <NewLink
           primitiveType="cyberstormLink"
           linkId="Communities"
@@ -280,10 +280,10 @@ export default function Community() {
         </NewLink>
         {listing.name}
       </NewBreadCrumbs>
-      <div className="nimbus-packageListing">
-        <section className="__main">
+      <div className="package-listing">
+        <section className="package-listing__main">
           <PageHeader
-            // rootClasses="__content-header"
+            // rootClasses="package-listing__content-header"
             heading={listing.name}
             headingLevel="1"
             headingSize="3"
@@ -309,7 +309,7 @@ export default function Community() {
                   // community={listing.community_identifier}
                   // team={listing.namespace}
                   csVariant="cyber"
-                  rootClasses="nimbus-commonComponents-pageHeader-meta-item"
+                  rootClasses="page-header__meta-item"
                 >
                   <NewIcon csMode="inline" noWrapper>
                     <FontAwesomeIcon icon={faUsers} />
@@ -321,7 +321,7 @@ export default function Community() {
                     primitiveType="link"
                     href={listing.website_url}
                     csVariant="cyber"
-                    rootClasses="nimbus-commonComponents-pageHeader-meta-item"
+                    rootClasses="page-header__meta-item"
                   >
                     {listing.website_url}
                     <NewIcon csMode="inline" noWrapper>
@@ -340,7 +340,7 @@ export default function Community() {
                 ? managementTools
                 : null}
             </div> */}
-          <div className="__content">
+          <div className="package-listing__content">
             <Tabs
               tabItems={[
                 {
@@ -460,20 +460,24 @@ export default function Community() {
             <Outlet context={outletContext} />
           </div>
         </section>
-        <aside className="__sidebar">
-          <NewButton csVariant="accent" csSize="big" rootClasses="__install">
+        <aside className="package-listing-sidebar">
+          <NewButton
+            csVariant="accent"
+            csSize="big"
+            rootClasses="package-listing-sidebar__install"
+          >
             <NewIcon csMode="inline">
               <ThunderstoreLogo />
             </NewIcon>
             Install
           </NewButton>
-          <div className="__main">
-            <div className="__actions">
+          <div className="package-listing-sidebar__main">
+            <div className="package-listing-sidebar__actions">
               <NewButton
                 primitiveType="link"
                 href={listing.download_url}
                 csVariant="secondary"
-                rootClasses="__download"
+                rootClasses="package-listing-sidebar__download"
               >
                 <NewIcon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faDownload} />
@@ -504,38 +508,50 @@ export default function Community() {
               />
               {/* <ReportButton onClick={TODO} /> */}
             </div>
-            <div className="__meta">
-              <div className="__item">
-                <div className="__label">Last Updated</div>
-                <div className="__content">{lastUpdated}</div>
+            <div className="package-listing-sidebar__meta">
+              <div className="package-listing-sidebar__item">
+                <div className="package-listing-sidebar__label">
+                  Last Updated
+                </div>
+                <div className="package-listing-sidebar__content">
+                  {lastUpdated}
+                </div>
               </div>
-              <div className="__item">
-                <div className="__label">First Uploaded</div>
-                <div className="__content">{firstUploaded}</div>
+              <div className="package-listing-sidebar__item">
+                <div className="package-listing-sidebar__label">
+                  First Uploaded
+                </div>
+                <div className="package-listing-sidebar__content">
+                  {firstUploaded}
+                </div>
               </div>
-              <div className="__item">
-                <div className="__label">Downloads</div>
-                <div className="__content">
+              <div className="package-listing-sidebar__item">
+                <div className="package-listing-sidebar__label">Downloads</div>
+                <div className="package-listing-sidebar__content">
                   {formatInteger(listing.download_count)}
                 </div>
               </div>
-              <div className="__item">
-                <div className="__label">Likes</div>
-                <div className="__content">
+              <div className="package-listing-sidebar__item">
+                <div className="package-listing-sidebar__label">Likes</div>
+                <div className="package-listing-sidebar__content">
                   {formatInteger(listing.rating_count)}
                 </div>
               </div>
-              <div className="__item">
-                <div className="__label">Size</div>
-                <div className="__content">{formatFileSize(listing.size)}</div>
+              <div className="package-listing-sidebar__item">
+                <div className="package-listing-sidebar__label">Size</div>
+                <div className="package-listing-sidebar__content">
+                  {formatFileSize(listing.size)}
+                </div>
               </div>
-              <div className="__item">
-                <div className="__label">Dependency string</div>
-                <div className="__content">
-                  <div className="__dependencystringwrapper">
+              <div className="package-listing-sidebar__item">
+                <div className="package-listing-sidebar__label">
+                  Dependency string
+                </div>
+                <div className="package-listing-sidebar__content">
+                  <div className="package-listing-sidebar__dependency-string-wrapper">
                     <div
                       title={listing.full_version_name}
-                      className="__dependencystring"
+                      className="package-listing-sidebar__dependency-string"
                     >
                       {listing.full_version_name}
                     </div>
@@ -543,9 +559,9 @@ export default function Community() {
                   </div>
                 </div>
               </div>
-              <div className="__item">
-                <div className="__label">Dependants</div>
-                <div className="__content">
+              <div className="package-listing-sidebar__item">
+                <div className="package-listing-sidebar__label">Dependants</div>
+                <div className="package-listing-sidebar__content">
                   <NewLink
                     primitiveType="cyberstormLink"
                     linkId="PackageDependants"
@@ -560,14 +576,16 @@ export default function Community() {
               </div>
             </div>
           </div>
-          <div className="__categories">
-            <div className="__header">
+          <div className="package-listing-sidebar__categories">
+            <div className="package-listing-sidebar__header">
               <Heading csLevel="4" csSize="4">
                 Categories
               </Heading>
             </div>
-            <div className="__body">{mappedPackageTagList}</div>
-            <div className="__body">
+            <div className="package-listing-sidebar__body">
+              {mappedPackageTagList}
+            </div>
+            <div className="package-listing-sidebar__body">
               {listing.is_pinned ? (
                 <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
                   <NewIcon noWrapper csMode="inline">

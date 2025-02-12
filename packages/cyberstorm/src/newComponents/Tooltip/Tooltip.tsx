@@ -30,7 +30,7 @@ export function Tooltip(props: TooltipProps) {
       <Trigger asChild>{children}</Trigger>
       <Portal>
         <Content
-          className="ts-tooltip"
+          className="tooltip"
           sideOffset={sideOffset ? sideOffset : 5}
           side={side ? side : "right"}
           collisionPadding={collisionPadding ? collisionPadding : 20}

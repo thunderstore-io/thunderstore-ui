@@ -17,11 +17,11 @@ export const CollapsibleMenu = (props: Props) => {
   const { headerTitle, defaultOpen, children } = props;
 
   return (
-    <details className="nimbus-commonComponents-collapsible" open={defaultOpen}>
+    <details className="collapsible" open={defaultOpen}>
       <summary
         className={classnames(
-          "ts-button ts-variant--secondary ts-size--big ts-modifier--ghost",
-          "nimbus-commonComponents-collapsible__header"
+          "button button--variant--secondary button--size--big button--ghost",
+          "collapsible__header"
         )}
       >
         {headerTitle}
@@ -29,9 +29,7 @@ export const CollapsibleMenu = (props: Props) => {
           <FontAwesomeIcon icon={faCaretDown} />
         </NewIcon>
       </summary>
-      <div className="nimbus-commonComponents-collapsible__content">
-        {children}
-      </div>
+      <div className="collapsible__content">{children}</div>
     </details>
   );
 };

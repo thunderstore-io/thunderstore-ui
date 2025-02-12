@@ -1,5 +1,5 @@
 /* List */
-.ts-pagination {
+.pagination {
   display: flex;
   flex-flow: row wrap;
   gap: var(--pagination-gap);
@@ -9,12 +9,12 @@
   list-style: none;
 }
 
-.ts-pagination--disabled {
+.pagination--disabled {
   pointer-events: none;
 }
 
 /* Item */
-.ts-pagination__item {
+.pagination__item {
   display: inline-flex;
   flex-shrink: 0;
   gap: var(--gap-xs);

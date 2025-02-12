@@ -58,20 +58,22 @@ export default function MarkdownPreview() {
   }, [debouncedMarkdownPreviewInput]);
 
   return (
-    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+    <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
         <NewLink primitiveType="cyberstormLink" linkId="MarkdownPreview">
           Markdown Preview
         </NewLink>
       </NewBreadCrumbs>
       <PageHeader heading="Markdown Preview" headingLevel="1" headingSize="2" />
-      <section className="ts-container ts-container--y ts-container--full nimbus-tools-markdownPreview">
-        <div className="ts-container ts-container--x ts-container--full __row">
-          <div className="__meta">
-            <p className="__title">Manifest Validator</p>
-            <p className="__description">Select a team to validate a package</p>
+      <section className="container container--y container--full markdown-preview">
+        <div className="container container--x container--full markdown-preview__row">
+          <div className="markdown-preview__meta">
+            <p className="markdown-preview__title">Manifest Validator</p>
+            <p className="markdown-preview__description">
+              Select a team to validate a package
+            </p>
           </div>
-          <div className="__content">
+          <div className="markdown-preview__content">
             <CodeInput
               placeholder="# This is a markdown preview placeholder"
               setValue={setMarkdownPreviewInput}
@@ -80,13 +82,15 @@ export default function MarkdownPreview() {
             />
           </div>
         </div>
-        <div className="__divider" />
-        <div className="ts-container ts-container--x ts-container--full __row">
-          <div className="__meta">
-            <p className="__title">Markdown output</p>
-            <p className="__description">A preview of your rendered markdown</p>
+        <div className="markdown-preview__divider" />
+        <div className="container container--x container--full markdown-preview__row">
+          <div className="markdown-preview__meta">
+            <p className="markdown-preview__title">Markdown output</p>
+            <p className="markdown-preview__description">
+              A preview of your rendered markdown
+            </p>
           </div>
-          <div className="__content">
+          <div className="markdown-preview__content">
             <Markdown input={html} placeholder={placeholder} dangerous />
           </div>
         </div>

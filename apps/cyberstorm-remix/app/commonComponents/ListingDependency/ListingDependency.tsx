@@ -12,31 +12,29 @@ export function ListingDependency(props: ListingDependencyProps) {
   const { dependency, domain } = props;
 
   return (
-    <div className="nimbus-commonComponents-listingDependency">
+    <div className="listing-dependency">
       <Image
         src={dependency.icon_url}
         cardType="package"
         square={true}
         intrinsicWidth={80}
         intrinsicHeight={80}
-        rootClasses="nimbus-commonComponents-listingDependency__image"
+        rootClasses="listing-dependency__image"
       />
       <div>
-        <div className="nimbus-commonComponents-listingDependency-info">
+        <div className="listing-dependency__info">
           <NewLink
             primitiveType="cyberstormLink"
             linkId="Package"
             community={dependency.community_identifier}
             namespace={dependency.namespace}
             package={dependency.name}
-            rootClasses="nimbus-commonComponents-listingDependency-info__name"
+            rootClasses="listing-dependency__name"
           >
             {dependency.name}
           </NewLink>
-          <span className="nimbus-commonComponents-listingDependency-info-title">
-            <span className="nimbus-commonComponents-listingDependency-info-title__by">
-              by
-            </span>
+          <span className="listing-dependency__title">
+            <span className="listing-dependency__title__by">by</span>
             <NewLink
               primitiveType="cyberstormLink"
               linkId="Team"
@@ -47,10 +45,10 @@ export function ListingDependency(props: ListingDependencyProps) {
             </NewLink>
           </span>
         </div>
-        <div className="nimbus-commonComponents-listingDependency-description">
+        <div className="listing-dependency__description">
           {dependency.description}
         </div>
-        <div className="nimbus-commonComponents-listingDependency-version">
+        <div className="listing-dependency__version">
           <span>Version:</span>
           <NewLink
             // TODO: Remove when package versiond detail is available

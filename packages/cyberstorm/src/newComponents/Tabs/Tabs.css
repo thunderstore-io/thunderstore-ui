@@ -1,5 +1,5 @@
 @layer components {
-  .ts-tabs {
+  .tabs {
     display: flex;
     align-items: center;
     align-self: stretch;
@@ -8,7 +8,7 @@
     overflow-x: auto;
   }
 
-  .ts-tabs-item {
+  .tabs__item {
     position: relative;
 
     /* bottom: calc(-1 * var(--tabs-border-bottom-width)); */
@@ -29,12 +29,12 @@
 
     --icon-color: var(--tabs-item-icon-color);
 
-    &.ts-tabs-item-current {
+    &.tabs__item--current {
       pointer-events: none;
     }
   }
 
-  .ts-tabs-item-number-slate {
+  .tabs__number-slate {
     display: flex;
     gap: var(--tabs-item-number-slate-gap);
     align-items: center;

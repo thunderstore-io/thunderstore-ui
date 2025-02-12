@@ -1,6 +1,6 @@
 @layer theme-components {
   /* VARIANTS STATELESS */
-  .ts-breadcrumbs__outer:where(.ts-variant--default) {
+  .breadcrumbs__outer:where(.breadcrumbs__outer--variant--default) {
     --breadcrumbs__outer-background-color: var(
       --breadcrumbs__outer-background-color--default
     );
@@ -12,14 +12,14 @@
     }
   }
 
-  .ts-breadcrumbs__outerend:where(.ts-variant--default) {
+  .breadcrumbs__outerend:where(.breadcrumbs__outerend--variant--default) {
     --breadcrumbs__outer-background-color: var(
       --breadcrumbs__outer-background-color--hover
     );
   }
 
-  .ts-breadcrumbs__innerend:where(.ts-variant--default) {
-    --ts-breadcrumbs__innerend-text-color: var(
+  .breadcrumbs__innerend:where(.breadcrumbs__innerend--variant--default) {
+    --breadcrumbs__innerend-text-color: var(
       --breadcrumbs__innerend-text-color--default
     );
   }

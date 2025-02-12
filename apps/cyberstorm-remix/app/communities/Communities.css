@@ -1,61 +1,61 @@
 @layer nimbus-layout {
-  .nimbus-communities {
+  .communities {
     gap: var(--space-20);
+  }
 
-    > .__heading {
-      padding: var(--space-8) 0;
-    }
+  .communities__heading {
+    padding: var(--space-8) 0;
+  }
 
-    > .__content {
-      display: flex;
+  .communities__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xxxl);
+    align-items: flex-start;
+    align-self: stretch;
+  }
+
+  .communities__tools {
+    flex-direction: row;
+    gap: var(--gap-md);
+    justify-content: space-between;
+  }
+
+  .communities__search {
+    display: flex;
+    flex-grow: 1;
+    min-width: max-content;
+    max-width: 26.25rem;
+  }
+
+  .communities__results {
+    justify-content: center;
+  }
+
+  .communities__communities-list {
+    display: grid;
+    flex-flow: row wrap;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    gap: var(--gap-xxxxxxxl) var(--gap-xl);
+    width: 100%;
+  }
+
+  @media (width <= 39rem) {
+    .communities__tools {
       flex-direction: column;
-      gap: var(--gap-xxxl);
-      align-items: flex-start;
-      align-self: stretch;
-
-      > .__tools {
-        flex-direction: row;
-        gap: var(--gap-md);
-        justify-content: space-between;
-
-        > .__search {
-          display: flex;
-          flex-grow: 1;
-          min-width: max-content;
-          max-width: 26.25rem;
-        }
-      }
-
-      > .__results {
-        justify-content: center;
-      }
-
-      @media (width <= 39rem) {
-        .__tools {
-          flex-direction: column;
-
-          > .__search {
-            display: flex;
-            flex-grow: 1;
-            min-width: unset;
-            max-width: unset;
-          }
-        }
-      }
     }
 
-    .__communitiesList {
-      display: grid;
-      flex-flow: row wrap;
-      grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-      gap: var(--gap-xxxxxxxl) var(--gap-xl);
-      width: 100%;
+    .communities__search {
+      display: flex;
+      flex-grow: 1;
+      min-width: unset;
+      max-width: unset;
     }
+  }
 
-    @media (width <= 27.5rem) {
-      .__communitiesList {
-        grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
-      }
+  @media (width <= 27.5rem) {
+    .communities__communities-list {
+      grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
     }
   }
 }

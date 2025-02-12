@@ -74,7 +74,7 @@ export default function ManifestValidator() {
   }, [debouncedTeamInput, debouncedManifestInput, outletContext.requestConfig]);
 
   return (
-    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+    <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
         <NewLink primitiveType="cyberstormLink" linkId="ManifestValidator">
           Manifest Validator
@@ -85,13 +85,15 @@ export default function ManifestValidator() {
         headingLevel="1"
         headingSize="2"
       />
-      <section className="ts-container ts-container--y ts-container--full nimbus-tools-manifestValidator">
-        <div className="ts-container ts-container--x ts-container--full __row">
-          <div className="__meta">
-            <p className="__title">Manifest Validator</p>
-            <p className="__description">Select a team to validate a package</p>
+      <section className="container container--y container--full manifest-validator">
+        <div className="container container--x container--full manifest-validator__row">
+          <div className="manifest-validator__meta">
+            <p className="manifest-validator__title">Manifest Validator</p>
+            <p className="manifest-validator__description">
+              Select a team to validate a package
+            </p>
           </div>
-          <div className="__content">
+          <div className="manifest-validator__content">
             {currentUser && currentUser.username ? null : (
               <Alert
                 content="You must be logged in to see your teams"

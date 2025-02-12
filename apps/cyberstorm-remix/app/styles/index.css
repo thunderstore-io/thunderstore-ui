@@ -3,6 +3,6 @@
 @import "layout.css";
 @import "overrides.css";
 @import "error.css";
-@import "emptyGhost.css";
+@import "noResult.css";
 @import "markdown.css";
 @import "settingsItem.css";

@@ -34,15 +34,15 @@ export const CheckboxList = (props: Props) => {
   const { items } = props;
 
   return (
-    <ol className="nimbus-commonComponents-checkboxList">
+    <ol className="checkbox-list">
       {items.map((item) => {
         const cs = currentState(item.state);
         return (
           <li key={item.label}>
             <label
               className={classnames(
-                "nimbus-commonComponents-checkboxList-label",
-                `nimbus-commonComponents-checkboxList-label--${cs}`
+                "checkbox-list__label",
+                `checkbox-list__label--${cs}`
               )}
             >
               {item.label}
@@ -50,8 +50,8 @@ export const CheckboxList = (props: Props) => {
                 onInteract={() => {
                   item.setStateFunc(nextStateResolve(item.state));
                 }}
-                rootClasses="nimbus-commonComponents-checkboxList-label__checkbox"
-                value={`nimbus-commonComponents-checkboxList-label--${cs}`}
+                rootClasses="checkbox-list__checkbox"
+                value={`checkbox-list__label--${cs}`}
                 noState
               >
                 <NewIcon csMode="inline" noWrapper>

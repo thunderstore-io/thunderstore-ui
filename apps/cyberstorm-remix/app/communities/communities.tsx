@@ -122,19 +122,19 @@ export default function CommunitiesPage() {
   }, [debouncedSearchValue]);
 
   return (
-    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
-      <section className="ts-container ts-container--y nimbus-communities">
+    <div className="container container--y container--full layout__content">
+      <section className="container container--y nimbus-communities">
         {/* <PageHeader heading="Communities" headingLevel="1" headingSize="2" /> */}
         <Heading
           csLevel="1"
           csSize="2"
-          rootClasses="ts-container ts-container--stretch __heading"
+          rootClasses="container container--stretch communities__heading"
         >
           Communities
         </Heading>
 
-        <div className="ts-container ts-container--y ts-container--full __content">
-          <div className="ts-container ts-container--stretch __tools">
+        <div className="container container--y container--full communities__content">
+          <div className="container container--stretch communities__tools">
             <NewTextInput
               onChange={(e) => setSearchValue(e.target.value)}
               value={searchValue}
@@ -142,9 +142,9 @@ export default function CommunitiesPage() {
               clearValue={() => setSearchValue("")}
               leftIcon={<FontAwesomeIcon icon={faSearch} />}
               type="search"
-              rootClasses="__search"
+              rootClasses="communities__search"
             />
-            <span className="ts-container ts-container--x">
+            <span className="container container--x">
               <NewSelect
                 onChange={changeOrder}
                 options={selectOptions}
@@ -154,7 +154,7 @@ export default function CommunitiesPage() {
             </span>
           </div>
 
-          <div className="ts-container ts-container--x ts-container--stretch __results">
+          <div className="container container--x container--stretch communities__results">
             <CommunitiesList communitiesData={communitiesData} />
           </div>
         </div>
@@ -173,7 +173,7 @@ function CommunitiesList(props: { communitiesData: Communities }) {
 
   if (communitiesData.results.length > 0) {
     return (
-      <div className="__communitiesList">
+      <div className="communities__communities-list">
         {communitiesData.results.map((community) => (
           <CardCommunity
             key={community.identifier}
@@ -189,8 +189,8 @@ function CommunitiesList(props: { communitiesData: Communities }) {
     );
   } else {
     return (
-      <EmptyState.Root className="nimbus-noresult">
-        <EmptyState.Icon wrapperClasses="nimbus-noresult__ghostbounce">
+      <EmptyState.Root className="no-result">
+        <EmptyState.Icon wrapperClasses="no-result__ghostbounce">
           <FontAwesomeIcon icon={faGhost} />
         </EmptyState.Icon>
         <EmptyState.Title>It&apos;s empty in there.</EmptyState.Title>

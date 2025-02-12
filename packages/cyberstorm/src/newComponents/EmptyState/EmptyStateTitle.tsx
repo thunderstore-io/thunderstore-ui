@@ -9,7 +9,7 @@ interface Props extends PropsWithChildren {
 export function EmptyStateTitle(props: Props) {
   const { children, className } = props;
   return (
-    <span className={classnames("ts-emptyState__title", className)}>
+    <span className={classnames("empty-state__title", className)}>
       {children}
     </span>
   );

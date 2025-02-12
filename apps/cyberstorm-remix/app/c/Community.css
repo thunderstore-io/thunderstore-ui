@@ -1,69 +1,67 @@
 @layer nimbus-layout {
-  .nimbus-community {
-    > .__heading {
-      display: flex;
-      gap: var(--gap-xl);
-      align-items: center;
-      align-self: stretch;
-      padding: var(--space-8) 0 var(--space-20);
+  .community__heading {
+    display: flex;
+    gap: var(--gap-xl);
+    align-items: center;
+    align-self: stretch;
+    padding: var(--space-8) 0 var(--space-20);
+  }
 
-      > .__communitySmallImage {
-        width: 3.5rem;
-        height: 3.5rem;
+  .community__small-image {
+    width: 3.5rem;
+    height: 3.5rem;
 
-        --aspect-ratio: 1;
+    --aspect-ratio: 1;
 
-        > svg {
-          width: 50%;
-        }
-      }
+    > svg {
+      width: 50%;
+    }
+  }
 
-      > .__content {
-        flex-wrap: wrap;
+  .community__content {
+    flex-wrap: wrap;
+  }
 
-        > .__info {
-          flex-shrink: 0;
-          min-width: 8ch;
-          overflow-wrap: anywhere;
-        }
+  .community__info {
+    flex-shrink: 0;
+    min-width: 8ch;
+    overflow-wrap: anywhere;
+  }
 
-        > .__meta {
-          display: flex;
-          flex-wrap: wrap;
-          gap: var(--gap-xxxl);
-          align-items: center;
+  .community__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap-xxxl);
+    align-items: center;
+  }
 
-          > .__item {
-            display: flex;
-            gap: var(--gap-xs);
-            align-items: center;
-            font-weight: var(--font-weight-bold);
-            font-size: var(--font-size-body-md);
-            line-height: var(--line-height-md);
+  .community__item {
+    display: flex;
+    gap: var(--gap-xs);
+    align-items: center;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
 
-            & > svg {
-              inline-size: var(--space-16);
-            }
-          }
-        }
+    > svg {
+      inline-size: var(--space-16);
+    }
+  }
 
-        @media (width <= 48rem) {
-          .__meta {
-            gap: var(--gap-xxs);
+  @media (width <= 48rem) {
+    .community__meta {
+      gap: var(--gap-xxs);
+    }
 
-            .__item {
-              font-size: var(--font-size-body-sm);
-            }
-          }
-        }
+    .community__item {
+      font-size: var(--font-size-body-sm);
+    }
+  }
 
-        @media (width <= 24rem) {
-          > .__info {
-            font-size: 2rem;
-            line-height: var(--line-height-sm);
-          }
-        }
-      }
+  @media (width <= 24rem) {
+    .community__info {
+      font-size: 2rem;
+      line-height: var(--line-height-sm);
     }
   }
 }

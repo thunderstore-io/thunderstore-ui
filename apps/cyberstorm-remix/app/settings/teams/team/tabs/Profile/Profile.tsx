@@ -56,7 +56,7 @@ export default function Profile() {
   });
 
   return (
-    <div className="nimbus-settings-team-profile nimbus-settingsItems">
+    <div className="settings-items team-profile">
       <ApiForm
         onSubmitSuccess={() => {
           onSubmitSuccess();
@@ -66,19 +66,19 @@ export default function Profile() {
         schema={teamDetailsEditFormSchema}
         meta={{ teamIdentifier: team.name }}
         endpoint={teamDetailsEdit}
-        formProps={{ className: "nimbus-settingsItems__item __form" }}
+        formProps={{ className: "settings-items__item" }}
         config={outletContext.requestConfig}
       >
-        <div className="nimbus-settingsItems__meta __meta">
-          <p className="nimbus-settingsItems__title">Team donation link</p>
-          <p className="nimbus-settingsItems__description">
+        <div className="settings-items__meta">
+          <p className="settings-items__title">Team donation link</p>
+          <p className="settings-items__description">
             For example shown in the teams packages pages
           </p>
         </div>
-        <div className="nimbus-settingsItems__content __content">
-          <div className="nimbus-settingsItems__item">
-            <div className="__donationLink">
-              <span className="__label">URL</span>
+        <div className="settings-items__content">
+          <div className="settings-items__island">
+            <div className="team-profile__donationLink">
+              <span className="team-profile__label">URL</span>
               <FormTextInput
                 schema={teamDetailsEditFormSchema}
                 name={"donation_link"}
@@ -86,11 +86,13 @@ export default function Profile() {
                 existingValue={
                   team.donation_link === null ? undefined : team.donation_link
                 }
-                rootClasses="__input"
+                rootClasses="team-profile__input"
               />
             </div>
           </div>
-          <FormSubmitButton rootClasses="__save">Save changes</FormSubmitButton>
+          <FormSubmitButton rootClasses="team-profile__save">
+            Save changes
+          </FormSubmitButton>
         </div>
       </ApiForm>
     </div>

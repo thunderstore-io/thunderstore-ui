@@ -312,8 +312,8 @@ export function PackageSearch(props: Props) {
   });
 
   return (
-    <div className="nimbus-commonComponents-packageSearch">
-      <div className="nimbus-commonComponents-packageSearch-sidebar">
+    <div className="package-search">
+      <div className="package-search__sidebar">
         <NewTextInput
           placeholder="Search Mods..."
           value={searchValue}
@@ -322,9 +322,9 @@ export function PackageSearch(props: Props) {
           leftIcon={<FontAwesomeIcon icon={faSearch} />}
           id="searchInput"
           type="search"
-          rootClasses="nimbus-commonComponents-packageSearch__search"
+          rootClasses="package-search__search"
         />
-        <div className="nimbus-commonComponents-packageSearch__filters">
+        <div className="package-search__filters">
           {allSections.length > 0 ? (
             <CollapsibleMenu headerTitle="Sections" defaultOpen>
               <RadioGroup
@@ -380,8 +380,8 @@ export function PackageSearch(props: Props) {
         </div>
       </div>
 
-      <div className="nimbus-commonComponents-packageSearch-content">
-        <div className="nimbus-commonComponents-packageSearch-searchParams">
+      <div className="package-search__content">
+        <div className="package-search__search-params">
           <CategoryTagCloud
             searchValue={searchValue}
             setSearchValue={setSearchValue}
@@ -390,10 +390,10 @@ export function PackageSearch(props: Props) {
               searchParamsBlob.excludedCategories ?? ""
             )}
             setCategories={setCategories}
-            rootClasses="nimbus-commonComponents-packageSearch-searchParams__tags"
+            rootClasses="package-search__tags"
           />
-          <div className="nimbus-commonComponents-packageSearch-tools">
-            <div className="nimbus-commonComponents-packageSearch-tools__results">
+          <div className="package-search__tools">
+            <div className="package-search__results">
               <PackageCount
                 page={searchParamsBlob.page ? Number(searchParamsBlob.page) : 1}
                 pageSize={PER_PAGE}
@@ -401,9 +401,9 @@ export function PackageSearch(props: Props) {
                 totalCount={listings.count}
               />
             </div>
-            <div className="nimbus-commonComponents-packageSearch-tools__listingActions">
+            <div className="package-search__listing-actions">
               {/* <div className="__display"></div> */}
-              <div className="nimbus-commonComponents-packageSearch-tools__sorting">
+              <div className="package-search__sorting">
                 <PackageOrder
                   order={
                     (searchParamsBlob.order as PackageOrderOptions) ??
@@ -417,21 +417,21 @@ export function PackageSearch(props: Props) {
         </div>
         <StalenessIndicator
           isStale={navigation.state === "loading" ? true : false}
-          className="nimbus-commonComponents-packageSearch-packages"
+          className="package-search__packages"
         >
           {listings.results.length > 0 ? (
-            <div className="nimbus-commonComponents-packageSearch-packages__grid">
+            <div className="package-search__grid">
               {listings.results.map((p) => (
                 <CardPackage key={`${p.namespace}-${p.name}`} packageData={p} />
               ))}
             </div>
           ) : (searchParamsBlob.order !== undefined && searchParams.size > 1) ||
             (searchParamsBlob.order === undefined && searchParams.size > 0) ? (
-            <EmptyState.Root className="nimbus-noresult">
-              <EmptyState.Icon wrapperClasses="nimbus-noresult__ghostbounce">
+            <EmptyState.Root className="no-result">
+              <EmptyState.Icon wrapperClasses="no-result__ghostbounce">
                 <FontAwesomeIcon icon={faSearch} />
               </EmptyState.Icon>
-              <div className="nimbus-noresult__info">
+              <div className="no-result__info">
                 <EmptyState.Title>No results found</EmptyState.Title>
                 <EmptyState.Message>
                   Make sure all keywords are spelled correctly or try different
@@ -440,17 +440,17 @@ export function PackageSearch(props: Props) {
               </div>
               <NewButton
                 onClick={() => resetParams(searchParamsBlob.order)}
-                rootClasses="nimbus-noresult__button"
+                rootClasses="no-result__button"
               >
                 Clear all filters
               </NewButton>
             </EmptyState.Root>
           ) : (
-            <EmptyState.Root className="nimbus-noresult">
-              <EmptyState.Icon wrapperClasses="nimbus-noresult__ghostbounce">
+            <EmptyState.Root className="no-result">
+              <EmptyState.Icon wrapperClasses="no-result__ghostbounce">
                 <FontAwesomeIcon icon={faGhost} />
               </EmptyState.Icon>
-              <div className="nimbus-noresult__info">
+              <div className="no-result__info">
                 <EmptyState.Title>It&apos;s empty in here</EmptyState.Title>
                 <EmptyState.Message>
                   Be the first to upload a mod!
@@ -459,7 +459,7 @@ export function PackageSearch(props: Props) {
             </EmptyState.Root>
           )}
         </StalenessIndicator>
-        <div className="nimbus-commonComponents-packageSearch-content__pagination">
+        <div className="package-search__pagination">
           <NewPagination
             currentPage={
               searchParamsBlob.page ? Number(searchParamsBlob.page) : 1

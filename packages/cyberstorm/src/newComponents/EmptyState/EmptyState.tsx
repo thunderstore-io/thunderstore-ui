@@ -14,9 +14,7 @@ interface Props extends PropsWithChildren {
 export function EmptyState(props: Props) {
   const { children, className } = props;
 
-  return (
-    <div className={classnames("ts-emptyState", className)}>{children}</div>
-  );
+  return <div className={classnames("empty-state", className)}>{children}</div>;
 }
 
 EmptyState.displayName = "EmptyState";

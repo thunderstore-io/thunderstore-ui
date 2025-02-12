@@ -1,5 +1,5 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-radioGroup {
+  .radio-group {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -7,7 +7,7 @@
     transition: ease-out var(--animation-duration-xs);
   }
 
-  .nimbus-commonComponents-radioGroup__label {
+  .radio-group__label {
     display: flex;
     gap: var(--gap-sm);
     align-items: center;
@@ -21,11 +21,11 @@
     transition: var(--animation-duration-xs);
     user-select: none;
 
-    &.nimbus-commonComponents-radioGroup__label--unselected {
+    &.radio-group__label--unselected {
       --icon-color: var(--color-surface-a8);
     }
 
-    &.nimbus-commonComponents-radioGroup__label--selected {
+    &.radio-group__label--selected {
       color: var(--color-cyber-green-7);
       font-weight: var(--font-weight-bold);
 
@@ -36,11 +36,11 @@
       color: var(--color-text-primary);
       background-color: var(--color-surface-a5);
 
-      &.nimbus-commonComponents-radioGroup__label--unselected {
+      &.radio-group__label--unselected {
         --icon-color: var(--color-surface-a10);
       }
 
-      &.nimbus-commonComponents-radioGroup__label--selected {
+      &.radio-group__label--selected {
         color: var(--color-cyber-green-8);
 
         --icon-color: var(--color-cyber-green-8);
@@ -48,7 +48,7 @@
     }
   }
 
-  .nimbus-commonComponents-radioGroup-radio {
+  .radio-group__radio {
     display: flex;
     align-items: center;
     width: var(--space-18);

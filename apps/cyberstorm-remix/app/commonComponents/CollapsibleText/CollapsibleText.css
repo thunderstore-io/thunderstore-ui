@@ -1,5 +1,5 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-collapsibleText {
+  .collapsible-text {
     display: flex;
     flex-direction: row;
     gap: var(--space-8);
@@ -8,7 +8,7 @@
     max-width: 100%;
   }
 
-  .nimbus-commonComponents-collapsibleText__text {
+  .collapsible-text__text {
     width: 100%;
     min-width: 0;
     max-width: 80ch;
@@ -24,20 +24,18 @@
     transition: max-height 500ms cubic-bezier(0, 1, 0, 1);
   }
 
-  .nimbus-commonComponents-collapsibleText:has(
-      .nimbus-commonComponents-collapsibleText__text--opened
-    ) {
+  .collapsible-text:has(.collapsible-text__text--opened) {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .nimbus-commonComponents-collapsibleText__text--opened {
+  .collapsible-text__text--opened {
     max-height: 30rem;
     white-space: normal;
     transition: max-height 500ms;
   }
 
-  .nimbus-commonComponents-collapsibleText__show {
+  .collapsible-text__show {
     color: var(--color-text-accent);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-md);
@@ -48,12 +46,12 @@
   }
 
   @media (width <= 48rem) {
-    .nimbus-commonComponents-collapsibleText__text {
+    .collapsible-text__text {
       font-size: var(--font-size-body-md);
       line-height: var(--line-height-sm);
     }
 
-    .nimbus-commonComponents-collapsibleText__show {
+    .collapsible-text__show {
       font-size: var(--font-size-body-sm);
     }
   }

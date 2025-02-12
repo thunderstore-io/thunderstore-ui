@@ -1,5 +1,5 @@
 @layer components {
-  .ts-metaitem {
+  .meta-item {
     display: inline-flex;
     gap: var(--metaitem-gap);
     align-items: center;

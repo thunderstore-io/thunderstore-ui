@@ -38,20 +38,21 @@ export const classnames = (
 };
 
 export const componentClasses = (
+  namespace: string,
   variant?: string,
   size?: string,
   modifiers?: string[]
 ): string[] => {
   const listOfClasses = [];
   if (variant) {
-    listOfClasses.push(`ts-variant--${variant}`);
+    listOfClasses.push(`${namespace}--variant--${variant}`);
   }
   if (size) {
-    listOfClasses.push(`ts-size--${size}`);
+    listOfClasses.push(`${namespace}--size--${size}`);
   }
   if (modifiers) {
     listOfClasses.push(
-      ...modifiers.map((csm) => (csm !== "" ? `ts-modifier--${csm}` : ""))
+      ...modifiers.map((csm) => (csm !== "" ? `${namespace}--${csm}` : ""))
     );
   }
   return listOfClasses;

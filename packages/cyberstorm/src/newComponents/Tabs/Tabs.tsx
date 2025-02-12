@@ -41,17 +41,17 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
         {...forwardedProps}
         primitiveType={"window"}
         rootClasses={classnames(
-          "ts-tabs",
-          ...componentClasses(csVariant, csSize),
+          "tabs",
+          ...componentClasses("tabs", csVariant, csSize),
           rootClasses
         )}
         ref={forwardedRef}
       >
         {tabItems.map((item) => {
           const tabsClasses = classnames(
-            "ts-tabs-item",
-            ...componentClasses(csVariant, csSize),
-            item.current ? "ts-tabs-item-current" : undefined
+            "tabs__item",
+            ...componentClasses("tabs__item", csVariant, csSize),
+            item.current ? "tabs__item--current" : undefined
           );
           if (item.itemProps.rootClasses) {
             item.itemProps.rootClasses += tabsClasses;
@@ -63,9 +63,9 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
             item.numberSlateValue ? (
               <div
                 className={classnames(
-                  "ts-tabs-item-number-slate",
-                  ...componentClasses(csVariant, csSize),
-                  item.current ? "ts-tabs-item-current" : undefined,
+                  "tabs__number-slate",
+                  ...componentClasses("tabs__number-slate", csVariant, csSize),
+                  item.current ? "tabs__item--current" : undefined,
                   item.tabItemNumberSlateRootClasses
                 )}
               >

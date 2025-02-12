@@ -1,5 +1,5 @@
 @layer nimbus-layout {
-  .nimbus-settings-teams-team {
+  .team-settings {
     display: flex;
     flex-direction: column;
     gap: 4rem;

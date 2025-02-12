@@ -1,5 +1,5 @@
 @layer components {
-  .ts-cardpackage {
+  .card-package {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -8,25 +8,23 @@
     transition: ease-out var(--animation-duration-xs);
   }
 
-  .ts-cardpackage:has(:focus-visible) {
+  .card-package:has(:focus-visible) {
     border-radius: var(--radius-md);
     outline: 0.2rem solid var(--color-cyber-green-5);
     outline-offset: 0.5rem;
   }
 
-  .ts-cardpackage .ts-cardpackage__imagewrapper {
-    border-bottom-right-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
-  }
-
-  .ts-cardpackage:hover {
+  .card-package:hover {
     background: var(--color-surface-a5);
     box-shadow:
       0 0 4px 0 rgb(0 0 0 / 0.4),
       0 6px 8px 0 rgb(0 0 0 / 0.5);
   }
 
-  .ts-cardpackage__imagewrapper {
+  .card-package__image-wrapper {
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+
     &:hover {
       filter: brightness(1.2);
 
@@ -36,7 +34,7 @@
     }
   }
 
-  .ts-cardpackage:focus-within .ts-cardpackage__imagewrapper {
+  .card-package:focus-within .card-package__image-wrapper {
     filter: brightness(1.2);
 
     > div {
@@ -44,7 +42,7 @@
     }
   }
 
-  .ts-cardpackage > .ts-cardpackage__content {
+  .card-package__content {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -54,7 +52,7 @@
     padding: var(--space-12);
   }
 
-  .ts-cardpackage__tag {
+  .card-package__tag {
     position: absolute;
     right: 0;
     z-index: 1;
@@ -65,7 +63,7 @@
     margin: var(--space-8);
   }
 
-  .ts-cardpackage__info {
+  .card-package__info {
     display: flex;
     flex-direction: column;
     gap: var(--gap-xxs);
@@ -73,7 +71,7 @@
   }
 
   /* Title */
-  .ts-cardpackage__title {
+  .card-package__title {
     width: 100%;
 
     overflow: hidden;
@@ -87,12 +85,12 @@
     --link-color: var(--color-text-primary);
   }
 
-  .ts-cardpackage__title:focus-visible {
+  .card-package__title:focus-visible {
     outline: none !important;
   }
 
   /* Author */
-  .ts-cardpackage__author {
+  .card-package__author {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -100,19 +98,19 @@
     text-decoration: none;
   }
 
-  .ts-cardpackage__author__link {
+  .card-package__link {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
 
-  .ts-cardpackage__author__prefix {
+  .card-package__prefix {
     padding-right: var(--space-4);
     color: var(--color-text-tertiary);
   }
 
   /* Description */
-  .ts-cardpackage__description {
+  .card-package__description {
     width: 100%;
     color: var(--color-text-secondary);
     font: var(--font-body);
@@ -122,7 +120,7 @@
   }
 
   /* Tags */
-  .ts-cardpackage__categoryWrapper {
+  .card-package__tags {
     display: flex;
     flex: 1;
     flex-wrap: wrap;
@@ -133,7 +131,7 @@
   }
 
   /* Footer */
-  .ts-cardpackage__footer {
+  .card-package__footer {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -143,7 +141,7 @@
     padding-top: 6px;
   }
 
-  .ts-cardpackage__footer__metaItemWrapper {
+  .card-package__meta {
     display: flex;
     flex-wrap: wrap;
     gap: 12px 24px;
@@ -153,7 +151,7 @@
     color: var(--color-text-tertiary);
   }
 
-  .ts-cardpackage__footer__updatetext {
+  .card-package__updated {
     color: var(--color-text-tertiary);
     font-weight: 400;
     font-size: var(--font-size-body-sm, 12px);

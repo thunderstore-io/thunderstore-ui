@@ -1,8 +1,8 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-checkboxList {
+  .checkbox-list {
     list-style: none;
 
-    .nimbus-commonComponents-checkboxList-label {
+    .checkbox-list__label {
       display: flex;
       gap: var(--gap-sm);
       align-items: center;
@@ -16,18 +16,7 @@
       transition: var(--animation-duration-xs);
       user-select: none;
 
-      &.nimbus-commonComponents-checkboxList-label--unselected {
-        --icon-color: var(--color-surface-a8);
-      }
-
-      &.nimbus-commonComponents-checkboxList-label--selected {
-        color: var(--color-cyber-green-7);
-        font-weight: var(--font-weight-bold);
-
-        --icon-color: var(--color-cyber-green-7);
-      }
-
-      &.nimbus-commonComponents-checkboxList-label--off {
+      &.checkbox-list__label--off {
         color: var(--color-text-secondary);
 
         svg {
@@ -35,7 +24,7 @@
         }
       }
 
-      &.nimbus-commonComponents-checkboxList-label--include {
+      &.checkbox-list__label--include {
         color: var(--color-cyber-green-7);
         font-weight: var(--font-weight-bold);
 
@@ -44,7 +33,7 @@
         }
       }
 
-      &.nimbus-commonComponents-checkboxList-label--exclude {
+      &.checkbox-list__label--exclude {
         color: var(--color-accent-red-7);
         font-weight: var(--font-weight-bold);
 
@@ -57,17 +46,7 @@
         color: var(--color-text-primary);
         background-color: var(--color-surface-a5);
 
-        &.nimbus-commonComponents-checkboxList-label--unselected {
-          --icon-color: var(--color-surface-a10);
-        }
-
-        &.nimbus-commonComponents-checkboxList-label--selected {
-          color: var(--color-cyber-green-8);
-
-          --icon-color: var(--color-cyber-green-8);
-        }
-
-        &.nimbus-commonComponents-checkboxList-label--off {
+        &.checkbox-list__label--off {
           color: var(--color-text-primary);
 
           svg {
@@ -75,7 +54,7 @@
           }
         }
 
-        &.nimbus-commonComponents-checkboxList-label--include {
+        &.checkbox-list__label--include {
           color: var(--color-cyber-green-8);
 
           svg {
@@ -83,7 +62,7 @@
           }
         }
 
-        &.nimbus-commonComponents-checkboxList-label--exclude {
+        &.checkbox-list__label--exclude {
           color: var(--color-accent-red-8);
 
           svg {
@@ -93,7 +72,7 @@
       }
     }
 
-    .nimbus-commonComponents-checkboxList-label__checkbox {
+    .checkbox-list__checkbox {
       display: flex;
       align-items: center;
       justify-content: center;

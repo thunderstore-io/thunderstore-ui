@@ -1,5 +1,5 @@
 @layer nimbus-layout {
-  .nimbus-commonComponents-navigation-header {
+  .navigation-header {
     position: sticky;
     top: 0;
     z-index: 999;
@@ -14,7 +14,7 @@
     overflow-x: auto;
   }
 
-  .nimbus-commonComponents-navigation-header__global {
+  .navigation-header__global {
     display: flex;
     flex-shrink: 0;
     gap: var(--gap-xs);
@@ -22,7 +22,7 @@
     align-self: stretch;
   }
 
-  .nimbus-commonComponents-navigation-header__logo {
+  .navigation-header__logo {
     display: flex;
     flex-shrink: 0;
     gap: var(--gap-sm);
@@ -37,14 +37,14 @@
     }
   }
 
-  .nimbus-commonComponents-navigation-header__main {
+  .navigation-header__main {
     display: flex;
     flex-direction: row;
     gap: var(--gap-md);
     align-items: center;
   }
 
-  .nimbus-commonComponents-navigation-header-user {
+  .navigation-header__user {
     display: flex;
     flex-shrink: 0;
     gap: var(--gap-md);
@@ -53,28 +53,28 @@
     padding-right: var(--space-12);
   }
 
-  .nimbus-commonComponents-navigation-header-user__extra {
+  .navigation-header__extra {
     display: flex;
     gap: var(--gap-xs);
     align-items: center;
   }
 
-  .nimbus-commonComponents-navigation-header-user__profile-actions {
+  .navigation-header__profile-actions {
     display: flex;
     gap: var(--gap-xs);
     align-items: flex-start;
   }
 
-  /* .nimbus-commonComponents-navigation-header-user-dropdown {
+  /* .navigation-header__user-dropdown {
   } */
 
-  .nimbus-commonComponents-navigation-header-user-dropdown__avatar {
+  .navigation-header__avatar {
     display: flex;
     gap: var(--gap-md);
     padding: var(--space-6) var(--space-16);
   }
 
-  .nimbus-commonComponents-navigation-header-user-dropdown__details {
+  .navigation-header__dropdown-details {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -83,7 +83,7 @@
     font-size: var(--font-size-body-lg);
   }
 
-  .nimbus-commonComponents-navigation-header-user-dropdown__item {
+  .navigation-header__dropdown-item {
     display: flex;
     gap: var(--space-16);
     align-items: center;
@@ -91,57 +91,52 @@
     font-size: var(--font-size-body-md);
   }
 
-  .nimbus-commonComponents-navigation-header-user-dropdown__item[data-highlighted]
-    svg,
-  .nimbus-commonComponents-navigation-header-user-dropdown__item[data-highlighted],
-  .nimbus-commonComponents-navigation-header-user-dropdown__item {
+  .navigation-header__dropdown-item[data-highlighted] svg,
+  .navigation-header__dropdown-item[data-highlighted],
+  .navigation-header__dropdown-item {
     color: var(--color-text-primary);
   }
 
-  .nimbus-commonComponents-navigation-header-developers-dropdown {
+  .navigation-header__developers-dropdown {
     min-width: 14rem;
   }
 
-  .nimbus-commonComponents-navigation-header-developers-dropdown__externalLink {
+  .navigation-header__externalLink {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
 
-  .nimbus-commonComponents-navigation-header-developers-dropdown__focus:not(
-      [data-highlighted]
-    )
-    a
-    svg {
+  .navigation-header--focus:not([data-highlighted]) a svg {
     color: var(--color-text-tertiary);
   }
 
-  .nimbus-commonComponents-navigation-login {
+  .navigation-login {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     align-items: center;
   }
 
-  .nimbus-commonComponents-navigation-login__logo {
+  .navigation-login__logo {
     width: 3.12rem;
     height: 2.79rem;
     color: currentcolor;
     fill: currentcolor;
   }
 
-  .nimbus-commonComponents-navigation-login__title {
+  .navigation-login__title {
     text-align: center;
   }
 
-  .nimbus-commonComponents-navigation-login__links {
+  .navigation-login__links {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     justify-content: center;
   }
 
-  .nimbus-commonComponents-navigation-login__link {
+  .navigation-login__link {
     display: flex;
     flex: 1 0 0;
     gap: 2.5rem;
@@ -153,19 +148,19 @@
     font-size: var(--font-size-body-md);
   }
 
-  .nimbus-commonComponents-navigation-login__discord {
+  .navigation-login__discord {
     background: #5865f2;
   }
 
-  .nimbus-commonComponents-navigation-login__github {
+  .navigation-login__github {
     background: #333;
   }
 
-  .nimbus-commonComponents-navigation-login__overwolf {
+  .navigation-login__overwolf {
     background: #d34037;
   }
 
-  .nimbus-commonComponents-navigation-login__legal {
+  .navigation-login__legal {
     color: #8683be;
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-sm);
@@ -179,7 +174,7 @@
 
   /* Mobile breakpoint */
   @media (width <= 475px) {
-    .nimbus-commonComponents-navigation-header {
+    .navigation-header {
       display: none;
     }
   }

@@ -1,21 +1,20 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-copyButton {
+  .copy-button {
     width: 1rem;
     height: 1rem;
     background: transparent;
   }
 
-  .nimbus-commonComponents-copyButton__copy {
+  .copy-button__copy {
     all: unset;
     color: var(--color-text-tertiary);
   }
 
-  .nimbus-commonComponents-copyButton:hover
-    .nimbus-commonComponents-copyButton__copy {
+  .copy-button:hover .copy-button__copy {
     color: var(--color-highlight);
   }
 
-  .nimbus-commonComponents-copyButton__checkmark {
+  .copy-button__checkmark {
     all: unset;
     color: var(--color-highlight);
   }

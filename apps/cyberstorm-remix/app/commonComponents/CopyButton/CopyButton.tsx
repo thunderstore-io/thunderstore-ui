@@ -36,15 +36,13 @@ export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
           onMouseOut={() => setIsTooltipOpen(false)}
           onBlur={() => {}}
           onFocus={() => {}}
-          className="nimbus-commonComponents-copyButton"
+          className="copy-button"
           ref={forwardedRef}
           {...forwardedProps}
         >
           <NewIcon
             rootClasses={
-              wasRecentlyCopied
-                ? "nimbus-commonComponents-copyButton__checkmark"
-                : "nimbus-commonComponents-copyButton__copy"
+              wasRecentlyCopied ? "copy-button__checkmark" : "copy-button__copy"
             }
             csMode="inline"
             noWrapper

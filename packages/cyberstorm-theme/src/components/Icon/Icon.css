@@ -1,42 +1,42 @@
 @layer theme-components {
   /* VARIANTS DEFAULT STATE */
-  .ts-icon:where(.ts-variant--primary) {
+  .icon:where(.icon--variant--primary) {
     --icon-color: var(--icon-primary-color--default);
   }
 
-  .ts-icon:where(.ts-variant--secondary) {
+  .icon:where(.icon--variant--secondary) {
     --icon-color: var(--icon-secondary-color--default);
   }
 
-  .ts-icon:where(.ts-variant--tertiary) {
+  .icon:where(.icon--variant--tertiary) {
     --icon-color: var(--icon-tertiary-color--default);
   }
 
-  .ts-icon:where(.ts-variant--accent) {
+  .icon:where(.icon--variant--accent) {
     --icon-color: var(--icon-accent-color--default);
   }
 
-  .ts-icon:where(.ts-variant--special) {
+  .icon:where(.icon--variant--special) {
     --icon-color: var(--icon-special-color--default);
   }
 
-  .ts-icon:where(.ts-variant--success) {
+  .icon:where(.icon--variant--success) {
     --icon-color: var(--icon-success-color--default);
   }
 
-  .ts-icon:where(.ts-variant--info) {
+  .icon:where(.icon--variant--info) {
     --icon-color: var(--icon-info-color--default);
   }
 
-  .ts-icon:where(.ts-variant--warning) {
+  .icon:where(.icon--variant--warning) {
     --icon-color: var(--icon-warning-color--default);
   }
 
-  .ts-icon:where(.ts-variant--danger) {
+  .icon:where(.icon--variant--danger) {
     --icon-color: var(--icon-danger-color--default);
   }
 
-  .ts-icon:where(.ts-variant--cyber) {
+  .icon:where(.icon--variant--cyber) {
     --icon-color: var(--icon-cyber-color--default);
   }
 

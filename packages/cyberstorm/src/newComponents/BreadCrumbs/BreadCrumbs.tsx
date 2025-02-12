@@ -42,18 +42,44 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
         key={homifiedIndex}
         primitiveType="window"
         rootClasses={classnames(
-          homifiedIndex == -1 ? "ts-breadcrumbs__outerstart" : null,
-          "ts-breadcrumbs__outer",
-          isLast ? "ts-breadcrumbs__outerend" : null,
-          ...componentClasses(csVariant, csSize, csModifiers)
+          homifiedIndex == -1 ? "breadcrumbs__outerstart" : null,
+          "breadcrumbs__outer",
+          ...componentClasses(
+            "breadcrumbs__outer",
+            csVariant,
+            csSize,
+            csModifiers
+          ),
+          isLast ? "breadcrumbs__outerend" : null,
+          ...(isLast
+            ? componentClasses(
+                "breadcrumbs__outerend",
+                csVariant,
+                csSize,
+                csModifiers
+              )
+            : [])
         )}
       >
         <Frame
           primitiveType="window"
           rootClasses={classnames(
-            "ts-breadcrumbs__inner",
-            isLast ? "ts-breadcrumbs__innerend" : null,
-            ...componentClasses(csVariant, csSize, csModifiers)
+            "breadcrumbs__inner",
+            ...componentClasses(
+              "breadcrumbs__inner",
+              csVariant,
+              csSize,
+              csModifiers
+            ),
+            isLast ? "breadcrumbs__innerend" : null,
+            ...(isLast
+              ? componentClasses(
+                  "breadcrumbs__innerend",
+                  csVariant,
+                  csSize,
+                  csModifiers
+                )
+              : [])
           )}
         >
           {node}
@@ -67,17 +93,19 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
       key={0}
       primitiveType="window"
       rootClasses={classnames(
-        "ts-breadcrumbs__outerstart",
-        "ts-breadcrumbs__outer",
-        "ts-breadcrumbs__outerhome",
-        ...componentClasses(csVariant, csSize, csModifiers)
+        "breadcrumbs__outerstart",
+        "breadcrumbs__outer",
+        "breadcrumbs__outerhome",
+        ...componentClasses(
+          "breadcrumbs__outer",
+          csVariant,
+          csSize,
+          csModifiers
+        )
       )}
     >
       <div
-        className={classnames(
-          "ts-breadcrumbs__inner",
-          "ts-breadcrumbs__innerhome"
-        )}
+        className={classnames("breadcrumbs__inner", "breadcrumbs__innerhome")}
       >
         <DefaultHomeCrumb />
       </div>
@@ -87,7 +115,7 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
   return (
     <Frame
       primitiveType="window"
-      rootClasses={classnames("ts-breadcrumbs", rootClasses)}
+      rootClasses={classnames("breadcrumbs", rootClasses)}
     >
       {excludeHome ? null : home}
       {nodes}
@@ -102,10 +130,10 @@ export function DefaultHomeCrumb() {
       linkId="Index"
       tooltipText="Home"
       aria-label="Home"
-      rootClasses={"ts-breadcrumbs__homelink"}
+      rootClasses={"breadcrumbs__homelink"}
     >
       <NewIcon noWrapper csVariant="cyber">
-        <FontAwesomeIcon icon={faHouse} className={"ts-breadcrumbs__home"} />
+        <FontAwesomeIcon icon={faHouse} className={"breadcrumbs__home"} />
       </NewIcon>
     </NewLink>
   );

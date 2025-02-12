@@ -1,18 +1,18 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-pageHeader {
+  .page-header {
     display: flex;
     flex-direction: row;
     gap: var(--space-32);
     align-items: flex-start;
     align-self: stretch;
-    padding: var(--space-16);
+    padding: var(--space-24) 0;
   }
 
-  .nimbus-commonComponents-pageHeader__image {
+  .page-header__image {
     flex: 0 0 6rem;
   }
 
-  .nimbus-commonComponents-pageHeader-content {
+  .page-header__content {
     display: flex;
     flex-direction: column;
     gap: var(--space-12);
@@ -21,7 +21,7 @@
     min-width: 0;
   }
 
-  .nimbus-commonComponents-pageHeader-content__info {
+  .page-header__info {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
@@ -33,13 +33,13 @@
     }
   }
 
-  .nimbus-commonComponents-pageHeader-content__meta {
+  .page-header__meta {
     display: flex;
     flex-flow: row wrap;
     gap: var(--space-32);
   }
 
-  .nimbus-commonComponents-pageHeader-meta-item {
+  .page-header__meta-item {
     display: flex;
     gap: var(--gap-xs);
     align-items: center;
@@ -55,20 +55,20 @@
   }
 
   @media (width <= 48rem) {
-    .nimbus-commonComponents-pageHeader {
+    .page-header {
       gap: var(--space-16);
       padding: var(--space-6) 0;
     }
 
-    .nimbus-commonComponents-pageHeader__image {
+    .page-header__image {
       flex: 0 0 5rem;
     }
 
-    .nimbus-commonComponents-pageHeader-content__info > h1 {
+    .page-header__info > h1 {
       --display-font-size: 1.75rem;
     }
 
-    .nimbus-commonComponents-pageHeader-content__meta {
+    .page-header__meta {
       gap: var(--space-16);
     }
   }

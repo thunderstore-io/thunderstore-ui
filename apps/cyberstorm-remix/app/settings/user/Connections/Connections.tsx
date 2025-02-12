@@ -114,11 +114,11 @@ export default function Connections() {
   };
 
   return (
-    <div className="nimbus-settingsItems">
-      <div className="nimbus-settingsItems__item">
-        <div className="nimbus-settingsItems__meta">
-          <p className="nimbus-settingsItems__title">Connections</p>
-          <p className="nimbus-settingsItems__description">
+    <div className="settings-items">
+      <div className="settings-items__item">
+        <div className="settings-items__meta">
+          <p className="settings-items__title">Connections</p>
+          <p className="settings-items__description">
             This information will not be shared outside of Thunderstore. Read
             more on our{" "}
             <NewLink primitiveType="cyberstormLink" linkId="PrivacyPolicy">
@@ -127,7 +127,7 @@ export default function Connections() {
             .
           </p>
         </div>
-        <div className="nimbus-settingsItems__content">
+        <div className="settings-items__content">
           {PROVIDERS.map((p) => (
             <Connection
               key={p.name}
