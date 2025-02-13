@@ -11,7 +11,11 @@ import {
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { CreateTeamForm } from "@thunderstore/cyberstorm-forms";
+import {
+  FormSubmitButton,
+  FormTextInput,
+  useFormToaster,
+} from "@thunderstore/cyberstorm-forms";
 import { currentUserSchema } from "@thunderstore/dapper-ts";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import "./Teams.css";
@@ -21,6 +25,11 @@ import {
   getSessionCurrentUser,
   NamespacedStorageManager,
 } from "@thunderstore/ts-api-react";
+import {
+  ApiForm,
+  createTeamFormSchema,
+} from "@thunderstore/ts-api-react-forms";
+import { createTeam } from "../../../../../packages/thunderstore-api/src";
 
 export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
   return [
@@ -62,6 +71,10 @@ export default function Teams() {
   const revalidator = useRevalidator();
   const [isRefetching, setIsRefetching] = useState(false);
 
+  const { onSubmitSuccess, onSubmitError } = useFormToaster({
+    successMessage: "Team created",
+  });
+
   useEffect(() => {
     setIsRefetching(false);
   }, [currentUser]);
@@ -81,15 +94,16 @@ export default function Teams() {
         </NewLink>
       </NewBreadCrumbs>
       <PageHeader heading="Teams" headingLevel="1" headingSize="2" />
-      <section className="ts-container ts-container--y ts-container--full nimbus-settings-teams">
-        <div className="ts-container ts-container--x ts-container--full __row">
-          <div className="__meta">
-            <p className="__title">Teams</p>
-            <p className="__description">Manage your teams</p>
+      <section className="nimbus-settingsItems nimbus-settings-teams ">
+        <div className="nimbus-settingsItems__item">
+          <div className="nimbus-settingsItems__meta">
+            <p className="nimbus-settingsItems__title">Teams</p>
+            <p className="nimbus-settingsItems__description">
+              Manage your teams
+            </p>
             <Modal
               popoverId={"teamsCreateTeam"}
               csSize="small"
-              title="Create Team"
               trigger={
                 <NewButton
                   {...{
@@ -104,13 +118,42 @@ export default function Teams() {
                 </NewButton>
               }
             >
-              <CreateTeamForm
+              <ApiForm
                 config={() => config}
-                updateTrigger={createTeamRevalidate}
-              />
+                onSubmitSuccess={() => {
+                  createTeamRevalidate();
+                  onSubmitSuccess();
+                }}
+                onSubmitError={onSubmitError}
+                schema={createTeamFormSchema}
+                meta={{}}
+                endpoint={createTeam}
+                formProps={{ className: "nimbus-commonStyles-modalTempalate" }}
+              >
+                <div className="nimbus-commonStyles-modalTempalate__header">
+                  Create team
+                </div>
+                <div className="nimbus-commonStyles-modalTempalate__content">
+                  <div>
+                    Enter the name of the team you wish to create. Team names
+                    can contain the characters a-z A-Z 0-9 _ and must not start
+                    or end with an _
+                  </div>
+                  <div>
+                    <FormTextInput
+                      schema={createTeamFormSchema}
+                      name={"name"}
+                      placeholder={"ExampleName"}
+                    />
+                  </div>
+                </div>
+                <div className="nimbus-commonStyles-modalTempalate__footer">
+                  <FormSubmitButton>Create</FormSubmitButton>
+                </div>
+              </ApiForm>
             </Modal>
           </div>
-          <div className="__content">
+          <div className="nimbus-settingsItems__content">
             <NewTable
               csModifiers={["alignLastColumnRight"]}
               headers={[

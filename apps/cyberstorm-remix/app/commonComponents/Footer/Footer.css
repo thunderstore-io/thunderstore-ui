@@ -1,5 +1,7 @@
 @layer nimbus-components {
   .nimbus-commonComponents-footer {
+    --footer-half-width: 41.75rem;
+
     > .__content {
       flex-direction: row;
       min-height: 34rem;
@@ -8,7 +10,6 @@
         --footer-info-leftside-section-right-padding: 3.5rem;
         --footer-info-leftside-section-top-padding: 4.5rem;
         --footer-info-leftside-section-bottom-padding: 4.5rem;
-        --footer-info-leftside-section-content-max-width: 41.75rem;
         --footer-info-leftside-company-icon-height: var(--space-32);
 
         flex-grow: 1;
@@ -19,7 +20,6 @@
           flex-wrap: wrap;
           gap: var(--gap-xxxl);
           justify-content: space-between;
-          max-width: var(--footer-info-leftside-section-content-max-width);
           margin-left: 5rem;
         }
 
@@ -29,6 +29,7 @@
           justify-content: flex-end;
 
           > .__body {
+            width: var(--footer-half-width);
             padding: var(--footer-info-leftside-section-top-padding)
               var(--footer-info-leftside-section-right-padding)
               var(--footer-info-leftside-section-bottom-padding) 0;
@@ -69,6 +70,7 @@
             var(--footer-info-leftside-section-bottom-padding) 0;
 
           > .__body {
+            width: var(--footer-half-width);
             padding-right: var(--footer-info-leftside-section-right-padding);
 
             > .__nav {
@@ -106,6 +108,7 @@
           flex-direction: column;
           gap: var(--gap-md);
           align-items: flex-start;
+          width: var(--footer-half-width);
           min-height: 0;
 
           > h2 {
@@ -125,7 +128,7 @@
 
           > .__imageWrapper {
             position: relative;
-            max-width: 100%;
+            width: 100%;
             min-height: 0;
             max-height: 13rem;
             margin-top: var(--space-48);
@@ -137,7 +140,6 @@
 
             > .__image {
               position: relative;
-              width: 41.75rem;
               min-height: 0;
             }
           }
@@ -153,8 +155,6 @@
 
             /* z-index: -1; */
             height: 100%;
-
-            /* max-height: 24rem; */
             background-image: linear-gradient(
               165deg,
               hsl(276deg 39% 38% / 0) 45%,
@@ -255,6 +255,7 @@
           > .__links > .__body,
           .__company > .__body {
             justify-content: center;
+            width: 100%;
             margin: unset;
             padding: unset;
           }
@@ -267,10 +268,14 @@
           align-items: flex-start;
           align-self: stretch;
           padding: 3rem var(--space-24) 0;
+
+          > .__content {
+            width: 100%;
+          }
         }
       }
 
-      > .__inner {
+      .__footnote > .__inner {
         flex-direction: column;
         align-items: center;
       }

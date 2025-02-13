@@ -1,80 +1,103 @@
-// import type { MetaFunction } from "@remix-run/node";
-import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
-import { BreadCrumbs, CyberstormLink, Icon } from "@thunderstore/cyberstorm";
-import tabsStyles from "./Tabs.module.css";
-import styles from "./SettingsLayout.module.css";
-import { getDapper } from "cyberstorm/dapper/sessionUtils";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleNodes, faCog } from "@fortawesome/free-solid-svg-icons";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import {
+  Outlet,
+  useLoaderData,
+  useLocation,
+  useOutletContext,
+} from "@remix-run/react";
+import { NewBreadCrumbs, NewLink, Tabs } from "@thunderstore/cyberstorm";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import {
+  clearSession,
+  getSessionCurrentUser,
+  NamespacedStorageManager,
+} from "@thunderstore/ts-api-react";
+import { currentUserSchema } from "@thunderstore/dapper-ts";
+import { OutletContextShape } from "../../root";
+import "./Settings.css";
 
-// REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader() {
-  const dapper = await getDapper(true);
-  const currentUser = await dapper.getCurrentUser();
-  if (!currentUser.username) {
+  const _storage = new NamespacedStorageManager("Session");
+  const currentUser = getSessionCurrentUser(_storage, true, undefined, () => {
+    clearSession(_storage);
+    throw new Response("Your session has expired, please log in again", {
+      status: 401,
+    });
+    // redirect("/");
+  });
+
+  if (
+    !currentUser.username ||
+    (currentUser.username && currentUser.username === "")
+  ) {
+    clearSession(_storage);
     throw new Response("Not logged in.", { status: 401 });
+  } else {
+    return {
+      currentUser: currentUser as typeof currentUserSchema._type,
+    };
   }
-  return { wowSuchData: undefined };
 }
 
 export function HydrateFallback() {
-  return "Loading...";
+  return <div style={{ padding: "32px" }}>Loading...</div>;
 }
 
 export default function Community() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { wowSuchData } = useLoaderData<typeof clientLoader>();
+  const { currentUser } = useLoaderData<typeof clientLoader>();
   const location = useLocation();
+  const outletContext = useOutletContext() as OutletContextShape;
 
-  const currentTab = location.pathname.endsWith("/account/") ? "account" : "";
+  const currentTab = location.pathname.endsWith("/account/")
+    ? "account"
+    : "settings";
 
   return (
-    <>
-      <BreadCrumbs>
-        <CyberstormLink linkId="Settings">Settings</CyberstormLink>
-      </BreadCrumbs>
-      <header className="nimbus-root__page-header">
-        <div className={styles.header}>
-          <PageHeader title="Settings" />
-        </div>
-      </header>
-      <main className="nimbus-root__main">
-        <div className={styles.tabContent}>
-          <div className={tabsStyles.root}>
-            <div className={tabsStyles.buttons}>
-              <CyberstormLink
-                linkId="Settings"
-                aria-current={currentTab === ""}
-                className={classnames(
-                  tabsStyles.button,
-                  currentTab === "" ? tabsStyles.active : ""
-                )}
-              >
-                <Icon inline wrapperClasses={tabsStyles.icon}>
-                  <FontAwesomeIcon icon={faCircleNodes} />
-                </Icon>
-                <span className={tabsStyles.label}>Connections</span>
-              </CyberstormLink>
-              <CyberstormLink
-                linkId="SettingsAccount"
-                aria-current={currentTab === "account"}
-                className={classnames(
-                  tabsStyles.button,
-                  currentTab === "account" ? tabsStyles.active : ""
-                )}
-              >
-                <Icon inline wrapperClasses={tabsStyles.icon}>
-                  <FontAwesomeIcon icon={faCog} />
-                </Icon>
-                <span className={tabsStyles.label}>Account</span>
-              </CyberstormLink>
-            </div>
-            <Outlet />
-          </div>
-        </div>
-      </main>
-    </>
+    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+      <NewBreadCrumbs>
+        <NewLink primitiveType="cyberstormLink" linkId="Settings">
+          {currentUser.username}
+        </NewLink>
+      </NewBreadCrumbs>
+      <PageHeader heading="Settings" headingLevel="1" headingSize="2" />
+      <div className="nimbus-settings-user">
+        <Tabs
+          tabItems={[
+            {
+              itemProps: {
+                key: "settings",
+                primitiveType: "cyberstormLink",
+                linkId: "Settings",
+                "aria-current": currentTab === "settings",
+                children: <>Settings</>,
+              },
+              current: currentTab === "settings",
+            },
+            {
+              itemProps: {
+                key: "account",
+                primitiveType: "cyberstormLink",
+                linkId: "SettingsAccount",
+                "aria-current": currentTab === "account",
+                children: <>Account</>,
+              },
+              current: currentTab === "account",
+            },
+          ]}
+          renderTabItem={(itemProps, numberSlate) => {
+            const { key, children, ...fItemProps } = itemProps;
+            return (
+              <NewLink key={key} {...fItemProps}>
+                {children}
+                {numberSlate}
+              </NewLink>
+            );
+          }}
+        />
+        <section>
+          <Outlet context={outletContext} />
+        </section>
+      </div>
+    </div>
   );
 }

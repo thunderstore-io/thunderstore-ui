@@ -2,7 +2,7 @@
 
 import { z, ZodObject, ZodRawShape } from "zod";
 import { Path, useController } from "react-hook-form";
-import { TextInput } from "@thunderstore/cyberstorm";
+import { NewTextInput, NewTextInputProps } from "@thunderstore/cyberstorm";
 import styles from "./FormTextInput.module.css";
 import React from "react";
 
@@ -19,7 +19,13 @@ export type FormTextInputProps<
 export function FormTextInput<
   Schema extends ZodObject<Z>,
   Z extends ZodRawShape,
->({ name, placeholder, existingValue }: FormTextInputProps<Schema, Z>) {
+>({
+  name,
+  placeholder,
+  existingValue,
+  clearValue,
+  ...fProps
+}: FormTextInputProps<Schema, Z> & NewTextInputProps) {
   const {
     field,
     fieldState: { isDirty, invalid, error },
@@ -32,13 +38,23 @@ export function FormTextInput<
     }, [existingValue]);
   }
 
+  const clearFormValue = () => {
+    field.onChange("");
+    if (clearValue) clearValue();
+  };
+
   return (
     <>
-      <TextInput
+      <NewTextInput
+        {...fProps}
+        clearValue={clearFormValue}
         {...field}
         ref={field.ref}
         placeholder={placeholder}
-        color={isDirty || invalid ? (invalid ? "red" : "green") : undefined}
+        csModifiers={[
+          isDirty || invalid ? (invalid ? "invalid" : "valid") : "",
+          isSubmitting || disabled ? "disabled" : "",
+        ]}
         disabled={isSubmitting || disabled}
       />
       {error && <span className={styles.errorMessage}>{error.message}</span>}

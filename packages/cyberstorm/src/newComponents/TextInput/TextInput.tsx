@@ -16,7 +16,8 @@ import {
   TextInputModifiers,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
-interface TextInputProps extends Omit<InputTextInputProps, "primitiveType"> {
+export interface TextInputProps
+  extends Omit<InputTextInputProps, "primitiveType"> {
   leftIcon?: JSX.Element;
   rightIcon?: JSX.Element;
   enterHook?: (value: string | number | readonly string[]) => string | void;
