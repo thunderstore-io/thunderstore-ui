@@ -123,7 +123,7 @@ export default function CommunitiesPage() {
 
   return (
     <div className="container container--y container--full layout__content">
-      <section className="container container--y nimbus-communities">
+      <section className="container container--y communities">
         {/* <PageHeader heading="Communities" headingLevel="1" headingSize="2" /> */}
         <Heading
           csLevel="1"

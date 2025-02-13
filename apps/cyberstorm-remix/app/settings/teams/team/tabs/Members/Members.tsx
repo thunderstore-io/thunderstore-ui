@@ -179,7 +179,7 @@ export default function Page() {
   });
 
   return (
-    <div className="nimbus-settings-team-members settings-items">
+    <div className="settings-items">
       <div className="settings-items__item">
         <div className="settings-items__meta">
           <p className="settings-items__title">Teams</p>
