@@ -1,19 +1,19 @@
 @layer theme-components {
   /* VARIANTS */
-  .ts-modal:where(.ts-variant--default) {
+  .modal:where(.modal--variant--default) {
     --modal-box-shadow: var(--modal-box-shadow--default);
     --modal-background: var(--modal-background--default);
     --modal-border: var(--modal-border--default);
   }
 
   /* SIZES */
-  .ts-modal:where(.ts-size--medium) {
+  .modal:where(.modal--size--medium) {
     --modal-border-radius: var(--modal-md-border-radius);
     --modal-content-padding: var(--modal-md-content-padding);
     --modal-content-gap: var(--modal-md-content-gap);
   }
 
-  .ts-modal:where(.ts-size--small) {
+  .modal:where(.modal--size--small) {
     --modal-border-radius: var(--modal-sm-border-radius);
     --modal-content-padding: var(--modal-sm-content-padding);
     --modal-content-gap: var(--modal-sm-content-gap);

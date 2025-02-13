@@ -1,77 +1,75 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-pageHeader {
+  .page-header {
     display: flex;
     flex-direction: row;
     gap: var(--space-32);
     align-items: flex-start;
     align-self: stretch;
-    padding: var(--space-16);
+    padding: var(--space-24) 0;
+  }
 
-    > .__image {
-      flex: 0 0 6rem;
+  .page-header__image {
+    flex: 0 0 6rem;
+  }
+
+  .page-header__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+
+    /* To ensure collapsibletext doesnt spill over */
+    min-width: 0;
+  }
+
+  .page-header__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: flex-start;
+    align-self: stretch;
+
+    > h1 {
+      --display-line-height: 1;
     }
+  }
 
-    > .__content {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-12);
+  .page-header__meta {
+    display: flex;
+    flex-flow: row wrap;
+    gap: var(--space-32);
+  }
 
-      /* To ensure collapsibletext doesnt spill over */
-      min-width: 0;
+  .page-header__meta-item {
+    display: flex;
+    gap: var(--gap-xs);
+    align-items: center;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-lg);
+    text-shadow: var(--textshadow-default);
+    word-break: break-all;
 
-      > .__info {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-4);
-        align-items: flex-start;
-        align-self: stretch;
-
-        > h1 {
-          --display-line-height: 1;
-        }
-      }
-
-      .__meta {
-        display: flex;
-        flex-flow: row wrap;
-        gap: var(--space-32);
-
-        > .__item {
-          display: flex;
-          gap: var(--gap-xs);
-          align-items: center;
-          font-weight: var(--font-weight-bold);
-          font-size: var(--font-size-body-md);
-          line-height: var(--line-height-lg);
-          text-shadow: var(--textshadow-default);
-          word-break: break-all;
-
-          & > svg {
-            inline-size: var(--space-16);
-          }
-        }
-      }
+    svg {
+      inline-size: var(--space-16);
     }
   }
 
   @media (width <= 48rem) {
-    .nimbus-commonComponents-pageHeader {
+    .page-header {
       gap: var(--space-16);
       padding: var(--space-6) 0;
+    }
 
-      > .__image {
-        flex: 0 0 5rem;
-      }
+    .page-header__image {
+      flex: 0 0 5rem;
+    }
 
-      > .__content {
-        .__info > h1 {
-          --display-font-size: 1.75rem;
-        }
+    .page-header__info > h1 {
+      --display-font-size: 1.75rem;
+    }
 
-        > .__meta {
-          gap: var(--space-16);
-        }
-      }
+    .page-header__meta {
+      gap: var(--space-16);
     }
   }
 }

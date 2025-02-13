@@ -47,8 +47,8 @@ export const Tag = React.forwardRef<
         {...fProps}
         primitiveType={"button"}
         rootClasses={classnames(
-          "ts-tag",
-          ...componentClasses(csVariant, csSize, csModifiers),
+          "tag",
+          ...componentClasses("tag", csVariant, csSize, csModifiers),
           rootClasses
         )}
         ref={fRef}
@@ -66,8 +66,8 @@ export const Tag = React.forwardRef<
         {...fProps}
         primitiveType={"link"}
         rootClasses={classnames(
-          "ts-tag",
-          ...componentClasses(csVariant, csSize, csModifiers),
+          "tag",
+          ...componentClasses("tag", csVariant, csSize, csModifiers),
           rootClasses
         )}
         ref={fRef}
@@ -83,8 +83,8 @@ export const Tag = React.forwardRef<
       {...fProps}
       primitiveType={"window"}
       rootClasses={classnames(
-        "ts-tag",
-        ...componentClasses(csVariant, csSize, csModifiers),
+        "tag",
+        ...componentClasses("tag", csVariant, csSize, csModifiers),
         rootClasses
       )}
       ref={forwardedRef}

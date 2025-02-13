@@ -27,8 +27,8 @@ export const MetaItem = React.forwardRef<HTMLDivElement, MetaItemProps>(
         {...forwardedProps}
         primitiveType={"window"}
         rootClasses={classnames(
-          "ts-metaitem",
-          ...componentClasses(csVariant, csSize),
+          "meta-item",
+          ...componentClasses("meta-item", csVariant, csSize),
           rootClasses
         )}
         ref={forwardedRef}

@@ -87,12 +87,12 @@ export default function Settings() {
   });
 
   return (
-    <div className="nimbus-settingsItems">
-      <div className="nimbus-settingsItems__item">
-        <div className="nimbus-settingsItems__meta">
-          <p className="nimbus-settingsItems__title">Leave team</p>
+    <div className="settings-items">
+      <div className="settings-items__item">
+        <div className="settings-items__meta">
+          <p className="settings-items__title">Leave team</p>
         </div>
-        <div className="nimbus-settingsItems__content">
+        <div className="settings-items__content">
           <NewAlert csVariant="danger">
             You cannot currently leave this team as you are it&apos;s last
             owner.
@@ -154,15 +154,15 @@ export default function Settings() {
           </Modal>
         </div>
       </div>
-      <div className="nimbus-settingsItems__separator" />
-      <div className="nimbus-settingsItems__item">
-        <div className="nimbus-settingsItems__meta">
-          <p className="nimbus-settingsItems__title">Disband team</p>
-          <p className="nimbus-settingsItems__description">
+      <div className="settings-items__separator" />
+      <div className="settings-items__item">
+        <div className="settings-items__meta">
+          <p className="settings-items__title">Disband team</p>
+          <p className="settings-items__description">
             Disband your team completely
           </p>
         </div>
-        <div className="nimbus-settingsItems__content">
+        <div className="settings-items__content">
           <NewAlert csVariant="danger">
             You cannot currently disband this team as it has packages.
           </NewAlert>

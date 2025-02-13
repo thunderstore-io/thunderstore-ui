@@ -18,20 +18,16 @@ export function Connection(props: ConnectionProps) {
   const { connection, identifier, icon, name, connectionLink } = props;
 
   return (
-    <div
-      className={`nimbus-commonComponents-connection ${
-        connection ? "" : "--disabled"
-      }`}
-    >
-      <div className="__body">
-        <NewIcon wrapperClasses="__icon">{icon}</NewIcon>
-        <div className="__name">{name}</div>
+    <div className={`connection ${connection ? "" : "connection--disabled"}`}>
+      <div className="connection__body">
+        <NewIcon wrapperClasses="connection__icon">{icon}</NewIcon>
+        <div className="connection__name">{name}</div>
       </div>
-      <div className="__actions">
+      <div className="connection__actions">
         {connection ? (
-          <div className="__description">
-            <span className="__connected">Connected as</span>
-            <span className="__username">{connection.username}</span>
+          <div className="connection__description">
+            <span className="connection__connected">Connected as</span>
+            <span className="connection__username">{connection.username}</span>
           </div>
         ) : null}
         {connection ? (

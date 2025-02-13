@@ -1,12 +1,15 @@
-.nimbus-packagelisting__tabs__versions {
+.versions {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   max-width: 100%;
-  overflow: auto;
 }
 
-.nimbus-packagelisting__tabs__versions__actionscell {
+.versions__table-wrapper {
+  overflow-x: scroll;
+}
+
+.versions__actions {
   display: flex;
   gap: 24px;
   align-items: flex-start;
@@ -14,21 +17,21 @@
   justify-content: flex-end;
 }
 
-.nimbus-packagelisting__tabs__versions__columns__version {
+.versions__version {
   color: var(--color-text-primary);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-body-md);
   line-height: var(--line-height-md);
 }
 
-.nimbus-packagelisting__tabs__versions__columns__uploaddate {
+.versions__upload-date {
   color: var(--color-text-tertiary);
   font-weight: var(--font-weight-regular);
   font-size: var(--font-size-body-md);
   line-height: var(--line-height-md);
 }
 
-.nimbus-packagelisting__tabs__versions__columns__downloads {
+.versions__downloads {
   color: var(--color-text-tertiary);
   font-weight: var(--font-weight-regular);
   font-size: var(--font-size-body-md);

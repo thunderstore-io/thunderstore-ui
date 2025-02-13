@@ -1,5 +1,5 @@
 @layer components {
-  .ts-adcontainer {
+  .ad-container {
     position: relative;
     display: inline-flex;
     flex-direction: column;
@@ -10,7 +10,7 @@
     line-height: var(--line-height-lg);
   }
 
-  .ts-adcontainer__fallback {
+  .ad-container__fallback {
     display: flex;
     flex-flow: wrap;
     gap: var(--gap-xs);
@@ -19,16 +19,16 @@
     width: 18.75rem;
     height: 15.625rem;
     padding: var(--space-24);
-    color: var(--adcontainer__fallback-color);
-    background-color: var(--adcontainer__fallback-background-color);
+    color: var(--ad-container__fallback-color);
+    background-color: var(--ad-container__fallback-background-color);
   }
 
-  .ts-adcontainer__icon {
+  .ad-container__icon {
     width: var(--space-16);
     animation: heart-beat 2s cubic-bezier(0, -0.76, 0.89, 1.64) infinite;
   }
 
-  .ts-adcontainer__content {
+  .ad-container__content {
     position: absolute;
     top: 0;
     left: 0;

@@ -56,7 +56,7 @@ export default function Community() {
         : "profile";
 
   return (
-    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+    <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
         <NewLink primitiveType="cyberstormLink" linkId="Teams">
           Teams
@@ -64,7 +64,7 @@ export default function Community() {
         {team.name}
       </NewBreadCrumbs>
       <PageHeader heading={team.name} headingLevel="1" headingSize="2" />
-      <div className="nimbus-settings-teams-team">
+      <div className="team-settings">
         <Tabs
           tabItems={[
             {

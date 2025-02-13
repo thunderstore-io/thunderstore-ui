@@ -1,6 +1,6 @@
 @layer theme-components {
   /* SIZES */
-  .ts-alert:where(.ts-size--small) {
+  .alert:where(.alert--size--small) {
     --alert-gap: var(--alert-sm-gap);
     --alert-padding-block: var(--alert-sm-padding-block);
     --alert-padding-inline: var(--alert-sm-padding-inline);
@@ -13,28 +13,28 @@
   }
 
   /* VARIANTS */
-  .ts-alert:where(.ts-variant--danger) {
+  .alert:where(.alert--variant--danger) {
     --alert-background-color: var(--alert-danger-bg-color--default);
     --alert-border-color: var(--alert-danger-border-color--default);
     --alert-icon-color: var(--alert-danger-icon-color--default);
     --alert-color: var(--alert-danger-text-color--default);
   }
 
-  .ts-alert:where(.ts-variant--info) {
+  .alert:where(.alert--variant--info) {
     --alert-background-color: var(--alert-info-bg-color--default);
     --alert-border-color: var(--alert-info-border-color--default);
     --alert-icon-color: var(--alert-info-icon-color--default);
     --alert-color: var(--alert-info-text-color--default);
   }
 
-  .ts-alert:where(.ts-variant--success) {
+  .alert:where(.alert--variant--success) {
     --alert-background-color: var(--alert-success-bg-color--default);
     --alert-border-color: var(--alert-success-border-color--default);
     --alert-icon-color: var(--alert-success-icon-color--default);
     --alert-color: var(--alert-success-text-color--default);
   }
 
-  .ts-alert:where(.ts-variant--warning) {
+  .alert:where(.alert--variant--warning) {
     --alert-background-color: var(--alert-warning-bg-color--default);
     --alert-border-color: var(--alert-warning-border-color--default);
     --alert-icon-color: var(--alert-warning-icon-color--default);

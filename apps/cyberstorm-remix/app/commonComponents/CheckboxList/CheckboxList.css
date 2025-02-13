@@ -1,8 +1,8 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-checkboxList {
+  .checkbox-list {
     list-style: none;
 
-    > li > label.__label {
+    .checkbox-list__label {
       display: flex;
       gap: var(--gap-sm);
       align-items: center;
@@ -16,52 +16,28 @@
       transition: var(--animation-duration-xs);
       user-select: none;
 
-      > .__checkbox {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: var(--space-20);
-        height: var(--space-20);
-
-        --icon-inline-size: var(--space-20);
-
-        background-color: transparent;
-        transition: ease-out var(--animation-duration-xs);
-      }
-
-      &.unselected {
-        --icon-color: var(--color-surface-a8);
-      }
-
-      &.selected {
-        color: var(--color-cyber-green-7);
-        font-weight: var(--font-weight-bold);
-
-        --icon-color: var(--color-cyber-green-7);
-      }
-
-      &.off {
+      &.checkbox-list__label--off {
         color: var(--color-text-secondary);
 
-        & > .__checkbox > svg {
+        svg {
           --icon-color: var(--color-surface-a8);
         }
       }
 
-      &.include {
+      &.checkbox-list__label--include {
         color: var(--color-cyber-green-7);
         font-weight: var(--font-weight-bold);
 
-        & > .__checkbox > svg {
+        svg {
           --icon-color: var(--color-cyber-green-7);
         }
       }
 
-      &.exclude {
+      &.checkbox-list__label--exclude {
         color: var(--color-accent-red-7);
         font-weight: var(--font-weight-bold);
 
-        & > .__checkbox > svg {
+        svg {
           --icon-color: var(--color-accent-red-7);
         }
       }
@@ -70,40 +46,43 @@
         color: var(--color-text-primary);
         background-color: var(--color-surface-a5);
 
-        &.unselected {
-          --icon-color: var(--color-surface-a10);
-        }
-
-        &.selected {
-          color: var(--color-cyber-green-8);
-
-          --icon-color: var(--color-cyber-green-8);
-        }
-
-        &.off {
+        &.checkbox-list__label--off {
           color: var(--color-text-primary);
 
-          & > .__checkbox > svg {
+          svg {
             --icon-color: var(--color-surface-a10);
           }
         }
 
-        &.include {
+        &.checkbox-list__label--include {
           color: var(--color-cyber-green-8);
 
-          & > .__checkbox > svg {
+          svg {
             --icon-color: var(--color-cyber-green-8);
           }
         }
 
-        &.exclude {
+        &.checkbox-list__label--exclude {
           color: var(--color-accent-red-8);
 
-          & > .__checkbox > svg {
+          svg {
             --icon-color: var(--color-accent-red-8);
           }
         }
       }
+    }
+
+    .checkbox-list__checkbox {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--space-20);
+      height: var(--space-20);
+
+      --icon-inline-size: var(--space-20);
+
+      background-color: transparent;
+      transition: ease-out var(--animation-duration-xs);
     }
   }
 }

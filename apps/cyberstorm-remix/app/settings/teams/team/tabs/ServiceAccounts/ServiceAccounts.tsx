@@ -188,13 +188,11 @@ export default function ServiceAccounts() {
   });
 
   return (
-    <div className="nimbus-settings-team-members nimbus-settingsItems">
-      <div className="nimbus-settingsItems__item">
-        <div className="nimbus-settingsItems__meta">
-          <p className="nimbus-settingsItems__title">Service accounts</p>
-          <p className="nimbus-settingsItems__description">
-            Your loyal servants
-          </p>
+    <div className="nimbus-settings-team-members settings-items">
+      <div className="settings-items__item">
+        <div className="settings-items__meta">
+          <p className="settings-items__title">Service accounts</p>
+          <p className="settings-items__description">Your loyal servants</p>
           <Modal
             popoverId="serviceAccountAdd"
             trigger={
@@ -277,7 +275,7 @@ export default function ServiceAccounts() {
             )}
           </Modal>
         </div>
-        <div className="nimbus-settingsItems__content">
+        <div className="settings-items__content">
           <NewTable
             headers={serviceAccountColumns}
             rows={tableData}

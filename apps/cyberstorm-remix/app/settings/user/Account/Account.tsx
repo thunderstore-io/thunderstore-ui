@@ -57,20 +57,20 @@ export default function Account() {
   });
 
   return (
-    <div className="nimbus-settingsItems">
-      <div className="nimbus-settingsItems__item">
-        <div className="nimbus-settingsItems__meta">
-          <p className="nimbus-settingsItems__title">Delete Account</p>
-          <p className="nimbus-settingsItems__description">
+    <div className="settings-items user-account">
+      <div className="settings-items__item">
+        <div className="settings-items__meta">
+          <p className="settings-items__title">Delete Account</p>
+          <p className="settings-items__description">
             Delete your Thunderstore account permanently
           </p>
         </div>
-        <div className="nimbus-settingsItems__content nimbus-settings-user-account">
+        <div className="settings-items__content">
           <ApiForm
             {...toast}
             schema={userDeleteFormSchema}
             endpoint={userDelete}
-            formProps={{ className: "__deleteUserForm" }}
+            formProps={{ className: "user-account__delete-user-form" }}
             meta={{}}
             config={() => config}
           >
@@ -78,7 +78,7 @@ export default function Account() {
               You are about to delete your account. Once deleted, it will be
               gone forever. Please be certain.
             </NewAlert>
-            <p className="__instructions">
+            <p className="user-account__instructions">
               The mods that have been uploaded on this account will remain
               public on the site even after deletion. If you need them to be
               taken down as well, please contact an administrator on the
@@ -86,11 +86,13 @@ export default function Account() {
               <br />
               <span>
                 As a precaution, to delete your account, please input{" "}
-                <span className="__username">{currentUser.username}</span> into
-                the field below.
+                <span className="user-account__username">
+                  {currentUser.username}
+                </span>{" "}
+                into the field below.
               </span>
             </p>
-            <div className="__actions">
+            <div className="user-account__actions">
               <FormTextInput
                 schema={userDeleteFormSchema}
                 name={"verification"}

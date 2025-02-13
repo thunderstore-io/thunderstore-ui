@@ -4,19 +4,19 @@
   }
 
   @media (width <= 63.5rem) {
-    .nimbus-hide-l {
+    .hide-l {
       display: none;
     }
   }
 
   @media (width <= 40rem) {
-    .nimbus-hide-m {
+    .hide-m {
       display: none;
     }
   }
 
   @media (width <= 48rem) {
-    .nimbus-hide-s {
+    .hide-s {
       display: none;
     }
   }

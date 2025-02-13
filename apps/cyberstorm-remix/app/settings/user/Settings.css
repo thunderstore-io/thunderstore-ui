@@ -1,14 +1,14 @@
 @layer nimbus-layout {
-  .nimbus-settings-user {
+  .settings-user {
     display: flex;
     flex-direction: column;
     gap: 4rem;
     align-items: flex-start;
+  }
 
-    > section {
-      display: flex;
-      flex: 1 1 0;
-      align-self: stretch;
-    }
+  .settings-user__body {
+    display: flex;
+    flex: 1 1 0;
+    align-self: stretch;
   }
 }

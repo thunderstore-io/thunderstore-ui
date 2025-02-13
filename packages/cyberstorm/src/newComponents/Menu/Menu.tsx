@@ -28,8 +28,8 @@ export function Menu(props: Props) {
         primitiveType="popover"
         popoverId={props.popoverId}
         rootClasses={classnames(
-          "ts-menu",
-          ...componentClasses(csVariant, undefined, undefined),
+          "menu",
+          ...componentClasses("menu", csVariant, undefined, undefined),
           rootClasses
         )}
         noWrapper
@@ -37,8 +37,13 @@ export function Menu(props: Props) {
       >
         <div
           className={classnames(
-            "ts-menu__wrapper",
-            ...componentClasses(csVariant, undefined, undefined)
+            "menu__wrapper",
+            ...componentClasses(
+              "menu__wrapper",
+              csVariant,
+              undefined,
+              undefined
+            )
           )}
         >
           {props.controls ? (
@@ -60,8 +65,13 @@ export function Menu(props: Props) {
         </div>
         <button
           className={classnames(
-            "ts-menu__fakebackdrop",
-            ...componentClasses(csVariant, undefined, undefined)
+            "menu__fake-backdrop",
+            ...componentClasses(
+              "menu__fake-backdrop",
+              csVariant,
+              undefined,
+              undefined
+            )
           )}
           {...{
             popovertarget: props.popoverId,

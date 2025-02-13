@@ -1,5 +1,5 @@
 @layer components {
-  .ts-dropdown {
+  .dropdown {
     z-index: 2;
     display: flex;
     flex-direction: column;
@@ -16,7 +16,7 @@
     animation: var(--dropdown-animation);
   }
 
-  .ts-dropdown > *:where(:not(.ts-dropdown__divider)) {
+  .dropdown > *:where(:not(.dropdown__divider)) {
     gap: var(--dropdown__item-gap);
     padding: var(--dropdown__item-padding);
     overflow: hidden;
@@ -29,11 +29,11 @@
     --icon-color: var(--dropdown__item-icon-color);
   }
 
-  .ts-dropdown > *:where(:not(.ts-dropdown__divider))[data-highlighted] {
+  .dropdown > *:where(:not(.dropdown__divider))[data-highlighted] {
     z-index: 999;
   }
 
-  .ts-dropdown__divider {
+  .dropdown__divider {
     height: var(--dropdown__divider-height);
     margin: var(--dropdown__divider-margin);
     background-color: var(--dropdown__divider-background-color);

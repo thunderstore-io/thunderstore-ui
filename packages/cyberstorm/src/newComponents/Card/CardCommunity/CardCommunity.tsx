@@ -22,9 +22,9 @@ export function CardCommunity(props: Props) {
   const { community, isPopular, isNew } = props;
 
   return (
-    <div className="ts-cardcommunity">
+    <div className="card-community">
       {isPopular || isNew ? (
-        <div className="ts-cardcommunity__tag">
+        <div className="card-community__tag">
           {isPopular ? (
             <NewTag csModifiers={["dark"]} csVariant="orange" csSize="small">
               <NewIcon noWrapper csMode="inline">
@@ -53,7 +53,7 @@ export function CardCommunity(props: Props) {
         <Image
           src={community.cover_image_url}
           cardType="community"
-          rootClasses="ts-cardcommunity__image"
+          rootClasses="card-community__image"
           intrinsicWidth={360}
           intrinsicHeight={480}
         />
@@ -62,11 +62,11 @@ export function CardCommunity(props: Props) {
         primitiveType="cyberstormLink"
         linkId="Community"
         community={community.identifier}
-        rootClasses="ts-cardcommunity__title"
+        rootClasses="card-community__title"
       >
         {community.name}
       </NewLink>
-      <div className="ts-cardcommunity__metaitemlist">
+      <div className="card-community__meta">
         <TooltipWrapper
           tooltipText={`${numberWithSpaces(
             community.total_package_count

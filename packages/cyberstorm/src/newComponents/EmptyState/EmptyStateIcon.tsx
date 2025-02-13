@@ -12,7 +12,7 @@ export function EmptyStateIcon(props: Props) {
   const { children, iconClasses, wrapperClasses } = props;
   return (
     <NewIcon
-      wrapperClasses={classnames("ts-emptyState__icon", wrapperClasses)}
+      wrapperClasses={classnames("empty-state__icon", wrapperClasses)}
       rootClasses={iconClasses}
     >
       {children}

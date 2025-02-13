@@ -1,6 +1,6 @@
 @layer theme-components {
   /* VARIANTS DEFAULT STATE */
-  .ts-link:where(.ts-variant--primary) {
+  .link:where(.link--variant--primary) {
     --link-color: var(--link-primary-color--default);
 
     &:where(:hover) {
@@ -8,7 +8,7 @@
     }
   }
 
-  .ts-link:where(.ts-variant--cyber) {
+  .link:where(.link--variant--cyber) {
     --link-color: var(--link-cyber-color--default);
 
     &:where(:hover) {
@@ -18,7 +18,7 @@
     }
   }
 
-  .ts-link > svg {
+  .link > svg {
     filter: var(--dropshadow-default);
   }
 

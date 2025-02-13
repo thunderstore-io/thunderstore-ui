@@ -1,65 +1,65 @@
 @layer components {
-  .ts-textinput__wrapper {
+  .text-input__wrapper {
     position: relative;
     display: flex;
     align-items: center;
-    width: var(--textinput__wrapper-width);
-    font-weight: var(--textinput__wrapper-font-weight);
-    font-size: var(--textinput__wrapper-font-size);
-    line-height: var(--textinput__wrapper-line-height);
+    width: var(--text-input__wrapper-width);
+    font-weight: var(--text-input__wrapper-font-weight);
+    font-size: var(--text-input__wrapper-font-size);
+    line-height: var(--text-input__wrapper-line-height);
   }
 
-  .ts-textinput__wrapper > input {
+  .text-input__wrapper > input {
     outline: none;
   }
 
-  .ts-textinput {
+  .text-input {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: var(--textinput-width);
-    height: var(--textinput-height);
-    padding: var(--textinput-padding);
-    border: var(--textinput-border);
-    border-color: var(--textinput-border-color);
-    border-radius: var(--textinput-border-radius);
-    color: var(--textinput-text-color);
-    background-color: var(--textinput-background-color);
+    width: var(--text-input-width);
+    height: var(--text-input-height);
+    padding: var(--text-input-padding);
+    border: var(--text-input-border);
+    border-color: var(--text-input-border-color);
+    border-radius: var(--text-input-border-radius);
+    color: var(--text-input-text-color);
+    background-color: var(--text-input-background-color);
     cursor: text;
-    transition: var(--textinput-transition);
+    transition: var(--text-input-transition);
   }
 
-  .ts-textinput::placeholder {
-    color: var(--textinput__placeholder-color);
-    opacity: var(--textinput__placeholder-opacity);
+  .text-input::placeholder {
+    color: var(--text-input__placeholder-color);
+    opacity: var(--text-input__placeholder-opacity);
   }
 
-  .ts-textinput:focus-within::placeholder {
+  .text-input:focus-within::placeholder {
     color: transparent;
   }
 
-  .ts-textinput__lefticon {
-    position: var(--ts-textinput__lefticon-position);
-    margin: var(--ts-textinput__lefticon-margin);
+  .text-input__left-icon {
+    position: var(--text-input__left-icon-position);
+    margin: var(--text-input__left-icon-margin);
 
-    --icon-color: var(--ts-textinput__lefticon-color);
+    --icon-color: var(--text-input__left-icon-color);
 
     pointer-events: none;
   }
 
-  .ts-textinput__righticon {
-    position: var(--ts-textinput__righticon-position);
-    padding: var(--ts-textinput__righticon-padding);
+  .text-input__right-icon {
+    position: var(--text-input__right-icon-position);
+    padding: var(--text-input__right-icon-padding);
 
-    --icon-color: var(--ts-textinput__righticon-color);
+    --icon-color: var(--text-input__right-icon-color);
   }
 
-  .ts-textinput__clearvaluebutton {
+  .text-input__clear-value-button {
     position: absolute;
-    right: var(--ts-textinput__clearvaluebutton-right);
+    right: var(--text-input__clear-value-button-right);
     display: flex;
-    color: var(--ts-textinput__clearvaluebutton-color);
+    color: var(--text-input__clear-value-button-color);
     background: inherit;
-    opacity: var(--ts-textinput__clearvaluebutton-opacity);
+    opacity: var(--text-input__clear-value-button-opacity);
   }
 }

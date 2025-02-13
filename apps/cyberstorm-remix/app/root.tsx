@@ -1,5 +1,4 @@
 import "./styles/index.css";
-import "@thunderstore/cyberstorm-styles";
 import "@thunderstore/cyberstorm-theme";
 import {
   Links,
@@ -146,18 +145,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <div className="ts-container ts-container--y ts-container--full ts-section nimbus-root">
+        <div className="container container--y container--full island layout">
           <SessionProvider apiHost={domain ?? "APIHOST_MISSING_IN_ENV"}>
             <LinkingProvider value={LinkLibrary}>
               <Toast.Provider toastDuration={10000}>
                 <RadixTooltip delayDuration={80}>
                   <NavigationWrapper />
-                  <div className="ts-container ts-container--x ts-container--full ts-section">
-                    <main className="ts-container ts-container--x ts-container--full ts-section-item nimbus-root__main">
+                  <div className="container container--x container--full island">
+                    <main className="container container--x container--full island-item layout__main">
                       {children}
                     </main>
-                    <div className="ts-container ts-container--y ts-section-item nimbus-root__ads">
-                      <div className="ts-container ts-container--y nimbus-root__ads__inner">
+                    <div className="container container--y island-item layout__ads">
+                      <div className="container container--y layout__ads-inner">
                         {shouldShowAds
                           ? adContainerIds.map((cid, k_i) => (
                               <AdContainer key={k_i} containerId={cid} />
@@ -228,18 +227,18 @@ export function ErrorBoundary() {
   }
   const isResponseError = isRouteErrorResponse(error);
   return (
-    <div className="nimbus-error">
+    <div className="error">
       <div
-        className="__glitch"
+        className="error__glitch"
         data-text={isResponseError ? error.status : 500}
       >
         <span>{isResponseError ? error.status : 500}</span>
       </div>
-      <div className="__description">
+      <div className="error__description">
         {isResponseError ? error.data : "Internal server error"}
       </div>
       {!isResponseError && (
-        <div className="__flavor">
+        <div className="error__flavor">
           Beep boop. Server something error happens.
         </div>
       )}

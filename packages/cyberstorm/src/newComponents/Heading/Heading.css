@@ -1,5 +1,5 @@
 @layer components {
-  .ts-heading {
+  .heading {
     color: var(--heading-text-color);
     font-weight: var(--heading-font-weight);
     font-size: var(--heading-font-size);
@@ -8,7 +8,7 @@
     line-height: var(--heading-line-height);
   }
 
-  .ts-display {
+  .display {
     color: var(--heading-text-color);
     font-weight: var(--display-font-weight);
     font-size: var(--display-font-size);

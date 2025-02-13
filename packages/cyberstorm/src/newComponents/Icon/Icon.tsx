@@ -19,7 +19,7 @@ export const Icon = React.forwardRef<
       {...forwardedProps}
       ref={forwardedRef}
       rootClasses={classnames(
-        ...componentClasses(csVariant, undefined, undefined),
+        ...componentClasses("icon", csVariant, undefined, undefined),
         rootClasses
       )}
     />

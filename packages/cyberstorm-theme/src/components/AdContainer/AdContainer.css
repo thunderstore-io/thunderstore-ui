@@ -1,8 +1,8 @@
 @layer theme-components {
   /* VARIANTS DEFAULT STATE */
-  .ts-adcontainer__fallback:where(.ts-variant--primary) {
-    --adcontainer__fallback-color: var(--ad-text-color--default);
-    --adcontainer__fallback-background-color: var(--ad-bg-color--default);
+  .ad-container__fallback:where(.ad-container__fallback--variant--primary) {
+    --ad-container__fallback-color: var(--ad-text-color--default);
+    --ad-container__fallback-background-color: var(--ad-bg-color--default);
   }
 
   /* TOKENS */

@@ -104,7 +104,7 @@ export default function Versions() {
     { value: v.download_count.toLocaleString(), sortValue: v.download_count },
     {
       value: (
-        <div className="nimbus-packagelisting__tabs__versions__actionscell">
+        <div className="versions__actions">
           <DownloadLink {...v} />
           <InstallLink {...v} />
         </div>
@@ -114,19 +114,21 @@ export default function Versions() {
   ]);
 
   return (
-    <div className="nimbus-packagelisting__tabs__versions">
+    <div className="versions">
       <ModManagerBanner />
-      <NewTable
-        titleRowContent={
-          <Heading csSize="3" csLevel="3">
-            Versions
-          </Heading>
-        }
-        headers={columns}
-        rows={tableRows}
-        sortDirection={NewTableSort.ASC}
-        csModifiers={["alignLastColumnRight"]}
-      />
+      <div className="versions__table-wrapper">
+        <NewTable
+          titleRowContent={
+            <Heading csSize="3" csLevel="3">
+              Versions
+            </Heading>
+          }
+          headers={columns}
+          rows={tableRows}
+          sortDirection={NewTableSort.ASC}
+          csModifiers={["alignLastColumnRight"]}
+        />
+      </div>
     </div>
   );
 }
@@ -135,17 +137,17 @@ const columns: NewTableLabels = [
   {
     value: "Version",
     disableSort: false,
-    columnClasses: "nimbus-packagelisting__tabs__versions__columns__version",
+    columnClasses: "versions__version",
   },
   {
     value: "Upload date",
     disableSort: false,
-    columnClasses: "nimbus-packagelisting__tabs__versions__columns__uploaddate",
+    columnClasses: "versions__upload-date",
   },
   {
     value: "Downloads",
     disableSort: false,
-    columnClasses: "nimbus-packagelisting__tabs__versions__columns__downloads",
+    columnClasses: "versions__downloads",
   },
   { value: "Actions", disableSort: true },
 ];

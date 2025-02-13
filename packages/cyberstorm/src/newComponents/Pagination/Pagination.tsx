@@ -47,7 +47,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
           key="page-previous"
           primitiveType="button"
           onClick={() => onPageChange(decreaseCurrentPage(currentPage))}
-          rootClasses="ts-pagination__item"
+          rootClasses="pagination__item"
         >
           <NewIcon csMode="inline" noWrapper>
             <FontAwesomeIcon icon={faArrowLeft} />
@@ -62,7 +62,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
           key="page-1"
           primitiveType="button"
           onClick={() => onPageChange(1)}
-          rootClasses="ts-pagination__item"
+          rootClasses="pagination__item"
         >
           1
         </Actionable>
@@ -75,9 +75,9 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
           primitiveType="button"
           onClick={() => onPageChange(pageNumber)}
           rootClasses={classnames(
-            "ts-pagination__item",
+            "pagination__item",
             currentPage === pageNumber
-              ? "ts-pagination__item--selected"
+              ? "pagination__item--selected"
               : undefined
           )}
         >
@@ -98,7 +98,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
           key={`page-${totalPageCount}`}
           primitiveType="button"
           onClick={() => onPageChange(totalPageCount)}
-          rootClasses="ts-pagination__item"
+          rootClasses="pagination__item"
         >
           {totalPageCount}
         </Actionable>
@@ -112,7 +112,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
           onClick={() =>
             onPageChange(increaseCurrentPage(currentPage, totalPageCount))
           }
-          rootClasses="ts-pagination__item"
+          rootClasses="pagination__item"
         >
           Next
           <NewIcon csMode="inline" noWrapper>
@@ -124,7 +124,7 @@ export const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
     // END Add buttons
 
     return (
-      <nav aria-label="Pagination" ref={forwardedRef} className="ts-pagination">
+      <nav aria-label="Pagination" ref={forwardedRef} className="pagination">
         {buttons}
       </nav>
     );

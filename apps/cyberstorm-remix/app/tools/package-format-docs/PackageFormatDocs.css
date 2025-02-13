@@ -1,9 +1,14 @@
 @layer nimbus-layout {
-  .nimbus-tools-packageFormatDocs {
+  .package-format-docs {
     gap: var(--gap-xxxxxl);
+  }
 
-    .__green {
-      color: var(--old--color-cyber-green-60);
-    }
+  .package-format-docs__green {
+    color: var(--old--color-cyber-green-60);
+  }
+
+  .package-format-docs__table-wrapper {
+    display: flex;
+    overflow-x: scroll;
   }
 }

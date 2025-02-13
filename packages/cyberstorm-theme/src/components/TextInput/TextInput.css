@@ -1,93 +1,91 @@
 @layer theme-components {
-  .ts-textinput {
-    --textinput-width: 100%;
-    --textinput-padding: var(--space-8) var(--space-10);
-    --textinput-border: var(--border-width--px) solid
-      var(--textinput-border-color);
-    --textinput-border-radius: var(--radius-md);
-    --textinput-transition: ease-out var(--animation-duration-xs);
-    --textinput-border-color: var(--input-border-color--default);
-    --textinput-text-color: var(--input-text-color--default);
-    --textinput-background-color: var(--input-bg-color--default);
+  .text-input {
+    --text-input-width: 100%;
+    --text-input-padding: var(--space-8) var(--space-10);
+    --text-input-border: var(--border-width--px) solid
+      var(--text-input-border-color);
+    --text-input-border-radius: var(--radius-md);
+    --text-input-transition: ease-out var(--animation-duration-xs);
+    --text-input-border-color: var(--input-border-color--default);
+    --text-input-text-color: var(--input-text-color--default);
+    --text-input-background-color: var(--input-bg-color--default);
   }
 
-  .ts-textinput__wrapper {
-    --textinput__wrapper-width: auto;
-    --textinput__wrapper-line-height: var(--line-height-auto);
-    --textinput__wrapper-font-weight: var(--font-weight-regular);
-    --textinput__wrapper-font-size: var(--font-size-body-lg);
+  .text-input__wrapper {
+    --text-input__wrapper-width: auto;
+    --text-input__wrapper-line-height: var(--line-height-auto);
+    --text-input__wrapper-font-weight: var(--font-weight-regular);
+    --text-input__wrapper-font-size: var(--font-size-body-lg);
   }
 
-  .ts-textinput[value] {
-    --textinput-text-color: var(--input-text-color--hover);
+  .text-input[value] {
+    --text-input-text-color: var(--input-text-color--hover);
   }
 
-  .ts-textinput:where(.ts-size--default) {
-    --textinput-height: var(--input-md-height);
-    --textinput-padding: var(--space-10)
+  .text-input:where(.text-input--size--default) {
+    --text-input-height: var(--input-md-height);
+    --text-input-padding: var(--space-10)
       calc(var(--space-16) + var(--right-padding-bonus, 0px)) var(--space-10)
       calc(var(--space-16) + var(--left-padding-bonus, 0px));
   }
 
-  .ts-textinput:where(.ts-size--small) {
-    --textinput-height: var(--input-sm-height);
-    --textinput-padding: var(--space-8)
+  .text-input:where(.text-input--size--small) {
+    --text-input-height: var(--input-sm-height);
+    --text-input-padding: var(--space-8)
       calc(var(--space-16) + var(--right-padding-bonus, 0px)) var(--space-10)
       calc(var(--space-16) + var(--left-padding-bonus, 0px));
   }
 
-  .ts-textinput:where(.ts-textinput__haslefticon) {
+  .text-input:where(.text-input--has-left-icon) {
     --left-padding-bonus: var(--space-24);
   }
 
-  .ts-textinput:where(.ts-textinput__hasclearvalue) {
+  .text-input:where(.text-input--has-clear-value) {
     --right-padding-bonus: var(--space-16);
   }
 
-  .ts-textinput:hover {
-    --textinput-background-color: var(--input-bg-color--hover);
-    --textinput-border-color: var(--input-border-color--hover);
+  .text-input:hover {
+    --text-input-background-color: var(--input-bg-color--hover);
+    --text-input-border-color: var(--input-border-color--hover);
   }
 
-  .ts-textinput:focus-within {
-    --textinput-text-color: var(--input-text-color--focus);
-    --textinput-background-color: var(--input-bg-color--focus);
-    --textinput-border-color: var(--input-border-color--focus);
+  .text-input:focus-within {
+    --text-input-text-color: var(--input-text-color--focus);
+    --text-input-background-color: var(--input-bg-color--focus);
+    --text-input-border-color: var(--input-border-color--focus);
   }
 
-  .ts-textinput:has(+ .ts-textinput__clearvaluebutton:hover):not(
-      :focus-within
-    ) {
+  .text-input:has(+ .text-input__clear-value-button:hover):not(:focus-within) {
     --input-background-color: var(--color-surface-a5);
     --border-color: var(--input-border-color--hover);
   }
 
-  .ts-textinput::placeholder {
-    --textinput__placeholder-color: var(--input-placeholder-color);
-    --textinput__placeholder-opacity: 1;
+  .text-input::placeholder {
+    --text-input__placeholder-color: var(--input-placeholder-color);
+    --text-input__placeholder-opacity: 1;
   }
 
-  .ts-textinput__lefticon {
-    --ts-textinput__lefticon-position: absolute;
-    --ts-textinput__lefticon-margin: var(--space-10) var(--space-16);
-    --ts-textinput__lefticon-color: var(--input-icon-color--default);
-    --ts-textinput__lefticon-pointer-events: none;
+  .text-input__left-icon {
+    --text-input__left-icon-position: absolute;
+    --text-input__left-icon-margin: var(--space-10) var(--space-16);
+    --text-input__left-icon-color: var(--input-icon-color--default);
+    --text-input__left-icon-pointer-events: none;
   }
 
-  .ts-textinput__righticon {
-    --ts-textinput__righticon-position: absolute;
-    --ts-textinput__righticon-padding: var(--space-14) var(--space-16);
-    --ts-textinput__righticon-color: var(--color-text-secondary);
+  .text-input__right-icon {
+    --text-input__right-icon-position: absolute;
+    --text-input__right-icon-padding: var(--space-14) var(--space-16);
+    --text-input__right-icon-color: var(--color-text-secondary);
   }
 
-  .ts-textinput__clearvaluebutton {
-    --ts-textinput__clearvaluebutton-right: var(--space-16);
-    --ts-textinput__clearvaluebutton-color: var(--color-text-secondary);
-    --ts-textinput__clearvaluebutton-opacity: 0.5;
+  .text-input__clear-value-button {
+    --text-input__clear-value-button-right: var(--space-16);
+    --text-input__clear-value-button-color: var(--color-text-secondary);
+    --text-input__clear-value-button-opacity: 0.5;
   }
 
-  .ts-textinput__clearvaluebutton:hover {
-    --ts-textinput__clearvaluebutton-opacity: 1;
+  .text-input__clear-value-button:hover {
+    --text-input__clear-value-button-opacity: 1;
   }
 
   :root {

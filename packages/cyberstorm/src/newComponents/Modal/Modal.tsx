@@ -24,8 +24,8 @@ export function Modal(props: Props) {
         primitiveType="modal"
         popoverId={props.popoverId}
         rootClasses={classnames(
-          "ts-modal",
-          ...componentClasses(csVariant, csSize, undefined)
+          "modal",
+          ...componentClasses("modal", csVariant, csSize, undefined)
         )}
       >
         <NewButton
@@ -38,9 +38,9 @@ export function Modal(props: Props) {
           csModifiers={["ghost"]}
           tooltipText="Close"
           icon={faXmarkLarge}
-          rootClasses="ts-modal__button"
+          rootClasses="modal__button"
         />
-        <div className="ts-modal__content">{children}</div>
+        <div className="modal__content">{children}</div>
       </Frame>
     </>
   );

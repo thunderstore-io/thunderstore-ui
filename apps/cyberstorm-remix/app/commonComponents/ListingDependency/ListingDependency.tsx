@@ -12,46 +12,43 @@ export function ListingDependency(props: ListingDependencyProps) {
   const { dependency, domain } = props;
 
   return (
-    <div className="nimbus-commonComponents-listingDependency">
+    <div className="listing-dependency">
       <Image
         src={dependency.icon_url}
         cardType="package"
         square={true}
         intrinsicWidth={80}
         intrinsicHeight={80}
-        rootClasses="nimbus-commonComponents-listingDependency__image"
+        rootClasses="listing-dependency__image"
       />
-      <div className="nimbus-commonComponents-listingDependency__body">
-        <div className="nimbus-commonComponents-listingDependency__info">
+      <div>
+        <div className="listing-dependency__info">
           <NewLink
             primitiveType="cyberstormLink"
             linkId="Package"
             community={dependency.community_identifier}
             namespace={dependency.namespace}
             package={dependency.name}
-            rootClasses="nimbus-commonComponents-listingDependency__info__name"
+            rootClasses="listing-dependency__name"
           >
             {dependency.name}
           </NewLink>
-          <span className="nimbus-commonComponents-listingDependency__info__title">
-            <span className="nimbus-commonComponents-listingDependency__info__by">
-              by
-            </span>
+          <span className="listing-dependency__title">
+            <span className="listing-dependency__title__by">by</span>
             <NewLink
               primitiveType="cyberstormLink"
               linkId="Team"
               team={dependency.namespace}
-              rootClasses="nimbus-commonComponents-listingDependency__info__author"
               csVariant="primary"
             >
               {dependency.namespace}
             </NewLink>
           </span>
         </div>
-        <div className="nimbus-commonComponents-listingDependency__description">
+        <div className="listing-dependency__description">
           {dependency.description}
         </div>
-        <div className="nimbus-commonComponents-listingDependency__version">
+        <div className="listing-dependency__version">
           <span>Version:</span>
           <NewLink
             // TODO: Remove when package versiond detail is available

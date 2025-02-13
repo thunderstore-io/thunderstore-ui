@@ -1,4 +1,4 @@
-.ts-tooltip {
+.tooltip {
   z-index: 999;
   max-width: 75vw;
 
@@ -26,19 +26,19 @@
   }
 }
 
-.ts-tooltip[data-state="delayed-open"][data-side="top"] {
+.tooltip[data-state="delayed-open"][data-side="top"] {
   animation-name: slide-down-and-fade;
 }
 
-.ts-tooltip[data-state="delayed-open"][data-side="right"] {
+.tooltip[data-state="delayed-open"][data-side="right"] {
   animation-name: slide-left-and-fade;
 }
 
-.ts-tooltip[data-state="delayed-open"][data-side="bottom"] {
+.tooltip[data-state="delayed-open"][data-side="bottom"] {
   animation-name: slide-up-and-fade;
 }
 
-.ts-tooltip[data-state="delayed-open"][data-side="left"] {
+.tooltip[data-state="delayed-open"][data-side="left"] {
   animation-name: slide-right-and-fade;
 }
 

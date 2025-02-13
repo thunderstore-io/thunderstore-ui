@@ -79,7 +79,7 @@ export default function Readme() {
     return (
       <div
         dangerouslySetInnerHTML={{ __html: readme.html }}
-        className="nimbus-markdown"
+        className="markdown"
       />
     );
   }

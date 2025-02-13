@@ -1,17 +1,17 @@
-.ts-emptyState {
+.empty-state {
   display: flex;
   flex-direction: column;
   gap: var(--gap-xxxl);
   color: var(--color-text--default);
 }
 
-.ts-emptyState__icon {
+.empty-state__icon {
   height: 6.5rem;
   color: rgb(99 90 159);
   background: transparent;
 }
 
-.ts-emptyState__title {
+.empty-state__title {
   color: var(--color-text-primary);
   font-weight: var(--font-weight-bold);
 
@@ -19,7 +19,7 @@
   text-align: center;
 }
 
-.ts-emptyState__message {
+.empty-state__message {
   color: #9c9cc4;
   font-weight: var(--font-weight-medium);
 
