@@ -45,11 +45,11 @@ export const Image = React.forwardRef<HTMLDivElement, ImageProps>(
         {...fProps}
         primitiveType="window"
         rootClasses={classnames(
-          "ts-image__wrapper",
-          src ? undefined : "ts-image__wrapper--noimage",
-          ...componentClasses(csVariant, undefined, undefined),
+          "image",
+          src ? undefined : "image--noimage",
+          ...componentClasses("image", csVariant, undefined, undefined),
           rootClasses,
-          square ? "ts-image--issquare" : "ts-image--is3by4"
+          square ? "image--issquare" : "image--is3by4"
         )}
         ref={forwardedRef}
       >
@@ -57,19 +57,29 @@ export const Image = React.forwardRef<HTMLDivElement, ImageProps>(
           <Frame
             primitiveType="window"
             rootClasses={classnames(
-              "ts-image__content",
-              ...componentClasses(csVariant, undefined, undefined),
-              "ts-image--fullwidth"
+              "image__content",
+              ...componentClasses(
+                "image__content",
+                csVariant,
+                undefined,
+                undefined
+              ),
+              "image--fullwidth"
             )}
           >
-            <img src={src} alt={alt} className="ts-image" />
+            <img src={src} alt={alt} className="image__src" />
           </Frame>
         ) : (
           <NewIcon
             rootClasses={classnames(
-              "ts-image__content",
-              ...componentClasses(csVariant, undefined, undefined),
-              "ts-image__icon"
+              "image__content",
+              ...componentClasses(
+                "image__content",
+                csVariant,
+                undefined,
+                undefined
+              ),
+              "image__icon"
             )}
             noWrapper
             csMode="inline"

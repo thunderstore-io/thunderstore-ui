@@ -1,25 +1,5 @@
 @layer components {
-  .ts-image {
-    width: inherit;
-    object-fit: cover;
-    aspect-ratio: var(--aspect-ratio);
-  }
-
-  .ts-image--issquare {
-    --aspect-ratio: 1;
-    --image-width: 50%;
-  }
-
-  .ts-image--is3by4 {
-    --aspect-ratio: 3 / 4;
-    --image-width: 30%;
-  }
-
-  .ts-image--fullwidth {
-    --image-width: 100%;
-  }
-
-  .ts-image__wrapper {
+  .image {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -29,12 +9,32 @@
     aspect-ratio: var(--aspect-ratio);
   }
 
-  .ts-image__wrapper--noimage {
-    color: var(--image__wrapper-color);
-    background-color: var(--image__wrapper-bg-color);
+  .image__src {
+    width: inherit;
+    object-fit: cover;
+    aspect-ratio: var(--aspect-ratio);
   }
 
-  .ts-image__content {
+  .image--issquare {
+    --aspect-ratio: 1;
+    --image-width: 50%;
+  }
+
+  .image--is3by4 {
+    --aspect-ratio: 3 / 4;
+    --image-width: 30%;
+  }
+
+  .image--fullwidth {
+    --image-width: 100%;
+  }
+
+  .image--noimage {
+    color: var(--image-color);
+    background-color: var(--image-bg-color);
+  }
+
+  .image__content {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -43,7 +43,7 @@
     transition: var(--animation-duration-sm) ease-out;
   }
 
-  .ts-image__icon {
+  .image__icon {
     width: 50px;
     height: 50px;
     color: var(--color-surface-a10);

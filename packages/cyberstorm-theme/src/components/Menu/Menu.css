@@ -1,6 +1,6 @@
 @layer theme-components {
   /* VARIANTS DEFAULT STATE */
-  .ts-menu:where(.ts-variant--primary) {
+  .menu:where(.menu--variant--primary) {
     --menu-color: var(--menu-primary-color--default);
 
     &:where(:hover) {

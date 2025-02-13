@@ -1,5 +1,5 @@
 @layer components {
-  .ts-table {
+  .table {
     --table-border: 1px solid var(--color-surface-a8);
 
     width: 100%;
@@ -49,18 +49,18 @@
       border-bottom-right-radius: var(--radius-md);
     }
 
-    .ts-table__sortbutton {
+    .table__sortbutton {
       display: flex;
       gap: 1rem;
       align-items: center;
       background: transparent;
     }
 
-    &.ts-modifier--alignLastColumnRight .ts-table__row {
+    &.table--alignLastColumnRight .table__row {
       :last-child {
         text-align: right;
 
-        > .ts-table__sortbutton {
+        > .table__sortbutton {
           float: right;
           text-align: right;
         }
@@ -68,7 +68,7 @@
     }
   }
 
-  .ts-table__caption {
+  .table__caption {
     padding: 1rem;
     border-top: var(--table-border);
     border-right: var(--table-border);
@@ -78,7 +78,7 @@
     text-align: left;
   }
 
-  .ts-table__header {
+  .table__header {
     color: var(--color-text-tertiary);
     font-weight: 700;
 
@@ -89,7 +89,7 @@
     background: var(--color-surface-a4);
   }
 
-  .ts-table__item {
+  .table__item {
     padding: 8px 16px;
   }
 

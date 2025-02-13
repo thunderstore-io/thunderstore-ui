@@ -1,5 +1,5 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-packageSearch-components-packageCount {
+  .package-count {
     display: flex;
     flex: 1;
     flex-wrap: wrap;

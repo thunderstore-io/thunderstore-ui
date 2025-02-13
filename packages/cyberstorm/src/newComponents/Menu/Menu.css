@@ -1,5 +1,5 @@
 @layer components {
-  .ts-menu {
+  .menu {
     z-index: 1;
     display: flex;
     width: 100%;
@@ -22,11 +22,11 @@
     }
   }
 
-  .ts-menu::backdrop {
+  .menu::backdrop {
     background: hsl(0deg 0% 0% / 0.6);
   }
 
-  .ts-menu__wrapper {
+  .menu__wrapper {
     display: none;
     flex-direction: column;
     gap: 2rem;
@@ -36,11 +36,11 @@
     background: #15152d;
   }
 
-  .ts-menu:popover-open > .ts-menu__wrapper {
+  .menu:popover-open > .menu__wrapper {
     display: flex;
   }
 
-  .ts-menu__fakebackdrop {
+  .menu__fake-backdrop {
     width: 20%;
     height: 100%;
     background: transparent;

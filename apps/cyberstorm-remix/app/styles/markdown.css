@@ -1,5 +1,5 @@
 @layer utils {
-  .nimbus-markdown {
+  .markdown {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -10,21 +10,21 @@
     word-break: break-word;
   }
 
-  .nimbus-markdown > :first-child {
+  .markdown > :first-child {
     padding-top: 0;
   }
 
   /*
     We can't control the elements inside the Markdown wrapper, e.g. to
     give them class names, and linting requires pure selectors, so repeat
-    the .nimbus-markdown class name on each selector.
+    the .markdown class name on each selector.
   */
-  .nimbus-markdown h1,
-  .nimbus-markdown h2,
-  .nimbus-markdown h3,
-  .nimbus-markdown h4,
-  .nimbus-markdown h5,
-  .nimbus-markdown h6 {
+  .markdown h1,
+  .markdown h2,
+  .markdown h3,
+  .markdown h4,
+  .markdown h5,
+  .markdown h6 {
     display: flex;
     gap: 0.5rem;
     align-items: flex-start;
@@ -34,66 +34,66 @@
     line-height: normal;
   }
 
-  .nimbus-markdown h1,
-  .nimbus-markdown h2 {
+  .markdown h1,
+  .markdown h2 {
     padding: 2rem 0 0.5rem;
     border-bottom: 1px solid #29295b;
   }
 
-  .nimbus-markdown h3,
-  .nimbus-markdown h4,
-  .nimbus-markdown h5,
-  .nimbus-markdown h6 {
+  .markdown h3,
+  .markdown h4,
+  .markdown h5,
+  .markdown h6 {
     padding-top: 1rem;
   }
 
-  .nimbus-markdown h1 {
+  .markdown h1 {
     font-size: 2.25rem;
   }
 
-  .nimbus-markdown h2 {
+  .markdown h2 {
     font-size: 1.75rem;
   }
 
-  .nimbus-markdown h3 {
+  .markdown h3 {
     font-size: var(--font-size-body-xxl);
   }
 
-  .nimbus-markdown h4 {
+  .markdown h4 {
     font-size: 1rem;
   }
 
-  .nimbus-markdown h5 {
+  .markdown h5 {
     font-size: 0.875rem;
   }
 
-  .nimbus-markdown h6 {
+  .markdown h6 {
     color: #9c9cc4;
     font-size: 0.875rem;
   }
 
-  .nimbus-markdown ul li,
-  .nimbus-markdown ol li {
+  .markdown ul li,
+  .markdown ol li {
     margin-inline-start: 0.75rem;
   }
 
-  .nimbus-markdown img {
+  .markdown img {
     display: inline-block;
   }
 
-  .nimbus-markdown li > ul,
-  .nimbus-markdown li > ol {
+  .markdown li > ul,
+  .markdown li > ol {
     margin-top: 0.25rem;
   }
 
-  .nimbus-markdown pre {
+  .markdown pre {
     padding: 1rem;
     border: 1px solid #333370;
     border-radius: 0.5rem;
     background: #0f0f1f;
   }
 
-  .nimbus-markdown code {
+  .markdown code {
     display: inline-flex;
     padding: 0 0.35rem;
     border: 1px solid #333370;
@@ -110,7 +110,7 @@
     background: #0d0d21;
   }
 
-  .nimbus-markdown pre code {
+  .markdown pre code {
     display: block;
     padding: 0;
     border: 0;
@@ -118,11 +118,11 @@
     color: #f5f5f6;
   }
 
-  .nimbus-markdown a {
+  .markdown a {
     color: var(--old--color-cyber-green-50);
   }
 
-  .nimbus-markdown blockquote {
+  .markdown blockquote {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -130,52 +130,52 @@
     border-left: 4px solid #3c3c86;
   }
 
-  .nimbus-markdown table {
+  .markdown table {
     border-collapse: separate;
     border-spacing: 0;
   }
 
-  .nimbus-markdown tbody tr:nth-child(even) {
+  .markdown tbody tr:nth-child(even) {
     background: #0d0d21;
   }
 
-  .nimbus-markdown tbody tr:nth-child(odd) {
+  .markdown tbody tr:nth-child(odd) {
     background: #15152d;
   }
 
-  .nimbus-markdown table tr th,
-  .nimbus-markdown table tr td {
+  .markdown table tr th,
+  .markdown table tr td {
     padding: 0.75rem 1rem;
     border-right: 1px solid #333370;
     border-bottom: 1px solid #333370;
     color: #fff;
   }
 
-  .nimbus-markdown table tr th {
+  .markdown table tr th {
     border-top: solid 1px #333370;
     color: #c6c3ff;
     text-align: left;
     background: #1f1f42;
   }
 
-  .nimbus-markdown table tr th:first-child,
-  .nimbus-markdown table tr td:first-child {
+  .markdown table tr th:first-child,
+  .markdown table tr td:first-child {
     border-left: 1px solid #333370;
   }
 
-  .nimbus-markdown table tr:first-child th:first-child {
+  .markdown table tr:first-child th:first-child {
     border-top-left-radius: 0.5rem;
   }
 
-  .nimbus-markdown table tr:first-child th:last-child {
+  .markdown table tr:first-child th:last-child {
     border-top-right-radius: 0.5rem;
   }
 
-  .nimbus-markdown table tr:last-child td:first-child {
+  .markdown table tr:last-child td:first-child {
     border-bottom-left-radius: 0.5rem;
   }
 
-  .nimbus-markdown table tr:last-child td:last-child {
+  .markdown table tr:last-child td:last-child {
     border-bottom-right-radius: 0.5rem;
   }
 }

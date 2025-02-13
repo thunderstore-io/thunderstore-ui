@@ -12,7 +12,7 @@ import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export default function PackageFormatDocs() {
   return (
-    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+    <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
         <NewLink primitiveType="cyberstormLink" linkId="PackageFormatDocs">
           Package Format Docs
@@ -23,7 +23,7 @@ export default function PackageFormatDocs() {
         headingLevel="1"
         headingSize="2"
       />
-      <section className="ts-container ts-container--y ts-container--full nimbus-tools-packageFormatDocs">
+      <section className="container container--y container--full package-format-docs">
         <p>A valid package is a zip file that contains the following files:</p>
         <NewTable
           headers={firstTableDataColumns}
@@ -34,12 +34,14 @@ export default function PackageFormatDocs() {
         <p>
           Additionally, the manifest.json must contain the following fields:
         </p>
-        <NewTable
-          headers={secondTableDataColumns}
-          rows={secondTableData}
-          disableSort={true}
-          gridTemplateColumns="minmax(22%, 0.5fr) minmax(18%, 0.5fr) minmax(30%, 1.25fr) minmax(30%, 1.25fr)"
-        />
+        <div className="package-format-docs__table-wrapper">
+          <NewTable
+            headers={secondTableDataColumns}
+            rows={secondTableData}
+            disableSort={true}
+            gridTemplateColumns="minmax(22%, 0.5fr) minmax(18%, 0.5fr) minmax(30%, 1.25fr) minmax(30%, 1.25fr)"
+          />
+        </div>
         <p>Example manifest.json content:</p>
         <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} />
       </section>
@@ -114,7 +116,12 @@ const secondTableData = [
     { value: "name", sortValue: 0 },
     {
       value: (
-        <NewIcon key="icon-1" noWrapper csMode="inline" rootClasses="__green">
+        <NewIcon
+          key="icon-1"
+          noWrapper
+          csMode="inline"
+          rootClasses="package-format-docs__green"
+        >
           <FontAwesomeIcon icon={faCheck} />
         </NewIcon>
       ),
@@ -127,7 +134,12 @@ const secondTableData = [
     { value: "description", sortValue: 0 },
     {
       value: (
-        <NewIcon key="icon-2" noWrapper csMode="inline" rootClasses="__green">
+        <NewIcon
+          key="icon-2"
+          noWrapper
+          csMode="inline"
+          rootClasses="package-format-docs__green"
+        >
           <FontAwesomeIcon icon={faCheck} />
         </NewIcon>
       ),
@@ -144,7 +156,12 @@ const secondTableData = [
     { value: "version number", sortValue: 0 },
     {
       value: (
-        <NewIcon key="icon-3" noWrapper csMode="inline" rootClasses="__green">
+        <NewIcon
+          key="icon-3"
+          noWrapper
+          csMode="inline"
+          rootClasses="package-format-docs__green"
+        >
           <FontAwesomeIcon icon={faCheck} />
         </NewIcon>
       ),
@@ -161,7 +178,12 @@ const secondTableData = [
     { value: "dependencies", sortValue: 0 },
     {
       value: (
-        <NewIcon key="icon-4" noWrapper csMode="inline" rootClasses="__green">
+        <NewIcon
+          key="icon-4"
+          noWrapper
+          csMode="inline"
+          rootClasses="package-format-docs__green"
+        >
           <FontAwesomeIcon icon={faCheck} />
         </NewIcon>
       ),
@@ -181,7 +203,12 @@ const secondTableData = [
     { value: "website_url", sortValue: 0 },
     {
       value: (
-        <NewIcon key="icon-5" noWrapper csMode="inline" rootClasses="__green">
+        <NewIcon
+          key="icon-5"
+          noWrapper
+          csMode="inline"
+          rootClasses="package-format-docs__green"
+        >
           <FontAwesomeIcon icon={faCheck} />
         </NewIcon>
       ),

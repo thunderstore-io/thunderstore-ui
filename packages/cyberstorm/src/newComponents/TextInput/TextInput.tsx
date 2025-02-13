@@ -52,8 +52,13 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
       <Frame
         primitiveType="window"
         rootClasses={classnames(
-          "ts-textinput__wrapper",
-          ...componentClasses(csVariant, csSize, csModifiers),
+          "text-input__wrapper",
+          ...componentClasses(
+            "text-input__wrapper",
+            csVariant,
+            csSize,
+            csModifiers
+          ),
           rootClasses
         )}
       >
@@ -61,7 +66,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
           <NewIcon
             csMode="inline"
             noWrapper
-            rootClasses="ts-textinput__lefticon"
+            rootClasses="text-input__left-icon"
           >
             {leftIcon}
           </NewIcon>
@@ -70,10 +75,10 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
           {...fProps}
           primitiveType={"textInput"}
           rootClasses={classnames(
-            "ts-textinput",
-            leftIcon ? "ts-textinput__haslefticon" : null,
-            clearValue ? "ts-textinput__hasclearvalue" : null,
-            ...componentClasses(csVariant, csSize, csModifiers)
+            "text-input",
+            leftIcon ? "text-input--has-left-icon" : null,
+            clearValue ? "text-input--has-clear-value" : null,
+            ...componentClasses("text-input", csVariant, csSize, csModifiers)
           )}
           ref={forwardedRef}
           onKeyDown={onEnter}
@@ -85,8 +90,13 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
             primitiveType="button"
             onClick={() => clearValue()}
             rootClasses={classnames(
-              "ts-textinput__clearvaluebutton",
-              ...componentClasses(csVariant, csSize, csModifiers)
+              "text-input__clear-value-button",
+              ...componentClasses(
+                "text-input__clear-value-button",
+                csVariant,
+                csSize,
+                csModifiers
+              )
             )}
             tooltipText="Clear"
             tooltipSide="left"

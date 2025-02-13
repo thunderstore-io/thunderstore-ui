@@ -41,7 +41,7 @@ export const CycleButton = React.forwardRef<
       <Actionable
         {...forwardedProps}
         primitiveType={"button"}
-        rootClasses={classnames("ts-cyclebutton", rootClasses)}
+        rootClasses={classnames("cycle-button", rootClasses)}
         ref={forwardedRef}
         onClick={onInteract ? () => onInteract() : undefined}
       >
@@ -57,7 +57,7 @@ export const CycleButton = React.forwardRef<
     <Actionable
       {...forwardedProps}
       primitiveType={"button"}
-      rootClasses={classnames("ts-cyclebutton", rootClasses)}
+      rootClasses={classnames("cycle-button", rootClasses)}
       ref={forwardedRef}
       onClick={() => {
         let newValue = currentValue;

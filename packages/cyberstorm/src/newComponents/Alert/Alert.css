@@ -1,5 +1,5 @@
 @layer components {
-  .ts-alert {
+  .alert {
     display: flex;
 
     gap: var(--alert-gap);
@@ -11,20 +11,20 @@
     background-color: var(--alert-background-color);
     padding-block: var(--alert-padding-block);
     padding-inline: var(--alert-padding-inline);
+  }
 
-    > .ts-alert__icon {
-      width: var(--alert-icon-width);
-      height: var(--alert-icon-height);
+  .alert__icon {
+    width: var(--alert-icon-width);
+    height: var(--alert-icon-height);
 
-      --icon-color: var(--alert-icon-color);
-    }
+    --icon-color: var(--alert-icon-color);
+  }
 
-    > .ts-alert__content {
-      min-width: 0;
-      color: var(--alert-color);
-      font-weight: var(--alert-font-weight);
-      font-size: var(--alert-font-size);
-      line-height: var(--alert-line-height);
-    }
+  .alert__content {
+    min-width: 0;
+    color: var(--alert-color);
+    font-weight: var(--alert-font-weight);
+    font-size: var(--alert-font-size);
+    line-height: var(--alert-line-height);
   }
 }

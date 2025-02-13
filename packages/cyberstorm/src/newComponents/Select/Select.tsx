@@ -80,8 +80,13 @@ export function Select<T extends string>(props: SelectProps<T>) {
           csSize="medium"
           aria-label={forwardedProps["aria-label"]}
           rootClasses={classnames(
-            "ts-select__trigger",
-            ...componentClasses(csVariant, csSize, csModifiers),
+            "select__trigger",
+            ...componentClasses(
+              "select__trigger",
+              csVariant,
+              csSize,
+              csModifiers
+            ),
             forwardedProps.rootClasses
           )}
         >
@@ -103,8 +108,8 @@ export function Select<T extends string>(props: SelectProps<T>) {
           position="popper"
           sideOffset={4}
           className={classnames(
-            "ts-select",
-            ...componentClasses(csVariant, csSize, csModifiers)
+            "select",
+            ...componentClasses("select", csVariant, csSize, csModifiers)
           )}
         >
           <Viewport>{selectItemElements}</Viewport>
@@ -126,8 +131,8 @@ const mapSelectData = (
     <Item value={option.value} key={index} asChild>
       <div
         className={classnames(
-          "ts-select__item",
-          ...componentClasses(csVariant, csSize, csModifiers)
+          "select__item",
+          ...componentClasses("select__item", csVariant, csSize, csModifiers)
         )}
       >
         <NewIcon csMode="inline" noWrapper>

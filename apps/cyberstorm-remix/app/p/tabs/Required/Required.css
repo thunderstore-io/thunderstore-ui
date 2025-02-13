@@ -1,10 +1,10 @@
-.nimbus-packagelisting__tabs__required {
+.required {
   display: flex;
   flex-direction: column;
   gap: var(--gap-md);
 }
 
-.nimbus-packagelisting__tabs__required__title {
+.required__title {
   display: flex;
   flex-direction: column;
   gap: var(--gap-md);
@@ -13,13 +13,13 @@
   padding-bottom: var(--space-24);
 }
 
-.nimbus-packagelisting__tabs__required__title__description {
+.required__description {
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-md);
 }
 
-.nimbus-packagelisting__tabs__required__body {
+.required__body {
   display: flex;
   flex-direction: column;
   gap: var(--gap-xxxs);

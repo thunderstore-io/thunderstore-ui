@@ -79,7 +79,7 @@ export default function Changelog() {
     return (
       <div
         dangerouslySetInnerHTML={{ __html: changelog.html }}
-        className="nimbus-markdown"
+        className="markdown"
       />
     );
   }

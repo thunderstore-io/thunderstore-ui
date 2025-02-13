@@ -10,7 +10,6 @@
     "@storybook/addon-links": "^8.3.3",
     "@storybook/react-webpack5": "^8.3.3",
     "@thunderstore/cyberstorm": "^0.1.0",
-    "@thunderstore/cyberstorm-styles": "^0.1.0",
     "@thunderstore/dapper": "^0.1.0",
     "@thunderstore/dapper-fake": "^0.1.0",
     "react": "^18.3.1",

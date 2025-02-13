@@ -1,8 +1,8 @@
-.nimbus-package-dependants {
+.dependants {
   display: flex;
   flex-direction: column;
 
-  .__header {
+  .dependants__header {
     padding: var(--space-40) 0;
     color: var(--color-text--default);
     font-weight: var(--font-weight-bold);
@@ -12,7 +12,7 @@
 }
 
 @media (width <= 48rem) {
-  .nimbus-package-dependants {
+  .dependants {
     gap: var(--space-16);
   }
 }

@@ -1,5 +1,5 @@
 @layer components {
-  .ts-select {
+  .select {
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -16,7 +16,7 @@
     animation: var(--select-animation);
   }
 
-  .ts-select__item {
+  .select__item {
     display: flex;
     flex-direction: row;
 
@@ -32,7 +32,7 @@
     cursor: pointer;
   }
 
-  .ts-select__trigger {
+  .select__trigger {
     width: 100%;
     font-weight: var(--select__trigger-font-weight);
     font-size: var(--select__trigger-font-size);

@@ -18,7 +18,6 @@ import {
 } from "@thunderstore/cyberstorm-forms";
 import { currentUserSchema } from "@thunderstore/dapper-ts";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import "./Teams.css";
 import {
   clearSession,
   getConfig,
@@ -87,20 +86,18 @@ export default function Teams() {
   }
 
   return (
-    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+    <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
         <NewLink primitiveType="cyberstormLink" linkId="Teams">
           Teams
         </NewLink>
       </NewBreadCrumbs>
       <PageHeader heading="Teams" headingLevel="1" headingSize="2" />
-      <section className="nimbus-settingsItems nimbus-settings-teams ">
-        <div className="nimbus-settingsItems__item">
-          <div className="nimbus-settingsItems__meta">
-            <p className="nimbus-settingsItems__title">Teams</p>
-            <p className="nimbus-settingsItems__description">
-              Manage your teams
-            </p>
+      <section className="settings-items">
+        <div className="settings-items__item">
+          <div className="settings-items__meta">
+            <p className="settings-items__title">Teams</p>
+            <p className="settings-items__description">Manage your teams</p>
             <Modal
               popoverId={"teamsCreateTeam"}
               csSize="small"
@@ -153,7 +150,7 @@ export default function Teams() {
               </ApiForm>
             </Modal>
           </div>
-          <div className="nimbus-settingsItems__content">
+          <div className="settings-items__content">
             <NewTable
               csModifiers={["alignLastColumnRight"]}
               headers={[

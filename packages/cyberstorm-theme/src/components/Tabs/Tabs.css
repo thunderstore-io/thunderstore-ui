@@ -1,6 +1,6 @@
 @layer theme-components {
   /* Tabs */
-  .ts-tabs {
+  .tabs {
     --tabs-border-bottom-width: 3px;
     --tabs-border-bottom-style: solid;
     --tabs-border-bottom-color: var(--color-surface-5);
@@ -9,7 +9,7 @@
   /* Tabs Item */
 
   /* SIZES */
-  .ts-tabs-item:where(.ts-size--medium) {
+  .tabs__item:where(.tabs__item--size--medium) {
     --tabs-item-height: 3.25rem;
     --tabs-item-padding: 0.75rem 1rem;
     --tabs-item-gap: 0.75rem;
@@ -19,7 +19,7 @@
   }
 
   /* VARIANTS */
-  .ts-tabs-item:where(.ts-variant--default) {
+  .tabs__item:where(.tabs__item--variant--default) {
     --tabs-item-color: var(--tab-nav-item-text-color--default);
     --tabs-item-icon-color: var(--tab-nav-item-icon-color--default);
     --tabs-item-border-bottom-style: var(--tab-nav-item-border-style--default);
@@ -37,7 +37,7 @@
       --tabs-item-border-bottom-color: var(--tab-nav-item-border-color--hover);
     }
 
-    &.ts-tabs-item-current {
+    &.tabs__item--current {
       --tabs-item-color: var(--tab-nav-item-text-color--current);
       --tabs-item-icon-color: var(--tab-nav-item-icon-color--current);
       --tabs-item-border-bottom-color: var(
@@ -49,7 +49,7 @@
   /* Tabs Item Number Slate */
 
   /* SIZES */
-  .ts-tabs-item-number-slate:where(.ts-size--medium) {
+  .tabs__number-slate:where(.tabs__number-slate--size--medium) {
     --tabs-item-number-slate-padding: var(--space-2) var(--space-4);
     --tabs-item-number-slate-gap: 0.5rem;
     --tabs-item-number-slate-border-radius: var(--radius-sm);
@@ -57,7 +57,7 @@
   }
 
   /* VARIANTS */
-  .ts-tabs-item-number-slate:where(.ts-variant--default) {
+  .tabs__number-slate:where(.tabs__number-slate--variant--default) {
     --tabs-item-number-slate-color: var(--tab-nav-item-text-color--default);
     --tabs-item-number-slate-background-color: var(--color-surface-a4);
 
@@ -75,7 +75,7 @@
       );
     }
 
-    &.ts-tabs-item-current {
+    &.tabs__item--current {
       --tabs-item-number-slate-color: var(--tab-nav-item-text-color--current);
       --tabs-item-number-slate-border-bottom-color: var(
         --tab-nav-item-border-color--current

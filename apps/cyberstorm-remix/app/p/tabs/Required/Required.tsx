@@ -61,20 +61,16 @@ export default function Required() {
   const outletContext = useOutletContext() as OutletContextShape;
 
   return (
-    <div className="nimbus-packagelisting__tabs__required">
-      <div className="nimbus-packagelisting__tabs__required__title">
-        <Heading
-          csLevel="3"
-          csSize="3"
-          rootClasses="nimbus-packagelisting__tabs__required__title__heading"
-        >
+    <div className="required">
+      <div className="required__title">
+        <Heading csLevel="3" csSize="3">
           Required mods ({listing.dependencies.length})
         </Heading>
-        <span className="nimbus-packagelisting__tabs__required__title__description">
+        <span className="required__description">
           This package requires the following packages to work.
         </span>
       </div>
-      <div className="nimbus-packagelisting__tabs__required__body">
+      <div className="required__body">
         {listing.dependencies.map((dep, key) => {
           return (
             <ListingDependency

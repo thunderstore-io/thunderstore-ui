@@ -11,20 +11,20 @@ export function AdContainer(props: AdContainerProps) {
   const { containerId } = props;
 
   return (
-    <div className="ts-adcontainer">
-      <div className="ts-adcontainer__fallback ts-variant--primary">
+    <div className="ad-container">
+      <div className="ad-container__fallback ad-container__fallback--variant--primary">
         Thunderstore development is made possible with ads. Please consider
         making an exception to your adblock.
         <NewIcon
           noWrapper
           csMode="inline"
-          rootClasses="ts-adcontainer__icon"
+          rootClasses="ad-container__icon"
           csVariant="danger"
         >
           <FontAwesomeIcon icon={faHeart} />
         </NewIcon>
       </div>
-      <div className="ts-adcontainer__content" id={containerId} />
+      <div className="ad-container__content" id={containerId} />
     </div>
   );
 }

@@ -4,9 +4,9 @@ import {
   Actionable,
   ActionableCyberstormLinkProps,
   ActionableLinkProps,
-} from "../../../primitiveComponents/Actionable/Actionable";
+} from "../../primitiveComponents/Actionable/Actionable";
 import React from "react";
-import { classnames } from "../../../utils/utils";
+import { classnames } from "../../utils/utils";
 
 interface LinkProps extends ActionableLinkProps {
   csVariant?: LinkVariants;
@@ -26,17 +26,17 @@ export const Link = React.forwardRef<
       {...forwardedProps}
       rootClasses={classnames(
         csVariant === "primary"
-          ? "ts-link ts-variant--primary"
+          ? "link link--variant--primary"
           : csVariant === "cyber"
-            ? "ts-link ts-variant--cyber"
-            : "ts-link",
-        forwardedProps.disabled ? "ts-link-disabled" : undefined,
+            ? "link link--variant--cyber"
+            : "link",
+        forwardedProps.disabled ? "link-disabled" : undefined,
         rootClasses
       )}
       ref={forwardedRef}
     >
       {forwardedProps.disabled ? (
-        <s className="ts-link-strikethrough">{children}</s>
+        <s className="link-strikethrough">{children}</s>
       ) : (
         children
       )}

@@ -7,7 +7,7 @@ export function Viewport(props: { toasts: ToastProps[] }) {
 
   return (
     <RadixToast.Viewport asChild>
-      <div className="ts-toast__viewport">
+      <div className="toast__viewport">
         {toasts.map((toast) => (
           <Toast key={toast.id} {...toast} />
         ))}

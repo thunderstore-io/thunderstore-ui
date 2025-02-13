@@ -1,5 +1,5 @@
 @layer components {
-  .ts-toast {
+  .toast {
     position: relative;
     display: flex;
 
@@ -12,44 +12,44 @@
     background-color: var(--toast-background-color);
     padding-block: var(--toast-padding-block);
     padding-inline: var(--toast-padding-inline);
-
-    > .ts-toast__icon {
-      width: var(--toast-icon-width);
-      height: var(--toast-icon-height);
-
-      --icon-color: var(--toast-icon-color);
-    }
-
-    > .ts-toast__close {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      width: var(--toast-close-width);
-      height: var(--toast-close-height);
-      background: transparent;
-
-      & > .ts-toast__close__icon {
-        width: var(--toast-close-icon-width);
-        height: var(--toast-close-icon-height);
-
-        --icon-color: var(--toast-close-icon-color);
-      }
-
-      & > .ts-toast__close__icon:hover {
-        --icon-color: var(--toast-close-icon-color-hover);
-      }
-    }
-
-    > .ts-toast__content {
-      min-width: 0;
-      color: var(--toast-color);
-      font-weight: var(--toast-font-weight);
-      font-size: var(--toast-font-size);
-      line-height: var(--toast-line-height);
-    }
   }
 
-  .ts-toast__viewport {
+  .toast__icon {
+    width: var(--toast-icon-width);
+    height: var(--toast-icon-height);
+
+    --icon-color: var(--toast-icon-color);
+  }
+
+  .toast__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: var(--toast-close-width);
+    height: var(--toast-close-height);
+    background: transparent;
+  }
+
+  .toast__close-icon {
+    width: var(--toast-close-icon-width);
+    height: var(--toast-close-icon-height);
+
+    --icon-color: var(--toast-close-icon-color);
+  }
+
+  .toast__close-icon:hover {
+    --icon-color: var(--toast-close-icon-color-hover);
+  }
+
+  .toast__content {
+    min-width: 0;
+    color: var(--toast-color);
+    font-weight: var(--toast-font-weight);
+    font-size: var(--toast-font-size);
+    line-height: var(--toast-line-height);
+  }
+
+  .toast__viewport {
     --viewport-padding: 1.5rem;
 
     position: fixed;
@@ -69,24 +69,24 @@
     --radix-toast-swipe-end-x: -1.5rem;
   }
 
-  .ts-toast[data-state="open"] {
+  .toast[data-state="open"] {
     animation: slide-in 600ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .ts-toast[data-state="closed"] {
+  .toast[data-state="closed"] {
     animation: hide 200ms ease-in;
   }
 
-  .ts-toast[data-swipe="move"] {
+  .toast[data-swipe="move"] {
     transform: translateX(var(--radix-toast-swipe-move-x));
   }
 
-  .ts-toast[data-swipe="cancel"] {
+  .toast[data-swipe="cancel"] {
     transform: translateX(0);
     transition: transform 200ms ease-out;
   }
 
-  .ts-toast[data-swipe="end"] {
+  .toast[data-swipe="end"] {
     animation: swipe-out 600ms ease-out;
   }
 

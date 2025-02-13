@@ -3,7 +3,7 @@
 
   /* VARIANTS */
 
-  /* .ts-table:where(.ts-variant--default) {
+  /* .table:where(.table--variant--default) {
     --table-background-color: var(--dropdown-bg-color--default);
     --table-border-color: var(--dropdown-border-color--default);
     --table-box-shadow: var(--shadow-lg);
@@ -13,7 +13,7 @@
 
   /* SIZES */
 
-  /* .ts-table:where(.ts-size--medium) {
+  /* .table:where(.table--size--medium) {
     --table-border-radius: var(--dropdown-md-border-radius);
     --table-padding: var(--dropdown-md-padding);
   } */

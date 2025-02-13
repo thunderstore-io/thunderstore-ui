@@ -1,6 +1,6 @@
 @layer theme-components {
   /* SIZES */
-  .ts-toast:where(.ts-size--medium) {
+  .toast:where(.toast--size--medium) {
     --toast-gap: var(--toast-md-gap);
     --toast-padding-block: var(--toast-md-padding-block);
     --toast-padding-inline: var(--toast-md-padding-inline);
@@ -17,7 +17,7 @@
   }
 
   /* VARIANTS */
-  .ts-toast:where(.ts-variant--danger) {
+  .toast:where(.toast--variant--danger) {
     --toast-background-color: var(--toast-danger-bg-color--default);
     --toast-border-color: var(--toast-danger-border-color--default);
     --toast-icon-color: var(--toast-danger-icon-color--default);
@@ -26,7 +26,7 @@
     --toast-close-icon-color-hover: var(--toast-danger-close-color--hover);
   }
 
-  .ts-toast:where(.ts-variant--info) {
+  .toast:where(.toast--variant--info) {
     --toast-background-color: var(--toast-info-bg-color--default);
     --toast-border-color: var(--toast-info-border-color--default);
     --toast-icon-color: var(--toast-info-icon-color--default);
@@ -35,7 +35,7 @@
     --toast-close-icon-color-hover: var(--toast-info-close-color--hover);
   }
 
-  .ts-toast:where(.ts-variant--success) {
+  .toast:where(.toast--variant--success) {
     --toast-background-color: var(--toast-success-bg-color--default);
     --toast-border-color: var(--toast-success-border-color--default);
     --toast-icon-color: var(--toast-success-icon-color--default);
@@ -44,7 +44,7 @@
     --toast-close-icon-color-hover: var(--toast-success-close-color--hover);
   }
 
-  .ts-toast:where(.ts-variant--warning) {
+  .toast:where(.toast--variant--warning) {
     --toast-background-color: var(--toast-warning-bg-color--default);
     --toast-border-color: var(--toast-warning-border-color--default);
     --toast-icon-color: var(--toast-warning-icon-color--default);

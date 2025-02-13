@@ -1,41 +1,51 @@
 @layer nimbus-layout {
-  .nimbus-tools-manifestValidator {
-    > .__row {
-      gap: 5rem;
+  .manifest-validator__row {
+    gap: 5rem;
+  }
 
-      > .__meta {
-        display: flex;
-        flex-direction: column;
-        gap: var(--gap-xs);
-        align-items: flex-start;
-        align-self: stretch;
+  .manifest-validator__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    align-items: flex-start;
+    align-self: stretch;
+  }
 
-        > .__title {
-          align-self: stretch;
-          color: var(--color-text-primary);
-          font-weight: var(--font-weight-bold);
+  .manifest-validator__title {
+    align-self: stretch;
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-bold);
 
-          font-size: var(--font-size-body-lg);
-          line-height: var(--line-height-md);
-        }
+    font-size: var(--font-size-body-lg);
+    line-height: var(--line-height-md);
+  }
 
-        > .__description {
-          align-self: stretch;
-          color: var(--color-text-tertiary);
-          font-weight: var(--font-weight-medium);
+  .manifest-validator__description {
+    align-self: stretch;
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-medium);
 
-          font-size: var(--font-size-body-md);
-          line-height: var(--line-height-md);
-        }
-      }
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md);
+  }
 
-      > .__content {
-        display: flex;
-        flex-direction: column;
-        gap: var(--gap-md);
-        align-items: flex-start;
-        width: 57.5rem;
-      }
+  .manifest-validator__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-items: flex-start;
+    width: 57.5rem;
+  }
+
+  /* Mobile breakpoint */
+  @media (width <= 475px) {
+    .manifest-validator__row {
+      flex-direction: column;
+      gap: var(--gap-xxxl);
+    }
+
+    .manifest-validator__content {
+      width: auto;
     }
   }
 }

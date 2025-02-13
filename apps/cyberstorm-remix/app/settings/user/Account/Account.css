@@ -1,40 +1,38 @@
 @layer nimbus-layout {
-  .nimbus-settings-user-account {
-    > .__deleteUserForm {
-      display: flex;
-      flex-direction: column;
-      gap: var(--gap-xxl);
-      align-items: flex-start;
-      align-self: stretch;
-      justify-content: center;
+  .user-account__delete-user-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xxl);
+    align-items: flex-start;
+    align-self: stretch;
+    justify-content: center;
+  }
 
-      > .__instructions {
-        display: flex;
-        flex-direction: column;
-        gap: var(--gap-md);
-        align-items: flex-start;
-        align-self: stretch;
-        color: var(--color-text-primary);
-        font-weight: var(--font-weight-regular);
+  .user-account__instructions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-items: flex-start;
+    align-self: stretch;
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-regular);
 
-        font-size: var(--font-size-body-lg);
-        line-height: var(--line-height-md);
+    font-size: var(--font-size-body-lg);
+    line-height: var(--line-height-md);
+  }
 
-        > span > .__username {
-          color: var(--color-text-primary);
-          font-weight: var(--font-weight-bold);
-          font-size: var(--font-size-body-lg);
-          font-style: italic;
-          line-height: 160%;
-        }
-      }
+  .user-account__username {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-body-lg);
+    font-style: italic;
+    line-height: 160%;
+  }
 
-      > .__actions {
-        display: flex;
-        flex-direction: column;
-        gap: var(--gap-md);
-        align-items: flex-start;
-      }
-    }
+  .user-account__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-items: flex-start;
   }
 }

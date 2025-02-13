@@ -1,31 +1,31 @@
 @layer theme-components {
   /* theme base styles */
-  .ts-metaitem {
+  .meta-item {
     --metaitem-gap: 0.5rem;
     --metaitem-font-weight: var(--font-weight-bold);
   }
 
   /* SIZES */
-  .ts-metaitem:where(.ts-size--16) {
+  .meta-item:where(.meta-item--size--16) {
     --metaitem-font-size: var(--meta-item-16-font-size);
     --metaitem-icon-width: var(--meta-item-16-icon-width);
     --metaitem-icon-height: var(--meta-item-16-icon-height);
   }
 
-  .ts-metaitem:where(.ts-size--14) {
+  .meta-item:where(.meta-item--size--14) {
     --metaitem-font-size: var(--meta-item-14-font-size);
     --metaitem-icon-width: var(--meta-item-14-icon-width);
     --metaitem-icon-height: var(--meta-item-14-icon-height);
   }
 
-  .ts-metaitem:where(.ts-size--12) {
+  .meta-item:where(.meta-item--size--12) {
     --metaitem-font-size: var(--meta-item-12-font-size);
     --metaitem-icon-width: var(--meta-item-12-icon-width);
     --metaitem-icon-height: var(--meta-item-12-icon-height);
   }
 
   /* VARIANTS */
-  .ts-metaitem:where(.ts-variant--default) {
+  .meta-item:where(.meta-item--variant--default) {
     --metaitem-color: var(--meta-item-icon-color--default);
     --metaitem-icon-color: var(--meta-item-text-color--default);
   }

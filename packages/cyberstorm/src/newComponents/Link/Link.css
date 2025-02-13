@@ -1,5 +1,5 @@
 @layer components {
-  .ts-link {
+  .link {
     color: var(--link-color);
     text-decoration: none;
 
@@ -8,12 +8,12 @@
     }
   }
 
-  .ts-link[disabled],
-  .ts-link-disabled {
+  .link[disabled],
+  .link-disabled {
     pointer-events: none;
   }
 
-  .ts-link-strikethrough {
+  .link-strikethrough {
     display: flex;
   }
 }

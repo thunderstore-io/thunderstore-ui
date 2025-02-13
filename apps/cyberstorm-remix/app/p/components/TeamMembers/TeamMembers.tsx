@@ -15,9 +15,9 @@ export default function TeamMembers(props: {
     });
 
   return (
-    <div className="nimbus-packageListing-components-team">
-      <div className="__header">
-        <Heading csLevel="4" csSize="4" rootClasses="__title">
+    <div className="team-members">
+      <div className="team-members__header">
+        <Heading csLevel="4" csSize="4" rootClasses="team-members__title">
           Team
         </Heading>
         <NewLink
@@ -29,7 +29,7 @@ export default function TeamMembers(props: {
           // community={props.listing.community_identifier}
           // team={props.listing.team.name}
           csVariant="cyber"
-          rootClasses="__link"
+          rootClasses="team-members__link"
         >
           See team
           <NewIcon csMode="inline" noWrapper>
@@ -37,7 +37,7 @@ export default function TeamMembers(props: {
           </NewIcon>
         </NewLink>
       </div>
-      <div className="__body">{mappedPackageTeamList}</div>
+      <div className="team-members__body">{mappedPackageTeamList}</div>
     </div>
   );
 }
@@ -51,18 +51,26 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
   const { teamMember } = props;
 
   return (
-    <div className="__item">
+    <div className="package-team-list-item">
       <Avatar username={teamMember.username} src={teamMember.avatar} />
-      <div className="__itemTitleWrapper">
-        <div className="__itemTitle">
-          <span className="__itemTitleUsername">{teamMember.username}</span>
+      <div className="package-team-list-item__wrapper">
+        <div className="package-team-list-item__title">
+          <span className="package-team-list-item__username">
+            {teamMember.username}
+          </span>
           {teamMember.role === "owner" ? (
-            <NewIcon csMode="inline" noWrapper rootClasses="__crown">
+            <NewIcon
+              csMode="inline"
+              noWrapper
+              rootClasses="package-team-list-item__crown"
+            >
               <FontAwesomeIcon icon={faCrown} />
             </NewIcon>
           ) : null}
         </div>
-        <div className="__itemDescription">{teamMember.role}</div>
+        <div className="package-team-list-item__description">
+          {teamMember.role}
+        </div>
       </div>
     </div>
   );

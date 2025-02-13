@@ -1,127 +1,127 @@
 @layer theme-components {
   /* Heading base tokens */
-  .ts-heading {
+  .heading {
     --heading-font-weight: var(--font-weight-bold);
     --heading-font-family: var(--font-family--inter);
     --heading-font-style: normal;
     --heading-line-height: normal;
   }
 
-  .ts-heading:where(.ts-size--1) {
+  .heading:where(.heading--size--1) {
     --heading-font-weight: var(--font-weight-extra-bold);
     --heading-font-size: var(--space-54);
     --heading-font-family: var(--font-family--hubot);
     --heading-line-height: 115%;
   }
 
-  .ts-heading:where(.ts-size--2) {
+  .heading:where(.heading--size--2) {
     --heading-font-size: var(--space-32);
     --heading-line-height: var(--line-height-sm);
   }
 
-  .ts-heading:where(.ts-size--3) {
+  .heading:where(.heading--size--3) {
     --heading-font-size: var(--space-20);
   }
 
-  .ts-heading:where(.ts-size--4) {
+  .heading:where(.heading--size--4) {
     --heading-font-size: var(--space-16);
   }
 
-  .ts-heading:where(.ts-size--5) {
+  .heading:where(.heading--size--5) {
     --heading-font-size: var(--space-14);
   }
 
-  .ts-heading:where(.ts-size--6) {
+  .heading:where(.heading--size--6) {
     --heading-font-size: var(--space-12);
   }
 
   /* Display base tokens */
-  .ts-display {
+  .display {
     --display-font-weight: var(--font-weight-bold);
     --display-font-family: var(--font-family--inter);
     --display-font-style: normal;
     --display-line-height: var(--line-height-auto);
   }
 
-  .ts-display:where(.ts-size--1) {
+  .display:where(.display--size--1) {
     --display-font-weight: var(--font-weight-extra-bold);
     --display-font-family: var(--font-family--hubot);
     --display-font-size: var(--space-54);
     --display-line-height: 115%; /* 62.1px */
   }
 
-  .ts-display:where(.ts-size--2) {
+  .display:where(.display--size--2) {
     --display-font-weight: var(--font-weight-extra-bold);
     --display-font-family: var(--font-family--hubot);
     --display-font-size: var(--space-51);
   }
 
-  .ts-display:where(.ts-size--3) {
+  .display:where(.display--size--3) {
     --display-font-weight: var(--font-weight-bold);
     --display-font-family: var(--font-family--hubot);
     --display-font-size: var(--space-38);
   }
 
-  .ts-display:where(.ts-size--4) {
+  .display:where(.display--size--4) {
     --display-font-size: var(--space-16);
   }
 
-  .ts-display:where(.ts-size--5) {
+  .display:where(.display--size--5) {
     --display-font-size: var(--space-14);
   }
 
-  .ts-display:where(.ts-size--6) {
+  .display:where(.display--size--6) {
     --display-font-size: var(--space-12);
   }
 
   /* VARIANTS DEFAULT STATE */
-  .ts-heading:where(.ts-variant--primary),
-  .ts-display:where(.ts-variant--primary) {
+  .heading:where(.heading--variant--primary),
+  .display:where(.display--variant--primary) {
     --heading-text-color: var(--heading-primary-text-color--default);
   }
 
-  .ts-heading:where(.ts-variant--secondary),
-  .ts-display:where(.ts-variant--secondary) {
+  .heading:where(.heading--variant--secondary),
+  .display:where(.display--variant--secondary) {
     --heading-text-color: var(--heading-secondary-text-color--default);
   }
 
-  .ts-heading:where(.ts-variant--tertiary),
-  .ts-display:where(.ts-variant--tertiary) {
+  .heading:where(.heading--variant--tertiary),
+  .display:where(.display--variant--tertiary) {
     --heading-text-color: var(--heading-tertiary-text-color--default);
   }
 
-  .ts-heading:where(.ts-variant--accent),
-  .ts-display:where(.ts-variant--accent) {
+  .heading:where(.heading--variant--accent),
+  .display:where(.display--variant--accent) {
     --heading-text-color: var(--heading-accent-text-color--default);
   }
 
-  .ts-heading:where(.ts-variant--special),
-  .ts-display:where(.ts-variant--special) {
+  .heading:where(.heading--variant--special),
+  .display:where(.display--variant--special) {
     --heading-text-color: var(--heading-special-text-color--default);
   }
 
-  .ts-heading:where(.ts-variant--success),
-  .ts-display:where(.ts-variant--success) {
+  .heading:where(.heading--variant--success),
+  .display:where(.display--variant--success) {
     --heading-text-color: var(--heading-success-text-color--default);
   }
 
-  .ts-heading:where(.ts-variant--info),
-  .ts-display:where(.ts-variant--info) {
+  .heading:where(.heading--variant--info),
+  .display:where(.display--variant--info) {
     --heading-text-color: var(--heading-info-text-color--default);
   }
 
-  .ts-heading:where(.ts-variant--warning),
-  .ts-display:where(.ts-variant--warning) {
+  .heading:where(.heading--variant--warning),
+  .display:where(.display--variant--warning) {
     --heading-text-color: var(--heading-warning-text-color--default);
   }
 
-  .ts-heading:where(.ts-variant--danger),
-  .ts-display:where(.ts-variant--danger) {
+  .heading:where(.heading--variant--danger),
+  .display:where(.display--variant--danger) {
     --heading-text-color: var(--heading-danger-text-color--default);
   }
 
-  .ts-heading:where(.ts-variant--cyber),
-  .ts-display:where(.ts-variant--cyber) {
+  .heading:where(.heading--variant--cyber),
+  .display:where(.display--variant--cyber) {
     --heading-text-color: var(--heading-cyber-text-color--default);
   }
 

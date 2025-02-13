@@ -1,5 +1,5 @@
 @layer components {
-  .ts-modal {
+  .modal {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -11,7 +11,7 @@
     transform: translate(-50%, -50%);
   }
 
-  .ts-modal__content {
+  .modal__content {
     display: flex;
     flex-direction: column;
     gap: var(--modal-content-gap);
@@ -21,7 +21,7 @@
     padding: var(--modal-content-padding);
   }
 
-  .ts-modal__button {
+  .modal__button {
     position: absolute;
     top: 1rem;
     right: 1rem;

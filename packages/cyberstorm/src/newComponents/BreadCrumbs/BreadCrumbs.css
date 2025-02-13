@@ -1,5 +1,5 @@
 @layer components {
-  .ts-breadcrumbs {
+  .breadcrumbs {
     display: flex;
     gap: var(--space-4);
     padding-left: var(--space-16);
@@ -9,7 +9,7 @@
     line-height: var(--line-height-auto);
   }
 
-  .ts-breadcrumbs__outer {
+  .breadcrumbs__outer {
     position: relative;
     display: flex;
     align-items: center;
@@ -21,20 +21,20 @@
     transform: skew(-30deg);
   }
 
-  .ts-breadcrumbs__outerhome {
+  .breadcrumbs__outerhome {
     z-index: 1;
   }
 
-  .ts-breadcrumbs__outerstart {
+  .breadcrumbs__outerstart {
     padding-left: 0;
   }
 
-  .ts-breadcrumbs__outerend {
+  .breadcrumbs__outerend {
     padding-right: 0;
   }
 
-  .ts-breadcrumbs__outerstart::before,
-  .ts-breadcrumbs__outerend::after {
+  .breadcrumbs__outerstart::before,
+  .breadcrumbs__outerend::after {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -45,17 +45,17 @@
     content: "\0020";
   }
 
-  .ts-breadcrumbs__outerstart::before {
+  .breadcrumbs__outerstart::before {
     left: -1rem;
     border-radius: 0.5rem 0 0 0.5rem;
   }
 
-  .ts-breadcrumbs__outerend::after {
+  .breadcrumbs__outerend::after {
     right: -1rem;
     border-radius: 0 0.5rem 0.5rem 0;
   }
 
-  .ts-breadcrumbs__inner {
+  .breadcrumbs__inner {
     white-space: nowrap;
 
     /* gap: var(--space-14);
@@ -65,7 +65,7 @@
     transform: skew(30deg);
   }
 
-  .ts-breadcrumbs__innerhome {
+  .breadcrumbs__innerhome {
     display: flex;
     align-items: center;
     width: 1em;
@@ -78,15 +78,15 @@
     padding: var(--space-8) var(--space-16);
   } */
 
-  .ts-breadcrumbs__innerend {
-    color: var(--ts-breadcrumbs__innerend-text-color);
+  .breadcrumbs__innerend {
+    color: var(--breadcrumbs__innerend-text-color);
   }
 
-  .ts-breadcrumbs__home {
+  .breadcrumbs__home {
     text-decoration: none;
   }
 
-  .ts-breadcrumbs__homelink {
+  .breadcrumbs__homelink {
     display: inline-block;
     height: 1em;
     font-size: var(--font-size-body-md);

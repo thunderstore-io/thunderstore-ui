@@ -1,24 +1,24 @@
 @layer nimbus-components {
-  .nimbus-commonComponents-packageSearch-components-categoryTagCloud {
+  .category-tag-cloud {
     display: flex;
     flex-flow: row wrap;
     gap: var(--space-8);
+  }
 
-    > .__searchTag {
-      display: flex;
-      flex: 0 1 0;
-      height: 100%;
-      min-height: var(--tag-height);
+  .category-tag-cloud__search-tag {
+    display: flex;
+    flex: 0 1 0;
+    height: 100%;
+    min-height: var(--tag-height);
 
-      > span {
-        white-space: wrap;
-        text-wrap: wrap;
-      }
+    > span {
+      white-space: wrap;
+      text-wrap: wrap;
     }
+  }
 
-    > .__clearButton {
-      height: var(--button-xs-height);
-      color: var(--color-text-accent);
-    }
+  .category-tag-cloud__clear-button {
+    height: var(--button-xs-height);
+    color: var(--color-text-accent);
   }
 }

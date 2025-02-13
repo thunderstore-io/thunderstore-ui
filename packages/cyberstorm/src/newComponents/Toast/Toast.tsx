@@ -51,22 +51,18 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
         <div
           {...forwardedProps}
           className={classnames(
-            "ts-toast",
-            ...componentClasses(csVariant, csSize, undefined),
+            "toast",
+            ...componentClasses("toast", csVariant, csSize, undefined),
             rootClasses
           )}
           ref={forwardedRef}
         >
-          <NewIcon noWrapper csMode="inline" rootClasses="ts-toast__icon">
+          <NewIcon noWrapper csMode="inline" rootClasses="toast__icon">
             <FontAwesomeIcon icon={icon} />
           </NewIcon>
-          <span className="ts-toast__content">{children}</span>
-          <RadixToast.Close className="ts-toast__close" aria-label="Close">
-            <NewIcon
-              rootClasses="ts-toast__close__icon"
-              csMode="inline"
-              noWrapper
-            >
+          <span className="toast__content">{children}</span>
+          <RadixToast.Close className="toast__close" aria-label="Close">
+            <NewIcon rootClasses="toast__close-icon" csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faXmarkLarge} />
             </NewIcon>
           </RadixToast.Close>

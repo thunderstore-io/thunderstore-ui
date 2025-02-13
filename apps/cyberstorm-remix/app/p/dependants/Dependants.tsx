@@ -128,7 +128,7 @@ export default function Dependants() {
   >();
 
   return (
-    <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
+    <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
         <CyberstormLink linkId="Communities">Communities</CyberstormLink>
         <CyberstormLink linkId="Community" community={community.identifier}>
@@ -151,8 +151,8 @@ export default function Dependants() {
         </CyberstormLink>
         Dependants
       </NewBreadCrumbs>
-      <section className="nimbus-package-dependants">
-        <span className="__header">
+      <section className="dependants">
+        <span className="dependants__header">
           Mods that depend on{" "}
           <NewLink
             primitiveType="cyberstormLink"

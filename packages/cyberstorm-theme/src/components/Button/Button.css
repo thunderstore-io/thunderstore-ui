@@ -1,6 +1,6 @@
 @layer theme-components {
   /* theme base styles */
-  .ts-button {
+  .button {
     --button-line-height: var(--line-height-auto);
     --button-gap: 1rem;
     --button-border-radius: 0.5rem;
@@ -9,7 +9,7 @@
   }
 
   /* SIZES */
-  .ts-button:where(.ts-size--xsmall) {
+  .button:where(.button--size--xsmall) {
     --button-height: var(--button-xs-height);
     --button-padding-block: var(--button-xs-padding-block);
     --button-padding-inline: var(--button-xs-padding-inline);
@@ -18,7 +18,7 @@
     --button-gap: var(--button-xs-gap);
   }
 
-  .ts-button:where(.ts-size--small) {
+  .button:where(.button--size--small) {
     --button-height: var(--button-sm-height);
     --button-padding-block: var(--button-sm-padding-block);
     --button-padding-inline: var(--button-sm-padding-inline);
@@ -27,7 +27,7 @@
     --button-gap: var(--button-sm-gap);
   }
 
-  .ts-button:where(.ts-size--medium) {
+  .button:where(.button--size--medium) {
     --button-height: var(--button-md-height);
     --button-padding-block: var(--button-md-padding-block);
     --button-padding-inline: var(--button-md-padding-inline);
@@ -36,7 +36,7 @@
     --button-gap: var(--button-md-gap);
   }
 
-  .ts-button:where(.ts-size--big) {
+  .button:where(.button--size--big) {
     --button-height: var(--button-lg-height);
     --button-padding-block: var(--button-lg-padding-block);
     --button-padding-inline: var(--button-lg-padding-inline);
@@ -46,7 +46,7 @@
   }
 
   /* VARIANTS DEFAULT STATE */
-  .ts-button:where(.ts-variant--primary) {
+  .button:where(.button--variant--primary) {
     --button-background-color: var(--button-primary-bg-color--default);
     --button-text-color: var(--button-primary-text-color--default);
 
@@ -62,7 +62,7 @@
     }
   }
 
-  .ts-button:where(.ts-variant--secondary) {
+  .button:where(.button--variant--secondary) {
     --button-background-color: var(--button-secondary-bg-color--default);
     --button-text-color: var(--button-secondary-text-color--default);
 
@@ -78,7 +78,7 @@
     }
   }
 
-  .ts-button:where(.ts-variant--accent) {
+  .button:where(.button--variant--accent) {
     --button-background-color: var(--button-accent-bg-color--default);
     --button-text-color: var(--button-accent-text-color--default);
 
@@ -94,7 +94,7 @@
     }
   }
 
-  .ts-button:where(.ts-variant--special) {
+  .button:where(.button--variant--special) {
     --button-text-color: var(--button-special-text-color--default);
     --button-border: var(--button-special-border--default);
     --button-border-color: var(--button-special-border-color--default);
@@ -119,7 +119,7 @@
     }
   }
 
-  .ts-button:where(.ts-variant--success) {
+  .button:where(.button--variant--success) {
     --button-background-color: var(--button-success-bg-color--default);
     --button-text-color: var(--button-success-text-color--default);
 
@@ -135,7 +135,7 @@
     }
   }
 
-  .ts-button:where(.ts-variant--info) {
+  .button:where(.button--variant--info) {
     --button-background-color: var(--button-info-bg-color--default);
     --button-text-color: var(--button-info-text-color--default);
 
@@ -151,7 +151,7 @@
     }
   }
 
-  .ts-button:where(.ts-variant--warning) {
+  .button:where(.button--variant--warning) {
     --button-background-color: var(--button-warning-bg-color--default);
     --button-text-color: var(--button-warning-text-color--default);
 
@@ -167,7 +167,7 @@
     }
   }
 
-  .ts-button:where(.ts-variant--danger) {
+  .button:where(.button--variant--danger) {
     --button-background-color: var(--button-danger-bg-color--default);
     --button-text-color: var(--button-danger-text-color--default);
 
@@ -184,19 +184,19 @@
   }
 
   /* MODIFIERS */
-  .ts-button:where(:not(.ts-variant--special)):where(.ts-modifier--ghost):where(
+  .button:where(:not(.button--variant--special)):where(.button--ghost):where(
       :not(:hover, :active)
     ) {
     --button-background-color: transparent;
   }
 
-  .ts-button:where(.ts-variant--special):where(.ts-modifier--ghost):where(
+  .button:where(.button--variant--special):where(.button--ghost):where(
       :not(:hover, :active)
     ) {
     background: transparent;
   }
 
-  .ts-button[disabled] {
+  .button[disabled] {
     opacity: 0.5;
     pointer-events: none;
   }

@@ -7,7 +7,7 @@ import "./SkeletonBox.css";
  * @returns A div element with skeleton component styling (flex and no width or height)
  */
 export function SkeletonBox({ className }: { className?: string }) {
-  return <div className={classnames("ts-skeleton", className)} />;
+  return <div className={classnames("skeleton", className)} />;
 }
 
 SkeletonBox.displayName = "SkeletonBox";

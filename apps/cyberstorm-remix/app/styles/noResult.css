@@ -1,5 +1,5 @@
 @layer nimbus-layout {
-  .nimbus-noresult {
+  .no-result {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7,16 +7,16 @@
     padding-bottom: 5rem;
   }
 
-  .nimbus-noresult__ghostbounce {
+  .no-result__ghostbounce {
     animation: ghost-bounce 3s ease-in-out infinite;
   }
 
-  .nimbus-noresult__info {
+  .no-result__info {
     display: flex;
     flex-direction: column;
   }
 
-  .nimbus-noresult__button {
+  .no-result__button {
     width: fit-content;
   }
 

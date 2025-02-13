@@ -41,8 +41,9 @@ export const Heading = React.forwardRef<HTMLHeadingElement, DefaultProps>(
         {...fProps}
         primitiveType={mode}
         rootClasses={classnames(
-          `ts-${mode}`,
+          `${mode}`,
           ...componentClasses(
+            mode,
             csVariant,
             csSize ? csSize : csLevel,
             csModifiers

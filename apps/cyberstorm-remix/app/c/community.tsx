@@ -138,8 +138,8 @@ export default function Community() {
 
   return (
     <>
-      <div className="ts-container ts-container--y ts-container--full nimbus-root__content">
-        <NewBreadCrumbs rootClasses="nimbus-root__breadcrumbs">
+      <div className="container container--y container--full layout__content">
+        <NewBreadCrumbs rootClasses="layout__breadcrumbs">
           <NewLink
             primitiveType="cyberstormLink"
             linkId="Communities"
@@ -149,31 +149,31 @@ export default function Community() {
           </NewLink>
           {community.name}
         </NewBreadCrumbs>
-        <section className="ts-container ts-container--y ts-container--full nimbus-community">
-          <span className="ts-container ts-container--x __heading">
+        <section className="container container--y container--full">
+          <span className="container container--x community__heading">
             <Image
               src={community.cover_image_url}
               cardType="community"
               intrinsicWidth={56}
               intrinsicHeight={56}
-              rootClasses="__communitySmallImage"
+              rootClasses="community__small-image"
             />
-            <span className="ts-container ts-container--full __content">
+            <span className="container container--full community__content">
               <Heading
                 csLevel="1"
                 csSize="3"
                 mode="display"
-                rootClasses="ts-container ts-container--full __info"
+                rootClasses="container container--full community__info"
               >
                 {community.name}
               </Heading>
-              <span className="ts-container ts-container--x __meta">
+              <span className="container container--x community__meta">
                 {community.wiki_url ? (
                   <NewLink
                     primitiveType="link"
                     href={community.wiki_url}
                     csVariant="cyber"
-                    rootClasses="__item"
+                    rootClasses="community__item"
                   >
                     <NewIcon csMode="inline" noWrapper>
                       <FontAwesomeIcon icon={faBook} />
@@ -189,7 +189,7 @@ export default function Community() {
                     primitiveType="link"
                     href={community.discord_url}
                     csVariant="cyber"
-                    rootClasses="__item"
+                    rootClasses="community__item"
                   >
                     <NewIcon csMode="inline" noWrapper>
                       <FontAwesomeIcon icon={faDiscord} />
