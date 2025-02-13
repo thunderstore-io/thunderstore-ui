@@ -33,6 +33,8 @@ export interface ContextInterface {
   apiHost?: string;
   /** Async function to update currentUser */
   updateCurrentUser: () => Promise<void>;
+  /** Store given CurrentUser */
+  storeCurrentUser: (currentUser: CurrentUser) => void;
   /** Function to get the currentUser */
   getSessionCurrentUser: (forceUpdateCurrentUser?: boolean) => CurrentUser;
 }
@@ -67,119 +69,65 @@ interface Props extends PropsWithChildren {
 export function SessionProvider(props: Props) {
   const _storage = new StorageManager("Session");
 
-  const setSession = (sessionData: SessionData) => {
-    _storage.setValue(API_HOST_KEY, sessionData.apiHost);
-    _storage.setValue(ID_KEY, sessionData.sessionId);
-    _storage.setValue(USERNAME_KEY, sessionData.username);
+  const _setSession = (sessionData: SessionData) => {
+    setSession(_storage, sessionData);
   };
 
-  const clearSession = () => {
-    _storage.removeValue(ID_KEY);
-    _storage.removeValue(USERNAME_KEY);
-    _storage.removeValue(API_HOST_KEY);
+  const _clearSession = () => {
+    clearSession(_storage);
   };
 
-  const clearCookies = () => {
-    deleteCookie("sessionid");
+  const _clearCookies = () => {
+    clearCookies();
   };
 
-  const getConfig = (domain?: string): RequestConfig => {
-    const apiHost = _storage.safeGetValue(API_HOST_KEY);
-    const sessionId = _storage.safeGetValue(ID_KEY);
-    return {
-      // THIS IS NOT KOSHER
-      apiHost: apiHost ? apiHost : domain ? domain : "",
-      sessionId: sessionId ?? "",
-    };
+  const _getConfig = (domain?: string): RequestConfig => {
+    return getConfig(_storage, domain);
   };
 
   // Check current session and try to fix it if cookies are not the same as storage
-  const sessionValid = (): boolean => {
-    const sessionidCookie = getCookie("sessionid");
-    const storedSessionId = _storage.safeGetValue(ID_KEY);
-    const storedUsername = _storage.safeGetValue(USERNAME_KEY);
-    const storedApiHost = _storage.safeGetValue(API_HOST_KEY);
-
-    if (storedSessionId) {
-      // Has storage values
-      if (sessionidCookie) {
-        // Has cookies
-        if (sessionidCookie === storedSessionId) {
-          // cookies match to storage yes
-          return true;
-        } else {
-          // cookies match to storage no
-          return false;
-        }
-      } else {
-        // storage values yes, cookies not needed for fetches, is ok
-        return true;
-      }
-    } else {
-      // No storage values but cookies
-      if (sessionidCookie) {
-        setSession({
-          sessionId: sessionidCookie,
-          username: storedUsername ?? "",
-          apiHost: storedApiHost ?? "",
-        });
-        return true;
-      }
-      return false;
-    }
+  const _sessionValid = (): boolean => {
+    return sessionValid(_storage);
   };
 
-  const storeCurrentUser = (currentUser: CurrentUser) => {
-    _storage.setJsonValue(CURRENT_USER_KEY, currentUser);
+  const _storeCurrentUser = (currentUser: CurrentUser) => {
+    storeCurrentUser(_storage, currentUser);
   };
 
-  const updateCurrentUser = async () => {
-    const dapper = new DapperTs(getConfig, clearSession);
-    const currentUser = await dapper.getCurrentUser();
-    storeCurrentUser(currentUser);
+  const _updateCurrentUser = async () => {
+    updateCurrentUser(_storage);
   };
 
-  const getSessionCurrentUser = (
+  const _getSessionCurrentUser = (
     forceUpdateCurrentUser: boolean = false
   ): CurrentUser => {
-    if (forceUpdateCurrentUser) {
-      (async () => {
-        await updateCurrentUser();
-      })();
-    }
-
-    const currentUser = _storage.safeGetJsonValue(CURRENT_USER_KEY);
-    const parsed = currentUserSchema.safeParse(currentUser);
-    if (!parsed.success) {
-      return emptyUser;
-    } else {
-      return currentUser;
-    }
+    return getSessionCurrentUser(_storage, forceUpdateCurrentUser);
   };
 
   if (typeof window !== "undefined") {
     const sessionidCookie = getCookie("sessionid");
 
     if (sessionidCookie) {
-      setSession({
+      _setSession({
         sessionId: sessionidCookie,
         username: "",
         apiHost: props.apiHost,
       });
     } else {
       _storage.setValue(API_HOST_KEY, props.apiHost);
-      sessionValid();
+      _sessionValid();
     }
   }
 
   const value = {
-    clearSession,
-    clearCookies,
-    getConfig,
-    sessionValid,
-    updateCurrentUser,
-    getSessionCurrentUser,
-    setSession,
+    clearSession: _clearSession,
+    clearCookies: _clearCookies,
+    getConfig: _getConfig,
+    sessionValid: _sessionValid,
+    updateCurrentUser: _updateCurrentUser,
+    storeCurrentUser: _storeCurrentUser,
+    getSessionCurrentUser: _getSessionCurrentUser,
+    setSession: _setSession,
     apiHost: props.apiHost,
   };
 
@@ -190,6 +138,7 @@ export function SessionProvider(props: Props) {
   );
 }
 
+// Util functions
 const getCookie = (cookieName: string) => {
   const cookie = new RegExp(`${cookieName}=([^;]+);`).exec(
     document.cookie[-1] === ";" ? document.cookie : document.cookie + ";"
@@ -201,6 +150,118 @@ const deleteCookie = (name: string) => {
   const date = new Date();
   date.setTime(0);
   document.cookie = `${name}=${null}; expires=${date.toUTCString()}; path=/`;
+};
+
+// All Session functions
+export const setSession = (
+  _storage: StorageManager,
+  sessionData: SessionData
+) => {
+  _storage.setValue(API_HOST_KEY, sessionData.apiHost);
+  _storage.setValue(ID_KEY, sessionData.sessionId);
+  _storage.setValue(USERNAME_KEY, sessionData.username);
+};
+
+export const clearSession = (_storage: StorageManager) => {
+  _storage.removeValue(ID_KEY);
+  _storage.removeValue(USERNAME_KEY);
+  _storage.removeValue(API_HOST_KEY);
+};
+
+export const clearCookies = () => {
+  deleteCookie("sessionid");
+};
+
+export const getConfig = (
+  _storage: StorageManager,
+  domain?: string
+): RequestConfig => {
+  const apiHost = _storage.safeGetValue(API_HOST_KEY);
+  const sessionId = _storage.safeGetValue(ID_KEY);
+  return {
+    // THIS IS NOT KOSHER
+    apiHost: apiHost ? apiHost : domain ? domain : "",
+    sessionId: sessionId ?? "",
+  };
+};
+
+// Check current session and try to fix it if cookies are not the same as storage
+export const sessionValid = (_storage: StorageManager): boolean => {
+  const sessionidCookie = getCookie("sessionid");
+  const storedSessionId = _storage.safeGetValue(ID_KEY);
+  const storedUsername = _storage.safeGetValue(USERNAME_KEY);
+  const storedApiHost = _storage.safeGetValue(API_HOST_KEY);
+
+  if (storedSessionId) {
+    // Has storage values
+    if (sessionidCookie) {
+      // Has cookies
+      if (sessionidCookie === storedSessionId) {
+        // cookies match to storage yes
+        return true;
+      } else {
+        // cookies match to storage no
+        return false;
+      }
+    } else {
+      // storage values yes, cookies not needed for fetches, is ok
+      return true;
+    }
+  } else {
+    // No storage values but cookies
+    if (sessionidCookie) {
+      setSession(_storage, {
+        sessionId: sessionidCookie,
+        username: storedUsername ?? "",
+        apiHost: storedApiHost ?? "",
+      });
+      return true;
+    }
+    return false;
+  }
+};
+
+export const storeCurrentUser = (
+  _storage: StorageManager,
+  currentUser: CurrentUser
+) => {
+  _storage.setJsonValue(CURRENT_USER_KEY, currentUser);
+};
+
+export const updateCurrentUser = async (
+  _storage: StorageManager,
+  customGetConfig?: (domain?: string) => RequestConfig,
+  customClearSession?: () => void
+) => {
+  const dapper = new DapperTs(
+    customGetConfig
+      ? customGetConfig
+      : (domain?: string) => getConfig(_storage, domain),
+    customClearSession ? customClearSession : () => clearSession(_storage)
+  );
+  const currentUser = await dapper.getCurrentUser();
+  storeCurrentUser(_storage, currentUser);
+};
+
+export const getSessionCurrentUser = (
+  _storage: StorageManager,
+  forceUpdateCurrentUser: boolean = false,
+  customGetConfig?: (domain?: string) => RequestConfig,
+  customClearSession?: () => void
+): CurrentUser => {
+  if (forceUpdateCurrentUser) {
+    (async () => {
+      await updateCurrentUser(_storage, customGetConfig, customClearSession);
+    })();
+  }
+
+  const currentUser = _storage.safeGetJsonValue(CURRENT_USER_KEY);
+  const parsed = currentUserSchema.safeParse(currentUser);
+  if (!parsed.success) {
+    return emptyUser;
+  } else {
+    return currentUser;
+  }
 };
 
 /**

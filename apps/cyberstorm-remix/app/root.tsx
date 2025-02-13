@@ -230,16 +230,16 @@ export function ErrorBoundary() {
   return (
     <div className="nimbus-error">
       <div
-        className="nimbus-error__glitch"
+        className="__glitch"
         data-text={isResponseError ? error.status : 500}
       >
         <span>{isResponseError ? error.status : 500}</span>
       </div>
-      <div className="nimbus-error__description">
+      <div className="__description">
         {isResponseError ? error.data : "Internal server error"}
       </div>
       {!isResponseError && (
-        <div className="nimbus-error__flavor">
+        <div className="__flavor">
           Beep boop. Server something error happens.
         </div>
       )}

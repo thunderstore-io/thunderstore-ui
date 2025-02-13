@@ -1,5 +1,5 @@
 import styles from "./CreateTeamForm.module.css";
-import { createTeam } from "@thunderstore/thunderstore-api";
+import { createTeam, RequestConfig } from "@thunderstore/thunderstore-api";
 import {
   ApiForm,
   createTeamFormSchema,
@@ -10,13 +10,17 @@ import {
   useFormToaster,
 } from "@thunderstore/cyberstorm-forms";
 
-export function CreateTeamForm(props: { updateTrigger: () => Promise<void> }) {
+export function CreateTeamForm(props: {
+  config: () => RequestConfig;
+  updateTrigger: () => Promise<void>;
+}) {
   const { onSubmitSuccess, onSubmitError } = useFormToaster({
     successMessage: "Team created",
   });
 
   return (
     <ApiForm
+      config={props.config}
       onSubmitSuccess={() => {
         props.updateTrigger();
         onSubmitSuccess();
