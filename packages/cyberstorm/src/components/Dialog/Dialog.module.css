@@ -58,6 +58,6 @@
 
 .closeIcon {
   display: flex;
-  color: var(--color-border--highlight);
+  color: rgb(82 82 178 / 0.88);
   font-weight: var(--font-weight-extra-bold);
 }

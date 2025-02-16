@@ -36,6 +36,18 @@ export default defineConfig({
               route("versions", "p/tabs/Versions/Versions.tsx");
             }
           );
+          route(
+            "/package/create/docs",
+            "tools/package-format-docs/packageFormatDocs.tsx"
+          );
+          route(
+            "/tools/markdown-preview",
+            "tools/markdown-preview/markdownPreview.tsx"
+          );
+          route(
+            "/tools/manifest-v1-validator",
+            "tools/manifest-validator/manifestValidator.tsx"
+          );
           if (process.env.ENABLE_BROKEN_PAGES) {
             route(
               "/c/:communityId/p/:namespaceId/:packageId/dependants",
@@ -69,18 +81,6 @@ export default defineConfig({
               });
               route("account", "settings/user/Account/Account.tsx");
             });
-            route(
-              "/package/create/docs",
-              "tools/package-format-docs/packageFormatDocs.tsx"
-            );
-            route(
-              "/tools/markdown-preview",
-              "tools/markdown-preview/markdownPreview.tsx"
-            );
-            route(
-              "/tools/manifest-v1-validator",
-              "tools/manifest-validator/manifestValidator.tsx"
-            );
           }
         });
       },

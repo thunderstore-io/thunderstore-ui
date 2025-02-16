@@ -49,14 +49,14 @@
 }
 
 .inputContainer:hover {
-  --border-color: var(--color-border--highlight);
+  --border-color: rgb(82 82 178 / 0.88);
 }
 
 .inputContainer:focus-within {
   color: var(--color-text--default);
   background-color: var(--color-black);
 
-  --border-color: var(--color-border--highlight);
+  --border-color: rgb(82 82 178 / 0.88);
 }
 
 .input::placeholder {

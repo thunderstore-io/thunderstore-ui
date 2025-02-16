@@ -33,6 +33,7 @@
   }
 
   .select__trigger {
+    justify-content: space-between;
     width: 100%;
     font-weight: var(--select__trigger-font-weight);
     font-size: var(--select__trigger-font-size);
