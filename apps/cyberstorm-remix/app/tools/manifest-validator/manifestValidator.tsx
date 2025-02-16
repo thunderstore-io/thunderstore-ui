@@ -1,17 +1,15 @@
 import {
-  Alert,
   CodeInput,
+  NewAlert,
   NewBreadCrumbs,
   NewLink,
-  Select,
+  NewSelect,
   isRecord,
   isStringArray,
 } from "@thunderstore/cyberstorm";
 import "./manifestValidator.css";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "@remix-run/react";
-import { faWarning } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Buffer } from "buffer";
 import {
   isApiError,
@@ -95,13 +93,11 @@ export default function ManifestValidator() {
           </div>
           <div className="manifest-validator__content">
             {currentUser && currentUser.username ? null : (
-              <Alert
-                content="You must be logged in to see your teams"
-                variant="warning"
-                icon={<FontAwesomeIcon icon={faWarning} />}
-              />
+              <NewAlert csVariant="warning">
+                You must be logged in to see your teams
+              </NewAlert>
             )}
-            <Select
+            <NewSelect
               onChange={setTeamInput}
               options={selectOptions}
               value={teamInput}

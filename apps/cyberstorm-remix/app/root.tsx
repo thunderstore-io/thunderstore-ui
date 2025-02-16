@@ -155,15 +155,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     <main className="container container--x container--full island-item layout__main">
                       {children}
                     </main>
-                    <div className="container container--y island-item layout__ads">
-                      <div className="container container--y layout__ads-inner">
-                        {shouldShowAds
-                          ? adContainerIds.map((cid, k_i) => (
-                              <AdContainer key={k_i} containerId={cid} />
-                            ))
-                          : null}
+                    {shouldShowAds ? (
+                      <div className="container container--y island-item layout__ads">
+                        <div className="container container--y layout__ads-inner">
+                          {adContainerIds.map((cid, k_i) => (
+                            <AdContainer key={k_i} containerId={cid} />
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    ) : null}
                   </div>
                   <Footer />
                   {shouldShowAds ? <AdsInit /> : null}
