@@ -105,9 +105,10 @@ export default function ManifestValidator() {
             />
             <CodeInput
               placeholder={PLACEHOLDER}
-              setValue={setManifestInput}
+              onChange={(e) => setManifestInput(e.currentTarget.value)}
               value={manifestInput}
               validationBarProps={validation}
+              rows={20}
             />
           </div>
         </div>
