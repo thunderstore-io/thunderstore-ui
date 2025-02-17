@@ -76,7 +76,7 @@ export default function MarkdownPreview() {
           <div className="markdown-preview__content">
             <CodeInput
               placeholder="# This is a markdown preview placeholder"
-              setValue={setMarkdownPreviewInput}
+              onChange={(e) => setMarkdownPreviewInput(e.currentTarget.value)}
               value={markdownPreviewInput}
               validationBarProps={validation}
             />
