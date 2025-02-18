@@ -7,7 +7,6 @@ export {
   BreadCrumbs,
   DefaultHomeCrumb,
 } from "./components/BreadCrumbs/BreadCrumbs";
-export { CodeInput } from "./components/CodeInput/CodeInput";
 export * as Dialog from "./components/Dialog/";
 export * as EmptyState from "./newComponents/EmptyState";
 export { Icon } from "./components/Icon/Icon";
@@ -65,6 +64,7 @@ export {
 export {
   Input,
   type InputTextInputProps,
+  type InputTextAreaProps,
 } from "./primitiveComponents/Input/Input";
 export { type PrimitiveComponentDefaultProps } from "./primitiveComponents/utils/utils";
 
@@ -83,6 +83,10 @@ export {
   TextInput as NewTextInput,
   type TextInputProps as NewTextInputProps,
 } from "./newComponents/TextInput/TextInput";
+export {
+  CodeInput,
+  type CodeInputProps,
+} from "./newComponents/CodeInput/CodeInput";
 export {
   Select as NewSelect,
   type SelectProps as NewSelectProps,

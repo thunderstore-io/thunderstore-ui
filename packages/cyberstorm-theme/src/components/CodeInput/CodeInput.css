@@ -1,0 +1,68 @@
+@layer theme-components {
+  .code-input {
+    --code-input-width: 100%;
+    --code-input-padding: var(--space-8) var(--space-10);
+    --code-input-border: var(--border-width--px) solid
+      var(--code-input-border-color);
+    --code-input-border-radius: var(--radius-md);
+    --code-input-transition: ease-out var(--animation-duration-xs);
+    --code-input-border-color: var(--input-border-color--default);
+    --code-input-text-color: var(--input-text-color--default);
+  }
+
+  .code-input__body {
+    --code-input-body-line-height: 1.5;
+  }
+
+  .code-input__wrapper {
+    --code-input-wrapper-padding: var(--space-8) var(--space-10);
+    --code-input-wrapper-border: var(--border-width--px) solid
+      var(--code-input-wrapper-border-color);
+    --code-input-wrapper-border-radius: var(--radius-md);
+    --code-input-wrapper-transition: ease-out var(--animation-duration-xs);
+    --code-input-wrapper-border-color: var(--input-border-color--default);
+    --code-input-wrapper-text-color: var(--input-text-color--default);
+    --code-input-wrapper-line-height: var(--line-height-auto);
+    --code-input-wrapper-font-weight: var(--font-weight-regular);
+    --code-input-wrapper-font-size: var(--font-size-body-lg);
+    --code-input-wrapper-background-color: var(--input-bg-color--default);
+  }
+
+  .code-input[value] {
+    --code-input-text-color: var(--input-text-color--hover);
+  }
+
+  .code-input:hover {
+    --code-input-background-color: var(--input-bg-color--hover);
+    --code-input-border-color: var(--input-border-color--hover);
+  }
+
+  .code-input:focus-within {
+    --code-input-text-color: var(--input-text-color--focus);
+    --code-input-background-color: var(--input-bg-color--focus);
+    --code-input-border-color: var(--input-border-color--focus);
+  }
+
+  .code-input::placeholder {
+    --code-input__placeholder-color: var(--input-placeholder-color);
+    --code-input__placeholder-opacity: 1;
+  }
+
+  :root {
+    --input-bg-color--default: var(--color-surface-a3);
+    --input-bg-color--focus: var(--color-surface-1);
+    --input-bg-color--hover: var(--color-surface-a5);
+    --input-border-color--default: var(--color-surface-a8);
+    --input-border-color--focus: var(--color-cyber-green-7);
+    --input-border-color--hover: var(--color-surface-a10);
+    --input-icon-color--default: var(--color-text-tertiary);
+    --input-placeholder-color: var(--color-text-tertiary);
+    --input-text-color--default: var(--color-text-secondary);
+    --input-text-color--focus: var(--color-text-primary);
+    --input-text-color--hover: var(--color-text-secondary);
+    --input-md-border-radius: var(--radius-md);
+    --input-md-height: 2.75rem;
+    --input-sm-border-radius: var(--radius-md);
+    --input-sm-height: 2.25rem;
+  }
+}
