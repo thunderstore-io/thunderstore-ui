@@ -4,7 +4,7 @@
   }
 
   .package-format-docs__title {
-    color: var(--color-text-primary,);
+    color: var(--color-text-primary);
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-lg);
     line-height: var(--line-height-md);
