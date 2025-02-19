@@ -66,6 +66,14 @@ export {
   type TextInputModifiers,
   TextInputModifiersList,
 } from "./components/TextInput/TextInput";
+export {
+  type CodeInputVariants,
+  CodeInputVariantsList,
+  type CodeInputSizes,
+  CodeInputSizesList,
+  type CodeInputModifiers,
+  CodeInputModifiersList,
+} from "./components/CodeInput/CodeInput";
 export { type IconVariants, IconVariantsList } from "./components/Icon/Icon";
 export {
   type BreadCrumbsVariants,

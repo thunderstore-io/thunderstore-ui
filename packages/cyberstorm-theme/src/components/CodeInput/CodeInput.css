@@ -1,0 +1,106 @@
+@layer theme-components {
+  .code-input__wrapper {
+    --code-input-wrapper-background-color: var(
+      --code-input-wrapper-bg-color--default
+    );
+    --code-input-wrapper-border-color: var(
+      --code-input-wrapper-border-color--default
+    );
+    --code-input-wrapper-border-radius: var(
+      --code-input-wrapper-md-border-radius
+    );
+  }
+
+  .code-input__wrapper:has(.validation-bar--success) {
+    --code-input-wrapper-border-color: var(
+      --validation-bar-border-top-color--success
+    );
+  }
+
+  .code-input__wrapper:has(.validation-bar--failure) {
+    --code-input-wrapper-border-color: var(
+      --validation-bar-border-top-color--failure
+    );
+  }
+
+  .code-input {
+    --code-input-color: var(--code-input-text-color--default);
+    --code-input-border-radius: var(--code-input-md-border-radius);
+    --code-input-padding: var(--code-input-md-padding);
+    --code-input-transition: var(--code-input-transition--default);
+    --code-input-font-family: var(--code-input-font-family--default);
+    --code-input-font-size: var(--code-input-md-font-size);
+    --code-input-font-weight: var(--code-input-md-font-weight);
+    --code-input-line-height: var(--code-input-md-line-height);
+  }
+
+  .code-input::placeholder {
+    --code-input-placeholder-color: var(
+      --code-input-placeholder-color--default
+    );
+  }
+
+  .validation-bar {
+    --validation-bar-padding: var(--validation-bar-md-padding);
+    --validation-bar-gap: var(--validation-bar-md-gap);
+    --validation-bar-border-radius: var(--validation-bar-md-border-radius);
+    --validation-bar-font-size: var(--validation-bar-md-font-size);
+    --validation-bar-font-weight: var(--validation-bar-md-font-weight);
+    --validation-bar-line-height: var(--validation-bar-md-line-height);
+    --validation-bar-border-top-color: var(
+      --validation-bar-border-top-color--default
+    );
+    --validation-bar-background-color: var(
+      --validation-bar-background-color--default
+    );
+    --validation-bar-color: var(--validation-bar-color--default);
+  }
+
+  .validation-bar--success {
+    --validation-bar-border-top-color: var(
+      --validation-bar-border-top-color--success
+    );
+    --validation-bar-color: var(--validation-bar-color--success);
+  }
+
+  .validation-bar--failure {
+    --validation-bar-border-top-color: var(
+      --validation-bar-border-top-color--failure
+    );
+    --validation-bar-background-color: var(
+      --validation-bar-background-color--failure
+    );
+    --validation-bar-color: var(--validation-bar-color--failure);
+  }
+
+  :root {
+    --code-input-wrapper-md-padding: var(--space-8) var(--space-10);
+    --code-input-wrapper-bg-color--default: rgb(59 63 125 / 0.24);
+    --code-input-wrapper-border-color--default: var(--color-surface-8);
+    --code-input-wrapper-md-border-radius: var(--radius-md);
+    --code-input-text-color--default: var(--color-text-primary);
+    --code-input-md-border-radius: var(--radius-md);
+    --code-input-md-padding: var(--space-8) var(--space-10);
+    --code-input-md-font-size: 0.813rem;
+    --code-input-transition--default: ease-out var(--animation-duration-xs);
+    --code-input-font-family--default: var(--font-family-monospace);
+    --code-input-md-font-weight: var(--font-weight-regular);
+    --code-input-md-line-height: var(--line-height-md);
+    --code-input-placeholder-color--default: var(--color-text-tertiary);
+    --validation-bar-md-padding: var(--space-12) var(--space-16);
+    --validation-bar-md-gap: var(--space-12);
+    --validation-bar-md-border-radius: 0rem 0rem var(--radius-md)
+      var(--radius-md);
+    --validation-bar-md-font-size: var(--font-size-body-md);
+    --validation-bar-md-font-weight: var(--font-weight-regular);
+    --validation-bar-md-line-height: var(--line-height-md);
+    --validation-bar-border-top-color--default: var(--color-surface-8);
+    --validation-bar-background-color--default: var(--color-surface-1);
+    --validation-bar-color--default: var(--color-text-accent);
+    --validation-bar-border-top-color--success: var(--color-accent-green-7);
+    --validation-bar-color--success: var(--color-accent-green-7);
+    --validation-bar-border-top-color--failure: var(--color-accent-red-7);
+    --validation-bar-background-color--failure: var(--color-accent-red-2);
+    --validation-bar-color--failure: var(--color-accent-red-7);
+  }
+}
