@@ -251,6 +251,9 @@ export default function Community() {
   //   </Modal>
   // );
 
+  const isNew =
+    Math.round((Date.now() - Date.parse(listing.last_updated)) / 86400000) < 3;
+
   return (
     <div className="container container--y container--full layout__content">
       <NewBreadCrumbs rootClasses="layout__breadcrumbs">
@@ -549,12 +552,12 @@ export default function Community() {
                 </div>
                 <div className="package-listing-sidebar__content">
                   <div className="package-listing-sidebar__dependency-string-wrapper">
-                    <div
+                    <span
                       title={listing.full_version_name}
                       className="package-listing-sidebar__dependency-string"
                     >
                       {listing.full_version_name}
-                    </div>
+                    </span>
                     <CopyButton text={listing.full_version_name} />
                   </div>
                 </div>
@@ -585,46 +588,61 @@ export default function Community() {
             <div className="package-listing-sidebar__body">
               {mappedPackageTagList}
             </div>
-            <div className="package-listing-sidebar__body">
-              {listing.is_pinned ? (
-                <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
-                  <NewIcon noWrapper csMode="inline">
-                    <FontAwesomeIcon icon={faThumbTack} />
-                  </NewIcon>
-                  Pinned
-                </NewTag>
-              ) : null}
-              {listing.is_deprecated ? (
-                <NewTag
-                  csSize="small"
-                  csModifiers={["dark"]}
-                  csVariant="yellow"
-                >
-                  <NewIcon noWrapper csMode="inline">
-                    <FontAwesomeIcon icon={faWarning} />
-                  </NewIcon>
-                  Deprecated
-                </NewTag>
-              ) : null}
-              {listing.is_nsfw ? (
-                <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
-                  <NewIcon noWrapper csMode="inline">
-                    <FontAwesomeIcon icon={faLips} />
-                  </NewIcon>
-                  NSFW
-                </NewTag>
-              ) : null}
-              {Math.round(
-                (Date.now() - Date.parse(listing.last_updated)) / 86400000
-              ) < 3 ? (
-                <NewTag csSize="small" csModifiers={["dark"]} csVariant="green">
-                  <NewIcon noWrapper csMode="inline">
-                    <FontAwesomeIcon icon={faSparkles} />
-                  </NewIcon>
-                  New
-                </NewTag>
-              ) : null}
-            </div>
+            {listing.is_pinned ||
+            listing.is_deprecated ||
+            listing.is_nsfw ||
+            isNew ? (
+              <div className="package-listing-sidebar__body">
+                {listing.is_pinned ? (
+                  <NewTag
+                    csSize="small"
+                    csModifiers={["dark"]}
+                    csVariant="blue"
+                  >
+                    <NewIcon noWrapper csMode="inline">
+                      <FontAwesomeIcon icon={faThumbTack} />
+                    </NewIcon>
+                    Pinned
+                  </NewTag>
+                ) : null}
+                {listing.is_deprecated ? (
+                  <NewTag
+                    csSize="small"
+                    csModifiers={["dark"]}
+                    csVariant="yellow"
+                  >
+                    <NewIcon noWrapper csMode="inline">
+                      <FontAwesomeIcon icon={faWarning} />
+                    </NewIcon>
+                    Deprecated
+                  </NewTag>
+                ) : null}
+                {listing.is_nsfw ? (
+                  <NewTag
+                    csSize="small"
+                    csModifiers={["dark"]}
+                    csVariant="pink"
+                  >
+                    <NewIcon noWrapper csMode="inline">
+                      <FontAwesomeIcon icon={faLips} />
+                    </NewIcon>
+                    NSFW
+                  </NewTag>
+                ) : null}
+                {isNew ? (
+                  <NewTag
+                    csSize="small"
+                    csModifiers={["dark"]}
+                    csVariant="green"
+                  >
+                    <NewIcon noWrapper csMode="inline">
+                      <FontAwesomeIcon icon={faSparkles} />
+                    </NewIcon>
+                    New
+                  </NewTag>
+                ) : null}
+              </div>
+            ) : null}
           </div>
 
           <TeamMembers listing={listing} domain={domain} />
