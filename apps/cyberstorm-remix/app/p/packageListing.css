@@ -117,18 +117,13 @@
   }
 
   .package-listing-sidebar__dependency-string {
-    display: -webkit-box;
-    flex: 1 0 0;
     max-width: 15ch;
-    overflow: hidden;
+    overflow-x: clip;
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
-
     font-size: var(--font-size-body-sm);
-    text-align: right;
+    white-space: nowrap;
     text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
   }
 
   .package-listing-sidebar__categories {
