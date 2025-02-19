@@ -2,16 +2,17 @@ import styles from "./CodeBox.module.css";
 
 export interface CodeBoxProps {
   value?: string;
+  inline?: boolean;
 }
 
 /**
  * Cyberstorm CodeBox component
  */
 export function CodeBox(props: CodeBoxProps) {
-  const { value = "" } = props;
+  const { value = "", inline = false } = props;
 
   return (
-    <pre className={styles.root}>
+    <pre className={inline ? styles.inline : styles.root}>
       <code>{value}</code>
     </pre>
   );
