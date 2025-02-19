@@ -91,6 +91,7 @@
 
   .table__item {
     padding: 8px 16px;
+    vertical-align: top;
   }
 
   :root {

@@ -3,12 +3,23 @@
     gap: var(--gap-xxxxxl);
   }
 
-  .package-format-docs__green {
-    color: var(--old--color-cyber-green-60);
+  .package-format-docs__title {
+    color: var(--color-text-primary,);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-body-lg);
+    line-height: var(--line-height-md);
+  }
+
+  .package-format-docs--green {
+    color: var(--color-cyber-green-7);
+  }
+
+  .package-format-docs--red {
+    color: var(--color-accent-red-7);
   }
 
   .package-format-docs__table-wrapper {
     display: flex;
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 }

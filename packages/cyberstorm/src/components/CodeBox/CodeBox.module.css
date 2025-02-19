@@ -18,3 +18,23 @@
 
   --border-color: transparent;
 }
+
+.inline {
+  display: inline-flex;
+  align-self: stretch;
+
+  padding: var(--space-4);
+  border: 1px solid #333370;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-regular);
+  font-size: 1em;
+
+  font-family: "Courier New", monospace;
+  font-style: normal;
+  line-height: 1;
+
+  white-space: pre;
+  background-color: #0f0f1f;
+
+  --border-color: transparent;
+}
