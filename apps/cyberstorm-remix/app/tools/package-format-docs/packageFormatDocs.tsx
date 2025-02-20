@@ -257,7 +257,7 @@ const secondTableData = [
     {
       value: (
         <NewIcon
-          key="icon-5"
+          key="icon-6"
           noWrapper
           csMode="inline"
           rootClasses="package-format-docs--red"
