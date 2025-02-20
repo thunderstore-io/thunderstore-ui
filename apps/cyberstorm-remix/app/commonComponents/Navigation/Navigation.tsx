@@ -482,6 +482,7 @@ export function MobileNavigationMenu() {
           News
         </NewLink>
       </nav>
+      <div id="nimbusBetaMobile" suppressHydrationWarning />
     </Menu>
   );
 }
