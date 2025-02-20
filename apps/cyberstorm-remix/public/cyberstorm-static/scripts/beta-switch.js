@@ -57,12 +57,12 @@ async function insertSwitchButton(legacy, beta) {
       betaIsAvailable = true;
     }
   });
-  if (betaIsAvailable) {
+  const isDoNotRenderPage =
+    window.location.hostname === legacy.hostname &&
+    window.location.pathname.startsWith("/communities");
+  if (betaIsAvailable && !isDoNotRenderPage) {
     const switchButton = document.createElement("button");
-    if (
-      window.location.hostname === beta.hostname ||
-      window.location.pathname.startsWith("/communities")
-    ) {
+    if (window.location.hostname === beta.hostname) {
       switchButton.setAttribute(
         "style",
         "display:flex;height:30px;padding: 0px 12px;justify-content:center;align-items:center;gap:12px;color:#F5F5F6;font-family:Inter;font-size:12px;font-style:normal;font-weight:700;line-height:normal;fill:#49B5F7;background:transparent;"
