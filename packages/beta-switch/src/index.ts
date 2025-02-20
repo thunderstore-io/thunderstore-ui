@@ -49,21 +49,34 @@ const betaDev: UrlStructure = {
   tld: "temp",
 };
 
-async function checkBetaRedirect(legacy: UrlStructure, beta: UrlStructure) {
-  let switchProject = legacy;
+async function checkBetaRedirect(
+  legacy: UrlStructure,
+  beta: UrlStructure,
+  goToBetaRoR2: boolean
+) {
+  if (goToBetaRoR2) {
+    // Don't include the search params as those differ in projects and are not handled gracefully
+    window.location.assign(
+      `${beta.protocol}${beta.hostname}${beta.port !== "" ? ":" : ""}${
+        beta.port
+      }/c/riskofrain2/`
+    );
+  } else {
+    let switchProject = legacy;
 
-  if (window.location.hostname === beta.hostname) {
-    switchProject = legacy;
-  } else if (window.location.hostname === legacy.hostname) {
-    switchProject = beta;
+    if (window.location.hostname === beta.hostname) {
+      switchProject = legacy;
+    } else if (window.location.hostname === legacy.hostname) {
+      switchProject = beta;
+    }
+
+    // Don't include the search params as those differ in projects and are not handled gracefully
+    window.location.assign(
+      `${switchProject.protocol}${switchProject.hostname}${
+        switchProject.port !== "" ? ":" : ""
+      }${switchProject.port}${window.location.pathname}`
+    );
   }
-
-  // Don't include the search params as those differ in projects and are not handled gracefully
-  window.location.assign(
-    `${switchProject.protocol}${switchProject.hostname}${
-      switchProject.port !== "" ? ":" : ""
-    }${switchProject.port}${window.location.pathname}`
-  );
 }
 
 async function insertSwitchButton(legacy: UrlStructure, beta: UrlStructure) {
@@ -80,7 +93,12 @@ async function insertSwitchButton(legacy: UrlStructure, beta: UrlStructure) {
     window.location.hostname === legacy.hostname &&
     window.location.pathname.startsWith("/communities");
 
-  if (betaIsAvailable && !isDoNotRenderPage) {
+  const goToBetaRoR2 =
+    window.location.hostname === legacy.hostname &&
+    (window.location.pathname === "/" ||
+      window.location.pathname === "/package/");
+
+  if ((betaIsAvailable && !isDoNotRenderPage) || goToBetaRoR2) {
     const switchButton = document.createElement("button");
 
     // Add styles
@@ -99,7 +117,7 @@ async function insertSwitchButton(legacy: UrlStructure, beta: UrlStructure) {
 
     // Add onClick
     switchButton.onclick = async () => {
-      checkBetaRedirect(legacy, beta);
+      checkBetaRedirect(legacy, beta, goToBetaRoR2);
     };
 
     // Add icon
@@ -116,7 +134,7 @@ async function insertSwitchButton(legacy: UrlStructure, beta: UrlStructure) {
         true
       ) as HTMLButtonElement;
       mobileSwitchButton.onclick = async () => {
-        checkBetaRedirect(legacy, beta);
+        checkBetaRedirect(legacy, beta, goToBetaRoR2);
       };
       const mobileEl = document.querySelector("#nimbusBetaMobile");
       if (mobileEl) {
