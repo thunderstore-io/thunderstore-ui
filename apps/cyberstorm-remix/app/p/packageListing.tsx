@@ -644,8 +644,9 @@ export default function Community() {
               </div>
             ) : null}
           </div>
-
-          <TeamMembers listing={listing} domain={domain} />
+          {listing.team.members.length > 0 ? (
+            <TeamMembers listing={listing} domain={domain} />
+          ) : null}
         </aside>
       </div>
     </div>
