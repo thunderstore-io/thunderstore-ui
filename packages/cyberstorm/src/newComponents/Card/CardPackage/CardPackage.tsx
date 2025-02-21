@@ -161,7 +161,7 @@ export function CardPackage(props: Props) {
             <TooltipWrapper
               tooltipText={`${numberWithSpaces(
                 packageData.rating_count
-              )} Upvotes`}
+              )} Likes`}
             >
               <NewMetaItem csSize="12">
                 <NewIcon csMode="inline" noWrapper>
