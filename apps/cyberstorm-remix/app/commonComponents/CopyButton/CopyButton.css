@@ -16,6 +16,6 @@
 
   .copy-button__checkmark {
     all: unset;
-    color: var(--color-highlight);
+    color: var(--color-accent-green-7);
   }
 }
