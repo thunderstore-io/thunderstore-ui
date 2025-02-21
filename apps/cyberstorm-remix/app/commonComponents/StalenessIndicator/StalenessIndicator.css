@@ -1,0 +1,32 @@
+@layer nimbus-components {
+  .staleness-indicator__wrapper {
+    opacity: 0.5;
+  }
+
+  .staleness-indicator {
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    align-items: flex-start;
+    padding: 5rem 0 10rem;
+
+    > svg {
+      position: sticky;
+      top: 40vh;
+      width: 5rem;
+      height: 5rem;
+      animation: rotation 1s linear infinite;
+      min-inline-size: auto;
+    }
+  }
+
+  @keyframes rotation {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}

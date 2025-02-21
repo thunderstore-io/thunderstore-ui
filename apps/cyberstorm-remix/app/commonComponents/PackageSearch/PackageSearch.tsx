@@ -22,7 +22,6 @@ import {
   useNavigationType,
   useSearchParams,
 } from "@remix-run/react";
-import { StalenessIndicator } from "@thunderstore/cyberstorm/src/components/StalenessIndicator/StalenessIndicator";
 import { PackageCount } from "./components/PackageCount/PackageCount";
 import {
   isPackageOrderOptions,
@@ -34,6 +33,7 @@ import { RadioGroup } from "../RadioGroup/RadioGroup";
 import { CategoryTagCloud } from "./components/CategoryTagCloud/CategoryTagCloud";
 import { CollapsibleMenu } from "../Collapsible/Collapsible";
 import { CheckboxList } from "../CheckboxList/CheckboxList";
+import { StalenessIndicator } from "../StalenessIndicator/StalenessIndicator";
 
 const PER_PAGE = 20;
 
@@ -417,7 +417,7 @@ export function PackageSearch(props: Props) {
         </div>
         <StalenessIndicator
           isStale={navigation.state === "loading" ? true : false}
-          className="package-search__packages"
+          rootClasses="package-search__packages"
         >
           {listings.results.length > 0 ? (
             <div className="package-search__grid">
