@@ -41,8 +41,9 @@ import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 export function Navigation(props: {
   hydrationCheck: boolean;
   currentUser?: CurrentUser;
+  domain: string;
 }) {
-  const { hydrationCheck, currentUser } = props;
+  const { hydrationCheck, currentUser, domain } = props;
   return (
     <>
       <header
@@ -90,7 +91,7 @@ export function Navigation(props: {
                 <NewLink
                   primitiveType="link"
                   rootClasses={"dropdown__item"}
-                  href="/api/docs"
+                  href={`${domain}/api/docs/`}
                 >
                   API Docs
                 </NewLink>
@@ -158,7 +159,7 @@ export function Navigation(props: {
             UPLOAD AND NOTIFS
           </span> */}
           {hydrationCheck && currentUser ? (
-            <DesktopUserDropdown user={currentUser} />
+            <DesktopUserDropdown user={currentUser} domain={domain} />
           ) : (
             <DesktopLoginPopover />
           )}
@@ -319,8 +320,11 @@ export function DesktopLoginPopover() {
   );
 }
 
-export function DesktopUserDropdown(props: { user: CurrentUser }) {
-  const { user } = props;
+export function DesktopUserDropdown(props: {
+  user: CurrentUser;
+  domain: string;
+}) {
+  const { user, domain } = props;
 
   const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
 
@@ -367,7 +371,7 @@ export function DesktopUserDropdown(props: { user: CurrentUser }) {
       <NewDropDownItem asChild>
         <NewLink
           primitiveType="link"
-          href="/logout"
+          href={`${domain}/logout/`}
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
@@ -380,7 +384,7 @@ export function DesktopUserDropdown(props: { user: CurrentUser }) {
   );
 }
 
-export function MobileNavigationMenu() {
+export function MobileNavigationMenu({ domain }: { domain: string }) {
   return (
     <Menu popoverId={"mobileNavMenu"} rootClasses="mobile-navigation__menu">
       <nav className="mobile-navigation__popover">
@@ -424,7 +428,7 @@ export function MobileNavigationMenu() {
           <nav className="mobile-navigation__popover__popover">
             <NewLink
               primitiveType="link"
-              href="/api/docs"
+              href={`${domain}/api/docs/`}
               rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
             >
               API Docs
@@ -487,8 +491,11 @@ export function MobileNavigationMenu() {
   );
 }
 
-export function MobileUserPopoverContent(props: { user?: CurrentUser }) {
-  const { user } = props;
+export function MobileUserPopoverContent(props: {
+  user?: CurrentUser;
+  domain?: string;
+}) {
+  const { user, domain } = props;
   const avatar = user?.connections.find((c) => c.avatar !== null)?.avatar;
 
   return (
@@ -523,7 +530,7 @@ export function MobileUserPopoverContent(props: { user?: CurrentUser }) {
           </NewLink> */}
           <NewLink
             primitiveType="link"
-            href="/logout"
+            href={domain ? `${domain}/logout/` : "/logout"}
             rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
           >
             <NewIcon csMode="inline" noWrapper>
