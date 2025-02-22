@@ -579,71 +579,80 @@ export default function Community() {
               </div>
             </div>
           </div>
-          <div className="package-listing-sidebar__categories">
-            <div className="package-listing-sidebar__header">
-              <Heading csLevel="4" csSize="4">
-                Categories
-              </Heading>
-            </div>
-            <div className="package-listing-sidebar__body">
-              {mappedPackageTagList}
-            </div>
-            {listing.is_pinned ||
-            listing.is_deprecated ||
-            listing.is_nsfw ||
-            isNew ? (
-              <div className="package-listing-sidebar__body">
-                {listing.is_pinned ? (
-                  <NewTag
-                    csSize="small"
-                    csModifiers={["dark"]}
-                    csVariant="blue"
-                  >
-                    <NewIcon noWrapper csMode="inline">
-                      <FontAwesomeIcon icon={faThumbTack} />
-                    </NewIcon>
-                    Pinned
-                  </NewTag>
-                ) : null}
-                {listing.is_deprecated ? (
-                  <NewTag
-                    csSize="small"
-                    csModifiers={["dark"]}
-                    csVariant="yellow"
-                  >
-                    <NewIcon noWrapper csMode="inline">
-                      <FontAwesomeIcon icon={faWarning} />
-                    </NewIcon>
-                    Deprecated
-                  </NewTag>
-                ) : null}
-                {listing.is_nsfw ? (
-                  <NewTag
-                    csSize="small"
-                    csModifiers={["dark"]}
-                    csVariant="pink"
-                  >
-                    <NewIcon noWrapper csMode="inline">
-                      <FontAwesomeIcon icon={faLips} />
-                    </NewIcon>
-                    NSFW
-                  </NewTag>
-                ) : null}
-                {isNew ? (
-                  <NewTag
-                    csSize="small"
-                    csModifiers={["dark"]}
-                    csVariant="green"
-                  >
-                    <NewIcon noWrapper csMode="inline">
-                      <FontAwesomeIcon icon={faSparkles} />
-                    </NewIcon>
-                    New
-                  </NewTag>
-                ) : null}
+          {mappedPackageTagList.length > 0 ||
+          listing.is_pinned ||
+          listing.is_deprecated ||
+          listing.is_nsfw ||
+          isNew ? (
+            <div className="package-listing-sidebar__categories">
+              <div className="package-listing-sidebar__header">
+                <Heading csLevel="4" csSize="4">
+                  Categories
+                </Heading>
               </div>
-            ) : null}
-          </div>
+              {mappedPackageTagList.length > 0 ? (
+                <div className="package-listing-sidebar__body">
+                  {mappedPackageTagList}
+                </div>
+              ) : null}
+              {listing.is_pinned ||
+              listing.is_deprecated ||
+              listing.is_nsfw ||
+              isNew ? (
+                <div className="package-listing-sidebar__body">
+                  {listing.is_pinned ? (
+                    <NewTag
+                      csSize="small"
+                      csModifiers={["dark"]}
+                      csVariant="blue"
+                    >
+                      <NewIcon noWrapper csMode="inline">
+                        <FontAwesomeIcon icon={faThumbTack} />
+                      </NewIcon>
+                      Pinned
+                    </NewTag>
+                  ) : null}
+                  {listing.is_deprecated ? (
+                    <NewTag
+                      csSize="small"
+                      csModifiers={["dark"]}
+                      csVariant="yellow"
+                    >
+                      <NewIcon noWrapper csMode="inline">
+                        <FontAwesomeIcon icon={faWarning} />
+                      </NewIcon>
+                      Deprecated
+                    </NewTag>
+                  ) : null}
+                  {listing.is_nsfw ? (
+                    <NewTag
+                      csSize="small"
+                      csModifiers={["dark"]}
+                      csVariant="pink"
+                    >
+                      <NewIcon noWrapper csMode="inline">
+                        <FontAwesomeIcon icon={faLips} />
+                      </NewIcon>
+                      NSFW
+                    </NewTag>
+                  ) : null}
+                  {isNew ? (
+                    <NewTag
+                      csSize="small"
+                      csModifiers={["dark"]}
+                      csVariant="green"
+                    >
+                      <NewIcon noWrapper csMode="inline">
+                        <FontAwesomeIcon icon={faSparkles} />
+                      </NewIcon>
+                      New
+                    </NewTag>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+
           {listing.team.members.length > 0 ? (
             <TeamMembers listing={listing} domain={domain} />
           ) : null}
