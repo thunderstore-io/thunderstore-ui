@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Community } from "@thunderstore/dapper/types";
 
-import { numberWithSpaces, formatInteger } from "../../../utils/utils";
+import { formatInteger } from "../../../utils/utils";
 import { NewLink, NewIcon, Image, NewTag, NewMetaItem } from "../../..";
 import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
 import "./CardCommunity.css";
@@ -68,8 +68,9 @@ export function CardCommunity(props: Props) {
       </NewLink>
       <div className="card-community__meta">
         <TooltipWrapper
-          tooltipText={`${numberWithSpaces(
-            community.total_package_count
+          tooltipText={`${formatInteger(
+            community.total_package_count,
+            "standard"
           )} Packages`}
         >
           <NewMetaItem csSize="12">
@@ -80,8 +81,9 @@ export function CardCommunity(props: Props) {
           </NewMetaItem>
         </TooltipWrapper>
         <TooltipWrapper
-          tooltipText={`${numberWithSpaces(
-            community.total_download_count
+          tooltipText={`${formatInteger(
+            community.total_download_count,
+            "standard"
           )} Downloads`}
         >
           <NewMetaItem csSize="12">
