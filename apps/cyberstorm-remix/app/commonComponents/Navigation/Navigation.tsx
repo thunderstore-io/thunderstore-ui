@@ -4,6 +4,8 @@ import {
   faLongArrowLeft,
   faCaretRight,
   faCaretDown,
+  faCog,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -347,30 +349,34 @@ export function DesktopUserDropdown(props: {
         </div>
       </NewDropDownItem>
       <NewDropDownDivider />
-      {/* <NewDropDownItem asChild>
+      <NewDropDownItem asChild>
         <NewLink
-          primitiveType="cyberstormLink"
-          linkId="Settings"
-          rootClasses="dropdown__item __item"
+          // primitiveType="cyberstormLink"
+          // linkId="Settings"
+          primitiveType="link"
+          href={`${domain}/settings/linked-accounts/`}
+          rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
             <FontAwesomeIcon icon={faCog} />
           </NewIcon>
           Settings
         </NewLink>
-      </NewDropDownItem> */}
-      {/* <NewDropDownItem asChild>
+      </NewDropDownItem>
+      <NewDropDownItem asChild>
         <NewLink
-          primitiveType="cyberstormLink"
-          linkId="Teams"
-          rootClasses="dropdown__item __item"
+          // primitiveType="cyberstormLink"
+          // linkId="Teams"
+          primitiveType="link"
+          href={`${domain}/settings/teams/`}
+          rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
             <FontAwesomeIcon icon={faUsers} />
           </NewIcon>
           Teams
         </NewLink>
-      </NewDropDownItem> */}
+      </NewDropDownItem>
       <NewDropDownItem asChild>
         <NewLink
           primitiveType="link"
