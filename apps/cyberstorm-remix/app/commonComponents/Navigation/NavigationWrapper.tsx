@@ -9,7 +9,7 @@ import {
   Navigation,
 } from "./Navigation";
 
-export function NavigationWrapper() {
+export function NavigationWrapper({ domain }: { domain: string }) {
   const isHydrated = useHydrated();
   const startsHydrated = useRef(isHydrated);
 
@@ -31,10 +31,11 @@ export function NavigationWrapper() {
       <Navigation
         hydrationCheck={!startsHydrated.current && isHydrated}
         currentUser={currentUser}
+        domain={domain}
       />
-      <MobileNavigationMenu />
+      <MobileNavigationMenu domain={domain} />
       {!startsHydrated.current && isHydrated && currentUser ? (
-        <MobileUserPopoverContent user={currentUser} />
+        <MobileUserPopoverContent user={currentUser} domain={domain} />
       ) : (
         <MobileUserPopoverContent />
       )}

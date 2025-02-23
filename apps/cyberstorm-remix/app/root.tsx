@@ -150,7 +150,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <LinkingProvider value={LinkLibrary}>
               <Toast.Provider toastDuration={10000}>
                 <RadixTooltip delayDuration={80}>
-                  <NavigationWrapper />
+                  <NavigationWrapper domain={domain} />
                   <div className="container container--x container--full island">
                     <main className="container container--x container--full island-item layout__main">
                       {children}
