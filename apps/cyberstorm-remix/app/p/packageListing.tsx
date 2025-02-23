@@ -119,7 +119,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 //   throw new Response("Package not found", { status: 404 });
 // }
 
-export default function Community() {
+export default function PackageListing() {
   // TODO: Enable when APIs are available
   // const { community, communityFilters, listing, team } =
   //   useLoaderData<typeof loader>();
