@@ -13,6 +13,7 @@ interface Props {
   categories: CategorySelection[];
   setCategories: (v: CategorySelection[]) => void;
   rootClasses: string;
+  clearAll: () => void;
 }
 
 /**
@@ -25,6 +26,7 @@ export const CategoryTagCloud = (props: Props) => {
     categories,
     setCategories,
     rootClasses,
+    clearAll,
   } = props;
   const visible = categories.filter((c) => c.selection !== "off");
 
@@ -36,11 +38,6 @@ export const CategoryTagCloud = (props: Props) => {
     setCategories(
       categories.map((c) => (c.id === id ? { ...c, selection: OFF } : c))
     );
-
-  const clearAll = () => {
-    setCategories(categories.map((c) => ({ ...c, selection: OFF })));
-    setSearchValue("");
-  };
 
   return (
     <div className={`category-tag-cloud ${rootClasses}`}>

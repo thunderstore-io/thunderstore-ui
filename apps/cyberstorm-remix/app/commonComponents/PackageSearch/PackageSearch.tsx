@@ -44,7 +44,8 @@ interface Props {
 }
 
 type SearchParamsType = {
-  order?: PackageOrderOptionsType;
+  search: string;
+  order: PackageOrderOptionsType | undefined;
   section: string;
   deprecated: boolean;
   nsfw: boolean;
@@ -60,15 +61,13 @@ export function PackageSearch(props: Props) {
   const { listings, packageCategories: allCategories, sections } = props;
   const allSections = sections.sort((a, b) => a.priority - b.priority);
 
-  // const [searchParams, setSearchParams] = useSearchParams();
   const navigation = useNavigation();
-
-  // REMIX START
 
   const navigationType = useNavigationType();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const initialSearch = searchParams.getAll("search").join(" ");
   const initialOrder = searchParams.get("ordering");
   const initialSection = searchParams.get("section");
   const initialDeprecated = searchParams.get("deprecated");
@@ -77,7 +76,8 @@ export function PackageSearch(props: Props) {
   const initialIncludedCategories = searchParams.get("includedCategories");
   const initialExcludedCategories = searchParams.get("excludedCategories");
 
-  const [searchParamsBlob, setSearchParamsBlob] = useState<SearchParamsType>({
+  const initialParams = {
+    search: initialSearch,
     order:
       initialOrder && isPackageOrderOptions(initialOrder)
         ? (initialOrder as PackageOrderOptionsType)
@@ -110,42 +110,24 @@ export function PackageSearch(props: Props) {
       initialIncludedCategories !== null ? initialIncludedCategories : "",
     excludedCategories:
       initialExcludedCategories !== null ? initialExcludedCategories : "",
-  });
-
-  // TODO: Disabled until we can figure out how a proper way to display skeletons
-  // const navigation = useNavigation();
-
-  // Order start
-  const changeOrder = (v: PackageOrderOptionsType) => {
-    setSearchParamsBlob({ ...searchParamsBlob, order: v });
   };
-  // Order end
 
-  // Search start
-  const [searchValue, setSearchValue] = useState(
-    searchParams.getAll("search").join(" ")
+  // Note: Ensure that page is reset to 1 on each setSearchParamsBlob call
+  const [searchParamsBlob, setSearchParamsBlob] =
+    useState<SearchParamsType>(initialParams);
+
+  const [currentPage, setCurrentPage] = useState(
+    initialPage &&
+      !Number.isNaN(Number.parseInt(initialPage)) &&
+      Number.isSafeInteger(Number.parseInt(initialPage))
+      ? Number.parseInt(initialPage)
+      : 1
   );
 
-  useEffect(() => {
-    if (navigationType === "POP") {
-      setSearchValue(searchParams.getAll("search").join(" "));
-    }
-  }, [searchParams]);
-
-  const [debouncedSearchValue] = useDebounce(searchValue, 300, {
-    maxWait: 300,
-  });
-
-  useEffect(() => {
-    if (debouncedSearchValue === "") {
-      searchParams.delete("search");
-      setSearchParams(searchParams, { replace: true });
-    } else {
-      searchParams.set("search", debouncedSearchValue);
-      setSearchParams(searchParams, { replace: true });
-    }
-  }, [debouncedSearchValue]);
-  // Search end
+  // Setters
+  const setSearch = (v: string) => {
+    setSearchParamsBlob({ ...searchParamsBlob, search: v });
+  };
 
   const setSection = (v: string) => {
     setSearchParamsBlob({ ...searchParamsBlob, section: v });
@@ -162,6 +144,17 @@ export function PackageSearch(props: Props) {
   const setPage = (v: number) => {
     setSearchParamsBlob({ ...searchParamsBlob, page: v });
   };
+
+  const setOrder = (v: PackageOrderOptionsType) => {
+    setSearchParamsBlob({ ...searchParamsBlob, order: v });
+  };
+
+  // Grab params and insert into useStated states
+  useEffect(() => {
+    if (navigationType === "POP") {
+      setSearch(searchParams.getAll("search").join(" "));
+    }
+  }, [searchParams]);
 
   // Categories start
   const categories: CategorySelection[] = allCategories
@@ -186,12 +179,14 @@ export function PackageSearch(props: Props) {
     } else {
       newSearchParams.excludedCategories = excludedCategories.join(",");
     }
-    setSearchParamsBlob(newSearchParams);
+    setSearchParamsBlob({ ...newSearchParams });
   };
+
   // Categories end
 
-  const resetParams = (order?: PackageOrderOptionsType) => {
+  const resetParams = (order: PackageOrderOptionsType | undefined) => {
     setSearchParamsBlob({
+      search: "",
       order: order,
       section: allSections.length === 0 ? "" : allSections[0]?.uuid,
       deprecated: false,
@@ -200,69 +195,137 @@ export function PackageSearch(props: Props) {
       includedCategories: "",
       excludedCategories: "",
     });
-    setSearchValue("");
+    // setOrdering(order);
+    // setPage(1);
+    // setSearchValue("");
   };
 
-  const [debouncedSearchParamsBlob] = useDebounce(searchParamsBlob, 750, {
-    maxWait: 750,
+  const clearAll = () =>
+    setSearchParamsBlob({
+      ...searchParamsBlob,
+      search: "",
+      includedCategories: "",
+      excludedCategories: "",
+    });
+
+  const [debouncedSearchParamsBlob] = useDebounce(searchParamsBlob, 300, {
+    maxWait: 300,
   });
 
   useEffect(() => {
+    let useReplace = false;
+    let resetPage = false;
+    const oldSearch = searchParams.getAll("search").join(" ");
+    const oldOrdering = searchParams.get("ordering") ?? undefined;
+    const oldSection = searchParams.get("section") ?? "";
+    const oldDeprecated = searchParams.get("deprecated") ? true : false;
+    const oldNSFW = searchParams.get("nsfw") ? true : false;
+    const oldIncludedCategories = searchParams.get("includedCategories") ?? "";
+    const oldExcludedCategories = searchParams.get("excludedCategories") ?? "";
+    const oldPage = searchParams.get("page")
+      ? Number(searchParams.get("page"))
+      : 1;
+
+    // Search
+    if (oldSearch !== debouncedSearchParamsBlob.search) {
+      if (debouncedSearchParamsBlob.search === "") {
+        searchParams.delete("search");
+      } else {
+        searchParams.set("search", debouncedSearchParamsBlob.search);
+      }
+      resetPage = true;
+      useReplace = true;
+    }
     // Order
-    if (
-      debouncedSearchParamsBlob.order === undefined ||
-      debouncedSearchParamsBlob.order === PackageOrderOptions.Updated
-    ) {
-      searchParams.delete("ordering");
-    } else {
-      searchParams.set("ordering", debouncedSearchParamsBlob.order);
+    if (oldOrdering !== debouncedSearchParamsBlob.order) {
+      if (
+        debouncedSearchParamsBlob.order === undefined ||
+        debouncedSearchParamsBlob.order === PackageOrderOptions.Updated
+      ) {
+        searchParams.delete("ordering");
+      } else {
+        searchParams.set("ordering", debouncedSearchParamsBlob.order);
+      }
+      resetPage = true;
     }
     // Section
-    if (
-      allSections.length === 0 ||
-      debouncedSearchParamsBlob.section === allSections[0]?.uuid ||
-      debouncedSearchParamsBlob.section === ""
-    ) {
-      searchParams.delete("section");
-    } else {
-      searchParams.set("section", debouncedSearchParamsBlob.section);
+    if (oldSection !== debouncedSearchParamsBlob.section) {
+      if (
+        allSections.length === 0 ||
+        debouncedSearchParamsBlob.section === allSections[0]?.uuid ||
+        debouncedSearchParamsBlob.section === ""
+      ) {
+        searchParams.delete("section");
+      } else {
+        searchParams.set("section", debouncedSearchParamsBlob.section);
+      }
+      resetPage = true;
     }
     // Deprecated
-    if (debouncedSearchParamsBlob.deprecated === false) {
-      searchParams.delete("deprecated");
-    } else {
-      searchParams.set("deprecated", "true");
+    if (oldDeprecated !== debouncedSearchParamsBlob.deprecated) {
+      if (debouncedSearchParamsBlob.deprecated === false) {
+        searchParams.delete("deprecated");
+      } else {
+        searchParams.set("deprecated", "true");
+      }
+      resetPage = true;
     }
     // NSFW
-    if (debouncedSearchParamsBlob.nsfw === false) {
-      searchParams.delete("nsfw");
-    } else {
-      searchParams.set("nsfw", "true");
-    }
-    // Page number
-    if (debouncedSearchParamsBlob.page === 1) {
-      searchParams.delete("page");
-    } else {
-      searchParams.set("page", String(debouncedSearchParamsBlob.page));
+    if (oldNSFW !== debouncedSearchParamsBlob.nsfw) {
+      if (debouncedSearchParamsBlob.nsfw === false) {
+        searchParams.delete("nsfw");
+      } else {
+        searchParams.set("nsfw", "true");
+      }
+      resetPage = true;
     }
     // Categories
-    if (debouncedSearchParamsBlob.includedCategories === "") {
-      searchParams.delete("includedCategories");
-    } else {
-      searchParams.set(
-        "includedCategories",
-        debouncedSearchParamsBlob.includedCategories
-      );
+    if (
+      oldIncludedCategories !== debouncedSearchParamsBlob.includedCategories
+    ) {
+      if (debouncedSearchParamsBlob.includedCategories === "") {
+        searchParams.delete("includedCategories");
+      } else {
+        searchParams.set(
+          "includedCategories",
+          debouncedSearchParamsBlob.includedCategories
+        );
+      }
+      resetPage = true;
     }
-    if (debouncedSearchParamsBlob.excludedCategories === "") {
-      searchParams.delete("excludedCategories");
-    } else {
-      searchParams.set(
-        "excludedCategories",
-        debouncedSearchParamsBlob.excludedCategories
-      );
+    if (
+      oldExcludedCategories !== debouncedSearchParamsBlob.excludedCategories
+    ) {
+      if (debouncedSearchParamsBlob.excludedCategories === "") {
+        searchParams.delete("excludedCategories");
+      } else {
+        searchParams.set(
+          "excludedCategories",
+          debouncedSearchParamsBlob.excludedCategories
+        );
+      }
+      resetPage = true;
     }
-    setSearchParams(searchParams);
+    // Page number
+    if (oldPage !== debouncedSearchParamsBlob.page) {
+      if (debouncedSearchParamsBlob.page === 1 || resetPage) {
+        searchParams.delete("page");
+        setCurrentPage(1);
+      } else {
+        searchParams.set("page", String(debouncedSearchParamsBlob.page));
+        setCurrentPage(debouncedSearchParamsBlob.page);
+      }
+    } else {
+      if (resetPage) {
+        searchParams.delete("page");
+        setCurrentPage(1);
+      }
+    }
+    if (useReplace) {
+      setSearchParams(searchParams, { replace: true });
+    } else {
+      setSearchParams(searchParams);
+    }
   }, [debouncedSearchParamsBlob]);
 
   function parseCategories(
@@ -316,9 +379,9 @@ export function PackageSearch(props: Props) {
       <div className="package-search__sidebar">
         <NewTextInput
           placeholder="Search Mods..."
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          clearValue={() => setSearchValue("")}
+          value={searchParamsBlob.search}
+          onChange={(e) => setSearch(e.target.value)}
+          clearValue={() => setSearch("")}
           leftIcon={<FontAwesomeIcon icon={faSearch} />}
           id="searchInput"
           type="search"
@@ -383,21 +446,22 @@ export function PackageSearch(props: Props) {
       <div className="package-search__content">
         <div className="package-search__search-params">
           <CategoryTagCloud
-            searchValue={searchValue}
-            setSearchValue={setSearchValue}
+            searchValue={searchParamsBlob.search}
+            setSearchValue={setSearch}
             categories={parseCategories(
               searchParamsBlob.includedCategories ?? "",
               searchParamsBlob.excludedCategories ?? ""
             )}
             setCategories={setCategories}
             rootClasses="package-search__tags"
+            clearAll={clearAll}
           />
           <div className="package-search__tools">
             <div className="package-search__results">
               <PackageCount
-                page={searchParamsBlob.page ? Number(searchParamsBlob.page) : 1}
+                page={currentPage}
                 pageSize={PER_PAGE}
-                searchQuery={debouncedSearchValue}
+                searchQuery={searchParamsBlob.search}
                 totalCount={listings.count}
               />
             </div>
@@ -405,11 +469,8 @@ export function PackageSearch(props: Props) {
               {/* <div className="__display"></div> */}
               <div className="package-search__sorting">
                 <PackageOrder
-                  order={
-                    (searchParamsBlob.order as PackageOrderOptions) ??
-                    PackageOrderOptions.Updated
-                  }
-                  setOrder={changeOrder}
+                  order={searchParamsBlob.order ?? PackageOrderOptions.Updated}
+                  setOrder={setOrder}
                 />
               </div>
             </div>
@@ -461,9 +522,7 @@ export function PackageSearch(props: Props) {
         </StalenessIndicator>
         <div className="package-search__pagination">
           <NewPagination
-            currentPage={
-              searchParamsBlob.page ? Number(searchParamsBlob.page) : 1
-            }
+            currentPage={currentPage}
             onPageChange={setPage}
             pageSize={PER_PAGE}
             siblingCount={4}
