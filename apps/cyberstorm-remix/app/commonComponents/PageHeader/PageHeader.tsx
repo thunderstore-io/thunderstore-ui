@@ -1,7 +1,6 @@
 import { Heading } from "@thunderstore/cyberstorm";
 import "./PageHeader.css";
 import { ReactElement } from "react";
-import { CollapsibleText } from "../CollapsibleText/CollapsibleText";
 import { HeadingSizes } from "@thunderstore/cyberstorm-theme/src/components";
 
 export interface PageHeaderProps {
@@ -36,9 +35,7 @@ export function PageHeader(props: PageHeaderProps) {
           >
             {heading}
           </Heading>
-          {description ? (
-            <CollapsibleText text={description} maxLength={85} />
-          ) : null}
+          <span className="page-header__description">{description}</span>
         </div>
         {meta ? <div className="page-header__meta">{meta}</div> : null}
       </div>
