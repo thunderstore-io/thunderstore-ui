@@ -6,37 +6,71 @@ import {
   MetaItemSizes,
   MetaItemVariants,
 } from "@thunderstore/cyberstorm-theme/src/components";
+import {
+  Actionable,
+  ActionableButtonProps,
+} from "../../primitiveComponents/Actionable/Actionable";
 
 interface MetaItemProps extends Omit<FrameWindowProps, "primitiveType"> {
   csVariant?: MetaItemVariants;
   csSize?: MetaItemSizes;
+  primitiveType?: "metaItem";
 }
 
-export const MetaItem = React.forwardRef<HTMLDivElement, MetaItemProps>(
-  (props: MetaItemProps, forwardedRef) => {
-    const {
-      children,
-      csVariant = "default",
-      csSize = "16",
-      rootClasses,
-      ...forwardedProps
-    } = props;
+interface MetaItemActionableProps
+  extends Omit<ActionableButtonProps, "primitiveType"> {
+  csVariant?: MetaItemVariants;
+  csSize?: MetaItemSizes;
+  primitiveType?: "metaItemActionable";
+}
 
+export const MetaItem = React.forwardRef<
+  HTMLDivElement | HTMLButtonElement,
+  MetaItemProps | MetaItemActionableProps
+>((props: MetaItemProps | MetaItemActionableProps, forwardedRef) => {
+  const {
+    children,
+    csVariant = "default",
+    csSize = "16",
+    rootClasses,
+    primitiveType = "metaItem",
+    ...forwardedProps
+  } = props;
+
+  if (primitiveType === "metaItemActionable") {
+    const fRef = forwardedRef as React.ForwardedRef<HTMLButtonElement>;
+    const fProps = forwardedProps as MetaItemActionableProps;
     return (
-      <Frame
-        {...forwardedProps}
-        primitiveType={"window"}
+      <Actionable
+        {...fProps}
+        primitiveType={"button"}
         rootClasses={classnames(
           "meta-item",
           ...componentClasses("meta-item", csVariant, csSize),
           rootClasses
         )}
-        ref={forwardedRef}
+        ref={fRef}
       >
         {children}
-      </Frame>
+      </Actionable>
     );
   }
-);
+  const fRef = forwardedRef as React.ForwardedRef<HTMLDivElement>;
+  const fProps = forwardedProps as MetaItemProps;
+  return (
+    <Frame
+      {...fProps}
+      primitiveType={"window"}
+      rootClasses={classnames(
+        "meta-item",
+        ...componentClasses("meta-item", csVariant, csSize),
+        rootClasses
+      )}
+      ref={fRef}
+    >
+      {children}
+    </Frame>
+  );
+});
 
 MetaItem.displayName = "MetaItem";

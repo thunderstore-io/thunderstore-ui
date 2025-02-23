@@ -4,6 +4,7 @@ import { apiFetch2 } from "../apiFetch";
 export type packageLikeMetaArgs = {
   namespace_id: string;
   package_name: string;
+  useSession: boolean;
 };
 
 export type packageLikeApiArgs = {
@@ -25,6 +26,6 @@ export function packageLike(
       cache: "no-store",
       body: JSON.stringify(data),
     },
-    useSession: true,
+    useSession: meta.useSession,
   });
 }

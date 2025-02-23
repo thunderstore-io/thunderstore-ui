@@ -21,6 +21,10 @@
       0 6px 8px 0 rgb(0 0 0 / 0.5);
   }
 
+  .card-package--is-liked {
+    --metaitem-icon-color: var(--color-cyber-green-7);
+  }
+
   .card-package__image-wrapper {
     border-bottom-right-radius: 0 !important;
     border-bottom-left-radius: 0 !important;

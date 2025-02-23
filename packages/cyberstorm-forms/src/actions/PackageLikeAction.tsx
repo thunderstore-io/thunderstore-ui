@@ -32,7 +32,11 @@ export function PackageLikeAction(props: {
   }
   const onSubmit = ApiAction({
     schema: packageLikeActionSchema,
-    meta: { namespace_id: props.namespace, package_name: props.packageName },
+    meta: {
+      namespace_id: props.namespace,
+      package_name: props.packageName,
+      useSession: props.isLoggedIn,
+    },
     endpoint: packageLike,
     onSubmitSuccess: onActionSuccess,
     onSubmitError: onActionError,

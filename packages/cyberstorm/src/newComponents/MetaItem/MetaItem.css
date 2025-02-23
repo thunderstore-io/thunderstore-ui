@@ -6,6 +6,7 @@
     color: var(--metaitem-color);
     font-weight: var(--metaitem-font-weight);
     font-size: var(--metaitem-font-size);
+    background: transparent;
 
     > svg {
       width: var(--metaitem-icon-width);
