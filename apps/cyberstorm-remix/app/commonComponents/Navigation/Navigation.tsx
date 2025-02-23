@@ -337,7 +337,10 @@ export function DesktopUserDropdown(props: {
       }
       rootClasses="navigation-header__user-dropdown"
     >
-      <NewDropDownItem rootClasses="navigation-header__avatar">
+      <NewDropDownItem
+        rootClasses="navigation-header__avatar"
+        onSelect={(event) => event.preventDefault()}
+      >
         <div>
           <Avatar src={avatar} username={user.username} size="small" />
           <p className="navigation-header__dropdown-details">{user.username}</p>
