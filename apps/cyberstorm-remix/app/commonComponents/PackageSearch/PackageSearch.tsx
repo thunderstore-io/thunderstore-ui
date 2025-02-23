@@ -1,11 +1,12 @@
 import { faGhost, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  CurrentUser,
   PackageCategory,
   PackageListings,
   Section,
 } from "@thunderstore/dapper/types";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 import "./PackageSearch.css";
@@ -34,6 +35,8 @@ import { CategoryTagCloud } from "./components/CategoryTagCloud/CategoryTagCloud
 import { CollapsibleMenu } from "../Collapsible/Collapsible";
 import { CheckboxList } from "../CheckboxList/CheckboxList";
 import { StalenessIndicator } from "../StalenessIndicator/StalenessIndicator";
+import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
+import { RequestConfig } from "@thunderstore/thunderstore-api";
 
 const PER_PAGE = 20;
 
@@ -41,6 +44,8 @@ interface Props {
   listings: PackageListings;
   packageCategories: PackageCategory[];
   sections: Section[];
+  config: () => RequestConfig;
+  currentUser?: CurrentUser;
 }
 
 type SearchParamsType = {
@@ -58,7 +63,13 @@ type SearchParamsType = {
  * Component for filtering and rendering a PackageList
  */
 export function PackageSearch(props: Props) {
-  const { listings, packageCategories: allCategories, sections } = props;
+  const {
+    listings,
+    packageCategories: allCategories,
+    sections,
+    config,
+    currentUser,
+  } = props;
   const allSections = sections.sort((a, b) => a.priority - b.priority);
 
   const navigation = useNavigation();
@@ -150,9 +161,11 @@ export function PackageSearch(props: Props) {
   };
 
   // Grab params and insert into useStated states
+  const searchParamsRef = useRef(searchParams);
   useEffect(() => {
-    if (navigationType === "POP") {
+    if (searchParamsRef.current !== searchParams && navigationType === "POP") {
       setSearch(searchParams.getAll("search").join(" "));
+      searchParamsRef.current = searchParams;
     }
   }, [searchParams]);
 
@@ -212,119 +225,125 @@ export function PackageSearch(props: Props) {
     maxWait: 300,
   });
 
+  const searchParamsBlobRef = useRef(debouncedSearchParamsBlob);
   useEffect(() => {
-    let useReplace = false;
-    let resetPage = false;
-    const oldSearch = searchParams.getAll("search").join(" ");
-    const oldOrdering = searchParams.get("ordering") ?? undefined;
-    const oldSection = searchParams.get("section") ?? "";
-    const oldDeprecated = searchParams.get("deprecated") ? true : false;
-    const oldNSFW = searchParams.get("nsfw") ? true : false;
-    const oldIncludedCategories = searchParams.get("includedCategories") ?? "";
-    const oldExcludedCategories = searchParams.get("excludedCategories") ?? "";
-    const oldPage = searchParams.get("page")
-      ? Number(searchParams.get("page"))
-      : 1;
+    if (searchParamsBlobRef.current !== debouncedSearchParamsBlob) {
+      let useReplace = false;
+      let resetPage = false;
+      const oldSearch = searchParams.getAll("search").join(" ");
+      const oldOrdering = searchParams.get("ordering") ?? undefined;
+      const oldSection = searchParams.get("section") ?? "";
+      const oldDeprecated = searchParams.get("deprecated") ? true : false;
+      const oldNSFW = searchParams.get("nsfw") ? true : false;
+      const oldIncludedCategories =
+        searchParams.get("includedCategories") ?? "";
+      const oldExcludedCategories =
+        searchParams.get("excludedCategories") ?? "";
+      const oldPage = searchParams.get("page")
+        ? Number(searchParams.get("page"))
+        : 1;
 
-    // Search
-    if (oldSearch !== debouncedSearchParamsBlob.search) {
-      if (debouncedSearchParamsBlob.search === "") {
-        searchParams.delete("search");
-      } else {
-        searchParams.set("search", debouncedSearchParamsBlob.search);
+      // Search
+      if (oldSearch !== debouncedSearchParamsBlob.search) {
+        if (debouncedSearchParamsBlob.search === "") {
+          searchParams.delete("search");
+        } else {
+          searchParams.set("search", debouncedSearchParamsBlob.search);
+        }
+        resetPage = true;
+        useReplace = true;
       }
-      resetPage = true;
-      useReplace = true;
-    }
-    // Order
-    if (oldOrdering !== debouncedSearchParamsBlob.order) {
+      // Order
+      if (oldOrdering !== debouncedSearchParamsBlob.order) {
+        if (
+          debouncedSearchParamsBlob.order === undefined ||
+          debouncedSearchParamsBlob.order === PackageOrderOptions.Updated
+        ) {
+          searchParams.delete("ordering");
+        } else {
+          searchParams.set("ordering", debouncedSearchParamsBlob.order);
+        }
+        resetPage = true;
+      }
+      // Section
+      if (oldSection !== debouncedSearchParamsBlob.section) {
+        if (
+          allSections.length === 0 ||
+          debouncedSearchParamsBlob.section === allSections[0]?.uuid ||
+          debouncedSearchParamsBlob.section === ""
+        ) {
+          searchParams.delete("section");
+        } else {
+          searchParams.set("section", debouncedSearchParamsBlob.section);
+        }
+        resetPage = true;
+      }
+      // Deprecated
+      if (oldDeprecated !== debouncedSearchParamsBlob.deprecated) {
+        if (debouncedSearchParamsBlob.deprecated === false) {
+          searchParams.delete("deprecated");
+        } else {
+          searchParams.set("deprecated", "true");
+        }
+        resetPage = true;
+      }
+      // NSFW
+      if (oldNSFW !== debouncedSearchParamsBlob.nsfw) {
+        if (debouncedSearchParamsBlob.nsfw === false) {
+          searchParams.delete("nsfw");
+        } else {
+          searchParams.set("nsfw", "true");
+        }
+        resetPage = true;
+      }
+      // Categories
       if (
-        debouncedSearchParamsBlob.order === undefined ||
-        debouncedSearchParamsBlob.order === PackageOrderOptions.Updated
+        oldIncludedCategories !== debouncedSearchParamsBlob.includedCategories
       ) {
-        searchParams.delete("ordering");
-      } else {
-        searchParams.set("ordering", debouncedSearchParamsBlob.order);
+        if (debouncedSearchParamsBlob.includedCategories === "") {
+          searchParams.delete("includedCategories");
+        } else {
+          searchParams.set(
+            "includedCategories",
+            debouncedSearchParamsBlob.includedCategories
+          );
+        }
+        resetPage = true;
       }
-      resetPage = true;
-    }
-    // Section
-    if (oldSection !== debouncedSearchParamsBlob.section) {
       if (
-        allSections.length === 0 ||
-        debouncedSearchParamsBlob.section === allSections[0]?.uuid ||
-        debouncedSearchParamsBlob.section === ""
+        oldExcludedCategories !== debouncedSearchParamsBlob.excludedCategories
       ) {
-        searchParams.delete("section");
+        if (debouncedSearchParamsBlob.excludedCategories === "") {
+          searchParams.delete("excludedCategories");
+        } else {
+          searchParams.set(
+            "excludedCategories",
+            debouncedSearchParamsBlob.excludedCategories
+          );
+        }
+        resetPage = true;
+      }
+      // Page number
+      if (oldPage !== debouncedSearchParamsBlob.page) {
+        if (debouncedSearchParamsBlob.page === 1 || resetPage) {
+          searchParams.delete("page");
+          setCurrentPage(1);
+        } else {
+          searchParams.set("page", String(debouncedSearchParamsBlob.page));
+          setCurrentPage(debouncedSearchParamsBlob.page);
+        }
       } else {
-        searchParams.set("section", debouncedSearchParamsBlob.section);
+        if (resetPage) {
+          searchParams.delete("page");
+          setCurrentPage(1);
+        }
       }
-      resetPage = true;
-    }
-    // Deprecated
-    if (oldDeprecated !== debouncedSearchParamsBlob.deprecated) {
-      if (debouncedSearchParamsBlob.deprecated === false) {
-        searchParams.delete("deprecated");
+      if (useReplace) {
+        setSearchParams(searchParams, { replace: true });
       } else {
-        searchParams.set("deprecated", "true");
+        setSearchParams(searchParams);
       }
-      resetPage = true;
-    }
-    // NSFW
-    if (oldNSFW !== debouncedSearchParamsBlob.nsfw) {
-      if (debouncedSearchParamsBlob.nsfw === false) {
-        searchParams.delete("nsfw");
-      } else {
-        searchParams.set("nsfw", "true");
-      }
-      resetPage = true;
-    }
-    // Categories
-    if (
-      oldIncludedCategories !== debouncedSearchParamsBlob.includedCategories
-    ) {
-      if (debouncedSearchParamsBlob.includedCategories === "") {
-        searchParams.delete("includedCategories");
-      } else {
-        searchParams.set(
-          "includedCategories",
-          debouncedSearchParamsBlob.includedCategories
-        );
-      }
-      resetPage = true;
-    }
-    if (
-      oldExcludedCategories !== debouncedSearchParamsBlob.excludedCategories
-    ) {
-      if (debouncedSearchParamsBlob.excludedCategories === "") {
-        searchParams.delete("excludedCategories");
-      } else {
-        searchParams.set(
-          "excludedCategories",
-          debouncedSearchParamsBlob.excludedCategories
-        );
-      }
-      resetPage = true;
-    }
-    // Page number
-    if (oldPage !== debouncedSearchParamsBlob.page) {
-      if (debouncedSearchParamsBlob.page === 1 || resetPage) {
-        searchParams.delete("page");
-        setCurrentPage(1);
-      } else {
-        searchParams.set("page", String(debouncedSearchParamsBlob.page));
-        setCurrentPage(debouncedSearchParamsBlob.page);
-      }
-    } else {
-      if (resetPage) {
-        searchParams.delete("page");
-        setCurrentPage(1);
-      }
-    }
-    if (useReplace) {
-      setSearchParams(searchParams, { replace: true });
-    } else {
-      setSearchParams(searchParams);
+      searchParamsBlobRef.current = debouncedSearchParamsBlob;
     }
   }, [debouncedSearchParamsBlob]);
 
@@ -373,6 +392,20 @@ export function PackageSearch(props: Props) {
       label: c.name,
     };
   });
+
+  const [ratedPackages, setRatedPackages] = useState<string[]>([]);
+
+  const fetchAndSetRatedPackages = async () => {
+    setRatedPackages((await window.Dapper.getRatedPackages()).rated_packages);
+  };
+
+  const currentUserRef = useRef(currentUser);
+  useEffect(() => {
+    if (currentUserRef.current !== currentUser && currentUser?.username) {
+      fetchAndSetRatedPackages();
+      currentUserRef.current = currentUser;
+    }
+  }, [currentUser]);
 
   return (
     <div className="package-search">
@@ -483,7 +516,19 @@ export function PackageSearch(props: Props) {
           {listings.results.length > 0 ? (
             <div className="package-search__grid">
               {listings.results.map((p) => (
-                <CardPackage key={`${p.namespace}-${p.name}`} packageData={p} />
+                <CardPackage
+                  key={`${p.namespace}-${p.name}`}
+                  packageData={p}
+                  isLiked={ratedPackages.includes(`${p.namespace}-${p.name}`)}
+                  packageLikeAction={PackageLikeAction({
+                    isLoggedIn: Boolean(currentUser?.username),
+                    packageName: p.name,
+                    namespace: p.namespace,
+                    isLiked: ratedPackages.includes(`${p.namespace}-${p.name}`),
+                    dataUpdateTrigger: fetchAndSetRatedPackages,
+                    config: config,
+                  })}
+                />
               ))}
             </div>
           ) : (searchParamsBlob.order !== undefined && searchParams.size > 1) ||

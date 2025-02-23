@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useOutletContext } from "@remix-run/react";
 import {
   Heading,
   Image,
@@ -16,6 +16,7 @@ import { ApiError } from "@thunderstore/thunderstore-api";
 import { PackageOrderOptions } from "~/commonComponents/PackageSearch/components/PackageOrder";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import { OutletContextShape } from "../root";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -136,6 +137,8 @@ export default function Community() {
     typeof loader | typeof clientLoader
   >();
 
+  const outletContext = useOutletContext() as OutletContextShape;
+
   return (
     <>
       <div className="container container--y container--full layout__content">
@@ -207,6 +210,8 @@ export default function Community() {
             listings={listings}
             packageCategories={filters.package_categories}
             sections={filters.sections}
+            config={outletContext.requestConfig}
+            currentUser={outletContext.currentUser}
           />
         </section>
       </div>

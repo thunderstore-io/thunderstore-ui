@@ -16,10 +16,12 @@ import { RelativeTime } from "../../../components/RelativeTime/RelativeTime";
 
 interface Props {
   packageData: PackageListing;
+  isLiked: boolean;
+  packageLikeAction?: () => void;
 }
 
 export function CardPackage(props: Props) {
-  const { packageData } = props;
+  const { packageData, isLiked, packageLikeAction } = props;
   const updateTime = Date.parse(packageData.last_updated);
   const updateTimeDelta = Math.round((Date.now() - updateTime) / 86400000);
   const isNew = updateTimeDelta < 3;
@@ -165,8 +167,16 @@ export function CardPackage(props: Props) {
                 "standard"
               )} Likes`}
             >
-              <NewMetaItem csSize="12">
-                <NewIcon csMode="inline" noWrapper>
+              <NewMetaItem
+                csSize="12"
+                primitiveType="metaItemActionable"
+                onClick={packageLikeAction}
+              >
+                <NewIcon
+                  csMode="inline"
+                  noWrapper
+                  rootClasses={isLiked ? "card-package--is-liked" : undefined}
+                >
                   <FontAwesomeIcon icon={faThumbsUp} />
                 </NewIcon>
                 {formatInteger(packageData.rating_count)}

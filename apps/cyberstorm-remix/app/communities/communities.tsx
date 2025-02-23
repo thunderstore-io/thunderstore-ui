@@ -7,7 +7,7 @@ import {
   Heading,
 } from "@thunderstore/cyberstorm";
 import "./Communities.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -111,13 +111,18 @@ export default function CommunitiesPage() {
     maxWait: 300,
   });
 
+  const searchRef = useRef(debouncedSearchValue);
+
   useEffect(() => {
-    if (debouncedSearchValue === "") {
-      searchParams.delete("search");
-      setSearchParams(searchParams, { replace: true });
-    } else {
-      searchParams.set("search", debouncedSearchValue);
-      setSearchParams(searchParams, { replace: true });
+    if (debouncedSearchValue !== searchRef.current) {
+      if (debouncedSearchValue === "") {
+        searchParams.delete("search");
+        setSearchParams(searchParams, { replace: true });
+      } else {
+        searchParams.set("search", debouncedSearchValue);
+        setSearchParams(searchParams, { replace: true });
+      }
+      searchRef.current = debouncedSearchValue;
     }
   }, [debouncedSearchValue]);
 
