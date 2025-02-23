@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PackageListing } from "@thunderstore/dapper/types";
 
-import { numberWithSpaces, formatInteger } from "../../../utils/utils";
+import { formatInteger } from "../../../utils/utils";
 import { NewLink, NewIcon, Image, NewTag, NewMetaItem } from "../../..";
 import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
 import "./CardPackage.css";
@@ -137,8 +137,9 @@ export function CardPackage(props: Props) {
         <div className="card-package__footer">
           <div className="card-package__meta">
             <TooltipWrapper
-              tooltipText={`${numberWithSpaces(
-                packageData.download_count
+              tooltipText={`${formatInteger(
+                packageData.download_count,
+                "standard"
               )} Downloads`}
             >
               <NewMetaItem csSize="12">
@@ -159,8 +160,9 @@ export function CardPackage(props: Props) {
               </div>
             </TooltipWrapper> */}
             <TooltipWrapper
-              tooltipText={`${numberWithSpaces(
-                packageData.rating_count
+              tooltipText={`${formatInteger(
+                packageData.rating_count,
+                "standard"
               )} Likes`}
             >
               <NewMetaItem csSize="12">
