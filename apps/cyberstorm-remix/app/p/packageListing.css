@@ -145,11 +145,14 @@
 
   .package-listing-sidebar__body {
     display: flex;
+    flex: 1 1 0;
     flex-wrap: wrap;
     gap: var(--gap-xs);
     align-content: flex-start;
     align-items: flex-start;
     align-self: stretch;
+    min-width: 100px;
+    max-width: 300px;
   }
 
   /* Mobile breakpoint */
