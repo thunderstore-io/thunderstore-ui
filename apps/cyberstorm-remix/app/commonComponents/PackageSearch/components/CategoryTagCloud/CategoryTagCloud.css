@@ -8,13 +8,7 @@
   .category-tag-cloud__search-tag {
     display: flex;
     flex: 0 1 0;
-    height: 100%;
     min-height: var(--tag-height);
-
-    > span {
-      white-space: wrap;
-      text-wrap: wrap;
-    }
   }
 
   .category-tag-cloud__clear-button {
