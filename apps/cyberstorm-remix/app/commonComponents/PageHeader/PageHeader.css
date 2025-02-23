@@ -33,6 +33,16 @@
     }
   }
 
+  .page-header__description {
+    display: flex;
+    align-self: stretch;
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-body-lg);
+    line-height: var(--line-height-md);
+    text-shadow: var(--textshadow-default);
+  }
+
   .page-header__meta {
     display: flex;
     flex-flow: row wrap;
