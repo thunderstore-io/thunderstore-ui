@@ -29,6 +29,7 @@ import {
   faThumbsUp,
   faWarning,
   faThumbTack,
+  faCodeMerge,
 } from "@fortawesome/free-solid-svg-icons";
 import TeamMembers from "./components/TeamMembers/TeamMembers";
 import { useEffect, useRef, useState } from "react";
@@ -252,6 +253,10 @@ export default function PackageListing() {
   // );
 
   const isNew =
+    Math.round((Date.now() - Date.parse(listing.datetime_created)) / 86400000) <
+    3;
+
+  const isUpdated =
     Math.round((Date.now() - Date.parse(listing.last_updated)) / 86400000) < 3;
 
   const likeAction = PackageLikeAction({
@@ -589,7 +594,8 @@ export default function PackageListing() {
           listing.is_pinned ||
           listing.is_deprecated ||
           listing.is_nsfw ||
-          isNew ? (
+          isNew ||
+          isUpdated ? (
             <div className="package-listing-sidebar__categories">
               <div className="package-listing-sidebar__header">
                 <Heading csLevel="4" csSize="4">
@@ -604,7 +610,8 @@ export default function PackageListing() {
               {listing.is_pinned ||
               listing.is_deprecated ||
               listing.is_nsfw ||
-              isNew ? (
+              isNew ||
+              isUpdated ? (
                 <div className="package-listing-sidebar__body">
                   {listing.is_pinned ? (
                     <NewTag
@@ -652,6 +659,14 @@ export default function PackageListing() {
                         <FontAwesomeIcon icon={faSparkles} />
                       </NewIcon>
                       New
+                    </NewTag>
+                  ) : null}
+                  {isUpdated ? (
+                    <NewTag csSize="small" csVariant="green">
+                      <NewIcon noWrapper csMode="inline">
+                        <FontAwesomeIcon icon={faCodeMerge} />
+                      </NewIcon>
+                      Updated
                     </NewTag>
                   ) : null}
                 </div>
