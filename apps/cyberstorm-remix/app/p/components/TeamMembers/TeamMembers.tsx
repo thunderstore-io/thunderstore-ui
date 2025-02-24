@@ -21,13 +21,10 @@ export default function TeamMembers(props: {
           Team
         </Heading>
         <NewLink
-          // TODO: Remove when team page is available
-          primitiveType="link"
-          href={`${props.domain}/c/${props.listing.community_identifier}/p/${props.listing.namespace}/`}
-          // primitiveType="cyberstormLink"
-          // linkId="Team"
-          // community={props.listing.community_identifier}
-          // team={props.listing.team.name}
+          primitiveType="cyberstormLink"
+          linkId="Team"
+          community={props.listing.community_identifier}
+          team={props.listing.team.name}
           csVariant="cyber"
           rootClasses="team-members__link"
         >

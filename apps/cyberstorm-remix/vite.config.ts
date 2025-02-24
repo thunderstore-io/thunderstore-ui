@@ -48,11 +48,12 @@ export default defineConfig({
             "/tools/manifest-v1-validator",
             "tools/manifest-validator/manifestValidator.tsx"
           );
+          route(
+            "/c/:communityId/p/:namespaceId/:packageId/dependants",
+            "p/dependants/Dependants.tsx"
+          );
+          route("/c/:communityId/p/:namespaceId", "p/team/Team.tsx");
           if (process.env.ENABLE_BROKEN_PAGES) {
-            route(
-              "/c/:communityId/p/:namespaceId/:packageId/dependants",
-              "p/dependants/Dependants.tsx"
-            );
             route("/teams", "settings/teams/Teams.tsx");
             route(
               "/teams/:namespaceId",
