@@ -46,6 +46,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       const deprecated = searchParams.get("deprecated");
       const community = await dapper.getCommunity(params.communityId);
       const filters = await dapper.getCommunityFilters(params.communityId);
+      const sortedSections = filters.sections.sort(
+        (a, b) => b.priority - a.priority
+      );
       return {
         community: community,
         filters: filters,
@@ -63,12 +66,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
             ? section === "all"
               ? ""
               : section
-            : filters.sections && filters.sections[0]
-              ? filters.sections[0].uuid
+            : sortedSections && sortedSections[0]
+              ? sortedSections[0].uuid
               : "",
           nsfw === "true" ? true : false,
           deprecated === "true" ? true : false
         ),
+        sortedSections: sortedSections,
       };
     } catch (error) {
       if (error instanceof ApiError) {
@@ -97,6 +101,9 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
       const deprecated = searchParams.get("deprecated");
       const community = await dapper.getCommunity(params.communityId);
       const filters = await dapper.getCommunityFilters(params.communityId);
+      const sortedSections = filters.sections.sort(
+        (a, b) => b.priority - a.priority
+      );
       return {
         community: community,
         filters: filters,
@@ -114,12 +121,13 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
             ? section === "all"
               ? ""
               : section
-            : filters.sections && filters.sections[0]
-              ? filters.sections[0].uuid
+            : sortedSections && sortedSections[0]
+              ? sortedSections[0].uuid
               : "",
           nsfw === "true" ? true : false,
           deprecated === "true" ? true : false
         ),
+        sortedSections: sortedSections,
       };
     } catch (error) {
       if (error instanceof ApiError) {
@@ -133,7 +141,7 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
 }
 
 export default function Community() {
-  const { community, filters, listings } = useLoaderData<
+  const { community, filters, listings, sortedSections } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
@@ -209,7 +217,7 @@ export default function Community() {
           <PackageSearch
             listings={listings}
             packageCategories={filters.package_categories}
-            sections={filters.sections}
+            sections={sortedSections}
             config={outletContext.requestConfig}
             currentUser={outletContext.currentUser}
           />

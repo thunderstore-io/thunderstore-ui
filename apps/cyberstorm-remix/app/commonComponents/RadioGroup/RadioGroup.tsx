@@ -7,13 +7,13 @@ import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { NewIcon } from "@thunderstore/cyberstorm";
 
 interface Props {
-  allSections: Section[];
+  sections: Section[];
   selected: string;
   setSelected: (v: string) => void;
 }
 
 export const RadioGroup = (props: Props) => {
-  const { allSections, selected, setSelected } = props;
+  const { sections, selected, setSelected } = props;
 
   return (
     <RadixRadioGroup.Root
@@ -21,7 +21,7 @@ export const RadioGroup = (props: Props) => {
       onValueChange={setSelected}
       className="radio-group"
     >
-      {allSections.map((s) => (
+      {sections.map((s) => (
         <label
           key={s.slug}
           className={classnames(

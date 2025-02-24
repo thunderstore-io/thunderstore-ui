@@ -70,7 +70,6 @@ export function PackageSearch(props: Props) {
     config,
     currentUser,
   } = props;
-  const allSections = sections.sort((a, b) => b.priority - a.priority);
 
   const navigation = useNavigation();
 
@@ -93,8 +92,7 @@ export function PackageSearch(props: Props) {
       initialOrder && isPackageOrderOptions(initialOrder)
         ? (initialOrder as PackageOrderOptionsType)
         : undefined,
-    section:
-      allSections.length === 0 ? "" : initialSection ?? allSections[0]?.uuid,
+    section: sections.length === 0 ? "" : initialSection ?? sections[0]?.uuid,
     deprecated:
       initialDeprecated === null
         ? false
@@ -201,7 +199,7 @@ export function PackageSearch(props: Props) {
     setSearchParamsBlob({
       search: "",
       order: order,
-      section: allSections.length === 0 ? "" : allSections[0]?.uuid,
+      section: sections.length === 0 ? "" : sections[0]?.uuid,
       deprecated: false,
       nsfw: false,
       page: 1,
@@ -268,8 +266,8 @@ export function PackageSearch(props: Props) {
       // Section
       if (oldSection !== debouncedSearchParamsBlob.section) {
         if (
-          allSections.length === 0 ||
-          debouncedSearchParamsBlob.section === allSections[0]?.uuid ||
+          sections.length === 0 ||
+          debouncedSearchParamsBlob.section === sections[0]?.uuid ||
           debouncedSearchParamsBlob.section === ""
         ) {
           searchParams.delete("section");
@@ -427,11 +425,11 @@ export function PackageSearch(props: Props) {
           rootClasses="package-search__search"
         />
         <div className="package-search__filters">
-          {allSections.length > 0 ? (
+          {sections.length > 0 ? (
             <CollapsibleMenu headerTitle="Sections" defaultOpen>
               <RadioGroup
-                allSections={[
-                  ...allSections,
+                sections={[
+                  ...sections,
                   {
                     uuid: "all",
                     name: "All",
@@ -439,7 +437,7 @@ export function PackageSearch(props: Props) {
                     priority: -999999999,
                   },
                 ]}
-                selected={searchParamsBlob.section ?? allSections[0]?.uuid}
+                selected={searchParamsBlob.section ?? sections[0]?.uuid}
                 setSelected={setSection}
               />
             </CollapsibleMenu>
