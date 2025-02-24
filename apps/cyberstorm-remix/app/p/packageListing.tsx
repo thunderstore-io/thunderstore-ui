@@ -254,6 +254,12 @@ export default function PackageListing() {
   const isNew =
     Math.round((Date.now() - Date.parse(listing.last_updated)) / 86400000) < 3;
 
+  const likeAction = PackageLikeAction({
+    isLoggedIn: Boolean(currentUser?.username),
+    dataUpdateTrigger: fetchAndSetRatedPackages,
+    config: config,
+  });
+
   return (
     <div className="container container--y container--full layout__content">
       <NewBreadCrumbs rootClasses="layout__breadcrumbs">
@@ -497,14 +503,14 @@ export default function PackageListing() {
               ) : null}
               <NewButton
                 primitiveType="button"
-                onClick={PackageLikeAction({
-                  isLoggedIn: Boolean(currentUser?.username),
-                  packageName: listing.name,
-                  namespace: listing.namespace,
-                  isLiked: isLiked,
-                  dataUpdateTrigger: fetchAndSetRatedPackages,
-                  config: config,
-                })}
+                onClick={() =>
+                  likeAction(
+                    isLiked,
+                    listing.namespace,
+                    listing.name,
+                    Boolean(currentUser?.username)
+                  )
+                }
                 tooltipText="Like"
                 icon={faThumbsUp}
                 csVariant={isLiked ? "success" : "secondary"}

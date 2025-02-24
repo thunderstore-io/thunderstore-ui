@@ -4,24 +4,23 @@ import { RequestConfig } from "@thunderstore/thunderstore-api";
 
 export type UseApiActionArgs<
   Schema extends ZodObject<Z>,
+  ReturnSchema extends ZodObject<Z>,
   Meta extends object,
-  Result extends object,
   Z extends ZodRawShape,
 > = {
   config: () => RequestConfig;
-  meta: Meta;
-  endpoint: ApiEndpoint<z.infer<Schema>, Meta, Result>;
+  endpoint: ApiEndpoint<z.infer<Schema>, Meta, ReturnSchema>;
 };
 export function useApiAction<
   Schema extends ZodObject<Z>,
+  ReturnSchema extends ZodObject<Z>,
   Meta extends object,
-  Result extends object,
   Z extends ZodRawShape,
->(args: UseApiActionArgs<Schema, Meta, Result, Z>) {
-  const { config, meta, endpoint } = args;
+>(args: UseApiActionArgs<Schema, ReturnSchema, Meta, Z>) {
+  const { config, endpoint } = args;
   const apiCall = useApiCall(endpoint);
 
-  const submitHandler = async (data: z.infer<Schema>) => {
+  const submitHandler = async (data: z.infer<Schema>, meta: Meta) => {
     return await apiCall(config, data, meta);
   };
 
