@@ -118,12 +118,16 @@
 
   .package-listing-sidebar__dependency-string {
     max-width: 15ch;
-    overflow-x: clip;
+
+    /* overflow-x: clip; */
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-sm);
-    white-space: nowrap;
-    text-overflow: ellipsis;
+
+    /* white-space: nowrap; */
+
+    /* text-overflow: ellipsis; */
+    word-break: break-word;
   }
 
   .package-listing-sidebar__categories {
