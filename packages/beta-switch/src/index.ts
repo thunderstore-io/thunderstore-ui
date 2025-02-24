@@ -1,4 +1,4 @@
-const enabledPages = ["/communities", "c/[^/]+/?$"];
+// const enabledPages = ["/communities", "c/[^/]+/?$"];
 
 type UrlStructure = {
   protocol: string;
@@ -54,6 +54,13 @@ async function checkBetaRedirect(
   beta: UrlStructure,
   goToBetaRoR2: boolean
 ) {
+  const legacyOnlyPages = [
+    "/settings",
+    "/package/create",
+    "c/[^/]+/p/[^/]+/[^/]+/wiki/?$",
+    "c/[^/]+/p/[^/]+/[^/]+/source/?$",
+  ];
+
   if (goToBetaRoR2) {
     // Don't include the search params as those differ in projects and are not handled gracefully
     window.location.assign(
@@ -63,31 +70,44 @@ async function checkBetaRedirect(
     );
   } else {
     let switchProject = legacy;
+    let path = window.location.pathname;
 
     if (window.location.hostname === beta.hostname) {
       switchProject = legacy;
     } else if (window.location.hostname === legacy.hostname) {
       switchProject = beta;
+      legacyOnlyPages.forEach((regPath) => {
+        const regExecuted = new RegExp(regPath).exec(window.location.pathname);
+        const found = regExecuted !== null && regExecuted.length < 2;
+        if (found) {
+          path = "/communities";
+        }
+      });
+      // legacyOnlyPages.forEach((lop) => {
+      //   if (window.location.pathname.startsWith(lop)) {
+      //     path = "/";
+      //   }
+      // });
     }
 
     // Don't include the search params as those differ in projects and are not handled gracefully
     window.location.assign(
       `${switchProject.protocol}${switchProject.hostname}${
         switchProject.port !== "" ? ":" : ""
-      }${switchProject.port}${window.location.pathname}`
+      }${switchProject.port}${path}`
     );
   }
 }
 
 async function insertSwitchButton(legacy: UrlStructure, beta: UrlStructure) {
-  let betaIsAvailable = false;
-  enabledPages.forEach((regPath) => {
-    const regExecuted = new RegExp(regPath).exec(window.location.pathname);
-    const found = regExecuted !== null && regExecuted.length < 2;
-    if (!betaIsAvailable && found) {
-      betaIsAvailable = true;
-    }
-  });
+  // let betaIsAvailable = false;
+  // enabledPages.forEach((regPath) => {
+  //   const regExecuted = new RegExp(regPath).exec(window.location.pathname);
+  //   const found = regExecuted !== null && regExecuted.length < 2;
+  //   if (!betaIsAvailable && found) {
+  //     betaIsAvailable = true;
+  //   }
+  // });
 
   const isDoNotRenderPage =
     window.location.hostname === legacy.hostname &&
@@ -98,7 +118,7 @@ async function insertSwitchButton(legacy: UrlStructure, beta: UrlStructure) {
     (window.location.pathname === "/" ||
       window.location.pathname === "/package/");
 
-  if ((betaIsAvailable && !isDoNotRenderPage) || goToBetaRoR2) {
+  if (!isDoNotRenderPage || goToBetaRoR2) {
     const switchButton = document.createElement("button");
 
     // Add styles
@@ -125,7 +145,7 @@ async function insertSwitchButton(legacy: UrlStructure, beta: UrlStructure) {
       window.location.hostname === legacy.hostname ? "beta" : "legacy"
     }`;
 
-    // Insert button to desktop
+    // Insert button to mobile
     if (
       window.location.hostname === beta.hostname ||
       window.location.pathname.startsWith("/communities")
