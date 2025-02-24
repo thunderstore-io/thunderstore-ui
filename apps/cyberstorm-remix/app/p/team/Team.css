@@ -1,9 +1,9 @@
 @layer nimbus-layout {
-  .dependants {
+  .team {
     display: flex;
     flex-direction: column;
 
-    .dependants__header {
+    .team__header {
       padding: var(--space-40) 0;
       color: var(--color-text--default);
       font-weight: var(--font-weight-bold);
@@ -13,7 +13,7 @@
   }
 
   @media (width <= 48rem) {
-    .dependants {
+    .team {
       gap: var(--space-16);
     }
   }

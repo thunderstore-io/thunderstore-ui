@@ -5,7 +5,7 @@ import {
   NewBreadCrumbs,
   NewLink,
 } from "@thunderstore/cyberstorm";
-import "./Dependants.css";
+import "./Team.css";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -20,7 +20,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
+  if (params.communityId && params.namespaceId) {
     try {
       const dapper = new DapperTs(() => {
         return {
@@ -45,18 +45,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       );
       return {
         community: community,
+        team: params.namespaceId,
         filters: filters,
-        listing: await dapper.getPackageListingDetails(
-          params.communityId,
-          params.namespaceId,
-          params.packageId
-        ),
         listings: await dapper.getPackageListings(
           {
-            kind: "package-dependants",
+            kind: "namespace",
             communityId: params.communityId,
             namespaceId: params.namespaceId,
-            packageName: params.packageId,
           },
           ordering ?? "",
           page === null ? undefined : Number(page),
@@ -87,7 +82,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 }
 
 export async function clientLoader({ request, params }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
+  if (params.communityId && params.namespaceId) {
     try {
       const dapper = window.Dapper;
       const searchParams = new URL(request.url).searchParams;
@@ -107,18 +102,13 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
       );
       return {
         community: community,
+        team: params.namespaceId,
         filters: filters,
-        listing: await dapper.getPackageListingDetails(
-          params.communityId,
-          params.namespaceId,
-          params.packageId
-        ),
         listings: await dapper.getPackageListings(
           {
-            kind: "package-dependants",
+            kind: "namespace",
             communityId: params.communityId,
             namespaceId: params.namespaceId,
-            packageName: params.packageId,
           },
           ordering ?? "",
           page === null ? undefined : Number(page),
@@ -148,9 +138,10 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
   throw new Response("Package not found", { status: 404 });
 }
 
-export default function Dependants() {
-  const { community, filters, listing, listings, sortedSections } =
-    useLoaderData<typeof loader | typeof clientLoader>();
+export default function Team() {
+  const { community, team, filters, listings, sortedSections } = useLoaderData<
+    typeof loader | typeof clientLoader
+  >();
 
   const outletContext = useOutletContext() as OutletContextShape;
 
@@ -161,45 +152,19 @@ export default function Dependants() {
         <CyberstormLink linkId="Community" community={community.identifier}>
           {community.name}
         </CyberstormLink>
-        <CyberstormLink
-          linkId="Team"
-          community={community.identifier}
-          team={listing.namespace}
-        >
-          {listing.namespace}
-        </CyberstormLink>
-        <CyberstormLink
-          linkId="Package"
-          community={listing.community_identifier}
-          namespace={listing.namespace}
-          package={listing.name}
-        >
-          {listing.name}
-        </CyberstormLink>
-        Dependants
+        {team}
       </NewBreadCrumbs>
-      <section className="dependants">
-        <span className="dependants__header">
-          Mods that depend on{" "}
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Package"
-            community={listing.community_identifier}
-            namespace={listing.namespace}
-            package={listing.name}
-            csVariant="cyber"
-          >
-            {listing.name}
-          </NewLink>
-          {" by "}
+      <section className="team">
+        <span className="team__header">
+          Mods uploaded by{" "}
           <NewLink
             primitiveType="cyberstormLink"
             linkId="Team"
-            community={listing.community_identifier}
-            team={listing.namespace}
+            community={community.identifier}
+            namespace={team}
             csVariant="cyber"
           >
-            {listing.namespace}
+            {team}
           </NewLink>
         </span>
         <PackageSearch

@@ -315,13 +315,10 @@ export default function PackageListing() {
             meta={
               <>
                 <NewLink
-                  // TODO: Remove when team page is available
-                  primitiveType="link"
-                  href={`${domain}/c/${listing.community_identifier}/p/${listing.namespace}/`}
-                  // primitiveType="cyberstormLink"
-                  // linkId="Team"
-                  // community={listing.community_identifier}
-                  // team={listing.namespace}
+                  primitiveType="cyberstormLink"
+                  linkId="Team"
+                  community={listing.community_identifier}
+                  team={listing.namespace}
                   csVariant="cyber"
                   rootClasses="page-header__meta-item"
                 >
