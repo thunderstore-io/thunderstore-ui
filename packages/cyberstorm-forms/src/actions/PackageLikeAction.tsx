@@ -1,50 +1,61 @@
 import { useFormToaster } from "@thunderstore/cyberstorm-forms";
 import {
   ApiAction,
+  packageLikeActionReturnSchema,
   packageLikeActionSchema,
 } from "@thunderstore/ts-api-react-actions";
-import { packageLike, RequestConfig } from "@thunderstore/thunderstore-api";
+import {
+  ApiError,
+  packageLike,
+  RequestConfig,
+} from "@thunderstore/thunderstore-api";
 
 export function PackageLikeAction(props: {
   isLoggedIn: boolean;
-  packageName: string;
-  namespace: string;
-  isLiked: boolean;
   dataUpdateTrigger: () => Promise<void>;
   config: () => RequestConfig;
 }) {
-  const { onSubmitSuccess, onSubmitError } = useFormToaster({
-    successMessage: `${props.isLiked ? "Unliked" : "Liked"} package ${
-      props.packageName
-    }`,
-    errorMessage: props.isLoggedIn
-      ? "Unknown error occurred. The error has been logged"
-      : "You must be logged in to like a package!",
+  const { onSubmitSuccess, onSubmitError } = useFormToaster<
+    { state: "rated" | "unrated" },
+    { isLoggedIn: boolean; e: Error | ApiError | unknown }
+  >({
+    successMessage: (successProps) =>
+      `${
+        successProps.state === "rated" ? "Liked" : "Removed like from"
+      } package`,
+    errorMessage: (errorProps) =>
+      errorProps.isLoggedIn
+        ? `Error: ${errorProps.e}`
+        : "You must be logged in to like a package!",
   });
 
-  function onActionSuccess() {
+  function onActionSuccess(result: typeof packageLikeActionReturnSchema._type) {
     props.dataUpdateTrigger();
-    onSubmitSuccess();
+    onSubmitSuccess(result);
   }
 
-  function onActionError() {
-    onSubmitError();
+  function onActionError(e: Error | ApiError | unknown) {
+    onSubmitError({ isLoggedIn: props.isLoggedIn, e: e });
   }
   const onSubmit = ApiAction({
     schema: packageLikeActionSchema,
-    meta: {
-      namespace_id: props.namespace,
-      package_name: props.packageName,
-      useSession: props.isLoggedIn,
-    },
+    returnSchema: packageLikeActionReturnSchema,
     endpoint: packageLike,
     onSubmitSuccess: onActionSuccess,
     onSubmitError: onActionError,
     config: props.config,
   });
 
-  return function () {
-    onSubmit({ target_state: props.isLiked ? "unrated" : "rated" });
+  return function (
+    isLiked: boolean,
+    namespace: string,
+    name: string,
+    useSession: boolean
+  ) {
+    onSubmit(
+      { target_state: isLiked ? "unrated" : "rated" },
+      { namespace_id: namespace, package_name: name, useSession: useSession }
+    );
   };
 }
 

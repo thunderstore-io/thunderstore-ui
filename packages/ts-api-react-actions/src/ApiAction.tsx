@@ -6,34 +6,33 @@ import { useApiAction } from "./useApiAction";
 
 export interface ApiActionProps<
   Schema extends ZodObject<Z>,
+  ReturnSchema extends ZodObject<Z>,
   Meta extends object,
-  Result extends object,
   Z extends ZodRawShape,
 > {
   schema: Schema;
-  endpoint: ApiEndpoint<z.infer<Schema>, Meta, Result>;
-  meta: Meta;
-  onSubmitSuccess?: (result: Result) => void;
+  returnSchema: ReturnSchema;
+  endpoint: ApiEndpoint<z.infer<Schema>, Meta, ReturnSchema>;
+  onSubmitSuccess?: (result: ReturnSchema) => void;
   onSubmitError?: (error: Error | ApiError | unknown) => void;
   config: () => RequestConfig;
 }
 
 export function ApiAction<
   Schema extends ZodObject<Z>,
+  ReturnSchema extends ZodObject<Z>,
   Meta extends object,
-  Result extends object,
   Z extends ZodRawShape,
->(props: ApiActionProps<Schema, Meta, Result, Z>) {
-  const { meta, endpoint, onSubmitSuccess, onSubmitError, config } = props;
+>(props: ApiActionProps<Schema, ReturnSchema, Meta, Z>) {
+  const { endpoint, onSubmitSuccess, onSubmitError, config } = props;
   const submitHandler = useApiAction({
     config,
-    meta: meta,
     endpoint: endpoint,
   });
   const onSubmit = useCallback(
-    async (data: z.infer<Schema>) => {
+    async (data: z.infer<Schema>, meta: Meta) => {
       try {
-        const result = await submitHandler(data);
+        const result = await submitHandler(data, meta);
         if (onSubmitSuccess) {
           onSubmitSuccess(result);
         }

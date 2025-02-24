@@ -1,33 +1,50 @@
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 
-export type UseFormToasterArgs = {
-  successMessage: string;
-  errorMessage?: string;
+export type UseFormToasterArgs<OnSubmitSuccessDataType, OnSubmitErrorDataType> =
+  {
+    successMessage: (props: OnSubmitSuccessDataType) => string | string;
+    errorMessage?: (props: OnSubmitErrorDataType) => string | string;
+  };
+export type UseFormToasterReturn<
+  OnSubmitSuccessDataType,
+  OnSubmitErrorDataType,
+> = {
+  onSubmitSuccess: (props?: OnSubmitSuccessDataType) => void;
+  onSubmitError: (props?: OnSubmitErrorDataType) => void;
 };
-export type UseFormToasterReturn = {
-  onSubmitSuccess: () => void;
-  onSubmitError: () => void;
-};
-export function useFormToaster({
+export function useFormToaster<OnSubmitSuccessDataType, OnSubmitErrorDataType>({
   successMessage,
   errorMessage,
-}: UseFormToasterArgs): UseFormToasterReturn {
+}: UseFormToasterArgs<
+  OnSubmitSuccessDataType,
+  OnSubmitErrorDataType
+>): UseFormToasterReturn<OnSubmitSuccessDataType, OnSubmitErrorDataType> {
   const toast = useToast();
 
   return {
-    onSubmitSuccess: () => {
+    onSubmitSuccess: (props) => {
       toast.addToast({
         csVariant: "success",
-        children: successMessage,
-        duration: 30000,
+        children:
+          typeof successMessage === "string"
+            ? successMessage
+            : props
+              ? successMessage(props)
+              : "OK",
+        duration: 2000,
       });
     },
-    onSubmitError: () => {
+    onSubmitError: (props) => {
       toast.addToast({
         csVariant: "danger",
         children: errorMessage
-          ? errorMessage
+          ? typeof errorMessage === "string"
+            ? errorMessage
+            : props
+              ? errorMessage(props)
+              : "Unknown error occurred. The error has been logged"
           : "Unknown error occurred. The error has been logged",
+        duration: 30000,
       });
     },
   };

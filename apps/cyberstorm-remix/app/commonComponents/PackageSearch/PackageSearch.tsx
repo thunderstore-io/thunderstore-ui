@@ -407,6 +407,12 @@ export function PackageSearch(props: Props) {
     }
   }, [currentUser]);
 
+  const likeAction = PackageLikeAction({
+    isLoggedIn: Boolean(currentUser?.username),
+    dataUpdateTrigger: fetchAndSetRatedPackages,
+    config: config,
+  });
+
   return (
     <div className="package-search">
       <div className="package-search__sidebar">
@@ -520,14 +526,16 @@ export function PackageSearch(props: Props) {
                   key={`${p.namespace}-${p.name}`}
                   packageData={p}
                   isLiked={ratedPackages.includes(`${p.namespace}-${p.name}`)}
-                  packageLikeAction={PackageLikeAction({
-                    isLoggedIn: Boolean(currentUser?.username),
-                    packageName: p.name,
-                    namespace: p.namespace,
-                    isLiked: ratedPackages.includes(`${p.namespace}-${p.name}`),
-                    dataUpdateTrigger: fetchAndSetRatedPackages,
-                    config: config,
-                  })}
+                  packageLikeAction={() => {
+                    if (likeAction) {
+                      likeAction(
+                        ratedPackages.includes(`${p.namespace}-${p.name}`),
+                        p.namespace,
+                        p.name,
+                        Boolean(currentUser?.username)
+                      );
+                    }
+                  }}
                 />
               ))}
             </div>
