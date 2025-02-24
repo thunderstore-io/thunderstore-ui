@@ -228,7 +228,7 @@
     --icon-button-secondary-bg-color--default: var(--color-surface-a7);
     --icon-button-secondary-bg-color--hover: var(--color-surface-a8);
     --icon-button-secondary-icon-color--active: var(--color-text-primary);
-    --icon-button-secondary-icon-color--default: var(--color-text-primary);
+    --icon-button-secondary-icon-color--default: var(--color-text-accent);
     --icon-button-secondary-icon-color--hover: var(--color-text-primary);
     --icon-button-success-bg-color--active: var(--color-accent-green-2);
     --icon-button-success-bg-color--default: var(--color-accent-green-4);

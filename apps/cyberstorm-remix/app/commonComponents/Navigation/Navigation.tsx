@@ -6,6 +6,7 @@ import {
   faCaretDown,
   faCog,
   faUsers,
+  faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -156,10 +157,18 @@ export function Navigation(props: {
               Get Manager
             </NewButton>
           </div>
-          {/* TODO: Add when upload page and notifs are a thing */}
-          {/* <span className="navigation-header__profile-actions">
-            UPLOAD AND NOTIFS
-          </span> */}
+          {currentUser?.username ? (
+            <span className="navigation-header__profile-actions">
+              <NewButton
+                icon={faUpload}
+                primitiveType="link"
+                href={`${domain}/package/create/`}
+                csVariant="secondary"
+                csModifiers={["ghost"]}
+              />
+            </span>
+          ) : null}
+
           {hydrationCheck && currentUser ? (
             <DesktopUserDropdown user={currentUser} domain={domain} />
           ) : (
