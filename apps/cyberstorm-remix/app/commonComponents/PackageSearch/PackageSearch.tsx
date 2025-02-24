@@ -70,7 +70,7 @@ export function PackageSearch(props: Props) {
     config,
     currentUser,
   } = props;
-  const allSections = sections.sort((a, b) => a.priority - b.priority);
+  const allSections = sections.sort((a, b) => b.priority - a.priority);
 
   const navigation = useNavigation();
 
