@@ -1,4 +1,3 @@
-const enabledPages = ["/communities", "c/[^/]+/?$"];
 const legacyProd = {
   protocol: "https://",
   hostname: "thunderstore.io",
@@ -36,6 +35,12 @@ const betaDev = {
   tld: "temp",
 };
 async function checkBetaRedirect(legacy, beta, goToBetaRoR2) {
+  const legacyOnlyPages = [
+    "/settings",
+    "/package/create",
+    "c/[^/]+/p/[^/]+/[^/]+/wiki/?$",
+    "c/[^/]+/p/[^/]+/[^/]+/source/?$",
+  ];
   if (goToBetaRoR2) {
     window.location.assign(
       `${beta.protocol}${beta.hostname}${beta.port !== "" ? ":" : ""}${
@@ -44,27 +49,27 @@ async function checkBetaRedirect(legacy, beta, goToBetaRoR2) {
     );
   } else {
     let switchProject = legacy;
+    let path = window.location.pathname;
     if (window.location.hostname === beta.hostname) {
       switchProject = legacy;
     } else if (window.location.hostname === legacy.hostname) {
       switchProject = beta;
+      legacyOnlyPages.forEach((regPath) => {
+        const regExecuted = new RegExp(regPath).exec(window.location.pathname);
+        const found = regExecuted !== null && regExecuted.length < 2;
+        if (found) {
+          path = "/communities";
+        }
+      });
     }
     window.location.assign(
       `${switchProject.protocol}${switchProject.hostname}${
         switchProject.port !== "" ? ":" : ""
-      }${switchProject.port}${window.location.pathname}`
+      }${switchProject.port}${path}`
     );
   }
 }
 async function insertSwitchButton(legacy, beta) {
-  let betaIsAvailable = false;
-  enabledPages.forEach((regPath) => {
-    const regExecuted = new RegExp(regPath).exec(window.location.pathname);
-    const found = regExecuted !== null && regExecuted.length < 2;
-    if (!betaIsAvailable && found) {
-      betaIsAvailable = true;
-    }
-  });
   const isDoNotRenderPage =
     window.location.hostname === legacy.hostname &&
     window.location.pathname.startsWith("/communities");
@@ -72,7 +77,7 @@ async function insertSwitchButton(legacy, beta) {
     window.location.hostname === legacy.hostname &&
     (window.location.pathname === "/" ||
       window.location.pathname === "/package/");
-  if ((betaIsAvailable && !isDoNotRenderPage) || goToBetaRoR2) {
+  if (!isDoNotRenderPage || goToBetaRoR2) {
     const switchButton = document.createElement("button");
     if (window.location.hostname === beta.hostname) {
       switchButton.setAttribute(
