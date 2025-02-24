@@ -12,6 +12,11 @@
     background-color: var(--toast-background-color);
     padding-block: var(--toast-padding-block);
     padding-inline: var(--toast-padding-inline);
+    cursor: grab;
+  }
+
+  .toast:active {
+    cursor: grabbing;
   }
 
   .toast__icon {
