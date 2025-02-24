@@ -3,6 +3,7 @@ import {
   faThumbTack,
   faWarning,
   faThumbsUp,
+  faCodeMerge,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PackageListing } from "@thunderstore/dapper/types";
@@ -11,7 +12,7 @@ import { formatInteger } from "../../../utils/utils";
 import { NewLink, NewIcon, Image, NewTag, NewMetaItem } from "../../..";
 import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
 import "./CardPackage.css";
-import { faLips, faSparkles } from "@fortawesome/pro-solid-svg-icons";
+import { faLips } from "@fortawesome/pro-solid-svg-icons";
 import { RelativeTime } from "../../../components/RelativeTime/RelativeTime";
 
 interface Props {
@@ -24,7 +25,7 @@ export function CardPackage(props: Props) {
   const { packageData, isLiked, packageLikeAction } = props;
   const updateTime = Date.parse(packageData.last_updated);
   const updateTimeDelta = Math.round((Date.now() - updateTime) / 86400000);
-  const isNew = updateTimeDelta < 3;
+  const isUpdated = updateTimeDelta < 3;
 
   return (
     <div className="card-package">
@@ -40,7 +41,7 @@ export function CardPackage(props: Props) {
         {packageData.is_pinned ||
         packageData.is_nsfw ||
         packageData.is_deprecated ||
-        isNew ? (
+        isUpdated ? (
           <div className="card-package__tag">
             {packageData.is_pinned ? (
               <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
@@ -66,12 +67,12 @@ export function CardPackage(props: Props) {
                 Deprecated
               </NewTag>
             ) : null}
-            {isNew ? (
-              <NewTag csSize="small" csModifiers={["dark"]} csVariant="green">
+            {isUpdated ? (
+              <NewTag csSize="small" csVariant="green">
                 <NewIcon noWrapper csMode="inline">
-                  <FontAwesomeIcon icon={faSparkles} />
+                  <FontAwesomeIcon icon={faCodeMerge} />
                 </NewIcon>
-                New
+                Updated
               </NewTag>
             ) : null}
           </div>
