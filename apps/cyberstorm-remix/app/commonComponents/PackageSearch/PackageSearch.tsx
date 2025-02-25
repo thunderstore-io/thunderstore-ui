@@ -230,7 +230,7 @@ export function PackageSearch(props: Props) {
       let resetPage = false;
       const oldSearch = searchParams.getAll("search").join(" ");
       const oldOrdering = searchParams.get("ordering") ?? undefined;
-      const oldSection = searchParams.get("section") ?? "";
+      // const oldSection = searchParams.get("section") ?? "";
       const oldDeprecated = searchParams.get("deprecated") ? true : false;
       const oldNSFW = searchParams.get("nsfw") ? true : false;
       const oldIncludedCategories =
@@ -264,18 +264,36 @@ export function PackageSearch(props: Props) {
         resetPage = true;
       }
       // Section
-      if (oldSection !== debouncedSearchParamsBlob.section) {
+      // Because of the first section being a empty value, the logic check is a bit funky
+
+      // If no section in search params, delete
+      if (sections.length === 0) searchParams.delete("section");
+
+      // If new section is empty, delete (defaults to first)
+      if (debouncedSearchParamsBlob.section === "")
+        searchParams.delete("section");
+
+      // If new section is the first one, delete. And reset page number if section is different from last render.
+      if (debouncedSearchParamsBlob.section === sections[0]?.uuid) {
         if (
-          sections.length === 0 ||
-          debouncedSearchParamsBlob.section === sections[0]?.uuid ||
-          debouncedSearchParamsBlob.section === ""
+          searchParamsBlobRef.current.section !==
+          debouncedSearchParamsBlob.section
         ) {
-          searchParams.delete("section");
-        } else {
-          searchParams.set("section", debouncedSearchParamsBlob.section);
+          resetPage = true;
         }
+        searchParams.delete("section");
+      }
+
+      // If new section is different and not the first one, set it.
+      if (
+        searchParamsBlobRef.current.section !==
+          debouncedSearchParamsBlob.section &&
+        debouncedSearchParamsBlob.section !== sections[0]?.uuid
+      ) {
+        searchParams.set("section", debouncedSearchParamsBlob.section);
         resetPage = true;
       }
+
       // Deprecated
       if (oldDeprecated !== debouncedSearchParamsBlob.deprecated) {
         if (debouncedSearchParamsBlob.deprecated === false) {
