@@ -18,6 +18,13 @@ import { ApiError } from "@thunderstore/thunderstore-api";
 import { useLoaderData } from "@remix-run/react";
 import { versionsSchema } from "@thunderstore/dapper-ts/src/methods/package";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import semverGt from "semver/functions/gt";
+import semverLt from "semver/functions/lt";
+import semverValid from "semver/functions/valid";
+import {
+  TableCompareColumnMeta,
+  TableRow,
+} from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
@@ -86,6 +93,32 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   };
 }
 
+type ConfirmedSemverStringType = string;
+
+export const isSemver = (s: string): s is ConfirmedSemverStringType => {
+  if (semverValid(s)) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+function rowSemverCompare(
+  a: TableRow,
+  b: TableRow,
+  columnMeta: TableCompareColumnMeta
+) {
+  if (isSemver(String(a[0].sortValue)) && isSemver(String(b[0].sortValue))) {
+    if (semverLt(String(a[0].sortValue), String(b[0].sortValue))) {
+      return columnMeta.direction;
+    }
+    if (semverGt(String(a[0].sortValue), String(b[0].sortValue))) {
+      return -columnMeta.direction;
+    }
+  }
+  return 0;
+}
+
 export default function Versions() {
   const { status, message, versions } = useLoaderData<
     typeof loader | typeof clientLoader
@@ -127,6 +160,7 @@ export default function Versions() {
           rows={tableRows}
           sortDirection={NewTableSort.ASC}
           csModifiers={["alignLastColumnRight"]}
+          customSortCompare={{ 1: rowSemverCompare }}
         />
       </div>
     </div>
