@@ -43,9 +43,14 @@ export type TableLabels = {
   columnClasses?: string;
 }[];
 
-type TableRow = TableItem[];
+export type TableRow = TableItem[];
 
 export type TableRows = TableRow[];
+
+export type TableCompareColumnMeta = {
+  identifier: number;
+  direction: TableSort;
+};
 
 export interface TableProps {
   titleRowContent?: ReactNode;
@@ -59,6 +64,35 @@ export interface TableProps {
   csVariant?: TableVariants;
   csSize?: TableSizes;
   csModifiers?: TableModifiers[];
+  customSortCompare?: {
+    [key: number]: (
+      a: TableRow,
+      b: TableRow,
+      columnMeta: TableCompareColumnMeta
+    ) => number;
+  };
+}
+
+export function tableDefaultCompare(
+  a: TableRow,
+  b: TableRow,
+  columnMeta: TableCompareColumnMeta
+) {
+  if (
+    a[columnMeta.identifier] &&
+    b[columnMeta.identifier] &&
+    a[columnMeta.identifier].sortValue < b[columnMeta.identifier].sortValue
+  ) {
+    return columnMeta.direction;
+  }
+  if (
+    a[columnMeta.identifier] &&
+    b[columnMeta.identifier] &&
+    a[columnMeta.identifier].sortValue > b[columnMeta.identifier].sortValue
+  ) {
+    return -columnMeta.direction;
+  }
+  return 0;
 }
 
 function SortButton(props: SortButtonProps) {
@@ -97,26 +131,22 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(
       csVariant = "default",
       csSize = "medium",
       csModifiers = [],
+      customSortCompare,
     } = props;
 
-    const [sortVariables, setSortVariables] = useState({
+    const [sortVariables, setSortVariables] = useState<TableCompareColumnMeta>({
       identifier: sortByHeader,
       direction: sortDirection,
     });
 
-    function compare(a: TableRow, b: TableRow) {
-      const column = sortVariables.identifier;
-      if (a[column] && b[column] && a[column].sortValue < b[column].sortValue) {
-        return sortVariables.direction;
-      }
-      if (a[column] && b[column] && a[column].sortValue > b[column].sortValue) {
-        return -sortVariables.direction;
-      }
-      return 0;
-    }
-
     if (!disableSort) {
-      rows.sort(compare);
+      if (customSortCompare && customSortCompare[sortVariables.identifier]) {
+        rows.sort((a, b) =>
+          customSortCompare[sortVariables.identifier](a, b, sortVariables)
+        );
+      } else {
+        rows.sort((a, b) => tableDefaultCompare(a, b, sortVariables));
+      }
     }
 
     // const rowCount = { "--row-count": rows.length } as CSSProperties;
