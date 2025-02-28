@@ -107,6 +107,8 @@ export { Tabs } from "./newComponents/Tabs/Tabs";
 export {
   Table as NewTable,
   TableSort as NewTableSort,
+  type TableCompareColumnMeta,
+  type TableRow as NewTableRow,
   type TableRows as NewTableRows,
   type TableLabels as NewTableLabels,
 } from "./newComponents/Table/Table";
