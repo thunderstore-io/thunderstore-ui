@@ -9,7 +9,7 @@
 
   body {
     display: flex;
-    background-color: black;
+    background-color: var(--color-surface-1);
   }
 
   .layout__main {

@@ -15,7 +15,7 @@
     width: 17rem;
     padding: var(--space-12);
     border-radius: var(--radius-md);
-    background: var(--color-surface-3);
+    background: var(--color-surface-default);
   }
 
   .package-search__search {

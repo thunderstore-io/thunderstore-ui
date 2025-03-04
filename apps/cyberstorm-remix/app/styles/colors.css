@@ -1,0 +1,13 @@
+@layer nimbus-colors {
+  :root {
+    --color-body-bg-color: var(--color-surface-2);
+    --color-header-bg-color: hsl(240deg 42% 11% / 0.85);
+    --color-border-dim: var(--color-surface-a6);
+    --color-border-default: var(--color-surface-a7);
+    --color-border-bright: var(--color-surface-a8);
+    --color-surface-dim: var(--color-surface-a3);
+    --color-surface-default: var(--color-surface-a4);
+    --color-skeleton-bg-color: var(--color-surface-default);
+    --color-datalist-row-bg-color: var(--color-surface-default);
+  }
+}
