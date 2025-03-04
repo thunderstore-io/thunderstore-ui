@@ -23,3 +23,4 @@ import "./components/AdContainer/AdContainer.css";
 import "./components/Pagination/Pagination.css";
 import "./components/Tabs/Tabs.css";
 import "./components/Modal/Modal.css";
+import "./components/CardPackage/CardPackage.css";
