@@ -165,6 +165,7 @@ export function Navigation(props: {
                 href={`${domain}/package/create/`}
                 csVariant="secondary"
                 csModifiers={["ghost"]}
+                tooltipText="Upload"
               />
             </span>
           ) : null}
