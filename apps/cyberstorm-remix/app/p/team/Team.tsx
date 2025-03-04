@@ -7,6 +7,7 @@ import { ApiError } from "@thunderstore/thunderstore-api";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
 import { OutletContextShape } from "../../root";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -164,7 +165,9 @@ export default function Team() {
         </span>
       </NewBreadCrumbs>
       <section className="team">
-        <span className="team__header">Mods uploaded by {team}</span>
+        <PageHeader headingLevel="1" headingSize="3">
+          Mods uploaded by {team}
+        </PageHeader>
         <PackageSearch
           listings={listings}
           packageCategories={filters.package_categories}

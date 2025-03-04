@@ -4,7 +4,6 @@ import {
   EmptyState,
   NewTextInput,
   NewSelect,
-  Heading,
 } from "@thunderstore/cyberstorm";
 import "./Communities.css";
 import { useState, useEffect, useRef } from "react";
@@ -25,6 +24,7 @@ import {
 import { Communities } from "@thunderstore/dapper/types";
 // import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction = () => {
   return [
@@ -129,15 +129,9 @@ export default function CommunitiesPage() {
   return (
     <div className="container container--y container--full layout__content">
       <section className="container container--y communities">
-        {/* <PageHeader heading="Communities" headingLevel="1" headingSize="2" /> */}
-        <Heading
-          csLevel="1"
-          csSize="2"
-          rootClasses="container container--stretch communities__heading"
-        >
+        <PageHeader headingLevel="1" headingSize="3">
           Communities
-        </Heading>
-
+        </PageHeader>
         <div className="container container--y container--full communities__content">
           <div className="container container--stretch communities__tools">
             <NewTextInput

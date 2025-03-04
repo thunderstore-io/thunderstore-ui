@@ -63,7 +63,9 @@ export default function MarkdownPreview() {
           <span>Markdown Preview</span>
         </span>
       </NewBreadCrumbs>
-      <PageHeader heading="Markdown Preview" headingLevel="1" headingSize="2" />
+      <PageHeader headingLevel="1" headingSize="2">
+        Markdown Preview
+      </PageHeader>
       <section className="container container--y container--full markdown-preview">
         <div className="container container--x container--full markdown-preview__row">
           <div className="markdown-preview__meta">

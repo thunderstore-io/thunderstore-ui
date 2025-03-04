@@ -77,11 +77,9 @@ export default function ManifestValidator() {
           <span>Manifest Validator</span>
         </span>
       </NewBreadCrumbs>
-      <PageHeader
-        heading="Manifest Validator"
-        headingLevel="1"
-        headingSize="2"
-      />
+      <PageHeader headingLevel="1" headingSize="2">
+        Manifest Validator
+      </PageHeader>
       <section className="container container--y container--full manifest-validator">
         <div className="container container--x container--full manifest-validator__row">
           <div className="manifest-validator__meta">

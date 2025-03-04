@@ -11,6 +11,7 @@ import { ApiError } from "@thunderstore/thunderstore-api";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
 import { OutletContextShape } from "../../root";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -196,7 +197,7 @@ export default function Dependants() {
         </span>
       </NewBreadCrumbs>
       <section className="dependants">
-        <span className="dependants__header">
+        <PageHeader headingLevel="1" headingSize="3">
           Mods that depend on{" "}
           <NewLink
             primitiveType="cyberstormLink"
@@ -218,7 +219,7 @@ export default function Dependants() {
           >
             {listing.namespace}
           </NewLink>
-        </span>
+        </PageHeader>
         <PackageSearch
           listings={listings}
           packageCategories={filters.package_categories}

@@ -17,11 +17,9 @@ export default function PackageFormatDocs() {
           <span>Package Format Docs</span>
         </span>
       </NewBreadCrumbs>
-      <PageHeader
-        heading="Package Format Docs"
-        headingLevel="1"
-        headingSize="2"
-      />
+      <PageHeader headingLevel="1" headingSize="2">
+        Package Format Docs
+      </PageHeader>
       <section className="container container--y container--full package-format-docs">
         <p className="package-format-docs__title">
           A valid package is a zip file that contains the following files:

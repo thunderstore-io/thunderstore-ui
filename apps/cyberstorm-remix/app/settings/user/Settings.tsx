@@ -59,7 +59,9 @@ export default function Community() {
           <span>{currentUser.username}</span>
         </span>
       </NewBreadCrumbs>
-      <PageHeader heading="Settings" headingLevel="1" headingSize="2" />
+      <PageHeader headingLevel="1" headingSize="2">
+        Settings
+      </PageHeader>
       <div className="settings-user">
         <Tabs
           tabItems={[
