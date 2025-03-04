@@ -55,9 +55,9 @@ export default function Community() {
   return (
     <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
-        <NewLink primitiveType="cyberstormLink" linkId="Settings">
-          {currentUser.username}
-        </NewLink>
+        <span>
+          <span>{currentUser.username}</span>
+        </span>
       </NewBreadCrumbs>
       <PageHeader heading="Settings" headingLevel="1" headingSize="2" />
       <div className="settings-user">

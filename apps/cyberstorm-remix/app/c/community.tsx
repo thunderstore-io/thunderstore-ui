@@ -4,6 +4,7 @@ import {
   Heading,
   Image,
   NewBreadCrumbs,
+  NewBreadCrumbsLink,
   NewIcon,
   NewLink,
 } from "@thunderstore/cyberstorm";
@@ -150,15 +151,17 @@ export default function Community() {
   return (
     <>
       <div className="container container--y container--full layout__content">
-        <NewBreadCrumbs rootClasses="layout__breadcrumbs">
-          <NewLink
+        <NewBreadCrumbs>
+          <NewBreadCrumbsLink
             primitiveType="cyberstormLink"
             linkId="Communities"
             csVariant="cyber"
           >
             Communities
-          </NewLink>
-          {community.name}
+          </NewBreadCrumbsLink>
+          <span>
+            <span>{community.name}</span>
+          </span>
         </NewBreadCrumbs>
         <section className="container container--y container--full">
           <span className="container container--x community__heading">

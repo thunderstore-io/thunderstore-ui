@@ -11,6 +11,7 @@ import {
   Image,
   // Modal,
   NewBreadCrumbs,
+  NewBreadCrumbsLink,
   NewButton,
   NewIcon,
   NewLink,
@@ -267,23 +268,23 @@ export default function PackageListing() {
 
   return (
     <div className="container container--y container--full layout__content">
-      <NewBreadCrumbs rootClasses="layout__breadcrumbs">
-        <NewLink
+      <NewBreadCrumbs>
+        <NewBreadCrumbsLink
           primitiveType="cyberstormLink"
           linkId="Communities"
           csVariant="cyber"
         >
           Communities
-        </NewLink>
-        <NewLink
+        </NewBreadCrumbsLink>
+        <NewBreadCrumbsLink
           primitiveType="cyberstormLink"
           linkId="Community"
           community={community.identifier}
           csVariant="cyber"
         >
           {community.name}
-        </NewLink>
-        <NewLink
+        </NewBreadCrumbsLink>
+        <NewBreadCrumbsLink
           primitiveType="cyberstormLink"
           linkId="Team"
           community={community.identifier}
@@ -291,8 +292,11 @@ export default function PackageListing() {
           csVariant="cyber"
         >
           {listing.namespace}
-        </NewLink>
-        {listing.name}
+        </NewBreadCrumbsLink>
+
+        <span>
+          <span>{listing.name}</span>
+        </span>
       </NewBreadCrumbs>
       <div className="package-listing">
         <section className="package-listing__main">

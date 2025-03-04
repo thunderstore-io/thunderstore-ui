@@ -1,8 +1,8 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData, useOutletContext } from "@remix-run/react";
 import {
-  CyberstormLink,
   NewBreadCrumbs,
+  NewBreadCrumbsLink,
   NewLink,
 } from "@thunderstore/cyberstorm";
 import "./Dependants.css";
@@ -157,26 +157,43 @@ export default function Dependants() {
   return (
     <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
-        <CyberstormLink linkId="Communities">Communities</CyberstormLink>
-        <CyberstormLink linkId="Community" community={community.identifier}>
+        <NewBreadCrumbsLink
+          primitiveType="cyberstormLink"
+          linkId="Communities"
+          csVariant="cyber"
+        >
+          Communities
+        </NewBreadCrumbsLink>
+        <NewBreadCrumbsLink
+          primitiveType="cyberstormLink"
+          linkId="Community"
+          community={community.identifier}
+          csVariant="cyber"
+        >
           {community.name}
-        </CyberstormLink>
-        <CyberstormLink
+        </NewBreadCrumbsLink>
+        <NewBreadCrumbsLink
+          primitiveType="cyberstormLink"
           linkId="Team"
           community={community.identifier}
           team={listing.namespace}
+          csVariant="cyber"
         >
           {listing.namespace}
-        </CyberstormLink>
-        <CyberstormLink
+        </NewBreadCrumbsLink>
+        <NewBreadCrumbsLink
+          primitiveType="cyberstormLink"
           linkId="Package"
           community={listing.community_identifier}
           namespace={listing.namespace}
           package={listing.name}
+          csVariant="cyber"
         >
           {listing.name}
-        </CyberstormLink>
-        Dependants
+        </NewBreadCrumbsLink>
+        <span>
+          <span>Dependants</span>
+        </span>
       </NewBreadCrumbs>
       <section className="dependants">
         <span className="dependants__header">

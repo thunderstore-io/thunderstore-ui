@@ -4,29 +4,22 @@ import { BreadCrumbs, CyberstormLink } from "@thunderstore/cyberstorm";
 export default {
   title: "Cyberstorm/Components/BreadCrumbs",
   component: BreadCrumbs,
-  argTypes: {
-    excludeHome: {
-      description: "If set to true, the home breadcrumb is excluded",
-      defaultValue: false,
-      control: "boolean",
-    },
-  },
 } as Meta;
 
 type BreadCrumbsStory = StoryFn<typeof BreadCrumbs>;
 const community = "riskofrain2";
 
-const breadCrumbStory = (args: { excludeHome?: boolean | undefined }) => (
+const breadCrumbStory = () => (
   <>
-    <BreadCrumbs {...args} />
+    <BreadCrumbs />
 
-    <BreadCrumbs {...args}>
+    <BreadCrumbs>
       <CyberstormLink linkId="Community" community={community}>
         Risk of Rain 2
       </CyberstormLink>
     </BreadCrumbs>
 
-    <BreadCrumbs {...args}>
+    <BreadCrumbs>
       <CyberstormLink linkId="Community" community={community}>
         Risk of Rain 2
       </CyberstormLink>
@@ -35,7 +28,7 @@ const breadCrumbStory = (args: { excludeHome?: boolean | undefined }) => (
       </CyberstormLink>
     </BreadCrumbs>
 
-    <BreadCrumbs {...args}>
+    <BreadCrumbs>
       <CyberstormLink linkId="Community" community={community}>
         Risk of Rain 2
       </CyberstormLink>
@@ -47,7 +40,4 @@ const breadCrumbStory = (args: { excludeHome?: boolean | undefined }) => (
   </>
 );
 
-export const ReferenceCrumbs: BreadCrumbsStory = (args) =>
-  breadCrumbStory(args);
-export const ExcludeHomeCrumbs: BreadCrumbsStory = () =>
-  breadCrumbStory({ excludeHome: true });
+export const ReferenceCrumbs: BreadCrumbsStory = () => breadCrumbStory();

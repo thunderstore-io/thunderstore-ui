@@ -74,10 +74,17 @@ export { Modal } from "./newComponents/Modal/Modal";
 export { Heading } from "./newComponents/Heading/Heading";
 export { CardCommunity } from "./newComponents/Card/CardCommunity/CardCommunity";
 export { CardPackage } from "./newComponents/Card/CardPackage/CardPackage";
-export { Link as NewLink } from "./newComponents/Link/Link";
+export {
+  Link as NewLink,
+  type LinkProps as NewLinkProps,
+  type CyberstormLinkProps as NewCyberstormLinkProps,
+} from "./newComponents/Link/Link";
 export { Button as NewButton } from "./newComponents/Button/Button";
 export { CycleButton } from "./newComponents/CycleButton/CycleButton";
-export { BreadCrumbs as NewBreadCrumbs } from "./newComponents/BreadCrumbs/BreadCrumbs";
+export {
+  BreadCrumbs as NewBreadCrumbs,
+  BreadCrumbsLink as NewBreadCrumbsLink,
+} from "./newComponents/BreadCrumbs/BreadCrumbs";
 export { Toast } from "./newComponents/Toast/Toast";
 export {
   TextInput as NewTextInput,

@@ -5,7 +5,12 @@ import {
   useLocation,
   useOutletContext,
 } from "@remix-run/react";
-import { NewBreadCrumbs, NewLink, Tabs } from "@thunderstore/cyberstorm";
+import {
+  NewBreadCrumbs,
+  NewBreadCrumbsLink,
+  NewLink,
+  Tabs,
+} from "@thunderstore/cyberstorm";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { OutletContextShape } from "../../../root";
@@ -58,10 +63,16 @@ export default function Community() {
   return (
     <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
-        <NewLink primitiveType="cyberstormLink" linkId="Teams">
+        <NewBreadCrumbsLink
+          primitiveType="cyberstormLink"
+          linkId="Teams"
+          csVariant="cyber"
+        >
           Teams
-        </NewLink>
-        {team.name}
+        </NewBreadCrumbsLink>
+        <span>
+          <span>{team.name}</span>
+        </span>
       </NewBreadCrumbs>
       <PageHeader heading={team.name} headingLevel="1" headingSize="2" />
       <div className="team-settings">

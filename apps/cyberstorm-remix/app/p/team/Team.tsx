@@ -1,6 +1,6 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData, useOutletContext } from "@remix-run/react";
-import { CyberstormLink, NewBreadCrumbs } from "@thunderstore/cyberstorm";
+import { NewBreadCrumbs, NewBreadCrumbsLink } from "@thunderstore/cyberstorm";
 import "./Team.css";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { ApiError } from "@thunderstore/thunderstore-api";
@@ -144,11 +144,24 @@ export default function Team() {
   return (
     <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
-        <CyberstormLink linkId="Communities">Communities</CyberstormLink>
-        <CyberstormLink linkId="Community" community={community.identifier}>
+        <NewBreadCrumbsLink
+          primitiveType="cyberstormLink"
+          linkId="Communities"
+          csVariant="cyber"
+        >
+          Communities
+        </NewBreadCrumbsLink>
+        <NewBreadCrumbsLink
+          primitiveType="cyberstormLink"
+          linkId="Community"
+          community={community.identifier}
+          csVariant="cyber"
+        >
           {community.name}
-        </CyberstormLink>
-        {team}
+        </NewBreadCrumbsLink>
+        <span>
+          <span>{team}</span>
+        </span>
       </NewBreadCrumbs>
       <section className="team">
         <span className="team__header">Mods uploaded by {team}</span>
