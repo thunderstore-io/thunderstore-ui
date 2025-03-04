@@ -17,8 +17,4 @@
     --table-border-radius: var(--dropdown-md-border-radius);
     --table-padding: var(--dropdown-md-padding);
   } */
-
-  :root {
-    --table-bg-color--default: var(--color-surface-4);
-  }
 }

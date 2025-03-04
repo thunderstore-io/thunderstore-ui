@@ -1,4 +1,4 @@
-@layer utils, components, colors, theme, theme-components, theme-layout, nimbus-components, nimbus-layout, nimbus-overrides;
+@layer utils, components, theme, theme-components, theme-components-sizes, theme-components-colors, theme-components-layouts, theme-components-miscs, theme-layout, nimbus-components, nimbus-layout, nimbus-overrides;
 
 @import "layout.css";
 @import "overrides.css";

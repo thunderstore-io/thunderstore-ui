@@ -1,9 +1,10 @@
 @layer theme-components {
   /* VARIANTS */
   .modal:where(.modal--variant--default) {
+    --modal-color: var(--modal-text-color--default);
     --modal-box-shadow: var(--modal-box-shadow--default);
-    --modal-background: var(--modal-background--default);
-    --modal-border: var(--modal-border--default);
+    --modal-background: var(--modal-bg-color--default);
+    --modal-border: 1px solid var(--modal-border-color--default);
   }
 
   /* SIZES */
@@ -17,18 +18,5 @@
     --modal-border-radius: var(--modal-sm-border-radius);
     --modal-content-padding: var(--modal-sm-content-padding);
     --modal-content-gap: var(--modal-sm-content-gap);
-  }
-
-  /* TOKENS */
-  :root {
-    --modal-box-shadow--default: var(--shadow-lg);
-    --modal-background--default: var(--color-surface-2);
-    --modal-border--default: 1px solid var(--color-surface-7);
-    --modal-md-border-radius: var(--radius-md);
-    --modal-md-content-padding: 3rem 5.5rem;
-    --modal-md-content-gap: 2rem;
-    --modal-sm-border-radius: var(--radius-md);
-    --modal-sm-content-padding: 0;
-    --modal-sm-content-gap: 0;
   }
 }

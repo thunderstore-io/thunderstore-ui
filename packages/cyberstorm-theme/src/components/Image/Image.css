@@ -4,10 +4,4 @@
     --image-color: var(--image-primary-color--default);
     --image-bg-color: var(--image-primary-background-color--default);
   }
-
-  /* TOKENS */
-  :root {
-    --image-primary-color--default: hsl(240deg 42% 45%);
-    --image-primary-background-color--default: var(--color-surface-a4);
-  }
 }

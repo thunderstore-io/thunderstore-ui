@@ -82,34 +82,4 @@
       );
     }
   }
-
-  /* TOKENS */
-  :root {
-    /* Tabs */
-
-    /* Tabs Item */
-    --tab-nav-item-border-style--default: solid;
-    --tab-nav-item-border-color--active: var(--color-surface-9);
-    --tab-nav-item-border-color--current: var(--color-cyber-green-7);
-    --tab-nav-item-border-color--default: #0000;
-    --tab-nav-item-border-color--hover: var(--color-surface-9);
-    --tab-nav-item-icon-color--active: var(--color-text-secondary);
-    --tab-nav-item-icon-color--current: var(--color-cyber-green-7);
-    --tab-nav-item-icon-color--default: var(--color-text-tertiary);
-    --tab-nav-item-icon-color--hover: var(--color-text-secondary);
-    --tab-nav-item-text-color--active: var(--color-text-primary);
-    --tab-nav-item-text-color--current: var(--color-cyber-green-7);
-    --tab-nav-item-text-color--default: var(--color-text-tertiary);
-    --tab-nav-item-text-color--hover: var(--color-text-primary);
-
-    /* Tabs Item Number Slate */
-    --tab-nav-item-number-background-color--active: var(--color-surface-a4);
-    --tab-nav-item-number-background-color--current: var(--color-cyber-green-3);
-    --tab-nav-item-number-background-color--default: var(--color-surface-a4);
-    --tab-nav-item-number-background-color--hover: var(--color-surface-a4);
-    --tab-nav-item-number-color--active: var(--color-text-tertiary);
-    --tab-nav-item-number-color--current: var(--color-cyber-green-6);
-    --tab-nav-item-number-color--default: var(--color-text-tertiary);
-    --tab-nav-item-number-color--hover: var(--color-text-tertiary);
-  }
 }

@@ -95,37 +95,4 @@
       opacity: 1;
     }
   }
-
-  :root {
-    --dropdown-md-gap: 0.25rem;
-    --dropdown-bg-color--default: var(--color-surface-4);
-    --dropdown-border-color--default: var(--color-surface-a6);
-    --dropdown-item-bg-color--default: #0000;
-    --dropdown-item-bg-color--hover: var(--color-surface-a7);
-    --dropdown-item-icon-color--default: var(--color-text-tertiary);
-    --dropdown-item-icon-color--hover: var(--color-text-primary);
-    --dropdown-item-text-color--default: var(--color-text-primary);
-    --dropdown-item-text-color--hover: var(--color-text-primary);
-    --dropdown-item-danger-bg-color--default: #0000;
-    --dropdown-item-danger-bg-color--hover: var(--color-accent-red-6);
-    --dropdown-item-danger-icon-color--default: var(--color-accent-red-7);
-    --dropdown-item-danger-icon-color--hover: #fff;
-    --dropdown-item-danger-text-color--default: var(--color-accent-red-7);
-    --dropdown-item-danger-text-color--hover: #fff;
-    --dropdown-item-disabled-bg-color--default: #0000;
-    --dropdown-item-disabled-bg-color--hover: #0000;
-    --dropdown-item-disabled-icon-color--default: var(--color-text-tertiary);
-    --dropdown-item-disabled-icon-color--hover: var(--color-text-tertiary);
-    --dropdown-item-disabled-text-color--default: var(--color-text-tertiary);
-    --dropdown-item-disabled-text-color--hover: var(--color-text-tertiary);
-    --dropdown-md-border-radius: var(--radius-md);
-    --dropdown-md-padding: var(--space-4) 0;
-    --dropdown-item-md-gap: var(--gap-md);
-    --dropdown-item-md-padding: var(--space-12) var(--space-16);
-    --dropdown-item-md-font-weight: var(--font-weight-regular);
-    --dropdown-item-md-font-size: var(--font-size-body-md);
-    --divider-bg-color: var(--color-surface-a6);
-    --divider-height: 0.063rem;
-    --divider-md-margin: 0.25rem 0rem;
-  }
 }

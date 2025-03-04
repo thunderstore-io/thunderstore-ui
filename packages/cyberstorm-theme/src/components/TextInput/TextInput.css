@@ -11,11 +11,22 @@
     --text-input-background-color: var(--input-bg-color--default);
   }
 
+  .text-input__left-icon {
+    --text-input__left-icon-position: absolute;
+    --text-input__left-icon-margin: var(--space-10) var(--space-16);
+    --text-input__left-icon-color: var(--input-icon-color--default);
+    --text-input__left-icon-pointer-events: none;
+  }
+
   .text-input__wrapper {
     --text-input__wrapper-width: auto;
     --text-input__wrapper-line-height: var(--line-height-auto);
     --text-input__wrapper-font-weight: var(--font-weight-regular);
     --text-input__wrapper-font-size: var(--font-size-body-lg);
+
+    &:focus-within .text-input__left-icon {
+      --text-input__left-icon-color: var(--input-icon-color--focus);
+    }
   }
 
   .text-input[value] {
@@ -65,13 +76,6 @@
     --text-input__placeholder-opacity: 1;
   }
 
-  .text-input__left-icon {
-    --text-input__left-icon-position: absolute;
-    --text-input__left-icon-margin: var(--space-10) var(--space-16);
-    --text-input__left-icon-color: var(--input-icon-color--default);
-    --text-input__left-icon-pointer-events: none;
-  }
-
   .text-input__right-icon {
     --text-input__right-icon-position: absolute;
     --text-input__right-icon-padding: var(--space-14) var(--space-16);
@@ -86,23 +90,5 @@
 
   .text-input__clear-value-button:hover {
     --text-input__clear-value-button-opacity: 1;
-  }
-
-  :root {
-    --input-bg-color--default: var(--color-surface-a3);
-    --input-bg-color--focus: var(--color-surface-1);
-    --input-bg-color--hover: var(--color-surface-a5);
-    --input-border-color--default: var(--color-surface-a8);
-    --input-border-color--focus: var(--color-cyber-green-7);
-    --input-border-color--hover: var(--color-surface-a10);
-    --input-icon-color--default: var(--color-text-tertiary);
-    --input-placeholder-color: var(--color-text-tertiary);
-    --input-text-color--default: var(--color-text-secondary);
-    --input-text-color--focus: var(--color-text-primary);
-    --input-text-color--hover: var(--color-text-secondary);
-    --input-md-border-radius: var(--radius-md);
-    --input-md-height: 2.75rem;
-    --input-sm-border-radius: var(--radius-md);
-    --input-sm-height: 2.25rem;
   }
 }

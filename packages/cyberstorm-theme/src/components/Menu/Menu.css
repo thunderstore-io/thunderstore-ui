@@ -7,10 +7,4 @@
       --menu-color: var(--menu-primary-color--hover);
     }
   }
-
-  /* TOKENS */
-  :root {
-    --menu-primary-color--default: var(--color-text-accent);
-    --menu-primary-color--hover: var(--color-text-primary);
-  }
 }

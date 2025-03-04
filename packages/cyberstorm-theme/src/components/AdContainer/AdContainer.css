@@ -4,10 +4,4 @@
     --ad-container__fallback-color: var(--ad-text-color--default);
     --ad-container__fallback-background-color: var(--ad-bg-color--default);
   }
-
-  /* TOKENS */
-  :root {
-    --ad-bg-color--default: var(--color-surface-4);
-    --ad-text-color--default: var(--color-text-tertiary);
-  }
 }

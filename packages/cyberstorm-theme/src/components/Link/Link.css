@@ -21,12 +21,4 @@
   .link > svg {
     filter: var(--dropshadow-default);
   }
-
-  /* TOKENS */
-  :root {
-    --link-primary-color--default: var(--color-text-accent);
-    --link-primary-color--hover: var(--color-text-primary);
-    --link-cyber-color--default: var(--color-cyber-green-7);
-    --link-cyber-color--hover: var(--color-cyber-green-9);
-  }
 }

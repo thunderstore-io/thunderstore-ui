@@ -5,6 +5,7 @@
     left: 50%;
     border: var(--modal-border);
     border-radius: var(--modal-border-radius);
+    color: var(--modal-color);
     background: var(--modal-background);
 
     box-shadow: var(--modal-box-shadow);

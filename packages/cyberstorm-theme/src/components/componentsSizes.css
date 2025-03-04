@@ -1,0 +1,208 @@
+@layer theme-components-sizes {
+  /* These variables are copied from Figma with the plugin variables2css */
+  :root {
+    --alert-sm-gap: var(--space-16);
+    --alert-sm-padding-block: var(--space-16);
+    --alert-sm-padding-inline: var(--space-24);
+    --alert-sm-font-size: var(--font-size-body-md);
+    --alert-sm-font-weight: var(--font-weight-regular);
+    --alert-sm-line-height: var(--line-height-md);
+    --alert-sm-icon-width: 1.125rem;
+    --alert-sm-icon-height: 1.375rem;
+    --alert-sm-border-radius: var(--radius-sm);
+    --button-lg-border-radius: var(--radius-md);
+    --button-lg-padding-block: 0rem;
+    --button-lg-font-size: var(--font-size-body-lg);
+    --button-lg-gap: var(--space-16);
+    --button-lg-padding-inline: var(--space-16);
+    --button-lg-height: 2.75rem;
+    --button-md-border-radius: var(--radius-md);
+    --button-md-padding-block: 0rem;
+    --button-md-font-size: var(--font-size-body-md);
+    --button-md-gap: var(--space-16);
+    --button-md-padding-inline: var(--space-16);
+    --button-md-height: 2.75rem;
+    --button-sm-border-radius: var(--radius-md);
+    --button-sm-padding-block: 0rem;
+    --button-sm-gap: var(--space-12);
+    --button-sm-padding-inline: var(--space-12);
+    --button-sm-font-size: var(--font-size-body-md);
+    --button-sm-height: 2.25rem;
+    --button-xs-border-radius: var(--radius-md);
+    --button-xs-padding-block: 0rem;
+    --button-xs-font-size: var(--font-size-body-sm);
+    --button-xs-gap: var(--space-12);
+    --button-xs-padding-inline: var(--space-12);
+    --button-xs-height: 1.875rem;
+    --card-package-shared-border-radius: var(--radius-md);
+    --card-package-shared--author-font-weight: var(--font-weight-regular);
+    --card-package-shared--prefix-padding-right: var(--space-4);
+    --card-package-shared--description-font-family: var(--font-family--inter);
+    --card-package-shared--description-font-size: var(--font-size-body-md);
+    --card-package-shared--description-font-style: normal;
+    --card-package-shared--description-font-weight: var(--font-weight-regular);
+    --card-package-shared--description-line-height: var(--line-height-md);
+    --card-package-shared--tags-gap: var(--gap-xxs);
+    --card-package-shared--footer-gap: var(--gap-sm);
+    --card-package-md-card--image-wrapper-border-bottom-left-radius: 0;
+    --card-package-md-card--image-wrapper-border-bottom-right-radius: 0;
+    --card-package-md-card--image-wrapper-border-top-left-radius: var(
+      --radius-md
+    );
+    --card-package-md-card--image-wrapper-border-top-right-radius: var(
+      --radius-md
+    );
+    --card-package-md-card--content-padding: var(--space-12);
+    --card-package-md-card--content-gap: var(--gap-sm);
+    --card-package-md-card--info-gap: var(--space-6);
+    --card-package-md-card--title-font-size: var(--font-size-body-xl);
+    --card-package-md-card--title-line-height: var(--line-height-auto);
+    --card-package-md-card--author-font-size: var(--font-size-body-md);
+    --card-package-md-card--link-font-weight: var(--font-weight-regular);
+    --card-package-md-card--updated-font-weight: var(--font-weight-regular);
+    --card-package-md-card--updated-font-size: var(--font-size-body-sm);
+    --card-package-md-featured--image-wrapper-border-top-left-radius: 0;
+    --card-package-md-featured--image-wrapper-border-top-right-radius: var(
+      --radius-md
+    );
+    --card-package-md-featured--image-wrapper-border-bottom-left-radius: 0;
+    --card-package-md-featured--image-wrapper-border-bottom-right-radius: var(
+      --radius-md
+    );
+    --card-package-md-featured--content-padding: var(--space-16) var(--space-24);
+    --card-package-md-featured--info-gap: var(--gap-xxxs);
+    --card-package-md-featured--title-font-size: 1.313rem;
+    --card-package-md-featured--title-line-height: 160%;
+    --card-package-md-featured--author-font-size: var(--font-size-body-md);
+    --card-package-md-featured--link-font-weight: var(--font-weight-bold);
+    --card-package-md-fullwidth-padding: var(--space-16);
+    --card-package-md-fullwidth-gap: var(--gap-sm);
+    --card-package-md-fullwidth--image-wrapper-border-top-left-radius: var(
+      --radius-md
+    );
+    --card-package-md-fullwidth--image-wrapper-border-top-right-radius: var(
+      --radius-md
+    );
+    --card-package-md-fullwidth--image-wrapper-border-bottom-left-radius: var(
+      --radius-md
+    );
+    --card-package-md-fullwidth--image-wrapper-border-bottom-right-radius: var(
+      --radius-md
+    );
+    --card-package-md-fullwidth--content-gap: var(--gap-sm);
+    --card-package-md-fullwidth--title-font-size: var(--font-size-body-xxl);
+    --card-package-md-fullwidth--title-line-height: var(--line-height-auto);
+    --card-package-md-fullwidth--author-font-size: var(--font-size-body-md);
+    --card-package-md-fullwidth--link-font-weight: var(--font-weight-regular);
+    --card-package-md-secondary--image-wrapper-border-top-left-radius: 0;
+    --card-package-md-secondary--image-wrapper-border-top-right-radius: var(
+      --radius-md
+    );
+    --card-package-md-secondary--image-wrapper-border-bottom-left-radius: 0;
+    --card-package-md-secondary--image-wrapper-border-bottom-right-radius: var(
+      --radius-md
+    );
+    --card-package-md-secondary--content-padding: 0 var(--space-16);
+    --card-package-md-secondary--info-max-width: 12rem;
+    --card-package-md-secondary--info-gap: 0.188rem;
+    --card-package-md-secondary--title-font-size: var(--font-size-body-md);
+    --card-package-md-secondary--title-line-height: var(--line-height-auto);
+    --card-package-md-secondary--author-font-size: var(--font-size-body-md);
+    --card-package-md-secondary--link-font-weight: var(--font-weight-bold);
+    --code-input-wrapper-md-padding: var(--space-8) var(--space-10);
+    --code-input-wrapper-md-border-radius: var(--radius-md);
+    --code-input-md-border-radius: var(--radius-md);
+    --code-input-md-padding: var(--space-8) var(--space-10);
+    --code-input-md-font-size: 0.813rem;
+    --code-input-font-family--default: var(--font-family-monospace);
+    --code-input-md-font-weight: var(--font-weight-regular);
+    --code-input-md-line-height: var(--line-height-md);
+    --validation-bar-md-padding: var(--space-12) var(--space-16);
+    --validation-bar-md-gap: var(--space-12);
+    --validation-bar-md-border-radius: 0rem 0rem var(--radius-md)
+      var(--radius-md);
+    --validation-bar-md-font-size: var(--font-size-body-md);
+    --validation-bar-md-font-weight: var(--font-weight-regular);
+    --validation-bar-md-line-height: var(--line-height-md);
+    --dropdown-md-gap: 0.25rem;
+    --dropdown-md-border-radius: var(--radius-md);
+    --dropdown-md-padding: var(--space-4) 0;
+    --dropdown-item-md-gap: var(--gap-md);
+    --dropdown-item-md-padding: var(--space-12) var(--space-16);
+    --dropdown-item-md-font-weight: var(--font-weight-regular);
+    --dropdown-item-md-font-size: var(--font-size-body-md);
+    --divider-height: 0.063rem;
+    --divider-md-margin: 0.25rem 0rem;
+    --icon-button-lg-font-size: var(--font-size-body-lg);
+    --icon-button-lg-height: 2.75rem;
+    --icon-button-sm-font-size: var(--font-size-body-lg);
+    --icon-button-sm-height: 2.25rem;
+    --icon-button-xs-font-size: var(--font-size-body-lg);
+    --icon-button-xs-height: 1.875rem;
+    --input-md-border-radius: var(--radius-md);
+    --input-md-height: 2.75rem;
+    --input-sm-border-radius: var(--radius-md);
+    --input-sm-height: 2.25rem;
+    --meta-item-16-font-size: var(--font-size-body-lg, 1rem);
+    --meta-item-16-icon-width: 1rem;
+    --meta-item-16-icon-height: 1rem;
+    --meta-item-14-font-size: var(--font-size-body-md, 0.875rem);
+    --meta-item-14-icon-width: 1rem;
+    --meta-item-14-icon-height: 1rem;
+    --meta-item-12-font-size: var(--font-size-body-sm, 0.75rem);
+    --meta-item-12-icon-width: 0.875rem;
+    --meta-item-12-icon-height: 0.875rem;
+    --modal-md-border-radius: var(--radius-md);
+    --modal-md-content-padding: 3rem 5.5rem;
+    --modal-md-content-gap: 2rem;
+    --modal-sm-border-radius: var(--radius-md);
+    --modal-sm-content-padding: 0;
+    --modal-sm-content-gap: 0;
+    --select-md-border-radius: var(--radius-md);
+    --select-md-padding: var(--space-4) 0;
+    --select-item-md-gap: var(--gap-md);
+    --select-item-md-padding: var(--space-12) var(--space-16);
+    --select-item-md-font-weight: var(--font-weight-regular);
+    --select-item-md-font-size: var(--font-size-body-md);
+    --select-trigger-md-font-weight: var(--font-weight-bold);
+    --select-trigger-md-font-size: var(--font-size-body-md);
+    --switch-md-knob-radius: 1.25rem;
+    --switch-md-height: 1.75rem;
+    --switch-md-width: 2.75rem;
+    --switch-sm-knob-radius: 0.875rem;
+    --switch-sm-height: 1.25rem;
+    --switch-sm-width: 1.875rem;
+    --tab-nav-item-border-style--default: solid;
+    --tag-md-border-radius: var(--radius-md);
+    --tag-md-padding-block: var(--space-4);
+    --tag-md-gap: var(--space-6);
+    --tag-md-padding-inline: var(--space-8);
+    --tag-md-font-size: var(--font-size-body-md);
+    --tag-md-height: 1.875rem;
+    --tag-sm-border-radius: var(--radius-md);
+    --tag-sm-padding-block: var(--space-4);
+    --tag-sm-gap: var(--space-6);
+    --tag-sm-padding-inline: var(--space-6);
+    --tag-sm-font-size: var(--font-size-body-sm);
+    --tag-sm-height: 1.5rem;
+    --tag-xs-border-radius: var(--radius-md);
+    --tag-xs-gap: var(--space-4);
+    --tag-xs-padding-block: var(--space-4);
+    --tag-xs-padding-inline: var(--space-6);
+    --tag-xs-font-size: var(--font-size-body-xs);
+    --tag-xs-height: var(--space-20);
+    --toast-md-gap: var(--space-16);
+    --toast-md-padding-block: var(--space-16);
+    --toast-md-padding-inline: var(--space-24);
+    --toast-md-font-size: var(--font-size-body-md);
+    --toast-md-font-weight: var(--font-weight-regular);
+    --toast-md-line-height: var(--line-height-md);
+    --toast-md-icon-width: 1.125rem;
+    --toast-md-icon-height: 1.375rem;
+    --toast-md-border-radius: var(--radius-sm);
+    --toast-md-close-width: 1.875rem;
+    --toast-md-close-height: 1.875rem;
+    --toast-md-close-icon-width: 0.875rem;
+    --toast-md-close-icon-height: 0.875rem;
+  }
+}
