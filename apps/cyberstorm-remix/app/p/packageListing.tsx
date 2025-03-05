@@ -8,7 +8,6 @@ import {
 } from "@remix-run/react";
 import {
   Heading,
-  Image,
   // Modal,
   NewBreadCrumbs,
   NewBreadCrumbsLink,
@@ -301,21 +300,11 @@ export default function PackageListing() {
       <div className="package-listing">
         <section className="package-listing__main">
           <PageHeader
-            // rootClasses="package-listing__content-header"
-            heading={listing.name}
             headingLevel="1"
             headingSize="3"
-            image={
-              <Image
-                // rootClasses={headerStyles.modImage}
-                src={listing.icon_url}
-                cardType="package"
-                square
-                intrinsicHeight={256}
-                intrinsicWidth={256}
-              />
-            }
+            image={listing.icon_url}
             description={listing.description}
+            variant="detailed"
             meta={
               <>
                 <NewLink
@@ -346,7 +335,9 @@ export default function PackageListing() {
                 ) : null}
               </>
             }
-          />
+          >
+            {listing.name}
+          </PageHeader>
           {/* TODO: Admin tools // TODO: Enable when APIs are available*/}
           {/* <div className="headerActions">
               {currentUser?.teams.some(function (cuTeam) {

@@ -92,7 +92,9 @@ export default function Teams() {
           <span>Teams</span>
         </span>
       </NewBreadCrumbs>
-      <PageHeader heading="Teams" headingLevel="1" headingSize="2" />
+      <PageHeader headingLevel="1" headingSize="2">
+        Teams
+      </PageHeader>
       <section className="settings-items">
         <div className="settings-items__item">
           <div className="settings-items__meta">

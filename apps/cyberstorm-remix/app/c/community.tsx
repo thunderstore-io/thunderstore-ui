@@ -1,8 +1,6 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData, useOutletContext } from "@remix-run/react";
 import {
-  Heading,
-  Image,
   NewBreadCrumbs,
   NewBreadCrumbsLink,
   NewIcon,
@@ -18,6 +16,7 @@ import { PackageOrderOptions } from "~/commonComponents/PackageSearch/components
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { OutletContextShape } from "../root";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -164,59 +163,52 @@ export default function Community() {
           </span>
         </NewBreadCrumbs>
         <section className="container container--y container--full">
-          <span className="container container--x community__heading">
-            <Image
-              src={community.cover_image_url}
-              cardType="community"
-              intrinsicWidth={56}
-              intrinsicHeight={56}
-              rootClasses="community__small-image"
-            />
-            <span className="container container--full community__content">
-              <Heading
-                csLevel="1"
-                csSize="3"
-                mode="display"
-                rootClasses="container container--full community__info"
-              >
-                {community.name}
-              </Heading>
-              <span className="container container--x community__meta">
-                {community.wiki_url ? (
-                  <NewLink
-                    primitiveType="link"
-                    href={community.wiki_url}
-                    csVariant="cyber"
-                    rootClasses="community__item"
-                  >
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faBook} />
-                    </NewIcon>
-                    <span>Modding Wiki</span>
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faArrowUpRight} />
-                    </NewIcon>
-                  </NewLink>
-                ) : null}
-                {community.discord_url ? (
-                  <NewLink
-                    primitiveType="link"
-                    href={community.discord_url}
-                    csVariant="cyber"
-                    rootClasses="community__item"
-                  >
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faDiscord} />
-                    </NewIcon>
-                    <span>Modding Discord</span>
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faArrowUpRight} />
-                    </NewIcon>
-                  </NewLink>
-                ) : null}
-              </span>
-            </span>
-          </span>
+          <div className="container container--x community__heading">
+            <PageHeader
+              headingLevel="1"
+              headingSize="3"
+              variant="simple"
+              icon={community.cover_image_url}
+              meta={
+                <>
+                  {community.wiki_url ? (
+                    <NewLink
+                      primitiveType="link"
+                      href={community.wiki_url}
+                      csVariant="cyber"
+                      rootClasses="community__item"
+                    >
+                      <NewIcon csMode="inline" noWrapper>
+                        <FontAwesomeIcon icon={faBook} />
+                      </NewIcon>
+                      <span>Modding Wiki</span>
+                      <NewIcon csMode="inline" noWrapper>
+                        <FontAwesomeIcon icon={faArrowUpRight} />
+                      </NewIcon>
+                    </NewLink>
+                  ) : null}
+                  {community.discord_url ? (
+                    <NewLink
+                      primitiveType="link"
+                      href={community.discord_url}
+                      csVariant="cyber"
+                      rootClasses="community__item"
+                    >
+                      <NewIcon csMode="inline" noWrapper>
+                        <FontAwesomeIcon icon={faDiscord} />
+                      </NewIcon>
+                      <span>Modding Discord</span>
+                      <NewIcon csMode="inline" noWrapper>
+                        <FontAwesomeIcon icon={faArrowUpRight} />
+                      </NewIcon>
+                    </NewLink>
+                  ) : null}
+                </>
+              }
+            >
+              {community.name}
+            </PageHeader>
+          </div>
           <PackageSearch
             listings={listings}
             packageCategories={filters.package_categories}

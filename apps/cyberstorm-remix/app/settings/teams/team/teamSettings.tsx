@@ -74,7 +74,9 @@ export default function Community() {
           <span>{team.name}</span>
         </span>
       </NewBreadCrumbs>
-      <PageHeader heading={team.name} headingLevel="1" headingSize="2" />
+      <PageHeader headingLevel="1" headingSize="2">
+        {team.name}
+      </PageHeader>
       <div className="team-settings">
         <Tabs
           tabItems={[
