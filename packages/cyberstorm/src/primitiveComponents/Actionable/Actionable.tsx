@@ -26,6 +26,7 @@ export interface ActionableCyberstormLinkProps
     ThunderstoreLinkProps {
   primitiveType: "cyberstormLink";
   linkId: CyberstormLinkIds;
+  queryParams?: string;
   disabled?: boolean;
 }
 
