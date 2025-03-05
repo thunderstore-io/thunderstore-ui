@@ -185,7 +185,15 @@ export default function PackageListing() {
   // Sidebar helpers
   const mappedPackageTagList = listing.categories.map((category) => {
     return (
-      <NewTag key={category.name} csSize="small" csVariant="primary">
+      <NewTag
+        key={category.name}
+        csMode="cyberstormLink"
+        linkId="Community"
+        community={community.identifier}
+        queryParams={`includedCategories=${category.id}`}
+        csSize="small"
+        csVariant="primary"
+      >
         {category.name}
       </NewTag>
     );

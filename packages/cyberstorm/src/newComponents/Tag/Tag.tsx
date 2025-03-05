@@ -10,16 +10,35 @@ import {
 import {
   Actionable,
   ActionableButtonProps,
+  ActionableCyberstormLinkProps,
   ActionableLinkProps,
 } from "../../primitiveComponents/Actionable/Actionable";
 
-interface TagProps
-  extends Omit<
-    FrameWindowProps | ActionableButtonProps | ActionableLinkProps,
-    "primitiveType"
-  > {
-  csMode?: "tag" | "button" | "link";
+interface TagProps extends Omit<FrameWindowProps, "primitiveType"> {
+  csMode?: "tag";
+  csVariant?: TagVariants;
+  csSize?: TagSizes;
+  csModifiers?: TagModifiers[];
+}
+
+interface TagButtonProps extends Omit<ActionableButtonProps, "primitiveType"> {
+  csMode: "button";
   href?: string;
+  csVariant?: TagVariants;
+  csSize?: TagSizes;
+  csModifiers?: TagModifiers[];
+}
+
+interface TagLinkProps extends Omit<ActionableLinkProps, "primitiveType"> {
+  csMode: "link";
+  csVariant?: TagVariants;
+  csSize?: TagSizes;
+  csModifiers?: TagModifiers[];
+}
+
+interface TagCyberstormLinkProps
+  extends Omit<ActionableCyberstormLinkProps, "primitiveType"> {
+  csMode: "cyberstormLink";
   csVariant?: TagVariants;
   csSize?: TagSizes;
   csModifiers?: TagModifiers[];
@@ -27,71 +46,95 @@ interface TagProps
 
 export const Tag = React.forwardRef<
   HTMLDivElement | HTMLButtonElement | HTMLAnchorElement,
-  TagProps
->((props: TagProps, forwardedRef) => {
-  const {
-    csMode = "tag",
-    children,
-    rootClasses,
-    csVariant = "primary",
-    csSize = "medium",
-    csModifiers,
-    ...forwardedProps
-  } = props;
+  TagProps | TagButtonProps | TagLinkProps | TagCyberstormLinkProps
+>(
+  (
+    props: TagProps | TagButtonProps | TagLinkProps | TagCyberstormLinkProps,
+    forwardedRef
+  ) => {
+    const {
+      csMode = "tag",
+      children,
+      rootClasses,
+      csVariant = "primary",
+      csSize = "medium",
+      csModifiers,
+      ...forwardedProps
+    } = props;
 
-  if (csMode === "button") {
-    const fProps = forwardedProps as ActionableButtonProps;
-    const fRef = forwardedRef as React.ForwardedRef<HTMLButtonElement>;
+    if (csMode === "button") {
+      const fProps = forwardedProps as ActionableButtonProps;
+      const fRef = forwardedRef as React.ForwardedRef<HTMLButtonElement>;
+      return (
+        <Actionable
+          {...fProps}
+          primitiveType={"button"}
+          rootClasses={classnames(
+            "tag",
+            ...componentClasses("tag", csVariant, csSize, csModifiers),
+            rootClasses
+          )}
+          ref={fRef}
+        >
+          {children}
+        </Actionable>
+      );
+    }
+
+    if (csMode === "link") {
+      const fProps = forwardedProps as ActionableLinkProps;
+      const fRef = forwardedRef as React.ForwardedRef<HTMLAnchorElement>;
+      return (
+        <Actionable
+          {...fProps}
+          primitiveType={"link"}
+          rootClasses={classnames(
+            "tag",
+            ...componentClasses("tag", csVariant, csSize, csModifiers),
+            rootClasses
+          )}
+          ref={fRef}
+        >
+          {children}
+        </Actionable>
+      );
+    }
+
+    if (csMode === "cyberstormLink") {
+      const fProps = forwardedProps as ActionableCyberstormLinkProps;
+      const fRef = forwardedRef as React.ForwardedRef<HTMLAnchorElement>;
+      return (
+        <Actionable
+          {...fProps}
+          primitiveType={"cyberstormLink"}
+          rootClasses={classnames(
+            "tag",
+            ...componentClasses("tag", csVariant, csSize, csModifiers),
+            rootClasses
+          )}
+          ref={fRef}
+        >
+          {children}
+        </Actionable>
+      );
+    }
+
+    const fProps = forwardedProps as FrameWindowProps;
     return (
-      <Actionable
+      <Frame
         {...fProps}
-        primitiveType={"button"}
+        primitiveType={"window"}
         rootClasses={classnames(
           "tag",
           ...componentClasses("tag", csVariant, csSize, csModifiers),
           rootClasses
         )}
-        ref={fRef}
+        ref={forwardedRef}
       >
         {children}
-      </Actionable>
+      </Frame>
     );
   }
-
-  if (csMode === "link") {
-    const fProps = forwardedProps as ActionableLinkProps;
-    const fRef = forwardedRef as React.ForwardedRef<HTMLAnchorElement>;
-    return (
-      <Actionable
-        {...fProps}
-        primitiveType={"link"}
-        rootClasses={classnames(
-          "tag",
-          ...componentClasses("tag", csVariant, csSize, csModifiers),
-          rootClasses
-        )}
-        ref={fRef}
-      >
-        {children}
-      </Actionable>
-    );
-  }
-
-  const fProps = forwardedProps as FrameWindowProps;
-  return (
-    <Frame
-      {...fProps}
-      primitiveType={"window"}
-      rootClasses={classnames(
-        "tag",
-        ...componentClasses("tag", csVariant, csSize, csModifiers),
-        rootClasses
-      )}
-      ref={forwardedRef}
-    >
-      {children}
-    </Frame>
-  );
-});
+);
 
 Tag.displayName = "Tag";
