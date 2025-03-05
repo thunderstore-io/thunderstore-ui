@@ -1,18 +1,18 @@
 @layer components {
   .meta-item {
     display: inline-flex;
-    gap: var(--metaitem-gap);
+    gap: var(--meta-item-gap);
     align-items: center;
-    color: var(--metaitem-color);
-    font-weight: var(--metaitem-font-weight);
-    font-size: var(--metaitem-font-size);
+    color: var(--meta-item-color);
+    font-weight: var(--meta-item-font-weight);
+    font-size: var(--meta-item-font-size);
     background: transparent;
 
     > svg {
-      width: var(--metaitem-icon-width);
-      height: var(--metaitem-icon-height);
+      width: var(--meta-item-icon-width);
+      height: var(--meta-item-icon-height);
 
-      --icon-color: var(--metaitem-icon-color);
+      --icon-color: var(--meta-item-icon-color);
     }
   }
 }

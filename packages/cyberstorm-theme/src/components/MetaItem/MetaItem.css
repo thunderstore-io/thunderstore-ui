@@ -1,33 +1,33 @@
 @layer theme-components {
   /* theme base styles */
   .meta-item {
-    --metaitem-gap: 0.5rem;
-    --metaitem-font-weight: var(--font-weight-bold);
+    --meta-item-gap: 0.5rem;
+    --meta-item-font-weight: var(--font-weight-bold);
   }
 
   /* SIZES */
   .meta-item:where(.meta-item--size--16) {
-    --metaitem-font-size: var(--meta-item-16-font-size);
-    --metaitem-icon-width: var(--meta-item-16-icon-width);
-    --metaitem-icon-height: var(--meta-item-16-icon-height);
+    --meta-item-font-size: var(--meta-item-16-font-size);
+    --meta-item-icon-width: var(--meta-item-16-icon-width);
+    --meta-item-icon-height: var(--meta-item-16-icon-height);
   }
 
   .meta-item:where(.meta-item--size--14) {
-    --metaitem-font-size: var(--meta-item-14-font-size);
-    --metaitem-icon-width: var(--meta-item-14-icon-width);
-    --metaitem-icon-height: var(--meta-item-14-icon-height);
+    --meta-item-font-size: var(--meta-item-14-font-size);
+    --meta-item-icon-width: var(--meta-item-14-icon-width);
+    --meta-item-icon-height: var(--meta-item-14-icon-height);
   }
 
   .meta-item:where(.meta-item--size--12) {
-    --metaitem-font-size: var(--meta-item-12-font-size);
-    --metaitem-icon-width: var(--meta-item-12-icon-width);
-    --metaitem-icon-height: var(--meta-item-12-icon-height);
+    --meta-item-font-size: var(--meta-item-12-font-size);
+    --meta-item-icon-width: var(--meta-item-12-icon-width);
+    --meta-item-icon-height: var(--meta-item-12-icon-height);
   }
 
   /* VARIANTS */
   .meta-item:where(.meta-item--variant--default) {
-    --metaitem-color: var(--meta-item-icon-color--default);
-    --metaitem-icon-color: var(--meta-item-text-color--default);
+    --meta-item-color: var(--meta-item-icon-color--default);
+    --meta-item-icon-color: var(--meta-item-text-color--default);
   }
 
   /* TOKENS */
