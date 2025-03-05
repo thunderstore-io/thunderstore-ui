@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClone, faCheck } from "@fortawesome/free-solid-svg-icons";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import "./CopyButton.css";
 import { NewIcon, Tooltip } from "@thunderstore/cyberstorm/src";
 import React from "react";
@@ -13,18 +13,10 @@ export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
   (props: CopyButtonProps, forwardedRef) => {
     const { text, ...forwardedProps } = props;
 
-    const [isSupported, setIsSupported] = useState(false);
     const [isTooltipOpen, setIsTooltipOpen] = useState(false);
     const [wasRecentlyCopied, setWasRecentlyCopied] = useState(false);
 
-    useEffect(() => {
-      setIsSupported(
-        typeof window !== "undefined" &&
-          typeof navigator?.clipboard !== "undefined"
-      );
-    }, [setIsSupported]);
-
-    return isSupported ? (
+    return (
       <Tooltip
         content={wasRecentlyCopied ? "Copied!" : "Copy"}
         open={isTooltipOpen}
@@ -51,7 +43,7 @@ export const CopyButton = React.forwardRef<HTMLButtonElement, CopyButtonProps>(
           </NewIcon>
         </button>
       </Tooltip>
-    ) : null;
+    );
   }
 );
 
