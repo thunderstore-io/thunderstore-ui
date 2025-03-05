@@ -35,10 +35,10 @@
 
   .markdown-preview__content {
     display: flex;
+    flex: 1 1 0;
     flex-direction: column;
     gap: var(--gap-md);
     align-items: flex-start;
-    width: 57.5rem;
   }
 
   .markdown-preview__divider {
