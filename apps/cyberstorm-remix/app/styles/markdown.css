@@ -4,7 +4,7 @@
     flex-direction: column;
     color: var(--color-text-primary);
     font: var(--font-body);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-regular);
     line-height: 160%;
     word-break: break-word;
 
