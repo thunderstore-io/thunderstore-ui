@@ -4,7 +4,6 @@ import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import {
   CodeBox,
   NewBreadCrumbs,
-  NewLink,
   NewIcon,
   NewTable,
 } from "@thunderstore/cyberstorm";
@@ -14,9 +13,9 @@ export default function PackageFormatDocs() {
   return (
     <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
-        <NewLink primitiveType="cyberstormLink" linkId="PackageFormatDocs">
-          Package Format Docs
-        </NewLink>
+        <span>
+          <span>Package Format Docs</span>
+        </span>
       </NewBreadCrumbs>
       <PageHeader
         heading="Package Format Docs"

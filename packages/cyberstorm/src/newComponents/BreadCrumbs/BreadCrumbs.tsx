@@ -4,7 +4,7 @@ import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./BreadCrumbs.css";
 import { classnames, componentClasses } from "../../utils/utils";
-import { NewIcon, NewLink } from "../..";
+import { NewCyberstormLinkProps, NewIcon, NewLink, NewLinkProps } from "../..";
 import { Frame } from "../../primitiveComponents/Frame/Frame";
 import {
   BreadCrumbsVariants,
@@ -13,7 +13,6 @@ import {
 } from "@thunderstore/cyberstorm-theme/src/components";
 
 type BreadCrumbsProps = PropsWithChildren<{
-  excludeHome?: boolean;
   rootClasses?: string;
   csVariant?: BreadCrumbsVariants;
   csSize?: BreadCrumbsSizes;
@@ -21,120 +20,52 @@ type BreadCrumbsProps = PropsWithChildren<{
 }>;
 
 // TODO: This component is not complete and probably is in need of redesign
-// TODO: Bug: when excludeHome is true, last element's style is wrong
 // TODO: https://developers.google.com/search/docs/appearance/structured-data/breadcrumb#microdata
 export function BreadCrumbs(props: BreadCrumbsProps) {
   const {
     children,
-    excludeHome,
     rootClasses,
     csVariant = "default",
     csSize = "medium",
     csModifiers,
   } = props;
-  const childrenArray = React.Children.toArray(children);
 
-  const nodes = childrenArray.map((node, index) => {
-    const homifiedIndex = excludeHome ? index - 1 : index;
-    const isLast = homifiedIndex == childrenArray.length - 1;
-    return (
-      <Frame
-        key={homifiedIndex}
-        primitiveType="window"
-        rootClasses={classnames(
-          homifiedIndex == -1 ? "breadcrumbs__outerstart" : null,
-          "breadcrumbs__outer",
-          ...componentClasses(
-            "breadcrumbs__outer",
-            csVariant,
-            csSize,
-            csModifiers
-          ),
-          isLast ? "breadcrumbs__outerend" : null,
-          ...(isLast
-            ? componentClasses(
-                "breadcrumbs__outerend",
-                csVariant,
-                csSize,
-                csModifiers
-              )
-            : [])
-        )}
-      >
-        <Frame
-          primitiveType="window"
-          rootClasses={classnames(
-            "breadcrumbs__inner",
-            ...componentClasses(
-              "breadcrumbs__inner",
-              csVariant,
-              csSize,
-              csModifiers
-            ),
-            isLast ? "breadcrumbs__innerend" : null,
-            ...(isLast
-              ? componentClasses(
-                  "breadcrumbs__innerend",
-                  csVariant,
-                  csSize,
-                  csModifiers
-                )
-              : [])
-          )}
-        >
-          {node}
-        </Frame>
-      </Frame>
-    );
-  });
-
-  const home = (
+  return (
     <Frame
-      key={0}
       primitiveType="window"
       rootClasses={classnames(
-        "breadcrumbs__outerstart",
-        "breadcrumbs__outer",
-        "breadcrumbs__outerhome",
-        ...componentClasses(
-          "breadcrumbs__outer",
-          csVariant,
-          csSize,
-          csModifiers
-        )
+        "breadcrumbs",
+        ...componentClasses("breadcrumbs", csVariant, csSize, csModifiers),
+        rootClasses
       )}
     >
-      <div
-        className={classnames("breadcrumbs__inner", "breadcrumbs__innerhome")}
+      <BreadCrumbsLink
+        primitiveType="cyberstormLink"
+        linkId="Index"
+        tooltipText="Home"
+        aria-label="Home"
+        rootClasses={"breadcrumbs__homelink"}
       >
-        <DefaultHomeCrumb />
-      </div>
-    </Frame>
-  );
-
-  return (
-    <Frame
-      primitiveType="window"
-      rootClasses={classnames("breadcrumbs", rootClasses)}
-    >
-      {excludeHome ? null : home}
-      {nodes}
+        <NewIcon noWrapper csVariant="cyber">
+          <FontAwesomeIcon icon={faHouse} className={"breadcrumbs__home"} />
+        </NewIcon>
+      </BreadCrumbsLink>
+      {children}
     </Frame>
   );
 }
 
-export function DefaultHomeCrumb() {
+export const BreadCrumbsLink = React.forwardRef<
+  HTMLAnchorElement,
+  NewLinkProps | NewCyberstormLinkProps
+>((props: NewLinkProps | NewCyberstormLinkProps, forwardedRef) => {
+  const { children, ...forwardedProps } = props;
+
   return (
-    <NewLink
-      primitiveType="cyberstormLink"
-      linkId="Index"
-      tooltipText="Home"
-      aria-label="Home"
-      rootClasses={"breadcrumbs__homelink"}
-    >
-      <NewIcon noWrapper csVariant="cyber">
-        <FontAwesomeIcon icon={faHouse} className={"breadcrumbs__home"} />
-      </NewIcon>
+    <NewLink {...forwardedProps} ref={forwardedRef}>
+      <span>{children}</span>
     </NewLink>
   );
-}
+});
+
+BreadCrumbsLink.displayName = "BreadCrumbsLink";

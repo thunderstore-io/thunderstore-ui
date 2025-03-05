@@ -4,7 +4,6 @@ import {
   CodeInput,
   Markdown,
   NewBreadCrumbs,
-  NewLink,
   isRecord,
 } from "@thunderstore/cyberstorm";
 import {
@@ -60,9 +59,9 @@ export default function MarkdownPreview() {
   return (
     <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
-        <NewLink primitiveType="cyberstormLink" linkId="MarkdownPreview">
-          Markdown Preview
-        </NewLink>
+        <span>
+          <span>Markdown Preview</span>
+        </span>
       </NewBreadCrumbs>
       <PageHeader heading="Markdown Preview" headingLevel="1" headingSize="2" />
       <section className="container container--y container--full markdown-preview">

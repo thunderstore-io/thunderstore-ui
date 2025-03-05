@@ -8,16 +8,13 @@ import { Icon } from "../Icon/Icon";
 import { classnames } from "../../utils/utils";
 import { Tooltip } from "../../newComponents/Tooltip/Tooltip";
 
-type BreadCrumbsProps = PropsWithChildren<{
-  excludeHome?: boolean;
-}>;
+type BreadCrumbsProps = PropsWithChildren;
 
-// TODO: Bug: when excludeHome is true, last element's style is wrong
 export function BreadCrumbs(props: BreadCrumbsProps) {
   const children = React.Children.toArray(props.children);
 
   const nodes = children.map((node, index) => {
-    const homifiedIndex = props.excludeHome ? index - 1 : index;
+    const homifiedIndex = index - 1;
     const isLast = homifiedIndex == children.length - 1;
     return (
       <div
@@ -57,7 +54,7 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
 
   return (
     <div className={styles.root}>
-      {props.excludeHome ? null : home}
+      {home}
       {nodes}
     </div>
   );

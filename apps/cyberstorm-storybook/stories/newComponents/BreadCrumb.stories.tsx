@@ -1,73 +1,69 @@
 import { StoryFn, Meta } from "@storybook/react";
-import { NewBreadCrumbs, NewLink } from "@thunderstore/cyberstorm";
+import { NewBreadCrumbs, NewBreadCrumbsLink } from "@thunderstore/cyberstorm";
 
 export default {
   title: "BreadCrumbs",
   component: NewBreadCrumbs,
-  argTypes: {
-    excludeHome: {
-      description: "If set to true, the home breadcrumb is excluded",
-      defaultValue: false,
-      control: "boolean",
-    },
-  },
 } as Meta;
 
 type BreadCrumbsStory = StoryFn<typeof NewBreadCrumbs>;
 const community = "riskofrain2";
 
-const breadCrumbStory = (args: { excludeHome?: boolean | undefined }) => (
+const breadCrumbStory = () => (
   <>
-    <NewBreadCrumbs {...args} />
+    <NewBreadCrumbs />
 
-    <NewBreadCrumbs {...args}>
-      <NewLink
+    <NewBreadCrumbs>
+      <NewBreadCrumbsLink
         primitiveType="cyberstormLink"
         linkId="Community"
         community={community}
+        csVariant="cyber"
       >
         Risk of Rain 2
-      </NewLink>
+      </NewBreadCrumbsLink>
     </NewBreadCrumbs>
 
-    <NewBreadCrumbs {...args}>
-      <NewLink
+    <NewBreadCrumbs>
+      <NewBreadCrumbsLink
         primitiveType="cyberstormLink"
         linkId="Community"
         community={community}
+        csVariant="cyber"
       >
         Risk of Rain 2
-      </NewLink>
-      <NewLink
+      </NewBreadCrumbsLink>
+      <NewBreadCrumbsLink
         primitiveType="cyberstormLink"
         linkId="CommunityPackages"
         community={community}
       >
         Packages
-      </NewLink>
+      </NewBreadCrumbsLink>
     </NewBreadCrumbs>
 
-    <NewBreadCrumbs {...args}>
-      <NewLink
+    <NewBreadCrumbs>
+      <NewBreadCrumbsLink
         primitiveType="cyberstormLink"
         linkId="Community"
         community={community}
+        csVariant="cyber"
       >
         Risk of Rain 2
-      </NewLink>
-      <NewLink
+      </NewBreadCrumbsLink>
+      <NewBreadCrumbsLink
         primitiveType="cyberstormLink"
         linkId="CommunityPackages"
         community={community}
+        csVariant="cyber"
       >
         Packages
-      </NewLink>
-      Popular
+      </NewBreadCrumbsLink>
+      <span>
+        <span>Popular</span>
+      </span>
     </NewBreadCrumbs>
   </>
 );
 
-export const ReferenceCrumbs: BreadCrumbsStory = (args) =>
-  breadCrumbStory(args);
-export const ExcludeHomeCrumbs: BreadCrumbsStory = () =>
-  breadCrumbStory({ excludeHome: true });
+export const ReferenceCrumbs: BreadCrumbsStory = () => breadCrumbStory();

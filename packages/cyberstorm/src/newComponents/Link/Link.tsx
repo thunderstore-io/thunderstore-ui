@@ -8,11 +8,11 @@ import {
 import React from "react";
 import { classnames } from "../../utils/utils";
 
-interface LinkProps extends ActionableLinkProps {
+export interface LinkProps extends ActionableLinkProps {
   csVariant?: LinkVariants;
 }
 
-interface CyberstormLinkProps extends ActionableCyberstormLinkProps {
+export interface CyberstormLinkProps extends ActionableCyberstormLinkProps {
   csVariant?: LinkVariants;
 }
 

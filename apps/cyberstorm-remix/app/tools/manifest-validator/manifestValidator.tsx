@@ -2,7 +2,6 @@ import {
   CodeInput,
   NewAlert,
   NewBreadCrumbs,
-  NewLink,
   NewSelect,
   isRecord,
   isStringArray,
@@ -74,9 +73,9 @@ export default function ManifestValidator() {
   return (
     <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
-        <NewLink primitiveType="cyberstormLink" linkId="ManifestValidator">
-          Manifest Validator
-        </NewLink>
+        <span>
+          <span>Manifest Validator</span>
+        </span>
       </NewBreadCrumbs>
       <PageHeader
         heading="Manifest Validator"

@@ -88,9 +88,9 @@ export default function Teams() {
   return (
     <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
-        <NewLink primitiveType="cyberstormLink" linkId="Teams">
-          Teams
-        </NewLink>
+        <span>
+          <span>Teams</span>
+        </span>
       </NewBreadCrumbs>
       <PageHeader heading="Teams" headingLevel="1" headingSize="2" />
       <section className="settings-items">
