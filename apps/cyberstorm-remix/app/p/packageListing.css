@@ -93,7 +93,7 @@
   }
 
   .package-listing-sidebar__label {
-    color: var(--color-text-secondary);
+    color: var(--color-text-tertiary);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-sm);
     line-height: normal;
