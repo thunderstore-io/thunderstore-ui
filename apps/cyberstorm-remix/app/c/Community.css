@@ -42,6 +42,7 @@
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-md);
     line-height: var(--line-height-md);
+    white-space: nowrap;
 
     > svg {
       inline-size: var(--space-16);
