@@ -1,0 +1,33 @@
+@layer theme-components-layouts {
+  /* These variables are copied from Figma with the plugin variables2css */
+  :root {
+    --card-package-shared-align-items: flex-start;
+    --card-package-card-flex-direction: column;
+    --card-package-card--content-flex-direction: column;
+    --card-package-card--content-align-items: flex-start;
+    --card-package-card--content-align-self: stretch;
+    --card-package-card--info-align-self: stretch;
+    --card-package-card--footer-flex-direction: column;
+    --card-package-featured-flex-direction: row;
+    --card-package-featured--content-flex-direction: column;
+    --card-package-featured--content-align-items: flex-start;
+    --card-package-featured--content-flex: 1 0 0;
+    --card-package-featured--content-align-self: stretch;
+    --card-package-featured--info-align-self: stretch;
+    --card-package-fullwidth-flex-direction: column;
+    --card-package-fullwidth--content-flex-direction: column;
+    --card-package-fullwidth--content-align-items: flex-start;
+    --card-package-fullwidth--content-flex: 1 0 0;
+    --card-package-fullwidth--info-justify-content: center;
+    --card-package-fullwidth--info-align-self: stretch;
+    --card-package-fullwidth--footer-flex-direction: row;
+    --card-package-fullwidth--tags-justify-content: flex-end;
+    --card-package-secondary-flex-direction: row;
+    --card-package-secondary--content-flex-direction: row;
+    --card-package-secondary--content-justify-content: space-between;
+    --card-package-secondary--content-align-items: center;
+    --card-package-secondary--content-flex: 1 0 0;
+    --card-package-secondary--content-align-self: stretch;
+    --card-package-secondary--info-justify-content: center;
+  }
+}

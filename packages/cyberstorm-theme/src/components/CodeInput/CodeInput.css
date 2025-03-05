@@ -72,35 +72,4 @@
     );
     --validation-bar-color: var(--validation-bar-color--failure);
   }
-
-  :root {
-    --code-input-wrapper-md-padding: var(--space-8) var(--space-10);
-    --code-input-wrapper-bg-color--default: rgb(59 63 125 / 0.24);
-    --code-input-wrapper-border-color--default: var(--color-surface-8);
-    --code-input-wrapper-md-border-radius: var(--radius-md);
-    --code-input-text-color--default: var(--color-text-primary);
-    --code-input-md-border-radius: var(--radius-md);
-    --code-input-md-padding: var(--space-8) var(--space-10);
-    --code-input-md-font-size: 0.813rem;
-    --code-input-transition--default: ease-out var(--animation-duration-xs);
-    --code-input-font-family--default: var(--font-family-monospace);
-    --code-input-md-font-weight: var(--font-weight-regular);
-    --code-input-md-line-height: var(--line-height-md);
-    --code-input-placeholder-color--default: var(--color-text-tertiary);
-    --validation-bar-md-padding: var(--space-12) var(--space-16);
-    --validation-bar-md-gap: var(--space-12);
-    --validation-bar-md-border-radius: 0rem 0rem var(--radius-md)
-      var(--radius-md);
-    --validation-bar-md-font-size: var(--font-size-body-md);
-    --validation-bar-md-font-weight: var(--font-weight-regular);
-    --validation-bar-md-line-height: var(--line-height-md);
-    --validation-bar-border-top-color--default: var(--color-surface-8);
-    --validation-bar-background-color--default: var(--color-surface-1);
-    --validation-bar-color--default: var(--color-text-accent);
-    --validation-bar-border-top-color--success: var(--color-accent-green-7);
-    --validation-bar-color--success: var(--color-accent-green-7);
-    --validation-bar-border-top-color--failure: var(--color-accent-red-7);
-    --validation-bar-background-color--failure: var(--color-accent-red-2);
-    --validation-bar-color--failure: var(--color-accent-red-7);
-  }
 }

@@ -41,16 +41,4 @@
       }
     }
   }
-
-  /* TOKENS */
-  :root {
-    --pagination-item-bg-color--active: var(--color-surface-a6);
-    --pagination-item-bg-color--current: #623bce;
-    --pagination-item-bg-color--default: var(--color-surface-a7);
-    --pagination-item-bg-color--hover: var(--color-surface-a8);
-    --pagination-item-text-color--active: var(--color-text-primary);
-    --pagination-item-text-color--current: var(--color-text-primary);
-    --pagination-item-text-color--default: var(--color-text-secondary);
-    --pagination-item-text-color--hover: var(--color-text-primary);
-  }
 }

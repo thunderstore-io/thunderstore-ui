@@ -1,0 +1,560 @@
+@layer theme-components-colors {
+  /* These variables are copied from Figma with the plugin variables2css */
+  :root {
+    --ad-bg-color--default: var(--color-surface-4);
+    --ad-text-color--default: var(--color-text-tertiary);
+    --alert-danger-bg-color--default: var(--color-accent-red-2);
+    --alert-danger-border-color--default: var(--color-accent-red-7);
+    --alert-danger-icon-color--default: var(--color-accent-red-7);
+    --alert-danger-text-color--default: var(--color-accent-red-11);
+    --alert-info-bg-color--default: var(--color-accent-blue-2);
+    --alert-info-border-color--default: var(--color-accent-blue-7);
+    --alert-info-icon-color--default: var(--color-accent-blue-7);
+    --alert-info-text-color--default: var(--color-accent-blue-11);
+    --alert-success-bg-color--default: var(--color-accent-green-2);
+    --alert-success-border-color--default: var(--color-accent-green-7);
+    --alert-success-icon-color--default: var(--color-accent-green-7);
+    --alert-success-text-color--default: var(--color-accent-green-11);
+    --alert-warning-bg-color--default: var(--color-accent-yellow-2);
+    --alert-warning-border-color--default: var(--color-accent-yellow-7);
+    --alert-warning-icon-color--default: var(--color-accent-yellow-7);
+    --alert-warning-text-color--default: var(--color-accent-yellow-11);
+    --breadcrumb-item-bg-color--current: var(--color-surface-8);
+    --breadcrumb-item-bg-color--default: var(--color-surface-6);
+    --breadcrumb-item-bg-color--hover: var(--color-surface-8);
+    --breadcrumb-item-text-color--current: var(--color-text-primary);
+    --breadcrumb-item-text-color--default: var(--color-cyber-green-7);
+    --breadcrumb-item-text-color--hover: var(--color-cyber-green-7);
+    --button-accent-bg-color--active: var(--color-cyber-green-6);
+    --button-accent-bg-color--default: var(--color-cyber-green-7);
+    --button-accent-bg-color--hover: var(--color-cyber-green-9);
+    --button-accent-icon-color--active: var(--color-cyber-green-2);
+    --button-accent-icon-color--default: var(--color-cyber-green-2);
+    --button-accent-icon-color--hover: var(--color-cyber-green-2);
+    --button-accent-text-color--active: var(--color-cyber-green-2);
+    --button-accent-text-color--default: var(--color-cyber-green-2);
+    --button-accent-text-color--hover: var(--color-cyber-green-2);
+    --button-danger-bg-color--active: var(--color-accent-red-2);
+    --button-danger-bg-color--default: var(--color-accent-red-4);
+    --button-danger-bg-color--hover: var(--color-accent-red-3);
+    --button-danger-icon-color--active: var(--color-accent-red-11);
+    --button-danger-icon-color--default: var(--color-accent-red-11);
+    --button-danger-icon-color--hover: var(--color-accent-red-11);
+    --button-danger-text-color--active: var(--color-accent-red-11);
+    --button-danger-text-color--default: var(--color-accent-red-11);
+    --button-danger-text-color--hover: var(--color-accent-red-11);
+    --button-info-bg-color--active: var(--color-accent-blue-2);
+    --button-info-bg-color--default: var(--color-accent-blue-4);
+    --button-info-bg-color--hover: var(--color-accent-blue-3);
+    --button-info-icon-color--active: var(--color-accent-blue-11);
+    --button-info-icon-color--default: var(--color-accent-blue-11);
+    --button-info-icon-color--hover: var(--color-accent-blue-11);
+    --button-info-text-color--active: var(--color-accent-blue-11);
+    --button-info-text-color--default: var(--color-accent-blue-11);
+    --button-info-text-color--hover: var(--color-accent-blue-11);
+    --button-primary-bg-color--active: #4d2bab;
+    --button-primary-bg-color--default: #623bce;
+    --button-primary-bg-color--hover: #6c44da;
+    --button-primary-icon-color--active: var(--color-text-primary);
+    --button-primary-icon-color--default: var(--color-text-primary);
+    --button-primary-icon-color--hover: var(--color-text-primary);
+    --button-primary-text-color--active: var(--color-text-primary);
+    --button-primary-text-color--default: var(--color-text-primary);
+    --button-primary-text-color--hover: var(--color-text-primary);
+    --button-secondary-bg-color--active: var(--color-surface-a7);
+    --button-secondary-bg-color--default: var(--color-surface-a8);
+    --button-secondary-bg-color--hover: var(--color-surface-a9);
+    --button-secondary-icon-color--active: var(--color-text-primary);
+    --button-secondary-icon-color--default: var(--color-text-primary);
+    --button-secondary-icon-color--hover: var(--color-text-primary);
+    --button-secondary-text-color--active: var(--color-text-primary);
+    --button-secondary-text-color--default: var(--color-text-primary);
+    --button-secondary-text-color--hover: var(--color-text-primary);
+    --button-special-text-color--active: var(--color-text-primary);
+    --button-special-text-color--default: var(--color-text-primary);
+    --button-special-text-color--hover: var(--color-text-primary);
+    --button-special-border--active: 2px solid;
+    --button-special-border--default: 2px solid;
+    --button-special-border--hover: 2px solid;
+    --button-special-border-color--active: transparent;
+    --button-special-border-color--default: transparent;
+    --button-special-border-color--hover: transparent;
+    --button-special-background--active: linear-gradient(
+          284deg,
+          hsl(203deg 80% 21% / 1) 0%,
+          hsl(155deg 46% 23% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(154deg 65% 67% / 1) 0%,
+          hsl(203deg 92% 63% / 1) 100%
+        )
+        border-box;
+    --button-special-background--default: linear-gradient(
+          284deg,
+          hsl(275deg 64% 11% / 1) 0%,
+          hsl(156deg 46% 12% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(276deg 77% 54% / 1) 0%,
+          hsl(158deg 100% 57% / 1) 100%
+        )
+        border-box;
+    --button-special-background--hover: linear-gradient(
+          284deg,
+          hsl(203deg 80% 21% / 1) 0%,
+          hsl(155deg 46% 23% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(154deg 65% 67% / 1) 0%,
+          hsl(203deg 92% 63% / 1) 100%
+        )
+        border-box;
+    --button-success-bg-color--active: var(--color-accent-green-2);
+    --button-success-bg-color--default: var(--color-accent-green-4);
+    --button-success-bg-color--hover: var(--color-accent-green-3);
+    --button-success-icon-color--active: var(--color-accent-green-11);
+    --button-success-icon-color--default: var(--color-accent-green-11);
+    --button-success-icon-color--hover: var(--color-accent-green-11);
+    --button-success-text-color--active: var(--color-accent-green-11);
+    --button-success-text-color--default: var(--color-accent-green-11);
+    --button-success-text-color--hover: var(--color-accent-green-11);
+    --button-warning-bg-color--active: var(--color-accent-yellow-2);
+    --button-warning-bg-color--default: var(--color-accent-yellow-4);
+    --button-warning-bg-color--hover: var(--color-accent-yellow-3);
+    --button-warning-icon-color--active: var(--color-accent-yellow-11);
+    --button-warning-icon-color--default: var(--color-accent-yellow-11);
+    --button-warning-icon-color--hover: var(--color-accent-yellow-11);
+    --button-warning-text-color--active: var(--color-accent-yellow-11);
+    --button-warning-text-color--default: var(--color-accent-yellow-11);
+    --button-warning-text-color--hover: var(--color-accent-yellow-11);
+    --card-package-shared--is-liked-icon-color: var(--color-cyber-green-7);
+    --card-package-shared--title-link-color: var(--color-text-primary);
+    --card-package-shared--title-color: var(--color-text-primary);
+    --card-package-shared--prefix-color: var(--color-text-tertiary);
+    --card-package-shared--description-color: var(--color-text-secondary);
+    --card-package-card-background-color: var(--color-surface-a4);
+    --card-package-card-hover-background-color: var(--color-surface-a5);
+    --card-package-card--updated-color: var(--color-text-tertiary);
+    --card-package-featured-background-color: rgb(61 61 127 / 0.44);
+    --card-package-featured-hover-background-color: rgb(63 63 136 / 0.55);
+    --card-package-fullwidth-background-color: var(--color-surface-a4);
+    --card-package-fullwidth-hover-background-color: var(--color-surface-a6);
+    --card-package-secondary-background-color: rgb(63 63 136 / 0.55);
+    --card-package-secondary-hover-background-color: rgb(63 63 136 / 0.55);
+    --checkbox-bg-color--active: var(--color-surface-a10);
+    --checkbox-bg-color--default: var(--color-surface-a8);
+    --checkbox-bg-color--hover: var(--color-surface-a10);
+    --checkbox-bg-color--selected: var(--color-cyber-green-7);
+    --code-input-wrapper-bg-color--default: rgb(59 63 125 / 0.24);
+    --code-input-wrapper-border-color--default: var(--color-surface-8);
+    --code-input-text-color--default: var(--color-text-primary);
+    --code-input-placeholder-color--default: var(--color-text-tertiary);
+    --validation-bar-border-top-color--default: var(--color-surface-8);
+    --validation-bar-background-color--default: var(--color-surface-1);
+    --validation-bar-color--default: var(--color-text-accent);
+    --validation-bar-border-top-color--success: var(--color-accent-green-7);
+    --validation-bar-color--success: var(--color-accent-green-7);
+    --validation-bar-border-top-color--failure: var(--color-accent-red-7);
+    --validation-bar-background-color--failure: var(--color-accent-red-2);
+    --validation-bar-color--failure: var(--color-accent-red-7);
+    --divider-bg-color: var(--color-surface-a6);
+    --dropdown-bg-color--default: var(--color-surface-4);
+    --dropdown-border-color--default: var(--color-surface-a6);
+    --dropdown-item-bg-color--default: #0000;
+    --dropdown-item-bg-color--hover: var(--color-surface-a7);
+    --dropdown-item-icon-color--default: var(--color-text-tertiary);
+    --dropdown-item-icon-color--hover: var(--color-text-primary);
+    --dropdown-item-text-color--default: var(--color-text-primary);
+    --dropdown-item-text-color--hover: var(--color-text-primary);
+    --dropdown-item-danger-bg-color--default: #0000;
+    --dropdown-item-danger-bg-color--hover: var(--color-accent-red-6);
+    --dropdown-item-danger-icon-color--default: var(--color-accent-red-7);
+    --dropdown-item-danger-icon-color--hover: #fff;
+    --dropdown-item-danger-text-color--default: var(--color-accent-red-7);
+    --dropdown-item-danger-text-color--hover: #fff;
+    --dropdown-item-disabled-bg-color--default: #0000;
+    --dropdown-item-disabled-bg-color--hover: #0000;
+    --dropdown-item-disabled-icon-color--default: var(--color-text-tertiary);
+    --dropdown-item-disabled-icon-color--hover: var(--color-text-tertiary);
+    --dropdown-item-disabled-text-color--default: var(--color-text-tertiary);
+    --dropdown-item-disabled-text-color--hover: var(--color-text-tertiary);
+    --heading-danger-text-color--default: var(--color-accent-red-7);
+    --heading-info-text-color--default: var(--color-accent-blue-7);
+    --heading-primary-text-color--default: var(--color-text-primary);
+    --heading-secondary-text-color--default: var(--color-text-secondary);
+    --heading-tertiary-text-color--default: var(--color-text-tertiary);
+    --heading-success-text-color--default: var(--color-accent-green-7);
+    --heading-warning-text-color--default: var(--color-accent-yellow-7);
+    --heading-special-text-color--default: linear-gradient(
+          284deg,
+          hsl(275deg 64% 11% / 1) 0%,
+          hsl(156deg 46% 12% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(276deg 77% 54% / 1) 0%,
+          hsl(158deg 100% 57% / 1) 100%
+        )
+        border-box;
+    --heading-special-text-color--hover: linear-gradient(
+          284deg,
+          hsl(203deg 80% 21% / 1) 0%,
+          hsl(155deg 46% 23% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(154deg 65% 67% / 1) 0%,
+          hsl(203deg 92% 63% / 1) 100%
+        )
+        border-box;
+    --heading-accent-text-color--default: var(--color-text-accent);
+    --heading-cyber-text-color--default: var(--color-cyber-green-7);
+    --icon-danger-color--default: var(--color-accent-red-7);
+    --icon-info-color--default: var(--color-accent-blue-7);
+    --icon-primary-color--default: var(--color-text-primary);
+    --icon-secondary-color--default: var(--color-text-secondary);
+    --icon-tertiary-color--default: var(--color-text-tertiary);
+    --icon-success-color--default: var(--color-accent-green-7);
+    --icon-warning-color--default: var(--color-accent-yellow-7);
+    --icon-special-color--default: linear-gradient(
+          284deg,
+          hsl(275deg 64% 11% / 1) 0%,
+          hsl(156deg 46% 12% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(276deg 77% 54% / 1) 0%,
+          hsl(158deg 100% 57% / 1) 100%
+        )
+        border-box;
+    --icon-special-color--hover: linear-gradient(
+          284deg,
+          hsl(203deg 80% 21% / 1) 0%,
+          hsl(155deg 46% 23% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(154deg 65% 67% / 1) 0%,
+          hsl(203deg 92% 63% / 1) 100%
+        )
+        border-box;
+    --icon-accent-color--default: var(--color-text-accent);
+    --icon-cyber-color--default: var(--color-cyber-green-7);
+    --image-primary-color--default: hsl(240deg 42% 45%);
+    --image-primary-background-color--default: var(--color-surface-a4);
+    --icon-button-danger-bg-color--active: var(--color-accent-red-2);
+    --icon-button-danger-bg-color--default: var(--color-accent-red-4);
+    --icon-button-danger-bg-color--hover: var(--color-accent-red-3);
+    --icon-button-danger-icon-color--active: var(--color-accent-red-11);
+    --icon-button-danger-icon-color--default: var(--color-accent-red-11);
+    --icon-button-danger-icon-color--hover: var(--color-accent-red-11);
+    --icon-button-info-bg-color--active: var(--color-accent-blue-2);
+    --icon-button-info-bg-color--default: var(--color-accent-blue-4);
+    --icon-button-info-bg-color--hover: var(--color-accent-blue-3);
+    --icon-button-info-icon-color--active: var(--color-accent-blue-11);
+    --icon-button-info-icon-color--default: var(--color-accent-blue-11);
+    --icon-button-info-icon-color--hover: var(--color-accent-blue-11);
+    --icon-button-primary-bg-color--active: hsl(256deg 60% 42%);
+    --icon-button-primary-bg-color--default: hsl(256deg 60% 52%);
+    --icon-button-primary-bg-color--hover: hsl(256deg 67% 56%);
+    --icon-button-primary-icon-color--active: var(--color-text-primary);
+    --icon-button-primary-icon-color--default: var(--color-text-primary);
+    --icon-button-primary-icon-color--hover: var(--color-text-primary);
+    --icon-button-secondary-bg-color--active: var(--color-surface-a6);
+    --icon-button-secondary-bg-color--default: var(--color-surface-a7);
+    --icon-button-secondary-bg-color--hover: var(--color-surface-a8);
+    --icon-button-secondary-icon-color--active: var(--color-text-primary);
+    --icon-button-secondary-icon-color--default: var(--color-text-accent);
+    --icon-button-secondary-icon-color--hover: var(--color-text-primary);
+    --icon-button-success-bg-color--active: var(--color-accent-green-2);
+    --icon-button-success-bg-color--default: var(--color-accent-green-4);
+    --icon-button-success-bg-color--hover: var(--color-accent-green-3);
+    --icon-button-success-icon-color--active: var(--color-accent-green-11);
+    --icon-button-success-icon-color--default: var(--color-accent-green-11);
+    --icon-button-success-icon-color--hover: var(--color-accent-green-11);
+    --icon-button-warning-bg-color--active: var(--color-accent-yellow-2);
+    --icon-button-warning-bg-color--default: var(--color-accent-yellow-4);
+    --icon-button-warning-bg-color--hover: var(--color-accent-yellow-3);
+    --icon-button-warning-icon-color--active: var(--color-accent-yellow-11);
+    --icon-button-warning-icon-color--default: var(--color-accent-yellow-11);
+    --icon-button-warning-icon-color--hover: var(--color-accent-yellow-11);
+    --icon-button-special-icon-color--active: var(--color-text-primary);
+    --icon-button-special-icon-color--default: var(--color-text-primary);
+    --icon-button-special-icon-color--hover: var(--color-text-primary);
+    --icon-button-special-border--active: 2px solid;
+    --icon-button-special-border--default: 2px solid;
+    --icon-button-special-border--hover: 2px solid;
+    --icon-button-special-border-color--active: transparent;
+    --icon-button-special-border-color--default: transparent;
+    --icon-button-special-border-color--hover: transparent;
+    --icon-button-special-background--active: linear-gradient(
+          284deg,
+          hsl(203deg 80% 21% / 1) 0%,
+          hsl(155deg 46% 23% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(154deg 65% 67% / 1) 0%,
+          hsl(203deg 92% 63% / 1) 100%
+        )
+        border-box;
+    --icon-button-special-background--default: linear-gradient(
+          284deg,
+          hsl(275deg 64% 11% / 1) 0%,
+          hsl(156deg 46% 12% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(276deg 77% 54% / 1) 0%,
+          hsl(158deg 100% 57% / 1) 100%
+        )
+        border-box;
+    --icon-button-special-background--hover: linear-gradient(
+          284deg,
+          hsl(203deg 80% 21% / 1) 0%,
+          hsl(155deg 46% 23% / 1) 100%
+        )
+        padding-box,
+      linear-gradient(
+          284deg,
+          hsl(154deg 65% 67% / 1) 0%,
+          hsl(203deg 92% 63% / 1) 100%
+        )
+        border-box;
+    --icon-button-accent-bg-color--active: var(--color-cyber-green-6);
+    --icon-button-accent-bg-color--default: var(--color-cyber-green-7);
+    --icon-button-accent-bg-color--hover: var(--color-cyber-green-9);
+    --icon-button-accent-icon-color--active: var(--color-cyber-green-2);
+    --icon-button-accent-icon-color--default: var(--color-text-accent);
+    --icon-button-accent-icon-color--hover: var(--color-cyber-green-2);
+    --input-bg-color--default: var(--color-surface-a4);
+    --input-bg-color--focus: var(--color-surface-1);
+    --input-bg-color--hover: var(--color-surface-a6);
+    --input-border-color--default: var(--color-surface-a10);
+    --input-border-color--focus: var(--color-cyber-green-7);
+    --input-border-color--hover: var(--color-surface-a10);
+    --input-icon-color--default: var(--color-text-tertiary);
+    --input-icon-color--focus: var(--color-text-secondary);
+    --input-icon-color--hover: var(--color-text-tertiary);
+    --input-placeholder-color: var(--color-text-tertiary);
+    --input-text-color--default: var(--color-text-secondary);
+    --input-text-color--focus: var(--color-text-primary);
+    --input-text-color--hover: var(--color-text-secondary);
+    --kbd-bg-color--default: #0000;
+    --kbd-border-color--default: var(--color-surface-a10);
+    --kbd-text-color--default: var(--color-text-tertiary);
+    --link-primary-color--default: var(--color-text-accent);
+    --link-primary-color--hover: var(--color-text-primary);
+    --link-cyber-color--default: var(--color-cyber-green-7);
+    --link-cyber-color--hover: var(--color-cyber-green-9);
+    --menu-primary-color--default: var(--color-text-accent);
+    --menu-primary-color--hover: var(--color-text-primary);
+    --meta-item-icon-color--default: var(--color-text-tertiary);
+    --meta-item-text-color--default: var(--color-text-tertiary);
+    --modal-bg-color--default: var(--color-surface-3);
+    --modal-border-color--default: var(--color-surface-a6);
+    --modal-box-shadow--default: var(--shadow-lg);
+    --modal-text-color--default: var(--color-text-secondary);
+    --pagination-item-bg-color--active: var(--color-surface-a6);
+    --pagination-item-bg-color--current: #623bce;
+    --pagination-item-bg-color--default: var(--color-surface-a7);
+    --pagination-item-bg-color--hover: var(--color-surface-a8);
+    --pagination-item-text-color--active: var(--color-text-primary);
+    --pagination-item-text-color--current: var(--color-text-primary);
+    --pagination-item-text-color--default: var(--color-text-secondary);
+    --pagination-item-text-color--hover: var(--color-text-primary);
+    --pre-bg-color--default: var(--color-surface-1);
+    --pre-border-color--default: var(--color-surface-a10);
+    --pre-text-color--default: var(--color-text-primary);
+    --radio-bg-color--active: var(--color-surface-a10);
+    --radio-bg-color--default: var(--color-surface-a8);
+    --radio-bg-color--hover: var(--color-surface-a10);
+    --radio-bg-color--selected: var(--color-cyber-green-7);
+    --select-bg-color--default: var(--color-surface-4);
+    --select-border-color--default: var(--color-surface-a6);
+    --select-item-bg-color--default: #0000;
+    --select-item-bg-color--hover: var(--color-surface-a7);
+    --select-item-icon-color--default: var(--color-text-tertiary);
+    --select-item-icon-color--hover: var(--color-text-primary);
+    --select-item-text-color--default: var(--color-text-primary);
+    --select-item-text-color--hover: var(--color-text-primary);
+    --select-item-danger-bg-color--default: #0000;
+    --select-item-danger-bg-color--hover: var(--color-accent-red-6);
+    --select-item-danger-icon-color--default: var(--color-accent-red-7);
+    --select-item-danger-icon-color--hover: #fff;
+    --select-item-danger-text-color--default: var(--color-accent-red-7);
+    --select-item-danger-text-color--hover: #fff;
+    --select-item-disabled-bg-color--default: #0000;
+    --select-item-disabled-bg-color--hover: #0000;
+    --select-item-disabled-icon-color--default: var(--color-text-tertiary);
+    --select-item-disabled-icon-color--hover: var(--color-text-tertiary);
+    --select-item-disabled-text-color--default: var(--color-text-tertiary);
+    --select-item-disabled-text-color--hover: var(--color-text-tertiary);
+    --switch-bg-color--active: var(--color-cyber-green-7);
+    --switch-bg-color--default: var(--color-surface-a6);
+    --switch-bg-color--hover: var(--color-surface-a8);
+    --switch-border-color--active: var(--color-cyber-green-7);
+    --switch-border-color--default: var(--color-surface-a8);
+    --switch-border-color--hover: #5d5a9f;
+    --switch-knob-bg-color--active: var(--color-text-primary);
+    --switch-knob-bg-color--default: var(--color-text-primary);
+    --switch-knob-bg-color--hover: var(--color-text-primary);
+    --table-bg-color--default: var(--color-surface-4);
+    --tab-nav-item-border-color--active: var(--color-surface-9);
+    --tab-nav-item-border-color--current: var(--color-cyber-green-7);
+    --tab-nav-item-border-color--default: #0000;
+    --tab-nav-item-border-color--hover: var(--color-surface-9);
+    --tab-nav-item-icon-color--active: var(--color-text-secondary);
+    --tab-nav-item-icon-color--current: var(--color-cyber-green-7);
+    --tab-nav-item-icon-color--default: var(--color-text-tertiary);
+    --tab-nav-item-icon-color--hover: var(--color-text-secondary);
+    --tab-nav-item-number-color--active: var(--color-text-tertiary);
+    --tab-nav-item-number-color--current: var(--color-cyber-green-6);
+    --tab-nav-item-number-color--default: var(--color-text-tertiary);
+    --tab-nav-item-number-color--hover: var(--color-text-tertiary);
+    --tab-nav-item-text-color--active: var(--color-text-primary);
+    --tab-nav-item-text-color--current: var(--color-cyber-green-7);
+    --tab-nav-item-text-color--default: var(--color-text-tertiary);
+    --tab-nav-item-text-color--hover: var(--color-text-primary);
+    --tag-dark-blue-bg-color--default: var(--color-accent-blue-2);
+    --tag-dark-blue-bg-color--hover: var(--color-accent-blue-3);
+    --tag-dark-blue-icon-color--default: var(--color-accent-blue-9);
+    --tag-dark-blue-icon-color--hover: var(--color-accent-blue-9);
+    --tag-dark-blue-text-color--default: var(--color-accent-blue-9);
+    --tag-dark-blue-text-color--hover: var(--color-accent-blue-9);
+    --tag-dark-green-bg-color--default: var(--color-accent-green-2);
+    --tag-dark-green-bg-color--hover: var(--color-accent-green-3);
+    --tag-dark-green-icon-color--default: var(--color-accent-green-9);
+    --tag-dark-green-icon-color--hover: var(--color-accent-green-9);
+    --tag-dark-green-text-color--default: var(--color-accent-green-9);
+    --tag-dark-green-text-color--hover: var(--color-accent-green-9);
+    --tag-dark-orange-bg-color--default: var(--color-accent-orange-2);
+    --tag-dark-orange-bg-color--hover: var(--color-accent-orange-3);
+    --tag-dark-orange-icon-color--default: var(--color-accent-orange-9);
+    --tag-dark-orange-icon-color--hover: var(--color-accent-orange-9);
+    --tag-dark-orange-text-color--default: var(--color-accent-orange-9);
+    --tag-dark-orange-text-color--hover: var(--color-accent-orange-9);
+    --tag-dark-pink-bg-color--default: var(--color-accent-pink-2);
+    --tag-dark-pink-bg-color--hover: var(--color-accent-pink-3);
+    --tag-dark-pink-icon-color--default: var(--color-accent-pink-9);
+    --tag-dark-pink-icon-color--hover: var(--color-accent-pink-9);
+    --tag-dark-pink-text-color--default: var(--color-accent-pink-9);
+    --tag-dark-pink-text-color--hover: var(--color-accent-pink-9);
+    --tag-dark-primary-bg-color--default: var(--color-surface-8);
+    --tag-dark-primary-bg-color--hover: var(--color-surface-9);
+    --tag-dark-primary-icon-color--default: var(--color-text-primary);
+    --tag-dark-primary-icon-color--hover: var(--color-text-primary);
+    --tag-dark-primary-text-color--default: var(--color-text-primary);
+    --tag-dark-primary-text-color--hover: var(--color-text-primary);
+    --tag-dark-purple-bg-color--default: var(--color-accent-purple-2);
+    --tag-dark-purple-bg-color--hover: var(--color-accent-purple-3);
+    --tag-dark-purple-icon-color--default: var(--color-accent-purple-9);
+    --tag-dark-purple-icon-color--hover: var(--color-accent-purple-9);
+    --tag-dark-purple-text-color--default: var(--color-accent-purple-9);
+    --tag-dark-purple-text-color--hover: var(--color-accent-purple-9);
+    --tag-dark-red-bg-color--default: var(--color-accent-red-2);
+    --tag-dark-red-bg-color--hover: var(--color-accent-red-3);
+    --tag-dark-red-icon-color--default: var(--color-accent-red-9);
+    --tag-dark-red-icon-color--hover: var(--color-accent-red-9);
+    --tag-dark-red-text-color--default: var(--color-accent-red-9);
+    --tag-dark-red-text-color--hover: var(--color-accent-red-9);
+    --tag-dark-yellow-bg-color--default: var(--color-accent-yellow-2);
+    --tag-dark-yellow-bg-color--hover: var(--color-accent-yellow-3);
+    --tag-dark-yellow-icon-color--default: var(--color-accent-yellow-9);
+    --tag-dark-yellow-icon-color--hover: var(--color-accent-yellow-9);
+    --tag-dark-yellow-text-color--default: var(--color-accent-yellow-9);
+    --tag-dark-yellow-text-color--hover: var(--color-accent-yellow-9);
+    --tag-light-blue-bg-color--default: var(--color-accent-blue-7);
+    --tag-light-blue-bg-color--hover: var(--color-accent-blue-8);
+    --tag-light-blue-icon-color--default: var(--color-accent-blue-1);
+    --tag-light-blue-icon-color--hover: var(--color-accent-blue-1);
+    --tag-light-blue-text-color--default: var(--color-accent-blue-1);
+    --tag-light-blue-text-color--hover: var(--color-accent-blue-1);
+    --tag-light-green-bg-color--default: var(--color-accent-green-7);
+    --tag-light-green-bg-color--hover: var(--color-accent-green-8);
+    --tag-light-green-icon-color--default: var(--color-accent-green-1);
+    --tag-light-green-icon-color--hover: var(--color-accent-green-1);
+    --tag-light-green-text-color--default: var(--color-accent-green-1);
+    --tag-light-green-text-color--hover: var(--color-accent-green-1);
+    --tag-light-orange-bg-color--default: var(--color-accent-orange-7);
+    --tag-light-orange-bg-color--hover: var(--color-accent-orange-8);
+    --tag-light-orange-icon-color--default: var(--color-accent-orange-1);
+    --tag-light-orange-icon-color--hover: var(--color-accent-orange-1);
+    --tag-light-orange-text-color--default: var(--color-accent-orange-1);
+    --tag-light-orange-text-color--hover: var(--color-accent-orange-1);
+    --tag-light-pink-bg-color--default: var(--color-accent-pink-7);
+    --tag-light-pink-bg-color--hover: var(--color-accent-pink-8);
+    --tag-light-pink-icon-color--default: var(--color-accent-pink-1);
+    --tag-light-pink-icon-color--hover: var(--color-accent-pink-1);
+    --tag-light-pink-text-color--default: var(--color-accent-pink-1);
+    --tag-light-pink-text-color--hover: var(--color-accent-pink-1);
+    --tag-light-primary-bg-color--default: var(--color-surface-10);
+    --tag-light-primary-bg-color--hover: #5a5abf;
+    --tag-light-primary-icon-color--default: var(--color-text-primary);
+    --tag-light-primary-icon-color--hover: var(--color-text-primary);
+    --tag-light-primary-text-color--default: var(--color-text-primary);
+    --tag-light-primary-text-color--hover: var(--color-text-primary);
+    --tag-light-purple-bg-color--default: var(--color-accent-purple-7);
+    --tag-light-purple-bg-color--hover: var(--color-accent-purple-8);
+    --tag-light-purple-icon-color--default: var(--color-accent-purple-1);
+    --tag-light-purple-icon-color--hover: var(--color-accent-purple-1);
+    --tag-light-purple-text-color--default: var(--color-accent-purple-1);
+    --tag-light-purple-text-color--hover: var(--color-accent-purple-1);
+    --tag-light-red-bg-color--default: var(--color-accent-red-7);
+    --tag-light-red-bg-color--hover: var(--color-accent-red-8);
+    --tag-light-red-icon-color--default: var(--color-accent-red-1);
+    --tag-light-red-icon-color--hover: var(--color-accent-red-1);
+    --tag-light-red-text-color--default: var(--color-accent-red-1);
+    --tag-light-red-text-color--hover: var(--color-accent-red-1);
+    --tag-light-yellow-bg-color--default: var(--color-accent-yellow-7);
+    --tag-light-yellow-bg-color--hover: var(--color-accent-yellow-8);
+    --tag-light-yellow-icon-color--default: var(--color-accent-yellow-1);
+    --tag-light-yellow-icon-color--hover: var(--color-accent-yellow-1);
+    --tag-light-yellow-text-color--default: var(--color-accent-yellow-1);
+    --tag-light-yellow-text-color--hover: var(--color-accent-yellow-1);
+    --toast-danger-bg-color--default: var(--color-accent-red-3);
+    --toast-danger-border-color--default: var(--color-accent-red-7);
+    --toast-danger-close-color--default: var(--color-accent-red-7);
+    --toast-danger-close-color--hover: var(--color-accent-red-10);
+    --toast-danger-icon-color--default: var(--color-accent-red-7);
+    --toast-danger-text-color--default: var(--color-accent-red-11);
+    --toast-default-bg-color--default: var(--color-surface-6);
+    --toast-default-border-color--default: #5d5a9f;
+    --toast-default-close-color--default: var(--color-text-tertiary);
+    --toast-default-close-color--hover: var(--color-text-secondary);
+    --toast-default-icon-color--default: var(--color-text-accent);
+    --toast-default-text-color--default: var(--color-text-secondary);
+    --toast-info-bg-color--default: var(--color-accent-blue-3);
+    --toast-info-border-color--default: var(--color-accent-blue-7);
+    --toast-info-close-color--default: var(--color-accent-blue-7);
+    --toast-info-close-color--hover: var(--color-accent-blue-10);
+    --toast-info-icon-color--default: var(--color-accent-blue-7);
+    --toast-info-text-color--default: var(--color-accent-blue-11);
+    --toast-success-bg-color--default: var(--color-accent-green-3);
+    --toast-success-border-color--default: var(--color-accent-green-7);
+    --toast-success-close-color--default: var(--color-accent-green-7);
+    --toast-success-close-color--hover: var(--color-accent-green-10);
+    --toast-success-icon-color--default: var(--color-accent-green-7);
+    --toast-success-text-color--default: var(--color-accent-green-11);
+    --toast-warning-bg-color--default: var(--color-accent-yellow-3);
+    --toast-warning-border-color--default: var(--color-accent-yellow-7);
+    --toast-warning-close-color--default: var(--color-accent-yellow-7);
+    --toast-warning-close-color--hover: var(--color-accent-yellow-10);
+    --toast-warning-icon-color--default: var(--color-accent-yellow-7);
+    --toast-warning-text-color--default: var(--color-accent-yellow-11);
+    --tooltip-bg-color--default: var(--color-surface-8);
+    --tooltip-text-color--default: var(--color-text-primary);
+  }
+}

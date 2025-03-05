@@ -29,25 +29,4 @@
     --meta-item-color: var(--meta-item-icon-color--default);
     --meta-item-icon-color: var(--meta-item-text-color--default);
   }
-
-  /* TOKENS */
-  :root {
-    --meta-item-icon-color--default: var(--color-text-tertiary);
-    --meta-item-text-color--default: var(--color-text-tertiary);
-
-    /* 16 */
-    --meta-item-16-font-size: var(--font-size-body-lg, 1rem);
-    --meta-item-16-icon-width: 1rem;
-    --meta-item-16-icon-height: 1rem;
-
-    /* 14 */
-    --meta-item-14-font-size: var(--font-size-body-md, 0.875rem);
-    --meta-item-14-icon-width: 1rem;
-    --meta-item-14-icon-height: 1rem;
-
-    /* 12 */
-    --meta-item-12-font-size: var(--font-size-body-sm, 0.75rem);
-    --meta-item-12-icon-width: 0.875rem;
-    --meta-item-12-icon-height: 0.875rem;
-  }
 }

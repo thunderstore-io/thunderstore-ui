@@ -2,33 +2,25 @@
   /* VARIANTS STATELESS */
   .breadcrumbs__outer:where(.breadcrumbs__outer--variant--default) {
     --breadcrumbs__outer-background-color: var(
-      --breadcrumbs__outer-background-color--default
+      --breadcrumb-item-bg-color--default
     );
 
     &:where(:hover) {
       --breadcrumbs__outer-background-color: var(
-        --breadcrumbs__outer-background-color--hover
+        --breadcrumb-item-bg-color--hover
       );
     }
   }
 
   .breadcrumbs__outerend:where(.breadcrumbs__outerend--variant--default) {
     --breadcrumbs__outer-background-color: var(
-      --breadcrumbs__outer-background-color--hover
+      --breadcrumb-item-bg-color--hover
     );
   }
 
   .breadcrumbs__innerend:where(.breadcrumbs__innerend--variant--default) {
     --breadcrumbs__innerend-text-color: var(
-      --breadcrumbs__innerend-text-color--default
+      --breadcrumb-item-text-color--current
     );
-  }
-
-  /* TOKENS */
-  :root {
-    --breadcrumbs__outer-background-color--default: var(--color-surface-6);
-    --breadcrumbs__outer-background-color--hover: var(--color-surface-8);
-    --breadcrumbs__outerend-background-color--default: var(--color-surface-8);
-    --breadcrumbs__innerend-text-color--default: var(--color-text-primary);
   }
 }

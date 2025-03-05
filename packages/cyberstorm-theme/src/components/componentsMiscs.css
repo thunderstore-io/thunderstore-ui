@@ -1,0 +1,15 @@
+@layer theme-components-miscs {
+  /* These variables are copied from Figma with the plugin variables2css */
+  :root {
+    --card-package-shared-transition: ease-out var(--animation-duration-xs);
+    --card-package-shared-focus-outline: 0.2rem solid var(--color-cyber-green-5);
+    --card-package-shared-focus-outline-offset: var(--space-8);
+    --card-package-card-hover-box-shadow: 0px 0px 4px 0px rgb(0 0 0 / 0.4),
+      0px 6px 8px 0px rgb(0 0 0 / 0.5);
+    --card-package-fullwidth-hover-box-shadow: 0px 0px 4px 0px rgb(0 0 0 / 0.4),
+      0px 6px 8px 0px rgb(0 0 0 / 0.5);
+    --card-package-secondary-hover-box-shadow: 0px 12px 24px 5px
+      rgb(0 0 0 / 0.65);
+    --code-input-transition--default: ease-out var(--animation-duration-xs);
+  }
+}
