@@ -44,7 +44,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         ref={forwardedRef}
         // TODO: Remove this prop when community page is deployed
         // OR there is someway to pass this prop in the needed places. e.g. CardCommunity
-        reloadDocument
+        // reloadDocument
       >
         {children}
       </RemixLink>
