@@ -129,7 +129,7 @@
 
   /* Description */
   .card-package__description {
-    /* width: 100%; */
+    width: 100%;
     color: var(--card-package--description-color);
     font-weight: var(--card-package--description-font-weight);
     font-size: var(--card-package--description-font-size);

@@ -270,6 +270,7 @@
 
     .manager-ad__wrapper {
       width: 100%;
+      padding: unset;
     }
 
     .footnote__inner {
