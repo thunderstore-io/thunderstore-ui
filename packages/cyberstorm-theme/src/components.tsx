@@ -131,3 +131,7 @@ export {
   type AdContainerVariants,
   AdContainerVariantsList,
 } from "./components/AdContainer/AdContainer";
+export {
+  type CardPackageVariants,
+  CardPackageVariantsList,
+} from "./components/CardPackage/CardPackage";
