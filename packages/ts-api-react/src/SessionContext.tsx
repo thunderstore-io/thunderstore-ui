@@ -237,7 +237,14 @@ export const updateCurrentUser = async (
     customGetConfig
       ? customGetConfig
       : (domain?: string) => getConfig(_storage, domain),
-    customClearSession ? customClearSession : () => clearSession(_storage)
+    customClearSession
+      ? customClearSession
+      : () => {
+          // This function gets called when the dapper getCurrentUser gets 401 as a response
+          clearSession(_storage);
+          // We want to clear the sessionid cookie if it's invalid.
+          clearCookies();
+        }
   );
   const currentUser = await dapper.getCurrentUser();
   storeCurrentUser(_storage, currentUser);
