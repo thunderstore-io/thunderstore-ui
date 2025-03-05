@@ -277,5 +277,9 @@
       flex-direction: column;
       align-items: center;
     }
+
+    .footer__copyright {
+      text-align: center;
+    }
   }
 }
