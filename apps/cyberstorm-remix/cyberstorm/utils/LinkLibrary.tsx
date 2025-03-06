@@ -42,9 +42,15 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         {...fProps}
         className={className}
         ref={forwardedRef}
-        // TODO: Remove this prop when community page is deployed
-        // OR there is someway to pass this prop in the needed places. e.g. CardCommunity
-        // reloadDocument
+        // TODO: Remove this when the site is deployed to full use. This here only to correct the link behaviour
+        // in "https://thunderstore.io/communities/" page as it's a Remix page that links to Django pages directly.
+        // Linking to Django pages wouldn't be a problem if there were not inconsistent expectations between the new. subdomain
+        // and the subdomainless Remix pages that are served. (At the time of writing it's only "https://thunderstore.io/communities/")
+        // For simplicity and time saving the new. subdomain is hardcoded here. If that subdomain is changed; this should be updated too.
+        reloadDocument={
+          typeof window !== "undefined" &&
+          !window.location.hostname.startsWith("new.")
+        }
       >
         {children}
       </RemixLink>
