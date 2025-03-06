@@ -160,7 +160,6 @@
       blockquote {
         display: flex;
         gap: 0;
-        align-items: center;
       }
     }
 
