@@ -6,6 +6,7 @@ type rootLoaderType = {
     envStuff: {
       ENV: {
         PUBLIC_API_URL?: string;
+        PUBLIC_AUTH_URL?: string;
         PUBLIC_CLIENT_SENTRY_DSN?: string;
         PUBLIC_SITE_URL?: string;
       };
@@ -20,6 +21,8 @@ export const isRootLoaderData = (obj: unknown): obj is rootLoaderType =>
   isRecord(obj.root.envStuff.ENV) &&
   (typeof obj.root.envStuff.ENV.PUBLIC_API_URL === "string" ||
     typeof obj.root.envStuff.ENV.PUBLIC_API_URL === "undefined") &&
+  (typeof obj.root.envStuff.ENV.PUBLIC_AUTH_URL === "string" ||
+    typeof obj.root.envStuff.ENV.PUBLIC_AUTH_URL === "undefined") &&
   (typeof obj.root.envStuff.ENV.PUBLIC_CLIENT_SENTRY_DSN === "string" ||
     typeof obj.root.envStuff.ENV.PUBLIC_CLIENT_SENTRY_DSN === "undefined") &&
   (typeof obj.root.envStuff.ENV.PUBLIC_SITE_URL === "string" ||
@@ -28,6 +31,7 @@ export const isRootLoaderData = (obj: unknown): obj is rootLoaderType =>
 export type publicEnvVariablesKeys =
   | "SITE_URL"
   | "API_URL"
+  | "AUTH_URL"
   | "CLIENT_SENTRY_DSN";
 
 export type PublicPrefix<envVariable extends string> = `PUBLIC_${envVariable}`;

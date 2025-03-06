@@ -97,6 +97,7 @@ jobs:
       NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
       PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
       PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+      PUBLIC_AUTH_URL: ${{ vars.NEXT_PUBLIC_AUTH_URL }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node ${{ needs.get-node-version.outputs.node-version }}
