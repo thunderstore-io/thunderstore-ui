@@ -160,7 +160,7 @@ export default function Versions() {
           rows={tableRows}
           sortDirection={NewTableSort.ASC}
           csModifiers={["alignLastColumnRight"]}
-          customSortCompare={{ 1: rowSemverCompare }}
+          customSortCompare={{ 0: rowSemverCompare }}
         />
       </div>
     </div>
