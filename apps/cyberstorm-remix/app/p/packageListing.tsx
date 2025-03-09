@@ -479,6 +479,8 @@ export default function PackageListing() {
             csVariant="accent"
             csSize="big"
             rootClasses="package-listing-sidebar__install"
+            primitiveType="link"
+            href={listing.install_url}
           >
             <NewIcon csMode="inline">
               <ThunderstoreLogo />
