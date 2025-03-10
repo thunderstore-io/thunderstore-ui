@@ -39,5 +39,6 @@ yarn workspace @thunderstore/cyberstorm-remix dev --port 3000 --host 0.0.0.0
 ```
 PUBLIC_SITE_URL=http://thunderstore.temp
 PUBLIC_API_URL=http://thunderstore.temp:81
+PUBLIC_AUTH_URL=http://auth.thunderstore.temp:81
 ```
 6. Run the Nimbus project normally
