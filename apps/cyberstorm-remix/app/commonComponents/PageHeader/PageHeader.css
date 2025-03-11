@@ -101,6 +101,7 @@
 
   .page-header__meta-item {
     display: flex;
+    flex-wrap: nowrap;
     gap: var(--gap-xs);
     align-items: center;
     font-weight: var(--font-weight-bold);
