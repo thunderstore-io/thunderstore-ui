@@ -7,6 +7,8 @@
   }
 
   .package-search__sidebar {
+    position: sticky;
+    top: calc(var(--header-height) + 1rem);
     display: flex;
     flex-direction: column;
     gap: var(--gap-xs);
