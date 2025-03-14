@@ -34,7 +34,7 @@
   .layout__ads-inner {
     position: sticky;
     top: var(--header-height);
-    gap: var(--gap-md);
+    gap: var(--gap-xl);
     align-items: center;
     justify-content: center;
     padding: var(--space-16) 0 0 0;
