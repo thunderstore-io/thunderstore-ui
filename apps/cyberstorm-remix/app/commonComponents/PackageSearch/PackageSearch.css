@@ -145,6 +145,8 @@
     }
 
     .package-search__sidebar {
+      position: relative;
+      top: 0;
       width: 100%;
     }
 
@@ -160,6 +162,10 @@
 
     .package-search__grid {
       grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    }
+
+    .package-search__content {
+      align-self: stretch;
     }
   }
 
