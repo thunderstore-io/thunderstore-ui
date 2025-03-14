@@ -7,6 +7,7 @@ import {
   // useRevalidator,
 } from "@remix-run/react";
 import {
+  Drawer,
   Heading,
   // Modal,
   NewBreadCrumbs,
@@ -30,9 +31,7 @@ import {
   faWarning,
   faThumbTack,
   faCodeMerge,
-  faScrewdriverWrench,
-  faUpload,
-  faFile,
+  faCaretRight,
 } from "@fortawesome/free-solid-svg-icons";
 import TeamMembers from "./components/TeamMembers/TeamMembers";
 import { useEffect, useRef, useState } from "react";
@@ -56,7 +55,6 @@ import {
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { OutletContextShape } from "~/root";
 import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
-import { TooltipWrapper } from "@thunderstore/cyberstorm/src/primitiveComponents/utils/utils";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -277,6 +275,194 @@ export default function PackageListing() {
     config: config,
   });
 
+  const actions = (
+    <div className="package-listing-sidebar__actions">
+      <NewButton
+        primitiveType="link"
+        href={listing.download_url}
+        csVariant="secondary"
+        rootClasses="package-listing-sidebar__download"
+      >
+        <NewIcon csMode="inline" noWrapper>
+          <FontAwesomeIcon icon={faDownload} />
+        </NewIcon>
+        Download
+      </NewButton>
+      {team.donation_link ? (
+        <NewButton
+          primitiveType="link"
+          href={team.donation_link}
+          csVariant="secondary"
+          csSize="big"
+          csModifiers={["only-icon"]}
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faHandHoldingHeart} />
+          </NewIcon>
+        </NewButton>
+      ) : null}
+      <NewButton
+        primitiveType="button"
+        onClick={() =>
+          likeAction(
+            isLiked,
+            listing.namespace,
+            listing.name,
+            Boolean(currentUser?.username)
+          )
+        }
+        tooltipText="Like"
+        csVariant={isLiked ? "success" : "secondary"}
+        csSize="big"
+        csModifiers={["only-icon"]}
+      >
+        <NewIcon csMode="inline" noWrapper>
+          <FontAwesomeIcon icon={faThumbsUp} />
+        </NewIcon>
+      </NewButton>
+      {/* <ReportButton onClick={TODO} /> */}
+    </div>
+  );
+
+  const packageMeta = (
+    <div className="package-listing-sidebar__meta">
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">Last Updated</div>
+        <div className="package-listing-sidebar__content">{lastUpdated}</div>
+      </div>
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">First Uploaded</div>
+        <div className="package-listing-sidebar__content">{firstUploaded}</div>
+      </div>
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">Downloads</div>
+        <div className="package-listing-sidebar__content">
+          {formatInteger(listing.download_count)}
+        </div>
+      </div>
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">Likes</div>
+        <div className="package-listing-sidebar__content">
+          {formatInteger(listing.rating_count)}
+        </div>
+      </div>
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">Size</div>
+        <div className="package-listing-sidebar__content">
+          {formatFileSize(listing.size)}
+        </div>
+      </div>
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">Dependency string</div>
+        <div className="package-listing-sidebar__content">
+          <div className="package-listing-sidebar__dependency-string-wrapper">
+            <span
+              title={listing.full_version_name}
+              className="package-listing-sidebar__dependency-string"
+            >
+              {listing.full_version_name}
+            </span>
+            <CopyButton text={listing.full_version_name} />
+          </div>
+        </div>
+      </div>
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">Dependants</div>
+        <div className="package-listing-sidebar__content">
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="PackageDependants"
+            community={listing.community_identifier}
+            namespace={listing.namespace}
+            package={listing.name}
+            csVariant="cyber"
+          >
+            {listing.dependant_count} other mods
+          </NewLink>
+        </div>
+      </div>
+    </div>
+  );
+
+  const packageBoxes = (
+    <>
+      {mappedPackageTagList.length > 0 ||
+      listing.is_pinned ||
+      listing.is_deprecated ||
+      listing.is_nsfw ||
+      isNew ||
+      isUpdated ? (
+        <div className="package-listing-sidebar__categories">
+          <div className="package-listing-sidebar__header">
+            <Heading csLevel="4" csSize="4">
+              Categories
+            </Heading>
+          </div>
+          {mappedPackageTagList.length > 0 ? (
+            <div className="package-listing-sidebar__body">
+              {mappedPackageTagList}
+            </div>
+          ) : null}
+          {listing.is_pinned ||
+          listing.is_deprecated ||
+          listing.is_nsfw ||
+          isNew ||
+          isUpdated ? (
+            <div className="package-listing-sidebar__body">
+              {listing.is_pinned ? (
+                <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faThumbTack} />
+                  </NewIcon>
+                  Pinned
+                </NewTag>
+              ) : null}
+              {listing.is_deprecated ? (
+                <NewTag
+                  csSize="small"
+                  csModifiers={["dark"]}
+                  csVariant="yellow"
+                >
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faWarning} />
+                  </NewIcon>
+                  Deprecated
+                </NewTag>
+              ) : null}
+              {listing.is_nsfw ? (
+                <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faLips} />
+                  </NewIcon>
+                  NSFW
+                </NewTag>
+              ) : null}
+              {isNew ? (
+                <NewTag csSize="small" csModifiers={["dark"]} csVariant="green">
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faSparkles} />
+                  </NewIcon>
+                  New
+                </NewTag>
+              ) : null}
+              {isUpdated ? (
+                <NewTag csSize="small" csVariant="green">
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faCodeMerge} />
+                  </NewIcon>
+                  Updated
+                </NewTag>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+      {listing.team.members.length > 0 ? (
+        <TeamMembers listing={listing} domain={domain} />
+      ) : null}
+    </>
+  );
+
   return (
     <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
@@ -358,145 +544,33 @@ export default function PackageListing() {
                 ? managementTools
                 : null}
             </div> */}
-
-          <div className="package-listing__meta">
-            <div className="package-listing__usage-actions">
-              <div className="package-listing__install-download">
-                <NewButton
-                  csVariant="accent"
-                  csSize="big"
-                  // rootClasses="package-listing-sidebar__install"'
-                  rootClasses="package-listing__action-button"
-                  primitiveType="link"
-                  href={listing.install_url}
-                >
-                  <NewIcon csMode="inline">
-                    <ThunderstoreLogo />
-                  </NewIcon>
-                  Install
-                </NewButton>
-                <NewButton
-                  primitiveType="link"
-                  href={listing.download_url}
-                  csVariant="secondary"
-                  // rootClasses="package-listing-sidebar__download"
-                  rootClasses="package-listing__action-button"
-                >
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faDownload} />
-                  </NewIcon>
-                  Download
-                </NewButton>
-              </div>
-              {team.donation_link ? (
-                <NewButton
-                  primitiveType="link"
-                  href={team.donation_link}
-                  csVariant="special"
-                  rootClasses="package-listing__action-button"
-                >
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faHandHoldingHeart} />
-                  </NewIcon>
-                  Support creator
-                </NewButton>
-              ) : null}
-              <span className="package-listing__dependency_string">
-                {listing.full_version_name}
-                <CopyButton text={listing.full_version_name} />
-              </span>
-            </div>
-            <div className="package-listing__interaction-and-data">
-              <div className="package-listing__package-data">
-                <div>
-                  <TooltipWrapper
-                    tooltipText={"Last updated"}
-                    tooltipSide="bottom"
-                  >
-                    <span>
-                      <NewIcon csMode="inline">
-                        <FontAwesomeIcon icon={faScrewdriverWrench} />
-                      </NewIcon>
-                      {lastUpdated}
-                    </span>
-                  </TooltipWrapper>
-                  <TooltipWrapper tooltipText={"Uploaded"} tooltipSide="bottom">
-                    <span>
-                      <NewIcon csMode="inline">
-                        <FontAwesomeIcon icon={faUpload} />
-                      </NewIcon>
-                      {firstUploaded}
-                    </span>
-                  </TooltipWrapper>
-                </div>
-                <div>
-                  <TooltipWrapper
-                    tooltipText={"Downloads"}
-                    tooltipSide="bottom"
-                  >
-                    <span>
-                      <NewIcon csMode="inline">
-                        <FontAwesomeIcon icon={faDownload} />
-                      </NewIcon>
-                      {formatInteger(listing.download_count)}
-                    </span>
-                  </TooltipWrapper>
-                  <TooltipWrapper tooltipText={"Likes"} tooltipSide="bottom">
-                    <span>
-                      <NewIcon csMode="inline">
-                        <FontAwesomeIcon icon={faThumbsUp} />
-                      </NewIcon>
-                      {formatInteger(listing.rating_count)}
-                    </span>
-                  </TooltipWrapper>
-                </div>
-                <div>
-                  <TooltipWrapper
-                    tooltipText={"Package size"}
-                    tooltipSide="bottom"
-                  >
-                    <span>
-                      <NewIcon csMode="inline">
-                        <FontAwesomeIcon icon={faFile} />
-                      </NewIcon>
-                      {formatFileSize(listing.size)}
-                    </span>
-                  </TooltipWrapper>
-                </div>
-              </div>
-              <div className="package-listing__package-interactions">
-                <NewButton
-                  primitiveType="button"
-                  onClick={() =>
-                    likeAction(
-                      isLiked,
-                      listing.namespace,
-                      listing.name,
-                      Boolean(currentUser?.username)
-                    )
-                  }
-                  tooltipText="Like"
-                  csVariant={isLiked ? "success" : "secondary"}
-                >
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faThumbsUp} />
-                  </NewIcon>
-                </NewButton>
-                {/* <ReportButton onClick={TODO} /> */}
-                <NewButton
-                  primitiveType="cyberstormLink"
-                  linkId="PackageDependants"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  csVariant="secondary"
-                >
-                  Dependants {listing.dependant_count}
-                </NewButton>
-              </div>
-            </div>
+          <div className="package-listing__narrow-actions">
+            <button
+              {...{
+                popovertarget: "packageDetailDrawer",
+                popovertargetaction: "open",
+              }}
+              className="button button--variant--secondary button--size--medium package-listing__drawer-button"
+            >
+              Details
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faCaretRight} />
+              </NewIcon>
+            </button>
+            <Drawer
+              popoverId="packageDetailDrawer"
+              headerContent={
+                <Heading csLevel="3" csSize="3">
+                  Details
+                </Heading>
+              }
+              rootClasses="package-listing__drawer"
+            >
+              {packageMeta}
+              {packageBoxes}
+            </Drawer>
+            {actions}
           </div>
-
           <div className="package-listing__content">
             <Tabs
               tabItems={[
@@ -618,93 +692,23 @@ export default function PackageListing() {
           </div>
         </section>
         <aside className="package-listing-sidebar">
-          {mappedPackageTagList.length > 0 ||
-          listing.is_pinned ||
-          listing.is_deprecated ||
-          listing.is_nsfw ||
-          isNew ||
-          isUpdated ? (
-            <div className="package-listing-sidebar__categories">
-              <div className="package-listing-sidebar__header">
-                <Heading csLevel="4" csSize="4">
-                  Categories
-                </Heading>
-              </div>
-              {mappedPackageTagList.length > 0 ? (
-                <div className="package-listing-sidebar__body">
-                  {mappedPackageTagList}
-                </div>
-              ) : null}
-              {listing.is_pinned ||
-              listing.is_deprecated ||
-              listing.is_nsfw ||
-              isNew ||
-              isUpdated ? (
-                <div className="package-listing-sidebar__body">
-                  {listing.is_pinned ? (
-                    <NewTag
-                      csSize="small"
-                      csModifiers={["dark"]}
-                      csVariant="blue"
-                    >
-                      <NewIcon noWrapper csMode="inline">
-                        <FontAwesomeIcon icon={faThumbTack} />
-                      </NewIcon>
-                      Pinned
-                    </NewTag>
-                  ) : null}
-                  {listing.is_deprecated ? (
-                    <NewTag
-                      csSize="small"
-                      csModifiers={["dark"]}
-                      csVariant="yellow"
-                    >
-                      <NewIcon noWrapper csMode="inline">
-                        <FontAwesomeIcon icon={faWarning} />
-                      </NewIcon>
-                      Deprecated
-                    </NewTag>
-                  ) : null}
-                  {listing.is_nsfw ? (
-                    <NewTag
-                      csSize="small"
-                      csModifiers={["dark"]}
-                      csVariant="pink"
-                    >
-                      <NewIcon noWrapper csMode="inline">
-                        <FontAwesomeIcon icon={faLips} />
-                      </NewIcon>
-                      NSFW
-                    </NewTag>
-                  ) : null}
-                  {isNew ? (
-                    <NewTag
-                      csSize="small"
-                      csModifiers={["dark"]}
-                      csVariant="green"
-                    >
-                      <NewIcon noWrapper csMode="inline">
-                        <FontAwesomeIcon icon={faSparkles} />
-                      </NewIcon>
-                      New
-                    </NewTag>
-                  ) : null}
-                  {isUpdated ? (
-                    <NewTag csSize="small" csVariant="green">
-                      <NewIcon noWrapper csMode="inline">
-                        <FontAwesomeIcon icon={faCodeMerge} />
-                      </NewIcon>
-                      Updated
-                    </NewTag>
-                  ) : null}
-                </div>
-              ) : null}
-            </div>
-          ) : null}
-
-          {listing.team.members.length > 0 ? (
-            <TeamMembers listing={listing} domain={domain} />
-          ) : null}
+          <NewButton
+            csVariant="accent"
+            csSize="big"
+            rootClasses="package-listing-sidebar__install"
+            primitiveType="link"
+            href={listing.install_url}
+          >
+            <NewIcon csMode="inline">
+              <ThunderstoreLogo />
+            </NewIcon>
+            Install
+          </NewButton>
+          <div className="package-listing-sidebar__main">
+            {actions}
+            {packageMeta}
+          </div>
+          {packageBoxes}
         </aside>
       </div>
     </div>

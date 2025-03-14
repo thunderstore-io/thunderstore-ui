@@ -70,6 +70,7 @@ export { type PrimitiveComponentDefaultProps } from "./primitiveComponents/utils
 
 // newComponents
 export { Menu } from "./newComponents/Menu/Menu";
+export { Drawer } from "./newComponents/Drawer/Drawer";
 export { Modal } from "./newComponents/Modal/Modal";
 export { Heading } from "./newComponents/Heading/Heading";
 export { CardCommunity } from "./newComponents/Card/CardCommunity/CardCommunity";
