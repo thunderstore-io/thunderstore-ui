@@ -6,6 +6,7 @@
     max-width: 100%;
     min-height: 50px;
     overflow-x: scroll;
+    scrollbar-width: none;
   }
 
   .tabs {
