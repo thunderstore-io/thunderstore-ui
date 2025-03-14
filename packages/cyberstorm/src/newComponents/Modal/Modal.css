@@ -10,6 +10,11 @@
 
     box-shadow: var(--modal-box-shadow);
     transform: translate(-50%, -50%);
+
+    &::backdrop {
+      background: rgb(0 0 0 / 0.6);
+      backdrop-filter: blur(10px);
+    }
   }
 
   .modal__content {

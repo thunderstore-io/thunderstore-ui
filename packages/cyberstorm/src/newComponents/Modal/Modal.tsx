@@ -15,11 +15,11 @@ interface Props extends Omit<FrameModalProps, "primitiveType"> {
 
 // TODO: Add storybook story
 export function Modal(props: Props) {
-  const { children, csVariant = "default", csSize = "medium" } = props;
+  const { children, csVariant = "default", csSize = "medium", trigger } = props;
 
   return (
     <>
-      {props.trigger}
+      {trigger}
       <Frame
         primitiveType="modal"
         popoverId={props.popoverId}
