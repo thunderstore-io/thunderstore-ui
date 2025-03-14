@@ -76,6 +76,7 @@
     display: flex;
     flex: 1 1 0;
     flex-flow: row wrap;
+    gap: var(--gap-xxs);
     justify-content: space-between;
   }
 
@@ -116,6 +117,7 @@
     display: flex;
     flex: 1 1 0;
     flex-direction: row-reverse;
+    gap: var(--gap-xxs);
   }
 
   .package-listing__content {

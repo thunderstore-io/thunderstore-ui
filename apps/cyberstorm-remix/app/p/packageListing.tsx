@@ -480,6 +480,16 @@ export default function PackageListing() {
                   csVariant={isLiked ? "success" : "secondary"}
                 />
                 {/* <ReportButton onClick={TODO} /> */}
+                <NewButton
+                  primitiveType="cyberstormLink"
+                  linkId="PackageDependants"
+                  community={listing.community_identifier}
+                  namespace={listing.namespace}
+                  package={listing.name}
+                  csVariant="secondary"
+                >
+                  Dependants {listing.dependant_count}
+                </NewButton>
               </div>
             </div>
           </div>
