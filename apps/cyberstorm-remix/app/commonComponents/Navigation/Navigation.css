@@ -121,6 +121,7 @@
     flex-direction: column;
     gap: 2rem;
     align-items: center;
+    width: min-content;
   }
 
   .navigation-login__logo {
@@ -151,6 +152,7 @@
     color: #f5f5f6;
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-md);
+    text-wrap: nowrap;
   }
 
   .navigation-login__discord {
@@ -166,6 +168,7 @@
   }
 
   .navigation-login__legal {
+    align-self: stretch;
     color: #8683be;
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-sm);
