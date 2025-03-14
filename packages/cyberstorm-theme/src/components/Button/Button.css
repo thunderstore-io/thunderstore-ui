@@ -16,6 +16,7 @@
     --button-border-radius: var(--button-xs-border-radius);
     --button-font-size: var(--button-xs-font-size);
     --button-gap: var(--button-xs-gap);
+    --button-icon-inline-size: var(--button-xs-icon-inline-size);
   }
 
   .button:where(.button--size--small) {
@@ -25,6 +26,7 @@
     --button-border-radius: var(--button-sm-border-radius);
     --button-font-size: var(--button-sm-font-size);
     --button-gap: var(--button-sm-gap);
+    --button-icon-inline-size: var(--button-sm-icon-inline-size);
   }
 
   .button:where(.button--size--medium) {
@@ -34,6 +36,7 @@
     --button-border-radius: var(--button-md-border-radius);
     --button-font-size: var(--button-md-font-size);
     --button-gap: var(--button-md-gap);
+    --button-icon-inline-size: var(--button-md-icon-inline-size);
   }
 
   .button:where(.button--size--big) {
@@ -43,59 +46,70 @@
     --button-border-radius: var(--button-lg-border-radius);
     --button-font-size: var(--button-lg-font-size);
     --button-gap: var(--button-lg-gap);
+    --button-icon-inline-size: var(--button-lg-icon-inline-size);
   }
 
   /* VARIANTS DEFAULT STATE */
   .button:where(.button--variant--primary) {
     --button-background-color: var(--button-primary-bg-color--default);
     --button-text-color: var(--button-primary-text-color--default);
+    --button-icon-color: var(--button-primary-icon-color--default);
 
     &:where(:hover),
     &[data-state="open"] {
       --button-background-color: var(--button-primary-bg-color--hover);
       --button-text-color: var(--button-primary-text-color--hover);
+      --button-icon-color: var(--button-primary-icon-color--hover);
     }
 
     &:where(:active) {
       --button-background-color: var(--button-primary-bg-color--active);
       --button-text-color: var(--button-primary-text-color--active);
+      --button-icon-color: var(--button-primary-icon-color--active);
     }
   }
 
   .button:where(.button--variant--secondary) {
     --button-background-color: var(--button-secondary-bg-color--default);
     --button-text-color: var(--button-secondary-text-color--default);
+    --button-icon-color: var(--button-secondary-icon-color--default);
 
     &:where(:hover),
     &[data-state="open"] {
       --button-background-color: var(--button-secondary-bg-color--hover);
       --button-text-color: var(--button-secondary-text-color--hover);
+      --button-icon-color: var(--button-secondary-icon-color--hover);
     }
 
     &:where(:active) {
       --button-background-color: var(--button-secondary-bg-color--active);
       --button-text-color: var(--button-secondary-text-color--active);
+      --button-icon-color: var(--button-secondary-icon-color--active);
     }
   }
 
   .button:where(.button--variant--accent) {
     --button-background-color: var(--button-accent-bg-color--default);
     --button-text-color: var(--button-accent-text-color--default);
+    --button-icon-color: var(--button-accent-icon-color--default);
 
     &:where(:hover),
     &[data-state="open"] {
       --button-background-color: var(--button-accent-bg-color--hover);
       --button-text-color: var(--button-accent-text-color--hover);
+      --button-icon-color: var(--button-accent-icon-color--hover);
     }
 
     &:where(:active) {
       --button-background-color: var(--button-accent-bg-color--active);
       --button-text-color: var(--button-accent-text-color--active);
+      --button-icon-color: var(--button-accent-icon-color--active);
     }
   }
 
   .button:where(.button--variant--special) {
     --button-text-color: var(--button-special-text-color--default);
+    --button-icon-color: var(--button-special-icon-color--default);
     --button-border: var(--button-special-border--default);
     --button-border-color: var(--button-special-border-color--default);
 
@@ -104,6 +118,7 @@
     &:where(:hover),
     &[data-state="open"] {
       --button-text-color: var(--button-special-text-color--hover);
+      --button-icon-color: var(--button-special-icon-color--hover);
       --button-border: var(--button-special-border--hover);
       --button-border-color: var(--button-special-border-color--hover);
 
@@ -112,6 +127,7 @@
 
     &:where(:active) {
       --button-text-color: var(--button-special-text-color--active);
+      --button-icon-color: var(--button-special-icon-color--active);
       --button-border: var(--button-special-border--active);
       --button-border-color: var(--button-special-border-color--active);
 
@@ -122,64 +138,76 @@
   .button:where(.button--variant--success) {
     --button-background-color: var(--button-success-bg-color--default);
     --button-text-color: var(--button-success-text-color--default);
+    --button-icon-color: var(--button-success-icon-color--default);
 
     &:where(:hover),
     &[data-state="open"] {
       --button-background-color: var(--button-success-bg-color--hover);
       --button-text-color: var(--button-success-text-color--hover);
+      --button-icon-color: var(--button-success-icon-color--hover);
     }
 
     &:where(:active) {
       --button-background-color: var(--button-success-bg-color--active);
       --button-text-color: var(--button-success-text-color--active);
+      --button-icon-color: var(--button-success-icon-color--active);
     }
   }
 
   .button:where(.button--variant--info) {
     --button-background-color: var(--button-info-bg-color--default);
     --button-text-color: var(--button-info-text-color--default);
+    --button-icon-color: var(--button-info-icon-color--default);
 
     &:where(:hover),
     &[data-state="open"] {
       --button-background-color: var(--button-info-bg-color--hover);
       --button-text-color: var(--button-info-text-color--hover);
+      --button-icon-color: var(--button-info-icon-color--hover);
     }
 
     &:where(:active) {
       --button-background-color: var(--button-info-bg-color--active);
       --button-text-color: var(--button-info-text-color--active);
+      --button-icon-color: var(--button-info-icon-color--active);
     }
   }
 
   .button:where(.button--variant--warning) {
     --button-background-color: var(--button-warning-bg-color--default);
     --button-text-color: var(--button-warning-text-color--default);
+    --button-icon-color: var(--button-warning-icon-color--default);
 
     &:where(:hover),
     &[data-state="open"] {
       --button-background-color: var(--button-warning-bg-color--hover);
       --button-text-color: var(--button-warning-text-color--hover);
+      --button-icon-color: var(--button-warning-icon-color--hover);
     }
 
     &:where(:active) {
       --button-background-color: var(--button-warning-bg-color--active);
       --button-text-color: var(--button-warning-text-color--active);
+      --button-icon-color: var(--button-warning-icon-color--active);
     }
   }
 
   .button:where(.button--variant--danger) {
     --button-background-color: var(--button-danger-bg-color--default);
     --button-text-color: var(--button-danger-text-color--default);
+    --button-icon-color: var(--button-danger-icon-color--default);
 
     &:where(:hover),
     &[data-state="open"] {
       --button-background-color: var(--button-danger-bg-color--hover);
       --button-text-color: var(--button-danger-text-color--hover);
+      --button-icon-color: var(--button-danger-icon-color--hover);
     }
 
     &:where(:active) {
       --button-background-color: var(--button-danger-bg-color--active);
       --button-text-color: var(--button-danger-text-color--active);
+      --button-icon-color: var(--button-danger-icon-color--active);
     }
   }
 
@@ -199,5 +227,31 @@
   .button[disabled] {
     opacity: 0.5;
     pointer-events: none;
+  }
+
+  .button:where(.button--only-icon) {
+    &:where(.button--size--xsmall) {
+      --button-height: var(--button-xs-height);
+      --button-width: var(--button-xs-height);
+      --button-icon-inline-size: var(--button-xs-icon-inline-size--only-icon);
+    }
+
+    &:where(.button--size--small) {
+      --button-height: var(--button-sm-height);
+      --button-width: var(--button-sm-height);
+      --button-icon-inline-size: var(--button-sm-icon-inline-size--only-icon);
+    }
+
+    &:where(.button--size--medium) {
+      --button-height: var(--button-md-height);
+      --button-width: var(--button-md-height);
+      --button-icon-inline-size: var(--button-md-icon-inline-size--only-icon);
+    }
+
+    &:where(.button--size--big) {
+      --button-height: var(--button-lg-height);
+      --button-width: var(--button-lg-height);
+      --button-icon-inline-size: var(--button-lg-icon-inline-size--only-icon);
+    }
   }
 }

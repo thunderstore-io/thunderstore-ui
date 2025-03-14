@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 import "./Menu.css";
-import { NewButton } from "../..";
+import { NewButton, NewIcon } from "../..";
 import {
   FramePopoverProps,
   Frame,
@@ -9,6 +9,7 @@ import {
 import { classnames, componentClasses } from "../../utils/utils";
 import { MenuVariants } from "@thunderstore/cyberstorm-theme/src/components";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface Props extends Omit<FramePopoverProps, "primitiveType"> {
   trigger?: ReactNode;
@@ -55,11 +56,14 @@ export function Menu(props: Props) {
                 popovertargetaction: "close",
               }}
               csVariant="secondary"
-              csModifiers={["ghost"]}
+              csModifiers={["ghost", "only-icon"]}
               tooltipText="Close"
               aria-label="Close"
-              icon={faXmarkLarge}
-            />
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faXmarkLarge} />
+              </NewIcon>
+            </NewButton>
           )}
           {props.children}
         </div>

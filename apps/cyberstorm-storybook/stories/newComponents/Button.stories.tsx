@@ -7,9 +7,6 @@ import {
   ButtonModifiersList,
   ButtonSizesList,
   ButtonVariantsList,
-  IconButtonModifiersList,
-  IconButtonSizesList,
-  IconButtonVariantsList,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
 const meta = {
@@ -117,88 +114,6 @@ const Template: StoryFn<typeof NewButton> = () => {
     );
   }
 
-  function genIconButtons(isLink: boolean) {
-    const IconButtons = IconButtonSizesList.map((size) => {
-      const variantBlock = IconButtonVariantsList.map((variant) => {
-        const modifierBlock = IconButtonModifiersList.map((modifier) => {
-          return isLink ? (
-            <NewButton
-              primitiveType={"link"}
-              href="https://example.com"
-              key={`${size}-${variant}-${modifier}`}
-              csVariant={variant}
-              csSize={size}
-              csModifiers={[modifier]}
-              icon={faChevronDown}
-            />
-          ) : (
-            <NewButton
-              key={`${size}-${variant}-${modifier}`}
-              csVariant={variant}
-              csSize={size}
-              csModifiers={[modifier]}
-              icon={faChevronDown}
-            />
-          );
-        });
-        return (
-          <div
-            key={`${size}-${variant}`}
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              gap: "0.5rem",
-            }}
-          >
-            {isLink ? (
-              <NewButton
-                primitiveType={"link"}
-                href="https://example.com"
-                key={`${size}-${variant}-noModifier`}
-                csVariant={variant}
-                csSize={size}
-                icon={faChevronDown}
-              />
-            ) : (
-              <NewButton
-                key={`${size}-${variant}-noModifier`}
-                csVariant={variant}
-                csSize={size}
-                icon={faChevronDown}
-              />
-            )}
-
-            {modifierBlock}
-          </div>
-        );
-      });
-      return (
-        <div
-          key={`${size}`}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.5rem",
-          }}
-        >
-          {variantBlock}
-        </div>
-      );
-    });
-
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.5rem",
-        }}
-      >
-        {IconButtons}
-      </div>
-    );
-  }
-
   return (
     <div
       style={{
@@ -209,9 +124,7 @@ const Template: StoryFn<typeof NewButton> = () => {
       }}
     >
       {genButtons(false)}
-      {genIconButtons(false)}
       {genButtons(true)}
-      {genIconButtons(true)}
     </div>
   );
 };

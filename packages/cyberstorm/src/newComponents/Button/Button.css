@@ -5,6 +5,8 @@
     flex-direction: row;
     gap: var(--button-gap);
     align-items: center;
+    justify-content: center;
+    width: var(--button-width, unset);
 
     height: var(--button-height);
 
@@ -19,7 +21,6 @@
     font-size: var(--button-font-size);
     line-height: var(--button-line-height);
     white-space: nowrap;
-
     text-align: center;
     text-decoration: none;
     background-color: var(--button-background-color);
@@ -27,5 +28,10 @@
     user-select: none;
     padding-block: var(--button-padding-block);
     padding-inline: var(--button-padding-inline);
+
+    svg {
+      --icon-inline-size: var(--button-icon-inline-size);
+      --icon-color: var(--button-icon-color);
+    }
   }
 }
