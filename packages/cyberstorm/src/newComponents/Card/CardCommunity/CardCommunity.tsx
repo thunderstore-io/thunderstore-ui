@@ -1,7 +1,6 @@
 import {
   faBoxOpen,
   faDownload,
-  faHandSparkles,
   faFire,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +10,7 @@ import { formatInteger } from "../../../utils/utils";
 import { NewLink, NewIcon, Image, NewTag, NewMetaItem } from "../../..";
 import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
 import "./CardCommunity.css";
+import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
 
 interface Props {
   community: Community;
@@ -36,7 +36,7 @@ export function CardCommunity(props: Props) {
           {isNew ? (
             <NewTag csModifiers={["dark"]} csVariant="green" csSize="small">
               <NewIcon noWrapper csMode="inline">
-                <FontAwesomeIcon icon={faHandSparkles} />
+                <FontAwesomeIcon icon={faSparkles} />
               </NewIcon>
               New
             </NewTag>
