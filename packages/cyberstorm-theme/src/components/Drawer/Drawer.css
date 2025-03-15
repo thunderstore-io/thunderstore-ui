@@ -1,0 +1,24 @@
+@layer theme-components {
+  .drawer:where(.drawer--size--medium) {
+    --drawer-border-radius: 1.5rem 1.5rem 0rem 0rem;
+
+    .drawer__header {
+      padding: 1rem 1.5rem 0.5rem;
+    }
+
+    .drawer__header-content {
+      --drawer-header-content-padding-right: 3rem;
+      --drawer-header-content-gap: 1rem;
+    }
+
+    .drawer__content {
+      --drawer-content-padding: 1rem 1.5rem;
+      --drawer-content-gap: 1rem;
+    }
+  }
+
+  .drawer:where(.drawer--variant--primary) {
+    --drawer-border: 1px solid rgb(61 61 127 / 0.44);
+    --drawer-background: #191b38;
+  }
+}

@@ -25,3 +25,4 @@ import "./components/Pagination/Pagination.css";
 import "./components/Tabs/Tabs.css";
 import "./components/Modal/Modal.css";
 import "./components/CardPackage/CardPackage.css";
+import "./components/Drawer/Drawer.css";

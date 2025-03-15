@@ -1,23 +1,18 @@
 @layer nimbus-layout {
   .package-listing {
     display: flex;
-    flex-wrap: wrap;
     gap: var(--gap-xxxl);
     align-items: flex-start;
     align-self: stretch;
-    justify-content: center;
   }
 
   .package-listing__main {
     display: flex;
     flex: 1 0 0;
-    flex: 1 1 40rem;
     flex-direction: column;
     gap: var(--gap-xl);
     align-items: flex-start;
-    min-width: 0;
-    max-width: 70rem;
-    padding-top: var(--space-16);
+    padding-top: 1rem;
   }
 
   .package-listing__content-header {
@@ -25,99 +20,7 @@
     gap: var(--gap-xl);
     align-items: flex-start;
     align-self: stretch;
-    padding: var(--space-16);
-  }
-
-  .package-listing__meta {
-    display: flex;
-    flex: 1 1 0;
-    flex-direction: column;
-    gap: var(--gap-xs);
-    align-self: stretch;
-  }
-
-  .package-listing__usage-actions {
-    display: flex;
-    flex: 1 1 0;
-    flex-direction: column;
-    gap: var(--gap-xs);
-  }
-
-  .package-listing__install-download {
-    display: flex;
-    flex: 1 1 0;
-    flex-flow: row wrap;
-    gap: var(--gap-xs);
-    align-content: stretch;
-  }
-
-  .package-listing__action-button {
-    display: flex;
-    flex-grow: 1;
-    justify-content: center;
-    width: unset;
-  }
-
-  .package-listing__dependency_string {
-    display: inline-flex;
-    flex: 1 1 0;
-    flex-direction: row;
-    gap: var(--gap-md);
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-8);
-    border: solid 1px var(--color-surface-8);
-    border-radius: var(--radius-md);
-    color: var(--color-text-tertiary);
-    background-color: var(--color-surface-2);
-  }
-
-  .package-listing__interaction-and-data {
-    display: flex;
-    flex: 1 1 0;
-    flex-flow: row wrap;
-    gap: var(--gap-xxs);
-    justify-content: space-between;
-  }
-
-  .package-listing__package-data {
-    display: flex;
-    flex: 1 1 0;
-    flex-direction: row;
-    gap: var(--gap-xxs);
-
-    > div {
-      display: flex;
-      flex-direction: column;
-      gap: var(--gap-xxs);
-
-      > span {
-        display: inline-flex;
-        flex-wrap: nowrap;
-        gap: var(--gap-xs);
-        align-items: center;
-        padding: var(--space-8) var(--space-12);
-        border-radius: var(--radius-md);
-        color: var(--color-text-tertiary);
-        font-weight: var(--font-weight-bold);
-        font-size: var(--font-size-body-sm);
-        line-height: normal;
-        background-color: var(--color-surface-default);
-
-        --icon-color: var(--color-text-accent);
-
-        > span {
-          text-wrap: nowrap;
-        }
-      }
-    }
-  }
-
-  .package-listing__package-interactions {
-    display: flex;
-    flex: 1 1 0;
-    flex-direction: row-reverse;
-    gap: var(--gap-xxs);
+    padding: 1rem;
   }
 
   .package-listing__content {
@@ -133,8 +36,8 @@
     position: sticky;
     top: var(--header-height);
     display: flex;
-    flex: 0 0 300px;
     flex-direction: column;
+    flex-shrink: 0;
     gap: var(--gap-md);
     align-items: flex-start;
     padding-top: var(--gap-md);
@@ -257,8 +160,29 @@
     max-width: 300px;
   }
 
-  /* Mobile breakpoint */
-  @media (width <= 475px) {
+  .package-listing__narrow-actions {
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+    align-self: stretch;
+    padding: 0 1rem;
+  }
+
+  .package-listing__drawer-button {
+    width: 100%;
+  }
+
+  /* Sidebar narrow/wide switch breakpoint */
+  @media (width <= 990px) {
+    .package-listing-sidebar {
+      display: none;
+    }
+
+    .package-listing__narrow-actions {
+      display: flex;
+    }
+
     .package-listing {
       flex-wrap: wrap;
       overflow: unset;
@@ -266,14 +190,6 @@
 
     .package-listing__main {
       min-width: 100%;
-    }
-
-    .package-listing-sidebar {
-      flex-grow: 1;
-    }
-
-    .package-listing-sidebar__install {
-      display: none;
     }
   }
 }

@@ -114,6 +114,12 @@ export {
 } from "./components/Image/Image";
 export { type MenuVariants, MenuVariantsList } from "./components/Menu/Menu";
 export {
+  type DrawerSizes,
+  DrawerSizesList,
+  type DrawerVariants,
+  DrawerVariantsList,
+} from "./components/Drawer/Drawer";
+export {
   type ModalVariants,
   ModalVariantsList,
   type ModalSizes,
