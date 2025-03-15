@@ -7,7 +7,6 @@ import "./components/componentsColors.css";
 import "./components/componentsSizes.css";
 import "./components/componentsLayouts.css";
 import "./components/Button/Button.css";
-import "./components/Button/IconButton.css";
 import "./components/Heading/Heading.css";
 import "./components/DropDown/DropDown.css";
 import "./components/TextInput/TextInput.css";

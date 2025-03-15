@@ -7,14 +7,6 @@ export {
   ButtonModifiersList,
 } from "./components/Button/Button";
 export {
-  type IconButtonVariants,
-  IconButtonVariantsList,
-  type IconButtonSizes,
-  IconButtonSizesList,
-  type IconButtonModifiers,
-  IconButtonModifiersList,
-} from "./components/Button/IconButton";
-export {
   type HeadingVariants,
   HeadingVariantsList,
   type HeadingSizes,

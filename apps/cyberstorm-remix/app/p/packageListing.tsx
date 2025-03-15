@@ -476,9 +476,12 @@ export default function PackageListing() {
                     )
                   }
                   tooltipText="Like"
-                  icon={faThumbsUp}
                   csVariant={isLiked ? "success" : "secondary"}
-                />
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faThumbsUp} />
+                  </NewIcon>
+                </NewButton>
                 {/* <ReportButton onClick={TODO} /> */}
                 <NewButton
                   primitiveType="cyberstormLink"

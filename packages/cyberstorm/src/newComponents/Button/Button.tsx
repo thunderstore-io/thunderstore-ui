@@ -1,5 +1,4 @@
 import "./Button.css";
-import "./IconButton.css";
 import React from "react";
 import { classnames, componentClasses } from "../../utils/utils";
 import {
@@ -8,16 +7,10 @@ import {
   ActionableCyberstormLinkProps,
   ActionableLinkProps,
 } from "../../primitiveComponents/Actionable/Actionable";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NewIcon } from "../..";
 import {
   ButtonVariants,
   ButtonSizes,
   ButtonModifiers,
-  IconButtonVariants,
-  IconButtonModifiers,
-  IconButtonSizes,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
 interface IButton {
@@ -26,23 +19,10 @@ interface IButton {
   csModifiers?: ButtonModifiers[];
 }
 
-interface IIconButton {
-  csVariant?: IconButtonVariants;
-  csSize?: IconButtonSizes;
-  csModifiers?: IconButtonModifiers[];
-  icon: IconProp;
-}
-
 interface ButtonButton extends IButton, ActionableButtonProps {}
 interface ButtonLinkButton extends IButton, ActionableLinkProps {}
 interface ButtonCyberstormLinkButton
   extends IButton,
-    ActionableCyberstormLinkProps {}
-
-interface IconButtonButton extends IIconButton, ActionableButtonProps {}
-interface IconButtonLinkButton extends IIconButton, ActionableLinkProps {}
-interface IconButtonCyberstormLinkButton
-  extends IIconButton,
     ActionableCyberstormLinkProps {}
 
 export type ButtonComponentProps =
@@ -53,15 +33,6 @@ export type ButtonComponentProps =
   | (ButtonLinkButton & { icon?: false; primitiveType: "link" })
   | (ButtonCyberstormLinkButton & {
       icon?: false;
-      primitiveType: "cyberstormLink";
-    })
-  | (Omit<IconButtonButton, "primitiveType"> & {
-      icon: IconProp;
-      primitiveType?: "button";
-    })
-  | (IconButtonLinkButton & { icon: IconProp; primitiveType: "link" })
-  | (IconButtonCyberstormLinkButton & {
-      icon: IconProp;
       primitiveType: "cyberstormLink";
     });
 
@@ -79,24 +50,6 @@ export const Button = React.forwardRef<
     icon,
     ...forwardedProps
   } = props;
-
-  if (icon) {
-    return (
-      <Actionable
-        {...forwardedProps}
-        rootClasses={classnames(
-          "icon-button",
-          ...componentClasses("icon-button", csVariant, csSize, csModifiers),
-          rootClasses
-        )}
-        ref={forwardedRef}
-      >
-        <NewIcon csMode="inline" noWrapper rootClasses="icon-button__icon">
-          <FontAwesomeIcon icon={icon} />
-        </NewIcon>
-      </Actionable>
-    );
-  }
 
   return (
     <Actionable

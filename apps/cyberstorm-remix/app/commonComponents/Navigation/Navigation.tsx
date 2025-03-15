@@ -160,13 +160,16 @@ export function Navigation(props: {
           {currentUser?.username ? (
             <span className="navigation-header__profile-actions">
               <NewButton
-                icon={faUpload}
                 primitiveType="link"
                 href={`${domain}/package/create/`}
                 csVariant="secondary"
-                csModifiers={["ghost"]}
+                csModifiers={["ghost", "only-icon"]}
                 tooltipText="Upload"
-              />
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faUpload} />
+                </NewIcon>
+              </NewButton>
             </span>
           ) : null}
 
@@ -439,9 +442,12 @@ export function MobileNavigationMenu({ domain }: { domain: string }) {
               aria-label="Back to previous menu"
               csSize="medium"
               csVariant="secondary"
-              csModifiers={["ghost"]}
-              icon={faLongArrowLeft}
-            />
+              csModifiers={["ghost", "only-icon"]}
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faLongArrowLeft} />
+              </NewIcon>
+            </NewButton>
           }
         >
           <nav className="mobile-navigation__popover__popover">
