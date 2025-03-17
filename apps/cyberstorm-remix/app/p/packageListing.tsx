@@ -620,7 +620,14 @@ export default function PackageListing() {
                     primitiveType: "link",
                     href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/wiki`,
                     "aria-current": currentTab === "wiki",
-                    children: <>Wiki</>,
+                    children: (
+                      <>
+                        Wiki
+                        <NewIcon csMode="inline" noWrapper>
+                          <FontAwesomeIcon icon={faArrowUpRight} />
+                        </NewIcon>
+                      </>
+                    ),
                   },
                   current: currentTab === "wiki",
                 },
@@ -673,7 +680,14 @@ export default function PackageListing() {
                     href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/source`,
                     primitiveType: "link",
                     "aria-current": currentTab === "source",
-                    children: <>Analysis</>,
+                    children: (
+                      <>
+                        Analysis{" "}
+                        <NewIcon csMode="inline" noWrapper>
+                          <FontAwesomeIcon icon={faArrowUpRight} />
+                        </NewIcon>
+                      </>
+                    ),
                   },
                   current: currentTab === "source",
                 },
