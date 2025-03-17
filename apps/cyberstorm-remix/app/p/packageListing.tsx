@@ -596,7 +596,7 @@ export default function PackageListing() {
                     namespace: listing.namespace,
                     package: listing.name,
                     "aria-current": currentTab === "required",
-                    children: <>Required</>,
+                    children: <>Required ({listing.dependency_count})</>,
                   },
                   current: currentTab === "required",
                 },
