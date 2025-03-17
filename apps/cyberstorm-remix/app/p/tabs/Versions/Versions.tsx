@@ -1,5 +1,4 @@
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import { faBoltLightning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./Versions.css";
@@ -25,6 +24,7 @@ import {
   TableCompareColumnMeta,
   TableRow,
 } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
+import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
@@ -214,13 +214,13 @@ const DownloadLink = (props: { download_url: string }) => (
 
 const InstallLink = (props: { install_url: string }) => (
   <NewButton
-    csVariant="secondary"
+    csVariant="accent"
     csSize="small"
     primitiveType="link"
     href={props.install_url}
   >
-    <NewIcon noWrapper csMode="inline">
-      <FontAwesomeIcon icon={faBoltLightning} />
+    <NewIcon csMode="inline">
+      <ThunderstoreLogo />
     </NewIcon>
     Install
   </NewButton>
