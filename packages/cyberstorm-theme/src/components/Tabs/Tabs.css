@@ -1,18 +1,13 @@
 @layer theme-components {
   /* Tabs */
   .tabs {
-    --tabs-border-bottom-width: 2px;
-    --tabs-border-bottom-style: solid;
-    --tabs-border-bottom-color: var(--color-surface-5);
+    --tabs-box-shadow-height: 3px;
+    --tabs-box-shadow-color: var(--color-surface-5);
   }
 
   /* Tabs Item */
 
   /* SIZES */
-  .tabs:where(.tabs--size--medium) {
-    --tabs-height: 3.25rem;
-  }
-
   .tabs__item:where(.tabs__item--size--medium) {
     --tabs-item-height: 3.25rem;
     --tabs-item-padding: 0.75rem 1rem;
