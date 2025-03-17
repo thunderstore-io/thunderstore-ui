@@ -204,6 +204,9 @@
     --card-package--footer-flex-direction: var(
       --card-package-card--footer-flex-direction
     );
+    --card-package--tags-align-items: var(
+      --card-package-card--tags-align-items
+    );
   }
 
   .card-package:where(.card-package--variant--featured) {

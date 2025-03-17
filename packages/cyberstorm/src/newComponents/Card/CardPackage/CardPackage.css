@@ -145,9 +145,9 @@
     flex-wrap: wrap;
 
     gap: var(--card-package--tags-gap);
+    align-items: var(--card-package--tags-align-items);
     align-self: stretch;
-
-    --card-package--tags-justify-content: flex-end;
+    justify-content: var(--card-package--tags-justify-content);
   }
 
   /* Footer */
