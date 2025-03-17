@@ -29,8 +29,6 @@ import {
   faDownload,
   faThumbsUp,
   faWarning,
-  faThumbTack,
-  faCodeMerge,
   faCaretRight,
 } from "@fortawesome/free-solid-svg-icons";
 import TeamMembers from "./components/TeamMembers/TeamMembers";
@@ -42,11 +40,7 @@ import {
   PackageLikeAction,
 } from "@thunderstore/cyberstorm-forms";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import {
-  faArrowUpRight,
-  faLips,
-  faSparkles,
-} from "@fortawesome/pro-solid-svg-icons";
+import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTime/RelativeTime";
 import {
   formatFileSize,
@@ -262,13 +256,6 @@ export default function PackageListing() {
   //   </Modal>
   // );
 
-  const isNew =
-    Math.round((Date.now() - Date.parse(listing.datetime_created)) / 86400000) <
-    3;
-
-  const isUpdated =
-    Math.round((Date.now() - Date.parse(listing.last_updated)) / 86400000) < 3;
-
   const likeAction = PackageLikeAction({
     isLoggedIn: Boolean(currentUser?.username),
     dataUpdateTrigger: fetchAndSetRatedPackages,
@@ -387,11 +374,8 @@ export default function PackageListing() {
   const packageBoxes = (
     <>
       {mappedPackageTagList.length > 0 ||
-      listing.is_pinned ||
       listing.is_deprecated ||
-      listing.is_nsfw ||
-      isNew ||
-      isUpdated ? (
+      listing.is_nsfw ? (
         <div className="package-listing-sidebar__categories">
           <div className="package-listing-sidebar__header">
             <Heading csLevel="4" csSize="4">
@@ -403,20 +387,8 @@ export default function PackageListing() {
               {mappedPackageTagList}
             </div>
           ) : null}
-          {listing.is_pinned ||
-          listing.is_deprecated ||
-          listing.is_nsfw ||
-          isNew ||
-          isUpdated ? (
+          {listing.is_deprecated || listing.is_nsfw ? (
             <div className="package-listing-sidebar__body">
-              {listing.is_pinned ? (
-                <NewTag csSize="small" csModifiers={["dark"]} csVariant="blue">
-                  <NewIcon noWrapper csMode="inline">
-                    <FontAwesomeIcon icon={faThumbTack} />
-                  </NewIcon>
-                  Pinned
-                </NewTag>
-              ) : null}
               {listing.is_deprecated ? (
                 <NewTag
                   csSize="small"
@@ -435,22 +407,6 @@ export default function PackageListing() {
                     <FontAwesomeIcon icon={faLips} />
                   </NewIcon>
                   NSFW
-                </NewTag>
-              ) : null}
-              {isNew ? (
-                <NewTag csSize="small" csModifiers={["dark"]} csVariant="green">
-                  <NewIcon noWrapper csMode="inline">
-                    <FontAwesomeIcon icon={faSparkles} />
-                  </NewIcon>
-                  New
-                </NewTag>
-              ) : null}
-              {isUpdated ? (
-                <NewTag csSize="small" csVariant="green">
-                  <NewIcon noWrapper csMode="inline">
-                    <FontAwesomeIcon icon={faCodeMerge} />
-                  </NewIcon>
-                  Updated
                 </NewTag>
               ) : null}
             </div>
