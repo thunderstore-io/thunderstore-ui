@@ -37,50 +37,44 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
     } = props;
 
     return (
-      <div className="tabs__overflow-wrapper">
-        <Frame
-          {...forwardedProps}
-          primitiveType={"window"}
-          rootClasses={classnames(
-            "tabs",
-            ...componentClasses("tabs", csVariant, csSize),
-            rootClasses
-          )}
-          ref={forwardedRef}
-        >
-          {tabItems.map((item) => {
-            const tabsClasses = classnames(
-              "tabs__item",
-              ...componentClasses("tabs__item", csVariant, csSize),
-              item.current ? "tabs__item--current" : undefined
-            );
-            if (item.itemProps.rootClasses) {
-              item.itemProps.rootClasses += tabsClasses;
-            } else {
-              item.itemProps.rootClasses = tabsClasses;
-            }
-            return renderTabItem(
-              item.itemProps,
-              item.numberSlateValue ? (
-                <div
-                  className={classnames(
-                    "tabs__number-slate",
-                    ...componentClasses(
-                      "tabs__number-slate",
-                      csVariant,
-                      csSize
-                    ),
-                    item.current ? "tabs__item--current" : undefined,
-                    item.tabItemNumberSlateRootClasses
-                  )}
-                >
-                  {item.numberSlateValue}
-                </div>
-              ) : undefined
-            );
-          })}
-        </Frame>
-      </div>
+      <Frame
+        {...forwardedProps}
+        primitiveType={"window"}
+        rootClasses={classnames(
+          "tabs",
+          ...componentClasses("tabs", csVariant, csSize),
+          rootClasses
+        )}
+        ref={forwardedRef}
+      >
+        {tabItems.map((item) => {
+          const tabsClasses = classnames(
+            "tabs__item",
+            ...componentClasses("tabs__item", csVariant, csSize),
+            item.current ? "tabs__item--current" : undefined
+          );
+          if (item.itemProps.rootClasses) {
+            item.itemProps.rootClasses += tabsClasses;
+          } else {
+            item.itemProps.rootClasses = tabsClasses;
+          }
+          return renderTabItem(
+            item.itemProps,
+            item.numberSlateValue ? (
+              <div
+                className={classnames(
+                  "tabs__number-slate",
+                  ...componentClasses("tabs__number-slate", csVariant, csSize),
+                  item.current ? "tabs__item--current" : undefined,
+                  item.tabItemNumberSlateRootClasses
+                )}
+              >
+                {item.numberSlateValue}
+              </div>
+            ) : undefined
+          );
+        })}
+      </Frame>
     );
   }
 );
