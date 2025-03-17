@@ -306,7 +306,7 @@ export function DesktopLoginPopover() {
             href={buildAuthLoginUrl({ type: "overwolf" })}
             rootClasses="navigation-login__link navigation-login__overwolf"
           >
-            <NewIcon csMode="inline" noWrapper>
+            <NewIcon csMode="inline">
               <OverwolfLogo />
             </NewIcon>
             Connect with Overwolf
