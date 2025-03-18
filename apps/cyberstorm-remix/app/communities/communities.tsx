@@ -94,7 +94,7 @@ export default function CommunitiesPage() {
 
   const changeOrder = (v: SortOptions) => {
     searchParams.set("order", v);
-    setSearchParams(searchParams);
+    setSearchParams(searchParams, { preventScrollReset: true });
   };
 
   const [searchValue, setSearchValue] = useState(
@@ -117,10 +117,16 @@ export default function CommunitiesPage() {
     if (debouncedSearchValue !== searchRef.current) {
       if (debouncedSearchValue === "") {
         searchParams.delete("search");
-        setSearchParams(searchParams, { replace: true });
+        setSearchParams(searchParams, {
+          replace: true,
+          preventScrollReset: true,
+        });
       } else {
         searchParams.set("search", debouncedSearchValue);
-        setSearchParams(searchParams, { replace: true });
+        setSearchParams(searchParams, {
+          replace: true,
+          preventScrollReset: true,
+        });
       }
       searchRef.current = debouncedSearchValue;
     }
