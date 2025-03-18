@@ -8,6 +8,7 @@
     --card-package-card--content-align-self: stretch;
     --card-package-card--info-align-self: stretch;
     --card-package-card--footer-flex-direction: column;
+    --card-package-card--tags-align-items: flex-end;
     --card-package-featured-flex-direction: row;
     --card-package-featured--content-flex-direction: column;
     --card-package-featured--content-align-items: flex-start;
