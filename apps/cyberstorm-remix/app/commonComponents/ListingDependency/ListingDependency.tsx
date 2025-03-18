@@ -1,6 +1,6 @@
 import "./ListingDependency.css";
 import { dependencyShema } from "@thunderstore/dapper-ts";
-import { Image, NewLink } from "@thunderstore/cyberstorm";
+import { formatToDisplayName, Image, NewLink } from "@thunderstore/cyberstorm";
 
 export interface ListingDependencyProps {
   dependency: typeof dependencyShema._type;
@@ -31,7 +31,7 @@ export function ListingDependency(props: ListingDependencyProps) {
             package={dependency.name}
             rootClasses="listing-dependency__name"
           >
-            {dependency.name}
+            {formatToDisplayName(dependency.name)}
           </NewLink>
           <span className="listing-dependency__title">
             <span className="listing-dependency__title__by">by</span>
@@ -60,7 +60,9 @@ export function ListingDependency(props: ListingDependencyProps) {
             // namespace={dependency.namespace}
             // package={dependency.name}
             // version={dependency.version_number}
-            title={`${dependency.name} - ${dependency.version_number}`}
+            title={`${formatToDisplayName(dependency.name)} - ${
+              dependency.version_number
+            }`}
             csVariant="cyber"
           >
             {dependency.version_number}

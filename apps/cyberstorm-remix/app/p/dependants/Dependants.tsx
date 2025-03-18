@@ -1,6 +1,7 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData, useOutletContext } from "@remix-run/react";
 import {
+  formatToDisplayName,
   NewBreadCrumbs,
   NewBreadCrumbsLink,
   NewLink,
@@ -190,7 +191,7 @@ export default function Dependants() {
           package={listing.name}
           csVariant="cyber"
         >
-          {listing.name}
+          {formatToDisplayName(listing.name)}
         </NewBreadCrumbsLink>
         <span>
           <span>Dependants</span>
@@ -207,7 +208,7 @@ export default function Dependants() {
             package={listing.name}
             csVariant="cyber"
           >
-            {listing.name}
+            {formatToDisplayName(listing.name)}
           </NewLink>
           {" by "}
           <NewLink
