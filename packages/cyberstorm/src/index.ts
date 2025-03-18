@@ -124,7 +124,7 @@ export { SkeletonBox } from "./newComponents/SkeletonBox/SkeletonBox";
 
 // Utils
 export { isNode, isRecord, isStringArray } from "./utils/type_guards";
-export { range } from "./utils/utils";
+export { range, formatToDisplayName } from "./utils/utils";
 export {
   LinkingProvider,
   type LinkLibrary,
