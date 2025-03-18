@@ -13,6 +13,7 @@ import {
   classnames,
   componentClasses,
   formatInteger,
+  formatToDisplayName,
 } from "../../../utils/utils";
 import { NewLink, NewIcon, Image, NewTag, NewMetaItem } from "../../..";
 import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
@@ -170,7 +171,9 @@ export function CardPackage(props: Props) {
         community={packageData.community_identifier}
         namespace={packageData.namespace}
         package={packageData.name}
-        title={`${packageData.name} by ${packageData.namespace}`}
+        title={`${formatToDisplayName(packageData.name)} by ${
+          packageData.namespace
+        }`}
       >
         {csVariant === "card" &&
         (packageData.is_pinned ||
@@ -231,9 +234,9 @@ export function CardPackage(props: Props) {
             namespace={packageData.namespace}
             package={packageData.name}
             rootClasses="card-package__title"
-            title={packageData.name}
+            title={formatToDisplayName(packageData.name)}
           >
-            {packageData.name}
+            {formatToDisplayName(packageData.name)}
           </NewLink>
 
           <div className="card-package__author">
