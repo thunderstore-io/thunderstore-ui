@@ -7,6 +7,7 @@
 
 .versions__table-wrapper {
   overflow-x: scroll;
+  scrollbar-width: none;
 }
 
 .versions__actions {
