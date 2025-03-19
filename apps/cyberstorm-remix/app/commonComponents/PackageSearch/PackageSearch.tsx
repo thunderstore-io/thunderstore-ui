@@ -355,9 +355,12 @@ export function PackageSearch(props: Props) {
         }
       }
       if (useReplace) {
-        setSearchParams(searchParams, { replace: true });
+        setSearchParams(searchParams, {
+          replace: true,
+          preventScrollReset: true,
+        });
       } else {
-        setSearchParams(searchParams);
+        setSearchParams(searchParams, { preventScrollReset: true });
       }
       searchParamsBlobRef.current = debouncedSearchParamsBlob;
     }

@@ -6,7 +6,7 @@ import {
   MetaFunction,
   Outlet,
   Scripts,
-  // ScrollRestoration,
+  ScrollRestoration,
   isRouteErrorResponse,
   useLocation,
   useRouteError,
@@ -171,7 +171,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </Toast.Provider>
             </LinkingProvider>
           </SessionProvider>
-          {/* <ScrollRestoration /> */}
+          <ScrollRestoration />
           <Scripts />
           <BetaButtonInit />
         </div>
