@@ -45,6 +45,7 @@ import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTi
 import {
   formatFileSize,
   formatInteger,
+  formatToDisplayName,
 } from "@thunderstore/cyberstorm/src/utils/utils";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { OutletContextShape } from "~/root";
@@ -52,7 +53,7 @@ import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
-    { title: data?.listing.name },
+    { title: data ? formatToDisplayName(data.listing.name) : undefined },
     { name: "description", content: data?.listing.description },
   ];
 };
@@ -448,7 +449,7 @@ export default function PackageListing() {
         </NewBreadCrumbsLink>
 
         <span>
-          <span>{listing.name}</span>
+          <span>{formatToDisplayName(listing.name)}</span>
         </span>
       </NewBreadCrumbs>
       <div className="package-listing">
@@ -490,7 +491,7 @@ export default function PackageListing() {
               </>
             }
           >
-            {listing.name}
+            {formatToDisplayName(listing.name)}
           </PageHeader>
           {/* TODO: Admin tools // TODO: Enable when APIs are available*/}
           {/* <div className="headerActions">
