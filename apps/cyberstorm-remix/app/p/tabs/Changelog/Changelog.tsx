@@ -77,10 +77,12 @@ export default function Changelog() {
 
   if (status === "ok") {
     return (
-      <div
-        dangerouslySetInnerHTML={{ __html: changelog.html }}
-        className="markdown"
-      />
+      <div className="markdown-wrapper">
+        <div
+          dangerouslySetInnerHTML={{ __html: changelog.html }}
+          className="markdown"
+        />
+      </div>
     );
   }
   return <div>{message}</div>;

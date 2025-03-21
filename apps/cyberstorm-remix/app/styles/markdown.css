@@ -1,4 +1,11 @@
 @layer utils {
+  .markdown-wrapper {
+    display: flex;
+    max-width: 100%;
+    overflow-x: scroll;
+    scrollbar-width: none;
+  }
+
   .markdown {
     display: flex;
     flex-direction: column;
@@ -185,9 +192,13 @@
     table tr th {
       border-top: solid var(--border-width--px) var(--color-surface-a8);
       color: var(--color-text-tertiary);
+      white-space: nowrap;
       text-align: left;
-      word-break: auto-phrase;
       background: var(--color-surface-5);
+
+      * {
+        white-space: inherit;
+      }
     }
 
     table tr th:first-child,
