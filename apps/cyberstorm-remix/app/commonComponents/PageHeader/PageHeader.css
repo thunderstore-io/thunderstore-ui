@@ -90,13 +90,14 @@
   }
 
   .page-header__description {
-    display: flex;
+    display: inline-block;
     align-self: stretch;
     color: var(--color-text-tertiary);
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-lg);
     line-height: var(--line-height-md);
     text-shadow: var(--textshadow-default);
+    word-break: break-word;
   }
 
   .page-header__meta-item {
@@ -133,6 +134,16 @@
     .page-header__content-simple .page-header__meta {
       flex-wrap: wrap;
       gap: var(--space-16);
+    }
+  }
+
+  @media (width <= 375px) {
+    .page-header__image {
+      width: 100%;
+    }
+
+    .page-header--detailed {
+      flex-direction: column;
     }
   }
 }
