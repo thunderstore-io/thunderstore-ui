@@ -187,6 +187,7 @@
       border-top: solid var(--border-width--px) var(--color-surface-a8);
       color: var(--color-text-tertiary);
       text-align: left;
+      word-break: auto-phrase;
       background: var(--color-surface-5);
     }
 
