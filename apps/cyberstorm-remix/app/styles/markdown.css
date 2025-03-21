@@ -34,8 +34,7 @@
     h4,
     h5,
     h6 {
-      display: flex;
-      gap: var(--gap-xs);
+      display: block;
       align-items: flex-start;
       align-self: stretch;
       font: var(--font-body);
