@@ -77,10 +77,12 @@ export default function Readme() {
 
   if (status === "ok") {
     return (
-      <div
-        dangerouslySetInnerHTML={{ __html: readme.html }}
-        className="markdown"
-      />
+      <div className="markdown-wrapper">
+        <div
+          dangerouslySetInnerHTML={{ __html: readme.html }}
+          className="markdown"
+        />
+      </div>
     );
   }
   return <div>{message}</div>;
