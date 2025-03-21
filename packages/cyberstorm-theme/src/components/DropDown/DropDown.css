@@ -12,14 +12,14 @@
     --dropdown-gap: var(--dropdown-md-gap);
 
     & > *:where(:not(.dropdown__divider)) {
-      --dropdown__item-gap: var(--dropdown-item-md-gap);
-      --dropdown__item-padding: var(--dropdown-item-md-padding);
-      --dropdown__item-font-weight: var(--dropdown-item-md-font-weight);
-      --dropdown__item-font-size: var(--dropdown-item-md-font-size);
+      --dropdown-item-gap: var(--dropdown-item-md-gap);
+      --dropdown-item-padding: var(--dropdown-item-md-padding);
+      --dropdown-item-font-weight: var(--dropdown-item-md-font-weight);
+      --dropdown-item-font-size: var(--dropdown-item-md-font-size);
     }
 
     & > .dropdown__divider {
-      --dropdown__divider-margin: var(--divider-md-margin);
+      --dropdown-divider-margin: var(--divider-md-margin);
     }
   }
 
@@ -28,59 +28,55 @@
     --dropdown-border-color: var(--dropdown-border-color--default);
 
     & > *:where(:not(.dropdown__divider)) {
-      --dropdown__item-background-color: var(--dropdown-item-bg-color--default);
-      --dropdown__item-color: var(--dropdown-item-text-color--default);
-      --dropdown__item-icon-color: var(--dropdown-item-icon-color--default);
+      --dropdown-item-background-color: var(--dropdown-item-bg-color--default);
+      --dropdown-item-color: var(--dropdown-item-text-color--default);
+      --dropdown-item-icon-color: var(--dropdown-item-icon-color--default);
     }
 
     & > *:where(:not(.dropdown__divider))[data-highlighted] {
-      --dropdown__item-background-color: var(--dropdown-item-bg-color--hover);
-      --dropdown__item-color: var(--dropdown-item-text-color--hover);
-      --dropdown__item-icon-color: var(--dropdown-item-icon-color--hover);
+      --dropdown-item-background-color: var(--dropdown-item-bg-color--hover);
+      --dropdown-item-color: var(--dropdown-item-text-color--hover);
+      --dropdown-item-icon-color: var(--dropdown-item-icon-color--hover);
     }
 
     & > .dropdown__divider:where(.dropdown--variant--primary) {
-      --dropdown__divider-height: var(--divider-height);
-      --dropdown__divider-background-color: var(--divider-bg-color);
+      --dropdown-divider-height: var(--divider-height);
+      --dropdown-divider-background-color: var(--divider-bg-color);
     }
   }
 
   /* Dropdown Item */
   .dropdown__item:where(.dropdown--danger) {
-    --dropdown__item-background-color: var(
+    --dropdown-item-background-color: var(
       --dropdown-item-danger-bg-color--default
     );
-    --dropdown__item-color: var(--dropdown-item-danger-text-color--default);
-    --dropdown__item-icon-color: var(
-      --dropdown-item-danger-icon-color--default
-    );
+    --dropdown-item-color: var(--dropdown-item-danger-text-color--default);
+    --dropdown-item-icon-color: var(--dropdown-item-danger-icon-color--default);
 
     &:where(:hover) {
-      --dropdown__item-background-color: var(
+      --dropdown-item-background-color: var(
         --dropdown-item-danger-bg-color--hover
       );
-      --dropdown__item-color: var(--dropdown-item-danger-text-color--hover);
-      --dropdown__item-icon-color: var(
-        --dropdown-item-danger-icon-color--hover
-      );
+      --dropdown-item-color: var(--dropdown-item-danger-text-color--hover);
+      --dropdown-item-icon-color: var(--dropdown-item-danger-icon-color--hover);
     }
   }
 
   .dropdown__item:where(.dropdown--disabled) {
-    --dropdown__item-background-color: var(
+    --dropdown-item-background-color: var(
       --dropdown-item-disabled-bg-color--default
     );
-    --dropdown__item-color: var(--dropdown-item-disabled-text-color--default);
-    --dropdown__item-icon-color: var(
+    --dropdown-item-color: var(--dropdown-item-disabled-text-color--default);
+    --dropdown-item-icon-color: var(
       --dropdown-item-disabled-icon-color--default
     );
 
     &:where(:hover) {
-      --dropdown__item-background-color: var(
+      --dropdown-item-background-color: var(
         --dropdown-item-disabled-bg-color--hover
       );
-      --dropdown__item-color: var(--dropdown-item-disabled-text-color--hover);
-      --dropdown__item-icon-color: var(
+      --dropdown-item-color: var(--dropdown-item-disabled-text-color--hover);
+      --dropdown-item-icon-color: var(
         --dropdown-item-disabled-icon-color--hover
       );
     }

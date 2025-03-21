@@ -76,7 +76,7 @@
   }
 
   .navigation-header__avatar[data-highlighted] {
-    --dropdown__item-background-color: var(--dropdown-item-bg-color--default);
+    --dropdown-item-background-color: var(--dropdown-item-bg-color--default);
   }
 
   .navigation-header__dropdown-details {
