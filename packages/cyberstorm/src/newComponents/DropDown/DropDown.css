@@ -17,16 +17,16 @@
   }
 
   .dropdown > *:where(:not(.dropdown__divider)) {
-    gap: var(--dropdown__item-gap);
-    padding: var(--dropdown__item-padding);
+    gap: var(--dropdown-item-gap);
+    padding: var(--dropdown-item-padding);
     overflow: hidden;
-    color: var(--dropdown__item-color);
-    font-weight: var(--dropdown__item-font-weight);
-    font-size: var(--dropdown__item-font-size);
-    background-color: var(--dropdown__item-background-color);
+    color: var(--dropdown-item-color);
+    font-weight: var(--dropdown-item-font-weight);
+    font-size: var(--dropdown-item-font-size);
+    background-color: var(--dropdown-item-background-color);
     outline: none;
 
-    --icon-color: var(--dropdown__item-icon-color);
+    --icon-color: var(--dropdown-item-icon-color);
   }
 
   .dropdown > *:where(:not(.dropdown__divider))[data-highlighted] {
@@ -34,8 +34,8 @@
   }
 
   .dropdown__divider {
-    height: var(--dropdown__divider-height);
-    margin: var(--dropdown__divider-margin);
-    background-color: var(--dropdown__divider-background-color);
+    height: var(--dropdown-divider-height);
+    margin: var(--dropdown-divider-margin);
+    background-color: var(--dropdown-divider-background-color);
   }
 }

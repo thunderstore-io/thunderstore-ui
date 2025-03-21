@@ -20,14 +20,14 @@
     display: flex;
     flex-direction: row;
 
-    gap: var(--select__item-gap);
+    gap: var(--select-item-gap);
     align-items: center;
-    padding: var(--select__item-padding);
-    color: var(--select__item-color);
+    padding: var(--select-item-padding);
+    color: var(--select-item-color);
 
-    font-weight: var(--select__item-font-weight);
-    font-size: var(--select__item-font-size);
-    background-color: var(--select__item-background-color);
+    font-weight: var(--select-item-font-weight);
+    font-size: var(--select-item-font-size);
+    background-color: var(--select-item-background-color);
     outline: none;
     cursor: pointer;
   }
@@ -35,8 +35,8 @@
   .select__trigger {
     justify-content: space-between;
     width: 100%;
-    font-weight: var(--select__trigger-font-weight);
-    font-size: var(--select__trigger-font-size);
+    font-weight: var(--select-trigger-font-weight);
+    font-size: var(--select-trigger-font-size);
 
     & > svg:nth-child(2) {
       margin-left: auto;

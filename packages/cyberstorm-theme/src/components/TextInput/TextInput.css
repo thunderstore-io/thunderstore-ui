@@ -12,20 +12,20 @@
   }
 
   .text-input__left-icon {
-    --text-input__left-icon-position: absolute;
-    --text-input__left-icon-margin: var(--space-10) var(--space-16);
-    --text-input__left-icon-color: var(--input-icon-color--default);
-    --text-input__left-icon-pointer-events: none;
+    --text-input-left-icon-position: absolute;
+    --text-input-left-icon-margin: var(--space-10) var(--space-16);
+    --text-input-left-icon-color: var(--input-icon-color--default);
+    --text-input-left-icon-pointer-events: none;
   }
 
   .text-input__wrapper {
-    --text-input__wrapper-width: auto;
-    --text-input__wrapper-line-height: var(--line-height-auto);
-    --text-input__wrapper-font-weight: var(--font-weight-regular);
-    --text-input__wrapper-font-size: var(--font-size-body-lg);
+    --text-input-wrapper-width: auto;
+    --text-input-wrapper-line-height: var(--line-height-auto);
+    --text-input-wrapper-font-weight: var(--font-weight-regular);
+    --text-input-wrapper-font-size: var(--font-size-body-lg);
 
     &:focus-within .text-input__left-icon {
-      --text-input__left-icon-color: var(--input-icon-color--focus);
+      --text-input-left-icon-color: var(--input-icon-color--focus);
     }
   }
 
@@ -72,23 +72,23 @@
   }
 
   .text-input::placeholder {
-    --text-input__placeholder-color: var(--input-placeholder-color);
-    --text-input__placeholder-opacity: 1;
+    --text-input-placeholder-color: var(--input-placeholder-color);
+    --text-input-placeholder-opacity: 1;
   }
 
   .text-input__right-icon {
-    --text-input__right-icon-position: absolute;
-    --text-input__right-icon-padding: var(--space-14) var(--space-16);
-    --text-input__right-icon-color: var(--color-text-secondary);
+    --text-input-right-icon-position: absolute;
+    --text-input-right-icon-padding: var(--space-14) var(--space-16);
+    --text-input-right-icon-color: var(--color-text-secondary);
   }
 
   .text-input__clear-value-button {
-    --text-input__clear-value-button-right: var(--space-16);
-    --text-input__clear-value-button-color: var(--color-text-secondary);
-    --text-input__clear-value-button-opacity: 0.5;
+    --text-input-clear-value-button-right: var(--space-16);
+    --text-input-clear-value-button-color: var(--color-text-secondary);
+    --text-input-clear-value-button-opacity: 0.5;
   }
 
   .text-input__clear-value-button:hover {
-    --text-input__clear-value-button-opacity: 1;
+    --text-input-clear-value-button-opacity: 1;
   }
 }

@@ -19,8 +19,8 @@
     width: 18.75rem;
     height: 15.625rem;
     padding: var(--space-24);
-    color: var(--ad-container__fallback-color);
-    background-color: var(--ad-container__fallback-background-color);
+    color: var(--ad-container-fallback-color);
+    background-color: var(--ad-container-fallback-background-color);
   }
 
   .ad-container__icon {

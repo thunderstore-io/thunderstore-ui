@@ -20,64 +20,60 @@
 
   /* VARIANTS */
   .select__item:where(.select__item--variant--default) {
-    --select__item-background-color: var(--select-item-bg-color--default);
-    --select__item-color: var(--select-item-text-color--default);
+    --select-item-background-color: var(--select-item-bg-color--default);
+    --select-item-color: var(--select-item-text-color--default);
     --icon-color: var(--select-item-icon-color--default);
 
     &[data-highlighted] {
-      --select__item-background-color: var(--select-item-bg-color--hover);
-      --select__item-color: var(--select-item-text-color--hover);
+      --select-item-background-color: var(--select-item-bg-color--hover);
+      --select-item-color: var(--select-item-text-color--hover);
       --icon-color: var(--select-item-icon-color--hover);
     }
   }
 
   .select__item:where(.select__item--variant--danger) {
-    --select__item-background-color: var(
-      --select-item-danger-bg-color--default
-    );
-    --select__item-color: var(--select-item-danger-text-color--default);
+    --select-item-background-color: var(--select-item-danger-bg-color--default);
+    --select-item-color: var(--select-item-danger-text-color--default);
     --icon-color: var(--select-item-danger-icon-color--default);
 
     &[data-highlighted] {
-      --select__item-background-color: var(
-        --select-item-danger-bg-color--hover
-      );
-      --select__item-color: var(--select-item-danger-text-color--hover);
+      --select-item-background-color: var(--select-item-danger-bg-color--hover);
+      --select-item-color: var(--select-item-danger-text-color--hover);
       --icon-color: var(--select-item-danger-icon-color--hover);
     }
   }
 
   .select__item:where(.select__item--variant--disabled) {
-    --select__item-background-color: var(
+    --select-item-background-color: var(
       --select-item-disabled-bg-color--default
     );
-    --select__item-color: var(--select-item-disabled-text-color--default);
-    --select__item-icon-color: var(--select-item-disabled-icon-color--default);
+    --select-item-color: var(--select-item-disabled-text-color--default);
+    --select-item-icon-color: var(--select-item-disabled-icon-color--default);
     --icon-color: var(--select-item-disabled-icon-color--default);
 
     &[data-highlighted] {
-      --select__item-background-color: var(
+      --select-item-background-color: var(
         --select-item-disabled-bg-color--hover
       );
-      --select__item-color: var(--select-item-disabled-text-color--hover);
+      --select-item-color: var(--select-item-disabled-text-color--hover);
       --icon-color: var(--select-item-disabled-icon-color--hover);
     }
   }
 
   /* SIZES */
   .select__item:where(.select__item--size--medium) {
-    --select__item-gap: var(--select-item-md-gap);
-    --select__item-padding: var(--select-item-md-padding);
-    --select__item-font-weight: var(--select-item-md-font-weight);
-    --select__item-font-size: var(--select-item-md-font-size);
+    --select-item-gap: var(--select-item-md-gap);
+    --select-item-padding: var(--select-item-md-padding);
+    --select-item-font-weight: var(--select-item-md-font-weight);
+    --select-item-font-size: var(--select-item-md-font-size);
   }
 
   /* SELECT TRIGGER */
 
   /* SIZES */
   .select__trigger:where(.select__trigger--size--medium) {
-    --select__trigger-font-weight: var(--select-trigger-md-font-weight);
-    --select__trigger-font-size: var(--select-trigger-md-font-size);
+    --select-trigger-font-weight: var(--select-trigger-md-font-weight);
+    --select-trigger-font-size: var(--select-trigger-md-font-size);
   }
 
   @keyframes fade-in {
