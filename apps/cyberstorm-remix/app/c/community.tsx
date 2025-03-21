@@ -17,11 +17,48 @@ import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { OutletContextShape } from "../root";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [
-    { title: data?.community.name },
+    { title: `Thunderstore - The ${data?.community.name} Mod Database` },
     { name: "description", content: `Mods for ${data?.community.name}` },
+    {
+      property: "og:type",
+      content: "website",
+    },
+    {
+      property: "og:url",
+      content: `${getPublicEnvVariables(["PUBLIC_SITE_URL"]).PUBLIC_SITE_URL}${
+        location.pathname
+      }`,
+    },
+    {
+      property: "og:title",
+      content: `Thunderstore - The ${data?.community.name} Mod Database`,
+    },
+    {
+      property: "og:description",
+      content: data
+        ? `Thunderstore is a mod database and API for downloading ${data.community.name} mods`
+        : undefined,
+    },
+    {
+      property: "og:image:width",
+      content: "360",
+    },
+    {
+      property: "og:image:height",
+      content: "480",
+    },
+    {
+      property: "og:image",
+      content: data?.community.cover_image_url,
+    },
+    {
+      property: "og:site_name",
+      content: "Thunderstore",
+    },
   ];
 };
 
