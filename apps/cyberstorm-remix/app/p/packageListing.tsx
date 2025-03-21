@@ -50,11 +50,55 @@ import {
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { OutletContextShape } from "~/root";
 import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [
-    { title: data ? formatToDisplayName(data.listing.name) : undefined },
+    {
+      title: data
+        ? `${formatToDisplayName(data.listing.name)} | Thunderstore - The ${data
+            ?.community.name} Mod Database`
+        : "Thunderstore The Mod Database",
+    },
     { name: "description", content: data?.listing.description },
+    {
+      property: "og:type",
+      content: "website",
+    },
+    {
+      property: "og:url",
+      content: `${getPublicEnvVariables(["PUBLIC_SITE_URL"]).PUBLIC_SITE_URL}${
+        location.pathname
+      }`,
+    },
+    {
+      property: "og:title",
+      content: data
+        ? `${formatToDisplayName(data.listing.name)} by ${
+            data.listing.namespace
+          }`
+        : undefined,
+    },
+    {
+      property: "og:description",
+      content: data?.listing.description,
+    },
+    {
+      property: "og:image:width",
+      content: "256",
+    },
+    {
+      property: "og:image:height",
+      content: "256",
+    },
+    {
+      property: "og:image",
+      content: data?.listing.icon_url,
+    },
+    {
+      property: "og:site_name",
+      content: "Thunderstore",
+    },
   ];
 };
 
