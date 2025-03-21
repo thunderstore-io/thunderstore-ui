@@ -1,0 +1,15 @@
+@layer nimbus-components {
+  .code-copy {
+    position: absolute;
+    top: var(--space-8);
+    right: var(--space-8);
+    width: var(--space-16);
+    height: var(--space-16);
+    color: var(--color-surface-7);
+    background: transparent;
+  }
+
+  .code-copy[value="copied"] {
+    color: var(--color-accent-green-7);
+  }
+}
