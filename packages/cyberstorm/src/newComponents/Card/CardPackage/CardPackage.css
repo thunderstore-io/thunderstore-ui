@@ -153,7 +153,6 @@
   /* Footer */
   .card-package__footer {
     display: flex;
-    flex: 1 0 0;
     flex-direction: var(--card-package--footer-flex-direction, column);
     gap: var(--card-package--footer-gap);
     align-items: flex-start;
