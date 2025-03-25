@@ -1,7 +1,6 @@
 import "./styles/colors.css";
 import "./styles/globals.css";
 import "./styles/typography.css";
-import "./styles/reset.css";
 import "./styles/layout.css";
 import "./components/componentsColors.css";
 import "./components/componentsSizes.css";

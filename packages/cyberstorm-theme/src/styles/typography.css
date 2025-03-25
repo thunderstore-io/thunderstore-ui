@@ -3,7 +3,7 @@
 @import "./fonts/hubot-sans/hubot-sans.css";
 @import "./fonts/hubot-sans/hubot-sansDeferred.css";
 
-@layer utils {
+@layer theme-utils {
   :root {
     --line-height-auto: normal;
     --line-height-xs: 100%;
@@ -44,16 +44,5 @@
     font: var(--font-body);
     line-height: normal;
     background-color: var(--body-bg-color);
-  }
-
-  a {
-    color: var(--color-text-a--default);
-    text-decoration: none;
-  }
-
-  a:where(:hover),
-  a:where(:active) {
-    color: var(--color-text-a--hover);
-    text-decoration: underline;
   }
 }
