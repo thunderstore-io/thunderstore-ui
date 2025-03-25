@@ -56,3 +56,11 @@ export interface PackageVersion {
   download_url: string;
   install_url: string;
 }
+
+export interface PackageSubmissionStatus {
+  id: string;
+  status: string;
+  form_errors: string[];
+  task_error: boolean;
+  result: string;
+}
