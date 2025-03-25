@@ -139,13 +139,6 @@
     list-style: none;
   }
 
-  /* More readable underline style for anchor tags
-    without a class. This could be set on anchor tags globally,
-    but it can cause conflicts. */
-  a:not([class]) {
-    text-decoration-skip-ink: auto;
-  }
-
   /* Make it clear that interactive elements are interactive */
   :where(
       a[href],
@@ -211,5 +204,23 @@
 
   * > * {
     scrollbar-width: thin;
+  }
+
+  a {
+    color: var(--color-text-a--default);
+    text-decoration: none;
+
+    &:where(:hover),
+    &:where(:active) {
+      color: var(--color-text-a--hover);
+      text-decoration: underline;
+    }
+
+    /* More readable underline style for anchor tags
+    without a class. This could be set on anchor tags globally,
+    but it can cause conflicts. */
+    &:not([class]) {
+      text-decoration-skip-ink: auto;
+    }
   }
 }
