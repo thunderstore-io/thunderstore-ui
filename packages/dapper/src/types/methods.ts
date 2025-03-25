@@ -2,6 +2,7 @@ import { Communities, Community, CommunityFilters } from "./community";
 import {
   PackageListingDetails,
   PackageListings,
+  PackageSubmissionStatus,
   PackageVersion,
 } from "./package";
 import { PackageListingType } from "./props";
@@ -65,6 +66,15 @@ export type GetPackageVersions = (
   namespace: string,
   name: string
 ) => Promise<PackageVersion[]>;
+
+export type PostPackageSubmissionMetadata = (
+  author_name: string,
+  categories: string[],
+  communities: string[],
+  has_nsfw_content: boolean,
+  upload_uuid: string,
+  community_categories: string[]
+) => Promise<PackageSubmissionStatus>;
 
 export type GetTeamDetails = (teamName: string) => Promise<TeamDetails>;
 
