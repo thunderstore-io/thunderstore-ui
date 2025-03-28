@@ -3,9 +3,8 @@ import {
   NewBreadCrumbs,
   NewButton,
   NewIcon,
-  NewSelect,
   // Select,
-  // SelectSearch,
+  NewSelectSearch,
   Switch,
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,7 +20,7 @@ import { faFileZip, faTreasureChest } from "@fortawesome/pro-solid-svg-icons";
 import { UserMedia } from "@thunderstore/ts-uploader/src/client/types";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
-export default function MarkdownPreview() {
+export default function Upload() {
   // const outletContext = useOutletContext() as OutletContextShape;
   const session = useSession();
 
@@ -95,7 +94,7 @@ export default function MarkdownPreview() {
           <div className="upload__content">
             <DnDFileInput
               rootClasses="drag-n-drop"
-              name={"file"}
+              name="file"
               baseState={
                 <div className="drag-n-drop__body">
                   <NewIcon
@@ -127,11 +126,9 @@ export default function MarkdownPreview() {
                   {file ? (
                     <span>{file.name}</span>
                   ) : (
-                    <>
-                      <span className="drag-n-drop__main-text">
-                        Drag file here
-                      </span>
-                    </>
+                    <span className="drag-n-drop__main-text">
+                      Drag file here
+                    </span>
                   )}
                 </div>
               }
@@ -151,14 +148,13 @@ export default function MarkdownPreview() {
             </p>
           </div>
           <div className="upload__content">
-            {/* <SelectSearch></SelectSearch> */}
-            <NewSelect
+            <NewSelectSearch
               options={[
                 { value: "team1", label: "Team 1" },
                 { value: "team2", label: "Team 2" },
               ]}
-              onChange={(val) => setTeam(val)}
-              value={team}
+              onChange={(val) => setTeam(val?.value)}
+              value={team ? { value: team, label: team } : undefined}
             />
           </div>
         </div>
@@ -171,14 +167,27 @@ export default function MarkdownPreview() {
             </p>
           </div>
           <div className="upload__content">
-            {/* <SelectSearch></SelectSearch> */}
-            <NewSelect
+            <NewSelectSearch
+              placeholder="Select communities"
+              multiple
               options={[
                 { value: "community1", label: "Community 1" },
                 { value: "community2", label: "Community 2" },
+                { value: "community3", label: "Community 3" },
+                { value: "community4", label: "Community 4" },
+                { value: "community5", label: "Community 5" },
+                { value: "community6", label: "Community 6" },
+                { value: "community7", label: "Community 7" },
+                { value: "community8", label: "Community 8" },
+                { value: "community9", label: "Community 9" },
+                { value: "community10", label: "Community 10" },
               ]}
-              onChange={(val) => setCommunities([val])}
-              value={communities?.join(" ")}
+              onChange={(val) => setCommunities(val ? [val.value] : [])}
+              value={
+                communities?.[0]
+                  ? { value: communities[0], label: communities[0] }
+                  : undefined
+              }
             />
           </div>
         </div>
@@ -191,13 +200,25 @@ export default function MarkdownPreview() {
             </p>
           </div>
           <div className="upload__content">
-            <NewSelect
+            <NewSelectSearch
+              placeholder="Select categories"
+              multiple
               options={[
                 { value: "cat1", label: "Cat 1" },
                 { value: "cat2", label: "Cat 2" },
+                { value: "cat3", label: "Cat 3" },
+                { value: "cat4", label: "Cat 4" },
+                { value: "cat5", label: "Cat 5" },
+                { value: "cat6", label: "Cat 6" },
+                { value: "cat7", label: "Cat 7" },
+                { value: "cat8", label: "Cat 8" },
               ]}
-              onChange={(val) => setCategories([val])}
-              value={categories?.join(" ")}
+              onChange={(val) => setCategories(val ? [val.value] : [])}
+              value={
+                categories?.[0]
+                  ? { value: categories[0], label: categories[0] }
+                  : undefined
+              }
             />
           </div>
         </div>
@@ -206,7 +227,7 @@ export default function MarkdownPreview() {
           <div className="upload__meta">
             <p className="upload__title">Contains NSFW content</p>
             <p className="upload__description">
-              Select if your package contains NSFW material. An “NSWF” -tag will
+              Select if your package contains NSFW material. An "NSWF" -tag will
               be applied to your package.
             </p>
           </div>
@@ -224,7 +245,7 @@ export default function MarkdownPreview() {
           <div className="upload__meta">
             <p className="upload__title">Submit</p>
             <p className="upload__description">
-              Double-check your selections and hit “Submit” when you’re ready!
+              Double-check your selections and hit "Submit" when you're ready!
             </p>
           </div>
           <div className="upload__content">
@@ -244,7 +265,7 @@ export default function MarkdownPreview() {
                   csSize="big"
                   rootClasses="upload__submit"
                 >
-                  Start upload
+                  Submit
                 </NewButton>
               ) : (
                 <NewButton
