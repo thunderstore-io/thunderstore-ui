@@ -6,11 +6,12 @@ import {
   // Select,
   NewSelectSearch,
   Switch,
+  NewSelectOption,
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { DnDFileInput } from "@thunderstore/react-dnd";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { initMultipartUpload, IUploadHandle } from "@thunderstore/ts-uploader";
 import { useUploadProgress } from "@thunderstore/ts-uploader-react";
 // import { useOutletContext } from "@remix-run/react";
@@ -19,15 +20,90 @@ import { useSession } from "@thunderstore/ts-api-react";
 import { faFileZip, faTreasureChest } from "@fortawesome/pro-solid-svg-icons";
 import { UserMedia } from "@thunderstore/ts-uploader/src/client/types";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import { MetaFunction } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+
+interface CommunityOption {
+  value: string;
+  label: string;
+}
+
+interface CategoryOption {
+  value: string;
+  label: string;
+}
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Upload | Thunderstore" },
+    {
+      name: "description",
+      content: "Upload a package to Thunderstore",
+    },
+  ];
+};
+
+export async function loader() {
+  const dapper = new DapperTs(() => {
+    return {
+      apiHost: process.env.PUBLIC_API_URL,
+      sessionId: undefined,
+    };
+  });
+  return await dapper.getCommunities();
+}
+
+export async function clientLoader() {
+  const dapper = window.Dapper;
+  return await dapper.getCommunities();
+}
 
 export default function Upload() {
+  const uploadData = useLoaderData<typeof loader | typeof clientLoader>();
+
+  const communityOptions: CommunityOption[] = [];
+  const [categoryOptions, setCategoryOptions] = useState<
+    { communityId: string; categories: CategoryOption[] }[]
+  >([]);
+
+  for (const community of uploadData.results) {
+    communityOptions.push({
+      value: community.identifier,
+      label: community.name,
+    });
+  }
+
   // const outletContext = useOutletContext() as OutletContextShape;
   const session = useSession();
 
   const [NSFW, setNSFW] = useState<boolean>(false);
   const [team, setTeam] = useState<string>();
-  const [communities, setCommunities] = useState<string[]>();
-  const [categories, setCategories] = useState<string[]>();
+  const [selectedCommunities, setSelectedCommunities] = useState<
+    NewSelectOption[]
+  >([]);
+  const [selectedCategories, setSelectedCategories] = useState<
+    { communityId: string; categoryId: string }[]
+  >([]);
+
+  const handleCategoryChange = useCallback(
+    (
+      val: NewSelectOption[] | undefined,
+      categories: CategoryOption[],
+      communityId: string
+    ) => {
+      setSelectedCategories((prev) => {
+        const filtered = prev.filter((cat) => cat.communityId !== communityId);
+        if (val) {
+          return [
+            ...filtered,
+            ...val.map((v) => ({ communityId, categoryId: v.value })),
+          ];
+        }
+        return filtered;
+      });
+    },
+    []
+  );
 
   const [file, setFile] = useState<File | null>(null);
   const [handle, setHandle] = useState<IUploadHandle>();
@@ -61,17 +137,43 @@ export default function Upload() {
 
   const submit = useCallback(() => {
     const config = session.getConfig();
-    // const currentUser = session.getSessionCurrentUser();
     const dapper = new DapperTs(() => config);
     dapper.postPackageSubmissionMetadata(
       team ?? "",
-      categories ? categories : [""],
-      communities ? communities : [""],
+      selectedCategories.map((cat) => cat.categoryId),
+      selectedCommunities.map(
+        (community) => (community as NewSelectOption).value
+      ),
       NSFW,
       usermedia?.uuid ?? "",
       [] // TODO: wth are community categories??
     );
-  }, [usermedia, NSFW, team, communities, categories, session]);
+  }, [usermedia, NSFW, team, selectedCommunities, selectedCategories, session]);
+
+  useEffect(() => {
+    if (selectedCommunities) {
+      for (const community of selectedCommunities) {
+        // Skip if we already have categories for this community
+        if (
+          categoryOptions.some((opt) => opt.communityId === community.value)
+        ) {
+          continue;
+        }
+        window.Dapper.getCommunityFilters(community.value).then((filters) => {
+          setCategoryOptions((prev) => [
+            ...prev,
+            {
+              communityId: community.value,
+              categories: filters.package_categories.map((cat) => ({
+                value: cat.id,
+                label: cat.name,
+              })),
+            },
+          ]);
+        });
+      }
+    }
+  }, [selectedCommunities]);
 
   return (
     <div className="container container--y container--full layout__content">
@@ -170,24 +272,23 @@ export default function Upload() {
             <NewSelectSearch
               placeholder="Select communities"
               multiple
-              options={[
-                { value: "community1", label: "Community 1" },
-                { value: "community2", label: "Community 2" },
-                { value: "community3", label: "Community 3" },
-                { value: "community4", label: "Community 4" },
-                { value: "community5", label: "Community 5" },
-                { value: "community6", label: "Community 6" },
-                { value: "community7", label: "Community 7" },
-                { value: "community8", label: "Community 8" },
-                { value: "community9", label: "Community 9" },
-                { value: "community10", label: "Community 10" },
-              ]}
-              onChange={(val) => setCommunities(val ? [val.value] : [])}
-              value={
-                communities?.[0]
-                  ? { value: communities[0], label: communities[0] }
-                  : undefined
-              }
+              options={communityOptions}
+              onChange={(val) => {
+                if (val) {
+                  const newCommunities = Array.isArray(val) ? val : [val];
+                  setSelectedCommunities(newCommunities);
+                  // Remove categories for communities that are no longer selected
+                  setSelectedCategories((prev) =>
+                    prev.filter((cat) =>
+                      newCommunities.some((c) => c.value === cat.communityId)
+                    )
+                  );
+                } else {
+                  setSelectedCommunities([]);
+                  setSelectedCategories([]);
+                }
+              }}
+              value={selectedCommunities}
             />
           </div>
         </div>
@@ -200,26 +301,47 @@ export default function Upload() {
             </p>
           </div>
           <div className="upload__content">
-            <NewSelectSearch
-              placeholder="Select categories"
-              multiple
-              options={[
-                { value: "cat1", label: "Cat 1" },
-                { value: "cat2", label: "Cat 2" },
-                { value: "cat3", label: "Cat 3" },
-                { value: "cat4", label: "Cat 4" },
-                { value: "cat5", label: "Cat 5" },
-                { value: "cat6", label: "Cat 6" },
-                { value: "cat7", label: "Cat 7" },
-                { value: "cat8", label: "Cat 8" },
-              ]}
-              onChange={(val) => setCategories(val ? [val.value] : [])}
-              value={
-                categories?.[0]
-                  ? { value: categories[0], label: categories[0] }
-                  : undefined
-              }
-            />
+            {selectedCommunities.map((community) => {
+              const communityData = uploadData.results.find(
+                (c) => c.identifier === community.value
+              );
+              const categories =
+                categoryOptions.find((c) => c.communityId === community.value)
+                  ?.categories || [];
+
+              return (
+                <div key={community.value} className="upload__category-select">
+                  <p className="upload__category-label">
+                    {communityData?.name} categories
+                  </p>
+                  <NewSelectSearch
+                    placeholder="Select categories"
+                    multiple
+                    options={categories}
+                    onChange={(val) => {
+                      handleCategoryChange(
+                        val ? (Array.isArray(val) ? val : [val]) : undefined,
+                        categories,
+                        community.value
+                      );
+                    }}
+                    value={selectedCategories
+                      .filter((cat) => cat.communityId === community.value)
+                      .map((cat) => ({
+                        value: cat.categoryId,
+                        label:
+                          categories.find((c) => c.value === cat.categoryId)
+                            ?.label || "",
+                      }))}
+                  />
+                </div>
+              );
+            })}
+            {(!selectedCommunities || selectedCommunities.length === 0) && (
+              <p className="upload__category-placeholder">
+                Select a community to choose categories
+              </p>
+            )}
           </div>
         </div>
         <div className="upload__divider" />
@@ -227,8 +349,8 @@ export default function Upload() {
           <div className="upload__meta">
             <p className="upload__title">Contains NSFW content</p>
             <p className="upload__description">
-              Select if your package contains NSFW material. An "NSWF" -tag will
-              be applied to your package.
+              Select if your package contains NSFW material. An
+              &ldquo;NSFW&rdquo; -tag will be applied to your package.
             </p>
           </div>
           <div className="upload__content">
@@ -245,7 +367,8 @@ export default function Upload() {
           <div className="upload__meta">
             <p className="upload__title">Submit</p>
             <p className="upload__description">
-              Double-check your selections and hit "Submit" when you're ready!
+              Double-check your selections and hit &ldquo;Submit&rdquo; when
+              you&rsquo;re ready!
             </p>
           </div>
           <div className="upload__content">
@@ -296,6 +419,16 @@ export default function Upload() {
           <p>Upload success: {isDone.toString()}</p>
         </div> */}
       </section>
+      <span>usermedia: {usermedia?.uuid}</span>
+      <span>NSFW: {NSFW}</span>
+      <span>team: {team}</span>
+      <span>
+        selectedCommunities: {selectedCommunities.map((c) => c.value)}
+      </span>
+      <span>
+        selectedCategories:{" "}
+        {selectedCategories.map((c) => `${c.communityId}-${c.categoryId} `)}
+      </span>
     </div>
   );
 }
