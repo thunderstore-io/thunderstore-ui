@@ -20,18 +20,29 @@ export type SelectOption<T extends string = string> = {
   leftIcon?: JSX.Element;
 };
 
-export interface SelectSearchProps {
-  multiple?: boolean;
-  options: SelectOption[];
-  value?: SelectOption;
-  onChange: (v: SelectOption | undefined) => void;
-  // onBlur?: () => void;
-  disabled?: boolean;
-  placeholder?: string;
-  csVariant?: SelectSearchVariants;
-  csSize?: SelectSearchSizes;
-  csModifiers?: SelectSearchModifiers[];
-}
+export type SelectSearchProps =
+  | {
+      multiple?: false;
+      options: SelectOption[];
+      value?: SelectOption;
+      onChange: (v: SelectOption | undefined) => void;
+      disabled?: boolean;
+      placeholder?: string;
+      csVariant?: SelectSearchVariants;
+      csSize?: SelectSearchSizes;
+      csModifiers?: SelectSearchModifiers[];
+    }
+  | {
+      multiple: true;
+      options: SelectOption[];
+      value?: SelectOption[];
+      onChange: (v: SelectOption[] | undefined) => void;
+      disabled?: boolean;
+      placeholder?: string;
+      csVariant?: SelectSearchVariants;
+      csSize?: SelectSearchSizes;
+      csModifiers?: SelectSearchModifiers[];
+    };
 
 /**
  * Cyberstorm SelectSearch component
@@ -74,11 +85,9 @@ export const SelectSearch = React.forwardRef<
     csModifiers,
     disabled = false,
   } = props;
+
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const containerRef = React.useRef<HTMLDivElement | null>(null);
-  const [selectedOptions, setSelectedOptions] = React.useState<SelectOption[]>(
-    value ? [value] : []
-  );
   const [isVisible, setIsVisible] = React.useState(false);
   const [search, setSearch] = React.useState("");
 
@@ -104,38 +113,44 @@ export const SelectSearch = React.forwardRef<
     if (disabled) return;
 
     if (!multiple) {
-      onChange(option);
-      setSelectedOptions([option]);
+      (onChange as (v: SelectOption | undefined) => void)(option);
       setIsVisible(false);
       return;
     }
 
-    const isSelected = selectedOptions.some(
-      (selected) => selected.value === option.value
-    );
+    const currentValues = Array.isArray(value) ? value : [];
+    const isSelected = currentValues.some((v) => v.value === option.value);
 
     if (isSelected) {
-      const newSelected = selectedOptions.filter(
-        (selected) => selected.value !== option.value
+      (onChange as (v: SelectOption[] | undefined) => void)(
+        currentValues.filter((v) => v.value !== option.value)
       );
-      setSelectedOptions(newSelected);
-      onChange(newSelected[0]); // Pass first option or undefined if empty
     } else {
-      const newSelected = [...selectedOptions, option];
-      setSelectedOptions(newSelected);
-      onChange(newSelected[0]); // Pass first option
+      (onChange as (v: SelectOption[] | undefined) => void)([
+        ...currentValues,
+        option,
+      ]);
     }
     // Keep focus on input after selection
     inputRef.current?.focus();
   };
 
   const removeOption = (optionToRemove: SelectOption) => {
-    const newSelected = selectedOptions.filter(
-      (option) => option.value !== optionToRemove.value
+    if (!multiple) {
+      (onChange as (v: SelectOption | undefined) => void)(undefined);
+      return;
+    }
+    const currentValues = Array.isArray(value) ? value : [];
+    (onChange as (v: SelectOption[] | undefined) => void)(
+      currentValues.filter((v) => v.value !== optionToRemove.value)
     );
-    setSelectedOptions(newSelected);
-    onChange(newSelected[0]); // Pass first option or undefined if empty
   };
+
+  const selectedValue = multiple
+    ? Array.isArray(value)
+      ? value
+      : []
+    : (value as SelectOption | undefined);
 
   return (
     <div
@@ -154,46 +169,50 @@ export const SelectSearch = React.forwardRef<
       <div className="select-search__search">
         <div className="select-search__selected-and-input-container">
           <div className="select-search__selected-and-input">
-            {(multiple ? selectedOptions.length > 0 : value) && (
+            {selectedValue && (
               <div className="select-search__selected">
                 {multiple ? (
-                  selectedOptions.map((option) => (
-                    <NewTag
-                      key={option.value}
-                      onClick={() => !disabled && removeOption(option)}
-                      rootClasses="select-search__selected-button"
-                      csVariant="primary"
-                      csSize="small"
-                      csMode="button"
-                      disabled={disabled}
-                    >
-                      {option.label}
-                      <NewIcon csMode="inline" noWrapper>
-                        <FontAwesomeIcon icon={faXmark} />
-                      </NewIcon>
-                    </NewTag>
-                  ))
-                ) : value ? (
+                  (selectedValue as SelectOption[]).map(
+                    (option: SelectOption) => (
+                      <NewTag
+                        key={option.value}
+                        onClick={() => !disabled && removeOption(option)}
+                        rootClasses="select-search__selected-button"
+                        csVariant="primary"
+                        csSize="small"
+                        csMode="button"
+                        disabled={disabled}
+                      >
+                        {option.label}
+                        <NewIcon csMode="inline" noWrapper>
+                          <FontAwesomeIcon icon={faXmark} />
+                        </NewIcon>
+                      </NewTag>
+                    )
+                  )
+                ) : (
                   <NewTag
-                    onClick={() => !disabled && removeOption(value)}
+                    onClick={() =>
+                      !disabled && removeOption(selectedValue as SelectOption)
+                    }
                     rootClasses="select-search__selected-button"
                     csVariant="primary"
                     csSize="small"
                     csMode="button"
                     disabled={disabled}
                   >
-                    {value.label}
+                    {(selectedValue as SelectOption).label}
                     <NewIcon csMode="inline" noWrapper>
                       <FontAwesomeIcon icon={faXmark} />
                     </NewIcon>
                   </NewTag>
-                ) : null}
+                )}
               </div>
             )}
             <input
               className={classnames(
                 "select-search__input",
-                value ? "select-search__input--has-value" : null,
+                selectedValue ? "select-search__input--has-value" : null,
                 disabled ? "select-search__input--disabled" : null
               )}
               value={search}
@@ -208,7 +227,6 @@ export const SelectSearch = React.forwardRef<
             onClick={(e) => {
               if (disabled) return;
               setSearch("");
-              setSelectedOptions([]);
               onChange(undefined);
               e.stopPropagation();
             }}
@@ -239,17 +257,19 @@ export const SelectSearch = React.forwardRef<
           {options.filter(
             (option) =>
               option.label?.toLowerCase().includes(search.toLowerCase()) &&
-              !selectedOptions.some(
-                (selected) => selected.value === option.value
-              )
+              (!Array.isArray(selectedValue) ||
+                !(selectedValue as SelectOption[]).some(
+                  (v) => v.value === option.value
+                ))
           ).length > 0 ? (
             options
               .filter(
                 (option) =>
                   option.label?.toLowerCase().includes(search.toLowerCase()) &&
-                  !selectedOptions.some(
-                    (selected) => selected.value === option.value
-                  )
+                  (!Array.isArray(selectedValue) ||
+                    !(selectedValue as SelectOption[]).some(
+                      (v) => v.value === option.value
+                    ))
               )
               .map((option) => {
                 return (
