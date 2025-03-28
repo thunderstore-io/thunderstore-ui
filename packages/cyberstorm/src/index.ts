@@ -99,6 +99,11 @@ export {
   Select as NewSelect,
   type SelectProps as NewSelectProps,
 } from "./newComponents/Select/Select";
+export {
+  SelectSearch as NewSelectSearch,
+  type SelectSearchProps as NewSelectSearchProps,
+  type SelectOption as NewSelectOption,
+} from "./newComponents/SelectSearch/SelectSearch";
 export { Icon as NewIcon } from "./newComponents/Icon/Icon";
 export { Tag as NewTag } from "./newComponents/Tag/Tag";
 export { Alert as NewAlert } from "./newComponents/Alert/Alert";
