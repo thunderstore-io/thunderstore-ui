@@ -21,6 +21,7 @@
     gap: var(--gap-sm);
     align-self: flex-start;
     justify-content: flex-start;
+    max-width: 83.5rem;
     padding: var(--space-16);
   }
 

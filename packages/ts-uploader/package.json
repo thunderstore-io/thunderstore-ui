@@ -1,0 +1,26 @@
+{
+  "name": "@thunderstore/ts-uploader",
+  "version": "0.1.0",
+  "description": "Handles file uploads to Thunderstore",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/ts-uploader",
+  "main": "dist/thunderstore-ts-uploader.cjs.js",
+  "module": "dist/thunderstore-ts-uploader.esm.js",
+  "types": "dist/thunderstore-ts-uploader.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "watch": "jest --watch"
+  },
+  "dependencies": {
+    "@thunderstore/typed-event-emitter": "*",
+    "crypto-js": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.3",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}

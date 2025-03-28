@@ -13,6 +13,7 @@ import "./components/TextInput/TextInput.css";
 import "./components/CodeInput/CodeInput.css";
 import "./components/Icon/Icon.css";
 import "./components/Select/Select.css";
+import "./components/SelectSearch/SelectSearch.css";
 import "./components/Table/Table.css";
 import "./components/Tag/Tag.css";
 import "./components/Toast/Toast.css";
