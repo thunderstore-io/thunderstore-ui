@@ -7,11 +7,11 @@ export type packageSubmissionMetaArgs = {
 
 export type packageSubmissionApiArgs = {
   author_name: string;
-  categories: string[];
   communities: string[];
   has_nsfw_content: boolean;
   upload_uuid: string;
-  community_categories: string[];
+  categories?: string[];
+  community_categories?: { [key: string]: string[] };
 };
 
 export function postPackageSubmission(

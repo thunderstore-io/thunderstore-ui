@@ -8,9 +8,14 @@ import {
 } from "./UploadRequest";
 import { calculateMD5 } from "../md5";
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
+import { BaseUpload } from "./BaseUpload";
+import { UploadConfig } from "./types";
 
 export type MultiPartUploadOptions = {
   api: ApiConfig;
+  file: File;
+  maxConcurrentParts?: number;
+  bandwidthLimit?: number;
 };
 
 /**
@@ -73,6 +78,7 @@ type UploadPart = {
     part_number: number;
     url: string;
   };
+  etag?: string;
 };
 
 export interface IUploadHandle {
@@ -169,5 +175,168 @@ class UploadHandle implements IUploadHandle {
       data: { parts },
       uuid: this.handle.uuid,
     });
+  }
+}
+
+export class MultipartUpload extends BaseUpload {
+  private file: File;
+  private api: ApiConfig;
+  private parts: UploadPart[] = [];
+  private activeControllers: AbortController[] = [];
+  private completedParts: { ETag: string; PartNumber: number }[] = [];
+  private handle?: UserMedia;
+
+  constructor(options: MultiPartUploadOptions, config?: UploadConfig) {
+    super(config);
+    this.file = options.file;
+    this.api = options.api;
+    this.metrics.totalBytes = this.file.size;
+  }
+
+  get uploadHandle(): UserMedia | undefined {
+    return this.handle;
+  }
+
+  private slicePart(offset: number, length: number): Blob {
+    const start = offset;
+    const end = offset + length;
+    return end < this.file.size
+      ? this.file.slice(start, end)
+      : this.file.slice(start);
+  }
+
+  async start(): Promise<void> {
+    if (this.status === "running") {
+      throw new Error("Upload already running");
+    }
+
+    try {
+      this.setStatus("running");
+      this.metrics.startTime = Date.now();
+      this.metrics.lastUpdateTime = this.metrics.startTime;
+
+      // Initialize upload
+      const result = await UsermediaEndpoints.init(this.api, {
+        data: {
+          filename: this.file.name,
+          file_size_bytes: this.file.size,
+        },
+      });
+
+      this.handle = result.user_media;
+
+      // Create parts
+      this.parts = result.upload_urls.map((x) => ({
+        payload: this.slicePart(x.offset, x.length),
+        meta: {
+          part_number: x.part_number,
+          url: x.url,
+        },
+      }));
+
+      // Upload parts concurrently
+      const maxConcurrent = this.config.maxConcurrentParts ?? 3;
+      for (let i = 0; i < this.parts.length; i += maxConcurrent) {
+        const batch = this.parts.slice(i, i + maxConcurrent);
+        await Promise.all(batch.map((part) => this.uploadPart(part)));
+      }
+
+      // Complete upload
+      await UsermediaEndpoints.finish(this.api, {
+        data: { parts: this.completedParts },
+        uuid: result.user_media.uuid,
+      });
+
+      this.setStatus("complete");
+    } catch (error) {
+      if (error instanceof Error) {
+        this.setError({
+          code: "UPLOAD_FAILED",
+          message: error.message,
+          retryable: true,
+          details: error,
+        });
+      }
+      this.setStatus("failed");
+    }
+  }
+
+  private async uploadPart(part: UploadPart): Promise<void> {
+    if (this.isAborted) {
+      throw new Error("Upload aborted");
+    }
+
+    const controller = new AbortController();
+    this.activeControllers.push(controller);
+
+    try {
+      // Calculate checksum
+      const checksum = await calculateMD5(part.payload);
+
+      await this.retryWithBackoff(async () => {
+        const response = await fetch(part.meta.url, {
+          method: "PUT",
+          headers: {
+            "Content-MD5": checksum,
+          },
+          body: part.payload,
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Part upload failed with status: ${response.status}`);
+        }
+
+        const etag = response.headers.get("etag");
+        if (!etag) {
+          throw new Error("ETag header was missing from the response!");
+        }
+
+        part.etag = etag;
+        this.completedParts.push({
+          ETag: etag,
+          PartNumber: part.meta.part_number,
+        });
+
+        this.updateProgress(
+          this.completedParts.length * (this.file.size / this.parts.length)
+        );
+      });
+    } finally {
+      const index = this.activeControllers.indexOf(controller);
+      if (index > -1) {
+        this.activeControllers.splice(index, 1);
+      }
+    }
+  }
+
+  async pause(): Promise<void> {
+    if (this.status !== "running") {
+      throw new Error("Upload is not running");
+    }
+    this.activeControllers.forEach((controller) => controller.abort());
+    this.setStatus("paused");
+  }
+
+  async resume(): Promise<void> {
+    if (this.status !== "paused") {
+      throw new Error("Upload is not paused");
+    }
+    await this.start();
+  }
+
+  async abort(): Promise<void> {
+    this.activeControllers.forEach((controller) => controller.abort());
+    this.isAborted = true;
+    this.setStatus("aborted");
+  }
+
+  async retry(): Promise<void> {
+    if (this.status === "running") {
+      throw new Error("Upload is already running");
+    }
+    this.error = undefined;
+    this.completedParts = [];
+    await this.start();
   }
 }
