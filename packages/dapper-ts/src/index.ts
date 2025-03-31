@@ -25,6 +25,7 @@ import {
   getTeamMembers,
   getTeamServiceAccounts,
 } from "./methods/team";
+export type { PackageSubmissionResponse } from "./methods/package";
 
 export interface DapperTsInterface extends DapperInterface {
   config: () => RequestConfig;

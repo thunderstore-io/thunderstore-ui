@@ -155,4 +155,65 @@
     height: 200px;
     border: 4px solid #fff;
   }
+
+  .upload__progress {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    width: 100%;
+    margin-top: var(--gap-md);
+  }
+
+  .upload__progress-bar {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: var(--color-surface-a9);
+  }
+
+  .upload__progress-bar-fill {
+    height: 100%;
+    background-color: var(--color-accent);
+    transition: width 0.3s ease;
+  }
+
+  .upload__progress-info {
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-sm);
+  }
+
+  .upload__error {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    color: #dc3545;
+    background-color: #f8f9fa;
+  }
+
+  .upload__error-field {
+    margin-bottom: 0.5rem;
+  }
+
+  .upload__error-field:last-child {
+    margin-bottom: 0;
+  }
+
+  .upload__error-field-name {
+    margin: 0;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+
+  .upload__error-message {
+    margin: 0;
+    padding-left: 1rem;
+  }
+
+  .upload__error .cs-button {
+    margin-top: 1rem;
+  }
 }

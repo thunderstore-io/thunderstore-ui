@@ -3,6 +3,7 @@ import {
   fetchPackageReadme,
   fetchPackageVersions,
   postPackageSubmission,
+  ApiError,
 } from "@thunderstore/thunderstore-api";
 import { z } from "zod";
 
@@ -92,32 +93,73 @@ export const packageSubmissionStatusSchema = z.object({
   result: z.string(),
 });
 
+export const packageSubmissionErrorSchema = z.object({
+  upload_uuid: z.array(z.string()).optional(),
+  author_name: z.array(z.string()).optional(),
+  categories: z.array(z.string()).optional(),
+  communities: z.array(z.string()).optional(),
+  has_nsfw_content: z.array(z.string()).optional(),
+  detail: z.string().optional(),
+  file: z.array(z.string()).optional(),
+  team: z.array(z.string()).optional(),
+  __all__: z.array(z.string()).optional(),
+});
+
+export type PackageSubmissionResponse =
+  | z.infer<typeof packageSubmissionStatusSchema>
+  | z.infer<typeof packageSubmissionErrorSchema>;
+
 export async function postPackageSubmissionMetadata(
   this: DapperTsInterface,
   author_name: string,
-  categories: string[],
   communities: string[],
   has_nsfw_content: boolean,
   upload_uuid: string,
-  community_categories: string[]
-) {
-  const data = await postPackageSubmission(
-    this.config,
-    {
-      author_name,
-      categories,
-      communities,
-      has_nsfw_content,
-      upload_uuid,
-      community_categories,
-    },
-    { useSession: true }
-  );
-  const parsed = packageSubmissionStatusSchema.safeParse(data);
+  categories?: string[],
+  community_categories?: { [key: string]: string[] }
+): Promise<PackageSubmissionResponse> {
+  try {
+    const data = await postPackageSubmission(
+      this.config,
+      {
+        author_name,
+        communities,
+        has_nsfw_content,
+        upload_uuid,
+        categories,
+        community_categories,
+      },
+      { useSession: true }
+    );
 
-  if (!parsed.success) {
-    throw new Error(formatErrorMessage(parsed.error));
+    const parsed = packageSubmissionStatusSchema.safeParse(data);
+
+    if (!parsed.success) {
+      // Try to parse as PackageSubmissionError
+      const errorParsed = packageSubmissionErrorSchema.safeParse(data);
+      if (errorParsed.success) {
+        return errorParsed.data;
+      }
+
+      // If not a PackageSubmissionError, wrap the error in __all__
+      return {
+        __all__: [formatErrorMessage(parsed.error)],
+      };
+    }
+
+    return parsed.data;
+  } catch (error) {
+    if (error instanceof ApiError) {
+      const errorParsed = packageSubmissionErrorSchema.safeParse(
+        error.responseJson
+      );
+      if (errorParsed.success) {
+        return errorParsed.data;
+      }
+      return {
+        __all__: [error.message],
+      };
+    }
+    throw error;
   }
-
-  return parsed.data;
 }

@@ -12,14 +12,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { DnDFileInput } from "@thunderstore/react-dnd";
 import { useCallback, useEffect, useState } from "react";
-import { initMultipartUpload, IUploadHandle } from "@thunderstore/ts-uploader";
-import { useUploadProgress } from "@thunderstore/ts-uploader-react";
+import { MultipartUpload, IBaseUploadHandle } from "@thunderstore/ts-uploader";
+import {
+  useUploadProgress,
+  useUploadStatus,
+  useUploadError,
+  useUploadControls,
+} from "@thunderstore/ts-uploader-react";
 // import { useOutletContext } from "@remix-run/react";
 // import { OutletContextShape } from "../../root";
 import { useSession } from "@thunderstore/ts-api-react";
 import { faFileZip, faTreasureChest } from "@fortawesome/pro-solid-svg-icons";
 import { UserMedia } from "@thunderstore/ts-uploader/src/client/types";
-import { DapperTs } from "@thunderstore/dapper-ts";
+import { DapperTs, PackageSubmissionResponse } from "@thunderstore/dapper-ts";
 import { MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
@@ -106,48 +111,108 @@ export default function Upload() {
   );
 
   const [file, setFile] = useState<File | null>(null);
-  const [handle, setHandle] = useState<IUploadHandle>();
+  const [handle, setHandle] = useState<IBaseUploadHandle>();
   const [lock, setLock] = useState<boolean>(false);
   const [isDone, setIsDone] = useState<boolean>(false);
 
+  const error = useUploadError(handle);
+  const controls = useUploadControls(handle);
+
   const [usermedia, setUsermedia] = useState<UserMedia>();
 
-  const startUpload = useCallback(() => {
+  const [submissionError, setSubmissionError] =
+    useState<PackageSubmissionResponse>({});
+
+  const startUpload = useCallback(async () => {
     if (!file) return;
-    const config = session.getConfig();
-    setLock(true);
-    initMultipartUpload(file, {
-      api: {
-        domain: config.apiHost ?? "https://thunderstore.io",
-        authorization: `Session ${config.sessionId}`,
-      },
-    }).then((handle) => {
-      setHandle(handle);
-      handle.startUpload().then(
-        (value) => {
-          setUsermedia(value);
-          setIsDone(true);
+
+    try {
+      const config = session.getConfig();
+      if (!config.apiHost) {
+        throw new Error("API host is not configured");
+      }
+      const upload = new MultipartUpload({
+        file,
+        api: {
+          domain: config.apiHost,
+          authorization: config.sessionId
+            ? `Session ${config.sessionId}`
+            : undefined,
         },
-        (reason) => {
-          console.log(reason);
-        }
-      );
-    });
+      });
+
+      setLock(true);
+      await upload.start();
+      setHandle(upload);
+      setUsermedia(upload.uploadHandle);
+      setIsDone(true);
+    } catch (error) {
+      console.error("Upload failed:", error);
+      if (error instanceof Error) {
+        alert(`Upload failed: ${error.message}`);
+      }
+    } finally {
+      setLock(false);
+    }
   }, [file, session]);
 
-  const submit = useCallback(() => {
-    const config = session.getConfig();
-    const dapper = new DapperTs(() => config);
-    dapper.postPackageSubmissionMetadata(
-      team ?? "",
-      selectedCategories.map((cat) => cat.categoryId),
-      selectedCommunities.map(
-        (community) => (community as NewSelectOption).value
-      ),
-      NSFW,
-      usermedia?.uuid ?? "",
-      [] // TODO: wth are community categories??
-    );
+  const submit = useCallback(async () => {
+    if (!usermedia?.uuid) {
+      setSubmissionError({
+        __all__: ["Upload not completed"],
+      });
+      return;
+    }
+
+    try {
+      setSubmissionError({});
+      const config = session.getConfig();
+      if (!config.apiHost) {
+        throw new Error("API host is not configured");
+      }
+      const dapper = new DapperTs(() => config);
+      const result = await dapper.postPackageSubmissionMetadata(
+        team ?? "",
+        selectedCommunities.map(
+          (community) => (community as NewSelectOption).value
+        ),
+        NSFW,
+        usermedia.uuid,
+        selectedCategories.map((cat) => cat.categoryId),
+        {}
+      );
+
+      // Check if the result is a SubmissionError
+      if (
+        "__all__" in result ||
+        "author_name" in result ||
+        "communities" in result
+      ) {
+        setSubmissionError(result);
+        return;
+      }
+
+      // Handle successful submission
+      if ("task_error" in result && result.task_error) {
+        setSubmissionError({
+          __all__: [`Submission failed: ${result.result}`],
+        });
+        return;
+      }
+
+      alert("Package submitted successfully!");
+    } catch (error) {
+      console.error("Submission failed:", error);
+      if (error instanceof Error) {
+        setSubmissionError({
+          __all__: [error.message],
+        });
+      } else {
+        setSubmissionError({
+          __all__: ["An unexpected error occurred during submission"],
+        });
+      }
+    }
   }, [usermedia, NSFW, team, selectedCommunities, selectedCategories, session]);
 
   useEffect(() => {
@@ -174,6 +239,16 @@ export default function Upload() {
       }
     }
   }, [selectedCommunities]);
+
+  // Helper function to format field names for display
+  const formatFieldName = (field: string) => {
+    return field
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+  // console.log(submissionError);
 
   return (
     <div className="container container--y container--full layout__content">
@@ -252,8 +327,17 @@ export default function Upload() {
           <div className="upload__content">
             <NewSelectSearch
               options={[
-                { value: "team1", label: "Team 1" },
-                { value: "team2", label: "Team 2" },
+                { value: "Test_Team_0", label: "Test_Team_0" },
+                { value: "Test_Team_1", label: "Test_Team_1" },
+                { value: "Test_Team_2", label: "Test_Team_2" },
+                { value: "Test_Team_3", label: "Test_Team_3" },
+                { value: "Test_Team_4", label: "Test_Team_4" },
+                { value: "Test_Team_5", label: "Test_Team_5" },
+                { value: "Test_Team_6", label: "Test_Team_6" },
+                { value: "Test_Team_7", label: "Test_Team_7" },
+                { value: "Test_Team_8", label: "Test_Team_8" },
+                { value: "Test_Team_9", label: "Test_Team_9" },
+                { value: "Test_Team_10", label: "Test_Team_10" },
               ]}
               onChange={(val) => setTeam(val?.value)}
               value={team ? { value: team, label: team } : undefined}
@@ -374,7 +458,16 @@ export default function Upload() {
           <div className="upload__content">
             <div className="upload__buttons">
               <NewButton
-                // onClick={startUpload}
+                onClick={() => {
+                  setFile(null);
+                  setHandle(undefined);
+                  setUsermedia(undefined);
+                  setIsDone(false);
+                  setSelectedCommunities([]);
+                  setSelectedCategories([]);
+                  setTeam(undefined);
+                  setNSFW(false);
+                }}
                 csVariant="secondary"
                 csSize="big"
               >
@@ -382,13 +475,13 @@ export default function Upload() {
               </NewButton>
               {isDone ? (
                 <NewButton
-                  // disabled={!file || !!handle || lock}
+                  disabled={!usermedia?.uuid || !selectedCommunities.length}
                   onClick={submit}
                   csVariant="accent"
                   csSize="big"
                   rootClasses="upload__submit"
                 >
-                  Submit
+                  Submit Package
                 </NewButton>
               ) : (
                 <NewButton
@@ -398,12 +491,43 @@ export default function Upload() {
                   csSize="big"
                   rootClasses="upload__submit"
                 >
-                  Start upload
+                  Upload File
                 </NewButton>
               )}
             </div>
             <UploadProgressDisplay handle={handle} />
-            <p>Upload success: {isDone.toString()}</p>
+            {error && (
+              <div className="upload__error">
+                <p>{error.message}</p>
+                {error.retryable && (
+                  <NewButton onClick={controls.retry}>Retry</NewButton>
+                )}
+              </div>
+            )}
+            {isDone && !usermedia?.uuid && (
+              <div className="upload__error">
+                <p>
+                  Upload completed but no UUID was received. Please try again.
+                </p>
+              </div>
+            )}
+            {isDone && usermedia?.uuid && !selectedCommunities.length && (
+              <div className="upload__error">
+                <p>Please select at least one community.</p>
+              </div>
+            )}
+            {Object.keys(submissionError).length > 0 && (
+              <div className="upload__error">
+                {Object.entries(submissionError).map(([field, errors]) => (
+                  <div key={field}>
+                    {field !== "__all__" && (
+                      <strong>{formatFieldName(field)}: </strong>
+                    )}
+                    {Array.isArray(errors) ? errors.join(", ") : String(errors)}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
         {/* <div className="upload-form">
@@ -433,12 +557,47 @@ export default function Upload() {
   );
 }
 
-const UploadProgressDisplay = (props: { handle?: IUploadHandle }) => {
+const UploadProgressDisplay = (props: { handle?: IBaseUploadHandle }) => {
   const progress = useUploadProgress(props.handle);
+  const status = useUploadStatus(props.handle);
+  const error = useUploadError(props.handle);
+  const controls = useUploadControls(props.handle);
+
   if (!progress) return <p>Upload not started</p>;
+
+  const percent = Math.round((progress.complete / progress.total) * 100);
+  const speed = Math.round(progress.metrics.bytesPerSecond / 1024 / 1024); // MB/s
+
   return (
-    <p>
-      Progress: {progress.complete} / {progress.total}
-    </p>
+    <div className="upload__progress">
+      <div className="upload__progress-bar">
+        <div
+          className="upload__progress-bar-fill"
+          style={{ width: `${percent}%` }}
+        />
+      </div>
+      <div className="upload__progress-info">
+        <span>{percent}%</span>
+        <span>{speed} MB/s</span>
+        <span>{status}</span>
+      </div>
+      {error && (
+        <div className="upload__error">
+          <p>{error.message}</p>
+          {error.retryable && (
+            <NewButton onClick={controls.retry}>Retry</NewButton>
+          )}
+        </div>
+      )}
+      {status === "running" && (
+        <NewButton onClick={controls.pause}>Pause</NewButton>
+      )}
+      {status === "paused" && (
+        <NewButton onClick={controls.resume}>Resume</NewButton>
+      )}
+      {(status === "running" || status === "paused") && (
+        <NewButton onClick={controls.abort}>Cancel</NewButton>
+      )}
+    </div>
   );
 };
