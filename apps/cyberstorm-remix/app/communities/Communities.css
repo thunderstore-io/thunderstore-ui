@@ -1,6 +1,8 @@
 @layer nimbus-layout {
   .communities {
     gap: var(--space-20);
+
+    --nimbus-layout-content-max-width: 120rem;
   }
 
   .communities__heading {

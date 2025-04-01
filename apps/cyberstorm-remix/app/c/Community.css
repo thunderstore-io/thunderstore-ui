@@ -1,4 +1,8 @@
 @layer nimbus-layout {
+  .community {
+    --nimbus-layout-content-max-width: 120rem;
+  }
+
   .community__heading {
     display: flex;
     gap: var(--gap-xl);
