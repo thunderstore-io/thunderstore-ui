@@ -1,12 +1,16 @@
 @layer nimbus-layout {
   .package-listing {
+    --nimbus-layout-content-max-width: 120rem;
+  }
+
+  .package-listing__main {
     display: flex;
     gap: var(--gap-xxxl);
     align-items: flex-start;
     align-self: stretch;
   }
 
-  .package-listing__main {
+  .package-listing__section {
     display: flex;
     flex: 1 0 0;
     flex-direction: column;

@@ -21,6 +21,7 @@
     gap: var(--gap-sm);
     align-self: flex-start;
     justify-content: flex-start;
+    max-width: var(--nimbus-layout-content-max-width, 90rem);
     padding: var(--space-16);
   }
 

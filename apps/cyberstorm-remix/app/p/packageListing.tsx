@@ -496,8 +496,8 @@ export default function PackageListing() {
           <span>{formatToDisplayName(listing.name)}</span>
         </span>
       </NewBreadCrumbs>
-      <div className="package-listing">
-        <section className="package-listing__main">
+      <div className="package-listing__main">
+        <section className="package-listing__section">
           <PageHeader
             headingLevel="1"
             headingSize="3"

@@ -133,43 +133,41 @@ export default function CommunitiesPage() {
   }, [debouncedSearchValue]);
 
   return (
-    <div className="container container--y container--full layout__content">
-      <section className="container container--y communities">
-        <PageHeader headingLevel="1" headingSize="3">
-          Communities
-        </PageHeader>
-        <div className="container container--y container--full communities__content">
-          <div className="container container--stretch communities__tools">
-            <NewTextInput
-              onChange={(e) => setSearchValue(e.target.value)}
-              value={searchValue}
-              placeholder="Search communities..."
-              clearValue={() => setSearchValue("")}
-              leftIcon={<FontAwesomeIcon icon={faSearch} />}
-              type="search"
-              rootClasses="communities__search"
+    <section className="container container--y container--full layout__content communities">
+      <PageHeader headingLevel="1" headingSize="3">
+        Communities
+      </PageHeader>
+      <div className="container container--y container--full communities__content">
+        <div className="container container--stretch communities__tools">
+          <NewTextInput
+            onChange={(e) => setSearchValue(e.target.value)}
+            value={searchValue}
+            placeholder="Search communities..."
+            clearValue={() => setSearchValue("")}
+            leftIcon={<FontAwesomeIcon icon={faSearch} />}
+            type="search"
+            rootClasses="communities__search"
+          />
+          <span className="container container--x">
+            <NewSelect
+              onChange={changeOrder}
+              options={selectOptions}
+              value={searchParams.get("order") ?? SortOptions.Popular}
+              aria-label="Sort communities by"
             />
-            <span className="container container--x">
-              <NewSelect
-                onChange={changeOrder}
-                options={selectOptions}
-                value={searchParams.get("order") ?? SortOptions.Popular}
-                aria-label="Sort communities by"
-              />
-            </span>
-          </div>
-
-          <div className="container container--x container--stretch communities__results">
-            <CommunitiesList communitiesData={communitiesData} />
-          </div>
+          </span>
         </div>
-        {/* {navigation.state === "loading" ? (
+
+        <div className="container container--x container--stretch communities__results">
+          <CommunitiesList communitiesData={communitiesData} />
+        </div>
+      </div>
+      {/* {navigation.state === "loading" ? (
           <CommunitiesListSkeleton />
         ) : (
           <CommunitiesList communitiesData={communitiesData} />
         )} */}
-      </section>
-    </div>
+    </section>
   );
 }
 
