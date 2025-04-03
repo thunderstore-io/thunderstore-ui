@@ -3,6 +3,7 @@ import {
   fetchPackageReadme,
   fetchPackageVersions,
   postPackageSubmission,
+  fetchPackageSubmissionStatus,
   ApiError,
 } from "@thunderstore/thunderstore-api";
 import { z } from "zod";
@@ -85,14 +86,7 @@ export async function getPackageVersions(
   return parsed.data;
 }
 
-export const packageSubmissionStatusSchema = z.object({
-  id: z.string().nonempty(),
-  status: z.string().nonempty(),
-  form_errors: z.string().array(),
-  task_error: z.boolean(),
-  result: z.string(),
-});
-
+// This error schema is for the submission request itself, not for the task that is run in the background
 export const packageSubmissionErrorSchema = z.object({
   upload_uuid: z.array(z.string()).optional(),
   author_name: z.array(z.string()).optional(),
@@ -103,6 +97,14 @@ export const packageSubmissionErrorSchema = z.object({
   file: z.array(z.string()).optional(),
   team: z.array(z.string()).optional(),
   __all__: z.array(z.string()).optional(),
+});
+
+export const packageSubmissionStatusSchema = z.object({
+  id: z.string().nonempty(),
+  status: z.string().nonempty(),
+  form_errors: packageSubmissionErrorSchema.nullable(),
+  task_error: z.boolean().nullable(),
+  result: z.string().nullable(),
 });
 
 export type PackageSubmissionResponse =
@@ -133,10 +135,53 @@ export async function postPackageSubmissionMetadata(
     );
 
     const parsed = packageSubmissionStatusSchema.safeParse(data);
-
     if (!parsed.success) {
       // Try to parse as PackageSubmissionError
       const errorParsed = packageSubmissionErrorSchema.safeParse(data);
+      if (errorParsed.success) {
+        return errorParsed.data;
+      }
+
+      // If not a PackageSubmissionError, wrap the error in __all__
+      return {
+        __all__: [formatErrorMessage(parsed.error)],
+      };
+    }
+
+    return parsed.data;
+  } catch (error) {
+    if (error instanceof ApiError) {
+      const errorParsed = packageSubmissionErrorSchema.safeParse(
+        error.responseJson
+      );
+      if (errorParsed.success) {
+        return errorParsed.data;
+      }
+      return {
+        __all__: [error.message],
+      };
+    }
+    throw error;
+  }
+}
+
+export async function getPackageSubmissionStatus(
+  this: DapperTsInterface,
+  submissionId: string
+): Promise<PackageSubmissionResponse> {
+  try {
+    const response = await fetchPackageSubmissionStatus(this.config, {
+      useSession: true,
+      submissionId,
+    });
+
+    console.log("Response:", response);
+    const parsed = packageSubmissionStatusSchema.safeParse(response);
+    console.log("Parsed response:", parsed);
+
+    if (!parsed.success) {
+      // Try to parse as PackageSubmissionError
+      const errorParsed = packageSubmissionErrorSchema.safeParse(response);
       if (errorParsed.success) {
         return errorParsed.data;
       }

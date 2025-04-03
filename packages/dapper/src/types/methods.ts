@@ -83,3 +83,7 @@ export type GetTeamMembers = (teamId: string) => Promise<TeamMember[]>;
 export type GetTeamServiceAccounts = (
   teamName: string
 ) => Promise<ServiceAccount[]>;
+
+export type GetPackageSubmissionStatus = (
+  submissionId: string
+) => Promise<PackageSubmissionResponse>;
