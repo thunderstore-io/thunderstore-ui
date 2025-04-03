@@ -15,6 +15,7 @@ import {
   getPackageReadme,
   getPackageVersions,
   postPackageSubmissionMetadata,
+  getPackageSubmissionStatus,
 } from "./methods/package";
 import {
   getPackageListingDetails,
@@ -55,6 +56,8 @@ export class DapperTs implements DapperTsInterface {
     this.getTeamServiceAccounts = this.getTeamServiceAccounts.bind(this);
     this.postPackageSubmissionMetadata =
       this.postPackageSubmissionMetadata.bind(this);
+    this.getPackageSubmissionStatus =
+      this.getPackageSubmissionStatus.bind(this);
   }
 
   public getDynamicHTML = getDynamicHTML;
@@ -72,4 +75,5 @@ export class DapperTs implements DapperTsInterface {
   public getTeamMembers = getTeamMembers;
   public getTeamServiceAccounts = getTeamServiceAccounts;
   public postPackageSubmissionMetadata = postPackageSubmissionMetadata;
+  public getPackageSubmissionStatus = getPackageSubmissionStatus;
 }

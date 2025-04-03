@@ -57,14 +57,6 @@ export interface PackageVersion {
   install_url: string;
 }
 
-export interface PackageSubmissionStatus {
-  id: string;
-  status: string;
-  form_errors: string[];
-  task_error: boolean;
-  result: string;
-}
-
 export interface PackageSubmissionError {
   upload_uuid?: string[];
   author_name?: string[];
@@ -75,6 +67,14 @@ export interface PackageSubmissionError {
   file?: string[];
   team?: string[];
   __all__?: string[];
+}
+
+export interface PackageSubmissionStatus {
+  id: string;
+  status: string;
+  form_errors: PackageSubmissionError | null;
+  task_error: boolean | null;
+  result: string | null;
 }
 
 export type PackageSubmissionResponse =

@@ -27,6 +27,11 @@ import { UserMedia } from "@thunderstore/ts-uploader/src/client/types";
 import { DapperTs, PackageSubmissionResponse } from "@thunderstore/dapper-ts";
 import { MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import {
+  packageSubmissionErrorSchema,
+  packageSubmissionStatusSchema,
+} from "@thunderstore/dapper-ts/src/methods/package";
+import { PackageSubmissionStatus } from "@thunderstore/dapper/types";
 
 interface CommunityOption {
   value: string;
@@ -70,6 +75,13 @@ export default function Upload() {
   const [categoryOptions, setCategoryOptions] = useState<
     { communityId: string; categories: CategoryOption[] }[]
   >([]);
+  const [availableTeams, setAvailableTeams] = useState<
+    {
+      name: string;
+      role: string;
+      member_count: number;
+    }[]
+  >([]);
 
   for (const community of uploadData.results) {
     communityOptions.push({
@@ -81,30 +93,33 @@ export default function Upload() {
   // const outletContext = useOutletContext() as OutletContextShape;
   const session = useSession();
 
+  // Teams do not have a separate identifier, the team name is the identifier
+  useEffect(() => {
+    setAvailableTeams(session.getSessionCurrentUser()?.teams ?? []);
+  }, [session]);
+
   const [NSFW, setNSFW] = useState<boolean>(false);
   const [team, setTeam] = useState<string>();
   const [selectedCommunities, setSelectedCommunities] = useState<
     NewSelectOption[]
   >([]);
-  const [selectedCategories, setSelectedCategories] = useState<
-    { communityId: string; categoryId: string }[]
-  >([]);
+  const [selectedCategories, setSelectedCategories] = useState<{
+    [key: string]: string[];
+  }>({});
+  const [submissionStatus, setSubmissionStatus] =
+    useState<PackageSubmissionStatus>();
+  const [pollingError, setPollingError] = useState<boolean>(false);
 
   const handleCategoryChange = useCallback(
-    (
-      val: NewSelectOption[] | undefined,
-      categories: CategoryOption[],
-      communityId: string
-    ) => {
+    (val: NewSelectOption[] | undefined, communityId: string) => {
       setSelectedCategories((prev) => {
-        const filtered = prev.filter((cat) => cat.communityId !== communityId);
+        const newCategories = { ...prev };
         if (val) {
-          return [
-            ...filtered,
-            ...val.map((v) => ({ communityId, categoryId: v.value })),
-          ];
+          newCategories[communityId] = val.map((v) => v.value);
+        } else {
+          delete newCategories[communityId];
         }
-        return filtered;
+        return newCategories;
       });
     },
     []
@@ -124,6 +139,7 @@ export default function Upload() {
     useState<PackageSubmissionResponse>({});
 
   const startUpload = useCallback(async () => {
+    // console.log("Starting upload");
     if (!file) return;
 
     try {
@@ -157,6 +173,7 @@ export default function Upload() {
   }, [file, session]);
 
   const submit = useCallback(async () => {
+    // console.log("Submitting package");
     if (!usermedia?.uuid) {
       setSubmissionError({
         __all__: ["Upload not completed"],
@@ -164,54 +181,42 @@ export default function Upload() {
       return;
     }
 
-    try {
-      setSubmissionError({});
-      const config = session.getConfig();
-      if (!config.apiHost) {
-        throw new Error("API host is not configured");
-      }
-      const dapper = new DapperTs(() => config);
-      const result = await dapper.postPackageSubmissionMetadata(
-        team ?? "",
-        selectedCommunities.map(
-          (community) => (community as NewSelectOption).value
-        ),
-        NSFW,
-        usermedia.uuid,
-        selectedCategories.map((cat) => cat.categoryId),
-        {}
-      );
+    setSubmissionError({});
+    const config = session.getConfig();
+    const dapper = new DapperTs(() => config);
+    const result = await dapper.postPackageSubmissionMetadata(
+      team ?? "",
+      selectedCommunities.map(
+        (community) => (community as NewSelectOption).value
+      ),
+      NSFW,
+      usermedia.uuid,
+      [],
+      selectedCategories
+    );
 
-      // Check if the result is a SubmissionError
-      if (
-        "__all__" in result ||
-        "author_name" in result ||
-        "communities" in result
-      ) {
+    const sub = packageSubmissionStatusSchema.safeParse(result);
+    // console.log("Submission statuaaas:", sub);
+    if (sub.success) {
+      setSubmissionStatus(sub.data);
+      // Start polling immediately when we get a submission status
+      pollSubmission(sub.data.id);
+      // console.log("Submission status:", sub.data);
+    } else {
+      // Check if the submission request had an error
+      // console.log("Submission error:", result);
+      if (packageSubmissionErrorSchema.safeParse(result).success) {
         setSubmissionError(result);
         return;
       }
+    }
 
-      // Handle successful submission
-      if ("task_error" in result && result.task_error) {
-        setSubmissionError({
-          __all__: [`Submission failed: ${result.result}`],
-        });
-        return;
-      }
-
-      alert("Package submitted successfully!");
-    } catch (error) {
-      console.error("Submission failed:", error);
-      if (error instanceof Error) {
-        setSubmissionError({
-          __all__: [error.message],
-        });
-      } else {
-        setSubmissionError({
-          __all__: ["An unexpected error occurred during submission"],
-        });
-      }
+    // Handle successful submission
+    if ("task_error" in result && result.task_error) {
+      setSubmissionError({
+        __all__: [`Submission failed: ${result.result}`],
+      });
+      return;
     }
   }, [usermedia, NSFW, team, selectedCommunities, selectedCategories, session]);
 
@@ -239,6 +244,64 @@ export default function Upload() {
       }
     }
   }, [selectedCommunities]);
+
+  const pollSubmission = async (submissionId: string) => {
+    // console.log("Polling submission status for:", submissionId);
+    const result = await window.Dapper.getPackageSubmissionStatus(submissionId);
+    // console.log("Result:", result);
+    const parsedResult = packageSubmissionStatusSchema.safeParse(result);
+    // console.log("Parsed result:", parsedResult);
+    if (parsedResult.success) {
+      setSubmissionStatus(parsedResult.data);
+    } else {
+      setSubmissionError(result);
+      return;
+    }
+  };
+
+  useEffect(() => {
+    let retriesLeft = 3;
+    let isPolling = true;
+    const pollSubmissionStatus = async () => {
+      while (isPolling && submissionStatus?.status === "PENDING") {
+        // Wait 5 seconds before polling again
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+        try {
+          await pollSubmission(submissionStatus.id);
+          retriesLeft = 3;
+          setPollingError(false);
+          // Stop polling if status is no longer PENDING
+          if (submissionStatus?.status !== "PENDING") {
+            isPolling = false;
+            break;
+          }
+        } catch {
+          retriesLeft -= 1;
+          if (retriesLeft < 0) {
+            setPollingError(true);
+            isPolling = false;
+            break;
+          }
+        }
+      }
+    };
+
+    if (submissionStatus?.status === "PENDING") {
+      pollSubmissionStatus();
+    }
+
+    // Cleanup function to stop polling when component unmounts or status changes
+    return () => {
+      isPolling = false;
+    };
+  }, [submissionStatus?.status]);
+
+  const retryPolling = () => {
+    if (submissionStatus?.id) {
+      setPollingError(false);
+      pollSubmission(submissionStatus.id);
+    }
+  };
 
   // Helper function to format field names for display
   const formatFieldName = (field: string) => {
@@ -326,19 +389,10 @@ export default function Upload() {
           </div>
           <div className="upload__content">
             <NewSelectSearch
-              options={[
-                { value: "Test_Team_0", label: "Test_Team_0" },
-                { value: "Test_Team_1", label: "Test_Team_1" },
-                { value: "Test_Team_2", label: "Test_Team_2" },
-                { value: "Test_Team_3", label: "Test_Team_3" },
-                { value: "Test_Team_4", label: "Test_Team_4" },
-                { value: "Test_Team_5", label: "Test_Team_5" },
-                { value: "Test_Team_6", label: "Test_Team_6" },
-                { value: "Test_Team_7", label: "Test_Team_7" },
-                { value: "Test_Team_8", label: "Test_Team_8" },
-                { value: "Test_Team_9", label: "Test_Team_9" },
-                { value: "Test_Team_10", label: "Test_Team_10" },
-              ]}
+              options={availableTeams?.map((team) => ({
+                value: team.name,
+                label: team.name,
+              }))}
               onChange={(val) => setTeam(val?.value)}
               value={team ? { value: team, label: team } : undefined}
             />
@@ -363,13 +417,15 @@ export default function Upload() {
                   setSelectedCommunities(newCommunities);
                   // Remove categories for communities that are no longer selected
                   setSelectedCategories((prev) =>
-                    prev.filter((cat) =>
-                      newCommunities.some((c) => c.value === cat.communityId)
+                    Object.fromEntries(
+                      Object.entries(prev).filter(([communityId]) =>
+                        newCommunities.some((c) => c.value === communityId)
+                      )
                     )
                   );
                 } else {
                   setSelectedCommunities([]);
-                  setSelectedCategories([]);
+                  setSelectedCategories({});
                 }
               }}
               value={selectedCommunities}
@@ -405,18 +461,17 @@ export default function Upload() {
                     onChange={(val) => {
                       handleCategoryChange(
                         val ? (Array.isArray(val) ? val : [val]) : undefined,
-                        categories,
                         community.value
                       );
                     }}
-                    value={selectedCategories
-                      .filter((cat) => cat.communityId === community.value)
-                      .map((cat) => ({
-                        value: cat.categoryId,
+                    value={selectedCategories[community.value]?.map(
+                      (categoryId) => ({
+                        value: categoryId,
                         label:
-                          categories.find((c) => c.value === cat.categoryId)
+                          categories.find((c) => c.value === categoryId)
                             ?.label || "",
-                      }))}
+                      })
+                    )}
                   />
                 </div>
               );
@@ -464,9 +519,10 @@ export default function Upload() {
                   setUsermedia(undefined);
                   setIsDone(false);
                   setSelectedCommunities([]);
-                  setSelectedCategories([]);
+                  setSelectedCategories({});
                   setTeam(undefined);
                   setNSFW(false);
+                  setSubmissionStatus(undefined);
                 }}
                 csVariant="secondary"
                 csSize="big"
@@ -496,6 +552,44 @@ export default function Upload() {
               )}
             </div>
             <UploadProgressDisplay handle={handle} />
+            {submissionStatus && (
+              <div className="upload__status">
+                <p>Submission Status: {submissionStatus.status}</p>
+                {pollingError && (
+                  <div className="upload__status-error">
+                    <p>Unable to check submission status</p>
+                    <NewButton onClick={retryPolling}>
+                      Retry Status Check
+                    </NewButton>
+                  </div>
+                )}
+                {submissionStatus.form_errors &&
+                  Object.keys(submissionStatus.form_errors).length > 0 && (
+                    <div className="upload__error">
+                      <p>Form Errors:</p>
+                      <ul>
+                        {Object.entries(submissionStatus.form_errors).map(
+                          ([field, error]) => (
+                            <li key={field}>
+                              {field !== "__all__" && (
+                                <strong>{formatFieldName(field)}: </strong>
+                              )}
+                              {Array.isArray(error)
+                                ? error.join(", ")
+                                : String(error)}
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  )}
+                {submissionStatus.task_error && (
+                  <div className="upload__error">
+                    <p>Task Error: {submissionStatus.result}</p>
+                  </div>
+                )}
+              </div>
+            )}
             {error && (
               <div className="upload__error">
                 <p>{error.message}</p>
@@ -551,7 +645,12 @@ export default function Upload() {
       </span>
       <span>
         selectedCategories:{" "}
-        {selectedCategories.map((c) => `${c.communityId}-${c.categoryId} `)}
+        {Object.entries(selectedCategories)
+          .map(
+            ([communityId, categoryIds]) =>
+              `${communityId}: ${categoryIds.join(", ")}`
+          )
+          .join(" | ")}
       </span>
     </div>
   );
