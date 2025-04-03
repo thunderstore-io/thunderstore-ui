@@ -1,4 +1,4 @@
-@layer colors {
+@layer theme-colors {
   :root {
     /* Figma common colors */
     --skeletor-bg: var(--color-surface-a3);

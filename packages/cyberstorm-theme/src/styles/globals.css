@@ -1,4 +1,4 @@
-@layer utils {
+@layer theme-utils {
   :root {
     /* Base values */
     --space-px: 1px;
