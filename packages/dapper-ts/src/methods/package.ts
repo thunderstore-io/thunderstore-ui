@@ -86,6 +86,36 @@ export async function getPackageVersions(
   return parsed.data;
 }
 
+export const packageSubmissionResultSchema = z.object({
+  package_version: z.object({
+    namespace: z.string(),
+    name: z.string(),
+    version_number: z.string(),
+    full_name: z.string(),
+    description: z.string(),
+    icon: z.string(),
+    dependencies: z.array(z.string()),
+    download_url: z.string(),
+    downloads: z.number(),
+    date_created: z.string(),
+    website_url: z.string().nullable(),
+    is_active: z.boolean(),
+  }),
+  available_communities: z.array(
+    z.object({
+      community: z.object({
+        identifier: z.string(),
+        name: z.string(),
+        discord_url: z.string().nullable(),
+        wiki_url: z.string().nullable(),
+        require_package_listing_approval: z.boolean(),
+      }),
+      categories: z.array(z.object({ name: z.string(), slug: z.string() })),
+      url: z.string(),
+    })
+  ),
+});
+
 // This error schema is for the submission request itself, not for the task that is run in the background
 export const packageSubmissionErrorSchema = z.object({
   upload_uuid: z.array(z.string()).optional(),
@@ -104,7 +134,7 @@ export const packageSubmissionStatusSchema = z.object({
   status: z.string().nonempty(),
   form_errors: packageSubmissionErrorSchema.nullable(),
   task_error: z.boolean().nullable(),
-  result: z.string().nullable(),
+  result: packageSubmissionResultSchema.nullable(),
 });
 
 export type PackageSubmissionResponse =

@@ -11,7 +11,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { DnDFileInput } from "@thunderstore/react-dnd";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MultipartUpload, IBaseUploadHandle } from "@thunderstore/ts-uploader";
 import {
   useUploadProgress,
@@ -106,9 +106,6 @@ export default function Upload() {
   const [selectedCategories, setSelectedCategories] = useState<{
     [key: string]: string[];
   }>({});
-  const [submissionStatus, setSubmissionStatus] =
-    useState<PackageSubmissionStatus>();
-  const [pollingError, setPollingError] = useState<boolean>(false);
 
   const handleCategoryChange = useCallback(
     (val: NewSelectOption[] | undefined, communityId: string) => {
@@ -135,6 +132,8 @@ export default function Upload() {
 
   const [usermedia, setUsermedia] = useState<UserMedia>();
 
+  const [submissionStatus, setSubmissionStatus] =
+    useState<PackageSubmissionStatus>();
   const [submissionError, setSubmissionError] =
     useState<PackageSubmissionResponse>({});
 
@@ -200,7 +199,7 @@ export default function Upload() {
     if (sub.success) {
       setSubmissionStatus(sub.data);
       // Start polling immediately when we get a submission status
-      pollSubmission(sub.data.id);
+      // pollSubmission(sub.data.id);
       // console.log("Submission status:", sub.data);
     } else {
       // Check if the submission request had an error
@@ -235,7 +234,7 @@ export default function Upload() {
             {
               communityId: community.value,
               categories: filters.package_categories.map((cat) => ({
-                value: cat.id,
+                value: cat.slug,
                 label: cat.name,
               })),
             },
@@ -246,60 +245,120 @@ export default function Upload() {
   }, [selectedCommunities]);
 
   const pollSubmission = async (submissionId: string) => {
+    console.log("Polling submission status");
+    // Wait 5 seconds before polling again
+    await new Promise((resolve) => setTimeout(resolve, 5000));
     // console.log("Polling submission status for:", submissionId);
     const result = await window.Dapper.getPackageSubmissionStatus(submissionId);
     // console.log("Result:", result);
     const parsedResult = packageSubmissionStatusSchema.safeParse(result);
     // console.log("Parsed result:", parsedResult);
     if (parsedResult.success) {
-      setSubmissionStatus(parsedResult.data);
+      return { success: true, data: parsedResult.data };
     } else {
-      setSubmissionError(result);
-      return;
+      return { success: false, data: parsedResult.data };
     }
   };
 
+  // const [errorFetchedChecker, setErrorFetchedChecker] = useState(false);
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [data, setData] = useState(null);
+
+  // const updateState = (jsonData) => {
+  //   setIsloading(false);
+  //   setData(jsonData);
+  // };
+
+  const submissionStatusRef = useRef<PackageSubmissionStatus | undefined>(
+    submissionStatus
+  );
+
   useEffect(() => {
-    let retriesLeft = 3;
-    let isPolling = true;
-    const pollSubmissionStatus = async () => {
-      while (isPolling && submissionStatus?.status === "PENDING") {
-        // Wait 5 seconds before polling again
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-        try {
-          await pollSubmission(submissionStatus.id);
-          retriesLeft = 3;
-          setPollingError(false);
-          // Stop polling if status is no longer PENDING
-          if (submissionStatus?.status !== "PENDING") {
-            isPolling = false;
-            break;
+    //console.log('EXECUTING');
+    if (
+      submissionStatus &&
+      submissionStatusRef.current !== submissionStatus &&
+      submissionStatus.status === "PENDING"
+    ) {
+      pollSubmission(submissionStatus.id).then(
+        (data) => {
+          if (data.success) {
+            submissionStatusRef.current = data.data;
+            setSubmissionStatus(data.data);
+          } else {
+            if (data.data) {
+              setSubmissionError(data.data);
+            } else {
+              setSubmissionError({
+                __all__: ["Unable to check submission status"],
+              });
+            }
           }
-        } catch {
-          retriesLeft -= 1;
-          if (retriesLeft < 0) {
-            setPollingError(true);
-            isPolling = false;
-            break;
-          }
+        },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (_error) => {
+          setSubmissionError({
+            __all__: ["Unable to check submission status"],
+          });
+          // setErrorFetchedChecker((c) => !c);
+          //console.log('LOG__FROM_CountriesTable: Executed');
         }
-      }
-    };
-
-    if (submissionStatus?.status === "PENDING") {
-      pollSubmissionStatus();
+      );
     }
+  }, [submissionStatus]);
 
-    // Cleanup function to stop polling when component unmounts or status changes
-    return () => {
-      isPolling = false;
-    };
-  }, [submissionStatus?.status]);
+  // useEffect(() => {
+  //   const pollSubmissionStatus = () => {
+  //     while (isPolling && submissionStatus?.status === "PENDING") {
+  //       try {
+  //         (async () => {
+  //           await pollSubmission(submissionStatus.id);
+  //         })();
+  //         setPollingRetriesLeft(3);
+  //         setPollingError(false);
+  //         // Stop polling if status is no longer PENDING
+  //         if (submissionStatus?.status !== "PENDING") {
+  //           setIsPolling(false);
+  //           break;
+  //         }
+  //       } catch {
+  //         setPollingRetriesLeft(pollingRetriesLeft - 1);
+  //         if (pollingRetriesLeft < 0) {
+  //           setPollingError(true);
+  //           setIsPolling(false);
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   };
+
+  //   if (submissionStatus?.status === "PENDING") {
+  //     console.log("Submission status:", submissionStatus?.status);
+  //     setIsPolling(true);
+  //     pollSubmissionStatus();
+  //   }
+
+  //   // Cleanup function to stop polling when component unmounts or status changes
+  //   return () => {
+  //     setIsPolling(false);
+  //   };
+  // }, [submissionStatus]);
 
   const retryPolling = () => {
     if (submissionStatus?.id) {
-      setPollingError(false);
-      pollSubmission(submissionStatus.id);
+      pollSubmission(submissionStatus.id).then(
+        (data) => {
+          if (data.success) {
+            setSubmissionStatus(data.data);
+          }
+        },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (_error) => {
+          setSubmissionError({
+            __all__: ["Unable to check submission status"],
+          });
+        }
+      );
     }
   };
 
@@ -555,14 +614,6 @@ export default function Upload() {
             {submissionStatus && (
               <div className="upload__status">
                 <p>Submission Status: {submissionStatus.status}</p>
-                {pollingError && (
-                  <div className="upload__status-error">
-                    <p>Unable to check submission status</p>
-                    <NewButton onClick={retryPolling}>
-                      Retry Status Check
-                    </NewButton>
-                  </div>
-                )}
                 {submissionStatus.form_errors &&
                   Object.keys(submissionStatus.form_errors).length > 0 && (
                     <div className="upload__error">
@@ -583,11 +634,154 @@ export default function Upload() {
                       </ul>
                     </div>
                   )}
-                {submissionStatus.task_error && (
-                  <div className="upload__error">
-                    <p>Task Error: {submissionStatus.result}</p>
+                {submissionStatus.result && (
+                  <div className="upload__result">
+                    <h3>Package Details</h3>
+                    <div className="upload__result-section">
+                      <h4>Package Version</h4>
+                      <div className="upload__result-grid">
+                        <div>
+                          <strong>Name:</strong>{" "}
+                          {submissionStatus.result.package_version.name}
+                        </div>
+                        <div>
+                          <strong>Namespace:</strong>{" "}
+                          {submissionStatus.result.package_version.namespace}
+                        </div>
+                        <div>
+                          <strong>Version:</strong>{" "}
+                          {
+                            submissionStatus.result.package_version
+                              .version_number
+                          }
+                        </div>
+                        <div>
+                          <strong>Full Name:</strong>{" "}
+                          {submissionStatus.result.package_version.full_name}
+                        </div>
+                        <div>
+                          <strong>Description:</strong>{" "}
+                          {submissionStatus.result.package_version.description}
+                        </div>
+                        <div>
+                          <strong>Downloads:</strong>{" "}
+                          {submissionStatus.result.package_version.downloads}
+                        </div>
+                        <div>
+                          <strong>Created:</strong>{" "}
+                          {new Date(
+                            submissionStatus.result.package_version.date_created
+                          ).toLocaleString()}
+                        </div>
+                        <div>
+                          <strong>Status:</strong>{" "}
+                          {submissionStatus.result.package_version.is_active
+                            ? "Active"
+                            : "Inactive"}
+                        </div>
+                        {submissionStatus.result.package_version
+                          .website_url && (
+                          <div>
+                            <strong>Website:</strong>{" "}
+                            <a
+                              href={
+                                submissionStatus.result.package_version
+                                  .website_url
+                              }
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {
+                                submissionStatus.result.package_version
+                                  .website_url
+                              }
+                            </a>
+                          </div>
+                        )}
+                        <div>
+                          <strong>Download URL:</strong>{" "}
+                          <a
+                            href={
+                              submissionStatus.result.package_version
+                                .download_url
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Download Package
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="upload__result-section">
+                      <h4>Available Communities</h4>
+                      <div className="upload__result-communities">
+                        {submissionStatus.result.available_communities.map(
+                          (community, index) => (
+                            <div
+                              key={index}
+                              className="upload__result-community"
+                            >
+                              <h5>{community.community.name}</h5>
+                              <div>
+                                <strong>Identifier:</strong>{" "}
+                                {community.community.identifier}
+                              </div>
+                              {community.community.discord_url && (
+                                <div>
+                                  <strong>Discord:</strong>{" "}
+                                  <a
+                                    href={community.community.discord_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    Join Discord
+                                  </a>
+                                </div>
+                              )}
+                              {community.community.wiki_url && (
+                                <div>
+                                  <strong>Wiki:</strong>{" "}
+                                  <a
+                                    href={community.community.wiki_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    View Wiki
+                                  </a>
+                                </div>
+                              )}
+                              <div>
+                                <strong>Package URL:</strong>{" "}
+                                <a
+                                  href={community.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  View Package
+                                </a>
+                              </div>
+                              {community.categories.length > 0 && (
+                                <div>
+                                  <strong>Categories:</strong>
+                                  <ul>
+                                    {community.categories.map(
+                                      (category, catIndex) => (
+                                        <li key={catIndex}>{category.name}</li>
+                                      )
+                                    )}
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
                   </div>
                 )}
+                <NewButton onClick={retryPolling}>Retry Status Check</NewButton>
               </div>
             )}
             {error && (
