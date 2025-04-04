@@ -167,8 +167,8 @@ export default function Upload() {
       });
 
       setLock(true);
-      await upload.start();
       setHandle(upload);
+      await upload.start();
       setUsermedia(upload.uploadHandle);
       setIsDone(true);
     } catch (error) {
@@ -176,6 +176,7 @@ export default function Upload() {
       if (error instanceof Error) {
         alert(`Upload failed: ${error.message}`);
       }
+      setHandle(undefined);
     } finally {
       setLock(false);
     }
