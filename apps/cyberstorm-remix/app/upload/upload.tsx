@@ -7,6 +7,11 @@ import {
   NewSelectSearch,
   NewSelectOption,
   NewSwitch,
+  Heading,
+  NewLink,
+  NewTable,
+  NewTableSort,
+  NewTag,
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
@@ -22,7 +27,12 @@ import {
 // import { useOutletContext } from "@remix-run/react";
 // import { OutletContextShape } from "../../root";
 import { useSession } from "@thunderstore/ts-api-react";
-import { faFileZip, faTreasureChest } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faFileZip,
+  faTreasureChest,
+  faUsers,
+  faArrowUpRight,
+} from "@fortawesome/pro-solid-svg-icons";
 import { UserMedia } from "@thunderstore/ts-uploader/src/client/types";
 import { DapperTs, PackageSubmissionResponse } from "@thunderstore/dapper-ts";
 import { MetaFunction } from "@remix-run/node";
@@ -635,150 +645,121 @@ export default function Upload() {
                     </div>
                   )}
                 {submissionStatus.result && (
-                  <div className="upload__result">
-                    <h3>Package Details</h3>
-                    <div className="upload__result-section">
-                      <h4>Package Version</h4>
-                      <div className="upload__result-grid">
-                        <div>
-                          <strong>Name:</strong>{" "}
-                          {submissionStatus.result.package_version.name}
-                        </div>
-                        <div>
-                          <strong>Namespace:</strong>{" "}
-                          {submissionStatus.result.package_version.namespace}
-                        </div>
-                        <div>
-                          <strong>Version:</strong>{" "}
-                          {
-                            submissionStatus.result.package_version
-                              .version_number
-                          }
-                        </div>
-                        <div>
-                          <strong>Full Name:</strong>{" "}
-                          {submissionStatus.result.package_version.full_name}
-                        </div>
-                        <div>
-                          <strong>Description:</strong>{" "}
-                          {submissionStatus.result.package_version.description}
-                        </div>
-                        <div>
-                          <strong>Downloads:</strong>{" "}
-                          {submissionStatus.result.package_version.downloads}
-                        </div>
-                        <div>
-                          <strong>Created:</strong>{" "}
-                          {new Date(
-                            submissionStatus.result.package_version.date_created
-                          ).toLocaleString()}
-                        </div>
-                        <div>
-                          <strong>Status:</strong>{" "}
-                          {submissionStatus.result.package_version.is_active
-                            ? "Active"
-                            : "Inactive"}
-                        </div>
-                        {submissionStatus.result.package_version
-                          .website_url && (
-                          <div>
-                            <strong>Website:</strong>{" "}
-                            <a
+                  <div className="container container--y container--full island">
+                    <PageHeader
+                      headingLevel="1"
+                      headingSize="3"
+                      image={submissionStatus.result.package_version.icon}
+                      description={
+                        submissionStatus.result.package_version.description
+                      }
+                      variant="detailed"
+                      meta={
+                        <>
+                          <span>
+                            <NewIcon csMode="inline" noWrapper>
+                              <FontAwesomeIcon icon={faUsers} />
+                            </NewIcon>
+                            By{" "}
+                            {submissionStatus.result.package_version.namespace}
+                          </span>
+                          {submissionStatus.result.package_version
+                            .website_url ? (
+                            <NewLink
+                              primitiveType="link"
                               href={
                                 submissionStatus.result.package_version
                                   .website_url
                               }
-                              target="_blank"
-                              rel="noopener noreferrer"
+                              csVariant="cyber"
+                              rootClasses="page-header__meta-item"
                             >
                               {
                                 submissionStatus.result.package_version
                                   .website_url
                               }
-                            </a>
-                          </div>
-                        )}
-                        <div>
-                          <strong>Download URL:</strong>{" "}
-                          <a
-                            href={
-                              submissionStatus.result.package_version
-                                .download_url
-                            }
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Download Package
-                          </a>
-                        </div>
-                      </div>
-                    </div>
+                              <NewIcon csMode="inline" noWrapper>
+                                <FontAwesomeIcon icon={faArrowUpRight} />
+                              </NewIcon>
+                            </NewLink>
+                          ) : null}
+                        </>
+                      }
+                    >
+                      {submissionStatus.result.package_version.name}
+                    </PageHeader>
 
-                    <div className="upload__result-section">
-                      <h4>Available Communities</h4>
-                      <div className="upload__result-communities">
-                        {submissionStatus.result.available_communities.map(
-                          (community, index) => (
-                            <div
-                              key={index}
-                              className="upload__result-community"
-                            >
-                              <h5>{community.community.name}</h5>
-                              <div>
-                                <strong>Identifier:</strong>{" "}
-                                {community.community.identifier}
-                              </div>
-                              {community.community.discord_url && (
-                                <div>
-                                  <strong>Discord:</strong>{" "}
-                                  <a
-                                    href={community.community.discord_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    Join Discord
-                                  </a>
-                                </div>
-                              )}
-                              {community.community.wiki_url && (
-                                <div>
-                                  <strong>Wiki:</strong>{" "}
-                                  <a
-                                    href={community.community.wiki_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    View Wiki
-                                  </a>
-                                </div>
-                              )}
-                              <div>
-                                <strong>Package URL:</strong>{" "}
-                                <a
-                                  href={community.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  View Package
-                                </a>
-                              </div>
-                              {community.categories.length > 0 && (
-                                <div>
-                                  <strong>Categories:</strong>
-                                  <ul>
-                                    {community.categories.map(
-                                      (category, catIndex) => (
-                                        <li key={catIndex}>{category.name}</li>
-                                      )
-                                    )}
-                                  </ul>
-                                </div>
-                              )}
-                            </div>
-                          )
-                        )}
-                      </div>
-                    </div>
+                    <NewTable
+                      titleRowContent={
+                        <>
+                          <Heading csLevel="3" csSize="3">
+                            Success!
+                          </Heading>
+                          <p>
+                            The package is listed in{" "}
+                            {
+                              submissionStatus.result.available_communities
+                                .length
+                            }{" "}
+                            {submissionStatus.result.available_communities
+                              .length !== 1
+                              ? "communities"
+                              : "community"}
+                            :
+                          </p>
+                        </>
+                      }
+                      headers={[
+                        {
+                          value: "Community",
+                          disableSort: false,
+                          columnClasses: "versions__version",
+                        },
+                        {
+                          value: "Link",
+                          disableSort: true,
+                          columnClasses: "versions__upload-date",
+                        },
+                        {
+                          value: "Categories",
+                          disableSort: true,
+                          columnClasses: "versions__downloads",
+                        },
+                      ]}
+                      rows={submissionStatus.result.available_communities.map(
+                        (v) => [
+                          {
+                            value: v.community.name,
+                            sortValue: v.community.name,
+                          },
+                          {
+                            value: (
+                              <NewLink
+                                primitiveType="link"
+                                href={v.url}
+                                target="_blank"
+                                csVariant="cyber"
+                              >
+                                View listing
+                              </NewLink>
+                            ),
+                            sortValue: v.url,
+                          },
+                          {
+                            value: v.categories.map((c) => (
+                              <NewTag key={c.slug} csSize="small">
+                                {c.name}
+                              </NewTag>
+                            )),
+                            sortValue: v.categories
+                              .map((c) => c.name)
+                              .join(", "),
+                          },
+                        ]
+                      )}
+                      sortDirection={NewTableSort.ASC}
+                      csModifiers={["alignLastColumnRight"]}
+                    />
                   </div>
                 )}
                 <NewButton onClick={retryPolling}>Retry Status Check</NewButton>
