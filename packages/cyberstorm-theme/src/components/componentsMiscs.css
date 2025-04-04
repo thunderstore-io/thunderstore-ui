@@ -11,5 +11,8 @@
     --card-package-secondary-hover-box-shadow: 0px 12px 24px 5px
       rgb(0 0 0 / 0.65);
     --code-input-transition--default: ease-out var(--animation-duration-xs);
+    --switch-transition--default: ease-in-out var(--animation-duration-md);
+    --switch-opacity--disabled: 0.5;
+    --switch-cursor--disabled: not-allowed;
   }
 }

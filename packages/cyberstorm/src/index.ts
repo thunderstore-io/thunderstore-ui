@@ -104,6 +104,7 @@ export {
   type SelectSearchProps as NewSelectSearchProps,
   type SelectOption as NewSelectOption,
 } from "./newComponents/SelectSearch/SelectSearch";
+export { Switch as NewSwitch } from "./newComponents/Switch/Switch";
 export { Icon as NewIcon } from "./newComponents/Icon/Icon";
 export { Tag as NewTag } from "./newComponents/Tag/Tag";
 export { Alert as NewAlert } from "./newComponents/Alert/Alert";
