@@ -5,8 +5,8 @@ import {
   NewIcon,
   // Select,
   NewSelectSearch,
-  Switch,
   NewSelectOption,
+  NewSwitch,
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
@@ -552,12 +552,12 @@ export default function Upload() {
             </p>
           </div>
           <div className="upload__content">
-            <Switch
+            <NewSwitch
               value={NSFW}
-              onChange={() => {
-                setNSFW(!NSFW);
+              onChange={(checked) => {
+                setNSFW(checked);
               }}
-            ></Switch>
+            />
           </div>
         </div>
         <div className="upload__divider" />
@@ -832,7 +832,7 @@ export default function Upload() {
         </div> */}
       </section>
       <span>usermedia: {usermedia?.uuid}</span>
-      <span>NSFW: {NSFW}</span>
+      <span>NSFW: {NSFW.toString()}</span>
       <span>team: {team}</span>
       <span>
         selectedCommunities: {selectedCommunities.map((c) => c.value)}

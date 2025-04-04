@@ -141,3 +141,11 @@ export {
   type SelectSearchModifiers,
   SelectSearchModifiersList,
 } from "./components/SelectSearch/SelectSearch";
+export {
+  type SwitchVariants,
+  SwitchVariantsList,
+  type SwitchSizes,
+  SwitchSizesList,
+  type SwitchModifiers,
+  SwitchModifiersList,
+} from "./components/Switch/Switch";
