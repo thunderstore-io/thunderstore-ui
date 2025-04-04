@@ -13,4 +13,6 @@ export interface DapperInterface {
   getTeamDetails: methods.GetTeamDetails;
   getTeamMembers: methods.GetTeamMembers;
   getTeamServiceAccounts: methods.GetTeamServiceAccounts;
+  postPackageSubmissionMetadata: methods.PostPackageSubmissionMetadata;
+  getPackageSubmissionStatus: methods.GetPackageSubmissionStatus;
 }

@@ -37,4 +37,6 @@ export * from "./fetch/teamRemoveMember";
 export * from "./fetch/userLinkedAccountDisconnect";
 export * from "./fetch/toolsManifestValidate";
 export * from "./fetch/toolsMarkdownPreview";
+export * from "./post/packageSubmission";
+export * from "./fetch/packageSubmission";
 export * from "./errors";

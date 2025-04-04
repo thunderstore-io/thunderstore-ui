@@ -56,3 +56,58 @@ export interface PackageVersion {
   download_url: string;
   install_url: string;
 }
+
+export interface PackageSubmissionError {
+  upload_uuid?: string[];
+  author_name?: string[];
+  categories?: string[];
+  communities?: string[];
+  has_nsfw_content?: string[];
+  detail?: string;
+  file?: string[];
+  team?: string[];
+  __all__?: string[];
+}
+
+export interface PackageSubmissionResult {
+  package_version: {
+    namespace: string;
+    name: string;
+    version_number: string;
+    full_name: string;
+    description: string;
+    icon: string;
+    dependencies: string[];
+    download_url: string;
+    downloads: number;
+    date_created: string;
+    website_url: string | null;
+    is_active: boolean;
+  };
+  available_communities: Array<{
+    community: {
+      identifier: string;
+      name: string;
+      discord_url: string | null;
+      wiki_url: string | null;
+      require_package_listing_approval: boolean;
+    };
+    categories: Array<{
+      name: string;
+      slug: string;
+    }>;
+    url: string;
+  }>;
+}
+
+export interface PackageSubmissionStatus {
+  id: string;
+  status: string;
+  form_errors: PackageSubmissionError | null;
+  task_error: boolean | null;
+  result: PackageSubmissionResult | null;
+}
+
+export type PackageSubmissionResponse =
+  | PackageSubmissionStatus
+  | PackageSubmissionError;
