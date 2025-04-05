@@ -1,6 +1,6 @@
 import { ApiConfig } from "../client/config";
 import { UsermediaEndpoints } from "../client/endpoints";
-import { calculateMD5 } from "../md5";
+import { calculateMD5 } from "../workers/md5Utils";
 import { BaseUpload } from "./BaseUpload";
 import { UploadConfig } from "./types";
 

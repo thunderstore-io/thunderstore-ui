@@ -6,10 +6,11 @@ import {
   UploadRequest,
   UploadRequestConfig,
 } from "./UploadRequest";
-import { calculateMD5 } from "../md5";
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 import { BaseUpload } from "./BaseUpload";
 import { UploadConfig } from "./types";
+import { getWorkerManager, getMD5WorkerManager } from "../workers";
+import { calculateMD5 } from "../workers/md5Utils";
 
 export type MultiPartUploadOptions = {
   api: ApiConfig;
@@ -270,36 +271,69 @@ export class MultipartUpload extends BaseUpload {
     this.activeControllers.push(controller);
 
     try {
-      // Calculate checksum
-      const checksum = await calculateMD5(part.payload);
+      // Calculate checksum using the MD5 worker
+      const md5WorkerManager = getMD5WorkerManager();
+      const checksum = await md5WorkerManager.calculateMD5(part.payload);
 
-      await this.retryWithBackoff(async () => {
-        const response = await fetch(part.meta.url, {
-          method: "PUT",
-          headers: {
-            "Content-MD5": checksum,
-          },
-          body: part.payload,
-          signal: controller.signal,
+      // Use the worker manager to upload the part
+      const workerManager = getWorkerManager();
+
+      // Set up event listeners for the worker
+      const progressListener = workerManager.onProgress.addListener((event) => {
+        if (event.partNumber === part.meta.part_number) {
+          // Update progress for this part
+          const partSize = this.file.size / this.parts.length;
+          const partProgress = (event.loaded / event.total) * partSize;
+          const totalProgress =
+            this.completedParts.length * partSize + partProgress;
+          this.updateProgress(totalProgress);
+        }
+      });
+
+      // Create a promise to wait for the upload to complete
+      await new Promise<void>((resolve, reject) => {
+        const completeListener = workerManager.onComplete.addListener(
+          (event) => {
+            if (event.partNumber === part.meta.part_number) {
+              // Remove listeners
+              progressListener();
+              completeListener();
+              errorListener();
+
+              // Add the completed part
+              this.completedParts.push({
+                ETag: event.etag,
+                PartNumber: part.meta.part_number,
+              });
+
+              // Update progress
+              this.updateProgress(
+                this.completedParts.length *
+                  (this.file.size / this.parts.length)
+              );
+
+              resolve();
+            }
+          }
+        );
+
+        const errorListener = workerManager.onError.addListener((event) => {
+          if (event.partNumber === part.meta.part_number) {
+            // Remove listeners
+            progressListener();
+            completeListener();
+            errorListener();
+
+            reject(new Error(event.error));
+          }
         });
 
-        if (!response.ok) {
-          throw new Error(`Part upload failed with status: ${response.status}`);
-        }
-
-        const etag = response.headers.get("etag");
-        if (!etag) {
-          throw new Error("ETag header was missing from the response!");
-        }
-
-        part.etag = etag;
-        this.completedParts.push({
-          ETag: etag,
-          PartNumber: part.meta.part_number,
-        });
-
-        this.updateProgress(
-          this.completedParts.length * (this.file.size / this.parts.length)
+        // Start the upload using the worker
+        workerManager.uploadPart(
+          part.meta.url,
+          part.payload,
+          part.meta.part_number,
+          checksum
         );
       });
     } finally {

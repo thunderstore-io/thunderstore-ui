@@ -22,7 +22,7 @@ async function apiPost<T>(api: ApiConfig, request: RequestConfig) {
   return (await response.json()) as T;
 }
 
-type ApiCall<Req = undefined, Res = undefined, Args = {}> = (
+type ApiCall<Req = undefined, Res = undefined, Args = object> = (
   api: ApiConfig,
   args: {
     data: Req;
