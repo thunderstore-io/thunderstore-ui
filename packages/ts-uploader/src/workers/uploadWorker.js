@@ -1,9 +1,11 @@
+// TODO: As this is JS and not TS, the postMessages have to be checked to make sure they return something sane
+
 // Handle messages from the main thread
 self.onmessage = async (event) => {
   const { type, part } = event.data;
 
   if (type === "upload") {
-    const { url, payload, partNumber, checksum } = part;
+    const { url, payload, uniqueId, checksum } = part;
 
     try {
       const xhr = new XMLHttpRequest();
@@ -13,7 +15,7 @@ self.onmessage = async (event) => {
         if (event.lengthComputable) {
           self.postMessage({
             type: "progress",
-            partNumber,
+            uniqueId,
             progress: event.loaded / event.total,
           });
         }
@@ -24,13 +26,14 @@ self.onmessage = async (event) => {
         if (xhr.status >= 200 && xhr.status < 300) {
           self.postMessage({
             type: "complete",
-            partNumber,
+            uniqueId,
+            etag: xhr.getResponseHeader("ETag"),
             response: xhr.response,
           });
         } else {
           self.postMessage({
             type: "error",
-            partNumber,
+            uniqueId,
             error: `HTTP error: ${xhr.status}`,
           });
         }
@@ -40,7 +43,7 @@ self.onmessage = async (event) => {
       xhr.onerror = () => {
         self.postMessage({
           type: "error",
-          partNumber,
+          uniqueId,
           error: "Network error",
         });
       };
@@ -54,7 +57,7 @@ self.onmessage = async (event) => {
     } catch (error) {
       self.postMessage({
         type: "error",
-        partNumber,
+        uniqueId,
         error: error instanceof Error ? error.message : "Unknown error",
       });
     }

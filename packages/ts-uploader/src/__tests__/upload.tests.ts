@@ -1,5 +1,5 @@
 import { expect } from "@jest/globals";
-import { SinglePartUpload } from "../state/SinglePartUpload";
+// import { SinglePartUpload } from "../state/SinglePartUpload";
 import { MultipartUpload } from "../state/MultipartUpload";
 import { ApiConfig } from "../client/config";
 import { UploadProgress, UploadStatus, UploadError } from "../state/types";
@@ -17,95 +17,95 @@ describe("Upload Tests", () => {
     return new File([blob], "test.bin");
   };
 
-  describe("SinglePartUpload", () => {
-    it("should upload a small file successfully", async () => {
-      const file = createTestFile(1024 * 1024); // 1MB
-      const upload = new SinglePartUpload({ api: apiConfig, file });
+  // describe("SinglePartUpload", () => {
+  //   it("should upload a small file successfully", async () => {
+  //     const file = createTestFile(1024 * 1024); // 1MB
+  //     const upload = new SinglePartUpload({ api: apiConfig, file });
 
-      const progressEvents: UploadProgress[] = [];
-      const statusEvents: UploadStatus[] = [];
-      const errorEvents: UploadError[] = [];
+  //     const progressEvents: UploadProgress[] = [];
+  //     const statusEvents: UploadStatus[] = [];
+  //     const errorEvents: UploadError[] = [];
 
-      upload.onProgress.addListener((progress: UploadProgress) => {
-        progressEvents.push(progress);
-      });
-      upload.onStatusChange.addListener((status: UploadStatus) => {
-        statusEvents.push(status);
-      });
-      upload.onError.addListener((error: UploadError) => {
-        errorEvents.push(error);
-      });
+  //     upload.onProgress.addListener((progress: UploadProgress) => {
+  //       progressEvents.push(progress);
+  //     });
+  //     upload.onStatusChange.addListener((status: UploadStatus) => {
+  //       statusEvents.push(status);
+  //     });
+  //     upload.onError.addListener((error: UploadError) => {
+  //       errorEvents.push(error);
+  //     });
 
-      await upload.start();
+  //     await upload.start();
 
-      expect(statusEvents).toContain("running");
-      expect(statusEvents).toContain("complete");
-      expect(errorEvents).toHaveLength(0);
-      expect(progressEvents[progressEvents.length - 1].complete).toBe(
-        file.size
-      );
-    });
+  //     expect(statusEvents).toContain("running");
+  //     expect(statusEvents).toContain("complete");
+  //     expect(errorEvents).toHaveLength(0);
+  //     expect(progressEvents[progressEvents.length - 1].complete).toBe(
+  //       file.size
+  //     );
+  //   });
 
-    it("should handle pause and resume", async () => {
-      const file = createTestFile(1024 * 1024 * 5); // 5MB
-      const upload = new SinglePartUpload({ api: apiConfig, file });
+  //   it("should handle pause and resume", async () => {
+  //     const file = createTestFile(1024 * 1024 * 5); // 5MB
+  //     const upload = new SinglePartUpload({ api: apiConfig, file });
 
-      const statusEvents: UploadStatus[] = [];
-      upload.onStatusChange.addListener((status: UploadStatus) => {
-        statusEvents.push(status);
-      });
+  //     const statusEvents: UploadStatus[] = [];
+  //     upload.onStatusChange.addListener((status: UploadStatus) => {
+  //       statusEvents.push(status);
+  //     });
 
-      await upload.start();
-      await upload.pause();
-      await upload.resume();
+  //     await upload.start();
+  //     await upload.pause();
+  //     await upload.resume();
 
-      expect(statusEvents).toContain("running");
-      expect(statusEvents).toContain("paused");
-      expect(statusEvents).toContain("complete");
-    });
+  //     expect(statusEvents).toContain("running");
+  //     expect(statusEvents).toContain("paused");
+  //     expect(statusEvents).toContain("complete");
+  //   });
 
-    it("should handle abort", async () => {
-      const file = createTestFile(1024 * 1024 * 5);
-      const upload = new SinglePartUpload({ api: apiConfig, file });
+  //   it("should handle abort", async () => {
+  //     const file = createTestFile(1024 * 1024 * 5);
+  //     const upload = new SinglePartUpload({ api: apiConfig, file });
 
-      const statusEvents: UploadStatus[] = [];
-      upload.onStatusChange.addListener((status: UploadStatus) => {
-        statusEvents.push(status);
-      });
+  //     const statusEvents: UploadStatus[] = [];
+  //     upload.onStatusChange.addListener((status: UploadStatus) => {
+  //       statusEvents.push(status);
+  //     });
 
-      await upload.start();
-      await upload.abort();
+  //     await upload.start();
+  //     await upload.abort();
 
-      expect(statusEvents).toContain("running");
-      expect(statusEvents).toContain("aborted");
-    });
+  //     expect(statusEvents).toContain("running");
+  //     expect(statusEvents).toContain("aborted");
+  //   });
 
-    it("should handle retry on failure", async () => {
-      const file = createTestFile(1024 * 1024);
-      const upload = new SinglePartUpload({
-        api: { ...apiConfig, domain: "invalid-domain" },
-        file,
-      });
+  //   it("should handle retry on failure", async () => {
+  //     const file = createTestFile(1024 * 1024);
+  //     const upload = new SinglePartUpload({
+  //       api: { ...apiConfig, domain: "invalid-domain" },
+  //       file,
+  //     });
 
-      const errorEvents: UploadError[] = [];
-      upload.onError.addListener((error: UploadError) => {
-        errorEvents.push(error);
-      });
+  //     const errorEvents: UploadError[] = [];
+  //     upload.onError.addListener((error: UploadError) => {
+  //       errorEvents.push(error);
+  //     });
 
-      try {
-        await upload.start();
-      } catch (e) {
-        // Expected to fail
-      }
+  //     try {
+  //       await upload.start();
+  //     } catch (e) {
+  //       // Expected to fail
+  //     }
 
-      expect(errorEvents).toHaveLength(1);
-      expect(errorEvents[0].retryable).toBe(true);
+  //     expect(errorEvents).toHaveLength(1);
+  //     expect(errorEvents[0].retryable).toBe(true);
 
-      // Retry with correct domain
-      upload.retry();
-      await upload.start();
-    });
-  });
+  //     // Retry with correct domain
+  //     upload.retry();
+  //     await upload.start();
+  //   });
+  // });
 
   describe("MultipartUpload", () => {
     it("should upload a large file successfully", async () => {

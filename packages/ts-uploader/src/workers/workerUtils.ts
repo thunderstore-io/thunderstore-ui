@@ -50,7 +50,7 @@ export function terminateWorkers(): void {
     uploadWorkerManager = null;
   }
   if (md5WorkerManager) {
-    md5WorkerManager.terminate();
+    md5WorkerManager.terminateWorkers();
     md5WorkerManager = null;
   }
 }

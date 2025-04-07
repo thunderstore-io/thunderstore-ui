@@ -30,6 +30,7 @@ export abstract class BaseUpload implements IBaseUploadHandle {
     this.config = {
       maxRetries: 3,
       retryDelay: 1000,
+      // TODO: This seems to prevent the upload from initializing above 4 parts
       maxConcurrentParts: 3,
       checksumAlgorithm: "md5",
       timeout: 30000,

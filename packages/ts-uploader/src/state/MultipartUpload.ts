@@ -1,16 +1,16 @@
-import { CompletedPart, UserMedia } from "../client/types";
+import { UserMedia } from "../client/types";
 import { UsermediaEndpoints } from "../client/endpoints";
 import { ApiConfig } from "../client/config";
-import {
-  UploadProgress,
-  UploadRequest,
-  UploadRequestConfig,
-} from "./UploadRequest";
+import { UploadProgress } from "./UploadRequest";
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 import { BaseUpload } from "./BaseUpload";
 import { UploadConfig } from "./types";
-import { getWorkerManager, getMD5WorkerManager } from "../workers";
-import { calculateMD5 } from "../workers/md5Utils";
+import {
+  getWorkerManager,
+  getMD5WorkerManager,
+  MD5WorkerManager,
+  WorkerManager,
+} from "../workers";
 
 export type MultiPartUploadOptions = {
   api: ApiConfig;
@@ -30,49 +30,6 @@ export type MultiPartUploadOptions = {
  *    to the server along with the upload handle ID.
  */
 
-function slicePart(file: File, offset: number, length: number) {
-  const start = offset;
-  const end = offset + length;
-  return end < file.size ? file.slice(start, end) : file.slice(start);
-}
-
-async function createUploadRequest<T>(
-  part: UploadPart,
-  onProgress: UploadRequestConfig<T>["onProgress"],
-  transformer: UploadRequest<T>["transformer"]
-): Promise<UploadRequest<T>> {
-  // TODO: Async md5 calculation via either wasm or workers
-  const md5 = await calculateMD5(part.payload);
-  return new UploadRequest(
-    {
-      data: part.payload,
-      md5: md5,
-    },
-    {
-      url: part.meta.url,
-      onProgress,
-    },
-    transformer
-  );
-}
-
-export async function initMultipartUpload(
-  file: File,
-  opts: MultiPartUploadOptions
-): Promise<UploadHandle> {
-  const result = await UsermediaEndpoints.init(opts.api, {
-    data: {
-      filename: file.name,
-      file_size_bytes: file.size,
-    },
-  });
-  const parts: UploadPart[] = result.upload_urls.map((x) => ({
-    payload: slicePart(file, x.offset, x.length),
-    meta: x,
-  }));
-  return new UploadHandle(result.user_media, opts, parts);
-}
-
 type UploadPart = {
   payload: Blob;
   meta: {
@@ -85,98 +42,6 @@ type UploadPart = {
 export interface IUploadHandle {
   get progress(): UploadProgress;
   onProgress: TypedEventEmitter<UploadProgress>;
-}
-
-class UploadHandle implements IUploadHandle {
-  readonly handle: UserMedia;
-  readonly opts: MultiPartUploadOptions;
-  readonly parts: UploadPart[];
-  readonly onProgress = new TypedEventEmitter<UploadProgress>();
-
-  private requests?: UploadRequest<CompletedPart>[];
-
-  constructor(
-    handle: UserMedia,
-    opts: MultiPartUploadOptions,
-    parts: UploadPart[]
-  ) {
-    this.handle = handle;
-    this.opts = opts;
-    this.parts = parts;
-  }
-
-  get progress(): UploadProgress {
-    return (this.requests || []).reduce(
-      (state, request) => {
-        return {
-          total: state.total + request.progress.total,
-          complete: state.complete + request.progress.complete,
-        };
-      },
-      {
-        total: 0,
-        complete: 0,
-      }
-    );
-  }
-
-  private startRequests(count?: number) {
-    if (this.requests == undefined) {
-      throw new Error("Upload not yet prepared");
-    }
-
-    const promises = [];
-    const candidates = this.requests.filter((x) => x.status === "pending");
-    for (let i = 0; i < (count ?? candidates.length); i++) {
-      if (i >= candidates.length) break;
-      promises.push(candidates[i].upload());
-    }
-    return promises;
-  }
-
-  async startUpload(
-    onProgress?: (
-      progress: UploadProgress
-    ) => ReturnType<typeof UsermediaEndpoints.finish>
-  ) {
-    if (this.requests != undefined) {
-      throw new Error("Upload already initiated!");
-    }
-
-    const progressCallback = () => {
-      const progress = this.progress;
-      if (onProgress) onProgress(progress);
-      this.onProgress.emit(progress);
-    };
-
-    this.requests = [];
-
-    for (const part of this.parts) {
-      const request = await createUploadRequest<CompletedPart>(
-        part,
-        progressCallback,
-        (response) => {
-          const etag = response.headers.get("etag");
-          if (!etag) {
-            // ETag is filtered out by some browser extensions
-            // TODO: Handle somehow better
-            throw new Error("ETag header was missing from the response!");
-          }
-          return {
-            ETag: etag,
-            PartNumber: part.meta.part_number,
-          };
-        }
-      );
-      this.requests.push(request);
-    }
-
-    const parts = await Promise.all(this.startRequests());
-    return UsermediaEndpoints.finish(this.opts.api, {
-      data: { parts },
-      uuid: this.handle.uuid,
-    });
-  }
 }
 
 export class MultipartUpload extends BaseUpload {
@@ -224,6 +89,8 @@ export class MultipartUpload extends BaseUpload {
         },
       });
 
+      // console.log(result);
+
       this.handle = result.user_media;
 
       // Create parts
@@ -235,11 +102,24 @@ export class MultipartUpload extends BaseUpload {
         },
       }));
 
+      const md5WorkerManager = getMD5WorkerManager();
+      const workerManager = getWorkerManager();
+
       // Upload parts concurrently
       const maxConcurrent = this.config.maxConcurrentParts ?? 3;
       for (let i = 0; i < this.parts.length; i += maxConcurrent) {
+        // console.log(i);
         const batch = this.parts.slice(i, i + maxConcurrent);
-        await Promise.all(batch.map((part) => this.uploadPart(part)));
+        // console.log(batch);
+        // await Promise.all(
+        //   batch.map((part) => this.uploadPart(md5WorkerManager, part))
+        // );
+        await Promise.all(
+          batch.map((part) => {
+            console.log(part);
+            return this.uploadPart(md5WorkerManager, workerManager, part);
+          })
+        );
       }
 
       // Complete upload
@@ -262,7 +142,11 @@ export class MultipartUpload extends BaseUpload {
     }
   }
 
-  private async uploadPart(part: UploadPart): Promise<void> {
+  private async uploadPart(
+    md5WorkerManager: MD5WorkerManager,
+    workerManager: WorkerManager,
+    part: UploadPart
+  ): Promise<void> {
     if (this.isAborted) {
       throw new Error("Upload aborted");
     }
@@ -270,41 +154,56 @@ export class MultipartUpload extends BaseUpload {
     const controller = new AbortController();
     this.activeControllers.push(controller);
 
+    // console.log(part);
+
     try {
       // Calculate checksum using the MD5 worker
-      const md5WorkerManager = getMD5WorkerManager();
-      const checksum = await md5WorkerManager.calculateMD5(part.payload);
+
+      if (!this.handle) {
+        throw new Error("Upload handle not found");
+      }
+
+      const uniqueId = `${this.handle.uuid}-${part.meta.part_number}`;
+
+      const checksum = await md5WorkerManager.calculateMD5(
+        uniqueId,
+        part.payload
+      );
+      console.log(checksum);
 
       // Use the worker manager to upload the part
-      const workerManager = getWorkerManager();
 
       // Set up event listeners for the worker
       const progressListener = workerManager.onProgress.addListener((event) => {
-        if (event.partNumber === part.meta.part_number) {
+        if (event.uniqueId === uniqueId) {
           // Update progress for this part
           const partSize = this.file.size / this.parts.length;
-          const partProgress = (event.loaded / event.total) * partSize;
+          const partProgress = event.progress * partSize;
           const totalProgress =
             this.completedParts.length * partSize + partProgress;
           this.updateProgress(totalProgress);
         }
       });
 
+      console.log("uploadPfasfafasart", uniqueId);
       // Create a promise to wait for the upload to complete
       await new Promise<void>((resolve, reject) => {
         const completeListener = workerManager.onComplete.addListener(
           (event) => {
-            if (event.partNumber === part.meta.part_number) {
+            // console.log("completeListener", event);
+            if (event.uniqueId === uniqueId) {
               // Remove listeners
               progressListener();
               completeListener();
               errorListener();
 
+              console.log("completedPart", event.etag);
               // Add the completed part
               this.completedParts.push({
                 ETag: event.etag,
                 PartNumber: part.meta.part_number,
               });
+              // console.log(this.completedParts);
 
               // Update progress
               this.updateProgress(
@@ -318,7 +217,7 @@ export class MultipartUpload extends BaseUpload {
         );
 
         const errorListener = workerManager.onError.addListener((event) => {
-          if (event.partNumber === part.meta.part_number) {
+          if (event.uniqueId === uniqueId) {
             // Remove listeners
             progressListener();
             completeListener();
@@ -328,11 +227,18 @@ export class MultipartUpload extends BaseUpload {
           }
         });
 
+        console.log(
+          "uploadPart",
+          part.meta.url,
+          part.payload,
+          part.meta.part_number,
+          checksum
+        );
         // Start the upload using the worker
         workerManager.uploadPart(
           part.meta.url,
           part.payload,
-          part.meta.part_number,
+          uniqueId,
           checksum
         );
       });

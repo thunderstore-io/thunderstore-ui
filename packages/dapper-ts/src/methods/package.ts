@@ -205,9 +205,7 @@ export async function getPackageSubmissionStatus(
       submissionId,
     });
 
-    console.log("Response:", response);
     const parsed = packageSubmissionStatusSchema.safeParse(response);
-    console.log("Parsed response:", parsed);
 
     if (!parsed.success) {
       // Try to parse as PackageSubmissionError

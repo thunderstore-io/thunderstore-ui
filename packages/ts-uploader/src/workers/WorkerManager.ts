@@ -1,18 +1,17 @@
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 
 export type WorkerProgressEvent = {
-  partNumber: number;
-  loaded: number;
-  total: number;
+  uniqueId: string;
+  progress: number;
 };
 
 export type WorkerCompleteEvent = {
-  partNumber: number;
+  uniqueId: string;
   etag: string;
 };
 
 export type WorkerErrorEvent = {
-  partNumber: number;
+  uniqueId: string;
   error: string;
 };
 
@@ -57,49 +56,51 @@ export class WorkerManager {
   uploadPart(
     url: string,
     payload: Blob,
-    partNumber: number,
+    uniqueId: string,
     checksum?: string
   ): void {
     if (!this.worker || !this.isInitialized) {
       this.onError.emit({
-        partNumber,
+        uniqueId,
         error: "Worker not initialized",
       });
       return;
     }
+
+    console.log("uploadPartasdasd", url, payload, uniqueId, checksum);
 
     this.worker.postMessage({
       type: "upload",
       part: {
         url,
         payload,
-        partNumber,
+        uniqueId,
         checksum,
       },
     });
   }
 
   private handleWorkerMessage(event: MessageEvent): void {
-    const { type, partNumber } = event.data;
+    const { type, uniqueId, progress, etag, error } = event.data;
 
     switch (type) {
       case "progress":
         this.onProgress.emit({
-          partNumber,
-          loaded: event.data.progress.loaded,
-          total: event.data.progress.total,
+          uniqueId,
+          progress,
         });
         break;
       case "complete":
+        console.log("complete", event.data);
         this.onComplete.emit({
-          partNumber,
-          etag: event.data.etag,
+          uniqueId,
+          etag,
         });
         break;
       case "error":
         this.onError.emit({
-          partNumber,
-          error: event.data.error,
+          uniqueId,
+          error,
         });
         break;
     }

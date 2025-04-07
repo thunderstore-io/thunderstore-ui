@@ -25,7 +25,7 @@ async function calculateMD5(blob) {
 
 // Handle messages from the main thread
 self.onmessage = async (event) => {
-  const { type, data } = event.data;
+  const { type, data, uniqueId } = event.data;
 
   if (type === "calculate") {
     try {
@@ -36,12 +36,14 @@ self.onmessage = async (event) => {
       self.postMessage({
         type: "complete",
         md5,
+        uniqueId,
       });
     } catch (error) {
       // Send error response back to main thread
       self.postMessage({
         type: "error",
         error: error instanceof Error ? error.message : "Unknown error",
+        uniqueId,
       });
     }
   }
