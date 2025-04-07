@@ -18,6 +18,7 @@ export type UploadError = {
 };
 
 export type UploadMetrics = {
+  bytesPerSecondHistory: { time: number; value: number }[];
   bytesPerSecond: number;
   totalBytes: number;
   uploadedBytes: number;
@@ -26,11 +27,19 @@ export type UploadMetrics = {
   retryCount: number;
 };
 
+export type UploadPartProgress = {
+  total: number;
+  complete: number;
+  status: UploadStatus;
+  error?: UploadError;
+};
+
 export type UploadProgress = {
   total: number;
   complete: number;
   status: UploadStatus;
   metrics: UploadMetrics;
+  partsProgress: { [key: string]: UploadPartProgress };
   error?: UploadError;
 };
 

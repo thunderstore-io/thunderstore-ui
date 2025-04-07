@@ -3,7 +3,6 @@ import {
   NewBreadCrumbs,
   NewButton,
   NewIcon,
-  // Select,
   NewSelectSearch,
   NewSelectOption,
   NewSwitch,
@@ -259,11 +258,8 @@ export default function Upload() {
     console.log("Polling submission status");
     // Wait 5 seconds before polling again
     await new Promise((resolve) => setTimeout(resolve, 5000));
-    // console.log("Polling submission status for:", submissionId);
     const result = await window.Dapper.getPackageSubmissionStatus(submissionId);
-    // console.log("Result:", result);
     const parsedResult = packageSubmissionStatusSchema.safeParse(result);
-    // console.log("Parsed result:", parsedResult);
     if (parsedResult.success) {
       return { success: true, data: parsedResult.data };
     } else {
@@ -311,8 +307,6 @@ export default function Upload() {
           setSubmissionError({
             __all__: ["Unable to check submission status"],
           });
-          // setErrorFetchedChecker((c) => !c);
-          //console.log('LOG__FROM_CountriesTable: Executed');
         }
       );
     }
@@ -800,18 +794,6 @@ export default function Upload() {
             )}
           </div>
         </div>
-        {/* <div className="upload-form">
-          <NewButton
-            disabled={!file || !!handle || lock}
-            onClick={startUpload}
-            csVariant="special"
-            csSize="big"
-          >
-            Start upload
-          </NewButton>
-          <UploadProgressDisplay handle={handle} />
-          <p>Upload success: {isDone.toString()}</p>
-        </div> */}
       </section>
       <span>usermedia: {usermedia?.uuid}</span>
       <span>NSFW: {NSFW.toString()}</span>
@@ -832,6 +814,28 @@ export default function Upload() {
   );
 }
 
+function formatBytes(bytes: number, decimals = 2) {
+  if (!+bytes) return "0 Bytes";
+
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = [
+    "Bytes",
+    "KiB",
+    "MiB",
+    "GiB",
+    "TiB",
+    "PiB",
+    "EiB",
+    "ZiB",
+    "YiB",
+  ];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+}
+
 const UploadProgressDisplay = (props: { handle?: IBaseUploadHandle }) => {
   const progress = useUploadProgress(props.handle);
   const status = useUploadStatus(props.handle);
@@ -840,8 +844,21 @@ const UploadProgressDisplay = (props: { handle?: IBaseUploadHandle }) => {
 
   if (!progress) return <p>Upload not started</p>;
 
+  const partBars = Object.keys(progress.partsProgress).map((partId) => {
+    const partProgress = progress.partsProgress[partId];
+    return (
+      <div className="upload__progress-bar" key={partId}>
+        <div
+          className="upload__progress-bar-fill"
+          style={{
+            width: `${(partProgress.complete / partProgress.total) * 100}%`,
+          }}
+        />
+      </div>
+    );
+  });
   const percent = Math.round((progress.complete / progress.total) * 100);
-  const speed = Math.round(progress.metrics.bytesPerSecond / 1024 / 1024); // MB/s
+  const speed = formatBytes(progress.metrics.bytesPerSecond, 2);
 
   return (
     <div className="upload__progress">
@@ -851,10 +868,14 @@ const UploadProgressDisplay = (props: { handle?: IBaseUploadHandle }) => {
           style={{ width: `${percent}%` }}
         />
       </div>
+      <div className="upload__progress-bars">{partBars}</div>
       <div className="upload__progress-info">
-        <span>{percent}%</span>
-        <span>{speed} MB/s</span>
-        <span>{status}</span>
+        <span>
+          {percent}% {formatBytes(progress.complete)} /{" "}
+          {formatBytes(progress.total)}
+        </span>
+        <span className="upload__progress-speed">{speed} / s</span>
+        {/* <span>{status}</span> */}
       </div>
       {error && (
         <div className="upload__error">

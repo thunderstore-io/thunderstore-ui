@@ -3,7 +3,7 @@ import {
   UploadProgress,
   UploadStatus,
   UploadError,
-  UploadConfig,
+  // UploadConfig,
 } from "@thunderstore/ts-uploader";
 import { useEffect, useState } from "react";
 

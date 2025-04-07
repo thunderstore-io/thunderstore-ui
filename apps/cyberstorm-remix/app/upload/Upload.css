@@ -172,17 +172,33 @@
     background-color: var(--color-surface-a9);
   }
 
+  .upload__progress-bars {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    width: 100%;
+  }
+
   .upload__progress-bar-fill {
     height: 100%;
-    background-color: var(--color-accent);
+    background-color: var(--color-accent-green-6);
     transition: width 0.3s ease;
   }
 
   .upload__progress-info {
     display: flex;
+    flex-direction: row;
+    align-items: space-between;
     justify-content: space-between;
     color: var(--color-text-secondary);
     font-size: var(--font-size-body-sm);
+  }
+
+  .upload__progress-speed {
+    display: inline-flex;
+    flex-direction: row;
+    gap: 0.5em;
+    align-items: flex-end;
   }
 
   .upload__error {

@@ -4,6 +4,7 @@ import {
   UploadConfig,
   UploadError,
   UploadMetrics,
+  UploadPartProgress,
   UploadProgress,
   UploadStatus,
 } from "./types";
@@ -11,6 +12,7 @@ import {
 export abstract class BaseUpload implements IBaseUploadHandle {
   protected status: UploadStatus = "pending";
   protected metrics: UploadMetrics = {
+    bytesPerSecondHistory: [],
     bytesPerSecond: 0,
     totalBytes: 0,
     uploadedBytes: 0,
@@ -19,6 +21,7 @@ export abstract class BaseUpload implements IBaseUploadHandle {
     retryCount: 0,
   };
   protected error?: UploadError;
+  protected partsProgress: { [key: string]: UploadPartProgress } = {};
   protected config: UploadConfig;
   protected isAborted = false;
 
@@ -45,18 +48,39 @@ export abstract class BaseUpload implements IBaseUploadHandle {
       status: this.status,
       metrics: this.metrics,
       error: this.error,
+      partsProgress: this.partsProgress,
     };
   }
 
-  protected updateProgress(bytes: number) {
+  protected updateProgress(uniqueId: string, partProgress: UploadPartProgress) {
     const now = Date.now();
+    this.partsProgress[uniqueId] = partProgress;
+
+    const previousUploadedBytes = this.metrics.uploadedBytes;
+
+    this.metrics.uploadedBytes = Object.values(this.partsProgress).reduce(
+      (acc, part) => acc + part.complete,
+      0
+    );
+
     const timeDiff = (now - this.metrics.lastUpdateTime) / 1000; // seconds
-    if (timeDiff > 0) {
-      this.metrics.bytesPerSecond =
-        (bytes - this.metrics.uploadedBytes) / timeDiff;
+    if (timeDiff > 1) {
+      this.metrics.bytesPerSecondHistory =
+        this.metrics.bytesPerSecondHistory.slice(-9);
+      this.metrics.bytesPerSecondHistory.push({
+        time: timeDiff,
+        value: this.metrics.uploadedBytes - previousUploadedBytes,
+      });
+      const bps = this.metrics.bytesPerSecondHistory.reduce(
+        (acc, val) => ({
+          time: acc.time + val.time,
+          value: acc.value + val.value,
+        }),
+        { time: 0, value: 0 }
+      );
+      this.metrics.bytesPerSecond = bps.value / bps.time;
+      this.metrics.lastUpdateTime = now;
     }
-    this.metrics.uploadedBytes = bytes;
-    this.metrics.lastUpdateTime = now;
     this.onProgress.emit(this.progress);
   }
 
@@ -72,6 +96,7 @@ export abstract class BaseUpload implements IBaseUploadHandle {
     this.onError.emit(error);
   }
 
+  // TODO: Take this into use
   protected async retryWithBackoff<T>(
     operation: () => Promise<T>,
     retryCount = 0
