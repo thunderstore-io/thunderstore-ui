@@ -81,6 +81,7 @@ export class MultipartUpload extends BaseUpload {
       this.metrics.startTime = Date.now();
       this.metrics.lastUpdateTime = this.metrics.startTime;
 
+      // TODO: If this throws a 400/500 oslt, the error isn't shown correctly
       // Initialize upload
       const result = await UsermediaEndpoints.init(this.api, {
         data: {
