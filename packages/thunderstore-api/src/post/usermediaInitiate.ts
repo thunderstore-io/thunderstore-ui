@@ -9,6 +9,7 @@ import {
   UsermediaInitiateUploadResponseData,
   usermediaInitiateUploadResponseDataSchema,
 } from "../schemas/responseSchemas";
+import { z } from "zod";
 
 export function postUsermediaInitiate(
   config: () => RequestConfig,
@@ -17,8 +18,8 @@ export function postUsermediaInitiate(
 ): Promise<UsermediaInitiateUploadResponseData> {
   const path = `/api/experimental/usermedia/initiate-upload/`;
 
-  return apiFetch(
-    {
+  return apiFetch({
+    args: {
       config,
       path,
       request: {
@@ -28,7 +29,8 @@ export function postUsermediaInitiate(
       },
       useSession: meta.useSession,
     },
-    usermediaInitiateUploadRequestDataSchema,
-    usermediaInitiateUploadResponseDataSchema
-  );
+    requestSchema: usermediaInitiateUploadRequestDataSchema,
+    queryParamsSchema: z.object({}),
+    responseSchema: usermediaInitiateUploadResponseDataSchema,
+  });
 }

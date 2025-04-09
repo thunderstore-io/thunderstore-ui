@@ -1,26 +1,43 @@
 import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
-import { serializeQueryString } from "../queryString";
-import { PackageListingQueryParams } from "../types";
+import {
+  packageListingsRequestParamsSchema,
+  PackageListingsRequestQueryParams,
+  packageListingsRequestQueryParamsSchema,
+  PackageListingsRequestParams,
+} from "../schemas/requestSchemas";
+import { PackageListingsOrderingEnum } from "../schemas/queryParamSchemas";
+import {
+  PackageListingsResponseData,
+  packageListingsResponseDataSchema,
+} from "../schemas/responseSchemas";
 
 export async function fetchCommunityPackageListings(
   config: () => RequestConfig,
-  communityId: string,
-  options?: PackageListingQueryParams
-) {
-  const path = `api/cyberstorm/listing/${communityId.toLowerCase()}/`;
-
-  const queryParams = [
-    { key: "ordering", value: options?.ordering, impotent: "last-updated" },
-    { key: "page", value: options?.page, impotent: 1 },
-    { key: "q", value: options?.q.trim() },
-    { key: "included_categories", value: options?.includedCategories },
-    { key: "excluded_categories", value: options?.excludedCategories },
-    { key: "section", value: options?.section },
-    { key: "nsfw", value: options?.nsfw, impotent: false },
-    { key: "deprecated", value: options?.deprecated, impotent: false },
-  ];
-  const query = serializeQueryString(queryParams);
-
-  return await apiFetch(config, path, query);
+  params: PackageListingsRequestParams,
+  queryParams: PackageListingsRequestQueryParams = [
+    {
+      key: "ordering",
+      value: PackageListingsOrderingEnum.Updated,
+      impotent: PackageListingsOrderingEnum.Updated,
+    },
+    { key: "page", value: 1, impotent: 1 },
+    { key: "q", value: "" },
+    { key: "included_categories", value: [] },
+    { key: "excluded_categories", value: [] },
+    { key: "section", value: "" },
+    { key: "nsfw", value: false, impotent: false },
+    { key: "deprecated", value: false, impotent: false },
+  ]
+): Promise<PackageListingsResponseData> {
+  return await apiFetch({
+    args: {
+      config,
+      path: `api/cyberstorm/listing/${params.community_id.toLowerCase()}/`,
+      queryParams,
+    },
+    requestSchema: packageListingsRequestParamsSchema,
+    queryParamsSchema: packageListingsRequestQueryParamsSchema,
+    responseSchema: packageListingsResponseDataSchema,
+  });
 }

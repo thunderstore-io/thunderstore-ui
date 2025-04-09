@@ -1,6 +1,7 @@
 import { ApiError, RequestConfig } from "./index";
 import { z } from "zod";
 import { formatErrorMessage } from "./utils";
+import { serializeQueryString } from "./queryString";
 
 const BASE_HEADERS = {
   Accept: "application/json",
@@ -37,27 +38,34 @@ function sleep(delay: number) {
   return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
-export type apiFetchArgs<B> = {
+export type apiFetchArgs<B, QP> = {
   config: () => RequestConfig;
   path: string;
-  query?: string;
+  queryParams?: QP;
   request?: Omit<RequestInit, "headers" | "body"> & { body?: B };
   useSession?: boolean;
 };
 
-export async function apiFetch(
-  args: apiFetchArgs<z.infer<typeof requestSchema>>,
-  requestSchema: z.ZodSchema,
-  responseSchema: z.ZodSchema
-): Promise<z.infer<typeof responseSchema>> {
-  const { config, path, request, query, useSession = false } = args;
+export async function apiFetch(props: {
+  args: apiFetchArgs<
+    z.infer<typeof props.requestSchema>,
+    z.infer<typeof props.queryParamsSchema>
+  >;
+  requestSchema: z.ZodSchema;
+  queryParamsSchema: z.ZodSchema;
+  responseSchema: z.ZodSchema;
+}): Promise<z.infer<typeof props.responseSchema>> {
+  const { args, responseSchema } = props;
+  const { config, path, request, queryParams, useSession = false } = args;
   const usedConfig: RequestConfig = useSession
     ? config()
     : {
         apiHost: config().apiHost,
         sessionId: undefined,
       };
-  const url = getUrl(usedConfig, path, query);
+  // TODO: Query params have stronger types, but they are not just shown here.
+  // Look into furthering the ensuring of passing proper query params.
+  const url = getUrl(usedConfig, path, queryParams);
 
   const response = await fetchRetry(url, {
     ...(request ?? {}),
@@ -87,7 +95,13 @@ function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {
     : {};
 }
 
-function getUrl(config: RequestConfig, path: string, query?: string) {
-  const fullPath = query ? `${path}?${query}` : path;
+function getUrl(
+  config: RequestConfig,
+  path: string,
+  queryParams?: { key: string; value: string; impotent?: string }[]
+) {
+  const fullPath = queryParams
+    ? `${path}?${serializeQueryString(queryParams)}`
+    : path;
   return new URL(fullPath, config.apiHost);
 }

@@ -10,6 +10,7 @@ import {
   UsermediaFinishUploadResponseData,
   usermediaFinishUploadResponseDataSchema,
 } from "../schemas/responseSchemas";
+import { z } from "zod";
 
 export function postUsermediaFinish(
   config: () => RequestConfig,
@@ -19,8 +20,8 @@ export function postUsermediaFinish(
 ): Promise<UsermediaFinishUploadResponseData> {
   const path = `/api/experimental/usermedia/${params.uuid}/finish-upload/`;
 
-  return apiFetch(
-    {
+  return apiFetch({
+    args: {
       config,
       path,
       request: {
@@ -30,7 +31,8 @@ export function postUsermediaFinish(
       },
       useSession: meta.useSession,
     },
-    usermediaFinishUploadRequestDataSchema,
-    usermediaFinishUploadResponseDataSchema
-  );
+    requestSchema: usermediaFinishUploadRequestDataSchema,
+    queryParamsSchema: z.object({}),
+    responseSchema: usermediaFinishUploadResponseDataSchema,
+  });
 }

@@ -1,29 +1,10 @@
-import { z } from "zod";
 import {
   fetchCommunity,
   fetchCommunityList,
 } from "@thunderstore/thunderstore-api";
 
 import { DapperTsInterface } from "../index";
-import { paginatedResults } from "../sharedSchemas";
 import { formatErrorMessage } from "../utils";
-
-const communitySchema = z.object({
-  name: z.string().nonempty(),
-  identifier: z.string().nonempty(),
-  short_description: z.string().nullable(),
-  description: z.string().nullable(),
-  wiki_url: z.string().nullable(),
-  discord_url: z.string().nullable(),
-  datetime_created: z.string().datetime(),
-  hero_image_url: z.string().url().nullable(),
-  cover_image_url: z.string().url().nullable(),
-  icon_url: z.string().url().nullable(),
-  total_download_count: z.number().int(),
-  total_package_count: z.number().int(),
-});
-
-const communitiesSchema = paginatedResults(communitySchema);
 
 export async function getCommunities(
   this: DapperTsInterface,

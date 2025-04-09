@@ -15,8 +15,8 @@ export function postUsermediaAbort(
 ): Promise<UsermediaAbortUploadResponseData> {
   const path = `/api/experimental/usermedia/${params.uuid}/abort-upload/`;
 
-  return apiFetch(
-    {
+  return apiFetch({
+    args: {
       config,
       path,
       request: {
@@ -25,7 +25,8 @@ export function postUsermediaAbort(
       },
       useSession: meta.useSession,
     },
-    z.object({}),
-    usermediaAbortUploadResponseDataSchema
-  );
+    requestSchema: z.object({}),
+    queryParamsSchema: z.object({}),
+    responseSchema: usermediaAbortUploadResponseDataSchema,
+  });
 }
