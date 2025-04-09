@@ -8,9 +8,10 @@ import {
   UploadProgress,
   UploadStatus,
 } from "./types";
+import { RequestConfig } from "@thunderstore/thunderstore-api";
 
 export abstract class BaseUpload implements IBaseUploadHandle {
-  protected status: UploadStatus = "pending";
+  protected status: UploadStatus = "not_started";
   protected metrics: UploadMetrics = {
     bytesPerSecondHistory: [],
     bytesPerSecond: 0,
@@ -23,22 +24,23 @@ export abstract class BaseUpload implements IBaseUploadHandle {
   protected error?: UploadError;
   protected partsProgress: { [key: string]: UploadPartProgress } = {};
   protected config: UploadConfig;
+  protected requestConfig: RequestConfig;
   protected isAborted = false;
 
   readonly onProgress = new TypedEventEmitter<UploadProgress>();
   readonly onStatusChange = new TypedEventEmitter<UploadStatus>();
   readonly onError = new TypedEventEmitter<UploadError>();
 
-  constructor(config: UploadConfig = {}) {
+  constructor(config: UploadConfig = {}, requestConfig: RequestConfig = {}) {
     this.config = {
       maxRetries: 3,
       retryDelay: 1000,
-      // TODO: This seems to prevent the upload from initializing above 4 parts
       maxConcurrentParts: 3,
       checksumAlgorithm: "md5",
       timeout: 30000,
       ...config,
     };
+    this.requestConfig = requestConfig;
   }
 
   get progress(): UploadProgress {

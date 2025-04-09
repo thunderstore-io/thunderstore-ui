@@ -5,6 +5,11 @@ import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 import { BaseUpload } from "./BaseUpload";
 import { UploadConfig, UploadProgress } from "./types";
 import { getMD5WorkerManager, MD5WorkerManager } from "../workers";
+import { MD5WorkerManagerError } from "../workers/MD5WorkerManager";
+import {
+  postUsermediaFinish,
+  postUsermediaInitiate,
+} from "@thunderstore/thunderstore-api";
 
 export type MultiPartUploadOptions = {
   api: ApiConfig;
@@ -46,7 +51,13 @@ export class MultipartUpload extends BaseUpload {
     [key: string]: {
       part: UploadPart;
       uniqueId: string;
-      state: "pending" | "uploading" | "complete" | "error" | "paused";
+      state:
+        | "pending"
+        | "prepared"
+        | "uploading"
+        | "complete"
+        | "error"
+        | "paused";
       etag: string | undefined;
       error: string | undefined;
       checksum: string | undefined;
@@ -77,16 +88,133 @@ export class MultipartUpload extends BaseUpload {
       : this.file.slice(start);
   }
 
-  async uploadPart(part: UploadPart, md5WorkerManager: MD5WorkerManager) {
-    if (!this.handle) {
-      throw new Error("Upload handle not found");
+  async start(): Promise<void> {
+    if (this.status === "running") {
+      throw new Error("Upload already running");
     }
-    const uniqueId = `${this.handle.uuid}-${part.meta.part_number}`;
-    // TODO: This can return an error in the string that is not handled
+
+    try {
+      this.setStatus("running");
+      this.metrics.startTime = Date.now();
+      this.metrics.lastUpdateTime = this.metrics.startTime;
+
+      // Initialize upload
+      const initiateResult = await postUsermediaInitiate(
+        () => this.requestConfig,
+        {
+          useSession: true,
+        },
+        {
+          filename: this.file.name,
+          file_size_bytes: this.file.size,
+        }
+      );
+
+      this.handle = initiateResult.user_media;
+
+      // Create parts
+      this.parts = initiateResult.upload_urls.map((x) => ({
+        payload: this.slicePart(x.offset, x.length),
+        meta: {
+          part_number: x.part_number,
+          url: x.url,
+        },
+      }));
+
+      // Prepare parts
+      for (let i = 0; i < this.parts.length; i) {
+        const uniqueId = `${this.handle.uuid}-${this.parts[i].meta.part_number}`;
+        this.partStates[uniqueId] = {
+          part: this.parts[i],
+          uniqueId,
+          state: "prepared",
+          etag: undefined,
+          error: undefined,
+          checksum: undefined,
+        };
+      }
+
+      // Upload parts concurrently
+      const maxConcurrent = this.config.maxConcurrentParts ?? 3;
+      for (let i = 0; i < this.parts.length; i += maxConcurrent) {
+        const batch = this.parts.slice(i, i + maxConcurrent);
+
+        batch.map((part) => {
+          if (!this.handle) {
+            throw new Error("Upload handle not found");
+          }
+          this.onGoingUploads.push(
+            this.uploadPart(
+              `${this.handle.uuid}-${part.meta.part_number}`,
+              part,
+              this.md5WorkerManager
+            )
+          );
+        });
+        await Promise.all(this.onGoingUploads);
+      }
+
+      if (
+        Object.values(this.partStates).some((part) => part.state === "error")
+      ) {
+        throw new Error("Parts of the upload failed, please retry.");
+      }
+
+      const completeParts: { ETag: string; PartNumber: number }[] = [];
+
+      Object.values(this.partStates).map((ps) => {
+        if (!ps.etag) {
+          throw new Error("Parts of the upload were not uploaded correctly.");
+        }
+        completeParts.push({
+          ETag: ps.etag,
+          PartNumber: ps.part.meta.part_number,
+        });
+      });
+
+      // Complete upload
+      const finishResult = await postUsermediaFinish(
+        () => this.requestConfig,
+        {
+          uuid: this.handle.uuid,
+        },
+        {
+          useSession: true,
+        },
+        {
+          parts: completeParts,
+        }
+      );
+
+      this.handle = finishResult;
+
+      this.setStatus("complete");
+    } catch (error) {
+      if (error instanceof Error) {
+        this.setError({
+          code: "UPLOAD_FAILED",
+          message: error.message,
+          retryable: true,
+          details: error,
+        });
+      }
+      this.setStatus("failed");
+    }
+  }
+
+  async uploadPart(
+    uniqueId: string,
+    part: UploadPart,
+    md5WorkerManager: MD5WorkerManager
+  ) {
     const checksum = await md5WorkerManager.calculateMD5(
       uniqueId,
       part.payload
     );
+
+    if (checksum instanceof MD5WorkerManagerError) {
+      throw checksum;
+    }
 
     this.partStates[uniqueId] = {
       part,
@@ -154,85 +282,6 @@ export class MultipartUpload extends BaseUpload {
     });
   }
 
-  async start(): Promise<void> {
-    if (this.status === "running") {
-      throw new Error("Upload already running");
-    }
-
-    try {
-      this.setStatus("running");
-      this.metrics.startTime = Date.now();
-      this.metrics.lastUpdateTime = this.metrics.startTime;
-
-      // TODO: If this throws a 400/500 oslt, the error isn't shown correctly
-      // Initialize upload
-      const result = await UsermediaEndpoints.init(this.api, {
-        data: {
-          filename: this.file.name,
-          file_size_bytes: this.file.size,
-        },
-      });
-
-      this.handle = result.user_media;
-
-      // Create parts
-      this.parts = result.upload_urls.map((x) => ({
-        payload: this.slicePart(x.offset, x.length),
-        meta: {
-          part_number: x.part_number,
-          url: x.url,
-        },
-      }));
-
-      // Upload parts concurrently
-      const maxConcurrent = this.config.maxConcurrentParts ?? 3;
-      for (let i = 0; i < this.parts.length; i += maxConcurrent) {
-        const batch = this.parts.slice(i, i + maxConcurrent);
-
-        batch.map((part) =>
-          this.onGoingUploads.push(this.uploadPart(part, this.md5WorkerManager))
-        );
-        await Promise.all(this.onGoingUploads);
-      }
-
-      if (
-        Object.values(this.partStates).some((part) => part.state === "error")
-      ) {
-        throw new Error("Upload failed");
-      }
-
-      const completeParts: { ETag: string; PartNumber: number }[] = [];
-
-      Object.values(this.partStates).map((ps) => {
-        // TODO: ETag cannot be missing here
-        completeParts.push({
-          ETag: ps.etag ?? "",
-          PartNumber: ps.part.meta.part_number,
-        });
-      });
-
-      // Complete upload
-      await UsermediaEndpoints.finish(this.api, {
-        data: {
-          parts: completeParts,
-        },
-        uuid: this.handle.uuid,
-      });
-
-      this.setStatus("complete");
-    } catch (error) {
-      if (error instanceof Error) {
-        this.setError({
-          code: "UPLOAD_FAILED",
-          message: error.message,
-          retryable: true,
-          details: error,
-        });
-      }
-      this.setStatus("failed");
-    }
-  }
-
   async pause(): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(this.partStates).forEach(([_key, value]) => {
@@ -247,7 +296,7 @@ export class MultipartUpload extends BaseUpload {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(this.partStates).forEach(([_key, value]) => {
       if (value.state === "paused") {
-        this.uploadPart(value.part, this.md5WorkerManager);
+        this.uploadPart(value.uniqueId, value.part, this.md5WorkerManager);
       }
     });
   }
@@ -268,7 +317,7 @@ export class MultipartUpload extends BaseUpload {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(this.partStates).forEach(([_key, value]) => {
       if (value.state === "error") {
-        this.uploadPart(value.part, this.md5WorkerManager);
+        this.uploadPart(value.uniqueId, value.part, this.md5WorkerManager);
       }
     });
   }

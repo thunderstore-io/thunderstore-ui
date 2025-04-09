@@ -39,4 +39,7 @@ export * from "./fetch/toolsManifestValidate";
 export * from "./fetch/toolsMarkdownPreview";
 export * from "./post/packageSubmission";
 export * from "./fetch/packageSubmission";
+export * from "./post/usermediaInitiate";
+export * from "./post/usermediaFinish";
+export * from "./post/usermediaAbort";
 export * from "./errors";

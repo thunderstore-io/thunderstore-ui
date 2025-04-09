@@ -1,5 +1,3 @@
-// import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
-
 export type MD5CompleteEvent = {
   type: "complete";
   md5: string;
@@ -12,12 +10,21 @@ export type MD5ErrorEvent = {
   uniqueId: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface MD5WorkerManagerError extends Error {}
+
+interface MD5WorkerManagerErrorConstructor extends ErrorConstructor {
+  new (message?: string): MD5WorkerManagerError;
+  (message?: string): MD5WorkerManagerError;
+  readonly prototype: MD5WorkerManagerError;
+}
+
+// eslint-disable-next-line no-var
+export declare var MD5WorkerManagerError: MD5WorkerManagerErrorConstructor;
+
 export class MD5WorkerManager {
   private workers: Worker[] = [];
   private isInitialized = false;
-
-  // readonly onComplete = new TypedEventEmitter<MD5CompleteEvent>();
-  // readonly onError = new TypedEventEmitter<MD5ErrorEvent>();
 
   constructor() {
     // this.namespace = namespace;
@@ -43,9 +50,14 @@ export class MD5WorkerManager {
     this.isInitialized = false;
   }
 
-  calculateMD5(uniqueId: string, data: Blob): Promise<string> {
+  calculateMD5(
+    uniqueId: string,
+    data: Blob
+  ): Promise<string | MD5WorkerManagerError> {
     if (!this.isInitialized) {
-      return Promise.reject(new Error("MD5 worker not initialized"));
+      return Promise.reject(
+        new MD5WorkerManagerError("MD5 worker not initialized")
+      );
     }
 
     let worker: Worker | null = null;
@@ -56,53 +68,34 @@ export class MD5WorkerManager {
         type: "module",
       });
       if (!worker) {
-        throw new Error("Failed to create MD5 worker");
+        return Promise.reject(
+          new MD5WorkerManagerError("Failed to create MD5 worker")
+        );
       }
       this.workers.push(worker);
     } catch (error) {
-      console.error("Failed to initialize MD5 worker:", error);
+      return Promise.reject(
+        new MD5WorkerManagerError(`Failed to initialize MD5 worker: ${error}`)
+      );
     }
 
     return new Promise((resolve, reject) => {
       worker!.onmessage = (event: MessageEvent) => {
-        console.log("calculateMD5 onmessage", event);
         const typeCastedEvent = event.data as MD5CompleteEvent | MD5ErrorEvent;
         if (typeCastedEvent.uniqueId === uniqueId) {
           if (typeCastedEvent.type === "complete") {
             resolve(typeCastedEvent.md5);
           } else if (typeCastedEvent.type === "error") {
-            reject(new Error(typeCastedEvent.error));
+            reject(
+              new MD5WorkerManagerError(
+                `MD5 worker error: ${typeCastedEvent.error}`
+              )
+            );
           } else {
-            reject(new Error("Unknown event type"));
+            reject(new MD5WorkerManagerError("Unknown event type"));
           }
         }
       };
-
-      // this.worker!.onerror = (event: MessageEvent) => {
-      //   console.log("calculateMD5 onerror", event);
-      //   const typeCastedEvent = event.data as MD5ErrorEvent;
-      //   if (typeCastedEvent.type === "error") {
-      //     if (typeCastedEvent.uniqueId === uniqueId) {
-      //       reject(new Error(typeCastedEvent.error));
-      //     }
-      //   }
-      // };
-
-      // const completeListener = this.onComplete.addListener((event) => {
-      //   if (event.uniqueId === uniqueId) {
-      //     completeListener();
-      //     errorListener();
-      //     resolve(event.md5);
-      //   }
-      // });
-
-      // const errorListener = this.onError.addListener((event) => {
-      //   if (event.uniqueId === uniqueId) {
-      //     completeListener();
-      //     errorListener();
-      //     reject(new Error(event.error));
-      //   }
-      // });
 
       worker!.postMessage({
         type: "calculate",
@@ -111,33 +104,4 @@ export class MD5WorkerManager {
       });
     });
   }
-
-  // private handleWorkerMessage(event: MD5CompleteEvent): void {
-  //   const { type, uniqueId, md5 } = event;
-
-  //   switch (type) {
-  //     case "complete":
-  //       this.onComplete.emit({
-  //         type: "complete",
-  //         uniqueId,
-  //         md5,
-  //       });
-  //       break;
-  //     case "error":
-  //       this.onError.emit({
-  //         type: "error",
-  //         uniqueId,
-  //         error,
-  //       });
-  //       break;
-  //   }
-  // }
-
-  // private handleWorkerError(event: MD5ErrorEvent): void {
-  //   this.onError.emit({
-  //     type: "error",
-  //     error: event.error || "Unknown error in MD5 worker",
-  //     uniqueId: event.uniqueId,
-  //   });
-  // }
 }

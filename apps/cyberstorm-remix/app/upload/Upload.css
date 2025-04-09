@@ -174,7 +174,7 @@
 
   .upload__progress-bars {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: var(--gap-md);
     width: 100%;
   }

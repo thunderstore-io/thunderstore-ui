@@ -40,7 +40,10 @@ import {
   packageSubmissionErrorSchema,
   packageSubmissionStatusSchema,
 } from "@thunderstore/dapper-ts/src/methods/package";
-import { PackageSubmissionStatus } from "@thunderstore/dapper/types";
+import {
+  PackageSubmissionResult,
+  PackageSubmissionStatus,
+} from "@thunderstore/dapper/types";
 
 interface CommunityOption {
   value: string;
@@ -182,7 +185,6 @@ export default function Upload() {
   }, [file, session]);
 
   const submit = useCallback(async () => {
-    // console.log("Submitting package");
     if (!usermedia?.uuid) {
       setSubmissionError({
         __all__: ["Upload not completed"],
@@ -205,7 +207,6 @@ export default function Upload() {
     );
 
     const sub = packageSubmissionStatusSchema.safeParse(result);
-    // console.log("Submission statuaaas:", sub);
     if (sub.success) {
       setSubmissionStatus(sub.data);
       // Start polling immediately when we get a submission status
@@ -374,8 +375,6 @@ export default function Upload() {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
   };
-
-  // console.log(submissionError);
 
   return (
     <div className="container container--y container--full layout__content">
@@ -593,27 +592,24 @@ export default function Upload() {
               >
                 Reset
               </NewButton>
-              {isDone ? (
-                <NewButton
-                  disabled={!usermedia?.uuid || !selectedCommunities.length}
-                  onClick={submit}
-                  csVariant="accent"
-                  csSize="big"
-                  rootClasses="upload__submit"
-                >
-                  Submit Package
-                </NewButton>
-              ) : (
-                <NewButton
-                  disabled={!file || !!handle || lock}
-                  onClick={startUpload}
-                  csVariant="accent"
-                  csSize="big"
-                  rootClasses="upload__submit"
-                >
-                  Upload File
-                </NewButton>
-              )}
+              <NewButton
+                disabled={!file || !!handle || lock}
+                onClick={startUpload}
+                csVariant="accent"
+                csSize="big"
+                rootClasses="upload__submit"
+              >
+                Upload File
+              </NewButton>
+              <NewButton
+                disabled={!usermedia?.uuid || !selectedCommunities.length}
+                onClick={submit}
+                csVariant="accent"
+                csSize="big"
+                rootClasses="upload__submit"
+              >
+                Submit Package
+              </NewButton>
             </div>
             <UploadProgressDisplay handle={handle} />
             {submissionStatus && (
@@ -640,122 +636,9 @@ export default function Upload() {
                     </div>
                   )}
                 {submissionStatus.result && (
-                  <div className="container container--y container--full island">
-                    <PageHeader
-                      headingLevel="1"
-                      headingSize="3"
-                      image={submissionStatus.result.package_version.icon}
-                      description={
-                        submissionStatus.result.package_version.description
-                      }
-                      variant="detailed"
-                      meta={
-                        <>
-                          <span>
-                            <NewIcon csMode="inline" noWrapper>
-                              <FontAwesomeIcon icon={faUsers} />
-                            </NewIcon>
-                            By{" "}
-                            {submissionStatus.result.package_version.namespace}
-                          </span>
-                          {submissionStatus.result.package_version
-                            .website_url ? (
-                            <NewLink
-                              primitiveType="link"
-                              href={
-                                submissionStatus.result.package_version
-                                  .website_url
-                              }
-                              csVariant="cyber"
-                              rootClasses="page-header__meta-item"
-                            >
-                              {
-                                submissionStatus.result.package_version
-                                  .website_url
-                              }
-                              <NewIcon csMode="inline" noWrapper>
-                                <FontAwesomeIcon icon={faArrowUpRight} />
-                              </NewIcon>
-                            </NewLink>
-                          ) : null}
-                        </>
-                      }
-                    >
-                      {submissionStatus.result.package_version.name}
-                    </PageHeader>
-
-                    <NewTable
-                      titleRowContent={
-                        <>
-                          <Heading csLevel="3" csSize="3">
-                            Success!
-                          </Heading>
-                          <p>
-                            The package is listed in{" "}
-                            {
-                              submissionStatus.result.available_communities
-                                .length
-                            }{" "}
-                            {submissionStatus.result.available_communities
-                              .length !== 1
-                              ? "communities"
-                              : "community"}
-                            :
-                          </p>
-                        </>
-                      }
-                      headers={[
-                        {
-                          value: "Community",
-                          disableSort: false,
-                          columnClasses: "versions__version",
-                        },
-                        {
-                          value: "Link",
-                          disableSort: true,
-                          columnClasses: "versions__upload-date",
-                        },
-                        {
-                          value: "Categories",
-                          disableSort: true,
-                          columnClasses: "versions__downloads",
-                        },
-                      ]}
-                      rows={submissionStatus.result.available_communities.map(
-                        (v) => [
-                          {
-                            value: v.community.name,
-                            sortValue: v.community.name,
-                          },
-                          {
-                            value: (
-                              <NewLink
-                                primitiveType="link"
-                                href={v.url}
-                                target="_blank"
-                                csVariant="cyber"
-                              >
-                                View listing
-                              </NewLink>
-                            ),
-                            sortValue: v.url,
-                          },
-                          {
-                            value: v.categories.map((c) => (
-                              <NewTag key={c.slug} csSize="small">
-                                {c.name}
-                              </NewTag>
-                            )),
-                            sortValue: v.categories
-                              .map((c) => c.name)
-                              .join(", "),
-                          },
-                        ]
-                      )}
-                      sortDirection={NewTableSort.ASC}
-                      csModifiers={["alignLastColumnRight"]}
-                    />
-                  </div>
+                  <SubmissionResult
+                    submissionStatusResult={submissionStatus.result}
+                  />
                 )}
                 <NewButton onClick={retryPolling}>Retry Status Check</NewButton>
               </div>
@@ -795,21 +678,23 @@ export default function Upload() {
           </div>
         </div>
       </section>
-      <span>usermedia: {usermedia?.uuid}</span>
-      <span>NSFW: {NSFW.toString()}</span>
-      <span>team: {team}</span>
-      <span>
-        selectedCommunities: {selectedCommunities.map((c) => c.value)}
-      </span>
-      <span>
-        selectedCategories:{" "}
-        {Object.entries(selectedCategories)
-          .map(
-            ([communityId, categoryIds]) =>
-              `${communityId}: ${categoryIds.join(", ")}`
-          )
-          .join(" | ")}
-      </span>
+      <div className="container container--y container--full">
+        <span>usermedia: {usermedia?.uuid}</span>
+        <span>NSFW: {NSFW.toString()}</span>
+        <span>team: {team}</span>
+        <span>
+          selectedCommunities: {selectedCommunities.map((c) => c.value)}
+        </span>
+        <span>
+          selectedCategories:{" "}
+          {Object.entries(selectedCategories)
+            .map(
+              ([communityId, categoryIds]) =>
+                `${communityId}: ${categoryIds.join(", ")}`
+            )
+            .join(" | ")}
+        </span>
+      </div>
     </div>
   );
 }
@@ -835,6 +720,111 @@ function formatBytes(bytes: number, decimals = 2) {
 
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
+
+const SubmissionResult = (props: {
+  submissionStatusResult: PackageSubmissionResult;
+}) => {
+  return (
+    <div className="container container--y container--full island">
+      <PageHeader
+        headingLevel="1"
+        headingSize="3"
+        image={props.submissionStatusResult.package_version.icon}
+        description={props.submissionStatusResult.package_version.description}
+        variant="detailed"
+        meta={
+          <>
+            <span>
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faUsers} />
+              </NewIcon>
+              By {props.submissionStatusResult.package_version.namespace}
+            </span>
+            {props.submissionStatusResult.package_version.website_url ? (
+              <NewLink
+                primitiveType="link"
+                href={props.submissionStatusResult.package_version.website_url}
+                csVariant="cyber"
+                rootClasses="page-header__meta-item"
+              >
+                {props.submissionStatusResult.package_version.website_url}
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faArrowUpRight} />
+                </NewIcon>
+              </NewLink>
+            ) : null}
+          </>
+        }
+      >
+        {props.submissionStatusResult.package_version.name}
+      </PageHeader>
+
+      <NewTable
+        titleRowContent={
+          <>
+            <Heading csLevel="3" csSize="3">
+              Success!
+            </Heading>
+            <p>
+              The package is listed in{" "}
+              {props.submissionStatusResult.available_communities.length}{" "}
+              {props.submissionStatusResult.available_communities.length !== 1
+                ? "communities"
+                : "community"}
+              :
+            </p>
+          </>
+        }
+        headers={[
+          {
+            value: "Community",
+            disableSort: false,
+            columnClasses: "versions__version",
+          },
+          {
+            value: "Link",
+            disableSort: true,
+            columnClasses: "versions__upload-date",
+          },
+          {
+            value: "Categories",
+            disableSort: true,
+            columnClasses: "versions__downloads",
+          },
+        ]}
+        rows={props.submissionStatusResult.available_communities.map((v) => [
+          {
+            value: v.community.name,
+            sortValue: v.community.name,
+          },
+          {
+            value: (
+              <NewLink
+                primitiveType="link"
+                href={v.url}
+                target="_blank"
+                csVariant="cyber"
+              >
+                View listing
+              </NewLink>
+            ),
+            sortValue: v.url,
+          },
+          {
+            value: v.categories.map((c) => (
+              <NewTag key={c.slug} csSize="small">
+                {c.name}
+              </NewTag>
+            )),
+            sortValue: v.categories.map((c) => c.name).join(", "),
+          },
+        ])}
+        sortDirection={NewTableSort.ASC}
+        csModifiers={["alignLastColumnRight"]}
+      />
+    </div>
+  );
+};
 
 const UploadProgressDisplay = (props: { handle?: IBaseUploadHandle }) => {
   const progress = useUploadProgress(props.handle);
@@ -875,7 +865,6 @@ const UploadProgressDisplay = (props: { handle?: IBaseUploadHandle }) => {
           {formatBytes(progress.total)}
         </span>
         <span className="upload__progress-speed">{speed} / s</span>
-        {/* <span>{status}</span> */}
       </div>
       {error && (
         <div className="upload__error">

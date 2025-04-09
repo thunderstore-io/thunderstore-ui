@@ -4,6 +4,7 @@ export type {
   UploadConfig,
   UploadProgress,
   UploadStatus,
+  UploadPartStatus,
   UploadError,
   UploadMetrics,
 } from "./state/types";

@@ -1,4 +1,6 @@
 import { ApiError, RequestConfig } from "./index";
+import { z } from "zod";
+import { formatErrorMessage } from "./utils";
 
 const BASE_HEADERS = {
   Accept: "application/json",
@@ -35,14 +37,19 @@ function sleep(delay: number) {
   return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
-export type apiFetchArgs = {
+export type apiFetchArgs<B> = {
   config: () => RequestConfig;
   path: string;
   query?: string;
-  request?: Omit<RequestInit, "headers">;
+  request?: Omit<RequestInit, "headers" | "body"> & { body?: B };
   useSession?: boolean;
 };
-export async function apiFetch2(args: apiFetchArgs) {
+
+export async function apiFetch(
+  args: apiFetchArgs<z.infer<typeof requestSchema>>,
+  requestSchema: z.ZodSchema,
+  responseSchema: z.ZodSchema
+): Promise<z.infer<typeof responseSchema>> {
   const { config, path, request, query, useSession = false } = args;
   const usedConfig: RequestConfig = useSession
     ? config()
@@ -64,26 +71,12 @@ export async function apiFetch2(args: apiFetchArgs) {
     throw await ApiError.createFromResponse(response);
   }
 
-  return response.json();
-}
-
-export function apiFetch(
-  config: () => RequestConfig,
-  path: string,
-  query?: string,
-  request?: Omit<RequestInit, "headers">,
-  useSession?: boolean
-) {
-  // TODO: Update the apiFetch signature to take in object args instead
-  //       of positional arguments and then merge apiFetch and apiFetch2
-  //       together. Someone else's job for now.
-  return apiFetch2({
-    config,
-    path,
-    query,
-    request,
-    useSession,
-  });
+  const parsed = responseSchema.safeParse(await response.json());
+  if (!parsed.success) {
+    throw new Error(formatErrorMessage(parsed.error));
+  } else {
+    return parsed.data;
+  }
 }
 
 function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {

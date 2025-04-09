@@ -3,9 +3,18 @@ import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 export type UploadType = "single" | "multipart";
 
 export type UploadStatus =
+  | "not_started"
   | "pending"
   | "running"
   | "paused"
+  | "complete"
+  | "failed"
+  | "aborted";
+
+export type UploadPartStatus =
+  | "prepared"
+  | "pending"
+  | "running"
   | "complete"
   | "failed"
   | "aborted";
@@ -30,7 +39,7 @@ export type UploadMetrics = {
 export type UploadPartProgress = {
   total: number;
   complete: number;
-  status: UploadStatus;
+  status: UploadPartStatus;
   error?: UploadError;
 };
 
