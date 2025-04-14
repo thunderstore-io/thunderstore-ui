@@ -7,6 +7,12 @@ import {
   packageListingSchema,
   userSchema,
   emptyUserSchema,
+  packageListingDetailsSchema,
+  packageVersionSchema,
+  ratedPackagesSchema,
+  teamDetailsSchema,
+  teamMembersSchema,
+  teamServiceAccountSchema,
 } from "../schemas/objectSchemas";
 import { paginatedResults } from "../schemas/objectSchemas";
 
@@ -79,4 +85,68 @@ export const dynamicHTMLResponseDataSchema = z.object({
 
 export type DynamicHTMLResponseData = z.infer<
   typeof dynamicHTMLResponseDataSchema
+>;
+
+// PackageChangelogResponse
+export const packageChangelogResponseDataSchema = z.object({
+  html: z.string(),
+});
+
+export type PackageChangelogResponseData = z.infer<
+  typeof packageChangelogResponseDataSchema
+>;
+
+// PackageListingDetailsResponse
+export const packageListingDetailsResponseDataSchema =
+  packageListingDetailsSchema;
+
+export type PackageListingDetailsResponseData = z.infer<
+  typeof packageListingDetailsResponseDataSchema
+>;
+
+// PackageReadmeResponse
+export const packageReadmeResponseDataSchema = z.object({
+  readme: z.string(),
+});
+
+export type PackageReadmeResponseData = z.infer<
+  typeof packageReadmeResponseDataSchema
+>;
+
+// PackageVersionsResponse
+export const packageVersionsResponseDataSchema = z.object({
+  versions: z.array(packageVersionSchema),
+});
+
+export type PackageVersionsResponseData = z.infer<
+  typeof packageVersionsResponseDataSchema
+>;
+
+// RatedPackagesResponse
+export const ratedPackagesResponseDataSchema = ratedPackagesSchema;
+
+export type RatedPackagesResponseData = z.infer<
+  typeof ratedPackagesResponseDataSchema
+>;
+
+// TeamDetailsResponse
+export const teamDetailsResponseDataSchema = teamDetailsSchema;
+
+export type TeamDetailsResponseData = z.infer<
+  typeof teamDetailsResponseDataSchema
+>;
+
+// TeamMembersResponse
+export const teamMembersResponseDataSchema = teamMembersSchema;
+
+export type TeamMembersResponseData = z.infer<
+  typeof teamMembersResponseDataSchema
+>;
+
+// TeamServiceAccountsResponse
+export const teamServiceAccountsResponseDataSchema =
+  teamServiceAccountSchema.array();
+
+export type TeamServiceAccountsResponseData = z.infer<
+  typeof teamServiceAccountsResponseDataSchema
 >;

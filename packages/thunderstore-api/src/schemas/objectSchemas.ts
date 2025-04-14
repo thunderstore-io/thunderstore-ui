@@ -272,3 +272,21 @@ export const userSchema = z.object({
 });
 
 export type User = z.infer<typeof userSchema>;
+
+export const ratedPackagesSchema = z.object({
+  rated_packages: z.string().array(),
+});
+
+export type RatedPackages = z.infer<typeof ratedPackagesSchema>;
+
+export const teamMembersSchema = teamMemberSchema.array();
+
+export type TeamMembers = z.infer<typeof teamMembersSchema>;
+
+export const teamServiceAccountSchema = z.object({
+  identifier: z.string().uuid(),
+  name: z.string().nonempty(),
+  last_used: z.string().datetime().nullable(),
+});
+
+export type TeamServiceAccount = z.infer<typeof teamServiceAccountSchema>;

@@ -89,13 +89,13 @@ export type CommunityFiltersRequestParams = z.infer<
   typeof communityFiltersRequestParamsSchema
 >;
 
-// PackageListingsRequest
-export const packageListingsRequestParamsSchema = z.object({
+// CommunityPackageListingsRequest
+export const communityPackageListingsRequestParamsSchema = z.object({
   community_id: z.string(),
 });
 
-export type PackageListingsRequestParams = z.infer<
-  typeof packageListingsRequestParamsSchema
+export type CommunityPackageListingsRequestParams = z.infer<
+  typeof communityPackageListingsRequestParamsSchema
 >;
 
 export const packageListingsRequestQueryParamsSchema = z.array(
@@ -122,4 +122,96 @@ export const dynamicHTMLRequestParamsSchema = z.object({
 
 export type DynamicHTMLRequestParams = z.infer<
   typeof dynamicHTMLRequestParamsSchema
+>;
+
+// NamespacePackageListingsRequest
+export const namespacePackageListingsRequestParamsSchema = z.object({
+  community_id: z.string(),
+  namespace_id: z.string(),
+});
+
+export type NamespacePackageListingsRequestParams = z.infer<
+  typeof namespacePackageListingsRequestParamsSchema
+>;
+
+// PackageChangelogRequest
+export const packageChangelogRequestParamsSchema = z.object({
+  namespace_id: z.string(),
+  package_name: z.string(),
+  version_number: z.union([z.string(), z.literal("latest")]),
+});
+
+export type PackageChangelogRequestParams = z.infer<
+  typeof packageChangelogRequestParamsSchema
+>;
+
+// PackageDependantsListingsRequest
+export const packageDependantsListingsRequestParamsSchema = z.object({
+  community_id: z.string(),
+  namespace_id: z.string(),
+  package_name: z.string(),
+});
+
+export type PackageDependantsListingsRequestParams = z.infer<
+  typeof packageDependantsListingsRequestParamsSchema
+>;
+
+// PackageListingDetailsRequest
+export const packageListingDetailsRequestParamsSchema = z.object({
+  community_id: z.string(),
+  namespace_id: z.string(),
+  package_name: z.string(),
+});
+
+export type PackageListingDetailsRequestParams = z.infer<
+  typeof packageListingDetailsRequestParamsSchema
+>;
+
+// PackageReadmeRequest
+export const packageReadmeRequestParamsSchema = z.object({
+  community_id: z.string(),
+  namespace_id: z.string(),
+  package_name: z.string(),
+  version_number: z.union([z.string(), z.literal("latest")]),
+});
+
+export type PackageReadmeRequestParams = z.infer<
+  typeof packageReadmeRequestParamsSchema
+>;
+
+// PackageVersionsRequest
+export const packageVersionsRequestParamsSchema = z.object({
+  namespace_id: z.string(),
+  package_name: z.string(),
+});
+
+export type PackageVersionsRequestParams = z.infer<
+  typeof packageVersionsRequestParamsSchema
+>;
+
+// TeamDetailsRequest
+export const teamDetailsRequestParamsSchema = z.object({
+  team_name: z.string(),
+});
+
+export type TeamDetailsRequestParams = z.infer<
+  typeof teamDetailsRequestParamsSchema
+>;
+
+// TeamMembersRequest
+export const teamMembersRequestParamsSchema = z.object({
+  team_name: z.string(),
+});
+
+export type TeamMembersRequestParams = z.infer<
+  typeof teamMembersRequestParamsSchema
+>;
+
+// TeamServiceAccountsRequest
+export const teamServiceAccountsRequestParamsSchema = z.object({
+  team_name: z.string(),
+});
+
+export type TeamServiceAccountsRequestParams = z.infer<
+  typeof teamServiceAccountsRequestParamsSchema
 >;

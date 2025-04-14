@@ -1,10 +1,10 @@
 import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
 import {
-  packageListingsRequestParamsSchema,
-  PackageListingsRequestQueryParams,
+  communityPackageListingsRequestParamsSchema,
+  CommunityPackageListingsRequestParams,
   packageListingsRequestQueryParamsSchema,
-  PackageListingsRequestParams,
+  PackageListingsRequestQueryParams,
 } from "../schemas/requestSchemas";
 import { PackageListingsOrderingEnum } from "../schemas/queryParamSchemas";
 import {
@@ -14,7 +14,7 @@ import {
 
 export async function fetchCommunityPackageListings(
   config: () => RequestConfig,
-  params: PackageListingsRequestParams,
+  params: CommunityPackageListingsRequestParams,
   queryParams: PackageListingsRequestQueryParams = [
     {
       key: "ordering",
@@ -36,7 +36,7 @@ export async function fetchCommunityPackageListings(
       path: `api/cyberstorm/listing/${params.community_id.toLowerCase()}/`,
       queryParams,
     },
-    requestSchema: packageListingsRequestParamsSchema,
+    requestSchema: communityPackageListingsRequestParamsSchema,
     queryParamsSchema: packageListingsRequestQueryParamsSchema,
     responseSchema: packageListingsResponseDataSchema,
   });

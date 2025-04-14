@@ -1,27 +1,45 @@
 import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
-import { serializeQueryString } from "../queryString";
-import { PackageListingQueryParams } from "../types";
+import {
+  NamespacePackageListingsRequestParams,
+  PackageListingsRequestQueryParams,
+  packageListingsRequestQueryParamsSchema,
+} from "../schemas/requestSchemas";
+import {
+  PackageListingsResponseData,
+  packageListingsResponseDataSchema,
+} from "../schemas/responseSchemas";
+import { PackageListingsOrderingEnum } from "../schemas/queryParamSchemas";
+import { z } from "zod";
 
 export async function fetchNamespacePackageListings(
   config: () => RequestConfig,
-  communityId: string,
-  namespaceId: string,
-  options?: PackageListingQueryParams
-) {
-  const path = `api/cyberstorm/listing/${communityId.toLowerCase()}/${namespaceId.toLowerCase()}/`;
+  params: NamespacePackageListingsRequestParams,
+  queryParams: PackageListingsRequestQueryParams = [
+    {
+      key: "ordering",
+      value: PackageListingsOrderingEnum.Updated,
+      impotent: PackageListingsOrderingEnum.Updated,
+    },
+    { key: "page", value: 1, impotent: 1 },
+    { key: "q", value: "" },
+    { key: "included_categories", value: [] },
+    { key: "excluded_categories", value: [] },
+    { key: "section", value: "" },
+    { key: "nsfw", value: false, impotent: false },
+    { key: "deprecated", value: false, impotent: false },
+  ]
+): Promise<PackageListingsResponseData> {
+  const path = `api/cyberstorm/listing/${params.community_id.toLowerCase()}/${params.namespace_id.toLowerCase()}/`;
 
-  const queryParams = [
-    { key: "ordering", value: options?.ordering, impotent: "last-updated" },
-    { key: "page", value: options?.page, impotent: 1 },
-    { key: "q", value: options?.q.trim() },
-    { key: "included_categories", value: options?.includedCategories },
-    { key: "excluded_categories", value: options?.excludedCategories },
-    { key: "section", value: options?.section },
-    { key: "nsfw", value: options?.nsfw, impotent: false },
-    { key: "deprecated", value: options?.deprecated, impotent: false },
-  ];
-  const query = serializeQueryString(queryParams);
-
-  return await apiFetch(config, path, query);
+  return await apiFetch({
+    args: {
+      config,
+      path,
+      queryParams,
+    },
+    requestSchema: z.object({}),
+    queryParamsSchema: packageListingsRequestQueryParamsSchema,
+    responseSchema: packageListingsResponseDataSchema,
+  });
 }

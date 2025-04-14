@@ -1,9 +1,24 @@
 import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
+import { z } from "zod";
+import { ratedPackagesResponseDataSchema } from "../schemas/responseSchemas";
+import { RatedPackagesResponseData } from "../schemas/responseSchemas";
 
-export async function fetchRatedPackages(config: () => RequestConfig) {
+export async function fetchRatedPackages(
+  config: () => RequestConfig
+): Promise<RatedPackagesResponseData> {
   const path = "api/experimental/current-user/rated-packages/";
   const request = { cache: "no-store" as RequestCache };
 
-  return await apiFetch(config, path, undefined, request, true);
+  return await apiFetch({
+    args: {
+      config: config,
+      path: path,
+      request: request,
+      useSession: true,
+    },
+    requestSchema: z.object({}),
+    queryParamsSchema: z.object({}),
+    responseSchema: ratedPackagesResponseDataSchema,
+  });
 }

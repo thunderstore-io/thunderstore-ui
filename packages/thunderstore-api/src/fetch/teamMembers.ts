@@ -1,11 +1,26 @@
 import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
+import {
+  TeamMembersResponseData,
+  teamMembersResponseDataSchema,
+} from "../schemas/responseSchemas";
+import { TeamMembersRequestParams } from "../schemas/requestSchemas";
+import { z } from "zod";
 
 export async function fetchTeamMembers(
   config: () => RequestConfig,
-  teamName: string
-) {
-  const path = `api/cyberstorm/team/${teamName}/member/`;
+  params: TeamMembersRequestParams
+): Promise<TeamMembersResponseData> {
+  const path = `api/cyberstorm/team/${params.team_name}/member/`;
 
-  return await apiFetch(config, path, undefined, undefined, true);
+  return await apiFetch({
+    args: {
+      config: config,
+      path: path,
+      useSession: true,
+    },
+    requestSchema: z.object({}),
+    queryParamsSchema: z.object({}),
+    responseSchema: teamMembersResponseDataSchema,
+  });
 }
