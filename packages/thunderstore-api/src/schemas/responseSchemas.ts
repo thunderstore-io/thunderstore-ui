@@ -13,6 +13,7 @@ import {
   teamDetailsSchema,
   teamMembersSchema,
   teamServiceAccountSchema,
+  packageSubmissionStatusSchema,
 } from "../schemas/objectSchemas";
 import { paginatedResults } from "../schemas/objectSchemas";
 
@@ -149,4 +150,12 @@ export const teamServiceAccountsResponseDataSchema =
 
 export type TeamServiceAccountsResponseData = z.infer<
   typeof teamServiceAccountsResponseDataSchema
+>;
+
+// PackageSubmissionStatusResponse
+export const packageSubmissionStatusResponseDataSchema =
+  packageSubmissionStatusSchema;
+
+export type PackageSubmissionStatusResponseData = z.infer<
+  typeof packageSubmissionStatusResponseDataSchema
 >;

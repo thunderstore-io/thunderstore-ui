@@ -215,3 +215,13 @@ export const teamServiceAccountsRequestParamsSchema = z.object({
 export type TeamServiceAccountsRequestParams = z.infer<
   typeof teamServiceAccountsRequestParamsSchema
 >;
+
+// PackageSubmissionRequest
+export const packageSubmissionRequestParamsSchema = z.object({
+  useSession: z.boolean(),
+  submission_id: z.string(),
+});
+
+export type PackageSubmissionRequestParams = z.infer<
+  typeof packageSubmissionRequestParamsSchema
+>;
