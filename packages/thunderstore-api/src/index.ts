@@ -43,4 +43,5 @@ export * from "./post/usermedia";
 // export * from "./post/teamEditMember";
 // export * from "./post/teamRemoveMember";
 // export * from "./post/userLinkedAccountDisconnect";
+export * from "./delete/team";
 export * from "./errors";
