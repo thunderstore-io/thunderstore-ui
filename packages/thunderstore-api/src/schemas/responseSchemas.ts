@@ -14,6 +14,7 @@ import {
   teamMembersSchema,
   teamServiceAccountSchema,
   packageSubmissionStatusSchema,
+  markdownRenderSchema,
 } from "../schemas/objectSchemas";
 import { paginatedResults } from "../schemas/objectSchemas";
 
@@ -158,4 +159,74 @@ export const packageSubmissionStatusResponseDataSchema =
 
 export type PackageSubmissionStatusResponseData = z.infer<
   typeof packageSubmissionStatusResponseDataSchema
+>;
+
+// PackageSubmissionResponse
+export const packageSubmissionResponseDataSchema =
+  packageSubmissionStatusResponseDataSchema;
+
+export type PackageSubmissionResponseData = z.infer<
+  typeof packageSubmissionResponseDataSchema
+>;
+
+// PackageListingDeprecateResponse
+export const packageDeprecateResponseDataSchema = z.object({
+  deprecate: z.boolean(),
+});
+
+export type PackageDeprecateResponseData = z.infer<
+  typeof packageDeprecateResponseDataSchema
+>;
+
+// PackageListingUpdateResponse
+export const packageListingUpdateResponseDataSchema = z.object({
+  categories: z.array(z.string()),
+});
+
+export type PackageListingUpdateResponseData = z.infer<
+  typeof packageListingUpdateResponseDataSchema
+>;
+
+// PackageRateResponse
+export const packageRateResponseDataSchema = z.object({
+  state: z.enum(["rated", "unrated"]),
+  score: z.number(),
+});
+
+export type PackageRateResponseData = z.infer<
+  typeof packageRateResponseDataSchema
+>;
+
+// TeamAddMemberResponse
+export const teamAddMemberResponseDataSchema = z.object({
+  username: z.string().min(1),
+  role: z.enum(["owner", "member"]),
+  team: z.string().min(1),
+});
+
+export type TeamAddMemberResponseData = z.infer<
+  typeof teamAddMemberResponseDataSchema
+>;
+
+// TeamCreateResponse
+export const teamCreateResponseDataSchema = teamDetailsSchema;
+
+export type TeamCreateResponseData = z.infer<
+  typeof teamCreateResponseDataSchema
+>;
+
+// SubmissionValidateManifestResponse
+export const submissionValidateManifestResponseDataSchema = z.object({
+  success: z.boolean(),
+});
+
+export type SubmissionValidateManifestResponseData = z.infer<
+  typeof submissionValidateManifestResponseDataSchema
+>;
+
+// MarkdownRenderResponse
+export const markdownRenderResponseDataSchema = markdownRenderSchema;
+
+export type MarkdownRenderResponseData = z.infer<
+  typeof markdownRenderResponseDataSchema
 >;

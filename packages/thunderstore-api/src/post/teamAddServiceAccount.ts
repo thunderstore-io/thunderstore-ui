@@ -1,3 +1,5 @@
+// THIS API ENDPOINT IS NOT IMPLEMENTED YET IN THE THUNDERSTORE API
+
 import { RequestConfig } from "../index";
 import { apiFetch2 } from "../apiFetch";
 

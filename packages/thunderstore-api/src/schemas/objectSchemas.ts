@@ -290,3 +290,9 @@ export const teamServiceAccountSchema = z.object({
 });
 
 export type TeamServiceAccount = z.infer<typeof teamServiceAccountSchema>;
+
+export const markdownRenderSchema = z.object({
+  html: z.string(),
+});
+
+export type MarkdownRender = z.infer<typeof markdownRenderSchema>;
