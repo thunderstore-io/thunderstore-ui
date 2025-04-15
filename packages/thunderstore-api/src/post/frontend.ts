@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import { z } from "zod";
 import {
@@ -15,9 +15,9 @@ export interface toolsMarkdownPreviewApiArgs {
 }
 
 export function toolsMarkdownPreview(
-  config: () => RequestConfig,
-  data: MarkdownRenderRequestData
+  props: ApiEndpointProps<object, object, MarkdownRenderRequestData>
 ): Promise<MarkdownRenderResponseData> {
+  const { config, data } = props;
   const path = `/api/experimental/frontend/render-markdown/`;
 
   return apiFetch({

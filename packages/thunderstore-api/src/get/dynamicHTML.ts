@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import { z } from "zod";
 import {
@@ -8,9 +8,9 @@ import {
 import { DynamicHTMLRequestParams } from "../schemas/requestSchemas";
 
 export async function fetchDynamicHTML(
-  config: () => RequestConfig,
-  params: DynamicHTMLRequestParams
+  props: ApiEndpointProps<DynamicHTMLRequestParams, object, object>
 ): Promise<DynamicHTMLResponseData> {
+  const { config, params } = props;
   const path = `api/cyberstorm/dynamichtml/${params.placement}`;
 
   return await apiFetch({

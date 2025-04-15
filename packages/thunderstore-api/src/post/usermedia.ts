@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import {
   UsermediaAbortUploadRequestParams,
@@ -8,7 +8,6 @@ import {
   UsermediaInitiateUploadRequestData,
   usermediaInitiateUploadRequestDataSchema,
 } from "../schemas/requestSchemas";
-import { RequestGenericMeta } from "../types";
 import {
   UsermediaAbortUploadResponseData,
   usermediaAbortUploadResponseDataSchema,
@@ -20,10 +19,9 @@ import {
 import { z } from "zod";
 
 export function postUsermediaInitiate(
-  config: () => RequestConfig,
-  meta: RequestGenericMeta,
-  data: UsermediaInitiateUploadRequestData
+  props: ApiEndpointProps<object, object, UsermediaInitiateUploadRequestData>
 ): Promise<UsermediaInitiateUploadResponseData> {
+  const { config, useSession, data } = props;
   const path = `/api/experimental/usermedia/initiate-upload/`;
 
   return apiFetch({
@@ -35,7 +33,7 @@ export function postUsermediaInitiate(
         cache: "no-store",
         body: JSON.stringify(data),
       },
-      useSession: meta.useSession,
+      useSession,
     },
     requestSchema: usermediaInitiateUploadRequestDataSchema,
     queryParamsSchema: z.object({}),
@@ -44,10 +42,9 @@ export function postUsermediaInitiate(
 }
 
 export function postUsermediaAbort(
-  config: () => RequestConfig,
-  params: UsermediaAbortUploadRequestParams,
-  meta: RequestGenericMeta
+  props: ApiEndpointProps<UsermediaAbortUploadRequestParams, object, object>
 ): Promise<UsermediaAbortUploadResponseData> {
+  const { config, useSession, params } = props;
   const path = `/api/experimental/usermedia/${params.uuid}/abort-upload/`;
 
   return apiFetch({
@@ -58,7 +55,7 @@ export function postUsermediaAbort(
         method: "POST",
         cache: "no-store",
       },
-      useSession: meta.useSession,
+      useSession,
     },
     requestSchema: z.object({}),
     queryParamsSchema: z.object({}),
@@ -67,11 +64,13 @@ export function postUsermediaAbort(
 }
 
 export function postUsermediaFinish(
-  config: () => RequestConfig,
-  params: UsermediaFinishUploadRequestParams,
-  meta: RequestGenericMeta,
-  data: UsermediaFinishUploadRequestData
+  props: ApiEndpointProps<
+    UsermediaFinishUploadRequestParams,
+    object,
+    UsermediaFinishUploadRequestData
+  >
 ): Promise<UsermediaFinishUploadResponseData> {
+  const { config, useSession, params, data } = props;
   const path = `/api/experimental/usermedia/${params.uuid}/finish-upload/`;
 
   return apiFetch({
@@ -83,7 +82,7 @@ export function postUsermediaFinish(
         cache: "no-store",
         body: JSON.stringify(data),
       },
-      useSession: meta.useSession,
+      useSession,
     },
     requestSchema: usermediaFinishUploadRequestDataSchema,
     queryParamsSchema: z.object({}),

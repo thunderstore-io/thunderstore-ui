@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import {
   PackageSubmissionRequestData,
@@ -14,9 +14,9 @@ import {
 } from "../schemas/responseSchemas";
 
 export function postPackageSubmission(
-  config: () => RequestConfig,
-  data: PackageSubmissionRequestData
+  props: ApiEndpointProps<object, object, PackageSubmissionRequestData>
 ): Promise<PackageSubmissionResponseData> {
+  const { config, data } = props;
   const path = `/api/experimental/submission/submit-async/`;
 
   return apiFetch({
@@ -37,9 +37,9 @@ export function postPackageSubmission(
 }
 
 export function toolsManifestValidate(
-  config: () => RequestConfig,
-  data: SubmissionValidateManifestRequestData
+  props: ApiEndpointProps<object, object, SubmissionValidateManifestRequestData>
 ): Promise<SubmissionValidateManifestResponseData> {
+  const { config, data } = props;
   const path = `/api/experimental/submission/validate/manifest-v1/`;
 
   return apiFetch({

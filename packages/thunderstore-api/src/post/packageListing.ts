@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import {
   PackageListingApproveRequestData,
@@ -18,16 +18,19 @@ import {
 } from "../schemas/responseSchemas";
 
 export function packageListingUpdate(
-  config: () => RequestConfig,
-  params: PackageListingUpdateRequestParams,
-  data: PackageListingUpdateRequestData
+  props: ApiEndpointProps<
+    PackageListingUpdateRequestParams,
+    object,
+    PackageListingUpdateRequestData
+  >
 ): Promise<PackageListingUpdateResponseData> {
+  const { config, params, data } = props;
   const path = `/api/cyberstorm/listing/${params.community}/${params.namespace}/${params.package}/update/`;
 
   return apiFetch({
     args: {
-      config: config,
-      path: path,
+      config,
+      path,
       request: {
         method: "POST",
         cache: "no-store",
@@ -42,16 +45,19 @@ export function packageListingUpdate(
 }
 
 export function packageListingApprove(
-  config: () => RequestConfig,
-  params: PackageListingApproveRequestParams,
-  data: PackageListingApproveRequestData
+  props: ApiEndpointProps<
+    PackageListingApproveRequestParams,
+    object,
+    PackageListingApproveRequestData
+  >
 ) {
+  const { config, params, data } = props;
   const path = `/api/cyberstorm/listing/${params.community}/${params.namespace}/${params.package}/approve/`;
 
   return apiFetch({
     args: {
-      config: config,
-      path: path,
+      config,
+      path,
       request: {
         method: "POST",
         cache: "no-store",
@@ -66,16 +72,19 @@ export function packageListingApprove(
 }
 
 export function packageListingReject(
-  config: () => RequestConfig,
-  params: PackageListingRejectRequestParams,
-  data: PackageListingRejectRequestData
+  props: ApiEndpointProps<
+    PackageListingRejectRequestParams,
+    object,
+    PackageListingRejectRequestData
+  >
 ) {
+  const { config, params, data } = props;
   const path = `/api/cyberstorm/listing/${params.community}/${params.namespace}/${params.package}/approve/`;
 
   return apiFetch({
     args: {
-      config: config,
-      path: path,
+      config,
+      path,
       request: {
         method: "POST",
         cache: "no-store",

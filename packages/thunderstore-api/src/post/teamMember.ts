@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import {
   TeamAddMemberRequestData,
@@ -12,10 +12,13 @@ import {
 import { z } from "zod";
 
 export function teamAddMember(
-  config: () => RequestConfig,
-  params: TeamAddMemberRequestParams,
-  data: TeamAddMemberRequestData
+  props: ApiEndpointProps<
+    TeamAddMemberRequestParams,
+    object,
+    TeamAddMemberRequestData
+  >
 ): Promise<TeamAddMemberResponseData> {
+  const { config, params, data } = props;
   const path = `/api/cyberstorm/team/${params.team_name}/member/add/`;
 
   return apiFetch({

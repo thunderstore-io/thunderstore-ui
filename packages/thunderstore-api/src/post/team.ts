@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import {
   TeamCreateRequestData,
@@ -11,9 +11,9 @@ import {
 } from "../schemas/responseSchemas";
 
 export function teamCreate(
-  config: () => RequestConfig,
-  data: TeamCreateRequestData
+  props: ApiEndpointProps<object, object, TeamCreateRequestData>
 ): Promise<TeamCreateResponseData> {
+  const { config, data } = props;
   const path = "api/cyberstorm/teams/create/";
 
   return apiFetch({

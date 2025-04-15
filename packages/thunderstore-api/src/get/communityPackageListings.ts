@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import {
   communityPackageListingsRequestParamsSchema,
@@ -13,23 +13,30 @@ import {
 } from "../schemas/responseSchemas";
 
 export async function fetchCommunityPackageListings(
-  config: () => RequestConfig,
-  params: CommunityPackageListingsRequestParams,
-  queryParams: PackageListingsRequestQueryParams = [
-    {
-      key: "ordering",
-      value: PackageListingsOrderingEnum.Updated,
-      impotent: PackageListingsOrderingEnum.Updated,
-    },
-    { key: "page", value: 1, impotent: 1 },
-    { key: "q", value: "" },
-    { key: "included_categories", value: [] },
-    { key: "excluded_categories", value: [] },
-    { key: "section", value: "" },
-    { key: "nsfw", value: false, impotent: false },
-    { key: "deprecated", value: false, impotent: false },
-  ]
+  props: ApiEndpointProps<
+    CommunityPackageListingsRequestParams,
+    PackageListingsRequestQueryParams,
+    object
+  >
 ): Promise<PackageListingsResponseData> {
+  const {
+    config,
+    params,
+    queryParams = [
+      {
+        key: "ordering",
+        value: PackageListingsOrderingEnum.Updated,
+        impotent: PackageListingsOrderingEnum.Updated,
+      },
+      { key: "page", value: 1, impotent: 1 },
+      { key: "q", value: "" },
+      { key: "included_categories", value: [] },
+      { key: "excluded_categories", value: [] },
+      { key: "section", value: "" },
+      { key: "nsfw", value: false, impotent: false },
+      { key: "deprecated", value: false, impotent: false },
+    ],
+  } = props;
   return await apiFetch({
     args: {
       config,

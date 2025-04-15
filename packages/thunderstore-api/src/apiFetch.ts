@@ -1,6 +1,6 @@
-import { ApiError, RequestConfig } from "./index";
+import { ApiError, ParseError, RequestConfig } from "./index";
 import { z } from "zod";
-import { formatErrorMessage } from "./utils";
+// import { formatErrorMessage } from "./utils";
 import { serializeQueryString } from "./queryString";
 
 const BASE_HEADERS = {
@@ -81,7 +81,7 @@ export async function apiFetch(props: {
 
   const parsed = responseSchema.safeParse(await response.json());
   if (!parsed.success) {
-    throw new Error(formatErrorMessage(parsed.error));
+    throw new ParseError(parsed.error);
   } else {
     return parsed.data;
   }

@@ -6,6 +6,14 @@ export interface RequestConfig {
   sessionId?: string;
 }
 
+export interface ApiEndpointProps<Params, QueryParams, Data> {
+  config: () => RequestConfig;
+  useSession?: boolean;
+  data: Data;
+  params: Params;
+  queryParams: QueryParams;
+}
+
 export * from "./get/dynamicHTML";
 export * from "./get/community";
 export * from "./get/communityFilters";

@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import {
   PackageDeprecateRequestData,
@@ -17,10 +17,13 @@ import {
 } from "../schemas/responseSchemas";
 
 export function packageRate(
-  config: () => RequestConfig,
-  params: PackageRateRequestParams,
-  data: PackageRateRequestData
+  props: ApiEndpointProps<
+    PackageRateRequestParams,
+    object,
+    PackageRateRequestData
+  >
 ): Promise<PackageRateResponseData> {
+  const { config, params, data } = props;
   const path = `/api/cyberstorm/package/${params.namespace}/${params.package}/rate/`;
 
   return apiFetch({
@@ -32,7 +35,7 @@ export function packageRate(
         cache: "no-store",
         body: JSON.stringify(data),
       },
-      useSession: true,
+      useSession: props.useSession,
     },
     requestSchema: packageRateRequestDataSchema,
     queryParamsSchema: z.object({}),
@@ -41,22 +44,25 @@ export function packageRate(
 }
 
 export function packageDeprecate(
-  config: () => RequestConfig,
-  params: PackageDeprecateRequestParams,
-  data: PackageDeprecateRequestData
+  props: ApiEndpointProps<
+    PackageDeprecateRequestParams,
+    object,
+    PackageDeprecateRequestData
+  >
 ): Promise<PackageDeprecateResponseData> {
+  const { config, params, data } = props;
   const path = `/api/cyberstorm/package/${params.namespace}/${params.package}/deprecate/`;
 
   return apiFetch({
     args: {
-      config: config,
-      path: path,
+      config,
+      path,
       request: {
         method: "POST",
         cache: "no-store",
         body: JSON.stringify(data),
       },
-      useSession: true,
+      useSession: props.useSession,
     },
     requestSchema: packageDeprecateRequestDataSchema,
     queryParamsSchema: z.object({}),

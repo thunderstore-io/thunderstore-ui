@@ -216,6 +216,7 @@ export type TeamServiceAccountsRequestParams = z.infer<
   typeof teamServiceAccountsRequestParamsSchema
 >;
 
+// PackageSubmissionRequest
 export const packageSubmissionRequestDataSchema = z.object({
   author_name: z.string(),
   communities: z.array(z.string()),
@@ -227,6 +228,15 @@ export const packageSubmissionRequestDataSchema = z.object({
 
 export type PackageSubmissionRequestData = z.infer<
   typeof packageSubmissionRequestDataSchema
+>;
+
+// PackageSubmissionStatusRequest
+export const packageSubmissionStatusRequestParamsSchema = z.object({
+  submission_id: z.string(),
+});
+
+export type PackageSubmissionStatusRequestParams = z.infer<
+  typeof packageSubmissionStatusRequestParamsSchema
 >;
 
 // PackageDeprecateRequest

@@ -1,13 +1,9 @@
 import { useFormToaster } from "@thunderstore/cyberstorm-forms";
-import {
-  ApiAction,
-  packageLikeActionReturnSchema,
-  packageLikeActionSchema,
-} from "@thunderstore/ts-api-react-actions";
+import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import {
   ApiError,
-  packageLike,
   RequestConfig,
+  packageRate,
 } from "@thunderstore/thunderstore-api";
 
 export function PackageLikeAction(props: {
@@ -29,21 +25,21 @@ export function PackageLikeAction(props: {
         : "You must be logged in to like a package!",
   });
 
-  function onActionSuccess(result: typeof packageLikeActionReturnSchema._type) {
-    props.dataUpdateTrigger();
-    onSubmitSuccess(result);
+  function onActionSuccess(result: ReturnType<typeof packageRate>) {
+    // TODO: Could there be an issue where this eats errors?
+    result.then((result) => {
+      props.dataUpdateTrigger();
+      onSubmitSuccess(result);
+    });
   }
 
   function onActionError(e: Error | ApiError | unknown) {
     onSubmitError({ isLoggedIn: props.isLoggedIn, e: e });
   }
   const onSubmit = ApiAction({
-    schema: packageLikeActionSchema,
-    returnSchema: packageLikeActionReturnSchema,
-    endpoint: packageLike,
+    endpoint: packageRate,
     onSubmitSuccess: onActionSuccess,
     onSubmitError: onActionError,
-    config: props.config,
   });
 
   return function (
@@ -52,10 +48,13 @@ export function PackageLikeAction(props: {
     name: string,
     useSession: boolean
   ) {
-    onSubmit(
-      { target_state: isLiked ? "unrated" : "rated" },
-      { namespace_id: namespace, package_name: name, useSession: useSession }
-    );
+    onSubmit({
+      params: { namespace, package: name },
+      data: { target_state: isLiked ? "unrated" : "rated" },
+      queryParams: {},
+      config: props.config,
+      useSession,
+    });
   };
 }
 

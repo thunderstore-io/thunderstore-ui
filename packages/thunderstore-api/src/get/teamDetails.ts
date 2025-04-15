@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import {
   TeamDetailsResponseData,
@@ -8,9 +8,9 @@ import { z } from "zod";
 import { TeamDetailsRequestParams } from "../schemas/requestSchemas";
 
 export async function fetchTeamDetails(
-  config: () => RequestConfig,
-  params: TeamDetailsRequestParams
+  props: ApiEndpointProps<TeamDetailsRequestParams, object, object>
 ): Promise<TeamDetailsResponseData> {
+  const { config, params } = props;
   const path = `api/cyberstorm/team/${params.team_name}/`;
 
   return await apiFetch({

@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import { z } from "zod";
 import {
@@ -11,9 +11,9 @@ import {
 } from "../schemas/responseSchemas";
 
 export async function fetchCommunityFilters(
-  config: () => RequestConfig,
-  params: CommunityFiltersRequestParams
+  props: ApiEndpointProps<CommunityFiltersRequestParams, object, object>
 ): Promise<CommunityFiltersResponseData> {
+  const { config, params } = props;
   const path = `api/cyberstorm/community/${params.community_id}/filters/`;
 
   return await apiFetch({

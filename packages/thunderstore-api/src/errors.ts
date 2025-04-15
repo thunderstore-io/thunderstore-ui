@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 type JSONValue =
   | string
   | number
@@ -27,6 +29,7 @@ export class ApiError extends Error {
     let responseJson: JSONValue | undefined;
     try {
       responseJson = await response.json();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       responseJson = undefined;
     }
@@ -57,5 +60,11 @@ export class ApiError extends Error {
         })
       );
     }
+  }
+}
+
+export class ParseError extends Error {
+  constructor(public error: z.ZodError) {
+    super(error.message);
   }
 }

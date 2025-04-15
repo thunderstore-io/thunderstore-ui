@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import { z } from "zod";
 import {
@@ -7,8 +7,9 @@ import {
 } from "../schemas/responseSchemas";
 
 export async function fetchCurrentUser(
-  config: () => RequestConfig
+  props: ApiEndpointProps<object, object, object>
 ): Promise<CurrentUserResponseData> {
+  const { config } = props;
   const path = "api/experimental/current-user/";
   const request = { cache: "no-store" as RequestCache };
 

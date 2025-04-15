@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import {
   PackageReadmeResponseData,
@@ -7,9 +7,9 @@ import {
 import { z } from "zod";
 import { PackageReadmeRequestParams } from "../schemas/requestSchemas";
 export async function fetchPackageReadme(
-  config: () => RequestConfig,
-  params: PackageReadmeRequestParams
+  props: ApiEndpointProps<PackageReadmeRequestParams, object, object>
 ): Promise<PackageReadmeResponseData> {
+  const { config, params } = props;
   const n = params.namespace_id.toLocaleLowerCase();
   const p = params.package_name.toLocaleLowerCase();
   const v =

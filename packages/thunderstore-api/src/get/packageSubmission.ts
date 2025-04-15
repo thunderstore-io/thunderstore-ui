@@ -1,21 +1,16 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import { z } from "zod";
-import { PackageSubmissionRequestParams } from "../schemas/requestSchemas";
+import { PackageSubmissionStatusRequestParams } from "../schemas/requestSchemas";
 import {
   PackageSubmissionStatusResponseData,
   packageSubmissionStatusResponseDataSchema,
 } from "../schemas/responseSchemas";
 
-export type packageSubmissionPollMetaArgs = {
-  useSession: boolean;
-  submissionId: string;
-};
-
 export function fetchPackageSubmissionStatus(
-  config: () => RequestConfig,
-  params: PackageSubmissionRequestParams
+  props: ApiEndpointProps<PackageSubmissionStatusRequestParams, object, object>
 ): Promise<PackageSubmissionStatusResponseData> {
+  const { config, params } = props;
   const request = { cache: "no-store" as RequestCache };
   const path = `/api/experimental/submission/poll-async/${params.submission_id}`;
 
@@ -23,7 +18,7 @@ export function fetchPackageSubmissionStatus(
     args: {
       config: config,
       path: path,
-      useSession: params.useSession,
+      useSession: true,
       request: request,
     },
     requestSchema: z.object({}),

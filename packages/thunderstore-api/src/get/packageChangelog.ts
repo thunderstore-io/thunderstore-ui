@@ -1,4 +1,4 @@
-import { RequestConfig } from "../index";
+import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import { PackageChangelogRequestParams } from "../schemas/requestSchemas";
 import { z } from "zod";
@@ -8,9 +8,9 @@ import {
 } from "../schemas/responseSchemas";
 
 export async function fetchPackageChangelog(
-  config: () => RequestConfig,
-  params: PackageChangelogRequestParams
+  props: ApiEndpointProps<PackageChangelogRequestParams, object, object>
 ): Promise<PackageChangelogResponseData> {
+  const { config, params } = props;
   const n = params.namespace_id.toLocaleLowerCase();
   const p = params.package_name.toLocaleLowerCase();
   const v =
