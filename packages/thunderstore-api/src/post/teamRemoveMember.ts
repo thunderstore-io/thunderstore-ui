@@ -1,7 +1,7 @@
 // THIS API ENDPOINT IS NOT IMPLEMENTED YET IN THE THUNDERSTORE API
 
 import { RequestConfig } from "../index";
-import { apiFetch2 } from "../apiFetch";
+import { apiFetch } from "../apiFetch";
 
 export type teamRemoveMemberMetaArgs = {
   teamIdentifier: string;
@@ -15,7 +15,7 @@ export function teamRemoveMember(
 ) {
   const path = `/api/cyberstorm/team/${meta.teamIdentifier}/members/remove/`;
 
-  return apiFetch2({
+  return apiFetch({
     config,
     path,
     request: {

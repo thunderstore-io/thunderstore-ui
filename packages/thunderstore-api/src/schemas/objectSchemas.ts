@@ -180,6 +180,25 @@ export const packageVersionSchema = z.object({
 
 export type PackageVersion = z.infer<typeof packageVersionSchema>;
 
+export const packageVersionExperimentalSchema = z.object({
+  namespace: z.string().min(1),
+  name: z.string().min(1).max(128),
+  version_number: z.string().min(1).max(16),
+  full_name: z.string(),
+  description: z.string().min(1).max(256),
+  icon: z.string().url(),
+  dependencies: z.string().array(),
+  download_url: z.string().url(),
+  downloads: z.number().int(),
+  date_created: z.string().datetime(),
+  website_url: z.string().url(),
+  is_active: z.boolean(),
+});
+
+export type PackageVersionExperimental = z.infer<
+  typeof packageVersionExperimentalSchema
+>;
+
 export const packageSubmissionErrorSchema = z.object({
   upload_uuid: z.string().array().nullable(),
   author_name: z.string().array().nullable(),
@@ -196,8 +215,20 @@ export type PackageSubmissionError = z.infer<
   typeof packageSubmissionErrorSchema
 >;
 
+export const packageSubmissionCommunitySchema = z.object({
+  identifier: z.string().min(1).max(256),
+  name: z.string().min(1).max(256),
+  discord_url: z.string().url().max(512).nullable(),
+  wiki_url: z.string().url().max(512).nullable(),
+  require_package_listing_approval: z.boolean(),
+});
+
+export type PackageSubmissionCommunity = z.infer<
+  typeof packageSubmissionCommunitySchema
+>;
+
 export const availableCommunitySchema = z.object({
-  community: communitySchema,
+  community: packageSubmissionCommunitySchema,
   categories: packageCategoryPartialSchema.array(),
   url: z.string().url(),
 });
@@ -205,7 +236,7 @@ export const availableCommunitySchema = z.object({
 export type AvailableCommunity = z.infer<typeof availableCommunitySchema>;
 
 export const packageSubmissionResultSchema = z.object({
-  package_version: packageVersionSchema,
+  package_version: packageVersionExperimentalSchema,
   available_communities: z.array(availableCommunitySchema),
 });
 
@@ -237,18 +268,6 @@ export const userTeamSchema = z.object({
   member_count: z.number().int().gte(1),
 });
 
-export const currentUserSchema = z.object({
-  username: z.string().min(1),
-  capabilities: z.string().array(),
-  connections: oAuthConnectionSchema.array(),
-  subscription: z.object({
-    expires: z.string().datetime().nullable(),
-  }),
-  teams: userTeamSchema.array(),
-});
-
-export type CurrentUser = z.infer<typeof currentUserSchema>;
-
 export const emptyUserSchema = z.object({
   username: z.null(),
   capabilities: z.array(z.string()),
@@ -256,7 +275,8 @@ export const emptyUserSchema = z.object({
   subscription: z.object({
     expires: z.string().datetime().nullable(),
   }),
-  teams: z.array(userTeamSchema),
+  teams: z.string().array(),
+  teams_full: z.array(userTeamSchema),
 });
 
 export type EmptyUser = z.infer<typeof emptyUserSchema>;
@@ -268,7 +288,8 @@ export const userSchema = z.object({
   subscription: z.object({
     expires: z.string().datetime().nullable(),
   }),
-  teams_full: userTeamSchema.array(),
+  teams: z.string().array(),
+  teams_full: z.array(userTeamSchema),
 });
 
 export type User = z.infer<typeof userSchema>;

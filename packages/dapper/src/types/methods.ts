@@ -6,21 +6,13 @@ import {
   PackageVersion,
 } from "./package";
 import { PackageListingType } from "./props";
-import { MarkdownResponse } from "./shared";
+import { HTMLContentResponse, MarkdownResponse } from "./shared";
 import { TeamDetails, ServiceAccount, TeamMember } from "./team";
 import { CurrentUser } from "./user";
 
 export type GetCommunities = (
   page?: number,
-  ordering?:
-    | "aggregated_fields__package_count"
-    | "-aggregated_fields__package_count"
-    | "aggregated_fields__download_count"
-    | "-aggregated_fields__download_count"
-    | "datetime_created"
-    | "-datetime_created"
-    | "name"
-    | "-name",
+  ordering?: string,
   search?: string
 ) => Promise<Communities>;
 
@@ -36,7 +28,7 @@ export type GetPackageChangelog = (
   namespace: string,
   name: string,
   version?: string
-) => Promise<MarkdownResponse>;
+) => Promise<HTMLContentResponse>;
 
 export type GetPackageListingDetails = (
   community: string,

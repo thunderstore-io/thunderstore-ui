@@ -16,9 +16,9 @@
     "watch": "jest --watch"
   },
   "dependencies": {
+    "@thunderstore/thunderstore-api": "^0.1.0",
     "@thunderstore/typed-event-emitter": "*",
-    "crypto-js": "^4.2.0",
-    "@thunderstore/thunderstore-api": "^0.1.0"
+    "crypto-js": "^4.2.0"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.1.3",

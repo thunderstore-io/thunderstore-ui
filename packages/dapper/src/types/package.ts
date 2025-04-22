@@ -6,7 +6,7 @@ export interface PackageListing {
   community_identifier: string;
   description: string;
   download_count: number;
-  icon_url: string;
+  icon_url: string | null;
   is_deprecated: boolean;
   is_nsfw: boolean;
   is_pinned: boolean;
@@ -58,15 +58,15 @@ export interface PackageVersion {
 }
 
 export interface PackageSubmissionError {
-  upload_uuid?: string[];
-  author_name?: string[];
-  categories?: string[];
-  communities?: string[];
-  has_nsfw_content?: string[];
-  detail?: string;
-  file?: string[];
-  team?: string[];
-  __all__?: string[];
+  upload_uuid: string[] | null;
+  author_name: string[] | null;
+  categories: string[] | null;
+  communities: string[] | null;
+  has_nsfw_content: string[] | null;
+  detail: string[] | null;
+  file: string[] | null;
+  team: string[] | null;
+  __all__: string[] | null;
 }
 
 export interface PackageSubmissionResult {

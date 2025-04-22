@@ -4,8 +4,11 @@ import { ApiConfig } from "../client/config";
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 import { BaseUpload } from "./BaseUpload";
 import { UploadConfig, UploadProgress } from "./types";
-import { getMD5WorkerManager, MD5WorkerManager } from "../workers";
-import { MD5WorkerManagerError } from "../workers/MD5WorkerManager";
+import {
+  getMD5WorkerManager,
+  MD5WorkerManager,
+  MD5WorkerManagerError,
+} from "../workers";
 import {
   postUsermediaFinish,
   postUsermediaInitiate,
@@ -99,16 +102,15 @@ export class MultipartUpload extends BaseUpload {
       this.metrics.lastUpdateTime = this.metrics.startTime;
 
       // Initialize upload
-      const initiateResult = await postUsermediaInitiate(
-        () => this.requestConfig,
-        {
-          useSession: true,
-        },
-        {
+      const initiateResult = await postUsermediaInitiate({
+        config: () => this.requestConfig,
+        params: {},
+        data: {
           filename: this.file.name,
           file_size_bytes: this.file.size,
-        }
-      );
+        },
+        queryParams: {},
+      });
 
       this.handle = initiateResult.user_media;
 
@@ -173,18 +175,16 @@ export class MultipartUpload extends BaseUpload {
       });
 
       // Complete upload
-      const finishResult = await postUsermediaFinish(
-        () => this.requestConfig,
-        {
+      const finishResult = await postUsermediaFinish({
+        config: () => this.requestConfig,
+        params: {
           uuid: this.handle.uuid,
         },
-        {
-          useSession: true,
-        },
-        {
+        data: {
           parts: completeParts,
-        }
-      );
+        },
+        queryParams: {},
+      });
 
       this.handle = finishResult;
 

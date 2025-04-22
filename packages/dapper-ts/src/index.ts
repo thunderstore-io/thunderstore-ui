@@ -5,11 +5,11 @@ import { getDynamicHTML } from "./methods/dynamicHTML";
 import { getCommunities, getCommunity } from "./methods/communities";
 import { getCommunityFilters } from "./methods/communityFilters";
 import { getRatedPackages } from "./methods/ratedPackages";
-export { ratedPackagesSchema } from "./methods/ratedPackages";
-import { getCurrentUser, emptyUser } from "./methods/currentUser";
-export const getEmptyUser = emptyUser;
-export { dependencyShema } from "./methods/packageListings";
-export { currentUserSchema } from "./methods/currentUser";
+// export { ratedPackagesSchema } from "./methods/ratedPackages";
+import { getCurrentUser } from "./methods/currentUser";
+// export const getEmptyUser = emptyUser;
+// export { dependencyShema } from "./methods/packageListings";
+// export { currentUserSchema } from "./methods/currentUser";
 import {
   getPackageChangelog,
   getPackageReadme,
@@ -26,7 +26,7 @@ import {
   getTeamMembers,
   getTeamServiceAccounts,
 } from "./methods/team";
-export type { PackageSubmissionResponse } from "./methods/package";
+// export type { PackageSubmissionResponse } from "./methods/package";
 
 export interface DapperTsInterface extends DapperInterface {
   config: () => RequestConfig;

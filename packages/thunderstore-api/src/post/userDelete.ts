@@ -1,7 +1,7 @@
 // THIS API ENDPOINT IS NOT IMPLEMENTED YET IN THE THUNDERSTORE API
 
 import { RequestConfig } from "../index";
-import { apiFetch2 } from "../apiFetch";
+import { apiFetch } from "../apiFetch";
 
 export interface userDeleteApiArgs {
   verification: string;
@@ -13,7 +13,7 @@ export function userDelete(
 ) {
   const path = `/api/cyberstorm/current-user/delete/`;
 
-  return apiFetch2({
+  return apiFetch({
     config,
     path,
     request: {

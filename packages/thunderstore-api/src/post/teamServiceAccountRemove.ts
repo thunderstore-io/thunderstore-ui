@@ -1,7 +1,7 @@
 // THIS API ENDPOINT IS NOT IMPLEMENTED YET IN THE THUNDERSTORE API
 
 import { RequestConfig } from "../index";
-import { apiFetch2 } from "../apiFetch";
+import { apiFetch } from "../apiFetch";
 
 export type teamServiceAccountRemoveMetaArgs = {
   serviceAccountIdentifier: string;
@@ -15,7 +15,7 @@ export function teamServiceAccountRemove(
 ) {
   const path = `/api/cyberstorm/team/${meta.teamName}/service-account/delete/`;
 
-  return apiFetch2({
+  return apiFetch({
     config,
     path,
     request: {

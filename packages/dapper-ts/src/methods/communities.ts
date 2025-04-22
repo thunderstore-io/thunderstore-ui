@@ -1,28 +1,41 @@
 import {
+  CommunityListOrderingEnum,
   fetchCommunity,
   fetchCommunityList,
 } from "@thunderstore/thunderstore-api";
 
 import { DapperTsInterface } from "../index";
-import { formatErrorMessage } from "../utils";
 
 export async function getCommunities(
   this: DapperTsInterface,
-  page = 1,
-  ordering = "name",
+  page?: number,
+  ordering?: string,
   search?: string
 ) {
-  const data = await fetchCommunityList(this.config, page, ordering, search);
-  const parsed = communitiesSchema.safeParse(data);
-
-  if (!parsed.success) {
-    throw new Error(formatErrorMessage(parsed.error));
+  let supportedOrdering = undefined;
+  // As dapper accepts more options, than the TS api at this time, we'll need to check if the given ordering is supported.
+  if (ordering && ordering in CommunityListOrderingEnum) {
+    supportedOrdering = ordering as CommunityListOrderingEnum;
   }
+  const data = await fetchCommunityList({
+    config: this.config,
+    queryParams: [
+      { key: "page", value: page, impotent: 1 },
+      {
+        key: "ordering",
+        value: supportedOrdering,
+        impotent: CommunityListOrderingEnum.Popular,
+      },
+      { key: "search", value: search },
+    ],
+    params: {},
+    data: {},
+  });
 
   return {
-    count: parsed.data.count,
-    hasMore: Boolean(parsed.data.next),
-    results: parsed.data.results,
+    count: data.count,
+    hasMore: Boolean(data.next),
+    results: data.results,
   };
 }
 
@@ -30,12 +43,12 @@ export async function getCommunity(
   this: DapperTsInterface,
   communityId: string
 ) {
-  const data = await fetchCommunity(this.config, communityId);
-  const parsed = communitySchema.safeParse(data);
+  const data = await fetchCommunity({
+    config: this.config,
+    params: { community_id: communityId },
+    data: {},
+    queryParams: {},
+  });
 
-  if (!parsed.success) {
-    throw new Error(formatErrorMessage(parsed.error));
-  }
-
-  return parsed.data;
+  return data;
 }

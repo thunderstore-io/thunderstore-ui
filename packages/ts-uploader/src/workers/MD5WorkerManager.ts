@@ -20,7 +20,7 @@ interface MD5WorkerManagerErrorConstructor extends ErrorConstructor {
 }
 
 // eslint-disable-next-line no-var
-export declare var MD5WorkerManagerError: MD5WorkerManagerErrorConstructor;
+export var MD5WorkerManagerError: MD5WorkerManagerErrorConstructor;
 
 export class MD5WorkerManager {
   private workers: Worker[] = [];

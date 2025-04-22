@@ -10,15 +10,10 @@
       "module": "./dist/thunderstore-thunderstore-api.esm.js",
       "default": "./dist/thunderstore-thunderstore-api.cjs.js"
     },
-    "./types": {
-      "module": "./types/dist/thunderstore-thunderstore-api-types.esm.js",
-      "default": "./types/dist/thunderstore-thunderstore-api-types.cjs.js"
-    },
     "./package.json": "./package.json"
   },
   "files": [
-    "dist",
-    "types"
+    "dist"
   ],
   "scripts": {
     "build": "tsc",
@@ -38,8 +33,7 @@
   },
   "preconstruct": {
     "entrypoints": [
-      "index.ts",
-      "types/index.ts"
+      "index.ts"
     ],
     "exports": true
   }

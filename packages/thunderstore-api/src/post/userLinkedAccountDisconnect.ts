@@ -1,7 +1,7 @@
 // THIS API ENDPOINT IS NOT IMPLEMENTED YET IN THE THUNDERSTORE API
 
 import { RequestConfig } from "../index";
-import { apiFetch2 } from "../apiFetch";
+import { apiFetch } from "../apiFetch";
 
 export interface userLinkedAccountDisconnectApiArgs {
   provider: "discord" | "github" | "overwolf";
@@ -13,7 +13,7 @@ export function userLinkedAccountDisconnect(
 ) {
   const path = `/api/cyberstorm/current-user/linked-account-disconnect/`;
 
-  return apiFetch2({
+  return apiFetch({
     config,
     path,
     request: {

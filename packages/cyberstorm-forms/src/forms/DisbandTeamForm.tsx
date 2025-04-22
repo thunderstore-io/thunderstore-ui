@@ -15,7 +15,7 @@ import {
 } from "@thunderstore/cyberstorm-forms";
 
 import { CyberstormLink } from "@thunderstore/cyberstorm";
-import { teamDisbandRequestParamsSchema } from "@thunderstore/thunderstore-api/src/schemas/requestSchemas";
+import { teamDisbandRequestParamsSchema } from "@thunderstore/thunderstore-api";
 
 export function DisbandTeamForm(props: {
   teamName: string;

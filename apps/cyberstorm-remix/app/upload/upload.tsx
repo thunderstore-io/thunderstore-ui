@@ -33,17 +33,22 @@ import {
   faArrowUpRight,
 } from "@fortawesome/pro-solid-svg-icons";
 import { UserMedia } from "@thunderstore/ts-uploader/src/client/types";
-import { DapperTs, PackageSubmissionResponse } from "@thunderstore/dapper-ts";
+import { DapperTs } from "@thunderstore/dapper-ts";
 import { MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import {
-  packageSubmissionErrorSchema,
-  packageSubmissionStatusSchema,
-} from "@thunderstore/dapper-ts/src/methods/package";
+// import {
+//   packageSubmissionErrorSchema,
+//   packageSubmissionStatusSchema,
+// } from "@thunderstore/dapper-ts/src/methods/package";
 import {
   PackageSubmissionResult,
   PackageSubmissionStatus,
 } from "@thunderstore/dapper/types";
+import {
+  PackageSubmissionError,
+  packageSubmissionErrorSchema,
+  packageSubmissionStatusSchema,
+} from "@thunderstore/thunderstore-api";
 
 interface CommunityOption {
   value: string;
@@ -107,7 +112,7 @@ export default function Upload() {
 
   // Teams do not have a separate identifier, the team name is the identifier
   useEffect(() => {
-    setAvailableTeams(session.getSessionCurrentUser()?.teams ?? []);
+    setAvailableTeams(session.getSessionCurrentUser()?.teams_full ?? []);
   }, [session]);
 
   const [NSFW, setNSFW] = useState<boolean>(false);
@@ -146,8 +151,9 @@ export default function Upload() {
 
   const [submissionStatus, setSubmissionStatus] =
     useState<PackageSubmissionStatus>();
-  const [submissionError, setSubmissionError] =
-    useState<PackageSubmissionResponse>({});
+  const [submissionError, setSubmissionError] = useState<
+    PackageSubmissionError | undefined
+  >();
 
   const startUpload = useCallback(async () => {
     // console.log("Starting upload");
@@ -187,12 +193,20 @@ export default function Upload() {
   const submit = useCallback(async () => {
     if (!usermedia?.uuid) {
       setSubmissionError({
+        upload_uuid: null,
+        author_name: null,
+        categories: null,
+        communities: null,
+        has_nsfw_content: null,
+        detail: null,
+        file: null,
+        team: null,
         __all__: ["Upload not completed"],
       });
       return;
     }
 
-    setSubmissionError({});
+    setSubmissionError(undefined);
     const config = session.getConfig();
     const dapper = new DapperTs(() => config);
     const result = await dapper.postPackageSubmissionMetadata(
@@ -215,8 +229,9 @@ export default function Upload() {
     } else {
       // Check if the submission request had an error
       // console.log("Submission error:", result);
-      if (packageSubmissionErrorSchema.safeParse(result).success) {
-        setSubmissionError(result);
+      const errorParsed = packageSubmissionErrorSchema.safeParse(result);
+      if (errorParsed.success) {
+        setSubmissionError(errorParsed.data);
         return;
       }
     }
@@ -224,6 +239,14 @@ export default function Upload() {
     // Handle successful submission
     if ("task_error" in result && result.task_error) {
       setSubmissionError({
+        upload_uuid: null,
+        author_name: null,
+        categories: null,
+        communities: null,
+        has_nsfw_content: null,
+        detail: null,
+        file: null,
+        team: null,
         __all__: [`Submission failed: ${result.result}`],
       });
       return;
@@ -255,16 +278,44 @@ export default function Upload() {
     }
   }, [selectedCommunities]);
 
-  const pollSubmission = async (submissionId: string) => {
+  const pollSubmission = async (
+    submissionId: string
+  ): Promise<
+    | { success: true; data: PackageSubmissionStatus }
+    | { success: false; data: PackageSubmissionError }
+  > => {
     console.log("Polling submission status");
     // Wait 5 seconds before polling again
     await new Promise((resolve) => setTimeout(resolve, 5000));
     const result = await window.Dapper.getPackageSubmissionStatus(submissionId);
     const parsedResult = packageSubmissionStatusSchema.safeParse(result);
     if (parsedResult.success) {
-      return { success: true, data: parsedResult.data };
+      return {
+        success: true,
+        data: parsedResult.data as PackageSubmissionStatus,
+      };
     } else {
-      return { success: false, data: parsedResult.data };
+      const errorParsed = packageSubmissionErrorSchema.safeParse(result);
+      if (errorParsed.success) {
+        return {
+          success: false,
+          data: errorParsed.data as PackageSubmissionError,
+        };
+      }
+      return {
+        success: false,
+        data: {
+          upload_uuid: null,
+          author_name: null,
+          categories: null,
+          communities: null,
+          has_nsfw_content: null,
+          detail: null,
+          file: null,
+          team: null,
+          __all__: ["Error while polling submission status"],
+        },
+      };
     }
   };
 
@@ -294,18 +345,20 @@ export default function Upload() {
             submissionStatusRef.current = data.data;
             setSubmissionStatus(data.data);
           } else {
-            if (data.data) {
-              setSubmissionError(data.data);
-            } else {
-              setSubmissionError({
-                __all__: ["Unable to check submission status"],
-              });
-            }
+            setSubmissionError(data.data);
           }
         },
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (_error) => {
           setSubmissionError({
+            upload_uuid: null,
+            author_name: null,
+            categories: null,
+            communities: null,
+            has_nsfw_content: null,
+            detail: null,
+            file: null,
+            team: null,
             __all__: ["Unable to check submission status"],
           });
         }
@@ -361,6 +414,14 @@ export default function Upload() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (_error) => {
           setSubmissionError({
+            upload_uuid: null,
+            author_name: null,
+            categories: null,
+            communities: null,
+            has_nsfw_content: null,
+            detail: null,
+            file: null,
+            team: null,
             __all__: ["Unable to check submission status"],
           });
         }
@@ -663,7 +724,7 @@ export default function Upload() {
                 <p>Please select at least one community.</p>
               </div>
             )}
-            {Object.keys(submissionError).length > 0 && (
+            {submissionError && Object.keys(submissionError).length > 0 && (
               <div className="upload__error">
                 {Object.entries(submissionError).map(([field, errors]) => (
                   <div key={field}>

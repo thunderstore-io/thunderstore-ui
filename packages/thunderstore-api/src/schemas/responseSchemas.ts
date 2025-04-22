@@ -116,9 +116,7 @@ export type PackageReadmeResponseData = z.infer<
 >;
 
 // PackageVersionsResponse
-export const packageVersionsResponseDataSchema = z.object({
-  versions: z.array(packageVersionSchema),
-});
+export const packageVersionsResponseDataSchema = z.array(packageVersionSchema);
 
 export type PackageVersionsResponseData = z.infer<
   typeof packageVersionsResponseDataSchema

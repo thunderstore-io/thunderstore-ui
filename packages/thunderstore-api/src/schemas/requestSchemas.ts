@@ -138,7 +138,7 @@ export type NamespacePackageListingsRequestParams = z.infer<
 export const packageChangelogRequestParamsSchema = z.object({
   namespace_id: z.string(),
   package_name: z.string(),
-  version_number: z.union([z.string(), z.literal("latest")]),
+  version_number: z.union([z.string(), z.literal("latest")]).optional(),
 });
 
 export type PackageChangelogRequestParams = z.infer<
@@ -169,10 +169,9 @@ export type PackageListingDetailsRequestParams = z.infer<
 
 // PackageReadmeRequest
 export const packageReadmeRequestParamsSchema = z.object({
-  community_id: z.string(),
   namespace_id: z.string(),
   package_name: z.string(),
-  version_number: z.union([z.string(), z.literal("latest")]),
+  version_number: z.union([z.string(), z.literal("latest")]).optional(),
 });
 
 export type PackageReadmeRequestParams = z.infer<
