@@ -7,10 +7,8 @@ export async function fetchPackageChangelog(
   packageName: string,
   versionNumber?: string
 ) {
-  const n = namespaceId.toLocaleLowerCase();
-  const p = packageName.toLocaleLowerCase();
   const v = versionNumber ? `v/${versionNumber}` : `latest`;
-  const path = `api/cyberstorm/package/${n}/${p}/${v}/changelog/`;
+  const path = `api/cyberstorm/package/${namespaceId}/${packageName}/${v}/changelog/`;
 
   return await apiFetch(config, path);
 }

@@ -11,9 +11,7 @@ export async function fetchPackageDependantsListings(
   options?: PackageListingQueryParams
 ) {
   const c = communityId.toLocaleLowerCase();
-  const n = namespaceId.toLocaleLowerCase();
-  const p = packageName.toLocaleLowerCase();
-  const path = `api/cyberstorm/listing/${c}/${n}/${p}/dependants/`;
+  const path = `api/cyberstorm/listing/${c}/${namespaceId}/${packageName}/dependants/`;
 
   const queryParams = [
     { key: "ordering", value: options?.ordering, impotent: "last-updated" },
