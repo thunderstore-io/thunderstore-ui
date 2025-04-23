@@ -7,10 +7,8 @@ export async function fetchPackageReadme(
   packageName: string,
   versionNumber?: string
 ) {
-  const n = namespaceId.toLocaleLowerCase();
-  const p = packageName.toLocaleLowerCase();
   const v = versionNumber ? `v/${versionNumber}` : `latest`;
-  const path = `api/cyberstorm/package/${n}/${p}/${v}/readme/`;
+  const path = `api/cyberstorm/package/${namespaceId}/${packageName}/${v}/readme/`;
 
   return await apiFetch(config, path);
 }

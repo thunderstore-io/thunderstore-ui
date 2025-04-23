@@ -8,9 +8,7 @@ export async function fetchPackageListingDetails(
   packageName: string
 ) {
   const c = communityId.toLocaleLowerCase();
-  const n = namespaceId.toLocaleLowerCase();
-  const p = packageName.toLocaleLowerCase();
-  const path = `api/cyberstorm/listing/${c}/${n}/${p}/`;
+  const path = `api/cyberstorm/listing/${c}/${namespaceId}/${packageName}/`;
 
   return await apiFetch(config, path);
 }
