@@ -37,10 +37,7 @@ export async function fetchPackageDependantsListings(
       { key: "deprecated", value: false, impotent: false },
     ],
   } = props;
-  const c = params.community_id.toLocaleLowerCase();
-  const n = params.namespace_id.toLocaleLowerCase();
-  const p = params.package_name.toLocaleLowerCase();
-  const path = `api/cyberstorm/listing/${c}/${n}/${p}/dependants/`;
+  const path = `api/cyberstorm/listing/${params.community_id}/${params.namespace_id}/${params.package_name}/dependants/`;
 
   return await apiFetch({
     args: {

@@ -9,9 +9,7 @@ export async function fetchPackageVersions(
   props: ApiEndpointProps<PackageVersionsRequestParams, object, object>
 ): Promise<PackageVersionsResponseData> {
   const { config, params } = props;
-  const n = params.namespace_id.toLocaleLowerCase();
-  const p = params.package_name.toLocaleLowerCase();
-  const path = `api/cyberstorm/package/${n}/${p}/versions/`;
+  const path = `api/cyberstorm/package/${params.namespace_id}/${params.package_name}/versions/`;
 
   return await apiFetch({
     args: {

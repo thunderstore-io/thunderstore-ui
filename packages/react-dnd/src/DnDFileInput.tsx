@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef } from "react";
+import React, { ReactNode, RefObject, useRef } from "react";
 import { useDnDFileInput } from "./useDnDFileInput";
 
 interface DnDFileInputProps {
@@ -8,10 +8,11 @@ interface DnDFileInputProps {
   baseState: ReactNode;
   dragState: ReactNode;
   rootClasses: string;
+  fileInputRef?: RefObject<HTMLInputElement>;
 }
 
 export const DnDFileInput: React.FC<DnDFileInputProps> = (props) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = props.fileInputRef ?? useRef<HTMLInputElement>(null);
   const { onChange, onDrop, isDragging } = useDnDFileInput({
     inputRef: fileInputRef,
     readonly: props.readonly,

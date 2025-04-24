@@ -144,6 +144,7 @@ export default function Upload() {
   );
 
   const [file, setFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [handle, setHandle] = useState<IBaseUploadHandle>();
   const [lock, setLock] = useState<boolean>(false);
   const [isDone, setIsDone] = useState<boolean>(false);
@@ -163,32 +164,23 @@ export default function Upload() {
     // console.log("Starting upload");
     if (!file) return;
 
-    try {
-      const config = session.getConfig();
-      if (!config.apiHost) {
-        throw new Error("API host is not configured");
-      }
-      const upload = new MultipartUpload(
-        {
-          file,
-        },
-        requestConfig
-      );
-
-      setLock(true);
-      setHandle(upload);
-      await upload.start();
-      setUsermedia(upload.uploadHandle);
-      setIsDone(true);
-    } catch (error) {
-      console.error("Upload failed:", error);
-      if (error instanceof Error) {
-        alert(`Upload failed: ${error.message}`);
-      }
-      setHandle(undefined);
-    } finally {
-      setLock(false);
+    const config = session.getConfig();
+    if (!config.apiHost) {
+      throw new Error("API host is not configured");
     }
+    const upload = new MultipartUpload(
+      {
+        file,
+      },
+      requestConfig
+    );
+
+    setLock(true);
+    setHandle(upload);
+    await upload.start();
+    setUsermedia(upload.uploadHandle);
+    setIsDone(true);
+    setLock(false);
   }, [file, session]);
 
   const submit = useCallback(async () => {
@@ -280,14 +272,17 @@ export default function Upload() {
   }, [selectedCommunities]);
 
   const pollSubmission = async (
-    submissionId: string
+    submissionId: string,
+    noSleep?: boolean
   ): Promise<
     | { success: true; data: PackageSubmissionStatus }
     | { success: false; data: PackageSubmissionError }
   > => {
     console.log("Polling submission status");
-    // Wait 5 seconds before polling again
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    if (!noSleep) {
+      // Wait 5 seconds before polling again
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    }
     const result = await window.Dapper.getPackageSubmissionStatus(submissionId);
     const parsedResult = packageSubmissionStatusSchema.safeParse(result);
     if (parsedResult.success) {
@@ -303,6 +298,7 @@ export default function Upload() {
           data: errorParsed.data as PackageSubmissionError,
         };
       }
+      // TODO: Add sentry logging here
       return {
         success: false,
         data: {
@@ -340,17 +336,18 @@ export default function Upload() {
       submissionStatusRef.current !== submissionStatus &&
       submissionStatus.status === "PENDING"
     ) {
-      pollSubmission(submissionStatus.id).then(
-        (data) => {
+      pollSubmission(submissionStatus.id)
+        .then((data) => {
           if (data.success) {
             submissionStatusRef.current = data.data;
             setSubmissionStatus(data.data);
           } else {
             setSubmissionError(data.data);
           }
-        },
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        (_error) => {
+        })
+        .catch((error) => {
+          // TODO: Add sentry logging
+          console.error("Error polling submission status:", error);
           setSubmissionError({
             upload_uuid: null,
             author_name: null,
@@ -362,8 +359,7 @@ export default function Upload() {
             team: null,
             __all__: ["Unable to check submission status"],
           });
-        }
-      );
+        });
     }
   }, [submissionStatus]);
 
@@ -406,7 +402,7 @@ export default function Upload() {
 
   const retryPolling = () => {
     if (submissionStatus?.id) {
-      pollSubmission(submissionStatus.id).then(
+      pollSubmission(submissionStatus.id, true).then(
         (data) => {
           if (data.success) {
             setSubmissionStatus(data.data);
@@ -501,6 +497,7 @@ export default function Upload() {
                 setFile(files.item(0));
               }}
               readonly={!!handle}
+              fileInputRef={fileInputRef}
             />
           </div>
         </div>
@@ -640,6 +637,9 @@ export default function Upload() {
               <NewButton
                 onClick={() => {
                   setFile(null);
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                  }
                   setHandle(undefined);
                   setUsermedia(undefined);
                   setIsDone(false);
@@ -673,13 +673,18 @@ export default function Upload() {
                 Submit Package
               </NewButton>
             </div>
-            <UploadProgressDisplay handle={handle} />
+            <UploadStatus handle={handle} />
+            <div className="submission__status">
+              <div className="submission__status-item">
+                Submission{" "}
+                {submissionStatus ? submissionStatus.status : "not started"}
+              </div>
+            </div>
             {submissionStatus && (
-              <div className="upload__status">
-                <p>Submission Status: {submissionStatus.status}</p>
+              <div className="submission__status">
                 {submissionStatus.form_errors &&
                   Object.keys(submissionStatus.form_errors).length > 0 && (
-                    <div className="upload__error">
+                    <div className="submission__error">
                       <p>Form Errors:</p>
                       <ul>
                         {Object.entries(submissionStatus.form_errors).map(
@@ -706,7 +711,7 @@ export default function Upload() {
               </div>
             )}
             {error && (
-              <div className="upload__error">
+              <div className="submission__error">
                 <p>{error.message}</p>
                 {error.retryable && (
                   <NewButton onClick={controls.retry}>Retry</NewButton>
@@ -714,19 +719,19 @@ export default function Upload() {
               </div>
             )}
             {isDone && !usermedia?.uuid && (
-              <div className="upload__error">
+              <div className="submission__error">
                 <p>
                   Upload completed but no UUID was received. Please try again.
                 </p>
               </div>
             )}
             {isDone && usermedia?.uuid && !selectedCommunities.length && (
-              <div className="upload__error">
+              <div className="submission__error">
                 <p>Please select at least one community.</p>
               </div>
             )}
             {submissionError && Object.keys(submissionError).length > 0 && (
-              <div className="upload__error">
+              <div className="submission__error">
                 {Object.entries(submissionError).map(([field, errors]) => (
                   <div key={field}>
                     {field !== "__all__" && (
@@ -782,6 +787,78 @@ function formatBytes(bytes: number, decimals = 2) {
 
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
+
+const UploadStatus = (props: { handle?: IBaseUploadHandle }) => {
+  const progress = useUploadProgress(props.handle);
+  const status = useUploadStatus(props.handle);
+  const error = useUploadError(props.handle);
+  const controls = useUploadControls(props.handle);
+
+  let progressElement = null;
+
+  if (progress) {
+    const partBars = Object.keys(progress.partsProgress).map((partId) => {
+      const partProgress = progress.partsProgress[partId];
+      return (
+        <div className="upload__progress-bar" key={partId}>
+          <div
+            className="upload__progress-bar-fill"
+            style={{
+              width: `${(partProgress.complete / partProgress.total) * 100}%`,
+            }}
+          />
+        </div>
+      );
+    });
+    const percent = Math.round((progress.complete / progress.total) * 100);
+    const speed = formatBytes(progress.metrics.bytesPerSecond, 2);
+
+    progressElement = (
+      <div className="upload__progress">
+        <div className="upload__progress-bar">
+          <div
+            className="upload__progress-bar-fill"
+            style={{ width: `${percent}%` }}
+          />
+        </div>
+        <div className="upload__progress-bars">{partBars}</div>
+        <div className="upload__progress-info">
+          <span>
+            {percent}% {formatBytes(progress.complete)} /{" "}
+            {formatBytes(progress.total)}
+          </span>
+          <span className="upload__progress-speed">{speed} / s</span>
+        </div>
+        {error && (
+          <div className="upload__error">
+            <p>{error.message}</p>
+            {error.retryable && (
+              <NewButton onClick={controls.retry}>Retry</NewButton>
+            )}
+          </div>
+        )}
+        {status === "running" && (
+          <NewButton onClick={controls.pause}>Pause</NewButton>
+        )}
+        {status === "paused" && (
+          <NewButton onClick={controls.resume}>Resume</NewButton>
+        )}
+        {(status === "running" || status === "paused") && (
+          <NewButton onClick={controls.abort}>Cancel</NewButton>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="upload__status">
+      <div className="upload__status-header">
+        <p>Upload Status: {status}</p>
+      </div>
+      <div className="upload__status-content">{progressElement}</div>
+    </div>
+  );
+};
 
 const SubmissionResult = (props: {
   submissionStatusResult: PackageSubmissionResult;
@@ -884,67 +961,6 @@ const SubmissionResult = (props: {
         sortDirection={NewTableSort.ASC}
         csModifiers={["alignLastColumnRight"]}
       />
-    </div>
-  );
-};
-
-const UploadProgressDisplay = (props: { handle?: IBaseUploadHandle }) => {
-  const progress = useUploadProgress(props.handle);
-  const status = useUploadStatus(props.handle);
-  const error = useUploadError(props.handle);
-  const controls = useUploadControls(props.handle);
-
-  if (!progress) return <p>Upload not started</p>;
-
-  const partBars = Object.keys(progress.partsProgress).map((partId) => {
-    const partProgress = progress.partsProgress[partId];
-    return (
-      <div className="upload__progress-bar" key={partId}>
-        <div
-          className="upload__progress-bar-fill"
-          style={{
-            width: `${(partProgress.complete / partProgress.total) * 100}%`,
-          }}
-        />
-      </div>
-    );
-  });
-  const percent = Math.round((progress.complete / progress.total) * 100);
-  const speed = formatBytes(progress.metrics.bytesPerSecond, 2);
-
-  return (
-    <div className="upload__progress">
-      <div className="upload__progress-bar">
-        <div
-          className="upload__progress-bar-fill"
-          style={{ width: `${percent}%` }}
-        />
-      </div>
-      <div className="upload__progress-bars">{partBars}</div>
-      <div className="upload__progress-info">
-        <span>
-          {percent}% {formatBytes(progress.complete)} /{" "}
-          {formatBytes(progress.total)}
-        </span>
-        <span className="upload__progress-speed">{speed} / s</span>
-      </div>
-      {error && (
-        <div className="upload__error">
-          <p>{error.message}</p>
-          {error.retryable && (
-            <NewButton onClick={controls.retry}>Retry</NewButton>
-          )}
-        </div>
-      )}
-      {status === "running" && (
-        <NewButton onClick={controls.pause}>Pause</NewButton>
-      )}
-      {status === "paused" && (
-        <NewButton onClick={controls.resume}>Resume</NewButton>
-      )}
-      {(status === "running" || status === "paused") && (
-        <NewButton onClick={controls.abort}>Cancel</NewButton>
-      )}
     </div>
   );
 };

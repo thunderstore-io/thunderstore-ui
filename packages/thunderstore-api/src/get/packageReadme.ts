@@ -10,13 +10,11 @@ export async function fetchPackageReadme(
   props: ApiEndpointProps<PackageReadmeRequestParams, object, object>
 ): Promise<PackageReadmeResponseData> {
   const { config, params } = props;
-  const n = params.namespace_id.toLocaleLowerCase();
-  const p = params.package_name.toLocaleLowerCase();
   const v =
     params.version_number === "latest"
       ? "latest"
       : `v/${params.version_number}`;
-  const path = `api/cyberstorm/package/${n}/${p}/${v}/readme/`;
+  const path = `api/cyberstorm/package/${params.namespace_id}/${params.package_name}/${v}/readme/`;
 
   return await apiFetch({
     args: {

@@ -200,15 +200,15 @@ export type PackageVersionExperimental = z.infer<
 >;
 
 export const packageSubmissionErrorSchema = z.object({
-  upload_uuid: z.string().array().nullable(),
-  author_name: z.string().array().nullable(),
-  categories: z.string().array().nullable(),
-  communities: z.string().array().nullable(),
-  has_nsfw_content: z.string().array().nullable(),
-  detail: z.string().array().nullable(),
-  file: z.string().array().nullable(),
-  team: z.string().array().nullable(),
-  __all__: z.string().array().nullable(),
+  upload_uuid: z.string().array().nullable().optional(),
+  author_name: z.string().array().nullable().optional(),
+  categories: z.string().array().nullable().optional(),
+  communities: z.string().array().nullable().optional(),
+  has_nsfw_content: z.string().array().nullable().optional(),
+  detail: z.string().array().nullable().optional(),
+  file: z.string().array().nullable().optional(),
+  team: z.string().array().nullable().optional(),
+  __all__: z.string().array().nullable().optional(),
 });
 
 export type PackageSubmissionError = z.infer<

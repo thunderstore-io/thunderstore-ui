@@ -17,6 +17,7 @@ export type UserMedia = {
   status: string;
   filename: string;
   size: number;
+  error?: string;
 };
 export type UploadPartUrl = {
   part_number: number;

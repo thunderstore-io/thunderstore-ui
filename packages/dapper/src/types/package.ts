@@ -58,15 +58,15 @@ export interface PackageVersion {
 }
 
 export interface PackageSubmissionError {
-  upload_uuid: string[] | null;
-  author_name: string[] | null;
-  categories: string[] | null;
-  communities: string[] | null;
-  has_nsfw_content: string[] | null;
-  detail: string[] | null;
-  file: string[] | null;
-  team: string[] | null;
-  __all__: string[] | null;
+  upload_uuid?: string[] | null;
+  author_name?: string[] | null;
+  categories?: string[] | null;
+  communities?: string[] | null;
+  has_nsfw_content?: string[] | null;
+  detail?: string[] | null;
+  file?: string[] | null;
+  team?: string[] | null;
+  __all__?: string[] | null;
 }
 
 export interface PackageSubmissionResult {

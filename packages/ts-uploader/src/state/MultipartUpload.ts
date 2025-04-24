@@ -92,7 +92,13 @@ export class MultipartUpload extends BaseUpload {
 
   async start(): Promise<void> {
     if (this.status === "running") {
-      throw new Error("Upload already running");
+      this.setError({
+        code: "UPLOAD_ALREADY_RUNNING",
+        message: "Upload already running",
+        retryable: false,
+        details: undefined,
+      });
+      return;
     }
 
     try {
@@ -149,7 +155,13 @@ export class MultipartUpload extends BaseUpload {
 
         batch.map((part) => {
           if (!this.handle) {
-            throw new Error("Upload handle not found");
+            this.setError({
+              code: "UPLOAD_HANDLE_NOT_FOUND",
+              message: "Upload handle not found",
+              retryable: false,
+              details: undefined,
+            });
+            return;
           }
           console.log("uploading part", part);
           this.onGoingUploads.push(
@@ -167,14 +179,26 @@ export class MultipartUpload extends BaseUpload {
       if (
         Object.values(this.partStates).some((part) => part.state === "error")
       ) {
-        throw new Error("Parts of the upload failed, please retry.");
+        this.setError({
+          code: "UPLOAD_FAILED",
+          message: "Parts of the upload failed, please retry.",
+          retryable: true,
+          details: undefined,
+        });
+        return;
       }
 
       const completeParts: { ETag: string; PartNumber: number }[] = [];
 
       Object.values(this.partStates).map((ps) => {
         if (!ps.etag) {
-          throw new Error("Parts of the upload were not uploaded correctly.");
+          this.setError({
+            code: "UPLOAD_FAILED",
+            message: "Parts of the upload were not uploaded correctly.",
+            retryable: true,
+            details: undefined,
+          });
+          return;
         }
         completeParts.push({
           ETag: ps.etag,
@@ -259,7 +283,7 @@ export class MultipartUpload extends BaseUpload {
             retryable: true,
             details: xhr,
           });
-          reject(new Error(`HTTP error: ${xhr.status}`));
+          reject();
         }
       };
 
@@ -273,7 +297,7 @@ export class MultipartUpload extends BaseUpload {
           retryable: true,
           details: xhr,
         });
-        reject(new Error("Network error"));
+        reject();
       };
 
       // Open and send the request
@@ -307,7 +331,13 @@ export class MultipartUpload extends BaseUpload {
 
   async abort(): Promise<void> {
     if (!this.handle) {
-      throw new Error("Upload handle not found");
+      this.setError({
+        code: "UPLOAD_HANDLE_NOT_FOUND",
+        message: "Upload handle not found",
+        retryable: false,
+        details: undefined,
+      });
+      return;
     }
     // TODO: This should probably change some status to aborted, so that the
     // frontend can show that the upload was aborted.
