@@ -8,7 +8,6 @@ import {
   UploadProgress,
   UploadStatus,
 } from "./types";
-import { RequestConfig } from "@thunderstore/thunderstore-api";
 
 export abstract class BaseUpload implements IBaseUploadHandle {
   protected status: UploadStatus = "not_started";
@@ -24,14 +23,13 @@ export abstract class BaseUpload implements IBaseUploadHandle {
   protected error?: UploadError;
   protected partsProgress: { [key: string]: UploadPartProgress } = {};
   protected config: UploadConfig;
-  protected requestConfig: RequestConfig;
   protected isAborted = false;
 
   readonly onProgress = new TypedEventEmitter<UploadProgress>();
   readonly onStatusChange = new TypedEventEmitter<UploadStatus>();
   readonly onError = new TypedEventEmitter<UploadError>();
 
-  constructor(config: UploadConfig = {}, requestConfig: RequestConfig = {}) {
+  constructor(config: UploadConfig = {}) {
     this.config = {
       maxRetries: 3,
       retryDelay: 1000,
@@ -40,7 +38,6 @@ export abstract class BaseUpload implements IBaseUploadHandle {
       timeout: 30000,
       ...config,
     };
-    this.requestConfig = requestConfig;
   }
 
   get progress(): UploadProgress {

@@ -1,3 +1,4 @@
+import { RequestConfig } from "@thunderstore/thunderstore-api";
 import {
   UserMedia,
   InitUploadResponse,
@@ -5,25 +6,9 @@ import {
   InitUploadRequest,
 } from "./types";
 import { UsermediaUrls } from "./urls";
-import { apiFetch } from "./fetch";
-import { ApiConfig } from "./config";
-
-type RequestConfig = {
-  path: string;
-  data?: object;
-};
-async function apiPost<T>(api: ApiConfig, request: RequestConfig) {
-  const response = await apiFetch({
-    url: `${api.domain}${request.path}`,
-    data: request.data,
-    authorization: api.authorization,
-    method: "POST",
-  });
-  return (await response.json()) as T;
-}
 
 type ApiCall<Req = undefined, Res = undefined, Args = object> = (
-  api: ApiConfig,
+  requestConfig: RequestConfig,
   args: {
     data: Req;
   } & Args

@@ -35,7 +35,7 @@ import {
 import { UserMedia } from "@thunderstore/ts-uploader/src/client/types";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useOutletContext } from "@remix-run/react";
 // import {
 //   packageSubmissionErrorSchema,
 //   packageSubmissionStatusSchema,
@@ -49,6 +49,7 @@ import {
   packageSubmissionErrorSchema,
   packageSubmissionStatusSchema,
 } from "@thunderstore/thunderstore-api";
+import { OutletContextShape } from "../root";
 
 interface CommunityOption {
   value: string;
@@ -87,6 +88,9 @@ export async function clientLoader() {
 
 export default function Upload() {
   const uploadData = useLoaderData<typeof loader | typeof clientLoader>();
+
+  const outletContext = useOutletContext() as OutletContextShape;
+  const requestConfig = outletContext.requestConfig;
 
   const communityOptions: CommunityOption[] = [];
   const [categoryOptions, setCategoryOptions] = useState<
@@ -164,15 +168,12 @@ export default function Upload() {
       if (!config.apiHost) {
         throw new Error("API host is not configured");
       }
-      const upload = new MultipartUpload({
-        file,
-        api: {
-          domain: config.apiHost,
-          authorization: config.sessionId
-            ? `Session ${config.sessionId}`
-            : undefined,
+      const upload = new MultipartUpload(
+        {
+          file,
         },
-      });
+        requestConfig
+      );
 
       setLock(true);
       setHandle(upload);

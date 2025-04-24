@@ -1,21 +1,16 @@
 import { UserMedia } from "../client/types";
-import { UsermediaEndpoints } from "../client/endpoints";
-import { ApiConfig } from "../client/config";
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 import { BaseUpload } from "./BaseUpload";
 import { UploadConfig, UploadProgress } from "./types";
+import { getMD5WorkerManager, MD5WorkerManager } from "../workers";
 import {
-  getMD5WorkerManager,
-  MD5WorkerManager,
-  MD5WorkerManagerError,
-} from "../workers";
-import {
+  postUsermediaAbort,
   postUsermediaFinish,
   postUsermediaInitiate,
+  RequestConfig,
 } from "@thunderstore/thunderstore-api";
 
 export type MultiPartUploadOptions = {
-  api: ApiConfig;
   file: File;
   maxConcurrentParts?: number;
   bandwidthLimit?: number;
@@ -48,7 +43,6 @@ export interface IUploadHandle {
 
 export class MultipartUpload extends BaseUpload {
   private file: File;
-  private api: ApiConfig;
   private parts: UploadPart[] = [];
   private partStates: {
     [key: string]: {
@@ -70,13 +64,18 @@ export class MultipartUpload extends BaseUpload {
   // private completedParts: { ETag: string; PartNumber: number }[] = [];
   private handle?: UserMedia;
   private md5WorkerManager: MD5WorkerManager;
+  private requestConfig: () => RequestConfig;
 
-  constructor(options: MultiPartUploadOptions, config?: UploadConfig) {
+  constructor(
+    options: MultiPartUploadOptions,
+    requestConfig: () => RequestConfig,
+    config?: UploadConfig
+  ) {
     super(config);
     this.file = options.file;
-    this.api = options.api;
     this.metrics.totalBytes = this.file.size;
     this.md5WorkerManager = getMD5WorkerManager();
+    this.requestConfig = requestConfig;
   }
 
   get uploadHandle(): UserMedia | undefined {
@@ -101,19 +100,23 @@ export class MultipartUpload extends BaseUpload {
       this.metrics.startTime = Date.now();
       this.metrics.lastUpdateTime = this.metrics.startTime;
 
+      console.log("requestConfig", this.requestConfig);
+
       // Initialize upload
       const initiateResult = await postUsermediaInitiate({
-        config: () => this.requestConfig,
+        config: this.requestConfig,
         params: {},
         data: {
           filename: this.file.name,
           file_size_bytes: this.file.size,
         },
         queryParams: {},
+        useSession: true,
       });
 
       this.handle = initiateResult.user_media;
 
+      console.log("initiateResult", initiateResult);
       // Create parts
       this.parts = initiateResult.upload_urls.map((x) => ({
         payload: this.slicePart(x.offset, x.length),
@@ -123,8 +126,11 @@ export class MultipartUpload extends BaseUpload {
         },
       }));
 
+      console.log("parts", this.parts);
+
       // Prepare parts
-      for (let i = 0; i < this.parts.length; i) {
+      for (let i = 0; i < this.parts.length; i++) {
+        console.log("part", this.parts[i]);
         const uniqueId = `${this.handle.uuid}-${this.parts[i].meta.part_number}`;
         this.partStates[uniqueId] = {
           part: this.parts[i],
@@ -145,6 +151,7 @@ export class MultipartUpload extends BaseUpload {
           if (!this.handle) {
             throw new Error("Upload handle not found");
           }
+          console.log("uploading part", part);
           this.onGoingUploads.push(
             this.uploadPart(
               `${this.handle.uuid}-${part.meta.part_number}`,
@@ -152,6 +159,7 @@ export class MultipartUpload extends BaseUpload {
               this.md5WorkerManager
             )
           );
+          console.log("onGoingUploads", this.onGoingUploads);
         });
         await Promise.all(this.onGoingUploads);
       }
@@ -176,7 +184,7 @@ export class MultipartUpload extends BaseUpload {
 
       // Complete upload
       const finishResult = await postUsermediaFinish({
-        config: () => this.requestConfig,
+        config: this.requestConfig,
         params: {
           uuid: this.handle.uuid,
         },
@@ -184,20 +192,20 @@ export class MultipartUpload extends BaseUpload {
           parts: completeParts,
         },
         queryParams: {},
+        useSession: true,
       });
 
       this.handle = finishResult;
 
       this.setStatus("complete");
     } catch (error) {
-      if (error instanceof Error) {
-        this.setError({
-          code: "UPLOAD_FAILED",
-          message: error.message,
-          retryable: true,
-          details: error,
-        });
-      }
+      console.log("error", error);
+      this.setError({
+        code: "UPLOAD_FAILED",
+        message: error.message,
+        retryable: true,
+        details: error,
+      });
       this.setStatus("failed");
     }
   }
@@ -211,10 +219,6 @@ export class MultipartUpload extends BaseUpload {
       uniqueId,
       part.payload
     );
-
-    if (checksum instanceof MD5WorkerManagerError) {
-      throw checksum;
-    }
 
     this.partStates[uniqueId] = {
       part,
@@ -307,9 +311,14 @@ export class MultipartUpload extends BaseUpload {
     }
     // TODO: This should probably change some status to aborted, so that the
     // frontend can show that the upload was aborted.
-    await UsermediaEndpoints.abort(this.api, {
-      uuid: this.handle.uuid,
-      data: undefined,
+    await postUsermediaAbort({
+      config: this.requestConfig,
+      params: {
+        uuid: this.handle.uuid,
+      },
+      data: {},
+      queryParams: {},
+      useSession: true,
     });
   }
 

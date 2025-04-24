@@ -10,18 +10,6 @@ export type MD5ErrorEvent = {
   uniqueId: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface MD5WorkerManagerError extends Error {}
-
-interface MD5WorkerManagerErrorConstructor extends ErrorConstructor {
-  new (message?: string): MD5WorkerManagerError;
-  (message?: string): MD5WorkerManagerError;
-  readonly prototype: MD5WorkerManagerError;
-}
-
-// eslint-disable-next-line no-var
-export var MD5WorkerManagerError: MD5WorkerManagerErrorConstructor;
-
 export class MD5WorkerManager {
   private workers: Worker[] = [];
   private isInitialized = false;
@@ -50,14 +38,9 @@ export class MD5WorkerManager {
     this.isInitialized = false;
   }
 
-  calculateMD5(
-    uniqueId: string,
-    data: Blob
-  ): Promise<string | MD5WorkerManagerError> {
+  calculateMD5(uniqueId: string, data: Blob): Promise<string> {
     if (!this.isInitialized) {
-      return Promise.reject(
-        new MD5WorkerManagerError("MD5 worker not initialized")
-      );
+      throw new Error("MD5 worker not initialized");
     }
 
     let worker: Worker | null = null;
@@ -68,31 +51,24 @@ export class MD5WorkerManager {
         type: "module",
       });
       if (!worker) {
-        return Promise.reject(
-          new MD5WorkerManagerError("Failed to create MD5 worker")
-        );
+        throw new Error("Failed to create MD5 worker");
       }
       this.workers.push(worker);
     } catch (error) {
-      return Promise.reject(
-        new MD5WorkerManagerError(`Failed to initialize MD5 worker: ${error}`)
-      );
+      throw new Error(`Failed to initialize MD5 worker: ${error}`);
     }
 
-    return new Promise((resolve, reject) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return new Promise((resolve, _reject) => {
       worker!.onmessage = (event: MessageEvent) => {
         const typeCastedEvent = event.data as MD5CompleteEvent | MD5ErrorEvent;
         if (typeCastedEvent.uniqueId === uniqueId) {
           if (typeCastedEvent.type === "complete") {
             resolve(typeCastedEvent.md5);
           } else if (typeCastedEvent.type === "error") {
-            reject(
-              new MD5WorkerManagerError(
-                `MD5 worker error: ${typeCastedEvent.error}`
-              )
-            );
+            throw new Error(`MD5 worker error: ${typeCastedEvent.error}`);
           } else {
-            reject(new MD5WorkerManagerError("Unknown event type"));
+            throw new Error("Unknown event type");
           }
         }
       };
