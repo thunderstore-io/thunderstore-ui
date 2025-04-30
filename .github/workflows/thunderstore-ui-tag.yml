@@ -1,7 +1,9 @@
-name: Thunderstore UI - Released
+name: Thunderstore UI - Tag
+
 on:
-  release:
-    types: [released]
+  push:
+    tags:
+      - '*'
 jobs:
   trigger-release-workflow:
     runs-on: ubuntu-latest
@@ -10,8 +12,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.THUNDERSTORE_BOT_PAT }}
         run: |
-          gh workflow run build-thunderstore-ui-release.yml \
+          gh workflow run build-thunderstore-ui-tag.yml \
           --repo Riskidev/Infra-v2 \
           --ref master \
-          -f tag_name=${{ github.event.release.tag_name }} \
+          -f tag_name=${{ github.ref_name }} \
           -f repo_url=${{ github.repository }}
