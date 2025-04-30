@@ -1,27 +1,17 @@
 name: Thunderstore UI - Pre-release
-
 on:
   release:
     types: [prereleased]
 jobs:
-  trigger-pre-release-workflow:
+  trigger-release-workflow:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Pre-release Workflow
-        uses: BeewiseTechnologiesLTD/remote-workflow-trigger@v1
-        id: trigger
-        with:
-          github_token: ${{ secrets.THUNDERSTORE_BOT_PAT }}
-          workflow_id: 'build-thunderstore-ui-pre-release.yml'
-          target_repo: 'Riskidev/Infra-v2'
-          ref: 'infra-v2-qa'
-          inputs: '{"tag_name": "${{ github.event.release.tag_name }}", "repo_url": "${{ github.repository }}"}'
-          wait_interval: '10'
-          timeout: '900'
-      
-      - name: Outputs
+        env:
+          GH_TOKEN: ${{ secrets.THUNDERSTORE_BOT_PAT }}
         run: |
-          echo "Workflow ID: ${{ steps.trigger.outputs.run_id }}"
-          echo "Workflow URL: ${{ steps.trigger.outputs.workflow_url }}"
-          echo "Status: ${{ steps.trigger.outputs.status }}"
-          echo "Conclusion: ${{ steps.trigger.outputs.conclusion }}"
+          gh workflow run build-thunderstore-ui-pre-release.yml \
+          --repo Riskidev/Infra-v2 \
+          --ref infra-v2-dev \
+          -f tag_name=${{ github.event.release.tag_name }} \
+          -f repo_url=${{ github.repository }}
