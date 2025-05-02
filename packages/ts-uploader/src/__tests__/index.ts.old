@@ -1,10 +1,10 @@
 // import { initMultipartUpload } from "../state/MultipartUpload";
 
-it("is configured correctly for tests", () => {
-  expect(process.env.TS_API_DOMAIN).toBeTruthy();
-  expect(process.env.TS_API_AUTHORIZATION).toBeTruthy();
-  // See README.md for test configuration instructions!
-});
+// it("is configured correctly for tests", () => {
+//   expect(process.env.TS_API_DOMAIN).toBeTruthy();
+//   expect(process.env.TS_API_AUTHORIZATION).toBeTruthy();
+//   // See README.md for test configuration instructions!
+// });
 
 // it(
 //   "uploads a multipart upload",

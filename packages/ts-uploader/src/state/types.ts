@@ -73,3 +73,9 @@ export type UploadConfig = {
   checksumAlgorithm?: "md5" | "sha256";
   timeout?: number;
 };
+
+export type MultiPartUploadOptions = {
+  file: File;
+  maxConcurrentParts?: number;
+  bandwidthLimit?: number;
+};

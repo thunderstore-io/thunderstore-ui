@@ -1,7 +1,7 @@
 import { UserMedia } from "../client/types";
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 import { BaseUpload } from "./BaseUpload";
-import { UploadConfig, UploadProgress } from "./types";
+import { UploadConfig, UploadProgress, MultiPartUploadOptions } from "./types";
 import { getMD5WorkerManager, MD5WorkerManager } from "../workers";
 import {
   postUsermediaAbort,
@@ -9,12 +9,6 @@ import {
   postUsermediaInitiate,
   RequestConfig,
 } from "@thunderstore/thunderstore-api";
-
-export type MultiPartUploadOptions = {
-  file: File;
-  maxConcurrentParts?: number;
-  bandwidthLimit?: number;
-};
 
 /**
  * A multi-part upload consists of 3 stages:
@@ -106,8 +100,6 @@ export class MultipartUpload extends BaseUpload {
       this.metrics.startTime = Date.now();
       this.metrics.lastUpdateTime = this.metrics.startTime;
 
-      console.log("requestConfig", this.requestConfig);
-
       // Initialize upload
       const initiateResult = await postUsermediaInitiate({
         config: this.requestConfig,
@@ -120,9 +112,10 @@ export class MultipartUpload extends BaseUpload {
         useSession: true,
       });
 
+      console.log("initiateResult", initiateResult);
+
       this.handle = initiateResult.user_media;
 
-      console.log("initiateResult", initiateResult);
       // Create parts
       this.parts = initiateResult.upload_urls.map((x) => ({
         payload: this.slicePart(x.offset, x.length),
@@ -136,7 +129,6 @@ export class MultipartUpload extends BaseUpload {
 
       // Prepare parts
       for (let i = 0; i < this.parts.length; i++) {
-        console.log("part", this.parts[i]);
         const uniqueId = `${this.handle.uuid}-${this.parts[i].meta.part_number}`;
         this.partStates[uniqueId] = {
           part: this.parts[i],
@@ -147,6 +139,8 @@ export class MultipartUpload extends BaseUpload {
           checksum: undefined,
         };
       }
+
+      console.log("partStates", this.partStates);
 
       // Upload parts concurrently
       const maxConcurrent = this.config.maxConcurrentParts ?? 3;
@@ -163,7 +157,6 @@ export class MultipartUpload extends BaseUpload {
             });
             return;
           }
-          console.log("uploading part", part);
           this.onGoingUploads.push(
             this.uploadPart(
               `${this.handle.uuid}-${part.meta.part_number}`,
@@ -171,10 +164,11 @@ export class MultipartUpload extends BaseUpload {
               this.md5WorkerManager
             )
           );
-          console.log("onGoingUploads", this.onGoingUploads);
         });
         await Promise.all(this.onGoingUploads);
       }
+
+      console.log("partStates", this.partStates);
 
       if (
         Object.values(this.partStates).some((part) => part.state === "error")
@@ -223,7 +217,6 @@ export class MultipartUpload extends BaseUpload {
 
       this.setStatus("complete");
     } catch (error) {
-      console.log("error", error);
       this.setError({
         code: "UPLOAD_FAILED",
         message: error.message,
