@@ -1,5 +1,5 @@
-export { MultipartUpload } from "./state/MultipartUpload";
-export type { IBaseUploadHandle } from "./state/types";
+export { MultipartUpload } from "./uploaders/MultipartUpload";
+export type { IBaseUploadHandle } from "./uploaders/types";
 export type {
   UploadConfig,
   UploadProgress,
@@ -7,5 +7,4 @@ export type {
   UploadPartStatus,
   UploadError,
   UploadMetrics,
-} from "./state/types";
-export type { ApiConfig } from "./client/config";
+} from "./uploaders/types";

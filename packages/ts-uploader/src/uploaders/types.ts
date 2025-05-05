@@ -68,7 +68,7 @@ export interface IBaseUploadHandle {
 export type UploadConfig = {
   maxRetries?: number;
   retryDelay?: number;
-  maxConcurrentParts?: number;
+  maxConcurrentUploads?: number;
   bandwidthLimit?: number; // bytes per second
   checksumAlgorithm?: "md5" | "sha256";
   timeout?: number;
@@ -76,6 +76,51 @@ export type UploadConfig = {
 
 export type MultiPartUploadOptions = {
   file: File;
-  maxConcurrentParts?: number;
+  maxConcurrentUploads?: number;
   bandwidthLimit?: number;
+};
+
+export type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JSONValue[]
+  | { [key: string]: JSONValue };
+
+export type GenericApiError = {
+  detail?: string;
+};
+
+export type UserMedia = {
+  uuid: string;
+  datetime_created: string;
+  expiry: string;
+  status: string;
+  filename: string;
+  size: number;
+  error?: string;
+};
+export type UploadPartUrl = {
+  part_number: number;
+  url: string;
+  offset: number;
+  length: number;
+};
+export type CompletedPart = {
+  ETag: string;
+  PartNumber: number;
+};
+
+export type InitUploadRequest = {
+  filename: string;
+  file_size_bytes: number;
+};
+export type InitUploadResponse = {
+  user_media: UserMedia;
+  upload_urls: UploadPartUrl[];
+};
+
+export type FinishUploadRequest = {
+  parts: CompletedPart[];
 };

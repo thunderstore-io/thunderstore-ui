@@ -1,9 +1,6 @@
-type TaskAction<Args, Res> = (
-  args: Args,
-  controller: AbortController
-) => Promise<Res>;
+import { TaskAction } from "./types";
 
-function chainActions<T1, T2, T3>(
+export function chainActions<T1, T2, T3>(
   act1: TaskAction<T1, T2>,
   act2: TaskAction<T2, T3>
 ): TaskAction<T1, T3> {

@@ -33,11 +33,12 @@ export abstract class BaseUpload implements IBaseUploadHandle {
     this.config = {
       maxRetries: 3,
       retryDelay: 1000,
-      maxConcurrentParts: 3,
+      maxConcurrentUploads: 3,
       checksumAlgorithm: "md5",
       timeout: 30000,
       ...config,
     };
+    this.partsProgress = {};
   }
 
   get progress(): UploadProgress {

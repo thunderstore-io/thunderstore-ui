@@ -32,7 +32,7 @@ import {
   faUsers,
   faArrowUpRight,
 } from "@fortawesome/pro-solid-svg-icons";
-import { UserMedia } from "@thunderstore/ts-uploader/src/client/types";
+import { UserMedia } from "@thunderstore/ts-uploader/src/uploaders/types";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { MetaFunction } from "@remix-run/node";
 import { useLoaderData, useOutletContext } from "@remix-run/react";
@@ -161,7 +161,6 @@ export default function Upload() {
   >();
 
   const startUpload = useCallback(async () => {
-    // console.log("Starting upload");
     if (!file) return;
 
     const config = session.getConfig();
@@ -178,7 +177,7 @@ export default function Upload() {
     setLock(true);
     setHandle(upload);
     await upload.start();
-    setUsermedia(upload.uploadHandle);
+    setUsermedia(upload.handle);
     setIsDone(true);
     setLock(false);
   }, [file, session]);
@@ -216,12 +215,8 @@ export default function Upload() {
     const sub = packageSubmissionStatusSchema.safeParse(result);
     if (sub.success) {
       setSubmissionStatus(sub.data);
-      // Start polling immediately when we get a submission status
-      // pollSubmission(sub.data.id);
-      // console.log("Submission status:", sub.data);
     } else {
       // Check if the submission request had an error
-      // console.log("Submission error:", result);
       const errorParsed = packageSubmissionErrorSchema.safeParse(result);
       if (errorParsed.success) {
         setSubmissionError(errorParsed.data);
@@ -278,7 +273,6 @@ export default function Upload() {
     | { success: true; data: PackageSubmissionStatus }
     | { success: false; data: PackageSubmissionError }
   > => {
-    console.log("Polling submission status");
     if (!noSleep) {
       // Wait 5 seconds before polling again
       await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -330,7 +324,6 @@ export default function Upload() {
   );
 
   useEffect(() => {
-    //console.log('EXECUTING');
     if (
       submissionStatus &&
       submissionStatusRef.current !== submissionStatus &&

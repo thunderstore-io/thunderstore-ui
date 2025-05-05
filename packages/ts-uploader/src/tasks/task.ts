@@ -1,57 +1,13 @@
-export enum TaskStatus {
-  PENDING = "PENDING",
-  STARTED = "STARTED",
-  FINISHED = "FINISHED",
-}
+import {
+  FinishedTask,
+  PendingTask,
+  StartedTask,
+  TaskBase,
+  TaskFinishReason,
+  TaskStatus,
+} from "./types";
 
-export enum TaskFinishReason {
-  SUCCESS = "SUCCESS",
-  ERROR = "ERROR",
-  ABORTED = "ABORTED",
-}
-
-type TaskAction<Args, Res> = (
-  args: Args,
-  controller: AbortController
-) => Promise<Res>;
-type TaskBase<Args, Res> = {
-  args: Args;
-  action: TaskAction<Args, Res>;
-};
-export type PendingTask<Args, Res> = TaskBase<Args, Res> & {
-  status: TaskStatus.PENDING;
-};
-export type StartedTask<Args, Res> = TaskBase<Args, Res> & {
-  status: TaskStatus.STARTED;
-  controller: AbortController;
-  result: Promise<Res>;
-};
-export type AbortedTask<Args, Res> = TaskBase<Args, Res> & {
-  status: TaskStatus.FINISHED;
-  finishReason: TaskFinishReason.ABORTED;
-  abortReason?: any;
-};
-export type ErroredTask<Args, Res> = TaskBase<Args, Res> & {
-  status: TaskStatus.FINISHED;
-  finishReason: TaskFinishReason.ERROR;
-  error: Error | unknown;
-};
-export type SuccesfulTask<Args, Res> = TaskBase<Args, Res> & {
-  status: TaskStatus.FINISHED;
-  finishReason: TaskFinishReason.SUCCESS;
-  result: Res;
-};
-export type FinishedTask<Args, Res> =
-  | AbortedTask<Args, Res>
-  | ErroredTask<Args, Res>
-  | SuccesfulTask<Args, Res>;
-
-export type Task<Args, Res> =
-  | PendingTask<Args, Res>
-  | StartedTask<Args, Res>
-  | FinishedTask<Args, Res>;
-
-function createTask<Args, Res>(
+export function createTask<Args, Res>(
   action: TaskBase<Args, Res>["action"],
   args: Args
 ): PendingTask<Args, Res> {
@@ -62,7 +18,7 @@ function createTask<Args, Res>(
   };
 }
 
-function startTask<Args, Res>(
+export function startTask<Args, Res>(
   task: PendingTask<Args, Res>
 ): StartedTask<Args, Res> {
   const controller = new AbortController();
@@ -74,10 +30,12 @@ function startTask<Args, Res>(
   };
 }
 
-async function waitTask<Args, Res>(
+export async function waitTask<Args, Res>(
   task: StartedTask<Args, Res>
 ): Promise<FinishedTask<Args, Res>> {
   try {
+    // TODO: If task is aborted whilst promise is running, the promise will not
+    // be rejected. Probably fix that somehow.
     const result = await task.result;
     return {
       ...task,
@@ -104,15 +62,16 @@ async function waitTask<Args, Res>(
   }
 }
 
-function abortTask<Args, Res>(
+export function abortTask<Args, Res>(
   task: StartedTask<Args, Res>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   reason?: any
 ): Promise<FinishedTask<Args, Res>> {
   task.controller.abort(reason);
   return waitTask<Args, Res>(task);
 }
 
-function restartTask<Args, Res>(
+export function restartTask<Args, Res>(
   task: FinishedTask<Args, Res>
 ): StartedTask<Args, Res> {
   return startTask(createTask(task.action, task.args));
