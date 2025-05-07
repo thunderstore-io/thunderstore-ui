@@ -13,5 +13,4 @@ jobs:
           gh workflow run build-thunderstore-ui-release.yml \
           --repo Riskidev/Infra-v2 \
           --ref master \
-          -f tag_name=${{ github.event.release.tag_name }} \
-          -f repo_url=${{ github.repository }}
+          -f tag_name='${{ github.event.release.tag_name }}'
