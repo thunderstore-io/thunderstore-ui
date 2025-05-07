@@ -24,6 +24,8 @@ export type AbortedTask<Args, Res> = TaskBase<Args, Res> & {
   finishReason: TaskFinishReason.ABORTED;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abortReason?: any;
+  error?: Error | unknown;
+  result?: Res;
 };
 export type ErroredTask<Args, Res> = TaskBase<Args, Res> & {
   status: TaskStatus.FINISHED;

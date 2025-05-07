@@ -7,6 +7,9 @@ import {
   TaskStatus,
 } from "./types";
 
+/**
+ * Creates a pending task.
+ */
 export function createTask<Args, Res>(
   action: TaskBase<Args, Res>["action"],
   args: Args
@@ -18,61 +21,88 @@ export function createTask<Args, Res>(
   };
 }
 
+/**
+ * Starts the task and returns a started task with a abort controller.
+ */
 export function startTask<Args, Res>(
   task: PendingTask<Args, Res>
 ): StartedTask<Args, Res> {
   const controller = new AbortController();
 
-  const taskWithController = new Promise<Res>((resolve, reject) => {
-    const abortListener = (event: Event) => {
-      const signal = event.target as AbortSignal;
-      controller.signal.removeEventListener("abort", abortListener);
-      reject(signal.reason);
-    };
-    controller.signal.addEventListener("abort", abortListener);
-    resolve(task.action(task.args, controller));
-  });
-
   return {
     ...task,
     status: TaskStatus.STARTED,
     controller,
-    result: taskWithController,
+    result: task.action(task.args, controller),
   };
 }
 
+/**
+ * Waits for the task to finish and returns the result.
+ *
+ * If the tasks abort signal is triggered whilst the task is running, the task will not be interrupted.
+ * The task will continue to run to completion and the promise will be fullfilled.
+ *
+ * If the task is aborted the resolve/reject of the promise will be an finished task with aborted status,
+ * with the result or the error, depending on the outcome of the task.
+ *
+ * When creating tasks please keep in mind the possible maximum time of the task.
+ *
+ * TODO: Add a timeout or escape hatch to the task, so that the promise execution can be interrupted.
+ *
+ * (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/race)
+ *
+ * (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/withResolvers)
+ */
 export async function waitTask<Args, Res>(
   task: StartedTask<Args, Res>
 ): Promise<FinishedTask<Args, Res>> {
-  try {
-    // TODO: If task is aborted whilst promise is running, the promise will not
-    // be rejected. Probably fix that somehow.
-    const result = await task.result;
-    return {
-      ...task,
-      status: TaskStatus.FINISHED,
-      finishReason: TaskFinishReason.SUCCESS,
-      result: result,
-    };
-  } catch (e) {
-    if (task.controller.signal.aborted) {
-      return {
-        ...task,
-        status: TaskStatus.FINISHED,
-        finishReason: TaskFinishReason.ABORTED,
-        abortReason: task.controller.signal.reason,
-      };
-    } else {
-      return {
-        ...task,
-        status: TaskStatus.FINISHED,
-        finishReason: TaskFinishReason.ERROR,
-        error: e,
-      };
-    }
-  }
+  return task.result
+    .then((r) => {
+      if (task.controller.signal.aborted) {
+        return {
+          action: task.action,
+          args: task.args,
+          status: TaskStatus.FINISHED as const,
+          finishReason: TaskFinishReason.ABORTED as const,
+          abortReason: task.controller.signal.reason,
+          result: r,
+        };
+      } else {
+        return {
+          action: task.action,
+          args: task.args,
+          status: TaskStatus.FINISHED as const,
+          finishReason: TaskFinishReason.SUCCESS as const,
+          result: r,
+        };
+      }
+    })
+    .catch((e) => {
+      if (task.controller.signal.aborted) {
+        return {
+          action: task.action,
+          args: task.args,
+          status: TaskStatus.FINISHED as const,
+          finishReason: TaskFinishReason.ABORTED as const,
+          abortReason: task.controller.signal.reason,
+          error: e,
+        };
+      } else {
+        return {
+          action: task.action,
+          args: task.args,
+          status: TaskStatus.FINISHED as const,
+          finishReason: TaskFinishReason.ERROR as const,
+          error: e,
+        };
+      }
+    });
 }
 
+/**
+ * Triggers the abort signal of the started task and returns the finished task.
+ */
 export function abortTask<Args, Res>(
   task: StartedTask<Args, Res>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -82,6 +112,11 @@ export function abortTask<Args, Res>(
   return waitTask<Args, Res>(task);
 }
 
+/**
+ * Takes in a finished task, creates a new task with the same action and args and starts it.
+ *
+ * Pass the returned started task to waitTask to get the finished task.
+ */
 export function restartTask<Args, Res>(
   task: FinishedTask<Args, Res>
 ): StartedTask<Args, Res> {

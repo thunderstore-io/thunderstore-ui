@@ -1,0 +1,187 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { TaskFinishReason, TaskStatus } from "../types";
+import { Tasks } from "../task";
+import { TaskManager } from "../taskManager";
+
+describe("TaskManager", () => {
+  let taskManager: TaskManager;
+
+  beforeEach(() => {
+    taskManager = new TaskManager();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe("createdTasks", () => {
+    it("should get tasks with PENDING status", async () => {
+      expect(taskManager.createdTasks.length).toBe(0);
+      taskManager.tasks.push(Tasks.create(async () => {}, {}));
+      taskManager.tasks.push(Tasks.create(async () => {}, {}));
+      expect(taskManager.createdTasks.length).toBe(2);
+      expect(taskManager.createdTasks[0].status).toBe(TaskStatus.PENDING);
+      expect(taskManager.createdTasks[1].status).toBe(TaskStatus.PENDING);
+    });
+  });
+
+  describe("startedTasks", () => {
+    it("should get tasks with STARTED status", async () => {
+      expect(taskManager.startedTasks.length).toBe(0);
+      taskManager.tasks.push(Tasks.start(Tasks.create(async () => {}, {})));
+      taskManager.tasks.push(Tasks.start(Tasks.create(async () => {}, {})));
+      expect(taskManager.startedTasks.length).toBe(2);
+      expect(taskManager.startedTasks[0].status).toBe(TaskStatus.STARTED);
+      expect(taskManager.startedTasks[1].status).toBe(TaskStatus.STARTED);
+    });
+  });
+
+  describe("finishedTasks", () => {
+    it("should get tasks with FINISHED status", async () => {
+      expect(taskManager.finishedTasks.length).toBe(0);
+      taskManager.tasks.push(
+        await Tasks.wait(Tasks.start(Tasks.create(async () => {}, {})))
+      );
+      taskManager.tasks.push(
+        await Tasks.wait(Tasks.start(Tasks.create(async () => {}, {})))
+      );
+      expect(taskManager.finishedTasks.length).toBe(2);
+      expect(taskManager.finishedTasks[0].status).toBe(TaskStatus.FINISHED);
+      expect(taskManager.finishedTasks[1].status).toBe(TaskStatus.FINISHED);
+    });
+  });
+
+  describe("abortedTasks", () => {
+    it("should get tasks with FINISHED status and ABORTED finish reason", async () => {
+      expect(taskManager.abortedTasks.length).toBe(0);
+      const startedTask1 = Tasks.start(
+        Tasks.create(async () => {
+          throw new Error("test error 1");
+        }, {})
+      );
+      startedTask1.controller.abort();
+      const startedTask2 = Tasks.start(
+        Tasks.create(async () => {
+          throw new Error("test error 2");
+        }, {})
+      );
+      startedTask2.controller.abort();
+      taskManager.tasks.push(await Tasks.wait(startedTask1));
+      taskManager.tasks.push(await Tasks.wait(startedTask2));
+      expect(taskManager.abortedTasks.length).toBe(2);
+      expect(taskManager.abortedTasks[0].status).toBe(TaskStatus.FINISHED);
+      expect(taskManager.abortedTasks[0].finishReason).toBe(
+        TaskFinishReason.ABORTED
+      );
+      expect(taskManager.abortedTasks[1].status).toBe(TaskStatus.FINISHED);
+      expect(taskManager.abortedTasks[1].finishReason).toBe(
+        TaskFinishReason.ABORTED
+      );
+    });
+  });
+
+  describe("erroredUploadPartTasks", () => {
+    it("should get tasks with FINISHED status and ERROR finish reason", async () => {
+      expect(taskManager.erroredTasks.length).toBe(0);
+      taskManager.tasks.push(
+        await Tasks.wait(
+          Tasks.start(
+            Tasks.create(async () => {
+              throw new Error("test error 1");
+            }, {})
+          )
+        )
+      );
+      taskManager.tasks.push(
+        await Tasks.wait(
+          Tasks.start(
+            Tasks.create(async () => {
+              throw new Error("test error 2");
+            }, {})
+          )
+        )
+      );
+      expect(taskManager.erroredTasks.length).toBe(2);
+      expect(taskManager.erroredTasks[0].status).toBe(TaskStatus.FINISHED);
+      expect(taskManager.erroredTasks[0].finishReason).toBe(
+        TaskFinishReason.ERROR
+      );
+      expect(taskManager.erroredTasks[1].status).toBe(TaskStatus.FINISHED);
+      expect(taskManager.erroredTasks[1].finishReason).toBe(
+        TaskFinishReason.ERROR
+      );
+    });
+  });
+
+  describe("successfulUploadPartTasks", () => {
+    it("should get tasks with FINISHED status and SUCCESS finish reason", async () => {
+      expect(taskManager.successfulTasks.length).toBe(0);
+      taskManager.tasks.push(
+        await Tasks.wait(Tasks.start(Tasks.create(async () => {}, {})))
+      );
+      taskManager.tasks.push(
+        await Tasks.wait(Tasks.start(Tasks.create(async () => {}, {})))
+      );
+      expect(taskManager.successfulTasks.length).toBe(2);
+      expect(taskManager.successfulTasks[0].status).toBe(TaskStatus.FINISHED);
+      expect(taskManager.successfulTasks[0].finishReason).toBe(
+        TaskFinishReason.SUCCESS
+      );
+      expect(taskManager.successfulTasks[1].status).toBe(TaskStatus.FINISHED);
+      expect(taskManager.successfulTasks[1].finishReason).toBe(
+        TaskFinishReason.SUCCESS
+      );
+    });
+  });
+
+  describe("createTask", () => {
+    it("should create a task and add it to the task manager tasks array", () => {
+      const task = taskManager.createTask(async () => {}, {});
+      expect(taskManager.tasks.length).toBe(1);
+      expect(taskManager.tasks[0]).toBe(task);
+    });
+  });
+
+  describe("startTask", () => {
+    it("should start a task and add it to the task manager tasks array", () => {
+      const task = taskManager.createTask(async () => {}, {});
+      const startedTask = taskManager.startTask(task);
+      expect(startedTask.status).toBe(TaskStatus.STARTED);
+      expect(taskManager.tasks.length).toBe(2);
+      expect(taskManager.tasks[1]).toBe(startedTask);
+    });
+  });
+
+  describe("waitTask", () => {
+    it("should wait for a task to finish and add it to the task manager tasks array", async () => {
+      const task = taskManager.createTask(async () => {}, {});
+      const startedTask = taskManager.startTask(task);
+      const finishedTask = await taskManager.waitTask(startedTask);
+      expect(taskManager.tasks.length).toBe(3);
+      expect(taskManager.tasks[2]).toBe(finishedTask);
+    });
+  });
+
+  describe("restartTask", () => {
+    it("should restart a task and add it to the task manager tasks array", async () => {
+      const task = taskManager.createTask(async () => {}, {});
+      const startedTask = taskManager.startTask(task);
+      const finishedTask = taskManager.waitTask(startedTask);
+      const restartedTask = taskManager.restartTask(await finishedTask);
+      expect(restartedTask.status).toBe(TaskStatus.STARTED);
+      expect(taskManager.tasks.length).toBe(4);
+      expect(taskManager.tasks[3]).toBe(restartedTask);
+    });
+  });
+
+  describe("abortTask", () => {
+    it("should abort a task and add it to the task manager tasks array", async () => {
+      const task = taskManager.createTask(async () => {}, {});
+      const startedTask = taskManager.startTask(task);
+      const abortedTask = await taskManager.abortTask(startedTask);
+      expect(abortedTask.status).toBe(TaskStatus.FINISHED);
+      expect(taskManager.tasks.length).toBe(3);
+      expect(taskManager.tasks[2]).toBe(abortedTask);
+    });
+  });
+});

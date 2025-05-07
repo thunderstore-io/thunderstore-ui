@@ -15,18 +15,12 @@ import {
   RequestConfig,
 } from "@thunderstore/thunderstore-api";
 import {
-  abortTask,
-  createTask,
-  restartTask,
-  startTask,
-  waitTask,
-} from "../tasks/task";
-import {
   FinishedTask,
   Task,
   TaskFinishReason,
   TaskStatus,
 } from "../tasks/types";
+import { TaskManager } from "../tasks/taskManager";
 
 /**
  * A multi-part upload consists of 3 stages:
@@ -74,6 +68,7 @@ export class MultipartUpload extends BaseUpload {
   private md5WorkerManager: MD5WorkerManager;
   private requestConfig: () => RequestConfig;
   private uploadPartTasks: Task<UploadPart, void>[] = [];
+  taskManager: TaskManager;
 
   constructor(
     options: MultiPartUploadOptions,
@@ -93,51 +88,11 @@ export class MultipartUpload extends BaseUpload {
       filename: this.file.name,
       size: this.file.size,
     };
+    this.taskManager = new TaskManager();
   }
 
   get handle(): UserMedia {
     return this.usermedia;
-  }
-
-  // TODO: Create a task manager class and move these into it
-  get createdUploadPartTasks() {
-    return this.uploadPartTasks.filter(
-      (task) => task.status === TaskStatus.PENDING
-    );
-  }
-
-  get startedUploadPartTasks() {
-    return this.uploadPartTasks.filter(
-      (task) => task.status === TaskStatus.STARTED
-    );
-  }
-
-  get finishedUploadPartTasks(): FinishedTask<UploadPart, void>[] {
-    return this.uploadPartTasks.filter(
-      (task) =>
-        task.status === TaskStatus.FINISHED &&
-        (task.finishReason === TaskFinishReason.ABORTED ||
-          task.finishReason === TaskFinishReason.ERROR ||
-          task.finishReason === TaskFinishReason.SUCCESS)
-    );
-  }
-
-  get abortedUploadPartTasks() {
-    return this.finishedUploadPartTasks.filter(
-      (task) => task.finishReason === TaskFinishReason.ABORTED
-    );
-  }
-
-  get erroredUploadPartTasks() {
-    return this.finishedUploadPartTasks.filter(
-      (task) => task.finishReason === TaskFinishReason.ERROR
-    );
-  }
-
-  get successfulUploadPartTasks() {
-    return this.finishedUploadPartTasks.filter(
-      (task) => task.finishReason === TaskFinishReason.SUCCESS
-    );
   }
 
   async start(): Promise<void> {
@@ -183,33 +138,29 @@ export class MultipartUpload extends BaseUpload {
 
     this.parts = this.createParts(this.file, upload_urls);
     this.partStates = this.prepareParts(this.parts, this.usermedia);
-    const createdTasks = this.parts.map((part) =>
-      createTask((part) => this.uploadPart(part), part)
+    this.parts.map((part) =>
+      this.taskManager.createTask((part) => this.uploadPart(part), part)
     );
-
-    this.uploadPartTasks.push(...createdTasks);
   }
 
   async beginUploadingParts(): Promise<void> {
     const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
     for (
       let i = 0;
-      i < this.createdUploadPartTasks.length;
+      i < this.taskManager.createdTasks.length;
       i += maxConcurrent
     ) {
-      const batch = this.createdUploadPartTasks.slice(i, i + maxConcurrent);
+      const batch = this.taskManager.createdTasks.slice(i, i + maxConcurrent);
       // Start tasks
       const taskPromises = batch
         .map((t) => {
-          const startedTask = startTask(t);
-          this.uploadPartTasks.push(startedTask);
+          const startedTask = this.taskManager.startTask(t);
           return startedTask;
         })
-        .map(waitTask);
+        .map(this.taskManager.waitTask);
 
       // Wait for all tasks in the batch to finish
-      const batchFinishedTasks = await Promise.all(taskPromises);
-      this.uploadPartTasks.push(...batchFinishedTasks);
+      await Promise.all(taskPromises);
     }
   }
 
@@ -287,15 +238,15 @@ export class MultipartUpload extends BaseUpload {
   }
 
   async pause() {
-    this.startedUploadPartTasks.forEach((t) => abortTask(t));
+    this.taskManager.startedTasks.forEach((t) => this.taskManager.abortTask(t));
     this.usermedia.status = "paused";
   }
 
   async resume() {
     this.setStatus("running");
     const tasksThatShouldBeRetried = this.collectUploadPartTasks(
-      this.uploadPartTasks,
-      this.finishedUploadPartTasks
+      this.taskManager.startedTasks,
+      this.taskManager.finishedTasks
     );
 
     const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
@@ -303,23 +254,21 @@ export class MultipartUpload extends BaseUpload {
       const batch = tasksThatShouldBeRetried.slice(i, i + maxConcurrent);
       const startedTasks = batch.map((t) =>
         t.status === TaskStatus.PENDING
-          ? startTask(t)
+          ? this.taskManager.startTask(t)
           : t.status === TaskStatus.FINISHED
-            ? restartTask(t)
+            ? this.taskManager.restartTask(t)
             : t
       );
-      const taskPromises = startedTasks.map(waitTask);
-      const batchFinishedTasks = await Promise.all(taskPromises);
-      this.uploadPartTasks.push(...batchFinishedTasks);
+      const taskPromises = startedTasks.map(this.taskManager.waitTask);
+      await Promise.all(taskPromises);
     }
 
     await this.finalizeUpload();
   }
 
   async abort() {
-    this.startedUploadPartTasks.forEach(async (t) => {
-      const abortedTask = await abortTask(t);
-      this.uploadPartTasks.push(abortedTask);
+    this.taskManager.startedTasks.forEach(async (t) => {
+      await this.taskManager.abortTask(t);
     });
     this.usermedia = await postUsermediaAbort({
       config: this.requestConfig,
@@ -336,8 +285,8 @@ export class MultipartUpload extends BaseUpload {
   async retry() {
     this.setStatus("running");
     const tasksThatShouldBeRetried = this.collectUploadPartTasks(
-      this.uploadPartTasks,
-      this.finishedUploadPartTasks
+      this.taskManager.tasks,
+      this.taskManager.finishedTasks
     );
 
     const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
@@ -345,14 +294,13 @@ export class MultipartUpload extends BaseUpload {
       const batch = tasksThatShouldBeRetried.slice(i, i + maxConcurrent);
       const startedTasks = batch.map((t) =>
         t.status === TaskStatus.PENDING
-          ? startTask(t)
+          ? this.taskManager.startTask(t)
           : t.status === TaskStatus.FINISHED
-            ? restartTask(t)
+            ? this.taskManager.restartTask(t)
             : t
       );
-      const taskPromises = startedTasks.map(waitTask);
-      const batchFinishedTasks = await Promise.all(taskPromises);
-      this.uploadPartTasks.push(...batchFinishedTasks);
+      const taskPromises = startedTasks.map(this.taskManager.waitTask);
+      await Promise.all(taskPromises);
     }
 
     await this.finalizeUpload();
