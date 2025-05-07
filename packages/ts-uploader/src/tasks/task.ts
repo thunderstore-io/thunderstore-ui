@@ -22,11 +22,22 @@ export function startTask<Args, Res>(
   task: PendingTask<Args, Res>
 ): StartedTask<Args, Res> {
   const controller = new AbortController();
+
+  const taskWithController = new Promise<Res>((resolve, reject) => {
+    const abortListener = (event: Event) => {
+      const signal = event.target as AbortSignal;
+      controller.signal.removeEventListener("abort", abortListener);
+      reject(signal.reason);
+    };
+    controller.signal.addEventListener("abort", abortListener);
+    resolve(task.action(task.args, controller));
+  });
+
   return {
     ...task,
     status: TaskStatus.STARTED,
     controller,
-    result: task.action(task.args, controller),
+    result: taskWithController,
   };
 }
 

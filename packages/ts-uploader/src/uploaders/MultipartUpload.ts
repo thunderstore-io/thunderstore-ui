@@ -39,7 +39,7 @@ import {
  *    to the server along with the upload handle ID.
  */
 
-type UploadPart = {
+export type UploadPart = {
   payload: Blob;
   meta: {
     part_number: number;
@@ -48,7 +48,7 @@ type UploadPart = {
   etag?: string;
 };
 
-type PartState = {
+export type PartState = {
   part: UploadPart;
   uniqueId: string;
   state: UploadPartStatus;
@@ -57,7 +57,7 @@ type PartState = {
   checksum: string | undefined;
 };
 
-type PartStates = {
+export type PartStates = {
   [key: string]: PartState;
 };
 
@@ -152,41 +152,9 @@ export class MultipartUpload extends BaseUpload {
     }
 
     try {
-      this.setStatus("running");
-      this.metrics.startTime = Date.now();
-      this.metrics.lastUpdateTime = this.metrics.startTime;
-
-      // Initialize upload
-      const { user_media, upload_urls } = await this.inititateUpload(
-        this.file,
-        this.requestConfig
-      );
-      this.usermedia = user_media;
-
-      // Create parts
-      this.parts = this.createParts(this.file, upload_urls);
-
-      // Prepare parts
-      this.partStates = this.prepareParts(this.parts, this.usermedia);
-
-      // Create tasks
-      const createdTasks = this.parts.map((part) =>
-        createTask((part) => this.uploadPart(part), part)
-      );
-
-      // Batch complete tasks
-      const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
-      for (let i = 0; i < createdTasks.length; i += maxConcurrent) {
-        const batch = createdTasks.slice(i, i + maxConcurrent);
-        // Start tasks
-        const taskPromises = batch.map(startTask).map(waitTask);
-
-        // Wait for all tasks in the batch to finish
-        const batchFinishedTasks = await Promise.all(taskPromises);
-        this.uploadPartTasks.push(...batchFinishedTasks);
-      }
-
-      await this.complete();
+      await this.initiateUploadAndCreatePartUploadTasks();
+      await this.beginUploadingParts();
+      await this.finalizeUpload();
     } catch (error) {
       this.setError({
         code: "UPLOAD_FAILED",
@@ -196,6 +164,52 @@ export class MultipartUpload extends BaseUpload {
       });
       this.setStatus("failed");
       this.usermedia.status = "failed";
+    }
+  }
+
+  async initiateUploadAndCreatePartUploadTasks(): Promise<void> {
+    // Initialize upload
+    const { user_media, upload_urls } = await postUsermediaInitiate({
+      config: this.requestConfig,
+      params: {},
+      data: {
+        filename: this.file.name,
+        file_size_bytes: this.file.size,
+      },
+      queryParams: {},
+      useSession: true,
+    });
+    this.usermedia = user_media;
+
+    this.parts = this.createParts(this.file, upload_urls);
+    this.partStates = this.prepareParts(this.parts, this.usermedia);
+    const createdTasks = this.parts.map((part) =>
+      createTask((part) => this.uploadPart(part), part)
+    );
+
+    this.uploadPartTasks.push(...createdTasks);
+  }
+
+  async beginUploadingParts(): Promise<void> {
+    const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
+    for (
+      let i = 0;
+      i < this.createdUploadPartTasks.length;
+      i += maxConcurrent
+    ) {
+      const batch = this.createdUploadPartTasks.slice(i, i + maxConcurrent);
+      // Start tasks
+      const taskPromises = batch
+        .map((t) => {
+          const startedTask = startTask(t);
+          this.uploadPartTasks.push(startedTask);
+          return startedTask;
+        })
+        .map(waitTask);
+
+      // Wait for all tasks in the batch to finish
+      const batchFinishedTasks = await Promise.all(taskPromises);
+      this.uploadPartTasks.push(...batchFinishedTasks);
     }
   }
 
@@ -210,12 +224,178 @@ export class MultipartUpload extends BaseUpload {
     this.partStates[uniqueId] = {
       part,
       uniqueId,
-      state: "pending",
+      state: "running",
       etag: undefined,
       error: undefined,
       checksum,
     };
 
+    await this.doPartUpload(part, uniqueId, checksum);
+  }
+
+  async finalizeUpload() {
+    if (this.status === "complete") {
+      return;
+    }
+
+    if (
+      Object.values(this.partStates).some((part) => part.state === "failed")
+    ) {
+      this.setError({
+        code: "UPLOAD_FAILED",
+        message: "Parts of the upload failed, please retry.",
+        retryable: true,
+        details: undefined,
+      });
+      this.setStatus("failed");
+      return;
+    }
+
+    const completeParts: { ETag: string; PartNumber: number }[] = [];
+
+    Object.values(this.partStates).map((ps) => {
+      if (!ps.etag) {
+        this.setError({
+          code: "UPLOAD_FAILED",
+          message: "Parts of the upload were not uploaded correctly.",
+          retryable: true,
+          details: undefined,
+        });
+        this.setStatus("failed");
+        return;
+      }
+      completeParts.push({
+        ETag: ps.etag,
+        PartNumber: ps.part.meta.part_number,
+      });
+    });
+
+    // Complete upload
+    this.usermedia = await postUsermediaFinish({
+      config: this.requestConfig,
+      params: {
+        uuid: this.usermedia.uuid,
+      },
+      data: {
+        parts: completeParts,
+      },
+      queryParams: {},
+      useSession: true,
+    });
+
+    this.setStatus("complete");
+  }
+
+  async pause() {
+    this.startedUploadPartTasks.forEach((t) => abortTask(t));
+    this.usermedia.status = "paused";
+  }
+
+  async resume() {
+    this.setStatus("running");
+    const tasksThatShouldBeRetried = this.collectUploadPartTasks(
+      this.uploadPartTasks,
+      this.finishedUploadPartTasks
+    );
+
+    const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
+    for (let i = 0; i < tasksThatShouldBeRetried.length; i += maxConcurrent) {
+      const batch = tasksThatShouldBeRetried.slice(i, i + maxConcurrent);
+      const startedTasks = batch.map((t) =>
+        t.status === TaskStatus.PENDING
+          ? startTask(t)
+          : t.status === TaskStatus.FINISHED
+            ? restartTask(t)
+            : t
+      );
+      const taskPromises = startedTasks.map(waitTask);
+      const batchFinishedTasks = await Promise.all(taskPromises);
+      this.uploadPartTasks.push(...batchFinishedTasks);
+    }
+
+    await this.finalizeUpload();
+  }
+
+  async abort() {
+    this.startedUploadPartTasks.forEach(async (t) => {
+      const abortedTask = await abortTask(t);
+      this.uploadPartTasks.push(abortedTask);
+    });
+    this.usermedia = await postUsermediaAbort({
+      config: this.requestConfig,
+      params: {
+        uuid: this.usermedia.uuid,
+      },
+      data: {},
+      queryParams: {},
+      useSession: true,
+    });
+    this.setStatus("aborted");
+  }
+
+  async retry() {
+    this.setStatus("running");
+    const tasksThatShouldBeRetried = this.collectUploadPartTasks(
+      this.uploadPartTasks,
+      this.finishedUploadPartTasks
+    );
+
+    const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
+    for (let i = 0; i < tasksThatShouldBeRetried.length; i += maxConcurrent) {
+      const batch = tasksThatShouldBeRetried.slice(i, i + maxConcurrent);
+      const startedTasks = batch.map((t) =>
+        t.status === TaskStatus.PENDING
+          ? startTask(t)
+          : t.status === TaskStatus.FINISHED
+            ? restartTask(t)
+            : t
+      );
+      const taskPromises = startedTasks.map(waitTask);
+      const batchFinishedTasks = await Promise.all(taskPromises);
+      this.uploadPartTasks.push(...batchFinishedTasks);
+    }
+
+    await this.finalizeUpload();
+  }
+
+  slicePart(file: File, offset: number, length: number): Blob {
+    const start = offset;
+    const end = offset + length;
+    return end < file.size ? file.slice(start, end) : file.slice(start);
+  }
+
+  createParts(file: File, uploadUrls: UploadPartUrl[]): UploadPart[] {
+    return uploadUrls.map((x) => ({
+      payload: this.slicePart(file, x.offset, x.length),
+      meta: {
+        part_number: x.part_number,
+        url: x.url,
+      },
+    }));
+  }
+
+  prepareParts(parts: UploadPart[], usermedia: UserMedia): PartStates {
+    const partStates: PartStates = {};
+    for (let i = 0; i < parts.length; i++) {
+      const uniqueId = `${usermedia.uuid}-${parts[i].meta.part_number}`;
+      this.partsProgress[uniqueId] = {
+        total: parts[i].payload.size,
+        complete: 0,
+        status: "prepared",
+      };
+      partStates[uniqueId] = {
+        part: parts[i],
+        uniqueId,
+        state: "prepared",
+        etag: undefined,
+        error: undefined,
+        checksum: undefined,
+      };
+    }
+    return partStates;
+  }
+
+  async doPartUpload(part: UploadPart, uniqueId: string, checksum: string) {
     await new Promise<void>((resolve, reject) => {
       const xhr = new XMLHttpRequest();
 
@@ -265,199 +445,9 @@ export class MultipartUpload extends BaseUpload {
 
       // Open and send the request
       xhr.open("PUT", part.meta.url);
-      if (checksum) {
-        xhr.setRequestHeader("Content-MD5", checksum);
-      }
+      xhr.setRequestHeader("Content-MD5", checksum);
       xhr.send(part.payload);
-      this.partStates[uniqueId].state = "running";
     });
-  }
-
-  async complete() {
-    if (this.status === "complete") {
-      return;
-    }
-
-    if (
-      Object.values(this.partStates).some((part) => part.state === "failed")
-    ) {
-      this.setError({
-        code: "UPLOAD_FAILED",
-        message: "Parts of the upload failed, please retry.",
-        retryable: true,
-        details: undefined,
-      });
-      this.setStatus("failed");
-      return;
-    }
-
-    const completeParts: { ETag: string; PartNumber: number }[] = [];
-
-    Object.values(this.partStates).map((ps) => {
-      if (!ps.etag) {
-        this.setError({
-          code: "UPLOAD_FAILED",
-          message: "Parts of the upload were not uploaded correctly.",
-          retryable: true,
-          details: undefined,
-        });
-        this.setStatus("failed");
-        return;
-      }
-      completeParts.push({
-        ETag: ps.etag,
-        PartNumber: ps.part.meta.part_number,
-      });
-    });
-
-    // Complete upload
-    this.usermedia = await this.finishUpload(
-      this.usermedia.uuid,
-      completeParts,
-      this.requestConfig
-    );
-
-    this.setStatus("complete");
-  }
-
-  async pause() {
-    this.startedUploadPartTasks.forEach((t) => abortTask(t));
-    this.usermedia.status = "paused";
-  }
-
-  async resume() {
-    this.setStatus("running");
-    const tasksThatShouldBeRetried = this.collectUploadPartTasks(
-      this.uploadPartTasks,
-      this.finishedUploadPartTasks
-    );
-
-    const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
-    for (let i = 0; i < tasksThatShouldBeRetried.length; i += maxConcurrent) {
-      const batch = tasksThatShouldBeRetried.slice(i, i + maxConcurrent);
-      const startedTasks = batch.map((t) =>
-        t.status === TaskStatus.PENDING
-          ? startTask(t)
-          : t.status === TaskStatus.FINISHED
-            ? restartTask(t)
-            : t
-      );
-      const taskPromises = startedTasks.map(waitTask);
-      const batchFinishedTasks = await Promise.all(taskPromises);
-      this.finishedUploadPartTasks.push(...batchFinishedTasks);
-    }
-
-    await this.complete();
-  }
-
-  async abort() {
-    this.startedUploadPartTasks.forEach((t) => abortTask(t));
-    this.usermedia = await postUsermediaAbort({
-      config: this.requestConfig,
-      params: {
-        uuid: this.usermedia.uuid,
-      },
-      data: {},
-      queryParams: {},
-      useSession: true,
-    });
-    this.setStatus("aborted");
-  }
-
-  async retry() {
-    this.setStatus("running");
-    const tasksThatShouldBeRetried = this.collectUploadPartTasks(
-      this.uploadPartTasks,
-      this.finishedUploadPartTasks
-    );
-
-    const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
-    for (let i = 0; i < tasksThatShouldBeRetried.length; i += maxConcurrent) {
-      const batch = tasksThatShouldBeRetried.slice(i, i + maxConcurrent);
-      const startedTasks = batch.map((t) =>
-        t.status === TaskStatus.PENDING
-          ? startTask(t)
-          : t.status === TaskStatus.FINISHED
-            ? restartTask(t)
-            : t
-      );
-      const taskPromises = startedTasks.map(waitTask);
-      const batchFinishedTasks = await Promise.all(taskPromises);
-      this.finishedUploadPartTasks.push(...batchFinishedTasks);
-    }
-
-    await this.complete();
-  }
-
-  async inititateUpload(
-    file: File,
-    requestConfig: () => RequestConfig
-  ): Promise<ReturnType<typeof postUsermediaInitiate>> {
-    return await postUsermediaInitiate({
-      config: requestConfig,
-      params: {},
-      data: {
-        filename: file.name,
-        file_size_bytes: file.size,
-      },
-      queryParams: {},
-      useSession: true,
-    });
-  }
-
-  async finishUpload(
-    userMediaUuid: string,
-    completeParts: { ETag: string; PartNumber: number }[],
-    requestConfig: () => RequestConfig
-  ): Promise<ReturnType<typeof postUsermediaFinish>> {
-    return await postUsermediaFinish({
-      config: requestConfig,
-      params: {
-        uuid: userMediaUuid,
-      },
-      data: {
-        parts: completeParts,
-      },
-      queryParams: {},
-      useSession: true,
-    });
-  }
-
-  slicePart(file: File, offset: number, length: number): Blob {
-    const start = offset;
-    const end = offset + length;
-    return end < file.size ? file.slice(start, end) : file.slice(start);
-  }
-
-  createParts(file: File, uploadUrls: UploadPartUrl[]): UploadPart[] {
-    return uploadUrls.map((x) => ({
-      payload: this.slicePart(file, x.offset, x.length),
-      meta: {
-        part_number: x.part_number,
-        url: x.url,
-      },
-    }));
-  }
-
-  prepareParts(parts: UploadPart[], usermedia: UserMedia): PartStates {
-    const partStates: PartStates = {};
-    for (let i = 0; i < parts.length; i++) {
-      const uniqueId = `${usermedia.uuid}-${parts[i].meta.part_number}`;
-      this.partsProgress[uniqueId] = {
-        total: parts[i].payload.size,
-        complete: 0,
-        status: "prepared",
-      };
-      partStates[uniqueId] = {
-        part: parts[i],
-        uniqueId,
-        state: "prepared",
-        etag: undefined,
-        error: undefined,
-        checksum: undefined,
-      };
-    }
-    return partStates;
   }
 
   // Collects all the tasks that should be retried and deduplicates them based on part number
