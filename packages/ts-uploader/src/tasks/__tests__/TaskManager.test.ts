@@ -13,6 +13,33 @@ describe("TaskManager", () => {
     vi.clearAllMocks();
   });
 
+  describe("tasks", () => {
+    it("should get tasks", async () => {
+      expect(taskManager.tasks.length).toBe(0);
+      taskManager.createTask(async () => {}, {});
+      taskManager.createTask(async () => {}, {});
+      expect(taskManager.createdTasks.length).toBe(2);
+    });
+  });
+
+  describe("taskPromises", () => {
+    it("should get taskPromises", async () => {
+      expect(taskManager.tasks.length).toBe(0);
+      expect(taskManager.taskPromises.length).toBe(0);
+      taskManager.waitTask(
+        taskManager.startTask(taskManager.createTask(async () => {}, {}))
+      );
+      taskManager.waitTask(
+        taskManager.startTask(taskManager.createTask(async () => {}, {}))
+      );
+      expect(taskManager.tasks.length).toBe(4);
+      expect(taskManager.taskPromises.length).toBe(2);
+      await taskManager.resolveTaskPromises();
+      expect(taskManager.tasks.length).toBe(6);
+      expect(taskManager.taskPromises.length).toBe(2);
+    });
+  });
+
   describe("createdTasks", () => {
     it("should get tasks with PENDING status", async () => {
       expect(taskManager.createdTasks.length).toBe(0);
@@ -132,6 +159,28 @@ describe("TaskManager", () => {
       expect(taskManager.successfulTasks[1].finishReason).toBe(
         TaskFinishReason.SUCCESS
       );
+    });
+  });
+
+  describe("resolveTaskPromises", () => {
+    it("should resolve promises in _tasks and add the resolved tasks to _tasks", async () => {
+      expect(taskManager.tasks.length).toBe(0);
+      expect(taskManager.taskPromises.length).toBe(0);
+      const task1 = taskManager.waitTask(
+        taskManager.startTask(taskManager.createTask(async () => {}, {}))
+      );
+      const task2 = taskManager.waitTask(
+        taskManager.startTask(taskManager.createTask(async () => {}, {}))
+      );
+      expect(taskManager.tasks.length).toBe(4);
+      expect(taskManager.taskPromises.length).toBe(2);
+      expect(taskManager.taskPromises[0]).toBe(task1);
+      expect(taskManager.taskPromises[1]).toBe(task2);
+      await taskManager.resolveTaskPromises();
+      expect(taskManager.tasks[4]).toBe(await task1);
+      expect(taskManager.tasks[5]).toBe(await task2);
+      expect(taskManager.tasks.length).toBe(6);
+      expect(taskManager.taskPromises.length).toBe(2);
     });
   });
 
