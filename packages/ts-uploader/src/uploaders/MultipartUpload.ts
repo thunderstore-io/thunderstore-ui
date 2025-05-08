@@ -67,7 +67,6 @@ export class MultipartUpload extends BaseUpload {
   private usermedia: UserMedia;
   private md5WorkerManager: MD5WorkerManager;
   private requestConfig: () => RequestConfig;
-  private uploadPartTasks: Task<UploadPart, void>[] = [];
   taskManager: TaskManager;
 
   constructor(
