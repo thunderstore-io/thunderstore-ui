@@ -9,14 +9,17 @@ import {
 } from "react";
 
 import { StorageManager } from "./storage";
-import { RequestConfig } from "@thunderstore/thunderstore-api";
-// Probably shouldn't from Dapper, but what can you do when you need these.
-import { CurrentUser } from "@thunderstore/dapper/types";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import {
-  currentUserSchema,
-  emptyUser,
-} from "@thunderstore/dapper-ts/src/methods/currentUser";
+  User,
+  userSchema,
+  EmptyUser,
+  emptyUserSchema,
+  RequestConfig,
+} from "@thunderstore/thunderstore-api";
+// Probably shouldn't from Dapper, but what can you do when you need these.
+// import { CurrentUser } from "@thunderstore/dapper/types";
+import { DapperTs } from "@thunderstore/dapper-ts";
+// import { CurrentUser } from "@thunderstore/dapper/types";
 
 export interface ContextInterface {
   /** Remove session data from provider's state and localStorage. */
@@ -34,9 +37,9 @@ export interface ContextInterface {
   /** Async function to update currentUser */
   updateCurrentUser: () => Promise<void>;
   /** Store given CurrentUser */
-  storeCurrentUser: (currentUser: CurrentUser) => void;
+  storeCurrentUser: (currentUser: User) => void;
   /** Function to get the currentUser */
-  getSessionCurrentUser: (forceUpdateCurrentUser?: boolean) => CurrentUser;
+  getSessionCurrentUser: (forceUpdateCurrentUser?: boolean) => User | EmptyUser;
 }
 
 interface SessionData {
@@ -90,7 +93,7 @@ export function SessionProvider(props: Props) {
     return sessionValid(_storage);
   };
 
-  const _storeCurrentUser = (currentUser: CurrentUser) => {
+  const _storeCurrentUser = (currentUser: User) => {
     storeCurrentUser(_storage, currentUser);
   };
 
@@ -98,9 +101,7 @@ export function SessionProvider(props: Props) {
     updateCurrentUser(_storage);
   };
 
-  const _getSessionCurrentUser = (
-    forceUpdateCurrentUser: boolean = false
-  ): CurrentUser => {
+  const _getSessionCurrentUser = (forceUpdateCurrentUser: boolean = false) => {
     return getSessionCurrentUser(_storage, forceUpdateCurrentUser);
   };
 
@@ -223,7 +224,7 @@ export const sessionValid = (_storage: StorageManager): boolean => {
 
 export const storeCurrentUser = (
   _storage: StorageManager,
-  currentUser: CurrentUser
+  currentUser: User
 ) => {
   _storage.setJsonValue(CURRENT_USER_KEY, currentUser);
 };
@@ -247,7 +248,10 @@ export const updateCurrentUser = async (
         }
   );
   const currentUser = await dapper.getCurrentUser();
-  storeCurrentUser(_storage, currentUser);
+  // Only store the currentUser if it's not empty
+  if (currentUser.username !== null) {
+    storeCurrentUser(_storage, currentUser);
+  }
 };
 
 export const getSessionCurrentUser = (
@@ -255,19 +259,35 @@ export const getSessionCurrentUser = (
   forceUpdateCurrentUser: boolean = false,
   customGetConfig?: (domain?: string) => RequestConfig,
   customClearSession?: () => void
-): CurrentUser => {
+): User | EmptyUser => {
   if (forceUpdateCurrentUser) {
     (async () => {
       await updateCurrentUser(_storage, customGetConfig, customClearSession);
     })();
   }
 
-  const currentUser = _storage.safeGetJsonValue(CURRENT_USER_KEY);
-  const parsed = currentUserSchema.safeParse(currentUser);
+  let currentUser = _storage.safeGetJsonValue(CURRENT_USER_KEY);
+  if (currentUser === null) {
+    currentUser = {
+      username: null,
+      capabilities: [],
+      connections: [],
+      subscription: {
+        expires: null,
+      },
+      teams: [],
+      teams_full: [],
+    };
+  }
+  const parsed = userSchema.safeParse(currentUser);
   if (!parsed.success) {
-    return emptyUser;
+    const emptyUser = emptyUserSchema.safeParse(currentUser);
+    if (!emptyUser.success) {
+      throw new Error("Failed to parse empty user");
+    }
+    return emptyUser.data;
   } else {
-    return currentUser;
+    return parsed.data;
   }
 };
 

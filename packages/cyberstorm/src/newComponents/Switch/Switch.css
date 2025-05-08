@@ -1,0 +1,27 @@
+@layer components {
+  .switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--switch-width);
+    height: var(--switch-height);
+    padding: var(--switch-padding);
+    border: var(--switch-border);
+    border-radius: var(--switch-border-radius);
+    background-color: var(--switch-background-color);
+    cursor: var(--switch-cursor);
+    opacity: var(--switch-opacity);
+    transition: var(--switch-transition);
+  }
+
+  .switch__thumb {
+    display: var(--switch-thumb-display);
+
+    width: var(--switch-thumb-width);
+    height: var(--switch-thumb-height);
+    border-radius: var(--switch-thumb-border-radius);
+    background-color: var(--switch-thumb-background-color);
+    transform: var(--switch-thumb-transform);
+    transition: var(--switch-thumb-transition);
+  }
+}
