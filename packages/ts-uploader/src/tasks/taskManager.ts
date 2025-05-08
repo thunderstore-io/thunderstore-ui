@@ -17,23 +17,55 @@ import {
 } from "./types";
 
 export class TaskManager {
-  tasks: Task<any, any>[] = [];
+  _tasks: (Task<any, any> | Promise<Task<any, any>>)[] = [];
 
   constructor(initialTasks?: Task<any, any>[]) {
-    this.tasks = initialTasks ?? [];
+    this._tasks = initialTasks ? initialTasks : [];
+  }
+
+  get tasks(): Task<any, any>[] {
+    return this._tasks.filter(
+      (task) => typeof task === "object" && "status" in task
+    );
+  }
+
+  set tasks(tasks: (Task<any, any> | Promise<Task<any, any>>)[]) {
+    this._tasks.push(...tasks);
+  }
+
+  get taskPromises(): Promise<Task<any, any>>[] {
+    return this._tasks.filter(
+      (task) =>
+        typeof task === "object" &&
+        "then" in task &&
+        "catch" in task &&
+        "finally" in task
+    );
   }
 
   get createdTasks() {
-    return this.tasks.filter((task) => task.status === TaskStatus.PENDING);
+    return this._tasks.filter(
+      (task) =>
+        typeof task === "object" &&
+        "status" in task &&
+        task.status === TaskStatus.PENDING
+    );
   }
 
   get startedTasks() {
-    return this.tasks.filter((task) => task.status === TaskStatus.STARTED);
+    return this._tasks.filter(
+      (task) =>
+        typeof task === "object" &&
+        "status" in task &&
+        task.status === TaskStatus.STARTED
+    );
   }
 
   get finishedTasks(): FinishedTask<any, any>[] {
-    return this.tasks.filter(
+    return this._tasks.filter(
       (task) =>
+        typeof task === "object" &&
+        "status" in task &&
         task.status === TaskStatus.FINISHED &&
         (task.finishReason === TaskFinishReason.ABORTED ||
           task.finishReason === TaskFinishReason.ERROR ||
@@ -59,37 +91,43 @@ export class TaskManager {
     );
   }
 
+  // TODO: Ensure no duplicates are added to the _tasks array
+  async resolveTaskPromises() {
+    await Promise.all(
+      this.taskPromises.map(async (promise) => {
+        const task = await promise;
+        this._tasks.push(task);
+      })
+    );
+  }
+
   createTask(action: TaskAction<any, any>, args: any) {
     const task = createTask(action, args);
-    this.tasks.push(task);
+    this._tasks.push(task);
     return task;
   }
 
   startTask(task: PendingTask<any, any>) {
     const startedTask = startTask(task);
-    this.tasks.push(startedTask);
+    this._tasks.push(startedTask);
     return startedTask;
   }
 
   waitTask(task: StartedTask<any, any>) {
     const finishedTask = waitTask(task);
-    finishedTask.then((t) => {
-      this.tasks.push(t);
-    });
+    this._tasks.push(finishedTask);
     return finishedTask;
   }
 
   restartTask(task: FinishedTask<any, any>) {
     const restartedTask = restartTask(task);
-    this.tasks.push(restartedTask);
+    this._tasks.push(restartedTask);
     return restartedTask;
   }
 
   abortTask(task: StartedTask<any, any>) {
     const abortedTask = abortTask(task);
-    abortedTask.then((t) => {
-      this.tasks.push(t);
-    });
+    this._tasks.push(abortedTask);
     return abortedTask;
   }
 }
