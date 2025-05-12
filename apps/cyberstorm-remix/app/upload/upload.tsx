@@ -703,6 +703,24 @@ export default function Upload() {
                 <NewButton onClick={retryPolling}>Retry Status Check</NewButton>
               </div>
             )}
+            <NewButton
+              disabled={!handle}
+              onClick={() => handle?.pause()}
+              csVariant="warning"
+              csSize="big"
+              rootClasses="upload__submit"
+            >
+              Pause
+            </NewButton>
+            <NewButton
+              disabled={!handle}
+              onClick={() => handle?.resume()}
+              csVariant="warning"
+              csSize="big"
+              rootClasses="upload__submit"
+            >
+              Resume
+            </NewButton>
             {error && (
               <div className="submission__error">
                 <p>{error.message}</p>

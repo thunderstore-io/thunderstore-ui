@@ -149,14 +149,14 @@ export class MultipartUpload extends BaseUpload {
       i < this.taskManager.createdTasks.length;
       i += maxConcurrent
     ) {
+      const taskPromises: Promise<FinishedTask<any, any>>[] = [];
       const batch = this.taskManager.createdTasks.slice(i, i + maxConcurrent);
       // Start tasks
-      const taskPromises = batch
-        .map((t) => {
-          const startedTask = this.taskManager.startTask(t);
-          return startedTask;
-        })
-        .map(this.taskManager.waitTask);
+      for (let i = 0; i < batch.length; i++) {
+        taskPromises.push(
+          this.taskManager.waitTask(this.taskManager.startTask(batch[i]))
+        );
+      }
 
       // Wait for all tasks in the batch to finish
       await Promise.all(taskPromises);
@@ -250,6 +250,7 @@ export class MultipartUpload extends BaseUpload {
 
     const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
     for (let i = 0; i < tasksThatShouldBeRetried.length; i += maxConcurrent) {
+      const taskPromises: Promise<FinishedTask<any, any>>[] = [];
       const batch = tasksThatShouldBeRetried.slice(i, i + maxConcurrent);
       const startedTasks = batch.map((t) =>
         t.status === TaskStatus.PENDING
@@ -258,7 +259,11 @@ export class MultipartUpload extends BaseUpload {
             ? this.taskManager.restartTask(t)
             : t
       );
-      const taskPromises = startedTasks.map(this.taskManager.waitTask);
+
+      for (let i = 0; i < startedTasks.length; i++) {
+        taskPromises.push(this.taskManager.waitTask(startedTasks[i]));
+      }
+
       await Promise.all(taskPromises);
     }
 
@@ -290,6 +295,7 @@ export class MultipartUpload extends BaseUpload {
 
     const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
     for (let i = 0; i < tasksThatShouldBeRetried.length; i += maxConcurrent) {
+      const taskPromises: Promise<FinishedTask<any, any>>[] = [];
       const batch = tasksThatShouldBeRetried.slice(i, i + maxConcurrent);
       const startedTasks = batch.map((t) =>
         t.status === TaskStatus.PENDING
@@ -298,7 +304,10 @@ export class MultipartUpload extends BaseUpload {
             ? this.taskManager.restartTask(t)
             : t
       );
-      const taskPromises = startedTasks.map(this.taskManager.waitTask);
+
+      for (let i = 0; i < startedTasks.length; i++) {
+        taskPromises.push(this.taskManager.waitTask(startedTasks[i]));
+      }
       await Promise.all(taskPromises);
     }
 
