@@ -16,6 +16,7 @@ import {
 } from "@thunderstore/thunderstore-api";
 import {
   FinishedTask,
+  StartedTask,
   Task,
   TaskFinishReason,
   TaskStatus,
@@ -107,7 +108,8 @@ export class MultipartUpload extends BaseUpload {
 
     try {
       await this.initiateUploadAndCreatePartUploadTasks();
-      await this.beginUploadingParts();
+      // await this.beginUploadingParts();
+      await this.batchEm(this.taskManager.createdTasks);
       await this.finalizeUpload();
     } catch (error) {
       this.setError({
@@ -117,8 +119,51 @@ export class MultipartUpload extends BaseUpload {
         details: error,
       });
       this.setStatus("failed");
-      this.usermedia.status = "failed";
     }
+  }
+
+  async pause() {
+    this.taskManager.startedTasks.forEach((t) => this.taskManager.abortTask(t));
+    this.setStatus("paused");
+  }
+
+  async resume() {
+    this.setStatus("running");
+    const tasksThatShouldBeRetried = this.collectUploadPartTasks(
+      this.taskManager.tasks,
+      this.taskManager.finishedTasks
+    );
+
+    console.log(tasksThatShouldBeRetried);
+    await this.batchEm(tasksThatShouldBeRetried);
+    await this.finalizeUpload();
+  }
+
+  async abort() {
+    this.taskManager.startedTasks.forEach(async (t) => {
+      await this.taskManager.abortTask(t);
+    });
+    this.usermedia = await postUsermediaAbort({
+      config: this.requestConfig,
+      params: {
+        uuid: this.usermedia.uuid,
+      },
+      data: {},
+      queryParams: {},
+      useSession: true,
+    });
+    this.setStatus("aborted");
+  }
+
+  async retry() {
+    this.setStatus("running");
+    const tasksThatShouldBeRetried = this.collectUploadPartTasks(
+      this.taskManager.tasks,
+      this.taskManager.finishedTasks
+    );
+
+    await this.batchEm(tasksThatShouldBeRetried);
+    await this.finalizeUpload();
   }
 
   async initiateUploadAndCreatePartUploadTasks(): Promise<void> {
@@ -142,27 +187,6 @@ export class MultipartUpload extends BaseUpload {
     );
   }
 
-  async beginUploadingParts(): Promise<void> {
-    const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
-    for (
-      let i = 0;
-      i < this.taskManager.createdTasks.length;
-      i += maxConcurrent
-    ) {
-      const taskPromises: Promise<FinishedTask<any, any>>[] = [];
-      const batch = this.taskManager.createdTasks.slice(i, i + maxConcurrent);
-      // Start tasks
-      for (let i = 0; i < batch.length; i++) {
-        taskPromises.push(
-          this.taskManager.waitTask(this.taskManager.startTask(batch[i]))
-        );
-      }
-
-      // Wait for all tasks in the batch to finish
-      await Promise.all(taskPromises);
-    }
-  }
-
   async uploadPart(part: UploadPart) {
     const uniqueId = `${this.usermedia.uuid}-${part.meta.part_number}`;
 
@@ -184,7 +208,11 @@ export class MultipartUpload extends BaseUpload {
   }
 
   async finalizeUpload() {
-    if (this.status === "complete") {
+    if (
+      this.status === "complete" ||
+      this.status === "paused" ||
+      this.status === "aborted"
+    ) {
       return;
     }
 
@@ -236,84 +264,6 @@ export class MultipartUpload extends BaseUpload {
     this.setStatus("complete");
   }
 
-  async pause() {
-    this.taskManager.startedTasks.forEach((t) => this.taskManager.abortTask(t));
-    this.usermedia.status = "paused";
-  }
-
-  async resume() {
-    this.setStatus("running");
-    const tasksThatShouldBeRetried = this.collectUploadPartTasks(
-      this.taskManager.startedTasks,
-      this.taskManager.finishedTasks
-    );
-
-    const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
-    for (let i = 0; i < tasksThatShouldBeRetried.length; i += maxConcurrent) {
-      const taskPromises: Promise<FinishedTask<any, any>>[] = [];
-      const batch = tasksThatShouldBeRetried.slice(i, i + maxConcurrent);
-      const startedTasks = batch.map((t) =>
-        t.status === TaskStatus.PENDING
-          ? this.taskManager.startTask(t)
-          : t.status === TaskStatus.FINISHED
-            ? this.taskManager.restartTask(t)
-            : t
-      );
-
-      for (let i = 0; i < startedTasks.length; i++) {
-        taskPromises.push(this.taskManager.waitTask(startedTasks[i]));
-      }
-
-      await Promise.all(taskPromises);
-    }
-
-    await this.finalizeUpload();
-  }
-
-  async abort() {
-    this.taskManager.startedTasks.forEach(async (t) => {
-      await this.taskManager.abortTask(t);
-    });
-    this.usermedia = await postUsermediaAbort({
-      config: this.requestConfig,
-      params: {
-        uuid: this.usermedia.uuid,
-      },
-      data: {},
-      queryParams: {},
-      useSession: true,
-    });
-    this.setStatus("aborted");
-  }
-
-  async retry() {
-    this.setStatus("running");
-    const tasksThatShouldBeRetried = this.collectUploadPartTasks(
-      this.taskManager.tasks,
-      this.taskManager.finishedTasks
-    );
-
-    const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
-    for (let i = 0; i < tasksThatShouldBeRetried.length; i += maxConcurrent) {
-      const taskPromises: Promise<FinishedTask<any, any>>[] = [];
-      const batch = tasksThatShouldBeRetried.slice(i, i + maxConcurrent);
-      const startedTasks = batch.map((t) =>
-        t.status === TaskStatus.PENDING
-          ? this.taskManager.startTask(t)
-          : t.status === TaskStatus.FINISHED
-            ? this.taskManager.restartTask(t)
-            : t
-      );
-
-      for (let i = 0; i < startedTasks.length; i++) {
-        taskPromises.push(this.taskManager.waitTask(startedTasks[i]));
-      }
-      await Promise.all(taskPromises);
-    }
-
-    await this.finalizeUpload();
-  }
-
   slicePart(file: File, offset: number, length: number): Blob {
     const start = offset;
     const end = offset + length;
@@ -353,10 +303,19 @@ export class MultipartUpload extends BaseUpload {
 
   async doPartUpload(part: UploadPart, uniqueId: string, checksum: string) {
     await new Promise<void>((resolve, reject) => {
+      if (this.status === "paused" || this.status === "aborted") {
+        reject();
+      }
+
       const xhr = new XMLHttpRequest();
 
       // Set up progress tracking
       xhr.upload.onprogress = (event) => {
+        console.log(this.status);
+        if (this.status === "paused" || this.status === "aborted") {
+          xhr.abort();
+          reject();
+        }
         if (event.lengthComputable) {
           this.updateProgress(uniqueId, {
             total: event.total,
@@ -431,5 +390,39 @@ export class MultipartUpload extends BaseUpload {
         }
         return acc;
       }, []);
+  }
+
+  batchEm(tasks: Task<any, any>[]): Promise<void> {
+    return new Promise<void>(async (resolve, reject) => {
+      console.log("batchEm", this.status);
+      if (this.status === "paused" || this.status === "aborted") {
+        reject(new Error("Upload is paused or aborted"));
+      }
+
+      const maxConcurrent = this.config.maxConcurrentUploads ?? 3;
+      for (let i = 0; i < tasks.length; i += maxConcurrent) {
+        if (this.status === "paused" || this.status === "aborted") {
+          reject(new Error("Upload is paused or aborted"));
+        }
+        const taskPromises: Promise<FinishedTask<any, any>>[] = [];
+        const batch = tasks.slice(i, i + maxConcurrent);
+
+        const startedTasks = batch.map((t) =>
+          t.status === TaskStatus.PENDING
+            ? this.taskManager.startTask(t)
+            : t.status === TaskStatus.FINISHED
+              ? this.taskManager.restartTask(t)
+              : t
+        );
+
+        console.log("startedTasks", startedTasks);
+        for (let i = 0; i < startedTasks.length; i++) {
+          taskPromises.push(this.taskManager.waitTask(startedTasks[i]));
+        }
+
+        await Promise.all(taskPromises);
+        resolve();
+      }
+    });
   }
 }
