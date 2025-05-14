@@ -16,7 +16,7 @@ import {
 } from "@thunderstore/thunderstore-api";
 import {
   FinishedTask,
-  StartedTask,
+  // StartedTask,
   Task,
   TaskFinishReason,
   TaskStatus,
@@ -129,6 +129,7 @@ export class MultipartUpload extends BaseUpload {
 
   async resume() {
     this.setStatus("running");
+    this.setError();
     const tasksThatShouldBeRetried = this.collectUploadPartTasks(
       this.taskManager.tasks,
       this.taskManager.finishedTasks
@@ -157,6 +158,7 @@ export class MultipartUpload extends BaseUpload {
 
   async retry() {
     this.setStatus("running");
+    this.setError();
     const tasksThatShouldBeRetried = this.collectUploadPartTasks(
       this.taskManager.tasks,
       this.taskManager.finishedTasks
@@ -213,6 +215,9 @@ export class MultipartUpload extends BaseUpload {
       this.status === "paused" ||
       this.status === "aborted"
     ) {
+      if (this.status === "complete") {
+        this.setError();
+      }
       return;
     }
 
@@ -261,7 +266,9 @@ export class MultipartUpload extends BaseUpload {
       useSession: true,
     });
 
+    console.log(this.taskManager.tasks);
     this.setStatus("complete");
+    this.setError();
   }
 
   slicePart(file: File, offset: number, length: number): Blob {
@@ -403,6 +410,7 @@ export class MultipartUpload extends BaseUpload {
       for (let i = 0; i < tasks.length; i += maxConcurrent) {
         if (this.status === "paused" || this.status === "aborted") {
           reject(new Error("Upload is paused or aborted"));
+          break;
         }
         const taskPromises: Promise<FinishedTask<any, any>>[] = [];
         const batch = tasks.slice(i, i + maxConcurrent);
@@ -421,8 +429,8 @@ export class MultipartUpload extends BaseUpload {
         }
 
         await Promise.all(taskPromises);
-        resolve();
       }
+      resolve();
     });
   }
 }

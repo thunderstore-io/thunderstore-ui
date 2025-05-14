@@ -27,7 +27,7 @@ export type UploadError = {
 };
 
 export type UploadMetrics = {
-  bytesPerSecondHistory: { time: number; value: number }[];
+  speedMatrix: [number, number][];
   bytesPerSecond: number;
   totalBytes: number;
   uploadedBytes: number;
@@ -56,7 +56,7 @@ export interface IBaseUploadHandle {
   get progress(): UploadProgress;
   onProgress: TypedEventEmitter<UploadProgress>;
   onStatusChange: TypedEventEmitter<UploadStatus>;
-  onError: TypedEventEmitter<UploadError>;
+  onError: TypedEventEmitter<UploadError | undefined>;
 
   start(): Promise<void>;
   pause(): Promise<void>;
