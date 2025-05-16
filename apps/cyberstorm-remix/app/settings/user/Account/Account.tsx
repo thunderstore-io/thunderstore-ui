@@ -6,7 +6,6 @@ import {
   FormTextInput,
   useFormToaster,
 } from "@thunderstore/cyberstorm-forms";
-import { currentUserSchema } from "@thunderstore/dapper-ts";
 import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
 import {
   ApiForm,
@@ -40,7 +39,7 @@ export async function clientLoader() {
   } else {
     return {
       config: getConfig(_storage),
-      currentUser: currentUser as typeof currentUserSchema._type,
+      currentUser: currentUser,
     };
   }
 }

@@ -1,0 +1,23 @@
+import { ApiEndpointProps } from "../index";
+import { apiFetch } from "../apiFetch";
+import { packageVersionsResponseDataSchema } from "../schemas/responseSchemas";
+import { PackageVersionsRequestParams } from "../schemas/requestSchemas";
+import { z } from "zod";
+import { PackageVersionsResponseData } from "../schemas/responseSchemas";
+
+export async function fetchPackageVersions(
+  props: ApiEndpointProps<PackageVersionsRequestParams, object, object>
+): Promise<PackageVersionsResponseData> {
+  const { config, params } = props;
+  const path = `api/cyberstorm/package/${params.namespace_id}/${params.package_name}/versions/`;
+
+  return await apiFetch({
+    args: {
+      config: config,
+      path: path,
+    },
+    requestSchema: z.object({}),
+    queryParamsSchema: z.object({}),
+    responseSchema: packageVersionsResponseDataSchema,
+  });
+}

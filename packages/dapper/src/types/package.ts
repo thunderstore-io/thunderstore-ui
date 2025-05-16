@@ -6,7 +6,7 @@ export interface PackageListing {
   community_identifier: string;
   description: string;
   download_count: number;
-  icon_url: string;
+  icon_url: string | null;
   is_deprecated: boolean;
   is_nsfw: boolean;
   is_pinned: boolean;
@@ -56,3 +56,58 @@ export interface PackageVersion {
   download_url: string;
   install_url: string;
 }
+
+export interface PackageSubmissionError {
+  upload_uuid?: string[] | null;
+  author_name?: string[] | null;
+  categories?: string[] | null;
+  communities?: string[] | null;
+  has_nsfw_content?: string[] | null;
+  detail?: string[] | null;
+  file?: string[] | null;
+  team?: string[] | null;
+  __all__?: string[] | null;
+}
+
+export interface PackageSubmissionResult {
+  package_version: {
+    namespace: string;
+    name: string;
+    version_number: string;
+    full_name: string;
+    description: string;
+    icon: string;
+    dependencies: string[];
+    download_url: string;
+    downloads: number;
+    date_created: string;
+    website_url: string | null;
+    is_active: boolean;
+  };
+  available_communities: Array<{
+    community: {
+      identifier: string;
+      name: string;
+      discord_url: string | null;
+      wiki_url: string | null;
+      require_package_listing_approval: boolean;
+    };
+    categories: Array<{
+      name: string;
+      slug: string;
+    }>;
+    url: string;
+  }>;
+}
+
+export interface PackageSubmissionStatus {
+  id: string;
+  status: string;
+  form_errors: PackageSubmissionError | null;
+  task_error: boolean | null;
+  result: PackageSubmissionResult | null;
+}
+
+export type PackageSubmissionResponse =
+  | PackageSubmissionStatus
+  | PackageSubmissionError;

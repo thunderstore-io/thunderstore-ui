@@ -1,3 +1,5 @@
+// API ENDPOINT FOR THIS IS NOT YET IMPLEMENTED IN THE THUNDERSTORE API
+
 import { useFormToaster } from "@thunderstore/cyberstorm-forms";
 import { Select } from "@thunderstore/cyberstorm";
 import { teamEditMemberFormSchema } from "@thunderstore/ts-api-react-forms";
