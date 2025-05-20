@@ -2,24 +2,26 @@ import { GraphEdge } from ".";
 
 export class GraphNode<IType, OType> {
   private _output: OType | undefined = undefined;
-  private backardEdges: GraphEdge<IType>[] = [];
-  private forwardEdges: GraphEdge<OType>[] = [];
+  private backwardEdges: GraphEdge<unknown, IType, unknown>[] = [];
+  private forwardEdges: GraphEdge<unknown, OType, unknown>[] = [];
   private readonly action: (args: IType[]) => Promise<OType>;
 
   constructor(action: (args: IType[]) => Promise<OType>) {
     this.action = action;
   }
 
-  public static linkNodes<Type>(
-    source: GraphNode<any, Type>,
-    target: GraphNode<Type, any>
+  public static linkNodes<SSType, Type, TTType>(
+    source: GraphNode<SSType, Type>,
+    target: GraphNode<Type, TTType>
   ) {
-    const edge = new GraphEdge<Type>(source, target);
+    const edge = new GraphEdge<SSType, Type, TTType>(source, target);
     source.forwardEdges.push(edge);
-    target.backardEdges.push(edge);
+    target.backwardEdges.push(edge);
   }
 
-  public static collectInputs<T>(edges: GraphEdge<T>[]): T[] | null {
+  public static collectInputs<SSType, T, TTType>(
+    edges: GraphEdge<SSType, T, TTType>[]
+  ): T[] | null {
     const result = edges.map((x) => x.source.output);
     if (result.every((x) => x !== undefined)) {
       return result;
@@ -28,13 +30,17 @@ export class GraphNode<IType, OType> {
     }
   }
 
+  public get getBackwardEdges(): GraphEdge<unknown, unknown, unknown>[] {
+    return this.backwardEdges;
+  }
+
   public get output(): OType | undefined {
     return this._output;
   }
 
   public get shouldExecute(): boolean {
     return (
-      GraphNode.collectInputs(this.backardEdges) !== null &&
+      GraphNode.collectInputs(this.backwardEdges) !== null &&
       this._output === undefined
     );
   }
@@ -43,7 +49,7 @@ export class GraphNode<IType, OType> {
     if (this._output) {
       return this._output;
     }
-    const inputs = GraphNode.collectInputs(this.backardEdges);
+    const inputs = GraphNode.collectInputs(this.backwardEdges);
     if (!inputs) {
       throw new Error("Node inputs aren't yet ready!");
     }

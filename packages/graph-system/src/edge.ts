@@ -1,12 +1,12 @@
 import { GraphNode } from ".";
 
-export class GraphEdge<Type> {
-  public readonly source: GraphNode<unknown, Type>;
-  public readonly target: GraphNode<Type, unknown>;
+export class GraphEdge<SSType, Type, TTType> {
+  public readonly source: GraphNode<Extract<SSType, unknown>, Type>;
+  public readonly target: GraphNode<Type, TTType>;
 
   constructor(
-    source: GraphNode<unknown, Type>,
-    target: GraphNode<Type, unknown>
+    source: GraphNode<Extract<SSType, unknown>, Type>,
+    target: GraphNode<Type, TTType>
   ) {
     this.source = source;
     this.target = target;

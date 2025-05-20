@@ -19,9 +19,9 @@ describe("GraphNode", () => {
       expect(sourceNode["forwardEdges"].length).toBe(1);
       expect(sourceNode["forwardEdges"][0].source).toBe(sourceNode);
       expect(sourceNode["forwardEdges"][0].target).toBe(targetNode);
-      expect(targetNode["backardEdges"].length).toBe(1);
-      expect(targetNode["backardEdges"][0].source).toBe(sourceNode);
-      expect(targetNode["backardEdges"][0].target).toBe(targetNode);
+      expect(targetNode["backwardEdges"].length).toBe(1);
+      expect(targetNode["backwardEdges"][0].source).toBe(sourceNode);
+      expect(targetNode["backwardEdges"][0].target).toBe(targetNode);
     });
   });
 
@@ -34,7 +34,7 @@ describe("GraphNode", () => {
       GraphNode.linkNodes(sourceNode1, targetNode);
       GraphNode.linkNodes(sourceNode2, targetNode);
 
-      const inputs = GraphNode.collectInputs(targetNode["backardEdges"]);
+      const inputs = GraphNode.collectInputs(targetNode["backwardEdges"]);
       expect(inputs).toBeNull();
     });
 
@@ -49,7 +49,7 @@ describe("GraphNode", () => {
       await sourceNode1.execute();
       await sourceNode2.execute();
 
-      const inputs = GraphNode.collectInputs(targetNode["backardEdges"]);
+      const inputs = GraphNode.collectInputs(targetNode["backwardEdges"]);
       expect(inputs).toEqual([5, 10]);
     });
   });
