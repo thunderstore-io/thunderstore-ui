@@ -548,116 +548,107 @@ type UploadPartError = {
 };
 
 // TODO: This could be simplified
-function uploadPart(
-  x: {
-    upload: PreparedUpload;
-    partNumber: number;
-    updateProgress: (
-      uniqueId: string,
-      partProgress: UploadPartProgress
-    ) => void;
-  }[]
-) {
-  const parts = [];
-
+function uploadPart(input: {
+  upload: PreparedUpload;
+  partNumber: number;
+  updateProgress: (uniqueId: string, partProgress: UploadPartProgress) => void;
+}) {
+  const { upload, partNumber, updateProgress } = input;
   // MAKE THIS XHR THING NOT BE IN A PROMISE
 
-  for (const { upload, partNumber, updateProgress } of x) {
-    const part = new Promise<UploadPartError | CompletePartState>(
-      (resolve, reject) => {
-        // Janky way to make the function work with GraphNode
-        let partState = undefined;
-        try {
-          partState = upload.partStates.filter(
-            (partState) => partState.part.meta.part_number === partNumber
-          )[0];
-        } catch {
-          if (partState === undefined) {
-            reject({
-              code: "PART_STATE_NOT_FOUND",
-              message: `Part state not found for part number: ${partNumber}`,
-              retryable: false,
-              details: undefined,
-            });
-            return;
-          }
-        }
-        // if (upload.status === "paused" || this.status === "aborted") {
-        //   reject();
-        // }
+  const part = new Promise<
+    UploadPartError | [PreparedUpload, CompletePartState]
+  >((resolve, reject) => {
+    // Janky way to make the function work with GraphNode
+    let partState = undefined;
+    try {
+      partState = upload.partStates.filter(
+        (partState) => partState.part.meta.part_number === partNumber
+      )[0];
+    } catch {
+      if (partState === undefined) {
+        reject({
+          code: "PART_STATE_NOT_FOUND",
+          message: `Part state not found for part number: ${partNumber}`,
+          retryable: false,
+          details: undefined,
+        });
+        return;
+      }
+    }
+    // if (upload.status === "paused" || this.status === "aborted") {
+    //   reject();
+    // }
 
-        const xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
 
-        // Set up progress tracking
-        xhr.upload.onprogress = (event) => {
-          // console.log(this.status);
-          // if (this.status === "paused" || this.status === "aborted") {
-          //   xhr.abort();
-          //   reject();
-          // }
-          if (event.lengthComputable) {
-            updateProgress(partState.uniqueId, {
-              total: event.total,
-              complete: event.loaded,
-              status: "running",
-            });
-          }
-        };
+    // Set up progress tracking
+    xhr.upload.onprogress = (event) => {
+      // console.log(this.status);
+      // if (this.status === "paused" || this.status === "aborted") {
+      //   xhr.abort();
+      //   reject();
+      // }
+      if (event.lengthComputable) {
+        updateProgress(partState.uniqueId, {
+          total: event.total,
+          complete: event.loaded,
+          status: "running",
+        });
+      }
+    };
 
-        xhr.onload = () => {
-          if (xhr.status >= 200 && xhr.status < 300) {
-            const etag = xhr.getResponseHeader("ETag");
-            if (!etag) {
-              partState.error = `ETAG missing on part upload: ${partState.part.meta.part_number}`;
-              partState.state = "failed";
-              reject({
-                code: "ETAG_MISSING",
-                message: `ETAG missing on part upload: ${partState.part.meta.part_number}`,
-                retryable: true,
-                details: xhr,
-              });
-            } else {
-              partState.part.etag = etag;
-              partState.state = "complete";
-              // TODO: Add a type guard here
-              resolve(partState as CompletePartState);
-            }
-          } else {
-            partState.error = `HTTP error: ${xhr.status}`;
-            partState.state = "failed";
-            reject({
-              code: "UPLOAD_FAILED",
-              message: `HTTP error: ${xhr.status}`,
-              retryable: true,
-              details: xhr,
-            });
-          }
-        };
-
-        xhr.onerror = () => {
-          partState.error = "Network error";
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        const etag = xhr.getResponseHeader("ETag");
+        if (!etag) {
+          partState.error = `ETAG missing on part upload: ${partState.part.meta.part_number}`;
           partState.state = "failed";
           reject({
-            code: "UPLOAD_FAILED",
-            message: "Network error",
+            code: "ETAG_MISSING",
+            message: `ETAG missing on part upload: ${partState.part.meta.part_number}`,
             retryable: true,
             details: xhr,
           });
-        };
-
-        xhr.open("PUT", partState.part.meta.url);
-        xhr.setRequestHeader("Content-MD5", partState.checksum);
-        xhr.send(partState.part.payload);
+        } else {
+          partState.part.etag = etag;
+          partState.state = "complete";
+          // TODO: Add a type guard here
+          resolve([upload, partState as CompletePartState]);
+        }
+      } else {
+        partState.error = `HTTP error: ${xhr.status}`;
+        partState.state = "failed";
+        reject({
+          code: "UPLOAD_FAILED",
+          message: `HTTP error: ${xhr.status}`,
+          retryable: true,
+          details: xhr,
+        });
       }
-    );
-    parts.push(part);
-  }
-  return Promise.all(parts);
+    };
+
+    xhr.onerror = () => {
+      partState.error = "Network error";
+      partState.state = "failed";
+      reject({
+        code: "UPLOAD_FAILED",
+        message: "Network error",
+        retryable: true,
+        details: xhr,
+      });
+    };
+
+    xhr.open("PUT", partState.part.meta.url);
+    xhr.setRequestHeader("Content-MD5", partState.checksum);
+    xhr.send(partState.part.payload);
+  });
+  return part;
 }
 
 function confirmPartsAreUploaded(
-  uploads: (UploadPartError | CompletePartState)[][]
-): Promise<FinalizedUpload[]> {
+  uploads: (UploadPartError | [PreparedUpload, CompletePartState])[]
+): Promise<CompleteUpload> {
   const finalizedUploads = uploads.map(async (upload) => {
     upload.usermedia = await postUsermediaFinish({
       config: upload.requestConfig,
@@ -711,6 +702,9 @@ function finalizeUpload(uploads: CompleteUpload[]): Promise<FinalizedUpload[]> {
 
 const uploadPartNode = new GraphNode(uploadPart);
 
+const confirmPartsUploadedNode = new GraphNode(confirmPartsAreUploaded);
+
 const outputNode = new GraphNode(finalizeUpload);
 
-GraphNode.linkNodes(uploadPartNode, outputNode);
+GraphNode.linkNodes(uploadPartNode, confirmPartsUploadedNode);
+GraphNode.linkNodes(confirmPartsUploadedNode, outputNode);
