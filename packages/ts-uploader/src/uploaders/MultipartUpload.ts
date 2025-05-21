@@ -1,5 +1,10 @@
-import { UploadPartUrl, UserMedia } from "./types";
+import { UploadPartProgress, UploadPartUrl, UserMedia } from "./types";
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
+import {
+  GraphEdge,
+  GraphNode,
+  GraphExecutor,
+} from "@thunderstore/graph-system";
 import { BaseUpload } from "./BaseUpload";
 import {
   UploadConfig,
@@ -34,23 +39,31 @@ import { TaskManager } from "../tasks/taskManager";
  *    to the server along with the upload handle ID.
  */
 
-export type UploadPart = {
+export interface UploadPart {
   payload: Blob;
   meta: {
     part_number: number;
     url: string;
   };
   etag?: string;
-};
+}
 
-export type PartState = {
+export interface PartState {
   part: UploadPart;
   uniqueId: string;
   state: UploadPartStatus;
   etag: string | undefined;
   error: string | undefined;
   checksum: string | undefined;
-};
+}
+
+export interface PreparedPartState extends Omit<PartState, "checksum"> {
+  checksum: string;
+}
+
+export interface CompletePartState extends Omit<PreparedPartState, "etag"> {
+  etag: string;
+}
 
 export type PartStates = {
   [key: string]: PartState;
@@ -271,12 +284,6 @@ export class MultipartUpload extends BaseUpload {
     this.setError();
   }
 
-  slicePart(file: File, offset: number, length: number): Blob {
-    const start = offset;
-    const end = offset + length;
-    return end < file.size ? file.slice(start, end) : file.slice(start);
-  }
-
   createParts(file: File, uploadUrls: UploadPartUrl[]): UploadPart[] {
     return uploadUrls.map((x) => ({
       payload: this.slicePart(file, x.offset, x.length),
@@ -434,3 +441,276 @@ export class MultipartUpload extends BaseUpload {
     });
   }
 }
+
+function slicePart(file: File, offset: number, length: number): Blob {
+  const start = offset;
+  const end = offset + length;
+  return end < file.size ? file.slice(start, end) : file.slice(start);
+}
+
+type Upload = {
+  requestConfig: () => RequestConfig;
+  usermedia: UserMedia;
+  partStates: PartState[];
+};
+
+type PreparedUpload = {
+  requestConfig: () => RequestConfig;
+  usermedia: UserMedia;
+  partStates: PreparedPartState[];
+};
+
+type CompleteUpload = {
+  requestConfig: () => RequestConfig;
+  usermedia: UserMedia;
+  partStates: CompletePartState[];
+};
+
+type FinalizedUpload = {
+  requestConfig: () => RequestConfig;
+  usermedia: Omit<UserMedia, "status"> & {
+    status: "complete";
+  };
+  partStates: CompletePartState[];
+};
+
+const createPartsNode = new GraphNode(
+  async (uploads: Upload[]): Promise<Upload[]> => {
+    for (const upload of uploads) {
+      upload.usermedia = await postUsermediaFinish({
+        config: upload.requestConfig,
+        params: {
+          uuid: upload.usermedia.uuid,
+        },
+        data: {
+          parts: upload.partStates.map((ps) => ({
+            ETag: ps.etag,
+            PartNumber: ps.part.meta.part_number,
+          })),
+        },
+        queryParams: {},
+        useSession: true,
+      });
+    }
+    return uploads;
+  }
+);
+
+const calculateMD5sNode = new GraphNode(
+  async (uploads: Upload[]): Promise<Upload[]> => {
+    for (const upload of uploads) {
+      upload.usermedia = await postUsermediaFinish({
+        config: upload.requestConfig,
+        params: {
+          uuid: upload.usermedia.uuid,
+        },
+        data: {
+          parts: upload.partStates.map((ps) => ({
+            ETag: ps.etag,
+            PartNumber: ps.part.meta.part_number,
+          })),
+        },
+        queryParams: {},
+        useSession: true,
+      });
+    }
+    return uploads;
+  }
+);
+
+const calculateMD5sNode = new GraphNode(
+  async (uploads: Upload[]): Promise<Upload[]> => {
+    for (const upload of uploads) {
+      upload.usermedia = await postUsermediaFinish({
+        config: upload.requestConfig,
+        params: {
+          uuid: upload.usermedia.uuid,
+        },
+        data: {
+          parts: upload.partStates.map((ps) => ({
+            ETag: ps.etag,
+            PartNumber: ps.part.meta.part_number,
+          })),
+        },
+        queryParams: {},
+        useSession: true,
+      });
+    }
+    return uploads;
+  }
+);
+
+type UploadPartError = {
+  code: string;
+  message: string;
+  retryable: boolean;
+  details: XMLHttpRequest;
+};
+
+// TODO: This could be simplified
+function uploadPart(
+  x: {
+    upload: PreparedUpload;
+    partNumber: number;
+    updateProgress: (
+      uniqueId: string,
+      partProgress: UploadPartProgress
+    ) => void;
+  }[]
+) {
+  const parts = [];
+
+  // MAKE THIS XHR THING NOT BE IN A PROMISE
+
+  for (const { upload, partNumber, updateProgress } of x) {
+    const part = new Promise<UploadPartError | CompletePartState>(
+      (resolve, reject) => {
+        // Janky way to make the function work with GraphNode
+        let partState = undefined;
+        try {
+          partState = upload.partStates.filter(
+            (partState) => partState.part.meta.part_number === partNumber
+          )[0];
+        } catch {
+          if (partState === undefined) {
+            reject({
+              code: "PART_STATE_NOT_FOUND",
+              message: `Part state not found for part number: ${partNumber}`,
+              retryable: false,
+              details: undefined,
+            });
+            return;
+          }
+        }
+        // if (upload.status === "paused" || this.status === "aborted") {
+        //   reject();
+        // }
+
+        const xhr = new XMLHttpRequest();
+
+        // Set up progress tracking
+        xhr.upload.onprogress = (event) => {
+          // console.log(this.status);
+          // if (this.status === "paused" || this.status === "aborted") {
+          //   xhr.abort();
+          //   reject();
+          // }
+          if (event.lengthComputable) {
+            updateProgress(partState.uniqueId, {
+              total: event.total,
+              complete: event.loaded,
+              status: "running",
+            });
+          }
+        };
+
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const etag = xhr.getResponseHeader("ETag");
+            if (!etag) {
+              partState.error = `ETAG missing on part upload: ${partState.part.meta.part_number}`;
+              partState.state = "failed";
+              reject({
+                code: "ETAG_MISSING",
+                message: `ETAG missing on part upload: ${partState.part.meta.part_number}`,
+                retryable: true,
+                details: xhr,
+              });
+            } else {
+              partState.part.etag = etag;
+              partState.state = "complete";
+              // TODO: Add a type guard here
+              resolve(partState as CompletePartState);
+            }
+          } else {
+            partState.error = `HTTP error: ${xhr.status}`;
+            partState.state = "failed";
+            reject({
+              code: "UPLOAD_FAILED",
+              message: `HTTP error: ${xhr.status}`,
+              retryable: true,
+              details: xhr,
+            });
+          }
+        };
+
+        xhr.onerror = () => {
+          partState.error = "Network error";
+          partState.state = "failed";
+          reject({
+            code: "UPLOAD_FAILED",
+            message: "Network error",
+            retryable: true,
+            details: xhr,
+          });
+        };
+
+        xhr.open("PUT", partState.part.meta.url);
+        xhr.setRequestHeader("Content-MD5", partState.checksum);
+        xhr.send(partState.part.payload);
+      }
+    );
+    parts.push(part);
+  }
+  return Promise.all(parts);
+}
+
+function confirmPartsAreUploaded(
+  uploads: (UploadPartError | CompletePartState)[][]
+): Promise<FinalizedUpload[]> {
+  const finalizedUploads = uploads.map(async (upload) => {
+    upload.usermedia = await postUsermediaFinish({
+      config: upload.requestConfig,
+      params: {
+        uuid: upload.usermedia.uuid,
+      },
+      data: {
+        parts: upload.partStates.map((ps) => ({
+          ETag: ps.etag,
+          PartNumber: ps.part.meta.part_number,
+        })),
+      },
+      queryParams: {},
+      useSession: true,
+    });
+    if (upload.usermedia.status !== "complete") {
+      throw new Error("Upload failed");
+    } else {
+      return upload as FinalizedUpload;
+    }
+  });
+
+  return Promise.all(finalizedUploads);
+}
+
+function finalizeUpload(uploads: CompleteUpload[]): Promise<FinalizedUpload[]> {
+  const finalizedUploads = uploads.map(async (upload) => {
+    upload.usermedia = await postUsermediaFinish({
+      config: upload.requestConfig,
+      params: {
+        uuid: upload.usermedia.uuid,
+      },
+      data: {
+        parts: upload.partStates.map((ps) => ({
+          ETag: ps.etag,
+          PartNumber: ps.part.meta.part_number,
+        })),
+      },
+      queryParams: {},
+      useSession: true,
+    });
+    if (upload.usermedia.status !== "complete") {
+      throw new Error("Upload failed");
+    } else {
+      return upload as FinalizedUpload;
+    }
+  });
+
+  return Promise.all(finalizedUploads);
+}
+
+const uploadPartNode = new GraphNode(uploadPart);
+
+const outputNode = new GraphNode(finalizeUpload);
+
+GraphNode.linkNodes(uploadPartNode, outputNode);

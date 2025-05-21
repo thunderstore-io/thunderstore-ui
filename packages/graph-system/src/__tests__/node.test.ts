@@ -1,14 +1,7 @@
 import { GraphNode } from "..";
+import { vi } from "vitest";
 
 describe("GraphNode", () => {
-  describe("constructor", () => {
-    it("should create a node with an action", () => {
-      const action = async (args: number[]) => args.reduce((a, b) => a + b, 0);
-      const node = new GraphNode<number, number>(action);
-      expect(node["action"]).toBe(action);
-    });
-  });
-
   describe("linkNodes", () => {
     it("should link two nodes with an edge", () => {
       const sourceNode = new GraphNode<unknown, number>(async () => 5);
@@ -93,9 +86,11 @@ describe("GraphNode", () => {
 
       await sourceNode.execute();
       const firstResult = await node.execute();
+      const collectInputsSpy = vi.spyOn(GraphNode, "collectInputs");
       const secondResult = await node.execute();
 
       expect(firstResult).toBe(5);
+      expect(collectInputsSpy).toHaveBeenCalledTimes(0);
       expect(secondResult).toBe(5);
     });
   });

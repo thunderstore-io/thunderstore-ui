@@ -2,7 +2,7 @@ import { GraphEdge } from ".";
 
 export class GraphNode<IType, OType> {
   private _output: OType | undefined = undefined;
-  private backwardEdges: GraphEdge<unknown, IType, unknown>[] = [];
+  private _backwardEdges: GraphEdge<unknown, IType, unknown>[] = [];
   private forwardEdges: GraphEdge<unknown, OType, unknown>[] = [];
   private readonly action: (args: IType[]) => Promise<OType>;
 
@@ -16,7 +16,7 @@ export class GraphNode<IType, OType> {
   ) {
     const edge = new GraphEdge<SSType, Type, TTType>(source, target);
     source.forwardEdges.push(edge);
-    target.backwardEdges.push(edge);
+    target._backwardEdges.push(edge);
   }
 
   public static collectInputs<SSType, T, TTType>(
@@ -30,8 +30,8 @@ export class GraphNode<IType, OType> {
     }
   }
 
-  public get getBackwardEdges(): GraphEdge<unknown, unknown, unknown>[] {
-    return this.backwardEdges;
+  public get backwardEdges(): GraphEdge<unknown, unknown, unknown>[] {
+    return this._backwardEdges;
   }
 
   public get output(): OType | undefined {
@@ -40,7 +40,7 @@ export class GraphNode<IType, OType> {
 
   public get shouldExecute(): boolean {
     return (
-      GraphNode.collectInputs(this.backwardEdges) !== null &&
+      GraphNode.collectInputs(this._backwardEdges) !== null &&
       this._output === undefined
     );
   }
@@ -49,7 +49,7 @@ export class GraphNode<IType, OType> {
     if (this._output) {
       return this._output;
     }
-    const inputs = GraphNode.collectInputs(this.backwardEdges);
+    const inputs = GraphNode.collectInputs(this._backwardEdges);
     if (!inputs) {
       throw new Error("Node inputs aren't yet ready!");
     }

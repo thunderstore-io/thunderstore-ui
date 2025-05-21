@@ -2,15 +2,26 @@ import { GraphExecutor, GraphNode } from "..";
 
 describe("GraphExecutor", () => {
   describe("executeGraph", () => {
+    it("should execute a graph with outputNode only", async () => {
+      const outputNode = new GraphNode<unknown, number>(async () => {
+        return 5 * 2;
+      });
+
+      const executor = new GraphExecutor(outputNode);
+      const result = await executor.executeGraph();
+
+      expect(result).toBe(10);
+    });
+
     it("should execute a simple linear graph", async () => {
       const inputNode = new GraphNode<unknown, number>(async () => 5);
-      const outputNode = new GraphNode<number, number>(
-        async (args) => args[0] * 2
-      );
+      const outputNode = new GraphNode<number, number>(async (args) => {
+        return args[0] * 2;
+      });
 
       GraphNode.linkNodes(inputNode, outputNode);
 
-      const executor = new GraphExecutor([inputNode, outputNode], outputNode);
+      const executor = new GraphExecutor(outputNode);
       const result = await executor.executeGraph();
 
       expect(result).toBe(10);
@@ -26,10 +37,7 @@ describe("GraphExecutor", () => {
       GraphNode.linkNodes(inputNode1, outputNode);
       GraphNode.linkNodes(inputNode2, outputNode);
 
-      const executor = new GraphExecutor(
-        [inputNode1, inputNode2, outputNode],
-        outputNode
-      );
+      const executor = new GraphExecutor(outputNode);
       const result = await executor.executeGraph();
 
       expect(result).toBe(15);
@@ -49,10 +57,7 @@ describe("GraphExecutor", () => {
       GraphNode.linkNodes(inputNode2, intermediateNode);
       GraphNode.linkNodes(intermediateNode, outputNode);
 
-      const executor = new GraphExecutor(
-        [inputNode1, inputNode2, intermediateNode, outputNode],
-        outputNode
-      );
+      const executor = new GraphExecutor(outputNode);
       const result = await executor.executeGraph();
 
       expect(result).toBe(30);
@@ -70,7 +75,7 @@ describe("GraphExecutor", () => {
 
       GraphNode.linkNodes(inputNode, outputNode);
 
-      const executor = new GraphExecutor([inputNode, outputNode], outputNode);
+      const executor = new GraphExecutor(outputNode);
       const result = await executor.executeGraph();
 
       expect(result).toBe(10);
