@@ -4,6 +4,10 @@ export type DynamicLink = {
 };
 
 export type MarkdownResponse = {
+  readme: string;
+};
+
+export type HTMLContentResponse = {
   html: string;
 };
 

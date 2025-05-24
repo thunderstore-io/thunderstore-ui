@@ -1,0 +1,32 @@
+{
+  "name": "@thunderstore/graph-system",
+  "version": "0.1.0",
+  "description": "Handles file uploads to Thunderstore",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/graph-system",
+  "main": "dist/thunderstore-graph-system.cjs.js",
+  "module": "dist/thunderstore-graph-system.esm.js",
+  "types": "dist/thunderstore-graph-system.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@thunderstore/thunderstore-api": "^0.1.0",
+    "@thunderstore/typed-event-emitter": "*",
+    "crypto-js": "^4.2.0",
+    "typescript": "^5.6.2"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.3",
+    "@vitest/coverage-v8": "^1.3.1",
+    "@vitest/web-worker": "^3.1.2",
+    "jsdom": "^24.0.0",
+    "vitest": "^1.3.1"
+  }
+}

@@ -63,7 +63,7 @@ const selectOptions = [
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const searchParams = new URL(request.url).searchParams;
-  const order = searchParams.get("order") ?? SortOptions.Popular;
+  const order = searchParams.get("order");
   const search = searchParams.get("search");
   const page = undefined;
   const dapper = new DapperTs(() => {
@@ -72,7 +72,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
       sessionId: undefined,
     };
   });
-  return await dapper.getCommunities(page, order ?? "", search ?? "");
+  return await dapper.getCommunities(
+    page,
+    order === null ? undefined : order,
+    search === null ? undefined : search
+  );
 }
 
 export async function clientLoader({ request }: LoaderFunctionArgs) {

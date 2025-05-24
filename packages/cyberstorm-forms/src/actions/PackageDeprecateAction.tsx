@@ -1,9 +1,7 @@
 import { useFormToaster } from "@thunderstore/cyberstorm-forms";
+import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import {
-  ApiAction,
-  PackageDeprecateActionSchema,
-} from "@thunderstore/ts-api-react-actions";
-import {
+  ApiError,
   packageDeprecate,
   RequestConfig,
 } from "@thunderstore/thunderstore-api";
@@ -15,10 +13,18 @@ export function PackageDeprecateAction(props: {
   dataUpdateTrigger: () => Promise<void>;
   config: () => RequestConfig;
 }) {
-  const { onSubmitSuccess, onSubmitError } = useFormToaster({
-    successMessage: `${
-      props.isDeprecated ? "Undeprecated" : "Deprecated"
-    } package ${props.packageName}`,
+  const { onSubmitSuccess, onSubmitError } = useFormToaster<
+    { isDeprecated: boolean; packageName: string; namespace: string },
+    { isLoggedIn: boolean; e: Error | ApiError | unknown }
+  >({
+    successMessage: (successProps) =>
+      `${successProps.isDeprecated ? "Undeprecated" : "Deprecated"} package ${
+        successProps.packageName
+      }`,
+    errorMessage: (errorProps) =>
+      errorProps.isLoggedIn
+        ? `Error: ${errorProps.e}`
+        : "You must be logged in to deprecate a package!",
   });
 
   function onActionSuccess() {
@@ -31,16 +37,19 @@ export function PackageDeprecateAction(props: {
   }
 
   const onSubmit = ApiAction({
-    schema: PackageDeprecateActionSchema,
-    meta: { packageName: props.packageName, namespace: props.namespace },
     endpoint: packageDeprecate,
     onSubmitSuccess: onActionSuccess,
     onSubmitError: onActionError,
-    config: props.config,
   });
 
   return function () {
-    onSubmit({ is_deprecated: !props.isDeprecated });
+    onSubmit({
+      params: { package: props.packageName, namespace: props.namespace },
+      data: { deprecate: !props.isDeprecated },
+      queryParams: {},
+      config: props.config,
+      useSession: true,
+    });
   };
 }
 
