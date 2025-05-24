@@ -674,37 +674,50 @@ function confirmPartsAreUploaded(
   return Promise.all(finalizedUploads);
 }
 
-function finalizeUpload(uploads: CompleteUpload[]): Promise<FinalizedUpload[]> {
-  const finalizedUploads = uploads.map(async (upload) => {
-    upload.usermedia = await postUsermediaFinish({
-      config: upload.requestConfig,
-      params: {
-        uuid: upload.usermedia.uuid,
-      },
-      data: {
-        parts: upload.partStates.map((ps) => ({
-          ETag: ps.etag,
-          PartNumber: ps.part.meta.part_number,
-        })),
-      },
-      queryParams: {},
-      useSession: true,
-    });
-    if (upload.usermedia.status !== "complete") {
-      throw new Error("Upload failed");
-    } else {
-      return upload as FinalizedUpload;
-    }
+async function finalizeUpload(
+  upload: CompleteUpload
+): Promise<FinalizedUpload> {
+  upload.usermedia = await postUsermediaFinish({
+    config: upload.requestConfig,
+    params: {
+      uuid: upload.usermedia.uuid,
+    },
+    data: {
+      parts: upload.partStates.map((ps) => ({
+        ETag: ps.etag,
+        PartNumber: ps.part.meta.part_number,
+      })),
+    },
+    queryParams: {},
+    useSession: true,
   });
-
-  return Promise.all(finalizedUploads);
+  if (upload.usermedia.status !== "complete") {
+    throw new Error("Upload failed");
+  } else {
+    return upload as FinalizedUpload;
+  }
 }
 
-const uploadPartNode = new GraphNode(uploadPart);
+const uploadPartNode = new GraphNode<
+  {
+    upload: PreparedUpload;
+    partNumber: number;
+    updateProgress: (
+      uniqueId: string,
+      partProgress: UploadPartProgress
+    ) => void;
+  },
+  UploadPartError | [PreparedUpload, CompletePartState]
+>(uploadPart);
 
-const confirmPartsUploadedNode = new GraphNode(confirmPartsAreUploaded);
+const confirmPartsUploadedNode = new GraphNode<
+  (UploadPartError | [PreparedUpload, CompletePartState])[],
+  CompleteUpload
+>(confirmPartsAreUploaded);
 
-const outputNode = new GraphNode(finalizeUpload);
+const outputNode = new GraphNode<CompleteUpload, FinalizedUpload>(
+  finalizeUpload
+);
 
-GraphNode.linkNodes(uploadPartNode, confirmPartsUploadedNode);
-GraphNode.linkNodes(confirmPartsUploadedNode, outputNode);
+GraphNode.multiLink(uploadPartNode, confirmPartsUploadedNode);
+GraphNode.soloLink(confirmPartsUploadedNode, outputNode);

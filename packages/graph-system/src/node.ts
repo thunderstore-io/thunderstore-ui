@@ -1,61 +1,68 @@
 import { GraphEdge } from ".";
+import { MultiGraphEdge } from "./edge";
+import { Collection } from "./types";
 
-type ASD<I> = I extends [] ? (I extends (infer U)[] ? [U] : I) : I;
+// type A<T> = T extends [] ? T[] : T;
 
 export class GraphNode<IType, OType> {
   private _output: OType | undefined = undefined;
-  private _backwardEdges: GraphEdge<unknown, IType, unknown>[] = [];
-  private _backwardEdge: GraphEdge<unknown, IType, unknown> | undefined =
-    undefined;
-  private forwardEdges: GraphEdge<unknown, OType, unknown>[] = [];
-  private readonly action: (args: IType | IType[]) => Promise<OType>;
-  private readonly _isSingleEdged: boolean;
+  private _backwardEdges: (
+    | GraphEdge<unknown, IType, unknown>
+    | MultiGraphEdge<unknown, IType, unknown>
+  )[] = [];
+  private forwardEdges: (
+    | GraphEdge<unknown, OType, unknown>
+    | MultiGraphEdge<unknown, OType, unknown>
+  )[] = [];
+  private readonly action: (args: IType) => Promise<OType>;
 
   constructor(
-    action: (args: IType | IType[]) => Promise<OType>,
-    _isSingleEdged = false
+    // This needs to figure out which it's getting
+    action: (args: IType) => Promise<OType>
   ) {
     this.action = action;
-    this._isSingleEdged = _isSingleEdged;
   }
 
-  public static linkNodes<SSType, Type, TTType>(
-    source: GraphNode<SSType, ASD<Type>>,
-    target: GraphNode<ASD<Type>, TTType>
+  public static soloLink<SSType, Type, TTType>(
+    source: GraphNode<SSType, Type>,
+    target: GraphNode<Type, TTType>
   ) {
-    const edge = new GraphEdge<SSType, ASD<Type>, TTType>(source, target);
+    const edge = new GraphEdge<SSType, Type, TTType>(source, target);
     source.forwardEdges.push(edge);
     target._backwardEdges.push(edge);
   }
 
-  public static collectInputs<SSType, T, TTType>(
-    edges: GraphEdge<SSType, T, TTType>[]
-  ): T[] | null {
-    const result = edges.map((x) => x.source.output);
-    if (result.every((x) => x !== undefined)) {
+  public static multiLink<SSType, Type, TTType>(
+    source: GraphNode<SSType, Type>,
+    target: GraphNode<Type[], TTType>
+  ) {
+    const edge = new MultiGraphEdge<SSType, Type, TTType>(source, target);
+    source.forwardEdges.push(edge);
+    target._backwardEdges.push(edge);
+  }
+
+  public static collect<SSType, T, TTType>(
+    edges: (GraphEdge<SSType, T, TTType> | MultiGraphEdge<SSType, T, TTType>)[]
+  ): Collection<T> | null {
+    const result: Collection<T> = {};
+    const outputs = edges.map((x, index) => {
+      if (x.source.output) {
+        result[index] = x.source.output;
+      }
+      return x.source.output;
+    });
+    if (outputs.every((x) => x !== undefined)) {
       return result;
     } else {
       return null;
     }
   }
 
-  public static collectInput<SSType, T, TTType>(
-    edges: GraphEdge<SSType, T, TTType>[]
-  ): T[] | null {
-    const result = edges.map((x) => x.source.output);
-    if (result.every((x) => x !== undefined)) {
-      return result;
-    } else {
-      return null;
-    }
-  }
-
-  public get backwardEdges(): GraphEdge<unknown, unknown, unknown>[] {
-    if (this._backwardEdge) {
-      return [...this._backwardEdges, this._backwardEdge];
-    } else {
-      return this._backwardEdges;
-    }
+  public get backwardEdges(): (
+    | GraphEdge<unknown, unknown, unknown>
+    | MultiGraphEdge<unknown, unknown, unknown>
+  )[] {
+    return this._backwardEdges;
   }
 
   public get output(): OType | undefined {
@@ -63,17 +70,8 @@ export class GraphNode<IType, OType> {
   }
 
   public get shouldExecute(): boolean {
-    if (this._isSingleEdged) {
-      if (this._backwardEdges.length > 1) {
-        throw new Error("Single edged node can only have one edge");
-      }
-      return (
-        this._backwardEdges.length === 1 &&
-        this._backwardEdges[0].source.output !== undefined
-      );
-    }
     return (
-      GraphNode.collectInputs(this._backwardEdges) !== null &&
+      GraphNode.collect(this._backwardEdges) !== null &&
       this._output === undefined
     );
   }
@@ -82,25 +80,32 @@ export class GraphNode<IType, OType> {
     if (this._output) {
       return this._output;
     }
-    if (this._isSingleEdged) {
-      if (!this._backwardEdge) {
-        throw new Error("Node doesn't have a backward edge");
-      }
-      const input = this._backwardEdge.source.output
-        ? this._backwardEdge.source.output
-        : null;
-      if (!input) {
-        throw new Error("Node inputs aren't yet ready!");
-      }
-      this._output = await this.action(input);
-      return this._output;
-    } else {
-      const inputs = GraphNode.collectInputs(this._backwardEdges);
-      if (!inputs) {
-        throw new Error("Node inputs aren't yet ready!");
-      }
-      this._output = await this.action(inputs);
-      return this._output;
+    let i = null;
+    i = GraphNode.collect(this._backwardEdges);
+    if (!i) {
+      throw new Error("Node inputs aren't yet ready!");
     }
+
+    let input: IType | null = null;
+
+    if (Object.keys(i).length === 1) {
+      input = i["0"];
+    } else {
+      input = [] as IType;
+      if (Array.isArray(input)) {
+        for (const key in i) {
+          input.push(i[key]);
+        }
+      } else {
+        throw new Error("This should never happen, go home.");
+      }
+    }
+
+    if (!input) {
+      throw new Error("Nodes input was somehow not resolved!");
+    }
+
+    this._output = await this.action(input);
+    return this._output;
   }
 }
