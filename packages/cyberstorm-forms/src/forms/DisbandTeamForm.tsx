@@ -1,5 +1,9 @@
 import styles from "./DisbandTeamForm.module.css";
-import { teamDisbandTeam } from "@thunderstore/thunderstore-api";
+import {
+  ApiError,
+  RequestConfig,
+  teamDisband,
+} from "@thunderstore/thunderstore-api";
 import {
   ApiForm,
   teamDisbandFormSchema,
@@ -11,22 +15,35 @@ import {
 } from "@thunderstore/cyberstorm-forms";
 
 import { CyberstormLink } from "@thunderstore/cyberstorm";
+import { teamDisbandRequestParamsSchema } from "@thunderstore/thunderstore-api";
 
-export function DisbandTeamForm(props: { teamName: string }) {
-  const { onSubmitSuccess, onSubmitError } = useFormToaster({
-    successMessage: `Team ${props.teamName} disbanded`,
+export function DisbandTeamForm(props: {
+  teamName: string;
+  config: () => RequestConfig;
+}) {
+  // const { onSubmitSuccess, onSubmitError } = useFormToaster({
+  //   successMessage: (props) => `Team ${props.teamName} disbanded`,
+  // });
+
+  const { onSubmitSuccess, onSubmitError } = useFormToaster<
+    object,
+    { error?: Error | ApiError; message?: string }
+  >({
+    successMessage: () => `Team ${props.teamName} disbanded`,
+    errorMessage: (errorProps) =>
+      errorProps.message ?? "Please check the form for errors and try again.",
   });
 
   return (
     <ApiForm
-      onSubmitSuccess={() => {
-        onSubmitSuccess();
-      }}
+      onSubmitSuccess={onSubmitSuccess}
       onSubmitError={onSubmitError}
-      schema={teamDisbandFormSchema}
-      endpoint={teamDisbandTeam}
+      endpoint={teamDisband}
       formProps={{ className: styles.root }}
-      meta={{ teamIdentifier: props.teamName }}
+      params={{ team_name: props.teamName }}
+      queryParams={{}}
+      config={props.config}
+      schema={teamDisbandRequestParamsSchema}
     >
       <div className={styles.dialog}>
         <p className={styles.description}>
@@ -48,7 +65,7 @@ export function DisbandTeamForm(props: { teamName: string }) {
         </div>
       </div>
       <div className={styles.footer}>
-        <FormSubmitButton text="Disband team" colorScheme="danger" />
+        <FormSubmitButton csVariant="danger">Disband team</FormSubmitButton>
       </div>
     </ApiForm>
   );

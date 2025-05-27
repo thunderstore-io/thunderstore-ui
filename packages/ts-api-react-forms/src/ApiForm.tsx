@@ -1,43 +1,55 @@
 "use client";
 
 import { HTMLAttributes, PropsWithChildren, useCallback } from "react";
-import { z, ZodObject, ZodRawShape } from "zod";
 import { ApiError, RequestConfig } from "@thunderstore/thunderstore-api";
 import { ApiEndpoint } from "@thunderstore/ts-api-react";
 import { FormProvider } from "react-hook-form";
 import { useApiForm } from "./useApiForm";
+import { ZodObject } from "zod";
+import { ZodRawShape } from "zod";
 
 export type ApiFormProps<
-  Schema extends ZodObject<Z>,
-  Meta extends object,
-  Result extends object,
-  Z extends ZodRawShape,
+  Params extends object,
+  QueryParams extends object,
+  Data extends object,
+  Return,
+  Schema extends ZodObject<ZodRawShape>,
 > = {
-  schema: Schema;
-  endpoint: ApiEndpoint<z.infer<Schema>, Meta, Result>;
-  meta: Meta;
-  onSubmitSuccess?: (result: Result) => void;
-  onSubmitError?: (error: Error | ApiError | unknown) => void;
+  endpoint: ApiEndpoint<Params, QueryParams, Data, Return>;
+  params: Params;
+  queryParams: QueryParams;
+  // data?: Data;
   config: () => RequestConfig;
+  onSubmitSuccess?: (result?: Return, message?: string) => void;
+  onSubmitError?: (error?: Error | ApiError, message?: string) => void;
   formProps?: Omit<HTMLAttributes<HTMLFormElement>, "onSubmit">;
+  schema: Schema;
 };
 export function ApiForm<
-  Schema extends ZodObject<Z>,
-  Meta extends object,
-  Result extends object,
-  Z extends ZodRawShape,
->(props: PropsWithChildren<ApiFormProps<Schema, Meta, Result, Z>>) {
-  const { config, schema, meta, endpoint, onSubmitSuccess, onSubmitError } =
-    props;
+  Params extends object,
+  QueryParams extends object,
+  Data extends object,
+  Return,
+  Schema extends ZodObject<ZodRawShape>,
+>(
+  props: PropsWithChildren<
+    ApiFormProps<Params, QueryParams, Data, Return, Schema>
+  >
+) {
+  const { endpoint, onSubmitSuccess, onSubmitError, schema } = props;
   const { form, submitHandler } = useApiForm({
-    schema: schema,
-    meta: meta,
     endpoint: endpoint,
+    schema: schema,
   });
   const onSubmit = useCallback(
-    async (data: z.infer<Schema>) => {
+    async (onSubmitData: Data) => {
       try {
-        const result = await submitHandler(config, data);
+        const result = await submitHandler({
+          params: props.params,
+          queryParams: props.queryParams,
+          data: onSubmitData,
+          config: props.config,
+        });
         if (onSubmitSuccess) {
           onSubmitSuccess(result);
         }
