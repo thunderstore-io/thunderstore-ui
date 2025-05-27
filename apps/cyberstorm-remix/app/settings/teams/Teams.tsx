@@ -28,7 +28,6 @@ import {
   ApiForm,
   createTeamFormSchema,
 } from "@thunderstore/ts-api-react-forms";
-import { createTeam } from "../../../../../packages/thunderstore-api/src";
 
 export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
   return [
@@ -100,7 +99,7 @@ export default function Teams() {
           <div className="settings-items__meta">
             <p className="settings-items__title">Teams</p>
             <p className="settings-items__description">Manage your teams</p>
-            <Modal
+            {/* <Modal
               popoverId={"teamsCreateTeam"}
               csSize="small"
               trigger={
@@ -150,7 +149,7 @@ export default function Teams() {
                   <FormSubmitButton>Create</FormSubmitButton>
                 </div>
               </ApiForm>
-            </Modal>
+            </Modal> */}
           </div>
           <div className="settings-items__content">
             <NewTable

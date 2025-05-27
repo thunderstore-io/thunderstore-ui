@@ -73,7 +73,8 @@ export type SelectSearchProps =
 export const SelectSearch = React.forwardRef<
   HTMLInputElement,
   SelectSearchProps
->(function SelectSearch(props) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+>(function SelectSearch(props, _forwardedRef) {
   const {
     options,
     value,
