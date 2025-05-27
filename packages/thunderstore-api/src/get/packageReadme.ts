@@ -1,0 +1,28 @@
+import { ApiEndpointProps } from "../index";
+import { apiFetch } from "../apiFetch";
+import {
+  PackageReadmeResponseData,
+  packageReadmeResponseDataSchema,
+} from "../schemas/responseSchemas";
+import { z } from "zod";
+import { PackageReadmeRequestParams } from "../schemas/requestSchemas";
+export async function fetchPackageReadme(
+  props: ApiEndpointProps<PackageReadmeRequestParams, object, object>
+): Promise<PackageReadmeResponseData> {
+  const { config, params } = props;
+  const v =
+    params.version_number === "latest"
+      ? "latest"
+      : `v/${params.version_number}`;
+  const path = `api/cyberstorm/package/${params.namespace_id}/${params.package_name}/${v}/readme/`;
+
+  return await apiFetch({
+    args: {
+      config: config,
+      path: path,
+    },
+    requestSchema: z.object({}),
+    queryParamsSchema: z.object({}),
+    responseSchema: packageReadmeResponseDataSchema,
+  });
+}

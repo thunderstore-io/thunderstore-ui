@@ -1,0 +1,25 @@
+import { ApiEndpointProps } from "../index";
+import { apiFetch } from "../apiFetch";
+import { z } from "zod";
+import { ratedPackagesResponseDataSchema } from "../schemas/responseSchemas";
+import { RatedPackagesResponseData } from "../schemas/responseSchemas";
+
+export async function fetchRatedPackages(
+  props: ApiEndpointProps<object, object, object>
+): Promise<RatedPackagesResponseData> {
+  const { config } = props;
+  const path = "api/experimental/current-user/rated-packages/";
+  const request = { cache: "no-store" as RequestCache };
+
+  return await apiFetch({
+    args: {
+      config: config,
+      path: path,
+      request: request,
+      useSession: true,
+    },
+    requestSchema: z.object({}),
+    queryParamsSchema: z.object({}),
+    responseSchema: ratedPackagesResponseDataSchema,
+  });
+}

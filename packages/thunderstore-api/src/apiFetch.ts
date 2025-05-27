@@ -1,4 +1,6 @@
-import { ApiError, RequestConfig } from "./index";
+import { ApiError, ParseError, RequestConfig } from "./index";
+import { z } from "zod";
+import { serializeQueryString } from "./queryString";
 
 const BASE_HEADERS = {
   Accept: "application/json",
@@ -35,22 +37,34 @@ function sleep(delay: number) {
   return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
-export type apiFetchArgs = {
+export type apiFetchArgs<B, QP> = {
   config: () => RequestConfig;
   path: string;
-  query?: string;
-  request?: Omit<RequestInit, "headers">;
+  queryParams?: QP;
+  request?: Omit<RequestInit, "headers" | "body"> & { body?: B };
   useSession?: boolean;
 };
-export async function apiFetch2(args: apiFetchArgs) {
-  const { config, path, request, query, useSession = false } = args;
+
+export async function apiFetch(props: {
+  args: apiFetchArgs<
+    z.infer<typeof props.requestSchema>,
+    z.infer<typeof props.queryParamsSchema>
+  >;
+  requestSchema: z.ZodSchema;
+  queryParamsSchema: z.ZodSchema;
+  responseSchema: z.ZodSchema;
+}): Promise<z.infer<typeof props.responseSchema>> {
+  const { args, responseSchema } = props;
+  const { config, path, request, queryParams, useSession = false } = args;
   const usedConfig: RequestConfig = useSession
     ? config()
     : {
         apiHost: config().apiHost,
         sessionId: undefined,
       };
-  const url = getUrl(usedConfig, path, query);
+  // TODO: Query params have stronger types, but they are not just shown here.
+  // Look into furthering the ensuring of passing proper query params.
+  const url = getUrl(usedConfig, path, queryParams);
 
   const response = await fetchRetry(url, {
     ...(request ?? {}),
@@ -64,26 +78,12 @@ export async function apiFetch2(args: apiFetchArgs) {
     throw await ApiError.createFromResponse(response);
   }
 
-  return response.json();
-}
-
-export function apiFetch(
-  config: () => RequestConfig,
-  path: string,
-  query?: string,
-  request?: Omit<RequestInit, "headers">,
-  useSession?: boolean
-) {
-  // TODO: Update the apiFetch signature to take in object args instead
-  //       of positional arguments and then merge apiFetch and apiFetch2
-  //       together. Someone else's job for now.
-  return apiFetch2({
-    config,
-    path,
-    query,
-    request,
-    useSession,
-  });
+  const parsed = responseSchema.safeParse(await response.json());
+  if (!parsed.success) {
+    throw new ParseError(parsed.error);
+  } else {
+    return parsed.data;
+  }
 }
 
 function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {
@@ -94,7 +94,13 @@ function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {
     : {};
 }
 
-function getUrl(config: RequestConfig, path: string, query?: string) {
-  const fullPath = query ? `${path}?${query}` : path;
+function getUrl(
+  config: RequestConfig,
+  path: string,
+  queryParams?: { key: string; value: string; impotent?: string }[]
+) {
+  const fullPath = queryParams
+    ? `${path}?${serializeQueryString(queryParams)}`
+    : path;
   return new URL(fullPath, config.apiHost);
 }
