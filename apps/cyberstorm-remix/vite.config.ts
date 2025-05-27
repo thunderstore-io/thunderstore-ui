@@ -13,6 +13,11 @@ export default defineConfig({
     // https://vitejs.dev/config/server-options.html#server-watch
     watch: { usePolling: true, interval: 500 },
     hmr: { path: "/remixhmr" },
+    allowedHosts: [
+      ".thunderstore.temp",
+      ".thunderstore.dev",
+      ".thunderstore.io",
+    ],
   },
   plugins: [
     remix({
