@@ -275,8 +275,8 @@ export const emptyUserSchema = z.object({
   subscription: z.object({
     expires: z.string().datetime().nullable(),
   }),
-  teams: z.string().array(),
-  teams_full: z.array(userTeamSchema),
+  teams: z.array(z.string()).or(z.array(userTeamSchema)),
+  teams_full: z.array(userTeamSchema).nullable().optional(),
 });
 
 export type EmptyUser = z.infer<typeof emptyUserSchema>;
@@ -288,8 +288,8 @@ export const userSchema = z.object({
   subscription: z.object({
     expires: z.string().datetime().nullable(),
   }),
-  teams: z.string().array(),
-  teams_full: z.array(userTeamSchema),
+  teams: z.array(z.string()).or(z.array(userTeamSchema)),
+  teams_full: z.array(userTeamSchema).nullable().optional(),
 });
 
 export type User = z.infer<typeof userSchema>;
