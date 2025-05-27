@@ -36,6 +36,7 @@ export default defineConfig({
               route("versions", "p/tabs/Versions/Versions.tsx");
             }
           );
+          route("/package/create", "upload/upload.tsx");
           route(
             "/package/create/docs",
             "tools/package-format-docs/packageFormatDocs.tsx"
