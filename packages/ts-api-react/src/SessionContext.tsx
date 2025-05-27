@@ -23,7 +23,7 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 
 export interface ContextInterface {
   /** Remove session data from provider's state and localStorage. */
-  clearSession: () => void;
+  clearSession: (clearApiHost?: boolean) => void;
   /** Remove session cookies. */
   clearCookies: () => void;
   /** Set SessionData in storage */
@@ -76,8 +76,8 @@ export function SessionProvider(props: Props) {
     setSession(_storage, sessionData);
   };
 
-  const _clearSession = () => {
-    clearSession(_storage);
+  const _clearSession = (clearApiHost: boolean = false) => {
+    clearSession(_storage, clearApiHost);
   };
 
   const _clearCookies = () => {
@@ -163,10 +163,15 @@ export const setSession = (
   _storage.setValue(USERNAME_KEY, sessionData.username);
 };
 
-export const clearSession = (_storage: StorageManager) => {
+export const clearSession = (
+  _storage: StorageManager,
+  clearApiHost: boolean
+) => {
   _storage.removeValue(ID_KEY);
   _storage.removeValue(USERNAME_KEY);
-  _storage.removeValue(API_HOST_KEY);
+  if (clearApiHost) {
+    _storage.removeValue(API_HOST_KEY);
+  }
 };
 
 export const clearCookies = () => {
@@ -242,7 +247,7 @@ export const updateCurrentUser = async (
       ? customClearSession
       : () => {
           // This function gets called when the dapper getCurrentUser gets 401 as a response
-          clearSession(_storage);
+          clearSession(_storage, false);
           // We want to clear the sessionid cookie if it's invalid.
           clearCookies();
         }

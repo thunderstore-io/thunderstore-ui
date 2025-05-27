@@ -1,4 +1,4 @@
-import { redirect, RemixBrowser } from "@remix-run/react";
+import { RemixBrowser } from "@remix-run/react";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 
@@ -24,7 +24,6 @@ const { clearSession, getConfig } = sessionProvider.props
 // INIT DAPPER
 window.Dapper = new DapperTs(getConfig, () => {
   clearSession();
-  redirect("/communities");
 });
 
 Sentry.init({
