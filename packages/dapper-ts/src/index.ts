@@ -5,15 +5,13 @@ import { getDynamicHTML } from "./methods/dynamicHTML";
 import { getCommunities, getCommunity } from "./methods/communities";
 import { getCommunityFilters } from "./methods/communityFilters";
 import { getRatedPackages } from "./methods/ratedPackages";
-export { ratedPackagesSchema } from "./methods/ratedPackages";
-import { getCurrentUser, emptyUser } from "./methods/currentUser";
-export const getEmptyUser = emptyUser;
-export { dependencyShema } from "./methods/packageListings";
-export { currentUserSchema } from "./methods/currentUser";
+import { getCurrentUser } from "./methods/currentUser";
 import {
   getPackageChangelog,
   getPackageReadme,
   getPackageVersions,
+  postPackageSubmissionMetadata,
+  getPackageSubmissionStatus,
 } from "./methods/package";
 import {
   getPackageListingDetails,
@@ -51,6 +49,10 @@ export class DapperTs implements DapperTsInterface {
     this.getTeamDetails = this.getTeamDetails.bind(this);
     this.getTeamMembers = this.getTeamMembers.bind(this);
     this.getTeamServiceAccounts = this.getTeamServiceAccounts.bind(this);
+    this.postPackageSubmissionMetadata =
+      this.postPackageSubmissionMetadata.bind(this);
+    this.getPackageSubmissionStatus =
+      this.getPackageSubmissionStatus.bind(this);
   }
 
   public getDynamicHTML = getDynamicHTML;
@@ -67,4 +69,6 @@ export class DapperTs implements DapperTsInterface {
   public getTeamDetails = getTeamDetails;
   public getTeamMembers = getTeamMembers;
   public getTeamServiceAccounts = getTeamServiceAccounts;
+  public postPackageSubmissionMetadata = postPackageSubmissionMetadata;
+  public getPackageSubmissionStatus = getPackageSubmissionStatus;
 }

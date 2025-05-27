@@ -2,24 +2,17 @@ import { Communities, Community, CommunityFilters } from "./community";
 import {
   PackageListingDetails,
   PackageListings,
+  PackageSubmissionResponse,
   PackageVersion,
 } from "./package";
 import { PackageListingType } from "./props";
-import { MarkdownResponse } from "./shared";
+import { HTMLContentResponse, MarkdownResponse } from "./shared";
 import { TeamDetails, ServiceAccount, TeamMember } from "./team";
 import { CurrentUser } from "./user";
 
 export type GetCommunities = (
   page?: number,
-  ordering?:
-    | "aggregated_fields__package_count"
-    | "-aggregated_fields__package_count"
-    | "aggregated_fields__download_count"
-    | "-aggregated_fields__download_count"
-    | "datetime_created"
-    | "-datetime_created"
-    | "name"
-    | "-name",
+  ordering?: string,
   search?: string
 ) => Promise<Communities>;
 
@@ -35,7 +28,7 @@ export type GetPackageChangelog = (
   namespace: string,
   name: string,
   version?: string
-) => Promise<MarkdownResponse>;
+) => Promise<HTMLContentResponse>;
 
 export type GetPackageListingDetails = (
   community: string,
@@ -66,6 +59,15 @@ export type GetPackageVersions = (
   name: string
 ) => Promise<PackageVersion[]>;
 
+export type PostPackageSubmissionMetadata = (
+  author_name: string,
+  communities: string[],
+  has_nsfw_content: boolean,
+  upload_uuid: string,
+  categories?: string[],
+  community_categories?: { [key: string]: string[] }
+) => Promise<PackageSubmissionResponse>;
+
 export type GetTeamDetails = (teamName: string) => Promise<TeamDetails>;
 
 export type GetTeamMembers = (teamId: string) => Promise<TeamMember[]>;
@@ -73,3 +75,7 @@ export type GetTeamMembers = (teamId: string) => Promise<TeamMember[]>;
 export type GetTeamServiceAccounts = (
   teamName: string
 ) => Promise<ServiceAccount[]>;
+
+export type GetPackageSubmissionStatus = (
+  submissionId: string
+) => Promise<PackageSubmissionResponse>;

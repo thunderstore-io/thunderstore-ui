@@ -7,7 +7,8 @@ export interface CurrentUser {
   subscription: {
     expires: string | null;
   };
-  teams: {
+  teams: string[];
+  teams_full: {
     name: string;
     role: string;
     member_count: number;
