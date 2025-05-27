@@ -75,10 +75,10 @@ const library: LinkLibrary = {
   ),
   Index: (p) => <Link {...p} url={"/communities"} ref={p.customRef} />, // /communities temporarily the frontpage
   ManifestValidator: (p) => (
-    <Link {...p} url={"/developers/manifest-validator/"} ref={p.customRef} />
+    <Link {...p} url={"/tools/manifest-v1-validator/"} ref={p.customRef} />
   ),
   MarkdownPreview: (p) => (
-    <Link {...p} url={"/developers/markdown-preview/"} ref={p.customRef} />
+    <Link {...p} url={"/tools/markdown-preview/"} ref={p.customRef} />
   ),
   Package: (p) => (
     <Link
@@ -137,10 +137,10 @@ const library: LinkLibrary = {
     />
   ),
   PackageFormatDocs: (p) => (
-    <Link {...p} url={"/developers/package-format-docs/"} ref={p.customRef} />
+    <Link {...p} url={"/package/create/docs/"} ref={p.customRef} />
   ),
   PackageUpload: (p) => (
-    <Link {...p} url={"/developers/upload-package/"} ref={p.customRef} />
+    <Link {...p} url={"/package/create/"} ref={p.customRef} />
   ),
   PrivacyPolicy: (p) => (
     <Link {...p} url={"/privacy-policy/"} ref={p.customRef} />
