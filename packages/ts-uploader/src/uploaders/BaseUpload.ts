@@ -56,9 +56,9 @@ export abstract class BaseUpload implements IBaseUploadHandle {
         { time: 0, value: 0 }
       );
     this.metrics.bytesPerSecond = bps.value / (bps.time / 1000);
-    console.log("bps.value", bps.value);
-    console.log("bps.time", bps.time);
-    console.log("this.metrics.bytesPerSecond", this.metrics.bytesPerSecond);
+    // console.log("bps.value", bps.value);
+    // console.log("bps.time", bps.time);
+    // console.log("this.metrics.bytesPerSecond", this.metrics.bytesPerSecond);
   }
 
   get progress(): UploadProgress {
