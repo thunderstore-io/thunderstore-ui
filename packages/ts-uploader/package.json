@@ -17,8 +17,8 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@thunderstore/thunderstore-api": "^0.1.0",
     "@thunderstore/graph-system": "^0.1.0",
+    "@thunderstore/thunderstore-api": "^0.1.0",
     "@thunderstore/typed-event-emitter": "*",
     "crypto-js": "^4.2.0",
     "typescript": "^5.6.2"
