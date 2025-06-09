@@ -52,6 +52,34 @@
     background-color: var(--border-default);
   }
 
+  .upload__no-teams {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .upload__no-teams-text {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+
+    font-size: var(--font-size-body-md);
+  }
+
+  .upload__category {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    align-items: flex-start;
+    align-self: stretch;
+  }
+
+  .upload__category-label {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+
+    font-size: var(--font-size-body-md);
+  }
+
   .drag-n-drop {
     display: flex;
     flex: 1 0 0;
@@ -67,6 +95,11 @@
     background: var(--color-surface-a4);
 
     cursor: pointer;
+  }
+
+  .drag-n-drop--success {
+    border: 2px solid var(--color-cyber-green-7);
+    background: var(--color-surface-1);
   }
 
   .drag-n-drop__body {
@@ -102,13 +135,37 @@
     text-align: center;
   }
 
+  .drag-n-drop__remove-button {
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-body-md);
+    background: transparent;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: none;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+  }
+
+  .upload__nsfw-switch {
+    display: flex;
+    flex-direction: row;
+    gap: var(--gap-md);
+    align-items: center;
+    align-self: flex-start;
+    justify-content: flex-start;
+  }
+
   .upload__buttons {
     display: flex;
     flex-direction: row;
     gap: var(--gap-md);
+    align-self: stretch;
   }
 
   .upload__submit {
+    flex: 1;
     align-self: stretch;
   }
 

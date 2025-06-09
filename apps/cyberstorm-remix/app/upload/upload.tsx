@@ -4,7 +4,6 @@ import {
   NewButton,
   NewIcon,
   NewSelectSearch,
-  NewSelectOption,
   NewSwitch,
   Heading,
   NewLink,
@@ -15,16 +14,14 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { DnDFileInput } from "@thunderstore/react-dnd";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { MultipartUpload, IBaseUploadHandle } from "@thunderstore/ts-uploader";
-import {
-  useUploadProgress,
-  useUploadStatus,
-  useUploadError,
-  useUploadControls,
-} from "@thunderstore/ts-uploader-react";
-// import { useOutletContext } from "@remix-run/react";
-// import { OutletContextShape } from "../../root";
+// import {
+//   useUploadProgress,
+//   useUploadStatus,
+//   useUploadError,
+//   useUploadControls,
+// } from "@thunderstore/ts-uploader-react";
 import { useSession } from "@thunderstore/ts-api-react";
 import {
   faFileZip,
@@ -36,20 +33,17 @@ import { UserMedia } from "@thunderstore/ts-uploader/src/uploaders/types";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { MetaFunction } from "@remix-run/node";
 import { useLoaderData, useOutletContext } from "@remix-run/react";
-// import {
-//   packageSubmissionErrorSchema,
-//   packageSubmissionStatusSchema,
-// } from "@thunderstore/dapper-ts/src/methods/package";
 import {
   PackageSubmissionResult,
   PackageSubmissionStatus,
 } from "@thunderstore/dapper/types";
-import {
-  PackageSubmissionError,
-  packageSubmissionErrorSchema,
-  packageSubmissionStatusSchema,
-} from "@thunderstore/thunderstore-api";
+import { PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
 import { OutletContextShape } from "../root";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { postPackageSubmissionMetadata } from "@thunderstore/dapper-ts/src/methods/package";
+import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 
 interface CommunityOption {
   value: string;
@@ -91,11 +85,16 @@ export default function Upload() {
 
   const outletContext = useOutletContext() as OutletContextShape;
   const requestConfig = outletContext.requestConfig;
+  const session = useSession();
 
-  const communityOptions: CommunityOption[] = [];
+  const toast = useToast();
+
+  // Category options
   const [categoryOptions, setCategoryOptions] = useState<
     { communityId: string; categories: CategoryOption[] }[]
   >([]);
+
+  // Available teams
   const [availableTeams, setAvailableTeams] = useState<
     {
       name: string;
@@ -103,7 +102,12 @@ export default function Upload() {
       member_count: number;
     }[]
   >([]);
+  useEffect(() => {
+    setAvailableTeams(session.getSessionCurrentUser()?.teams_full ?? []);
+  }, [session]);
 
+  // Community options
+  const communityOptions: CommunityOption[] = [];
   for (const community of uploadData.results) {
     communityOptions.push({
       value: community.identifier,
@@ -111,54 +115,19 @@ export default function Upload() {
     });
   }
 
-  // const outletContext = useOutletContext() as OutletContextShape;
-  const session = useSession();
-
-  // Teams do not have a separate identifier, the team name is the identifier
-  useEffect(() => {
-    setAvailableTeams(session.getSessionCurrentUser()?.teams_full ?? []);
-  }, [session]);
-
-  const [NSFW, setNSFW] = useState<boolean>(false);
-  const [team, setTeam] = useState<string>();
-  const [selectedCommunities, setSelectedCommunities] = useState<
-    NewSelectOption[]
-  >([]);
-  const [selectedCategories, setSelectedCategories] = useState<{
-    [key: string]: string[];
-  }>({});
-
-  const handleCategoryChange = useCallback(
-    (val: NewSelectOption[] | undefined, communityId: string) => {
-      setSelectedCategories((prev) => {
-        const newCategories = { ...prev };
-        if (val) {
-          newCategories[communityId] = val.map((v) => v.value);
-        } else {
-          delete newCategories[communityId];
-        }
-        return newCategories;
-      });
-    },
-    []
-  );
+  const [submissionStatus, setSubmissionStatus] =
+    useState<PackageSubmissionStatus>();
 
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [handle, setHandle] = useState<IBaseUploadHandle>();
-  const [lock, setLock] = useState<boolean>(false);
+  // const [lock, setLock] = useState<boolean>(false);
   const [isDone, setIsDone] = useState<boolean>(false);
 
-  const error = useUploadError(handle);
-  const controls = useUploadControls(handle);
+  // const error = useUploadError(handle);
+  // const controls = useUploadControls(handle);
 
   const [usermedia, setUsermedia] = useState<UserMedia>();
-
-  const [submissionStatus, setSubmissionStatus] =
-    useState<PackageSubmissionStatus>();
-  const [submissionError, setSubmissionError] = useState<
-    PackageSubmissionError | undefined
-  >();
 
   const startUpload = useCallback(async () => {
     if (!file) return;
@@ -174,150 +143,40 @@ export default function Upload() {
       requestConfig
     );
 
-    setLock(true);
+    // setLock(true);
     setHandle(upload);
+    toast.addToast({
+      csVariant: "info",
+      children: "Starting upload",
+      duration: 4000,
+    });
     await upload.start();
     setUsermedia(upload.handle);
     setIsDone(true);
-    setLock(false);
+    // setLock(false);
   }, [file, session]);
 
-  const submit = useCallback(async () => {
-    if (!usermedia?.uuid) {
-      setSubmissionError({
-        upload_uuid: null,
-        author_name: null,
-        categories: null,
-        communities: null,
-        has_nsfw_content: null,
-        detail: null,
-        file: null,
-        team: null,
-        __all__: ["Upload not completed"],
-      });
-      return;
-    }
-
-    setSubmissionError(undefined);
-    const config = session.getConfig();
-    const dapper = new DapperTs(() => config);
-    const result = await dapper.postPackageSubmissionMetadata(
-      team ?? "",
-      selectedCommunities.map(
-        (community) => (community as NewSelectOption).value
-      ),
-      NSFW,
-      usermedia.uuid,
-      [],
-      selectedCategories
-    );
-
-    const sub = packageSubmissionStatusSchema.safeParse(result);
-    if (sub.success) {
-      setSubmissionStatus(sub.data);
-    } else {
-      // Check if the submission request had an error
-      const errorParsed = packageSubmissionErrorSchema.safeParse(result);
-      if (errorParsed.success) {
-        setSubmissionError(errorParsed.data);
-        return;
-      }
-    }
-
-    // Handle successful submission
-    if ("task_error" in result && result.task_error) {
-      setSubmissionError({
-        upload_uuid: null,
-        author_name: null,
-        categories: null,
-        communities: null,
-        has_nsfw_content: null,
-        detail: null,
-        file: null,
-        team: null,
-        __all__: [`Submission failed: ${result.result}`],
-      });
-      return;
-    }
-  }, [usermedia, NSFW, team, selectedCommunities, selectedCategories, session]);
-
   useEffect(() => {
-    if (selectedCommunities) {
-      for (const community of selectedCommunities) {
-        // Skip if we already have categories for this community
-        if (
-          categoryOptions.some((opt) => opt.communityId === community.value)
-        ) {
-          continue;
-        }
-        window.Dapper.getCommunityFilters(community.value).then((filters) => {
-          setCategoryOptions((prev) => [
-            ...prev,
-            {
-              communityId: community.value,
-              categories: filters.package_categories.map((cat) => ({
-                value: cat.slug,
-                label: cat.name,
-              })),
-            },
-          ]);
-        });
-      }
+    if (file) {
+      startUpload();
     }
-  }, [selectedCommunities]);
+  }, [file]);
 
   const pollSubmission = async (
     submissionId: string,
     noSleep?: boolean
-  ): Promise<
-    | { success: true; data: PackageSubmissionStatus }
-    | { success: false; data: PackageSubmissionError }
-  > => {
+  ): Promise<PackageSubmissionStatus> => {
     if (!noSleep) {
       // Wait 5 seconds before polling again
       await new Promise((resolve) => setTimeout(resolve, 5000));
     }
-    const result = await window.Dapper.getPackageSubmissionStatus(submissionId);
-    const parsedResult = packageSubmissionStatusSchema.safeParse(result);
-    if (parsedResult.success) {
-      return {
-        success: true,
-        data: parsedResult.data as PackageSubmissionStatus,
-      };
-    } else {
-      const errorParsed = packageSubmissionErrorSchema.safeParse(result);
-      if (errorParsed.success) {
-        return {
-          success: false,
-          data: errorParsed.data as PackageSubmissionError,
-        };
-      }
-      // TODO: Add sentry logging here
-      return {
-        success: false,
-        data: {
-          upload_uuid: null,
-          author_name: null,
-          categories: null,
-          communities: null,
-          has_nsfw_content: null,
-          detail: null,
-          file: null,
-          team: null,
-          __all__: ["Error while polling submission status"],
-        },
-      };
-    }
+    toast.addToast({
+      csVariant: "info",
+      children: "Polling submission status",
+      duration: 4000,
+    });
+    return await window.Dapper.getPackageSubmissionStatus(submissionId);
   };
-
-  // const [errorFetchedChecker, setErrorFetchedChecker] = useState(false);
-  // const [isLoading, setIsLoading] = useState(true);
-  // const [data, setData] = useState(null);
-
-  // const updateState = (jsonData) => {
-  //   setIsloading(false);
-  //   setData(jsonData);
-  // };
 
   const submissionStatusRef = useRef<PackageSubmissionStatus | undefined>(
     submissionStatus
@@ -331,91 +190,53 @@ export default function Upload() {
     ) {
       pollSubmission(submissionStatus.id)
         .then((data) => {
-          if (data.success) {
-            submissionStatusRef.current = data.data;
-            setSubmissionStatus(data.data);
+          submissionStatusRef.current = data;
+          setSubmissionStatus(data);
+          if (data.status === "PENDING") {
+            toast.addToast({
+              csVariant: "info",
+              children:
+                "Submission is still pending, polling again in 5 seconds",
+              duration: 4000,
+            });
           } else {
-            setSubmissionError(data.data);
+            if (data.form_errors || !data.result) {
+              toast.addToast({
+                csVariant: "danger",
+                children:
+                  "Submission completed, but there were issues. Please check the form errors.",
+                duration: 8000,
+              });
+            } else {
+              toast.addToast({
+                csVariant: "success",
+                children: `Package ${data.result?.package_version
+                  .full_name} uploaded successfully! It's now available in ${
+                  data.result?.available_communities.length === 1
+                    ? data.result?.available_communities[0].community.name
+                    : `${data.result?.available_communities.length} communities`
+                }!`,
+                duration: 8000,
+              });
+            }
           }
         })
         .catch((error) => {
           // TODO: Add sentry logging
-          console.error("Error polling submission status:", error);
-          setSubmissionError({
-            upload_uuid: null,
-            author_name: null,
-            categories: null,
-            communities: null,
-            has_nsfw_content: null,
-            detail: null,
-            file: null,
-            team: null,
-            __all__: ["Unable to check submission status"],
+          toast.addToast({
+            csVariant: "danger",
+            children: `Error polling submission status: ${error.message}`,
+            duration: 8000,
           });
         });
     }
   }, [submissionStatus]);
 
-  // useEffect(() => {
-  //   const pollSubmissionStatus = () => {
-  //     while (isPolling && submissionStatus?.status === "PENDING") {
-  //       try {
-  //         (async () => {
-  //           await pollSubmission(submissionStatus.id);
-  //         })();
-  //         setPollingRetriesLeft(3);
-  //         setPollingError(false);
-  //         // Stop polling if status is no longer PENDING
-  //         if (submissionStatus?.status !== "PENDING") {
-  //           setIsPolling(false);
-  //           break;
-  //         }
-  //       } catch {
-  //         setPollingRetriesLeft(pollingRetriesLeft - 1);
-  //         if (pollingRetriesLeft < 0) {
-  //           setPollingError(true);
-  //           setIsPolling(false);
-  //           break;
-  //         }
-  //       }
-  //     }
-  //   };
-
-  //   if (submissionStatus?.status === "PENDING") {
-  //     console.log("Submission status:", submissionStatus?.status);
-  //     setIsPolling(true);
-  //     pollSubmissionStatus();
-  //   }
-
-  //   // Cleanup function to stop polling when component unmounts or status changes
-  //   return () => {
-  //     setIsPolling(false);
-  //   };
-  // }, [submissionStatus]);
-
   const retryPolling = () => {
     if (submissionStatus?.id) {
-      pollSubmission(submissionStatus.id, true).then(
-        (data) => {
-          if (data.success) {
-            setSubmissionStatus(data.data);
-          }
-        },
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        (_error) => {
-          setSubmissionError({
-            upload_uuid: null,
-            author_name: null,
-            categories: null,
-            communities: null,
-            has_nsfw_content: null,
-            detail: null,
-            file: null,
-            team: null,
-            __all__: ["Unable to check submission status"],
-          });
-        }
-      );
+      pollSubmission(submissionStatus.id, true).then((data) => {
+        setSubmissionStatus(data);
+      });
     }
   };
 
@@ -426,6 +247,109 @@ export default function Upload() {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
   };
+
+  function formFieldUpdateAction(
+    state: PackageSubmissionRequestData,
+    action: {
+      field: keyof PackageSubmissionRequestData;
+      value: PackageSubmissionRequestData[keyof PackageSubmissionRequestData];
+    }
+  ) {
+    return {
+      ...state,
+      [action.field]: action.value,
+    };
+  }
+
+  const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
+    author_name: "",
+    communities: [],
+    has_nsfw_content: false,
+    upload_uuid: "",
+    categories: undefined,
+    community_categories: undefined,
+  });
+
+  useEffect(() => {
+    for (const community of formInputs.communities) {
+      // Skip if we already have categories for this community
+      if (categoryOptions.some((opt) => opt.communityId === community)) {
+        continue;
+      }
+      window.Dapper.getCommunityFilters(community).then((filters) => {
+        setCategoryOptions((prev) => [
+          ...prev,
+          {
+            communityId: community,
+            categories: filters.package_categories.map((cat) => ({
+              value: cat.slug,
+              label: cat.name,
+            })),
+          },
+        ]);
+      });
+    }
+  }, [formInputs.communities]);
+
+  type SubmitorOutput = Awaited<
+    ReturnType<typeof postPackageSubmissionMetadata>
+  >;
+
+  async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
+    const config = session.getConfig();
+    const dapper = new DapperTs(() => config);
+    return await dapper.postPackageSubmissionMetadata(
+      data.author_name,
+      data.communities,
+      data.has_nsfw_content,
+      data.upload_uuid,
+      data.categories,
+      data.community_categories
+    );
+  }
+
+  type InputErrors = {
+    [key in keyof typeof formInputs]?: string | string[];
+  };
+
+  const strongForm = useStrongForm<
+    typeof formInputs,
+    PackageSubmissionRequestData,
+    Error,
+    SubmitorOutput,
+    Error,
+    InputErrors
+  >({
+    inputs: formInputs,
+    submitor,
+    onSubmitSuccess: () => {
+      toast.addToast({
+        csVariant: "info",
+        children: `Package submitted, wait for processing to complete.`,
+        duration: 4000,
+      });
+    },
+    onSubmitError: (error) => {
+      toast.addToast({
+        csVariant: "danger",
+        children: `Error occurred: ${error.message || "Unknown error"}`,
+        duration: 8000,
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (usermedia?.uuid) {
+      updateFormFieldState({
+        field: "upload_uuid",
+        value: usermedia.uuid,
+      });
+    }
+  }, [usermedia?.uuid]);
+
+  useEffect(() => {
+    setSubmissionStatus(strongForm.submitOutput);
+  }, [strongForm.submitOutput]);
 
   return (
     <div className="container container--y container--full layout__content">
@@ -440,63 +364,6 @@ export default function Upload() {
       <section className="container container--y container--full upload">
         <div className="container container--x container--full upload__row">
           <div className="upload__meta">
-            <p className="upload__title">Upload file</p>
-            <p className="upload__description">
-              Upload your package as a ZIP file.
-            </p>
-          </div>
-          <div className="upload__content">
-            <DnDFileInput
-              rootClasses="drag-n-drop"
-              name="file"
-              baseState={
-                <div className="drag-n-drop__body">
-                  <NewIcon
-                    wrapperClasses="drag-n-drop__icon"
-                    csVariant="accent"
-                  >
-                    <FontAwesomeIcon icon={faFileZip} />
-                  </NewIcon>
-                  {file ? (
-                    <span>{file.name}</span>
-                  ) : (
-                    <>
-                      <span className="drag-n-drop__main-text">
-                        Drag and drop your ZIP file here
-                      </span>
-                      <span className="drag-n-drop__sub-text">or browse</span>
-                    </>
-                  )}
-                </div>
-              }
-              dragState={
-                <div className="drag-n-drop__body">
-                  <NewIcon
-                    wrapperClasses="drag-n-drop__icon"
-                    csVariant="accent"
-                  >
-                    <FontAwesomeIcon icon={faTreasureChest} />
-                  </NewIcon>
-                  {file ? (
-                    <span>{file.name}</span>
-                  ) : (
-                    <span className="drag-n-drop__main-text">
-                      Drag file here
-                    </span>
-                  )}
-                </div>
-              }
-              onChange={(files) => {
-                setFile(files.item(0));
-              }}
-              readonly={!!handle}
-              fileInputRef={fileInputRef}
-            />
-          </div>
-        </div>
-        <div className="upload__divider" />
-        <div className="container container--x container--full upload__row">
-          <div className="upload__meta">
             <p className="upload__title">Team</p>
             <p className="upload__description">
               Select the team you want your package to be associated with.
@@ -504,119 +371,277 @@ export default function Upload() {
           </div>
           <div className="upload__content">
             <NewSelectSearch
+              placeholder="Select team"
               options={availableTeams?.map((team) => ({
                 value: team.name,
                 label: team.name,
               }))}
-              onChange={(val) => setTeam(val?.value)}
-              value={team ? { value: team, label: team } : undefined}
-            />
-          </div>
-        </div>
-        <div className="container container--x container--full upload__row">
-          <div className="upload__meta">
-            <p className="upload__title">Communities</p>
-            <p className="upload__description">
-              Select communities you want your package to be listed under.
-              Current community is selected by default.
-            </p>
-          </div>
-          <div className="upload__content">
-            <NewSelectSearch
-              placeholder="Select communities"
-              multiple
-              options={communityOptions}
               onChange={(val) => {
                 if (val) {
-                  const newCommunities = Array.isArray(val) ? val : [val];
-                  setSelectedCommunities(newCommunities);
-                  // Remove categories for communities that are no longer selected
-                  setSelectedCategories((prev) =>
-                    Object.fromEntries(
-                      Object.entries(prev).filter(([communityId]) =>
-                        newCommunities.some((c) => c.value === communityId)
-                      )
-                    )
-                  );
+                  updateFormFieldState({
+                    field: "author_name",
+                    value: val.value,
+                  });
                 } else {
-                  setSelectedCommunities([]);
-                  setSelectedCategories({});
+                  updateFormFieldState({
+                    field: "author_name",
+                    value: "",
+                  });
                 }
               }}
-              value={selectedCommunities}
+              value={
+                formInputs.author_name
+                  ? {
+                      value: formInputs.author_name,
+                      label: formInputs.author_name,
+                    }
+                  : undefined
+              }
             />
+            <span className="upload__no-teams">
+              <p className="upload__no-teams-text">No teams available?</p>
+              <NewLink
+                primitiveType="link"
+                href={`${outletContext.domain}/settings/teams/`}
+                csVariant="cyber"
+                rootClasses="community__item"
+              >
+                <span>Create team</span>
+              </NewLink>
+            </span>
           </div>
         </div>
-        <div className="container container--x container--full upload__row">
-          <div className="upload__meta">
-            <p className="upload__title">Categories</p>
-            <p className="upload__description">
-              Select descriptive categories to help people discover your
-              package.
-            </p>
-          </div>
-          <div className="upload__content">
-            {selectedCommunities.map((community) => {
-              const communityData = uploadData.results.find(
-                (c) => c.identifier === community.value
-              );
-              const categories =
-                categoryOptions.find((c) => c.communityId === community.value)
-                  ?.categories || [];
-
-              return (
-                <div key={community.value} className="upload__category-select">
-                  <p className="upload__category-label">
-                    {communityData?.name} categories
+        <div className="upload__divider" />
+        {formInputs.author_name ? (
+          <>
+            <div className="container container--x container--full upload__row">
+              <div className="upload__meta">
+                <p className="upload__title">Upload file</p>
+                <p className="upload__description">
+                  Upload your package as a ZIP file.
+                </p>
+              </div>
+              <div className="upload__content">
+                <DnDFileInput
+                  rootClasses={classnames(
+                    "drag-n-drop",
+                    file ? "drag-n-drop--success" : null
+                  )}
+                  name="file"
+                  baseState={
+                    <div className="drag-n-drop__body">
+                      {file ? (
+                        <>
+                          <NewIcon
+                            wrapperClasses="drag-n-drop__icon"
+                            csVariant="success"
+                          >
+                            <FontAwesomeIcon icon={faCheckCircle} />
+                          </NewIcon>
+                          <span className="drag-n-drop__main-text">
+                            {file.name}{" "}
+                            {`(${
+                              file.size > 0 ? formatBytes(file.size) : "0 Bytes"
+                            })`}
+                          </span>
+                          <button
+                            className="drag-n-drop__remove-button"
+                            onClick={() => {
+                              // TODO: Clicking this causes the file select to open also
+                              setFile(null);
+                              if (fileInputRef.current) {
+                                fileInputRef.current.value = "";
+                              }
+                              handle?.abort();
+                              setHandle(undefined);
+                              setUsermedia(undefined);
+                              setIsDone(false);
+                              // setLock(false);
+                            }}
+                          >
+                            Remove
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <NewIcon
+                            wrapperClasses="drag-n-drop__icon"
+                            csVariant="accent"
+                          >
+                            <FontAwesomeIcon icon={faFileZip} />
+                          </NewIcon>
+                          <span className="drag-n-drop__main-text">
+                            Drag and drop your ZIP file here
+                          </span>
+                          <span className="drag-n-drop__sub-text">5GB max</span>
+                        </>
+                      )}
+                    </div>
+                  }
+                  dragState={
+                    <div className="drag-n-drop__body">
+                      <NewIcon
+                        wrapperClasses="drag-n-drop__icon"
+                        csVariant="accent"
+                      >
+                        <FontAwesomeIcon icon={faTreasureChest} />
+                      </NewIcon>
+                      {file ? (
+                        <span>{file.name}</span>
+                      ) : (
+                        <span className="drag-n-drop__main-text">
+                          Drag file here
+                        </span>
+                      )}
+                    </div>
+                  }
+                  onChange={(files) => {
+                    setFile(files.item(0));
+                  }}
+                  readonly={!!handle}
+                  fileInputRef={fileInputRef}
+                />
+              </div>
+            </div>
+            <div className="upload__divider" />
+          </>
+        ) : null}
+        {isDone && usermedia?.uuid ? (
+          <>
+            <div className="container container--x container--full upload__row">
+              <div className="upload__meta">
+                <p className="upload__title">Communities</p>
+                <p className="upload__description">
+                  Select communities you want your package to be listed under.
+                </p>
+              </div>
+              <div className="upload__content">
+                <NewSelectSearch
+                  placeholder="Select communities"
+                  multiple
+                  options={communityOptions}
+                  onChange={(val) => {
+                    if (val) {
+                      updateFormFieldState({
+                        field: "communities",
+                        value: val.map((c) => c.value),
+                      });
+                    } else {
+                      updateFormFieldState({
+                        field: "communities",
+                        value: [],
+                      });
+                    }
+                  }}
+                  value={formInputs.communities?.map((communityId) => ({
+                    value: communityId,
+                    label:
+                      communityOptions.find((c) => c.value === communityId)
+                        ?.label || "",
+                  }))}
+                />
+              </div>
+            </div>
+            {formInputs.communities && formInputs.communities.length !== 0 && (
+              <div className="container container--x container--full upload__row">
+                <div className="upload__meta">
+                  <p className="upload__title">Categories</p>
+                  <p className="upload__description">
+                    Select descriptive categories to help people discover your
+                    package.
                   </p>
-                  <NewSelectSearch
-                    placeholder="Select categories"
-                    multiple
-                    options={categories}
-                    onChange={(val) => {
-                      handleCategoryChange(
-                        val ? (Array.isArray(val) ? val : [val]) : undefined,
-                        community.value
-                      );
-                    }}
-                    value={selectedCategories[community.value]?.map(
-                      (categoryId) => ({
-                        value: categoryId,
-                        label:
-                          categories.find((c) => c.value === categoryId)
-                            ?.label || "",
-                      })
-                    )}
-                  />
                 </div>
-              );
-            })}
-            {(!selectedCommunities || selectedCommunities.length === 0) && (
-              <p className="upload__category-placeholder">
-                Select a community to choose categories
-              </p>
+                <div className="upload__content">
+                  {formInputs.communities.map((community) => {
+                    const communityData = uploadData.results.find(
+                      (c) => c.identifier === community
+                    );
+                    const categories =
+                      categoryOptions.find((c) => c.communityId === community)
+                        ?.categories || [];
+
+                    return (
+                      <div key={community} className="upload__category">
+                        <p className="upload__category-label">
+                          {communityData?.name}
+                        </p>
+                        <NewSelectSearch
+                          placeholder="Select categories"
+                          multiple
+                          options={categories}
+                          onChange={(val) => {
+                            if (val) {
+                              updateFormFieldState({
+                                field: "community_categories",
+                                value: {
+                                  ...formInputs.community_categories,
+                                  [community]: val
+                                    ? val.map((v) => v.value)
+                                    : [],
+                                },
+                              });
+                            } else {
+                              if (
+                                formInputs.community_categories &&
+                                formInputs.community_categories[community]
+                              ) {
+                                const temp = formInputs.community_categories;
+                                delete temp[community];
+                                updateFormFieldState({
+                                  field: "community_categories",
+                                  value: {
+                                    ...temp,
+                                  },
+                                });
+                              }
+                            }
+                          }}
+                          value={
+                            formInputs.community_categories
+                              ? formInputs.community_categories[community]?.map(
+                                  (categoryId) => ({
+                                    value: categoryId,
+                                    label:
+                                      categories.find(
+                                        (c) => c.value === categoryId
+                                      )?.label || "",
+                                  })
+                                )
+                              : []
+                          }
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             )}
-          </div>
-        </div>
-        <div className="upload__divider" />
-        <div className="container container--x container--full upload__row">
-          <div className="upload__meta">
-            <p className="upload__title">Contains NSFW content</p>
-            <p className="upload__description">
-              Select if your package contains NSFW material. An
-              &ldquo;NSFW&rdquo; -tag will be applied to your package.
-            </p>
-          </div>
-          <div className="upload__content">
-            <NewSwitch
-              value={NSFW}
-              onChange={(checked) => {
-                setNSFW(checked);
-              }}
-            />
-          </div>
-        </div>
-        <div className="upload__divider" />
+            <div className="upload__divider" />
+            <div className="container container--x container--full upload__row">
+              <div className="upload__meta">
+                <p className="upload__title">Contains NSFW content</p>
+                <p className="upload__description">
+                  Select if your package contains NSFW material. An
+                  &ldquo;NSFW&rdquo; -tag will be applied to your package.
+                </p>
+              </div>
+              <div className="upload__content upload__nsfw-switch">
+                No
+                <NewSwitch
+                  value={formInputs.has_nsfw_content}
+                  onChange={(checked) => {
+                    updateFormFieldState({
+                      field: "has_nsfw_content",
+                      value: checked,
+                    });
+                  }}
+                />
+                Yes
+              </div>
+            </div>
+            <div className="upload__divider" />
+          </>
+        ) : null}
         <div className="container container--x container--full upload__row">
           <div className="upload__meta">
             <p className="upload__title">Submit</p>
@@ -637,19 +662,39 @@ export default function Upload() {
                   setHandle(undefined);
                   setUsermedia(undefined);
                   setIsDone(false);
-                  setSelectedCommunities([]);
-                  setSelectedCategories({});
-                  setTeam(undefined);
-                  setNSFW(false);
+                  updateFormFieldState({
+                    field: "author_name",
+                    value: "",
+                  });
+                  updateFormFieldState({
+                    field: "communities",
+                    value: [],
+                  });
+                  updateFormFieldState({
+                    field: "has_nsfw_content",
+                    value: false,
+                  });
+                  updateFormFieldState({
+                    field: "upload_uuid",
+                    value: "",
+                  });
+                  updateFormFieldState({
+                    field: "categories",
+                    value: undefined,
+                  });
+                  updateFormFieldState({
+                    field: "community_categories",
+                    value: undefined,
+                  });
                   setSubmissionStatus(undefined);
-                  setLock(false);
+                  // setLock(false);
                 }}
                 csVariant="secondary"
                 csSize="big"
               >
                 Reset
               </NewButton>
-              <NewButton
+              {/* <NewButton
                 disabled={!file || !!handle || lock}
                 onClick={startUpload}
                 csVariant="accent"
@@ -657,124 +702,172 @@ export default function Upload() {
                 rootClasses="upload__submit"
               >
                 Upload File
-              </NewButton>
+              </NewButton> */}
               <NewButton
-                disabled={!usermedia?.uuid || !selectedCommunities.length}
-                onClick={submit}
+                disabled={
+                  !usermedia?.uuid || formInputs.communities.length === 0
+                }
+                onClick={strongForm.submit}
                 csVariant="accent"
                 csSize="big"
                 rootClasses="upload__submit"
               >
-                Submit Package
+                Submit
               </NewButton>
             </div>
+
+            {/* <>
             <UploadStatus handle={handle} />
-            <div className="submission__status">
-              <div className="submission__status-item">
-                Submission{" "}
-                {submissionStatus ? submissionStatus.status : "not started"}
-              </div>
-            </div>
-            {submissionStatus && (
               <div className="submission__status">
-                {submissionStatus.form_errors &&
-                  Object.keys(submissionStatus.form_errors).length > 0 && (
-                    <div className="submission__error">
-                      <p>Form Errors:</p>
-                      <ul>
-                        {Object.entries(submissionStatus.form_errors).map(
-                          ([field, error]) => (
-                            <li key={field}>
-                              {field !== "__all__" && (
-                                <strong>{formatFieldName(field)}: </strong>
-                              )}
-                              {Array.isArray(error)
-                                ? error.join(", ")
-                                : String(error)}
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </div>
-                  )}
-                {submissionStatus.result && (
-                  <SubmissionResult
-                    submissionStatusResult={submissionStatus.result}
-                  />
-                )}
-                <NewButton onClick={retryPolling}>Retry Status Check</NewButton>
+                <div className="submission__status-item">
+                  Submission{" "}
+                  {submissionStatus ? submissionStatus.status : "not started"}
+                </div>
               </div>
-            )}
-            <NewButton
-              disabled={!handle}
-              onClick={() => handle?.pause()}
-              csVariant="warning"
-              csSize="big"
-              rootClasses="upload__submit"
-            >
-              Pause
-            </NewButton>
-            <NewButton
-              disabled={!handle}
-              onClick={() => handle?.resume()}
-              csVariant="warning"
-              csSize="big"
-              rootClasses="upload__submit"
-            >
-              Resume
-            </NewButton>
-            {error && (
-              <div className="submission__error">
-                <p>{error.message}</p>
-                {error.retryable && (
-                  <NewButton onClick={controls.retry}>Retry</NewButton>
-                )}
-              </div>
-            )}
-            {isDone && !usermedia?.uuid && (
-              <div className="submission__error">
-                <p>
-                  Upload completed but no UUID was received. Please try again.
-                </p>
-              </div>
-            )}
-            {isDone && usermedia?.uuid && !selectedCommunities.length && (
-              <div className="submission__error">
-                <p>Please select at least one community.</p>
-              </div>
-            )}
-            {submissionError && Object.keys(submissionError).length > 0 && (
-              <div className="submission__error">
-                {Object.entries(submissionError).map(([field, errors]) => (
-                  <div key={field}>
-                    {field !== "__all__" && (
-                      <strong>{formatFieldName(field)}: </strong>
+              {submissionStatus && (
+                <div className="submission__status">
+                  {submissionStatus.form_errors &&
+                    Object.keys(submissionStatus.form_errors).length > 0 && (
+                      <div className="submission__error">
+                        <p>Form Errors:</p>
+                        <ul>
+                          {Object.entries(submissionStatus.form_errors).map(
+                            ([field, error]) => (
+                              <li key={field}>
+                                {field !== "__all__" && (
+                                  <strong>{formatFieldName(field)}: </strong>
+                                )}
+                                {Array.isArray(error)
+                                  ? error.join(", ")
+                                  : String(error)}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </div>
                     )}
-                    {Array.isArray(errors) ? errors.join(", ") : String(errors)}
+                  {submissionStatus.result && (
+                    <SubmissionResult
+                      submissionStatusResult={submissionStatus.result}
+                    />
+                  )}
+                  <NewButton onClick={retryPolling}>
+                    Retry Status Check
+                  </NewButton>
+                </div>
+              )}
+              <NewButton
+                disabled={!handle}
+                onClick={() => handle?.pause()}
+                csVariant="warning"
+                csSize="big"
+                rootClasses="upload__submit"
+              >
+                Pause
+              </NewButton>
+              <NewButton
+                disabled={!handle}
+                onClick={() => handle?.resume()}
+                csVariant="warning"
+                csSize="big"
+                rootClasses="upload__submit"
+              >
+                Resume
+              </NewButton>
+              {error && (
+                <div className="submission__error">
+                  <p>{error.message}</p>
+                  {error.retryable && (
+                    <NewButton onClick={controls.retry}>Retry</NewButton>
+                  )}
+                </div>
+              )}
+              {isDone && !usermedia?.uuid && (
+                <div className="submission__error">
+                  <p>
+                    Upload completed but no UUID was received. Please try again.
+                  </p>
+                </div>
+              )}
+              {isDone &&
+                usermedia?.uuid &&
+                formInputs.communities.length === 0 && (
+                  <div className="submission__error">
+                    <p>Please select at least one community.</p>
                   </div>
-                ))}
-              </div>
-            )}
+                )}
+              {submissionStatus?.form_errors &&
+                Object.keys(submissionStatus.form_errors).length > 0 && (
+                  <div className="submission__error">
+                    {Object.entries(submissionStatus.form_errors).map(
+                      ([field, errors]) => (
+                        <div key={field}>
+                          {field !== "__all__" && (
+                            <strong>{formatFieldName(field)}: </strong>
+                          )}
+                          {Array.isArray(errors)
+                            ? errors.join(", ")
+                            : String(errors)}
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
+            </> */}
           </div>
         </div>
+        <div className="upload__divider" />
+        {submissionStatus ? (
+          <div className="submission__status">
+            {submissionStatus.form_errors &&
+              Object.keys(submissionStatus.form_errors).length > 0 && (
+                <div className="submission__error">
+                  <p>Form Errors:</p>
+                  <ul>
+                    {Object.entries(submissionStatus.form_errors).map(
+                      ([field, error]) => (
+                        <li key={field}>
+                          {field !== "__all__" && (
+                            <strong>{formatFieldName(field)}: </strong>
+                          )}
+                          {Array.isArray(error)
+                            ? error.join(", ")
+                            : String(error)}
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              )}
+            {submissionStatus.result && (
+              <SubmissionResult
+                submissionStatusResult={submissionStatus.result}
+              />
+            )}
+            <NewButton onClick={retryPolling}>Retry Status Check</NewButton>
+          </div>
+        ) : null}
+        {/* <div className="upload__divider" />
+        <div className="container container--y container--full">
+          <p>Is submitting: {strongForm.submitting ? "yes" : "no"}</p>
+          <p>inputErrors: {JSON.stringify(strongForm.inputErrors)}</p>
+          <p>author_name: {strongForm.submissionData?.author_name}</p>
+          <p>categories: {strongForm.submissionData?.categories}</p>
+          <p>communities: {strongForm.submissionData?.communities}</p>
+          <p>
+            community_categories:{" "}
+            {strongForm.submissionData?.community_categories
+              ? Object.entries(strongForm.submissionData.community_categories)
+                  .map(([comId, cats]) => `{${comId}: ${cats.join(", ")}}`)
+                  .join(", ")
+              : "None"}
+          </p>
+          <p>has_nsfw_content: {strongForm.submissionData?.has_nsfw_content}</p>
+          <p>upload_uuid: {strongForm.submissionData?.upload_uuid}</p>
+          <p>submitOutput: {JSON.stringify(strongForm.submitOutput)}</p>
+          <p>submitError: {JSON.stringify(strongForm.submitError)}</p>
+        </div> */}
       </section>
-      <div className="container container--y container--full">
-        <span>usermedia: {usermedia?.uuid}</span>
-        <span>NSFW: {NSFW.toString()}</span>
-        <span>team: {team}</span>
-        <span>
-          selectedCommunities: {selectedCommunities.map((c) => c.value)}
-        </span>
-        <span>
-          selectedCategories:{" "}
-          {Object.entries(selectedCategories)
-            .map(
-              ([communityId, categoryIds]) =>
-                `${communityId}: ${categoryIds.join(", ")}`
-            )
-            .join(" | ")}
-        </span>
-      </div>
     </div>
   );
 }
@@ -801,77 +894,77 @@ function formatBytes(bytes: number, decimals = 2) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
-const UploadStatus = (props: { handle?: IBaseUploadHandle }) => {
-  const progress = useUploadProgress(props.handle);
-  const status = useUploadStatus(props.handle);
-  const error = useUploadError(props.handle);
-  const controls = useUploadControls(props.handle);
+// const UploadStatus = (props: { handle?: IBaseUploadHandle }) => {
+//   const progress = useUploadProgress(props.handle);
+//   const status = useUploadStatus(props.handle);
+//   const error = useUploadError(props.handle);
+//   const controls = useUploadControls(props.handle);
 
-  let progressElement = null;
+//   let progressElement = null;
 
-  if (progress) {
-    const partBars = Object.keys(progress.partsProgress).map((partId) => {
-      const partProgress = progress.partsProgress[partId];
-      return (
-        <div className="upload__progress-bar" key={partId}>
-          <div
-            className="upload__progress-bar-fill"
-            style={{
-              width: `${(partProgress.complete / partProgress.total) * 100}%`,
-            }}
-          />
-        </div>
-      );
-    });
-    const percent = Math.round((progress.complete / progress.total) * 100);
-    const speed = formatBytes(progress.metrics.bytesPerSecond, 2);
+//   if (progress) {
+//     const partBars = Object.keys(progress.partsProgress).map((partId) => {
+//       const partProgress = progress.partsProgress[partId];
+//       return (
+//         <div className="upload__progress-bar" key={partId}>
+//           <div
+//             className="upload__progress-bar-fill"
+//             style={{
+//               width: `${(partProgress.complete / partProgress.total) * 100}%`,
+//             }}
+//           />
+//         </div>
+//       );
+//     });
+//     const percent = Math.round((progress.complete / progress.total) * 100);
+//     const speed = formatBytes(progress.metrics.bytesPerSecond, 2);
 
-    progressElement = (
-      <div className="upload__progress">
-        <div className="upload__progress-bar">
-          <div
-            className="upload__progress-bar-fill"
-            style={{ width: `${percent}%` }}
-          />
-        </div>
-        <div className="upload__progress-bars">{partBars}</div>
-        <div className="upload__progress-info">
-          <span>
-            {percent}% {formatBytes(progress.complete)} /{" "}
-            {formatBytes(progress.total)}
-          </span>
-          <span className="upload__progress-speed">{speed} / s</span>
-        </div>
-        {error && (
-          <div className="upload__error">
-            <p>{error.message}</p>
-            {error.retryable && (
-              <NewButton onClick={controls.retry}>Retry</NewButton>
-            )}
-          </div>
-        )}
-        {status === "running" && (
-          <NewButton onClick={controls.pause}>Pause</NewButton>
-        )}
-        {status === "paused" && (
-          <NewButton onClick={controls.resume}>Resume</NewButton>
-        )}
-        {(status === "running" || status === "paused") && (
-          <NewButton onClick={controls.abort}>Cancel</NewButton>
-        )}
-      </div>
-    );
-  }
+//     progressElement = (
+//       <div className="upload__progress">
+//         <div className="upload__progress-bar">
+//           <div
+//             className="upload__progress-bar-fill"
+//             style={{ width: `${percent}%` }}
+//           />
+//         </div>
+//         <div className="upload__progress-bars">{partBars}</div>
+//         <div className="upload__progress-info">
+//           <span>
+//             {percent}% {formatBytes(progress.complete)} /{" "}
+//             {formatBytes(progress.total)}
+//           </span>
+//           <span className="upload__progress-speed">{speed} / s</span>
+//         </div>
+//         {error && (
+//           <div className="upload__error">
+//             <p>{error.message}</p>
+//             {error.retryable && (
+//               <NewButton onClick={controls.retry}>Retry</NewButton>
+//             )}
+//           </div>
+//         )}
+//         {status === "running" && (
+//           <NewButton onClick={controls.pause}>Pause</NewButton>
+//         )}
+//         {status === "paused" && (
+//           <NewButton onClick={controls.resume}>Resume</NewButton>
+//         )}
+//         {(status === "running" || status === "paused") && (
+//           <NewButton onClick={controls.abort}>Cancel</NewButton>
+//         )}
+//       </div>
+//     );
+//   }
 
-  return (
-    <div className="upload__status">
-      <div className="upload__status-header">
-        <p>Upload Status: {status}</p>
-      </div>
-      <div className="upload__status-content">{progressElement}</div>
-    </div>
-  );
-};
+//   return (
+//     <div className="upload__status">
+//       <div className="upload__status-header">
+//         <p>Upload Status: {status}</p>
+//       </div>
+//       <div className="upload__status-content">{progressElement}</div>
+//     </div>
+//   );
+// };
 
 const SubmissionResult = (props: {
   submissionStatusResult: PackageSubmissionResult;
@@ -886,7 +979,7 @@ const SubmissionResult = (props: {
         variant="detailed"
         meta={
           <>
-            <span>
+            <span className="page-header__meta-item">
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faUsers} />
               </NewIcon>
