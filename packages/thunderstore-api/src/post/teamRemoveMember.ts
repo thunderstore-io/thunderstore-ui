@@ -2,6 +2,7 @@
 
 import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
+import z from "zod";
 
 export type teamRemoveMemberMetaArgs = {
   teamIdentifier: string;
@@ -16,12 +17,19 @@ export function teamRemoveMember(
   const path = `/api/cyberstorm/team/${meta.teamIdentifier}/members/remove/`;
 
   return apiFetch({
-    config,
-    path,
-    request: {
-      method: "POST",
-      body: JSON.stringify({ username: meta.username }),
+    args: {
+      config,
+      path,
+      request: {
+        method: "POST",
+        body: JSON.stringify({ username: meta.username }),
+      },
+      useSession: true,
     },
-    useSession: true,
+    // requestSchema: teamRemoveMemberRequestSchema,
+    requestSchema: z.object({}),
+    queryParamsSchema: z.object({}),
+    // responseSchema: teamRemoveMemberResponseSchema,
+    responseSchema: z.object({}),
   });
 }

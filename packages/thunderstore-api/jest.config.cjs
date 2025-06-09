@@ -4,6 +4,6 @@ module.exports = {
   testEnvironment: "node",
   modulePathIgnorePatterns: [
     "<rootDir>/dist/",
-    "<rootDir>/src/fetch/__tests__/defaultConfig.ts",
+    "<rootDir>/src/__tests__/defaultConfig.ts",
   ],
 };
