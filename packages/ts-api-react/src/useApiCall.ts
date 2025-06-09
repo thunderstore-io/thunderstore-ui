@@ -1,14 +1,13 @@
-import { RequestConfig } from "@thunderstore/thunderstore-api";
+import { ApiEndpointProps } from "@thunderstore/thunderstore-api";
 
-export type ApiEndpoint<Data, Meta, Result> = (
-  config: () => RequestConfig,
-  data: Data,
-  meta: Meta
-) => Promise<Result>;
-export function useApiCall<Data, Meta, Result>(
-  endpoint: ApiEndpoint<Data, Meta, Result>
-): (config: () => RequestConfig, data: Data, meta: Meta) => Promise<Result> {
-  return (config: () => RequestConfig, data: Data, meta: Meta) => {
-    return endpoint(config, data, meta);
+export type ApiEndpoint<Params, QueryParams, Data, Return> = (
+  props: ApiEndpointProps<Params, QueryParams, Data>
+) => Return;
+
+export function useApiCall<Params, QueryParams, Data, Return>(
+  endpoint: ApiEndpoint<Params, QueryParams, Data, Return>
+): (props: ApiEndpointProps<Params, QueryParams, Data>) => Return {
+  return (props: ApiEndpointProps<Params, QueryParams, Data>) => {
+    return endpoint(props);
   };
 }

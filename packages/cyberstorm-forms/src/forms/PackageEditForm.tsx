@@ -1,6 +1,6 @@
 import styles from "./PackageEditForm.module.css";
 import {
-  packageEditCategories,
+  // packageEditCategories,
   RequestConfig,
 } from "@thunderstore/thunderstore-api";
 import {
@@ -37,70 +37,72 @@ export function PackageEditForm(props: {
     successMessage: "Changes saved!",
   });
 
-  return (
-    <ApiForm
-      onSubmitSuccess={() => {
-        props.dataUpdateTrigger();
-        onSubmitSuccess();
-      }}
-      onSubmitError={onSubmitError}
-      schema={packageEditFormSchema}
-      meta={{
-        community: props.community,
-        namespace: props.namespace,
-        package: props.package,
-        current_categories: props.current_categories.map((cat) => cat.slug),
-      }}
-      endpoint={packageEditCategories}
-      config={props.config}
-      formProps={{ className: styles.root }}
-    >
-      <div className={styles.dialog}>
-        <div className={styles.main}>
-          <div>
-            <Alert
-              icon={<FontAwesomeIcon icon={faCircleExclamation} />}
-              content={
-                "Changes might take several minutes to show publicly! Info shown below is always up to date."
-              }
-              variant="info"
-            />
-          </div>
-          <div>
-            <div className={styles.statusSection}>
-              <div className={styles.title}>Package status</div>
-              <div className={styles.statusTag}>
-                <Tag
-                  size="medium"
-                  label={props.isDeprecated ? "DEPRECATED" : "ACTIVE"}
-                  colorScheme={props.isDeprecated ? "yellow" : "success"}
-                />
-              </div>
-            </div>
-          </div>
-          <div className={styles.categoriesSelect}>
-            <div className={styles.title}>Edit categories</div>
-            <div className={styles.title}>Current categories</div>
-            {renderCurrentCategories(props.current_categories)}
-            <div className={styles.title}>New categories</div>
-            <FormMultiSelectSearch
-              schema={packageEditFormSchema}
-              name={"new_categories"}
-              placeholder={"Select categories"}
-              options={props.options}
-              fieldFormFormatParser={(v: MultiSelectSearchOption[]) =>
-                v.map((x) => x.value)
-              }
-            />
-          </div>
-        </div>
-        <div className={styles.footer}>
-          <FormSubmitButton text="Save changes" />
-          {props.deprecationButton}
-        </div>
-      </div>
-    </ApiForm>
-  );
+  return <p>Form is currently disabled.</p>;
+
+  // return (
+  //   <ApiForm
+  //     onSubmitSuccess={() => {
+  //       props.dataUpdateTrigger();
+  //       onSubmitSuccess();
+  //     }}
+  //     onSubmitError={onSubmitError}
+  //     schema={packageEditFormSchema}
+  //     meta={{
+  //       community: props.community,
+  //       namespace: props.namespace,
+  //       package: props.package,
+  //       current_categories: props.current_categories.map((cat) => cat.slug),
+  //     }}
+  //     endpoint={packageEditCategories}
+  //     config={props.config}
+  //     formProps={{ className: styles.root }}
+  //   >
+  //     <div className={styles.dialog}>
+  //       <div className={styles.main}>
+  //         <div>
+  //           <Alert
+  //             icon={<FontAwesomeIcon icon={faCircleExclamation} />}
+  //             content={
+  //               "Changes might take several minutes to show publicly! Info shown below is always up to date."
+  //             }
+  //             variant="info"
+  //           />
+  //         </div>
+  //         <div>
+  //           <div className={styles.statusSection}>
+  //             <div className={styles.title}>Package status</div>
+  //             <div className={styles.statusTag}>
+  //               <Tag
+  //                 size="medium"
+  //                 label={props.isDeprecated ? "DEPRECATED" : "ACTIVE"}
+  //                 colorScheme={props.isDeprecated ? "yellow" : "success"}
+  //               />
+  //             </div>
+  //           </div>
+  //         </div>
+  //         <div className={styles.categoriesSelect}>
+  //           <div className={styles.title}>Edit categories</div>
+  //           <div className={styles.title}>Current categories</div>
+  //           {renderCurrentCategories(props.current_categories)}
+  //           <div className={styles.title}>New categories</div>
+  //           <FormMultiSelectSearch
+  //             schema={packageEditFormSchema}
+  //             name={"new_categories"}
+  //             placeholder={"Select categories"}
+  //             options={props.options}
+  //             fieldFormFormatParser={(v: MultiSelectSearchOption[]) =>
+  //               v.map((x) => x.value)
+  //             }
+  //           />
+  //         </div>
+  //       </div>
+  //       <div className={styles.footer}>
+  //         <FormSubmitButton text="Save changes" />
+  //         {props.deprecationButton}
+  //       </div>
+  //     </div>
+  //   </ApiForm>
+  // );
 }
 
 PackageEditForm.displayName = "PackageEditForm";

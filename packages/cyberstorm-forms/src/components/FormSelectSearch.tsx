@@ -1,7 +1,9 @@
 import { z, ZodObject, ZodRawShape } from "zod";
 import { Path, useController } from "react-hook-form";
-import { SelectSearch } from "@thunderstore/cyberstorm";
+import { NewSelectSearch } from "@thunderstore/cyberstorm";
 import styles from "./FormTextInput.module.css";
+import { SelectOption } from "@thunderstore/cyberstorm/src/newComponents/SelectSearch/SelectSearch";
+import { SelectSearchModifiers } from "@thunderstore/cyberstorm-theme/src/components";
 
 export type FormSelectSearchProps<
   Schema extends ZodObject<Z>,
@@ -11,27 +13,34 @@ export type FormSelectSearchProps<
   schema: Schema;
   name: Path<z.infer<Schema>>;
   placeholder?: string;
-  options: string[];
+  options: SelectOption<string>[];
+  multiple?: boolean;
 };
 export function FormSelectSearch<
   Schema extends ZodObject<Z>,
   Z extends ZodRawShape,
->({ name, placeholder, options }: FormSelectSearchProps<Schema, Z>) {
+>({ name, placeholder, options, multiple }: FormSelectSearchProps<Schema, Z>) {
   const {
     field,
     fieldState: { isDirty, invalid, error },
     formState: { isSubmitting, disabled },
   } = useController({ name });
 
+  let modifiers: SelectSearchModifiers[] = [];
+  if (isDirty || invalid) {
+    modifiers = ["invalid"];
+  }
+
   return (
     <>
-      <SelectSearch
+      <NewSelectSearch
         {...field}
         ref={field.ref}
         placeholder={placeholder}
-        color={isDirty || invalid ? (invalid ? "red" : "green") : undefined}
+        csModifiers={modifiers}
         disabled={isSubmitting || disabled}
         options={options}
+        multiple={multiple}
       />
       {error && <span className={styles.errorMessage}>{error.message}</span>}
     </>

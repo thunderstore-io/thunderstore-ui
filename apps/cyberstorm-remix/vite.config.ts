@@ -13,6 +13,11 @@ export default defineConfig({
     // https://vitejs.dev/config/server-options.html#server-watch
     watch: { usePolling: true, interval: 500 },
     hmr: { path: "/remixhmr" },
+    allowedHosts: [
+      ".thunderstore.temp",
+      ".thunderstore.dev",
+      ".thunderstore.io",
+    ],
   },
   plugins: [
     remix({
@@ -36,6 +41,7 @@ export default defineConfig({
               route("versions", "p/tabs/Versions/Versions.tsx");
             }
           );
+          route("/package/create", "upload/upload.tsx");
           route(
             "/package/create/docs",
             "tools/package-format-docs/packageFormatDocs.tsx"

@@ -2,8 +2,8 @@ import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provi
 
 export type UseFormToasterArgs<OnSubmitSuccessDataType, OnSubmitErrorDataType> =
   {
-    successMessage: (props: OnSubmitSuccessDataType) => string | string;
-    errorMessage?: (props: OnSubmitErrorDataType) => string | string;
+    successMessage: ((props: OnSubmitSuccessDataType) => string) | string;
+    errorMessage?: ((props: OnSubmitErrorDataType) => string) | string;
   };
 export type UseFormToasterReturn<
   OnSubmitSuccessDataType,

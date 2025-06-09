@@ -18,11 +18,23 @@ export function NavigationWrapper({ domain }: { domain: string }) {
   const [currentUser, setCurrentUser] = useState<CurrentUser>();
   const session = useSession();
   useEffect(() => {
-    const cu = session.getSessionCurrentUser();
-    if (cu.username) {
-      setCurrentUser(session.getSessionCurrentUser());
-    } else {
-      setCurrentUser(undefined);
+    let cu: CurrentUser | undefined = undefined;
+    // TODO: Fix this issue in a lasting way.
+    // IMPORTANT: If this try catch is removed and for whatever
+    // reason the retrieval of current user fails, the throws from
+    // inside the useEffect will cause the whole navigation and the
+    // navigationwrapper to rerender. Which then becomes a infinite
+    // loop of trying to parse the currentUser stored in the storage.
+    try {
+      cu = session.getSessionCurrentUser();
+      if (cu.username) {
+        setCurrentUser(cu);
+      } else {
+        setCurrentUser(undefined);
+      }
+    } catch (e) {
+      // If we can't get the current user, we just set it to undefined.
+      console.error("Failed to get current user from session:", e);
     }
   }, []);
 

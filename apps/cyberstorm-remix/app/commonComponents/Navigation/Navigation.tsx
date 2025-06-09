@@ -101,27 +101,27 @@ export function Navigation(props: {
               </NewDropDownItem>
               <NewDropDownItem>
                 <NewLink
-                  primitiveType="link"
                   rootClasses={"dropdown__item"}
-                  href="/package/create/docs/"
+                  primitiveType="cyberstormLink"
+                  linkId="PackageFormatDocs"
                 >
                   Package Format Docs
                 </NewLink>
               </NewDropDownItem>
               <NewDropDownItem>
                 <NewLink
-                  primitiveType="link"
+                  primitiveType="cyberstormLink"
+                  linkId="ManifestValidator"
                   rootClasses={"dropdown__item"}
-                  href="/tools/manifest-v1-validator/"
                 >
                   Manifest Validator
                 </NewLink>
               </NewDropDownItem>
               <NewDropDownItem>
                 <NewLink
-                  primitiveType="link"
                   rootClasses={"dropdown__item"}
-                  href="/tools/markdown-preview/"
+                  primitiveType="cyberstormLink"
+                  linkId="MarkdownPreview"
                 >
                   Markdown Preview
                 </NewLink>
@@ -160,8 +160,8 @@ export function Navigation(props: {
           {currentUser?.username ? (
             <span className="navigation-header__profile-actions">
               <NewButton
-                primitiveType="link"
-                href={`${domain}/package/create/`}
+                primitiveType="cyberstormLink"
+                linkId="PackageUpload"
                 csVariant="secondary"
                 csModifiers={["ghost", "only-icon"]}
                 tooltipText="Upload"
@@ -466,22 +466,22 @@ export function MobileNavigationMenu({ domain }: { domain: string }) {
               GitHub
             </NewLink>
             <NewLink
-              primitiveType="link"
-              href="/package/create/docs/"
+              primitiveType="cyberstormLink"
+              linkId="PackageFormatDocs"
               rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
             >
               Package Format Docs
             </NewLink>
             <NewLink
-              primitiveType="link"
-              href="/tools/markdown-preview/"
+              primitiveType="cyberstormLink"
+              linkId="MarkdownPreview"
               rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
             >
               Markdown Preview
             </NewLink>
             <NewLink
-              primitiveType="link"
-              href="/tools/manifest-v1-validator/"
+              primitiveType="cyberstormLink"
+              linkId="ManifestValidator"
               rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
             >
               Manifest Validator

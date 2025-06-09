@@ -1,0 +1,25 @@
+{
+  "name": "@thunderstore/ts-uploader-react",
+  "version": "0.1.0",
+  "description": "Provides react components for handling file uploads to Thunderstore",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/ts-uploader-react",
+  "main": "dist/thunderstore-ts-uploader-react.cjs.js",
+  "module": "dist/thunderstore-ts-uploader-react.esm.js",
+  "types": "dist/thunderstore-ts-uploader-react.cjs.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@thunderstore/ts-uploader": "*",
+    "@types/react": "^18.3.8",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "typescript-plugin-css-modules": "^5.1.0"
+  }
+}

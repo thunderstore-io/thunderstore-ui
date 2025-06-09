@@ -103,8 +103,8 @@ export function Footer() {
                   </li>
                   <li>
                     <NewLink
-                      primitiveType="link"
-                      href="/package/create/docs/"
+                      primitiveType="cyberstormLink"
+                      linkId="PackageFormatDocs"
                       csVariant="primary"
                     >
                       Package Format Docs
@@ -112,8 +112,8 @@ export function Footer() {
                   </li>
                   <li>
                     <NewLink
-                      primitiveType="link"
-                      href="/tools/manifest-v1-validator/"
+                      primitiveType="cyberstormLink"
+                      linkId="ManifestValidator"
                       csVariant="primary"
                     >
                       Manifest Validator
@@ -121,8 +121,8 @@ export function Footer() {
                   </li>
                   <li>
                     <NewLink
-                      primitiveType="link"
-                      href="/tools/markdown-preview/"
+                      primitiveType="cyberstormLink"
+                      linkId="MarkdownPreview"
                       csVariant="primary"
                     >
                       Markdown Preview

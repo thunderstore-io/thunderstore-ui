@@ -2,15 +2,12 @@ import {
   fetchPackageChangelog,
   fetchPackageReadme,
   fetchPackageVersions,
+  postPackageSubmission,
+  fetchPackageSubmissionStatus,
 } from "@thunderstore/thunderstore-api";
 import { z } from "zod";
 
 import { DapperTsInterface } from "../index";
-import { formatErrorMessage } from "../utils";
-
-const prerenderedMarkup = z.object({
-  html: z.string(),
-});
 
 export async function getPackageChangelog(
   this: DapperTsInterface,
@@ -18,19 +15,18 @@ export async function getPackageChangelog(
   packageName: string,
   versionNumber?: string
 ) {
-  const data = await fetchPackageChangelog(
-    this.config,
-    namespaceId,
-    packageName,
-    versionNumber
-  );
-  const parsed = prerenderedMarkup.safeParse(data);
+  const data = await fetchPackageChangelog({
+    config: this.config,
+    params: {
+      namespace_id: namespaceId,
+      package_name: packageName,
+      version_number: versionNumber,
+    },
+    data: {},
+    queryParams: {},
+  });
 
-  if (!parsed.success) {
-    throw new Error(formatErrorMessage(parsed.error));
-  }
-
-  return parsed.data;
+  return data;
 }
 
 export async function getPackageReadme(
@@ -39,19 +35,18 @@ export async function getPackageReadme(
   packageName: string,
   versionNumber?: string
 ) {
-  const data = await fetchPackageReadme(
-    this.config,
-    namespaceId,
-    packageName,
-    versionNumber
-  );
-  const parsed = prerenderedMarkup.safeParse(data);
+  const data = await fetchPackageReadme({
+    config: this.config,
+    params: {
+      namespace_id: namespaceId,
+      package_name: packageName,
+      version_number: versionNumber,
+    },
+    data: {},
+    queryParams: {},
+  });
 
-  if (!parsed.success) {
-    throw new Error(formatErrorMessage(parsed.error));
-  }
-
-  return parsed.data;
+  return data;
 }
 
 export const versionsSchema = z
@@ -69,16 +64,57 @@ export async function getPackageVersions(
   namespaceId: string,
   packageName: string
 ) {
-  const data = await fetchPackageVersions(
-    this.config,
-    namespaceId,
-    packageName
-  );
-  const parsed = versionsSchema.safeParse(data);
+  const data = await fetchPackageVersions({
+    config: this.config,
+    params: {
+      namespace_id: namespaceId,
+      package_name: packageName,
+    },
+    data: {},
+    queryParams: {},
+  });
 
-  if (!parsed.success) {
-    throw new Error(formatErrorMessage(parsed.error));
-  }
+  return data;
+}
 
-  return parsed.data;
+export async function postPackageSubmissionMetadata(
+  this: DapperTsInterface,
+  author_name: string,
+  communities: string[],
+  has_nsfw_content: boolean,
+  upload_uuid: string,
+  categories?: string[],
+  community_categories?: { [key: string]: string[] }
+) {
+  const data = await postPackageSubmission({
+    config: this.config,
+    params: {},
+    data: {
+      author_name,
+      communities,
+      has_nsfw_content,
+      upload_uuid,
+      categories,
+      community_categories,
+    },
+    queryParams: {},
+  });
+
+  return data;
+}
+
+export async function getPackageSubmissionStatus(
+  this: DapperTsInterface,
+  submissionId: string
+) {
+  const response = await fetchPackageSubmissionStatus({
+    config: this.config,
+    params: {
+      submission_id: submissionId,
+    },
+    data: {},
+    queryParams: {},
+  });
+
+  return response;
 }

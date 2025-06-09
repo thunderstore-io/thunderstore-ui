@@ -25,3 +25,11 @@ export interface PackageListingQueryParams {
   deprecated: boolean;
   // Disabled until the UX for date filtering is resolved
 }
+
+export type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JSONValue[]
+  | { [key: string]: JSONValue };

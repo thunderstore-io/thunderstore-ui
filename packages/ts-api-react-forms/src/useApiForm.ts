@@ -1,54 +1,56 @@
-import { z, ZodObject, ZodRawShape } from "zod";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { handleFormApiErrors } from "./errors";
 import { ApiEndpoint, useApiCall } from "@thunderstore/ts-api-react";
-import { RequestConfig } from "@thunderstore/thunderstore-api";
+import { ApiEndpointProps } from "@thunderstore/thunderstore-api";
+import { ZodObject, ZodRawShape } from "zod";
 
 export type UseApiFormArgs<
-  Schema extends ZodObject<Z>,
-  Meta extends object,
-  Result extends object,
-  Z extends ZodRawShape,
+  Params extends object,
+  QueryParams extends object,
+  Data extends object,
+  Return,
 > = {
-  schema: Schema;
-  meta: Meta;
-  endpoint: ApiEndpoint<z.infer<Schema>, Meta, Result>;
+  endpoint: ApiEndpoint<Params, QueryParams, Data, Return>;
 };
 export type UseApiFormReturn<
-  Schema extends ZodObject<Z>,
-  Result extends object,
-  Z extends ZodRawShape,
+  Params extends object,
+  QueryParams extends object,
+  Data extends object,
+  Return,
 > = {
-  form: UseFormReturn<z.infer<Schema>>;
+  form: UseFormReturn<Data>;
   submitHandler: (
-    config: () => RequestConfig,
-    data: z.infer<Schema>
-  ) => Promise<Result>;
+    onSubmitProps: ApiEndpointProps<Params, QueryParams, Data>
+  ) => Promise<Return>;
 };
 export function useApiForm<
-  Schema extends ZodObject<Z>,
-  Meta extends object,
-  Result extends object,
-  Z extends ZodRawShape,
+  Schema extends ZodObject<ZodRawShape>,
+  Params extends object,
+  QueryParams extends object,
+  Data extends object,
+  Return,
 >(
-  args: UseApiFormArgs<Schema, Meta, Result, Z>
-): UseApiFormReturn<Schema, Result, Z> {
-  const { schema, meta, endpoint } = args;
+  args: UseApiFormArgs<Params, QueryParams, Data, Return> & {
+    schema: Schema;
+  }
+): UseApiFormReturn<Params, QueryParams, Data, Return> {
+  const { endpoint, schema } = args;
   const apiCall = useApiCall(endpoint);
 
-  const form = useForm<z.infer<Schema>>({
+  const form = useForm<Data>({
     mode: "onSubmit",
     resolver: zodResolver(schema),
   });
-  const submitHandler = async (
-    config: () => RequestConfig,
-    data: z.infer<Schema>
+  const submitHandler: (
+    props: ApiEndpointProps<Params, QueryParams, Data>
+  ) => Promise<ReturnType<typeof endpoint>> = async (
+    props: ApiEndpointProps<Params, QueryParams, Data>
   ) => {
     try {
-      return await apiCall(config, data, meta);
+      return await apiCall(props);
     } catch (e) {
-      handleFormApiErrors(e, schema, form.setError);
+      handleFormApiErrors<Schema, Data>(e, schema, form.setError);
       throw e;
     }
   };
