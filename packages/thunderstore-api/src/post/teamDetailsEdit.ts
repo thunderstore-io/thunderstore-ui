@@ -2,6 +2,7 @@
 
 import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
+import z from "zod";
 
 export type teamDetailsEditMetaArgs = {
   teamIdentifier: string;
@@ -19,12 +20,19 @@ export function teamDetailsEdit(
   const path = `api/cyberstorm/team/${meta.teamIdentifier}/edit/`;
 
   return apiFetch({
-    config,
-    path,
-    request: {
-      method: "POST",
-      body: JSON.stringify(data),
+    args: {
+      config,
+      path,
+      request: {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      useSession: true,
     },
-    useSession: true,
+    // requestSchema: teamDetailsEditRequestSchema,
+    requestSchema: z.object({}),
+    queryParamsSchema: z.object({}),
+    // responseSchema: teamDetailsEditResponseSchema,
+    responseSchema: z.object({}),
   });
 }

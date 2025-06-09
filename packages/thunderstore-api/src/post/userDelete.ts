@@ -2,6 +2,7 @@
 
 import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
+import z from "zod";
 
 export interface userDeleteApiArgs {
   verification: string;
@@ -14,12 +15,19 @@ export function userDelete(
   const path = `/api/cyberstorm/current-user/delete/`;
 
   return apiFetch({
-    config,
-    path,
-    request: {
-      method: "POST",
-      body: JSON.stringify(data),
+    args: {
+      config,
+      path,
+      request: {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      useSession: true,
     },
-    useSession: true,
+    // requestSchema: userDeleteRequestSchema,
+    requestSchema: z.object({}),
+    queryParamsSchema: z.object({}),
+    // responseSchema: userDeleteResponseSchema,
+    responseSchema: z.object({}),
   });
 }

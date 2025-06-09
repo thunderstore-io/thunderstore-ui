@@ -108,7 +108,7 @@ export type PackageListingDetailsResponseData = z.infer<
 
 // PackageReadmeResponse
 export const packageReadmeResponseDataSchema = z.object({
-  readme: z.string(),
+  html: z.string(),
 });
 
 export type PackageReadmeResponseData = z.infer<

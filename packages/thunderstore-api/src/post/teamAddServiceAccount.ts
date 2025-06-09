@@ -2,6 +2,7 @@
 
 import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
+import z from "zod";
 
 export type teamAddServiceAccountMetaArgs = {
   teamIdentifier: string;
@@ -19,12 +20,19 @@ export function teamAddServiceAccount(
   const path = `api/cyberstorm/team/${meta.teamIdentifier}/service-account/create/`;
 
   return apiFetch({
-    config,
-    path,
-    request: {
-      method: "POST",
-      body: JSON.stringify(data),
+    args: {
+      config,
+      path,
+      request: {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      useSession: true,
     },
-    useSession: true,
+    // requestSchema: teamAddServiceAccountDataSchema,
+    requestSchema: z.object({}),
+    queryParamsSchema: z.object({}),
+    // responseSchema: teamAddServiceAccountResponseDataSchema,
+    responseSchema: z.object({}),
   });
 }

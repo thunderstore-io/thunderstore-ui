@@ -34,7 +34,11 @@ export function PackageCard(props: Props) {
           namespace={p.namespace}
           package={p.name}
         >
-          <img className={styles.image} src={p.icon_url} alt={p.name} />
+          <img
+            className={styles.image}
+            src={p.icon_url ? p.icon_url : undefined}
+            alt={p.name}
+          />
           {getPackageFlags(p)}
         </CyberstormLink>
       </div>
