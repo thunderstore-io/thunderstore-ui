@@ -58,8 +58,8 @@ export default defineConfig({
             "p/dependants/Dependants.tsx"
           );
           route("/c/:communityId/p/:namespaceId", "p/team/Team.tsx");
+          route("/package/create", "upload/upload.tsx");
           if (process.env.ENABLE_BROKEN_PAGES) {
-            route("/package/create", "upload/upload.tsx");
             route("/teams", "settings/teams/Teams.tsx");
             route(
               "/teams/:namespaceId",

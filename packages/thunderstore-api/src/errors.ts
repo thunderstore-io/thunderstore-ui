@@ -63,6 +63,18 @@ export class ApiError extends Error {
   }
 }
 
+export class RequestBodyParseError extends Error {
+  constructor(public error: z.ZodError) {
+    super(error.message);
+  }
+}
+
+export class RequestQueryParamsParseError extends Error {
+  constructor(public error: z.ZodError) {
+    super(error.message);
+  }
+}
+
 export class ParseError extends Error {
   constructor(public error: z.ZodError) {
     super(error.message);

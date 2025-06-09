@@ -182,8 +182,8 @@ export class MultipartUpload extends BaseUpload {
 
     this.graphCompleteListener = this.executor.onGraphComplete.addListener(
       (output) => {
+        this.usermedia = output.usermedia;
         this.setStatus("complete");
-        console.log("Upload complete:", output);
       }
     );
 
@@ -229,15 +229,18 @@ export class MultipartUpload extends BaseUpload {
       if (this.graphCompleteListener) {
         this.graphCompleteListener();
       }
-      this.usermedia = await postUsermediaAbort({
-        config: this.requestConfig,
-        params: {
-          uuid: this.usermedia.uuid,
-        },
-        data: {},
-        queryParams: {},
-        useSession: true,
-      });
+      if (this.usermedia.status !== "upload_complete") {
+        // This might be bad, but we can't abort something that is done.
+        this.usermedia = await postUsermediaAbort({
+          config: this.requestConfig,
+          params: {
+            uuid: this.usermedia.uuid,
+          },
+          data: {},
+          queryParams: {},
+          useSession: true,
+        });
+      }
       // Reset the executor to prevent further uploads with stale upload state
       this.executor = undefined;
       this.setStatus("aborted");

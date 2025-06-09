@@ -29,6 +29,7 @@ export function postPackageSubmission(
         cache: "no-store",
         body: JSON.stringify(data),
       },
+      bodyRaw: data,
       useSession: true,
     },
     requestSchema: packageSubmissionRequestDataSchema,

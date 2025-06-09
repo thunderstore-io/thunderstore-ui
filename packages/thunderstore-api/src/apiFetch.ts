@@ -1,4 +1,10 @@
-import { ApiError, ParseError, RequestConfig } from "./index";
+import {
+  ApiError,
+  ParseError,
+  RequestConfig,
+  RequestBodyParseError,
+  RequestQueryParamsParseError,
+} from "./index";
 import { z } from "zod";
 import { serializeQueryString } from "./queryString";
 
@@ -41,8 +47,9 @@ export type apiFetchArgs<B, QP> = {
   config: () => RequestConfig;
   path: string;
   queryParams?: QP;
-  request?: Omit<RequestInit, "headers" | "body"> & { body?: B };
+  request?: Omit<RequestInit, "headers" | "body"> & { body?: string };
   useSession?: boolean;
+  bodyRaw?: B;
 };
 
 export async function apiFetch(props: {
@@ -54,7 +61,21 @@ export async function apiFetch(props: {
   queryParamsSchema: z.ZodSchema;
   responseSchema: z.ZodSchema;
 }): Promise<z.infer<typeof props.responseSchema>> {
-  const { args, responseSchema } = props;
+  const { args, requestSchema, queryParamsSchema, responseSchema } = props;
+
+  if (args.bodyRaw) {
+    const parsedRequestBody = requestSchema.safeParse(args.bodyRaw);
+    if (!parsedRequestBody.success) {
+      throw new RequestBodyParseError(parsedRequestBody.error);
+    }
+  }
+  if (args.queryParams) {
+    const parsedQueryParams = queryParamsSchema.safeParse(args.queryParams);
+    if (!parsedQueryParams.success) {
+      throw new RequestQueryParamsParseError(parsedQueryParams.error);
+    }
+  }
+
   const { config, path, request, queryParams, useSession = false } = args;
   const usedConfig: RequestConfig = useSession
     ? config()
