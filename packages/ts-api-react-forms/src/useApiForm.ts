@@ -42,7 +42,9 @@ export function useApiForm<
     mode: "onSubmit",
     resolver: zodResolver(schema),
   });
-  const submitHandler = async (
+  const submitHandler: (
+    props: ApiEndpointProps<Params, QueryParams, Data>
+  ) => Promise<ReturnType<typeof endpoint>> = async (
     props: ApiEndpointProps<Params, QueryParams, Data>
   ) => {
     try {

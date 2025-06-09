@@ -1,5 +1,6 @@
-import { config, testData } from "./defaultConfig";
+import { config, testData } from "../../__tests__/defaultConfig";
 import { fetchNamespacePackageListings } from "../namespacePackageListings";
+import { PackageListingsOrderingEnum } from "../../schemas/queryParamSchemas";
 
 interface PartialPackage {
   community_identifier: string;
@@ -8,11 +9,25 @@ interface PartialPackage {
 
 it("receives namespace scoped paginated package listing", async () => {
   const { communityId, namespaceId } = testData;
-  const response = await fetchNamespacePackageListings(
+  const response = await fetchNamespacePackageListings({
     config,
-    communityId,
-    namespaceId
-  );
+    params: { community_id: communityId, namespace_id: namespaceId },
+    data: {},
+    queryParams: [
+      {
+        key: "ordering",
+        value: PackageListingsOrderingEnum.Updated,
+        impotent: PackageListingsOrderingEnum.Updated,
+      },
+      { key: "page", value: 1, impotent: 1 },
+      { key: "q", value: "" },
+      { key: "included_categories", value: [] },
+      { key: "excluded_categories", value: [] },
+      { key: "section", value: "" },
+      { key: "nsfw", value: false, impotent: false },
+      { key: "deprecated", value: false, impotent: false },
+    ],
+  });
 
   expect(typeof response.count).toEqual("number");
   expect(Array.isArray(response.results)).toEqual(true);

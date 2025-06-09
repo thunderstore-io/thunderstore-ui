@@ -11,7 +11,7 @@ export async function fetchPackageReadme(
 ): Promise<PackageReadmeResponseData> {
   const { config, params } = props;
   const v =
-    params.version_number === "latest"
+    params.version_number === "latest" || params.version_number === undefined
       ? "latest"
       : `v/${params.version_number}`;
   const path = `api/cyberstorm/package/${params.namespace_id}/${params.package_name}/${v}/readme/`;

@@ -2,6 +2,7 @@ import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import {
   PackageSubmissionRequestData,
+  packageSubmissionRequestDataSchema,
   SubmissionValidateManifestRequestData,
   submissionValidateManifestRequestDataSchema,
 } from "../schemas/requestSchemas";
@@ -30,7 +31,7 @@ export function postPackageSubmission(
       },
       useSession: true,
     },
-    requestSchema: z.object({}),
+    requestSchema: packageSubmissionRequestDataSchema,
     queryParamsSchema: z.object({}),
     responseSchema: packageSubmissionResponseDataSchema,
   });

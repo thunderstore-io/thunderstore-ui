@@ -2,6 +2,7 @@
 
 import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
+import z from "zod";
 
 export type teamServiceAccountRemoveMetaArgs = {
   serviceAccountIdentifier: string;
@@ -16,14 +17,21 @@ export function teamServiceAccountRemove(
   const path = `/api/cyberstorm/team/${meta.teamName}/service-account/delete/`;
 
   return apiFetch({
-    config,
-    path,
-    request: {
-      method: "POST",
-      body: JSON.stringify({
-        service_account_uuid: meta.serviceAccountIdentifier,
-      }),
+    args: {
+      config,
+      path,
+      request: {
+        method: "POST",
+        body: JSON.stringify({
+          service_account_uuid: meta.serviceAccountIdentifier,
+        }),
+      },
+      useSession: true,
     },
-    useSession: true,
+    // requestSchema: teamServiceAccountRemoveRequestSchema,
+    requestSchema: z.object({}),
+    queryParamsSchema: z.object({}),
+    // responseSchema: teamServiceAccountRemoveResponseSchema,
+    responseSchema: z.object({}),
   });
 }

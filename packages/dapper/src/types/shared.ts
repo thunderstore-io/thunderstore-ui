@@ -4,7 +4,7 @@ export type DynamicLink = {
 };
 
 export type MarkdownResponse = {
-  readme: string;
+  html: string;
 };
 
 export type HTMLContentResponse = {

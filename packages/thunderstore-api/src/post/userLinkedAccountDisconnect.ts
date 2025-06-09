@@ -2,6 +2,7 @@
 
 import { RequestConfig } from "../index";
 import { apiFetch } from "../apiFetch";
+import z from "zod";
 
 export interface userLinkedAccountDisconnectApiArgs {
   provider: "discord" | "github" | "overwolf";
@@ -14,12 +15,19 @@ export function userLinkedAccountDisconnect(
   const path = `/api/cyberstorm/current-user/linked-account-disconnect/`;
 
   return apiFetch({
-    config,
-    path,
-    request: {
-      method: "POST",
-      body: JSON.stringify(data),
+    args: {
+      config,
+      path,
+      request: {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+      useSession: true,
     },
-    useSession: true,
+    // requestSchema: userLinkedAccountDisconnectRequestSchema,
+    requestSchema: z.object({}),
+    queryParamsSchema: z.object({}),
+    // responseSchema: userLinkedAccountDisconnectResponseSchema,
+    responseSchema: z.object({}),
   });
 }

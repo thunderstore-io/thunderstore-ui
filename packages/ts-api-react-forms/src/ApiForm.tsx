@@ -1,52 +1,55 @@
 "use client";
 
 import { HTMLAttributes, PropsWithChildren, useCallback } from "react";
-import { ApiError, RequestConfig } from "@thunderstore/thunderstore-api";
-import { ApiEndpoint } from "@thunderstore/ts-api-react";
+import {
+  ApiEndpointProps,
+  ApiError,
+  RequestConfig,
+} from "@thunderstore/thunderstore-api";
 import { FormProvider } from "react-hook-form";
 import { useApiForm } from "./useApiForm";
-import { ZodObject } from "zod";
-import { ZodRawShape } from "zod";
+import z, { ZodObject, ZodRawShape } from "zod";
 
-export type ApiFormProps<
-  Params extends object,
-  QueryParams extends object,
-  Data extends object,
-  Return,
-  Schema extends ZodObject<ZodRawShape>,
-> = {
-  endpoint: ApiEndpoint<Params, QueryParams, Data, Return>;
-  params: Params;
-  queryParams: QueryParams;
-  // data?: Data;
-  config: () => RequestConfig;
-  onSubmitSuccess?: (result?: Return, message?: string) => void;
-  onSubmitError?: (error?: Error | ApiError, message?: string) => void;
-  formProps?: Omit<HTMLAttributes<HTMLFormElement>, "onSubmit">;
-  schema: Schema;
-};
 export function ApiForm<
   Params extends object,
   QueryParams extends object,
-  Data extends object,
-  Return,
   Schema extends ZodObject<ZodRawShape>,
+  Return,
 >(
-  props: PropsWithChildren<
-    ApiFormProps<Params, QueryParams, Data, Return, Schema>
-  >
+  props: PropsWithChildren<{
+    endpoint: (
+      props: ApiEndpointProps<Params, QueryParams, z.infer<Schema>>
+    ) => Return;
+    params?: Params;
+    queryParams?: QueryParams;
+    // data?: Data;
+    config: () => RequestConfig;
+    onSubmitSuccess?: (result?: Return, message?: string) => void;
+    onSubmitError?: (error?: Error | ApiError, message?: string) => void;
+    formProps?: Omit<HTMLAttributes<HTMLFormElement>, "onSubmit">;
+  }> & {
+    schema: Schema;
+  }
 ) {
   const { endpoint, onSubmitSuccess, onSubmitError, schema } = props;
-  const { form, submitHandler } = useApiForm({
+  const { form, submitHandler } = useApiForm<
+    typeof schema,
+    Params,
+    QueryParams,
+    z.infer<Schema>,
+    ReturnType<typeof endpoint>
+  >({
     endpoint: endpoint,
     schema: schema,
   });
   const onSubmit = useCallback(
-    async (onSubmitData: Data) => {
+    async (onSubmitData: z.infer<Schema>) => {
       try {
         const result = await submitHandler({
-          params: props.params,
-          queryParams: props.queryParams,
+          params: props.params ? props.params : ({} as Params),
+          queryParams: props.queryParams
+            ? props.queryParams
+            : ({} as QueryParams),
           data: onSubmitData,
           config: props.config,
         });
