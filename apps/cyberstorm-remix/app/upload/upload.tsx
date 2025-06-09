@@ -47,9 +47,19 @@ import {
 import {
   PackageSubmissionError,
   packageSubmissionErrorSchema,
+  packageSubmissionRequestDataSchema,
   packageSubmissionStatusSchema,
+  postPackageSubmission,
 } from "@thunderstore/thunderstore-api";
 import { OutletContextShape } from "../root";
+import { ApiForm } from "@thunderstore/ts-api-react-forms";
+import {
+  FormSelectSearch,
+  FormSubmitButton,
+  FormSwitch,
+  FormTextInput,
+  useFormToaster,
+} from "@thunderstore/cyberstorm-forms";
 
 interface CommunityOption {
   value: string;
@@ -427,6 +437,10 @@ export default function Upload() {
       .join(" ");
   };
 
+  const { onSubmitSuccess, onSubmitError } = useFormToaster({
+    successMessage: "Package uploaded",
+  });
+
   return (
     <div className="container container--y container--full layout__content">
       <NewBreadCrumbs>
@@ -495,268 +509,343 @@ export default function Upload() {
           </div>
         </div>
         <div className="upload__divider" />
-        <div className="container container--x container--full upload__row">
-          <div className="upload__meta">
-            <p className="upload__title">Team</p>
-            <p className="upload__description">
-              Select the team you want your package to be associated with.
-            </p>
-          </div>
-          <div className="upload__content">
-            <NewSelectSearch
-              options={availableTeams?.map((team) => ({
-                value: team.name,
-                label: team.name,
-              }))}
-              onChange={(val) => setTeam(val?.value)}
-              value={team ? { value: team, label: team } : undefined}
-            />
-          </div>
-        </div>
-        <div className="container container--x container--full upload__row">
-          <div className="upload__meta">
-            <p className="upload__title">Communities</p>
-            <p className="upload__description">
-              Select communities you want your package to be listed under.
-              Current community is selected by default.
-            </p>
-          </div>
-          <div className="upload__content">
-            <NewSelectSearch
-              placeholder="Select communities"
-              multiple
-              options={communityOptions}
-              onChange={(val) => {
-                if (val) {
-                  const newCommunities = Array.isArray(val) ? val : [val];
-                  setSelectedCommunities(newCommunities);
-                  // Remove categories for communities that are no longer selected
-                  setSelectedCategories((prev) =>
-                    Object.fromEntries(
-                      Object.entries(prev).filter(([communityId]) =>
-                        newCommunities.some((c) => c.value === communityId)
-                      )
-                    )
-                  );
-                } else {
-                  setSelectedCommunities([]);
-                  setSelectedCategories({});
-                }
-              }}
-              value={selectedCommunities}
-            />
-          </div>
-        </div>
-        <div className="container container--x container--full upload__row">
-          <div className="upload__meta">
-            <p className="upload__title">Categories</p>
-            <p className="upload__description">
-              Select descriptive categories to help people discover your
-              package.
-            </p>
-          </div>
-          <div className="upload__content">
-            {selectedCommunities.map((community) => {
-              const communityData = uploadData.results.find(
-                (c) => c.identifier === community.value
-              );
-              const categories =
-                categoryOptions.find((c) => c.communityId === community.value)
-                  ?.categories || [];
 
-              return (
-                <div key={community.value} className="upload__category-select">
-                  <p className="upload__category-label">
-                    {communityData?.name} categories
-                  </p>
-                  <NewSelectSearch
-                    placeholder="Select categories"
-                    multiple
-                    options={categories}
-                    onChange={(val) => {
-                      handleCategoryChange(
-                        val ? (Array.isArray(val) ? val : [val]) : undefined,
-                        community.value
-                      );
-                    }}
-                    value={selectedCategories[community.value]?.map(
-                      (categoryId) => ({
-                        value: categoryId,
-                        label:
-                          categories.find((c) => c.value === categoryId)
-                            ?.label || "",
-                      })
-                    )}
-                  />
-                </div>
-              );
-            })}
-            {(!selectedCommunities || selectedCommunities.length === 0) && (
-              <p className="upload__category-placeholder">
-                Select a community to choose categories
+        <ApiForm
+          config={requestConfig}
+          onSubmitSuccess={onSubmitSuccess}
+          onSubmitError={onSubmitError}
+          schema={packageSubmissionRequestDataSchema}
+          endpoint={postPackageSubmission}
+          formProps={{
+            // className: "container container--x container--full upload__row",
+            className: "container container--y container--full upload",
+          }}
+        >
+          {/* This should be hidden pre-inserted value (inserted when the upload is complete) */}
+          {/* <FormTextInput
+            schema={packageSubmissionRequestDataSchema}
+            name={"upload_uuid"}
+            placeholder={"ExampleName"}
+          /> */}
+          {/* Only community categories, this should be empty and hidden in the form */}
+          {/* <FormSelectSearch
+            schema={packageSubmissionRequestDataSchema}
+            name={"categories"}
+            placeholder={"ExampleName"}
+            options={categoryOptions}
+          /> */}
+          {/* This is a tricky one since there are multiple SelectSearches that edit one value in the form */}
+
+          <div className="container container--x container--full upload__row">
+            <div className="upload__meta">
+              <p className="upload__title">Team</p>
+              <p className="upload__description">
+                Select the team you want your package to be associated with.
               </p>
-            )}
+            </div>
+            <div className="upload__content">
+              <FormSelectSearch
+                schema={packageSubmissionRequestDataSchema}
+                name={"author_name"}
+                placeholder={"ExampleName"}
+                options={availableTeams?.map((team) => ({
+                  value: team.name,
+                  label: team.name,
+                }))}
+              />
+              {/* <NewSelectSearch
+                options={availableTeams?.map((team) => ({
+                  value: team.name,
+                  label: team.name,
+                }))}
+                onChange={(val) => setTeam(val?.value)}
+                value={team ? { value: team, label: team } : undefined}
+              /> */}
+            </div>
           </div>
-        </div>
-        <div className="upload__divider" />
-        <div className="container container--x container--full upload__row">
-          <div className="upload__meta">
-            <p className="upload__title">Contains NSFW content</p>
-            <p className="upload__description">
-              Select if your package contains NSFW material. An
-              &ldquo;NSFW&rdquo; -tag will be applied to your package.
-            </p>
-          </div>
-          <div className="upload__content">
-            <NewSwitch
-              value={NSFW}
-              onChange={(checked) => {
-                setNSFW(checked);
-              }}
-            />
-          </div>
-        </div>
-        <div className="upload__divider" />
-        <div className="container container--x container--full upload__row">
-          <div className="upload__meta">
-            <p className="upload__title">Submit</p>
-            <p className="upload__description">
-              Double-check your selections and hit &ldquo;Submit&rdquo; when
-              you&rsquo;re ready!
-            </p>
-          </div>
-          <div className="upload__content">
-            <div className="upload__buttons">
-              <NewButton
-                onClick={() => {
-                  setFile(null);
-                  if (fileInputRef.current) {
-                    fileInputRef.current.value = "";
+          <div className="container container--x container--full upload__row">
+            <div className="upload__meta">
+              <p className="upload__title">Communities</p>
+              <p className="upload__description">
+                Select communities you want your package to be listed under.
+                Current community is selected by default.
+              </p>
+            </div>
+            <div className="upload__content">
+              <FormSelectSearch
+                schema={packageSubmissionRequestDataSchema}
+                name={"communities"}
+                placeholder={"ExampleName"}
+                multiple
+                options={communityOptions}
+              />
+              {/* <NewSelectSearch
+                placeholder="Select communities"
+                multiple
+                options={communityOptions}
+                onChange={(val) => {
+                  if (val) {
+                    const newCommunities = Array.isArray(val) ? val : [val];
+                    setSelectedCommunities(newCommunities);
+                    // Remove categories for communities that are no longer selected
+                    setSelectedCategories((prev) =>
+                      Object.fromEntries(
+                        Object.entries(prev).filter(([communityId]) =>
+                          newCommunities.some((c) => c.value === communityId)
+                        )
+                      )
+                    );
+                  } else {
+                    setSelectedCommunities([]);
+                    setSelectedCategories({});
                   }
-                  handle?.abort();
-                  setHandle(undefined);
-                  setUsermedia(undefined);
-                  setIsDone(false);
-                  setSelectedCommunities([]);
-                  setSelectedCategories({});
-                  setTeam(undefined);
-                  setNSFW(false);
-                  setSubmissionStatus(undefined);
-                  setLock(false);
                 }}
-                csVariant="secondary"
-                csSize="big"
-              >
-                Reset
-              </NewButton>
-              <NewButton
-                disabled={!file || !!handle || lock}
-                onClick={startUpload}
-                csVariant="accent"
-                csSize="big"
-                rootClasses="upload__submit"
-              >
-                Upload File
-              </NewButton>
-              <NewButton
-                disabled={!usermedia?.uuid || !selectedCommunities.length}
-                onClick={submit}
-                csVariant="accent"
-                csSize="big"
-                rootClasses="upload__submit"
-              >
-                Submit Package
-              </NewButton>
+                value={selectedCommunities}
+              /> */}
             </div>
-            <UploadStatus handle={handle} />
-            <div className="submission__status">
-              <div className="submission__status-item">
-                Submission{" "}
-                {submissionStatus ? submissionStatus.status : "not started"}
-              </div>
-            </div>
-            {submissionStatus && (
-              <div className="submission__status">
-                {submissionStatus.form_errors &&
-                  Object.keys(submissionStatus.form_errors).length > 0 && (
-                    <div className="submission__error">
-                      <p>Form Errors:</p>
-                      <ul>
-                        {Object.entries(submissionStatus.form_errors).map(
-                          ([field, error]) => (
-                            <li key={field}>
-                              {field !== "__all__" && (
-                                <strong>{formatFieldName(field)}: </strong>
-                              )}
-                              {Array.isArray(error)
-                                ? error.join(", ")
-                                : String(error)}
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </div>
-                  )}
-                {submissionStatus.result && (
-                  <SubmissionResult
-                    submissionStatusResult={submissionStatus.result}
-                  />
-                )}
-                <NewButton onClick={retryPolling}>Retry Status Check</NewButton>
-              </div>
-            )}
-            <NewButton
-              disabled={!handle}
-              onClick={() => handle?.pause()}
-              csVariant="warning"
-              csSize="big"
-              rootClasses="upload__submit"
-            >
-              Pause
-            </NewButton>
-            <NewButton
-              disabled={!handle}
-              onClick={() => handle?.resume()}
-              csVariant="warning"
-              csSize="big"
-              rootClasses="upload__submit"
-            >
-              Resume
-            </NewButton>
-            {error && (
-              <div className="submission__error">
-                <p>{error.message}</p>
-                {error.retryable && (
-                  <NewButton onClick={controls.retry}>Retry</NewButton>
-                )}
-              </div>
-            )}
-            {isDone && !usermedia?.uuid && (
-              <div className="submission__error">
-                <p>
-                  Upload completed but no UUID was received. Please try again.
-                </p>
-              </div>
-            )}
-            {isDone && usermedia?.uuid && !selectedCommunities.length && (
-              <div className="submission__error">
-                <p>Please select at least one community.</p>
-              </div>
-            )}
-            {submissionError && Object.keys(submissionError).length > 0 && (
-              <div className="submission__error">
-                {Object.entries(submissionError).map(([field, errors]) => (
-                  <div key={field}>
-                    {field !== "__all__" && (
-                      <strong>{formatFieldName(field)}: </strong>
-                    )}
-                    {Array.isArray(errors) ? errors.join(", ") : String(errors)}
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
-        </div>
+          <div className="container container--x container--full upload__row">
+            <div className="upload__meta">
+              <p className="upload__title">Categories</p>
+              <p className="upload__description">
+                Select descriptive categories to help people discover your
+                package.
+              </p>
+            </div>
+            <div className="upload__content">
+              <FormSelectSearch
+                schema={packageSubmissionRequestDataSchema}
+                name={"community_categories"}
+                placeholder={"ExampleName"}
+                multiple
+                options={communityOptions}
+              />
+              {/* {selectedCommunities.map((community) => {
+                const communityData = uploadData.results.find(
+                  (c) => c.identifier === community.value
+                );
+                const categories =
+                  categoryOptions.find((c) => c.communityId === community.value)
+                    ?.categories || [];
+
+                return (
+                  <div
+                    key={community.value}
+                    className="upload__category-select"
+                  >
+                    <p className="upload__category-label">
+                      {communityData?.name} categories
+                    </p>
+                    <NewSelectSearch
+                      placeholder="Select categories"
+                      multiple
+                      options={categories}
+                      onChange={(val) => {
+                        handleCategoryChange(
+                          val ? (Array.isArray(val) ? val : [val]) : undefined,
+                          community.value
+                        );
+                      }}
+                      value={selectedCategories[community.value]?.map(
+                        (categoryId) => ({
+                          value: categoryId,
+                          label:
+                            categories.find((c) => c.value === categoryId)
+                              ?.label || "",
+                        })
+                      )}
+                    />
+                  </div>
+                );
+              })}
+              {(!selectedCommunities || selectedCommunities.length === 0) && (
+                <p className="upload__category-placeholder">
+                  Select a community to choose categories
+                </p>
+              )} */}
+            </div>
+          </div>
+          <div className="upload__divider" />
+          <div className="container container--x container--full upload__row">
+            <div className="upload__meta">
+              <p className="upload__title">Contains NSFW content</p>
+              <p className="upload__description">
+                Select if your package contains NSFW material. An
+                &ldquo;NSFW&rdquo; -tag will be applied to your package.
+              </p>
+            </div>
+            <div className="upload__content">
+              {/* <NewSwitch
+                value={NSFW}
+                onChange={(checked) => {
+                  setNSFW(checked);
+                }}
+              /> */}
+
+              <FormSwitch
+                schema={packageSubmissionRequestDataSchema}
+                name={"has_nsfw_content"}
+                placeholder={"ExampleName"}
+              />
+            </div>
+          </div>
+          <div className="upload__divider" />
+          <div className="container container--x container--full upload__row">
+            <div className="upload__meta">
+              <p className="upload__title">Submit</p>
+              <p className="upload__description">
+                Double-check your selections and hit &ldquo;Submit&rdquo; when
+                you&rsquo;re ready!
+              </p>
+            </div>
+            <div className="upload__content">
+              <div className="upload__buttons">
+                <NewButton
+                  onClick={() => {
+                    setFile(null);
+                    if (fileInputRef.current) {
+                      fileInputRef.current.value = "";
+                    }
+                    handle?.abort();
+                    setHandle(undefined);
+                    setUsermedia(undefined);
+                    setIsDone(false);
+                    setSelectedCommunities([]);
+                    setSelectedCategories({});
+                    setTeam(undefined);
+                    setNSFW(false);
+                    setSubmissionStatus(undefined);
+                    setLock(false);
+                  }}
+                  csVariant="secondary"
+                  csSize="big"
+                >
+                  Reset
+                </NewButton>
+                <NewButton
+                  disabled={!file || !!handle || lock}
+                  onClick={startUpload}
+                  csVariant="accent"
+                  csSize="big"
+                  rootClasses="upload__submit"
+                >
+                  Upload File
+                </NewButton>
+                {/* <NewButton
+                  disabled={!usermedia?.uuid || !selectedCommunities.length}
+                  onClick={submit}
+                  csVariant="accent"
+                  csSize="big"
+                  rootClasses="upload__submit"
+                >
+                  Submit Package
+                </NewButton> */}
+
+                <FormSubmitButton
+                  // disabled={!usermedia?.uuid || !selectedCommunities.length}
+                  // onClick={submit}
+                  csVariant="accent"
+                  csSize="big"
+                  rootClasses="upload__submit"
+                >
+                  Submit Package
+                </FormSubmitButton>
+              </div>
+
+              <UploadStatus handle={handle} />
+              <div className="submission__status">
+                <div className="submission__status-item">
+                  Submission{" "}
+                  {submissionStatus ? submissionStatus.status : "not started"}
+                </div>
+              </div>
+              {submissionStatus && (
+                <div className="submission__status">
+                  {submissionStatus.form_errors &&
+                    Object.keys(submissionStatus.form_errors).length > 0 && (
+                      <div className="submission__error">
+                        <p>Form Errors:</p>
+                        <ul>
+                          {Object.entries(submissionStatus.form_errors).map(
+                            ([field, error]) => (
+                              <li key={field}>
+                                {field !== "__all__" && (
+                                  <strong>{formatFieldName(field)}: </strong>
+                                )}
+                                {Array.isArray(error)
+                                  ? error.join(", ")
+                                  : String(error)}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    )}
+                  {submissionStatus.result && (
+                    <SubmissionResult
+                      submissionStatusResult={submissionStatus.result}
+                    />
+                  )}
+                  <NewButton onClick={retryPolling}>
+                    Retry Status Check
+                  </NewButton>
+                </div>
+              )}
+              <NewButton
+                disabled={!handle}
+                onClick={() => handle?.pause()}
+                csVariant="warning"
+                csSize="big"
+                rootClasses="upload__submit"
+              >
+                Pause
+              </NewButton>
+              <NewButton
+                disabled={!handle}
+                onClick={() => handle?.resume()}
+                csVariant="warning"
+                csSize="big"
+                rootClasses="upload__submit"
+              >
+                Resume
+              </NewButton>
+              {error && (
+                <div className="submission__error">
+                  <p>{error.message}</p>
+                  {error.retryable && (
+                    <NewButton onClick={controls.retry}>Retry</NewButton>
+                  )}
+                </div>
+              )}
+              {isDone && !usermedia?.uuid && (
+                <div className="submission__error">
+                  <p>
+                    Upload completed but no UUID was received. Please try again.
+                  </p>
+                </div>
+              )}
+              {isDone && usermedia?.uuid && !selectedCommunities.length && (
+                <div className="submission__error">
+                  <p>Please select at least one community.</p>
+                </div>
+              )}
+              {submissionError && Object.keys(submissionError).length > 0 && (
+                <div className="submission__error">
+                  {Object.entries(submissionError).map(([field, errors]) => (
+                    <div key={field}>
+                      {field !== "__all__" && (
+                        <strong>{formatFieldName(field)}: </strong>
+                      )}
+                      {Array.isArray(errors)
+                        ? errors.join(", ")
+                        : String(errors)}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </ApiForm>
       </section>
       <div className="container container--y container--full">
         <span>usermedia: {usermedia?.uuid}</span>
