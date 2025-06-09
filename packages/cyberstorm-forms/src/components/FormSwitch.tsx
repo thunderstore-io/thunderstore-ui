@@ -1,8 +1,7 @@
-import { z, ZodObject } from "zod";
-import { ZodRawShape } from "zod/lib/types";
+import { z, ZodObject, ZodRawShape } from "zod";
 import { Path, useController } from "react-hook-form";
 import styles from "./FormTextInput.module.css";
-import { Switch } from "@thunderstore/cyberstorm";
+import { NewSwitch } from "@thunderstore/cyberstorm";
 
 export type FormSwitchProps<
   Schema extends ZodObject<Z>,
@@ -24,7 +23,7 @@ export function FormSwitch<Schema extends ZodObject<Z>, Z extends ZodRawShape>({
 
   return (
     <>
-      <Switch {...field} disabled={isSubmitting || disabled} />
+      <NewSwitch {...field} disabled={isSubmitting || disabled} />
       {error && <span className={styles.errorMessage}>{error.message}</span>}
     </>
   );

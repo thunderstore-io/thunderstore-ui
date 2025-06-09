@@ -9,7 +9,7 @@ import React from "react";
 import { ImageVariants } from "@thunderstore/cyberstorm-theme/src/components";
 
 interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
-  src: string | null;
+  src: string | null | undefined;
   /** Type of the image defines the icon used as the fallback. */
   cardType: "community" | "communityIcon" | "package";
   /** Alt text for the image. Leave empty for decorative images. */
