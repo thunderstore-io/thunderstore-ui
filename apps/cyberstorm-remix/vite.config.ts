@@ -41,7 +41,6 @@ export default defineConfig({
               route("versions", "p/tabs/Versions/Versions.tsx");
             }
           );
-          route("/package/create", "upload/upload.tsx");
           route(
             "/package/create/docs",
             "tools/package-format-docs/packageFormatDocs.tsx"
@@ -60,6 +59,7 @@ export default defineConfig({
           );
           route("/c/:communityId/p/:namespaceId", "p/team/Team.tsx");
           if (process.env.ENABLE_BROKEN_PAGES) {
+            route("/package/create", "upload/upload.tsx");
             route("/teams", "settings/teams/Teams.tsx");
             route(
               "/teams/:namespaceId",
