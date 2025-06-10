@@ -13,7 +13,7 @@ export interface ApiActionProps<
   // params?: Params;
   // queryParams?: QueryParams;
   // data?: Data;
-  onSubmitSuccess?: (result: Return) => void;
+  onSubmitSuccess?: (result: Awaited<Return>) => void;
   onSubmitError?: (error: Error | ApiError | unknown) => void;
 }
 

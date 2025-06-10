@@ -25,12 +25,9 @@ export function PackageLikeAction(props: {
         : "You must be logged in to like a package!",
   });
 
-  function onActionSuccess(result: ReturnType<typeof packageRate>) {
-    // TODO: Could there be an issue where this eats errors?
-    result.then((result) => {
-      props.dataUpdateTrigger();
-      onSubmitSuccess(result);
-    });
+  function onActionSuccess(result: Awaited<ReturnType<typeof packageRate>>) {
+    props.dataUpdateTrigger();
+    onSubmitSuccess(result);
   }
 
   function onActionError(e: Error | ApiError | unknown) {
