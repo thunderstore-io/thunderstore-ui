@@ -110,8 +110,13 @@ async function MarkdownValidationResult(
   }) => void
 ) {
   try {
-    const response = await toolsMarkdownPreview(config, {
-      markdown: markdownPreviewInput,
+    const response = await toolsMarkdownPreview({
+      config: config,
+      data: {
+        markdown: markdownPreviewInput,
+      },
+      params: {},
+      queryParams: {},
     });
     if (isRecord(response) && typeof response.html === "string") {
       setHTML(response.html);

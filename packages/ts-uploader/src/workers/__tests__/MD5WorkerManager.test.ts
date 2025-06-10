@@ -3,8 +3,9 @@ import { MD5WorkerManager } from "../MD5WorkerManager";
 
 describe("MD5WorkerManager", () => {
   let manager: MD5WorkerManager;
-  const mockWorker = {
+  const mockWorker: Worker = {
     onmessage: null,
+    // @ts-expect-error Mocking Worker methods
     postMessage: vi.fn(),
     terminate: vi.fn(),
   };
@@ -35,6 +36,7 @@ describe("MD5WorkerManager", () => {
 
     it("should not initialize if Worker is not available", () => {
       const originalWorker = global.Worker;
+      // @ts-expect-error Simulate Worker not being available
       delete global.Worker;
 
       manager.initialize();
@@ -48,13 +50,6 @@ describe("MD5WorkerManager", () => {
     it("should calculate MD5 hash for a blob", async () => {
       const blob = new Blob(["test content"]);
       const uniqueId = "test-id";
-
-      // Mock worker response
-      const mockResponse = {
-        type: "complete",
-        md5: "mock-md5-hash",
-        uniqueId,
-      };
 
       // Set up the worker's onmessage handler
       mockWorker.onmessage = ({ data }) => {
@@ -76,13 +71,6 @@ describe("MD5WorkerManager", () => {
     it("should handle worker errors", async () => {
       const blob = new Blob(["test content"]);
       const uniqueId = "test-id";
-
-      // Mock worker error response
-      const mockError = {
-        type: "error",
-        error: "Calculation failed",
-        uniqueId,
-      };
 
       // Set up the worker's onmessage handler
       mockWorker.onmessage = ({ data }) => {

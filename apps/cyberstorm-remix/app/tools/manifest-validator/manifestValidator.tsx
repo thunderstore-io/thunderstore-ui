@@ -29,6 +29,9 @@ export default function ManifestValidator() {
 
   const selectOptions = currentUser
     ? currentUser.teams.map((team) => {
+        if (typeof team === "string") {
+          return { value: team, label: team };
+        }
         return { value: team.name, label: team.name };
       })
     : [];
@@ -153,21 +156,17 @@ async function ManifestValidationResult(
   }) => void
 ) {
   try {
-    const response = await toolsManifestValidate(config, {
-      namespace: teamInput,
-      manifest_data: encode(manifestInput),
+    const response = await toolsManifestValidate({
+      config: config,
+      data: {
+        namespace: teamInput,
+        manifest_data: encode(manifestInput),
+      },
+      params: {},
+      queryParams: {},
     });
-    if (
-      isRecord(response) &&
-      typeof response.success === "boolean" &&
-      response.success
-    ) {
+    if (response.success) {
       setValidation({ status: "success", message: "All systems go!" });
-    } else {
-      const parsedResponse = await response.json();
-      if (isHTMLResponse(parsedResponse)) {
-        setValidation({ status: "success", message: "All systems go!" });
-      }
     }
   } catch (e) {
     if (isApiError(e)) {

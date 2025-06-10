@@ -160,8 +160,11 @@ export function Navigation(props: {
           {currentUser?.username ? (
             <span className="navigation-header__profile-actions">
               <NewButton
-                primitiveType="cyberstormLink"
-                linkId="PackageUpload"
+                primitiveType="link"
+                href={`${domain}/package/create/`}
+                // TODO: Take these into use when the upload page is ready
+                // primitiveType="cyberstormLink"
+                // linkId="PackageUpload"
                 csVariant="secondary"
                 csModifiers={["ghost", "only-icon"]}
                 tooltipText="Upload"

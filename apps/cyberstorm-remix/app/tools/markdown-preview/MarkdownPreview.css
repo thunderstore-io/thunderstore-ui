@@ -4,6 +4,8 @@
   }
 
   .markdown-preview__row {
+    display: flex;
+    flex-direction: row;
     gap: 5rem;
   }
 

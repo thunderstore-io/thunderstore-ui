@@ -51,6 +51,7 @@ export function toolsManifestValidate(
         method: "POST",
         body: JSON.stringify(data),
       },
+      useSession: true,
     },
     requestSchema: submissionValidateManifestRequestDataSchema,
     queryParamsSchema: z.object({}),
