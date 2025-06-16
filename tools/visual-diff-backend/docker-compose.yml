@@ -1,7 +1,7 @@
 version: "3.8"
 
 x-django-service: &django-service
-  image: ${DJANGO_IMAGE:-thunderstore/thunderstore:release-0.136.0}
+  image: ${DJANGO_IMAGE:-thunderstore/thunderstore:release-0.144.0}
   environment:
     CORS_ALLOWED_ORIGINS: "*"
     CELERY_BROKER_URL: "pyamqp://django:django@rabbitmq/django"
