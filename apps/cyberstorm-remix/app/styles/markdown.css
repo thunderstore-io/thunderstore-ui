@@ -7,8 +7,7 @@
   }
 
   .markdown {
-    display: flex;
-    flex-direction: column;
+    display: block;
     color: var(--color-text-primary);
     font: var(--font-body);
     font-weight: var(--font-weight-regular);
@@ -176,8 +175,11 @@
     }
 
     table {
+      display: block;
+      width: 100%;
       border-collapse: separate;
       border-spacing: 0;
+      overflow: auto;
     }
 
     tbody tr:nth-child(even) {
