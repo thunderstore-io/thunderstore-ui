@@ -207,6 +207,9 @@
     --card-package--tags-align-items: var(
       --card-package-card--tags-align-items
     );
+    --card-package--tags-align-content: var(
+      --card-package-card--tags-align-content
+    );
   }
 
   .card-package:where(.card-package--variant--featured) {
