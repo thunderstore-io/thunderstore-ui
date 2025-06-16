@@ -145,9 +145,10 @@
     flex-wrap: wrap;
 
     gap: var(--card-package--tags-gap);
+    place-content: var(--card-package--tags-align-content)
+      var(--card-package--tags-justify-content);
     align-items: var(--card-package--tags-align-items);
     align-self: stretch;
-    justify-content: var(--card-package--tags-justify-content);
   }
 
   /* Footer */
