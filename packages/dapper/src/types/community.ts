@@ -11,6 +11,7 @@ export interface Community {
   hero_image_url: string | null;
   cover_image_url: string | null;
   icon_url: string | null;
+  community_icon_url: string | null;
   total_download_count: number;
   total_package_count: number;
 }

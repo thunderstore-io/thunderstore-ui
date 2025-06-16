@@ -204,7 +204,7 @@ export default function Community() {
             headingLevel="1"
             headingSize="3"
             variant="simple"
-            icon={community.cover_image_url}
+            icon={community.community_icon_url}
             meta={
               <>
                 {community.wiki_url ? (
