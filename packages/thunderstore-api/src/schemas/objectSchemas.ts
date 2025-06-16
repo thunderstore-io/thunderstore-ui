@@ -54,6 +54,7 @@ export const communitySchema = z.object({
   hero_image_url: z.string().url().nullable(),
   cover_image_url: z.string().url().nullable(),
   icon_url: z.string().url().nullable(),
+  community_icon_url: z.string().url().nullable(),
   total_download_count: z.number().int(),
   total_package_count: z.number().int(),
 });
