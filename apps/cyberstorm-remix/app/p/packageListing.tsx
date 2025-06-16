@@ -572,137 +572,137 @@ export default function PackageListing() {
             </Drawer>
             {actions}
           </div>
+          <Tabs
+            tabItems={[
+              {
+                itemProps: {
+                  key: "description",
+                  primitiveType: "cyberstormLink",
+                  linkId: "Package",
+                  community: listing.community_identifier,
+                  namespace: listing.namespace,
+                  package: listing.name,
+                  "aria-current": currentTab === "details",
+                  children: <>Description</>,
+                },
+                current: currentTab === "details",
+              },
+              {
+                itemProps: {
+                  key: "required",
+                  primitiveType: "cyberstormLink",
+                  linkId: "PackageRequired",
+                  community: listing.community_identifier,
+                  namespace: listing.namespace,
+                  package: listing.name,
+                  "aria-current": currentTab === "required",
+                  children: <>Required ({listing.dependency_count})</>,
+                },
+                current: currentTab === "required",
+              },
+              // TODO: Once Analysis page is ready, enable it
+              // {
+              //   itemProps: {
+              //     key: "wiki",
+              //     primitiveType: "cyberstormLink",
+              //     linkId: "PackageWiki",
+              //     community: listing.community_identifier,
+              //     namespace: listing.namespace,
+              //     package: listing.name,
+              //     "aria-current": currentTab === "wiki",
+              //     children: <>Wiki</>,
+              //   },
+              //   current: currentTab === "wiki",
+              // },
+              {
+                itemProps: {
+                  key: "wiki",
+                  primitiveType: "link",
+                  href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/wiki`,
+                  "aria-current": currentTab === "wiki",
+                  children: (
+                    <>
+                      Wiki
+                      <NewIcon csMode="inline" noWrapper>
+                        <FontAwesomeIcon icon={faArrowUpRight} />
+                      </NewIcon>
+                    </>
+                  ),
+                },
+                current: currentTab === "wiki",
+              },
+              {
+                itemProps: {
+                  key: "changelog",
+                  primitiveType: "cyberstormLink",
+                  linkId: "PackageChangelog",
+                  community: listing.community_identifier,
+                  namespace: listing.namespace,
+                  package: listing.name,
+                  "aria-current": currentTab === "changelog",
+                  children: <>Changelog</>,
+                  disabled: !listing.has_changelog,
+                },
+                current: currentTab === "changelog",
+              },
+              {
+                itemProps: {
+                  key: "versions",
+                  primitiveType: "cyberstormLink",
+                  linkId: "PackageVersions",
+                  community: listing.community_identifier,
+                  namespace: listing.namespace,
+                  package: listing.name,
+                  "aria-current": currentTab === "versions",
+                  children: <>Versions</>,
+                },
+                current: currentTab === "versions",
+                // TODO: Version count field needs to be added to the endpoint
+                // numberSlateValue: listing.versionCount,
+              },
+              // TODO: Once Analysis page is ready, enable it
+              // {
+              //   itemProps: {
+              //     key: "source",
+              //     primitiveType: "cyberstormLink",
+              //     linkId: "PackageSource",
+              //     community: listing.community_identifier,
+              //     namespace: listing.namespace,
+              //     package: listing.name,
+              //     "aria-current": currentTab === "source",
+              //     children: <>Analysis</>,
+              //   },
+              //   current: currentTab === "source",
+              // },
+              {
+                itemProps: {
+                  key: "source",
+                  href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/source`,
+                  primitiveType: "link",
+                  "aria-current": currentTab === "source",
+                  children: (
+                    <>
+                      Analysis{" "}
+                      <NewIcon csMode="inline" noWrapper>
+                        <FontAwesomeIcon icon={faArrowUpRight} />
+                      </NewIcon>
+                    </>
+                  ),
+                },
+                current: currentTab === "source",
+              },
+            ]}
+            renderTabItem={(itemProps, numberSlate) => {
+              const { key, children, ...fItemProps } = itemProps;
+              return (
+                <NewLink key={key} {...fItemProps}>
+                  {children}
+                  {numberSlate}
+                </NewLink>
+              );
+            }}
+          />
           <div className="package-listing__content">
-            <Tabs
-              tabItems={[
-                {
-                  itemProps: {
-                    key: "description",
-                    primitiveType: "cyberstormLink",
-                    linkId: "Package",
-                    community: listing.community_identifier,
-                    namespace: listing.namespace,
-                    package: listing.name,
-                    "aria-current": currentTab === "details",
-                    children: <>Description</>,
-                  },
-                  current: currentTab === "details",
-                },
-                {
-                  itemProps: {
-                    key: "required",
-                    primitiveType: "cyberstormLink",
-                    linkId: "PackageRequired",
-                    community: listing.community_identifier,
-                    namespace: listing.namespace,
-                    package: listing.name,
-                    "aria-current": currentTab === "required",
-                    children: <>Required ({listing.dependency_count})</>,
-                  },
-                  current: currentTab === "required",
-                },
-                // TODO: Once Analysis page is ready, enable it
-                // {
-                //   itemProps: {
-                //     key: "wiki",
-                //     primitiveType: "cyberstormLink",
-                //     linkId: "PackageWiki",
-                //     community: listing.community_identifier,
-                //     namespace: listing.namespace,
-                //     package: listing.name,
-                //     "aria-current": currentTab === "wiki",
-                //     children: <>Wiki</>,
-                //   },
-                //   current: currentTab === "wiki",
-                // },
-                {
-                  itemProps: {
-                    key: "wiki",
-                    primitiveType: "link",
-                    href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/wiki`,
-                    "aria-current": currentTab === "wiki",
-                    children: (
-                      <>
-                        Wiki
-                        <NewIcon csMode="inline" noWrapper>
-                          <FontAwesomeIcon icon={faArrowUpRight} />
-                        </NewIcon>
-                      </>
-                    ),
-                  },
-                  current: currentTab === "wiki",
-                },
-                {
-                  itemProps: {
-                    key: "changelog",
-                    primitiveType: "cyberstormLink",
-                    linkId: "PackageChangelog",
-                    community: listing.community_identifier,
-                    namespace: listing.namespace,
-                    package: listing.name,
-                    "aria-current": currentTab === "changelog",
-                    children: <>Changelog</>,
-                    disabled: !listing.has_changelog,
-                  },
-                  current: currentTab === "changelog",
-                },
-                {
-                  itemProps: {
-                    key: "versions",
-                    primitiveType: "cyberstormLink",
-                    linkId: "PackageVersions",
-                    community: listing.community_identifier,
-                    namespace: listing.namespace,
-                    package: listing.name,
-                    "aria-current": currentTab === "versions",
-                    children: <>Versions</>,
-                  },
-                  current: currentTab === "versions",
-                  // TODO: Version count field needs to be added to the endpoint
-                  // numberSlateValue: listing.versionCount,
-                },
-                // TODO: Once Analysis page is ready, enable it
-                // {
-                //   itemProps: {
-                //     key: "source",
-                //     primitiveType: "cyberstormLink",
-                //     linkId: "PackageSource",
-                //     community: listing.community_identifier,
-                //     namespace: listing.namespace,
-                //     package: listing.name,
-                //     "aria-current": currentTab === "source",
-                //     children: <>Analysis</>,
-                //   },
-                //   current: currentTab === "source",
-                // },
-                {
-                  itemProps: {
-                    key: "source",
-                    href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/source`,
-                    primitiveType: "link",
-                    "aria-current": currentTab === "source",
-                    children: (
-                      <>
-                        Analysis{" "}
-                        <NewIcon csMode="inline" noWrapper>
-                          <FontAwesomeIcon icon={faArrowUpRight} />
-                        </NewIcon>
-                      </>
-                    ),
-                  },
-                  current: currentTab === "source",
-                },
-              ]}
-              renderTabItem={(itemProps, numberSlate) => {
-                const { key, children, ...fItemProps } = itemProps;
-                return (
-                  <NewLink key={key} {...fItemProps}>
-                    {children}
-                    {numberSlate}
-                  </NewLink>
-                );
-              }}
-            />
             <Outlet context={outletContext} />
           </div>
         </section>
