@@ -120,7 +120,7 @@ export type TeamMember = z.infer<typeof teamMemberSchema>;
 export const packageListingSchema = z.object({
   categories: packageCategorySchema.array(),
   community_identifier: z.string().min(1),
-  description: z.string().min(1),
+  description: z.string(),
   download_count: z.number().int(),
   icon_url: z.string().url().nullable(),
   is_deprecated: z.boolean(),
@@ -144,7 +144,7 @@ export type PackageTeam = z.infer<typeof packageTeamSchema>;
 
 export const packageDependencySchema = z.object({
   community_identifier: z.string().min(1),
-  description: z.string().min(1),
+  description: z.string(),
   icon_url: z.string().url().nullable(),
   is_active: z.boolean(),
   name: z.string().min(1),
@@ -186,7 +186,7 @@ export const packageVersionExperimentalSchema = z.object({
   name: z.string().min(1).max(128),
   version_number: z.string().min(1).max(16),
   full_name: z.string(),
-  description: z.string().min(1).max(256),
+  description: z.string().max(256),
   icon: z.string().url(),
   dependencies: z.string().array(),
   download_url: z.string().url(),
