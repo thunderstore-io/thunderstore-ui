@@ -24,7 +24,12 @@ export async function getPackageListings(
 ) {
   let supportedOrdering = undefined;
   // As dapper accepts more options, than the TS api at this time, we'll need to check if the given ordering is supported.
-  if (ordering && ordering in PackageListingsOrderingEnum) {
+  if (
+    ordering &&
+    Object.values(PackageListingsOrderingEnum).includes(
+      ordering as PackageListingsOrderingEnum
+    )
+  ) {
     supportedOrdering = ordering as PackageListingsOrderingEnum;
   }
 

@@ -14,7 +14,12 @@ export async function getCommunities(
 ) {
   let supportedOrdering = undefined;
   // As dapper accepts more options, than the TS api at this time, we'll need to check if the given ordering is supported.
-  if (ordering && ordering in CommunityListOrderingEnum) {
+  if (
+    ordering &&
+    Object.values(CommunityListOrderingEnum).includes(
+      ordering as CommunityListOrderingEnum
+    )
+  ) {
     supportedOrdering = ordering as CommunityListOrderingEnum;
   }
   const data = await fetchCommunityList({
