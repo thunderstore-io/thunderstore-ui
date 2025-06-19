@@ -29,7 +29,7 @@ export async function getCommunities(
       {
         key: "ordering",
         value: supportedOrdering,
-        impotent: CommunityListOrderingEnum.Popular,
+        impotent: CommunityListOrderingEnum.Name,
       },
       { key: "search", value: search },
     ],

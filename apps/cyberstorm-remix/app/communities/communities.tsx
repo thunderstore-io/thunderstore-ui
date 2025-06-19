@@ -63,7 +63,7 @@ const selectOptions = [
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const searchParams = new URL(request.url).searchParams;
-  const order = searchParams.get("order");
+  const order = searchParams.get("order") ?? SortOptions.Popular;
   const search = searchParams.get("search");
   const page = undefined;
   const dapper = new DapperTs(() => {
@@ -81,11 +81,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function clientLoader({ request }: LoaderFunctionArgs) {
   const searchParams = new URL(request.url).searchParams;
-  const order = searchParams.get("order") ?? SortOptions.Popular;
+  const order = searchParams.get("order");
   const search = searchParams.get("search");
   const page = undefined;
   const dapper = window.Dapper;
-  return await dapper.getCommunities(page, order ?? "", search ?? "");
+  return await dapper.getCommunities(
+    page,
+    order ?? SortOptions.Popular,
+    search ?? ""
+  );
 }
 
 export default function CommunitiesPage() {
@@ -97,7 +101,11 @@ export default function CommunitiesPage() {
   // const navigation = useNavigation();
 
   const changeOrder = (v: SortOptions) => {
-    searchParams.set("order", v);
+    if (v === SortOptions.Popular) {
+      searchParams.delete("order");
+    } else {
+      searchParams.set("order", v);
+    }
     setSearchParams(searchParams, { preventScrollReset: true });
   };
 
