@@ -84,6 +84,7 @@ export async function loader() {
     envStuff: {
       ENV: getPublicEnvVariables([
         "PUBLIC_API_URL",
+        "PUBLIC_AUTH_URL",
         "PUBLIC_CLIENT_SENTRY_DSN",
         "PUBLIC_SITE_URL",
       ]),
