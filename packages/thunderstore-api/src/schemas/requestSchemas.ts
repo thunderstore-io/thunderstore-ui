@@ -217,10 +217,10 @@ export type TeamServiceAccountsRequestParams = z.infer<
 
 // PackageSubmissionRequest
 export const packageSubmissionRequestDataSchema = z.object({
-  author_name: z.string(),
+  author_name: z.string().min(1),
   communities: z.array(z.string()),
   has_nsfw_content: z.boolean(),
-  upload_uuid: z.string(),
+  upload_uuid: z.string().min(1),
   categories: z.array(z.string()).optional(),
   community_categories: z.record(z.string(), z.array(z.string())).optional(),
 });
