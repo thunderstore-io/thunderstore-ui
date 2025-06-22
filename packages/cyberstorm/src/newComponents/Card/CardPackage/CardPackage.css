@@ -141,7 +141,7 @@
   /* Tags */
   .card-package__tags {
     display: flex;
-    flex: 1;
+    flex: 0 1 auto;
     flex-wrap: wrap;
 
     gap: var(--card-package--tags-gap);
