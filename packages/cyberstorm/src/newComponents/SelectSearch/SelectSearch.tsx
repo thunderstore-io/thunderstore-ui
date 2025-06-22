@@ -81,8 +81,8 @@ export const SelectSearch = React.forwardRef<
     onChange,
     placeholder,
     multiple = false,
-    csVariant,
-    csSize,
+    csVariant = "default",
+    csSize = "medium",
     csModifiers,
     disabled = false,
   } = props;
@@ -137,14 +137,14 @@ export const SelectSearch = React.forwardRef<
   };
 
   const removeOption = (optionToRemove: SelectOption) => {
-    if (!multiple) {
+    if (multiple) {
+      const currentValues = Array.isArray(value) ? value : [];
+      (onChange as (v: SelectOption[] | undefined) => void)(
+        currentValues.filter((v) => v.value !== optionToRemove.value)
+      );
+    } else {
       (onChange as (v: SelectOption | undefined) => void)(undefined);
-      return;
     }
-    const currentValues = Array.isArray(value) ? value : [];
-    (onChange as (v: SelectOption[] | undefined) => void)(
-      currentValues.filter((v) => v.value !== optionToRemove.value)
-    );
   };
 
   const selectedValue = multiple
@@ -193,9 +193,10 @@ export const SelectSearch = React.forwardRef<
                   )
                 ) : (
                   <NewTag
-                    onClick={() =>
-                      !disabled && removeOption(selectedValue as SelectOption)
-                    }
+                    onClick={() => {
+                      if (disabled) return;
+                      removeOption(selectedValue as SelectOption);
+                    }}
                     rootClasses="select-search__selected-button"
                     csVariant="primary"
                     csSize="small"
@@ -213,14 +214,13 @@ export const SelectSearch = React.forwardRef<
             <input
               className={classnames(
                 "select-search__input",
-                selectedValue ? "select-search__input--has-value" : null,
                 disabled ? "select-search__input--disabled" : null
               )}
               value={search}
               onFocus={() => !disabled && setIsVisible(true)}
               onChange={(e) => !disabled && setSearch(e.currentTarget.value)}
               ref={inputRef}
-              placeholder={placeholder}
+              placeholder={selectedValue ? undefined : placeholder}
               disabled={disabled}
             />
           </div>

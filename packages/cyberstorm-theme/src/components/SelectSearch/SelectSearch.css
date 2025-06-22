@@ -2,7 +2,7 @@
   /* Base variables */
   .select-search {
     --select-search-width: 100%;
-    --select-search-padding: var(--space-8) var(--space-10);
+    --select-search-padding: var(--space-12) var(--space-16);
     --select-search-border: var(--border-width--px) solid
       var(--select-search-border-color);
     --select-search-border-radius: var(--radius-md);
@@ -10,8 +10,7 @@
     --select-search-border-color: var(--input-border-color--default);
     --select-search-text-color: var(--input-text-color--default);
     --select-search-background-color: var(--input-bg-color--default);
-    --select-search-font-weight: var(--font-weight-bold);
-    --select-search-font-size: var(--font-size-body-md);
+    --select-search-font-weight: var(--font-weight-regular);
   }
 
   /* Clear search button */
@@ -97,32 +96,15 @@
     background-color: var(--color-surface-6);
   }
 
-  /* Size variants */
+  /* Sizes */
   .select-search:where(.select-search--size--medium) {
     --select-search-height: 2.75rem;
-    --select-search-font-size: var(--font-size-base);
-  }
-
-  .select-search:where(.select-search--size--default) {
-    --select-search-height: 2.5rem;
-    --select-search-padding: var(--space-10)
-      calc(var(--space-16) + var(--right-padding-bonus, 0px)) var(--space-10)
-      calc(var(--space-16) + var(--left-padding-bonus, 0px));
-    --select-search-font-size: var(--font-size-base);
-  }
-
-  .select-search:where(.select-search--size--small) {
-    --select-search-height: 2rem;
-    --select-search-padding: var(--space-8)
-      calc(var(--space-16) + var(--right-padding-bonus, 0px)) var(--space-10)
-      calc(var(--space-16) + var(--left-padding-bonus, 0px));
-    --select-search-font-size: var(--font-size-sm);
+    --select-search-font-size: var(--font-size-body-lg);
   }
 
   /* Modifiers */
   .select-search:where(.select-search--has-left-icon) {
     --left-padding-bonus: var(--space-24);
-    --select-search-padding-left: var(--space-16);
   }
 
   .select-search:where(.select-search--has-clear-value) {
@@ -164,19 +146,11 @@
 
   /* Multiple variant */
   .select-search:where(.select-search--variant--multiple) {
-    --select-search-padding: var(--space-8);
+    /* --select-search-padding: var(--space-8); */
     --select-search-background-color: var(--color-surface-4);
 
     &:hover {
       --select-search-background-color: var(--color-surface-5);
-    }
-
-    .select-search__input {
-      margin-left: var(--space-8);
-
-      &--has-value {
-        margin-left: 0;
-      }
     }
   }
 

@@ -4,6 +4,7 @@ export type UseFormToasterArgs<OnSubmitSuccessDataType, OnSubmitErrorDataType> =
   {
     successMessage: ((props: OnSubmitSuccessDataType) => string) | string;
     errorMessage?: ((props: OnSubmitErrorDataType) => string) | string;
+    duration?: number;
   };
 export type UseFormToasterReturn<
   OnSubmitSuccessDataType,
@@ -11,10 +12,12 @@ export type UseFormToasterReturn<
 > = {
   onSubmitSuccess: (props?: OnSubmitSuccessDataType) => void;
   onSubmitError: (props?: OnSubmitErrorDataType) => void;
+  duration?: number;
 };
 export function useFormToaster<OnSubmitSuccessDataType, OnSubmitErrorDataType>({
   successMessage,
   errorMessage,
+  duration = 2000,
 }: UseFormToasterArgs<
   OnSubmitSuccessDataType,
   OnSubmitErrorDataType
@@ -31,7 +34,7 @@ export function useFormToaster<OnSubmitSuccessDataType, OnSubmitErrorDataType>({
             : props
               ? successMessage(props)
               : "OK",
-        duration: 2000,
+        duration: duration,
       });
     },
     onSubmitError: (props) => {

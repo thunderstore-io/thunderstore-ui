@@ -121,7 +121,6 @@
     gap: var(--space-8);
     align-items: center;
     min-width: 0;
-    padding: 0 var(--space-14);
   }
 
   .select-search__divider {
