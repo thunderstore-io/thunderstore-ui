@@ -86,6 +86,8 @@ export async function loader() {
         "PUBLIC_API_URL",
         "PUBLIC_CLIENT_SENTRY_DSN",
         "PUBLIC_SITE_URL",
+        "PUBLIC_AUTH_BASE_URL",
+        "PUBLIC_AUTH_RETURN_URL",
       ]),
     },
   };

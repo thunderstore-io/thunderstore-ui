@@ -6,12 +6,11 @@ interface Props {
 }
 
 export function buildAuthLoginUrl(props: Props) {
-  const PUBLIC_API_URL = getPublicEnvVariables([
-    "PUBLIC_API_URL",
-  ]).PUBLIC_API_URL;
-  return `${PUBLIC_API_URL}/auth/login/${props.type}/${
+  const { PUBLIC_AUTH_BASE_URL, PUBLIC_AUTH_RETURN_URL } =
+    getPublicEnvVariables(["PUBLIC_AUTH_BASE_URL", "PUBLIC_AUTH_RETURN_URL"]);
+  return `${PUBLIC_AUTH_BASE_URL}/auth/login/${props.type}/${
     props.nextUrl
       ? `?next=${encodeURIComponent(props.nextUrl)}`
-      : `?next=${encodeURIComponent(`${PUBLIC_API_URL}/communities/`)}`
+      : `?next=${encodeURIComponent(`${PUBLIC_AUTH_RETURN_URL}/communities/`)}`
   }`;
 }

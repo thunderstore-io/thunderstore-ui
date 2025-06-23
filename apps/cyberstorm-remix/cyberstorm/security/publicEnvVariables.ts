@@ -8,6 +8,8 @@ type rootLoaderType = {
         PUBLIC_API_URL?: string;
         PUBLIC_CLIENT_SENTRY_DSN?: string;
         PUBLIC_SITE_URL?: string;
+        PUBLIC_AUTH_BASE_URL?: string;
+        PUBLIC_AUTH_RETURN_URL?: string;
       };
     };
   };
@@ -23,12 +25,18 @@ export const isRootLoaderData = (obj: unknown): obj is rootLoaderType =>
   (typeof obj.root.envStuff.ENV.PUBLIC_CLIENT_SENTRY_DSN === "string" ||
     typeof obj.root.envStuff.ENV.PUBLIC_CLIENT_SENTRY_DSN === "undefined") &&
   (typeof obj.root.envStuff.ENV.PUBLIC_SITE_URL === "string" ||
-    typeof obj.root.envStuff.ENV.PUBLIC_SITE_URL === "undefined");
+    typeof obj.root.envStuff.ENV.PUBLIC_SITE_URL === "undefined") &&
+  (typeof obj.root.envStuff.ENV.PUBLIC_AUTH_BASE_URL === "string" ||
+    typeof obj.root.envStuff.ENV.PUBLIC_AUTH_BASE_URL === "undefined") &&
+  (typeof obj.root.envStuff.ENV.PUBLIC_AUTH_RETURN_URL === "string" ||
+    typeof obj.root.envStuff.ENV.PUBLIC_AUTH_RETURN_URL === "undefined");
 
 export type publicEnvVariablesKeys =
   | "SITE_URL"
   | "API_URL"
-  | "CLIENT_SENTRY_DSN";
+  | "CLIENT_SENTRY_DSN"
+  | "AUTH_BASE_URL"
+  | "AUTH_RETURN_URL";
 
 export type PublicPrefix<envVariable extends string> = `PUBLIC_${envVariable}`;
 
