@@ -13,12 +13,8 @@ import {
 } from "@thunderstore/cyberstorm-forms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { LoaderFunctionArgs } from "@remix-run/node";
-import {
-  useLoaderData,
-  useOutletContext,
-  useRevalidator,
-} from "@remix-run/react";
+import { LoaderFunctionArgs } from "react-router";
+import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import {
   ApiError,
   teamAddServiceAccount,

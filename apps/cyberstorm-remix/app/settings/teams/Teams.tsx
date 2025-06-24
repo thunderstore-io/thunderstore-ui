@@ -1,5 +1,5 @@
-import type { MetaFunction } from "@remix-run/node";
-import { useLoaderData, useRevalidator } from "@remix-run/react";
+import type { MetaFunction } from "react-router";
+import { useLoaderData, useRevalidator } from "react-router";
 import {
   Modal,
   NewBreadCrumbs,

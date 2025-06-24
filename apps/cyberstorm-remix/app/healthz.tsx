@@ -1,8 +1,8 @@
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { LoaderFunctionArgs } from "react-router";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   if (url.pathname === "/healthz") {
-    return json({ message: "ok" }, 200);
+    return Response.json({ message: "ok" }, { status: 200 });
   }
 }

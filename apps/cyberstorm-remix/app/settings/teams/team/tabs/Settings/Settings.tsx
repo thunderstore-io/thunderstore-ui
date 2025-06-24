@@ -13,22 +13,22 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { currentUserSchema } from "@thunderstore/dapper-ts";
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData, useOutletContext } from "@remix-run/react";
+import { LoaderFunctionArgs } from "react-router";
+import { useLoaderData, useOutletContext } from "react-router";
 import {
   ApiError,
-  teamDisbandTeam,
-  teamRemoveMember,
+  // teamDisbandTeam,
+  // teamRemoveMember,
 } from "@thunderstore/thunderstore-api";
 import {
   clearSession,
   getSessionCurrentUser,
   NamespacedStorageManager,
 } from "@thunderstore/ts-api-react";
-import {
-  ApiForm,
-  teamDisbandFormSchema,
-} from "@thunderstore/ts-api-react-forms";
+// import {
+//   ApiForm,
+//   teamDisbandFormSchema,
+// } from "@thunderstore/ts-api-react-forms";
 import { z } from "zod";
 import { OutletContextShape } from "~/root";
 
@@ -118,7 +118,7 @@ export default function Settings() {
               </NewButton>
             }
           >
-            <ApiForm
+            {/* <ApiForm
               config={outletContext.requestConfig}
               onSubmitSuccess={leaveTeamToast.onSubmitSuccess}
               onSubmitError={leaveTeamToast.onSubmitError}
@@ -150,7 +150,7 @@ export default function Settings() {
                   Leave team
                 </FormSubmitButton>
               </div>
-            </ApiForm>
+            </ApiForm> */}
           </Modal>
         </div>
       </div>
@@ -189,7 +189,7 @@ export default function Settings() {
               </NewButton>
             }
           >
-            <ApiForm
+            {/* <ApiForm
               config={outletContext.requestConfig}
               onSubmitSuccess={disbandTeamToast.onSubmitSuccess}
               onSubmitError={disbandTeamToast.onSubmitError}
@@ -232,7 +232,7 @@ export default function Settings() {
                   Disband team
                 </FormSubmitButton>
               </div>
-            </ApiForm>
+            </ApiForm> */}
           </Modal>
         </div>
       </div>

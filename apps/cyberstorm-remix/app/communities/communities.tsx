@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import {
   CardCommunity,
   EmptyState,
@@ -17,10 +17,9 @@ import { faGhost, faFire } from "@fortawesome/free-solid-svg-icons";
 import { useDebounce } from "use-debounce";
 import {
   useLoaderData,
-  useNavigationType,
-  // useNavigation,
+  useNavigationType, // useNavigation,
   useSearchParams,
-} from "@remix-run/react";
+} from "react-router";
 import { Communities } from "@thunderstore/dapper/types";
 // import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -68,7 +67,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const page = undefined;
   const dapper = new DapperTs(() => {
     return {
-      apiHost: process.env.PUBLIC_API_URL,
+      apiHost: import.meta.env.VITE_API_URL,
       sessionId: undefined,
     };
   });

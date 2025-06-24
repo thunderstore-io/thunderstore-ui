@@ -9,9 +9,9 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   useLocation,
-  useRouteError,
   // useRouteLoaderData,
-} from "@remix-run/react";
+  useRouteError,
+} from "react-router";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 
@@ -21,10 +21,6 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { CurrentUser } from "@thunderstore/dapper/types";
 
 import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
-import {
-  getPublicEnvVariables,
-  publicEnvVariables,
-} from "cyberstorm/security/publicEnvVariables";
 import { useEffect, useRef, useState } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import Toast from "@thunderstore/cyberstorm/src/newComponents/Toast";
@@ -38,7 +34,6 @@ import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapp
 
 declare global {
   interface Window {
-    ENV: publicEnvVariables;
     Dapper: DapperTs;
     nitroAds?: {
       createAd: (
@@ -79,32 +74,30 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function loader() {
-  return {
-    envStuff: {
-      ENV: getPublicEnvVariables([
-        "PUBLIC_API_URL",
-        "PUBLIC_CLIENT_SENTRY_DSN",
-        "PUBLIC_SITE_URL",
-        "PUBLIC_AUTH_BASE_URL",
-        "PUBLIC_AUTH_RETURN_URL",
-      ]),
-    },
-  };
-}
+// export async function loader() {
+//   return {
+//     envStuff: {
+//       ENV: getPublicEnvVariables([
+//         "PUBLIC_API_URL",
+//         "PUBLIC_CLIENT_SENTRY_DSN",
+//         "PUBLIC_SITE_URL",
+//         "PUBLIC_AUTH_BASE_URL",
+//         "PUBLIC_AUTH_RETURN_URL",
+//       ]),
+//     },
+//   };
+// }
 
-export function shouldRevalidate() {
-  return false;
-}
+// export function shouldRevalidate() {
+//   return false;
+// }
 
 const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   // const data = useRouteLoaderData<typeof loader>("root");
 
-  const domain =
-    getPublicEnvVariables(["PUBLIC_SITE_URL"]).PUBLIC_SITE_URL ??
-    "https://thunderstore.io";
+  const domain = import.meta.env.VITE_SITE_URL ?? "https://thunderstore.io";
 
   const location = useLocation();
   const shouldShowAds = location.pathname.startsWith("/teams")
@@ -184,9 +177,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 function App() {
   // TODO: Remove this customization when legacy site is removed
-  const domain =
-    getPublicEnvVariables(["PUBLIC_SITE_URL"]).PUBLIC_SITE_URL ??
-    "https://thunderstore.io";
+  const domain = import.meta.env.VITE_SITE_URL ?? "https://thunderstore.io";
 
   const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>(
     undefined
@@ -223,9 +214,9 @@ export function ErrorBoundary() {
   //   currentUser: CurrentUser;
   // } = JSON.parse(JSON.stringify(loaderOutput));
   const error = useRouteError();
-  if (process.env.NODE_ENV === "production") {
+  if (import.meta.env.PROD) {
     captureRemixErrorBoundaryError(error);
-  } else if (process.env.NODE_ENV === "development") {
+  } else if (import.meta.env.DEV) {
     console.log(error);
   }
   const isResponseError = isRouteErrorResponse(error);

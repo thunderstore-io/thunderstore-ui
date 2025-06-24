@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData, useOutletContext } from "@remix-run/react";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+import { useLoaderData, useOutletContext } from "react-router";
 import {
   NewBreadCrumbs,
   NewBreadCrumbsLink,
@@ -17,7 +17,6 @@ import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { OutletContextShape } from "../root";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [
@@ -29,9 +28,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
     },
     {
       property: "og:url",
-      content: `${getPublicEnvVariables(["PUBLIC_SITE_URL"]).PUBLIC_SITE_URL}${
-        location.pathname
-      }`,
+      content: `${import.meta.env.VITE_SITE_URL}${location.pathname}`,
     },
     {
       property: "og:title",
@@ -67,7 +64,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     try {
       const dapper = new DapperTs(() => {
         return {
-          apiHost: process.env.PUBLIC_API_URL,
+          apiHost: import.meta.env.VITE_API_URL,
           sessionId: undefined,
         };
       });

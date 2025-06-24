@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData, useOutletContext } from "@remix-run/react";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+import { useLoaderData, useOutletContext } from "react-router";
 import { NewBreadCrumbs, NewBreadCrumbsLink } from "@thunderstore/cyberstorm";
 import "./Team.css";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
@@ -21,7 +21,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     try {
       const dapper = new DapperTs(() => {
         return {
-          apiHost: process.env.PUBLIC_API_URL,
+          apiHost: import.meta.env.VITE_API_URL,
           sessionId: undefined,
         };
       });

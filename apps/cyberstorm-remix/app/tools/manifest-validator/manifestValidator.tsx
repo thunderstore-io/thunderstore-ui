@@ -8,7 +8,7 @@ import {
 } from "@thunderstore/cyberstorm";
 import "./manifestValidator.css";
 import { useEffect, useState } from "react";
-import { useOutletContext } from "@remix-run/react";
+import { useOutletContext } from "react-router";
 import { Buffer } from "buffer";
 import {
   isApiError,

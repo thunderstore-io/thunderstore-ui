@@ -3,7 +3,7 @@ import {
   useLoaderData,
   useLocation,
   useOutletContext,
-} from "@remix-run/react";
+} from "react-router";
 import { NewBreadCrumbs, NewLink, Tabs } from "@thunderstore/cyberstorm";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import {
