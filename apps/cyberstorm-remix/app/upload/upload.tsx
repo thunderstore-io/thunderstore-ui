@@ -31,8 +31,8 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { UserMedia } from "@thunderstore/ts-uploader/src/uploaders/types";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { MetaFunction } from "@remix-run/node";
-import { useLoaderData, useOutletContext } from "@remix-run/react";
+import { MetaFunction } from "react-router";
+import { useLoaderData, useOutletContext } from "react-router";
 import {
   PackageSubmissionResult,
   PackageSubmissionStatus,
@@ -68,7 +68,7 @@ export const meta: MetaFunction = () => {
 export async function loader() {
   const dapper = new DapperTs(() => {
     return {
-      apiHost: process.env.PUBLIC_API_URL,
+      apiHost: import.meta.env.VITE_API_URL,
       sessionId: undefined,
     };
   });

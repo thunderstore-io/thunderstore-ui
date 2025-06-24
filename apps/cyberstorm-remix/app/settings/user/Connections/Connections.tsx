@@ -1,7 +1,7 @@
 import { NewLink } from "@thunderstore/cyberstorm";
 
 import { currentUserSchema } from "@thunderstore/dapper-ts";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
 import {
   clearSession,

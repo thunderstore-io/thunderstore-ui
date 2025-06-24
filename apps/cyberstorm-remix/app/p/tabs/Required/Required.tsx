@@ -1,8 +1,8 @@
 import "./Required.css";
 import { Heading } from "@thunderstore/cyberstorm";
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs } from "react-router";
 import { ApiError } from "@thunderstore/thunderstore-api";
-import { useLoaderData, useOutletContext } from "@remix-run/react";
+import { useLoaderData, useOutletContext } from "react-router";
 import { ListingDependency } from "~/commonComponents/ListingDependency/ListingDependency";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { OutletContextShape } from "~/root";
@@ -12,7 +12,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     try {
       const dapper = new DapperTs(() => {
         return {
-          apiHost: process.env.PUBLIC_API_URL,
+          apiHost: import.meta.env.VITE_API_URL,
           sessionId: undefined,
         };
       });

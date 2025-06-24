@@ -1,11 +1,10 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import {
   Outlet,
   useLoaderData,
-  useLocation,
+  useLocation, // useRevalidator,
   useOutletContext,
-  // useRevalidator,
-} from "@remix-run/react";
+} from "react-router";
 import {
   Drawer,
   Heading,
@@ -50,7 +49,6 @@ import {
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { OutletContextShape } from "~/root";
 import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
-import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [
@@ -67,9 +65,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
     },
     {
       property: "og:url",
-      content: `${getPublicEnvVariables(["PUBLIC_SITE_URL"]).PUBLIC_SITE_URL}${
-        location.pathname
-      }`,
+      content: `${import.meta.env.VITE_SITE_URL}${location.pathname}`,
     },
     {
       property: "og:title",
@@ -107,7 +103,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     try {
       const dapper = new DapperTs(() => {
         return {
-          apiHost: process.env.PUBLIC_API_URL,
+          apiHost: import.meta.env.VITE_API_URL,
           sessionId: undefined,
         };
       });

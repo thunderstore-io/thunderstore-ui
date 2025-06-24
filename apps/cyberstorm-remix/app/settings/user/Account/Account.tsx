@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 import "./Account.css";
 import { NewAlert, NewIcon } from "@thunderstore/cyberstorm";
 import {

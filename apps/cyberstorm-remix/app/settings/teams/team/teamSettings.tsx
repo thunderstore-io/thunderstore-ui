@@ -1,10 +1,10 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import {
   Outlet,
   useLoaderData,
   useLocation,
   useOutletContext,
-} from "@remix-run/react";
+} from "react-router";
 import {
   NewBreadCrumbs,
   NewBreadCrumbsLink,

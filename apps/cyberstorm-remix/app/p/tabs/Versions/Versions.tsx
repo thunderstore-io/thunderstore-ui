@@ -12,9 +12,9 @@ import {
   Heading,
   NewAlert,
 } from "@thunderstore/cyberstorm";
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs } from "react-router";
 import { ApiError } from "@thunderstore/thunderstore-api";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 import { versionsSchema } from "@thunderstore/dapper-ts/src/methods/package";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import semverGt from "semver/functions/gt";
@@ -31,7 +31,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     try {
       const dapper = new DapperTs(() => {
         return {
-          apiHost: process.env.PUBLIC_API_URL,
+          apiHost: import.meta.env.VITE_API_URL,
           sessionId: undefined,
         };
       });

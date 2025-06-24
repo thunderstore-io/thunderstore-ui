@@ -1,21 +1,15 @@
-import { RemixBrowser } from "@remix-run/react";
+import { HydratedRouter } from "react-router/dom";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 
-import { useLocation, useMatches } from "@remix-run/react";
+import { useLocation, useMatches } from "react-router";
 import * as Sentry from "@sentry/remix";
 import { useEffect } from "react";
-import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { ContextInterface, SessionProvider } from "@thunderstore/ts-api-react";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
-const publicEnvVars = getPublicEnvVariables([
-  "PUBLIC_CLIENT_SENTRY_DSN",
-  "PUBLIC_API_URL",
-]);
-
 const sessionProvider = SessionProvider({
-  apiHost: publicEnvVars.PUBLIC_API_URL ?? "MISSING_API_HOST",
+  apiHost: import.meta.env.VITE_API_URL ?? "MISSING_API_HOST",
 });
 
 const { clearSession, getConfig } = sessionProvider.props
@@ -27,7 +21,7 @@ window.Dapper = new DapperTs(getConfig, () => {
 });
 
 Sentry.init({
-  dsn: publicEnvVars.PUBLIC_CLIENT_SENTRY_DSN,
+  dsn: import.meta.env.VITE_CLIENT_SENTRY_DSN,
   integrations: [
     Sentry.browserTracingIntegration({
       useEffect,
@@ -56,7 +50,7 @@ startTransition(() => {
   hydrateRoot(
     document,
     <StrictMode>
-      <RemixBrowser />
+      <HydratedRouter />
     </StrictMode>
   );
 });
