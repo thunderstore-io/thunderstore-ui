@@ -19,8 +19,8 @@ export async function fetchTeamServiceAccounts(
       path,
       useSession: true,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: teamServiceAccountsResponseDataSchema,
   });
 }

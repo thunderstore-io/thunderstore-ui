@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./CategoryTagCloud.css";
 import { CategorySelection, TRISTATE_STATES } from "../../../types";
 import { NewButton, NewIcon, NewTag } from "@thunderstore/cyberstorm";
+import { memo } from "react";
 
 const OFF = TRISTATE_STATES[0];
 
@@ -19,7 +20,7 @@ interface Props {
 /**
  * Show currently selected category filters.
  */
-export const CategoryTagCloud = (props: Props) => {
+export const CategoryTagCloud = memo(function CategoryTagCloud(props: Props) {
   const {
     searchValue,
     setSearchValue,
@@ -90,6 +91,6 @@ export const CategoryTagCloud = (props: Props) => {
       </NewButton>
     </div>
   );
-};
+});
 
 CategoryTagCloud.displayName = "CategoryTagCloud";

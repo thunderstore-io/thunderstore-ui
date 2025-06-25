@@ -1,5 +1,5 @@
 import "./DropDown.css";
-import { ReactNode, ReactElement } from "react";
+import { ReactNode, ReactElement, memo } from "react";
 
 import {
   Root,
@@ -32,7 +32,7 @@ interface DropDownProps extends PrimitiveComponentDefaultProps {
   csModifiers?: DropDownModifiers[];
 }
 
-export function DropDown(props: DropDownProps) {
+export const DropDown = memo(function DropDown(props: DropDownProps) {
   const {
     children,
     rootClasses,
@@ -65,7 +65,7 @@ export function DropDown(props: DropDownProps) {
       </Portal>
     </Root>
   );
-}
+});
 
 interface DropDownItemProps
   extends PrimitiveComponentDefaultProps,
@@ -75,7 +75,9 @@ interface DropDownItemProps
   csModifiers?: DropDownItemModifiers[];
 }
 
-export function DropDownItem(props: DropDownItemProps) {
+export const DropDownItem = memo(function DropDownItem(
+  props: DropDownItemProps
+) {
   const {
     children,
     rootClasses,
@@ -98,7 +100,7 @@ export function DropDownItem(props: DropDownItemProps) {
       {children}
     </Item>
   );
-}
+});
 
 interface DropDownDividerProps extends PrimitiveComponentDefaultProps {
   csVariant?: DropDownDividerVariants;
@@ -106,7 +108,9 @@ interface DropDownDividerProps extends PrimitiveComponentDefaultProps {
   csModifiers?: DropDownDividerModifiers[];
 }
 
-export function DropDownDivider(props: DropDownDividerProps) {
+export const DropDownDivider = memo(function DropDownDivider(
+  props: DropDownDividerProps
+) {
   const {
     rootClasses,
     csVariant = "primary",
@@ -129,7 +133,7 @@ export function DropDownDivider(props: DropDownDividerProps) {
       {...fProps}
     />
   );
-}
+});
 
 DropDown.displayName = "DropDown";
 DropDownItem.displayName = "DropDownItem";

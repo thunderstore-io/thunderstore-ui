@@ -1,8 +1,14 @@
 // THIS API ENDPOINT IS NOT IMPLEMENTED YET IN THE THUNDERSTORE API
 
-import { RequestConfig } from "../index";
+import {
+  ApiEndpointProps,
+  TeamServiceAccountAddRequestData,
+  teamServiceAccountAddRequestDataSchema,
+  TeamServiceAccountAddRequestParams,
+  TeamServiceAccountAddResponseData,
+  teamServiceAccountAddResponseSchema,
+} from "../index";
 import { apiFetch } from "../apiFetch";
-import z from "zod";
 
 export type teamAddServiceAccountMetaArgs = {
   teamIdentifier: string;
@@ -13,11 +19,14 @@ export type teamAddServiceAccountApiArgs = {
 };
 
 export function teamAddServiceAccount(
-  config: () => RequestConfig,
-  data: teamAddServiceAccountApiArgs,
-  meta: teamAddServiceAccountMetaArgs
-) {
-  const path = `api/cyberstorm/team/${meta.teamIdentifier}/service-account/create/`;
+  props: ApiEndpointProps<
+    TeamServiceAccountAddRequestParams,
+    object,
+    TeamServiceAccountAddRequestData
+  >
+): Promise<TeamServiceAccountAddResponseData> {
+  const { config, data, params } = props;
+  const path = `api/cyberstorm/team/${params.team_name}/service-account/create/`;
 
   return apiFetch({
     args: {
@@ -29,10 +38,8 @@ export function teamAddServiceAccount(
       },
       useSession: true,
     },
-    // requestSchema: teamAddServiceAccountDataSchema,
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
-    // responseSchema: teamAddServiceAccountResponseDataSchema,
-    responseSchema: z.object({}),
+    requestSchema: teamServiceAccountAddRequestDataSchema,
+    queryParamsSchema: undefined,
+    responseSchema: teamServiceAccountAddResponseSchema,
   });
 }

@@ -18,8 +18,8 @@ export async function fetchCommunity(
       config,
       path,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: communityResponseDataSchema,
   });
 }

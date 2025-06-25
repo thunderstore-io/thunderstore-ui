@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, ReactElement } from "react";
 import "./Select.css";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,16 +19,16 @@ import {
   SelectVariants,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
-type SelectOption<T extends string = string> = {
+export type SelectOption<T extends string = string> = {
   value: T;
   label?: string;
-  leftIcon?: JSX.Element;
+  leftIcon?: ReactElement;
 };
 
 type _SelectProps<T extends string = string> = {
   variant?: "default" | "accent" | "wide";
   defaultOpen?: boolean;
-  icon?: JSX.Element;
+  icon?: ReactElement;
   onChange?: (val: T) => void;
   options: SelectOption<T>[];
   placeholder?: string;
@@ -44,7 +44,9 @@ export type SelectProps<T extends string = string> = _SelectProps<T> &
 
 // TODO: Rework to use regular select preferrably
 // or atleast ensure a11y stuff works
-export function Select<T extends string>(props: SelectProps<T>) {
+export const Select = memo(function Select<T extends string>(
+  props: SelectProps<T>
+) {
   const {
     defaultOpen = false,
     icon = (
@@ -77,7 +79,7 @@ export function Select<T extends string>(props: SelectProps<T>) {
       <Trigger asChild>
         <NewButton
           csVariant="secondary"
-          csSize="medium"
+          csSize={csSize}
           aria-label={forwardedProps["aria-label"]}
           rootClasses={classnames(
             "select__trigger",
@@ -117,7 +119,7 @@ export function Select<T extends string>(props: SelectProps<T>) {
       </Portal>
     </Root>
   );
-}
+});
 
 Select.displayName = "Select";
 

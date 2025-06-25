@@ -1,39 +1,45 @@
+import "./ServiceAccounts.css";
 import {
   NewAlert,
   NewButton,
   Modal,
   NewTable,
   NewIcon,
-  isRecord,
+  NewTextInput,
+  Heading,
 } from "@thunderstore/cyberstorm";
-import {
-  FormSubmitButton,
-  FormTextInput,
-  useFormToaster,
-} from "@thunderstore/cyberstorm-forms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import {
   ApiError,
+  RequestConfig,
   teamAddServiceAccount,
+  TeamServiceAccountAddRequestData,
   teamServiceAccountRemove,
 } from "@thunderstore/thunderstore-api";
-import {
-  ApiForm,
-  teamAddServiceAccountFormSchema,
-} from "@thunderstore/ts-api-react-forms";
-import { z } from "zod";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { OutletContextShape } from "../../../../../root";
-import { useState } from "react";
+import { useReducer, useState } from "react";
+import { DapperTs } from "@thunderstore/dapper-ts";
+import { getSessionTools } from "~/middlewares";
+import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
+import { ApiAction } from "@thunderstore/ts-api-react-actions";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 
 // REMIX TODO: Add check for "user has permission to see this page"
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ context, params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
     try {
-      const dapper = window.Dapper;
+      const tools = getSessionTools(context);
+      const config = tools?.getConfig();
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: config?.apiHost,
+          sessionId: config?.sessionId,
+        };
+      });
       return {
         teamName: params.namespaceId,
         serviceAccounts: await dapper.getTeamServiceAccounts(
@@ -44,7 +50,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       if (error instanceof ApiError) {
         throw new Response("Team not found", { status: 404 });
       } else {
-        // REMIX TODO: Add sentry
         throw error;
       }
     }
@@ -62,67 +67,55 @@ const serviceAccountColumns = [
   { value: "Actions", disableSort: true },
 ];
 
-interface ServiceAccountSuccessResponse {
-  api_token: string;
-  nickname: string;
-  team_name: string;
-}
-
-function isServiceAccountSuccessResponse(
-  responseBodyJson: unknown
-): responseBodyJson is ServiceAccountSuccessResponse {
-  return (
-    isRecord(responseBodyJson) &&
-    typeof responseBodyJson.api_token === "string" &&
-    typeof responseBodyJson.nickname === "string" &&
-    typeof responseBodyJson.team_name === "string"
-  );
-}
-
 export default function ServiceAccounts() {
   const { teamName, serviceAccounts } = useLoaderData<typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
 
   const revalidator = useRevalidator();
 
-  // REMIX TODO: Move current user to stand-alone loader and revalidate only currentUser
+  const toast = useToast();
+
   async function serviceAccountRevalidate() {
     revalidator.revalidate();
   }
 
-  const removeToast = useFormToaster({
-    successMessage: `Service account removed from team`,
-  });
-
-  const addToast = useFormToaster({
-    successMessage: "Service account created",
-  });
-
-  const [serviceAccountAdded, setServiceAccountAdded] = useState(true);
-  const [addedServiceAccountToken, setAddedServiceAccountToken] = useState("");
-  const [addedServiceAccountNickname, setAddedServiceAccountNickname] =
-    useState("");
-
-  function onSubmitSuccessExtra(responseBodyString: object) {
-    // TODO: Fix the Result type resolving in the whole chain of ApiForm
-    // It's now just assumed all results are objects
-    if (isServiceAccountSuccessResponse(responseBodyString)) {
-      setServiceAccountAdded(true);
-      setAddedServiceAccountToken(responseBodyString.api_token);
-      setAddedServiceAccountNickname(responseBodyString.nickname);
+  // Remove service account stuff
+  const removeServiceAccountAction = ApiAction({
+    endpoint: teamServiceAccountRemove,
+    onSubmitSuccess: () => {
+      toast.addToast({
+        csVariant: "success",
+        children: `Service account removed`,
+        duration: 4000,
+      });
       serviceAccountRevalidate();
-      addToast.onSubmitSuccess();
-    } else {
-      addToast.onSubmitError();
-    }
-  }
+    },
+    onSubmitError: (error) => {
+      toast.addToast({
+        csVariant: "danger",
+        children: `Error occurred: ${error.message || "Unknown error"}`,
+        duration: 8000,
+      });
+    },
+  });
 
   const tableData = serviceAccounts.map((serviceAccount, index) => {
     return [
-      { value: serviceAccount.name, sortValue: serviceAccount.name },
       {
-        value: serviceAccount.last_used ?? "Never",
-        sortValue: serviceAccount.last_used ?? "Never",
+        value: (
+          <p className="team-service-accounts__nickname">
+            {serviceAccount.name}
+          </p>
+        ),
+        sortValue: serviceAccount.name,
+      },
+      {
+        value: (
+          <p className="team-service-accounts__last-used">
+            {serviceAccount.last_used ?? "Never"}
+          </p>
+        ),
+        sortValue: serviceAccount.last_used ?? "0",
       },
       {
         value: (
@@ -133,55 +126,79 @@ export default function ServiceAccounts() {
             trigger={
               <NewButton
                 csVariant="danger"
-                {...{
-                  popovertarget: `memberKickModal-${serviceAccount.name}-${index}`,
-                  popovertargetaction: "open",
-                }}
+                popoverTarget={`memberKickModal-${serviceAccount.name}-${index}`}
+                popoverTargetAction="show"
+                csSize="xsmall"
               >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faTrash} />
+                </NewIcon>
                 Remove
               </NewButton>
             }
+            csSize="small"
           >
-            <ApiForm
-              onSubmitSuccess={() => {
-                removeToast.onSubmitSuccess();
-                serviceAccountRevalidate();
-              }}
-              onSubmitError={removeToast.onSubmitError}
-              schema={z.object({})}
-              endpoint={teamServiceAccountRemove}
-              formProps={{ className: "nimbus-commonStyles-modalTempalate" }}
-              meta={{
-                serviceAccountIdentifier: serviceAccount.identifier,
-                teamName: teamName,
-              }}
-              config={outletContext.requestConfig}
-            >
-              <div className="nimbus-commonStyles-modalTempalate__header">
+            <div className="modal-content">
+              <div className="modal-content__header">
                 Remove service account
               </div>
-              <div className="nimbus-commonStyles-modalTempalate__content">
+              <div className="modal-content__body">
                 <NewAlert csVariant="warning">
                   This cannot be undone! Related API token will stop working
                   immediately if the service account is removed.
                 </NewAlert>
                 <div>
                   You are about to remove service account{" "}
-                  <span>{serviceAccount.name}</span>.
+                  <span className="team-service-accounts__highlight">
+                    {serviceAccount.name}
+                  </span>
+                  .
                 </div>
               </div>
-              <div className="nimbus-commonStyles-modalTempalate__footer">
-                <FormSubmitButton csVariant="danger">
+              <div className="modal-content__footer">
+                <NewButton
+                  onClick={() => {
+                    removeServiceAccountAction({
+                      config: outletContext.requestConfig,
+                      params: {
+                        team_name: teamName,
+                      },
+                      queryParams: {},
+                      data: {
+                        service_account_uuid: serviceAccount.identifier,
+                      },
+                    });
+                  }}
+                  csVariant="danger"
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </NewIcon>
                   Remove service account
-                </FormSubmitButton>
+                </NewButton>
               </div>
-            </ApiForm>
+            </div>
           </Modal>
         ),
         sortValue: 0,
       },
     ];
   });
+
+  // Add service account stuff
+  const [serviceAccountAdded, setServiceAccountAdded] = useState(false);
+  const [addedServiceAccountToken, setAddedServiceAccountToken] = useState("");
+  const [addedServiceAccountNickname, setAddedServiceAccountNickname] =
+    useState("");
+
+  function onSuccess(
+    result: Awaited<ReturnType<typeof teamAddServiceAccount>>
+  ) {
+    setServiceAccountAdded(true);
+    setAddedServiceAccountToken(result.api_token);
+    setAddedServiceAccountNickname(result.nickname);
+    serviceAccountRevalidate();
+  }
 
   return (
     <div className="settings-items">
@@ -193,10 +210,8 @@ export default function ServiceAccounts() {
             popoverId="serviceAccountAdd"
             trigger={
               <NewButton
-                {...{
-                  popovertarget: "serviceAccountAdd",
-                  popovertargetaction: "open",
-                }}
+                popoverTarget="serviceAccountAdd"
+                popoverTargetAction="show"
               >
                 Add Service Account
                 <NewIcon csMode="inline" noWrapper>
@@ -204,10 +219,11 @@ export default function ServiceAccounts() {
                 </NewIcon>
               </NewButton>
             }
+            csSize="small"
           >
             {serviceAccountAdded ? (
-              <>
-                <div className="nimbus-commonStyles-modalTempalate__content">
+              <div className="modal-content">
+                <div className="modal-content__content">
                   <p>
                     New service account{" "}
                     <span>{addedServiceAccountNickname}</span> was created
@@ -223,63 +239,132 @@ export default function ServiceAccounts() {
                     password.
                   </NewAlert>
                 </div>
-                <div className="nimbus-commonStyles-modalTempalate__footer">
+                <div className="modal-content__footer">
                   <NewButton
                     onClick={() => {
                       setAddedServiceAccountToken("");
+                      setAddedServiceAccountNickname("");
                       setServiceAccountAdded(false);
                     }}
-                    {...{
-                      popovertarget: "serviceAccountAdd",
-                      popovertargetaction: "close",
-                    }}
+                    popoverTarget="serviceAccountAdd"
+                    popoverTargetAction="hide"
                   >
                     Close
                   </NewButton>
                 </div>
-              </>
+              </div>
             ) : (
-              <ApiForm
-                onSubmitSuccess={onSubmitSuccessExtra}
-                onSubmitError={addToast.onSubmitError}
-                schema={teamAddServiceAccountFormSchema}
-                meta={{ teamIdentifier: teamName }}
-                endpoint={teamAddServiceAccount}
-                formProps={{ className: "__form" }}
+              <AddServiceAccountForm
+                onSuccess={onSuccess}
+                teamName={teamName}
                 config={outletContext.requestConfig}
-              >
-                <div className="nimbus-commonStyles-modalTempalate__header">
-                  Confirm service account removal
-                </div>
-                <div className="nimbus-commonStyles-modalTempalate__content">
-                  <div>
-                    Enter the nickname of the service account you wish to add to
-                    the team <span>{teamName}</span>
-                  </div>
-                  <div>
-                    <FormTextInput
-                      schema={teamAddServiceAccountFormSchema}
-                      name={"nickname"}
-                      placeholder={"ExampleName"}
-                    />
-                  </div>
-                </div>
-                <div className="nimbus-commonStyles-modalTempalate__footer">
-                  <FormSubmitButton>Add Service Account</FormSubmitButton>
-                </div>
-              </ApiForm>
+              />
             )}
           </Modal>
         </div>
         <div className="settings-items__content">
           <NewTable
+            titleRowContent={<Heading csLevel="3">Service Accounts</Heading>}
             headers={serviceAccountColumns}
             rows={tableData}
             sortByHeader={1}
             sortDirection={TableSort.ASC}
-            csModifiers={["alignLastColumnRight"]}
           />
         </div>
+      </div>
+    </div>
+  );
+}
+
+function AddServiceAccountForm(props: {
+  teamName: string;
+  config: () => RequestConfig;
+  onSuccess: (
+    result: Awaited<ReturnType<typeof teamAddServiceAccount>>
+  ) => void;
+}) {
+  const toast = useToast();
+
+  function formFieldUpdateAction(
+    state: TeamServiceAccountAddRequestData,
+    action: {
+      field: keyof TeamServiceAccountAddRequestData;
+      value: TeamServiceAccountAddRequestData[keyof TeamServiceAccountAddRequestData];
+    }
+  ) {
+    return {
+      ...state,
+      [action.field]: action.value,
+    };
+  }
+
+  const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
+    nickname: "",
+  });
+
+  type SubmitorOutput = Awaited<ReturnType<typeof teamAddServiceAccount>>;
+
+  async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
+    return await teamAddServiceAccount({
+      config: props.config,
+      params: { team_name: props.teamName },
+      queryParams: {},
+      data: { nickname: data.nickname },
+    });
+  }
+
+  type InputErrors = {
+    [key in keyof typeof formInputs]?: string | string[];
+  };
+
+  const strongForm = useStrongForm<
+    typeof formInputs,
+    TeamServiceAccountAddRequestData,
+    Error,
+    SubmitorOutput,
+    Error,
+    InputErrors
+  >({
+    inputs: formInputs,
+    submitor,
+    onSubmitSuccess: () => {
+      toast.addToast({
+        csVariant: "success",
+        children: `Service account added`,
+        duration: 4000,
+      });
+    },
+    onSubmitError: (error) => {
+      toast.addToast({
+        csVariant: "danger",
+        children: `Error occurred: ${error.message || "Unknown error"}`,
+        duration: 8000,
+      });
+    },
+  });
+
+  return (
+    <div className="modal-content">
+      <div className="modal-content__header">Add service account</div>
+      <div className="modal-content__body">
+        <div>
+          Enter the nickname of the service account you wish to add to the team{" "}
+          <span>{props.teamName}</span>
+        </div>
+        <div>
+          <NewTextInput
+            onChange={(e) => {
+              updateFormFieldState({
+                field: "nickname",
+                value: e.target.value,
+              });
+            }}
+            placeholder={"ExampleName"}
+          />
+        </div>
+      </div>
+      <div className="modal-content__footer">
+        <NewButton onClick={strongForm.submit}>Add Service Account</NewButton>
       </div>
     </div>
   );

@@ -3,13 +3,19 @@
 
   /* VARIANTS */
 
-  /* .table:where(.table--variant--default) {
-    --table-background-color: var(--dropdown-bg-color--default);
+  .table:where(.table--variant--default) {
+    /* --table-background-color: var(--dropdown-bg-color--default);
     --table-border-color: var(--dropdown-border-color--default);
     --table-box-shadow: var(--shadow-lg);
     --table-animation: fade-in var(--animation-duration-md) ease;
-    --table-border: var(--space-px) var(--select-border-color) solid;
-  } */
+    --table-border: var(--space-px) var(--select-border-color) solid; */
+
+    .table__row {
+      &:hover {
+        --table-row-background-color: var(--color-surface-a3);
+      }
+    }
+  }
 
   /* SIZES */
 

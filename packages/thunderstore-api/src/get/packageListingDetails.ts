@@ -16,8 +16,8 @@ export async function fetchPackageListingDetails(
       config: config,
       path: path,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: packageListingDetailsSchema,
   });
 }

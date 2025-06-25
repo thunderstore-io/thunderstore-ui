@@ -1,8 +1,12 @@
-// THIS API ENDPOINT IS NOT IMPLEMENTED YET IN THE THUNDERSTORE API
-
-import { RequestConfig } from "../index";
+import {
+  ApiEndpointProps,
+  TeamDetailsEditRequestData,
+  teamDetailsEditRequestDataSchema,
+  TeamDetailsEditRequestParams,
+  TeamDetailsEditResponseData,
+  teamDetailsEditResponseSchema,
+} from "../index";
 import { apiFetch } from "../apiFetch";
-import z from "zod";
 
 export type teamDetailsEditMetaArgs = {
   teamIdentifier: string;
@@ -13,26 +17,27 @@ export type teamDetailsEditApiArgs = {
 };
 
 export function teamDetailsEdit(
-  config: () => RequestConfig,
-  data: teamDetailsEditApiArgs,
-  meta: teamDetailsEditMetaArgs
-) {
-  const path = `api/cyberstorm/team/${meta.teamIdentifier}/edit/`;
+  props: ApiEndpointProps<
+    TeamDetailsEditRequestParams,
+    object,
+    TeamDetailsEditRequestData
+  >
+): Promise<TeamDetailsEditResponseData> {
+  const { config, data, params } = props;
+  const path = `api/cyberstorm/team/${params.teamIdentifier}/update/`;
 
   return apiFetch({
     args: {
       config,
       path,
       request: {
-        method: "POST",
+        method: "PATCH",
         body: JSON.stringify(data),
       },
       useSession: true,
     },
-    // requestSchema: teamDetailsEditRequestSchema,
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
-    // responseSchema: teamDetailsEditResponseSchema,
-    responseSchema: z.object({}),
+    requestSchema: teamDetailsEditRequestDataSchema,
+    queryParamsSchema: undefined,
+    responseSchema: teamDetailsEditResponseSchema,
   });
 }

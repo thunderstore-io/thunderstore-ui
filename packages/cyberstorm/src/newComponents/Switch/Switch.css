@@ -6,7 +6,9 @@
     width: var(--switch-width);
     height: var(--switch-height);
     padding: var(--switch-padding);
-    border: var(--switch-border);
+    border-color: var(--switch-border-color);
+    border-style: var(--switch-border-style);
+    border-width: var(--switch-border-width);
     border-radius: var(--switch-border-radius);
     background-color: var(--switch-background-color);
     cursor: var(--switch-cursor);
@@ -14,14 +16,15 @@
     transition: var(--switch-transition);
   }
 
-  .switch__thumb {
-    display: var(--switch-thumb-display);
+  .switch__knob {
+    display: var(--switch-knob-display);
 
-    width: var(--switch-thumb-width);
-    height: var(--switch-thumb-height);
-    border-radius: var(--switch-thumb-border-radius);
-    background-color: var(--switch-thumb-background-color);
-    transform: var(--switch-thumb-transform);
-    transition: var(--switch-thumb-transition);
+    width: var(--switch-knob-width);
+    height: var(--switch-knob-height);
+    border-radius: var(--switch-knob-border-radius);
+    background-color: var(--switch-knob-background-color);
+    box-shadow: var(--switch-knob-box-shadow);
+    transform: var(--switch-knob-transform);
+    transition: var(--switch-knob-transition);
   }
 }

@@ -1,0 +1,127 @@
+import "./Wiki.css";
+
+import { PackageWikiPageResponseData } from "@thunderstore/thunderstore-api";
+import { Heading, NewButton, NewIcon } from "@thunderstore/cyberstorm";
+import {
+  faArrowLeftLong,
+  faArrowRightLong,
+  faCalendarDay,
+  faEdit,
+} from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { memo } from "react";
+import { Markdown } from "~/commonComponents/Markdown/Markdown";
+
+interface WikiContentProps {
+  page: PackageWikiPageResponseData;
+  communityId: string;
+  namespaceId: string;
+  packageId: string;
+  previousPage?: string;
+  nextPage?: string;
+}
+
+export const WikiContent = memo(function WikiContent({
+  page,
+  communityId,
+  namespaceId,
+  packageId,
+  previousPage,
+  nextPage,
+}: WikiContentProps) {
+  return (
+    <>
+      <div className="wiki-content__header">
+        <div className="wiki-content__title">
+          <Heading csLevel="3">{page.title}</Heading>
+          <div className="wiki-content__meta">
+            <span className="wiki-content__meta-date">
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faCalendarDay} />
+              </NewIcon>
+              {page.datetime_created}
+            </span>
+            <span>
+              <i>Updated {page.datetime_updated} ago</i>
+            </span>
+          </div>
+        </div>
+        <div className="wiki-content__actions">
+          <NewButton
+            csSize="small"
+            primitiveType="cyberstormLink"
+            linkId="PackageWikiPageEdit"
+            community={communityId}
+            namespace={namespaceId}
+            package={packageId}
+            wikipageslug={page.slug}
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faEdit} />
+            </NewIcon>
+            Edit
+          </NewButton>
+        </div>
+      </div>
+      <div className="wiki-content__body">
+        <Markdown input={page.markdown_content} />
+        {/* <div className="markdown-wrapper">
+          <div
+            dangerouslySetInnerHTML={{ __html: page.markdown_content }}
+            className="markdown"
+          />
+        </div> */}
+      </div>
+      <div className="wiki-content__footer">
+        {previousPage ? (
+          <NewButton
+            csModifiers={["ghost"]}
+            csVariant="secondary"
+            primitiveType="cyberstormLink"
+            linkId="PackageWikiPage"
+            community={communityId}
+            namespace={namespaceId}
+            package={packageId}
+            wikipageslug={previousPage}
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faArrowLeftLong} />
+            </NewIcon>
+            Previous Page
+          </NewButton>
+        ) : (
+          <NewButton csModifiers={["ghost", "disabled"]} csVariant="secondary">
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faArrowLeftLong} />
+            </NewIcon>
+            Previous Page
+          </NewButton>
+        )}
+        {nextPage ? (
+          <NewButton
+            csModifiers={["ghost"]}
+            csVariant="secondary"
+            primitiveType="cyberstormLink"
+            linkId="PackageWikiPage"
+            community={communityId}
+            namespace={namespaceId}
+            package={packageId}
+            wikipageslug={nextPage}
+          >
+            Next Page
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faArrowRightLong} />
+            </NewIcon>
+          </NewButton>
+        ) : (
+          <NewButton csModifiers={["ghost", "disabled"]} csVariant="secondary">
+            Next Page
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faArrowRightLong} />
+            </NewIcon>
+          </NewButton>
+        )}
+      </div>
+    </>
+  );
+});

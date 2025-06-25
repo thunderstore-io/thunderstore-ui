@@ -1,0 +1,77 @@
+@layer theme-components {
+  .avatar {
+    > .avatar__image {
+      --avatar-image-width: var(--size);
+      --avatar-image-height: var(--size);
+      --avatar-image-border-radius: calc(var(--size) * 4.92);
+      --avatar-image-transition: opacity var(--animation-duration-md)
+        ease-in-out;
+    }
+  }
+
+  /* SIZES */
+  .avatar:where(.avatar--size--verySmoll) {
+    --size: 1.375rem;
+  }
+
+  .avatar:where(.avatar--size--small) {
+    --size: 2.5rem;
+  }
+
+  .avatar:where(.avatar--size--medium) {
+    --size: 3rem;
+  }
+
+  .avatar:where(.avatar--size--large) {
+    --size: 8rem;
+  }
+
+  /* VARIANTS */
+  .avatar:where(.avatar--variant--default) {
+    > .avatar__image {
+      --avatar-image-transition: opacity var(--animation-duration-md)
+        ease-in-out;
+
+      /* --avatar-image-color: var(--avatar-image-color);
+      --avatar-image-background-color: var(--avatar-image-background-color); */
+    }
+
+    &:where(.avatar__placeholder) {
+      > .avatar__image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        --avatar-image-border-radius: calc(var(--size) * 4.92);
+        --avatar-image-background-color: rgb(67 67 132 / 0.32);
+      }
+    }
+
+    &:where(.avatar__placeholder-letter) {
+      > .avatar__image {
+        --avatar-image-color: #39e9aa;
+        --avatar-image-font: var(--font-body);
+        --avatar-image-font-weight: var(--font-weight-semibold);
+        --avatar-image-font-size: calc(var(--size) / 1.9);
+        --avatar-image-line-height: var(--line-height-xs);
+      }
+    }
+
+    &:where(.avatar__placeholder-root) {
+      > .avatar__image {
+        opacity: 0.9;
+      }
+    }
+
+    &:where(.avatar__placeholder-icon) {
+      > .avatar__image {
+        --avatar-image-color: var(--old--color-accent-purple-9);
+      }
+
+      &:hover > .avatar__image {
+        --avatar-image-color: #6060bd;
+        --avatar-image-background-color: #2a2a56;
+      }
+    }
+  }
+}
