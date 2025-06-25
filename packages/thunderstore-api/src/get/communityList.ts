@@ -34,7 +34,7 @@ export async function fetchCommunityList(
       path,
       queryParams,
     },
-    requestSchema: z.object({}),
+    requestSchema: undefined,
     queryParamsSchema: communityListRequestQueryParamsSchema,
     responseSchema: communityListResponseDataSchema,
   });

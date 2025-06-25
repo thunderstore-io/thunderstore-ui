@@ -15,6 +15,7 @@ import {
   teamServiceAccountSchema,
   packageSubmissionStatusSchema,
   markdownRenderSchema,
+  packageWikiPageSchema,
 } from "../schemas/objectSchemas";
 import { paginatedResults } from "../schemas/objectSchemas";
 
@@ -122,6 +123,53 @@ export type PackageVersionsResponseData = z.infer<
   typeof packageVersionsResponseDataSchema
 >;
 
+// PackageWikiResponse
+export const packageWikiResponseDataSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  slug: z.string().min(1),
+  datetime_created: z.string().datetime(),
+  datetime_updated: z.string().datetime(),
+  pages: z.array(
+    z.object({
+      id: z.string().min(1),
+      title: z.string().min(1),
+      slug: z.string().min(1),
+      datetime_created: z.string().datetime(),
+      datetime_updated: z.string().datetime(),
+    })
+  ),
+});
+
+export type PackageWikiResponseData = z.infer<
+  typeof packageWikiResponseDataSchema
+>;
+
+// PackageWikiPageResponse
+export const packageWikiPageResponseDataSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  slug: z.string().min(1),
+  datetime_created: z.string().datetime(),
+  datetime_updated: z.string().datetime(),
+  markdown_content: z.string().min(1),
+});
+export type PackageWikiPageResponseData = z.infer<
+  typeof packageWikiPageResponseDataSchema
+>;
+
+// PackageWikiPageCreateResponse
+export const packageWikiPageCreateResponseDataSchema = packageWikiPageSchema;
+export type PackageWikiPageCreateResponseData = z.infer<
+  typeof packageWikiPageEditResponseDataSchema
+>;
+
+// PackageWikiPageEditResponse
+export const packageWikiPageEditResponseDataSchema = packageWikiPageSchema;
+export type PackageWikiPageEditResponseData = z.infer<
+  typeof packageWikiPageEditResponseDataSchema
+>;
+
 // RatedPackagesResponse
 export const ratedPackagesResponseDataSchema = ratedPackagesSchema;
 
@@ -227,4 +275,23 @@ export const markdownRenderResponseDataSchema = markdownRenderSchema;
 
 export type MarkdownRenderResponseData = z.infer<
   typeof markdownRenderResponseDataSchema
+>;
+
+// TeamDetailsEditResponse
+export const teamDetailsEditResponseSchema = z.object({
+  donation_link: z.string().url().min(1).max(1024),
+});
+
+export type TeamDetailsEditResponseData = z.infer<
+  typeof teamDetailsEditResponseSchema
+>;
+
+// TeamServiceAccountAddResponseSchema
+export const teamServiceAccountAddResponseSchema = z.object({
+  api_token: z.string(),
+  nickname: z.string().min(1),
+});
+
+export type TeamServiceAccountAddResponseData = z.infer<
+  typeof teamServiceAccountAddResponseSchema
 >;

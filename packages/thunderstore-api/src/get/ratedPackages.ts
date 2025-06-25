@@ -18,8 +18,8 @@ export async function fetchRatedPackages(
       request: request,
       useSession: true,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: ratedPackagesResponseDataSchema,
   });
 }

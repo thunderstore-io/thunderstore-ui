@@ -15,18 +15,10 @@
     --animation-timing-1: cubic-bezier(0.16, 1, 0.3, 1);
     --shadow-lg: 0px 0px 4px 0px rgb(0 0 0 / 0.4),
       0px 6px 8px 0px rgb(0 0 0 / 0.5);
-    --color-text-a--default: var(--color-cyber-green-7);
-    --color-text-a--hover: var(--color-cyber-green-6);
     --dropshadow-default: drop-shadow(0 1px 1px #0d0d21);
     --textshadow-default: 0 1px 1px #0d0d21;
 
     /* Color tokens */
-    --color-black: rgb(0 0 0);
-    --color-white: rgb(255 255 255);
-    --color-text-primary: hsl(240deg 5% 96% / 1);
-    --color-text-secondary: hsl(231deg 46% 86% / 1);
-    --color-text-tertiary: hsl(230deg 32% 74% / 1);
-    --color-text-accent: hsl(243deg 100% 88% / 1);
     --color-accent-blue-1: hsl(203deg 78% 5%);
     --color-accent-blue-10: hsl(203deg 92% 86%);
     --color-accent-blue-11: hsl(202deg 92% 95%);
@@ -115,6 +107,28 @@
     --color-cyber-green-7: hsl(157deg 100% 57%);
     --color-cyber-green-8: hsl(159deg 100% 65%);
     --color-cyber-green-9: hsl(159deg 100% 74%);
+    --color-nightsky-1: hsl(240deg 65% 8%);
+    --color-nightsky-10: hsl(240deg 38% 47%);
+    --color-nightsky-11: hsl(246deg 50% 42%);
+    --color-nightsky-2: hsl(240deg 42% 11%);
+    --color-nightsky-3: hsl(240deg 38% 13%);
+    --color-nightsky-4: hsl(236deg 38% 16%);
+    --color-nightsky-5: hsl(240deg 36% 19%);
+    --color-nightsky-6: hsl(240deg 37% 22%);
+    --color-nightsky-7: hsl(240deg 38% 26%);
+    --color-nightsky-8: hsl(240deg 37% 32%);
+    --color-nightsky-9: hsl(240deg 38% 38%);
+    --color-nightsky-a1: hsl(240deg 100% 9% / 0.05);
+    --color-nightsky-a10: hsl(240deg 38% 51% / 0.88);
+    --color-nightsky-a11: hsl(247deg 49% 48% / 0.85);
+    --color-nightsky-a2: hsl(240deg 35% 32% / 0.09);
+    --color-nightsky-a3: hsl(240deg 30% 32% / 0.15);
+    --color-nightsky-a4: hsl(236deg 36% 36% / 0.24);
+    --color-nightsky-a5: hsl(240deg 33% 39% / 0.32);
+    --color-nightsky-a6: hsl(240deg 35% 37% / 0.44);
+    --color-nightsky-a7: hsl(240deg 37% 39% / 0.55);
+    --color-nightsky-a8: hsl(240deg 36% 43% / 0.66);
+    --color-nightsky-a9: hsl(240deg 39% 47% / 0.77);
     --color-surface-1: hsl(240deg 65% 8%);
     --color-surface-10: hsl(240deg 38% 47%);
     --color-surface-11: hsl(246deg 50% 42%);
@@ -137,5 +151,32 @@
     --color-surface-a7: hsl(240deg 37% 39% / 0.55);
     --color-surface-a8: hsl(240deg 36% 43% / 0.66);
     --color-surface-a9: hsl(240deg 39% 47% / 0.77);
+    --color-text-a--default: var(--color-cyber-green-7);
+    --color-text-a--hover: var(--color-cyber-green-7);
+    --color-text-accent: hsl(243deg 100% 88%);
+    --color-text-primary: hsl(240deg 5% 96%);
+    --color-text-secondary: hsl(230deg 47% 86%);
+    --color-text-tertiary: hsl(230deg 32% 74%);
+    --color-ui-background-1: var(--color-nightsky-1);
+    --color-ui-background-2: var(--color-nightsky-2);
+    --color-ui-border-1: var(--color-nightsky-a6);
+    --color-ui-border-2: var(--color-nightsky-a7);
+    --color-ui-border-3: var(--color-nightsky-a8);
+    --color-ui-element-1: var(--color-nightsky-a7);
+    --color-ui-element-2: var(--color-nightsky-a8);
+    --color-ui-element-3: var(--color-nightsky-a9);
+    --color-ui-surface-1: var(--color-nightsky-a3);
+    --color-ui-surface-2: var(--color-nightsky-a4);
+    --color-ui-surface-3: var(--color-nightsky-a5);
+    --color-white-a1: hsl(0deg 0 100% / 0.03);
+    --color-white-a10: hsl(0deg 0 100% / 0.84);
+    --color-white-a2: hsl(0deg 0 100% / 0.06);
+    --color-white-a3: hsl(0deg 0 100% / 0.12);
+    --color-white-a4: hsl(0deg 0 100% / 0.18);
+    --color-white-a5: hsl(0deg 0 100% / 0.24);
+    --color-white-a6: hsl(0deg 0 100% / 0.36);
+    --color-white-a7: hsl(0deg 0 100% / 0.48);
+    --color-white-a8: hsl(0deg 0 100% / 0.6);
+    --color-white-a9: hsl(0deg 0 100% / 0.72);
   }
 }

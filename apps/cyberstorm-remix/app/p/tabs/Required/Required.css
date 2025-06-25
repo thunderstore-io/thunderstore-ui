@@ -1,31 +1,33 @@
-.required {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-md);
-  width: 100%;
-  overflow-x: auto;
-}
+@layer nimbus-layout {
+  .required {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    width: 100%;
+    overflow-x: auto;
+  }
 
-.required__title {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-md);
-  align-items: flex-start;
-  align-self: stretch;
-  padding-bottom: var(--space-24);
-}
+  .required__title {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-items: flex-start;
+    align-self: stretch;
+    padding-bottom: var(--space-24);
+  }
 
-.required__description {
-  color: var(--color-text-secondary);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--line-height-md);
-}
+  .required__description {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-md);
+  }
 
-.required__body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-xxxs);
-  align-items: flex-start;
-  align-self: stretch;
-  padding-bottom: var(--space-32);
+  .required__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xxxs);
+    align-items: flex-start;
+    align-self: stretch;
+    padding-bottom: var(--space-32);
+  }
 }

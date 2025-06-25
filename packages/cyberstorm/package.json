@@ -40,8 +40,6 @@
     "react": "^19.1.0",
     "react-data-table-component": "^7.6.2",
     "react-dom": "^19.1.0",
-    "react-markdown": "^9.0.1",
-    "remark-gfm": "^4.0.0",
     "s-ago": "^2.2.0",
     "styled-components": "^6.1.13",
     "use-debounce": "^10.0.3",

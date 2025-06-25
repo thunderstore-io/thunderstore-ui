@@ -30,17 +30,15 @@ export function Modal(props: Props) {
         )}
       >
         <NewButton
-          {...{
-            popovertarget: props.popoverId,
-            popovertargetaction: "close",
-          }}
+          popoverTarget={props.popoverId}
+          popoverTargetAction="hide"
           csVariant="secondary"
           csSize="medium"
           csModifiers={["ghost", "only-icon"]}
           tooltipText="Close"
           rootClasses="modal__button"
         >
-          <NewIcon csMode="inline" noWrapper>
+          <NewIcon csMode="inline" csVariant="secondary" noWrapper>
             <FontAwesomeIcon icon={faXmarkLarge} />
           </NewIcon>
         </NewButton>

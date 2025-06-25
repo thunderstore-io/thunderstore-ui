@@ -26,6 +26,7 @@ export interface ThunderstoreLinkProps {
   version?: string;
   team?: string;
   user?: string;
+  wikipageslug?: string;
 }
 
 // STEP 2 of adding new link definitions:
@@ -41,6 +42,7 @@ export const thunderstoreLinkProps: ThunderstoreLinkProps = {
   version: "",
   team: "",
   user: "",
+  wikipageslug: "",
 };
 
 // Accepting any and all props is required to keep the linking
@@ -84,6 +86,16 @@ export interface LinkLibrary {
   PackageRequired: (props: AnyProps & PackageProps) => RE | null;
   /** Package's wiki view */
   PackageWiki: (props: AnyProps & PackageProps) => RE | null;
+  /** Package's wiki view */
+  PackageWikiNewPage: (props: AnyProps & PackageProps) => RE | null;
+  /** Package's wiki page view */
+  PackageWikiPage: (
+    props: AnyProps & PackageProps & { wikipageslug: string }
+  ) => RE | null;
+  /** Package's wiki page edit view */
+  PackageWikiPageEdit: (
+    props: AnyProps & PackageProps & { wikipageslug: string }
+  ) => RE | null;
   /** Package's changelog view */
   PackageChangelog: (props: AnyProps & PackageProps) => RE | null;
   /** Package's versions view */
@@ -139,6 +151,9 @@ const library: LinkLibrary = {
   Package: noop,
   PackageRequired: noop,
   PackageWiki: noop,
+  PackageWikiNewPage: noop,
+  PackageWikiPage: noop,
+  PackageWikiPageEdit: noop,
   PackageChangelog: noop,
   PackageVersions: noop,
   PackageSource: noop,

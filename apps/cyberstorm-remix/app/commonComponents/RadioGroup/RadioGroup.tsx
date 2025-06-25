@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./RadioGroup.css";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { NewIcon } from "@thunderstore/cyberstorm";
+import { memo } from "react";
 
 interface Props {
   sections: Section[];
@@ -12,7 +13,7 @@ interface Props {
   setSelected: (v: string) => void;
 }
 
-export const RadioGroup = (props: Props) => {
+export const RadioGroup = memo(function RadioGroup(props: Props) {
   const { sections, selected, setSelected } = props;
 
   return (
@@ -48,6 +49,6 @@ export const RadioGroup = (props: Props) => {
       ))}
     </RadixRadioGroup.Root>
   );
-};
+});
 
 RadioGroup.displayName = "RadioGroup";

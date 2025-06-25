@@ -1,47 +1,16 @@
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false;
 
-export * as Button from "./components/Button/";
 export { CodeBox, type CodeBoxProps } from "./components/CodeBox/CodeBox";
-export {
-  BreadCrumbs,
-  DefaultHomeCrumb,
-} from "./components/BreadCrumbs/BreadCrumbs";
-export * as Dialog from "./components/Dialog/";
 export * as EmptyState from "./newComponents/EmptyState";
-export { Icon } from "./components/Icon/Icon";
 
 export { CyberstormLink } from "./components/Links/Links";
 export { ValidationBar } from "./components/ValidationBar/ValidationBar";
-export { Markdown } from "./components/Markdown/Markdown";
-export * as MenuItem from "./components/MenuItem/";
-export type { MenuItemProps } from "./components/MenuItem/";
-export { MetaItem, type MetaItemProps } from "./components/MetaItem/MetaItem";
-export { SelectSearch } from "./components/SelectSearch/SelectSearch";
-export {
-  MultiSelectSearch,
-  type MultiSelectSearchOption,
-} from "./components/MultiSelectSearch/MultiSelectSearch";
-export { Switch, type SwitchProps } from "./components/Switch/Switch";
-export { CyberstormProviders } from "./components/Providers";
-export { Select, type SelectProps } from "./components/Select/Select";
-export { Tag, type TagProps } from "./components/Tag/Tag";
-export {
-  TextInput,
-  type TextInputProps,
-} from "./components/TextInput/TextInput";
 export {
   TextAreaInput,
   type TextAreaInputProps,
 } from "./components/TextAreaInput/TextAreaInput";
-export { Title, type TitleProps } from "./components/Title/Title";
 export { Tooltip, type TooltipProps } from "./newComponents/Tooltip/Tooltip";
-export { Alert, type AlertProps } from "./components/Alert/Alert";
-export { Avatar } from "./components/Avatar/Avatar";
-export { AvatarButton } from "./components/Avatar/AvatarButton";
-export { Table, Sort } from "./components/Table/Table";
-export { SettingItem } from "./components/SettingItem/SettingItem";
-export { ImageWithFallback } from "./components/ImageWithFallback/ImageWithFallback";
 
 // primitiveComponents
 export {
@@ -69,6 +38,7 @@ export {
 export { type PrimitiveComponentDefaultProps } from "./primitiveComponents/utils/utils";
 
 // newComponents
+export { Avatar as NewAvatar } from "./newComponents/Avatar/Avatar";
 export { Menu } from "./newComponents/Menu/Menu";
 export { Drawer } from "./newComponents/Drawer/Drawer";
 export { Modal } from "./newComponents/Modal/Modal";
@@ -107,7 +77,10 @@ export {
 export { Switch as NewSwitch } from "./newComponents/Switch/Switch";
 export { Icon as NewIcon } from "./newComponents/Icon/Icon";
 export { Tag as NewTag } from "./newComponents/Tag/Tag";
-export { Alert as NewAlert } from "./newComponents/Alert/Alert";
+export {
+  Alert as NewAlert,
+  type AlertProps as NewAlertProps,
+} from "./newComponents/Alert/Alert";
 export { MetaItem as NewMetaItem } from "./newComponents/MetaItem/MetaItem";
 export { Pagination as NewPagination } from "./newComponents/Pagination/Pagination";
 export {

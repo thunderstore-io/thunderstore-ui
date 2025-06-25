@@ -1,23 +1,29 @@
 import { LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import {
-  FormSubmitButton,
-  FormTextInput,
-  // TeamDetailsEdit,
-  useFormToaster,
-} from "@thunderstore/cyberstorm-forms";
-import { ApiError, teamDetailsEdit } from "@thunderstore/thunderstore-api";
-import {
-  ApiForm,
-  teamDetailsEditFormSchema,
-} from "@thunderstore/ts-api-react-forms";
+  ApiError,
+  teamDetailsEdit,
+  TeamDetailsEditRequestData,
+} from "@thunderstore/thunderstore-api";
 import { OutletContextShape } from "~/root";
 import "./Profile.css";
+import { DapperTs } from "@thunderstore/dapper-ts";
+import { getSessionTools } from "~/middlewares";
+import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { useReducer } from "react";
+import { NewButton, NewTextInput } from "@thunderstore/cyberstorm";
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ context, params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
     try {
-      const dapper = window.Dapper;
+      const tools = getSessionTools(context);
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: tools?.getConfig().apiHost,
+          sessionId: tools?.getConfig().sessionId,
+        };
+      });
       return {
         team: await dapper.getTeamDetails(params.namespaceId),
       };
@@ -43,54 +49,99 @@ export default function Profile() {
 
   const revalidator = useRevalidator();
 
-  async function teamProfileRevalidate() {
-    revalidator.revalidate();
+  const toast = useToast();
+
+  function formFieldUpdateAction(
+    state: TeamDetailsEditRequestData,
+    action: {
+      field: keyof TeamDetailsEditRequestData;
+      value: TeamDetailsEditRequestData[keyof TeamDetailsEditRequestData];
+    }
+  ) {
+    return {
+      ...state,
+      [action.field]: action.value,
+    };
   }
 
-  const { onSubmitSuccess, onSubmitError } = useFormToaster({
-    successMessage: "Changes saved",
+  const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
+    donation_link: "",
+  });
+
+  type SubmitorOutput = Awaited<ReturnType<typeof teamDetailsEdit>>;
+
+  async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
+    return await teamDetailsEdit({
+      config: outletContext.requestConfig,
+      params: { teamIdentifier: team.name },
+      data: { donation_link: data.donation_link },
+      queryParams: {},
+    });
+  }
+
+  type InputErrors = {
+    [key in keyof typeof formInputs]?: string | string[];
+  };
+
+  const strongForm = useStrongForm<
+    typeof formInputs,
+    TeamDetailsEditRequestData,
+    Error,
+    SubmitorOutput,
+    Error,
+    InputErrors
+  >({
+    inputs: formInputs,
+    submitor,
+    onSubmitSuccess: () => {
+      toast.addToast({
+        csVariant: "success",
+        children: `Changes saved successfully`,
+        duration: 4000,
+      });
+      revalidator.revalidate();
+    },
+    onSubmitError: (error) => {
+      toast.addToast({
+        csVariant: "danger",
+        children: `Error occurred: ${error.message || "Unknown error"}`,
+        duration: 8000,
+      });
+    },
   });
 
   return (
     <div className="settings-items team-profile">
-      <ApiForm
-        onSubmitSuccess={() => {
-          onSubmitSuccess();
-          teamProfileRevalidate();
-        }}
-        onSubmitError={onSubmitError}
-        schema={teamDetailsEditFormSchema}
-        meta={{ teamIdentifier: team.name }}
-        endpoint={teamDetailsEdit}
-        formProps={{ className: "settings-items__item" }}
-        config={outletContext.requestConfig}
-      >
+      <div className="settings-items__item">
         <div className="settings-items__meta">
-          <p className="settings-items__title">Team donation link</p>
-          <p className="settings-items__description">
-            For example shown in the teams packages pages
-          </p>
+          <p className="settings-items__title">Donation Link</p>
         </div>
         <div className="settings-items__content">
           <div className="settings-items__island">
             <div className="team-profile__donationLink">
               <span className="team-profile__label">URL</span>
-              <FormTextInput
-                schema={teamDetailsEditFormSchema}
+              <NewTextInput
                 name={"donation_link"}
                 placeholder={"https://"}
-                existingValue={
-                  team.donation_link === null ? undefined : team.donation_link
+                value={formInputs.donation_link}
+                onChange={(e) =>
+                  updateFormFieldState({
+                    field: "donation_link",
+                    value: e.target.value,
+                  })
                 }
                 rootClasses="team-profile__input"
               />
             </div>
           </div>
-          <FormSubmitButton rootClasses="team-profile__save">
+          <NewButton
+            rootClasses="team-profile__save"
+            onClick={strongForm.submit}
+          >
             Save changes
-          </FormSubmitButton>
+          </NewButton>
         </div>
-      </ApiForm>
+      </div>
     </div>
   );
 }
