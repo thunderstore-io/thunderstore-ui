@@ -1,6 +1,5 @@
 import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import { z } from "zod";
 import {
   MarkdownRenderRequestData,
   markdownRenderRequestDataSchema,
@@ -30,7 +29,7 @@ export function toolsMarkdownPreview(
       },
     },
     requestSchema: markdownRenderRequestDataSchema,
-    queryParamsSchema: z.object({}),
+    queryParamsSchema: undefined,
     responseSchema: markdownRenderResponseDataSchema,
   });
 }

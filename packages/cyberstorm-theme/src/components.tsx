@@ -149,3 +149,9 @@ export {
   type SwitchModifiers,
   SwitchModifiersList,
 } from "./components/Switch/Switch";
+export {
+  type AvatarVariants,
+  AvatarVariantsList,
+  type AvatarSizes,
+  AvatarSizesList,
+} from "./components/Avatar/Avatar";

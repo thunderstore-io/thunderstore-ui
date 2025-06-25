@@ -25,6 +25,7 @@ import {
   TableRow,
 } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
+import { getSessionTools } from "~/middlewares";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
@@ -62,10 +63,16 @@ export async function loader({ params }: LoaderFunctionArgs) {
   };
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ context, params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
+    const tools = getSessionTools(context);
+    const dapper = new DapperTs(() => {
+      return {
+        apiHost: tools?.getConfig().apiHost,
+        sessionId: tools?.getConfig().sessionId,
+      };
+    });
     try {
-      const dapper = window.Dapper;
       return {
         status: "ok",
         message: "",

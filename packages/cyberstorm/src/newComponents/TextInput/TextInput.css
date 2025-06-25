@@ -3,6 +3,7 @@
     position: relative;
     display: flex;
     align-items: center;
+    align-self: stretch;
     width: var(--text-input-wrapper-width);
     font-weight: var(--text-input-wrapper-font-weight);
     font-size: var(--text-input-wrapper-font-size);

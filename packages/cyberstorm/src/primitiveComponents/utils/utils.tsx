@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { memo, PropsWithChildren } from "react";
 import { Tooltip } from "../..";
 
 interface TooltipWrapperProps extends PropsWithChildren {
@@ -12,11 +12,13 @@ export interface PrimitiveComponentDefaultProps
   rootClasses?: string;
 }
 
-export const TooltipWrapper = (props: TooltipWrapperProps) =>
-  props.tooltipText ? (
+export const TooltipWrapper = memo(function TooltipWrapper(
+  props: TooltipWrapperProps
+) {
+  if (!props.tooltipText) return <>{props.children}</>;
+  return (
     <Tooltip content={props.tooltipText} side={props.tooltipSide ?? "bottom"}>
       {props.children}
     </Tooltip>
-  ) : (
-    <>{props.children}</>
   );
+});

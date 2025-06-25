@@ -45,7 +45,7 @@ export async function fetchPackageDependantsListings(
       path,
       queryParams,
     },
-    requestSchema: z.object({}),
+    requestSchema: undefined,
     queryParamsSchema: packageListingsRequestQueryParamsSchema,
     responseSchema: packageListingsResponseDataSchema,
   });

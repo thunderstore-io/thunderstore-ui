@@ -16,14 +16,13 @@ import {
   Menu,
   NewLink,
   NewIcon,
-  Avatar,
   Heading,
   NewButton,
   NewDropDown,
   NewDropDownItem,
   Modal,
   NewDropDownDivider,
-  AvatarButton,
+  NewAvatar,
 } from "@thunderstore/cyberstorm";
 import {
   OverwolfLogo,
@@ -42,11 +41,11 @@ import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 
 export function Navigation(props: {
-  hydrationCheck: boolean;
+  // hydrationCheck: boolean;
   currentUser?: CurrentUser;
   domain: string;
 }) {
-  const { hydrationCheck, currentUser, domain } = props;
+  const { currentUser, domain } = props;
   return (
     <>
       <header
@@ -151,7 +150,7 @@ export function Navigation(props: {
               primitiveType="link"
               href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
               csSize="small"
-              csVariant="secondary"
+              csVariant="accent"
               aria-label="Get Thunderstore Mod Manager App"
             >
               Get Manager
@@ -160,23 +159,25 @@ export function Navigation(props: {
           {currentUser?.username ? (
             <span className="navigation-header__profile-actions">
               <NewButton
-                primitiveType="link"
-                href={`${domain}/package/create/`}
+                // primitiveType="link"
+                // href={`${domain}/package/create/`}
                 // TODO: Take these into use when the upload page is ready
-                // primitiveType="cyberstormLink"
-                // linkId="PackageUpload"
+                primitiveType="cyberstormLink"
+                linkId="PackageUpload"
                 csVariant="secondary"
-                csModifiers={["ghost", "only-icon"]}
+                csSize="small"
+                // csModifiers={["ghost", "only-icon"]}
                 tooltipText="Upload"
               >
                 <NewIcon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faUpload} />
                 </NewIcon>
+                Upload
               </NewButton>
             </span>
           ) : null}
 
-          {hydrationCheck && currentUser ? (
+          {currentUser ? (
             <DesktopUserDropdown user={currentUser} domain={domain} />
           ) : (
             <DesktopLoginPopover />
@@ -186,10 +187,8 @@ export function Navigation(props: {
 
       <nav className="mobile-navigation">
         <button
-          {...{
-            popovertarget: "mobileNavMenu",
-            popovertargetaction: "open",
-          }}
+          popoverTarget="mobileNavMenu"
+          popoverTargetAction="show"
           className="mobile-navigation__item"
         >
           <NewIcon noWrapper>
@@ -208,18 +207,16 @@ export function Navigation(props: {
           Browse
         </NewLink>
         <button
-          {...{
-            popovertarget: "mobileNavAccount",
-            popovertargetaction: "open",
-          }}
+          popoverTarget="mobileNavAccount"
+          popoverTargetAction="show"
           className="mobile-navigation__item"
         >
-          <Avatar
+          <NewAvatar
             src={
               currentUser?.connections.find((c) => c.avatar !== null)?.avatar
             }
             username={currentUser ? currentUser.username : null}
-            size="verySmoll"
+            csSize="verySmoll"
           />
           Account
         </button>
@@ -236,10 +233,8 @@ export function DesktopLoginPopover() {
         <NewButton
           csVariant="accent"
           csSize="small"
-          {...{
-            popovertarget: "navAccount",
-            popovertargetaction: "open",
-          }}
+          popoverTarget="navAccount"
+          popoverTargetAction="show"
         >
           <NewIcon csMode="inline" noWrapper>
             <FontAwesomeIcon icon={faArrowRightToBracket} />
@@ -351,7 +346,12 @@ export function DesktopUserDropdown(props: {
     <NewDropDown
       contentAlignment="end"
       trigger={
-        <AvatarButton src={avatar} username={user.username} size="small" />
+        <button className="navigation-header__user-button">
+          <NewAvatar src={avatar} username={user.username} csSize="verySmoll" />
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faCaretDown} />
+          </NewIcon>
+        </button>
       }
       rootClasses="navigation-header__user-dropdown"
     >
@@ -360,17 +360,15 @@ export function DesktopUserDropdown(props: {
         onSelect={(event) => event.preventDefault()}
       >
         <div>
-          <Avatar src={avatar} username={user.username} size="small" />
+          <NewAvatar src={avatar} username={user.username} csSize="small" />
           <p className="navigation-header__dropdown-details">{user.username}</p>
         </div>
       </NewDropDownItem>
       <NewDropDownDivider />
       <NewDropDownItem asChild>
         <NewLink
-          // primitiveType="cyberstormLink"
-          // linkId="Settings"
-          primitiveType="link"
-          href={`${domain}/settings/linked-accounts/`}
+          primitiveType="cyberstormLink"
+          linkId="Settings"
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
@@ -381,10 +379,8 @@ export function DesktopUserDropdown(props: {
       </NewDropDownItem>
       <NewDropDownItem asChild>
         <NewLink
-          // primitiveType="cyberstormLink"
-          // linkId="Teams"
-          primitiveType="link"
-          href={`${domain}/settings/teams/`}
+          primitiveType="cyberstormLink"
+          linkId="Teams"
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
@@ -424,10 +420,8 @@ export function MobileNavigationMenu({ domain }: { domain: string }) {
           popoverId={"mobileNavMenuDevelopers"}
           trigger={
             <button
-              {...{
-                popovertarget: "mobileNavMenuDevelopers",
-                popovertargetaction: "open",
-              }}
+              popoverTarget="mobileNavMenuDevelopers"
+              popoverTargetAction="show"
               className="mobile-navigation__popover-item mobile-navigation__popover--thick mobile-navigation__developers-button"
             >
               Developers
@@ -438,10 +432,8 @@ export function MobileNavigationMenu({ domain }: { domain: string }) {
           }
           controls={
             <NewButton
-              {...{
-                popovertarget: "mobileNavMenuDevelopers",
-                popovertargetaction: "close",
-              }}
+              popoverTarget="mobileNavMenuDevelopers"
+              popoverTargetAction="hide"
               aria-label="Back to previous menu"
               csSize="medium"
               csVariant="secondary"
@@ -531,7 +523,7 @@ export function MobileUserPopoverContent(props: {
       {user && user.username ? (
         <div className="mobile-navigation__popover">
           <div className="mobile-navigation__avatar">
-            <Avatar src={avatar} username={user.username} size="small" />
+            <NewAvatar src={avatar} username={user.username} csSize="small" />
             <p className="mobile-navigation__user-details">{user.username}</p>
           </div>
           {/* <NewLink

@@ -68,6 +68,27 @@
   /* .navigation-header__user-dropdown {
   } */
 
+  .navigation-header__user-button {
+    display: inline-flex;
+    flex-shrink: 0;
+    gap: 0.25rem;
+    align-items: center;
+    justify-content: center;
+    height: 2.25rem;
+    padding: 0.25rem;
+    border-radius: var(--radius-full);
+    background: transparent;
+    background: var(--color-ui-element-1);
+
+    > .avatar {
+      --size: 1.75rem;
+    }
+
+    &:hover {
+      background: var(--color-ui-element-3);
+    }
+  }
+
   .navigation-header__avatar {
     display: flex;
     gap: var(--gap-md);

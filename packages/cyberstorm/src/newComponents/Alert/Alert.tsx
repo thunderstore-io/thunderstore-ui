@@ -14,7 +14,7 @@ import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NewIcon, PrimitiveComponentDefaultProps } from "../..";
 
-interface AlertProps extends PrimitiveComponentDefaultProps {
+export interface AlertProps extends PrimitiveComponentDefaultProps {
   csVariant?: AlertVariants;
   csSize?: AlertSizes;
 }

@@ -33,7 +33,7 @@ export function postPackageSubmission(
       useSession: true,
     },
     requestSchema: packageSubmissionRequestDataSchema,
-    queryParamsSchema: z.object({}),
+    queryParamsSchema: undefined,
     responseSchema: packageSubmissionResponseDataSchema,
   });
 }
@@ -55,7 +55,7 @@ export function toolsManifestValidate(
       useSession: true,
     },
     requestSchema: submissionValidateManifestRequestDataSchema,
-    queryParamsSchema: z.object({}),
+    queryParamsSchema: undefined,
     responseSchema: submissionValidateManifestResponseDataSchema,
   });
 }

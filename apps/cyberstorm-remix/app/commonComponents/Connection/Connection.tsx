@@ -1,17 +1,16 @@
 import "./Connection.css";
-import { NewIcon, NewButton } from "@thunderstore/cyberstorm";
+import { NewIcon, NewSwitch } from "@thunderstore/cyberstorm";
 import { OAuthConnection } from "@thunderstore/dapper/types";
-import { userLinkedAccountDisconnectFormSchema } from "@thunderstore/ts-api-react-forms";
+import { ReactElement } from "react";
+import { userLinkedAccountDisconnectProviders } from "../../../../../packages/thunderstore-api/src";
 
 interface ConnectionProps {
   name: string;
   identifier: "discord" | "github" | "overwolf";
-  icon: JSX.Element;
+  icon: ReactElement;
   connection?: OAuthConnection;
   connectionLink: string;
-  disconnectFunction: (
-    data: typeof userLinkedAccountDisconnectFormSchema._type
-  ) => void;
+  disconnectFunction: (data: userLinkedAccountDisconnectProviders) => void;
 }
 
 export function Connection(props: ConnectionProps) {
@@ -30,19 +29,16 @@ export function Connection(props: ConnectionProps) {
             <span className="connection__username">{connection.username}</span>
           </div>
         ) : null}
-        {connection ? (
-          <NewButton
-            csVariant="danger"
-            onClick={() => props.disconnectFunction({ provider: identifier })}
-          >
-            Disconnect
-          </NewButton>
-        ) : (
-          <NewButton csVariant="success" href={connectionLink}>
-            Connect
-          </NewButton>
-        )}
-        {/* <Switch value={connection !== undefined} /> */}
+        <NewSwitch
+          value={connection !== undefined}
+          onChange={() => {
+            if (connection) {
+              props.disconnectFunction(identifier);
+            } else {
+              window.open(connectionLink);
+            }
+          }}
+        />
       </div>
     </div>
   );

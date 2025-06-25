@@ -37,6 +37,7 @@ import { CheckboxList } from "../CheckboxList/CheckboxList";
 import { StalenessIndicator } from "../StalenessIndicator/StalenessIndicator";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { RequestConfig } from "@thunderstore/thunderstore-api";
+import { DapperTs } from "@thunderstore/dapper-ts";
 
 const PER_PAGE = 20;
 
@@ -46,6 +47,7 @@ interface Props {
   sections: Section[];
   config: () => RequestConfig;
   currentUser?: CurrentUser;
+  dapper: DapperTs;
 }
 
 type SearchParamsType = {
@@ -149,6 +151,7 @@ export function PackageSearch(props: Props) {
     sections,
     config,
     currentUser,
+    dapper,
   } = props;
 
   const navigation = useNavigation();
@@ -480,7 +483,7 @@ export function PackageSearch(props: Props) {
   const [ratedPackages, setRatedPackages] = useState<string[]>([]);
 
   const fetchAndSetRatedPackages = async () => {
-    setRatedPackages((await window.Dapper.getRatedPackages()).rated_packages);
+    setRatedPackages((await dapper.getRatedPackages()).rated_packages);
   };
 
   const currentUserRef = useRef(currentUser);

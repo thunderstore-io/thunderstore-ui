@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { memo, PropsWithChildren } from "react";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Collapsible.css";
@@ -13,7 +13,7 @@ interface Props extends PropsWithChildren {
 /**
  * Wrapper for making a menu collapsible
  */
-export const CollapsibleMenu = (props: Props) => {
+export const CollapsibleMenu = memo(function CollapsibleMenu(props: Props) {
   const { headerTitle, defaultOpen, children } = props;
 
   return (
@@ -32,6 +32,6 @@ export const CollapsibleMenu = (props: Props) => {
       <div className="collapsible__content">{children}</div>
     </details>
   );
-};
+});
 
 CollapsibleMenu.displayName = "CollapsibleMenu";

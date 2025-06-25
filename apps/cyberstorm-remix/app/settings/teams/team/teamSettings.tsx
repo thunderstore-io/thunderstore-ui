@@ -15,6 +15,8 @@ import { ApiError } from "@thunderstore/thunderstore-api";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { OutletContextShape } from "../../../root";
 import "./teamSettings.css";
+import { DapperTs } from "@thunderstore/dapper-ts";
+import { getSessionTools } from "~/middlewares";
 
 export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
   return [
@@ -24,10 +26,17 @@ export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
 };
 
 // REMIX TODO: Add check for "user has permission to see this page"
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ context, params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
     try {
-      const dapper = window.Dapper;
+      const tools = getSessionTools(context);
+      const config = tools?.getConfig();
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: config?.apiHost,
+          sessionId: config?.sessionId,
+        };
+      });
       return {
         team: await dapper.getTeamDetails(params.namespaceId),
       };
@@ -35,7 +44,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       if (error instanceof ApiError) {
         throw new Response("Team not found", { status: 404 });
       } else {
-        // REMIX TODO: Add sentry
         throw error;
       }
     }
@@ -82,53 +90,57 @@ export default function Community() {
           tabItems={[
             {
               itemProps: {
-                key: "profile",
                 primitiveType: "cyberstormLink",
                 linkId: "TeamSettings",
                 team: team.name,
                 "aria-current": currentTab === "profile",
                 children: <>Profile</>,
-              },
+              } as React.ComponentPropsWithRef<typeof NewLink>,
+              key: "profile",
               current: currentTab === "profile",
             },
             {
               itemProps: {
-                key: "members",
                 primitiveType: "cyberstormLink",
                 linkId: "TeamSettingsMembers",
                 team: team.name,
                 "aria-current": currentTab === "members",
                 children: <>Members</>,
-              },
+              } as React.ComponentPropsWithRef<typeof NewLink>,
+              key: "members",
               current: currentTab === "members",
             },
             {
               itemProps: {
-                key: "service-accounts",
                 primitiveType: "cyberstormLink",
                 linkId: "TeamSettingsServiceAccounts",
                 team: team.name,
                 "aria-current": currentTab === "service-accounts",
                 children: <>Service Accounts</>,
-              },
+              } as React.ComponentPropsWithRef<typeof NewLink>,
+              key: "service-accounts",
               current: currentTab === "service-accounts",
             },
             {
               itemProps: {
-                key: "settings",
                 primitiveType: "cyberstormLink",
                 linkId: "TeamSettingsSettings",
                 team: team.name,
                 "aria-current": currentTab === "settings",
                 children: <>Settings</>,
-              },
+              } as React.ComponentPropsWithRef<typeof NewLink>,
+              key: "settings",
               current: currentTab === "settings",
             },
           ]}
-          renderTabItem={(itemProps, numberSlate) => {
-            const { key, children, ...fItemProps } = itemProps;
+          renderTabItem={(key, itemProps, numberSlate) => {
+            const { children, ...fItemProps } =
+              itemProps as React.ComponentPropsWithRef<typeof NewLink>;
             return (
-              <NewLink key={key} {...fItemProps}>
+              <NewLink
+                key={key}
+                {...(fItemProps as React.ComponentProps<typeof NewLink>)}
+              >
                 {children}
                 {numberSlate}
               </NewLink>

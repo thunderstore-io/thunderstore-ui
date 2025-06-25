@@ -28,6 +28,10 @@ export interface ContextInterface {
   clearCookies: () => void;
   /** Set SessionData in storage */
   setSession: (sessionData: SessionData) => void;
+  /** Set session stale state */
+  setSessionStale: (isStale: boolean) => void;
+  /** Get session stale state */
+  getSessionStale: () => boolean;
   /** Get RequestConfig for Dapper usage */
   getConfig: (domain?: string) => RequestConfig;
   /** Check if session is valid and try to repair if not */
@@ -39,19 +43,20 @@ export interface ContextInterface {
   /** Store given CurrentUser */
   storeCurrentUser: (currentUser: User) => void;
   /** Function to get the currentUser */
-  getSessionCurrentUser: (forceUpdateCurrentUser?: boolean) => User | EmptyUser;
+  getSessionCurrentUser: () => Promise<User | EmptyUser>;
 }
 
 interface SessionData {
   apiHost: string;
   sessionId: string;
-  username: string;
+  stale: "yes" | "no";
 }
 
 const SessionContext = createContext<ContextInterface | null>(null);
 export const ID_KEY = "id";
 export const USERNAME_KEY = "username";
 export const API_HOST_KEY = "apiHost";
+export const STALE_KEY = "stale";
 
 // CurrentUser objects keys
 export const CURRENT_USER_KEY = "currentUser";
@@ -74,6 +79,14 @@ export function SessionProvider(props: Props) {
 
   const _setSession = (sessionData: SessionData) => {
     setSession(_storage, sessionData);
+  };
+
+  const _setSessionStale = (isStale: boolean) => {
+    setSessionStale(_storage, isStale);
+  };
+
+  const _getSessionStale = () => {
+    return getSessionStale(_storage);
   };
 
   const _clearSession = (clearApiHost: boolean = false) => {
@@ -101,8 +114,8 @@ export function SessionProvider(props: Props) {
     updateCurrentUser(_storage);
   };
 
-  const _getSessionCurrentUser = (forceUpdateCurrentUser: boolean = false) => {
-    return getSessionCurrentUser(_storage, forceUpdateCurrentUser);
+  const _getSessionCurrentUser = () => {
+    return getSessionCurrentUser(_storage);
   };
 
   if (typeof window !== "undefined") {
@@ -111,8 +124,8 @@ export function SessionProvider(props: Props) {
     if (sessionidCookie) {
       _setSession({
         sessionId: sessionidCookie,
-        username: "",
         apiHost: props.apiHost,
+        stale: "no",
       });
     } else {
       _storage.setValue(API_HOST_KEY, props.apiHost);
@@ -129,14 +142,12 @@ export function SessionProvider(props: Props) {
     storeCurrentUser: _storeCurrentUser,
     getSessionCurrentUser: _getSessionCurrentUser,
     setSession: _setSession,
+    setSessionStale: _setSessionStale,
+    getSessionStale: _getSessionStale,
     apiHost: props.apiHost,
   };
 
-  return (
-    <SessionContext.Provider value={value}>
-      {props.children}
-    </SessionContext.Provider>
-  );
+  return <SessionContext value={value}>{props.children}</SessionContext>;
 }
 
 // Util functions
@@ -160,15 +171,22 @@ export const setSession = (
 ) => {
   _storage.setValue(API_HOST_KEY, sessionData.apiHost);
   _storage.setValue(ID_KEY, sessionData.sessionId);
-  _storage.setValue(USERNAME_KEY, sessionData.username);
+  _storage.setValue(STALE_KEY, sessionData.stale ? "yes" : "no");
+};
+
+export const setSessionStale = (_storage: StorageManager, isStale: boolean) => {
+  _storage.setValue(STALE_KEY, isStale ? "yes" : "no");
+};
+
+export const getSessionStale = (_storage: StorageManager) => {
+  return _storage.safeGetValue(STALE_KEY) === "yes";
 };
 
 export const clearSession = (
   _storage: StorageManager,
   clearApiHost: boolean
 ) => {
-  _storage.removeValue(ID_KEY);
-  _storage.removeValue(USERNAME_KEY);
+  _storage.removeValue(CURRENT_USER_KEY);
   if (clearApiHost) {
     _storage.removeValue(API_HOST_KEY);
   }
@@ -195,8 +213,8 @@ export const getConfig = (
 export const sessionValid = (_storage: StorageManager): boolean => {
   const sessionidCookie = getCookie("sessionid");
   const storedSessionId = _storage.safeGetValue(ID_KEY);
-  const storedUsername = _storage.safeGetValue(USERNAME_KEY);
   const storedApiHost = _storage.safeGetValue(API_HOST_KEY);
+  const storedStale = _storage.safeGetValue(STALE_KEY);
 
   if (storedSessionId) {
     // Has storage values
@@ -218,8 +236,13 @@ export const sessionValid = (_storage: StorageManager): boolean => {
     if (sessionidCookie) {
       setSession(_storage, {
         sessionId: sessionidCookie,
-        username: storedUsername ?? "",
         apiHost: storedApiHost ?? "",
+        stale:
+          typeof storedStale === typeof "string"
+            ? storedStale === "yes"
+              ? "yes"
+              : "no"
+            : "yes",
       });
       return true;
     }
@@ -254,24 +277,22 @@ export const updateCurrentUser = async (
   );
   const currentUser = await dapper.getCurrentUser();
   // Only store the currentUser if it's not empty
-  if (currentUser.username !== null) {
+  if (currentUser && currentUser.username !== null) {
     storeCurrentUser(_storage, currentUser);
   }
+  setSessionStale(_storage, false);
 };
 
-export const getSessionCurrentUser = (
-  _storage: StorageManager,
-  forceUpdateCurrentUser: boolean = false,
-  customGetConfig?: (domain?: string) => RequestConfig,
-  customClearSession?: () => void
-): User | EmptyUser => {
-  if (forceUpdateCurrentUser) {
-    (async () => {
-      await updateCurrentUser(_storage, customGetConfig, customClearSession);
-    })();
+export const getSessionCurrentUser = async (
+  _storage: StorageManager
+): Promise<User | EmptyUser> => {
+  const isStale = _storage.safeGetValue(STALE_KEY);
+  if (!(typeof isStale === "string") || !(isStale === "no")) {
+    // If the session is stale, we need to refresh it
+    await updateCurrentUser(_storage);
   }
-
   let currentUser = _storage.safeGetJsonValue(CURRENT_USER_KEY);
+  // Let's set the currentUser to an empty user if it's null
   if (currentUser === null) {
     currentUser = {
       username: null,
@@ -283,7 +304,9 @@ export const getSessionCurrentUser = (
       teams: [],
       teams_full: [],
     };
+    storeCurrentUser(_storage, currentUser);
   }
+  currentUser = _storage.safeGetJsonValue(CURRENT_USER_KEY);
   const parsed = userSchema.safeParse(currentUser);
   if (!parsed.success) {
     const emptyUser = emptyUserSchema.safeParse(currentUser);
@@ -314,6 +337,80 @@ export const useSession = (): ContextInterface => {
   }
 
   return contextState;
+};
+
+export const getSessionContext = (apiHost: string): ContextInterface => {
+  const _storage = new StorageManager("Session");
+
+  const _setSession = (sessionData: SessionData) => {
+    setSession(_storage, sessionData);
+  };
+
+  const _setSessionStale = (isStale: boolean) => {
+    setSessionStale(_storage, isStale);
+  };
+
+  const _getSessionStale = () => {
+    return getSessionStale(_storage);
+  };
+
+  const _clearSession = (clearApiHost: boolean = false) => {
+    clearSession(_storage, clearApiHost);
+  };
+
+  const _clearCookies = () => {
+    clearCookies();
+  };
+
+  const _getConfig = (domain?: string): RequestConfig => {
+    return getConfig(_storage, domain);
+  };
+
+  // Check current session and try to fix it if cookies are not the same as storage
+  const _sessionValid = (): boolean => {
+    return sessionValid(_storage);
+  };
+
+  const _storeCurrentUser = (currentUser: User) => {
+    storeCurrentUser(_storage, currentUser);
+  };
+
+  const _updateCurrentUser = async () => {
+    updateCurrentUser(_storage);
+  };
+
+  const _getSessionCurrentUser = () => {
+    return getSessionCurrentUser(_storage);
+  };
+
+  if (typeof window !== "undefined") {
+    const sessionidCookie = getCookie("sessionid");
+
+    if (sessionidCookie) {
+      _setSession({
+        sessionId: sessionidCookie,
+        apiHost: apiHost,
+        stale: "no",
+      });
+    } else {
+      _storage.setValue(API_HOST_KEY, apiHost);
+      _sessionValid();
+    }
+  }
+
+  return {
+    clearSession: _clearSession,
+    clearCookies: _clearCookies,
+    getConfig: _getConfig,
+    sessionValid: _sessionValid,
+    updateCurrentUser: _updateCurrentUser,
+    storeCurrentUser: _storeCurrentUser,
+    getSessionCurrentUser: _getSessionCurrentUser,
+    setSession: _setSession,
+    setSessionStale: _setSessionStale,
+    getSessionStale: _getSessionStale,
+    apiHost: apiHost,
+  };
 };
 
 /**

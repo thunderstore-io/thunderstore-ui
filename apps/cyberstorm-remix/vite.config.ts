@@ -11,7 +11,7 @@ export default defineConfig({
     watch: { usePolling: true, interval: 500 },
     hmr: { path: "/react-router" },
     allowedHosts: [
-      ".thunderstore.temp",
+      // ".thunderstore.temp",
       ".thunderstore.dev",
       ".thunderstore.io",
     ],

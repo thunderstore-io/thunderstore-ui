@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import { memo, PropsWithChildren } from "react";
 
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,7 +21,7 @@ type BreadCrumbsProps = PropsWithChildren<{
 
 // TODO: This component is not complete and probably is in need of redesign
 // TODO: https://developers.google.com/search/docs/appearance/structured-data/breadcrumb#microdata
-export function BreadCrumbs(props: BreadCrumbsProps) {
+export const BreadCrumbs = memo(function BreadCrumbs(props: BreadCrumbsProps) {
   const {
     children,
     rootClasses,
@@ -53,19 +53,16 @@ export function BreadCrumbs(props: BreadCrumbsProps) {
       {children}
     </Frame>
   );
-}
+});
 
-export const BreadCrumbsLink = React.forwardRef<
-  HTMLAnchorElement,
-  NewLinkProps | NewCyberstormLinkProps
->((props: NewLinkProps | NewCyberstormLinkProps, forwardedRef) => {
+export function BreadCrumbsLink(props: NewLinkProps | NewCyberstormLinkProps) {
   const { children, ...forwardedProps } = props;
 
   return (
-    <NewLink {...forwardedProps} ref={forwardedRef}>
+    <NewLink {...forwardedProps} ref={props.ref}>
       <span>{children}</span>
     </NewLink>
   );
-});
+}
 
 BreadCrumbsLink.displayName = "BreadCrumbsLink";

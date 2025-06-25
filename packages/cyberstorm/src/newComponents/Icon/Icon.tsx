@@ -1,5 +1,5 @@
 import { Frame, FrameIconProps } from "../../primitiveComponents/Frame/Frame";
-import React from "react";
+import { memo } from "react";
 import "./Icon.css";
 import { classnames, componentClasses } from "../../utils/utils";
 import { IconVariants } from "@thunderstore/cyberstorm-theme/src/components";
@@ -8,16 +8,12 @@ interface IconProps extends Omit<FrameIconProps, "primitiveType"> {
   csVariant?: IconVariants;
 }
 
-export const Icon = React.forwardRef<
-  HTMLDivElement | HTMLSpanElement | SVGElement,
-  IconProps
->((props: IconProps, forwardedRef) => {
+export const Icon = memo(function Icon(props: IconProps) {
   const { rootClasses, csVariant, ...forwardedProps } = props;
   return (
     <Frame
       primitiveType="icon"
       {...forwardedProps}
-      ref={forwardedRef}
       rootClasses={classnames(
         ...componentClasses("icon", csVariant, undefined, undefined),
         rootClasses

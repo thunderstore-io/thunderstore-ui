@@ -11,6 +11,7 @@ import { NewLink, NewIcon, Image, NewTag, NewMetaItem } from "../../..";
 import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
 import "./CardCommunity.css";
 import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
+import { memo } from "react";
 
 interface Props {
   community: Community;
@@ -18,7 +19,7 @@ interface Props {
   isNew?: boolean;
 }
 
-export function CardCommunity(props: Props) {
+export const CardCommunity = memo(function CardCommunity(props: Props) {
   const { community, isPopular, isNew } = props;
 
   return (
@@ -96,6 +97,6 @@ export function CardCommunity(props: Props) {
       </div>
     </div>
   );
-}
+});
 
 CardCommunity.displayName = "CardCommunity";

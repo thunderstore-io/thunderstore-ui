@@ -71,6 +71,7 @@ export interface TableProps {
       columnMeta: TableCompareColumnMeta
     ) => number;
   };
+  ref?: React.Ref<HTMLTableElement>;
 }
 
 export function tableDefaultCompare(
@@ -117,114 +118,109 @@ function SortButton(props: SortButtonProps) {
   );
 }
 
-export const Table = React.forwardRef<HTMLTableElement, TableProps>(
-  (props: TableProps, forwardedRef) => {
-    const {
-      titleRowContent,
-      headers,
-      rows,
-      sortByHeader = 0,
-      sortDirection = TableSort.DESC,
-      disableSort = false,
-      gridTemplateColumns,
-      rootClasses,
-      csVariant = "default",
-      csSize = "medium",
-      csModifiers = [],
-      customSortCompare,
-    } = props;
+export function Table(props: TableProps) {
+  const {
+    titleRowContent,
+    headers,
+    rows,
+    sortByHeader = 0,
+    sortDirection = TableSort.DESC,
+    disableSort = false,
+    gridTemplateColumns,
+    rootClasses,
+    csVariant = "default",
+    csSize = "medium",
+    csModifiers = [],
+    customSortCompare,
+    ref,
+  } = props;
 
-    const [sortVariables, setSortVariables] = useState<TableCompareColumnMeta>({
-      identifier: sortByHeader,
-      direction: sortDirection,
-    });
+  const [sortVariables, setSortVariables] = useState<TableCompareColumnMeta>({
+    identifier: sortByHeader,
+    direction: sortDirection,
+  });
 
-    if (!disableSort) {
-      if (customSortCompare && customSortCompare[sortVariables.identifier]) {
-        rows.sort((a, b) =>
-          customSortCompare[sortVariables.identifier](a, b, sortVariables)
-        );
-      } else {
-        rows.sort((a, b) => tableDefaultCompare(a, b, sortVariables));
-      }
-    }
-
-    // const rowCount = { "--row-count": rows.length } as CSSProperties;
-    let columnCSSProps = {};
-    if (gridTemplateColumns) {
-      columnCSSProps = {
-        "--column-count": headers.length,
-        "--dynamic-grid-template-columns": gridTemplateColumns,
-      } as CSSProperties;
+  if (!disableSort) {
+    if (customSortCompare && customSortCompare[sortVariables.identifier]) {
+      rows.sort((a, b) =>
+        customSortCompare[sortVariables.identifier](a, b, sortVariables)
+      );
     } else {
-      columnCSSProps = { "--column-count": headers.length } as CSSProperties;
+      rows.sort((a, b) => tableDefaultCompare(a, b, sortVariables));
     }
+  }
 
-    return (
-      <table
-        className={classnames(
-          "table",
-          ...componentClasses("table", csVariant, csSize, csModifiers),
-          rootClasses
-        )}
-        ref={forwardedRef}
-      >
-        <colgroup>
-          <col span={headers.length} />
-        </colgroup>
-        {titleRowContent ? (
-          <caption className="table__caption">{titleRowContent}</caption>
-        ) : null}
-        <thead>
-          <tr className="table__row" style={columnCSSProps}>
-            {headers.map((header, headerI) => (
-              <th
-                key={headerI}
-                className="table__header"
-                style={columnCSSProps}
-                scope="col"
-              >
-                {header.disableSort ? (
-                  header.value
-                ) : (
-                  <SortButton
-                    identifier={headerI}
-                    current={sortVariables.identifier}
-                    direction={sortVariables.direction}
-                    hook={setSortVariables}
-                    label={header.value}
-                  />
+  // const rowCount = { "--row-count": rows.length } as CSSProperties;
+  let columnCSSProps = {};
+  if (gridTemplateColumns) {
+    columnCSSProps = {
+      "--column-count": headers.length,
+      "--dynamic-grid-template-columns": gridTemplateColumns,
+    } as CSSProperties;
+  } else {
+    columnCSSProps = { "--column-count": headers.length } as CSSProperties;
+  }
+
+  return (
+    <table
+      className={classnames(
+        "table",
+        ...componentClasses("table", csVariant, csSize, csModifiers),
+        rootClasses
+      )}
+      ref={ref}
+    >
+      <colgroup>
+        <col span={headers.length} />
+      </colgroup>
+      {titleRowContent ? (
+        <caption className="table__caption">{titleRowContent}</caption>
+      ) : null}
+      <thead>
+        <tr className="table__row" style={columnCSSProps}>
+          {headers.map((header, headerI) => (
+            <th
+              key={headerI}
+              className="table__header"
+              style={columnCSSProps}
+              scope="col"
+            >
+              {header.disableSort ? (
+                header.value
+              ) : (
+                <SortButton
+                  identifier={headerI}
+                  current={sortVariables.identifier}
+                  direction={sortVariables.direction}
+                  hook={setSortVariables}
+                  label={header.value}
+                />
+              )}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row, rowI) => (
+          <tr key={`row${rowI}`} className="table__row" style={columnCSSProps}>
+            {row.map((col, colI) => (
+              <td
+                key={`row${rowI}_col${colI}`}
+                className={classnames(
+                  "table__item",
+                  headers[colI] && headers[colI].columnClasses
+                    ? `${headers[colI].columnClasses}`
+                    : undefined
                 )}
-              </th>
+              >
+                {col.value}
+              </td>
             ))}
           </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, rowI) => (
-            <tr
-              key={`row${rowI}`}
-              className="table__row"
-              style={columnCSSProps}
-            >
-              {row.map((col, colI) => (
-                <td
-                  key={`row${rowI}_col${colI}`}
-                  className={classnames(
-                    "table__item",
-                    headers[colI] && headers[colI].columnClasses
-                      ? `${headers[colI].columnClasses}`
-                      : undefined
-                  )}
-                >
-                  {col.value}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    );
-  }
-);
+        ))}
+      </tbody>
+    </table>
+  );
+}
 
 Table.displayName = "Table";

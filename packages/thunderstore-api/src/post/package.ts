@@ -38,7 +38,7 @@ export function packageRate(
       useSession: props.useSession,
     },
     requestSchema: packageRateRequestDataSchema,
-    queryParamsSchema: z.object({}),
+    queryParamsSchema: undefined,
     responseSchema: packageRateResponseDataSchema,
   });
 }
@@ -65,7 +65,7 @@ export function packageDeprecate(
       useSession: props.useSession,
     },
     requestSchema: packageDeprecateRequestDataSchema,
-    queryParamsSchema: z.object({}),
+    queryParamsSchema: undefined,
     responseSchema: packageDeprecateResponseDataSchema,
   });
 }

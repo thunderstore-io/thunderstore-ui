@@ -2,6 +2,7 @@ import {
   fetchTeamDetails,
   fetchTeamMembers,
   fetchTeamServiceAccounts,
+  teamCreate,
 } from "@thunderstore/thunderstore-api";
 
 import { DapperTsInterface } from "../index";
@@ -48,6 +49,17 @@ export async function getTeamServiceAccounts(
       team_name: teamName,
     },
     data: {},
+    queryParams: {},
+  });
+
+  return data;
+}
+
+export async function postTeamCreate(this: DapperTsInterface, name: string) {
+  const data = await teamCreate({
+    config: this.config,
+    params: {},
+    data: { name },
     queryParams: {},
   });
 

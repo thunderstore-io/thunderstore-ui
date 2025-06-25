@@ -6,6 +6,10 @@
     border-collapse: separate;
     border-spacing: 0;
 
+    .table__row {
+      background-color: var(--table-row-background-color);
+    }
+
     tr > th,
     tr > td {
       padding: 8px 16px;
