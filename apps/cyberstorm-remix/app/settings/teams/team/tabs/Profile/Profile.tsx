@@ -13,11 +13,19 @@ import {
 } from "@thunderstore/ts-api-react-forms";
 import { OutletContextShape } from "~/root";
 import "./Profile.css";
+import { DapperTs } from "@thunderstore/dapper-ts";
+import { getSessionTools } from "~/middlewares";
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ context, params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
     try {
-      const dapper = window.Dapper;
+      const tools = getSessionTools(context);
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: tools?.getConfig().apiHost,
+          sessionId: tools?.getConfig().sessionId,
+        };
+      });
       return {
         team: await dapper.getTeamDetails(params.namespaceId),
       };

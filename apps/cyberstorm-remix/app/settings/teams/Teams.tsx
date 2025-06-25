@@ -1,5 +1,10 @@
 import type { MetaFunction } from "react-router";
-import { useLoaderData, useRevalidator } from "react-router";
+import {
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+  useRouteLoaderData,
+} from "react-router";
 import {
   Modal,
   NewBreadCrumbs,
@@ -7,82 +12,157 @@ import {
   NewIcon,
   NewLink,
   NewTable,
+  NewTextInput,
 } from "@thunderstore/cyberstorm";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
 import {
-  FormSubmitButton,
-  FormTextInput,
-  useFormToaster,
-} from "@thunderstore/cyberstorm-forms";
-import { currentUserSchema } from "@thunderstore/dapper-ts";
+  useEffect,
+  useRef,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
+import { TeamCreateRequestData } from "@thunderstore/thunderstore-api";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { DapperTs } from "@thunderstore/dapper-ts";
+import { postTeamCreate } from "@thunderstore/dapper-ts/src/methods/team";
+import { OutletContextShape, RootClientLoader } from "../../root";
 import {
-  clearSession,
-  getConfig,
-  getSessionCurrentUser,
   NamespacedStorageManager,
+  updateCurrentUser,
 } from "@thunderstore/ts-api-react";
-import {
-  ApiForm,
-  createTeamFormSchema,
-} from "@thunderstore/ts-api-react-forms";
 
-export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
+export const meta: MetaFunction<
+  unknown,
+  {
+    root: RootClientLoader;
+  }
+> = ({ matches }) => {
+  const rootData = matches.find((match) => match.id === "root")?.data;
   return [
-    { title: `Teams of ${data?.currentUser.username}` },
-    { name: "description", content: `Teams of ${data?.currentUser.username}` },
+    { title: `Teams of ${rootData?.currentUser?.username}` },
+    {
+      name: "description",
+      content: `Teams of ${rootData?.currentUser?.username}`,
+    },
   ];
 };
 
-export async function clientLoader() {
-  const _storage = new NamespacedStorageManager("Session");
-  const currentUser = getSessionCurrentUser(_storage, true, undefined, () => {
-    clearSession(_storage);
-    throw new Response("Your session has expired, please log in again", {
-      status: 401,
-    });
-    // redirect("/");
-  });
+// export async function loader() {
+//   // console.log("loader context", getSessionTools(context));
+//   const dapper = new DapperTs(() => {
+//     return {
+//       apiHost: import.meta.env.VITE_API_URL,
+//       sessionId: undefined,
+//     };
+//   });
+//   return await dapper.getCommunities();
+// }
 
-  if (
-    !currentUser.username ||
-    (currentUser.username && currentUser.username === "")
-  ) {
-    clearSession(_storage);
-    throw new Response("Not logged in.", { status: 401 });
-  } else {
-    return {
-      config: getConfig(_storage),
-      currentUser: currentUser as typeof currentUserSchema._type,
-    };
-  }
-}
-
-export function HydrateFallback() {
-  return <div style={{ padding: "32px" }}>Loading...</div>;
-}
+// export async function clientLoader() {
+//   // console.log("clientloader context", getSessionTools(context));
+//   const dapper = window.Dapper;
+//   return await dapper.getCommunities();
+// }
 
 export default function Teams() {
-  const { config, currentUser } = useLoaderData<typeof clientLoader>();
+  // const uploadData = useLoaderData<typeof loader | typeof clientLoader>();
+  // console.log(uploadData);
+
+  // const { config, currentUser } = useLoaderData<typeof clientLoader>();
   const revalidator = useRevalidator();
   const [isRefetching, setIsRefetching] = useState(false);
+  // const rootData = useRouteLoaderData<RootClientLoader>("root");
 
-  const { onSubmitSuccess, onSubmitError } = useFormToaster({
-    successMessage: "Team created",
-  });
+  const outletContext = useOutletContext() as OutletContextShape;
+  const currentUser = outletContext.currentUser;
+
+  const toast = useToast();
+  console.log("Current user loaded1:", currentUser);
 
   useEffect(() => {
+    console.log("Current user loaded2:", outletContext.currentUser);
     setIsRefetching(false);
-  }, [currentUser]);
+  }, [outletContext.currentUser]);
 
   async function createTeamRevalidate() {
+    console.log("Updating current user...");
+    const storage = new NamespacedStorageManager("Session");
+    await updateCurrentUser(storage);
+    console.log("Revalidating loaders");
     if (!isRefetching) {
       setIsRefetching(true);
+      // const sleep = (ms: number) =>
+      //   new Promise((resolve) => setTimeout(resolve, ms));
+      // await sleep(5000); // Simulate a delay for the revalidation
       revalidator.revalidate();
     }
   }
+
+  function formFieldUpdateAction(
+    state: TeamCreateRequestData,
+    action: {
+      field: keyof TeamCreateRequestData;
+      value: TeamCreateRequestData[keyof TeamCreateRequestData];
+    }
+  ) {
+    console.log(
+      "Updating form field:",
+      action.field,
+      "with value:",
+      action.value
+    );
+    return {
+      ...state,
+      [action.field]: action.value,
+    };
+  }
+
+  const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
+    name: "",
+  });
+
+  type SubmitorOutput = Awaited<ReturnType<typeof postTeamCreate>>;
+
+  async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
+    return await outletContext.dapper.postTeamCreate(data.name);
+  }
+
+  type InputErrors = {
+    [key in keyof typeof formInputs]?: string | string[];
+  };
+
+  const strongForm = useStrongForm<
+    typeof formInputs,
+    TeamCreateRequestData,
+    Error,
+    SubmitorOutput,
+    Error,
+    InputErrors
+  >({
+    inputs: formInputs,
+    submitor,
+    onSubmitSuccess: (fi) => {
+      createTeamRevalidate();
+      updateFormFieldState({ field: "name", value: "" });
+      toast.addToast({
+        csVariant: "success",
+        children: `Team ${fi.name} created!`,
+        duration: 4000,
+      });
+    },
+    onSubmitError: (error) => {
+      toast.addToast({
+        csVariant: "danger",
+        children: `Error occurred: ${error.message || "Unknown error"}`,
+        duration: 8000,
+      });
+    },
+  });
 
   return (
     <div className="container container--y container--full layout__content">
@@ -99,15 +179,13 @@ export default function Teams() {
           <div className="settings-items__meta">
             <p className="settings-items__title">Teams</p>
             <p className="settings-items__description">Manage your teams</p>
-            {/* <Modal
+            <Modal
               popoverId={"teamsCreateTeam"}
               csSize="small"
               trigger={
                 <NewButton
-                  {...{
-                    popovertarget: "teamsCreateTeam",
-                    popovertargetaction: "open",
-                  }}
+                  popoverTarget="teamsCreateTeam"
+                  popoverTargetAction="show"
                 >
                   Create Team
                   <NewIcon csMode="inline" noWrapper>
@@ -116,18 +194,7 @@ export default function Teams() {
                 </NewButton>
               }
             >
-              <ApiForm
-                config={() => config}
-                onSubmitSuccess={() => {
-                  createTeamRevalidate();
-                  onSubmitSuccess();
-                }}
-                onSubmitError={onSubmitError}
-                schema={createTeamFormSchema}
-                meta={{}}
-                endpoint={createTeam}
-                formProps={{ className: "nimbus-commonStyles-modalTempalate" }}
-              >
+              <div className="nimbus-commonStyles-modalTempalate">
                 <div className="nimbus-commonStyles-modalTempalate__header">
                   Create team
                 </div>
@@ -138,52 +205,60 @@ export default function Teams() {
                     or end with an _
                   </div>
                   <div>
-                    <FormTextInput
-                      schema={createTeamFormSchema}
-                      name={"name"}
+                    <NewTextInput
                       placeholder={"ExampleName"}
+                      onChange={(v) =>
+                        updateFormFieldState({
+                          field: "name",
+                          value: v.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
                 <div className="nimbus-commonStyles-modalTempalate__footer">
-                  <FormSubmitButton>Create</FormSubmitButton>
+                  <NewButton onClick={strongForm.submit}>Create</NewButton>
                 </div>
-              </ApiForm>
-            </Modal> */}
+              </div>
+            </Modal>
           </div>
           <div className="settings-items__content">
-            <NewTable
-              csModifiers={["alignLastColumnRight"]}
-              headers={[
-                { value: "Team Name", disableSort: false },
-                { value: "Role", disableSort: false },
-                { value: "Members", disableSort: false },
-              ]}
-              rows={currentUser.teams.map((team) => [
-                {
-                  value: (
-                    <NewLink
-                      primitiveType="cyberstormLink"
-                      linkId="TeamSettings"
-                      key={team.name}
-                      team={team.name}
-                      csVariant="cyber"
-                    >
-                      {team.name}
-                    </NewLink>
-                  ),
-                  sortValue: team.name,
-                },
-                {
-                  value: team.role,
-                  sortValue: team.role,
-                },
-                {
-                  value: team.member_count,
-                  sortValue: team.member_count,
-                },
-              ])}
-            />
+            {currentUser?.teams_full && currentUser.teams_full.length !== 0 ? (
+              <NewTable
+                csModifiers={["alignLastColumnRight"]}
+                headers={[
+                  { value: "Team Name", disableSort: false },
+                  { value: "Role", disableSort: false },
+                  { value: "Members", disableSort: false },
+                ]}
+                rows={currentUser.teams_full.map((team) => [
+                  {
+                    value: (
+                      <NewLink
+                        primitiveType="cyberstormLink"
+                        linkId="TeamSettings"
+                        key={team.name}
+                        team={team.name}
+                        csVariant="cyber"
+                      >
+                        {team.name}
+                      </NewLink>
+                    ),
+                    sortValue: team.name,
+                  },
+                  {
+                    value: team.role,
+                    sortValue: team.role,
+                  },
+                  {
+                    value: team.member_count,
+                    sortValue: team.member_count,
+                  },
+                ])}
+              />
+            ) : (
+              <p>No teams found</p>
+            )}
           </div>
         </div>
       </section>

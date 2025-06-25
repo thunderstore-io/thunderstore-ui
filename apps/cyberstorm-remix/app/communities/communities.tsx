@@ -17,13 +17,16 @@ import { faGhost, faFire } from "@fortawesome/free-solid-svg-icons";
 import { useDebounce } from "use-debounce";
 import {
   useLoaderData,
-  useNavigationType, // useNavigation,
+  useNavigationType,
+  useOutletContext, // useNavigation,
   useSearchParams,
 } from "react-router";
 import { Communities } from "@thunderstore/dapper/types";
 // import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { getSessionTools } from "~/middlewares";
+import { OutletContextShape } from "~/root";
 
 export const meta: MetaFunction = () => {
   return [
@@ -78,12 +81,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   );
 }
 
-export async function clientLoader({ request }: LoaderFunctionArgs) {
+export async function clientLoader({ context, request }: LoaderFunctionArgs) {
+  const tools = getSessionTools(context);
+  const dapper = new DapperTs(() => {
+    return {
+      apiHost: tools?.getConfig().apiHost,
+      sessionId: tools?.getConfig().sessionId,
+    };
+  });
   const searchParams = new URL(request.url).searchParams;
   const order = searchParams.get("order");
   const search = searchParams.get("search");
   const page = undefined;
-  const dapper = window.Dapper;
   return await dapper.getCommunities(
     page,
     order ?? SortOptions.Popular,
@@ -93,6 +102,7 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
 
 export default function CommunitiesPage() {
   const communitiesData = useLoaderData<typeof loader | typeof clientLoader>();
+  console.log("Communities data loaded:", communitiesData);
   const navigationType = useNavigationType();
 
   const [searchParams, setSearchParams] = useSearchParams();

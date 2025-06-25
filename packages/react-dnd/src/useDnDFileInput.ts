@@ -2,7 +2,7 @@ import React, { RefObject } from "react";
 import { useDnD } from "./useDnD";
 
 type useDragAndDropInputProps = {
-  inputRef: RefObject<HTMLInputElement>;
+  inputRef: RefObject<HTMLInputElement | null>;
   readonly?: boolean;
   onChange?: (files: FileList) => void;
 };
@@ -11,7 +11,7 @@ export const useDnDFileInput = (props: useDragAndDropInputProps) => {
 
   const onChange = () => {
     if (!props.readonly) {
-      const inp = props.inputRef.current;
+      const inp = props.inputRef?.current;
       const files = inp?.files;
       if (props.onChange && files) {
         props.onChange(files);
@@ -22,7 +22,7 @@ export const useDnDFileInput = (props: useDragAndDropInputProps) => {
 
   const onDrop = (e: React.DragEvent) => {
     if (!props.readonly) {
-      const inp = props.inputRef.current;
+      const inp = props.inputRef?.current;
       if (inp) {
         inp.files = e.dataTransfer.files;
       }

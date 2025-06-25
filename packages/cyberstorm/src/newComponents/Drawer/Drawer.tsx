@@ -60,10 +60,8 @@ export function Drawer(props: Props) {
               undefined
             )
           )}
-          {...{
-            popovertarget: popoverId,
-            popovertargetaction: "close",
-          }}
+          popoverTarget={popoverId}
+          popoverTargetAction="hide"
           aria-hidden
           tabIndex={-1}
         />
@@ -79,10 +77,8 @@ export function Drawer(props: Props) {
               controls
             ) : (
               <NewButton
-                {...{
-                  popovertarget: popoverId,
-                  popovertargetaction: "close",
-                }}
+                popoverTarget={popoverId}
+                popoverTargetAction="hide"
                 csVariant="secondary"
                 csModifiers={["ghost", "only-icon"]}
                 tooltipText="Close"

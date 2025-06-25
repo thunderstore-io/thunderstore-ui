@@ -31,7 +31,7 @@ import {
   faCaretRight,
 } from "@fortawesome/free-solid-svg-icons";
 import TeamMembers from "./components/TeamMembers/TeamMembers";
-import { useEffect, useRef, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import {
   // PackageDeprecateAction,
@@ -169,11 +169,11 @@ export default function PackageListing() {
   const currentUser = outletContext.currentUser;
   const config = outletContext.requestConfig;
   const domain = outletContext.domain;
+  const dapper = outletContext.dapper;
 
   const [isLiked, setIsLiked] = useState(false);
 
   const fetchAndSetRatedPackages = async () => {
-    const dapper = window.Dapper;
     const rp = await dapper.getRatedPackages();
     setIsLiked(
       rp.rated_packages.includes(`${listing.namespace}-${listing.name}`)
@@ -198,10 +198,10 @@ export default function PackageListing() {
   const startsHydrated = useRef(isHydrated);
 
   // START: For sidebar meta dates
-  const [lastUpdated, setLastUpdated] = useState<JSX.Element | undefined>(
+  const [lastUpdated, setLastUpdated] = useState<ReactElement | undefined>(
     <RelativeTime time={listing.last_updated} suppressHydrationWarning />
   );
-  const [firstUploaded, setFirstUploaded] = useState<JSX.Element | undefined>(
+  const [firstUploaded, setFirstUploaded] = useState<ReactElement | undefined>(
     <RelativeTime time={listing.datetime_created} suppressHydrationWarning />
   );
 
@@ -543,10 +543,8 @@ export default function PackageListing() {
             </div> */}
           <div className="package-listing__narrow-actions">
             <button
-              {...{
-                popovertarget: "packageDetailDrawer",
-                popovertargetaction: "open",
-              }}
+              popoverTarget="packageDetailDrawer"
+              popoverTargetAction="show"
               className="button button--variant--secondary button--size--medium package-listing__drawer-button"
             >
               Details

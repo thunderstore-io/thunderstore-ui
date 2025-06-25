@@ -9,8 +9,8 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   useLocation,
-  // useRouteLoaderData,
   useRouteError,
+  useRouteLoaderData,
 } from "react-router";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
@@ -24,10 +24,12 @@ import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 import { useEffect, useRef, useState } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import Toast from "@thunderstore/cyberstorm/src/newComponents/Toast";
-import { SessionProvider, useSession } from "@thunderstore/ts-api-react";
+// import { SessionProvider } from "@thunderstore/ts-api-react";
 import { Footer } from "./commonComponents/Footer/Footer";
 import { RequestConfig } from "@thunderstore/thunderstore-api";
 import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
+import type { Route } from "./+types/root";
+import { getSessionTools } from "./middlewares";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -62,6 +64,7 @@ export type OutletContextShape = {
   currentUser: CurrentUser | undefined;
   requestConfig: () => RequestConfig;
   domain: string;
+  dapper: DapperTs;
 };
 
 export const meta: MetaFunction = () => {
@@ -74,28 +77,49 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-// export async function loader() {
-//   return {
-//     envStuff: {
-//       ENV: getPublicEnvVariables([
-//         "PUBLIC_API_URL",
-//         "PUBLIC_CLIENT_SENTRY_DSN",
-//         "PUBLIC_SITE_URL",
-//         "PUBLIC_AUTH_BASE_URL",
-//         "PUBLIC_AUTH_RETURN_URL",
-//       ]),
-//     },
-//   };
-// }
+export async function clientLoader({ context }: Route.ClientLoaderArgs) {
+  const tools = getSessionTools(context);
+  // console.log("clientloader context", tools);
+  if (!tools) {
+    throw new Error("Session tools not found in context");
+  }
+  console.log("clientloader run");
+  // const currentUser = {
+  //   username: null,
+  //   capabilities: [],
+  //   connections: [],
+  //   subscription: {
+  //     expires: null,
+  //   },
+  //   teams: [],
+  //   teams_full: [],
+  // };
+  // const config: RequestConfig = {
+  //   apiHost: import.meta.env.VITE_API_URL,
+  //   sessionId: "",
+  // };
+  const currentUser = tools.getSessionCurrentUser();
+  const config = tools.getConfig();
+  return {
+    currentUser: currentUser.username ? currentUser : undefined,
+    config,
+  };
+}
 
 // export function shouldRevalidate() {
 //   return false;
 // }
 
+export function HydrateFallback() {
+  return <div style={{ padding: "32px" }}>Loading...</div>;
+}
+
+export type RootClientLoader = typeof clientLoader;
+
 const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  // const data = useRouteLoaderData<typeof loader>("root");
+  const data = useRouteLoaderData<RootClientLoader>("root");
 
   const domain = import.meta.env.VITE_SITE_URL ?? "https://thunderstore.io";
 
@@ -141,31 +165,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <div className="container container--y container--full island layout">
-          <SessionProvider apiHost={domain ?? "APIHOST_MISSING_IN_ENV"}>
-            <LinkingProvider value={LinkLibrary}>
-              <Toast.Provider toastDuration={10000}>
-                <RadixTooltip delayDuration={80}>
-                  <NavigationWrapper domain={domain} />
-                  <div className="container container--x container--full island">
-                    <main className="container container--x container--full island-item layout__main">
-                      {children}
-                    </main>
-                    {shouldShowAds ? (
-                      <div className="container container--y island-item layout__ads">
-                        <div className="container container--y layout__ads-inner">
-                          {adContainerIds.map((cid, k_i) => (
-                            <AdContainer key={k_i} containerId={cid} />
-                          ))}
-                        </div>
+          <LinkingProvider value={LinkLibrary}>
+            <Toast.Provider toastDuration={10000}>
+              <RadixTooltip delayDuration={80}>
+                <NavigationWrapper
+                  domain={domain}
+                  currentUser={data?.currentUser}
+                />
+                <div className="container container--x container--full island">
+                  <main className="container container--x container--full island-item layout__main">
+                    {children}
+                  </main>
+                  {shouldShowAds ? (
+                    <div className="container container--y island-item layout__ads">
+                      <div className="container container--y layout__ads-inner">
+                        {adContainerIds.map((cid, k_i) => (
+                          <AdContainer key={k_i} containerId={cid} />
+                        ))}
                       </div>
-                    ) : null}
-                  </div>
-                  <Footer />
-                  {shouldShowAds ? <AdsInit /> : null}
-                </RadixTooltip>
-              </Toast.Provider>
-            </LinkingProvider>
-          </SessionProvider>
+                    </div>
+                  ) : null}
+                </div>
+                <Footer />
+                {shouldShowAds ? <AdsInit /> : null}
+              </RadixTooltip>
+            </Toast.Provider>
+          </LinkingProvider>
           <ScrollRestoration />
           <Scripts />
           <BetaButtonInit />
@@ -179,24 +204,21 @@ function App() {
   // TODO: Remove this customization when legacy site is removed
   const domain = import.meta.env.VITE_SITE_URL ?? "https://thunderstore.io";
 
-  const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>(
-    undefined
-  );
-  const [rcCallable, setRcCallable] = useState<() => RequestConfig>();
-
-  const session = useSession();
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    setRcCallable((prevRcCallable) => session.getConfig);
-    setCurrentUser(session.getSessionCurrentUser(true));
-  }, []);
+  const data = useRouteLoaderData<typeof clientLoader>("root");
+  const dapper = new DapperTs(() => {
+    return {
+      apiHost: data ? data.config.apiHost : domain,
+      sessionId: data?.config.sessionId,
+    };
+  });
 
   return (
     <Outlet
       context={{
-        currentUser: currentUser,
-        requestConfig: rcCallable,
+        currentUser: data?.currentUser,
+        requestConfig: dapper.config,
         domain: domain,
+        dapper: dapper,
       }}
     />
   );

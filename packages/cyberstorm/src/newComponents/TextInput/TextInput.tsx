@@ -1,5 +1,5 @@
 import "./TextInput.css";
-import React from "react";
+import React, { ReactElement } from "react";
 import {
   Input,
   InputTextInputProps,
@@ -18,98 +18,177 @@ import {
 
 export interface TextInputProps
   extends Omit<InputTextInputProps, "primitiveType"> {
-  leftIcon?: JSX.Element;
-  rightIcon?: JSX.Element;
+  leftIcon?: ReactElement;
+  rightIcon?: ReactElement;
   enterHook?: (value: string | number | readonly string[]) => string | void;
   clearValue?: () => void;
   csVariant?: TextInputVariants;
   csSize?: TextInputSizes;
   csModifiers?: TextInputModifiers[];
+  ref?: React.Ref<HTMLInputElement>;
 }
 
 // TODO: Finish the styles conversion to new system
-export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
-  (props: TextInputProps, forwardedRef) => {
-    const {
-      children,
-      leftIcon,
-      rightIcon,
-      clearValue,
-      enterHook,
-      rootClasses,
-      csVariant = "primary",
-      csSize = "default",
-      csModifiers,
-      ...forwardedProps
-    } = props;
-    const fProps = forwardedProps as InputTextInputProps;
-    const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (fProps.value && enterHook && e.key === "Enter") {
-        enterHook(fProps.value);
-      }
-    };
-    return (
-      <Frame
-        primitiveType="window"
-        rootClasses={classnames(
+export function TextInput(props: TextInputProps) {
+  const {
+    children,
+    leftIcon,
+    rightIcon,
+    clearValue,
+    enterHook,
+    rootClasses,
+    csVariant = "primary",
+    csSize = "default",
+    csModifiers,
+    ...forwardedProps
+  } = props;
+  const fProps = forwardedProps as InputTextInputProps;
+  const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (fProps.value && enterHook && e.key === "Enter") {
+      enterHook(fProps.value);
+    }
+  };
+  return (
+    <Frame
+      primitiveType="window"
+      rootClasses={classnames(
+        "text-input__wrapper",
+        ...componentClasses(
           "text-input__wrapper",
-          ...componentClasses(
-            "text-input__wrapper",
-            csVariant,
-            csSize,
-            csModifiers
-          ),
-          rootClasses
+          csVariant,
+          csSize,
+          csModifiers
+        ),
+        rootClasses
+      )}
+    >
+      {leftIcon ? (
+        <NewIcon csMode="inline" noWrapper rootClasses="text-input__left-icon">
+          {leftIcon}
+        </NewIcon>
+      ) : null}
+      <Input
+        {...fProps}
+        primitiveType={"textInput"}
+        rootClasses={classnames(
+          "text-input",
+          leftIcon ? "text-input--has-left-icon" : null,
+          clearValue ? "text-input--has-clear-value" : null,
+          ...componentClasses("text-input", csVariant, csSize, csModifiers)
         )}
+        ref={props.ref}
+        onKeyDown={onEnter}
       >
-        {leftIcon ? (
-          <NewIcon
-            csMode="inline"
-            noWrapper
-            rootClasses="text-input__left-icon"
-          >
-            {leftIcon}
-          </NewIcon>
-        ) : null}
-        <Input
-          {...fProps}
-          primitiveType={"textInput"}
+        {children}
+      </Input>
+      {clearValue && fProps.value !== "" ? (
+        <Actionable
+          primitiveType="button"
+          onClick={() => clearValue()}
           rootClasses={classnames(
-            "text-input",
-            leftIcon ? "text-input--has-left-icon" : null,
-            clearValue ? "text-input--has-clear-value" : null,
-            ...componentClasses("text-input", csVariant, csSize, csModifiers)
-          )}
-          ref={forwardedRef}
-          onKeyDown={onEnter}
-        >
-          {children}
-        </Input>
-        {clearValue && fProps.value !== "" ? (
-          <Actionable
-            primitiveType="button"
-            onClick={() => clearValue()}
-            rootClasses={classnames(
+            "text-input__clear-value-button",
+            ...componentClasses(
               "text-input__clear-value-button",
-              ...componentClasses(
-                "text-input__clear-value-button",
-                csVariant,
-                csSize,
-                csModifiers
-              )
-            )}
-            tooltipText="Clear"
-            tooltipSide="left"
-            aria-label="Clear search input"
-          >
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faXmarkLarge} />
-            </NewIcon>
-          </Actionable>
-        ) : null}
-      </Frame>
-    );
-  }
-);
+              csVariant,
+              csSize,
+              csModifiers
+            )
+          )}
+          tooltipText="Clear"
+          tooltipSide="left"
+          aria-label="Clear search input"
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faXmarkLarge} />
+          </NewIcon>
+        </Actionable>
+      ) : null}
+    </Frame>
+  );
+}
+
+// export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
+//   (props: TextInputProps, forwardedRef) => {
+//     const {
+//       children,
+//       leftIcon,
+//       rightIcon,
+//       clearValue,
+//       enterHook,
+//       rootClasses,
+//       csVariant = "primary",
+//       csSize = "default",
+//       csModifiers,
+//       ...forwardedProps
+//     } = props;
+//     const fProps = forwardedProps as InputTextInputProps;
+//     const onEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+//       if (fProps.value && enterHook && e.key === "Enter") {
+//         enterHook(fProps.value);
+//       }
+//     };
+//     return (
+//       <Frame
+//         primitiveType="window"
+//         rootClasses={classnames(
+//           "text-input__wrapper",
+//           ...componentClasses(
+//             "text-input__wrapper",
+//             csVariant,
+//             csSize,
+//             csModifiers
+//           ),
+//           rootClasses
+//         )}
+//       >
+//         {leftIcon ? (
+//           <NewIcon
+//             csMode="inline"
+//             noWrapper
+//             rootClasses="text-input__left-icon"
+//           >
+//             {leftIcon}
+//           </NewIcon>
+//         ) : null}
+//         <Input
+//           {...fProps}
+//           primitiveType={"textInput"}
+//           rootClasses={classnames(
+//             "text-input",
+//             leftIcon ? "text-input--has-left-icon" : null,
+//             clearValue ? "text-input--has-clear-value" : null,
+//             ...componentClasses("text-input", csVariant, csSize, csModifiers)
+//           )}
+//           ref={forwardedRef}
+//           onKeyDown={onEnter}
+//         >
+//           {children}
+//         </Input>
+//         {clearValue && fProps.value !== "" ? (
+//           <Actionable
+//             primitiveType="button"
+//             onClick={() => clearValue()}
+//             rootClasses={classnames(
+//               "text-input__clear-value-button",
+//               ...componentClasses(
+//                 "text-input__clear-value-button",
+//                 csVariant,
+//                 csSize,
+//                 csModifiers
+//               )
+//             )}
+//             tooltipText="Clear"
+//             tooltipSide="left"
+//             aria-label="Clear search input"
+//           >
+//             <NewIcon csMode="inline" noWrapper>
+//               <FontAwesomeIcon icon={faXmarkLarge} />
+//             </NewIcon>
+//           </Actionable>
+//         ) : null}
+//       </Frame>
+//     );
+//   }
+// );
 
 TextInput.displayName = "TextInput";

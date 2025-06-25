@@ -79,3 +79,5 @@ export type GetTeamServiceAccounts = (
 export type GetPackageSubmissionStatus = (
   submissionId: string
 ) => Promise<PackageSubmissionResponse>;
+
+export type PostTeamCreate = (name: string) => Promise<TeamDetails>;
