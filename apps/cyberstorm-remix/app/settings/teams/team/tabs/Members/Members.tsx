@@ -33,12 +33,20 @@ import { OutletContextShape } from "../../../../../root";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { z } from "zod";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
+import { DapperTs } from "@thunderstore/dapper-ts";
+import { getSessionTools } from "~/middlewares";
 
 // REMIX TODO: Add check for "user has permission to see this page"
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ context, params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
     try {
-      const dapper = window.Dapper;
+      const tools = getSessionTools(context);
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: tools?.getConfig().apiHost,
+          sessionId: tools?.getConfig().sessionId,
+        };
+      });
       return {
         teamName: params.namespaceId,
         members: await dapper.getTeamMembers(params.namespaceId),
@@ -148,10 +156,8 @@ export default function Page() {
               <NewButton
                 csVariant="danger"
                 key={`action_button_${index}`}
-                {...{
-                  popovertarget: `memberKickModal-${member.username}-${index}`,
-                  popovertargetaction: "open",
-                }}
+                popoverTarget={`memberKickModal-${member.username}-${index}`}
+                popoverTargetAction="show"
               >
                 <NewIcon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faTrashCan} />
@@ -185,10 +191,8 @@ export default function Page() {
             csSize="small"
             trigger={
               <NewButton
-                {...{
-                  popovertarget: "teamMembersAddMember",
-                  popovertargetaction: "open",
-                }}
+                popoverTarget="teamMembersAddMember"
+                popoverTargetAction="show"
               >
                 Add Member
                 <NewIcon csMode="inline" noWrapper>

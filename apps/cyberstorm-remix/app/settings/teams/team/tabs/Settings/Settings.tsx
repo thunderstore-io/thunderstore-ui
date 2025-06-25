@@ -106,10 +106,8 @@ export default function Settings() {
             csSize="small"
             trigger={
               <NewButton
-                {...{
-                  popovertarget: "teamLeaveTeam",
-                  popovertargetaction: "open",
-                }}
+                popoverTarget="teamLeaveTeam"
+                popoverTargetAction="show"
               >
                 <NewIcon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faTrashCan} />
@@ -177,10 +175,8 @@ export default function Settings() {
             csSize="small"
             trigger={
               <NewButton
-                {...{
-                  popovertarget: "teamDisbandTeam",
-                  popovertargetaction: "open",
-                }}
+                popoverTarget="teamDisbandTeam"
+                popoverTargetAction="show"
               >
                 <NewIcon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faTrashCan} />

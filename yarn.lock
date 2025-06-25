@@ -2819,7 +2819,7 @@
   dependencies:
     "@react-router/node" "7.6.2"
 
-"@react-router/node@7.6.2", "@react-router/node@^7.0.0":
+"@react-router/node@7.6.2", "@react-router/node@^7.6.2":
   version "7.6.2"
   resolved "https://registry.npmjs.org/@react-router/node/-/node-7.6.2.tgz#1aee2344776b575d145528d166dc3b5f8ade8bb7"
   integrity sha512-KrxfnfJVU1b+020VKemkxpc7ssItsAL8MOJthcoGwPyKwrgovdwc+8NKJUqw3P7yk/Si0ZmVh9QYAzi9qF96dg==
@@ -2829,7 +2829,7 @@
     stream-slice "^0.1.2"
     undici "^6.19.2"
 
-"@react-router/serve@^7.0.0":
+"@react-router/serve@^7.6.2":
   version "7.6.2"
   resolved "https://registry.npmjs.org/@react-router/serve/-/serve-7.6.2.tgz#8c961c9c3850701e0a4e31c795c91092418809cf"
   integrity sha512-VTdvB8kdZEtYeQML9TFJiIZnPefv94LfmLx5qQ0SJSesel/hQolnfpWEkLJ9WtBO+/10CulAvg6y5UwiceUFTQ==
@@ -12134,7 +12134,7 @@ react-remove-scroll@^2.6.3:
     use-callback-ref "^1.3.3"
     use-sidecar "^1.1.3"
 
-react-router@^7.0.0:
+react-router@^7.6.2:
   version "7.6.2"
   resolved "https://registry.npmjs.org/react-router/-/react-router-7.6.2.tgz#9f48b343bead7d0a94e28342fc4f9ae29131520e"
   integrity sha512-U7Nv3y+bMimgWjhlT5CRdzHPu2/KVmqPwKUCChW8en5P3znxUqwlYFlbmyj8Rgp1SF6zs5X4+77kBVknkg6a0w==

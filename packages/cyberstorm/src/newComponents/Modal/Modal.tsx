@@ -30,10 +30,8 @@ export function Modal(props: Props) {
         )}
       >
         <NewButton
-          {...{
-            popovertarget: props.popoverId,
-            popovertargetaction: "close",
-          }}
+          popoverTarget={props.popoverId}
+          popoverTargetAction="hide"
           csVariant="secondary"
           csSize="medium"
           csModifiers={["ghost", "only-icon"]}

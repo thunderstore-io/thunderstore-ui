@@ -28,12 +28,20 @@ import { z } from "zod";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { OutletContextShape } from "../../../../../root";
 import { useState } from "react";
+import { DapperTs } from "@thunderstore/dapper-ts";
+import { getSessionTools } from "~/middlewares";
 
 // REMIX TODO: Add check for "user has permission to see this page"
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ context, params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
     try {
-      const dapper = window.Dapper;
+      const tools = getSessionTools(context);
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: tools?.getConfig().apiHost,
+          sessionId: tools?.getConfig().sessionId,
+        };
+      });
       return {
         teamName: params.namespaceId,
         serviceAccounts: await dapper.getTeamServiceAccounts(
@@ -133,10 +141,8 @@ export default function ServiceAccounts() {
             trigger={
               <NewButton
                 csVariant="danger"
-                {...{
-                  popovertarget: `memberKickModal-${serviceAccount.name}-${index}`,
-                  popovertargetaction: "open",
-                }}
+                popoverTarget={`memberKickModal-${serviceAccount.name}-${index}`}
+                popoverTargetAction="show"
               >
                 Remove
               </NewButton>
@@ -193,10 +199,8 @@ export default function ServiceAccounts() {
             popoverId="serviceAccountAdd"
             trigger={
               <NewButton
-                {...{
-                  popovertarget: "serviceAccountAdd",
-                  popovertargetaction: "open",
-                }}
+                popoverTarget="serviceAccountAdd"
+                popoverTargetAction="show"
               >
                 Add Service Account
                 <NewIcon csMode="inline" noWrapper>
@@ -229,10 +233,8 @@ export default function ServiceAccounts() {
                       setAddedServiceAccountToken("");
                       setServiceAccountAdded(false);
                     }}
-                    {...{
-                      popovertarget: "serviceAccountAdd",
-                      popovertargetaction: "close",
-                    }}
+                    popoverTarget="serviceAccountAdd"
+                    popoverTargetAction="hide"
                   >
                     Close
                   </NewButton>

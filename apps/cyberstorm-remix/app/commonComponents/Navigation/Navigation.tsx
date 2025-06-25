@@ -42,11 +42,11 @@ import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 
 export function Navigation(props: {
-  hydrationCheck: boolean;
+  // hydrationCheck: boolean;
   currentUser?: CurrentUser;
   domain: string;
 }) {
-  const { hydrationCheck, currentUser, domain } = props;
+  const { currentUser, domain } = props;
   return (
     <>
       <header
@@ -160,11 +160,11 @@ export function Navigation(props: {
           {currentUser?.username ? (
             <span className="navigation-header__profile-actions">
               <NewButton
-                primitiveType="link"
-                href={`${domain}/package/create/`}
+                // primitiveType="link"
+                // href={`${domain}/package/create/`}
                 // TODO: Take these into use when the upload page is ready
-                // primitiveType="cyberstormLink"
-                // linkId="PackageUpload"
+                primitiveType="cyberstormLink"
+                linkId="PackageUpload"
                 csVariant="secondary"
                 csModifiers={["ghost", "only-icon"]}
                 tooltipText="Upload"
@@ -176,7 +176,7 @@ export function Navigation(props: {
             </span>
           ) : null}
 
-          {hydrationCheck && currentUser ? (
+          {currentUser ? (
             <DesktopUserDropdown user={currentUser} domain={domain} />
           ) : (
             <DesktopLoginPopover />
@@ -186,10 +186,8 @@ export function Navigation(props: {
 
       <nav className="mobile-navigation">
         <button
-          {...{
-            popovertarget: "mobileNavMenu",
-            popovertargetaction: "open",
-          }}
+          popoverTarget="mobileNavMenu"
+          popoverTargetAction="show"
           className="mobile-navigation__item"
         >
           <NewIcon noWrapper>
@@ -208,10 +206,8 @@ export function Navigation(props: {
           Browse
         </NewLink>
         <button
-          {...{
-            popovertarget: "mobileNavAccount",
-            popovertargetaction: "open",
-          }}
+          popoverTarget="mobileNavAccount"
+          popoverTargetAction="show"
           className="mobile-navigation__item"
         >
           <Avatar
@@ -236,10 +232,8 @@ export function DesktopLoginPopover() {
         <NewButton
           csVariant="accent"
           csSize="small"
-          {...{
-            popovertarget: "navAccount",
-            popovertargetaction: "open",
-          }}
+          popoverTarget="navAccount"
+          popoverTargetAction="show"
         >
           <NewIcon csMode="inline" noWrapper>
             <FontAwesomeIcon icon={faArrowRightToBracket} />
@@ -367,10 +361,8 @@ export function DesktopUserDropdown(props: {
       <NewDropDownDivider />
       <NewDropDownItem asChild>
         <NewLink
-          // primitiveType="cyberstormLink"
-          // linkId="Settings"
-          primitiveType="link"
-          href={`${domain}/settings/linked-accounts/`}
+          primitiveType="cyberstormLink"
+          linkId="Settings"
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
@@ -381,10 +373,8 @@ export function DesktopUserDropdown(props: {
       </NewDropDownItem>
       <NewDropDownItem asChild>
         <NewLink
-          // primitiveType="cyberstormLink"
-          // linkId="Teams"
-          primitiveType="link"
-          href={`${domain}/settings/teams/`}
+          primitiveType="cyberstormLink"
+          linkId="Teams"
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
@@ -424,10 +414,8 @@ export function MobileNavigationMenu({ domain }: { domain: string }) {
           popoverId={"mobileNavMenuDevelopers"}
           trigger={
             <button
-              {...{
-                popovertarget: "mobileNavMenuDevelopers",
-                popovertargetaction: "open",
-              }}
+              popoverTarget="mobileNavMenuDevelopers"
+              popoverTargetAction="show"
               className="mobile-navigation__popover-item mobile-navigation__popover--thick mobile-navigation__developers-button"
             >
               Developers
@@ -438,10 +426,8 @@ export function MobileNavigationMenu({ domain }: { domain: string }) {
           }
           controls={
             <NewButton
-              {...{
-                popovertarget: "mobileNavMenuDevelopers",
-                popovertargetaction: "close",
-              }}
+              popoverTarget="mobileNavMenuDevelopers"
+              popoverTargetAction="hide"
               aria-label="Back to previous menu"
               csSize="medium"
               csVariant="secondary"

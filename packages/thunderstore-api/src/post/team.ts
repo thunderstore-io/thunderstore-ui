@@ -14,7 +14,8 @@ export function teamCreate(
   props: ApiEndpointProps<object, object, TeamCreateRequestData>
 ): Promise<TeamCreateResponseData> {
   const { config, data } = props;
-  const path = "api/cyberstorm/teams/create/";
+  const path = "api/cyberstorm/team/create/";
+  console.log("asdasd");
 
   return apiFetch({
     args: {

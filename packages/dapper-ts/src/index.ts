@@ -21,6 +21,7 @@ import {
   getTeamDetails,
   getTeamMembers,
   getTeamServiceAccounts,
+  postTeamCreate,
 } from "./methods/team";
 
 export interface DapperTsInterface extends DapperInterface {
@@ -49,6 +50,7 @@ export class DapperTs implements DapperTsInterface {
     this.getTeamDetails = this.getTeamDetails.bind(this);
     this.getTeamMembers = this.getTeamMembers.bind(this);
     this.getTeamServiceAccounts = this.getTeamServiceAccounts.bind(this);
+    this.postTeamCreate = () => this.postTeamCreate.bind(this);
     this.postPackageSubmissionMetadata =
       this.postPackageSubmissionMetadata.bind(this);
     this.getPackageSubmissionStatus =
@@ -69,6 +71,7 @@ export class DapperTs implements DapperTsInterface {
   public getTeamDetails = getTeamDetails;
   public getTeamMembers = getTeamMembers;
   public getTeamServiceAccounts = getTeamServiceAccounts;
+  public postTeamCreate = postTeamCreate;
   public postPackageSubmissionMetadata = postPackageSubmissionMetadata;
   public getPackageSubmissionStatus = getPackageSubmissionStatus;
 }

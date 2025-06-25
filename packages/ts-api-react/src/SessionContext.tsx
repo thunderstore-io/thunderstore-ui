@@ -39,7 +39,9 @@ export interface ContextInterface {
   /** Store given CurrentUser */
   storeCurrentUser: (currentUser: User) => void;
   /** Function to get the currentUser */
-  getSessionCurrentUser: (forceUpdateCurrentUser?: boolean) => User | EmptyUser;
+  getSessionCurrentUser: () => User | EmptyUser;
+  /** Function to get the updated currentUser */
+  getSessionUpdatedCurrentUser: (update?: boolean) => Promise<User | EmptyUser>;
 }
 
 interface SessionData {
@@ -101,8 +103,12 @@ export function SessionProvider(props: Props) {
     updateCurrentUser(_storage);
   };
 
-  const _getSessionCurrentUser = (forceUpdateCurrentUser: boolean = false) => {
-    return getSessionCurrentUser(_storage, forceUpdateCurrentUser);
+  const _getSessionCurrentUser = () => {
+    return getSessionCurrentUser(_storage);
+  };
+
+  const _getSessionUpdatedCurrentUser = (update: boolean = true) => {
+    return getSessionUpdatedCurrentUser(_storage, update);
   };
 
   if (typeof window !== "undefined") {
@@ -128,15 +134,12 @@ export function SessionProvider(props: Props) {
     updateCurrentUser: _updateCurrentUser,
     storeCurrentUser: _storeCurrentUser,
     getSessionCurrentUser: _getSessionCurrentUser,
+    getSessionUpdatedCurrentUser: _getSessionUpdatedCurrentUser,
     setSession: _setSession,
     apiHost: props.apiHost,
   };
 
-  return (
-    <SessionContext.Provider value={value}>
-      {props.children}
-    </SessionContext.Provider>
-  );
+  return <SessionContext value={value}>{props.children}</SessionContext>;
 }
 
 // Util functions
@@ -260,15 +263,54 @@ export const updateCurrentUser = async (
 };
 
 export const getSessionCurrentUser = (
+  _storage: StorageManager
+): User | EmptyUser => {
+  let currentUser = _storage.safeGetJsonValue(CURRENT_USER_KEY);
+  if (currentUser === null) {
+    currentUser = {
+      username: null,
+      capabilities: [],
+      connections: [],
+      subscription: {
+        expires: null,
+      },
+      teams: [],
+      teams_full: [],
+    };
+  }
+  const parsed = userSchema.safeParse(currentUser);
+  if (!parsed.success) {
+    const emptyUser = emptyUserSchema.safeParse(currentUser);
+    if (!emptyUser.success) {
+      throw new Error("Failed to parse empty user");
+    }
+    return emptyUser.data;
+  } else {
+    return parsed.data;
+  }
+};
+
+export const getSessionUpdatedCurrentUser = async (
   _storage: StorageManager,
-  forceUpdateCurrentUser: boolean = false,
+  update: boolean = true,
   customGetConfig?: (domain?: string) => RequestConfig,
   customClearSession?: () => void
-): User | EmptyUser => {
-  if (forceUpdateCurrentUser) {
-    (async () => {
-      await updateCurrentUser(_storage, customGetConfig, customClearSession);
-    })();
+): Promise<User | EmptyUser> => {
+  if (typeof window === "undefined") {
+    return {
+      username: null,
+      capabilities: [],
+      connections: [],
+      subscription: {
+        expires: null,
+      },
+      teams: [],
+      teams_full: [],
+    };
+  }
+
+  if (update) {
+    await updateCurrentUser(_storage, customGetConfig, customClearSession);
   }
 
   let currentUser = _storage.safeGetJsonValue(CURRENT_USER_KEY);
@@ -314,6 +356,75 @@ export const useSession = (): ContextInterface => {
   }
 
   return contextState;
+};
+
+export const getSessionContext = (apiHost: string): ContextInterface => {
+  const _storage = new StorageManager("Session");
+
+  const _setSession = (sessionData: SessionData) => {
+    setSession(_storage, sessionData);
+  };
+
+  const _clearSession = (clearApiHost: boolean = false) => {
+    clearSession(_storage, clearApiHost);
+  };
+
+  const _clearCookies = () => {
+    clearCookies();
+  };
+
+  const _getConfig = (domain?: string): RequestConfig => {
+    return getConfig(_storage, domain);
+  };
+
+  // Check current session and try to fix it if cookies are not the same as storage
+  const _sessionValid = (): boolean => {
+    return sessionValid(_storage);
+  };
+
+  const _storeCurrentUser = (currentUser: User) => {
+    storeCurrentUser(_storage, currentUser);
+  };
+
+  const _updateCurrentUser = async () => {
+    updateCurrentUser(_storage);
+  };
+
+  const _getSessionCurrentUser = () => {
+    return getSessionCurrentUser(_storage);
+  };
+
+  const _getSessionUpdatedCurrentUser = (update: boolean = true) => {
+    return getSessionUpdatedCurrentUser(_storage, update);
+  };
+
+  if (typeof window !== "undefined") {
+    const sessionidCookie = getCookie("sessionid");
+
+    if (sessionidCookie) {
+      _setSession({
+        sessionId: sessionidCookie,
+        username: "",
+        apiHost: apiHost,
+      });
+    } else {
+      _storage.setValue(API_HOST_KEY, apiHost);
+      _sessionValid();
+    }
+  }
+
+  return {
+    clearSession: _clearSession,
+    clearCookies: _clearCookies,
+    getConfig: _getConfig,
+    sessionValid: _sessionValid,
+    updateCurrentUser: _updateCurrentUser,
+    storeCurrentUser: _storeCurrentUser,
+    getSessionCurrentUser: _getSessionCurrentUser,
+    getSessionUpdatedCurrentUser: _getSessionUpdatedCurrentUser,
+    setSession: _setSession,
+    apiHost: apiHost,
+  };
 };
 
 /**
