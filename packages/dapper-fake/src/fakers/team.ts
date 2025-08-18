@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 
 import { getFakeImg, getIds, setSeed } from "./utils";
+import { teamCreate } from "@thunderstore/thunderstore-api";
 
 export const getFakeTeamDetails = async (teamName: string) => {
   setSeed(teamName);
@@ -23,3 +24,9 @@ export const getFakeTeamMembers = async (teamName: string) => {
   setSeed(teamName);
   return getIds(10).map(getFakeTeamMember);
 };
+
+export async function postFakeTeamCreate(
+  name: string
+): ReturnType<typeof teamCreate> {
+  return { identifier: 123, name: name, donation_link: null };
+}

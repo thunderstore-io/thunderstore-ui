@@ -102,7 +102,6 @@ export const Tag = React.forwardRef<
 
     if (csMode === "cyberstormLink") {
       const fProps = forwardedProps as ActionableCyberstormLinkProps;
-      const fRef = forwardedRef as React.ForwardedRef<HTMLAnchorElement>;
       return (
         <Actionable
           {...fProps}
@@ -112,7 +111,7 @@ export const Tag = React.forwardRef<
             ...componentClasses("tag", csVariant, csSize, csModifiers),
             rootClasses
           )}
-          ref={fRef}
+          ref={forwardedRef as React.ForwardedRef<HTMLAnchorElement>}
         >
           {children}
         </Actionable>
@@ -129,7 +128,7 @@ export const Tag = React.forwardRef<
           ...componentClasses("tag", csVariant, csSize, csModifiers),
           rootClasses
         )}
-        ref={forwardedRef}
+        ref={forwardedRef as React.ForwardedRef<HTMLDivElement>}
       >
         {children}
       </Frame>

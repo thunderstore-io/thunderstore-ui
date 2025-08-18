@@ -10,11 +10,12 @@ import {
 
 import { classnames } from "../../utils/utils";
 import { NewIcon } from "../..";
+import { ReactNode } from "react";
 
 export function ValidationBar(props: {
   status: "waiting" | "processing" | "success" | "failure";
   message?: string;
-}): JSX.Element {
+}): ReactNode {
   if (props.status === "waiting") {
     return (
       <div className={styles.statusBar}>

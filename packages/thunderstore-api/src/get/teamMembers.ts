@@ -5,7 +5,6 @@ import {
   teamMembersResponseDataSchema,
 } from "../schemas/responseSchemas";
 import { TeamMembersRequestParams } from "../schemas/requestSchemas";
-import { z } from "zod";
 
 export async function fetchTeamMembers(
   props: ApiEndpointProps<TeamMembersRequestParams, object, object>

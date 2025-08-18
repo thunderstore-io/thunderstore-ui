@@ -16,7 +16,6 @@ import {
   UsermediaInitiateUploadResponseData,
   usermediaInitiateUploadResponseDataSchema,
 } from "../schemas/responseSchemas";
-import { z } from "zod";
 
 export function postUsermediaInitiate(
   props: ApiEndpointProps<object, object, UsermediaInitiateUploadRequestData>

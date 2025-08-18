@@ -1,6 +1,5 @@
 import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import { z } from "zod";
 import { ratedPackagesResponseDataSchema } from "../schemas/responseSchemas";
 import { RatedPackagesResponseData } from "../schemas/responseSchemas";
 

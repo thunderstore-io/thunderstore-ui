@@ -1,5 +1,5 @@
 import "./Button.css";
-import React, { memo } from "react";
+import { memo } from "react";
 import { classnames, componentClasses } from "../../utils/utils";
 import {
   ActionableButtonProps,
