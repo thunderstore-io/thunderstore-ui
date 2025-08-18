@@ -21,7 +21,7 @@ export async function fetchCommunityFilters(
       config,
       path,
     },
-    requestSchema: z.object({}),
+    requestSchema: undefined,
     queryParamsSchema: communityFiltersRequestParamsSchema,
     responseSchema: communityFiltersResponseDataSchema,
   });

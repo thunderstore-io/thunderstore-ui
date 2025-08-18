@@ -52,24 +52,28 @@ export type apiFetchArgs<B, QP> = {
   bodyRaw?: B;
 };
 
+type schemaOrUndefined<A> = A extends z.ZodSchema
+  ? z.infer<A>
+  : never | undefined;
+
 export async function apiFetch(props: {
   args: apiFetchArgs<
-    z.infer<typeof props.requestSchema>,
-    z.infer<typeof props.queryParamsSchema>
+    schemaOrUndefined<typeof props.requestSchema>,
+    schemaOrUndefined<typeof props.queryParamsSchema>
   >;
-  requestSchema: z.ZodSchema;
-  queryParamsSchema: z.ZodSchema;
-  responseSchema: z.ZodSchema;
-}): Promise<z.infer<typeof props.responseSchema>> {
+  requestSchema: z.ZodSchema | undefined;
+  queryParamsSchema: z.ZodSchema | undefined;
+  responseSchema: z.ZodSchema | undefined;
+}): Promise<schemaOrUndefined<typeof props.responseSchema>> {
   const { args, requestSchema, queryParamsSchema, responseSchema } = props;
 
-  if (args.bodyRaw) {
+  if (requestSchema && args.bodyRaw) {
     const parsedRequestBody = requestSchema.safeParse(args.bodyRaw);
     if (!parsedRequestBody.success) {
       throw new RequestBodyParseError(parsedRequestBody.error);
     }
   }
-  if (args.queryParams) {
+  if (queryParamsSchema && args.queryParams) {
     const parsedQueryParams = queryParamsSchema.safeParse(args.queryParams);
     if (!parsedQueryParams.success) {
       throw new RequestQueryParamsParseError(parsedQueryParams.error);
@@ -98,6 +102,8 @@ export async function apiFetch(props: {
   if (!response.ok) {
     throw await ApiError.createFromResponse(response);
   }
+
+  if (responseSchema === undefined) return undefined;
 
   const parsed = responseSchema.safeParse(await response.json());
   if (!parsed.success) {

@@ -8,23 +8,23 @@
       background-color var(--switch-transition--default),
       border-color var(--switch-transition--default);
 
-    .switch__thumb {
-      --switch-thumb-display: block;
-      --switch-thumb-transform: translateX(
+    .switch__knob {
+      --switch-knob-display: block;
+      --switch-knob-transform: translateX(
         calc(
           ((var(--switch-width) / 2) * -1) + var(--switch-padding) +
-            var(--switch-thumb-width) / 2
+            var(--switch-knob-width) / 2
         )
       );
 
       transition: transform var(--switch-transition--default);
     }
 
-    &:where([data-state="checked"]) .switch__thumb {
-      --switch-thumb-transform: translateX(
+    &:where([data-state="checked"]) .switch__knob {
+      --switch-knob-transform: translateX(
         calc(
           ((var(--switch-width) / 2)) - var(--switch-padding) -
-            var(--switch-thumb-width) / 2
+            var(--switch-knob-width) / 2
         )
       );
     }
@@ -36,11 +36,12 @@
     --switch-height: var(--switch-sm-height);
     --switch-padding: var(--switch-sm-padding);
     --switch-border-radius: var(--switch-sm-border-radius);
+    --switch-border-width: var(--switch-sm-border-width);
 
-    .switch__thumb {
-      --switch-thumb-width: var(--switch-sm-thumb-radius);
-      --switch-thumb-height: var(--switch-sm-thumb-radius);
-      --switch-thumb-border-radius: var(--switch-sm-thumb-border-radius);
+    .switch__knob {
+      --switch-knob-width: var(--switch-knob-sm-radius);
+      --switch-knob-height: var(--switch-knob-sm-radius);
+      --switch-knob-border-radius: var(--switch-knob-sm-border-radius);
     }
   }
 
@@ -49,11 +50,12 @@
     --switch-height: var(--switch-md-height);
     --switch-padding: var(--switch-md-padding);
     --switch-border-radius: var(--switch-md-border-radius);
+    --switch-border-width: var(--switch-md-border-width);
 
-    .switch__thumb {
-      --switch-thumb-width: var(--switch-md-thumb-radius);
-      --switch-thumb-height: var(--switch-md-thumb-radius);
-      --switch-thumb-border-radius: var(--switch-md-thumb-border-radius);
+    .switch__knob {
+      --switch-knob-width: var(--switch-md-knob-radius);
+      --switch-knob-height: var(--switch-md-knob-radius);
+      --switch-knob-border-radius: var(--switch-md-knob-border-radius);
     }
   }
 
@@ -61,20 +63,30 @@
   .switch:where(.switch--variant--default) {
     --switch-border-color: var(--switch-default-border-color--default);
     --switch-background-color: var(--switch-default-bg-color--default);
+    --switch-border-style: var(--switch-default-border-style--default);
 
-    .switch__thumb {
-      --switch-thumb-background-color: var(
-        --switch-default-thumb-bg-color--default
+    .switch__knob {
+      --switch-knob-background-color: var(
+        --switch-default-knob-bg-color--default
+      );
+      --switch-knob-box-shadow: var(--switch-default-knob-box-shadow--default);
+      --switch-knob-border-style: var(
+        --switch-default-knob-border-style--default
       );
     }
 
     &:where(:hover) {
       --switch-border-color: var(--switch-default-border-color--hover);
       --switch-background-color: var(--switch-default-bg-color--hover);
+      --switch-border-style: var(--switch-default-border-style--hover);
 
-      .switch__thumb {
-        --switch-thumb-background-color: var(
-          --switch-default-thumb-bg-color--hover
+      .switch__knob {
+        --switch-knob-background-color: var(
+          --switch-default-knob-bg-color--hover
+        );
+        --switch-knob-box-shadow: var(--switch-default-knob-box-shadow--hover);
+        --switch-knob-border-style: var(
+          --switch-default-knob-border-style--hover
         );
       }
     }
@@ -82,10 +94,17 @@
     &[data-state="checked"] {
       --switch-border-color: var(--switch-default-border-color--active);
       --switch-background-color: var(--switch-default-bg-color--active);
+      --switch-border-style: var(--switch-default-border-style--active);
 
-      .switch__thumb {
-        --switch-thumb-background-color: var(
-          --switch-default-thumb-bg-color--active
+      .switch__knob {
+        --switch-knob-background-color: var(
+          --switch-default-knob-bg-color--active
+        );
+        --switch-knob-box-shadow: var(
+          --switch-default-knob-box-shadow--checked
+        );
+        --switch-knob-border-style: var(
+          --switch-default-knob-border-style--checked
         );
       }
     }

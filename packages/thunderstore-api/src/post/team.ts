@@ -4,7 +4,6 @@ import {
   TeamCreateRequestData,
   teamCreateRequestDataSchema,
 } from "../schemas/requestSchemas";
-import { z } from "zod";
 import {
   TeamCreateResponseData,
   teamCreateResponseDataSchema,
@@ -14,7 +13,7 @@ export function teamCreate(
   props: ApiEndpointProps<object, object, TeamCreateRequestData>
 ): Promise<TeamCreateResponseData> {
   const { config, data } = props;
-  const path = "api/cyberstorm/teams/create/";
+  const path = "api/cyberstorm/team/create/";
 
   return apiFetch({
     args: {
@@ -27,7 +26,7 @@ export function teamCreate(
       useSession: true,
     },
     requestSchema: teamCreateRequestDataSchema,
-    queryParamsSchema: z.object({}),
+    queryParamsSchema: undefined,
     responseSchema: teamCreateResponseDataSchema,
   });
 }

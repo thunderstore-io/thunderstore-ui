@@ -4,7 +4,6 @@ import {
   TeamDetailsResponseData,
   teamDetailsResponseDataSchema,
 } from "../schemas/responseSchemas";
-import { z } from "zod";
 import { TeamDetailsRequestParams } from "../schemas/requestSchemas";
 
 export async function fetchTeamDetails(
@@ -18,8 +17,8 @@ export async function fetchTeamDetails(
       config: config,
       path: path,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: teamDetailsResponseDataSchema,
   });
 }

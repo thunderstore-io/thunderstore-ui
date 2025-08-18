@@ -1,0 +1,43 @@
+@layer nimbus-layout {
+  .teams-table__cell {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-md); /* 21px */
+  }
+
+  .teams-table__role {
+    text-transform: capitalize;
+  }
+
+  .teams-table__name {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .create-team-form__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xxl);
+    align-items: flex-start;
+    align-self: stretch;
+  }
+
+  .create-team-form__input {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    align-items: flex-start;
+    align-self: stretch;
+  }
+
+  .create-team-form__label {
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-body-md);
+    line-height: var(--line-height-auto);
+  }
+}

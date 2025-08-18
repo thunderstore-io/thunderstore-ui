@@ -9,7 +9,6 @@ import {
   TeamAddMemberResponseData,
   teamAddMemberResponseDataSchema,
 } from "../schemas/responseSchemas";
-import { z } from "zod";
 
 export function teamAddMember(
   props: ApiEndpointProps<
@@ -32,7 +31,7 @@ export function teamAddMember(
       useSession: true,
     },
     requestSchema: teamAddMemberRequestDataSchema,
-    queryParamsSchema: z.object({}),
+    queryParamsSchema: undefined,
     responseSchema: teamAddMemberResponseDataSchema,
   });
 }

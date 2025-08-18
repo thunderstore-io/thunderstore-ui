@@ -14,5 +14,12 @@
     --switch-transition--default: ease-in-out var(--animation-duration-md);
     --switch-opacity--disabled: 0.5;
     --switch-cursor--disabled: not-allowed;
+    --switch-default-border-style--active: solid;
+    --switch-default-border-style--default: solid;
+    --switch-default-border-style--hover: solid;
+    --switch-default-knob-box-shadow--default: 0px 1px 2px 0px rgb(0 0 0 / 0.55);
+    --switch-default-knob-box-shadow--hover: 0px 1px 2px 0px rgb(0 0 0 / 0.55);
+    --switch-default-knob-box-shadow--checked: 0px -1px 0px 0px rgb(0 0 0 / 0.05),
+      0px 1px 2px 0px rgb(0 0 0 / 0.65);
   }
 }

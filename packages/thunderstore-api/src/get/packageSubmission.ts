@@ -21,8 +21,8 @@ export function fetchPackageSubmissionStatus(
       useSession: true,
       request: request,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: packageSubmissionStatusResponseDataSchema,
   });
 }

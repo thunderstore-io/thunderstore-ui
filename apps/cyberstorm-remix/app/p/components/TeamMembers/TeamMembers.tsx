@@ -1,4 +1,10 @@
-import { Avatar, Heading, NewIcon, NewLink } from "@thunderstore/cyberstorm";
+import {
+  Avatar,
+  Heading,
+  NewAvatar,
+  NewIcon,
+  NewLink,
+} from "@thunderstore/cyberstorm";
 import { faCaretRight, faCrown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./TeamMembers.css";
@@ -49,7 +55,7 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
 
   return (
     <div className="package-team-list-item">
-      <Avatar username={teamMember.username} src={teamMember.avatar} />
+      <NewAvatar username={teamMember.username} src={teamMember.avatar} />
       <div className="package-team-list-item__wrapper">
         <div className="package-team-list-item__title">
           <span className="package-team-list-item__username">

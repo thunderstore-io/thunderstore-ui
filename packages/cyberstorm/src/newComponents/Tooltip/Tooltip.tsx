@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { memo, ReactNode } from "react";
 import { Root, Trigger, Portal, Content, Arrow } from "@radix-ui/react-tooltip";
 
 import "./Tooltip.css";
@@ -14,7 +14,7 @@ export interface TooltipProps {
   open?: boolean;
 }
 
-export function Tooltip(props: TooltipProps) {
+export const Tooltip = memo(function Tooltip(props: TooltipProps) {
   const {
     content,
     sideOffset = 5,
@@ -45,4 +45,4 @@ export function Tooltip(props: TooltipProps) {
       </Portal>
     </Root>
   );
-}
+});

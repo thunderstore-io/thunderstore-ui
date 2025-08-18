@@ -35,4 +35,8 @@
     gap: var(--gap-md);
     align-items: flex-start;
   }
+
+  .user-account__verification-input {
+    align-self: stretch;
+  }
 }

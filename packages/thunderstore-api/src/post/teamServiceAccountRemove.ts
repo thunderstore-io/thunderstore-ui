@@ -1,20 +1,22 @@
 // THIS API ENDPOINT IS NOT IMPLEMENTED YET IN THE THUNDERSTORE API
 
-import { RequestConfig } from "../index";
+import {
+  ApiEndpointProps,
+  TeamServiceAccountRemoveRequestData,
+  teamServiceAccountRemoveRequestDataSchema,
+  TeamServiceAccountRemoveRequestParams,
+} from "../index";
 import { apiFetch } from "../apiFetch";
-import z from "zod";
-
-export type teamServiceAccountRemoveMetaArgs = {
-  serviceAccountIdentifier: string;
-  teamName: string;
-};
 
 export function teamServiceAccountRemove(
-  config: () => RequestConfig,
-  _data: object,
-  meta: teamServiceAccountRemoveMetaArgs
-) {
-  const path = `/api/cyberstorm/team/${meta.teamName}/service-account/delete/`;
+  props: ApiEndpointProps<
+    TeamServiceAccountRemoveRequestParams,
+    object,
+    TeamServiceAccountRemoveRequestData
+  >
+): Promise<undefined> {
+  const { config, params, data } = props;
+  const path = `/api/cyberstorm/team/${params.team_name}/service-account/delete/`;
 
   return apiFetch({
     args: {
@@ -22,16 +24,13 @@ export function teamServiceAccountRemove(
       path,
       request: {
         method: "POST",
-        body: JSON.stringify({
-          service_account_uuid: meta.serviceAccountIdentifier,
-        }),
+        body: JSON.stringify(data),
       },
       useSession: true,
     },
-    // requestSchema: teamServiceAccountRemoveRequestSchema,
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: teamServiceAccountRemoveRequestDataSchema,
+    queryParamsSchema: undefined,
     // responseSchema: teamServiceAccountRemoveResponseSchema,
-    responseSchema: z.object({}),
+    responseSchema: undefined,
   });
 }

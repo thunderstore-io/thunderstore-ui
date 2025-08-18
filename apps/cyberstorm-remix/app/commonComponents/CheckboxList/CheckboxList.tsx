@@ -10,6 +10,7 @@ import { CycleButton, NewIcon } from "@thunderstore/cyberstorm";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { resolveTriState } from "~/commonComponents/utils";
 import { TRISTATE } from "~/commonComponents/types";
+import { memo } from "react";
 
 type typeA<B> = (v: B) => void;
 
@@ -30,7 +31,7 @@ const currentState = (state: TRISTATE | boolean) =>
 /**
  * CheckboxList which supports boolean and tri-state "checkboxes"
  */
-export const CheckboxList = (props: Props) => {
+export const CheckboxList = memo(function CheckboxList(props: Props) {
   const { items } = props;
 
   return (
@@ -72,6 +73,6 @@ export const CheckboxList = (props: Props) => {
       })}
     </ol>
   );
-};
+});
 
 CheckboxList.displayName = "CheckboxList";

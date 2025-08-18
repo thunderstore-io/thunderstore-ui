@@ -51,10 +51,8 @@ export function Menu(props: Props) {
             props.controls
           ) : (
             <NewButton
-              {...{
-                popovertarget: props.popoverId,
-                popovertargetaction: "close",
-              }}
+              popoverTarget={props.popoverId}
+              popoverTargetAction="hide"
               csVariant="secondary"
               csModifiers={["ghost", "only-icon"]}
               tooltipText="Close"
@@ -77,10 +75,8 @@ export function Menu(props: Props) {
               undefined
             )
           )}
-          {...{
-            popovertarget: props.popoverId,
-            popovertargetaction: "close",
-          }}
+          popoverTarget={props.popoverId}
+          popoverTargetAction="hide"
           aria-hidden
           tabIndex={-1}
         />

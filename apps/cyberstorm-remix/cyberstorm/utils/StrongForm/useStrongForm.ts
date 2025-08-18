@@ -126,22 +126,22 @@ export function useStrongForm<
               ) as SubmissionError
             );
             setInputErrors(error.error.formErrors as InputErrors);
-          }
-          if (error instanceof RequestQueryParamsParseError) {
+          } else if (error instanceof RequestQueryParamsParseError) {
             setSubmitError(
               new Error(
                 "Some of the query parameters are invalid"
               ) as SubmissionError
             );
             setInputErrors(error.error.formErrors as InputErrors);
-          }
-          if (error instanceof ParseError) {
+          } else if (error instanceof ParseError) {
             setSubmitError(
               new Error(
                 "Request succeeded, but the response was invalid"
               ) as SubmissionError
             );
             setInputErrors(error.error.formErrors as InputErrors);
+          } else {
+            throw error;
           }
         });
       return submitOutput;

@@ -4,7 +4,6 @@ import {
   PackageReadmeResponseData,
   packageReadmeResponseDataSchema,
 } from "../schemas/responseSchemas";
-import { z } from "zod";
 import { PackageReadmeRequestParams } from "../schemas/requestSchemas";
 export async function fetchPackageReadme(
   props: ApiEndpointProps<PackageReadmeRequestParams, object, object>
@@ -21,8 +20,8 @@ export async function fetchPackageReadme(
       config: config,
       path: path,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: packageReadmeResponseDataSchema,
   });
 }

@@ -8,7 +8,7 @@ interface DnDFileInputProps {
   baseState: ReactNode;
   dragState: ReactNode;
   rootClasses: string;
-  fileInputRef?: RefObject<HTMLInputElement>;
+  fileInputRef?: RefObject<HTMLInputElement | null>;
 }
 
 export const DnDFileInput: React.FC<DnDFileInputProps> = (props) => {
