@@ -1,18 +1,22 @@
 // THIS API ENDPOINT IS NOT IMPLEMENTED YET IN THE THUNDERSTORE API
 
-import { RequestConfig } from "../index";
+import {
+  ApiEndpointProps,
+  UserAccountDeleteRequestData,
+  userAccountDeleteRequestDataSchema,
+  UserAccountDeleteRequestParams,
+} from "../index";
 import { apiFetch } from "../apiFetch";
-import z from "zod";
-
-export interface userDeleteApiArgs {
-  verification: string;
-}
 
 export function userDelete(
-  config: () => RequestConfig,
-  data: userDeleteApiArgs
-) {
-  const path = `/api/cyberstorm/current-user/delete/`;
+  props: ApiEndpointProps<
+    UserAccountDeleteRequestParams,
+    object,
+    UserAccountDeleteRequestData
+  >
+): Promise<undefined> {
+  const { config, params, data } = props;
+  const path = `/api/cyberstorm/user/${params.username}/delete/`;
 
   return apiFetch({
     args: {
@@ -24,10 +28,9 @@ export function userDelete(
       },
       useSession: true,
     },
-    // requestSchema: userDeleteRequestSchema,
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: userAccountDeleteRequestDataSchema,
+    queryParamsSchema: undefined,
     // responseSchema: userDeleteResponseSchema,
-    responseSchema: z.object({}),
+    responseSchema: undefined,
   });
 }

@@ -4,6 +4,8 @@ import {
   fetchPackageVersions,
   postPackageSubmission,
   fetchPackageSubmissionStatus,
+  fetchPackageWiki,
+  fetchPackageWikiPage,
 } from "@thunderstore/thunderstore-api";
 import { z } from "zod";
 
@@ -69,6 +71,37 @@ export async function getPackageVersions(
     params: {
       namespace_id: namespaceId,
       package_name: packageName,
+    },
+    data: {},
+    queryParams: {},
+  });
+
+  return data;
+}
+
+export async function getPackageWiki(
+  this: DapperTsInterface,
+  namespaceId: string,
+  packageName: string
+) {
+  const data = await fetchPackageWiki({
+    config: this.config,
+    params: {
+      namespace_id: namespaceId,
+      package_name: packageName,
+    },
+    data: {},
+    queryParams: {},
+  });
+
+  return data;
+}
+
+export async function getPackageWikiPage(this: DapperTsInterface, id: string) {
+  const data = await fetchPackageWikiPage({
+    config: this.config,
+    params: {
+      id,
     },
     data: {},
     queryParams: {},

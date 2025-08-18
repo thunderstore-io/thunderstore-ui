@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@fortawesome/pro-solid-svg-icons": "6.6.0",
-    "@react-router/node": "^7.0.0",
-    "@react-router/serve": "^7.0.0",
+    "@react-router/node": "^7.6.2",
+    "@react-router/serve": "^7.6.2",
     "@sentry/remix": "^8.31.0",
     "@sentry/vite-plugin": "^2.22.4",
     "@thunderstore/cyberstorm": "^0.1.0",
@@ -26,7 +26,10 @@
     "isbot": "^5.1.17",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router": "^7.0.0",
+    "react-markdown": "^10.1.0",
+    "react-router": "^7.6.2",
+    "rehype-sanitize": "^6.0.0",
+    "remark-gfm": "^4.0.1",
     "remix-utils": "^7.7.0",
     "semver": "^7.7.1",
     "zod": "^3.23.8"

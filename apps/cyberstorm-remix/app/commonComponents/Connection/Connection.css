@@ -6,7 +6,7 @@
     align-self: stretch;
     padding: var(--space-16) var(--space-32);
     border-radius: var(--radius-md);
-    background: rgb(62 68 158 / 0.24);
+    background: var(--color-surface-default);
   }
 
   .connection__body {

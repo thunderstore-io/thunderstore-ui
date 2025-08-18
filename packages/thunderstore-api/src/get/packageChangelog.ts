@@ -22,8 +22,8 @@ export async function fetchPackageChangelog(
       config,
       path,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: packageChangelogResponseDataSchema,
   });
 }

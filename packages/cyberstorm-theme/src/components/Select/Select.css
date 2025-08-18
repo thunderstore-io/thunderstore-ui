@@ -11,6 +11,16 @@
   }
 
   /* SIZES */
+  .select:where(.select--size--xsmall) {
+    --select-border-radius: var(--select-xs-border-radius);
+    --select-padding: var(--select-xs-padding);
+  }
+
+  .select:where(.select--size--small) {
+    --select-border-radius: var(--select-sm-border-radius);
+    --select-padding: var(--select-sm-padding);
+  }
+
   .select:where(.select--size--medium) {
     --select-border-radius: var(--select-md-border-radius);
     --select-padding: var(--select-md-padding);
@@ -61,6 +71,20 @@
   }
 
   /* SIZES */
+  .select__item:where(.select__item--size--xsmall) {
+    --select-item-gap: var(--select-item-xs-gap);
+    --select-item-padding: var(--select-item-xs-padding);
+    --select-item-font-weight: var(--select-item-xs-font-weight);
+    --select-item-font-size: var(--select-item-xs-font-size);
+  }
+
+  .select__item:where(.select__item--size--small) {
+    --select-item-gap: var(--select-item-sm-gap);
+    --select-item-padding: var(--select-item-sm-padding);
+    --select-item-font-weight: var(--select-item-sm-font-weight);
+    --select-item-font-size: var(--select-item-sm-font-size);
+  }
+
   .select__item:where(.select__item--size--medium) {
     --select-item-gap: var(--select-item-md-gap);
     --select-item-padding: var(--select-item-md-padding);
@@ -71,6 +95,16 @@
   /* SELECT TRIGGER */
 
   /* SIZES */
+  .select__trigger:where(.select__trigger--size--xsmall) {
+    --select-trigger-font-weight: var(--select-trigger-xs-font-weight);
+    --select-trigger-font-size: var(--select-trigger-xs-font-size);
+  }
+
+  .select__trigger:where(.select__trigger--size--small) {
+    --select-trigger-font-weight: var(--select-trigger-sm-font-weight);
+    --select-trigger-font-size: var(--select-trigger-sm-font-size);
+  }
+
   .select__trigger:where(.select__trigger--size--medium) {
     --select-trigger-font-weight: var(--select-trigger-md-font-weight);
     --select-trigger-font-size: var(--select-trigger-md-font-size);

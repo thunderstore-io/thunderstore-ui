@@ -10,13 +10,11 @@ export interface ApiActionProps<
   Return,
 > {
   endpoint: ApiEndpoint<Params, QueryParams, Data, Return>;
-  // params?: Params;
-  // queryParams?: QueryParams;
-  // data?: Data;
   onSubmitSuccess?: (result: Awaited<Return>) => void;
-  onSubmitError?: (error: Error | ApiError | unknown) => void;
+  onSubmitError?: (error: Error | ApiError) => void;
 }
 
+// As of this moment ApiActions sole purpose is to gracefully handle errors from API calls
 export function ApiAction<
   Params extends object,
   QueryParams extends object,
