@@ -8,7 +8,6 @@ import {
 } from "../schemas/requestSchemas";
 import { PackageRateRequestData } from "../schemas/requestSchemas";
 import { PackageRateRequestParams } from "../schemas/requestSchemas";
-import { z } from "zod";
 import {
   PackageDeprecateResponseData,
   packageDeprecateResponseDataSchema,
@@ -38,7 +37,7 @@ export function packageRate(
       useSession: props.useSession,
     },
     requestSchema: packageRateRequestDataSchema,
-    queryParamsSchema: z.object({}),
+    queryParamsSchema: undefined,
     responseSchema: packageRateResponseDataSchema,
   });
 }
@@ -65,7 +64,7 @@ export function packageDeprecate(
       useSession: props.useSession,
     },
     requestSchema: packageDeprecateRequestDataSchema,
-    queryParamsSchema: z.object({}),
+    queryParamsSchema: undefined,
     responseSchema: packageDeprecateResponseDataSchema,
   });
 }

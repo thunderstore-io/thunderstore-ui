@@ -1,6 +1,6 @@
 import { Heading, Image } from "@thunderstore/cyberstorm";
 import "./PageHeader.css";
-import { PropsWithChildren, ReactElement } from "react";
+import { memo, PropsWithChildren, ReactElement } from "react";
 import { HeadingSizes } from "@thunderstore/cyberstorm-theme/src/components";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 
@@ -14,7 +14,7 @@ export interface PageHeaderProps extends PropsWithChildren {
   variant?: "simple" | "detailed";
 }
 
-export function PageHeader(props: PageHeaderProps) {
+export const PageHeader = memo(function PageHeader(props: PageHeaderProps) {
   const {
     children,
     headingSize,
@@ -78,6 +78,6 @@ export function PageHeader(props: PageHeaderProps) {
       </div>
     </header>
   );
-}
+});
 
 PageHeader.displayName = "PageHeader";

@@ -22,7 +22,7 @@ export type GetCommunityFilters = (
   communityId: string
 ) => Promise<CommunityFilters>;
 
-export type GetCurrentUser = () => Promise<CurrentUser>;
+export type GetCurrentUser = () => Promise<null | CurrentUser>;
 
 export type GetPackageChangelog = (
   namespace: string,
@@ -79,3 +79,5 @@ export type GetTeamServiceAccounts = (
 export type GetPackageSubmissionStatus = (
   submissionId: string
 ) => Promise<PackageSubmissionResponse>;
+
+export type PostTeamCreate = (name: string) => Promise<TeamDetails>;

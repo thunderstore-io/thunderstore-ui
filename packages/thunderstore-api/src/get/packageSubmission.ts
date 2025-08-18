@@ -1,6 +1,5 @@
 import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import { z } from "zod";
 import { PackageSubmissionStatusRequestParams } from "../schemas/requestSchemas";
 import {
   PackageSubmissionStatusResponseData,
@@ -21,8 +20,8 @@ export function fetchPackageSubmissionStatus(
       useSession: true,
       request: request,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: packageSubmissionStatusResponseDataSchema,
   });
 }

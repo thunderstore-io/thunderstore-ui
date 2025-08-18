@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import {
   CardCommunity,
   EmptyState,
@@ -6,7 +6,7 @@ import {
   NewSelect,
 } from "@thunderstore/cyberstorm";
 import "./Communities.css";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -18,13 +18,13 @@ import { useDebounce } from "use-debounce";
 import {
   useLoaderData,
   useNavigationType,
-  // useNavigation,
   useSearchParams,
-} from "@remix-run/react";
+} from "react-router";
 import { Communities } from "@thunderstore/dapper/types";
 // import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { getSessionTools } from "~/middlewares";
 
 export const meta: MetaFunction = () => {
   return [
@@ -68,7 +68,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const page = undefined;
   const dapper = new DapperTs(() => {
     return {
-      apiHost: process.env.PUBLIC_API_URL,
+      apiHost: import.meta.env.VITE_API_URL,
       sessionId: undefined,
     };
   });
@@ -79,12 +79,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
   );
 }
 
-export async function clientLoader({ request }: LoaderFunctionArgs) {
+export async function clientLoader({ context, request }: LoaderFunctionArgs) {
+  const tools = getSessionTools(context);
+  const dapper = new DapperTs(() => {
+    return {
+      apiHost: tools?.getConfig().apiHost,
+      sessionId: tools?.getConfig().sessionId,
+    };
+  });
   const searchParams = new URL(request.url).searchParams;
   const order = searchParams.get("order");
   const search = searchParams.get("search");
   const page = undefined;
-  const dapper = window.Dapper;
   return await dapper.getCommunities(
     page,
     order ?? SortOptions.Popular,
@@ -94,6 +100,7 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
 
 export default function CommunitiesPage() {
   const communitiesData = useLoaderData<typeof loader | typeof clientLoader>();
+  console.log("Communities data loaded:", communitiesData);
   const navigationType = useNavigationType();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -183,7 +190,9 @@ export default function CommunitiesPage() {
   );
 }
 
-function CommunitiesList(props: { communitiesData: Communities }) {
+const CommunitiesList = memo(function CommunitiesList(props: {
+  communitiesData: Communities;
+}) {
   const { communitiesData } = props;
 
   if (communitiesData.results.length > 0) {
@@ -212,4 +221,4 @@ function CommunitiesList(props: { communitiesData: Communities }) {
       </EmptyState.Root>
     );
   }
-}
+});

@@ -22,7 +22,7 @@ import { MultipartUpload, IBaseUploadHandle } from "@thunderstore/ts-uploader";
 //   useUploadError,
 //   useUploadControls,
 // } from "@thunderstore/ts-uploader-react";
-import { useSession } from "@thunderstore/ts-api-react";
+// import { useSession } from "@thunderstore/ts-api-react";
 import {
   faFileZip,
   faTreasureChest,
@@ -31,8 +31,8 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { UserMedia } from "@thunderstore/ts-uploader/src/uploaders/types";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { MetaFunction } from "@remix-run/node";
-import { useLoaderData, useOutletContext } from "@remix-run/react";
+import { LoaderFunctionArgs, MetaFunction } from "react-router";
+import { useLoaderData, useOutletContext } from "react-router";
 import {
   PackageSubmissionResult,
   PackageSubmissionStatus,
@@ -44,6 +44,7 @@ import { postPackageSubmissionMetadata } from "@thunderstore/dapper-ts/src/metho
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { getSessionTools } from "~/middlewares";
 
 interface CommunityOption {
   value: string;
@@ -66,17 +67,25 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader() {
+  // console.log("loader context", getSessionTools(context));
   const dapper = new DapperTs(() => {
     return {
-      apiHost: process.env.PUBLIC_API_URL,
+      apiHost: import.meta.env.VITE_API_URL,
       sessionId: undefined,
     };
   });
   return await dapper.getCommunities();
 }
 
-export async function clientLoader() {
-  const dapper = window.Dapper;
+export async function clientLoader({ context }: LoaderFunctionArgs) {
+  // console.log("clientloader context", getSessionTools(context));
+  const tools = getSessionTools(context);
+  const dapper = new DapperTs(() => {
+    return {
+      apiHost: tools?.getConfig().apiHost,
+      sessionId: tools?.getConfig().sessionId,
+    };
+  });
   return await dapper.getCommunities();
 }
 
@@ -85,7 +94,8 @@ export default function Upload() {
 
   const outletContext = useOutletContext() as OutletContextShape;
   const requestConfig = outletContext.requestConfig;
-  const session = useSession();
+  const currentUser = outletContext.currentUser;
+  const dapper = outletContext.dapper;
 
   const toast = useToast();
 
@@ -103,8 +113,8 @@ export default function Upload() {
     }[]
   >([]);
   useEffect(() => {
-    setAvailableTeams(session.getSessionCurrentUser()?.teams_full ?? []);
-  }, [session]);
+    setAvailableTeams(currentUser?.teams_full ?? []);
+  }, [currentUser?.teams_full]);
 
   // Community options
   const communityOptions: CommunityOption[] = [];
@@ -132,7 +142,7 @@ export default function Upload() {
   const startUpload = useCallback(async () => {
     if (!file) return;
 
-    const config = session.getConfig();
+    const config = requestConfig();
     if (!config.apiHost) {
       throw new Error("API host is not configured");
     }
@@ -154,7 +164,7 @@ export default function Upload() {
     setUsermedia(upload.handle);
     setIsDone(true);
     // setLock(false);
-  }, [file, session]);
+  }, [file, requestConfig]);
 
   useEffect(() => {
     if (file) {
@@ -175,7 +185,7 @@ export default function Upload() {
       children: "Polling submission status",
       duration: 4000,
     });
-    return await window.Dapper.getPackageSubmissionStatus(submissionId);
+    return await dapper.getPackageSubmissionStatus(submissionId);
   };
 
   const submissionStatusRef = useRef<PackageSubmissionStatus | undefined>(
@@ -276,7 +286,7 @@ export default function Upload() {
       if (categoryOptions.some((opt) => opt.communityId === community)) {
         continue;
       }
-      window.Dapper.getCommunityFilters(community).then((filters) => {
+      dapper.getCommunityFilters(community).then((filters) => {
         setCategoryOptions((prev) => [
           ...prev,
           {
@@ -296,7 +306,7 @@ export default function Upload() {
   >;
 
   async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
-    const config = session.getConfig();
+    const config = requestConfig();
     const dapper = new DapperTs(() => config);
     return await dapper.postPackageSubmissionMetadata(
       data.author_name,

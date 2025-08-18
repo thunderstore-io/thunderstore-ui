@@ -18,6 +18,7 @@
     align-items: flex-start;
     padding-top: 1rem;
     overflow-x: scroll;
+    scrollbar-width: none;
   }
 
   .package-listing__content-header {

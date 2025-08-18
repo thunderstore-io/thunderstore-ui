@@ -5,7 +5,6 @@ import {
   PackageListingsRequestQueryParams,
   packageListingsRequestQueryParamsSchema,
 } from "../schemas/requestSchemas";
-import { z } from "zod";
 import { PackageListingsOrderingEnum } from "../schemas/queryParamSchemas";
 import {
   PackageListingsResponseData,
@@ -45,7 +44,7 @@ export async function fetchPackageDependantsListings(
       path,
       queryParams,
     },
-    requestSchema: z.object({}),
+    requestSchema: undefined,
     queryParamsSchema: packageListingsRequestQueryParamsSchema,
     responseSchema: packageListingsResponseDataSchema,
   });

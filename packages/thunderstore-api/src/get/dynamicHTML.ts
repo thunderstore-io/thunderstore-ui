@@ -1,6 +1,5 @@
 import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import { z } from "zod";
 import {
   DynamicHTMLResponseData,
   dynamicHTMLResponseDataSchema,
@@ -15,8 +14,8 @@ export async function fetchDynamicHTML(
 
   return await apiFetch({
     args: { config, path, request: { cache: "no-store" as RequestCache } },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: dynamicHTMLResponseDataSchema,
   });
 }

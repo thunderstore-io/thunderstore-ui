@@ -11,7 +11,6 @@ import {
   packageListingApproveRequestDataSchema,
   packageListingRejectRequestDataSchema,
 } from "../schemas/requestSchemas";
-import { z } from "zod";
 import {
   PackageListingUpdateResponseData,
   packageListingUpdateResponseDataSchema,
@@ -39,7 +38,7 @@ export function packageListingUpdate(
       useSession: true,
     },
     requestSchema: packageListingUpdateRequestDataSchema,
-    queryParamsSchema: z.object({}),
+    queryParamsSchema: undefined,
     responseSchema: packageListingUpdateResponseDataSchema,
   });
 }
@@ -66,8 +65,8 @@ export function packageListingApprove(
       useSession: true,
     },
     requestSchema: packageListingApproveRequestDataSchema,
-    queryParamsSchema: z.object({}),
-    responseSchema: z.object({}),
+    queryParamsSchema: undefined,
+    responseSchema: undefined,
   });
 }
 
@@ -93,7 +92,7 @@ export function packageListingReject(
       useSession: true,
     },
     requestSchema: packageListingRejectRequestDataSchema,
-    queryParamsSchema: z.object({}),
-    responseSchema: z.object({}),
+    queryParamsSchema: undefined,
+    responseSchema: undefined,
   });
 }

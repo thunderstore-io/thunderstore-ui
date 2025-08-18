@@ -34,7 +34,7 @@
   .settings-items__description {
     align-self: stretch;
     color: var(--color-text-tertiary);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-regular);
 
     font-size: var(--font-size-body-md);
     line-height: var(--line-height-md);
@@ -56,6 +56,6 @@
     align-items: flex-start;
     padding: var(--space-16) var(--space-32);
     border-radius: var(--radius-md);
-    background: rgb(59 63 125 / 0.24);
+    background: var(--color-surface-default);
   }
 }

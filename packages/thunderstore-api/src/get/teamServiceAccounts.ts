@@ -1,7 +1,6 @@
 import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import { TeamServiceAccountsRequestParams } from "../schemas/requestSchemas";
-import { z } from "zod";
 import {
   TeamServiceAccountsResponseData,
   teamServiceAccountsResponseDataSchema,
@@ -19,8 +18,8 @@ export async function fetchTeamServiceAccounts(
       path,
       useSession: true,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: teamServiceAccountsResponseDataSchema,
   });
 }

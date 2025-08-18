@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData, useOutletContext } from "@remix-run/react";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+import { useLoaderData, useOutletContext } from "react-router";
 import { NewBreadCrumbs, NewBreadCrumbsLink } from "@thunderstore/cyberstorm";
 import "./Team.css";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
@@ -8,6 +8,7 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
 import { OutletContextShape } from "../../root";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { getSessionTools } from "~/middlewares";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -21,7 +22,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     try {
       const dapper = new DapperTs(() => {
         return {
-          apiHost: process.env.PUBLIC_API_URL,
+          apiHost: import.meta.env.VITE_API_URL,
           sessionId: undefined,
         };
       });
@@ -78,10 +79,20 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   throw new Response("Package not found", { status: 404 });
 }
 
-export async function clientLoader({ request, params }: LoaderFunctionArgs) {
+export async function clientLoader({
+  context,
+  request,
+  params,
+}: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId) {
     try {
-      const dapper = window.Dapper;
+      const tools = getSessionTools(context);
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: tools?.getConfig().apiHost,
+          sessionId: tools?.getConfig().sessionId,
+        };
+      });
       const searchParams = new URL(request.url).searchParams;
       const ordering =
         searchParams.get("ordering") ?? PackageOrderOptions.Updated;
@@ -174,6 +185,7 @@ export default function Team() {
           sections={sortedSections}
           config={outletContext.requestConfig}
           currentUser={outletContext.currentUser}
+          dapper={outletContext.dapper}
         />
       </section>
     </div>

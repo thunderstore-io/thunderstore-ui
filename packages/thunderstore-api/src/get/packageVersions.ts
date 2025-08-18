@@ -2,7 +2,6 @@ import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import { packageVersionsResponseDataSchema } from "../schemas/responseSchemas";
 import { PackageVersionsRequestParams } from "../schemas/requestSchemas";
-import { z } from "zod";
 import { PackageVersionsResponseData } from "../schemas/responseSchemas";
 
 export async function fetchPackageVersions(
@@ -16,8 +15,8 @@ export async function fetchPackageVersions(
       config: config,
       path: path,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: packageVersionsResponseDataSchema,
   });
 }

@@ -16,6 +16,7 @@ interface typeWorkaroundProps extends PropsWithChildren {
   team?: string;
   user?: string;
   url?: string;
+  wikipageslug?: string;
 }
 
 export type CyberstormLinkIds =
@@ -29,6 +30,9 @@ export type CyberstormLinkIds =
   | "Package"
   | "PackageRequired"
   | "PackageWiki"
+  | "PackageWikiNewPage"
+  | "PackageWikiPage"
+  | "PackageWikiPageEdit"
   | "PackageChangelog"
   | "PackageVersions"
   | "PackageSource"
@@ -72,6 +76,7 @@ export const CyberstormLink = React.forwardRef<
     version = "",
     team = "",
     user = "",
+    wikipageslug = "",
     ...forwardedProps
   } = props;
   const fProps =
@@ -89,6 +94,7 @@ export const CyberstormLink = React.forwardRef<
       version={version}
       team={team}
       user={user}
+      wikipageslug={wikipageslug}
       customRef={forwardedRef}
     >
       {children}

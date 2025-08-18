@@ -1,6 +1,5 @@
 import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import { z } from "zod";
 import {
   communityResponseDataSchema,
   CommunityResponseData,
@@ -18,8 +17,8 @@ export async function fetchCommunity(
       config,
       path,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: communityResponseDataSchema,
   });
 }

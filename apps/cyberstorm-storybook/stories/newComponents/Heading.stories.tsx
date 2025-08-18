@@ -1,6 +1,6 @@
 import { StoryFn, Meta } from "@storybook/react";
 import { Heading } from "@thunderstore/cyberstorm";
-import React from "react";
+import React, { ReactNode } from "react";
 
 const meta = {
   title: "Heading",
@@ -11,7 +11,7 @@ const levels = ["1", "2", "3", "4"] as const;
 const styleLevels = ["1", "2", "3", "4"] as const;
 
 const Template: StoryFn<typeof Heading> = (args) => {
-  const options: JSX.Element[] = [];
+  const options: ReactNode[] = [];
   levels.map((level: "1" | "2" | "3" | "4") =>
     styleLevels.map((styleLevel) => {
       options.push(

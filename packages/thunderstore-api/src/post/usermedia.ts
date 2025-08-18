@@ -16,7 +16,6 @@ import {
   UsermediaInitiateUploadResponseData,
   usermediaInitiateUploadResponseDataSchema,
 } from "../schemas/responseSchemas";
-import { z } from "zod";
 
 export function postUsermediaInitiate(
   props: ApiEndpointProps<object, object, UsermediaInitiateUploadRequestData>
@@ -36,7 +35,7 @@ export function postUsermediaInitiate(
       useSession,
     },
     requestSchema: usermediaInitiateUploadRequestDataSchema,
-    queryParamsSchema: z.object({}),
+    queryParamsSchema: undefined,
     responseSchema: usermediaInitiateUploadResponseDataSchema,
   });
 }
@@ -57,8 +56,8 @@ export function postUsermediaAbort(
       },
       useSession,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: usermediaAbortUploadResponseDataSchema,
   });
 }
@@ -85,7 +84,7 @@ export function postUsermediaFinish(
       useSession,
     },
     requestSchema: usermediaFinishUploadRequestDataSchema,
-    queryParamsSchema: z.object({}),
+    queryParamsSchema: undefined,
     responseSchema: usermediaFinishUploadResponseDataSchema,
   });
 }

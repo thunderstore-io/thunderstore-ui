@@ -1,3 +1,4 @@
+import { memo } from "react";
 import "./PackageCount.css";
 
 interface Props {
@@ -15,7 +16,7 @@ interface Props {
  * Show the currently displayed packages and the total count of matches
  * for the current filters.
  */
-export const PackageCount = (props: Props) => {
+export const PackageCount = memo(function PackageCount(props: Props) {
   const { page, pageSize, searchQuery, totalCount } = props;
   const first = (page - 1) * pageSize + 1;
   const last = first + pageSize - 1;
@@ -32,6 +33,6 @@ export const PackageCount = (props: Props) => {
       } of ${totalCount} results ${query}`}
     </p>
   );
-};
+});
 
 PackageCount.displayName = "PackageCount";

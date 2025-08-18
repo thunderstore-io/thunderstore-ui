@@ -318,3 +318,13 @@ export const markdownRenderSchema = z.object({
 });
 
 export type MarkdownRender = z.infer<typeof markdownRenderSchema>;
+
+export const packageWikiPageSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  slug: z.string().min(1),
+  datetime_created: z.string().datetime(),
+  datetime_updated: z.string().datetime(),
+  markdown_content: z.string().min(1),
+});
+export type PackageWikiPage = z.infer<typeof packageWikiPageSchema>;

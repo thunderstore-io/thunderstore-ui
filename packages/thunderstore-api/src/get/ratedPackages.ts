@@ -1,6 +1,5 @@
 import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import { z } from "zod";
 import { ratedPackagesResponseDataSchema } from "../schemas/responseSchemas";
 import { RatedPackagesResponseData } from "../schemas/responseSchemas";
 
@@ -18,8 +17,8 @@ export async function fetchRatedPackages(
       request: request,
       useSession: true,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: ratedPackagesResponseDataSchema,
   });
 }

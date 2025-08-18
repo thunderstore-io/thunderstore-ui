@@ -12,7 +12,11 @@ import {
   getFakePackageVersions,
 } from "./fakers/package";
 import { getFakeServiceAccounts } from "./fakers/serviceAccount";
-import { getFakeTeamDetails, getFakeTeamMembers } from "./fakers/team";
+import {
+  getFakeTeamDetails,
+  getFakeTeamMembers,
+  postFakeTeamCreate,
+} from "./fakers/team";
 import { getFakeCurrentUser } from "./fakers/user";
 import { postFakePackageSubmissionMetadata } from "./fakers/submission";
 import { getFakePackageSubmissionStatus } from "./fakers/submission";
@@ -32,4 +36,5 @@ export class DapperFake implements DapperInterface {
   public getTeamServiceAccounts = getFakeServiceAccounts;
   public postPackageSubmissionMetadata = postFakePackageSubmissionMetadata;
   public getPackageSubmissionStatus = getFakePackageSubmissionStatus;
+  public postTeamCreate = postFakeTeamCreate;
 }

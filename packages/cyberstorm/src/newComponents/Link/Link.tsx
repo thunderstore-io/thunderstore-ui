@@ -5,7 +5,7 @@ import {
   ActionableCyberstormLinkProps,
   ActionableLinkProps,
 } from "../../primitiveComponents/Actionable/Actionable";
-import React from "react";
+import { memo } from "react";
 import { classnames } from "../../utils/utils";
 
 export interface LinkProps extends ActionableLinkProps {
@@ -16,10 +16,7 @@ export interface CyberstormLinkProps extends ActionableCyberstormLinkProps {
   csVariant?: LinkVariants;
 }
 
-export const Link = React.forwardRef<
-  HTMLAnchorElement,
-  LinkProps | CyberstormLinkProps
->((props: LinkProps | CyberstormLinkProps, forwardedRef) => {
+export const Link = memo(function Link(props: LinkProps | CyberstormLinkProps) {
   const { children, rootClasses, csVariant, ...forwardedProps } = props;
   return (
     <Actionable
@@ -33,7 +30,6 @@ export const Link = React.forwardRef<
         forwardedProps.disabled ? "link-disabled" : undefined,
         rootClasses
       )}
-      ref={forwardedRef}
     >
       {forwardedProps.disabled ? (
         <s className="link-strikethrough">{children}</s>

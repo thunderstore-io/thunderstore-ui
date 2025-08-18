@@ -1,13 +1,12 @@
 import { LinkLibrary, ThunderstoreLinkProps } from "@thunderstore/cyberstorm";
-import { Link as RemixLink } from "@remix-run/react";
+import { LinkProps as RRLinkProps, Link as RRLink } from "react-router";
 import { PropsWithChildren } from "react";
 import React from "react";
-import { RemixLinkProps } from "@remix-run/react/dist/components";
 
 interface LinkProps
   extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
     PropsWithChildren,
-    Omit<RemixLinkProps, "to">,
+    Omit<RRLinkProps, "to">,
     ThunderstoreLinkProps {
   className?: string;
   queryParams?: string;
@@ -36,7 +35,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     const fProps =
       forwardedProps as React.AnchorHTMLAttributes<HTMLAnchorElement>;
     return (
-      <RemixLink
+      <RRLink
         to={`${url}${q}`}
         // passHref
         {...fProps}
@@ -53,7 +52,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         }
       >
         {children}
-      </RemixLink>
+      </RRLink>
     );
   }
 );
@@ -94,6 +93,27 @@ const library: LinkLibrary = {
     <Link
       {...p}
       url={`/c/${p.community}/p/${p.namespace}/${p.package}/wiki`}
+      ref={p.customRef}
+    />
+  ),
+  PackageWikiNewPage: (p) => (
+    <Link
+      {...p}
+      url={`/c/${p.community}/p/${p.namespace}/${p.package}/wiki/new`}
+      ref={p.customRef}
+    />
+  ),
+  PackageWikiPage: (p) => (
+    <Link
+      {...p}
+      url={`/c/${p.community}/p/${p.namespace}/${p.package}/wiki/${p.wikipageslug}`}
+      ref={p.customRef}
+    />
+  ),
+  PackageWikiPageEdit: (p) => (
+    <Link
+      {...p}
+      url={`/c/${p.community}/p/${p.namespace}/${p.package}/wiki/${p.wikipageslug}/edit`}
       ref={p.customRef}
     />
   ),

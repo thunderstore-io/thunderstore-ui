@@ -67,12 +67,12 @@ export function Provider(props: { toastDuration: number } & PropsWithChildren) {
   };
 
   return (
-    <ToastContext.Provider value={value}>
+    <ToastContext value={value}>
       <RadixToast.Provider swipeDirection="left" duration={props.toastDuration}>
         {props.children}
         <Viewport toasts={state.toasts} />
       </RadixToast.Provider>
-    </ToastContext.Provider>
+    </ToastContext>
   );
 }
 

@@ -1,7 +1,6 @@
 import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import { PackageChangelogRequestParams } from "../schemas/requestSchemas";
-import { z } from "zod";
 import {
   PackageChangelogResponseData,
   packageChangelogResponseDataSchema,
@@ -22,8 +21,8 @@ export async function fetchPackageChangelog(
       config,
       path,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: packageChangelogResponseDataSchema,
   });
 }

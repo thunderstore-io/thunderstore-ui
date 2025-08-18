@@ -1,11 +1,6 @@
-import { useOutletContext } from "@remix-run/react";
+import { useOutletContext } from "react-router";
 import "./MarkdownPreview.css";
-import {
-  CodeInput,
-  Markdown,
-  NewBreadCrumbs,
-  isRecord,
-} from "@thunderstore/cyberstorm";
+import { CodeInput, NewBreadCrumbs, isRecord } from "@thunderstore/cyberstorm";
 import {
   isApiError,
   RequestConfig,
@@ -16,6 +11,7 @@ import { PageHeader } from "../../commonComponents/PageHeader/PageHeader";
 import { OutletContextShape } from "../../root";
 
 import { useDebounce } from "use-debounce";
+import { Markdown } from "~/commonComponents/Markdown/Markdown";
 
 export default function MarkdownPreview() {
   const outletContext = useOutletContext() as OutletContextShape;

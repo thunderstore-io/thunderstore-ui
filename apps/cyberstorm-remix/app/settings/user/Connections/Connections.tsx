@@ -1,58 +1,24 @@
 import { NewLink } from "@thunderstore/cyberstorm";
 
-import { currentUserSchema } from "@thunderstore/dapper-ts";
-import { useLoaderData } from "@remix-run/react";
+import { useOutletContext } from "react-router";
 import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
-import {
-  clearSession,
-  getConfig,
-  getSessionCurrentUser,
-  NamespacedStorageManager,
-} from "@thunderstore/ts-api-react";
+
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
-import {
-  useApiForm,
-  userLinkedAccountDisconnectFormSchema,
-} from "@thunderstore/ts-api-react-forms";
 import { userLinkedAccountDisconnect } from "../../../../../../packages/thunderstore-api/src";
 
 import { Connection } from "~/commonComponents/Connection/Connection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { OverwolfLogo } from "@thunderstore/cyberstorm/src/svg/svg";
-
-export async function clientLoader() {
-  const _storage = new NamespacedStorageManager("Session");
-  const currentUser = getSessionCurrentUser(_storage, true, undefined, () => {
-    clearSession(_storage);
-    throw new Response("Your session has expired, please log in again", {
-      status: 401,
-    });
-    // redirect("/");
-  });
-
-  if (
-    !currentUser.username ||
-    (currentUser.username && currentUser.username === "")
-  ) {
-    clearSession(_storage);
-    throw new Response("Not logged in.", { status: 401 });
-  } else {
-    return {
-      config: getConfig(_storage),
-      currentUser: currentUser as typeof currentUserSchema._type,
-    };
-  }
-}
-
-export function HydrateFallback() {
-  return "Loading...";
-}
+import { ReactElement } from "react";
+import { OutletContextShape } from "~/root";
+import { ApiAction } from "@thunderstore/ts-api-react-actions";
+import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 
 type ProvidersType = {
   name: string;
   identifier: "discord" | "github" | "overwolf";
-  icon: JSX.Element;
+  icon: ReactElement;
 }[];
 
 export const PROVIDERS: ProvidersType = [
@@ -70,15 +36,24 @@ export const PROVIDERS: ProvidersType = [
 ];
 
 export default function Connections() {
-  const { config, currentUser } = useLoaderData<typeof clientLoader>();
+  const outletContext = useOutletContext() as OutletContextShape;
+
+  if (!outletContext.currentUser || !outletContext.currentUser.username)
+    return <NotLoggedIn />;
 
   const toast = useToast();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onSubmitSuccess = (_r: unknown) => {
+    if (!outletContext.currentUser || !outletContext.currentUser.username)
+      throw new Error("User not logged in");
     toast.addToast({
       csVariant: "success",
-      children: <>User {currentUser.username} was disconnected from TODO</>,
+      children: (
+        <>
+          User {outletContext.currentUser.username} was disconnected from TODO
+        </>
+      ),
       duration: 30000,
     });
   };
@@ -90,28 +65,11 @@ export default function Connections() {
     });
   };
 
-  const { submitHandler } = useApiForm({
-    schema: userLinkedAccountDisconnectFormSchema,
-    meta: {},
+  const onSubmit = ApiAction({
     endpoint: userLinkedAccountDisconnect,
+    onSubmitSuccess: onSubmitSuccess,
+    onSubmitError: onSubmitError,
   });
-
-  const onSubmit = async (
-    data: typeof userLinkedAccountDisconnectFormSchema._type
-  ) => {
-    try {
-      const result = await submitHandler(() => config, data);
-      if (onSubmitSuccess) {
-        onSubmitSuccess(result);
-      }
-    } catch (e) {
-      if (onSubmitError) {
-        onSubmitError(e);
-      } else {
-        throw e;
-      }
-    }
-  };
 
   return (
     <div className="settings-items">
@@ -121,30 +79,54 @@ export default function Connections() {
           <p className="settings-items__description">
             This information will not be shared outside of Thunderstore. Read
             more on our{" "}
-            <NewLink primitiveType="cyberstormLink" linkId="PrivacyPolicy">
+            <NewLink
+              primitiveType="cyberstormLink"
+              linkId="PrivacyPolicy"
+              csVariant="cyber"
+            >
               Privacy Policy
             </NewLink>
             .
           </p>
         </div>
         <div className="settings-items__content">
-          {PROVIDERS.map((p) => (
-            <Connection
-              key={p.name}
-              icon={p.icon}
-              name={p.name}
-              identifier={p.identifier}
-              connection={currentUser.connections?.find(
-                (c) => c.provider.toLowerCase() === p.identifier
-              )}
-              connectionLink={buildAuthLoginUrl({ type: p.identifier })}
-              disconnectFunction={onSubmit}
-            />
-          ))}
+          {PROVIDERS.map((p) => {
+            if (
+              !outletContext.currentUser ||
+              !outletContext.currentUser.username
+            )
+              throw new Error("User not logged in");
+            return (
+              <Connection
+                key={p.name}
+                icon={p.icon}
+                name={p.name}
+                identifier={p.identifier}
+                connection={outletContext.currentUser.connections?.find(
+                  (c) => c.provider.toLowerCase() === p.identifier
+                )}
+                connectionLink={buildAuthLoginUrl({ type: p.identifier })}
+                disconnectFunction={(p) => {
+                  if (
+                    !outletContext.currentUser ||
+                    !outletContext.currentUser.username
+                  )
+                    throw new Error("User not logged in");
+                  return onSubmit({
+                    params: {
+                      provider: p,
+                      user: outletContext.currentUser.username,
+                    },
+                    config: outletContext.requestConfig,
+                    queryParams: {},
+                    data: {},
+                  });
+                }}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
   );
 }
-
-Connections.displayName = "Connections";

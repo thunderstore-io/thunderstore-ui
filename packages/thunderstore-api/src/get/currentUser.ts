@@ -1,6 +1,5 @@
 import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import { z } from "zod";
 import {
   CurrentUserResponseData,
   currentUserResponseDataSchema,
@@ -15,8 +14,8 @@ export async function fetchCurrentUser(
 
   return await apiFetch({
     args: { config, path, request, useSession: true },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: currentUserResponseDataSchema,
   });
 }

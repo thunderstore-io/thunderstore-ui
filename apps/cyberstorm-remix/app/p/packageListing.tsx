@@ -1,11 +1,10 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import {
   Outlet,
   useLoaderData,
-  useLocation,
+  useLocation, // useRevalidator,
   useOutletContext,
-  // useRevalidator,
-} from "@remix-run/react";
+} from "react-router";
 import {
   Drawer,
   Heading,
@@ -32,7 +31,7 @@ import {
   faCaretRight,
 } from "@fortawesome/free-solid-svg-icons";
 import TeamMembers from "./components/TeamMembers/TeamMembers";
-import { useEffect, useRef, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import {
   // PackageDeprecateAction,
@@ -50,7 +49,6 @@ import {
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { OutletContextShape } from "~/root";
 import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
-import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [
@@ -67,9 +65,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
     },
     {
       property: "og:url",
-      content: `${getPublicEnvVariables(["PUBLIC_SITE_URL"]).PUBLIC_SITE_URL}${
-        location.pathname
-      }`,
+      content: `${import.meta.env.VITE_SITE_URL}${location.pathname}`,
     },
     {
       property: "og:title",
@@ -107,7 +103,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     try {
       const dapper = new DapperTs(() => {
         return {
-          apiHost: process.env.PUBLIC_API_URL,
+          apiHost: import.meta.env.VITE_API_URL,
           sessionId: undefined,
         };
       });
@@ -173,11 +169,11 @@ export default function PackageListing() {
   const currentUser = outletContext.currentUser;
   const config = outletContext.requestConfig;
   const domain = outletContext.domain;
+  const dapper = outletContext.dapper;
 
   const [isLiked, setIsLiked] = useState(false);
 
   const fetchAndSetRatedPackages = async () => {
-    const dapper = window.Dapper;
     const rp = await dapper.getRatedPackages();
     setIsLiked(
       rp.rated_packages.includes(`${listing.namespace}-${listing.name}`)
@@ -202,10 +198,10 @@ export default function PackageListing() {
   const startsHydrated = useRef(isHydrated);
 
   // START: For sidebar meta dates
-  const [lastUpdated, setLastUpdated] = useState<JSX.Element | undefined>(
+  const [lastUpdated, setLastUpdated] = useState<ReactElement | undefined>(
     <RelativeTime time={listing.last_updated} suppressHydrationWarning />
   );
-  const [firstUploaded, setFirstUploaded] = useState<JSX.Element | undefined>(
+  const [firstUploaded, setFirstUploaded] = useState<ReactElement | undefined>(
     <RelativeTime time={listing.datetime_created} suppressHydrationWarning />
   );
 
@@ -240,17 +236,7 @@ export default function PackageListing() {
     );
   });
 
-  const currentTab = location.pathname.endsWith("/changelog")
-    ? "changelog"
-    : location.pathname.endsWith("/required")
-      ? "required"
-      : location.pathname.endsWith("/versions")
-        ? "versions"
-        : location.pathname.endsWith("/wiki")
-          ? "wiki"
-          : location.pathname.endsWith("/source")
-            ? "source"
-            : "details";
+  const currentTab = location.pathname.split("/")[6] || "details";
 
   // TODO: Enable when APIs are available
   // const managementTools = (
@@ -547,10 +533,8 @@ export default function PackageListing() {
             </div> */}
           <div className="package-listing__narrow-actions">
             <button
-              {...{
-                popovertarget: "packageDetailDrawer",
-                popovertargetaction: "open",
-              }}
+              popoverTarget="packageDetailDrawer"
+              popoverTargetAction="show"
               className="button button--variant--secondary button--size--medium package-listing__drawer-button"
             >
               Details
@@ -576,7 +560,6 @@ export default function PackageListing() {
             tabItems={[
               {
                 itemProps: {
-                  key: "description",
                   primitiveType: "cyberstormLink",
                   linkId: "Package",
                   community: listing.community_identifier,
@@ -584,12 +567,12 @@ export default function PackageListing() {
                   package: listing.name,
                   "aria-current": currentTab === "details",
                   children: <>Description</>,
-                },
+                } as React.ComponentPropsWithRef<typeof NewLink>,
                 current: currentTab === "details",
+                key: "description",
               },
               {
                 itemProps: {
-                  key: "required",
                   primitiveType: "cyberstormLink",
                   linkId: "PackageRequired",
                   community: listing.community_identifier,
@@ -597,43 +580,25 @@ export default function PackageListing() {
                   package: listing.name,
                   "aria-current": currentTab === "required",
                   children: <>Required ({listing.dependency_count})</>,
-                },
+                } as React.ComponentPropsWithRef<typeof NewLink>,
                 current: currentTab === "required",
+                key: "required",
               },
-              // TODO: Once Analysis page is ready, enable it
-              // {
-              //   itemProps: {
-              //     key: "wiki",
-              //     primitiveType: "cyberstormLink",
-              //     linkId: "PackageWiki",
-              //     community: listing.community_identifier,
-              //     namespace: listing.namespace,
-              //     package: listing.name,
-              //     "aria-current": currentTab === "wiki",
-              //     children: <>Wiki</>,
-              //   },
-              //   current: currentTab === "wiki",
-              // },
               {
                 itemProps: {
-                  key: "wiki",
-                  primitiveType: "link",
-                  href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/wiki`,
+                  primitiveType: "cyberstormLink",
+                  linkId: "PackageWiki",
+                  community: listing.community_identifier,
+                  namespace: listing.namespace,
+                  package: listing.name,
                   "aria-current": currentTab === "wiki",
-                  children: (
-                    <>
-                      Wiki
-                      <NewIcon csMode="inline" noWrapper>
-                        <FontAwesomeIcon icon={faArrowUpRight} />
-                      </NewIcon>
-                    </>
-                  ),
-                },
+                  children: <>Wiki</>,
+                } as React.ComponentPropsWithRef<typeof NewLink>,
                 current: currentTab === "wiki",
+                key: "wiki",
               },
               {
                 itemProps: {
-                  key: "changelog",
                   primitiveType: "cyberstormLink",
                   linkId: "PackageChangelog",
                   community: listing.community_identifier,
@@ -642,12 +607,12 @@ export default function PackageListing() {
                   "aria-current": currentTab === "changelog",
                   children: <>Changelog</>,
                   disabled: !listing.has_changelog,
-                },
+                } as React.ComponentPropsWithRef<typeof NewLink>,
                 current: currentTab === "changelog",
+                key: "changelog",
               },
               {
                 itemProps: {
-                  key: "versions",
                   primitiveType: "cyberstormLink",
                   linkId: "PackageVersions",
                   community: listing.community_identifier,
@@ -655,8 +620,9 @@ export default function PackageListing() {
                   package: listing.name,
                   "aria-current": currentTab === "versions",
                   children: <>Versions</>,
-                },
+                } as React.ComponentPropsWithRef<typeof NewLink>,
                 current: currentTab === "versions",
+                key: "versions",
                 // TODO: Version count field needs to be added to the endpoint
                 // numberSlateValue: listing.versionCount,
               },
@@ -676,7 +642,6 @@ export default function PackageListing() {
               // },
               {
                 itemProps: {
-                  key: "source",
                   href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/source`,
                   primitiveType: "link",
                   "aria-current": currentTab === "source",
@@ -688,12 +653,14 @@ export default function PackageListing() {
                       </NewIcon>
                     </>
                   ),
-                },
+                } as React.ComponentPropsWithRef<typeof NewLink>,
                 current: currentTab === "source",
+                key: "source",
               },
             ]}
-            renderTabItem={(itemProps, numberSlate) => {
-              const { key, children, ...fItemProps } = itemProps;
+            renderTabItem={(key, itemProps, numberSlate) => {
+              const { children, ...fItemProps } =
+                itemProps as React.ComponentPropsWithRef<typeof NewLink>;
               return (
                 <NewLink key={key} {...fItemProps}>
                   {children}

@@ -1,6 +1,5 @@
 import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import { z } from "zod";
 import {
   CommunityFiltersRequestParams,
   communityFiltersRequestParamsSchema,
@@ -21,7 +20,7 @@ export async function fetchCommunityFilters(
       config,
       path,
     },
-    requestSchema: z.object({}),
+    requestSchema: undefined,
     queryParamsSchema: communityFiltersRequestParamsSchema,
     responseSchema: communityFiltersResponseDataSchema,
   });

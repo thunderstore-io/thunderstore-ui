@@ -1,42 +1,35 @@
-import React from "react";
+import React, { memo } from "react";
 import { PrimitiveComponentDefaultProps, TooltipWrapper } from "../utils/utils";
 
 export interface InputTextInputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
     PrimitiveComponentDefaultProps {
   primitiveType: "textInput";
+  ref?: React.Ref<HTMLInputElement>;
 }
 
 export interface InputTextAreaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
     PrimitiveComponentDefaultProps {
   primitiveType: "textArea";
+  ref?: React.Ref<HTMLTextAreaElement>;
 }
 
-export const isRefType = (
-  ref:
-    | React.ForwardedRef<HTMLInputElement>
-    | React.ForwardedRef<HTMLTextAreaElement>,
-  wantedRef:
-    | React.ForwardedRef<HTMLInputElement>
-    | React.ForwardedRef<HTMLTextAreaElement>
-): ref is typeof wantedRef => typeof ref === typeof wantedRef;
-
-export const Input = React.forwardRef<
-  HTMLInputElement | HTMLTextAreaElement,
-  InputTextInputProps | InputTextAreaProps
->((props: InputTextInputProps | InputTextAreaProps, forwardedRef) => {
+export const Input = memo(function Input(
+  props: InputTextInputProps | InputTextAreaProps
+) {
   const {
     children,
     primitiveType,
     rootClasses,
     tooltipText,
     tooltipSide,
+    ref,
     ...forwardedProps
   } = props;
 
   if (primitiveType === "textInput") {
-    const fRef = forwardedRef as React.ForwardedRef<HTMLInputElement>;
+    const fRef = ref as React.ForwardedRef<HTMLInputElement>;
     const fProps = forwardedProps as InputTextInputProps;
 
     return (
@@ -49,7 +42,7 @@ export const Input = React.forwardRef<
   }
 
   if (primitiveType === "textArea") {
-    const fRef = forwardedRef as React.ForwardedRef<HTMLTextAreaElement>;
+    const fRef = ref as React.ForwardedRef<HTMLTextAreaElement>;
     const fProps = forwardedProps as InputTextAreaProps;
 
     return (

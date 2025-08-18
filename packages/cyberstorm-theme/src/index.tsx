@@ -28,3 +28,4 @@ import "./components/Modal/Modal.css";
 import "./components/CardPackage/CardPackage.css";
 import "./components/Drawer/Drawer.css";
 import "./components/Switch/Switch.css";
+import "./components/Avatar/Avatar.css";

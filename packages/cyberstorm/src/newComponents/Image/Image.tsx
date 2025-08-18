@@ -5,7 +5,7 @@ import "./Image.css";
 import { classnames, componentClasses } from "../../utils/utils";
 import { Frame, FrameWindowProps } from "../../primitiveComponents/Frame/Frame";
 import { NewIcon } from "../..";
-import React from "react";
+import { memo } from "react";
 import { ImageVariants } from "@thunderstore/cyberstorm-theme/src/components";
 
 interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
@@ -25,72 +25,69 @@ interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
 /**
  * Show the image, or use predefined icon as the fallback.
  */
-export const Image = React.forwardRef<HTMLDivElement, ImageProps>(
-  (props: ImageProps, forwardedRef) => {
-    const {
-      src,
-      cardType,
-      alt = "",
-      rootClasses,
-      square = false,
-      csVariant = "primary",
-      intrinsicWidth,
-      intrinsicHeight,
-      ...forwardedProps
-    } = props;
-    const fProps = forwardedProps as ImageProps;
+export const Image = memo(function Image(props: ImageProps) {
+  const {
+    src,
+    cardType,
+    alt = "",
+    rootClasses,
+    square = false,
+    csVariant = "primary",
+    intrinsicWidth,
+    intrinsicHeight,
+    ...forwardedProps
+  } = props;
+  const fProps = forwardedProps as ImageProps;
 
-    return (
-      <Frame
-        {...fProps}
-        primitiveType="window"
-        rootClasses={classnames(
-          "image",
-          src ? undefined : "image--noimage",
-          ...componentClasses("image", csVariant, undefined, undefined),
-          rootClasses,
-          square ? "image--issquare" : "image--is3by4"
-        )}
-        ref={forwardedRef}
-      >
-        {src ? (
-          <Frame
-            primitiveType="window"
-            rootClasses={classnames(
+  return (
+    <Frame
+      {...fProps}
+      primitiveType="window"
+      rootClasses={classnames(
+        "image",
+        src ? undefined : "image--noimage",
+        ...componentClasses("image", csVariant, undefined, undefined),
+        rootClasses,
+        square ? "image--issquare" : "image--is3by4"
+      )}
+    >
+      {src ? (
+        <Frame
+          primitiveType="window"
+          rootClasses={classnames(
+            "image__content",
+            ...componentClasses(
               "image__content",
-              ...componentClasses(
-                "image__content",
-                csVariant,
-                undefined,
-                undefined
-              ),
-              "image--fullwidth"
-            )}
-          >
-            <img src={src} alt={alt} className="image__src" />
-          </Frame>
-        ) : (
-          <NewIcon
-            rootClasses={classnames(
+              csVariant,
+              undefined,
+              undefined
+            ),
+            "image--fullwidth"
+          )}
+        >
+          <img src={src} alt={alt} className="image__src" />
+        </Frame>
+      ) : (
+        <NewIcon
+          rootClasses={classnames(
+            "image__content",
+            ...componentClasses(
               "image__content",
-              ...componentClasses(
-                "image__content",
-                csVariant,
-                undefined,
-                undefined
-              ),
-              "image__icon"
-            )}
-            noWrapper
-            csMode="inline"
-          >
-            <FontAwesomeIcon icon={getIcon(cardType)} />
-          </NewIcon>
-        )}
-      </Frame>
-    );
-  }
-);
+              csVariant,
+              undefined,
+              undefined
+            ),
+            "image__icon"
+          )}
+          noWrapper
+          csMode="inline"
+        >
+          <FontAwesomeIcon icon={getIcon(cardType)} />
+        </NewIcon>
+      )}
+    </Frame>
+  );
+});
 
 Image.displayName = "Image";
 

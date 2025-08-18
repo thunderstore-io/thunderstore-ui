@@ -5,7 +5,6 @@ import {
   teamMembersResponseDataSchema,
 } from "../schemas/responseSchemas";
 import { TeamMembersRequestParams } from "../schemas/requestSchemas";
-import { z } from "zod";
 
 export async function fetchTeamMembers(
   props: ApiEndpointProps<TeamMembersRequestParams, object, object>
@@ -19,8 +18,8 @@ export async function fetchTeamMembers(
       path: path,
       useSession: true,
     },
-    requestSchema: z.object({}),
-    queryParamsSchema: z.object({}),
+    requestSchema: undefined,
+    queryParamsSchema: undefined,
     responseSchema: teamMembersResponseDataSchema,
   });
 }

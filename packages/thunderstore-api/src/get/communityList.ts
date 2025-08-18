@@ -5,7 +5,6 @@ import {
   communityListRequestQueryParamsSchema,
 } from "../schemas/requestSchemas";
 import { CommunityListOrderingEnum } from "../schemas/queryParamSchemas";
-import { z } from "zod";
 import {
   communityListResponseDataSchema,
   CommunityListResponseData,
@@ -34,7 +33,7 @@ export async function fetchCommunityList(
       path,
       queryParams,
     },
-    requestSchema: z.object({}),
+    requestSchema: undefined,
     queryParamsSchema: communityListRequestQueryParamsSchema,
     responseSchema: communityListResponseDataSchema,
   });

@@ -1,5 +1,5 @@
 import "./Button.css";
-import React from "react";
+import { memo } from "react";
 import { classnames, componentClasses } from "../../utils/utils";
 import {
   ActionableButtonProps,
@@ -37,10 +37,7 @@ export type ButtonComponentProps =
     });
 
 // TODO: Add style support for disabled
-export const Button = React.forwardRef<
-  HTMLButtonElement | HTMLAnchorElement,
-  ButtonComponentProps
->((props: ButtonComponentProps, forwardedRef) => {
+export const Button = memo(function Button(props: ButtonComponentProps) {
   const {
     children,
     rootClasses,
@@ -59,7 +56,6 @@ export const Button = React.forwardRef<
         ...componentClasses("button", csVariant, csSize, csModifiers),
         rootClasses
       )}
-      ref={forwardedRef}
     >
       {children}
     </Actionable>

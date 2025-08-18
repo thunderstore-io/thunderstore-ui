@@ -1,9 +1,10 @@
 import "./EmptyState.css";
 import { classnames } from "../../utils/utils";
 import { NewIcon } from "../..";
+import { ReactNode } from "react";
 
 interface Props {
-  children: JSX.Element | JSX.Element[];
+  children: ReactNode | ReactNode[];
   iconClasses?: string;
   wrapperClasses?: string;
 }

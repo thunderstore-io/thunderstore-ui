@@ -12,9 +12,9 @@ import {
   Heading,
   NewAlert,
 } from "@thunderstore/cyberstorm";
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs } from "react-router";
 import { ApiError } from "@thunderstore/thunderstore-api";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 import { versionsSchema } from "@thunderstore/dapper-ts/src/methods/package";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import semverGt from "semver/functions/gt";
@@ -25,13 +25,14 @@ import {
   TableRow,
 } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
+import { getSessionTools } from "~/middlewares";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
     try {
       const dapper = new DapperTs(() => {
         return {
-          apiHost: process.env.PUBLIC_API_URL,
+          apiHost: import.meta.env.VITE_API_URL,
           sessionId: undefined,
         };
       });
@@ -62,10 +63,16 @@ export async function loader({ params }: LoaderFunctionArgs) {
   };
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ context, params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
+    const tools = getSessionTools(context);
+    const dapper = new DapperTs(() => {
+      return {
+        apiHost: tools?.getConfig().apiHost,
+        sessionId: tools?.getConfig().sessionId,
+      };
+    });
     try {
-      const dapper = window.Dapper;
       return {
         status: "ok",
         message: "",

@@ -188,31 +188,80 @@ export type PackageVersionsRequestParams = z.infer<
   typeof packageVersionsRequestParamsSchema
 >;
 
-// TeamDetailsRequest
-export const teamDetailsRequestParamsSchema = z.object({
-  team_name: z.string(),
+// PackageWikiRequest
+export const packageWikiRequestParamsSchema = z.object({
+  namespace_id: z.string(),
+  package_name: z.string(),
 });
 
-export type TeamDetailsRequestParams = z.infer<
-  typeof teamDetailsRequestParamsSchema
+export type PackageWikiRequestParams = z.infer<
+  typeof packageWikiRequestParamsSchema
 >;
 
-// TeamMembersRequest
-export const teamMembersRequestParamsSchema = z.object({
-  team_name: z.string(),
+// PackageWikiPageRequest
+export const packageWikiPageRequestParamsSchema = z.object({
+  id: z.string(),
 });
 
-export type TeamMembersRequestParams = z.infer<
-  typeof teamMembersRequestParamsSchema
+export type PackageWikiPageRequestParams = z.infer<
+  typeof packageWikiPageRequestParamsSchema
 >;
 
-// TeamServiceAccountsRequest
-export const teamServiceAccountsRequestParamsSchema = z.object({
-  team_name: z.string(),
+// PackageWikiPageCreateRequest
+export const packageWikiPageCreateRequestParamsSchema = z.object({
+  namespace_id: z.string(),
+  package_name: z.string(),
 });
 
-export type TeamServiceAccountsRequestParams = z.infer<
-  typeof teamServiceAccountsRequestParamsSchema
+export type PackageWikiPageCreateRequestParams = z.infer<
+  typeof packageWikiPageCreateRequestParamsSchema
+>;
+
+export const packageWikiPageCreateRequestDataSchema = z.object({
+  title: z.string().min(1).max(512),
+  markdown_content: z.string().min(1).max(100000),
+});
+
+export type PackageWikiPageCreateRequestData = z.infer<
+  typeof packageWikiPageCreateRequestDataSchema
+>;
+
+// PackageWikiPageEditRequest
+export const packageWikiPageEditRequestParamsSchema = z.object({
+  namespace_id: z.string(),
+  package_name: z.string(),
+});
+
+export type PackageWikiPageEditRequestParams = z.infer<
+  typeof packageWikiPageEditRequestParamsSchema
+>;
+
+export const packageWikiPageEditRequestDataSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1).max(512),
+  markdown_content: z.string().min(1).max(100000),
+});
+
+export type PackageWikiPageEditRequestData = z.infer<
+  typeof packageWikiPageEditRequestDataSchema
+>;
+
+// PackageWikiPageDeleteRequest
+export const packageWikiPageDeleteRequestParamsSchema = z.object({
+  namespace_id: z.string(),
+  package_name: z.string(),
+});
+
+export type PackageWikiPageDeleteRequestParams = z.infer<
+  typeof packageWikiPageDeleteRequestParamsSchema
+>;
+
+export const packageWikiPageDeleteRequestDataSchema = z.object({
+  id: z.string().min(1),
+});
+
+export type PackageWikiPageDeleteRequestData = z.infer<
+  typeof packageWikiPageDeleteRequestDataSchema
 >;
 
 // PackageSubmissionRequest
@@ -293,44 +342,6 @@ export type PackageRateRequestData = z.infer<
   typeof packageRateRequestDataSchema
 >;
 
-// TeamAddMemberRequest
-export const teamAddMemberRequestParamsSchema = z.object({
-  team_name: z.string(),
-});
-
-export type TeamAddMemberRequestParams = z.infer<
-  typeof teamAddMemberRequestParamsSchema
->;
-
-export const teamAddMemberRequestDataSchema = z.object({
-  username: z.string().min(1),
-  role: z.enum(["owner", "member"]),
-});
-
-export type TeamAddMemberRequestData = z.infer<
-  typeof teamAddMemberRequestDataSchema
->;
-
-// TeamCreateRequest
-export const teamCreateRequestDataSchema = z.object({
-  name: z
-    .string()
-    .regex(/^[a-zA-Z0-9]+([a-zA-Z0-9_]+[a-zA-Z0-9])?$/)
-    .max(64)
-    .min(1),
-});
-
-export type TeamCreateRequestData = z.infer<typeof teamCreateRequestDataSchema>;
-
-// TeamDisbandRequest
-export const teamDisbandRequestParamsSchema = z.object({
-  team_name: z.string(),
-});
-
-export type TeamDisbandRequestParams = z.infer<
-  typeof teamDisbandRequestParamsSchema
->;
-
 // SubmissionValidateManifestRequest
 export const submissionValidateManifestRequestDataSchema = z.object({
   namespace: z.string(),
@@ -387,4 +398,193 @@ export const packageListingRejectRequestDataSchema = z.object({
 
 export type PackageListingRejectRequestData = z.infer<
   typeof packageListingRejectRequestDataSchema
+>;
+
+// UserLinkedAccountDisconnectRequest
+export const userLinkedAccountDisconnectProvidersSchema = z.enum([
+  "discord",
+  "github",
+  "overwolf",
+]);
+
+export type userLinkedAccountDisconnectProviders = z.infer<
+  typeof userLinkedAccountDisconnectProvidersSchema
+>;
+
+export const userLinkedAccountDisconnectRequestParamsSchema = z.object({
+  user: z.string(),
+  provider: userLinkedAccountDisconnectProvidersSchema,
+});
+
+export type UserLinkedAccountDisconnectRequestParams = z.infer<
+  typeof userLinkedAccountDisconnectRequestParamsSchema
+>;
+
+// UserAccountDeleteRequest
+export const userAccountDeleteRequestParamsSchema = z.object({
+  username: z.string(),
+});
+
+export type UserAccountDeleteRequestParams = z.infer<
+  typeof userAccountDeleteRequestParamsSchema
+>;
+
+export const userAccountDeleteRequestDataSchema = z.object({
+  verification: z.string(),
+});
+
+export type UserAccountDeleteRequestData = z.infer<
+  typeof userAccountDeleteRequestDataSchema
+>;
+
+// TeamDetailsRequest
+export const teamDetailsRequestParamsSchema = z.object({
+  team_name: z.string(),
+});
+
+export type TeamDetailsRequestParams = z.infer<
+  typeof teamDetailsRequestParamsSchema
+>;
+
+// TeamMembersRequest
+export const teamMembersRequestParamsSchema = z.object({
+  team_name: z.string(),
+});
+
+export type TeamMembersRequestParams = z.infer<
+  typeof teamMembersRequestParamsSchema
+>;
+
+// TeamServiceAccountsRequest
+export const teamServiceAccountsRequestParamsSchema = z.object({
+  team_name: z.string(),
+});
+
+export type TeamServiceAccountsRequestParams = z.infer<
+  typeof teamServiceAccountsRequestParamsSchema
+>;
+
+// TeamServiceAccountAdd
+export const teamServiceAccountAddRequestParamsSchema = z.object({
+  team_name: z.string(),
+});
+
+export type TeamServiceAccountAddRequestParams = z.infer<
+  typeof teamServiceAccountAddRequestParamsSchema
+>;
+
+export const teamServiceAccountAddRequestDataSchema = z.object({
+  nickname: z.string().min(1),
+});
+
+export type TeamServiceAccountAddRequestData = z.infer<
+  typeof teamServiceAccountAddRequestDataSchema
+>;
+
+// TeamServiceAccountRemoveRequest
+export const teamServiceAccountRemoveRequestParamsSchema = z.object({
+  team_name: z.string(),
+});
+
+export type TeamServiceAccountRemoveRequestParams = z.infer<
+  typeof teamServiceAccountRemoveRequestParamsSchema
+>;
+
+export const teamServiceAccountRemoveRequestDataSchema = z.object({
+  service_account_uuid: z.string(),
+});
+
+export type TeamServiceAccountRemoveRequestData = z.infer<
+  typeof teamServiceAccountRemoveRequestDataSchema
+>;
+
+// TeamAddMemberRequest
+export const teamAddMemberRequestParamsSchema = z.object({
+  team_name: z.string(),
+});
+
+export type TeamAddMemberRequestParams = z.infer<
+  typeof teamAddMemberRequestParamsSchema
+>;
+
+export const teamAddMemberRequestDataSchema = z.object({
+  username: z.string().min(1),
+  role: z.enum(["owner", "member"]),
+});
+
+export type TeamAddMemberRequestData = z.infer<
+  typeof teamAddMemberRequestDataSchema
+>;
+
+// TeamCreateRequest
+export const teamCreateRequestDataSchema = z.object({
+  name: z
+    .string()
+    .regex(/^[a-zA-Z0-9]+([a-zA-Z0-9_]+[a-zA-Z0-9])?$/)
+    .max(64)
+    .min(1),
+});
+
+export type TeamCreateRequestData = z.infer<typeof teamCreateRequestDataSchema>;
+
+// TeamDisbandRequest
+export const teamDisbandRequestParamsSchema = z.object({
+  team_name: z.string(),
+});
+
+export type TeamDisbandRequestParams = z.infer<
+  typeof teamDisbandRequestParamsSchema
+>;
+
+export const teamDisbandRequestDataSchema = z.object({
+  team_name: z.string(),
+});
+
+export type TeamDisbandRequestData = z.infer<
+  typeof teamDisbandRequestDataSchema
+>;
+
+// TeamDetailsEditRequest
+export const teamDetailsEditRequestParamsSchema = z.object({
+  teamIdentifier: z.string(),
+});
+
+export type TeamDetailsEditRequestParams = z.infer<
+  typeof teamDetailsEditRequestParamsSchema
+>;
+
+export const teamDetailsEditRequestDataSchema = z.object({
+  donation_link: z.string().min(1).max(1024),
+});
+
+export type TeamDetailsEditRequestData = z.infer<
+  typeof teamDetailsEditRequestDataSchema
+>;
+
+// TeamMemberEditRequest
+export const teamMemberEditRequestParamsSchema = z.object({
+  teamIdentifier: z.string(),
+  username: z.string(),
+});
+
+export type TeamMemberEditRequestParams = z.infer<
+  typeof teamMemberEditRequestParamsSchema
+>;
+
+export const teamMemberEditRequestDataSchema = z.object({
+  role: z.enum(["member", "owner"]),
+});
+
+export type TeamMemberEditRequestData = z.infer<
+  typeof teamMemberEditRequestDataSchema
+>;
+
+// TeamMemberRemoveRequest
+export const teamMemberRemoveRequestParamsSchema = z.object({
+  team_name: z.string(),
+  username: z.string(),
+});
+
+export type TeamMemberRemoveRequestParams = z.infer<
+  typeof teamMemberRemoveRequestParamsSchema
 >;

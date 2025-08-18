@@ -4,8 +4,8 @@ export const SelectVariantsList = ["default"] as const;
 export type SelectVariants = "default";
 
 // Sizes
-export const SelectSizesList = ["medium"] as const;
-export type SelectSizes = "medium";
+export const SelectSizesList = ["medium", "small", "xsmall"] as const;
+export type SelectSizes = "medium" | "small" | "xsmall";
 
 // Modifiers
 export const SelectModifiersList = ["disabled"] as const;
