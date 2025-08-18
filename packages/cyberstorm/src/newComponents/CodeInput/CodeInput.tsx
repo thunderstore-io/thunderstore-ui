@@ -1,5 +1,5 @@
 import "./CodeInput.css";
-import React from "react";
+import React, { ReactNode } from "react";
 import {
   Input,
   InputTextAreaProps,
@@ -21,8 +21,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export interface CodeInputProps
   extends Omit<InputTextAreaProps, "primitiveType"> {
-  leftIcon?: JSX.Element;
-  rightIcon?: JSX.Element;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
   enterHook?: (value: string | number | readonly string[]) => string | void;
   validationBarProps?: {
     status: "failure" | "success" | "waiting" | "processing";
@@ -91,7 +91,7 @@ CodeInput.displayName = "CodeInput";
 function ValidationBar(props: {
   status: "waiting" | "processing" | "success" | "failure";
   message?: string;
-}): JSX.Element {
+}): ReactNode {
   if (props.status === "waiting") {
     return (
       <div className="validation-bar">

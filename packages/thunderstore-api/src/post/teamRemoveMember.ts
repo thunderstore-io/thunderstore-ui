@@ -2,7 +2,6 @@
 
 import { ApiEndpointProps, TeamMemberRemoveRequestParams } from "../index";
 import { apiFetch } from "../apiFetch";
-import z from "zod";
 
 export function teamRemoveMember(
   props: ApiEndpointProps<TeamMemberRemoveRequestParams, object, object>

@@ -1,10 +1,4 @@
-import {
-  Avatar,
-  Heading,
-  NewAvatar,
-  NewIcon,
-  NewLink,
-} from "@thunderstore/cyberstorm";
+import { Heading, NewAvatar, NewIcon, NewLink } from "@thunderstore/cyberstorm";
 import { faCaretRight, faCrown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./TeamMembers.css";

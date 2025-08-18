@@ -10,7 +10,6 @@ import {
   packageListingsResponseDataSchema,
 } from "../schemas/responseSchemas";
 import { PackageListingsOrderingEnum } from "../schemas/queryParamSchemas";
-import { z } from "zod";
 
 export async function fetchNamespacePackageListings(
   props: ApiEndpointProps<

@@ -5,7 +5,6 @@ import {
   communityListRequestQueryParamsSchema,
 } from "../schemas/requestSchemas";
 import { CommunityListOrderingEnum } from "../schemas/queryParamSchemas";
-import { z } from "zod";
 import {
   communityListResponseDataSchema,
   CommunityListResponseData,

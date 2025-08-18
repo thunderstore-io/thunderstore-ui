@@ -1,7 +1,6 @@
 import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
 import { TeamServiceAccountsRequestParams } from "../schemas/requestSchemas";
-import { z } from "zod";
 import {
   TeamServiceAccountsResponseData,
   teamServiceAccountsResponseDataSchema,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import "./SelectSearch.css";
 import { classnames, componentClasses } from "../../utils/utils";
 import { NewIcon, NewTag } from "../../index";
@@ -17,7 +17,7 @@ import {
 export type SelectOption<T extends string = string> = {
   value: T;
   label?: string;
-  leftIcon?: JSX.Element;
+  leftIcon?: ReactNode;
 };
 
 export type SelectSearchProps =
