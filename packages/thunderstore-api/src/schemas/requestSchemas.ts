@@ -305,6 +305,25 @@ export type PackageDeprecateRequestData = z.infer<
   typeof packageDeprecateRequestDataSchema
 >;
 
+// PackageUnlistRequest
+export const packageUnlistRequestParamsSchema = z.object({
+  package: z.string(),
+  namespace: z.string(),
+  community: z.string(),
+});
+
+export type PackageUnlistRequestParams = z.infer<
+  typeof packageUnlistRequestParamsSchema
+>;
+
+export const packageUnlistRequestDataSchema = z.object({
+  unlist: z.literal("unlist"),
+});
+
+export type PackageUnlistRequestData = z.infer<
+  typeof packageUnlistRequestDataSchema
+>;
+
 // PackageListingUpdateRequest
 export const packageListingUpdateRequestParamsSchema = z.object({
   community: z.string(),
@@ -398,6 +417,37 @@ export const packageListingRejectRequestDataSchema = z.object({
 
 export type PackageListingRejectRequestData = z.infer<
   typeof packageListingRejectRequestDataSchema
+>;
+
+// PackageListingReportRequest
+export const packageListingReportRequestParamsSchema = z.object({
+  // This will most likely change to a dedicated cyberstorm endpoint, so the params will change to the commented ones.
+  id: z.string(),
+  // community: z.string(),
+  // namespace: z.string(),
+  // package: z.string(),
+});
+
+export type PackageListingReportRequestParams = z.infer<
+  typeof packageListingReportRequestParamsSchema
+>;
+
+export const packageListingReportRequestDataSchema = z.object({
+  version: z.number().optional(),
+  reason: z.enum([
+    "Spam",
+    "Malware",
+    "Reupload",
+    "CopyrightOrLicense",
+    "WrongCommunity",
+    "WrongCategories",
+    "Other",
+  ]),
+  description: z.string().max(12288).optional().nullable(),
+});
+
+export type PackageListingReportRequestData = z.infer<
+  typeof packageListingReportRequestDataSchema
 >;
 
 // UserLinkedAccountDisconnectRequest
@@ -587,4 +637,15 @@ export const teamMemberRemoveRequestParamsSchema = z.object({
 
 export type TeamMemberRemoveRequestParams = z.infer<
   typeof teamMemberRemoveRequestParamsSchema
+>;
+
+// PackagePermissionsRequest
+export const packagePermissionsRequestParamsSchema = z.object({
+  community_id: z.string(),
+  namespace_id: z.string(),
+  package_name: z.string(),
+});
+
+export type PackagePermissionsRequestParams = z.infer<
+  typeof packagePermissionsRequestParamsSchema
 >;

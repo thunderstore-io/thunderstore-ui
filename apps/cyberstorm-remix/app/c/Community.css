@@ -1,14 +1,41 @@
 @layer nimbus-layout {
   .community {
     --nimbus-layout-content-max-width: 120rem;
+
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    align-self: stretch;
+    padding: 7.5rem 3rem 2rem;
   }
 
-  .community__heading {
+  .community__background {
+    position: absolute;
     display: flex;
-    gap: var(--gap-xl);
-    align-items: center;
-    align-self: stretch;
-    padding: var(--space-8) 0 var(--space-20);
+    flex-direction: column;
+    align-items: flex-start;
+    height: 20rem;
+    border-radius: var(--section-border-radius);
+    overflow: hidden;
+  }
+
+  .community__background-image {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: var(--color-body-bg-color, #101028);
+
+    opacity: 0.4;
+    mix-blend-mode: luminosity;
+  }
+
+  .community__background-tint {
+    position: absolute;
+    width: 100%;
+    height: 20rem;
+    background: linear-gradient(180deg, rgb(16 16 40 / 0.4) 0%, #101028 85.94%);
   }
 
   .community__small-image {

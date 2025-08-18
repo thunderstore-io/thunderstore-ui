@@ -16,6 +16,7 @@ import {
   packageSubmissionStatusSchema,
   markdownRenderSchema,
   packageWikiPageSchema,
+  packagePermissionsSchema,
 } from "../schemas/objectSchemas";
 import { paginatedResults } from "../schemas/objectSchemas";
 
@@ -105,6 +106,13 @@ export const packageListingDetailsResponseDataSchema =
 
 export type PackageListingDetailsResponseData = z.infer<
   typeof packageListingDetailsResponseDataSchema
+>;
+
+// PackagePermissionsResponse
+export const packagePermissionsResponseDataSchema = packagePermissionsSchema;
+
+export type PackagePermissionsResponseData = z.infer<
+  typeof packagePermissionsResponseDataSchema
 >;
 
 // PackageReadmeResponse
@@ -215,9 +223,18 @@ export type PackageSubmissionResponseData = z.infer<
   typeof packageSubmissionResponseDataSchema
 >;
 
+// PackageUnlistResponse
+export const packageUnlistResponseDataSchema = z.object({
+  message: z.string().min(1),
+});
+
+export type PackageUnlistResponseData = z.infer<
+  typeof packageUnlistResponseDataSchema
+>;
+
 // PackageListingDeprecateResponse
 export const packageDeprecateResponseDataSchema = z.object({
-  deprecate: z.boolean(),
+  message: z.string().min(1),
 });
 
 export type PackageDeprecateResponseData = z.infer<
@@ -226,7 +243,12 @@ export type PackageDeprecateResponseData = z.infer<
 
 // PackageListingUpdateResponse
 export const packageListingUpdateResponseDataSchema = z.object({
-  categories: z.array(z.string()),
+  categories: z.array(
+    z.object({
+      slug: z.string().min(1),
+      name: z.string().min(1),
+    })
+  ),
 });
 
 export type PackageListingUpdateResponseData = z.infer<

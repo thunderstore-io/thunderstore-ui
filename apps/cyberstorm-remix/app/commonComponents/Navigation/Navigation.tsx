@@ -353,7 +353,6 @@ export function DesktopUserDropdown(props: {
           </NewIcon>
         </button>
       }
-      rootClasses="navigation-header__user-dropdown"
     >
       <NewDropDownItem
         rootClasses="navigation-header__avatar"
@@ -367,8 +366,10 @@ export function DesktopUserDropdown(props: {
       <NewDropDownDivider />
       <NewDropDownItem asChild>
         <NewLink
-          primitiveType="cyberstormLink"
-          linkId="Settings"
+          // primitiveType="cyberstormLink"
+          // linkId="Settings"
+          primitiveType="link"
+          href={`${domain}/settings/linked-accounts/`}
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
@@ -379,8 +380,10 @@ export function DesktopUserDropdown(props: {
       </NewDropDownItem>
       <NewDropDownItem asChild>
         <NewLink
-          primitiveType="cyberstormLink"
-          linkId="Teams"
+          // primitiveType="cyberstormLink"
+          // linkId="Teams"
+          primitiveType="link"
+          href={`${domain}/settings/teams/`}
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">

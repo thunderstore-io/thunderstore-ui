@@ -65,9 +65,6 @@
     align-items: flex-start;
   }
 
-  /* .navigation-header__user-dropdown {
-  } */
-
   .navigation-header__user-button {
     display: inline-flex;
     flex-shrink: 0;

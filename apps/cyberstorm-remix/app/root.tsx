@@ -84,7 +84,6 @@ export async function clientLoader({ context }: Route.ClientLoaderArgs) {
   if (!tools) {
     throw new Error("Session tools not found in context");
   }
-  console.log("root clientloader run");
   const currentUser = await tools.getSessionCurrentUser();
   const config = tools.getConfig();
   return {

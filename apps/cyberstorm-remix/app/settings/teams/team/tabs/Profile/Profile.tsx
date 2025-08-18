@@ -65,7 +65,7 @@ export default function Profile() {
   }
 
   const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
-    donation_link: "",
+    donation_link: team.donation_link || "",
   });
 
   type SubmitorOutput = Awaited<ReturnType<typeof teamDetailsEdit>>;

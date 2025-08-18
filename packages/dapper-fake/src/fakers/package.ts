@@ -88,6 +88,41 @@ const getFakeDependencies = async (
   });
 };
 
+export const getFakePackagePermissions = async (
+  community: string,
+  namespace: string,
+  name: string
+) => {
+  const seed = `${community}-${namespace}-${name}`;
+  setSeed(seed);
+
+  // Return shape mirrors API: { package, permissions }
+  const canManage = faker.datatype.boolean(0.6);
+  const canModerate = faker.datatype.boolean(0.2);
+
+  return {
+    package: {
+      community_id: community,
+      namespace_id: namespace,
+      package_name: name,
+    },
+    permissions: {
+      can_manage: canManage,
+      can_manage_deprecation: faker.datatype.boolean(0.5),
+      can_manage_categories: faker.datatype.boolean(0.5),
+      can_deprecate: faker.datatype.boolean(0.5),
+      can_undeprecate: faker.datatype.boolean(0.5),
+      can_unlist: faker.datatype.boolean(0.5),
+      can_moderate: canModerate,
+      // Viewing pages is typically allowed if you can manage or moderate
+      can_view_package_admin_page:
+        canManage || canModerate || faker.datatype.boolean(0.3),
+      can_view_listing_admin_page:
+        canManage || canModerate || faker.datatype.boolean(0.3),
+    },
+  };
+};
+
 // Content used to render Package's detail view.
 export const getFakePackageListingDetails = async (
   community: string,

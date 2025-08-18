@@ -87,6 +87,13 @@ const library: LinkLibrary = {
       ref={p.customRef}
     />
   ),
+  PackageEdit: (p) => (
+    <Link
+      {...p}
+      url={`/c/${p.community}/p/${p.namespace}/${p.package}/edit`}
+      ref={p.customRef}
+    />
+  ),
   PackageRequired: (p) => (
     <Link
       {...p}
@@ -98,6 +105,27 @@ const library: LinkLibrary = {
     <Link
       {...p}
       url={`/c/${p.community}/p/${p.namespace}/${p.package}/wiki`}
+      ref={p.customRef}
+    />
+  ),
+  PackageWikiNewPage: (p) => (
+    <Link
+      {...p}
+      url={`/c/${p.community}/p/${p.namespace}/${p.package}/wiki/new`}
+      ref={p.customRef}
+    />
+  ),
+  PackageWikiPage: (p) => (
+    <Link
+      {...p}
+      url={`/c/${p.community}/p/${p.namespace}/${p.package}/wiki/${p.wikipageslug}`}
+      ref={p.customRef}
+    />
+  ),
+  PackageWikiPageEdit: (p) => (
+    <Link
+      {...p}
+      url={`/c/${p.community}/p/${p.namespace}/${p.package}/wiki/${p.wikipageslug}/edit`}
       ref={p.customRef}
     />
   ),
