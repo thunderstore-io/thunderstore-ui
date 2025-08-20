@@ -1,0 +1,9 @@
+
+services:
+  nginx:
+    build: .
+    ports:
+      - "127.0.0.1:82:80"
+    command: ["nginx", "-g", "daemon off;"]
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
