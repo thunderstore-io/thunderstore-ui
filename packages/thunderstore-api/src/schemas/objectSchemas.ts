@@ -171,6 +171,35 @@ export const packageListingDetailsSchema = packageListingSchema.extend({
 
 export type PackageListingDetails = z.infer<typeof packageListingDetailsSchema>;
 
+export const packageInfoSchema = z.object({
+  community_id: z.string().min(1),
+  namespace_id: z.string().min(1),
+  package_name: z.string().min(1),
+});
+
+export type PackageInfo = z.infer<typeof packageInfoSchema>;
+
+export const permissionsSchema = z.object({
+  can_manage: z.boolean(),
+  can_manage_deprecation: z.boolean(),
+  can_manage_categories: z.boolean(),
+  can_deprecate: z.boolean(),
+  can_undeprecate: z.boolean(),
+  can_unlist: z.boolean(),
+  can_moderate: z.boolean(),
+  can_view_package_admin_page: z.boolean(),
+  can_view_listing_admin_page: z.boolean(),
+});
+
+export type Permissions = z.infer<typeof permissionsSchema>;
+
+export const packagePermissionsSchema = z.object({
+  package: packageInfoSchema,
+  permissions: permissionsSchema,
+});
+
+export type PackagePermissions = z.infer<typeof packagePermissionsSchema>;
+
 export const packageVersionSchema = z.object({
   version_number: z.string().min(1),
   datetime_created: z.string().datetime(),

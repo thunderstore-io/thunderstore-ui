@@ -2,6 +2,7 @@ import { Communities, Community, CommunityFilters } from "./community";
 import {
   PackageListingDetails,
   PackageListings,
+  PackagePermissions,
   PackageSubmissionResponse,
   PackageVersion,
 } from "./package";
@@ -58,6 +59,12 @@ export type GetPackageVersions = (
   namespace: string,
   name: string
 ) => Promise<PackageVersion[]>;
+
+export type GetPackagePermissions = (
+  namespaceId: string,
+  communityId: string,
+  packageName: string
+) => Promise<PackagePermissions | undefined>;
 
 export type PostPackageSubmissionMetadata = (
   author_name: string,

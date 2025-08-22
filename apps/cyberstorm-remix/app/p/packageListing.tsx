@@ -1,5 +1,6 @@
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import {
+  Await,
   Outlet,
   useLoaderData,
   useLocation, // useRevalidator,
@@ -8,38 +9,59 @@ import {
 import {
   Drawer,
   Heading,
-  // Modal,
+  Modal,
+  NewAlert,
   NewBreadCrumbs,
   NewBreadCrumbsLink,
   NewButton,
   NewIcon,
   NewLink,
+  NewSelect,
   NewTag,
+  NewTextInput,
   Tabs,
 } from "@thunderstore/cyberstorm";
 import "./packageListing.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ApiError } from "@thunderstore/thunderstore-api";
+import {
+  ApiError,
+  fetchPackagePermissions,
+  packageListingApprove,
+  packageListingReject,
+  packageListingReport,
+  PackageListingReportRequestData,
+  RequestConfig,
+} from "@thunderstore/thunderstore-api";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import {
-  // faCog,
   faUsers,
   faHandHoldingHeart,
   faDownload,
   faThumbsUp,
   faWarning,
   faCaretRight,
+  faScaleBalanced,
+  // faList,
+  // faBoxOpen,
+  faCog,
 } from "@fortawesome/free-solid-svg-icons";
 import TeamMembers from "./components/TeamMembers/TeamMembers";
-import { ReactElement, useEffect, useRef, useState } from "react";
-import { useHydrated } from "remix-utils/use-hydrated";
 import {
-  // PackageDeprecateAction,
-  // PackageEditForm,
-  PackageLikeAction,
-} from "@thunderstore/cyberstorm-forms";
+  ReactElement,
+  Suspense,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
+import { useHydrated } from "remix-utils/use-hydrated";
+import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faArrowUpRight,
+  // faFlagSwallowtail,
+  faLips,
+} from "@fortawesome/pro-solid-svg-icons";
 import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTime/RelativeTime";
 import {
   formatFileSize,
@@ -49,6 +71,13 @@ import {
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { OutletContextShape } from "~/root";
 import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
+import { getSessionTools } from "~/middlewares";
+import { getPackagePermissions } from "@thunderstore/dapper-ts/src/methods/package";
+import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
+import { ApiAction } from "@thunderstore/ts-api-react-actions";
+import { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { SelectOption } from "@thunderstore/cyberstorm/src/newComponents/Select/Select";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [
@@ -116,6 +145,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
           params.packageId
         ),
         team: await dapper.getTeamDetails(params.namespaceId),
+        permissions: undefined,
       };
     } catch (error) {
       if (error instanceof ApiError) {
@@ -130,38 +160,64 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 // TODO: Needs to check if package is available for the logged in user
-// export async function clientLoader({ params }: LoaderFunctionArgs) {
-//   if (params.communityId && params.namespaceId && params.packageId) {
-//     try {
-//       const dapper = window.Dapper;
-//       return {
-//         community: await dapper.getCommunity(params.communityId),
-//         communityFilters: await dapper.getCommunityFilters(params.communityId),
-//         listing: await dapper.getPackageListingDetails(
-//           params.communityId,
-//           params.namespaceId,
-//           params.packageId
-//         ),
-//         team: await dapper.getTeamDetails(params.namespaceId),
-//         currentUser: await dapper.getCurrentUser(),
-//       };
-//     } catch (error) {
-//       if (error instanceof ApiError) {
-//         throw new Response("Package not found", { status: 404 });
-//       } else {
-//         // REMIX TODO: Add sentry
-//         throw error;
-//       }
-//     }
-//   }
-//   throw new Response("Package not found", { status: 404 });
-// }
+export async function clientLoader({ params, context }: LoaderFunctionArgs) {
+  if (params.communityId && params.namespaceId && params.packageId) {
+    try {
+      const tools = getSessionTools(context);
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: tools?.getConfig().apiHost,
+          sessionId: tools?.getConfig().sessionId,
+        };
+      });
+
+      // We do some trickery right here to prevent unnecessary request when the user is not logged in
+      let permissionsPromise = undefined;
+      const cu = await tools.getSessionCurrentUser();
+      if (cu.username) {
+        const wrapperPromise =
+          Promise.withResolvers<
+            Awaited<ReturnType<typeof getPackagePermissions>>
+          >();
+        dapper
+          .getPackagePermissions(
+            params.communityId,
+            params.namespaceId,
+            params.packageId
+          )
+          .then(wrapperPromise.resolve, wrapperPromise.reject);
+        permissionsPromise = wrapperPromise.promise;
+      }
+
+      return {
+        community: await dapper.getCommunity(params.communityId),
+        communityFilters: await dapper.getCommunityFilters(params.communityId),
+        listing: await dapper.getPackageListingDetails(
+          params.communityId,
+          params.namespaceId,
+          params.packageId
+        ),
+        team: await dapper.getTeamDetails(params.namespaceId),
+        permissions: permissionsPromise,
+      };
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw new Response("Package not found", { status: 404 });
+      } else {
+        // REMIX TODO: Add sentry
+        throw error;
+      }
+    }
+  }
+  throw new Response("Package not found", { status: 404 });
+}
+
+clientLoader.hydrate = true;
 
 export default function PackageListing() {
-  // TODO: Enable when APIs are available
-  // const { community, communityFilters, listing, team } =
-  //   useLoaderData<typeof loader>();
-  const { community, listing, team } = useLoaderData<typeof loader>();
+  const { community, listing, team, permissions } = useLoaderData<
+    typeof loader | typeof clientLoader
+  >();
 
   const location = useLocation();
 
@@ -172,6 +228,7 @@ export default function PackageListing() {
   const dapper = outletContext.dapper;
 
   const [isLiked, setIsLiked] = useState(false);
+  const toast = useToast();
 
   const fetchAndSetRatedPackages = async () => {
     const rp = await dapper.getRatedPackages();
@@ -179,14 +236,6 @@ export default function PackageListing() {
       rp.rated_packages.includes(`${listing.namespace}-${listing.name}`)
     );
   };
-
-  // TODO: Enable when APIs are available
-  // const revalidator = useRevalidator();
-  // const revalidateLoaderData = async () => {
-  //   if (revalidator.state === "idle") {
-  //     revalidator.revalidate();
-  //   }
-  // };
 
   useEffect(() => {
     if (currentUser?.username) {
@@ -239,53 +288,99 @@ export default function PackageListing() {
   const currentTab = location.pathname.split("/")[6] || "details";
 
   // TODO: Enable when APIs are available
-  // const managementTools = (
-  //   <Modal
-  //     popoverId="packageManagementTools"
-  //     trigger={
-  //       <NewButton
-  //         csVariant="primary"
-  //         {...{
-  //           popovertarget: "packageManagementTools",
-  //           popovertargetaction: "open",
-  //         }}
-  //       >
-  //         <NewIcon csMode="inline" noWrapper>
-  //           <FontAwesomeIcon icon={faCog} />
-  //         </NewIcon>
-  //         Manage
-  //       </NewButton>
-  //     }
-  //   >
-  //     <PackageEditForm
-  //       options={communityFilters.package_categories.map((cat) => {
-  //         return { label: cat.name, value: cat.slug };
-  //       })}
-  //       community={listing.community_identifier}
-  //       namespace={listing.namespace}
-  //       package={listing.name}
-  //       current_categories={listing.categories}
-  //       isDeprecated={listing.is_deprecated}
-  //       dataUpdateTrigger={revalidateLoaderData}
-  //       deprecationButton={
-  //         <NewButton
-  //           primitiveType="button"
-  //           onClick={PackageDeprecateAction({
-  //             packageName: listing.name,
-  //             namespace: listing.namespace,
-  //             isDeprecated: listing.is_deprecated,
-  //             dataUpdateTrigger: revalidateLoaderData,
-  //             config: config,
-  //           })}
-  //           csVariant={listing.is_deprecated ? "warning" : "primary"}
-  //         >
-  //           {listing.is_deprecated ? "Undeprecate" : "Deprecate"}
-  //         </NewButton>
-  //       }
-  //       config={config}
-  //     />
-  //   </Modal>
-  // );
+  function managementTools(
+    packagePermissions: Awaited<ReturnType<typeof fetchPackagePermissions>>
+  ) {
+    return (
+      <div className="package-listing-management-tools">
+        {packagePermissions.permissions.can_moderate ? (
+          <div className="package-listing-management-tools__island">
+            {packagePermissions.permissions.can_moderate ? (
+              <Modal
+                popoverId={"reviewPackage"}
+                csSize="small"
+                trigger={
+                  <NewButton
+                    csSize="small"
+                    popoverTarget="reviewPackage"
+                    popoverTargetAction="show"
+                  >
+                    <NewIcon csMode="inline" noWrapper>
+                      <FontAwesomeIcon icon={faScaleBalanced} />
+                    </NewIcon>
+                    Review Package
+                  </NewButton>
+                }
+              >
+                <ReviewPackageForm
+                  communityId={listing.community_identifier}
+                  namespaceId={listing.namespace}
+                  packageId={listing.name}
+                  toast={toast}
+                  reviewStatusColor={"orange"}
+                  reviewStatus={"Skibidied"}
+                  config={outletContext.requestConfig}
+                />
+              </Modal>
+            ) : null}
+            {/* {packagePermissions.permissions.can_view_listing_admin_page ? (
+              <NewButton
+                csSize="small"
+                csVariant="secondary"
+                primitiveType="link"
+                href={`${
+                  import.meta.env.VITE_SITE_URL
+                }/djangoadmin/community/packagelisting/206/change/`}
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faList} />
+                </NewIcon>
+                Listing admin
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faArrowUpRight} />
+                </NewIcon>
+              </NewButton>
+            ) : null}
+            {packagePermissions.permissions.can_view_package_admin_page ? (
+              <NewButton
+                csSize="small"
+                csVariant="secondary"
+                primitiveType="link"
+                href={`${
+                  import.meta.env.VITE_SITE_URL
+                }/djangoadmin/repository/package/16/change/`}
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faBoxOpen} />
+                </NewIcon>
+                Package admin
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faArrowUpRight} />
+                </NewIcon>
+              </NewButton>
+            ) : null} */}
+          </div>
+        ) : null}
+        {packagePermissions.permissions.can_manage ? (
+          <div className="package-listing-management-tools__island">
+            <NewButton
+              csSize="small"
+              primitiveType="cyberstormLink"
+              linkId="PackageEdit"
+              community={packagePermissions.package.community_id}
+              namespace={packagePermissions.package.namespace_id}
+              package={packagePermissions.package.package_name}
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faCog} />
+              </NewIcon>
+              Manage Package
+            </NewButton>
+          </div>
+        ) : null}
+      </div>
+    );
+  }
 
   const likeAction = PackageLikeAction({
     isLoggedIn: Boolean(currentUser?.username),
@@ -330,7 +425,7 @@ export default function PackageListing() {
           )
         }
         tooltipText="Like"
-        csVariant={isLiked ? "success" : "secondary"}
+        csVariant={isLiked ? "primary" : "secondary"}
         csSize="big"
         csModifiers={["only-icon"]}
       >
@@ -338,7 +433,19 @@ export default function PackageListing() {
           <FontAwesomeIcon icon={faThumbsUp} />
         </NewIcon>
       </NewButton>
-      {/* <ReportButton onClick={TODO} /> */}
+      {/* <NewButton
+        // primitiveType="button"
+        tooltipText="Report"
+        csVariant={"secondary"}
+        csSize="big"
+        csModifiers={["only-icon"]}
+        popoverTarget="reportPackage"
+        popoverTargetAction="show"
+      >
+        <NewIcon csMode="inline" noWrapper>
+          <FontAwesomeIcon icon={faFlagSwallowtail} />
+        </NewIcon>
+      </NewButton> */}
     </div>
   );
 
@@ -451,261 +558,557 @@ export default function PackageListing() {
   );
 
   return (
-    <div className="container container--y container--full layout__content">
-      <NewBreadCrumbs>
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Communities"
-          csVariant="cyber"
-        >
-          Communities
-        </NewBreadCrumbsLink>
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Community"
-          community={community.identifier}
-          csVariant="cyber"
-        >
-          {community.name}
-        </NewBreadCrumbsLink>
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Team"
-          community={community.identifier}
-          team={listing.namespace}
-          csVariant="cyber"
-        >
-          {listing.namespace}
-        </NewBreadCrumbsLink>
-
-        <span>
-          <span>{formatToDisplayName(listing.name)}</span>
-        </span>
-      </NewBreadCrumbs>
-      <div className="package-listing__main">
-        <section className="package-listing__section">
-          <PageHeader
-            headingLevel="1"
-            headingSize="3"
-            image={listing.icon_url}
-            description={listing.description}
-            variant="detailed"
-            meta={
-              <>
-                <NewLink
-                  primitiveType="cyberstormLink"
-                  linkId="Team"
-                  community={listing.community_identifier}
-                  team={listing.namespace}
-                  csVariant="cyber"
-                  rootClasses="page-header__meta-item"
-                >
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faUsers} />
-                  </NewIcon>
-                  {listing.namespace}
-                </NewLink>
-                {listing.website_url ? (
-                  <NewLink
-                    primitiveType="link"
-                    href={listing.website_url}
-                    csVariant="cyber"
-                    rootClasses="page-header__meta-item"
-                  >
-                    {listing.website_url}
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faArrowUpRight} />
-                    </NewIcon>
-                  </NewLink>
-                ) : null}
-              </>
-            }
-          >
-            {formatToDisplayName(listing.name)}
-          </PageHeader>
-          {/* TODO: Admin tools // TODO: Enable when APIs are available*/}
-          {/* <div className="headerActions">
-              {currentUser?.teams.some(function (cuTeam) {
-                return cuTeam?.name === listing.team.name;
-              })
-                ? managementTools
-                : null}
-            </div> */}
-          <div className="package-listing__narrow-actions">
-            <button
-              popoverTarget="packageDetailDrawer"
-              popoverTargetAction="show"
-              className="button button--variant--secondary button--size--medium package-listing__drawer-button"
-            >
-              Details
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faCaretRight} />
-              </NewIcon>
-            </button>
-            <Drawer
-              popoverId="packageDetailDrawer"
-              headerContent={
-                <Heading csLevel="3" csSize="3">
-                  Details
-                </Heading>
-              }
-              rootClasses="package-listing__drawer"
-            >
-              {packageMeta}
-              {packageBoxes}
-            </Drawer>
-            {actions}
-          </div>
-          <Tabs
-            tabItems={[
-              {
-                itemProps: {
-                  primitiveType: "cyberstormLink",
-                  linkId: "Package",
-                  community: listing.community_identifier,
-                  namespace: listing.namespace,
-                  package: listing.name,
-                  "aria-current": currentTab === "details",
-                  children: <>Description</>,
-                } as React.ComponentPropsWithRef<typeof NewLink>,
-                current: currentTab === "details",
-                key: "description",
-              },
-              {
-                itemProps: {
-                  primitiveType: "cyberstormLink",
-                  linkId: "PackageRequired",
-                  community: listing.community_identifier,
-                  namespace: listing.namespace,
-                  package: listing.name,
-                  "aria-current": currentTab === "required",
-                  children: <>Required ({listing.dependency_count})</>,
-                } as React.ComponentPropsWithRef<typeof NewLink>,
-                current: currentTab === "required",
-                key: "required",
-              },
-              {
-                itemProps: {
-                  primitiveType: "cyberstormLink",
-                  linkId: "PackageWiki",
-                  community: listing.community_identifier,
-                  namespace: listing.namespace,
-                  package: listing.name,
-                  "aria-current": currentTab === "wiki",
-                  children: <>Wiki</>,
-                } as React.ComponentPropsWithRef<typeof NewLink>,
-                current: currentTab === "wiki",
-                key: "wiki",
-              },
-              {
-                itemProps: {
-                  primitiveType: "cyberstormLink",
-                  linkId: "PackageChangelog",
-                  community: listing.community_identifier,
-                  namespace: listing.namespace,
-                  package: listing.name,
-                  "aria-current": currentTab === "changelog",
-                  children: <>Changelog</>,
-                  disabled: !listing.has_changelog,
-                } as React.ComponentPropsWithRef<typeof NewLink>,
-                current: currentTab === "changelog",
-                key: "changelog",
-              },
-              {
-                itemProps: {
-                  primitiveType: "cyberstormLink",
-                  linkId: "PackageVersions",
-                  community: listing.community_identifier,
-                  namespace: listing.namespace,
-                  package: listing.name,
-                  "aria-current": currentTab === "versions",
-                  children: <>Versions</>,
-                } as React.ComponentPropsWithRef<typeof NewLink>,
-                current: currentTab === "versions",
-                key: "versions",
-                // TODO: Version count field needs to be added to the endpoint
-                // numberSlateValue: listing.versionCount,
-              },
-              // TODO: Once Analysis page is ready, enable it
-              // {
-              //   itemProps: {
-              //     key: "source",
-              //     primitiveType: "cyberstormLink",
-              //     linkId: "PackageSource",
-              //     community: listing.community_identifier,
-              //     namespace: listing.namespace,
-              //     package: listing.name,
-              //     "aria-current": currentTab === "source",
-              //     children: <>Analysis</>,
-              //   },
-              //   current: currentTab === "source",
-              // },
-              {
-                itemProps: {
-                  href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/source`,
-                  primitiveType: "link",
-                  "aria-current": currentTab === "source",
-                  children: (
-                    <>
-                      Analysis{" "}
-                      <NewIcon csMode="inline" noWrapper>
-                        <FontAwesomeIcon icon={faArrowUpRight} />
-                      </NewIcon>
-                    </>
-                  ),
-                } as React.ComponentPropsWithRef<typeof NewLink>,
-                current: currentTab === "source",
-                key: "source",
-              },
-            ]}
-            renderTabItem={(key, itemProps, numberSlate) => {
-              const { children, ...fItemProps } =
-                itemProps as React.ComponentPropsWithRef<typeof NewLink>;
-              return (
-                <NewLink key={key} {...fItemProps}>
-                  {children}
-                  {numberSlate}
-                </NewLink>
-              );
-            }}
+    <>
+      <div className="package-community__background">
+        {community.hero_image_url ? (
+          <img
+            src={community.hero_image_url}
+            alt={community.name}
+            className="package-community__background-image"
           />
-          <div className="package-listing__content">
-            <Outlet context={outletContext} />
+        ) : null}
+        <div className="package-community__background-tint" />
+      </div>
+      <div className="container container--y container--full">
+        <section className="package-listing__package-section">
+          <Suspense fallback={<></>}>
+            <Await resolve={permissions} errorElement={<></>}>
+              {(resolvedValue) =>
+                resolvedValue ? (
+                  <div className="package-listing__actions">
+                    {managementTools(resolvedValue)}
+                  </div>
+                ) : null
+              }
+            </Await>
+          </Suspense>
+          <NewBreadCrumbs>
+            <NewBreadCrumbsLink
+              primitiveType="cyberstormLink"
+              linkId="Communities"
+              csVariant="cyber"
+            >
+              Communities
+            </NewBreadCrumbsLink>
+            <NewBreadCrumbsLink
+              primitiveType="cyberstormLink"
+              linkId="Community"
+              community={community.identifier}
+              csVariant="cyber"
+            >
+              {community.name}
+            </NewBreadCrumbsLink>
+            <NewBreadCrumbsLink
+              primitiveType="cyberstormLink"
+              linkId="Team"
+              community={community.identifier}
+              team={listing.namespace}
+              csVariant="cyber"
+            >
+              {listing.namespace}
+            </NewBreadCrumbsLink>
+
+            <span>
+              <span>{formatToDisplayName(listing.name)}</span>
+            </span>
+          </NewBreadCrumbs>
+          <div className="package-listing__main">
+            <section className="package-listing__package-content-section">
+              <PageHeader
+                headingLevel="1"
+                headingSize="3"
+                image={listing.icon_url}
+                description={listing.description}
+                variant="detailed"
+                meta={
+                  <>
+                    <NewLink
+                      primitiveType="cyberstormLink"
+                      linkId="Team"
+                      community={listing.community_identifier}
+                      team={listing.namespace}
+                      csVariant="cyber"
+                      rootClasses="page-header__meta-item"
+                    >
+                      <NewIcon csMode="inline" noWrapper>
+                        <FontAwesomeIcon icon={faUsers} />
+                      </NewIcon>
+                      {listing.namespace}
+                    </NewLink>
+                    {listing.website_url ? (
+                      <NewLink
+                        primitiveType="link"
+                        href={listing.website_url}
+                        csVariant="cyber"
+                        rootClasses="page-header__meta-item"
+                      >
+                        {listing.website_url}
+                        <NewIcon csMode="inline" noWrapper>
+                          <FontAwesomeIcon icon={faArrowUpRight} />
+                        </NewIcon>
+                      </NewLink>
+                    ) : null}
+                  </>
+                }
+              >
+                {formatToDisplayName(listing.name)}
+              </PageHeader>
+              {/* Report modal is here, so that it can be reused in both desktop on mobile */}
+              {/* <Modal popoverId={"reportPackage"} csSize="small">
+                <ReportPackageForm
+                  // communityId={listing.community_identifier}
+                  // namespaceId={listing.namespace}
+                  // packageId={listing.name}
+                  // id={listing.id}
+                  id={"206"}
+                  toast={toast}
+                  config={outletContext.requestConfig}
+                />
+              </Modal> */}
+              <div className="package-listing__narrow-actions">
+                <button
+                  popoverTarget="packageDetailDrawer"
+                  popoverTargetAction="show"
+                  className="button button--variant--secondary button--size--medium package-listing__drawer-button"
+                >
+                  Details
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faCaretRight} />
+                  </NewIcon>
+                </button>
+                <Drawer
+                  popoverId="packageDetailDrawer"
+                  headerContent={
+                    <Heading csLevel="3" csSize="3">
+                      Details
+                    </Heading>
+                  }
+                  rootClasses="package-listing__drawer"
+                >
+                  {packageMeta}
+                  {packageBoxes}
+                </Drawer>
+                {actions}
+              </div>
+              <Tabs
+                tabItems={[
+                  {
+                    itemProps: {
+                      primitiveType: "cyberstormLink",
+                      linkId: "Package",
+                      community: listing.community_identifier,
+                      namespace: listing.namespace,
+                      package: listing.name,
+                      "aria-current": currentTab === "details",
+                      children: <>Description</>,
+                    } as React.ComponentPropsWithRef<typeof NewLink>,
+                    current: currentTab === "details",
+                    key: "description",
+                  },
+                  {
+                    itemProps: {
+                      primitiveType: "cyberstormLink",
+                      linkId: "PackageRequired",
+                      community: listing.community_identifier,
+                      namespace: listing.namespace,
+                      package: listing.name,
+                      "aria-current": currentTab === "required",
+                      children: <>Required ({listing.dependency_count})</>,
+                    } as React.ComponentPropsWithRef<typeof NewLink>,
+                    current: currentTab === "required",
+                    key: "required",
+                  },
+                  {
+                    itemProps: {
+                      primitiveType: "cyberstormLink",
+                      linkId: "PackageWiki",
+                      community: listing.community_identifier,
+                      namespace: listing.namespace,
+                      package: listing.name,
+                      "aria-current": currentTab === "wiki",
+                      children: <>Wiki</>,
+                    } as React.ComponentPropsWithRef<typeof NewLink>,
+                    current: currentTab === "wiki",
+                    key: "wiki",
+                  },
+                  {
+                    itemProps: {
+                      primitiveType: "cyberstormLink",
+                      linkId: "PackageChangelog",
+                      community: listing.community_identifier,
+                      namespace: listing.namespace,
+                      package: listing.name,
+                      "aria-current": currentTab === "changelog",
+                      children: <>Changelog</>,
+                      disabled: !listing.has_changelog,
+                    } as React.ComponentPropsWithRef<typeof NewLink>,
+                    current: currentTab === "changelog",
+                    key: "changelog",
+                  },
+                  {
+                    itemProps: {
+                      primitiveType: "cyberstormLink",
+                      linkId: "PackageVersions",
+                      community: listing.community_identifier,
+                      namespace: listing.namespace,
+                      package: listing.name,
+                      "aria-current": currentTab === "versions",
+                      children: <>Versions</>,
+                    } as React.ComponentPropsWithRef<typeof NewLink>,
+                    current: currentTab === "versions",
+                    key: "versions",
+                    // TODO: Version count field needs to be added to the endpoint
+                    // numberSlateValue: listing.versionCount,
+                  },
+                  // TODO: Once Analysis page is ready, enable it
+                  // {
+                  //   itemProps: {
+                  //     key: "source",
+                  //     primitiveType: "cyberstormLink",
+                  //     linkId: "PackageSource",
+                  //     community: listing.community_identifier,
+                  //     namespace: listing.namespace,
+                  //     package: listing.name,
+                  //     "aria-current": currentTab === "source",
+                  //     children: <>Analysis</>,
+                  //   },
+                  //   current: currentTab === "source",
+                  // },
+                  {
+                    itemProps: {
+                      href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/source`,
+                      primitiveType: "link",
+                      "aria-current": currentTab === "source",
+                      children: (
+                        <>
+                          Analysis{" "}
+                          <NewIcon csMode="inline" noWrapper>
+                            <FontAwesomeIcon icon={faArrowUpRight} />
+                          </NewIcon>
+                        </>
+                      ),
+                    } as React.ComponentPropsWithRef<typeof NewLink>,
+                    current: currentTab === "source",
+                    key: "source",
+                  },
+                ]}
+                renderTabItem={(key, itemProps, numberSlate) => {
+                  const { children, ...fItemProps } =
+                    itemProps as React.ComponentPropsWithRef<typeof NewLink>;
+                  return (
+                    <NewLink key={key} {...fItemProps}>
+                      {children}
+                      {numberSlate}
+                    </NewLink>
+                  );
+                }}
+              />
+              <div className="package-listing__content">
+                <Outlet context={outletContext} />
+              </div>
+            </section>
+            <aside className="package-listing-sidebar">
+              <NewButton
+                csVariant="accent"
+                csSize="big"
+                rootClasses="package-listing-sidebar__install"
+                primitiveType="link"
+                href={listing.install_url}
+              >
+                <NewIcon csMode="inline">
+                  <ThunderstoreLogo />
+                </NewIcon>
+                Install
+              </NewButton>
+              <div className="package-listing-sidebar__main">
+                {actions}
+                {packageMeta}
+              </div>
+              {packageBoxes}
+            </aside>
           </div>
         </section>
-        <aside className="package-listing-sidebar">
-          <NewButton
-            csVariant="accent"
-            csSize="big"
-            rootClasses="package-listing-sidebar__install"
-            primitiveType="link"
-            href={listing.install_url}
-          >
-            <NewIcon csMode="inline">
-              <ThunderstoreLogo />
-            </NewIcon>
-            Install
-          </NewButton>
-          <div className="package-listing-sidebar__main">
-            {actions}
-            {packageMeta}
-          </div>
-          {packageBoxes}
-        </aside>
+      </div>
+    </>
+  );
+}
+
+function ReviewPackageForm(props: {
+  communityId: string;
+  namespaceId: string;
+  packageId: string;
+  reviewStatus: string;
+  reviewStatusColor: TagVariants;
+  config: () => RequestConfig;
+  toast: ReturnType<typeof useToast>;
+}) {
+  const {
+    communityId,
+    namespaceId,
+    packageId,
+    reviewStatus,
+    reviewStatusColor,
+    toast,
+    config,
+  } = props;
+  const [rejectionReason, setRejectionReason] = useState<string>("");
+  const [internalNotes, setInternalNotes] = useState<string>("");
+  const rejectPackageAction = ApiAction({
+    endpoint: packageListingReject,
+    onSubmitSuccess: () => {
+      toast.addToast({
+        csVariant: "success",
+        children: `Package rejected`,
+        duration: 4000,
+      });
+    },
+    onSubmitError: (error) => {
+      toast.addToast({
+        csVariant: "danger",
+        children: `Error occurred: ${error.message || "Unknown error"}`,
+        duration: 8000,
+      });
+    },
+  });
+
+  const approvePackageAction = ApiAction({
+    endpoint: packageListingApprove,
+    onSubmitSuccess: () => {
+      toast.addToast({
+        csVariant: "success",
+        children: `Package approved`,
+        duration: 4000,
+      });
+    },
+    onSubmitError: (error) => {
+      toast.addToast({
+        csVariant: "danger",
+        children: `Error occurred: ${error.message || "Unknown error"}`,
+        duration: 8000,
+      });
+    },
+  });
+
+  return (
+    <div className="modal-content">
+      <div className="modal-content__header">Review Package</div>
+      <div className="modal-content__body review-package__body">
+        <NewAlert csVariant="info">
+          Changes might take several minutes to show publicly! Info shown below
+          is always up to date.
+        </NewAlert>
+        <div className="review-package__block">
+          <p className="review-package__label">Review status</p>
+          <NewTag csVariant={reviewStatusColor} csModifiers={["dark"]}>
+            {reviewStatus}
+          </NewTag>
+        </div>
+        <div className="review-package__block">
+          <p className="review-package__label">
+            Reject reason (saved on reject)
+          </p>
+          <NewTextInput
+            value={rejectionReason}
+            onChange={(e) => setRejectionReason(e.target.value)}
+            placeholder="Invalid submission"
+            csSize="textarea"
+            rootClasses="review-package__textarea"
+          />
+        </div>
+        <div className="review-package__block">
+          <p className="review-package__label">Internal notes</p>
+          <NewTextInput
+            value={internalNotes}
+            onChange={(e) => setInternalNotes(e.target.value)}
+            placeholder=".exe requires manual review"
+            csSize="textarea"
+            rootClasses="review-package__textarea"
+          />
+        </div>
+      </div>
+      <div className="modal-content__footer review-package__footer">
+        <NewButton
+          csVariant="danger"
+          onClick={() =>
+            rejectPackageAction({
+              config: config,
+              params: {
+                community: communityId,
+                namespace: namespaceId,
+                package: packageId,
+              },
+              queryParams: {},
+              data: {
+                rejection_reason: rejectionReason,
+                internal_notes: internalNotes ? internalNotes : null,
+              },
+            })
+          }
+        >
+          Reject
+        </NewButton>
+        <NewButton
+          csVariant="success"
+          onClick={() =>
+            approvePackageAction({
+              config: config,
+              params: {
+                community: communityId,
+                namespace: namespaceId,
+                package: packageId,
+              },
+              queryParams: {},
+              data: {
+                internal_notes: internalNotes ? internalNotes : null,
+              },
+            })
+          }
+        >
+          Approve
+        </NewButton>
       </div>
     </div>
   );
 }
 
-// const ReportButton = (props: Clickable) => (
-//   <Button.Root
-//     onClick={onClick}
-//     tooltipText="Report"
-//     colorScheme="primary"
-//     paddingSize="mediumSquare"
-//   >
-//     <Button.ButtonIcon>
-//       <FontAwesomeIcon icon={faFlag} />
-//     </Button.ButtonIcon>
-//   </Button.Root>
-// );
+ReviewPackageForm.displayName = "ReviewPackageForm";
+
+const reportOptions: SelectOption<
+  | "Spam"
+  | "Malware"
+  | "Reupload"
+  | "CopyrightOrLicense"
+  | "WrongCommunity"
+  | "WrongCategories"
+  | "Other"
+>[] = [
+  { value: "Spam", label: "Spam" },
+  { value: "Malware", label: "Malware" },
+  { value: "Reupload", label: "Reupload" },
+  { value: "CopyrightOrLicense", label: "Copyright Or License" },
+  { value: "WrongCommunity", label: "Wrong Community" },
+  { value: "WrongCategories", label: "Wrong Categories" },
+  { value: "Other", label: "Other" },
+];
+
+function ReportPackageForm(props: {
+  // communityId: string;
+  // namespaceId: string;
+  // packageId: string;
+  id: string;
+  config: () => RequestConfig;
+  toast: ReturnType<typeof useToast>;
+}) {
+  const {
+    // communityId,
+    // namespaceId,
+    // packageId,
+    id,
+    toast,
+    config,
+  } = props;
+
+  function formFieldUpdateAction(
+    state: PackageListingReportRequestData,
+    action: {
+      field: keyof PackageListingReportRequestData;
+      value: PackageListingReportRequestData[keyof PackageListingReportRequestData];
+    }
+  ) {
+    return {
+      ...state,
+      [action.field]: action.value,
+    };
+  }
+
+  const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
+    reason: "Other",
+    description: "",
+  });
+
+  type SubmitorOutput = Awaited<ReturnType<typeof packageListingReport>>;
+
+  async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
+    return await packageListingReport({
+      config: config,
+      params: { id: id },
+      queryParams: {},
+      data: { reason: data.reason, description: data.description },
+    });
+  }
+
+  type InputErrors = {
+    [key in keyof typeof formInputs]?: string | string[];
+  };
+
+  const strongForm = useStrongForm<
+    typeof formInputs,
+    PackageListingReportRequestData,
+    Error,
+    SubmitorOutput,
+    Error,
+    InputErrors
+  >({
+    inputs: formInputs,
+    submitor,
+    onSubmitSuccess: () => {
+      toast.addToast({
+        csVariant: "success",
+        children: `Package reported`,
+        duration: 4000,
+      });
+    },
+    onSubmitError: (error) => {
+      toast.addToast({
+        csVariant: "danger",
+        children: `Error occurred: ${error.message || "Unknown error"}`,
+        duration: 8000,
+      });
+    },
+  });
+
+  return (
+    <div className="modal-content">
+      <div className="modal-content__header">Report Package</div>
+      <div className="modal-content__body report-package__body">
+        <div className="report-package__block">
+          <p className="report-package__label">Reason</p>
+          <NewSelect
+            name={"role"}
+            options={reportOptions}
+            placeholder="Please select..."
+            value={formInputs.reason}
+            onChange={(value) => {
+              updateFormFieldState({ field: "reason", value: value });
+            }}
+            id="role"
+          />
+        </div>
+        <div className="report-package__block">
+          <p className="report-package__label">
+            Additional information (optional)
+          </p>
+          <NewTextInput
+            value={formInputs.description || ""}
+            onChange={(e) => {
+              updateFormFieldState({
+                field: "description",
+                value: e.target.value,
+              });
+            }}
+            placeholder="Invalid submission"
+            csSize="textarea"
+            rootClasses="report-package__textarea"
+          />
+        </div>
+      </div>
+      <div className="modal-content__footer report-package__footer">
+        <NewButton csVariant="success" onClick={strongForm.submit}>
+          Submit
+        </NewButton>
+      </div>
+    </div>
+  );
+}
+
+ReportPackageForm.displayName = "ReportPackageForm";

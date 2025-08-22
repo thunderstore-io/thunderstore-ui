@@ -176,66 +176,74 @@ export default function Community() {
   const outletContext = useOutletContext() as OutletContextShape;
 
   return (
-    <div className="container container--y container--full layout__content community">
-      <NewBreadCrumbs>
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Communities"
-          csVariant="cyber"
-        >
-          Communities
-        </NewBreadCrumbsLink>
-        <span>
-          <span>{community.name}</span>
-        </span>
-      </NewBreadCrumbs>
-      <section className="container container--y container--full">
-        <div className="container container--x community__heading">
-          <PageHeader
-            headingLevel="1"
-            headingSize="3"
-            variant="simple"
-            icon={community.community_icon_url}
-            meta={
-              <>
-                {community.wiki_url ? (
-                  <NewLink
-                    primitiveType="link"
-                    href={community.wiki_url}
-                    csVariant="cyber"
-                    rootClasses="community__item"
-                  >
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faBook} />
-                    </NewIcon>
-                    <span>Modding Wiki</span>
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faArrowUpRight} />
-                    </NewIcon>
-                  </NewLink>
-                ) : null}
-                {community.discord_url ? (
-                  <NewLink
-                    primitiveType="link"
-                    href={community.discord_url}
-                    csVariant="cyber"
-                    rootClasses="community__item"
-                  >
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faDiscord} />
-                    </NewIcon>
-                    <span>Modding Discord</span>
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faArrowUpRight} />
-                    </NewIcon>
-                  </NewLink>
-                ) : null}
-              </>
-            }
+    <>
+      <div className="community__background">
+        {community.hero_image_url ? (
+          <img
+            src={community.hero_image_url}
+            alt={community.name}
+            className="community__background-image"
+          />
+        ) : null}
+        <div className="community__background-tint" />
+      </div>
+      <div className="container container--y container--full layout__content community">
+        <NewBreadCrumbs>
+          <NewBreadCrumbsLink
+            primitiveType="cyberstormLink"
+            linkId="Communities"
+            csVariant="cyber"
           >
-            {community.name}
-          </PageHeader>
-        </div>
+            Communities
+          </NewBreadCrumbsLink>
+          <span>
+            <span>{community.name}</span>
+          </span>
+        </NewBreadCrumbs>
+        <PageHeader
+          headingLevel="1"
+          headingSize="3"
+          variant="simple"
+          icon={community.community_icon_url}
+          meta={
+            <>
+              {community.wiki_url ? (
+                <NewLink
+                  primitiveType="link"
+                  href={community.wiki_url}
+                  csVariant="cyber"
+                  rootClasses="community__item"
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faBook} />
+                  </NewIcon>
+                  <span>Modding Wiki</span>
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faArrowUpRight} />
+                  </NewIcon>
+                </NewLink>
+              ) : null}
+              {community.discord_url ? (
+                <NewLink
+                  primitiveType="link"
+                  href={community.discord_url}
+                  csVariant="cyber"
+                  rootClasses="community__item"
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faDiscord} />
+                  </NewIcon>
+                  <span>Modding Discord</span>
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faArrowUpRight} />
+                  </NewIcon>
+                </NewLink>
+              ) : null}
+            </>
+          }
+        >
+          {community.name}
+        </PageHeader>
         <PackageSearch
           listings={listings}
           packageCategories={filters.package_categories}
@@ -244,7 +252,7 @@ export default function Community() {
           currentUser={outletContext.currentUser}
           dapper={outletContext.dapper}
         />
-      </section>
-    </div>
+      </div>
+    </>
   );
 }

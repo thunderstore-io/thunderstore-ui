@@ -27,6 +27,7 @@ export default [
       ]),
     ]),
   ]),
+  route("/c/:communityId/p/:namespaceId/:packageId/edit", "p/packageEdit.tsx"),
   route(
     "/package/create/docs",
     "tools/package-format-docs/packageFormatDocs.tsx"

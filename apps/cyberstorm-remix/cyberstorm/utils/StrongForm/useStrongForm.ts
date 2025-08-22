@@ -140,6 +140,7 @@ export function useStrongForm<
               ) as SubmissionError
             );
             setInputErrors(error.error.formErrors as InputErrors);
+            throw error;
           } else {
             throw error;
           }

@@ -6,6 +6,8 @@ import {
   fetchPackageSubmissionStatus,
   fetchPackageWiki,
   fetchPackageWikiPage,
+  fetchPackagePermissions,
+  ApiError,
 } from "@thunderstore/thunderstore-api";
 import { z } from "zod";
 
@@ -150,4 +152,32 @@ export async function getPackageSubmissionStatus(
   });
 
   return response;
+}
+
+export async function getPackagePermissions(
+  this: DapperTsInterface,
+  communityId: string,
+  namespaceId: string,
+  packageName: string
+) {
+  try {
+    const response = await fetchPackagePermissions({
+      config: this.config,
+      params: {
+        community_id: communityId,
+        namespace_id: namespaceId,
+        package_name: packageName,
+      },
+      data: {},
+      queryParams: {},
+    });
+    return response;
+  } catch (error) {
+    // In case of user not being logged in or stale session
+    if (error instanceof ApiError && error.response.status === 401) {
+      return undefined;
+    } else {
+      throw error;
+    }
+  }
 }

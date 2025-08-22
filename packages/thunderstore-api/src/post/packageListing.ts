@@ -10,6 +10,9 @@ import {
   packageListingUpdateRequestDataSchema,
   packageListingApproveRequestDataSchema,
   packageListingRejectRequestDataSchema,
+  PackageListingReportRequestParams,
+  PackageListingReportRequestData,
+  packageListingReportRequestDataSchema,
 } from "../schemas/requestSchemas";
 import {
   PackageListingUpdateResponseData,
@@ -78,7 +81,7 @@ export function packageListingReject(
   >
 ) {
   const { config, params, data } = props;
-  const path = `/api/cyberstorm/listing/${params.community}/${params.namespace}/${params.package}/approve/`;
+  const path = `/api/cyberstorm/listing/${params.community}/${params.namespace}/${params.package}/reject/`;
 
   return apiFetch({
     args: {
@@ -92,6 +95,35 @@ export function packageListingReject(
       useSession: true,
     },
     requestSchema: packageListingRejectRequestDataSchema,
+    queryParamsSchema: undefined,
+    responseSchema: undefined,
+  });
+}
+
+export function packageListingReport(
+  props: ApiEndpointProps<
+    PackageListingReportRequestParams,
+    object,
+    PackageListingReportRequestData
+  >
+) {
+  const { config, params, data } = props;
+  // This will most likely change to a dedicated cyberstorm API endpoint, which is commented right now.
+  // const path = `/api/cyberstorm/listing/${params.community}/${params.namespace}/${params.package}/report/`;
+  const path = `/api/experimental/package-listing/${params.id}/report/`;
+
+  return apiFetch({
+    args: {
+      config,
+      path,
+      request: {
+        method: "POST",
+        cache: "no-store",
+        body: JSON.stringify(data),
+      },
+      useSession: true,
+    },
+    requestSchema: packageListingReportRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: undefined,
   });

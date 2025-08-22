@@ -22,6 +22,7 @@ export * from "./get/communityPackageListings";
 export * from "./get/currentUser";
 export * from "./get/ratedPackages";
 export * from "./get/namespacePackageListings";
+export * from "./get/package";
 export * from "./get/packageChangelog";
 export * from "./get/packageDependantsListings";
 export * from "./get/packageListingDetails";

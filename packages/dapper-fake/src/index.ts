@@ -9,6 +9,7 @@ import { getFakeChangelog, getFakeReadme } from "./fakers/markup";
 import {
   getFakePackageListingDetails,
   getFakePackageListings,
+  getFakePackagePermissions,
   getFakePackageVersions,
 } from "./fakers/package";
 import { getFakeServiceAccounts } from "./fakers/serviceAccount";
@@ -27,6 +28,7 @@ export class DapperFake implements DapperInterface {
   public getCommunityFilters = getFakeCommunityFilters;
   public getCurrentUser = getFakeCurrentUser;
   public getPackageChangelog = getFakeChangelog;
+  public getPackagePermissions = getFakePackagePermissions;
   public getPackageListingDetails = getFakePackageListingDetails;
   public getPackageListings = getFakePackageListings;
   public getPackageReadme = getFakeReadme;

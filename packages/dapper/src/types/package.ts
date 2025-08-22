@@ -57,6 +57,25 @@ export interface PackageVersion {
   install_url: string;
 }
 
+export interface PackagePermissions {
+  package: {
+    community_id: string;
+    namespace_id: string;
+    package_name: string;
+  };
+  permissions: {
+    can_manage: boolean;
+    can_manage_deprecation: boolean;
+    can_manage_categories: boolean;
+    can_deprecate: boolean;
+    can_undeprecate: boolean;
+    can_unlist: boolean;
+    can_moderate: boolean;
+    can_view_package_admin_page: boolean;
+    can_view_listing_admin_page: boolean;
+  };
+}
+
 export interface PackageSubmissionError {
   upload_uuid?: string[] | null;
   author_name?: string[] | null;

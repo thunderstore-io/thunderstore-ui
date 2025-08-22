@@ -26,5 +26,9 @@
     box-shadow: var(--switch-knob-box-shadow);
     transform: var(--switch-knob-transform);
     transition: var(--switch-knob-transition);
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }

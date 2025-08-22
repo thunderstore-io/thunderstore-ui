@@ -100,7 +100,6 @@ export async function clientLoader({ context, request }: LoaderFunctionArgs) {
 
 export default function CommunitiesPage() {
   const communitiesData = useLoaderData<typeof loader | typeof clientLoader>();
-  console.log("Communities data loaded:", communitiesData);
   const navigationType = useNavigationType();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -169,7 +168,7 @@ export default function CommunitiesPage() {
           />
           <span className="container container--x">
             <NewSelect
-              onChange={changeOrder}
+              onChange={(val) => changeOrder(val as SortOptions)}
               options={selectOptions}
               value={searchParams.get("order") ?? SortOptions.Popular}
               aria-label="Sort communities by"
