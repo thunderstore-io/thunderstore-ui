@@ -70,7 +70,7 @@ export async function loader() {
   // console.log("loader context", getSessionTools(context));
   const dapper = new DapperTs(() => {
     return {
-      apiHost: import.meta.env.VITE_API_URL,
+      apiHost: process.env.VITE_API_URL,
       sessionId: undefined,
     };
   });

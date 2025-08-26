@@ -10,7 +10,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const dapper = new DapperTs(() => {
       return {
-        apiHost: import.meta.env.VITE_API_URL,
+        apiHost: process.env.VITE_API_URL,
         sessionId: undefined,
       };
     });

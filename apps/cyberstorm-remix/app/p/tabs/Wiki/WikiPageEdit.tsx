@@ -40,7 +40,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   ) {
     const dapper = new DapperTs(() => {
       return {
-        apiHost: import.meta.env.VITE_API_URL,
+        apiHost: process.env.VITE_API_URL,
         sessionId: undefined,
       };
     });

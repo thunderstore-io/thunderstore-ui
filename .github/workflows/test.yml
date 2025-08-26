@@ -93,10 +93,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: get-node-version
     env:
-      NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
-      NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
-      PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
-      PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+      VITE_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+      VITE_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+      VITE_AUTH_BASE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+      VITE_AUTH_RETURN_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node ${{ needs.get-node-version.outputs.node-version }}
