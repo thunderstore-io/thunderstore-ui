@@ -108,7 +108,12 @@ const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useRouteLoaderData<RootClientLoader>("root");
 
-  const domain = import.meta.env.VITE_SITE_URL ?? "https://thunderstore.io";
+  let domain: string;
+  if (import.meta.env.SSR) {
+    domain = process.env.VITE_SITE_URL || "";
+  } else {
+    domain = import.meta.env.VITE_SITE_URL;
+  }
 
   const location = useLocation();
   const shouldShowAds = location.pathname.startsWith("/teams")
@@ -197,7 +202,12 @@ const TooltipProvider = memo(function TooltipProvider({
 
 function App() {
   // TODO: Remove this customization when legacy site is removed
-  const domain = import.meta.env.VITE_SITE_URL ?? "https://thunderstore.io";
+  let domain: string;
+  if (import.meta.env.SSR) {
+    domain = process.env.VITE_SITE_URL || "";
+  } else {
+    domain = import.meta.env.VITE_SITE_URL;
+  }
 
   const data = useRouteLoaderData<typeof clientLoader>("root");
   const dapper = new DapperTs(() => {

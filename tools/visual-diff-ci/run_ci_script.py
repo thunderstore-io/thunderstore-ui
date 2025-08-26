@@ -137,8 +137,10 @@ def setup_frontend():
 
 def start_frontend() -> BgProcess:
     configs = {
-        "PUBLIC_SITE_URL": "http://127.0.0.1:8000",
-        "PUBLIC_API_URL": "http://127.0.0.1:8000",
+        "VITE_SITE_URL": "http://127.0.0.1:8000",
+        "VITE_API_URL": "http://127.0.0.1:8000",
+        "VITE_AUTH_BASE_URL": "http://127.0.0.1:8000",
+        "VITE_AUTH_RETURN_URL": "http://127.0.0.1:8000",
     }
     process = BgProcess(
         [YARN_PATH, "workspace", "@thunderstore/cyberstorm-remix", "start", "--host", "0.0.0.0", "--port", "3000"],
