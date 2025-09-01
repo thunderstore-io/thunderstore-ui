@@ -3,14 +3,18 @@ import "./Wiki.css";
 import { LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "~/middlewares";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 import { WikiContent } from "./WikiContent";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
+    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
-        apiHost: process.env.VITE_API_URL,
+        apiHost: publicEnvVariables.VITE_API_URL,
         sessionId: undefined,
       };
     });
@@ -25,15 +29,16 @@ export async function loader({ params }: LoaderFunctionArgs) {
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
+      permissions: undefined,
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
 }
 
-export async function clientLoader({ context, params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    const tools = getSessionTools(context);
+    const tools = getSessionTools();
     const dapper = new DapperTs(() => {
       return {
         apiHost: tools?.getConfig().apiHost,
@@ -46,12 +51,19 @@ export async function clientLoader({ context, params }: LoaderFunctionArgs) {
       params.packageId
     );
     const firstPage = await dapper.getPackageWikiPage(wiki.pages[0].id);
+
+    const permissions = await dapper.getPackagePermissions(
+      params.communityId,
+      params.namespaceId,
+      params.packageId
+    );
     return {
       wiki: wiki,
       firstPage: firstPage,
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
+      permissions: permissions,
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");
@@ -59,7 +71,7 @@ export async function clientLoader({ context, params }: LoaderFunctionArgs) {
 }
 
 export default function Wiki() {
-  const { wiki, firstPage, communityId, namespaceId, packageId } =
+  const { wiki, firstPage, communityId, namespaceId, packageId, permissions } =
     useLoaderData<typeof loader | typeof clientLoader>();
 
   return (
@@ -70,6 +82,7 @@ export default function Wiki() {
       packageId={packageId}
       previousPage={undefined}
       nextPage={wiki.pages[1]?.slug}
+      canManage={permissions?.permissions.can_manage}
     />
   );
 }

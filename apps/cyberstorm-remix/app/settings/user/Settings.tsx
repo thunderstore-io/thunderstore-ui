@@ -7,7 +7,7 @@ import "./Settings.css";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 
 // export async function clientLoader() {
-//   const _storage = new NamespacedStorageManager("Session");
+//   const _storage = new NamespacedStorageManager(SESSION_STORAGE_KEY);
 //   const currentUser = getSessionCurrentUser(_storage, true, undefined, () => {
 //     clearSession(_storage);
 //     throw new Response("Your session has expired, please log in again", {

@@ -2,7 +2,6 @@ import "./Members.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import {
-  Avatar,
   Modal,
   NewAvatar,
   NewButton,
@@ -26,17 +25,17 @@ import { OutletContextShape } from "../../../../../root";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "~/middlewares";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { SelectOption } from "@thunderstore/cyberstorm/src/newComponents/Select/Select";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
 
 // REMIX TODO: Add check for "user has permission to see this page"
-export async function clientLoader({ context, params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
     try {
-      const tools = getSessionTools(context);
+      const tools = getSessionTools();
       const config = tools?.getConfig();
       const dapper = new DapperTs(() => {
         return {

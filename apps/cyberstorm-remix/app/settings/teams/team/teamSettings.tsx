@@ -16,7 +16,7 @@ import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { OutletContextShape } from "../../../root";
 import "./teamSettings.css";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "~/middlewares";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 
 export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
   return [
@@ -26,10 +26,10 @@ export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
 };
 
 // REMIX TODO: Add check for "user has permission to see this page"
-export async function clientLoader({ context, params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
     try {
-      const tools = getSessionTools(context);
+      const tools = getSessionTools();
       const config = tools?.getConfig();
       const dapper = new DapperTs(() => {
         return {

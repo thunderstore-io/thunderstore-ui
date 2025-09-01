@@ -24,7 +24,10 @@ import { Communities } from "@thunderstore/dapper/types";
 // import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { getSessionTools } from "~/middlewares";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 
 export const meta: MetaFunction = () => {
   return [
@@ -66,9 +69,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const order = searchParams.get("order") ?? SortOptions.Popular;
   const search = searchParams.get("search");
   const page = undefined;
+  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
   const dapper = new DapperTs(() => {
     return {
-      apiHost: process.env.VITE_API_URL,
+      apiHost: publicEnvVariables.VITE_API_URL,
       sessionId: undefined,
     };
   });
@@ -79,8 +83,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   );
 }
 
-export async function clientLoader({ context, request }: LoaderFunctionArgs) {
-  const tools = getSessionTools(context);
+export async function clientLoader({ request }: LoaderFunctionArgs) {
+  const tools = getSessionTools();
   const dapper = new DapperTs(() => {
     return {
       apiHost: tools?.getConfig().apiHost,

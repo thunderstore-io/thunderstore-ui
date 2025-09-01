@@ -16,7 +16,10 @@ import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { OutletContextShape } from "../root";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { getSessionTools } from "~/middlewares";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [
@@ -61,9 +64,10 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   if (params.communityId) {
+    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
-        apiHost: process.env.VITE_API_URL,
+        apiHost: publicEnvVariables.VITE_API_URL,
         sessionId: undefined,
       };
     });
@@ -111,13 +115,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   throw new Response("Community not found", { status: 404 });
 }
 
-export async function clientLoader({
-  context,
-  request,
-  params,
-}: LoaderFunctionArgs) {
+export async function clientLoader({ request, params }: LoaderFunctionArgs) {
   if (params.communityId) {
-    const tools = getSessionTools(context);
+    const tools = getSessionTools();
     const dapper = new DapperTs(() => {
       return {
         apiHost: tools?.getConfig().apiHost,

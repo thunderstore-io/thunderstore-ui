@@ -19,6 +19,7 @@ interface WikiContentProps {
   packageId: string;
   previousPage?: string;
   nextPage?: string;
+  canManage?: boolean;
 }
 
 export const WikiContent = memo(function WikiContent({
@@ -28,6 +29,7 @@ export const WikiContent = memo(function WikiContent({
   packageId,
   previousPage,
   nextPage,
+  canManage,
 }: WikiContentProps) {
   return (
     <>
@@ -46,22 +48,24 @@ export const WikiContent = memo(function WikiContent({
             </span>
           </div>
         </div>
-        <div className="wiki-content__actions">
-          <NewButton
-            csSize="small"
-            primitiveType="cyberstormLink"
-            linkId="PackageWikiPageEdit"
-            community={communityId}
-            namespace={namespaceId}
-            package={packageId}
-            wikipageslug={page.slug}
-          >
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faEdit} />
-            </NewIcon>
-            Edit
-          </NewButton>
-        </div>
+        {canManage ? (
+          <div className="wiki-content__actions">
+            <NewButton
+              csSize="small"
+              primitiveType="cyberstormLink"
+              linkId="PackageWikiPageEdit"
+              community={communityId}
+              namespace={namespaceId}
+              package={packageId}
+              wikipageslug={page.slug}
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faEdit} />
+              </NewIcon>
+              Edit
+            </NewButton>
+          </div>
+        ) : null}
       </div>
       <div className="wiki-content__body">
         <Markdown input={page.markdown_content} />
