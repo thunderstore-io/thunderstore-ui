@@ -41,7 +41,6 @@ import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 
 export function Navigation(props: {
-  // hydrationCheck: boolean;
   currentUser?: CurrentUser;
   domain: string;
 }) {
@@ -366,10 +365,10 @@ export function DesktopUserDropdown(props: {
       <NewDropDownDivider />
       <NewDropDownItem asChild>
         <NewLink
-          // primitiveType="cyberstormLink"
-          // linkId="Settings"
-          primitiveType="link"
-          href={`${domain}/settings/linked-accounts/`}
+          primitiveType="cyberstormLink"
+          linkId="Settings"
+          // primitiveType="link"
+          // href={`${domain}/settings/linked-accounts/`}
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
@@ -380,10 +379,10 @@ export function DesktopUserDropdown(props: {
       </NewDropDownItem>
       <NewDropDownItem asChild>
         <NewLink
-          // primitiveType="cyberstormLink"
-          // linkId="Teams"
-          primitiveType="link"
-          href={`${domain}/settings/teams/`}
+          primitiveType="cyberstormLink"
+          linkId="Teams"
+          // primitiveType="link"
+          // href={`${domain}/settings/teams/`}
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
@@ -529,7 +528,7 @@ export function MobileUserPopoverContent(props: {
             <NewAvatar src={avatar} username={user.username} csSize="small" />
             <p className="mobile-navigation__user-details">{user.username}</p>
           </div>
-          {/* <NewLink
+          <NewLink
             primitiveType="cyberstormLink"
             linkId="Settings"
             csVariant="primary"
@@ -550,7 +549,7 @@ export function MobileUserPopoverContent(props: {
               <FontAwesomeIcon icon={faUsers} />
             </NewIcon>
             Teams
-          </NewLink> */}
+          </NewLink>
           <NewLink
             primitiveType="link"
             href={domain ? `${domain}/logout/` : "/logout"}
