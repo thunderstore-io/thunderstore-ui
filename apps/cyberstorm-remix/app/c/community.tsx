@@ -1,5 +1,10 @@
-import type { LoaderFunctionArgs, MetaFunction } from "react-router";
-import { useLoaderData, useOutletContext } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import {
+  Await,
+  useLoaderData,
+  useLocation,
+  useOutletContext,
+} from "react-router";
 import {
   NewBreadCrumbs,
   NewBreadCrumbsLink,
@@ -20,47 +25,7 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-
-export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
-  return [
-    { title: `Thunderstore - The ${data?.community.name} Mod Database` },
-    { name: "description", content: `Mods for ${data?.community.name}` },
-    {
-      property: "og:type",
-      content: "website",
-    },
-    {
-      property: "og:url",
-      content: `${import.meta.env.VITE_SITE_URL}${location.pathname}`,
-    },
-    {
-      property: "og:title",
-      content: `Thunderstore - The ${data?.community.name} Mod Database`,
-    },
-    {
-      property: "og:description",
-      content: data
-        ? `Thunderstore is a mod database and API for downloading ${data.community.name} mods`
-        : undefined,
-    },
-    {
-      property: "og:image:width",
-      content: "360",
-    },
-    {
-      property: "og:image:height",
-      content: "480",
-    },
-    {
-      property: "og:image",
-      content: data?.community.cover_image_url,
-    },
-    {
-      property: "og:site_name",
-      content: "Thunderstore",
-    },
-  ];
-};
+import { Suspense } from "react";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   if (params.communityId) {
@@ -81,7 +46,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
-    const community = await dapper.getCommunity(params.communityId);
+    const community = dapper.getCommunity(params.communityId);
     const filters = await dapper.getCommunityFilters(params.communityId);
     const sortedSections = filters.sections.sort(
       (a, b) => b.priority - a.priority
@@ -89,7 +54,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return {
       community: community,
       filters: filters,
-      listings: await dapper.getPackageListings(
+      listings: dapper.getPackageListings(
         {
           kind: "community",
           communityId: params.communityId,
@@ -134,7 +99,7 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
-    const community = await dapper.getCommunity(params.communityId);
+    const community = dapper.getCommunity(params.communityId);
     const filters = await dapper.getCommunityFilters(params.communityId);
     const sortedSections = filters.sections.sort(
       (a, b) => b.priority - a.priority
@@ -142,7 +107,7 @@ export async function clientLoader({ request, params }: LoaderFunctionArgs) {
     return {
       community: community,
       filters: filters,
-      listings: await dapper.getPackageListings(
+      listings: dapper.getPackageListings(
         {
           kind: "community",
           communityId: params.communityId,
@@ -174,19 +139,68 @@ export default function Community() {
   >();
 
   const outletContext = useOutletContext() as OutletContextShape;
+  const location = useLocation();
 
   return (
     <>
-      <div className="community__background">
-        {community.hero_image_url ? (
-          <img
-            src={community.hero_image_url}
-            alt={community.name}
-            className="community__background-image"
-          />
-        ) : null}
-        <div className="community__background-tint" />
-      </div>
+      <Suspense>
+        <Await resolve={community}>
+          {(resolvedValue) => {
+            return (
+              <>
+                <meta
+                  title={`Thunderstore - The ${resolvedValue.name} Mod Database`}
+                />
+                <meta
+                  name="description"
+                  content={`Mods for ${resolvedValue.name}`}
+                />
+                <meta property="og:type" content="website" />
+                <meta
+                  property="og:url"
+                  content={`${
+                    getPublicEnvVariables(["VITE_SITE_URL"]).VITE_SITE_URL
+                  }${location.pathname}`}
+                />
+                <meta
+                  property="og:title"
+                  content={`Thunderstore - The ${resolvedValue.name} Mod Database`}
+                />
+                <meta
+                  property="og:description"
+                  content={`Thunderstore is a mod database and API for downloading ${resolvedValue.name} mods`}
+                />
+                <meta property="og:image:width" content="360" />
+                <meta property="og:image:height" content="480" />
+                <meta
+                  property="og:image"
+                  content={resolvedValue.cover_image_url ?? undefined}
+                />
+                <meta property="og:site_name" content="Thunderstore" />
+              </>
+            );
+          }}
+        </Await>
+      </Suspense>
+
+      <Suspense>
+        <Await resolve={community}>
+          {(resolvedValue) => {
+            return resolvedValue.hero_image_url ? (
+              <>
+                <div className="community__background">
+                  <img
+                    src={resolvedValue.hero_image_url}
+                    alt={resolvedValue.name}
+                    className="community__background-image"
+                  />
+                  <div className="community__background-tint" />
+                </div>
+              </>
+            ) : null;
+          }}
+        </Await>
+      </Suspense>
       <div className="container container--y container--full layout__content community">
         <NewBreadCrumbs>
           <NewBreadCrumbsLink
@@ -197,53 +211,70 @@ export default function Community() {
             Communities
           </NewBreadCrumbsLink>
           <span>
-            <span>{community.name}</span>
+            <span>
+              <Suspense fallback={<>Loading</>}>
+                <Await resolve={community} errorElement={<></>}>
+                  {(resolvedValue) => {
+                    return <>{resolvedValue.name}</>;
+                  }}
+                </Await>
+              </Suspense>
+            </span>
           </span>
         </NewBreadCrumbs>
-        <PageHeader
-          headingLevel="1"
-          headingSize="3"
-          variant="simple"
-          icon={community.community_icon_url}
-          meta={
-            <>
-              {community.wiki_url ? (
-                <NewLink
-                  primitiveType="link"
-                  href={community.wiki_url}
-                  csVariant="cyber"
-                  rootClasses="community__item"
+        <Suspense fallback={<>Loading</>}>
+          <Await resolve={community} errorElement={<></>}>
+            {(resolvedValue) => {
+              return (
+                <PageHeader
+                  headingLevel="1"
+                  headingSize="3"
+                  variant="simple"
+                  icon={resolvedValue.community_icon_url}
+                  meta={
+                    <>
+                      {resolvedValue.wiki_url ? (
+                        <NewLink
+                          primitiveType="link"
+                          href={resolvedValue.wiki_url}
+                          csVariant="cyber"
+                          rootClasses="community__item"
+                        >
+                          <NewIcon csMode="inline" noWrapper>
+                            <FontAwesomeIcon icon={faBook} />
+                          </NewIcon>
+                          <span>Modding Wiki</span>
+                          <NewIcon csMode="inline" noWrapper>
+                            <FontAwesomeIcon icon={faArrowUpRight} />
+                          </NewIcon>
+                        </NewLink>
+                      ) : null}
+                      {resolvedValue.discord_url ? (
+                        <NewLink
+                          primitiveType="link"
+                          href={resolvedValue.discord_url}
+                          csVariant="cyber"
+                          rootClasses="community__item"
+                        >
+                          <NewIcon csMode="inline" noWrapper>
+                            <FontAwesomeIcon icon={faDiscord} />
+                          </NewIcon>
+                          <span>Modding Discord</span>
+                          <NewIcon csMode="inline" noWrapper>
+                            <FontAwesomeIcon icon={faArrowUpRight} />
+                          </NewIcon>
+                        </NewLink>
+                      ) : null}
+                    </>
+                  }
                 >
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faBook} />
-                  </NewIcon>
-                  <span>Modding Wiki</span>
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faArrowUpRight} />
-                  </NewIcon>
-                </NewLink>
-              ) : null}
-              {community.discord_url ? (
-                <NewLink
-                  primitiveType="link"
-                  href={community.discord_url}
-                  csVariant="cyber"
-                  rootClasses="community__item"
-                >
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faDiscord} />
-                  </NewIcon>
-                  <span>Modding Discord</span>
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faArrowUpRight} />
-                  </NewIcon>
-                </NewLink>
-              ) : null}
-            </>
-          }
-        >
-          {community.name}
-        </PageHeader>
+                  {resolvedValue.name}
+                </PageHeader>
+              );
+            }}
+          </Await>
+        </Suspense>
+
         <PackageSearch
           listings={listings}
           packageCategories={filters.package_categories}
