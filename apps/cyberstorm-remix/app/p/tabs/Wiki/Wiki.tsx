@@ -3,7 +3,10 @@ import "./Wiki.css";
 import { LoaderFunctionArgs, Outlet, useOutletContext } from "react-router";
 import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "~/middlewares";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 import { NewButton, NewIcon } from "@thunderstore/cyberstorm";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,9 +14,10 @@ import { OutletContextShape } from "~/root";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
+    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
-        apiHost: process.env.VITE_API_URL,
+        apiHost: publicEnvVariables.VITE_API_URL,
         sessionId: undefined,
       };
     });
@@ -27,15 +31,16 @@ export async function loader({ params }: LoaderFunctionArgs) {
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       slug: params.slug,
+      permissions: undefined,
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
 }
 
-export async function clientLoader({ context, params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    const tools = getSessionTools(context);
+    const tools = getSessionTools();
     const dapper = new DapperTs(() => {
       return {
         apiHost: tools?.getConfig().apiHost,
@@ -47,12 +52,20 @@ export async function clientLoader({ context, params }: LoaderFunctionArgs) {
       params.namespaceId,
       params.packageId
     );
+
+    const permissions = await dapper.getPackagePermissions(
+      params.communityId,
+      params.namespaceId,
+      params.packageId
+    );
+
     return {
       wiki: wiki,
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       slug: params.slug,
+      permissions: permissions,
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");
@@ -60,33 +73,34 @@ export async function clientLoader({ context, params }: LoaderFunctionArgs) {
 }
 
 export default function Wiki() {
-  const { wiki, communityId, namespaceId, packageId, slug } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { wiki, communityId, namespaceId, packageId, slug, permissions } =
+    useLoaderData<typeof loader | typeof clientLoader>();
 
   const outletContext = useOutletContext() as OutletContextShape;
 
   return (
     <div className="wiki">
       <div className="wiki-nav">
-        <div className="wiki-nav__header">
-          <NewButton
-            primitiveType="cyberstormLink"
-            linkId="PackageWikiNewPage"
-            community={communityId}
-            namespace={namespaceId}
-            package={packageId}
-          >
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faPlus} />
-            </NewIcon>
-            New Page
-          </NewButton>
-        </div>
+        {permissions?.permissions.can_manage ? (
+          <div className="wiki-nav__header">
+            <NewButton
+              primitiveType="cyberstormLink"
+              linkId="PackageWikiNewPage"
+              community={communityId}
+              namespace={namespaceId}
+              package={packageId}
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faPlus} />
+              </NewIcon>
+              New Page
+            </NewButton>
+          </div>
+        ) : null}
         <div className="wiki-nav__section">
           <div className="wiki-nav__list">
-            {wiki.pages.map((page) => {
-              if (!slug) {
+            {wiki.pages.map((page, index) => {
+              if (!slug && index === 0) {
                 return (
                   <NewButton
                     key={page.id}

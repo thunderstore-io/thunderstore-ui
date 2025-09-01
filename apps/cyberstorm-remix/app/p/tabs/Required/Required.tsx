@@ -6,14 +6,18 @@ import { useLoaderData, useOutletContext } from "react-router";
 import { ListingDependency } from "~/commonComponents/ListingDependency/ListingDependency";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { OutletContextShape } from "~/root";
-import { getSessionTools } from "~/middlewares";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     try {
+      const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
       const dapper = new DapperTs(() => {
         return {
-          apiHost: process.env.VITE_API_URL,
+          apiHost: publicEnvVariables.VITE_API_URL,
           sessionId: undefined,
         };
       });
@@ -35,10 +39,10 @@ export async function loader({ params }: LoaderFunctionArgs) {
   throw new Response("Listing dependencies not found", { status: 404 });
 }
 
-export async function clientLoader({ context, params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     try {
-      const tools = getSessionTools(context);
+      const tools = getSessionTools();
       const dapper = new DapperTs(() => {
         return {
           apiHost: tools?.getConfig().apiHost,

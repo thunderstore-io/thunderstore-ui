@@ -7,7 +7,10 @@ import {
 } from "react-router";
 import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "~/middlewares";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 import {
   Heading,
   Modal,
@@ -38,9 +41,10 @@ export async function loader({ params }: LoaderFunctionArgs) {
     params.packageId &&
     params.slug
   ) {
+    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
-        apiHost: process.env.VITE_API_URL,
+        apiHost: publicEnvVariables.VITE_API_URL,
         sessionId: undefined,
       };
     });
@@ -65,14 +69,14 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 }
 
-export async function clientLoader({ context, params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (
     params.communityId &&
     params.namespaceId &&
     params.packageId &&
     params.slug
   ) {
-    const tools = getSessionTools(context);
+    const tools = getSessionTools();
     const dapper = new DapperTs(() => {
       return {
         apiHost: tools?.getConfig().apiHost,

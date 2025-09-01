@@ -7,7 +7,9 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  ShouldRevalidateFunctionArgs,
   isRouteErrorResponse,
+  useLoaderData,
   useLocation,
   useRouteError,
   useRouteLoaderData,
@@ -24,20 +26,28 @@ import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 import { memo, ReactNode, useEffect, useRef } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import Toast from "@thunderstore/cyberstorm/src/newComponents/Toast";
-// import { SessionProvider } from "@thunderstore/ts-api-react";
 import { Footer } from "./commonComponents/Footer/Footer";
 import { RequestConfig } from "@thunderstore/thunderstore-api";
 import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
-import type { Route } from "./+types/root";
-import { getSessionTools } from "./middlewares";
 import { NamespacedStorageManager } from "@thunderstore/ts-api-react";
-import { getSessionStale } from "@thunderstore/ts-api-react/src/SessionContext";
+import {
+  getSessionContext,
+  getSessionStale,
+  SESSION_STORAGE_KEY,
+  sessionValid,
+} from "@thunderstore/ts-api-react/src/SessionContext";
+import {
+  getPublicEnvVariables,
+  publicEnvVariables,
+} from "cyberstorm/security/publicEnvVariables";
+import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 declare global {
   interface Window {
+    ENV: publicEnvVariables;
     Dapper: DapperTs;
     nitroAds?: {
       createAd: (
@@ -79,41 +89,92 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function clientLoader({ context }: Route.ClientLoaderArgs) {
-  const tools = getSessionTools(context);
-  if (!tools) {
-    throw new Error("Session tools not found in context");
-  }
-  const currentUser = await tools.getSessionCurrentUser();
-  const config = tools.getConfig();
+export async function loader() {
+  const publicEnvVariables = getPublicEnvVariables([
+    "VITE_SITE_URL",
+    "VITE_API_URL",
+    "VITE_COOKIE_DOMAIN",
+    "VITE_AUTH_BASE_URL",
+    "VITE_AUTH_RETURN_URL",
+    "VITE_CLIENT_SENTRY_DSN",
+  ]);
+  const config: RequestConfig = {
+    apiHost: publicEnvVariables.VITE_API_URL,
+    sessionId: undefined,
+  };
   return {
+    publicEnvVariables: {
+      ENV: publicEnvVariables,
+    },
+    currentUser: undefined,
+    config,
+  };
+}
+
+export async function clientLoader() {
+  const publicEnvVariables = getPublicEnvVariables([
+    "VITE_SITE_URL",
+    "VITE_API_URL",
+    "VITE_COOKIE_DOMAIN",
+    "VITE_AUTH_BASE_URL",
+    "VITE_AUTH_RETURN_URL",
+    "VITE_CLIENT_SENTRY_DSN",
+  ]);
+  if (
+    !publicEnvVariables.VITE_API_URL ||
+    !publicEnvVariables.VITE_COOKIE_DOMAIN
+  ) {
+    throw new Error(
+      "Enviroment variables did not load correctly, please hard refresh page"
+    );
+  }
+  const sessionTools = getSessionContext(
+    publicEnvVariables.VITE_API_URL,
+    publicEnvVariables.VITE_COOKIE_DOMAIN
+  );
+  const currentUser = await sessionTools.getSessionCurrentUser();
+  const config = sessionTools.getConfig(publicEnvVariables.VITE_API_URL);
+  return {
+    publicEnvVariables: {
+      ENV: publicEnvVariables,
+    },
     currentUser: currentUser.username ? currentUser : undefined,
     config,
   };
 }
 
-// We are preventing implicit revalidation
-export function shouldRevalidate() {
-  return getSessionStale(new NamespacedStorageManager("Session"));
+export type RootLoadersType = typeof loader | typeof clientLoader;
+
+// We want to force revalidation when session is stale
+// TODO: Currently when logging in, the revalidation wont be run on the redirect back to the page
+// this needs to be fixed, but it requires a more in-depth solution
+export function shouldRevalidate({
+  defaultShouldRevalidate,
+}: ShouldRevalidateFunctionArgs) {
+  if (defaultShouldRevalidate) return true;
+  const publicEnvVariables = getPublicEnvVariables([
+    "VITE_API_URL",
+    "VITE_COOKIE_DOMAIN",
+  ]);
+  if (
+    !sessionValid(
+      new StorageManager(SESSION_STORAGE_KEY),
+      publicEnvVariables.VITE_API_URL || "",
+      publicEnvVariables.VITE_COOKIE_DOMAIN || ""
+    )
+  )
+    return true;
+  return getSessionStale(new NamespacedStorageManager(SESSION_STORAGE_KEY));
 }
 
 export function HydrateFallback() {
   return <div style={{ padding: "32px" }}>Loading...</div>;
 }
 
-export type RootClientLoader = typeof clientLoader;
-
 const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const data = useRouteLoaderData<RootClientLoader>("root");
-
-  let domain: string;
-  if (import.meta.env.SSR) {
-    domain = process.env.VITE_SITE_URL || "";
-  } else {
-    domain = import.meta.env.VITE_SITE_URL;
-  }
+  const data = useLoaderData<RootLoadersType>();
 
   const location = useLocation();
   const shouldShowAds = location.pathname.startsWith("/teams")
@@ -156,12 +217,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(
+              data.publicEnvVariables.ENV
+            )}`,
+          }}
+        />
         <div className="container container--y container--full island layout">
           <LinkingProvider value={LinkLibrary}>
             <Toast.Provider toastDuration={10000}>
               <TooltipProvider>
                 <NavigationWrapper
-                  domain={domain}
+                  domain={data.publicEnvVariables.ENV.VITE_API_URL || ""}
                   currentUser={data?.currentUser}
                 />
                 <div className="container container--x container--full island">
@@ -201,18 +269,10 @@ const TooltipProvider = memo(function TooltipProvider({
 });
 
 function App() {
-  // TODO: Remove this customization when legacy site is removed
-  let domain: string;
-  if (import.meta.env.SSR) {
-    domain = process.env.VITE_SITE_URL || "";
-  } else {
-    domain = import.meta.env.VITE_SITE_URL;
-  }
-
-  const data = useRouteLoaderData<typeof clientLoader>("root");
+  const data = useRouteLoaderData<RootLoadersType>("root");
   const dapper = new DapperTs(() => {
     return {
-      apiHost: data ? data.config.apiHost : domain,
+      apiHost: data?.publicEnvVariables.ENV.VITE_API_URL,
       sessionId: data?.config.sessionId,
     };
   });
@@ -222,7 +282,7 @@ function App() {
       context={{
         currentUser: data?.currentUser,
         requestConfig: dapper.config,
-        domain: domain,
+        domain: data?.publicEnvVariables.ENV.VITE_API_URL,
         dapper: dapper,
       }}
     />
@@ -234,7 +294,7 @@ export default withSentry(App);
 // REMIX TODO: We don't have any data available in the root ErrorBoundary, so we might want to change the designs
 export function ErrorBoundary() {
   // REMIX TODO: We need to call the loader separately somehow to get the CurrentUser
-  // const loaderOutput = useLoaderData<typeof loader | typeof clientLoader>();
+  // const loaderOutput = useLoaderData<RootLoadersType>();
   // const parsedLoaderOutput: {
   //   envStuff: { ENV: { PUBLIC_API_URL: string } };
   //   sessionId: string | null;

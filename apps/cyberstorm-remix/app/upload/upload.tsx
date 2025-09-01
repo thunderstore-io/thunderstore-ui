@@ -31,7 +31,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { UserMedia } from "@thunderstore/ts-uploader/src/uploaders/types";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { LoaderFunctionArgs, MetaFunction } from "react-router";
+import { MetaFunction } from "react-router";
 import { useLoaderData, useOutletContext } from "react-router";
 import {
   PackageSubmissionResult,
@@ -44,7 +44,10 @@ import { postPackageSubmissionMetadata } from "@thunderstore/dapper-ts/src/metho
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
-import { getSessionTools } from "~/middlewares";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 
 interface CommunityOption {
   value: string;
@@ -67,19 +70,19 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader() {
-  // console.log("loader context", getSessionTools(context));
+  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
   const dapper = new DapperTs(() => {
     return {
-      apiHost: process.env.VITE_API_URL,
+      apiHost: publicEnvVariables.VITE_API_URL,
       sessionId: undefined,
     };
   });
   return await dapper.getCommunities();
 }
 
-export async function clientLoader({ context }: LoaderFunctionArgs) {
+export async function clientLoader() {
   // console.log("clientloader context", getSessionTools(context));
-  const tools = getSessionTools(context);
+  const tools = getSessionTools();
   const dapper = new DapperTs(() => {
     return {
       apiHost: tools?.getConfig().apiHost,

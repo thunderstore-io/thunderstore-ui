@@ -5,15 +5,7 @@ import { hydrateRoot } from "react-dom/client";
 import { useLocation, useMatches } from "react-router";
 import * as Sentry from "@sentry/remix";
 import { useEffect } from "react";
-// import { SessionProvider } from "@thunderstore/ts-api-react";
 // import { DapperTs } from "@thunderstore/dapper-ts";
-
-// const sessionProvider = SessionProvider({
-//   apiHost: import.meta.env.VITE_API_URL ?? "MISSING_API_HOST",
-// });
-
-// const { clearSession, getConfig } = sessionProvider.props
-//   .value as ContextInterface;
 
 // INIT DAPPER
 // window.Dapper = new DapperTs(getConfig, () => {

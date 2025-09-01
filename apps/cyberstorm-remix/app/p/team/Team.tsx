@@ -8,7 +8,10 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
 import { OutletContextShape } from "../../root";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { getSessionTools } from "~/middlewares";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -20,9 +23,10 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export async function loader({ request, params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId) {
     try {
+      const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
       const dapper = new DapperTs(() => {
         return {
-          apiHost: process.env.VITE_API_URL,
+          apiHost: publicEnvVariables.VITE_API_URL,
           sessionId: undefined,
         };
       });
@@ -79,14 +83,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   throw new Response("Package not found", { status: 404 });
 }
 
-export async function clientLoader({
-  context,
-  request,
-  params,
-}: LoaderFunctionArgs) {
+export async function clientLoader({ request, params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId) {
     try {
-      const tools = getSessionTools(context);
+      const tools = getSessionTools();
       const dapper = new DapperTs(() => {
         return {
           apiHost: tools?.getConfig().apiHost,

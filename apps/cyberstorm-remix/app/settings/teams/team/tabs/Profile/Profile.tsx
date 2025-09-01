@@ -8,16 +8,16 @@ import {
 import { OutletContextShape } from "~/root";
 import "./Profile.css";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "~/middlewares";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
 import { NewButton, NewTextInput } from "@thunderstore/cyberstorm";
 
-export async function clientLoader({ context, params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
     try {
-      const tools = getSessionTools(context);
+      const tools = getSessionTools();
       const dapper = new DapperTs(() => {
         return {
           apiHost: tools?.getConfig().apiHost,

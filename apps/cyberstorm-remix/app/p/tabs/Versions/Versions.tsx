@@ -25,14 +25,18 @@ import {
   TableRow,
 } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
-import { getSessionTools } from "~/middlewares";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
     try {
+      const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
       const dapper = new DapperTs(() => {
         return {
-          apiHost: process.env.VITE_API_URL,
+          apiHost: publicEnvVariables.VITE_API_URL,
           sessionId: undefined,
         };
       });
@@ -63,9 +67,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
   };
 }
 
-export async function clientLoader({ context, params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
-    const tools = getSessionTools(context);
+    const tools = getSessionTools();
     const dapper = new DapperTs(() => {
       return {
         apiHost: tools?.getConfig().apiHost,

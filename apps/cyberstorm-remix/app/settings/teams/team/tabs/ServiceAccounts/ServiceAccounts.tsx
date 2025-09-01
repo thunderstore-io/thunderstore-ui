@@ -23,16 +23,16 @@ import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Tabl
 import { OutletContextShape } from "../../../../../root";
 import { useReducer, useState } from "react";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "~/middlewares";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 
 // REMIX TODO: Add check for "user has permission to see this page"
-export async function clientLoader({ context, params }: LoaderFunctionArgs) {
+export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
     try {
-      const tools = getSessionTools(context);
+      const tools = getSessionTools();
       const config = tools?.getConfig();
       const dapper = new DapperTs(() => {
         return {

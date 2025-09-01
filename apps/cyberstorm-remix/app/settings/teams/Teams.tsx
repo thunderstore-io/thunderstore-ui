@@ -23,14 +23,17 @@ import {
 } from "@thunderstore/thunderstore-api";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { postTeamCreate } from "@thunderstore/dapper-ts/src/methods/team";
-import { OutletContextShape, RootClientLoader } from "../../root";
+import { OutletContextShape, RootLoadersType } from "../../root";
 import { NamespacedStorageManager } from "@thunderstore/ts-api-react";
-import { setSessionStale } from "@thunderstore/ts-api-react/src/SessionContext";
+import {
+  setSessionStale,
+  SESSION_STORAGE_KEY,
+} from "@thunderstore/ts-api-react/src/SessionContext";
 
 export const meta: MetaFunction<
   unknown,
   {
-    root: RootClientLoader;
+    root: RootLoadersType;
   }
 > = ({ matches }) => {
   const rootData = matches.find((match) => match.id === "root")?.data;
@@ -150,7 +153,7 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
   const toast = useToast();
 
   async function createTeamRevalidate() {
-    setSessionStale(new NamespacedStorageManager("Session"), true);
+    setSessionStale(new NamespacedStorageManager(SESSION_STORAGE_KEY), true);
     revalidator.revalidate();
   }
 
