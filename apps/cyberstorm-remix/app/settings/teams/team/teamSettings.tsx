@@ -86,67 +86,56 @@ export default function Community() {
         {team.name}
       </PageHeader>
       <div className="team-settings">
-        <Tabs
-          tabItems={[
-            {
-              itemProps: {
-                primitiveType: "cyberstormLink",
-                linkId: "TeamSettings",
-                team: team.name,
-                "aria-current": currentTab === "profile",
-                children: <>Profile</>,
-              } as React.ComponentPropsWithRef<typeof NewLink>,
-              key: "profile",
-              current: currentTab === "profile",
-            },
-            {
-              itemProps: {
-                primitiveType: "cyberstormLink",
-                linkId: "TeamSettingsMembers",
-                team: team.name,
-                "aria-current": currentTab === "members",
-                children: <>Members</>,
-              } as React.ComponentPropsWithRef<typeof NewLink>,
-              key: "members",
-              current: currentTab === "members",
-            },
-            {
-              itemProps: {
-                primitiveType: "cyberstormLink",
-                linkId: "TeamSettingsServiceAccounts",
-                team: team.name,
-                "aria-current": currentTab === "service-accounts",
-                children: <>Service Accounts</>,
-              } as React.ComponentPropsWithRef<typeof NewLink>,
-              key: "service-accounts",
-              current: currentTab === "service-accounts",
-            },
-            {
-              itemProps: {
-                primitiveType: "cyberstormLink",
-                linkId: "TeamSettingsSettings",
-                team: team.name,
-                "aria-current": currentTab === "settings",
-                children: <>Settings</>,
-              } as React.ComponentPropsWithRef<typeof NewLink>,
-              key: "settings",
-              current: currentTab === "settings",
-            },
-          ]}
-          renderTabItem={(key, itemProps, numberSlate) => {
-            const { children, ...fItemProps } =
-              itemProps as React.ComponentPropsWithRef<typeof NewLink>;
-            return (
-              <NewLink
-                key={key}
-                {...(fItemProps as React.ComponentProps<typeof NewLink>)}
-              >
-                {children}
-                {numberSlate}
-              </NewLink>
-            );
-          }}
-        />
+        <Tabs>
+          <NewLink
+            key="profile"
+            primitiveType="cyberstormLink"
+            linkId="TeamSettings"
+            team={team.name}
+            aria-current={currentTab === "profile"}
+            rootClasses={`tabs-item${
+              currentTab === "profile" ? " tabs-item--current" : ""
+            }`}
+          >
+            Profile
+          </NewLink>
+          <NewLink
+            key="members"
+            primitiveType="cyberstormLink"
+            linkId="TeamSettingsMembers"
+            team={team.name}
+            aria-current={currentTab === "members"}
+            rootClasses={`tabs-item${
+              currentTab === "members" ? " tabs-item--current" : ""
+            }`}
+          >
+            Members
+          </NewLink>
+          <NewLink
+            key="service-accounts"
+            primitiveType="cyberstormLink"
+            linkId="TeamSettingsServiceAccounts"
+            team={team.name}
+            aria-current={currentTab === "service-accounts"}
+            rootClasses={`tabs-item${
+              currentTab === "service-accounts" ? " tabs-item--current" : ""
+            }`}
+          >
+            Service Accounts
+          </NewLink>
+          <NewLink
+            key="settings"
+            primitiveType="cyberstormLink"
+            linkId="TeamSettingsSettings"
+            team={team.name}
+            aria-current={currentTab === "settings"}
+            rootClasses={`tabs-item${
+              currentTab === "settings" ? " tabs-item--current" : ""
+            }`}
+          >
+            Settings
+          </NewLink>
+        </Tabs>
         <section>
           <Outlet context={outletContext} />
         </section>

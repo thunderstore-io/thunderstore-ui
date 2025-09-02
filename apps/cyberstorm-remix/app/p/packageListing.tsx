@@ -75,12 +75,16 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { getPackagePermissions } from "@thunderstore/dapper-ts/src/methods/package";
+import {
+  getPackagePermissions,
+  getPackageWiki,
+} from "@thunderstore/dapper-ts/src/methods/package";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
 import { SelectOption } from "@thunderstore/cyberstorm/src/newComponents/Select/Select";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { isPromise } from "cyberstorm/utils/typeChecks";
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [
@@ -132,33 +136,41 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    try {
-      const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: publicEnvVariables.VITE_API_URL,
-          sessionId: undefined,
-        };
-      });
+    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
+    const dapper = new DapperTs(() => {
       return {
-        community: await dapper.getCommunity(params.communityId),
-        communityFilters: await dapper.getCommunityFilters(params.communityId),
-        listing: await dapper.getPackageListingDetails(
-          params.communityId,
-          params.namespaceId,
-          params.packageId
-        ),
-        team: await dapper.getTeamDetails(params.namespaceId),
-        permissions: undefined,
+        apiHost: publicEnvVariables.VITE_API_URL,
+        sessionId: undefined,
       };
+    });
+
+    let wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
+
+    try {
+      wiki = await dapper.getPackageWiki(params.namespaceId, params.packageId);
     } catch (error) {
       if (error instanceof ApiError) {
-        throw new Response("Package not found", { status: 404 });
-      } else {
-        // REMIX TODO: Add sentry
-        throw error;
+        if (error.response.status === 404) {
+          wiki = undefined;
+        } else {
+          wiki = undefined;
+          console.error("Error fetching package wiki:", error);
+        }
       }
     }
+
+    return {
+      community: await dapper.getCommunity(params.communityId),
+      communityFilters: await dapper.getCommunityFilters(params.communityId),
+      listing: await dapper.getPackageListingDetails(
+        params.communityId,
+        params.namespaceId,
+        params.packageId
+      ),
+      team: await dapper.getTeamDetails(params.namespaceId),
+      permissions: undefined,
+      wiki: wiki,
+    };
   }
   throw new Response("Package not found", { status: 404 });
 }
@@ -166,52 +178,43 @@ export async function loader({ params }: LoaderFunctionArgs) {
 // TODO: Needs to check if package is available for the logged in user
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    try {
-      const tools = getSessionTools();
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: tools?.getConfig().apiHost,
-          sessionId: tools?.getConfig().sessionId,
-        };
-      });
-
-      // We do some trickery right here to prevent unnecessary request when the user is not logged in
-      let permissionsPromise = undefined;
-      const cu = await tools.getSessionCurrentUser();
-      if (cu.username) {
-        const wrapperPromise =
-          Promise.withResolvers<
-            Awaited<ReturnType<typeof getPackagePermissions>>
-          >();
-        dapper
-          .getPackagePermissions(
-            params.communityId,
-            params.namespaceId,
-            params.packageId
-          )
-          .then(wrapperPromise.resolve, wrapperPromise.reject);
-        permissionsPromise = wrapperPromise.promise;
-      }
-
+    const tools = getSessionTools();
+    const dapper = new DapperTs(() => {
       return {
-        community: await dapper.getCommunity(params.communityId),
-        communityFilters: await dapper.getCommunityFilters(params.communityId),
-        listing: await dapper.getPackageListingDetails(
+        apiHost: tools?.getConfig().apiHost,
+        sessionId: tools?.getConfig().sessionId,
+      };
+    });
+
+    // We do some trickery right here to prevent unnecessary request when the user is not logged in
+    let permissionsPromise = undefined;
+    const cu = await tools.getSessionCurrentUser();
+    if (cu.username) {
+      const wrapperPromise =
+        Promise.withResolvers<
+          Awaited<ReturnType<typeof getPackagePermissions>>
+        >();
+      dapper
+        .getPackagePermissions(
           params.communityId,
           params.namespaceId,
           params.packageId
-        ),
-        team: await dapper.getTeamDetails(params.namespaceId),
-        permissions: permissionsPromise,
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Package not found", { status: 404 });
-      } else {
-        // REMIX TODO: Add sentry
-        throw error;
-      }
+        )
+        .then(wrapperPromise.resolve, wrapperPromise.reject);
+      permissionsPromise = wrapperPromise.promise;
     }
+    return {
+      community: await dapper.getCommunity(params.communityId),
+      communityFilters: await dapper.getCommunityFilters(params.communityId),
+      listing: await dapper.getPackageListingDetails(
+        params.communityId,
+        params.namespaceId,
+        params.packageId
+      ),
+      team: await dapper.getTeamDetails(params.namespaceId),
+      permissions: permissionsPromise,
+      wiki: dapper.getPackageWiki(params.namespaceId, params.packageId),
+    };
   }
   throw new Response("Package not found", { status: 404 });
 }
@@ -219,7 +222,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 clientLoader.hydrate = true;
 
 export default function PackageListing() {
-  const { community, listing, team, permissions } = useLoaderData<
+  const { community, listing, team, permissions, wiki } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
@@ -561,6 +564,41 @@ export default function PackageListing() {
     </>
   );
 
+  const canAccessWikiTabPromise = Promise.withResolvers<boolean>();
+  if (wiki && isPromise(wiki)) {
+    wiki
+      .then(async (a) => {
+        if (a.pages.length > 0) {
+          canAccessWikiTabPromise.resolve(true);
+        } else {
+          if ((await permissions)?.permissions.can_manage) {
+            canAccessWikiTabPromise.resolve(true);
+          } else {
+            canAccessWikiTabPromise.resolve(false);
+          }
+        }
+      })
+      .catch(async () => {
+        if ((await permissions)?.permissions.can_manage) {
+          canAccessWikiTabPromise.resolve(true);
+        } else {
+          canAccessWikiTabPromise.resolve(false);
+        }
+      });
+  } else {
+    if (permissions) {
+      permissions.then((a) => {
+        if (a?.permissions.can_manage) {
+          canAccessWikiTabPromise.resolve(true);
+        } else {
+          canAccessWikiTabPromise.resolve(false);
+        }
+      });
+    } else {
+      canAccessWikiTabPromise.resolve(false);
+    }
+  }
+
   return (
     <>
       <div className="package-community__background">
@@ -575,8 +613,8 @@ export default function PackageListing() {
       </div>
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
-          <Suspense fallback={<></>}>
-            <Await resolve={permissions} errorElement={<></>}>
+          <Suspense>
+            <Await resolve={permissions}>
               {(resolvedValue) =>
                 resolvedValue ? (
                   <div className="package-listing__actions">
@@ -694,119 +732,139 @@ export default function PackageListing() {
                 </Drawer>
                 {actions}
               </div>
-              <Tabs
-                tabItems={[
-                  {
-                    itemProps: {
-                      primitiveType: "cyberstormLink",
-                      linkId: "Package",
-                      community: listing.community_identifier,
-                      namespace: listing.namespace,
-                      package: listing.name,
-                      "aria-current": currentTab === "details",
-                      children: <>Description</>,
-                    } as React.ComponentPropsWithRef<typeof NewLink>,
-                    current: currentTab === "details",
-                    key: "description",
-                  },
-                  {
-                    itemProps: {
-                      primitiveType: "cyberstormLink",
-                      linkId: "PackageRequired",
-                      community: listing.community_identifier,
-                      namespace: listing.namespace,
-                      package: listing.name,
-                      "aria-current": currentTab === "required",
-                      children: <>Required ({listing.dependency_count})</>,
-                    } as React.ComponentPropsWithRef<typeof NewLink>,
-                    current: currentTab === "required",
-                    key: "required",
-                  },
-                  {
-                    itemProps: {
-                      primitiveType: "cyberstormLink",
-                      linkId: "PackageWiki",
-                      community: listing.community_identifier,
-                      namespace: listing.namespace,
-                      package: listing.name,
-                      "aria-current": currentTab === "wiki",
-                      children: <>Wiki</>,
-                    } as React.ComponentPropsWithRef<typeof NewLink>,
-                    current: currentTab === "wiki",
-                    key: "wiki",
-                  },
-                  {
-                    itemProps: {
-                      primitiveType: "cyberstormLink",
-                      linkId: "PackageChangelog",
-                      community: listing.community_identifier,
-                      namespace: listing.namespace,
-                      package: listing.name,
-                      "aria-current": currentTab === "changelog",
-                      children: <>Changelog</>,
-                      disabled: !listing.has_changelog,
-                    } as React.ComponentPropsWithRef<typeof NewLink>,
-                    current: currentTab === "changelog",
-                    key: "changelog",
-                  },
-                  {
-                    itemProps: {
-                      primitiveType: "cyberstormLink",
-                      linkId: "PackageVersions",
-                      community: listing.community_identifier,
-                      namespace: listing.namespace,
-                      package: listing.name,
-                      "aria-current": currentTab === "versions",
-                      children: <>Versions</>,
-                    } as React.ComponentPropsWithRef<typeof NewLink>,
-                    current: currentTab === "versions",
-                    key: "versions",
-                    // TODO: Version count field needs to be added to the endpoint
-                    // numberSlateValue: listing.versionCount,
-                  },
-                  // TODO: Once Analysis page is ready, enable it
-                  // {
-                  //   itemProps: {
-                  //     key: "source",
-                  //     primitiveType: "cyberstormLink",
-                  //     linkId: "PackageSource",
-                  //     community: listing.community_identifier,
-                  //     namespace: listing.namespace,
-                  //     package: listing.name,
-                  //     "aria-current": currentTab === "source",
-                  //     children: <>Analysis</>,
-                  //   },
-                  //   current: currentTab === "source",
-                  // },
-                  {
-                    itemProps: {
-                      href: `${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/source`,
-                      primitiveType: "link",
-                      "aria-current": currentTab === "source",
-                      children: (
-                        <>
-                          Analysis{" "}
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faArrowUpRight} />
-                          </NewIcon>
-                        </>
-                      ),
-                    } as React.ComponentPropsWithRef<typeof NewLink>,
-                    current: currentTab === "source",
-                    key: "source",
-                  },
-                ]}
-                renderTabItem={(key, itemProps, numberSlate) => {
-                  const { children, ...fItemProps } =
-                    itemProps as React.ComponentPropsWithRef<typeof NewLink>;
-                  return (
-                    <NewLink key={key} {...fItemProps}>
-                      {children}
-                      {numberSlate}
+              <Tabs>
+                <NewLink
+                  key="description"
+                  primitiveType="cyberstormLink"
+                  linkId="Package"
+                  community={listing.community_identifier}
+                  namespace={listing.namespace}
+                  package={listing.name}
+                  aria-current={currentTab === "details"}
+                  rootClasses={`tabs-item${
+                    currentTab === "details" ? " tabs-item--current" : ""
+                  }`}
+                >
+                  Details
+                </NewLink>
+                <NewLink
+                  key="required"
+                  primitiveType="cyberstormLink"
+                  linkId="PackageRequired"
+                  community={listing.community_identifier}
+                  namespace={listing.namespace}
+                  package={listing.name}
+                  aria-current={currentTab === "required"}
+                  rootClasses={`tabs-item${
+                    currentTab === "required" ? " tabs-item--current" : ""
+                  }`}
+                >
+                  Required ({listing.dependency_count})
+                </NewLink>
+                <Suspense
+                  fallback={
+                    <NewLink
+                      key="wiki"
+                      primitiveType="cyberstormLink"
+                      linkId="PackageWiki"
+                      community={listing.community_identifier}
+                      namespace={listing.namespace}
+                      package={listing.name}
+                      aria-current={currentTab === "wiki"}
+                      rootClasses={`tabs-item${
+                        currentTab === "wiki" ? " tabs-item--current" : ""
+                      }`}
+                      disabled={true}
+                    >
+                      Wiki
                     </NewLink>
-                  );
-                }}
-              />
+                  }
+                >
+                  <Await
+                    resolve={canAccessWikiTabPromise.promise}
+                    errorElement={
+                      <NewLink
+                        key="wiki"
+                        primitiveType="cyberstormLink"
+                        linkId="PackageWiki"
+                        community={listing.community_identifier}
+                        namespace={listing.namespace}
+                        package={listing.name}
+                        aria-current={currentTab === "wiki"}
+                        rootClasses={`tabs-item${
+                          currentTab === "wiki" ? " tabs-item--current" : ""
+                        }`}
+                        disabled={true}
+                      >
+                        Wiki
+                      </NewLink>
+                    }
+                  >
+                    {(resolvedValue) => {
+                      return (
+                        <NewLink
+                          key="wiki"
+                          primitiveType="cyberstormLink"
+                          linkId="PackageWiki"
+                          community={listing.community_identifier}
+                          namespace={listing.namespace}
+                          package={listing.name}
+                          aria-current={currentTab === "wiki"}
+                          rootClasses={`tabs-item${
+                            currentTab === "wiki" ? " tabs-item--current" : ""
+                          }`}
+                          disabled={!resolvedValue}
+                        >
+                          Wiki
+                        </NewLink>
+                      );
+                    }}
+                  </Await>
+                </Suspense>
+                <NewLink
+                  key="changelog"
+                  primitiveType="cyberstormLink"
+                  linkId="PackageChangelog"
+                  community={listing.community_identifier}
+                  namespace={listing.namespace}
+                  package={listing.name}
+                  aria-current={currentTab === "changelog"}
+                  rootClasses={`tabs-item${
+                    currentTab === "changelog" ? " tabs-item--current" : ""
+                  }`}
+                  disabled={!listing.has_changelog}
+                >
+                  Changelog
+                </NewLink>
+                <NewLink
+                  key="versions"
+                  primitiveType="cyberstormLink"
+                  linkId="PackageVersions"
+                  community={listing.community_identifier}
+                  namespace={listing.namespace}
+                  package={listing.name}
+                  aria-current={currentTab === "versions"}
+                  rootClasses={`tabs-item${
+                    currentTab === "versions" ? " tabs-item--current" : ""
+                  }`}
+                >
+                  Versions
+                </NewLink>
+                <NewLink
+                  key="source"
+                  href={`${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/source`}
+                  primitiveType="link"
+                  aria-current={currentTab === "source"}
+                  rootClasses={`tabs-item${
+                    currentTab === "source" ? " tabs-item--current" : ""
+                  }`}
+                >
+                  Analysis{" "}
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faArrowUpRight} />
+                  </NewIcon>
+                </NewLink>
+              </Tabs>
               <div className="package-listing__content">
                 <Outlet context={outletContext} />
               </div>

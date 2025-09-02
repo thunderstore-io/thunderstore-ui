@@ -8,6 +8,21 @@ import {
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { WikiContent } from "./WikiContent";
+import {
+  getPackageWiki,
+  getPackageWikiPage,
+  getPackagePermissions,
+} from "@thunderstore/dapper-ts/src/methods/package";
+import { isApiError } from "../../../../../../packages/thunderstore-api/src";
+
+type ResultType = {
+  wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
+  page: Awaited<ReturnType<typeof getPackageWikiPage>> | undefined;
+  communityId: string;
+  namespaceId: string;
+  packageId: string;
+  permissions: ReturnType<typeof getPackagePermissions> | undefined;
+};
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (
@@ -23,40 +38,50 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-    const wiki = await dapper.getPackageWiki(
-      params.namespaceId,
-      params.packageId
-    );
-    const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
-    if (!pageId) {
-      throw new Error("Page not found");
-    }
-    const page = await dapper.getPackageWikiPage(pageId);
-    const currentPageIndex = wiki.pages.findIndex((p) => p.id === page.id);
 
-    let previousPage = undefined;
-    let nextPage = undefined;
-
-    if (currentPageIndex === 0) {
-      previousPage = undefined;
-    } else {
-      previousPage = wiki.pages[currentPageIndex - 1]?.slug;
-    }
-
-    if (currentPageIndex === wiki.pages.length) {
-      nextPage = undefined;
-    } else {
-      nextPage = wiki.pages[currentPageIndex + 1]?.slug;
-    }
-
-    return {
-      page: page,
+    let result: ResultType = {
+      wiki: undefined,
+      page: undefined,
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      previousPage: previousPage,
-      nextPage: nextPage,
+      permissions: undefined,
     };
+
+    try {
+      const wiki = await dapper.getPackageWiki(
+        params.namespaceId,
+        params.packageId
+      );
+      const page = await dapper.getPackageWikiPage(params.slug);
+      result = {
+        wiki: wiki,
+        page: page,
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        permissions: undefined,
+      };
+    } catch (error) {
+      if (isApiError(error)) {
+        // There is no wiki or the User does not have permission to view the wiki, return empty wiki and undefined firstPage
+        if (error.response.status === 404) {
+          result = {
+            wiki: undefined,
+            page: undefined,
+            communityId: params.communityId,
+            namespaceId: params.namespaceId,
+            packageId: params.packageId,
+            permissions: undefined,
+          };
+        } else {
+          throw error;
+        }
+      } else {
+        throw error;
+      }
+    }
+    return result;
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
@@ -76,15 +101,67 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
-    const wiki = await dapper.getPackageWiki(
+
+    const permissions = dapper.getPackagePermissions(
+      params.communityId,
       params.namespaceId,
       params.packageId
     );
-    const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
-    if (!pageId) {
-      throw new Error("Page not found");
+
+    let result: ResultType = {
+      wiki: undefined,
+      page: undefined,
+      communityId: params.communityId,
+      namespaceId: params.namespaceId,
+      packageId: params.packageId,
+      permissions: permissions,
+    };
+
+    try {
+      const wiki = await dapper.getPackageWiki(
+        params.namespaceId,
+        params.packageId
+      );
+      const page = await dapper.getPackageWikiPage(params.slug);
+      result = {
+        wiki: wiki,
+        page: page,
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        permissions: permissions,
+      };
+    } catch (error) {
+      if (isApiError(error)) {
+        // There is no wiki or the User does not have permission to view the wiki, return empty wiki and undefined firstPage
+        if (error.response.status === 404) {
+          result = {
+            wiki: undefined,
+            page: undefined,
+            communityId: params.communityId,
+            namespaceId: params.namespaceId,
+            packageId: params.packageId,
+            permissions: permissions,
+          };
+        } else {
+          throw error;
+        }
+      } else {
+        throw error;
+      }
     }
-    const page = await dapper.getPackageWikiPage(pageId);
+    return result;
+  } else {
+    throw new Error("Namespace ID or Package ID is missing");
+  }
+}
+
+export default function WikiPage() {
+  const { wiki, page, communityId, namespaceId, packageId } = useLoaderData<
+    typeof loader | typeof clientLoader
+  >();
+
+  if (wiki && page) {
     const currentPageIndex = wiki.pages.findIndex((p) => p.id === page.id);
 
     let previousPage = undefined;
@@ -102,31 +179,16 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       nextPage = wiki.pages[currentPageIndex + 1]?.slug;
     }
 
-    return {
-      page: page,
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      previousPage: previousPage,
-      nextPage: nextPage,
-    };
-  } else {
-    throw new Error("Namespace ID or Package ID is missing");
+    return (
+      <WikiContent
+        page={page}
+        communityId={communityId}
+        namespaceId={namespaceId}
+        packageId={packageId}
+        previousPage={previousPage}
+        nextPage={nextPage}
+      />
+    );
   }
-}
-
-export default function Wiki() {
-  const { page, communityId, namespaceId, packageId, previousPage, nextPage } =
-    useLoaderData<typeof loader | typeof clientLoader>();
-
-  return (
-    <WikiContent
-      page={page}
-      communityId={communityId}
-      namespaceId={namespaceId}
-      packageId={packageId}
-      previousPage={previousPage}
-      nextPage={nextPage}
-    />
-  );
+  return <>Wiki Page Not Found</>;
 }

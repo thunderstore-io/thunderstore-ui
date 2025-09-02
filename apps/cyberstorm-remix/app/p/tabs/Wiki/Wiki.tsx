@@ -1,6 +1,11 @@
 import "./Wiki.css";
 
-import { LoaderFunctionArgs, Outlet, useOutletContext } from "react-router";
+import {
+  Await,
+  LoaderFunctionArgs,
+  Outlet,
+  useOutletContext,
+} from "react-router";
 import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
@@ -11,6 +16,9 @@ import { NewButton, NewIcon } from "@thunderstore/cyberstorm";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OutletContextShape } from "~/root";
+import { Suspense } from "react";
+import { ApiError } from "../../../../../../packages/thunderstore-api/src";
+import { getPackageWiki } from "@thunderstore/dapper-ts/src/methods/package";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -21,10 +29,22 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-    const wiki = await dapper.getPackageWiki(
-      params.namespaceId,
-      params.packageId
-    );
+
+    let wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
+
+    try {
+      wiki = await dapper.getPackageWiki(params.namespaceId, params.packageId);
+    } catch (error) {
+      if (error instanceof ApiError) {
+        if (error.response.status === 404) {
+          wiki = undefined;
+        } else {
+          wiki = undefined;
+          console.error("Error fetching package wiki:", error);
+        }
+      }
+    }
+
     return {
       wiki: wiki,
       communityId: params.communityId,
@@ -48,12 +68,9 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
 
-    const wiki = await dapper.getPackageWiki(
-      params.namespaceId,
-      params.packageId
-    );
+    const wiki = dapper.getPackageWiki(params.namespaceId, params.packageId);
 
-    const permissions = await dapper.getPackagePermissions(
+    const permissions = dapper.getPackagePermissions(
       params.communityId,
       params.namespaceId,
       params.packageId
@@ -81,77 +98,90 @@ export default function Wiki() {
   return (
     <div className="wiki">
       <div className="wiki-nav">
-        {permissions?.permissions.can_manage ? (
-          <div className="wiki-nav__header">
-            <NewButton
-              primitiveType="cyberstormLink"
-              linkId="PackageWikiNewPage"
-              community={communityId}
-              namespace={namespaceId}
-              package={packageId}
-            >
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faPlus} />
-              </NewIcon>
-              New Page
-            </NewButton>
-          </div>
-        ) : null}
+        <Suspense>
+          <Await resolve={permissions}>
+            {(resolvedValue) =>
+              resolvedValue?.permissions.can_manage ? (
+                <div className="wiki-nav__header">
+                  <NewButton
+                    primitiveType="cyberstormLink"
+                    linkId="PackageWikiNewPage"
+                    community={communityId}
+                    namespace={namespaceId}
+                    package={packageId}
+                  >
+                    <NewIcon csMode="inline" noWrapper>
+                      <FontAwesomeIcon icon={faPlus} />
+                    </NewIcon>
+                    New Page
+                  </NewButton>
+                </div>
+              ) : null
+            }
+          </Await>
+        </Suspense>
         <div className="wiki-nav__section">
           <div className="wiki-nav__list">
-            {wiki.pages.map((page, index) => {
-              if (!slug && index === 0) {
-                return (
-                  <NewButton
-                    key={page.id}
-                    csSize="small"
-                    csVariant="secondary"
-                    primitiveType="cyberstormLink"
-                    linkId="PackageWikiPage"
-                    community={communityId}
-                    namespace={namespaceId}
-                    package={packageId}
-                    wikipageslug={page.slug}
-                  >
-                    {page.title}
-                  </NewButton>
-                );
-              }
-              if (page.slug === slug) {
-                return (
-                  <NewButton
-                    key={page.id}
-                    csSize="small"
-                    csVariant="secondary"
-                    primitiveType="cyberstormLink"
-                    linkId="PackageWikiPage"
-                    community={communityId}
-                    namespace={namespaceId}
-                    package={packageId}
-                    wikipageslug={page.slug}
-                  >
-                    {page.title}
-                  </NewButton>
-                );
-              }
-              return (
-                <NewButton
-                  key={page.id}
-                  csSize="small"
-                  csVariant="secondary"
-                  primitiveType="cyberstormLink"
-                  linkId="PackageWikiPage"
-                  community={communityId}
-                  namespace={namespaceId}
-                  package={packageId}
-                  wikipageslug={page.slug}
-                  csModifiers={["ghost"]}
-                  rootClasses="wiki-nav__unselected"
-                >
-                  {page.title}
-                </NewButton>
-              );
-            })}
+            <Suspense fallback={<div>Loading...</div>}>
+              <Await resolve={wiki} errorElement={<></>}>
+                {(resolvedValue) =>
+                  resolvedValue &&
+                  resolvedValue.pages.map((page, index) => {
+                    if (!slug && index === 0) {
+                      return (
+                        <NewButton
+                          key={page.id}
+                          csSize="small"
+                          csVariant="secondary"
+                          primitiveType="cyberstormLink"
+                          linkId="PackageWikiPage"
+                          community={communityId}
+                          namespace={namespaceId}
+                          package={packageId}
+                          wikipageslug={page.slug}
+                        >
+                          {page.title}
+                        </NewButton>
+                      );
+                    }
+                    if (page.slug === slug) {
+                      return (
+                        <NewButton
+                          key={page.id}
+                          csSize="small"
+                          csVariant="secondary"
+                          primitiveType="cyberstormLink"
+                          linkId="PackageWikiPage"
+                          community={communityId}
+                          namespace={namespaceId}
+                          package={packageId}
+                          wikipageslug={page.slug}
+                        >
+                          {page.title}
+                        </NewButton>
+                      );
+                    }
+                    return (
+                      <NewButton
+                        key={page.id}
+                        csSize="small"
+                        csVariant="secondary"
+                        primitiveType="cyberstormLink"
+                        linkId="PackageWikiPage"
+                        community={communityId}
+                        namespace={namespaceId}
+                        package={packageId}
+                        wikipageslug={page.slug}
+                        csModifiers={["ghost"]}
+                        rootClasses="wiki-nav__unselected"
+                      >
+                        {page.title}
+                      </NewButton>
+                    );
+                  })
+                }
+              </Await>
+            </Suspense>
           </div>
         </div>
       </div>

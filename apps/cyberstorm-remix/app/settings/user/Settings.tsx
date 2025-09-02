@@ -57,39 +57,30 @@ export default function Community() {
         Settings
       </PageHeader>
       <div className="settings-user">
-        <Tabs
-          tabItems={[
-            {
-              itemProps: {
-                primitiveType: "cyberstormLink",
-                linkId: "Settings",
-                "aria-current": currentTab === "settings",
-                children: <>Settings</>,
-              },
-              current: currentTab === "settings",
-              key: "settings",
-            },
-            {
-              itemProps: {
-                primitiveType: "cyberstormLink",
-                linkId: "SettingsAccount",
-                "aria-current": currentTab === "account",
-                children: <>Account</>,
-              },
-              current: currentTab === "account",
-              key: "account",
-            },
-          ]}
-          renderTabItem={(key, itemProps, numberSlate) => {
-            const { children, ...fItemProps } = itemProps;
-            return (
-              <NewLink key={key} {...fItemProps}>
-                {children}
-                {numberSlate}
-              </NewLink>
-            );
-          }}
-        />
+        <Tabs>
+          <NewLink
+            key="settings"
+            primitiveType="cyberstormLink"
+            linkId="Settings"
+            aria-current={currentTab === "settings"}
+            rootClasses={`tabs-item${
+              currentTab === "settings" ? " tabs-item--current" : ""
+            }`}
+          >
+            Settings
+          </NewLink>
+          <NewLink
+            key="account"
+            primitiveType="cyberstormLink"
+            linkId="SettingsAccount"
+            aria-current={currentTab === "account"}
+            rootClasses={`tabs-item${
+              currentTab === "account" ? " tabs-item--current" : ""
+            }`}
+          >
+            Account
+          </NewLink>
+        </Tabs>
         <section className="settings-user__body">
           <Outlet context={outletContext} />
         </section>

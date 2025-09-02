@@ -47,10 +47,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   }
 }
 
-type TabsButtonType = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  rootClasses?: string;
-};
-
 export default function Wiki() {
   const { communityId, namespaceId, packageId } = useLoaderData<
     typeof loader | typeof clientLoader
@@ -144,45 +140,32 @@ export default function Wiki() {
         </div>
       </div>
       <div className="wiki-content__body">
-        <Tabs
-          tabItems={[
-            {
-              itemProps: {
-                onClick: () => setSelectedTab("write"),
-                "aria-current": selectedTab === "write",
-                children: <>Write</>,
-              } as TabsButtonType,
-              current: selectedTab === "write",
-              key: "write",
-            },
-            {
-              itemProps: {
-                onClick: () => setSelectedTab("preview"),
-                "aria-current": selectedTab === "preview",
-                children: <>Preview</>,
-              } as TabsButtonType,
-              current: selectedTab === "preview",
-              key: "preview",
-            },
-          ]}
-          renderTabItem={(key, itemProps) => {
-            const { children, ...fItemProps } = itemProps as TabsButtonType;
-
-            return (
-              <button
-                key={key}
-                onClick={fItemProps.onClick}
-                aria-current={fItemProps["aria-current"]}
-                className={classnames(
-                  "wiki-edit__tabs-button",
-                  fItemProps.rootClasses
-                )}
-              >
-                {children}
-              </button>
-            );
-          }}
-        />
+        <Tabs>
+          <button
+            key="write"
+            onClick={() => setSelectedTab("write")}
+            aria-current={selectedTab === "write"}
+            className={classnames(
+              "wiki-edit__tabs-button",
+              "tabs-item",
+              selectedTab === "write" ? "tabs-item--current" : undefined
+            )}
+          >
+            Write
+          </button>
+          <button
+            key="preview"
+            onClick={() => setSelectedTab("preview")}
+            aria-current={selectedTab === "preview"}
+            className={classnames(
+              "wiki-edit__tabs-button",
+              "tabs-item",
+              selectedTab === "preview" ? "tabs-item--current" : undefined
+            )}
+          >
+            Preview
+          </button>
+        </Tabs>
         {selectedTab === "write" ? (
           <>
             <NewTextInput
