@@ -92,6 +92,7 @@ export const meta: MetaFunction = () => {
 export async function loader() {
   const publicEnvVariables = getPublicEnvVariables([
     "VITE_SITE_URL",
+    "VITE_BETA_SITE_URL",
     "VITE_API_URL",
     "VITE_COOKIE_DOMAIN",
     "VITE_AUTH_BASE_URL",
@@ -114,6 +115,7 @@ export async function loader() {
 export async function clientLoader() {
   const publicEnvVariables = getPublicEnvVariables([
     "VITE_SITE_URL",
+    "VITE_BETA_SITE_URL",
     "VITE_API_URL",
     "VITE_COOKIE_DOMAIN",
     "VITE_AUTH_BASE_URL",
