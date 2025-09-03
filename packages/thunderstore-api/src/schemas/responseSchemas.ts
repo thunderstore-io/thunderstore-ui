@@ -301,7 +301,7 @@ export type MarkdownRenderResponseData = z.infer<
 
 // TeamDetailsEditResponse
 export const teamDetailsEditResponseSchema = z.object({
-  donation_link: z.string().url().min(1).max(1024),
+  donation_link: z.string().min(1).max(1024),
 });
 
 export type TeamDetailsEditResponseData = z.infer<
