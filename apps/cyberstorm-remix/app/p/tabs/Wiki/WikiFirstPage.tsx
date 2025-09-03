@@ -8,6 +8,21 @@ import {
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { WikiContent } from "./WikiContent";
+import { isApiError } from "../../../../../../packages/thunderstore-api/src";
+import {
+  getPackagePermissions,
+  getPackageWiki,
+  getPackageWikiPage,
+} from "@thunderstore/dapper-ts/src/methods/package";
+
+type ResultType = {
+  wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
+  firstPage: Awaited<ReturnType<typeof getPackageWikiPage>> | undefined;
+  communityId: string;
+  namespaceId: string;
+  packageId: string;
+  permissions: ReturnType<typeof getPackagePermissions> | undefined;
+};
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -18,19 +33,49 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-    const wiki = await dapper.getPackageWiki(
-      params.namespaceId,
-      params.packageId
-    );
-    const firstPage = await dapper.getPackageWikiPage(wiki.pages[0].id);
-    return {
-      wiki: wiki,
-      firstPage: firstPage,
+    let result: ResultType = {
+      wiki: undefined,
+      firstPage: undefined,
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       permissions: undefined,
     };
+
+    try {
+      const wiki = await dapper.getPackageWiki(
+        params.namespaceId,
+        params.packageId
+      );
+      const firstPage = await dapper.getPackageWikiPage(wiki.pages[0].id);
+      result = {
+        wiki: wiki,
+        firstPage: firstPage,
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        permissions: undefined,
+      };
+    } catch (error) {
+      if (isApiError(error)) {
+        // There is no wiki or the User does not have permission to view the wiki, return empty wiki and undefined firstPage
+        if (error.response.status === 404) {
+          result = {
+            wiki: undefined,
+            firstPage: undefined,
+            communityId: params.communityId,
+            namespaceId: params.namespaceId,
+            packageId: params.packageId,
+            permissions: undefined,
+          };
+        } else {
+          throw error;
+        }
+      } else {
+        throw error;
+      }
+    }
+    return result;
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
@@ -46,43 +91,78 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
 
-    const wiki = await dapper.getPackageWiki(
-      params.namespaceId,
-      params.packageId
-    );
-    const firstPage = await dapper.getPackageWikiPage(wiki.pages[0].id);
-
-    const permissions = await dapper.getPackagePermissions(
+    const permissions = dapper.getPackagePermissions(
       params.communityId,
       params.namespaceId,
       params.packageId
     );
-    return {
-      wiki: wiki,
-      firstPage: firstPage,
+
+    let result: ResultType = {
+      wiki: undefined,
+      firstPage: undefined,
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       permissions: permissions,
     };
+
+    try {
+      const wiki = await dapper.getPackageWiki(
+        params.namespaceId,
+        params.packageId
+      );
+      const firstPage = await dapper.getPackageWikiPage(wiki.pages[0].id);
+      result = {
+        wiki: wiki,
+        firstPage: firstPage,
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        permissions: permissions,
+      };
+    } catch (error) {
+      if (isApiError(error)) {
+        // There is no wiki or the User does not have permission to view the wiki, return empty wiki and undefined firstPage
+        if (error.response.status === 404) {
+          result = {
+            wiki: undefined,
+            firstPage: undefined,
+            communityId: params.communityId,
+            namespaceId: params.namespaceId,
+            packageId: params.packageId,
+            permissions: permissions,
+          };
+        } else {
+          throw error;
+        }
+      } else {
+        throw error;
+      }
+    }
+    return result;
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
 }
 
-export default function Wiki() {
+export default function WikiFirstPage() {
   const { wiki, firstPage, communityId, namespaceId, packageId, permissions } =
     useLoaderData<typeof loader | typeof clientLoader>();
 
-  return (
-    <WikiContent
-      page={firstPage}
-      communityId={communityId}
-      namespaceId={namespaceId}
-      packageId={packageId}
-      previousPage={undefined}
-      nextPage={wiki.pages[1]?.slug}
-      canManage={permissions?.permissions.can_manage}
-    />
-  );
+  if (wiki && firstPage) {
+    return (
+      <WikiContent
+        page={firstPage}
+        communityId={communityId}
+        namespaceId={namespaceId}
+        packageId={packageId}
+        previousPage={undefined}
+        nextPage={wiki.pages.length > 1 ? wiki.pages[1].slug : undefined}
+        canManage={permissions?.then((perms) =>
+          typeof perms === "undefined" ? false : perms.permissions.can_manage
+        )}
+      />
+    );
+  }
+  return <>There are no wiki pages available.</>;
 }

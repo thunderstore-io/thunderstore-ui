@@ -5,15 +5,14 @@ import { hydrateRoot } from "react-dom/client";
 import { useLocation, useMatches } from "react-router";
 import * as Sentry from "@sentry/remix";
 import { useEffect } from "react";
-// import { DapperTs } from "@thunderstore/dapper-ts";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
-// INIT DAPPER
-// window.Dapper = new DapperTs(getConfig, () => {
-//   clearSession();
-// });
+const sentryClientDSN = getPublicEnvVariables([
+  "VITE_CLIENT_SENTRY_DSN",
+]).VITE_CLIENT_SENTRY_DSN;
 
 Sentry.init({
-  dsn: import.meta.env.VITE_CLIENT_SENTRY_DSN,
+  dsn: sentryClientDSN,
   integrations: [
     Sentry.browserTracingIntegration({
       useEffect,

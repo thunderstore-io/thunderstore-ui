@@ -14,6 +14,7 @@ import { ReactElement } from "react";
 import { OutletContextShape } from "~/root";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
 type ProvidersType = {
   name: string;
@@ -71,6 +72,11 @@ export default function Connections() {
     onSubmitError: onSubmitError,
   });
 
+  const publicEnvVariables = getPublicEnvVariables([
+    "VITE_AUTH_BASE_URL",
+    "VITE_AUTH_RETURN_URL",
+  ]);
+
   return (
     <div className="settings-items">
       <div className="settings-items__item">
@@ -105,7 +111,12 @@ export default function Connections() {
                 connection={outletContext.currentUser.connections?.find(
                   (c) => c.provider.toLowerCase() === p.identifier
                 )}
-                connectionLink={buildAuthLoginUrl({ type: p.identifier })}
+                connectionLink={buildAuthLoginUrl({
+                  type: p.identifier,
+                  authBaseDomain: publicEnvVariables.VITE_AUTH_BASE_URL || "",
+                  authReturnDomain:
+                    publicEnvVariables.VITE_AUTH_RETURN_URL || "",
+                })}
                 disconnectFunction={(p) => {
                   if (
                     !outletContext.currentUser ||

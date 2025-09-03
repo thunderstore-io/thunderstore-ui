@@ -39,6 +39,7 @@ import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
 export function Navigation(props: {
   // hydrationCheck: boolean;
@@ -226,6 +227,11 @@ export function Navigation(props: {
 }
 
 export function DesktopLoginPopover() {
+  const publicEnvVariables = getPublicEnvVariables([
+    "VITE_AUTH_BASE_URL",
+    "VITE_AUTH_RETURN_URL",
+  ]);
+
   return (
     <Modal
       popoverId={"navAccount"}
@@ -281,7 +287,11 @@ export function DesktopLoginPopover() {
         <div className="navigation-login__links">
           <NewLink
             primitiveType="link"
-            href={buildAuthLoginUrl({ type: "discord" })}
+            href={buildAuthLoginUrl({
+              type: "discord",
+              authBaseDomain: publicEnvVariables.VITE_AUTH_BASE_URL || "",
+              authReturnDomain: publicEnvVariables.VITE_AUTH_RETURN_URL || "",
+            })}
             rootClasses="navigation-login__link navigation-login__discord"
           >
             <NewIcon csMode="inline" noWrapper>
@@ -291,7 +301,11 @@ export function DesktopLoginPopover() {
           </NewLink>
           <NewLink
             primitiveType="link"
-            href={buildAuthLoginUrl({ type: "github" })}
+            href={buildAuthLoginUrl({
+              type: "github",
+              authBaseDomain: publicEnvVariables.VITE_AUTH_BASE_URL || "",
+              authReturnDomain: publicEnvVariables.VITE_AUTH_RETURN_URL || "",
+            })}
             rootClasses="navigation-login__link navigation-login__github"
           >
             <NewIcon csMode="inline" noWrapper>
@@ -301,7 +315,11 @@ export function DesktopLoginPopover() {
           </NewLink>
           <NewLink
             primitiveType="link"
-            href={buildAuthLoginUrl({ type: "overwolf" })}
+            href={buildAuthLoginUrl({
+              type: "overwolf",
+              authBaseDomain: publicEnvVariables.VITE_AUTH_BASE_URL || "",
+              authReturnDomain: publicEnvVariables.VITE_AUTH_RETURN_URL || "",
+            })}
             rootClasses="navigation-login__link navigation-login__overwolf"
           >
             <NewIcon csMode="inline">
@@ -520,6 +538,10 @@ export function MobileUserPopoverContent(props: {
 }) {
   const { user, domain } = props;
   const avatar = user?.connections.find((c) => c.avatar !== null)?.avatar;
+  const publicEnvVariables = getPublicEnvVariables([
+    "VITE_AUTH_BASE_URL",
+    "VITE_AUTH_RETURN_URL",
+  ]);
 
   return (
     <Menu popoverId={"mobileNavAccount"} rootClasses="mobile-navigation__user">
@@ -601,7 +623,11 @@ export function MobileUserPopoverContent(props: {
           <div className="navigation-login__links">
             <NewLink
               primitiveType="link"
-              href={buildAuthLoginUrl({ type: "discord" })}
+              href={buildAuthLoginUrl({
+                type: "discord",
+                authBaseDomain: publicEnvVariables.VITE_AUTH_BASE_URL || "",
+                authReturnDomain: publicEnvVariables.VITE_AUTH_RETURN_URL || "",
+              })}
               rootClasses="navigation-login__link navigation-login__discord"
             >
               <NewIcon csMode="inline" noWrapper>
@@ -611,7 +637,11 @@ export function MobileUserPopoverContent(props: {
             </NewLink>
             <NewLink
               primitiveType="link"
-              href={buildAuthLoginUrl({ type: "github" })}
+              href={buildAuthLoginUrl({
+                type: "github",
+                authBaseDomain: publicEnvVariables.VITE_AUTH_BASE_URL || "",
+                authReturnDomain: publicEnvVariables.VITE_AUTH_RETURN_URL || "",
+              })}
               rootClasses="navigation-login__link navigation-login__github"
             >
               <NewIcon csMode="inline" noWrapper>
@@ -621,7 +651,11 @@ export function MobileUserPopoverContent(props: {
             </NewLink>
             <NewLink
               primitiveType="link"
-              href={buildAuthLoginUrl({ type: "overwolf" })}
+              href={buildAuthLoginUrl({
+                type: "overwolf",
+                authBaseDomain: publicEnvVariables.VITE_AUTH_BASE_URL || "",
+                authReturnDomain: publicEnvVariables.VITE_AUTH_RETURN_URL || "",
+              })}
               rootClasses="navigation-login__link navigation-login__overwolf"
             >
               <NewIcon csMode="inline" noWrapper>

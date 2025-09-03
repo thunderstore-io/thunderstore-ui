@@ -9,7 +9,7 @@
     scrollbar-width: none;
   }
 
-  .tabs__item {
+  .tabs-item {
     position: relative;
     display: inline-flex;
     flex-shrink: 0;
@@ -27,12 +27,12 @@
 
     --icon-color: var(--tabs-item-icon-color);
 
-    &.tabs__item--current {
+    &.tabs-item--current {
       pointer-events: none;
     }
   }
 
-  .tabs__number-slate {
+  .tabs-number-slate {
     display: flex;
     gap: var(--tabs-item-number-slate-gap);
     align-items: center;
