@@ -2,6 +2,7 @@ import { getSessionContext } from "@thunderstore/ts-api-react/src/SessionContext
 
 export type publicEnvVariablesKeys =
   | "SITE_URL"
+  | "BETA_SITE_URL"
   | "API_URL"
   | "COOKIE_DOMAIN"
   | "AUTH_BASE_URL"
