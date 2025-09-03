@@ -7,8 +7,8 @@ export type GenericApiError = {
 export const paginatedResults = <T extends z.ZodTypeAny>(resultType: T) =>
   z.object({
     count: z.number().int().min(0),
-    next: z.string().url().nullable(),
-    previous: z.string().url().nullable(),
+    next: z.string().nullable(),
+    previous: z.string().nullable(),
     results: z.array(resultType),
   });
 
@@ -51,10 +51,10 @@ export const communitySchema = z.object({
   wiki_url: z.string().nullable(),
   discord_url: z.string().nullable(),
   datetime_created: z.string().datetime(),
-  hero_image_url: z.string().url().nullable(),
-  cover_image_url: z.string().url().nullable(),
-  icon_url: z.string().url().nullable(),
-  community_icon_url: z.string().url().nullable(),
+  hero_image_url: z.string().nullable(),
+  cover_image_url: z.string().nullable(),
+  icon_url: z.string().nullable(),
+  community_icon_url: z.string().nullable(),
   total_download_count: z.number().int(),
   total_package_count: z.number().int(),
 });
@@ -103,7 +103,7 @@ export type ServiceAccount = z.infer<typeof serviceAccountSchema>;
 export const teamDetailsSchema = z.object({
   identifier: z.number().int(),
   name: z.string().min(1),
-  donation_link: z.string().url().nullable(),
+  donation_link: z.string().nullable(),
 });
 
 export type TeamDetails = z.infer<typeof teamDetailsSchema>;
@@ -111,7 +111,7 @@ export type TeamDetails = z.infer<typeof teamDetailsSchema>;
 export const teamMemberSchema = z.object({
   identifier: z.number().int(),
   username: z.string().min(1),
-  avatar: z.string().url().nullable(),
+  avatar: z.string().nullable(),
   role: z.enum(["owner", "member"]),
 });
 
@@ -122,7 +122,7 @@ export const packageListingSchema = z.object({
   community_identifier: z.string().min(1),
   description: z.string(),
   download_count: z.number().int(),
-  icon_url: z.string().url().nullable(),
+  icon_url: z.string().nullable(),
   is_deprecated: z.boolean(),
   is_nsfw: z.boolean(),
   is_pinned: z.boolean(),
@@ -145,7 +145,7 @@ export type PackageTeam = z.infer<typeof packageTeamSchema>;
 export const packageDependencySchema = z.object({
   community_identifier: z.string().min(1),
   description: z.string(),
-  icon_url: z.string().url().nullable(),
+  icon_url: z.string().nullable(),
   is_active: z.boolean(),
   name: z.string().min(1),
   namespace: z.string().min(1),
@@ -160,13 +160,13 @@ export const packageListingDetailsSchema = packageListingSchema.extend({
   dependant_count: z.number().int(),
   dependencies: z.array(packageDependencySchema),
   dependency_count: z.number().int(),
-  download_url: z.string().url(),
+  download_url: z.string(),
   full_version_name: z.string().min(1),
   has_changelog: z.boolean(),
-  install_url: z.string().url(),
+  install_url: z.string(),
   latest_version_number: z.string().min(1),
   team: packageTeamSchema,
-  website_url: z.string().url().nullable(),
+  website_url: z.string().nullable(),
 });
 
 export type PackageListingDetails = z.infer<typeof packageListingDetailsSchema>;
@@ -204,8 +204,8 @@ export const packageVersionSchema = z.object({
   version_number: z.string().min(1),
   datetime_created: z.string().datetime(),
   download_count: z.number().int(),
-  download_url: z.string().url(),
-  install_url: z.string().url(),
+  download_url: z.string(),
+  install_url: z.string(),
 });
 
 export type PackageVersion = z.infer<typeof packageVersionSchema>;
@@ -216,12 +216,12 @@ export const packageVersionExperimentalSchema = z.object({
   version_number: z.string().min(1).max(16),
   full_name: z.string(),
   description: z.string().max(256),
-  icon: z.string().url(),
+  icon: z.string(),
   dependencies: z.string().array(),
-  download_url: z.string().url(),
+  download_url: z.string(),
   downloads: z.number().int(),
   date_created: z.string().datetime(),
-  website_url: z.string().url(),
+  website_url: z.string().nullable(),
   is_active: z.boolean(),
 });
 
@@ -248,8 +248,8 @@ export type PackageSubmissionError = z.infer<
 export const packageSubmissionCommunitySchema = z.object({
   identifier: z.string().min(1).max(256),
   name: z.string().min(1).max(256),
-  discord_url: z.string().url().max(512).nullable(),
-  wiki_url: z.string().url().max(512).nullable(),
+  discord_url: z.string().max(512).nullable(),
+  wiki_url: z.string().max(512).nullable(),
   require_package_listing_approval: z.boolean(),
 });
 
@@ -260,7 +260,7 @@ export type PackageSubmissionCommunity = z.infer<
 export const availableCommunitySchema = z.object({
   community: packageSubmissionCommunitySchema,
   categories: packageCategoryPartialSchema.array(),
-  url: z.string().url(),
+  url: z.string(),
 });
 
 export type AvailableCommunity = z.infer<typeof availableCommunitySchema>;
@@ -289,7 +289,7 @@ export type PackageSubmissionStatus = z.infer<
 export const oAuthConnectionSchema = z.object({
   provider: z.string().min(1),
   username: z.string().min(1),
-  avatar: z.string().url().nullable(),
+  avatar: z.string().nullable(),
 });
 
 export const userTeamSchema = z.object({

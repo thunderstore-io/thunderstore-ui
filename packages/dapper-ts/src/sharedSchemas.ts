@@ -9,7 +9,7 @@ export const PackageCategory = z.object({
 export const paginatedResults = <T extends z.ZodTypeAny>(resultType: T) =>
   z.object({
     count: z.number().int().min(0),
-    next: z.string().url().nullable(),
-    previous: z.string().url().nullable(),
+    next: z.string().nullable(),
+    previous: z.string().nullable(),
     results: z.array(resultType),
   });
