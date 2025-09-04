@@ -24,7 +24,6 @@ import {
 import "./packageListing.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  ApiError,
   fetchPackagePermissions,
   packageListingApprove,
   packageListingReject,
@@ -75,16 +74,12 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import {
-  getPackagePermissions,
-  getPackageWiki,
-} from "@thunderstore/dapper-ts/src/methods/package";
+import { getPackagePermissions } from "@thunderstore/dapper-ts/src/methods/package";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
 import { SelectOption } from "@thunderstore/cyberstorm/src/newComponents/Select/Select";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { isPromise } from "cyberstorm/utils/typeChecks";
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [
@@ -144,21 +139,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
       };
     });
 
-    let wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
-
-    try {
-      wiki = await dapper.getPackageWiki(params.namespaceId, params.packageId);
-    } catch (error) {
-      if (error instanceof ApiError) {
-        if (error.response.status === 404) {
-          wiki = undefined;
-        } else {
-          wiki = undefined;
-          console.error("Error fetching package wiki:", error);
-        }
-      }
-    }
-
     return {
       community: await dapper.getCommunity(params.communityId),
       communityFilters: await dapper.getCommunityFilters(params.communityId),
@@ -169,7 +149,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
       ),
       team: await dapper.getTeamDetails(params.namespaceId),
       permissions: undefined,
-      wiki: wiki,
     };
   }
   throw new Response("Package not found", { status: 404 });
@@ -213,7 +192,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       ),
       team: await dapper.getTeamDetails(params.namespaceId),
       permissions: permissionsPromise,
-      wiki: dapper.getPackageWiki(params.namespaceId, params.packageId),
     };
   }
   throw new Response("Package not found", { status: 404 });
@@ -222,7 +200,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 clientLoader.hydrate = true;
 
 export default function PackageListing() {
-  const { community, listing, team, permissions, wiki } = useLoaderData<
+  const { community, listing, team, permissions } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
@@ -564,41 +542,6 @@ export default function PackageListing() {
     </>
   );
 
-  const canAccessWikiTabPromise = Promise.withResolvers<boolean>();
-  if (wiki && isPromise(wiki)) {
-    wiki
-      .then(async (a) => {
-        if (a.pages.length > 0) {
-          canAccessWikiTabPromise.resolve(true);
-        } else {
-          if ((await permissions)?.permissions.can_manage) {
-            canAccessWikiTabPromise.resolve(true);
-          } else {
-            canAccessWikiTabPromise.resolve(false);
-          }
-        }
-      })
-      .catch(async () => {
-        if ((await permissions)?.permissions.can_manage) {
-          canAccessWikiTabPromise.resolve(true);
-        } else {
-          canAccessWikiTabPromise.resolve(false);
-        }
-      });
-  } else {
-    if (permissions) {
-      permissions.then((a) => {
-        if (a?.permissions.can_manage) {
-          canAccessWikiTabPromise.resolve(true);
-        } else {
-          canAccessWikiTabPromise.resolve(false);
-        }
-      });
-    } else {
-      canAccessWikiTabPromise.resolve(false);
-    }
-  }
-
   return (
     <>
       <div className="package-community__background">
@@ -761,66 +704,20 @@ export default function PackageListing() {
                 >
                   Required ({listing.dependency_count})
                 </NewLink>
-                <Suspense
-                  fallback={
-                    <NewLink
-                      key="wiki"
-                      primitiveType="cyberstormLink"
-                      linkId="PackageWiki"
-                      community={listing.community_identifier}
-                      namespace={listing.namespace}
-                      package={listing.name}
-                      aria-current={currentTab === "wiki"}
-                      rootClasses={`tabs-item${
-                        currentTab === "wiki" ? " tabs-item--current" : ""
-                      }`}
-                      disabled={true}
-                    >
-                      Wiki
-                    </NewLink>
-                  }
+                <NewLink
+                  key="wiki"
+                  primitiveType="cyberstormLink"
+                  linkId="PackageWiki"
+                  community={listing.community_identifier}
+                  namespace={listing.namespace}
+                  package={listing.name}
+                  aria-current={currentTab === "wiki"}
+                  rootClasses={`tabs-item${
+                    currentTab === "wiki" ? " tabs-item--current" : ""
+                  }`}
                 >
-                  <Await
-                    resolve={canAccessWikiTabPromise.promise}
-                    errorElement={
-                      <NewLink
-                        key="wiki"
-                        primitiveType="cyberstormLink"
-                        linkId="PackageWiki"
-                        community={listing.community_identifier}
-                        namespace={listing.namespace}
-                        package={listing.name}
-                        aria-current={currentTab === "wiki"}
-                        rootClasses={`tabs-item${
-                          currentTab === "wiki" ? " tabs-item--current" : ""
-                        }`}
-                        disabled={true}
-                      >
-                        Wiki
-                      </NewLink>
-                    }
-                  >
-                    {(resolvedValue) => {
-                      return (
-                        <NewLink
-                          key="wiki"
-                          primitiveType="cyberstormLink"
-                          linkId="PackageWiki"
-                          community={listing.community_identifier}
-                          namespace={listing.namespace}
-                          package={listing.name}
-                          aria-current={currentTab === "wiki"}
-                          rootClasses={`tabs-item${
-                            currentTab === "wiki" ? " tabs-item--current" : ""
-                          }`}
-                          disabled={!resolvedValue}
-                        >
-                          Wiki
-                        </NewLink>
-                      );
-                    }}
-                  </Await>
-                </Suspense>
+                  Wiki
+                </NewLink>
                 <NewLink
                   key="changelog"
                   primitiveType="cyberstormLink"
