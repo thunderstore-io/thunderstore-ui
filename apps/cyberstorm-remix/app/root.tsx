@@ -38,7 +38,7 @@ import {
 } from "@thunderstore/ts-api-react/src/SessionContext";
 import {
   getPublicEnvVariables,
-  publicEnvVariables,
+  publicEnvVariablesType,
 } from "cyberstorm/security/publicEnvVariables";
 import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
 
@@ -47,7 +47,7 @@ import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
 
 declare global {
   interface Window {
-    ENV: publicEnvVariables;
+    NIMBUS_PUBLIC_ENV: publicEnvVariablesType;
     Dapper: DapperTs;
     nitroAds?: {
       createAd: (
@@ -104,9 +104,7 @@ export async function loader() {
     sessionId: undefined,
   };
   return {
-    publicEnvVariables: {
-      ENV: publicEnvVariables,
-    },
+    publicEnvVariables: publicEnvVariables,
     currentUser: undefined,
     config,
   };
@@ -137,9 +135,7 @@ export async function clientLoader() {
   const currentUser = await sessionTools.getSessionCurrentUser();
   const config = sessionTools.getConfig(publicEnvVariables.VITE_API_URL);
   return {
-    publicEnvVariables: {
-      ENV: publicEnvVariables,
-    },
+    publicEnvVariables: publicEnvVariables,
     currentUser: currentUser.username ? currentUser : undefined,
     config,
   };
@@ -221,8 +217,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.ENV = ${JSON.stringify(
-              data.publicEnvVariables.ENV
+            __html: `window.NIMBUS_PUBLIC_ENV = ${JSON.stringify(
+              data.publicEnvVariables
             )}`,
           }}
         />
@@ -231,7 +227,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <Toast.Provider toastDuration={10000}>
               <TooltipProvider>
                 <NavigationWrapper
-                  domain={data.publicEnvVariables.ENV.VITE_API_URL || ""}
+                  domain={data.publicEnvVariables.VITE_API_URL || ""}
                   currentUser={data?.currentUser}
                 />
                 <div className="container container--x container--full island">
@@ -274,7 +270,7 @@ function App() {
   const data = useRouteLoaderData<RootLoadersType>("root");
   const dapper = new DapperTs(() => {
     return {
-      apiHost: data?.publicEnvVariables.ENV.VITE_API_URL,
+      apiHost: data?.publicEnvVariables.VITE_API_URL,
       sessionId: data?.config.sessionId,
     };
   });
@@ -284,7 +280,7 @@ function App() {
       context={{
         currentUser: data?.currentUser,
         requestConfig: dapper.config,
-        domain: data?.publicEnvVariables.ENV.VITE_API_URL,
+        domain: data?.publicEnvVariables.VITE_API_URL,
         dapper: dapper,
       }}
     />

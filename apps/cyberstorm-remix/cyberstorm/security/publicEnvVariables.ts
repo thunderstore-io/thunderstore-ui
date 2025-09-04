@@ -11,14 +11,14 @@ export type publicEnvVariablesKeys =
 
 export type PublicPrefix<envVariable extends string> = `VITE_${envVariable}`;
 
-export type publicEnvVariables = Partial<{
+export type publicEnvVariablesType = Partial<{
   [key in PublicPrefix<publicEnvVariablesKeys>]: string | undefined;
 }>;
 
 export function getPublicEnvVariables(
   vars: PublicPrefix<publicEnvVariablesKeys>[]
-): publicEnvVariables {
-  const returnedVars: publicEnvVariables = {};
+): publicEnvVariablesType {
+  const returnedVars: publicEnvVariablesType = {};
   if (import.meta.env.SSR) {
     vars.forEach((envVar) => {
       if (envVar.startsWith("VITE_") && envVar in process.env) {
@@ -27,8 +27,8 @@ export function getPublicEnvVariables(
     });
   } else {
     vars.forEach((envVar) => {
-      if (envVar.startsWith("VITE_") && envVar in window.ENV) {
-        returnedVars[envVar] = window.ENV[envVar];
+      if (envVar.startsWith("VITE_") && envVar in window.NIMBUS_PUBLIC_ENV) {
+        returnedVars[envVar] = window.NIMBUS_PUBLIC_ENV[envVar];
       }
     });
   }
