@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
 import {
   Await,
   Outlet,
@@ -46,9 +46,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import TeamMembers from "./components/TeamMembers/TeamMembers";
 import {
+  memo,
   ReactElement,
   Suspense,
   useEffect,
+  useMemo,
   useReducer,
   useRef,
   useState,
@@ -74,60 +76,16 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { getPackagePermissions } from "@thunderstore/dapper-ts/src/methods/package";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
 import { SelectOption } from "@thunderstore/cyberstorm/src/newComponents/Select/Select";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-
-export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
-  return [
-    {
-      title: data
-        ? `${formatToDisplayName(data.listing.name)} | Thunderstore - The ${data
-            ?.community.name} Mod Database`
-        : "Thunderstore The Mod Database",
-    },
-    { name: "description", content: data?.listing.description },
-    {
-      property: "og:type",
-      content: "website",
-    },
-    {
-      property: "og:url",
-      content: `${import.meta.env.VITE_SITE_URL}${location.pathname}`,
-    },
-    {
-      property: "og:title",
-      content: data
-        ? `${formatToDisplayName(data.listing.name)} by ${
-            data.listing.namespace
-          }`
-        : undefined,
-    },
-    {
-      property: "og:description",
-      content: data?.listing.description,
-    },
-    {
-      property: "og:image:width",
-      content: "256",
-    },
-    {
-      property: "og:image:height",
-      content: "256",
-    },
-    {
-      property: "og:image",
-      content: data?.listing.icon_url,
-    },
-    {
-      property: "og:site_name",
-      content: "Thunderstore",
-    },
-  ];
-};
+import { getPackageListingDetails } from "@thunderstore/dapper-ts/src/methods/packageListings";
+import { getCommunity } from "@thunderstore/dapper-ts/src/methods/communities";
+import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
+import { CurrentUser } from "@thunderstore/dapper/types";
+import { isPromise } from "cyberstorm/utils/typeChecks";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -154,6 +112,20 @@ export async function loader({ params }: LoaderFunctionArgs) {
   throw new Response("Package not found", { status: 404 });
 }
 
+async function getUserPermissions(
+  tools: ReturnType<typeof getSessionTools>,
+  dapper: DapperTs,
+  communityId: string,
+  namespaceId: string,
+  packageId: string
+) {
+  const cu = await tools.getSessionCurrentUser();
+  if (cu.username) {
+    return dapper.getPackagePermissions(communityId, namespaceId, packageId);
+  }
+  return undefined;
+}
+
 // TODO: Needs to check if package is available for the logged in user
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -165,33 +137,22 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
 
-    // We do some trickery right here to prevent unnecessary request when the user is not logged in
-    let permissionsPromise = undefined;
-    const cu = await tools.getSessionCurrentUser();
-    if (cu.username) {
-      const wrapperPromise =
-        Promise.withResolvers<
-          Awaited<ReturnType<typeof getPackagePermissions>>
-        >();
-      dapper
-        .getPackagePermissions(
-          params.communityId,
-          params.namespaceId,
-          params.packageId
-        )
-        .then(wrapperPromise.resolve, wrapperPromise.reject);
-      permissionsPromise = wrapperPromise.promise;
-    }
     return {
-      community: await dapper.getCommunity(params.communityId),
-      communityFilters: await dapper.getCommunityFilters(params.communityId),
-      listing: await dapper.getPackageListingDetails(
+      community: dapper.getCommunity(params.communityId),
+      communityFilters: dapper.getCommunityFilters(params.communityId),
+      listing: dapper.getPackageListingDetails(
         params.communityId,
         params.namespaceId,
         params.packageId
       ),
-      team: await dapper.getTeamDetails(params.namespaceId),
-      permissions: permissionsPromise,
+      team: dapper.getTeamDetails(params.namespaceId),
+      permissions: getUserPermissions(
+        tools,
+        dapper,
+        params.communityId,
+        params.namespaceId,
+        params.packageId
+      ),
     };
   }
   throw new Response("Package not found", { status: 404 });
@@ -217,9 +178,19 @@ export default function PackageListing() {
 
   const fetchAndSetRatedPackages = async () => {
     const rp = await dapper.getRatedPackages();
-    setIsLiked(
-      rp.rated_packages.includes(`${listing.namespace}-${listing.name}`)
-    );
+    if (isPromise(listing)) {
+      listing.then((listingData) => {
+        setIsLiked(
+          rp.rated_packages.includes(
+            `${listingData.namespace}-${listingData.name}`
+          )
+        );
+      });
+    } else {
+      setIsLiked(
+        rp.rated_packages.includes(`${listing.namespace}-${listing.name}`)
+      );
+    }
   };
 
   useEffect(() => {
@@ -232,336 +203,130 @@ export default function PackageListing() {
   const startsHydrated = useRef(isHydrated);
 
   // START: For sidebar meta dates
-  const [lastUpdated, setLastUpdated] = useState<ReactElement | undefined>(
-    <RelativeTime time={listing.last_updated} suppressHydrationWarning />
-  );
-  const [firstUploaded, setFirstUploaded] = useState<ReactElement | undefined>(
-    <RelativeTime time={listing.datetime_created} suppressHydrationWarning />
-  );
+  const [lastUpdated, setLastUpdated] = useState<ReactElement | undefined>();
+  const [firstUploaded, setFirstUploaded] = useState<
+    ReactElement | undefined
+  >();
 
   // This will be loaded 2 times in development because of:
   // https://react.dev/reference/react/StrictMode
   // If strict mode is removed from the entry.client.tsx, this should only run once
   useEffect(() => {
     if (!startsHydrated.current && isHydrated) return;
-    setLastUpdated(
-      <RelativeTime time={listing.last_updated} suppressHydrationWarning />
-    );
-    setFirstUploaded(
-      <RelativeTime time={listing.datetime_created} suppressHydrationWarning />
-    );
+    if (isPromise(listing)) {
+      listing.then((listingData) => {
+        setLastUpdated(
+          <RelativeTime
+            time={listingData.last_updated}
+            suppressHydrationWarning
+          />
+        );
+        setFirstUploaded(
+          <RelativeTime
+            time={listingData.datetime_created}
+            suppressHydrationWarning
+          />
+        );
+      });
+    } else {
+      setLastUpdated(
+        <RelativeTime time={listing.last_updated} suppressHydrationWarning />
+      );
+      setFirstUploaded(
+        <RelativeTime
+          time={listing.datetime_created}
+          suppressHydrationWarning
+        />
+      );
+    }
   }, []);
   // END: For sidebar meta dates
 
-  // Sidebar helpers
-  const mappedPackageTagList = listing.categories.map((category) => {
-    return (
-      <NewTag
-        key={category.name}
-        csMode="cyberstormLink"
-        linkId="Community"
-        community={community.identifier}
-        queryParams={`includedCategories=${category.id}`}
-        csSize="small"
-        csVariant="primary"
-      >
-        {category.name}
-      </NewTag>
-    );
-  });
-
   const currentTab = location.pathname.split("/")[6] || "details";
 
-  // TODO: Enable when APIs are available
-  function managementTools(
-    packagePermissions: Awaited<ReturnType<typeof fetchPackagePermissions>>
-  ) {
-    return (
-      <div className="package-listing-management-tools">
-        {packagePermissions.permissions.can_moderate ? (
-          <div className="package-listing-management-tools__island">
-            {packagePermissions.permissions.can_moderate ? (
-              <Modal
-                popoverId={"reviewPackage"}
-                csSize="small"
-                trigger={
-                  <NewButton
-                    csSize="small"
-                    popoverTarget="reviewPackage"
-                    popoverTargetAction="show"
-                  >
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faScaleBalanced} />
-                    </NewIcon>
-                    Review Package
-                  </NewButton>
-                }
-              >
-                <ReviewPackageForm
-                  communityId={listing.community_identifier}
-                  namespaceId={listing.namespace}
-                  packageId={listing.name}
-                  toast={toast}
-                  reviewStatusColor={"orange"}
-                  reviewStatus={"Skibidied"}
-                  config={outletContext.requestConfig}
-                />
-              </Modal>
-            ) : null}
-            {/* {packagePermissions.permissions.can_view_listing_admin_page ? (
-              <NewButton
-                csSize="small"
-                csVariant="secondary"
-                primitiveType="link"
-                href={`${
-                  import.meta.env.VITE_SITE_URL
-                }/djangoadmin/community/packagelisting/206/change/`}
-              >
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faList} />
-                </NewIcon>
-                Listing admin
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faArrowUpRight} />
-                </NewIcon>
-              </NewButton>
-            ) : null}
-            {packagePermissions.permissions.can_view_package_admin_page ? (
-              <NewButton
-                csSize="small"
-                csVariant="secondary"
-                primitiveType="link"
-                href={`${
-                  import.meta.env.VITE_SITE_URL
-                }/djangoadmin/repository/package/16/change/`}
-              >
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faBoxOpen} />
-                </NewIcon>
-                Package admin
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faArrowUpRight} />
-                </NewIcon>
-              </NewButton>
-            ) : null} */}
-          </div>
-        ) : null}
-        {packagePermissions.permissions.can_manage ? (
-          <div className="package-listing-management-tools__island">
-            <NewButton
-              csSize="small"
-              primitiveType="cyberstormLink"
-              linkId="PackageEdit"
-              community={packagePermissions.package.community_id}
-              namespace={packagePermissions.package.namespace_id}
-              package={packagePermissions.package.package_name}
-            >
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faCog} />
-              </NewIcon>
-              Manage Package
-            </NewButton>
-          </div>
-        ) : null}
-      </div>
-    );
-  }
-
-  const likeAction = PackageLikeAction({
-    isLoggedIn: Boolean(currentUser?.username),
-    dataUpdateTrigger: fetchAndSetRatedPackages,
-    config: config,
-  });
-
-  const actions = (
-    <div className="package-listing-sidebar__actions">
-      <NewButton
-        primitiveType="link"
-        href={listing.download_url}
-        csVariant="secondary"
-        rootClasses="package-listing-sidebar__download"
-      >
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faDownload} />
-        </NewIcon>
-        Download
-      </NewButton>
-      {team.donation_link ? (
-        <NewButton
-          primitiveType="link"
-          href={team.donation_link}
-          csVariant="secondary"
-          csSize="big"
-          csModifiers={["only-icon"]}
-        >
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faHandHoldingHeart} />
-          </NewIcon>
-        </NewButton>
-      ) : null}
-      <NewButton
-        primitiveType="button"
-        onClick={() =>
-          likeAction(
-            isLiked,
-            listing.namespace,
-            listing.name,
-            Boolean(currentUser?.username)
-          )
-        }
-        tooltipText="Like"
-        csVariant={isLiked ? "primary" : "secondary"}
-        csSize="big"
-        csModifiers={["only-icon"]}
-      >
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faThumbsUp} />
-        </NewIcon>
-      </NewButton>
-      {/* <NewButton
-        // primitiveType="button"
-        tooltipText="Report"
-        csVariant={"secondary"}
-        csSize="big"
-        csModifiers={["only-icon"]}
-        popoverTarget="reportPackage"
-        popoverTargetAction="show"
-      >
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faFlagSwallowtail} />
-        </NewIcon>
-      </NewButton> */}
-    </div>
+  const listingAndCommunityPromise = useMemo(
+    () => Promise.all([listing, community]),
+    []
   );
 
-  const packageMeta = (
-    <div className="package-listing-sidebar__meta">
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Last Updated</div>
-        <div className="package-listing-sidebar__content">{lastUpdated}</div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">First Uploaded</div>
-        <div className="package-listing-sidebar__content">{firstUploaded}</div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Downloads</div>
-        <div className="package-listing-sidebar__content">
-          {formatInteger(listing.download_count)}
-        </div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Likes</div>
-        <div className="package-listing-sidebar__content">
-          {formatInteger(listing.rating_count)}
-        </div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Size</div>
-        <div className="package-listing-sidebar__content">
-          {formatFileSize(listing.size)}
-        </div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Dependency string</div>
-        <div className="package-listing-sidebar__content">
-          <div className="package-listing-sidebar__dependency-string-wrapper">
-            <span
-              title={listing.full_version_name}
-              className="package-listing-sidebar__dependency-string"
-            >
-              {listing.full_version_name}
-            </span>
-            <CopyButton text={listing.full_version_name} />
-          </div>
-        </div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Dependants</div>
-        <div className="package-listing-sidebar__content">
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="PackageDependants"
-            community={listing.community_identifier}
-            namespace={listing.namespace}
-            package={listing.name}
-            csVariant="cyber"
-          >
-            {listing.dependant_count} other mods
-          </NewLink>
-        </div>
-      </div>
-    </div>
+  const listingAndPermissionsPromise = useMemo(
+    () => Promise.all([listing, permissions]),
+    []
   );
 
-  const packageBoxes = (
-    <>
-      {mappedPackageTagList.length > 0 ||
-      listing.is_deprecated ||
-      listing.is_nsfw ? (
-        <div className="package-listing-sidebar__categories">
-          <div className="package-listing-sidebar__header">
-            <Heading csLevel="4" csSize="4">
-              Categories
-            </Heading>
-          </div>
-          {mappedPackageTagList.length > 0 ? (
-            <div className="package-listing-sidebar__body">
-              {mappedPackageTagList}
-            </div>
-          ) : null}
-          {listing.is_deprecated || listing.is_nsfw ? (
-            <div className="package-listing-sidebar__body">
-              {listing.is_deprecated ? (
-                <NewTag
-                  csSize="small"
-                  csModifiers={["dark"]}
-                  csVariant="yellow"
-                >
-                  <NewIcon noWrapper csMode="inline">
-                    <FontAwesomeIcon icon={faWarning} />
-                  </NewIcon>
-                  Deprecated
-                </NewTag>
-              ) : null}
-              {listing.is_nsfw ? (
-                <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
-                  <NewIcon noWrapper csMode="inline">
-                    <FontAwesomeIcon icon={faLips} />
-                  </NewIcon>
-                  NSFW
-                </NewTag>
-              ) : null}
-            </div>
-          ) : null}
-        </div>
-      ) : null}
-      {listing.team.members.length > 0 ? (
-        <TeamMembers listing={listing} domain={domain} />
-      ) : null}
-    </>
-  );
+  const listingAndTeamPromise = useMemo(() => Promise.all([listing, team]), []);
 
   return (
     <>
-      <div className="package-community__background">
-        {community.hero_image_url ? (
-          <img
-            src={community.hero_image_url}
-            alt={community.name}
-            className="package-community__background-image"
-          />
-        ) : null}
-        <div className="package-community__background-tint" />
-      </div>
+      <Suspense>
+        <Await resolve={listingAndCommunityPromise}>
+          {(resolvedValue) => (
+            <>
+              <meta
+                title={`${formatToDisplayName(
+                  resolvedValue[0].name
+                )} | Thunderstore - The ${resolvedValue[1].name} Mod Database`}
+              />
+              <meta name="description" content={resolvedValue[0].description} />
+              <meta property="og:type" content="website" />
+              <meta
+                property="og:url"
+                content={`${getPublicEnvVariables(["VITE_BETA_SITE_URL"])}${
+                  location.pathname
+                }`}
+              />
+              <meta
+                property="og:title"
+                content={`${formatToDisplayName(resolvedValue[0].name)} by ${
+                  resolvedValue[0].namespace
+                }`}
+              />
+              <meta
+                property="og:description"
+                content={resolvedValue[0].description}
+              />
+              <meta property="og:image:width" content="256" />
+              <meta property="og:image:height" content="256" />
+              <meta
+                property="og:image"
+                content={resolvedValue[0].icon_url ?? undefined}
+              />
+              <meta property="og:site_name" content="Thunderstore" />
+            </>
+          )}
+        </Await>
+      </Suspense>
+      <Suspense>
+        <Await resolve={community}>
+          {(resolvedValue) =>
+            resolvedValue.hero_image_url ? (
+              <div className="package-community__background">
+                {resolvedValue.hero_image_url ? (
+                  <img
+                    src={resolvedValue.hero_image_url}
+                    alt={resolvedValue.name}
+                    className="package-community__background-image"
+                  />
+                ) : null}
+                <div className="package-community__background-tint" />
+              </div>
+            ) : null
+          }
+        </Await>
+      </Suspense>
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
           <Suspense>
-            <Await resolve={permissions}>
+            <Await resolve={listingAndPermissionsPromise}>
               {(resolvedValue) =>
-                resolvedValue ? (
+                resolvedValue && resolvedValue[1] ? (
                   <div className="package-listing__actions">
-                    {managementTools(resolvedValue)}
+                    {managementTools(
+                      resolvedValue[1],
+                      resolvedValue[0],
+                      toast,
+                      config
+                    )}
                   </div>
                 ) : null
               }
@@ -575,69 +340,111 @@ export default function PackageListing() {
             >
               Communities
             </NewBreadCrumbsLink>
-            <NewBreadCrumbsLink
-              primitiveType="cyberstormLink"
-              linkId="Community"
-              community={community.identifier}
-              csVariant="cyber"
+            <Suspense
+              fallback={
+                <span>
+                  <span>Loading...</span>
+                </span>
+              }
             >
-              {community.name}
-            </NewBreadCrumbsLink>
-            <NewBreadCrumbsLink
-              primitiveType="cyberstormLink"
-              linkId="Team"
-              community={community.identifier}
-              team={listing.namespace}
-              csVariant="cyber"
+              <Await resolve={community}>
+                {(resolvedValue) => (
+                  <NewBreadCrumbsLink
+                    primitiveType="cyberstormLink"
+                    linkId="Community"
+                    community={resolvedValue.identifier}
+                    csVariant="cyber"
+                  >
+                    {resolvedValue.name}
+                  </NewBreadCrumbsLink>
+                )}
+              </Await>
+            </Suspense>
+            <Suspense
+              fallback={
+                <span>
+                  <span>Loading...</span>
+                </span>
+              }
             >
-              {listing.namespace}
-            </NewBreadCrumbsLink>
-
-            <span>
-              <span>{formatToDisplayName(listing.name)}</span>
-            </span>
+              <Await resolve={listingAndCommunityPromise}>
+                {(resolvedValue) => (
+                  <NewBreadCrumbsLink
+                    primitiveType="cyberstormLink"
+                    linkId="Team"
+                    community={resolvedValue[1].identifier}
+                    team={resolvedValue[0].namespace}
+                    csVariant="cyber"
+                  >
+                    {resolvedValue[0].namespace}
+                  </NewBreadCrumbsLink>
+                )}
+              </Await>
+            </Suspense>
+            <Suspense
+              fallback={
+                <span>
+                  <span>Loading...</span>
+                </span>
+              }
+            >
+              <Await resolve={listing}>
+                {(resolvedValue) => (
+                  <span>
+                    <span>{formatToDisplayName(resolvedValue.name)}</span>
+                  </span>
+                )}
+              </Await>
+            </Suspense>
           </NewBreadCrumbs>
           <div className="package-listing__main">
             <section className="package-listing__package-content-section">
-              <PageHeader
-                headingLevel="1"
-                headingSize="3"
-                image={listing.icon_url}
-                description={listing.description}
-                variant="detailed"
-                meta={
-                  <>
-                    <NewLink
-                      primitiveType="cyberstormLink"
-                      linkId="Team"
-                      community={listing.community_identifier}
-                      team={listing.namespace}
-                      csVariant="cyber"
-                      rootClasses="page-header__meta-item"
+              <Suspense fallback={<span>Loading...</span>}>
+                <Await resolve={listing}>
+                  {(resolvedValue) => (
+                    <PageHeader
+                      headingLevel="1"
+                      headingSize="3"
+                      image={resolvedValue.icon_url}
+                      description={resolvedValue.description}
+                      variant="detailed"
+                      meta={
+                        <>
+                          <NewLink
+                            primitiveType="cyberstormLink"
+                            linkId="Team"
+                            community={resolvedValue.community_identifier}
+                            team={resolvedValue.namespace}
+                            csVariant="cyber"
+                            rootClasses="page-header__meta-item"
+                          >
+                            <NewIcon csMode="inline" noWrapper>
+                              <FontAwesomeIcon icon={faUsers} />
+                            </NewIcon>
+                            {resolvedValue.namespace}
+                          </NewLink>
+                          {resolvedValue.website_url ? (
+                            <NewLink
+                              primitiveType="link"
+                              href={resolvedValue.website_url}
+                              csVariant="cyber"
+                              rootClasses="page-header__meta-item"
+                            >
+                              {resolvedValue.website_url}
+                              <NewIcon csMode="inline" noWrapper>
+                                <FontAwesomeIcon icon={faArrowUpRight} />
+                              </NewIcon>
+                            </NewLink>
+                          ) : null}
+                        </>
+                      }
                     >
-                      <NewIcon csMode="inline" noWrapper>
-                        <FontAwesomeIcon icon={faUsers} />
-                      </NewIcon>
-                      {listing.namespace}
-                    </NewLink>
-                    {listing.website_url ? (
-                      <NewLink
-                        primitiveType="link"
-                        href={listing.website_url}
-                        csVariant="cyber"
-                        rootClasses="page-header__meta-item"
-                      >
-                        {listing.website_url}
-                        <NewIcon csMode="inline" noWrapper>
-                          <FontAwesomeIcon icon={faArrowUpRight} />
-                        </NewIcon>
-                      </NewLink>
-                    ) : null}
-                  </>
-                }
-              >
-                {formatToDisplayName(listing.name)}
-              </PageHeader>
+                      {formatToDisplayName(resolvedValue.name)}
+                    </PageHeader>
+                  )}
+                </Await>
+              </Suspense>
+
               {/* Report modal is here, so that it can be reused in both desktop on mobile */}
               {/* <Modal popoverId={"reportPackage"} csSize="small">
                 <ReportPackageForm
@@ -670,120 +477,256 @@ export default function PackageListing() {
                   }
                   rootClasses="package-listing__drawer"
                 >
-                  {packageMeta}
-                  {packageBoxes}
+                  <Suspense
+                    fallback={
+                      <span>
+                        <span>Loading...</span>
+                      </span>
+                    }
+                  >
+                    <Await resolve={listing}>
+                      {(resolvedValue) => (
+                        <>
+                          {packageMeta(
+                            lastUpdated,
+                            firstUploaded,
+                            resolvedValue
+                          )}
+                        </>
+                      )}
+                    </Await>
+                  </Suspense>
+                  <Suspense
+                    fallback={
+                      <span>
+                        <span>Loading...</span>
+                      </span>
+                    }
+                  >
+                    <Await resolve={listingAndCommunityPromise}>
+                      {(resolvedValue) => (
+                        <>
+                          {packageBoxes(
+                            resolvedValue[0],
+                            resolvedValue[1],
+                            domain
+                          )}
+                        </>
+                      )}
+                    </Await>
+                  </Suspense>
                 </Drawer>
-                {actions}
+                <Suspense
+                  fallback={
+                    <span>
+                      <span>Loading...</span>
+                    </span>
+                  }
+                >
+                  <Await resolve={listingAndTeamPromise}>
+                    {(resolvedValue) => (
+                      <Actions
+                        team={resolvedValue[1]}
+                        listing={resolvedValue[0]}
+                        isLiked={isLiked}
+                        currentUser={currentUser}
+                        likeUpdateTrigger={fetchAndSetRatedPackages}
+                        requestConfig={config}
+                      />
+                    )}
+                  </Await>
+                </Suspense>
               </div>
-              <Tabs>
-                <NewLink
-                  key="description"
-                  primitiveType="cyberstormLink"
-                  linkId="Package"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  aria-current={currentTab === "details"}
-                  rootClasses={`tabs-item${
-                    currentTab === "details" ? " tabs-item--current" : ""
-                  }`}
-                >
-                  Details
-                </NewLink>
-                <NewLink
-                  key="required"
-                  primitiveType="cyberstormLink"
-                  linkId="PackageRequired"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  aria-current={currentTab === "required"}
-                  rootClasses={`tabs-item${
-                    currentTab === "required" ? " tabs-item--current" : ""
-                  }`}
-                >
-                  Required ({listing.dependency_count})
-                </NewLink>
-                <NewLink
-                  key="wiki"
-                  primitiveType="cyberstormLink"
-                  linkId="PackageWiki"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  aria-current={currentTab === "wiki"}
-                  rootClasses={`tabs-item${
-                    currentTab === "wiki" ? " tabs-item--current" : ""
-                  }`}
-                >
-                  Wiki
-                </NewLink>
-                <NewLink
-                  key="changelog"
-                  primitiveType="cyberstormLink"
-                  linkId="PackageChangelog"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  aria-current={currentTab === "changelog"}
-                  rootClasses={`tabs-item${
-                    currentTab === "changelog" ? " tabs-item--current" : ""
-                  }`}
-                  disabled={!listing.has_changelog}
-                >
-                  Changelog
-                </NewLink>
-                <NewLink
-                  key="versions"
-                  primitiveType="cyberstormLink"
-                  linkId="PackageVersions"
-                  community={listing.community_identifier}
-                  namespace={listing.namespace}
-                  package={listing.name}
-                  aria-current={currentTab === "versions"}
-                  rootClasses={`tabs-item${
-                    currentTab === "versions" ? " tabs-item--current" : ""
-                  }`}
-                >
-                  Versions
-                </NewLink>
-                <NewLink
-                  key="source"
-                  href={`${domain}/c/${listing.community_identifier}/p/${listing.namespace}/${listing.name}/source`}
-                  primitiveType="link"
-                  aria-current={currentTab === "source"}
-                  rootClasses={`tabs-item${
-                    currentTab === "source" ? " tabs-item--current" : ""
-                  }`}
-                >
-                  Analysis{" "}
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faArrowUpRight} />
-                  </NewIcon>
-                </NewLink>
-              </Tabs>
+              <Suspense
+                fallback={
+                  <span>
+                    <span>Loading...</span>
+                  </span>
+                }
+              >
+                <Await resolve={listing}>
+                  {(resolvedValue) => (
+                    <>
+                      <Tabs>
+                        <NewLink
+                          key="description"
+                          primitiveType="cyberstormLink"
+                          linkId="Package"
+                          community={resolvedValue.community_identifier}
+                          namespace={resolvedValue.namespace}
+                          package={resolvedValue.name}
+                          aria-current={currentTab === "details"}
+                          rootClasses={`tabs-item${
+                            currentTab === "details"
+                              ? " tabs-item--current"
+                              : ""
+                          }`}
+                        >
+                          Details
+                        </NewLink>
+                        <NewLink
+                          key="required"
+                          primitiveType="cyberstormLink"
+                          linkId="PackageRequired"
+                          community={resolvedValue.community_identifier}
+                          namespace={resolvedValue.namespace}
+                          package={resolvedValue.name}
+                          aria-current={currentTab === "required"}
+                          rootClasses={`tabs-item${
+                            currentTab === "required"
+                              ? " tabs-item--current"
+                              : ""
+                          }`}
+                        >
+                          Required ({resolvedValue.dependency_count})
+                        </NewLink>
+                        <NewLink
+                          key="wiki"
+                          primitiveType="cyberstormLink"
+                          linkId="PackageWiki"
+                          community={resolvedValue.community_identifier}
+                          namespace={resolvedValue.namespace}
+                          package={resolvedValue.name}
+                          aria-current={currentTab === "wiki"}
+                          rootClasses={`tabs-item${
+                            currentTab === "wiki" ? " tabs-item--current" : ""
+                          }`}
+                        >
+                          Wiki
+                        </NewLink>
+                        <NewLink
+                          key="changelog"
+                          primitiveType="cyberstormLink"
+                          linkId="PackageChangelog"
+                          community={resolvedValue.community_identifier}
+                          namespace={resolvedValue.namespace}
+                          package={resolvedValue.name}
+                          aria-current={currentTab === "changelog"}
+                          rootClasses={`tabs-item${
+                            currentTab === "changelog"
+                              ? " tabs-item--current"
+                              : ""
+                          }`}
+                          disabled={!resolvedValue.has_changelog}
+                        >
+                          Changelog
+                        </NewLink>
+                        <NewLink
+                          key="versions"
+                          primitiveType="cyberstormLink"
+                          linkId="PackageVersions"
+                          community={resolvedValue.community_identifier}
+                          namespace={resolvedValue.namespace}
+                          package={resolvedValue.name}
+                          aria-current={currentTab === "versions"}
+                          rootClasses={`tabs-item${
+                            currentTab === "versions"
+                              ? " tabs-item--current"
+                              : ""
+                          }`}
+                        >
+                          Versions
+                        </NewLink>
+                        <NewLink
+                          key="source"
+                          href={`${domain}/c/${resolvedValue.community_identifier}/p/${resolvedValue.namespace}/${resolvedValue.name}/source`}
+                          primitiveType="link"
+                          aria-current={currentTab === "source"}
+                          rootClasses={`tabs-item${
+                            currentTab === "source" ? " tabs-item--current" : ""
+                          }`}
+                        >
+                          Analysis{" "}
+                          <NewIcon csMode="inline" noWrapper>
+                            <FontAwesomeIcon icon={faArrowUpRight} />
+                          </NewIcon>
+                        </NewLink>
+                      </Tabs>
+                    </>
+                  )}
+                </Await>
+              </Suspense>
               <div className="package-listing__content">
                 <Outlet context={outletContext} />
               </div>
             </section>
             <aside className="package-listing-sidebar">
-              <NewButton
-                csVariant="accent"
-                csSize="big"
-                rootClasses="package-listing-sidebar__install"
-                primitiveType="link"
-                href={listing.install_url}
+              <Suspense
+                fallback={
+                  <span>
+                    <span>Loading...</span>
+                  </span>
+                }
               >
-                <NewIcon csMode="inline">
-                  <ThunderstoreLogo />
-                </NewIcon>
-                Install
-              </NewButton>
+                <Await resolve={listing}>
+                  {(resolvedValue) => (
+                    <NewButton
+                      csVariant="accent"
+                      csSize="big"
+                      rootClasses="package-listing-sidebar__install"
+                      primitiveType="link"
+                      href={resolvedValue.install_url}
+                    >
+                      <NewIcon csMode="inline">
+                        <ThunderstoreLogo />
+                      </NewIcon>
+                      Install
+                    </NewButton>
+                  )}
+                </Await>
+              </Suspense>
               <div className="package-listing-sidebar__main">
-                {actions}
-                {packageMeta}
+                <Suspense
+                  fallback={
+                    <span>
+                      <span>Loading...</span>
+                    </span>
+                  }
+                >
+                  <Await resolve={listingAndTeamPromise}>
+                    {(resolvedValue) => (
+                      <Actions
+                        team={resolvedValue[1]}
+                        listing={resolvedValue[0]}
+                        isLiked={isLiked}
+                        currentUser={currentUser}
+                        likeUpdateTrigger={fetchAndSetRatedPackages}
+                        requestConfig={config}
+                      />
+                    )}
+                  </Await>
+                </Suspense>
+                <Suspense
+                  fallback={
+                    <span>
+                      <span>Loading...</span>
+                    </span>
+                  }
+                >
+                  <Await resolve={listing}>
+                    {(resolvedValue) => (
+                      <>
+                        {packageMeta(lastUpdated, firstUploaded, resolvedValue)}
+                      </>
+                    )}
+                  </Await>
+                </Suspense>
               </div>
-              {packageBoxes}
+              <Suspense
+                fallback={
+                  <span>
+                    <span>Loading...</span>
+                  </span>
+                }
+              >
+                <Await resolve={listingAndCommunityPromise}>
+                  {(resolvedValue) => (
+                    <>
+                      {packageBoxes(resolvedValue[0], resolvedValue[1], domain)}
+                    </>
+                  )}
+                </Await>
+              </Suspense>
             </aside>
           </div>
         </section>
@@ -1071,3 +1014,330 @@ function ReportPackageForm(props: {
 }
 
 ReportPackageForm.displayName = "ReportPackageForm";
+
+function packageTags(
+  listing: Awaited<ReturnType<typeof getPackageListingDetails>>,
+  community: Awaited<ReturnType<typeof getCommunity>>
+) {
+  return listing.categories.map((category) => {
+    return (
+      <NewTag
+        key={category.name}
+        csMode="cyberstormLink"
+        linkId="Community"
+        community={community.identifier}
+        queryParams={`includedCategories=${category.id}`}
+        csSize="small"
+        csVariant="primary"
+      >
+        {category.name}
+      </NewTag>
+    );
+  });
+}
+
+function packageBoxes(
+  listing: Awaited<ReturnType<typeof getPackageListingDetails>>,
+  community: Awaited<ReturnType<typeof getCommunity>>,
+  domain: string
+) {
+  const pt = packageTags(listing, community);
+
+  return (
+    <>
+      {pt.length > 0 || listing.is_deprecated || listing.is_nsfw ? (
+        <div className="package-listing-sidebar__categories">
+          <div className="package-listing-sidebar__header">
+            <Heading csLevel="4" csSize="4">
+              Categories
+            </Heading>
+          </div>
+          {pt.length > 0 ? (
+            <div className="package-listing-sidebar__body">{pt}</div>
+          ) : null}
+          {listing.is_deprecated || listing.is_nsfw ? (
+            <div className="package-listing-sidebar__body">
+              {listing.is_deprecated ? (
+                <NewTag
+                  csSize="small"
+                  csModifiers={["dark"]}
+                  csVariant="yellow"
+                >
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faWarning} />
+                  </NewIcon>
+                  Deprecated
+                </NewTag>
+              ) : null}
+              {listing.is_nsfw ? (
+                <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
+                  <NewIcon noWrapper csMode="inline">
+                    <FontAwesomeIcon icon={faLips} />
+                  </NewIcon>
+                  NSFW
+                </NewTag>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+      {listing.team.members.length > 0 ? (
+        <TeamMembers listing={listing} domain={domain} />
+      ) : null}
+    </>
+  );
+}
+
+// TODO: Enable when APIs are available
+function managementTools(
+  packagePermissions: Awaited<ReturnType<typeof fetchPackagePermissions>>,
+  listing: Awaited<ReturnType<typeof getPackageListingDetails>>,
+  toast: ReturnType<typeof useToast>,
+  requestConfig: () => RequestConfig
+) {
+  return (
+    <div className="package-listing-management-tools">
+      {packagePermissions.permissions.can_moderate ? (
+        <div className="package-listing-management-tools__island">
+          {packagePermissions.permissions.can_moderate ? (
+            <Modal
+              popoverId={"reviewPackage"}
+              csSize="small"
+              trigger={
+                <NewButton
+                  csSize="small"
+                  popoverTarget="reviewPackage"
+                  popoverTargetAction="show"
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faScaleBalanced} />
+                  </NewIcon>
+                  Review Package
+                </NewButton>
+              }
+            >
+              <ReviewPackageForm
+                communityId={listing.community_identifier}
+                namespaceId={listing.namespace}
+                packageId={listing.name}
+                toast={toast}
+                reviewStatusColor={"orange"}
+                reviewStatus={"Skibidied"}
+                config={requestConfig}
+              />
+            </Modal>
+          ) : null}
+          {/* {packagePermissions.permissions.can_view_listing_admin_page ? (
+              <NewButton
+                csSize="small"
+                csVariant="secondary"
+                primitiveType="link"
+                href={`${
+                  import.meta.env.VITE_SITE_URL
+                }/djangoadmin/community/packagelisting/206/change/`}
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faList} />
+                </NewIcon>
+                Listing admin
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faArrowUpRight} />
+                </NewIcon>
+              </NewButton>
+            ) : null}
+            {packagePermissions.permissions.can_view_package_admin_page ? (
+              <NewButton
+                csSize="small"
+                csVariant="secondary"
+                primitiveType="link"
+                href={`${
+                  import.meta.env.VITE_SITE_URL
+                }/djangoadmin/repository/package/16/change/`}
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faBoxOpen} />
+                </NewIcon>
+                Package admin
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faArrowUpRight} />
+                </NewIcon>
+              </NewButton>
+            ) : null} */}
+        </div>
+      ) : null}
+      {packagePermissions.permissions.can_manage ? (
+        <div className="package-listing-management-tools__island">
+          <NewButton
+            csSize="small"
+            primitiveType="cyberstormLink"
+            linkId="PackageEdit"
+            community={packagePermissions.package.community_id}
+            namespace={packagePermissions.package.namespace_id}
+            package={packagePermissions.package.package_name}
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faCog} />
+            </NewIcon>
+            Manage Package
+          </NewButton>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function likeAction(
+  currentUser: CurrentUser | undefined,
+  updateTrigger: () => Promise<void>,
+  requestConfig: () => RequestConfig
+) {
+  return PackageLikeAction({
+    isLoggedIn: Boolean(currentUser?.username),
+    dataUpdateTrigger: updateTrigger,
+    config: requestConfig,
+  });
+}
+
+const Actions = memo(function Actions(props: {
+  team: Awaited<ReturnType<typeof getTeamDetails>>;
+  listing: Awaited<ReturnType<typeof getPackageListingDetails>>;
+  isLiked: boolean;
+  currentUser: CurrentUser | undefined;
+  likeUpdateTrigger: () => Promise<void>;
+  requestConfig: () => RequestConfig;
+}) {
+  const {
+    team,
+    listing,
+    isLiked,
+    currentUser,
+    likeUpdateTrigger,
+    requestConfig,
+  } = props;
+  return (
+    <div className="package-listing-sidebar__actions">
+      <NewButton
+        primitiveType="link"
+        href={listing.download_url}
+        csVariant="secondary"
+        rootClasses="package-listing-sidebar__download"
+      >
+        <NewIcon csMode="inline" noWrapper>
+          <FontAwesomeIcon icon={faDownload} />
+        </NewIcon>
+        Download
+      </NewButton>
+      {team.donation_link ? (
+        <NewButton
+          primitiveType="link"
+          href={team.donation_link}
+          csVariant="secondary"
+          csSize="big"
+          csModifiers={["only-icon"]}
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faHandHoldingHeart} />
+          </NewIcon>
+        </NewButton>
+      ) : null}
+      <NewButton
+        primitiveType="button"
+        onClick={() =>
+          likeAction(currentUser, likeUpdateTrigger, requestConfig)(
+            isLiked,
+            listing.namespace,
+            listing.name,
+            Boolean(currentUser?.username)
+          )
+        }
+        tooltipText="Like"
+        csVariant={isLiked ? "primary" : "secondary"}
+        csSize="big"
+        csModifiers={["only-icon"]}
+      >
+        <NewIcon csMode="inline" noWrapper>
+          <FontAwesomeIcon icon={faThumbsUp} />
+        </NewIcon>
+      </NewButton>
+      {/* <NewButton
+            // primitiveType="button"
+            tooltipText="Report"
+            csVariant={"secondary"}
+            csSize="big"
+            csModifiers={["only-icon"]}
+            popoverTarget="reportPackage"
+            popoverTargetAction="show"
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faFlagSwallowtail} />
+            </NewIcon>
+          </NewButton> */}
+    </div>
+  );
+});
+
+function packageMeta(
+  lastUpdated: ReactElement | undefined,
+  firstUploaded: ReactElement | undefined,
+  listing: Awaited<ReturnType<typeof getPackageListingDetails>>
+) {
+  return (
+    <div className="package-listing-sidebar__meta">
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">Last Updated</div>
+        <div className="package-listing-sidebar__content">{lastUpdated}</div>
+      </div>
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">First Uploaded</div>
+        <div className="package-listing-sidebar__content">{firstUploaded}</div>
+      </div>
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">Downloads</div>
+        <div className="package-listing-sidebar__content">
+          {formatInteger(listing.download_count)}
+        </div>
+      </div>
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">Likes</div>
+        <div className="package-listing-sidebar__content">
+          {formatInteger(listing.rating_count)}
+        </div>
+      </div>
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">Size</div>
+        <div className="package-listing-sidebar__content">
+          {formatFileSize(listing.size)}
+        </div>
+      </div>
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">Dependency string</div>
+        <div className="package-listing-sidebar__content">
+          <div className="package-listing-sidebar__dependency-string-wrapper">
+            <span
+              title={listing.full_version_name}
+              className="package-listing-sidebar__dependency-string"
+            >
+              {listing.full_version_name}
+            </span>
+            <CopyButton text={listing.full_version_name} />
+          </div>
+        </div>
+      </div>
+      <div className="package-listing-sidebar__item">
+        <div className="package-listing-sidebar__label">Dependants</div>
+        <div className="package-listing-sidebar__content">
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="PackageDependants"
+            community={listing.community_identifier}
+            namespace={listing.namespace}
+            package={listing.name}
+            csVariant="cyber"
+          >
+            {listing.dependant_count} other mods
+          </NewLink>
+        </div>
+      </div>
+    </div>
+  );
+}
