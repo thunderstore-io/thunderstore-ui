@@ -4,6 +4,7 @@ import {
   EmptyState,
   NewTextInput,
   NewSelect,
+  SkeletonBox,
 } from "@thunderstore/cyberstorm";
 import "./Communities.css";
 import { useState, useEffect, useRef, memo, Suspense } from "react";
@@ -78,7 +79,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     };
   });
   return {
-    communities: dapper.getCommunities(
+    communities: await dapper.getCommunities(
       page,
       order === null ? undefined : order,
       search === null ? undefined : search
@@ -160,7 +161,7 @@ export default function CommunitiesPage() {
   }, [debouncedSearchValue]);
 
   return (
-    <section className="container container--y container--full layout__content communities">
+    <>
       <PageHeader headingLevel="1" headingSize="3">
         Communities
       </PageHeader>
@@ -198,7 +199,7 @@ export default function CommunitiesPage() {
           </Suspense>
         </div>
       </div>
-    </section>
+    </>
   );
 }
 
@@ -240,10 +241,16 @@ const CommunitiesListSkeleton = memo(function CommunitiesListSkeleton() {
     <div className="communities__communities-list">
       {Array.from({ length: 14 }).map((_, index) => (
         <div key={index} className="communities__community-skeleton">
-          <div className="communities__community-skeleton-image" />
+          <div className="communities__community-skeleton-image">
+            <SkeletonBox />
+          </div>
           <div className="communities__community-skeleton-content">
-            <div className="communities__community-skeleton-title" />
-            <div className="communities__community-skeleton-meta" />
+            <div className="communities__community-skeleton-title">
+              <SkeletonBox />
+            </div>
+            <div className="communities__community-skeleton-meta">
+              <SkeletonBox />
+            </div>
           </div>
         </div>
       ))}

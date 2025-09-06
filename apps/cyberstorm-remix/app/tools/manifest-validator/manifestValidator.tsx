@@ -74,7 +74,7 @@ export default function ManifestValidator() {
   }, [debouncedTeamInput, debouncedManifestInput, outletContext.requestConfig]);
 
   return (
-    <div className="container container--y container--full layout__content">
+    <>
       <NewBreadCrumbs>
         <span>
           <span>Manifest Validator</span>
@@ -112,7 +112,7 @@ export default function ManifestValidator() {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }
 

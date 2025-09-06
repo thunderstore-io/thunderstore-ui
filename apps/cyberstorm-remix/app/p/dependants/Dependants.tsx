@@ -168,7 +168,7 @@ export default function Dependants() {
   const outletContext = useOutletContext() as OutletContextShape;
 
   return (
-    <div className="container container--y container--full layout__content">
+    <>
       <NewBreadCrumbs>
         <NewBreadCrumbsLink
           primitiveType="cyberstormLink"
@@ -241,6 +241,6 @@ export default function Dependants() {
           dapper={outletContext.dapper}
         />
       </section>
-    </div>
+    </>
   );
 }

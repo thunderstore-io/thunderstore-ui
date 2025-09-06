@@ -1,6 +1,6 @@
 import "./Wiki.css";
 
-import { LoaderFunctionArgs } from "react-router";
+import { Await, LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
@@ -14,10 +14,12 @@ import {
   getPackagePermissions,
 } from "@thunderstore/dapper-ts/src/methods/package";
 import { isApiError } from "../../../../../../packages/thunderstore-api/src";
+import { Suspense, useMemo } from "react";
+import { SkeletonBox } from "@thunderstore/cyberstorm";
 
 type ResultType = {
-  wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
-  page: Awaited<ReturnType<typeof getPackageWikiPage>> | undefined;
+  wiki: ReturnType<typeof getPackageWiki> | undefined;
+  page: ReturnType<typeof getPackageWikiPage> | undefined;
   communityId: string;
   namespaceId: string;
   packageId: string;
@@ -49,11 +51,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
     };
 
     try {
-      const wiki = await dapper.getPackageWiki(
-        params.namespaceId,
-        params.packageId
-      );
-      const page = await dapper.getPackageWikiPage(params.slug);
+      const wiki = dapper.getPackageWiki(params.namespaceId, params.packageId);
+      const page = dapper.getPackageWikiPage(params.slug);
       result = {
         wiki: wiki,
         page: page,
@@ -118,11 +117,8 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
     };
 
     try {
-      const wiki = await dapper.getPackageWiki(
-        params.namespaceId,
-        params.packageId
-      );
-      const page = await dapper.getPackageWikiPage(params.slug);
+      const wiki = dapper.getPackageWiki(params.namespaceId, params.packageId);
+      const page = dapper.getPackageWikiPage(params.slug);
       result = {
         wiki: wiki,
         page: page,
@@ -161,34 +157,51 @@ export default function WikiPage() {
     typeof loader | typeof clientLoader
   >();
 
-  if (wiki && page) {
-    const currentPageIndex = wiki.pages.findIndex((p) => p.id === page.id);
+  const wikiAndPageMemo = useMemo(
+    () => Promise.all([wiki, page]),
+    [wiki, page]
+  );
 
-    let previousPage = undefined;
-    let nextPage = undefined;
+  <Suspense fallback={<SkeletonBox className="package-wiki__skeleton" />}>
+    <Await
+      resolve={wikiAndPageMemo}
+      errorElement={<div>Error occurred while loading wiki page</div>}
+    >
+      {(resolvedValue) => {
+        const [wiki, page] = resolvedValue;
+        if (wiki && page) {
+          const currentPageIndex = wiki.pages.findIndex(
+            (p) => p.id === page.id
+          );
 
-    if (currentPageIndex === 0) {
-      previousPage = undefined;
-    } else {
-      previousPage = wiki.pages[currentPageIndex - 1]?.slug;
-    }
+          let previousPage = undefined;
+          let nextPage = undefined;
 
-    if (currentPageIndex === wiki.pages.length) {
-      nextPage = undefined;
-    } else {
-      nextPage = wiki.pages[currentPageIndex + 1]?.slug;
-    }
+          if (currentPageIndex === 0) {
+            previousPage = undefined;
+          } else {
+            previousPage = wiki.pages[currentPageIndex - 1]?.slug;
+          }
 
-    return (
-      <WikiContent
-        page={page}
-        communityId={communityId}
-        namespaceId={namespaceId}
-        packageId={packageId}
-        previousPage={previousPage}
-        nextPage={nextPage}
-      />
-    );
-  }
-  return <>Wiki Page Not Found</>;
+          if (currentPageIndex === wiki.pages.length) {
+            nextPage = undefined;
+          } else {
+            nextPage = wiki.pages[currentPageIndex + 1]?.slug;
+          }
+
+          return (
+            <WikiContent
+              page={page}
+              communityId={communityId}
+              namespaceId={namespaceId}
+              packageId={packageId}
+              previousPage={previousPage}
+              nextPage={nextPage}
+            />
+          );
+        }
+        return <>Wiki Page Not Found</>;
+      }}
+    </Await>
+  </Suspense>;
 }

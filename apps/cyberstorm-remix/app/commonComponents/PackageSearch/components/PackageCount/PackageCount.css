@@ -3,6 +3,7 @@
     display: flex;
     flex: 1;
     flex-wrap: wrap;
+    justify-content: flex-end;
     color: var(--color-text-tertiary);
     font-size: var(--font-size-body-md);
     word-break: break-all;

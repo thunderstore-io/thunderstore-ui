@@ -1,6 +1,6 @@
 import "./Wiki.css";
 
-import { LoaderFunctionArgs } from "react-router";
+import { Await, LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
@@ -14,10 +14,12 @@ import {
   getPackageWiki,
   getPackageWikiPage,
 } from "@thunderstore/dapper-ts/src/methods/package";
+import { SkeletonBox } from "@thunderstore/cyberstorm";
+import { useMemo, Suspense } from "react";
 
 type ResultType = {
   wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
-  firstPage: Awaited<ReturnType<typeof getPackageWikiPage>> | undefined;
+  firstPage: ReturnType<typeof getPackageWikiPage> | undefined;
   communityId: string;
   namespaceId: string;
   packageId: string;
@@ -47,7 +49,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
         params.namespaceId,
         params.packageId
       );
-      const firstPage = await dapper.getPackageWikiPage(wiki.pages[0].id);
+      const firstPage = dapper.getPackageWikiPage(wiki.pages[0].id);
       result = {
         wiki: wiki,
         firstPage: firstPage,
@@ -111,7 +113,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         params.namespaceId,
         params.packageId
       );
-      const firstPage = await dapper.getPackageWikiPage(wiki.pages[0].id);
+      const firstPage = dapper.getPackageWikiPage(wiki.pages[0].id);
       result = {
         wiki: wiki,
         firstPage: firstPage,
@@ -149,20 +151,34 @@ export default function WikiFirstPage() {
   const { wiki, firstPage, communityId, namespaceId, packageId, permissions } =
     useLoaderData<typeof loader | typeof clientLoader>();
 
-  if (wiki && firstPage) {
-    return (
-      <WikiContent
-        page={firstPage}
-        communityId={communityId}
-        namespaceId={namespaceId}
-        packageId={packageId}
-        previousPage={undefined}
-        nextPage={wiki.pages.length > 1 ? wiki.pages[1].slug : undefined}
-        canManage={permissions?.then((perms) =>
-          typeof perms === "undefined" ? false : perms.permissions.can_manage
-        )}
-      />
-    );
-  }
-  return <>There are no wiki pages available.</>;
+  const wikiAndFirstPageMemo = useMemo(
+    () => Promise.all([wiki, firstPage]),
+    [wiki, firstPage]
+  );
+
+  <Suspense fallback={<SkeletonBox className="package-wiki__skeleton" />}>
+    <Await resolve={wikiAndFirstPageMemo}>
+      {(resolvedValue) => {
+        const [wiki, firstPage] = resolvedValue;
+        if (wiki && firstPage) {
+          return (
+            <WikiContent
+              page={firstPage}
+              communityId={communityId}
+              namespaceId={namespaceId}
+              packageId={packageId}
+              previousPage={undefined}
+              nextPage={wiki.pages.length > 1 ? wiki.pages[1].slug : undefined}
+              canManage={permissions?.then((perms) =>
+                typeof perms === "undefined"
+                  ? false
+                  : perms.permissions.can_manage
+              )}
+            />
+          );
+        }
+        return <>There are no wiki pages available.</>;
+      }}
+    </Await>
+  </Suspense>;
 }

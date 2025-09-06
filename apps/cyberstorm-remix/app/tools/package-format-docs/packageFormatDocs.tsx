@@ -11,7 +11,7 @@ import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export default function PackageFormatDocs() {
   return (
-    <div className="container container--y container--full layout__content">
+    <>
       <NewBreadCrumbs>
         <span>
           <span>Package Format Docs</span>
@@ -48,7 +48,7 @@ export default function PackageFormatDocs() {
         </p>
         <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} />
       </section>
-    </div>
+    </>
   );
 }
 

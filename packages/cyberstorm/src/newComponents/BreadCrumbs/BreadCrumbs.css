@@ -9,6 +9,36 @@
     font-size: var(--font-size-body-sm);
     line-height: var(--line-height-auto);
 
+    > span {
+      > span {
+        display: inline-flex;
+        gap: 0.5rem;
+      }
+    }
+
+    > a {
+      > span {
+        display: inline-flex;
+        gap: 0.5rem;
+      }
+    }
+
+    .breadcrumbs__homelink > span {
+      display: inline-block;
+      width: 0.875rem;
+      height: 0.875rem;
+      font-size: var(--font-size-body-md);
+    }
+
+    img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1rem;
+      height: 1rem;
+      aspect-ratio: 1/1;
+    }
+
     > * {
       position: relative;
       display: flex;
@@ -89,12 +119,5 @@
         background-color: var(--breadcrumb-item-bg-color--hover);
       }
     }
-  }
-
-  .breadcrumbs__homelink > span {
-    display: inline-block;
-    width: 0.875rem;
-    height: 0.875rem;
-    font-size: var(--font-size-body-md);
   }
 }

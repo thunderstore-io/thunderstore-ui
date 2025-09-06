@@ -1,17 +1,21 @@
 @layer nimbus-layout {
-  .versions {
+  .package-versions__skeleton {
+    height: 500px;
+  }
+
+  .package-versions {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     max-width: 100%;
   }
 
-  .versions__table-wrapper {
+  .package-versions__table-wrapper {
     overflow-x: scroll;
     scrollbar-width: none;
   }
 
-  .versions__actions {
+  .package-versions__actions {
     display: flex;
     gap: 24px;
     align-items: flex-start;
@@ -19,21 +23,21 @@
     justify-content: flex-end;
   }
 
-  .versions__version {
+  .package-versions__version {
     color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-md);
     line-height: var(--line-height-md);
   }
 
-  .versions__upload-date {
+  .package-versions__upload-date {
     color: var(--color-text-tertiary);
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-md);
     line-height: var(--line-height-md);
   }
 
-  .versions__downloads {
+  .package-versions__downloads {
     color: var(--color-text-tertiary);
     font-weight: var(--font-weight-regular);
     font-size: var(--font-size-body-md);

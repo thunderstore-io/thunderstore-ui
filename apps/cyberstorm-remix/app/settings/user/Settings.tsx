@@ -47,7 +47,7 @@ export default function Community() {
     : "settings";
 
   return (
-    <div className="container container--y container--full layout__content">
+    <>
       <NewBreadCrumbs>
         <span>
           <span>{outletContext.currentUser.username}</span>
@@ -85,6 +85,6 @@ export default function Community() {
           <Outlet context={outletContext} />
         </section>
       </div>
-    </div>
+    </>
   );
 }

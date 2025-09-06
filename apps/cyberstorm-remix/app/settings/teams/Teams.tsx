@@ -64,7 +64,7 @@ export default function Teams() {
   const currentUser = outletContext.currentUser;
 
   return (
-    <div className="container container--y container--full layout__content">
+    <>
       <NewBreadCrumbs>
         <span>
           <span>Teams</span>
@@ -144,7 +144,7 @@ export default function Teams() {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }
 

@@ -3,6 +3,10 @@
     /* Header dimensions */
     --header-height: 3.5rem;
     --content-padding-top: 1.5rem;
+
+    /* stylelint-disable */
+    interpolate-size: allow-keywords;
+    /* stylelint-enable */
   }
 
   body {
@@ -20,7 +24,7 @@
     gap: var(--gap-sm);
     align-self: flex-start;
     justify-content: flex-start;
-    max-width: var(--nimbus-layout-content-max-width, 90rem);
+    max-width: var(--nimbus-layout-content-max-width, 120rem);
     padding: var(--space-16);
   }
 

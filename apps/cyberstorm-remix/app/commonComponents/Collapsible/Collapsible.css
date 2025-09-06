@@ -3,12 +3,18 @@
     display: flex;
     flex: 1;
     flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    padding: 0.5rem;
+    border-radius: var(--Radius-md, 0.5rem);
     font-size: var(--font-size-body-md);
+    background: var(--Color-UI-surface-1, rgb(57 57 106 / 0.15));
   }
 
   .collapsible__header {
     display: flex;
     gap: var(--gap-md);
+    align-self: stretch;
     justify-content: space-between;
     padding: var(--space-8) var(--space-12);
     font-weight: var(--font-weight-bold);

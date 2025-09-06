@@ -53,7 +53,7 @@ export default function MarkdownPreview() {
   }, [debouncedMarkdownPreviewInput]);
 
   return (
-    <div className="container container--y container--full layout__content">
+    <>
       <NewBreadCrumbs>
         <span>
           <span>Markdown Preview</span>
@@ -92,7 +92,7 @@ export default function MarkdownPreview() {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }
 

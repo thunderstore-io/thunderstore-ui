@@ -48,8 +48,8 @@
       align-items: flex-start;
       align-self: stretch;
       aspect-ratio: 3/4;
-      border-radius: var(--radius-md);
-      background: var(--color-skeleton-bg-color);
+
+      --skeleton-radius: var(--radius-md);
     }
 
     .communities__community-skeleton-content {
@@ -65,8 +65,6 @@
         align-items: flex-start;
         width: 90%;
         height: 1.188rem;
-        border-radius: var(--radius-sm);
-        background: var(--color-skeleton-bg-color);
       }
 
       .communities__community-skeleton-meta {
@@ -75,8 +73,6 @@
         align-self: stretch;
         justify-content: space-between;
         height: 0.937rem;
-        border-radius: var(--radius-sm);
-        background: var(--color-skeleton-bg-color);
       }
     }
   }

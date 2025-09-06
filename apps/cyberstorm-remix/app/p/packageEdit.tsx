@@ -236,7 +236,7 @@ export default function PackageListing() {
   });
 
   return (
-    <div className="container container--y container--full layout__content package-edit">
+    <>
       <NewBreadCrumbs>
         <NewBreadCrumbsLink
           primitiveType="cyberstormLink"
@@ -439,6 +439,6 @@ export default function PackageListing() {
           </div>
         </section>
       </div>
-    </div>
+    </>
   );
 }

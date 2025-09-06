@@ -1,6 +1,7 @@
 import "./styles/index.css";
 import "@thunderstore/cyberstorm-theme";
 import {
+  Await,
   Links,
   Meta,
   MetaFunction,
@@ -11,6 +12,7 @@ import {
   isRouteErrorResponse,
   useLoaderData,
   useLocation,
+  useMatches,
   useRouteError,
   useRouteLoaderData,
 } from "react-router";
@@ -18,12 +20,18 @@ import {
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 
 import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
-import { AdContainer, LinkingProvider } from "@thunderstore/cyberstorm";
+import {
+  AdContainer,
+  isRecord,
+  LinkingProvider,
+  NewBreadCrumbs,
+  NewBreadCrumbsLink,
+} from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { CurrentUser } from "@thunderstore/dapper/types";
 
 import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
-import { memo, ReactNode, useEffect, useRef } from "react";
+import { memo, ReactNode, Suspense, useEffect, useRef } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import Toast from "@thunderstore/cyberstorm/src/newComponents/Toast";
 import { Footer } from "./commonComponents/Footer/Footer";
@@ -41,6 +49,7 @@ import {
   publicEnvVariablesType,
 } from "cyberstorm/security/publicEnvVariables";
 import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
+import { isPromise } from "cyberstorm/utils/typeChecks";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -175,6 +184,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const data = useLoaderData<RootLoadersType>();
 
   const location = useLocation();
+  // const splitPath = location.pathname.split("/");
+  // const isSubPath = splitPath.length > 4;
+  // const enableCommunitiesBreadCrumb =
+  //   location.pathname === "/communities" || location.pathname.startsWith("/c/");
+  // const isPackageListingSubPath =
+  //   splitPath.length > 5 && splitPath[1] === "c" && splitPath[3] === "p";
+  const matches = useMatches();
+
+  const communitiesPage = matches.find(
+    (m) => m.id === "communities/communities"
+  );
+  const communityPage = matches.find((m) => m.id === "c/community");
+  const packageListingPage = matches.find((m) => m.id === "p/packageListing");
   const shouldShowAds = location.pathname.startsWith("/teams")
     ? false
     : location.pathname.startsWith("/settings")
@@ -232,7 +254,121 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 />
                 <div className="container container--x container--full island">
                   <main className="container container--x container--full island-item layout__main">
-                    {children}
+                    <section className="container container--y container--full layout__content">
+                      {/* Breadcrumbs are build progressively */}
+                      <NewBreadCrumbs>
+                        {/* Communities page */}
+                        {communitiesPage || communityPage ? (
+                          <NewBreadCrumbsLink
+                            primitiveType="cyberstormLink"
+                            linkId="Communities"
+                            csVariant="cyber"
+                          >
+                            Communities
+                          </NewBreadCrumbsLink>
+                        ) : null}
+                        {/* Community page */}
+                        {communityPage &&
+                        isRecord(communityPage.data) &&
+                        Object.prototype.hasOwnProperty.call(
+                          communityPage.data,
+                          "community"
+                        ) &&
+                        isPromise(communityPage.data.community) ? (
+                          <Suspense
+                            fallback={
+                              <span>
+                                <span>Loading...</span>
+                              </span>
+                            }
+                          >
+                            <Await resolve={communityPage.data.community}>
+                              {(resolvedValue) => {
+                                let label = undefined;
+                                let icon = undefined;
+                                if (isRecord(resolvedValue)) {
+                                  label =
+                                    Object.prototype.hasOwnProperty.call(
+                                      resolvedValue,
+                                      "name"
+                                    ) && typeof resolvedValue.name === "string"
+                                      ? resolvedValue.name
+                                      : communityPage.params.communityId;
+                                  icon =
+                                    Object.prototype.hasOwnProperty.call(
+                                      resolvedValue,
+                                      "community_icon_url"
+                                    ) &&
+                                    typeof resolvedValue.community_icon_url ===
+                                      "string" ? (
+                                      <img
+                                        src={resolvedValue.community_icon_url}
+                                        alt=""
+                                      />
+                                    ) : undefined;
+                                }
+                                return matches[matches.length - 1] ===
+                                  communityPage ? (
+                                  <span>
+                                    <span>
+                                      {icon}
+                                      {label}
+                                    </span>
+                                  </span>
+                                ) : (
+                                  <NewBreadCrumbsLink
+                                    primitiveType="cyberstormLink"
+                                    linkId="Community"
+                                    community={communityPage.params.communityId}
+                                    csVariant="cyber"
+                                  >
+                                    {icon}
+                                    {label}
+                                  </NewBreadCrumbsLink>
+                                );
+                              }}
+                            </Await>
+                          </Suspense>
+                        ) : null}
+                        {/* Package listing page */}
+                        {packageListingPage &&
+                        isRecord(packageListingPage.data) &&
+                        Object.prototype.hasOwnProperty.call(
+                          packageListingPage.data,
+                          "listing"
+                        ) &&
+                        isPromise(packageListingPage.data.listing) ? (
+                          <Suspense
+                            fallback={
+                              <span>
+                                <span>Loading...</span>
+                              </span>
+                            }
+                          >
+                            <Await resolve={packageListingPage.data.listing}>
+                              {(resolvedValue) => {
+                                let label = undefined;
+                                if (isRecord(resolvedValue)) {
+                                  label =
+                                    Object.prototype.hasOwnProperty.call(
+                                      resolvedValue,
+                                      "name"
+                                    ) && typeof resolvedValue.name === "string"
+                                      ? resolvedValue.name
+                                      : packageListingPage.params.packageId;
+                                }
+                                return (
+                                  <span>
+                                    <span>{label}</span>
+                                  </span>
+                                );
+                              }}
+                            </Await>
+                          </Suspense>
+                        ) : null}
+                      </NewBreadCrumbs>
+                      {children}
+                    </section>
                   </main>
                   {shouldShowAds ? (
                     <div className="container container--y island-item layout__ads">
@@ -267,7 +403,6 @@ const TooltipProvider = memo(function TooltipProvider({
 });
 
 function App() {
-  const location = useLocation();
   const data = useRouteLoaderData<RootLoadersType>("root");
   const dapper = new DapperTs(() => {
     return {
@@ -284,7 +419,6 @@ function App() {
         domain: data?.publicEnvVariables.VITE_API_URL,
         dapper: dapper,
       }}
-      key={location.key}
     />
   );
 }

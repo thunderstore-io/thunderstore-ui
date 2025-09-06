@@ -1,7 +1,8 @@
 @layer nimbus-components {
   .page-header {
     display: flex;
-    flex: 1 1 0;
+
+    /* flex: 1 1 0; */
     flex-direction: row;
     gap: var(--space-32);
     align-items: flex-start;

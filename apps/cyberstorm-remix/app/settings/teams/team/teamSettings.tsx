@@ -69,7 +69,7 @@ export default function Community() {
         : "profile";
 
   return (
-    <div className="container container--y container--full layout__content">
+    <>
       <NewBreadCrumbs>
         <NewBreadCrumbsLink
           primitiveType="cyberstormLink"
@@ -140,6 +140,6 @@ export default function Community() {
           <Outlet context={outletContext} />
         </section>
       </div>
-    </div>
+    </>
   );
 }

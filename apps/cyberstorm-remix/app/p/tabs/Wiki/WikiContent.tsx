@@ -34,11 +34,11 @@ export const WikiContent = memo(function WikiContent({
 }: WikiContentProps) {
   return (
     <>
-      <div className="wiki-content__header">
-        <div className="wiki-content__title">
+      <div className="package-wiki-content__header">
+        <div className="package-wiki-content__title">
           <Heading csLevel="3">{page.title}</Heading>
-          <div className="wiki-content__meta">
-            <span className="wiki-content__meta-date">
+          <div className="package-wiki-content__meta">
+            <span className="package-wiki-content__meta-date">
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faCalendarDay} />
               </NewIcon>
@@ -53,7 +53,7 @@ export const WikiContent = memo(function WikiContent({
           <Await resolve={canManage}>
             {(resolvedValue) =>
               resolvedValue ? (
-                <div className="wiki-content__actions">
+                <div className="package-wiki-content__actions">
                   <NewButton
                     csSize="small"
                     primitiveType="cyberstormLink"
@@ -74,7 +74,7 @@ export const WikiContent = memo(function WikiContent({
           </Await>
         </Suspense>
       </div>
-      <div className="wiki-content__body">
+      <div className="package-wiki-content__body">
         <Markdown input={page.markdown_content} />
         {/* <div className="markdown-wrapper">
           <div
@@ -83,7 +83,7 @@ export const WikiContent = memo(function WikiContent({
           />
         </div> */}
       </div>
-      <div className="wiki-content__footer">
+      <div className="package-wiki-content__footer">
         {previousPage ? (
           <NewButton
             csModifiers={["ghost"]}

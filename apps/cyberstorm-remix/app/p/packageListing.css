@@ -1,37 +1,4 @@
 @layer nimbus-layout {
-  .package-listing {
-    --nimbus-layout-content-max-width: 120rem;
-
-    z-index: 1;
-  }
-
-  .package-community__background {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    height: 20rem;
-    border-radius: var(--section-border-radius);
-    overflow: hidden;
-  }
-
-  .package-community__background-image {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    background: var(--color-body-bg-color, #101028);
-
-    opacity: 0.4;
-    mix-blend-mode: luminosity;
-  }
-
-  .package-community__background-tint {
-    position: absolute;
-    width: 100%;
-    height: 20rem;
-    background: linear-gradient(180deg, rgb(16 16 40 / 0.4) 0%, #101028 85.94%);
-  }
-
   .package-listing__main {
     display: flex;
     gap: var(--gap-xxxl);
@@ -49,12 +16,11 @@
     align-items: flex-start;
     align-self: stretch;
     justify-content: flex-start;
-    padding: 7.5rem 3rem 2rem;
   }
 
   .package-listing__actions {
     position: absolute;
-    top: 2.5rem;
+    top: -5rem;
     right: 3rem;
     display: flex;
     flex-direction: column;
@@ -151,12 +117,12 @@
     scrollbar-width: none;
   }
 
-  .package-listing__content-header {
-    display: flex;
-    gap: var(--gap-xl);
-    align-items: flex-start;
-    align-self: stretch;
-    padding: 1rem;
+  .package-listing__page-header-skeleton {
+    height: 10rem;
+  }
+
+  .package-listing__nav-skeleton {
+    height: 47px;
   }
 
   .package-listing__content {
@@ -179,6 +145,16 @@
     padding-top: var(--gap-md);
   }
 
+  .package-listing-sidebar__skeleton {
+    width: 20rem;
+    height: 21.4rem;
+  }
+
+  .package-listing-sidebar__install-skeleton {
+    width: 20rem;
+    height: 3.56rem;
+  }
+
   .package-listing-sidebar__install {
     justify-content: center;
     width: 100%;
@@ -190,6 +166,11 @@
     gap: var(--gap-md);
     align-items: flex-start;
     align-self: stretch;
+  }
+
+  .package-listing-sidebar__actions-skeleton {
+    width: 20rem;
+    height: 2.25rem;
   }
 
   .package-listing-sidebar__actions {
@@ -265,6 +246,11 @@
 
     /* text-overflow: ellipsis; */
     word-break: break-word;
+  }
+
+  .package-listing-sidebar__boxes-skeleton {
+    width: 20rem;
+    height: 11rem;
   }
 
   .package-listing-sidebar__categories {

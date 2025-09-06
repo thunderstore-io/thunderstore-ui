@@ -365,7 +365,7 @@ export default function Upload() {
   }, [strongForm.submitOutput]);
 
   return (
-    <div className="container container--y container--full layout__content">
+    <>
       <NewBreadCrumbs>
         <span>
           <span>Upload</span>
@@ -881,7 +881,7 @@ export default function Upload() {
           <p>submitError: {JSON.stringify(strongForm.submitError)}</p>
         </div> */}
       </section>
-    </div>
+    </>
   );
 }
 
