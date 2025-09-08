@@ -182,6 +182,31 @@ const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useLoaderData<RootLoadersType>();
+  let envVars = undefined;
+  let shouldUpdatePublicEnvVars = false;
+  if (import.meta.env.SSR) {
+    envVars = getPublicEnvVariables([
+      "VITE_SITE_URL",
+      "VITE_BETA_SITE_URL",
+      "VITE_API_URL",
+      "VITE_COOKIE_DOMAIN",
+      "VITE_AUTH_BASE_URL",
+      "VITE_AUTH_RETURN_URL",
+      "VITE_CLIENT_SENTRY_DSN",
+    ]);
+    shouldUpdatePublicEnvVars = true;
+  } else {
+    envVars = window.NIMBUS_PUBLIC_ENV;
+    if (
+      data &&
+      data.publicEnvVariables &&
+      data.publicEnvVariables !== envVars
+    ) {
+      shouldUpdatePublicEnvVars = true;
+    }
+  }
+
+  const resolvedEnvVars = data ? data.publicEnvVariables : envVars;
 
   const location = useLocation();
   // const splitPath = location.pathname.split("/");
@@ -237,19 +262,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.NIMBUS_PUBLIC_ENV = ${JSON.stringify(
-              data.publicEnvVariables
-            )}`,
-          }}
-        />
+        {shouldUpdatePublicEnvVars && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.NIMBUS_PUBLIC_ENV = ${JSON.stringify(
+                resolvedEnvVars
+              )}`,
+            }}
+          />
+        )}
         <div className="container container--y container--full island layout">
           <LinkingProvider value={LinkLibrary}>
             <Toast.Provider toastDuration={10000}>
               <TooltipProvider>
                 <NavigationWrapper
-                  domain={data.publicEnvVariables.VITE_API_URL || ""}
+                  domain={resolvedEnvVars?.VITE_API_URL || ""}
                   currentUser={data?.currentUser}
                 />
                 <div className="container container--x container--full island">

@@ -16,6 +16,7 @@ interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
   alt?: string;
   /** Force 1:1 aspect ratio */
   square?: boolean;
+  loading?: "eager" | "lazy";
   csVariant?: ImageVariants;
   intrinsicWidth?: number;
   intrinsicHeight?: number;
@@ -35,6 +36,7 @@ export const Image = memo(function Image(props: ImageProps) {
     csVariant = "primary",
     intrinsicWidth,
     intrinsicHeight,
+    loading = "lazy",
     ...forwardedProps
   } = props;
   const fProps = forwardedProps as ImageProps;
@@ -65,7 +67,7 @@ export const Image = memo(function Image(props: ImageProps) {
             "image--fullwidth"
           )}
         >
-          <img src={src} alt={alt} className="image__src" />
+          <img src={src} loading={loading} alt={alt} className="image__src" />
         </Frame>
       ) : (
         <NewIcon
