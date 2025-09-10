@@ -5,7 +5,7 @@ import {
   PackageListings,
   Section,
 } from "@thunderstore/dapper/types";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { memo, Suspense, useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 import "./PackageSearch.css";
@@ -16,6 +16,7 @@ import {
   NewButton,
   NewPagination,
   NewTextInput,
+  SkeletonBox,
 } from "@thunderstore/cyberstorm";
 import { Await, useNavigationType, useSearchParams } from "react-router";
 import { PackageCount } from "./components/PackageCount/PackageCount";
@@ -35,12 +36,13 @@ import {
   RequestConfig,
 } from "@thunderstore/thunderstore-api";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import { isPromise } from "cyberstorm/utils/typeChecks";
 
 const PER_PAGE = 20;
 
 interface Props {
-  listings: Promise<PackageListings>;
-  filters: Promise<CommunityFilters>;
+  listings: Promise<PackageListings> | PackageListings;
+  filters: Promise<CommunityFilters> | CommunityFilters;
   config: () => RequestConfig;
   currentUser?: CurrentUser;
   dapper: DapperTs;
@@ -148,34 +150,26 @@ const compareSearchParamBlobs = (
 export function PackageSearch(props: Props) {
   const { listings, filters, config, currentUser, dapper } = props;
 
-  // const navigation = useNavigation();
-
   const navigationType = useNavigationType();
 
-  // const listingsAndFiltersMemo = useMemo(
-  //   () => Promise.all([listings, filters]),
-  //   [listings, filters]
-  // );
+  // This exists to resolve insert the initial sections and categories on server-side
+  // so that we don't have to await the clientLoader to get the options, to then be able to
+  // do the initial fetch
+  const possibleFilters = isPromise(filters) ? undefined : filters;
 
-  const [sortedSections, setSortedSections] =
-    useState<CommunityFilters["sections"]>();
-  const [categories, setCategories] = useState<CategorySelection[]>();
+  const [sortedSections, setSortedSections] = useState<
+    CommunityFilters["sections"] | undefined
+  >(possibleFilters?.sections);
+
+  const [categories, setCategories] = useState<CategorySelection[] | undefined>(
+    possibleFilters?.package_categories
+      .sort((a, b) => a.slug.localeCompare(b.slug))
+      .map((c) => ({ ...c, selection: "off" }))
+  );
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // filters.then((resolvedFilters) => {
-  //   // Set sorted sections
-  //   setSortedSections(
-  //     resolvedFilters.sections.sort((a, b) => b.priority - a.priority)
-  //   );
-  //   // Set current "initial" categories
-  //   const categories: CategorySelection[] = resolvedFilters.package_categories
-  //     .sort((a, b) => a.slug.localeCompare(b.slug))
-  //     .map((c) => ({ ...c, selection: "off" }));
-  //   setCategories(categories);
-  // });
-
-  const initialParams = searchParamsToBlob(searchParams);
+  const initialParams = searchParamsToBlob(searchParams, sortedSections);
 
   const [searchParamsBlob, setSearchParamsBlob] =
     useState<SearchParamsType>(initialParams);
@@ -183,6 +177,37 @@ export function PackageSearch(props: Props) {
   const [currentPage, setCurrentPage] = useState(
     searchParams.get("page") ? Number(searchParams.get("page")) : 1
   );
+
+  const categoriesRef = useRef<
+    undefined | Awaited<Promise<CommunityFilters>>["package_categories"]
+  >(undefined);
+
+  useEffect(() => {
+    if (isPromise(filters)) {
+      // On mount, resolve filters promise and set sections and categories states
+      filters.then((resolvedFilters) => {
+        // Set sorted sections
+        setSortedSections(
+          resolvedFilters.sections.sort((a, b) => b.priority - a.priority)
+        );
+        if (sortedSections && sortedSections.length !== 0) {
+          setSearchParamsBlob((prev) => ({
+            ...prev,
+            section: sortedSections[0].uuid,
+          }));
+        }
+        if (resolvedFilters.package_categories !== categoriesRef.current) {
+          // Set current "initial" categories
+          const categories: CategorySelection[] =
+            resolvedFilters.package_categories
+              .sort((a, b) => a.slug.localeCompare(b.slug))
+              .map((c) => ({ ...c, selection: "off" }));
+          setCategories(categories);
+          categoriesRef.current = resolvedFilters.package_categories;
+        }
+      });
+    }
+  }, []);
 
   // Categories start
 
@@ -307,38 +332,30 @@ export function PackageSearch(props: Props) {
           resetPage = true;
         }
         // Section
-        // Because of the first section being a empty value, the logic check is a bit funky
-
-        // If no section in search params, delete
-        if (sortedSections && sortedSections.length === 0)
-          searchParams.delete("section");
-
-        // If new section is empty, delete (defaults to first)
-        if (debouncedSearchParamsBlob.section === "")
-          searchParams.delete("section");
-
-        // If new section is the first one, delete. And reset page number if section is different from last render.
         if (
-          sortedSections &&
-          debouncedSearchParamsBlob.section === sortedSections[0]?.uuid
+          debouncedSearchParamsBlob.section === "" ||
+          (sortedSections && sortedSections.length === 0)
         ) {
-          if (
-            searchParamsBlobRef.current.section !==
-            debouncedSearchParamsBlob.section
-          ) {
-            resetPage = true;
-          }
           searchParams.delete("section");
+        } else {
+          if (sortedSections && sortedSections.length !== 0) {
+            if (debouncedSearchParamsBlob.section === sortedSections[0]?.uuid) {
+              // If the first one, ensure the search param isn't set as it's defaulted to the first one in SearchParmsToBlob function.
+              searchParams.delete("section");
+            } else {
+              searchParams.set("section", debouncedSearchParamsBlob.section);
+            }
+          } else {
+            // This else is for completeness
+            searchParams.delete("section");
+          }
         }
 
-        // If new section is different and not the first one, set it.
+        // Reset page if section has changed
         if (
-          sortedSections &&
           searchParamsBlobRef.current.section !==
-            debouncedSearchParamsBlob.section &&
-          debouncedSearchParamsBlob.section !== sortedSections[0]?.uuid
+          debouncedSearchParamsBlob.section
         ) {
-          searchParams.set("section", debouncedSearchParamsBlob.section);
           resetPage = true;
         }
 
@@ -470,7 +487,11 @@ export function PackageSearch(props: Props) {
                     priority: -999999999,
                   },
                 ]}
-                selected={searchParamsBlob.section ?? sortedSections[0]?.uuid}
+                selected={
+                  searchParamsBlob.section === ""
+                    ? sortedSections[0]?.uuid
+                    : searchParamsBlob.section
+                }
                 setSelected={setParamsBlobValue(
                   setSearchParamsBlob,
                   searchParamsBlob,
@@ -581,13 +602,7 @@ export function PackageSearch(props: Props) {
               </div>
             </div>
             <div className="package-search__results">
-              <Suspense
-                fallback={
-                  <span>
-                    <span>Loading...</span>
-                  </span>
-                }
-              >
+              <Suspense fallback={<SkeletonBox />}>
                 <Await resolve={listings}>
                   {(resolvedValue) => (
                     <PackageCount
@@ -603,13 +618,7 @@ export function PackageSearch(props: Props) {
           </div>
         </div>
         <div className="package-search__packages">
-          <Suspense
-            fallback={
-              <span>
-                <span>Loading...</span>
-              </span>
-            }
-          >
+          <Suspense fallback={<PackageSearchPackagesSkeleton />}>
             <Await resolve={listings}>
               {(resolvedValue) => (
                 <>
@@ -686,13 +695,7 @@ export function PackageSearch(props: Props) {
           </Suspense>
         </div>
         <div className="package-search__pagination">
-          <Suspense
-            fallback={
-              <span>
-                <span>Loading...</span>
-              </span>
-            }
-          >
+          <Suspense fallback={<SkeletonBox />}>
             <Await resolve={listings}>
               {(resolvedValue) => (
                 <NewPagination
@@ -770,9 +773,6 @@ const resetParams = (
     includedCategories: "",
     excludedCategories: "",
   });
-  // setOrdering(order);
-  // setPage(1);
-  // setSearchValue("");
 };
 
 const clearAll =
@@ -784,3 +784,15 @@ const clearAll =
       excludedCategories: "",
     });
 // End setters
+
+const PackageSearchPackagesSkeleton = memo(
+  function PackageSearchPackagesSkeleton() {
+    return (
+      <div className="package-search__grid">
+        {Array.from({ length: 12 }).map((_, index) => (
+          <SkeletonBox key={index} />
+        ))}
+      </div>
+    );
+  }
+);

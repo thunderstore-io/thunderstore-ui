@@ -51,6 +51,12 @@
     align-self: stretch;
     justify-content: center;
     padding-top: var(--space-40);
+
+    > .skeleton {
+      width: 100%;
+      max-width: 20rem;
+      height: 2.5rem;
+    }
   }
 
   .package-search__search-params {
@@ -104,6 +110,12 @@
     flex: 1;
     gap: var(--gap-xxs);
     align-items: center;
+    justify-content: flex-end;
+
+    .skeleton {
+      width: 18ch;
+      height: 1rem;
+    }
   }
 
   .package-search__packages {
@@ -120,6 +132,10 @@
     grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
     gap: var(--gap-sm);
     width: 100%;
+
+    > .skeleton {
+      height: 30rem;
+    }
   }
 
   @media (width <= 48rem) {
@@ -165,6 +181,10 @@
 
     .package-search__grid {
       grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+
+      > .skeleton {
+        height: 28rem;
+      }
     }
 
     .package-search__content {

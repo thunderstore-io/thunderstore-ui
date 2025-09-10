@@ -39,8 +39,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-    const community = dapper.getCommunity(params.communityId);
-
+    const community = await dapper.getCommunity(params.communityId);
     return {
       community: community,
     };
@@ -236,7 +235,12 @@ export default function Community() {
                 </Suspense>
               </div>
             </div>
-            <NewButton csSize="big" csVariant="accent">
+            <NewButton
+              csSize="big"
+              csVariant="accent"
+              primitiveType="cyberstormLink"
+              linkId="PackageUpload"
+            >
               <NewIcon noWrapper csMode="inline">
                 <FontAwesomeIcon icon={faDownload} />
               </NewIcon>
