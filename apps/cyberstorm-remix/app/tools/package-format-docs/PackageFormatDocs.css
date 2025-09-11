@@ -1,6 +1,6 @@
 @layer nimbus-layout {
   .package-format-docs {
-    gap: var(--gap-xxxxxl);
+    gap: var(--gap-5xl);
   }
 
   .package-format-docs__title {

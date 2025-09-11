@@ -12,7 +12,7 @@
   .communities__content {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xxxl);
+    gap: var(--gap-3xl);
     align-items: flex-start;
     align-self: stretch;
   }
@@ -38,7 +38,7 @@
     display: grid;
     flex-flow: row wrap;
     grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
-    gap: var(--gap-xxxxxxxl) var(--gap-xl);
+    gap: var(--gap-7xl) var(--gap-xl);
     width: 100%;
   }
 
@@ -74,6 +74,12 @@
         justify-content: space-between;
         height: 0.937rem;
       }
+    }
+  }
+
+  @media (width <= 41rem) {
+    .communities__communities-list {
+      gap: var(--gap-3xl) var(--gap-xl);
     }
   }
 

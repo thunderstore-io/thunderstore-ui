@@ -16,11 +16,22 @@
       transition: var(--animation-duration-xs);
       user-select: none;
 
+      > span {
+        display: inline-flex;
+        flex-wrap: nowrap;
+        gap: 0.75rem;
+        align-items: center;
+      }
+
       &.checkbox-list__label--off {
         color: var(--color-text-secondary);
 
         svg {
           --icon-color: var(--color-surface-a8);
+        }
+
+        .checkbox-list__exclude-button svg {
+          --icon-color: transparent;
         }
       }
 
@@ -28,8 +39,12 @@
         color: var(--color-cyber-green-7);
         font-weight: var(--font-weight-bold);
 
-        svg {
+        .checkbox-list__checkbox-button svg {
           --icon-color: var(--color-cyber-green-7);
+        }
+
+        .checkbox-list__exclude-button svg {
+          --icon-color: transparent;
         }
       }
 
@@ -37,8 +52,12 @@
         color: var(--color-accent-red-7);
         font-weight: var(--font-weight-bold);
 
-        svg {
+        .checkbox-list__exclude-button svg {
           --icon-color: var(--color-accent-red-7);
+        }
+
+        .checkbox-list__checkbox-button svg {
+          --icon-color: var(--color-surface-a8);
         }
       }
 
@@ -57,22 +76,30 @@
         &.checkbox-list__label--include {
           color: var(--color-cyber-green-8);
 
-          svg {
+          .checkbox-list__checkbox-button svg {
             --icon-color: var(--color-cyber-green-8);
+          }
+
+          .checkbox-list__exclude-button svg {
+            --icon-color: var(--color-accent-red-8);
           }
         }
 
         &.checkbox-list__label--exclude {
           color: var(--color-accent-red-8);
 
-          svg {
+          .checkbox-list__checkbox-button svg {
+            --icon-color: var(--color-surface-a10);
+          }
+
+          .checkbox-list__exclude-button svg {
             --icon-color: var(--color-accent-red-8);
           }
         }
       }
     }
 
-    .checkbox-list__checkbox {
+    .checkbox-list__icon {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -83,6 +110,17 @@
 
       background-color: transparent;
       transition: ease-out var(--animation-duration-xs);
+
+      &.checkbox-list__exclude-button {
+        --icon-inline-size: var(--space-16);
+
+        width: var(--space-20);
+        height: var(--space-20);
+
+        &:hover {
+          --icon-color: var(--color-accent-red-8);
+        }
+      }
     }
   }
 }

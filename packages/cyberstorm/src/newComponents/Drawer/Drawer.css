@@ -30,7 +30,7 @@
 
   .drawer__fake-backdrop {
     width: 100%;
-    height: 10%;
+    height: 40%;
     background: transparent;
   }
 
@@ -43,7 +43,7 @@
 
     width: 100%;
     height: max-content;
-    max-height: 90%;
+    max-height: 60%;
     border: var(--drawer-border);
 
     border-radius: var(--drawer-border-radius);

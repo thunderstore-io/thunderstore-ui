@@ -39,8 +39,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-    const community = dapper.getCommunity(params.communityId);
-
+    const community = await dapper.getCommunity(params.communityId);
     return {
       community: community,
     };
@@ -152,91 +151,99 @@ export default function Community() {
 
           <div
             className={classnames(
-              "community__content-header",
+              "community__content-header-wrapper",
               isSubPath ? "community__content-header--hide" : null
             )}
           >
-            <div className="community__game-icon">
-              <div className="community__game-icon-tinified">
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) =>
-                      resolvedValue.community_icon_url ? (
-                        <img
-                          src={resolvedValue.community_icon_url}
-                          alt={resolvedValue.name}
-                        />
-                      ) : null
-                    }
-                  </Await>
-                </Suspense>
+            <div className="community__content-header">
+              <div className="community__game-icon">
+                <div className="community__game-icon-tinified">
+                  <Suspense fallback={<SkeletonBox />}>
+                    <Await resolve={community}>
+                      {(resolvedValue) =>
+                        resolvedValue.community_icon_url ? (
+                          <img
+                            src={resolvedValue.community_icon_url}
+                            alt={resolvedValue.name}
+                          />
+                        ) : null
+                      }
+                    </Await>
+                  </Suspense>
+                </div>
+              </div>
+              <div className="community__content-header-content">
+                <div className="community__header-info">
+                  <Suspense fallback={<SkeletonBox />}>
+                    <Await resolve={community}>
+                      {(resolvedValue) => (
+                        <Heading
+                          csLevel={"1"}
+                          csSize={"3"}
+                          csVariant="primary"
+                          mode="display"
+                        >
+                          {resolvedValue.name}
+                        </Heading>
+                      )}
+                    </Await>
+                  </Suspense>
+                </div>
+                <div className="community__header-meta">
+                  <Suspense fallback={<SkeletonBox />}>
+                    <Await resolve={community}>
+                      {(resolvedValue) =>
+                        resolvedValue.wiki_url ? (
+                          <NewLink
+                            primitiveType="link"
+                            href={resolvedValue.wiki_url}
+                            csVariant="cyber"
+                            rootClasses="community__item"
+                          >
+                            <NewIcon csMode="inline" noWrapper>
+                              <FontAwesomeIcon icon={faBook} />
+                            </NewIcon>
+                            <span>Modding Wiki</span>
+                            <NewIcon csMode="inline" noWrapper>
+                              <FontAwesomeIcon icon={faArrowUpRight} />
+                            </NewIcon>
+                          </NewLink>
+                        ) : null
+                      }
+                    </Await>
+                  </Suspense>
+                  <Suspense fallback={<SkeletonBox />}>
+                    <Await resolve={community}>
+                      {(resolvedValue) =>
+                        resolvedValue.discord_url ? (
+                          <NewLink
+                            primitiveType="link"
+                            href={resolvedValue.discord_url}
+                            csVariant="cyber"
+                            rootClasses="community__item"
+                          >
+                            <NewIcon csMode="inline" noWrapper>
+                              <FontAwesomeIcon icon={faDiscord} />
+                            </NewIcon>
+                            <span>Modding Discord</span>
+                            <NewIcon csMode="inline" noWrapper>
+                              <FontAwesomeIcon icon={faArrowUpRight} />
+                            </NewIcon>
+                          </NewLink>
+                        ) : null
+                      }
+                    </Await>
+                  </Suspense>
+                </div>
               </div>
             </div>
-            <div className="community__content-header-content">
-              <div className="community__header-info">
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) => (
-                      <Heading
-                        csLevel={"1"}
-                        csSize={"3"}
-                        csVariant="primary"
-                        mode="display"
-                      >
-                        {resolvedValue.name}
-                      </Heading>
-                    )}
-                  </Await>
-                </Suspense>
-              </div>
-              <div className="community__header-meta">
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) =>
-                      resolvedValue.wiki_url ? (
-                        <NewLink
-                          primitiveType="link"
-                          href={resolvedValue.wiki_url}
-                          csVariant="cyber"
-                          rootClasses="community__item"
-                        >
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faBook} />
-                          </NewIcon>
-                          <span>Modding Wiki</span>
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faArrowUpRight} />
-                          </NewIcon>
-                        </NewLink>
-                      ) : null
-                    }
-                  </Await>
-                </Suspense>
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) =>
-                      resolvedValue.discord_url ? (
-                        <NewLink
-                          primitiveType="link"
-                          href={resolvedValue.discord_url}
-                          csVariant="cyber"
-                          rootClasses="community__item"
-                        >
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faDiscord} />
-                          </NewIcon>
-                          <span>Modding Discord</span>
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faArrowUpRight} />
-                          </NewIcon>
-                        </NewLink>
-                      ) : null
-                    }
-                  </Await>
-                </Suspense>
-              </div>
-            </div>
-            <NewButton csSize="big" csVariant="accent">
+            <NewButton
+              csSize="big"
+              csVariant="accent"
+              primitiveType="cyberstormLink"
+              linkId="PackageUpload"
+              rootClasses="community__upload-button"
+            >
               <NewIcon noWrapper csMode="inline">
                 <FontAwesomeIcon icon={faDownload} />
               </NewIcon>

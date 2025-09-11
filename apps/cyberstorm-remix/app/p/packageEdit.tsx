@@ -2,8 +2,6 @@ import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import {
   NewAlert,
-  NewBreadCrumbs,
-  NewBreadCrumbsLink,
   NewButton,
   NewIcon,
   NewSelectSearch,
@@ -237,45 +235,6 @@ export default function PackageListing() {
 
   return (
     <>
-      <NewBreadCrumbs>
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Communities"
-          csVariant="cyber"
-        >
-          Communities
-        </NewBreadCrumbsLink>
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Community"
-          community={community.identifier}
-          csVariant="cyber"
-        >
-          {community.name}
-        </NewBreadCrumbsLink>
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Team"
-          community={community.identifier}
-          team={listing.namespace}
-          csVariant="cyber"
-        >
-          {listing.namespace}
-        </NewBreadCrumbsLink>
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Package"
-          community={community.identifier}
-          namespace={listing.namespace}
-          package={listing.name}
-          csVariant="cyber"
-        >
-          {listing.name}
-        </NewBreadCrumbsLink>
-        <span>
-          <span>Edit package</span>
-        </span>
-      </NewBreadCrumbs>
       <PageHeader headingLevel="1" headingSize="2">
         Edit package
       </PageHeader>

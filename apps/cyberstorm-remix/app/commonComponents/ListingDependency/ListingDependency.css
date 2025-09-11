@@ -29,7 +29,7 @@
 
   .listing-dependency__title {
     display: flex;
-    gap: var(--gap-xxs);
+    gap: var(--gap-2xs);
     align-items: center;
     align-self: stretch;
     font-weight: var(--font-weight-regular);

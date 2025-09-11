@@ -1,6 +1,5 @@
 import "./Upload.css";
 import {
-  NewBreadCrumbs,
   NewButton,
   NewIcon,
   NewSelectSearch,
@@ -366,11 +365,6 @@ export default function Upload() {
 
   return (
     <>
-      <NewBreadCrumbs>
-        <span>
-          <span>Upload</span>
-        </span>
-      </NewBreadCrumbs>
       <PageHeader headingLevel="1" headingSize="2">
         Upload package
       </PageHeader>

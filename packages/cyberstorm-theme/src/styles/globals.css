@@ -27,18 +27,19 @@
 
     /* Space affecting layout values */
 
-    --gap-xxxs: var(--space-2);
-    --gap-xxs: var(--space-4);
+    --gap-3xs: var(--space-2);
+    --gap-2xs: var(--space-4);
     --gap-xs: var(--space-8);
     --gap-sm: var(--space-12);
     --gap-md: var(--space-16);
+    --gap-lg: var(--space-20);
     --gap-xl: var(--space-24);
-    --gap-xxl: var(--space-28);
-    --gap-xxxl: var(--space-32);
-    --gap-xxxxl: var(--space-36);
-    --gap-xxxxxl: var(--space-40);
-    --gap-xxxxxxl: var(--space-44);
-    --gap-xxxxxxxl: var(--space-48);
+    --gap-2xl: var(--space-28);
+    --gap-3xl: var(--space-32);
+    --gap-4xl: var(--space-36);
+    --gap-5xl: var(--space-40);
+    --gap-6xl: var(--space-44);
+    --gap-7xl: var(--space-48);
     --page-margin: 16rem;
     --page-margin-top: 25px;
 

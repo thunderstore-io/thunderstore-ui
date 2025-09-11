@@ -1,9 +1,6 @@
-import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { useLoaderData, useOutletContext } from "react-router";
-import { NewBreadCrumbs, NewBreadCrumbsLink } from "@thunderstore/cyberstorm";
 import "./Team.css";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
-import { ApiError } from "@thunderstore/thunderstore-api";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
 import { OutletContextShape } from "../../root";
@@ -12,142 +9,100 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
+import { Route } from "./+types/Team";
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return [
-    { title: data?.community.name },
-    { name: "description", content: `Mods for ${data?.community.name}` },
-  ];
-};
-
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId && params.namespaceId) {
-    try {
-      const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: publicEnvVariables.VITE_API_URL,
-          sessionId: undefined,
-        };
-      });
-      const searchParams = new URL(request.url).searchParams;
-      const ordering =
-        searchParams.get("ordering") ?? PackageOrderOptions.Updated;
-      const page = searchParams.get("page");
-      const search = searchParams.get("search");
-      const includedCategories = searchParams.get("includedCategories");
-      const excludedCategories = searchParams.get("excludedCategories");
-      const section = searchParams.get("section");
-      const nsfw = searchParams.get("nsfw");
-      const deprecated = searchParams.get("deprecated");
-      const community = await dapper.getCommunity(params.communityId);
-      const filters = await dapper.getCommunityFilters(params.communityId);
-      const sortedSections = filters.sections.sort(
-        (a, b) => b.priority - a.priority
-      );
+    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
+    const dapper = new DapperTs(() => {
       return {
-        community: community,
-        team: params.namespaceId,
-        filters: filters,
-        listings: await dapper.getPackageListings(
-          {
-            kind: "namespace",
-            communityId: params.communityId,
-            namespaceId: params.namespaceId,
-          },
-          ordering ?? "",
-          page === null ? undefined : Number(page),
-          search ?? "",
-          includedCategories?.split(",") ?? undefined,
-          excludedCategories?.split(",") ?? undefined,
-          section
-            ? section === "all"
-              ? ""
-              : section
-            : sortedSections && sortedSections[0]
-              ? sortedSections[0].uuid
-              : "",
-          nsfw === "true" ? true : false,
-          deprecated === "true" ? true : false
-        ),
-        sortedSections: sortedSections,
+        apiHost: publicEnvVariables.VITE_API_URL,
+        sessionId: undefined,
       };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Package not found", { status: 404 });
-      } else {
-        throw error;
-      }
-    }
+    });
+    const searchParams = new URL(request.url).searchParams;
+    const ordering =
+      searchParams.get("ordering") ?? PackageOrderOptions.Updated;
+    const page = searchParams.get("page");
+    const search = searchParams.get("search");
+    const includedCategories = searchParams.get("includedCategories");
+    const excludedCategories = searchParams.get("excludedCategories");
+    const section = searchParams.get("section");
+    const nsfw = searchParams.get("nsfw");
+    const deprecated = searchParams.get("deprecated");
+    const filters = await dapper.getCommunityFilters(params.communityId);
+
+    return {
+      teamId: params.namespaceId,
+      filters: filters,
+      listings: await dapper.getPackageListings(
+        {
+          kind: "namespace",
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+        },
+        ordering ?? "",
+        page === null ? undefined : Number(page),
+        search ?? "",
+        includedCategories?.split(",") ?? undefined,
+        excludedCategories?.split(",") ?? undefined,
+        section ? (section === "all" ? "" : section) : "",
+        nsfw === "true" ? true : false,
+        deprecated === "true" ? true : false
+      ),
+    };
   }
-  throw new Response("Package not found", { status: 404 });
+  throw new Response("Community not found", { status: 404 });
 }
 
-export async function clientLoader({ request, params }: LoaderFunctionArgs) {
+export async function clientLoader({
+  request,
+  params,
+}: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId) {
-    try {
-      const tools = getSessionTools();
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: tools?.getConfig().apiHost,
-          sessionId: tools?.getConfig().sessionId,
-        };
-      });
-      const searchParams = new URL(request.url).searchParams;
-      const ordering =
-        searchParams.get("ordering") ?? PackageOrderOptions.Updated;
-      const page = searchParams.get("page");
-      const search = searchParams.get("search");
-      const includedCategories = searchParams.get("includedCategories");
-      const excludedCategories = searchParams.get("excludedCategories");
-      const section = searchParams.get("section");
-      const nsfw = searchParams.get("nsfw");
-      const deprecated = searchParams.get("deprecated");
-      const community = await dapper.getCommunity(params.communityId);
-      const filters = await dapper.getCommunityFilters(params.communityId);
-      const sortedSections = filters.sections.sort(
-        (a, b) => b.priority - a.priority
-      );
+    const tools = getSessionTools();
+    const dapper = new DapperTs(() => {
       return {
-        community: community,
-        team: params.namespaceId,
-        filters: filters,
-        listings: await dapper.getPackageListings(
-          {
-            kind: "namespace",
-            communityId: params.communityId,
-            namespaceId: params.namespaceId,
-          },
-          ordering ?? "",
-          page === null ? undefined : Number(page),
-          search ?? "",
-          includedCategories?.split(",") ?? undefined,
-          excludedCategories?.split(",") ?? undefined,
-          section
-            ? section === "all"
-              ? ""
-              : section
-            : sortedSections && sortedSections[0]
-              ? sortedSections[0].uuid
-              : "",
-          nsfw === "true" ? true : false,
-          deprecated === "true" ? true : false
-        ),
-        sortedSections: sortedSections,
+        apiHost: tools?.getConfig().apiHost,
+        sessionId: tools?.getConfig().sessionId,
       };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Package not found", { status: 404 });
-      } else {
-        throw error;
-      }
-    }
+    });
+    const searchParams = new URL(request.url).searchParams;
+    const ordering =
+      searchParams.get("ordering") ?? PackageOrderOptions.Updated;
+    const page = searchParams.get("page");
+    const search = searchParams.get("search");
+    const includedCategories = searchParams.get("includedCategories");
+    const excludedCategories = searchParams.get("excludedCategories");
+    const section = searchParams.get("section");
+    const nsfw = searchParams.get("nsfw");
+    const deprecated = searchParams.get("deprecated");
+    const filters = dapper.getCommunityFilters(params.communityId);
+    return {
+      teamId: params.namespaceId,
+      filters: filters,
+      listings: dapper.getPackageListings(
+        {
+          kind: "namespace",
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+        },
+        ordering ?? "",
+        page === null ? undefined : Number(page),
+        search ?? "",
+        includedCategories?.split(",") ?? undefined,
+        excludedCategories?.split(",") ?? undefined,
+        section ? (section === "all" ? "" : section) : "",
+        nsfw === "true" ? true : false,
+        deprecated === "true" ? true : false
+      ),
+    };
   }
-  throw new Response("Package not found", { status: 404 });
+  throw new Response("Community not found", { status: 404 });
 }
 
 export default function Team() {
-  const { community, team, filters, listings, sortedSections } = useLoaderData<
+  const { filters, listings, teamId } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
@@ -155,38 +110,19 @@ export default function Team() {
 
   return (
     <>
-      <NewBreadCrumbs>
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Communities"
-          csVariant="cyber"
-        >
-          Communities
-        </NewBreadCrumbsLink>
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Community"
-          community={community.identifier}
-          csVariant="cyber"
-        >
-          {community.name}
-        </NewBreadCrumbsLink>
-        <span>
-          <span>{team}</span>
-        </span>
-      </NewBreadCrumbs>
       <section className="team">
         <PageHeader headingLevel="1" headingSize="3">
-          Mods uploaded by {team}
+          Mods uploaded by {teamId}
         </PageHeader>
-        <PackageSearch
-          listings={listings}
-          packageCategories={filters.package_categories}
-          sections={sortedSections}
-          config={outletContext.requestConfig}
-          currentUser={outletContext.currentUser}
-          dapper={outletContext.dapper}
-        />
+        <>
+          <PackageSearch
+            listings={listings}
+            filters={filters}
+            config={outletContext.requestConfig}
+            currentUser={outletContext.currentUser}
+            dapper={outletContext.dapper}
+          />
+        </>
       </section>
     </>
   );

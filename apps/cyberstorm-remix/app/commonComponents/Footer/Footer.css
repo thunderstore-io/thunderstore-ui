@@ -21,7 +21,7 @@
   .footer__links-wrapper {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--gap-xxxl);
+    gap: var(--gap-3xl);
     justify-content: space-between;
     margin-left: 3.5rem;
   }
@@ -47,7 +47,7 @@
   .footer__icon-links {
     display: flex;
     flex-shrink: 0;
-    gap: var(--gap-xxxl);
+    gap: var(--gap-3xl);
     justify-content: center;
   }
 
@@ -181,7 +181,7 @@
   .footnote__inner {
     display: flex;
     flex-grow: 1;
-    gap: var(--gap-xxl);
+    gap: var(--gap-2xl);
     max-width: calc(var(--footer-half-width) * 2);
     margin-right: 3.5rem;
     margin-left: 3.5rem;
@@ -191,7 +191,7 @@
     display: flex;
     flex: 1 0 0;
     flex-wrap: wrap;
-    gap: var(--gap-xxxl);
+    gap: var(--gap-3xl);
     align-items: flex-start;
 
     > a {
@@ -240,7 +240,7 @@
       display: flex;
       flex-flow: column wrap;
       flex-shrink: 0;
-      gap: var(--gap-xxxl);
+      gap: var(--gap-3xl);
       justify-content: space-between;
       max-width: unset;
       margin-left: unset;
