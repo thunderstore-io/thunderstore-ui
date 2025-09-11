@@ -41,7 +41,7 @@
   @media (width <= 475px) {
     .manifest-validator__row {
       flex-direction: column;
-      gap: var(--gap-xxxl);
+      gap: var(--gap-3xl);
     }
 
     .manifest-validator__content {

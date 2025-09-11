@@ -175,6 +175,7 @@ export default function CommunitiesPage() {
             leftIcon={<FontAwesomeIcon icon={faSearch} />}
             type="search"
             rootClasses="communities__search"
+            csSize="small"
           />
           <span className="container container--x">
             <NewSelect
