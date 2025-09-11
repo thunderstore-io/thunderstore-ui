@@ -1,24 +1,16 @@
-import { Await, useLoaderData, useOutletContext } from "react-router";
-import {
-  formatToDisplayName,
-  NewLink,
-  SkeletonBox,
-} from "@thunderstore/cyberstorm";
-import "./Dependants.css";
+import { useLoaderData, useOutletContext } from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
+import { PackageOrderOptions } from "~/commonComponents/PackageSearch/components/PackageOrder";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
-import { OutletContextShape } from "../../root";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { Route } from "./+types/Dependants";
-import { Suspense } from "react";
+import { OutletContextShape } from "~/root";
+import { Route } from "./+types/PackageSearch";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
-  if (params.communityId && params.packageId && params.namespaceId) {
+  if (params.communityId) {
     const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
@@ -39,19 +31,11 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     const filters = await dapper.getCommunityFilters(params.communityId);
 
     return {
-      community: dapper.getCommunity(params.communityId),
-      listing: dapper.getPackageListingDetails(
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      ),
       filters: filters,
       listings: await dapper.getPackageListings(
         {
-          kind: "package-dependants",
+          kind: "community",
           communityId: params.communityId,
-          namespaceId: params.namespaceId,
-          packageName: params.packageId,
         },
         ordering ?? "",
         page === null ? undefined : Number(page),
@@ -71,7 +55,7 @@ export async function clientLoader({
   request,
   params,
 }: Route.ClientLoaderArgs) {
-  if (params.communityId && params.packageId && params.namespaceId) {
+  if (params.communityId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
       return {
@@ -91,19 +75,11 @@ export async function clientLoader({
     const deprecated = searchParams.get("deprecated");
     const filters = dapper.getCommunityFilters(params.communityId);
     return {
-      community: dapper.getCommunity(params.communityId),
-      listing: dapper.getPackageListingDetails(
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      ),
       filters: filters,
       listings: dapper.getPackageListings(
         {
-          kind: "package-dependants",
+          kind: "community",
           communityId: params.communityId,
-          namespaceId: params.namespaceId,
-          packageName: params.packageId,
         },
         ordering ?? "",
         page === null ? undefined : Number(page),
@@ -119,8 +95,12 @@ export async function clientLoader({
   throw new Response("Community not found", { status: 404 });
 }
 
-export default function Dependants() {
-  const { filters, listing, listings } = useLoaderData<
+// function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
+//   return true; // false
+// }
+
+export default function CommunityPackageSearch() {
+  const { filters, listings } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
@@ -128,46 +108,13 @@ export default function Dependants() {
 
   return (
     <>
-      <section className="dependants">
-        <Suspense fallback={<SkeletonBox />}>
-          <Await resolve={listing}>
-            {(resolvedValue) => (
-              <PageHeader headingLevel="1" headingSize="3">
-                Mods that depend on{" "}
-                <NewLink
-                  primitiveType="cyberstormLink"
-                  linkId="Package"
-                  community={resolvedValue.community_identifier}
-                  namespace={resolvedValue.namespace}
-                  package={resolvedValue.name}
-                  csVariant="cyber"
-                >
-                  {formatToDisplayName(resolvedValue.name)}
-                </NewLink>
-                {" by "}
-                <NewLink
-                  primitiveType="cyberstormLink"
-                  linkId="Team"
-                  community={resolvedValue.community_identifier}
-                  team={resolvedValue.namespace}
-                  csVariant="cyber"
-                >
-                  {resolvedValue.namespace}
-                </NewLink>
-              </PageHeader>
-            )}
-          </Await>
-        </Suspense>
-        <>
-          <PackageSearch
-            listings={listings}
-            filters={filters}
-            config={outletContext.requestConfig}
-            currentUser={outletContext.currentUser}
-            dapper={outletContext.dapper}
-          />
-        </>
-      </section>
+      <PackageSearch
+        listings={listings}
+        filters={filters}
+        config={outletContext.requestConfig}
+        currentUser={outletContext.currentUser}
+        dapper={outletContext.dapper}
+      />
     </>
   );
 }

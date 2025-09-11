@@ -11,14 +11,13 @@
     top: calc(var(--header-height) + 1rem);
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xs);
+    gap: var(--gap-sm);
     align-items: flex-start;
-    width: 17rem;
+    min-width: 15.5rem;
     max-height: calc(100vh - var(--header-height) - 2rem);
-    padding: var(--space-12);
+    padding-top: var(--space-16);
     border-radius: var(--radius-md);
     overflow-y: auto;
-    background: var(--color-surface-default);
     scrollbar-width: none;
   }
 
@@ -29,9 +28,11 @@
   .package-search__filters {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xs);
+    gap: var(--gap-sm);
+    gap: 0.75rem;
     align-items: stretch;
     align-self: stretch;
+    width: 15.5rem;
   }
 
   .package-search__content {
@@ -40,15 +41,22 @@
     flex-direction: column;
     gap: var(--space-24);
     align-items: flex-start;
+    padding-top: 1rem;
   }
 
   .package-search__pagination {
     display: flex;
-    gap: var(--gap-xxs);
+    gap: var(--gap-2xs);
     align-items: center;
     align-self: stretch;
     justify-content: center;
     padding-top: var(--space-40);
+
+    > .skeleton {
+      width: 100%;
+      max-width: 20rem;
+      height: 2.5rem;
+    }
   }
 
   .package-search__search-params {
@@ -78,18 +86,10 @@
     align-self: stretch;
   }
 
-  .package-search__results {
-    display: flex;
-    flex: 1;
-    gap: var(--gap-xxs);
-    align-items: center;
-  }
-
   .package-search__listing-actions {
     display: flex;
     gap: var(--gap-md);
     align-items: center;
-    justify-content: flex-end;
 
     /* > .__display {
       display: flex;
@@ -103,6 +103,19 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+
+  .package-search__results {
+    display: flex;
+    flex: 1;
+    gap: var(--gap-2xs);
+    align-items: center;
+    justify-content: flex-end;
+
+    .skeleton {
+      width: 18ch;
+      height: 1rem;
+    }
   }
 
   .package-search__packages {
@@ -119,6 +132,10 @@
     grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
     gap: var(--gap-sm);
     width: 100%;
+
+    > .skeleton {
+      height: 30rem;
+    }
   }
 
   @media (width <= 48rem) {
@@ -144,6 +161,7 @@
   @media (width <= 475px) {
     .package-search {
       flex-direction: column;
+      gap: 0.25rem;
     }
 
     .package-search__sidebar {
@@ -152,8 +170,13 @@
       width: 100%;
     }
 
+    .package-search__filters {
+      width: unset;
+    }
+
     .package-search__tools {
       flex-direction: column;
+      gap: 0.5rem;
       align-items: stretch;
     }
 
@@ -164,9 +187,14 @@
 
     .package-search__grid {
       grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+
+      > .skeleton {
+        height: 28rem;
+      }
     }
 
     .package-search__content {
+      gap: 0.5rem;
       align-self: stretch;
     }
   }

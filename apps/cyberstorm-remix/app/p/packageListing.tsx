@@ -1,4 +1,7 @@
-import type { LoaderFunctionArgs } from "react-router";
+import type {
+  LoaderFunctionArgs,
+  ShouldRevalidateFunctionArgs,
+} from "react-router";
 import {
   Await,
   Outlet,
@@ -11,14 +14,13 @@ import {
   Heading,
   Modal,
   NewAlert,
-  NewBreadCrumbs,
-  NewBreadCrumbsLink,
   NewButton,
   NewIcon,
   NewLink,
   NewSelect,
   NewTag,
   NewTextInput,
+  SkeletonBox,
   Tabs,
 } from "@thunderstore/cyberstorm";
 import "./packageListing.css";
@@ -160,6 +162,20 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 
 clientLoader.hydrate = true;
 
+export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
+  const oldPath = arg.currentUrl.pathname.split("/");
+  const newPath = arg.nextUrl.pathname.split("/");
+  // If we're staying on the same package page, don't revalidate
+  if (
+    oldPath[2] === newPath[2] &&
+    oldPath[4] === newPath[4] &&
+    oldPath[5] === newPath[5]
+  ) {
+    return false;
+  }
+  return arg.defaultShouldRevalidate;
+}
+
 export default function PackageListing() {
   const { community, listing, team, permissions } = useLoaderData<
     typeof loader | typeof clientLoader
@@ -296,24 +312,6 @@ export default function PackageListing() {
           )}
         </Await>
       </Suspense>
-      <Suspense>
-        <Await resolve={community}>
-          {(resolvedValue) =>
-            resolvedValue.hero_image_url ? (
-              <div className="package-community__background">
-                {resolvedValue.hero_image_url ? (
-                  <img
-                    src={resolvedValue.hero_image_url}
-                    alt={resolvedValue.name}
-                    className="package-community__background-image"
-                  />
-                ) : null}
-                <div className="package-community__background-tint" />
-              </div>
-            ) : null
-          }
-        </Await>
-      </Suspense>
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
           <Suspense>
@@ -332,74 +330,13 @@ export default function PackageListing() {
               }
             </Await>
           </Suspense>
-          <NewBreadCrumbs>
-            <NewBreadCrumbsLink
-              primitiveType="cyberstormLink"
-              linkId="Communities"
-              csVariant="cyber"
-            >
-              Communities
-            </NewBreadCrumbsLink>
-            <Suspense
-              fallback={
-                <span>
-                  <span>Loading...</span>
-                </span>
-              }
-            >
-              <Await resolve={community}>
-                {(resolvedValue) => (
-                  <NewBreadCrumbsLink
-                    primitiveType="cyberstormLink"
-                    linkId="Community"
-                    community={resolvedValue.identifier}
-                    csVariant="cyber"
-                  >
-                    {resolvedValue.name}
-                  </NewBreadCrumbsLink>
-                )}
-              </Await>
-            </Suspense>
-            <Suspense
-              fallback={
-                <span>
-                  <span>Loading...</span>
-                </span>
-              }
-            >
-              <Await resolve={listingAndCommunityPromise}>
-                {(resolvedValue) => (
-                  <NewBreadCrumbsLink
-                    primitiveType="cyberstormLink"
-                    linkId="Team"
-                    community={resolvedValue[1].identifier}
-                    team={resolvedValue[0].namespace}
-                    csVariant="cyber"
-                  >
-                    {resolvedValue[0].namespace}
-                  </NewBreadCrumbsLink>
-                )}
-              </Await>
-            </Suspense>
-            <Suspense
-              fallback={
-                <span>
-                  <span>Loading...</span>
-                </span>
-              }
-            >
-              <Await resolve={listing}>
-                {(resolvedValue) => (
-                  <span>
-                    <span>{formatToDisplayName(resolvedValue.name)}</span>
-                  </span>
-                )}
-              </Await>
-            </Suspense>
-          </NewBreadCrumbs>
           <div className="package-listing__main">
             <section className="package-listing__package-content-section">
-              <Suspense fallback={<span>Loading...</span>}>
+              <Suspense
+                fallback={
+                  <SkeletonBox className="package-listing__page-header-skeleton" />
+                }
+              >
                 <Await resolve={listing}>
                   {(resolvedValue) => (
                     <PageHeader
@@ -477,13 +414,7 @@ export default function PackageListing() {
                   }
                   rootClasses="package-listing__drawer"
                 >
-                  <Suspense
-                    fallback={
-                      <span>
-                        <span>Loading...</span>
-                      </span>
-                    }
-                  >
+                  <Suspense fallback={<p>Loading...</p>}>
                     <Await resolve={listing}>
                       {(resolvedValue) => (
                         <>
@@ -496,13 +427,7 @@ export default function PackageListing() {
                       )}
                     </Await>
                   </Suspense>
-                  <Suspense
-                    fallback={
-                      <span>
-                        <span>Loading...</span>
-                      </span>
-                    }
-                  >
+                  <Suspense fallback={<p>Loading...</p>}>
                     <Await resolve={listingAndCommunityPromise}>
                       {(resolvedValue) => (
                         <>
@@ -516,13 +441,7 @@ export default function PackageListing() {
                     </Await>
                   </Suspense>
                 </Drawer>
-                <Suspense
-                  fallback={
-                    <span>
-                      <span>Loading...</span>
-                    </span>
-                  }
-                >
+                <Suspense fallback={<p>Loading...</p>}>
                   <Await resolve={listingAndTeamPromise}>
                     {(resolvedValue) => (
                       <Actions
@@ -539,9 +458,7 @@ export default function PackageListing() {
               </div>
               <Suspense
                 fallback={
-                  <span>
-                    <span>Loading...</span>
-                  </span>
+                  <SkeletonBox className="package-listing__nav-skeleton" />
                 }
               >
                 <Await resolve={listing}>
@@ -653,9 +570,7 @@ export default function PackageListing() {
             <aside className="package-listing-sidebar">
               <Suspense
                 fallback={
-                  <span>
-                    <span>Loading...</span>
-                  </span>
+                  <SkeletonBox className="package-listing-sidebar__install-skeleton" />
                 }
               >
                 <Await resolve={listing}>
@@ -678,9 +593,7 @@ export default function PackageListing() {
               <div className="package-listing-sidebar__main">
                 <Suspense
                   fallback={
-                    <span>
-                      <span>Loading...</span>
-                    </span>
+                    <SkeletonBox className="package-listing-sidebar__actions-skeleton" />
                   }
                 >
                   <Await resolve={listingAndTeamPromise}>
@@ -698,9 +611,7 @@ export default function PackageListing() {
                 </Suspense>
                 <Suspense
                   fallback={
-                    <span>
-                      <span>Loading...</span>
-                    </span>
+                    <SkeletonBox className="package-listing-sidebar__skeleton" />
                   }
                 >
                   <Await resolve={listing}>
@@ -714,9 +625,7 @@ export default function PackageListing() {
               </div>
               <Suspense
                 fallback={
-                  <span>
-                    <span>Loading...</span>
-                  </span>
+                  <SkeletonBox className="package-listing-sidebar__boxes-skeleton" />
                 }
               >
                 <Await resolve={listingAndCommunityPromise}>

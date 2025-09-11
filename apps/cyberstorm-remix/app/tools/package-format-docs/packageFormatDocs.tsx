@@ -1,22 +1,12 @@
 import "./PackageFormatDocs.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
-import {
-  CodeBox,
-  NewBreadCrumbs,
-  NewIcon,
-  NewTable,
-} from "@thunderstore/cyberstorm";
+import { CodeBox, NewIcon, NewTable } from "@thunderstore/cyberstorm";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 export default function PackageFormatDocs() {
   return (
-    <div className="container container--y container--full layout__content">
-      <NewBreadCrumbs>
-        <span>
-          <span>Package Format Docs</span>
-        </span>
-      </NewBreadCrumbs>
+    <>
       <PageHeader headingLevel="1" headingSize="2">
         Package Format Docs
       </PageHeader>
@@ -48,7 +38,7 @@ export default function PackageFormatDocs() {
         </p>
         <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} />
       </section>
-    </div>
+    </>
   );
 }
 

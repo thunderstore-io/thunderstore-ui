@@ -2,11 +2,10 @@ import { faGhost, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   CurrentUser,
-  PackageCategory,
   PackageListings,
   Section,
 } from "@thunderstore/dapper/types";
-import { useEffect, useRef, useState } from "react";
+import { memo, Suspense, useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 import "./PackageSearch.css";
@@ -17,12 +16,9 @@ import {
   NewButton,
   NewPagination,
   NewTextInput,
+  SkeletonBox,
 } from "@thunderstore/cyberstorm";
-import {
-  useNavigation,
-  useNavigationType,
-  useSearchParams,
-} from "react-router";
+import { Await, useNavigationType, useSearchParams } from "react-router";
 import { PackageCount } from "./components/PackageCount/PackageCount";
 import {
   isPackageOrderOptions,
@@ -34,17 +30,19 @@ import { RadioGroup } from "../RadioGroup/RadioGroup";
 import { CategoryTagCloud } from "./components/CategoryTagCloud/CategoryTagCloud";
 import { CollapsibleMenu } from "../Collapsible/Collapsible";
 import { CheckboxList } from "../CheckboxList/CheckboxList";
-import { StalenessIndicator } from "../StalenessIndicator/StalenessIndicator";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
-import { RequestConfig } from "@thunderstore/thunderstore-api";
+import {
+  CommunityFilters,
+  RequestConfig,
+} from "@thunderstore/thunderstore-api";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import { isPromise } from "cyberstorm/utils/typeChecks";
 
 const PER_PAGE = 20;
 
 interface Props {
-  listings: PackageListings;
-  packageCategories: PackageCategory[];
-  sections: Section[];
+  listings: Promise<PackageListings> | PackageListings;
+  filters: Promise<CommunityFilters> | CommunityFilters;
   config: () => RequestConfig;
   currentUser?: CurrentUser;
   dapper: DapperTs;
@@ -63,7 +61,7 @@ type SearchParamsType = {
 
 const searchParamsToBlob = (
   searchParams: URLSearchParams,
-  sections: Section[]
+  sections?: Section[]
 ) => {
   const initialSearch = searchParams.getAll("search").join(" ");
   const initialOrder = searchParams.get("ordering");
@@ -80,7 +78,11 @@ const searchParamsToBlob = (
       initialOrder && isPackageOrderOptions(initialOrder)
         ? (initialOrder as PackageOrderOptionsType)
         : undefined,
-    section: sections.length === 0 ? "" : initialSection ?? sections[0]?.uuid,
+    section: sections
+      ? sections.length === 0
+        ? ""
+        : initialSection ?? sections[0]?.uuid
+      : initialSection ?? "",
     deprecated:
       initialDeprecated === null
         ? false
@@ -111,10 +113,11 @@ const searchParamsToBlob = (
 };
 
 function parseCategories(
-  categories: CategorySelection[],
   includedCategories: string,
-  excludedCategories: string
+  excludedCategories: string,
+  categories?: CategorySelection[]
 ): CategorySelection[] {
+  if (!categories) return [];
   const iCArr = includedCategories.split(",");
   const eCArr = excludedCategories.split(",");
   return categories.map((c) =>
@@ -145,20 +148,24 @@ const compareSearchParamBlobs = (
  * Component for filtering and rendering a PackageList
  */
 export function PackageSearch(props: Props) {
-  const {
-    listings,
-    packageCategories: allCategories,
-    sections,
-    config,
-    currentUser,
-    dapper,
-  } = props;
-
-  const sortedSections = sections.sort((a, b) => b.priority - a.priority);
-
-  const navigation = useNavigation();
+  const { listings, filters, config, currentUser, dapper } = props;
 
   const navigationType = useNavigationType();
+
+  // This exists to resolve insert the initial sections and categories on server-side
+  // so that we don't have to await the clientLoader to get the options, to then be able to
+  // do the initial fetch
+  const possibleFilters = isPromise(filters) ? undefined : filters;
+
+  const [sortedSections, setSortedSections] = useState<
+    CommunityFilters["sections"] | undefined
+  >(possibleFilters?.sections);
+
+  const [categories, setCategories] = useState<CategorySelection[] | undefined>(
+    possibleFilters?.package_categories
+      .sort((a, b) => a.slug.localeCompare(b.slug))
+      .map((c) => ({ ...c, selection: "off" }))
+  );
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -167,92 +174,53 @@ export function PackageSearch(props: Props) {
   const [searchParamsBlob, setSearchParamsBlob] =
     useState<SearchParamsType>(initialParams);
 
-  const [currentPage, setCurrentPage] = useState(initialParams.page);
+  const [currentPage, setCurrentPage] = useState(
+    searchParams.get("page") ? Number(searchParams.get("page")) : 1
+  );
 
-  // Start setters
-  const setSearch = (v: string) => {
-    setSearchParamsBlob({ ...searchParamsBlob, search: v });
-  };
+  const categoriesRef = useRef<
+    undefined | Awaited<Promise<CommunityFilters>>["package_categories"]
+  >(undefined);
 
-  const setSection = (v: string) => {
-    setSearchParamsBlob({ ...searchParamsBlob, section: v });
-  };
-
-  const setDeprecated = (v: boolean) => {
-    setSearchParamsBlob({ ...searchParamsBlob, deprecated: v });
-  };
-
-  const setNsfw = (v: boolean) => {
-    setSearchParamsBlob({ ...searchParamsBlob, nsfw: v });
-  };
-
-  const setPage = (v: number) => {
-    setSearchParamsBlob({ ...searchParamsBlob, page: v });
-  };
-
-  const setOrder = (v: PackageOrderOptionsType) => {
-    setSearchParamsBlob({ ...searchParamsBlob, order: v });
-  };
-
-  const resetParams = (order: PackageOrderOptionsType | undefined) => {
-    setSearchParamsBlob({
-      search: "",
-      order: order,
-      section: sortedSections.length === 0 ? "" : sortedSections[0]?.uuid,
-      deprecated: false,
-      nsfw: false,
-      page: 1,
-      includedCategories: "",
-      excludedCategories: "",
-    });
-    // setOrdering(order);
-    // setPage(1);
-    // setSearchValue("");
-  };
-
-  const clearAll = () =>
-    setSearchParamsBlob({
-      ...searchParamsBlob,
-      search: "",
-      includedCategories: "",
-      excludedCategories: "",
-    });
-  // End setters
+  useEffect(() => {
+    if (isPromise(filters)) {
+      // On mount, resolve filters promise and set sections and categories states
+      filters.then((resolvedFilters) => {
+        // Set sorted sections
+        setSortedSections(
+          resolvedFilters.sections.sort((a, b) => b.priority - a.priority)
+        );
+        if (sortedSections && sortedSections.length !== 0) {
+          setSearchParamsBlob((prev) => ({
+            ...prev,
+            section: sortedSections[0].uuid,
+          }));
+        }
+        if (resolvedFilters.package_categories !== categoriesRef.current) {
+          // Set current "initial" categories
+          const categories: CategorySelection[] =
+            resolvedFilters.package_categories
+              .sort((a, b) => a.slug.localeCompare(b.slug))
+              .map((c) => ({ ...c, selection: "off" }));
+          setCategories(categories);
+          categoriesRef.current = resolvedFilters.package_categories;
+        }
+      });
+    }
+  }, []);
 
   // Categories start
-  const categories: CategorySelection[] = allCategories
-    .sort((a, b) => a.slug.localeCompare(b.slug))
-    .map((c) => ({ ...c, selection: "off" }));
-
-  const setCategories = (v: CategorySelection[]) => {
-    const newSearchParams = { ...searchParamsBlob };
-    const includedCategories = v
-      .filter((c) => c.selection === "include")
-      .map((c) => c.id);
-    if (includedCategories.length === 0) {
-      newSearchParams.includedCategories = "";
-    } else {
-      newSearchParams.includedCategories = includedCategories.join(",");
-    }
-    const excludedCategories = v
-      .filter((c) => c.selection === "exclude")
-      .map((c) => c.id);
-    if (excludedCategories.length === 0) {
-      newSearchParams.excludedCategories = "";
-    } else {
-      newSearchParams.excludedCategories = excludedCategories.join(",");
-    }
-    setSearchParamsBlob({ ...newSearchParams });
-  };
 
   const parsedCategories = parseCategories(
-    categories,
     searchParamsBlob.includedCategories,
-    searchParamsBlob.excludedCategories
+    searchParamsBlob.excludedCategories,
+    categories
   );
 
   const updateCatSelection = (catId: string, v: TRISTATE) => {
-    setCategories(
+    setParamsBlobCategories(
+      setSearchParamsBlob,
+      searchParamsBlob,
       parsedCategories.map((uc) => {
         if (uc.id === catId) {
           return {
@@ -364,33 +332,30 @@ export function PackageSearch(props: Props) {
           resetPage = true;
         }
         // Section
-        // Because of the first section being a empty value, the logic check is a bit funky
-
-        // If no section in search params, delete
-        if (sortedSections.length === 0) searchParams.delete("section");
-
-        // If new section is empty, delete (defaults to first)
-        if (debouncedSearchParamsBlob.section === "")
+        if (
+          debouncedSearchParamsBlob.section === "" ||
+          (sortedSections && sortedSections.length === 0)
+        ) {
           searchParams.delete("section");
-
-        // If new section is the first one, delete. And reset page number if section is different from last render.
-        if (debouncedSearchParamsBlob.section === sortedSections[0]?.uuid) {
-          if (
-            searchParamsBlobRef.current.section !==
-            debouncedSearchParamsBlob.section
-          ) {
-            resetPage = true;
+        } else {
+          if (sortedSections && sortedSections.length !== 0) {
+            if (debouncedSearchParamsBlob.section === sortedSections[0]?.uuid) {
+              // If the first one, ensure the search param isn't set as it's defaulted to the first one in SearchParmsToBlob function.
+              searchParams.delete("section");
+            } else {
+              searchParams.set("section", debouncedSearchParamsBlob.section);
+            }
+          } else {
+            // This else is for completeness
+            searchParams.delete("section");
           }
-          searchParams.delete("section");
         }
 
-        // If new section is different and not the first one, set it.
+        // Reset page if section has changed
         if (
           searchParamsBlobRef.current.section !==
-            debouncedSearchParamsBlob.section &&
-          debouncedSearchParamsBlob.section !== sortedSections[0]?.uuid
+          debouncedSearchParamsBlob.section
         ) {
-          searchParams.set("section", debouncedSearchParamsBlob.section);
           resetPage = true;
         }
 
@@ -485,8 +450,8 @@ export function PackageSearch(props: Props) {
     }
   }, [debouncedSearchParamsBlob]);
 
+  // WHOLE LIKE THING
   const [ratedPackages, setRatedPackages] = useState<string[]>([]);
-
   const fetchAndSetRatedPackages = async () => {
     setRatedPackages((await dapper.getRatedPackages()).rated_packages);
   };
@@ -499,31 +464,18 @@ export function PackageSearch(props: Props) {
     }
   }, [currentUser]);
 
-  // End updating page
-
-  // Start actions
   const likeAction = PackageLikeAction({
     isLoggedIn: Boolean(currentUser?.username),
     dataUpdateTrigger: fetchAndSetRatedPackages,
     config: config,
   });
-  // End actions
+  // WHOLE LIKE THING
 
   return (
     <div className="package-search">
       <div className="package-search__sidebar">
-        <NewTextInput
-          placeholder="Search Mods..."
-          value={searchParamsBlob.search}
-          onChange={(e) => setSearch(e.target.value)}
-          clearValue={() => setSearch("")}
-          leftIcon={<FontAwesomeIcon icon={faSearch} />}
-          id="searchInput"
-          type="search"
-          rootClasses="package-search__search"
-        />
         <div className="package-search__filters">
-          {sortedSections.length > 0 ? (
+          {sortedSections && sortedSections.length > 0 ? (
             <CollapsibleMenu headerTitle="Sections" defaultOpen>
               <RadioGroup
                 sections={[
@@ -535,12 +487,20 @@ export function PackageSearch(props: Props) {
                     priority: -999999999,
                   },
                 ]}
-                selected={searchParamsBlob.section ?? sortedSections[0]?.uuid}
-                setSelected={setSection}
+                selected={
+                  searchParamsBlob.section === ""
+                    ? sortedSections[0]?.uuid
+                    : searchParamsBlob.section
+                }
+                setSelected={setParamsBlobValue(
+                  setSearchParamsBlob,
+                  searchParamsBlob,
+                  "section"
+                )}
               />
             </CollapsibleMenu>
           ) : null}
-          {categories.length > 0 ? (
+          {categories && categories.length > 0 ? (
             <CollapsibleMenu headerTitle="Categories" defaultOpen>
               <CheckboxList items={filtersCategoriesItems} />
             </CollapsibleMenu>
@@ -551,7 +511,11 @@ export function PackageSearch(props: Props) {
                 {
                   state: searchParamsBlob.deprecated,
                   setStateFunc: (v: boolean | TRISTATE) =>
-                    setDeprecated(
+                    setParamsBlobValue(
+                      setSearchParamsBlob,
+                      searchParamsBlob,
+                      "deprecated"
+                    )(
                       typeof v === "boolean"
                         ? v
                         : v === "include"
@@ -563,7 +527,11 @@ export function PackageSearch(props: Props) {
                 {
                   state: searchParamsBlob.nsfw,
                   setStateFunc: (v: boolean | TRISTATE) =>
-                    setNsfw(
+                    setParamsBlobValue(
+                      setSearchParamsBlob,
+                      searchParamsBlob,
+                      "nsfw"
+                    )(
                       typeof v === "boolean"
                         ? v
                         : v === "include"
@@ -579,105 +547,171 @@ export function PackageSearch(props: Props) {
       </div>
 
       <div className="package-search__content">
+        <NewTextInput
+          placeholder="Search Mods..."
+          value={searchParamsBlob.search}
+          onChange={(e) =>
+            setParamsBlobValue(
+              setSearchParamsBlob,
+              searchParamsBlob,
+              "search"
+            )(e.target.value)
+          }
+          clearValue={() =>
+            setParamsBlobValue(
+              setSearchParamsBlob,
+              searchParamsBlob,
+              "search"
+            )("")
+          }
+          leftIcon={<FontAwesomeIcon icon={faSearch} />}
+          id="searchInput"
+          type="search"
+          rootClasses="package-search__search"
+        />
         <div className="package-search__search-params">
           <CategoryTagCloud
             searchValue={searchParamsBlob.search}
-            setSearchValue={setSearch}
-            categories={parseCategories(
-              categories,
-              searchParamsBlob.includedCategories ?? "",
-              searchParamsBlob.excludedCategories ?? ""
+            setSearchValue={setParamsBlobValue(
+              setSearchParamsBlob,
+              searchParamsBlob,
+              "search"
             )}
-            setCategories={setCategories}
+            categories={parseCategories(
+              searchParamsBlob.includedCategories ?? "",
+              searchParamsBlob.excludedCategories ?? "",
+              categories
+            )}
+            setCategories={(v) =>
+              setParamsBlobCategories(setSearchParamsBlob, searchParamsBlob, v)
+            }
             rootClasses="package-search__tags"
-            clearAll={clearAll}
+            clearAll={clearAll(setSearchParamsBlob, searchParamsBlob)}
           />
           <div className="package-search__tools">
-            <div className="package-search__results">
-              <PackageCount
-                page={currentPage}
-                pageSize={PER_PAGE}
-                searchQuery={searchParamsBlob.search}
-                totalCount={listings.count}
-              />
-            </div>
             <div className="package-search__listing-actions">
-              {/* <div className="__display"></div> */}
               <div className="package-search__sorting">
                 <PackageOrder
                   order={searchParamsBlob.order ?? PackageOrderOptions.Updated}
-                  setOrder={setOrder}
+                  setOrder={setParamsBlobValue(
+                    setSearchParamsBlob,
+                    searchParamsBlob,
+                    "order"
+                  )}
                 />
               </div>
+            </div>
+            <div className="package-search__results">
+              <Suspense fallback={<SkeletonBox />}>
+                <Await resolve={listings}>
+                  {(resolvedValue) => (
+                    <PackageCount
+                      page={currentPage}
+                      pageSize={PER_PAGE}
+                      searchQuery={searchParamsBlob.search}
+                      totalCount={resolvedValue.count}
+                    />
+                  )}
+                </Await>
+              </Suspense>
             </div>
           </div>
         </div>
-        <StalenessIndicator
-          isStale={navigation.state === "loading" ? true : false}
-          rootClasses="package-search__packages"
-        >
-          {listings.results.length > 0 ? (
-            <div className="package-search__grid">
-              {listings.results.map((p) => (
-                <CardPackage
-                  key={`${p.namespace}-${p.name}`}
-                  packageData={p}
-                  isLiked={ratedPackages.includes(`${p.namespace}-${p.name}`)}
-                  packageLikeAction={() => {
-                    if (likeAction) {
-                      likeAction(
-                        ratedPackages.includes(`${p.namespace}-${p.name}`),
-                        p.namespace,
-                        p.name,
-                        Boolean(currentUser?.username)
-                      );
-                    }
-                  }}
-                />
-              ))}
-            </div>
-          ) : (searchParamsBlob.order !== undefined && searchParams.size > 1) ||
-            (searchParamsBlob.order === undefined && searchParams.size > 0) ? (
-            <EmptyState.Root className="no-result">
-              <EmptyState.Icon wrapperClasses="no-result__ghostbounce">
-                <FontAwesomeIcon icon={faSearch} />
-              </EmptyState.Icon>
-              <div className="no-result__info">
-                <EmptyState.Title>No results found</EmptyState.Title>
-                <EmptyState.Message>
-                  Make sure all keywords are spelled correctly or try different
-                  search parameters.
-                </EmptyState.Message>
-              </div>
-              <NewButton
-                onClick={() => resetParams(searchParamsBlob.order)}
-                rootClasses="no-result__button"
-              >
-                Clear all filters
-              </NewButton>
-            </EmptyState.Root>
-          ) : (
-            <EmptyState.Root className="no-result">
-              <EmptyState.Icon wrapperClasses="no-result__ghostbounce">
-                <FontAwesomeIcon icon={faGhost} />
-              </EmptyState.Icon>
-              <div className="no-result__info">
-                <EmptyState.Title>It&apos;s empty in here</EmptyState.Title>
-                <EmptyState.Message>
-                  Be the first to upload a mod!
-                </EmptyState.Message>
-              </div>
-            </EmptyState.Root>
-          )}
-        </StalenessIndicator>
+        <div className="package-search__packages">
+          <Suspense fallback={<PackageSearchPackagesSkeleton />}>
+            <Await resolve={listings}>
+              {(resolvedValue) => (
+                <>
+                  {resolvedValue.results.length > 0 ? (
+                    <div className="package-search__grid">
+                      {resolvedValue.results.map((p) => (
+                        <CardPackage
+                          key={`${p.namespace}-${p.name}`}
+                          packageData={p}
+                          isLiked={ratedPackages.includes(
+                            `${p.namespace}-${p.name}`
+                          )}
+                          packageLikeAction={() => {
+                            if (likeAction) {
+                              likeAction(
+                                ratedPackages.includes(
+                                  `${p.namespace}-${p.name}`
+                                ),
+                                p.namespace,
+                                p.name,
+                                Boolean(currentUser?.username)
+                              );
+                            }
+                          }}
+                        />
+                      ))}
+                    </div>
+                  ) : (searchParamsBlob.order !== undefined &&
+                      searchParams.size > 1) ||
+                    (searchParamsBlob.order === undefined &&
+                      searchParams.size > 0) ? (
+                    <EmptyState.Root className="no-result">
+                      <EmptyState.Icon wrapperClasses="no-result__ghostbounce">
+                        <FontAwesomeIcon icon={faSearch} />
+                      </EmptyState.Icon>
+                      <div className="no-result__info">
+                        <EmptyState.Title>No results found</EmptyState.Title>
+                        <EmptyState.Message>
+                          Make sure all keywords are spelled correctly or try
+                          different search parameters.
+                        </EmptyState.Message>
+                      </div>
+                      <NewButton
+                        onClick={() =>
+                          resetParams(
+                            setSearchParamsBlob,
+                            searchParamsBlob.order,
+                            sortedSections
+                          )
+                        }
+                        rootClasses="no-result__button"
+                      >
+                        Clear all filters
+                      </NewButton>
+                    </EmptyState.Root>
+                  ) : (
+                    <EmptyState.Root className="no-result">
+                      <EmptyState.Icon wrapperClasses="no-result__ghostbounce">
+                        <FontAwesomeIcon icon={faGhost} />
+                      </EmptyState.Icon>
+                      <div className="no-result__info">
+                        <EmptyState.Title>
+                          It&apos;s empty in here
+                        </EmptyState.Title>
+                        <EmptyState.Message>
+                          Be the first to upload a mod!
+                        </EmptyState.Message>
+                      </div>
+                    </EmptyState.Root>
+                  )}
+                </>
+              )}
+            </Await>
+          </Suspense>
+        </div>
         <div className="package-search__pagination">
-          <NewPagination
-            currentPage={currentPage}
-            onPageChange={setPage}
-            pageSize={PER_PAGE}
-            siblingCount={4}
-            totalCount={listings.count}
-          />
+          <Suspense fallback={<SkeletonBox />}>
+            <Await resolve={listings}>
+              {(resolvedValue) => (
+                <NewPagination
+                  currentPage={currentPage}
+                  onPageChange={setParamsBlobValue(
+                    setSearchParamsBlob,
+                    searchParamsBlob,
+                    "page"
+                  )}
+                  pageSize={PER_PAGE}
+                  siblingCount={4}
+                  totalCount={resolvedValue.count}
+                />
+              )}
+            </Await>
+          </Suspense>
         </div>
       </div>
     </div>
@@ -685,3 +719,80 @@ export function PackageSearch(props: Props) {
 }
 
 PackageSearch.displayName = "PackageSearch";
+
+// Start setters
+function setParamsBlobValue<K extends keyof SearchParamsType>(
+  setter: (v: SearchParamsType) => void,
+  oldBlob: SearchParamsType,
+  key: K
+) {
+  return (v: SearchParamsType[K]) => setter({ ...oldBlob, [key]: v });
+}
+
+const setParamsBlobCategories = (
+  setter: (v: SearchParamsType) => void,
+  oldBlob: SearchParamsType,
+  v: CategorySelection[]
+) => {
+  const newSearchParams = { ...oldBlob };
+  const includedCategories = v
+    .filter((c) => c.selection === "include")
+    .map((c) => c.id);
+  if (includedCategories.length === 0) {
+    newSearchParams.includedCategories = "";
+  } else {
+    newSearchParams.includedCategories = includedCategories.join(",");
+  }
+  const excludedCategories = v
+    .filter((c) => c.selection === "exclude")
+    .map((c) => c.id);
+  if (excludedCategories.length === 0) {
+    newSearchParams.excludedCategories = "";
+  } else {
+    newSearchParams.excludedCategories = excludedCategories.join(",");
+  }
+  setter({ ...newSearchParams });
+};
+
+const resetParams = (
+  setter: (v: SearchParamsType) => void,
+  order: PackageOrderOptionsType | undefined,
+  sortedSections: CommunityFilters["sections"] | undefined
+) => {
+  setter({
+    search: "",
+    order: order,
+    section: sortedSections
+      ? sortedSections.length === 0
+        ? ""
+        : sortedSections[0]?.uuid
+      : "",
+    deprecated: false,
+    nsfw: false,
+    page: 1,
+    includedCategories: "",
+    excludedCategories: "",
+  });
+};
+
+const clearAll =
+  (setter: (v: SearchParamsType) => void, oldBlob: SearchParamsType) => () =>
+    setter({
+      ...oldBlob,
+      search: "",
+      includedCategories: "",
+      excludedCategories: "",
+    });
+// End setters
+
+const PackageSearchPackagesSkeleton = memo(
+  function PackageSearchPackagesSkeleton() {
+    return (
+      <div className="package-search__grid">
+        {Array.from({ length: 12 }).map((_, index) => (
+          <SkeletonBox key={index} />
+        ))}
+      </div>
+    );
+  }
+);

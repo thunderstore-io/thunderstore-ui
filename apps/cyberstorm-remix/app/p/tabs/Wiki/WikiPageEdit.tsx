@@ -204,11 +204,11 @@ export default function WikiEdit() {
 
   return (
     <>
-      <div className="wiki-content__header">
-        <div className="wiki-content__title">
+      <div className="package-wiki-content__header">
+        <div className="package-wiki-content__title">
           <Heading csLevel="3">Editing page</Heading>
         </div>
-        <div className="wiki-content__actions">
+        <div className="package-wiki-content__actions">
           <Modal
             popoverId={"deletePackageWikiPage"}
             csSize="small"
@@ -234,14 +234,14 @@ export default function WikiEdit() {
           </Modal>
         </div>
       </div>
-      <div className="wiki-content__body">
+      <div className="package-wiki-content__body">
         <Tabs>
           <button
             key="write"
             onClick={() => setSelectedTab("write")}
             aria-current={selectedTab === "write"}
             className={classnames(
-              "wiki-edit__tabs-button",
+              "package-wiki-edit__tabs-button",
               "tabs-item",
               selectedTab === "write" ? "tabs-item--current" : undefined
             )}
@@ -253,7 +253,7 @@ export default function WikiEdit() {
             onClick={() => setSelectedTab("preview")}
             aria-current={selectedTab === "preview"}
             className={classnames(
-              "wiki-edit__tabs-button",
+              "package-wiki-edit__tabs-button",
               "tabs-item",
               selectedTab === "preview" ? "tabs-item--current" : undefined
             )}
@@ -282,7 +282,7 @@ export default function WikiEdit() {
                 })
               }
               name="markdown_content"
-              rootClasses="wiki-edit__markdown-input"
+              rootClasses="package-wiki-edit__markdown-input"
               style={{ height: "500px" }}
             />
           </>
@@ -296,7 +296,7 @@ export default function WikiEdit() {
               />
             </div> */}
       </div>
-      <div className="wiki-content__footer">
+      <div className="package-wiki-content__footer">
         <NewButton
           csVariant="secondary"
           primitiveType="cyberstormLink"

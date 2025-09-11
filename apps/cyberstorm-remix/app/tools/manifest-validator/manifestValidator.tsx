@@ -1,7 +1,6 @@
 import {
   CodeInput,
   NewAlert,
-  NewBreadCrumbs,
   NewSelect,
   isRecord,
   isStringArray,
@@ -74,12 +73,7 @@ export default function ManifestValidator() {
   }, [debouncedTeamInput, debouncedManifestInput, outletContext.requestConfig]);
 
   return (
-    <div className="container container--y container--full layout__content">
-      <NewBreadCrumbs>
-        <span>
-          <span>Manifest Validator</span>
-        </span>
-      </NewBreadCrumbs>
+    <>
       <PageHeader headingLevel="1" headingSize="2">
         Manifest Validator
       </PageHeader>
@@ -112,7 +106,7 @@ export default function ManifestValidator() {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }
 

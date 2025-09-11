@@ -12,22 +12,34 @@ export default [
   route("healthz", "./healthz.tsx"),
 
   route("/communities", "./communities/communities.tsx"),
-  route("/c/:communityId", "c/community.tsx"),
-  route("/c/:communityId/p/:namespaceId/:packageId", "p/packageListing.tsx", [
-    route("", "p/tabs/Readme/Readme.tsx", { index: true }),
-    route("required", "p/tabs/Required/Required.tsx"),
-    route("changelog", "p/tabs/Changelog/Changelog.tsx"),
-    route("versions", "p/tabs/Versions/Versions.tsx"),
-    ...prefix("wiki", [
-      layout("p/tabs/Wiki/Wiki.tsx", [
-        index("p/tabs/Wiki/WikiFirstPage.tsx"),
-        route("/new", "p/tabs/Wiki/WikiNewPage.tsx"),
-        route("/:slug", "p/tabs/Wiki/WikiPage.tsx"),
-        route("/:slug/edit", "p/tabs/Wiki/WikiPageEdit.tsx"),
+  route("/c/:communityId", "c/community.tsx", [
+    route("/c/:communityId/", "c/tabs/PackageSearch/PackageSearch.tsx"),
+    ...prefix("p", [
+      route(":namespaceId/:packageId", "p/packageListing.tsx", [
+        route(
+          "/c/:communityId/p/:namespaceId/:packageId/",
+          "p/tabs/Readme/Readme.tsx"
+        ),
+        route("required", "p/tabs/Required/Required.tsx"),
+        route("changelog", "p/tabs/Changelog/Changelog.tsx"),
+        route("versions", "p/tabs/Versions/Versions.tsx"),
+        ...prefix("wiki", [
+          layout("p/tabs/Wiki/Wiki.tsx", [
+            index("p/tabs/Wiki/WikiFirstPage.tsx"),
+            route("/new", "p/tabs/Wiki/WikiNewPage.tsx"),
+            route("/:slug", "p/tabs/Wiki/WikiPage.tsx"),
+            route("/:slug/edit", "p/tabs/Wiki/WikiPageEdit.tsx"),
+          ]),
+        ]),
       ]),
+      route(":namespaceId/:packageId/edit", "p/packageEdit.tsx"),
     ]),
   ]),
-  route("/c/:communityId/p/:namespaceId/:packageId/edit", "p/packageEdit.tsx"),
+  route(
+    "/c/:communityId/p/:namespaceId/:packageId/dependants",
+    "p/dependants/Dependants.tsx"
+  ),
+  route("/c/:communityId/p/:namespaceId", "p/team/Team.tsx"),
   route(
     "/package/create/docs",
     "tools/package-format-docs/packageFormatDocs.tsx"
@@ -40,11 +52,6 @@ export default [
     "/tools/manifest-v1-validator",
     "tools/manifest-validator/manifestValidator.tsx"
   ),
-  route(
-    "/c/:communityId/p/:namespaceId/:packageId/dependants",
-    "p/dependants/Dependants.tsx"
-  ),
-  route("/c/:communityId/p/:namespaceId", "p/team/Team.tsx"),
   route("/package/create", "upload/upload.tsx"),
 
   // TODO: DISABLED UNTIL WE'VE GOT THE ENDPOINTS FOR THESE

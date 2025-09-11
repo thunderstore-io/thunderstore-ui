@@ -1,11 +1,7 @@
 @layer nimbus-layout {
-  .package-edit {
-    --nimbus-layout-content-max-width: 90rem;
-  }
-
   .package-edit__main {
     display: flex;
-    gap: var(--gap-xxxl);
+    gap: var(--gap-3xl);
     align-items: center;
     align-self: stretch;
   }

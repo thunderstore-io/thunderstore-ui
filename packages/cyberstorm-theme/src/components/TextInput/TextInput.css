@@ -35,14 +35,14 @@
 
   .text-input:where(.text-input--size--default) {
     --text-input-height: var(--input-md-height);
-    --text-input-padding: var(--space-10)
-      calc(var(--space-16) + var(--right-padding-bonus, 0px)) var(--space-10)
+    --text-input-padding: var(--space-12)
+      calc(var(--space-16) + var(--right-padding-bonus, 0px)) var(--space-12)
       calc(var(--space-16) + var(--left-padding-bonus, 0px));
   }
 
   .text-input:where(.text-input--size--small) {
     --text-input-height: var(--input-sm-height);
-    --text-input-padding: var(--space-8)
+    --text-input-padding: var(--space-10)
       calc(var(--space-16) + var(--right-padding-bonus, 0px)) var(--space-10)
       calc(var(--space-16) + var(--left-padding-bonus, 0px));
   }

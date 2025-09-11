@@ -2,7 +2,7 @@
   :root {
     --section-bg: var(--color-surface-2);
     --section-border-radius: var(--radius-sm);
-    --section-gap: var(--gap-xxs);
+    --section-gap: var(--gap-2xs);
   }
 
   /* CONTAINER, basically flex wrapper utility class */

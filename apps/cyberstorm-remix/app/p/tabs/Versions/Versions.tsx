@@ -7,13 +7,12 @@ import {
   NewButton,
   NewIcon,
   NewTable,
-  NewTableRows,
   NewTableLabels,
   Heading,
   NewAlert,
+  SkeletonBox,
 } from "@thunderstore/cyberstorm";
-import { LoaderFunctionArgs } from "react-router";
-import { ApiError } from "@thunderstore/thunderstore-api";
+import { Await, LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
 import { versionsSchema } from "@thunderstore/dapper-ts/src/methods/package";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -29,36 +28,20 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
+import { Suspense } from "react";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
-    try {
-      const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: publicEnvVariables.VITE_API_URL,
-          sessionId: undefined,
-        };
-      });
+    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
+    const dapper = new DapperTs(() => {
       return {
-        status: "ok",
-        message: "",
-        versions: await dapper.getPackageVersions(
-          params.namespaceId,
-          params.packageId
-        ),
+        apiHost: publicEnvVariables.VITE_API_URL,
+        sessionId: undefined,
       };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return {
-          status: "error",
-          message: "Failed to load versions",
-          versions: versionsSchema.parse({}),
-        };
-      } else {
-        throw error;
-      }
-    }
+    });
+    return {
+      versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
+    };
   }
   return {
     status: "error",
@@ -76,26 +59,9 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
-    try {
-      return {
-        status: "ok",
-        message: "",
-        versions: await dapper.getPackageVersions(
-          params.namespaceId,
-          params.packageId
-        ),
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        return {
-          status: "error",
-          message: "Failed to load versions",
-          versions: versionsSchema.parse({}),
-        };
-      } else {
-        throw error;
-      }
-    }
+    return {
+      versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
+    };
   }
   return {
     status: "error",
@@ -139,42 +105,49 @@ export default function Versions() {
     return <div>{message}</div>;
   }
 
-  const tableRows: NewTableRows = versions.map((v) => [
-    { value: v.version_number, sortValue: v.version_number },
-    {
-      value: new Date(v.datetime_created).toUTCString(),
-      sortValue: v.datetime_created,
-    },
-    { value: v.download_count.toLocaleString(), sortValue: v.download_count },
-    {
-      value: (
-        <div className="versions__actions">
-          <DownloadLink {...v} />
-          <InstallLink {...v} />
-        </div>
-      ),
-      sortValue: 0,
-    },
-  ]);
-
   return (
-    <div className="versions">
-      <ModManagerBanner />
-      <div className="versions__table-wrapper">
-        <NewTable
-          titleRowContent={
-            <Heading csSize="3" csLevel="3">
-              Versions
-            </Heading>
-          }
-          headers={columns}
-          rows={tableRows}
-          sortDirection={NewTableSort.ASC}
-          csModifiers={["alignLastColumnRight"]}
-          customSortCompare={{ 0: rowSemverCompare }}
-        />
-      </div>
-    </div>
+    <Suspense fallback={<SkeletonBox className="package-versions__skeleton" />}>
+      <Await resolve={versions}>
+        {(resolvedValue) => (
+          <div className="package-versions">
+            <ModManagerBanner />
+            <div className="package-versions__table-wrapper">
+              <NewTable
+                titleRowContent={
+                  <Heading csSize="3" csLevel="3">
+                    Versions
+                  </Heading>
+                }
+                headers={columns}
+                rows={resolvedValue.map((v) => [
+                  { value: v.version_number, sortValue: v.version_number },
+                  {
+                    value: new Date(v.datetime_created).toUTCString(),
+                    sortValue: v.datetime_created,
+                  },
+                  {
+                    value: v.download_count.toLocaleString(),
+                    sortValue: v.download_count,
+                  },
+                  {
+                    value: (
+                      <div className="package-versions__actions">
+                        <DownloadLink {...v} />
+                        <InstallLink {...v} />
+                      </div>
+                    ),
+                    sortValue: 0,
+                  },
+                ])}
+                sortDirection={NewTableSort.ASC}
+                csModifiers={["alignLastColumnRight"]}
+                customSortCompare={{ 0: rowSemverCompare }}
+              />
+            </div>
+          </div>
+        )}
+      </Await>
+    </Suspense>
   );
 }
 
@@ -182,17 +155,17 @@ const columns: NewTableLabels = [
   {
     value: "Version",
     disableSort: false,
-    columnClasses: "versions__version",
+    columnClasses: "package-versions__version",
   },
   {
     value: "Upload date",
     disableSort: false,
-    columnClasses: "versions__upload-date",
+    columnClasses: "package-versions__upload-date",
   },
   {
     value: "Downloads",
     disableSort: false,
-    columnClasses: "versions__downloads",
+    columnClasses: "package-versions__downloads",
   },
   { value: "Actions", disableSort: true },
 ];

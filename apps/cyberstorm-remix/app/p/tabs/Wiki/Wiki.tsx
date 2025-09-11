@@ -12,7 +12,7 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { NewButton, NewIcon } from "@thunderstore/cyberstorm";
+import { NewButton, NewIcon, SkeletonBox } from "@thunderstore/cyberstorm";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { OutletContextShape } from "~/root";
@@ -96,13 +96,13 @@ export default function Wiki() {
   const outletContext = useOutletContext() as OutletContextShape;
 
   return (
-    <div className="wiki">
-      <div className="wiki-nav">
+    <div className="package-wiki">
+      <div className="package-wiki-nav">
         <Suspense>
           <Await resolve={permissions}>
             {(resolvedValue) =>
               resolvedValue?.permissions.can_manage ? (
-                <div className="wiki-nav__header">
+                <div className="package-wiki-nav__header">
                   <NewButton
                     primitiveType="cyberstormLink"
                     linkId="PackageWikiNewPage"
@@ -120,9 +120,11 @@ export default function Wiki() {
             }
           </Await>
         </Suspense>
-        <div className="wiki-nav__section">
-          <div className="wiki-nav__list">
-            <Suspense fallback={<div>Loading...</div>}>
+        <div className="package-wiki-nav__section">
+          <div className="package-wiki-nav__list">
+            <Suspense
+              fallback={<SkeletonBox className="package-wiki-nav__skeleton" />}
+            >
               <Await resolve={wiki} errorElement={<></>}>
                 {(resolvedValue) =>
                   resolvedValue &&
@@ -173,7 +175,7 @@ export default function Wiki() {
                         package={packageId}
                         wikipageslug={page.slug}
                         csModifiers={["ghost"]}
-                        rootClasses="wiki-nav__unselected"
+                        rootClasses="package-wiki-nav__unselected"
                       >
                         {page.title}
                       </NewButton>
@@ -185,7 +187,7 @@ export default function Wiki() {
           </div>
         </div>
       </div>
-      <div className="wiki-content">
+      <div className="package-wiki-content">
         <Outlet context={outletContext} />
       </div>
     </div>

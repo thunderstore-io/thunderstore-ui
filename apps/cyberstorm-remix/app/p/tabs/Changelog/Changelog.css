@@ -1,0 +1,5 @@
+@layer nimbus-layout {
+  .package-changelog__skeleton {
+    height: 500px;
+  }
+}

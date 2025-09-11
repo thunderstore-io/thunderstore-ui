@@ -1,5 +1,9 @@
 @layer nimbus-layout {
-  .required {
+  .package-required__skeleton {
+    height: 500px;
+  }
+
+  .package-required {
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
@@ -7,7 +11,7 @@
     overflow-x: auto;
   }
 
-  .required__title {
+  .package-required__title {
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
@@ -16,16 +20,16 @@
     padding-bottom: var(--space-24);
   }
 
-  .required__description {
+  .package-required__description {
     color: var(--color-text-secondary);
     font-weight: var(--font-weight-regular);
     line-height: var(--line-height-md);
   }
 
-  .required__body {
+  .package-required__body {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xxxs);
+    gap: var(--gap-3xs);
     align-items: flex-start;
     align-self: stretch;
     padding-bottom: var(--space-32);

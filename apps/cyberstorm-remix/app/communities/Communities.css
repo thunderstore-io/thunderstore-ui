@@ -12,7 +12,7 @@
   .communities__content {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xxxl);
+    gap: var(--gap-3xl);
     align-items: flex-start;
     align-self: stretch;
   }
@@ -38,7 +38,7 @@
     display: grid;
     flex-flow: row wrap;
     grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
-    gap: var(--gap-xxxxxxxl) var(--gap-xl);
+    gap: var(--gap-7xl) var(--gap-xl);
     width: 100%;
   }
 
@@ -48,8 +48,8 @@
       align-items: flex-start;
       align-self: stretch;
       aspect-ratio: 3/4;
-      border-radius: var(--radius-md);
-      background: var(--color-skeleton-bg-color);
+
+      --skeleton-radius: var(--radius-md);
     }
 
     .communities__community-skeleton-content {
@@ -65,8 +65,6 @@
         align-items: flex-start;
         width: 90%;
         height: 1.188rem;
-        border-radius: var(--radius-sm);
-        background: var(--color-skeleton-bg-color);
       }
 
       .communities__community-skeleton-meta {
@@ -75,9 +73,13 @@
         align-self: stretch;
         justify-content: space-between;
         height: 0.937rem;
-        border-radius: var(--radius-sm);
-        background: var(--color-skeleton-bg-color);
       }
+    }
+  }
+
+  @media (width <= 41rem) {
+    .communities__communities-list {
+      gap: var(--gap-3xl) var(--gap-xl);
     }
   }
 
