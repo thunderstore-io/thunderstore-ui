@@ -37,9 +37,48 @@
   .communities__communities-list {
     display: grid;
     flex-flow: row wrap;
-    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
     gap: var(--gap-xxxxxxxl) var(--gap-xl);
     width: 100%;
+  }
+
+  .communities__community-skeleton {
+    .communities__community-skeleton-image {
+      display: flex;
+      align-items: flex-start;
+      align-self: stretch;
+      aspect-ratio: 3/4;
+      border-radius: var(--radius-md);
+      background: var(--color-skeleton-bg-color);
+    }
+
+    .communities__community-skeleton-content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap-sm);
+      align-items: flex-start;
+      padding: var(--space-12) 0;
+
+      .communities__community-skeleton-title {
+        display: flex;
+        gap: var(--gap-xs);
+        align-items: flex-start;
+        width: 90%;
+        height: 1.188rem;
+        border-radius: var(--radius-sm);
+        background: var(--color-skeleton-bg-color);
+      }
+
+      .communities__community-skeleton-meta {
+        display: flex;
+        align-items: center;
+        align-self: stretch;
+        justify-content: space-between;
+        height: 0.937rem;
+        border-radius: var(--radius-sm);
+        background: var(--color-skeleton-bg-color);
+      }
+    }
   }
 
   @media (width <= 39rem) {
@@ -57,7 +96,7 @@
 
   @media (width <= 27.5rem) {
     .communities__communities-list {
-      grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
     }
   }
 }

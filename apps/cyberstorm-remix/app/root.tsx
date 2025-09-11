@@ -267,6 +267,7 @@ const TooltipProvider = memo(function TooltipProvider({
 });
 
 function App() {
+  const location = useLocation();
   const data = useRouteLoaderData<RootLoadersType>("root");
   const dapper = new DapperTs(() => {
     return {
@@ -283,6 +284,7 @@ function App() {
         domain: data?.publicEnvVariables.VITE_API_URL,
         dapper: dapper,
       }}
+      key={location.key}
     />
   );
 }

@@ -6,7 +6,7 @@ import {
   NewSelect,
 } from "@thunderstore/cyberstorm";
 import "./Communities.css";
-import { useState, useEffect, useRef, memo } from "react";
+import { useState, useEffect, useRef, memo, Suspense } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -16,6 +16,7 @@ import {
 import { faGhost, faFire } from "@fortawesome/free-solid-svg-icons";
 import { useDebounce } from "use-debounce";
 import {
+  Await,
   useLoaderData,
   useNavigationType,
   useSearchParams,
@@ -76,11 +77,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
       sessionId: undefined,
     };
   });
-  return await dapper.getCommunities(
-    page,
-    order === null ? undefined : order,
-    search === null ? undefined : search
-  );
+  return {
+    communities: dapper.getCommunities(
+      page,
+      order === null ? undefined : order,
+      search === null ? undefined : search
+    ),
+  };
 }
 
 export async function clientLoader({ request }: LoaderFunctionArgs) {
@@ -95,15 +98,17 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
   const order = searchParams.get("order");
   const search = searchParams.get("search");
   const page = undefined;
-  return await dapper.getCommunities(
-    page,
-    order ?? SortOptions.Popular,
-    search ?? ""
-  );
+  return {
+    communities: dapper.getCommunities(
+      page,
+      order ?? SortOptions.Popular,
+      search ?? ""
+    ),
+  };
 }
 
 export default function CommunitiesPage() {
-  const communitiesData = useLoaderData<typeof loader | typeof clientLoader>();
+  const { communities } = useLoaderData<typeof loader | typeof clientLoader>();
   const navigationType = useNavigationType();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -181,14 +186,18 @@ export default function CommunitiesPage() {
         </div>
 
         <div className="container container--x container--stretch communities__results">
-          <CommunitiesList communitiesData={communitiesData} />
+          <Suspense fallback={<CommunitiesListSkeleton />}>
+            <Await
+              resolve={communities}
+              errorElement={<div>Error loading communities</div>}
+            >
+              {(resolvedValue) => (
+                <CommunitiesList communitiesData={resolvedValue} />
+              )}
+            </Await>
+          </Suspense>
         </div>
       </div>
-      {/* {navigation.state === "loading" ? (
-          <CommunitiesListSkeleton />
-        ) : (
-          <CommunitiesList communitiesData={communitiesData} />
-        )} */}
     </section>
   );
 }
@@ -224,4 +233,20 @@ const CommunitiesList = memo(function CommunitiesList(props: {
       </EmptyState.Root>
     );
   }
+});
+
+const CommunitiesListSkeleton = memo(function CommunitiesListSkeleton() {
+  return (
+    <div className="communities__communities-list">
+      {Array.from({ length: 14 }).map((_, index) => (
+        <div key={index} className="communities__community-skeleton">
+          <div className="communities__community-skeleton-image" />
+          <div className="communities__community-skeleton-content">
+            <div className="communities__community-skeleton-title" />
+            <div className="communities__community-skeleton-meta" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 });
