@@ -1,4 +1,3 @@
-import type { LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useOutletContext } from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { PackageOrderOptions } from "~/commonComponents/PackageSearch/components/PackageOrder";
@@ -8,8 +7,9 @@ import {
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { OutletContextShape } from "~/root";
+import { Route } from "./+types/PackageSearch";
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId) {
     const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
@@ -28,11 +28,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
-    const filters = dapper.getCommunityFilters(params.communityId);
+    const filters = await dapper.getCommunityFilters(params.communityId);
 
     return {
       filters: filters,
-      listings: dapper.getPackageListings(
+      listings: await dapper.getPackageListings(
         {
           kind: "community",
           communityId: params.communityId,
@@ -51,7 +51,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   throw new Response("Community not found", { status: 404 });
 }
 
-export async function clientLoader({ request, params }: LoaderFunctionArgs) {
+export async function clientLoader({
+  request,
+  params,
+}: Route.ClientLoaderArgs) {
   if (params.communityId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {

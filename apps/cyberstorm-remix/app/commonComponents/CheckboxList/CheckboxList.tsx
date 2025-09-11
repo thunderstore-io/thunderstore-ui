@@ -1,12 +1,12 @@
 import {
+  faBan,
   faSquare,
   faSquareCheck,
-  faSquareXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./CheckboxList.css";
-import { CycleButton, NewIcon } from "@thunderstore/cyberstorm";
+import { Actionable, NewIcon } from "@thunderstore/cyberstorm";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { resolveTriState } from "~/commonComponents/utils";
 import { TRISTATE } from "~/commonComponents/types";
@@ -45,28 +45,48 @@ export const CheckboxList = memo(function CheckboxList(props: Props) {
                 "checkbox-list__label",
                 `checkbox-list__label--${cs}`
               )}
+              htmlFor={`checkbox-list__checkbox__${item.label}`}
             >
-              {item.label}
-              <CycleButton
-                onInteract={() => {
-                  item.setStateFunc(nextStateResolve(item.state));
-                }}
-                rootClasses="checkbox-list__checkbox"
-                value={`checkbox-list__label--${cs}`}
-                noState
-              >
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon
-                    icon={
-                      cs === "include"
-                        ? faSquareCheck
-                        : cs === "exclude"
-                          ? faSquareXmark
-                          : faSquare
+              <span>
+                <Actionable
+                  primitiveType={"button"}
+                  onClick={() => {
+                    if (typeof item.state === "string") {
+                      item.setStateFunc(
+                        item.state !== "include" ? "include" : "off"
+                      );
+                    } else {
+                      item.setStateFunc(!item.state);
                     }
-                  />
-                </NewIcon>
-              </CycleButton>
+                  }}
+                  rootClasses="checkbox-list__icon checkbox-list__checkbox-button"
+                  id={`checkbox-list__checkbox__${item.label}`}
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon
+                      icon={cs === "include" ? faSquareCheck : faSquare}
+                    />
+                  </NewIcon>
+                </Actionable>
+                {item.label}
+              </span>
+              {typeof item.state === "string" && (
+                <Actionable
+                  primitiveType={"button"}
+                  onClick={() => {
+                    if (item.state === "exclude") {
+                      item.setStateFunc("off");
+                    } else {
+                      item.setStateFunc("exclude");
+                    }
+                  }}
+                  rootClasses="checkbox-list__icon checkbox-list__exclude-button"
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faBan} />
+                  </NewIcon>
+                </Actionable>
+              )}
             </label>
           </li>
         );

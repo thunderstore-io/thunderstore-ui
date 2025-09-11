@@ -9,6 +9,7 @@ import {
   Scripts,
   ScrollRestoration,
   ShouldRevalidateFunctionArgs,
+  UIMatch,
   isRouteErrorResponse,
   useLoaderData,
   useLocation,
@@ -49,7 +50,6 @@ import {
   publicEnvVariablesType,
 } from "cyberstorm/security/publicEnvVariables";
 import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
-import { isPromise } from "cyberstorm/utils/typeChecks";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -182,6 +182,31 @@ const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useLoaderData<RootLoadersType>();
+  let envVars = undefined;
+  let shouldUpdatePublicEnvVars = false;
+  if (import.meta.env.SSR) {
+    envVars = getPublicEnvVariables([
+      "VITE_SITE_URL",
+      "VITE_BETA_SITE_URL",
+      "VITE_API_URL",
+      "VITE_COOKIE_DOMAIN",
+      "VITE_AUTH_BASE_URL",
+      "VITE_AUTH_RETURN_URL",
+      "VITE_CLIENT_SENTRY_DSN",
+    ]);
+    shouldUpdatePublicEnvVars = true;
+  } else {
+    envVars = window.NIMBUS_PUBLIC_ENV;
+    if (
+      data &&
+      data.publicEnvVariables &&
+      data.publicEnvVariables !== envVars
+    ) {
+      shouldUpdatePublicEnvVars = true;
+    }
+  }
+
+  const resolvedEnvVars = data ? data.publicEnvVariables : envVars;
 
   const location = useLocation();
   // const splitPath = location.pathname.split("/");
@@ -195,8 +220,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const communitiesPage = matches.find(
     (m) => m.id === "communities/communities"
   );
+  const uploadPage = matches.find((m) => m.id === "upload/upload");
   const communityPage = matches.find((m) => m.id === "c/community");
   const packageListingPage = matches.find((m) => m.id === "p/packageListing");
+  const packageEditPage = matches.find((m) => m.id === "p/packageEdit");
+  const packageDependantsPage = matches.find(
+    (m) => m.id === "p/dependants/Dependants"
+  );
+  const packageTeamPage = matches.find((m) => m.id === "p/team/Team");
+  const packageFormatDocsPage = matches.find(
+    (m) => m.id === "tools/package-format-docs/packageFormatDocs"
+  );
+  const manifestValidatorPage = matches.find(
+    (m) => m.id === "tools/manifest-validator/manifestValidator"
+  );
+  const markdownPreviewPage = matches.find(
+    (m) => m.id === "tools/markdown-preview/markdownPreview"
+  );
+
   const shouldShowAds = location.pathname.startsWith("/teams")
     ? false
     : location.pathname.startsWith("/settings")
@@ -237,19 +278,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.NIMBUS_PUBLIC_ENV = ${JSON.stringify(
-              data.publicEnvVariables
-            )}`,
-          }}
-        />
+        {shouldUpdatePublicEnvVars && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.NIMBUS_PUBLIC_ENV = ${JSON.stringify(
+                resolvedEnvVars
+              )}`,
+            }}
+          />
+        )}
         <div className="container container--y container--full island layout">
           <LinkingProvider value={LinkLibrary}>
             <Toast.Provider toastDuration={10000}>
               <TooltipProvider>
                 <NavigationWrapper
-                  domain={data.publicEnvVariables.VITE_API_URL || ""}
+                  domain={resolvedEnvVars?.VITE_API_URL || ""}
                   currentUser={data?.currentUser}
                 />
                 <div className="container container--x container--full island">
@@ -257,114 +300,78 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     <section className="container container--y container--full layout__content">
                       {/* Breadcrumbs are build progressively */}
                       <NewBreadCrumbs>
+                        {/* Upload */}
+                        {uploadPage ? (
+                          <span>
+                            <span>Upload</span>
+                          </span>
+                        ) : null}
                         {/* Communities page */}
-                        {communitiesPage || communityPage ? (
-                          <NewBreadCrumbsLink
-                            primitiveType="cyberstormLink"
-                            linkId="Communities"
-                            csVariant="cyber"
-                          >
-                            Communities
-                          </NewBreadCrumbsLink>
+                        {communitiesPage ||
+                        communityPage ||
+                        packageDependantsPage ||
+                        packageTeamPage ? (
+                          communityPage ||
+                          packageDependantsPage ||
+                          packageTeamPage ? (
+                            <NewBreadCrumbsLink
+                              primitiveType="cyberstormLink"
+                              linkId="Communities"
+                              csVariant="cyber"
+                            >
+                              Communities
+                            </NewBreadCrumbsLink>
+                          ) : (
+                            <span>
+                              <span>Communities</span>
+                            </span>
+                          )
                         ) : null}
                         {/* Community page */}
-                        {communityPage &&
-                        isRecord(communityPage.data) &&
-                        Object.prototype.hasOwnProperty.call(
-                          communityPage.data,
-                          "community"
-                        ) &&
-                        isPromise(communityPage.data.community) ? (
-                          <Suspense
-                            fallback={
-                              <span>
-                                <span>Loading...</span>
-                              </span>
-                            }
-                          >
-                            <Await resolve={communityPage.data.community}>
-                              {(resolvedValue) => {
-                                let label = undefined;
-                                let icon = undefined;
-                                if (isRecord(resolvedValue)) {
-                                  label =
-                                    Object.prototype.hasOwnProperty.call(
-                                      resolvedValue,
-                                      "name"
-                                    ) && typeof resolvedValue.name === "string"
-                                      ? resolvedValue.name
-                                      : communityPage.params.communityId;
-                                  icon =
-                                    Object.prototype.hasOwnProperty.call(
-                                      resolvedValue,
-                                      "community_icon_url"
-                                    ) &&
-                                    typeof resolvedValue.community_icon_url ===
-                                      "string" ? (
-                                      <img
-                                        src={resolvedValue.community_icon_url}
-                                        alt=""
-                                      />
-                                    ) : undefined;
-                                }
-                                return matches[matches.length - 1] ===
-                                  communityPage ? (
-                                  <span>
-                                    <span>
-                                      {icon}
-                                      {label}
-                                    </span>
-                                  </span>
-                                ) : (
-                                  <NewBreadCrumbsLink
-                                    primitiveType="cyberstormLink"
-                                    linkId="Community"
-                                    community={communityPage.params.communityId}
-                                    csVariant="cyber"
-                                  >
-                                    {icon}
-                                    {label}
-                                  </NewBreadCrumbsLink>
-                                );
-                              }}
-                            </Await>
-                          </Suspense>
-                        ) : null}
+                        {getCommunityBreadcrumb(
+                          communityPage ||
+                            packageListingPage ||
+                            packageDependantsPage ||
+                            packageTeamPage,
+                          Boolean(packageListingPage) ||
+                            Boolean(packageDependantsPage) ||
+                            Boolean(packageTeamPage)
+                        )}
                         {/* Package listing page */}
-                        {packageListingPage &&
-                        isRecord(packageListingPage.data) &&
-                        Object.prototype.hasOwnProperty.call(
-                          packageListingPage.data,
-                          "listing"
-                        ) &&
-                        isPromise(packageListingPage.data.listing) ? (
-                          <Suspense
-                            fallback={
-                              <span>
-                                <span>Loading...</span>
-                              </span>
-                            }
-                          >
-                            <Await resolve={packageListingPage.data.listing}>
-                              {(resolvedValue) => {
-                                let label = undefined;
-                                if (isRecord(resolvedValue)) {
-                                  label =
-                                    Object.prototype.hasOwnProperty.call(
-                                      resolvedValue,
-                                      "name"
-                                    ) && typeof resolvedValue.name === "string"
-                                      ? resolvedValue.name
-                                      : packageListingPage.params.packageId;
-                                }
-                                return (
-                                  <span>
-                                    <span>{label}</span>
-                                  </span>
-                                );
-                              }}
-                            </Await>
-                          </Suspense>
+                        {getPackageListingBreadcrumb(
+                          packageListingPage,
+                          packageEditPage,
+                          packageDependantsPage
+                        )}
+                        {packageEditPage ? (
+                          <span>
+                            <span>Edit package</span>
+                          </span>
+                        ) : null}
+                        {packageDependantsPage ? (
+                          <span>
+                            <span>Dependants</span>
+                          </span>
+                        ) : null}
+                        {packageTeamPage ? (
+                          <span>
+                            <span>{packageTeamPage.params.namespaceId}</span>
+                          </span>
+                        ) : null}
+                        {packageFormatDocsPage ? (
+                          <span>
+                            <span>Package Format Docs</span>
+                          </span>
+                        ) : null}
+                        {manifestValidatorPage ? (
+                          <span>
+                            <span>Manifest Validator</span>
+                          </span>
+                        ) : null}
+                        {markdownPreviewPage ? (
+                          <span>
+                            <span>Markdown Preview</span>
+                          </span>
                         ) : null}
                       </NewBreadCrumbs>
                       {children}
@@ -540,4 +547,107 @@ function BetaButtonInit() {
   }, []);
 
   return <></>;
+}
+
+function getCommunityBreadcrumb(
+  communityPage: UIMatch | undefined,
+  isNotLast: boolean
+) {
+  if (!communityPage) return null;
+  return (
+    <>
+      {communityPage &&
+      isRecord(communityPage.data) &&
+      Object.prototype.hasOwnProperty.call(communityPage.data, "community") ? (
+        <Suspense
+          fallback={
+            <span>
+              <span>Loading...</span>
+            </span>
+          }
+        >
+          <Await resolve={communityPage.data.community}>
+            {(resolvedValue) => {
+              let label = undefined;
+              let icon = undefined;
+              if (isRecord(resolvedValue)) {
+                label =
+                  Object.prototype.hasOwnProperty.call(resolvedValue, "name") &&
+                  typeof resolvedValue.name === "string"
+                    ? resolvedValue.name
+                    : communityPage.params.communityId;
+                icon =
+                  Object.prototype.hasOwnProperty.call(
+                    resolvedValue,
+                    "community_icon_url"
+                  ) && typeof resolvedValue.community_icon_url === "string" ? (
+                    <img src={resolvedValue.community_icon_url} alt="" />
+                  ) : undefined;
+              }
+              return isNotLast ? (
+                <NewBreadCrumbsLink
+                  primitiveType="cyberstormLink"
+                  linkId="Community"
+                  community={communityPage.params.communityId}
+                  csVariant="cyber"
+                >
+                  {icon}
+                  {label}
+                </NewBreadCrumbsLink>
+              ) : (
+                <span>
+                  <span>
+                    {icon}
+                    {label}
+                  </span>
+                </span>
+              );
+            }}
+          </Await>
+        </Suspense>
+      ) : null}
+    </>
+  );
+}
+
+function getPackageListingBreadcrumb(
+  packageListingPage: UIMatch | undefined,
+  packageEditPage: UIMatch | undefined,
+  packageDependantsPage: UIMatch | undefined
+) {
+  if (!packageListingPage && !packageEditPage && !packageDependantsPage)
+    return null;
+  return (
+    <>
+      {packageListingPage ? (
+        <span>
+          <span>{packageListingPage.params.packageId}</span>
+        </span>
+      ) : null}
+      {packageEditPage ? (
+        <NewBreadCrumbsLink
+          primitiveType="cyberstormLink"
+          linkId="Package"
+          community={packageEditPage.params.communityId}
+          namespace={packageEditPage.params.namespaceId}
+          package={packageEditPage.params.packageId}
+          csVariant="cyber"
+        >
+          {packageEditPage.params.packageId}
+        </NewBreadCrumbsLink>
+      ) : null}
+      {packageDependantsPage ? (
+        <NewBreadCrumbsLink
+          primitiveType="cyberstormLink"
+          linkId="Package"
+          community={packageDependantsPage.params.communityId}
+          namespace={packageDependantsPage.params.namespaceId}
+          package={packageDependantsPage.params.packageId}
+          csVariant="cyber"
+        >
+          {packageDependantsPage.params.packageId}
+        </NewBreadCrumbsLink>
+      ) : null}
+    </>
+  );
 }

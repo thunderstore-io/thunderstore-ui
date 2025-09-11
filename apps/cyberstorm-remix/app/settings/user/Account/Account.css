@@ -2,7 +2,7 @@
   .user-account__delete-user-form {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xxl);
+    gap: var(--gap-2xl);
     align-items: flex-start;
     align-self: stretch;
     justify-content: center;

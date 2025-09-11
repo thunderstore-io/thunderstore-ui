@@ -1,7 +1,7 @@
 .empty-state {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xxxl);
+  gap: var(--gap-3xl);
   color: var(--color-text--default);
 }
 

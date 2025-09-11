@@ -1,4 +1,5 @@
 import { getSessionContext } from "@thunderstore/ts-api-react/src/SessionContext";
+import { isRecord } from "cyberstorm/utils/typeChecks";
 
 export type publicEnvVariablesKeys =
   | "SITE_URL"
@@ -21,13 +22,24 @@ export function getPublicEnvVariables(
   const returnedVars: publicEnvVariablesType = {};
   if (import.meta.env.SSR) {
     vars.forEach((envVar) => {
-      if (envVar.startsWith("VITE_") && envVar in process.env) {
+      if (
+        process.env !== undefined &&
+        isRecord(process.env) &&
+        envVar.startsWith("VITE_") &&
+        Object.prototype.hasOwnProperty.call(process.env, envVar)
+      ) {
         returnedVars[envVar] = process.env[envVar];
       }
     });
   } else {
     vars.forEach((envVar) => {
-      if (envVar.startsWith("VITE_") && envVar in window.NIMBUS_PUBLIC_ENV) {
+      if (
+        window !== undefined &&
+        Object.prototype.hasOwnProperty.call(window, "NIMBUS_PUBLIC_ENV") &&
+        isRecord(window.NIMBUS_PUBLIC_ENV) &&
+        envVar.startsWith("VITE_") &&
+        Object.prototype.hasOwnProperty.call(window.NIMBUS_PUBLIC_ENV, envVar)
+      ) {
         returnedVars[envVar] = window.NIMBUS_PUBLIC_ENV[envVar];
       }
     });

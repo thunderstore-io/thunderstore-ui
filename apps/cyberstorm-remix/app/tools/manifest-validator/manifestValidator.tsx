@@ -1,7 +1,6 @@
 import {
   CodeInput,
   NewAlert,
-  NewBreadCrumbs,
   NewSelect,
   isRecord,
   isStringArray,
@@ -75,11 +74,6 @@ export default function ManifestValidator() {
 
   return (
     <>
-      <NewBreadCrumbs>
-        <span>
-          <span>Manifest Validator</span>
-        </span>
-      </NewBreadCrumbs>
       <PageHeader headingLevel="1" headingSize="2">
         Manifest Validator
       </PageHeader>

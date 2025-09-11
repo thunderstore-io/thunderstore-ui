@@ -1,7 +1,7 @@
 @layer nimbus-layout {
   .package-listing__main {
     display: flex;
-    gap: var(--gap-xxxl);
+    gap: var(--gap-3xl);
     align-items: flex-start;
     align-self: stretch;
   }
@@ -129,7 +129,7 @@
     display: flex;
     flex: 1 0 0;
     flex-direction: column;
-    gap: var(--gap-xxxl);
+    gap: var(--gap-3xl);
     align-items: flex-start;
     align-self: stretch;
   }
@@ -188,7 +188,7 @@
   .package-listing-sidebar__meta {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xxxs);
+    gap: var(--gap-3xs);
     align-items: flex-start;
     align-self: stretch;
 
@@ -203,7 +203,7 @@
 
   .package-listing-sidebar__item {
     display: flex;
-    gap: var(--gap-xxxl);
+    gap: var(--gap-3xl);
     align-items: center;
     align-self: stretch;
     padding: var(--space-8) var(--space-12);
@@ -292,6 +292,21 @@
 
   .package-listing__drawer-button {
     width: 100%;
+  }
+
+  @media (width < 41rem) {
+    .package-listing__actions {
+      position: unset;
+      top: unset;
+      right: unset;
+      display: flex;
+      flex: 1 1 0;
+    }
+
+    .package-listing-management-tools {
+      flex: 1 1 0;
+      flex-flow: row wrap;
+    }
   }
 
   /* Sidebar narrow/wide switch breakpoint */

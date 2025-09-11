@@ -13,10 +13,13 @@ export default [
 
   route("/communities", "./communities/communities.tsx"),
   route("/c/:communityId", "c/community.tsx", [
-    route("", "c/tabs/PackageSearch/PackageSearch.tsx", { index: true }),
+    route("/c/:communityId/", "c/tabs/PackageSearch/PackageSearch.tsx"),
     ...prefix("p", [
       route(":namespaceId/:packageId", "p/packageListing.tsx", [
-        route("", "p/tabs/Readme/Readme.tsx", { index: true }),
+        route(
+          "/c/:communityId/p/:namespaceId/:packageId/",
+          "p/tabs/Readme/Readme.tsx"
+        ),
         route("required", "p/tabs/Required/Required.tsx"),
         route("changelog", "p/tabs/Changelog/Changelog.tsx"),
         route("versions", "p/tabs/Versions/Versions.tsx"),
@@ -28,15 +31,15 @@ export default [
             route("/:slug/edit", "p/tabs/Wiki/WikiPageEdit.tsx"),
           ]),
         ]),
-        route("edit", "p/packageEdit.tsx"),
       ]),
-      route(
-        ":namespaceId/:packageId/dependants",
-        "p/dependants/Dependants.tsx"
-      ),
-      route(":namespaceId", "p/team/Team.tsx"),
+      route(":namespaceId/:packageId/edit", "p/packageEdit.tsx"),
     ]),
   ]),
+  route(
+    "/c/:communityId/p/:namespaceId/:packageId/dependants",
+    "p/dependants/Dependants.tsx"
+  ),
+  route("/c/:communityId/p/:namespaceId", "p/team/Team.tsx"),
   route(
     "/package/create/docs",
     "tools/package-format-docs/packageFormatDocs.tsx"

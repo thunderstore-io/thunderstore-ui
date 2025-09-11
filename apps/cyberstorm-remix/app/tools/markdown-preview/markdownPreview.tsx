@@ -1,6 +1,6 @@
 import { useOutletContext } from "react-router";
 import "./MarkdownPreview.css";
-import { CodeInput, NewBreadCrumbs, isRecord } from "@thunderstore/cyberstorm";
+import { CodeInput, isRecord } from "@thunderstore/cyberstorm";
 import {
   isApiError,
   RequestConfig,
@@ -54,11 +54,6 @@ export default function MarkdownPreview() {
 
   return (
     <>
-      <NewBreadCrumbs>
-        <span>
-          <span>Markdown Preview</span>
-        </span>
-      </NewBreadCrumbs>
       <PageHeader headingLevel="1" headingSize="2">
         Markdown Preview
       </PageHeader>
