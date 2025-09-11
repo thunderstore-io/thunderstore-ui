@@ -19,7 +19,7 @@
   .add-member-form__body {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xxl);
+    gap: var(--gap-2xl);
     align-items: flex-start;
     align-self: stretch;
   }
@@ -73,7 +73,7 @@
   .remove-member-form__body {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xxl);
+    gap: var(--gap-2xl);
     align-items: flex-start;
     align-self: stretch;
   }

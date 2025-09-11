@@ -77,22 +77,7 @@ export const TextInput = memo(function TextInput(props: TextInputProps) {
           {leftIcon}
         </NewIcon>
       ) : null}
-      {csSize === "default" ? (
-        <Input
-          {...(fProps as InputTextInputProps)}
-          primitiveType={"textInput"}
-          rootClasses={classnames(
-            "text-input",
-            leftIcon ? "text-input--has-left-icon" : null,
-            clearValue ? "text-input--has-clear-value" : null,
-            ...componentClasses("text-input", csVariant, csSize, csModifiers)
-          )}
-          ref={inputRef}
-          onKeyDown={onEnter}
-        >
-          {children}
-        </Input>
-      ) : (
+      {csSize === "textarea" ? (
         <Input
           {...(fProps as InputTextAreaProps)}
           primitiveType={"textArea"}
@@ -103,6 +88,21 @@ export const TextInput = memo(function TextInput(props: TextInputProps) {
             ...componentClasses("text-input", csVariant, csSize, csModifiers)
           )}
           ref={textareaRef}
+          onKeyDown={onEnter}
+        >
+          {children}
+        </Input>
+      ) : (
+        <Input
+          {...(fProps as InputTextInputProps)}
+          primitiveType={"textInput"}
+          rootClasses={classnames(
+            "text-input",
+            leftIcon ? "text-input--has-left-icon" : null,
+            clearValue ? "text-input--has-clear-value" : null,
+            ...componentClasses("text-input", csVariant, csSize, csModifiers)
+          )}
+          ref={inputRef}
           onKeyDown={onEnter}
         >
           {children}
