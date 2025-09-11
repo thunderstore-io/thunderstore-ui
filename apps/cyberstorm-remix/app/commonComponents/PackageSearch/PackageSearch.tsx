@@ -154,13 +154,15 @@ export function PackageSearch(props: Props) {
     dapper,
   } = props;
 
+  const sortedSections = sections.sort((a, b) => b.priority - a.priority);
+
   const navigation = useNavigation();
 
   const navigationType = useNavigationType();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const initialParams = searchParamsToBlob(searchParams, sections);
+  const initialParams = searchParamsToBlob(searchParams, sortedSections);
 
   const [searchParamsBlob, setSearchParamsBlob] =
     useState<SearchParamsType>(initialParams);
@@ -196,7 +198,7 @@ export function PackageSearch(props: Props) {
     setSearchParamsBlob({
       search: "",
       order: order,
-      section: sections.length === 0 ? "" : sections[0]?.uuid,
+      section: sortedSections.length === 0 ? "" : sortedSections[0]?.uuid,
       deprecated: false,
       nsfw: false,
       page: 1,
@@ -305,12 +307,15 @@ export function PackageSearch(props: Props) {
   useEffect(() => {
     if (navigationType === "POP") {
       if (searchParamsRef.current !== searchParams) {
-        const spb = searchParamsToBlob(searchParams, sections);
+        const spb = searchParamsToBlob(searchParams, sortedSections);
         setSearchParamsBlob(spb);
         setCurrentPage(spb.page);
         searchParamsRef.current = searchParams;
       }
-      searchParamsBlobRef.current = searchParamsToBlob(searchParams, sections);
+      searchParamsBlobRef.current = searchParamsToBlob(
+        searchParams,
+        sortedSections
+      );
     }
   }, [searchParams]);
 
@@ -362,14 +367,14 @@ export function PackageSearch(props: Props) {
         // Because of the first section being a empty value, the logic check is a bit funky
 
         // If no section in search params, delete
-        if (sections.length === 0) searchParams.delete("section");
+        if (sortedSections.length === 0) searchParams.delete("section");
 
         // If new section is empty, delete (defaults to first)
         if (debouncedSearchParamsBlob.section === "")
           searchParams.delete("section");
 
         // If new section is the first one, delete. And reset page number if section is different from last render.
-        if (debouncedSearchParamsBlob.section === sections[0]?.uuid) {
+        if (debouncedSearchParamsBlob.section === sortedSections[0]?.uuid) {
           if (
             searchParamsBlobRef.current.section !==
             debouncedSearchParamsBlob.section
@@ -383,7 +388,7 @@ export function PackageSearch(props: Props) {
         if (
           searchParamsBlobRef.current.section !==
             debouncedSearchParamsBlob.section &&
-          debouncedSearchParamsBlob.section !== sections[0]?.uuid
+          debouncedSearchParamsBlob.section !== sortedSections[0]?.uuid
         ) {
           searchParams.set("section", debouncedSearchParamsBlob.section);
           resetPage = true;
@@ -451,7 +456,7 @@ export function PackageSearch(props: Props) {
         }
         const uncommittedSearchParams = searchParamsToBlob(
           searchParams,
-          sections
+          sortedSections
         );
 
         if (
@@ -518,11 +523,11 @@ export function PackageSearch(props: Props) {
           rootClasses="package-search__search"
         />
         <div className="package-search__filters">
-          {sections.length > 0 ? (
+          {sortedSections.length > 0 ? (
             <CollapsibleMenu headerTitle="Sections" defaultOpen>
               <RadioGroup
                 sections={[
-                  ...sections,
+                  ...sortedSections,
                   {
                     uuid: "all",
                     name: "All",
@@ -530,7 +535,7 @@ export function PackageSearch(props: Props) {
                     priority: -999999999,
                   },
                 ]}
-                selected={searchParamsBlob.section ?? sections[0]?.uuid}
+                selected={searchParamsBlob.section ?? sortedSections[0]?.uuid}
                 setSelected={setSection}
               />
             </CollapsibleMenu>
