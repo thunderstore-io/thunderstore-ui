@@ -30,7 +30,7 @@
     "chromatic": "^11.10.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jsx-a11y": "^6.10.0",
-    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react": "^7.36.1",
     "globals": "^15.10.0",
     "plop": "^4.0.1",
