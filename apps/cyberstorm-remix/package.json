@@ -45,7 +45,7 @@
     "vite-tsconfig-paths": "^5.0.1"
   },
   "engines": {
-    "node": ">=20.17.0"
+    "node": ">=24.1.0"
   },
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/apps/cyberstorm-remix"
 }
