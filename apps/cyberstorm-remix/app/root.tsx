@@ -217,6 +217,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
   //   splitPath.length > 5 && splitPath[1] === "c" && splitPath[3] === "p";
   const matches = useMatches();
 
+  const userSettingsPage = matches.find(
+    (m) => m.id === "settings/user/Settings"
+  );
+  const userSettingsAccountPage = matches.find(
+    (m) => m.id === "settings/user/Account/Account"
+  );
+  const teamsPage = matches.find((m) => m.id === "settings/teams/Teams");
+  const teamSettingsPage = matches.find(
+    (m) => m.id === "settings/teams/team/teamSettings"
+  );
+  const teamSettingsProfilePage = matches.find(
+    (m) => m.id === "settings/teams/team/tabs/Profile/Profile"
+  );
+  const teamSettingsMembersPage = matches.find(
+    (m) => m.id === "settings/teams/team/tabs/Members/Members"
+  );
+  const teamSettingsServiceAccountsPage = matches.find(
+    (m) => m.id === "settings/teams/team/tabs/ServiceAccounts/ServiceAccounts"
+  );
+  const teamSettingsSettingsPage = matches.find(
+    (m) => m.id === "settings/teams/team/tabs/Settings/Settings"
+  );
   const communitiesPage = matches.find(
     (m) => m.id === "communities/communities"
   );
@@ -300,6 +322,73 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     <section className="container container--y container--full layout__content">
                       {/* Breadcrumbs are build progressively */}
                       <NewBreadCrumbs>
+                        {/* User Settings */}
+                        {userSettingsPage ? (
+                          userSettingsAccountPage ? (
+                            <NewBreadCrumbsLink
+                              primitiveType="cyberstormLink"
+                              linkId="Settings"
+                              csVariant="cyber"
+                            >
+                              Settings
+                            </NewBreadCrumbsLink>
+                          ) : (
+                            <span>
+                              <span>Settings</span>
+                            </span>
+                          )
+                        ) : null}
+                        {/* User Settings account */}
+                        {userSettingsAccountPage ? (
+                          <span>
+                            <span>Account</span>
+                          </span>
+                        ) : null}
+                        {/* Teams */}
+                        {teamsPage || teamSettingsPage ? (
+                          <NewBreadCrumbsLink
+                            primitiveType="cyberstormLink"
+                            linkId="Teams"
+                            csVariant="cyber"
+                          >
+                            Teams
+                          </NewBreadCrumbsLink>
+                        ) : null}
+                        {/* Team settings */}
+                        {teamSettingsPage ? (
+                          <NewBreadCrumbsLink
+                            primitiveType="cyberstormLink"
+                            linkId="Team"
+                            csVariant="cyber"
+                            team={teamSettingsPage.params.namespaceId}
+                          >
+                            {teamSettingsPage.params.namespaceId}
+                          </NewBreadCrumbsLink>
+                        ) : null}
+                        {/* Team Settings Profile */}
+                        {teamSettingsProfilePage ? (
+                          <span>
+                            <span>Profile</span>
+                          </span>
+                        ) : null}
+                        {/* Team Settings Members */}
+                        {teamSettingsMembersPage ? (
+                          <span>
+                            <span>Members</span>
+                          </span>
+                        ) : null}
+                        {/* Team Settings Service Accounts */}
+                        {teamSettingsServiceAccountsPage ? (
+                          <span>
+                            <span>Service Accounts</span>
+                          </span>
+                        ) : null}
+                        {/* Team Settings Settings */}
+                        {teamSettingsSettingsPage ? (
+                          <span>
+                            <span>Settings</span>
+                          </span>
+                        ) : null}
                         {/* Upload */}
                         {uploadPage ? (
                           <span>
