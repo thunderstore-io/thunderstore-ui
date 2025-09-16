@@ -70,18 +70,6 @@ export default function Community() {
 
   return (
     <>
-      <NewBreadCrumbs>
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Teams"
-          csVariant="cyber"
-        >
-          Teams
-        </NewBreadCrumbsLink>
-        <span>
-          <span>{team.name}</span>
-        </span>
-      </NewBreadCrumbs>
       <PageHeader headingLevel="1" headingSize="2">
         {team.name}
       </PageHeader>

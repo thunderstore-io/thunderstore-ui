@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useOutletContext } from "react-router";
-import { NewBreadCrumbs, NewLink, Tabs } from "@thunderstore/cyberstorm";
+import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 import { OutletContextShape } from "../../root";
@@ -48,11 +48,6 @@ export default function Community() {
 
   return (
     <>
-      <NewBreadCrumbs>
-        <span>
-          <span>{outletContext.currentUser.username}</span>
-        </span>
-      </NewBreadCrumbs>
       <PageHeader headingLevel="1" headingSize="2">
         Settings
       </PageHeader>
