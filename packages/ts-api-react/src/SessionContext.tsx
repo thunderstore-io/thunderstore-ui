@@ -142,6 +142,7 @@ export const sessionValid = (
     // sessionid present but no currentUser, session is stale
     if (storedCurrentUser === null) {
       _storage.setValue(STALE_KEY, "yes");
+      return false;
     }
     return true;
   }
