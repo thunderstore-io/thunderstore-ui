@@ -160,11 +160,8 @@ export function Navigation(props: {
           {currentUser?.username ? (
             <span className="navigation-header__profile-actions">
               <NewButton
-                primitiveType="link"
-                href={`${domain}/package/create/`}
-                // TODO: Take these into use when the upload page is ready
-                // primitiveType="cyberstormLink"
-                // linkId="PackageUpload"
+                primitiveType="cyberstormLink"
+                linkId="PackageUpload"
                 csVariant="secondary"
                 csSize="small"
                 // csModifiers={["ghost", "only-icon"]}
@@ -384,10 +381,8 @@ export function DesktopUserDropdown(props: {
       <NewDropDownDivider />
       <NewDropDownItem asChild>
         <NewLink
-          // primitiveType="cyberstormLink"
-          // linkId="Settings"
-          primitiveType="link"
-          href={`${domain}/settings/linked-accounts/`}
+          primitiveType="cyberstormLink"
+          linkId="Settings"
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
@@ -398,10 +393,8 @@ export function DesktopUserDropdown(props: {
       </NewDropDownItem>
       <NewDropDownItem asChild>
         <NewLink
-          // primitiveType="cyberstormLink"
-          // linkId="Teams"
-          primitiveType="link"
-          href={`${domain}/settings/teams/`}
+          primitiveType="cyberstormLink"
+          linkId="Teams"
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
@@ -551,7 +544,7 @@ export function MobileUserPopoverContent(props: {
             <NewAvatar src={avatar} username={user.username} csSize="small" />
             <p className="mobile-navigation__user-details">{user.username}</p>
           </div>
-          {/* <NewLink
+          <NewLink
             primitiveType="cyberstormLink"
             linkId="Settings"
             csVariant="primary"
@@ -572,7 +565,7 @@ export function MobileUserPopoverContent(props: {
               <FontAwesomeIcon icon={faUsers} />
             </NewIcon>
             Teams
-          </NewLink> */}
+          </NewLink>
           <NewLink
             primitiveType="link"
             href={domain ? `${domain}/logout/` : "/logout"}
