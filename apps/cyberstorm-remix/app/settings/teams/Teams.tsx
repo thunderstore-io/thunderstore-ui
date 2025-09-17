@@ -4,7 +4,6 @@ import { useOutletContext, useRevalidator } from "react-router";
 import {
   Heading,
   Modal,
-  NewBreadCrumbs,
   NewButton,
   NewIcon,
   NewLink,
@@ -65,11 +64,6 @@ export default function Teams() {
 
   return (
     <>
-      <NewBreadCrumbs>
-        <span>
-          <span>Teams</span>
-        </span>
-      </NewBreadCrumbs>
       <PageHeader headingLevel="1" headingSize="2">
         Teams
       </PageHeader>
