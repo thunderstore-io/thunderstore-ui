@@ -50,6 +50,7 @@ import {
   publicEnvVariablesType,
 } from "cyberstorm/security/publicEnvVariables";
 import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
+import { Route } from "./+types/root";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -119,7 +120,7 @@ export async function loader() {
   };
 }
 
-export async function clientLoader() {
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const publicEnvVariables = getPublicEnvVariables([
     "VITE_SITE_URL",
     "VITE_BETA_SITE_URL",
@@ -142,13 +143,28 @@ export async function clientLoader() {
     publicEnvVariables.VITE_COOKIE_DOMAIN
   );
 
-  // We need to run this here too in addition to the, shouldRevalidate function,
-  // as for some reason the commits to localStorage are not done before the the clientLoader is run
-  sessionTools.sessionValid(
-    publicEnvVariables.VITE_API_URL,
-    publicEnvVariables.VITE_COOKIE_DOMAIN
+  let forceUpdateCurrentUser = false;
+  if (
+    request.url.startsWith(`${publicEnvVariables.VITE_BETA_SITE_URL}/teams`) ||
+    request.url.startsWith(`${publicEnvVariables.VITE_BETA_SITE_URL}/settings`)
+  ) {
+    forceUpdateCurrentUser = true;
+  } else {
+    // In all other cases check if actually need to fetch
+    // current-user data. Ideally we shouldn't need to do
+    // this sessionValid check again, but for some reason
+    // we need to run this here too in addition to the,
+    // shouldRevalidate function, cause for some reason
+    // the commits to localStorage are not done before
+    // the clientLoader is run.
+    sessionTools.sessionValid(
+      publicEnvVariables.VITE_API_URL,
+      publicEnvVariables.VITE_COOKIE_DOMAIN
+    );
+  }
+  const currentUser = await sessionTools.getSessionCurrentUser(
+    forceUpdateCurrentUser
   );
-  const currentUser = await sessionTools.getSessionCurrentUser();
   const config = sessionTools.getConfig(publicEnvVariables.VITE_API_URL);
   return {
     publicEnvVariables: publicEnvVariables,
@@ -164,11 +180,17 @@ export type RootLoadersType = typeof loader | typeof clientLoader;
 // this needs to be fixed, but it requires a more in-depth solution
 export function shouldRevalidate({
   defaultShouldRevalidate,
+  nextUrl,
 }: ShouldRevalidateFunctionArgs) {
   const publicEnvVariables = getPublicEnvVariables([
     "VITE_API_URL",
     "VITE_COOKIE_DOMAIN",
   ]);
+  if (
+    nextUrl.pathname.startsWith("/teams") ||
+    nextUrl.pathname.startsWith("/settings")
+  )
+    return true;
   sessionValid(
     new StorageManager(SESSION_STORAGE_KEY),
     publicEnvVariables.VITE_API_URL || "",
