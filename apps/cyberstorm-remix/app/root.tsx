@@ -141,6 +141,13 @@ export async function clientLoader() {
     publicEnvVariables.VITE_API_URL,
     publicEnvVariables.VITE_COOKIE_DOMAIN
   );
+
+  // We need to run this here too in addition to the, shouldRevalidate function,
+  // as for some reason the commits to localStorage are not done before the the clientLoader is run
+  sessionTools.sessionValid(
+    publicEnvVariables.VITE_API_URL,
+    publicEnvVariables.VITE_COOKIE_DOMAIN
+  );
   const currentUser = await sessionTools.getSessionCurrentUser();
   const config = sessionTools.getConfig(publicEnvVariables.VITE_API_URL);
   return {
@@ -158,21 +165,22 @@ export type RootLoadersType = typeof loader | typeof clientLoader;
 export function shouldRevalidate({
   defaultShouldRevalidate,
 }: ShouldRevalidateFunctionArgs) {
-  if (defaultShouldRevalidate) return true;
   const publicEnvVariables = getPublicEnvVariables([
     "VITE_API_URL",
     "VITE_COOKIE_DOMAIN",
   ]);
-  if (
-    !sessionValid(
-      new StorageManager(SESSION_STORAGE_KEY),
-      publicEnvVariables.VITE_API_URL || "",
-      publicEnvVariables.VITE_COOKIE_DOMAIN || ""
-    )
-  )
-    return true;
-  return getSessionStale(new NamespacedStorageManager(SESSION_STORAGE_KEY));
+  sessionValid(
+    new StorageManager(SESSION_STORAGE_KEY),
+    publicEnvVariables.VITE_API_URL || "",
+    publicEnvVariables.VITE_COOKIE_DOMAIN || ""
+  );
+  const sessionIsStale = getSessionStale(
+    new NamespacedStorageManager(SESSION_STORAGE_KEY)
+  );
+  return sessionIsStale || defaultShouldRevalidate;
 }
+
+clientLoader.hydrate = true;
 
 export function HydrateFallback() {
   return <div style={{ padding: "32px" }}>Loading...</div>;
