@@ -34,7 +34,9 @@ export interface ContextInterface {
   /** Store given CurrentUser */
   storeCurrentUser: (currentUser: User) => void;
   /** Function to get the currentUser */
-  getSessionCurrentUser: () => Promise<User | EmptyUser>;
+  getSessionCurrentUser: (
+    forceUpdateCurrentUser?: boolean
+  ) => Promise<User | EmptyUser>;
 }
 
 interface SessionData {
@@ -204,10 +206,10 @@ const emptyCurrentUser: EmptyUser = {
 };
 
 export const getSessionCurrentUser = async (
-  _storage: StorageManager
+  _storage: StorageManager,
+  forceUpdateCurrentUser: boolean = false
 ): Promise<User | EmptyUser> => {
-  const isStale = _storage.safeGetValue(STALE_KEY);
-  if (!(typeof isStale === "string") || !(isStale === "no")) {
+  if (forceUpdateCurrentUser || _storage.safeGetValue(STALE_KEY) === "yes") {
     // If the session is stale, we need to refresh it
     await updateCurrentUser(_storage);
   }
@@ -262,8 +264,8 @@ export const getSessionContext = (
     updateCurrentUser(_storage);
   };
 
-  const _getSessionCurrentUser = () => {
-    return getSessionCurrentUser(_storage);
+  const _getSessionCurrentUser = (forceUpdateCurrentUser: boolean = false) => {
+    return getSessionCurrentUser(_storage, forceUpdateCurrentUser);
   };
 
   if (typeof window !== "undefined") {
