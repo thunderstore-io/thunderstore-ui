@@ -317,3 +317,14 @@ export const teamServiceAccountAddResponseSchema = z.object({
 export type TeamServiceAccountAddResponseData = z.infer<
   typeof teamServiceAccountAddResponseSchema
 >;
+
+// TeamMemberEditResponse
+export const teamEditMemberResponseSchema = z.object({
+  role: z.enum(["owner", "member"]),
+  team_name: z.string().min(1),
+  username: z.string().min(1),
+});
+
+export type TeamEditMemberResponseData = z.infer<
+  typeof teamEditMemberResponseSchema
+>;

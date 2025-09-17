@@ -1,5 +1,3 @@
-// THIS API ENDPOINT IS NOT IMPLEMENTED YET IN THE THUNDERSTORE API
-
 import { ApiEndpointProps, TeamMemberRemoveRequestParams } from "../index";
 import { apiFetch } from "../apiFetch";
 

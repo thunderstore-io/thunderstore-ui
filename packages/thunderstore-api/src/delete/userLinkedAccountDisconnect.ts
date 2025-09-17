@@ -1,8 +1,7 @@
-// THIS API ENDPOINT IS NOT IMPLEMENTED YET IN THE THUNDERSTORE API
-
 import {
   ApiEndpointProps,
   UserLinkedAccountDisconnectRequestParams,
+  userLinkedAccountDisconnectRequestParamsSchema,
 } from "../index";
 import { apiFetch } from "../apiFetch";
 
@@ -13,8 +12,8 @@ export function userLinkedAccountDisconnect(
     object
   >
 ): Promise<undefined> {
-  const { config, params, data } = props;
-  const path = `/api/cyberstorm/user/${params.user}/social-account/${params.provider}/delete/`;
+  const { config, params } = props;
+  const path = `/api/cyberstorm/user/linked-account/${params.provider}/disconnect/`;
 
   return apiFetch({
     args: {
@@ -22,11 +21,10 @@ export function userLinkedAccountDisconnect(
       path,
       request: {
         method: "DELETE",
-        body: JSON.stringify(data),
       },
       useSession: true,
     },
-    requestSchema: undefined,
+    requestSchema: userLinkedAccountDisconnectRequestParamsSchema,
     queryParamsSchema: undefined,
     responseSchema: undefined,
   });
