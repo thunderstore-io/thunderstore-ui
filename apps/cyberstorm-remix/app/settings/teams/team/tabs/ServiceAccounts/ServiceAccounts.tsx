@@ -162,11 +162,10 @@ export default function ServiceAccounts() {
                       config: outletContext.requestConfig,
                       params: {
                         team_name: teamName,
+                        uuid: serviceAccount.identifier,
                       },
                       queryParams: {},
-                      data: {
-                        service_account_uuid: serviceAccount.identifier,
-                      },
+                      data: {},
                     });
                   }}
                   csVariant="danger"
