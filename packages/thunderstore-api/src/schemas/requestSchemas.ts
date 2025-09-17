@@ -462,29 +462,11 @@ export type userLinkedAccountDisconnectProviders = z.infer<
 >;
 
 export const userLinkedAccountDisconnectRequestParamsSchema = z.object({
-  user: z.string(),
   provider: userLinkedAccountDisconnectProvidersSchema,
 });
 
 export type UserLinkedAccountDisconnectRequestParams = z.infer<
   typeof userLinkedAccountDisconnectRequestParamsSchema
->;
-
-// UserAccountDeleteRequest
-export const userAccountDeleteRequestParamsSchema = z.object({
-  username: z.string(),
-});
-
-export type UserAccountDeleteRequestParams = z.infer<
-  typeof userAccountDeleteRequestParamsSchema
->;
-
-export const userAccountDeleteRequestDataSchema = z.object({
-  verification: z.string(),
-});
-
-export type UserAccountDeleteRequestData = z.infer<
-  typeof userAccountDeleteRequestDataSchema
 >;
 
 // TeamDetailsRequest
@@ -534,18 +516,11 @@ export type TeamServiceAccountAddRequestData = z.infer<
 // TeamServiceAccountRemoveRequest
 export const teamServiceAccountRemoveRequestParamsSchema = z.object({
   team_name: z.string(),
+  uuid: z.string(),
 });
 
 export type TeamServiceAccountRemoveRequestParams = z.infer<
   typeof teamServiceAccountRemoveRequestParamsSchema
->;
-
-export const teamServiceAccountRemoveRequestDataSchema = z.object({
-  service_account_uuid: z.string(),
-});
-
-export type TeamServiceAccountRemoveRequestData = z.infer<
-  typeof teamServiceAccountRemoveRequestDataSchema
 >;
 
 // TeamAddMemberRequest
