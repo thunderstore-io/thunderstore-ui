@@ -72,7 +72,7 @@ export const setSession = (
 ) => {
   _storage.setValue(API_HOST_KEY, sessionData.apiHost);
   _storage.setValue(COOKIE_DOMAIN_KEY, sessionData.cookieDomain);
-  _storage.setValue(STALE_KEY, sessionData.stale ? "yes" : "no");
+  _storage.setValue(STALE_KEY, sessionData.stale);
 };
 
 export const setSessionStale = (_storage: StorageManager, isStale: boolean) => {
