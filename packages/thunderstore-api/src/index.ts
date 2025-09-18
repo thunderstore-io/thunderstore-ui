@@ -29,6 +29,7 @@ export * from "./get/packageListingDetails";
 export * from "./get/packageReadme";
 export * from "./get/packageVersions";
 export * from "./get/packageWiki";
+export * from "./get/packageSource";
 export * from "./get/teamDetails";
 export * from "./get/teamMembers";
 export * from "./get/teamServiceAccounts";
