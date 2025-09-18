@@ -23,6 +23,7 @@ export default [
         route("required", "p/tabs/Required/Required.tsx"),
         route("changelog", "p/tabs/Changelog/Changelog.tsx"),
         route("versions", "p/tabs/Versions/Versions.tsx"),
+        route("source", "p/tabs/Source/Source.tsx"),
         ...prefix("wiki", [
           layout("p/tabs/Wiki/Wiki.tsx", [
             index("p/tabs/Wiki/WikiFirstPage.tsx"),

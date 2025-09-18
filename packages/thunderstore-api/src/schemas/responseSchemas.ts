@@ -17,6 +17,7 @@ import {
   markdownRenderSchema,
   packageWikiPageSchema,
   packagePermissionsSchema,
+  packageSourceSchema,
 } from "../schemas/objectSchemas";
 import { paginatedResults } from "../schemas/objectSchemas";
 
@@ -113,6 +114,13 @@ export const packagePermissionsResponseDataSchema = packagePermissionsSchema;
 
 export type PackagePermissionsResponseData = z.infer<
   typeof packagePermissionsResponseDataSchema
+>;
+
+// PackageSourceResponse
+export const packageSourceResponseDataSchema = packageSourceSchema;
+
+export type PackageSourceResponseData = z.infer<
+  typeof packageSourceResponseDataSchema
 >;
 
 // PackageReadmeResponse
