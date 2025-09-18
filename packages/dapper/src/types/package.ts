@@ -76,6 +76,23 @@ export interface PackagePermissions {
   };
 }
 
+export interface PackageSource {
+  is_visible: boolean;
+  namespace: string;
+  package_name: string;
+  version_number: string;
+  last_decompilation_date?: string | null;
+  decompilations: Decompilation[];
+}
+
+interface Decompilation {
+  source_file_name: string;
+  url: string;
+  result_size: string;
+  result: string;
+  is_truncated: boolean;
+}
+
 export interface PackageSubmissionError {
   upload_uuid?: string[] | null;
   author_name?: string[] | null;

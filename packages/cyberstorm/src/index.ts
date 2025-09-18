@@ -2,6 +2,10 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false;
 
 export { CodeBox, type CodeBoxProps } from "./components/CodeBox/CodeBox";
+export {
+  CodeBoxHTML,
+  type CodeBoxHTMLProps,
+} from "./components/CodeBox/CodeBox";
 export * as EmptyState from "./newComponents/EmptyState";
 
 export { CyberstormLink } from "./components/Links/Links";

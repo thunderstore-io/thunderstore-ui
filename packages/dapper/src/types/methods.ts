@@ -3,6 +3,7 @@ import {
   PackageListingDetails,
   PackageListings,
   PackagePermissions,
+  PackageSource,
   PackageSubmissionResponse,
   PackageVersion,
 } from "./package";
@@ -65,6 +66,12 @@ export type GetPackagePermissions = (
   communityId: string,
   packageName: string
 ) => Promise<PackagePermissions | undefined>;
+
+export type GetPackageSource = (
+  namespace: string,
+  name: string,
+  version?: string
+) => Promise<PackageSource>;
 
 export type PostPackageSubmissionMetadata = (
   author_name: string,
