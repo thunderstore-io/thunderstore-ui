@@ -182,10 +182,6 @@ export function shouldRevalidate({
 
 clientLoader.hydrate = true;
 
-export function HydrateFallback() {
-  return <div style={{ padding: "32px" }}>Loading...</div>;
-}
-
 const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
 
 export function Layout({ children }: { children: React.ReactNode }) {
