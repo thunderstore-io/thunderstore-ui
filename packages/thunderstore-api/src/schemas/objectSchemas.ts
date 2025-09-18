@@ -208,6 +208,25 @@ export const packageVersionSchema = z.object({
   install_url: z.string(),
 });
 
+export const decompilationSchema = z.object({
+  source_file_name: z.string(),
+  url: z.string(),
+  result_size: z.string(),
+  result: z.string(),
+  is_truncated: z.boolean(),
+});
+
+export const packageSourceSchema = z.object({
+  is_visible: z.boolean(),
+  namespace: z.string().min(1),
+  package_name: z.string().min(1),
+  version_number: z.string().min(1),
+  last_decompilation_date: z.string().datetime().nullable().optional(),
+  decompilations: decompilationSchema.array(),
+});
+
+export type PackageSource = z.infer<typeof packageSourceSchema>;
+
 export type PackageVersion = z.infer<typeof packageVersionSchema>;
 
 export const packageVersionExperimentalSchema = z.object({
