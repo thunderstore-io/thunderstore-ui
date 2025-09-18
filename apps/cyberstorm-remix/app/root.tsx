@@ -43,7 +43,7 @@ import {
   getSessionContext,
   getSessionStale,
   SESSION_STORAGE_KEY,
-  sessionValid,
+  runSessionValidationCheck,
 } from "@thunderstore/ts-api-react/src/SessionContext";
 import {
   getPublicEnvVariables,
@@ -152,12 +152,12 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   } else {
     // In all other cases check if actually need to fetch
     // current-user data. Ideally we shouldn't need to do
-    // this sessionValid check again, but for some reason
+    // this runSessionValidationCheck check again, but for some reason
     // we need to run this here too in addition to the,
     // shouldRevalidate function, cause for some reason
     // the commits to localStorage are not done before
     // the clientLoader is run.
-    sessionTools.sessionValid(
+    sessionTools.runSessionValidationCheck(
       publicEnvVariables.VITE_API_URL,
       publicEnvVariables.VITE_COOKIE_DOMAIN
     );
@@ -191,7 +191,7 @@ export function shouldRevalidate({
     nextUrl.pathname.startsWith("/settings")
   )
     return true;
-  sessionValid(
+  runSessionValidationCheck(
     new StorageManager(SESSION_STORAGE_KEY),
     publicEnvVariables.VITE_API_URL || "",
     publicEnvVariables.VITE_COOKIE_DOMAIN || ""
