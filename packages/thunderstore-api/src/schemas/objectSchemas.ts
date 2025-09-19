@@ -135,7 +135,7 @@ export const packageListingSchema = z.object({
 
 export type PackageListing = z.infer<typeof packageListingSchema>;
 
-const packageTeamSchema = z.object({
+export const packageTeamSchema = z.object({
   name: z.string().min(1),
   members: teamMemberSchema.array(),
 });

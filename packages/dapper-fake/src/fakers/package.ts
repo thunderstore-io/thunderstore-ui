@@ -157,6 +157,72 @@ export const getFakePackageListingDetails = async (
   };
 };
 
+// Content used to render Package's detail view.
+export const getFakePackageVersionDetails = async (
+  namespace: string,
+  name: string,
+  version: string
+) => {
+  const seed = `${namespace}-${name}-${version}`;
+  setSeed(seed);
+
+  // Generate a base icon (nullable 10% of time)
+  const iconUrl =
+    faker.helpers.maybe(() => getFakeImg(), {
+      probability: 0.9,
+    }) ?? null;
+
+  // Fake dependencies (reuse logic but need extra flags)
+  const dependencyCount = faker.number.int({ min: 0, max: 6 });
+  const dependencies = await Promise.all(
+    range(dependencyCount).map(async () => {
+      const depSeed = `${seed}-dep-${faker.string.alpha(8)}`;
+      setSeed(depSeed);
+      const isActive = faker.datatype.boolean(0.8);
+      const removed = faker.datatype.boolean(0.1);
+      const unavailable = !removed && faker.datatype.boolean(0.05);
+      return {
+        description: isActive
+          ? faker.company.buzzPhrase()
+          : "This package has been removed.",
+        icon_url: isActive
+          ? faker.helpers.maybe(() => getFakeImg(256, 256), {
+              probability: 0.85,
+            }) ?? null
+          : null,
+        is_active: isActive,
+        name: faker.word.words(3).split(" ").join("_"),
+        namespace: faker.word.sample(),
+        version_number: getVersionNumber(),
+        is_removed: removed,
+        is_unavailable: unavailable,
+      };
+    })
+  );
+
+  return {
+    description: faker.company.buzzPhrase(),
+    download_count: faker.number.int({ min: 0, max: 5_000_000 }),
+    icon_url: iconUrl,
+    name,
+    namespace,
+    size: faker.number.int({ min: 20_000, max: 4_000_000_000 }),
+    datetime_created: faker.date.past({ years: 2 }).toISOString(),
+    dependencies,
+    dependency_count: dependencies.length,
+    download_url: `https://thunderstore.io/package/download/${namespace}/${name}/${version}/`,
+    full_version_name: `${namespace}-${name}-${version}`,
+    team: {
+      name: faker.word.words(3),
+      members: await getFakeTeamMembers(seed),
+    },
+    website_url:
+      faker.helpers.maybe(() => faker.internet.url(), {
+        probability: 0.9,
+      }) ?? null,
+  };
+};
+
 // Shown on a tab on Package's detail view.
 export const getFakePackageVersions = async (
   namespace: string,
