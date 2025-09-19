@@ -11,6 +11,7 @@ import {
   Heading,
   NewAlert,
   SkeletonBox,
+  NewLink,
 } from "@thunderstore/cyberstorm";
 import { Await, type LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
@@ -31,7 +32,7 @@ import {
 import { Suspense } from "react";
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  if (params.namespaceId && params.packageId) {
+  if (params.communityId && params.namespaceId && params.packageId) {
     const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
@@ -40,6 +41,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
       };
     });
     return {
+      communityId: params.communityId,
+      namespaceId: params.namespaceId,
+      packageId: params.packageId,
       versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
     };
   }
@@ -51,7 +55,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
-  if (params.namespaceId && params.packageId) {
+  if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
       return {
@@ -60,6 +64,9 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
     return {
+      communityId: params.communityId,
+      namespaceId: params.namespaceId,
+      packageId: params.packageId,
       versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
     };
   }
@@ -97,9 +104,8 @@ function rowSemverCompare(
 }
 
 export default function Versions() {
-  const { status, message, versions } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { communityId, namespaceId, packageId, status, message, versions } =
+    useLoaderData<typeof loader | typeof clientLoader>();
 
   if (status === "error") {
     return <div>{message}</div>;
@@ -120,7 +126,22 @@ export default function Versions() {
                 }
                 headers={columns}
                 rows={resolvedValue.map((v) => [
-                  { value: v.version_number, sortValue: v.version_number },
+                  {
+                    value: (
+                      <NewLink
+                        primitiveType="cyberstormLink"
+                        linkId="PackageVersion"
+                        package={packageId}
+                        community={communityId}
+                        namespace={namespaceId}
+                        version={v.version_number}
+                        csVariant="cyber"
+                      >
+                        {v.version_number}
+                      </NewLink>
+                    ),
+                    sortValue: v.version_number,
+                  },
                   {
                     value: new Date(v.datetime_created).toUTCString(),
                     sortValue: v.datetime_created,
