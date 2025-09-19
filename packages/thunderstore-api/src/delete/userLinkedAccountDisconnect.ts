@@ -1,7 +1,7 @@
 import {
   ApiEndpointProps,
   UserLinkedAccountDisconnectRequestParams,
-  userLinkedAccountDisconnectRequestParamsSchema,
+  userLinkedAccountDisconnectRequestDataSchema,
 } from "../index";
 import { apiFetch } from "../apiFetch";
 
@@ -24,7 +24,7 @@ export function userLinkedAccountDisconnect(
       },
       useSession: true,
     },
-    requestSchema: userLinkedAccountDisconnectRequestParamsSchema,
+    requestSchema: userLinkedAccountDisconnectRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: undefined,
   });
