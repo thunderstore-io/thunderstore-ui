@@ -469,6 +469,14 @@ export type UserLinkedAccountDisconnectRequestParams = z.infer<
   typeof userLinkedAccountDisconnectRequestParamsSchema
 >;
 
+export const userLinkedAccountDisconnectRequestDataSchema = z.object({
+  provider: userLinkedAccountDisconnectProvidersSchema,
+});
+
+export type UserLinkedAccountDisconnectRequestData = z.infer<
+  typeof userLinkedAccountDisconnectRequestDataSchema
+>;
+
 // TeamDetailsRequest
 export const teamDetailsRequestParamsSchema = z.object({
   team_name: z.string(),
