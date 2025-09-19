@@ -1,7 +1,6 @@
-// THIS API ENDPOINT IS NOT IMPLEMENTED YET IN THE THUNDERSTORE API
-
 import {
   ApiEndpointProps,
+  teamEditMemberResponseSchema,
   TeamMemberEditRequestData,
   TeamMemberEditRequestParams,
   teamMemberEditRequestParamsSchema,
@@ -39,7 +38,6 @@ export function teamEditMember(
     },
     requestSchema: teamMemberEditRequestParamsSchema,
     queryParamsSchema: undefined,
-    // responseSchema: teamEditMemberResponseSchema,
-    responseSchema: undefined,
+    responseSchema: teamEditMemberResponseSchema,
   });
 }
