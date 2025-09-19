@@ -26,7 +26,7 @@ export interface ContextInterface {
   /** Get RequestConfig for Dapper usage */
   getConfig: (domain?: string) => RequestConfig;
   /** Check if session is valid and try to repair if not */
-  sessionValid: (apiHost: string, cookieDomain: string) => boolean;
+  runSessionValidationCheck: (apiHost: string, cookieDomain: string) => boolean;
   /** apiHost of the session */
   apiHost?: string;
   /** Async function to update currentUser */
@@ -120,7 +120,7 @@ function parseCurrentUser(currentUser: unknown): User {
   }
 }
 
-export const sessionValid = (
+export const runSessionValidationCheck = (
   _storage: StorageManager,
   apiHost: string,
   cookieDomain: string
@@ -252,8 +252,11 @@ export const getSessionContext = (
   };
 
   // Check current session and try to fix it if cookies are not the same as storage
-  const _sessionValid = (apiHost: string, cookieDomain: string): boolean => {
-    return sessionValid(_storage, apiHost, cookieDomain);
+  const _runSessionValidationCheck = (
+    apiHost: string,
+    cookieDomain: string
+  ): boolean => {
+    return runSessionValidationCheck(_storage, apiHost, cookieDomain);
   };
 
   const _storeCurrentUser = (currentUser: User) => {
@@ -279,7 +282,7 @@ export const getSessionContext = (
       });
     } else {
       _storage.setValue(API_HOST_KEY, apiHost);
-      _sessionValid(apiHost, cookieDomain);
+      _runSessionValidationCheck(apiHost, cookieDomain);
     }
   }
 
@@ -287,7 +290,7 @@ export const getSessionContext = (
     clearSession: _clearSession,
     clearCookies: _clearCookies,
     getConfig: _getConfig,
-    sessionValid: _sessionValid,
+    runSessionValidationCheck: _runSessionValidationCheck,
     updateCurrentUser: _updateCurrentUser,
     storeCurrentUser: _storeCurrentUser,
     getSessionCurrentUser: _getSessionCurrentUser,

@@ -4,7 +4,7 @@ export {
   setSession,
   clearSession,
   getConfig,
-  sessionValid,
+  runSessionValidationCheck,
   storeCurrentUser,
   updateCurrentUser,
   getSessionCurrentUser,
