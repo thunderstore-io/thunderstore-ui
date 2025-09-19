@@ -110,6 +110,22 @@ export interface LinkLibrary {
   PackageFormatDocs: NoRequiredProps;
   /** PackageVersion's detail view */
   PackageVersion: (props: AnyProps & PackageVersionProps) => RE | null;
+  /** PackageVersion's required view */
+  PackageVersionRequired: (props: AnyProps & PackageVersionProps) => RE | null;
+  /** PackageVersion's versions view */
+  PackageVersionVersions: (props: AnyProps & PackageVersionProps) => RE | null;
+  /** PackageVersionWithoutCommunity's detail view */
+  PackageVersionWithoutCommunity: (
+    props: AnyProps & Omit<PackageVersionProps, "community">
+  ) => RE | null;
+  /** PackageVersionWithoutCommunity's required view */
+  PackageVersionWithoutCommunityRequired: (
+    props: AnyProps & Omit<PackageVersionProps, "community">
+  ) => RE | null;
+  /** PackageVersionWithoutCommunity's versions view */
+  PackageVersionWithoutCommunityVersions: (
+    props: AnyProps & Omit<PackageVersionProps, "community">
+  ) => RE | null;
   /** View for submitting new packages or versions */
   PackageUpload: NoRequiredProps;
   /** Privacy policy */
@@ -163,6 +179,11 @@ const library: LinkLibrary = {
   PackageDependants: noop,
   PackageFormatDocs: noop,
   PackageVersion: noop,
+  PackageVersionRequired: noop,
+  PackageVersionVersions: noop,
+  PackageVersionWithoutCommunity: noop,
+  PackageVersionWithoutCommunityRequired: noop,
+  PackageVersionWithoutCommunityVersions: noop,
   PackageUpload: noop,
   PrivacyPolicy: noop,
   User: noop,
