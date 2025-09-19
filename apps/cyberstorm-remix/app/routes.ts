@@ -54,34 +54,22 @@ export default [
   ),
   route("/package/create", "upload/upload.tsx"),
 
-  // TODO: DISABLED UNTIL WE'VE GOT THE ENDPOINTS FOR THESE
-  // route("/settings", "settings/user/Settings.tsx", [
-  //   route("", "settings/user/Connections/Connections.tsx", {
-  //     index: true,
-  //   }),
-  //   route("account", "settings/user/Account/Account.tsx"),
-  // ]),
-  // route("/teams", "settings/teams/Teams.tsx"),
-  // route("/teams/:namespaceId", "settings/teams/team/teamSettings.tsx", [
-  //   route("", "settings/teams/team/tabs/Profile/Profile.tsx", {
-  //     index: true,
-  //   }),
-  //   route("members", "settings/teams/team/tabs/Members/Members.tsx"),
-  //   route(
-  //     "service-accounts",
-  //     "settings/teams/team/tabs/ServiceAccounts/ServiceAccounts.tsx"
-  //   ),
-  //   route("settings", "settings/teams/team/tabs/Settings/Settings.tsx"),
-  // ]),
-
-  // layout("./auth/layout.tsx", [
-  //   route("login", "./auth/login.tsx"),
-  //   route("register", "./auth/register.tsx"),
-  // ]),
-
-  // ...prefix("concerts", [
-  //   index("./concerts/home.tsx"),
-  //   route(":city", "./concerts/city.tsx"),
-  //   route("trending", "./concerts/trending.tsx"),
-  // ]),
+  route("/settings", "settings/user/Settings.tsx", [
+    route("", "settings/user/Connections/Connections.tsx", {
+      index: true,
+    }),
+    route("account", "settings/user/Account/Account.tsx"),
+  ]),
+  route("/teams", "settings/teams/Teams.tsx"),
+  route("/teams/:namespaceId", "settings/teams/team/teamSettings.tsx", [
+    route("", "settings/teams/team/tabs/Profile/Profile.tsx", {
+      index: true,
+    }),
+    route("members", "settings/teams/team/tabs/Members/Members.tsx"),
+    route(
+      "service-accounts",
+      "settings/teams/team/tabs/ServiceAccounts/ServiceAccounts.tsx"
+    ),
+    route("settings", "settings/teams/team/tabs/Settings/Settings.tsx"),
+  ]),
 ] satisfies RouteConfig;
