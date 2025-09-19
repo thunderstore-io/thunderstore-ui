@@ -134,8 +134,8 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
       return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
+        apiHost: tools.getConfig().apiHost,
+        sessionId: tools.getConfig().sessionId,
       };
     });
 
