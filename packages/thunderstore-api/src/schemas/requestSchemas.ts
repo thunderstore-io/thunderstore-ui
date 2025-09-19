@@ -649,3 +649,13 @@ export const packagePermissionsRequestParamsSchema = z.object({
 export type PackagePermissionsRequestParams = z.infer<
   typeof packagePermissionsRequestParamsSchema
 >;
+
+// PackageSourceRequest
+export const packageSourceRequestParamsSchema = z.object({
+  namespace_id: z.string(),
+  package_name: z.string(),
+});
+
+export type PackageSourceRequestParams = z.infer<
+  typeof packageSourceRequestParamsSchema
+>;

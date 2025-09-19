@@ -546,17 +546,17 @@ export default function PackageListing() {
                         </NewLink>
                         <NewLink
                           key="source"
-                          href={`${domain}/c/${resolvedValue.community_identifier}/p/${resolvedValue.namespace}/${resolvedValue.name}/source`}
-                          primitiveType="link"
+                          primitiveType="cyberstormLink"
+                          linkId="PackageSource"
+                          community={resolvedValue.community_identifier}
+                          namespace={resolvedValue.namespace}
+                          package={resolvedValue.name}
                           aria-current={currentTab === "source"}
                           rootClasses={`tabs-item${
                             currentTab === "source" ? " tabs-item--current" : ""
                           }`}
                         >
                           Analysis{" "}
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faArrowUpRight} />
-                          </NewIcon>
                         </NewLink>
                       </Tabs>
                     </>
