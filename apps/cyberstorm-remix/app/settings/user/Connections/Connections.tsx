@@ -126,11 +126,10 @@ export default function Connections() {
                   return onSubmit({
                     params: {
                       provider: p,
-                      user: outletContext.currentUser.username,
                     },
                     config: outletContext.requestConfig,
                     queryParams: {},
-                    data: {},
+                    data: { provider: p },
                   });
                 }}
               />
