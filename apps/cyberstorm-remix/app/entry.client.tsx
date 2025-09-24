@@ -5,6 +5,7 @@ import { useLocation, useMatches } from "react-router";
 import { HydratedRouter } from "react-router/dom";
 
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import { denyUrls } from "cyberstorm/utils/sentry";
 
 const publicEnvVariables = getPublicEnvVariables([
   "VITE_SITE_URL",
@@ -63,6 +64,9 @@ Sentry.init({
   // plus for 100% of sessions with an error
   replaysSessionSampleRate: 0,
   replaysOnErrorSampleRate: 0,
+
+  // Filter out e.g. ad related domains that may spam errors.
+  denyUrls,
 });
 
 startTransition(() => {
