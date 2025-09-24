@@ -1,11 +1,6 @@
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import "./Versions.css";
 import {
   NewTableSort,
-  NewButton,
-  NewIcon,
   NewTable,
   NewTableLabels,
   Heading,
@@ -22,14 +17,13 @@ import {
   TableCompareColumnMeta,
   TableRow,
 } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
-import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
 import { isSemver } from "cyberstorm/utils/typeChecks";
-import { ModManagerBanner } from "./common";
+import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -180,32 +174,3 @@ const columns: NewTableLabels = [
   },
   { value: "Actions", disableSort: true },
 ];
-
-const DownloadLink = (props: { download_url: string }) => (
-  <NewButton
-    csVariant="secondary"
-    csModifiers={["ghost"]}
-    csSize="small"
-    primitiveType="link"
-    href={props.download_url}
-  >
-    <NewIcon noWrapper csMode="inline">
-      <FontAwesomeIcon icon={faDownload} />
-    </NewIcon>
-    Download
-  </NewButton>
-);
-
-const InstallLink = (props: { install_url: string }) => (
-  <NewButton
-    csVariant="accent"
-    csSize="small"
-    primitiveType="link"
-    href={props.install_url}
-  >
-    <NewIcon csMode="inline">
-      <ThunderstoreLogo />
-    </NewIcon>
-    Install
-  </NewButton>
-);
