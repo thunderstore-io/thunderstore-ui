@@ -1,12 +1,10 @@
-import { HydratedRouter } from "react-router/dom";
-import { startTransition, StrictMode } from "react";
-import { hydrateRoot } from "react-dom/client";
-
-import { useLocation, useMatches } from "react-router";
 import * as Sentry from "@sentry/remix";
-import { useEffect } from "react";
+import { useEffect, startTransition, StrictMode } from "react";
+import { hydrateRoot } from "react-dom/client";
+import { useLocation, useMatches } from "react-router";
+import { HydratedRouter } from "react-router/dom";
+
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
-import { Breadcrumb, EventHint } from "@sentry/remix";
 
 const publicEnvVariables = getPublicEnvVariables([
   "VITE_SITE_URL",
@@ -29,10 +27,8 @@ Sentry.init({
   ],
 
   beforeBreadcrumb: (
-    breadcrumb: Breadcrumb,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    hint?: EventHint
-  ): Breadcrumb | null => {
+    breadcrumb: Sentry.Breadcrumb
+  ): Sentry.Breadcrumb | null => {
     if (breadcrumb.category === "fetch" || breadcrumb.category === "xhr") {
       const breadcrumbUrl = breadcrumb.data?.url;
       if (
