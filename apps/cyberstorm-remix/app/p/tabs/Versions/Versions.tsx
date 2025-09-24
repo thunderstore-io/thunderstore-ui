@@ -19,7 +19,6 @@ import { versionsSchema } from "@thunderstore/dapper-ts/src/methods/package";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import semverGt from "semver/functions/gt";
 import semverLt from "semver/functions/lt";
-import semverValid from "semver/functions/valid";
 import {
   type TableCompareColumnMeta,
   type TableRow,
@@ -30,6 +29,7 @@ import {
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
+import { isSemver } from "cyberstorm/utils/typeChecks";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -76,16 +76,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
     versions: versionsSchema.parse({}),
   };
 }
-
-type ConfirmedSemverStringType = string;
-
-export const isSemver = (s: string): s is ConfirmedSemverStringType => {
-  if (semverValid(s)) {
-    return true;
-  } else {
-    return false;
-  }
-};
 
 function rowSemverCompare(
   a: TableRow,
