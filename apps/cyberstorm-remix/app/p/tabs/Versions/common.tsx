@@ -1,4 +1,7 @@
-import { NewAlert } from "@thunderstore/cyberstorm";
+import { faDownload } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { NewAlert, NewButton, NewIcon } from "@thunderstore/cyberstorm";
+import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import { memo } from "react";
 
 export const ModManagerBanner = memo(function ModManagerBanner() {
@@ -11,5 +14,42 @@ export const ModManagerBanner = memo(function ModManagerBanner() {
       </a>{" "}
       Otherwise use the zip download links instead.
     </NewAlert>
+  );
+});
+
+export const DownloadLink = memo(function DownloadLink(props: {
+  download_url: string;
+}) {
+  return (
+    <NewButton
+      csVariant="secondary"
+      csModifiers={["ghost"]}
+      csSize="small"
+      primitiveType="link"
+      href={props.download_url}
+    >
+      <NewIcon noWrapper csMode="inline">
+        <FontAwesomeIcon icon={faDownload} />
+      </NewIcon>
+      Download
+    </NewButton>
+  );
+});
+
+export const InstallLink = memo(function InstallLink(props: {
+  install_url: string;
+}) {
+  return (
+    <NewButton
+      csVariant="accent"
+      csSize="small"
+      primitiveType="link"
+      href={props.install_url}
+    >
+      <NewIcon csMode="inline">
+        <ThunderstoreLogo />
+      </NewIcon>
+      Install
+    </NewButton>
   );
 });
