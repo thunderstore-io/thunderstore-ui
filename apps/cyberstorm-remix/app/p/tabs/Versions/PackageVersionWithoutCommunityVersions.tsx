@@ -9,7 +9,6 @@ import {
   NewTable,
   NewTableLabels,
   Heading,
-  NewAlert,
   SkeletonBox,
   NewLink,
 } from "@thunderstore/cyberstorm";
@@ -30,6 +29,7 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
 import { isSemver } from "cyberstorm/utils/typeChecks";
+import { ModManagerBanner } from "./common";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
@@ -180,17 +180,6 @@ const columns: NewTableLabels = [
   },
   { value: "Actions", disableSort: true },
 ];
-
-const ModManagerBanner = () => (
-  <NewAlert csVariant="info">
-    Please note that the install buttons only work if you have compatible client
-    software installed, such as the{" "}
-    <a href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager">
-      Thunderstore Mod Manager.
-    </a>{" "}
-    Otherwise use the zip download links instead.
-  </NewAlert>
-);
 
 const DownloadLink = (props: { download_url: string }) => (
   <NewButton
