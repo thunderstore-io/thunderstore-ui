@@ -1,0 +1,10 @@
+@layer storybook-stories {
+  .icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .icon--red-color {
+    --icon-color: red;
+  }
+}
