@@ -1,0 +1,14 @@
+@layer storybook-stories {
+  .skeleton-box {
+    --color-surface-default: var(--color-surface-a4);
+    --color-skeleton-bg-color: var(--color-surface-default);
+
+    width: 300px;
+    height: 300px;
+
+    /* Disable the animation to prevent flaky visual tests */
+    > .skeleton {
+      animation: unset;
+    }
+  }
+}
