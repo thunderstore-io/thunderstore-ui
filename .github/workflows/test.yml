@@ -39,7 +39,7 @@ jobs:
           python-version: "3.8"
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
       - name: Get node version
         id: node-version
         run: echo "::set-output name=node-version::$(node --version)"
@@ -88,10 +88,10 @@ jobs:
 #        if: github.event_name != 'pull_request'
 #        run: IMAGE_TAG=${GITHUB_REF##*/} docker compose -f docker-compose.build.yml push
 
-  test:
-    name: Test
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    needs: get-node-version
+    needs: [get-node-version, pre-commit]
     env:
       VITE_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
       VITE_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
@@ -116,53 +116,94 @@ jobs:
         run: yarn workspace @thunderstore/cyberstorm build
       - name: Build @thunderstore/cyberstorm-forms
         run: yarn workspace @thunderstore/cyberstorm-forms build
-      - name: Build and test @thunderstore/cyberstorm-remix
-        run: |
-          yarn workspace @thunderstore/cyberstorm-remix build
-          yarn workspace @thunderstore/cyberstorm-remix test run
-      # Enable once build process has been fixed.
-      # - name: Build @thunderstore/cyberstorm-storybook
-        # run: yarn workspace @thunderstore/cyberstorm-storybook build
+      - name: Build @thunderstore/cyberstorm-remix
+        run: yarn workspace @thunderstore/cyberstorm-remix build
+      - name: Build @thunderstore/storybook
+        run: yarn workspace @thunderstore/storybook build
       - name: Build @thunderstore/dapper
         run: yarn workspace @thunderstore/dapper build
       - name: Build @thunderstore/dapper-fake
         run: yarn workspace @thunderstore/dapper-fake build
-      - name: Build and test @thunderstore/dapper-ts
-        run: |
-          yarn workspace @thunderstore/dapper-ts build
-          yarn workspace @thunderstore/dapper-ts test
-      - name: Build and test @thunderstore/graph-system
-        run: |
-          yarn workspace @thunderstore/graph-system build
-          yarn workspace @thunderstore/graph-system test run
+      - name: Build @thunderstore/dapper-ts
+        run: yarn workspace @thunderstore/dapper-ts build
+      - name: Build @thunderstore/graph-system
+        run: yarn workspace @thunderstore/graph-system build
       - name: Build @thunderstore/react-dnd
         run: yarn workspace @thunderstore/react-dnd build
-      - name: Build and test @thunderstore/thunderstore-api
-        run: |
-          yarn workspace @thunderstore/thunderstore-api build
-          yarn workspace @thunderstore/thunderstore-api test
+      - name: Build @thunderstore/thunderstore-api
+        run: yarn workspace @thunderstore/thunderstore-api build
       - name: Build @thunderstore/ts-api-react
         run: yarn workspace @thunderstore/ts-api-react build
       - name: Build @thunderstore/ts-api-react-actions
         run: yarn workspace @thunderstore/ts-api-react-actions build
       - name: Build @thunderstore/ts-api-react-forms
         run: yarn workspace @thunderstore/ts-api-react-forms build
-      - name: Build and test @thunderstore/ts-uploader
-        # Add running tests once they've been fixed.
-        run: |
-          yarn workspace @thunderstore/ts-uploader build
+      - name: Build @thunderstore/ts-uploader
+        run: yarn workspace @thunderstore/ts-uploader build
       - name: Build @thunderstore/ts-uploader-react
         run: yarn workspace @thunderstore/ts-uploader-react build
-      - name: Build and test @thunderstore/typed-event-emitter
-        run: |
-          yarn workspace @thunderstore/typed-event-emitter build
-          yarn workspace @thunderstore/typed-event-emitter test
+      - name: Build @thunderstore/typed-event-emitter
+        run: yarn workspace @thunderstore/typed-event-emitter build
       - name: Build @thunderstore/use-promise
         run: yarn workspace @thunderstore/use-promise build
 
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: [get-node-version, pre-commit, build]
+    env:
+      VITE_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+      VITE_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+      VITE_AUTH_BASE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+      VITE_AUTH_RETURN_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+      - name: "Setup Python 3.10"
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Set up Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "yarn"
+      - name: Set fontawesome token
+        run: |
+          npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+          npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
+      - uses: snok/install-poetry@v1
+        with:
+          version: 1.4.1
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      - name: Cache poetry venv
+        id: cache-poetry
+        uses: actions/cache@v4
+        with:
+          path: tools/test-ci/.venv
+          key: "poetry-${{ runner.os }}-\
+            ${{ steps.setup-python.outputs.python-version }}-\
+            ${{ hashFiles('tools/test-ci/poetry.lock') }}"
+          restore-keys: |
+            poetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-
+      - name: Install poetry dependencies
+        run: |
+          cd tools/test-ci/
+          poetry install
+      - name: Run testing script
+        run: |
+          cd tools/test-ci/
+          poetry run python run_ci_script.py
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   chromatic-deployment:
     runs-on: ubuntu-latest
-    needs: ["test", "pre-commit", "get-node-version"]
+    needs: [get-node-version, pre-commit, build, test]
     strategy:
       matrix:
         projects: [
