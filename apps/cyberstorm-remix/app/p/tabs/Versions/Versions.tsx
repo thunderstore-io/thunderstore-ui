@@ -44,7 +44,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   return {
     status: "error",
     message: "Failed to load versions",
-    versions: versionsSchema.parse({}),
+    versions: [],
   };
 }
 
@@ -67,7 +67,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   return {
     status: "error",
     message: "Failed to load versions",
-    versions: versionsSchema.parse({}),
+    versions: [],
   };
 }
 
