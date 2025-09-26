@@ -31,6 +31,7 @@ export type SelectSearchProps =
       csVariant?: SelectSearchVariants;
       csSize?: SelectSearchSizes;
       csModifiers?: SelectSearchModifiers[];
+      defaultOpen?: boolean;
     }
   | {
       multiple: true;
@@ -42,6 +43,7 @@ export type SelectSearchProps =
       csVariant?: SelectSearchVariants;
       csSize?: SelectSearchSizes;
       csModifiers?: SelectSearchModifiers[];
+      defaultOpen?: boolean;
     };
 
 /**
@@ -85,11 +87,12 @@ export const SelectSearch = React.forwardRef<
     csSize = "medium",
     csModifiers,
     disabled = false,
+    defaultOpen = false,
   } = props;
 
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const containerRef = React.useRef<HTMLDivElement | null>(null);
-  const [isVisible, setIsVisible] = React.useState(false);
+  const [isVisible, setIsVisible] = React.useState(defaultOpen);
   const [search, setSearch] = React.useState("");
 
   React.useEffect(() => {
