@@ -1,17 +1,17 @@
 import { config, testData } from "../../__tests__/defaultConfig";
-import { fetchNamespacePackageListings } from "../namespacePackageListings";
+import { fetchCommunityPackageListings } from "../communityPackageListings";
 import { PackageListingsOrderingEnum } from "../../schemas/queryParamSchemas";
+import { it, expect } from "vitest";
 
 interface PartialPackage {
   community_identifier: string;
-  namespace: string;
 }
 
-it("receives namespace scoped paginated package listing", async () => {
-  const { communityId, namespaceId } = testData;
-  const response = await fetchNamespacePackageListings({
+it("receives community scoped paginated package listing", async () => {
+  const { communityId } = testData;
+  const response = await fetchCommunityPackageListings({
     config,
-    params: { community_id: communityId, namespace_id: namespaceId },
+    params: { community_id: communityId },
     data: {},
     queryParams: [
       {
@@ -33,7 +33,6 @@ it("receives namespace scoped paginated package listing", async () => {
   expect(Array.isArray(response.results)).toEqual(true);
 
   response.results.forEach((pkg: PartialPackage) => {
-    expect(pkg.community_identifier).toStrictEqual(communityId);
-    expect(pkg.namespace).toStrictEqual(namespaceId);
+    expect(pkg.community_identifier.toLowerCase()).toStrictEqual(communityId);
   });
 });

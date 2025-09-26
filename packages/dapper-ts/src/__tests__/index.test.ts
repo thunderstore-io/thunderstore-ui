@@ -1,13 +1,14 @@
+import { it, expect, beforeAll } from "vitest";
 import { DapperTs } from "../index";
 
-const communityId = "test";
-const namespaceId = "Testruction";
-const packageName = "Testitute";
+const communityId = "test-community-1";
+const namespaceId = "Test_Team_0";
+const packageName = "Test_Package_0";
 let dapper: DapperTs;
 
 beforeAll(() => {
   dapper = new DapperTs(() => {
-    return { apiHost: "https://thunderstore.dev" };
+    return { apiHost: "http://127.0.0.1:8000" };
   });
 });
 
