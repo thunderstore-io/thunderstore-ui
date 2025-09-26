@@ -169,7 +169,7 @@ def wait_for_url(url: str) -> bool:
     return result
 
 
-BACKEND_DIR = REPO_ROOT / "tools" / "visual-diff-backend"
+BACKEND_DIR = REPO_ROOT / "tools" / "thunderstore-test-backend"
 
 
 def start_backend() -> bool:
