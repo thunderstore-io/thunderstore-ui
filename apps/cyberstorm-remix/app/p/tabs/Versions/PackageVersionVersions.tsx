@@ -9,7 +9,6 @@ import {
 } from "@thunderstore/cyberstorm";
 import { Await, LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
-import { versionsSchema } from "@thunderstore/dapper-ts/src/methods/package";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import semverGt from "semver/functions/gt";
 import semverLt from "semver/functions/lt";
@@ -44,7 +43,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   return {
     status: "error",
     message: "Failed to load versions",
-    versions: versionsSchema.parse({}),
+    versions: [],
   };
 }
 
@@ -67,7 +66,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   return {
     status: "error",
     message: "Failed to load versions",
-    versions: versionsSchema.parse({}),
+    versions: [],
   };
 }
 
