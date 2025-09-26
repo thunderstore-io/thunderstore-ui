@@ -9,7 +9,10 @@
   "scripts": {
     "postinstall": "preconstruct dev && manypkg check",
     "build": "preconstruct build",
-    "plop": "plop"
+    "plop": "plop",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "coverage": "vitest run --coverage"
   },
   "engines": {
     "node": ">=20.17.0"
@@ -27,6 +30,7 @@
     "@types/node": "^20.16.0",
     "@typescript-eslint/eslint-plugin": "^8.7.0",
     "@typescript-eslint/parser": "^8.7.0",
+    "@vitest/coverage-v8": "3.2.4",
     "chromatic": "^13.2.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jsx-a11y": "^6.10.0",
@@ -41,6 +45,7 @@
     "stylelint-order": "^6.0.4",
     "typescript": "^5.6.2",
     "typescript-plugin-css-modules": "^5.1.0",
+    "vitest": "3.2.4",
     "webpack": "^5.94.0"
   },
   "preconstruct": {
