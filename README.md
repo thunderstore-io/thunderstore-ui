@@ -1,5 +1,7 @@
 # Thunderstore UI
 
+[![codecov](https://codecov.io/gh/thunderstore-io/thunderstore-ui/branch/master/graph/badge.svg)](https://codecov.io/gh/thunderstore-io/thunderstore-ui)
+
 Monorepo containing Remix frontend for [thunderstore.io](https://thunderstore.io)
 and reusable UI components.
 

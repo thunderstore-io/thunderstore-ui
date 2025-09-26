@@ -17,7 +17,6 @@ let md5WorkerManager: MD5WorkerManager | null = null;
 export function getMD5WorkerManager(): MD5WorkerManager {
   if (!md5WorkerManager) {
     md5WorkerManager = new MD5WorkerManager();
-    md5WorkerManager.initialize();
   }
   return md5WorkerManager;
 }
