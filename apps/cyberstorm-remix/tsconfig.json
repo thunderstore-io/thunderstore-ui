@@ -11,7 +11,11 @@
   "compilerOptions": {
     "rootDirs": [".", "./.react-router/types"],
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["@react-router/node", "vite/client"],
+    "types": [
+      "@react-router/node",
+      "vite/client",
+      "@vitest/browser/providers/playwright"
+    ],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
