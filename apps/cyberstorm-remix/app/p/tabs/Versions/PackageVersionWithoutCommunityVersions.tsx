@@ -9,7 +9,6 @@ import {
 } from "@thunderstore/cyberstorm";
 import { Await, LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
-import { versionsSchema } from "@thunderstore/dapper-ts/src/methods/package";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import semverGt from "semver/functions/gt";
 import semverLt from "semver/functions/lt";
@@ -26,7 +25,7 @@ import { isSemver } from "cyberstorm/utils/typeChecks";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
+  if (params.namespaceId && params.packageId) {
     const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
@@ -35,7 +34,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
       };
     });
     return {
-      communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
@@ -49,7 +47,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
+  if (params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
       return {
@@ -58,7 +56,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
     return {
-      communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
@@ -88,8 +85,9 @@ function rowSemverCompare(
 }
 
 export default function Versions() {
-  const { communityId, namespaceId, packageId, status, message, versions } =
-    useLoaderData<typeof loader | typeof clientLoader>();
+  const { namespaceId, packageId, status, message, versions } = useLoaderData<
+    typeof loader | typeof clientLoader
+  >();
 
   if (status === "error") {
     return <div>{message}</div>;
@@ -114,9 +112,8 @@ export default function Versions() {
                     value: (
                       <NewLink
                         primitiveType="cyberstormLink"
-                        linkId="PackageVersion"
+                        linkId="PackageVersionWithoutCommunity"
                         package={packageId}
-                        community={communityId}
                         namespace={namespaceId}
                         version={v.version_number}
                         csVariant="cyber"
