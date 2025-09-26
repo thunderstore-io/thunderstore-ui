@@ -229,7 +229,7 @@ export const Frame = memo(function Frame(
             (child.props as any).className,
             "icon",
             noWrapper && csMode === "inline" ? "icon--inline" : null,
-            rootClasses
+            wrapperClasses
           ),
           ref: noWrapper ? svgIconRef : null,
           ...svgFProps,
@@ -248,11 +248,7 @@ export const Frame = memo(function Frame(
       content = (
         <span
           {...strippedForwardedProps}
-          className={classnames(
-            "icon__wrapper",
-            "icon--inline",
-            wrapperClasses
-          )}
+          className={classnames("icon", "icon--inline", wrapperClasses)}
           ref={spanIconRef}
         >
           {clones}
@@ -263,7 +259,7 @@ export const Frame = memo(function Frame(
       content = (
         <div
           {...strippedForwardedProps}
-          className={classnames("icon__wrapper", wrapperClasses)}
+          className={classnames("icon", wrapperClasses)}
           ref={divIconRef}
         >
           {clones}
