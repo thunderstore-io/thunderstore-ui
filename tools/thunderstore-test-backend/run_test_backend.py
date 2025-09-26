@@ -72,7 +72,7 @@ def run_migrations():
 
 
 def create_data():
-    run_command("python manage.py create_test_data")
+    run_command("python manage.py create_test_data --community-count=3 --team-count=2 --package-count=5 --version-count=5 --dependency-count=3 --contract-count=0 --contract-version-count=0 --wiki-page-count=3 --reuse-icon")
 
 
 def launch_server():
