@@ -1,4 +1,5 @@
 import { GraphNode } from "..";
+import { describe, it, expect } from "vitest";
 
 describe("GraphNode", () => {
   describe("soloLink", () => {
