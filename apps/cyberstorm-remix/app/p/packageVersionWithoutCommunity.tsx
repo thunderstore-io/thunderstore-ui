@@ -107,7 +107,7 @@ export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
   // If we're staying on the same package page, don't revalidate
   if (
     oldPath[2] === newPath[2] &&
-    oldPath[4] === newPath[4] &&
+    oldPath[3] === newPath[3] &&
     oldPath[5] === newPath[5]
   ) {
     return false;
@@ -176,9 +176,10 @@ export default function PackageVersion() {
               <meta property="og:type" content="website" />
               <meta
                 property="og:url"
-                content={`${getPublicEnvVariables(["VITE_BETA_SITE_URL"])}${
-                  location.pathname
-                }`}
+                content={`${
+                  getPublicEnvVariables(["VITE_BETA_SITE_URL"])
+                    .VITE_BETA_SITE_URL
+                }${location.pathname}`}
               />
               <meta
                 property="og:title"
