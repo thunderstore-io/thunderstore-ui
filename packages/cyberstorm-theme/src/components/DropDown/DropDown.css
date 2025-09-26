@@ -39,7 +39,7 @@
       --dropdown-item-icon-color: var(--dropdown-item-icon-color--hover);
     }
 
-    & > .dropdown__divider:where(.dropdown--variant--primary) {
+    & > .dropdown__divider:where(.dropdown__divider--variant--primary) {
       --dropdown-divider-height: var(--divider-height);
       --dropdown-divider-background-color: var(--divider-bg-color);
     }
