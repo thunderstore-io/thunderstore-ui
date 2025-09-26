@@ -196,9 +196,10 @@ export default function PackageVersion() {
               <meta property="og:type" content="website" />
               <meta
                 property="og:url"
-                content={`${getPublicEnvVariables(["VITE_BETA_SITE_URL"])}${
-                  location.pathname
-                }`}
+                content={`${
+                  getPublicEnvVariables(["VITE_BETA_SITE_URL"])
+                    .VITE_BETA_SITE_URL
+                }${location.pathname}`}
               />
               <meta
                 property="og:title"
