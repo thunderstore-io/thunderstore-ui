@@ -3,12 +3,22 @@ import { MD5WorkerManager } from "../MD5WorkerManager";
 
 describe("MD5WorkerManager", () => {
   let manager: MD5WorkerManager;
-  const mockWorker: Worker = {
-    onmessage: null,
-    // @ts-expect-error Mocking Worker methods
+
+  const mockWorker = {
+    // event target bits that Worker requires
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+
+    // handler properties
+    onmessage: null as Worker["onmessage"],
+    onerror: null as Worker["onerror"],
+    onmessageerror: null as Worker["onmessageerror"],
+
+    // the methods you actually use
     postMessage: vi.fn(),
     terminate: vi.fn(),
-  };
+  } satisfies Partial<Worker> as Worker;
 
   beforeEach(() => {
     // Mock Worker
