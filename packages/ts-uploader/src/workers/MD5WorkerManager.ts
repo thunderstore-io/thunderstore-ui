@@ -12,21 +12,12 @@ export type MD5ErrorEvent = {
 
 export class MD5WorkerManager {
   private workers: Worker[] = [];
-  private isInitialized = false;
 
   constructor() {
-    // this.namespace = namespace;
-  }
-
-  initialize(): void {
-    if (this.isInitialized || typeof window === "undefined" || !window.Worker) {
-      return;
-    }
-
-    try {
-      this.isInitialized = true;
-    } catch (error) {
-      console.error("Failed to initialize MD5 WorkerManager:", error);
+    if (typeof window === "undefined" || !window.Worker) {
+      throw new Error(
+        "Failed to initialize MD5 WorkerManager: Worker not supported"
+      );
     }
   }
 
@@ -35,14 +26,9 @@ export class MD5WorkerManager {
       worker.terminate();
     });
     this.workers = [];
-    this.isInitialized = false;
   }
 
   calculateMD5(uniqueId: string, data: Blob): Promise<string> {
-    if (!this.isInitialized) {
-      throw new Error("MD5 worker not initialized");
-    }
-
     let worker: Worker | null = null;
 
     try {
@@ -59,21 +45,21 @@ export class MD5WorkerManager {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return new Promise((resolve, _reject) => {
-      worker!.onmessage = (event: MessageEvent) => {
+    return new Promise((resolve, reject) => {
+      worker.onmessage = (event: MessageEvent) => {
         const typeCastedEvent = event.data as MD5CompleteEvent | MD5ErrorEvent;
         if (typeCastedEvent.uniqueId === uniqueId) {
           if (typeCastedEvent.type === "complete") {
             resolve(typeCastedEvent.md5);
           } else if (typeCastedEvent.type === "error") {
-            throw new Error(`MD5 worker error: ${typeCastedEvent.error}`);
+            reject(new Error(`MD5 worker error: ${typeCastedEvent.error}`));
           } else {
-            throw new Error("Unknown event type");
+            reject(new Error("Unknown event type"));
           }
         }
       };
 
-      worker!.postMessage({
+      worker.postMessage({
         type: "calculate",
         uniqueId,
         data,
