@@ -8,7 +8,7 @@ import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { ModalSizes } from "@thunderstore/cyberstorm-theme/src/components/Modal/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-interface Props extends Omit<FrameModalProps, "primitiveType"> {
+export interface ModalProps extends Omit<FrameModalProps, "primitiveType"> {
   trigger?: ReactNode;
   csVariant?: ModalVariants;
   csSize?: ModalSizes;
@@ -16,7 +16,7 @@ interface Props extends Omit<FrameModalProps, "primitiveType"> {
 
 // TODO: Add storybook story
 // TODO: Currently the same modal can't be used in 2 different places in the same page. Fix that somehow
-export function Modal(props: Props) {
+export function Modal(props: ModalProps) {
   const { children, csVariant = "default", csSize = "medium", trigger } = props;
 
   return (
