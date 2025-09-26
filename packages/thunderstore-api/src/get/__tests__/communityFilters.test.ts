@@ -1,3 +1,4 @@
+import { it, expect } from "vitest";
 import { config, testData } from "../../__tests__/defaultConfig";
 import { fetchCommunityFilters } from "../communityFilters";
 
