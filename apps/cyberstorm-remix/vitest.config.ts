@@ -1,10 +1,13 @@
-import { defineConfig } from "vitest/config";
+import { defineProject } from "vitest/config";
 
-export default defineConfig({
+export default defineProject({
   test: {
-    environment: "jsdom",
-    globals: true,
-    exclude: ["build/**/*"],
-    setupFiles: ["@vitest/web-worker"],
+    include: ["**/__tests__/**/*.test.ts"],
+    exclude: ["dist/**/*"],
+    browser: {
+      provider: "playwright",
+      enabled: true,
+      instances: [{ browser: "chromium", headless: true }],
+    },
   },
 });

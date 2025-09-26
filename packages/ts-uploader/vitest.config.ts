@@ -1,19 +1,16 @@
-import { defineConfig } from "vitest/config";
+import { defineProject } from "vitest/config";
 
-export default defineConfig({
+export default defineProject({
   test: {
-    environment: "jsdom",
-    globals: true,
-    include: ["src/**/*.test.ts"],
+    include: ["src/**/__tests__/**/*.test.ts"],
     exclude: ["dist/**/*"],
-    // environmentOptions: {
-    //   jsdom: {
-    //     resources: "usable",
-    //   },
-    // },
-    // deps: {
-    //   inline: [/@thunderstore\/ts-uploader/],
-    // },
-    setupFiles: ["@vitest/web-worker"],
+    browser: {
+      provider: "playwright",
+      enabled: true,
+      instances: [{ browser: "chromium", headless: true }],
+    },
+  },
+  optimizeDeps: {
+    include: ["crypto-js"],
   },
 });
