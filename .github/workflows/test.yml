@@ -166,7 +166,7 @@ jobs:
     strategy:
       matrix:
         projects: [
-          { dir: "apps/cyberstorm-storybook", token: "CHROMATIC_CYBERSTORM_TOKEN" },
+          { dir: "apps/storybook", token: "CHROMATIC_CYBERSTORM_TOKEN" },
         ]
     steps:
       - uses: actions/checkout@v4
