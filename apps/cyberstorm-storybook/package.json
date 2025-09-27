@@ -24,7 +24,7 @@
     "chromatic": "chromatic --exit-zero-on-changes"
   },
   "engines": {
-    "node": ">=20.17.0"
+    "node": ">=24.1.0"
   },
   "devDependencies": {
     "@storybook/addon-webpack5-compiler-babel": "3.0.3"
