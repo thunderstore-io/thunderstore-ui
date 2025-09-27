@@ -384,7 +384,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                         {teamSettingsPage ? (
                           <NewBreadCrumbsLink
                             primitiveType="cyberstormLink"
-                            linkId="Team"
+                            linkId="TeamSettings"
                             csVariant="cyber"
                             team={teamSettingsPage.params.namespaceId}
                           >
