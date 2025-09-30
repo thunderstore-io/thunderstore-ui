@@ -2,10 +2,10 @@ import React from "react";
 import "./Toast.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as RadixToast from "@radix-ui/react-toast";
-import { NewIcon, PrimitiveComponentDefaultProps } from "../..";
+import { NewIcon, type PrimitiveComponentDefaultProps } from "../..";
 import {
-  ToastVariants,
-  ToastSizes,
+  type ToastVariants,
+  type ToastSizes,
 } from "@thunderstore/cyberstorm-theme/src/components";
 import { classnames, componentClasses } from "../../utils/utils";
 

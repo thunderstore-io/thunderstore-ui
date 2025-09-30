@@ -20,7 +20,7 @@ import {
   teamServiceAccountRemove,
 } from "@thunderstore/thunderstore-api";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
-import { OutletContextShape } from "../../../../../root";
+import { type OutletContextShape } from "../../../../../root";
 import { useReducer, useState } from "react";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";

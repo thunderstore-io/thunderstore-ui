@@ -1,16 +1,15 @@
 import type { StorybookConfig } from "@storybook/react-vite";
-import { createRequire } from "module";
+import module from "node:module";
+import path from "node:path";
 
-import { join, dirname } from "path";
-
-const require = createRequire(import.meta.url);
+const require = module.createRequire(import.meta.url);
 
 /**
  * This function is used to resolve the absolute path of a package.
  * It is needed in projects that use Yarn PnP or are set up within a monorepo.
  */
-function getAbsolutePath(value: string): any {
-  return dirname(require.resolve(join(value, "package.json")));
+function getAbsolutePath(value: string) {
+  return path.dirname(require.resolve(path.join(value, "package.json")));
 }
 const config: StorybookConfig = {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],

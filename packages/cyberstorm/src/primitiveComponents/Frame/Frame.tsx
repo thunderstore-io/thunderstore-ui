@@ -1,6 +1,9 @@
 import { classnames } from "./../../utils/utils";
-import React, { memo, ReactNode } from "react";
-import { PrimitiveComponentDefaultProps, TooltipWrapper } from "../utils/utils";
+import React, { memo, type ReactNode } from "react";
+import {
+  type PrimitiveComponentDefaultProps,
+  TooltipWrapper,
+} from "../utils/utils";
 import { Children, cloneElement } from "react";
 
 export interface FrameWindowProps

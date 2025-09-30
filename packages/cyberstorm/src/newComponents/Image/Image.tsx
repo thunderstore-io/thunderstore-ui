@@ -3,10 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./Image.css";
 import { classnames, componentClasses } from "../../utils/utils";
-import { Frame, FrameWindowProps } from "../../primitiveComponents/Frame/Frame";
+import {
+  Frame,
+  type FrameWindowProps,
+} from "../../primitiveComponents/Frame/Frame";
 import { NewIcon } from "../..";
 import { memo } from "react";
-import { ImageVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { type ImageVariants } from "@thunderstore/cyberstorm-theme/src/components";
 
 interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
   src: string | null | undefined;

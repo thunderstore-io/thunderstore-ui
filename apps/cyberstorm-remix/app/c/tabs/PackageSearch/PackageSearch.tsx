@@ -6,8 +6,8 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { OutletContextShape } from "~/root";
-import { Route } from "./+types/PackageSearch";
+import { type OutletContextShape } from "~/root";
+import type { Route } from "./+types/PackageSearch";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId) {

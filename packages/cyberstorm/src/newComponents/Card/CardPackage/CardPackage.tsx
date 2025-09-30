@@ -7,7 +7,7 @@ import {
   faClockRotateLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PackageListing } from "@thunderstore/dapper/types";
+import { type PackageListing } from "@thunderstore/dapper/types";
 
 import {
   classnames,
@@ -20,11 +20,11 @@ import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
 import "./CardPackage.css";
 import { faLips } from "@fortawesome/pro-solid-svg-icons";
 import { RelativeTime } from "../../../components/RelativeTime/RelativeTime";
-import { CardPackageVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { type CardPackageVariants } from "@thunderstore/cyberstorm-theme/src/components";
 import ago from "s-ago";
 import {
-  CardPackageModifiers,
-  CardPackageSizes,
+  type CardPackageModifiers,
+  type CardPackageSizes,
 } from "@thunderstore/cyberstorm-theme/src/components/CardPackage/CardPackage";
 
 interface Props {

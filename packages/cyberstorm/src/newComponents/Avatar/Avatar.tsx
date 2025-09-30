@@ -1,9 +1,9 @@
 import "./Avatar.css";
 import {
-  AvatarSizes,
-  AvatarVariants,
+  type AvatarSizes,
+  type AvatarVariants,
 } from "@thunderstore/cyberstorm-theme/src/components";
-import { NewIcon, PrimitiveComponentDefaultProps } from "../..";
+import { NewIcon, type PrimitiveComponentDefaultProps } from "../..";
 import { classnames, componentClasses } from "../../utils/utils";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -29,7 +29,7 @@ import {
   postPackageWikiPageEdit,
   RequestConfig,
 } from "@thunderstore/thunderstore-api";
-import { OutletContextShape } from "~/root";
+import { type OutletContextShape } from "~/root";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";

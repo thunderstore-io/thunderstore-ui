@@ -1,9 +1,9 @@
 import "./Link.css";
-import { LinkVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { type LinkVariants } from "@thunderstore/cyberstorm-theme/src/components";
 import {
   Actionable,
-  ActionableCyberstormLinkProps,
-  ActionableLinkProps,
+  type ActionableCyberstormLinkProps,
+  type ActionableLinkProps,
 } from "../../primitiveComponents/Actionable/Actionable";
 import { memo } from "react";
 import { classnames } from "../../utils/utils";

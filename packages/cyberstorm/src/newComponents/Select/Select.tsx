@@ -1,4 +1,4 @@
-import React, { memo, ReactElement } from "react";
+import React, { memo, type ReactElement } from "react";
 import "./Select.css";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,9 +14,9 @@ import {
 import { classnames, componentClasses } from "../../utils/utils";
 import { NewButton, NewIcon } from "../..";
 import {
-  SelectModifiers,
-  SelectSizes,
-  SelectVariants,
+  type SelectModifiers,
+  type SelectSizes,
+  type SelectVariants,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
 export type SelectOption<T extends string = string> = {

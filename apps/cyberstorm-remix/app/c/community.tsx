@@ -22,7 +22,7 @@ import { faBook, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { OutletContextShape } from "../root";
+import { type OutletContextShape } from "../root";
 import {
   getPublicEnvVariables,
   getSessionTools,

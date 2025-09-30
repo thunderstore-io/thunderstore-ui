@@ -2,7 +2,7 @@ import { Outlet, useLocation, useOutletContext } from "react-router";
 import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
-import { OutletContextShape } from "../../root";
+import { type OutletContextShape } from "../../root";
 import "./Settings.css";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 

@@ -1,5 +1,8 @@
 import React, { memo } from "react";
-import { PrimitiveComponentDefaultProps, TooltipWrapper } from "../utils/utils";
+import {
+  type PrimitiveComponentDefaultProps,
+  TooltipWrapper,
+} from "../utils/utils";
 
 export interface InputTextInputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,

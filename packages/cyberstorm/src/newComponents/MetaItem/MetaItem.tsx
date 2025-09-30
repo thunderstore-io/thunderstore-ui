@@ -1,14 +1,17 @@
 import "./MetaItem.css";
 import React from "react";
-import { Frame, FrameWindowProps } from "../../primitiveComponents/Frame/Frame";
+import {
+  Frame,
+  type FrameWindowProps,
+} from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
 import {
-  MetaItemSizes,
-  MetaItemVariants,
+  type MetaItemSizes,
+  type MetaItemVariants,
 } from "@thunderstore/cyberstorm-theme/src/components";
 import {
   Actionable,
-  ActionableButtonProps,
+  type ActionableButtonProps,
 } from "../../primitiveComponents/Actionable/Actionable";
 
 interface MetaItemProps extends Omit<FrameWindowProps, "primitiveType"> {

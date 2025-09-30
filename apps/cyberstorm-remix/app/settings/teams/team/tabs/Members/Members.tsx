@@ -21,7 +21,7 @@ import {
   teamEditMember,
   teamRemoveMember,
 } from "@thunderstore/thunderstore-api";
-import { OutletContextShape } from "../../../../../root";
+import { type OutletContextShape } from "../../../../../root";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { DapperTs } from "@thunderstore/dapper-ts";

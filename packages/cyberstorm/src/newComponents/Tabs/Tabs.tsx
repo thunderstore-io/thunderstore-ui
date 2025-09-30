@@ -1,10 +1,13 @@
 import "./Tabs.css";
 import { memo } from "react";
-import { Frame, FrameWindowProps } from "../../primitiveComponents/Frame/Frame";
+import {
+  Frame,
+  type FrameWindowProps,
+} from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
 import {
-  TabsSizes,
-  TabsVariants,
+  type TabsSizes,
+  type TabsVariants,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
 interface TabsProps extends Omit<FrameWindowProps, "primitiveType"> {

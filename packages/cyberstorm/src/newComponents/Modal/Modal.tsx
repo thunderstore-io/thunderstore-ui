@@ -1,11 +1,14 @@
-import { ReactNode } from "react";
-import { Frame, FrameModalProps } from "../../primitiveComponents/Frame/Frame";
+import { type ReactNode } from "react";
+import {
+  Frame,
+  type FrameModalProps,
+} from "../../primitiveComponents/Frame/Frame";
 import "./Modal.css";
 import { NewButton, NewIcon } from "../..";
-import { ModalVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { type ModalVariants } from "@thunderstore/cyberstorm-theme/src/components";
 import { classnames, componentClasses } from "../../utils/utils";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
-import { ModalSizes } from "@thunderstore/cyberstorm-theme/src/components/Modal/Modal";
+import { type ModalSizes } from "@thunderstore/cyberstorm-theme/src/components/Modal/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export interface ModalProps extends Omit<FrameModalProps, "primitiveType"> {

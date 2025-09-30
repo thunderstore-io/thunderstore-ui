@@ -15,7 +15,7 @@ import {
 import { NewButton, NewIcon, SkeletonBox } from "@thunderstore/cyberstorm";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { OutletContextShape } from "~/root";
+import { type OutletContextShape } from "~/root";
 import { Suspense } from "react";
 import { ApiError } from "../../../../../../packages/thunderstore-api/src";
 import { getPackageWiki } from "@thunderstore/dapper-ts/src/methods/package";

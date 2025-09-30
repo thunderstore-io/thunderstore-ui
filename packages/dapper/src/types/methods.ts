@@ -1,15 +1,19 @@
-import { Communities, Community, CommunityFilters } from "./community";
 import {
-  PackageListingDetails,
-  PackageListings,
-  PackagePermissions,
-  PackageSubmissionResponse,
-  PackageVersion,
+  type Communities,
+  type Community,
+  type CommunityFilters,
+} from "./community";
+import {
+  type PackageListingDetails,
+  type PackageListings,
+  type PackagePermissions,
+  type PackageSubmissionResponse,
+  type PackageVersion,
 } from "./package";
-import { PackageListingType } from "./props";
-import { HTMLContentResponse, MarkdownResponse } from "./shared";
-import { TeamDetails, ServiceAccount, TeamMember } from "./team";
-import { CurrentUser } from "./user";
+import { type PackageListingType } from "./props";
+import { type HTMLContentResponse, type MarkdownResponse } from "./shared";
+import { type TeamDetails, type ServiceAccount, type TeamMember } from "./team";
+import { type CurrentUser } from "./user";
 
 export type GetCommunities = (
   page?: number,

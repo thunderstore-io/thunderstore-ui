@@ -1,15 +1,15 @@
 import "./CodeInput.css";
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import {
   Input,
-  InputTextAreaProps,
+  type InputTextAreaProps,
 } from "../../primitiveComponents/Input/Input";
 import { classnames, componentClasses } from "../../utils/utils";
 import { NewIcon } from "../..";
 import {
-  CodeInputVariants,
-  CodeInputSizes,
-  CodeInputModifiers,
+  type CodeInputVariants,
+  type CodeInputSizes,
+  type CodeInputModifiers,
 } from "@thunderstore/cyberstorm-theme/src/components";
 import {
   faPenToSquare,

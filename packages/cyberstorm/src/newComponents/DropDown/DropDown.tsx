@@ -1,26 +1,26 @@
 import "./DropDown.css";
-import { ReactNode, ReactElement, memo } from "react";
+import { type ReactNode, type ReactElement, memo } from "react";
 
 import {
   Root,
   Trigger,
   Portal,
   Content,
-  DropdownMenuItemProps,
+  type DropdownMenuItemProps,
   Item,
 } from "@radix-ui/react-dropdown-menu";
 import { classnames, componentClasses } from "../../utils/utils";
-import { PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
+import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
 import {
-  DropDownVariants,
-  DropDownSizes,
-  DropDownModifiers,
-  DropDownItemModifiers,
-  DropDownItemSizes,
-  DropDownItemVariants,
-  DropDownDividerModifiers,
-  DropDownDividerSizes,
-  DropDownDividerVariants,
+  type DropDownVariants,
+  type DropDownSizes,
+  type DropDownModifiers,
+  type DropDownItemModifiers,
+  type DropDownItemSizes,
+  type DropDownItemVariants,
+  type DropDownDividerModifiers,
+  type DropDownDividerSizes,
+  type DropDownDividerVariants,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
 interface DropDownProps extends PrimitiveComponentDefaultProps {

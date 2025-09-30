@@ -2,14 +2,14 @@ import "./Heading.css";
 import React from "react";
 import {
   Frame,
-  FrameHeadingProps,
-  FrameDisplayProps,
+  type FrameHeadingProps,
+  type FrameDisplayProps,
 } from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
 import {
-  HeadingVariants,
-  HeadingSizes,
-  HeadingModifiers,
+  type HeadingVariants,
+  type HeadingSizes,
+  type HeadingModifiers,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
 interface DefaultProps

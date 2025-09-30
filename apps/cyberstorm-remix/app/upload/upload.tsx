@@ -37,7 +37,7 @@ import {
   PackageSubmissionStatus,
 } from "@thunderstore/dapper/types";
 import { PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
-import { OutletContextShape } from "../root";
+import { type OutletContextShape } from "../root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { postPackageSubmissionMetadata } from "@thunderstore/dapper-ts/src/methods/package";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";

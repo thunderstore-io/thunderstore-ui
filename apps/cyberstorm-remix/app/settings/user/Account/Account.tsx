@@ -13,7 +13,7 @@ import {
 } from "../../../../../../packages/thunderstore-api/src";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
-import { OutletContextShape } from "~/root";
+import { type OutletContextShape } from "~/root";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";

@@ -10,7 +10,7 @@ import {
 
 import { classnames } from "../../utils/utils";
 import { NewIcon } from "../..";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 export function ValidationBar(props: {
   status: "waiting" | "processing" | "success" | "failure";
