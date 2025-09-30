@@ -15,8 +15,11 @@ export const Icon = memo(function Icon(props: IconProps) {
       primitiveType="icon"
       {...forwardedProps}
       wrapperClasses={classnames(
+        props.noWrapper ? undefined : props.wrapperClasses
+      )}
+      rootClasses={classnames(
         ...componentClasses("icon", csVariant, undefined, undefined),
-        rootClasses
+        props.noWrapper ? rootClasses : undefined
       )}
     />
   );

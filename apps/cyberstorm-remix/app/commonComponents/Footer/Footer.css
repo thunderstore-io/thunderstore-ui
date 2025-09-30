@@ -40,8 +40,12 @@
   }
 
   .footer__logo {
-    flex-shrink: 0;
-    height: var(--footer-info-leftside-company-icon-height);
+    display: flex;
+    justify-content: center;
+
+    > svg {
+      height: var(--footer-info-leftside-company-icon-height);
+    }
   }
 
   .footer__icon-links {
