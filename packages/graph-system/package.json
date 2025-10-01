@@ -9,14 +9,14 @@
   "files": [
     "dist"
   ],
-  "engine": {
-    "node": ">=24.0.0"
-  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "vitest",
     "test:coverage": "vitest run --coverage"
+  },
+  "engines": {
+    "node": "24.9.0"
   },
   "dependencies": {
     "@thunderstore/thunderstore-api": "^0.1.0",
