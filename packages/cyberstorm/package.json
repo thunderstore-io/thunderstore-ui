@@ -14,6 +14,9 @@
     "build": "tsc",
     "dev": "tsc --watch"
   },
+  "engines": {
+    "node": "24.9.0"
+  },
   "dependencies": {
     "@babel/runtime": "^7.25.6",
     "@faker-js/faker": "^9.0.2",
@@ -34,7 +37,7 @@
     "@thunderstore/dapper": "^0.1.0",
     "@thunderstore/thunderstore-api": "*",
     "@thunderstore/use-promise": "^0.1.0",
-    "@types/node": "^20.16.0",
+    "@types/node": "^24",
     "@types/react": "^19.1.0",
     "@types/uuid": "^10.0.0",
     "react": "^19.1.0",

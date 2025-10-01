@@ -15,6 +15,9 @@
     "test": "jest",
     "watch": "jest --watch"
   },
+  "engines": {
+    "node": "24.9.0"
+  },
   "dependencies": {},
   "devDependencies": {
     "jest-environment-jsdom": "^29.7.0"
