@@ -12,7 +12,7 @@
     "plop": "plop"
   },
   "engines": {
-    "node": ">=20.17.0"
+    "node": ">=24.1.0"
   },
   "dependencies": {
     "@babel/core": "7.25.2",
