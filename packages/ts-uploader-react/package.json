@@ -13,6 +13,9 @@
     "build": "tsc",
     "dev": "tsc --watch"
   },
+  "engines": {
+    "node": "24.9.0"
+  },
   "dependencies": {
     "@thunderstore/ts-uploader": "*",
     "@types/react": "^19.1.0",
