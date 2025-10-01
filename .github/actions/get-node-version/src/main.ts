@@ -1,4 +1,4 @@
-import { getInput, setFailed, setOutput } from "@actions/core";
+import { getInput, info, setFailed, setOutput } from "@actions/core";
 import { readFileSync } from "fs";
 import semver from "semver";
 
@@ -11,6 +11,7 @@ import semver from "semver";
 
   const rawContent = readFileSync(inputPath);
   const packageJson = JSON.parse(rawContent.toString());
+  info(`Validating Node version string "${packageJson?.engines?.node}"`);
 
   // Check if both ranges are valid
   const engineVersionRangeString = semver.validRange(packageJson.engines.node);
@@ -48,5 +49,6 @@ import semver from "semver";
     return;
   }
 
+  info(`Setting outputs.node-version to "${engineVersionRangeMinimum.major}"`);
   setOutput("node-version", engineVersionRangeMinimum.major);
 })();
