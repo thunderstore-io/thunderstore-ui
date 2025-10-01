@@ -12,6 +12,9 @@
     "test:coverage": "vitest run --coverage",
     "typecheck": "react-router typegen && tsc"
   },
+  "engines": {
+    "node": "24.9.0"
+  },
   "dependencies": {
     "@fortawesome/pro-light-svg-icons": "7.1.0",
     "@fortawesome/pro-solid-svg-icons": "7.1.0",
@@ -52,9 +55,6 @@
     "vite": "^7.2.6",
     "vite-tsconfig-paths": "^5.0.1",
     "vitest": "3.2.4"
-  },
-  "engines": {
-    "node": ">=20.17.0"
   },
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/apps/cyberstorm-remix"
 }
