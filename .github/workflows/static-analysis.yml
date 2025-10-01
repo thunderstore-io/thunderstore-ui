@@ -29,7 +29,7 @@ jobs:
     outputs:
       node-version: ${{ steps.get-node-version.outputs.node-version }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - name: Check get-node-version version
         uses: ./.github/actions/get-node-version
         with:
@@ -44,9 +44,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ needs.get-node-version.outputs.node-version }}
       - name: Set fontawesome token
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:

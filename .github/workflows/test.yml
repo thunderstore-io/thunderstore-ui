@@ -16,7 +16,7 @@ jobs:
     outputs:
       node-version: ${{ steps.get-node-version.outputs.node-version }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - name: Check get-node-version version
         uses: ./.github/actions/get-node-version
         with:
@@ -29,7 +29,7 @@ jobs:
     name: Run pre-commit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: false
       - name: Setup Python 3.8
@@ -37,7 +37,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.8"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: ${{ steps.get-node-version.outputs.node-version }}
       - uses: snok/install-poetry@v1
@@ -72,7 +72,7 @@ jobs:
 #    name: Build
 #    runs-on: ubuntu-latest
 #    steps:
-#      - uses: actions/checkout@v3
+#      - uses: actions/checkout@v5
 #      - name: Build Docker images
 #        run: IMAGE_TAG=${GITHUB_REF##*/} docker compose -f docker-compose.build.yml build --pull
 #      - name: Login to Docker Hub
@@ -207,7 +207,7 @@ jobs:
           { dir: "apps/storybook", token: "CHROMATIC_CYBERSTORM_TOKEN" },
         ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Setup Node ${{ needs.get-node-version.outputs.node-version }}
