@@ -1,6 +1,9 @@
-import { LinkLibrary, ThunderstoreLinkProps } from "@thunderstore/cyberstorm";
-import { LinkProps as RRLinkProps, Link as RRLink } from "react-router";
-import { PropsWithChildren } from "react";
+import type {
+  LinkLibrary,
+  ThunderstoreLinkProps,
+} from "@thunderstore/cyberstorm";
+import { type LinkProps as RRLinkProps, Link as RRLink } from "react-router";
+import { type PropsWithChildren } from "react";
 import React from "react";
 
 interface LinkProps

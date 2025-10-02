@@ -16,13 +16,13 @@ import { useReducer } from "react";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import {
-  RequestConfig,
+  type RequestConfig,
   teamCreate,
-  TeamCreateRequestData,
+  type TeamCreateRequestData,
 } from "@thunderstore/thunderstore-api";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { postTeamCreate } from "@thunderstore/dapper-ts/src/methods/team";
-import { OutletContextShape, RootLoadersType } from "../../root";
+import { type OutletContextShape, type RootLoadersType } from "../../root";
 import { NamespacedStorageManager } from "@thunderstore/ts-api-react";
 import {
   setSessionStale,

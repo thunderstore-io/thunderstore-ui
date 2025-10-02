@@ -1,4 +1,4 @@
-import { memo, PropsWithChildren } from "react";
+import { memo, type PropsWithChildren } from "react";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Collapsible.css";

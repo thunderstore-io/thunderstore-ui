@@ -3,7 +3,7 @@ import "./MarkdownPreview.css";
 import { CodeInput, isRecord } from "@thunderstore/cyberstorm";
 import {
   isApiError,
-  RequestConfig,
+  type RequestConfig,
   toolsMarkdownPreview,
 } from "@thunderstore/thunderstore-api";
 import { useState, useEffect } from "react";

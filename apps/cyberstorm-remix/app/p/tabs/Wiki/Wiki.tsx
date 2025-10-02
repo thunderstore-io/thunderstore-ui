@@ -2,7 +2,7 @@ import "./Wiki.css";
 
 import {
   Await,
-  LoaderFunctionArgs,
+  type LoaderFunctionArgs,
   Outlet,
   useOutletContext,
 } from "react-router";

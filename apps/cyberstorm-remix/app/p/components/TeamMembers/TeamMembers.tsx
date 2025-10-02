@@ -2,7 +2,10 @@ import { Heading, NewAvatar, NewIcon, NewLink } from "@thunderstore/cyberstorm";
 import { faCaretRight, faCrown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./TeamMembers.css";
-import { PackageListingDetails, TeamMember } from "@thunderstore/dapper/types";
+import {
+  type PackageListingDetails,
+  type TeamMember,
+} from "@thunderstore/dapper/types";
 
 export default function TeamMembers(props: {
   listing: PackageListingDetails;

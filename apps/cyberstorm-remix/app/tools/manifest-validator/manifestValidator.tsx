@@ -11,7 +11,7 @@ import { useOutletContext } from "react-router";
 import { Buffer } from "buffer";
 import {
   isApiError,
-  RequestConfig,
+  type RequestConfig,
   toolsManifestValidate,
 } from "@thunderstore/thunderstore-api";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";

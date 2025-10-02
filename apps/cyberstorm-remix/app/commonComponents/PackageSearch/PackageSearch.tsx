@@ -1,15 +1,15 @@
 import { faGhost, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  CurrentUser,
-  PackageListings,
-  Section,
+  type CurrentUser,
+  type PackageListings,
+  type Section,
 } from "@thunderstore/dapper/types";
 import { memo, Suspense, useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 import "./PackageSearch.css";
-import { CategorySelection, TRISTATE } from "../types";
+import { type CategorySelection, type TRISTATE } from "../types";
 import {
   CardPackage,
   EmptyState,
@@ -24,7 +24,7 @@ import {
   isPackageOrderOptions,
   PackageOrder,
   PackageOrderOptions,
-  PackageOrderOptionsType,
+  type PackageOrderOptionsType,
 } from "./components/PackageOrder";
 import { RadioGroup } from "../RadioGroup/RadioGroup";
 import { CategoryTagCloud } from "./components/CategoryTagCloud/CategoryTagCloud";
@@ -32,8 +32,8 @@ import { CollapsibleMenu } from "../Collapsible/Collapsible";
 import { CheckboxList } from "../CheckboxList/CheckboxList";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import {
-  CommunityFilters,
-  RequestConfig,
+  type CommunityFilters,
+  type RequestConfig,
 } from "@thunderstore/thunderstore-api";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { isPromise } from "cyberstorm/utils/typeChecks";

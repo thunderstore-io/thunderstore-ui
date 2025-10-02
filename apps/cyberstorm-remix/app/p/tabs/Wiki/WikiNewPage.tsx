@@ -1,7 +1,7 @@
 import "./Wiki.css";
 
 import {
-  LoaderFunctionArgs,
+  type LoaderFunctionArgs,
   useNavigate,
   useOutletContext,
 } from "react-router";
@@ -16,7 +16,7 @@ import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provi
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer, useState } from "react";
 import {
-  PackageWikiPageCreateRequestData,
+  type PackageWikiPageCreateRequestData,
   postPackageWikiPageCreate,
 } from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "~/root";

@@ -10,13 +10,13 @@ import {
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { LoaderFunctionArgs } from "react-router";
+import { type LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import {
   ApiError,
-  RequestConfig,
+  type RequestConfig,
   teamAddServiceAccount,
-  TeamServiceAccountAddRequestData,
+  type TeamServiceAccountAddRequestData,
   teamServiceAccountRemove,
 } from "@thunderstore/thunderstore-api";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";

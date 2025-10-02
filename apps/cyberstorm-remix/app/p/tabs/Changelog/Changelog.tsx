@@ -1,5 +1,5 @@
 import { Await, useLoaderData } from "react-router";
-import { LoaderFunctionArgs } from "react-router";
+import { type LoaderFunctionArgs } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicEnvVariables,

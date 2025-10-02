@@ -1,4 +1,4 @@
-import { Await, LoaderFunctionArgs } from "react-router";
+import { Await, type LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {

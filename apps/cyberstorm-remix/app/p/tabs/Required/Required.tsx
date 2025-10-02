@@ -1,6 +1,6 @@
 import "./Required.css";
 import { Heading, SkeletonBox } from "@thunderstore/cyberstorm";
-import { Await, LoaderFunctionArgs } from "react-router";
+import { Await, type LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useOutletContext } from "react-router";
 import { ListingDependency } from "~/commonComponents/ListingDependency/ListingDependency";
 import { DapperTs } from "@thunderstore/dapper-ts";

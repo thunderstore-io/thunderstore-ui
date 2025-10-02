@@ -1,6 +1,6 @@
 import "./Wiki.css";
 
-import { PackageWikiPageResponseData } from "@thunderstore/thunderstore-api";
+import { type PackageWikiPageResponseData } from "@thunderstore/thunderstore-api";
 import { Heading, NewButton, NewIcon } from "@thunderstore/cyberstorm";
 import {
   faArrowLeftLong,

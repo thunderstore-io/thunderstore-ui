@@ -1,6 +1,6 @@
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import "./CollapsibleText.css";
-import { ReactElement, useState } from "react";
+import { useState, type ReactElement } from "react";
 
 export interface CollapsibleTextProps {
   text?: string;

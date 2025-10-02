@@ -6,7 +6,7 @@ import {
   Await,
   Outlet,
   useLoaderData,
-  useLocation, // useRevalidator,
+  useLocation,
   useOutletContext,
 } from "react-router";
 import {
@@ -30,8 +30,8 @@ import {
   packageListingApprove,
   packageListingReject,
   packageListingReport,
-  PackageListingReportRequestData,
-  RequestConfig,
+  type PackageListingReportRequestData,
+  type RequestConfig,
 } from "@thunderstore/thunderstore-api";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import {
@@ -42,14 +42,12 @@ import {
   faWarning,
   faCaretRight,
   faScaleBalanced,
-  // faList,
-  // faBoxOpen,
   faCog,
 } from "@fortawesome/free-solid-svg-icons";
 import TeamMembers from "./components/TeamMembers/TeamMembers";
 import {
   memo,
-  ReactElement,
+  type ReactElement,
   Suspense,
   useEffect,
   useMemo,
@@ -60,11 +58,7 @@ import {
 import { useHydrated } from "remix-utils/use-hydrated";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import {
-  faArrowUpRight,
-  // faFlagSwallowtail,
-  faLips,
-} from "@fortawesome/pro-solid-svg-icons";
+import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTime/RelativeTime";
 import {
   formatFileSize,
@@ -80,13 +74,13 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-import { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
-import { SelectOption } from "@thunderstore/cyberstorm/src/newComponents/Select/Select";
+import type { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import type { SelectOption } from "@thunderstore/cyberstorm/src/newComponents/Select/Select";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { getPackageListingDetails } from "@thunderstore/dapper-ts/src/methods/packageListings";
 import { getCommunity } from "@thunderstore/dapper-ts/src/methods/communities";
 import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
-import { CurrentUser } from "@thunderstore/dapper/types";
+import type { CurrentUser } from "@thunderstore/dapper/types";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 
 export async function loader({ params }: LoaderFunctionArgs) {
