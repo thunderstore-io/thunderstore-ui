@@ -58,7 +58,7 @@ jobs:
       - name: Run ESLint
         run: yarn run eslint apps packages -f node_modules/@microsoft/eslint-formatter-sarif/sarif.js -o results.sarif || ":"
       - name: Upload SARIF
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: results.sarif
 
@@ -80,8 +80,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v1
+        uses: github/codeql-action/init@v3
         with:
           languages: javascript
       - name: CodeQL analysis
-        uses: github/codeql-action/analyze@v1
+        uses: github/codeql-action/analyze@v3

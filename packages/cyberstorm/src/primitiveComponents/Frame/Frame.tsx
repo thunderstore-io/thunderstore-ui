@@ -220,42 +220,56 @@ export const Frame = memo(function Frame(
 
     const svgIconRef = ref as React.ForwardedRef<SVGElement>;
 
-    const clones = Children.map(children, (child) => {
-      if (React.isValidElement(child)) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return cloneElement(child as React.ReactElement<any>, {
-          className: classnames(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (child.props as any).className,
-            "icon",
-            noWrapper && csMode === "inline" ? "icon--inline" : null,
-            rootClasses
-          ),
-          ref: noWrapper ? svgIconRef : null,
-          ...svgFProps,
-        });
-      } else {
-        return null;
-      }
-    });
-
     let content = null;
 
     if (noWrapper) {
-      content = <>{clones}</>;
+      content = (
+        <>
+          {Children.map(children, (child) => {
+            if (React.isValidElement(child)) {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              return cloneElement(child as React.ReactElement<any>, {
+                className: classnames(
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  (child.props as any).className,
+                  "icon",
+                  csMode === "inline" ? "icon--inline" : null,
+                  rootClasses
+                ),
+                ref: svgIconRef,
+                ...svgFProps,
+              });
+            } else {
+              return null;
+            }
+          })}
+        </>
+      );
     } else if (csMode === "inline") {
       const spanIconRef = ref as React.ForwardedRef<HTMLSpanElement>;
       content = (
         <span
           {...strippedForwardedProps}
-          className={classnames(
-            "icon__wrapper",
-            "icon--inline",
-            wrapperClasses
-          )}
+          className={wrapperClasses}
           ref={spanIconRef}
         >
-          {clones}
+          {Children.map(children, (child) => {
+            if (React.isValidElement(child)) {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              return cloneElement(child as React.ReactElement<any>, {
+                className: classnames(
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  (child.props as any).className,
+                  "icon",
+                  "icon--inline",
+                  rootClasses
+                ),
+                ...svgFProps,
+              });
+            } else {
+              return null;
+            }
+          })}
         </span>
       );
     } else {
@@ -263,10 +277,25 @@ export const Frame = memo(function Frame(
       content = (
         <div
           {...strippedForwardedProps}
-          className={classnames("icon__wrapper", wrapperClasses)}
+          className={wrapperClasses}
           ref={divIconRef}
         >
-          {clones}
+          {Children.map(children, (child) => {
+            if (React.isValidElement(child)) {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              return cloneElement(child as React.ReactElement<any>, {
+                className: classnames(
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  (child.props as any).className,
+                  "icon",
+                  rootClasses
+                ),
+                ...svgFProps,
+              });
+            } else {
+              return null;
+            }
+          })}
         </div>
       );
     }

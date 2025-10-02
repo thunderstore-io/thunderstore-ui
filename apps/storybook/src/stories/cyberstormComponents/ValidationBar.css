@@ -1,0 +1,6 @@
+@layer storybook-stories {
+  .validation-bar--spin {
+    /* Disable animation to prevent flaky snapshots */
+    animation: unset;
+  }
+}
