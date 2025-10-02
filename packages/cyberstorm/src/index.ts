@@ -5,7 +5,7 @@ export { CodeBox, type CodeBoxProps } from "./components/CodeBox/CodeBox";
 export {
   CodeBoxHTML,
   type CodeBoxHTMLProps,
-} from "./components/CodeBox/CodeBox";
+} from "./components/CodeBoxHTML/CodeBoxHTML";
 export * as EmptyState from "./newComponents/EmptyState";
 
 export { CyberstormLink } from "./components/Links/Links";
