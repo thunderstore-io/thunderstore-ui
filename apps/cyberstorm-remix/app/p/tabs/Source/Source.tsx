@@ -12,7 +12,6 @@ import {
   Heading,
   NewIcon,
   NewButton,
-  CodeBoxHTML,
 } from "@thunderstore/cyberstorm";
 import { TooltipWrapper } from "@thunderstore/cyberstorm/src/primitiveComponents/utils/utils";
 import { type OutletContextShape } from "~/root";
@@ -24,6 +23,7 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { Alert } from "@thunderstore/cyberstorm/src/newComponents/Alert/Alert";
 import { isApiError } from "@thunderstore/thunderstore-api";
 import { getPackageSource } from "@thunderstore/dapper-ts/src/methods/package";
+import { CodeBoxHTML } from "../../../commonComponents/CodeBoxHTML/CodeBoxHTML";
 
 type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
