@@ -7,16 +7,13 @@ import {
   NewTextInput,
 } from "@thunderstore/cyberstorm";
 import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
-import {
-  UserAccountDeleteRequestData,
-  userDelete,
-} from "../../../../../../packages/thunderstore-api/src";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { type OutletContextShape } from "~/root";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
+import { userDelete } from "@thunderstore/thunderstore-api";
 
 export default function Account() {
   const outletContext = useOutletContext() as OutletContextShape;
@@ -71,6 +68,11 @@ function DeleteAccountForm(props: {
   requestConfig: OutletContextShape["requestConfig"];
 }) {
   const toast = useToast();
+
+  // TODO: This should have a verification step, like typing the username to confirm
+  type UserAccountDeleteRequestData = {
+    verification: string;
+  };
 
   function formFieldUpdateAction(
     state: UserAccountDeleteRequestData,
