@@ -1,24 +1,8 @@
-import React from "react";
 import styles from "./CodeBox.module.css";
 
 export interface CodeBoxProps {
   value?: string;
   inline?: boolean;
-}
-
-export interface CodeBoxHTMLProps {
-  value?: string;
-  inline?: boolean;
-}
-
-function BaseCodeBox({
-  children,
-  inline = false,
-}: {
-  children: React.ReactNode;
-  inline?: boolean;
-}) {
-  return <pre className={inline ? styles.inline : styles.root}>{children}</pre>;
 }
 
 /**
@@ -28,22 +12,9 @@ export function CodeBox(props: CodeBoxProps) {
   const { value = "", inline = false } = props;
 
   return (
-    <BaseCodeBox inline={inline}>
+    <pre className={inline ? styles.inline : styles.root}>
       <code>{value}</code>
-    </BaseCodeBox>
-  );
-}
-
-/**
- * Cyberstorm CodeBox component which renders HTML
- */
-export function CodeBoxHTML(props: CodeBoxHTMLProps) {
-  const { value = "", inline = false } = props;
-
-  return (
-    <BaseCodeBox inline={inline}>
-      <div dangerouslySetInnerHTML={{ __html: value }} />
-    </BaseCodeBox>
+    </pre>
   );
 }
 
