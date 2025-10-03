@@ -9,21 +9,14 @@ import {
 } from "@thunderstore/cyberstorm";
 import { Await, type LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
-import { versionsSchema } from "@thunderstore/dapper-ts/src/methods/package";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import semverGt from "semver/functions/gt";
-import semverLt from "semver/functions/lt";
-import {
-  type TableCompareColumnMeta,
-  type TableRow,
-} from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
-import { isSemver } from "cyberstorm/utils/typeChecks";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
+import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -69,22 +62,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
     message: "Failed to load versions",
     versions: [],
   };
-}
-
-function rowSemverCompare(
-  a: TableRow,
-  b: TableRow,
-  columnMeta: TableCompareColumnMeta
-) {
-  if (isSemver(String(a[0].sortValue)) && isSemver(String(b[0].sortValue))) {
-    if (semverLt(String(a[0].sortValue), String(b[0].sortValue))) {
-      return columnMeta.direction;
-    }
-    if (semverGt(String(a[0].sortValue), String(b[0].sortValue))) {
-      return -columnMeta.direction;
-    }
-  }
-  return 0;
 }
 
 export default function Versions() {
@@ -156,7 +133,7 @@ export default function Versions() {
   );
 }
 
-const columns: NewTableLabels = [
+export const columns: NewTableLabels = [
   {
     value: "Version",
     disableSort: false,

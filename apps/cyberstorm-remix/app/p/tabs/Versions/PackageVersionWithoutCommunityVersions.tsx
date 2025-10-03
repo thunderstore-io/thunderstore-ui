@@ -2,7 +2,6 @@ import "./Versions.css";
 import {
   NewTableSort,
   NewTable,
-  NewTableLabels,
   Heading,
   SkeletonBox,
   NewLink,
@@ -10,19 +9,14 @@ import {
 import { Await, LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import semverGt from "semver/functions/gt";
-import semverLt from "semver/functions/lt";
-import {
-  TableCompareColumnMeta,
-  TableRow,
-} from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
-import { isSemver } from "cyberstorm/utils/typeChecks";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
+import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
+import { columns } from "./Versions";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
@@ -66,22 +60,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
     message: "Failed to load versions",
     versions: [],
   };
-}
-
-function rowSemverCompare(
-  a: TableRow,
-  b: TableRow,
-  columnMeta: TableCompareColumnMeta
-) {
-  if (isSemver(String(a[0].sortValue)) && isSemver(String(b[0].sortValue))) {
-    if (semverLt(String(a[0].sortValue), String(b[0].sortValue))) {
-      return columnMeta.direction;
-    }
-    if (semverGt(String(a[0].sortValue), String(b[0].sortValue))) {
-      return -columnMeta.direction;
-    }
-  }
-  return 0;
 }
 
 export default function Versions() {
@@ -152,22 +130,3 @@ export default function Versions() {
     </Suspense>
   );
 }
-
-const columns: NewTableLabels = [
-  {
-    value: "Version",
-    disableSort: false,
-    columnClasses: "package-versions__version",
-  },
-  {
-    value: "Upload date",
-    disableSort: false,
-    columnClasses: "package-versions__upload-date",
-  },
-  {
-    value: "Downloads",
-    disableSort: false,
-    columnClasses: "package-versions__downloads",
-  },
-  { value: "Actions", disableSort: true },
-];
