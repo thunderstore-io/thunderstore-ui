@@ -10,11 +10,7 @@ export default defineConfig({
     // https://vitejs.dev/config/server-options.html#server-watch
     watch: { usePolling: true, interval: 500 },
     hmr: { path: "/react-router" },
-    allowedHosts: [
-      // ".thunderstore.temp",
-      ".thunderstore.dev",
-      ".thunderstore.io",
-    ],
+    allowedHosts: [".thunderstore.dev", ".thunderstore.io"],
   },
   plugins: [
     reactRouter(),
