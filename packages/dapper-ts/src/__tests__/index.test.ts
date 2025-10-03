@@ -4,6 +4,7 @@ import { DapperTs } from "../index";
 const communityId = "test-community-1";
 const namespaceId = "Test_Team_0";
 const packageName = "Test_Package_0";
+const packageVersion = "1.0.0";
 let dapper: DapperTs;
 
 beforeAll(() => {
@@ -34,6 +35,16 @@ it("executes getCurrentUser without errors", async () => {
 it("executes getPackageChangelog without errors", async () => {
   await expect(
     dapper.getPackageChangelog(namespaceId, packageName)
+  ).resolves.not.toThrowError();
+});
+
+it("executes getPackageVersionDependencies without errors", async () => {
+  await expect(
+    dapper.getPackageVersionDependencies(
+      namespaceId,
+      packageName,
+      packageVersion
+    )
   ).resolves.not.toThrowError();
 });
 
