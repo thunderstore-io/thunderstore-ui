@@ -18,6 +18,7 @@ import {
   packageWikiPageSchema,
   packagePermissionsSchema,
   packageSourceSchema,
+  packageVersionDependencySchema,
 } from "../schemas/objectSchemas";
 import { paginatedResults } from "../schemas/objectSchemas";
 
@@ -137,6 +138,17 @@ export const packageVersionsResponseDataSchema = z.array(packageVersionSchema);
 
 export type PackageVersionsResponseData = z.infer<
   typeof packageVersionsResponseDataSchema
+>;
+
+export const packageVersionDependenciesResponseDataSchema = z.object({
+  count: z.number(),
+  next: z.string().url().nullable(),
+  previous: z.string().url().nullable(),
+  results: z.array(packageVersionDependencySchema),
+});
+
+export type PackageVersionDependenciesResponseData = z.infer<
+  typeof packageVersionDependenciesResponseDataSchema
 >;
 
 // PackageWikiResponse
