@@ -22,8 +22,7 @@ import {
   useNavigationType,
   useSearchParams,
 } from "react-router";
-import { Communities } from "@thunderstore/dapper/types";
-// import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import type { Communities } from "@thunderstore/dapper/types";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import {

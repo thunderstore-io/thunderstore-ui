@@ -14,7 +14,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { DnDFileInput } from "@thunderstore/react-dnd";
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
-import { MultipartUpload, IBaseUploadHandle } from "@thunderstore/ts-uploader";
+import {
+  MultipartUpload,
+  type IBaseUploadHandle,
+} from "@thunderstore/ts-uploader";
 // import {
 //   useUploadProgress,
 //   useUploadStatus,
@@ -28,15 +31,15 @@ import {
   faUsers,
   faArrowUpRight,
 } from "@fortawesome/pro-solid-svg-icons";
-import { UserMedia } from "@thunderstore/ts-uploader/src/uploaders/types";
+import { type UserMedia } from "@thunderstore/ts-uploader/src/uploaders/types";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { MetaFunction } from "react-router";
+import { type MetaFunction } from "react-router";
 import { useLoaderData, useOutletContext } from "react-router";
 import {
-  PackageSubmissionResult,
-  PackageSubmissionStatus,
+  type PackageSubmissionResult,
+  type PackageSubmissionStatus,
 } from "@thunderstore/dapper/types";
-import { PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
+import { type PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "../root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { postPackageSubmissionMetadata } from "@thunderstore/dapper-ts/src/methods/package";

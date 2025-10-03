@@ -1,8 +1,8 @@
 import "./Connection.css";
 import { NewIcon, NewSwitch } from "@thunderstore/cyberstorm";
-import { OAuthConnection } from "@thunderstore/dapper/types";
-import { ReactElement } from "react";
-import { userLinkedAccountDisconnectProviders } from "../../../../../packages/thunderstore-api/src";
+import { type OAuthConnection } from "@thunderstore/dapper/types";
+import { type ReactElement } from "react";
+import { type userLinkedAccountDisconnectProviders } from "../../../../../packages/thunderstore-api/src";
 
 interface ConnectionProps {
   name: string;

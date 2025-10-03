@@ -12,7 +12,7 @@ import {
   ApiError,
   packageDeprecate,
   packageListingUpdate,
-  PackageListingUpdateRequestData,
+  type PackageListingUpdateRequestData,
   packageUnlist,
 } from "@thunderstore/thunderstore-api";
 import { formatToDisplayName } from "@thunderstore/cyberstorm/src/utils/utils";

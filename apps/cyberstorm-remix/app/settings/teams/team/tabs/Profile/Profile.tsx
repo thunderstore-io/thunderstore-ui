@@ -1,9 +1,9 @@
-import { LoaderFunctionArgs } from "react-router";
+import { type LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import {
   ApiError,
   teamDetailsEdit,
-  TeamDetailsEditRequestData,
+  type TeamDetailsEditRequestData,
 } from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "~/root";
 import "./Profile.css";

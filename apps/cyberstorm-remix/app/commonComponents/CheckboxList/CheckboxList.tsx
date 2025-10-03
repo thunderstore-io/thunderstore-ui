@@ -9,7 +9,7 @@ import "./CheckboxList.css";
 import { Actionable, NewIcon } from "@thunderstore/cyberstorm";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { resolveTriState } from "~/commonComponents/utils";
-import { TRISTATE } from "~/commonComponents/types";
+import { type TRISTATE } from "~/commonComponents/types";
 import { memo } from "react";
 
 type typeA<B> = (v: B) => void;

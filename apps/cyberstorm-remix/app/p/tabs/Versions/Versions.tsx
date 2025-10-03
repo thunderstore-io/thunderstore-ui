@@ -7,12 +7,12 @@ import {
   NewButton,
   NewIcon,
   NewTable,
-  NewTableLabels,
+  type NewTableLabels,
   Heading,
   NewAlert,
   SkeletonBox,
 } from "@thunderstore/cyberstorm";
-import { Await, LoaderFunctionArgs } from "react-router";
+import { Await, type LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
 import { versionsSchema } from "@thunderstore/dapper-ts/src/methods/package";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -20,8 +20,8 @@ import semverGt from "semver/functions/gt";
 import semverLt from "semver/functions/lt";
 import semverValid from "semver/functions/valid";
 import {
-  TableCompareColumnMeta,
-  TableRow,
+  type TableCompareColumnMeta,
+  type TableRow,
 } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import {

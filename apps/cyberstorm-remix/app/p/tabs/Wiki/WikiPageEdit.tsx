@@ -1,7 +1,7 @@
 import "./Wiki.css";
 
 import {
-  LoaderFunctionArgs,
+  type LoaderFunctionArgs,
   useNavigate,
   useOutletContext,
 } from "react-router";
@@ -24,10 +24,10 @@ import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer, useState } from "react";
 import {
   deletePackageWikiPage,
-  PackageWikiPageEditRequestData,
-  PackageWikiPageResponseData,
+  type PackageWikiPageEditRequestData,
+  type PackageWikiPageResponseData,
   postPackageWikiPageEdit,
-  RequestConfig,
+  type RequestConfig,
 } from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "~/root";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";

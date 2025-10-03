@@ -5,12 +5,7 @@ import {
   useLocation,
   useOutletContext,
 } from "react-router";
-import {
-  NewBreadCrumbs,
-  NewBreadCrumbsLink,
-  NewLink,
-  Tabs,
-} from "@thunderstore/cyberstorm";
+import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../../../root";

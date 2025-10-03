@@ -28,7 +28,7 @@ import {
   OverwolfLogo,
   ThunderstoreLogo,
 } from "@thunderstore/cyberstorm/src/svg/svg";
-import { CurrentUser } from "@thunderstore/dapper/types";
+import { type CurrentUser } from "@thunderstore/dapper/types";
 
 import {
   faSignOut,

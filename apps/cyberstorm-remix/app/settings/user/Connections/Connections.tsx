@@ -10,7 +10,7 @@ import { Connection } from "~/commonComponents/Connection/Connection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { OverwolfLogo } from "@thunderstore/cyberstorm/src/svg/svg";
-import { ReactElement } from "react";
+import { type ReactElement } from "react";
 import { type OutletContextShape } from "~/root";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";

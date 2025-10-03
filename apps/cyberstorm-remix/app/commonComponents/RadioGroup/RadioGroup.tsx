@@ -1,5 +1,5 @@
 import * as RadixRadioGroup from "@radix-ui/react-radio-group";
-import { Section } from "@thunderstore/dapper/types";
+import { type Section } from "@thunderstore/dapper/types";
 import { faCircle, faCircleDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./RadioGroup.css";

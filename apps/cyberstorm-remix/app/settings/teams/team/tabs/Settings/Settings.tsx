@@ -14,9 +14,9 @@ import { useNavigate, useOutletContext, useParams } from "react-router";
 import { type OutletContextShape } from "~/root";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import {
-  RequestConfig,
+  type RequestConfig,
   teamDisband,
-  TeamDisbandRequestData,
+  type TeamDisbandRequestData,
   teamRemoveMember,
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";

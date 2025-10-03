@@ -2,7 +2,7 @@
 // import { useHydrated } from "remix-utils/use-hydrated";
 // import { useEffect, useRef, useState } from "react";
 
-import { CurrentUser } from "@thunderstore/dapper/types";
+import { type CurrentUser } from "@thunderstore/dapper/types";
 import {
   MobileNavigationMenu,
   MobileUserPopoverContent,
