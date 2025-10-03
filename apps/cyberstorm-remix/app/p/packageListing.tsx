@@ -695,8 +695,7 @@ function ReviewPackageForm(props: {
   });
 
   return (
-    <div className="modal-content">
-      <div className="modal-content__header">Review Package</div>
+    <>
       <div className="modal-content__body review-package__body">
         <NewAlert csVariant="info">
           Changes might take several minutes to show publicly! Info shown below
@@ -772,7 +771,7 @@ function ReviewPackageForm(props: {
           Approve
         </NewButton>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -1004,7 +1003,6 @@ function managementTools(
         <div className="package-listing-management-tools__island">
           {packagePermissions.permissions.can_moderate ? (
             <Modal
-              popoverId={"reviewPackage"}
               csSize="small"
               trigger={
                 <NewButton
@@ -1018,6 +1016,7 @@ function managementTools(
                   Review Package
                 </NewButton>
               }
+              titleContent="Review Package"
             >
               <ReviewPackageForm
                 communityId={listing.community_identifier}
