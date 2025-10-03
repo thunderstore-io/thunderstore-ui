@@ -9,7 +9,7 @@ export async function fetchPackageSource(
 ): Promise<PackageSourceResponseData> {
   const { config, params } = props;
   const v = params.version_number ? params.version_number : "latest";
-  const path = `api/cyberstorm/package/${params.namespace_id}/${params.package_name}/${v}/source/`;
+  const path = `api/cyberstorm/package/${params.namespace_id}/${params.package_name}/v/${v}/source/`;
 
   return await apiFetch({
     args: {

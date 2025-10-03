@@ -1,6 +1,6 @@
 import "./Source.css";
 
-import { Await, LoaderFunctionArgs, useOutletContext } from "react-router";
+import { Await, type LoaderFunctionArgs, useOutletContext } from "react-router";
 import { useLoaderData } from "react-router";
 import { Suspense } from "react";
 import ago from "s-ago";
@@ -15,7 +15,7 @@ import {
   CodeBoxHTML,
 } from "@thunderstore/cyberstorm";
 import { TooltipWrapper } from "@thunderstore/cyberstorm/src/primitiveComponents/utils/utils";
-import { OutletContextShape } from "~/root";
+import { type OutletContextShape } from "~/root";
 import {
   getPublicEnvVariables,
   getSessionTools,
@@ -142,12 +142,14 @@ export default function Source() {
         errorElement={<div>Error occurred while loading source</div>}
       >
         {(resolvedValue) => {
-          if (resolvedValue?.decompilations.length === 0) {
+          const decompilations = resolvedValue?.decompilations ?? [];
+          const lastDecompilationDate = resolvedValue?.last_decompilation_date;
+          if (decompilations.length === 0) {
             return (
               <Alert csVariant="info">Decompiled source not available.</Alert>
             );
           }
-          return resolvedValue?.decompilations.map((decompilation) => {
+          return decompilations.map((decompilation) => {
             return (
               <div
                 className="package-source"
@@ -160,9 +162,7 @@ export default function Source() {
                     </Heading>
                     <div className="package-source__header-meta">
                       <DecompilationDateDisplay
-                        lastDecompilationDate={
-                          resolvedValue.last_decompilation_date
-                        }
+                        lastDecompilationDate={lastDecompilationDate}
                       />
                     </div>
                   </div>
