@@ -30,7 +30,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {
   memo,
-  ReactElement,
+  type ReactElement,
   Suspense,
   useEffect,
   useMemo,
@@ -47,7 +47,7 @@ import {
   formatToDisplayName,
 } from "@thunderstore/cyberstorm/src/utils/utils";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { OutletContextShape } from "~/root";
+import { type OutletContextShape } from "~/root";
 import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
 import {
   getPublicEnvVariables,
