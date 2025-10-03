@@ -213,7 +213,7 @@ const getFakeDecompilations = () => {
   return range(50).map(() => {
     return {
       source_file_name: faker.system.fileName(),
-      url: faker.system.directoryPath(),
+      url: faker.internet.url(),
       result_size: faker.number.int({ min: 0, max: 1000000 }).toString(),
       result: faker.lorem.paragraph(),
       is_truncated: faker.datatype.boolean(0.5),
