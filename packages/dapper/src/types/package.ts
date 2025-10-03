@@ -57,6 +57,23 @@ export interface PackageVersion {
   install_url: string;
 }
 
+export interface PackageVersionDependency {
+  description: string;
+  icon_url: string;
+  is_active: boolean;
+  name: string;
+  namespace: string;
+  version_number: string;
+  is_removed: boolean;
+}
+
+export type PackageVersionDependencies = {
+  count: number;
+  previous: string | null;
+  next: string | null;
+  results: PackageVersionDependency[];
+};
+
 export interface PackagePermissions {
   package: {
     community_id: string;
