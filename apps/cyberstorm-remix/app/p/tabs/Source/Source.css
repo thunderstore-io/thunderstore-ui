@@ -26,6 +26,11 @@
     gap: var(--gap-2xs);
   }
 
+  .package-source__header-info h2 {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+  }
+
   .package-source__header-meta {
     color: var(--color-text-tertiary);
     font-size: var(--font-size-body-md);
