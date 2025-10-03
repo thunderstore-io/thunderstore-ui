@@ -38,7 +38,7 @@ import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import { faArrowUpRight, faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
 export function Navigation(props: {
@@ -231,7 +231,6 @@ export function DesktopLoginPopover() {
 
   return (
     <Modal
-      popoverId={"navAccount"}
       trigger={
         <NewButton
           csVariant="accent"
@@ -244,6 +243,21 @@ export function DesktopLoginPopover() {
           </NewIcon>
           Log In
         </NewButton>
+      }
+      title={
+        <Modal.Close asChild>
+          <NewButton
+            csVariant="secondary"
+            csSize="medium"
+            csModifiers={["ghost", "only-icon"]}
+            tooltipText="Close"
+            rootClasses="modal__button"
+          >
+            <NewIcon csMode="inline" csVariant="secondary" noWrapper>
+              <FontAwesomeIcon icon={faXmarkLarge} />
+            </NewIcon>
+          </NewButton>
+        </Modal.Close>
       }
     >
       <div className="navigation-login">
