@@ -8,7 +8,7 @@ import {
 } from "@thunderstore/thunderstore-api";
 import { useState, useEffect } from "react";
 import { PageHeader } from "../../commonComponents/PageHeader/PageHeader";
-import { OutletContextShape } from "../../root";
+import { type OutletContextShape } from "../../root";
 
 import { useDebounce } from "use-debounce";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";

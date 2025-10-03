@@ -13,7 +13,7 @@ import {
 } from "@thunderstore/cyberstorm";
 import { ApiError } from "@thunderstore/thunderstore-api";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { OutletContextShape } from "../../../root";
+import { type OutletContextShape } from "../../../root";
 import "./teamSettings.css";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";

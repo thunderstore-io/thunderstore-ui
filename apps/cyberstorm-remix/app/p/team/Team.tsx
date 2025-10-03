@@ -3,13 +3,13 @@ import "./Team.css";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
-import { OutletContextShape } from "../../root";
+import { type OutletContextShape } from "../../root";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { Route } from "./+types/Team";
+import type { Route } from "./+types/Team";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId && params.namespaceId) {

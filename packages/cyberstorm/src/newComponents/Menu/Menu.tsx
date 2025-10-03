@@ -1,13 +1,13 @@
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import "./Menu.css";
 import { NewButton, NewIcon } from "../..";
 import {
-  FramePopoverProps,
+  type FramePopoverProps,
   Frame,
 } from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
-import { MenuVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { type MenuVariants } from "@thunderstore/cyberstorm-theme/src/components";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

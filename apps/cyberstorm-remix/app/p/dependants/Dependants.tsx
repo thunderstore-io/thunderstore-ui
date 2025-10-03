@@ -8,13 +8,13 @@ import "./Dependants.css";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
-import { OutletContextShape } from "../../root";
+import { type OutletContextShape } from "../../root";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { Route } from "./+types/Dependants";
+import type { Route } from "./+types/Dependants";
 import { Suspense } from "react";
 
 export async function loader({ params, request }: Route.LoaderArgs) {

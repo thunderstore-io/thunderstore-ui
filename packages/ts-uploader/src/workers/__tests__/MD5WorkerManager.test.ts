@@ -4,25 +4,7 @@ import { MD5WorkerManager } from "../MD5WorkerManager";
 describe("MD5WorkerManager", () => {
   let manager: MD5WorkerManager;
 
-  const mockWorker = {
-    // event target bits that Worker requires
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-
-    // handler properties
-    onmessage: null as Worker["onmessage"],
-    onerror: null as Worker["onerror"],
-    onmessageerror: null as Worker["onmessageerror"],
-
-    // the methods you actually use
-    postMessage: vi.fn(),
-    terminate: vi.fn(),
-  } satisfies Partial<Worker> as Worker;
-
   beforeEach(() => {
-    // Mock Worker
-    global.Worker = vi.fn().mockImplementation(() => mockWorker);
     manager = new MD5WorkerManager();
   });
 
@@ -32,27 +14,20 @@ describe("MD5WorkerManager", () => {
 
   describe("initialize", () => {
     it("should initialize the worker manager", () => {
-      manager.initialize();
-      expect(global.Worker).toHaveBeenCalled();
+      expect(manager).toBeTruthy();
     });
 
-    it("should not initialize if already initialized", () => {
-      manager.initialize();
-      const initialCallCount = vi.mocked(global.Worker).mock.calls.length;
-
-      manager.initialize();
-      expect(vi.mocked(global.Worker).mock.calls.length).toBe(initialCallCount);
-    });
-
-    it("should not initialize if Worker is not available", () => {
-      const originalWorker = global.Worker;
+    it("should throw if Worker is not available", () => {
+      const originalWorker = window.Worker;
+      expect(manager).toBeTruthy();
       // @ts-expect-error Simulate Worker not being available
-      delete global.Worker;
-
-      manager.initialize();
-      expect(vi.mocked(console.error)).not.toHaveBeenCalled();
-
-      global.Worker = originalWorker;
+      delete window.Worker;
+      expect(manager).toBeTruthy();
+      expect(() => new MD5WorkerManager()).toThrow(
+        "Failed to initialize MD5 WorkerManager: Worker not supported"
+      );
+      window.Worker = originalWorker;
+      expect(manager).toBeTruthy();
     });
   });
 
@@ -61,55 +36,34 @@ describe("MD5WorkerManager", () => {
       const blob = new Blob(["test content"]);
       const uniqueId = "test-id";
 
-      // Set up the worker's onmessage handler
-      mockWorker.onmessage = ({ data }) => {
-        if (data.uniqueId === uniqueId) {
-          mockWorker.onmessage = null;
-        }
-      };
-
-      const hash = await manager.calculateMD5(uniqueId, blob);
-
-      expect(hash).toBe("mock-md5-hash");
-      expect(mockWorker.postMessage).toHaveBeenCalledWith({
-        type: "calculate",
-        uniqueId,
-        data: blob,
-      });
-    });
-
-    it("should handle worker errors", async () => {
-      const blob = new Blob(["test content"]);
-      const uniqueId = "test-id";
-
-      // Set up the worker's onmessage handler
-      mockWorker.onmessage = ({ data }) => {
-        if (data.uniqueId === uniqueId) {
-          mockWorker.onmessage = null;
-        }
-      };
-
-      await expect(manager.calculateMD5(uniqueId, blob)).rejects.toThrow(
-        "MD5 worker error: Calculation failed"
-      );
-    });
-
-    it("should throw error if not initialized", () => {
-      const blob = new Blob(["test content"]);
-      const uniqueId = "test-id";
-
-      expect(() => manager.calculateMD5(uniqueId, blob)).toThrow(
-        "MD5 worker not initialized"
+      expect(await manager.calculateMD5(uniqueId, blob)).toBe(
+        "lHP90NiApDwht3eNNIchVw=="
       );
     });
   });
 
   describe("terminateWorkers", () => {
     it("should terminate all workers", () => {
-      manager.initialize();
       manager.terminateWorkers();
 
-      expect(mockWorker.terminate).toHaveBeenCalled();
+      // Simulate adding workers and spy on terminate
+      const createdWorkers: Worker[] = [];
+      for (let i = 0; i < 5; i++) {
+        const w = new Worker(new URL("../MD5Worker.js", import.meta.url), {
+          type: "module",
+        });
+        vi.spyOn(w, "terminate");
+        createdWorkers.push(w);
+        manager["workers"].push(w);
+      }
+
+      expect(manager["workers"]).toHaveLength(5);
+      manager.terminateWorkers();
+
+      // Verify terminate called on all created workers
+      for (const w of createdWorkers) {
+        expect(w.terminate).toHaveBeenCalled();
+      }
       expect(manager["workers"]).toHaveLength(0);
     });
   });

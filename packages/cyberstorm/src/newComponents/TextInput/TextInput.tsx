@@ -1,9 +1,9 @@
 import "./TextInput.css";
-import React, { memo, ReactElement } from "react";
+import React, { memo, type ReactElement } from "react";
 import {
   Input,
-  InputTextAreaProps,
-  InputTextInputProps,
+  type InputTextAreaProps,
+  type InputTextInputProps,
 } from "../../primitiveComponents/Input/Input";
 import { classnames, componentClasses } from "../../utils/utils";
 import { Frame } from "../../primitiveComponents/Frame/Frame";
@@ -12,9 +12,9 @@ import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { Actionable } from "../../primitiveComponents/Actionable/Actionable";
 import { NewIcon } from "../..";
 import {
-  TextInputVariants,
-  TextInputSizes,
-  TextInputModifiers,
+  type TextInputVariants,
+  type TextInputSizes,
+  type TextInputModifiers,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
 export interface TextInputProps

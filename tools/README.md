@@ -17,7 +17,7 @@ environment for the snapshots to be uploaded). The script will proceed with
 the following operations:
    1. Install dependencies of the `cyberstorm-remix` app
    2. Build the `cyberstorm-remix` app
-   3. Start the `visual-diff-backend` docker compose stack
+   3. Start the `thunderstore-test-backend` docker compose stack
       - This will create a fresh Thunderstore instance with automatically
         populated test data included.
    4. Wait for the Thunderstore backend to come online
@@ -49,9 +49,9 @@ to it.
 
 ## Project directories included
 
-### visual-diff-backend
+### thunderstore-test-backend
 
-The `visual-diff-backend` directory includes a minimal docker setup of the
+The `thunderstore-test-backend` directory includes a minimal docker setup of the
 Thunderstore backend, which when run, will bootstrap a fresh Thunderstore
 instance and populate it with test content.
 

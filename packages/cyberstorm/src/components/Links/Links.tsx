@@ -5,8 +5,8 @@
  * useContext. LinkingContext can also be used "manually" if one so
  * wishes.
  */
-import React, { PropsWithChildren } from "react";
-import { LinkingContext, ThunderstoreLinkProps } from "./LinkingProvider";
+import React, { type PropsWithChildren } from "react";
+import { LinkingContext, type ThunderstoreLinkProps } from "./LinkingProvider";
 
 interface typeWorkaroundProps extends PropsWithChildren {
   community?: string;

@@ -1,15 +1,15 @@
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import "./Drawer.css";
 import { NewButton, NewIcon } from "../..";
 import {
-  FramePopoverProps,
+  type FramePopoverProps,
   Frame,
 } from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
 import {
-  DrawerSizes,
-  DrawerVariants,
+  type DrawerSizes,
+  type DrawerVariants,
 } from "@thunderstore/cyberstorm-theme/src/components";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

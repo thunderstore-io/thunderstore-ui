@@ -4,12 +4,12 @@ import {
   Await,
   Links,
   Meta,
-  MetaFunction,
+  type MetaFunction,
   Outlet,
   Scripts,
   ScrollRestoration,
-  ShouldRevalidateFunctionArgs,
-  UIMatch,
+  type ShouldRevalidateFunctionArgs,
+  type UIMatch,
   isRouteErrorResponse,
   useLoaderData,
   useLocation,
@@ -29,14 +29,14 @@ import {
   NewBreadCrumbsLink,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { CurrentUser } from "@thunderstore/dapper/types";
+import { type CurrentUser } from "@thunderstore/dapper/types";
 
 import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
-import { memo, ReactNode, Suspense, useEffect, useRef } from "react";
+import { memo, type ReactNode, Suspense, useEffect, useRef } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import Toast from "@thunderstore/cyberstorm/src/newComponents/Toast";
 import { Footer } from "./commonComponents/Footer/Footer";
-import { RequestConfig } from "@thunderstore/thunderstore-api";
+import { type RequestConfig } from "@thunderstore/thunderstore-api";
 import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
 import { NamespacedStorageManager } from "@thunderstore/ts-api-react";
 import {
@@ -47,10 +47,10 @@ import {
 } from "@thunderstore/ts-api-react/src/SessionContext";
 import {
   getPublicEnvVariables,
-  publicEnvVariablesType,
+  type publicEnvVariablesType,
 } from "cyberstorm/security/publicEnvVariables";
 import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
-import { Route } from "./+types/root";
+import type { Route } from "./+types/root";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];

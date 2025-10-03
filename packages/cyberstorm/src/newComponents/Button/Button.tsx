@@ -2,15 +2,15 @@ import "./Button.css";
 import { memo } from "react";
 import { classnames, componentClasses } from "../../utils/utils";
 import {
-  ActionableButtonProps,
   Actionable,
-  ActionableCyberstormLinkProps,
-  ActionableLinkProps,
+  type ActionableButtonProps,
+  type ActionableCyberstormLinkProps,
+  type ActionableLinkProps,
 } from "../../primitiveComponents/Actionable/Actionable";
 import {
-  ButtonVariants,
-  ButtonSizes,
-  ButtonModifiers,
+  type ButtonVariants,
+  type ButtonSizes,
+  type ButtonModifiers,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
 interface IButton {

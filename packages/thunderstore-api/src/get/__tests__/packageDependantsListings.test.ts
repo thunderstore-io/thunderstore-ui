@@ -1,6 +1,7 @@
 import { config, testData } from "../../__tests__/defaultConfig";
 import { fetchPackageDependantsListings } from "../packageDependantsListings";
 import { PackageListingsOrderingEnum } from "../../schemas/queryParamSchemas";
+import { it, expect } from "vitest";
 
 interface PartialPackage {
   community_identifier: string;

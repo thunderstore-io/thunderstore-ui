@@ -4,7 +4,7 @@ import {
   faFire,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Community } from "@thunderstore/dapper/types";
+import { type Community } from "@thunderstore/dapper/types";
 
 import { formatInteger } from "../../../utils/utils";
 import { NewLink, NewIcon, Image, NewTag, NewMetaItem } from "../../..";

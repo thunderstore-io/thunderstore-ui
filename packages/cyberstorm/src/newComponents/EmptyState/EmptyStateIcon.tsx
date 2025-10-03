@@ -1,7 +1,7 @@
 import "./EmptyState.css";
 import { classnames } from "../../utils/utils";
 import { NewIcon } from "../..";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 interface Props {
   children: ReactNode | ReactNode[];

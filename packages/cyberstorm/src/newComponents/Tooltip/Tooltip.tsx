@@ -1,4 +1,4 @@
-import { memo, ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 import { Root, Trigger, Portal, Content, Arrow } from "@radix-ui/react-tooltip";
 
 import "./Tooltip.css";

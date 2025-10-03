@@ -2,12 +2,12 @@
 import * as RadixToast from "@radix-ui/react-toast";
 import {
   createContext,
-  PropsWithChildren,
+  type PropsWithChildren,
   useContext,
   useReducer,
 } from "react";
 import { v4 as uuid } from "uuid";
-import { ToastProps } from "./Toast";
+import { type ToastProps } from "./Toast";
 import { Viewport } from "./Viewport";
 
 const initState: {

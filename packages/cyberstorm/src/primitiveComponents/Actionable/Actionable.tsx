@@ -1,10 +1,13 @@
 import {
   CyberstormLink,
-  CyberstormLinkIds,
+  type CyberstormLinkIds,
 } from "../../components/Links/Links";
 import React, { memo } from "react";
-import { ThunderstoreLinkProps } from "../../components/Links/LinkingProvider";
-import { PrimitiveComponentDefaultProps, TooltipWrapper } from "../utils/utils";
+import { type ThunderstoreLinkProps } from "../../components/Links/LinkingProvider";
+import {
+  type PrimitiveComponentDefaultProps,
+  TooltipWrapper,
+} from "../utils/utils";
 
 export interface ActionableButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,

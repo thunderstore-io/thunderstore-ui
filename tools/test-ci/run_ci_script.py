@@ -3,7 +3,6 @@ import shutil
 import subprocess
 import sys
 import time
-from distutils.util import strtobool
 from pathlib import Path
 from typing import List, Union, Dict, Optional
 
@@ -13,8 +12,6 @@ import requests
 CURRENT_DIR = Path(__file__).parent
 REPO_ROOT = CURRENT_DIR / ".." / ".."
 YARN_PATH = shutil.which("yarn")
-NPX_PATH = shutil.which("npx")
-NPM_PATH = shutil.which("npm")
 
 
 class EarlyExit(Exception):
@@ -87,67 +84,9 @@ def run_command(
     return result
 
 
-def register_variable(cast, name, default) -> EnvironmentVariable:
-    var = EnvironmentVariable(cast, name, default)
-    VARIABLES[name] = var
-    return var
-
-
-def to_bool(val) -> bool:
-    if not val:
-        return False
-    return bool(strtobool(val))
-
-
-PERCY_TOKEN = register_variable(str, "PERCY_TOKEN", None)
-
-
-class BgProcess:
-    process: subprocess.Popen
-
-    def __init__(
-        self,
-        command: Union[List[Union[EnvironmentVariable, str]], str],
-        cwd: Optional[Path] = None,
-        env: Optional[Dict[str, str]] = None,
-    ):
-        command = build_command(command)
-        cwd = cwd or CURRENT_DIR
-        print(str(cwd.resolve()) + ": " + " ".join(command))
-        env = {
-            **build_env(),
-            **(env or {}),
-        }
-        self.process = subprocess.Popen(
-            command,
-            cwd=cwd,
-            env=env,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-
-    def kill(self):
-        self.process.kill()
-
-
 def setup_frontend():
     run_command([YARN_PATH, "install", "--frozen-lockfile"], cwd=REPO_ROOT)
-    run_command([YARN_PATH, "workspace", "@thunderstore/cyberstorm-remix", "build"], cwd=REPO_ROOT)
-
-
-def start_frontend() -> BgProcess:
-    configs = {
-        "VITE_SITE_URL": "http://127.0.0.1:8000",
-        "VITE_API_URL": "http://127.0.0.1:8000",
-        "VITE_AUTH_BASE_URL": "http://127.0.0.1:8000",
-        "VITE_AUTH_RETURN_URL": "http://127.0.0.1:8000",
-    }
-    process = BgProcess(
-        [YARN_PATH, "workspace", "@thunderstore/cyberstorm-remix", "start", "--host", "0.0.0.0", "--port", "3000"],
-        cwd=REPO_ROOT,
-        env=configs,
-    )
-    return process
+    run_command([YARN_PATH, "playwright", "install"], cwd=REPO_ROOT)
 
 
 def wait_for_url(url: str) -> bool:
@@ -181,14 +120,8 @@ def stop_backend():
     run_command("docker compose down", cwd=BACKEND_DIR)
 
 
-PLAYWRIGHT_DIR = (REPO_ROOT / "tools" / "cyberstorm-playwright").resolve()
-
-
-def run_playwright():
-    # try:
-    run_command([NPM_PATH, "ci"], cwd=PLAYWRIGHT_DIR)
-    run_command([NPX_PATH, "playwright", "install", "--with-deps"], cwd=PLAYWRIGHT_DIR)
-    run_command([NPX_PATH, "percy", "exec", "--", "playwright", "test", "--reporter=list"], cwd=PLAYWRIGHT_DIR)
+def run_tests():
+    run_command([YARN_PATH, "coverage"], cwd=REPO_ROOT)
 
 
 def main():
@@ -200,21 +133,17 @@ def main():
         print("Successfully launched backend!")
     else:
         print("Failed to launch backend!")
-
-    print("Starting frontend")
-    process = start_frontend()
-    wait_for_url("http://127.0.0.1:3000")
+        stop_backend()
+        raise EarlyExit(1)
 
     try:
-        run_playwright()
+        run_tests()
     except Exception as e:
         print(f"Exception: {e}")
-        process.kill()
         stop_backend()
         raise e
 
     stop_backend()
-    process.kill()
     print("Done")
 
 

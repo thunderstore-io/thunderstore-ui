@@ -11,7 +11,11 @@
   "compilerOptions": {
     "rootDirs": [".", "./.react-router/types"],
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["@react-router/node", "vite/client"],
+    "types": [
+      "@react-router/node",
+      "vite/client",
+      "@vitest/browser/providers/playwright"
+    ],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
@@ -28,7 +32,7 @@
       "~/*": ["app/*", "./react-router/types/*"],
       "react": ["./node_modules/@types/react"]
     },
-    // "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": true,
 
     // Vite takes care of building everything, not tsc.
     "noEmit": true,

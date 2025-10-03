@@ -1,4 +1,4 @@
-import { PackageCategory, PaginatedList } from "./shared";
+import { type PackageCategory, type PaginatedList } from "./shared";
 
 export interface Community {
   name: string;

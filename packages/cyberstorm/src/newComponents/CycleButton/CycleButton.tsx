@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { classnames } from "../../utils/utils";
 import {
   Actionable,
-  ActionableButtonProps,
+  type ActionableButtonProps,
 } from "../../primitiveComponents/Actionable/Actionable";
 
 interface CycleButtonProps

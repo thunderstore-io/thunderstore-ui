@@ -1,4 +1,4 @@
-import { DynamicLink } from "./shared";
+import { type DynamicLink } from "./shared";
 
 export interface WeirdCurrentUserTeamsFull {
   name: string;

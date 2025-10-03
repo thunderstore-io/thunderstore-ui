@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode, useState } from "react";
+import { type CSSProperties, type ReactNode, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSort,
@@ -9,9 +9,9 @@ import "./Table.css";
 import { NewIcon } from "../..";
 import { classnames, componentClasses } from "../../utils/utils";
 import {
-  TableVariants,
-  TableSizes,
-  TableModifiers,
+  type TableVariants,
+  type TableSizes,
+  type TableModifiers,
 } from "@thunderstore/cyberstorm-theme/src/components";
 import React from "react";
 

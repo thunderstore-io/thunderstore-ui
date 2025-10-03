@@ -17,7 +17,7 @@ import {
 } from "@thunderstore/thunderstore-api";
 import { formatToDisplayName } from "@thunderstore/cyberstorm/src/utils/utils";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { OutletContextShape } from "~/root";
+import { type OutletContextShape } from "~/root";
 import {
   getPublicEnvVariables,
   getSessionTools,

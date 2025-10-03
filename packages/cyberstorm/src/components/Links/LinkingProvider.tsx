@@ -15,7 +15,7 @@
  *
  * To add a new link type, follow the 4 required steps defined below.
  */
-import React, { ReactElement as RE } from "react";
+import React, { type ReactElement as RE } from "react";
 
 // STEP 1 of adding new link definitions:
 // If the new link uses any props not already listed here, add them.

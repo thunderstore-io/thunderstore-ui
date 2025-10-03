@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import "./SelectSearch.css";
 import { classnames, componentClasses } from "../../utils/utils";
 import { NewIcon, NewTag } from "../../index";
@@ -9,9 +9,9 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-  SelectSearchVariants,
-  SelectSearchSizes,
-  SelectSearchModifiers,
+  type SelectSearchVariants,
+  type SelectSearchSizes,
+  type SelectSearchModifiers,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
 export type SelectOption<T extends string = string> = {

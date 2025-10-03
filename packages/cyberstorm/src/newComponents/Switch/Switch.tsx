@@ -3,9 +3,9 @@ import React, { memo } from "react";
 import * as RadixSwitch from "@radix-ui/react-switch";
 import { classnames, componentClasses } from "../../utils/utils";
 import {
-  SwitchVariants,
-  SwitchSizes,
-  SwitchModifiers,
+  type SwitchVariants,
+  type SwitchSizes,
+  type SwitchModifiers,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
 export interface SwitchProps {

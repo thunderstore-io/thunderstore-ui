@@ -4,7 +4,7 @@ import { Await, LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useOutletContext } from "react-router";
 import { ListingDependency } from "~/commonComponents/ListingDependency/ListingDependency";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { OutletContextShape } from "~/root";
+import { type OutletContextShape } from "~/root";
 import {
   getPublicEnvVariables,
   getSessionTools,

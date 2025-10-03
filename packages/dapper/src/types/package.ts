@@ -1,5 +1,5 @@
-import { PackageCategory, PaginatedList } from "./shared";
-import { TeamMember } from "./team";
+import { type PackageCategory, type PaginatedList } from "./shared";
+import { type TeamMember } from "./team";
 
 export interface PackageListing {
   categories: PackageCategory[];

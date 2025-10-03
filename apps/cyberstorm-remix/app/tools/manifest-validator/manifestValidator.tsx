@@ -15,7 +15,7 @@ import {
   toolsManifestValidate,
 } from "@thunderstore/thunderstore-api";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { OutletContextShape } from "../../root";
+import { type OutletContextShape } from "../../root";
 
 import { useDebounce } from "use-debounce";
 
