@@ -1,5 +1,5 @@
 import "./Required.css";
-import { Heading, NewPagination, SkeletonBox } from "@thunderstore/cyberstorm";
+import { Heading, SkeletonBox } from "@thunderstore/cyberstorm";
 import {
   Await,
   useNavigationType,
@@ -7,18 +7,27 @@ import {
   type LoaderFunctionArgs,
 } from "react-router";
 import { useLoaderData } from "react-router";
-import { ListingDependency } from "~/commonComponents/ListingDependency/ListingDependency";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { Suspense, useEffect, useRef, useState } from "react";
-import type { PackageVersionDependency } from "@thunderstore/dapper/types";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
+import {
+  compareSearchParamBlobs,
+  PackageDependenciesListWithPagination,
+  searchParamsToBlob,
+  type SearchParamsType,
+} from "./Required";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
+  if (
+    params.communityId &&
+    params.namespaceId &&
+    params.packageId &&
+    params.packageVersion
+  ) {
     const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
@@ -29,22 +38,20 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     const searchParams = new URL(request.url).searchParams;
     const page = searchParams.get("page");
 
-    const listing = await dapper.getPackageListingDetails(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
-
     return {
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      packageVersion: listing.latest_version_number,
-      listing: listing,
+      packageVersion: params.packageVersion,
+      listing: await dapper.getPackageListingDetails(
+        params.communityId,
+        params.namespaceId,
+        params.packageId
+      ),
       dependencies: await dapper.getPackageVersionDependencies(
         params.namespaceId,
         params.packageId,
-        listing.latest_version_number,
+        params.packageVersion,
         page === null ? undefined : Number(page)
       ),
     };
@@ -53,7 +60,12 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 export async function clientLoader({ params, request }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
+  if (
+    params.communityId &&
+    params.namespaceId &&
+    params.packageId &&
+    params.packageVersion
+  ) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
       return {
@@ -64,22 +76,20 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
     const searchParams = new URL(request.url).searchParams;
     const page = searchParams.get("page");
 
-    const listing = await dapper.getPackageListingDetails(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
-
     return {
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      packageVersion: listing.latest_version_number,
-      listing: listing,
+      packageVersion: params.packageVersion,
+      listing: dapper.getPackageListingDetails(
+        params.communityId,
+        params.namespaceId,
+        params.packageId
+      ),
       dependencies: dapper.getPackageVersionDependencies(
         params.namespaceId,
         params.packageId,
-        listing.latest_version_number,
+        params.packageVersion,
         page === null ? undefined : Number(page)
       ),
     };
@@ -87,7 +97,7 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
   throw new Response("Package version dependencies not found", { status: 404 });
 }
 
-export default function Required() {
+export default function PackageVersionRequired() {
   const {
     communityId,
     namespaceId,
@@ -96,6 +106,10 @@ export default function Required() {
     listing,
     dependencies,
   } = useLoaderData<typeof loader | typeof clientLoader>();
+  const listingAndDependencies = useMemo(
+    () => Promise.all([listing, dependencies]),
+    [listing, dependencies]
+  );
 
   const navigationType = useNavigationType();
 
@@ -173,7 +187,7 @@ export default function Required() {
   return (
     <Suspense fallback={<SkeletonBox className="package-required__skeleton" />}>
       <Await
-        resolve={dependencies}
+        resolve={listingAndDependencies}
         errorElement={
           <div>Error occurred while loading required dependencies</div>
         }
@@ -183,7 +197,7 @@ export default function Required() {
             <div className="required">
               <div className="required__title">
                 <Heading csLevel="3" csSize="3">
-                  Required mods ({listing.dependency_count})
+                  Required mods ({resolvedValue[0].dependencies.length})
                 </Heading>
                 <span className="required__description">
                   This package requires the following packages to work.
@@ -191,18 +205,14 @@ export default function Required() {
               </div>
               <PackageDependenciesListWithPagination
                 page={currentPage}
-                pageSize={20}
+                pageSize={10}
                 communityId={communityId}
                 namespaceId={namespaceId}
                 packageId={packageId}
                 packageVersion={packageVersion}
-                dependenciesCount={listing.dependency_count}
-                onPageChange={setParamsBlobValue(
-                  setSearchParamsBlob,
-                  searchParamsBlob,
-                  "page"
-                )}
-                dependencies={resolvedValue.results}
+                dependenciesCount={resolvedValue[1].results.length}
+                setPage={setCurrentPage}
+                dependencies={resolvedValue[1].results}
               />
             </div>
           </>
@@ -210,66 +220,4 @@ export default function Required() {
       </Await>
     </Suspense>
   );
-}
-
-export function PackageDependenciesListWithPagination(props: {
-  page: number;
-  pageSize: number;
-  communityId: string;
-  namespaceId: string;
-  packageId: string;
-  packageVersion: string;
-  dependenciesCount: number;
-  onPageChange: (page: number) => void;
-  dependencies: PackageVersionDependency[];
-}) {
-  return (
-    <>
-      <div className="required__body">
-        {props.dependencies.map((dep, key) => {
-          return <ListingDependency key={key} dependency={dep} />;
-        })}
-      </div>
-      <NewPagination
-        currentPage={props.page}
-        pageSize={props.pageSize}
-        totalCount={props.dependenciesCount}
-        onPageChange={props.onPageChange}
-        siblingCount={4}
-      />
-    </>
-  );
-}
-
-export type SearchParamsType = {
-  page: number;
-};
-
-export const compareSearchParamBlobs = (
-  b1: SearchParamsType,
-  b2: SearchParamsType
-) => {
-  if (b1.page !== b2.page) return false;
-  return true;
-};
-
-export const searchParamsToBlob = (searchParams: URLSearchParams) => {
-  const initialPage = searchParams.get("page");
-
-  return {
-    page:
-      initialPage &&
-      !Number.isNaN(Number.parseInt(initialPage)) &&
-      Number.isSafeInteger(Number.parseInt(initialPage))
-        ? Number.parseInt(initialPage)
-        : 1,
-  };
-};
-
-export function setParamsBlobValue<K extends keyof SearchParamsType>(
-  setter: (v: SearchParamsType) => void,
-  oldBlob: SearchParamsType,
-  key: K
-) {
-  return (v: SearchParamsType[K]) => setter({ ...oldBlob, [key]: v });
 }

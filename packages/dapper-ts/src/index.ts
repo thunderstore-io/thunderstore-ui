@@ -27,6 +27,7 @@ import {
   getTeamServiceAccounts,
   postTeamCreate,
 } from "./methods/team";
+import { getPackageVersionDetails } from "./methods/packageVersion";
 
 export interface DapperTsInterface extends DapperInterface {
   config: () => RequestConfig;
@@ -50,6 +51,7 @@ export class DapperTs implements DapperTsInterface {
     this.getPackageListings = this.getPackageListings.bind(this);
     this.getPackageListingDetails = this.getPackageListingDetails.bind(this);
     this.getPackageReadme = this.getPackageReadme.bind(this);
+    this.getPackageVersionDetails = this.getPackageVersionDetails.bind(this);
     this.getPackageVersions = this.getPackageVersions.bind(this);
     this.getPackageVersionDependencies =
       this.getPackageVersionDependencies.bind(this);
@@ -78,6 +80,7 @@ export class DapperTs implements DapperTsInterface {
   public getPackageReadme = getPackageReadme;
   public getPackageVersions = getPackageVersions;
   public getPackageVersionDependencies = getPackageVersionDependencies;
+  public getPackageVersionDetails = getPackageVersionDetails;
   public getPackageWiki = getPackageWiki;
   public getPackageWikiPage = getPackageWikiPage;
   public getPackagePermissions = getPackagePermissions;
