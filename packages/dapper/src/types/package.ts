@@ -23,7 +23,7 @@ export interface PackageListingDetails extends PackageListing {
   community_name: string;
   datetime_created: string;
   dependant_count: number;
-  dependencies: PackageDependency[];
+  dependencies: PackageListingDependency[];
   dependency_count: number;
   download_url: string;
   full_version_name: string;
@@ -34,7 +34,7 @@ export interface PackageListingDetails extends PackageListing {
   website_url: string | null;
 }
 
-export interface PackageDependency {
+export interface PackageListingDependency {
   community_identifier: string;
   description: string;
   icon_url: string | null;
