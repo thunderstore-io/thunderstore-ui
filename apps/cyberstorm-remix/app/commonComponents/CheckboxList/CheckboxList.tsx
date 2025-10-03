@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./CheckboxList.css";
 import { Actionable, NewIcon } from "@thunderstore/cyberstorm";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
-import { resolveTriState } from "~/commonComponents/utils";
 import { type TRISTATE } from "~/commonComponents/types";
 import { memo } from "react";
 
@@ -21,9 +20,6 @@ interface Props {
     label: string;
   }[];
 }
-
-const nextStateResolve = (state: TRISTATE | boolean) =>
-  typeof state === "string" ? resolveTriState(state) : !state;
 
 const currentState = (state: TRISTATE | boolean) =>
   typeof state === "string" ? state : state ? "include" : "off";
