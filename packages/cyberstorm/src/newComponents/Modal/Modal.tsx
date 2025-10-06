@@ -233,41 +233,39 @@ export function Modal(props: ModalProps) {
   }
 
   return (
-    <>
-      <Dialog.Root open={props.open} onOpenChange={props.onOpenChange}>
-        <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
-        <Dialog.Portal>
-          <Dialog.Overlay className="modal__overlay">
-            <Dialog.Content
-              className={classnames(
-                "modal",
-                "modal__content",
-                ...componentClasses("modal", csVariant, csSize, undefined),
-                props.contentClasses
-              )}
-              aria-describedby={ariaDescribedby}
-            >
-              {disableDefaultSubComponents ? (
-                children
-              ) : (
-                <>
-                  {disableExit ? null : exit}
-                  {disableTitle ? null : title}
-                  {disableBody ? (
-                    filteredChildren
-                  ) : body ? (
-                    body
-                  ) : (
-                    <Modal.Body>{filteredChildren}</Modal.Body>
-                  )}
-                  {disableFooter ? null : footer}
-                </>
-              )}
-            </Dialog.Content>
-          </Dialog.Overlay>
-        </Dialog.Portal>
-      </Dialog.Root>
-    </>
+    <Dialog.Root open={props.open} onOpenChange={props.onOpenChange}>
+      {trigger ? <Dialog.Trigger asChild>{trigger}</Dialog.Trigger> : null}
+      <Dialog.Portal>
+        <Dialog.Overlay className="modal__overlay">
+          <Dialog.Content
+            className={classnames(
+              "modal",
+              "modal__content",
+              ...componentClasses("modal", csVariant, csSize, undefined),
+              props.contentClasses
+            )}
+            aria-describedby={ariaDescribedby}
+          >
+            {disableDefaultSubComponents ? (
+              children
+            ) : (
+              <>
+                {disableExit ? null : exit}
+                {disableTitle ? null : title}
+                {disableBody ? (
+                  filteredChildren
+                ) : body ? (
+                  body
+                ) : (
+                  <Modal.Body>{filteredChildren}</Modal.Body>
+                )}
+                {disableFooter ? null : footer}
+              </>
+            )}
+          </Dialog.Content>
+        </Dialog.Overlay>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
 
