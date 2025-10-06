@@ -29,7 +29,7 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { type SelectOption } from "@thunderstore/cyberstorm/src/newComponents/Select/Select";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 
 // REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader({ params }: LoaderFunctionArgs) {
@@ -151,34 +151,13 @@ export default function Members() {
       },
       {
         value: (
-          <Modal
-            key={`action_${index}`}
-            title="Confirm member removal"
-            csSize="small"
-            trigger={
-              <NewButton
-                csVariant="danger"
-                csSize="xsmall"
-                key={`action_button_${index}`}
-                popoverTarget={`memberKickModal-${member.username}-${index}`}
-                popoverTargetAction="show"
-              >
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faTrashCan} />
-                </NewIcon>
-                Kick
-              </NewButton>
-            }
-            popoverId={`memberKickModal-${member.username}-${index}`}
-          >
-            <RemoveTeamMemberForm
-              teamName={teamName}
-              userName={member.username}
-              updateTrigger={teamMemberRevalidate}
-              config={outletContext.requestConfig}
-              popoverTarget={`memberKickModal-${member.username}-${index}`}
-            />
-          </Modal>
+          <RemoveTeamMemberForm
+            indexKey={`action_${index}`}
+            teamName={teamName}
+            userName={member.username}
+            updateTrigger={teamMemberRevalidate}
+            config={outletContext.requestConfig}
+          />
         ),
         sortValue: 0,
       },
@@ -191,27 +170,11 @@ export default function Members() {
         <div className="settings-items__meta">
           <p className="settings-items__title">Teams</p>
           <p className="settings-items__description">Manage your teams</p>
-          <Modal
-            popoverId={"teamMembersAddMember"}
-            csSize="small"
-            trigger={
-              <NewButton
-                popoverTarget="teamMembersAddMember"
-                popoverTargetAction="show"
-              >
-                Add Member
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faPlus} />
-                </NewIcon>
-              </NewButton>
-            }
-          >
-            <AddTeamMemberForm
-              teamName={teamName}
-              updateTrigger={teamMemberRevalidate}
-              config={outletContext.requestConfig}
-            />
-          </Modal>
+          <AddTeamMemberForm
+            teamName={teamName}
+            updateTrigger={teamMemberRevalidate}
+            config={outletContext.requestConfig}
+          />
         </div>
         <div className="settings-items__content">
           <NewTable
@@ -232,6 +195,7 @@ function AddTeamMemberForm(props: {
   config: () => RequestConfig;
 }) {
   const toast = useToast();
+  const [open, setOpen] = useState(false);
 
   function formFieldUpdateAction(
     state: TeamAddMemberRequestData,
@@ -283,6 +247,7 @@ function AddTeamMemberForm(props: {
         children: `Team member added`,
         duration: 4000,
       });
+      setOpen(false);
     },
     onSubmitError: (error) => {
       toast.addToast({
@@ -294,9 +259,21 @@ function AddTeamMemberForm(props: {
   });
 
   return (
-    <div className="modal-content">
-      <div className="modal-content__header">Add Member</div>
-      <div className="modal-content__body add-member-form__body">
+    <Modal
+      open={open}
+      onOpenChange={setOpen}
+      titleContent="Add Team Member"
+      csSize="small"
+      trigger={
+        <NewButton>
+          Add Member
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faPlus} />
+          </NewIcon>
+        </NewButton>
+      }
+    >
+      <Modal.Body>
         <div className="add-member-form__text">
           Enter the username of the user you wish to add to the team{" "}
           <span className="add-member-form__text--bold">{props.teamName}</span>.
@@ -335,26 +312,27 @@ function AddTeamMemberForm(props: {
             />
           </div>
         </div>
-      </div>
-      <div className="modal-content__footer">
+      </Modal.Body>
+      <Modal.Footer>
         <NewButton csVariant="accent" onClick={strongForm.submit}>
           Add member
         </NewButton>
-      </div>
-    </div>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
 AddTeamMemberForm.displayName = "AddTeamMemberForm";
 
 function RemoveTeamMemberForm(props: {
+  indexKey?: string;
   userName: string;
   teamName: string;
   updateTrigger: () => Promise<void>;
   config: () => RequestConfig;
-  popoverTarget: string;
 }) {
   const toast = useToast();
+  const [open, setOpen] = useState(false);
 
   const kickMemberAction = ApiAction({
     endpoint: teamRemoveMember,
@@ -376,9 +354,21 @@ function RemoveTeamMemberForm(props: {
   });
 
   return (
-    <div className="modal-content">
-      <div className="modal-content__header">Confirm member removal</div>
-      <div className="modal-content__body remove-member-form__body">
+    <Modal
+      open={open}
+      onOpenChange={setOpen}
+      titleContent="Confirm member removal"
+      csSize="small"
+      trigger={
+        <NewButton csVariant="danger" csSize="xsmall" key={props.indexKey}>
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faTrashCan} />
+          </NewIcon>
+          Kick
+        </NewButton>
+      }
+    >
+      <Modal.Body className="remove-member-form__body">
         <div className="remove-member-form__text">
           You are about to kick member{" "}
           <span className="remove-member-form__text--bold">
@@ -386,14 +376,11 @@ function RemoveTeamMemberForm(props: {
           </span>
           .
         </div>
-      </div>
-      <div className="modal-content__footer">
-        <NewButton
-          popoverTarget={props.popoverTarget}
-          popoverTargetAction="hide"
-        >
-          Cancel
-        </NewButton>
+      </Modal.Body>
+      <Modal.Footer>
+        <Modal.Close asChild>
+          <NewButton>Cancel</NewButton>
+        </Modal.Close>
         <NewButton
           csVariant="danger"
           onClick={() =>
@@ -402,13 +389,15 @@ function RemoveTeamMemberForm(props: {
               params: { team_name: props.teamName, username: props.userName },
               queryParams: {},
               data: {},
+            }).then(() => {
+              setOpen(false);
             })
           }
         >
           Kick member
         </NewButton>
-      </div>
-    </div>
+      </Modal.Footer>
+    </Modal>
   );
 }
 

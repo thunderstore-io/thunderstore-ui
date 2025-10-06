@@ -7,16 +7,13 @@ import {
   NewTextInput,
 } from "@thunderstore/cyberstorm";
 import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
-import {
-  UserAccountDeleteRequestData,
-  userDelete,
-} from "../../../../../../packages/thunderstore-api/src";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { type OutletContextShape } from "~/root";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
+import { userDelete } from "@thunderstore/thunderstore-api";
 
 export default function Account() {
   const outletContext = useOutletContext() as OutletContextShape;
@@ -66,6 +63,10 @@ export default function Account() {
   );
 }
 
+type UserAccountDeleteRequestData = {
+  verification: string;
+};
+
 function DeleteAccountForm(props: {
   currentUser: OutletContextShape["currentUser"];
   requestConfig: OutletContextShape["requestConfig"];
@@ -94,11 +95,13 @@ function DeleteAccountForm(props: {
   async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
     if (!props.currentUser || !props.currentUser.username)
       throw new Error("User not logged in");
+    if (data.verification !== props.currentUser.username)
+      throw new Error("Verification input does not match username");
     return await userDelete({
       config: props.requestConfig,
       params: { username: props.currentUser.username },
       queryParams: {},
-      data: { verification: data.verification },
+      data: {},
     });
   }
 

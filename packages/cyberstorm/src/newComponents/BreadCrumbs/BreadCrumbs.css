@@ -70,7 +70,6 @@
     }
 
     > *:first-child {
-      z-index: 1;
       padding-left: 0;
 
       > svg {

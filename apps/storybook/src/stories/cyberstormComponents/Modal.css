@@ -1,0 +1,13 @@
+@layer storybook-stories {
+  .custom-modal-title {
+    background-color: red;
+  }
+
+  .custom-modal-body {
+    background-color: red;
+  }
+
+  .custom-modal-footer {
+    background-color: red;
+  }
+}
