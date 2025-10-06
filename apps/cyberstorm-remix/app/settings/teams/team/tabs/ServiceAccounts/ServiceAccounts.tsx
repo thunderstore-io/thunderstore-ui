@@ -280,10 +280,20 @@ function AddServiceAccountForm(props: {
     },
   });
 
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+    if (!nextOpen) {
+      setServiceAccountAdded(false);
+      setAddedServiceAccountToken("");
+      setAddedServiceAccountNickname("");
+      updateFormFieldState({ field: "nickname", value: "" });
+    }
+  };
+
   return (
     <Modal
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={handleOpenChange}
       trigger={
         <NewButton popoverTarget="serviceAccountAdd" popoverTargetAction="show">
           Add Service Account
