@@ -1,7 +1,7 @@
 import {
   cloneElement,
   isValidElement,
-  PropsWithChildren,
+  type PropsWithChildren,
   type ReactNode,
 } from "react";
 import "./Modal.css";
@@ -12,7 +12,7 @@ import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { type ModalSizes } from "@thunderstore/cyberstorm-theme/src/components/Modal/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Dialog from "@radix-ui/react-dialog";
-import { ButtonComponentProps } from "../Button/Button";
+import { type ButtonComponentProps } from "../Button/Button";
 
 /**
  * Props for the `Modal` component.
@@ -318,15 +318,16 @@ function ModalBody(
 ) {
   if (props.asChild) {
     if (isValidElement(props.children)) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return cloneElement(props.children as React.ReactElement<any>, {
-        className: classnames(
-          "modal__body",
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (props.children.props as any).className,
-          props.className
-        ),
-      });
+      return cloneElement(
+        props.children as React.ReactElement<{ className?: string }>,
+        {
+          className: classnames(
+            "modal__body",
+            (props.children.props as { className?: string }).className,
+            props.className
+          ),
+        }
+      );
     } else {
       console.warn("Modal.Body child is not valid for usage with asChild");
       return null;
@@ -347,15 +348,16 @@ function ModalFooter(
 ) {
   if (props.asChild) {
     if (isValidElement(props.children)) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return cloneElement(props.children as React.ReactElement<any>, {
-        className: classnames(
-          "modal__footer",
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (props.children.props as any).className,
-          props.className
-        ),
-      });
+      return cloneElement(
+        props.children as React.ReactElement<{ className?: string }>,
+        {
+          className: classnames(
+            "modal__footer",
+            (props.children.props as { className?: string }).className,
+            props.className
+          ),
+        }
+      );
     } else {
       console.warn("Modal.Footer child is not valid for usage with asChild");
       return null;
