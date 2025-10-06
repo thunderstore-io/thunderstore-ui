@@ -204,7 +204,7 @@ export function Modal(props: ModalProps) {
 
   if (!disableDefaultSubComponents && children) {
     for (const child of children instanceof Array ? children : [children]) {
-      if (!child) continue;
+      if (child == null) continue;
       if (isValidElement(child)) {
         const childDisplayName =
           typeof child.type === "function" &&
@@ -227,6 +227,8 @@ export function Modal(props: ModalProps) {
           body = child;
           continue;
         }
+        filteredChildren.push(child);
+      } else {
         filteredChildren.push(child);
       }
     }
