@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import "./CodeBoxHTML.css";
+import "./Highlight.css";
 
 export interface CodeBoxHTMLProps {
   value?: string;
@@ -77,7 +78,7 @@ export function CodeBoxHTML({ value = "", maxHeight = 600 }: CodeBoxHTMLProps) {
         {lines.slice(visibleStart, visibleEnd).map((line, index) => (
           <code
             key={visibleStart + index}
-            className="code-box-html__line"
+            className="code-box-html__line highlight"
             style={{
               top: (visibleStart + index) * lineHeight,
               height: lineHeight,
