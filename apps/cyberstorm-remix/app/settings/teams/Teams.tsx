@@ -12,7 +12,7 @@ import {
 } from "@thunderstore/cyberstorm";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import {
@@ -72,23 +72,7 @@ export default function Teams() {
           <div className="settings-items__meta">
             <p className="settings-items__title">Teams</p>
             <p className="settings-items__description">Manage your teams</p>
-            <Modal
-              popoverId={"teamsCreateTeam"}
-              csSize="small"
-              trigger={
-                <NewButton
-                  popoverTarget="teamsCreateTeam"
-                  popoverTargetAction="show"
-                >
-                  Create Team
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faPlus} />
-                  </NewIcon>
-                </NewButton>
-              }
-            >
-              <CreateTeamForm config={outletContext.dapper.config} />
-            </Modal>
+            <CreateTeamForm config={outletContext.dapper.config} />
           </div>
           <div className="settings-items__content">
             {currentUser?.teams_full && currentUser.teams_full.length !== 0 ? (
@@ -198,11 +182,26 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
     },
   });
 
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="modal-content">
-      <div className="modal-content__header">Create team</div>
-      <div className="modal-content__body create-team-form__body">
-        <div>
+    <Modal
+      open={open}
+      onOpenChange={setOpen}
+      csSize="small"
+      contentClasses="create-team-form__body"
+      trigger={
+        <NewButton popoverTarget="teamsCreateTeam" popoverTargetAction="show">
+          Create Team
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faPlus} />
+          </NewIcon>
+        </NewButton>
+      }
+    >
+      <Modal.Title>Create Team</Modal.Title>
+      <Modal.Body>
+        <div className="create-team-form__description">
           Enter the name of the team you wish to create. Team names can contain
           the characters a-z A-Z 0-9 _ and must not start or end with an _.
         </div>
@@ -221,12 +220,17 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
             id="teamName"
           />
         </div>
-      </div>
-      <div className="modal-content__footer">
-        <NewButton onClick={strongForm.submit} csVariant="accent">
+      </Modal.Body>
+      <Modal.Footer>
+        <NewButton
+          onClick={() => {
+            strongForm.submit().then(() => setOpen(false));
+          }}
+          csVariant="accent"
+        >
           Create
         </NewButton>
-      </div>
-    </div>
+      </Modal.Footer>
+    </Modal>
   );
 }

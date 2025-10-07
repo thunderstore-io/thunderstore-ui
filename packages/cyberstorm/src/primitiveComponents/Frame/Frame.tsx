@@ -230,18 +230,19 @@ export const Frame = memo(function Frame(
         <>
           {Children.map(children, (child) => {
             if (React.isValidElement(child)) {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              return cloneElement(child as React.ReactElement<any>, {
-                className: classnames(
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (child.props as any).className,
-                  "icon",
-                  csMode === "inline" ? "icon--inline" : null,
-                  rootClasses
-                ),
-                ref: svgIconRef,
-                ...svgFProps,
-              });
+              return cloneElement(
+                child as React.ReactElement<{ className?: string }>,
+                {
+                  className: classnames(
+                    (child.props as { className?: string }).className,
+                    "icon",
+                    csMode === "inline" ? "icon--inline" : null,
+                    rootClasses
+                  ),
+                  ref: svgIconRef,
+                  ...svgFProps,
+                }
+              );
             } else {
               return null;
             }
@@ -258,17 +259,18 @@ export const Frame = memo(function Frame(
         >
           {Children.map(children, (child) => {
             if (React.isValidElement(child)) {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              return cloneElement(child as React.ReactElement<any>, {
-                className: classnames(
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (child.props as any).className,
-                  "icon",
-                  "icon--inline",
-                  rootClasses
-                ),
-                ...svgFProps,
-              });
+              return cloneElement(
+                child as React.ReactElement<{ className?: string }>,
+                {
+                  className: classnames(
+                    (child.props as { className?: string }).className,
+                    "icon",
+                    "icon--inline",
+                    rootClasses
+                  ),
+                  ...svgFProps,
+                }
+              );
             } else {
               return null;
             }
@@ -286,15 +288,18 @@ export const Frame = memo(function Frame(
           {Children.map(children, (child) => {
             if (React.isValidElement(child)) {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              return cloneElement(child as React.ReactElement<any>, {
-                className: classnames(
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (child.props as any).className,
-                  "icon",
-                  rootClasses
-                ),
-                ...svgFProps,
-              });
+              return cloneElement(
+                child as React.ReactElement<{ className?: string }>,
+                {
+                  className: classnames(
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (child.props as { className?: string }).className,
+                    "icon",
+                    rootClasses
+                  ),
+                  ...svgFProps,
+                }
+              );
             } else {
               return null;
             }

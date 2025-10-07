@@ -7,6 +7,7 @@ import {
   NewIcon,
   NewTextInput,
   Heading,
+  CodeBox,
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -121,15 +122,9 @@ export default function ServiceAccounts() {
         value: (
           <Modal
             key={`${serviceAccount.name}_${index}`}
-            popoverId={`memberKickModal-${serviceAccount.name}-${index}`}
-            title="Confirm service account removal"
+            titleContent="Confirm service account removal"
             trigger={
-              <NewButton
-                csVariant="danger"
-                popoverTarget={`memberKickModal-${serviceAccount.name}-${index}`}
-                popoverTargetAction="show"
-                csSize="xsmall"
-              >
+              <NewButton csVariant="danger" csSize="xsmall">
                 <NewIcon csMode="inline" noWrapper>
                   <FontAwesomeIcon icon={faTrash} />
                 </NewIcon>
@@ -138,45 +133,40 @@ export default function ServiceAccounts() {
             }
             csSize="small"
           >
-            <div className="modal-content">
-              <div className="modal-content__header">
+            <Modal.Body>
+              <NewAlert csVariant="warning">
+                This cannot be undone! Related API token will stop working
+                immediately if the service account is removed.
+              </NewAlert>
+              <div>
+                You are about to remove service account{" "}
+                <span className="team-service-accounts__highlight">
+                  {serviceAccount.name}
+                </span>
+                .
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <NewButton
+                onClick={() => {
+                  removeServiceAccountAction({
+                    config: outletContext.requestConfig,
+                    params: {
+                      team_name: teamName,
+                      uuid: serviceAccount.identifier,
+                    },
+                    queryParams: {},
+                    data: {},
+                  });
+                }}
+                csVariant="danger"
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faTrash} />
+                </NewIcon>
                 Remove service account
-              </div>
-              <div className="modal-content__body">
-                <NewAlert csVariant="warning">
-                  This cannot be undone! Related API token will stop working
-                  immediately if the service account is removed.
-                </NewAlert>
-                <div>
-                  You are about to remove service account{" "}
-                  <span className="team-service-accounts__highlight">
-                    {serviceAccount.name}
-                  </span>
-                  .
-                </div>
-              </div>
-              <div className="modal-content__footer">
-                <NewButton
-                  onClick={() => {
-                    removeServiceAccountAction({
-                      config: outletContext.requestConfig,
-                      params: {
-                        team_name: teamName,
-                        uuid: serviceAccount.identifier,
-                      },
-                      queryParams: {},
-                      data: {},
-                    });
-                  }}
-                  csVariant="danger"
-                >
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faTrash} />
-                  </NewIcon>
-                  Remove service account
-                </NewButton>
-              </div>
-            </div>
+              </NewButton>
+            </Modal.Footer>
           </Modal>
         ),
         sortValue: 0,
@@ -184,82 +174,17 @@ export default function ServiceAccounts() {
     ];
   });
 
-  // Add service account stuff
-  const [serviceAccountAdded, setServiceAccountAdded] = useState(false);
-  const [addedServiceAccountToken, setAddedServiceAccountToken] = useState("");
-  const [addedServiceAccountNickname, setAddedServiceAccountNickname] =
-    useState("");
-
-  function onSuccess(
-    result: Awaited<ReturnType<typeof teamAddServiceAccount>>
-  ) {
-    setServiceAccountAdded(true);
-    setAddedServiceAccountToken(result.api_token);
-    setAddedServiceAccountNickname(result.nickname);
-    serviceAccountRevalidate();
-  }
-
   return (
     <div className="settings-items">
       <div className="settings-items__item">
         <div className="settings-items__meta">
           <p className="settings-items__title">Service accounts</p>
           <p className="settings-items__description">Your loyal servants</p>
-          <Modal
-            popoverId="serviceAccountAdd"
-            trigger={
-              <NewButton
-                popoverTarget="serviceAccountAdd"
-                popoverTargetAction="show"
-              >
-                Add Service Account
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faPlus} />
-                </NewIcon>
-              </NewButton>
-            }
-            csSize="small"
-          >
-            {serviceAccountAdded ? (
-              <div className="modal-content">
-                <div className="modal-content__content">
-                  <p>
-                    New service account{" "}
-                    <span>{addedServiceAccountNickname}</span> was created
-                    successfully. It can be used with this API token:
-                  </p>
-                  <div>
-                    <pre>{addedServiceAccountToken}</pre>
-                    {/* <CopyButton text={addedServiceAccountToken} /> */}
-                  </div>
-                  <NewAlert csVariant="info">
-                    Store this token securely, as it can&apos;t be retrieved
-                    later, and treat it as you would treat an important
-                    password.
-                  </NewAlert>
-                </div>
-                <div className="modal-content__footer">
-                  <NewButton
-                    onClick={() => {
-                      setAddedServiceAccountToken("");
-                      setAddedServiceAccountNickname("");
-                      setServiceAccountAdded(false);
-                    }}
-                    popoverTarget="serviceAccountAdd"
-                    popoverTargetAction="hide"
-                  >
-                    Close
-                  </NewButton>
-                </div>
-              </div>
-            ) : (
-              <AddServiceAccountForm
-                onSuccess={onSuccess}
-                teamName={teamName}
-                config={outletContext.requestConfig}
-              />
-            )}
-          </Modal>
+          <AddServiceAccountForm
+            teamName={teamName}
+            config={outletContext.requestConfig}
+            serviceAccountRevalidate={serviceAccountRevalidate}
+          />
         </div>
         <div className="settings-items__content">
           <NewTable
@@ -278,10 +203,22 @@ export default function ServiceAccounts() {
 function AddServiceAccountForm(props: {
   teamName: string;
   config: () => RequestConfig;
-  onSuccess: (
-    result: Awaited<ReturnType<typeof teamAddServiceAccount>>
-  ) => void;
+  serviceAccountRevalidate?: () => void;
 }) {
+  const [open, setOpen] = useState(false);
+  const [serviceAccountAdded, setServiceAccountAdded] = useState(false);
+  const [addedServiceAccountToken, setAddedServiceAccountToken] = useState("");
+  const [addedServiceAccountNickname, setAddedServiceAccountNickname] =
+    useState("");
+
+  function onSuccess(
+    result: Awaited<ReturnType<typeof teamAddServiceAccount>>
+  ) {
+    setServiceAccountAdded(true);
+    setAddedServiceAccountToken(result.api_token);
+    setAddedServiceAccountNickname(result.nickname);
+  }
+
   const toast = useToast();
 
   function formFieldUpdateAction(
@@ -326,7 +263,8 @@ function AddServiceAccountForm(props: {
   >({
     inputs: formInputs,
     submitor,
-    onSubmitSuccess: () => {
+    onSubmitSuccess: (result) => {
+      onSuccess(result);
       toast.addToast({
         csVariant: "success",
         children: `Service account added`,
@@ -342,29 +280,69 @@ function AddServiceAccountForm(props: {
     },
   });
 
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+    if (!nextOpen) {
+      setServiceAccountAdded(false);
+      setAddedServiceAccountToken("");
+      setAddedServiceAccountNickname("");
+      updateFormFieldState({ field: "nickname", value: "" });
+    }
+  };
+
   return (
-    <div className="modal-content">
-      <div className="modal-content__header">Add service account</div>
-      <div className="modal-content__body">
-        <div>
-          Enter the nickname of the service account you wish to add to the team{" "}
-          <span>{props.teamName}</span>
-        </div>
-        <div>
-          <NewTextInput
-            onChange={(e) => {
-              updateFormFieldState({
-                field: "nickname",
-                value: e.target.value,
-              });
-            }}
-            placeholder={"ExampleName"}
-          />
-        </div>
-      </div>
-      <div className="modal-content__footer">
-        <NewButton onClick={strongForm.submit}>Add Service Account</NewButton>
-      </div>
-    </div>
+    <Modal
+      open={open}
+      onOpenChange={handleOpenChange}
+      trigger={
+        <NewButton popoverTarget="serviceAccountAdd" popoverTargetAction="show">
+          Add Service Account
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faPlus} />
+          </NewIcon>
+        </NewButton>
+      }
+      csSize="small"
+      titleContent="Add service account"
+    >
+      {serviceAccountAdded ? (
+        <Modal.Body>
+          <p>
+            New service account <span>{addedServiceAccountNickname}</span> was
+            created successfully. It can be used with this API token:
+          </p>
+          <div>
+            <CodeBox value={addedServiceAccountToken} />
+          </div>
+          <NewAlert csVariant="info">
+            Store this token securely, as it can&apos;t be retrieved later, and
+            treat it as you would treat an important password.
+          </NewAlert>
+        </Modal.Body>
+      ) : (
+        <Modal.Body>
+          <div>
+            Enter the nickname of the service account you wish to add to the
+            team <span>{props.teamName}</span>
+          </div>
+          <div>
+            <NewTextInput
+              onChange={(e) => {
+                updateFormFieldState({
+                  field: "nickname",
+                  value: e.target.value,
+                });
+              }}
+              placeholder={"ExampleName"}
+            />
+          </div>
+        </Modal.Body>
+      )}
+      {serviceAccountAdded ? null : (
+        <Modal.Footer>
+          <NewButton onClick={strongForm.submit}>Add Service Account</NewButton>
+        </Modal.Footer>
+      )}
+    </Modal>
   );
 }
