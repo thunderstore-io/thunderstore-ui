@@ -196,10 +196,11 @@ jobs:
         run: |
           cd tools/test-ci/
           poetry run python run_ci_script.py
-      - name: Upload results to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      # TODO: Enable when decision has been made on testing strategy/policy regarding e2e tests
+      # - name: Upload results to Codecov
+      #   uses: codecov/codecov-action@v5
+      #   with:
+      #     token: ${{ secrets.CODECOV_TOKEN }}
 
   chromatic-deployment:
     runs-on: ubuntu-latest

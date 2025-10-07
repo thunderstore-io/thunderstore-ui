@@ -121,7 +121,9 @@ def stop_backend():
 
 
 def run_tests():
-    run_command([YARN_PATH, "coverage"], cwd=REPO_ROOT)
+    # TODO: Enable tests with coverage run when decision has been made on testing strategy/policy regarding e2e tests
+    # run_command([YARN_PATH, "coverage"], cwd=REPO_ROOT)
+    run_command([YARN_PATH, "test"], cwd=REPO_ROOT)
 
 
 def main():
