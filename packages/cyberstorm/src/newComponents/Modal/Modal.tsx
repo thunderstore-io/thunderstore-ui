@@ -330,7 +330,11 @@ function ModalBody(
       );
     } else {
       console.warn("Modal.Body child is not valid for usage with asChild");
-      return null;
+      return (
+        <div className={classnames("modal__body", props.className)}>
+          {props.children}
+        </div>
+      );
     }
   }
 
@@ -360,7 +364,11 @@ function ModalFooter(
       );
     } else {
       console.warn("Modal.Footer child is not valid for usage with asChild");
-      return null;
+      return (
+        <div className={classnames("modal__footer", props.className)}>
+          {props.children}
+        </div>
+      );
     }
   }
 
