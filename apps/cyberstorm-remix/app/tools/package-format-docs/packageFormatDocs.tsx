@@ -36,7 +36,7 @@ export default function PackageFormatDocs() {
         <p className="package-format-docs__title">
           Example manifest.json content:
         </p>
-        <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} />
+        <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} language="json" />
       </section>
     </>
   );
@@ -126,7 +126,7 @@ const secondTableData = [
         <div style={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
           <span>
             Name of the mod, no spaces. Allowed characters:{" "}
-            <CodeBox value="a-z A-Z 0-9 _" inline />
+            <CodeBox value="a-z A-Z 0-9 _" language="text" inline />
           </span>
           Underscores get replaced with a space for display purposes in some
           views on the website & mod manager.
@@ -138,7 +138,10 @@ const secondTableData = [
       ),
       sortValue: 0,
     },
-    { value: <CodeBox key="code-1" value='"Some_Mod"' />, sortValue: 0 },
+    {
+      value: <CodeBox key="code-1" value='"Some_Mod"' language="json" />,
+      sortValue: 0,
+    },
   ],
   [
     { value: "description", sortValue: 0 },
@@ -160,7 +163,10 @@ const secondTableData = [
         "A short description of the mod, shown on the mod list. Max 250 characters.",
       sortValue: 0,
     },
-    { value: <CodeBox key="code-2" value='"Hello world"' />, sortValue: 0 },
+    {
+      value: <CodeBox key="code-2" value='"Hello world"' language="json" />,
+      sortValue: 0,
+    },
   ],
   [
     { value: "version number", sortValue: 0 },
@@ -187,7 +193,10 @@ const secondTableData = [
       ),
       sortValue: 0,
     },
-    { value: <CodeBox key="code-3" value='"1.3.2"' />, sortValue: 0 },
+    {
+      value: <CodeBox key="code-3" value='"1.3.2"' language="json" />,
+      sortValue: 0,
+    },
   ],
   [
     { value: "dependencies", sortValue: 0 },
@@ -210,7 +219,9 @@ const secondTableData = [
       sortValue: 0,
     },
     {
-      value: <CodeBox key="code-4" value={EXAMPLE_DEPENDENCIES} />,
+      value: (
+        <CodeBox key="code-4" value={EXAMPLE_DEPENDENCIES} language="json" />
+      ),
       sortValue: 0,
     },
   ],
@@ -235,7 +246,9 @@ const secondTableData = [
       sortValue: 0,
     },
     {
-      value: <CodeBox key="code-5" value='"https://example.com/"' />,
+      value: (
+        <CodeBox key="code-5" value='"https://example.com/"' language="json" />
+      ),
       sortValue: 0,
     },
   ],
@@ -284,7 +297,9 @@ const secondTableData = [
       sortValue: 0,
     },
     {
-      value: <CodeBox key="code-5" value='"https://example.com/"' />,
+      value: (
+        <CodeBox key="code-6" value='"https://example.com/"' language="json" />
+      ),
       sortValue: 0,
     },
   ],
