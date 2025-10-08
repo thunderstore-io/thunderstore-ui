@@ -43,14 +43,12 @@ export default function PackageFormatDocs() {
 }
 
 const EXAMPLE_MANIFEST_JSON_TEXT = `{
-  "name": "Textarea",
+  "name": "TestMod",
   "version_number": "1.1.0",
-  "number": 0,
-  "boolean": true,
   "website_url": "https://github.com/thunderstore-io",
   "description": "This is a description for a mod. 250 characters max",
   "dependencies": [
-      "Mythic-TestMod-1.1.0"
+      "MythicManiac-TestMod-1.1.0"
   ]
 }
 `;
@@ -58,6 +56,11 @@ const EXAMPLE_MANIFEST_JSON_TEXT = `{
 const EXAMPLE_DEPENDENCIES = `[
   "MythicManiac-TestMod-1.1.0",
   "SomeAuthor-SomePackage-1.0.0"
+]
+`;
+
+const EXAMPLE_INSTALLERS = `[
+    { "identifier": "foo-installer" }
 ]
 `;
 
@@ -215,7 +218,7 @@ const secondTableData = [
     },
     {
       value:
-        "List of other packages that are required for this package to function",
+        "List of other packages that are required for this package to function.",
       sortValue: 0,
     },
     {
@@ -298,7 +301,13 @@ const secondTableData = [
     },
     {
       value: (
-        <CodeBox key="code-6" value='"https://example.com/"' language="json" />
+        <div style={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
+          <CodeBox key="code-6" value={EXAMPLE_INSTALLERS} language="json" />
+          <p>
+            The installer referred above does not actually exist, this is for
+            illustrative purposes only.
+          </p>
+        </div>
       ),
       sortValue: 0,
     },

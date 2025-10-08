@@ -26,14 +26,16 @@ export function CodeBox(props: CodeBoxProps) {
         borderRadius: "var(--radius-md)",
         borderWidth: "1px",
         borderStyle: "solid",
-        borderColor: "#333370",
+        borderColor: "var(--color-surface-8)",
         whiteSpace: "pre",
-        lineHeight: inline ? "1" : "1.5",
-        fontSize: inline ? "1em" : "0.875em",
+        lineHeight: inline ? "var(--line-height-xs)" : "var(--line-height-md)",
+        fontSize: inline
+          ? "var(--font-size-body-lg)"
+          : "var(--font-size-body-md)",
         fontStyle: "normal",
         fontFamily: "var(--font-family-monospace)",
         fontWeight: "var(--font-weight-regular)",
-        backgroundColor: "#0f0f1f",
+        backgroundColor: "var(--color-surface-1)",
       }}
     >
       {value}
