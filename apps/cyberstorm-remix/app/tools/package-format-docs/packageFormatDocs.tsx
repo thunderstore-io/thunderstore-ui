@@ -36,21 +36,19 @@ export default function PackageFormatDocs() {
         <p className="package-format-docs__title">
           Example manifest.json content:
         </p>
-        <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} />
+        <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} language="json" />
       </section>
     </>
   );
 }
 
 const EXAMPLE_MANIFEST_JSON_TEXT = `{
-  "name": "Textarea",
+  "name": "TestMod",
   "version_number": "1.1.0",
-  "number": 0,
-  "boolean": true,
   "website_url": "https://github.com/thunderstore-io",
   "description": "This is a description for a mod. 250 characters max",
   "dependencies": [
-      "Mythic-TestMod-1.1.0"
+      "MythicManiac-TestMod-1.1.0"
   ]
 }
 `;
@@ -58,6 +56,11 @@ const EXAMPLE_MANIFEST_JSON_TEXT = `{
 const EXAMPLE_DEPENDENCIES = `[
   "MythicManiac-TestMod-1.1.0",
   "SomeAuthor-SomePackage-1.0.0"
+]
+`;
+
+const EXAMPLE_INSTALLERS = `[
+    { "identifier": "foo-installer" }
 ]
 `;
 
@@ -126,7 +129,7 @@ const secondTableData = [
         <div style={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
           <span>
             Name of the mod, no spaces. Allowed characters:{" "}
-            <CodeBox value="a-z A-Z 0-9 _" inline />
+            <CodeBox value="a-z A-Z 0-9 _" language="text" inline />
           </span>
           Underscores get replaced with a space for display purposes in some
           views on the website & mod manager.
@@ -138,7 +141,10 @@ const secondTableData = [
       ),
       sortValue: 0,
     },
-    { value: <CodeBox key="code-1" value='"Some_Mod"' />, sortValue: 0 },
+    {
+      value: <CodeBox key="code-1" value='"Some_Mod"' language="json" />,
+      sortValue: 0,
+    },
   ],
   [
     { value: "description", sortValue: 0 },
@@ -160,7 +166,10 @@ const secondTableData = [
         "A short description of the mod, shown on the mod list. Max 250 characters.",
       sortValue: 0,
     },
-    { value: <CodeBox key="code-2" value='"Hello world"' />, sortValue: 0 },
+    {
+      value: <CodeBox key="code-2" value='"Hello world"' language="json" />,
+      sortValue: 0,
+    },
   ],
   [
     { value: "version number", sortValue: 0 },
@@ -187,7 +196,10 @@ const secondTableData = [
       ),
       sortValue: 0,
     },
-    { value: <CodeBox key="code-3" value='"1.3.2"' />, sortValue: 0 },
+    {
+      value: <CodeBox key="code-3" value='"1.3.2"' language="json" />,
+      sortValue: 0,
+    },
   ],
   [
     { value: "dependencies", sortValue: 0 },
@@ -206,11 +218,13 @@ const secondTableData = [
     },
     {
       value:
-        "List of other packages that are required for this package to function",
+        "List of other packages that are required for this package to function.",
       sortValue: 0,
     },
     {
-      value: <CodeBox key="code-4" value={EXAMPLE_DEPENDENCIES} />,
+      value: (
+        <CodeBox key="code-4" value={EXAMPLE_DEPENDENCIES} language="json" />
+      ),
       sortValue: 0,
     },
   ],
@@ -235,7 +249,9 @@ const secondTableData = [
       sortValue: 0,
     },
     {
-      value: <CodeBox key="code-5" value='"https://example.com/"' />,
+      value: (
+        <CodeBox key="code-5" value='"https://example.com/"' language="json" />
+      ),
       sortValue: 0,
     },
   ],
@@ -284,7 +300,15 @@ const secondTableData = [
       sortValue: 0,
     },
     {
-      value: <CodeBox key="code-5" value='"https://example.com/"' />,
+      value: (
+        <div style={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
+          <CodeBox key="code-6" value={EXAMPLE_INSTALLERS} language="json" />
+          <p>
+            The installer referred above does not actually exist, this is for
+            illustrative purposes only.
+          </p>
+        </div>
+      ),
       sortValue: 0,
     },
   ],
