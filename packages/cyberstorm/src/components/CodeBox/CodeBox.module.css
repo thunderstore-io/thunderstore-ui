@@ -38,3 +38,19 @@
 
   --border-color: transparent;
 }
+
+.virtualContainer {
+  position: relative;
+  overflow: auto;
+}
+
+.virtualContent {
+  position: relative;
+  width: 100%;
+}
+
+.virtualLine {
+  position: absolute;
+  width: 100%;
+  white-space: pre;
+}
