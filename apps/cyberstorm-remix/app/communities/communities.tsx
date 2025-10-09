@@ -162,7 +162,7 @@ export default function CommunitiesPage() {
   return (
     <>
       <PageHeader headingLevel="1" headingSize="3">
-        Communities
+        ASd
       </PageHeader>
       <div className="container container--y container--full communities__content">
         <div className="container container--stretch communities__tools">
