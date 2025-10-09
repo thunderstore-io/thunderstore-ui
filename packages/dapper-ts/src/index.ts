@@ -15,6 +15,7 @@ import {
   getPackageWiki,
   getPackageWikiPage,
   getPackagePermissions,
+  getPackageSource,
 } from "./methods/package";
 import {
   getPackageListingDetails,
@@ -53,6 +54,7 @@ export class DapperTs implements DapperTsInterface {
     this.getPackageWiki = this.getPackageWiki.bind(this);
     this.getPackageWikiPage = this.getPackageWikiPage.bind(this);
     this.getPackagePermissions = this.getPackagePermissions.bind(this);
+    this.getPackageSource = this.getPackageSource.bind(this);
     this.getTeamDetails = this.getTeamDetails.bind(this);
     this.getTeamMembers = this.getTeamMembers.bind(this);
     this.getTeamServiceAccounts = this.getTeamServiceAccounts.bind(this);
@@ -77,6 +79,7 @@ export class DapperTs implements DapperTsInterface {
   public getPackageWiki = getPackageWiki;
   public getPackageWikiPage = getPackageWikiPage;
   public getPackagePermissions = getPackagePermissions;
+  public getPackageSource = getPackageSource;
   public getTeamDetails = getTeamDetails;
   public getTeamMembers = getTeamMembers;
   public getTeamServiceAccounts = getTeamServiceAccounts;
