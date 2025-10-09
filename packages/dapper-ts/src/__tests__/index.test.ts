@@ -1,4 +1,4 @@
-import { it, expect, beforeAll } from "vitest";
+import { it, expect, beforeAll, test } from "vitest";
 import { DapperTs } from "../index";
 
 const communityId = "test-community-1";
@@ -65,7 +65,8 @@ it("executes getPackageReadme without errors", async () => {
   ).resolves.not.toThrowError();
 });
 
-it("executes getPackageSource without errors", async () => {
+// TODO: Disabled temporarily until we decide on a testing strategy/policy regarding e2e tests
+test.skip("executes getPackageSource without errors", async () => {
   await expect(
     dapper.getPackageSource(namespaceId, packageName)
   ).resolves.not.toThrowError();

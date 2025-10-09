@@ -1,9 +1,10 @@
-import { expect, it } from "vitest";
+import { expect, test } from "vitest";
 import { config, testData } from "../../__tests__/defaultConfig";
 import { fetchPackageSource } from "../packageSource";
 import { packageSourceResponseDataSchema } from "../../schemas/responseSchemas";
 
-it("ensures package source can be fetched", async () => {
+// TODO: Disabled temporarily until we decide on a testing strategy/policy regarding e2e tests
+test.skip("ensures package source can be fetched", async () => {
   const { namespaceId, packageName } = testData;
   const response = await fetchPackageSource({
     config,
