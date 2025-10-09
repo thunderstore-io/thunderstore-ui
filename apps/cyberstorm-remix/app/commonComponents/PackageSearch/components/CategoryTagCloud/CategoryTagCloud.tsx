@@ -2,7 +2,7 @@ import { faBan, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./CategoryTagCloud.css";
-import { CategorySelection, TRISTATE_STATES } from "../../../types";
+import { type CategorySelection, TRISTATE_STATES } from "../../../types";
 import { NewButton, NewIcon, NewTag } from "@thunderstore/cyberstorm";
 import { memo } from "react";
 
