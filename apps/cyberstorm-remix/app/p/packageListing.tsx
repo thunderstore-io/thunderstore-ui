@@ -57,8 +57,8 @@ import {
   type SelectOption,
   SkeletonBox,
   Tabs,
+  useToast,
 } from "@thunderstore/cyberstorm";
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import {
   formatFileSize,
   formatInteger,

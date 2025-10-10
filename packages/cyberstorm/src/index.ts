@@ -96,6 +96,7 @@ export {
   TextInput as NewTextInput,
   type TextInputProps as NewTextInputProps,
 } from "./newComponents/TextInput/TextInput";
+export { useToast } from "./newComponents/Toast/Provider";
 export { Toast } from "./newComponents/Toast/Toast";
 export {
   Table as NewTable,

@@ -1,9 +1,8 @@
-import { NewLink } from "@thunderstore/cyberstorm";
+import { NewLink, useToast } from "@thunderstore/cyberstorm";
 
 import { useOutletContext } from "react-router";
 import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
 
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { userLinkedAccountDisconnect } from "../../../../../../packages/thunderstore-api/src";
 
 import { Connection } from "~/commonComponents/Connection/Connection";

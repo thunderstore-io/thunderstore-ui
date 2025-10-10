@@ -6,6 +6,7 @@ import {
   NewIcon,
   NewSelectSearch,
   NewTag,
+  useToast,
 } from "@thunderstore/cyberstorm";
 import "./packageEdit.css";
 import {
@@ -25,7 +26,6 @@ import {
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faCheck } from "@fortawesome/pro-solid-svg-icons";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";

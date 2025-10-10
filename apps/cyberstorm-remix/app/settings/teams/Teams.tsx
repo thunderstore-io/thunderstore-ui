@@ -9,12 +9,12 @@ import {
   NewLink,
   NewTable,
   NewTextInput,
+  useToast,
 } from "@thunderstore/cyberstorm";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useReducer, useState } from "react";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import {
   type RequestConfig,
   teamCreate,

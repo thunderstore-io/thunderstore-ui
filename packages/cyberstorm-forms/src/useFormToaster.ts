@@ -1,4 +1,4 @@
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
+import { useToast } from "@thunderstore/cyberstorm";
 
 export type UseFormToasterArgs<OnSubmitSuccessDataType, OnSubmitErrorDataType> =
   {

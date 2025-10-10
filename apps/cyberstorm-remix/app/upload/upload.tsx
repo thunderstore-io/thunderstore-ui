@@ -9,6 +9,7 @@ import {
   NewTable,
   NewTableSort,
   NewTag,
+  useToast,
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
@@ -43,7 +44,6 @@ import { type PackageSubmissionRequestData } from "@thunderstore/thunderstore-ap
 import { type OutletContextShape } from "../root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { postPackageSubmissionMetadata } from "@thunderstore/dapper-ts/src/methods/package";
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import {

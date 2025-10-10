@@ -9,10 +9,9 @@ import { type OutletContextShape } from "~/root";
 import "./Profile.css";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
-import { NewButton, NewTextInput } from "@thunderstore/cyberstorm";
+import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {

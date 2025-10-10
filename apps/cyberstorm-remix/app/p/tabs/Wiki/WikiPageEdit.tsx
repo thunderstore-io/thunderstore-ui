@@ -18,8 +18,8 @@ import {
   NewLink,
   NewTextInput,
   Tabs,
+  useToast,
 } from "@thunderstore/cyberstorm";
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer, useState } from "react";
 import {
