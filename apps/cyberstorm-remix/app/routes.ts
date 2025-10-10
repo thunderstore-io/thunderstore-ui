@@ -33,9 +33,39 @@ export default [
           ]),
         ]),
       ]),
+      route(
+        ":namespaceId/:packageId/v/:packageVersion",
+        "p/packageVersion.tsx",
+        [
+          route(
+            "/c/:communityId/p/:namespaceId/:packageId/v/:packageVersion/",
+            "p/tabs/Readme/PackageVersionReadme.tsx"
+          ),
+          route("required", "p/tabs/Required/PackageVersionRequired.tsx"),
+          route("versions", "p/tabs/Versions/PackageVersionVersions.tsx"),
+        ]
+      ),
       route(":namespaceId/:packageId/edit", "p/packageEdit.tsx"),
     ]),
   ]),
+  route(
+    "/p/:namespaceId/:packageId/v/:packageVersion",
+    "p/packageVersionWithoutCommunity.tsx",
+    [
+      route(
+        "/p/:namespaceId/:packageId/v/:packageVersion/",
+        "p/tabs/Readme/PackageVersionWithoutCommunityReadme.tsx"
+      ),
+      route(
+        "required",
+        "p/tabs/Required/PackageVersionWithoutCommunityRequired.tsx"
+      ),
+      route(
+        "versions",
+        "p/tabs/Versions/PackageVersionWithoutCommunityVersions.tsx"
+      ),
+    ]
+  ),
   route(
     "/c/:communityId/p/:namespaceId/:packageId/dependants",
     "p/dependants/Dependants.tsx"

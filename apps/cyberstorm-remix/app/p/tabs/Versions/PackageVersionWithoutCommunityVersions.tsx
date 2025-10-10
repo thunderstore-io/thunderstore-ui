@@ -2,7 +2,6 @@ import "./Versions.css";
 import {
   NewTableSort,
   NewTable,
-  type NewTableLabels,
   Heading,
   SkeletonBox,
   NewLink,
@@ -17,9 +16,10 @@ import {
 import { Suspense } from "react";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
+import { columns } from "./Versions";
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
+  if (params.namespaceId && params.packageId) {
     const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
@@ -28,7 +28,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
       };
     });
     return {
-      communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
@@ -42,7 +41,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
+  if (params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
       return {
@@ -51,7 +50,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
     return {
-      communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
@@ -65,8 +63,9 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 }
 
 export default function Versions() {
-  const { communityId, namespaceId, packageId, status, message, versions } =
-    useLoaderData<typeof loader | typeof clientLoader>();
+  const { namespaceId, packageId, status, message, versions } = useLoaderData<
+    typeof loader | typeof clientLoader
+  >();
 
   if (status === "error") {
     return <div>{message}</div>;
@@ -91,9 +90,8 @@ export default function Versions() {
                     value: (
                       <NewLink
                         primitiveType="cyberstormLink"
-                        linkId="PackageVersion"
+                        linkId="PackageVersionWithoutCommunity"
                         package={packageId}
-                        community={communityId}
                         namespace={namespaceId}
                         version={v.version_number}
                         csVariant="cyber"
@@ -132,22 +130,3 @@ export default function Versions() {
     </Suspense>
   );
 }
-
-export const columns: NewTableLabels = [
-  {
-    value: "Version",
-    disableSort: false,
-    columnClasses: "package-versions__version",
-  },
-  {
-    value: "Upload date",
-    disableSort: false,
-    columnClasses: "package-versions__upload-date",
-  },
-  {
-    value: "Downloads",
-    disableSort: false,
-    columnClasses: "package-versions__downloads",
-  },
-  { value: "Actions", disableSort: true },
-];
