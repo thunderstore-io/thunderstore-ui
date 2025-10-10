@@ -1,14 +1,47 @@
-import type {
-  LoaderFunctionArgs,
-  ShouldRevalidateFunctionArgs,
-} from "react-router";
+import {
+  memo,
+  type ReactElement,
+  Suspense,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import {
   Await,
   Outlet,
   useLoaderData,
   useLocation,
   useOutletContext,
+  type LoaderFunctionArgs,
+  type ShouldRevalidateFunctionArgs,
 } from "react-router";
+import { useHydrated } from "remix-utils/use-hydrated";
+import {
+  faUsers,
+  faHandHoldingHeart,
+  faDownload,
+  faThumbsUp,
+  faWarning,
+  faCaretRight,
+  faScaleBalanced,
+  faCog,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
+
+import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
+import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
+import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
+import { type OutletContextShape } from "app/root";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { isPromise } from "cyberstorm/utils/typeChecks";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
+
 import {
   Drawer,
   Heading,
@@ -23,8 +56,22 @@ import {
   SkeletonBox,
   Tabs,
 } from "@thunderstore/cyberstorm";
-import "./packageListing.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTime/RelativeTime";
+import type { SelectOption } from "@thunderstore/cyberstorm/src/newComponents/Select/Select";
+import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
+import {
+  formatFileSize,
+  formatInteger,
+  formatToDisplayName,
+} from "@thunderstore/cyberstorm/src/utils/utils";
+import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
+import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
+import type { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { DapperTs } from "@thunderstore/dapper-ts";
+import type { CurrentUser } from "@thunderstore/dapper/types";
+import { getCommunity } from "@thunderstore/dapper-ts/src/methods/communities";
+import { getPackageListingDetails } from "@thunderstore/dapper-ts/src/methods/packageListings";
+import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
 import {
   fetchPackagePermissions,
   packageListingApprove,
@@ -33,55 +80,9 @@ import {
   type PackageListingReportRequestData,
   type RequestConfig,
 } from "@thunderstore/thunderstore-api";
-import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
-import {
-  faUsers,
-  faHandHoldingHeart,
-  faDownload,
-  faThumbsUp,
-  faWarning,
-  faCaretRight,
-  faScaleBalanced,
-  faCog,
-} from "@fortawesome/free-solid-svg-icons";
-import TeamMembers from "./components/TeamMembers/TeamMembers";
-import {
-  memo,
-  type ReactElement,
-  Suspense,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
-import { useHydrated } from "remix-utils/use-hydrated";
-import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
-import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTime/RelativeTime";
-import {
-  formatFileSize,
-  formatInteger,
-  formatToDisplayName,
-} from "@thunderstore/cyberstorm/src/utils/utils";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { type OutletContextShape } from "~/root";
-import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-import type { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
-import type { SelectOption } from "@thunderstore/cyberstorm/src/newComponents/Select/Select";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { getPackageListingDetails } from "@thunderstore/dapper-ts/src/methods/packageListings";
-import { getCommunity } from "@thunderstore/dapper-ts/src/methods/communities";
-import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
-import type { CurrentUser } from "@thunderstore/dapper/types";
-import { isPromise } from "cyberstorm/utils/typeChecks";
+
+import "./packageListing.css";
 
 type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
