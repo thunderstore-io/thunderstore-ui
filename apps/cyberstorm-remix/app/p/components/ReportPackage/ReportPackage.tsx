@@ -16,23 +16,16 @@ import {
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import "./ReportPackage.css";
 
-const reportOptions: SelectOption<
-  | "Spam"
-  | "Malware"
-  | "Reupload"
-  | "CopyrightOrLicense"
-  | "WrongCommunity"
-  | "WrongCategories"
-  | "Other"
->[] = [
-  { value: "Spam", label: "Spam" },
-  { value: "Malware", label: "Malware" },
-  { value: "Reupload", label: "Reupload" },
-  { value: "CopyrightOrLicense", label: "Copyright Or License" },
-  { value: "WrongCommunity", label: "Wrong Community" },
-  { value: "WrongCategories", label: "Wrong Categories" },
-  { value: "Other", label: "Other" },
-];
+const reportOptions: SelectOption<PackageListingReportRequestData["reason"]>[] =
+  [
+    { value: "Spam", label: "Spam" },
+    { value: "Malware", label: "Malware" },
+    { value: "Reupload", label: "Reupload" },
+    { value: "CopyrightOrLicense", label: "Copyright Or License" },
+    { value: "WrongCommunity", label: "Wrong Community" },
+    { value: "WrongCategories", label: "Wrong Categories" },
+    { value: "Other", label: "Other" },
+  ];
 
 export function ReportPackageForm(props: {
   community: string;
