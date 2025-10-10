@@ -65,11 +65,8 @@ import {
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import type { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import type { CurrentUser } from "@thunderstore/dapper/types";
-import { getCommunity } from "@thunderstore/dapper-ts/src/methods/communities";
-import { getPackageListingDetails } from "@thunderstore/dapper-ts/src/methods/packageListings";
-import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
+import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
 import {
   fetchPackagePermissions,
   packageListingApprove,
@@ -943,8 +940,8 @@ function ReportPackageForm(props: {
 ReportPackageForm.displayName = "ReportPackageForm";
 
 function packageTags(
-  listing: Awaited<ReturnType<typeof getPackageListingDetails>>,
-  community: Awaited<ReturnType<typeof getCommunity>>
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>,
+  community: Awaited<ReturnType<DapperTsInterface["getCommunity"]>>
 ) {
   return listing.categories.map((category) => {
     return (
@@ -964,8 +961,8 @@ function packageTags(
 }
 
 function packageBoxes(
-  listing: Awaited<ReturnType<typeof getPackageListingDetails>>,
-  community: Awaited<ReturnType<typeof getCommunity>>,
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>,
+  community: Awaited<ReturnType<DapperTsInterface["getCommunity"]>>,
   domain: string
 ) {
   const pt = packageTags(listing, community);
@@ -1018,7 +1015,7 @@ function packageBoxes(
 // TODO: Enable when APIs are available
 function managementTools(
   packagePermissions: Awaited<ReturnType<typeof fetchPackagePermissions>>,
-  listing: Awaited<ReturnType<typeof getPackageListingDetails>>,
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>,
   toast: ReturnType<typeof useToast>,
   requestConfig: () => RequestConfig
 ) {
@@ -1109,8 +1106,8 @@ function likeAction(
 }
 
 const Actions = memo(function Actions(props: {
-  team: Awaited<ReturnType<typeof getTeamDetails>>;
-  listing: Awaited<ReturnType<typeof getPackageListingDetails>>;
+  team: Awaited<ReturnType<DapperTsInterface["getTeamDetails"]>>;
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>;
   isLiked: boolean;
   currentUser: CurrentUser | undefined;
   likeUpdateTrigger: () => Promise<void>;
@@ -1189,7 +1186,7 @@ const Actions = memo(function Actions(props: {
 function packageMeta(
   lastUpdated: ReactElement | undefined,
   firstUploaded: ReactElement | undefined,
-  listing: Awaited<ReturnType<typeof getPackageListingDetails>>
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>
 ) {
   return (
     <div className="package-listing-sidebar__meta">
