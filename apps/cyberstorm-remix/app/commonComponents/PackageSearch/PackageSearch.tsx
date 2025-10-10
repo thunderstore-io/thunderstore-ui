@@ -37,6 +37,7 @@ import {
 } from "@thunderstore/thunderstore-api";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { isPromise } from "cyberstorm/utils/typeChecks";
+import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
 
 const PER_PAGE = 20;
 
@@ -721,14 +722,6 @@ export function PackageSearch(props: Props) {
 PackageSearch.displayName = "PackageSearch";
 
 // Start setters
-function setParamsBlobValue<K extends keyof SearchParamsType>(
-  setter: (v: SearchParamsType) => void,
-  oldBlob: SearchParamsType,
-  key: K
-) {
-  return (v: SearchParamsType[K]) => setter({ ...oldBlob, [key]: v });
-}
-
 const setParamsBlobCategories = (
   setter: (v: SearchParamsType) => void,
   oldBlob: SearchParamsType,
