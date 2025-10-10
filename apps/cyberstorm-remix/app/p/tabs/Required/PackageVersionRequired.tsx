@@ -8,7 +8,7 @@ import {
 import { PaginatedDependencies } from "~/commonComponents/PaginatedDependencies/PaginatedDependencies";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
+  if (params.namespaceId && params.packageId && params.packageVersion) {
     const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
@@ -18,22 +18,17 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     });
     const searchParams = new URL(request.url).searchParams;
     const page = searchParams.get("page");
-    const listing = await dapper.getPackageListingDetails(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
 
     return {
       version: await dapper.getPackageVersionDetails(
         params.namespaceId,
         params.packageId,
-        listing.latest_version_number
+        params.packageVersion
       ),
       dependencies: await dapper.getPackageVersionDependencies(
         params.namespaceId,
         params.packageId,
-        listing.latest_version_number,
+        params.packageVersion,
         page === null ? undefined : Number(page)
       ),
     };
@@ -42,7 +37,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 }
 
 export async function clientLoader({ params, request }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
+  if (params.namespaceId && params.packageId && params.packageVersion) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
       return {
@@ -52,22 +47,17 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
     });
     const searchParams = new URL(request.url).searchParams;
     const page = searchParams.get("page");
-    const listing = await dapper.getPackageListingDetails(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
 
     return {
       version: dapper.getPackageVersionDetails(
         params.namespaceId,
         params.packageId,
-        listing.latest_version_number
+        params.packageVersion
       ),
       dependencies: dapper.getPackageVersionDependencies(
         params.namespaceId,
         params.packageId,
-        listing.latest_version_number,
+        params.packageVersion,
         page === null ? undefined : Number(page)
       ),
     };

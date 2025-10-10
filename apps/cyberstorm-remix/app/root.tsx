@@ -271,6 +271,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const uploadPage = matches.find((m) => m.id === "upload/upload");
   const communityPage = matches.find((m) => m.id === "c/community");
   const packageListingPage = matches.find((m) => m.id === "p/packageListing");
+  const packageVersionPage = matches.find((m) => m.id === "p/packageVersion");
+  const packageVersionWithoutCommunityPage = matches.find(
+    (m) => m.id === "p/packageVersionWithoutCommunity"
+  );
   const packageEditPage = matches.find((m) => m.id === "p/packageEdit");
   const packageDependantsPage = matches.find(
     (m) => m.id === "p/dependants/Dependants"
@@ -447,10 +451,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
                           communityPage ||
                             packageListingPage ||
                             packageDependantsPage ||
-                            packageTeamPage,
+                            packageTeamPage ||
+                            packageVersionPage,
                           Boolean(packageListingPage) ||
                             Boolean(packageDependantsPage) ||
-                            Boolean(packageTeamPage)
+                            Boolean(packageTeamPage) ||
+                            Boolean(packageVersionPage)
                         )}
                         {/* Package listing page */}
                         {getPackageListingBreadcrumb(
@@ -458,6 +464,55 @@ export function Layout({ children }: { children: React.ReactNode }) {
                           packageEditPage,
                           packageDependantsPage
                         )}
+                        {/* Package Version Page */}
+                        {packageVersionPage ? (
+                          <>
+                            <NewBreadCrumbsLink
+                              primitiveType="cyberstormLink"
+                              linkId="Package"
+                              community={packageVersionPage.params.communityId}
+                              namespace={packageVersionPage.params.namespaceId}
+                              package={packageVersionPage.params.packageId}
+                              csVariant="cyber"
+                            >
+                              {packageVersionPage.params.packageId}
+                            </NewBreadCrumbsLink>
+                            <span>
+                              <span>
+                                {packageVersionPage.params.packageVersion}
+                              </span>
+                            </span>
+                          </>
+                        ) : null}
+                        {/* Package version without community Page */}
+                        {packageVersionWithoutCommunityPage ? (
+                          <>
+                            <span>
+                              <span>
+                                {
+                                  packageVersionWithoutCommunityPage.params
+                                    .namespaceId
+                                }
+                              </span>
+                            </span>
+                            <span>
+                              <span>
+                                {
+                                  packageVersionWithoutCommunityPage.params
+                                    .packageId
+                                }
+                              </span>
+                            </span>
+                            <span>
+                              <span>
+                                {
+                                  packageVersionWithoutCommunityPage.params
+                                    .packageVersion
+                                }
+                              </span>
+                            </span>
+                          </>
+                        ) : null}
                         {packageEditPage ? (
                           <span>
                             <span>Edit package</span>
