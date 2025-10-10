@@ -4,7 +4,6 @@ import {
   Suspense,
   useEffect,
   useMemo,
-  useReducer,
   useRef,
   useState,
 } from "react";
@@ -35,7 +34,6 @@ import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
 import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
 import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
 import { type OutletContextShape } from "app/root";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import {
   getPublicEnvVariables,
@@ -50,11 +48,9 @@ import {
   NewButton,
   NewIcon,
   NewLink,
-  NewSelect,
   NewTag,
   NewTextInput,
   RelativeTime,
-  type SelectOption,
   SkeletonBox,
   Tabs,
   ThunderstoreLogo,
@@ -71,8 +67,6 @@ import {
   fetchPackagePermissions,
   packageListingApprove,
   packageListingReject,
-  packageListingReport,
-  type PackageListingReportRequestData,
   type RequestConfig,
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
@@ -375,19 +369,6 @@ export default function PackageListing() {
                   )}
                 </Await>
               </Suspense>
-
-              {/* Report modal is here, so that it can be reused in both desktop on mobile */}
-              {/* <Modal popoverId={"reportPackage"} csSize="small">
-                <ReportPackageForm
-                  // communityId={listing.community_identifier}
-                  // namespaceId={listing.namespace}
-                  // packageId={listing.name}
-                  // id={listing.id}
-                  id={"206"}
-                  toast={toast}
-                  config={outletContext.requestConfig}
-                />
-              </Modal> */}
               <div className="package-listing__narrow-actions">
                 <button
                   popoverTarget="packageDetailDrawer"
@@ -799,146 +780,6 @@ function ReviewPackageForm(props: {
 
 ReviewPackageForm.displayName = "ReviewPackageForm";
 
-const reportOptions: SelectOption<
-  | "Spam"
-  | "Malware"
-  | "Reupload"
-  | "CopyrightOrLicense"
-  | "WrongCommunity"
-  | "WrongCategories"
-  | "Other"
->[] = [
-  { value: "Spam", label: "Spam" },
-  { value: "Malware", label: "Malware" },
-  { value: "Reupload", label: "Reupload" },
-  { value: "CopyrightOrLicense", label: "Copyright Or License" },
-  { value: "WrongCommunity", label: "Wrong Community" },
-  { value: "WrongCategories", label: "Wrong Categories" },
-  { value: "Other", label: "Other" },
-];
-
-function ReportPackageForm(props: {
-  // communityId: string;
-  // namespaceId: string;
-  // packageId: string;
-  id: string;
-  config: () => RequestConfig;
-  toast: ReturnType<typeof useToast>;
-}) {
-  const {
-    // communityId,
-    // namespaceId,
-    // packageId,
-    id,
-    toast,
-    config,
-  } = props;
-
-  function formFieldUpdateAction(
-    state: PackageListingReportRequestData,
-    action: {
-      field: keyof PackageListingReportRequestData;
-      value: PackageListingReportRequestData[keyof PackageListingReportRequestData];
-    }
-  ) {
-    return {
-      ...state,
-      [action.field]: action.value,
-    };
-  }
-
-  const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
-    reason: "Other",
-    description: "",
-  });
-
-  type SubmitorOutput = Awaited<ReturnType<typeof packageListingReport>>;
-
-  async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
-    return await packageListingReport({
-      config: config,
-      params: { id: id },
-      queryParams: {},
-      data: { reason: data.reason, description: data.description },
-    });
-  }
-
-  type InputErrors = {
-    [key in keyof typeof formInputs]?: string | string[];
-  };
-
-  const strongForm = useStrongForm<
-    typeof formInputs,
-    PackageListingReportRequestData,
-    Error,
-    SubmitorOutput,
-    Error,
-    InputErrors
-  >({
-    inputs: formInputs,
-    submitor,
-    onSubmitSuccess: () => {
-      toast.addToast({
-        csVariant: "success",
-        children: `Package reported`,
-        duration: 4000,
-      });
-    },
-    onSubmitError: (error) => {
-      toast.addToast({
-        csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
-        duration: 8000,
-      });
-    },
-  });
-
-  return (
-    <div className="modal-content">
-      <div className="modal-content__header">Report Package</div>
-      <div className="modal-content__body report-package__body">
-        <div className="report-package__block">
-          <p className="report-package__label">Reason</p>
-          <NewSelect
-            name={"role"}
-            options={reportOptions}
-            placeholder="Please select..."
-            value={formInputs.reason}
-            onChange={(value) => {
-              updateFormFieldState({ field: "reason", value: value });
-            }}
-            id="role"
-          />
-        </div>
-        <div className="report-package__block">
-          <p className="report-package__label">
-            Additional information (optional)
-          </p>
-          <NewTextInput
-            value={formInputs.description || ""}
-            onChange={(e) => {
-              updateFormFieldState({
-                field: "description",
-                value: e.target.value,
-              });
-            }}
-            placeholder="Invalid submission"
-            csSize="textarea"
-            rootClasses="report-package__textarea"
-          />
-        </div>
-      </div>
-      <div className="modal-content__footer report-package__footer">
-        <NewButton csVariant="success" onClick={strongForm.submit}>
-          Submit
-        </NewButton>
-      </div>
-    </div>
-  );
-}
-
-ReportPackageForm.displayName = "ReportPackageForm";
-
 function packageTags(
   listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>,
   community: Awaited<ReturnType<DapperTsInterface["getCommunity"]>>
@@ -1166,19 +1007,6 @@ const Actions = memo(function Actions(props: {
           <FontAwesomeIcon icon={faThumbsUp} />
         </NewIcon>
       </NewButton>
-      {/* <NewButton
-            // primitiveType="button"
-            tooltipText="Report"
-            csVariant={"secondary"}
-            csSize="big"
-            csModifiers={["only-icon"]}
-            popoverTarget="reportPackage"
-            popoverTargetAction="show"
-          >
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faFlagSwallowtail} />
-            </NewIcon>
-          </NewButton> */}
     </div>
   );
 });
