@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import "@thunderstore/cyberstorm-theme";
-import { NewSelectSearch } from "@thunderstore/cyberstorm";
+import {
+  NewSelectSearch,
+  type NewSelectSearchProps,
+  type SelectOption,
+} from "@thunderstore/cyberstorm";
 import { useState } from "react";
 import {
   SelectSearchModifiersList,
   SelectSearchSizesList,
   SelectSearchVariantsList,
 } from "@thunderstore/cyberstorm-theme/src/components";
-import type {
-  SelectOption,
-  SelectSearchProps,
-} from "@thunderstore/cyberstorm/src/newComponents/SelectSearch/SelectSearch";
 
 const meta = {
   title: "Cyberstorm/SelectSearch",
@@ -48,7 +48,7 @@ export const Single: Story = {
   render: (args) => <SingleComponent args={args} />,
 };
 
-function SingleComponent(props: { args: SelectSearchProps }) {
+function SingleComponent(props: { args: NewSelectSearchProps }) {
   const { args } = props;
   const [val, setVal] = useState<SelectOption | undefined>(undefined);
   const [val2, setVal2] = useState<SelectOption | undefined>(args.options[1]);
@@ -75,7 +75,7 @@ export const Multiple: Story = {
   render: (args) => <MultipleComponent args={args} />,
 };
 
-function MultipleComponent(props: { args: SelectSearchProps }) {
+function MultipleComponent(props: { args: NewSelectSearchProps }) {
   const { args } = props;
   const [val, setVal] = useState<SelectOption<string>[] | undefined>(undefined);
   const [val2, setVal2] = useState<SelectOption<string>[] | undefined>(
@@ -94,7 +94,7 @@ export const Variants: Story = {
   render: (args) => <VariantsComponent args={args} />,
 };
 
-function VariantsComponent(props: { args: SelectSearchProps }) {
+function VariantsComponent(props: { args: NewSelectSearchProps }) {
   const { args } = props;
   const [val, setVal] = useState<{ value: string; label?: string } | undefined>(
     undefined
@@ -131,7 +131,7 @@ export const Sizes: Story = {
   render: (args) => <SizesComponent args={args} />,
 };
 
-function SizesComponent(props: { args: SelectSearchProps }) {
+function SizesComponent(props: { args: NewSelectSearchProps }) {
   const { args } = props;
   const [val, setVal] = useState<SelectOption[] | undefined>(undefined);
   const sizes = SelectSearchSizesList.map((size) => (
@@ -162,7 +162,7 @@ export const Modifiers: Story = {
   render: (args) => <ModifiersComponent args={args} />,
 };
 
-function ModifiersComponent(props: { args: SelectSearchProps }) {
+function ModifiersComponent(props: { args: NewSelectSearchProps }) {
   const { args } = props;
   const [val, setVal] = useState<SelectOption[] | undefined>(undefined);
   const modifiers = SelectSearchModifiersList.map((modifier) => (

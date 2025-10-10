@@ -88,7 +88,6 @@ export {
 export {
   SelectSearch as NewSelectSearch,
   type SelectSearchProps as NewSelectSearchProps,
-  type SelectOption as NewSelectOption,
 } from "./newComponents/SelectSearch/SelectSearch";
 export { SkeletonBox } from "./newComponents/SkeletonBox/SkeletonBox";
 export { Switch as NewSwitch } from "./newComponents/Switch/Switch";
@@ -111,4 +110,5 @@ export { Tooltip, type TooltipProps } from "./newComponents/Tooltip/Tooltip";
 
 // Utils
 export { isNode, isRecord, isStringArray } from "./utils/type_guards";
+export type { SelectOption } from "./utils/types";
 export { range, formatToDisplayName } from "./utils/utils";

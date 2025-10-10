@@ -54,10 +54,10 @@ import {
   NewTag,
   NewTextInput,
   RelativeTime,
+  type SelectOption,
   SkeletonBox,
   Tabs,
 } from "@thunderstore/cyberstorm";
-import type { SelectOption } from "@thunderstore/cyberstorm/src/newComponents/Select/Select";
 import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import {
   formatFileSize,
