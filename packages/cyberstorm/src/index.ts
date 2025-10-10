@@ -36,6 +36,7 @@ export {
   thunderstoreLinkProps,
 } from "./components/Links/LinkingProvider";
 export { CyberstormLink } from "./components/Links/Links";
+export { RelativeTime } from "./components/RelativeTime/RelativeTime";
 export {
   TextAreaInput,
   type TextAreaInputProps,
