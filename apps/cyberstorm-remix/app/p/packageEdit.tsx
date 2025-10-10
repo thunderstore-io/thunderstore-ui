@@ -6,6 +6,7 @@ import {
   NewIcon,
   NewSelectSearch,
   NewTag,
+  formatToDisplayName,
   useToast,
 } from "@thunderstore/cyberstorm";
 import "./packageEdit.css";
@@ -16,7 +17,6 @@ import {
   type PackageListingUpdateRequestData,
   packageUnlist,
 } from "@thunderstore/thunderstore-api";
-import { formatToDisplayName } from "@thunderstore/cyberstorm/src/utils/utils";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type OutletContextShape } from "~/root";
 import {

@@ -57,13 +57,11 @@ import {
   type SelectOption,
   SkeletonBox,
   Tabs,
-  useToast,
-} from "@thunderstore/cyberstorm";
-import {
   formatFileSize,
   formatInteger,
   formatToDisplayName,
-} from "@thunderstore/cyberstorm/src/utils/utils";
+  useToast,
+} from "@thunderstore/cyberstorm";
 import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import type { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";

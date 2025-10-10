@@ -112,4 +112,9 @@ export { Tooltip, type TooltipProps } from "./newComponents/Tooltip/Tooltip";
 // Utils
 export { isNode, isRecord, isStringArray } from "./utils/type_guards";
 export type { SelectOption } from "./utils/types";
-export { range, formatToDisplayName } from "./utils/utils";
+export {
+  range,
+  formatFileSize,
+  formatInteger,
+  formatToDisplayName,
+} from "./utils/utils";
