@@ -2,7 +2,6 @@ import "./Versions.css";
 import {
   NewTableSort,
   NewTable,
-  type NewTableLabels,
   Heading,
   SkeletonBox,
   NewLink,
@@ -17,6 +16,7 @@ import {
 import { Suspense } from "react";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
+import { columns } from "./Versions";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -132,22 +132,3 @@ export default function Versions() {
     </Suspense>
   );
 }
-
-export const columns: NewTableLabels = [
-  {
-    value: "Version",
-    disableSort: false,
-    columnClasses: "package-versions__version",
-  },
-  {
-    value: "Upload date",
-    disableSort: false,
-    columnClasses: "package-versions__upload-date",
-  },
-  {
-    value: "Downloads",
-    disableSort: false,
-    columnClasses: "package-versions__downloads",
-  },
-  { value: "Actions", disableSort: true },
-];
