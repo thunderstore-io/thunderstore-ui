@@ -13,21 +13,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./MobileNavigation.css";
 import "./Navigation.css";
 import {
-  Menu,
-  NewLink,
-  NewIcon,
   Heading,
+  Menu,
+  Modal,
   NewButton,
   NewDropDown,
-  NewDropDownItem,
-  Modal,
   NewDropDownDivider,
+  NewDropDownItem,
   NewAvatar,
-} from "@thunderstore/cyberstorm";
-import {
+  NewIcon,
+  NewLink,
   OverwolfLogo,
   ThunderstoreLogo,
-} from "@thunderstore/cyberstorm/src/svg/svg";
+} from "@thunderstore/cyberstorm";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 
 import {

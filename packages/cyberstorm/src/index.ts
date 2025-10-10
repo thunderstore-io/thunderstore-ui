@@ -118,3 +118,9 @@ export {
   formatInteger,
   formatToDisplayName,
 } from "./utils/utils";
+
+export {
+  OverwolfLogo,
+  ThunderstoreLogo,
+  ThunderstoreLogoHorizontal,
+} from "./svg/svg";

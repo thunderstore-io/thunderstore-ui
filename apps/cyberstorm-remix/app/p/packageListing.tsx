@@ -57,12 +57,12 @@ import {
   type SelectOption,
   SkeletonBox,
   Tabs,
+  ThunderstoreLogo,
   formatFileSize,
   formatInteger,
   formatToDisplayName,
   useToast,
 } from "@thunderstore/cyberstorm";
-import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import type { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
 import { DapperTs } from "@thunderstore/dapper-ts";
