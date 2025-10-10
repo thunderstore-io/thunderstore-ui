@@ -188,6 +188,24 @@ export type PackageVersionsRequestParams = z.infer<
   typeof packageVersionsRequestParamsSchema
 >;
 
+// PackageVersionDependenciesRequest
+export const packageVersionDependenciesRequestParamsSchema = z.object({
+  namespace_id: z.string(),
+  package_name: z.string(),
+  version_number: z.string(),
+});
+
+export type PackageVersionDependenciesRequestParams = z.infer<
+  typeof packageVersionDependenciesRequestParamsSchema
+>;
+
+export const packageVersionDependenciesRequestQueryParamsSchema =
+  z.array(pageQueryParam);
+
+export type PackageVersionDependenciesRequestQueryParams = z.infer<
+  typeof packageVersionDependenciesRequestQueryParamsSchema
+>;
+
 // PackageWikiRequest
 export const packageWikiRequestParamsSchema = z.object({
   namespace_id: z.string(),

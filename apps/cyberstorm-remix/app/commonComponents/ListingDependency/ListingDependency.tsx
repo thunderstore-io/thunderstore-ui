@@ -1,9 +1,9 @@
-import type { packageDependencySchema } from "@thunderstore/thunderstore-api";
+import type { packageListingDependencySchema } from "@thunderstore/thunderstore-api";
 import "./ListingDependency.css";
 import { formatToDisplayName, Image, NewLink } from "@thunderstore/cyberstorm";
 
 export interface ListingDependencyProps {
-  dependency: typeof packageDependencySchema._type;
+  dependency: typeof packageListingDependencySchema._type;
   // TODO: Remove when package versiond detail is available
   domain: string;
 }
