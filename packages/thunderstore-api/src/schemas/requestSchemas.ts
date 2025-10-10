@@ -450,11 +450,9 @@ export type PackageListingRejectRequestData = z.infer<
 
 // PackageListingReportRequest
 export const packageListingReportRequestParamsSchema = z.object({
-  // This will most likely change to a dedicated cyberstorm endpoint, so the params will change to the commented ones.
-  id: z.string(),
-  // community: z.string(),
-  // namespace: z.string(),
-  // package: z.string(),
+  community: z.string(),
+  namespace: z.string(),
+  package: z.string(),
 });
 
 export type PackageListingReportRequestParams = z.infer<
@@ -462,7 +460,7 @@ export type PackageListingReportRequestParams = z.infer<
 >;
 
 export const packageListingReportRequestDataSchema = z.object({
-  version: z.number().optional(),
+  version: z.number().optional(), // TODO: use SemVer string
   reason: z.enum([
     "Spam",
     "Malware",

@@ -35,21 +35,13 @@ const reportOptions: SelectOption<
 ];
 
 export function ReportPackageForm(props: {
-  // communityId: string;
-  // namespaceId: string;
-  // packageId: string;
-  id: string;
+  community: string;
+  namespace: string;
+  package: string;
   config: () => RequestConfig;
   toast: ReturnType<typeof useToast>;
 }) {
-  const {
-    // communityId,
-    // namespaceId,
-    // packageId,
-    id,
-    toast,
-    config,
-  } = props;
+  const { config, toast, ...requestParams } = props;
 
   function formFieldUpdateAction(
     state: PackageListingReportRequestData,
@@ -74,7 +66,7 @@ export function ReportPackageForm(props: {
   async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
     return await packageListingReport({
       config: config,
-      params: { id: id },
+      params: requestParams,
       queryParams: {},
       data: { reason: data.reason, description: data.description },
     });

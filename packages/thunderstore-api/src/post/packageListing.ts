@@ -108,10 +108,7 @@ export function packageListingReport(
   >
 ) {
   const { config, params, data } = props;
-  // This will most likely change to a dedicated cyberstorm API endpoint, which is commented right now.
-  // const path = `/api/cyberstorm/listing/${params.community}/${params.namespace}/${params.package}/report/`;
-  const path = `/api/experimental/package-listing/${params.id}/report/`;
-
+  const path = `/api/cyberstorm/listing/${params.community}/${params.namespace}/${params.package}/report/`;
   return apiFetch({
     args: {
       config,
