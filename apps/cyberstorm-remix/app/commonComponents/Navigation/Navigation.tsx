@@ -231,7 +231,7 @@ export function DesktopLoginPopover() {
 
   return (
     <Modal
-      popoverId={"navAccount"}
+      disableBody
       trigger={
         <NewButton
           csVariant="accent"

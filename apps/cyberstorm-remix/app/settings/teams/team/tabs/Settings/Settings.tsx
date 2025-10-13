@@ -22,7 +22,7 @@ import {
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 
 // REMIX TODO: Make sure user is redirected of this page, if the user is not logged in
 export default function Settings() {
@@ -67,31 +67,13 @@ export default function Settings() {
             If you are the owner of the team, you can only leave if the team has
             another owner assigned.
           </p>
-          <Modal
-            popoverId={"teamLeaveTeam"}
-            csSize="small"
-            trigger={
-              <NewButton
-                popoverTarget="teamLeaveTeam"
-                popoverTargetAction="show"
-                csVariant="danger"
-                rootClasses="team-settings__leave-and-disband-button"
-              >
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faTrashCan} />
-                </NewIcon>
-                Leave team
-              </NewButton>
-            }
-          >
-            <LeaveTeamForm
-              userName={outletContext.currentUser.username}
-              teamName={params.namespaceId}
-              toast={toast}
-              config={outletContext.requestConfig}
-              updateTrigger={moveToTeams}
-            />
-          </Modal>
+          <LeaveTeamForm
+            userName={outletContext.currentUser.username}
+            teamName={params.namespaceId}
+            toast={toast}
+            config={outletContext.requestConfig}
+            updateTrigger={moveToTeams}
+          />
         </div>
       </div>
       <div className="settings-items__separator" />
@@ -112,30 +94,12 @@ export default function Settings() {
             you need to archive a team with existing pages, contact Mythic#0001
             on the Thunderstore Discord.
           </p>
-          <Modal
-            popoverId={"teamDisbandTeam"}
-            csSize="small"
-            trigger={
-              <NewButton
-                popoverTarget="teamDisbandTeam"
-                popoverTargetAction="show"
-                csVariant="danger"
-                rootClasses="team-settings__leave-and-disband-button"
-              >
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faTrashCan} />
-                </NewIcon>
-                Disband team
-              </NewButton>
-            }
-          >
-            <DisbandTeamForm
-              teamName={params.namespaceId}
-              updateTrigger={moveToTeams}
-              config={outletContext.requestConfig}
-              toast={toast}
-            />
-          </Modal>
+          <DisbandTeamForm
+            teamName={params.namespaceId}
+            updateTrigger={moveToTeams}
+            config={outletContext.requestConfig}
+            toast={toast}
+          />
         </div>
       </div>
     </div>
@@ -150,6 +114,7 @@ function LeaveTeamForm(props: {
   toast: ReturnType<typeof useToast>;
 }) {
   const { userName, teamName, toast, updateTrigger, config } = props;
+  const [open, setOpen] = useState(false);
   const kickMemberAction = ApiAction({
     endpoint: teamRemoveMember,
     onSubmitSuccess: () => {
@@ -170,10 +135,25 @@ function LeaveTeamForm(props: {
   });
 
   return (
-    <div className="modal-content">
-      <div className="modal-content__header">Leave team</div>
-      <div className="modal-content__body">
-        <div>
+    <Modal
+      open={open}
+      onOpenChange={setOpen}
+      titleContent="Leave team"
+      csSize="small"
+      trigger={
+        <NewButton
+          csVariant="danger"
+          rootClasses="team-settings__leave-and-disband-button"
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faTrashCan} />
+          </NewIcon>
+          Leave team
+        </NewButton>
+      }
+    >
+      <Modal.Body>
+        <span>
           You are about to leave the team{" "}
           <NewLink
             primitiveType="cyberstormLink"
@@ -183,9 +163,9 @@ function LeaveTeamForm(props: {
           >
             {teamName}
           </NewLink>
-        </div>
-      </div>
-      <div className="modal-content__footer">
+        </span>
+      </Modal.Body>
+      <Modal.Footer>
         <NewButton
           csVariant="danger"
           onClick={() =>
@@ -199,8 +179,8 @@ function LeaveTeamForm(props: {
         >
           Leave team
         </NewButton>
-      </div>
-    </div>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
@@ -213,6 +193,8 @@ function DisbandTeamForm(props: {
   toast: ReturnType<typeof useToast>;
 }) {
   const { teamName, toast, updateTrigger, config } = props;
+
+  const [open, setOpen] = useState(false);
 
   function formFieldUpdateAction(
     state: TeamDisbandRequestData,
@@ -263,6 +245,7 @@ function DisbandTeamForm(props: {
         duration: 4000,
       });
       updateTrigger();
+      setOpen(false);
     },
     onSubmitError: (error) => {
       toast.addToast({
@@ -274,9 +257,24 @@ function DisbandTeamForm(props: {
   });
 
   return (
-    <div className="modal-content">
-      <div className="modal-content__header">Disband team</div>
-      <div className="modal-content__body">
+    <Modal
+      open={open}
+      onOpenChange={setOpen}
+      titleContent="Disband team"
+      csSize="small"
+      trigger={
+        <NewButton
+          csVariant="danger"
+          rootClasses="team-settings__leave-and-disband-button"
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faTrashCan} />
+          </NewIcon>
+          Disband team
+        </NewButton>
+      }
+    >
+      <Modal.Body>
         <div>
           You are about to disband the team{" "}
           <NewLink
@@ -298,8 +296,8 @@ function DisbandTeamForm(props: {
             updateFormFieldState({ field: "team_name", value: e.target.value })
           }
         />
-      </div>
-      <div className="modal-content__footer">
+      </Modal.Body>
+      <Modal.Footer>
         <NewButton
           csVariant="danger"
           onClick={() => {
@@ -311,8 +309,8 @@ function DisbandTeamForm(props: {
           </NewIcon>
           Disband team
         </NewButton>
-      </div>
-    </div>
+      </Modal.Footer>
+    </Modal>
   );
 }
 

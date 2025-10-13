@@ -706,9 +706,23 @@ function ReviewPackageForm(props: {
   });
 
   return (
-    <div className="modal-content">
-      <div className="modal-content__header">Review Package</div>
-      <div className="modal-content__body review-package__body">
+    <Modal
+      csSize="small"
+      trigger={
+        <NewButton
+          csSize="small"
+          popoverTarget="reviewPackage"
+          popoverTargetAction="show"
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faScaleBalanced} />
+          </NewIcon>
+          Review Package
+        </NewButton>
+      }
+      titleContent="Review Package"
+    >
+      <Modal.Body className="review-package__body">
         <NewAlert csVariant="info">
           Changes might take several minutes to show publicly! Info shown below
           is always up to date.
@@ -741,8 +755,8 @@ function ReviewPackageForm(props: {
             rootClasses="review-package__textarea"
           />
         </div>
-      </div>
-      <div className="modal-content__footer review-package__footer">
+      </Modal.Body>
+      <Modal.Footer className="modal-content__footer review-package__footer">
         <NewButton
           csVariant="danger"
           onClick={() =>
@@ -782,8 +796,8 @@ function ReviewPackageForm(props: {
         >
           Approve
         </NewButton>
-      </div>
-    </div>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
@@ -1014,32 +1028,15 @@ function managementTools(
       {packagePermissions.permissions.can_moderate ? (
         <div className="package-listing-management-tools__island">
           {packagePermissions.permissions.can_moderate ? (
-            <Modal
-              popoverId={"reviewPackage"}
-              csSize="small"
-              trigger={
-                <NewButton
-                  csSize="small"
-                  popoverTarget="reviewPackage"
-                  popoverTargetAction="show"
-                >
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faScaleBalanced} />
-                  </NewIcon>
-                  Review Package
-                </NewButton>
-              }
-            >
-              <ReviewPackageForm
-                communityId={listing.community_identifier}
-                namespaceId={listing.namespace}
-                packageId={listing.name}
-                toast={toast}
-                reviewStatusColor={"orange"}
-                reviewStatus={"Skibidied"}
-                config={requestConfig}
-              />
-            </Modal>
+            <ReviewPackageForm
+              communityId={listing.community_identifier}
+              namespaceId={listing.namespace}
+              packageId={listing.name}
+              toast={toast}
+              reviewStatusColor={"orange"}
+              reviewStatus={"Skibidied"}
+              config={requestConfig}
+            />
           ) : null}
           {/* {packagePermissions.permissions.can_view_listing_admin_page ? (
               <NewButton

@@ -209,29 +209,15 @@ export default function WikiEdit() {
           <Heading csLevel="3">Editing page</Heading>
         </div>
         <div className="package-wiki-content__actions">
-          <Modal
-            popoverId={"deletePackageWikiPage"}
-            csSize="small"
-            trigger={
-              <NewButton
-                popoverTarget="deletePackageWikiPage"
-                popoverTargetAction="show"
-                csVariant="danger"
-              >
-                Delete page
-              </NewButton>
-            }
-          >
-            <DeletePackageWikiPageForm
-              page={page}
-              communityId={communityId}
-              namespaceId={namespaceId}
-              packageId={packageId}
-              toast={toast}
-              updateTrigger={moveToWiki}
-              config={outletContext.requestConfig}
-            />
-          </Modal>
+          <DeletePackageWikiPageForm
+            page={page}
+            communityId={communityId}
+            namespaceId={namespaceId}
+            packageId={packageId}
+            toast={toast}
+            updateTrigger={moveToWiki}
+            config={outletContext.requestConfig}
+          />
         </div>
       </div>
       <div className="package-wiki-content__body">
@@ -359,9 +345,12 @@ function DeletePackageWikiPageForm(props: {
   });
 
   return (
-    <div className="modal-content">
-      <div className="modal-content__header">Delete wiki page</div>
-      <div className="modal-content__body">
+    <Modal
+      csSize="small"
+      trigger={<NewButton csVariant="danger">Delete page</NewButton>}
+      titleContent="Delete wiki page"
+    >
+      <Modal.Body>
         <div>
           You are about to delete wiki page{" "}
           <NewLink
@@ -376,8 +365,8 @@ function DeletePackageWikiPageForm(props: {
             {page.title}
           </NewLink>
         </div>
-      </div>
-      <div className="modal-content__footer">
+      </Modal.Body>
+      <Modal.Footer>
         <NewButton
           csVariant="danger"
           onClick={() =>
@@ -391,8 +380,8 @@ function DeletePackageWikiPageForm(props: {
         >
           Delete
         </NewButton>
-      </div>
-    </div>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
