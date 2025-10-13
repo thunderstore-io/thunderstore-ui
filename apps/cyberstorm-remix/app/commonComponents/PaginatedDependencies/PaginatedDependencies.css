@@ -1,9 +1,5 @@
-@layer nimbus-layout {
-  .package-required__skeleton {
-    height: 500px;
-  }
-
-  .package-required {
+@layer nimbus-components {
+  .paginated-dependencies {
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
@@ -11,7 +7,11 @@
     overflow-x: auto;
   }
 
-  .package-required__title {
+  .paginated-dependencies__skeleton {
+    height: 500px;
+  }
+
+  .paginated-dependencies__title {
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
@@ -20,13 +20,13 @@
     padding-bottom: var(--space-24);
   }
 
-  .package-required__description {
+  .paginated-dependencies__description {
     color: var(--color-text-secondary);
     font-weight: var(--font-weight-regular);
     line-height: var(--line-height-md);
   }
 
-  .package-required__body {
+  .paginated-dependencies__body {
     display: flex;
     flex-direction: column;
     gap: var(--gap-3xs);

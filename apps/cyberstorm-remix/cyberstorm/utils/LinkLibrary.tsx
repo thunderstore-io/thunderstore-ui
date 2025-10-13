@@ -162,6 +162,41 @@ const library: LinkLibrary = {
       ref={p.customRef}
     />
   ),
+  PackageVersionRequired: (p) => (
+    <Link
+      {...p}
+      url={`/c/${p.community}/p/${p.namespace}/${p.package}/v/${p.version}/required`}
+      ref={p.customRef}
+    />
+  ),
+  PackageVersionVersions: (p) => (
+    <Link
+      {...p}
+      url={`/c/${p.community}/p/${p.namespace}/${p.package}/v/${p.version}/versions`}
+      ref={p.customRef}
+    />
+  ),
+  PackageVersionWithoutCommunity: (p) => (
+    <Link
+      {...p}
+      url={`/p/${p.namespace}/${p.package}/v/${p.version}/`}
+      ref={p.customRef}
+    />
+  ),
+  PackageVersionWithoutCommunityRequired: (p) => (
+    <Link
+      {...p}
+      url={`/p/${p.namespace}/${p.package}/v/${p.version}/required`}
+      ref={p.customRef}
+    />
+  ),
+  PackageVersionWithoutCommunityVersions: (p) => (
+    <Link
+      {...p}
+      url={`/p/${p.namespace}/${p.package}/v/${p.version}/versions`}
+      ref={p.customRef}
+    />
+  ),
   PackageFormatDocs: (p) => (
     <Link {...p} url={"/package/create/docs/"} ref={p.customRef} />
   ),

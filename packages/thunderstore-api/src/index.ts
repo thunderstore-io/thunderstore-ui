@@ -35,6 +35,7 @@ export * from "./get/packageReadme";
 export * from "./get/packageSubmission";
 export * from "./get/packageVersionDependencies";
 export * from "./get/packageVersions";
+export * from "./get/packageVersionDetails";
 export * from "./get/packageWiki";
 export * from "./get/ratedPackages";
 export * from "./get/packageSource";

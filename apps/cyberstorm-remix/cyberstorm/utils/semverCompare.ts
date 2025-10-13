@@ -1,0 +1,19 @@
+import { type TableCompareColumnMeta } from "@thunderstore/cyberstorm";
+import { type TableRow } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
+import { isSemver } from "./typeChecks";
+import semverCompare from "semver/functions/compare";
+
+export function rowSemverCompare(
+  a: TableRow,
+  b: TableRow,
+  columnMeta: TableCompareColumnMeta
+) {
+  const av = String(a[0].sortValue);
+  const bv = String(b[0].sortValue);
+
+  if (isSemver(av) && isSemver(bv)) {
+    return semverCompare(av, bv) * columnMeta.direction;
+  }
+
+  return 0;
+}

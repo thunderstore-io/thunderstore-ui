@@ -166,7 +166,7 @@ export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
   // If we're staying on the same package page, don't revalidate
   if (
     oldPath[2] === newPath[2] &&
-    oldPath[4] === newPath[4] &&
+    oldPath[3] === newPath[3] &&
     oldPath[5] === newPath[5]
   ) {
     return false;

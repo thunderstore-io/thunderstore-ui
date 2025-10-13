@@ -167,6 +167,17 @@ export type PackageListingDetailsRequestParams = z.infer<
   typeof packageListingDetailsRequestParamsSchema
 >;
 
+// PackageVersionDetailsRequest
+export const packageVersionDetailsRequestParamsSchema = z.object({
+  namespace_id: z.string(),
+  package_name: z.string(),
+  package_version: z.string(),
+});
+
+export type PackageVersionDetailsRequestParams = z.infer<
+  typeof packageVersionDetailsRequestParamsSchema
+>;
+
 // PackageReadmeRequest
 export const packageReadmeRequestParamsSchema = z.object({
   namespace_id: z.string(),

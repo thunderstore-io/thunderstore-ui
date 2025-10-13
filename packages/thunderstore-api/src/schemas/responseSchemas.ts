@@ -19,6 +19,7 @@ import {
   packagePermissionsSchema,
   packageSourceSchema,
   packageVersionDependencySchema,
+  packageTeamSchema,
 } from "../schemas/objectSchemas";
 import { paginatedResults } from "../schemas/objectSchemas";
 
@@ -108,6 +109,28 @@ export const packageListingDetailsResponseDataSchema =
 
 export type PackageListingDetailsResponseData = z.infer<
   typeof packageListingDetailsResponseDataSchema
+>;
+
+// PackageVersionDetailsResponse
+export const packageVersionDetailsResponseDataSchema = z.object({
+  description: z.string(),
+  download_count: z.number().int(),
+  icon_url: z.string().nullable(),
+  install_url: z.string().nullable(),
+  name: z.string().min(1),
+  version_number: z.string().min(1),
+  namespace: z.string().min(1),
+  size: z.number().int(),
+  datetime_created: z.string().datetime(),
+  dependency_count: z.number().int(),
+  download_url: z.string(),
+  full_version_name: z.string().min(1),
+  team: packageTeamSchema,
+  website_url: z.string().nullable(),
+});
+
+export type PackageVersionDetailsResponseData = z.infer<
+  typeof packageVersionDetailsResponseDataSchema
 >;
 
 // PackagePermissionsResponse

@@ -1,15 +1,14 @@
-import type { packageListingDependencySchema } from "@thunderstore/thunderstore-api";
+import { type PackageVersionDependency } from "@thunderstore/thunderstore-api";
 import "./ListingDependency.css";
 import { formatToDisplayName, Image, NewLink } from "@thunderstore/cyberstorm";
 
 export interface ListingDependencyProps {
-  dependency: typeof packageListingDependencySchema._type;
-  // TODO: Remove when package versiond detail is available
-  domain: string;
+  dependency: PackageVersionDependency;
+  communityId?: string;
 }
 
 export function ListingDependency(props: ListingDependencyProps) {
-  const { dependency, domain } = props;
+  const { dependency, communityId } = props;
 
   return (
     <div className="listing-dependency">
@@ -23,16 +22,30 @@ export function ListingDependency(props: ListingDependencyProps) {
       />
       <div>
         <div className="listing-dependency__info">
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Package"
-            community={dependency.community_identifier}
-            namespace={dependency.namespace}
-            package={dependency.name}
-            rootClasses="listing-dependency__name"
-          >
-            {formatToDisplayName(dependency.name)}
-          </NewLink>
+          {communityId ? (
+            <NewLink
+              primitiveType="cyberstormLink"
+              linkId="PackageVersion"
+              community={communityId}
+              namespace={dependency.namespace}
+              package={dependency.name}
+              version={dependency.version_number}
+              rootClasses="listing-dependency__name"
+            >
+              {formatToDisplayName(dependency.name)}
+            </NewLink>
+          ) : (
+            <NewLink
+              primitiveType="cyberstormLink"
+              linkId="PackageVersionWithoutCommunity"
+              namespace={dependency.namespace}
+              package={dependency.name}
+              version={dependency.version_number}
+              rootClasses="listing-dependency__name"
+            >
+              {formatToDisplayName(dependency.name)}
+            </NewLink>
+          )}
           <span className="listing-dependency__title">
             <span className="listing-dependency__title__by">by</span>
             <NewLink
@@ -50,23 +63,36 @@ export function ListingDependency(props: ListingDependencyProps) {
         </div>
         <div className="listing-dependency__version">
           <span>Version:</span>
-          <NewLink
-            // TODO: Remove when package versiond detail is available
-            primitiveType="link"
-            href={`${domain}/c/${dependency.community_identifier}/p/${dependency.namespace}/${dependency.name}/v/${dependency.version_number}/`}
-            // primitiveType="cyberstormLink"
-            // linkId="PackageVersion"
-            // community={dependency.community_identifier}
-            // namespace={dependency.namespace}
-            // package={dependency.name}
-            // version={dependency.version_number}
-            title={`${formatToDisplayName(dependency.name)} - ${
-              dependency.version_number
-            }`}
-            csVariant="cyber"
-          >
-            {dependency.version_number}
-          </NewLink>
+          {communityId ? (
+            <NewLink
+              primitiveType="cyberstormLink"
+              linkId="PackageVersion"
+              community={communityId}
+              namespace={dependency.namespace}
+              package={dependency.name}
+              version={dependency.version_number}
+              title={`${formatToDisplayName(dependency.name)} - ${
+                dependency.version_number
+              }`}
+              csVariant="cyber"
+            >
+              {dependency.version_number}
+            </NewLink>
+          ) : (
+            <NewLink
+              primitiveType="cyberstormLink"
+              linkId="PackageVersionWithoutCommunity"
+              namespace={dependency.namespace}
+              package={dependency.name}
+              version={dependency.version_number}
+              title={`${formatToDisplayName(dependency.name)} - ${
+                dependency.version_number
+              }`}
+              csVariant="cyber"
+            >
+              {dependency.version_number}
+            </NewLink>
+          )}
         </div>
       </div>
     </div>

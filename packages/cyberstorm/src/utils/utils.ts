@@ -58,4 +58,5 @@ export const componentClasses = (
   return listOfClasses;
 };
 
-export const formatToDisplayName = (name: string) => name.replaceAll("_", " ");
+export const formatToDisplayName = (name: string) =>
+  name.replaceAll("-", " ").replaceAll("_", " ");
