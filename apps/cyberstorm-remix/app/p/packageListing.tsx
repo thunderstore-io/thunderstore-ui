@@ -83,6 +83,10 @@ import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
 import type { CurrentUser } from "@thunderstore/dapper/types";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 
+type PackageListingOutletContext = OutletContextShape & {
+  packageDownloadUrl?: string;
+};
+
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
@@ -540,26 +544,33 @@ export default function PackageListing() {
                         </NewLink>
                         <NewLink
                           key="source"
-                          href={`${domain}/c/${resolvedValue.community_identifier}/p/${resolvedValue.namespace}/${resolvedValue.name}/source`}
-                          primitiveType="link"
+                          primitiveType="cyberstormLink"
+                          linkId="PackageSource"
+                          community={resolvedValue.community_identifier}
+                          namespace={resolvedValue.namespace}
+                          package={resolvedValue.name}
                           aria-current={currentTab === "source"}
                           rootClasses={`tabs-item${
                             currentTab === "source" ? " tabs-item--current" : ""
                           }`}
                         >
-                          Analysis{" "}
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faArrowUpRight} />
-                          </NewIcon>
+                          Analysis
                         </NewLink>
                       </Tabs>
+                      <div className="package-listing__content">
+                        <Outlet
+                          context={
+                            {
+                              ...outletContext,
+                              packageDownloadUrl: resolvedValue.download_url,
+                            } as PackageListingOutletContext
+                          }
+                        />
+                      </div>
                     </>
                   )}
                 </Await>
               </Suspense>
-              <div className="package-listing__content">
-                <Outlet context={outletContext} />
-              </div>
             </section>
             <aside className="package-listing-sidebar">
               <Suspense

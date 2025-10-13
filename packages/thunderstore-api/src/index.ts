@@ -36,6 +36,7 @@ export * from "./get/packageSubmission";
 export * from "./get/packageVersions";
 export * from "./get/packageWiki";
 export * from "./get/ratedPackages";
+export * from "./get/packageSource";
 export * from "./get/teamDetails";
 export * from "./get/teamMembers";
 export * from "./get/teamServiceAccounts";

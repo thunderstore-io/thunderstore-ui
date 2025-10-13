@@ -196,3 +196,27 @@ const getVersionNumber = (min = 0, max = 10) => {
   const fix = faker.number.int({ min, max });
   return `${major}.${minor}.${fix}`;
 };
+
+// Shown on a tab on Package's detail view.
+export const getFakePackageSource = async (namespace: string, name: string) => {
+  return {
+    is_visible: true,
+    namespace,
+    package_name: name,
+    version_number: getVersionNumber(),
+    last_decompilation_date: faker.date.recent({ days: 700 }).toISOString(),
+    decompilations: getFakeDecompilations(),
+  };
+};
+
+const getFakeDecompilations = () => {
+  return range(50).map(() => {
+    return {
+      source_file_name: faker.system.fileName(),
+      url: faker.internet.url(),
+      result_size: faker.number.int({ min: 0, max: 1000000 }).toString(),
+      result: faker.lorem.paragraph(),
+      is_truncated: faker.datatype.boolean(0.5),
+    };
+  });
+};
