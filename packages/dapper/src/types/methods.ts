@@ -10,6 +10,7 @@ import {
   type PackageSource,
   type PackageSubmissionResponse,
   type PackageVersion,
+  type PackageVersionDependencies,
 } from "./package";
 import { type PackageListingType } from "./props";
 import { type HTMLContentResponse, type MarkdownResponse } from "./shared";
@@ -64,6 +65,13 @@ export type GetPackageVersions = (
   namespace: string,
   name: string
 ) => Promise<PackageVersion[]>;
+
+export type GetPackageVersionDependencies = (
+  namespace: string,
+  name: string,
+  version: string,
+  page?: number
+) => Promise<PackageVersionDependencies>;
 
 export type GetPackagePermissions = (
   namespaceId: string,

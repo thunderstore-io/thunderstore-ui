@@ -9,6 +9,8 @@ import {
   fetchPackagePermissions,
   fetchPackageSource,
   ApiError,
+  fetchPackageVersionDependencies,
+  PackageVersionDependenciesRequestQueryParams,
 } from "@thunderstore/thunderstore-api";
 import { z } from "zod";
 
@@ -97,6 +99,34 @@ export async function getPackageVersions(
     },
     data: {},
     queryParams: {},
+  });
+
+  return data;
+}
+export async function getPackageVersionDependencies(
+  this: DapperTsInterface,
+  namespaceId: string,
+  packageName: string,
+  versionNumber: string,
+  page?: number
+) {
+  const options: PackageVersionDependenciesRequestQueryParams = [
+    {
+      key: "page",
+      value: page,
+      impotent: 1,
+    },
+  ];
+
+  const data = await fetchPackageVersionDependencies({
+    config: this.config,
+    params: {
+      namespace_id: namespaceId,
+      package_name: packageName,
+      version_number: versionNumber,
+    },
+    data: {},
+    queryParams: options,
   });
 
   return data;

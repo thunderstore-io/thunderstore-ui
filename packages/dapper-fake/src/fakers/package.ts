@@ -190,6 +190,49 @@ export const getFakePackageVersions = async (
   });
 };
 
+const fakePackageVersionDependencies = range(25).map(() => ({
+  description: faker.company.buzzPhrase(),
+  icon_url: getFakeImg(256, 256),
+  is_active: faker.datatype.boolean(0.5),
+  name: faker.word.words(3).split(" ").join("_"),
+  namespace: faker.word.sample(),
+  version_number: getVersionNumber(),
+  is_removed: faker.datatype.boolean(0.5),
+}));
+
+export const getFakePackageVersionDependencies = async (
+  namespace: string,
+  name: string,
+  version: string,
+  page?: number
+) => {
+  setSeed(`${namespace}-${name}-${version}`);
+  page = page ?? 1;
+
+  // Split the fake data into pages of 10 items each.
+
+  const start = (page - 1) * 10;
+  const end = start + 10;
+  const items = fakePackageVersionDependencies.slice(start, end);
+
+  return {
+    count: fakePackageVersionDependencies.length,
+    next:
+      end < fakePackageVersionDependencies.length
+        ? `https://thunderstore.io/api/cyberstorm/package/${namespace}/${name}/v/${version}/dependencies/?page=${
+            page + 1
+          }`
+        : null,
+    previous:
+      page > 1
+        ? `https://thunderstore.io/api/cyberstorm/package/${namespace}/${name}/v/${version}/dependencies/?page=${
+            page - 1
+          }`
+        : null,
+    results: items,
+  };
+};
+
 const getVersionNumber = (min = 0, max = 10) => {
   const major = faker.number.int({ min, max });
   const minor = faker.number.int({ min, max });
