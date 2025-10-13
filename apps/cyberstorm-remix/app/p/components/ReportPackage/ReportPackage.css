@@ -1,8 +1,4 @@
 @layer nimbus-layout {
-  .report-package__body {
-    align-items: stretch;
-  }
-
   .report-package__block {
     display: flex;
     flex-direction: column;
@@ -23,9 +19,5 @@
       width: 100%;
       height: 10rem;
     }
-  }
-
-  .report-package__footer {
-    justify-content: flex-end;
   }
 }

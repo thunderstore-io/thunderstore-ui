@@ -33,6 +33,7 @@ import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
 import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
 import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
+import { useReportPackage } from "app/p/components/ReportPackage/ReportPackage";
 import { type OutletContextShape } from "app/root";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import {
@@ -179,6 +180,16 @@ export default function PackageListing() {
 
   const [isLiked, setIsLiked] = useState(false);
   const toast = useToast();
+
+  const { ReportPackageButton, ReportPackageForm } = useReportPackage(
+    Promise.resolve(listing).then((listingData) => ({
+      community: listingData.community_identifier,
+      namespace: listingData.namespace,
+      package: listingData.name,
+      config,
+      toast,
+    }))
+  );
 
   const fetchAndSetRatedPackages = async () => {
     const rp = await dapper.getRatedPackages();
@@ -430,6 +441,8 @@ export default function PackageListing() {
                     )}
                   </Await>
                 </Suspense>
+
+                {ReportPackageButton}
               </div>
               <Suspense
                 fallback={
@@ -573,24 +586,29 @@ export default function PackageListing() {
                 </Await>
               </Suspense>
               <div className="package-listing-sidebar__main">
-                <Suspense
-                  fallback={
-                    <SkeletonBox className="package-listing-sidebar__actions-skeleton" />
-                  }
-                >
-                  <Await resolve={listingAndTeamPromise}>
-                    {(resolvedValue) => (
-                      <Actions
-                        team={resolvedValue[1]}
-                        listing={resolvedValue[0]}
-                        isLiked={isLiked}
-                        currentUser={currentUser}
-                        likeUpdateTrigger={fetchAndSetRatedPackages}
-                        requestConfig={config}
-                      />
-                    )}
-                  </Await>
-                </Suspense>
+                <div className="package-listing-sidebar__actions">
+                  <Suspense
+                    fallback={
+                      <SkeletonBox className="package-listing-sidebar__actions-skeleton" />
+                    }
+                  >
+                    <Await resolve={listingAndTeamPromise}>
+                      {(resolvedValue) => (
+                        <Actions
+                          team={resolvedValue[1]}
+                          listing={resolvedValue[0]}
+                          isLiked={isLiked}
+                          currentUser={currentUser}
+                          likeUpdateTrigger={fetchAndSetRatedPackages}
+                          requestConfig={config}
+                        />
+                      )}
+                    </Await>
+                  </Suspense>
+
+                  {ReportPackageButton}
+                </div>
+
                 <Suspense
                   fallback={
                     <SkeletonBox className="package-listing-sidebar__skeleton" />
@@ -622,6 +640,8 @@ export default function PackageListing() {
           </div>
         </section>
       </div>
+
+      {ReportPackageForm}
     </>
   );
 }
@@ -963,7 +983,7 @@ const Actions = memo(function Actions(props: {
     requestConfig,
   } = props;
   return (
-    <div className="package-listing-sidebar__actions">
+    <>
       <NewButton
         primitiveType="link"
         href={listing.download_url}
@@ -1007,7 +1027,7 @@ const Actions = memo(function Actions(props: {
           <FontAwesomeIcon icon={faThumbsUp} />
         </NewIcon>
       </NewButton>
-    </div>
+    </>
   );
 });
 

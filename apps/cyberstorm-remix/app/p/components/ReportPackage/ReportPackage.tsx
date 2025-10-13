@@ -1,7 +1,11 @@
-import { useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFlagSwallowtail } from "@fortawesome/pro-solid-svg-icons";
 
 import {
+  Modal,
   NewButton,
+  NewIcon,
   NewSelect,
   NewTextInput,
   type SelectOption,
@@ -27,14 +31,40 @@ const reportOptions: SelectOption<PackageListingReportRequestData["reason"]>[] =
     { value: "Other", label: "Other" },
   ];
 
-export function ReportPackageForm(props: {
+function ReportPackageButton(props: { onClick: () => void }) {
+  return (
+    <NewButton
+      onClick={props.onClick}
+      tooltipText="Report Package"
+      csVariant="secondary"
+      csModifiers={["only-icon"]}
+    >
+      <NewIcon csMode="inline" noWrapper>
+        <FontAwesomeIcon icon={faFlagSwallowtail} />
+      </NewIcon>
+    </NewButton>
+  );
+}
+
+ReportPackageButton.displayName = "ReportPackageButton";
+
+interface ReportPackageFormProps {
   community: string;
   namespace: string;
   package: string;
   config: () => RequestConfig;
   toast: ReturnType<typeof useToast>;
-}) {
-  const { config, toast, ...requestParams } = props;
+}
+
+interface ReportPackageModalProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}
+
+function ReportPackageForm(
+  props: ReportPackageFormProps & ReportPackageModalProps
+) {
+  const { config, toast, isOpen, setIsOpen, ...requestParams } = props;
 
   function formFieldUpdateAction(
     state: PackageListingReportRequestData,
@@ -85,6 +115,7 @@ export function ReportPackageForm(props: {
         children: `Package reported`,
         duration: 4000,
       });
+      setIsOpen(false);
     },
     onSubmitError: (error) => {
       toast.addToast({
@@ -96,9 +127,13 @@ export function ReportPackageForm(props: {
   });
 
   return (
-    <div className="modal-content">
-      <div className="modal-content__header">Report Package</div>
-      <div className="modal-content__body report-package__body">
+    <Modal
+      titleContent="Report Package"
+      csSize="small"
+      open={props.isOpen}
+      onOpenChange={props.setIsOpen}
+    >
+      <Modal.Body>
         <div className="report-package__block">
           <p className="report-package__label">Reason</p>
           <NewSelect
@@ -130,14 +165,40 @@ export function ReportPackageForm(props: {
             rootClasses="report-package__textarea"
           />
         </div>
-      </div>
-      <div className="modal-content__footer report-package__footer">
+      </Modal.Body>
+      <Modal.Footer>
         <NewButton csVariant="success" onClick={strongForm.submit}>
           Submit
         </NewButton>
-      </div>
-    </div>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
 ReportPackageForm.displayName = "ReportPackageForm";
+
+export function useReportPackage(formProps: Promise<ReportPackageFormProps>) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [props, setProps] = useState<ReportPackageFormProps | null>(null);
+
+  async function awaitAndSetProps() {
+    if (!props) {
+      setProps(await formProps);
+    }
+  }
+
+  useEffect(() => {
+    awaitAndSetProps();
+  }, [formProps, props]);
+
+  const button = <ReportPackageButton onClick={() => setIsOpen(true)} />;
+
+  const form = props && (
+    <ReportPackageForm {...{ isOpen, setIsOpen }} {...props} />
+  );
+
+  return {
+    ReportPackageButton: button,
+    ReportPackageForm: form,
+  };
+}
