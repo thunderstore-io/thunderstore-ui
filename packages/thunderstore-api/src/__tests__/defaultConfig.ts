@@ -12,4 +12,5 @@ export const testData = {
   communityId: "test-community-1",
   namespaceId: "Test_Team_0",
   packageName: "Test_Package_0",
+  versionNumber: "1.0.0",
 };

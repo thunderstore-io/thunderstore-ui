@@ -142,7 +142,7 @@ const packageTeamSchema = z.object({
 
 export type PackageTeam = z.infer<typeof packageTeamSchema>;
 
-export const packageDependencySchema = z.object({
+export const packageListingDependencySchema = z.object({
   community_identifier: z.string().min(1),
   description: z.string(),
   icon_url: z.string().nullable(),
@@ -152,13 +152,15 @@ export const packageDependencySchema = z.object({
   version_number: z.string().min(1),
 });
 
-export type PackageDependency = z.infer<typeof packageDependencySchema>;
+export type PackageListingDependency = z.infer<
+  typeof packageListingDependencySchema
+>;
 
 export const packageListingDetailsSchema = packageListingSchema.extend({
   community_name: z.string().min(1),
   datetime_created: z.string().datetime(),
   dependant_count: z.number().int(),
-  dependencies: z.array(packageDependencySchema),
+  dependencies: z.array(packageListingDependencySchema),
   dependency_count: z.number().int(),
   download_url: z.string(),
   full_version_name: z.string().min(1),
@@ -243,6 +245,20 @@ export const packageVersionExperimentalSchema = z.object({
   website_url: z.string().nullable(),
   is_active: z.boolean(),
 });
+
+export const packageVersionDependencySchema = z.object({
+  description: z.string(),
+  icon_url: z.string(),
+  is_active: z.boolean(),
+  name: z.string().min(1),
+  namespace: z.string().min(1),
+  version_number: z.string().min(1),
+  is_removed: z.boolean(),
+});
+
+export type PackageVersionDependency = z.infer<
+  typeof packageVersionDependencySchema
+>;
 
 export type PackageVersionExperimental = z.infer<
   typeof packageVersionExperimentalSchema
