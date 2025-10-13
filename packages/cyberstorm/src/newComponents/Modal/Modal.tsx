@@ -18,13 +18,13 @@ import { type ButtonComponentProps } from "../Button/Button";
  * Props for the `Modal` component.
  *
  * The modal is built on top of Radix UI Dialog and supports both
- * controlled and uncontrolled usage. Provide `open` and
- * `onOpenChange` to control it programmatically, or omit them and
+ * controlled and uncontrolled usage. Provide `open`,
+ * `onOpenChange` and/or `defaultOpen` to control it programmatically, or omit them and
  * pass a `trigger` element to let Radix manage state internally.
  */
 export interface ModalProps
   extends PropsWithChildren,
-    Pick<Dialog.DialogProps, "onOpenChange" | "open"> {
+    Pick<Dialog.DialogProps, "onOpenChange" | "open" | "defaultOpen"> {
   /**
    * Optional element that acts as the opener for the modal.
    * Rendered through Radix `Dialog.Trigger` with `asChild` so your
@@ -235,7 +235,11 @@ export function Modal(props: ModalProps) {
   }
 
   return (
-    <Dialog.Root open={props.open} onOpenChange={props.onOpenChange}>
+    <Dialog.Root
+      open={props.open}
+      onOpenChange={props.onOpenChange}
+      defaultOpen={props.defaultOpen}
+    >
       {trigger ? <Dialog.Trigger asChild>{trigger}</Dialog.Trigger> : null}
       <Dialog.Portal>
         <Dialog.Overlay className="modal__overlay">

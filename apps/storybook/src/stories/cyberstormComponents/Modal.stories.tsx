@@ -14,7 +14,7 @@ const meta = {
     csVariant: { control: "select", options: ModalVariantsList },
     csSize: { control: "select", options: ModalSizesList },
     onOpenChange: { action: "onOpenChange" },
-    open: { control: "boolean" },
+    defaultOpen: { control: "boolean" },
     trigger: { control: false },
     disableTitle: { control: "boolean" },
     disableBody: { control: "boolean" },
@@ -39,98 +39,120 @@ const meta = {
     ariaDescribedby: "modal-description",
   },
   render: (args) => <Modal {...args} />,
+  parameters: {
+    chromatic: { delay: 300 },
+  },
 } satisfies Meta<typeof Modal>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {},
+  args: { open: false },
 };
 
 export const DisabledTitleDefaultSubComponents: Story = {
   args: {
     disableTitle: true,
-    open: true,
+    defaultOpen: true,
   },
 };
 export const DisabledBodyDefaultSubComponents: Story = {
   args: {
     disableBody: true,
-    open: true,
+    defaultOpen: true,
   },
 };
 export const DisabledFooterDefaultSubComponents: Story = {
   args: {
     disableFooter: true,
-    open: true,
+    defaultOpen: true,
   },
 };
 export const DisabledExitDefaultSubComponents: Story = {
   args: {
     disableExit: true,
-    open: true,
+    defaultOpen: true,
   },
 };
 export const DisabledAllDefaultSubComponents: Story = {
   args: {
     disableDefaultSubComponents: true,
-    open: true,
+    defaultOpen: true,
   },
 };
 
-export const Variants: Story = {
+export const VariantDefault: Story = {
   render: () => {
     const size = "small";
+    const variant = "default";
     return (
-      <>
-        {ModalVariantsList.map((variant) => (
-          <Modal
-            key={`${size}-${variant}`}
-            csVariant={variant}
-            csSize={size}
-            open={true}
-          >
-            <Modal.Title>
-              {size}-{variant}
-            </Modal.Title>
-            <Modal.Body>
-              {size}-{variant}
-            </Modal.Body>
-            <Modal.Footer>
-              {size}-{variant}
-            </Modal.Footer>
-          </Modal>
-        ))}
-      </>
+      <Modal
+        key={`${size}-${variant}`}
+        csVariant={variant}
+        csSize={size}
+        defaultOpen={true}
+      >
+        <Modal.Title>
+          {size}-{variant}
+        </Modal.Title>
+        <Modal.Body>
+          {size}-{variant}
+        </Modal.Body>
+        <Modal.Footer>
+          {size}-{variant}
+        </Modal.Footer>
+      </Modal>
     );
   },
 };
 
-export const Sizes: Story = {
+export const SizeSmall: Story = {
   render: () => {
+    const size = "small";
     const variant = "default";
     return (
-      <>
-        {ModalSizesList.map((size) => (
-          <Modal
-            key={`${size}-${variant}`}
-            csVariant={variant}
-            csSize={size}
-            open={true}
-          >
-            <Modal.Title>
-              {size}-{variant}
-            </Modal.Title>
-            <Modal.Body>
-              {size}-{variant}
-            </Modal.Body>
-            <Modal.Footer>
-              {size}-{variant}
-            </Modal.Footer>
-          </Modal>
-        ))}
-      </>
+      <Modal
+        key={`${size}-${variant}`}
+        csVariant={variant}
+        csSize={size}
+        defaultOpen={true}
+      >
+        <Modal.Title>
+          {size}-{variant}
+        </Modal.Title>
+        <Modal.Body>
+          {size}-{variant}
+        </Modal.Body>
+        <Modal.Footer>
+          {size}-{variant}
+        </Modal.Footer>
+      </Modal>
+    );
+  },
+};
+
+export const SizeMedium: Story = {
+  render: () => {
+    const size = "medium";
+    const variant = "default";
+    return (
+      <Modal
+        key={`${size}-${variant}`}
+        csVariant={variant}
+        csSize={size}
+        defaultOpen={true}
+      >
+        <Modal.Title>
+          {size}-{variant}
+        </Modal.Title>
+        <Modal.Body>
+          {size}-{variant}
+        </Modal.Body>
+        <Modal.Footer>
+          {size}-{variant}
+        </Modal.Footer>
+      </Modal>
     );
   },
 };
@@ -138,7 +160,7 @@ export const Sizes: Story = {
 export const ModalTitle: Story = {
   render: (args) => {
     return (
-      <Modal {...args} open={true}>
+      <Modal {...args} defaultOpen={true}>
         <Modal.Title className="custom-modal-title">
           Custom Modal Title
         </Modal.Title>
@@ -150,7 +172,7 @@ export const ModalTitle: Story = {
 export const ModalBody: Story = {
   render: (args) => {
     return (
-      <Modal {...args} open={true}>
+      <Modal {...args} defaultOpen={true}>
         <Modal.Body className="custom-modal-body">Custom Modal Body</Modal.Body>
       </Modal>
     );
@@ -160,7 +182,7 @@ export const ModalBody: Story = {
 export const ModalFooter: Story = {
   render: (args) => {
     return (
-      <Modal {...args} open={true}>
+      <Modal {...args} defaultOpen={true}>
         <Modal.Footer className="custom-modal-footer">
           Custom Modal Footer
         </Modal.Footer>

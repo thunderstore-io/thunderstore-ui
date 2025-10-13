@@ -18,7 +18,8 @@
     align-items: flex-start;
     align-self: stretch;
     justify-content: center;
-    padding: var(--modal-content-padding);
+
+    /* padding: var(--modal-content-padding); */
     border: var(--modal-border);
     border-radius: var(--modal-border-radius);
     color: var(--modal-color);
