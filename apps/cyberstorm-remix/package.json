@@ -14,7 +14,7 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
-    "@fortawesome/pro-solid-svg-icons": "6.6.0",
+    "@fortawesome/pro-solid-svg-icons": "7.1.0",
     "@react-router/node": "^7.6.2",
     "@react-router/serve": "^7.6.2",
     "@sentry/remix": "^10.8.0",
