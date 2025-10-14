@@ -181,7 +181,7 @@ export default function PackageListing() {
   const [isLiked, setIsLiked] = useState(false);
   const toast = useToast();
 
-  const { ReportPackageButton, ReportPackageForm } = useReportPackage(
+  const { ReportPackageButton, ReportPackageModal } = useReportPackage(
     Promise.resolve(listing).then((listingData) => ({
       community: listingData.community_identifier,
       namespace: listingData.namespace,
@@ -641,7 +641,7 @@ export default function PackageListing() {
         </section>
       </div>
 
-      {ReportPackageForm}
+      {ReportPackageModal}
     </>
   );
 }

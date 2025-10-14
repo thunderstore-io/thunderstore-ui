@@ -15,7 +15,6 @@ import {
 } from "@thunderstore/thunderstore-api";
 
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import "./ReportPackage.css";
 
 const reportOptions: SelectOption<PackageListingReportRequestData["reason"]>[] =
   [
@@ -36,15 +35,8 @@ export interface ReportPackageFormProps {
   toast: ReturnType<typeof useToast>;
 }
 
-interface ReportPackageModalProps {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-}
-
-export function ReportPackageForm(
-  props: ReportPackageFormProps & ReportPackageModalProps
-) {
-  const { config, toast, isOpen, setIsOpen, ...requestParams } = props;
+export function ReportPackageForm(props: ReportPackageFormProps) {
+  const { config, toast, ...requestParams } = props;
 
   function formFieldUpdateAction(
     state: PackageListingReportRequestData,
@@ -95,7 +87,6 @@ export function ReportPackageForm(
         children: `Package reported`,
         duration: 4000,
       });
-      setIsOpen(false);
     },
     onSubmitError: (error) => {
       toast.addToast({
@@ -107,12 +98,7 @@ export function ReportPackageForm(
   });
 
   return (
-    <Modal
-      titleContent="Report Package"
-      csSize="small"
-      open={props.isOpen}
-      onOpenChange={props.setIsOpen}
-    >
+    <>
       <Modal.Body>
         <div className="report-package__block">
           <p className="report-package__label">Reason</p>
@@ -151,7 +137,7 @@ export function ReportPackageForm(
           Submit
         </NewButton>
       </Modal.Footer>
-    </Modal>
+    </>
   );
 }
 

@@ -5,6 +5,7 @@ import {
   type ReportPackageFormProps,
 } from "./ReportPackage";
 import { ReportPackageButton } from "./ReportPackageButton";
+import { ReportPackageModal } from "./ReportPackageModal";
 
 export function useReportPackage(formProps: Promise<ReportPackageFormProps>) {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,12 +23,14 @@ export function useReportPackage(formProps: Promise<ReportPackageFormProps>) {
 
   const button = <ReportPackageButton onClick={() => setIsOpen(true)} />;
 
-  const form = props && (
-    <ReportPackageForm {...{ isOpen, setIsOpen }} {...props} />
+  const form = props && <ReportPackageForm {...props} />;
+
+  const modal = (
+    <ReportPackageModal {...{ isOpen, setIsOpen }}>{form}</ReportPackageModal>
   );
 
   return {
     ReportPackageButton: button,
-    ReportPackageForm: form,
+    ReportPackageModal: modal,
   };
 }
