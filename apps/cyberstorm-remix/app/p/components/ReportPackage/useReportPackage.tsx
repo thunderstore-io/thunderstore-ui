@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+
 import {
-  ReportPackageButton,
   ReportPackageForm,
   type ReportPackageFormProps,
 } from "./ReportPackage";
+import { ReportPackageButton } from "./ReportPackageButton";
 
 export function useReportPackage(formProps: Promise<ReportPackageFormProps>) {
   const [isOpen, setIsOpen] = useState(false);
