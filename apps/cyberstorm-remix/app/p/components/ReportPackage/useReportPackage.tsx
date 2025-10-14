@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
   ReportPackageForm,
   type ReportPackageFormProps,
-} from "./ReportPackage";
+} from "./ReportPackageForm";
 import { ReportPackageButton } from "./ReportPackageButton";
 import { ReportPackageModal } from "./ReportPackageModal";
 
