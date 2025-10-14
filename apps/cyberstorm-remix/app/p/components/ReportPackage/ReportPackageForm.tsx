@@ -7,7 +7,6 @@ import {
   NewSelect,
   NewTextInput,
   type SelectOption,
-  useToast,
 } from "@thunderstore/cyberstorm";
 import {
   type RequestConfig,
@@ -33,12 +32,16 @@ export interface ReportPackageFormProps {
   namespace: string;
   package: string;
   config: () => RequestConfig;
-  toast: ReturnType<typeof useToast>;
 }
 
-export function ReportPackageForm(props: ReportPackageFormProps) {
-  const { config, toast, ...requestParams } = props;
-  const [error, setError] = useState<string | null>(null);
+interface ReportPackageFormFullProps extends ReportPackageFormProps {
+  error: string | null;
+  setError: (error: string | null) => void;
+  setIsSubmitted: (isSubmitted: boolean) => void;
+}
+
+export function ReportPackageForm(props: ReportPackageFormFullProps) {
+  const { config, setIsSubmitted, error, setError, ...requestParams } = props;
 
   function formFieldUpdateAction(
     state: PackageListingReportRequestData,
@@ -84,11 +87,8 @@ export function ReportPackageForm(props: ReportPackageFormProps) {
     inputs: formInputs,
     submitor,
     onSubmitSuccess: () => {
-      toast.addToast({
-        csVariant: "success",
-        children: `Package reported`,
-        duration: 4000,
-      });
+      setIsSubmitted(true);
+      setError(null);
     },
     onSubmitError: (error) => {
       let message = `Error occurred: ${error.message || "Unknown error"}`;

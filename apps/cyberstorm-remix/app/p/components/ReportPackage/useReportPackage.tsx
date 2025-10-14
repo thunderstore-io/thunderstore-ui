@@ -6,9 +6,19 @@ import {
 } from "./ReportPackageForm";
 import { ReportPackageButton } from "./ReportPackageButton";
 import { ReportPackageModal } from "./ReportPackageModal";
+import { ReportPackageSubmitted } from "./ReportPackageSubmitted";
 
 export function useReportPackage(formProps: Promise<ReportPackageFormProps>) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const onOpenChange = (isOpen: boolean) => {
+    setIsOpen(isOpen);
+    setIsSubmitted(false);
+    setError(null);
+  };
+
   const [props, setProps] = useState<ReportPackageFormProps | null>(null);
 
   async function awaitAndSetProps() {
@@ -21,12 +31,19 @@ export function useReportPackage(formProps: Promise<ReportPackageFormProps>) {
     awaitAndSetProps();
   }, [formProps, props, awaitAndSetProps]);
 
-  const button = <ReportPackageButton onClick={() => setIsOpen(true)} />;
+  const button = <ReportPackageButton onClick={() => onOpenChange(true)} />;
 
-  const form = props && <ReportPackageForm {...props} />;
+  const extraProps = { error, setError, setIsSubmitted };
+  const form = props && <ReportPackageForm {...props} {...extraProps} />;
+
+  const done = (
+    <ReportPackageSubmitted closeModal={() => onOpenChange(false)} />
+  );
 
   const modal = (
-    <ReportPackageModal {...{ isOpen, setIsOpen }}>{form}</ReportPackageModal>
+    <ReportPackageModal {...{ isOpen, onOpenChange }}>
+      {isSubmitted ? done : form}
+    </ReportPackageModal>
   );
 
   return {

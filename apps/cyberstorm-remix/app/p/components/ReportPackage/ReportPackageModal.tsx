@@ -4,7 +4,7 @@ import "./ReportPackage.css";
 
 interface ReportPackageModalProps {
   isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  onOpenChange: (isOpen: boolean) => void;
   children: React.ReactNode;
 }
 
@@ -15,7 +15,7 @@ export function ReportPackageModal(props: ReportPackageModalProps) {
       csSize="small"
       disableBody
       open={props.isOpen}
-      onOpenChange={props.setIsOpen}
+      onOpenChange={props.onOpenChange}
     >
       {props.children}
     </Modal>

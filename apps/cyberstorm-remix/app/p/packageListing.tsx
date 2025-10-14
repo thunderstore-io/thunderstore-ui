@@ -187,7 +187,6 @@ export default function PackageListing() {
       namespace: listingData.namespace,
       package: listingData.name,
       config,
-      toast,
     }))
   );
 
