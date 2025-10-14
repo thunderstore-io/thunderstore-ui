@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlagSwallowtail } from "@fortawesome/pro-solid-svg-icons";
 
@@ -31,7 +31,7 @@ const reportOptions: SelectOption<PackageListingReportRequestData["reason"]>[] =
     { value: "Other", label: "Other" },
   ];
 
-function ReportPackageButton(props: { onClick: () => void }) {
+export function ReportPackageButton(props: { onClick: () => void }) {
   return (
     <NewButton
       onClick={props.onClick}
@@ -48,7 +48,7 @@ function ReportPackageButton(props: { onClick: () => void }) {
 
 ReportPackageButton.displayName = "ReportPackageButton";
 
-interface ReportPackageFormProps {
+export interface ReportPackageFormProps {
   community: string;
   namespace: string;
   package: string;
@@ -61,7 +61,7 @@ interface ReportPackageModalProps {
   setIsOpen: (isOpen: boolean) => void;
 }
 
-function ReportPackageForm(
+export function ReportPackageForm(
   props: ReportPackageFormProps & ReportPackageModalProps
 ) {
   const { config, toast, isOpen, setIsOpen, ...requestParams } = props;
@@ -176,29 +176,3 @@ function ReportPackageForm(
 }
 
 ReportPackageForm.displayName = "ReportPackageForm";
-
-export function useReportPackage(formProps: Promise<ReportPackageFormProps>) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [props, setProps] = useState<ReportPackageFormProps | null>(null);
-
-  async function awaitAndSetProps() {
-    if (!props) {
-      setProps(await formProps);
-    }
-  }
-
-  useEffect(() => {
-    awaitAndSetProps();
-  }, [formProps, props]);
-
-  const button = <ReportPackageButton onClick={() => setIsOpen(true)} />;
-
-  const form = props && (
-    <ReportPackageForm {...{ isOpen, setIsOpen }} {...props} />
-  );
-
-  return {
-    ReportPackageButton: button,
-    ReportPackageForm: form,
-  };
-}

@@ -33,7 +33,7 @@ import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
 import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
 import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
-import { useReportPackage } from "app/p/components/ReportPackage/ReportPackage";
+import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
 import { type OutletContextShape } from "app/root";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import {
