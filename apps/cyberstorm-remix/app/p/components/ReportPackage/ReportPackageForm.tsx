@@ -1,7 +1,8 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 
 import {
   Modal,
+  NewAlert,
   NewButton,
   NewSelect,
   NewTextInput,
@@ -37,6 +38,7 @@ export interface ReportPackageFormProps {
 
 export function ReportPackageForm(props: ReportPackageFormProps) {
   const { config, toast, ...requestParams } = props;
+  const [error, setError] = useState<string | null>(null);
 
   function formFieldUpdateAction(
     state: PackageListingReportRequestData,
@@ -89,11 +91,11 @@ export function ReportPackageForm(props: ReportPackageFormProps) {
       });
     },
     onSubmitError: (error) => {
-      toast.addToast({
-        csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
-        duration: 8000,
-      });
+      let message = `Error occurred: ${error.message || "Unknown error"}`;
+      if (error.message === "401: Unauthorized") {
+        message = "You must be logged in to report a package.";
+      }
+      setError(message);
     },
   });
 
@@ -131,6 +133,11 @@ export function ReportPackageForm(props: ReportPackageFormProps) {
             rootClasses="report-package__textarea"
           />
         </div>
+        {error && (
+          <div className="report-package__block">
+            <NewAlert csVariant="danger">{error}</NewAlert>
+          </div>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <NewButton csVariant="success" onClick={strongForm.submit}>
