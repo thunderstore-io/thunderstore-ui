@@ -36,12 +36,20 @@ export interface ReportPackageFormProps {
 
 interface ReportPackageFormFullProps extends ReportPackageFormProps {
   error: string | null;
+  onOpenChange: (isOpen: boolean) => void;
   setError: (error: string | null) => void;
   setIsSubmitted: (isSubmitted: boolean) => void;
 }
 
 export function ReportPackageForm(props: ReportPackageFormFullProps) {
-  const { config, setIsSubmitted, error, setError, ...requestParams } = props;
+  const {
+    config,
+    onOpenChange,
+    setIsSubmitted,
+    error,
+    setError,
+    ...requestParams
+  } = props;
 
   function formFieldUpdateAction(
     state: PackageListingReportRequestData,
@@ -146,6 +154,9 @@ export function ReportPackageForm(props: ReportPackageFormFullProps) {
         )}
       </Modal.Body>
       <Modal.Footer>
+        <NewButton csVariant="secondary" onClick={() => onOpenChange(false)}>
+          Cancel
+        </NewButton>
         <NewButton csVariant="accent" onClick={strongForm.submit}>
           Send report
         </NewButton>

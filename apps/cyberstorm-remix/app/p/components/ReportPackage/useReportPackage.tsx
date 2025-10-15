@@ -33,7 +33,7 @@ export function useReportPackage(formProps: Promise<ReportPackageFormProps>) {
 
   const button = <ReportPackageButton onClick={() => onOpenChange(true)} />;
 
-  const extraProps = { error, setError, setIsSubmitted };
+  const extraProps = { error, onOpenChange, setError, setIsSubmitted };
   const form = props && <ReportPackageForm {...props} {...extraProps} />;
 
   const done = (
