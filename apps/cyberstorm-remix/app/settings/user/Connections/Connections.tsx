@@ -1,15 +1,13 @@
-import { NewLink } from "@thunderstore/cyberstorm";
+import { NewLink, OverwolfLogo, useToast } from "@thunderstore/cyberstorm";
 
 import { useOutletContext } from "react-router";
 import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
 
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { userLinkedAccountDisconnect } from "../../../../../../packages/thunderstore-api/src";
 
 import { Connection } from "~/commonComponents/Connection/Connection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
-import { OverwolfLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import { type ReactElement } from "react";
 import { type OutletContextShape } from "~/root";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";

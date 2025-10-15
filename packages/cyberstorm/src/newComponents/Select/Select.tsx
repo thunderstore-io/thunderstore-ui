@@ -11,6 +11,7 @@ import {
   Trigger,
   Viewport,
 } from "@radix-ui/react-select";
+import type { SelectOption } from "../../utils/types";
 import { classnames, componentClasses } from "../../utils/utils";
 import { NewButton, NewIcon } from "../..";
 import {
@@ -18,12 +19,6 @@ import {
   type SelectSizes,
   type SelectVariants,
 } from "@thunderstore/cyberstorm-theme/src/components";
-
-export type SelectOption<T extends string = string> = {
-  value: T;
-  label?: string;
-  leftIcon?: ReactElement;
-};
 
 type _SelectProps<T extends string = string> = {
   variant?: "default" | "accent" | "wide";

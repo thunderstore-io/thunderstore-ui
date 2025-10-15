@@ -1,5 +1,6 @@
-import React, { type ReactNode } from "react";
+import React from "react";
 import "./SelectSearch.css";
+import type { SelectOption } from "../../utils/types";
 import { classnames, componentClasses } from "../../utils/utils";
 import { NewIcon, NewTag } from "../../index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,12 +14,6 @@ import {
   type SelectSearchSizes,
   type SelectSearchModifiers,
 } from "@thunderstore/cyberstorm-theme/src/components";
-
-export type SelectOption<T extends string = string> = {
-  value: T;
-  label?: string;
-  leftIcon?: ReactNode;
-};
 
 export type SelectSearchProps =
   | {

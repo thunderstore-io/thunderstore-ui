@@ -5,12 +5,12 @@ import {
   NewButton,
   NewIcon,
   NewTextInput,
+  useToast,
 } from "@thunderstore/cyberstorm";
 import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { type OutletContextShape } from "~/root";
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
 import { userDelete } from "@thunderstore/thunderstore-api";

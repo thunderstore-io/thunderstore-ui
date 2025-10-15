@@ -6,13 +6,13 @@ import {
   NewIcon,
   NewLink,
   NewTextInput,
+  useToast,
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useOutletContext, useParams } from "react-router";
 
 import { type OutletContextShape } from "~/root";
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import {
   type RequestConfig,
   teamDisband,

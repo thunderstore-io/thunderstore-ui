@@ -1,14 +1,47 @@
-import type {
-  LoaderFunctionArgs,
-  ShouldRevalidateFunctionArgs,
-} from "react-router";
+import {
+  memo,
+  type ReactElement,
+  Suspense,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import {
   Await,
   Outlet,
   useLoaderData,
   useLocation,
   useOutletContext,
+  type LoaderFunctionArgs,
+  type ShouldRevalidateFunctionArgs,
 } from "react-router";
+import { useHydrated } from "remix-utils/use-hydrated";
+import {
+  faUsers,
+  faHandHoldingHeart,
+  faDownload,
+  faThumbsUp,
+  faWarning,
+  faCaretRight,
+  faScaleBalanced,
+  faCog,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
+
+import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
+import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
+import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
+import { type OutletContextShape } from "app/root";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { isPromise } from "cyberstorm/utils/typeChecks";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
+
 import {
   Drawer,
   Heading,
@@ -20,11 +53,20 @@ import {
   NewSelect,
   NewTag,
   NewTextInput,
+  RelativeTime,
+  type SelectOption,
   SkeletonBox,
   Tabs,
+  ThunderstoreLogo,
+  formatFileSize,
+  formatInteger,
+  formatToDisplayName,
+  useToast,
 } from "@thunderstore/cyberstorm";
-import "./packageListing.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
+import type { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import type { CurrentUser } from "@thunderstore/dapper/types";
+import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
 import {
   fetchPackagePermissions,
   packageListingApprove,
@@ -33,55 +75,9 @@ import {
   type PackageListingReportRequestData,
   type RequestConfig,
 } from "@thunderstore/thunderstore-api";
-import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
-import {
-  faUsers,
-  faHandHoldingHeart,
-  faDownload,
-  faThumbsUp,
-  faWarning,
-  faCaretRight,
-  faScaleBalanced,
-  faCog,
-} from "@fortawesome/free-solid-svg-icons";
-import TeamMembers from "./components/TeamMembers/TeamMembers";
-import {
-  memo,
-  type ReactElement,
-  Suspense,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
-import { useHydrated } from "remix-utils/use-hydrated";
-import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
-import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTime/RelativeTime";
-import {
-  formatFileSize,
-  formatInteger,
-  formatToDisplayName,
-} from "@thunderstore/cyberstorm/src/utils/utils";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { type OutletContextShape } from "~/root";
-import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-import type { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
-import type { SelectOption } from "@thunderstore/cyberstorm/src/newComponents/Select/Select";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { getPackageListingDetails } from "@thunderstore/dapper-ts/src/methods/packageListings";
-import { getCommunity } from "@thunderstore/dapper-ts/src/methods/communities";
-import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
-import type { CurrentUser } from "@thunderstore/dapper/types";
-import { isPromise } from "cyberstorm/utils/typeChecks";
+
+import "./packageListing.css";
 
 type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
@@ -944,8 +940,8 @@ function ReportPackageForm(props: {
 ReportPackageForm.displayName = "ReportPackageForm";
 
 function packageTags(
-  listing: Awaited<ReturnType<typeof getPackageListingDetails>>,
-  community: Awaited<ReturnType<typeof getCommunity>>
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>,
+  community: Awaited<ReturnType<DapperTsInterface["getCommunity"]>>
 ) {
   return listing.categories.map((category) => {
     return (
@@ -965,8 +961,8 @@ function packageTags(
 }
 
 function packageBoxes(
-  listing: Awaited<ReturnType<typeof getPackageListingDetails>>,
-  community: Awaited<ReturnType<typeof getCommunity>>,
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>,
+  community: Awaited<ReturnType<DapperTsInterface["getCommunity"]>>,
   domain: string
 ) {
   const pt = packageTags(listing, community);
@@ -1019,7 +1015,7 @@ function packageBoxes(
 // TODO: Enable when APIs are available
 function managementTools(
   packagePermissions: Awaited<ReturnType<typeof fetchPackagePermissions>>,
-  listing: Awaited<ReturnType<typeof getPackageListingDetails>>,
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>,
   toast: ReturnType<typeof useToast>,
   requestConfig: () => RequestConfig
 ) {
@@ -1110,8 +1106,8 @@ function likeAction(
 }
 
 const Actions = memo(function Actions(props: {
-  team: Awaited<ReturnType<typeof getTeamDetails>>;
-  listing: Awaited<ReturnType<typeof getPackageListingDetails>>;
+  team: Awaited<ReturnType<DapperTsInterface["getTeamDetails"]>>;
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>;
   isLiked: boolean;
   currentUser: CurrentUser | undefined;
   likeUpdateTrigger: () => Promise<void>;
@@ -1190,7 +1186,7 @@ const Actions = memo(function Actions(props: {
 function packageMeta(
   lastUpdated: ReactElement | undefined,
   firstUploaded: ReactElement | undefined,
-  listing: Awaited<ReturnType<typeof getPackageListingDetails>>
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>
 ) {
   return (
     <div className="package-listing-sidebar__meta">

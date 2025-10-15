@@ -2,13 +2,13 @@ import "./Footer.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faBoltLightning } from "@fortawesome/free-solid-svg-icons";
-import { ThunderstoreLogoHorizontal } from "@thunderstore/cyberstorm/src/svg/svg";
 import {
   Heading,
   NewButton,
   NewIcon,
   NewLink,
-} from "@thunderstore/cyberstorm/src";
+  ThunderstoreLogoHorizontal,
+} from "@thunderstore/cyberstorm";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 
 const AD_IMAGE_SRC = "/cyberstorm-static/images/tsmm_screenshot.png";

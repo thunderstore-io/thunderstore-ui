@@ -8,6 +8,7 @@ import {
   NewTextInput,
   Heading,
   CodeBox,
+  useToast,
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -25,7 +26,6 @@ import { type OutletContextShape } from "../../../../../root";
 import { useReducer, useState } from "react";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { useToast } from "@thunderstore/cyberstorm/src/newComponents/Toast/Provider";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 
