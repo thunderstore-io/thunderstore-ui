@@ -33,7 +33,7 @@ import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
 import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
 import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
-import { useReportPackage } from "app/p/components/ReportPackage/ReportPackage";
+import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
 import { type OutletContextShape } from "app/root";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import {
@@ -181,7 +181,7 @@ export default function PackageListing() {
   const [isLiked, setIsLiked] = useState(false);
   const toast = useToast();
 
-  const { ReportPackageButton, ReportPackageForm } = useReportPackage(
+  const { ReportPackageButton, ReportPackageModal } = useReportPackage(
     Promise.resolve(listing).then((listingData) => ({
       community: listingData.community_identifier,
       namespace: listingData.namespace,
@@ -641,7 +641,7 @@ export default function PackageListing() {
         </section>
       </div>
 
-      {ReportPackageForm}
+      {ReportPackageModal}
     </>
   );
 }

@@ -1,11 +1,8 @@
-import { useEffect, useReducer, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFlagSwallowtail } from "@fortawesome/pro-solid-svg-icons";
+import { useReducer } from "react";
 
 import {
   Modal,
   NewButton,
-  NewIcon,
   NewSelect,
   NewTextInput,
   type SelectOption,
@@ -18,7 +15,6 @@ import {
 } from "@thunderstore/thunderstore-api";
 
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import "./ReportPackage.css";
 
 const reportOptions: SelectOption<PackageListingReportRequestData["reason"]>[] =
   [
@@ -31,24 +27,7 @@ const reportOptions: SelectOption<PackageListingReportRequestData["reason"]>[] =
     { value: "Other", label: "Other" },
   ];
 
-function ReportPackageButton(props: { onClick: () => void }) {
-  return (
-    <NewButton
-      onClick={props.onClick}
-      tooltipText="Report Package"
-      csVariant="secondary"
-      csModifiers={["only-icon"]}
-    >
-      <NewIcon csMode="inline" noWrapper>
-        <FontAwesomeIcon icon={faFlagSwallowtail} />
-      </NewIcon>
-    </NewButton>
-  );
-}
-
-ReportPackageButton.displayName = "ReportPackageButton";
-
-interface ReportPackageFormProps {
+export interface ReportPackageFormProps {
   community: string;
   namespace: string;
   package: string;
@@ -56,15 +35,8 @@ interface ReportPackageFormProps {
   toast: ReturnType<typeof useToast>;
 }
 
-interface ReportPackageModalProps {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-}
-
-function ReportPackageForm(
-  props: ReportPackageFormProps & ReportPackageModalProps
-) {
-  const { config, toast, isOpen, setIsOpen, ...requestParams } = props;
+export function ReportPackageForm(props: ReportPackageFormProps) {
+  const { config, toast, ...requestParams } = props;
 
   function formFieldUpdateAction(
     state: PackageListingReportRequestData,
@@ -115,7 +87,6 @@ function ReportPackageForm(
         children: `Package reported`,
         duration: 4000,
       });
-      setIsOpen(false);
     },
     onSubmitError: (error) => {
       toast.addToast({
@@ -127,12 +98,7 @@ function ReportPackageForm(
   });
 
   return (
-    <Modal
-      titleContent="Report Package"
-      csSize="small"
-      open={props.isOpen}
-      onOpenChange={props.setIsOpen}
-    >
+    <>
       <Modal.Body>
         <div className="report-package__block">
           <p className="report-package__label">Reason</p>
@@ -171,34 +137,8 @@ function ReportPackageForm(
           Submit
         </NewButton>
       </Modal.Footer>
-    </Modal>
+    </>
   );
 }
 
 ReportPackageForm.displayName = "ReportPackageForm";
-
-export function useReportPackage(formProps: Promise<ReportPackageFormProps>) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [props, setProps] = useState<ReportPackageFormProps | null>(null);
-
-  async function awaitAndSetProps() {
-    if (!props) {
-      setProps(await formProps);
-    }
-  }
-
-  useEffect(() => {
-    awaitAndSetProps();
-  }, [formProps, props]);
-
-  const button = <ReportPackageButton onClick={() => setIsOpen(true)} />;
-
-  const form = props && (
-    <ReportPackageForm {...{ isOpen, setIsOpen }} {...props} />
-  );
-
-  return {
-    ReportPackageButton: button,
-    ReportPackageForm: form,
-  };
-}
