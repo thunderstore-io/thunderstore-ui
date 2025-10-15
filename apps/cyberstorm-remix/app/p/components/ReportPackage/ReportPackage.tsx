@@ -1,0 +1,204 @@
+import { useEffect, useReducer, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFlagSwallowtail } from "@fortawesome/pro-solid-svg-icons";
+
+import {
+  Modal,
+  NewButton,
+  NewIcon,
+  NewSelect,
+  NewTextInput,
+  type SelectOption,
+  useToast,
+} from "@thunderstore/cyberstorm";
+import {
+  type RequestConfig,
+  type PackageListingReportRequestData,
+  packageListingReport,
+} from "@thunderstore/thunderstore-api";
+
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import "./ReportPackage.css";
+
+const reportOptions: SelectOption<PackageListingReportRequestData["reason"]>[] =
+  [
+    { value: "Spam", label: "Spam" },
+    { value: "Malware", label: "Malware" },
+    { value: "Reupload", label: "Reupload" },
+    { value: "CopyrightOrLicense", label: "Copyright Or License" },
+    { value: "WrongCommunity", label: "Wrong Community" },
+    { value: "WrongCategories", label: "Wrong Categories" },
+    { value: "Other", label: "Other" },
+  ];
+
+function ReportPackageButton(props: { onClick: () => void }) {
+  return (
+    <NewButton
+      onClick={props.onClick}
+      tooltipText="Report Package"
+      csVariant="secondary"
+      csModifiers={["only-icon"]}
+    >
+      <NewIcon csMode="inline" noWrapper>
+        <FontAwesomeIcon icon={faFlagSwallowtail} />
+      </NewIcon>
+    </NewButton>
+  );
+}
+
+ReportPackageButton.displayName = "ReportPackageButton";
+
+interface ReportPackageFormProps {
+  community: string;
+  namespace: string;
+  package: string;
+  config: () => RequestConfig;
+  toast: ReturnType<typeof useToast>;
+}
+
+interface ReportPackageModalProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}
+
+function ReportPackageForm(
+  props: ReportPackageFormProps & ReportPackageModalProps
+) {
+  const { config, toast, isOpen, setIsOpen, ...requestParams } = props;
+
+  function formFieldUpdateAction(
+    state: PackageListingReportRequestData,
+    action: {
+      field: keyof PackageListingReportRequestData;
+      value: PackageListingReportRequestData[keyof PackageListingReportRequestData];
+    }
+  ) {
+    return {
+      ...state,
+      [action.field]: action.value,
+    };
+  }
+
+  const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
+    reason: "Other",
+    description: "",
+  });
+
+  type SubmitorOutput = Awaited<ReturnType<typeof packageListingReport>>;
+
+  async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
+    return await packageListingReport({
+      config: config,
+      params: requestParams,
+      queryParams: {},
+      data: { reason: data.reason, description: data.description },
+    });
+  }
+
+  type InputErrors = {
+    [key in keyof typeof formInputs]?: string | string[];
+  };
+
+  const strongForm = useStrongForm<
+    typeof formInputs,
+    PackageListingReportRequestData,
+    Error,
+    SubmitorOutput,
+    Error,
+    InputErrors
+  >({
+    inputs: formInputs,
+    submitor,
+    onSubmitSuccess: () => {
+      toast.addToast({
+        csVariant: "success",
+        children: `Package reported`,
+        duration: 4000,
+      });
+      setIsOpen(false);
+    },
+    onSubmitError: (error) => {
+      toast.addToast({
+        csVariant: "danger",
+        children: `Error occurred: ${error.message || "Unknown error"}`,
+        duration: 8000,
+      });
+    },
+  });
+
+  return (
+    <Modal
+      titleContent="Report Package"
+      csSize="small"
+      open={props.isOpen}
+      onOpenChange={props.setIsOpen}
+    >
+      <Modal.Body>
+        <div className="report-package__block">
+          <p className="report-package__label">Reason</p>
+          <NewSelect
+            name={"reason"}
+            options={reportOptions}
+            placeholder="Please select..."
+            value={formInputs.reason}
+            onChange={(value) => {
+              updateFormFieldState({ field: "reason", value: value });
+            }}
+            id="reason"
+            csSize="small"
+          />
+        </div>
+        <div className="report-package__block">
+          <p className="report-package__label">
+            Additional information (optional)
+          </p>
+          <NewTextInput
+            value={formInputs.description || ""}
+            onChange={(e) => {
+              updateFormFieldState({
+                field: "description",
+                value: e.target.value,
+              });
+            }}
+            placeholder="Invalid submission"
+            csSize="textarea"
+            rootClasses="report-package__textarea"
+          />
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <NewButton csVariant="success" onClick={strongForm.submit}>
+          Submit
+        </NewButton>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
+ReportPackageForm.displayName = "ReportPackageForm";
+
+export function useReportPackage(formProps: Promise<ReportPackageFormProps>) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [props, setProps] = useState<ReportPackageFormProps | null>(null);
+
+  async function awaitAndSetProps() {
+    if (!props) {
+      setProps(await formProps);
+    }
+  }
+
+  useEffect(() => {
+    awaitAndSetProps();
+  }, [formProps, props]);
+
+  const button = <ReportPackageButton onClick={() => setIsOpen(true)} />;
+
+  const form = props && (
+    <ReportPackageForm {...{ isOpen, setIsOpen }} {...props} />
+  );
+
+  return {
+    ReportPackageButton: button,
+    ReportPackageForm: form,
+  };
+}
