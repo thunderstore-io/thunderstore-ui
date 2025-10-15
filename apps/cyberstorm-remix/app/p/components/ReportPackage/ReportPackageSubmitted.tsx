@@ -6,20 +6,25 @@ import { Modal, NewButton, NewIcon } from "@thunderstore/cyberstorm";
 export function ReportPackageSubmitted(props: { closeModal: () => void }) {
   return (
     <>
-      <Modal.Body>
-        <div className="report-package__block">
-          <NewIcon csMode="inline" noWrapper>
+      <Modal.Body className="report-package--centered">
+        <div className="report-package__block ">
+          <NewIcon
+            csMode="inline"
+            noWrapper
+            rootClasses="report-package__submitted-icon"
+          >
             <FontAwesomeIcon icon={faFaceSaluting} />
           </NewIcon>
         </div>
-        <div className="report-package__block">Thank you for your report.</div>
-        <div className="report-package__block">
-          We've received your report and will review the content shortly. Your
-          feedback helps keep our community safe.
-        </div>
+        <h3 className="report-package__heading">Thank you for your report</h3>
+        <p className="report-package__paragraph">
+          We've received your report and will review the content shortly.
+          <br />
+          Your feedback helps keep our community safe.
+        </p>
       </Modal.Body>
       <Modal.Footer>
-        <NewButton csVariant="info" onClick={props.closeModal}>
+        <NewButton csVariant="secondary" onClick={props.closeModal}>
           Close
         </NewButton>
       </Modal.Footer>
