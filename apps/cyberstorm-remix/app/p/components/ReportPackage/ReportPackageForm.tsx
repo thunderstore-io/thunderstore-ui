@@ -1,12 +1,12 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 
 import {
   Modal,
+  NewAlert,
   NewButton,
   NewSelect,
   NewTextInput,
   type SelectOption,
-  useToast,
 } from "@thunderstore/cyberstorm";
 import {
   type RequestConfig,
@@ -32,11 +32,24 @@ export interface ReportPackageFormProps {
   namespace: string;
   package: string;
   config: () => RequestConfig;
-  toast: ReturnType<typeof useToast>;
 }
 
-export function ReportPackageForm(props: ReportPackageFormProps) {
-  const { config, toast, ...requestParams } = props;
+interface ReportPackageFormFullProps extends ReportPackageFormProps {
+  error: string | null;
+  onOpenChange: (isOpen: boolean) => void;
+  setError: (error: string | null) => void;
+  setIsSubmitted: (isSubmitted: boolean) => void;
+}
+
+export function ReportPackageForm(props: ReportPackageFormFullProps) {
+  const {
+    config,
+    onOpenChange,
+    setIsSubmitted,
+    error,
+    setError,
+    ...requestParams
+  } = props;
 
   function formFieldUpdateAction(
     state: PackageListingReportRequestData,
@@ -82,18 +95,15 @@ export function ReportPackageForm(props: ReportPackageFormProps) {
     inputs: formInputs,
     submitor,
     onSubmitSuccess: () => {
-      toast.addToast({
-        csVariant: "success",
-        children: `Package reported`,
-        duration: 4000,
-      });
+      setIsSubmitted(true);
+      setError(null);
     },
     onSubmitError: (error) => {
-      toast.addToast({
-        csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
-        duration: 8000,
-      });
+      let message = `Error occurred: ${error.message || "Unknown error"}`;
+      if (error.message === "401: Unauthorized") {
+        message = "You must be logged in to report a package.";
+      }
+      setError(message);
     },
   });
 
@@ -101,24 +111,30 @@ export function ReportPackageForm(props: ReportPackageFormProps) {
     <>
       <Modal.Body>
         <div className="report-package__block">
-          <p className="report-package__label">Reason</p>
+          <label htmlFor="reason" className="report-package__label">
+            Reason
+          </label>
           <NewSelect
+            id="reason"
             name={"reason"}
             options={reportOptions}
-            placeholder="Please select..."
+            // TODO: placeholder doesn't currently work as `value` is set below.
+            // Even if `value` is removed, "other" value is submitted if user
+            // doesn't choose anything else, which is confusing.
+            // placeholder="Please select..."
             value={formInputs.reason}
             onChange={(value) => {
               updateFormFieldState({ field: "reason", value: value });
             }}
-            id="reason"
             csSize="small"
           />
         </div>
         <div className="report-package__block">
-          <p className="report-package__label">
+          <label htmlFor="description" className="report-package__label">
             Additional information (optional)
-          </p>
+          </label>
           <NewTextInput
+            id="description"
             value={formInputs.description || ""}
             onChange={(e) => {
               updateFormFieldState({
@@ -131,10 +147,18 @@ export function ReportPackageForm(props: ReportPackageFormProps) {
             rootClasses="report-package__textarea"
           />
         </div>
+        {error && (
+          <div className="report-package__block">
+            <NewAlert csVariant="danger">{error}</NewAlert>
+          </div>
+        )}
       </Modal.Body>
       <Modal.Footer>
-        <NewButton csVariant="success" onClick={strongForm.submit}>
-          Submit
+        <NewButton csVariant="secondary" onClick={() => onOpenChange(false)}>
+          Cancel
+        </NewButton>
+        <NewButton csVariant="accent" onClick={strongForm.submit}>
+          Send report
         </NewButton>
       </Modal.Footer>
     </>
