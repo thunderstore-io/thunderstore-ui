@@ -1,5 +1,9 @@
 @layer nimbus-layout {
-  .report-package--centered {
+  .report-package__body {
+    min-width: 600px;
+  }
+
+  .report-package__body--centered {
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -41,5 +45,11 @@
   .report-package__paragraph {
     font-size: var(--font-size-body-md);
     line-height: var(--line-height-md);
+  }
+
+  @media (width <= 650px) {
+    .report-package__body {
+      min-width: 95vw;
+    }
   }
 }

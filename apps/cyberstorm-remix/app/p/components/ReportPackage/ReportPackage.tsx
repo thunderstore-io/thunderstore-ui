@@ -1,11 +1,14 @@
+import "./ReportPackage.css";
 import { useReducer, useState } from "react";
 
 import {
   Modal,
   NewAlert,
   NewButton,
+  NewIcon,
   NewSelect,
   NewTextInput,
+  useToast,
   type SelectOption,
 } from "@thunderstore/cyberstorm";
 import {
@@ -13,8 +16,32 @@ import {
   type PackageListingReportRequestData,
   packageListingReport,
 } from "@thunderstore/thunderstore-api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import {
+  faFaceSaluting,
+  faFlagSwallowtail,
+} from "@fortawesome/pro-solid-svg-icons";
+
+export function ReportPackageButton(
+  props: React.HTMLAttributes<HTMLButtonElement>
+) {
+  return (
+    <NewButton
+      tooltipText="Report Package"
+      csVariant="secondary"
+      csModifiers={["only-icon"]}
+      {...props}
+    >
+      <NewIcon csMode="inline" noWrapper>
+        <FontAwesomeIcon icon={faFlagSwallowtail} />
+      </NewIcon>
+    </NewButton>
+  );
+}
+
+ReportPackageButton.displayName = "ReportPackageButton";
 
 const reportOptions: SelectOption<PackageListingReportRequestData["reason"]>[] =
   [
@@ -27,29 +54,20 @@ const reportOptions: SelectOption<PackageListingReportRequestData["reason"]>[] =
     { value: "Other", label: "Other" },
   ];
 
-export interface ReportPackageFormProps {
+export interface ReportPackageProps {
   community: string;
   namespace: string;
   package: string;
   config: () => RequestConfig;
 }
 
-interface ReportPackageFormFullProps extends ReportPackageFormProps {
-  error: string | null;
-  onOpenChange: (isOpen: boolean) => void;
-  setError: (error: string | null) => void;
-  setIsSubmitted: (isSubmitted: boolean) => void;
-}
+export function ReportPackage(props: ReportPackageProps) {
+  const { config, ...requestParams } = props;
 
-export function ReportPackageForm(props: ReportPackageFormFullProps) {
-  const {
-    config,
-    onOpenChange,
-    setIsSubmitted,
-    error,
-    setError,
-    ...requestParams
-  } = props;
+  const [submitted, setSubmitted] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const toast = useToast();
 
   function formFieldUpdateAction(
     state: PackageListingReportRequestData,
@@ -95,21 +113,24 @@ export function ReportPackageForm(props: ReportPackageFormFullProps) {
     inputs: formInputs,
     submitor,
     onSubmitSuccess: () => {
-      setIsSubmitted(true);
-      setError(null);
+      setSubmitted(true);
     },
     onSubmitError: (error) => {
       let message = `Error occurred: ${error.message || "Unknown error"}`;
       if (error.message === "401: Unauthorized") {
         message = "You must be logged in to report a package.";
       }
-      setError(message);
+      toast.addToast({
+        csVariant: "danger",
+        children: message,
+        duration: 8000,
+      });
     },
   });
 
-  return (
+  const form = (
     <>
-      <Modal.Body>
+      <Modal.Body className="report-package__body">
         <div className="report-package__block">
           <label htmlFor="reason" className="report-package__label">
             Reason
@@ -147,22 +168,91 @@ export function ReportPackageForm(props: ReportPackageFormFullProps) {
             rootClasses="report-package__textarea"
           />
         </div>
-        {error && (
+        {strongForm.inputErrors ||
+        strongForm.refineError ||
+        strongForm.submitError ? (
           <div className="report-package__block">
-            <NewAlert csVariant="danger">{error}</NewAlert>
+            {strongForm.inputErrors ? (
+              <NewAlert csVariant="danger">
+                {Object.entries(strongForm.inputErrors).map(([key, value]) => (
+                  <div key={key}>
+                    <strong>{key}:</strong>{" "}
+                    {Array.isArray(value) ? value.join(", ") : value}
+                  </div>
+                ))}
+              </NewAlert>
+            ) : null}
+            {strongForm.refineError ? (
+              <NewAlert csVariant="danger">
+                Error while refining: {strongForm.refineError.message}
+              </NewAlert>
+            ) : null}
+            {strongForm.submitError ? (
+              <NewAlert csVariant="danger">
+                Error while submitting: {strongForm.submitError.message}
+              </NewAlert>
+            ) : null}
           </div>
-        )}
+        ) : null}
       </Modal.Body>
       <Modal.Footer>
-        <NewButton csVariant="secondary" onClick={() => onOpenChange(false)}>
-          Cancel
-        </NewButton>
+        <Modal.Close asChild>
+          <NewButton csVariant="secondary">Cancel</NewButton>
+        </Modal.Close>
         <NewButton csVariant="accent" onClick={strongForm.submit}>
           Send report
         </NewButton>
       </Modal.Footer>
     </>
   );
+
+  const done = (
+    <>
+      <Modal.Body className="report-package__body report-package__body--centered">
+        <div className="report-package__block ">
+          <NewIcon
+            csMode="inline"
+            noWrapper
+            rootClasses="report-package__submitted-icon"
+          >
+            <FontAwesomeIcon icon={faFaceSaluting} />
+          </NewIcon>
+        </div>
+        <h3 className="report-package__heading">Thank you for your report</h3>
+        <p className="report-package__paragraph">
+          We&apos;ve received your report and will review the content shortly.
+          <br />
+          Your feedback helps keep our community safe.
+        </p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Modal.Close asChild>
+          <NewButton csVariant="secondary">Close</NewButton>
+        </Modal.Close>
+      </Modal.Footer>
+    </>
+  );
+
+  return (
+    <Modal
+      titleContent="Report Package"
+      csSize="small"
+      disableBody
+      onOpenChange={(isOpen) => {
+        if (modalOpen && submitted && !isOpen) {
+          // If the modal is being closed after a successful submission,
+          // reset the form state.
+          updateFormFieldState({ field: "reason", value: "Other" });
+          updateFormFieldState({ field: "description", value: "" });
+          setSubmitted(false);
+        }
+        setModalOpen(isOpen);
+      }}
+      trigger={<ReportPackageButton />}
+    >
+      {submitted ? done : form}
+    </Modal>
+  );
 }
 
-ReportPackageForm.displayName = "ReportPackageForm";
+ReportPackage.displayName = "ReportPackage";
