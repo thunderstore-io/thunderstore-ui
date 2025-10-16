@@ -264,6 +264,13 @@
     width: 100%;
   }
 
+  .package-listing__narrow-other-actions {
+    display: flex;
+    flex-direction: row;
+    gap: var(--gap-xs);
+    width: 100%;
+  }
+
   @media (width < 41rem) {
     .package-listing__actions {
       position: unset;

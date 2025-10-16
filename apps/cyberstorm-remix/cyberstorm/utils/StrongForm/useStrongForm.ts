@@ -150,6 +150,7 @@ export function useStrongForm<
       if (props.onSubmitError) {
         props.onSubmitError(error as SubmissionError);
       }
+      setSubmitError(error as SubmissionError);
       throw error;
     } finally {
       setSubmitting(false);
