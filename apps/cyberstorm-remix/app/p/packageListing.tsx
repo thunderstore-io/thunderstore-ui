@@ -33,7 +33,6 @@ import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
 import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
 import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
-import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
 import { type OutletContextShape } from "app/root";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import {
@@ -73,6 +72,10 @@ import {
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
 import "./packageListing.css";
+import {
+  ReportPackage,
+  ReportPackageButton,
+} from "./components/ReportPackage/ReportPackage";
 
 type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
@@ -180,15 +183,6 @@ export default function PackageListing() {
 
   const [isLiked, setIsLiked] = useState(false);
   const toast = useToast();
-
-  const { ReportPackageButton, ReportPackageModal } = useReportPackage(
-    Promise.resolve(listing).then((listingData) => ({
-      community: listingData.community_identifier,
-      namespace: listingData.namespace,
-      package: listingData.name,
-      config,
-    }))
-  );
 
   const fetchAndSetRatedPackages = async () => {
     const rp = await dapper.getRatedPackages();
@@ -426,22 +420,34 @@ export default function PackageListing() {
                     </Await>
                   </Suspense>
                 </Drawer>
-                <Suspense fallback={<p>Loading...</p>}>
-                  <Await resolve={listingAndTeamPromise}>
-                    {(resolvedValue) => (
-                      <Actions
-                        team={resolvedValue[1]}
-                        listing={resolvedValue[0]}
-                        isLiked={isLiked}
-                        currentUser={currentUser}
-                        likeUpdateTrigger={fetchAndSetRatedPackages}
-                        requestConfig={config}
-                      />
-                    )}
-                  </Await>
-                </Suspense>
-
-                {ReportPackageButton}
+                <div className="package-listing__narrow-other-actions">
+                  <Suspense fallback={<p>Loading...</p>}>
+                    <Await resolve={listingAndTeamPromise}>
+                      {(resolvedValue) => (
+                        <Actions
+                          team={resolvedValue[1]}
+                          listing={resolvedValue[0]}
+                          isLiked={isLiked}
+                          currentUser={currentUser}
+                          likeUpdateTrigger={fetchAndSetRatedPackages}
+                          requestConfig={config}
+                        />
+                      )}
+                    </Await>
+                  </Suspense>
+                  <Suspense fallback={<ReportPackageButton />}>
+                    <Await resolve={listing}>
+                      {(resolvedValue) => (
+                        <ReportPackage
+                          community={resolvedValue.community_identifier}
+                          namespace={resolvedValue.namespace}
+                          package={resolvedValue.name}
+                          config={config}
+                        />
+                      )}
+                    </Await>
+                  </Suspense>
+                </div>
               </div>
               <Suspense
                 fallback={
@@ -604,8 +610,18 @@ export default function PackageListing() {
                       )}
                     </Await>
                   </Suspense>
-
-                  {ReportPackageButton}
+                  <Suspense fallback={<ReportPackageButton />}>
+                    <Await resolve={listing}>
+                      {(resolvedValue) => (
+                        <ReportPackage
+                          community={resolvedValue.community_identifier}
+                          namespace={resolvedValue.namespace}
+                          package={resolvedValue.name}
+                          config={config}
+                        />
+                      )}
+                    </Await>
+                  </Suspense>
                 </div>
 
                 <Suspense
@@ -639,8 +655,6 @@ export default function PackageListing() {
           </div>
         </section>
       </div>
-
-      {ReportPackageModal}
     </>
   );
 }
