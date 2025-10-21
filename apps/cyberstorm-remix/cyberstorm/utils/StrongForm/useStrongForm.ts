@@ -126,6 +126,7 @@ export function useStrongForm<
               ) as SubmissionError
             );
             setInputErrors(error.error.formErrors as InputErrors);
+            throw error;
           } else if (error instanceof RequestQueryParamsParseError) {
             setSubmitError(
               new Error(
@@ -133,6 +134,7 @@ export function useStrongForm<
               ) as SubmissionError
             );
             setInputErrors(error.error.formErrors as InputErrors);
+            throw error;
           } else if (error instanceof ParseError) {
             setSubmitError(
               new Error(
@@ -150,7 +152,7 @@ export function useStrongForm<
       if (props.onSubmitError) {
         props.onSubmitError(error as SubmissionError);
       }
-      setSubmitError(error as SubmissionError);
+      setSubmitError((prev) => prev ?? (error as SubmissionError));
       throw error;
     } finally {
       setSubmitting(false);
