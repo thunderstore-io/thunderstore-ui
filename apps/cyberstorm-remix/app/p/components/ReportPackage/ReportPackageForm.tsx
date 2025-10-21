@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 
 import {
   Modal,
@@ -31,7 +31,6 @@ export interface ReportPackageFormProps {
   community: string;
   namespace: string;
   package: string;
-  config: () => RequestConfig;
 }
 
 interface ReportPackageFormFullProps extends ReportPackageFormProps {
@@ -41,7 +40,11 @@ interface ReportPackageFormFullProps extends ReportPackageFormProps {
   setIsSubmitted: (isSubmitted: boolean) => void;
 }
 
-export function ReportPackageForm(props: ReportPackageFormFullProps) {
+export function ReportPackageForm(
+  props: ReportPackageFormFullProps & {
+    config: () => RequestConfig;
+  }
+) {
   const {
     config,
     onOpenChange,
