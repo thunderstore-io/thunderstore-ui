@@ -15,7 +15,6 @@ import {
   useLocation,
   useMatches,
   useRouteError,
-  useRouteLoaderData,
 } from "react-router";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
@@ -580,7 +579,7 @@ const TooltipProvider = memo(function TooltipProvider({
 });
 
 function App() {
-  const data = useRouteLoaderData<RootLoadersType>("root");
+  const data = useLoaderData<RootLoadersType>();
   const dapper = new DapperTs(() => {
     return {
       apiHost: data?.publicEnvVariables.VITE_API_URL,
