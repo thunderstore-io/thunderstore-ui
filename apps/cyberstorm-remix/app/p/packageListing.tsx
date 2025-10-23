@@ -2,6 +2,7 @@ import {
   memo,
   type ReactElement,
   Suspense,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -40,6 +41,8 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { createNotFoundMapping } from "cyberstorm/utils/errors/loaderMappings";
 
 import {
   Drawer,
@@ -69,10 +72,20 @@ import {
   packageListingApprove,
   packageListingReject,
   type RequestConfig,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
 
 import "./packageListing.css";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
+
+const getErrorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : String(error);
 
 type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
@@ -80,27 +93,43 @@ type PackageListingOutletContext = OutletContextShape & {
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
-      };
-    });
-
-    return {
-      community: await dapper.getCommunity(params.communityId),
-      communityFilters: await dapper.getCommunityFilters(params.communityId),
-      listing: await dapper.getPackageListingDetails(
+    const { dapper } = getLoaderTools();
+    try {
+      const community = await dapper.getCommunity(params.communityId);
+      const communityFilters = await dapper.getCommunityFilters(
+        params.communityId
+      );
+      const listing = await dapper.getPackageListingDetails(
         params.communityId,
         params.namespaceId,
         params.packageId
-      ),
-      team: await dapper.getTeamDetails(params.namespaceId),
-      permissions: undefined,
-    };
+      );
+      const team = await dapper.getTeamDetails(params.namespaceId);
+
+      return {
+        community,
+        communityFilters,
+        listing,
+        team,
+        permissions: undefined,
+      };
+    } catch (error) {
+      handleLoaderError(error, {
+        mappings: [
+          createNotFoundMapping(
+            "Package not found.",
+            "We could not find the requested package."
+          ),
+        ],
+      });
+    }
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 async function getUserPermissions(
@@ -118,7 +147,7 @@ async function getUserPermissions(
 }
 
 // TODO: Needs to check if package is available for the logged in user
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -127,26 +156,40 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools.getConfig().sessionId,
       };
     });
+    const community = dapper.getCommunity(params.communityId);
+    const communityFilters = dapper.getCommunityFilters(params.communityId);
+    const listing = dapper.getPackageListingDetails(
+      params.communityId,
+      params.namespaceId,
+      params.packageId
+    );
+    const team = dapper.getTeamDetails(params.namespaceId);
+    const permissions = getUserPermissions(
+      tools,
+      dapper,
+      params.communityId,
+      params.namespaceId,
+      params.packageId
+    );
 
     return {
-      community: dapper.getCommunity(params.communityId),
-      communityFilters: dapper.getCommunityFilters(params.communityId),
-      listing: dapper.getPackageListingDetails(
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      ),
-      team: dapper.getTeamDetails(params.namespaceId),
-      permissions: getUserPermissions(
-        tools,
-        dapper,
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      ),
+      community,
+      communityFilters,
+      listing,
+      team,
+      permissions,
     };
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }
 
 clientLoader.hydrate = true;
@@ -190,28 +233,51 @@ export default function PackageListing() {
     config: config,
   });
 
-  const fetchAndSetRatedPackages = async () => {
-    const rp = await dapper.getRatedPackages();
-    if (isPromise(listing)) {
-      listing.then((listingData) => {
+  const fetchAndSetRatedPackages = useCallback(
+    async (options?: { isCancelled?: () => boolean }) => {
+      try {
+        const ratedPackages = await dapper.getRatedPackages();
+        const listingData = await Promise.resolve(listing);
+        if (options?.isCancelled?.()) {
+          return;
+        }
+
         setIsLiked(
-          rp.rated_packages.includes(
+          ratedPackages.rated_packages.includes(
             `${listingData.namespace}-${listingData.name}`
           )
         );
-      });
-    } else {
-      setIsLiked(
-        rp.rated_packages.includes(`${listing.namespace}-${listing.name}`)
-      );
-    }
-  };
+      } catch (error) {
+        if (!options?.isCancelled?.()) {
+          console.error("Failed to load rated packages", error);
+          toast.addToast({
+            csVariant: "danger",
+            children: `Failed to fetch rated packages: ${getErrorMessage(
+              error
+            )}`,
+            duration: 6000,
+          });
+        }
+      }
+    },
+    [dapper, listing, toast]
+  );
 
   useEffect(() => {
-    if (currentUser?.username) {
-      fetchAndSetRatedPackages();
+    if (!currentUser?.username) {
+      return;
     }
-  }, [currentUser]);
+
+    let isCancelled = false;
+
+    fetchAndSetRatedPackages({
+      isCancelled: () => isCancelled,
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [currentUser?.username, fetchAndSetRatedPackages]);
 
   const isHydrated = useHydrated();
   const startsHydrated = useRef(isHydrated);
@@ -227,8 +293,29 @@ export default function PackageListing() {
   // If strict mode is removed from the entry.client.tsx, this should only run once
   useEffect(() => {
     if (!startsHydrated.current && isHydrated) return;
-    if (isPromise(listing)) {
-      listing.then((listingData) => {
+
+    if (!isPromise(listing)) {
+      setLastUpdated(
+        <RelativeTime time={listing.last_updated} suppressHydrationWarning />
+      );
+      setFirstUploaded(
+        <RelativeTime
+          time={listing.datetime_created}
+          suppressHydrationWarning
+        />
+      );
+      return;
+    }
+
+    let isCancelled = false;
+
+    const resolveListingTimes = async () => {
+      try {
+        const listingData = await listing;
+        if (isCancelled) {
+          return;
+        }
+
         setLastUpdated(
           <RelativeTime
             time={listingData.last_updated}
@@ -241,19 +328,19 @@ export default function PackageListing() {
             suppressHydrationWarning
           />
         );
-      });
-    } else {
-      setLastUpdated(
-        <RelativeTime time={listing.last_updated} suppressHydrationWarning />
-      );
-      setFirstUploaded(
-        <RelativeTime
-          time={listing.datetime_created}
-          suppressHydrationWarning
-        />
-      );
-    }
-  }, []);
+      } catch (error) {
+        if (!isCancelled) {
+          console.error("Failed to resolve listing metadata", error);
+        }
+      }
+    };
+
+    resolveListingTimes();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [isHydrated, listing]);
   // END: For sidebar meta dates
 
   const currentTab = location.pathname.split("/")[6] || "details";
@@ -273,7 +360,10 @@ export default function PackageListing() {
   return (
     <>
       <Suspense>
-        <Await resolve={listingAndCommunityPromise}>
+        <Await
+          resolve={listingAndCommunityPromise}
+          errorElement={<NimbusAwaitErrorElement />}
+        >
           {(resolvedValue) => (
             <>
               <meta
@@ -285,9 +375,10 @@ export default function PackageListing() {
               <meta property="og:type" content="website" />
               <meta
                 property="og:url"
-                content={`${getPublicEnvVariables(["VITE_BETA_SITE_URL"])}${
-                  location.pathname
-                }`}
+                content={`${
+                  getPublicEnvVariables(["VITE_BETA_SITE_URL"])
+                    .VITE_BETA_SITE_URL
+                }${location.pathname}`}
               />
               <meta
                 property="og:title"
@@ -313,7 +404,10 @@ export default function PackageListing() {
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
           <Suspense>
-            <Await resolve={listingAndPermissionsPromise}>
+            <Await
+              resolve={listingAndPermissionsPromise}
+              errorElement={<NimbusAwaitErrorElement />}
+            >
               {(resolvedValue) =>
                 resolvedValue && resolvedValue[1] ? (
                   <div className="package-listing__actions">
@@ -335,7 +429,10 @@ export default function PackageListing() {
                   <SkeletonBox className="package-listing__page-header-skeleton" />
                 }
               >
-                <Await resolve={listing}>
+                <Await
+                  resolve={listing}
+                  errorElement={<NimbusAwaitErrorElement />}
+                >
                   {(resolvedValue) => (
                     <PageHeader
                       headingLevel="1"
@@ -400,7 +497,10 @@ export default function PackageListing() {
                   rootClasses="package-listing__drawer"
                 >
                   <Suspense fallback={<p>Loading...</p>}>
-                    <Await resolve={listing}>
+                    <Await
+                      resolve={listing}
+                      errorElement={<NimbusAwaitErrorElement />}
+                    >
                       {(resolvedValue) => (
                         <>
                           {packageMeta(
@@ -413,7 +513,10 @@ export default function PackageListing() {
                     </Await>
                   </Suspense>
                   <Suspense fallback={<p>Loading...</p>}>
-                    <Await resolve={listingAndCommunityPromise}>
+                    <Await
+                      resolve={listingAndCommunityPromise}
+                      errorElement={<NimbusAwaitErrorElement />}
+                    >
                       {(resolvedValue) => (
                         <>
                           {packageBoxes(
@@ -427,7 +530,10 @@ export default function PackageListing() {
                   </Suspense>
                 </Drawer>
                 <Suspense fallback={<p>Loading...</p>}>
-                  <Await resolve={listingAndTeamPromise}>
+                  <Await
+                    resolve={listingAndTeamPromise}
+                    errorElement={<NimbusAwaitErrorElement />}
+                  >
                     {(resolvedValue) => (
                       <Actions
                         team={resolvedValue[1]}
@@ -448,7 +554,10 @@ export default function PackageListing() {
                   <SkeletonBox className="package-listing__nav-skeleton" />
                 }
               >
-                <Await resolve={listing}>
+                <Await
+                  resolve={listing}
+                  errorElement={<NimbusAwaitErrorElement />}
+                >
                   {(resolvedValue) => (
                     <>
                       <Tabs>
@@ -567,7 +676,10 @@ export default function PackageListing() {
                   <SkeletonBox className="package-listing-sidebar__install-skeleton" />
                 }
               >
-                <Await resolve={listing}>
+                <Await
+                  resolve={listing}
+                  errorElement={<NimbusAwaitErrorElement />}
+                >
                   {(resolvedValue) => (
                     <NewButton
                       csVariant="accent"
@@ -591,7 +703,10 @@ export default function PackageListing() {
                       <SkeletonBox className="package-listing-sidebar__actions-skeleton" />
                     }
                   >
-                    <Await resolve={listingAndTeamPromise}>
+                    <Await
+                      resolve={listingAndTeamPromise}
+                      errorElement={<NimbusAwaitErrorElement />}
+                    >
                       {(resolvedValue) => (
                         <Actions
                           team={resolvedValue[1]}
@@ -613,7 +728,10 @@ export default function PackageListing() {
                     <SkeletonBox className="package-listing-sidebar__skeleton" />
                   }
                 >
-                  <Await resolve={listing}>
+                  <Await
+                    resolve={listing}
+                    errorElement={<NimbusAwaitErrorElement />}
+                  >
                     {(resolvedValue) => (
                       <>
                         {packageMeta(lastUpdated, firstUploaded, resolvedValue)}
@@ -627,7 +745,10 @@ export default function PackageListing() {
                   <SkeletonBox className="package-listing-sidebar__boxes-skeleton" />
                 }
               >
-                <Await resolve={listingAndCommunityPromise}>
+                <Await
+                  resolve={listingAndCommunityPromise}
+                  errorElement={<NimbusAwaitErrorElement />}
+                >
                   {(resolvedValue) => (
                     <>
                       {packageBoxes(resolvedValue[0], resolvedValue[1], domain)}
@@ -639,7 +760,6 @@ export default function PackageListing() {
           </div>
         </section>
       </div>
-
       {ReportPackageModal}
     </>
   );
@@ -677,7 +797,7 @@ function ReviewPackageForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -695,7 +815,7 @@ function ReviewPackageForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },

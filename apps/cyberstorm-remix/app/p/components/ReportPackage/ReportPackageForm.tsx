@@ -12,6 +12,8 @@ import {
   type RequestConfig,
   type PackageListingReportRequestData,
   packageListingReport,
+  UserFacingError,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
@@ -92,7 +94,7 @@ export function ReportPackageForm(
     PackageListingReportRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -102,11 +104,7 @@ export function ReportPackageForm(
       setError(null);
     },
     onSubmitError: (error) => {
-      let message = `Error occurred: ${error.message || "Unknown error"}`;
-      if (error.message === "401: Unauthorized") {
-        message = "You must be logged in to report a package.";
-      }
-      setError(message);
+      setError(formatUserFacingError(error));
     },
   });
 

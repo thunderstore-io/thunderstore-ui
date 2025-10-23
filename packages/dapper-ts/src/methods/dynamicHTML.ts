@@ -6,12 +6,10 @@ export async function getDynamicHTML(
   this: DapperTsInterface,
   placement: string
 ) {
-  const data = await fetchDynamicHTML({
+  return fetchDynamicHTML({
     config: this.config,
     params: { placement },
     data: {},
     queryParams: {},
   });
-
-  return data.dynamic_htmls;
 }

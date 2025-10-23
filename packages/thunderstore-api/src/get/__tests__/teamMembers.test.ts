@@ -10,5 +10,5 @@ it("ensures accessing team members requires authentication", async () => {
       data: {},
       queryParams: {},
     })
-  ).rejects.toThrowError("401: Unauthorized");
+  ).rejects.toThrowError("Authentication required. Please sign in.");
 });

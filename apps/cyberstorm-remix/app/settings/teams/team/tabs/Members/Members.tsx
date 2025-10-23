@@ -10,56 +10,53 @@ import {
   NewSelect,
   NewTable,
   NewTextInput,
+  SkeletonBox,
   type SelectOption,
   useToast,
 } from "@thunderstore/cyberstorm";
 import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import {
-  ApiError,
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+} from "react-router";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import {
   type RequestConfig,
   teamAddMember,
   type TeamAddMemberRequestData,
   teamEditMember,
   teamRemoveMember,
+  UserFacingError,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "../../../../../root";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer, useState } from "react";
+import { Suspense, useReducer, useState } from "react";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 
-// REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
-    try {
-      const tools = getSessionTools();
-      const config = tools?.getConfig();
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: config.apiHost,
-          sessionId: config.sessionId,
-        };
-      });
-      return {
-        teamName: params.namespaceId,
-        members: await dapper.getTeamMembers(params.namespaceId),
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team members not found", { status: 404 });
-      } else {
-        throw error;
-      }
-    }
+    const { dapper } = getLoaderTools();
+    return {
+      teamName: params.namespaceId,
+      members: dapper.getTeamMembers(params.namespaceId),
+    };
   }
-  throw new Response("Team not found", { status: 404 });
-}
-
-export function HydrateFallback() {
-  return <div style={{ padding: "32px" }}>Loading...</div>;
+  throwUserFacingPayloadResponse({
+    headline: "Team not found.",
+    description: "We could not find the requested team.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 const teamMemberColumns = [
@@ -76,14 +73,41 @@ const roleOptions: SelectOption<"owner" | "member">[] = [
 export default function Members() {
   const { teamName, members } = useLoaderData<typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
+  return (
+    <Suspense fallback={<MembersSkeleton />}>
+      <Await resolve={members} errorElement={<NimbusAwaitErrorElement />}>
+        {(result) => (
+          <MembersContent
+            teamName={teamName}
+            members={result}
+            outletContext={outletContext}
+          />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
 
+interface MembersContentProps {
+  teamName: string;
+  members: Awaited<ReturnType<DapperTs["getTeamMembers"]>>;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Displays the team members table once the loader promise settles.
+ */
+function MembersContent({
+  teamName,
+  members,
+  outletContext,
+}: MembersContentProps) {
   const revalidator = useRevalidator();
+  const toast = useToast();
 
   async function teamMemberRevalidate() {
     revalidator.revalidate();
   }
-
-  const toast = useToast();
 
   const changeMemberRoleAction = ApiAction({
     endpoint: teamEditMember,
@@ -98,7 +122,7 @@ export default function Members() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -141,8 +165,8 @@ export default function Members() {
               csSize="xsmall"
               options={roleOptions}
               value={member.role}
-              onChange={(val: "owner" | "member") =>
-                changeMemberRole(member.username, val)
+              onChange={(val) =>
+                changeMemberRole(member.username, val as "owner" | "member")
               }
             />
           </div>
@@ -187,6 +211,21 @@ export default function Members() {
       </div>
     </div>
   );
+}
+
+/**
+ * Displays a table placeholder while members load on the client.
+ */
+function MembersSkeleton() {
+  return (
+    <div className="settings-items">
+      <SkeletonBox className="settings-items__skeleton" />
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }
 
 function AddTeamMemberForm(props: {
@@ -235,7 +274,7 @@ function AddTeamMemberForm(props: {
     TeamAddMemberRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -252,7 +291,7 @@ function AddTeamMemberForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -337,7 +376,8 @@ function RemoveTeamMemberForm(props: {
   const kickMemberAction = ApiAction({
     endpoint: teamRemoveMember,
     onSubmitSuccess: () => {
-      props.updateTrigger();
+      void props.updateTrigger();
+      setOpen(false);
       toast.addToast({
         csVariant: "success",
         children: `Team member removed`,
@@ -347,7 +387,7 @@ function RemoveTeamMemberForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -389,8 +429,6 @@ function RemoveTeamMemberForm(props: {
               params: { team_name: props.teamName, username: props.userName },
               queryParams: {},
               data: {},
-            }).then(() => {
-              setOpen(false);
             })
           }
         >

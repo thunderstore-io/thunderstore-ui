@@ -5,6 +5,11 @@ import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../../root";
 import "./Settings.css";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
+import {
+  NimbusErrorBoundary,
+  NimbusErrorBoundaryFallback,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import type { NimbusErrorBoundaryFallbackProps } from "cyberstorm/utils/errors/NimbusErrorBoundary";
 
 // export async function clientLoader() {
 //   const _storage = new NamespacedStorageManager(SESSION_STORAGE_KEY);
@@ -47,7 +52,10 @@ export default function Community() {
     : "settings";
 
   return (
-    <>
+    <NimbusErrorBoundary
+      fallback={UserSettingsFallback}
+      onRetry={({ reset }) => reset()}
+    >
       <PageHeader headingLevel="1" headingSize="2">
         Settings
       </PageHeader>
@@ -80,6 +88,27 @@ export default function Community() {
           <Outlet context={outletContext} />
         </section>
       </div>
-    </>
+    </NimbusErrorBoundary>
+  );
+}
+
+/**
+ * Provides fallback messaging when the user settings shell fails to render.
+ */
+function UserSettingsFallback(props: NimbusErrorBoundaryFallbackProps) {
+  const {
+    title = "Settings failed to load",
+    description = "Reload the settings page or return to the dashboard.",
+    retryLabel = "Reload",
+    ...rest
+  } = props;
+
+  return (
+    <NimbusErrorBoundaryFallback
+      {...rest}
+      title={title}
+      description={description}
+      retryLabel={retryLabel}
+    />
   );
 }
