@@ -1,14 +1,22 @@
-import { ApiEndpoint, useApiCall } from "@thunderstore/ts-api-react";
+import {
+  ApiEndpoint,
+  UseApiCallOptions,
+  useApiCall,
+} from "@thunderstore/ts-api-react";
 import { ApiEndpointProps } from "@thunderstore/thunderstore-api";
 
 export type UseApiActionArgs<Params, QueryParams, Data, Return> = {
   endpoint: ApiEndpoint<Params, QueryParams, Data, Return>;
+  apiCallOptions?: UseApiCallOptions;
 };
 
 export function useApiAction<Params, QueryParams, Data, Return>(
   args: UseApiActionArgs<Params, QueryParams, Data, Return>
 ) {
-  const apiCall = useApiCall<Params, QueryParams, Data, Return>(args.endpoint);
+  const apiCall = useApiCall<Params, QueryParams, Data, Return>(
+    args.endpoint,
+    args.apiCallOptions
+  );
 
   const submitHandler = async (
     props: ApiEndpointProps<Params, QueryParams, Data>

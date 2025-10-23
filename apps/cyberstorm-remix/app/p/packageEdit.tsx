@@ -16,6 +16,7 @@ import {
   packageListingUpdate,
   type PackageListingUpdateRequestData,
   packageUnlist,
+  UserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type OutletContextShape } from "~/root";
@@ -146,7 +147,9 @@ export default function PackageListing() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: error.description
+          ? `${error.headline} ${error.description}`
+          : error.headline,
         duration: 8000,
       });
     },
@@ -165,7 +168,9 @@ export default function PackageListing() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: error.description
+          ? `${error.headline} ${error.description}`
+          : error.headline,
         duration: 8000,
       });
     },
@@ -207,12 +212,12 @@ export default function PackageListing() {
     [key in keyof typeof formInputs]?: string | string[];
   };
 
-  const strongForm = useStrongForm<
+  const { submit: submitPackageUpdate } = useStrongForm<
     typeof formInputs,
     PackageListingUpdateRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -227,7 +232,9 @@ export default function PackageListing() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: error.description
+          ? `${error.headline} ${error.description}`
+          : error.headline,
         duration: 8000,
       });
     },
@@ -388,7 +395,7 @@ export default function PackageListing() {
                 csVariant="accent"
                 csSize="big"
                 onClick={() => {
-                  strongForm.submit();
+                  submitPackageUpdate();
                 }}
                 rootClasses="package-edit__save-button"
               >
