@@ -81,12 +81,14 @@ export async function apiFetch(props: {
   }
 
   const { config, path, request, queryParams, useSession = false } = args;
+  const configSnapshot = config();
   const usedConfig: RequestConfig = useSession
-    ? config()
+    ? configSnapshot
     : {
-        apiHost: config().apiHost,
+        apiHost: configSnapshot.apiHost,
         sessionId: undefined,
       };
+  const sessionWasUsed = Boolean(usedConfig.sessionId);
   // TODO: Query params have stronger types, but they are not just shown here.
   // Look into furthering the ensuring of passing proper query params.
   const url = getUrl(usedConfig, path, queryParams);
@@ -100,7 +102,9 @@ export async function apiFetch(props: {
   });
 
   if (!response.ok) {
-    throw await ApiError.createFromResponse(response);
+    throw await ApiError.createFromResponse(response, {
+      sessionWasUsed,
+    });
   }
 
   if (responseSchema === undefined) return undefined;
