@@ -181,14 +181,14 @@ export default function PackageListing() {
   const [isLiked, setIsLiked] = useState(false);
   const toast = useToast();
 
-  const { ReportPackageButton, ReportPackageModal } = useReportPackage(
-    Promise.resolve(listing).then((listingData) => ({
+  const { ReportPackageButton, ReportPackageModal } = useReportPackage({
+    formPropsPromise: Promise.resolve(listing).then((listingData) => ({
       community: listingData.community_identifier,
       namespace: listingData.namespace,
       package: listingData.name,
-      config,
-    }))
-  );
+    })),
+    config: config,
+  });
 
   const fetchAndSetRatedPackages = async () => {
     const rp = await dapper.getRatedPackages();

@@ -7,8 +7,12 @@ import {
 import { ReportPackageButton } from "./ReportPackageButton";
 import { ReportPackageModal } from "./ReportPackageModal";
 import { ReportPackageSubmitted } from "./ReportPackageSubmitted";
+import { type RequestConfig } from "@thunderstore/thunderstore-api";
 
-export function useReportPackage(formProps: Promise<ReportPackageFormProps>) {
+export function useReportPackage(formProps: {
+  formPropsPromise: Promise<ReportPackageFormProps>;
+  config: () => RequestConfig;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +27,7 @@ export function useReportPackage(formProps: Promise<ReportPackageFormProps>) {
 
   async function awaitAndSetProps() {
     if (!props) {
-      setProps(await formProps);
+      setProps(await formProps.formPropsPromise);
     }
   }
 
@@ -34,7 +38,9 @@ export function useReportPackage(formProps: Promise<ReportPackageFormProps>) {
   const button = <ReportPackageButton onClick={() => onOpenChange(true)} />;
 
   const extraProps = { error, onOpenChange, setError, setIsSubmitted };
-  const form = props && <ReportPackageForm {...props} {...extraProps} />;
+  const form = props && (
+    <ReportPackageForm {...props} {...extraProps} config={formProps.config} />
+  );
 
   const done = (
     <ReportPackageSubmitted closeModal={() => onOpenChange(false)} />
