@@ -13,6 +13,11 @@ import { type OutletContextShape } from "~/root";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import {
+  NimbusErrorBoundary,
+  NimbusErrorBoundaryFallback,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import type { NimbusErrorBoundaryFallbackProps } from "cyberstorm/utils/errors/NimbusErrorBoundary";
 
 type ProvidersType = {
   name: string;
@@ -76,65 +81,91 @@ export default function Connections() {
   ]);
 
   return (
-    <div className="settings-items">
-      <div className="settings-items__item">
-        <div className="settings-items__meta">
-          <p className="settings-items__title">Connections</p>
-          <p className="settings-items__description">
-            This information will not be shared outside of Thunderstore. Read
-            more on our{" "}
-            <NewLink
-              primitiveType="cyberstormLink"
-              linkId="PrivacyPolicy"
-              csVariant="cyber"
-            >
-              Privacy Policy
-            </NewLink>
-            .
-          </p>
-        </div>
-        <div className="settings-items__content">
-          {PROVIDERS.map((p) => {
-            if (
-              !outletContext.currentUser ||
-              !outletContext.currentUser.username
-            )
-              throw new Error("User not logged in");
-            return (
-              <Connection
-                key={p.name}
-                icon={p.icon}
-                name={p.name}
-                identifier={p.identifier}
-                connection={outletContext.currentUser.connections?.find(
-                  (c) => c.provider.toLowerCase() === p.identifier
-                )}
-                connectionLink={buildAuthLoginUrl({
-                  type: p.identifier,
-                  authBaseDomain: publicEnvVariables.VITE_AUTH_BASE_URL || "",
-                  authReturnDomain:
-                    publicEnvVariables.VITE_AUTH_RETURN_URL || "",
-                })}
-                disconnectFunction={(p) => {
-                  if (
-                    !outletContext.currentUser ||
-                    !outletContext.currentUser.username
-                  )
-                    throw new Error("User not logged in");
-                  return onSubmit({
-                    params: {
-                      provider: p,
-                    },
-                    config: outletContext.requestConfig,
-                    queryParams: {},
-                    data: { provider: p },
-                  });
-                }}
-              />
-            );
-          })}
+    <NimbusErrorBoundary
+      fallback={ConnectionsFallback}
+      onRetry={({ reset }) => reset()}
+    >
+      <div className="settings-items">
+        <div className="settings-items__item">
+          <div className="settings-items__meta">
+            <p className="settings-items__title">Connections</p>
+            <p className="settings-items__description">
+              This information will not be shared outside of Thunderstore. Read
+              more on our{" "}
+              <NewLink
+                primitiveType="cyberstormLink"
+                linkId="PrivacyPolicy"
+                csVariant="cyber"
+              >
+                Privacy Policy
+              </NewLink>
+              .
+            </p>
+          </div>
+          <div className="settings-items__content">
+            {PROVIDERS.map((p) => {
+              if (
+                !outletContext.currentUser ||
+                !outletContext.currentUser.username
+              )
+                throw new Error("User not logged in");
+              return (
+                <Connection
+                  key={p.name}
+                  icon={p.icon}
+                  name={p.name}
+                  identifier={p.identifier}
+                  connection={outletContext.currentUser.connections?.find(
+                    (c) => c.provider.toLowerCase() === p.identifier
+                  )}
+                  connectionLink={buildAuthLoginUrl({
+                    type: p.identifier,
+                    authBaseDomain: publicEnvVariables.VITE_AUTH_BASE_URL || "",
+                    authReturnDomain:
+                      publicEnvVariables.VITE_AUTH_RETURN_URL || "",
+                  })}
+                  disconnectFunction={(p) => {
+                    if (
+                      !outletContext.currentUser ||
+                      !outletContext.currentUser.username
+                    )
+                      throw new Error("User not logged in");
+                    return onSubmit({
+                      params: {
+                        provider: p,
+                      },
+                      config: outletContext.requestConfig,
+                      queryParams: {},
+                      data: { provider: p },
+                    });
+                  }}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
+    </NimbusErrorBoundary>
+  );
+}
+
+/**
+ * Provides fallback messaging for connection management crashes.
+ */
+function ConnectionsFallback(props: NimbusErrorBoundaryFallbackProps) {
+  const {
+    title = "Connections failed to load",
+    description = "Reload the connections tab or return to settings.",
+    retryLabel = "Reload",
+    ...rest
+  } = props;
+
+  return (
+    <NimbusErrorBoundaryFallback
+      {...rest}
+      title={title}
+      description={description}
+      retryLabel={retryLabel}
+    />
   );
 }

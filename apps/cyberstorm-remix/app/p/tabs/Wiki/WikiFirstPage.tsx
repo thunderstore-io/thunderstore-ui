@@ -1,184 +1,134 @@
 import "./Wiki.css";
 
-import { Await, type LoaderFunctionArgs } from "react-router";
-import { useLoaderData } from "react-router";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { Await, type LoaderFunctionArgs, useLoaderData } from "react-router";
+import { Suspense } from "react";
+import { NewAlert, SkeletonBox } from "@thunderstore/cyberstorm";
 import { WikiContent } from "./WikiContent";
-import { isApiError } from "../../../../../../packages/thunderstore-api/src";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import {
-  getPackagePermissions,
-  getPackageWiki,
-  getPackageWikiPage,
-} from "@thunderstore/dapper-ts/src/methods/package";
-import { SkeletonBox } from "@thunderstore/cyberstorm";
-import { useMemo, Suspense } from "react";
-
-type ResultType = {
-  wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
-  firstPage: ReturnType<typeof getPackageWikiPage> | undefined;
-  communityId: string;
-  namespaceId: string;
-  packageId: string;
-  permissions: ReturnType<typeof getPackagePermissions> | undefined;
-};
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
-      };
-    });
-    let result: ResultType = {
-      wiki: undefined,
-      firstPage: undefined,
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      permissions: undefined,
-    };
+    const { dapper } = getLoaderTools();
 
     try {
       const wiki = await dapper.getPackageWiki(
         params.namespaceId,
         params.packageId
       );
-      const firstPage = dapper.getPackageWikiPage(wiki.pages[0].id);
-      result = {
-        wiki: wiki,
-        firstPage: firstPage,
+      const firstPage =
+        wiki.pages.length > 0
+          ? await dapper.getPackageWikiPage(wiki.pages[0].id)
+          : undefined;
+      return {
         communityId: params.communityId,
         namespaceId: params.namespaceId,
         packageId: params.packageId,
-        permissions: undefined,
+        promises: Promise.all([wiki, firstPage, undefined]),
       };
     } catch (error) {
-      if (isApiError(error)) {
-        // There is no wiki or the User does not have permission to view the wiki, return empty wiki and undefined firstPage
-        if (error.response.status === 404) {
-          result = {
-            wiki: undefined,
-            firstPage: undefined,
-            communityId: params.communityId,
-            namespaceId: params.namespaceId,
-            packageId: params.packageId,
-            permissions: undefined,
-          };
-        } else {
-          throw error;
-        }
-      } else {
-        throw error;
-      }
+      handleLoaderError(error);
     }
-    return result;
   } else {
-    throw new Error("Namespace ID or Package ID is missing");
+    throwUserFacingPayloadResponse({
+      headline: "Wiki page not available.",
+      description: "We could not find the requested wiki page.",
+      category: "not_found",
+      status: 404,
+    });
   }
 }
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
+    const { dapper } = getLoaderTools();
 
-    const permissions = dapper.getPackagePermissions(
+    const permissionsPromise = dapper.getPackagePermissions(
       params.communityId,
       params.namespaceId,
       params.packageId
     );
 
-    let result: ResultType = {
-      wiki: undefined,
-      firstPage: undefined,
+    const wikiPromise = dapper.getPackageWiki(
+      params.namespaceId,
+      params.packageId
+    );
+
+    const firstPagePromise = wikiPromise.then((resolvedWiki) => {
+      if (!resolvedWiki || resolvedWiki.pages.length === 0) {
+        return undefined;
+      }
+      return dapper.getPackageWikiPage(resolvedWiki.pages[0].id);
+    });
+
+    return {
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      permissions: permissions,
+      promises: Promise.all([
+        wikiPromise,
+        firstPagePromise,
+        permissionsPromise,
+      ]),
     };
-
-    try {
-      const wiki = await dapper.getPackageWiki(
-        params.namespaceId,
-        params.packageId
-      );
-      const firstPage = dapper.getPackageWikiPage(wiki.pages[0].id);
-      result = {
-        wiki: wiki,
-        firstPage: firstPage,
-        communityId: params.communityId,
-        namespaceId: params.namespaceId,
-        packageId: params.packageId,
-        permissions: permissions,
-      };
-    } catch (error) {
-      if (isApiError(error)) {
-        // There is no wiki or the User does not have permission to view the wiki, return empty wiki and undefined firstPage
-        if (error.response.status === 404) {
-          result = {
-            wiki: undefined,
-            firstPage: undefined,
-            communityId: params.communityId,
-            namespaceId: params.namespaceId,
-            packageId: params.packageId,
-            permissions: permissions,
-          };
-        } else {
-          throw error;
-        }
-      } else {
-        throw error;
-      }
-    }
-    return result;
   } else {
-    throw new Error("Namespace ID or Package ID is missing");
+    throwUserFacingPayloadResponse({
+      headline: "Wiki page not available.",
+      description: "We could not find the requested wiki page.",
+      category: "not_found",
+      status: 404,
+    });
   }
 }
 
+/**
+ * Renders the first wiki page, deferring data resolution to Suspense.
+ */
 export default function WikiFirstPage() {
-  const { wiki, firstPage, communityId, namespaceId, packageId, permissions } =
-    useLoaderData<typeof loader | typeof clientLoader>();
+  const { communityId, namespaceId, packageId, promises } = useLoaderData<
+    typeof loader | typeof clientLoader
+  >();
 
-  const wikiAndFirstPageMemo = useMemo(
-    () => Promise.all([wiki, firstPage]),
-    [wiki, firstPage]
-  );
+  return (
+    <Suspense fallback={<SkeletonBox className="package-wiki__skeleton" />}>
+      <Await resolve={promises} errorElement={<NimbusAwaitErrorElement />}>
+        {(resolvedData) => {
+          const [wiki, firstPage, permissions] = resolvedData;
+          if (wiki && firstPage) {
+            const nextPage =
+              wiki.pages.length > 1 ? wiki.pages[1].slug : undefined;
 
-  <Suspense fallback={<SkeletonBox className="package-wiki__skeleton" />}>
-    <Await resolve={wikiAndFirstPageMemo}>
-      {(resolvedValue) => {
-        const [wiki, firstPage] = resolvedValue;
-        if (wiki && firstPage) {
+            return (
+              <WikiContent
+                page={firstPage}
+                communityId={communityId}
+                namespaceId={namespaceId}
+                packageId={packageId}
+                previousPage={undefined}
+                nextPage={nextPage}
+                canManage={Promise.resolve(
+                  permissions?.permissions.can_manage ?? false
+                )}
+              />
+            );
+          }
+
           return (
-            <WikiContent
-              page={firstPage}
-              communityId={communityId}
-              namespaceId={namespaceId}
-              packageId={packageId}
-              previousPage={undefined}
-              nextPage={wiki.pages.length > 1 ? wiki.pages[1].slug : undefined}
-              canManage={permissions?.then((perms) =>
-                typeof perms === "undefined"
-                  ? false
-                  : perms.permissions.can_manage
-              )}
-            />
+            <NewAlert csVariant="info">
+              There are no wiki pages available yet.
+            </NewAlert>
           );
-        }
-        return <>There are no wiki pages available.</>;
-      }}
-    </Await>
-  </Suspense>;
+        }}
+      </Await>
+    </Suspense>
+  );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }

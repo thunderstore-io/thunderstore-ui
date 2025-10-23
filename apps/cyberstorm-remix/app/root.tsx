@@ -27,6 +27,10 @@ import {
   NewBreadCrumbs,
   NewBreadCrumbsLink,
 } from "@thunderstore/cyberstorm";
+import {
+  parseUserFacingErrorPayload,
+  type UserFacingErrorPayload,
+} from "cyberstorm/utils/errors/userFacingErrorResponse";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 
@@ -35,6 +39,12 @@ import { memo, type ReactNode, Suspense, useEffect, useRef } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import Toast from "@thunderstore/cyberstorm/src/newComponents/Toast";
 import { Footer } from "./commonComponents/Footer/Footer";
+import {
+  NimbusErrorBoundary,
+  NimbusErrorBoundaryFallback,
+  NimbusAwaitErrorElement,
+} from "../cyberstorm/utils/errors/NimbusErrorBoundary";
+import type { NimbusErrorBoundaryFallbackProps } from "../cyberstorm/utils/errors/NimbusErrorBoundary";
 import { type RequestConfig } from "@thunderstore/thunderstore-api";
 import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
 import { NamespacedStorageManager } from "@thunderstore/ts-api-react";
@@ -342,222 +352,238 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <LinkingProvider value={LinkLibrary}>
             <Toast.Provider toastDuration={10000}>
               <TooltipProvider>
-                <NavigationWrapper
-                  domain={resolvedEnvVars?.VITE_API_URL || ""}
-                  currentUser={data?.currentUser}
-                />
-                <div className="container container--x container--full island">
-                  <main className="container container--x container--full island-item layout__main">
-                    <section className="container container--y container--full layout__content">
-                      {/* Breadcrumbs are build progressively */}
-                      <NewBreadCrumbs>
-                        {/* User Settings */}
-                        {userSettingsPage ? (
-                          userSettingsAccountPage ? (
-                            <NewBreadCrumbsLink
-                              primitiveType="cyberstormLink"
-                              linkId="Settings"
-                              csVariant="cyber"
-                            >
-                              Settings
-                            </NewBreadCrumbsLink>
-                          ) : (
-                            <span>
-                              <span>Settings</span>
-                            </span>
-                          )
-                        ) : null}
-                        {/* User Settings account */}
-                        {userSettingsAccountPage ? (
-                          <span>
-                            <span>Account</span>
-                          </span>
-                        ) : null}
-                        {/* Teams */}
-                        {teamsPage || teamSettingsPage ? (
-                          <NewBreadCrumbsLink
-                            primitiveType="cyberstormLink"
-                            linkId="Teams"
-                            csVariant="cyber"
-                          >
-                            Teams
-                          </NewBreadCrumbsLink>
-                        ) : null}
-                        {/* Team settings */}
-                        {teamSettingsPage ? (
-                          <NewBreadCrumbsLink
-                            primitiveType="cyberstormLink"
-                            linkId="TeamSettings"
-                            csVariant="cyber"
-                            team={teamSettingsPage.params.namespaceId}
-                          >
-                            {teamSettingsPage.params.namespaceId}
-                          </NewBreadCrumbsLink>
-                        ) : null}
-                        {/* Team Settings Profile */}
-                        {teamSettingsProfilePage ? (
-                          <span>
-                            <span>Profile</span>
-                          </span>
-                        ) : null}
-                        {/* Team Settings Members */}
-                        {teamSettingsMembersPage ? (
-                          <span>
-                            <span>Members</span>
-                          </span>
-                        ) : null}
-                        {/* Team Settings Service Accounts */}
-                        {teamSettingsServiceAccountsPage ? (
-                          <span>
-                            <span>Service Accounts</span>
-                          </span>
-                        ) : null}
-                        {/* Team Settings Settings */}
-                        {teamSettingsSettingsPage ? (
-                          <span>
-                            <span>Settings</span>
-                          </span>
-                        ) : null}
-                        {/* Upload */}
-                        {uploadPage ? (
-                          <span>
-                            <span>Upload</span>
-                          </span>
-                        ) : null}
-                        {/* Communities page */}
-                        {communitiesPage ||
-                        communityPage ||
-                        packageDependantsPage ||
-                        packageTeamPage ? (
-                          communityPage ||
-                          packageDependantsPage ||
-                          packageTeamPage ? (
-                            <NewBreadCrumbsLink
-                              primitiveType="cyberstormLink"
-                              linkId="Communities"
-                              csVariant="cyber"
-                            >
-                              Communities
-                            </NewBreadCrumbsLink>
-                          ) : (
-                            <span>
-                              <span>Communities</span>
-                            </span>
-                          )
-                        ) : null}
-                        {/* Community page */}
-                        {getCommunityBreadcrumb(
-                          communityPage ||
-                            packageListingPage ||
+                <NimbusErrorBoundary
+                  fallback={AppShellErrorFallback}
+                  onRetry={({ reset }) => reset()}
+                >
+                  <NavigationWrapper
+                    domain={resolvedEnvVars?.VITE_API_URL || ""}
+                    currentUser={data?.currentUser}
+                  />
+                  <div className="container container--x container--full island">
+                    <main className="container container--x container--full island-item layout__main">
+                      <NimbusErrorBoundary
+                        fallback={AppContentErrorFallback}
+                        onRetry={({ reset }) => reset()}
+                      >
+                        <section className="container container--y container--full layout__content">
+                          {/* Breadcrumbs are build progressively */}
+                          <NewBreadCrumbs>
+                            {/* User Settings */}
+                            {userSettingsPage ? (
+                              userSettingsAccountPage ? (
+                                <NewBreadCrumbsLink
+                                  primitiveType="cyberstormLink"
+                                  linkId="Settings"
+                                  csVariant="cyber"
+                                >
+                                  Settings
+                                </NewBreadCrumbsLink>
+                              ) : (
+                                <span>
+                                  <span>Settings</span>
+                                </span>
+                              )
+                            ) : null}
+                            {/* User Settings account */}
+                            {userSettingsAccountPage ? (
+                              <span>
+                                <span>Account</span>
+                              </span>
+                            ) : null}
+                            {/* Teams */}
+                            {teamsPage || teamSettingsPage ? (
+                              <NewBreadCrumbsLink
+                                primitiveType="cyberstormLink"
+                                linkId="Teams"
+                                csVariant="cyber"
+                              >
+                                Teams
+                              </NewBreadCrumbsLink>
+                            ) : null}
+                            {/* Team settings */}
+                            {teamSettingsPage ? (
+                              <NewBreadCrumbsLink
+                                primitiveType="cyberstormLink"
+                                linkId="TeamSettings"
+                                csVariant="cyber"
+                                team={teamSettingsPage.params.namespaceId}
+                              >
+                                {teamSettingsPage.params.namespaceId}
+                              </NewBreadCrumbsLink>
+                            ) : null}
+                            {/* Team Settings Profile */}
+                            {teamSettingsProfilePage ? (
+                              <span>
+                                <span>Profile</span>
+                              </span>
+                            ) : null}
+                            {/* Team Settings Members */}
+                            {teamSettingsMembersPage ? (
+                              <span>
+                                <span>Members</span>
+                              </span>
+                            ) : null}
+                            {/* Team Settings Service Accounts */}
+                            {teamSettingsServiceAccountsPage ? (
+                              <span>
+                                <span>Service Accounts</span>
+                              </span>
+                            ) : null}
+                            {/* Team Settings Settings */}
+                            {teamSettingsSettingsPage ? (
+                              <span>
+                                <span>Settings</span>
+                              </span>
+                            ) : null}
+                            {/* Upload */}
+                            {uploadPage ? (
+                              <span>
+                                <span>Upload</span>
+                              </span>
+                            ) : null}
+                            {/* Communities page */}
+                            {communitiesPage ||
+                            communityPage ||
                             packageDependantsPage ||
-                            packageTeamPage ||
-                            packageVersionPage,
-                          Boolean(packageListingPage) ||
-                            Boolean(packageDependantsPage) ||
-                            Boolean(packageTeamPage) ||
-                            Boolean(packageVersionPage)
-                        )}
-                        {/* Package listing page */}
-                        {getPackageListingBreadcrumb(
-                          packageListingPage,
-                          packageEditPage,
-                          packageDependantsPage
-                        )}
-                        {/* Package Version Page */}
-                        {packageVersionPage ? (
-                          <>
-                            <NewBreadCrumbsLink
-                              primitiveType="cyberstormLink"
-                              linkId="Package"
-                              community={packageVersionPage.params.communityId}
-                              namespace={packageVersionPage.params.namespaceId}
-                              package={packageVersionPage.params.packageId}
-                              csVariant="cyber"
-                            >
-                              {packageVersionPage.params.packageId}
-                            </NewBreadCrumbsLink>
-                            <span>
+                            packageTeamPage ? (
+                              communityPage ||
+                              packageDependantsPage ||
+                              packageTeamPage ? (
+                                <NewBreadCrumbsLink
+                                  primitiveType="cyberstormLink"
+                                  linkId="Communities"
+                                  csVariant="cyber"
+                                >
+                                  Communities
+                                </NewBreadCrumbsLink>
+                              ) : (
+                                <span>
+                                  <span>Communities</span>
+                                </span>
+                              )
+                            ) : null}
+                            {/* Community page */}
+                            {getCommunityBreadcrumb(
+                              communityPage ||
+                                packageListingPage ||
+                                packageDependantsPage ||
+                                packageTeamPage ||
+                                packageVersionPage,
+                              Boolean(packageListingPage) ||
+                                Boolean(packageDependantsPage) ||
+                                Boolean(packageTeamPage) ||
+                                Boolean(packageVersionPage)
+                            )}
+                            {/* Package listing page */}
+                            {getPackageListingBreadcrumb(
+                              packageListingPage,
+                              packageEditPage,
+                              packageDependantsPage
+                            )}
+                            {/* Package Version Page */}
+                            {packageVersionPage ? (
+                              <>
+                                <NewBreadCrumbsLink
+                                  primitiveType="cyberstormLink"
+                                  linkId="Package"
+                                  community={
+                                    packageVersionPage.params.communityId
+                                  }
+                                  namespace={
+                                    packageVersionPage.params.namespaceId
+                                  }
+                                  package={packageVersionPage.params.packageId}
+                                  csVariant="cyber"
+                                >
+                                  {packageVersionPage.params.packageId}
+                                </NewBreadCrumbsLink>
+                                <span>
+                                  <span>
+                                    {packageVersionPage.params.packageVersion}
+                                  </span>
+                                </span>
+                              </>
+                            ) : null}
+                            {/* Package version without community Page */}
+                            {packageVersionWithoutCommunityPage ? (
+                              <>
+                                <span>
+                                  <span>
+                                    {
+                                      packageVersionWithoutCommunityPage.params
+                                        .namespaceId
+                                    }
+                                  </span>
+                                </span>
+                                <span>
+                                  <span>
+                                    {
+                                      packageVersionWithoutCommunityPage.params
+                                        .packageId
+                                    }
+                                  </span>
+                                </span>
+                                <span>
+                                  <span>
+                                    {
+                                      packageVersionWithoutCommunityPage.params
+                                        .packageVersion
+                                    }
+                                  </span>
+                                </span>
+                              </>
+                            ) : null}
+                            {packageEditPage ? (
                               <span>
-                                {packageVersionPage.params.packageVersion}
+                                <span>Edit package</span>
                               </span>
-                            </span>
-                          </>
-                        ) : null}
-                        {/* Package version without community Page */}
-                        {packageVersionWithoutCommunityPage ? (
-                          <>
-                            <span>
+                            ) : null}
+                            {packageDependantsPage ? (
                               <span>
-                                {
-                                  packageVersionWithoutCommunityPage.params
-                                    .namespaceId
-                                }
+                                <span>Dependants</span>
                               </span>
-                            </span>
-                            <span>
+                            ) : null}
+                            {packageTeamPage ? (
                               <span>
-                                {
-                                  packageVersionWithoutCommunityPage.params
-                                    .packageId
-                                }
+                                <span>
+                                  {packageTeamPage.params.namespaceId}
+                                </span>
                               </span>
-                            </span>
-                            <span>
+                            ) : null}
+                            {packageFormatDocsPage ? (
                               <span>
-                                {
-                                  packageVersionWithoutCommunityPage.params
-                                    .packageVersion
-                                }
+                                <span>Package Format Docs</span>
                               </span>
-                            </span>
-                          </>
-                        ) : null}
-                        {packageEditPage ? (
-                          <span>
-                            <span>Edit package</span>
-                          </span>
-                        ) : null}
-                        {packageDependantsPage ? (
-                          <span>
-                            <span>Dependants</span>
-                          </span>
-                        ) : null}
-                        {packageTeamPage ? (
-                          <span>
-                            <span>{packageTeamPage.params.namespaceId}</span>
-                          </span>
-                        ) : null}
-                        {packageFormatDocsPage ? (
-                          <span>
-                            <span>Package Format Docs</span>
-                          </span>
-                        ) : null}
-                        {manifestValidatorPage ? (
-                          <span>
-                            <span>Manifest Validator</span>
-                          </span>
-                        ) : null}
-                        {markdownPreviewPage ? (
-                          <span>
-                            <span>Markdown Preview</span>
-                          </span>
-                        ) : null}
-                      </NewBreadCrumbs>
-                      {children}
-                    </section>
-                  </main>
-                  {shouldShowAds ? (
-                    <div className="container container--y island-item layout__ads">
-                      <div className="container container--y layout__ads-inner">
-                        {adContainerIds.map((cid, k_i) => (
-                          <AdContainer key={k_i} containerId={cid} />
-                        ))}
+                            ) : null}
+                            {manifestValidatorPage ? (
+                              <span>
+                                <span>Manifest Validator</span>
+                              </span>
+                            ) : null}
+                            {markdownPreviewPage ? (
+                              <span>
+                                <span>Markdown Preview</span>
+                              </span>
+                            ) : null}
+                          </NewBreadCrumbs>
+                          {children}
+                        </section>
+                      </NimbusErrorBoundary>
+                    </main>
+                    {shouldShowAds ? (
+                      <div className="container container--y island-item layout__ads">
+                        <div className="container container--y layout__ads-inner">
+                          {adContainerIds.map((cid, k_i) => (
+                            <AdContainer key={k_i} containerId={cid} />
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ) : null}
-                </div>
-                <Footer />
-                {shouldShowAds ? <AdsInit /> : null}
+                    ) : null}
+                  </div>
+                  <Footer />
+                  {shouldShowAds ? <AdsInit /> : null}
+                </NimbusErrorBoundary>
               </TooltipProvider>
             </Toast.Provider>
           </LinkingProvider>
@@ -567,6 +593,48 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </body>
     </html>
+  );
+}
+
+/**
+ * Provides Nimbus fallback UI for top-level shell crashes.
+ */
+function AppShellErrorFallback(props: NimbusErrorBoundaryFallbackProps) {
+  const {
+    title = "Something went wrong",
+    description = "Reload the page to try again.",
+    retryLabel = "Reload",
+    ...rest
+  } = props;
+
+  return (
+    <NimbusErrorBoundaryFallback
+      {...rest}
+      title={title}
+      description={description}
+      retryLabel={retryLabel}
+    />
+  );
+}
+
+/**
+ * Presents a scoped fallback for content area render failures.
+ */
+function AppContentErrorFallback(props: NimbusErrorBoundaryFallbackProps) {
+  const {
+    title = "Unable to load this page",
+    description = "Try refreshing the view or contact support if the issue persists.",
+    retryLabel = "Try again",
+    ...rest
+  } = props;
+
+  return (
+    <NimbusErrorBoundaryFallback
+      {...rest}
+      title={title}
+      description={description}
+      retryLabel={retryLabel}
+    />
   );
 }
 
@@ -617,24 +685,62 @@ export function ErrorBoundary() {
     console.log(error);
   }
   const isResponseError = isRouteErrorResponse(error);
+  let payload: UserFacingErrorPayload | null = null;
+
+  if (isResponseError) {
+    payload = parseUserFacingErrorPayload(error.data);
+  }
+
+  const statusCode = payload?.status ?? (isResponseError ? error.status : 500);
+  const headline =
+    payload?.headline ??
+    (isResponseError
+      ? error.statusText || `Error ${error.status}`
+      : "Internal server error");
+
+  const fallbackDescription =
+    isResponseError && typeof error.data === "string"
+      ? dedupeDescription(headline, error.data)
+      : undefined;
+
+  const description = payload?.description ?? fallbackDescription;
+  const showDefaultFlavor = !payload && !isResponseError;
   return (
     <div className="error">
-      <div
-        className="error__glitch"
-        data-text={isResponseError ? error.status : 500}
-      >
-        <span>{isResponseError ? error.status : 500}</span>
+      <div className="error__glitch" data-text={statusCode}>
+        <span>{statusCode}</span>
       </div>
       <div className="error__description">
-        {isResponseError ? error.data : "Internal server error"}
+        <strong>{headline}</strong>
+        {description ? <div>{description}</div> : null}
       </div>
-      {!isResponseError && (
+      {showDefaultFlavor && (
         <div className="error__flavor">
           Beep boop. Server something error happens.
         </div>
       )}
     </div>
   );
+}
+
+function dedupeDescription(
+  headline: string,
+  description: string | undefined
+): string | undefined {
+  if (!description) {
+    return undefined;
+  }
+
+  const trimmedDescription = description.trim();
+  if (!trimmedDescription) {
+    return undefined;
+  }
+
+  if (trimmedDescription.toLowerCase() === headline.trim().toLowerCase()) {
+    return undefined;
+  }
+
+  return trimmedDescription;
 }
 
 // Temporary solution for implementing ads
@@ -735,7 +841,10 @@ function getCommunityBreadcrumb(
             </span>
           }
         >
-          <Await resolve={communityPage.data.community}>
+          <Await
+            resolve={communityPage.data.community}
+            errorElement={<NimbusAwaitErrorElement />}
+          >
             {(resolvedValue) => {
               let label = undefined;
               let icon = undefined;

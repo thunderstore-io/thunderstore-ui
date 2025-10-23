@@ -8,72 +8,74 @@ import {
 } from "@thunderstore/cyberstorm";
 import { Await, type LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
-import { columns } from "./Versions";
+import { columns, packageVersionsErrorMappings } from "./Versions";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
+    const { dapper } = getLoaderTools();
+    try {
+      const versions = await dapper.getPackageVersions(
+        params.namespaceId,
+        params.packageId
+      );
+
       return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        versions,
       };
-    });
-    return {
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
-    };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageVersionsErrorMappings });
+    }
   }
-  return {
-    status: "error",
-    message: "Failed to load versions",
-    versions: [],
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
+    const { dapper } = getLoaderTools();
+    const versions = dapper.getPackageVersions(
+      params.namespaceId,
+      params.packageId
+    );
+
     return {
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
+      versions,
     };
   }
-  return {
-    status: "error",
-    message: "Failed to load versions",
-    versions: [],
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export default function Versions() {
-  const { namespaceId, packageId, status, message, versions } = useLoaderData<
+  const { namespaceId, packageId, versions } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
-  if (status === "error") {
-    return <div>{message}</div>;
-  }
-
   return (
     <Suspense fallback={<SkeletonBox className="package-versions__skeleton" />}>
-      <Await resolve={versions}>
+      <Await resolve={versions} errorElement={<NimbusAwaitErrorElement />}>
         {(resolvedValue) => (
           <div className="package-versions">
             <ModManagerBanner />
@@ -129,4 +131,8 @@ export default function Versions() {
       </Await>
     </Suspense>
   );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }

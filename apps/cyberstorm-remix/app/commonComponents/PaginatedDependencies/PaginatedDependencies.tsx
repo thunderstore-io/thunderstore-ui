@@ -7,6 +7,7 @@ import { useDebounce } from "use-debounce";
 import type { getPackageVersionDetails } from "@thunderstore/dapper-ts/src/methods/packageVersion";
 import type { getPackageVersionDependencies } from "@thunderstore/dapper-ts/src/methods/package";
 import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
+import { NimbusAwaitErrorElement } from "../../../cyberstorm/utils/errors/NimbusErrorBoundary";
 
 interface Props {
   version:
@@ -97,7 +98,7 @@ export const PaginatedDependencies = memo(function PaginatedDependencies(
 
   const versionAndDependencies = useMemo(
     () => Promise.all([props.version, props.dependencies]),
-    [currentPage]
+    [currentPage, props.version, props.dependencies]
   );
 
   return (
@@ -107,9 +108,7 @@ export const PaginatedDependencies = memo(function PaginatedDependencies(
       >
         <Await
           resolve={versionAndDependencies}
-          errorElement={
-            <div>Error occurred while loading required dependencies</div>
-          }
+          errorElement={<NimbusAwaitErrorElement />}
         >
           {(resolvedValue) => {
             return (

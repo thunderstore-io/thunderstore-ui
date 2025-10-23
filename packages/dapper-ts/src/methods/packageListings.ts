@@ -10,7 +10,7 @@ import {
 
 import { DapperTsInterface } from "../index";
 
-export async function getPackageListings(
+export function getPackageListings(
   this: DapperTsInterface,
   type: PackageListingType,
   ordering?: string,
@@ -75,7 +75,7 @@ export async function getPackageListings(
   let data;
 
   if (type.kind === "community") {
-    data = await fetchCommunityPackageListings({
+    data = fetchCommunityPackageListings({
       config: this.config,
       params: {
         community_id: type.communityId,
@@ -84,7 +84,7 @@ export async function getPackageListings(
       queryParams: options,
     });
   } else if (type.kind === "namespace") {
-    data = await fetchNamespacePackageListings({
+    data = fetchNamespacePackageListings({
       config: this.config,
       params: {
         community_id: type.communityId,
@@ -94,7 +94,7 @@ export async function getPackageListings(
       queryParams: options,
     });
   } else if (type.kind === "package-dependants") {
-    data = await fetchPackageDependantsListings({
+    data = fetchPackageDependantsListings({
       config: this.config,
       params: {
         community_id: type.communityId,
@@ -110,11 +110,7 @@ export async function getPackageListings(
     );
   }
 
-  return {
-    count: data.count,
-    hasMore: Boolean(data.next),
-    results: data.results,
-  };
+  return data;
 }
 
 export async function getPackageListingDetails(
@@ -123,7 +119,7 @@ export async function getPackageListingDetails(
   namespaceId: string,
   packageName: string
 ) {
-  const data = await fetchPackageListingDetails({
+  return fetchPackageListingDetails({
     config: this.config,
     params: {
       community_id: communityId,
@@ -133,6 +129,4 @@ export async function getPackageListingDetails(
     data: {},
     queryParams: {},
   });
-
-  return data;
 }

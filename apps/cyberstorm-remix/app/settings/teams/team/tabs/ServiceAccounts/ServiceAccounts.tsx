@@ -8,56 +8,60 @@ import {
   NewTextInput,
   Heading,
   CodeBox,
+  SkeletonBox,
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import {
-  ApiError,
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+} from "react-router";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import {
   type RequestConfig,
   teamAddServiceAccount,
   type TeamServiceAccountAddRequestData,
+  UserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { type OutletContextShape } from "../../../../../root";
-import { useReducer, useState } from "react";
+import { Suspense, useReducer, useState } from "react";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { ServiceAccountRemoveModal } from "./ServiceAccountRemoveModal";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 
-// REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
     try {
-      const tools = getSessionTools();
-      const config = tools?.getConfig();
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: config?.apiHost,
-          sessionId: config?.sessionId,
-        };
-      });
+      const { dapper } = getLoaderTools();
+      const serviceAccountsPromise = dapper.getTeamServiceAccounts(
+        params.namespaceId
+      );
+
       return {
         teamName: params.namespaceId,
-        serviceAccounts: await dapper.getTeamServiceAccounts(
-          params.namespaceId
-        ),
+        serviceAccounts: serviceAccountsPromise,
       };
     } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team not found", { status: 404 });
-      } else {
-        throw error;
-      }
+      handleLoaderError(error);
     }
   }
-  throw new Response("Team not found", { status: 404 });
-}
 
-export function HydrateFallback() {
-  return <div style={{ padding: "32px" }}>Loading...</div>;
+  throwUserFacingPayloadResponse({
+    headline: "Team not found.",
+    description: "We could not find the requested team.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 const serviceAccountColumns = [
@@ -70,6 +74,38 @@ export default function ServiceAccounts() {
   const { teamName, serviceAccounts } = useLoaderData<typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
 
+  return (
+    <Suspense fallback={<ServiceAccountsSkeleton />}>
+      <Await
+        resolve={serviceAccounts}
+        errorElement={<NimbusAwaitErrorElement />}
+      >
+        {(result) => (
+          <ServiceAccountsContent
+            teamName={teamName}
+            serviceAccounts={result}
+            outletContext={outletContext}
+          />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
+
+interface ServiceAccountsContentProps {
+  teamName: string;
+  serviceAccounts: Awaited<ReturnType<DapperTs["getTeamServiceAccounts"]>>;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Renders the service accounts table after Suspense resolves the data.
+ */
+function ServiceAccountsContent({
+  teamName,
+  serviceAccounts,
+  outletContext,
+}: ServiceAccountsContentProps) {
   const revalidator = useRevalidator();
 
   const currentUserTeam = outletContext.currentUser?.teams_full?.find(
@@ -142,6 +178,21 @@ export default function ServiceAccounts() {
   );
 }
 
+/**
+ * Displays a placeholder skeleton while service accounts load.
+ */
+function ServiceAccountsSkeleton() {
+  return (
+    <div className="settings-items">
+      <SkeletonBox className="settings-items__skeleton" />
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
+}
+
 function AddServiceAccountForm(props: {
   teamName: string;
   config: () => RequestConfig;
@@ -201,12 +252,12 @@ function AddServiceAccountForm(props: {
     TeamServiceAccountAddRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
     submitor,
-    onSubmitSuccess: (result) => {
+    onSubmitSuccess: (result: SubmitorOutput) => {
       onSuccess(result);
       setError(null);
       // Refresh the service accounts list to show the newly created account

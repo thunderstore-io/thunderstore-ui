@@ -1,53 +1,81 @@
 import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import {
-  ApiError,
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+} from "react-router";
+import {
   teamDetailsEdit,
   type TeamDetailsEditRequestData,
+  UserFacingError,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "~/root";
 import "./Profile.css";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer } from "react";
-import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
+import { Suspense, useReducer } from "react";
+import {
+  NewButton,
+  NewTextInput,
+  SkeletonBox,
+  useToast,
+} from "@thunderstore/cyberstorm";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
+
+type TeamDetails = Awaited<ReturnType<DapperTs["getTeamDetails"]>>;
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
     try {
-      const tools = getSessionTools();
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: tools?.getConfig().apiHost,
-          sessionId: tools?.getConfig().sessionId,
-        };
-      });
+      const { dapper } = getLoaderTools();
       return {
-        team: await dapper.getTeamDetails(params.namespaceId),
+        team: dapper.getTeamDetails(params.namespaceId),
       };
     } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team not found", { status: 404 });
-      } else {
-        // REMIX TODO: Add sentry
-        throw error;
-      }
+      handleLoaderError(error);
     }
   }
-  throw new Response("Team not found", { status: 404 });
-}
-
-export function HydrateFallback() {
-  return <div style={{ padding: "32px" }}>Loading...</div>;
+  throwUserFacingPayloadResponse({
+    headline: "Team not found.",
+    description: "We could not find the requested team.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export default function Profile() {
   const { team } = useLoaderData<typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
 
-  const revalidator = useRevalidator();
+  return (
+    <Suspense fallback={<ProfileSkeleton />}>
+      <Await resolve={team} errorElement={<NimbusAwaitErrorElement />}>
+        {(result) => (
+          <ProfileContent team={result} outletContext={outletContext} />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
 
+interface ProfileContentProps {
+  team: TeamDetails;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Renders the team profile editing form once Suspense resolves the team data.
+ */
+function ProfileContent({ team, outletContext }: ProfileContentProps) {
+  const revalidator = useRevalidator();
   const toast = useToast();
 
   function formFieldUpdateAction(
@@ -87,7 +115,7 @@ export default function Profile() {
     TeamDetailsEditRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -103,7 +131,7 @@ export default function Profile() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -143,4 +171,19 @@ export default function Profile() {
       </div>
     </div>
   );
+}
+
+/**
+ * Displays a minimal skeleton while team profile data loads.
+ */
+function ProfileSkeleton() {
+  return (
+    <div className="settings-items team-profile">
+      <SkeletonBox className="team-profile__skeleton" />
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }

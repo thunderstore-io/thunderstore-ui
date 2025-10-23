@@ -2,4 +2,17 @@
   .package-changelog__skeleton {
     height: 500px;
   }
+
+  .package-changelog__error {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 3rem 0;
+  }
+
+  .package-changelog__error-description {
+    max-width: 40rem;
+    color: var(--Color-text-muted, rgb(180 189 255 / 0.8));
+  }
 }
