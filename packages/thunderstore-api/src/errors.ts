@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { formatErrorMessage } from "./utils";
+import { sanitizeServerDetail } from "./errors/sanitizeServerDetail";
 
 type JSONValue =
   | string
@@ -8,7 +9,7 @@ type JSONValue =
   | { [x: string]: JSONValue }
   | JSONValue[];
 
-type ApiErrorContext = {
+export type ApiErrorContext = {
   sessionWasUsed?: boolean;
 };
 
@@ -44,33 +45,59 @@ export function isApiError(e: Error | ApiError | unknown): e is ApiError {
 export class ApiError extends Error {
   response: Response;
   responseJson?: JSONValue;
+  responseText?: string;
+  context?: ApiErrorContext;
+  serverMessage?: string;
 
   constructor(args: {
     message: string;
     response: Response;
     responseJson?: JSONValue;
+    responseText?: string;
+    context?: ApiErrorContext;
+    serverMessage?: string;
   }) {
     super(args.message);
     this.responseJson = args.responseJson;
     this.response = args.response;
+    this.responseText = args.responseText;
+    this.context = args.context;
+    this.serverMessage = args.serverMessage;
   }
 
   static async createFromResponse(
     response: Response,
     context: ApiErrorContext = {}
   ): Promise<ApiError> {
+    let responseText: string | undefined;
     let responseJson: JSONValue | undefined;
     try {
-      responseJson = await response.json();
+      responseText = await response.clone().text();
+    } catch (e) {
+      responseText = undefined;
+    }
+    try {
+      responseJson = responseText
+        ? JSON.parse(responseText)
+        : await response.json();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       responseJson = undefined;
     }
 
+    const serverMessage = responseJson
+      ? extractMessage(responseJson)
+      : responseText
+        ? sanitizeServerDetail(responseText)
+        : undefined;
+
     return new ApiError({
       message: buildApiErrorMessage({ response, responseJson, context }),
       response: response,
       responseJson: responseJson,
+      responseText,
+      context,
+      serverMessage,
     });
   }
 
@@ -93,6 +120,14 @@ export class ApiError extends Error {
         })
       );
     }
+  }
+
+  get statusCode(): number {
+    return this.response.status;
+  }
+
+  get statusText(): string {
+    return this.response.statusText;
   }
 }
 
@@ -190,11 +225,11 @@ function extractMessage(value: JSONValue | undefined): string | undefined {
   if (value === undefined || value === null) return undefined;
 
   if (typeof value === "string") {
-    return value;
+    return sanitizeServerDetail(value);
   }
 
   if (typeof value === "number" || typeof value === "boolean") {
-    return String(value);
+    return sanitizeServerDetail(String(value));
   }
 
   if (Array.isArray(value)) {
@@ -203,7 +238,7 @@ function extractMessage(value: JSONValue | undefined): string | undefined {
       .filter((item): item is string => Boolean(item));
 
     if (parts.length > 0) {
-      return parts.join(" ");
+      return sanitizeServerDetail(parts.join(" "));
     }
 
     return undefined;
@@ -215,7 +250,7 @@ function extractMessage(value: JSONValue | undefined): string | undefined {
     if (key in objectValue) {
       const message = extractMessage(objectValue[key]);
       if (message) {
-        return message;
+        return sanitizeServerDetail(message);
       }
     }
   }
