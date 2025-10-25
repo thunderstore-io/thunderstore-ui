@@ -34,11 +34,10 @@ VITE_API_URL=http://thunderstore.temp
 VITE_COOKIE_DOMAIN=.thunderstore.temp
 VITE_AUTH_BASE_URL=http://thunderstore.temp
 VITE_AUTH_RETURN_URL=http://new.thunderstore.temp
+__VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS=.thunderstore.temp
 ```
 
-5. Uncomment the following string to the `allowedHosts` list in `vite.config.ts` ([link](https://github.com/thunderstore-io/thunderstore-ui/blob/f69ca05f2fe51320768aa4b934d17e40060192b5/apps/cyberstorm-remix/vite.config.ts#L13-L17)): `".thunderstore.temp"`
-
-6. Run the build/start server script or the dev server script
+5. Run the build/start server script or the dev server script
 
 Build and start
 ```
