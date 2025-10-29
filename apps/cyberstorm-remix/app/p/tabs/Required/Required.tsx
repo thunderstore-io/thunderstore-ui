@@ -59,12 +59,12 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
     );
 
     return {
-      version: dapper.getPackageVersionDetails(
+      version: await dapper.getPackageVersionDetails(
         params.namespaceId,
         params.packageId,
         listing.latest_version_number
       ),
-      dependencies: dapper.getPackageVersionDependencies(
+      dependencies: await dapper.getPackageVersionDependencies(
         params.namespaceId,
         params.packageId,
         listing.latest_version_number,
@@ -76,11 +76,6 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
 }
 
 export default function PackageVersionRequired() {
-  const { version, dependencies } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
-
-  return (
-    <PaginatedDependencies version={version} dependencies={dependencies} />
-  );
+  const { dependencies } = useLoaderData<typeof loader | typeof clientLoader>();
+  return <PaginatedDependencies dependencies={dependencies} />;
 }
