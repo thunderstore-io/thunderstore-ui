@@ -17,6 +17,21 @@ import {
 import { Suspense } from "react";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  FORBIDDEN_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  createNotFoundMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
+
+export const packageVersionsErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  createNotFoundMapping(
+    "Package not found.",
+    "We could not find the requested package."
+  ),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -27,12 +42,22 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-    return {
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
-    };
+    try {
+      const versionsPromise = dapper.getPackageVersions(
+        params.namespaceId,
+        params.packageId
+      );
+      await versionsPromise;
+
+      return {
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        versions: versionsPromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageVersionsErrorMappings });
+    }
   }
   return {
     status: "error",
@@ -50,12 +75,22 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
-    return {
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
-    };
+    try {
+      const versionsPromise = dapper.getPackageVersions(
+        params.namespaceId,
+        params.packageId
+      );
+      await versionsPromise;
+
+      return {
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        versions: versionsPromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageVersionsErrorMappings });
+    }
   }
   return {
     status: "error",

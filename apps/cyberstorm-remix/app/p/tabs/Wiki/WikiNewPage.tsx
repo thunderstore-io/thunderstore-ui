@@ -18,18 +18,53 @@ import { useReducer, useState } from "react";
 import {
   type PackageWikiPageCreateRequestData,
   postPackageWikiPageCreate,
+  UserFacingError,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "~/root";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { DapperTs } from "@thunderstore/dapper-ts";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  CONFLICT_MAPPING,
+  RATE_LIMIT_MAPPING,
+  createServerErrorMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
+import { wikiErrorMappings } from "./Wiki";
+
+const wikiNewPageErrorMappings = [
+  ...wikiErrorMappings,
+  CONFLICT_MAPPING,
+  RATE_LIMIT_MAPPING,
+  createServerErrorMapping(),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    return {
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-    };
+    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
+    const dapper = new DapperTs(() => {
+      return {
+        apiHost: publicEnvVariables.VITE_API_URL,
+        sessionId: undefined,
+      };
+    });
+
+    try {
+      await dapper.getPackageWiki(params.namespaceId, params.packageId);
+
+      return {
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: wikiNewPageErrorMappings });
+    }
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
@@ -37,11 +72,25 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    return {
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-    };
+    const tools = getSessionTools();
+    const dapper = new DapperTs(() => {
+      return {
+        apiHost: tools?.getConfig().apiHost,
+        sessionId: tools?.getConfig().sessionId,
+      };
+    });
+
+    try {
+      await dapper.getPackageWiki(params.namespaceId, params.packageId);
+
+      return {
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: wikiNewPageErrorMappings });
+    }
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
@@ -110,7 +159,7 @@ export default function Wiki() {
     PackageWikiPageCreateRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -126,7 +175,7 @@ export default function Wiki() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },

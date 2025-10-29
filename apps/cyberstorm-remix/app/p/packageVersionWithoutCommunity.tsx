@@ -56,6 +56,22 @@ import {
 import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import { getPackageVersionDetails } from "@thunderstore/dapper-ts/src/methods/packageVersion";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  FORBIDDEN_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  createNotFoundMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
+
+const packageVersionWithoutCommunityErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  createNotFoundMapping(
+    "Package version not found.",
+    "We could not find the requested package version."
+  ),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
@@ -66,17 +82,30 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-
-    return {
-      version: await dapper.getPackageVersionDetails(
+    try {
+      const version = await dapper.getPackageVersionDetails(
         params.namespaceId,
         params.packageId,
         params.packageVersion
-      ),
-      team: await dapper.getTeamDetails(params.namespaceId),
-    };
+      );
+      const team = await dapper.getTeamDetails(params.namespaceId);
+
+      return {
+        version,
+        team,
+      };
+    } catch (error) {
+      handleLoaderError(error, {
+        mappings: packageVersionWithoutCommunityErrorMappings,
+      });
+    }
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
@@ -88,17 +117,32 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
-
-    return {
-      version: dapper.getPackageVersionDetails(
+    try {
+      const versionPromise = dapper.getPackageVersionDetails(
         params.namespaceId,
         params.packageId,
         params.packageVersion
-      ),
-      team: dapper.getTeamDetails(params.namespaceId),
-    };
+      );
+      const teamPromise = dapper.getTeamDetails(params.namespaceId);
+
+      await Promise.all([versionPromise, teamPromise]);
+
+      return {
+        version: versionPromise,
+        team: teamPromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, {
+        mappings: packageVersionWithoutCommunityErrorMappings,
+      });
+    }
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {

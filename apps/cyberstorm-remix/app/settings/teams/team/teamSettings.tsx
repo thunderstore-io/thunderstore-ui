@@ -6,12 +6,14 @@ import {
   useOutletContext,
 } from "react-router";
 import { NewLink, Tabs } from "@thunderstore/cyberstorm";
-import { ApiError } from "@thunderstore/thunderstore-api";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../../../root";
 import "./teamSettings.css";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { ApiError } from "@thunderstore/thunderstore-api";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 
 export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
   return [
@@ -36,14 +38,23 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         team: await dapper.getTeamDetails(params.namespaceId),
       };
     } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team not found", { status: 404 });
-      } else {
-        throw error;
+      if (error instanceof ApiError && error.statusCode === 404) {
+        throwUserFacingPayloadResponse({
+          headline: "Team not found.",
+          description: "We could not find the requested team.",
+          category: "not_found",
+          status: 404,
+        });
       }
+      handleLoaderError(error);
     }
   }
-  throw new Response("Team not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Team not found.",
+    description: "We could not find the requested team.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export function HydrateFallback() {

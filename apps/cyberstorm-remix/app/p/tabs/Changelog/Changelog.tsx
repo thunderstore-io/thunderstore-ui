@@ -8,6 +8,21 @@ import {
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { Suspense } from "react";
 import "./Changelog.css";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  FORBIDDEN_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  createNotFoundMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
+
+const changelogErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  createNotFoundMapping(
+    "Changelog not available.",
+    "We could not find a changelog for this package."
+  ),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
@@ -18,12 +33,19 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-    return {
-      changelog: dapper.getPackageChangelog(
+    try {
+      const changelogPromise = dapper.getPackageChangelog(
         params.namespaceId,
         params.packageId
-      ),
-    };
+      );
+      await changelogPromise;
+
+      return {
+        changelog: changelogPromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: changelogErrorMappings });
+    }
   }
   return {
     status: "error",
@@ -41,12 +63,19 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
-    return {
-      changelog: dapper.getPackageChangelog(
+    try {
+      const changelogPromise = dapper.getPackageChangelog(
         params.namespaceId,
         params.packageId
-      ),
-    };
+      );
+      await changelogPromise;
+
+      return {
+        changelog: changelogPromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: changelogErrorMappings });
+    }
   }
   return {
     status: "error",

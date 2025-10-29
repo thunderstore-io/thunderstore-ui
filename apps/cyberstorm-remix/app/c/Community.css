@@ -197,6 +197,19 @@
     }
   }
 
+  .community__error {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 3rem 0;
+  }
+
+  .community__error-description {
+    max-width: 40rem;
+    color: var(--Color-text-muted, rgb(180 189 255 / 0.8));
+  }
+
   @media (width >= 41rem) {
     .community__background {
       height: 12.5rem;

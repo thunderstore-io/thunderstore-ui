@@ -16,7 +16,8 @@ import {
 import { Suspense } from "react";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
-import { columns } from "./Versions";
+import { columns, packageVersionsErrorMappings } from "./Versions";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
@@ -27,11 +28,21 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-    return {
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
-    };
+    try {
+      const versionsPromise = dapper.getPackageVersions(
+        params.namespaceId,
+        params.packageId
+      );
+      await versionsPromise;
+
+      return {
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        versions: versionsPromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageVersionsErrorMappings });
+    }
   }
   return {
     status: "error",
@@ -49,11 +60,21 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
-    return {
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
-    };
+    try {
+      const versionsPromise = dapper.getPackageVersions(
+        params.namespaceId,
+        params.packageId
+      );
+      await versionsPromise;
+
+      return {
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        versions: versionsPromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageVersionsErrorMappings });
+    }
   }
   return {
     status: "error",

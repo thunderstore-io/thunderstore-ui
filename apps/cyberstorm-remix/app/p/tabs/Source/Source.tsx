@@ -21,9 +21,14 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { Alert } from "@thunderstore/cyberstorm/src/newComponents/Alert/Alert";
-import { isApiError } from "@thunderstore/thunderstore-api";
 import { getPackageSource } from "@thunderstore/dapper-ts/src/methods/package";
 import { CodeBoxHTML } from "../../../commonComponents/CodeBoxHTML/CodeBoxHTML";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  FORBIDDEN_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  createNotFoundMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
 
 type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
@@ -37,6 +42,15 @@ type ResultType = {
     | ReturnType<typeof getPackageSource>;
 };
 
+const sourceErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  createNotFoundMapping(
+    "Source not available.",
+    "We could not find the requested package source."
+  ),
+];
+
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
     const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
@@ -46,37 +60,20 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-    let result: ResultType = {
-      status: null,
-      source: undefined,
-      message: undefined,
-    };
     try {
       const source = await dapper.getPackageSource(
         params.namespaceId,
         params.packageId
       );
-      result = {
+
+      return {
         status: null,
-        source: source,
+        source,
         message: undefined,
-      };
+      } satisfies ResultType;
     } catch (error) {
-      if (isApiError(error)) {
-        if (error.response.status > 400) {
-          result = {
-            status: "error",
-            source: undefined,
-            message: `Failed to load source: ${error.message}`,
-          };
-        } else {
-          throw error;
-        }
-      } else {
-        throw error;
-      }
+      handleLoaderError(error, { mappings: sourceErrorMappings });
     }
-    return result;
   }
   return {
     status: "error",
@@ -94,30 +91,21 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools.getConfig().sessionId,
       };
     });
-    let result: ResultType = {
-      status: null,
-      source: undefined,
-      message: undefined,
-    };
     try {
-      const source = dapper.getPackageSource(
+      const sourcePromise = dapper.getPackageSource(
         params.namespaceId,
         params.packageId
       );
-      result = {
+      await sourcePromise;
+
+      return {
         status: null,
-        source: source,
+        source: sourcePromise,
         message: undefined,
-      };
+      } satisfies ResultType;
     } catch (error) {
-      result = {
-        status: "error",
-        source: undefined,
-        message: "Failed to load source",
-      };
-      throw error;
+      handleLoaderError(error, { mappings: sourceErrorMappings });
     }
-    return result;
   }
   return {
     status: "error",

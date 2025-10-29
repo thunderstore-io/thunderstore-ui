@@ -17,8 +17,22 @@ import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type OutletContextShape } from "~/root";
 import { Suspense } from "react";
-import { ApiError } from "../../../../../../packages/thunderstore-api/src";
 import { getPackageWiki } from "@thunderstore/dapper-ts/src/methods/package";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  FORBIDDEN_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  createNotFoundMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
+
+export const wikiErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  createNotFoundMapping(
+    "Wiki not available.",
+    "We could not find the requested wiki."
+  ),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -29,30 +43,23 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-
-    let wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
-
     try {
-      wiki = await dapper.getPackageWiki(params.namespaceId, params.packageId);
-    } catch (error) {
-      if (error instanceof ApiError) {
-        if (error.response.status === 404) {
-          wiki = undefined;
-        } else {
-          wiki = undefined;
-          console.error("Error fetching package wiki:", error);
-        }
-      }
-    }
+      const wiki = await dapper.getPackageWiki(
+        params.namespaceId,
+        params.packageId
+      );
 
-    return {
-      wiki: wiki,
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      slug: params.slug,
-      permissions: undefined,
-    };
+      return {
+        wiki,
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        slug: params.slug,
+        permissions: undefined,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: wikiErrorMappings });
+    }
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
@@ -68,22 +75,31 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
 
-    const wiki = dapper.getPackageWiki(params.namespaceId, params.packageId);
+    try {
+      const wikiPromise = dapper.getPackageWiki(
+        params.namespaceId,
+        params.packageId
+      );
 
-    const permissions = dapper.getPackagePermissions(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
+      const permissionsPromise = dapper.getPackagePermissions(
+        params.communityId,
+        params.namespaceId,
+        params.packageId
+      );
 
-    return {
-      wiki: wiki,
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      slug: params.slug,
-      permissions: permissions,
-    };
+      await Promise.all([wikiPromise, permissionsPromise]);
+
+      return {
+        wiki: wikiPromise,
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        slug: params.slug,
+        permissions: permissionsPromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: wikiErrorMappings });
+    }
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
