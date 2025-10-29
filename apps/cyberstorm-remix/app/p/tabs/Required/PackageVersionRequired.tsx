@@ -6,6 +6,9 @@ import {
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { PaginatedDependencies } from "~/commonComponents/PaginatedDependencies/PaginatedDependencies";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { packageDependenciesErrorMappings } from "./Required";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
@@ -19,21 +22,33 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     const searchParams = new URL(request.url).searchParams;
     const page = searchParams.get("page");
 
-    return {
-      version: await dapper.getPackageVersionDetails(
+    try {
+      const version = await dapper.getPackageVersionDetails(
         params.namespaceId,
         params.packageId,
         params.packageVersion
-      ),
-      dependencies: await dapper.getPackageVersionDependencies(
+      );
+      const dependencies = await dapper.getPackageVersionDependencies(
         params.namespaceId,
         params.packageId,
         params.packageVersion,
         page === null ? undefined : Number(page)
-      ),
-    };
+      );
+
+      return {
+        version,
+        dependencies,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageDependenciesErrorMappings });
+    }
   }
-  throw new Response("Package version dependencies not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Dependencies not found.",
+    description: "We could not find the requested version dependencies.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export async function clientLoader({ params, request }: LoaderFunctionArgs) {
@@ -48,21 +63,35 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
     const searchParams = new URL(request.url).searchParams;
     const page = searchParams.get("page");
 
-    return {
-      version: dapper.getPackageVersionDetails(
+    try {
+      const versionPromise = dapper.getPackageVersionDetails(
         params.namespaceId,
         params.packageId,
         params.packageVersion
-      ),
-      dependencies: dapper.getPackageVersionDependencies(
+      );
+      const dependenciesPromise = dapper.getPackageVersionDependencies(
         params.namespaceId,
         params.packageId,
         params.packageVersion,
         page === null ? undefined : Number(page)
-      ),
-    };
+      );
+
+      await Promise.all([versionPromise, dependenciesPromise]);
+
+      return {
+        version: versionPromise,
+        dependencies: dependenciesPromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageDependenciesErrorMappings });
+    }
   }
-  throw new Response("Package version dependencies not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Dependencies not found.",
+    description: "We could not find the requested version dependencies.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export default function PackageVersionRequired() {

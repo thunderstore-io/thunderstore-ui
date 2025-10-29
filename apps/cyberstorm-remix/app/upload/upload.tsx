@@ -40,7 +40,11 @@ import {
   type PackageSubmissionResult,
   type PackageSubmissionStatus,
 } from "@thunderstore/dapper/types";
-import { type PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
+import {
+  type PackageSubmissionRequestData,
+  UserFacingError,
+  formatUserFacingError,
+} from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "../root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { postPackageSubmissionMetadata } from "@thunderstore/dapper-ts/src/methods/package";
@@ -50,6 +54,15 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  CONFLICT_MAPPING,
+  FORBIDDEN_MAPPING,
+  RATE_LIMIT_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  VALIDATION_MAPPING,
+  createServerErrorMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
 
 interface CommunityOption {
   value: string;
@@ -71,6 +84,15 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+const uploadErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  VALIDATION_MAPPING,
+  CONFLICT_MAPPING,
+  RATE_LIMIT_MAPPING,
+  createServerErrorMapping(),
+];
+
 export async function loader() {
   const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
   const dapper = new DapperTs(() => {
@@ -79,7 +101,11 @@ export async function loader() {
       sessionId: undefined,
     };
   });
-  return await dapper.getCommunities();
+  try {
+    return await dapper.getCommunities();
+  } catch (error) {
+    handleLoaderError(error, { mappings: uploadErrorMappings });
+  }
 }
 
 export async function clientLoader() {
@@ -91,7 +117,11 @@ export async function clientLoader() {
       sessionId: tools?.getConfig().sessionId,
     };
   });
-  return await dapper.getCommunities();
+  try {
+    return await dapper.getCommunities();
+  } catch (error) {
+    handleLoaderError(error, { mappings: uploadErrorMappings });
+  }
 }
 
 export default function Upload() {
@@ -332,7 +362,7 @@ export default function Upload() {
     PackageSubmissionRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -347,7 +377,7 @@ export default function Upload() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },

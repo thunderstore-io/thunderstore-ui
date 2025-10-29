@@ -8,6 +8,7 @@ import {
   useLoaderData,
   useLocation,
   useOutletContext,
+  useRouteError,
 } from "react-router";
 import {
   Heading,
@@ -29,6 +30,27 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import {
+  FORBIDDEN_MAPPING,
+  RATE_LIMIT_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  createNotFoundMapping,
+  createServerErrorMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
+
+const communityErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  createNotFoundMapping(
+    "Community not found.",
+    "We could not find the requested community."
+  ),
+  RATE_LIMIT_MAPPING,
+  createServerErrorMapping(),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId) {
@@ -39,15 +61,24 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-    const community = await dapper.getCommunity(params.communityId);
-    return {
-      community: community,
-    };
+    try {
+      const community = await dapper.getCommunity(params.communityId);
+      return {
+        community,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: communityErrorMappings });
+    }
   }
-  throw new Response("Community not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Community not found.",
+    description: "We could not find the requested community.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -56,12 +87,16 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
-    const community = dapper.getCommunity(params.communityId);
     return {
-      community: community,
+      community: dapper.getCommunity(params.communityId),
     };
   }
-  throw new Response("Community not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Community not found.",
+    description: "We could not find the requested community.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
@@ -254,5 +289,21 @@ export default function Community() {
         <Outlet context={outletContext} />
       </>
     </>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="container container--y container--full community__error">
+      <Heading csLevel="1" csSize="3" csVariant="primary" mode="display">
+        {payload.headline}
+      </Heading>
+      {payload.description ? (
+        <p className="community__error-description">{payload.description}</p>
+      ) : null}
+    </div>
   );
 }

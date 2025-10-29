@@ -4,6 +4,8 @@ import {
   ApiError,
   teamDetailsEdit,
   type TeamDetailsEditRequestData,
+  UserFacingError,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "~/root";
 import "./Profile.css";
@@ -12,6 +14,8 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
 import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
@@ -27,15 +31,24 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         team: await dapper.getTeamDetails(params.namespaceId),
       };
     } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team not found", { status: 404 });
-      } else {
-        // REMIX TODO: Add sentry
-        throw error;
+      // REMIX TODO: Add sentry
+      if (error instanceof ApiError && error.statusCode === 404) {
+        throwUserFacingPayloadResponse({
+          headline: "Team not found.",
+          description: "We could not find the requested team.",
+          category: "not_found",
+          status: 404,
+        });
       }
+      handleLoaderError(error);
     }
   }
-  throw new Response("Team not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Team not found.",
+    description: "We could not find the requested team.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export function HydrateFallback() {
@@ -87,7 +100,7 @@ export default function Profile() {
     TeamDetailsEditRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -103,7 +116,7 @@ export default function Profile() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },

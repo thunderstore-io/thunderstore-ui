@@ -28,11 +28,40 @@ import {
   type PackageWikiPageResponseData,
   postPackageWikiPageEdit,
   type RequestConfig,
+  UserFacingError,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "~/root";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  CONFLICT_MAPPING,
+  RATE_LIMIT_MAPPING,
+  createNotFoundMapping,
+  createServerErrorMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
+import { wikiErrorMappings } from "./Wiki";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+
+type ResultType = {
+  page: PackageWikiPageResponseData;
+  communityId: string;
+  namespaceId: string;
+  packageId: string;
+};
+
+const wikiPageEditErrorMappings = [
+  ...wikiErrorMappings,
+  createNotFoundMapping(
+    "Wiki page not available.",
+    "We could not find the requested wiki page."
+  ),
+  CONFLICT_MAPPING,
+  RATE_LIMIT_MAPPING,
+  createServerErrorMapping(),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (
@@ -48,22 +77,36 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-    const wiki = await dapper.getPackageWiki(
-      params.namespaceId,
-      params.packageId
-    );
-    const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
-    if (!pageId) {
-      throw new Error("Page not found");
-    }
-    const page = await dapper.getPackageWikiPage(pageId);
+    try {
+      const wiki = await dapper.getPackageWiki(
+        params.namespaceId,
+        params.packageId
+      );
+      const pageId = wiki.pages.find((candidate) => candidate.slug === params.slug)?.id;
 
-    return {
-      page: page,
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-    };
+      if (!pageId) {
+        throwUserFacingPayloadResponse(
+          {
+            headline: "Wiki page not available.",
+            description: "We could not find the requested wiki page.",
+            category: "not_found",
+            status: 404,
+          },
+          { statusOverride: 404 }
+        );
+      }
+
+      const page = await dapper.getPackageWikiPage(pageId);
+
+      return {
+        page,
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+      } satisfies ResultType;
+    } catch (error) {
+      handleLoaderError(error, { mappings: wikiPageEditErrorMappings });
+    }
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
@@ -83,22 +126,38 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
-    const wiki = await dapper.getPackageWiki(
-      params.namespaceId,
-      params.packageId
-    );
-    const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
-    if (!pageId) {
-      throw new Error("Page not found");
-    }
-    const page = await dapper.getPackageWikiPage(pageId);
+    try {
+      const wikiPromise = dapper.getPackageWiki(
+        params.namespaceId,
+        params.packageId
+      );
 
-    return {
-      page: page,
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-    };
+      const wiki = await wikiPromise;
+      const pageId = wiki.pages.find((candidate) => candidate.slug === params.slug)?.id;
+
+      if (!pageId) {
+        throwUserFacingPayloadResponse(
+          {
+            headline: "Wiki page not available.",
+            description: "We could not find the requested wiki page.",
+            category: "not_found",
+            status: 404,
+          },
+          { statusOverride: 404 }
+        );
+      }
+
+      const page = await dapper.getPackageWikiPage(pageId);
+
+      return {
+        page,
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+      } satisfies ResultType;
+    } catch (error) {
+      handleLoaderError(error, { mappings: wikiPageEditErrorMappings });
+    }
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
@@ -180,7 +239,7 @@ export default function WikiEdit() {
     PackageWikiPageEditRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -196,7 +255,7 @@ export default function WikiEdit() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -338,7 +397,7 @@ function DeletePackageWikiPageForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },

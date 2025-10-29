@@ -20,6 +20,7 @@ import {
   Await,
   useLoaderData,
   useNavigationType,
+  useRouteError,
   useSearchParams,
 } from "react-router";
 import type { Communities } from "@thunderstore/dapper/types";
@@ -29,6 +30,15 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  FORBIDDEN_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+} from "cyberstorm/utils/errors/loaderMappings";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import { Heading } from "@thunderstore/cyberstorm";
+
+const communitiesErrorMappings = [SIGN_IN_REQUIRED_MAPPING, FORBIDDEN_MAPPING];
 
 export const meta: MetaFunction = () => {
   return [
@@ -65,10 +75,32 @@ const selectOptions = [
   },
 ];
 
-export async function loader({ request }: LoaderFunctionArgs) {
+interface CommunitiesQuery {
+  order: SortOptions;
+  search: string | undefined;
+}
+
+/**
+ * Extracts the current query parameters governing the communities list.
+ */
+function resolveCommunitiesQuery(request: Request): CommunitiesQuery {
   const searchParams = new URL(request.url).searchParams;
-  const order = searchParams.get("order") ?? SortOptions.Popular;
-  const search = searchParams.get("search");
+  const orderParam = searchParams.get("order");
+  const orderValues = Object.values(SortOptions);
+  const order =
+    orderParam && orderValues.includes(orderParam as SortOptions)
+      ? (orderParam as SortOptions)
+      : SortOptions.Popular;
+  const search = searchParams.get("search") ?? undefined;
+
+  return {
+    order,
+    search,
+  };
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const query = resolveCommunitiesQuery(request);
   const page = undefined;
   const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
   const dapper = new DapperTs(() => {
@@ -77,16 +109,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
       sessionId: undefined,
     };
   });
-  return {
-    communities: await dapper.getCommunities(
-      page,
-      order === null ? undefined : order,
-      search === null ? undefined : search
-    ),
-  };
+  try {
+    return {
+      communities: await dapper.getCommunities(page, query.order, query.search),
+    };
+  } catch (error) {
+    handleLoaderError(error, { mappings: communitiesErrorMappings });
+  }
 }
 
-export async function clientLoader({ request }: LoaderFunctionArgs) {
+export function clientLoader({ request }: LoaderFunctionArgs) {
   const tools = getSessionTools();
   const dapper = new DapperTs(() => {
     return {
@@ -94,16 +126,10 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
       sessionId: tools?.getConfig().sessionId,
     };
   });
-  const searchParams = new URL(request.url).searchParams;
-  const order = searchParams.get("order");
-  const search = searchParams.get("search");
+  const query = resolveCommunitiesQuery(request);
   const page = undefined;
   return {
-    communities: dapper.getCommunities(
-      page,
-      order ?? SortOptions.Popular,
-      search ?? ""
-    ),
+    communities: dapper.getCommunities(page, query.order, query.search),
   };
 }
 
@@ -188,10 +214,7 @@ export default function CommunitiesPage() {
 
         <div className="container container--x container--stretch communities__results">
           <Suspense fallback={<CommunitiesListSkeleton />}>
-            <Await
-              resolve={communities}
-              errorElement={<div>Error loading communities</div>}
-            >
+            <Await resolve={communities}>
               {(resolvedValue) => (
                 <CommunitiesList communitiesData={resolvedValue} />
               )}
@@ -200,6 +223,25 @@ export default function CommunitiesPage() {
         </div>
       </div>
     </>
+  );
+}
+
+/**
+ * Renders a user-facing message when the communities route loader rejects.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="container container--y container--full communities__error">
+      <Heading csLevel="2" csSize="3" csVariant="primary" mode="display">
+        {payload.headline}
+      </Heading>
+      {payload.description ? (
+        <p className="communities__error-description">{payload.description}</p>
+      ) : null}
+    </div>
   );
 }
 

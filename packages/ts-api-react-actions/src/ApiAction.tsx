@@ -1,6 +1,10 @@
 import { useCallback } from "react";
-import { ApiEndpointProps, ApiError } from "@thunderstore/thunderstore-api";
-import { ApiEndpoint } from "@thunderstore/ts-api-react";
+import {
+  ApiEndpointProps,
+  UserFacingError,
+  mapApiErrorToUserFacingError,
+} from "@thunderstore/thunderstore-api";
+import { ApiEndpoint, UseApiCallOptions } from "@thunderstore/ts-api-react";
 import { useApiAction } from "./useApiAction";
 
 export interface ApiActionProps<
@@ -10,8 +14,9 @@ export interface ApiActionProps<
   Return,
 > {
   endpoint: ApiEndpoint<Params, QueryParams, Data, Return>;
+  apiCallOptions?: UseApiCallOptions;
   onSubmitSuccess?: (result: Awaited<Return>) => void;
-  onSubmitError?: (error: Error | ApiError) => void;
+  onSubmitError?: (error: UserFacingError) => void;
 }
 
 // As of this moment ApiActions sole purpose is to gracefully handle errors from API calls
@@ -21,7 +26,7 @@ export function ApiAction<
   Data extends object,
   Return,
 >(props: ApiActionProps<Params, QueryParams, Data, Return>) {
-  const { endpoint, onSubmitSuccess, onSubmitError } = props;
+  const { endpoint, onSubmitSuccess, onSubmitError, apiCallOptions } = props;
   const submitHandler = useApiAction<
     Params,
     QueryParams,
@@ -29,6 +34,7 @@ export function ApiAction<
     ReturnType<typeof endpoint>
   >({
     endpoint: endpoint,
+    apiCallOptions,
   });
   const onSubmit = useCallback(
     async (onSubmitProps: ApiEndpointProps<Params, QueryParams, Data>) => {
@@ -38,14 +44,17 @@ export function ApiAction<
           onSubmitSuccess(result);
         }
       } catch (e) {
+        const mappedError =
+          e instanceof UserFacingError ? e : mapApiErrorToUserFacingError(e);
+
         if (onSubmitError) {
-          onSubmitError(e);
+          onSubmitError(mappedError);
         } else {
-          throw e;
+          throw mappedError;
         }
       }
     },
-    [onSubmitSuccess, onSubmitError]
+    [onSubmitSuccess, onSubmitError, apiCallOptions, submitHandler]
   );
 
   return onSubmit;

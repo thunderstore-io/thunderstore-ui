@@ -40,6 +40,12 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  FORBIDDEN_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  createNotFoundMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
 
 import {
   Drawer,
@@ -69,14 +75,25 @@ import {
   packageListingApprove,
   packageListingReject,
   type RequestConfig,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 
 import "./packageListing.css";
 
 type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
 };
+
+const packageListingErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  createNotFoundMapping(
+    "Package not found.",
+    "We could not find the requested package."
+  ),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -87,20 +104,35 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-
-    return {
-      community: await dapper.getCommunity(params.communityId),
-      communityFilters: await dapper.getCommunityFilters(params.communityId),
-      listing: await dapper.getPackageListingDetails(
+    try {
+      const community = await dapper.getCommunity(params.communityId);
+      const communityFilters = await dapper.getCommunityFilters(
+        params.communityId
+      );
+      const listing = await dapper.getPackageListingDetails(
         params.communityId,
         params.namespaceId,
         params.packageId
-      ),
-      team: await dapper.getTeamDetails(params.namespaceId),
-      permissions: undefined,
-    };
+      );
+      const team = await dapper.getTeamDetails(params.namespaceId);
+
+      return {
+        community,
+        communityFilters,
+        listing,
+        team,
+        permissions: undefined,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageListingErrorMappings });
+    }
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 async function getUserPermissions(
@@ -127,26 +159,50 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools.getConfig().sessionId,
       };
     });
-
-    return {
-      community: dapper.getCommunity(params.communityId),
-      communityFilters: dapper.getCommunityFilters(params.communityId),
-      listing: dapper.getPackageListingDetails(
+    try {
+      const communityPromise = dapper.getCommunity(params.communityId);
+      const communityFiltersPromise = dapper.getCommunityFilters(
+        params.communityId
+      );
+      const listingPromise = dapper.getPackageListingDetails(
         params.communityId,
         params.namespaceId,
         params.packageId
-      ),
-      team: dapper.getTeamDetails(params.namespaceId),
-      permissions: getUserPermissions(
+      );
+      const teamPromise = dapper.getTeamDetails(params.namespaceId);
+      const permissionsPromise = getUserPermissions(
         tools,
         dapper,
         params.communityId,
         params.namespaceId,
         params.packageId
-      ),
-    };
+      );
+
+      await Promise.all([
+        communityPromise,
+        communityFiltersPromise,
+        listingPromise,
+        teamPromise,
+        permissionsPromise ?? Promise.resolve(undefined),
+      ]);
+
+      return {
+        community: communityPromise,
+        communityFilters: communityFiltersPromise,
+        listing: listingPromise,
+        team: teamPromise,
+        permissions: permissionsPromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageListingErrorMappings });
+    }
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 clientLoader.hydrate = true;
@@ -677,7 +733,7 @@ function ReviewPackageForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -695,7 +751,7 @@ function ReviewPackageForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },

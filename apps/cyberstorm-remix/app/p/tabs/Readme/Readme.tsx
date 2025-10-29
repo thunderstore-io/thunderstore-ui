@@ -8,6 +8,21 @@ import {
 import { Suspense } from "react";
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import "./Readme.css";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  FORBIDDEN_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  createNotFoundMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
+
+const readmeErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  createNotFoundMapping(
+    "Readme not available.",
+    "We could not find a readme for this package."
+  ),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
@@ -18,9 +33,19 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-    return {
-      readme: dapper.getPackageReadme(params.namespaceId, params.packageId),
-    };
+    try {
+      const readmePromise = dapper.getPackageReadme(
+        params.namespaceId,
+        params.packageId
+      );
+      await readmePromise;
+
+      return {
+        readme: readmePromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: readmeErrorMappings });
+    }
   }
   return {
     status: "error",
@@ -38,9 +63,19 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
-    return {
-      readme: dapper.getPackageReadme(params.namespaceId, params.packageId),
-    };
+    try {
+      const readmePromise = dapper.getPackageReadme(
+        params.namespaceId,
+        params.packageId
+      );
+      await readmePromise;
+
+      return {
+        readme: readmePromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: readmeErrorMappings });
+    }
   }
   return {
     status: "error",

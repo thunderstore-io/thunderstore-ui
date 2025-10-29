@@ -1,4 +1,8 @@
-import { ApiEndpointProps } from "../index";
+import {
+  ApiEndpointProps,
+  ApiError,
+  createResourceNotFoundError,
+} from "../index";
 import { apiFetch } from "../apiFetch";
 import {
   TeamDetailsResponseData,
@@ -12,13 +16,29 @@ export async function fetchTeamDetails(
   const { config, params } = props;
   const path = `api/cyberstorm/team/${params.team_name}/`;
 
-  return await apiFetch({
-    args: {
-      config: config,
-      path: path,
-    },
-    requestSchema: undefined,
-    queryParamsSchema: undefined,
-    responseSchema: teamDetailsResponseDataSchema,
-  });
+  try {
+    return await apiFetch({
+      args: {
+        config: config,
+        path: path,
+      },
+      requestSchema: undefined,
+      queryParamsSchema: undefined,
+      responseSchema: teamDetailsResponseDataSchema,
+    });
+  } catch (error) {
+    if (error instanceof ApiError && error.statusCode === 404) {
+      throw createResourceNotFoundError({
+        resourceName: "team",
+        identifier: params.team_name,
+        description: "We could not find the requested team.",
+        originalError: error,
+        context: {
+          ...error.context,
+          statusText: error.statusText,
+        },
+      });
+    }
+    throw error;
+  }
 }

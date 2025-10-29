@@ -16,6 +16,24 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import type { Route } from "./+types/Dependants";
 import { Suspense } from "react";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  FORBIDDEN_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  VALIDATION_MAPPING,
+  createNotFoundMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
+
+const dependantsErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  VALIDATION_MAPPING,
+  createNotFoundMapping(
+    "Package not found.",
+    "We could not find the requested package."
+  ),
+];
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId && params.packageId && params.namespaceId) {
@@ -36,17 +54,15 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
-    const filters = await dapper.getCommunityFilters(params.communityId);
-
-    return {
-      community: dapper.getCommunity(params.communityId),
-      listing: dapper.getPackageListingDetails(
+    try {
+      const filtersPromise = dapper.getCommunityFilters(params.communityId);
+      const communityPromise = dapper.getCommunity(params.communityId);
+      const listingPromise = dapper.getPackageListingDetails(
         params.communityId,
         params.namespaceId,
         params.packageId
-      ),
-      filters: filters,
-      listings: await dapper.getPackageListings(
+      );
+      const listingsPromise = dapper.getPackageListings(
         {
           kind: "package-dependants",
           communityId: params.communityId,
@@ -61,10 +77,29 @@ export async function loader({ params, request }: Route.LoaderArgs) {
         section ? (section === "all" ? "" : section) : "",
         nsfw === "true" ? true : false,
         deprecated === "true" ? true : false
-      ),
-    };
+      );
+      await Promise.all([
+        communityPromise,
+        listingPromise,
+        listingsPromise,
+      ]);
+      const filters = await filtersPromise;
+      return {
+        community: communityPromise,
+        listing: listingPromise,
+        filters,
+        listings: listingsPromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: dependantsErrorMappings });
+    }
   }
-  throw new Response("Community not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Community not found.",
+    description: "We could not find the requested community.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export async function clientLoader({
@@ -89,16 +124,15 @@ export async function clientLoader({
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
-    const filters = dapper.getCommunityFilters(params.communityId);
-    return {
-      community: dapper.getCommunity(params.communityId),
-      listing: dapper.getPackageListingDetails(
+    try {
+      const filtersPromise = dapper.getCommunityFilters(params.communityId);
+      const communityPromise = dapper.getCommunity(params.communityId);
+      const listingPromise = dapper.getPackageListingDetails(
         params.communityId,
         params.namespaceId,
         params.packageId
-      ),
-      filters: filters,
-      listings: dapper.getPackageListings(
+      );
+      const listingsPromise = dapper.getPackageListings(
         {
           kind: "package-dependants",
           communityId: params.communityId,
@@ -113,10 +147,29 @@ export async function clientLoader({
         section ? (section === "all" ? "" : section) : "",
         nsfw === "true" ? true : false,
         deprecated === "true" ? true : false
-      ),
-    };
+      );
+      await Promise.all([
+        communityPromise,
+        listingPromise,
+        listingsPromise,
+      ]);
+      const filters = await filtersPromise;
+      return {
+        community: communityPromise,
+        listing: listingPromise,
+        filters,
+        listings: listingsPromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: dependantsErrorMappings });
+    }
   }
-  throw new Response("Community not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Community not found.",
+    description: "We could not find the requested community.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export default function Dependants() {

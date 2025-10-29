@@ -20,6 +20,8 @@ import {
   teamAddServiceAccount,
   type TeamServiceAccountAddRequestData,
   teamServiceAccountRemove,
+  UserFacingError,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { type OutletContextShape } from "../../../../../root";
@@ -28,6 +30,8 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 
 // REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader({ params }: LoaderFunctionArgs) {
@@ -48,14 +52,23 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         ),
       };
     } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team not found", { status: 404 });
-      } else {
-        throw error;
+      if (error instanceof ApiError && error.statusCode === 404) {
+        throwUserFacingPayloadResponse({
+          headline: "Team not found.",
+          description: "We could not find the requested team.",
+          category: "not_found",
+          status: 404,
+        });
       }
+      handleLoaderError(error);
     }
   }
-  throw new Response("Team not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Team not found.",
+    description: "We could not find the requested team.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export function HydrateFallback() {
@@ -94,7 +107,7 @@ export default function ServiceAccounts() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -258,7 +271,7 @@ function AddServiceAccountForm(props: {
     TeamServiceAccountAddRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -274,7 +287,7 @@ function AddServiceAccountForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },

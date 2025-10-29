@@ -16,6 +16,7 @@ import {
   packageListingUpdate,
   type PackageListingUpdateRequestData,
   packageUnlist,
+  UserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type OutletContextShape } from "~/root";
@@ -23,6 +24,8 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
@@ -63,15 +66,24 @@ export async function loader({ params }: LoaderFunctionArgs) {
         permissions: undefined,
       };
     } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Package not found", { status: 404 });
-      } else {
-        // REMIX TODO: Add sentry
-        throw error;
+      // REMIX TODO: Add sentry
+      if (error instanceof ApiError && error.statusCode === 404) {
+        throwUserFacingPayloadResponse({
+          headline: "Package not found.",
+          description: "We could not find the requested package.",
+          category: "not_found",
+          status: 404,
+        });
       }
+      handleLoaderError(error);
     }
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 // TODO: Needs to check if package is available for the logged in user
@@ -93,7 +105,12 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       );
 
       if (!permissions?.permissions.can_manage) {
-        throw new Response("Unauthorized", { status: 403 });
+        throwUserFacingPayloadResponse({
+          headline: "You do not have permission to edit this package.",
+          description: "Sign in with a team member account to continue.",
+          category: "auth",
+          status: 403,
+        });
       }
 
       return {
@@ -109,14 +126,23 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         permissions: permissions,
       };
     } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Package not found", { status: 404 });
-      } else {
-        throw error;
+      if (error instanceof ApiError && error.statusCode === 404) {
+        throwUserFacingPayloadResponse({
+          headline: "Package not found.",
+          description: "We could not find the requested package.",
+          category: "not_found",
+          status: 404,
+        });
       }
+      handleLoaderError(error);
     }
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 clientLoader.hydrate = true;
@@ -146,7 +172,9 @@ export default function PackageListing() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: error.description
+          ? `${error.headline} ${error.description}`
+          : error.headline,
         duration: 8000,
       });
     },
@@ -165,7 +193,9 @@ export default function PackageListing() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: error.description
+          ? `${error.headline} ${error.description}`
+          : error.headline,
         duration: 8000,
       });
     },
@@ -207,12 +237,12 @@ export default function PackageListing() {
     [key in keyof typeof formInputs]?: string | string[];
   };
 
-  const strongForm = useStrongForm<
+  const { submit: submitPackageUpdate } = useStrongForm<
     typeof formInputs,
     PackageListingUpdateRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -227,7 +257,9 @@ export default function PackageListing() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: error.description
+          ? `${error.headline} ${error.description}`
+          : error.headline,
         duration: 8000,
       });
     },
@@ -388,7 +420,7 @@ export default function PackageListing() {
                 csVariant="accent"
                 csSize="big"
                 onClick={() => {
-                  strongForm.submit();
+                  submitPackageUpdate();
                 }}
                 rootClasses="package-edit__save-button"
               >
