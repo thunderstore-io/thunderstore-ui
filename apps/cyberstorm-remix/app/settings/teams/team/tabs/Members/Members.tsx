@@ -43,6 +43,12 @@ import { Suspense, useMemo, useReducer, useState } from "react";
 import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import {
+  isLoaderError,
+  resolveLoaderPromise,
+  type LoaderErrorPayload,
+  type LoaderResult,
+} from "cyberstorm/utils/errors/loaderResult";
 
 type MaybePromise<T> = T | Promise<T>;
 
@@ -50,7 +56,7 @@ type TeamMembers = Awaited<ReturnType<DapperTs["getTeamMembers"]>>;
 
 type LoaderData = {
   teamName: string;
-  members: MaybePromise<TeamMembers>;
+  members: MaybePromise<LoaderResult<TeamMembers>>;
 };
 
 // REMIX TODO: Add check for "user has permission to see this page"
@@ -65,9 +71,8 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           sessionId: config.sessionId,
         };
       });
-      const membersPromise = dapper
-        .getTeamMembers(params.namespaceId)
-        .catch((error) => {
+      const membersPromise = resolveLoaderPromise(
+        dapper.getTeamMembers(params.namespaceId).catch((error) => {
           if (error instanceof ApiError && error.statusCode === 404) {
             throwUserFacingPayloadResponse({
               headline: "Team not found.",
@@ -76,8 +81,9 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
               status: 404,
             });
           }
-          return handleLoaderError(error);
-        });
+          throw error;
+        })
+      );
 
       return {
         teamName: params.namespaceId,
@@ -119,23 +125,28 @@ const roleOptions: SelectOption<"owner" | "member">[] = [
 ];
 
 export default function Members() {
-  const { teamName, members } = useLoaderData<typeof clientLoader>();
+  const { teamName, members } = useLoaderData<
+    typeof clientLoader
+  >() as LoaderData;
   const outletContext = useOutletContext() as OutletContextShape;
-  const resolvedMembersPromise = useMemo(() => Promise.resolve(members), [members]);
+  const resolvedMembersPromise = useMemo(() => {
+    return Promise.resolve(members) as Promise<LoaderResult<TeamMembers>>;
+  }, [members]);
 
   return (
     <Suspense fallback={<MembersSkeleton />}>
-      <Await
-        resolve={resolvedMembersPromise}
-        errorElement={<MembersAwaitError />}
-      >
-        {(resolvedMembers) => (
-          <MembersContent
-            teamName={teamName}
-            members={resolvedMembers}
-            outletContext={outletContext}
-          />
-        )}
+      <Await resolve={resolvedMembersPromise}>
+        {(result) =>
+          isLoaderError(result) ? (
+            <MembersAwaitError payload={result.__error} />
+          ) : (
+            <MembersContent
+              teamName={teamName}
+              members={result}
+              outletContext={outletContext}
+            />
+          )
+        }
       </Await>
     </Suspense>
   );
@@ -150,7 +161,11 @@ interface MembersContentProps {
 /**
  * Displays the team members table once the loader promise settles.
  */
-function MembersContent({ teamName, members, outletContext }: MembersContentProps) {
+function MembersContent({
+  teamName,
+  members,
+  outletContext,
+}: MembersContentProps) {
   const revalidator = useRevalidator();
   const toast = useToast();
 
@@ -265,10 +280,13 @@ function MembersContent({ teamName, members, outletContext }: MembersContentProp
 /**
  * Shows an alert when the members promise rejects.
  */
-function MembersAwaitError() {
+function MembersAwaitError(props: { payload: LoaderErrorPayload }) {
+  const { payload } = props;
+
   return (
     <NewAlert csVariant="danger">
-      We could not load the team members. Please try again.
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
     </NewAlert>
   );
 }
@@ -447,7 +465,8 @@ function RemoveTeamMemberForm(props: {
   const kickMemberAction = ApiAction({
     endpoint: teamRemoveMember,
     onSubmitSuccess: () => {
-      props.updateTrigger();
+      void props.updateTrigger();
+      setOpen(false);
       toast.addToast({
         csVariant: "success",
         children: `Team member removed`,
@@ -499,8 +518,6 @@ function RemoveTeamMemberForm(props: {
               params: { team_name: props.teamName, username: props.userName },
               queryParams: {},
               data: {},
-            }).then(() => {
-              setOpen(false);
             })
           }
         >

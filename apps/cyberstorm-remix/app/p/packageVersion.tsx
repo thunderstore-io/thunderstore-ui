@@ -213,24 +213,44 @@ export default function PackageVersion() {
   // If strict mode is removed from the entry.client.tsx, this should only run once
   useEffect(() => {
     if (!startsHydrated.current && isHydrated) return;
-    if (isPromise(version)) {
-      version.then((versionData) => {
-        setFirstUploaded(
-          <RelativeTime
-            time={versionData.datetime_created}
-            suppressHydrationWarning
-          />
-        );
-      });
-    } else {
+    if (!isPromise(version)) {
       setFirstUploaded(
         <RelativeTime
           time={version.datetime_created}
           suppressHydrationWarning
         />
       );
+      return;
     }
-  }, []);
+
+    let isCancelled = false;
+
+    const resolveVersionTimes = async () => {
+      try {
+        const versionData = await version;
+        if (isCancelled) {
+          return;
+        }
+
+        setFirstUploaded(
+          <RelativeTime
+            time={versionData.datetime_created}
+            suppressHydrationWarning
+          />
+        );
+      } catch (error) {
+        if (!isCancelled) {
+          console.error("Failed to resolve version metadata", error);
+        }
+      }
+    };
+
+    resolveVersionTimes();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [isHydrated, version]);
   // END: For sidebar meta dates
 
   const currentTab = location.pathname.split("/")[8] || "details";

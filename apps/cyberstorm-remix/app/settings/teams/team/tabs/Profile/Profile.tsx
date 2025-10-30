@@ -29,13 +29,19 @@ import {
 import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import {
+  isLoaderError,
+  resolveLoaderPromise,
+  type LoaderErrorPayload,
+  type LoaderResult,
+} from "cyberstorm/utils/errors/loaderResult";
 
 type MaybePromise<T> = T | Promise<T>;
 
 type TeamDetails = Awaited<ReturnType<DapperTs["getTeamDetails"]>>;
 
 type LoaderData = {
-  team: MaybePromise<TeamDetails>;
+  team: MaybePromise<LoaderResult<TeamDetails>>;
 };
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
@@ -48,9 +54,8 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           sessionId: tools?.getConfig().sessionId,
         };
       });
-      const teamPromise = dapper
-        .getTeamDetails(params.namespaceId)
-        .catch((error) => {
+      const teamPromise = resolveLoaderPromise(
+        dapper.getTeamDetails(params.namespaceId).catch((error) => {
           if (error instanceof ApiError && error.statusCode === 404) {
             throwUserFacingPayloadResponse({
               headline: "Team not found.",
@@ -59,8 +64,9 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
               status: 404,
             });
           }
-          return handleLoaderError(error);
-        });
+          throw error;
+        })
+      );
 
       return {
         team: teamPromise,
@@ -91,22 +97,22 @@ export function HydrateFallback() {
 }
 
 export default function Profile() {
-  const { team } = useLoaderData<typeof clientLoader>();
+  const { team } = useLoaderData<typeof clientLoader>() as LoaderData;
   const outletContext = useOutletContext() as OutletContextShape;
-  const resolvedTeamPromise = useMemo(() => Promise.resolve(team), [team]);
+  const resolvedTeamPromise = useMemo(() => {
+    return Promise.resolve(team) as Promise<LoaderResult<TeamDetails>>;
+  }, [team]);
 
   return (
     <Suspense fallback={<ProfileSkeleton />}>
-      <Await
-        resolve={resolvedTeamPromise}
-        errorElement={<ProfileAwaitError />}
-      >
-        {(resolvedTeam) => (
-          <ProfileContent
-            team={resolvedTeam}
-            outletContext={outletContext}
-          />
-        )}
+      <Await resolve={resolvedTeamPromise}>
+        {(result) =>
+          isLoaderError(result) ? (
+            <ProfileAwaitError payload={result.__error} />
+          ) : (
+            <ProfileContent team={result} outletContext={outletContext} />
+          )
+        }
       </Await>
     </Suspense>
   );
@@ -220,12 +226,15 @@ function ProfileContent({ team, outletContext }: ProfileContentProps) {
 }
 
 /**
- * Shows a friendly alert when the team profile promise rejects during Suspense.
+ * Shows a friendly alert when the team profile promise resolves with an error payload.
  */
-function ProfileAwaitError() {
+function ProfileAwaitError(props: { payload: LoaderErrorPayload }) {
+  const { payload } = props;
+
   return (
     <NewAlert csVariant="danger">
-      We could not load the team profile. Please try again.
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
     </NewAlert>
   );
 }

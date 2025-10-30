@@ -7,12 +7,7 @@ import {
   useOutletContext,
   useRouteError,
 } from "react-router";
-import {
-  NewAlert,
-  NewLink,
-  SkeletonBox,
-  Tabs,
-} from "@thunderstore/cyberstorm";
+import { NewAlert, NewLink, SkeletonBox, Tabs } from "@thunderstore/cyberstorm";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../../../root";
 import "./teamSettings.css";
@@ -23,13 +18,19 @@ import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFaci
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import { Suspense, useMemo } from "react";
 import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import {
+  isLoaderError,
+  resolveLoaderPromise,
+  type LoaderErrorPayload,
+  type LoaderResult,
+} from "cyberstorm/utils/errors/loaderResult";
 
 type MaybePromise<T> = T | Promise<T>;
 
 type TeamDetails = Awaited<ReturnType<DapperTs["getTeamDetails"]>>;
 
 type LoaderData = {
-  team: MaybePromise<TeamDetails>;
+  team: MaybePromise<LoaderResult<TeamDetails>>;
 };
 
 function isPromiseLike<T>(value: MaybePromise<T>): value is Promise<T> {
@@ -40,7 +41,9 @@ export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
   const loaderData = data as LoaderData | undefined;
   const teamValue = loaderData?.team;
   const resolvedName =
-    teamValue && !isPromiseLike(teamValue) ? teamValue.name : undefined;
+    teamValue && !isPromiseLike(teamValue) && !isLoaderError(teamValue)
+      ? teamValue.name
+      : undefined;
 
   const title = resolvedName
     ? `${resolvedName} settings`
@@ -50,9 +53,7 @@ export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
     { title },
     {
       name: "description",
-      content: resolvedName
-        ? `${resolvedName} settings`
-        : "Team configuration",
+      content: resolvedName ? `${resolvedName} settings` : "Team configuration",
     },
   ];
 };
@@ -69,9 +70,8 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           sessionId: config?.sessionId,
         };
       });
-      const teamPromise = dapper
-        .getTeamDetails(params.namespaceId)
-        .catch((error) => {
+      const teamPromise = resolveLoaderPromise(
+        dapper.getTeamDetails(params.namespaceId).catch((error) => {
           if (error instanceof ApiError && error.statusCode === 404) {
             throwUserFacingPayloadResponse({
               headline: "Team not found.",
@@ -80,8 +80,9 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
               status: 404,
             });
           }
-          return handleLoaderError(error);
-        });
+          throw error;
+        })
+      );
 
       return {
         team: teamPromise,
@@ -111,27 +112,28 @@ export function HydrateFallback() {
 }
 
 export default function TeamSettingsRoute() {
-  const { team } = useLoaderData<typeof clientLoader>();
+  const { team } = useLoaderData<typeof clientLoader>() as LoaderData;
   const location = useLocation();
   const outletContext = useOutletContext() as OutletContextShape;
 
   const resolvedTeamPromise = useMemo(() => {
-    return Promise.resolve(team);
+    return Promise.resolve(team) as Promise<LoaderResult<TeamDetails>>;
   }, [team]);
 
   return (
     <Suspense fallback={<TeamSettingsSkeleton />}>
-      <Await
-        resolve={resolvedTeamPromise}
-        errorElement={<TeamSettingsAwaitError />}
-      >
-        {(resolvedTeam) => (
-          <TeamSettingsContent
-            team={resolvedTeam}
-            locationPathname={location.pathname}
-            outletContext={outletContext}
-          />
-        )}
+      <Await resolve={resolvedTeamPromise}>
+        {(result) =>
+          isLoaderError(result) ? (
+            <TeamSettingsAwaitError payload={result.__error} />
+          ) : (
+            <TeamSettingsContent
+              team={result}
+              locationPathname={location.pathname}
+              outletContext={outletContext}
+            />
+          )
+        }
       </Await>
     </Suspense>
   );
@@ -226,10 +228,13 @@ function TeamSettingsContent({
 /**
  * Shows an inline alert when the team detail promise rejects during Suspense.
  */
-function TeamSettingsAwaitError() {
+function TeamSettingsAwaitError(props: { payload: LoaderErrorPayload }) {
+  const { payload } = props;
+
   return (
     <NewAlert csVariant="danger">
-      We could not load the team details. Please try again.
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
     </NewAlert>
   );
 }

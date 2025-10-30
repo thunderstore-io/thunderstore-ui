@@ -2,6 +2,7 @@ import {
   memo,
   type ReactElement,
   Suspense,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -83,6 +84,9 @@ import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFaci
 import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
 
 import "./packageListing.css";
+
+const getErrorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : String(error);
 
 type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
@@ -255,28 +259,51 @@ export default function PackageListing() {
     config: config,
   });
 
-  const fetchAndSetRatedPackages = async () => {
-    const rp = await dapper.getRatedPackages();
-    if (isPromise(listing)) {
-      listing.then((listingData) => {
+  const fetchAndSetRatedPackages = useCallback(
+    async (options?: { isCancelled?: () => boolean }) => {
+      try {
+        const ratedPackages = await dapper.getRatedPackages();
+        const listingData = await Promise.resolve(listing);
+        if (options?.isCancelled?.()) {
+          return;
+        }
+
         setIsLiked(
-          rp.rated_packages.includes(
+          ratedPackages.rated_packages.includes(
             `${listingData.namespace}-${listingData.name}`
           )
         );
-      });
-    } else {
-      setIsLiked(
-        rp.rated_packages.includes(`${listing.namespace}-${listing.name}`)
-      );
-    }
-  };
+      } catch (error) {
+        if (!options?.isCancelled?.()) {
+          console.error("Failed to load rated packages", error);
+          toast.addToast({
+            csVariant: "danger",
+            children: `Failed to fetch rated packages: ${getErrorMessage(
+              error
+            )}`,
+            duration: 6000,
+          });
+        }
+      }
+    },
+    [dapper, listing, toast]
+  );
 
   useEffect(() => {
-    if (currentUser?.username) {
-      fetchAndSetRatedPackages();
+    if (!currentUser?.username) {
+      return;
     }
-  }, [currentUser]);
+
+    let isCancelled = false;
+
+    fetchAndSetRatedPackages({
+      isCancelled: () => isCancelled,
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [currentUser?.username, fetchAndSetRatedPackages]);
 
   const isHydrated = useHydrated();
   const startsHydrated = useRef(isHydrated);
@@ -292,8 +319,29 @@ export default function PackageListing() {
   // If strict mode is removed from the entry.client.tsx, this should only run once
   useEffect(() => {
     if (!startsHydrated.current && isHydrated) return;
-    if (isPromise(listing)) {
-      listing.then((listingData) => {
+
+    if (!isPromise(listing)) {
+      setLastUpdated(
+        <RelativeTime time={listing.last_updated} suppressHydrationWarning />
+      );
+      setFirstUploaded(
+        <RelativeTime
+          time={listing.datetime_created}
+          suppressHydrationWarning
+        />
+      );
+      return;
+    }
+
+    let isCancelled = false;
+
+    const resolveListingTimes = async () => {
+      try {
+        const listingData = await listing;
+        if (isCancelled) {
+          return;
+        }
+
         setLastUpdated(
           <RelativeTime
             time={listingData.last_updated}
@@ -306,19 +354,19 @@ export default function PackageListing() {
             suppressHydrationWarning
           />
         );
-      });
-    } else {
-      setLastUpdated(
-        <RelativeTime time={listing.last_updated} suppressHydrationWarning />
-      );
-      setFirstUploaded(
-        <RelativeTime
-          time={listing.datetime_created}
-          suppressHydrationWarning
-        />
-      );
-    }
-  }, []);
+      } catch (error) {
+        if (!isCancelled) {
+          console.error("Failed to resolve listing metadata", error);
+        }
+      }
+    };
+
+    resolveListingTimes();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [isHydrated, listing]);
   // END: For sidebar meta dates
 
   const currentTab = location.pathname.split("/")[6] || "details";
