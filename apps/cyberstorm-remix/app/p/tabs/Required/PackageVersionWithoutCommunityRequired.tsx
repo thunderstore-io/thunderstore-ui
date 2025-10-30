@@ -1,5 +1,5 @@
 import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useRouteError } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicEnvVariables,
@@ -9,6 +9,8 @@ import { PaginatedDependencies } from "~/commonComponents/PaginatedDependencies/
 import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import { packageDependenciesErrorMappings } from "./Required";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import { Heading } from "@thunderstore/cyberstorm";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
@@ -51,7 +53,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   });
 }
 
-export async function clientLoader({ params, request }: LoaderFunctionArgs) {
+export function clientLoader({ params, request }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -63,28 +65,30 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
     const searchParams = new URL(request.url).searchParams;
     const page = searchParams.get("page");
 
-    try {
-      const versionPromise = dapper.getPackageVersionDetails(
+    const version = dapper
+      .getPackageVersionDetails(
         params.namespaceId,
         params.packageId,
         params.packageVersion
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageDependenciesErrorMappings })
       );
-      const dependenciesPromise = dapper.getPackageVersionDependencies(
+    const dependencies = dapper
+      .getPackageVersionDependencies(
         params.namespaceId,
         params.packageId,
         params.packageVersion,
         page === null ? undefined : Number(page)
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageDependenciesErrorMappings })
       );
 
-      await Promise.all([versionPromise, dependenciesPromise]);
-
-      return {
-        version: versionPromise,
-        dependencies: dependenciesPromise,
-      };
-    } catch (error) {
-      handleLoaderError(error, { mappings: packageDependenciesErrorMappings });
-    }
+    return {
+      version,
+      dependencies,
+    };
   }
   throwUserFacingPayloadResponse({
     headline: "Dependencies not found.",
@@ -101,5 +105,23 @@ export default function PackageVersionWithoutCommunityRequired() {
 
   return (
     <PaginatedDependencies version={version} dependencies={dependencies} />
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="package-listing__error">
+      <Heading csLevel="3" csSize="3" csVariant="primary" mode="display">
+        {payload.headline}
+      </Heading>
+      {payload.description ? (
+        <p className="package-listing__error-description">
+          {payload.description}
+        </p>
+      ) : null}
+    </div>
   );
 }

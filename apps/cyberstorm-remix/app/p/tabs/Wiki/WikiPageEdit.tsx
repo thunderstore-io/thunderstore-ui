@@ -1,11 +1,13 @@
 import "./Wiki.css";
 
 import {
+  Await,
   type LoaderFunctionArgs,
+  useLoaderData,
   useNavigate,
   useOutletContext,
+  useRouteError,
 } from "react-router";
-import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicEnvVariables,
@@ -14,14 +16,16 @@ import {
 import {
   Heading,
   Modal,
+  NewAlert,
   NewButton,
   NewLink,
   NewTextInput,
+  SkeletonBox,
   Tabs,
   useToast,
 } from "@thunderstore/cyberstorm";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer, useState } from "react";
+import { Suspense, useMemo, useReducer, useState } from "react";
 import {
   deletePackageWikiPage,
   type PackageWikiPageEditRequestData,
@@ -44,9 +48,12 @@ import {
 } from "cyberstorm/utils/errors/loaderMappings";
 import { wikiErrorMappings } from "./Wiki";
 import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+
+type MaybePromise<T> = T | Promise<T>;
 
 type ResultType = {
-  page: PackageWikiPageResponseData;
+  page: MaybePromise<PackageWikiPageResponseData | undefined>;
   communityId: string;
   namespaceId: string;
   packageId: string;
@@ -126,13 +133,15 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
-    try {
-      const wikiPromise = dapper.getPackageWiki(
-        params.namespaceId,
-        params.packageId
-      );
+    const wikiPromise = dapper
+      .getPackageWiki(params.namespaceId, params.packageId)
+      .catch((error) => handleLoaderError(error, { mappings: wikiPageEditErrorMappings }));
 
-      const wiki = await wikiPromise;
+    const pagePromise = wikiPromise.then((wiki) => {
+      if (!wiki) {
+        return undefined;
+      }
+
       const pageId = wiki.pages.find((candidate) => candidate.slug === params.slug)?.id;
 
       if (!pageId) {
@@ -147,33 +156,77 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         );
       }
 
-      const page = await dapper.getPackageWikiPage(pageId);
+      return dapper
+        .getPackageWikiPage(pageId)
+        .catch((error) => handleLoaderError(error, { mappings: wikiPageEditErrorMappings }));
+    });
 
-      return {
-        page,
-        communityId: params.communityId,
-        namespaceId: params.namespaceId,
-        packageId: params.packageId,
-      } satisfies ResultType;
-    } catch (error) {
-      handleLoaderError(error, { mappings: wikiPageEditErrorMappings });
-    }
+    return {
+      page: pagePromise,
+      communityId: params.communityId,
+      namespaceId: params.namespaceId,
+      packageId: params.packageId,
+    } satisfies ResultType;
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
 }
 
+/**
+ * Renders the wiki page editor and defers data resolution to Suspense.
+ */
 export default function WikiEdit() {
   const { page, communityId, namespaceId, packageId } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
+  const resolvedPagePromise = useMemo(
+    () => Promise.resolve(page),
+    [page]
+  );
+
+  return (
+    <Suspense fallback={<WikiEditSkeleton />}>
+      <Await
+        resolve={resolvedPagePromise}
+        errorElement={<WikiEditAwaitError />}
+      >
+        {(resolvedPage) =>
+          resolvedPage ? (
+            <WikiEditContent
+              page={resolvedPage}
+              communityId={communityId}
+              namespaceId={namespaceId}
+              packageId={packageId}
+            />
+          ) : (
+            <NewAlert csVariant="info">Wiki page not found.</NewAlert>
+          )
+        }
+      </Await>
+    </Suspense>
+  );
+}
+
+type WikiEditContentProps = {
+  page: PackageWikiPageResponseData;
+  communityId: string;
+  namespaceId: string;
+  packageId: string;
+};
+
+/**
+ * Provides the interactive wiki page edit form once the page data is ready.
+ */
+function WikiEditContent({
+  page,
+  communityId,
+  namespaceId,
+  packageId,
+}: WikiEditContentProps) {
   const outletContext = useOutletContext() as OutletContextShape;
-
   const toast = useToast();
-
   const navigate = useNavigate();
-
   const [selectedTab, setSelectedTab] = useState<"write" | "preview">("write");
 
   async function moveToWikiPage() {
@@ -334,12 +387,6 @@ export default function WikiEdit() {
         ) : (
           <Markdown input={formInputs.markdown_content} />
         )}
-        {/* <div className="markdown-wrapper">
-              <div
-                dangerouslySetInnerHTML={{ __html: page.markdown_content }}
-                className="markdown"
-              />
-            </div> */}
       </div>
       <div className="package-wiki-content__footer">
         <NewButton
@@ -366,6 +413,48 @@ export default function WikiEdit() {
   );
 }
 
+/**
+ * Renders a skeleton while wiki edit data streams in.
+ */
+function WikiEditSkeleton() {
+  return (
+    <div className="package-wiki-content__body">
+      <SkeletonBox className="package-wiki-edit__skeleton-title" />
+      <SkeletonBox className="package-wiki-edit__skeleton-input" />
+      <SkeletonBox className="package-wiki-edit__skeleton-input" />
+    </div>
+  );
+}
+
+/**
+ * Displays a friendly error when Suspense promises reject.
+ */
+function WikiEditAwaitError() {
+  return (
+    <NewAlert csVariant="danger">
+      We could not load the wiki page editor. Please try again.
+    </NewAlert>
+  );
+}
+
+/**
+ * Maps loader errors to a user-facing alert for the wiki edit route.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
+  );
+}
+
+/**
+ * Confirmation modal to delete a wiki page and refresh the listing.
+ */
 function DeletePackageWikiPageForm(props: {
   communityId: string;
   namespaceId: string;

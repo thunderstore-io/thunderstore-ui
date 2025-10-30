@@ -1,6 +1,11 @@
 import "./Source.css";
 
-import { Await, type LoaderFunctionArgs, useOutletContext } from "react-router";
+import {
+  Await,
+  type LoaderFunctionArgs,
+  useOutletContext,
+  useRouteError,
+} from "react-router";
 import { useLoaderData } from "react-router";
 import { Suspense } from "react";
 import ago from "s-ago";
@@ -29,17 +34,11 @@ import {
   SIGN_IN_REQUIRED_MAPPING,
   createNotFoundMapping,
 } from "cyberstorm/utils/errors/loaderMappings";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
 
 type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
-};
-
-type ResultType = {
-  status: string | null;
-  message?: string;
-  source?:
-    | Awaited<ReturnType<typeof getPackageSource>>
-    | ReturnType<typeof getPackageSource>;
 };
 
 const sourceErrorMappings = [
@@ -67,22 +66,21 @@ export async function loader({ params }: LoaderFunctionArgs) {
       );
 
       return {
-        status: null,
         source,
-        message: undefined,
-      } satisfies ResultType;
+      };
     } catch (error) {
       handleLoaderError(error, { mappings: sourceErrorMappings });
     }
   }
-  return {
-    status: "error",
-    message: "Failed to load source",
-    source: undefined,
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Source not available.",
+    description: "We could not find the requested package source.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -91,44 +89,33 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools.getConfig().sessionId,
       };
     });
-    try {
-      const sourcePromise = dapper.getPackageSource(
-        params.namespaceId,
-        params.packageId
+    const source = dapper
+      .getPackageSource(params.namespaceId, params.packageId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: sourceErrorMappings })
       );
-      await sourcePromise;
 
-      return {
-        status: null,
-        source: sourcePromise,
-        message: undefined,
-      } satisfies ResultType;
-    } catch (error) {
-      handleLoaderError(error, { mappings: sourceErrorMappings });
-    }
+    return {
+      source,
+    };
   }
-  return {
-    status: "error",
-    message: "Failed to load source",
-    source: undefined,
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Source not available.",
+    description: "We could not find the requested package source.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export default function Source() {
-  const { status, message, source } = useLoaderData<
+  const { source } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
   const outletContext = useOutletContext() as PackageListingOutletContext;
 
-  if (status === "error") {
-    return <div>{message}</div>;
-  }
   return (
     <Suspense fallback={<SkeletonBox className="package-source__skeleton" />}>
-      <Await
-        resolve={source}
-        errorElement={<div>Error occurred while loading source</div>}
-      >
+      <Await resolve={source}>
         {(resolvedValue) => {
           const decompilations = resolvedValue?.decompilations ?? [];
           const lastDecompilationDate = resolvedValue?.last_decompilation_date;
@@ -177,6 +164,24 @@ export default function Source() {
         }}
       </Await>
     </Suspense>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="package-listing__error">
+      <Heading csLevel="3" csSize="3" csVariant="primary" mode="display">
+        {payload.headline}
+      </Heading>
+      {payload.description ? (
+        <p className="package-listing__error-description">
+          {payload.description}
+        </p>
+      ) : null}
+    </div>
   );
 }
 

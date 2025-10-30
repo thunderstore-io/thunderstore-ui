@@ -8,6 +8,7 @@ import {
   useLoaderData,
   useLocation,
   useOutletContext,
+  useRouteError,
 } from "react-router";
 import {
   Drawer,
@@ -63,6 +64,7 @@ import {
   SIGN_IN_REQUIRED_MAPPING,
   createNotFoundMapping,
 } from "cyberstorm/utils/errors/loaderMappings";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
 
 const packageVersionWithoutCommunityErrorMappings = [
   SIGN_IN_REQUIRED_MAPPING,
@@ -108,7 +110,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -117,25 +119,17 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
-    try {
-      const versionPromise = dapper.getPackageVersionDetails(
-        params.namespaceId,
-        params.packageId,
-        params.packageVersion
-      );
-      const teamPromise = dapper.getTeamDetails(params.namespaceId);
+    const version = dapper.getPackageVersionDetails(
+      params.namespaceId,
+      params.packageId,
+      params.packageVersion
+    );
+    const team = dapper.getTeamDetails(params.namespaceId);
 
-      await Promise.all([versionPromise, teamPromise]);
-
-      return {
-        version: versionPromise,
-        team: teamPromise,
-      };
-    } catch (error) {
-      handleLoaderError(error, {
-        mappings: packageVersionWithoutCommunityErrorMappings,
-      });
-    }
+    return {
+      version,
+      team,
+    };
   }
   throwUserFacingPayloadResponse({
     headline: "Package not found.",
@@ -143,6 +137,27 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
     category: "not_found",
     status: 404,
   });
+}
+
+/**
+ * Provides user-facing fallback content when the package version (no community) route errors.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="container container--y container--full package-listing__error">
+      <Heading csLevel="2" csSize="3" csVariant="primary" mode="display">
+        {payload.headline}
+      </Heading>
+      {payload.description ? (
+        <p className="package-listing__error-description">
+          {payload.description}
+        </p>
+      ) : null}
+    </div>
+  );
 }
 
 export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {

@@ -1,12 +1,12 @@
 import { Await, type LoaderFunctionArgs } from "react-router";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useRouteError } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
-import { SkeletonBox } from "@thunderstore/cyberstorm";
+import { Heading, SkeletonBox } from "@thunderstore/cyberstorm";
 import "./Readme.css";
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import {
@@ -14,6 +14,8 @@ import {
   SIGN_IN_REQUIRED_MAPPING,
   createNotFoundMapping,
 } from "cyberstorm/utils/errors/loaderMappings";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
 
 const readmeErrorMappings = [
   SIGN_IN_REQUIRED_MAPPING,
@@ -34,27 +36,27 @@ export async function loader({ params }: LoaderFunctionArgs) {
       };
     });
     try {
-      const readmePromise = dapper.getPackageReadme(
+      const readme = await dapper.getPackageReadme(
         params.namespaceId,
         params.packageId
       );
-      await readmePromise;
 
       return {
-        readme: readmePromise,
+        readme,
       };
     } catch (error) {
       handleLoaderError(error, { mappings: readmeErrorMappings });
     }
   }
-  return {
-    status: "error",
-    message: "Failed to load readme",
-    readme: { html: "" },
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Readme not available.",
+    description: "We could not find a readme for this package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -63,39 +65,32 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
-    try {
-      const readmePromise = dapper.getPackageReadme(
-        params.namespaceId,
-        params.packageId
+    const readme = dapper
+      .getPackageReadme(params.namespaceId, params.packageId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: readmeErrorMappings })
       );
-      await readmePromise;
 
-      return {
-        readme: readmePromise,
-      };
-    } catch (error) {
-      handleLoaderError(error, { mappings: readmeErrorMappings });
-    }
+    return {
+      readme,
+    };
   }
-  return {
-    status: "error",
-    message: "Failed to load readme",
-    readme: { html: "" },
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Readme not available.",
+    description: "We could not find a readme for this package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export default function Readme() {
-  const { status, message, readme } = useLoaderData<
+  const { readme } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
-  if (status === "error") return <div>{message}</div>;
   return (
     <Suspense fallback={<SkeletonBox className="package-readme__skeleton" />}>
-      <Await
-        resolve={readme}
-        errorElement={<div>Error occurred while loading description</div>}
-      >
+      <Await resolve={readme}>
         {(resolvedValue) => (
           <>
             <div className="markdown-wrapper">
@@ -108,5 +103,23 @@ export default function Readme() {
         )}
       </Await>
     </Suspense>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="package-readme__error">
+      <Heading csLevel="3" csSize="3" csVariant="primary" mode="display">
+        {payload.headline}
+      </Heading>
+      {payload.description ? (
+        <p className="package-readme__error-description">
+          {payload.description}
+        </p>
+      ) : null}
+    </div>
   );
 }

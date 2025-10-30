@@ -4,15 +4,16 @@ import {
   Await,
   type LoaderFunctionArgs,
   Outlet,
+  useLoaderData,
   useOutletContext,
+  useRouteError,
 } from "react-router";
-import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { NewButton, NewIcon, SkeletonBox } from "@thunderstore/cyberstorm";
+import { NewAlert, NewButton, NewIcon, SkeletonBox } from "@thunderstore/cyberstorm";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type OutletContextShape } from "~/root";
@@ -24,6 +25,7 @@ import {
   SIGN_IN_REQUIRED_MAPPING,
   createNotFoundMapping,
 } from "cyberstorm/utils/errors/loaderMappings";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
 
 export const wikiErrorMappings = [
   SIGN_IN_REQUIRED_MAPPING,
@@ -75,36 +77,34 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
 
-    try {
-      const wikiPromise = dapper.getPackageWiki(
-        params.namespaceId,
-        params.packageId
-      );
+    const wikiPromise = dapper
+      .getPackageWiki(params.namespaceId, params.packageId)
+      .catch((error) => handleLoaderError(error, { mappings: wikiErrorMappings }));
 
-      const permissionsPromise = dapper.getPackagePermissions(
+    const permissionsPromise = dapper
+      .getPackagePermissions(
         params.communityId,
         params.namespaceId,
         params.packageId
-      );
+      )
+      .catch((error) => handleLoaderError(error, { mappings: wikiErrorMappings }));
 
-      await Promise.all([wikiPromise, permissionsPromise]);
-
-      return {
-        wiki: wikiPromise,
-        communityId: params.communityId,
-        namespaceId: params.namespaceId,
-        packageId: params.packageId,
-        slug: params.slug,
-        permissions: permissionsPromise,
-      };
-    } catch (error) {
-      handleLoaderError(error, { mappings: wikiErrorMappings });
-    }
+    return {
+      wiki: wikiPromise,
+      communityId: params.communityId,
+      namespaceId: params.namespaceId,
+      packageId: params.packageId,
+      slug: params.slug,
+      permissions: permissionsPromise,
+    };
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
 }
 
+/**
+ * Displays the package wiki navigation and nested routes, relying on Suspense for data.
+ */
 export default function Wiki() {
   const { wiki, communityId, namespaceId, packageId, slug, permissions } =
     useLoaderData<typeof loader | typeof clientLoader>();
@@ -206,6 +206,23 @@ export default function Wiki() {
       <div className="package-wiki-content">
         <Outlet context={outletContext} />
       </div>
+    </div>
+  );
+}
+
+/**
+ * Maps loader errors to a user-facing alert when wiki data fails to resolve.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="package-wiki">
+      <NewAlert csVariant="danger">
+        <strong>{payload.headline}</strong>
+        {payload.description ? ` ${payload.description}` : ""}
+      </NewAlert>
     </div>
   );
 }

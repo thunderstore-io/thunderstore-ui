@@ -9,11 +9,18 @@ import {
   Heading,
   CodeBox,
   useToast,
+  SkeletonBox,
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import {
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+  useRouteError,
+} from "react-router";
 import {
   ApiError,
   type RequestConfig,
@@ -25,13 +32,25 @@ import {
 } from "@thunderstore/thunderstore-api";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { type OutletContextShape } from "../../../../../root";
-import { useReducer, useState } from "react";
+import { Suspense, useMemo, useReducer, useState } from "react";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+
+type MaybePromise<T> = T | Promise<T>;
+
+type ServiceAccountList = Awaited<
+  ReturnType<DapperTs["getTeamServiceAccounts"]>
+>;
+
+type LoaderData = {
+  teamName: string;
+  serviceAccounts: MaybePromise<ServiceAccountList>;
+};
 
 // REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader({ params }: LoaderFunctionArgs) {
@@ -45,12 +64,24 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           sessionId: config?.sessionId,
         };
       });
+      const serviceAccountsPromise = dapper
+        .getTeamServiceAccounts(params.namespaceId)
+        .catch((error) => {
+          if (error instanceof ApiError && error.statusCode === 404) {
+            throwUserFacingPayloadResponse({
+              headline: "Team not found.",
+              description: "We could not find the requested team.",
+              category: "not_found",
+              status: 404,
+            });
+          }
+          return handleLoaderError(error);
+        });
+
       return {
         teamName: params.namespaceId,
-        serviceAccounts: await dapper.getTeamServiceAccounts(
-          params.namespaceId
-        ),
-      };
+        serviceAccounts: serviceAccountsPromise,
+      } satisfies LoaderData;
     } catch (error) {
       if (error instanceof ApiError && error.statusCode === 404) {
         throwUserFacingPayloadResponse({
@@ -82,18 +113,52 @@ const serviceAccountColumns = [
 ];
 
 export default function ServiceAccounts() {
-  const { teamName, serviceAccounts } = useLoaderData<typeof clientLoader>();
+  const { teamName, serviceAccounts } = useLoaderData<LoaderData>();
   const outletContext = useOutletContext() as OutletContextShape;
+  const resolvedServiceAccounts = useMemo(
+    () => Promise.resolve(serviceAccounts),
+    [serviceAccounts]
+  );
 
+  return (
+    <Suspense fallback={<ServiceAccountsSkeleton />}>
+      <Await
+        resolve={resolvedServiceAccounts}
+        errorElement={<ServiceAccountsAwaitError />}
+      >
+        {(resolvedAccounts) => (
+          <ServiceAccountsContent
+            teamName={teamName}
+            serviceAccounts={resolvedAccounts}
+            outletContext={outletContext}
+          />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
+
+interface ServiceAccountsContentProps {
+  teamName: string;
+  serviceAccounts: ServiceAccountList;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Renders the service accounts table after Suspense resolves the data.
+ */
+function ServiceAccountsContent({
+  teamName,
+  serviceAccounts,
+  outletContext,
+}: ServiceAccountsContentProps) {
   const revalidator = useRevalidator();
-
   const toast = useToast();
 
   async function serviceAccountRevalidate() {
     revalidator.revalidate();
   }
 
-  // Remove service account stuff
   const removeServiceAccountAction = ApiAction({
     endpoint: teamServiceAccountRemove,
     onSubmitSuccess: () => {
@@ -213,6 +278,42 @@ export default function ServiceAccounts() {
   );
 }
 
+/**
+ * Shows an alert when service account data fails to load.
+ */
+function ServiceAccountsAwaitError() {
+  return (
+    <NewAlert csVariant="danger">
+      We could not load service accounts. Please try again.
+    </NewAlert>
+  );
+}
+
+/**
+ * Displays a placeholder skeleton while service accounts load.
+ */
+function ServiceAccountsSkeleton() {
+  return (
+    <div className="settings-items">
+      <SkeletonBox className="settings-items__skeleton" />
+    </div>
+  );
+}
+
+/**
+ * Maps thrown loader errors to a user alert for the service accounts tab.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
+  );
+}
 function AddServiceAccountForm(props: {
   teamName: string;
   config: () => RequestConfig;
@@ -276,15 +377,16 @@ function AddServiceAccountForm(props: {
   >({
     inputs: formInputs,
     submitor,
-    onSubmitSuccess: (result) => {
+    onSubmitSuccess: (result: SubmitorOutput) => {
       onSuccess(result);
+      props.serviceAccountRevalidate?.();
       toast.addToast({
         csVariant: "success",
         children: `Service account added`,
         duration: 4000,
       });
     },
-    onSubmitError: (error) => {
+    onSubmitError: (error: UserFacingError) => {
       toast.addToast({
         csVariant: "danger",
         children: formatUserFacingError(error),

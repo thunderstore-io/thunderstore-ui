@@ -3,74 +3,78 @@
 ## Overview
 - Reviewed every `loader` and `clientLoader` under `apps/cyberstorm-remix` with a focus on Remix Suspense/Await integration.
 - Goal: loaders should continue to return resolved data for SSR when possible, while client loaders should hand back the original promises so UI-level `Suspense` components can present fallbacks during client transitions.
-- Presently, most loaders still provide SSR-friendly resolved data, but nearly every client loader resolves its data before returning. This prevents Suspense fallbacks from appearing and forces duplicate error handling inside the loader.
-- A handful of server loaders also bubble promises (after awaiting for error handling) instead of returning concrete values, making SSR less predictable.
+- Server loaders continue to provide SSR-friendly resolved data so markup remains deterministic during the initial render.
+- Refactored client loaders now return their original promises, letting Suspense fallbacks surface loading states and consolidate error handling in the UI.
 
 ## Server loaders (`export async function loader`)
 | Path | Current pattern | Risk | Suggested next step |
 | --- | --- | --- | --- |
-| apps/cyberstorm-remix/app/c/community.tsx | Returns resolved community object (SSR-friendly). | Low | No change needed once client side is updated. |
-| apps/cyberstorm-remix/app/c/tabs/PackageSearch/PackageSearch.tsx | Resolves filters/listings before return. | Low | No action required; just ensure layout Suspense owns client errors. |
-| apps/cyberstorm-remix/app/communities/communities.tsx | Returns resolved listings; SSR works today. | Low | Keep as-is after client loader shift. |
-| apps/cyberstorm-remix/app/p/dependants/Dependants.tsx | Resolves filters but returns other promises that were awaited only for errors. | Medium | Convert return shape to plain data (or explicit `{value, promise}` split) so SSR has concrete values. |
-| apps/cyberstorm-remix/app/p/packageEdit.tsx | Returns fully awaited data. | Low | No change required. |
-| apps/cyberstorm-remix/app/p/packageListing.tsx | Returns awaited data across all fields. | Low | Nothing to do. |
-| apps/cyberstorm-remix/app/p/packageVersion.tsx | Returns promises after `Promise.all`, leaving layout to unwrap. | Medium | Return concrete objects for SSR; move promise handing to client loader/layout combo. |
-| apps/cyberstorm-remix/app/p/packageVersionWithoutCommunity.tsx | Returns resolved data. | Low | No change needed. |
-| apps/cyberstorm-remix/app/p/tabs/Changelog/Changelog.tsx | Returns resolved promise object (already awaited). | Medium | Return the markdown payload rather than the promise. |
-| apps/cyberstorm-remix/app/p/tabs/Readme/PackageVersionReadme.tsx | Same: returns promise after awaiting. | Medium | Return resolved readme HTML for SSR, shift promise handling to client loader. |
-| apps/cyberstorm-remix/app/p/tabs/Readme/PackageVersionWithoutCommunityReadme.tsx | Returns promise after awaiting. | Medium | Same recommendation as above. |
-| apps/cyberstorm-remix/app/p/tabs/Readme/Readme.tsx | Returns promise after awaiting. | Medium | Return resolved value, keep Suspense only on client path. |
-| apps/cyberstorm-remix/app/p/tabs/Required/PackageVersionRequired.tsx | Returns promises post-`Promise.all`. | Medium | Replace with resolved arrays/objects for SSR clarity. |
-| apps/cyberstorm-remix/app/p/tabs/Required/PackageVersionWithoutCommunityRequired.tsx | Returns promises after awaiting. | Medium | Same fix as other dependency tabs. |
-| apps/cyberstorm-remix/app/p/tabs/Required/Required.tsx | Mix of resolved data and promises. | Medium | Normalize to resolved data. |
-| apps/cyberstorm-remix/app/p/tabs/Source/Source.tsx | Returns promise after awaiting the fetch. | Medium | Provide final source payload to SSR, leave streaming to client. |
-| apps/cyberstorm-remix/app/p/tabs/Versions/PackageVersionVersions.tsx | Returns promise after awaiting. | Medium | Return resolved version list, keep Suspense usage for client transitions only. |
-| apps/cyberstorm-remix/app/p/tabs/Versions/PackageVersionWithoutCommunityVersions.tsx | Returns promise after awaiting. | Medium | Same update as above. |
-| apps/cyberstorm-remix/app/p/tabs/Versions/Versions.tsx | Returns promise after awaiting. | Medium | Return resolved versions. |
-| apps/cyberstorm-remix/app/p/tabs/Wiki/Wiki.tsx | Returns resolved wiki object + primitive IDs. | Low | Already SSR friendly; no change. |
-| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiFirstPage.tsx | Returns resolved wiki/page objects (plus IDs). | Low | Fine as-is. |
-| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiNewPage.tsx | Returns resolved metadata (no wiki promise). | Low | No change required. |
-| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiPage.tsx | Returns resolved wiki/page. | Low | No change required. |
-| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiPageEdit.tsx | Returns resolved page struct. | Low | Good for SSR. |
-| apps/cyberstorm-remix/app/p/team/Team.tsx | Returns resolved filters/listings. | Low | Already SSR friendly. |
-| apps/cyberstorm-remix/app/root.tsx | Returns env/session data synchronously. | Low | No change needed. |
-| apps/cyberstorm-remix/app/upload/upload.tsx | Returns resolved community list. | Low | No change needed. |
+| apps/cyberstorm-remix/app/c/community.tsx | Returns resolved community object for SSR (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/c/tabs/PackageSearch/PackageSearch.tsx | Returns resolved filters and listings for SSR (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/communities/communities.tsx | Returns resolved community listings for SSR (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/dependants/Dependants.tsx | Returns resolved community, listing, and filter data for predictable SSR (updated Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/packageEdit.tsx | Returns fully awaited package edit payload for SSR (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/packageListing.tsx | Returns awaited listing, versions, and permissions for SSR (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/packageVersion.tsx | Returns resolved community, version, and team data for SSR (updated Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/packageVersionWithoutCommunity.tsx | Returns resolved package version data for SSR (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Changelog/Changelog.tsx | Returns resolved markdown payload for deterministic SSR (updated Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Readme/PackageVersionReadme.tsx | Returns resolved readme payload for SSR (updated Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Readme/PackageVersionWithoutCommunityReadme.tsx | Returns resolved readme payload for SSR (updated Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Readme/Readme.tsx | Returns resolved readme payload for SSR (updated Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Required/PackageVersionRequired.tsx | Returns resolved version and dependency data for SSR (updated Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Required/PackageVersionWithoutCommunityRequired.tsx | Returns resolved version and dependency data for SSR (updated Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Required/Required.tsx | Returns resolved version and dependency data for SSR (updated Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Source/Source.tsx | Returns resolved source payload for SSR (updated Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Versions/PackageVersionVersions.tsx | Returns resolved version list for SSR (updated Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Versions/PackageVersionWithoutCommunityVersions.tsx | Returns resolved version list for SSR (updated Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Versions/Versions.tsx | Returns resolved version list for SSR (updated Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Wiki/Wiki.tsx | Returns resolved wiki object plus primitive IDs for SSR (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiFirstPage.tsx | Returns resolved wiki and page objects for SSR (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiNewPage.tsx | Returns resolved metadata for SSR (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiPage.tsx | Returns resolved wiki and page data for SSR (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiPageEdit.tsx | Returns resolved page structure for SSR (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/p/team/Team.tsx | Returns resolved filters and listings for SSR (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/root.tsx | Returns env and session data synchronously (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/upload/upload.tsx | Returns resolved community list for SSR (confirmed Oct 30 2025). | Low | - |
 
 ## Client loaders (`export async function clientLoader`)
 | Path | Current pattern | Risk | Suggested next step |
 | --- | --- | --- | --- |
-| apps/cyberstorm-remix/app/c/community.tsx | Awaits community before returning, so Suspense gets an already-resolved value. | High | Stop awaiting; return the raw promise and let layout handle errors via Suspense/ErrorBoundary. |
-| apps/cyberstorm-remix/app/c/tabs/PackageSearch/PackageSearch.tsx | Uses `await Promise.all` then returns resolved values. | High | Return the original promises (or re-wrap) and surface errors in layout. |
-| apps/cyberstorm-remix/app/communities/communities.tsx | Awaits `getCommunities` before returning. | High | ✅ Completed Oct 29 2025 — client loader returns the original promise and the route-level ErrorBoundary surfaces `resolveRouteErrorPayload`. |
-| apps/cyberstorm-remix/app/p/dependants/Dependants.tsx | Awaits all data; returns a mix of resolved values/promises. | High | Return promises for listings/community and relocate error handling + boundaries. |
-| apps/cyberstorm-remix/app/p/packageEdit.tsx | Fully awaits everything prior to return. | High | Return deferred promises (especially listing/filters) and surface permission errors via boundary. |
-| apps/cyberstorm-remix/app/p/packageListing.tsx | Awaits all resources (Promise.all) before returning. | High | Return the original promises to preserve Suspense UX. |
-| apps/cyberstorm-remix/app/p/packageVersion.tsx | Awaits each fetch, handing back resolved objects. | High | Return raw promises; relocate error management to layout-level boundaries. |
-| apps/cyberstorm-remix/app/p/packageVersionWithoutCommunity.tsx | Awaits via `Promise.all`, then returns resolved promises. | High | Return unresolved promises so Suspense fallback renders. |
-| apps/cyberstorm-remix/app/p/tabs/Changelog/Changelog.tsx | Awaits changelog promise before returning. | High | Return `changelogPromise`; move error handling to component boundary. |
-| apps/cyberstorm-remix/app/p/tabs/Readme/PackageVersionReadme.tsx | Awaits readme before returning. | High | Return promise and catch errors in layout. |
-| apps/cyberstorm-remix/app/p/tabs/Readme/PackageVersionWithoutCommunityReadme.tsx | Same as above. | High | Same fix. |
-| apps/cyberstorm-remix/app/p/tabs/Readme/Readme.tsx | Awaits readme before returning. | High | Return promise and handle errors higher up. |
-| apps/cyberstorm-remix/app/p/tabs/Required/PackageVersionRequired.tsx | Awaits via `Promise.all`, returning resolved promises. | High | Stop awaiting; let Suspense manage loading states. |
-| apps/cyberstorm-remix/app/p/tabs/Required/PackageVersionWithoutCommunityRequired.tsx | Same pattern. | High | Same update. |
-| apps/cyberstorm-remix/app/p/tabs/Required/Required.tsx | Awaits dependencies before return. | High | Return raw promises & elevate error handling. |
-| apps/cyberstorm-remix/app/p/tabs/Source/Source.tsx | Awaits source payload before returning. | High | Return promise and add boundary in layout. |
-| apps/cyberstorm-remix/app/p/tabs/Versions/PackageVersionVersions.tsx | Awaits versions before returning. | High | Return promise; move error handling to Suspense boundary. |
-| apps/cyberstorm-remix/app/p/tabs/Versions/PackageVersionWithoutCommunityVersions.tsx | Same. | High | Same fix. |
-| apps/cyberstorm-remix/app/p/tabs/Versions/Versions.tsx | Same. | High | Same fix. |
-| apps/cyberstorm-remix/app/p/tabs/Wiki/Wiki.tsx | Awaits both wiki & permissions before returning promises. | High | Return promises without awaiting; relocate error handling to wiki layout component. |
-| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiFirstPage.tsx | Awaits wiki/page/permissions before returning (mix of resolved/promise). | High | Return raw promises; add route-level Suspense/ErrorBoundary. |
-| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiNewPage.tsx | Awaits wiki existence before returning. | Medium | Consider returning promise if metadata fetch should show skeleton; ensure layout can render boundary copy. |
-| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiPage.tsx | Awaits wiki/page before returning promises. | High | Return promises untouched; surface errors via layout boundary. |
-| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiPageEdit.tsx | Awaits wiki/page before returning. | High | Return promises, introduce Suspense boundary for editor. |
-| apps/cyberstorm-remix/app/p/team/Team.tsx | Awaits filters/listings prior to return. | High | Return promises so team tab skeleton renders; move error handling to route-level boundary. |
-| apps/cyberstorm-remix/app/root.tsx | Returns env/session synchronously. | Low | No Suspense usage; unchanged. |
-| apps/cyberstorm-remix/app/upload/upload.tsx | Awaits community list before returning. | High | Return promise to allow upload page skeleton; move errors to boundary. |
+| apps/cyberstorm-remix/app/c/community.tsx | Streams community promise to Suspense with alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/c/tabs/PackageSearch/PackageSearch.tsx | Streams filters and listings promises to Suspense with alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/communities/communities.tsx | Streams community list promise via layout Suspense with alert boundary (updated Oct 29 2025). | High | - |
+| apps/cyberstorm-remix/app/p/dependants/Dependants.tsx | Streams dependant data promises with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/packageEdit.tsx | Defers listing, filter, and team promises to Suspense with alert error surface (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/packageListing.tsx | Streams listing, versions, and permissions promises with shared alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/packageVersion.tsx | Streams community, version, and team promises through Suspense with alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/packageVersionWithoutCommunity.tsx | Streams package version promise set with shared boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Changelog/Changelog.tsx | Streams changelog promise with markdown skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Readme/PackageVersionReadme.tsx | Streams readme promise with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Readme/PackageVersionWithoutCommunityReadme.tsx | Streams readme promise with shared Suspense boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Readme/Readme.tsx | Streams readme promise with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Required/PackageVersionRequired.tsx | Streams dependency promises with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Required/PackageVersionWithoutCommunityRequired.tsx | Streams dependency promises with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Required/Required.tsx | Streams dependency promises with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Source/Source.tsx | Streams source payload promise with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Versions/PackageVersionVersions.tsx | Streams versions promise with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Versions/PackageVersionWithoutCommunityVersions.tsx | Streams versions promise with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Versions/Versions.tsx | Streams versions promise with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Wiki/Wiki.tsx | Streams wiki and permission promises with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiFirstPage.tsx | Streams wiki, page, and permission promises with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiNewPage.tsx | Streams wiki metadata promise with Suspense skeleton and alert boundary (updated Oct 30 2025). | Medium | - |
+| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiPage.tsx | Streams wiki, page, and permission promises with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/tabs/Wiki/WikiPageEdit.tsx | Streams wiki and page promises with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/p/team/Team.tsx | Streams filters and listings promises with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/root.tsx | Returns env and session data synchronously; no Suspense usage (confirmed Oct 30 2025). | Low | - |
+| apps/cyberstorm-remix/app/upload/upload.tsx | Streams community list promise with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/settings/teams/team/teamSettings.tsx | Streams team promise with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/settings/teams/team/tabs/Profile/Profile.tsx | Streams team promise with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/settings/teams/team/tabs/Members/Members.tsx | Streams member promise with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
+| apps/cyberstorm-remix/app/settings/teams/team/tabs/ServiceAccounts/ServiceAccounts.tsx | Streams service account promise with Suspense skeleton and alert boundary (updated Oct 30 2025). | High | - |
 
 ## Additional notes
-- Nearly all client loaders still resolve data and map errors before returning, which defeats Suspense fallbacks. Refactor client loaders to return raw promises and relocate error handling to the components that call `Await`.
-- Communities route now confirmed working with promise-based client loader and shared ErrorBoundary pattern (Oct 29 2025).
-- Several loaders (notably changelog/readme/versions/dependant flows) return promise objects after awaiting; switch those to resolved values to maximize SSR benefit.
-- Introducing route-level `ErrorBoundary` components for Suspense-driven layouts will allow graceful rendering when client promises reject.
-- When refactoring, prefer a consistent shape (e.g., `{ value, promise }`) if both SSR data and client streaming are required, and document the contract for downstream components.
+- All audited client loaders now return raw promises and delegate loading and error UI to Suspense `Await` wrappers (confirmed Oct 30 2025).
+- Server loaders remain fully awaited so SSR output stays predictable while clients stream data.
+- Shared error helpers (`handleLoaderError`, `resolveRouteErrorPayload`, `throwUserFacingPayloadResponse`) back the alert boundaries across the audited routes.
+- Team settings layout and nested tabs share the Suspense skeleton and alert pattern introduced during this pass (updated Oct 30 2025).
+- Future audits should document any routes that need both resolved SSR data and streamed client promises to keep contracts clear for downstream components.
