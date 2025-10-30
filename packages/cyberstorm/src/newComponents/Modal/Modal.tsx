@@ -3,6 +3,7 @@ import {
   isValidElement,
   type PropsWithChildren,
   type ReactNode,
+  useRef,
 } from "react";
 import "./Modal.css";
 import { NewButton, NewIcon } from "../..";
@@ -191,6 +192,7 @@ export function Modal(props: ModalProps) {
   } = props;
 
   const filteredChildren: ReactNode[] = [];
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   let exit = <Modal.Exit />;
 
@@ -251,6 +253,13 @@ export function Modal(props: ModalProps) {
               props.contentClasses
             )}
             aria-describedby={ariaDescribedby}
+            onOpenAutoFocus={(e) => {
+              // Prevent auto-focusing the first focusable (usually Exit button with tooltip)
+              e.preventDefault();
+              contentRef.current?.focus();
+            }}
+            tabIndex={-1}
+            ref={contentRef}
           >
             {disableDefaultSubComponents ? (
               children
