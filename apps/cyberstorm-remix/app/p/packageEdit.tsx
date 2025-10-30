@@ -41,6 +41,12 @@ import { faBan, faCheck } from "@fortawesome/pro-solid-svg-icons";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import type { DapperTsInterface } from "@thunderstore/dapper-ts";
 import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import {
+  isLoaderError,
+  resolveLoaderPromise,
+  type LoaderErrorPayload,
+  type LoaderResult,
+} from "cyberstorm/utils/errors/loaderResult";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [
@@ -80,7 +86,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
         team,
         filters: communityFilters,
         permissions: undefined,
-      };
+      } satisfies LoaderData;
     } catch (error) {
       // REMIX TODO: Add sentry
       if (error instanceof ApiError && error.statusCode === 404) {
@@ -129,28 +135,31 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         });
       }
 
-      const communityFiltersPromise = dapper
-        .getCommunityFilters(params.communityId)
-        .catch((error) => handleLoaderError(error));
+      const communityFiltersPromise = resolveLoaderPromise(
+        dapper.getCommunityFilters(params.communityId)
+      );
+      const communityPromise = resolveLoaderPromise(
+        dapper.getCommunity(params.communityId)
+      );
+      const listingPromise = resolveLoaderPromise(
+        dapper.getPackageListingDetails(
+          params.communityId,
+          params.namespaceId,
+          params.packageId
+        )
+      );
+      const teamPromise = resolveLoaderPromise(
+        dapper.getTeamDetails(params.namespaceId)
+      );
 
       return {
-        community: dapper
-          .getCommunity(params.communityId)
-          .catch((error) => handleLoaderError(error)),
+        community: communityPromise,
         communityFilters: communityFiltersPromise,
-        listing: dapper
-          .getPackageListingDetails(
-            params.communityId,
-            params.namespaceId,
-            params.packageId
-          )
-          .catch((error) => handleLoaderError(error)),
-        team: dapper
-          .getTeamDetails(params.namespaceId)
-          .catch((error) => handleLoaderError(error)),
+        listing: listingPromise,
+        team: teamPromise,
         filters: communityFiltersPromise,
         permissions,
-      };
+      } satisfies LoaderData;
     } catch (error) {
       if (error instanceof ApiError && error.statusCode === 404) {
         throwUserFacingPayloadResponse({
@@ -173,36 +182,59 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 
 clientLoader.hydrate = true;
 
+type MaybePromise<T> = T | Promise<T>;
+
+type LoaderData = {
+  community: MaybePromise<LoaderResult<PackageEditResolvedData["community"]>>;
+  communityFilters: MaybePromise<
+    LoaderResult<PackageEditResolvedData["filters"]>
+  >;
+  listing: MaybePromise<LoaderResult<PackageEditResolvedData["listing"]>>;
+  team: MaybePromise<
+    LoaderResult<Awaited<ReturnType<DapperTsInterface["getTeamDetails"]>>>
+  >;
+  filters: MaybePromise<LoaderResult<PackageEditResolvedData["filters"]>>;
+  permissions: PackageEditResolvedData["permissions"];
+};
+
 /**
  * Renders the package edit page and defers loading states to Suspense/Await.
  */
 export default function PackageListing() {
-  const loaderData = useLoaderData<typeof loader | typeof clientLoader>();
+  const loaderData = useLoaderData<
+    typeof loader | typeof clientLoader
+  >() as LoaderData;
   const outletContext = useOutletContext() as OutletContextShape;
   const config = outletContext.requestConfig;
   const toast = useToast();
   const revalidator = useRevalidator();
 
-  const resolvedDataPromise = useMemo(() => {
-    return Promise.all([
-      Promise.resolve(loaderData.community),
-      Promise.resolve(loaderData.listing),
-      Promise.resolve(loaderData.filters),
-      Promise.resolve(loaderData.permissions),
-    ]).then(([community, listing, filters, permissions]) => {
-      return {
-        community,
-        listing,
-        filters,
-        permissions,
-      } satisfies PackageEditResolvedData;
-    });
-  }, [
-    loaderData.community,
-    loaderData.listing,
-    loaderData.filters,
-    loaderData.permissions,
-  ]);
+  const communityPromise = useMemo(() => {
+    return Promise.resolve(loaderData.community) as Promise<
+      LoaderResult<PackageEditResolvedData["community"]>
+    >;
+  }, [loaderData.community]);
+  const listingPromise = useMemo(() => {
+    return Promise.resolve(loaderData.listing) as Promise<
+      LoaderResult<PackageEditResolvedData["listing"]>
+    >;
+  }, [loaderData.listing]);
+  const filtersPromise = useMemo(() => {
+    return Promise.resolve(loaderData.filters) as Promise<
+      LoaderResult<PackageEditResolvedData["filters"]>
+    >;
+  }, [loaderData.filters]);
+  const combinedPromise = useMemo(
+    () =>
+      Promise.all([communityPromise, listingPromise, filtersPromise]).then(
+        ([communityResult, listingResult, filtersResult]) => ({
+          communityResult,
+          listingResult,
+          filtersResult,
+        })
+      ),
+    [communityPromise, listingPromise, filtersPromise]
+  );
 
   return (
     <>
@@ -211,18 +243,42 @@ export default function PackageListing() {
       </PageHeader>
       <div className="package-edit__main">
         <Suspense fallback={<PackageEditSkeleton />}>
-          <Await
-            resolve={resolvedDataPromise}
-            errorElement={<PackageEditAwaitError />}
-          >
-            {(resolvedData) => (
-              <PackageEditContent
-                data={resolvedData}
-                config={config}
-                toast={toast}
-                revalidator={revalidator}
-              />
-            )}
+          <Await resolve={combinedPromise}>
+            {({ communityResult, listingResult, filtersResult }) => {
+              if (isLoaderError(communityResult)) {
+                return (
+                  <PackageEditAwaitError payload={communityResult.__error} />
+                );
+              }
+
+              if (isLoaderError(listingResult)) {
+                return (
+                  <PackageEditAwaitError payload={listingResult.__error} />
+                );
+              }
+
+              if (isLoaderError(filtersResult)) {
+                return (
+                  <PackageEditAwaitError payload={filtersResult.__error} />
+                );
+              }
+
+              const resolvedData: PackageEditResolvedData = {
+                community: communityResult,
+                listing: listingResult,
+                filters: filtersResult,
+                permissions: loaderData.permissions,
+              };
+
+              return (
+                <PackageEditContent
+                  data={resolvedData}
+                  config={config}
+                  toast={toast}
+                  revalidator={revalidator}
+                />
+              );
+            }}
           </Await>
         </Suspense>
       </div>
@@ -232,9 +288,7 @@ export default function PackageListing() {
 
 type PackageEditResolvedData = {
   community: Awaited<ReturnType<DapperTsInterface["getCommunity"]>>;
-  listing: Awaited<
-    ReturnType<DapperTsInterface["getPackageListingDetails"]>
-  >;
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>;
   filters: Awaited<ReturnType<DapperTsInterface["getCommunityFilters"]>>;
   permissions:
     | Awaited<ReturnType<DapperTsInterface["getPackagePermissions"]>>
@@ -251,7 +305,12 @@ type PackageEditContentProps = {
 /**
  * Provides the interactive package edit form once all dependencies resolve.
  */
-function PackageEditContent({ data, config, toast, revalidator }: PackageEditContentProps) {
+function PackageEditContent({
+  data,
+  config,
+  toast,
+  revalidator,
+}: PackageEditContentProps) {
   const { community, listing, filters, permissions } = data;
 
   const deprecateToggleAction = ApiAction({
@@ -460,8 +519,7 @@ function PackageEditContent({ data, config, toast, revalidator }: PackageEditCon
         <div className="package-edit__info">
           <div className="package-edit__title">Categories</div>
           <div className="package-edit__description">
-            Select descriptive categories to help people discover your
-            package.
+            Select descriptive categories to help people discover your package.
           </div>
         </div>
         <div className="package-edit__row-content">
@@ -551,11 +609,14 @@ function PackageEditSkeleton() {
 /**
  * Surfaces a friendly error when Suspense promises reject during hydration.
  */
-function PackageEditAwaitError() {
+function PackageEditAwaitError(props: { payload: LoaderErrorPayload }) {
+  const { payload } = props;
+
   return (
     <div className="package-edit__section">
       <NewAlert csVariant="danger">
-        We could not load the package details. Please try again.
+        <strong>{payload.headline}</strong>
+        {payload.description ? ` ${payload.description}` : ""}
       </NewAlert>
     </div>
   );

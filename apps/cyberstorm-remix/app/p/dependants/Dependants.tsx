@@ -1,6 +1,7 @@
 import { Await, useLoaderData, useOutletContext } from "react-router";
 import {
   formatToDisplayName,
+  NewAlert,
   NewLink,
   SkeletonBox,
 } from "@thunderstore/cyberstorm";
@@ -15,7 +16,7 @@ import {
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 import type { Route } from "./+types/Dependants";
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import {
@@ -24,6 +25,12 @@ import {
   VALIDATION_MAPPING,
   createNotFoundMapping,
 } from "cyberstorm/utils/errors/loaderMappings";
+import {
+  isLoaderError,
+  resolveLoaderPromise,
+  type LoaderErrorPayload,
+  type LoaderResult,
+} from "cyberstorm/utils/errors/loaderResult";
 
 const dependantsErrorMappings = [
   SIGN_IN_REQUIRED_MAPPING,
@@ -34,6 +41,21 @@ const dependantsErrorMappings = [
     "We could not find the requested package."
   ),
 ];
+
+type MaybePromise<T> = T | Promise<T>;
+
+type FiltersResult = Awaited<ReturnType<DapperTs["getCommunityFilters"]>>;
+type ListingResult = Awaited<ReturnType<DapperTs["getPackageListingDetails"]>>;
+type ListingsResult = Awaited<ReturnType<DapperTs["getPackageListings"]>>;
+
+type LoaderData = {
+  community: MaybePromise<
+    LoaderResult<Awaited<ReturnType<DapperTs["getCommunity"]>>>
+  >;
+  listing: MaybePromise<LoaderResult<ListingResult>>;
+  filters: MaybePromise<LoaderResult<FiltersResult>>;
+  listings: MaybePromise<LoaderResult<ListingsResult>>;
+};
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId && params.packageId && params.namespaceId) {
@@ -121,52 +143,42 @@ export async function clientLoader({
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
-    const filters = dapper
-      .getCommunityFilters(params.communityId)
-      .catch((error) =>
-        handleLoaderError(error, { mappings: dependantsErrorMappings })
-      );
-    const community = dapper
-      .getCommunity(params.communityId)
-      .catch((error) =>
-        handleLoaderError(error, { mappings: dependantsErrorMappings })
-      );
-    const listing = dapper
-      .getPackageListingDetails(
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      )
-      .catch((error) =>
-        handleLoaderError(error, { mappings: dependantsErrorMappings })
-      );
-    const listings = dapper
-      .getPackageListings(
-        {
-          kind: "package-dependants",
-          communityId: params.communityId,
-          namespaceId: params.namespaceId,
-          packageName: params.packageId,
-        },
-        ordering ?? "",
-        page === null ? undefined : Number(page),
-        search ?? "",
-        includedCategories?.split(",") ?? undefined,
-        excludedCategories?.split(",") ?? undefined,
-        section ? (section === "all" ? "" : section) : "",
-        nsfw === "true" ? true : false,
-        deprecated === "true" ? true : false
-      )
-      .catch((error) =>
-        handleLoaderError(error, { mappings: dependantsErrorMappings })
-      );
-
     return {
-      community,
-      listing,
-      filters,
-      listings,
-    };
+      community: resolveLoaderPromise(dapper.getCommunity(params.communityId), {
+        mappings: dependantsErrorMappings,
+      }),
+      listing: resolveLoaderPromise(
+        dapper.getPackageListingDetails(
+          params.communityId,
+          params.namespaceId,
+          params.packageId
+        ),
+        { mappings: dependantsErrorMappings }
+      ),
+      filters: resolveLoaderPromise(
+        dapper.getCommunityFilters(params.communityId),
+        { mappings: dependantsErrorMappings }
+      ),
+      listings: resolveLoaderPromise(
+        dapper.getPackageListings(
+          {
+            kind: "package-dependants",
+            communityId: params.communityId,
+            namespaceId: params.namespaceId,
+            packageName: params.packageId,
+          },
+          ordering ?? "",
+          page === null ? undefined : Number(page),
+          search ?? "",
+          includedCategories?.split(",") ?? undefined,
+          excludedCategories?.split(",") ?? undefined,
+          section ? (section === "all" ? "" : section) : "",
+          nsfw === "true",
+          deprecated === "true"
+        ),
+        { mappings: dependantsErrorMappings }
+      ),
+    } satisfies LoaderData;
   }
   throwUserFacingPayloadResponse({
     headline: "Community not found.",
@@ -179,52 +191,107 @@ export async function clientLoader({
 export default function Dependants() {
   const { filters, listing, listings } = useLoaderData<
     typeof loader | typeof clientLoader
-  >();
+  >() as LoaderData;
 
   const outletContext = useOutletContext() as OutletContextShape;
+  const listingPromise = useMemo(() => {
+    return Promise.resolve(listing) as Promise<LoaderResult<ListingResult>>;
+  }, [listing]);
+  const filtersPromise = useMemo(() => {
+    return Promise.resolve(filters) as Promise<LoaderResult<FiltersResult>>;
+  }, [filters]);
+  const listingsPromise = useMemo(() => {
+    return Promise.resolve(listings) as Promise<LoaderResult<ListingsResult>>;
+  }, [listings]);
+  const packageSearchPromise = useMemo(
+    () =>
+      Promise.all([filtersPromise, listingsPromise]).then(
+        ([filtersResult, listingsResult]) => ({
+          filtersResult,
+          listingsResult,
+        })
+      ),
+    [filtersPromise, listingsPromise]
+  );
 
   return (
     <>
       <section className="dependants">
         <Suspense fallback={<SkeletonBox />}>
-          <Await resolve={listing}>
-            {(resolvedValue) => (
-              <PageHeader headingLevel="1" headingSize="3">
-                Mods that depend on{" "}
-                <NewLink
-                  primitiveType="cyberstormLink"
-                  linkId="Package"
-                  community={resolvedValue.community_identifier}
-                  namespace={resolvedValue.namespace}
-                  package={resolvedValue.name}
-                  csVariant="cyber"
-                >
-                  {formatToDisplayName(resolvedValue.name)}
-                </NewLink>
-                {" by "}
-                <NewLink
-                  primitiveType="cyberstormLink"
-                  linkId="Team"
-                  community={resolvedValue.community_identifier}
-                  team={resolvedValue.namespace}
-                  csVariant="cyber"
-                >
-                  {resolvedValue.namespace}
-                </NewLink>
-              </PageHeader>
-            )}
+          <Await resolve={listingPromise}>
+            {(listingResult) =>
+              isLoaderError(listingResult) ? (
+                <DependantsAwaitError payload={listingResult.__error} />
+              ) : (
+                <PageHeader headingLevel="1" headingSize="3">
+                  Mods that depend on{" "}
+                  <NewLink
+                    primitiveType="cyberstormLink"
+                    linkId="Package"
+                    community={listingResult.community_identifier}
+                    namespace={listingResult.namespace}
+                    package={listingResult.name}
+                    csVariant="cyber"
+                  >
+                    {formatToDisplayName(listingResult.name)}
+                  </NewLink>
+                  {" by "}
+                  <NewLink
+                    primitiveType="cyberstormLink"
+                    linkId="Team"
+                    community={listingResult.community_identifier}
+                    team={listingResult.namespace}
+                    csVariant="cyber"
+                  >
+                    {listingResult.namespace}
+                  </NewLink>
+                </PageHeader>
+              )
+            }
           </Await>
         </Suspense>
-        <>
-          <PackageSearch
-            listings={listings}
-            filters={filters}
-            config={outletContext.requestConfig}
-            currentUser={outletContext.currentUser}
-            dapper={outletContext.dapper}
-          />
-        </>
+        <Suspense fallback={<SkeletonBox />}>
+          <Await resolve={packageSearchPromise}>
+            {({ filtersResult, listingsResult }) => {
+              if (isLoaderError(filtersResult)) {
+                return <DependantsAwaitError payload={filtersResult.__error} />;
+              }
+
+              if (isLoaderError(listingsResult)) {
+                return (
+                  <DependantsAwaitError payload={listingsResult.__error} />
+                );
+              }
+
+              return (
+                <PackageSearch
+                  listings={listingsResult}
+                  filters={filtersResult}
+                  config={outletContext.requestConfig}
+                  currentUser={outletContext.currentUser}
+                  dapper={outletContext.dapper}
+                />
+              );
+            }}
+          </Await>
+        </Suspense>
       </section>
     </>
+  );
+}
+
+/**
+ * Renders an inline alert when dependant package data fails to load.
+ */
+function DependantsAwaitError(props: { payload: LoaderErrorPayload }) {
+  const { payload } = props;
+
+  return (
+    <div className="dependants__error">
+      <NewAlert csVariant="danger">
+        <strong>{payload.headline}</strong>
+        {payload.description ? ` ${payload.description}` : ""}
+      </NewAlert>
+    </div>
   );
 }

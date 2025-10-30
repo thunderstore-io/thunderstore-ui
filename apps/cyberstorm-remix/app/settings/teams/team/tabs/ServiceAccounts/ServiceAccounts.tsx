@@ -40,6 +40,12 @@ import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
 import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import {
+  isLoaderError,
+  resolveLoaderPromise,
+  type LoaderErrorPayload,
+  type LoaderResult,
+} from "cyberstorm/utils/errors/loaderResult";
 
 type MaybePromise<T> = T | Promise<T>;
 
@@ -49,7 +55,7 @@ type ServiceAccountList = Awaited<
 
 type LoaderData = {
   teamName: string;
-  serviceAccounts: MaybePromise<ServiceAccountList>;
+  serviceAccounts: MaybePromise<LoaderResult<ServiceAccountList>>;
 };
 
 // REMIX TODO: Add check for "user has permission to see this page"
@@ -64,9 +70,8 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           sessionId: config?.sessionId,
         };
       });
-      const serviceAccountsPromise = dapper
-        .getTeamServiceAccounts(params.namespaceId)
-        .catch((error) => {
+      const serviceAccountsPromise = resolveLoaderPromise(
+        dapper.getTeamServiceAccounts(params.namespaceId).catch((error) => {
           if (error instanceof ApiError && error.statusCode === 404) {
             throwUserFacingPayloadResponse({
               headline: "Team not found.",
@@ -75,8 +80,9 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
               status: 404,
             });
           }
-          return handleLoaderError(error);
-        });
+          throw error;
+        })
+      );
 
       return {
         teamName: params.namespaceId,
@@ -94,6 +100,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       handleLoaderError(error);
     }
   }
+
   throwUserFacingPayloadResponse({
     headline: "Team not found.",
     description: "We could not find the requested team.",
@@ -113,26 +120,30 @@ const serviceAccountColumns = [
 ];
 
 export default function ServiceAccounts() {
-  const { teamName, serviceAccounts } = useLoaderData<LoaderData>();
+  const { teamName, serviceAccounts } = useLoaderData<
+    typeof clientLoader
+  >() as LoaderData;
   const outletContext = useOutletContext() as OutletContextShape;
-  const resolvedServiceAccounts = useMemo(
-    () => Promise.resolve(serviceAccounts),
-    [serviceAccounts]
-  );
+  const resolvedServiceAccounts = useMemo(() => {
+    return Promise.resolve(serviceAccounts) as Promise<
+      LoaderResult<ServiceAccountList>
+    >;
+  }, [serviceAccounts]);
 
   return (
     <Suspense fallback={<ServiceAccountsSkeleton />}>
-      <Await
-        resolve={resolvedServiceAccounts}
-        errorElement={<ServiceAccountsAwaitError />}
-      >
-        {(resolvedAccounts) => (
-          <ServiceAccountsContent
-            teamName={teamName}
-            serviceAccounts={resolvedAccounts}
-            outletContext={outletContext}
-          />
-        )}
+      <Await resolve={resolvedServiceAccounts}>
+        {(result) =>
+          isLoaderError(result) ? (
+            <ServiceAccountsAwaitError payload={result.__error} />
+          ) : (
+            <ServiceAccountsContent
+              teamName={teamName}
+              serviceAccounts={result}
+              outletContext={outletContext}
+            />
+          )
+        }
       </Await>
     </Suspense>
   );
@@ -281,10 +292,13 @@ function ServiceAccountsContent({
 /**
  * Shows an alert when service account data fails to load.
  */
-function ServiceAccountsAwaitError() {
+function ServiceAccountsAwaitError(props: { payload: LoaderErrorPayload }) {
+  const { payload } = props;
+
   return (
     <NewAlert csVariant="danger">
-      We could not load service accounts. Please try again.
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
     </NewAlert>
   );
 }

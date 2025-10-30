@@ -1,4 +1,10 @@
-import { useLoaderData, useOutletContext, useRouteError } from "react-router";
+import { Suspense, useMemo } from "react";
+import {
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRouteError,
+} from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { PackageOrderOptions } from "~/commonComponents/PackageSearch/components/PackageOrder";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -11,6 +17,12 @@ import type { Route } from "./+types/PackageSearch";
 import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import {
+  isLoaderError,
+  resolveLoaderPromise,
+  type LoaderErrorPayload,
+  type LoaderResult,
+} from "cyberstorm/utils/errors/loaderResult";
 import { Heading } from "@thunderstore/cyberstorm";
 import {
   FORBIDDEN_MAPPING,
@@ -32,6 +44,20 @@ const packageSearchErrorMappings = [
   ),
   createServerErrorMapping(),
 ];
+
+type CommunityFiltersResult = Awaited<
+  ReturnType<DapperTs["getCommunityFilters"]>
+>;
+type PackageListingsResult = Awaited<
+  ReturnType<DapperTs["getPackageListings"]>
+>;
+
+type MaybePromise<T> = T | Promise<T>;
+
+type PackageSearchLoaderData = {
+  filters: MaybePromise<LoaderResult<CommunityFiltersResult>>;
+  listings: MaybePromise<LoaderResult<PackageListingsResult>>;
+};
 
 interface PackageSearchQuery {
   ordering: string;
@@ -106,7 +132,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       return {
         filters,
         listings,
-      };
+      } satisfies PackageSearchLoaderData;
     } catch (error) {
       handleLoaderError(error, { mappings: packageSearchErrorMappings });
     }
@@ -133,13 +159,12 @@ export async function clientLoader({
     });
     const query = resolvePackageSearchQuery(request);
     return {
-      filters: dapper
-        .getCommunityFilters(params.communityId)
-        .catch((error) =>
-          handleLoaderError(error, { mappings: packageSearchErrorMappings })
-        ),
-      listings: dapper
-        .getPackageListings(
+      filters: resolveLoaderPromise(
+        dapper.getCommunityFilters(params.communityId),
+        { mappings: packageSearchErrorMappings }
+      ),
+      listings: resolveLoaderPromise(
+        dapper.getPackageListings(
           {
             kind: "community",
             communityId: params.communityId,
@@ -152,11 +177,10 @@ export async function clientLoader({
           query.section,
           query.nsfw,
           query.deprecated
-        )
-        .catch((error) =>
-          handleLoaderError(error, { mappings: packageSearchErrorMappings })
         ),
-    };
+        { mappings: packageSearchErrorMappings }
+      ),
+    } satisfies PackageSearchLoaderData;
   }
   throwUserFacingPayloadResponse({
     headline: "Community not found.",
@@ -173,20 +197,77 @@ export async function clientLoader({
 export default function CommunityPackageSearch() {
   const { filters, listings } = useLoaderData<
     typeof loader | typeof clientLoader
-  >();
+  >() as PackageSearchLoaderData;
 
   const outletContext = useOutletContext() as OutletContextShape;
 
+  const filtersPromise = useMemo(() => {
+    return Promise.resolve(filters) as Promise<
+      LoaderResult<CommunityFiltersResult>
+    >;
+  }, [filters]);
+
+  const listingsPromise = useMemo(() => {
+    return Promise.resolve(listings) as Promise<
+      LoaderResult<PackageListingsResult>
+    >;
+  }, [listings]);
+
+  const combinedPromise = useMemo(
+    () =>
+      Promise.all([filtersPromise, listingsPromise]).then(
+        ([filtersResult, listingsResult]) => ({
+          filtersResult,
+          listingsResult,
+        })
+      ),
+    [filtersPromise, listingsPromise]
+  );
+
   return (
-    <>
-      <PackageSearch
-        listings={listings}
-        filters={filters}
-        config={outletContext.requestConfig}
-        currentUser={outletContext.currentUser}
-        dapper={outletContext.dapper}
-      />
-    </>
+    <Suspense>
+      <Await resolve={combinedPromise}>
+        {({ filtersResult, listingsResult }) => {
+          if (isLoaderError(filtersResult)) {
+            return <PackageSearchAwaitError payload={filtersResult.__error} />;
+          }
+
+          if (isLoaderError(listingsResult)) {
+            return <PackageSearchAwaitError payload={listingsResult.__error} />;
+          }
+
+          return (
+            <PackageSearch
+              listings={listingsResult}
+              filters={filtersResult}
+              config={outletContext.requestConfig}
+              currentUser={outletContext.currentUser}
+              dapper={outletContext.dapper}
+            />
+          );
+        }}
+      </Await>
+    </Suspense>
+  );
+}
+
+/**
+ * Displays a loader error payload inline when package search data fails to resolve.
+ */
+function PackageSearchAwaitError(props: { payload: LoaderErrorPayload }) {
+  const { payload } = props;
+
+  return (
+    <div className="container container--y container--full package-search__error">
+      <Heading csLevel="2" csSize="3" csVariant="primary" mode="display">
+        {payload.headline}
+      </Heading>
+      {payload.description ? (
+        <p className="package-search__error-description">
+          {payload.description}
+        </p>
+      ) : null}
+    </div>
   );
 }
 

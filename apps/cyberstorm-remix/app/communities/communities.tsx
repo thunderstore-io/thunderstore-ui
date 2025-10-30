@@ -2,12 +2,13 @@ import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import {
   CardCommunity,
   EmptyState,
+  NewAlert,
   NewTextInput,
   NewSelect,
   SkeletonBox,
 } from "@thunderstore/cyberstorm";
 import "./Communities.css";
-import { useState, useEffect, useRef, memo, Suspense } from "react";
+import { useState, useEffect, useRef, memo, Suspense, useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -37,8 +38,22 @@ import {
 } from "cyberstorm/utils/errors/loaderMappings";
 import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
 import { Heading } from "@thunderstore/cyberstorm";
+import {
+  isLoaderError,
+  resolveLoaderPromise,
+  type LoaderErrorPayload,
+  type LoaderResult,
+} from "cyberstorm/utils/errors/loaderResult";
 
 const communitiesErrorMappings = [SIGN_IN_REQUIRED_MAPPING, FORBIDDEN_MAPPING];
+
+type CommunitiesResult = Awaited<ReturnType<DapperTs["getCommunities"]>>;
+
+type MaybePromise<T> = T | Promise<T>;
+
+type CommunitiesLoaderData = {
+  communities: MaybePromise<LoaderResult<CommunitiesResult>>;
+};
 
 export const meta: MetaFunction = () => {
   return [
@@ -112,7 +127,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   try {
     return {
       communities: await dapper.getCommunities(page, query.order, query.search),
-    };
+    } satisfies CommunitiesLoaderData;
   } catch (error) {
     handleLoaderError(error, { mappings: communitiesErrorMappings });
   }
@@ -129,17 +144,28 @@ export function clientLoader({ request }: LoaderFunctionArgs) {
   const query = resolveCommunitiesQuery(request);
   const page = undefined;
   return {
-    communities: dapper.getCommunities(page, query.order, query.search),
-  };
+    communities: resolveLoaderPromise(
+      dapper.getCommunities(page, query.order, query.search),
+      { mappings: communitiesErrorMappings }
+    ),
+  } satisfies CommunitiesLoaderData;
 }
 
 export default function CommunitiesPage() {
-  const { communities } = useLoaderData<typeof loader | typeof clientLoader>();
+  const { communities } = useLoaderData<
+    typeof loader | typeof clientLoader
+  >() as CommunitiesLoaderData;
   const navigationType = useNavigationType();
 
   const [searchParams, setSearchParams] = useSearchParams();
   // TODO: Disabled until we can figure out how a proper way to display skeletons
   // const navigation = useNavigation();
+
+  const communitiesPromise = useMemo(() => {
+    return Promise.resolve(communities) as Promise<
+      LoaderResult<CommunitiesResult>
+    >;
+  }, [communities]);
 
   const changeOrder = (v: SortOptions) => {
     if (v === SortOptions.Popular) {
@@ -214,10 +240,14 @@ export default function CommunitiesPage() {
 
         <div className="container container--x container--stretch communities__results">
           <Suspense fallback={<CommunitiesListSkeleton />}>
-            <Await resolve={communities}>
-              {(resolvedValue) => (
-                <CommunitiesList communitiesData={resolvedValue} />
-              )}
+            <Await resolve={communitiesPromise}>
+              {(result) =>
+                isLoaderError(result) ? (
+                  <CommunitiesAwaitError payload={result.__error} />
+                ) : (
+                  <CommunitiesList communitiesData={result} />
+                )
+              }
             </Await>
           </Suspense>
         </div>
@@ -299,3 +329,14 @@ const CommunitiesListSkeleton = memo(function CommunitiesListSkeleton() {
     </div>
   );
 });
+
+function CommunitiesAwaitError(props: { payload: LoaderErrorPayload }) {
+  const { payload } = props;
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
+  );
+}

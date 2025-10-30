@@ -79,6 +79,15 @@ import {
   createServerErrorMapping,
 } from "cyberstorm/utils/errors/loaderMappings";
 import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import {
+  isLoaderError,
+  resolveLoaderPromise,
+  type LoaderErrorPayload,
+  type LoaderResult,
+} from "cyberstorm/utils/errors/loaderResult";
+
+const getErrorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : String(error);
 
 interface CommunityOption {
   value: string;
@@ -114,7 +123,7 @@ type MaybePromise<T> = T | Promise<T>;
 type CommunitiesResult = Awaited<ReturnType<DapperTs["getCommunities"]>>;
 
 type LoaderData = {
-  communities: MaybePromise<CommunitiesResult>;
+  communities: MaybePromise<LoaderResult<CommunitiesResult>>;
 };
 
 interface UploadContentProps {
@@ -157,9 +166,9 @@ export async function clientLoader() {
     };
   });
   try {
-    const communitiesPromise = dapper
-      .getCommunities()
-      .catch((error) => handleLoaderError(error, { mappings: uploadErrorMappings }));
+    const communitiesPromise = resolveLoaderPromise(dapper.getCommunities(), {
+      mappings: uploadErrorMappings,
+    });
 
     return {
       communities: communitiesPromise,
@@ -177,21 +186,21 @@ export default function Upload() {
   const outletContext = useOutletContext() as OutletContextShape;
 
   const resolvedCommunitiesPromise = useMemo(() => {
-    return Promise.resolve(communities);
+    return Promise.resolve(communities) as Promise<
+      LoaderResult<CommunitiesResult>
+    >;
   }, [communities]);
 
   return (
     <Suspense fallback={<UploadSkeleton />}>
-      <Await
-        resolve={resolvedCommunitiesPromise}
-        errorElement={<UploadAwaitError />}
-      >
-        {(resolvedCommunities) => (
-          <UploadContent
-            communities={resolvedCommunities}
-            outletContext={outletContext}
-          />
-        )}
+      <Await resolve={resolvedCommunitiesPromise}>
+        {(result) =>
+          isLoaderError(result) ? (
+            <UploadAwaitError payload={result.__error} />
+          ) : (
+            <UploadContent communities={result} outletContext={outletContext} />
+          )
+        }
       </Await>
     </Suspense>
   );
@@ -342,17 +351,29 @@ function UploadContent({ communities, outletContext }: UploadContentProps) {
           // TODO: Add sentry logging
           toast.addToast({
             csVariant: "danger",
-            children: `Error polling submission status: ${error.message}`,
+            children: `Error polling submission status: ${getErrorMessage(
+              error
+            )}`,
             duration: 8000,
           });
         });
     }
   }, [submissionStatus]);
 
-  const retryPolling = () => {
-    if (submissionStatus?.id) {
-      pollSubmission(submissionStatus.id, true).then((data) => {
-        setSubmissionStatus(data);
+  const retryPolling = async () => {
+    const submissionId = submissionStatus?.id;
+    if (!submissionId) {
+      return;
+    }
+
+    try {
+      const data = await pollSubmission(submissionId, true);
+      setSubmissionStatus(data);
+    } catch (error) {
+      toast.addToast({
+        csVariant: "danger",
+        children: `Error polling submission status: ${getErrorMessage(error)}`,
+        duration: 8000,
       });
     }
   };
@@ -388,25 +409,63 @@ function UploadContent({ communities, outletContext }: UploadContentProps) {
   });
 
   useEffect(() => {
-    for (const community of formInputs.communities) {
-      // Skip if we already have categories for this community
-      if (categoryOptions.some((opt) => opt.communityId === community)) {
-        continue;
-      }
-      dapper.getCommunityFilters(community).then((filters) => {
-        setCategoryOptions((prev) => [
-          ...prev,
-          {
-            communityId: community,
-            categories: filters.package_categories.map((cat) => ({
-              value: cat.slug,
-              label: cat.name,
-            })),
-          },
-        ]);
-      });
+    const communitiesToFetch = formInputs.communities.filter(
+      (community) =>
+        !categoryOptions.some((opt) => opt.communityId === community)
+    );
+
+    if (communitiesToFetch.length === 0) {
+      return;
     }
-  }, [formInputs.communities]);
+
+    let isCancelled = false;
+
+    const fetchFilters = async () => {
+      await Promise.all(
+        communitiesToFetch.map(async (community) => {
+          try {
+            const filters = await dapper.getCommunityFilters(community);
+            if (isCancelled) {
+              return;
+            }
+
+            setCategoryOptions((prev) => {
+              if (prev.some((opt) => opt.communityId === community)) {
+                return prev;
+              }
+
+              return [
+                ...prev,
+                {
+                  communityId: community,
+                  categories: filters.package_categories.map((cat) => ({
+                    value: cat.slug,
+                    label: cat.name,
+                  })),
+                },
+              ];
+            });
+          } catch (error) {
+            if (!isCancelled) {
+              toast.addToast({
+                csVariant: "danger",
+                children: `Failed to load categories: ${getErrorMessage(
+                  error
+                )}`,
+                duration: 8000,
+              });
+            }
+          }
+        })
+      );
+    };
+
+    fetchFilters();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [categoryOptions, dapper, formInputs.communities, toast]);
 
   type SubmitorOutput = Awaited<
     ReturnType<typeof postPackageSubmissionMetadata>
@@ -985,12 +1044,15 @@ function UploadContent({ communities, outletContext }: UploadContentProps) {
 }
 
 /**
- * Renders an alert when the Suspense promise rejects during client navigation.
+ * Renders an alert when the Suspense promise resolves with a loader error payload.
  */
-function UploadAwaitError() {
+function UploadAwaitError(props: { payload: LoaderErrorPayload }) {
+  const { payload } = props;
+
   return (
     <NewAlert csVariant="danger">
-      We could not load the available communities. Please try again.
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
     </NewAlert>
   );
 }
