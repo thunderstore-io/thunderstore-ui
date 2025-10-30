@@ -35,6 +35,19 @@
     align-items: center;
   }
 
+  .package-listing__error {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 3rem 0;
+  }
+
+  .package-listing__error-description {
+    max-width: 40rem;
+    color: var(--Color-text-muted, rgb(180 189 255 / 0.8));
+  }
+
   .package-listing-management-tools__island {
     display: flex;
     gap: 6px;

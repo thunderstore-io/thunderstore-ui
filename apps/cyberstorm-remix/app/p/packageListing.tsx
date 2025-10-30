@@ -13,6 +13,7 @@ import {
   useLoaderData,
   useLocation,
   useOutletContext,
+  useRouteError,
   type LoaderFunctionArgs,
   type ShouldRevalidateFunctionArgs,
 } from "react-router";
@@ -79,6 +80,7 @@ import {
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
 
 import "./packageListing.css";
 
@@ -150,7 +152,7 @@ async function getUserPermissions(
 }
 
 // TODO: Needs to check if package is available for the logged in user
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -159,43 +161,29 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools.getConfig().sessionId,
       };
     });
-    try {
-      const communityPromise = dapper.getCommunity(params.communityId);
-      const communityFiltersPromise = dapper.getCommunityFilters(
-        params.communityId
-      );
-      const listingPromise = dapper.getPackageListingDetails(
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      );
-      const teamPromise = dapper.getTeamDetails(params.namespaceId);
-      const permissionsPromise = getUserPermissions(
-        tools,
-        dapper,
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      );
+    const community = dapper.getCommunity(params.communityId);
+    const communityFilters = dapper.getCommunityFilters(params.communityId);
+    const listing = dapper.getPackageListingDetails(
+      params.communityId,
+      params.namespaceId,
+      params.packageId
+    );
+    const team = dapper.getTeamDetails(params.namespaceId);
+    const permissions = getUserPermissions(
+      tools,
+      dapper,
+      params.communityId,
+      params.namespaceId,
+      params.packageId
+    );
 
-      await Promise.all([
-        communityPromise,
-        communityFiltersPromise,
-        listingPromise,
-        teamPromise,
-        permissionsPromise ?? Promise.resolve(undefined),
-      ]);
-
-      return {
-        community: communityPromise,
-        communityFilters: communityFiltersPromise,
-        listing: listingPromise,
-        team: teamPromise,
-        permissions: permissionsPromise,
-      };
-    } catch (error) {
-      handleLoaderError(error, { mappings: packageListingErrorMappings });
-    }
+    return {
+      community,
+      communityFilters,
+      listing,
+      team,
+      permissions,
+    };
   }
   throwUserFacingPayloadResponse({
     headline: "Package not found.",
@@ -203,6 +191,27 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
     category: "not_found",
     status: 404,
   });
+}
+
+/**
+ * Renders user-facing messaging when the package listing route rejects.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="container container--y container--full package-listing__error">
+      <Heading csLevel="2" csSize="3" csVariant="primary" mode="display">
+        {payload.headline}
+      </Heading>
+      {payload.description ? (
+        <p className="package-listing__error-description">
+          {payload.description}
+        </p>
+      ) : null}
+    </div>
+  );
 }
 
 clientLoader.hydrate = true;

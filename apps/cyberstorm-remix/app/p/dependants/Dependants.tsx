@@ -55,40 +55,37 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
     try {
-      const filtersPromise = dapper.getCommunityFilters(params.communityId);
-      const communityPromise = dapper.getCommunity(params.communityId);
-      const listingPromise = dapper.getPackageListingDetails(
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      );
-      const listingsPromise = dapper.getPackageListings(
-        {
-          kind: "package-dependants",
-          communityId: params.communityId,
-          namespaceId: params.namespaceId,
-          packageName: params.packageId,
-        },
-        ordering ?? "",
-        page === null ? undefined : Number(page),
-        search ?? "",
-        includedCategories?.split(",") ?? undefined,
-        excludedCategories?.split(",") ?? undefined,
-        section ? (section === "all" ? "" : section) : "",
-        nsfw === "true" ? true : false,
-        deprecated === "true" ? true : false
-      );
-      await Promise.all([
-        communityPromise,
-        listingPromise,
-        listingsPromise,
+      const [filters, community, listing, listings] = await Promise.all([
+        dapper.getCommunityFilters(params.communityId),
+        dapper.getCommunity(params.communityId),
+        dapper.getPackageListingDetails(
+          params.communityId,
+          params.namespaceId,
+          params.packageId
+        ),
+        dapper.getPackageListings(
+          {
+            kind: "package-dependants",
+            communityId: params.communityId,
+            namespaceId: params.namespaceId,
+            packageName: params.packageId,
+          },
+          ordering ?? "",
+          page === null ? undefined : Number(page),
+          search ?? "",
+          includedCategories?.split(",") ?? undefined,
+          excludedCategories?.split(",") ?? undefined,
+          section ? (section === "all" ? "" : section) : "",
+          nsfw === "true" ? true : false,
+          deprecated === "true" ? true : false
+        ),
       ]);
-      const filters = await filtersPromise;
+
       return {
-        community: communityPromise,
-        listing: listingPromise,
+        community,
+        listing,
         filters,
-        listings: listingsPromise,
+        listings,
       };
     } catch (error) {
       handleLoaderError(error, { mappings: dependantsErrorMappings });
@@ -124,15 +121,27 @@ export async function clientLoader({
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
-    try {
-      const filtersPromise = dapper.getCommunityFilters(params.communityId);
-      const communityPromise = dapper.getCommunity(params.communityId);
-      const listingPromise = dapper.getPackageListingDetails(
+    const filters = dapper
+      .getCommunityFilters(params.communityId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: dependantsErrorMappings })
+      );
+    const community = dapper
+      .getCommunity(params.communityId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: dependantsErrorMappings })
+      );
+    const listing = dapper
+      .getPackageListingDetails(
         params.communityId,
         params.namespaceId,
         params.packageId
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: dependantsErrorMappings })
       );
-      const listingsPromise = dapper.getPackageListings(
+    const listings = dapper
+      .getPackageListings(
         {
           kind: "package-dependants",
           communityId: params.communityId,
@@ -147,22 +156,17 @@ export async function clientLoader({
         section ? (section === "all" ? "" : section) : "",
         nsfw === "true" ? true : false,
         deprecated === "true" ? true : false
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: dependantsErrorMappings })
       );
-      await Promise.all([
-        communityPromise,
-        listingPromise,
-        listingsPromise,
-      ]);
-      const filters = await filtersPromise;
-      return {
-        community: communityPromise,
-        listing: listingPromise,
-        filters,
-        listings: listingsPromise,
-      };
-    } catch (error) {
-      handleLoaderError(error, { mappings: dependantsErrorMappings });
-    }
+
+    return {
+      community,
+      listing,
+      filters,
+      listings,
+    };
   }
   throwUserFacingPayloadResponse({
     headline: "Community not found.",

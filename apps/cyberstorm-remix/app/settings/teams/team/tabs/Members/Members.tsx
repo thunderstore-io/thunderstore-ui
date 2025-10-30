@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import {
   Modal,
+  NewAlert,
   NewAvatar,
   NewButton,
   NewIcon,
@@ -10,11 +11,18 @@ import {
   NewSelect,
   NewTable,
   NewTextInput,
+  SkeletonBox,
   type SelectOption,
   useToast,
 } from "@thunderstore/cyberstorm";
 import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import {
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+  useRouteError,
+} from "react-router";
 import {
   ApiError,
   type RequestConfig,
@@ -31,9 +39,19 @@ import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer, useState } from "react";
+import { Suspense, useMemo, useReducer, useState } from "react";
 import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+
+type MaybePromise<T> = T | Promise<T>;
+
+type TeamMembers = Awaited<ReturnType<DapperTs["getTeamMembers"]>>;
+
+type LoaderData = {
+  teamName: string;
+  members: MaybePromise<TeamMembers>;
+};
 
 // REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader({ params }: LoaderFunctionArgs) {
@@ -47,10 +65,24 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           sessionId: config.sessionId,
         };
       });
+      const membersPromise = dapper
+        .getTeamMembers(params.namespaceId)
+        .catch((error) => {
+          if (error instanceof ApiError && error.statusCode === 404) {
+            throwUserFacingPayloadResponse({
+              headline: "Team not found.",
+              description: "We could not find the requested team.",
+              category: "not_found",
+              status: 404,
+            });
+          }
+          return handleLoaderError(error);
+        });
+
       return {
         teamName: params.namespaceId,
-        members: await dapper.getTeamMembers(params.namespaceId),
-      };
+        members: membersPromise,
+      } satisfies LoaderData;
     } catch (error) {
       if (error instanceof ApiError && error.statusCode === 404) {
         throwUserFacingPayloadResponse({
@@ -89,14 +121,42 @@ const roleOptions: SelectOption<"owner" | "member">[] = [
 export default function Members() {
   const { teamName, members } = useLoaderData<typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
+  const resolvedMembersPromise = useMemo(() => Promise.resolve(members), [members]);
 
+  return (
+    <Suspense fallback={<MembersSkeleton />}>
+      <Await
+        resolve={resolvedMembersPromise}
+        errorElement={<MembersAwaitError />}
+      >
+        {(resolvedMembers) => (
+          <MembersContent
+            teamName={teamName}
+            members={resolvedMembers}
+            outletContext={outletContext}
+          />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
+
+interface MembersContentProps {
+  teamName: string;
+  members: TeamMembers;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Displays the team members table once the loader promise settles.
+ */
+function MembersContent({ teamName, members, outletContext }: MembersContentProps) {
   const revalidator = useRevalidator();
+  const toast = useToast();
 
   async function teamMemberRevalidate() {
     revalidator.revalidate();
   }
-
-  const toast = useToast();
 
   const changeMemberRoleAction = ApiAction({
     endpoint: teamEditMember,
@@ -199,6 +259,43 @@ export default function Members() {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Shows an alert when the members promise rejects.
+ */
+function MembersAwaitError() {
+  return (
+    <NewAlert csVariant="danger">
+      We could not load the team members. Please try again.
+    </NewAlert>
+  );
+}
+
+/**
+ * Displays a table placeholder while members load on the client.
+ */
+function MembersSkeleton() {
+  return (
+    <div className="settings-items">
+      <SkeletonBox className="settings-items__skeleton" />
+    </div>
+  );
+}
+
+/**
+ * Maps thrown loader errors to a user-facing alert for the members tab.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
   );
 }
 

@@ -1,5 +1,5 @@
 import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useRouteError } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicEnvVariables,
@@ -14,6 +14,8 @@ import {
   VALIDATION_MAPPING,
   createNotFoundMapping,
 } from "cyberstorm/utils/errors/loaderMappings";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import { Heading } from "@thunderstore/cyberstorm";
 
 export const packageDependenciesErrorMappings = [
   SIGN_IN_REQUIRED_MAPPING,
@@ -71,7 +73,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   });
 }
 
-export async function clientLoader({ params, request }: LoaderFunctionArgs) {
+export function clientLoader({ params, request }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -82,34 +84,49 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
     });
     const searchParams = new URL(request.url).searchParams;
     const page = searchParams.get("page");
-    try {
-      const listing = await dapper.getPackageListingDetails(
+    const listingPromise = dapper
+      .getPackageListingDetails(
         params.communityId,
         params.namespaceId,
         params.packageId
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageDependenciesErrorMappings })
       );
 
-      const versionPromise = dapper.getPackageVersionDetails(
-        params.namespaceId,
-        params.packageId,
-        listing.latest_version_number
-      );
-      const dependenciesPromise = dapper.getPackageVersionDependencies(
-        params.namespaceId,
-        params.packageId,
-        listing.latest_version_number,
-        page === null ? undefined : Number(page)
-      );
+    const version = listingPromise.then((listing) =>
+      dapper
+        .getPackageVersionDetails(
+          params.namespaceId,
+          params.packageId,
+          listing.latest_version_number
+        )
+        .catch((error) =>
+          handleLoaderError(error, {
+            mappings: packageDependenciesErrorMappings,
+          })
+        )
+    );
 
-      await Promise.all([versionPromise, dependenciesPromise]);
+    const dependencies = listingPromise.then((listing) =>
+      dapper
+        .getPackageVersionDependencies(
+          params.namespaceId,
+          params.packageId,
+          listing.latest_version_number,
+          page === null ? undefined : Number(page)
+        )
+        .catch((error) =>
+          handleLoaderError(error, {
+            mappings: packageDependenciesErrorMappings,
+          })
+        )
+    );
 
-      return {
-        version: versionPromise,
-        dependencies: dependenciesPromise,
-      };
-    } catch (error) {
-      handleLoaderError(error, { mappings: packageDependenciesErrorMappings });
-    }
+    return {
+      version,
+      dependencies,
+    };
   }
   throwUserFacingPayloadResponse({
     headline: "Dependencies not found.",
@@ -126,5 +143,23 @@ export default function PackageVersionRequired() {
 
   return (
     <PaginatedDependencies version={version} dependencies={dependencies} />
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="package-listing__error">
+      <Heading csLevel="3" csSize="3" csVariant="primary" mode="display">
+        {payload.headline}
+      </Heading>
+      {payload.description ? (
+        <p className="package-listing__error-description">
+          {payload.description}
+        </p>
+      ) : null}
+    </div>
   );
 }

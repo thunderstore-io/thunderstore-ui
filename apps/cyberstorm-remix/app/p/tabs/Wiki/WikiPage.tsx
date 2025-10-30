@@ -1,14 +1,18 @@
 import "./Wiki.css";
 
-import { Await, type LoaderFunctionArgs } from "react-router";
+import {
+  Await,
+  type LoaderFunctionArgs,
+  useLoaderData,
+  useRouteError,
+} from "react-router";
 import { Suspense, useMemo } from "react";
-import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { SkeletonBox } from "@thunderstore/cyberstorm";
+import { NewAlert, SkeletonBox } from "@thunderstore/cyberstorm";
 import { WikiContent } from "./WikiContent";
 import {
   getPackagePermissions,
@@ -23,14 +27,21 @@ import {
 } from "cyberstorm/utils/errors/loaderMappings";
 import { wikiErrorMappings } from "./Wiki";
 import { isApiError } from "../../../../../../packages/thunderstore-api/src";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+
+type MaybePromise<T> = T | Promise<T>;
 
 type ResultType = {
-  wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
-  page: ReturnType<typeof getPackageWikiPage> | undefined;
+  wiki: MaybePromise<Awaited<ReturnType<typeof getPackageWiki>> | undefined>;
+  page: MaybePromise<
+    Awaited<ReturnType<typeof getPackageWikiPage>> | undefined
+  >;
   communityId: string;
   namespaceId: string;
   packageId: string;
-  permissions: ReturnType<typeof getPackagePermissions> | undefined;
+  permissions: MaybePromise<
+    Awaited<ReturnType<typeof getPackagePermissions>> | undefined
+  >;
 };
 
 const wikiPageErrorMappings = [
@@ -56,17 +67,14 @@ export async function loader({ params }: LoaderFunctionArgs) {
     });
 
     try {
-      const wikiPromise = dapper.getPackageWiki(
-        params.namespaceId,
-        params.packageId
-      );
-      const pagePromise = dapper.getPackageWikiPage(params.slug);
-
-      await Promise.all([wikiPromise, pagePromise]);
+      const [wiki, page] = await Promise.all([
+        dapper.getPackageWiki(params.namespaceId, params.packageId),
+        dapper.getPackageWikiPage(params.slug),
+      ]);
 
       return {
-        wiki: await wikiPromise,
-        page: pagePromise,
+        wiki,
+        page,
         communityId: params.communityId,
         namespaceId: params.namespaceId,
         packageId: params.packageId,
@@ -106,64 +114,78 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
 
-    const permissions = dapper.getPackagePermissions(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
-
-    try {
-      const wikiPromise = dapper.getPackageWiki(
+    const permissionsPromise = dapper
+      .getPackagePermissions(
+        params.communityId,
         params.namespaceId,
         params.packageId
-      );
-      const pagePromise = dapper.getPackageWikiPage(params.slug);
+      )
+      .catch((error) => {
+        if (isApiError(error) && error.response.status === 404) {
+          return undefined;
+        }
+        return handleLoaderError(error, { mappings: wikiPageErrorMappings });
+      });
 
-      await Promise.all([wikiPromise, pagePromise, permissions]);
+    const wikiPromise = dapper
+      .getPackageWiki(params.namespaceId, params.packageId)
+      .catch((error) => {
+        if (isApiError(error) && error.response.status === 404) {
+          return undefined;
+        }
+        return handleLoaderError(error, { mappings: wikiPageErrorMappings });
+      });
 
-      return {
-        wiki: await wikiPromise,
-        page: pagePromise,
-        communityId: params.communityId,
-        namespaceId: params.namespaceId,
-        packageId: params.packageId,
-        permissions,
-      } satisfies ResultType;
-    } catch (error) {
-      if (isApiError(error) && error.response.status === 404) {
-        return {
-          wiki: undefined,
-          page: undefined,
-          communityId: params.communityId,
-          namespaceId: params.namespaceId,
-          packageId: params.packageId,
-          permissions,
-        } satisfies ResultType;
-      }
+    const pagePromise = dapper
+      .getPackageWikiPage(params.slug)
+      .catch((error) => {
+        if (isApiError(error) && error.response.status === 404) {
+          return undefined;
+        }
+        return handleLoaderError(error, { mappings: wikiPageErrorMappings });
+      });
 
-      handleLoaderError(error, { mappings: wikiPageErrorMappings });
-    }
+    return {
+      wiki: wikiPromise,
+      page: pagePromise,
+      communityId: params.communityId,
+      namespaceId: params.namespaceId,
+      packageId: params.packageId,
+      permissions: permissionsPromise,
+    } satisfies ResultType;
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
 }
 
+/**
+ * Displays a specific wiki page and navigational context using Suspense.
+ */
 export default function WikiPage() {
-  const { wiki, page, communityId, namespaceId, packageId } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { wiki, page, communityId, namespaceId, packageId, permissions } =
+    useLoaderData<typeof loader | typeof clientLoader>();
 
-  const wikiAndPageMemo = useMemo(() => Promise.all([wiki, page]), [wiki, page]);
+  const resolvedDataPromise = useMemo(() => {
+    return Promise.all([
+      Promise.resolve(wiki),
+      Promise.resolve(page),
+      Promise.resolve(permissions),
+    ]).then(([resolvedWiki, resolvedPage, resolvedPermissions]) => {
+      return {
+        wiki: resolvedWiki,
+        page: resolvedPage,
+        permissions: resolvedPermissions,
+      };
+    });
+  }, [wiki, page, permissions]);
 
   return (
     <Suspense fallback={<SkeletonBox className="package-wiki__skeleton" />}>
       <Await
-        resolve={wikiAndPageMemo}
-        errorElement={<div>Error occurred while loading wiki page</div>}
+        resolve={resolvedDataPromise}
+        errorElement={<WikiPageAwaitError />}
       >
-        {(resolvedValue) => {
-          const [resolvedWiki, resolvedPage] = resolvedValue;
-
+        {({ wiki: resolvedWiki, page: resolvedPage, permissions: resolvedPermissions }) => {
           if (resolvedWiki && resolvedPage) {
             const currentPageIndex = resolvedWiki.pages.findIndex(
               (resolved) => resolved.id === resolvedPage.id
@@ -187,13 +209,44 @@ export default function WikiPage() {
                 packageId={packageId}
                 previousPage={previousPage}
                 nextPage={nextPage}
+                canManage={Promise.resolve(
+                  resolvedPermissions?.permissions.can_manage ?? false
+                )}
               />
             );
           }
 
-          return <>Wiki Page Not Found</>;
+          return (
+            <NewAlert csVariant="info">Wiki page not found.</NewAlert>
+          );
         }}
       </Await>
     </Suspense>
+  );
+}
+
+/**
+ * Displays a friendly message when the Suspense promise rejects.
+ */
+function WikiPageAwaitError() {
+  return (
+    <NewAlert csVariant="danger">
+      We could not load the wiki page. Please try again.
+    </NewAlert>
+  );
+}
+
+/**
+ * Maps loader errors to user-facing alerts for the wiki page route.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
   );
 }

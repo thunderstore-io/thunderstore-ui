@@ -88,7 +88,11 @@ export function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
     return {
-      community: dapper.getCommunity(params.communityId),
+      community: dapper
+        .getCommunity(params.communityId)
+        .catch((error) =>
+          handleLoaderError(error, { mappings: communityErrorMappings })
+        ),
     };
   }
   throwUserFacingPayloadResponse({

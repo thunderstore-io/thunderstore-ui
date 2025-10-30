@@ -97,7 +97,7 @@ export const PaginatedDependencies = memo(function PaginatedDependencies(
 
   const versionAndDependencies = useMemo(
     () => Promise.all([props.version, props.dependencies]),
-    [currentPage]
+    [currentPage, props.version, props.dependencies]
   );
 
   return (
@@ -105,12 +105,7 @@ export const PaginatedDependencies = memo(function PaginatedDependencies(
       <Suspense
         fallback={<SkeletonBox className="paginated-dependencies__skeleton" />}
       >
-        <Await
-          resolve={versionAndDependencies}
-          errorElement={
-            <div>Error occurred while loading required dependencies</div>
-          }
-        >
+        <Await resolve={versionAndDependencies}>
           {(resolvedValue) => {
             return (
               <>

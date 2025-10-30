@@ -133,21 +133,29 @@ export async function clientLoader({
     });
     const query = resolvePackageSearchQuery(request);
     return {
-      filters: dapper.getCommunityFilters(params.communityId),
-      listings: dapper.getPackageListings(
-        {
-          kind: "community",
-          communityId: params.communityId,
-        },
-        query.ordering ?? "",
-        query.page,
-        query.search,
-        query.includedCategories,
-        query.excludedCategories,
-        query.section,
-        query.nsfw,
-        query.deprecated
-      ),
+      filters: dapper
+        .getCommunityFilters(params.communityId)
+        .catch((error) =>
+          handleLoaderError(error, { mappings: packageSearchErrorMappings })
+        ),
+      listings: dapper
+        .getPackageListings(
+          {
+            kind: "community",
+            communityId: params.communityId,
+          },
+          query.ordering ?? "",
+          query.page,
+          query.search,
+          query.includedCategories,
+          query.excludedCategories,
+          query.section,
+          query.nsfw,
+          query.deprecated
+        )
+        .catch((error) =>
+          handleLoaderError(error, { mappings: packageSearchErrorMappings })
+        ),
     };
   }
   throwUserFacingPayloadResponse({

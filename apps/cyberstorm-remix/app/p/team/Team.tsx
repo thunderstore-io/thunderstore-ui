@@ -1,4 +1,4 @@
-import { useLoaderData, useOutletContext } from "react-router";
+import { useLoaderData, useOutletContext, useRouteError } from "react-router";
 import "./Team.css";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -20,6 +20,8 @@ import {
   createNotFoundMapping,
   createServerErrorMapping,
 } from "cyberstorm/utils/errors/loaderMappings";
+import { NewAlert } from "@thunderstore/cyberstorm";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
 
 const teamErrorMappings = [
   SIGN_IN_REQUIRED_MAPPING,
@@ -110,34 +112,32 @@ export async function clientLoader({
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
-    const filtersPromise = dapper.getCommunityFilters(params.communityId);
-    const listingsPromise = dapper.getPackageListings(
-      {
-        kind: "namespace",
-        communityId: params.communityId,
-        namespaceId: params.namespaceId,
-      },
-      ordering ?? "",
-      page === null ? undefined : Number(page),
-      search ?? "",
-      includedCategories?.split(",") ?? undefined,
-      excludedCategories?.split(",") ?? undefined,
-      section ? (section === "all" ? "" : section) : "",
-      nsfw === "true",
-      deprecated === "true"
-    );
+    const filtersPromise = dapper
+      .getCommunityFilters(params.communityId)
+      .catch((error) => handleLoaderError(error, { mappings: teamErrorMappings }));
+    const listingsPromise = dapper
+      .getPackageListings(
+        {
+          kind: "namespace",
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+        },
+        ordering ?? "",
+        page === null ? undefined : Number(page),
+        search ?? "",
+        includedCategories?.split(",") ?? undefined,
+        excludedCategories?.split(",") ?? undefined,
+        section ? (section === "all" ? "" : section) : "",
+        nsfw === "true",
+        deprecated === "true"
+      )
+      .catch((error) => handleLoaderError(error, { mappings: teamErrorMappings }));
 
-    try {
-      await Promise.all([filtersPromise, listingsPromise]);
-
-      return {
-        teamId: params.namespaceId,
-        filters: filtersPromise,
-        listings: listingsPromise,
-      };
-    } catch (error) {
-      handleLoaderError(error, { mappings: teamErrorMappings });
-    }
+    return {
+      teamId: params.namespaceId,
+      filters: filtersPromise,
+      listings: listingsPromise,
+    };
   }
   throwUserFacingPayloadResponse({
     headline: "Community not found.",
@@ -147,6 +147,9 @@ export async function clientLoader({
   });
 }
 
+/**
+ * Displays the team package listing and delegates streaming data to PackageSearch.
+ */
 export default function Team() {
   const { filters, listings, teamId } = useLoaderData<
     typeof loader | typeof clientLoader
@@ -171,5 +174,20 @@ export default function Team() {
         </>
       </section>
     </>
+  );
+}
+
+/**
+ * Maps loader errors to a user-facing alert for the team route.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
   );
 }

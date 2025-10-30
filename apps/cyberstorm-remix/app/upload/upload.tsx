@@ -1,20 +1,30 @@
 import "./Upload.css";
 import {
+  Heading,
+  NewAlert,
   NewButton,
   NewIcon,
+  NewLink,
   NewSelectSearch,
   NewSwitch,
-  Heading,
-  NewLink,
   NewTable,
   NewTableSort,
   NewTag,
+  SkeletonBox,
   useToast,
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { DnDFileInput } from "@thunderstore/react-dnd";
-import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import {
   MultipartUpload,
   type IBaseUploadHandle,
@@ -34,8 +44,13 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { type UserMedia } from "@thunderstore/ts-uploader/src/uploaders/types";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { type MetaFunction } from "react-router";
-import { useLoaderData, useOutletContext } from "react-router";
+import {
+  Await,
+  type MetaFunction,
+  useLoaderData,
+  useOutletContext,
+  useRouteError,
+} from "react-router";
 import {
   type PackageSubmissionResult,
   type PackageSubmissionStatus,
@@ -63,6 +78,7 @@ import {
   VALIDATION_MAPPING,
   createServerErrorMapping,
 } from "cyberstorm/utils/errors/loaderMappings";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
 
 interface CommunityOption {
   value: string;
@@ -93,6 +109,22 @@ const uploadErrorMappings = [
   createServerErrorMapping(),
 ];
 
+type MaybePromise<T> = T | Promise<T>;
+
+type CommunitiesResult = Awaited<ReturnType<DapperTs["getCommunities"]>>;
+
+type LoaderData = {
+  communities: MaybePromise<CommunitiesResult>;
+};
+
+interface UploadContentProps {
+  communities: CommunitiesResult;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Fetches the community list for the upload form during SSR.
+ */
 export async function loader() {
   const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
   const dapper = new DapperTs(() => {
@@ -102,12 +134,19 @@ export async function loader() {
     };
   });
   try {
-    return await dapper.getCommunities();
+    const communities = await dapper.getCommunities();
+
+    return {
+      communities,
+    } satisfies LoaderData;
   } catch (error) {
     handleLoaderError(error, { mappings: uploadErrorMappings });
   }
 }
 
+/**
+ * Streams the community list promise so Suspense can render progress fallbacks.
+ */
 export async function clientLoader() {
   // console.log("clientloader context", getSessionTools(context));
   const tools = getSessionTools();
@@ -118,19 +157,51 @@ export async function clientLoader() {
     };
   });
   try {
-    return await dapper.getCommunities();
+    const communitiesPromise = dapper
+      .getCommunities()
+      .catch((error) => handleLoaderError(error, { mappings: uploadErrorMappings }));
+
+    return {
+      communities: communitiesPromise,
+    } satisfies LoaderData;
   } catch (error) {
     handleLoaderError(error, { mappings: uploadErrorMappings });
   }
 }
 
+/**
+ * Streams communities via Suspense and delegates UI rendering to UploadContent.
+ */
 export default function Upload() {
-  const uploadData = useLoaderData<typeof loader | typeof clientLoader>();
-
+  const { communities } = useLoaderData<typeof loader | typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
-  const requestConfig = outletContext.requestConfig;
-  const currentUser = outletContext.currentUser;
-  const dapper = outletContext.dapper;
+
+  const resolvedCommunitiesPromise = useMemo(() => {
+    return Promise.resolve(communities);
+  }, [communities]);
+
+  return (
+    <Suspense fallback={<UploadSkeleton />}>
+      <Await
+        resolve={resolvedCommunitiesPromise}
+        errorElement={<UploadAwaitError />}
+      >
+        {(resolvedCommunities) => (
+          <UploadContent
+            communities={resolvedCommunities}
+            outletContext={outletContext}
+          />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
+
+/**
+ * Renders the upload workflow once community metadata resolves.
+ */
+function UploadContent({ communities, outletContext }: UploadContentProps) {
+  const { requestConfig, currentUser, dapper, domain } = outletContext;
 
   const toast = useToast();
 
@@ -152,13 +223,14 @@ export default function Upload() {
   }, [currentUser?.teams_full]);
 
   // Community options
-  const communityOptions: CommunityOption[] = [];
-  for (const community of uploadData.results) {
-    communityOptions.push({
-      value: community.identifier,
-      label: community.name,
-    });
-  }
+  const communityOptions: CommunityOption[] = communities.results.map(
+    (community) => {
+      return {
+        value: community.identifier,
+        label: community.name,
+      };
+    }
+  );
 
   const [submissionStatus, setSubmissionStatus] =
     useState<PackageSubmissionStatus>();
@@ -442,7 +514,7 @@ export default function Upload() {
               <p className="upload__no-teams-text">No teams available?</p>
               <NewLink
                 primitiveType="link"
-                href={`${outletContext.domain}/settings/teams/`}
+                href={`${domain}/settings/teams/`}
                 csVariant="cyber"
                 rootClasses="community__item"
               >
@@ -593,7 +665,7 @@ export default function Upload() {
                 </div>
                 <div className="upload__content">
                   {formInputs.communities.map((community) => {
-                    const communityData = uploadData.results.find(
+                    const communityData = communities.results.find(
                       (c) => c.identifier === community
                     );
                     const categories =
@@ -912,6 +984,54 @@ export default function Upload() {
   );
 }
 
+/**
+ * Renders an alert when the Suspense promise rejects during client navigation.
+ */
+function UploadAwaitError() {
+  return (
+    <NewAlert csVariant="danger">
+      We could not load the available communities. Please try again.
+    </NewAlert>
+  );
+}
+
+/**
+ * Shows a lightweight skeleton while communities load after navigation.
+ */
+function UploadSkeleton() {
+  return (
+    <section className="container container--y container--full upload">
+      {[0, 1, 2].map((index) => (
+        <div
+          key={index}
+          className="container container--x container--full upload__row"
+          style={{ marginBottom: "1rem", height: "3rem" }}
+        >
+          <SkeletonBox />
+        </div>
+      ))}
+    </section>
+  );
+}
+
+/**
+ * Maps route loader failures to a user-facing alert for the upload route.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
+  );
+}
+
+/**
+ * Converts byte counts into a human-readable string for upload status messaging.
+ */
 function formatBytes(bytes: number, decimals = 2) {
   if (!+bytes) return "0 Bytes";
 
@@ -1006,6 +1126,9 @@ function formatBytes(bytes: number, decimals = 2) {
 //   );
 // };
 
+/**
+ * Displays the submission success summary once the package metadata API responds.
+ */
 const SubmissionResult = (props: {
   submissionStatusResult: PackageSubmissionResult;
 }) => {
