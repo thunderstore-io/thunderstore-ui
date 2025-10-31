@@ -4,15 +4,14 @@ import type {
 } from "react-router";
 import {
   Await,
-  Outlet,
+  useAsyncError,
   useLoaderData,
   useLocation,
-  useOutletContext,
   useRouteError,
 } from "react-router";
 import {
   Heading,
-  NewAlert,
+  // NewAlert,
   NewButton,
   NewIcon,
   NewLink,
@@ -24,12 +23,11 @@ import { faBook, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { type OutletContextShape } from "../root";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { Suspense, useMemo } from "react";
+import { Suspense } from "react";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
@@ -53,6 +51,10 @@ const communityErrorMappings = [
   createServerErrorMapping(),
 ];
 
+/**
+ * Remix server loader that fetches the community by id while translating API errors
+ * into user-facing payload responses.
+ */
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId) {
     const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
@@ -79,6 +81,10 @@ export async function loader({ params }: LoaderFunctionArgs) {
   });
 }
 
+/**
+ * Remix client loader that defers community fetching to the browser and maps
+ * API failures to the same user-facing responses as the server loader.
+ */
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   const { communityId } = params;
 
@@ -91,22 +97,33 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
 
-    const communityPromise = dapper.getCommunity(communityId).catch((error) => {
-      try {
-        handleLoaderError(error, { mappings: communityErrorMappings });
-      } catch (thrown) {
-        return {
-          __error: resolveRouteErrorPayload(thrown),
-        } as const;
-      }
+    const wrapperPromise =
+      Promise.withResolvers<Awaited<ReturnType<DapperTs["getCommunity"]>>>();
 
-      return {
-        __error: resolveRouteErrorPayload(error),
-      } as const;
-    });
+    dapper
+      .getCommunity(communityId)
+      .then(
+        (data) => {
+          console.log("qweqwe1");
+          wrapperPromise.resolve(data);
+        },
+        (rejected) => {
+          console.log("qweqwe2");
+          wrapperPromise.reject(rejected);
+        }
+      )
+      .catch((error) => {
+        console.log("asdasdasd2", error);
+        try {
+          handleLoaderError(error, { mappings: communityErrorMappings });
+        } catch (handledError) {
+          console.log("asdasd3", handledError);
+          wrapperPromise.reject(handledError);
+        }
+      });
 
     return {
-      community: communityPromise,
+      community: wrapperPromise.promise,
     };
   }
   throwUserFacingPayloadResponse({
@@ -117,6 +134,10 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   });
 }
 
+/**
+ * Determines whether the route should revalidate when navigating within the
+ * community section.
+ */
 export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
   if (
     arg.currentUrl.pathname.split("/")[1] === arg.nextUrl.pathname.split("/")[1]
@@ -127,17 +148,11 @@ export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
 }
 
 type CommunityDetails = Awaited<ReturnType<DapperTs["getCommunity"]>>;
-type CommunityError = {
-  readonly __error: ReturnType<typeof resolveRouteErrorPayload>;
-};
-type CommunityLoaderResult = CommunityDetails | CommunityError;
 
-function isCommunityError(
-  value: CommunityLoaderResult
-): value is CommunityError {
-  return typeof (value as CommunityError).__error !== "undefined";
-}
-
+/**
+ * Default community route component that renders the header for the selected
+ * community and provides Suspense-driven loading states.
+ */
 export default function Community() {
   const { community } = useLoaderData<typeof loader | typeof clientLoader>();
   const location = useLocation();
@@ -146,17 +161,11 @@ export default function Community() {
   const isPackageListingSubPath =
     splitPath.length > 5 && splitPath[1] === "c" && splitPath[3] === "p";
 
-  const outletContext = useOutletContext() as OutletContextShape;
-  const communityPromise = useMemo<Promise<CommunityLoaderResult>>(
-    () => Promise.resolve(community) as Promise<CommunityLoaderResult>,
-    [community]
-  );
-
   return (
     <>
-      {isSubPath ? null : (
+      {/* {isSubPath ? null : (
         <Suspense fallback={null}>
-          <Await resolve={communityPromise}>
+          <Await resolve={community} errorElement={<CommunityErrorHandler />}>
             {(result) => {
               if (isCommunityError(result)) {
                 return null;
@@ -198,29 +207,28 @@ export default function Community() {
             }}
           </Await>
         </Suspense>
-      )}
+      )} */}
 
       <Suspense fallback={<CommunitySkeleton />}>
-        <Await resolve={communityPromise}>
-          {(result) =>
-            isCommunityError(result) ? (
-              <CommunityAwaitError payload={result.__error} />
-            ) : (
-              <CommunityHeaderContent
-                community={result}
-                isPackageListingSubPath={isPackageListingSubPath}
-                isSubPath={isSubPath}
-              />
-            )
-          }
+        <Await resolve={community} errorElement={<CommunityErrorHandler />}>
+          {(result) => (
+            <CommunityHeaderContent
+              community={result}
+              isPackageListingSubPath={isPackageListingSubPath}
+              isSubPath={isSubPath}
+            />
+          )}
         </Await>
       </Suspense>
 
-      <Outlet context={outletContext} />
+      {/* <Outlet /> */}
     </>
   );
 }
 
+/**
+ * Renders the community header once the community payload has resolved.
+ */
 function CommunityHeaderContent(props: {
   community: CommunityDetails;
   isPackageListingSubPath: boolean;
@@ -319,6 +327,9 @@ function CommunityHeaderContent(props: {
   );
 }
 
+/**
+ * Skeleton fallback displayed while community data is loading.
+ */
 function CommunitySkeleton() {
   return (
     <div className="community__header">
@@ -352,21 +363,53 @@ function CommunitySkeleton() {
   );
 }
 
-function CommunityAwaitError(props: {
-  payload: ReturnType<typeof resolveRouteErrorPayload>;
-}) {
-  const { payload } = props;
-
+/**
+ * Handles errors thrown while awaiting the community promise and displays
+ * mapped user-facing error metadata for debugging.
+ */
+function CommunityErrorHandler() {
+  // return <p>hapl</p>;
+  const error = useAsyncError();
+  // let formattedError;
+  // try {
+  //   // This will always throw
+  //   console.log("Handling error:", error);
+  //   handleLoaderError(error, { mappings: communityErrorMappings });
+  // } catch (thrown) {
+  //   console.log("Error handling:", thrown);
+  //   formattedError = resolveRouteErrorPayload(thrown);
+  // }
+  const formattedError = resolveRouteErrorPayload(error);
   return (
-    <div className="container container--y container--full community__error">
-      <NewAlert csVariant="danger">
-        <strong>{payload.headline}</strong>
-        {payload.description ? ` ${payload.description}` : ""}
-      </NewAlert>
+    <div>
+      Error loading community
+      <ul>
+        <li>{formattedError?.headline}</li>
+        <li>{formattedError?.category}</li>
+        <li>{formattedError?.status}</li>
+      </ul>
     </div>
   );
 }
 
+// function CommunityAwaitError(props: {
+//   payload: ReturnType<typeof resolveRouteErrorPayload>;
+// }) {
+//   const { payload } = props;
+
+//   return (
+//     <div className="container container--y container--full community__error">
+//       <NewAlert csVariant="danger">
+//         <strong>{payload.headline}</strong>
+//         {payload.description ? ` ${payload.description}` : ""}
+//       </NewAlert>
+//     </div>
+//   );
+// }
+
+/**
+ * Error boundary for synchronous route-level failures.
+ */
 export function ErrorBoundary() {
   const error = useRouteError();
   const payload = resolveRouteErrorPayload(error);
