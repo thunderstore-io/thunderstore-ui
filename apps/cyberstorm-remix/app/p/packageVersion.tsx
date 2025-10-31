@@ -8,6 +8,7 @@ import {
   useLoaderData,
   useLocation,
   useOutletContext,
+  useRouteError,
 } from "react-router";
 import {
   Drawer,
@@ -56,6 +57,23 @@ import {
 import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import { getPackageVersionDetails } from "@thunderstore/dapper-ts/src/methods/packageVersion";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  FORBIDDEN_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  createNotFoundMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+
+const packageVersionErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  createNotFoundMapping(
+    "Package version not found.",
+    "We could not find the requested package version."
+  ),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (
@@ -71,22 +89,36 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
+    try {
+      const [community, version, team] = await Promise.all([
+        dapper.getCommunity(params.communityId),
+        dapper.getPackageVersionDetails(
+          params.namespaceId,
+          params.packageId,
+          params.packageVersion
+        ),
+        dapper.getTeamDetails(params.namespaceId),
+      ]);
 
-    return {
-      communityId: params.communityId,
-      community: await dapper.getCommunity(params.communityId),
-      version: await dapper.getPackageVersionDetails(
-        params.namespaceId,
-        params.packageId,
-        params.packageVersion
-      ),
-      team: await dapper.getTeamDetails(params.namespaceId),
-    };
+      return {
+        communityId: params.communityId,
+        community,
+        version,
+        team,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageVersionErrorMappings });
+    }
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (
     params.communityId &&
     params.namespaceId &&
@@ -100,19 +132,48 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
+    const community = dapper.getCommunity(params.communityId);
+    const version = dapper.getPackageVersionDetails(
+      params.namespaceId,
+      params.packageId,
+      params.packageVersion
+    );
+    const team = dapper.getTeamDetails(params.namespaceId);
 
     return {
       communityId: params.communityId,
-      community: dapper.getCommunity(params.communityId),
-      version: dapper.getPackageVersionDetails(
-        params.namespaceId,
-        params.packageId,
-        params.packageVersion
-      ),
-      team: dapper.getTeamDetails(params.namespaceId),
+      community,
+      version,
+      team,
     };
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
+}
+
+/**
+ * Provides user-facing fallback content when the package version route errors.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="container container--y container--full package-listing__error">
+      <Heading csLevel="2" csSize="3" csVariant="primary" mode="display">
+        {payload.headline}
+      </Heading>
+      {payload.description ? (
+        <p className="package-listing__error-description">
+          {payload.description}
+        </p>
+      ) : null}
+    </div>
+  );
 }
 
 export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
@@ -152,24 +213,44 @@ export default function PackageVersion() {
   // If strict mode is removed from the entry.client.tsx, this should only run once
   useEffect(() => {
     if (!startsHydrated.current && isHydrated) return;
-    if (isPromise(version)) {
-      version.then((versionData) => {
-        setFirstUploaded(
-          <RelativeTime
-            time={versionData.datetime_created}
-            suppressHydrationWarning
-          />
-        );
-      });
-    } else {
+    if (!isPromise(version)) {
       setFirstUploaded(
         <RelativeTime
           time={version.datetime_created}
           suppressHydrationWarning
         />
       );
+      return;
     }
-  }, []);
+
+    let isCancelled = false;
+
+    const resolveVersionTimes = async () => {
+      try {
+        const versionData = await version;
+        if (isCancelled) {
+          return;
+        }
+
+        setFirstUploaded(
+          <RelativeTime
+            time={versionData.datetime_created}
+            suppressHydrationWarning
+          />
+        );
+      } catch (error) {
+        if (!isCancelled) {
+          console.error("Failed to resolve version metadata", error);
+        }
+      }
+    };
+
+    resolveVersionTimes();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [isHydrated, version]);
   // END: For sidebar meta dates
 
   const currentTab = location.pathname.split("/")[8] || "details";

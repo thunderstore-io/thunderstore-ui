@@ -184,31 +184,56 @@ export function PackageSearch(props: Props) {
   >(undefined);
 
   useEffect(() => {
-    if (isPromise(filters)) {
-      // On mount, resolve filters promise and set sections and categories states
-      filters.then((resolvedFilters) => {
-        // Set sorted sections
-        setSortedSections(
-          resolvedFilters.sections.sort((a, b) => b.priority - a.priority)
-        );
-        if (sortedSections && sortedSections.length !== 0) {
-          setSearchParamsBlob((prev) => ({
-            ...prev,
-            section: sortedSections[0].uuid,
-          }));
+    if (!isPromise(filters)) {
+      return;
+    }
+
+    let isCancelled = false;
+
+    const resolveFilters = async () => {
+      try {
+        const resolvedFilters = await filters;
+        if (isCancelled) {
+          return;
         }
+
+        const orderedSections = resolvedFilters.sections
+          .slice()
+          .sort((a, b) => b.priority - a.priority);
+        setSortedSections(orderedSections);
+        if (orderedSections.length > 0) {
+          setSearchParamsBlob((prev) =>
+            prev.section
+              ? prev
+              : {
+                  ...prev,
+                  section: orderedSections[0].uuid,
+                }
+          );
+        }
+
         if (resolvedFilters.package_categories !== categoriesRef.current) {
-          // Set current "initial" categories
-          const categories: CategorySelection[] =
+          const nextCategories: CategorySelection[] =
             resolvedFilters.package_categories
+              .slice()
               .sort((a, b) => a.slug.localeCompare(b.slug))
               .map((c) => ({ ...c, selection: "off" }));
-          setCategories(categories);
+          setCategories(nextCategories);
           categoriesRef.current = resolvedFilters.package_categories;
         }
-      });
-    }
-  }, []);
+      } catch (error) {
+        if (!isCancelled) {
+          console.error("Failed to resolve package filters", error);
+        }
+      }
+    };
+
+    resolveFilters();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [filters]);
 
   // Categories start
 

@@ -8,6 +8,7 @@ import {
   useLoaderData,
   useLocation,
   useOutletContext,
+  useRouteError,
 } from "react-router";
 import {
   Drawer,
@@ -56,6 +57,39 @@ import {
 import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import { getPackageVersionDetails } from "@thunderstore/dapper-ts/src/methods/packageVersion";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  FORBIDDEN_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  createNotFoundMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import {
+  isLoaderError,
+  resolveLoaderPromise,
+  type LoaderErrorPayload,
+  type LoaderResult,
+} from "cyberstorm/utils/errors/loaderResult";
+
+const packageVersionWithoutCommunityErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  createNotFoundMapping(
+    "Package version not found.",
+    "We could not find the requested package version."
+  ),
+];
+
+type MaybePromise<T> = T | Promise<T>;
+
+type VersionResult = Awaited<ReturnType<DapperTs["getPackageVersionDetails"]>>;
+type TeamResult = Awaited<ReturnType<DapperTs["getTeamDetails"]>>;
+
+type LoaderData = {
+  version: MaybePromise<LoaderResult<VersionResult>>;
+  team: MaybePromise<LoaderResult<TeamResult>>;
+};
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
@@ -66,20 +100,33 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-
-    return {
-      version: await dapper.getPackageVersionDetails(
+    try {
+      const version = await dapper.getPackageVersionDetails(
         params.namespaceId,
         params.packageId,
         params.packageVersion
-      ),
-      team: await dapper.getTeamDetails(params.namespaceId),
-    };
+      );
+      const team = await dapper.getTeamDetails(params.namespaceId);
+
+      return {
+        version,
+        team,
+      } satisfies LoaderData;
+    } catch (error) {
+      handleLoaderError(error, {
+        mappings: packageVersionWithoutCommunityErrorMappings,
+      });
+    }
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -88,17 +135,47 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
-
     return {
-      version: dapper.getPackageVersionDetails(
-        params.namespaceId,
-        params.packageId,
-        params.packageVersion
+      version: resolveLoaderPromise(
+        dapper.getPackageVersionDetails(
+          params.namespaceId,
+          params.packageId,
+          params.packageVersion
+        ),
+        { mappings: packageVersionWithoutCommunityErrorMappings }
       ),
-      team: dapper.getTeamDetails(params.namespaceId),
-    };
+      team: resolveLoaderPromise(dapper.getTeamDetails(params.namespaceId), {
+        mappings: packageVersionWithoutCommunityErrorMappings,
+      }),
+    } satisfies LoaderData;
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
+}
+
+/**
+ * Provides user-facing fallback content when the package version (no community) route errors.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="container container--y container--full package-listing__error">
+      <Heading csLevel="2" csSize="3" csVariant="primary" mode="display">
+        {payload.headline}
+      </Heading>
+      {payload.description ? (
+        <p className="package-listing__error-description">
+          {payload.description}
+        </p>
+      ) : null}
+    </div>
+  );
 }
 
 export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
@@ -127,6 +204,13 @@ export default function PackageVersion() {
   const isHydrated = useHydrated();
   const startsHydrated = useRef(isHydrated);
 
+  const versionPromise = useMemo(() => Promise.resolve(version), [version]);
+  const teamPromise = useMemo(() => Promise.resolve(team), [team]);
+  const versionAndTeamPromise = useMemo(
+    () => Promise.all([versionPromise, teamPromise]),
+    [teamPromise, versionPromise]
+  );
+
   // START: For sidebar meta dates
   const [firstUploaded, setFirstUploaded] = useState<
     ReactElement | undefined
@@ -137,69 +221,77 @@ export default function PackageVersion() {
   // If strict mode is removed from the entry.client.tsx, this should only run once
   useEffect(() => {
     if (!startsHydrated.current && isHydrated) return;
-    if (isPromise(version)) {
-      version.then((versionData) => {
-        setFirstUploaded(
-          <RelativeTime
-            time={versionData.datetime_created}
-            suppressHydrationWarning
-          />
-        );
-      });
-    } else {
+
+    const applyRelativeTime = (result: LoaderResult<VersionResult>) => {
+      if (isLoaderError(result)) {
+        return;
+      }
+
       setFirstUploaded(
-        <RelativeTime
-          time={version.datetime_created}
-          suppressHydrationWarning
-        />
+        <RelativeTime time={result.datetime_created} suppressHydrationWarning />
       );
+    };
+
+    if (isPromise(version)) {
+      void version.then(applyRelativeTime);
+    } else {
+      applyRelativeTime(version);
     }
-  }, []);
+  }, [isHydrated, version]);
   // END: For sidebar meta dates
 
   const currentTab = location.pathname.split("/")[6] || "details";
-
-  const versionAndTeamPromise = useMemo(() => Promise.all([version, team]), []);
 
   return (
     <>
       <Suspense>
         <Await resolve={versionAndTeamPromise}>
-          {(resolvedValue) => (
-            <>
-              <meta
-                title={`${formatToDisplayName(
-                  resolvedValue[0].full_version_name
-                )} | ${resolvedValue[1].name}`}
-              />
-              <meta name="description" content={resolvedValue[0].description} />
-              <meta property="og:type" content="website" />
-              <meta
-                property="og:url"
-                content={`${
-                  getPublicEnvVariables(["VITE_BETA_SITE_URL"])
-                    .VITE_BETA_SITE_URL
-                }${location.pathname}`}
-              />
-              <meta
-                property="og:title"
-                content={`${formatToDisplayName(
-                  resolvedValue[0].full_version_name
-                )} by ${resolvedValue[0].namespace}`}
-              />
-              <meta
-                property="og:description"
-                content={resolvedValue[0].description}
-              />
-              <meta property="og:image:width" content="256" />
-              <meta property="og:image:height" content="256" />
-              <meta
-                property="og:image"
-                content={resolvedValue[0].icon_url ?? undefined}
-              />
-              <meta property="og:site_name" content="Thunderstore" />
-            </>
-          )}
+          {(results) => {
+            const [versionResult, teamResult] = results;
+
+            if (isLoaderError(versionResult) || isLoaderError(teamResult)) {
+              return null;
+            }
+
+            const metaVersion = versionResult;
+            const metaTeam = teamResult;
+
+            return (
+              <>
+                <meta
+                  title={`${formatToDisplayName(
+                    metaVersion.full_version_name
+                  )} | ${metaTeam.name}`}
+                />
+                <meta name="description" content={metaVersion.description} />
+                <meta property="og:type" content="website" />
+                <meta
+                  property="og:url"
+                  content={`${
+                    getPublicEnvVariables(["VITE_BETA_SITE_URL"])
+                      .VITE_BETA_SITE_URL
+                  }${location.pathname}`}
+                />
+                <meta
+                  property="og:title"
+                  content={`${formatToDisplayName(
+                    metaVersion.full_version_name
+                  )} by ${metaVersion.namespace}`}
+                />
+                <meta
+                  property="og:description"
+                  content={metaVersion.description}
+                />
+                <meta property="og:image:width" content="256" />
+                <meta property="og:image:height" content="256" />
+                <meta
+                  property="og:image"
+                  content={metaVersion.icon_url ?? undefined}
+                />
+                <meta property="og:site_name" content="Thunderstore" />
+              </>
+            );
+          }}
         </Await>
       </Suspense>
       <div className="container container--y container--full">
@@ -214,41 +306,47 @@ export default function PackageVersion() {
                   <SkeletonBox className="package-listing__page-header-skeleton" />
                 }
               >
-                <Await resolve={version}>
-                  {(resolvedValue) => (
-                    <PageHeader
-                      headingLevel="1"
-                      headingSize="3"
-                      image={resolvedValue.icon_url}
-                      description={resolvedValue.description}
-                      variant="detailed"
-                      meta={
-                        <>
-                          <span>
-                            <NewIcon csMode="inline" noWrapper>
-                              <FontAwesomeIcon icon={faUsers} />
-                            </NewIcon>
-                            {resolvedValue.namespace}
-                          </span>
-                          {resolvedValue.website_url ? (
-                            <NewLink
-                              primitiveType="link"
-                              href={resolvedValue.website_url}
-                              csVariant="cyber"
-                              rootClasses="page-header__meta-item"
-                            >
-                              {resolvedValue.website_url}
+                <Await resolve={versionPromise}>
+                  {(versionResult) =>
+                    isLoaderError(versionResult) ? (
+                      <PackageVersionWithoutCommunityAwaitError
+                        payload={versionResult.__error}
+                      />
+                    ) : (
+                      <PageHeader
+                        headingLevel="1"
+                        headingSize="3"
+                        image={versionResult.icon_url}
+                        description={versionResult.description}
+                        variant="detailed"
+                        meta={
+                          <>
+                            <span>
                               <NewIcon csMode="inline" noWrapper>
-                                <FontAwesomeIcon icon={faArrowUpRight} />
+                                <FontAwesomeIcon icon={faUsers} />
                               </NewIcon>
-                            </NewLink>
-                          ) : null}
-                        </>
-                      }
-                    >
-                      {formatToDisplayName(resolvedValue.name)}
-                    </PageHeader>
-                  )}
+                              {versionResult.namespace}
+                            </span>
+                            {versionResult.website_url ? (
+                              <NewLink
+                                primitiveType="link"
+                                href={versionResult.website_url}
+                                csVariant="cyber"
+                                rootClasses="page-header__meta-item"
+                              >
+                                {versionResult.website_url}
+                                <NewIcon csMode="inline" noWrapper>
+                                  <FontAwesomeIcon icon={faArrowUpRight} />
+                                </NewIcon>
+                              </NewLink>
+                            ) : null}
+                          </>
+                        }
+                      >
+                        {formatToDisplayName(versionResult.name)}
+                      </PageHeader>
+                    )
+                  }
                 </Await>
               </Suspense>
 
@@ -273,21 +371,42 @@ export default function PackageVersion() {
                   rootClasses="package-listing__drawer"
                 >
                   <Suspense fallback={<p>Loading...</p>}>
-                    <Await resolve={version}>
-                      {(resolvedValue) => (
-                        <>{packageMeta(firstUploaded, resolvedValue)}</>
-                      )}
+                    <Await resolve={versionPromise}>
+                      {(versionResult) => {
+                        if (isLoaderError(versionResult)) {
+                          return null;
+                        }
+
+                        return <>{packageMeta(firstUploaded, versionResult)}</>;
+                      }}
                     </Await>
                   </Suspense>
                 </Drawer>
                 <Suspense fallback={<p>Loading...</p>}>
                   <Await resolve={versionAndTeamPromise}>
-                    {(resolvedValue) => (
-                      <Actions
-                        team={resolvedValue[1]}
-                        version={resolvedValue[0]}
-                      />
-                    )}
+                    {(results) => {
+                      const [versionResult, teamResult] = results;
+
+                      if (isLoaderError(versionResult)) {
+                        return (
+                          <PackageVersionWithoutCommunityAwaitError
+                            payload={versionResult.__error}
+                          />
+                        );
+                      }
+
+                      if (isLoaderError(teamResult)) {
+                        return (
+                          <PackageVersionWithoutCommunityAwaitError
+                            payload={teamResult.__error}
+                          />
+                        );
+                      }
+
+                      return (
+                        <Actions team={teamResult} version={versionResult} />
+                      );
+                    }}
                   </Await>
                 </Suspense>
               </div>
@@ -296,61 +415,67 @@ export default function PackageVersion() {
                   <SkeletonBox className="package-listing__nav-skeleton" />
                 }
               >
-                <Await resolve={version}>
-                  {(resolvedValue) => (
-                    <>
-                      <Tabs>
-                        <NewLink
-                          key="description"
-                          primitiveType="cyberstormLink"
-                          linkId="PackageVersionWithoutCommunity"
-                          namespace={resolvedValue.namespace}
-                          package={resolvedValue.name}
-                          version={resolvedValue.version_number}
-                          aria-current={currentTab === "details"}
-                          rootClasses={`tabs-item${
-                            currentTab === "details"
-                              ? " tabs-item--current"
-                              : ""
-                          }`}
-                        >
-                          Details
-                        </NewLink>
-                        <NewLink
-                          key="required"
-                          primitiveType="cyberstormLink"
-                          linkId="PackageVersionWithoutCommunityRequired"
-                          namespace={resolvedValue.namespace}
-                          package={resolvedValue.name}
-                          version={resolvedValue.version_number}
-                          aria-current={currentTab === "required"}
-                          rootClasses={`tabs-item${
-                            currentTab === "required"
-                              ? " tabs-item--current"
-                              : ""
-                          }`}
-                        >
-                          Required ({resolvedValue.dependency_count})
-                        </NewLink>
-                        <NewLink
-                          key="versions"
-                          primitiveType="cyberstormLink"
-                          linkId="PackageVersionWithoutCommunityVersions"
-                          namespace={resolvedValue.namespace}
-                          package={resolvedValue.name}
-                          version={resolvedValue.version_number}
-                          aria-current={currentTab === "versions"}
-                          rootClasses={`tabs-item${
-                            currentTab === "versions"
-                              ? " tabs-item--current"
-                              : ""
-                          }`}
-                        >
-                          Versions
-                        </NewLink>
-                      </Tabs>
-                    </>
-                  )}
+                <Await resolve={versionPromise}>
+                  {(versionResult) => {
+                    if (isLoaderError(versionResult)) {
+                      return null;
+                    }
+
+                    return (
+                      <>
+                        <Tabs>
+                          <NewLink
+                            key="description"
+                            primitiveType="cyberstormLink"
+                            linkId="PackageVersionWithoutCommunity"
+                            namespace={versionResult.namespace}
+                            package={versionResult.name}
+                            version={versionResult.version_number}
+                            aria-current={currentTab === "details"}
+                            rootClasses={`tabs-item${
+                              currentTab === "details"
+                                ? " tabs-item--current"
+                                : ""
+                            }`}
+                          >
+                            Details
+                          </NewLink>
+                          <NewLink
+                            key="required"
+                            primitiveType="cyberstormLink"
+                            linkId="PackageVersionWithoutCommunityRequired"
+                            namespace={versionResult.namespace}
+                            package={versionResult.name}
+                            version={versionResult.version_number}
+                            aria-current={currentTab === "required"}
+                            rootClasses={`tabs-item${
+                              currentTab === "required"
+                                ? " tabs-item--current"
+                                : ""
+                            }`}
+                          >
+                            Required ({versionResult.dependency_count})
+                          </NewLink>
+                          <NewLink
+                            key="versions"
+                            primitiveType="cyberstormLink"
+                            linkId="PackageVersionWithoutCommunityVersions"
+                            namespace={versionResult.namespace}
+                            package={versionResult.name}
+                            version={versionResult.version_number}
+                            aria-current={currentTab === "versions"}
+                            rootClasses={`tabs-item${
+                              currentTab === "versions"
+                                ? " tabs-item--current"
+                                : ""
+                            }`}
+                          >
+                            Versions
+                          </NewLink>
+                        </Tabs>
+                      </>
+                    );
+                  }}
                 </Await>
               </Suspense>
               <div className="package-listing__content">
@@ -363,22 +488,28 @@ export default function PackageVersion() {
                   <SkeletonBox className="package-listing-sidebar__install-skeleton" />
                 }
               >
-                <Await resolve={version}>
-                  {(resolvedValue) => (
-                    <NewButton
-                      csVariant="accent"
-                      csSize="big"
-                      rootClasses="package-listing-sidebar__install"
-                      primitiveType="link"
-                      href={resolvedValue.install_url || ""}
-                      disabled={!resolvedValue.install_url}
-                    >
-                      <NewIcon csMode="inline">
-                        <ThunderstoreLogo />
-                      </NewIcon>
-                      Install
-                    </NewButton>
-                  )}
+                <Await resolve={versionPromise}>
+                  {(versionResult) => {
+                    if (isLoaderError(versionResult)) {
+                      return null;
+                    }
+
+                    return (
+                      <NewButton
+                        csVariant="accent"
+                        csSize="big"
+                        rootClasses="package-listing-sidebar__install"
+                        primitiveType="link"
+                        href={versionResult.install_url || ""}
+                        disabled={!versionResult.install_url}
+                      >
+                        <NewIcon csMode="inline">
+                          <ThunderstoreLogo />
+                        </NewIcon>
+                        Install
+                      </NewButton>
+                    );
+                  }}
                 </Await>
               </Suspense>
               <div className="package-listing-sidebar__main">
@@ -388,12 +519,20 @@ export default function PackageVersion() {
                   }
                 >
                   <Await resolve={versionAndTeamPromise}>
-                    {(resolvedValue) => (
-                      <Actions
-                        team={resolvedValue[1]}
-                        version={resolvedValue[0]}
-                      />
-                    )}
+                    {(results) => {
+                      const [versionResult, teamResult] = results;
+
+                      if (
+                        isLoaderError(versionResult) ||
+                        isLoaderError(teamResult)
+                      ) {
+                        return null;
+                      }
+
+                      return (
+                        <Actions team={teamResult} version={versionResult} />
+                      );
+                    }}
                   </Await>
                 </Suspense>
                 <Suspense
@@ -401,10 +540,14 @@ export default function PackageVersion() {
                     <SkeletonBox className="package-listing-sidebar__skeleton" />
                   }
                 >
-                  <Await resolve={version}>
-                    {(resolvedValue) => (
-                      <>{packageMeta(firstUploaded, resolvedValue)}</>
-                    )}
+                  <Await resolve={versionPromise}>
+                    {(versionResult) => {
+                      if (isLoaderError(versionResult)) {
+                        return null;
+                      }
+
+                      return <>{packageMeta(firstUploaded, versionResult)}</>;
+                    }}
                   </Await>
                 </Suspense>
               </div>
@@ -488,5 +631,21 @@ function packageMeta(
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Renders an inline alert when package version data fails to load.
+ */
+function PackageVersionWithoutCommunityAwaitError(props: {
+  payload: LoaderErrorPayload;
+}) {
+  const { payload } = props;
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
   );
 }

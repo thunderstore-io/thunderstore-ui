@@ -27,6 +27,10 @@ import {
   NewBreadCrumbs,
   NewBreadCrumbsLink,
 } from "@thunderstore/cyberstorm";
+import {
+  parseUserFacingErrorPayload,
+  type UserFacingErrorPayload,
+} from "cyberstorm/utils/errors/userFacingErrorResponse";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 
@@ -617,24 +621,62 @@ export function ErrorBoundary() {
     console.log(error);
   }
   const isResponseError = isRouteErrorResponse(error);
+  let payload: UserFacingErrorPayload | null = null;
+
+  if (isResponseError) {
+    payload = parseUserFacingErrorPayload(error.data);
+  }
+
+  const statusCode = payload?.status ?? (isResponseError ? error.status : 500);
+  const headline =
+    payload?.headline ??
+    (isResponseError
+      ? error.statusText || `Error ${error.status}`
+      : "Internal server error");
+
+  const fallbackDescription =
+    isResponseError && typeof error.data === "string"
+      ? dedupeDescription(headline, error.data)
+      : undefined;
+
+  const description = payload?.description ?? fallbackDescription;
+  const showDefaultFlavor = !payload && !isResponseError;
   return (
     <div className="error">
-      <div
-        className="error__glitch"
-        data-text={isResponseError ? error.status : 500}
-      >
-        <span>{isResponseError ? error.status : 500}</span>
+      <div className="error__glitch" data-text={statusCode}>
+        <span>{statusCode}</span>
       </div>
       <div className="error__description">
-        {isResponseError ? error.data : "Internal server error"}
+        <strong>{headline}</strong>
+        {description ? <div>{description}</div> : null}
       </div>
-      {!isResponseError && (
+      {showDefaultFlavor && (
         <div className="error__flavor">
           Beep boop. Server something error happens.
         </div>
       )}
     </div>
   );
+}
+
+function dedupeDescription(
+  headline: string,
+  description: string | undefined
+): string | undefined {
+  if (!description) {
+    return undefined;
+  }
+
+  const trimmedDescription = description.trim();
+  if (!trimmedDescription) {
+    return undefined;
+  }
+
+  if (trimmedDescription.toLowerCase() === headline.trim().toLowerCase()) {
+    return undefined;
+  }
+
+  return trimmedDescription;
 }
 
 // Temporary solution for implementing ads

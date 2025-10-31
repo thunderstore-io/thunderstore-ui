@@ -7,7 +7,7 @@ import {
   NewLink,
 } from "@thunderstore/cyberstorm";
 import { Await, type LoaderFunctionArgs } from "react-router";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useRouteError } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicEnvVariables,
@@ -16,7 +16,10 @@ import {
 import { Suspense } from "react";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
-import { columns } from "./Versions";
+import { columns, packageVersionsErrorMappings } from "./Versions";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -27,21 +30,31 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-    return {
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
-    };
+    try {
+      const versions = await dapper.getPackageVersions(
+        params.namespaceId,
+        params.packageId
+      );
+
+      return {
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        versions,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageVersionsErrorMappings });
+    }
   }
-  return {
-    status: "error",
-    message: "Failed to load versions",
-    versions: [],
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -50,27 +63,30 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools?.getConfig().sessionId,
       };
     });
+    const versions = dapper
+      .getPackageVersions(params.namespaceId, params.packageId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageVersionsErrorMappings })
+      );
+
     return {
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
+      versions,
     };
   }
-  return {
-    status: "error",
-    message: "Failed to load versions",
-    versions: [],
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export default function Versions() {
-  const { communityId, namespaceId, packageId, status, message, versions } =
+  const { communityId, namespaceId, packageId, versions } =
     useLoaderData<typeof loader | typeof clientLoader>();
-
-  if (status === "error") {
-    return <div>{message}</div>;
-  }
 
   return (
     <Suspense fallback={<SkeletonBox className="package-versions__skeleton" />}>
@@ -130,5 +146,23 @@ export default function Versions() {
         )}
       </Await>
     </Suspense>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="package-listing__error">
+      <Heading csLevel="3" csSize="3" csVariant="primary" mode="display">
+        {payload.headline}
+      </Heading>
+      {payload.description ? (
+        <p className="package-listing__error-description">
+          {payload.description}
+        </p>
+      ) : null}
+    </div>
   );
 }

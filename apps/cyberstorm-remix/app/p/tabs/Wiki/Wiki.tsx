@@ -4,21 +4,37 @@ import {
   Await,
   type LoaderFunctionArgs,
   Outlet,
+  useLoaderData,
   useOutletContext,
+  useRouteError,
 } from "react-router";
-import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { NewButton, NewIcon, SkeletonBox } from "@thunderstore/cyberstorm";
+import { NewAlert, NewButton, NewIcon, SkeletonBox } from "@thunderstore/cyberstorm";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type OutletContextShape } from "~/root";
 import { Suspense } from "react";
-import { ApiError } from "../../../../../../packages/thunderstore-api/src";
 import { getPackageWiki } from "@thunderstore/dapper-ts/src/methods/package";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  FORBIDDEN_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  createNotFoundMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+
+export const wikiErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  createNotFoundMapping(
+    "Wiki not available.",
+    "We could not find the requested wiki."
+  ),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -29,30 +45,23 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-
-    let wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
-
     try {
-      wiki = await dapper.getPackageWiki(params.namespaceId, params.packageId);
-    } catch (error) {
-      if (error instanceof ApiError) {
-        if (error.response.status === 404) {
-          wiki = undefined;
-        } else {
-          wiki = undefined;
-          console.error("Error fetching package wiki:", error);
-        }
-      }
-    }
+      const wiki = await dapper.getPackageWiki(
+        params.namespaceId,
+        params.packageId
+      );
 
-    return {
-      wiki: wiki,
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      slug: params.slug,
-      permissions: undefined,
-    };
+      return {
+        wiki,
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        slug: params.slug,
+        permissions: undefined,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: wikiErrorMappings });
+    }
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
@@ -68,27 +77,34 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
 
-    const wiki = dapper.getPackageWiki(params.namespaceId, params.packageId);
+    const wikiPromise = dapper
+      .getPackageWiki(params.namespaceId, params.packageId)
+      .catch((error) => handleLoaderError(error, { mappings: wikiErrorMappings }));
 
-    const permissions = dapper.getPackagePermissions(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
+    const permissionsPromise = dapper
+      .getPackagePermissions(
+        params.communityId,
+        params.namespaceId,
+        params.packageId
+      )
+      .catch((error) => handleLoaderError(error, { mappings: wikiErrorMappings }));
 
     return {
-      wiki: wiki,
+      wiki: wikiPromise,
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       slug: params.slug,
-      permissions: permissions,
+      permissions: permissionsPromise,
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
 }
 
+/**
+ * Displays the package wiki navigation and nested routes, relying on Suspense for data.
+ */
 export default function Wiki() {
   const { wiki, communityId, namespaceId, packageId, slug, permissions } =
     useLoaderData<typeof loader | typeof clientLoader>();
@@ -190,6 +206,23 @@ export default function Wiki() {
       <div className="package-wiki-content">
         <Outlet context={outletContext} />
       </div>
+    </div>
+  );
+}
+
+/**
+ * Maps loader errors to a user-facing alert when wiki data fails to resolve.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="package-wiki">
+      <NewAlert csVariant="danger">
+        <strong>{payload.headline}</strong>
+        {payload.description ? ` ${payload.description}` : ""}
+      </NewAlert>
     </div>
   );
 }

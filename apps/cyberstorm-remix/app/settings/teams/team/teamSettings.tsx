@@ -1,22 +1,60 @@
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import {
+  Await,
   Outlet,
   useLoaderData,
   useLocation,
   useOutletContext,
+  useRouteError,
 } from "react-router";
-import { NewLink, Tabs } from "@thunderstore/cyberstorm";
-import { ApiError } from "@thunderstore/thunderstore-api";
+import { NewAlert, NewLink, SkeletonBox, Tabs } from "@thunderstore/cyberstorm";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../../../root";
 import "./teamSettings.css";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { ApiError } from "@thunderstore/thunderstore-api";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { Suspense, useMemo } from "react";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import {
+  isLoaderError,
+  resolveLoaderPromise,
+  type LoaderErrorPayload,
+  type LoaderResult,
+} from "cyberstorm/utils/errors/loaderResult";
+
+type MaybePromise<T> = T | Promise<T>;
+
+type TeamDetails = Awaited<ReturnType<DapperTs["getTeamDetails"]>>;
+
+type LoaderData = {
+  team: MaybePromise<LoaderResult<TeamDetails>>;
+};
+
+function isPromiseLike<T>(value: MaybePromise<T>): value is Promise<T> {
+  return typeof value === "object" && value !== null && "then" in value;
+}
 
 export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
+  const loaderData = data as LoaderData | undefined;
+  const teamValue = loaderData?.team;
+  const resolvedName =
+    teamValue && !isPromiseLike(teamValue) && !isLoaderError(teamValue)
+      ? teamValue.name
+      : undefined;
+
+  const title = resolvedName
+    ? `${resolvedName} settings`
+    : "Team settings | Thunderstore";
+
   return [
-    { title: `${data?.team.name} settings` },
-    { name: "description", content: `${data?.team.name} settings` },
+    { title },
+    {
+      name: "description",
+      content: resolvedName ? `${resolvedName} settings` : "Team configuration",
+    },
   ];
 };
 
@@ -32,34 +70,94 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           sessionId: config?.sessionId,
         };
       });
+      const teamPromise = resolveLoaderPromise(
+        dapper.getTeamDetails(params.namespaceId).catch((error) => {
+          if (error instanceof ApiError && error.statusCode === 404) {
+            throwUserFacingPayloadResponse({
+              headline: "Team not found.",
+              description: "We could not find the requested team.",
+              category: "not_found",
+              status: 404,
+            });
+          }
+          throw error;
+        })
+      );
+
       return {
-        team: await dapper.getTeamDetails(params.namespaceId),
-      };
+        team: teamPromise,
+      } satisfies LoaderData;
     } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team not found", { status: 404 });
-      } else {
-        throw error;
+      if (error instanceof ApiError && error.statusCode === 404) {
+        throwUserFacingPayloadResponse({
+          headline: "Team not found.",
+          description: "We could not find the requested team.",
+          category: "not_found",
+          status: 404,
+        });
       }
+      handleLoaderError(error);
     }
   }
-  throw new Response("Team not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Team not found.",
+    description: "We could not find the requested team.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export function HydrateFallback() {
   return <div style={{ padding: "32px" }}>Loading...</div>;
 }
 
-export default function Community() {
-  const { team } = useLoaderData<typeof clientLoader>();
+export default function TeamSettingsRoute() {
+  const { team } = useLoaderData<typeof clientLoader>() as LoaderData;
   const location = useLocation();
   const outletContext = useOutletContext() as OutletContextShape;
 
-  const currentTab = location.pathname.endsWith("/settings")
+  const resolvedTeamPromise = useMemo(() => {
+    return Promise.resolve(team) as Promise<LoaderResult<TeamDetails>>;
+  }, [team]);
+
+  return (
+    <Suspense fallback={<TeamSettingsSkeleton />}>
+      <Await resolve={resolvedTeamPromise}>
+        {(result) =>
+          isLoaderError(result) ? (
+            <TeamSettingsAwaitError payload={result.__error} />
+          ) : (
+            <TeamSettingsContent
+              team={result}
+              locationPathname={location.pathname}
+              outletContext={outletContext}
+            />
+          )
+        }
+      </Await>
+    </Suspense>
+  );
+}
+
+interface TeamSettingsContentProps {
+  team: TeamDetails;
+  locationPathname: string;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Displays the team settings tabs once loader data resolves on the client.
+ */
+function TeamSettingsContent({
+  team,
+  locationPathname,
+  outletContext,
+}: TeamSettingsContentProps) {
+  const currentTab = locationPathname.endsWith("/settings")
     ? "settings"
-    : location.pathname.endsWith("/members")
+    : locationPathname.endsWith("/members")
       ? "members"
-      : location.pathname.endsWith("/service-accounts")
+      : locationPathname.endsWith("/service-accounts")
         ? "service-accounts"
         : "profile";
 
@@ -124,5 +222,45 @@ export default function Community() {
         </section>
       </div>
     </>
+  );
+}
+
+/**
+ * Shows an inline alert when the team detail promise rejects during Suspense.
+ */
+function TeamSettingsAwaitError(props: { payload: LoaderErrorPayload }) {
+  const { payload } = props;
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
+  );
+}
+
+/**
+ * Displays a lightweight skeleton while team details load on the client.
+ */
+function TeamSettingsSkeleton() {
+  return (
+    <div className="team-settings">
+      <SkeletonBox className="team-settings__skeleton" />
+    </div>
+  );
+}
+
+/**
+ * Maps thrown loader errors to an alert for the team settings route.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
   );
 }

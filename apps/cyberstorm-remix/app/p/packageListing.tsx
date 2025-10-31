@@ -2,6 +2,7 @@ import {
   memo,
   type ReactElement,
   Suspense,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -13,6 +14,7 @@ import {
   useLoaderData,
   useLocation,
   useOutletContext,
+  useRouteError,
   type LoaderFunctionArgs,
   type ShouldRevalidateFunctionArgs,
 } from "react-router";
@@ -40,6 +42,12 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import {
+  FORBIDDEN_MAPPING,
+  SIGN_IN_REQUIRED_MAPPING,
+  createNotFoundMapping,
+} from "cyberstorm/utils/errors/loaderMappings";
 
 import {
   Drawer,
@@ -69,14 +77,29 @@ import {
   packageListingApprove,
   packageListingReject,
   type RequestConfig,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
 
 import "./packageListing.css";
+
+const getErrorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : String(error);
 
 type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
 };
+
+const packageListingErrorMappings = [
+  SIGN_IN_REQUIRED_MAPPING,
+  FORBIDDEN_MAPPING,
+  createNotFoundMapping(
+    "Package not found.",
+    "We could not find the requested package."
+  ),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -87,20 +110,35 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
-
-    return {
-      community: await dapper.getCommunity(params.communityId),
-      communityFilters: await dapper.getCommunityFilters(params.communityId),
-      listing: await dapper.getPackageListingDetails(
+    try {
+      const community = await dapper.getCommunity(params.communityId);
+      const communityFilters = await dapper.getCommunityFilters(
+        params.communityId
+      );
+      const listing = await dapper.getPackageListingDetails(
         params.communityId,
         params.namespaceId,
         params.packageId
-      ),
-      team: await dapper.getTeamDetails(params.namespaceId),
-      permissions: undefined,
-    };
+      );
+      const team = await dapper.getTeamDetails(params.namespaceId);
+
+      return {
+        community,
+        communityFilters,
+        listing,
+        team,
+        permissions: undefined,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageListingErrorMappings });
+    }
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 async function getUserPermissions(
@@ -118,7 +156,7 @@ async function getUserPermissions(
 }
 
 // TODO: Needs to check if package is available for the logged in user
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -127,26 +165,57 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         sessionId: tools.getConfig().sessionId,
       };
     });
+    const community = dapper.getCommunity(params.communityId);
+    const communityFilters = dapper.getCommunityFilters(params.communityId);
+    const listing = dapper.getPackageListingDetails(
+      params.communityId,
+      params.namespaceId,
+      params.packageId
+    );
+    const team = dapper.getTeamDetails(params.namespaceId);
+    const permissions = getUserPermissions(
+      tools,
+      dapper,
+      params.communityId,
+      params.namespaceId,
+      params.packageId
+    );
 
     return {
-      community: dapper.getCommunity(params.communityId),
-      communityFilters: dapper.getCommunityFilters(params.communityId),
-      listing: dapper.getPackageListingDetails(
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      ),
-      team: dapper.getTeamDetails(params.namespaceId),
-      permissions: getUserPermissions(
-        tools,
-        dapper,
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      ),
+      community,
+      communityFilters,
+      listing,
+      team,
+      permissions,
     };
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
+}
+
+/**
+ * Renders user-facing messaging when the package listing route rejects.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <div className="container container--y container--full package-listing__error">
+      <Heading csLevel="2" csSize="3" csVariant="primary" mode="display">
+        {payload.headline}
+      </Heading>
+      {payload.description ? (
+        <p className="package-listing__error-description">
+          {payload.description}
+        </p>
+      ) : null}
+    </div>
+  );
 }
 
 clientLoader.hydrate = true;
@@ -190,28 +259,51 @@ export default function PackageListing() {
     config: config,
   });
 
-  const fetchAndSetRatedPackages = async () => {
-    const rp = await dapper.getRatedPackages();
-    if (isPromise(listing)) {
-      listing.then((listingData) => {
+  const fetchAndSetRatedPackages = useCallback(
+    async (options?: { isCancelled?: () => boolean }) => {
+      try {
+        const ratedPackages = await dapper.getRatedPackages();
+        const listingData = await Promise.resolve(listing);
+        if (options?.isCancelled?.()) {
+          return;
+        }
+
         setIsLiked(
-          rp.rated_packages.includes(
+          ratedPackages.rated_packages.includes(
             `${listingData.namespace}-${listingData.name}`
           )
         );
-      });
-    } else {
-      setIsLiked(
-        rp.rated_packages.includes(`${listing.namespace}-${listing.name}`)
-      );
-    }
-  };
+      } catch (error) {
+        if (!options?.isCancelled?.()) {
+          console.error("Failed to load rated packages", error);
+          toast.addToast({
+            csVariant: "danger",
+            children: `Failed to fetch rated packages: ${getErrorMessage(
+              error
+            )}`,
+            duration: 6000,
+          });
+        }
+      }
+    },
+    [dapper, listing, toast]
+  );
 
   useEffect(() => {
-    if (currentUser?.username) {
-      fetchAndSetRatedPackages();
+    if (!currentUser?.username) {
+      return;
     }
-  }, [currentUser]);
+
+    let isCancelled = false;
+
+    fetchAndSetRatedPackages({
+      isCancelled: () => isCancelled,
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [currentUser?.username, fetchAndSetRatedPackages]);
 
   const isHydrated = useHydrated();
   const startsHydrated = useRef(isHydrated);
@@ -227,8 +319,29 @@ export default function PackageListing() {
   // If strict mode is removed from the entry.client.tsx, this should only run once
   useEffect(() => {
     if (!startsHydrated.current && isHydrated) return;
-    if (isPromise(listing)) {
-      listing.then((listingData) => {
+
+    if (!isPromise(listing)) {
+      setLastUpdated(
+        <RelativeTime time={listing.last_updated} suppressHydrationWarning />
+      );
+      setFirstUploaded(
+        <RelativeTime
+          time={listing.datetime_created}
+          suppressHydrationWarning
+        />
+      );
+      return;
+    }
+
+    let isCancelled = false;
+
+    const resolveListingTimes = async () => {
+      try {
+        const listingData = await listing;
+        if (isCancelled) {
+          return;
+        }
+
         setLastUpdated(
           <RelativeTime
             time={listingData.last_updated}
@@ -241,19 +354,19 @@ export default function PackageListing() {
             suppressHydrationWarning
           />
         );
-      });
-    } else {
-      setLastUpdated(
-        <RelativeTime time={listing.last_updated} suppressHydrationWarning />
-      );
-      setFirstUploaded(
-        <RelativeTime
-          time={listing.datetime_created}
-          suppressHydrationWarning
-        />
-      );
-    }
-  }, []);
+      } catch (error) {
+        if (!isCancelled) {
+          console.error("Failed to resolve listing metadata", error);
+        }
+      }
+    };
+
+    resolveListingTimes();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [isHydrated, listing]);
   // END: For sidebar meta dates
 
   const currentTab = location.pathname.split("/")[6] || "details";
@@ -677,7 +790,7 @@ function ReviewPackageForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -695,7 +808,7 @@ function ReviewPackageForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },

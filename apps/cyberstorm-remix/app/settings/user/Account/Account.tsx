@@ -13,7 +13,11 @@ import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { type OutletContextShape } from "~/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
-import { userDelete } from "@thunderstore/thunderstore-api";
+import {
+  userDelete,
+  UserFacingError,
+  formatUserFacingError,
+} from "@thunderstore/thunderstore-api";
 
 export default function Account() {
   const outletContext = useOutletContext() as OutletContextShape;
@@ -114,7 +118,7 @@ function DeleteAccountForm(props: {
     UserAccountDeleteRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -129,7 +133,7 @@ function DeleteAccountForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },

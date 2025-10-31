@@ -19,6 +19,8 @@ import {
   type RequestConfig,
   teamCreate,
   type TeamCreateRequestData,
+  UserFacingError,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { postTeamCreate } from "@thunderstore/dapper-ts/src/methods/team";
@@ -159,7 +161,7 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
     TeamCreateRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -176,7 +178,7 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },

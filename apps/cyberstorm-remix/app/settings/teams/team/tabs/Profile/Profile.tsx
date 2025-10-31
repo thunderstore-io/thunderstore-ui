@@ -1,17 +1,48 @@
 import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import {
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+  useRouteError,
+} from "react-router";
 import {
   ApiError,
   teamDetailsEdit,
   type TeamDetailsEditRequestData,
+  UserFacingError,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "~/root";
 import "./Profile.css";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer } from "react";
-import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
+import { Suspense, useMemo, useReducer } from "react";
+import {
+  NewAlert,
+  NewButton,
+  NewTextInput,
+  SkeletonBox,
+  useToast,
+} from "@thunderstore/cyberstorm";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import {
+  isLoaderError,
+  resolveLoaderPromise,
+  type LoaderErrorPayload,
+  type LoaderResult,
+} from "cyberstorm/utils/errors/loaderResult";
+
+type MaybePromise<T> = T | Promise<T>;
+
+type TeamDetails = Awaited<ReturnType<DapperTs["getTeamDetails"]>>;
+
+type LoaderData = {
+  team: MaybePromise<LoaderResult<TeamDetails>>;
+};
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId) {
@@ -23,19 +54,42 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           sessionId: tools?.getConfig().sessionId,
         };
       });
+      const teamPromise = resolveLoaderPromise(
+        dapper.getTeamDetails(params.namespaceId).catch((error) => {
+          if (error instanceof ApiError && error.statusCode === 404) {
+            throwUserFacingPayloadResponse({
+              headline: "Team not found.",
+              description: "We could not find the requested team.",
+              category: "not_found",
+              status: 404,
+            });
+          }
+          throw error;
+        })
+      );
+
       return {
-        team: await dapper.getTeamDetails(params.namespaceId),
-      };
+        team: teamPromise,
+      } satisfies LoaderData;
     } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team not found", { status: 404 });
-      } else {
-        // REMIX TODO: Add sentry
-        throw error;
+      // REMIX TODO: Add sentry
+      if (error instanceof ApiError && error.statusCode === 404) {
+        throwUserFacingPayloadResponse({
+          headline: "Team not found.",
+          description: "We could not find the requested team.",
+          category: "not_found",
+          status: 404,
+        });
       }
+      handleLoaderError(error);
     }
   }
-  throw new Response("Team not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Team not found.",
+    description: "We could not find the requested team.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export function HydrateFallback() {
@@ -43,11 +97,37 @@ export function HydrateFallback() {
 }
 
 export default function Profile() {
-  const { team } = useLoaderData<typeof clientLoader>();
+  const { team } = useLoaderData<typeof clientLoader>() as LoaderData;
   const outletContext = useOutletContext() as OutletContextShape;
+  const resolvedTeamPromise = useMemo(() => {
+    return Promise.resolve(team) as Promise<LoaderResult<TeamDetails>>;
+  }, [team]);
 
+  return (
+    <Suspense fallback={<ProfileSkeleton />}>
+      <Await resolve={resolvedTeamPromise}>
+        {(result) =>
+          isLoaderError(result) ? (
+            <ProfileAwaitError payload={result.__error} />
+          ) : (
+            <ProfileContent team={result} outletContext={outletContext} />
+          )
+        }
+      </Await>
+    </Suspense>
+  );
+}
+
+interface ProfileContentProps {
+  team: TeamDetails;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Renders the team profile editing form once Suspense resolves the team data.
+ */
+function ProfileContent({ team, outletContext }: ProfileContentProps) {
   const revalidator = useRevalidator();
-
   const toast = useToast();
 
   function formFieldUpdateAction(
@@ -87,7 +167,7 @@ export default function Profile() {
     TeamDetailsEditRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -103,7 +183,7 @@ export default function Profile() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -142,5 +222,45 @@ export default function Profile() {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Shows a friendly alert when the team profile promise resolves with an error payload.
+ */
+function ProfileAwaitError(props: { payload: LoaderErrorPayload }) {
+  const { payload } = props;
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
+  );
+}
+
+/**
+ * Displays a minimal skeleton while team profile data loads.
+ */
+function ProfileSkeleton() {
+  return (
+    <div className="settings-items team-profile">
+      <SkeletonBox className="team-profile__skeleton" />
+    </div>
+  );
+}
+
+/**
+ * Maps thrown loader errors to an alert for the profile tab.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
   );
 }

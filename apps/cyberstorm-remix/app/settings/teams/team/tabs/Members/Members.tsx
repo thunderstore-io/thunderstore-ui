@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import {
   Modal,
+  NewAlert,
   NewAvatar,
   NewButton,
   NewIcon,
@@ -10,11 +11,18 @@ import {
   NewSelect,
   NewTable,
   NewTextInput,
+  SkeletonBox,
   type SelectOption,
   useToast,
 } from "@thunderstore/cyberstorm";
 import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import {
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+  useRouteError,
+} from "react-router";
 import {
   ApiError,
   type RequestConfig,
@@ -22,6 +30,8 @@ import {
   type TeamAddMemberRequestData,
   teamEditMember,
   teamRemoveMember,
+  UserFacingError,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "../../../../../root";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
@@ -29,7 +39,25 @@ import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer, useState } from "react";
+import { Suspense, useMemo, useReducer, useState } from "react";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import {
+  isLoaderError,
+  resolveLoaderPromise,
+  type LoaderErrorPayload,
+  type LoaderResult,
+} from "cyberstorm/utils/errors/loaderResult";
+
+type MaybePromise<T> = T | Promise<T>;
+
+type TeamMembers = Awaited<ReturnType<DapperTs["getTeamMembers"]>>;
+
+type LoaderData = {
+  teamName: string;
+  members: MaybePromise<LoaderResult<TeamMembers>>;
+};
 
 // REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader({ params }: LoaderFunctionArgs) {
@@ -43,19 +71,42 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           sessionId: config.sessionId,
         };
       });
+      const membersPromise = resolveLoaderPromise(
+        dapper.getTeamMembers(params.namespaceId).catch((error) => {
+          if (error instanceof ApiError && error.statusCode === 404) {
+            throwUserFacingPayloadResponse({
+              headline: "Team not found.",
+              description: "We could not find the requested team.",
+              category: "not_found",
+              status: 404,
+            });
+          }
+          throw error;
+        })
+      );
+
       return {
         teamName: params.namespaceId,
-        members: await dapper.getTeamMembers(params.namespaceId),
-      };
+        members: membersPromise,
+      } satisfies LoaderData;
     } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team members not found", { status: 404 });
-      } else {
-        throw error;
+      if (error instanceof ApiError && error.statusCode === 404) {
+        throwUserFacingPayloadResponse({
+          headline: "Team not found.",
+          description: "We could not find the requested team.",
+          category: "not_found",
+          status: 404,
+        });
       }
+      handleLoaderError(error);
     }
   }
-  throw new Response("Team not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Team not found.",
+    description: "We could not find the requested team.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export function HydrateFallback() {
@@ -74,16 +125,53 @@ const roleOptions: SelectOption<"owner" | "member">[] = [
 ];
 
 export default function Members() {
-  const { teamName, members } = useLoaderData<typeof clientLoader>();
+  const { teamName, members } = useLoaderData<
+    typeof clientLoader
+  >() as LoaderData;
   const outletContext = useOutletContext() as OutletContextShape;
+  const resolvedMembersPromise = useMemo(() => {
+    return Promise.resolve(members) as Promise<LoaderResult<TeamMembers>>;
+  }, [members]);
 
+  return (
+    <Suspense fallback={<MembersSkeleton />}>
+      <Await resolve={resolvedMembersPromise}>
+        {(result) =>
+          isLoaderError(result) ? (
+            <MembersAwaitError payload={result.__error} />
+          ) : (
+            <MembersContent
+              teamName={teamName}
+              members={result}
+              outletContext={outletContext}
+            />
+          )
+        }
+      </Await>
+    </Suspense>
+  );
+}
+
+interface MembersContentProps {
+  teamName: string;
+  members: TeamMembers;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Displays the team members table once the loader promise settles.
+ */
+function MembersContent({
+  teamName,
+  members,
+  outletContext,
+}: MembersContentProps) {
   const revalidator = useRevalidator();
+  const toast = useToast();
 
   async function teamMemberRevalidate() {
     revalidator.revalidate();
   }
-
-  const toast = useToast();
 
   const changeMemberRoleAction = ApiAction({
     endpoint: teamEditMember,
@@ -98,7 +186,7 @@ export default function Members() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -141,8 +229,8 @@ export default function Members() {
               csSize="xsmall"
               options={roleOptions}
               value={member.role}
-              onChange={(val: "owner" | "member") =>
-                changeMemberRole(member.username, val)
+              onChange={(val) =>
+                changeMemberRole(member.username, val as "owner" | "member")
               }
             />
           </div>
@@ -186,6 +274,46 @@ export default function Members() {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Shows an alert when the members promise rejects.
+ */
+function MembersAwaitError(props: { payload: LoaderErrorPayload }) {
+  const { payload } = props;
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
+  );
+}
+
+/**
+ * Displays a table placeholder while members load on the client.
+ */
+function MembersSkeleton() {
+  return (
+    <div className="settings-items">
+      <SkeletonBox className="settings-items__skeleton" />
+    </div>
+  );
+}
+
+/**
+ * Maps thrown loader errors to a user-facing alert for the members tab.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <NewAlert csVariant="danger">
+      <strong>{payload.headline}</strong>
+      {payload.description ? ` ${payload.description}` : ""}
+    </NewAlert>
   );
 }
 
@@ -235,7 +363,7 @@ function AddTeamMemberForm(props: {
     TeamAddMemberRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -252,7 +380,7 @@ function AddTeamMemberForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -337,7 +465,8 @@ function RemoveTeamMemberForm(props: {
   const kickMemberAction = ApiAction({
     endpoint: teamRemoveMember,
     onSubmitSuccess: () => {
-      props.updateTrigger();
+      void props.updateTrigger();
+      setOpen(false);
       toast.addToast({
         csVariant: "success",
         children: `Team member removed`,
@@ -347,7 +476,7 @@ function RemoveTeamMemberForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -389,8 +518,6 @@ function RemoveTeamMemberForm(props: {
               params: { team_name: props.teamName, username: props.userName },
               queryParams: {},
               data: {},
-            }).then(() => {
-              setOpen(false);
             })
           }
         >
