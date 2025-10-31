@@ -1,11 +1,5 @@
 import { type DynamicLink } from "./shared";
 
-export interface WeirdCurrentUserTeamsFull {
-  name: string;
-  role: string;
-  member_count: number;
-}
-
 export interface CurrentUser {
   username: string | null;
   capabilities: string[];
@@ -13,8 +7,12 @@ export interface CurrentUser {
   subscription: {
     expires: string | null;
   };
-  teams: string[] | WeirdCurrentUserTeamsFull[];
-  teams_full?: WeirdCurrentUserTeamsFull[] | null;
+  teams: string[];
+  teams_full: {
+    name: string;
+    role: string;
+    member_count: number;
+  }[];
 }
 
 export interface User {
