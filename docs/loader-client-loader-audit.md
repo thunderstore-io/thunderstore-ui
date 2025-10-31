@@ -41,7 +41,7 @@
 ## Client loaders (`export async function clientLoader`)
 | Path | Current handling | Risk | Suggested next step |
 | --- | --- | --- | --- |
-| apps/cyberstorm-remix/app/c/community.tsx | ✅ Awaited community fetch with shared mappings | Low | None. |
+| apps/cyberstorm-remix/app/c/community.tsx | Suspense promise wraps `DapperTs.getCommunity` with shared mappings on rejection | Low | Completed 2025-10-31; monitor for new status codes. |
 | apps/cyberstorm-remix/app/c/tabs/PackageSearch/PackageSearch.tsx | ✅ Awaited filters/listings with shared mappings | Low | None. |
 | apps/cyberstorm-remix/app/communities/communities.tsx | ✅ Await + mappings before returning Suspense promise | Low | Monitor additional codes. |
 | apps/cyberstorm-remix/app/p/dependants/Dependants.tsx | ✅ Await Promises + shared mappings | Low | — |

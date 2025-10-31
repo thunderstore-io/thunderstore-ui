@@ -67,54 +67,68 @@ export async function apiFetch(props: {
 }): Promise<schemaOrUndefined<typeof props.responseSchema>> {
   const { args, requestSchema, queryParamsSchema, responseSchema } = props;
 
-  if (requestSchema && args.bodyRaw) {
-    const parsedRequestBody = requestSchema.safeParse(args.bodyRaw);
-    if (!parsedRequestBody.success) {
-      throw new RequestBodyParseError(parsedRequestBody.error);
+  const wrapperPromise =
+    Promise.withResolvers<schemaOrUndefined<typeof responseSchema>>();
+  try {
+    if (requestSchema && args.bodyRaw) {
+      const parsedRequestBody = requestSchema.safeParse(args.bodyRaw);
+      if (!parsedRequestBody.success) {
+        throw new RequestBodyParseError(parsedRequestBody.error);
+      }
     }
-  }
-  if (queryParamsSchema && args.queryParams) {
-    const parsedQueryParams = queryParamsSchema.safeParse(args.queryParams);
-    if (!parsedQueryParams.success) {
-      throw new RequestQueryParamsParseError(parsedQueryParams.error);
+    if (queryParamsSchema && args.queryParams) {
+      const parsedQueryParams = queryParamsSchema.safeParse(args.queryParams);
+      if (!parsedQueryParams.success) {
+        throw new RequestQueryParamsParseError(parsedQueryParams.error);
+      }
     }
-  }
 
-  const { config, path, request, queryParams, useSession = false } = args;
-  const configSnapshot = config();
-  const usedConfig: RequestConfig = useSession
-    ? configSnapshot
-    : {
-        apiHost: configSnapshot.apiHost,
-        sessionId: undefined,
-      };
-  const sessionWasUsed = Boolean(usedConfig.sessionId);
-  // TODO: Query params have stronger types, but they are not just shown here.
-  // Look into furthering the ensuring of passing proper query params.
-  const url = getUrl(usedConfig, path, queryParams);
+    const { config, path, request, queryParams, useSession = false } = args;
+    const configSnapshot = config();
+    const usedConfig: RequestConfig = useSession
+      ? configSnapshot
+      : {
+          apiHost: configSnapshot.apiHost,
+          sessionId: undefined,
+        };
+    const sessionWasUsed = Boolean(usedConfig.sessionId);
+    // TODO: Query params have stronger types, but they are not just shown here.
+    // Look into furthering the ensuring of passing proper query params.
+    const url = getUrl(usedConfig, path, queryParams);
 
-  const response = await fetchRetry(url, {
-    ...(request ?? {}),
-    headers: {
-      ...BASE_HEADERS,
-      ...getAuthHeaders(usedConfig),
-    },
-  });
-
-  if (!response.ok) {
-    throw await ApiError.createFromResponse(response, {
-      sessionWasUsed,
+    const response = await fetchRetry(url, {
+      ...(request ?? {}),
+      headers: {
+        ...BASE_HEADERS,
+        ...getAuthHeaders(usedConfig),
+      },
     });
+
+    if (!response.ok) {
+      try {
+        const asdError = await ApiError.createFromResponse(response, {
+          sessionWasUsed,
+        });
+        wrapperPromise.reject(asdError);
+      } catch (error) {
+        wrapperPromise.reject(error);
+      }
+    }
+
+    if (responseSchema === undefined) return undefined;
+
+    const parsed = responseSchema.safeParse(await response.json());
+    if (!parsed.success) {
+      throw new ParseError(parsed.error);
+    } else {
+      wrapperPromise.resolve(parsed.data);
+    }
+  } catch (err) {
+    console.log("asdasdasd", err);
+    wrapperPromise.reject(err);
   }
 
-  if (responseSchema === undefined) return undefined;
-
-  const parsed = responseSchema.safeParse(await response.json());
-  if (!parsed.success) {
-    throw new ParseError(parsed.error);
-  } else {
-    return parsed.data;
-  }
+  return wrapperPromise.promise;
 }
 
 function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {

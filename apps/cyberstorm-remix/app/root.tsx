@@ -293,15 +293,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
     (m) => m.id === "tools/markdown-preview/markdownPreview"
   );
 
-  const shouldShowAds = location.pathname.startsWith("/teams")
-    ? false
-    : location.pathname.startsWith("/settings")
-      ? false
-      : location.pathname.startsWith("/package/create")
-        ? false
-        : location.pathname.startsWith("/tools")
-          ? false
-          : true;
+  // const shouldShowAds = location.pathname.startsWith("/teams")
+  //   ? false
+  //   : location.pathname.startsWith("/settings")
+  //     ? false
+  //     : location.pathname.startsWith("/package/create")
+  //       ? false
+  //       : location.pathname.startsWith("/tools")
+  //         ? false
+  //         : true;
+  const shouldShowAds = false;
 
   return (
     <html lang="en">

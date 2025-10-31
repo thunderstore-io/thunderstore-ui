@@ -1,10 +1,4 @@
-import { Suspense, useMemo } from "react";
-import {
-  Await,
-  useLoaderData,
-  useOutletContext,
-  useRouteError,
-} from "react-router";
+import { useLoaderData, useOutletContext, useRevalidator, useRouteError } from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { PackageOrderOptions } from "~/commonComponents/PackageSearch/components/PackageOrder";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -16,14 +10,6 @@ import { type OutletContextShape } from "~/root";
 import type { Route } from "./+types/PackageSearch";
 import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
-import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
-import {
-  isLoaderError,
-  resolveLoaderPromise,
-  type LoaderErrorPayload,
-  type LoaderResult,
-} from "cyberstorm/utils/errors/loaderResult";
-import { Heading } from "@thunderstore/cyberstorm";
 import {
   FORBIDDEN_MAPPING,
   RATE_LIMIT_MAPPING,
@@ -32,6 +18,8 @@ import {
   createNotFoundMapping,
   createServerErrorMapping,
 } from "cyberstorm/utils/errors/loaderMappings";
+import { NimbusErrorBoundaryFallback } from "~/commonComponents/NimbusErrorBoundary";
+import type { NimbusErrorBoundaryFallbackProps } from "~/commonComponents/NimbusErrorBoundary";
 
 const packageSearchErrorMappings = [
   SIGN_IN_REQUIRED_MAPPING,
@@ -44,20 +32,6 @@ const packageSearchErrorMappings = [
   ),
   createServerErrorMapping(),
 ];
-
-type CommunityFiltersResult = Awaited<
-  ReturnType<DapperTs["getCommunityFilters"]>
->;
-type PackageListingsResult = Awaited<
-  ReturnType<DapperTs["getPackageListings"]>
->;
-
-type MaybePromise<T> = T | Promise<T>;
-
-type PackageSearchLoaderData = {
-  filters: MaybePromise<LoaderResult<CommunityFiltersResult>>;
-  listings: MaybePromise<LoaderResult<PackageListingsResult>>;
-};
 
 interface PackageSearchQuery {
   ordering: string;
@@ -111,9 +85,9 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     try {
       const query = resolvePackageSearchQuery(request);
 
-      const [filters, listings] = await Promise.all([
-        dapper.getCommunityFilters(params.communityId),
-        dapper.getPackageListings(
+      return {
+        filters: await dapper.getCommunityFilters(params.communityId),
+        listings: await dapper.getPackageListings(
           {
             kind: "community",
             communityId: params.communityId,
@@ -127,12 +101,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
           query.nsfw,
           query.deprecated
         ),
-      ]);
-
-      return {
-        filters,
-        listings,
-      } satisfies PackageSearchLoaderData;
+      };
     } catch (error) {
       handleLoaderError(error, { mappings: packageSearchErrorMappings });
     }
@@ -159,28 +128,22 @@ export async function clientLoader({
     });
     const query = resolvePackageSearchQuery(request);
     return {
-      filters: resolveLoaderPromise(
-        dapper.getCommunityFilters(params.communityId),
-        { mappings: packageSearchErrorMappings }
+      filters: dapper.getCommunityFilters(params.communityId),
+      listings: dapper.getPackageListings(
+        {
+          kind: "community",
+          communityId: params.communityId,
+        },
+        query.ordering ?? "",
+        query.page,
+        query.search,
+        query.includedCategories,
+        query.excludedCategories,
+        query.section,
+        query.nsfw,
+        query.deprecated
       ),
-      listings: resolveLoaderPromise(
-        dapper.getPackageListings(
-          {
-            kind: "community",
-            communityId: params.communityId,
-          },
-          query.ordering ?? "",
-          query.page,
-          query.search,
-          query.includedCategories,
-          query.excludedCategories,
-          query.section,
-          query.nsfw,
-          query.deprecated
-        ),
-        { mappings: packageSearchErrorMappings }
-      ),
-    } satisfies PackageSearchLoaderData;
+    };
   }
   throwUserFacingPayloadResponse({
     headline: "Community not found.",
@@ -190,101 +153,57 @@ export async function clientLoader({
   });
 }
 
-// function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
-//   return true; // false
-// }
+export function HydrateFallback() {
+  return <div>Loading...</div>;
+}
 
 export default function CommunityPackageSearch() {
   const { filters, listings } = useLoaderData<
     typeof loader | typeof clientLoader
-  >() as PackageSearchLoaderData;
+  >();
 
   const outletContext = useOutletContext() as OutletContextShape;
 
-  const filtersPromise = useMemo(() => {
-    return Promise.resolve(filters) as Promise<
-      LoaderResult<CommunityFiltersResult>
-    >;
-  }, [filters]);
-
-  const listingsPromise = useMemo(() => {
-    return Promise.resolve(listings) as Promise<
-      LoaderResult<PackageListingsResult>
-    >;
-  }, [listings]);
-
-  const combinedPromise = useMemo(
-    () =>
-      Promise.all([filtersPromise, listingsPromise]).then(
-        ([filtersResult, listingsResult]) => ({
-          filtersResult,
-          listingsResult,
-        })
-      ),
-    [filtersPromise, listingsPromise]
-  );
-
   return (
-    <Suspense>
-      <Await resolve={combinedPromise}>
-        {({ filtersResult, listingsResult }) => {
-          if (isLoaderError(filtersResult)) {
-            return <PackageSearchAwaitError payload={filtersResult.__error} />;
-          }
-
-          if (isLoaderError(listingsResult)) {
-            return <PackageSearchAwaitError payload={listingsResult.__error} />;
-          }
-
-          return (
-            <PackageSearch
-              listings={listingsResult}
-              filters={filtersResult}
-              config={outletContext.requestConfig}
-              currentUser={outletContext.currentUser}
-              dapper={outletContext.dapper}
-            />
-          );
-        }}
-      </Await>
-    </Suspense>
+    <PackageSearch
+      listings={listings}
+      filters={filters}
+      config={outletContext.requestConfig}
+      currentUser={outletContext.currentUser}
+      dapper={outletContext.dapper}
+    />
   );
 }
 
 /**
- * Displays a loader error payload inline when package search data fails to resolve.
+ * Nimbus wrapper for package search error messaging to keep styling consistent.
  */
-function PackageSearchAwaitError(props: { payload: LoaderErrorPayload }) {
-  const { payload } = props;
+function PackageSearchErrorFallback(props: NimbusErrorBoundaryFallbackProps) {
+  const { className, retryLabel, ...rest } = props;
+  const mergedClassName = className
+    ? `${className} package-search__error`
+    : "package-search__error";
 
   return (
-    <div className="container container--y container--full package-search__error">
-      <Heading csLevel="2" csSize="3" csVariant="primary" mode="display">
-        {payload.headline}
-      </Heading>
-      {payload.description ? (
-        <p className="package-search__error-description">
-          {payload.description}
-        </p>
-      ) : null}
-    </div>
+    <NimbusErrorBoundaryFallback
+      {...rest}
+      className={mergedClassName}
+      retryLabel={retryLabel ?? "Retry search"}
+    />
   );
 }
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  const payload = resolveRouteErrorPayload(error);
+  const revalidator = useRevalidator();
 
   return (
-    <div className="container container--y container--full package-search__error">
-      <Heading csLevel="2" csSize="3" csVariant="primary" mode="display">
-        {payload.headline}
-      </Heading>
-      {payload.description ? (
-        <p className="package-search__error-description">
-          {payload.description}
-        </p>
-      ) : null}
-    </div>
+    <PackageSearchErrorFallback
+      error={error}
+      reset={() => {}}
+      onRetry={() => revalidator.revalidate()}
+      title="Failed to load package search"
+      retryLabel="Retry page"
+    />
   );
 }

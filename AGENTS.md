@@ -1,9 +1,11 @@
+# When in Agent or Plan mode
 ## Creating new files
 - When creating a new file and encountering an line endings related issue; stop and ask for the user to fix the line endings.
 
 ## Code readibility
 - Ensure all classes and functions have up-to-date JSDoc annotations.
 
+# When working with audit document or asked to audit
 ## Audit documentation
 - Capture work in the existing docs under `docs/` (or create a new markdown file there) before making code changes.
 - Record the scope, impacted surface area, and the date so future contributors can see what was completed and why.

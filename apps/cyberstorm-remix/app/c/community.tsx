@@ -5,6 +5,7 @@ import type {
 import {
   Await,
   Outlet,
+  useAsyncError,
   useLoaderData,
   useLocation,
   useOutletContext,
@@ -12,7 +13,7 @@ import {
 } from "react-router";
 import {
   Heading,
-  NewAlert,
+  // NewAlert,
   NewButton,
   NewIcon,
   NewLink,
@@ -24,16 +25,14 @@ import { faBook, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { type OutletContextShape } from "../root";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { Suspense, useMemo } from "react";
+import { Suspense } from "react";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
-import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
 import {
   FORBIDDEN_MAPPING,
   RATE_LIMIT_MAPPING,
@@ -41,6 +40,12 @@ import {
   createNotFoundMapping,
   createServerErrorMapping,
 } from "cyberstorm/utils/errors/loaderMappings";
+import {
+  NimbusErrorBoundary,
+  NimbusErrorBoundaryFallback,
+} from "~/commonComponents/NimbusErrorBoundary";
+import type { NimbusErrorBoundaryFallbackProps } from "~/commonComponents/NimbusErrorBoundary";
+import type { OutletContextShape } from "~/root";
 
 const communityErrorMappings = [
   SIGN_IN_REQUIRED_MAPPING,
@@ -53,6 +58,10 @@ const communityErrorMappings = [
   createServerErrorMapping(),
 ];
 
+/**
+ * Remix server loader that fetches the community by id while translating API errors
+ * into user-facing payload responses.
+ */
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId) {
     const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
@@ -79,6 +88,10 @@ export async function loader({ params }: LoaderFunctionArgs) {
   });
 }
 
+/**
+ * Remix client loader that defers community fetching to the browser and maps
+ * API failures to the same user-facing responses as the server loader.
+ */
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   const { communityId } = params;
 
@@ -91,22 +104,25 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
 
-    const communityPromise = dapper.getCommunity(communityId).catch((error) => {
-      try {
-        handleLoaderError(error, { mappings: communityErrorMappings });
-      } catch (thrown) {
-        return {
-          __error: resolveRouteErrorPayload(thrown),
-        } as const;
-      }
+    const wrapperPromise =
+      Promise.withResolvers<Awaited<ReturnType<DapperTs["getCommunity"]>>>();
 
-      return {
-        __error: resolveRouteErrorPayload(error),
-      } as const;
-    });
+    dapper
+      .getCommunity(communityId)
+      .then(wrapperPromise.resolve)
+      .catch((error) => {
+        try {
+          handleLoaderError(error, { mappings: communityErrorMappings });
+        } catch (handledError) {
+          wrapperPromise.reject(handledError);
+          return;
+        }
+
+        wrapperPromise.reject(error);
+      });
 
     return {
-      community: communityPromise,
+      community: wrapperPromise.promise,
     };
   }
   throwUserFacingPayloadResponse({
@@ -117,6 +133,10 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   });
 }
 
+/**
+ * Determines whether the route should revalidate when navigating within the
+ * community section.
+ */
 export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
   if (
     arg.currentUrl.pathname.split("/")[1] === arg.nextUrl.pathname.split("/")[1]
@@ -127,17 +147,11 @@ export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
 }
 
 type CommunityDetails = Awaited<ReturnType<DapperTs["getCommunity"]>>;
-type CommunityError = {
-  readonly __error: ReturnType<typeof resolveRouteErrorPayload>;
-};
-type CommunityLoaderResult = CommunityDetails | CommunityError;
 
-function isCommunityError(
-  value: CommunityLoaderResult
-): value is CommunityError {
-  return typeof (value as CommunityError).__error !== "undefined";
-}
-
+/**
+ * Default community route component that renders the header for the selected
+ * community and provides Suspense-driven loading states.
+ */
 export default function Community() {
   const { community } = useLoaderData<typeof loader | typeof clientLoader>();
   const location = useLocation();
@@ -145,18 +159,13 @@ export default function Community() {
   const isSubPath = splitPath.length > 4;
   const isPackageListingSubPath =
     splitPath.length > 5 && splitPath[1] === "c" && splitPath[3] === "p";
-
   const outletContext = useOutletContext() as OutletContextShape;
-  const communityPromise = useMemo<Promise<CommunityLoaderResult>>(
-    () => Promise.resolve(community) as Promise<CommunityLoaderResult>,
-    [community]
-  );
 
   return (
     <>
-      {isSubPath ? null : (
+      {/* {isSubPath ? null : (
         <Suspense fallback={null}>
-          <Await resolve={communityPromise}>
+          <Await resolve={community} errorElement={<CommunityErrorHandler />}>
             {(result) => {
               if (isCommunityError(result)) {
                 return null;
@@ -198,21 +207,22 @@ export default function Community() {
             }}
           </Await>
         </Suspense>
-      )}
+      )} */}
 
       <Suspense fallback={<CommunitySkeleton />}>
-        <Await resolve={communityPromise}>
-          {(result) =>
-            isCommunityError(result) ? (
-              <CommunityAwaitError payload={result.__error} />
-            ) : (
+        <Await resolve={community} errorElement={<CommunityErrorHandler />}>
+          {(result) => (
+            <NimbusErrorBoundary
+              fallback={CommunityHeaderErrorFallback}
+              onRetry={({ reset }) => reset()}
+            >
               <CommunityHeaderContent
                 community={result}
                 isPackageListingSubPath={isPackageListingSubPath}
                 isSubPath={isSubPath}
               />
-            )
-          }
+            </NimbusErrorBoundary>
+          )}
         </Await>
       </Suspense>
 
@@ -221,6 +231,9 @@ export default function Community() {
   );
 }
 
+/**
+ * Renders the community header once the community payload has resolved.
+ */
 function CommunityHeaderContent(props: {
   community: CommunityDetails;
   isPackageListingSubPath: boolean;
@@ -319,6 +332,9 @@ function CommunityHeaderContent(props: {
   );
 }
 
+/**
+ * Skeleton fallback displayed while community data is loading.
+ */
 function CommunitySkeleton() {
   return (
     <div className="community__header">
@@ -352,33 +368,50 @@ function CommunitySkeleton() {
   );
 }
 
-function CommunityAwaitError(props: {
-  payload: ReturnType<typeof resolveRouteErrorPayload>;
-}) {
-  const { payload } = props;
+/**
+ * Nimbus fallback wrapper that enforces community-specific styling.
+ */
+function CommunityHeaderErrorFallback(props: NimbusErrorBoundaryFallbackProps) {
+  const { className, retryLabel, ...rest } = props;
+  const mergedClassName = className
+    ? `${className} community__error`
+    : "community__error";
 
   return (
-    <div className="container container--y container--full community__error">
-      <NewAlert csVariant="danger">
-        <strong>{payload.headline}</strong>
-        {payload.description ? ` ${payload.description}` : ""}
-      </NewAlert>
-    </div>
+    <NimbusErrorBoundaryFallback
+      {...rest}
+      className={mergedClassName}
+      retryLabel={retryLabel ?? "Retry"}
+    />
   );
 }
 
-export function ErrorBoundary() {
-  const error = useRouteError();
-  const payload = resolveRouteErrorPayload(error);
+/**
+ * Handles errors thrown while awaiting the community promise and surfaces the
+ * retry affordance that triggers a full page navigation.
+ */
+function CommunityErrorHandler() {
+  const error = useAsyncError();
 
   return (
-    <div className="container container--y container--full community__error">
-      <Heading csLevel="1" csSize="3" csVariant="primary" mode="display">
-        {payload.headline}
-      </Heading>
-      {payload.description ? (
-        <p className="community__error-description">{payload.description}</p>
-      ) : null}
-    </div>
+    <CommunityHeaderErrorFallback
+      error={error}
+      title="Error loading community"
+      retryLabel="Retry page"
+    />
+  );
+}
+
+/**
+ * Error boundary for synchronous route-level failures.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  return (
+    <CommunityHeaderErrorFallback
+      error={error}
+      title="Error loading community"
+      retryLabel="Retry page"
+    />
   );
 }

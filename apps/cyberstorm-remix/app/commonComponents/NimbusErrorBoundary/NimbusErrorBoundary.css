@@ -1,0 +1,43 @@
+@layer nimbus-components {
+  .nimbus-error-boundary {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    align-items: flex-start;
+    padding: var(--space-20);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgb(61 78 159 / 0.35);
+    background: linear-gradient(
+      135deg,
+      rgb(29 41 95 / 0.35),
+      rgb(19 26 68 / 0.5)
+    );
+    transition:
+      background 180ms ease,
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .nimbus-error-boundary:hover {
+    border-color: rgb(103 140 255 / 0.55);
+    background: linear-gradient(
+      135deg,
+      rgb(40 58 132 / 0.45),
+      rgb(24 32 86 / 0.65)
+    );
+    box-shadow: 0 0.5rem 1.25rem rgb(29 36 82 / 0.45);
+  }
+
+  .nimbus-error-boundary__actions {
+    display: flex;
+    align-self: stretch;
+    }
+
+  .nimbus-error-boundary__button {
+    flex-grow: 1;
+  }
+  
+  .nimbus-error-boundary__description {
+    display: none;
+  }
+}
