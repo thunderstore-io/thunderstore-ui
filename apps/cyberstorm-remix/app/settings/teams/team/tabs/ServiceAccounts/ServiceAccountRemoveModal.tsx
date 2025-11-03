@@ -23,6 +23,15 @@ export function ServiceAccountRemoveModal({
 }: ServiceAccountRemoveModalProps) {
   const toast = useToast();
 
+  const canDelete = () => {
+    const teams = outletContext.currentUser?.teams_full || [];
+    const belongingTeam = teams.find((team) => team.name === teamName);
+    if (!belongingTeam) {
+      return false;
+    }
+    return belongingTeam.role === "owner";
+  };
+
   const removeServiceAccountAction = ApiAction({
     endpoint: teamServiceAccountRemove,
     onSubmitSuccess: () => {
@@ -47,12 +56,14 @@ export function ServiceAccountRemoveModal({
       key={serviceAccount.identifier}
       titleContent="Confirm service account removal"
       trigger={
-        <NewButton csVariant="danger" csSize="xsmall">
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faTrash} />
-          </NewIcon>
-          Remove
-        </NewButton>
+        canDelete() && ( // Only show trigger if user can delete
+          <NewButton csVariant="danger" csSize="xsmall">
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faTrash} />
+            </NewIcon>
+            Remove
+          </NewButton>
+        )
       }
       csSize="small"
     >
