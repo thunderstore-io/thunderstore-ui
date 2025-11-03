@@ -8,7 +8,7 @@ export function teamServiceAccountRemove(
   props: ApiEndpointProps<TeamServiceAccountRemoveRequestParams, object, object>
 ): Promise<undefined> {
   const { config, params } = props;
-  const path = `/api/cyberstorm/team/${params.team_name}/service-account/delete/${params.uuid}/`;
+  const path = `/api/cyberstorm/service-account/${params.uuid}/delete/`;
 
   return apiFetch({
     args: {
