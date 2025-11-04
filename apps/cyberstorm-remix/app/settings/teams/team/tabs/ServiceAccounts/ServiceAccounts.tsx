@@ -77,7 +77,7 @@ export default function ServiceAccounts() {
     revalidator.revalidate();
   }
 
-  const tableData = serviceAccounts.map((serviceAccount, index) => {
+  const tableData = serviceAccounts.map((serviceAccount) => {
     return [
       {
         value: (
@@ -98,6 +98,7 @@ export default function ServiceAccounts() {
       {
         value: (
           <ServiceAccountRemoveModal
+            key={serviceAccount.identifier}
             serviceAccount={serviceAccount}
             teamName={teamName}
             outletContext={outletContext}

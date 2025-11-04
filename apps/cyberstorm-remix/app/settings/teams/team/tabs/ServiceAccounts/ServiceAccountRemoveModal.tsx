@@ -53,7 +53,6 @@ export function ServiceAccountRemoveModal({
 
   return (
     <Modal
-      key={serviceAccount.identifier}
       titleContent="Confirm service account removal"
       trigger={
         canDelete() && ( // Only show trigger if user can delete
