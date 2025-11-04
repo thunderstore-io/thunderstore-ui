@@ -85,7 +85,6 @@ export function ServiceAccountRemoveModal({
             removeServiceAccountAction({
               config: outletContext.requestConfig,
               params: {
-                team_name: teamName,
                 uuid: serviceAccount.identifier,
               },
               queryParams: {},
