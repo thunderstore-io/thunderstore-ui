@@ -13,6 +13,7 @@ import { type OutletContextShape } from "~/root";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import { ApiError } from "@thunderstore/thunderstore-api";
 
 type ProvidersType = {
   name: string;
@@ -56,11 +57,24 @@ export default function Connections() {
       duration: 30000,
     });
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmitError = (_e: unknown) => {
+
+  const onSubmitError = (error: unknown) => {
+    let message = "Error when disconnecting account.";
+
+    if (error instanceof ApiError) {
+      const fieldErrors = error.getFieldErrors();
+      message =
+        fieldErrors.non_field_errors?.[0] ||
+        fieldErrors.detail?.[0] ||
+        fieldErrors.root?.[0] ||
+        error.message ||
+        message;
+    }
+
     toast.addToast({
       csVariant: "danger",
-      children: <>Unknown error occurred. The error has been logged</>,
+      children: <>{message}</>,
+      duration: 8000,
     });
   };
 
