@@ -4,13 +4,13 @@ import { ListingDependency } from "../ListingDependency/ListingDependency";
 import { useSearchParams } from "react-router";
 import { type PackageVersionDependency } from "@thunderstore/thunderstore-api";
 
-interface DependecyResponse {
+interface DependencyResponse {
   results: PackageVersionDependency[];
   count: number;
 }
 
 interface Props {
-  dependencies: DependecyResponse;
+  dependencies: DependencyResponse;
   pageSize?: number;
   siblingCount?: number;
 }
