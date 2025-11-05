@@ -325,7 +325,7 @@ function AddServiceAccountForm(props: {
             Enter the nickname of the service account you wish to add to the
             team <span>{props.teamName}</span>
           </div>
-          <div>
+          <div className="service-accounts__nickname-input">
             <NewTextInput
               onChange={(e) => {
                 updateFormFieldState({
@@ -334,7 +334,11 @@ function AddServiceAccountForm(props: {
                 });
               }}
               placeholder={"ExampleName"}
+              maxLength={32}
             />
+            <div className="service-accounts__nickname-input-max-length">
+              Max. 32 characters
+            </div>
           </div>
         </Modal.Body>
       )}
