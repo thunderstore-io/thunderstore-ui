@@ -1,72 +1,36 @@
-import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import {
   Outlet,
-  useLoaderData,
   useLocation,
   useOutletContext,
+  useParams,
+  type MetaFunction,
 } from "react-router";
-import { NewLink, Tabs } from "@thunderstore/cyberstorm";
-import { ApiError } from "@thunderstore/thunderstore-api";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { type OutletContextShape } from "../../../root";
-import "./teamSettings.css";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 
-export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
+import { NewLink, Tabs } from "@thunderstore/cyberstorm";
+
+import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
+import { type OutletContextShape } from "app/root";
+import "./teamSettings.css";
+
+export const meta: MetaFunction = ({ params }) => {
   return [
-    { title: `${data?.team.name} settings` },
-    { name: "description", content: `${data?.team.name} settings` },
+    { title: `Team ${params.namespaceId ?? ""} settings` },
+    { name: "description", content: "Manage team related settings" },
   ];
 };
 
-// REMIX TODO: Add check for "user has permission to see this page"
-export async function clientLoader({ params }: LoaderFunctionArgs) {
-  if (params.namespaceId) {
-    try {
-      const tools = getSessionTools();
-      const config = tools?.getConfig();
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: config?.apiHost,
-          sessionId: config?.sessionId,
-        };
-      });
-      return {
-        team: await dapper.getTeamDetails(params.namespaceId),
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team not found", { status: 404 });
-      } else {
-        throw error;
-      }
-    }
-  }
-  throw new Response("Team not found", { status: 404 });
-}
-
-export function HydrateFallback() {
-  return <div style={{ padding: "32px" }}>Loading...</div>;
-}
-
 export default function Community() {
-  const { team } = useLoaderData<typeof clientLoader>();
+  const teamName = useParams().namespaceId ?? "";
   const location = useLocation();
   const outletContext = useOutletContext() as OutletContextShape;
 
-  const currentTab = location.pathname.endsWith("/settings")
-    ? "settings"
-    : location.pathname.endsWith("/members")
-      ? "members"
-      : location.pathname.endsWith("/service-accounts")
-        ? "service-accounts"
-        : "profile";
+  const parts = location.pathname.split("/");
+  const currentTab = parts.length === 4 ? parts[3] : "profile";
 
   return (
     <>
       <PageHeader headingLevel="1" headingSize="2">
-        {team.name}
+        {teamName}
       </PageHeader>
       <div className="team-settings">
         <Tabs>
@@ -74,7 +38,7 @@ export default function Community() {
             key="profile"
             primitiveType="cyberstormLink"
             linkId="TeamSettings"
-            team={team.name}
+            team={teamName}
             aria-current={currentTab === "profile"}
             rootClasses={`tabs-item${
               currentTab === "profile" ? " tabs-item--current" : ""
@@ -86,7 +50,7 @@ export default function Community() {
             key="members"
             primitiveType="cyberstormLink"
             linkId="TeamSettingsMembers"
-            team={team.name}
+            team={teamName}
             aria-current={currentTab === "members"}
             rootClasses={`tabs-item${
               currentTab === "members" ? " tabs-item--current" : ""
@@ -98,7 +62,7 @@ export default function Community() {
             key="service-accounts"
             primitiveType="cyberstormLink"
             linkId="TeamSettingsServiceAccounts"
-            team={team.name}
+            team={teamName}
             aria-current={currentTab === "service-accounts"}
             rootClasses={`tabs-item${
               currentTab === "service-accounts" ? " tabs-item--current" : ""
@@ -110,7 +74,7 @@ export default function Community() {
             key="settings"
             primitiveType="cyberstormLink"
             linkId="TeamSettingsSettings"
-            team={team.name}
+            team={teamName}
             aria-current={currentTab === "settings"}
             rootClasses={`tabs-item${
               currentTab === "settings" ? " tabs-item--current" : ""
