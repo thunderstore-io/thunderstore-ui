@@ -11,7 +11,7 @@ import {
   useToast,
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { type LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import {
@@ -19,15 +19,14 @@ import {
   type RequestConfig,
   teamAddServiceAccount,
   type TeamServiceAccountAddRequestData,
-  teamServiceAccountRemove,
 } from "@thunderstore/thunderstore-api";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { type OutletContextShape } from "../../../../../root";
 import { useReducer, useState } from "react";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { ServiceAccountRemoveModal } from "./ServiceAccountRemoveModal";
 
 // REMIX TODO: Add check for "user has permission to see this page"
 export async function clientLoader({ params }: LoaderFunctionArgs) {
@@ -74,33 +73,11 @@ export default function ServiceAccounts() {
 
   const revalidator = useRevalidator();
 
-  const toast = useToast();
-
   async function serviceAccountRevalidate() {
     revalidator.revalidate();
   }
 
-  // Remove service account stuff
-  const removeServiceAccountAction = ApiAction({
-    endpoint: teamServiceAccountRemove,
-    onSubmitSuccess: () => {
-      toast.addToast({
-        csVariant: "success",
-        children: `Service account removed`,
-        duration: 4000,
-      });
-      serviceAccountRevalidate();
-    },
-    onSubmitError: (error) => {
-      toast.addToast({
-        csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
-        duration: 8000,
-      });
-    },
-  });
-
-  const tableData = serviceAccounts.map((serviceAccount, index) => {
+  const tableData = serviceAccounts.map((serviceAccount) => {
     return [
       {
         value: (
@@ -120,54 +97,13 @@ export default function ServiceAccounts() {
       },
       {
         value: (
-          <Modal
-            key={`${serviceAccount.name}_${index}`}
-            titleContent="Confirm service account removal"
-            trigger={
-              <NewButton csVariant="danger" csSize="xsmall">
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faTrash} />
-                </NewIcon>
-                Remove
-              </NewButton>
-            }
-            csSize="small"
-          >
-            <Modal.Body>
-              <NewAlert csVariant="warning">
-                This cannot be undone! Related API token will stop working
-                immediately if the service account is removed.
-              </NewAlert>
-              <div>
-                You are about to remove service account{" "}
-                <span className="team-service-accounts__highlight">
-                  {serviceAccount.name}
-                </span>
-                .
-              </div>
-            </Modal.Body>
-            <Modal.Footer>
-              <NewButton
-                onClick={() => {
-                  removeServiceAccountAction({
-                    config: outletContext.requestConfig,
-                    params: {
-                      team_name: teamName,
-                      uuid: serviceAccount.identifier,
-                    },
-                    queryParams: {},
-                    data: {},
-                  });
-                }}
-                csVariant="danger"
-              >
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faTrash} />
-                </NewIcon>
-                Remove service account
-              </NewButton>
-            </Modal.Footer>
-          </Modal>
+          <ServiceAccountRemoveModal
+            key={serviceAccount.identifier}
+            serviceAccount={serviceAccount}
+            teamName={teamName}
+            outletContext={outletContext}
+            revalidate={serviceAccountRevalidate}
+          />
         ),
         sortValue: 0,
       },

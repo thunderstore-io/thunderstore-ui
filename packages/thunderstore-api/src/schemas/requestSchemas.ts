@@ -550,7 +550,6 @@ export type TeamServiceAccountAddRequestData = z.infer<
 
 // TeamServiceAccountRemoveRequest
 export const teamServiceAccountRemoveRequestParamsSchema = z.object({
-  team_name: z.string(),
   uuid: z.string(),
 });
 
