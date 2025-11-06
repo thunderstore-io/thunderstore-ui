@@ -84,6 +84,10 @@ export default function Members() {
   }
 
   const currentUser = outletContext.currentUser;
+  const currentUserTeam = currentUser?.teams_full?.find(
+    (team) => team.name === teamName
+  );
+  const isOwner = currentUserTeam?.role === "owner";
 
   const toast = useToast();
 
@@ -146,7 +150,7 @@ export default function Members() {
               onChange={(val: "owner" | "member") =>
                 changeMemberRole(member.username, val)
               }
-              disabled={currentUser?.username === member.username}
+              disabled={!isOwner || currentUser?.username === member.username}
             />
           </div>
         ),
@@ -154,7 +158,7 @@ export default function Members() {
       },
       {
         value:
-          currentUser?.username === member.username ? null : (
+          !isOwner || currentUser?.username === member.username ? null : (
             <RemoveTeamMemberForm
               indexKey={`action_${index}`}
               teamName={teamName}
