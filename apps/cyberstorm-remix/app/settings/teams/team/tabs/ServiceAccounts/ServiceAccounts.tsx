@@ -8,7 +8,6 @@ import {
   NewTextInput,
   Heading,
   CodeBox,
-  useToast,
 } from "@thunderstore/cyberstorm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -73,6 +72,11 @@ export default function ServiceAccounts() {
 
   const revalidator = useRevalidator();
 
+  const currentUserTeam = outletContext.currentUser?.teams_full?.find(
+    (team) => team.name === teamName
+  );
+  const isOwner = currentUserTeam?.role === "owner";
+
   async function serviceAccountRevalidate() {
     revalidator.revalidate();
   }
@@ -116,11 +120,13 @@ export default function ServiceAccounts() {
         <div className="settings-items__meta">
           <p className="settings-items__title">Service accounts</p>
           <p className="settings-items__description">Your loyal servants</p>
-          <AddServiceAccountForm
-            teamName={teamName}
-            config={outletContext.requestConfig}
-            serviceAccountRevalidate={serviceAccountRevalidate}
-          />
+          {isOwner && (
+            <AddServiceAccountForm
+              teamName={teamName}
+              config={outletContext.requestConfig}
+              serviceAccountRevalidate={serviceAccountRevalidate}
+            />
+          )}
         </div>
         <div className="settings-items__content">
           <NewTable
@@ -146,6 +152,7 @@ function AddServiceAccountForm(props: {
   const [addedServiceAccountToken, setAddedServiceAccountToken] = useState("");
   const [addedServiceAccountNickname, setAddedServiceAccountNickname] =
     useState("");
+  const [error, setError] = useState<string | null>(null);
 
   function onSuccess(
     result: Awaited<ReturnType<typeof teamAddServiceAccount>>
@@ -154,8 +161,6 @@ function AddServiceAccountForm(props: {
     setAddedServiceAccountToken(result.api_token);
     setAddedServiceAccountNickname(result.nickname);
   }
-
-  const toast = useToast();
 
   function formFieldUpdateAction(
     state: TeamServiceAccountAddRequestData,
@@ -174,6 +179,8 @@ function AddServiceAccountForm(props: {
     nickname: "",
   });
 
+  const isValid = formInputs.nickname.trim().length > 0;
+
   type SubmitorOutput = Awaited<ReturnType<typeof teamAddServiceAccount>>;
 
   async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
@@ -181,7 +188,7 @@ function AddServiceAccountForm(props: {
       config: props.config,
       params: { team_name: props.teamName },
       queryParams: {},
-      data: { nickname: data.nickname },
+      data: { nickname: data.nickname.trim() },
     });
   }
 
@@ -201,18 +208,15 @@ function AddServiceAccountForm(props: {
     submitor,
     onSubmitSuccess: (result) => {
       onSuccess(result);
-      toast.addToast({
-        csVariant: "success",
-        children: `Service account added`,
-        duration: 4000,
-      });
+      setError(null);
+      // Refresh the service accounts list to show the newly created account
+      // TODO: When API returns identifier in response, we can append the new
+      // service account to the list instead of refreshing from backend
+      props.serviceAccountRevalidate?.();
     },
     onSubmitError: (error) => {
-      toast.addToast({
-        csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
-        duration: 8000,
-      });
+      const message = `Error occurred: ${error.message || "Unknown error"}`;
+      setError(message);
     },
   });
 
@@ -222,6 +226,7 @@ function AddServiceAccountForm(props: {
       setServiceAccountAdded(false);
       setAddedServiceAccountToken("");
       setAddedServiceAccountNickname("");
+      setError(null);
       updateFormFieldState({ field: "nickname", value: "" });
     }
   };
@@ -257,30 +262,44 @@ function AddServiceAccountForm(props: {
         </Modal.Body>
       ) : (
         <Modal.Body>
-          <div>
-            Enter the nickname of the service account you wish to add to the
-            team <span>{props.teamName}</span>
-          </div>
-          <div className="service-accounts__nickname-input">
-            <NewTextInput
-              onChange={(e) => {
-                updateFormFieldState({
-                  field: "nickname",
-                  value: e.target.value,
-                });
-              }}
-              placeholder={"ExampleName"}
-              maxLength={32}
-            />
-            <div className="service-accounts__nickname-input-max-length">
-              Max. 32 characters
+          <form
+            className="service-accounts__form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (isValid) {
+                strongForm.submit();
+              }
+            }}
+          >
+            <div>
+              Enter the nickname of the service account you wish to add to the
+              team <span>{props.teamName}</span>
             </div>
-          </div>
+            <div className="service-accounts__nickname-input">
+              <NewTextInput
+                value={formInputs.nickname}
+                onChange={(e) => {
+                  updateFormFieldState({
+                    field: "nickname",
+                    value: e.target.value,
+                  });
+                }}
+                placeholder={"ExampleName"}
+                maxLength={32}
+              />
+              <div className="service-accounts__nickname-input-max-length">
+                Max. 32 characters
+              </div>
+            </div>
+            {error && <NewAlert csVariant="danger">{error}</NewAlert>}
+          </form>
         </Modal.Body>
       )}
       {serviceAccountAdded ? null : (
         <Modal.Footer>
-          <NewButton onClick={strongForm.submit}>Add Service Account</NewButton>
+          <NewButton onClick={strongForm.submit} disabled={!isValid}>
+            Add Service Account
+          </NewButton>
         </Modal.Footer>
       )}
     </Modal>

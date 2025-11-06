@@ -58,4 +58,18 @@
     border-radius: var(--radius-md);
     background: var(--color-surface-default);
   }
+
+  @media (width <= 48rem) {
+    .settings-items__item {
+      flex-direction: column;
+    }
+
+    .settings-items__meta {
+      width: 100%;
+    }
+
+    .settings-items__content {
+      width: 100%;
+    }
+  }
 }
