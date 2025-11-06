@@ -83,6 +83,8 @@ export default function Members() {
     revalidator.revalidate();
   }
 
+  const currentUser = outletContext.currentUser;
+
   const toast = useToast();
 
   const changeMemberRoleAction = ApiAction({
@@ -144,21 +146,23 @@ export default function Members() {
               onChange={(val: "owner" | "member") =>
                 changeMemberRole(member.username, val)
               }
+              disabled={currentUser?.username === member.username}
             />
           </div>
         ),
         sortValue: member.role,
       },
       {
-        value: (
-          <RemoveTeamMemberForm
-            indexKey={`action_${index}`}
-            teamName={teamName}
-            userName={member.username}
-            updateTrigger={teamMemberRevalidate}
-            config={outletContext.requestConfig}
-          />
-        ),
+        value:
+          currentUser?.username === member.username ? null : (
+            <RemoveTeamMemberForm
+              indexKey={`action_${index}`}
+              teamName={teamName}
+              userName={member.username}
+              updateTrigger={teamMemberRevalidate}
+              config={outletContext.requestConfig}
+            />
+          ),
         sortValue: 0,
       },
     ];
