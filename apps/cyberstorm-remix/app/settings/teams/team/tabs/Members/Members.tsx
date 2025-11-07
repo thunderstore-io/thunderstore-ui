@@ -1,7 +1,12 @@
 import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useReducer, useState } from "react";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import { Suspense, useReducer, useState } from "react";
+import {
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+} from "react-router";
 
 import {
   Modal,
@@ -12,16 +17,18 @@ import {
   NewSelect,
   NewTable,
   NewTextInput,
+  SkeletonBox,
   type SelectOption,
   useToast,
 } from "@thunderstore/cyberstorm";
-import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import {
   type RequestConfig,
   teamAddMember,
   type TeamAddMemberRequestData,
   teamEditMember,
   teamRemoveMember,
+  UserFacingError,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
@@ -29,6 +36,12 @@ import { type OutletContextShape } from "app/root";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import "./Members.css";
+import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
+import type { DapperTs } from "@thunderstore/dapper-ts";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
 
 export const clientLoader = makeTeamSettingsTabLoader(
   async (dapper, teamName) => ({
@@ -54,7 +67,35 @@ const roleOptions: SelectOption<"owner" | "member">[] = [
 export default function Members() {
   const { teamName, members } = useLoaderData<typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
+  return (
+    <Suspense fallback={<MembersSkeleton />}>
+      <Await resolve={members} errorElement={<NimbusAwaitErrorElement />}>
+        {(result) => (
+          <MembersContent
+            teamName={teamName}
+            members={result}
+            outletContext={outletContext}
+          />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
 
+interface MembersContentProps {
+  teamName: string;
+  members: Awaited<ReturnType<DapperTs["getTeamMembers"]>>;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Displays the team members table once the loader promise settles.
+ */
+function MembersContent({
+  teamName,
+  members,
+  outletContext,
+}: MembersContentProps) {
   const revalidator = useRevalidator();
 
   async function teamMemberRevalidate() {
@@ -82,7 +123,7 @@ export default function Members() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -125,8 +166,8 @@ export default function Members() {
               csSize="xsmall"
               options={roleOptions}
               value={member.role}
-              onChange={(val: "owner" | "member") =>
-                changeMemberRole(member.username, val)
+              onChange={(val) =>
+                changeMemberRole(member.username, val as "owner" | "member")
               }
               disabled={!isOwner || currentUser?.username === member.username}
             />
@@ -175,6 +216,21 @@ export default function Members() {
   );
 }
 
+/**
+ * Displays a table placeholder while members load on the client.
+ */
+function MembersSkeleton() {
+  return (
+    <div className="settings-items">
+      <SkeletonBox className="settings-items__skeleton" />
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
+}
+
 function AddTeamMemberForm(props: {
   teamName: string;
   updateTrigger: () => Promise<void>;
@@ -221,7 +277,7 @@ function AddTeamMemberForm(props: {
     TeamAddMemberRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -238,7 +294,7 @@ function AddTeamMemberForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -323,7 +379,8 @@ function RemoveTeamMemberForm(props: {
   const kickMemberAction = ApiAction({
     endpoint: teamRemoveMember,
     onSubmitSuccess: () => {
-      props.updateTrigger();
+      void props.updateTrigger();
+      setOpen(false);
       toast.addToast({
         csVariant: "success",
         children: `Team member removed`,
@@ -333,7 +390,7 @@ function RemoveTeamMemberForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -375,8 +432,6 @@ function RemoveTeamMemberForm(props: {
               params: { team_name: props.teamName, username: props.userName },
               queryParams: {},
               data: {},
-            }).then(() => {
-              setOpen(false);
             })
           }
         >
