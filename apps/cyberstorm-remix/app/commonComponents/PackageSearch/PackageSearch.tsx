@@ -5,7 +5,14 @@ import {
   type PackageListings,
   type Section,
 } from "@thunderstore/dapper/types";
-import { memo, Suspense, useEffect, useRef, useState } from "react";
+import {
+  memo,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+  type ComponentPropsWithoutRef,
+} from "react";
 import { useDebounce } from "use-debounce";
 
 import "./PackageSearch.css";
@@ -38,6 +45,12 @@ import {
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
+import {
+  NimbusAwaitErrorElement,
+  NimbusErrorBoundary,
+  NimbusErrorBoundaryFallback,
+} from "../../../cyberstorm/utils/errors/NimbusErrorBoundary";
+import type { NimbusErrorBoundaryFallbackProps } from "../../../cyberstorm/utils/errors/NimbusErrorBoundary";
 
 const PER_PAGE = 20;
 
@@ -59,6 +72,10 @@ type SearchParamsType = {
   includedCategories: string;
   excludedCategories: string;
 };
+
+type CheckboxListItemsType = NonNullable<
+  ComponentPropsWithoutRef<typeof CheckboxList>["items"]
+>;
 
 const searchParamsToBlob = (
   searchParams: URLSearchParams,
@@ -148,7 +165,7 @@ const compareSearchParamBlobs = (
 /**
  * Component for filtering and rendering a PackageList
  */
-export function PackageSearch(props: Props) {
+function PackageSearchContent(props: Props) {
   const { listings, filters, config, currentUser, dapper } = props;
 
   const navigationType = useNavigationType();
@@ -164,9 +181,14 @@ export function PackageSearch(props: Props) {
 
   const [categories, setCategories] = useState<CategorySelection[] | undefined>(
     possibleFilters?.package_categories
-      .sort((a, b) => a.slug.localeCompare(b.slug))
-      .map((c) => ({ ...c, selection: "off" }))
+      ? possibleFilters.package_categories
+          .slice()
+          .sort((a, b) => a.slug.localeCompare(b.slug))
+          .map((c) => ({ ...c, selection: "off" }))
+      : undefined
   );
+
+  const [filtersError, setFiltersError] = useState<unknown>(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -183,32 +205,75 @@ export function PackageSearch(props: Props) {
     undefined | Awaited<Promise<CommunityFilters>>["package_categories"]
   >(undefined);
 
-  useEffect(() => {
-    if (isPromise(filters)) {
-      // On mount, resolve filters promise and set sections and categories states
-      filters.then((resolvedFilters) => {
-        // Set sorted sections
-        setSortedSections(
-          resolvedFilters.sections.sort((a, b) => b.priority - a.priority)
-        );
-        if (sortedSections && sortedSections.length !== 0) {
-          setSearchParamsBlob((prev) => ({
-            ...prev,
-            section: sortedSections[0].uuid,
-          }));
-        }
-        if (resolvedFilters.package_categories !== categoriesRef.current) {
-          // Set current "initial" categories
-          const categories: CategorySelection[] =
-            resolvedFilters.package_categories
-              .sort((a, b) => a.slug.localeCompare(b.slug))
-              .map((c) => ({ ...c, selection: "off" }));
-          setCategories(categories);
-          categoriesRef.current = resolvedFilters.package_categories;
-        }
-      });
+  const applyResolvedFilters = (resolvedFilters?: CommunityFilters | null) => {
+    const sections = Array.isArray(resolvedFilters?.sections)
+      ? resolvedFilters?.sections
+      : [];
+
+    const orderedSections = sections
+      .slice()
+      .sort((a, b) => b.priority - a.priority);
+    setSortedSections(orderedSections);
+    if (orderedSections.length > 0) {
+      setSearchParamsBlob((prev) =>
+        prev.section
+          ? prev
+          : {
+              ...prev,
+              section: orderedSections[0].uuid,
+            }
+      );
     }
-  }, []);
+
+    const rawCategories = Array.isArray(resolvedFilters?.package_categories)
+      ? resolvedFilters?.package_categories
+      : [];
+
+    if (categoriesRef.current !== rawCategories) {
+      const nextCategories: CategorySelection[] = rawCategories
+        .slice()
+        .sort((a, b) => a.slug.localeCompare(b.slug))
+        .map((c) => ({ ...c, selection: "off" }));
+      setCategories(nextCategories);
+      categoriesRef.current = rawCategories;
+    }
+  };
+
+  useEffect(() => {
+    if (!filters) {
+      return;
+    }
+
+    if (!isPromise(filters)) {
+      applyResolvedFilters(filters);
+      setFiltersError(null);
+      return;
+    }
+
+    let isCancelled = false;
+
+    const resolveFilters = async () => {
+      setFiltersError(null);
+      try {
+        const resolvedFilters = await filters;
+        if (isCancelled) {
+          return;
+        }
+        applyResolvedFilters(resolvedFilters);
+      } catch (error) {
+        if (!isCancelled) {
+          console.error("Failed to resolve package filters", error);
+          setFiltersError(error);
+        }
+      }
+    };
+
+    resolveFilters();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [filters]);
 
   // Categories start
 
@@ -234,17 +299,19 @@ export function PackageSearch(props: Props) {
     );
   };
 
-  const filtersCategoriesItems = parsedCategories.map((c) => {
-    return {
-      state: c.selection,
-      setStateFunc: (v: boolean | TRISTATE) =>
-        updateCatSelection(
-          c.id,
-          typeof v === "string" ? v : v ? "include" : "off"
-        ),
-      label: c.name,
-    };
-  });
+  const filtersCategoriesItems: CheckboxListItemsType = parsedCategories.map(
+    (c) => {
+      return {
+        state: c.selection,
+        setStateFunc: (v: boolean | TRISTATE) =>
+          updateCatSelection(
+            c.id,
+            typeof v === "string" ? v : v ? "include" : "off"
+          ),
+        label: c.name,
+      };
+    }
+  );
   // Categories end
 
   // Start updating page
@@ -476,36 +543,22 @@ export function PackageSearch(props: Props) {
     <div className="package-search">
       <div className="package-search__sidebar">
         <div className="package-search__filters">
-          {sortedSections && sortedSections.length > 0 ? (
-            <CollapsibleMenu headerTitle="Sections" defaultOpen>
-              <RadioGroup
-                sections={[
-                  ...sortedSections,
-                  {
-                    uuid: "all",
-                    name: "All",
-                    slug: "all",
-                    priority: -999999999,
-                  },
-                ]}
-                selected={
-                  searchParamsBlob.section === ""
-                    ? sortedSections[0]?.uuid
-                    : searchParamsBlob.section
-                }
-                setSelected={setParamsBlobValue(
-                  setSearchParamsBlob,
-                  searchParamsBlob,
-                  "section"
-                )}
-              />
-            </CollapsibleMenu>
-          ) : null}
-          {categories && categories.length > 0 ? (
-            <CollapsibleMenu headerTitle="Categories" defaultOpen>
-              <CheckboxList items={filtersCategoriesItems} />
-            </CollapsibleMenu>
-          ) : null}
+          <NimbusErrorBoundary
+            title="Failed to load filters"
+            retryLabel="Retry"
+          >
+            <SectionsFilterSection
+              sections={sortedSections}
+              filtersError={filtersError}
+              searchParamsBlob={searchParamsBlob}
+              setSearchParamsBlob={setSearchParamsBlob}
+            />
+            <CategoriesFilterSection
+              categories={categories}
+              filtersError={filtersError}
+              items={filtersCategoriesItems}
+            />
+          </NimbusErrorBoundary>
           <CollapsibleMenu headerTitle="Other filters" defaultOpen>
             <CheckboxList
               items={[
@@ -571,23 +624,10 @@ export function PackageSearch(props: Props) {
           rootClasses="package-search__search"
         />
         <div className="package-search__search-params">
-          <CategoryTagCloud
-            searchValue={searchParamsBlob.search}
-            setSearchValue={setParamsBlobValue(
-              setSearchParamsBlob,
-              searchParamsBlob,
-              "search"
-            )}
-            categories={parseCategories(
-              searchParamsBlob.includedCategories ?? "",
-              searchParamsBlob.excludedCategories ?? "",
-              categories
-            )}
-            setCategories={(v) =>
-              setParamsBlobCategories(setSearchParamsBlob, searchParamsBlob, v)
-            }
-            rootClasses="package-search__tags"
-            clearAll={clearAll(setSearchParamsBlob, searchParamsBlob)}
+          <CategoryTagCloudSection
+            parsedCategories={parsedCategories}
+            searchParamsBlob={searchParamsBlob}
+            setSearchParamsBlob={setSearchParamsBlob}
           />
           <div className="package-search__tools">
             <div className="package-search__listing-actions">
@@ -604,7 +644,10 @@ export function PackageSearch(props: Props) {
             </div>
             <div className="package-search__results">
               <Suspense fallback={<SkeletonBox />}>
-                <Await resolve={listings}>
+                <Await
+                  resolve={listings}
+                  errorElement={<NimbusAwaitErrorElement />}
+                >
                   {(resolvedValue) => (
                     <PackageCount
                       page={currentPage}
@@ -620,7 +663,10 @@ export function PackageSearch(props: Props) {
         </div>
         <div className="package-search__packages">
           <Suspense fallback={<PackageSearchPackagesSkeleton />}>
-            <Await resolve={listings}>
+            <Await
+              resolve={listings}
+              errorElement={<NimbusAwaitErrorElement />}
+            >
               {(resolvedValue) => (
                 <>
                   {resolvedValue.results.length > 0 ? (
@@ -697,7 +743,10 @@ export function PackageSearch(props: Props) {
         </div>
         <div className="package-search__pagination">
           <Suspense fallback={<SkeletonBox />}>
-            <Await resolve={listings}>
+            <Await
+              resolve={listings}
+              errorElement={<NimbusAwaitErrorElement />}
+            >
               {(resolvedValue) => (
                 <NewPagination
                   currentPage={currentPage}
@@ -716,6 +765,22 @@ export function PackageSearch(props: Props) {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * Exported package search component wrapped in a Nimbus error boundary to
+ * prevent localized failures from cascading to the entire route.
+ */
+export function PackageSearch(props: Props) {
+  return (
+    <NimbusErrorBoundary
+      fallbackClassName="package-search__error"
+      title="Failed to load package search"
+      retryLabel="Retry loading package search"
+    >
+      <PackageSearchContent {...props} />
+    </NimbusErrorBoundary>
   );
 }
 
@@ -777,6 +842,115 @@ const clearAll =
       excludedCategories: "",
     });
 // End setters
+
+interface SectionsFilterSectionProps {
+  sections?: CommunityFilters["sections"];
+  filtersError: unknown;
+  searchParamsBlob: SearchParamsType;
+  setSearchParamsBlob: (v: SearchParamsType) => void;
+}
+
+/**
+ * Renders the sections filter menu or throws when the sections promise rejects.
+ */
+function SectionsFilterSection(props: SectionsFilterSectionProps) {
+  const { sections, filtersError, searchParamsBlob, setSearchParamsBlob } =
+    props;
+
+  if (filtersError) {
+    throw filtersError instanceof Error
+      ? filtersError
+      : new Error("Failed to load section filters");
+  }
+
+  if (!sections || sections.length === 0) {
+    return null;
+  }
+
+  const radioSections = [
+    ...sections,
+    { uuid: "all", name: "All", slug: "all", priority: -999999999 },
+  ];
+
+  const selectedSection =
+    searchParamsBlob.section === ""
+      ? sections[0]?.uuid
+      : searchParamsBlob.section;
+
+  return (
+    <CollapsibleMenu headerTitle="Sections" defaultOpen>
+      <RadioGroup
+        sections={radioSections}
+        selected={selectedSection}
+        setSelected={setParamsBlobValue(
+          setSearchParamsBlob,
+          searchParamsBlob,
+          "section"
+        )}
+      />
+    </CollapsibleMenu>
+  );
+}
+
+interface CategoriesFilterSectionProps {
+  categories?: CategorySelection[];
+  filtersError: unknown;
+  items: CheckboxListItemsType;
+}
+
+/**
+ * Renders the categories filter menu and throws when filter resolution fails so
+ * the surrounding boundary can surface a localized fallback.
+ */
+function CategoriesFilterSection(props: CategoriesFilterSectionProps) {
+  const { categories, filtersError, items } = props;
+
+  if (filtersError) {
+    throw filtersError instanceof Error
+      ? filtersError
+      : new Error("Failed to load category filters");
+  }
+
+  if (!categories || categories.length === 0) {
+    return null;
+  }
+
+  return (
+    <CollapsibleMenu headerTitle="Categories" defaultOpen>
+      <CheckboxList items={items} />
+    </CollapsibleMenu>
+  );
+}
+
+interface CategoryTagCloudSectionProps {
+  parsedCategories: CategorySelection[];
+  searchParamsBlob: SearchParamsType;
+  setSearchParamsBlob: (v: SearchParamsType) => void;
+}
+
+/**
+ * Wraps the category tag cloud, throwing when the filter promise rejects.
+ */
+function CategoryTagCloudSection(props: CategoryTagCloudSectionProps) {
+  const { parsedCategories, searchParamsBlob, setSearchParamsBlob } = props;
+
+  return (
+    <CategoryTagCloud
+      searchValue={searchParamsBlob.search}
+      setSearchValue={setParamsBlobValue(
+        setSearchParamsBlob,
+        searchParamsBlob,
+        "search"
+      )}
+      categories={parsedCategories}
+      setCategories={(v) =>
+        setParamsBlobCategories(setSearchParamsBlob, searchParamsBlob, v)
+      }
+      rootClasses="package-search__tags"
+      clearAll={clearAll(setSearchParamsBlob, searchParamsBlob)}
+    />
+  );
+}
 
 const PackageSearchPackagesSkeleton = memo(
   function PackageSearchPackagesSkeleton() {
