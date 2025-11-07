@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo, Suspense } from "react";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 import { Await } from "react-router";
+import { NimbusAwaitErrorElement } from "cyberstorm/utils/errors/NimbusErrorBoundary";
 
 interface WikiContentProps {
   page: PackageWikiPageResponseData;
@@ -50,7 +51,7 @@ export const WikiContent = memo(function WikiContent({
           </div>
         </div>
         <Suspense>
-          <Await resolve={canManage}>
+          <Await resolve={canManage} errorElement={<NimbusAwaitErrorElement />}>
             {(resolvedValue) =>
               resolvedValue ? (
                 <div className="package-wiki-content__actions">
