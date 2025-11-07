@@ -9,13 +9,13 @@ import {
   CommunityFiltersResponseData,
 } from "../schemas/responseSchemas";
 
-export async function fetchCommunityFilters(
+export function fetchCommunityFilters(
   props: ApiEndpointProps<CommunityFiltersRequestParams, object, object>
 ): Promise<CommunityFiltersResponseData> {
   const { config, params } = props;
   const path = `api/cyberstorm/community/${params.community_id}/filters/`;
 
-  return await apiFetch({
+  return apiFetch({
     args: {
       config,
       path,
