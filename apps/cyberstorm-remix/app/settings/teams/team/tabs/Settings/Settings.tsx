@@ -1,3 +1,8 @@
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useReducer, useState } from "react";
+import { useLoaderData, useNavigate, useOutletContext } from "react-router";
+
 import "./Settings.css";
 import {
   NewAlert,
@@ -8,11 +13,6 @@ import {
   NewTextInput,
   useToast,
 } from "@thunderstore/cyberstorm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, useOutletContext, useParams } from "react-router";
-
-import { type OutletContextShape } from "~/root";
 import {
   type RequestConfig,
   teamDisband,
@@ -20,23 +20,23 @@ import {
   teamRemoveMember,
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer, useState } from "react";
 
-// REMIX TODO: Make sure user is redirected of this page, if the user is not logged in
+import { NotLoggedIn } from "app/commonComponents/NotLoggedIn/NotLoggedIn";
+import { type OutletContextShape } from "app/root";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+
+export const clientLoader = makeTeamSettingsTabLoader(
+  // TODO: add end point for checking can leave/disband status.
+  async (dapper, teamName) => ({})
+);
+
 export default function Settings() {
-  const params = useParams();
+  const { teamName } = useLoaderData<typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
 
-  if (
-    !outletContext.currentUser ||
-    !outletContext.currentUser.username ||
-    !params.namespaceId
-  )
+  if (!outletContext.currentUser || !outletContext.currentUser.username)
     return <NotLoggedIn />;
-
-  if (!params.namespaceId) return <p>Team not found</p>;
 
   const toast = useToast();
 
@@ -69,7 +69,7 @@ export default function Settings() {
           </p>
           <LeaveTeamForm
             userName={outletContext.currentUser.username}
-            teamName={params.namespaceId}
+            teamName={teamName}
             toast={toast}
             config={outletContext.requestConfig}
             updateTrigger={moveToTeams}
@@ -88,14 +88,14 @@ export default function Settings() {
           <NewAlert csVariant="danger">
             You cannot currently disband this team as it has packages.
           </NewAlert>
-          <p>You are about to disband the team {params.namespaceId}.</p>
+          <p>You are about to disband the team {teamName}.</p>
           <p>
             Be aware you can currently only disband teams with no packages. If
             you need to archive a team with existing pages, contact Mythic#0001
             on the Thunderstore Discord.
           </p>
           <DisbandTeamForm
-            teamName={params.namespaceId}
+            teamName={teamName}
             updateTrigger={moveToTeams}
             config={outletContext.requestConfig}
             toast={toast}

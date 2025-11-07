@@ -1,42 +1,25 @@
-import { type LoaderFunctionArgs } from "react-router";
+import { useReducer } from "react";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+
+import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
 import {
-  ApiError,
   teamDetailsEdit,
   type TeamDetailsEditRequestData,
 } from "@thunderstore/thunderstore-api";
-import { type OutletContextShape } from "~/root";
-import "./Profile.css";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer } from "react";
-import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
-  if (params.namespaceId) {
-    try {
-      const tools = getSessionTools();
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: tools?.getConfig().apiHost,
-          sessionId: tools?.getConfig().sessionId,
-        };
-      });
-      return {
-        team: await dapper.getTeamDetails(params.namespaceId),
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team not found", { status: 404 });
-      } else {
-        // REMIX TODO: Add sentry
-        throw error;
-      }
-    }
-  }
-  throw new Response("Team not found", { status: 404 });
-}
+import { type OutletContextShape } from "app/root";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import "./Profile.css";
+
+export const clientLoader = makeTeamSettingsTabLoader(
+  async (dapper, teamName) => ({
+    // TODO: for hygienie we shouldn't use this public endpoint but
+    // have an endpoint that confirms user permissions and returns
+    // possibly sensitive information.
+    team: await dapper.getTeamDetails(teamName),
+  })
+);
 
 export function HydrateFallback() {
   return <div style={{ padding: "32px" }}>Loading...</div>;
