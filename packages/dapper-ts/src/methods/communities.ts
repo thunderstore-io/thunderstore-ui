@@ -22,7 +22,7 @@ export async function getCommunities(
   ) {
     supportedOrdering = ordering as CommunityListOrderingEnum;
   }
-  const data = await fetchCommunityList({
+  return fetchCommunityList({
     config: this.config,
     queryParams: [
       { key: "page", value: page, impotent: 1 },
@@ -36,24 +36,13 @@ export async function getCommunities(
     params: {},
     data: {},
   });
-
-  return {
-    count: data.count,
-    hasMore: Boolean(data.next),
-    results: data.results,
-  };
 }
 
-export async function getCommunity(
-  this: DapperTsInterface,
-  communityId: string
-) {
-  const data = await fetchCommunity({
+export function getCommunity(this: DapperTsInterface, communityId: string) {
+  return fetchCommunity({
     config: this.config,
     params: { community_id: communityId },
     data: {},
     queryParams: {},
   });
-
-  return data;
 }
