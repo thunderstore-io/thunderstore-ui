@@ -1,5 +1,10 @@
-import { useReducer } from "react";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import { Suspense, useReducer } from "react";
+import {
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+} from "react-router";
 
 import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
 import {
@@ -18,21 +23,23 @@ export const clientLoader = makeTeamSettingsTabLoader(
     // TODO: for hygienie we shouldn't use this public endpoint but
     // have an endpoint that confirms user permissions and returns
     // possibly sensitive information.
-    team: await dapper.getTeamDetails(teamName),
+    team: dapper.getTeamDetails(teamName),
   })
 );
-
-export function HydrateFallback() {
-  return <div style={{ padding: "32px" }}>Loading...</div>;
-}
 
 export default function Profile() {
   const { team } = useLoaderData<typeof clientLoader>();
 
   return (
-    <div className="settings-items team-profile">
-      <ProfileForm team={team} />
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Await resolve={team}>
+        {(resolvedTeam) => (
+          <div className="settings-items team-profile">
+            <ProfileForm team={resolvedTeam} />
+          </div>
+        )}
+      </Await>
+    </Suspense>
   );
 }
 

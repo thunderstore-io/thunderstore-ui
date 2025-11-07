@@ -1,7 +1,12 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useReducer, useState } from "react";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import { Suspense, useReducer, useState } from "react";
+import {
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+} from "react-router";
 
 import {
   NewAlert,
@@ -24,13 +29,9 @@ import "./ServiceAccounts.css";
 
 export const clientLoader = makeTeamSettingsTabLoader(
   async (dapper, teamName) => ({
-    serviceAccounts: await dapper.getTeamServiceAccounts(teamName),
+    serviceAccounts: dapper.getTeamServiceAccounts(teamName),
   })
 );
-
-export function HydrateFallback() {
-  return <div style={{ padding: "32px" }}>Loading...</div>;
-}
 
 export default function ServiceAccounts() {
   const { teamName, serviceAccounts } = useLoaderData<typeof clientLoader>();
@@ -41,25 +42,33 @@ export default function ServiceAccounts() {
   }
 
   return (
-    <div className="settings-items">
-      <div className="settings-items__item">
-        <div className="settings-items__meta">
-          <p className="settings-items__title">Service accounts</p>
-          <p className="settings-items__description">Your loyal servants</p>
-          <AddServiceAccountForm
-            teamName={teamName}
-            serviceAccountRevalidate={serviceAccountRevalidate}
-          />
-        </div>
-        <div className="settings-items__content">
-          <ServiceAccountsTable
-            serviceAccounts={serviceAccounts}
-            serviceAccountRevalidate={serviceAccountRevalidate}
-            teamName={teamName}
-          />
-        </div>
-      </div>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Await resolve={serviceAccounts}>
+        {(resolvedServiceAccounts) => (
+          <div className="settings-items">
+            <div className="settings-items__item">
+              <div className="settings-items__meta">
+                <p className="settings-items__title">Service accounts</p>
+                <p className="settings-items__description">
+                  Your loyal servants
+                </p>
+                <AddServiceAccountForm
+                  teamName={teamName}
+                  serviceAccountRevalidate={serviceAccountRevalidate}
+                />
+              </div>
+              <div className="settings-items__content">
+                <ServiceAccountsTable
+                  serviceAccounts={resolvedServiceAccounts}
+                  serviceAccountRevalidate={serviceAccountRevalidate}
+                  teamName={teamName}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </Await>
+    </Suspense>
   );
 }
 
