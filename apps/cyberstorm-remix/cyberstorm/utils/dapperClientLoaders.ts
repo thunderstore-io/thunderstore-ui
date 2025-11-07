@@ -1,7 +1,7 @@
 import { type LoaderFunctionArgs } from "react-router";
 
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { ApiError } from "@thunderstore/thunderstore-api";
+import { ApiError, type GenericApiError } from "@thunderstore/thunderstore-api";
 
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 
@@ -17,7 +17,11 @@ export function makeTeamSettingsTabLoader<T>(
       return { teamName, ...data };
     } catch (error) {
       if (error instanceof ApiError) {
-        throw new Response(`Team "${teamName}" not found`, { status: 404 });
+        const status = error.response.status;
+        const statusText =
+          (error.responseJson as GenericApiError)?.detail ??
+          error.response.statusText;
+        throw new Response(statusText, { status, statusText });
       }
       throw error;
     }
