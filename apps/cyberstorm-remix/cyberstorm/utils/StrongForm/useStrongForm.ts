@@ -12,7 +12,7 @@ import {
  */
 export interface UseStrongFormProps<
   Inputs,
-  SubmissionDataShape = Inputs,
+  SubmissionDataShape extends Inputs = Inputs,
   RefinerError extends Error = Error,
   SubmissionOutput = unknown,
   SubmissionError extends UserFacingError = UserFacingError,
@@ -32,7 +32,7 @@ export interface UseStrongFormProps<
  */
 export interface UseStrongFormReturn<
   Inputs,
-  SubmissionDataShape = Inputs,
+  SubmissionDataShape extends Inputs = Inputs,
   RefinerError extends Error = Error,
   SubmissionOutput = unknown,
   SubmissionError extends UserFacingError = UserFacingError,
@@ -54,7 +54,7 @@ export interface UseStrongFormReturn<
  */
 export function useStrongForm<
   Inputs,
-  SubmissionDataShape = Inputs,
+  SubmissionDataShape extends Inputs = Inputs,
   RefinerError extends Error = Error,
   SubmissionOutput = unknown,
   SubmissionError extends UserFacingError = UserFacingError,
@@ -83,6 +83,19 @@ export function useStrongForm<
   const [submitError, setSubmitError] = useState<SubmissionError>();
   const [inputErrors, setInputErrors] = useState<InputErrors>();
 
+  const ensureSubmissionDataShape = (value: Inputs): SubmissionDataShape => {
+    if (
+      value === null ||
+      (typeof value !== "object" && typeof value !== "function")
+    ) {
+      throw new Error(
+        "useStrongForm received primitive form inputs without a refiner; provide a refiner or ensure the input type matches the submission data shape."
+      );
+    }
+
+    return value as SubmissionDataShape;
+  };
+
   const defaultErrorMapper = (error: unknown): SubmissionError => {
     return mapApiErrorToUserFacingError(error) as SubmissionError;
   };
@@ -97,7 +110,7 @@ export function useStrongForm<
     setInputErrors(undefined);
 
     if (!props.refiner) {
-      setSubmissionData(props.inputs as unknown as SubmissionDataShape);
+      setSubmissionData(ensureSubmissionDataShape(props.inputs));
       setRefining(false);
       setRefineError(undefined);
       return () => {
@@ -145,7 +158,7 @@ export function useStrongForm<
 
   const toSubmissionError = (error: unknown): SubmissionError => {
     if (error instanceof UserFacingError) {
-      return error as unknown as SubmissionError;
+      return error as SubmissionError;
     }
     return mapError(error);
   };
