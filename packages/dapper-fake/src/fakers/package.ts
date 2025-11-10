@@ -59,7 +59,9 @@ export const getFakePackageListings = async (
       case "namespace":
         return `api/cyberstorm/listing/${type.communityId.toLowerCase()}/${type.namespaceId.toLowerCase()}/`;
       case "package-dependants":
-        return `api/cyberstorm/listing/${type.communityId.toLowerCase()}/${type.namespaceId.toLowerCase()}/${type.packageName}/dependants/`;
+        return `api/cyberstorm/listing/${type.communityId.toLowerCase()}/${type.namespaceId.toLowerCase()}/${
+          type.packageName
+        }/dependants/`;
       default:
         return "api/cyberstorm/listing/";
     }
