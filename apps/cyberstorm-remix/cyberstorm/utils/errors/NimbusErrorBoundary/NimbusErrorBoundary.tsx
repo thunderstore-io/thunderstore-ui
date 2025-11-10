@@ -1,4 +1,5 @@
 import { Component, useCallback, type ErrorInfo, type ReactNode } from "react";
+import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
 import { NewButton } from "@thunderstore/cyberstorm";
 import { useAsyncError, useLocation, useRouteError } from "react-router";
 import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
@@ -138,11 +139,10 @@ export function NimbusErrorBoundaryFallback(
     props.description ?? payload?.description ?? "Please try again.";
   const retryLabel = props.retryLabel ?? "Retry";
   const currentLocation = `${pathname}${search}${hash}`;
-  const baseClassName =
-    "container container--y container--full nimbus-error-boundary";
-  const rootClassName = className
-    ? `${baseClassName} ${className}`
-    : baseClassName;
+  const rootClassName = classnames(
+    "container container--y container--full nimbus-error-boundary",
+    className
+  );
 
   const noopReset = useCallback(() => {}, []);
   const safeReset = reset ?? noopReset;
