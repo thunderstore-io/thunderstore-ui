@@ -16,11 +16,11 @@ export function getLoaderTools() {
       };
     });
   } else {
-    const tools = getSessionTools();
+    sessionTools = getSessionTools();
     dapper = new DapperTs(() => {
       return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
+        apiHost: sessionTools?.getConfig().apiHost,
+        sessionId: sessionTools?.getConfig().sessionId,
       };
     });
   }
