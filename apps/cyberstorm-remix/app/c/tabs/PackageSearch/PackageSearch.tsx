@@ -8,6 +8,7 @@ import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import { createNotFoundMapping } from "cyberstorm/utils/errors/loaderMappings";
 import { NimbusDefaultRouteErrorBoundary } from "cyberstorm/utils/errors/NimbusErrorBoundary";
 import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
+import { parseIntegerSearchParam } from "cyberstorm/utils/searchParamsUtils";
 
 interface PackageSearchQuery {
   ordering: string;
@@ -23,8 +24,7 @@ interface PackageSearchQuery {
 function resolvePackageSearchQuery(request: Request): PackageSearchQuery {
   const searchParams = new URL(request.url).searchParams;
   const ordering = searchParams.get("ordering") ?? PackageOrderOptions.Updated;
-  const pageParam = searchParams.get("page");
-  const page = pageParam === null ? undefined : Number(pageParam);
+  const page = parseIntegerSearchParam(searchParams.get("page"));
   const search = searchParams.get("search") ?? "";
   const included = searchParams.get("includedCategories");
   const excluded = searchParams.get("excludedCategories");

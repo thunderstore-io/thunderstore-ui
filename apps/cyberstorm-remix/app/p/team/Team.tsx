@@ -15,6 +15,7 @@ import {
   NimbusDefaultRouteErrorBoundary,
 } from "cyberstorm/utils/errors/NimbusErrorBoundary";
 import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
+import { parseIntegerSearchParam } from "cyberstorm/utils/searchParamsUtils";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId && params.namespaceId) {
@@ -22,7 +23,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     const searchParams = new URL(request.url).searchParams;
     const ordering =
       searchParams.get("ordering") ?? PackageOrderOptions.Updated;
-    const page = searchParams.get("page");
+    const page = parseIntegerSearchParam(searchParams.get("page"));
     const search = searchParams.get("search");
     const includedCategories = searchParams.get("includedCategories");
     const excludedCategories = searchParams.get("excludedCategories");
@@ -38,7 +39,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
           namespaceId: params.namespaceId,
         },
         ordering ?? "",
-        page === null ? undefined : Number(page),
+        page,
         search ?? "",
         includedCategories?.split(",") ?? undefined,
         excludedCategories?.split(",") ?? undefined,
@@ -81,7 +82,7 @@ export async function clientLoader({
     const searchParams = new URL(request.url).searchParams;
     const ordering =
       searchParams.get("ordering") ?? PackageOrderOptions.Updated;
-    const page = searchParams.get("page");
+    const page = parseIntegerSearchParam(searchParams.get("page"));
     const search = searchParams.get("search");
     const includedCategories = searchParams.get("includedCategories");
     const excludedCategories = searchParams.get("excludedCategories");
@@ -96,7 +97,7 @@ export async function clientLoader({
         namespaceId: params.namespaceId,
       },
       ordering ?? "",
-      page === null ? undefined : Number(page),
+      page,
       search ?? "",
       includedCategories?.split(",") ?? undefined,
       excludedCategories?.split(",") ?? undefined,

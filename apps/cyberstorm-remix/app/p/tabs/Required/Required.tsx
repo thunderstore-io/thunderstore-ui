@@ -8,6 +8,7 @@ import { createNotFoundMapping } from "cyberstorm/utils/errors/loaderMappings";
 import { NimbusDefaultRouteErrorBoundary } from "cyberstorm/utils/errors/NimbusErrorBoundary";
 import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 import { SkeletonBox } from "@thunderstore/cyberstorm";
+import { parseIntegerSearchParam } from "cyberstorm/utils/searchParamsUtils";
 
 export const packageDependenciesErrorMappings = [
   createNotFoundMapping(
@@ -20,7 +21,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const { dapper } = getLoaderTools();
     const searchParams = new URL(request.url).searchParams;
-    const page = searchParams.get("page");
+    const page = parseIntegerSearchParam(searchParams.get("page"));
     try {
       const listing = await dapper.getPackageListingDetails(
         params.communityId,
@@ -37,7 +38,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
         params.namespaceId,
         params.packageId,
         listing.latest_version_number,
-        page === null ? undefined : Number(page)
+        page
       );
 
       return {
@@ -60,7 +61,7 @@ export function clientLoader({ params, request }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const { dapper } = getLoaderTools();
     const searchParams = new URL(request.url).searchParams;
-    const page = searchParams.get("page");
+    const page = parseIntegerSearchParam(searchParams.get("page"));
     const listingPromise = dapper.getPackageListingDetails(
       params.communityId,
       params.namespaceId,
@@ -80,7 +81,7 @@ export function clientLoader({ params, request }: LoaderFunctionArgs) {
         listing.namespace,
         listing.name,
         listing.latest_version_number,
-        page === null ? undefined : Number(page)
+        page
       )
     );
 

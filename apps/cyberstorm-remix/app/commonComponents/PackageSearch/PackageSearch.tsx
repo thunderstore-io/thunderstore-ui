@@ -44,13 +44,14 @@ import {
 } from "@thunderstore/thunderstore-api";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { isPromise } from "cyberstorm/utils/typeChecks";
-import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
+import {
+  parseIntegerSearchParam,
+  setParamsBlobValue,
+} from "cyberstorm/utils/searchParamsUtils";
 import {
   NimbusAwaitErrorElement,
   NimbusErrorBoundary,
-  NimbusErrorBoundaryFallback,
 } from "../../../cyberstorm/utils/errors/NimbusErrorBoundary";
-import type { NimbusErrorBoundaryFallbackProps } from "../../../cyberstorm/utils/errors/NimbusErrorBoundary";
 
 const PER_PAGE = 20;
 
@@ -86,7 +87,7 @@ const searchParamsToBlob = (
   const initialSection = searchParams.get("section");
   const initialDeprecated = searchParams.get("deprecated");
   const initialNsfw = searchParams.get("nsfw");
-  const initialPage = searchParams.get("page");
+  const initialPage = parseIntegerSearchParam(searchParams.get("page"));
   const initialIncludedCategories = searchParams.get("includedCategories");
   const initialExcludedCategories = searchParams.get("excludedCategories");
 
@@ -117,12 +118,7 @@ const searchParamsToBlob = (
           : initialNsfw === "false"
             ? false
             : false,
-    page:
-      initialPage &&
-      !Number.isNaN(Number.parseInt(initialPage)) &&
-      Number.isSafeInteger(Number.parseInt(initialPage))
-        ? Number.parseInt(initialPage)
-        : 1,
+    page: initialPage ?? 1,
     includedCategories:
       initialIncludedCategories !== null ? initialIncludedCategories : "",
     excludedCategories:
@@ -198,7 +194,7 @@ function PackageSearchContent(props: Props) {
     useState<SearchParamsType>(initialParams);
 
   const [currentPage, setCurrentPage] = useState(
-    searchParams.get("page") ? Number(searchParams.get("page")) : 1
+    parseIntegerSearchParam(searchParams.get("page")) ?? 1
   );
 
   const categoriesRef = useRef<
@@ -373,9 +369,7 @@ function PackageSearchContent(props: Props) {
           searchParams.get("includedCategories") ?? "";
         const oldExcludedCategories =
           searchParams.get("excludedCategories") ?? "";
-        const oldPage = searchParams.get("page")
-          ? Number(searchParams.get("page"))
-          : 1;
+        const oldPage = parseIntegerSearchParam(searchParams.get("page")) ?? 1;
 
         // Search
         if (oldSearch !== debouncedSearchParamsBlob.search) {
