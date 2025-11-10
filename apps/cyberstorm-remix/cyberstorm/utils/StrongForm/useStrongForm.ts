@@ -15,7 +15,7 @@ export interface UseStrongFormProps<
   SubmissionDataShape = Inputs,
   RefinerError extends Error = Error,
   SubmissionOutput = unknown,
-  SubmissionError extends Error = UserFacingError,
+  SubmissionError extends UserFacingError = UserFacingError,
 > {
   inputs: Inputs;
   submitor: (data: SubmissionDataShape) => Promise<SubmissionOutput>;
