@@ -53,10 +53,10 @@ export function handleLoaderError(
       return statuses.includes(error.statusCode);
     });
 
-    if (options && mapping) {
-      const base = mapApiErrorToUserFacingError(error, options.mapOptions);
+    if (mapping) {
+      const base = mapApiErrorToUserFacingError(error, options?.mapOptions);
       const includeContextValue =
-        mapping.includeContext ?? options.includeContext ?? false;
+        mapping.includeContext ?? options?.includeContext ?? false;
       const payload: UserFacingErrorPayload = {
         headline: mapping.headline,
         description:
@@ -72,7 +72,7 @@ export function handleLoaderError(
       }
 
       throwUserFacingPayloadResponse(payload, {
-        statusOverride: mapping.statusOverride ?? options.statusOverride,
+        statusOverride: mapping.statusOverride ?? options?.statusOverride,
       });
     }
   }
