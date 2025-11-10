@@ -112,6 +112,7 @@ export default function Community() {
   const isPackageListingSubPath =
     splitPath.length > 5 && splitPath[1] === "c" && splitPath[3] === "p";
   const outletContext = useOutletContext() as OutletContextShape;
+  const { VITE_BETA_SITE_URL } = getPublicEnvVariables(["VITE_BETA_SITE_URL"]);
 
   return (
     <>
@@ -131,9 +132,7 @@ export default function Community() {
                   <meta property="og:type" content="website" />
                   <meta
                     property="og:url"
-                    content={`${getPublicEnvVariables(["VITE_BETA_SITE_URL"])}${
-                      location.pathname
-                    }`}
+                    content={`${VITE_BETA_SITE_URL ?? ""}${location.pathname}`}
                   />
                   <meta
                     property="og:title"
