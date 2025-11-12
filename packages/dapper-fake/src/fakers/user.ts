@@ -4,6 +4,8 @@ import { getFakeImg, setSeed } from "./utils";
 
 export const getFakeCurrentUser = async () => {
   setSeed("currentUser");
+  const team1 = faker.word.words(1);
+  const team2 = faker.word.words(2);
 
   return {
     username: faker.internet.userName(),
@@ -19,14 +21,15 @@ export const getFakeCurrentUser = async () => {
           faker.date.soon({ days: 30 }).toDateString()
         ) ?? null,
     },
-    teams: [
+    teams: [team1, team2],
+    teams_full: [
       {
-        name: faker.word.words(1),
+        name: team1,
         role: "owner",
         member_count: faker.number.int({ min: 1, max: 100 }),
       },
       {
-        name: faker.word.words(2),
+        name: team2,
         role: "member",
         member_count: faker.number.int({ min: 1, max: 100 }),
       },

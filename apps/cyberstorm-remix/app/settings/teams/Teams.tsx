@@ -75,7 +75,7 @@ export default function Teams() {
             <CreateTeamForm config={outletContext.dapper.config} />
           </div>
           <div className="settings-items__content">
-            {currentUser?.teams_full && currentUser.teams_full.length !== 0 ? (
+            {currentUser?.teams_full?.length ? (
               <NewTable
                 titleRowContent={<Heading csLevel="3">Teams</Heading>}
                 // csModifiers={["alignLastColumnRight"]}
