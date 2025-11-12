@@ -1,6 +1,8 @@
-import "./Members.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useReducer, useState } from "react";
+import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+
 import {
   Modal,
   NewAvatar,
@@ -13,50 +15,26 @@ import {
   type SelectOption,
   useToast,
 } from "@thunderstore/cyberstorm";
-import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import {
-  ApiError,
   type RequestConfig,
   teamAddMember,
   type TeamAddMemberRequestData,
   teamEditMember,
   teamRemoveMember,
 } from "@thunderstore/thunderstore-api";
-import { type OutletContextShape } from "../../../../../root";
-import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer, useState } from "react";
 
-// REMIX TODO: Add check for "user has permission to see this page"
-export async function clientLoader({ params }: LoaderFunctionArgs) {
-  if (params.namespaceId) {
-    try {
-      const tools = getSessionTools();
-      const config = tools?.getConfig();
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: config.apiHost,
-          sessionId: config.sessionId,
-        };
-      });
-      return {
-        teamName: params.namespaceId,
-        members: await dapper.getTeamMembers(params.namespaceId),
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team members not found", { status: 404 });
-      } else {
-        throw error;
-      }
-    }
-  }
-  throw new Response("Team not found", { status: 404 });
-}
+import { type OutletContextShape } from "app/root";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import "./Members.css";
+
+export const clientLoader = makeTeamSettingsTabLoader(
+  async (dapper, teamName) => ({
+    members: await dapper.getTeamMembers(teamName),
+  })
+);
 
 export function HydrateFallback() {
   return <div style={{ padding: "32px" }}>Loading...</div>;

@@ -1,4 +1,8 @@
-import "./ServiceAccounts.css";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useReducer, useState } from "react";
+import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+
 import {
   NewAlert,
   NewButton,
@@ -9,52 +13,24 @@ import {
   Heading,
   CodeBox,
 } from "@thunderstore/cyberstorm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import {
-  ApiError,
   type RequestConfig,
   teamAddServiceAccount,
   type TeamServiceAccountAddRequestData,
 } from "@thunderstore/thunderstore-api";
-import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
-import { type OutletContextShape } from "../../../../../root";
-import { useReducer, useState } from "react";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+
+import { type OutletContextShape } from "app/root";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { ServiceAccountRemoveModal } from "./ServiceAccountRemoveModal";
+import "./ServiceAccounts.css";
 
-// REMIX TODO: Add check for "user has permission to see this page"
-export async function clientLoader({ params }: LoaderFunctionArgs) {
-  if (params.namespaceId) {
-    try {
-      const tools = getSessionTools();
-      const config = tools?.getConfig();
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: config?.apiHost,
-          sessionId: config?.sessionId,
-        };
-      });
-      return {
-        teamName: params.namespaceId,
-        serviceAccounts: await dapper.getTeamServiceAccounts(
-          params.namespaceId
-        ),
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Team not found", { status: 404 });
-      } else {
-        throw error;
-      }
-    }
-  }
-  throw new Response("Team not found", { status: 404 });
-}
+export const clientLoader = makeTeamSettingsTabLoader(
+  async (dapper, teamName) => ({
+    serviceAccounts: await dapper.getTeamServiceAccounts(teamName),
+  })
+);
 
 export function HydrateFallback() {
   return <div style={{ padding: "32px" }}>Loading...</div>;
