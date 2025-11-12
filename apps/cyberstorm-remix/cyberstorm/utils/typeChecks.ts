@@ -13,3 +13,10 @@ type ConfirmedSemverStringType = string;
 export const isSemver = (s: string): s is ConfirmedSemverStringType => {
   return Boolean(semverValid(s));
 };
+
+export const isStringOneOf = <T extends string>(
+  value: unknown,
+  candidates: readonly T[]
+): value is T => {
+  return typeof value === "string" && candidates.includes(value as T);
+};
