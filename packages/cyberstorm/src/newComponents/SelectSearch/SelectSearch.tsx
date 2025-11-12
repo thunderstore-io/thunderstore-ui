@@ -18,9 +18,9 @@ import {
 export type SelectSearchProps =
   | {
       multiple?: false;
-      options: SelectOption[];
-      value?: SelectOption;
-      onChange: (v: SelectOption | undefined) => void;
+      options: SelectOption<string>[];
+      value?: SelectOption<string>;
+      onChange: (v: SelectOption<string> | undefined) => void;
       disabled?: boolean;
       placeholder?: string;
       csVariant?: SelectSearchVariants;
@@ -30,9 +30,9 @@ export type SelectSearchProps =
     }
   | {
       multiple: true;
-      options: SelectOption[];
-      value?: SelectOption[];
-      onChange: (v: SelectOption[] | undefined) => void;
+      options: SelectOption<string>[];
+      value?: SelectOption<string>[];
+      onChange: (v: SelectOption<string>[] | undefined) => void;
       disabled?: boolean;
       placeholder?: string;
       csVariant?: SelectSearchVariants;
@@ -108,11 +108,11 @@ export const SelectSearch = React.forwardRef<
     };
   }, [isVisible, disabled]);
 
-  const handleOptionSelect = (option: SelectOption) => {
+  const handleOptionSelect = (option: SelectOption<string>) => {
     if (disabled) return;
 
     if (!multiple) {
-      (onChange as (v: SelectOption | undefined) => void)(option);
+      (onChange as (v: SelectOption<string> | undefined) => void)(option);
       setIsVisible(false);
       return;
     }
@@ -121,11 +121,11 @@ export const SelectSearch = React.forwardRef<
     const isSelected = currentValues.some((v) => v.value === option.value);
 
     if (isSelected) {
-      (onChange as (v: SelectOption[] | undefined) => void)(
+      (onChange as (v: SelectOption<string>[] | undefined) => void)(
         currentValues.filter((v) => v.value !== option.value)
       );
     } else {
-      (onChange as (v: SelectOption[] | undefined) => void)([
+      (onChange as (v: SelectOption<string>[] | undefined) => void)([
         ...currentValues,
         option,
       ]);
@@ -134,14 +134,14 @@ export const SelectSearch = React.forwardRef<
     inputRef.current?.focus();
   };
 
-  const removeOption = (optionToRemove: SelectOption) => {
+  const removeOption = (optionToRemove: SelectOption<string>) => {
     if (multiple) {
       const currentValues = Array.isArray(value) ? value : [];
-      (onChange as (v: SelectOption[] | undefined) => void)(
+      (onChange as (v: SelectOption<string>[] | undefined) => void)(
         currentValues.filter((v) => v.value !== optionToRemove.value)
       );
     } else {
-      (onChange as (v: SelectOption | undefined) => void)(undefined);
+      (onChange as (v: SelectOption<string> | undefined) => void)(undefined);
     }
   };
 
@@ -149,7 +149,7 @@ export const SelectSearch = React.forwardRef<
     ? Array.isArray(value)
       ? value
       : []
-    : (value as SelectOption | undefined);
+    : (value as SelectOption<string> | undefined);
 
   return (
     <div
@@ -171,8 +171,8 @@ export const SelectSearch = React.forwardRef<
             {selectedValue && (
               <div className="select-search__selected">
                 {multiple ? (
-                  (selectedValue as SelectOption[]).map(
-                    (option: SelectOption) => (
+                  (selectedValue as SelectOption<string>[]).map(
+                    (option: SelectOption<string>) => (
                       <NewTag
                         key={option.value}
                         onClick={() => !disabled && removeOption(option)}
@@ -193,7 +193,7 @@ export const SelectSearch = React.forwardRef<
                   <NewTag
                     onClick={() => {
                       if (disabled) return;
-                      removeOption(selectedValue as SelectOption);
+                      removeOption(selectedValue as SelectOption<string>);
                     }}
                     rootClasses="select-search__selected-button"
                     csVariant="primary"
@@ -201,7 +201,7 @@ export const SelectSearch = React.forwardRef<
                     csMode="button"
                     disabled={disabled}
                   >
-                    {(selectedValue as SelectOption).label}
+                    {(selectedValue as SelectOption<string>).label}
                     <NewIcon csMode="inline" noWrapper>
                       <FontAwesomeIcon icon={faXmark} />
                     </NewIcon>
@@ -257,7 +257,7 @@ export const SelectSearch = React.forwardRef<
             (option) =>
               option.label?.toLowerCase().includes(search.toLowerCase()) &&
               (!Array.isArray(selectedValue) ||
-                !(selectedValue as SelectOption[]).some(
+                !(selectedValue as SelectOption<string>[]).some(
                   (v) => v.value === option.value
                 ))
           ).length > 0 ? (
@@ -266,7 +266,7 @@ export const SelectSearch = React.forwardRef<
                 (option) =>
                   option.label?.toLowerCase().includes(search.toLowerCase()) &&
                   (!Array.isArray(selectedValue) ||
-                    !(selectedValue as SelectOption[]).some(
+                    !(selectedValue as SelectOption<string>[]).some(
                       (v) => v.value === option.value
                     ))
               )
@@ -297,7 +297,7 @@ SelectSearch.displayName = "SelectSearch";
 
 const SelectItem = (props: {
   onClick: (e: React.MouseEvent | React.KeyboardEvent) => void;
-  option: SelectOption;
+  option: SelectOption<string>;
 }) => {
   return (
     <div
