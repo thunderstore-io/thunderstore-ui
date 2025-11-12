@@ -411,8 +411,9 @@ export default function Upload() {
             <span className="upload__no-teams">
               <p className="upload__no-teams-text">No teams available?</p>
               <NewLink
-                primitiveType="link"
-                href={`${outletContext.domain}/settings/teams/`}
+                key="create-team-link"
+                primitiveType="cyberstormLink"
+                linkId="Teams"
                 csVariant="cyber"
                 rootClasses="community__item"
               >
