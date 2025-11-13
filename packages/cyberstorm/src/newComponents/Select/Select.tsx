@@ -23,6 +23,7 @@ import {
 type _SelectProps<T extends string = string> = {
   variant?: "default" | "accent" | "wide";
   defaultOpen?: boolean;
+  disabled?: boolean;
   icon?: ReactElement;
   onChange?: (val: T) => void;
   options: SelectOption<T>[];
@@ -44,6 +45,7 @@ export const Select = memo(function Select<T extends string>(
 ) {
   const {
     defaultOpen = false,
+    disabled = false,
     icon = (
       <NewIcon csMode="inline" noWrapper>
         <FontAwesomeIcon icon={faCaretDown} />
@@ -69,7 +71,7 @@ export const Select = memo(function Select<T extends string>(
       defaultOpen={defaultOpen}
       value={value}
       onValueChange={onChange}
-      disabled={options.length === 0}
+      disabled={disabled || options.length === 0}
     >
       <Trigger asChild>
         <NewButton
