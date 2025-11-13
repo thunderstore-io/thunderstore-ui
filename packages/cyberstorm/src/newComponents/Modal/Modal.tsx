@@ -3,7 +3,10 @@ import {
   isValidElement,
   type PropsWithChildren,
   type ReactNode,
+  useCallback,
+  useEffect,
   useRef,
+  useState,
 } from "react";
 import "./Modal.css";
 import { NewButton, NewIcon } from "../..";
@@ -194,10 +197,57 @@ export function Modal(props: ModalProps) {
     footerContent,
     ariaDescribedby,
     enableBackdropBlur = false,
+    contentClasses,
+    open: controlledOpen,
+    onOpenChange,
+    defaultOpen,
   } = props;
 
   const filteredChildren: ReactNode[] = [];
   const contentRef = useRef<HTMLDivElement | null>(null);
+
+  const isControlled = controlledOpen !== undefined;
+
+  const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false);
+  const effectiveOpen = isControlled ? controlledOpen! : internalOpen;
+
+  // Radix Select/DropdownMenu can leave body pointer-events disabled if the modal closes first.
+  const restoreBodyPointerEvents = useCallback(() => {
+    if (typeof document === "undefined") return;
+    const bodyStyle = document.body.style;
+    if (bodyStyle.pointerEvents === "none") {
+      bodyStyle.pointerEvents = "";
+      if (typeof CustomEvent === "function") {
+        document.dispatchEvent(new CustomEvent("dismissableLayer.update"));
+      }
+    }
+  }, []);
+
+  const handleOpenChange = useCallback(
+    (next: boolean) => {
+      if (!isControlled) {
+        setInternalOpen(next);
+      }
+      onOpenChange?.(next);
+      if (!next) {
+        if (typeof window !== "undefined") {
+          window.requestAnimationFrame(restoreBodyPointerEvents);
+        } else {
+          restoreBodyPointerEvents();
+        }
+      }
+    },
+    [isControlled, onOpenChange, restoreBodyPointerEvents]
+  );
+
+  useEffect(() => {
+    if (!effectiveOpen) {
+      restoreBodyPointerEvents();
+    }
+    return () => {
+      restoreBodyPointerEvents();
+    };
+  }, [effectiveOpen, restoreBodyPointerEvents]);
 
   let exit = <Modal.Exit />;
 
@@ -243,9 +293,9 @@ export function Modal(props: ModalProps) {
 
   return (
     <Dialog.Root
-      open={props.open}
-      onOpenChange={props.onOpenChange}
-      defaultOpen={props.defaultOpen}
+      {...(isControlled ? { open: controlledOpen } : {})}
+      {...(!isControlled && defaultOpen !== undefined ? { defaultOpen } : {})}
+      onOpenChange={handleOpenChange}
     >
       {trigger ? <Dialog.Trigger asChild>{trigger}</Dialog.Trigger> : null}
       <Dialog.Portal>
@@ -260,7 +310,7 @@ export function Modal(props: ModalProps) {
               "modal",
               "modal__content",
               ...componentClasses("modal", csVariant, csSize, undefined),
-              props.contentClasses
+              contentClasses
             )}
             aria-describedby={ariaDescribedby}
             onOpenAutoFocus={(e) => {
