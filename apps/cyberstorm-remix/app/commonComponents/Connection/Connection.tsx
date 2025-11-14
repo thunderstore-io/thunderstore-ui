@@ -11,10 +11,12 @@ interface ConnectionProps {
   connection?: OAuthConnection;
   connectionLink: string;
   disconnectFunction: (data: userLinkedAccountDisconnectProviders) => void;
+  disabled: boolean;
 }
 
 export function Connection(props: ConnectionProps) {
-  const { connection, identifier, icon, name, connectionLink } = props;
+  const { connection, identifier, icon, name, connectionLink, disabled } =
+    props;
 
   return (
     <div className={`connection ${connection ? "" : "connection--disabled"}`}>
@@ -30,6 +32,7 @@ export function Connection(props: ConnectionProps) {
           </div>
         ) : null}
         <NewSwitch
+          disabled={disabled}
           value={connection !== undefined}
           onChange={() => {
             if (connection) {
