@@ -1,56 +1,24 @@
+import "./Settings.css";
 import { Outlet, useLocation, useOutletContext } from "react-router";
 import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-
 import { type OutletContextShape } from "../../root";
-import "./Settings.css";
-import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 
-// export async function clientLoader() {
-//   const _storage = new NamespacedStorageManager(SESSION_STORAGE_KEY);
-//   const currentUser = getSessionCurrentUser(_storage, true, undefined, () => {
-//     clearSession(_storage);
-//     throw new Response("Your session has expired, please log in again", {
-//       status: 401,
-//     });
-//     // redirect("/");
-//   });
+export default function UserSettings() {
+  const context = useOutletContext<OutletContextShape>();
+  const { pathname } = useLocation();
+  const currentTab = pathname.endsWith("/account/") ? "account" : "settings";
 
-//   if (
-//     !currentUser.username ||
-//     (currentUser.username && currentUser.username === "")
-//   ) {
-//     clearSession(_storage);
-//     throw new Response("Not logged in.", { status: 401 });
-//   } else {
-//     return {
-//       currentUser: currentUser as typeof currentUserSchema._type,
-//     };
-//   }
-// }
-
-// export function HydrateFallback() {
-//   return <div style={{ padding: "32px" }}>Loading...</div>;
-// }
-
-export default function Community() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const { currentUser } = useLoaderData<typeof clientLoader>();
-  const location = useLocation();
-  const outletContext = useOutletContext() as OutletContextShape;
-
-  if (!outletContext.currentUser || !outletContext.currentUser.username)
-    return <NotLoggedIn />;
-
-  const currentTab = location.pathname.endsWith("/account/")
-    ? "account"
-    : "settings";
+  function tabClass(tab: string) {
+    return `tabs-item${currentTab === tab ? " tabs-item--current" : ""}`;
+  }
 
   return (
     <>
       <PageHeader headingLevel="1" headingSize="2">
         Settings
       </PageHeader>
+
       <div className="settings-user">
         <Tabs>
           <NewLink
@@ -58,9 +26,7 @@ export default function Community() {
             primitiveType="cyberstormLink"
             linkId="Settings"
             aria-current={currentTab === "settings"}
-            rootClasses={`tabs-item${
-              currentTab === "settings" ? " tabs-item--current" : ""
-            }`}
+            rootClasses={tabClass("settings")}
           >
             Settings
           </NewLink>
@@ -69,15 +35,14 @@ export default function Community() {
             primitiveType="cyberstormLink"
             linkId="SettingsAccount"
             aria-current={currentTab === "account"}
-            rootClasses={`tabs-item${
-              currentTab === "account" ? " tabs-item--current" : ""
-            }`}
+            rootClasses={tabClass("account")}
           >
             Account
           </NewLink>
         </Tabs>
+
         <section className="settings-user__body">
-          <Outlet context={outletContext} />
+          <Outlet context={context} />
         </section>
       </div>
     </>
