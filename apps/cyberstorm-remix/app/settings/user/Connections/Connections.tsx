@@ -1,38 +1,31 @@
-import { type ReactElement, useRef, Suspense } from "react";
+import { type ReactElement, useRef } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
 
-import {
-  useOutletContext,
-  useRevalidator,
-  useLoaderData,
-  Await,
-} from "react-router";
+import { useOutletContext, useRevalidator } from "react-router";
 
 import { NewLink, OverwolfLogo, useToast } from "@thunderstore/cyberstorm";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import { ApiError } from "@thunderstore/thunderstore-api";
 
 import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
 import { Connection } from "~/commonComponents/Connection/Connection";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { type OutletContextShape } from "~/root";
 
 import { userLinkedAccountDisconnect } from "../../../../../../packages/thunderstore-api/src";
+import { useHydrated } from "remix-utils/use-hydrated";
 
 type ProvidersType = {
   name: string;
   identifier: "discord" | "github" | "overwolf";
   icon: ReactElement;
-}[];
+};
 
-export const PROVIDERS: ProvidersType = [
+export const PROVIDERS: ProvidersType[] = [
   {
     name: "Discord",
     identifier: "discord",
@@ -46,19 +39,9 @@ export const PROVIDERS: ProvidersType = [
   { name: "Overwolf", identifier: "overwolf", icon: OverwolfLogo() },
 ];
 
-export function HydrateFallback() {
-  return <div style={{ padding: "32px" }}>Loading...</div>;
-}
-
-export async function clientLoader() {
-  const tools = getSessionTools();
-  const currentUser = tools.getSessionCurrentUser(true);
-  return { currentUser };
-}
-
 export default function Connections() {
   const outletContext = useOutletContext() as OutletContextShape;
-  const { currentUser } = useLoaderData<typeof clientLoader>();
+  const isHydrated = useHydrated();
   const revalidator = useRevalidator();
   const toast = useToast();
   const disconnectingProviderRef = useRef<string | null>(null);
@@ -123,69 +106,63 @@ export default function Connections() {
   const publicEnvVariables = getPublicEnvVariables([
     "VITE_AUTH_BASE_URL",
     "VITE_AUTH_RETURN_URL",
+    "VITE_BETA_SITE_URL",
   ]);
 
+  if (!isHydrated) {
+    return <div style={{ padding: "32px" }}>Loading...</div>;
+  }
+
+  if (!outletContext.currentUser) {
+    return <NotLoggedIn />;
+  }
+
   return (
-    <Suspense key="user-settings-connections">
-      <Await resolve={currentUser} errorElement={<div>Error loading user</div>}>
-        {(resolvedCurrentUser) => {
-          outletContext.currentUser = resolvedCurrentUser;
-
-          if (!outletContext.currentUser) {
-            return <NotLoggedIn />;
-          }
-
-          return (
-            <div className="settings-items">
-              <div className="settings-items__item">
-                <div className="settings-items__meta">
-                  <p className="settings-items__title">Connections</p>
-                  <p className="settings-items__description">
-                    This information will not be shared outside of Thunderstore.
-                    Read more on our{" "}
-                    <NewLink
-                      primitiveType="cyberstormLink"
-                      linkId="PrivacyPolicy"
-                      csVariant="cyber"
-                    >
-                      Privacy Policy
-                    </NewLink>
-                    .
-                  </p>
-                </div>
-                <div className="settings-items__content">
-                  {PROVIDERS.map((provider) => (
-                    <Connection
-                      key={provider.name}
-                      disabled={onlyOneConnected() && !!getConnection(provider)}
-                      icon={provider.icon}
-                      name={provider.name}
-                      identifier={provider.identifier}
-                      connection={getConnection(provider)}
-                      connectionLink={buildAuthLoginUrl({
-                        type: provider.identifier,
-                        authBaseDomain:
-                          publicEnvVariables.VITE_AUTH_BASE_URL || "",
-                        authReturnDomain:
-                          publicEnvVariables.VITE_AUTH_RETURN_URL || "",
-                      })}
-                      disconnectFunction={(provider) => {
-                        disconnectingProviderRef.current = provider;
-                        return onSubmit({
-                          params: { provider },
-                          config: outletContext.requestConfig,
-                          queryParams: {},
-                          data: { provider },
-                        });
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          );
-        }}
-      </Await>
-    </Suspense>
+    <div className="settings-items">
+      <div className="settings-items__item">
+        <div className="settings-items__meta">
+          <p className="settings-items__title">Connections</p>
+          <p className="settings-items__description">
+            This information will not be shared outside of Thunderstore. Read
+            more on our{" "}
+            <NewLink
+              primitiveType="cyberstormLink"
+              linkId="PrivacyPolicy"
+              csVariant="cyber"
+            >
+              Privacy Policy
+            </NewLink>
+            .
+          </p>
+        </div>
+        <div className="settings-items__content">
+          {PROVIDERS.map((provider) => (
+            <Connection
+              key={provider.name}
+              disabled={onlyOneConnected() && !!getConnection(provider)}
+              icon={provider.icon}
+              name={provider.name}
+              identifier={provider.identifier}
+              connection={getConnection(provider)}
+              connectionLink={buildAuthLoginUrl({
+                type: provider.identifier,
+                authBaseDomain: publicEnvVariables.VITE_AUTH_BASE_URL || "",
+                authReturnDomain: publicEnvVariables.VITE_AUTH_RETURN_URL || "",
+                nextUrl: `${publicEnvVariables.VITE_BETA_SITE_URL}/settings`,
+              })}
+              disconnectFunction={(provider) => {
+                disconnectingProviderRef.current = provider;
+                return onSubmit({
+                  params: { provider },
+                  config: outletContext.requestConfig,
+                  queryParams: {},
+                  data: { provider },
+                });
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
