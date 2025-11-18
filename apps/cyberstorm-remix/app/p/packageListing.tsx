@@ -270,6 +270,12 @@ export default function PackageListing() {
 
   const listingAndTeamPromise = useMemo(() => Promise.all([listing, team]), []);
 
+  const packageLikeAction = PackageLikeAction({
+    isLoggedIn: Boolean(currentUser?.username),
+    dataUpdateTrigger: fetchAndSetRatedPackages,
+    config: config,
+  });
+
   return (
     <>
       <Suspense>
@@ -434,8 +440,7 @@ export default function PackageListing() {
                         listing={resolvedValue[0]}
                         isLiked={isLiked}
                         currentUser={currentUser}
-                        likeUpdateTrigger={fetchAndSetRatedPackages}
-                        requestConfig={config}
+                        packageLikeAction={packageLikeAction}
                       />
                     )}
                   </Await>
@@ -598,8 +603,7 @@ export default function PackageListing() {
                           listing={resolvedValue[0]}
                           isLiked={isLiked}
                           currentUser={currentUser}
-                          likeUpdateTrigger={fetchAndSetRatedPackages}
-                          requestConfig={config}
+                          packageLikeAction={packageLikeAction}
                         />
                       )}
                     </Await>
@@ -953,34 +957,19 @@ function managementTools(
   );
 }
 
-function likeAction(
-  currentUser: CurrentUser | undefined,
-  updateTrigger: () => Promise<void>,
-  requestConfig: () => RequestConfig
-) {
-  return PackageLikeAction({
-    isLoggedIn: Boolean(currentUser?.username),
-    dataUpdateTrigger: updateTrigger,
-    config: requestConfig,
-  });
-}
-
 const Actions = memo(function Actions(props: {
   team: Awaited<ReturnType<DapperTsInterface["getTeamDetails"]>>;
   listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>;
   isLiked: boolean;
   currentUser: CurrentUser | undefined;
-  likeUpdateTrigger: () => Promise<void>;
-  requestConfig: () => RequestConfig;
+  packageLikeAction: (
+    isLiked: boolean,
+    namespace: string,
+    packageName: string,
+    isLoggedIn: boolean
+  ) => void;
 }) {
-  const {
-    team,
-    listing,
-    isLiked,
-    currentUser,
-    likeUpdateTrigger,
-    requestConfig,
-  } = props;
+  const { team, listing, isLiked, currentUser, packageLikeAction } = props;
   return (
     <>
       <NewButton
@@ -1010,7 +999,7 @@ const Actions = memo(function Actions(props: {
       <NewButton
         primitiveType="button"
         onClick={() =>
-          likeAction(currentUser, likeUpdateTrigger, requestConfig)(
+          packageLikeAction(
             isLiked,
             listing.namespace,
             listing.name,
