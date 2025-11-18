@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router";
+import { useOutletContext, useRevalidator, useNavigate } from "react-router";
 import "./Account.css";
 import {
   NewAlert,
@@ -80,6 +80,8 @@ function DeleteAccountForm(props: {
   requestConfig: OutletContextShape["requestConfig"];
 }) {
   const toast = useToast();
+  const { revalidate } = useRevalidator();
+  const navigate = useNavigate();
 
   function formFieldUpdateAction(
     state: UserAccountDeleteRequestData,
@@ -127,12 +129,14 @@ function DeleteAccountForm(props: {
   >({
     inputs: formInputs,
     submitor,
-    onSubmitSuccess: () => {
+    onSubmitSuccess: async () => {
       toast.addToast({
         csVariant: "success",
         children: `Account deleted successfully`,
         duration: 4000,
       });
+      await revalidate();
+      navigate("/communities");
     },
     onSubmitError: (error) => {
       toast.addToast({
