@@ -12,7 +12,7 @@ import {
   packageListingsResponseDataSchema,
 } from "../schemas/responseSchemas";
 
-export async function fetchCommunityPackageListings(
+export function fetchCommunityPackageListings(
   props: ApiEndpointProps<
     CommunityPackageListingsRequestParams,
     PackageListingsRequestQueryParams,
@@ -37,7 +37,7 @@ export async function fetchCommunityPackageListings(
       { key: "deprecated", value: false, impotent: false },
     ],
   } = props;
-  return await apiFetch({
+  return apiFetch({
     args: {
       config,
       path: `api/cyberstorm/listing/${params.community_id.toLowerCase()}/`,

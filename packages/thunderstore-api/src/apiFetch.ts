@@ -16,6 +16,9 @@ const BASE_HEADERS = {
 const MAX_NB_RETRY = 5;
 const RETRY_DELAY_MS = 200;
 
+/**
+ * Attempts a fetch call multiple times to work around transient network failures.
+ */
 async function fetchRetry(
   input: RequestInfo | URL,
   init?: RequestInit | undefined
@@ -39,32 +42,44 @@ async function fetchRetry(
   }
 }
 
+/**
+ * Simple timeout helper used by the retry loop.
+ */
 function sleep(delay: number) {
   return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
-export type apiFetchArgs<B, QP> = {
+/**
+ * Arguments supplied to `apiFetch` describing the HTTP request and validation schemas.
+ */
+type SchemaOrUndefined<Schema extends z.ZodSchema | undefined> =
+  Schema extends z.ZodSchema ? z.infer<Schema> : undefined;
+
+export type apiFetchArgs<
+  RequestSchema extends z.ZodSchema | undefined,
+  QueryParamsSchema extends z.ZodSchema | undefined,
+> = {
   config: () => RequestConfig;
   path: string;
-  queryParams?: QP;
+  queryParams?: SchemaOrUndefined<QueryParamsSchema>;
   request?: Omit<RequestInit, "headers" | "body"> & { body?: string };
   useSession?: boolean;
-  bodyRaw?: B;
+  bodyRaw?: SchemaOrUndefined<RequestSchema>;
 };
 
-type schemaOrUndefined<A> = A extends z.ZodSchema
-  ? z.infer<A>
-  : never | undefined;
-
-export async function apiFetch(props: {
-  args: apiFetchArgs<
-    schemaOrUndefined<typeof props.requestSchema>,
-    schemaOrUndefined<typeof props.queryParamsSchema>
-  >;
-  requestSchema: z.ZodSchema | undefined;
-  queryParamsSchema: z.ZodSchema | undefined;
-  responseSchema: z.ZodSchema | undefined;
-}): Promise<schemaOrUndefined<typeof props.responseSchema>> {
+/**
+ * Validates input payloads, executes the HTTP request, and parses the response with Zod schemas.
+ */
+export async function apiFetch<
+  RequestSchema extends z.ZodSchema | undefined,
+  QueryParamsSchema extends z.ZodSchema | undefined,
+  ResponseSchema extends z.ZodSchema | undefined,
+>(props: {
+  args: apiFetchArgs<RequestSchema, QueryParamsSchema>;
+  requestSchema: RequestSchema;
+  queryParamsSchema: QueryParamsSchema;
+  responseSchema: ResponseSchema;
+}): Promise<SchemaOrUndefined<ResponseSchema>> {
   const { args, requestSchema, queryParamsSchema, responseSchema } = props;
 
   if (requestSchema && args.bodyRaw) {
@@ -73,6 +88,7 @@ export async function apiFetch(props: {
       throw new RequestBodyParseError(parsedRequestBody.error);
     }
   }
+
   if (queryParamsSchema && args.queryParams) {
     const parsedQueryParams = queryParamsSchema.safeParse(args.queryParams);
     if (!parsedQueryParams.success) {
@@ -81,14 +97,14 @@ export async function apiFetch(props: {
   }
 
   const { config, path, request, queryParams, useSession = false } = args;
+  const configSnapshot = config();
   const usedConfig: RequestConfig = useSession
-    ? config()
+    ? configSnapshot
     : {
-        apiHost: config().apiHost,
+        apiHost: configSnapshot.apiHost,
         sessionId: undefined,
       };
-  // TODO: Query params have stronger types, but they are not just shown here.
-  // Look into furthering the ensuring of passing proper query params.
+  const sessionWasUsed = Boolean(usedConfig.sessionId);
   const url = getUrl(usedConfig, path, queryParams);
 
   const response = await fetchRetry(url, {
@@ -100,19 +116,27 @@ export async function apiFetch(props: {
   });
 
   if (!response.ok) {
-    throw await ApiError.createFromResponse(response);
+    const apiError = await ApiError.createFromResponse(response, {
+      sessionWasUsed,
+    });
+    throw apiError;
   }
 
-  if (responseSchema === undefined) return undefined;
+  if (responseSchema === undefined) {
+    return undefined as SchemaOrUndefined<ResponseSchema>;
+  }
 
   const parsed = responseSchema.safeParse(await response.json());
   if (!parsed.success) {
     throw new ParseError(parsed.error);
-  } else {
-    return parsed.data;
   }
+
+  return parsed.data;
 }
 
+/**
+ * Derives authentication headers based on the provided request configuration.
+ */
 function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {
   return config.sessionId
     ? {
@@ -121,6 +145,9 @@ function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {
     : {};
 }
 
+/**
+ * Builds the request URL with optional query parameters.
+ */
 function getUrl(
   config: RequestConfig,
   path: string,

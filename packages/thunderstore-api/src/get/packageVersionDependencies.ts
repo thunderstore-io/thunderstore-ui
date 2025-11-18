@@ -8,7 +8,7 @@ import {
 } from "../index";
 import { apiFetch } from "../apiFetch";
 
-export async function fetchPackageVersionDependencies(
+export function fetchPackageVersionDependencies(
   props: ApiEndpointProps<
     PackageVersionDependenciesRequestParams,
     PackageVersionDependenciesRequestQueryParams,
@@ -22,7 +22,7 @@ export async function fetchPackageVersionDependencies(
   } = props;
   const path = `api/cyberstorm/package/${params.namespace_id}/${params.package_name}/v/${params.version_number}/dependencies/`;
 
-  return await apiFetch({
+  return apiFetch({
     args: {
       config,
       path,
