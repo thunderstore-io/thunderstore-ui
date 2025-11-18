@@ -36,6 +36,13 @@ import {
 import type { OutletContextShape } from "~/root";
 import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 
+const communityNotFoundMappings = [
+  createNotFoundMapping(
+    "Community not found.",
+    "We could not find the requested community."
+  ),
+];
+
 /**
  * Remix server loader that fetches the community by id while translating API errors
  * into user-facing payload responses.
@@ -49,14 +56,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
         community,
       };
     } catch (error) {
-      handleLoaderError(error, {
-        mappings: [
-          createNotFoundMapping(
-            "Community not found.",
-            "We could not find the requested community."
-          ),
-        ],
-      });
+      handleLoaderError(error, { mappings: communityNotFoundMappings });
     }
   }
   throwUserFacingPayloadResponse({
@@ -76,7 +76,11 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
     const { dapper } = getLoaderTools();
 
     return {
-      community: dapper.getCommunity(params.communityId),
+      community: dapper
+        .getCommunity(params.communityId)
+        .catch((error) =>
+          handleLoaderError(error, { mappings: communityNotFoundMappings })
+        ),
     };
   }
   throwUserFacingPayloadResponse({

@@ -51,17 +51,25 @@ export function clientLoader({ params, request }: LoaderFunctionArgs) {
     const searchParams = new URL(request.url).searchParams;
     const page = parseIntegerSearchParam(searchParams.get("page"));
 
-    const version = dapper.getPackageVersionDetails(
-      params.namespaceId,
-      params.packageId,
-      params.packageVersion
-    );
-    const dependencies = dapper.getPackageVersionDependencies(
-      params.namespaceId,
-      params.packageId,
-      params.packageVersion,
-      page
-    );
+    const version = dapper
+      .getPackageVersionDetails(
+        params.namespaceId,
+        params.packageId,
+        params.packageVersion
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageDependenciesErrorMappings })
+      );
+    const dependencies = dapper
+      .getPackageVersionDependencies(
+        params.namespaceId,
+        params.packageId,
+        params.packageVersion,
+        page
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageDependenciesErrorMappings })
+      );
 
     return {
       version,

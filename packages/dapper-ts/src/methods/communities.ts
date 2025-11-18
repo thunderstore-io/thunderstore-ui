@@ -6,7 +6,7 @@ import {
 
 import { DapperTsInterface } from "../index";
 
-export async function getCommunities(
+export function getCommunities(
   this: DapperTsInterface,
   page?: number,
   ordering?: string,

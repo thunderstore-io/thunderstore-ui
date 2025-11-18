@@ -47,7 +47,10 @@ export const getFakePackageListings = async (
 ) => {
   const pageSize = 20;
   const count = 200;
-  const currentPage = Math.max(page ?? 1, 1);
+  const normalizedPage = Number.isFinite(page)
+    ? Math.max(1, Math.trunc(page))
+    : 1;
+  const currentPage = normalizedPage;
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, count);
   const pageLength = Math.max(endIndex - startIndex, 0);
@@ -59,9 +62,7 @@ export const getFakePackageListings = async (
       case "namespace":
         return `api/cyberstorm/listing/${type.communityId.toLowerCase()}/${type.namespaceId.toLowerCase()}/`;
       case "package-dependants":
-        return `api/cyberstorm/listing/${type.communityId.toLowerCase()}/${type.namespaceId.toLowerCase()}/${
-          type.packageName
-        }/dependants/`;
+        return `api/cyberstorm/listing/${type.communityId.toLowerCase()}/${type.namespaceId.toLowerCase()}/${type.packageName.toLowerCase()}/dependants/`;
       default:
         return "api/cyberstorm/listing/";
     }
@@ -108,7 +109,7 @@ export const getFakePackageListings = async (
         : `${type.communityId}-namespace-${currentPage}-${index}`;
     const packageName =
       type.kind === "package-dependants"
-        ? `${type.packageName}-dependant-${currentPage}-${index}`
+        ? `${type.packageName.toLowerCase()}-dependant-${currentPage}-${index}`
         : `${namespaceId}-package-${currentPage}-${index}`;
 
     return getFakePackageListing(type.communityId, namespaceId, packageName);
@@ -340,11 +341,14 @@ export const getFakePackageVersionDependencies = async (
   page?: number
 ) => {
   setSeed(`${namespace}-${name}-${version}`);
-  page = page ?? 1;
+  const normalizedPage =
+    typeof page === "number" && Number.isFinite(page)
+      ? Math.max(1, Math.trunc(page))
+      : 1;
 
   // Split the fake data into pages of 10 items each.
 
-  const start = (page - 1) * 10;
+  const start = (normalizedPage - 1) * 10;
   const end = start + 10;
   const items = fakePackageVersionDependencies.slice(start, end);
 
@@ -353,13 +357,13 @@ export const getFakePackageVersionDependencies = async (
     next:
       end < fakePackageVersionDependencies.length
         ? `https://thunderstore.io/api/cyberstorm/package/${namespace}/${name}/v/${version}/dependencies/?page=${
-            page + 1
+            normalizedPage + 1
           }`
         : null,
     previous:
-      page > 1
+      normalizedPage > 1
         ? `https://thunderstore.io/api/cyberstorm/package/${namespace}/${name}/v/${version}/dependencies/?page=${
-            page - 1
+            normalizedPage - 1
           }`
         : null,
     results: items,

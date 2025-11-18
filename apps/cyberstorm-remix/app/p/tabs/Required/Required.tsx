@@ -62,28 +62,40 @@ export function clientLoader({ params, request }: LoaderFunctionArgs) {
     const { dapper } = getLoaderTools();
     const searchParams = new URL(request.url).searchParams;
     const page = parseIntegerSearchParam(searchParams.get("page"));
-    const listingPromise = dapper.getPackageListingDetails(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
-
-    const version = listingPromise.then((listing) =>
-      dapper.getPackageVersionDetails(
-        listing.namespace,
-        listing.name,
-        listing.latest_version_number
+    const listingPromise = dapper
+      .getPackageListingDetails(
+        params.communityId,
+        params.namespaceId,
+        params.packageId
       )
-    );
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageDependenciesErrorMappings })
+      );
 
-    const dependencies = listingPromise.then((listing) =>
-      dapper.getPackageVersionDependencies(
-        listing.namespace,
-        listing.name,
-        listing.latest_version_number,
-        page
+    const version = listingPromise
+      .then((listing) =>
+        dapper.getPackageVersionDetails(
+          listing.namespace,
+          listing.name,
+          listing.latest_version_number
+        )
       )
-    );
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageDependenciesErrorMappings })
+      );
+
+    const dependencies = listingPromise
+      .then((listing) =>
+        dapper.getPackageVersionDependencies(
+          listing.namespace,
+          listing.name,
+          listing.latest_version_number,
+          page
+        )
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageDependenciesErrorMappings })
+      );
 
     return {
       version,

@@ -84,6 +84,13 @@ import {
 import "./packageListing.css";
 import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 
+const packageNotFoundMappings = [
+  createNotFoundMapping(
+    "Package not found.",
+    "We could not find the requested package."
+  ),
+];
+
 const getErrorMessage = (error: unknown) =>
   error instanceof Error ? error.message : String(error);
 
@@ -114,14 +121,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
         permissions: undefined,
       };
     } catch (error) {
-      handleLoaderError(error, {
-        mappings: [
-          createNotFoundMapping(
-            "Package not found.",
-            "We could not find the requested package."
-          ),
-        ],
-      });
+      handleLoaderError(error, { mappings: packageNotFoundMappings });
     }
   }
   throwUserFacingPayloadResponse({
@@ -149,27 +149,40 @@ async function getUserPermissions(
 // TODO: Needs to check if package is available for the logged in user
 export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools.getConfig().apiHost,
-        sessionId: tools.getConfig().sessionId,
-      };
-    });
-    const community = dapper.getCommunity(params.communityId);
-    const communityFilters = dapper.getCommunityFilters(params.communityId);
-    const listing = dapper.getPackageListingDetails(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
-    const team = dapper.getTeamDetails(params.namespaceId);
+    const { dapper, sessionTools } = getLoaderTools();
+    const tools = sessionTools ?? getSessionTools();
+    const community = dapper
+      .getCommunity(params.communityId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageNotFoundMappings })
+      );
+    const communityFilters = dapper
+      .getCommunityFilters(params.communityId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageNotFoundMappings })
+      );
+    const listing = dapper
+      .getPackageListingDetails(
+        params.communityId,
+        params.namespaceId,
+        params.packageId
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageNotFoundMappings })
+      );
+    const team = dapper
+      .getTeamDetails(params.namespaceId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageNotFoundMappings })
+      );
     const permissions = getUserPermissions(
       tools,
       dapper,
       params.communityId,
       params.namespaceId,
       params.packageId
+    ).catch((error) =>
+      handleLoaderError(error, { mappings: packageNotFoundMappings })
     );
 
     return {
@@ -347,15 +360,18 @@ export default function PackageListing() {
 
   const listingAndCommunityPromise = useMemo(
     () => Promise.all([listing, community]),
-    []
+    [listing, community]
   );
 
   const listingAndPermissionsPromise = useMemo(
     () => Promise.all([listing, permissions]),
-    []
+    [listing, permissions]
   );
 
-  const listingAndTeamPromise = useMemo(() => Promise.all([listing, team]), []);
+  const listingAndTeamPromise = useMemo(
+    () => Promise.all([listing, team]),
+    [listing, team]
+  );
 
   const packageLikeAction = PackageLikeAction({
     isLoggedIn: Boolean(currentUser?.username),

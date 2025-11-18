@@ -43,7 +43,10 @@ export function handleLoaderError(
     throw error;
   }
 
-  const allOptions = defaultErrorMappings.concat(options?.mappings ?? []);
+  const resolvedOptions: HandleLoaderErrorOptions = options ?? {};
+  const allOptions = defaultErrorMappings.concat(
+    resolvedOptions.mappings ?? []
+  );
 
   if (error instanceof ApiError && allOptions.length) {
     const mapping = allOptions.findLast((candidate) => {
@@ -54,9 +57,12 @@ export function handleLoaderError(
     });
 
     if (mapping) {
-      const base = mapApiErrorToUserFacingError(error, options?.mapOptions);
+      const base = mapApiErrorToUserFacingError(
+        error,
+        resolvedOptions.mapOptions
+      );
       const includeContextValue =
-        mapping.includeContext ?? options?.includeContext ?? false;
+        mapping.includeContext ?? resolvedOptions.includeContext ?? false;
       const payload: UserFacingErrorPayload = {
         headline: mapping.headline,
         description:
@@ -72,10 +78,11 @@ export function handleLoaderError(
       }
 
       throwUserFacingPayloadResponse(payload, {
-        statusOverride: mapping.statusOverride ?? options?.statusOverride,
+        statusOverride:
+          mapping.statusOverride ?? resolvedOptions.statusOverride,
       });
     }
   }
 
-  throwUserFacingErrorResponse(error, options);
+  throwUserFacingErrorResponse(error, resolvedOptions);
 }

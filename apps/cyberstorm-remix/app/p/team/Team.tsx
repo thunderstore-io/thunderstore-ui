@@ -17,6 +17,14 @@ import {
 import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 import { parseIntegerSearchParam } from "cyberstorm/utils/searchParamsUtils";
 
+const teamNotFoundMappings = [
+  createNotFoundMapping(
+    "Team not found.",
+    "We could not find the requested team.",
+    404
+  ),
+];
+
 export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId && params.namespaceId) {
     const { dapper } = getLoaderTools();
@@ -54,15 +62,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
         filtersAndListings: await dataPromise,
       };
     } catch (error) {
-      handleLoaderError(error, {
-        mappings: [
-          createNotFoundMapping(
-            "Team not found.",
-            "We could not find the requested team.",
-            404
-          ),
-        ],
-      });
+      handleLoaderError(error, { mappings: teamNotFoundMappings });
     }
   }
   throwUserFacingPayloadResponse({
@@ -89,22 +89,30 @@ export async function clientLoader({
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
-    const filters = dapper.getCommunityFilters(params.communityId);
-    const listings = dapper.getPackageListings(
-      {
-        kind: "namespace",
-        communityId: params.communityId,
-        namespaceId: params.namespaceId,
-      },
-      ordering ?? "",
-      page,
-      search ?? "",
-      includedCategories?.split(",") ?? undefined,
-      excludedCategories?.split(",") ?? undefined,
-      section ? (section === "all" ? "" : section) : "",
-      nsfw === "true",
-      deprecated === "true"
-    );
+    const filters = dapper
+      .getCommunityFilters(params.communityId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: teamNotFoundMappings })
+      );
+    const listings = dapper
+      .getPackageListings(
+        {
+          kind: "namespace",
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+        },
+        ordering ?? "",
+        page,
+        search ?? "",
+        includedCategories?.split(",") ?? undefined,
+        excludedCategories?.split(",") ?? undefined,
+        section ? (section === "all" ? "" : section) : "",
+        nsfw === "true",
+        deprecated === "true"
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: teamNotFoundMappings })
+      );
     const dataPromise = Promise.all([filters, listings]);
 
     return { teamId: params.namespaceId, filtersAndListings: dataPromise };

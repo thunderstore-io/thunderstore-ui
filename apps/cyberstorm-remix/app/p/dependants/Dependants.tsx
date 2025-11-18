@@ -21,6 +21,13 @@ import { createNotFoundMapping } from "cyberstorm/utils/errors/loaderMappings";
 import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 import { parseIntegerSearchParam } from "cyberstorm/utils/searchParamsUtils";
 
+const packageDependantsNotFoundMappings = [
+  createNotFoundMapping(
+    "Package not found.",
+    "We could not find the requested package."
+  ),
+];
+
 export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId && params.packageId && params.namespaceId) {
     const { dapper } = getLoaderTools();
@@ -64,12 +71,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       return dataPromise;
     } catch (error) {
       handleLoaderError(error, {
-        mappings: [
-          createNotFoundMapping(
-            "Package not found.",
-            "We could not find the requested package."
-          ),
-        ],
+        mappings: packageDependantsNotFoundMappings,
       });
     }
   }

@@ -25,7 +25,7 @@ import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
 import { NotLoggedIn } from "app/commonComponents/NotLoggedIn/NotLoggedIn";
 import { type OutletContextShape } from "app/root";
-import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/getLoaderTools";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 
 export const clientLoader = makeTeamSettingsTabLoader(

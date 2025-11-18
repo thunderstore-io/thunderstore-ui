@@ -7,10 +7,7 @@ import {
 
 import { DapperTsInterface } from "../index";
 
-export async function getTeamDetails(
-  this: DapperTsInterface,
-  teamName: string
-) {
+export function getTeamDetails(this: DapperTsInterface, teamName: string) {
   return fetchTeamDetails({
     config: this.config,
     params: {
@@ -21,10 +18,7 @@ export async function getTeamDetails(
   });
 }
 
-export async function getTeamMembers(
-  this: DapperTsInterface,
-  teamName: string
-) {
+export function getTeamMembers(this: DapperTsInterface, teamName: string) {
   return fetchTeamMembers({
     config: this.config,
     params: {
@@ -35,7 +29,7 @@ export async function getTeamMembers(
   });
 }
 
-export async function getTeamServiceAccounts(
+export function getTeamServiceAccounts(
   this: DapperTsInterface,
   teamName: string
 ) {
@@ -49,7 +43,7 @@ export async function getTeamServiceAccounts(
   });
 }
 
-export async function postTeamCreate(this: DapperTsInterface, name: string) {
+export function postTeamCreate(this: DapperTsInterface, name: string) {
   return teamCreate({
     config: this.config,
     params: {},

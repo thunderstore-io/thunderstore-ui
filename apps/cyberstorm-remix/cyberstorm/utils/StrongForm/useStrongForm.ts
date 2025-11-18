@@ -7,10 +7,36 @@ import {
   mapApiErrorToUserFacingError,
 } from "@thunderstore/thunderstore-api";
 
-/**
- * Configuration for wiring a StrongForm instance to refiners, submitters and lifecycle hooks.
- */
-export interface UseStrongFormProps<
+type IsExact<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B
+  ? 1
+  : 2
+  ? (<T>() => T extends B ? 1 : 2) extends <T>() => T extends A ? 1 : 2
+    ? true
+    : false
+  : false;
+
+type RefinerRequirement<Inputs, SubmissionDataShape extends Inputs> = [
+  SubmissionDataShape,
+] extends [Inputs]
+  ? {
+      refiner?: (inputs: Inputs) => Promise<SubmissionDataShape>;
+    }
+  : {
+      refiner: (inputs: Inputs) => Promise<SubmissionDataShape>;
+    };
+
+type ErrorMapperRequirement<SubmissionError extends UserFacingError> = IsExact<
+  SubmissionError,
+  UserFacingError
+> extends true
+  ? {
+      errorMapper?: (error: unknown) => SubmissionError;
+    }
+  : {
+      errorMapper: (error: unknown) => SubmissionError;
+    };
+
+interface UseStrongFormPropsBase<
   Inputs,
   SubmissionDataShape extends Inputs = Inputs,
   RefinerError extends Error = Error,
@@ -19,13 +45,30 @@ export interface UseStrongFormProps<
 > {
   inputs: Inputs;
   submitor: (data: SubmissionDataShape) => Promise<SubmissionOutput>;
-  refiner?: (inputs: Inputs) => Promise<SubmissionDataShape>;
   onRefineSuccess?: (data: SubmissionDataShape) => void;
   onRefineError?: (error: RefinerError) => void;
   onSubmitSuccess?: (output: SubmissionOutput) => void;
   onSubmitError?: (error: SubmissionError) => void;
-  errorMapper?: (error: unknown) => SubmissionError;
 }
+
+/**
+ * Configuration for wiring a StrongForm instance to refiners, submitters and lifecycle hooks.
+ */
+export type UseStrongFormProps<
+  Inputs,
+  SubmissionDataShape extends Inputs = Inputs,
+  RefinerError extends Error = Error,
+  SubmissionOutput = unknown,
+  SubmissionError extends UserFacingError = UserFacingError,
+> = UseStrongFormPropsBase<
+  Inputs,
+  SubmissionDataShape,
+  RefinerError,
+  SubmissionOutput,
+  SubmissionError
+> &
+  RefinerRequirement<Inputs, SubmissionDataShape> &
+  ErrorMapperRequirement<SubmissionError>;
 
 /**
  * Return shape emitted by `useStrongForm`, exposing state for UI bindings.
@@ -96,11 +139,15 @@ export function useStrongForm<
     return value as SubmissionDataShape;
   };
 
-  const defaultErrorMapper = (error: unknown): SubmissionError => {
-    return mapApiErrorToUserFacingError(error) as SubmissionError;
+  const defaultErrorMapper = (error: unknown): UserFacingError => {
+    if (error instanceof UserFacingError) {
+      return error;
+    }
+    return mapApiErrorToUserFacingError(error);
   };
 
-  const mapError = props.errorMapper ?? defaultErrorMapper;
+  const mapError: (error: unknown) => SubmissionError =
+    props.errorMapper ?? defaultErrorMapper;
 
   useEffect(() => {
     let cancelled = false;
@@ -139,7 +186,9 @@ export function useStrongForm<
           return;
         }
 
-        const castError = error as RefinerError;
+        const normalizedError =
+          error instanceof Error ? error : new Error(String(error));
+        const castError = normalizedError as RefinerError;
         setRefineError(castError);
         if (props.onRefineError) {
           props.onRefineError(castError);
@@ -218,11 +267,11 @@ export function useStrongForm<
       return output;
     } catch (error) {
       if (error instanceof RequestBodyParseError) {
-        setInputErrors(error.error.formErrors as InputErrors);
+        setInputErrors(error.error.formErrors.fieldErrors as InputErrors);
       } else if (error instanceof RequestQueryParamsParseError) {
-        setInputErrors(error.error.formErrors as InputErrors);
+        setInputErrors(error.error.formErrors.fieldErrors as InputErrors);
       } else if (error instanceof ParseError) {
-        setInputErrors(error.error.formErrors as InputErrors);
+        setInputErrors(error.error.formErrors.fieldErrors as InputErrors);
       }
 
       const mappedError = toSubmissionError(error);

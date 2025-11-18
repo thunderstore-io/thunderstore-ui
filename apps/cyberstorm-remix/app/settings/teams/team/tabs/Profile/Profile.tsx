@@ -21,7 +21,7 @@ import {
 } from "@thunderstore/thunderstore-api";
 
 import { type OutletContextShape } from "app/root";
-import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/getLoaderTools";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import "./Profile.css";
 import {
@@ -34,7 +34,7 @@ export const clientLoader = makeTeamSettingsTabLoader(
     // TODO: for hygienie we shouldn't use this public endpoint but
     // have an endpoint that confirms user permissions and returns
     // possibly sensitive information.
-    team: await dapper.getTeamDetails(teamName),
+    team: dapper.getTeamDetails(teamName),
   })
 );
 

@@ -23,13 +23,11 @@ import {
   useSearchParams,
 } from "react-router";
 import type { Communities } from "@thunderstore/dapper/types";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import {
   NimbusAwaitErrorElement,
   NimbusDefaultRouteErrorBoundary,
 } from "cyberstorm/utils/errors/NimbusErrorBoundary";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 
@@ -115,17 +113,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
  * Fetches communities data on the client, returning a Suspense-ready promise wrapper.
  */
 export function clientLoader({ request }: LoaderFunctionArgs) {
-  const tools = getSessionTools();
-  const dapper = new DapperTs(() => {
-    return {
-      apiHost: tools?.getConfig().apiHost,
-      sessionId: tools?.getConfig().sessionId,
-    };
-  });
+  const { dapper } = getLoaderTools();
   const query = resolveCommunitiesQuery(request);
   const page = undefined;
   return {
-    communities: dapper.getCommunities(page, query.order, query.search),
+    communities: dapper
+      .getCommunities(page, query.order, query.search)
+      .catch((error) => handleLoaderError(error)),
   };
 }
 

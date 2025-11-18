@@ -9,7 +9,11 @@ export function parseIntegerSearchParam(value: string | null) {
   if (value === null) {
     return undefined;
   }
-  const parsed = Number.parseInt(value, 10);
+  const trimmedValue = value.trim();
+  if (!/^\d+$/.test(trimmedValue)) {
+    return undefined;
+  }
+  const parsed = Number.parseInt(trimmedValue, 10);
   if (Number.isNaN(parsed) || !Number.isSafeInteger(parsed)) {
     return undefined;
   }

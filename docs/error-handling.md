@@ -1,26 +1,27 @@
 # Error Handling
 
-This document provides a concise overview of the error handling strategy used in the Cyberstorm Remix application. The goal is to provide consistent, user-friendly error messages and robust error isolation.
+This document summarizes the Cyberstorm Remix error-handling strategy so every route surfaces consistent, user-friendly failures.
 
-## Core Concepts
+The guidance is split into three layers:
 
-Our error handling is built around a few key concepts:
-
--   **`handleLoaderError`**: A utility for normalizing errors within Remix loaders.
--   **`UserFacingError`**: A structured error format for communicating user-friendly error details from the API/backend to the UI.
--   **`NimbusErrorBoundary`**: A React error boundary to gracefully handle rendering errors in components.
+1. **Server loaders** – how to normalize API failures before they reach the UI.
+2. **Client loaders** – how to stream data to Suspense while preserving the same user-facing payloads.
+3. **Error boundaries** – how Nimbus components keep rendering errors isolated.
 
 ---
 
-## `handleLoaderError`
+## Server Loaders
 
-All Remix loaders that fetch data from the API should use the `handleLoaderError` utility to ensure errors are handled consistently. It catches errors from Dapper, maps them to `UserFacingError` payloads, and throws a `Response` that can be caught by the route's `ErrorBoundary`.
+Server-side Remix `loader` functions must always translate thrown errors into `UserFacingError` payloads. Use `handleLoaderError` for every API call so mapped HTTP codes always render the same text.
 
-### Usage
+### `handleLoaderError`
 
-Wrap your data-fetching logic in a `try...catch` block and call `handleLoaderError` in the `catch` block.
+`handleLoaderError` accepts any unknown error, looks up optional mappings, and throws a `Response` created by `throwUserFacingPayloadResponse`.
 
-```typescript
+-   **Source**: [`cyberstorm/utils/errors/handleLoaderError.ts`](../../apps/cyberstorm-remix/cyberstorm/utils/errors/handleLoaderError.ts)
+-   **Response helper**: [`cyberstorm/utils/errors/userFacingErrorResponse.ts`](../../apps/cyberstorm-remix/cyberstorm/utils/errors/userFacingErrorResponse.ts)
+
+```tsx
 // apps/cyberstorm-remix/app/p/tabs/Readme/Readme.tsx
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
@@ -38,104 +39,96 @@ export async function loader({ params }: LoaderFunctionArgs) {
       handleLoaderError(error);
     }
   }
-  // ...
+
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    category: "not_found",
+    status: 404,
+  });
 }
 ```
 
--   **Source**: [`apps/cyberstorm-remix/cyberstorm/utils/errors/handleLoaderError.ts`](../../apps/cyberstorm-remix/cyberstorm/utils/errors/handleLoaderError.ts)
--   **Example**: [`apps/cyberstorm-remix/app/p/tabs/Readme/Readme.tsx`](../../apps/cyberstorm-remix/app/p/tabs/Readme/Readme.tsx)
+#### Why every loader uses it
 
-### Error Handling in `loader` vs. `clientLoader`
+The phrase “all Remix loaders” includes *both* server `loader`s and client `clientLoader`s. Wrapping API calls this way guarantees:
 
-There is a notable difference in how errors are handled between `loader` and `clientLoader` functions.
+-   Users always see the same copy (via shared mappings such as `packageNotFoundMappings`).
+-   Default mappings continue to work when route code omits explicit options; `handleLoaderError` now merges `defaultErrorMappings` with any route-specific overrides before searching for a match.
+-   Any unrecognized exception still flows through `throwUserFacingErrorResponse`, so the `ErrorBoundary` has structured data.
 
--   **`loader` (Server-side):** Errors are consistently processed through `handleLoaderError`. This utility catches errors from API calls (e.g., from Dapper), maps them to structured `UserFacingError` payloads, and throws a `Response`. This ensures that errors are standardized before they reach the UI, allowing for consistent presentation in the route's `ErrorBoundary`.
+### `UserFacingError`
 
--   **`clientLoader` (Client-side):** Error handling is less standardized. `clientLoader` functions often do not use `handleLoaderError`. Instead, they might:
-    -   Throw a generic `Error` object.
-    -   Have no explicit `try...catch` block, letting promise rejections from API calls be caught by the nearest Remix error boundary.
-
-This can lead to less specific error messages for the user. The recommendation is to apply the same `try...catch` and `handleLoaderError` pattern in `clientLoader` as is used in `loader` to ensure a consistent user experience.
-
-#### Bad Example (`clientLoader` without `handleLoaderError`)
-
-```typescript
-// This is not recommended
-export async function clientLoader({ params }: ClientLoaderFunctionArgs) {
-  const { dapper } = getLoaderTools();
-  try {
-    const team = await dapper.getTeam(params.teamId);
-    // Awaiting all follow-up data forces the UI to block on the clientLoader.
-    const members = await dapper.getTeamMembers(params.teamId);
-    return { team, members };
-  } catch (error) {
-    // Errors will bubble to Remix but we miss the user-facing payload mapping.
-    throw error;
-  }
-}
-```
-
-#### Good Example (`clientLoader` with `handleLoaderError`)
-
-```typescript
-// This is the recommended approach
-export async function clientLoader({ params }: ClientLoaderFunctionArgs) {
-  const { dapper } = getLoaderTools();
-
-  let team;
-  try {
-    // Await the first fetch only because the follow-up request depends on it.
-    team = await dapper.getTeam(params.teamId);
-  } catch (error) {
-    // This provides a consistent, user-facing error.
-    handleLoaderError(error);
-  }
-
-  // Kick off dependent work without awaiting so Suspense can resolve it downstream.
-  const members = dapper.getTeamMembers(team.slug);
-
-  return {
-    team,
-    members,
-  };
-}
-```
+`handleLoaderError` ultimately throws a JSON payload shaped like `UserFacingError`, defined in [`packages/thunderstore-api`](../../packages/thunderstore-api/src/errors/userFacingError.ts). Each payload contains a `headline`, optional `description`, and any context needed by Nimbus error boundaries.
 
 ---
 
-## `UserFacingError`
+## Client Loaders
 
-When an error is thrown, `handleLoaderError` uses `throwUserFacingPayloadResponse` to create a `Response` with a JSON payload containing a `UserFacingError`. This structured error object ensures that the UI can present a helpful message.
+Client loaders stream data to the browser but should produce the same payloads and tone as their server counterparts. Treat them exactly like server loaders:
 
-The `UserFacingError` interface is defined in the `thunderstore-api` package.
+1. Validate required params (`namespaceId`, `teamName`, etc.) and throw `throwUserFacingPayloadResponse` immediately when missing.
+2. Call `getLoaderTools()` so you reuse the configured `DapperTs` instance *and* hydrated session tools. The helper now returns `{ dapper, sessionTools }` for client and server paths.
+3. Wrap awaited work in `try/catch` and delegate to `handleLoaderError`. For Promises you hand off to Suspense, attach `.catch(error => handleLoaderError(error, { mappings }))` so rejections surface Nimbus copy.
+4. Share error-mapping constants between server and client loaders to prevent drift.
 
-```typescript
-// packages/thunderstore-api/src/errors/userFacingError.ts
-export interface UserFacingError {
-  headline: string;
-  description?: string;
-  category?: UserFacingErrorCategory;
-  status?: number;
-  context?: Record<string, unknown>;
+### Example pattern
+
+```tsx
+const teamNotFoundMappings = [
+  createNotFoundMapping(
+    "Team not found.",
+    "We could not find the requested team.",
+    404
+  ),
+];
+
+export async function clientLoader({ params, request }: Route.ClientLoaderArgs) {
+  if (params.communityId && params.namespaceId) {
+    const { dapper } = getLoaderTools();
+    const page = parseIntegerSearchParam(new URL(request.url).searchParams.get("page"));
+
+    return {
+      filters: dapper
+        .getCommunityFilters(params.communityId)
+        .catch((error) => handleLoaderError(error, { mappings: teamNotFoundMappings })),
+      listings: dapper
+        .getPackageListings(
+          { kind: "namespace", communityId: params.communityId, namespaceId: params.namespaceId },
+          PackageOrderOptions.Updated,
+          page
+        )
+        .catch((error) => handleLoaderError(error, { mappings: teamNotFoundMappings })),
+    };
+  }
+
+  throwUserFacingPayloadResponse({
+    headline: "Community not found.",
+    description: "We could not find the requested community.",
+    category: "not_found",
+    status: 404,
+  });
 }
 ```
 
--   **Definition**: [`packages/thunderstore-api/src/errors/userFacingError.ts`](../../packages/thunderstore-api/src/errors/userFacingError.ts)
--   **Response Helper**: [`apps/cyberstorm-remix/cyberstorm/utils/errors/userFacingErrorResponse.ts`](../../apps/cyberstorm-remix/cyberstorm/utils/errors/userFacingErrorResponse.ts)
+> **Tip:** Client loaders should only `await` dependent work (for example, when the second call needs data from the first). Everything else can be returned as promises so `<Suspense>` renders immediately.
 
 ---
 
-## React Router Related Error Handling
+## Error Boundaries
 
-### Usage in ErrorBoundary
+Rendering errors are isolated with Nimbus components so a failure in one subtree never crashes the entire shell. Treat React Router error primitives and Nimbus helpers as a single toolkit.
 
-A route's `ErrorBoundary` can use `resolveRouteErrorPayload` to parse the error from the `Response` and render a user-friendly message.
+### Route-level boundaries
 
-```typescript
-// apps/cyberstorm-remix/app/some-route.tsx
+Every Remix route exports `ErrorBoundary = NimbusDefaultRouteErrorBoundary` (or a custom component that delegates to `NimbusErrorBoundaryFallback`). When a loader throws a `UserFacingError`, call `resolveRouteErrorPayload` inside the boundary to access the structured payload.
+
+```tsx
 import { useRouteError } from "react-router";
+import {
+  NimbusDefaultRouteErrorBoundary,
+  NimbusErrorBoundaryFallback,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
 import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
-import { NimbusErrorBoundaryFallback } from "cyberstorm/utils/errors/NimbusErrorBoundary";
 
 export function ErrorBoundary() {
   const error = useRouteError();
@@ -149,14 +142,15 @@ export function ErrorBoundary() {
     />
   );
 }
+
+export const DefaultRouteBoundary = NimbusDefaultRouteErrorBoundary;
 ```
 
-### Usage with Suspense & `Await`
+### Suspense + `Await`
 
-When handing promises to the UI, wrap the consuming view with `Suspense`/`Await` and provide `NimbusAwaitErrorElement` as the `errorElement`. This ensures promise rejections render the same Nimbus fallback instead of crashing the tree.
+When a loader returns promises, wrap the consuming UI with `<Suspense>` and `<Await>` so loader errors resolve through Nimbus’ Suspense-aware helpers instead of crashing React Router.
 
 ```tsx
-// apps/cyberstorm-remix/app/p/tabs/Readme/Readme.tsx
 import { Suspense } from "react";
 import { Await } from "react-router";
 import { SkeletonBox } from "@thunderstore/cyberstorm";
@@ -173,70 +167,32 @@ export function ReadmeContent({ readme }: { readme: Promise<string> }) {
 }
 ```
 
----
+### Granular component boundaries
 
-## `NimbusErrorBoundary`
-
-`NimbusErrorBoundary` is a crucial component for preventing a UI crash in one part of the page from taking down the entire application. It's a React Error Boundary that catches rendering errors in its children and displays a fallback UI.
-
-### Root Error Boundary
-
-The entire application is wrapped in `NimbusErrorBoundary` in `root.tsx` to catch any unhandled rendering errors.
+`NimbusErrorBoundary` can also wrap individual components when you need localized retries or messaging.
 
 ```tsx
-// apps/cyberstorm-remix/app/root.tsx
 import { NimbusErrorBoundary } from "cyberstorm/utils/errors/NimbusErrorBoundary";
 
-export default function App() {
-  // ...
+export function MyComponent() {
   return (
     <NimbusErrorBoundary
-      fallback={AppShellErrorFallback}
-      onReset={reloadDocument}
+      title="A component has failed"
+      description="This part of the page couldn't be loaded. Please try again."
+      retryLabel="Retry block"
     >
-      <Layout>
-        <Outlet />
-      </Layout>
+      <SomeRiskyComponent />
     </NimbusErrorBoundary>
   );
 }
 ```
 
-### Route-level Error Boundary
+The full implementation lives in [`cyberstorm/utils/errors/NimbusErrorBoundary/NimbusErrorBoundary.tsx`](../../apps/cyberstorm-remix/cyberstorm/utils/errors/NimbusErrorBoundary/NimbusErrorBoundary.tsx), and the app shell wires it up in [`app/root.tsx`](../../apps/cyberstorm-remix/app/root.tsx).
 
-Remix routes can export an `ErrorBoundary` which will render when a loader or action throws an error. We use `NimbusDefaultRouteErrorBoundary` to provide a consistent look and feel.
+---
 
-```tsx
-// apps/cyberstorm-remix/app/p/tabs/Changelog/Changelog.tsx
-import { NimbusDefaultRouteErrorBoundary } from "cyberstorm/utils/errors/NimbusErrorBoundary";
+## Markdown Style Notes
 
-export const ErrorBoundary = NimbusDefaultRouteErrorBoundary;
-```
-
-### Granular Component Boundary
-
-You can also wrap a single component with `NimbusErrorBoundary` to isolate its failures.
-
-```tsx
-// Example of wrapping a specific component
-import { SomeRiskyComponent } from "./SomeRiskyComponent";
-import { NimbusErrorBoundary } from "cyberstorm/utils/errors/NimbusErrorBoundary";
-
-export default function MyComponent() {
-  return (
-    <div>
-      <h1>My Page</h1>
-      <NimbusErrorBoundary
-        title="A component has failed"
-        description="This part of the page couldn't be loaded. Please try again."
-      >
-        <SomeRiskyComponent />
-      </NimbusErrorBoundary>
-      <p>Other content on the page that will still render.</p>
-    </div>
-  );
-}
-```
-
--   **Source**: [`apps/cyberstorm-remix/cyberstorm/utils/errors/NimbusErrorBoundary/NimbusErrorBoundary.tsx`](../../apps/cyberstorm-remix/cyberstorm/utils/errors/NimbusErrorBoundary/NimbusErrorBoundary.tsx)
--   **Root Usage**: [`apps/cyberstorm-remix/app/root.tsx`](../../apps/cyberstorm-remix/app/root.tsx)
+-   Hyphenate adjective phrases such as “error-handling” or “React Router-related.”
+-   Indent nested lists by two spaces so markdownlint (`MD007`) remains satisfied.
+-   Keep code snippets short and reference the source file immediately after each block.

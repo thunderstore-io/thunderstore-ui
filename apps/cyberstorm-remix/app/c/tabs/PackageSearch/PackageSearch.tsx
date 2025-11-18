@@ -21,6 +21,13 @@ interface PackageSearchQuery {
   deprecated: boolean;
 }
 
+const communityNotFoundMappings = [
+  createNotFoundMapping(
+    "Community not found.",
+    "We could not find the requested community."
+  ),
+];
+
 function resolvePackageSearchQuery(request: Request): PackageSearchQuery {
   const searchParams = new URL(request.url).searchParams;
   const ordering = searchParams.get("ordering") ?? PackageOrderOptions.Updated;
@@ -73,14 +80,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
         ),
       };
     } catch (error) {
-      handleLoaderError(error, {
-        mappings: [
-          createNotFoundMapping(
-            "Community not found.",
-            "We could not find the requested community."
-          ),
-        ],
-      });
+      handleLoaderError(error, { mappings: communityNotFoundMappings });
     }
   }
   throwUserFacingPayloadResponse({
@@ -99,21 +99,29 @@ export async function clientLoader({
     const { dapper } = getLoaderTools();
     const query = resolvePackageSearchQuery(request);
     return {
-      filters: dapper.getCommunityFilters(params.communityId),
-      listings: dapper.getPackageListings(
-        {
-          kind: "community",
-          communityId: params.communityId,
-        },
-        query.ordering ?? "",
-        query.page,
-        query.search,
-        query.includedCategories,
-        query.excludedCategories,
-        query.section,
-        query.nsfw,
-        query.deprecated
-      ),
+      filters: dapper
+        .getCommunityFilters(params.communityId)
+        .catch((error) =>
+          handleLoaderError(error, { mappings: communityNotFoundMappings })
+        ),
+      listings: dapper
+        .getPackageListings(
+          {
+            kind: "community",
+            communityId: params.communityId,
+          },
+          query.ordering ?? "",
+          query.page,
+          query.search,
+          query.includedCategories,
+          query.excludedCategories,
+          query.section,
+          query.nsfw,
+          query.deprecated
+        )
+        .catch((error) =>
+          handleLoaderError(error, { mappings: communityNotFoundMappings })
+        ),
     };
   }
   throwUserFacingPayloadResponse({

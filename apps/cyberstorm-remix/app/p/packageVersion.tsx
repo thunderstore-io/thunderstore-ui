@@ -50,13 +50,9 @@ import {
   formatInteger,
   formatToDisplayName,
 } from "@thunderstore/cyberstorm/src/utils/utils";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import { type OutletContextShape } from "~/root";
 import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import { getPackageVersionDetails } from "@thunderstore/dapper-ts/src/methods/packageVersion";
@@ -64,6 +60,13 @@ import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFaci
 import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
 import { createNotFoundMapping } from "cyberstorm/utils/errors/loaderMappings";
 import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
+
+const packageVersionNotFoundMappings = [
+  createNotFoundMapping(
+    "Package version not found.",
+    "We could not find the requested package version."
+  ),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (
@@ -91,14 +94,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
         team,
       };
     } catch (error) {
-      handleLoaderError(error, {
-        mappings: [
-          createNotFoundMapping(
-            "Package version not found.",
-            "We could not find the requested package version."
-          ),
-        ],
-      });
+      handleLoaderError(error, { mappings: packageVersionNotFoundMappings });
     }
   }
   throwUserFacingPayloadResponse({
@@ -116,20 +112,26 @@ export function clientLoader({ params }: LoaderFunctionArgs) {
     params.packageId &&
     params.packageVersion
   ) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
-    const community = dapper.getCommunity(params.communityId);
-    const version = dapper.getPackageVersionDetails(
-      params.namespaceId,
-      params.packageId,
-      params.packageVersion
-    );
-    const team = dapper.getTeamDetails(params.namespaceId);
+    const { dapper } = getLoaderTools();
+    const community = dapper
+      .getCommunity(params.communityId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageVersionNotFoundMappings })
+      );
+    const version = dapper
+      .getPackageVersionDetails(
+        params.namespaceId,
+        params.packageId,
+        params.packageVersion
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageVersionNotFoundMappings })
+      );
+    const team = dapper
+      .getTeamDetails(params.namespaceId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageVersionNotFoundMappings })
+      );
 
     return {
       communityId: params.communityId,
@@ -231,10 +233,13 @@ export default function PackageVersion() {
 
   const versionAndCommunityPromise = useMemo(
     () => Promise.all([version, community]),
-    []
+    [version, community]
   );
 
-  const versionAndTeamPromise = useMemo(() => Promise.all([version, team]), []);
+  const versionAndTeamPromise = useMemo(
+    () => Promise.all([version, team]),
+    [version, team]
+  );
 
   return (
     <>

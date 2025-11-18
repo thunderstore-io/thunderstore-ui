@@ -28,7 +28,7 @@ import {
 } from "@thunderstore/thunderstore-api";
 
 import { type OutletContextShape } from "app/root";
-import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/getLoaderTools";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { ServiceAccountRemoveModal } from "./ServiceAccountRemoveModal";
 import "./ServiceAccounts.css";

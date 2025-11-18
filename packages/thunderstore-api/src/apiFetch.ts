@@ -52,31 +52,34 @@ function sleep(delay: number) {
 /**
  * Arguments supplied to `apiFetch` describing the HTTP request and validation schemas.
  */
-export type apiFetchArgs<B, QP> = {
+type SchemaOrUndefined<Schema extends z.ZodSchema | undefined> =
+  Schema extends z.ZodSchema ? z.infer<Schema> : undefined;
+
+export type apiFetchArgs<
+  RequestSchema extends z.ZodSchema | undefined,
+  QueryParamsSchema extends z.ZodSchema | undefined,
+> = {
   config: () => RequestConfig;
   path: string;
-  queryParams?: QP;
+  queryParams?: SchemaOrUndefined<QueryParamsSchema>;
   request?: Omit<RequestInit, "headers" | "body"> & { body?: string };
   useSession?: boolean;
-  bodyRaw?: B;
+  bodyRaw?: SchemaOrUndefined<RequestSchema>;
 };
-
-type schemaOrUndefined<A> = A extends z.ZodSchema
-  ? z.infer<A>
-  : never | undefined;
 
 /**
  * Validates input payloads, executes the HTTP request, and parses the response with Zod schemas.
  */
-export async function apiFetch(props: {
-  args: apiFetchArgs<
-    schemaOrUndefined<typeof props.requestSchema>,
-    schemaOrUndefined<typeof props.queryParamsSchema>
-  >;
-  requestSchema: z.ZodSchema | undefined;
-  queryParamsSchema: z.ZodSchema | undefined;
-  responseSchema: z.ZodSchema | undefined;
-}): Promise<schemaOrUndefined<typeof props.responseSchema>> {
+export async function apiFetch<
+  RequestSchema extends z.ZodSchema | undefined,
+  QueryParamsSchema extends z.ZodSchema | undefined,
+  ResponseSchema extends z.ZodSchema | undefined,
+>(props: {
+  args: apiFetchArgs<RequestSchema, QueryParamsSchema>;
+  requestSchema: RequestSchema;
+  queryParamsSchema: QueryParamsSchema;
+  responseSchema: ResponseSchema;
+}): Promise<SchemaOrUndefined<ResponseSchema>> {
   const { args, requestSchema, queryParamsSchema, responseSchema } = props;
 
   if (requestSchema && args.bodyRaw) {
@@ -120,7 +123,7 @@ export async function apiFetch(props: {
   }
 
   if (responseSchema === undefined) {
-    return undefined as schemaOrUndefined<typeof props.responseSchema>;
+    return undefined as SchemaOrUndefined<ResponseSchema>;
   }
 
   const parsed = responseSchema.safeParse(await response.json());

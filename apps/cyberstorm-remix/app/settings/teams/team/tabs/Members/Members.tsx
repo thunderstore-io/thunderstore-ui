@@ -33,7 +33,7 @@ import {
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
 import { type OutletContextShape } from "app/root";
-import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/getLoaderTools";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import "./Members.css";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
@@ -45,7 +45,7 @@ import {
 
 export const clientLoader = makeTeamSettingsTabLoader(
   async (dapper, teamName) => ({
-    members: await dapper.getTeamMembers(teamName),
+    members: dapper.getTeamMembers(teamName),
   })
 );
 
