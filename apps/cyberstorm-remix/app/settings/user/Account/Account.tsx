@@ -10,16 +10,24 @@ import {
 import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
+import { Loading } from "~/commonComponents/Loading/Loading";
 import { type OutletContextShape } from "~/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
 import { userDelete } from "@thunderstore/thunderstore-api";
+import { useHydrated } from "remix-utils/use-hydrated";
 
 export default function Account() {
   const outletContext = useOutletContext() as OutletContextShape;
+  const isHydrated = useHydrated();
 
-  if (!outletContext.currentUser || !outletContext.currentUser.username)
+  if (!isHydrated) {
+    return <Loading />;
+  }
+
+  if (!outletContext.currentUser) {
     return <NotLoggedIn />;
+  }
 
   return (
     <div className="settings-items user-account">
