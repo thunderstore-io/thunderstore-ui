@@ -36,7 +36,9 @@ export default function PackageFormatDocs() {
         <p className="package-format-docs__title">
           Example manifest.json content:
         </p>
-        <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} language="json" />
+        <div className="package-format-docs__table-wrapper">
+          <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} language="json" />
+        </div>
       </section>
     </>
   );
@@ -223,7 +225,9 @@ const secondTableData = [
     },
     {
       value: (
-        <CodeBox key="code-4" value={EXAMPLE_DEPENDENCIES} language="json" />
+        <div className="package-format-docs__table-wrapper">
+          <CodeBox key="code-4" value={EXAMPLE_DEPENDENCIES} language="json" />
+        </div>
       ),
       sortValue: 0,
     },
@@ -302,7 +306,9 @@ const secondTableData = [
     {
       value: (
         <div style={{ display: "flex", gap: "1rem", flexDirection: "column" }}>
-          <CodeBox key="code-6" value={EXAMPLE_INSTALLERS} language="json" />
+          <div className="package-format-docs__table-wrapper">
+            <CodeBox key="code-6" value={EXAMPLE_INSTALLERS} language="json" />
+          </div>
           <p>
             The installer referred above does not actually exist, this is for
             illustrative purposes only.
