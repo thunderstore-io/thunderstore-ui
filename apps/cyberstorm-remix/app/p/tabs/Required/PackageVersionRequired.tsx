@@ -1,11 +1,13 @@
+import { Suspense } from "react";
 import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData } from "react-router";
+import { useLoaderData, Await } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import { SkeletonBox } from "@thunderstore/cyberstorm";
+import { PaginatedDependencies } from "~/commonComponents/PaginatedDependencies/PaginatedDependencies";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { PaginatedDependencies } from "~/commonComponents/PaginatedDependencies/PaginatedDependencies";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
@@ -66,11 +68,22 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
 }
 
 export default function PackageVersionRequired() {
-  const { version, dependencies } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { dependencies } = useLoaderData();
 
   return (
-    <PaginatedDependencies version={version} dependencies={dependencies} />
+    <Suspense
+      fallback={<SkeletonBox className="paginated-dependencies__skeleton" />}
+    >
+      <Await
+        resolve={dependencies}
+        errorElement={
+          <div>Error occurred while loading required dependencies</div>
+        }
+      >
+        {(resolvedDependencies) => (
+          <PaginatedDependencies dependencies={resolvedDependencies} />
+        )}
+      </Await>
+    </Suspense>
   );
 }
