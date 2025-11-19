@@ -1,81 +1,113 @@
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
-import { type LoaderFunctionArgs } from "react-router";
-import { Await, useLoaderData } from "react-router";
+import { Await, type LoaderFunctionArgs } from "react-router";
+import { useLoaderData } from "react-router";
 import { PaginatedDependencies } from "~/commonComponents/PaginatedDependencies/PaginatedDependencies";
-
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { createNotFoundMapping } from "cyberstorm/utils/errors/loaderMappings";
+import { NimbusDefaultRouteErrorBoundary } from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 import { SkeletonBox } from "@thunderstore/cyberstorm";
-import { DapperTs } from "@thunderstore/dapper-ts";
+import { parseIntegerSearchParam } from "cyberstorm/utils/searchParamsUtils";
+
+export const packageDependenciesErrorMappings = [
+  createNotFoundMapping(
+    "Dependencies not found.",
+    "We could not find the requested version dependencies."
+  ),
+];
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
-      };
-    });
+    const { dapper } = getLoaderTools();
     const searchParams = new URL(request.url).searchParams;
-    const page = searchParams.get("page");
-    const listing = await dapper.getPackageListingDetails(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
+    const page = parseIntegerSearchParam(searchParams.get("page"));
+    try {
+      const listing = await dapper.getPackageListingDetails(
+        params.communityId,
+        params.namespaceId,
+        params.packageId
+      );
 
-    return {
-      version: await dapper.getPackageVersionDetails(
+      const version = await dapper.getPackageVersionDetails(
         params.namespaceId,
         params.packageId,
         listing.latest_version_number
-      ),
-      dependencies: await dapper.getPackageVersionDependencies(
+      );
+      const dependencies = await dapper.getPackageVersionDependencies(
         params.namespaceId,
         params.packageId,
         listing.latest_version_number,
-        page === null ? undefined : Number(page)
-      ),
-    };
+        page
+      );
+
+      return {
+        version,
+        dependencies,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageDependenciesErrorMappings });
+    }
   }
-  throw new Response("Package version dependencies not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Dependencies not found.",
+    description: "We could not find the requested version dependencies.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
-export async function clientLoader({ params, request }: LoaderFunctionArgs) {
+export function clientLoader({ params, request }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
+    const { dapper } = getLoaderTools();
     const searchParams = new URL(request.url).searchParams;
-    const page = searchParams.get("page");
-    const listing = await dapper.getPackageListingDetails(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
+    const page = parseIntegerSearchParam(searchParams.get("page"));
+    const listingPromise = dapper
+      .getPackageListingDetails(
+        params.communityId,
+        params.namespaceId,
+        params.packageId
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageDependenciesErrorMappings })
+      );
+
+    const version = listingPromise
+      .then((listing) =>
+        dapper.getPackageVersionDetails(
+          listing.namespace,
+          listing.name,
+          listing.latest_version_number
+        )
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageDependenciesErrorMappings })
+      );
+
+    const dependencies = listingPromise
+      .then((listing) =>
+        dapper.getPackageVersionDependencies(
+          listing.namespace,
+          listing.name,
+          listing.latest_version_number,
+          page
+        )
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageDependenciesErrorMappings })
+      );
 
     return {
-      version: dapper.getPackageVersionDetails(
-        params.namespaceId,
-        params.packageId,
-        listing.latest_version_number
-      ),
-      dependencies: dapper.getPackageVersionDependencies(
-        params.namespaceId,
-        params.packageId,
-        listing.latest_version_number,
-        page === null ? undefined : Number(page)
-      ),
+      version,
+      dependencies,
     };
   }
-  throw new Response("Package version dependencies not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Dependencies not found.",
+    description: "We could not find the requested version dependencies.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export default function PackageVersionRequired() {
@@ -97,4 +129,8 @@ export default function PackageVersionRequired() {
       </Await>
     </Suspense>
   );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }
