@@ -1,6 +1,6 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useReducer, useState } from "react";
+import { Suspense, useReducer, useState } from "react";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 
 import {
@@ -12,29 +12,33 @@ import {
   NewTextInput,
   Heading,
   CodeBox,
+  SkeletonBox,
 } from "@thunderstore/cyberstorm";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
+import { Await } from "react-router";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
 import {
   type RequestConfig,
   teamAddServiceAccount,
   type TeamServiceAccountAddRequestData,
+  UserFacingError,
 } from "@thunderstore/thunderstore-api";
 
 import { type OutletContextShape } from "app/root";
-import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/getLoaderTools";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { ServiceAccountRemoveModal } from "./ServiceAccountRemoveModal";
 import "./ServiceAccounts.css";
+import type { DapperTs } from "@thunderstore/dapper-ts";
 
 export const clientLoader = makeTeamSettingsTabLoader(
   async (dapper, teamName) => ({
     serviceAccounts: await dapper.getTeamServiceAccounts(teamName),
   })
 );
-
-export function HydrateFallback() {
-  return <div style={{ padding: "32px" }}>Loading...</div>;
-}
 
 const serviceAccountColumns = [
   { value: "Nickname", disableSort: false },
@@ -46,6 +50,38 @@ export default function ServiceAccounts() {
   const { teamName, serviceAccounts } = useLoaderData<typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
 
+  return (
+    <Suspense fallback={<ServiceAccountsSkeleton />}>
+      <Await
+        resolve={serviceAccounts}
+        errorElement={<NimbusAwaitErrorElement />}
+      >
+        {(result) => (
+          <ServiceAccountsContent
+            teamName={teamName}
+            serviceAccounts={result}
+            outletContext={outletContext}
+          />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
+
+interface ServiceAccountsContentProps {
+  teamName: string;
+  serviceAccounts: Awaited<ReturnType<DapperTs["getTeamServiceAccounts"]>>;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Renders the service accounts table after Suspense resolves the data.
+ */
+function ServiceAccountsContent({
+  teamName,
+  serviceAccounts,
+  outletContext,
+}: ServiceAccountsContentProps) {
   const revalidator = useRevalidator();
 
   const currentUserTeam = outletContext.currentUser?.teams_full?.find(
@@ -118,6 +154,21 @@ export default function ServiceAccounts() {
   );
 }
 
+/**
+ * Displays a placeholder skeleton while service accounts load.
+ */
+function ServiceAccountsSkeleton() {
+  return (
+    <div className="settings-items">
+      <SkeletonBox className="settings-items__skeleton" />
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
+}
+
 function AddServiceAccountForm(props: {
   teamName: string;
   config: () => RequestConfig;
@@ -177,12 +228,12 @@ function AddServiceAccountForm(props: {
     TeamServiceAccountAddRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
     submitor,
-    onSubmitSuccess: (result) => {
+    onSubmitSuccess: (result: SubmitorOutput) => {
       onSuccess(result);
       setError(null);
       // Refresh the service accounts list to show the newly created account

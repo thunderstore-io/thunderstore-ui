@@ -1,23 +1,40 @@
-import { useReducer } from "react";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import { Suspense, useReducer } from "react";
+import {
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+} from "react-router";
 
-import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
+import {
+  NewButton,
+  NewTextInput,
+  SkeletonBox,
+  useToast,
+} from "@thunderstore/cyberstorm";
 import {
   teamDetailsEdit,
   type TeamDetailsEditRequestData,
+  UserFacingError,
+  formatUserFacingError,
+  type TeamDetails,
 } from "@thunderstore/thunderstore-api";
 
 import { type OutletContextShape } from "app/root";
-import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/getLoaderTools";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import "./Profile.css";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
 
 export const clientLoader = makeTeamSettingsTabLoader(
   async (dapper, teamName) => ({
     // TODO: for hygienie we shouldn't use this public endpoint but
     // have an endpoint that confirms user permissions and returns
     // possibly sensitive information.
-    team: await dapper.getTeamDetails(teamName),
+    team: dapper.getTeamDetails(teamName),
   })
 );
 
@@ -29,8 +46,27 @@ export default function Profile() {
   const { team } = useLoaderData<typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
 
-  const revalidator = useRevalidator();
+  return (
+    <Suspense fallback={<ProfileSkeleton />}>
+      <Await resolve={team} errorElement={<NimbusAwaitErrorElement />}>
+        {(result) => (
+          <ProfileContent team={result} outletContext={outletContext} />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
 
+interface ProfileContentProps {
+  team: TeamDetails;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Renders the team profile editing form once Suspense resolves the team data.
+ */
+function ProfileContent({ team, outletContext }: ProfileContentProps) {
+  const revalidator = useRevalidator();
   const toast = useToast();
 
   function formFieldUpdateAction(
@@ -70,7 +106,7 @@ export default function Profile() {
     TeamDetailsEditRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -86,7 +122,7 @@ export default function Profile() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -126,4 +162,19 @@ export default function Profile() {
       </div>
     </div>
   );
+}
+
+/**
+ * Displays a minimal skeleton while team profile data loads.
+ */
+function ProfileSkeleton() {
+  return (
+    <div className="settings-items team-profile">
+      <SkeletonBox className="team-profile__skeleton" />
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }
