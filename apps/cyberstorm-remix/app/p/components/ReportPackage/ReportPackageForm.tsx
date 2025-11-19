@@ -12,6 +12,7 @@ import {
   type PackageListingReportRequestData,
   type RequestConfig,
   UserFacingError,
+  formatUserFacingError,
   packageListingReport,
 } from "@thunderstore/thunderstore-api";
 
@@ -93,11 +94,7 @@ export function ReportPackageForm(
       resetFormInputs();
     },
     onSubmitError: (error) => {
-      let message = `Error occurred: ${error.message || "Unknown error"}`;
-      if (error.message === "401: Unauthorized") {
-        message = "You must be logged in to report a package.";
-      }
-      setError(message);
+      setError(formatUserFacingError(error));
     },
   });
 
