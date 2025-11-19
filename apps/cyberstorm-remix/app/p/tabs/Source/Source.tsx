@@ -1,151 +1,105 @@
 import { faClock, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { createNotFoundMapping } from "cyberstorm/utils/errors/loaderMappings";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 import { Suspense } from "react";
-import { Await, type LoaderFunctionArgs, useOutletContext } from "react-router";
-import { useLoaderData } from "react-router";
+import {
+  Await,
+  type LoaderFunctionArgs,
+  useLoaderData,
+  useOutletContext,
+} from "react-router";
 import ago from "s-ago";
-import { type OutletContextShape } from "~/root";
+import { CodeBoxHTML } from "~/commonComponents/CodeBoxHTML/CodeBoxHTML";
+import type { OutletContextShape } from "~/root";
 
 import {
-  NewAlert as Alert,
   Heading,
+  NewAlert,
   NewButton,
   NewIcon,
   SkeletonBox,
   TooltipWrapper,
 } from "@thunderstore/cyberstorm";
-import { DapperTs, getPackageSource } from "@thunderstore/dapper-ts";
-import { isApiError } from "@thunderstore/thunderstore-api";
 
-import { CodeBoxHTML } from "../../../commonComponents/CodeBoxHTML/CodeBoxHTML";
 import "./Source.css";
 
 type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
 };
 
-type ResultType = {
-  status: string | null;
-  message?: string;
-  source?:
-    | Awaited<ReturnType<typeof getPackageSource>>
-    | ReturnType<typeof getPackageSource>;
-};
-
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
-      };
-    });
-    let result: ResultType = {
-      status: null,
-      source: undefined,
-      message: undefined,
-    };
+    const { dapper } = getLoaderTools();
     try {
       const source = await dapper.getPackageSource(
         params.namespaceId,
         params.packageId
       );
-      result = {
-        status: null,
-        source: source,
-        message: undefined,
+
+      return {
+        source,
       };
     } catch (error) {
-      if (isApiError(error)) {
-        if (error.response.status > 400) {
-          result = {
-            status: "error",
-            source: undefined,
-            message: `Failed to load source: ${error.message}`,
-          };
-        } else {
-          throw error;
-        }
-      } else {
-        throw error;
-      }
+      handleLoaderError(error, {
+        mappings: [
+          createNotFoundMapping(
+            "Source not available.",
+            "We could not find the requested package source."
+          ),
+        ],
+      });
     }
-    return result;
   }
-  return {
-    status: "error",
-    message: "Failed to load source",
-    source: undefined,
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Source not available.",
+    description: "We could not find the requested package source.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools.getConfig().apiHost,
-        sessionId: tools.getConfig().sessionId,
-      };
-    });
-    let result: ResultType = {
-      status: null,
-      source: undefined,
-      message: undefined,
+    const { dapper } = getLoaderTools();
+    const source = dapper.getPackageSource(
+      params.namespaceId,
+      params.packageId
+    );
+
+    return {
+      source,
     };
-    try {
-      const source = dapper.getPackageSource(
-        params.namespaceId,
-        params.packageId
-      );
-      result = {
-        status: null,
-        source: source,
-        message: undefined,
-      };
-    } catch (error) {
-      result = {
-        status: "error",
-        source: undefined,
-        message: "Failed to load source",
-      };
-      throw error;
-    }
-    return result;
   }
-  return {
-    status: "error",
-    message: "Failed to load source",
-    source: undefined,
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Source not available.",
+    description: "We could not find the requested package source.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export default function Source() {
-  const { status, message, source } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { source } = useLoaderData<typeof loader | typeof clientLoader>();
   const outletContext = useOutletContext() as PackageListingOutletContext;
 
-  if (status === "error") {
-    return <div>{message}</div>;
-  }
   return (
     <Suspense fallback={<SkeletonBox className="package-source__skeleton" />}>
-      <Await
-        resolve={source}
-        errorElement={<div>Error occurred while loading source</div>}
-      >
+      <Await resolve={source} errorElement={<NimbusAwaitErrorElement />}>
         {(resolvedValue) => {
           const decompilations = resolvedValue?.decompilations ?? [];
           const lastDecompilationDate = resolvedValue?.last_decompilation_date;
           if (decompilations.length === 0) {
             return (
-              <Alert csVariant="info">Decompiled source not available.</Alert>
+              <NewAlert csVariant="info">
+                Decompiled source not available.
+              </NewAlert>
             );
           }
           return decompilations.map((decompilation) => {
@@ -171,10 +125,10 @@ export default function Source() {
                   />
                 </div>
                 {decompilation.is_truncated && (
-                  <Alert csVariant="warning">
+                  <NewAlert csVariant="warning">
                     The result has been truncated due to the large size,
                     download it to view the full contents!
-                  </Alert>
+                  </NewAlert>
                 )}
                 <div
                   className="package-source__decompilations-file"
@@ -189,6 +143,10 @@ export default function Source() {
       </Await>
     </Suspense>
   );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }
 
 const DecompilationDateDisplay = (props: {
