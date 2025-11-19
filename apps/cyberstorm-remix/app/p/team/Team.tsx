@@ -1,58 +1,76 @@
-import { useLoaderData, useOutletContext } from "react-router";
+import { Await, useLoaderData, useOutletContext } from "react-router";
 import "./Team.css";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
 import { type OutletContextShape } from "../../root";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
 import type { Route } from "./+types/Team";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { createNotFoundMapping } from "cyberstorm/utils/errors/loaderMappings";
+import { SkeletonBox } from "@thunderstore/cyberstorm";
+import { Suspense } from "react";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
+import { parseIntegerSearchParam } from "cyberstorm/utils/searchParamsUtils";
+
+const teamNotFoundMappings = [
+  createNotFoundMapping(
+    "Team not found.",
+    "We could not find the requested team.",
+    404
+  ),
+];
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId && params.namespaceId) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
-      };
-    });
+    const { dapper } = getLoaderTools();
     const searchParams = new URL(request.url).searchParams;
     const ordering =
       searchParams.get("ordering") ?? PackageOrderOptions.Updated;
-    const page = searchParams.get("page");
+    const page = parseIntegerSearchParam(searchParams.get("page"));
     const search = searchParams.get("search");
     const includedCategories = searchParams.get("includedCategories");
     const excludedCategories = searchParams.get("excludedCategories");
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
-    const filters = await dapper.getCommunityFilters(params.communityId);
-
-    return {
-      teamId: params.namespaceId,
-      filters: filters,
-      listings: await dapper.getPackageListings(
+    try {
+      const filters = await dapper.getCommunityFilters(params.communityId);
+      const listings = await dapper.getPackageListings(
         {
           kind: "namespace",
           communityId: params.communityId,
           namespaceId: params.namespaceId,
         },
         ordering ?? "",
-        page === null ? undefined : Number(page),
+        page,
         search ?? "",
         includedCategories?.split(",") ?? undefined,
         excludedCategories?.split(",") ?? undefined,
         section ? (section === "all" ? "" : section) : "",
-        nsfw === "true" ? true : false,
-        deprecated === "true" ? true : false
-      ),
-    };
+        nsfw === "true",
+        deprecated === "true"
+      );
+      const dataPromise = Promise.all([filters, listings]);
+
+      return {
+        teamId: params.namespaceId,
+        filtersAndListings: await dataPromise,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: teamNotFoundMappings });
+    }
   }
-  throw new Response("Community not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Community not found.",
+    description: "We could not find the requested community.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export async function clientLoader({
@@ -60,70 +78,88 @@ export async function clientLoader({
   params,
 }: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
+    const { dapper } = getLoaderTools();
     const searchParams = new URL(request.url).searchParams;
     const ordering =
       searchParams.get("ordering") ?? PackageOrderOptions.Updated;
-    const page = searchParams.get("page");
+    const page = parseIntegerSearchParam(searchParams.get("page"));
     const search = searchParams.get("search");
     const includedCategories = searchParams.get("includedCategories");
     const excludedCategories = searchParams.get("excludedCategories");
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
-    const filters = dapper.getCommunityFilters(params.communityId);
-    return {
-      teamId: params.namespaceId,
-      filters: filters,
-      listings: dapper.getPackageListings(
+    const filters = dapper
+      .getCommunityFilters(params.communityId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: teamNotFoundMappings })
+      );
+    const listings = dapper
+      .getPackageListings(
         {
           kind: "namespace",
           communityId: params.communityId,
           namespaceId: params.namespaceId,
         },
         ordering ?? "",
-        page === null ? undefined : Number(page),
+        page,
         search ?? "",
         includedCategories?.split(",") ?? undefined,
         excludedCategories?.split(",") ?? undefined,
         section ? (section === "all" ? "" : section) : "",
-        nsfw === "true" ? true : false,
-        deprecated === "true" ? true : false
-      ),
-    };
+        nsfw === "true",
+        deprecated === "true"
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: teamNotFoundMappings })
+      );
+    const dataPromise = Promise.all([filters, listings]);
+
+    return { teamId: params.namespaceId, filtersAndListings: dataPromise };
   }
-  throw new Response("Community not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Community not found.",
+    description: "We could not find the requested community.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
+/**
+ * Displays the team package listing and delegates streaming data to PackageSearch.
+ */
 export default function Team() {
-  const { filters, listings, teamId } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const data = useLoaderData<typeof loader | typeof clientLoader>();
 
   const outletContext = useOutletContext() as OutletContextShape;
 
   return (
-    <>
-      <section className="team">
-        <PageHeader headingLevel="1" headingSize="3">
-          Mods uploaded by {teamId}
-        </PageHeader>
-        <>
-          <PackageSearch
-            listings={listings}
-            filters={filters}
-            config={outletContext.requestConfig}
-            currentUser={outletContext.currentUser}
-            dapper={outletContext.dapper}
-          />
-        </>
-      </section>
-    </>
+    <section className="team">
+      <PageHeader headingLevel="1" headingSize="3">
+        Mods uploaded by {data.teamId}
+      </PageHeader>
+      <Suspense fallback={<SkeletonBox />}>
+        <Await
+          resolve={data.filtersAndListings}
+          errorElement={<NimbusAwaitErrorElement />}
+        >
+          {([filters, listings]) => {
+            return (
+              <PackageSearch
+                listings={listings}
+                filters={filters}
+                config={outletContext.requestConfig}
+                currentUser={outletContext.currentUser}
+                dapper={outletContext.dapper}
+              />
+            );
+          }}
+        </Await>
+      </Suspense>
+    </section>
   );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }
