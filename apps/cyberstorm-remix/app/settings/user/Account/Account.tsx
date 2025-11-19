@@ -13,7 +13,16 @@ import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { type OutletContextShape } from "~/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
-import { userDelete } from "@thunderstore/thunderstore-api";
+import {
+  userDelete,
+  UserFacingError,
+  formatUserFacingError,
+} from "@thunderstore/thunderstore-api";
+import {
+  NimbusErrorBoundary,
+  NimbusErrorBoundaryFallback,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import type { NimbusErrorBoundaryFallbackProps } from "cyberstorm/utils/errors/NimbusErrorBoundary";
 
 export default function Account() {
   const outletContext = useOutletContext() as OutletContextShape;
@@ -22,44 +31,70 @@ export default function Account() {
     return <NotLoggedIn />;
 
   return (
-    <div className="settings-items user-account">
-      <div className="settings-items__item">
-        <div className="settings-items__meta">
-          <p className="settings-items__title">Delete Account</p>
-          <p className="settings-items__description">
-            Delete your Thunderstore account permanently
-          </p>
-        </div>
-        <div className="settings-items__content">
-          <div className="user-account__delete-user-form">
-            <NewAlert csVariant="warning">
-              You are about to delete your account. Once deleted, it will be
-              gone forever. Please be certain.
-            </NewAlert>
-            <p className="user-account__instructions">
-              The mods that have been uploaded on this account will remain
-              public on the site even after deletion. If you need them to be
-              taken down as well, please contact an administrator on the
-              community Discord server.
-              <br />
-              <span>
-                As a precaution, to delete your account, please input{" "}
-                <span className="user-account__username">
-                  {outletContext.currentUser.username}
-                </span>{" "}
-                into the field below.
-              </span>
+    <NimbusErrorBoundary
+      fallback={AccountSettingsFallback}
+      onRetry={({ reset }) => reset()}
+    >
+      <div className="settings-items user-account">
+        <div className="settings-items__item">
+          <div className="settings-items__meta">
+            <p className="settings-items__title">Delete Account</p>
+            <p className="settings-items__description">
+              Delete your Thunderstore account permanently
             </p>
-            <div className="user-account__actions">
-              <DeleteAccountForm
-                currentUser={outletContext.currentUser}
-                requestConfig={outletContext.requestConfig}
-              />
+          </div>
+          <div className="settings-items__content">
+            <div className="user-account__delete-user-form">
+              <NewAlert csVariant="warning">
+                You are about to delete your account. Once deleted, it will be
+                gone forever. Please be certain.
+              </NewAlert>
+              <p className="user-account__instructions">
+                The mods that have been uploaded on this account will remain
+                public on the site even after deletion. If you need them to be
+                taken down as well, please contact an administrator on the
+                community Discord server.
+                <br />
+                <span>
+                  As a precaution, to delete your account, please input{" "}
+                  <span className="user-account__username">
+                    {outletContext.currentUser.username}
+                  </span>{" "}
+                  into the field below.
+                </span>
+              </p>
+              <div className="user-account__actions">
+                <DeleteAccountForm
+                  currentUser={outletContext.currentUser}
+                  requestConfig={outletContext.requestConfig}
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </NimbusErrorBoundary>
+  );
+}
+
+/**
+ * Displays fallback messaging when the account settings view fails to render.
+ */
+function AccountSettingsFallback(props: NimbusErrorBoundaryFallbackProps) {
+  const {
+    title = "Account settings failed to load",
+    description = "Reload the account tab or return to settings.",
+    retryLabel = "Reload",
+    ...rest
+  } = props;
+
+  return (
+    <NimbusErrorBoundaryFallback
+      {...rest}
+      title={title}
+      description={description}
+      retryLabel={retryLabel}
+    />
   );
 }
 
@@ -114,7 +149,7 @@ function DeleteAccountForm(props: {
     UserAccountDeleteRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -129,7 +164,7 @@ function DeleteAccountForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
