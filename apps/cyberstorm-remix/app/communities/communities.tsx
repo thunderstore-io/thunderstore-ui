@@ -23,13 +23,17 @@ import {
   useSearchParams,
 } from "react-router";
 import type { Communities } from "@thunderstore/dapper/types";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 
+/**
+ * Provides the HTML metadata for the communities listing route.
+ */
 export const meta: MetaFunction = () => {
   return [
     { title: "Communities | Thunderstore" },
@@ -65,48 +69,63 @@ const selectOptions = [
   },
 ];
 
+interface CommunitiesQuery {
+  order: SortOptions;
+  search: string | undefined;
+}
+
+/**
+ * Extracts the current query parameters governing the communities list.
+ */
+function resolveCommunitiesQuery(request: Request): CommunitiesQuery {
+  const searchParams = new URL(request.url).searchParams;
+  const orderParam = searchParams.get("order");
+  const orderValues = Object.values(SortOptions);
+  const order =
+    orderParam && orderValues.includes(orderParam as SortOptions)
+      ? (orderParam as SortOptions)
+      : SortOptions.Popular;
+  const search = searchParams.get("search") ?? undefined;
+
+  return {
+    order,
+    search,
+  };
+}
+
+/**
+ * Fetches communities data on the server and surfaces mapped loader errors.
+ */
 export async function loader({ request }: LoaderFunctionArgs) {
-  const searchParams = new URL(request.url).searchParams;
-  const order = searchParams.get("order") ?? SortOptions.Popular;
-  const search = searchParams.get("search");
+  const query = resolveCommunitiesQuery(request);
   const page = undefined;
-  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-  const dapper = new DapperTs(() => {
+  const { dapper } = getLoaderTools();
+  try {
     return {
-      apiHost: publicEnvVariables.VITE_API_URL,
-      sessionId: undefined,
+      communities: await dapper.getCommunities(page, query.order, query.search),
     };
-  });
+  } catch (error) {
+    handleLoaderError(error);
+  }
+}
+
+/**
+ * Fetches communities data on the client, returning a Suspense-ready promise wrapper.
+ */
+export function clientLoader({ request }: LoaderFunctionArgs) {
+  const { dapper } = getLoaderTools();
+  const query = resolveCommunitiesQuery(request);
+  const page = undefined;
   return {
-    communities: await dapper.getCommunities(
-      page,
-      order === null ? undefined : order,
-      search === null ? undefined : search
-    ),
+    communities: dapper
+      .getCommunities(page, query.order, query.search)
+      .catch((error) => handleLoaderError(error)),
   };
 }
 
-export async function clientLoader({ request }: LoaderFunctionArgs) {
-  const tools = getSessionTools();
-  const dapper = new DapperTs(() => {
-    return {
-      apiHost: tools?.getConfig().apiHost,
-      sessionId: tools?.getConfig().sessionId,
-    };
-  });
-  const searchParams = new URL(request.url).searchParams;
-  const order = searchParams.get("order");
-  const search = searchParams.get("search");
-  const page = undefined;
-  return {
-    communities: dapper.getCommunities(
-      page,
-      order ?? SortOptions.Popular,
-      search ?? ""
-    ),
-  };
-}
-
+/**
+ * Renders the communities listing experience with search, sorting, and Suspense fallback handling.
+ */
 export default function CommunitiesPage() {
   const { communities } = useLoaderData<typeof loader | typeof clientLoader>();
   const navigationType = useNavigationType();
@@ -115,6 +134,9 @@ export default function CommunitiesPage() {
   // TODO: Disabled until we can figure out how a proper way to display skeletons
   // const navigation = useNavigation();
 
+  /**
+   * Persists the selected sort order back into the URL search params.
+   */
   const changeOrder = (v: SortOptions) => {
     if (v === SortOptions.Popular) {
       searchParams.delete("order");
@@ -190,11 +212,9 @@ export default function CommunitiesPage() {
           <Suspense fallback={<CommunitiesListSkeleton />}>
             <Await
               resolve={communities}
-              errorElement={<div>Error loading communities</div>}
+              errorElement={<NimbusAwaitErrorElement />}
             >
-              {(resolvedValue) => (
-                <CommunitiesList communitiesData={resolvedValue} />
-              )}
+              {(result) => <CommunitiesList communitiesData={result} />}
             </Await>
           </Suspense>
         </div>
@@ -203,6 +223,13 @@ export default function CommunitiesPage() {
   );
 }
 
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
+}
+
+/**
+ * Displays the resolved communities list or an empty state when no entries exist.
+ */
 const CommunitiesList = memo(function CommunitiesList(props: {
   communitiesData: Communities;
 }) {
@@ -236,6 +263,9 @@ const CommunitiesList = memo(function CommunitiesList(props: {
   }
 });
 
+/**
+ * Shows a skeleton grid while the communities listing resolves.
+ */
 const CommunitiesListSkeleton = memo(function CommunitiesListSkeleton() {
   return (
     <div className="communities__communities-list">
