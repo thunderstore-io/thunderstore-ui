@@ -39,6 +39,10 @@ import {
 } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTime/RelativeTime";
 import {
@@ -46,16 +50,23 @@ import {
   formatInteger,
   formatToDisplayName,
 } from "@thunderstore/cyberstorm/src/utils/utils";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import { type OutletContextShape } from "~/root";
 import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import { getPackageVersionDetails } from "@thunderstore/dapper-ts/src/methods/packageVersion";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { createNotFoundMapping } from "cyberstorm/utils/errors/loaderMappings";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
+
+const packageVersionNotFoundMappings = [
+  createNotFoundMapping(
+    "Package version not found.",
+    "We could not find the requested package version."
+  ),
+];
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (
@@ -64,55 +75,81 @@ export async function loader({ params }: LoaderFunctionArgs) {
     params.packageId &&
     params.packageVersion
   ) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
-      };
-    });
+    const { dapper } = getLoaderTools();
+    try {
+      const [community, version, team] = await Promise.all([
+        dapper.getCommunity(params.communityId),
+        dapper.getPackageVersionDetails(
+          params.namespaceId,
+          params.packageId,
+          params.packageVersion
+        ),
+        dapper.getTeamDetails(params.namespaceId),
+      ]);
 
-    return {
-      communityId: params.communityId,
-      community: await dapper.getCommunity(params.communityId),
-      version: await dapper.getPackageVersionDetails(
-        params.namespaceId,
-        params.packageId,
-        params.packageVersion
-      ),
-      team: await dapper.getTeamDetails(params.namespaceId),
-    };
+      return {
+        communityId: params.communityId,
+        community,
+        version,
+        team,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: packageVersionNotFoundMappings });
+    }
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (
     params.communityId &&
     params.namespaceId &&
     params.packageId &&
     params.packageVersion
   ) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
-
-    return {
-      communityId: params.communityId,
-      community: dapper.getCommunity(params.communityId),
-      version: dapper.getPackageVersionDetails(
+    const { dapper } = getLoaderTools();
+    const community = dapper
+      .getCommunity(params.communityId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageVersionNotFoundMappings })
+      );
+    const version = dapper
+      .getPackageVersionDetails(
         params.namespaceId,
         params.packageId,
         params.packageVersion
-      ),
-      team: dapper.getTeamDetails(params.namespaceId),
+      )
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageVersionNotFoundMappings })
+      );
+    const team = dapper
+      .getTeamDetails(params.namespaceId)
+      .catch((error) =>
+        handleLoaderError(error, { mappings: packageVersionNotFoundMappings })
+      );
+
+    return {
+      communityId: params.communityId,
+      community,
+      version,
+      team,
     };
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }
 
 export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
@@ -152,39 +189,65 @@ export default function PackageVersion() {
   // If strict mode is removed from the entry.client.tsx, this should only run once
   useEffect(() => {
     if (!startsHydrated.current && isHydrated) return;
-    if (isPromise(version)) {
-      version.then((versionData) => {
-        setFirstUploaded(
-          <RelativeTime
-            time={versionData.datetime_created}
-            suppressHydrationWarning
-          />
-        );
-      });
-    } else {
+    if (!isPromise(version)) {
       setFirstUploaded(
         <RelativeTime
           time={version.datetime_created}
           suppressHydrationWarning
         />
       );
+      return;
     }
-  }, []);
+
+    let isCancelled = false;
+
+    const resolveVersionTimes = async () => {
+      try {
+        const versionData = await version;
+        if (isCancelled) {
+          return;
+        }
+
+        setFirstUploaded(
+          <RelativeTime
+            time={versionData.datetime_created}
+            suppressHydrationWarning
+          />
+        );
+      } catch (error) {
+        if (!isCancelled) {
+          console.error("Failed to resolve version metadata", error);
+        }
+      }
+    };
+
+    resolveVersionTimes();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [isHydrated, version]);
   // END: For sidebar meta dates
 
   const currentTab = location.pathname.split("/")[8] || "details";
 
   const versionAndCommunityPromise = useMemo(
     () => Promise.all([version, community]),
-    []
+    [version, community]
   );
 
-  const versionAndTeamPromise = useMemo(() => Promise.all([version, team]), []);
+  const versionAndTeamPromise = useMemo(
+    () => Promise.all([version, team]),
+    [version, team]
+  );
 
   return (
     <>
       <Suspense>
-        <Await resolve={versionAndCommunityPromise}>
+        <Await
+          resolve={versionAndCommunityPromise}
+          errorElement={<NimbusAwaitErrorElement />}
+        >
           {(resolvedValue) => (
             <>
               <meta
@@ -233,7 +296,10 @@ export default function PackageVersion() {
                   </NewAlert>
                 }
               >
-                <Await resolve={version}>
+                <Await
+                  resolve={version}
+                  errorElement={<NimbusAwaitErrorElement />}
+                >
                   {(resolvedValue) => (
                     <NewAlert csVariant="warning">
                       You are viewing a potentially older version of this
@@ -257,7 +323,10 @@ export default function PackageVersion() {
                   <SkeletonBox className="package-listing__page-header-skeleton" />
                 }
               >
-                <Await resolve={version}>
+                <Await
+                  resolve={version}
+                  errorElement={<NimbusAwaitErrorElement />}
+                >
                   {(resolvedValue) => (
                     <PageHeader
                       headingLevel="1"
@@ -323,7 +392,10 @@ export default function PackageVersion() {
                   rootClasses="package-listing__drawer"
                 >
                   <Suspense fallback={<p>Loading...</p>}>
-                    <Await resolve={version}>
+                    <Await
+                      resolve={version}
+                      errorElement={<NimbusAwaitErrorElement />}
+                    >
                       {(resolvedValue) => (
                         <>{packageMeta(firstUploaded, resolvedValue)}</>
                       )}
@@ -331,7 +403,10 @@ export default function PackageVersion() {
                   </Suspense>
                 </Drawer>
                 <Suspense fallback={<p>Loading...</p>}>
-                  <Await resolve={versionAndTeamPromise}>
+                  <Await
+                    resolve={versionAndTeamPromise}
+                    errorElement={<NimbusAwaitErrorElement />}
+                  >
                     {(resolvedValue) => (
                       <Actions
                         team={resolvedValue[1]}
@@ -346,7 +421,10 @@ export default function PackageVersion() {
                   <SkeletonBox className="package-listing__nav-skeleton" />
                 }
               >
-                <Await resolve={version}>
+                <Await
+                  resolve={version}
+                  errorElement={<NimbusAwaitErrorElement />}
+                >
                   {(resolvedValue) => (
                     <>
                       <Tabs>
@@ -416,7 +494,10 @@ export default function PackageVersion() {
                   <SkeletonBox className="package-listing-sidebar__install-skeleton" />
                 }
               >
-                <Await resolve={version}>
+                <Await
+                  resolve={version}
+                  errorElement={<NimbusAwaitErrorElement />}
+                >
                   {(resolvedValue) => (
                     <NewButton
                       csVariant="accent"
@@ -440,7 +521,10 @@ export default function PackageVersion() {
                     <SkeletonBox className="package-listing-sidebar__actions-skeleton" />
                   }
                 >
-                  <Await resolve={versionAndTeamPromise}>
+                  <Await
+                    resolve={versionAndTeamPromise}
+                    errorElement={<NimbusAwaitErrorElement />}
+                  >
                     {(resolvedValue) => (
                       <Actions
                         team={resolvedValue[1]}
@@ -454,7 +538,10 @@ export default function PackageVersion() {
                     <SkeletonBox className="package-listing-sidebar__skeleton" />
                   }
                 >
-                  <Await resolve={version}>
+                  <Await
+                    resolve={version}
+                    errorElement={<NimbusAwaitErrorElement />}
+                  >
                     {(resolvedValue) => (
                       <>{packageMeta(firstUploaded, resolvedValue)}</>
                     )}
