@@ -1,4 +1,8 @@
 import { useToast } from "@thunderstore/cyberstorm";
+import {
+  UserFacingError,
+  formatUserFacingError,
+} from "@thunderstore/thunderstore-api";
 
 export type UseFormToasterArgs<OnSubmitSuccessDataType, OnSubmitErrorDataType> =
   {
@@ -38,17 +42,35 @@ export function useFormToaster<OnSubmitSuccessDataType, OnSubmitErrorDataType>({
       });
     },
     onSubmitError: (props) => {
+      const resolvedMessage = resolveErrorMessage(props, errorMessage);
+
       toast.addToast({
         csVariant: "danger",
-        children: errorMessage
-          ? typeof errorMessage === "string"
-            ? errorMessage
-            : props
-              ? errorMessage(props)
-              : "Unknown error occurred. The error has been logged"
-          : "Unknown error occurred. The error has been logged",
+        children: resolvedMessage,
         duration: 30000,
       });
     },
   };
+}
+
+function resolveErrorMessage<OnSubmitErrorDataType>(
+  props: OnSubmitErrorDataType | undefined,
+  override?: string | ((props: OnSubmitErrorDataType) => string)
+): string {
+  if (override) {
+    if (typeof override === "string") {
+      return override;
+    }
+    if (props) {
+      return override(props);
+    }
+  }
+
+  if (props instanceof UserFacingError) {
+    return formatUserFacingError(props, {
+      fallback: "Unknown error occurred. The error has been logged",
+    });
+  }
+
+  return "Unknown error occurred. The error has been logged";
 }
