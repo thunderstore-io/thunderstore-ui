@@ -19,13 +19,6 @@ import {
   MultipartUpload,
   type IBaseUploadHandle,
 } from "@thunderstore/ts-uploader";
-// import {
-//   useUploadProgress,
-//   useUploadStatus,
-//   useUploadError,
-//   useUploadControls,
-// } from "@thunderstore/ts-uploader-react";
-// import { useSession } from "@thunderstore/ts-api-react";
 import {
   faFileZip,
   faTreasureChest,
@@ -136,11 +129,7 @@ export default function Upload() {
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [handle, setHandle] = useState<IBaseUploadHandle>();
-  // const [lock, setLock] = useState<boolean>(false);
   const [isDone, setIsDone] = useState<boolean>(false);
-
-  // const error = useUploadError(handle);
-  // const controls = useUploadControls(handle);
 
   const [usermedia, setUsermedia] = useState<UserMedia>();
 
@@ -158,18 +147,25 @@ export default function Upload() {
       requestConfig
     );
 
-    // setLock(true);
     setHandle(upload);
     toast.addToast({
       csVariant: "info",
       children: "Starting upload",
       duration: 4000,
     });
-    await upload.start();
-    setUsermedia(upload.handle);
-    setIsDone(true);
-    // setLock(false);
-  }, [file, requestConfig]);
+    try {
+      await upload.start();
+      setUsermedia(upload.handle);
+      setIsDone(true);
+    } catch (error) {
+      toast.addToast({
+        csVariant: "danger",
+        children: error instanceof Error ? error.message : "Upload failed",
+        duration: 8000,
+      });
+      setHandle(undefined);
+    }
+  }, [file, requestConfig, toast]);
 
   useEffect(() => {
     if (file) {
@@ -456,8 +452,9 @@ export default function Upload() {
                           </span>
                           <button
                             className="drag-n-drop__remove-button"
-                            onClick={() => {
-                              // TODO: Clicking this causes the file select to open also
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
                               setFile(null);
                               if (fileInputRef.current) {
                                 fileInputRef.current.value = "";
@@ -466,7 +463,6 @@ export default function Upload() {
                               setHandle(undefined);
                               setUsermedia(undefined);
                               setIsDone(false);
-                              // setLock(false);
                             }}
                           >
                             Remove
@@ -697,22 +693,12 @@ export default function Upload() {
                     value: undefined,
                   });
                   setSubmissionStatus(undefined);
-                  // setLock(false);
                 }}
                 csVariant="secondary"
                 csSize="big"
               >
                 Reset
               </NewButton>
-              {/* <NewButton
-                disabled={!file || !!handle || lock}
-                onClick={startUpload}
-                csVariant="accent"
-                csSize="big"
-                rootClasses="upload__submit"
-              >
-                Upload File
-              </NewButton> */}
               <NewButton
                 disabled={
                   !usermedia?.uuid || formInputs.communities.length === 0
@@ -725,105 +711,6 @@ export default function Upload() {
                 Submit
               </NewButton>
             </div>
-
-            {/* <>
-            <UploadStatus handle={handle} />
-              <div className="submission__status">
-                <div className="submission__status-item">
-                  Submission{" "}
-                  {submissionStatus ? submissionStatus.status : "not started"}
-                </div>
-              </div>
-              {submissionStatus && (
-                <div className="submission__status">
-                  {submissionStatus.form_errors &&
-                    Object.keys(submissionStatus.form_errors).length > 0 && (
-                      <div className="submission__error">
-                        <p>Form Errors:</p>
-                        <ul>
-                          {Object.entries(submissionStatus.form_errors).map(
-                            ([field, error]) => (
-                              <li key={field}>
-                                {field !== "__all__" && (
-                                  <strong>{formatFieldName(field)}: </strong>
-                                )}
-                                {Array.isArray(error)
-                                  ? error.join(", ")
-                                  : String(error)}
-                              </li>
-                            )
-                          )}
-                        </ul>
-                      </div>
-                    )}
-                  {submissionStatus.result && (
-                    <SubmissionResult
-                      submissionStatusResult={submissionStatus.result}
-                    />
-                  )}
-                  <NewButton onClick={retryPolling}>
-                    Retry Status Check
-                  </NewButton>
-                </div>
-              )}
-              <NewButton
-                disabled={!handle}
-                onClick={() => handle?.pause()}
-                csVariant="warning"
-                csSize="big"
-                rootClasses="upload__submit"
-              >
-                Pause
-              </NewButton>
-              <NewButton
-                disabled={!handle}
-                onClick={() => handle?.resume()}
-                csVariant="warning"
-                csSize="big"
-                rootClasses="upload__submit"
-              >
-                Resume
-              </NewButton>
-              {error && (
-                <div className="submission__error">
-                  <p>{error.message}</p>
-                  {error.retryable && (
-                    <NewButton onClick={controls.retry}>Retry</NewButton>
-                  )}
-                </div>
-              )}
-              {isDone && !usermedia?.uuid && (
-                <div className="submission__error">
-                  <p>
-                    Upload completed but no UUID was received. Please try again.
-                  </p>
-                </div>
-              )}
-              {isDone &&
-                usermedia?.uuid &&
-                formInputs.communities.length === 0 && (
-                  <div className="submission__error">
-                    <p>Please select at least one community.</p>
-                  </div>
-                )}
-              {submissionStatus?.form_errors &&
-                Object.keys(submissionStatus.form_errors).length > 0 && (
-                  <div className="submission__error">
-                    {Object.entries(submissionStatus.form_errors).map(
-                      ([field, errors]) => (
-                        <div key={field}>
-                          {field !== "__all__" && (
-                            <strong>{formatFieldName(field)}: </strong>
-                          )}
-                          {Array.isArray(errors)
-                            ? errors.join(", ")
-                            : String(errors)}
-                        </div>
-                      )
-                    )}
-                  </div>
-                )}
-            </> */}
           </div>
         </div>
         <div className="upload__divider" />
@@ -857,26 +744,6 @@ export default function Upload() {
             <NewButton onClick={retryPolling}>Retry Status Check</NewButton>
           </div>
         ) : null}
-        {/* <div className="upload__divider" />
-        <div className="container container--y container--full">
-          <p>Is submitting: {strongForm.submitting ? "yes" : "no"}</p>
-          <p>inputErrors: {JSON.stringify(strongForm.inputErrors)}</p>
-          <p>author_name: {strongForm.submissionData?.author_name}</p>
-          <p>categories: {strongForm.submissionData?.categories}</p>
-          <p>communities: {strongForm.submissionData?.communities}</p>
-          <p>
-            community_categories:{" "}
-            {strongForm.submissionData?.community_categories
-              ? Object.entries(strongForm.submissionData.community_categories)
-                  .map(([comId, cats]) => `{${comId}: ${cats.join(", ")}}`)
-                  .join(", ")
-              : "None"}
-          </p>
-          <p>has_nsfw_content: {strongForm.submissionData?.has_nsfw_content}</p>
-          <p>upload_uuid: {strongForm.submissionData?.upload_uuid}</p>
-          <p>submitOutput: {JSON.stringify(strongForm.submitOutput)}</p>
-          <p>submitError: {JSON.stringify(strongForm.submitError)}</p>
-        </div> */}
       </section>
     </>
   );
@@ -903,78 +770,6 @@ function formatBytes(bytes: number, decimals = 2) {
 
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
-
-// const UploadStatus = (props: { handle?: IBaseUploadHandle }) => {
-//   const progress = useUploadProgress(props.handle);
-//   const status = useUploadStatus(props.handle);
-//   const error = useUploadError(props.handle);
-//   const controls = useUploadControls(props.handle);
-
-//   let progressElement = null;
-
-//   if (progress) {
-//     const partBars = Object.keys(progress.partsProgress).map((partId) => {
-//       const partProgress = progress.partsProgress[partId];
-//       return (
-//         <div className="upload__progress-bar" key={partId}>
-//           <div
-//             className="upload__progress-bar-fill"
-//             style={{
-//               width: `${(partProgress.complete / partProgress.total) * 100}%`,
-//             }}
-//           />
-//         </div>
-//       );
-//     });
-//     const percent = Math.round((progress.complete / progress.total) * 100);
-//     const speed = formatBytes(progress.metrics.bytesPerSecond, 2);
-
-//     progressElement = (
-//       <div className="upload__progress">
-//         <div className="upload__progress-bar">
-//           <div
-//             className="upload__progress-bar-fill"
-//             style={{ width: `${percent}%` }}
-//           />
-//         </div>
-//         <div className="upload__progress-bars">{partBars}</div>
-//         <div className="upload__progress-info">
-//           <span>
-//             {percent}% {formatBytes(progress.complete)} /{" "}
-//             {formatBytes(progress.total)}
-//           </span>
-//           <span className="upload__progress-speed">{speed} / s</span>
-//         </div>
-//         {error && (
-//           <div className="upload__error">
-//             <p>{error.message}</p>
-//             {error.retryable && (
-//               <NewButton onClick={controls.retry}>Retry</NewButton>
-//             )}
-//           </div>
-//         )}
-//         {status === "running" && (
-//           <NewButton onClick={controls.pause}>Pause</NewButton>
-//         )}
-//         {status === "paused" && (
-//           <NewButton onClick={controls.resume}>Resume</NewButton>
-//         )}
-//         {(status === "running" || status === "paused") && (
-//           <NewButton onClick={controls.abort}>Cancel</NewButton>
-//         )}
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className="upload__status">
-//       <div className="upload__status-header">
-//         <p>Upload Status: {status}</p>
-//       </div>
-//       <div className="upload__status-content">{progressElement}</div>
-//     </div>
-//   );
-// };
 
 const SubmissionResult = (props: {
   submissionStatusResult: PackageSubmissionResult;
