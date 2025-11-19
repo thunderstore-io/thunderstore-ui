@@ -1,19 +1,34 @@
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import {
   faArrowUpRight,
+  faCheckCircle,
   faFileZip,
   faTreasureChest,
   faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useCallback, useEffect, useReducer, useRef, useState } from "react";
-import { type MetaFunction } from "react-router";
-import { useLoaderData, useOutletContext } from "react-router";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
+import {
+  Await,
+  type MetaFunction,
+  useLoaderData,
+  useOutletContext,
+} from "react-router";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import type { OutletContextShape } from "~/root";
 
 import {
   Heading,
@@ -25,12 +40,13 @@ import {
   NewTable,
   NewTableSort,
   NewTag,
+  SkeletonBox,
   classnames,
   useToast,
 } from "@thunderstore/cyberstorm";
-import {
-  type PackageSubmissionResult,
-  type PackageSubmissionStatus,
+import type {
+  PackageSubmissionResult,
+  PackageSubmissionStatus,
 } from "@thunderstore/dapper";
 import {
   DapperTs,
@@ -38,18 +54,19 @@ import {
 } from "@thunderstore/dapper-ts";
 import { DnDFileInput } from "@thunderstore/react-dnd";
 import {
-  type PackageSubmissionRequestData,
-  UserFacingError,
-} from "@thunderstore/thunderstore-api";
-import {
   type IBaseUploadHandle,
   MultipartUpload,
-  type UserMedia,
 } from "@thunderstore/ts-uploader";
 
-import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
-import { type OutletContextShape } from "../root";
-import "./Upload.css";
+import {
+  type PackageSubmissionRequestData,
+  UserFacingError,
+  type UserMedia,
+  formatUserFacingError,
+} from "../../../../packages/thunderstore-api/src";
+
+const getErrorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : String(error);
 
 interface CommunityOption {
   value: string;
@@ -71,36 +88,64 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+type CommunitiesResult = Awaited<ReturnType<DapperTs["getCommunities"]>>;
+
+interface UploadContentProps {
+  communities: CommunitiesResult;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Fetches the community list for the upload form during SSR.
+ */
 export async function loader() {
-  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-  const dapper = new DapperTs(() => {
+  const { dapper } = getLoaderTools();
+  try {
+    const communities = await dapper.getCommunities();
+
     return {
-      apiHost: publicEnvVariables.VITE_API_URL,
-      sessionId: undefined,
+      communities,
     };
-  });
-  return await dapper.getCommunities();
+  } catch (error) {
+    handleLoaderError(error);
+  }
 }
 
+/**
+ * Streams the community list promise so Suspense can render progress fallbacks.
+ */
 export async function clientLoader() {
-  // console.log("clientloader context", getSessionTools(context));
-  const tools = getSessionTools();
-  const dapper = new DapperTs(() => {
-    return {
-      apiHost: tools?.getConfig().apiHost,
-      sessionId: tools?.getConfig().sessionId,
-    };
-  });
-  return await dapper.getCommunities();
+  const { dapper } = getLoaderTools();
+  const communitiesPromise = dapper.getCommunities();
+
+  return {
+    communities: communitiesPromise,
+  };
 }
 
+/**
+ * Streams communities via Suspense and delegates UI rendering to UploadContent.
+ */
 export default function Upload() {
-  const uploadData = useLoaderData<typeof loader | typeof clientLoader>();
-
+  const { communities } = useLoaderData<typeof loader | typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
-  const requestConfig = outletContext.requestConfig;
-  const currentUser = outletContext.currentUser;
-  const dapper = outletContext.dapper;
+
+  return (
+    <Suspense fallback={<UploadSkeleton />}>
+      <Await resolve={communities} errorElement={<NimbusAwaitErrorElement />}>
+        {(result) => (
+          <UploadContent communities={result} outletContext={outletContext} />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
+
+/**
+ * Renders the upload workflow once community metadata resolves.
+ */
+function UploadContent({ communities, outletContext }: UploadContentProps) {
+  const { requestConfig, currentUser, dapper } = outletContext;
 
   const toast = useToast();
 
@@ -122,13 +167,14 @@ export default function Upload() {
   }, [currentUser?.teams_full]);
 
   // Community options
-  const communityOptions: CommunityOption[] = [];
-  for (const community of uploadData.results) {
-    communityOptions.push({
-      value: community.identifier,
-      label: community.name,
-    });
-  }
+  const communityOptions: CommunityOption[] = communities.results.map(
+    (community) => {
+      return {
+        value: community.identifier,
+        label: community.name,
+      };
+    }
+  );
 
   const [submissionStatus, setSubmissionStatus] =
     useState<PackageSubmissionStatus>();
@@ -243,17 +289,29 @@ export default function Upload() {
           // TODO: Add sentry logging
           toast.addToast({
             csVariant: "danger",
-            children: `Error polling submission status: ${error.message}`,
+            children: `Error polling submission status: ${getErrorMessage(
+              error
+            )}`,
             duration: 8000,
           });
         });
     }
   }, [submissionStatus]);
 
-  const retryPolling = () => {
-    if (submissionStatus?.id) {
-      pollSubmission(submissionStatus.id, true).then((data) => {
-        setSubmissionStatus(data);
+  const retryPolling = async () => {
+    const submissionId = submissionStatus?.id;
+    if (!submissionId) {
+      return;
+    }
+
+    try {
+      const data = await pollSubmission(submissionId, true);
+      setSubmissionStatus(data);
+    } catch (error) {
+      toast.addToast({
+        csVariant: "danger",
+        children: `Error polling submission status: ${getErrorMessage(error)}`,
+        duration: 8000,
       });
     }
   };
@@ -289,25 +347,63 @@ export default function Upload() {
   });
 
   useEffect(() => {
-    for (const community of formInputs.communities) {
-      // Skip if we already have categories for this community
-      if (categoryOptions.some((opt) => opt.communityId === community)) {
-        continue;
-      }
-      dapper.getCommunityFilters(community).then((filters) => {
-        setCategoryOptions((prev) => [
-          ...prev,
-          {
-            communityId: community,
-            categories: filters.package_categories.map((cat) => ({
-              value: cat.slug,
-              label: cat.name,
-            })),
-          },
-        ]);
-      });
+    const communitiesToFetch = formInputs.communities.filter(
+      (community) =>
+        !categoryOptions.some((opt) => opt.communityId === community)
+    );
+
+    if (communitiesToFetch.length === 0) {
+      return;
     }
-  }, [formInputs.communities]);
+
+    let isCancelled = false;
+
+    const fetchFilters = async () => {
+      await Promise.all(
+        communitiesToFetch.map(async (community) => {
+          try {
+            const filters = await dapper.getCommunityFilters(community);
+            if (isCancelled) {
+              return;
+            }
+
+            setCategoryOptions((prev) => {
+              if (prev.some((opt) => opt.communityId === community)) {
+                return prev;
+              }
+
+              return [
+                ...prev,
+                {
+                  communityId: community,
+                  categories: filters.package_categories.map((cat) => ({
+                    value: cat.slug,
+                    label: cat.name,
+                  })),
+                },
+              ];
+            });
+          } catch (error) {
+            if (!isCancelled) {
+              toast.addToast({
+                csVariant: "danger",
+                children: `Failed to load categories: ${getErrorMessage(
+                  error
+                )}`,
+                duration: 8000,
+              });
+            }
+          }
+        })
+      );
+    };
+
+    fetchFilters();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [categoryOptions, dapper, formInputs.communities, toast]);
 
   type SubmitorOutput = Awaited<
     ReturnType<typeof postPackageSubmissionMetadata>
@@ -350,7 +446,7 @@ export default function Upload() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -567,7 +663,7 @@ export default function Upload() {
                 </div>
                 <div className="upload__content">
                   {formInputs.communities.map((community) => {
-                    const communityData = uploadData.results.find(
+                    const communityData = communities.results.find(
                       (c) => c.identifier === community
                     );
                     const categories =
@@ -757,6 +853,32 @@ export default function Upload() {
   );
 }
 
+/**
+ * Shows a lightweight skeleton while communities load after navigation.
+ */
+function UploadSkeleton() {
+  return (
+    <section className="container container--y container--full upload">
+      {[0, 1, 2].map((index) => (
+        <div
+          key={index}
+          className="container container--x container--full upload__row"
+          style={{ marginBottom: "1rem", height: "3rem" }}
+        >
+          <SkeletonBox />
+        </div>
+      ))}
+    </section>
+  );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
+}
+
+/**
+ * Converts byte counts into a human-readable string for upload status messaging.
+ */
 function formatBytes(bytes: number, decimals = 2) {
   if (!+bytes) return "0 Bytes";
 
@@ -779,6 +901,9 @@ function formatBytes(bytes: number, decimals = 2) {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }
 
+/**
+ * Displays the submission success summary once the package metadata API responds.
+ */
 const SubmissionResult = (props: {
   submissionStatusResult: PackageSubmissionResult;
 }) => {
