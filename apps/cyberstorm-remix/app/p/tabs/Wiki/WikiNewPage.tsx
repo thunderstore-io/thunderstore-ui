@@ -2,10 +2,11 @@ import "./Wiki.css";
 
 import {
   type LoaderFunctionArgs,
+  useLoaderData,
   useNavigate,
   useOutletContext,
+  useRouteError,
 } from "react-router";
-import { useLoaderData } from "react-router";
 import {
   Heading,
   NewButton,
@@ -18,10 +19,15 @@ import { useReducer, useState } from "react";
 import {
   type PackageWikiPageCreateRequestData,
   postPackageWikiPageCreate,
+  UserFacingError,
+  formatUserFacingError,
 } from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "~/root";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { resolveRouteErrorPayload } from "cyberstorm/utils/errors/resolveRouteErrorPayload";
+import { NimbusErrorBoundaryFallback } from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
@@ -31,7 +37,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
       packageId: params.packageId,
     };
   } else {
-    throw new Error("Namespace ID or Package ID is missing");
+    throwUserFacingPayloadResponse({
+      headline: "Can't find package for wiki page creation.",
+      description: "We could not find the requested package.",
+      category: "not_found",
+      status: 404,
+    });
   }
 }
 
@@ -43,7 +54,12 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       packageId: params.packageId,
     };
   } else {
-    throw new Error("Namespace ID or Package ID is missing");
+    throwUserFacingPayloadResponse({
+      headline: "Can't find package for wiki page creation.",
+      description: "We could not find the requested package.",
+      category: "not_found",
+      status: 404,
+    });
   }
 }
 
@@ -52,22 +68,33 @@ export default function Wiki() {
     typeof loader | typeof clientLoader
   >();
 
+  return (
+    <WikiNewPageContent
+      communityId={communityId}
+      namespaceId={namespaceId}
+      packageId={packageId}
+    />
+  );
+}
+
+type WikiNewPageContentProps = {
+  communityId: string;
+  namespaceId: string;
+  packageId: string;
+};
+
+/**
+ * Provides the interactive form for creating a new wiki page.
+ */
+function WikiNewPageContent({
+  communityId,
+  namespaceId,
+  packageId,
+}: WikiNewPageContentProps) {
   const outletContext = useOutletContext() as OutletContextShape;
-
   const toast = useToast();
-
   const navigate = useNavigate();
-
   const [selectedTab, setSelectedTab] = useState<"write" | "preview">("write");
-
-  async function moveToWikiPage(slug: string) {
-    toast.addToast({
-      csVariant: "info",
-      children: `Moving to the created wiki page`,
-      duration: 4000,
-    });
-    navigate(`/c/${communityId}/p/${namespaceId}/${packageId}/wiki/${slug}`);
-  }
 
   function formFieldUpdateAction(
     state: PackageWikiPageCreateRequestData,
@@ -86,6 +113,15 @@ export default function Wiki() {
     title: "",
     markdown_content: "# New page",
   });
+
+  async function moveToWikiPage(slug: string) {
+    toast.addToast({
+      csVariant: "info",
+      children: `Moving to the created wiki page`,
+      duration: 4000,
+    });
+    navigate(`/c/${communityId}/p/${namespaceId}/${packageId}/wiki/${slug}`);
+  }
 
   type SubmitorOutput = Awaited<ReturnType<typeof postPackageWikiPageCreate>>;
 
@@ -110,7 +146,7 @@ export default function Wiki() {
     PackageWikiPageCreateRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
@@ -126,7 +162,7 @@ export default function Wiki() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -217,5 +253,21 @@ export default function Wiki() {
         </NewButton>
       </div>
     </>
+  );
+}
+
+/**
+ * Maps loader errors to user-facing alerts for the new wiki page route.
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+  const payload = resolveRouteErrorPayload(error);
+
+  return (
+    <NimbusErrorBoundaryFallback
+      error={error}
+      title={payload.headline}
+      description={payload.description}
+    />
   );
 }
