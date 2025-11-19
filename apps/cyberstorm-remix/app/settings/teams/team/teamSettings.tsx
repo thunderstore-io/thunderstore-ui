@@ -1,29 +1,39 @@
 import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "app/root";
-import {
-  type MetaFunction,
-  Outlet,
-  useLocation,
-  useOutletContext,
-  useParams,
-} from "react-router";
+import { NimbusDefaultRouteErrorBoundary } from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { Outlet, useLocation, useOutletContext, useParams } from "react-router";
 
 import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 
 import "./teamSettings.css";
 
-export const meta: MetaFunction = ({ params }) => {
-  return [
-    { title: `Team ${params.namespaceId ?? ""} settings` },
-    { name: "description", content: "Manage team related settings" },
-  ];
-};
-
-export default function Community() {
-  const teamName = useParams().namespaceId ?? "";
+export default function TeamSettingsRoute() {
   const location = useLocation();
   const outletContext = useOutletContext() as OutletContextShape;
+  const teamName = useParams().namespaceId ?? "";
 
+  return (
+    <TeamSettingsContent
+      teamName={teamName}
+      locationPathname={location.pathname}
+      outletContext={outletContext}
+    />
+  );
+}
+
+interface TeamSettingsContentProps {
+  teamName: string;
+  locationPathname: string;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Displays the team settings tabs once loader data resolves on the client.
+ */
+function TeamSettingsContent({
+  teamName,
+  outletContext,
+}: TeamSettingsContentProps) {
   const parts = location.pathname.split("/");
   const currentTab = parts.length === 4 ? parts[3] : "profile";
 
@@ -89,4 +99,8 @@ export default function Community() {
       </div>
     </>
   );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }

@@ -25,6 +25,7 @@ import {
   type RequestConfig,
   type TeamDisbandRequestData,
   UserFacingError,
+  formatUserFacingError,
   teamDisband,
   teamRemoveMember,
 } from "@thunderstore/thunderstore-api";
@@ -153,7 +154,7 @@ function LeaveTeamForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -275,7 +276,7 @@ function DisbandTeamForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },

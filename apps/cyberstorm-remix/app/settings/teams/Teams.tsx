@@ -1,6 +1,11 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import {
+  NimbusErrorBoundary,
+  NimbusErrorBoundaryFallback,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import type { NimbusErrorBoundaryFallbackProps } from "cyberstorm/utils/errors/NimbusErrorBoundary";
 import { useReducer, useState } from "react";
 import type { MetaFunction } from "react-router";
 import { useOutletContext, useRevalidator } from "react-router";
@@ -21,6 +26,7 @@ import {
   type RequestConfig,
   type TeamCreateRequestData,
   UserFacingError,
+  formatUserFacingError,
   teamCreate,
 } from "@thunderstore/thunderstore-api";
 import {
@@ -66,7 +72,10 @@ export default function Teams() {
   const currentUser = outletContext.currentUser;
 
   return (
-    <>
+    <NimbusErrorBoundary
+      fallback={TeamsSettingsFallback}
+      onRetry={({ reset }) => reset()}
+    >
       <PageHeader headingLevel="1" headingSize="2">
         Teams
       </PageHeader>
@@ -81,7 +90,6 @@ export default function Teams() {
             {currentUser?.teams_full?.length ? (
               <NewTable
                 titleRowContent={<Heading csLevel="3">Teams</Heading>}
-                // csModifiers={["alignLastColumnRight"]}
                 headers={[
                   { value: "Team Name", disableSort: false },
                   { value: "Role", disableSort: false },
@@ -125,7 +133,28 @@ export default function Teams() {
           </div>
         </div>
       </section>
-    </>
+    </NimbusErrorBoundary>
+  );
+}
+
+/**
+ * Presents fallback messaging when the teams settings view crashes.
+ */
+function TeamsSettingsFallback(props: NimbusErrorBoundaryFallbackProps) {
+  const {
+    title = "Teams failed to load",
+    description = "Reload the teams tab or return to settings.",
+    retryLabel = "Reload",
+    ...rest
+  } = props;
+
+  return (
+    <NimbusErrorBoundaryFallback
+      {...rest}
+      title={title}
+      description={description}
+      retryLabel={retryLabel}
+    />
   );
 }
 
@@ -179,7 +208,7 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },

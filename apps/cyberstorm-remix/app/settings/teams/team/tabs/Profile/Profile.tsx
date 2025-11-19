@@ -1,6 +1,10 @@
 import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
 import { Suspense, useReducer } from "react";
 import {
   Await,
@@ -9,11 +13,17 @@ import {
   useRevalidator,
 } from "react-router";
 
-import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
+import {
+  NewButton,
+  NewTextInput,
+  SkeletonBox,
+  useToast,
+} from "@thunderstore/cyberstorm";
 import {
   type TeamDetails,
   type TeamDetailsEditRequestData,
   UserFacingError,
+  formatUserFacingError,
   teamDetailsEdit,
 } from "@thunderstore/thunderstore-api";
 
@@ -47,6 +57,27 @@ export default function Profile() {
 function ProfileForm(props: { team: TeamDetails }) {
   const { team } = props;
   const outletContext = useOutletContext() as OutletContextShape;
+
+  return (
+    <Suspense fallback={<ProfileSkeleton />}>
+      <Await resolve={team} errorElement={<NimbusAwaitErrorElement />}>
+        {(result) => (
+          <ProfileContent team={result} outletContext={outletContext} />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
+
+interface ProfileContentProps {
+  team: TeamDetails;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Renders the team profile editing form once Suspense resolves the team data.
+ */
+function ProfileContent({ team, outletContext }: ProfileContentProps) {
   const revalidator = useRevalidator();
   const toast = useToast();
 
@@ -103,7 +134,7 @@ function ProfileForm(props: { team: TeamDetails }) {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -141,3 +172,18 @@ function ProfileForm(props: { team: TeamDetails }) {
 }
 
 ProfileForm.displayName = "ProfileForm";
+
+/**
+ * Displays a minimal skeleton while team profile data loads.
+ */
+function ProfileSkeleton() {
+  return (
+    <div className="settings-items team-profile">
+      <SkeletonBox className="team-profile__skeleton" />
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
+}
