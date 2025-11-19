@@ -5,7 +5,7 @@ import {
   packageReadmeResponseDataSchema,
 } from "../schemas/responseSchemas";
 import { PackageReadmeRequestParams } from "../schemas/requestSchemas";
-export async function fetchPackageReadme(
+export function fetchPackageReadme(
   props: ApiEndpointProps<PackageReadmeRequestParams, object, object>
 ): Promise<PackageReadmeResponseData> {
   const { config, params } = props;
@@ -15,7 +15,7 @@ export async function fetchPackageReadme(
       : `v/${params.version_number}`;
   const path = `api/cyberstorm/package/${params.namespace_id}/${params.package_name}/${v}/readme/`;
 
-  return await apiFetch({
+  return apiFetch({
     args: {
       config: config,
       path: path,
