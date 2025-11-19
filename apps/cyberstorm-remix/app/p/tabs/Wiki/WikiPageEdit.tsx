@@ -1,10 +1,13 @@
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer, useState } from "react";
 import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
+import { Suspense, useReducer, useState } from "react";
+import {
+  Await,
   type LoaderFunctionArgs,
   useNavigate,
   useOutletContext,
@@ -16,60 +19,34 @@ import { type OutletContextShape } from "~/root";
 import {
   Heading,
   Modal,
+  NewAlert,
   NewButton,
   NewLink,
   NewTextInput,
+  SkeletonBox,
   Tabs,
   useToast,
 } from "@thunderstore/cyberstorm";
 import { classnames } from "@thunderstore/cyberstorm";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   type PackageWikiPageEditRequestData,
   type PackageWikiPageResponseData,
   type RequestConfig,
   UserFacingError,
   deletePackageWikiPage,
+  formatUserFacingError,
   postPackageWikiPageEdit,
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
-import "./Wiki.css";
+type MaybePromise<T> = T | Promise<T>;
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  if (
-    params.communityId &&
-    params.namespaceId &&
-    params.packageId &&
-    params.slug
-  ) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
-      };
-    });
-    const wiki = await dapper.getPackageWiki(
-      params.namespaceId,
-      params.packageId
-    );
-    const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
-    if (!pageId) {
-      throw new Error("Page not found");
-    }
-    const page = await dapper.getPackageWikiPage(pageId);
-
-    return {
-      page: page,
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-    };
-  } else {
-    throw new Error("Namespace ID or Package ID is missing");
-  }
-}
+type ResultType = {
+  page: MaybePromise<PackageWikiPageResponseData | undefined>;
+  communityId: string;
+  namespaceId: string;
+  packageId: string;
+};
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (
@@ -78,45 +55,103 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
     params.packageId &&
     params.slug
   ) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
-    const wiki = await dapper.getPackageWiki(
-      params.namespaceId,
-      params.packageId
-    );
-    const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
-    if (!pageId) {
-      throw new Error("Page not found");
-    }
-    const page = await dapper.getPackageWikiPage(pageId);
+    const { dapper } = getLoaderTools();
+    const pagePromise = dapper
+      .getPackageWiki(params.namespaceId, params.packageId)
+      .then((wiki) => {
+        if (!wiki) {
+          throwUserFacingPayloadResponse(
+            {
+              headline: "Wiki not available.",
+              description: "We could not find the requested wiki.",
+              category: "not_found",
+              status: 404,
+            },
+            { statusOverride: 404 }
+          );
+        }
+
+        const pageId = wiki.pages.find(
+          (candidate) => candidate.slug === params.slug
+        )?.id;
+
+        if (!pageId) {
+          throwUserFacingPayloadResponse(
+            {
+              headline: "Wiki page not available.",
+              description: "We could not find the requested wiki page.",
+              category: "not_found",
+              status: 404,
+            },
+            { statusOverride: 404 }
+          );
+        }
+
+        return dapper.getPackageWikiPage(pageId);
+      });
 
     return {
-      page: page,
+      page: pagePromise,
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-    };
+    } satisfies ResultType;
   } else {
-    throw new Error("Namespace ID or Package ID is missing");
+    throwUserFacingPayloadResponse({
+      headline: "Wiki page not available for edit.",
+      description: "We could not find the requested wiki page for editing.",
+      category: "not_found",
+      status: 404,
+    });
   }
 }
 
+/**
+ * Renders the wiki page editor and defers data resolution to Suspense.
+ */
 export default function WikiEdit() {
-  const { page, communityId, namespaceId, packageId } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { page, communityId, namespaceId, packageId } =
+    useLoaderData<typeof clientLoader>();
 
+  return (
+    <Suspense fallback={<WikiEditSkeleton />}>
+      <Await resolve={page} errorElement={<NimbusAwaitErrorElement />}>
+        {(resolvedPage) =>
+          resolvedPage ? (
+            <WikiEditContent
+              page={resolvedPage}
+              communityId={communityId}
+              namespaceId={namespaceId}
+              packageId={packageId}
+            />
+          ) : (
+            <NewAlert csVariant="info">Wiki page not found.</NewAlert>
+          )
+        }
+      </Await>
+    </Suspense>
+  );
+}
+
+type WikiEditContentProps = {
+  page: PackageWikiPageResponseData;
+  communityId: string;
+  namespaceId: string;
+  packageId: string;
+};
+
+/**
+ * Provides the interactive wiki page edit form once the page data is ready.
+ */
+function WikiEditContent({
+  page,
+  communityId,
+  namespaceId,
+  packageId,
+}: WikiEditContentProps) {
   const outletContext = useOutletContext() as OutletContextShape;
-
   const toast = useToast();
-
   const navigate = useNavigate();
-
   const [selectedTab, setSelectedTab] = useState<"write" | "preview">("write");
 
   async function moveToWikiPage() {
@@ -198,7 +233,7 @@ export default function WikiEdit() {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
@@ -277,12 +312,6 @@ export default function WikiEdit() {
         ) : (
           <Markdown input={formInputs.markdown_content} />
         )}
-        {/* <div className="markdown-wrapper">
-              <div
-                dangerouslySetInnerHTML={{ __html: page.markdown_content }}
-                className="markdown"
-              />
-            </div> */}
       </div>
       <div className="package-wiki-content__footer">
         <NewButton
@@ -309,6 +338,26 @@ export default function WikiEdit() {
   );
 }
 
+/**
+ * Renders a skeleton while wiki edit data streams in.
+ */
+function WikiEditSkeleton() {
+  return (
+    <div className="package-wiki-content__body">
+      <SkeletonBox className="package-wiki-edit__skeleton-title" />
+      <SkeletonBox className="package-wiki-edit__skeleton-input" />
+      <SkeletonBox className="package-wiki-edit__skeleton-input" />
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
+}
+
+/**
+ * Confirmation modal to delete a wiki page and refresh the listing.
+ */
 function DeletePackageWikiPageForm(props: {
   communityId: string;
   namespaceId: string;
@@ -340,7 +389,7 @@ function DeletePackageWikiPageForm(props: {
     onSubmitError: (error) => {
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: formatUserFacingError(error),
         duration: 8000,
       });
     },
