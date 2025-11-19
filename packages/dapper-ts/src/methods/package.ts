@@ -8,7 +8,6 @@ import {
   fetchPackageWikiPage,
   fetchPackagePermissions,
   fetchPackageSource,
-  ApiError,
   fetchPackageVersionDependencies,
   PackageVersionDependenciesRequestQueryParams,
 } from "@thunderstore/thunderstore-api";
@@ -22,7 +21,7 @@ export async function getPackageChangelog(
   packageName: string,
   versionNumber?: string
 ) {
-  const data = await fetchPackageChangelog({
+  return fetchPackageChangelog({
     config: this.config,
     params: {
       namespace_id: namespaceId,
@@ -32,8 +31,6 @@ export async function getPackageChangelog(
     data: {},
     queryParams: {},
   });
-
-  return data;
 }
 
 export async function getPackageReadme(
@@ -42,7 +39,7 @@ export async function getPackageReadme(
   packageName: string,
   versionNumber?: string
 ) {
-  const data = await fetchPackageReadme({
+  return fetchPackageReadme({
     config: this.config,
     params: {
       namespace_id: namespaceId,
@@ -52,8 +49,6 @@ export async function getPackageReadme(
     data: {},
     queryParams: {},
   });
-
-  return data;
 }
 
 export async function getPackageSource(
@@ -62,7 +57,7 @@ export async function getPackageSource(
   packageName: string,
   versionNumber?: string
 ) {
-  const data = await fetchPackageSource({
+  return fetchPackageSource({
     config: this.config,
     params: {
       namespace_id: namespaceId,
@@ -72,8 +67,6 @@ export async function getPackageSource(
     data: {},
     queryParams: {},
   });
-
-  return data;
 }
 
 export const versionsSchema = z
@@ -91,7 +84,7 @@ export async function getPackageVersions(
   namespaceId: string,
   packageName: string
 ) {
-  const data = await fetchPackageVersions({
+  return fetchPackageVersions({
     config: this.config,
     params: {
       namespace_id: namespaceId,
@@ -100,8 +93,6 @@ export async function getPackageVersions(
     data: {},
     queryParams: {},
   });
-
-  return data;
 }
 export async function getPackageVersionDependencies(
   this: DapperTsInterface,
@@ -118,7 +109,7 @@ export async function getPackageVersionDependencies(
     },
   ];
 
-  const data = await fetchPackageVersionDependencies({
+  return fetchPackageVersionDependencies({
     config: this.config,
     params: {
       namespace_id: namespaceId,
@@ -128,8 +119,6 @@ export async function getPackageVersionDependencies(
     data: {},
     queryParams: options,
   });
-
-  return data;
 }
 
 export async function getPackageWiki(
@@ -137,7 +126,7 @@ export async function getPackageWiki(
   namespaceId: string,
   packageName: string
 ) {
-  const data = await fetchPackageWiki({
+  return fetchPackageWiki({
     config: this.config,
     params: {
       namespace_id: namespaceId,
@@ -146,12 +135,10 @@ export async function getPackageWiki(
     data: {},
     queryParams: {},
   });
-
-  return data;
 }
 
 export async function getPackageWikiPage(this: DapperTsInterface, id: string) {
-  const data = await fetchPackageWikiPage({
+  return fetchPackageWikiPage({
     config: this.config,
     params: {
       id,
@@ -159,8 +146,6 @@ export async function getPackageWikiPage(this: DapperTsInterface, id: string) {
     data: {},
     queryParams: {},
   });
-
-  return data;
 }
 
 export async function postPackageSubmissionMetadata(
@@ -172,7 +157,7 @@ export async function postPackageSubmissionMetadata(
   categories?: string[],
   community_categories?: { [key: string]: string[] }
 ) {
-  const data = await postPackageSubmission({
+  return postPackageSubmission({
     config: this.config,
     params: {},
     data: {
@@ -185,15 +170,13 @@ export async function postPackageSubmissionMetadata(
     },
     queryParams: {},
   });
-
-  return data;
 }
 
 export async function getPackageSubmissionStatus(
   this: DapperTsInterface,
   submissionId: string
 ) {
-  const response = await fetchPackageSubmissionStatus({
+  return fetchPackageSubmissionStatus({
     config: this.config,
     params: {
       submission_id: submissionId,
@@ -201,8 +184,6 @@ export async function getPackageSubmissionStatus(
     data: {},
     queryParams: {},
   });
-
-  return response;
 }
 
 export async function getPackagePermissions(
@@ -211,24 +192,14 @@ export async function getPackagePermissions(
   namespaceId: string,
   packageName: string
 ) {
-  try {
-    const response = await fetchPackagePermissions({
-      config: this.config,
-      params: {
-        community_id: communityId,
-        namespace_id: namespaceId,
-        package_name: packageName,
-      },
-      data: {},
-      queryParams: {},
-    });
-    return response;
-  } catch (error) {
-    // In case of user not being logged in or stale session
-    if (error instanceof ApiError && error.response.status === 401) {
-      return undefined;
-    } else {
-      throw error;
-    }
-  }
+  return fetchPackagePermissions({
+    config: this.config,
+    params: {
+      community_id: communityId,
+      namespace_id: namespaceId,
+      package_name: packageName,
+    },
+    data: {},
+    queryParams: {},
+  });
 }

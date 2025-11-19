@@ -8,7 +8,7 @@ export async function getPackageVersionDetails(
   packageName: string,
   packageVersion: string
 ) {
-  const data = await fetchPackageVersionDetails({
+  return fetchPackageVersionDetails({
     config: this.config,
     params: {
       namespace_id: namespaceId,
@@ -18,6 +18,4 @@ export async function getPackageVersionDetails(
     data: {},
     queryParams: {},
   });
-
-  return data;
 }

@@ -1,14 +1,17 @@
-import { fetchRatedPackages } from "@thunderstore/thunderstore-api";
+import {
+  fetchRatedPackages,
+  RatedPackagesResponseData,
+} from "@thunderstore/thunderstore-api";
 
 import { DapperTsInterface } from "../index";
 
-export async function getRatedPackages(this: DapperTsInterface) {
-  const data = await fetchRatedPackages({
+export function getRatedPackages(
+  this: DapperTsInterface
+): Promise<RatedPackagesResponseData> {
+  return fetchRatedPackages({
     config: this.config,
     params: {},
     data: {},
     queryParams: {},
   });
-
-  return data;
 }
