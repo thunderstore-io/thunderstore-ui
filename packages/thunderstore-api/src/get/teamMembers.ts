@@ -6,13 +6,13 @@ import {
 } from "../schemas/responseSchemas";
 import { TeamMembersRequestParams } from "../schemas/requestSchemas";
 
-export async function fetchTeamMembers(
+export function fetchTeamMembers(
   props: ApiEndpointProps<TeamMembersRequestParams, object, object>
 ): Promise<TeamMembersResponseData> {
   const { config, params } = props;
   const path = `api/cyberstorm/team/${params.team_name}/member/`;
 
-  return await apiFetch({
+  return apiFetch({
     args: {
       config: config,
       path: path,

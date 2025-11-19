@@ -6,7 +6,7 @@ import {
   PackageWikiPageDeleteRequestParams,
 } from "../schemas/requestSchemas";
 
-export async function deletePackageWikiPage(
+export function deletePackageWikiPage(
   props: ApiEndpointProps<
     PackageWikiPageDeleteRequestParams,
     object,
@@ -16,7 +16,7 @@ export async function deletePackageWikiPage(
   const { config, params, data } = props;
   const path = `api/experimental/package/${params.namespace_id}/${params.package_name}/wiki/`;
 
-  return await apiFetch({
+  return apiFetch({
     args: {
       config: config,
       path: path,
