@@ -26,24 +26,21 @@ import {
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
-import { NotLoggedIn } from "app/commonComponents/NotLoggedIn/NotLoggedIn";
 import { type OutletContextShape } from "app/root";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 
 export const clientLoader = makeTeamSettingsTabLoader(
-  // TODO: add end point for checking can leave/disband status.
-  async (dapper, teamName) => ({ teamName })
+  async (dapper, teamName) => ({
+    permissions: dapper.getCurrentUserTeamPermissions(teamName),
+  })
 );
 
 export default function Settings() {
-  const { teamName } = useLoaderData<typeof clientLoader>();
+  const { permissions, teamName } = useLoaderData<typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
   const toast = useToast();
   const navigate = useNavigate();
-
-  const currentUser = outletContext.currentUser?.username;
-  if (!currentUser) return <NotLoggedIn />;
 
   async function moveToTeams() {
     toast.addToast({
@@ -56,8 +53,8 @@ export default function Settings() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <Await resolve={teamName}>
-        {(resolvedTeamName) => (
+      <Await resolve={permissions}>
+        {(resolvedPermissions) => (
           <div className="settings-items">
             <div className="settings-items__item">
               <div className="settings-items__meta">
@@ -74,8 +71,8 @@ export default function Settings() {
                   team has another owner assigned.
                 </p>
                 <LeaveTeamForm
-                  userName={currentUser}
-                  teamName={resolvedTeamName}
+                  userName={outletContext.currentUser?.username ?? ""}
+                  teamName={teamName}
                   toast={toast}
                   config={outletContext.requestConfig}
                   updateTrigger={moveToTeams}
@@ -94,14 +91,14 @@ export default function Settings() {
                 <NewAlert csVariant="danger">
                   You cannot currently disband this team as it has packages.
                 </NewAlert>
-                <p>You are about to disband the team {resolvedTeamName}.</p>
+                <p>You are about to disband the team {teamName}.</p>
                 <p>
                   Be aware you can currently only disband teams with no
                   packages. If you need to archive a team with existing pages,
                   contact Mythic#0001 on the Thunderstore Discord.
                 </p>
                 <DisbandTeamForm
-                  teamName={resolvedTeamName}
+                  teamName={teamName}
                   updateTrigger={moveToTeams}
                   config={outletContext.requestConfig}
                   toast={toast}
