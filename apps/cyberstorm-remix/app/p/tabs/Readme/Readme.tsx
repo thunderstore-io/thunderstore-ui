@@ -1,16 +1,14 @@
 import { Await, type LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import "./Readme.css";
+import { getRequestScopedDapper } from "cyberstorm/utils/dapperSingleton";
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  if (params.namespaceId && params.packageId) {
+  if (params.communityId && params.namespaceId && params.packageId) {
     const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
@@ -18,8 +16,10 @@ export async function loader({ params }: LoaderFunctionArgs) {
         sessionId: undefined,
       };
     });
+    const community = await dapper.getCommunity(params.communityId);
     return {
       readme: dapper.getPackageReadme(params.namespaceId, params.packageId),
+      community: community,
     };
   }
   return {
@@ -29,17 +29,13 @@ export async function loader({ params }: LoaderFunctionArgs) {
   };
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
-  if (params.namespaceId && params.packageId) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
+export async function clientLoader({ params, request }: LoaderFunctionArgs) {
+  if (params.communityId && params.namespaceId && params.packageId) {
+    const dapper = getRequestScopedDapper(request);
+    const community = dapper.getCommunity(params.communityId);
     return {
       readme: dapper.getPackageReadme(params.namespaceId, params.packageId),
+      community,
     };
   }
   return {
@@ -50,9 +46,10 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 }
 
 export default function Readme() {
-  const { status, message, readme } = useLoaderData<
+  const { status, message, readme, community } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
+  console.log(community);
 
   if (status === "error") return <div>{message}</div>;
   return (

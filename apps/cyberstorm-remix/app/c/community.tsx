@@ -23,12 +23,10 @@ import { faDiscord } from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type OutletContextShape } from "../root";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { Suspense } from "react";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { getRequestScopedDapper } from "cyberstorm/utils/dapperSingleton";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId) {
@@ -47,15 +45,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
   throw new Response("Community not found", { status: 404 });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ params, request }: LoaderFunctionArgs) {
   if (params.communityId) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
+    const dapper = getRequestScopedDapper(request);
     const community = dapper.getCommunity(params.communityId);
     return {
       community: community,
