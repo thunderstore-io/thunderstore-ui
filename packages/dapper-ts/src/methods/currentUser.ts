@@ -1,4 +1,8 @@
-import { ApiError, fetchCurrentUser } from "@thunderstore/thunderstore-api";
+import {
+  ApiError,
+  fetchCurrentUser,
+  fetchCurrentUserTeamPermissions,
+} from "@thunderstore/thunderstore-api";
 
 import { DapperTsInterface } from "../index";
 
@@ -21,4 +25,16 @@ export async function getCurrentUser(this: DapperTsInterface) {
       throw error;
     }
   }
+}
+
+export async function getCurrentUserTeamPermissions(
+  this: DapperTsInterface,
+  teamName: string
+) {
+  return await fetchCurrentUserTeamPermissions({
+    config: this.config,
+    params: { team_name: teamName },
+    data: {},
+    queryParams: {},
+  });
 }

@@ -115,6 +115,15 @@ export type PackageListingsRequestQueryParams = z.infer<
   typeof packageListingsRequestQueryParamsSchema
 >;
 
+// CurrentUserTeamPermissionsRequest
+export const currentUserTeamPermissionsRequestParamsSchema = z.object({
+  team_name: z.string(),
+});
+
+export type CurrentUserTeamPermissionsRequestParams = z.infer<
+  typeof currentUserTeamPermissionsRequestParamsSchema
+>;
+
 // DynamicHTMLRequest
 export const dynamicHTMLRequestParamsSchema = z.object({
   placement: z.string(),

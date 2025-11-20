@@ -15,7 +15,7 @@ import {
 import { type PackageListingType } from "./props";
 import { type HTMLContentResponse, type MarkdownResponse } from "./shared";
 import { type TeamDetails, type ServiceAccount, type TeamMember } from "./team";
-import { type CurrentUser } from "./user";
+import { type CurrentUser, type CurrentUserTeamPermissions } from "./user";
 
 export type GetCommunities = (
   page?: number,
@@ -30,6 +30,10 @@ export type GetCommunityFilters = (
 ) => Promise<CommunityFilters>;
 
 export type GetCurrentUser = () => Promise<null | CurrentUser>;
+
+export type GetCurrentUserTeamPermissions = (
+  teamName: string
+) => Promise<CurrentUserTeamPermissions>;
 
 export type GetPackageChangelog = (
   namespace: string,
