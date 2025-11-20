@@ -85,6 +85,10 @@ export interface ModalProps
    * Provide the id of an element that describes the dialog.
    */
   ariaDescribedby?: string;
+  /**
+   * When true, the modal overlay applies a heavy blur effect. Disable for better performance.
+   */
+  enableBackdropBlur?: boolean;
 }
 // TODO: Style system compatibility is currently degraded, improve to a agreed upon level according to specifications
 
@@ -189,6 +193,7 @@ export function Modal(props: ModalProps) {
     titleContent,
     footerContent,
     ariaDescribedby,
+    enableBackdropBlur = false,
   } = props;
 
   const filteredChildren: ReactNode[] = [];
@@ -244,7 +249,12 @@ export function Modal(props: ModalProps) {
     >
       {trigger ? <Dialog.Trigger asChild>{trigger}</Dialog.Trigger> : null}
       <Dialog.Portal>
-        <Dialog.Overlay className="modal__overlay">
+        <Dialog.Overlay
+          className={classnames(
+            "modal__overlay",
+            enableBackdropBlur ? "modal__overlay--blur" : null
+          )}
+        >
           <Dialog.Content
             className={classnames(
               "modal",
