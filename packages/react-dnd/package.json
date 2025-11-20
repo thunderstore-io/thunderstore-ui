@@ -13,6 +13,9 @@
     "build": "tsc",
     "dev": "tsc --watch"
   },
+  "engines": {
+    "node": "24.9.0"
+  },
   "dependencies": {
     "@types/react": "^19.1.0",
     "react": "^19.1.0",
