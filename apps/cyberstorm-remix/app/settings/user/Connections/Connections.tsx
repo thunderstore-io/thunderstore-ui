@@ -14,6 +14,7 @@ import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
 import { Connection } from "~/commonComponents/Connection/Connection";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
+import { Loading } from "~/commonComponents/Loading/Loading";
 import { type OutletContextShape } from "~/root";
 
 import { userLinkedAccountDisconnect } from "../../../../../../packages/thunderstore-api/src";
@@ -110,7 +111,7 @@ export default function Connections() {
   ]);
 
   if (!isHydrated) {
-    return <div style={{ padding: "32px" }}>Loading...</div>;
+    return <Loading />;
   }
 
   if (!outletContext.currentUser) {

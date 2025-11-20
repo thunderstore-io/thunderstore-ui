@@ -1,0 +1,5 @@
+@layer nimbus-components {
+  .loading-message {
+    padding: 32px;
+  }
+}
