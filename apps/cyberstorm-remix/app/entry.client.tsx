@@ -4,8 +4,12 @@ import { hydrateRoot } from "react-dom/client";
 import { useLocation, useMatches } from "react-router";
 import { HydratedRouter } from "react-router/dom";
 
-import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 import { denyUrls } from "cyberstorm/utils/sentry";
+import { primeClientDapper } from "cyberstorm/utils/dapperSingleton";
 
 const publicEnvVariables = getPublicEnvVariables([
   "VITE_SITE_URL",
@@ -14,6 +18,11 @@ const publicEnvVariables = getPublicEnvVariables([
   "VITE_AUTH_BASE_URL",
   "VITE_CLIENT_SENTRY_DSN",
 ]);
+
+const sessionTools = getSessionTools();
+primeClientDapper(() =>
+  sessionTools.getConfig(publicEnvVariables.VITE_API_URL)
+);
 
 Sentry.init({
   dsn: publicEnvVariables.VITE_CLIENT_SENTRY_DSN,
