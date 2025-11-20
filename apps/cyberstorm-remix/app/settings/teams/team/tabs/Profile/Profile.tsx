@@ -1,9 +1,15 @@
-import { useReducer } from "react";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import { Suspense, useReducer } from "react";
+import {
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+} from "react-router";
 
 import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
 import {
   teamDetailsEdit,
+  type TeamDetails,
   type TeamDetailsEditRequestData,
 } from "@thunderstore/thunderstore-api";
 
@@ -17,20 +23,30 @@ export const clientLoader = makeTeamSettingsTabLoader(
     // TODO: for hygienie we shouldn't use this public endpoint but
     // have an endpoint that confirms user permissions and returns
     // possibly sensitive information.
-    team: await dapper.getTeamDetails(teamName),
+    team: dapper.getTeamDetails(teamName),
   })
 );
 
-export function HydrateFallback() {
-  return <div style={{ padding: "32px" }}>Loading...</div>;
-}
-
 export default function Profile() {
   const { team } = useLoaderData<typeof clientLoader>();
+
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Await resolve={team}>
+        {(resolvedTeam) => (
+          <div className="settings-items team-profile">
+            <ProfileForm team={resolvedTeam} />
+          </div>
+        )}
+      </Await>
+    </Suspense>
+  );
+}
+
+function ProfileForm(props: { team: TeamDetails }) {
+  const { team } = props;
   const outletContext = useOutletContext() as OutletContextShape;
-
   const revalidator = useRevalidator();
-
   const toast = useToast();
 
   function formFieldUpdateAction(
@@ -93,37 +109,34 @@ export default function Profile() {
   });
 
   return (
-    <div className="settings-items team-profile">
-      <div className="settings-items__item">
-        <div className="settings-items__meta">
-          <p className="settings-items__title">Donation Link</p>
-        </div>
-        <div className="settings-items__content">
-          <div className="settings-items__island">
-            <div className="team-profile__donationLink">
-              <span className="team-profile__label">URL</span>
-              <NewTextInput
-                name={"donation_link"}
-                placeholder={"https://"}
-                value={formInputs.donation_link}
-                onChange={(e) =>
-                  updateFormFieldState({
-                    field: "donation_link",
-                    value: e.target.value,
-                  })
-                }
-                rootClasses="team-profile__input"
-              />
-            </div>
+    <div className="settings-items__item">
+      <div className="settings-items__meta">
+        <p className="settings-items__title">Donation Link</p>
+      </div>
+      <div className="settings-items__content">
+        <div className="settings-items__island">
+          <div className="team-profile__donationLink">
+            <span className="team-profile__label">URL</span>
+            <NewTextInput
+              name={"donation_link"}
+              placeholder={"https://"}
+              value={formInputs.donation_link}
+              onChange={(e) =>
+                updateFormFieldState({
+                  field: "donation_link",
+                  value: e.target.value,
+                })
+              }
+              rootClasses="team-profile__input"
+            />
           </div>
-          <NewButton
-            rootClasses="team-profile__save"
-            onClick={strongForm.submit}
-          >
-            Save changes
-          </NewButton>
         </div>
+        <NewButton rootClasses="team-profile__save" onClick={strongForm.submit}>
+          Save changes
+        </NewButton>
       </div>
     </div>
   );
 }
+
+ProfileForm.displayName = "ProfileForm";

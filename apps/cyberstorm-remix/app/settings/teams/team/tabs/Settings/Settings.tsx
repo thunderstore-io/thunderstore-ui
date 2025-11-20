@@ -1,7 +1,12 @@
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useReducer, useState } from "react";
-import { useLoaderData, useNavigate, useOutletContext } from "react-router";
+import { Suspense, useReducer, useState } from "react";
+import {
+  Await,
+  useLoaderData,
+  useNavigate,
+  useOutletContext,
+} from "react-router";
 
 import "./Settings.css";
 import {
@@ -28,19 +33,17 @@ import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 
 export const clientLoader = makeTeamSettingsTabLoader(
   // TODO: add end point for checking can leave/disband status.
-  async (dapper, teamName) => ({})
+  async (dapper, teamName) => ({ teamName })
 );
 
 export default function Settings() {
   const { teamName } = useLoaderData<typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
-
-  if (!outletContext.currentUser || !outletContext.currentUser.username)
-    return <NotLoggedIn />;
-
   const toast = useToast();
-
   const navigate = useNavigate();
+
+  const currentUser = outletContext.currentUser?.username;
+  if (!currentUser) return <NotLoggedIn />;
 
   async function moveToTeams() {
     toast.addToast({
@@ -52,57 +55,63 @@ export default function Settings() {
   }
 
   return (
-    <div className="settings-items">
-      <div className="settings-items__item">
-        <div className="settings-items__meta">
-          <p className="settings-items__title">Leave team</p>
-          <p className="settings-items__description">Leave your team</p>
-        </div>
-        <div className="settings-items__content">
-          <NewAlert csVariant="danger">
-            You cannot currently leave this team as you are it&apos;s last
-            owner.
-          </NewAlert>
-          <p>
-            If you are the owner of the team, you can only leave if the team has
-            another owner assigned.
-          </p>
-          <LeaveTeamForm
-            userName={outletContext.currentUser.username}
-            teamName={teamName}
-            toast={toast}
-            config={outletContext.requestConfig}
-            updateTrigger={moveToTeams}
-          />
-        </div>
-      </div>
-      <div className="settings-items__separator" />
-      <div className="settings-items__item">
-        <div className="settings-items__meta">
-          <p className="settings-items__title">Disband team</p>
-          <p className="settings-items__description">
-            Disband your team completely
-          </p>
-        </div>
-        <div className="settings-items__content">
-          <NewAlert csVariant="danger">
-            You cannot currently disband this team as it has packages.
-          </NewAlert>
-          <p>You are about to disband the team {teamName}.</p>
-          <p>
-            Be aware you can currently only disband teams with no packages. If
-            you need to archive a team with existing pages, contact Mythic#0001
-            on the Thunderstore Discord.
-          </p>
-          <DisbandTeamForm
-            teamName={teamName}
-            updateTrigger={moveToTeams}
-            config={outletContext.requestConfig}
-            toast={toast}
-          />
-        </div>
-      </div>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Await resolve={teamName}>
+        {(resolvedTeamName) => (
+          <div className="settings-items">
+            <div className="settings-items__item">
+              <div className="settings-items__meta">
+                <p className="settings-items__title">Leave team</p>
+                <p className="settings-items__description">Leave your team</p>
+              </div>
+              <div className="settings-items__content">
+                <NewAlert csVariant="danger">
+                  You cannot currently leave this team as you are it&apos;s last
+                  owner.
+                </NewAlert>
+                <p>
+                  If you are the owner of the team, you can only leave if the
+                  team has another owner assigned.
+                </p>
+                <LeaveTeamForm
+                  userName={currentUser}
+                  teamName={resolvedTeamName}
+                  toast={toast}
+                  config={outletContext.requestConfig}
+                  updateTrigger={moveToTeams}
+                />
+              </div>
+            </div>
+            <div className="settings-items__separator" />
+            <div className="settings-items__item">
+              <div className="settings-items__meta">
+                <p className="settings-items__title">Disband team</p>
+                <p className="settings-items__description">
+                  Disband your team completely
+                </p>
+              </div>
+              <div className="settings-items__content">
+                <NewAlert csVariant="danger">
+                  You cannot currently disband this team as it has packages.
+                </NewAlert>
+                <p>You are about to disband the team {resolvedTeamName}.</p>
+                <p>
+                  Be aware you can currently only disband teams with no
+                  packages. If you need to archive a team with existing pages,
+                  contact Mythic#0001 on the Thunderstore Discord.
+                </p>
+                <DisbandTeamForm
+                  teamName={resolvedTeamName}
+                  updateTrigger={moveToTeams}
+                  config={outletContext.requestConfig}
+                  toast={toast}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </Await>
+    </Suspense>
   );
 }
 
