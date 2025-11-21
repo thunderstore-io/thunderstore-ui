@@ -20,6 +20,7 @@ import {
   packageSourceSchema,
   packageVersionDependencySchema,
   packageTeamSchema,
+  currentUserTeamPermissionsSchema,
 } from "../schemas/objectSchemas";
 import { paginatedResults } from "../schemas/objectSchemas";
 
@@ -83,6 +84,14 @@ export const currentUserResponseDataSchema = z.union([
 
 export type CurrentUserResponseData = z.infer<
   typeof currentUserResponseDataSchema
+>;
+
+// CurrentUserTeamPermissionsResponse
+export const currentUserTeamPermissionsResponseDataSchema =
+  currentUserTeamPermissionsSchema;
+
+export type CurrentUserTeamPermissionsResponseData = z.infer<
+  typeof currentUserTeamPermissionsResponseDataSchema
 >;
 
 // DynamicHTMLResponse

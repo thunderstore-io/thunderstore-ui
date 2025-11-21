@@ -46,3 +46,8 @@ interface Badge {
   description: string;
   imageSource: string;
 }
+
+export interface CurrentUserTeamPermissions {
+  can_disband_team: boolean;
+  can_leave_team: boolean;
+}
