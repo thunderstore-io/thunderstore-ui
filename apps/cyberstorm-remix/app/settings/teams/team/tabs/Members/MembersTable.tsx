@@ -24,6 +24,7 @@ import {
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
 import { type OutletContextShape } from "app/root";
+import { isTeamOwner } from "cyberstorm/utils/permissions";
 
 const teamMemberColumns = [
   { value: "User", disableSort: false },
@@ -47,8 +48,7 @@ export function MembersTable(props: {
   const toast = useToast();
 
   const currentUser = outletContext.currentUser;
-  const membership = currentUser?.teams_full.find((t) => t.name === teamName);
-  const isOwner = membership?.role === "owner";
+  const isOwner = isTeamOwner(teamName, currentUser);
 
   const canManageMember = (username: string) =>
     isOwner && currentUser?.username !== username;
