@@ -28,6 +28,7 @@ import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
 import { type OutletContextShape } from "app/root";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 
 export const clientLoader = makeTeamSettingsTabLoader(
@@ -59,24 +60,22 @@ export default function Settings() {
             <div className="settings-items__item">
               <div className="settings-items__meta">
                 <p className="settings-items__title">Leave team</p>
-                <p className="settings-items__description">Leave your team</p>
+                <p className="settings-items__description">
+                  Resign from the team
+                </p>
               </div>
               <div className="settings-items__content">
-                <NewAlert csVariant="danger">
-                  You cannot currently leave this team as you are it&apos;s last
-                  owner.
-                </NewAlert>
-                <p>
-                  If you are the owner of the team, you can only leave if the
-                  team has another owner assigned.
-                </p>
-                <LeaveTeamForm
-                  userName={outletContext.currentUser?.username ?? ""}
-                  teamName={teamName}
-                  toast={toast}
-                  config={outletContext.requestConfig}
-                  updateTrigger={moveToTeams}
-                />
+                {resolvedPermissions.can_leave_team ? (
+                  <LeaveTeamForm
+                    userName={outletContext.currentUser?.username ?? ""}
+                    teamName={teamName}
+                    toast={toast}
+                    config={outletContext.requestConfig}
+                    updateTrigger={moveToTeams}
+                  />
+                ) : (
+                  <LastOwnerAlert />
+                )}
               </div>
             </div>
             <div className="settings-items__separator" />
@@ -84,25 +83,22 @@ export default function Settings() {
               <div className="settings-items__meta">
                 <p className="settings-items__title">Disband team</p>
                 <p className="settings-items__description">
-                  Disband your team completely
+                  Remove the team completely
                 </p>
               </div>
               <div className="settings-items__content">
-                <NewAlert csVariant="danger">
-                  You cannot currently disband this team as it has packages.
-                </NewAlert>
-                <p>You are about to disband the team {teamName}.</p>
-                <p>
-                  Be aware you can currently only disband teams with no
-                  packages. If you need to archive a team with existing pages,
-                  contact Mythic#0001 on the Thunderstore Discord.
-                </p>
-                <DisbandTeamForm
-                  teamName={teamName}
-                  updateTrigger={moveToTeams}
-                  config={outletContext.requestConfig}
-                  toast={toast}
-                />
+                {resolvedPermissions.can_disband_team ? (
+                  <DisbandTeamForm
+                    teamName={teamName}
+                    updateTrigger={moveToTeams}
+                    config={outletContext.requestConfig}
+                    toast={toast}
+                  />
+                ) : isTeamOwner(teamName, outletContext.currentUser) ? (
+                  <TeamHasPackagesAlert />
+                ) : (
+                  <NotTeamOwnerAlert />
+                )}
               </div>
             </div>
           </div>
@@ -111,6 +107,28 @@ export default function Settings() {
     </Suspense>
   );
 }
+
+const LastOwnerAlert = () => (
+  <NewAlert csVariant="info">
+    You cannot currently leave this team as you are its last owner.
+    <br />
+    To leave the team, you need to assign another owner to it. Alternatively,
+    you can disband the whole team.
+  </NewAlert>
+);
+
+const TeamHasPackagesAlert = () => (
+  <NewAlert csVariant="info">
+    You cannot currently disband this team as it has packages.
+    <br />
+    If you need to archive this team, contact #support in the{" "}
+    <a href="https://discord.thunderstore.io/">Thunderstore Discord</a>.
+  </NewAlert>
+);
+
+const NotTeamOwnerAlert = () => (
+  <NewAlert csVariant="info">Only team owners can disband teams.</NewAlert>
+);
 
 function LeaveTeamForm(props: {
   userName: string;
@@ -144,7 +162,7 @@ function LeaveTeamForm(props: {
     <Modal
       open={open}
       onOpenChange={setOpen}
-      titleContent="Leave team"
+      titleContent="Leave team?"
       csSize="small"
       trigger={
         <NewButton
@@ -167,7 +185,7 @@ function LeaveTeamForm(props: {
             team={teamName}
             csVariant="cyber"
           >
-            {teamName}
+            {teamName}.
           </NewLink>
         </span>
       </Modal.Body>
@@ -266,7 +284,7 @@ function DisbandTeamForm(props: {
     <Modal
       open={open}
       onOpenChange={setOpen}
-      titleContent="Disband team"
+      titleContent="Disband team?"
       csSize="small"
       trigger={
         <NewButton
@@ -289,7 +307,7 @@ function DisbandTeamForm(props: {
             team={teamName}
             csVariant="cyber"
           >
-            {teamName}
+            {teamName}.
           </NewLink>
         </div>
         <div>
