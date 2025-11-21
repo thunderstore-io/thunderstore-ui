@@ -85,12 +85,9 @@ export function MembersTable(props: {
     return [
       {
         value: (
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="User"
+          <div
             key={`user_${member.username}_${index}`}
-            user={member.username}
-            rootClasses="members__user"
+            className="members__user"
           >
             <NewAvatar
               src={member.avatar}
@@ -98,7 +95,7 @@ export function MembersTable(props: {
               csSize="small"
             />
             <span>{member.username}</span>
-          </NewLink>
+          </div>
         ),
         sortValue: member.username,
       },
