@@ -42,3 +42,12 @@ const getFakeOAuthConnection = (provider: string) => ({
   username: faker.internet.userName(),
   avatar: faker.helpers.maybe(getFakeImg) ?? null,
 });
+
+export const getFakeCurrentUserTeamPermissions = async (teamName: string) => {
+  setSeed(teamName);
+
+  return {
+    can_disband_team: faker.datatype.boolean(),
+    can_leave_team: faker.datatype.boolean(),
+  };
+};

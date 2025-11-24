@@ -5,7 +5,10 @@ import { getDynamicHTML } from "./methods/dynamicHTML";
 import { getCommunities, getCommunity } from "./methods/communities";
 import { getCommunityFilters } from "./methods/communityFilters";
 import { getRatedPackages } from "./methods/ratedPackages";
-import { getCurrentUser } from "./methods/currentUser";
+import {
+  getCurrentUser,
+  getCurrentUserTeamPermissions,
+} from "./methods/currentUser";
 import {
   getPackageChangelog,
   getPackageReadme,
@@ -48,6 +51,8 @@ export class DapperTs implements DapperTsInterface {
     this.getCommunityFilters = this.getCommunityFilters.bind(this);
     this.getRatedPackages = this.getRatedPackages.bind(this);
     this.getCurrentUser = this.getCurrentUser.bind(this);
+    this.getCurrentUserTeamPermissions =
+      this.getCurrentUserTeamPermissions.bind(this);
     this.getPackageChangelog = this.getPackageChangelog.bind(this);
     this.getPackageListings = this.getPackageListings.bind(this);
     this.getPackageListingDetails = this.getPackageListingDetails.bind(this);
@@ -76,6 +81,7 @@ export class DapperTs implements DapperTsInterface {
   public getCommunityFilters = getCommunityFilters;
   public getRatedPackages = getRatedPackages;
   public getCurrentUser = getCurrentUser;
+  public getCurrentUserTeamPermissions = getCurrentUserTeamPermissions;
   public getPackageChangelog = getPackageChangelog;
   public getPackageListings = getPackageListings;
   public getPackageListingDetails = getPackageListingDetails;

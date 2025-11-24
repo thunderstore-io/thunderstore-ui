@@ -359,6 +359,15 @@ export const userSchema = z.object({
 
 export type User = z.infer<typeof userSchema>;
 
+export const currentUserTeamPermissionsSchema = z.object({
+  can_disband_team: z.boolean(),
+  can_leave_team: z.boolean(),
+});
+
+export type CurrentUserTeamPermissions = z.infer<
+  typeof currentUserTeamPermissionsSchema
+>;
+
 export const ratedPackagesSchema = z.object({
   rated_packages: z.string().array(),
 });
