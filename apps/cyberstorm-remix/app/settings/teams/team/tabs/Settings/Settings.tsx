@@ -225,6 +225,13 @@ function DisbandTeamForm(props: {
   type SubmitorOutput = Awaited<ReturnType<typeof teamDisband>>;
 
   async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
+    // Check that the team name input matches the actual team name
+    if (data.team_name !== teamName) {
+      return Promise.reject(
+        new Error("The team name you entered does not match.")
+      );
+    }
+
     return await teamDisband({
       config: config,
       params: { team_name: teamName },
