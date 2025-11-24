@@ -92,4 +92,8 @@
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-bold);
   }
+
+  .members_table__span {
+    font-size: var(--font-size-body-md);
+  }
 }

@@ -1,21 +1,22 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useReducer, useState } from "react";
-import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import { Suspense, useReducer, useState } from "react";
+import {
+  Await,
+  useLoaderData,
+  useOutletContext,
+  useRevalidator,
+} from "react-router";
 
 import {
   NewAlert,
   NewButton,
   Modal,
-  NewTable,
   NewIcon,
   NewTextInput,
-  Heading,
   CodeBox,
 } from "@thunderstore/cyberstorm";
-import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import {
-  type RequestConfig,
   teamAddServiceAccount,
   type TeamServiceAccountAddRequestData,
 } from "@thunderstore/thunderstore-api";
@@ -23,112 +24,73 @@ import {
 import { type OutletContextShape } from "app/root";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { ServiceAccountRemoveModal } from "./ServiceAccountRemoveModal";
+import { ServiceAccountsTable } from "./ServiceAccountsTable";
 import "./ServiceAccounts.css";
 
 export const clientLoader = makeTeamSettingsTabLoader(
   async (dapper, teamName) => ({
-    serviceAccounts: await dapper.getTeamServiceAccounts(teamName),
+    serviceAccounts: dapper.getTeamServiceAccounts(teamName),
   })
 );
 
-export function HydrateFallback() {
-  return <div style={{ padding: "32px" }}>Loading...</div>;
-}
-
-const serviceAccountColumns = [
-  { value: "Nickname", disableSort: false },
-  { value: "Last Used", disableSort: false },
-  { value: "Actions", disableSort: true },
-];
-
 export default function ServiceAccounts() {
   const { teamName, serviceAccounts } = useLoaderData<typeof clientLoader>();
-  const outletContext = useOutletContext() as OutletContextShape;
-
   const revalidator = useRevalidator();
-
-  const currentUserTeam = outletContext.currentUser?.teams_full?.find(
-    (team) => team.name === teamName
-  );
-  const isOwner = currentUserTeam?.role === "owner";
 
   async function serviceAccountRevalidate() {
     revalidator.revalidate();
   }
 
-  const tableData = serviceAccounts.map((serviceAccount) => {
-    return [
-      {
-        value: (
-          <p className="team-service-accounts__nickname">
-            {serviceAccount.name}
-          </p>
-        ),
-        sortValue: serviceAccount.name,
-      },
-      {
-        value: (
-          <p className="team-service-accounts__last-used">
-            {serviceAccount.last_used ?? "Never"}
-          </p>
-        ),
-        sortValue: serviceAccount.last_used ?? "0",
-      },
-      {
-        value: (
-          <ServiceAccountRemoveModal
-            key={serviceAccount.identifier}
-            serviceAccount={serviceAccount}
-            teamName={teamName}
-            outletContext={outletContext}
-            revalidate={serviceAccountRevalidate}
-          />
-        ),
-        sortValue: 0,
-      },
-    ];
-  });
-
   return (
-    <div className="settings-items">
-      <div className="settings-items__item">
-        <div className="settings-items__meta">
-          <p className="settings-items__title">Service accounts</p>
-          <p className="settings-items__description">Your loyal servants</p>
-          {isOwner && (
-            <AddServiceAccountForm
-              teamName={teamName}
-              config={outletContext.requestConfig}
-              serviceAccountRevalidate={serviceAccountRevalidate}
-            />
-          )}
-        </div>
-        <div className="settings-items__content">
-          <NewTable
-            titleRowContent={<Heading csLevel="3">Service Accounts</Heading>}
-            headers={serviceAccountColumns}
-            rows={tableData}
-            sortByHeader={1}
-            sortDirection={TableSort.ASC}
-          />
-        </div>
-      </div>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Await resolve={serviceAccounts}>
+        {(resolvedServiceAccounts) => (
+          <div className="settings-items">
+            <div className="settings-items__item">
+              <div className="settings-items__meta">
+                <p className="settings-items__title">Service accounts</p>
+                <p className="settings-items__description">
+                  Your loyal servants
+                </p>
+                <AddServiceAccountForm
+                  teamName={teamName}
+                  serviceAccountRevalidate={serviceAccountRevalidate}
+                />
+              </div>
+              <div className="settings-items__content">
+                <ServiceAccountsTable
+                  serviceAccounts={resolvedServiceAccounts}
+                  serviceAccountRevalidate={serviceAccountRevalidate}
+                  teamName={teamName}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </Await>
+    </Suspense>
   );
 }
 
 function AddServiceAccountForm(props: {
   teamName: string;
-  config: () => RequestConfig;
-  serviceAccountRevalidate?: () => void;
+  serviceAccountRevalidate: () => Promise<void>;
 }) {
+  const outletContext = useOutletContext() as OutletContextShape;
   const [open, setOpen] = useState(false);
   const [serviceAccountAdded, setServiceAccountAdded] = useState(false);
   const [addedServiceAccountToken, setAddedServiceAccountToken] = useState("");
   const [addedServiceAccountNickname, setAddedServiceAccountNickname] =
     useState("");
   const [error, setError] = useState<string | null>(null);
+
+  const currentUserTeam = outletContext.currentUser?.teams_full?.find(
+    (team) => team.name === props.teamName
+  );
+
+  if (currentUserTeam?.role !== "owner") {
+    return null;
+  }
 
   function onSuccess(
     result: Awaited<ReturnType<typeof teamAddServiceAccount>>
@@ -161,7 +123,7 @@ function AddServiceAccountForm(props: {
 
   async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
     return await teamAddServiceAccount({
-      config: props.config,
+      config: outletContext.requestConfig,
       params: { team_name: props.teamName },
       queryParams: {},
       data: { nickname: data.nickname.trim() },
@@ -188,7 +150,7 @@ function AddServiceAccountForm(props: {
       // Refresh the service accounts list to show the newly created account
       // TODO: When API returns identifier in response, we can append the new
       // service account to the list instead of refreshing from backend
-      props.serviceAccountRevalidate?.();
+      props.serviceAccountRevalidate();
     },
     onSubmitError: (error) => {
       const message = `Error occurred: ${error.message || "Unknown error"}`;
