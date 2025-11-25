@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router";
+import { useOutletContext, useRevalidator, useNavigate } from "react-router";
 import "./Account.css";
 import {
   NewAlert,
@@ -10,16 +10,24 @@ import {
 import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
+import { Loading } from "~/commonComponents/Loading/Loading";
 import { type OutletContextShape } from "~/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
 import { userDelete } from "@thunderstore/thunderstore-api";
+import { useHydrated } from "remix-utils/use-hydrated";
 
 export default function Account() {
   const outletContext = useOutletContext() as OutletContextShape;
+  const isHydrated = useHydrated();
 
-  if (!outletContext.currentUser || !outletContext.currentUser.username)
+  if (!isHydrated) {
+    return <Loading />;
+  }
+
+  if (!outletContext.currentUser) {
     return <NotLoggedIn />;
+  }
 
   return (
     <div className="settings-items user-account">
@@ -72,6 +80,8 @@ function DeleteAccountForm(props: {
   requestConfig: OutletContextShape["requestConfig"];
 }) {
   const toast = useToast();
+  const { revalidate } = useRevalidator();
+  const navigate = useNavigate();
 
   function formFieldUpdateAction(
     state: UserAccountDeleteRequestData,
@@ -119,12 +129,14 @@ function DeleteAccountForm(props: {
   >({
     inputs: formInputs,
     submitor,
-    onSubmitSuccess: () => {
+    onSubmitSuccess: async () => {
       toast.addToast({
         csVariant: "success",
         children: `Account deleted successfully`,
         duration: 4000,
       });
+      await revalidate();
+      navigate("/communities");
     },
     onSubmitError: (error) => {
       toast.addToast({
