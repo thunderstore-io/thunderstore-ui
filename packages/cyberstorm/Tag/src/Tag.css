@@ -1,0 +1,25 @@
+@layer components {
+  .tag {
+    display: inline-flex;
+    gap: var(--tag-gap);
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    height: var(--tag-height);
+    border-radius: var(--tag-border-radius);
+    color: var(--tag-color);
+    font-weight: var(--tag-font-weight);
+    font-size: var(--tag-font-size);
+    background: var(--tag-background-color);
+    padding-block: var(--tag-padding-block);
+    padding-inline: var(--tag-padding-inline);
+  }
+
+  .tag > span {
+    min-width: 0;
+    overflow-x: clip;
+    white-space: nowrap;
+    text-decoration: none;
+    text-overflow: ellipsis;
+  }
+}
