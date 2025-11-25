@@ -1,5 +1,5 @@
 import { getSessionContext } from "@thunderstore/ts-api-react/src/SessionContext";
-import { isRecord } from "cyberstorm/utils/typeChecks";
+import { isRecord } from "../utils/typeChecks";
 
 export type publicEnvVariablesKeys =
   | "SITE_URL"
@@ -47,11 +47,10 @@ export function getPublicEnvVariables(
   return returnedVars;
 }
 
-export function getSessionTools() {
-  const publicEnvVariables = getPublicEnvVariables([
-    "VITE_API_URL",
-    "VITE_COOKIE_DOMAIN",
-  ]);
+export function getSessionTools(preFetchedEnv?: publicEnvVariablesType) {
+  const publicEnvVariables =
+    preFetchedEnv ||
+    getPublicEnvVariables(["VITE_API_URL", "VITE_COOKIE_DOMAIN"]);
   if (
     !publicEnvVariables.VITE_API_URL ||
     !publicEnvVariables.VITE_COOKIE_DOMAIN
