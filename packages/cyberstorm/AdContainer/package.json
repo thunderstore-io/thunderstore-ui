@@ -1,0 +1,22 @@
+{
+  "name": "@thunderstore/cyberstorm-ad-container",
+  "version": "0.1.0",
+  "description": "AdContainer component for Thunderstore Cyberstorm",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/cyberstorm/AdContainer",
+  "type": "module",
+  "main": "dist/thunderstore-cyberstorm-ad-container.cjs.js",
+  "module": "dist/thunderstore-cyberstorm-ad-container.esm.js",
+  "types": "dist/thunderstore-cyberstorm-ad-container.cjs.d.ts",
+  "files": ["dist"],
+  "scripts": {"build": "tsc", "dev": "tsc --watch"},
+  "dependencies": {
+    "@babel/runtime": "^7.25.6",
+    "@fortawesome/free-solid-svg-icons": "7.1.0",
+    "@fortawesome/react-fontawesome": "3.1.0",
+    "@thunderstore/cyberstorm-icon": "^0.1.0",
+    "@types/react": "^19.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {"typescript": "^5.6.2", "typescript-plugin-css-modules": "^5.1.0"}
+}

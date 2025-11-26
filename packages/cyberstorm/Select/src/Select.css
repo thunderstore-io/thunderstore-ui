@@ -1,0 +1,45 @@
+@layer components {
+  .select {
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: var(--select-gap);
+    min-width: var(--radix-popper-anchor-width);
+    max-width: max-content;
+    padding: var(--select-padding);
+    border: var(--select-border);
+    border-radius: var(--select-border-radius);
+    overflow: hidden;
+    color: var(--select-text-color);
+    background-color: var(--select-background-color);
+    box-shadow: var(--select-box-shadow);
+    animation: var(--select-animation);
+  }
+
+  .select__item {
+    display: flex;
+    flex-direction: row;
+
+    gap: var(--select-item-gap);
+    align-items: center;
+    padding: var(--select-item-padding);
+    color: var(--select-item-color);
+
+    font-weight: var(--select-item-font-weight);
+    font-size: var(--select-item-font-size);
+    background-color: var(--select-item-background-color);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .select__trigger {
+    justify-content: space-between;
+    width: 100%;
+    font-weight: var(--select-trigger-font-weight);
+    font-size: var(--select-trigger-font-size);
+
+    & > svg:nth-child(2) {
+      margin-left: auto;
+    }
+  }
+}
