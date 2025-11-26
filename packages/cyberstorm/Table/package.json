@@ -1,0 +1,24 @@
+{
+  "name": "@thunderstore/cyberstorm-table",
+  "version": "0.1.0",
+  "description": "Table component for Thunderstore Cyberstorm",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/cyberstorm/Table",
+  "type": "module",
+  "main": "dist/thunderstore-cyberstorm-table.cjs.js",
+  "module": "dist/thunderstore-cyberstorm-table.esm.js",
+  "types": "dist/thunderstore-cyberstorm-table.cjs.d.ts",
+  "files": ["dist"],
+  "scripts": {"build": "tsc", "dev": "tsc --watch"},
+  "dependencies": {
+    "@babel/runtime": "^7.25.6",
+    "@fortawesome/free-solid-svg-icons": "7.1.0",
+    "@fortawesome/react-fontawesome": "3.1.0",
+    "@thunderstore/cyberstorm-icon": "^0.1.0",
+    "@thunderstore/cyberstorm-theme": "^0.1.0",
+    "@thunderstore/cyberstorm-utils": "^0.1.0",
+    "@types/react": "^19.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {"typescript": "^5.6.2", "typescript-plugin-css-modules": "^5.1.0"}
+}

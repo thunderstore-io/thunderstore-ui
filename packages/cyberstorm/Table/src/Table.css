@@ -1,0 +1,105 @@
+@layer components {
+  .table {
+    --table-border: 1px solid var(--color-surface-a8);
+
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    .table__row {
+      background-color: var(--table-row-background-color);
+    }
+
+    tr > th,
+    tr > td {
+      padding: 8px 16px;
+      border-bottom: var(--table-border);
+    }
+
+    tr > td:first-child,
+    tr > th:first-child {
+      border-left: var(--table-border);
+    }
+
+    tr > td:last-child,
+    tr > th:last-child {
+      border-right: var(--table-border);
+    }
+
+    tr:first-child > th {
+      border-top: var(--table-border);
+    }
+
+    tr:first-child > th:only-child {
+      border-top-left-radius: var(--radius-md);
+      border-top-right-radius: var(--radius-md);
+    }
+
+    &:not(:has(caption)) {
+      tr:first-child > th:first-child {
+        border-top-left-radius: var(--radius-md);
+      }
+
+      tr:first-child > th:last-child {
+        border-top-right-radius: var(--radius-md);
+      }
+    }
+
+    tr:last-child > td:first-child {
+      border-bottom-left-radius: var(--radius-md);
+    }
+
+    tr:last-child > td:last-child {
+      border-bottom-right-radius: var(--radius-md);
+    }
+
+    .table__sortbutton {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      background: transparent;
+    }
+
+    &.table--alignLastColumnRight .table__row {
+      :last-child {
+        text-align: right;
+
+        > .table__sortbutton {
+          float: right;
+          text-align: right;
+        }
+      }
+    }
+  }
+
+  .table__caption {
+    padding: 1rem;
+    border-top: var(--table-border);
+    border-right: var(--table-border);
+    border-left: var(--table-border);
+    border-top-left-radius: var(--radius-md);
+    border-top-right-radius: var(--radius-md);
+    text-align: left;
+  }
+
+  .table__header {
+    color: var(--color-text-tertiary);
+    font-weight: 700;
+
+    font-size: var(--font-size-body-md);
+    line-height: 150%; /* 21px */
+    text-align: left;
+    text-wrap: nowrap;
+    background: var(--color-surface-a4);
+  }
+
+  .table__item {
+    align-content: center;
+    padding: 8px 16px;
+    vertical-align: top;
+  }
+
+  :root {
+    --table-border: 1px solid var(--color-surface-a8);
+  }
+}
