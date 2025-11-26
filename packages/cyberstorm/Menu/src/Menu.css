@@ -1,0 +1,48 @@
+@layer components {
+  .menu {
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+
+    transform: translateX(-100%);
+    transition:
+      transform var(--animation-duration-sm),
+      display var(--animation-duration-sm) allow-discrete;
+
+    &:popover-open {
+      transform: none;
+
+      @starting-style {
+        & {
+          transform: translateX(-100%);
+        }
+      }
+    }
+  }
+
+  .menu::backdrop {
+    background: hsl(0deg 0% 0% / 0.6);
+  }
+
+  .menu__wrapper {
+    display: none;
+    flex-direction: column;
+    gap: 2rem;
+    width: 80%;
+    height: 100%;
+    padding: 1.5rem;
+    background: #15152d;
+  }
+
+  .menu:popover-open > .menu__wrapper {
+    display: flex;
+  }
+
+  .menu__fake-backdrop {
+    width: 20%;
+    height: 100%;
+    background: transparent;
+  }
+}
