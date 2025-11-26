@@ -1,0 +1,20 @@
+{
+  "name": "@thunderstore/cyberstorm-codebox",
+  "version": "0.1.0",
+  "description": "CodeBox component for Thunderstore Cyberstorm",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/cyberstorm/CodeBox",
+  "type": "module",
+  "main": "dist/thunderstore-cyberstorm-codebox.cjs.js",
+  "module": "dist/thunderstore-cyberstorm-codebox.esm.js",
+  "types": "dist/thunderstore-cyberstorm-codebox.cjs.d.ts",
+  "files": ["dist"],
+  "scripts": {"build": "tsc", "dev": "tsc --watch"},
+  "dependencies": {
+    "@babel/runtime": "^7.25.6",
+    "@types/react": "^19.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-syntax-highlighter": "15.6.6"
+  },
+  "devDependencies": {"typescript": "^5.6.2", "@types/react-syntax-highlighter": "15.5.13"}
+}
