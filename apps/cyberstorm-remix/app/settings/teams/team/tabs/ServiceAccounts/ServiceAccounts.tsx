@@ -179,7 +179,9 @@ function AddServiceAccountForm(props: {
         </NewButton>
       }
       csSize="small"
-      titleContent="Add service account"
+      titleContent={
+        serviceAccountAdded ? "Service Account Added" : "Add Service Account"
+      }
     >
       {serviceAccountAdded ? (
         <Modal.Body>
