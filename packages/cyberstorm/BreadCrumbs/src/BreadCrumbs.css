@@ -1,0 +1,122 @@
+@layer components {
+  .breadcrumbs {
+    display: flex;
+    gap: var(--space-4);
+    width: 100%;
+    padding-left: var(--space-16);
+    overflow: auto;
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-body-sm);
+    line-height: var(--line-height-auto);
+
+    > span {
+      > span {
+        display: inline-flex;
+        gap: 0.5rem;
+      }
+    }
+
+    > a {
+      > span {
+        display: inline-flex;
+        gap: 0.5rem;
+      }
+    }
+
+    .breadcrumbs__homelink > span {
+      display: inline-block;
+      width: 0.875rem;
+      height: 0.875rem;
+      font-size: var(--font-size-body-md);
+    }
+
+    img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1rem;
+      height: 1rem;
+      aspect-ratio: 1/1;
+    }
+
+    > * {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-8) var(--space-16);
+      background-color: var(--breadcrumb-item-bg-color--default);
+
+      /* skew the container */
+      transform: skew(-30deg);
+
+      > * {
+        white-space: nowrap;
+        transform: skew(30deg);
+      }
+
+      &:hover {
+        background-color: var(--breadcrumb-item-bg-color--hover);
+      }
+    }
+
+    > *:last-child {
+      padding-right: 0;
+      background-color: var(--breadcrumb-item-bg-color--hover);
+
+      > * {
+        color: var(--breadcrumb-item-text-color--current);
+      }
+    }
+
+    > *:first-child {
+      padding-left: 0;
+
+      > svg {
+        display: flex;
+        align-items: center;
+        width: 0.875rem;
+        height: 0.875rem;
+        text-decoration: none;
+      }
+
+      &::before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -1rem;
+        z-index: -1;
+        width: var(--space-32);
+        border-radius: 0.5rem 0 0 0.5rem;
+        background-color: var(--breadcrumb-item-bg-color--default);
+        transform: skew(30deg);
+        content: "\0020";
+      }
+
+      &:hover {
+        background-color: var(--breadcrumb-item-bg-color--hover);
+
+        &::before {
+          background-color: var(--breadcrumb-item-bg-color--hover);
+        }
+      }
+    }
+
+    > *:last-child::after {
+      position: absolute;
+      top: 0;
+      right: -1rem;
+      bottom: 0;
+      z-index: -1;
+      width: var(--space-32);
+      border-radius: 0 0.5rem 0.5rem 0;
+      background-color: var(--breadcrumb-item-bg-color--hover);
+      transform: skew(30deg);
+      content: "\0020";
+
+      &:hover {
+        background-color: var(--breadcrumb-item-bg-color--hover);
+      }
+    }
+  }
+}

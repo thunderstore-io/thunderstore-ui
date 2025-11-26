@@ -1,0 +1,23 @@
+{
+  "name": "@thunderstore/cyberstorm-tabs",
+  "version": "0.1.0",
+  "description": "Tabs component for Thunderstore Cyberstorm",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/cyberstorm/Tabs",
+  "type": "module",
+  "main": "dist/thunderstore-cyberstorm-tabs.cjs.js",
+  "module": "dist/thunderstore-cyberstorm-tabs.esm.js",
+  "types": "dist/thunderstore-cyberstorm-tabs.cjs.d.ts",
+  "files": ["dist"],
+  "scripts": {"build": "tsc", "dev": "tsc --watch"},
+  "dependencies": {
+    "@babel/runtime": "^7.25.6",
+    "@thunderstore/cyberstorm-actionable": "^0.1.0",
+    "@thunderstore/cyberstorm-links": "^0.1.0",
+    "@thunderstore/cyberstorm-theme": "^0.1.0",
+    "@thunderstore/cyberstorm-utils": "^0.1.0",
+    "@types/react": "^19.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {"typescript": "^5.6.2", "typescript-plugin-css-modules": "^5.1.0"}
+}

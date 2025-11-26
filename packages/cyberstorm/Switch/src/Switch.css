@@ -1,0 +1,34 @@
+@layer components {
+  .switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--switch-width);
+    height: var(--switch-height);
+    padding: var(--switch-padding);
+    border-color: var(--switch-border-color);
+    border-style: var(--switch-border-style);
+    border-width: var(--switch-border-width);
+    border-radius: var(--switch-border-radius);
+    background-color: var(--switch-background-color);
+    cursor: var(--switch-cursor);
+    opacity: var(--switch-opacity);
+    transition: var(--switch-transition);
+  }
+
+  .switch__knob {
+    display: var(--switch-knob-display);
+
+    width: var(--switch-knob-width);
+    height: var(--switch-knob-height);
+    border-radius: var(--switch-knob-border-radius);
+    background-color: var(--switch-knob-background-color);
+    box-shadow: var(--switch-knob-box-shadow);
+    transform: var(--switch-knob-transform);
+    transition: var(--switch-knob-transition);
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
