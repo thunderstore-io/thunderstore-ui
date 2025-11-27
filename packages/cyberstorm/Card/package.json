@@ -1,0 +1,33 @@
+{
+  "name": "@thunderstore/cyberstorm-card",
+  "version": "0.1.0",
+  "description": "Card components for Thunderstore Cyberstorm",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/cyberstorm/Card",
+  "type": "module",
+  "main": "dist/thunderstore-cyberstorm-card.cjs.js",
+  "module": "dist/thunderstore-cyberstorm-card.esm.js",
+  "types": "dist/thunderstore-cyberstorm-card.cjs.d.ts",
+  "files": ["dist"],
+  "scripts": {"build": "tsc", "dev": "tsc --watch"},
+  "dependencies": {
+    "@babel/runtime": "^7.25.6",
+    "@fortawesome/free-solid-svg-icons": "7.1.0",
+    "@fortawesome/pro-solid-svg-icons": "7.1.0",
+    "@fortawesome/react-fontawesome": "3.1.0",
+    "@thunderstore/cyberstorm-icon": "^0.1.0",
+    "@thunderstore/cyberstorm-image": "^0.1.0",
+    "@thunderstore/cyberstorm-link": "^0.1.0",
+    "@thunderstore/cyberstorm-meta-item": "^0.1.0",
+    "@thunderstore/cyberstorm-primitive-utils": "^0.1.0",
+    "@thunderstore/cyberstorm-relative-time": "^0.1.0",
+    "@thunderstore/cyberstorm-tag": "^0.1.0",
+    "@thunderstore/cyberstorm-theme": "^0.1.0",
+    "@thunderstore/cyberstorm-utils": "^0.1.0",
+    "@thunderstore/dapper": "^0.1.0",
+    "@types/react": "^19.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "s-ago": "^2.2.0"
+  },
+  "devDependencies": {"typescript": "^5.6.2", "typescript-plugin-css-modules": "^5.1.0"}
+}

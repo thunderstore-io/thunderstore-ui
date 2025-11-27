@@ -1,0 +1,104 @@
+@layer components {
+  .modal__overlay {
+    position: fixed;
+    background: rgb(0 0 0 / 0.6);
+    animation: overlay-show 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    inset: 0;
+  }
+
+  .modal__overlay--blur {
+    backdrop-filter: blur(10px);
+  }
+
+  .modal__content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+
+    /* gap: var(--modal-content-gap); */
+    align-items: flex-start;
+    align-self: stretch;
+    justify-content: center;
+
+    /* padding: var(--modal-content-padding); */
+    border: var(--modal-border);
+    border-radius: var(--modal-border-radius);
+    color: var(--modal-color);
+    background: var(--modal-background);
+
+    box-shadow: var(--modal-box-shadow);
+    transform: translate(-50%, -50%);
+    animation: content-show 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .modal__content:focus {
+    outline: none;
+  }
+
+  .modal__title {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    height: 60px;
+    padding: var(--space-8) var(--space-8) var(--space-8) var(--space-32);
+
+    padding-right: 92px;
+    border-bottom: 1px solid var(--modal-border-color--default);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: 21px;
+    font-style: normal;
+    line-height: 120%; /* 25.2px */
+  }
+
+  .modal__button {
+    position: fixed;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .modal__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-items: flex-start;
+    align-self: stretch;
+    max-height: 800px;
+    padding: var(--space-32);
+    overflow-y: auto;
+  }
+
+  .modal__footer {
+    display: flex;
+    gap: var(--gap-md);
+    align-items: center;
+    align-self: stretch;
+    justify-content: flex-end;
+    padding: var(--space-16) var(--space-24);
+    border-top: 1px solid var(--modal-border-color--default);
+  }
+
+  @keyframes overlay-show {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes content-show {
+    from {
+      transform: translate(-50%, -48%) scale(0.96);
+      opacity: 0;
+    }
+
+    to {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+  }
+}

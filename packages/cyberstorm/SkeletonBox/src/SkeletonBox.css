@@ -1,0 +1,32 @@
+@layer components {
+  .skeleton {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--skeleton-radius, var(--radius-md));
+    background: var(--color-skeleton-bg-color);
+    animation: pulse 2.5s infinite ease-in-out;
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 0.2;
+    }
+
+    20% {
+      opacity: 0.4;
+    }
+
+    40% {
+      opacity: 0.2;
+    }
+
+    70% {
+      opacity: 0.6;
+    }
+
+    100% {
+      opacity: 0.2;
+    }
+  }
+}

@@ -1,0 +1,173 @@
+@layer components {
+  /* Base styles */
+  .select-search {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    align-self: stretch;
+    justify-content: flex-end;
+    width: var(--select-search-width);
+    min-height: var(--select-search-height, 2.75rem);
+    border: var(--select-search-border);
+    border-radius: var(--select-search-border-radius);
+    color: var(--select-search-text-color);
+    background-color: var(--select-search-background-color);
+    transition: var(--select-search-transition);
+  }
+
+  /* Hover and focus states */
+  .select-search:hover {
+    --border-color: var(--select-search-border-color);
+
+    background-color: var(--select-search-background-color);
+  }
+
+  .select-search:focus-within {
+    color: var(--select-search-text-color);
+    background-color: var(--select-search-background-color);
+
+    --border-color: var(--select-search-border-color);
+  }
+
+  /* Input styles */
+  .select-search__input {
+    flex: 1;
+    min-width: 200px;
+    margin: 0;
+    color: var(--select-search-text-color);
+    font-weight: var(--select-search-font-weight);
+    font-size: var(--select-search-font-size);
+    line-height: normal;
+    background-color: transparent;
+    outline: none;
+
+    &::placeholder {
+      color: var(--select-search-placeholder-color);
+      opacity: var(--select-search-placeholder-opacity);
+    }
+  }
+
+  /* Selected button styles */
+  .select-search__selected-button {
+    max-width: 200px;
+    height: 1.5rem;
+    padding: 0 var(--space-8);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    font-size: var(--select-search-font-size);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background-color: var(--color-surface-6);
+  }
+
+  /* Clear search button styles */
+  .select-search__clear-search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 100%;
+    color: var(--select-search-clear-search-color);
+    background: transparent;
+    opacity: var(--select-search-clear-search-opacity);
+  }
+
+  /* Show menu button styles */
+  .select-search__show-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 100%;
+    color: var(--color-text-secondary);
+    background: transparent;
+  }
+
+  /* Other component styles */
+  .select-search__selected {
+    display: flex;
+    flex-flow: row wrap;
+    gap: var(--space-8);
+    align-items: center;
+    min-height: 1.5rem;
+  }
+
+  .select-search__search {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    color: var(--select-search-text-color);
+  }
+
+  .select-search__selected-and-input-container {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    width: 100%;
+    min-height: var(--select-search-height, 2.75rem);
+    padding: var(--select-search-padding);
+
+    & > input {
+      outline: none;
+    }
+  }
+
+  .select-search__selected-and-input {
+    display: flex;
+    flex: 1;
+    flex-flow: row wrap;
+    gap: var(--space-8);
+    align-items: center;
+    min-width: 0;
+  }
+
+  .select-search__divider {
+    width: 0.063rem;
+    height: 1.375rem;
+    background: var(--color-surface-6);
+  }
+
+  .select-search__menu {
+    position: absolute;
+    bottom: -0.5rem;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-2xs);
+    width: 100%;
+    min-height: 1.5rem;
+    max-height: 12rem;
+    padding: var(--space-8) 0;
+    border: var(--space-px) var(--color-surface-6) solid;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    overflow-y: auto !important;
+    color: var(--text-color);
+    background-color: var(--color-surface-2);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(100%);
+    visibility: hidden;
+
+    --text-color: var(--color-white);
+    --bg-color: var(--color-surface-4);
+  }
+
+  .select-search__menu-label {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .select-search__item {
+    padding: var(--space-12) var(--space-16);
+    font-weight: var(--select-search-item-font-weight);
+    font-size: var(--select-search-item-font-size);
+  }
+
+  .select-search__no-options {
+    padding: var(--space-12) var(--space-16);
+    color: var(--color-text-tertiary);
+    text-align: center;
+  }
+}

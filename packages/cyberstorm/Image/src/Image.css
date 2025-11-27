@@ -1,0 +1,51 @@
+@layer components {
+  .image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: var(--animation-duration-sm) ease-out;
+    aspect-ratio: var(--aspect-ratio);
+  }
+
+  .image__src {
+    width: inherit;
+    object-fit: cover;
+    aspect-ratio: var(--aspect-ratio);
+  }
+
+  .image--issquare {
+    --aspect-ratio: 1;
+    --image-width: 50%;
+  }
+
+  .image--is3by4 {
+    --aspect-ratio: 3 / 4;
+    --image-width: 30%;
+  }
+
+  .image--fullwidth {
+    --image-width: 100%;
+  }
+
+  .image--noimage {
+    color: var(--image-color);
+    background-color: var(--image-bg-color);
+  }
+
+  .image__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--image-width);
+    aspect-ratio: 1;
+    transition: var(--animation-duration-sm) ease-out;
+  }
+
+  .image__icon {
+    width: 50px;
+    height: 50px;
+    color: var(--color-surface-a10);
+  }
+}

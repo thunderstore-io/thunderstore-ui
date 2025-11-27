@@ -1,0 +1,27 @@
+.avatar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: calc(var(--size) * 4.92) !important;
+  border-radius: var(--avatar-border-radius);
+  background: transparent;
+}
+
+.avatar__placeholder-root {
+  --icon-inline-size: var(--size);
+}
+
+.avatar__image {
+  width: var(--avatar-image-width);
+  height: var(--avatar-image-height);
+  border-radius: var(--avatar-image-border-radius);
+  color: var(--avatar-image-color);
+
+  font: var(--avatar-image-font);
+  font-weight: var(--avatar-image-font-weight);
+  font-size: var(--avatar-image-font-size);
+  line-height: var(--avatar-image-line-height);
+  background-color: var(--avatar-image-background-color);
+  transition: var(--avatar-image-transition);
+}

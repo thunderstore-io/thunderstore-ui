@@ -4,7 +4,8 @@
   "private": true,
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "packages/cyberstorm/*"
   ],
   "scripts": {
     "postinstall": "preconstruct dev && manypkg check",
@@ -50,7 +51,8 @@
   },
   "preconstruct": {
     "packages": [
-      "packages/*"
+      "packages/*",
+      "packages/cyberstorm/*"
     ]
   }
 }

@@ -1,0 +1,23 @@
+{
+  "name": "@thunderstore/cyberstorm-dropdown",
+  "version": "0.1.0",
+  "description": "DropDown component for Thunderstore Cyberstorm",
+  "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/cyberstorm/DropDown",
+  "type": "module",
+  "main": "dist/thunderstore-cyberstorm-dropdown.cjs.js",
+  "module": "dist/thunderstore-cyberstorm-dropdown.esm.js",
+  "types": "dist/thunderstore-cyberstorm-dropdown.cjs.d.ts",
+  "files": ["dist"],
+  "scripts": {"build": "tsc", "dev": "tsc --watch"},
+  "dependencies": {
+    "@babel/runtime": "^7.25.6",
+    "@radix-ui/react-dropdown-menu": "^2.1.1",
+    "@thunderstore/cyberstorm-primitive-utils": "^0.1.0",
+    "@thunderstore/cyberstorm-theme": "^0.1.0",
+    "@thunderstore/cyberstorm-utils": "^0.1.0",
+    "@types/react": "^19.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {"typescript": "^5.6.2", "typescript-plugin-css-modules": "^5.1.0"}
+}

@@ -1,0 +1,19 @@
+@layer components {
+  .link {
+    color: var(--link-color);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--link-color-hover);
+    }
+  }
+
+  .link[disabled],
+  .link-disabled {
+    pointer-events: none;
+  }
+
+  .link-strikethrough {
+    display: flex;
+  }
+}

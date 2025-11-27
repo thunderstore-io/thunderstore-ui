@@ -1,0 +1,28 @@
+@layer components {
+  .icon__wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon__wrapper svg,
+  .icon {
+    display: flex;
+
+    flex-shrink: 0;
+    color: var(--icon-color, "currentColor");
+    fill: currentcolor;
+    stroke: currentcolor;
+    block-size: 100%;
+    inline-size: auto;
+    min-inline-size: 100%;
+
+    stroke-width: 0;
+  }
+
+  .icon--inline {
+    display: inline-flex;
+    height: var(--icon-inline-size, 1em);
+    min-inline-size: 1em;
+  }
+}

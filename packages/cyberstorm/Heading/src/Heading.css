@@ -1,0 +1,19 @@
+@layer components {
+  .heading {
+    color: var(--heading-text-color);
+    font-weight: var(--heading-font-weight);
+    font-size: var(--heading-font-size);
+    font-family: var(--heading-font-family);
+    font-style: var(--heading-font-style);
+    line-height: var(--heading-line-height);
+  }
+
+  .display {
+    color: var(--heading-text-color);
+    font-weight: var(--display-font-weight);
+    font-size: var(--display-font-size);
+    font-family: var(--display-font-family);
+    font-style: var(--display-font-style);
+    line-height: var(--display-line-height);
+  }
+}

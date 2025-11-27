@@ -1,0 +1,45 @@
+@layer components {
+  .tabs {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    overflow-x: scroll;
+    box-shadow: inset 0 calc(var(--tabs-box-shadow-height) * -1)
+      var(--tabs-box-shadow-color);
+    scrollbar-width: none;
+  }
+
+  .tabs-item {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    gap: var(--tabs-item-gap);
+    align-items: center;
+    justify-content: center;
+
+    padding: var(--tabs-item-padding);
+    border-bottom: var(--tabs-item-border-bottom-width)
+      var(--tabs-item-border-bottom-style) var(--tabs-item-border-bottom-color);
+    color: var(--tabs-item-color);
+    font-weight: var(--tabs-item-font-weight);
+    font-size: var(--tabs-item-font-size);
+    line-height: normal;
+
+    --icon-color: var(--tabs-item-icon-color);
+
+    &.tabs-item--current {
+      pointer-events: none;
+    }
+  }
+
+  .tabs-number-slate {
+    display: flex;
+    gap: var(--tabs-item-number-slate-gap);
+    align-items: center;
+    justify-content: center;
+    padding: var(--tabs-item-number-slate-padding);
+    border-radius: var(--tabs-item-number-slate-border-radius);
+    color: var(--tabs-item-number-slate-color);
+    background-color: var(--tabs-item-number-slate-background-color);
+  }
+}

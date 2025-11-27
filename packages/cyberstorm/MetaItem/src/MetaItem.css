@@ -1,0 +1,18 @@
+@layer components {
+  .meta-item {
+    display: inline-flex;
+    gap: var(--meta-item-gap);
+    align-items: center;
+    color: var(--meta-item-color);
+    font-weight: var(--meta-item-font-weight);
+    font-size: var(--meta-item-font-size);
+    background: transparent;
+
+    > svg {
+      width: var(--meta-item-icon-width);
+      height: var(--meta-item-icon-height);
+
+      --icon-color: var(--meta-item-icon-color);
+    }
+  }
+}
