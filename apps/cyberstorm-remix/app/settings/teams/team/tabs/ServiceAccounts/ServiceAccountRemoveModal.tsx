@@ -1,12 +1,22 @@
-import "./ServiceAccounts.css";
-import { NewAlert, NewButton, Modal, NewIcon } from "@thunderstore/cyberstorm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useToast } from "@thunderstore/cyberstorm";
-import { teamServiceAccountRemove } from "@thunderstore/thunderstore-api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import {
+  NewAlert,
+  NewButton,
+  Modal,
+  NewIcon,
+  useToast,
+} from "@thunderstore/cyberstorm";
+import {
+  type TeamServiceAccount,
+  teamServiceAccountRemove,
+} from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-import { type OutletContextShape } from "~/root";
-import { type TeamServiceAccount } from "@thunderstore/thunderstore-api";
+
+import { type OutletContextShape } from "app/root";
+import { isTeamOwner } from "cyberstorm/utils/permissions";
+import "./ServiceAccounts.css";
 
 interface ServiceAccountRemoveModalProps {
   serviceAccount: TeamServiceAccount;
@@ -22,15 +32,6 @@ export function ServiceAccountRemoveModal({
   revalidate,
 }: ServiceAccountRemoveModalProps) {
   const toast = useToast();
-
-  const canDelete = () => {
-    const teams = outletContext.currentUser?.teams_full || [];
-    const belongingTeam = teams.find((team) => team.name === teamName);
-    if (!belongingTeam) {
-      return false;
-    }
-    return belongingTeam.role === "owner";
-  };
 
   const removeServiceAccountAction = ApiAction({
     endpoint: teamServiceAccountRemove,
@@ -55,7 +56,7 @@ export function ServiceAccountRemoveModal({
     <Modal
       titleContent="Confirm service account removal"
       trigger={
-        canDelete() && ( // Only show trigger if user can delete
+        isTeamOwner(teamName, outletContext.currentUser) && ( // Only show trigger if user can delete
           <NewButton csVariant="danger" csSize="xsmall">
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faTrash} />

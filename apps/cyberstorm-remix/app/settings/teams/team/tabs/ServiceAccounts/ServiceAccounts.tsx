@@ -23,6 +23,7 @@ import {
 
 import { type OutletContextShape } from "app/root";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { ServiceAccountsTable } from "./ServiceAccountsTable";
 import "./ServiceAccounts.css";
@@ -84,11 +85,7 @@ function AddServiceAccountForm(props: {
     useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const currentUserTeam = outletContext.currentUser?.teams_full?.find(
-    (team) => team.name === props.teamName
-  );
-
-  if (currentUserTeam?.role !== "owner") {
+  if (!isTeamOwner(props.teamName, outletContext.currentUser)) {
     return null;
   }
 
@@ -182,7 +179,9 @@ function AddServiceAccountForm(props: {
         </NewButton>
       }
       csSize="small"
-      titleContent="Add service account"
+      titleContent={
+        serviceAccountAdded ? "Service Account Added" : "Add Service Account"
+      }
     >
       {serviceAccountAdded ? (
         <Modal.Body>

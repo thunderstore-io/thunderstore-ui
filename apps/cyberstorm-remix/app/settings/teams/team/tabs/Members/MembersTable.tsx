@@ -24,6 +24,7 @@ import {
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
 import { type OutletContextShape } from "app/root";
+import { isTeamOwner } from "cyberstorm/utils/permissions";
 
 const teamMemberColumns = [
   { value: "User", disableSort: false },
@@ -47,8 +48,7 @@ export function MembersTable(props: {
   const toast = useToast();
 
   const currentUser = outletContext.currentUser;
-  const membership = currentUser?.teams_full.find((t) => t.name === teamName);
-  const isOwner = membership?.role === "owner";
+  const isOwner = isTeamOwner(teamName, currentUser);
 
   const canManageMember = (username: string) =>
     isOwner && currentUser?.username !== username;
@@ -85,12 +85,9 @@ export function MembersTable(props: {
     return [
       {
         value: (
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="User"
+          <div
             key={`user_${member.username}_${index}`}
-            user={member.username}
-            rootClasses="members__user"
+            className="members__user"
           >
             <NewAvatar
               src={member.avatar}
@@ -98,7 +95,7 @@ export function MembersTable(props: {
               csSize="small"
             />
             <span>{member.username}</span>
-          </NewLink>
+          </div>
         ),
         sortValue: member.username,
       },

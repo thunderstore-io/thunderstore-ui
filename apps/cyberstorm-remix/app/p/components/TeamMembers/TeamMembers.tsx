@@ -74,31 +74,6 @@ function PackageTeamListItem(props: PackageTeamListItemProps) {
       </div>
     </div>
   );
-
-  // TODO: Enable when user page is available
-  // return (
-  //   <NewLink
-  //     primitiveType="cyberstormLink"
-  //     linkId="User"
-  //     user={teamMember.username}
-  //     rootClasses={styles.item}
-  //   >
-  //     <Avatar username={teamMember.username} src={teamMember.avatar} />
-  //     <div className={styles.itemTitleWrapper}>
-  //       <div className={styles.itemTitle}>
-  //         <span className={styles.itemTitleUsername}>
-  //           {teamMember.username}
-  //         </span>
-  //         {teamMember.role === "owner" ? (
-  //           <NewIcon csMode="inline" noWrapper rootClasses={styles.crown}>
-  //             <FontAwesomeIcon icon={faCrown} />
-  //           </NewIcon>
-  //         ) : null}
-  //       </div>
-  //       <div className={styles.itemDescription}>{teamMember.role}</div>
-  //     </div>
-  //   </NewLink>
-  // );
 }
 
 function compare(a: TeamMember, b: TeamMember) {
