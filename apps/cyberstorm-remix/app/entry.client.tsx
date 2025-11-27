@@ -20,7 +20,6 @@ const publicEnvVariables = getPublicEnvVariables([
   "VITE_COOKIE_DOMAIN",
 ]);
 
-// TODO: Check if this is synchronous or not
 Sentry.init({
   dsn: publicEnvVariables.VITE_CLIENT_SENTRY_DSN,
   integrations: [

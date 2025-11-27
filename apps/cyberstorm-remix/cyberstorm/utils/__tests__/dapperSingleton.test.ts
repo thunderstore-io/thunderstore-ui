@@ -2,9 +2,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   initializeClientDapper,
   getClientDapper,
-  getRequestScopedDapper,
+  getDapperForRequest,
   resetDapperSingletonForTest,
 } from "../dapperSingleton";
+import { deduplicatePromiseForRequest } from "../requestCache";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import * as publicEnvVariables from "../../security/publicEnvVariables";
 
@@ -48,6 +49,20 @@ describe("dapperSingleton", () => {
       expect(factory).toHaveBeenCalled();
     });
 
+    it("updates existing window.Dapper config if called again with factory", () => {
+      // First initialization
+      initializeClientDapper();
+      const originalDapper = window.Dapper;
+      expect(originalDapper).toBeDefined();
+
+      // Second initialization with new factory
+      const newFactory = vi.fn().mockReturnValue({ apiHost: "updated" });
+      initializeClientDapper(newFactory);
+
+      expect(window.Dapper).toBe(originalDapper); // Should be same instance
+      expect(window.Dapper.config()).toEqual({ apiHost: "updated" });
+    });
+
     it("resolves config factory from session tools if no factory provided", () => {
       initializeClientDapper();
       expect(publicEnvVariables.getSessionTools).toHaveBeenCalled();
@@ -69,17 +84,17 @@ describe("dapperSingleton", () => {
     });
   });
 
-  describe("getRequestScopedDapper", () => {
+  describe("getDapperForRequest", () => {
     it("returns client dapper if no request is provided", () => {
       initializeClientDapper();
-      const dapper = getRequestScopedDapper();
+      const dapper = getDapperForRequest();
       expect(dapper).toBe(window.Dapper);
     });
 
     it("returns a proxy if request is provided", () => {
       initializeClientDapper();
       const request = new Request("http://localhost");
-      const dapper = getRequestScopedDapper(request);
+      const dapper = getDapperForRequest(request);
       expect(dapper).not.toBe(window.Dapper);
       // It should be a proxy
       expect(dapper).toBeInstanceOf(DapperTs);
@@ -88,8 +103,8 @@ describe("dapperSingleton", () => {
     it("caches the proxy for the same request", () => {
       initializeClientDapper();
       const request = new Request("http://localhost");
-      const dapper1 = getRequestScopedDapper(request);
-      const dapper2 = getRequestScopedDapper(request);
+      const dapper1 = getDapperForRequest(request);
+      const dapper2 = getDapperForRequest(request);
       expect(dapper1).toBe(dapper2);
     });
 
@@ -97,15 +112,15 @@ describe("dapperSingleton", () => {
       initializeClientDapper();
       const request1 = new Request("http://localhost");
       const request2 = new Request("http://localhost");
-      const dapper1 = getRequestScopedDapper(request1);
-      const dapper2 = getRequestScopedDapper(request2);
+      const dapper1 = getDapperForRequest(request1);
+      const dapper2 = getDapperForRequest(request2);
       expect(dapper1).not.toBe(dapper2);
     });
 
     it("intercepts 'get' methods and caches promises", async () => {
       initializeClientDapper();
       const request = new Request("http://localhost");
-      const dapper = getRequestScopedDapper(request);
+      const dapper = getDapperForRequest(request);
 
       // Mock the underlying method on window.Dapper
       const mockGetCommunities = vi
@@ -125,7 +140,7 @@ describe("dapperSingleton", () => {
     it("does not intercept non-'get' methods", async () => {
       initializeClientDapper();
       const request = new Request("http://localhost");
-      const dapper = getRequestScopedDapper(request);
+      const dapper = getDapperForRequest(request);
 
       // Mock a non-get method
       // postTeamCreate is a good candidate
@@ -142,6 +157,39 @@ describe("dapperSingleton", () => {
 
       // Should be called twice (no caching)
       expect(mockPostTeamCreate).toHaveBeenCalledTimes(2);
+    });
+
+    it("shares cache between proxy calls and manual deduplicatePromiseForRequest calls", async () => {
+      initializeClientDapper();
+      const request = new Request("http://localhost");
+      const dapper = getDapperForRequest(request);
+
+      // Mock the underlying method on window.Dapper
+      const mockGetCommunity = vi
+        .spyOn(window.Dapper, "getCommunity")
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .mockResolvedValue({ identifier: "1", name: "Test Community" } as any);
+
+      // 1. Call via proxy
+      const dapperResult = await dapper.getCommunity("1");
+
+      // 2. Call manually with same key and args
+      const manualFunc = vi.fn().mockResolvedValue("manual result");
+      const manualResult = await deduplicatePromiseForRequest(
+        "getCommunity",
+        manualFunc,
+        ["1"],
+        request
+      );
+
+      // Assertions
+      expect(dapperResult).toEqual({ identifier: "1", name: "Test Community" });
+      // Should return the cached result from the first call, NOT "manual result"
+      expect(manualResult).toBe(dapperResult);
+      // The manual function should NOT have been called
+      expect(manualFunc).not.toHaveBeenCalled();
+      // The underlying dapper method should have been called once
+      expect(mockGetCommunity).toHaveBeenCalledTimes(1);
     });
   });
 });
