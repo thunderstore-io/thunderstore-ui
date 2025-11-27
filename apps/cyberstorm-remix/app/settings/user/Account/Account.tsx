@@ -16,6 +16,7 @@ import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
 import { userDelete } from "@thunderstore/thunderstore-api";
 import { useHydrated } from "remix-utils/use-hydrated";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 
 export default function Account() {
   const outletContext = useOutletContext() as OutletContextShape;
@@ -135,6 +136,7 @@ function DeleteAccountForm(props: {
         children: `Account deleted successfully`,
         duration: 4000,
       });
+      await getSessionTools().updateCurrentUser();
       await revalidate();
       navigate("/communities");
     },
