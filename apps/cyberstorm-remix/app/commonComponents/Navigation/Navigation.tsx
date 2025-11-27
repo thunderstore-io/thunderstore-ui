@@ -35,7 +35,10 @@ import {
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
-import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
+import {
+  buildAuthLoginUrl,
+  buildLogoutUrl,
+} from "cyberstorm/utils/ThunderstoreAuth";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
@@ -404,7 +407,7 @@ export function DesktopUserDropdown(props: {
       <NewDropDownItem asChild>
         <NewLink
           primitiveType="link"
-          href={`${domain}/logout/`}
+          href={buildLogoutUrl(domain)}
           rootClasses="dropdown__item navigation-header__dropdown-item"
         >
           <NewIcon csMode="inline" noWrapper csVariant="tertiary">
@@ -566,7 +569,7 @@ export function MobileUserPopoverContent(props: {
           </NewLink>
           <NewLink
             primitiveType="link"
-            href={domain ? `${domain}/logout/` : "/logout"}
+            href={buildLogoutUrl(domain)}
             rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
           >
             <NewIcon csMode="inline" noWrapper>
