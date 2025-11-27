@@ -264,7 +264,7 @@ export const getSessionContext = (
   };
 
   const _updateCurrentUser = async () => {
-    updateCurrentUser(_storage);
+    return updateCurrentUser(_storage);
   };
 
   const _getSessionCurrentUser = (forceUpdateCurrentUser: boolean = false) => {
