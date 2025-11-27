@@ -32,7 +32,7 @@ const meta = {
       { value: "1", label: "One" },
       { value: "2", label: "Two" },
       { value: "3", label: "Three" },
-    ] as SelectOption[],
+    ] as SelectOption<string>[],
     onChange: () => {},
     value: undefined,
     multiple: false,
@@ -50,8 +50,10 @@ export const Single: Story = {
 
 function SingleComponent(props: { args: NewSelectSearchProps }) {
   const { args } = props;
-  const [val, setVal] = useState<SelectOption | undefined>(undefined);
-  const [val2, setVal2] = useState<SelectOption | undefined>(args.options[1]);
+  const [val, setVal] = useState<SelectOption<string> | undefined>(undefined);
+  const [val2, setVal2] = useState<SelectOption<string> | undefined>(
+    args.options[1]
+  );
   return (
     <div style={{ display: "flex", gap: "12rem", flexDirection: "column" }}>
       <NewSelectSearch
@@ -133,7 +135,7 @@ export const Sizes: Story = {
 
 function SizesComponent(props: { args: NewSelectSearchProps }) {
   const { args } = props;
-  const [val, setVal] = useState<SelectOption[] | undefined>(undefined);
+  const [val, setVal] = useState<SelectOption<string>[] | undefined>(undefined);
   const sizes = SelectSearchSizesList.map((size) => (
     <div
       key={size}
@@ -164,7 +166,7 @@ export const Modifiers: Story = {
 
 function ModifiersComponent(props: { args: NewSelectSearchProps }) {
   const { args } = props;
-  const [val, setVal] = useState<SelectOption[] | undefined>(undefined);
+  const [val, setVal] = useState<SelectOption<string>[] | undefined>(undefined);
   const modifiers = SelectSearchModifiersList.map((modifier) => (
     <div
       key={modifier}

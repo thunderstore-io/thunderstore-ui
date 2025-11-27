@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
-export type SelectOption<T extends string = string> = {
+export type SelectOption<T> = {
   value: T;
   label?: string;
   leftIcon?: ReactNode;

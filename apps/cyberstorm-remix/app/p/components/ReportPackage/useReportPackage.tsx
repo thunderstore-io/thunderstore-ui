@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
   ReportPackageForm,
@@ -7,7 +7,15 @@ import {
 import { ReportPackageButton } from "./ReportPackageButton";
 import { ReportPackageModal } from "./ReportPackageModal";
 import { ReportPackageSubmitted } from "./ReportPackageSubmitted";
-import { type RequestConfig } from "@thunderstore/thunderstore-api";
+import {
+  type PackageListingReportRequestData,
+  type RequestConfig,
+} from "@thunderstore/thunderstore-api";
+
+const createInitialFormInputs = (): PackageListingReportRequestData => ({
+  reason: "Other",
+  description: "",
+});
 
 export function useReportPackage(formProps: {
   formPropsPromise: Promise<ReportPackageFormProps>;
@@ -16,12 +24,31 @@ export function useReportPackage(formProps: {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [formInputs, setFormInputs] = useState<PackageListingReportRequestData>(
+    createInitialFormInputs
+  );
 
   const onOpenChange = (isOpen: boolean) => {
     setIsOpen(isOpen);
     setIsSubmitted(false);
     setError(null);
   };
+
+  type UpdateFormInput = <K extends keyof PackageListingReportRequestData>(
+    field: K,
+    value: PackageListingReportRequestData[K]
+  ) => void;
+
+  const updateFormInput = useCallback<UpdateFormInput>((field, value) => {
+    setFormInputs((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  }, []);
+
+  const resetFormInputs = useCallback(() => {
+    setFormInputs(createInitialFormInputs());
+  }, []);
 
   const [props, setProps] = useState<ReportPackageFormProps | null>(null);
 
@@ -37,7 +64,15 @@ export function useReportPackage(formProps: {
 
   const button = <ReportPackageButton onClick={() => onOpenChange(true)} />;
 
-  const extraProps = { error, onOpenChange, setError, setIsSubmitted };
+  const extraProps = {
+    error,
+    onOpenChange,
+    setError,
+    setIsSubmitted,
+    formInputs,
+    updateFormInput,
+    resetFormInputs,
+  };
   const form = props && (
     <ReportPackageForm {...props} {...extraProps} config={formProps.config} />
   );

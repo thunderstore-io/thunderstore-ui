@@ -1,5 +1,3 @@
-import { useReducer } from "react";
-
 import {
   Modal,
   NewAlert,
@@ -38,6 +36,12 @@ interface ReportPackageFormFullProps extends ReportPackageFormProps {
   onOpenChange: (isOpen: boolean) => void;
   setError: (error: string | null) => void;
   setIsSubmitted: (isSubmitted: boolean) => void;
+  formInputs: PackageListingReportRequestData;
+  updateFormInput: <K extends keyof PackageListingReportRequestData>(
+    field: K,
+    value: PackageListingReportRequestData[K]
+  ) => void;
+  resetFormInputs: () => void;
 }
 
 export function ReportPackageForm(
@@ -51,26 +55,11 @@ export function ReportPackageForm(
     setIsSubmitted,
     error,
     setError,
+    formInputs,
+    updateFormInput,
+    resetFormInputs,
     ...requestParams
   } = props;
-
-  function formFieldUpdateAction(
-    state: PackageListingReportRequestData,
-    action: {
-      field: keyof PackageListingReportRequestData;
-      value: PackageListingReportRequestData[keyof PackageListingReportRequestData];
-    }
-  ) {
-    return {
-      ...state,
-      [action.field]: action.value,
-    };
-  }
-
-  const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
-    reason: "Other",
-    description: "",
-  });
 
   type SubmitorOutput = Awaited<ReturnType<typeof packageListingReport>>;
 
@@ -100,6 +89,7 @@ export function ReportPackageForm(
     onSubmitSuccess: () => {
       setIsSubmitted(true);
       setError(null);
+      resetFormInputs();
     },
     onSubmitError: (error) => {
       let message = `Error occurred: ${error.message || "Unknown error"}`;
@@ -109,6 +99,12 @@ export function ReportPackageForm(
       setError(message);
     },
   });
+
+  const handleCancel = () => {
+    resetFormInputs();
+    setError(null);
+    onOpenChange(false);
+  };
 
   return (
     <>
@@ -127,7 +123,7 @@ export function ReportPackageForm(
             // placeholder="Please select..."
             value={formInputs.reason}
             onChange={(value) => {
-              updateFormFieldState({ field: "reason", value: value });
+              updateFormInput("reason", value);
             }}
             csSize="small"
           />
@@ -140,10 +136,7 @@ export function ReportPackageForm(
             id="description"
             value={formInputs.description || ""}
             onChange={(e) => {
-              updateFormFieldState({
-                field: "description",
-                value: e.target.value,
-              });
+              updateFormInput("description", e.target.value);
             }}
             placeholder="Invalid submission"
             csSize="textarea"
@@ -157,7 +150,7 @@ export function ReportPackageForm(
         )}
       </Modal.Body>
       <Modal.Footer>
-        <NewButton csVariant="secondary" onClick={() => onOpenChange(false)}>
+        <NewButton csVariant="secondary" onClick={handleCancel}>
           Cancel
         </NewButton>
         <NewButton csVariant="accent" onClick={strongForm.submit}>

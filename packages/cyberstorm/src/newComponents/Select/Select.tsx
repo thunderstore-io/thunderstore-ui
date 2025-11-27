@@ -20,7 +20,7 @@ import {
   type SelectVariants,
 } from "@thunderstore/cyberstorm-theme/src/components";
 
-type _SelectProps<T extends string = string> = {
+type _SelectProps<T> = {
   variant?: "default" | "accent" | "wide";
   defaultOpen?: boolean;
   disabled?: boolean;
@@ -35,14 +35,12 @@ type _SelectProps<T extends string = string> = {
   csModifiers?: SelectModifiers[];
 };
 
-export type SelectProps<T extends string = string> = _SelectProps<T> &
+export type SelectProps<T> = _SelectProps<T> &
   Omit<React.HTMLProps<HTMLDivElement>, keyof _SelectProps<T>>;
 
 // TODO: Rework to use regular select preferrably
 // or atleast ensure a11y stuff works
-export const Select = memo(function Select<T extends string>(
-  props: SelectProps<T>
-) {
+function SelectComponent<T extends string>(props: SelectProps<T>) {
   const {
     defaultOpen = false,
     disabled = false,
@@ -116,16 +114,18 @@ export const Select = memo(function Select<T extends string>(
       </Portal>
     </Root>
   );
-});
+}
 
-Select.displayName = "Select";
+SelectComponent.displayName = "Select";
 
-const mapSelectData = (
-  options: SelectOption[],
+export const Select = memo(SelectComponent) as typeof SelectComponent;
+
+function mapSelectData<T extends string>(
+  options: SelectOption<T>[],
   csVariant: SelectVariants,
   csSize: SelectSizes,
   csModifiers?: SelectModifiers[]
-) => {
+) {
   return options.map((option, index) => (
     <Item value={option.value} key={index} asChild>
       <div
@@ -142,4 +142,4 @@ const mapSelectData = (
       </div>
     </Item>
   ));
-};
+}
