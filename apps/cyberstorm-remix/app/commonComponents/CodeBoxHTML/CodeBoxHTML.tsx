@@ -7,10 +7,22 @@ export interface CodeBoxHTMLProps {
   maxHeight?: number;
 }
 
+// Fixed line height for consistent rendering
+const LINE_HEIGHT = 21;
+
 /**
- * CodeBox component which renders HTML and
- * uses virtual scrolling to render the content
- * in parts to improve performance
+ * Strips HTML tags from a string to extract plain text content.
+ * Uses a simple regex approach that's safe for our use case where
+ * input is already server-sanitized syntax highlighting HTML.
+ */
+function stripHtmlTags(html: string): string {
+  return html.replace(/<[^>]*>/g, "");
+}
+
+/**
+ * CodeBox component which renders HTML syntax-highlighted code.
+ * Uses virtual scrolling for visual performance while maintaining
+ * a hidden selectable layer for copy/paste functionality.
  */
 export function CodeBoxHTML({ value = "", maxHeight = 600 }: CodeBoxHTMLProps) {
   const [scrollTop, setScrollTop] = useState(0);
@@ -18,19 +30,21 @@ export function CodeBoxHTML({ value = "", maxHeight = 600 }: CodeBoxHTMLProps) {
   const [containerWidth, setContainerWidth] = useState<number | undefined>(
     undefined
   );
-  const [lineHeight, setLineHeight] = useState(21); // We'll measure this based on the actual styles later
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Extra lines to render above/below viewport, so that there's content
-  // to render immediately when scrolling, making it smoother
+  // Extra lines to render above/below viewport for smooth scrolling
   const BUFFER_LINES = 25;
-  const lines = useMemo(() => value.split("\n"), [value]);
+
+  // Split into lines and compute plain text for the selectable layer
+  const { lines, plainText } = useMemo(() => {
+    const htmlLines = value.split("\n");
+    const textContent = htmlLines.map(stripHtmlTags).join("\n");
+    return { lines: htmlLines, plainText: textContent };
+  }, [value]);
 
   useEffect(() => {
-    const { width, lineHeight: measuredLineHeight } =
-      calculateDimensions(lines);
+    const width = calculateWidth(lines);
     setContainerWidth(width);
-    setLineHeight(measuredLineHeight);
   }, [lines]);
 
   useEffect(() => {
@@ -46,15 +60,16 @@ export function CodeBoxHTML({ value = "", maxHeight = 600 }: CodeBoxHTMLProps) {
 
   const visibleStart = Math.max(
     0,
-    Math.floor(scrollTop / lineHeight) - BUFFER_LINES
+    Math.floor(scrollTop / LINE_HEIGHT) - BUFFER_LINES
   );
 
   const visibleEnd = Math.min(
-    visibleStart + Math.ceil(containerHeight / lineHeight) + BUFFER_LINES * 2,
+    visibleStart + Math.ceil(containerHeight / LINE_HEIGHT) + BUFFER_LINES * 2,
     lines.length
   );
 
-  const totalHeight = lines.length * lineHeight;
+  const totalHeight = lines.length * LINE_HEIGHT;
+  const contentWidth = containerWidth ? `${containerWidth}px` : "auto";
 
   return (
     <div
@@ -67,11 +82,25 @@ export function CodeBoxHTML({ value = "", maxHeight = 600 }: CodeBoxHTMLProps) {
       }}
       onScroll={(e) => setScrollTop(e.currentTarget.scrollTop)}
     >
+      {/* Selectable layer: contains all text for copy/paste functionality */}
       <pre
-        className="code-box-html__content"
+        className="code-box-html__selectable"
         style={{
           height: totalHeight,
-          width: containerWidth ? `${containerWidth}px` : "auto",
+          width: contentWidth,
+          minWidth: "100%",
+        }}
+      >
+        {plainText}
+      </pre>
+
+      {/* Visual layer: shows syntax-highlighted code with virtual scrolling */}
+      <pre
+        className="code-box-html__visual"
+        aria-hidden="true"
+        style={{
+          height: totalHeight,
+          width: contentWidth,
           minWidth: "100%",
         }}
       >
@@ -80,8 +109,7 @@ export function CodeBoxHTML({ value = "", maxHeight = 600 }: CodeBoxHTMLProps) {
             key={visibleStart + index}
             className="code-box-html__line highlight"
             style={{
-              top: (visibleStart + index) * lineHeight,
-              height: lineHeight,
+              top: (visibleStart + index) * LINE_HEIGHT,
             }}
             dangerouslySetInnerHTML={{ __html: line }}
           />
@@ -91,12 +119,13 @@ export function CodeBoxHTML({ value = "", maxHeight = 600 }: CodeBoxHTMLProps) {
   );
 }
 
-/*
- * Measure the longest line width and line height using the same styles as the component
+/**
+ * Measure the width needed for the longest line using the same styles as the component
  */
-const calculateDimensions = (lines: string[]) => {
-  if (lines.length === 0 || (lines.length === 1 && lines[0] === ""))
-    return { width: 0, lineHeight: 21 };
+function calculateWidth(lines: string[]): number {
+  if (lines.length === 0 || (lines.length === 1 && lines[0] === "")) {
+    return 0;
+  }
   const longestLine = lines.reduce((longest, current) =>
     current.length > longest.length ? current : longest
   );
@@ -105,15 +134,15 @@ const calculateDimensions = (lines: string[]) => {
   measureElement.style.width = "auto";
   measureElement.style.padding = "0";
   measureElement.style.border = "none";
+  measureElement.style.position = "absolute";
+  measureElement.style.visibility = "hidden";
   document.body.appendChild(measureElement);
   try {
     measureElement.innerHTML = longestLine;
-    const width = measureElement.offsetWidth;
-    const measuredLineHeight = measureElement.offsetHeight;
-    return { width, lineHeight: measuredLineHeight };
+    return measureElement.offsetWidth;
   } finally {
     document.body.removeChild(measureElement);
   }
-};
+}
 
 CodeBoxHTML.displayName = "CodeBoxHTML";

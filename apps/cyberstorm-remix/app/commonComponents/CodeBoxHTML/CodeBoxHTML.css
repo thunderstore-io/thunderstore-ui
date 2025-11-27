@@ -12,16 +12,45 @@
   --border-color: transparent;
 }
 
-.code-box-html__content {
+/* Selectable layer: transparent text that users can select and copy */
+.code-box-html__selectable {
   position: relative;
+  z-index: 1;
   width: 100%;
+  margin: 0;
+
+  font-size: var(--font-size-body-md);
+  font-family: var(--font-family-monospace);
+  font-style: normal;
+  line-height: 21px;
+  white-space: pre;
+  color: transparent;
+
+  /* Allow selection but make text invisible */
+  user-select: text;
+}
+
+/* Visual layer: syntax-highlighted code with virtual scrolling */
+.code-box-html__visual {
+  position: absolute;
+  top: var(--space-16);
+  left: var(--space-16);
+  z-index: 0;
+  width: 100%;
+  margin: 0;
+
+  /* Prevent visual layer from receiving pointer events */
+  pointer-events: none;
 }
 
 .code-box-html__line {
   position: absolute;
+  display: block;
   width: 100%;
+
   font-size: var(--font-size-body-md);
   font-family: var(--font-family-monospace);
   font-style: normal;
-  line-height: var(--line-height-md);
+  line-height: 21px;
+  white-space: pre;
 }
