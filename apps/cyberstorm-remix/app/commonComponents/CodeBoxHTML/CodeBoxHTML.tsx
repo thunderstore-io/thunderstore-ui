@@ -8,15 +8,28 @@ export interface CodeBoxHTMLProps {
 }
 
 // Fixed line height for consistent rendering
+// This value must match --code-line-height in CodeBoxHTML.css
 const LINE_HEIGHT = 21;
 
 /**
  * Strips HTML tags from a string to extract plain text content.
- * Uses a simple regex approach that's safe for our use case where
- * input is already server-sanitized syntax highlighting HTML.
+ * Uses a loop to handle potentially nested or malformed tags.
+ * This is safe for our use case because:
+ * 1. Input is already server-sanitized syntax highlighting HTML
+ * 2. The result is only used as text content, not rendered as HTML
+ * 3. HTML entities are preserved as-is which is acceptable for code display
  */
 function stripHtmlTags(html: string): string {
-  return html.replace(/<[^>]*>/g, "");
+  const tagPattern = /<[^>]*>/g;
+  let result = html;
+  let previous;
+  // Repeatedly strip tags until no more are found
+  // This handles cases like <scr<script>ipt>
+  do {
+    previous = result;
+    result = result.replace(tagPattern, "");
+  } while (result !== previous);
+  return result;
 }
 
 /**

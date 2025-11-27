@@ -10,6 +10,7 @@
   background-color: var(--color-surface-1);
 
   --border-color: transparent;
+  --code-line-height: 21px;
 }
 
 /* Selectable layer: transparent text that users can select and copy */
@@ -22,7 +23,7 @@
   font-size: var(--font-size-body-md);
   font-family: var(--font-family-monospace);
   font-style: normal;
-  line-height: 21px;
+  line-height: var(--code-line-height);
   white-space: pre;
   color: transparent;
 
@@ -51,6 +52,6 @@
   font-size: var(--font-size-body-md);
   font-family: var(--font-family-monospace);
   font-style: normal;
-  line-height: 21px;
+  line-height: var(--code-line-height);
   white-space: pre;
 }
