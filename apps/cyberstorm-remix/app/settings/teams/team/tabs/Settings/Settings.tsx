@@ -1,5 +1,9 @@
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { type OutletContextShape } from "app/root";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { Suspense, useReducer, useState } from "react";
 import {
   Await,
@@ -8,10 +12,9 @@ import {
   useOutletContext,
 } from "react-router";
 
-import "./Settings.css";
 import {
-  NewAlert,
   Modal,
+  NewAlert,
   NewButton,
   NewIcon,
   NewLink,
@@ -20,16 +23,13 @@ import {
 } from "@thunderstore/cyberstorm";
 import {
   type RequestConfig,
-  teamDisband,
   type TeamDisbandRequestData,
+  teamDisband,
   teamRemoveMember,
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
-import { type OutletContextShape } from "app/root";
-import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
-import { isTeamOwner } from "cyberstorm/utils/permissions";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import "./Settings.css";
 
 export const clientLoader = makeTeamSettingsTabLoader(
   async (dapper, teamName) => ({

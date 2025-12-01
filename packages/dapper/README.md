@@ -19,7 +19,7 @@ Using them might look a little something like this:
 import React from "react";
 
 import { DapperProvider, useDapper} from "@thunderstore/dapper";
-import { Communities } from "@thunderstore/dapper/types";
+import { Communities } from "@thunderstore/dapper";
 import { usePromise } from "@thunderstore/use-promise";
 
 const MyApp = () => <DapperProvider apiDomain="https://thunderstore.dev/">
@@ -66,7 +66,7 @@ const CommunityList = () => {
       the naming used in Thunderstore backend to help developers grasp
       how the data maps between the systems
     * Note that everything exported from `src/types/index.ts` can be´
-      imported by other packages from `@thunderstore/dapper/types`
+      imported by other packages from `@thunderstore/dapper`
 2. Add the method in DapperInterface (`src/dapper.ts`)
 3. Add the method implementation to the current Dapper implementations,
    e.g. `dapper-fake` and `dapper-ts`

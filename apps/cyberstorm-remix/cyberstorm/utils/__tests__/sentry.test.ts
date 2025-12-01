@@ -1,4 +1,5 @@
 import { assert, describe, it } from "vitest";
+
 import { denyUrls } from "../sentry";
 
 // This attempts to match how Sentry does things.

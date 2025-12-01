@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 
 import {
-  ReportPackageForm,
-  type ReportPackageFormProps,
-} from "./ReportPackageForm";
-import { ReportPackageButton } from "./ReportPackageButton";
-import { ReportPackageModal } from "./ReportPackageModal";
-import { ReportPackageSubmitted } from "./ReportPackageSubmitted";
-import {
   type PackageListingReportRequestData,
   type RequestConfig,
 } from "@thunderstore/thunderstore-api";
+
+import { ReportPackageButton } from "./ReportPackageButton";
+import {
+  ReportPackageForm,
+  type ReportPackageFormProps,
+} from "./ReportPackageForm";
+import { ReportPackageModal } from "./ReportPackageModal";
+import { ReportPackageSubmitted } from "./ReportPackageSubmitted";
 
 const createInitialFormInputs = (): PackageListingReportRequestData => ({
   reason: "Other",

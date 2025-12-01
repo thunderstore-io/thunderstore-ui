@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import "@thunderstore/cyberstorm-theme";
+
 import { NewLink } from "@thunderstore/cyberstorm";
-import { LinkVariantsList } from "@thunderstore/cyberstorm-theme/src/components";
+import "@thunderstore/cyberstorm-theme";
+import { LinkVariantsList } from "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/Link",

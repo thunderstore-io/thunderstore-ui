@@ -1,23 +1,22 @@
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useReducer } from "react";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { useReducer, useState } from "react";
 
 import {
-  useToast,
   Modal,
   NewButton,
   NewIcon,
-  NewTextInput,
   NewSelect,
+  NewTextInput,
   type SelectOption,
+  useToast,
 } from "@thunderstore/cyberstorm";
 import {
-  teamAddMember,
   type RequestConfig,
   type TeamAddMemberRequestData,
+  teamAddMember,
 } from "@thunderstore/thunderstore-api";
-
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 
 const roleOptions: SelectOption<"owner" | "member">[] = [
   { value: "member", label: "Member" },

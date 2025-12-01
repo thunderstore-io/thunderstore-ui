@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+
 import {
   ParseError,
   RequestBodyParseError,
   RequestQueryParamsParseError,
-} from "../../../../../packages/thunderstore-api/src";
+} from "@thunderstore/thunderstore-api";
 
 interface UseStrongFormProps<
   Inputs,

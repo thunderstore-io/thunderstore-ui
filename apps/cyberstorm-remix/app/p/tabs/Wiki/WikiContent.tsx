@@ -1,7 +1,3 @@
-import "./Wiki.css";
-
-import { type PackageWikiPageResponseData } from "@thunderstore/thunderstore-api";
-import { Heading, NewButton, NewIcon } from "@thunderstore/cyberstorm";
 import {
   faArrowLeftLong,
   faArrowRightLong,
@@ -9,9 +5,14 @@ import {
   faEdit,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { memo, Suspense } from "react";
-import { Markdown } from "~/commonComponents/Markdown/Markdown";
+import { Suspense, memo } from "react";
 import { Await } from "react-router";
+import { Markdown } from "~/commonComponents/Markdown/Markdown";
+
+import { Heading, NewButton, NewIcon } from "@thunderstore/cyberstorm";
+import { type PackageWikiPageResponseData } from "@thunderstore/thunderstore-api";
+
+import "./Wiki.css";
 
 interface WikiContentProps {
   page: PackageWikiPageResponseData;

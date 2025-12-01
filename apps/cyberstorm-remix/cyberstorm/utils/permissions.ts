@@ -1,4 +1,4 @@
-import type { CurrentUser } from "@thunderstore/dapper/types";
+import type { CurrentUser } from "@thunderstore/dapper";
 
 export const isTeamOwner = (
   teamName: string,

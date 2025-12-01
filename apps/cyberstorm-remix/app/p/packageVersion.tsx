@@ -1,3 +1,25 @@
+import {
+  faCaretRight,
+  faDownload,
+  faHandHoldingHeart,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
+import { isPromise } from "cyberstorm/utils/typeChecks";
+import {
+  type ReactElement,
+  Suspense,
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type {
   LoaderFunctionArgs,
   ShouldRevalidateFunctionArgs,
@@ -9,6 +31,11 @@ import {
   useLocation,
   useOutletContext,
 } from "react-router";
+import { useHydrated } from "remix-utils/use-hydrated";
+import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { type OutletContextShape } from "~/root";
+
 import {
   Drawer,
   Heading,
@@ -16,46 +43,21 @@ import {
   NewButton,
   NewIcon,
   NewLink,
+  RelativeTime,
   SkeletonBox,
   Tabs,
-} from "@thunderstore/cyberstorm";
-import "./packageListing.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
-import {
-  faUsers,
-  faHandHoldingHeart,
-  faDownload,
-  faCaretRight,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  memo,
-  type ReactElement,
-  Suspense,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useHydrated } from "remix-utils/use-hydrated";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
-import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTime/RelativeTime";
-import {
+  ThunderstoreLogo,
   formatFileSize,
   formatInteger,
   formatToDisplayName,
-} from "@thunderstore/cyberstorm/src/utils/utils";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { type OutletContextShape } from "~/root";
-import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
+} from "@thunderstore/cyberstorm";
 import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
-import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
-import { isPromise } from "cyberstorm/utils/typeChecks";
-import { getPackageVersionDetails } from "@thunderstore/dapper-ts/src/methods/packageVersion";
+  DapperTs,
+  getPackageVersionDetails,
+  getTeamDetails,
+} from "@thunderstore/dapper-ts";
+
+import "./packageListing.css";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (

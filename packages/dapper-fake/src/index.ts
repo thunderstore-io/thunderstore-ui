@@ -10,12 +10,14 @@ import {
   getFakePackageListingDetails,
   getFakePackageListings,
   getFakePackagePermissions,
-  getFakePackageVersionDependencies,
-  getFakePackageVersions,
   getFakePackageSource,
+  getFakePackageVersionDependencies,
   getFakePackageVersionDetails,
+  getFakePackageVersions,
 } from "./fakers/package";
 import { getFakeServiceAccounts } from "./fakers/serviceAccount";
+import { postFakePackageSubmissionMetadata } from "./fakers/submission";
+import { getFakePackageSubmissionStatus } from "./fakers/submission";
 import {
   getFakeTeamDetails,
   getFakeTeamMembers,
@@ -25,8 +27,6 @@ import {
   getFakeCurrentUser,
   getFakeCurrentUserTeamPermissions,
 } from "./fakers/user";
-import { postFakePackageSubmissionMetadata } from "./fakers/submission";
-import { getFakePackageSubmissionStatus } from "./fakers/submission";
 
 export class DapperFake implements DapperInterface {
   public getCommunities = getFakeCommunities;

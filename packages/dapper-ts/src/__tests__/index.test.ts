@@ -1,4 +1,5 @@
-import { it, expect, beforeAll, test } from "vitest";
+import { beforeAll, expect, it, test } from "vitest";
+
 import { DapperTs } from "../index";
 
 const communityId = "test-community-1";

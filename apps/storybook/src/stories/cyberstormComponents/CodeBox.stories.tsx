@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { CodeBox } from "@thunderstore/cyberstorm";
 
 const meta = {

@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import "@thunderstore/cyberstorm-theme";
+
 import { CardPackage } from "@thunderstore/cyberstorm";
+import "@thunderstore/cyberstorm-theme";
+import type { PackageListing } from "@thunderstore/dapper";
+
 import goblin from "../assets/goblin.png";
-import type { PackageListing } from "../../../../../packages/dapper/src/types";
 
 const now = new Date("2023-01-01T00:00:00Z");
 const modPackage = {

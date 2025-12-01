@@ -1,21 +1,21 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import { type ApiEndpointProps } from "../index";
 import {
-  PackageListingApproveRequestData,
-  PackageListingApproveRequestParams,
-  PackageListingRejectRequestData,
-  PackageListingRejectRequestParams,
-  PackageListingUpdateRequestData,
-  PackageListingUpdateRequestParams,
-  packageListingUpdateRequestDataSchema,
+  type PackageListingApproveRequestData,
+  type PackageListingApproveRequestParams,
+  type PackageListingRejectRequestData,
+  type PackageListingRejectRequestParams,
+  type PackageListingReportRequestData,
+  type PackageListingReportRequestParams,
+  type PackageListingUpdateRequestData,
+  type PackageListingUpdateRequestParams,
   packageListingApproveRequestDataSchema,
   packageListingRejectRequestDataSchema,
-  PackageListingReportRequestParams,
-  PackageListingReportRequestData,
   packageListingReportRequestDataSchema,
+  packageListingUpdateRequestDataSchema,
 } from "../schemas/requestSchemas";
 import {
-  PackageListingUpdateResponseData,
+  type PackageListingUpdateResponseData,
   packageListingUpdateResponseDataSchema,
 } from "../schemas/responseSchemas";
 

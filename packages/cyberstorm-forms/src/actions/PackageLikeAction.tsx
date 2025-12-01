@@ -1,16 +1,22 @@
-import { useFormToaster } from "@thunderstore/cyberstorm-forms";
-import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import {
   ApiError,
-  RequestConfig,
+  type RequestConfig,
   packageRate,
 } from "@thunderstore/thunderstore-api";
+import { ApiAction } from "@thunderstore/ts-api-react-actions";
+
+import { useFormToaster } from "../useFormToaster";
 
 export function PackageLikeAction(props: {
   isLoggedIn: boolean;
   dataUpdateTrigger: () => Promise<void>;
   config: () => RequestConfig;
-}) {
+}): (
+  isLiked: boolean,
+  namespace: string,
+  name: string,
+  useSession: boolean
+) => void {
   const { onSubmitSuccess, onSubmitError } = useFormToaster<
     { state: "rated" | "unrated" },
     { isLoggedIn: boolean; e: Error | ApiError | unknown }

@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import "@thunderstore/cyberstorm-theme";
-import { NewButton } from "@thunderstore/cyberstorm";
 import { useState } from "react";
+
+import { NewButton } from "@thunderstore/cyberstorm";
 import { NewPagination as Pagination } from "@thunderstore/cyberstorm";
-import type { PaginationProps } from "@thunderstore/cyberstorm/src/newComponents/Pagination/Pagination";
+import type { PaginationProps } from "@thunderstore/cyberstorm";
+import "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/Pagination",

@@ -1,8 +1,8 @@
 // import { useSession } from "@thunderstore/ts-api-react";
 // import { useHydrated } from "remix-utils/use-hydrated";
 // import { useEffect, useRef, useState } from "react";
+import { type CurrentUser } from "@thunderstore/dapper";
 
-import { type CurrentUser } from "@thunderstore/dapper/types";
 import {
   MobileNavigationMenu,
   MobileUserPopoverContent,

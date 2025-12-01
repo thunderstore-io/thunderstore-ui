@@ -1,5 +1,5 @@
 // import { test, expect } from "@chromatic-com/playwright";
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 const percySnapshot = require("@percy/playwright");
 

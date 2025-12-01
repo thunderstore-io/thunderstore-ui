@@ -1,13 +1,13 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import {
-  CommunityListRequestQueryParams,
-  communityListRequestQueryParamsSchema,
-} from "../schemas/requestSchemas";
+import { type ApiEndpointProps } from "../index";
 import { CommunityListOrderingEnum } from "../schemas/queryParamSchemas";
 import {
+  type CommunityListRequestQueryParams,
+  communityListRequestQueryParamsSchema,
+} from "../schemas/requestSchemas";
+import {
+  type CommunityListResponseData,
   communityListResponseDataSchema,
-  CommunityListResponseData,
 } from "../schemas/responseSchemas";
 
 export async function fetchCommunityList(

@@ -1,4 +1,5 @@
 import { config } from "@fortawesome/fontawesome-svg-core";
+
 config.autoAddCss = false;
 
 // primitiveComponents
@@ -24,7 +25,10 @@ export {
   type InputTextInputProps,
   type InputTextAreaProps,
 } from "./primitiveComponents/Input/Input";
-export { type PrimitiveComponentDefaultProps } from "./primitiveComponents/utils/utils";
+export {
+  type PrimitiveComponentDefaultProps,
+  TooltipWrapper,
+} from "./primitiveComponents/utils/utils";
 
 // components
 export { CodeBox, type CodeBoxProps } from "./components/CodeBox/CodeBox";
@@ -80,7 +84,10 @@ export {
 export { Menu } from "./newComponents/Menu/Menu";
 export { MetaItem as NewMetaItem } from "./newComponents/MetaItem/MetaItem";
 export { Modal, type ModalProps } from "./newComponents/Modal/Modal";
-export { Pagination as NewPagination } from "./newComponents/Pagination/Pagination";
+export {
+  Pagination as NewPagination,
+  type PaginationProps,
+} from "./newComponents/Pagination/Pagination";
 export {
   Select as NewSelect,
   type SelectProps as NewSelectProps,
@@ -97,7 +104,7 @@ export {
   type TextInputProps as NewTextInputProps,
 } from "./newComponents/TextInput/TextInput";
 export { useToast } from "./newComponents/Toast/Provider";
-export { Toast } from "./newComponents/Toast/Toast";
+export * as Toast from "./newComponents/Toast";
 export {
   Table as NewTable,
   TableSort as NewTableSort,
@@ -117,6 +124,7 @@ export {
   formatFileSize,
   formatInteger,
   formatToDisplayName,
+  classnames,
 } from "./utils/utils";
 
 export {

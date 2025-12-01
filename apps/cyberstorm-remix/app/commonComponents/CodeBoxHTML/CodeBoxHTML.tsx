@@ -1,4 +1,5 @@
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+
 import "./CodeBoxHTML.css";
 import "./Highlight.css";
 

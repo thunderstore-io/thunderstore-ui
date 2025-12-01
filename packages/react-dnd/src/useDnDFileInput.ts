@@ -1,4 +1,5 @@
-import React, { RefObject } from "react";
+import React, { type RefObject } from "react";
+
 import { useDnD } from "./useDnD";
 
 type useDragAndDropInputProps = {

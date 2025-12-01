@@ -1,7 +1,8 @@
+import { expect, it } from "vitest";
+
 import { config, testData } from "../../__tests__/defaultConfig";
-import { fetchCommunityList } from "../communityList";
 import { CommunityListOrderingEnum } from "../../schemas/queryParamSchemas";
-import { it, expect } from "vitest";
+import { fetchCommunityList } from "../communityList";
 
 it("finds a community in the community listing", async () => {
   const response = await fetchCommunityList({

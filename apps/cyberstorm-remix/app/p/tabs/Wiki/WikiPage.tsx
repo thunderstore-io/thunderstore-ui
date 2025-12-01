@@ -1,21 +1,22 @@
-import "./Wiki.css";
-
-import { Await, type LoaderFunctionArgs } from "react-router";
-import { useLoaderData } from "react-router";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { WikiContent } from "./WikiContent";
+import { Suspense, useMemo } from "react";
+import { Await, type LoaderFunctionArgs } from "react-router";
+import { useLoaderData } from "react-router";
+
+import { SkeletonBox } from "@thunderstore/cyberstorm";
+import { DapperTs } from "@thunderstore/dapper-ts";
 import {
+  getPackagePermissions,
   getPackageWiki,
   getPackageWikiPage,
-  getPackagePermissions,
-} from "@thunderstore/dapper-ts/src/methods/package";
-import { isApiError } from "../../../../../../packages/thunderstore-api/src";
-import { Suspense, useMemo } from "react";
-import { SkeletonBox } from "@thunderstore/cyberstorm";
+} from "@thunderstore/dapper-ts";
+import { isApiError } from "@thunderstore/thunderstore-api";
+
+import "./Wiki.css";
+import { WikiContent } from "./WikiContent";
 
 type ResultType = {
   wiki: ReturnType<typeof getPackageWiki> | undefined;

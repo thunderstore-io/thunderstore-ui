@@ -1,8 +1,8 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import { PackagePermissionsRequestParams } from "../schemas/requestSchemas";
+import { type ApiEndpointProps } from "../index";
+import { type PackagePermissionsRequestParams } from "../schemas/requestSchemas";
 import {
-  PackagePermissionsResponseData,
+  type PackagePermissionsResponseData,
   packagePermissionsResponseDataSchema,
 } from "../schemas/responseSchemas";
 

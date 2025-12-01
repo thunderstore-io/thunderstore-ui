@@ -1,12 +1,13 @@
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
+
 import {
-  IBaseUploadHandle,
-  UploadConfig,
-  UploadError,
-  UploadMetrics,
-  UploadPartProgress,
-  UploadProgress,
-  UploadStatus,
+  type IBaseUploadHandle,
+  type UploadConfig,
+  type UploadError,
+  type UploadMetrics,
+  type UploadPartProgress,
+  type UploadProgress,
+  type UploadStatus,
 } from "./types";
 
 export abstract class BaseUpload implements IBaseUploadHandle {

@@ -1,7 +1,8 @@
-import "./Footer.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faBoltLightning } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   Heading,
   NewButton,
@@ -9,7 +10,8 @@ import {
   NewLink,
   ThunderstoreLogoHorizontal,
 } from "@thunderstore/cyberstorm";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+
+import "./Footer.css";
 
 const AD_IMAGE_SRC = "/cyberstorm-static/images/tsmm_screenshot.png";
 const DISCORD_URL = "https://discord.thunderstore.io/";

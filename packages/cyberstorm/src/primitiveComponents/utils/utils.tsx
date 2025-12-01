@@ -1,4 +1,5 @@
-import { memo, type PropsWithChildren } from "react";
+import { type PropsWithChildren, memo } from "react";
+
 import { Tooltip } from "../..";
 
 interface TooltipWrapperProps extends PropsWithChildren {

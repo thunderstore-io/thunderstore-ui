@@ -1,28 +1,29 @@
+import { GraphExecutor, GraphNode } from "@thunderstore/graph-system";
 import {
-  CompleteUpload,
-  FinalizedUpload,
-  PreparedUpload,
-  UploadPartError,
-  UploadPartUrl,
-  UploadStatus,
-  UserMedia,
-} from "./types";
-import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
-import { GraphNode, GraphExecutor } from "@thunderstore/graph-system";
-import { BaseUpload } from "./BaseUpload";
-import {
-  UploadConfig,
-  UploadProgress,
-  MultiPartUploadOptions,
-  UploadPartStatus,
-} from "./types";
-import { getMD5WorkerManager, MD5WorkerManager } from "../workers";
-import {
+  type RequestConfig,
   postUsermediaAbort,
   postUsermediaFinish,
   postUsermediaInitiate,
-  RequestConfig,
 } from "@thunderstore/thunderstore-api";
+import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
+
+import { MD5WorkerManager, getMD5WorkerManager } from "../workers";
+import { BaseUpload } from "./BaseUpload";
+import {
+  type CompleteUpload,
+  type FinalizedUpload,
+  type PreparedUpload,
+  type UploadPartError,
+  type UploadPartUrl,
+  type UploadStatus,
+  type UserMedia,
+} from "./types";
+import {
+  type MultiPartUploadOptions,
+  type UploadConfig,
+  type UploadPartStatus,
+  type UploadProgress,
+} from "./types";
 import { slicePart } from "./utls";
 
 export interface UploadPart {
@@ -62,7 +63,7 @@ export interface IUploadHandle {
 
 export class MultipartUpload extends BaseUpload {
   private file: File;
-  private usermedia: UserMedia;
+  private usermedia!: UserMedia;
   private requestConfig: () => RequestConfig;
   private executor: GraphExecutor<CompleteUpload, FinalizedUpload> | undefined;
   private graphCompleteListener?: () => void;

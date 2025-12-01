@@ -1,8 +1,9 @@
 import { faker } from "@faker-js/faker";
-import { PackageListingType } from "@thunderstore/dapper/types";
 
-import { getFakeImg, getFakePackageCategories, range, setSeed } from "./utils";
+import { PackageListingType } from "@thunderstore/dapper";
+
 import { getFakeTeamMembers } from "./team";
+import { getFakeImg, getFakePackageCategories, range, setSeed } from "./utils";
 
 // Content used to render one PackageCard in a list view.
 const getFakePackageListing = (

@@ -1,6 +1,6 @@
 import {
-  postPackageSubmission,
   fetchPackageSubmissionStatus,
+  postPackageSubmission,
 } from "@thunderstore/thunderstore-api";
 
 const packageSubmissionStatus = {

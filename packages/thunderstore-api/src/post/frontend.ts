@@ -1,11 +1,11 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import { type ApiEndpointProps } from "../index";
 import {
-  MarkdownRenderRequestData,
+  type MarkdownRenderRequestData,
   markdownRenderRequestDataSchema,
 } from "../schemas/requestSchemas";
 import {
-  MarkdownRenderResponseData,
+  type MarkdownRenderResponseData,
   markdownRenderResponseDataSchema,
 } from "../schemas/responseSchemas";
 

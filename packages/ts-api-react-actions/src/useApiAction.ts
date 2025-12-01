@@ -1,5 +1,5 @@
-import { ApiEndpoint, useApiCall } from "@thunderstore/ts-api-react";
-import { ApiEndpointProps } from "@thunderstore/thunderstore-api";
+import { type ApiEndpointProps } from "@thunderstore/thunderstore-api";
+import { type ApiEndpoint, useApiCall } from "@thunderstore/ts-api-react";
 
 export type UseApiActionArgs<Params, QueryParams, Data, Return> = {
   endpoint: ApiEndpoint<Params, QueryParams, Data, Return>;

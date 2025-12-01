@@ -1,12 +1,13 @@
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import "@thunderstore/cyberstorm-theme";
+
 import { NewIcon, Tabs } from "@thunderstore/cyberstorm";
+import "@thunderstore/cyberstorm-theme";
 import {
   TabsSizesList,
   TabsVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+} from "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/Tabs",

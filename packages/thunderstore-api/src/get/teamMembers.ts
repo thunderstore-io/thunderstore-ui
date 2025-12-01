@@ -1,10 +1,10 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import { type ApiEndpointProps } from "../index";
+import { type TeamMembersRequestParams } from "../schemas/requestSchemas";
 import {
-  TeamMembersResponseData,
+  type TeamMembersResponseData,
   teamMembersResponseDataSchema,
 } from "../schemas/responseSchemas";
-import { TeamMembersRequestParams } from "../schemas/requestSchemas";
 
 export async function fetchTeamMembers(
   props: ApiEndpointProps<TeamMembersRequestParams, object, object>

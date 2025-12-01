@@ -1,12 +1,14 @@
-import "./Link.css";
-import { type LinkVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { memo } from "react";
+
+import { type LinkVariants } from "@thunderstore/cyberstorm-theme";
+
 import {
   Actionable,
   type ActionableCyberstormLinkProps,
   type ActionableLinkProps,
 } from "../../primitiveComponents/Actionable/Actionable";
-import { memo } from "react";
 import { classnames } from "../../utils/utils";
+import "./Link.css";
 
 export interface LinkProps extends ActionableLinkProps {
   csVariant?: LinkVariants;

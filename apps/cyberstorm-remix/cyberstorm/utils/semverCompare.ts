@@ -1,7 +1,11 @@
-import { type TableCompareColumnMeta } from "@thunderstore/cyberstorm";
-import { type TableRow } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
-import { isSemver } from "./typeChecks";
 import semverCompare from "semver/functions/compare";
+
+import {
+  type TableCompareColumnMeta,
+  type NewTableRow as TableRow,
+} from "@thunderstore/cyberstorm";
+
+import { isSemver } from "./typeChecks";
 
 export function rowSemverCompare(
   a: TableRow,
