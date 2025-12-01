@@ -12,5 +12,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.25.6"
   }
 }

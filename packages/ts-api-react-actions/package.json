@@ -5,7 +5,7 @@
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/ts-api-react-actions",
   "main": "dist/thunderstore-ts-api-react-actions.cjs.js",
   "module": "dist/thunderstore-ts-api-react-actions.esm.js",
-  "types": "dist/thunderstore-ts-api-react-actions.cjs.d.ts",
+  "types": "src/index.ts",
   "files": [
     "dist"
   ],
