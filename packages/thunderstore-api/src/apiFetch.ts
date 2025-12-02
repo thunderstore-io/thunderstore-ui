@@ -44,29 +44,33 @@ function sleep(delay: number) {
   return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
-export type apiFetchArgs<B, QP> = {
+type SchemaOrUndefined<Schema extends z.ZodSchema | undefined> =
+  Schema extends z.ZodSchema ? z.infer<Schema> : undefined;
+
+type apiFetchArgs<
+  RequestSchema extends z.ZodSchema | undefined,
+  QueryParamsSchema extends z.ZodSchema | undefined,
+  ResponseSchema extends z.ZodSchema | undefined,
+> = {
   config: () => RequestConfig;
   path: string;
-  queryParams?: QP;
+  queryParams?: SchemaOrUndefined<QueryParamsSchema>;
   request?: Omit<RequestInit, "headers" | "body"> & { body?: string };
   useSession?: boolean;
-  bodyRaw?: B;
+  bodyRaw?: SchemaOrUndefined<RequestSchema>;
+  requestSchema: RequestSchema;
+  queryParamsSchema: QueryParamsSchema;
+  responseSchema: ResponseSchema;
 };
 
-type schemaOrUndefined<A> = A extends z.ZodSchema
-  ? z.infer<A>
-  : never | undefined;
-
-export async function apiFetch(props: {
-  args: apiFetchArgs<
-    schemaOrUndefined<typeof props.requestSchema>,
-    schemaOrUndefined<typeof props.queryParamsSchema>
-  >;
-  requestSchema: z.ZodSchema | undefined;
-  queryParamsSchema: z.ZodSchema | undefined;
-  responseSchema: z.ZodSchema | undefined;
-}): Promise<schemaOrUndefined<typeof props.responseSchema>> {
-  const { args, requestSchema, queryParamsSchema, responseSchema } = props;
+export async function apiFetch<
+  RequestSchema extends z.ZodSchema | undefined,
+  QueryParamsSchema extends z.ZodSchema | undefined,
+  ResponseSchema extends z.ZodSchema | undefined,
+>(
+  args: apiFetchArgs<RequestSchema, QueryParamsSchema, ResponseSchema>
+): Promise<SchemaOrUndefined<ResponseSchema>> {
+  const { requestSchema, queryParamsSchema, responseSchema } = args;
 
   if (requestSchema && args.bodyRaw) {
     const parsedRequestBody = requestSchema.safeParse(args.bodyRaw);
@@ -74,6 +78,7 @@ export async function apiFetch(props: {
       throw new RequestBodyParseError(parsedRequestBody.error);
     }
   }
+
   if (queryParamsSchema && args.queryParams) {
     const parsedQueryParams = queryParamsSchema.safeParse(args.queryParams);
     if (!parsedQueryParams.success) {
@@ -88,8 +93,7 @@ export async function apiFetch(props: {
         apiHost: config().apiHost,
         sessionId: undefined,
       };
-  // TODO: Query params have stronger types, but they are not just shown here.
-  // Look into furthering the ensuring of passing proper query params.
+  const sessionWasUsed = Boolean(usedConfig.sessionId);
   const url = getUrl(usedConfig, path, queryParams);
 
   const response = await fetchRetry(url, {
@@ -101,17 +105,21 @@ export async function apiFetch(props: {
   });
 
   if (!response.ok) {
-    throw await ApiError.createFromResponse(response);
+    throw await ApiError.createFromResponse(response, {
+      sessionWasUsed,
+    });
   }
 
-  if (responseSchema === undefined) return undefined;
+  if (responseSchema === undefined) {
+    return undefined as SchemaOrUndefined<ResponseSchema>;
+  }
 
   const parsed = responseSchema.safeParse(await response.json());
   if (!parsed.success) {
     throw new ParseError(parsed.error);
-  } else {
-    return parsed.data;
   }
+
+  return parsed.data;
 }
 
 function getAuthHeaders(config: RequestConfig): RequestInit["headers"] {
