@@ -1,5 +1,5 @@
 import {
-  RatedPackagesResponseData,
+  type RatedPackagesResponseData,
   fetchRatedPackages,
 } from "@thunderstore/thunderstore-api";
 
