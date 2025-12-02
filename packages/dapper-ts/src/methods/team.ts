@@ -7,11 +7,8 @@ import {
 
 import { type DapperTsInterface } from "../index";
 
-export async function getTeamDetails(
-  this: DapperTsInterface,
-  teamName: string
-) {
-  const data = await fetchTeamDetails({
+export function getTeamDetails(this: DapperTsInterface, teamName: string) {
+  return fetchTeamDetails({
     config: this.config,
     params: {
       team_name: teamName,
@@ -19,15 +16,10 @@ export async function getTeamDetails(
     data: {},
     queryParams: {},
   });
-
-  return data;
 }
 
-export async function getTeamMembers(
-  this: DapperTsInterface,
-  teamName: string
-) {
-  const data = await fetchTeamMembers({
+export function getTeamMembers(this: DapperTsInterface, teamName: string) {
+  return fetchTeamMembers({
     config: this.config,
     params: {
       team_name: teamName,
@@ -35,15 +27,13 @@ export async function getTeamMembers(
     data: {},
     queryParams: {},
   });
-
-  return data;
 }
 
-export async function getTeamServiceAccounts(
+export function getTeamServiceAccounts(
   this: DapperTsInterface,
   teamName: string
 ) {
-  const data = await fetchTeamServiceAccounts({
+  return fetchTeamServiceAccounts({
     config: this.config,
     params: {
       team_name: teamName,
@@ -51,17 +41,13 @@ export async function getTeamServiceAccounts(
     data: {},
     queryParams: {},
   });
-
-  return data;
 }
 
-export async function postTeamCreate(this: DapperTsInterface, name: string) {
-  const data = await teamCreate({
+export function postTeamCreate(this: DapperTsInterface, name: string) {
+  return teamCreate({
     config: this.config,
     params: {},
     data: { name },
     queryParams: {},
   });
-
-  return data;
 }
