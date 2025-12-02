@@ -18,4 +18,4 @@ export {
 export type { ContextInterface } from "./SessionContext";
 export { StorageManager as NamespacedStorageManager } from "./storage";
 export { useApiCall } from "./useApiCall";
-export type { ApiEndpoint } from "./useApiCall";
+export type { ApiEndpoint, UseApiCallOptions } from "./useApiCall";
