@@ -3,16 +3,13 @@
     align-self: flex-start;
   }
 
+  .team-settings__text--bold {
+    font-weight: var(--font-weight-bold);
+  }
+
   .disband-team-form__form {
     display: flex;
     flex-direction: column;
     align-self: stretch;
-  }
-
-  .disband-team-form__text--bold {
-    color: var(--color-text-primary);
-
-    font-weight: var(--font-weight-bold);
-    line-height: var(--line-height-bold);
   }
 }
