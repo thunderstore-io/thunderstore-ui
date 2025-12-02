@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { type ApiEndpointProps } from "@thunderstore/thunderstore-api";
 import {
   type ApiEndpoint,
-  UseApiCallOptions,
+  type UseApiCallOptions,
   useApiCall,
 } from "@thunderstore/ts-api-react";
 

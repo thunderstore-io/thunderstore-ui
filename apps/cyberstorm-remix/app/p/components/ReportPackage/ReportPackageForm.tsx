@@ -11,6 +11,7 @@ import {
 import {
   type PackageListingReportRequestData,
   type RequestConfig,
+  UserFacingError,
   packageListingReport,
 } from "@thunderstore/thunderstore-api";
 
@@ -81,7 +82,7 @@ export function ReportPackageForm(
     PackageListingReportRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,

@@ -20,6 +20,7 @@ import { postTeamCreate } from "@thunderstore/dapper-ts";
 import {
   type RequestConfig,
   type TeamCreateRequestData,
+  UserFacingError,
   teamCreate,
 } from "@thunderstore/thunderstore-api";
 import {
@@ -161,7 +162,7 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
     TeamCreateRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,

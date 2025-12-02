@@ -1,11 +1,14 @@
 import { useCallback } from "react";
 
 import {
-  ApiEndpointProps,
+  type ApiEndpointProps,
   UserFacingError,
   mapApiErrorToUserFacingError,
 } from "@thunderstore/thunderstore-api";
-import { ApiEndpoint, UseApiCallOptions } from "@thunderstore/ts-api-react";
+import {
+  type ApiEndpoint,
+  type UseApiCallOptions,
+} from "@thunderstore/ts-api-react";
 
 import { useApiAction } from "./useApiAction";
 

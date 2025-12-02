@@ -15,6 +15,7 @@ import {
 import {
   type RequestConfig,
   type TeamAddMemberRequestData,
+  UserFacingError,
   teamAddMember,
 } from "@thunderstore/thunderstore-api";
 
@@ -69,7 +70,7 @@ export function MemberAddForm(props: {
     TeamAddMemberRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,

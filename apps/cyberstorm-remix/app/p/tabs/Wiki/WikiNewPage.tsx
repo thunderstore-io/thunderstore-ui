@@ -19,6 +19,7 @@ import {
 import { classnames } from "@thunderstore/cyberstorm";
 import {
   type PackageWikiPageCreateRequestData,
+  UserFacingError,
   postPackageWikiPageCreate,
 } from "@thunderstore/thunderstore-api";
 
@@ -111,7 +112,7 @@ export default function Wiki() {
     PackageWikiPageCreateRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,

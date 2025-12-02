@@ -1,6 +1,6 @@
 import {
   type ApiEndpointProps,
-  MapUserFacingErrorOptions,
+  type MapUserFacingErrorOptions,
   mapApiErrorToUserFacingError,
 } from "@thunderstore/thunderstore-api";
 

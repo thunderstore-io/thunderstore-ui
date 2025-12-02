@@ -22,6 +22,7 @@ import {
 } from "@thunderstore/cyberstorm";
 import {
   type TeamServiceAccountAddRequestData,
+  UserFacingError,
   teamAddServiceAccount,
 } from "@thunderstore/thunderstore-api";
 
@@ -136,7 +137,7 @@ function AddServiceAccountForm(props: {
     TeamServiceAccountAddRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,

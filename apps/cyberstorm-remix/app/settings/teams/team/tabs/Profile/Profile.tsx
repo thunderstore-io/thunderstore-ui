@@ -13,6 +13,7 @@ import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
 import {
   type TeamDetails,
   type TeamDetailsEditRequestData,
+  UserFacingError,
   teamDetailsEdit,
 } from "@thunderstore/thunderstore-api";
 
@@ -86,7 +87,7 @@ function ProfileForm(props: { team: TeamDetails }) {
     TeamDetailsEditRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,

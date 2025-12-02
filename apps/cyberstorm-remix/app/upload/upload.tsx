@@ -37,7 +37,10 @@ import {
   postPackageSubmissionMetadata,
 } from "@thunderstore/dapper-ts";
 import { DnDFileInput } from "@thunderstore/react-dnd";
-import { type PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
+import {
+  type PackageSubmissionRequestData,
+  UserFacingError,
+} from "@thunderstore/thunderstore-api";
 import {
   type IBaseUploadHandle,
   MultipartUpload,
@@ -332,7 +335,7 @@ export default function Upload() {
     PackageSubmissionRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
