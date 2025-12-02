@@ -16,11 +16,9 @@ export async function fetchPackageReadme(
       : `v/${params.version_number}`;
   const path = `api/cyberstorm/package/${params.namespace_id}/${params.package_name}/${v}/readme/`;
 
-  return await apiFetch({
-    args: {
-      config: config,
-      path: path,
-    },
+  return apiFetch({
+    config: config,
+    path: path,
     requestSchema: undefined,
     queryParamsSchema: undefined,
     responseSchema: packageReadmeResponseDataSchema,

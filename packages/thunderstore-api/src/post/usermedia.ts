@@ -24,16 +24,14 @@ export function postUsermediaInitiate(
   const path = `/api/experimental/usermedia/initiate-upload/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        cache: "no-store",
-        body: JSON.stringify(data),
-      },
-      useSession,
+    config,
+    path,
+    request: {
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(data),
     },
+    useSession,
     requestSchema: usermediaInitiateUploadRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: usermediaInitiateUploadResponseDataSchema,
@@ -47,15 +45,13 @@ export function postUsermediaAbort(
   const path = `/api/experimental/usermedia/${params.uuid}/abort-upload/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        cache: "no-store",
-      },
-      useSession,
+    config,
+    path,
+    request: {
+      method: "POST",
+      cache: "no-store",
     },
+    useSession,
     requestSchema: undefined,
     queryParamsSchema: undefined,
     responseSchema: usermediaAbortUploadResponseDataSchema,
@@ -73,16 +69,14 @@ export function postUsermediaFinish(
   const path = `/api/experimental/usermedia/${params.uuid}/finish-upload/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        cache: "no-store",
-        body: JSON.stringify(data),
-      },
-      useSession,
+    config,
+    path,
+    request: {
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(data),
     },
+    useSession,
     requestSchema: usermediaFinishUploadRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: usermediaFinishUploadResponseDataSchema,

@@ -27,15 +27,13 @@ export function teamDetailsEdit(
   const path = `api/cyberstorm/team/${params.teamIdentifier}/update/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "PATCH",
-        body: JSON.stringify(data),
-      },
-      useSession: true,
+    config,
+    path,
+    request: {
+      method: "PATCH",
+      body: JSON.stringify(data),
     },
+    useSession: true,
     requestSchema: teamDetailsEditRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: teamDetailsEditResponseSchema,

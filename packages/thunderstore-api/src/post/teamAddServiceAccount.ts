@@ -28,15 +28,13 @@ export function teamAddServiceAccount(
   const path = `api/cyberstorm/team/${params.team_name}/service-account/create/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        body: JSON.stringify(data),
-      },
-      useSession: true,
+    config,
+    path,
+    request: {
+      method: "POST",
+      body: JSON.stringify(data),
     },
+    useSession: true,
     requestSchema: teamServiceAccountAddRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: teamServiceAccountAddResponseSchema,

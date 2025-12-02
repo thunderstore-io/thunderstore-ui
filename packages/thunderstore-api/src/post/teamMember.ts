@@ -21,15 +21,13 @@ export function teamAddMember(
   const path = `/api/cyberstorm/team/${params.team_name}/member/add/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        body: JSON.stringify(data),
-      },
-      useSession: true,
+    config,
+    path,
+    request: {
+      method: "POST",
+      body: JSON.stringify(data),
     },
+    useSession: true,
     requestSchema: teamAddMemberRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: teamAddMemberResponseDataSchema,

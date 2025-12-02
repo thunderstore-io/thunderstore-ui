@@ -11,14 +11,12 @@ export function teamServiceAccountRemove(
   const path = `/api/cyberstorm/service-account/${params.uuid}/delete/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "DELETE",
-      },
-      useSession: true,
+    config,
+    path,
+    request: {
+      method: "DELETE",
     },
+    useSession: true,
     requestSchema: undefined,
     queryParamsSchema: undefined,
     responseSchema: undefined,

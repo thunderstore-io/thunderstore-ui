@@ -30,16 +30,14 @@ export function packageListingUpdate(
   const path = `/api/cyberstorm/listing/${params.community}/${params.namespace}/${params.package}/update/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        cache: "no-store",
-        body: JSON.stringify(data),
-      },
-      useSession: true,
+    config,
+    path,
+    request: {
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(data),
     },
+    useSession: true,
     requestSchema: packageListingUpdateRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: packageListingUpdateResponseDataSchema,
@@ -57,16 +55,14 @@ export function packageListingApprove(
   const path = `/api/cyberstorm/listing/${params.community}/${params.namespace}/${params.package}/approve/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        cache: "no-store",
-        body: JSON.stringify(data),
-      },
-      useSession: true,
+    config,
+    path,
+    request: {
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(data),
     },
+    useSession: true,
     requestSchema: packageListingApproveRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: undefined,
@@ -84,16 +80,14 @@ export function packageListingReject(
   const path = `/api/cyberstorm/listing/${params.community}/${params.namespace}/${params.package}/reject/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        cache: "no-store",
-        body: JSON.stringify(data),
-      },
-      useSession: true,
+    config,
+    path,
+    request: {
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(data),
     },
+    useSession: true,
     requestSchema: packageListingRejectRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: undefined,
@@ -110,16 +104,14 @@ export function packageListingReport(
   const { config, params, data } = props;
   const path = `/api/cyberstorm/listing/${params.community}/${params.namespace}/${params.package}/report/`;
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        cache: "no-store",
-        body: JSON.stringify(data),
-      },
-      useSession: true,
+    config,
+    path,
+    request: {
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(data),
     },
+    useSession: true,
     requestSchema: packageListingReportRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: undefined,

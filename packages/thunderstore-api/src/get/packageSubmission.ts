@@ -14,12 +14,10 @@ export function fetchPackageSubmissionStatus(
   const path = `/api/experimental/submission/poll-async/${params.submission_id}`;
 
   return apiFetch({
-    args: {
-      config: config,
-      path: path,
-      useSession: true,
-      request: request,
-    },
+    config: config,
+    path: path,
+    useSession: true,
+    request: request,
     requestSchema: undefined,
     queryParamsSchema: undefined,
     responseSchema: packageSubmissionStatusResponseDataSchema,

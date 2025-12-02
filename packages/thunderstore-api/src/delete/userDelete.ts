@@ -8,14 +8,12 @@ export function userDelete(
   const path = `/api/cyberstorm/user/delete/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "DELETE",
-      },
-      useSession: true,
+    config,
+    path,
+    request: {
+      method: "DELETE",
     },
+    useSession: true,
     requestSchema: undefined,
     queryParamsSchema: undefined,
     responseSchema: undefined,

@@ -31,16 +31,14 @@ export function packageRate(
   const path = `/api/cyberstorm/package/${params.namespace}/${params.package}/rate/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        cache: "no-store",
-        body: JSON.stringify(data),
-      },
-      useSession: props.useSession,
+    config,
+    path,
+    request: {
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(data),
     },
+    useSession: props.useSession,
     requestSchema: packageRateRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: packageRateResponseDataSchema,
@@ -58,16 +56,14 @@ export function packageDeprecate(
   const path = `/api/cyberstorm/package/${params.namespace}/${params.package}/deprecate/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        cache: "no-store",
-        body: JSON.stringify(data),
-      },
-      useSession: props.useSession,
+    config,
+    path,
+    request: {
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(data),
     },
+    useSession: props.useSession,
     requestSchema: packageDeprecateRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: packageDeprecateResponseDataSchema,
@@ -85,16 +81,14 @@ export function packageUnlist(
   const path = `/c/${params.community}/${params.namespace}/${params.package}/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        cache: "no-store",
-        body: JSON.stringify(data),
-      },
-      useSession: props.useSession,
+    config,
+    path,
+    request: {
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(data),
     },
+    useSession: props.useSession,
     requestSchema: packageUnlistRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: packageUnlistResponseDataSchema,

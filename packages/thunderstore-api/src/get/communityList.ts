@@ -10,7 +10,7 @@ import {
   communityListResponseDataSchema,
 } from "../schemas/responseSchemas";
 
-export async function fetchCommunityList(
+export function fetchCommunityList(
   props: ApiEndpointProps<object, CommunityListRequestQueryParams, object>
 ): Promise<CommunityListResponseData> {
   const {
@@ -27,12 +27,10 @@ export async function fetchCommunityList(
   } = props;
   const path = "api/cyberstorm/community/";
 
-  return await apiFetch({
-    args: {
-      config,
-      path,
-      queryParams,
-    },
+  return apiFetch({
+    config,
+    path,
+    queryParams,
     requestSchema: undefined,
     queryParamsSchema: communityListRequestQueryParamsSchema,
     responseSchema: communityListResponseDataSchema,

@@ -11,7 +11,7 @@ import {
   packageListingsResponseDataSchema,
 } from "../schemas/responseSchemas";
 
-export async function fetchNamespacePackageListings(
+export function fetchNamespacePackageListings(
   props: ApiEndpointProps<
     NamespacePackageListingsRequestParams,
     PackageListingsRequestQueryParams,
@@ -38,12 +38,10 @@ export async function fetchNamespacePackageListings(
   } = props;
   const path = `api/cyberstorm/listing/${params.community_id.toLowerCase()}/${params.namespace_id.toLowerCase()}/`;
 
-  return await apiFetch({
-    args: {
-      config,
-      path,
-      queryParams,
-    },
+  return apiFetch({
+    config,
+    path,
+    queryParams,
     requestSchema: undefined,
     queryParamsSchema: packageListingsRequestQueryParamsSchema,
     responseSchema: packageListingsResponseDataSchema,
