@@ -4,31 +4,117 @@ import {
   ParseError,
   RequestBodyParseError,
   RequestQueryParamsParseError,
+  UserFacingError,
+  mapApiErrorToUserFacingError,
 } from "@thunderstore/thunderstore-api";
 
-interface UseStrongFormProps<
-  Inputs,
+/**
+ * Checks if two types are exactly identical.
+ * Returns `true` if A and B are strictly equal, `false` otherwise.
+ * This is useful for distinguishing between types that are assignable to each other
+ * (e.g. `string` and `string | number`) but not identical.
+ */
+type IsExact<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B
+  ? 1
+  : 2
+  ? (<T>() => T extends B ? 1 : 2) extends <T>() => T extends A ? 1 : 2
+    ? true
+    : false
+  : false;
+
+/**
+ * Enforces the presence of a `refiner` prop when the submission data shape
+ * differs from the input shape.
+ *
+ * If `SubmissionDataShape` is identical to or a subtype of `Inputs`, the refiner
+ * is optional (defaults to identity/cast).
+ * Otherwise, a refiner is required to transform inputs into the submission shape.
+ */
+type RefinerRequirement<Inputs, SubmissionDataShape extends Inputs> = [
   SubmissionDataShape,
-  RefinerError,
-  SubmissionOutput,
+] extends [Inputs]
+  ? {
+      refiner?: (inputs: Inputs) => Promise<SubmissionDataShape>;
+    }
+  : {
+      refiner: (inputs: Inputs) => Promise<SubmissionDataShape>;
+    };
+
+/**
+ * Enforces the presence of an `errorMapper` prop when a custom `SubmissionError` type is used.
+ *
+ * If `SubmissionError` is exactly `UserFacingError` (the default), the mapper is optional
+ * as `mapApiErrorToUserFacingError` is used by default.
+ * If a different error type is specified, a mapper must be provided to convert unknown errors
+ * into the expected `SubmissionError` type.
+ */
+type ErrorMapperRequirement<SubmissionError> = IsExact<
   SubmissionError,
+  UserFacingError
+> extends true
+  ? {
+      errorMapper?: (error: unknown) => SubmissionError;
+    }
+  : {
+      errorMapper: (error: unknown) => SubmissionError;
+    };
+
+interface UseStrongFormPropsBase<
+  Inputs,
+  SubmissionDataShape extends Inputs = Inputs,
+  RefinerError extends Error = Error,
+  SubmissionOutput = unknown,
+  SubmissionError = UserFacingError,
 > {
   inputs: Inputs;
-  refiner?: (inputs: Inputs) => Promise<SubmissionDataShape>;
-  onRefineSuccess?: (output: SubmissionDataShape) => void;
-  onRefineError?: (error: RefinerError) => void;
   submitor: (data: SubmissionDataShape) => Promise<SubmissionOutput>;
+  onRefineSuccess?: (data: SubmissionDataShape) => void;
+  onRefineError?: (error: RefinerError) => void;
   onSubmitSuccess?: (output: SubmissionOutput) => void;
   onSubmitError?: (error: SubmissionError) => void;
 }
 
-export function useStrongForm<
+export type UseStrongFormProps<
+  Inputs,
+  SubmissionDataShape extends Inputs = Inputs,
+  RefinerError extends Error = Error,
+  SubmissionOutput = unknown,
+  SubmissionError = UserFacingError,
+> = UseStrongFormPropsBase<
   Inputs,
   SubmissionDataShape,
   RefinerError,
   SubmissionOutput,
-  SubmissionError,
-  InputErrors,
+  SubmissionError
+> &
+  RefinerRequirement<Inputs, SubmissionDataShape> &
+  ErrorMapperRequirement<SubmissionError>;
+
+export interface UseStrongFormReturn<
+  Inputs,
+  SubmissionDataShape extends Inputs = Inputs,
+  RefinerError extends Error = Error,
+  SubmissionOutput = unknown,
+  SubmissionError = UserFacingError,
+  InputErrors = Record<string, unknown>,
+> {
+  submit: () => Promise<SubmissionOutput>;
+  submitting: boolean;
+  submitOutput?: SubmissionOutput;
+  submitError?: SubmissionError;
+  submissionData?: SubmissionDataShape;
+  refining: boolean;
+  refineError?: RefinerError;
+  inputErrors?: InputErrors;
+}
+
+export function useStrongForm<
+  Inputs,
+  SubmissionDataShape extends Inputs = Inputs,
+  RefinerError extends Error = Error,
+  SubmissionOutput = unknown,
+  SubmissionError = UserFacingError,
+  InputErrors = Record<string, unknown>,
 >(
   props: UseStrongFormProps<
     Inputs,
@@ -37,7 +123,14 @@ export function useStrongForm<
     SubmissionOutput,
     SubmissionError
   >
-) {
+): UseStrongFormReturn<
+  Inputs,
+  SubmissionDataShape,
+  RefinerError,
+  SubmissionOutput,
+  SubmissionError,
+  InputErrors
+> {
   const [refining, setRefining] = useState(false);
   const [submissionData, setSubmissionData] = useState<SubmissionDataShape>();
   const [refineError, setRefineError] = useState<RefinerError>();
@@ -46,112 +139,149 @@ export function useStrongForm<
   const [submitError, setSubmitError] = useState<SubmissionError>();
   const [inputErrors, setInputErrors] = useState<InputErrors>();
 
-  useEffect(() => {
-    if (refining || submitting) {
-      return;
+  const ensureSubmissionDataShape = (value: Inputs): SubmissionDataShape => {
+    if (
+      value === null ||
+      (typeof value !== "object" && typeof value !== "function")
+    ) {
+      throw new Error(
+        "useStrongForm received primitive form inputs without a refiner; provide a refiner or ensure the input type matches the submission data shape."
+      );
     }
+
+    return value as SubmissionDataShape;
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+
     setSubmitOutput(undefined);
     setSubmitError(undefined);
     setInputErrors(undefined);
-    if (props.refiner) {
-      setSubmissionData(undefined);
-      setRefineError(undefined);
-      setRefining(true);
-      props
-        .refiner(props.inputs)
-        .then((refiningOutput) => {
-          if (props.onRefineSuccess) {
-            props.onRefineSuccess(refiningOutput);
-          }
-          setSubmissionData(refiningOutput);
-          setRefining(false);
-        })
-        .catch((error) => {
-          setRefineError(error);
-          if (props.onRefineError) {
-            props.onRefineError(error);
-          }
-          setRefining(false);
-        });
-    } else {
-      // A quick hack to allow the form to work without a refiner.
-      setSubmissionData(props.inputs as unknown as SubmissionDataShape);
-    }
-  }, [props.inputs]);
 
-  const submit = async () => {
+    if (!props.refiner) {
+      setSubmissionData(ensureSubmissionDataShape(props.inputs));
+      setRefining(false);
+      setRefineError(undefined);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    setSubmissionData(undefined);
+    setRefineError(undefined);
+    setRefining(true);
+
+    props
+      .refiner(props.inputs)
+      .then((result) => {
+        if (cancelled) {
+          return;
+        }
+
+        setSubmissionData(result);
+        if (props.onRefineSuccess) {
+          props.onRefineSuccess(result);
+        }
+      })
+      .catch((error) => {
+        if (cancelled) {
+          return;
+        }
+
+        const normalizedError =
+          error instanceof Error ? error : new Error(String(error));
+        const castError = normalizedError as RefinerError;
+        setRefineError(castError);
+        if (props.onRefineError) {
+          props.onRefineError(castError);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setRefining(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [props.inputs, props.refiner, props.onRefineSuccess, props.onRefineError]);
+
+  const toSubmissionError = (error: unknown): SubmissionError => {
+    if (props.errorMapper) {
+      return props.errorMapper(error);
+    }
+
+    // If errorMapper is not provided, we assume SubmissionError is UserFacingError.
+    // This is enforced by the ErrorMapperRequirement type.
+    return mapApiErrorToUserFacingError(error) as unknown as SubmissionError;
+  };
+
+  const emitSubmissionError = (error: SubmissionError): never => {
+    setSubmitError(error);
+    if (props.onSubmitError) {
+      props.onSubmitError(error);
+    }
+    throw error;
+  };
+
+  const createGuardSubmissionError = (message: string): SubmissionError => {
+    return toSubmissionError(
+      new UserFacingError({
+        category: "validation",
+        headline: message,
+        description: undefined,
+        originalError: new Error(message),
+      })
+    );
+  };
+
+  const submit = async (): Promise<SubmissionOutput> => {
     if (submitting) {
-      const error = new Error("Form is already submitting!");
-      if (props.onSubmitError) {
-        props.onSubmitError(error as SubmissionError);
-      }
-      throw error;
+      return emitSubmissionError(
+        createGuardSubmissionError("Form is already submitting.")
+      );
     }
+
     if (refining) {
-      const error = new Error("Form is still refining!");
-      if (props.onSubmitError) {
-        props.onSubmitError(error as SubmissionError);
-      }
-      throw error;
+      return emitSubmissionError(
+        createGuardSubmissionError("Form is still refining.")
+      );
     }
+
     if (refineError) {
-      const error = new Error("Form refinement failed!");
-      if (props.onSubmitError) {
-        props.onSubmitError(error as SubmissionError);
-      }
-      throw refineError;
+      return emitSubmissionError(toSubmissionError(refineError));
     }
+
     if (!submissionData) {
-      const error = new Error("Form has not been refined yet!");
-      if (props.onSubmitError) {
-        props.onSubmitError(error as SubmissionError);
-      }
-      throw error;
+      return emitSubmissionError(
+        createGuardSubmissionError("Form has not been refined yet.")
+      );
     }
 
     setSubmitting(true);
+    setSubmitError(undefined);
+    setInputErrors(undefined);
+
     try {
-      await props
-        .submitor(submissionData)
-        .then((output) => {
-          setSubmitOutput(output);
-          if (props.onSubmitSuccess) {
-            props.onSubmitSuccess(output);
-          }
-        })
-        .catch((error) => {
-          if (error instanceof RequestBodyParseError) {
-            setSubmitError(
-              new Error(
-                "Some of the field values are invalid"
-              ) as SubmissionError
-            );
-            setInputErrors(error.error.formErrors as InputErrors);
-          } else if (error instanceof RequestQueryParamsParseError) {
-            setSubmitError(
-              new Error(
-                "Some of the query parameters are invalid"
-              ) as SubmissionError
-            );
-            setInputErrors(error.error.formErrors as InputErrors);
-          } else if (error instanceof ParseError) {
-            setSubmitError(
-              new Error(
-                "Request succeeded, but the response was invalid"
-              ) as SubmissionError
-            );
-            setInputErrors(error.error.formErrors as InputErrors);
-            throw error;
-          } else {
-            throw error;
-          }
-        });
-      return submitOutput;
-    } catch (error) {
-      if (props.onSubmitError) {
-        props.onSubmitError(error as SubmissionError);
+      const output = await props.submitor(submissionData);
+      setSubmitOutput(output);
+      if (props.onSubmitSuccess) {
+        props.onSubmitSuccess(output);
       }
-      throw error;
+      return output;
+    } catch (error) {
+      if (error instanceof RequestBodyParseError) {
+        setInputErrors(error.error.formErrors.fieldErrors as InputErrors);
+      } else if (error instanceof RequestQueryParamsParseError) {
+        setInputErrors(error.error.formErrors.fieldErrors as InputErrors);
+      } else if (error instanceof ParseError) {
+        setInputErrors(error.error.formErrors.fieldErrors as InputErrors);
+      }
+
+      const mappedError = toSubmissionError(error);
+      return emitSubmissionError(mappedError);
     } finally {
       setSubmitting(false);
     }
