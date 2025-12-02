@@ -3,44 +3,10 @@
     align-self: flex-start;
   }
 
-  /* Leave Team Form */
-  .leave-team-form__body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-2xl);
-    align-items: flex-start;
-    align-self: stretch;
-  }
-
-  .leave-team-form__text {
-    color: var(--modal-text-color--default);
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-body-lg);
-    font-style: normal;
-    line-height: var(--line-height-md);
-  }
-
-  /* Disband team Form */
   .disband-team-form__form {
     display: flex;
     flex-direction: column;
     align-self: stretch;
-  }
-
-  .disband-team-form__body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-2xl);
-    align-items: flex-start;
-    align-self: stretch;
-  }
-
-  .disband-team-form__text {
-    color: var(--modal-text-color--default);
-    font-weight: var(--font-weight-regular);
-    font-size: var(--font-size-Body-lg);
-    font-style: normal;
-    line-height: var(--line-height-md);
   }
 
   .disband-team-form__text--bold {
