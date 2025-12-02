@@ -355,4 +355,4 @@ function DisbandTeamForm(props: {
   );
 }
 
-LeaveTeamForm.displayName = "LeaveTeamForm";
+DisbandTeamForm.displayName = "DisbandTeamForm";
