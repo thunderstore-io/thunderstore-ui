@@ -13,7 +13,9 @@ export function fetchDynamicHTML(
   const path = `api/cyberstorm/dynamichtml/${params.placement}`;
 
   return apiFetch({
-    args: { config, path, request: { cache: "no-store" as RequestCache } },
+    config,
+    path,
+    request: { cache: "no-store" as RequestCache },
     requestSchema: undefined,
     queryParamsSchema: undefined,
     responseSchema: dynamicHTMLResponseDataSchema,

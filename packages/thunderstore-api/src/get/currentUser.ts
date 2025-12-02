@@ -19,7 +19,10 @@ export function fetchCurrentUser(
   const request = { cache: "no-store" as RequestCache };
 
   return apiFetch({
-    args: { config, path, request, useSession: true },
+    config,
+    path,
+    request,
+    useSession: true,
     requestSchema: undefined,
     queryParamsSchema: undefined,
     responseSchema: currentUserResponseDataSchema,
@@ -38,7 +41,10 @@ export async function fetchCurrentUserTeamPermissions(
   const request = { cache: "no-store" as RequestCache };
 
   return await apiFetch({
-    args: { config, path, request, useSession: true },
+    config,
+    path,
+    request,
+    useSession: true,
     requestSchema: currentUserTeamPermissionsRequestParamsSchema,
     queryParamsSchema: undefined,
     responseSchema: currentUserTeamPermissionsResponseDataSchema,
