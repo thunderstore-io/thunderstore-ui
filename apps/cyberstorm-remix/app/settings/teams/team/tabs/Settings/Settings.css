@@ -21,6 +21,12 @@
   }
 
   /* Disband team Form */
+  .disband-team-form__form {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+  }
+
   .disband-team-form__body {
     display: flex;
     flex-direction: column;

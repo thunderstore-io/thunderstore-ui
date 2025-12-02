@@ -237,6 +237,8 @@ function DisbandTeamForm(props: {
     team_name: "",
   });
 
+  const formDisabled = formInputs.team_name !== teamName;
+
   type SubmitorOutput = Awaited<ReturnType<typeof teamDisband>>;
 
   async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
@@ -315,15 +317,30 @@ function DisbandTeamForm(props: {
           <span className="disband-team-form__text--bold">{teamName}</span> into
           the field below.
         </div>
-        <NewTextInput
-          onChange={(e) =>
-            updateFormFieldState({ field: "team_name", value: e.target.value })
-          }
-        />
+
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (!formDisabled) {
+              strongForm.submit();
+            }
+          }}
+          className="disband-team-form__form"
+        >
+          <NewTextInput
+            onChange={(e) =>
+              updateFormFieldState({
+                field: "team_name",
+                value: e.target.value,
+              })
+            }
+          />
+        </form>
       </Modal.Body>
       <Modal.Footer>
         <NewButton
           csVariant="danger"
+          disabled={formDisabled}
           onClick={() => {
             strongForm.submit();
           }}
