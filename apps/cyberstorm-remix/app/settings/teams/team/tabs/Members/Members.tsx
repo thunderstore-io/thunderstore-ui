@@ -8,6 +8,7 @@ import {
 
 import { type OutletContextShape } from "app/root";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { MemberAddForm } from "./MemberAddForm";
 import { MembersTable } from "./MembersTable";
 import "./Members.css";
@@ -27,6 +28,8 @@ export default function Members() {
     revalidator.revalidate();
   }
 
+  const isOwner = isTeamOwner(teamName, outletContext.currentUser);
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Await resolve={members}>
@@ -36,11 +39,13 @@ export default function Members() {
               <div className="settings-items__meta">
                 <p className="settings-items__title">Teams</p>
                 <p className="settings-items__description">Manage your teams</p>
-                <MemberAddForm
-                  teamName={teamName}
-                  updateTrigger={teamMemberRevalidate}
-                  config={outletContext.requestConfig}
-                />
+                {isOwner && (
+                  <MemberAddForm
+                    teamName={teamName}
+                    updateTrigger={teamMemberRevalidate}
+                    config={outletContext.requestConfig}
+                  />
+                )}
               </div>
               <div className="settings-items__content">
                 <MembersTable
