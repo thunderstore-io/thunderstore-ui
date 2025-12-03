@@ -83,11 +83,28 @@ export const getFakeCommunities: GetCommunities = async (
   }
 
   const count = communities.length;
-  const pageCommunities = communities.splice((page - 1) * pageSize, pageSize);
+  const currentPage = Math.max(page, 1);
+  const startIndex = (currentPage - 1) * pageSize;
+  const pageCommunities = communities.slice(startIndex, startIndex + pageSize);
+  const hasNext = startIndex + pageSize < count;
+  const buildPageUrl = (targetPage: number) => {
+    const params = new URLSearchParams();
+    params.set("page", String(targetPage));
+    if (ordering) {
+      params.set("ordering", ordering);
+    }
+    if (typeof search === "string" && search.trim().length > 0) {
+      params.set("search", search);
+    }
+    return `https://thunderstore.io/api/cyberstorm/community/?${params.toString()}`;
+  };
+  const next = hasNext ? buildPageUrl(currentPage + 1) : null;
+  const previous = currentPage > 1 ? buildPageUrl(currentPage - 1) : null;
 
   return {
     count,
-    hasMore: page > fullPages + 1,
+    next,
+    previous,
     results: pageCommunities,
   };
 };

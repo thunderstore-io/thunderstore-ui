@@ -19,6 +19,7 @@ export interface PackageCategory {
 
 export type PaginatedList<T> = {
   count: number;
-  hasMore: boolean;
+  next: string | null;
+  previous: string | null;
   results: T[];
 };
