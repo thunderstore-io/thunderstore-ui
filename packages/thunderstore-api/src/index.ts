@@ -54,6 +54,7 @@ export * from "./post/teamAddServiceAccount";
 export * from "./post/teamMember";
 export * from "./post/usermedia";
 export * from "./errors";
+export * from "./errors/index";
 export * from "./schemas/requestSchemas";
 export * from "./schemas/responseSchemas";
 export * from "./schemas/objectSchemas";
