@@ -10,70 +10,85 @@ import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
 import "./Readme.css";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { createNotFoundMapping } from "cyberstorm/utils/errors/loaderMappings";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
+    const { dapper } = getLoaderTools();
+    try {
+      const readme = await dapper.getPackageReadme(
+        params.namespaceId,
+        params.packageId
+      );
+
       return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
+        readme,
       };
-    });
-    return {
-      readme: dapper.getPackageReadme(params.namespaceId, params.packageId),
-    };
+    } catch (error) {
+      handleLoaderError(error, {
+        mappings: [
+          createNotFoundMapping(
+            "Readme not available.",
+            "We could not find a readme for this package."
+          ),
+        ],
+      });
+    }
   }
-  return {
-    status: "error",
-    message: "Failed to load readme",
-    readme: { html: "" },
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Readme not available.",
+    description: "We could not find a readme for this package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
+    const { dapper } = getLoaderTools();
+    const readme = dapper.getPackageReadme(
+      params.namespaceId,
+      params.packageId
+    );
+
     return {
-      readme: dapper.getPackageReadme(params.namespaceId, params.packageId),
+      readme,
     };
   }
-  return {
-    status: "error",
-    message: "Failed to load readme",
-    readme: { html: "" },
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Readme not available.",
+    description: "We could not find a readme for this package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export default function Readme() {
-  const { status, message, readme } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { readme } = useLoaderData<typeof loader | typeof clientLoader>();
 
-  if (status === "error") return <div>{message}</div>;
   return (
     <Suspense fallback={<SkeletonBox className="package-readme__skeleton" />}>
-      <Await
-        resolve={readme}
-        errorElement={<div>Error occurred while loading description</div>}
-      >
+      <Await resolve={readme} errorElement={<NimbusAwaitErrorElement />}>
         {(resolvedValue) => (
-          <>
-            <div className="markdown-wrapper">
-              <div
-                dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
-                className="markdown"
-              />
-            </div>
-          </>
+          <div className="markdown-wrapper">
+            <div
+              dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
+              className="markdown"
+            />
+          </div>
         )}
       </Await>
     </Suspense>
   );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }
