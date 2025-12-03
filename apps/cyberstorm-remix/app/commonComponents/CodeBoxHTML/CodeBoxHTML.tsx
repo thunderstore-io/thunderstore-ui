@@ -18,7 +18,7 @@ export function CodeBoxHTML({
   language = "text",
 }: CodeBoxHTMLProps) {
   // Strip HTML tags from the value to get plain text
-  const plainText = stripHtmlTags(value || "");
+  const plainText = stripHtmlTags(value);
 
   return (
     <div
