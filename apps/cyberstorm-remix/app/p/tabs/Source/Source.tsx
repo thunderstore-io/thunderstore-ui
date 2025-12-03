@@ -181,7 +181,10 @@ export default function Source() {
                   className="package-source__decompilations-file"
                   key={decompilation.source_file_name}
                 >
-                  <CodeBoxHTML value={decompilation.result} />
+                  <CodeBoxHTML
+                    value={decompilation.result}
+                    language={"csharp"}
+                  />
                 </div>
               </div>
             );
