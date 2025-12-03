@@ -1,22 +1,22 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import { type ApiEndpointProps } from "../index";
 import {
-  PackageDeprecateRequestData,
+  type PackageDeprecateRequestData,
+  type PackageDeprecateRequestParams,
+  type PackageUnlistRequestData,
+  type PackageUnlistRequestParams,
   packageDeprecateRequestDataSchema,
-  PackageDeprecateRequestParams,
   packageRateRequestDataSchema,
-  PackageUnlistRequestData,
   packageUnlistRequestDataSchema,
-  PackageUnlistRequestParams,
 } from "../schemas/requestSchemas";
-import { PackageRateRequestData } from "../schemas/requestSchemas";
-import { PackageRateRequestParams } from "../schemas/requestSchemas";
+import { type PackageRateRequestData } from "../schemas/requestSchemas";
+import { type PackageRateRequestParams } from "../schemas/requestSchemas";
 import {
-  PackageDeprecateResponseData,
+  type PackageDeprecateResponseData,
+  type PackageRateResponseData,
+  type PackageUnlistResponseData,
   packageDeprecateResponseDataSchema,
   packageRateResponseDataSchema,
-  PackageRateResponseData,
-  PackageUnlistResponseData,
   packageUnlistResponseDataSchema,
 } from "../schemas/responseSchemas";
 

@@ -13,6 +13,9 @@ repos:
     hooks:
       - id: prettier
         exclude_types: [markdown, yaml]
+        additional_dependencies:
+          - prettier@3.1.0
+          - "@trivago/prettier-plugin-sort-imports@6.0.0"
   - repo: https://github.com/thibaudcolas/pre-commit-stylelint
     rev: v16.9.0
     hooks:

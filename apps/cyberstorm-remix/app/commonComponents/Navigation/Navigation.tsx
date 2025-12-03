@@ -1,46 +1,45 @@
+import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
   faBars,
+  faCaretDown,
+  faCaretRight,
+  faCog,
   faGamepad,
   faLongArrowLeft,
-  faCaretRight,
-  faCaretDown,
-  faCog,
-  faUsers,
   faUpload,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import "./MobileNavigation.css";
-import "./Navigation.css";
 import {
-  Heading,
-  Menu,
-  Modal,
-  NewButton,
-  NewDropDown,
-  NewDropDownDivider,
-  NewDropDownItem,
-  NewAvatar,
-  NewIcon,
-  NewLink,
-  OverwolfLogo,
-  ThunderstoreLogo,
-} from "@thunderstore/cyberstorm";
-import { type CurrentUser } from "@thunderstore/dapper/types";
-
-import {
-  faSignOut,
   faArrowRightToBracket,
+  faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
-import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
-
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import {
   buildAuthLoginUrl,
   buildLogoutUrl,
 } from "cyberstorm/utils/ThunderstoreAuth";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
-import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+
+import {
+  Heading,
+  Menu,
+  Modal,
+  NewAvatar,
+  NewButton,
+  NewDropDown,
+  NewDropDownDivider,
+  NewDropDownItem,
+  NewIcon,
+  NewLink,
+  OverwolfLogo,
+  ThunderstoreLogo,
+  classnames,
+} from "@thunderstore/cyberstorm";
+import { type CurrentUser } from "@thunderstore/dapper";
+
+import "./MobileNavigation.css";
+import "./Navigation.css";
 
 export function Navigation(props: {
   // hydrationCheck: boolean;

@@ -1,8 +1,10 @@
+import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 import type { Preview } from "@storybook/react-vite";
+
 import { LinkingProvider } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-theme";
+
 import { LinkLibrary } from "../LinkLibrary";
-import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 import "./styles.css";
 
 const preview: Preview = {

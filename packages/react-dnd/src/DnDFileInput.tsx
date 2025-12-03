@@ -1,4 +1,5 @@
-import React, { ReactNode, RefObject, useRef } from "react";
+import React, { type ReactNode, type RefObject, useRef } from "react";
+
 import { useDnDFileInput } from "./useDnDFileInput";
 
 interface DnDFileInputProps {

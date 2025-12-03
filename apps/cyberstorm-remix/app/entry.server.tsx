@@ -1,12 +1,10 @@
-import { PassThrough } from "node:stream";
-
-import type { AppLoadContext, EntryContext } from "react-router";
 import { createReadableStreamFromReadable } from "@react-router/node";
-import { ServerRouter } from "react-router";
-import * as isbotModule from "isbot";
-import { renderToPipeableStream } from "react-dom/server";
-
 import * as Sentry from "@sentry/remix";
+import * as isbotModule from "isbot";
+import { PassThrough } from "node:stream";
+import { renderToPipeableStream } from "react-dom/server";
+import type { AppLoadContext, EntryContext } from "react-router";
+import { ServerRouter } from "react-router";
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,

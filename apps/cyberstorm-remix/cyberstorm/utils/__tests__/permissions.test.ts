@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
 
-import type { CurrentUser } from "@thunderstore/dapper/types";
+import type { CurrentUser } from "@thunderstore/dapper";
 
 import { isTeamOwner } from "../permissions";
 

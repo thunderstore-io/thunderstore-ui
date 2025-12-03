@@ -1,5 +1,6 @@
+import { describe, expect, it, vi } from "vitest";
+
 import { GraphExecutor, GraphNode } from "..";
-import { vi, describe, it, expect } from "vitest";
 
 describe("GraphExecutor", () => {
   it("should cover resumeListener branch for shouldExecuteEvent === true", async () => {

@@ -1,15 +1,11 @@
 import { faGhost, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  type CurrentUser,
-  type PackageListings,
-  type Section,
-} from "@thunderstore/dapper/types";
-import { memo, Suspense, useEffect, useRef, useState } from "react";
+import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
+import { isPromise } from "cyberstorm/utils/typeChecks";
+import { Suspense, memo, useEffect, useRef, useState } from "react";
+import { Await, useNavigationType, useSearchParams } from "react-router";
 import { useDebounce } from "use-debounce";
 
-import "./PackageSearch.css";
-import { type CategorySelection, type TRISTATE } from "../types";
 import {
   CardPackage,
   EmptyState,
@@ -18,26 +14,31 @@ import {
   NewTextInput,
   SkeletonBox,
 } from "@thunderstore/cyberstorm";
-import { Await, useNavigationType, useSearchParams } from "react-router";
-import { PackageCount } from "./components/PackageCount/PackageCount";
-import {
-  isPackageOrderOptions,
-  PackageOrder,
-  PackageOrderOptions,
-  type PackageOrderOptionsType,
-} from "./components/PackageOrder";
-import { RadioGroup } from "../RadioGroup/RadioGroup";
-import { CategoryTagCloud } from "./components/CategoryTagCloud/CategoryTagCloud";
-import { CollapsibleMenu } from "../Collapsible/Collapsible";
-import { CheckboxList } from "../CheckboxList/CheckboxList";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
+import {
+  type CurrentUser,
+  type PackageListings,
+  type Section,
+} from "@thunderstore/dapper";
+import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   type CommunityFilters,
   type RequestConfig,
 } from "@thunderstore/thunderstore-api";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { isPromise } from "cyberstorm/utils/typeChecks";
-import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
+
+import { CheckboxList } from "../CheckboxList/CheckboxList";
+import { CollapsibleMenu } from "../Collapsible/Collapsible";
+import { RadioGroup } from "../RadioGroup/RadioGroup";
+import { type CategorySelection, type TRISTATE } from "../types";
+import "./PackageSearch.css";
+import { CategoryTagCloud } from "./components/CategoryTagCloud/CategoryTagCloud";
+import { PackageCount } from "./components/PackageCount/PackageCount";
+import {
+  PackageOrder,
+  PackageOrderOptions,
+  type PackageOrderOptionsType,
+  isPackageOrderOptions,
+} from "./components/PackageOrder";
 
 const PER_PAGE = 20;
 

@@ -14,7 +14,7 @@ import {
 } from "./package";
 import { type PackageListingType } from "./props";
 import { type HTMLContentResponse, type MarkdownResponse } from "./shared";
-import { type TeamDetails, type ServiceAccount, type TeamMember } from "./team";
+import { type ServiceAccount, type TeamDetails, type TeamMember } from "./team";
 import { type CurrentUser, type CurrentUserTeamPermissions } from "./user";
 
 export type GetCommunities = (

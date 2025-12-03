@@ -1,6 +1,11 @@
-import "./Teams.css";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { useReducer, useState } from "react";
 import type { MetaFunction } from "react-router";
 import { useOutletContext, useRevalidator } from "react-router";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+
 import {
   Heading,
   Modal,
@@ -11,23 +16,20 @@ import {
   NewTextInput,
   useToast,
 } from "@thunderstore/cyberstorm";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useReducer, useState } from "react";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { postTeamCreate } from "@thunderstore/dapper-ts";
 import {
   type RequestConfig,
-  teamCreate,
   type TeamCreateRequestData,
+  teamCreate,
 } from "@thunderstore/thunderstore-api";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { postTeamCreate } from "@thunderstore/dapper-ts/src/methods/team";
-import { type OutletContextShape, type RootLoadersType } from "../../root";
-import { NamespacedStorageManager } from "@thunderstore/ts-api-react";
 import {
-  setSessionStale,
+  NamespacedStorageManager,
   SESSION_STORAGE_KEY,
-} from "@thunderstore/ts-api-react/src/SessionContext";
+  setSessionStale,
+} from "@thunderstore/ts-api-react";
+
+import { type OutletContextShape, type RootLoadersType } from "../../root";
+import "./Teams.css";
 
 export const meta: MetaFunction<
   unknown,

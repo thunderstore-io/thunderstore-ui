@@ -5,6 +5,7 @@
   "type": "module",
   "main": "dist/thunderstore-dapper.cjs.js",
   "module": "dist/thunderstore-dapper.esm.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "module": "./dist/thunderstore-dapper.esm.js",

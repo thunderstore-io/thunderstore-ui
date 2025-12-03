@@ -1,7 +1,8 @@
-import "./AdContainer.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { NewIcon } from "../..";
+import "./AdContainer.css";
 
 interface AdContainerProps {
   containerId: string;

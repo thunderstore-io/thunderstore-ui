@@ -1,6 +1,7 @@
-import { ApiError, isApiError } from "@thunderstore/thunderstore-api";
-import { ZodObject, ZodRawShape } from "zod";
 import { Path, UseFormSetError } from "react-hook-form";
+import { ZodObject, ZodRawShape } from "zod";
+
+import { ApiError, isApiError } from "@thunderstore/thunderstore-api";
 
 // TODO: The types and schema usage might be super stupid here
 export function getErrorFormKey<

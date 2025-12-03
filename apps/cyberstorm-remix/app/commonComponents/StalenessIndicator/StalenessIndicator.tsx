@@ -1,9 +1,10 @@
-import "./StalenessIndicator.css";
-import { type ReactNode } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinnerThird } from "@fortawesome/pro-solid-svg-icons";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
-import { NewIcon } from "@thunderstore/cyberstorm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { type ReactNode } from "react";
+
+import { NewIcon, classnames } from "@thunderstore/cyberstorm";
+
+import "./StalenessIndicator.css";
 
 interface Props {
   children: ReactNode;

@@ -1,5 +1,13 @@
-import { useOutletContext, useRevalidator, useNavigate } from "react-router";
-import "./Account.css";
+import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { useReducer } from "react";
+import { useNavigate, useOutletContext, useRevalidator } from "react-router";
+import { useHydrated } from "remix-utils/use-hydrated";
+import { Loading } from "~/commonComponents/Loading/Loading";
+import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
+import { type OutletContextShape } from "~/root";
+
 import {
   NewAlert,
   NewButton,
@@ -7,15 +15,9 @@ import {
   NewTextInput,
   useToast,
 } from "@thunderstore/cyberstorm";
-import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
-import { Loading } from "~/commonComponents/Loading/Loading";
-import { type OutletContextShape } from "~/root";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer } from "react";
 import { userDelete } from "@thunderstore/thunderstore-api";
-import { useHydrated } from "remix-utils/use-hydrated";
+
+import "./Account.css";
 
 export default function Account() {
   const outletContext = useOutletContext() as OutletContextShape;

@@ -4,7 +4,7 @@ import {
   fetchCurrentUserTeamPermissions,
 } from "@thunderstore/thunderstore-api";
 
-import { DapperTsInterface } from "../index";
+import { type DapperTsInterface } from "../index";
 
 export async function getCurrentUser(this: DapperTsInterface) {
   try {

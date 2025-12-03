@@ -1,5 +1,16 @@
+import { faBan, faCheck } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { useReducer } from "react";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { type OutletContextShape } from "~/root";
+
 import {
   NewAlert,
   NewButton,
@@ -9,26 +20,17 @@ import {
   formatToDisplayName,
   useToast,
 } from "@thunderstore/cyberstorm";
-import "./packageEdit.css";
+import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   ApiError,
+  type PackageListingUpdateRequestData,
   packageDeprecate,
   packageListingUpdate,
-  type PackageListingUpdateRequestData,
   packageUnlist,
 } from "@thunderstore/thunderstore-api";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { type OutletContextShape } from "~/root";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBan, faCheck } from "@fortawesome/pro-solid-svg-icons";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
+
+import "./packageEdit.css";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [

@@ -1,10 +1,11 @@
-import "./Pagination.css";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { classnames, range } from "../../utils/utils";
 import React from "react";
-import { Actionable } from "../../primitiveComponents/Actionable/Actionable";
+
 import { NewIcon } from "../..";
+import { Actionable } from "../../primitiveComponents/Actionable/Actionable";
+import { classnames, range } from "../../utils/utils";
+import "./Pagination.css";
 
 export interface PaginationProps {
   currentPage: number;

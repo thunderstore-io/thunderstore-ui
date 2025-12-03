@@ -1,10 +1,11 @@
-import "./CycleButton.css";
 import React, { useState } from "react";
-import { classnames } from "../../utils/utils";
+
 import {
   Actionable,
   type ActionableButtonProps,
 } from "../../primitiveComponents/Actionable/Actionable";
+import { classnames } from "../../utils/utils";
+import "./CycleButton.css";
 
 interface CycleButtonProps
   extends Omit<ActionableButtonProps, "primitiveType"> {

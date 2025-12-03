@@ -1,10 +1,11 @@
-import { classnames } from "./../../utils/utils";
-import React, { memo, type ReactNode } from "react";
+import React, { type ReactNode, memo } from "react";
+import { Children, cloneElement } from "react";
+
 import {
   type PrimitiveComponentDefaultProps,
   TooltipWrapper,
 } from "../utils/utils";
-import { Children, cloneElement } from "react";
+import { classnames } from "./../../utils/utils";
 
 export interface FrameWindowProps
   extends React.HTMLAttributes<HTMLDivElement>,

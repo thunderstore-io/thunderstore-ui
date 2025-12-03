@@ -1,11 +1,12 @@
-import * as RadixRadioGroup from "@radix-ui/react-radio-group";
-import { type Section } from "@thunderstore/dapper/types";
 import { faCircle, faCircleDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./RadioGroup.css";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
-import { NewIcon } from "@thunderstore/cyberstorm";
+import * as RadixRadioGroup from "@radix-ui/react-radio-group";
 import { memo } from "react";
+
+import { NewIcon, classnames } from "@thunderstore/cyberstorm";
+import { type Section } from "@thunderstore/dapper";
+
+import "./RadioGroup.css";
 
 interface Props {
   sections: Section[];

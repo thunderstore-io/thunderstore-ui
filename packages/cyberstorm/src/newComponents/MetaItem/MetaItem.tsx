@@ -1,18 +1,20 @@
-import "./MetaItem.css";
 import React from "react";
+
+import {
+  type MetaItemSizes,
+  type MetaItemVariants,
+} from "@thunderstore/cyberstorm-theme";
+
+import {
+  Actionable,
+  type ActionableButtonProps,
+} from "../../primitiveComponents/Actionable/Actionable";
 import {
   Frame,
   type FrameWindowProps,
 } from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
-import {
-  type MetaItemSizes,
-  type MetaItemVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
-import {
-  Actionable,
-  type ActionableButtonProps,
-} from "../../primitiveComponents/Actionable/Actionable";
+import "./MetaItem.css";
 
 interface MetaItemProps extends Omit<FrameWindowProps, "primitiveType"> {
   csVariant?: MetaItemVariants;

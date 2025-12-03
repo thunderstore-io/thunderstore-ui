@@ -1,7 +1,8 @@
+import { expect, it } from "vitest";
+
 import { config, testData } from "../../__tests__/defaultConfig";
-import { fetchNamespacePackageListings } from "../namespacePackageListings";
 import { PackageListingsOrderingEnum } from "../../schemas/queryParamSchemas";
-import { it, expect } from "vitest";
+import { fetchNamespacePackageListings } from "../namespacePackageListings";
 
 interface PartialPackage {
   community_identifier: string;

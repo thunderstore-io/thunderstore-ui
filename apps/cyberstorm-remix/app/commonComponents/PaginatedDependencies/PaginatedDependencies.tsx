@@ -1,8 +1,10 @@
-import "./PaginatedDependencies.css";
-import { Heading, NewPagination } from "@thunderstore/cyberstorm";
-import { ListingDependency } from "../ListingDependency/ListingDependency";
 import { useSearchParams } from "react-router";
+
+import { Heading, NewPagination } from "@thunderstore/cyberstorm";
 import { type PackageVersionDependency } from "@thunderstore/thunderstore-api";
+
+import { ListingDependency } from "../ListingDependency/ListingDependency";
+import "./PaginatedDependencies.css";
 
 interface DependencyResponse {
   results: PackageVersionDependency[];

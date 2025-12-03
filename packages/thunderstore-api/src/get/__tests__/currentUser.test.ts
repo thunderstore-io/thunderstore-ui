@@ -1,4 +1,5 @@
-import { it, expect } from "vitest";
+import { expect, it } from "vitest";
+
 import { config } from "../../__tests__/defaultConfig";
 import { fetchCurrentUser } from "../currentUser";
 

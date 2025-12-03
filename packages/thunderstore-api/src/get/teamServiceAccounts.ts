@@ -1,8 +1,8 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import { TeamServiceAccountsRequestParams } from "../schemas/requestSchemas";
+import { type ApiEndpointProps } from "../index";
+import { type TeamServiceAccountsRequestParams } from "../schemas/requestSchemas";
 import {
-  TeamServiceAccountsResponseData,
+  type TeamServiceAccountsResponseData,
   teamServiceAccountsResponseDataSchema,
 } from "../schemas/responseSchemas";
 

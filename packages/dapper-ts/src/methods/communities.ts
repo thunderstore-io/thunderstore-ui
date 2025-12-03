@@ -4,7 +4,7 @@ import {
   fetchCommunityList,
 } from "@thunderstore/thunderstore-api";
 
-import { DapperTsInterface } from "../index";
+import { type DapperTsInterface } from "../index";
 
 export async function getCommunities(
   this: DapperTsInterface,

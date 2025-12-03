@@ -15,7 +15,9 @@
     "test": "vitest run",
     "watch": "vitest watch"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@babel/runtime": "^7.25.6"
+  },
   "devDependencies": {
     "@vitest/browser": "3.2.4",
     "playwright": "1.55.1",

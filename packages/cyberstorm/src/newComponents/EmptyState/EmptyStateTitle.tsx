@@ -1,6 +1,7 @@
 import { type PropsWithChildren } from "react";
-import "./EmptyState.css";
+
 import { classnames } from "../../utils/utils";
+import "./EmptyState.css";
 
 interface Props extends PropsWithChildren {
   className?: string;

@@ -6,7 +6,7 @@
   "type": "module",
   "main": "dist/thunderstore-dapper-ts.cjs.js",
   "module": "dist/thunderstore-dapper-ts.esm.js",
-  "types": "dist/thunderstore-dapper-ts.cjs.d.ts",
+  "types": "src/index.ts",
   "files": [
     "dist"
   ],

@@ -1,4 +1,4 @@
-import { type PackageCategory } from "@thunderstore/dapper/types";
+import { type PackageCategory } from "@thunderstore/dapper";
 
 export const TRISTATE_STATES = ["off", "include", "exclude"] as const;
 // There is an issue with Typescript (eslint) and prettier disagreeing if

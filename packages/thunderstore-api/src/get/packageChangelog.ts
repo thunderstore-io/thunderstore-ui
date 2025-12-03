@@ -1,8 +1,8 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import { PackageChangelogRequestParams } from "../schemas/requestSchemas";
+import { type ApiEndpointProps } from "../index";
+import { type PackageChangelogRequestParams } from "../schemas/requestSchemas";
 import {
-  PackageChangelogResponseData,
+  type PackageChangelogResponseData,
   packageChangelogResponseDataSchema,
 } from "../schemas/responseSchemas";
 

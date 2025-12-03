@@ -1,9 +1,9 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import { type ApiEndpointProps } from "../index";
 import {
-  PackageWikiPageDeleteRequestData,
+  type PackageWikiPageDeleteRequestData,
+  type PackageWikiPageDeleteRequestParams,
   packageWikiPageDeleteRequestDataSchema,
-  PackageWikiPageDeleteRequestParams,
 } from "../schemas/requestSchemas";
 
 export async function deletePackageWikiPage(

@@ -1,5 +1,5 @@
-import { type Schema, sanitize } from "hast-util-sanitize";
 import type { Nodes } from "hast";
+import { type Schema, sanitize } from "hast-util-sanitize";
 
 /**
  * Based on:

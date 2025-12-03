@@ -4,12 +4,12 @@ import {
   faSquareCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { memo } from "react";
+import { type TRISTATE } from "~/commonComponents/types";
+
+import { Actionable, NewIcon, classnames } from "@thunderstore/cyberstorm";
 
 import "./CheckboxList.css";
-import { Actionable, NewIcon } from "@thunderstore/cyberstorm";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
-import { type TRISTATE } from "~/commonComponents/types";
-import { memo } from "react";
 
 type typeA<B> = (v: B) => void;
 

@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { GetCommunities } from "@thunderstore/dapper/types";
+
+import { GetCommunities } from "@thunderstore/dapper";
 
 import {
   getFakeImg,

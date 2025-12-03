@@ -1,6 +1,7 @@
+import * as RadixToast from "@radix-ui/react-toast";
+
 import { Toast, type ToastProps } from "./Toast";
 import "./Toast.css";
-import * as RadixToast from "@radix-ui/react-toast";
 
 export function Viewport(props: { toasts: ToastProps[] }) {
   const { toasts } = props;

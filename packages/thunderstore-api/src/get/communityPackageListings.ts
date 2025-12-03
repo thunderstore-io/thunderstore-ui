@@ -1,14 +1,14 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import {
-  communityPackageListingsRequestParamsSchema,
-  CommunityPackageListingsRequestParams,
-  packageListingsRequestQueryParamsSchema,
-  PackageListingsRequestQueryParams,
-} from "../schemas/requestSchemas";
+import { type ApiEndpointProps } from "../index";
 import { PackageListingsOrderingEnum } from "../schemas/queryParamSchemas";
 import {
-  PackageListingsResponseData,
+  type CommunityPackageListingsRequestParams,
+  type PackageListingsRequestQueryParams,
+  communityPackageListingsRequestParamsSchema,
+  packageListingsRequestQueryParamsSchema,
+} from "../schemas/requestSchemas";
+import {
+  type PackageListingsResponseData,
   packageListingsResponseDataSchema,
 } from "../schemas/responseSchemas";
 

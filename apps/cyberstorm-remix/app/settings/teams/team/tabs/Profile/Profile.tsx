@@ -1,3 +1,6 @@
+import { type OutletContextShape } from "app/root";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { Suspense, useReducer } from "react";
 import {
   Await,
@@ -8,14 +11,11 @@ import {
 
 import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
 import {
-  teamDetailsEdit,
   type TeamDetails,
   type TeamDetailsEditRequestData,
+  teamDetailsEdit,
 } from "@thunderstore/thunderstore-api";
 
-import { type OutletContextShape } from "app/root";
-import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import "./Profile.css";
 
 export const clientLoader = makeTeamSettingsTabLoader(

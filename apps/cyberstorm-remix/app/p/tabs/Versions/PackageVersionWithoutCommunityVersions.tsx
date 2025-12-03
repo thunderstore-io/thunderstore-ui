@@ -1,22 +1,24 @@
-import "./Versions.css";
-import {
-  NewTableSort,
-  NewTable,
-  Heading,
-  SkeletonBox,
-  NewLink,
-} from "@thunderstore/cyberstorm";
-import { Await, type LoaderFunctionArgs } from "react-router";
-import { useLoaderData } from "react-router";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { Suspense } from "react";
-import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
+import { Suspense } from "react";
+import { Await, type LoaderFunctionArgs } from "react-router";
+import { useLoaderData } from "react-router";
+
+import {
+  Heading,
+  NewLink,
+  NewTable,
+  NewTableSort,
+  SkeletonBox,
+} from "@thunderstore/cyberstorm";
+import { DapperTs } from "@thunderstore/dapper-ts";
+
 import { columns } from "./Versions";
+import "./Versions.css";
+import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {

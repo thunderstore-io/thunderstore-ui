@@ -1,15 +1,15 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import { type ApiEndpointProps } from "../index";
+import { PackageListingsOrderingEnum } from "../schemas/queryParamSchemas";
 import {
-  NamespacePackageListingsRequestParams,
-  PackageListingsRequestQueryParams,
+  type NamespacePackageListingsRequestParams,
+  type PackageListingsRequestQueryParams,
   packageListingsRequestQueryParamsSchema,
 } from "../schemas/requestSchemas";
 import {
-  PackageListingsResponseData,
+  type PackageListingsResponseData,
   packageListingsResponseDataSchema,
 } from "../schemas/responseSchemas";
-import { PackageListingsOrderingEnum } from "../schemas/queryParamSchemas";
 
 export async function fetchNamespacePackageListings(
   props: ApiEndpointProps<

@@ -8,6 +8,12 @@ export {
   storeCurrentUser,
   updateCurrentUser,
   getSessionCurrentUser,
+  SESSION_STORAGE_KEY,
+  getSessionContext,
+  getSessionStale,
+  setSessionStale,
+  COOKIE_DOMAIN_KEY,
+  STALE_KEY,
 } from "./SessionContext";
 export type { ContextInterface } from "./SessionContext";
 export { StorageManager as NamespacedStorageManager } from "./storage";

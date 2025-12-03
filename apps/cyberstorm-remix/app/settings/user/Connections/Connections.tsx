@@ -1,24 +1,19 @@
-import { type ReactElement, useRef } from "react";
-
+import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
-
-import { useOutletContext, useRevalidator } from "react-router";
-
-import { NewLink, OverwolfLogo, useToast } from "@thunderstore/cyberstorm";
-import { ApiAction } from "@thunderstore/ts-api-react-actions";
-import { ApiError } from "@thunderstore/thunderstore-api";
-
-import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
-
+import { buildAuthLoginUrl } from "cyberstorm/utils/ThunderstoreAuth";
+import { type ReactElement, useRef } from "react";
+import { useOutletContext, useRevalidator } from "react-router";
+import { useHydrated } from "remix-utils/use-hydrated";
 import { Connection } from "~/commonComponents/Connection/Connection";
-import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { Loading } from "~/commonComponents/Loading/Loading";
+import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { type OutletContextShape } from "~/root";
 
-import { userLinkedAccountDisconnect } from "../../../../../../packages/thunderstore-api/src";
-import { useHydrated } from "remix-utils/use-hydrated";
+import { NewLink, OverwolfLogo, useToast } from "@thunderstore/cyberstorm";
+import { ApiError } from "@thunderstore/thunderstore-api";
+import { userLinkedAccountDisconnect } from "@thunderstore/thunderstore-api";
+import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
 type ProvidersType = {
   name: string;

@@ -1,48 +1,52 @@
-import "./Upload.css";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import {
-  NewButton,
-  NewIcon,
-  NewSelectSearch,
-  NewSwitch,
-  Heading,
-  NewLink,
-  NewTable,
-  NewTableSort,
-  NewTag,
-  useToast,
-} from "@thunderstore/cyberstorm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
-import { DnDFileInput } from "@thunderstore/react-dnd";
-import { useCallback, useEffect, useReducer, useRef, useState } from "react";
-import {
-  MultipartUpload,
-  type IBaseUploadHandle,
-} from "@thunderstore/ts-uploader";
-import {
+  faArrowUpRight,
   faFileZip,
   faTreasureChest,
   faUsers,
-  faArrowUpRight,
 } from "@fortawesome/pro-solid-svg-icons";
-import { type UserMedia } from "@thunderstore/ts-uploader/src/uploaders/types";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { type MetaFunction } from "react-router";
-import { useLoaderData, useOutletContext } from "react-router";
-import {
-  type PackageSubmissionResult,
-  type PackageSubmissionStatus,
-} from "@thunderstore/dapper/types";
-import { type PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
-import { type OutletContextShape } from "../root";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { postPackageSubmissionMetadata } from "@thunderstore/dapper-ts/src/methods/package";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { type MetaFunction } from "react-router";
+import { useLoaderData, useOutletContext } from "react-router";
+
+import {
+  Heading,
+  NewButton,
+  NewIcon,
+  NewLink,
+  NewSelectSearch,
+  NewSwitch,
+  NewTable,
+  NewTableSort,
+  NewTag,
+  classnames,
+  useToast,
+} from "@thunderstore/cyberstorm";
+import {
+  type PackageSubmissionResult,
+  type PackageSubmissionStatus,
+} from "@thunderstore/dapper";
+import {
+  DapperTs,
+  postPackageSubmissionMetadata,
+} from "@thunderstore/dapper-ts";
+import { DnDFileInput } from "@thunderstore/react-dnd";
+import { type PackageSubmissionRequestData } from "@thunderstore/thunderstore-api";
+import {
+  type IBaseUploadHandle,
+  MultipartUpload,
+  type UserMedia,
+} from "@thunderstore/ts-uploader";
+
+import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
+import { type OutletContextShape } from "../root";
+import "./Upload.css";
 
 interface CommunityOption {
   value: string;

@@ -1,21 +1,23 @@
-import "./TextInput.css";
-import React, { memo, type ReactElement } from "react";
+import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { type ReactElement, memo } from "react";
+
+import {
+  type TextInputModifiers,
+  type TextInputSizes,
+  type TextInputVariants,
+} from "@thunderstore/cyberstorm-theme";
+
+import { NewIcon } from "../..";
+import { Actionable } from "../../primitiveComponents/Actionable/Actionable";
+import { Frame } from "../../primitiveComponents/Frame/Frame";
 import {
   Input,
   type InputTextAreaProps,
   type InputTextInputProps,
 } from "../../primitiveComponents/Input/Input";
 import { classnames, componentClasses } from "../../utils/utils";
-import { Frame } from "../../primitiveComponents/Frame/Frame";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
-import { Actionable } from "../../primitiveComponents/Actionable/Actionable";
-import { NewIcon } from "../..";
-import {
-  type TextInputVariants,
-  type TextInputSizes,
-  type TextInputModifiers,
-} from "@thunderstore/cyberstorm-theme/src/components";
+import "./TextInput.css";
 
 export interface TextInputProps
   extends Omit<InputTextInputProps, "primitiveType"> {

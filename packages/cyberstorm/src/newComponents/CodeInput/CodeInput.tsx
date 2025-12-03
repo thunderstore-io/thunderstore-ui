@@ -1,23 +1,25 @@
-import "./CodeInput.css";
+import {
+  faArrowsRotate,
+  faCircleCheck,
+  faPenToSquare,
+  faTriangleExclamation,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { type ReactNode } from "react";
+
+import {
+  type CodeInputModifiers,
+  type CodeInputSizes,
+  type CodeInputVariants,
+} from "@thunderstore/cyberstorm-theme";
+
+import { NewIcon } from "../..";
 import {
   Input,
   type InputTextAreaProps,
 } from "../../primitiveComponents/Input/Input";
 import { classnames, componentClasses } from "../../utils/utils";
-import { NewIcon } from "../..";
-import {
-  type CodeInputVariants,
-  type CodeInputSizes,
-  type CodeInputModifiers,
-} from "@thunderstore/cyberstorm-theme/src/components";
-import {
-  faPenToSquare,
-  faArrowsRotate,
-  faCircleCheck,
-  faTriangleExclamation,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "./CodeInput.css";
 
 export interface CodeInputProps
   extends Omit<InputTextAreaProps, "primitiveType"> {

@@ -3,15 +3,16 @@ import {
   faDownload,
   faFire,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type Community } from "@thunderstore/dapper/types";
-
-import { formatInteger } from "../../../utils/utils";
-import { NewLink, NewIcon, Image, NewTag, NewMetaItem } from "../../..";
-import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
-import "./CardCommunity.css";
 import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo } from "react";
+
+import { type Community } from "@thunderstore/dapper";
+
+import { Image, NewIcon, NewLink, NewMetaItem, NewTag } from "../../..";
+import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
+import { formatInteger } from "../../../utils/utils";
+import "./CardCommunity.css";
 
 interface Props {
   community: Community;

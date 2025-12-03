@@ -1,5 +1,9 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { type OutletContextShape } from "app/root";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { Suspense, useReducer, useState } from "react";
 import {
   Await,
@@ -9,24 +13,20 @@ import {
 } from "react-router";
 
 import {
+  CodeBox,
+  Modal,
   NewAlert,
   NewButton,
-  Modal,
   NewIcon,
   NewTextInput,
-  CodeBox,
 } from "@thunderstore/cyberstorm";
 import {
-  teamAddServiceAccount,
   type TeamServiceAccountAddRequestData,
+  teamAddServiceAccount,
 } from "@thunderstore/thunderstore-api";
 
-import { type OutletContextShape } from "app/root";
-import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
-import { isTeamOwner } from "cyberstorm/utils/permissions";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { ServiceAccountsTable } from "./ServiceAccountsTable";
 import "./ServiceAccounts.css";
+import { ServiceAccountsTable } from "./ServiceAccountsTable";
 
 export const clientLoader = makeTeamSettingsTabLoader(
   async (dapper, teamName) => ({

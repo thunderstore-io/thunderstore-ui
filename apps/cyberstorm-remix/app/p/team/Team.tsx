@@ -1,15 +1,17 @@
-import { useLoaderData, useOutletContext } from "react-router";
-import "./Team.css";
-import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
-import { type OutletContextShape } from "../../root";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
+import { useLoaderData, useOutletContext } from "react-router";
+import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+
+import { DapperTs } from "@thunderstore/dapper-ts";
+
+import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
+import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Team";
+import "./Team.css";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId && params.namespaceId) {

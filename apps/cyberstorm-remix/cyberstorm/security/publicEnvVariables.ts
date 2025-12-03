@@ -1,5 +1,6 @@
-import { getSessionContext } from "@thunderstore/ts-api-react/src/SessionContext";
 import { isRecord } from "cyberstorm/utils/typeChecks";
+
+import { getSessionContext } from "@thunderstore/ts-api-react";
 
 export type publicEnvVariablesKeys =
   | "SITE_URL"

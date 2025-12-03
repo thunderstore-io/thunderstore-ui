@@ -6,7 +6,7 @@
   "type": "module",
   "main": "dist/thunderstore-cyberstorm-forms.cjs.js",
   "module": "dist/thunderstore-cyberstorm-forms.esm.js",
-  "types": "dist/thunderstore-cyberstorm-forms.cjs.d.ts",
+  "types": "src/index.ts",
   "files": [
     "dist"
   ],
