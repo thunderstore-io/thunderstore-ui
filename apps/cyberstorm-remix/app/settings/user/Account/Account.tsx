@@ -15,7 +15,7 @@ import {
   NewTextInput,
   useToast,
 } from "@thunderstore/cyberstorm";
-import { userDelete } from "@thunderstore/thunderstore-api";
+import { UserFacingError, userDelete } from "@thunderstore/thunderstore-api";
 
 import "./Account.css";
 
@@ -126,7 +126,7 @@ function DeleteAccountForm(props: {
     UserAccountDeleteRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,

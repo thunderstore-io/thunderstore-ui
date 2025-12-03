@@ -24,6 +24,7 @@ import {
 import {
   type RequestConfig,
   type TeamDisbandRequestData,
+  UserFacingError,
   teamDisband,
   teamRemoveMember,
 } from "@thunderstore/thunderstore-api";
@@ -257,7 +258,7 @@ function DisbandTeamForm(props: {
     TeamDisbandRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,

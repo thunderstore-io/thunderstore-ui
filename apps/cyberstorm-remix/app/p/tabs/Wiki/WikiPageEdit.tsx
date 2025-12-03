@@ -28,6 +28,7 @@ import {
   type PackageWikiPageEditRequestData,
   type PackageWikiPageResponseData,
   type RequestConfig,
+  UserFacingError,
   deletePackageWikiPage,
   postPackageWikiPageEdit,
 } from "@thunderstore/thunderstore-api";
@@ -181,7 +182,7 @@ export default function WikiEdit() {
     PackageWikiPageEditRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,

@@ -2,9 +2,13 @@ import { useCallback } from "react";
 
 import {
   type ApiEndpointProps,
-  ApiError,
+  UserFacingError,
+  mapApiErrorToUserFacingError,
 } from "@thunderstore/thunderstore-api";
-import { type ApiEndpoint } from "@thunderstore/ts-api-react";
+import {
+  type ApiEndpoint,
+  type UseApiCallOptions,
+} from "@thunderstore/ts-api-react";
 
 import { useApiAction } from "./useApiAction";
 
@@ -15,18 +19,18 @@ export interface ApiActionProps<
   Return,
 > {
   endpoint: ApiEndpoint<Params, QueryParams, Data, Return>;
+  apiCallOptions?: UseApiCallOptions;
   onSubmitSuccess?: (result: Awaited<Return>) => void;
-  onSubmitError?: (error: Error | ApiError) => void;
+  onSubmitError?: (error: UserFacingError) => void;
 }
 
-// As of this moment ApiActions sole purpose is to gracefully handle errors from API calls
 export function ApiAction<
   Params extends object,
   QueryParams extends object,
   Data extends object,
   Return,
 >(props: ApiActionProps<Params, QueryParams, Data, Return>) {
-  const { endpoint, onSubmitSuccess, onSubmitError } = props;
+  const { endpoint, onSubmitSuccess, onSubmitError, apiCallOptions } = props;
   const submitHandler = useApiAction<
     Params,
     QueryParams,
@@ -34,6 +38,7 @@ export function ApiAction<
     ReturnType<typeof endpoint>
   >({
     endpoint: endpoint,
+    apiCallOptions,
   });
   const onSubmit = useCallback(
     async (onSubmitProps: ApiEndpointProps<Params, QueryParams, Data>) => {
@@ -43,14 +48,17 @@ export function ApiAction<
           onSubmitSuccess(result);
         }
       } catch (e) {
+        const mappedError =
+          e instanceof UserFacingError ? e : mapApiErrorToUserFacingError(e);
+
         if (onSubmitError) {
-          onSubmitError(e as Error | ApiError);
+          onSubmitError(mappedError);
         } else {
-          throw e;
+          throw mappedError;
         }
       }
     },
-    [onSubmitSuccess, onSubmitError]
+    [onSubmitSuccess, onSubmitError, apiCallOptions, submitHandler]
   );
 
   return onSubmit;

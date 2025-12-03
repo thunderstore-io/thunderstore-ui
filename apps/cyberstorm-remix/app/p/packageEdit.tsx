@@ -24,6 +24,7 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   ApiError,
   type PackageListingUpdateRequestData,
+  UserFacingError,
   packageDeprecate,
   packageListingUpdate,
   packageUnlist,
@@ -214,7 +215,7 @@ export default function PackageListing() {
     PackageListingUpdateRequestData,
     Error,
     SubmitorOutput,
-    Error,
+    UserFacingError,
     InputErrors
   >({
     inputs: formInputs,
