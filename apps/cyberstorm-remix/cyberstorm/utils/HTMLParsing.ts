@@ -3,7 +3,6 @@ const NAMED_ENTITIES: Record<string, string> = {
   lt: "<",
   gt: ">",
   quot: '"',
-  "#39": "'",
   apos: "'",
   nbsp: " ",
   amp: "&",
@@ -33,29 +32,27 @@ export function stripHtmlTags(html: string = ""): string {
 
 /**
  * Decodes HTML entities with a single regex pass for performance.
- * Handles named entities (except &amp;), numeric (&#123;), and hex (&#x1F;) entities,
- * Then handles &amp; (in a second pass) to avoid interfering with other entities.
+ * Handles named entities, numeric (&#123;), and hex (&#x1F;) entities.
+ * All entities including &amp; are handled in one pass to correctly decode
+ * double-encoded entities like &amp;lt;.
  */
 function decodeHtmlEntities(text: string): string {
-  const result = text.replace(
+  return text.replace(
     /&(?:#(\d+)|#x([0-9a-fA-F]+)|([a-z0-9]+));/gi,
     (match, dec, hex, named) => {
-      if (dec) {
-        return String.fromCharCode(Number(dec));
-      }
-      if (hex) {
-        return String.fromCharCode(parseInt(hex, 16));
-      }
       if (named) {
         const lower = named.toLowerCase();
-        if (lower === "amp") {
-          return match; // Skip &amp; for now, handle in second pass
-        }
         return NAMED_ENTITIES[lower] || match;
+      }
+      if (dec || hex) {
+        try {
+          const codePoint = dec ? Number(dec) : parseInt(hex, 16);
+          return String.fromCodePoint(codePoint);
+        } catch {
+          return match; // Invalid code point, return unchanged
+        }
       }
       return match;
     }
   );
-  // Handle &amp; last to avoid interfering with other entity replacements
-  return result.replace(/&amp;/gi, "&");
 }

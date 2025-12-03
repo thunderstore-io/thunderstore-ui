@@ -1,4 +1,5 @@
-import { CodeBox } from "@thunderstore/cyberstorm";
+import { CodeBox, NewAlert } from "@thunderstore/cyberstorm";
+import { memo, useMemo } from "react";
 import { stripHtmlTags } from "cyberstorm/utils/HTMLParsing";
 import "./CodeBoxHTML.css";
 
@@ -12,13 +13,25 @@ export interface CodeBoxHTMLProps {
  * CodeBox component which renders HTML content by stripping HTML tags
  * and passing the plain text to the CodeBox component for syntax highlighting
  */
-export function CodeBoxHTML({
+export const CodeBoxHTML = memo(function CodeBoxHTML({
   value = "",
   maxHeight = 600,
   language = "text",
 }: CodeBoxHTMLProps) {
-  // Strip HTML tags from the value to get plain text
-  const plainText = stripHtmlTags(value || "");
+  const result = useMemo(() => {
+    try {
+      const text = stripHtmlTags(value);
+      return { text, error: null };
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to process HTML content";
+      return { text: "", error: errorMessage };
+    }
+  }, [value]);
+
+  if (result.error) {
+    return <NewAlert csVariant="danger">{result.error}</NewAlert>;
+  }
 
   return (
     <div
@@ -29,9 +42,9 @@ export function CodeBoxHTML({
         overflow: "auto",
       }}
     >
-      <CodeBox value={plainText} language={language} />
+      <CodeBox value={result.text} language={language} />
     </div>
   );
-}
+});
 
 CodeBoxHTML.displayName = "CodeBoxHTML";
