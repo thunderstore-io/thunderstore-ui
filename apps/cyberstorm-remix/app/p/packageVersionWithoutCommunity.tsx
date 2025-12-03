@@ -6,17 +6,21 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { createNotFoundMapping } from "cyberstorm/utils/errors/loaderMappings";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import {
   type ReactElement,
   Suspense,
   memo,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -61,36 +65,41 @@ import "./packageListing.css";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
-      };
-    });
-
-    return {
-      version: await dapper.getPackageVersionDetails(
+    const { dapper } = getLoaderTools();
+    try {
+      const version = await dapper.getPackageVersionDetails(
         params.namespaceId,
         params.packageId,
         params.packageVersion
-      ),
-      team: await dapper.getTeamDetails(params.namespaceId),
-    };
+      );
+      const team = await dapper.getTeamDetails(params.namespaceId);
+
+      return {
+        version,
+        team,
+      };
+    } catch (error) {
+      handleLoaderError(error, {
+        mappings: [
+          createNotFoundMapping(
+            "Package version not found.",
+            "We could not find the requested package version."
+          ),
+        ],
+      });
+    }
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
-
+    const { dapper } = getLoaderTools();
     return {
       version: dapper.getPackageVersionDetails(
         params.namespaceId,
@@ -100,7 +109,16 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       team: dapper.getTeamDetails(params.namespaceId),
     };
   }
-  throw new Response("Package not found", { status: 404 });
+  throwUserFacingPayloadResponse({
+    headline: "Package not found.",
+    description: "We could not find the requested package.",
+    category: "not_found",
+    status: 404,
+  });
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }
 
 export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
@@ -139,69 +157,70 @@ export default function PackageVersion() {
   // If strict mode is removed from the entry.client.tsx, this should only run once
   useEffect(() => {
     if (!startsHydrated.current && isHydrated) return;
-    if (isPromise(version)) {
-      version.then((versionData) => {
-        setFirstUploaded(
-          <RelativeTime
-            time={versionData.datetime_created}
-            suppressHydrationWarning
-          />
-        );
-      });
-    } else {
+
+    const applyRelativeTime = (
+      result: Awaited<ReturnType<DapperTs["getPackageVersionDetails"]>>
+    ) => {
       setFirstUploaded(
-        <RelativeTime
-          time={version.datetime_created}
-          suppressHydrationWarning
-        />
+        <RelativeTime time={result.datetime_created} suppressHydrationWarning />
       );
+    };
+
+    if (isPromise(version)) {
+      void version.then(applyRelativeTime);
+    } else {
+      applyRelativeTime(version);
     }
-  }, []);
+  }, [isHydrated, version]);
   // END: For sidebar meta dates
 
   const currentTab = location.pathname.split("/")[6] || "details";
 
-  const versionAndTeamPromise = useMemo(() => Promise.all([version, team]), []);
-
   return (
     <>
       <Suspense>
-        <Await resolve={versionAndTeamPromise}>
-          {(resolvedValue) => (
-            <>
-              <meta
-                title={`${formatToDisplayName(
-                  resolvedValue[0].full_version_name
-                )} | ${resolvedValue[1].name}`}
-              />
-              <meta name="description" content={resolvedValue[0].description} />
-              <meta property="og:type" content="website" />
-              <meta
-                property="og:url"
-                content={`${
-                  getPublicEnvVariables(["VITE_BETA_SITE_URL"])
-                    .VITE_BETA_SITE_URL
-                }${location.pathname}`}
-              />
-              <meta
-                property="og:title"
-                content={`${formatToDisplayName(
-                  resolvedValue[0].full_version_name
-                )} by ${resolvedValue[0].namespace}`}
-              />
-              <meta
-                property="og:description"
-                content={resolvedValue[0].description}
-              />
-              <meta property="og:image:width" content="256" />
-              <meta property="og:image:height" content="256" />
-              <meta
-                property="og:image"
-                content={resolvedValue[0].icon_url ?? undefined}
-              />
-              <meta property="og:site_name" content="Thunderstore" />
-            </>
-          )}
+        <Await resolve={Promise.all([version, team])} errorElement={<></>}>
+          {(results) => {
+            const [versionResult, teamResult] = results;
+            const metaVersion = versionResult;
+            const metaTeam = teamResult;
+
+            return (
+              <>
+                <meta
+                  title={`${formatToDisplayName(
+                    metaVersion.full_version_name
+                  )} | ${metaTeam.name}`}
+                />
+                <meta name="description" content={metaVersion.description} />
+                <meta property="og:type" content="website" />
+                <meta
+                  property="og:url"
+                  content={`${
+                    getPublicEnvVariables(["VITE_BETA_SITE_URL"])
+                      .VITE_BETA_SITE_URL
+                  }${location.pathname}`}
+                />
+                <meta
+                  property="og:title"
+                  content={`${formatToDisplayName(
+                    metaVersion.full_version_name
+                  )} by ${metaVersion.namespace}`}
+                />
+                <meta
+                  property="og:description"
+                  content={metaVersion.description}
+                />
+                <meta property="og:image:width" content="256" />
+                <meta property="og:image:height" content="256" />
+                <meta
+                  property="og:image"
+                  content={metaVersion.icon_url ?? undefined}
+                />
+                <meta property="og:site_name" content="Thunderstore" />
+              </>
+            );
+          }}
         </Await>
       </Suspense>
       <div className="container container--y container--full">
@@ -216,13 +235,16 @@ export default function PackageVersion() {
                   <SkeletonBox className="package-listing__page-header-skeleton" />
                 }
               >
-                <Await resolve={version}>
-                  {(resolvedValue) => (
+                <Await
+                  resolve={version}
+                  errorElement={<NimbusAwaitErrorElement />}
+                >
+                  {(versionResult) => (
                     <PageHeader
                       headingLevel="1"
                       headingSize="3"
-                      image={resolvedValue.icon_url}
-                      description={resolvedValue.description}
+                      image={versionResult.icon_url}
+                      description={versionResult.description}
                       variant="detailed"
                       meta={
                         <>
@@ -230,16 +252,16 @@ export default function PackageVersion() {
                             <NewIcon csMode="inline" noWrapper>
                               <FontAwesomeIcon icon={faUsers} />
                             </NewIcon>
-                            {resolvedValue.namespace}
+                            {versionResult.namespace}
                           </span>
-                          {resolvedValue.website_url ? (
+                          {versionResult.website_url ? (
                             <NewLink
                               primitiveType="link"
-                              href={resolvedValue.website_url}
+                              href={versionResult.website_url}
                               csVariant="cyber"
                               rootClasses="page-header__meta-item"
                             >
-                              {resolvedValue.website_url}
+                              {versionResult.website_url}
                               <NewIcon csMode="inline" noWrapper>
                                 <FontAwesomeIcon icon={faArrowUpRight} />
                               </NewIcon>
@@ -248,7 +270,7 @@ export default function PackageVersion() {
                         </>
                       }
                     >
-                      {formatToDisplayName(resolvedValue.name)}
+                      {formatToDisplayName(versionResult.name)}
                     </PageHeader>
                   )}
                 </Await>
@@ -275,20 +297,23 @@ export default function PackageVersion() {
                   rootClasses="package-listing__drawer"
                 >
                   <Suspense fallback={<p>Loading...</p>}>
-                    <Await resolve={version}>
-                      {(resolvedValue) => (
-                        <>{packageMeta(firstUploaded, resolvedValue)}</>
-                      )}
+                    <Await
+                      resolve={version}
+                      errorElement={<NimbusAwaitErrorElement />}
+                    >
+                      {(versionResult) => {
+                        return packageMeta(firstUploaded, versionResult);
+                      }}
                     </Await>
                   </Suspense>
                 </Drawer>
                 <Suspense fallback={<p>Loading...</p>}>
-                  <Await resolve={versionAndTeamPromise}>
-                    {(resolvedValue) => (
-                      <Actions
-                        team={resolvedValue[1]}
-                        version={resolvedValue[0]}
-                      />
+                  <Await
+                    resolve={Promise.all([team, version])}
+                    errorElement={<NimbusAwaitErrorElement />}
+                  >
+                    {(results) => (
+                      <Actions team={results[0]} version={results[1]} />
                     )}
                   </Await>
                 </Suspense>
@@ -298,17 +323,20 @@ export default function PackageVersion() {
                   <SkeletonBox className="package-listing__nav-skeleton" />
                 }
               >
-                <Await resolve={version}>
-                  {(resolvedValue) => (
+                <Await
+                  resolve={version}
+                  errorElement={<NimbusAwaitErrorElement />}
+                >
+                  {(versionResult) => (
                     <>
                       <Tabs>
                         <NewLink
                           key="description"
                           primitiveType="cyberstormLink"
                           linkId="PackageVersionWithoutCommunity"
-                          namespace={resolvedValue.namespace}
-                          package={resolvedValue.name}
-                          version={resolvedValue.version_number}
+                          namespace={versionResult.namespace}
+                          package={versionResult.name}
+                          version={versionResult.version_number}
                           aria-current={currentTab === "details"}
                           rootClasses={`tabs-item${
                             currentTab === "details"
@@ -322,9 +350,9 @@ export default function PackageVersion() {
                           key="required"
                           primitiveType="cyberstormLink"
                           linkId="PackageVersionWithoutCommunityRequired"
-                          namespace={resolvedValue.namespace}
-                          package={resolvedValue.name}
-                          version={resolvedValue.version_number}
+                          namespace={versionResult.namespace}
+                          package={versionResult.name}
+                          version={versionResult.version_number}
                           aria-current={currentTab === "required"}
                           rootClasses={`tabs-item${
                             currentTab === "required"
@@ -332,15 +360,15 @@ export default function PackageVersion() {
                               : ""
                           }`}
                         >
-                          Required ({resolvedValue.dependency_count})
+                          Required ({versionResult.dependency_count})
                         </NewLink>
                         <NewLink
                           key="versions"
                           primitiveType="cyberstormLink"
                           linkId="PackageVersionWithoutCommunityVersions"
-                          namespace={resolvedValue.namespace}
-                          package={resolvedValue.name}
-                          version={resolvedValue.version_number}
+                          namespace={versionResult.namespace}
+                          package={versionResult.name}
+                          version={versionResult.version_number}
                           aria-current={currentTab === "versions"}
                           rootClasses={`tabs-item${
                             currentTab === "versions"
@@ -365,15 +393,18 @@ export default function PackageVersion() {
                   <SkeletonBox className="package-listing-sidebar__install-skeleton" />
                 }
               >
-                <Await resolve={version}>
-                  {(resolvedValue) => (
+                <Await
+                  resolve={version}
+                  errorElement={<NimbusAwaitErrorElement />}
+                >
+                  {(versionResult) => (
                     <NewButton
                       csVariant="accent"
                       csSize="big"
                       rootClasses="package-listing-sidebar__install"
                       primitiveType="link"
-                      href={resolvedValue.install_url || ""}
-                      disabled={!resolvedValue.install_url}
+                      href={versionResult.install_url || ""}
+                      disabled={!versionResult.install_url}
                     >
                       <NewIcon csMode="inline">
                         <ThunderstoreLogo />
@@ -389,12 +420,12 @@ export default function PackageVersion() {
                     <SkeletonBox className="package-listing-sidebar__actions-skeleton" />
                   }
                 >
-                  <Await resolve={versionAndTeamPromise}>
-                    {(resolvedValue) => (
-                      <Actions
-                        team={resolvedValue[1]}
-                        version={resolvedValue[0]}
-                      />
+                  <Await
+                    resolve={Promise.all([team, version])}
+                    errorElement={<NimbusAwaitErrorElement />}
+                  >
+                    {(result) => (
+                      <Actions team={result[0]} version={result[1]} />
                     )}
                   </Await>
                 </Suspense>
@@ -403,10 +434,13 @@ export default function PackageVersion() {
                     <SkeletonBox className="package-listing-sidebar__skeleton" />
                   }
                 >
-                  <Await resolve={version}>
-                    {(resolvedValue) => (
-                      <>{packageMeta(firstUploaded, resolvedValue)}</>
-                    )}
+                  <Await
+                    resolve={version}
+                    errorElement={<NimbusAwaitErrorElement />}
+                  >
+                    {(versionResult) =>
+                      packageMeta(firstUploaded, versionResult)
+                    }
                   </Await>
                 </Suspense>
               </div>
