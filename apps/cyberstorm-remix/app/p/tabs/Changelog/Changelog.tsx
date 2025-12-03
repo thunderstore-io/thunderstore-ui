@@ -10,39 +10,49 @@ import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
 import "./Changelog.css";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { createNotFoundMapping } from "cyberstorm/utils/errors/loaderMappings";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
-      };
-    });
-    return {
-      changelog: dapper.getPackageChangelog(
+    const { dapper } = getLoaderTools();
+    try {
+      const changelog = await dapper.getPackageChangelog(
         params.namespaceId,
         params.packageId
-      ),
-    };
+      );
+
+      return {
+        changelog,
+      };
+    } catch (error) {
+      handleLoaderError(error, {
+        mappings: [
+          createNotFoundMapping(
+            "Changelog not available.",
+            "We could not find a changelog for this package."
+          ),
+        ],
+      });
+    }
   }
-  return {
-    status: "error",
-    message: "Failed to load changelog",
-    changelog: { html: "" },
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Changelog not available.",
+    description: "We could not find a changelog for this package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
+    const { dapper } = getLoaderTools();
     return {
       changelog: dapper.getPackageChangelog(
         params.namespaceId,
@@ -50,27 +60,22 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       ),
     };
   }
-  return {
-    status: "error",
-    message: "Failed to load changelog",
-    changelog: { html: "" },
-  };
+  throwUserFacingPayloadResponse({
+    headline: "Changelog not available.",
+    description: "We could not find a changelog for this package.",
+    category: "not_found",
+    status: 404,
+  });
 }
 
 export default function Changelog() {
-  const { status, message, changelog } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { changelog } = useLoaderData<typeof loader | typeof clientLoader>();
 
-  if (status === "error") return <div>{message}</div>;
   return (
     <Suspense
       fallback={<SkeletonBox className="package-changelog__skeleton" />}
     >
-      <Await
-        resolve={changelog}
-        errorElement={<div>Error occurred while loading changelog</div>}
-      >
+      <Await resolve={changelog} errorElement={<NimbusAwaitErrorElement />}>
         {(resolvedValue) => (
           <>
             <div className="markdown-wrapper">
@@ -84,4 +89,8 @@ export default function Changelog() {
       </Await>
     </Suspense>
   );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }
