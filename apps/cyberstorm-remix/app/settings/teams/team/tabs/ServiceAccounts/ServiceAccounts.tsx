@@ -3,6 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import {
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { Suspense, useReducer, useState } from "react";
 import {
@@ -19,7 +23,9 @@ import {
   NewButton,
   NewIcon,
   NewTextInput,
+  SkeletonBox,
 } from "@thunderstore/cyberstorm";
+import type { DapperTs } from "@thunderstore/dapper-ts";
 import {
   type TeamServiceAccountAddRequestData,
   UserFacingError,
@@ -37,6 +43,39 @@ export const clientLoader = makeTeamSettingsTabLoader(
 
 export default function ServiceAccounts() {
   const { teamName, serviceAccounts } = useLoaderData<typeof clientLoader>();
+  const outletContext = useOutletContext() as OutletContextShape;
+
+  return (
+    <Suspense fallback={<ServiceAccountsSkeleton />}>
+      <Await
+        resolve={serviceAccounts}
+        errorElement={<NimbusAwaitErrorElement />}
+      >
+        {(result) => (
+          <ServiceAccountsContent
+            teamName={teamName}
+            serviceAccounts={result}
+            outletContext={outletContext}
+          />
+        )}
+      </Await>
+    </Suspense>
+  );
+}
+
+interface ServiceAccountsContentProps {
+  teamName: string;
+  serviceAccounts: Awaited<ReturnType<DapperTs["getTeamServiceAccounts"]>>;
+  outletContext: OutletContextShape;
+}
+
+/**
+ * Renders the service accounts table after Suspense resolves the data.
+ */
+function ServiceAccountsContent({
+  teamName,
+  serviceAccounts,
+}: ServiceAccountsContentProps) {
   const revalidator = useRevalidator();
 
   async function serviceAccountRevalidate() {
@@ -72,6 +111,21 @@ export default function ServiceAccounts() {
       </Await>
     </Suspense>
   );
+}
+
+/**
+ * Displays a placeholder skeleton while service accounts load.
+ */
+function ServiceAccountsSkeleton() {
+  return (
+    <div className="settings-items">
+      <SkeletonBox className="settings-items__skeleton" />
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }
 
 function AddServiceAccountForm(props: {
@@ -142,7 +196,7 @@ function AddServiceAccountForm(props: {
   >({
     inputs: formInputs,
     submitor,
-    onSubmitSuccess: (result) => {
+    onSubmitSuccess: (result: SubmitorOutput) => {
       onSuccess(result);
       setError(null);
       // Refresh the service accounts list to show the newly created account
