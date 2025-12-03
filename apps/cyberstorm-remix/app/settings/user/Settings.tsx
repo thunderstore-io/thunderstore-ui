@@ -5,6 +5,11 @@ import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 
 import { type OutletContextShape } from "../../root";
 import "./Settings.css";
+import {
+  NimbusErrorBoundary,
+  NimbusErrorBoundaryFallback,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import type { NimbusErrorBoundaryFallbackProps } from "cyberstorm/utils/errors/NimbusErrorBoundary";
 
 export default function UserSettings() {
   const context = useOutletContext<OutletContextShape>();
@@ -16,7 +21,10 @@ export default function UserSettings() {
   }
 
   return (
-    <>
+    <NimbusErrorBoundary
+      fallback={UserSettingsFallback}
+      onRetry={({ reset }) => reset()}
+    >
       <PageHeader headingLevel="1" headingSize="2">
         Settings
       </PageHeader>
@@ -47,6 +55,27 @@ export default function UserSettings() {
           <Outlet context={context} />
         </section>
       </div>
-    </>
+    </NimbusErrorBoundary>
+  );
+}
+
+/**
+ * Provides fallback messaging when the user settings shell fails to render.
+ */
+function UserSettingsFallback(props: NimbusErrorBoundaryFallbackProps) {
+  const {
+    title = "Settings failed to load",
+    description = "Reload the settings page or return to the dashboard.",
+    retryLabel = "Reload",
+    ...rest
+  } = props;
+
+  return (
+    <NimbusErrorBoundaryFallback
+      {...rest}
+      title={title}
+      description={description}
+      retryLabel={retryLabel}
+    />
   );
 }
