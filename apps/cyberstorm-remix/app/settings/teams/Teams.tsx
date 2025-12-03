@@ -163,6 +163,7 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
     InputErrors
   >({
     inputs: formInputs,
+    validators: { name: { required: true } },
     submitor,
     onSubmitSuccess: (fi) => {
       createTeamRevalidate();
@@ -223,10 +224,11 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
       </Modal.Body>
       <Modal.Footer>
         <NewButton
+          disabled={!strongForm.isReady}
+          csVariant="accent"
           onClick={() => {
             strongForm.submit().then(() => setOpen(false));
           }}
-          csVariant="accent"
         >
           Create
         </NewButton>

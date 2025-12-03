@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ParseError,
   RequestBodyParseError,
   RequestQueryParamsParseError,
 } from "../../../../../packages/thunderstore-api/src";
+
+type Validator = {
+  required?: boolean;
+};
 
 interface UseStrongFormProps<
   Inputs,
@@ -13,6 +17,15 @@ interface UseStrongFormProps<
   SubmissionError,
 > {
   inputs: Inputs;
+  /**
+   * Validators for the form inputs.
+   *
+   * NOTE: If you add new validator types here, make sure to implement the
+   * validation logic in the `isReady` memo inside `useStrongForm`.
+   */
+  validators?: {
+    [K in keyof Inputs]?: Validator;
+  };
   refiner?: (inputs: Inputs) => Promise<SubmissionDataShape>;
   onRefineSuccess?: (output: SubmissionDataShape) => void;
   onRefineError?: (error: RefinerError) => void;
@@ -44,6 +57,20 @@ export function useStrongForm<
   const [submitOutput, setSubmitOutput] = useState<SubmissionOutput>();
   const [submitError, setSubmitError] = useState<SubmissionError>();
   const [inputErrors, setInputErrors] = useState<InputErrors>();
+
+  const isReady = useMemo(() => {
+    if (!props.validators) return true;
+    for (const key in props.validators) {
+      const validator = props.validators[key];
+      const value = props.inputs[key];
+      // NOTE: Expand the checks as more validators are added
+      if (validator?.required) {
+        if (typeof value === "string" && value.trim() === "") return false;
+        if (value === undefined || value === null) return false;
+      }
+    }
+    return true;
+  }, [props.inputs]);
 
   useEffect(() => {
     if (refining || submitting) {
@@ -165,5 +192,6 @@ export function useStrongForm<
     refining,
     refineError,
     inputErrors,
+    isReady,
   };
 }

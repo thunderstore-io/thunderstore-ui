@@ -74,6 +74,7 @@ export function MemberAddForm(props: {
     InputErrors
   >({
     inputs: formInputs,
+    validators: { username: { required: true } },
     submitor,
     onSubmitSuccess: () => {
       props.updateTrigger();
@@ -151,7 +152,11 @@ export function MemberAddForm(props: {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <NewButton csVariant="accent" onClick={strongForm.submit}>
+        <NewButton
+          csVariant="accent"
+          disabled={!strongForm.isReady}
+          onClick={strongForm.submit}
+        >
           Add member
         </NewButton>
       </Modal.Footer>
