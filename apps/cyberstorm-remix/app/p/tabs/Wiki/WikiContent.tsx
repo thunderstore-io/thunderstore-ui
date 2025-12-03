@@ -13,6 +13,7 @@ import { Heading, NewButton, NewIcon } from "@thunderstore/cyberstorm";
 import { type PackageWikiPageResponseData } from "@thunderstore/thunderstore-api";
 
 import "./Wiki.css";
+import { NimbusAwaitErrorElement } from "cyberstorm/utils/errors/NimbusErrorBoundary";
 
 interface WikiContentProps {
   page: PackageWikiPageResponseData;
@@ -51,7 +52,7 @@ export const WikiContent = memo(function WikiContent({
           </div>
         </div>
         <Suspense>
-          <Await resolve={canManage}>
+          <Await resolve={canManage} errorElement={<NimbusAwaitErrorElement />}>
             {(resolvedValue) =>
               resolvedValue ? (
                 <div className="package-wiki-content__actions">

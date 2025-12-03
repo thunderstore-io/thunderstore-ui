@@ -1,95 +1,100 @@
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+  NimbusAwaitErrorElement,
+  NimbusDefaultRouteErrorBoundary,
+} from "cyberstorm/utils/errors/NimbusErrorBoundary";
+import { handleLoaderError } from "cyberstorm/utils/errors/handleLoaderError";
+import { createNotFoundMapping } from "cyberstorm/utils/errors/loaderMappings";
+import { throwUserFacingPayloadResponse } from "cyberstorm/utils/errors/userFacingErrorResponse";
+import { getLoaderTools } from "cyberstorm/utils/getLoaderTools";
 import { Suspense } from "react";
 import {
   Await,
   type LoaderFunctionArgs,
   Outlet,
+  useLoaderData,
   useOutletContext,
 } from "react-router";
-import { useLoaderData } from "react-router";
 import { type OutletContextShape } from "~/root";
 
 import { NewButton, NewIcon, SkeletonBox } from "@thunderstore/cyberstorm";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { getPackageWiki } from "@thunderstore/dapper-ts";
-import { ApiError } from "@thunderstore/thunderstore-api";
 
 import "./Wiki.css";
 
+export const wikiErrorMappings = [
+  createNotFoundMapping(
+    "Wiki not available.",
+    "We could not find the requested wiki."
+  ),
+];
+
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
-      };
-    });
-
-    let wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
-
+    const { dapper } = getLoaderTools();
     try {
-      wiki = await dapper.getPackageWiki(params.namespaceId, params.packageId);
-    } catch (error) {
-      if (error instanceof ApiError) {
-        if (error.response.status === 404) {
-          wiki = undefined;
-        } else {
-          wiki = undefined;
-          console.error("Error fetching package wiki:", error);
-        }
-      }
-    }
+      const wiki = await dapper.getPackageWiki(
+        params.namespaceId,
+        params.packageId
+      );
 
-    return {
-      wiki: wiki,
-      communityId: params.communityId,
-      namespaceId: params.namespaceId,
-      packageId: params.packageId,
-      slug: params.slug,
-      permissions: undefined,
-    };
+      return {
+        wiki,
+        communityId: params.communityId,
+        namespaceId: params.namespaceId,
+        packageId: params.packageId,
+        slug: params.slug,
+        permissions: undefined,
+      };
+    } catch (error) {
+      handleLoaderError(error, { mappings: wikiErrorMappings });
+    }
   } else {
-    throw new Error("Namespace ID or Package ID is missing");
+    throwUserFacingPayloadResponse({
+      headline: "Wiki not available.",
+      description: "We could not find the requested wiki.",
+      category: "not_found",
+      status: 404,
+    });
   }
 }
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
+    const { dapper } = getLoaderTools();
 
-    const wiki = dapper.getPackageWiki(params.namespaceId, params.packageId);
+    const wikiPromise = dapper.getPackageWiki(
+      params.namespaceId,
+      params.packageId
+    );
 
-    const permissions = dapper.getPackagePermissions(
+    const permissionsPromise = dapper.getPackagePermissions(
       params.communityId,
       params.namespaceId,
       params.packageId
     );
 
     return {
-      wiki: wiki,
+      wiki: wikiPromise,
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       slug: params.slug,
-      permissions: permissions,
+      permissions: permissionsPromise,
     };
   } else {
-    throw new Error("Namespace ID or Package ID is missing");
+    throwUserFacingPayloadResponse({
+      headline: "Wiki not available.",
+      description: "We could not find the requested wiki.",
+      category: "not_found",
+      status: 404,
+    });
   }
 }
 
+/**
+ * Displays the package wiki navigation and nested routes, relying on Suspense for data.
+ */
 export default function Wiki() {
   const { wiki, communityId, namespaceId, packageId, slug, permissions } =
     useLoaderData<typeof loader | typeof clientLoader>();
@@ -100,7 +105,10 @@ export default function Wiki() {
     <div className="package-wiki">
       <div className="package-wiki-nav">
         <Suspense>
-          <Await resolve={permissions}>
+          <Await
+            resolve={permissions}
+            errorElement={<NimbusAwaitErrorElement />}
+          >
             {(resolvedValue) =>
               resolvedValue?.permissions.can_manage ? (
                 <div className="package-wiki-nav__header">
@@ -126,7 +134,7 @@ export default function Wiki() {
             <Suspense
               fallback={<SkeletonBox className="package-wiki-nav__skeleton" />}
             >
-              <Await resolve={wiki} errorElement={<></>}>
+              <Await resolve={wiki} errorElement={<NimbusAwaitErrorElement />}>
                 {(resolvedValue) =>
                   resolvedValue &&
                   resolvedValue.pages.map((page, index) => {
@@ -193,4 +201,8 @@ export default function Wiki() {
       </div>
     </div>
   );
+}
+
+export function ErrorBoundary() {
+  return <NimbusDefaultRouteErrorBoundary />;
 }
