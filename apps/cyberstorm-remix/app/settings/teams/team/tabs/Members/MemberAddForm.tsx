@@ -31,6 +31,7 @@ export function MemberAddForm(props: {
 }) {
   const toast = useToast();
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function formFieldUpdateAction(
     state: TeamAddMemberRequestData,
@@ -85,18 +86,21 @@ export function MemberAddForm(props: {
       setOpen(false);
     },
     onSubmitError: (error) => {
-      toast.addToast({
-        csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
-        duration: 8000,
-      });
+      if (error.message.includes("400")) {
+        setError("User not found, make sure you typed the name correctly");
+      } else {
+        setError("An unexpected error occurred, please try again later.");
+      }
     },
   });
 
   return (
     <Modal
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(val) => {
+        setOpen(val);
+        if (!val) setError(null);
+      }}
       titleContent="Add Team Member"
       csSize="small"
       trigger={
@@ -123,6 +127,7 @@ export function MemberAddForm(props: {
               placeholder={"Enter username..."}
               value={formInputs.username}
               onChange={(e) => {
+                setError(null);
                 updateFormFieldState({
                   field: "username",
                   value: e.target.value,
@@ -131,6 +136,7 @@ export function MemberAddForm(props: {
               rootClasses="add-member-form__username-input"
               id="username"
             />
+            {error && <div className="add-member-form__error">{error}</div>}
           </div>
           <div className="add-member-form__field">
             <label className="add-member-form__label" htmlFor="role">
