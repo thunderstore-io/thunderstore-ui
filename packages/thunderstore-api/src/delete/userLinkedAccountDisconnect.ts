@@ -16,14 +16,12 @@ export function userLinkedAccountDisconnect(
   const path = `/api/cyberstorm/user/linked-account/${params.provider}/disconnect/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "DELETE",
-      },
-      useSession: true,
+    config,
+    path,
+    request: {
+      method: "DELETE",
     },
+    useSession: true,
     requestSchema: userLinkedAccountDisconnectRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: undefined,

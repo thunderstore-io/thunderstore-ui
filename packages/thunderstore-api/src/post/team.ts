@@ -16,15 +16,13 @@ export function teamCreate(
   const path = "api/cyberstorm/team/create/";
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        body: JSON.stringify(data),
-      },
-      useSession: true,
+    config,
+    path,
+    request: {
+      method: "POST",
+      body: JSON.stringify(data),
     },
+    useSession: true,
     requestSchema: teamCreateRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: teamCreateResponseDataSchema,

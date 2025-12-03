@@ -20,17 +20,15 @@ export function postPackageSubmission(
   const path = `/api/experimental/submission/submit-async/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        cache: "no-store",
-        body: JSON.stringify(data),
-      },
-      bodyRaw: data,
-      useSession: true,
+    config,
+    path,
+    request: {
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(data),
     },
+    bodyRaw: data,
+    useSession: true,
     requestSchema: packageSubmissionRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: packageSubmissionResponseDataSchema,
@@ -44,15 +42,13 @@ export function toolsManifestValidate(
   const path = `/api/experimental/submission/validate/manifest-v1/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        body: JSON.stringify(data),
-      },
-      useSession: true,
+    config,
+    path,
+    request: {
+      method: "POST",
+      body: JSON.stringify(data),
     },
+    useSession: true,
     requestSchema: submissionValidateManifestRequestDataSchema,
     queryParamsSchema: undefined,
     responseSchema: submissionValidateManifestResponseDataSchema,

@@ -11,15 +11,18 @@ import {
   currentUserTeamPermissionsResponseDataSchema,
 } from "../schemas/responseSchemas";
 
-export async function fetchCurrentUser(
+export function fetchCurrentUser(
   props: ApiEndpointProps<object, object, object>
 ): Promise<CurrentUserResponseData> {
   const { config } = props;
   const path = "api/experimental/current-user/";
   const request = { cache: "no-store" as RequestCache };
 
-  return await apiFetch({
-    args: { config, path, request, useSession: true },
+  return apiFetch({
+    config,
+    path,
+    request,
+    useSession: true,
     requestSchema: undefined,
     queryParamsSchema: undefined,
     responseSchema: currentUserResponseDataSchema,
@@ -38,7 +41,10 @@ export async function fetchCurrentUserTeamPermissions(
   const request = { cache: "no-store" as RequestCache };
 
   return await apiFetch({
-    args: { config, path, request, useSession: true },
+    config,
+    path,
+    request,
+    useSession: true,
     requestSchema: currentUserTeamPermissionsRequestParamsSchema,
     queryParamsSchema: undefined,
     responseSchema: currentUserTeamPermissionsResponseDataSchema,

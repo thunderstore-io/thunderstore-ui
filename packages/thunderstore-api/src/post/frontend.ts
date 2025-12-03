@@ -20,13 +20,11 @@ export function toolsMarkdownPreview(
   const path = `/api/experimental/frontend/render-markdown/`;
 
   return apiFetch({
-    args: {
-      config,
-      path,
-      request: {
-        method: "POST",
-        body: JSON.stringify(data),
-      },
+    config,
+    path,
+    request: {
+      method: "POST",
+      body: JSON.stringify(data),
     },
     requestSchema: markdownRenderRequestDataSchema,
     queryParamsSchema: undefined,

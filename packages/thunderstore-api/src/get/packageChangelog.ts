@@ -6,7 +6,7 @@ import {
   packageChangelogResponseDataSchema,
 } from "../schemas/responseSchemas";
 
-export async function fetchPackageChangelog(
+export function fetchPackageChangelog(
   props: ApiEndpointProps<PackageChangelogRequestParams, object, object>
 ): Promise<PackageChangelogResponseData> {
   const { config, params } = props;
@@ -16,11 +16,9 @@ export async function fetchPackageChangelog(
       : `v/${params.version_number}`;
   const path = `api/cyberstorm/package/${params.namespace_id}/${params.package_name}/${v}/changelog/`;
 
-  return await apiFetch({
-    args: {
-      config,
-      path,
-    },
+  return apiFetch({
+    config,
+    path,
     requestSchema: undefined,
     queryParamsSchema: undefined,
     responseSchema: packageChangelogResponseDataSchema,

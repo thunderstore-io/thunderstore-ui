@@ -15,7 +15,7 @@ import {
   packageWikiPageEditResponseDataSchema,
 } from "../schemas/responseSchemas";
 
-export async function postPackageWikiPageCreate(
+export function postPackageWikiPageCreate(
   props: ApiEndpointProps<
     PackageWikiPageCreateRequestParams,
     object,
@@ -25,15 +25,13 @@ export async function postPackageWikiPageCreate(
   const { config, params, data } = props;
   const path = `api/experimental/package/${params.namespace_id}/${params.package_name}/wiki/`;
 
-  return await apiFetch({
-    args: {
-      config: config,
-      path: path,
-      request: {
-        method: "POST",
-        cache: "no-store",
-        body: JSON.stringify(data),
-      },
+  return apiFetch({
+    config: config,
+    path: path,
+    request: {
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(data),
     },
     requestSchema: packageWikiPageCreateRequestDataSchema,
     queryParamsSchema: undefined,
@@ -41,7 +39,7 @@ export async function postPackageWikiPageCreate(
   });
 }
 
-export async function postPackageWikiPageEdit(
+export function postPackageWikiPageEdit(
   props: ApiEndpointProps<
     PackageWikiPageEditRequestParams,
     object,
@@ -51,15 +49,13 @@ export async function postPackageWikiPageEdit(
   const { config, params, data } = props;
   const path = `api/experimental/package/${params.namespace_id}/${params.package_name}/wiki/`;
 
-  return await apiFetch({
-    args: {
-      config: config,
-      path: path,
-      request: {
-        method: "POST",
-        cache: "no-store",
-        body: JSON.stringify(data),
-      },
+  return apiFetch({
+    config: config,
+    path: path,
+    request: {
+      method: "POST",
+      cache: "no-store",
+      body: JSON.stringify(data),
     },
     requestSchema: packageWikiPageEditRequestDataSchema,
     queryParamsSchema: undefined,

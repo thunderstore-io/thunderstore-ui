@@ -11,7 +11,7 @@ import {
   packageListingsResponseDataSchema,
 } from "../schemas/responseSchemas";
 
-export async function fetchPackageDependantsListings(
+export function fetchPackageDependantsListings(
   props: ApiEndpointProps<
     PackageDependantsListingsRequestParams,
     PackageListingsRequestQueryParams,
@@ -38,12 +38,10 @@ export async function fetchPackageDependantsListings(
   } = props;
   const path = `api/cyberstorm/listing/${params.community_id}/${params.namespace_id}/${params.package_name}/dependants/`;
 
-  return await apiFetch({
-    args: {
-      config,
-      path,
-      queryParams,
-    },
+  return apiFetch({
+    config,
+    path,
+    queryParams,
     requestSchema: undefined,
     queryParamsSchema: packageListingsRequestQueryParamsSchema,
     responseSchema: packageListingsResponseDataSchema,
