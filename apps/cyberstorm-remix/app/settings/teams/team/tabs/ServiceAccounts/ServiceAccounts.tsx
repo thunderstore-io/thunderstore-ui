@@ -114,8 +114,6 @@ function AddServiceAccountForm(props: {
     nickname: "",
   });
 
-  const isValid = formInputs.nickname.trim().length > 0;
-
   type SubmitorOutput = Awaited<ReturnType<typeof teamAddServiceAccount>>;
 
   async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
@@ -140,6 +138,7 @@ function AddServiceAccountForm(props: {
     InputErrors
   >({
     inputs: formInputs,
+    validators: { nickname: { required: true } },
     submitor,
     onSubmitSuccess: (result) => {
       onSuccess(result);
@@ -203,7 +202,7 @@ function AddServiceAccountForm(props: {
             className="service-accounts__form"
             onSubmit={(e) => {
               e.preventDefault();
-              if (isValid) {
+              if (strongForm.isReady) {
                 strongForm.submit();
               }
             }}
@@ -234,7 +233,7 @@ function AddServiceAccountForm(props: {
       )}
       {serviceAccountAdded ? null : (
         <Modal.Footer>
-          <NewButton onClick={strongForm.submit} disabled={!isValid}>
+          <NewButton onClick={strongForm.submit} disabled={!strongForm.isReady}>
             Add Service Account
           </NewButton>
         </Modal.Footer>
