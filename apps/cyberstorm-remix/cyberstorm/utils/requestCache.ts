@@ -59,10 +59,6 @@ export function deduplicatePromiseForRequest<Args extends unknown[], Result>(
   inputs: Args,
   request: Request
 ): Promise<Result> {
-  if (func.name === "default" || func.name === "anonymous") {
-    throw new Error("Must be named functions to support caching.");
-  }
-
   // Performance note: We use a linear search over the cache entries.
   // Since the number of unique requests per page load is usually small, this is acceptable.
   // We use lodash/isEqual for deep comparison of arguments.
