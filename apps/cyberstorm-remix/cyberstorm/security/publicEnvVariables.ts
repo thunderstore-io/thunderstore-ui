@@ -1,5 +1,5 @@
 import { getSessionContext } from "@thunderstore/ts-api-react/src/SessionContext";
-import { isRecord } from "cyberstorm/utils/typeChecks";
+import { isRecord } from "../utils/typeChecks";
 
 export type publicEnvVariablesKeys =
   | "SITE_URL"
@@ -57,7 +57,7 @@ export function getSessionTools() {
     !publicEnvVariables.VITE_COOKIE_DOMAIN
   ) {
     throw new Error(
-      "Enviroment variables did not load correctly, please hard refresh page"
+      "Environment variables did not load correctly, please hard refresh page"
     );
   }
   return getSessionContext(
