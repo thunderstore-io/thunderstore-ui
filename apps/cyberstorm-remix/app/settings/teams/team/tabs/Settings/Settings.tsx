@@ -14,7 +14,6 @@ import {
   Modal,
   NewButton,
   NewIcon,
-  NewLink,
   NewTextInput,
   useToast,
 } from "@thunderstore/cyberstorm";
@@ -179,14 +178,7 @@ function LeaveTeamForm(props: {
       <Modal.Body>
         <span>
           You are about to leave the team{" "}
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Team"
-            team={teamName}
-            csVariant="cyber"
-          >
-            {teamName}.
-          </NewLink>
+          <span className="team-settings__text--bold">{teamName}</span>.
         </span>
       </Modal.Body>
       <Modal.Footer>
@@ -236,6 +228,8 @@ function DisbandTeamForm(props: {
   const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
     team_name: "",
   });
+
+  const formDisabled = formInputs.team_name !== teamName;
 
   type SubmitorOutput = Awaited<ReturnType<typeof teamDisband>>;
 
@@ -301,29 +295,37 @@ function DisbandTeamForm(props: {
       <Modal.Body>
         <div>
           You are about to disband the team{" "}
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Team"
-            team={teamName}
-            csVariant="cyber"
-          >
-            {teamName}.
-          </NewLink>
+          <span className="team-settings__text--bold">{teamName}</span>.
         </div>
         <div>
           As a precaution, to disband your team, please input{" "}
-          <span className="disband-team-form__text--bold">{teamName}</span> into
-          the field below.
+          <span className="team-settings__text--bold">{teamName}</span> into the
+          field below.
         </div>
-        <NewTextInput
-          onChange={(e) =>
-            updateFormFieldState({ field: "team_name", value: e.target.value })
-          }
-        />
+
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (!formDisabled) {
+              strongForm.submit();
+            }
+          }}
+          className="disband-team-form__form"
+        >
+          <NewTextInput
+            onChange={(e) =>
+              updateFormFieldState({
+                field: "team_name",
+                value: e.target.value,
+              })
+            }
+          />
+        </form>
       </Modal.Body>
       <Modal.Footer>
         <NewButton
           csVariant="danger"
+          disabled={formDisabled}
           onClick={() => {
             strongForm.submit();
           }}
@@ -338,4 +340,4 @@ function DisbandTeamForm(props: {
   );
 }
 
-LeaveTeamForm.displayName = "LeaveTeamForm";
+DisbandTeamForm.displayName = "DisbandTeamForm";
