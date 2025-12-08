@@ -10,11 +10,9 @@ import {
   ScrollRestoration,
   type ShouldRevalidateFunctionArgs,
   type UIMatch,
-  isRouteErrorResponse,
   useLoaderData,
   useLocation,
   useMatches,
-  useRouteError,
 } from "react-router";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
@@ -30,7 +28,7 @@ import {
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 
-import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
+import { withSentry } from "@sentry/remix";
 import { memo, type ReactNode, Suspense, useEffect, useRef } from "react";
 import { useHydrated } from "remix-utils/use-hydrated";
 import Toast from "@thunderstore/cyberstorm/src/newComponents/Toast";
@@ -600,42 +598,7 @@ function App() {
 }
 
 export default withSentry(App);
-
-// REMIX TODO: We don't have any data available in the root ErrorBoundary, so we might want to change the designs
-export function ErrorBoundary() {
-  // REMIX TODO: We need to call the loader separately somehow to get the CurrentUser
-  // const loaderOutput = useLoaderData<RootLoadersType>();
-  // const parsedLoaderOutput: {
-  //   envStuff: { ENV: { PUBLIC_API_URL: string } };
-  //   sessionId: string | null;
-  //   currentUser: CurrentUser;
-  // } = JSON.parse(JSON.stringify(loaderOutput));
-  const error = useRouteError();
-  if (import.meta.env.PROD) {
-    captureRemixErrorBoundaryError(error);
-  } else if (import.meta.env.DEV) {
-    console.log(error);
-  }
-  const isResponseError = isRouteErrorResponse(error);
-  return (
-    <div className="error">
-      <div
-        className="error__glitch"
-        data-text={isResponseError ? error.status : 500}
-      >
-        <span>{isResponseError ? error.status : 500}</span>
-      </div>
-      <div className="error__description">
-        {isResponseError ? error.data : "Internal server error"}
-      </div>
-      {!isResponseError && (
-        <div className="error__flavor">
-          Beep boop. Server something error happens.
-        </div>
-      )}
-    </div>
-  );
-}
+export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
 
 // Temporary solution for implementing ads
 // REMIX TODO: Move to dynamic html
