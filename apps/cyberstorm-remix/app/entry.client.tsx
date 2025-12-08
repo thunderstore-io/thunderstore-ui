@@ -4,8 +4,12 @@ import { hydrateRoot } from "react-dom/client";
 import { useLocation, useMatches } from "react-router";
 import { HydratedRouter } from "react-router/dom";
 
-import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
 import { denyUrls } from "cyberstorm/utils/sentry";
+import { initializeClientDapper } from "cyberstorm/utils/dapperSingleton";
 
 const publicEnvVariables = getPublicEnvVariables([
   "VITE_SITE_URL",
@@ -13,6 +17,7 @@ const publicEnvVariables = getPublicEnvVariables([
   "VITE_API_URL",
   "VITE_AUTH_BASE_URL",
   "VITE_CLIENT_SENTRY_DSN",
+  "VITE_COOKIE_DOMAIN",
 ]);
 
 Sentry.init({
@@ -68,6 +73,16 @@ Sentry.init({
   // Filter out e.g. ad related domains that may spam errors.
   denyUrls,
 });
+
+try {
+  const sessionTools = getSessionTools();
+
+  initializeClientDapper(() =>
+    sessionTools.getConfig(publicEnvVariables.VITE_API_URL)
+  );
+} catch (error) {
+  Sentry.captureException(error);
+}
 
 startTransition(() => {
   hydrateRoot(
