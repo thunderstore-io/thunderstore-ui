@@ -134,12 +134,15 @@
     color: var(--color-text-tertiary);
   }
 
+  .navigation-login__modal {
+    max-width: min-content;
+  }
+
   .navigation-login {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     align-items: center;
-    width: min-content;
     padding: var(--space-32);
   }
 

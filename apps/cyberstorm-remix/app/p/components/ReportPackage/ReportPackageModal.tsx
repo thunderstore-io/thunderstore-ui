@@ -12,7 +12,6 @@ export function ReportPackageModal(props: ReportPackageModalProps) {
   return (
     <Modal
       titleContent="Report Package"
-      csSize="small"
       disableBody
       open={props.isOpen}
       onOpenChange={props.onOpenChange}
