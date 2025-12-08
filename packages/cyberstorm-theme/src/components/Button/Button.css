@@ -55,14 +55,14 @@
     --button-text-color: var(--button-primary-text-color--default);
     --button-icon-color: var(--button-primary-icon-color--default);
 
-    &:where(:hover),
+    &:where(:hover:not(:disabled)),
     &[data-state="open"] {
       --button-background-color: var(--button-primary-bg-color--hover);
       --button-text-color: var(--button-primary-text-color--hover);
       --button-icon-color: var(--button-primary-icon-color--hover);
     }
 
-    &:where(:active) {
+    &:where(:active:not(:disabled)) {
       --button-background-color: var(--button-primary-bg-color--active);
       --button-text-color: var(--button-primary-text-color--active);
       --button-icon-color: var(--button-primary-icon-color--active);
@@ -74,14 +74,14 @@
     --button-text-color: var(--button-secondary-text-color--default);
     --button-icon-color: var(--button-secondary-icon-color--default);
 
-    &:where(:hover),
+    &:where(:hover:not(:disabled)),
     &[data-state="open"] {
       --button-background-color: var(--button-secondary-bg-color--hover);
       --button-text-color: var(--button-secondary-text-color--hover);
       --button-icon-color: var(--button-secondary-icon-color--hover);
     }
 
-    &:where(:active) {
+    &:where(:active:not(:disabled)) {
       --button-background-color: var(--button-secondary-bg-color--active);
       --button-text-color: var(--button-secondary-text-color--active);
       --button-icon-color: var(--button-secondary-icon-color--active);
@@ -93,14 +93,14 @@
     --button-text-color: var(--button-accent-text-color--default);
     --button-icon-color: var(--button-accent-icon-color--default);
 
-    &:where(:hover),
+    &:where(:hover:not(:disabled)),
     &[data-state="open"] {
       --button-background-color: var(--button-accent-bg-color--hover);
       --button-text-color: var(--button-accent-text-color--hover);
       --button-icon-color: var(--button-accent-icon-color--hover);
     }
 
-    &:where(:active) {
+    &:where(:active:not(:disabled)) {
       --button-background-color: var(--button-accent-bg-color--active);
       --button-text-color: var(--button-accent-text-color--active);
       --button-icon-color: var(--button-accent-icon-color--active);
@@ -115,7 +115,7 @@
 
     background: var(--button-special-background--default);
 
-    &:where(:hover),
+    &:where(:hover:not(:disabled)),
     &[data-state="open"] {
       --button-text-color: var(--button-special-text-color--hover);
       --button-icon-color: var(--button-special-icon-color--hover);
@@ -125,7 +125,7 @@
       background: var(--button-special-background--hover);
     }
 
-    &:where(:active) {
+    &:where(:active:not(:disabled)) {
       --button-text-color: var(--button-special-text-color--active);
       --button-icon-color: var(--button-special-icon-color--active);
       --button-border: var(--button-special-border--active);
@@ -140,14 +140,14 @@
     --button-text-color: var(--button-success-text-color--default);
     --button-icon-color: var(--button-success-icon-color--default);
 
-    &:where(:hover),
+    &:where(:hover:not(:disabled)),
     &[data-state="open"] {
       --button-background-color: var(--button-success-bg-color--hover);
       --button-text-color: var(--button-success-text-color--hover);
       --button-icon-color: var(--button-success-icon-color--hover);
     }
 
-    &:where(:active) {
+    &:where(:active:not(:disabled)) {
       --button-background-color: var(--button-success-bg-color--active);
       --button-text-color: var(--button-success-text-color--active);
       --button-icon-color: var(--button-success-icon-color--active);
@@ -159,14 +159,14 @@
     --button-text-color: var(--button-info-text-color--default);
     --button-icon-color: var(--button-info-icon-color--default);
 
-    &:where(:hover),
+    &:where(:hover:not(:disabled)),
     &[data-state="open"] {
       --button-background-color: var(--button-info-bg-color--hover);
       --button-text-color: var(--button-info-text-color--hover);
       --button-icon-color: var(--button-info-icon-color--hover);
     }
 
-    &:where(:active) {
+    &:where(:active:not(:disabled)) {
       --button-background-color: var(--button-info-bg-color--active);
       --button-text-color: var(--button-info-text-color--active);
       --button-icon-color: var(--button-info-icon-color--active);
@@ -178,14 +178,14 @@
     --button-text-color: var(--button-warning-text-color--default);
     --button-icon-color: var(--button-warning-icon-color--default);
 
-    &:where(:hover),
+    &:where(:hover:not(:disabled)),
     &[data-state="open"] {
       --button-background-color: var(--button-warning-bg-color--hover);
       --button-text-color: var(--button-warning-text-color--hover);
       --button-icon-color: var(--button-warning-icon-color--hover);
     }
 
-    &:where(:active) {
+    &:where(:active:not(:disabled)) {
       --button-background-color: var(--button-warning-bg-color--active);
       --button-text-color: var(--button-warning-text-color--active);
       --button-icon-color: var(--button-warning-icon-color--active);
@@ -197,14 +197,14 @@
     --button-text-color: var(--button-danger-text-color--default);
     --button-icon-color: var(--button-danger-icon-color--default);
 
-    &:where(:hover),
+    &:where(:hover:not(:disabled)),
     &[data-state="open"] {
       --button-background-color: var(--button-danger-bg-color--hover);
       --button-text-color: var(--button-danger-text-color--hover);
       --button-icon-color: var(--button-danger-icon-color--hover);
     }
 
-    &:where(:active) {
+    &:where(:active:not(:disabled)) {
       --button-background-color: var(--button-danger-bg-color--active);
       --button-text-color: var(--button-danger-text-color--active);
       --button-icon-color: var(--button-danger-icon-color--active);
@@ -226,7 +226,6 @@
 
   .button[disabled] {
     opacity: 0.5;
-    pointer-events: none;
   }
 
   .button:where(.button--only-icon) {
