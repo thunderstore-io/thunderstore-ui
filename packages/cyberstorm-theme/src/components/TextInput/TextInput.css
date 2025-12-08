@@ -67,12 +67,16 @@
     --text-input-border-color: var(--input-border-color--invalid);
   }
 
-  .text-input:hover {
+  .text-input:disabled {
+    cursor: not-allowed;
+  }
+
+  .text-input:hover:not(:disabled) {
     --text-input-background-color: var(--input-bg-color--hover);
     --text-input-border-color: var(--input-border-color--hover);
   }
 
-  .text-input:focus-within {
+  .text-input:focus-within:not(:disabled) {
     --text-input-text-color: var(--input-text-color--focus);
     --text-input-background-color: var(--input-bg-color--focus);
     --text-input-border-color: var(--input-border-color--focus);
