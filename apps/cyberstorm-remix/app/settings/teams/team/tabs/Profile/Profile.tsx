@@ -16,6 +16,7 @@ import {
   teamDetailsEdit,
 } from "@thunderstore/thunderstore-api";
 
+import { isTeamOwner } from "cyberstorm/utils/permissions";
 import "./Profile.css";
 
 export const clientLoader = makeTeamSettingsTabLoader(
@@ -48,6 +49,8 @@ function ProfileForm(props: { team: TeamDetails }) {
   const outletContext = useOutletContext() as OutletContextShape;
   const revalidator = useRevalidator();
   const toast = useToast();
+
+  const formDisabled = !isTeamOwner(team.name, outletContext.currentUser);
 
   function formFieldUpdateAction(
     state: TeamDetailsEditRequestData,
@@ -131,10 +134,15 @@ function ProfileForm(props: { team: TeamDetails }) {
                 })
               }
               rootClasses="team-profile__input"
+              disabled={formDisabled}
             />
           </div>
         </div>
-        <NewButton rootClasses="team-profile__save" onClick={strongForm.submit}>
+        <NewButton
+          rootClasses="team-profile__save"
+          onClick={strongForm.submit}
+          disabled={formDisabled}
+        >
           Save changes
         </NewButton>
       </div>
