@@ -1,5 +1,6 @@
-import type { JSX } from "react";
+import { useEffect, type JSX } from "react";
 import { isRouteErrorResponse, useRouteError } from "react-router";
+import { captureRemixErrorBoundaryError } from "@sentry/remix";
 
 import { ApiError } from "@thunderstore/thunderstore-api";
 
@@ -14,6 +15,17 @@ type StatusCode = number | "???";
  */
 export function RouteErrorBoundary() {
   const error = useRouteError();
+
+  // Seeing double console logs caused by React's strictMode (that
+  // *should* happen only in dev mode) makes me want to ensure any
+  // rerenders don't get logged in Sentry twice.
+  useEffect(() => {
+    if (error && import.meta.env.PROD) {
+      captureRemixErrorBoundaryError(error);
+    } else if (error) {
+      console.error("Error boundary caught error", error);
+    }
+  }, [error]);
 
   let statusCode: StatusCode = "???";
 

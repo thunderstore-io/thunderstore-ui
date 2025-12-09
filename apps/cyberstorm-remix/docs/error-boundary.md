@@ -14,9 +14,7 @@ export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorB
 
 ### TODO
 
-- Consider replacing the error boundary in `root.tsx` with this one
 - Use `RouteErrorBoundary` in route components
-- Investigate if [error reporting](https://reactrouter.com/how-to/error-reporting) (via Sentry) should be done separately or implement as a part of the error boundary
 - Add "retry buttons" (e.g. reloading the page on 500 series of errors)
 - As `RouteErrorBoundary` is all-or-nothing solution when it comes to rendering, consider if there's a need for more granular non-route component level error boundaries. We might not need or want to use them, as error boundaries are intended more for render time errors, and any errors caused by user interaction should be handled by the component logic itself
   - If it turns out we don't want other error boundaries, consider renaming `RouteErrorBoundary` to just `ErrorBoundary`
