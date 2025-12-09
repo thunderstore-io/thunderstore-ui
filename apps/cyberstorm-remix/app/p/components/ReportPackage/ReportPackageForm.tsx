@@ -93,10 +93,7 @@ export function ReportPackageForm(
       resetFormInputs();
     },
     onSubmitError: (error) => {
-      if (
-        error.message === "401: Unauthorized" ||
-        (isApiError(error) && error.response.status === 401)
-      ) {
+      if (isApiError(error) && error.response.status === 401) {
         setError("You must be logged in to report a package.");
         return;
       }
