@@ -185,6 +185,8 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
     },
   });
 
+  const teamNameFieldProps = strongForm.getFieldComponentProps("name");
+
   const [open, setOpen] = useState(false);
 
   return (
@@ -210,9 +212,10 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
         </div>
         <div className="create-team-form__input">
           <label className="create-team-form__label" htmlFor="teamName">
-            Team Name
+            Team Name <span aria-hidden="true">*</span>
           </label>
           <NewTextInput
+            value={formInputs.name}
             onChange={(v) =>
               updateFormFieldState({
                 field: "name",
@@ -221,6 +224,8 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
             }
             placeholder={"MyCoolTeam"}
             id="teamName"
+            required
+            {...teamNameFieldProps}
           />
         </div>
       </Modal.Body>
