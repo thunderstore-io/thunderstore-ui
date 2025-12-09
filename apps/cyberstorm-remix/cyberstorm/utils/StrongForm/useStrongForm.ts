@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ParseError,
   RequestBodyParseError,
@@ -57,20 +57,105 @@ export function useStrongForm<
   const [submitOutput, setSubmitOutput] = useState<SubmissionOutput>();
   const [submitError, setSubmitError] = useState<SubmissionError>();
   const [inputErrors, setInputErrors] = useState<InputErrors>();
+  const [fieldInteractions, setFieldInteractions] = useState<
+    Partial<
+      Record<
+        keyof Inputs,
+        {
+          hasFocused: boolean;
+          hasBlurred: boolean;
+        }
+      >
+    >
+  >({});
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+
+  const isValueEmpty = (value: unknown) => {
+    if (typeof value === "string") {
+      return value.trim() === "";
+    }
+    return value === undefined || value === null;
+  };
 
   const isReady = useMemo(() => {
     if (!props.validators) return true;
     for (const key in props.validators) {
       const validator = props.validators[key];
-      const value = props.inputs[key];
+      const value = props.inputs[key as keyof Inputs];
       // NOTE: Expand the checks as more validators are added
-      if (validator?.required) {
-        if (typeof value === "string" && value.trim() === "") return false;
-        if (value === undefined || value === null) return false;
+      if (validator?.required && isValueEmpty(value)) {
+        return false;
       }
     }
     return true;
-  }, [props.inputs]);
+  }, [props.inputs, props.validators]);
+
+  const getFieldState = useCallback(
+    <K extends keyof Inputs>(field: K) => {
+      const validator = props.validators?.[field];
+      const value = props.inputs[field];
+      const isRequired = Boolean(validator?.required);
+      const rawInvalid = isRequired && isValueEmpty(value);
+      const interactions = fieldInteractions[field];
+      const hasFinishedInteraction =
+        Boolean(interactions?.hasFocused && interactions?.hasBlurred) ||
+        hasAttemptedSubmit;
+      const isInvalid = rawInvalid && hasFinishedInteraction;
+      return {
+        isRequired,
+        isInvalid,
+      };
+    },
+    [fieldInteractions, hasAttemptedSubmit, props.inputs, props.validators]
+  );
+
+  const markFieldInteraction = useCallback(
+    (field: keyof Inputs, type: "focus" | "blur") => {
+      setFieldInteractions((prev) => {
+        const current = prev[field] ?? { hasFocused: false, hasBlurred: false };
+        const next =
+          type === "focus"
+            ? { ...current, hasFocused: true }
+            : { ...current, hasBlurred: true };
+        if (
+          current.hasFocused === next.hasFocused &&
+          current.hasBlurred === next.hasBlurred
+        ) {
+          return prev;
+        }
+        return { ...prev, [field]: next };
+      });
+    },
+    []
+  );
+
+  const getFieldInteractionProps = useCallback(
+    (field: keyof Inputs) => ({
+      onFocus: () => markFieldInteraction(field, "focus"),
+      onBlur: () => markFieldInteraction(field, "blur"),
+    }),
+    [markFieldInteraction]
+  );
+
+  const getFieldComponentProps = useCallback(
+    (field: keyof Inputs, options?: { disabled?: boolean }) => {
+      const fieldState = getFieldState(field);
+      const modifiers: ("invalid" | "disabled")[] = [];
+      if (fieldState.isInvalid) {
+        modifiers.push("invalid" as const);
+      }
+      if (options?.disabled) {
+        modifiers.push("disabled" as const);
+      }
+      const interactionProps = getFieldInteractionProps(field);
+      return {
+        ...interactionProps,
+        "aria-invalid": fieldState.isInvalid,
+        csModifiers: modifiers,
+      };
+    },
+    [getFieldInteractionProps, getFieldState]
+  );
 
   useEffect(() => {
     if (refining || submitting) {
@@ -106,6 +191,7 @@ export function useStrongForm<
   }, [props.inputs]);
 
   const submit = async () => {
+    setHasAttemptedSubmit(true);
     if (submitting) {
       const error = new Error("Form is already submitting!");
       if (props.onSubmitError) {
@@ -193,5 +279,8 @@ export function useStrongForm<
     refineError,
     inputErrors,
     isReady,
+    getFieldState,
+    getFieldInteractionProps,
+    getFieldComponentProps,
   };
 }
