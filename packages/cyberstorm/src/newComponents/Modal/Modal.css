@@ -22,6 +22,10 @@
     align-self: stretch;
     justify-content: center;
 
+    width: 100%;
+    min-width: 15rem;
+    max-width: 39rem;
+
     /* padding: var(--modal-content-padding); */
     border: var(--modal-border);
     border-radius: var(--modal-border-radius);

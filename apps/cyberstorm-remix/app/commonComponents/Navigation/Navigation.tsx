@@ -246,6 +246,7 @@ export function DesktopLoginPopover() {
           Log In
         </NewButton>
       }
+      contentClasses="navigation-login__modal"
     >
       <div className="navigation-login">
         <svg
