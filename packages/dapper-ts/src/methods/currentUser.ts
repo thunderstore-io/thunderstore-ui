@@ -6,6 +6,31 @@ import {
 
 import { DapperTsInterface } from "../index";
 
+function isInvalidTokenError(error: ApiError): boolean {
+  const detail = extractErrorDetail(error.responseJson);
+  return (
+    typeof detail === "string" && detail.toLowerCase().includes("invalid token")
+  );
+}
+
+function extractErrorDetail(payload: unknown): string | undefined {
+  if (!payload) {
+    return undefined;
+  }
+  if (typeof payload === "string") {
+    return payload;
+  }
+  if (
+    typeof payload === "object" &&
+    payload !== null &&
+    "detail" in payload &&
+    typeof (payload as { detail?: unknown }).detail === "string"
+  ) {
+    return (payload as { detail: string }).detail;
+  }
+  return undefined;
+}
+
 export async function getCurrentUser(this: DapperTsInterface) {
   try {
     const data = await fetchCurrentUser({
@@ -17,13 +42,13 @@ export async function getCurrentUser(this: DapperTsInterface) {
     return data;
   } catch (error) {
     if (error instanceof ApiError && error.response.status === 401) {
-      // If the user is not authenticated, we remove the session hook
-      this.removeSessionHook?.();
+      if (isInvalidTokenError(error)) {
+        // If the token is invalid, clear any persisted session data
+        this.removeSessionHook?.();
+      }
       return null;
-    } else {
-      // If it's another error, we throw it
-      throw error;
     }
+    throw error;
   }
 }
 
