@@ -25,10 +25,7 @@
     background-color: var(--switch-knob-background-color);
     box-shadow: var(--switch-knob-box-shadow);
     transform: var(--switch-knob-transform);
+    cursor: var(--switch-cursor);
     transition: var(--switch-knob-transition);
-
-    &:hover {
-      cursor: pointer;
-    }
   }
 }

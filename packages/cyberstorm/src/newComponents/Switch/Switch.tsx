@@ -43,7 +43,12 @@ export const Switch = memo(function Switch(props: SwitchProps) {
     <RadixSwitch.Root
       className={classnames(
         "switch",
-        ...componentClasses("switch", csVariant, csSize, csModifiers),
+        ...componentClasses(
+          "switch",
+          csVariant,
+          csSize,
+          disabled ? [...(csModifiers ?? []), "disabled"] : csModifiers
+        ),
         rootClasses
       )}
       disabled={disabled}
