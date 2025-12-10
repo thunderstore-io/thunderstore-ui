@@ -4,6 +4,7 @@ import {
   fetchNamespacePackageListings,
   fetchPackageDependantsListings,
   fetchPackageListingDetails,
+  fetchPackageListingStatus,
   PackageListingsOrderingEnum,
   PackageListingsRequestQueryParams,
 } from "@thunderstore/thunderstore-api";
@@ -121,9 +122,31 @@ export async function getPackageListingDetails(
   this: DapperTsInterface,
   communityId: string,
   namespaceId: string,
-  packageName: string
+  packageName: string,
+  useSession = false
 ) {
   const data = await fetchPackageListingDetails({
+    config: this.config,
+    params: {
+      community_id: communityId,
+      namespace_id: namespaceId,
+      package_name: packageName,
+    },
+    data: {},
+    queryParams: {},
+    useSession: useSession,
+  });
+
+  return data;
+}
+
+export async function getPackageListingStatus(
+  this: DapperTsInterface,
+  communityId: string,
+  namespaceId: string,
+  packageName: string
+) {
+  const data = await fetchPackageListingStatus({
     config: this.config,
     params: {
       community_id: communityId,
