@@ -133,7 +133,15 @@ export const packageListingSchema = z.object({
   size: z.number().int(),
 });
 
+export const packageListingStatusSchema = z.object({
+  review_status: z.string().nullable().optional(),
+  rejection_reason: z.string().nullable().optional(),
+  internal_notes: z.string().nullable().optional(),
+});
+
 export type PackageListing = z.infer<typeof packageListingSchema>;
+
+export type PackageListingStatus = z.infer<typeof packageListingStatusSchema>;
 
 export const packageTeamSchema = z.object({
   name: z.string().min(1),
