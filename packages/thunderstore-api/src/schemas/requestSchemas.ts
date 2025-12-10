@@ -622,7 +622,7 @@ export type TeamDetailsEditRequestParams = z.infer<
 >;
 
 export const teamDetailsEditRequestDataSchema = z.object({
-  donation_link: z.string().min(1).max(1024),
+  donation_link: z.string().min(1).max(1024).nullable(),
 });
 
 export type TeamDetailsEditRequestData = z.infer<
