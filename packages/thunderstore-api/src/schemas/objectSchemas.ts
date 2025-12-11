@@ -134,7 +134,10 @@ export const packageListingSchema = z.object({
 });
 
 export const packageListingStatusSchema = z.object({
-  review_status: z.string().nullable().optional(),
+  review_status: z
+    .enum(["unreviewed", "approved", "rejected"])
+    .nullable()
+    .optional(),
   rejection_reason: z.string().nullable().optional(),
   internal_notes: z.string().nullable().optional(),
 });
