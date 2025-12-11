@@ -90,6 +90,9 @@ function ProfileForm(props: { team: TeamDetails }) {
     InputErrors
   >({
     inputs: formInputs,
+    refiner: async (inputs: typeof formInputs) => ({
+      donation_link: nullForEmptyString(inputs.donation_link),
+    }),
     submitor,
     onSubmitSuccess: () => {
       toast.addToast({
@@ -120,7 +123,7 @@ function ProfileForm(props: { team: TeamDetails }) {
             <NewTextInput
               name={"donation_link"}
               placeholder={"https://"}
-              value={formInputs.donation_link}
+              value={formInputs.donation_link ?? ""}
               onChange={(e) =>
                 updateFormFieldState({
                   field: "donation_link",
@@ -140,3 +143,6 @@ function ProfileForm(props: { team: TeamDetails }) {
 }
 
 ProfileForm.displayName = "ProfileForm";
+
+const nullForEmptyString = (value: string | null): string | null =>
+  value?.trim() === "" ? null : value;
