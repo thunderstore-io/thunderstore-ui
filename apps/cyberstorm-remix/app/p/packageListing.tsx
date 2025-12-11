@@ -105,7 +105,11 @@ async function getUserPermissions(
 ) {
   const cu = await tools.getSessionCurrentUser();
   if (cu.username) {
-    return await dapper.getPackagePermissions(communityId, namespaceId, packageId);
+    return await dapper.getPackagePermissions(
+      communityId,
+      namespaceId,
+      packageId
+    );
   }
   return undefined;
 }
@@ -119,7 +123,11 @@ async function getPackageListingStatus(
 ) {
   const cu = await tools.getSessionCurrentUser();
   if (cu.username) {
-    return await dapper.getPackageListingStatus(communityId, namespaceId, packageId);
+    return await dapper.getPackageListingStatus(
+      communityId,
+      namespaceId,
+      packageId
+    );
   }
   return undefined;
 }
@@ -180,9 +188,8 @@ export default function PackageListing() {
     permissions,
     community_identifier,
     namespace_id,
-    package_id
+    package_id,
   } = useLoaderData<typeof loader | typeof clientLoader>();
-
 
   const location = useLocation();
 
@@ -196,11 +203,11 @@ export default function PackageListing() {
   const toast = useToast();
 
   const { ReportPackageButton, ReportPackageModal } = useReportPackage({
-    formPropsPromise: new Promise(() => ({
+    formPropsPromise: Promise.resolve({
       community: community_identifier,
       namespace: namespace_id,
       package: package_id,
-    })),
+    }),
     config: config,
   });
 
@@ -320,7 +327,10 @@ export default function PackageListing() {
               <meta property="og:description" content={listing.description} />
               <meta property="og:image:width" content="256" />
               <meta property="og:image:height" content="256" />
-              <meta property="og:image" content={listing.icon_url ?? undefined} />
+              <meta
+                property="og:image"
+                content={listing.icon_url ?? undefined}
+              />
               <meta property="og:site_name" content="Thunderstore" />
             </>
           )}
@@ -404,7 +414,11 @@ export default function PackageListing() {
 
                 <Drawer
                   popoverId="packageDetailDrawer"
-                  headerContent={<Heading csLevel="3" csSize="3">Details</Heading>}
+                  headerContent={
+                    <Heading csLevel="3" csSize="3">
+                      Details
+                    </Heading>
+                  }
                   rootClasses="package-listing__drawer"
                 >
                   {packageMeta(lastUpdated, firstUploaded, listing)}

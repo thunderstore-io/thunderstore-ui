@@ -18,11 +18,13 @@ import {
   type RequestConfig,
 } from "@thunderstore/thunderstore-api";
 
+import { type PackageListingStatus } from "@thunderstore/dapper/types";
+
 export interface ReviewPackageFormProps {
   communityId: string;
   namespaceId: string;
   packageId: string;
-  packageListingStatus?: any; //TODO: FIX THIS TYPE LATER
+  packageListingStatus: PackageListingStatus;
   config: () => RequestConfig;
   toast: ReturnType<typeof useToast>;
 }
@@ -50,7 +52,10 @@ export function ReviewPackageForm({
   );
 
   const reviewStatus = packageListingStatus?.review_status ?? "unreviewed";
-  const reviewStatusColor = reviewStatusColorMap[reviewStatus];
+  const reviewStatusColor =
+    reviewStatusColorMap[reviewStatus as keyof typeof reviewStatusColorMap] ??
+    "orange";
+
   const { revalidate } = useRevalidator();
 
   useEffect(() => {

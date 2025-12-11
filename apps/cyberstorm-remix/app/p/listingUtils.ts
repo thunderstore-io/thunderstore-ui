@@ -50,10 +50,10 @@ export async function getPrivateListing(
       namespaceId,
       packageId
     );
-  } catch (err: any) {
-    const is404 = isApiError(err) && err.response?.status === 404;
+  } catch (e) {
+    const is404 = isApiError(e) && e.response?.status === 404;
     if (!is404) {
-      throw err;
+      throw e;
     }
   }
 

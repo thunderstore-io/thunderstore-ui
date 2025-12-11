@@ -8,11 +8,12 @@ import {
   fetchPackagePermissions,
   type RequestConfig,
 } from "@thunderstore/thunderstore-api";
+import { type PackageListingStatus } from "@thunderstore/dapper/types";
 
 export interface ManagementToolsProps {
   packagePermissions: Awaited<ReturnType<typeof fetchPackagePermissions>>;
   listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>;
-  listingStatus: any; //TODO: FIX THIS TYPE LATER
+  listingStatus: PackageListingStatus;
   toast: ReturnType<typeof useToast>;
   requestConfig: () => RequestConfig;
 }
