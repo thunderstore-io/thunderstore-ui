@@ -3,6 +3,9 @@
   .switch {
     --switch-position: relative;
     --switch-display: inline-block;
+    --switch-opacity: 1;
+    --switch-cursor: pointer;
+    --switch-knob-transition: transform var(--switch-transition--default);
 
     transition:
       background-color var(--switch-transition--default),
@@ -27,6 +30,11 @@
             var(--switch-knob-width) / 2
         )
       );
+    }
+
+    &:where(.switch--disabled) {
+      --switch-opacity: var(--switch-opacity--disabled);
+      --switch-cursor: var(--switch-cursor--disabled);
     }
   }
 
@@ -108,11 +116,5 @@
         );
       }
     }
-  }
-
-  /* MODIFIERS */
-  .switch:where(.switch--modifier--disabled) {
-    --switch-opacity: var(--switch-opacity--disabled);
-    --switch-cursor: var(--switch-cursor--disabled);
   }
 }
