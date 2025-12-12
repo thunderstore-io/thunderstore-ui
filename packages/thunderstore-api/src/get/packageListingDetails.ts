@@ -10,13 +10,13 @@ import {
   PackageListingStatusResponseData,
 } from "../schemas/responseSchemas";
 
-const basePath = "api/cyberstorm/listing/";
+import { BASE_LISTING_PATH } from "../index";
 
 export async function fetchPackageListingDetails(
   props: ApiEndpointProps<PackageListingDetailsRequestParams, object, object>
 ): Promise<PackageListingDetailsResponseData> {
   const { config, params, useSession } = props;
-  const path = `${basePath}${params.community_id}/${params.namespace_id}/${params.package_name}/`;
+  const path = `${BASE_LISTING_PATH}${params.community_id}/${params.namespace_id}/${params.package_name}/`;
 
   return await apiFetch({
     args: {
@@ -34,7 +34,7 @@ export async function fetchPackageListingStatus(
   props: ApiEndpointProps<PackageListingDetailsRequestParams, object, object>
 ): Promise<PackageListingStatusResponseData> {
   const { config, params } = props;
-  const path = `${basePath}${params.community_id}/${params.namespace_id}/${params.package_name}/status/`;
+  const path = `${BASE_LISTING_PATH}${params.community_id}/${params.namespace_id}/${params.package_name}/status/`;
 
   return await apiFetch({
     args: {

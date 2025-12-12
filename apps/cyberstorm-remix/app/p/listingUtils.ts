@@ -57,12 +57,11 @@ export async function getPrivateListing(
     }
   }
 
-  const useSession = true;
   const privateListing = await dapper.getPackageListingDetails(
     communityId,
     namespaceId,
     packageId,
-    useSession
+    true
   );
 
   if (!privateListing) {

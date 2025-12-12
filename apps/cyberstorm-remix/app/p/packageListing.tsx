@@ -249,11 +249,7 @@ export default function PackageListing() {
   // https://react.dev/reference/react/StrictMode
   // If strict mode is removed from the entry.client.tsx, this should only run once
   useEffect(() => {
-    if (!startsHydrated.current && isHydrated) {
-      return;
-    }
-
-    if (!listing) {
+    if (!listing || (!startsHydrated.current && isHydrated)) {
       return;
     }
 
@@ -294,6 +290,7 @@ export default function PackageListing() {
     config: config,
   });
 
+  // TODO: Add proper loading element
   if (!listing) {
     return <div>Loading package...</div>;
   }

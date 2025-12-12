@@ -14,6 +14,8 @@ export interface ApiEndpointProps<Params, QueryParams, Data> {
   queryParams: QueryParams;
 }
 
+export const BASE_LISTING_PATH = "api/cyberstorm/listing/";
+
 export * from "./delete/packageWiki";
 export * from "./delete/teamDisband";
 export * from "./delete/teamRemoveMember";
