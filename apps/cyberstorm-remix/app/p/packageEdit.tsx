@@ -58,6 +58,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
       sessionId: undefined,
     };
   });
+
   return {
     community: await dapper.getCommunity(communityId),
     communityFilters: await dapper.getCommunityFilters(communityId),
@@ -92,6 +93,13 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
     namespaceId,
     packageId
   );
+
+  if (
+    !permissions?.permissions.can_manage &&
+    !permissions?.permissions.can_moderate
+  ) {
+    throw new Response("Unauthorized", { status: 403 });
+  }
 
   const listing = await getPrivateListing(dapper, {
     communityId: communityId,
