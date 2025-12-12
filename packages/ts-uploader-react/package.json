@@ -15,9 +15,9 @@
   },
   "dependencies": {
     "@thunderstore/ts-uploader": "*",
-    "@types/react": "^19.1.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "@types/react": "^19.2.7",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
   },
   "devDependencies": {
     "typescript-plugin-css-modules": "^5.1.0"
