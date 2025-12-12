@@ -81,7 +81,7 @@ export function ManagementTools({
       )}
 
       {/* Manage package */}
-      {perms.can_manage && (
+      {(perms.can_manage || perms.can_moderate) && (
         <div className="package-listing-management-tools__island">
           <NewButton
             csSize="small"
