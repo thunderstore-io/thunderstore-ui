@@ -2,163 +2,73 @@
 
 [![codecov](https://codecov.io/gh/thunderstore-io/thunderstore-ui/branch/master/graph/badge.svg)](https://codecov.io/gh/thunderstore-io/thunderstore-ui)
 
-Monorepo containing Remix frontend for [thunderstore.io](https://thunderstore.io)
-and reusable UI components.
+This monorepo contains the frontend applications and shared libraries for [thunderstore.io](https://thunderstore.io).
 
-## Monorepo Setup
+## 🚀 Key Projects
 
-- [`yarn` workspaces](https://classic.yarnpkg.com/en/docs/workspaces/) manages
-  the packages in the monorepo (see `packages` key in base `package.json` file)
-  and handles dependency installation/deduplication.
-- [`preconstruct`](https://preconstruct.tools/) automates building and linking
-  the packages within the monorepo. Instead of using relative paths, local
-  packages can be imported as if they were installed via a package manager.
-  - Packages can be linked locally by running `yarn preconstruct dev`, but this
-    is handled automatically by `postinstall` hook, so developers don't need to
-    worry about it.
+### [Nimbus (Cyberstorm Remix)](./apps/cyberstorm-remix/README.md)
+The next-generation frontend for Thunderstore, built with Remix.
+👉 **[Read the Setup Guide](./apps/cyberstorm-remix/README.md)** to get started with the full stack (Frontend + Backend).
 
-```
-// first time setup
-git clone git@github.com:thunderstore-io/thunderstore-ui.git thunderstore-ui
-cd thunderstore-ui
-yarn install
+### [Storybook](./apps/cyberstorm-storybook)
+Component library and design system documentation.
+- Run: `yarn workspace @thunderstore/cyberstorm-storybook storybook`
+- URL: [http://localhost:6006/](http://localhost:6006/)
 
-// start Remix dev server
-yarn workspace @thunderstore/cyberstorm-remix dev
-```
+## 📦 Packages
 
-That's it. Changes done to `apps/cyberstorm-remix` and
-`packages/cyberstorm` should both be automatically visible at
-[http://localhost:3000/].
+Shared libraries located in `packages/`:
 
-```
-// production build, assumes yarn install has already been run
-// build packages/* with preconstruct
-yarn build
+### Core UI
+- **[`cyberstorm`](./packages/cyberstorm)**: Core React components and design system.
+- **[`cyberstorm-forms`](./packages/cyberstorm-forms)**: Form components for Cyberstorm.
+- **[`cyberstorm-theme`](./packages/cyberstorm-theme)**: Theme definitions and utilities.
 
-// build and start Remix prod server
-yarn workspace @thunderstore/cyberstorm-remix build
-yarn workspace @thunderstore/cyberstorm-remix start
-```
+### Data & API
+- **[`dapper`](./packages/dapper)**: Data Provider interfaces and types (React Context).
+- **[`dapper-ts`](./packages/dapper-ts)**: Production implementation of Dapper using the Thunderstore API.
+- **[`dapper-fake`](./packages/dapper-fake)**: Fake implementation of Dapper for testing and development.
+- **[`thunderstore-api`](./packages/thunderstore-api)**: Low-level Thunderstore API client.
+- **[`ts-api-react`](./packages/ts-api-react)**: React hooks and integration for the API.
+- **[`ts-api-react-actions`](./packages/ts-api-react-actions)**: React actions logic for the API.
+- **[`ts-api-react-forms`](./packages/ts-api-react-forms)**: React forms logic for the API.
 
-### Troubleshooting
+### Utilities
+- **[`beta-switch`](./packages/beta-switch)**: Helper for switching between projects on the same domain.
+- **[`graph-system`](./packages/graph-system)**: Graph execution system (Nodes/Edges).
+- **[`react-dnd`](./packages/react-dnd)**: React drag & drop hooks.
+- **[`ts-uploader`](./packages/ts-uploader)**: File upload logic.
+- **[`ts-uploader-react`](./packages/ts-uploader-react)**: React components for file uploads.
+- **[`typed-event-emitter`](./packages/typed-event-emitter)**: Strongly typed event emitter.
+- **[`use-promise`](./packages/use-promise)**: React hook for resolving promises with Suspense support.
 
-#### After runinng `yarn install` on Windows, you see symlinking errors
+## 🛠️ Monorepo Tooling
 
-**Solution**: Enable developer mode in windows settings.
-See https://github.com/preconstruct/preconstruct/issues/381 for more details
+This project uses:
+- **[Yarn Workspaces](https://classic.yarnpkg.com/en/docs/workspaces/)**: Dependency management.
+- **[Preconstruct](https://preconstruct.tools/)**: Links packages locally so changes are reflected immediately without rebuilding.
+- **[Plop](https://plopjs.com/)**: Scaffolding for new packages (`yarn run plop`).
 
-#### Yarn error `expected workspace package to exist for X`
+### Common Commands
 
-**Solution**: Downgrade yarn to a working version by running
-`yarn policies set-version 1.19.0`. See
-https://github.com/yarnpkg/yarn/issues/8405 for more details.
+| Command | Description |
+| :--- | :--- |
+| `yarn install` | Install dependencies for all packages. |
+| `yarn build` | Build all packages using Preconstruct. |
+| `yarn workspace <name> <cmd>` | Run a command in a specific package. |
 
-### Adding dependencies
+## 🤝 Contributing
 
-To add new dependencies to existing packages, simply run something like:
+### Pre-commit Hooks
+We use [pre-commit](https://pre-commit.com/) to enforce code style.
+1. Install pre-commit: [Installation Guide](https://pre-commit.com/#install)
+2. Enable hooks: `pre-commit install`
 
-```
-yarn workspace @thunderstore/cyberstorm add react-table @types/react-table
-```
+### Visual Testing (Chromatic)
+Pull requests automatically run visual regression tests via [Chromatic](https://www.chromatic.com/). You may need to accept baseline changes in the Chromatic UI before merging.
 
-### Adding a new package
-
-**Template**
-
-This repository includes a templated package generation script, powered by
-[plop](https://plopjs.com/documentation/). The templates can be found in
-[./plop/package](./plop/package) and should be updated if the requirements
-for new packages change.
-
-Behavior of plop is controlled in a single JS file at
-[./plopfile.mjs](./plopfile.mjs)
-
-**Generating**
-
-To actually generate a new package stub, simply run `yarn run plop` at the
-root of the repository. You should be prompted with a handful of questions after
-which a new package is created.
-
-![Plop generation example](./docs/plop.png)
-
-### About VS Code...
-
-VS Code may have problem detecting installed packages in this monorepo/workspace
-setup. Installing
-[Monorepo Workspace extension](https://marketplace.visualstudio.com/items?itemName=folke.vscode-monorepo-workspace)
-may solve them.
-
-## Storybook
-
-[Storybook](https://storybook.js.org/docs/react/get-started/introduction)
-provides a sandbox to build UI components in isolation, without having to start
-up the whole service stack. Additionally it showcases the existing components,
-promoting reusability.
-
-To start Storybook, run `yarn workspace @thunderstore/cyberstorm-storybook storybook`.
-Storybook can then be accessed at [http://localhost:6006/].
-
-When creating new components for `@thunderstore/cyberstorm`, add stories for
-them by creating files under `apps/cyberstorm-storybook/stories`. See the
-existing files for examples.
-
-To upgrade Storybook when it informs you about new version being available, run
-the given `npx sb@latest upgrade` command in `apps/cyberstorm-storybook`
-directory.
-
-### Chromatic
-
-[Chromatic](https://www.chromatic.com/docs/) is used as a part of CI pipeline.
-It hosts Storybook, and detects visual changes to any stories. These changes
-needs to be reviewed before a related PR can be merged. The workflow is:
-
-1. Commit and push the changes as usual. `storybook-chromatic.yml` Action
-   builds and uploads a new version of our Storybook to Chromatic. Note that
-   this step only fails if there's error building or uploading the Storybook -
-   any changes to components are not important at this point.
-2. Create a PR as usual.
-3. If there were visual changes, GitHub will show a pending action: _"UI Tests
-   Pending — 10 changes must be accepted as baselines."_ Clicking the *Details*
-   link will take you to Chromatic, where you must review and either accept or
-   reject the changes. The PR can't be merged before the changes are accepted.
-
-`yarn workspace @thunderstore/cyberstorm-storybook chromatic` can be used to
-manually upload a Storybook to Chromatic, but this seems unnecessary since we
-have it automated. To use the manual method, `CHROMATIC_CYBERSTORM_TOKEN` env
-variable needs to be set (in the repo it's stored as a Secret for Actions).
-
-## Docker Compose
-
-The build configuration for some apps is included in the
-`docker-compose.build.yml` file, making building of the services simple.
-
-**You will need to ensure all configured secrets are present before building
-with docker compose.** Currently the only required secret is the `.npmrc` file,
-which should include authentication to the font awesome private registry. See
-[Font Awesome documentation](https://fontawesome.com/docs/web/setup/packages)
-for more info on how to authenticate with npm, and then copy the `~/.npmrc` file
-it generates to the `./build-secrets` directory.
-
-**Build secrets are unsupported in the `docker-compose` python package, you must
-use the built-in `docker compose` subcommand instead.**
-
-Once the build-time secrets are available, building the services is as simple as
-running:
-
-```bash
-docker compose -f docker-compose.build.yml build
-```
-
-## pre-commit
-
-[Pre-commit](https://pre-commit.com/) enforces code style practices in this
-project. Choose your preferred
-[installation method](https://pre-commit.com/#install) and then run `pre-commit
-install` to enable Git hook scripts. Pre-commit will now automatically cancel
-your commits if any problems are detected, and autofix them. Stage the changed
-files to your commit and re-run the commit command.
-
-Pre-commit can be disabled for a single commit with `--no-verify` option, but
-note that CI also runs pre-commit and will fail if any problems are encountered
-at this stage.
+### VS Code
+Recommended extensions:
+- [Monorepo Workspace](https://marketplace.visualstudio.com/items?itemName=folke.vscode-monorepo-workspace) (helps with package detection)
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)

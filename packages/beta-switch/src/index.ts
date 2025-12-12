@@ -37,16 +37,16 @@ const betaQA: UrlStructure = {
 
 const legacyDev: UrlStructure = {
   protocol: "http://",
-  hostname: "thunderstore.temp",
+  hostname: "localhost",
   port: "",
-  tld: "temp",
+  tld: "localhost",
 };
 
 const betaDev: UrlStructure = {
   protocol: "http://",
-  hostname: "new.thunderstore.temp",
+  hostname: "new.localhost",
   port: "",
-  tld: "temp",
+  tld: "localhost",
 };
 
 async function checkBetaRedirect(

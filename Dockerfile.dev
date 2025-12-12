@@ -1,0 +1,15 @@
+FROM node:24-bookworm
+
+# Install system dependencies
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends iptables socat \
+	&& rm -rf /var/lib/apt/lists/*
+
+WORKDIR /workspace
+
+# Copy entrypoint script
+COPY apps/cyberstorm-remix/entrypoint.dev.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["yarn", "workspace", "@thunderstore/cyberstorm-remix", "dev", "--port", "3000", "--host", "0.0.0.0"]

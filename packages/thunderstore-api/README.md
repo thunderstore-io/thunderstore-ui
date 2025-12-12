@@ -1,6 +1,22 @@
-# thunderstore-api
+# @thunderstore/thunderstore-api
 
-Thunderstore API client
+The low-level client for the Thunderstore API. It handles HTTP requests, authentication headers, and basic error handling.
+
+## Features
+
+-   **Method Wrappers**: Typed functions for `GET`, `POST`, `PUT`, `DELETE`, `PATCH`.
+-   **Fetch Abstraction**: Wraps the native `fetch` API with Thunderstore-specific logic.
+-   **Error Handling**: Standardized error classes for API failures.
+
+## Usage
+
+This package is primarily used by `@thunderstore/dapper-ts` and `@thunderstore/ts-api-react` to communicate with the backend.
+
+```typescript
+import { apiFetch } from "@thunderstore/thunderstore-api";
+
+// ...
+```
 
 ## Scripts
 
