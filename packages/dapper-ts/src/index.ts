@@ -23,6 +23,7 @@ import {
 } from "./methods/package";
 import {
   getPackageListingDetails,
+  getPackageListingStatus,
   getPackageListings,
 } from "./methods/packageListings";
 import {
@@ -56,6 +57,7 @@ export class DapperTs implements DapperTsInterface {
     this.getPackageChangelog = this.getPackageChangelog.bind(this);
     this.getPackageListings = this.getPackageListings.bind(this);
     this.getPackageListingDetails = this.getPackageListingDetails.bind(this);
+    this.getPackageListingStatus = this.getPackageListingStatus.bind(this);
     this.getPackageReadme = this.getPackageReadme.bind(this);
     this.getPackageVersionDetails = this.getPackageVersionDetails.bind(this);
     this.getPackageVersions = this.getPackageVersions.bind(this);
@@ -85,6 +87,7 @@ export class DapperTs implements DapperTsInterface {
   public getPackageChangelog = getPackageChangelog;
   public getPackageListings = getPackageListings;
   public getPackageListingDetails = getPackageListingDetails;
+  public getPackageListingStatus = getPackageListingStatus;
   public getPackageReadme = getPackageReadme;
   public getPackageVersions = getPackageVersions;
   public getPackageVersionDependencies = getPackageVersionDependencies;

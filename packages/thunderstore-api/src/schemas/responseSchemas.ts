@@ -120,6 +120,17 @@ export type PackageListingDetailsResponseData = z.infer<
   typeof packageListingDetailsResponseDataSchema
 >;
 
+// PackageListingStatusResponse
+export const packageListingStatusResponseDataSchema = z.object({
+  review_status: z.enum(["unreviewed", "approved", "rejected"]).nullable(),
+  rejection_reason: z.string().nullable(),
+  internal_notes: z.string().nullable(),
+});
+
+export type PackageListingStatusResponseData = z.infer<
+  typeof packageListingStatusResponseDataSchema
+>;
+
 // PackageVersionDetailsResponse
 export const packageVersionDetailsResponseDataSchema = z.object({
   description: z.string(),
