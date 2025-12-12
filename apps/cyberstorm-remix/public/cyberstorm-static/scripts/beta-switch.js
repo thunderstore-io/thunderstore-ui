@@ -24,15 +24,15 @@ const betaQA = {
 };
 const legacyDev = {
   protocol: "http://",
-  hostname: "thunderstore.temp",
+  hostname: "localhost",
   port: "",
-  tld: "temp",
+  tld: "localhost",
 };
 const betaDev = {
   protocol: "http://",
-  hostname: "new.thunderstore.temp",
+  hostname: "new.localhost",
   port: "",
-  tld: "temp",
+  tld: "localhost",
 };
 async function checkBetaRedirect(legacy, beta, goToBetaRoR2) {
   const legacyOnlyPages = [

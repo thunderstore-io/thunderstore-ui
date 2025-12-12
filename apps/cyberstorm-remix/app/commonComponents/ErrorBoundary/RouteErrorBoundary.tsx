@@ -23,6 +23,7 @@ export function RouteErrorBoundary() {
     if (error && import.meta.env.PROD) {
       captureRemixErrorBoundaryError(error);
     } else if (error) {
+      console.log("Error boundary caught error", error);
       console.error("Error boundary caught error", error);
     }
   }, [error]);

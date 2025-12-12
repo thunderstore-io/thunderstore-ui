@@ -1,6 +1,11 @@
-# react-dnd
+# @thunderstore/react-dnd
 
-React drag &amp; drop hooks
+A collection of React hooks and utilities for handling Drag and Drop interactions.
+
+## Features
+
+-   **Hooks**: Custom hooks to easily make elements draggable or droppable.
+-   **Lightweight**: Minimal dependencies, focused on specific use cases within Thunderstore.
 
 ## Scripts
 

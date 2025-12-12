@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  cyberstorm-remix:
+    container_name: cyberstorm-remix
+    build:
+      context: ../../
+      dockerfile: Dockerfile.dev
+    working_dir: /workspace
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      # Use delegated to reduce host<->container fs latency on Docker Desktop
+      - ../../:/workspace:delegated
+      - thunderstore_ui_node_modules:/workspace/node_modules
+      - nimbus_node_modules:/workspace/apps/cyberstorm-remix/node_modules
+      - thunderstore_nginx_conf:/etc/nginx/user-conf
+    networks:
+        - thunderstore_default
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost
+    secrets:
+      - npmrc
+
+volumes:
+  thunderstore_ui_node_modules:
+  nimbus_node_modules:
+  thunderstore_nginx_conf:
+    external: true
+
+secrets:
+  npmrc:
+    file: "../../build-secrets/.npmrc"
+
+networks:
+  thunderstore_default:
+    name: thunderstore_default
+    external: true

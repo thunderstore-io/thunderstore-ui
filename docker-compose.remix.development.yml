@@ -1,46 +1,79 @@
-version: "3.8"
-
 services:
+  cyberstorm-remix-nginx-conf:
+    image: alpine:3.20
+    container_name: cyberstorm-remix-nginx-conf
+    restart: "no"
+    command: >-
+      /bin/sh -c "set -e; cp /src/new-localhost.conf /etc/nginx/user-conf/new-localhost.conf"
+    volumes:
+      - ./tools/nginx/new-localhost.conf:/src/new-localhost.conf:ro
+      - thunderstore_nginx_conf:/etc/nginx/user-conf
+
+  cyberstorm-remix-sync:
+    image: alpine:3.20
+    container_name: cyberstorm-remix-sync
+    restart: "no"
+    command: >-
+      /bin/sh -c "set -e; apk add --no-cache rsync; rsync -a --delete --info=progress2 --exclude='.git' --exclude='build-secrets' --exclude='.npmrc' --exclude='node_modules' --exclude='.turbo' --exclude='.cache' /src/ /workspace/; echo sync complete"
+    volumes:
+      - ./:/src:ro
+      - workspace_src:/workspace
+
+  cyberstorm-remix-watch:
+    image: alpine:3.20
+    container_name: cyberstorm-remix-watch
+    restart: unless-stopped
+    environment:
+      - SYNC_INTERVAL=5
+    command: >-
+      /bin/sh -c "set -e; apk add --no-cache rsync; while true; do rsync -a --delete --info=progress2 --exclude='.git' --exclude='build-secrets' --exclude='.npmrc' --exclude='node_modules' --exclude='.turbo' --exclude='.cache' /src/ /workspace/; sleep ${SYNC_INTERVAL}; done"
+    volumes:
+      - ./:/src:ro
+      - workspace_src:/workspace
+
   cyberstorm-remix:
     container_name: cyberstorm-remix
-    command: /bin/sh -c "tail -f /dev/null"
-    # command: yarn workspace @thunderstore/cyberstorm-remix dev --port 3000 --host 0.0.0.0
     build:
-      context: "./"
-      dockerfile: "apps/cyberstorm-remix/Dockerfile.development"
-      secrets:
-        - "npmrc"
-    image: thunderstore/thunderstore-ui.cyberstorm-remix-development:${IMAGE_TAG:-dev}
+      context: ./
+      dockerfile: ./Dockerfile.dev
+    working_dir: /workspace
     ports:
-      - "127.0.0.1:3000:3000"
+      - "3000:3000"
+    depends_on:
+      cyberstorm-remix-nginx-conf:
+        condition: service_completed_successfully
+      cyberstorm-remix-sync:
+        condition: service_completed_successfully
     volumes:
-      - remix_node_modules:/app/apps/cyberstorm-remix/node_modules
-      - ./apps/cyberstorm-remix:/app/apps/cyberstorm-remix
-      - ./packages:/app/packages
+      - workspace_src:/workspace
+      - thunderstore_ui_node_modules:/workspace/node_modules
+      - nimbus_node_modules:/workspace/apps/cyberstorm-remix/node_modules
+      - thunderstore_nginx_conf:/etc/nginx/user-conf
+      - yarn_cache:/usr/local/share/.cache/yarn
     networks:
         - thunderstore_default
     environment:
       - NODE_ENV=development
-
-  remix-nginx-proxy:
-    image: nginx
-    container_name: remix-nginx-proxy
-    restart: always
-    ports:
-      - "443:443"
-      - "80:80"
-    volumes:
-      - ./nginx/www:/var/www:ro
-      - ./nginx/conf.d/remixdefault.conf:/etc/nginx/conf.d/default.conf:ro
-      # - ./ssl:/etc/nginx/ssl:ro
-      # - ./snippets:/etc/nginx/snippets:ro
-      # - ./protect:/etc/nginx/protect:ro
-    hostname: thunderstore.temp
-    networks:
-        - thunderstore_default
+      - NPM_CONFIG_USERCONFIG=/run/secrets/npmrc
+      - ENABLE_BROKEN_PAGES=True
+      - VITE_DEVELOPMENT=True
+      - VITE_SITE_URL=http://localhost
+      - VITE_BETA_SITE_URL=http://new.localhost
+      - VITE_API_URL=http://localhost
+      - VITE_COOKIE_DOMAIN=.localhost
+      - VITE_AUTH_BASE_URL=http://localhost
+      - VITE_AUTH_RETURN_URL=http://new.localhost
+      - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS=.localhost
+    secrets:
+      - npmrc
 
 volumes:
-  remix_node_modules:
+  workspace_src:
+  thunderstore_ui_node_modules:
+  nimbus_node_modules:
+  yarn_cache:
+  thunderstore_nginx_conf:
+    external: true
 
 secrets:
   npmrc:

@@ -1,6 +1,12 @@
-# ts-api-react-forms
+# @thunderstore/ts-api-react-forms
 
-React forms logic for the Thunderstore API
+React form logic and bindings for the Thunderstore API.
+
+## Features
+
+-   **Form Integration**: Connects `react-hook-form` with Thunderstore API actions.
+-   **Validation**: Uses `zod` schemas to validate form data against API requirements.
+-   **Resolvers**: Provides custom resolvers for `react-hook-form`.
 
 ## Scripts
 

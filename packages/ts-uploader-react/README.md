@@ -1,6 +1,12 @@
-# ts-uploader-react
+# @thunderstore/ts-uploader-react
 
-Provides react components for handling file uploads to Thunderstore
+React components and hooks for handling file uploads to Thunderstore.
+
+## Features
+
+-   **Upload Components**: UI elements for selecting and uploading files.
+-   **Progress Tracking**: Hooks to track upload progress and status.
+-   **Integration**: Built on top of `@thunderstore/ts-uploader`.
 
 ## Scripts
 

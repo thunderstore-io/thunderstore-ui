@@ -72,13 +72,13 @@ accessible by node. This might not be the case by default, as the backend dev
 environment setup instructions assume the browser to handle localhost subdomains
 rather than instructing system-wide configuration for them.
 
-If using the local backend dev environment, you will most likely need to
-configure local DNS rules that map `thunderstore.localhost` to `127.0.0.1` and
-then set `http://thunderstore.localhost` as your `TS_API_DOMAIN` value.
+If using the local backend dev environment, point `TS_API_DOMAIN` to `http://localhost`.
+Modern browsers resolve `localhost` without any hosts-file entries, so no extra DNS tweaks
+are required.
 
 Additionally, for some reason jsdom XMLHttpRequest will fail to make proper
 requests to the `localhost:9000` domain (which is what the backend dev env will
 use by default for s3 pre-signed URL generation), so you might need to change
 the `USERMEDIA_S3_SIGNING_ENDPOINT_URL` to e.g.
-`http://thunderstore.localhost:9000/` or something else which is accessible by
+`http://localhost:9000/` or something else which is accessible by
 jsdom.
