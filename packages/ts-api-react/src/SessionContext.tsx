@@ -17,6 +17,8 @@ export interface ContextInterface {
   clearSession: (clearApiHost?: boolean) => void;
   /** Remove session cookies. */
   clearCookies: (domain: string) => void;
+  /** Clear all persisted session data and flag as stale. */
+  clearInvalidSession: (cookieDomainOverride?: string) => void;
   /** Set SessionData in storage */
   setSession: (sessionData: SessionData) => void;
   /** Set session stale state */
@@ -99,6 +101,28 @@ export const clearCookies = (domain: string) => {
   deleteCookie("sessionid", domain);
 };
 
+export const clearInvalidSession = (
+  _storage: StorageManager,
+  cookieDomainOverride?: string
+) => {
+  if (typeof window === "undefined") {
+    return;
+  }
+  try {
+    clearSession(_storage, true);
+    const cookieDomain =
+      cookieDomainOverride ||
+      _storage.safeGetValue(COOKIE_DOMAIN_KEY) ||
+      undefined;
+    if (cookieDomain) {
+      clearCookies(cookieDomain);
+    }
+    setSessionStale(_storage, true);
+  } catch (error) {
+    console.error("Failed to clear invalid session", error);
+  }
+};
+
 export const getConfig = (
   _storage: StorageManager,
   domain?: string
@@ -178,10 +202,7 @@ export const updateCurrentUser = async (
     customClearSession
       ? customClearSession
       : () => {
-          // This function gets called when the dapper getCurrentUser gets 401 as a response
-          clearSession(_storage, false);
-          // We want to clear the sessionid cookie if it's invalid.
-          clearCookies(_storage.safeGetValue(COOKIE_DOMAIN_KEY) || "");
+          clearInvalidSession(_storage);
         }
   );
   const currentUser = await dapper.getCurrentUser();
@@ -247,6 +268,13 @@ export const getSessionContext = (
     clearCookies(domain);
   };
 
+  const _clearInvalidSession = (cookieDomainOverride?: string) => {
+    clearInvalidSession(
+      _storage,
+      cookieDomainOverride || cookieDomain || undefined
+    );
+  };
+
   const _getConfig = (domain?: string): RequestConfig => {
     return getConfig(_storage, domain);
   };
@@ -289,6 +317,7 @@ export const getSessionContext = (
   return {
     clearSession: _clearSession,
     clearCookies: _clearCookies,
+    clearInvalidSession: _clearInvalidSession,
     getConfig: _getConfig,
     runSessionValidationCheck: _runSessionValidationCheck,
     updateCurrentUser: _updateCurrentUser,

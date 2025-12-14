@@ -44,6 +44,7 @@ import {
 } from "@thunderstore/ts-api-react/src/SessionContext";
 import {
   getPublicEnvVariables,
+  getSessionTools,
   type publicEnvVariablesType,
 } from "cyberstorm/security/publicEnvVariables";
 import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
@@ -578,12 +579,19 @@ const TooltipProvider = memo(function TooltipProvider({
 
 function App() {
   const data = useLoaderData<RootLoadersType>();
-  const dapper = new DapperTs(() => {
-    return {
-      apiHost: data?.publicEnvVariables.VITE_API_URL,
-      sessionId: data?.config.sessionId,
-    };
-  });
+  const sessionTools = getSessionTools();
+  const dapper = new DapperTs(
+    () => {
+      return {
+        apiHost: data?.publicEnvVariables.VITE_API_URL,
+        sessionId: data?.config.sessionId,
+      };
+    },
+    () =>
+      sessionTools.clearInvalidSession(
+        data?.publicEnvVariables.VITE_COOKIE_DOMAIN
+      )
+  );
 
   return (
     <Outlet
