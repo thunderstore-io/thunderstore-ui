@@ -49,15 +49,26 @@ export async function loader({ params }: LoaderFunctionArgs) {
         params.namespaceId,
         params.packageId
       );
-      const firstPage = dapper.getPackageWikiPage(wiki.pages[0].id);
-      result = {
-        wiki: wiki,
-        firstPage: firstPage,
-        communityId: params.communityId,
-        namespaceId: params.namespaceId,
-        packageId: params.packageId,
-        permissions: undefined,
-      };
+      if (wiki.pages && wiki.pages.length > 0) {
+        const firstPage = dapper.getPackageWikiPage(wiki.pages[0].id);
+        result = {
+          wiki: wiki,
+          firstPage: firstPage,
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+          packageId: params.packageId,
+          permissions: undefined,
+        };
+      } else {
+        result = {
+          wiki: wiki,
+          firstPage: undefined,
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+          packageId: params.packageId,
+          permissions: undefined,
+        };
+      }
     } catch (error) {
       if (isApiError(error)) {
         // There is no wiki or the User does not have permission to view the wiki, return empty wiki and undefined firstPage
@@ -113,15 +124,26 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         params.namespaceId,
         params.packageId
       );
-      const firstPage = dapper.getPackageWikiPage(wiki.pages[0].id);
-      result = {
-        wiki: wiki,
-        firstPage: firstPage,
-        communityId: params.communityId,
-        namespaceId: params.namespaceId,
-        packageId: params.packageId,
-        permissions: permissions,
-      };
+      if (wiki.pages && wiki.pages.length > 0) {
+        const firstPage = dapper.getPackageWikiPage(wiki.pages[0].id);
+        result = {
+          wiki: wiki,
+          firstPage: firstPage,
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+          packageId: params.packageId,
+          permissions: permissions,
+        };
+      } else {
+        result = {
+          wiki: wiki,
+          firstPage: undefined,
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+          packageId: params.packageId,
+          permissions: permissions,
+        };
+      }
     } catch (error) {
       if (isApiError(error)) {
         // There is no wiki or the User does not have permission to view the wiki, return empty wiki and undefined firstPage
@@ -152,33 +174,37 @@ export default function WikiFirstPage() {
     useLoaderData<typeof loader | typeof clientLoader>();
 
   const wikiAndFirstPageMemo = useMemo(
-    () => Promise.all([wiki, firstPage]),
+    () => Promise.all([Promise.resolve(wiki), firstPage]),
     [wiki, firstPage]
   );
 
-  <Suspense fallback={<SkeletonBox className="package-wiki__skeleton" />}>
-    <Await resolve={wikiAndFirstPageMemo}>
-      {(resolvedValue) => {
-        const [wiki, firstPage] = resolvedValue;
-        if (wiki && firstPage) {
-          return (
-            <WikiContent
-              page={firstPage}
-              communityId={communityId}
-              namespaceId={namespaceId}
-              packageId={packageId}
-              previousPage={undefined}
-              nextPage={wiki.pages.length > 1 ? wiki.pages[1].slug : undefined}
-              canManage={permissions?.then((perms) =>
-                typeof perms === "undefined"
-                  ? false
-                  : perms.permissions.can_manage
-              )}
-            />
-          );
-        }
-        return <>There are no wiki pages available.</>;
-      }}
-    </Await>
-  </Suspense>;
+  return (
+    <Suspense fallback={<SkeletonBox className="package-wiki__skeleton" />}>
+      <Await resolve={wikiAndFirstPageMemo}>
+        {(resolvedValue) => {
+          const [wiki, firstPage] = resolvedValue;
+          if (wiki && firstPage) {
+            return (
+              <WikiContent
+                page={firstPage}
+                communityId={communityId}
+                namespaceId={namespaceId}
+                packageId={packageId}
+                previousPage={undefined}
+                nextPage={
+                  wiki.pages.length > 1 ? wiki.pages[1].slug : undefined
+                }
+                canManage={permissions?.then((perms) =>
+                  typeof perms === "undefined"
+                    ? false
+                    : perms.permissions.can_manage
+                )}
+              />
+            );
+          }
+          return <>There are no wiki pages available.</>;
+        }}
+      </Await>
+    </Suspense>
+  );
 }

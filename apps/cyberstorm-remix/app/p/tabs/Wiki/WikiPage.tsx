@@ -1,6 +1,6 @@
 import "./Wiki.css";
 
-import { Await, type LoaderFunctionArgs } from "react-router";
+import { Await, type LoaderFunctionArgs, useParams } from "react-router";
 import { useLoaderData } from "react-router";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
@@ -14,11 +14,11 @@ import {
   getPackagePermissions,
 } from "@thunderstore/dapper-ts/src/methods/package";
 import { isApiError } from "../../../../../../packages/thunderstore-api/src";
-import { Suspense, useMemo } from "react";
+import { Suspense } from "react";
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 
 type ResultType = {
-  wiki: ReturnType<typeof getPackageWiki> | undefined;
+  wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
   page: ReturnType<typeof getPackageWikiPage> | undefined;
   communityId: string;
   namespaceId: string;
@@ -51,8 +51,15 @@ export async function loader({ params }: LoaderFunctionArgs) {
     };
 
     try {
-      const wiki = dapper.getPackageWiki(params.namespaceId, params.packageId);
-      const page = dapper.getPackageWikiPage(params.slug);
+      const wiki = await dapper.getPackageWiki(
+        params.namespaceId,
+        params.packageId
+      );
+      const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
+      if (!pageId) {
+        throw new Error("Page not found");
+      }
+      const page = dapper.getPackageWikiPage(pageId);
       result = {
         wiki: wiki,
         page: page,
@@ -117,8 +124,15 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
     };
 
     try {
-      const wiki = dapper.getPackageWiki(params.namespaceId, params.packageId);
-      const page = dapper.getPackageWikiPage(params.slug);
+      const wiki = await dapper.getPackageWiki(
+        params.namespaceId,
+        params.packageId
+      );
+      const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
+      if (!pageId) {
+        throw new Error("Page not found");
+      }
+      const page = dapper.getPackageWikiPage(pageId);
       result = {
         wiki: wiki,
         page: page,
@@ -156,52 +170,53 @@ export default function WikiPage() {
   const { wiki, page, communityId, namespaceId, packageId } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
+  const params = useParams();
 
-  const wikiAndPageMemo = useMemo(
-    () => Promise.all([wiki, page]),
-    [wiki, page]
+  const wikiAndPagePromise = Promise.all([Promise.resolve(wiki), page]);
+
+  return (
+    <Suspense fallback={<SkeletonBox className="package-wiki__skeleton" />}>
+      <Await
+        key={params.slug}
+        resolve={wikiAndPagePromise}
+        errorElement={<div>Error occurred while loading wiki page</div>}
+      >
+        {(resolvedValue) => {
+          const [wiki, page] = resolvedValue;
+          if (wiki && page) {
+            const currentPageIndex = wiki.pages.findIndex(
+              (p) => p.id === page.id
+            );
+
+            let previousPage = undefined;
+            let nextPage = undefined;
+
+            if (currentPageIndex === 0) {
+              previousPage = undefined;
+            } else {
+              previousPage = wiki.pages[currentPageIndex - 1]?.slug;
+            }
+
+            if (currentPageIndex === wiki.pages.length - 1) {
+              nextPage = undefined;
+            } else {
+              nextPage = wiki.pages[currentPageIndex + 1]?.slug;
+            }
+
+            return (
+              <WikiContent
+                page={page}
+                communityId={communityId}
+                namespaceId={namespaceId}
+                packageId={packageId}
+                previousPage={previousPage}
+                nextPage={nextPage}
+              />
+            );
+          }
+          return <>Wiki Page Not Found</>;
+        }}
+      </Await>
+    </Suspense>
   );
-
-  <Suspense fallback={<SkeletonBox className="package-wiki__skeleton" />}>
-    <Await
-      resolve={wikiAndPageMemo}
-      errorElement={<div>Error occurred while loading wiki page</div>}
-    >
-      {(resolvedValue) => {
-        const [wiki, page] = resolvedValue;
-        if (wiki && page) {
-          const currentPageIndex = wiki.pages.findIndex(
-            (p) => p.id === page.id
-          );
-
-          let previousPage = undefined;
-          let nextPage = undefined;
-
-          if (currentPageIndex === 0) {
-            previousPage = undefined;
-          } else {
-            previousPage = wiki.pages[currentPageIndex - 1]?.slug;
-          }
-
-          if (currentPageIndex === wiki.pages.length) {
-            nextPage = undefined;
-          } else {
-            nextPage = wiki.pages[currentPageIndex + 1]?.slug;
-          }
-
-          return (
-            <WikiContent
-              page={page}
-              communityId={communityId}
-              namespaceId={namespaceId}
-              packageId={packageId}
-              previousPage={previousPage}
-              nextPage={nextPage}
-            />
-          );
-        }
-        return <>Wiki Page Not Found</>;
-      }}
-    </Await>
-  </Suspense>;
 }
