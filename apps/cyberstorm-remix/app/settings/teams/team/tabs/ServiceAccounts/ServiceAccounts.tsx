@@ -154,6 +154,8 @@ function AddServiceAccountForm(props: {
     },
   });
 
+  const nicknameFieldProps = strongForm.getFieldComponentProps("nickname");
+
   const handleOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen);
     if (!nextOpen) {
@@ -197,46 +199,47 @@ function AddServiceAccountForm(props: {
           </NewAlert>
         </Modal.Body>
       ) : (
-        <Modal.Body>
-          <form
-            className="service-accounts__form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (strongForm.isReady) {
-                strongForm.submit();
-              }
-            }}
-          >
-            <div>
-              Enter the nickname of the service account you wish to add to the
-              team <span>{props.teamName}</span>
-            </div>
-            <div className="service-accounts__nickname-input">
-              <NewTextInput
-                value={formInputs.nickname}
-                onChange={(e) => {
-                  updateFormFieldState({
-                    field: "nickname",
-                    value: e.target.value,
-                  });
-                }}
-                placeholder={"ExampleName"}
-                maxLength={32}
-              />
-              <div className="service-accounts__nickname-input-max-length">
-                Max. 32 characters
+        <>
+          <Modal.Body>
+            <div className="service-accounts__form">
+              <div>
+                Enter the nickname of the service account you wish to add to the
+                team <span>{props.teamName}</span>
               </div>
+              <label htmlFor="serviceAccountNickname">
+                Nickname <span aria-hidden="true">*</span>
+              </label>
+              <div className="service-accounts__nickname-input">
+                <NewTextInput
+                  id="serviceAccountNickname"
+                  value={formInputs.nickname}
+                  onChange={(e) => {
+                    updateFormFieldState({
+                      field: "nickname",
+                      value: e.target.value,
+                    });
+                  }}
+                  placeholder={"ExampleName"}
+                  maxLength={32}
+                  required
+                  {...nicknameFieldProps}
+                />
+                <div className="service-accounts__nickname-input-max-length">
+                  Max. 32 characters
+                </div>
+              </div>
+              {error && <NewAlert csVariant="danger">{error}</NewAlert>}
             </div>
-            {error && <NewAlert csVariant="danger">{error}</NewAlert>}
-          </form>
-        </Modal.Body>
-      )}
-      {serviceAccountAdded ? null : (
-        <Modal.Footer>
-          <NewButton onClick={strongForm.submit} disabled={!strongForm.isReady}>
-            Add Service Account
-          </NewButton>
-        </Modal.Footer>
+          </Modal.Body>
+          <Modal.Footer>
+            <NewButton
+              onClick={strongForm.submit}
+              disabled={!strongForm.isReady}
+            >
+              Add Service Account
+            </NewButton>
+          </Modal.Footer>
+        </>
       )}
     </Modal>
   );

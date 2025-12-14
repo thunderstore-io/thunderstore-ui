@@ -95,6 +95,8 @@ export function MemberAddForm(props: {
     },
   });
 
+  const usernameFieldProps = strongForm.getFieldComponentProps("username");
+
   return (
     <Modal
       open={open}
@@ -121,7 +123,7 @@ export function MemberAddForm(props: {
         <div className="add-member-form__fields">
           <div className="add-member-form__field add-member-form__username">
             <label className="add-member-form__label" htmlFor="username">
-              Username
+              Username <span aria-hidden="true">*</span>
             </label>
             <NewTextInput
               name={"username"}
@@ -136,6 +138,8 @@ export function MemberAddForm(props: {
               }}
               rootClasses="add-member-form__username-input"
               id="username"
+              required
+              {...usernameFieldProps}
             />
             {error && <div className="add-member-form__error">{error}</div>}
           </div>
