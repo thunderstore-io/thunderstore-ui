@@ -92,7 +92,12 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         params.packageId
       );
 
-      if (!permissions?.permissions.can_manage) {
+      if (!permissions) {
+        throw new Response("Unauthenticated", { status: 401 });
+      } else if (
+        !permissions.permissions.can_manage &&
+        !permissions.permissions.can_moderate
+      ) {
         throw new Response("Unauthorized", { status: 403 });
       }
 
