@@ -21,6 +21,9 @@
     "test": "vitest run",
     "watch": "vitest watch"
   },
+  "engines": {
+    "node": "24.9.0"
+  },
   "dependencies": {
     "@babel/runtime": "^7.25.6"
   },
