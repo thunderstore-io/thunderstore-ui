@@ -101,7 +101,11 @@ export const WikiContent = memo(function WikiContent({
             Previous Page
           </NewButton>
         ) : (
-          <NewButton csModifiers={["ghost", "disabled"]} csVariant="secondary">
+          <NewButton
+            csModifiers={["ghost", "disabled"]}
+            csVariant="secondary"
+            disabled={true}
+          >
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faArrowLeftLong} />
             </NewIcon>
@@ -125,7 +129,11 @@ export const WikiContent = memo(function WikiContent({
             </NewIcon>
           </NewButton>
         ) : (
-          <NewButton csModifiers={["ghost", "disabled"]} csVariant="secondary">
+          <NewButton
+            csModifiers={["ghost", "disabled"]}
+            csVariant="secondary"
+            disabled={true}
+          >
             Next Page
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faArrowRightLong} />
