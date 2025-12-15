@@ -337,20 +337,22 @@ export default function PackageListing() {
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
           <Suspense>
-            <Await resolve={Promise.all([listingStatus, permissions])}>
-              {([resolvedStatus, resolvedPermissions]) =>
-                resolvedPermissions ? (
-                  <div className="package-listing__actions">
-                    <ManagementTools
-                      packagePermissions={resolvedPermissions}
-                      listing={listing}
-                      listingStatus={resolvedStatus}
-                      toast={toast}
-                      requestConfig={config}
-                    />
-                  </div>
-                ) : null
-              }
+            <Await resolve={listingStatus}>
+              {(resolvedStatus) => (
+                <Await resolve={permissions}>
+                  {(resolvedPermissions) =>
+                    resolvedPermissions ? (
+                      <ManagementTools
+                        listingStatus={resolvedStatus}
+                        packagePermissions={resolvedPermissions}
+                        listing={listing}
+                        toast={toast}
+                        requestConfig={config}
+                      />
+                    ) : null
+                  }
+                </Await>
+              )}
             </Await>
           </Suspense>
 
