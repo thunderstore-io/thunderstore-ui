@@ -19,6 +19,12 @@ export interface PackageListing {
 
 export type PackageListings = PaginatedList<PackageListing>;
 
+export interface PackageListingStatus {
+  review_status: string;
+  rejection_reason: string | null;
+  internal_notes: string | null;
+}
+
 export interface PackageListingDetails extends PackageListing {
   community_name: string;
   datetime_created: string;
