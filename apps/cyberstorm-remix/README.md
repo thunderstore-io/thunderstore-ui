@@ -1,68 +1,45 @@
-# How to setup and run Nimbus dev environment with local Thunderstore
+# Cyberstorm Remix (Nimbus)
 
-## Preparations
-This quide expects you to have setup your Thunderstore Django project for development on some level. Please setup the Thunderstore project before continuing.
+This is the Remix application that powers the new Thunderstore frontend (codenamed Nimbus).
 
-## Setup nginx proxy for local data ingress/egress
-1. Add the following to your hosts (on windows, google what how to achive same on other OS')
-```
-127.0.0.1 thunderstore.temp
-127.0.0.1 new.thunderstore.temp
-```
+## Quick Start (Docker)
 
-2. Boot up the nginx proxy with the following command; `docker compose -f tools/ts-dev-proxy/docker-compose.yml up`
+The easiest way to run the full stack (Backend + Frontend) is using Docker.
 
-3. Boot up your Thunderstore backend and ensure it's running in port 81 (it's normally 80). The following [line](https://github.com/thunderstore-io/Thunderstore/blob/f06b9b438ea6e990881e60339d34bde1a480d073/docker-compose.yml#L123) in your Thunderstore projects docker-compose, should be `- "127.0.0.1:81:8000"`
+1.  **Clone Repositories**
+    Ensure you have both `Thunderstore` (Backend) and `thunderstore-ui` (Frontend) cloned side-by-side.
+    ```bash
+    # Example structure
+    # C:\projects\Thunderstore
+    # C:\projects\thunderstore-ui
+    ```
 
-## Setup Nimbus for development
+2.  **Start Backend**
+    ```bash
+    cd ../Thunderstore
+    docker compose up -d
+    docker compose exec django python manage.py setup_dev_env
+    ```
+    (If you have some pre-existing containers, please do `docker compose down -v`, `docker compose up -d --build` and `docker compose exec django python manage.py setup_dev_env`)
 
-1. Clone the repo `git@github.com:thunderstore-io/thunderstore-ui.git`
+3.  **Start Frontend**
+    ```bash
+    cd ../thunderstore-ui
+    docker compose -f docker-compose.remix.development.yml up -d
+    ```
+    (If you have some pre-existing containers, please do `docker compose -f docker-compose.remix.development.yml down -v` and `docker compose -f docker-compose.remix.development.yml up -d --build`)
 
-2. Setup FontAwesome token. One way to do it is to add a `.npmrc` file with the following contents, under `thunderstore-ui/build-secrets/.npmrc`
-```
-@fortawesome:registry = "https://npm.fontawesome.com/"
-//npm.fontawesome.com/:_authToken = YOUR_FA_TOKEN
-```
+4.  **Open Browser**
+    -   **Frontend**: [http://new.localhost](http://new.localhost)
+    -   **Backend**: [http://localhost](http://localhost)
 
-3. Run `yarn install` first on the repo root (`thunderstore-ui` folder) and then again in the `thunderstore-ui/apps/cyberstorm-remix` folder.
+## Manual Setup
 
-4. Add `.env.development` and/or `.env.production` files. You can copy the `.env` file, rename and edit the values to your needs. Here's a example of the file contents:
-```
-VITE_SITE_URL=http://thunderstore.temp
-VITE_BETA_SITE_URL=http://new.thunderstore.temp
-VITE_API_URL=http://thunderstore.temp
-VITE_COOKIE_DOMAIN=.thunderstore.temp
-VITE_AUTH_BASE_URL=http://thunderstore.temp
-VITE_AUTH_RETURN_URL=http://new.thunderstore.temp
-__VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS=.thunderstore.temp
-```
+If you prefer running Node locally instead of in Docker:
 
-5. Run the build/start server script or the dev server script
-
-Build and start
-```
-yarn workspace @thunderstore/cyberstorm-remix build
-yarn workspace @thunderstore/cyberstorm-remix start --port 3000 --host 0.0.0.0
-```
-
-Dev script
-```
-yarn workspace @thunderstore/cyberstorm-remix dev --port 3000 --host 0.0.0.0
-```
-
-## Finally
-You should now have the fully local Nimbus dev environment setup and running in `http://new.thunderstore.temp` and the Django site should be running in `http://thunderstore.temp`. You might need to go to `http://new.thunderstore.temp/communities` as Nimbus doesn't have a landing page yet.
-
-# How to setup ts-proxy as a backend for this project
-**Keep in mind that when using the ts-proxy, the sessions and actions will be made against the actual production Thunderstore**
-
-1. Open hosts file as administrator (`C:\Windows\System32\drivers\etc`) and add this `127.0.0.1 thunderstore.temp` there
-2. Download and install Docker and docker-compose. For windows people, Docker for Windows should be enough.
-3. Open up a terminal and navigate to `thunderstore-ui/tools/ts-proxy`
-4. Run `docker compose up`
-5. Add these to your `.env.development` or `.env.production`
-```
-PUBLIC_SITE_URL=http://thunderstore.temp
-PUBLIC_API_URL=http://thunderstore.temp:81
-```
-6. Run the Nimbus project normally
+1.  **Install Dependencies**: `yarn install` (in repo root)
+2.  **Configure Env**: Copy `.env.example` to `.env` in `apps/cyberstorm-remix`.
+3.  **Run Dev Server**:
+    ```bash
+    yarn workspace @thunderstore/cyberstorm-remix dev --port 3000 --host 0.0.0.0
+    ```
