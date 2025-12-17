@@ -55,9 +55,17 @@ export async function loader({ params }: LoaderFunctionArgs) {
         params.namespaceId,
         params.packageId
       );
-      const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
+      const pageId = wiki.pages?.find((p) => p.slug === params.slug)?.id;
       if (!pageId) {
-        throw new Error("Page not found");
+        result = {
+          wiki,
+          page: undefined,
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+          packageId: params.packageId,
+          permissions: result.permissions,
+        };
+        return result;
       }
       const page = dapper.getPackageWikiPage(pageId);
       result = {
@@ -128,9 +136,17 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         params.namespaceId,
         params.packageId
       );
-      const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
+      const pageId = wiki.pages?.find((p) => p.slug === params.slug)?.id;
       if (!pageId) {
-        throw new Error("Page not found");
+        result = {
+          wiki,
+          page: undefined,
+          communityId: params.communityId,
+          namespaceId: params.namespaceId,
+          packageId: params.packageId,
+          permissions: result.permissions,
+        };
+        return result;
       }
       const page = dapper.getPackageWikiPage(pageId);
       result = {
@@ -174,6 +190,8 @@ export default function WikiPage() {
 
   const wikiAndPagePromise = Promise.all([Promise.resolve(wiki), page]);
 
+  const notFoundElement = <div>Wiki page not found.</div>;
+
   return (
     <Suspense fallback={<SkeletonBox className="package-wiki__skeleton" />}>
       <Await
@@ -188,20 +206,18 @@ export default function WikiPage() {
               (p) => p.id === page.id
             );
 
-            let previousPage = undefined;
-            let nextPage = undefined;
-
-            if (currentPageIndex === 0) {
-              previousPage = undefined;
-            } else {
-              previousPage = wiki.pages[currentPageIndex - 1]?.slug;
+            if (currentPageIndex < 0) {
+              return notFoundElement;
             }
 
-            if (currentPageIndex === wiki.pages.length - 1) {
-              nextPage = undefined;
-            } else {
-              nextPage = wiki.pages[currentPageIndex + 1]?.slug;
-            }
+            const previousPage =
+              currentPageIndex > 0
+                ? wiki.pages[currentPageIndex - 1]?.slug
+                : undefined;
+            const nextPage =
+              currentPageIndex < wiki.pages.length - 1
+                ? wiki.pages[currentPageIndex + 1]?.slug
+                : undefined;
 
             return (
               <WikiContent
@@ -214,7 +230,7 @@ export default function WikiPage() {
               />
             );
           }
-          return <>Wiki Page Not Found</>;
+          return notFoundElement;
         }}
       </Await>
     </Suspense>
