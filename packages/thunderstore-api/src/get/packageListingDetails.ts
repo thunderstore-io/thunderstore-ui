@@ -16,7 +16,11 @@ export async function fetchPackageListingDetails(
   props: ApiEndpointProps<PackageListingDetailsRequestParams, object, object>
 ): Promise<PackageListingDetailsResponseData> {
   const { config, params, useSession } = props;
-  const path = `${BASE_LISTING_PATH}${params.community_id}/${params.namespace_id}/${params.package_name}/`;
+  let path = `${BASE_LISTING_PATH}${params.community_id}/${params.namespace_id}/${params.package_name}/`;
+
+  if (params.version_number) {
+    path = `${path}v/${params.version_number}/`;
+  }
 
   return await apiFetch({
     args: {

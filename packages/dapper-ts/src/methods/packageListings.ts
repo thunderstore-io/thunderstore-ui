@@ -123,6 +123,7 @@ export async function getPackageListingDetails(
   communityId: string,
   namespaceId: string,
   packageName: string,
+  version: string | undefined = undefined,
   useSession = false
 ) {
   const data = await fetchPackageListingDetails({
@@ -131,6 +132,7 @@ export async function getPackageListingDetails(
       community_id: communityId,
       namespace_id: namespaceId,
       package_name: packageName,
+      version_number: version,
     },
     data: {},
     queryParams: {},
