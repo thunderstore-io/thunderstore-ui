@@ -79,7 +79,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
   });
 
   return {
-    community: await dapper.getCommunity(communityId),
     listing,
     packageVersion,
     team: await dapper.getTeamDetails(namespaceId),
@@ -108,7 +107,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   });
 
   return {
-    community: dapper.getCommunity(communityId),
     listing,
     packageVersion,
     team: dapper.getTeamDetails(namespaceId),
@@ -133,7 +131,7 @@ export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
 }
 
 export default function PackageVersion() {
-  const { community, listing, packageVersion, team } = useLoaderData<
+  const { listing, packageVersion, team } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
@@ -175,42 +173,31 @@ export default function PackageVersion() {
 
   return (
     <>
-      <Suspense>
-        <Await resolve={community}>
-          {(resolvedCommunity) => (
-            <>
-              <meta
-                title={`${formatToDisplayName(
-                  listing.full_version_name
-                )} | Thunderstore - The ${resolvedCommunity.name} Mod Database`}
-              />
-              <meta name="description" content={listing.description} />
-              <meta property="og:type" content="website" />
-              <meta
-                property="og:url"
-                content={`${
-                  getPublicEnvVariables(["VITE_BETA_SITE_URL"])
-                    .VITE_BETA_SITE_URL
-                }${location.pathname}`}
-              />
-              <meta
-                property="og:title"
-                content={`${formatToDisplayName(
-                  listing.full_version_name
-                )} by ${listing.namespace}`}
-              />
-              <meta property="og:description" content={listing.description} />
-              <meta property="og:image:width" content="256" />
-              <meta property="og:image:height" content="256" />
-              <meta
-                property="og:image"
-                content={listing.icon_url ?? undefined}
-              />
-              <meta property="og:site_name" content="Thunderstore" />
-            </>
-          )}
-        </Await>
-      </Suspense>
+      <meta
+        title={`${formatToDisplayName(
+          listing.full_version_name
+        )} | Thunderstore - The ${listing.community_name} Mod Database`}
+      />
+      <meta name="description" content={listing.description} />
+      <meta property="og:type" content="website" />
+      <meta
+        property="og:url"
+        content={`${
+          getPublicEnvVariables(["VITE_BETA_SITE_URL"]).VITE_BETA_SITE_URL
+        }${location.pathname}`}
+      />
+      <meta
+        property="og:title"
+        content={`${formatToDisplayName(listing.full_version_name)} by ${
+          listing.namespace
+        }`}
+      />
+      <meta property="og:description" content={listing.description} />
+      <meta property="og:image:width" content="256" />
+      <meta property="og:image:height" content="256" />
+      <meta property="og:image" content={listing.icon_url ?? undefined} />
+      <meta property="og:site_name" content="Thunderstore" />
+
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
           <div className="package-listing__main">
