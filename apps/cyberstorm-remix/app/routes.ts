@@ -48,6 +48,11 @@ export default [
       route(":namespaceId/:packageId/edit", "p/packageEdit.tsx"),
     ]),
   ]),
+  /**
+   * Disabled until we figure out how to ensure the community-agnostic
+   * endpoints won't serve rejected packages (rejections are listing-,
+   * and thus community-specific).
+
   route(
     "/p/:namespaceId/:packageId/v/:packageVersion",
     "p/packageVersionWithoutCommunity.tsx",
@@ -66,6 +71,7 @@ export default [
       ),
     ]
   ),
+  */
   route(
     "/c/:communityId/p/:namespaceId/:packageId/dependants",
     "p/dependants/Dependants.tsx"
