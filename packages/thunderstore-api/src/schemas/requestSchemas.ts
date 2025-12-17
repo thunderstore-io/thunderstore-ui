@@ -170,6 +170,7 @@ export const packageListingDetailsRequestParamsSchema = z.object({
   community_id: z.string(),
   namespace_id: z.string(),
   package_name: z.string(),
+  version_number: z.string().optional(),
 });
 
 export type PackageListingDetailsRequestParams = z.infer<

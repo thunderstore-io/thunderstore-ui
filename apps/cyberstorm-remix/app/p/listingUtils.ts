@@ -5,6 +5,7 @@ export interface ListingIdentifiers {
   communityId: string;
   namespaceId: string;
   packageId: string;
+  packageVersion?: string;
 }
 
 /**
@@ -16,12 +17,13 @@ export async function getPublicListing(
   dapper: DapperTs,
   ids: ListingIdentifiers
 ) {
-  const { communityId, namespaceId, packageId } = ids;
+  const { communityId, namespaceId, packageId, packageVersion } = ids;
   try {
     return await dapper.getPackageListingDetails(
       communityId,
       namespaceId,
-      packageId
+      packageId,
+      packageVersion
     );
   } catch (e) {
     if (isApiError(e) && e.response.status === 404) {
@@ -42,13 +44,14 @@ export async function getPrivateListing(
   dapper: DapperTs,
   ids: ListingIdentifiers
 ) {
-  const { communityId, namespaceId, packageId } = ids;
+  const { communityId, namespaceId, packageId, packageVersion } = ids;
 
   try {
     return await dapper.getPackageListingDetails(
       communityId,
       namespaceId,
-      packageId
+      packageId,
+      packageVersion
     );
   } catch (e) {
     const is404 = isApiError(e) && e.response?.status === 404;
@@ -61,6 +64,7 @@ export async function getPrivateListing(
     communityId,
     namespaceId,
     packageId,
+    packageVersion,
     true
   );
 
