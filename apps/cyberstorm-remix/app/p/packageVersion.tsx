@@ -28,15 +28,7 @@ import {
   faDownload,
   faCaretRight,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  memo,
-  type ReactElement,
-  Suspense,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { useHydrated } from "remix-utils/use-hydrated";
+import { memo, Suspense } from "react";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTime/RelativeTime";
@@ -136,35 +128,7 @@ export default function PackageVersion() {
   >();
 
   const location = useLocation();
-
   const outletContext = useOutletContext() as OutletContextShape;
-
-  const isHydrated = useHydrated();
-  const startsHydrated = useRef(isHydrated);
-
-  // START: For sidebar meta dates
-  const [firstUploaded, setFirstUploaded] = useState<
-    ReactElement | undefined
-  >();
-
-  // This will be loaded 2 times in development because of:
-  // https://react.dev/reference/react/StrictMode
-  // If strict mode is removed from the entry.client.tsx, this should only run once
-  useEffect(() => {
-    if (!startsHydrated.current && isHydrated) {
-      return;
-    }
-
-    if (!listing) {
-      return;
-    }
-
-    setFirstUploaded(
-      <RelativeTime time={listing.datetime_created} suppressHydrationWarning />
-    );
-  }, []);
-  // END: For sidebar meta dates
-
   const currentTab = location.pathname.split("/")[8] || "details";
 
   if (!listing) {
@@ -276,7 +240,7 @@ export default function PackageVersion() {
                   }
                   rootClasses="package-listing__drawer"
                 >
-                  {packageMeta(firstUploaded, listing)}
+                  {packageMeta(listing)}
                 </Drawer>
                 <Suspense fallback={<p>Loading...</p>}>
                   <Await resolve={team}>
@@ -366,7 +330,7 @@ export default function PackageVersion() {
                   </Await>
                 </Suspense>
 
-                {packageMeta(firstUploaded, listing)}
+                {packageMeta(listing)}
               </div>
             </aside>
           </div>
@@ -411,15 +375,17 @@ const Actions = memo(function Actions(props: {
   );
 });
 
-function packageMeta(
-  firstUploaded: ReactElement | undefined,
-  listing: PackageListingDetails
-) {
+function packageMeta(listing: PackageListingDetails) {
   return (
     <div className="package-listing-sidebar__meta">
       <div className="package-listing-sidebar__item">
         <div className="package-listing-sidebar__label">Date Uploaded</div>
-        <div className="package-listing-sidebar__content">{firstUploaded}</div>
+        <div className="package-listing-sidebar__content">
+          <RelativeTime
+            time={listing.datetime_created}
+            suppressHydrationWarning
+          />
+        </div>
       </div>
       <div className="package-listing-sidebar__item">
         <div className="package-listing-sidebar__label">Downloads</div>
