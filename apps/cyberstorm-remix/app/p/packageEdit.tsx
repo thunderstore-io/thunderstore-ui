@@ -24,7 +24,7 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faCheck } from "@fortawesome/pro-solid-svg-icons";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
@@ -181,6 +181,15 @@ export default function PackageListing() {
       categories: listing?.categories.map((c) => c.slug) ?? [],
     })
   );
+
+  useEffect(() => {
+    if (!listing) return;
+
+    updateFormFieldState({
+      field: "categories",
+      value: listing.categories.map((c) => c.slug),
+    });
+  }, [listing?.categories]);
 
   type SubmitorOutput = Awaited<ReturnType<typeof packageListingUpdate>>;
 
