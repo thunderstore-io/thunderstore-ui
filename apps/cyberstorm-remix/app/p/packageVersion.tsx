@@ -33,7 +33,6 @@ import {
   type ReactElement,
   Suspense,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -53,67 +52,70 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
-import { isPromise } from "cyberstorm/utils/typeChecks";
-import { getPackageVersionDetails } from "@thunderstore/dapper-ts/src/methods/packageVersion";
+import { getPrivateListing, getPublicListing } from "./listingUtils";
+import {
+  type PackageListingDetails,
+  type TeamDetails,
+} from "@thunderstore/dapper/types";
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  if (
-    params.communityId &&
-    params.namespaceId &&
-    params.packageId &&
-    params.packageVersion
-  ) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
-      };
-    });
+  const { communityId, namespaceId, packageId, packageVersion } = params;
 
-    return {
-      communityId: params.communityId,
-      community: await dapper.getCommunity(params.communityId),
-      version: await dapper.getPackageVersionDetails(
-        params.namespaceId,
-        params.packageId,
-        params.packageVersion
-      ),
-      team: await dapper.getTeamDetails(params.namespaceId),
-    };
+  if (!communityId || !namespaceId || !packageId || !packageVersion) {
+    throw new Response("Package not found", { status: 404 });
   }
-  throw new Response("Package not found", { status: 404 });
+
+  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
+  const dapper = new DapperTs(() => ({
+    apiHost: publicEnvVariables.VITE_API_URL,
+    sessionId: undefined,
+  }));
+
+  const listing = await getPublicListing(dapper, {
+    communityId,
+    namespaceId,
+    packageId,
+    packageVersion,
+  });
+
+  return {
+    community: await dapper.getCommunity(communityId),
+    listing,
+    packageVersion,
+    team: await dapper.getTeamDetails(namespaceId),
+  };
 }
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
-  if (
-    params.communityId &&
-    params.namespaceId &&
-    params.packageId &&
-    params.packageVersion
-  ) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
+  const { communityId, namespaceId, packageId, packageVersion } = params;
 
-    return {
-      communityId: params.communityId,
-      community: dapper.getCommunity(params.communityId),
-      version: dapper.getPackageVersionDetails(
-        params.namespaceId,
-        params.packageId,
-        params.packageVersion
-      ),
-      team: dapper.getTeamDetails(params.namespaceId),
-    };
+  if (!communityId || !namespaceId || !packageId || !packageVersion) {
+    throw new Response("Package not found", { status: 404 });
   }
-  throw new Response("Package not found", { status: 404 });
+
+  const tools = getSessionTools();
+  const config = tools.getConfig();
+  const dapper = new DapperTs(() => ({
+    apiHost: config.apiHost,
+    sessionId: config.sessionId,
+  }));
+
+  const listing = await getPrivateListing(dapper, {
+    communityId,
+    namespaceId,
+    packageId,
+    packageVersion,
+  });
+
+  return {
+    community: dapper.getCommunity(communityId),
+    listing,
+    packageVersion,
+    team: dapper.getTeamDetails(namespaceId),
+  };
 }
+
+clientLoader.hydrate = true;
 
 export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
   const oldPath = arg.currentUrl.pathname.split("/");
@@ -131,7 +133,7 @@ export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
 }
 
 export default function PackageVersion() {
-  const { communityId, community, version, team } = useLoaderData<
+  const { community, listing, packageVersion, team } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
@@ -151,48 +153,38 @@ export default function PackageVersion() {
   // https://react.dev/reference/react/StrictMode
   // If strict mode is removed from the entry.client.tsx, this should only run once
   useEffect(() => {
-    if (!startsHydrated.current && isHydrated) return;
-    if (isPromise(version)) {
-      version.then((versionData) => {
-        setFirstUploaded(
-          <RelativeTime
-            time={versionData.datetime_created}
-            suppressHydrationWarning
-          />
-        );
-      });
-    } else {
-      setFirstUploaded(
-        <RelativeTime
-          time={version.datetime_created}
-          suppressHydrationWarning
-        />
-      );
+    if (!startsHydrated.current && isHydrated) {
+      return;
     }
+
+    if (!listing) {
+      return;
+    }
+
+    setFirstUploaded(
+      <RelativeTime time={listing.datetime_created} suppressHydrationWarning />
+    );
   }, []);
   // END: For sidebar meta dates
 
   const currentTab = location.pathname.split("/")[8] || "details";
 
-  const versionAndCommunityPromise = useMemo(
-    () => Promise.all([version, community]),
-    []
-  );
-
-  const versionAndTeamPromise = useMemo(() => Promise.all([version, team]), []);
+  if (!listing) {
+    return <div>Loading listing...</div>;
+  }
 
   return (
     <>
       <Suspense>
-        <Await resolve={versionAndCommunityPromise}>
-          {(resolvedValue) => (
+        <Await resolve={community}>
+          {(resolvedCommunity) => (
             <>
               <meta
                 title={`${formatToDisplayName(
-                  resolvedValue[0].full_version_name
-                )} | Thunderstore - The ${resolvedValue[1].name} Mod Database`}
+                  listing.full_version_name
+                )} | Thunderstore - The ${resolvedCommunity.name} Mod Database`}
               />
-              <meta name="description" content={resolvedValue[0].description} />
+              <meta name="description" content={listing.description} />
               <meta property="og:type" content="website" />
               <meta
                 property="og:url"
@@ -204,18 +196,15 @@ export default function PackageVersion() {
               <meta
                 property="og:title"
                 content={`${formatToDisplayName(
-                  resolvedValue[0].full_version_name
-                )} by ${resolvedValue[0].namespace}`}
+                  listing.full_version_name
+                )} by ${listing.namespace}`}
               />
-              <meta
-                property="og:description"
-                content={resolvedValue[0].description}
-              />
+              <meta property="og:description" content={listing.description} />
               <meta property="og:image:width" content="256" />
               <meta property="og:image:height" content="256" />
               <meta
                 property="og:image"
-                content={resolvedValue[0].icon_url ?? undefined}
+                content={listing.icon_url ?? undefined}
               />
               <meta property="og:site_name" content="Thunderstore" />
             </>
@@ -226,81 +215,59 @@ export default function PackageVersion() {
         <section className="package-listing__package-section">
           <div className="package-listing__main">
             <section className="package-listing__package-content-section">
-              <Suspense
-                fallback={
-                  <NewAlert csVariant="warning">
-                    You are viewing a potentially older version of this package.
-                  </NewAlert>
-                }
-              >
-                <Await resolve={version}>
-                  {(resolvedValue) => (
-                    <NewAlert csVariant="warning">
-                      You are viewing a potentially older version of this
-                      package.{" "}
-                      <NewLink
-                        primitiveType="cyberstormLink"
-                        linkId="Package"
-                        community={communityId}
-                        namespace={resolvedValue.namespace}
-                        package={resolvedValue.name}
-                        csVariant="cyber"
-                      >
-                        View Latest Version
-                      </NewLink>
-                    </NewAlert>
-                  )}
-                </Await>
-              </Suspense>
-              <Suspense
-                fallback={
-                  <SkeletonBox className="package-listing__page-header-skeleton" />
-                }
-              >
-                <Await resolve={version}>
-                  {(resolvedValue) => (
-                    <PageHeader
-                      headingLevel="1"
-                      headingSize="3"
-                      image={resolvedValue.icon_url}
-                      description={resolvedValue.description}
-                      variant="detailed"
-                      meta={
-                        <>
-                          <NewLink
-                            primitiveType="cyberstormLink"
-                            linkId="Team"
-                            community={communityId}
-                            team={resolvedValue.namespace}
-                            csVariant="cyber"
-                            rootClasses="page-header__meta-item"
-                          >
-                            <NewIcon csMode="inline" noWrapper>
-                              <FontAwesomeIcon icon={faUsers} />
-                            </NewIcon>
-                            {resolvedValue.namespace}
-                          </NewLink>
-                          {resolvedValue.website_url ? (
-                            <NewLink
-                              primitiveType="link"
-                              href={resolvedValue.website_url}
-                              csVariant="cyber"
-                              rootClasses="page-header__meta-item"
-                            >
-                              {resolvedValue.website_url}
-                              <NewIcon csMode="inline" noWrapper>
-                                <FontAwesomeIcon icon={faArrowUpRight} />
-                              </NewIcon>
-                            </NewLink>
-                          ) : null}
-                        </>
-                      }
+              <NewAlert csVariant="warning">
+                You are viewing a potentially older version of this package.{" "}
+                <NewLink
+                  primitiveType="cyberstormLink"
+                  linkId="Package"
+                  community={listing.community_identifier}
+                  namespace={listing.namespace}
+                  package={listing.name}
+                  csVariant="cyber"
+                >
+                  View Latest Version
+                </NewLink>
+              </NewAlert>
+
+              <PageHeader
+                headingLevel="1"
+                headingSize="3"
+                image={listing.icon_url}
+                description={listing.description}
+                variant="detailed"
+                meta={
+                  <>
+                    <NewLink
+                      primitiveType="cyberstormLink"
+                      linkId="Team"
+                      community={listing.community_identifier}
+                      team={listing.namespace}
+                      csVariant="cyber"
+                      rootClasses="page-header__meta-item"
                     >
-                      {formatToDisplayName(resolvedValue.name)}
-                    </PageHeader>
-                  )}
-                </Await>
-              </Suspense>
+                      <NewIcon csMode="inline" noWrapper>
+                        <FontAwesomeIcon icon={faUsers} />
+                      </NewIcon>
+                      {listing.namespace}
+                    </NewLink>
+                    {listing.website_url ? (
+                      <NewLink
+                        primitiveType="link"
+                        href={listing.website_url}
+                        csVariant="cyber"
+                        rootClasses="page-header__meta-item"
+                      >
+                        {listing.website_url}
+                        <NewIcon csMode="inline" noWrapper>
+                          <FontAwesomeIcon icon={faArrowUpRight} />
+                        </NewIcon>
+                      </NewLink>
+                    ) : null}
+                  </>
+                }
+              >
+                {formatToDisplayName(listing.name)}
+              </PageHeader>
 
               <div className="package-listing__narrow-actions">
                 <button
@@ -322,144 +289,97 @@ export default function PackageVersion() {
                   }
                   rootClasses="package-listing__drawer"
                 >
-                  <Suspense fallback={<p>Loading...</p>}>
-                    <Await resolve={version}>
-                      {(resolvedValue) => (
-                        <>{packageMeta(firstUploaded, resolvedValue)}</>
-                      )}
-                    </Await>
-                  </Suspense>
+                  {packageMeta(firstUploaded, listing)}
                 </Drawer>
                 <Suspense fallback={<p>Loading...</p>}>
-                  <Await resolve={versionAndTeamPromise}>
-                    {(resolvedValue) => (
-                      <Actions
-                        team={resolvedValue[1]}
-                        version={resolvedValue[0]}
-                      />
+                  <Await resolve={team}>
+                    {(resolvedTeam) => (
+                      <Actions team={resolvedTeam} listing={listing} />
                     )}
                   </Await>
                 </Suspense>
               </div>
-              <Suspense
-                fallback={
-                  <SkeletonBox className="package-listing__nav-skeleton" />
-                }
-              >
-                <Await resolve={version}>
-                  {(resolvedValue) => (
-                    <>
-                      <Tabs>
-                        <NewLink
-                          key="description"
-                          primitiveType="cyberstormLink"
-                          linkId="PackageVersion"
-                          community={communityId}
-                          namespace={resolvedValue.namespace}
-                          package={resolvedValue.name}
-                          version={resolvedValue.version_number}
-                          aria-current={currentTab === "details"}
-                          rootClasses={`tabs-item${
-                            currentTab === "details"
-                              ? " tabs-item--current"
-                              : ""
-                          }`}
-                        >
-                          Details
-                        </NewLink>
-                        <NewLink
-                          key="required"
-                          primitiveType="cyberstormLink"
-                          linkId="PackageVersionRequired"
-                          community={communityId}
-                          namespace={resolvedValue.namespace}
-                          package={resolvedValue.name}
-                          version={resolvedValue.version_number}
-                          aria-current={currentTab === "required"}
-                          rootClasses={`tabs-item${
-                            currentTab === "required"
-                              ? " tabs-item--current"
-                              : ""
-                          }`}
-                        >
-                          Required ({resolvedValue.dependency_count})
-                        </NewLink>
-                        <NewLink
-                          key="versions"
-                          primitiveType="cyberstormLink"
-                          linkId="PackageVersionVersions"
-                          community={communityId}
-                          namespace={resolvedValue.namespace}
-                          package={resolvedValue.name}
-                          version={resolvedValue.version_number}
-                          aria-current={currentTab === "versions"}
-                          rootClasses={`tabs-item${
-                            currentTab === "versions"
-                              ? " tabs-item--current"
-                              : ""
-                          }`}
-                        >
-                          Versions
-                        </NewLink>
-                      </Tabs>
-                    </>
-                  )}
-                </Await>
-              </Suspense>
+
+              <Tabs>
+                <NewLink
+                  key="description"
+                  primitiveType="cyberstormLink"
+                  linkId="PackageVersion"
+                  community={listing.community_identifier}
+                  namespace={listing.namespace}
+                  package={listing.name}
+                  version={packageVersion}
+                  aria-current={currentTab === "details"}
+                  rootClasses={`tabs-item${
+                    currentTab === "details" ? " tabs-item--current" : ""
+                  }`}
+                >
+                  Details
+                </NewLink>
+                <NewLink
+                  key="required"
+                  primitiveType="cyberstormLink"
+                  linkId="PackageVersionRequired"
+                  community={listing.community_identifier}
+                  namespace={listing.namespace}
+                  package={listing.name}
+                  version={packageVersion}
+                  aria-current={currentTab === "required"}
+                  rootClasses={`tabs-item${
+                    currentTab === "required" ? " tabs-item--current" : ""
+                  }`}
+                >
+                  Required ({listing.dependency_count})
+                </NewLink>
+                <NewLink
+                  key="versions"
+                  primitiveType="cyberstormLink"
+                  linkId="PackageVersionVersions"
+                  community={listing.community_identifier}
+                  namespace={listing.namespace}
+                  package={listing.name}
+                  version={packageVersion}
+                  aria-current={currentTab === "versions"}
+                  rootClasses={`tabs-item${
+                    currentTab === "versions" ? " tabs-item--current" : ""
+                  }`}
+                >
+                  Versions
+                </NewLink>
+              </Tabs>
+
               <div className="package-listing__content">
                 <Outlet context={outletContext} />
               </div>
             </section>
             <aside className="package-listing-sidebar">
-              <Suspense
-                fallback={
-                  <SkeletonBox className="package-listing-sidebar__install-skeleton" />
-                }
+              <NewButton
+                csVariant="accent"
+                csSize="big"
+                rootClasses="package-listing-sidebar__install"
+                primitiveType="link"
+                href={listing.install_url || ""}
+                disabled={!listing.install_url}
               >
-                <Await resolve={version}>
-                  {(resolvedValue) => (
-                    <NewButton
-                      csVariant="accent"
-                      csSize="big"
-                      rootClasses="package-listing-sidebar__install"
-                      primitiveType="link"
-                      href={resolvedValue.install_url || ""}
-                      disabled={!resolvedValue.install_url}
-                    >
-                      <NewIcon csMode="inline">
-                        <ThunderstoreLogo />
-                      </NewIcon>
-                      Install
-                    </NewButton>
-                  )}
-                </Await>
-              </Suspense>
+                <NewIcon csMode="inline">
+                  <ThunderstoreLogo />
+                </NewIcon>
+                Install
+              </NewButton>
               <div className="package-listing-sidebar__main">
                 <Suspense
                   fallback={
                     <SkeletonBox className="package-listing-sidebar__actions-skeleton" />
                   }
                 >
-                  <Await resolve={versionAndTeamPromise}>
-                    {(resolvedValue) => (
-                      <Actions
-                        team={resolvedValue[1]}
-                        version={resolvedValue[0]}
-                      />
+                  <Await resolve={team}>
+                    {(resolvedTeam) => (
+                      <Actions team={resolvedTeam} listing={listing} />
                     )}
                   </Await>
                 </Suspense>
-                <Suspense
-                  fallback={
-                    <SkeletonBox className="package-listing-sidebar__skeleton" />
-                  }
-                >
-                  <Await resolve={version}>
-                    {(resolvedValue) => (
-                      <>{packageMeta(firstUploaded, resolvedValue)}</>
-                    )}
-                  </Await>
-                </Suspense>
+
+                {packageMeta(firstUploaded, listing)}
               </div>
             </aside>
           </div>
@@ -470,15 +390,15 @@ export default function PackageVersion() {
 }
 
 const Actions = memo(function Actions(props: {
-  team: Awaited<ReturnType<typeof getTeamDetails>>;
-  version: Awaited<ReturnType<typeof getPackageVersionDetails>>;
+  listing: PackageListingDetails;
+  team: TeamDetails;
 }) {
-  const { team, version } = props;
+  const { listing, team } = props;
   return (
     <div className="package-listing-sidebar__actions">
       <NewButton
         primitiveType="link"
-        href={version.download_url}
+        href={listing.download_url}
         csVariant="secondary"
         rootClasses="package-listing-sidebar__download"
       >
@@ -506,7 +426,7 @@ const Actions = memo(function Actions(props: {
 
 function packageMeta(
   firstUploaded: ReactElement | undefined,
-  version: Awaited<ReturnType<typeof getPackageVersionDetails>>
+  listing: PackageListingDetails
 ) {
   return (
     <div className="package-listing-sidebar__meta">
@@ -517,13 +437,13 @@ function packageMeta(
       <div className="package-listing-sidebar__item">
         <div className="package-listing-sidebar__label">Downloads</div>
         <div className="package-listing-sidebar__content">
-          {formatInteger(version.download_count)}
+          {formatInteger(listing.download_count)}
         </div>
       </div>
       <div className="package-listing-sidebar__item">
         <div className="package-listing-sidebar__label">Size</div>
         <div className="package-listing-sidebar__content">
-          {formatFileSize(version.size)}
+          {formatFileSize(listing.size)}
         </div>
       </div>
       <div className="package-listing-sidebar__item">
@@ -531,12 +451,12 @@ function packageMeta(
         <div className="package-listing-sidebar__content">
           <div className="package-listing-sidebar__dependency-string-wrapper">
             <span
-              title={version.full_version_name}
+              title={listing.full_version_name}
               className="package-listing-sidebar__dependency-string"
             >
-              {version.full_version_name}
+              {listing.full_version_name}
             </span>
-            <CopyButton text={version.full_version_name} />
+            <CopyButton text={listing.full_version_name} />
           </div>
         </div>
       </div>
