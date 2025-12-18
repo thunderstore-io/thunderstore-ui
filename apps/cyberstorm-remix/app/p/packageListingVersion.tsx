@@ -122,7 +122,7 @@ export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
   return arg.defaultShouldRevalidate;
 }
 
-export default function PackageVersion() {
+export default function PackageListingVersion() {
   const { listing, packageVersion, team } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
