@@ -57,6 +57,10 @@ import type { CurrentUser } from "@thunderstore/dapper/types";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
 import { getPublicListing, getPrivateListing } from "./listingUtils";
 import { ManagementTools } from "./components/PackageListing/ManagementTools";
+import {
+  InternalNotes,
+  RejectionReason,
+} from "./components/PackageListing/ReviewInformation";
 
 import "./packageListing.css";
 
@@ -342,13 +346,17 @@ export default function PackageListing() {
                 <Await resolve={permissions}>
                   {(resolvedPermissions) =>
                     resolvedPermissions ? (
-                      <ManagementTools
-                        listingStatus={resolvedStatus}
-                        packagePermissions={resolvedPermissions}
-                        listing={listing}
-                        toast={toast}
-                        requestConfig={config}
-                      />
+                      <>
+                        <ManagementTools
+                          listingStatus={resolvedStatus}
+                          packagePermissions={resolvedPermissions}
+                          listing={listing}
+                          toast={toast}
+                          requestConfig={config}
+                        />
+                        <RejectionReason status={resolvedStatus} />
+                        <InternalNotes status={resolvedStatus} />
+                      </>
                     ) : null
                   }
                 </Await>
