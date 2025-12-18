@@ -6,10 +6,8 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 
 import { PaginatedDependencies } from "app/commonComponents/PaginatedDependencies/PaginatedDependencies";
 import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 
 const Dependency404 = new Response("Package dependencies not found", {
   status: 404,
@@ -73,12 +71,7 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
     throw Dependency404;
   }
 
-  const tools = getSessionTools();
-  const dapper = new DapperTs(() => ({
-    apiHost: tools?.getConfig().apiHost,
-    sessionId: tools?.getConfig().sessionId,
-  }));
-
+  const dapper = getDapperForRequest(request);
   let version: string;
 
   if (packageVersion) {
