@@ -188,7 +188,7 @@ export default function WikiPage() {
   >();
   const params = useParams();
 
-  const wikiAndPagePromise = Promise.all([Promise.resolve(wiki), page]);
+  const wikiAndPagePromise = Promise.all([wiki, page]);
 
   const notFoundElement = <div>Wiki page not found.</div>;
 
