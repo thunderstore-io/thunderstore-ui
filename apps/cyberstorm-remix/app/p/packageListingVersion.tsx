@@ -40,10 +40,8 @@ import {
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type OutletContextShape } from "~/root";
 import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getPrivateListing, getPublicListing } from "./listingUtils";
 import {
   type PackageListingDetails,
@@ -77,19 +75,14 @@ export async function loader({ params }: LoaderFunctionArgs) {
   };
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ params, request }: LoaderFunctionArgs) {
   const { communityId, namespaceId, packageId, packageVersion } = params;
 
   if (!communityId || !namespaceId || !packageId || !packageVersion) {
     throw new Response("Package not found", { status: 404 });
   }
 
-  const tools = getSessionTools();
-  const config = tools.getConfig();
-  const dapper = new DapperTs(() => ({
-    apiHost: config.apiHost,
-    sessionId: config.sessionId,
-  }));
+  const dapper = getDapperForRequest(request);
 
   const listing = await getPrivateListing(dapper, {
     communityId,
