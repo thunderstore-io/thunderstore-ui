@@ -344,38 +344,42 @@ export default function PackageListing() {
               <div className="package-edit__divider" />
             </>
           ) : null}
-          <div className="package-edit__row">
-            <div className="package-edit__info">
-              <div className="package-edit__title">Categories</div>
-              <div className="package-edit__description">
-                Select descriptive categories to help people discover your
-                package.
+          {permissions?.permissions.can_manage_categories ? (
+            <>
+              <div className="package-edit__row">
+                <div className="package-edit__info">
+                  <div className="package-edit__title">Categories</div>
+                  <div className="package-edit__description">
+                    Select descriptive categories to help people discover your
+                    package.
+                  </div>
+                </div>
+                <div className="package-edit__row-content">
+                  <NewSelectSearch
+                    placeholder="Select categories"
+                    multiple
+                    options={filters.package_categories.map((category) => ({
+                      value: category.slug,
+                      label: category.name,
+                    }))}
+                    onChange={(val) => {
+                      updateFormFieldState({
+                        field: "categories",
+                        value: val ? val.map((v) => v.value) : [],
+                      });
+                    }}
+                    value={formInputs.categories.map((categoryId) => ({
+                      value: categoryId,
+                      label:
+                        filters.package_categories.find(
+                          (c) => c.slug === categoryId
+                        )?.name || "",
+                    }))}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="package-edit__row-content">
-              <NewSelectSearch
-                placeholder="Select categories"
-                multiple
-                options={filters.package_categories.map((category) => ({
-                  value: category.slug,
-                  label: category.name,
-                }))}
-                onChange={(val) => {
-                  updateFormFieldState({
-                    field: "categories",
-                    value: val ? val.map((v) => v.value) : [],
-                  });
-                }}
-                value={formInputs.categories.map((categoryId) => ({
-                  value: categoryId,
-                  label:
-                    filters.package_categories.find(
-                      (c) => c.slug === categoryId
-                    )?.name || "",
-                }))}
-              />
-            </div>
-          </div>
+            </>
+          ) : null}
           <div className="package-edit__divider" />
           <div className="package-edit__row">
             <div className="package-edit__info">
