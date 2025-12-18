@@ -5,6 +5,10 @@ export interface ReviewInformationProps {
 }
 
 export const InternalNotes = ({ status }: ReviewInformationProps) => {
+  if (!status) {
+    return null;
+  }
+
   const notes = status.internal_notes || "";
 
   if (!notes) {
@@ -20,6 +24,10 @@ export const InternalNotes = ({ status }: ReviewInformationProps) => {
 };
 
 export const RejectionReason = ({ status }: ReviewInformationProps) => {
+  if (!status) {
+    return null;
+  }
+
   const isRejected = status.review_status === "rejected";
   const reason = status.rejection_reason || "";
 
