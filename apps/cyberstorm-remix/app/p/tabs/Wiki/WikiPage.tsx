@@ -183,9 +183,8 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 }
 
 export default function WikiPage() {
-  const { wiki, page, communityId, namespaceId, packageId } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
+  const { wiki, page, communityId, namespaceId, packageId, permissions } =
+    useLoaderData<typeof loader | typeof clientLoader>();
   const params = useParams();
 
   const wikiAndPagePromise = Promise.all([wiki, page]);
@@ -227,6 +226,11 @@ export default function WikiPage() {
                 packageId={packageId}
                 previousPage={previousPage}
                 nextPage={nextPage}
+                canManage={permissions?.then((perms) =>
+                  typeof perms === "undefined"
+                    ? false
+                    : perms.permissions.can_manage
+                )}
               />
             );
           }
