@@ -1,5 +1,6 @@
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { isApiError } from "@thunderstore/thunderstore-api";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 
 export interface ListingIdentifiers {
   communityId: string;
@@ -69,4 +70,58 @@ export async function getPrivateListing(
   }
 
   return privateListing;
+}
+
+/**
+ * Fetches the package listing status for the current user.
+ * If the user is not logged in or does not have permission, returns undefined.
+ */
+export async function getPackageListingStatus(
+  tools: ReturnType<typeof getSessionTools>,
+  dapper: DapperTs,
+  communityId: string,
+  namespaceId: string,
+  packageId: string
+) {
+  const cu = await tools.getSessionCurrentUser();
+
+  if (!cu.username) {
+    return undefined;
+  }
+
+  try {
+    return await dapper.getPackageListingStatus(
+      communityId,
+      namespaceId,
+      packageId
+    );
+  } catch (error: unknown) {
+    if (isApiError(error) && error.response.status === 403) {
+      return undefined;
+    }
+
+    throw error;
+  }
+}
+
+/**
+ * Fetches the package permissions for the current user.
+ * If the user is not logged in, returns undefined.
+ */
+export async function getUserPermissions(
+  tools: ReturnType<typeof getSessionTools>,
+  dapper: DapperTs,
+  communityId: string,
+  namespaceId: string,
+  packageId: string
+) {
+  const cu = await tools.getSessionCurrentUser();
+  if (cu.username) {
+    return await dapper.getPackagePermissions(
+      communityId,
+      namespaceId,
+      packageId
+    );
+  }
+  return undefined;
 }

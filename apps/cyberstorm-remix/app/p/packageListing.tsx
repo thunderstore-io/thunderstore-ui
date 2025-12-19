@@ -55,7 +55,12 @@ import {
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import type { CurrentUser } from "@thunderstore/dapper/types";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
-import { getPublicListing, getPrivateListing } from "./listingUtils";
+import {
+  getPublicListing,
+  getPrivateListing,
+  getPackageListingStatus,
+  getUserPermissions,
+} from "./listingUtils";
 import { ManagementTools } from "./components/PackageListing/ManagementTools";
 import {
   InternalNotes,
@@ -98,42 +103,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
     namespace_id: namespaceId,
     package_id: packageId,
   };
-}
-
-async function getUserPermissions(
-  tools: ReturnType<typeof getSessionTools>,
-  dapper: DapperTs,
-  communityId: string,
-  namespaceId: string,
-  packageId: string
-) {
-  const cu = await tools.getSessionCurrentUser();
-  if (cu.username) {
-    return await dapper.getPackagePermissions(
-      communityId,
-      namespaceId,
-      packageId
-    );
-  }
-  return undefined;
-}
-
-async function getPackageListingStatus(
-  tools: ReturnType<typeof getSessionTools>,
-  dapper: DapperTs,
-  communityId: string,
-  namespaceId: string,
-  packageId: string
-) {
-  const cu = await tools.getSessionCurrentUser();
-  if (cu.username) {
-    return await dapper.getPackageListingStatus(
-      communityId,
-      namespaceId,
-      packageId
-    );
-  }
-  return undefined;
 }
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
