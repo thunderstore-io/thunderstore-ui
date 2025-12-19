@@ -37,7 +37,10 @@ export function initializeClientDapper(factory?: ConfigFactory) {
 
   if (!window.Dapper) {
     const resolvedFactory = resolveConfigFactory();
-    window.Dapper = new DapperTs(resolvedFactory);
+    const tools = getSessionTools();
+    window.Dapper = new DapperTs(resolvedFactory, () =>
+      tools.clearInvalidSession()
+    );
   }
 }
 

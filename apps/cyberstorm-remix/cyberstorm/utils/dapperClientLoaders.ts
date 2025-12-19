@@ -44,9 +44,12 @@ export function makeTeamSettingsTabLoader<T>(
 
 const setupDapper = () => {
   const tools = getSessionTools();
-  const config = tools?.getConfig();
-  return new DapperTs(() => ({
-    apiHost: config?.apiHost,
-    sessionId: config?.sessionId,
-  }));
+  const config = tools.getConfig();
+  return new DapperTs(
+    () => ({
+      apiHost: config.apiHost,
+      sessionId: config.sessionId,
+    }),
+    () => tools.clearInvalidSession()
+  );
 };
