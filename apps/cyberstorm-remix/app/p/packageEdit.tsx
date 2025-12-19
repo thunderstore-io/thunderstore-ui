@@ -6,6 +6,7 @@ import {
   NewIcon,
   NewSelectSearch,
   NewTag,
+  SkeletonBox,
   formatToDisplayName,
   useToast,
 } from "@thunderstore/cyberstorm";
@@ -18,23 +19,16 @@ import {
 } from "@thunderstore/thunderstore-api";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type OutletContextShape } from "~/root";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faCheck } from "@fortawesome/pro-solid-svg-icons";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-import { getPublicListing, getPrivateListing } from "./listingUtils";
+import { getPrivateListing } from "./listingUtils";
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  if (!data || data.listing === undefined) {
-    return [];
-  }
-
+export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
   return [
     {
       title: data
@@ -47,32 +41,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 const package404 = new Response("Package not found", { status: 404 });
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  const { communityId, namespaceId, packageId } = params;
-
-  if (!communityId || !namespaceId || !packageId) {
-    throw package404;
-  }
-
-  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-  const dapper = new DapperTs(() => {
-    return {
-      apiHost: publicEnvVariables.VITE_API_URL,
-      sessionId: undefined,
-    };
-  });
-
-  return {
-    community: await dapper.getCommunity(communityId),
-    communityFilters: await dapper.getCommunityFilters(communityId),
-    listing: await getPublicListing(dapper, {
-      communityId,
-      namespaceId,
-      packageId,
-    }),
-    team: await dapper.getTeamDetails(namespaceId),
-    filters: await dapper.getCommunityFilters(communityId),
-    permissions: undefined,
-  };
+  return undefined;
 }
 
 export async function clientLoader({ params }: LoaderFunctionArgs) {
@@ -124,10 +93,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 clientLoader.hydrate = true;
 
 export default function PackageListing() {
-  const { listing, filters, permissions } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
-
+  const loaderData = useLoaderData<typeof loader | typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
   const config = outletContext.requestConfig;
   const toast = useToast();
@@ -186,22 +152,9 @@ export default function PackageListing() {
     };
   }
 
-  const [formInputs, updateFormFieldState] = useReducer(
-    formFieldUpdateAction,
-    undefined,
-    () => ({
-      categories: listing?.categories.map((c) => c.slug) ?? [],
-    })
-  );
-
-  useEffect(() => {
-    if (!listing) return;
-
-    updateFormFieldState({
-      field: "categories",
-      value: listing.categories.map((c) => c.slug),
-    });
-  }, [listing?.categories]);
+  const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
+    categories: loaderData?.listing.categories.map((c) => c.slug) ?? [],
+  });
 
   type SubmitorOutput = Awaited<ReturnType<typeof packageListingUpdate>>;
 
@@ -252,10 +205,11 @@ export default function PackageListing() {
     },
   });
 
-  // TODO: Add proper loading element
-  if (!listing) {
-    return <div>Loading package...</div>;
+  if (!loaderData) {
+    return <SkeletonBox className="package-edit__skeleton" />;
   }
+
+  const { listing, filters, permissions } = loaderData;
 
   return (
     <>
@@ -264,7 +218,7 @@ export default function PackageListing() {
       </PageHeader>
       <div className="package-edit__main">
         <section className="package-edit__section">
-          {permissions?.permissions.can_unlist ? (
+          {permissions.permissions.can_unlist && (
             <>
               <div className="package-edit__row">
                 <div className="package-edit__info">
@@ -304,8 +258,8 @@ export default function PackageListing() {
               </div>
               <div className="package-edit__divider" />
             </>
-          ) : null}
-          {permissions?.permissions.can_manage_deprecation ? (
+          )}
+          {permissions.permissions.can_manage_deprecation && (
             <>
               <div className="package-edit__row">
                 <div className="package-edit__info">
@@ -355,7 +309,7 @@ export default function PackageListing() {
               </div>
               <div className="package-edit__divider" />
             </>
-          ) : null}
+          )}
           {permissions?.permissions.can_manage_categories ? (
             <>
               <div className="package-edit__row">
