@@ -12,21 +12,21 @@ import {
 } from "@thunderstore/cyberstorm";
 import "./packageEdit.css";
 import {
+  ApiError,
   packageDeprecate,
   packageListingUpdate,
   type PackageListingUpdateRequestData,
   packageUnlist,
 } from "@thunderstore/thunderstore-api";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import { type OutletContextShape } from "~/root";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer, useEffect } from "react";
+import { useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faCheck } from "@fortawesome/pro-solid-svg-icons";
+import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
+import { getPrivateListing } from "app/p/listingUtils";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-import { getPrivateListing } from "./listingUtils";
 
 export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
   return [
@@ -44,50 +44,37 @@ export async function loader({ params }: LoaderFunctionArgs) {
   return undefined;
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ params, request }: LoaderFunctionArgs) {
   const { communityId, namespaceId, packageId } = params;
 
   if (!communityId || !namespaceId || !packageId) {
     throw package404;
   }
 
-  const tools = getSessionTools();
-  const dapper = new DapperTs(() => {
-    return {
-      apiHost: tools?.getConfig().apiHost,
-      sessionId: tools?.getConfig().sessionId,
-    };
-  });
+  try {
+    const dapper = getDapperForRequest(request);
 
-  const permissions = await dapper.getPackagePermissions(
-    communityId,
-    namespaceId,
-    packageId
-  );
+    // Fetch everything at once for faster page load, even if we may
+    //  overfetch in case we lack authentication/authorization.
+    const [listing, permissions, filters] = await Promise.all([
+      getPrivateListing(dapper, { communityId, namespaceId, packageId }),
+      dapper.getPackagePermissions(communityId, namespaceId, packageId),
+      dapper.getCommunityFilters(communityId),
+    ]);
 
-  if (!permissions) {
-    throw new Response("Unauthenticated", { status: 401 });
-  } else if (
-    !permissions?.permissions.can_manage &&
-    !permissions?.permissions.can_moderate
-  ) {
-    throw new Response("Unauthorized", { status: 403 });
+    if (!permissions) {
+      throw new Response("Unauthenticated", { status: 401 });
+    } else if (
+      !permissions.permissions.can_manage &&
+      !permissions.permissions.can_moderate
+    ) {
+      throw new Response("Unauthorized", { status: 403 });
+    }
+
+    return { listing, permissions, filters };
+  } catch (error) {
+    throw error instanceof ApiError ? package404 : error;
   }
-
-  const listing = await getPrivateListing(dapper, {
-    communityId: communityId,
-    namespaceId: namespaceId,
-    packageId: packageId,
-  });
-
-  return {
-    community: await dapper.getCommunity(communityId),
-    communityFilters: await dapper.getCommunityFilters(communityId),
-    listing: listing,
-    team: await dapper.getTeamDetails(namespaceId),
-    filters: await dapper.getCommunityFilters(communityId),
-    permissions: permissions,
-  };
 }
 
 clientLoader.hydrate = true;
