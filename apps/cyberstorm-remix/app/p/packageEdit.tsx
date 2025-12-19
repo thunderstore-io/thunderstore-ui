@@ -44,11 +44,13 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ];
 };
 
+const package404 = new Response("Package not found", { status: 404 });
+
 export async function loader({ params }: LoaderFunctionArgs) {
   const { communityId, namespaceId, packageId } = params;
 
   if (!communityId || !namespaceId || !packageId) {
-    throw new Response("Package not found", { status: 404 });
+    throw package404;
   }
 
   const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
@@ -77,7 +79,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   const { communityId, namespaceId, packageId } = params;
 
   if (!communityId || !namespaceId || !packageId) {
-    throw new Response("Package not found", { status: 404 });
+    throw package404;
   }
 
   const tools = getSessionTools();
