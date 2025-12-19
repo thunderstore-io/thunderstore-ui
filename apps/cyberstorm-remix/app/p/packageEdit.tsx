@@ -11,7 +11,6 @@ import {
 } from "@thunderstore/cyberstorm";
 import "./packageEdit.css";
 import {
-  ApiError,
   packageDeprecate,
   packageListingUpdate,
   type PackageListingUpdateRequestData,
@@ -25,12 +24,17 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faCheck } from "@fortawesome/pro-solid-svg-icons";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
+import { getPublicListing, getPrivateListing } from "./listingUtils";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  if (!data || data.listing === undefined) {
+    return [];
+  }
+
   return [
     {
       title: data
@@ -41,82 +45,68 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
-    try {
-      const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: publicEnvVariables.VITE_API_URL,
-          sessionId: undefined,
-        };
-      });
-      return {
-        community: await dapper.getCommunity(params.communityId),
-        communityFilters: await dapper.getCommunityFilters(params.communityId),
-        listing: await dapper.getPackageListingDetails(
-          params.communityId,
-          params.namespaceId,
-          params.packageId
-        ),
-        team: await dapper.getTeamDetails(params.namespaceId),
-        filters: await dapper.getCommunityFilters(params.communityId),
-        permissions: undefined,
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Package not found", { status: 404 });
-      } else {
-        // REMIX TODO: Add sentry
-        throw error;
-      }
-    }
+  const { communityId, namespaceId, packageId } = params;
+
+  if (!communityId || !namespaceId || !packageId) {
+    throw new Response("Package not found", { status: 404 });
   }
-  throw new Response("Package not found", { status: 404 });
+
+  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
+  const dapper = new DapperTs(() => {
+    return {
+      apiHost: publicEnvVariables.VITE_API_URL,
+      sessionId: undefined,
+    };
+  });
+  return {
+    community: await dapper.getCommunity(communityId),
+    communityFilters: await dapper.getCommunityFilters(communityId),
+    listing: await getPublicListing(dapper, {
+      communityId,
+      namespaceId,
+      packageId,
+    }),
+    team: await dapper.getTeamDetails(namespaceId),
+    filters: await dapper.getCommunityFilters(communityId),
+    permissions: undefined,
+  };
 }
 
-// TODO: Needs to check if package is available for the logged in user
 export async function clientLoader({ params }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
-    try {
-      const tools = getSessionTools();
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: tools?.getConfig().apiHost,
-          sessionId: tools?.getConfig().sessionId,
-        };
-      });
+  const { communityId, namespaceId, packageId } = params;
 
-      const permissions = await dapper.getPackagePermissions(
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      );
-
-      if (!permissions?.permissions.can_manage) {
-        throw new Response("Unauthorized", { status: 403 });
-      }
-
-      return {
-        community: await dapper.getCommunity(params.communityId),
-        communityFilters: await dapper.getCommunityFilters(params.communityId),
-        listing: await dapper.getPackageListingDetails(
-          params.communityId,
-          params.namespaceId,
-          params.packageId
-        ),
-        team: await dapper.getTeamDetails(params.namespaceId),
-        filters: await dapper.getCommunityFilters(params.communityId),
-        permissions: permissions,
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Package not found", { status: 404 });
-      } else {
-        throw error;
-      }
-    }
+  if (!communityId || !namespaceId || !packageId) {
+    throw new Response("Package not found", { status: 404 });
   }
-  throw new Response("Package not found", { status: 404 });
+
+  const tools = getSessionTools();
+  const dapper = new DapperTs(() => {
+    return {
+      apiHost: tools?.getConfig().apiHost,
+      sessionId: tools?.getConfig().sessionId,
+    };
+  });
+
+  const permissions = await dapper.getPackagePermissions(
+    communityId,
+    namespaceId,
+    packageId
+  );
+
+  const listing = await getPrivateListing(dapper, {
+    communityId: communityId,
+    namespaceId: namespaceId,
+    packageId: packageId,
+  });
+
+  return {
+    community: await dapper.getCommunity(communityId),
+    communityFilters: await dapper.getCommunityFilters(communityId),
+    listing: listing,
+    team: await dapper.getTeamDetails(namespaceId),
+    filters: await dapper.getCommunityFilters(communityId),
+    permissions: permissions,
+  };
 }
 
 clientLoader.hydrate = true;
@@ -184,13 +174,30 @@ export default function PackageListing() {
     };
   }
 
-  const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
-    categories: listing.categories.map((c) => c.slug),
-  });
+  const [formInputs, updateFormFieldState] = useReducer(
+    formFieldUpdateAction,
+    undefined,
+    () => ({
+      categories: listing?.categories.map((c) => c.slug) ?? [],
+    })
+  );
+
+  useEffect(() => {
+    if (!listing) return;
+
+    updateFormFieldState({
+      field: "categories",
+      value: listing.categories.map((c) => c.slug),
+    });
+  }, [listing?.categories]);
 
   type SubmitorOutput = Awaited<ReturnType<typeof packageListingUpdate>>;
 
   async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
+    if (!listing) {
+      throw new Error("Listing not loaded");
+    }
+
     return await packageListingUpdate({
       config: config,
       params: {
@@ -232,6 +239,11 @@ export default function PackageListing() {
       });
     },
   });
+
+  // TODO: Add proper loading element
+  if (!listing) {
+    return <div>Loading package...</div>;
+  }
 
   return (
     <>
@@ -332,38 +344,42 @@ export default function PackageListing() {
               <div className="package-edit__divider" />
             </>
           ) : null}
-          <div className="package-edit__row">
-            <div className="package-edit__info">
-              <div className="package-edit__title">Categories</div>
-              <div className="package-edit__description">
-                Select descriptive categories to help people discover your
-                package.
+          {permissions?.permissions.can_manage_categories ? (
+            <>
+              <div className="package-edit__row">
+                <div className="package-edit__info">
+                  <div className="package-edit__title">Categories</div>
+                  <div className="package-edit__description">
+                    Select descriptive categories to help people discover your
+                    package.
+                  </div>
+                </div>
+                <div className="package-edit__row-content">
+                  <NewSelectSearch
+                    placeholder="Select categories"
+                    multiple
+                    options={filters.package_categories.map((category) => ({
+                      value: category.slug,
+                      label: category.name,
+                    }))}
+                    onChange={(val) => {
+                      updateFormFieldState({
+                        field: "categories",
+                        value: val ? val.map((v) => v.value) : [],
+                      });
+                    }}
+                    value={formInputs.categories.map((categoryId) => ({
+                      value: categoryId,
+                      label:
+                        filters.package_categories.find(
+                          (c) => c.slug === categoryId
+                        )?.name || "",
+                    }))}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="package-edit__row-content">
-              <NewSelectSearch
-                placeholder="Select categories"
-                multiple
-                options={filters.package_categories.map((category) => ({
-                  value: category.slug,
-                  label: category.name,
-                }))}
-                onChange={(val) => {
-                  updateFormFieldState({
-                    field: "categories",
-                    value: val ? val.map((v) => v.value) : [],
-                  });
-                }}
-                value={formInputs.categories.map((categoryId) => ({
-                  value: categoryId,
-                  label:
-                    filters.package_categories.find(
-                      (c) => c.slug === categoryId
-                    )?.name || "",
-                }))}
-              />
-            </div>
-          </div>
+            </>
+          ) : null}
           <div className="package-edit__divider" />
           <div className="package-edit__row">
             <div className="package-edit__info">

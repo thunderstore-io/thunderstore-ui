@@ -82,7 +82,8 @@ export function packageUnlist(
   >
 ): Promise<PackageUnlistResponseData> {
   const { config, params, data } = props;
-  const path = `/c/${params.community}/${params.namespace}/${params.package}/`;
+  const baseUrl = "/api/cyberstorm/listing/";
+  const path = `${baseUrl}${params.community}/${params.namespace}/${params.package}/unlist/`;
 
   return apiFetch({
     args: {
