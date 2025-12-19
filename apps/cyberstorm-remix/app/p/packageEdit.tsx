@@ -122,7 +122,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 clientLoader.hydrate = true;
 
 export default function PackageListing() {
-  const { community, listing, filters, permissions } = useLoaderData<
+  const { listing, filters, permissions } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
@@ -211,7 +211,7 @@ export default function PackageListing() {
     return await packageListingUpdate({
       config: config,
       params: {
-        community: community.identifier,
+        community: listing.community_identifier,
         namespace: listing.namespace,
         package: listing.name,
       },
@@ -284,7 +284,7 @@ export default function PackageListing() {
                       unlistAction({
                         config: config,
                         params: {
-                          community: community.identifier,
+                          community: listing.community_identifier,
                           namespace: listing.namespace,
                           package: listing.name,
                         },
