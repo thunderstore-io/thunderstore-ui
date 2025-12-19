@@ -85,4 +85,8 @@
   .package-edit__save-button {
     flex: 1 0 0;
   }
+
+  .package-edit__skeleton {
+    min-height: 20rem;
+  }
 }
