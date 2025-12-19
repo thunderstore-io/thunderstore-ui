@@ -1,7 +1,12 @@
 import "./Wiki.css";
 
 import { type PackageWikiPageResponseData } from "@thunderstore/thunderstore-api";
-import { Heading, NewButton, NewIcon } from "@thunderstore/cyberstorm";
+import {
+  Heading,
+  NewButton,
+  NewIcon,
+  RelativeTime,
+} from "@thunderstore/cyberstorm";
 import {
   faArrowLeftLong,
   faArrowRightLong,
@@ -42,10 +47,19 @@ export const WikiContent = memo(function WikiContent({
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faCalendarDay} />
               </NewIcon>
-              {page.datetime_created}
+              <RelativeTime
+                time={page.datetime_created}
+                suppressHydrationWarning
+              />
             </span>
             <span>
-              <i>Updated {page.datetime_updated} ago</i>
+              <i>
+                Updated{" "}
+                <RelativeTime
+                  time={page.datetime_updated}
+                  suppressHydrationWarning
+                />
+              </i>
             </span>
           </div>
         </div>
@@ -101,7 +115,11 @@ export const WikiContent = memo(function WikiContent({
             Previous Page
           </NewButton>
         ) : (
-          <NewButton csModifiers={["ghost", "disabled"]} csVariant="secondary">
+          <NewButton
+            csModifiers={["ghost", "disabled"]}
+            csVariant="secondary"
+            disabled={true}
+          >
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faArrowLeftLong} />
             </NewIcon>
@@ -125,7 +143,11 @@ export const WikiContent = memo(function WikiContent({
             </NewIcon>
           </NewButton>
         ) : (
-          <NewButton csModifiers={["ghost", "disabled"]} csVariant="secondary">
+          <NewButton
+            csModifiers={["ghost", "disabled"]}
+            csVariant="secondary"
+            disabled={true}
+          >
             Next Page
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faArrowRightLong} />
