@@ -23,7 +23,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "jsx": "react-jsx",
-    "types": ["@vitest/browser/providers/playwright"]
+    "types": ["vite/client", "@vitest/browser/providers/playwright"]
   },
   "include": ["./src/**/*.tsx", "./src/**/*.ts"],
   "exclude": ["node_modules"]

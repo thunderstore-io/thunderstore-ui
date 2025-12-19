@@ -10,7 +10,11 @@ let dapper: DapperTs;
 
 beforeAll(() => {
   dapper = new DapperTs(() => {
-    return { apiHost: "http://127.0.0.1:8000" };
+    return {
+      apiHost:
+        import.meta.env.VITE_THUNDERSTORE_TEST_API_HOST ??
+        "http://127.0.0.1:8000",
+    };
   });
 });
 
