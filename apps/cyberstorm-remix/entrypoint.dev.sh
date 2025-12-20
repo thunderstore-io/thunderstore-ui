@@ -33,21 +33,21 @@ if [ -z "$(ls -A node_modules)" ] || [ ! -f node_modules/.bin/react-router ]; th
     su node -c "yarn install --frozen-lockfile --production=false"
 fi
 
-# Map localhost to the backend nginx container IP so SSR API calls hit the backend
-# without changing client-side env values.
+# Map thunderstore.localhost to the backend nginx container IP so SSR API calls hit
+# the backend without changing client-side env values.
 backend_nginx_ip=$(getent hosts nginx | awk '{print $1}')
 if [ -n "$backend_nginx_ip" ]; then
-  # Prepend to /etc/hosts to take precedence over the default loopback entry.
+  # Prepend to /etc/hosts so it takes precedence.
   # Make idempotent to avoid duplicate lines on restarts.
-  if ! grep -q "^${backend_nginx_ip}[[:space:]][[:space:]]*localhost\([[:space:]]\|$\)" /etc/hosts 2>/dev/null; then
+  if ! grep -q "^${backend_nginx_ip}[[:space:]][[:space:]]*thunderstore\.localhost\([[:space:]]\|$\)" /etc/hosts 2>/dev/null; then
     tmp_hosts=$(mktemp)
     {
-      printf "%s localhost\n" "$backend_nginx_ip"
-      # Drop existing localhost mappings so the new mapping is unambiguous.
-      # This keeps other host entries intact.
-      awk '!($0 ~ /(^|[[:space:]])localhost([[:space:]]|$)/)' /etc/hosts 2>/dev/null || true
+      printf "%s thunderstore.localhost\n" "$backend_nginx_ip"
+      # Drop existing thunderstore.localhost mappings so the new mapping is unambiguous.
+      # This keeps other host entries (including localhost) intact.
+      awk '!($0 ~ /(^|[[:space:]])thunderstore\.localhost([[:space:]]|$)/)' /etc/hosts 2>/dev/null || true
     } > "$tmp_hosts"
-    cat "$tmp_hosts" > /etc/hosts || printf "%s localhost\n" "$backend_nginx_ip" >> /etc/hosts
+    cat "$tmp_hosts" > /etc/hosts || printf "%s thunderstore.localhost\n" "$backend_nginx_ip" >> /etc/hosts
     rm -f "$tmp_hosts"
   fi
 fi

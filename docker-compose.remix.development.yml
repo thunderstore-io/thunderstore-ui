@@ -6,7 +6,7 @@ x-rsync-common: &rsync-common
     - workspace_src:/workspace
     - thunderstore_nginx_conf:/etc/nginx/user-conf
   environment:
-    RSYNC_ARGS: "-a --delete --info=progress2 --exclude=.git --exclude=build-secrets --exclude=.npmrc --exclude=node_modules --exclude=.turbo --exclude=.cache --exclude=apps/cyberstorm-remix/build --exclude=apps/cyberstorm-remix/.react-router"
+    RSYNC_ARGS: "-a --delete --info=progress2 --exclude=.git --exclude=build-secrets --exclude=.npmrc --exclude=node_modules --exclude=.turbo --exclude=.cache --exclude=packages/*/dist --exclude=packages/*/dist/** --exclude=packages/*/types/dist --exclude=packages/*/types/dist/** --exclude=apps/cyberstorm-remix/build --exclude=apps/cyberstorm-remix/.react-router"
     SYNC_INTERVAL: "5"
 
 services:
@@ -15,7 +15,7 @@ services:
     container_name: cyberstorm-remix-sync
     restart: "no"
     command: >-
-      /bin/sh -c "set -e; apk add --no-cache rsync; rsync $$RSYNC_ARGS /src/ /workspace/; tmp=/etc/nginx/user-conf/.new-localhost.conf.tmp; cp -f /src/tools/nginx/new-localhost.conf \"$$tmp\"; mv -f \"$$tmp\" /etc/nginx/user-conf/new-localhost.conf; echo sync complete"
+      /bin/sh -c "set -e; apk add --no-cache rsync; rsync $$RSYNC_ARGS /src/ /workspace/; tmp=/etc/nginx/user-conf/.new-thunderstore-localhost.conf.tmp; cp -f /src/tools/nginx/new-thunderstore-localhost.conf \"$$tmp\"; mv -f \"$$tmp\" /etc/nginx/user-conf/new-thunderstore-localhost.conf; echo sync complete"
 
   cyberstorm-remix-watch:
     <<: *rsync-common
@@ -25,7 +25,7 @@ services:
       cyberstorm-remix-sync:
         condition: service_completed_successfully
     command: >-
-      /bin/sh -c "set -e; apk add --no-cache rsync; while true; do rsync $$RSYNC_ARGS /src/ /workspace/; tmp=/etc/nginx/user-conf/.new-localhost.conf.tmp; cp -f /src/tools/nginx/new-localhost.conf \"$$tmp\"; mv -f \"$$tmp\" /etc/nginx/user-conf/new-localhost.conf; sleep $$SYNC_INTERVAL; done"
+      /bin/sh -c "set -e; apk add --no-cache rsync; while true; do rsync $$RSYNC_ARGS /src/ /workspace/; tmp=/etc/nginx/user-conf/.new-thunderstore-localhost.conf.tmp; cp -f /src/tools/nginx/new-thunderstore-localhost.conf \"$$tmp\"; mv -f \"$$tmp\" /etc/nginx/user-conf/new-thunderstore-localhost.conf; sleep $$SYNC_INTERVAL; done"
 
   cyberstorm-remix:
     container_name: cyberstorm-remix
@@ -51,13 +51,13 @@ services:
       - NPM_CONFIG_USERCONFIG=/run/secrets/npmrc
       - ENABLE_BROKEN_PAGES=True
       - VITE_DEVELOPMENT=True
-      - VITE_SITE_URL=http://localhost
-      - VITE_BETA_SITE_URL=http://new.localhost
-      - VITE_API_URL=http://localhost
-      - VITE_COOKIE_DOMAIN=.localhost
-      - VITE_AUTH_BASE_URL=http://localhost
-      - VITE_AUTH_RETURN_URL=http://new.localhost
-      - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS=.localhost
+      - VITE_SITE_URL=http://thunderstore.localhost
+      - VITE_BETA_SITE_URL=http://new.thunderstore.localhost
+      - VITE_API_URL=http://thunderstore.localhost
+      - VITE_COOKIE_DOMAIN=.thunderstore.localhost
+      - VITE_AUTH_BASE_URL=http://thunderstore.localhost
+      - VITE_AUTH_RETURN_URL=http://new.thunderstore.localhost
+      - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS=.thunderstore.localhost
     secrets:
       - npmrc
 
