@@ -18,6 +18,8 @@ import {
   teamAddMember,
 } from "@thunderstore/thunderstore-api";
 
+import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
+
 const roleOptions: SelectOption<"owner" | "member">[] = [
   { value: "member", label: "Member" },
   { value: "owner", label: "Owner" },
@@ -122,7 +124,7 @@ export function MemberAddForm(props: {
         <div className="add-member-form__fields">
           <div className="add-member-form__field add-member-form__username">
             <label className="add-member-form__label" htmlFor="username">
-              Username <span aria-hidden="true">*</span>
+              Username <RequiredIndicator />
             </label>
             <NewTextInput
               name={"username"}

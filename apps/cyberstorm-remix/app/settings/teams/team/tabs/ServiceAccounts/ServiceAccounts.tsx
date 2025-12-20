@@ -25,6 +25,7 @@ import {
   teamAddServiceAccount,
 } from "@thunderstore/thunderstore-api";
 
+import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 import "./ServiceAccounts.css";
 import { ServiceAccountsTable } from "./ServiceAccountsTable";
 
@@ -207,7 +208,7 @@ function AddServiceAccountForm(props: {
                 team <span>{props.teamName}</span>
               </div>
               <label htmlFor="serviceAccountNickname">
-                Nickname <span aria-hidden="true">*</span>
+                Nickname <RequiredIndicator />
               </label>
               <div className="service-accounts__nickname-input">
                 <NewTextInput

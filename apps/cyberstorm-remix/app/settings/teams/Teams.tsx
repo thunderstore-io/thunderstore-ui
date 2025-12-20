@@ -17,6 +17,7 @@ import {
   useToast,
 } from "@thunderstore/cyberstorm";
 import { postTeamCreate } from "@thunderstore/dapper-ts/src/methods/team";
+import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 import {
   type RequestConfig,
   type TeamCreateRequestData,
@@ -212,7 +213,7 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
         </div>
         <div className="create-team-form__input">
           <label className="create-team-form__label" htmlFor="teamName">
-            Team Name <span aria-hidden="true">*</span>
+            Team Name <RequiredIndicator />
           </label>
           <NewTextInput
             value={formInputs.name}
