@@ -15,6 +15,9 @@
     "test": "vitest",
     "test:coverage": "vitest run --coverage"
   },
+  "engines": {
+    "node": "24.9.0"
+  },
   "dependencies": {
     "@thunderstore/graph-system": "^0.1.0",
     "@thunderstore/thunderstore-api": "^0.1.0",

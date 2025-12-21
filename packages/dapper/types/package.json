@@ -1,4 +1,7 @@
 {
   "main": "dist/thunderstore-dapper-types.cjs.js",
-  "module": "dist/thunderstore-dapper-types.esm.js"
+  "module": "dist/thunderstore-dapper-types.esm.js",
+  "engines": {
+    "node": "24.9.0"
+  }
 }

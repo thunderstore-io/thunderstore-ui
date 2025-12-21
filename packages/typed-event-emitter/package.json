@@ -15,6 +15,9 @@
     "test": "vitest run",
     "watch": "vitest watch"
   },
+  "engines": {
+    "node": "24.9.0"
+  },
   "dependencies": {},
   "devDependencies": {
     "@vitest/browser": "3.2.4",

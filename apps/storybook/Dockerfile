@@ -1,7 +1,7 @@
 # For running @thunderstore/storybook in Docker container.
 
 # Build Storybook to static files
-FROM node:24.1.0-alpine3.21 AS builder
+FROM node:24.9.0-alpine3.21 AS builder
 WORKDIR /app
 COPY package.json yarn.lock babel.config.js ./
 COPY apps/storybook ./apps/storybook

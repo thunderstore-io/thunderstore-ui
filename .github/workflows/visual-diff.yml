@@ -16,7 +16,7 @@ jobs:
     outputs:
       node-version: ${{ steps.get-node-version.outputs.node-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Check get-node-version version
         uses: ./.github/actions/get-node-version
         with:
@@ -31,14 +31,14 @@ jobs:
     needs: get-node-version
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: "Setup Python 3.10"
         id: setup-python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
       - name: "Setup Node"
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ needs.get-node-version.outputs.node-version }}
       - name: Set fontawesome token
