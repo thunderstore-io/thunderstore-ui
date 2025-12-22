@@ -3,6 +3,7 @@ export {
   CURRENT_USER_KEY,
   setSession,
   clearSession,
+  clearInvalidSession,
   getConfig,
   runSessionValidationCheck,
   storeCurrentUser,

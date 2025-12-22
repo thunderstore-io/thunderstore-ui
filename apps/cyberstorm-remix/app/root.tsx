@@ -3,6 +3,7 @@ import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 import { withSentry } from "@sentry/remix";
 import {
   getPublicEnvVariables,
+  getSessionTools,
   type publicEnvVariablesType,
 } from "cyberstorm/security/publicEnvVariables";
 import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
@@ -578,12 +579,19 @@ const TooltipProvider = memo(function TooltipProvider({
 
 function App() {
   const data = useLoaderData<RootLoadersType>();
-  const dapper = new DapperTs(() => {
-    return {
-      apiHost: data?.publicEnvVariables.VITE_API_URL,
-      sessionId: data?.config.sessionId,
-    };
-  });
+  const sessionTools = getSessionTools();
+  const dapper = new DapperTs(
+    () => {
+      return {
+        apiHost: data?.publicEnvVariables.VITE_API_URL,
+        sessionId: data?.config.sessionId,
+      };
+    },
+    () =>
+      sessionTools.clearInvalidSession(
+        data?.publicEnvVariables.VITE_COOKIE_DOMAIN
+      )
+  );
 
   return (
     <Outlet
