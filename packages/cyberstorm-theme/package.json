@@ -4,10 +4,28 @@
   "description": "Cyberstorm theme",
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/cyberstorm-theme",
   "type": "module",
-  "main": "dist/thunderstore-cyberstorm-theme.cjs.js",
-  "module": "dist/thunderstore-cyberstorm-theme.esm.js",
-  "types": "dist/thunderstore-cyberstorm-theme.cjs.d.ts",
+  "main": "dist/thunderstore-cyberstorm-theme.umd.cjs",
+  "module": "dist/thunderstore-cyberstorm-theme.js",
+  "types": "dist/index.d.ts",
+  "style": "dist/cyberstorm-theme.css",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
   "files": [
     "dist"
-  ]
+  ],
+  "devDependencies": {
+    "vite": "^7.2.6",
+    "vite-plugin-dts": "^4.5.4"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/thunderstore-cyberstorm-theme.js",
+      "require": "./dist/thunderstore-cyberstorm-theme.umd.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./css": "./dist/cyberstorm-theme.css",
+    "./package.json": "./package.json"
+  }
 }
