@@ -200,7 +200,7 @@ export function Footer() {
             </NewLink>
           </div>
           <p className="footer__copyright">
-            © 2025 Thunderstore and contributors.{" "}
+            © 2026 Thunderstore and contributors.{" "}
             <span>
               This page is{" "}
               <NewLink
