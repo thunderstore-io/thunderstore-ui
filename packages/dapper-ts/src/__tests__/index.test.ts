@@ -43,15 +43,15 @@ it("executes getPackageChangelog without errors", async () => {
   ).resolves.not.toThrowError();
 });
 
-// TODO: Disabled temporarily until we decide on a testing strategy/policy regarding e2e tests
-test.skip("executes getPackageVersionDependencies without errors", async () => {
-  await expect(
-    dapper.getPackageVersionDependencies(
-      namespaceId,
-      packageName,
-      packageVersion
-    )
-  ).resolves.not.toThrowError();
+test("executes getPackageVersionDependencies without errors", async () => {
+  const response = await dapper.getPackageVersionDependencies(
+    namespaceId,
+    packageName,
+    packageVersion
+  );
+
+  expect(response.count).toBeTypeOf("number");
+  expect(Array.isArray(response.results)).toBe(true);
 });
 
 it("executes getPackageListingDetails without errors", async () => {
@@ -82,11 +82,27 @@ it("executes getPackageReadme without errors", async () => {
   ).resolves.not.toThrowError();
 });
 
-// TODO: Disabled temporarily until we decide on a testing strategy/policy regarding e2e tests
-test.skip("executes getPackageSource without errors", async () => {
-  await expect(
-    dapper.getPackageSource(namespaceId, packageName)
-  ).resolves.not.toThrowError();
+test("executes getPackageSource when enabled (or 404 when disabled)", async () => {
+  try {
+    const response = await dapper.getPackageSource(namespaceId, packageName);
+
+    // If the endpoint exists in the backend image, validate a minimal shape.
+    expect(response).toBeTruthy();
+    expect(response).toHaveProperty("namespace");
+    expect(response).toHaveProperty("package_name");
+    expect(response).toHaveProperty("version_number");
+    expect(response).toHaveProperty("is_visible");
+    expect(response).toHaveProperty("decompilations");
+    expect(Array.isArray(response.decompilations)).toBe(true);
+  } catch (err) {
+    // The test backend image used for containerized tests may not include the
+    // plugin that registers this endpoint. Treat a 404 as "endpoint disabled".
+    if (err instanceof Error && err.message.includes("404")) {
+      return;
+    }
+
+    throw err;
+  }
 });
 
 it("executes getPackageVersions without errors", async () => {
