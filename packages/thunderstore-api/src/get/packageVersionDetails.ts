@@ -1,8 +1,8 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
-import { PackageVersionDetailsRequestParams } from "../schemas/requestSchemas";
+import type { ApiEndpointProps } from "../index";
+import type { PackageVersionDetailsRequestParams } from "../schemas/requestSchemas";
 import {
-  PackageVersionDetailsResponseData,
+  type PackageVersionDetailsResponseData,
   packageVersionDetailsResponseDataSchema,
 } from "../schemas/responseSchemas";
 

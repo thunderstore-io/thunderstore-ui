@@ -11,7 +11,7 @@ import {
   type CodeInputModifiers,
   type CodeInputSizes,
   type CodeInputVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import { NewIcon } from "../..";
 import {

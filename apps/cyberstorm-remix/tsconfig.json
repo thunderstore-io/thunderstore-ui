@@ -33,6 +33,7 @@
       "react": ["./node_modules/@types/react"]
     },
     "verbatimModuleSyntax": true,
+    "disableSourceOfProjectReferenceRedirect": true,
 
     // Vite takes care of building everything, not tsc.
     "noEmit": true,

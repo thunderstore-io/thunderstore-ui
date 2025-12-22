@@ -1,6 +1,6 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
-import { TeamDisbandRequestParams } from "../schemas/requestSchemas";
+import type { ApiEndpointProps } from "../index";
+import type { TeamDisbandRequestParams } from "../schemas/requestSchemas";
 
 export function teamDisband(
   props: ApiEndpointProps<TeamDisbandRequestParams, object, object>

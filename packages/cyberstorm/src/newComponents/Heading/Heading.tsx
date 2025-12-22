@@ -4,7 +4,7 @@ import {
   type HeadingModifiers,
   type HeadingSizes,
   type HeadingVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import {
   Frame,

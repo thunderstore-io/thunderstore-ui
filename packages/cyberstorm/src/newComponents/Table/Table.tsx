@@ -11,7 +11,7 @@ import {
   type TableModifiers,
   type TableSizes,
   type TableVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import { NewIcon } from "../..";
 import { classnames, componentClasses } from "../../utils/utils";

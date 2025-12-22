@@ -1,40 +1,40 @@
-import type { User } from "@thunderstore/thunderstore-api";
 import {
-  assert,
-  describe,
-  it,
-  beforeEach,
   afterEach,
-  vi,
+  assert,
+  beforeEach,
+  describe,
   expect,
+  it,
+  vi,
 } from "vitest";
 
-vi.mock("@thunderstore/dapper-ts", () => ({
-  DapperTs: vi.fn(),
-}));
-
-let getCurrentUserMock: ReturnType<typeof vi.fn>;
-
+import type { User } from "@thunderstore/thunderstore-api";
 import {
   API_HOST_KEY,
   COOKIE_DOMAIN_KEY,
   CURRENT_USER_KEY,
   SESSION_STORAGE_KEY,
   STALE_KEY,
-  clearSession,
-  getSessionContext,
-  getCookie,
+  StorageManager,
   clearCookies,
   clearInvalidSession,
+  clearSession,
   getConfig,
-  updateCurrentUser,
+  getCookie,
+  getSessionContext,
   getSessionCurrentUser,
   getSessionStale,
   runSessionValidationCheck,
   setSessionStale,
   storeCurrentUser,
-} from "@thunderstore/ts-api-react/src/SessionContext";
-import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
+  updateCurrentUser,
+} from "@thunderstore/ts-api-react";
+
+vi.mock("@thunderstore/dapper-ts", () => ({
+  DapperTs: vi.fn(),
+}));
+
+let getCurrentUserMock: ReturnType<typeof vi.fn>;
 
 describe("SessionContext", () => {
   const testApiHost = "https://api.example.invalid";

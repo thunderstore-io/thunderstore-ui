@@ -1,4 +1,10 @@
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { DapperTs } from "@thunderstore/dapper-ts";
+import { ApiError } from "@thunderstore/thunderstore-api";
+
+import { makeTeamSettingsTabLoader } from "../dapperClientLoaders";
 
 vi.mock("cyberstorm/security/publicEnvVariables", () => ({
   getSessionTools: vi.fn().mockReturnValue({
@@ -20,12 +26,6 @@ vi.mock("@thunderstore/dapper-ts", () => ({
   }),
 }));
 
-import { ApiError } from "@thunderstore/thunderstore-api";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-
-import { makeTeamSettingsTabLoader } from "../dapperClientLoaders";
-
 describe("dapperClientLoaders", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -37,7 +37,9 @@ describe("dapperClientLoaders", () => {
 
     const result = await loader({
       params: { namespaceId: "MyTeam" },
-    } as unknown as { params: { namespaceId: string } });
+      request: new Request("http://example.invalid"),
+      context: {},
+    } as never);
 
     expect(result).toEqual({ teamName: "MyTeam", foo: 123 });
     expect(dataFetcher).toHaveBeenCalledTimes(1);
@@ -74,7 +76,9 @@ describe("dapperClientLoaders", () => {
     try {
       await loader({
         params: { namespaceId: "MyTeam" },
-      } as unknown as { params: { namespaceId: string } });
+        request: new Request("http://example.invalid"),
+        context: {},
+      } as never);
     } catch (e) {
       thrown = e;
     }
@@ -98,7 +102,9 @@ describe("dapperClientLoaders", () => {
     try {
       await loader({
         params: { namespaceId: "MyTeam" },
-      } as unknown as { params: { namespaceId: string } });
+        request: new Request("http://example.invalid"),
+        context: {},
+      } as never);
     } catch (e) {
       const res = e as Response;
       expect(res).toBeInstanceOf(Response);

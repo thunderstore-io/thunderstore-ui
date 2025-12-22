@@ -10,7 +10,7 @@ import React from "react";
 import {
   type AlertSizes,
   type AlertVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import { NewIcon, type PrimitiveComponentDefaultProps } from "../..";
 import { classnames, componentClasses } from "../../utils/utils";

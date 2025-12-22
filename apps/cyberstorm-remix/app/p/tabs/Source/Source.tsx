@@ -11,15 +11,15 @@ import ago from "s-ago";
 import { type OutletContextShape } from "~/root";
 
 import {
+  NewAlert as Alert,
   Heading,
   NewButton,
   NewIcon,
   SkeletonBox,
+  TooltipWrapper,
 } from "@thunderstore/cyberstorm";
-import { Alert } from "@thunderstore/cyberstorm/src/newComponents/Alert/Alert";
-import { TooltipWrapper } from "@thunderstore/cyberstorm/src/primitiveComponents/utils/utils";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getPackageSource } from "@thunderstore/dapper-ts/src/methods/package";
+import { getPackageSource } from "@thunderstore/dapper-ts";
 import { isApiError } from "@thunderstore/thunderstore-api";
 
 import { CodeBoxHTML } from "../../../commonComponents/CodeBoxHTML/CodeBoxHTML";

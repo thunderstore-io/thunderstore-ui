@@ -1,8 +1,10 @@
 import { apiFetch } from "../apiFetch";
-import {
+import type {
   ApiEndpointProps,
   TeamMemberEditRequestData,
   TeamMemberEditRequestParams,
+} from "../index";
+import {
   teamEditMemberResponseSchema,
   teamMemberEditRequestParamsSchema,
 } from "../index";

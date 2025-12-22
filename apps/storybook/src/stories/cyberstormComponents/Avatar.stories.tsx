@@ -5,7 +5,7 @@ import "@thunderstore/cyberstorm-theme";
 import {
   AvatarSizesList,
   AvatarVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import catboy from "../assets/catboy.png";
 

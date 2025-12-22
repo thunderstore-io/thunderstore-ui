@@ -1,8 +1,8 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
-import { PackageSourceRequestParams } from "../schemas/requestSchemas";
+import type { ApiEndpointProps } from "../index";
+import type { PackageSourceRequestParams } from "../schemas/requestSchemas";
 import { packageSourceResponseDataSchema } from "../schemas/responseSchemas";
-import { PackageSourceResponseData } from "../schemas/responseSchemas";
+import type { PackageSourceResponseData } from "../schemas/responseSchemas";
 
 export async function fetchPackageSource(
   props: ApiEndpointProps<PackageSourceRequestParams, object, object>

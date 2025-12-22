@@ -12,9 +12,9 @@ import {
   getPackagePermissions,
   getPackageWiki,
   getPackageWikiPage,
-} from "@thunderstore/dapper-ts/src/methods/package";
+} from "@thunderstore/dapper-ts";
+import { isApiError } from "@thunderstore/thunderstore-api";
 
-import { isApiError } from "../../../../../../packages/thunderstore-api/src";
 import "./Wiki.css";
 import { WikiContent } from "./WikiContent";
 

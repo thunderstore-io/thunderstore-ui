@@ -26,7 +26,7 @@ import {
   NewLink,
   SkeletonBox,
 } from "@thunderstore/cyberstorm";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { classnames } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
 import { type OutletContextShape } from "../root";

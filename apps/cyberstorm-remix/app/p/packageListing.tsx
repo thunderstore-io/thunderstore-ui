@@ -60,7 +60,7 @@ import {
   useToast,
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
-import type { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import type { TagVariants } from "@thunderstore/cyberstorm-theme";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
 import type { CurrentUser } from "@thunderstore/dapper/types";
 import {

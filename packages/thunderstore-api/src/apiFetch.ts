@@ -1,10 +1,10 @@
 import { z } from "zod";
 
+import type { RequestConfig } from "./index";
 import {
   ApiError,
   ParseError,
   RequestBodyParseError,
-  RequestConfig,
   RequestQueryParamsParseError,
 } from "./index";
 import { serializeQueryString } from "./queryString";

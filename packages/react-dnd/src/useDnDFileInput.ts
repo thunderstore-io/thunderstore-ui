@@ -1,4 +1,4 @@
-import React, { RefObject } from "react";
+import type { DragEvent, RefObject } from "react";
 
 import { useDnD } from "./useDnD";
 
@@ -21,7 +21,7 @@ export const useDnDFileInput = (props: useDragAndDropInputProps) => {
     resetDrag();
   };
 
-  const onDrop = (e: React.DragEvent) => {
+  const onDrop = (e: DragEvent) => {
     if (!props.readonly) {
       const inp = props.inputRef?.current;
       if (inp) {

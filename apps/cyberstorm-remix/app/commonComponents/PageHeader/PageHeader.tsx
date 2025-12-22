@@ -1,8 +1,8 @@
 import { type PropsWithChildren, type ReactElement, memo } from "react";
 
 import { Heading, Image } from "@thunderstore/cyberstorm";
-import type { HeadingSizes } from "@thunderstore/cyberstorm-theme/src/components";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { classnames } from "@thunderstore/cyberstorm";
+import type { HeadingSizes } from "@thunderstore/cyberstorm-theme";
 
 import "./PageHeader.css";
 

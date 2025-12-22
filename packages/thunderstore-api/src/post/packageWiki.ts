@@ -1,16 +1,16 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
+import type { ApiEndpointProps } from "../index";
 import {
-  PackageWikiPageCreateRequestData,
-  PackageWikiPageCreateRequestParams,
-  PackageWikiPageEditRequestData,
-  PackageWikiPageEditRequestParams,
+  type PackageWikiPageCreateRequestData,
+  type PackageWikiPageCreateRequestParams,
+  type PackageWikiPageEditRequestData,
+  type PackageWikiPageEditRequestParams,
   packageWikiPageCreateRequestDataSchema,
   packageWikiPageEditRequestDataSchema,
 } from "../schemas/requestSchemas";
 import {
-  PackageWikiPageCreateResponseData,
-  PackageWikiPageEditResponseData,
+  type PackageWikiPageCreateResponseData,
+  type PackageWikiPageEditResponseData,
   packageWikiPageCreateResponseDataSchema,
   packageWikiPageEditResponseDataSchema,
 } from "../schemas/responseSchemas";

@@ -1,7 +1,7 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
+import type { ApiEndpointProps } from "../index";
 import { ratedPackagesResponseDataSchema } from "../schemas/responseSchemas";
-import { RatedPackagesResponseData } from "../schemas/responseSchemas";
+import type { RatedPackagesResponseData } from "../schemas/responseSchemas";
 
 export async function fetchRatedPackages(
   props: ApiEndpointProps<object, object, object>

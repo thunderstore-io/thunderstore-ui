@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type PropsWithChildren, memo } from "react";
 
 import { NewIcon } from "@thunderstore/cyberstorm";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { classnames } from "@thunderstore/cyberstorm";
 
 import "./Collapsible.css";
 

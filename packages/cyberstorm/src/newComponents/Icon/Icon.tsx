@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-import { type IconVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { type IconVariants } from "@thunderstore/cyberstorm-theme";
 
 import {
   Frame,

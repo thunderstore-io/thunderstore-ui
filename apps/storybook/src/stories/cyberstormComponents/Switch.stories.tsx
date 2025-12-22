@@ -6,7 +6,7 @@ import {
   SwitchModifiersList,
   SwitchSizesList,
   SwitchVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/Switch",

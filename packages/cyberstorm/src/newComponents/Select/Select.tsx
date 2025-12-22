@@ -14,7 +14,7 @@ import {
   type SelectModifiers,
   type SelectSizes,
   type SelectVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import { NewButton, NewIcon } from "../..";
 import type { SelectOption } from "../../utils/types";

@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { Toast } from "@thunderstore/cyberstorm";
+import { Toast, ToastProvider } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-theme";
 import {
   ToastSizesList,
   ToastVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
-import * as ToastProvider from "@thunderstore/cyberstorm/src/newComponents/Toast";
+} from "@thunderstore/cyberstorm-theme";
 
 // Note: The default export from Toast has .Provider and .Viewport attached
 const meta = {
@@ -20,9 +19,9 @@ const meta = {
   },
   args: { children: "Hello toast!", id: "toast-1" },
   render: (args) => (
-    <ToastProvider.default.Provider toastDuration={30000}>
+    <ToastProvider toastDuration={30000}>
       <Toast {...args} />
-    </ToastProvider.default.Provider>
+    </ToastProvider>
   ),
 } satisfies Meta<typeof Toast>;
 
@@ -40,11 +39,11 @@ export const Variants: Story = {
       </Toast>
     ));
     return (
-      <ToastProvider.default.Provider toastDuration={30000}>
+      <ToastProvider toastDuration={30000}>
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           {toastVariants}
         </div>
-      </ToastProvider.default.Provider>
+      </ToastProvider>
     );
   },
 };
@@ -58,11 +57,11 @@ export const Sizes: Story = {
       </Toast>
     ));
     return (
-      <ToastProvider.default.Provider toastDuration={30000}>
+      <ToastProvider toastDuration={30000}>
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           {toastSizes}
         </div>
-      </ToastProvider.default.Provider>
+      </ToastProvider>
     );
   },
 };

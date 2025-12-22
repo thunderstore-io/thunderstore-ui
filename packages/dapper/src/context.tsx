@@ -1,6 +1,6 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
-import { DapperInterface } from "./dapper";
+import type { DapperInterface } from "./dapper";
 import { getDapperContext } from "./singleton";
 
 type DapperProviderProps = PropsWithChildren<{

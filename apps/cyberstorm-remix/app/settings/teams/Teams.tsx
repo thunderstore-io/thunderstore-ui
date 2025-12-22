@@ -5,6 +5,7 @@ import { useReducer, useState } from "react";
 import type { MetaFunction } from "react-router";
 import { useOutletContext, useRevalidator } from "react-router";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 
 import {
   Heading,
@@ -16,8 +17,7 @@ import {
   NewTextInput,
   useToast,
 } from "@thunderstore/cyberstorm";
-import { postTeamCreate } from "@thunderstore/dapper-ts/src/methods/team";
-import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
+import { postTeamCreate } from "@thunderstore/dapper-ts";
 import {
   type RequestConfig,
   type TeamCreateRequestData,
@@ -27,7 +27,7 @@ import { NamespacedStorageManager } from "@thunderstore/ts-api-react";
 import {
   SESSION_STORAGE_KEY,
   setSessionStale,
-} from "@thunderstore/ts-api-react/src/SessionContext";
+} from "@thunderstore/ts-api-react";
 
 import { type OutletContextShape, type RootLoadersType } from "../../root";
 import "./Teams.css";

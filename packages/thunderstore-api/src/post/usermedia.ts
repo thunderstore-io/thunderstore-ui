@@ -1,17 +1,17 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
+import type { ApiEndpointProps } from "../index";
 import {
-  UsermediaAbortUploadRequestParams,
-  UsermediaFinishUploadRequestData,
-  UsermediaFinishUploadRequestParams,
-  UsermediaInitiateUploadRequestData,
+  type UsermediaAbortUploadRequestParams,
+  type UsermediaFinishUploadRequestData,
+  type UsermediaFinishUploadRequestParams,
+  type UsermediaInitiateUploadRequestData,
   usermediaFinishUploadRequestDataSchema,
   usermediaInitiateUploadRequestDataSchema,
 } from "../schemas/requestSchemas";
 import {
-  UsermediaAbortUploadResponseData,
-  UsermediaFinishUploadResponseData,
-  UsermediaInitiateUploadResponseData,
+  type UsermediaAbortUploadResponseData,
+  type UsermediaFinishUploadResponseData,
+  type UsermediaInitiateUploadResponseData,
   usermediaAbortUploadResponseDataSchema,
   usermediaFinishUploadResponseDataSchema,
   usermediaInitiateUploadResponseDataSchema,

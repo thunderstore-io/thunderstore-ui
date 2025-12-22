@@ -1,5 +1,5 @@
 import { apiFetch } from "../apiFetch";
-import {
+import type {
   ApiEndpointProps,
   TeamServiceAccountRemoveRequestParams,
 } from "../index";

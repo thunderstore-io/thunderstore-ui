@@ -16,7 +16,7 @@ import {
   type SelectOption,
   useToast,
 } from "@thunderstore/cyberstorm";
-import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
+import { NewTableSort as TableSort } from "@thunderstore/cyberstorm";
 import {
   type RequestConfig,
   type TeamMember,

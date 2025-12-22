@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo } from "react";
 
 import { NewAlert, NewButton, NewIcon } from "@thunderstore/cyberstorm";
-import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
+import { ThunderstoreLogo } from "@thunderstore/cyberstorm";
 
 export const ModManagerBanner = memo(function ModManagerBanner() {
   return (

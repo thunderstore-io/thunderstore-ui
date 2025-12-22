@@ -18,7 +18,7 @@ import {
   type DropDownModifiers,
   type DropDownSizes,
   type DropDownVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
 import { classnames, componentClasses } from "../../utils/utils";

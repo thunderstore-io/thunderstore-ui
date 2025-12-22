@@ -4,7 +4,7 @@ import * as RadixRadioGroup from "@radix-ui/react-radio-group";
 import { memo } from "react";
 
 import { NewIcon } from "@thunderstore/cyberstorm";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { classnames } from "@thunderstore/cyberstorm";
 import { type Section } from "@thunderstore/dapper/types";
 
 import "./RadioGroup.css";

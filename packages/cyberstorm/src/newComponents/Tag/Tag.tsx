@@ -4,7 +4,7 @@ import {
   type TagModifiers,
   type TagSizes,
   type TagVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import {
   Actionable,

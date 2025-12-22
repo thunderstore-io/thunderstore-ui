@@ -1,8 +1,8 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
-import { PackageReadmeRequestParams } from "../schemas/requestSchemas";
+import type { ApiEndpointProps } from "../index";
+import type { PackageReadmeRequestParams } from "../schemas/requestSchemas";
 import {
-  PackageReadmeResponseData,
+  type PackageReadmeResponseData,
   packageReadmeResponseDataSchema,
 } from "../schemas/responseSchemas";
 

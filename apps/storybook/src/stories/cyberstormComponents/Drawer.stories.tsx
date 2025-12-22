@@ -5,7 +5,7 @@ import "@thunderstore/cyberstorm-theme";
 import {
   DrawerSizesList,
   DrawerVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/Drawer",

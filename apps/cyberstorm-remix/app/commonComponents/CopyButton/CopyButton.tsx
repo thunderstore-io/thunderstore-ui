@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type Dispatch, type SetStateAction, useState } from "react";
 import React from "react";
 
-import { NewIcon, Tooltip } from "@thunderstore/cyberstorm/src";
+import { NewIcon, Tooltip } from "@thunderstore/cyberstorm";
 
 import "./CopyButton.css";
 
