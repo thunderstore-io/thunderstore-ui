@@ -1,13 +1,14 @@
-import { Suspense } from "react";
-import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData, Await } from "react-router";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { SkeletonBox } from "@thunderstore/cyberstorm";
-import { PaginatedDependencies } from "~/commonComponents/PaginatedDependencies/PaginatedDependencies";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
+import { Suspense } from "react";
+import { type LoaderFunctionArgs } from "react-router";
+import { Await, useLoaderData } from "react-router";
+import { PaginatedDependencies } from "~/commonComponents/PaginatedDependencies/PaginatedDependencies";
+
+import { SkeletonBox } from "@thunderstore/cyberstorm";
+import { DapperTs } from "@thunderstore/dapper-ts";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {

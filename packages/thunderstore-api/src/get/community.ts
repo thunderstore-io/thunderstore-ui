@@ -1,10 +1,10 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import {
-  communityResponseDataSchema,
-  CommunityResponseData,
-} from "../schemas/responseSchemas";
+import { ApiEndpointProps } from "../index";
 import { CommunityRequestParams } from "../schemas/requestSchemas";
+import {
+  CommunityResponseData,
+  communityResponseDataSchema,
+} from "../schemas/responseSchemas";
 
 export async function fetchCommunity(
   props: ApiEndpointProps<CommunityRequestParams, object, object>

@@ -1,10 +1,10 @@
+import { type OutletContextShape } from "app/root";
 import { useOutletContext } from "react-router";
 
-import { NewTable, Heading } from "@thunderstore/cyberstorm";
+import { Heading, NewTable } from "@thunderstore/cyberstorm";
 import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import { type TeamServiceAccount } from "@thunderstore/thunderstore-api";
 
-import { type OutletContextShape } from "app/root";
 import { ServiceAccountRemoveModal } from "./ServiceAccountRemoveModal";
 import "./ServiceAccounts.css";
 

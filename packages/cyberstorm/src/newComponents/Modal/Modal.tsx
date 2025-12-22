@@ -1,22 +1,24 @@
+import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Dialog from "@radix-ui/react-dialog";
 import {
-  cloneElement,
-  isValidElement,
   type PropsWithChildren,
   type ReactNode,
+  cloneElement,
+  isValidElement,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
-import "./Modal.css";
-import { NewButton, NewIcon } from "../..";
+
 import { type ModalVariants } from "@thunderstore/cyberstorm-theme/src/components";
-import { classnames, componentClasses } from "../../utils/utils";
-import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { type ModalSizes } from "@thunderstore/cyberstorm-theme/src/components/Modal/Modal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as Dialog from "@radix-ui/react-dialog";
+
+import { NewButton, NewIcon } from "../..";
+import { classnames, componentClasses } from "../../utils/utils";
 import { type ButtonComponentProps } from "../Button/Button";
+import "./Modal.css";
 
 /**
  * Props for the `Modal` component.

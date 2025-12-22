@@ -1,13 +1,13 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import { ApiEndpointProps } from "../index";
 import {
   type CurrentUserTeamPermissionsRequestParams,
   currentUserTeamPermissionsRequestParamsSchema,
 } from "../schemas/requestSchemas";
 import {
   CurrentUserResponseData,
-  currentUserResponseDataSchema,
   CurrentUserTeamPermissionsResponseData,
+  currentUserResponseDataSchema,
   currentUserTeamPermissionsResponseDataSchema,
 } from "../schemas/responseSchemas";
 

@@ -1,6 +1,8 @@
-import { CodeBox, NewAlert } from "@thunderstore/cyberstorm";
-import { memo, useMemo } from "react";
 import { stripHtmlTags } from "cyberstorm/utils/HTMLParsing";
+import { memo, useMemo } from "react";
+
+import { CodeBox, NewAlert } from "@thunderstore/cyberstorm";
+
 import "./CodeBoxHTML.css";
 
 export interface CodeBoxHTMLProps {

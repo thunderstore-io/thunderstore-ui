@@ -1,5 +1,6 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import { ApiEndpointProps } from "../index";
+import { PackageListingsOrderingEnum } from "../schemas/queryParamSchemas";
 import {
   NamespacePackageListingsRequestParams,
   PackageListingsRequestQueryParams,
@@ -9,7 +10,6 @@ import {
   PackageListingsResponseData,
   packageListingsResponseDataSchema,
 } from "../schemas/responseSchemas";
-import { PackageListingsOrderingEnum } from "../schemas/queryParamSchemas";
 
 export async function fetchNamespacePackageListings(
   props: ApiEndpointProps<

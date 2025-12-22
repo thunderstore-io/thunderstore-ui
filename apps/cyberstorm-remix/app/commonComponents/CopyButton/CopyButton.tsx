@@ -1,9 +1,11 @@
+import { faCheck, faClone } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClone, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { type Dispatch, type SetStateAction, useState } from "react";
-import "./CopyButton.css";
-import { NewIcon, Tooltip } from "@thunderstore/cyberstorm/src";
 import React from "react";
+
+import { NewIcon, Tooltip } from "@thunderstore/cyberstorm/src";
+
+import "./CopyButton.css";
 
 interface CopyButtonProps {
   text: string;

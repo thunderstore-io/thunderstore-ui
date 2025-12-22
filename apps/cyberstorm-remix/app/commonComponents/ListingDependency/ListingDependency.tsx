@@ -1,6 +1,7 @@
+import { Image, NewLink, formatToDisplayName } from "@thunderstore/cyberstorm";
 import { type PackageVersionDependency } from "@thunderstore/thunderstore-api";
+
 import "./ListingDependency.css";
-import { formatToDisplayName, Image, NewLink } from "@thunderstore/cyberstorm";
 
 export interface ListingDependencyProps {
   dependency: PackageVersionDependency;

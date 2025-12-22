@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import "@thunderstore/cyberstorm-theme";
+
 import { NewTextInput } from "@thunderstore/cyberstorm";
+import "@thunderstore/cyberstorm-theme";
 import {
   TextInputModifiersList,
   TextInputSizesList,

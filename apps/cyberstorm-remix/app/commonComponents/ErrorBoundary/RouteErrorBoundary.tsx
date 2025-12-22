@@ -1,6 +1,6 @@
-import { useEffect, type JSX } from "react";
-import { isRouteErrorResponse, useRouteError } from "react-router";
 import { captureRemixErrorBoundaryError } from "@sentry/remix";
+import { type JSX, useEffect } from "react";
+import { isRouteErrorResponse, useRouteError } from "react-router";
 
 import { ApiError } from "@thunderstore/thunderstore-api";
 

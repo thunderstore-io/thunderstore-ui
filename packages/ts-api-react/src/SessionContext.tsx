@@ -1,15 +1,17 @@
 "use client";
 
-import { StorageManager } from "./storage";
-import {
-  User,
-  userSchema,
-  EmptyUser,
-  RequestConfig,
-} from "@thunderstore/thunderstore-api";
 // Probably shouldn't from Dapper, but what can you do when you need these.
 // import { CurrentUser } from "@thunderstore/dapper/types";
 import { DapperTs } from "@thunderstore/dapper-ts";
+import {
+  EmptyUser,
+  RequestConfig,
+  User,
+  userSchema,
+} from "@thunderstore/thunderstore-api";
+
+import { StorageManager } from "./storage";
+
 // import { CurrentUser } from "@thunderstore/dapper/types";
 
 export interface ContextInterface {

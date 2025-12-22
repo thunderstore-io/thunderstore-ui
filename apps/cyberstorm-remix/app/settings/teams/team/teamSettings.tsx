@@ -1,15 +1,15 @@
+import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
+import { type OutletContextShape } from "app/root";
 import {
+  type MetaFunction,
   Outlet,
   useLocation,
   useOutletContext,
   useParams,
-  type MetaFunction,
 } from "react-router";
 
 import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 
-import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
-import { type OutletContextShape } from "app/root";
 import "./teamSettings.css";
 
 export const meta: MetaFunction = ({ params }) => {

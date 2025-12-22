@@ -1,5 +1,5 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import { ApiEndpointProps } from "../index";
 import { PackageVersionDetailsRequestParams } from "../schemas/requestSchemas";
 import {
   PackageVersionDetailsResponseData,

@@ -1,11 +1,11 @@
 import { PackageListingType } from "@thunderstore/dapper/types";
 import {
+  PackageListingsOrderingEnum,
+  PackageListingsRequestQueryParams,
   fetchCommunityPackageListings,
   fetchNamespacePackageListings,
   fetchPackageDependantsListings,
   fetchPackageListingDetails,
-  PackageListingsOrderingEnum,
-  PackageListingsRequestQueryParams,
 } from "@thunderstore/thunderstore-api";
 
 import { DapperTsInterface } from "../index";

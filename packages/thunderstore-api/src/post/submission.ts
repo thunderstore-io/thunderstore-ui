@@ -1,16 +1,16 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import { ApiEndpointProps } from "../index";
 import {
   PackageSubmissionRequestData,
-  packageSubmissionRequestDataSchema,
   SubmissionValidateManifestRequestData,
+  packageSubmissionRequestDataSchema,
   submissionValidateManifestRequestDataSchema,
 } from "../schemas/requestSchemas";
 import {
   PackageSubmissionResponseData,
+  SubmissionValidateManifestResponseData,
   packageSubmissionResponseDataSchema,
   submissionValidateManifestResponseDataSchema,
-  SubmissionValidateManifestResponseData,
 } from "../schemas/responseSchemas";
 
 export function postPackageSubmission(

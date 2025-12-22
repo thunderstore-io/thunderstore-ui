@@ -1,5 +1,10 @@
-import "./Wiki.css";
-
+import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
+import { Suspense } from "react";
 import {
   Await,
   type LoaderFunctionArgs,
@@ -7,18 +12,14 @@ import {
   useOutletContext,
 } from "react-router";
 import { useLoaderData } from "react-router";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
-import { NewButton, NewIcon, SkeletonBox } from "@thunderstore/cyberstorm";
-import { faPlus } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type OutletContextShape } from "~/root";
-import { Suspense } from "react";
-import { ApiError } from "../../../../../../packages/thunderstore-api/src";
+
+import { NewButton, NewIcon, SkeletonBox } from "@thunderstore/cyberstorm";
+import { DapperTs } from "@thunderstore/dapper-ts";
 import { getPackageWiki } from "@thunderstore/dapper-ts/src/methods/package";
+
+import { ApiError } from "../../../../../../packages/thunderstore-api/src";
+import "./Wiki.css";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {

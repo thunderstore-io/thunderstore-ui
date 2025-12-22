@@ -1,8 +1,10 @@
+import { type PropsWithChildren, type ReactElement, memo } from "react";
+
 import { Heading, Image } from "@thunderstore/cyberstorm";
-import "./PageHeader.css";
-import { memo, type PropsWithChildren, type ReactElement } from "react";
 import type { HeadingSizes } from "@thunderstore/cyberstorm-theme/src/components";
 import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+
+import "./PageHeader.css";
 
 export interface PageHeaderProps extends PropsWithChildren {
   image?: string | null;

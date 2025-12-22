@@ -1,9 +1,10 @@
 import { RequestConfig } from "@thunderstore/thunderstore-api";
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
+
 import {
+  CompletePartState,
   PartState,
   PreparedPartState,
-  CompletePartState,
 } from "./MultipartUpload";
 
 export type UploadType = "single" | "multipart";

@@ -1,8 +1,10 @@
-import "./Settings.css";
 import { Outlet, useLocation, useOutletContext } from "react-router";
-import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+
+import { NewLink, Tabs } from "@thunderstore/cyberstorm";
+
 import { type OutletContextShape } from "../../root";
+import "./Settings.css";
 
 export default function UserSettings() {
   const context = useOutletContext<OutletContextShape>();

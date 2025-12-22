@@ -1,17 +1,19 @@
-import "./Button.css";
 import { memo } from "react";
-import { classnames, componentClasses } from "../../utils/utils";
+
+import {
+  type ButtonModifiers,
+  type ButtonSizes,
+  type ButtonVariants,
+} from "@thunderstore/cyberstorm-theme/src/components";
+
 import {
   Actionable,
   type ActionableButtonProps,
   type ActionableCyberstormLinkProps,
   type ActionableLinkProps,
 } from "../../primitiveComponents/Actionable/Actionable";
-import {
-  type ButtonVariants,
-  type ButtonSizes,
-  type ButtonModifiers,
-} from "@thunderstore/cyberstorm-theme/src/components";
+import { classnames, componentClasses } from "../../utils/utils";
+import "./Button.css";
 
 interface IButton {
   csVariant?: ButtonVariants;

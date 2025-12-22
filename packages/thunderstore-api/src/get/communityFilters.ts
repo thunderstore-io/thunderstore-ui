@@ -1,12 +1,12 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import { ApiEndpointProps } from "../index";
 import {
   CommunityFiltersRequestParams,
   communityFiltersRequestParamsSchema,
 } from "../schemas/requestSchemas";
 import {
-  communityFiltersResponseDataSchema,
   CommunityFiltersResponseData,
+  communityFiltersResponseDataSchema,
 } from "../schemas/responseSchemas";
 
 export async function fetchCommunityFilters(

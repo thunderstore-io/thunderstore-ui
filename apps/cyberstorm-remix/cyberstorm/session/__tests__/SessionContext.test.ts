@@ -1,20 +1,21 @@
-import { assert, describe, it, beforeEach } from "vitest";
+import { assert, beforeEach, describe, it } from "vitest";
+
+import type { User } from "@thunderstore/thunderstore-api";
 import {
-  SESSION_STORAGE_KEY,
-  CURRENT_USER_KEY,
-  STALE_KEY,
   API_HOST_KEY,
   COOKIE_DOMAIN_KEY,
-  getSessionContext,
-  getSessionStale,
-  setSessionStale,
-  runSessionValidationCheck,
-  storeCurrentUser,
+  CURRENT_USER_KEY,
+  SESSION_STORAGE_KEY,
+  STALE_KEY,
   clearSession,
+  getSessionContext,
   getSessionCurrentUser,
+  getSessionStale,
+  runSessionValidationCheck,
+  setSessionStale,
+  storeCurrentUser,
 } from "@thunderstore/ts-api-react/src/SessionContext";
 import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
-import type { User } from "@thunderstore/thunderstore-api";
 
 describe("SessionContext", () => {
   const testApiHost = "https://api.example.invalid";

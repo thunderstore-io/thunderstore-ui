@@ -1,21 +1,23 @@
-import "./Tag.css";
 import React from "react";
-import {
-  Frame,
-  type FrameWindowProps,
-} from "../../primitiveComponents/Frame/Frame";
-import { classnames, componentClasses } from "../../utils/utils";
+
 import {
   type TagModifiers,
   type TagSizes,
   type TagVariants,
 } from "@thunderstore/cyberstorm-theme/src/components";
+
 import {
   Actionable,
   type ActionableButtonProps,
   type ActionableCyberstormLinkProps,
   type ActionableLinkProps,
 } from "../../primitiveComponents/Actionable/Actionable";
+import {
+  Frame,
+  type FrameWindowProps,
+} from "../../primitiveComponents/Frame/Frame";
+import { classnames, componentClasses } from "../../utils/utils";
+import "./Tag.css";
 
 interface TagProps extends Omit<FrameWindowProps, "primitiveType"> {
   csMode?: "tag";

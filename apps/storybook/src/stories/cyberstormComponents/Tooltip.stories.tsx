@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
+import { NewButton, Tooltip } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-theme";
-import { Tooltip, NewButton } from "@thunderstore/cyberstorm";
 
 const meta = {
   title: "Cyberstorm/Tooltip",
