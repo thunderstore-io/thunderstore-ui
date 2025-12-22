@@ -1,7 +1,7 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import { packageVersionsResponseDataSchema } from "../schemas/responseSchemas";
+import { ApiEndpointProps } from "../index";
 import { PackageVersionsRequestParams } from "../schemas/requestSchemas";
+import { packageVersionsResponseDataSchema } from "../schemas/responseSchemas";
 import { PackageVersionsResponseData } from "../schemas/responseSchemas";
 
 export async function fetchPackageVersions(

@@ -1,18 +1,19 @@
+import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type ReactNode } from "react";
 
-import "./Drawer.css";
-import { NewButton, NewIcon } from "../..";
-import {
-  type FramePopoverProps,
-  Frame,
-} from "../../primitiveComponents/Frame/Frame";
-import { classnames, componentClasses } from "../../utils/utils";
 import {
   type DrawerSizes,
   type DrawerVariants,
 } from "@thunderstore/cyberstorm-theme/src/components";
-import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { NewButton, NewIcon } from "../..";
+import {
+  Frame,
+  type FramePopoverProps,
+} from "../../primitiveComponents/Frame/Frame";
+import { classnames, componentClasses } from "../../utils/utils";
+import "./Drawer.css";
 
 interface Props extends Omit<FramePopoverProps, "primitiveType"> {
   csVariant?: DrawerVariants;

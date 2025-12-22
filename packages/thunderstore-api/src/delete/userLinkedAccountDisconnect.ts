@@ -1,9 +1,9 @@
+import { apiFetch } from "../apiFetch";
 import {
   ApiEndpointProps,
   UserLinkedAccountDisconnectRequestParams,
   userLinkedAccountDisconnectRequestDataSchema,
 } from "../index";
-import { apiFetch } from "../apiFetch";
 
 export function userLinkedAccountDisconnect(
   props: ApiEndpointProps<

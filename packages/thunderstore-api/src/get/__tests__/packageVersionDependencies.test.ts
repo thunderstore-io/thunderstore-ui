@@ -1,7 +1,8 @@
 import { expect, test } from "vitest";
+
+import { packageVersionDependenciesResponseDataSchema } from "../..";
 import { config, testData } from "../../__tests__/defaultConfig";
 import { fetchPackageVersionDependencies } from "../packageVersionDependencies";
-import { packageVersionDependenciesResponseDataSchema } from "../..";
 
 // TODO: Disabled temporarily until we decide on a testing strategy/policy regarding e2e tests
 test.skip("ensures package version dependencies can be fetched", async () => {

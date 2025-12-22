@@ -1,12 +1,12 @@
+import { apiFetch } from "../apiFetch";
 import {
   ApiEndpointProps,
-  packageVersionDependenciesRequestQueryParamsSchema,
-  PackageVersionDependenciesRequestQueryParams,
   PackageVersionDependenciesRequestParams,
-  packageVersionDependenciesResponseDataSchema,
+  PackageVersionDependenciesRequestQueryParams,
   PackageVersionDependenciesResponseData,
+  packageVersionDependenciesRequestQueryParamsSchema,
+  packageVersionDependenciesResponseDataSchema,
 } from "../index";
-import { apiFetch } from "../apiFetch";
 
 export async function fetchPackageVersionDependencies(
   props: ApiEndpointProps<

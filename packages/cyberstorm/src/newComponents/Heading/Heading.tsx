@@ -1,16 +1,18 @@
-import "./Heading.css";
 import React from "react";
+
+import {
+  type HeadingModifiers,
+  type HeadingSizes,
+  type HeadingVariants,
+} from "@thunderstore/cyberstorm-theme/src/components";
+
 import {
   Frame,
-  type FrameHeadingProps,
   type FrameDisplayProps,
+  type FrameHeadingProps,
 } from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
-import {
-  type HeadingVariants,
-  type HeadingSizes,
-  type HeadingModifiers,
-} from "@thunderstore/cyberstorm-theme/src/components";
+import "./Heading.css";
 
 interface DefaultProps
   extends React.HTMLAttributes<HTMLHeadingElement>,

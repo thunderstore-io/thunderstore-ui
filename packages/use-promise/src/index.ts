@@ -3,9 +3,9 @@
  * Based on react-promise-suspense v0.3.4. Improves caching by comparing
  * the names of the functions passed to usePromise.
  */
-
 // Changed for Thunderstore: use lodash instead of fast-deep-equal
 import lodash from "lodash";
+
 const { isEqual } = lodash;
 
 interface PromiseCache {

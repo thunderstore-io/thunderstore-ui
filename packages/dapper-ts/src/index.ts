@@ -1,37 +1,37 @@
 import { DapperInterface } from "@thunderstore/dapper";
 import { RequestConfig } from "@thunderstore/thunderstore-api";
 
-import { getDynamicHTML } from "./methods/dynamicHTML";
 import { getCommunities, getCommunity } from "./methods/communities";
 import { getCommunityFilters } from "./methods/communityFilters";
-import { getRatedPackages } from "./methods/ratedPackages";
 import {
   getCurrentUser,
   getCurrentUserTeamPermissions,
 } from "./methods/currentUser";
+import { getDynamicHTML } from "./methods/dynamicHTML";
 import {
   getPackageChangelog,
+  getPackagePermissions,
   getPackageReadme,
-  getPackageVersions,
-  postPackageSubmissionMetadata,
+  getPackageSource,
   getPackageSubmissionStatus,
+  getPackageVersionDependencies,
+  getPackageVersions,
   getPackageWiki,
   getPackageWikiPage,
-  getPackagePermissions,
-  getPackageSource,
-  getPackageVersionDependencies,
+  postPackageSubmissionMetadata,
 } from "./methods/package";
 import {
   getPackageListingDetails,
   getPackageListings,
 } from "./methods/packageListings";
+import { getPackageVersionDetails } from "./methods/packageVersion";
+import { getRatedPackages } from "./methods/ratedPackages";
 import {
   getTeamDetails,
   getTeamMembers,
   getTeamServiceAccounts,
   postTeamCreate,
 } from "./methods/team";
-import { getPackageVersionDetails } from "./methods/packageVersion";
 
 export interface DapperTsInterface extends DapperInterface {
   config: () => RequestConfig;

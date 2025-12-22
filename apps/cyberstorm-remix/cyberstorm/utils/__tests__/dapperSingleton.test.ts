@@ -1,14 +1,16 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { DapperTs } from "@thunderstore/dapper-ts";
+
+import type { Community } from "../../../../../packages/thunderstore-api/src";
+import * as publicEnvVariables from "../../security/publicEnvVariables";
 import {
-  initializeClientDapper,
   getClientDapper,
   getDapperForRequest,
+  initializeClientDapper,
   resetDapperSingletonForTest,
 } from "../dapperSingleton";
 import { deduplicatePromiseForRequest } from "../requestCache";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import * as publicEnvVariables from "../../security/publicEnvVariables";
-import type { Community } from "../../../../../packages/thunderstore-api/src";
 
 // Mock getSessionTools
 vi.mock("../../security/publicEnvVariables", () => ({

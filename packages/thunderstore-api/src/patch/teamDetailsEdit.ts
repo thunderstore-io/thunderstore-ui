@@ -1,12 +1,12 @@
+import { apiFetch } from "../apiFetch";
 import {
   ApiEndpointProps,
   TeamDetailsEditRequestData,
-  teamDetailsEditRequestDataSchema,
   TeamDetailsEditRequestParams,
   TeamDetailsEditResponseData,
+  teamDetailsEditRequestDataSchema,
   teamDetailsEditResponseSchema,
 } from "../index";
-import { apiFetch } from "../apiFetch";
 
 export type teamDetailsEditMetaArgs = {
   teamIdentifier: string;

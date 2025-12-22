@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import "@thunderstore/cyberstorm-theme";
+
 import { NewAlert } from "@thunderstore/cyberstorm";
+import "@thunderstore/cyberstorm-theme";
 import {
   AlertSizesList,
   AlertVariantsList,

@@ -1,10 +1,10 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import { ApiEndpointProps } from "../index";
+import { TeamDetailsRequestParams } from "../schemas/requestSchemas";
 import {
   TeamDetailsResponseData,
   teamDetailsResponseDataSchema,
 } from "../schemas/responseSchemas";
-import { TeamDetailsRequestParams } from "../schemas/requestSchemas";
 
 export async function fetchTeamDetails(
   props: ApiEndpointProps<TeamDetailsRequestParams, object, object>

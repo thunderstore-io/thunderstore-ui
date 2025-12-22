@@ -1,10 +1,11 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import { ApiEndpointProps } from "../index";
+import { PackageReadmeRequestParams } from "../schemas/requestSchemas";
 import {
   PackageReadmeResponseData,
   packageReadmeResponseDataSchema,
 } from "../schemas/responseSchemas";
-import { PackageReadmeRequestParams } from "../schemas/requestSchemas";
+
 export async function fetchPackageReadme(
   props: ApiEndpointProps<PackageReadmeRequestParams, object, object>
 ): Promise<PackageReadmeResponseData> {

@@ -1,10 +1,10 @@
 import { useFormToaster } from "@thunderstore/cyberstorm-forms";
-import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import {
   ApiError,
   RequestConfig,
   packageRate,
 } from "@thunderstore/thunderstore-api";
+import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
 export function PackageLikeAction(props: {
   isLoggedIn: boolean;

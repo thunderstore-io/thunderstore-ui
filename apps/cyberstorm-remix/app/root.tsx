@@ -1,5 +1,12 @@
-import "./styles/index.css";
-import "@thunderstore/cyberstorm-theme";
+// import { LinksFunction } from "@remix-run/react/dist/routeModules";
+import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
+import { withSentry } from "@sentry/remix";
+import {
+  getPublicEnvVariables,
+  type publicEnvVariablesType,
+} from "cyberstorm/security/publicEnvVariables";
+import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
+import { type ReactNode, Suspense, memo, useEffect, useRef } from "react";
 import {
   Await,
   Links,
@@ -14,40 +21,33 @@ import {
   useLocation,
   useMatches,
 } from "react-router";
-// import { LinksFunction } from "@remix-run/react/dist/routeModules";
-import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
+import { useHydrated } from "remix-utils/use-hydrated";
 
-import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
 import {
   AdContainer,
-  isRecord,
   LinkingProvider,
   NewBreadCrumbs,
   NewBreadCrumbsLink,
+  isRecord,
 } from "@thunderstore/cyberstorm";
+import "@thunderstore/cyberstorm-theme";
+import Toast from "@thunderstore/cyberstorm/src/newComponents/Toast";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type CurrentUser } from "@thunderstore/dapper/types";
-
-import { withSentry } from "@sentry/remix";
-import { memo, type ReactNode, Suspense, useEffect, useRef } from "react";
-import { useHydrated } from "remix-utils/use-hydrated";
-import Toast from "@thunderstore/cyberstorm/src/newComponents/Toast";
-import { Footer } from "./commonComponents/Footer/Footer";
 import { type RequestConfig } from "@thunderstore/thunderstore-api";
-import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
 import { NamespacedStorageManager } from "@thunderstore/ts-api-react";
 import {
+  SESSION_STORAGE_KEY,
   getSessionContext,
   getSessionStale,
-  SESSION_STORAGE_KEY,
   runSessionValidationCheck,
 } from "@thunderstore/ts-api-react/src/SessionContext";
-import {
-  getPublicEnvVariables,
-  type publicEnvVariablesType,
-} from "cyberstorm/security/publicEnvVariables";
 import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
+
 import type { Route } from "./+types/root";
+import { Footer } from "./commonComponents/Footer/Footer";
+import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
+import "./styles/index.css";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];

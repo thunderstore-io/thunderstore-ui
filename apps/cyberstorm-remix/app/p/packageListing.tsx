@@ -1,7 +1,29 @@
 import {
-  memo,
+  faCaretRight,
+  faCog,
+  faDownload,
+  faHandHoldingHeart,
+  faScaleBalanced,
+  faThumbsUp,
+  faUsers,
+  faWarning,
+} from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
+import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
+import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
+import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
+import { type OutletContextShape } from "app/root";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
+import { isPromise } from "cyberstorm/utils/typeChecks";
+import {
   type ReactElement,
   Suspense,
+  memo,
   useEffect,
   useMemo,
   useRef,
@@ -9,37 +31,14 @@ import {
 } from "react";
 import {
   Await,
+  type LoaderFunctionArgs,
   Outlet,
+  type ShouldRevalidateFunctionArgs,
   useLoaderData,
   useLocation,
   useOutletContext,
-  type LoaderFunctionArgs,
-  type ShouldRevalidateFunctionArgs,
 } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
-import {
-  faUsers,
-  faHandHoldingHeart,
-  faDownload,
-  faThumbsUp,
-  faWarning,
-  faCaretRight,
-  faScaleBalanced,
-  faCog,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
-
-import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
-import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
-import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
-import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
-import { type OutletContextShape } from "app/root";
-import { isPromise } from "cyberstorm/utils/typeChecks";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
 
 import {
   Drawer,
@@ -62,13 +61,13 @@ import {
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import type { TagVariants } from "@thunderstore/cyberstorm-theme/src/components";
-import type { CurrentUser } from "@thunderstore/dapper/types";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
+import type { CurrentUser } from "@thunderstore/dapper/types";
 import {
+  type RequestConfig,
   fetchPackagePermissions,
   packageListingApprove,
   packageListingReject,
-  type RequestConfig,
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 

@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
+import { Toast } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-theme";
-import * as ToastProvider from "@thunderstore/cyberstorm/src/newComponents/Toast";
 import {
   ToastSizesList,
   ToastVariantsList,
 } from "@thunderstore/cyberstorm-theme/src/components";
-import { Toast } from "@thunderstore/cyberstorm";
+import * as ToastProvider from "@thunderstore/cyberstorm/src/newComponents/Toast";
 
 // Note: The default export from Toast has .Provider and .Viewport attached
 const meta = {

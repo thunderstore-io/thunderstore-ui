@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
+import { NewButton } from "@thunderstore/cyberstorm";
 // import { fn } from 'storybook/test';
 import "@thunderstore/cyberstorm-theme";
-import { NewButton } from "@thunderstore/cyberstorm";
 import {
   ButtonModifiersList,
   ButtonSizesList,
