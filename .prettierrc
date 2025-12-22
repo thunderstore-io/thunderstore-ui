@@ -17,7 +17,12 @@
   "useTabs": false,
   "vueIndentScriptAndStyle": false,
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
-  "importOrder": ["<THIRD_PARTY_MODULES>", "^@thunderstore/(.*)$", "^[./]"],
+  "importOrder": [
+    "^\\./styles/index\\.css$",
+    "<THIRD_PARTY_MODULES>",
+    "^@thunderstore/(.*)$",
+    "^[./]"
+  ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true
 }
