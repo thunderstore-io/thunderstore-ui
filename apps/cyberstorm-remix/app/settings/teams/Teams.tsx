@@ -17,6 +17,7 @@ import {
   useToast,
 } from "@thunderstore/cyberstorm";
 import { postTeamCreate } from "@thunderstore/dapper-ts/src/methods/team";
+import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 import {
   type RequestConfig,
   type TeamCreateRequestData,
@@ -132,6 +133,8 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
   const revalidator = useRevalidator();
   const toast = useToast();
 
+  const [open, setOpen] = useState(false);
+
   async function createTeamRevalidate() {
     setSessionStale(new NamespacedStorageManager(SESSION_STORAGE_KEY), true);
     revalidator.revalidate();
@@ -170,6 +173,7 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
     onSubmitSuccess: (fi) => {
       createTeamRevalidate();
       updateFormFieldState({ field: "name", value: "" });
+      setOpen(false);
       toast.addToast({
         csVariant: "success",
         children: `Team ${fi.name} created!`,
@@ -185,7 +189,7 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
     },
   });
 
-  const [open, setOpen] = useState(false);
+  const teamNameFieldProps = strongForm.getFieldComponentProps("name");
 
   return (
     <Modal
@@ -203,38 +207,41 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
       }
     >
       <Modal.Title>Create Team</Modal.Title>
-      <Modal.Body>
-        <div className="create-team-form__description">
-          Enter the name of the team you wish to create. Team names can contain
-          the characters a-z A-Z 0-9 _ and must not start or end with an _.
-        </div>
-        <div className="create-team-form__input">
-          <label className="create-team-form__label" htmlFor="teamName">
-            Team Name
-          </label>
-          <NewTextInput
-            onChange={(v) =>
-              updateFormFieldState({
-                field: "name",
-                value: v.target.value,
-              })
-            }
-            placeholder={"MyCoolTeam"}
-            id="teamName"
-          />
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <NewButton
-          disabled={!strongForm.isReady}
-          csVariant="accent"
-          onClick={() => {
-            strongForm.submit().then(() => setOpen(false));
-          }}
-        >
-          Create
-        </NewButton>
-      </Modal.Footer>
+      <form onSubmit={strongForm.handleSubmit}>
+        <Modal.Body>
+          <div className="create-team-form__description">
+            Enter the name of the team you wish to create. Team names can
+            contain the characters a-z A-Z 0-9 _ and must not start or end with
+            an _.
+          </div>
+          <div className="create-team-form__input">
+            <label className="create-team-form__label" htmlFor="teamName">
+              Team Name <RequiredIndicator />
+            </label>
+            <NewTextInput
+              value={formInputs.name}
+              onChange={(v) =>
+                updateFormFieldState({
+                  field: "name",
+                  value: v.target.value,
+                })
+              }
+              placeholder={"MyCoolTeam"}
+              id="teamName"
+              {...teamNameFieldProps}
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <NewButton
+            type="submit"
+            disabled={!strongForm.isReady}
+            csVariant="accent"
+          >
+            Create
+          </NewButton>
+        </Modal.Footer>
+      </form>
     </Modal>
   );
 }
