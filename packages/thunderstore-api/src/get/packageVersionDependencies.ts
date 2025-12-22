@@ -1,9 +1,11 @@
 import { apiFetch } from "../apiFetch";
-import {
+import type {
   ApiEndpointProps,
   PackageVersionDependenciesRequestParams,
   PackageVersionDependenciesRequestQueryParams,
   PackageVersionDependenciesResponseData,
+} from "../index";
+import {
   packageVersionDependenciesRequestQueryParamsSchema,
   packageVersionDependenciesResponseDataSchema,
 } from "../index";

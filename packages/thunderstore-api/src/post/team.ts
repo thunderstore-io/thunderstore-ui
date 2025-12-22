@@ -1,11 +1,11 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
+import type { ApiEndpointProps } from "../index";
 import {
-  TeamCreateRequestData,
+  type TeamCreateRequestData,
   teamCreateRequestDataSchema,
 } from "../schemas/requestSchemas";
 import {
-  TeamCreateResponseData,
+  type TeamCreateResponseData,
   teamCreateResponseDataSchema,
 } from "../schemas/responseSchemas";
 

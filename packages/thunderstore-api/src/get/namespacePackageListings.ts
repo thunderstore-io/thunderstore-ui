@@ -1,13 +1,13 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
+import type { ApiEndpointProps } from "../index";
 import { PackageListingsOrderingEnum } from "../schemas/queryParamSchemas";
 import {
-  NamespacePackageListingsRequestParams,
-  PackageListingsRequestQueryParams,
+  type NamespacePackageListingsRequestParams,
+  type PackageListingsRequestQueryParams,
   packageListingsRequestQueryParamsSchema,
 } from "../schemas/requestSchemas";
 import {
-  PackageListingsResponseData,
+  type PackageListingsResponseData,
   packageListingsResponseDataSchema,
 } from "../schemas/responseSchemas";
 

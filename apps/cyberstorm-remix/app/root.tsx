@@ -29,21 +29,21 @@ import {
   LinkingProvider,
   NewBreadCrumbs,
   NewBreadCrumbsLink,
+  ToastProvider,
   isRecord,
 } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-theme";
-import Toast from "@thunderstore/cyberstorm/src/newComponents/Toast";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 import { type RequestConfig } from "@thunderstore/thunderstore-api";
-import { NamespacedStorageManager } from "@thunderstore/ts-api-react";
 import {
+  NamespacedStorageManager,
   SESSION_STORAGE_KEY,
+  StorageManager,
   getSessionContext,
   getSessionStale,
   runSessionValidationCheck,
-} from "@thunderstore/ts-api-react/src/SessionContext";
-import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
+} from "@thunderstore/ts-api-react";
 
 import type { Route } from "./+types/root";
 import { Footer } from "./commonComponents/Footer/Footer";
@@ -339,7 +339,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         )}
         <div className="container container--y container--full island layout">
           <LinkingProvider value={LinkLibrary}>
-            <Toast.Provider toastDuration={10000}>
+            <ToastProvider toastDuration={10000}>
               <TooltipProvider>
                 <NavigationWrapper
                   domain={resolvedEnvVars?.VITE_API_URL || ""}
@@ -558,7 +558,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Footer />
                 {shouldShowAds ? <AdsInit /> : null}
               </TooltipProvider>
-            </Toast.Provider>
+            </ToastProvider>
           </LinkingProvider>
           <ScrollRestoration />
           <Scripts />

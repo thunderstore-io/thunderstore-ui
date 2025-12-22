@@ -43,19 +43,19 @@ import {
   NewButton,
   NewIcon,
   NewLink,
+  RelativeTime,
   SkeletonBox,
   Tabs,
-} from "@thunderstore/cyberstorm";
-import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTime/RelativeTime";
-import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
-import {
+  ThunderstoreLogo,
   formatFileSize,
   formatInteger,
   formatToDisplayName,
-} from "@thunderstore/cyberstorm/src/utils/utils";
+} from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getPackageVersionDetails } from "@thunderstore/dapper-ts/src/methods/packageVersion";
-import { getTeamDetails } from "@thunderstore/dapper-ts/src/methods/team";
+import {
+  getPackageVersionDetails,
+  getTeamDetails,
+} from "@thunderstore/dapper-ts";
 
 import "./packageListing.css";
 

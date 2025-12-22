@@ -6,7 +6,7 @@ import {
   CodeInputModifiersList,
   CodeInputSizesList,
   CodeInputVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import "./CodeInput.css";
 

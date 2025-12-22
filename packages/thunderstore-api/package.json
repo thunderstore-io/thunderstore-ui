@@ -4,10 +4,11 @@
   "description": "Thunderstore API client",
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/thunderstore-api",
   "main": "dist/thunderstore-thunderstore-api.cjs.js",
-  "types": "src/index.ts",
+  "types": "dist/index.d.ts",
   "module": "dist/thunderstore-thunderstore-api.esm.js",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "module": "./dist/thunderstore-thunderstore-api.esm.js",
       "default": "./dist/thunderstore-thunderstore-api.cjs.js"
     },

@@ -27,9 +27,11 @@ import {
   NewTag,
   useToast,
 } from "@thunderstore/cyberstorm";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { postPackageSubmissionMetadata } from "@thunderstore/dapper-ts/src/methods/package";
+import { classnames } from "@thunderstore/cyberstorm";
+import {
+  DapperTs,
+  postPackageSubmissionMetadata,
+} from "@thunderstore/dapper-ts";
 import {
   type PackageSubmissionResult,
   type PackageSubmissionStatus,
@@ -40,7 +42,7 @@ import {
   type IBaseUploadHandle,
   MultipartUpload,
 } from "@thunderstore/ts-uploader";
-import { type UserMedia } from "@thunderstore/ts-uploader/src/uploaders/types";
+import { type UserMedia } from "@thunderstore/ts-uploader";
 
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../root";

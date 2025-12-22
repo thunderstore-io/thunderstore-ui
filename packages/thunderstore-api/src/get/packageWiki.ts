@@ -1,12 +1,12 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
+import type { ApiEndpointProps } from "../index";
 import {
-  PackageWikiPageRequestParams,
-  PackageWikiRequestParams,
+  type PackageWikiPageRequestParams,
+  type PackageWikiRequestParams,
 } from "../schemas/requestSchemas";
 import {
-  PackageWikiPageResponseData,
-  PackageWikiResponseData,
+  type PackageWikiPageResponseData,
+  type PackageWikiResponseData,
   packageWikiPageResponseDataSchema,
   packageWikiResponseDataSchema,
 } from "../schemas/responseSchemas";

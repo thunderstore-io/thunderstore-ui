@@ -1,8 +1,8 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
-import { DynamicHTMLRequestParams } from "../schemas/requestSchemas";
+import type { ApiEndpointProps } from "../index";
+import type { DynamicHTMLRequestParams } from "../schemas/requestSchemas";
 import {
-  DynamicHTMLResponseData,
+  type DynamicHTMLResponseData,
   dynamicHTMLResponseDataSchema,
 } from "../schemas/responseSchemas";
 

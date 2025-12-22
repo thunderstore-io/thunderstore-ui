@@ -5,7 +5,7 @@
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/ts-api-react-forms",
   "main": "dist/thunderstore-ts-api-react-forms.cjs.js",
   "module": "dist/thunderstore-ts-api-react-forms.esm.js",
-  "types": "src/index.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],

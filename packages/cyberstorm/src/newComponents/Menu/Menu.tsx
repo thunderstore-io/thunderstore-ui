@@ -2,7 +2,7 @@ import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type ReactNode } from "react";
 
-import { type MenuVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { type MenuVariants } from "@thunderstore/cyberstorm-theme";
 
 import { NewButton, NewIcon } from "../..";
 import {

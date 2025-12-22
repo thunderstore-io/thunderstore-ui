@@ -1,8 +1,8 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
-import { PackageSubmissionStatusRequestParams } from "../schemas/requestSchemas";
+import type { ApiEndpointProps } from "../index";
+import type { PackageSubmissionStatusRequestParams } from "../schemas/requestSchemas";
 import {
-  PackageSubmissionStatusResponseData,
+  type PackageSubmissionStatusResponseData,
   packageSubmissionStatusResponseDataSchema,
 } from "../schemas/responseSchemas";
 

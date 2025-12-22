@@ -5,7 +5,7 @@ import { type ReactNode } from "react";
 import {
   type DrawerSizes,
   type DrawerVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import { NewButton, NewIcon } from "../..";
 import {

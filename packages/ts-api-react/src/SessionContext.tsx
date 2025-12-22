@@ -4,9 +4,9 @@
 // import { CurrentUser } from "@thunderstore/dapper/types";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
-  EmptyUser,
-  RequestConfig,
-  User,
+  type EmptyUser,
+  type RequestConfig,
+  type User,
   userSchema,
 } from "@thunderstore/thunderstore-api";
 

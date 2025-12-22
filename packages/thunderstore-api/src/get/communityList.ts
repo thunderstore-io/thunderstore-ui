@@ -1,12 +1,12 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
+import type { ApiEndpointProps } from "../index";
 import { CommunityListOrderingEnum } from "../schemas/queryParamSchemas";
 import {
-  CommunityListRequestQueryParams,
+  type CommunityListRequestQueryParams,
   communityListRequestQueryParamsSchema,
 } from "../schemas/requestSchemas";
 import {
-  CommunityListResponseData,
+  type CommunityListResponseData,
   communityListResponseDataSchema,
 } from "../schemas/responseSchemas";
 

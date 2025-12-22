@@ -29,3 +29,5 @@ import "./styles/colors.css";
 import "./styles/globals.css";
 import "./styles/layout.css";
 import "./styles/typography.css";
+
+export * from "./components";

@@ -1,4 +1,4 @@
-import { getSessionContext } from "@thunderstore/ts-api-react/src/SessionContext";
+import { getSessionContext } from "@thunderstore/ts-api-react";
 
 import { isRecord } from "../utils/typeChecks";
 

@@ -5,7 +5,7 @@
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/use-promise",
   "main": "dist/thunderstore-use-promise.cjs.js",
   "module": "dist/thunderstore-use-promise.esm.js",
-  "types": "src/index.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],

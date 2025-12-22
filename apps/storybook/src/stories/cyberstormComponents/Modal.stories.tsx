@@ -5,7 +5,7 @@ import "@thunderstore/cyberstorm-theme";
 import {
   ModalSizesList,
   ModalVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/Modal",

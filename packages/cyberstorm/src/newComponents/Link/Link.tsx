@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-import { type LinkVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { type LinkVariants } from "@thunderstore/cyberstorm-theme";
 
 import {
   Actionable,

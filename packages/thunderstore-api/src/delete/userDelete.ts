@@ -1,5 +1,5 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
+import type { ApiEndpointProps } from "../index";
 
 export function userDelete(
   props: ApiEndpointProps<object, object, object>

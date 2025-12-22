@@ -1,5 +1,5 @@
-import { DapperInterface } from "@thunderstore/dapper";
-import { RequestConfig } from "@thunderstore/thunderstore-api";
+import type { DapperInterface } from "@thunderstore/dapper";
+import type { RequestConfig } from "@thunderstore/thunderstore-api";
 
 import { getCommunities, getCommunity } from "./methods/communities";
 import { getCommunityFilters } from "./methods/communityFilters";
@@ -68,7 +68,7 @@ export class DapperTs implements DapperTsInterface {
     this.getTeamDetails = this.getTeamDetails.bind(this);
     this.getTeamMembers = this.getTeamMembers.bind(this);
     this.getTeamServiceAccounts = this.getTeamServiceAccounts.bind(this);
-    this.postTeamCreate = () => this.postTeamCreate.bind(this);
+    this.postTeamCreate = this.postTeamCreate.bind(this);
     this.postPackageSubmissionMetadata =
       this.postPackageSubmissionMetadata.bind(this);
     this.getPackageSubmissionStatus =
@@ -100,3 +100,30 @@ export class DapperTs implements DapperTsInterface {
   public postPackageSubmissionMetadata = postPackageSubmissionMetadata;
   public getPackageSubmissionStatus = getPackageSubmissionStatus;
 }
+
+export {
+  getCommunities,
+  getCommunity,
+  getCommunityFilters,
+  getCurrentUser,
+  getCurrentUserTeamPermissions,
+  getDynamicHTML,
+  getPackageChangelog,
+  getPackageListingDetails,
+  getPackageListings,
+  getPackagePermissions,
+  getPackageReadme,
+  getPackageSource,
+  getPackageSubmissionStatus,
+  getPackageVersionDependencies,
+  getPackageVersionDetails,
+  getPackageVersions,
+  getPackageWiki,
+  getPackageWikiPage,
+  getRatedPackages,
+  getTeamDetails,
+  getTeamMembers,
+  getTeamServiceAccounts,
+  postPackageSubmissionMetadata,
+  postTeamCreate,
+};

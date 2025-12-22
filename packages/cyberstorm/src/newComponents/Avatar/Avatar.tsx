@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   type AvatarSizes,
   type AvatarVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import { NewIcon, type PrimitiveComponentDefaultProps } from "../..";
 import { classnames, componentClasses } from "../../utils/utils";

@@ -10,11 +10,11 @@ import { faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ago from "s-ago";
 
-import { type CardPackageVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { type CardPackageVariants } from "@thunderstore/cyberstorm-theme";
 import {
   type CardPackageModifiers,
   type CardPackageSizes,
-} from "@thunderstore/cyberstorm-theme/src/components/CardPackage/CardPackage";
+} from "@thunderstore/cyberstorm-theme";
 import { type PackageListing } from "@thunderstore/dapper/types";
 
 import { Image, NewIcon, NewLink, NewMetaItem, NewTag } from "../../..";

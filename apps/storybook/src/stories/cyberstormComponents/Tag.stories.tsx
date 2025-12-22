@@ -6,7 +6,7 @@ import {
   TagModifiersList,
   TagSizesList,
   TagVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 const modes = ["tag", "button", "link"] as const;
 

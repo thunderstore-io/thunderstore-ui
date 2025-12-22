@@ -1,11 +1,11 @@
 import { apiFetch } from "../apiFetch";
-import { ApiEndpointProps } from "../index";
+import type { ApiEndpointProps } from "../index";
 import {
-  CommunityFiltersRequestParams,
+  type CommunityFiltersRequestParams,
   communityFiltersRequestParamsSchema,
 } from "../schemas/requestSchemas";
 import {
-  CommunityFiltersResponseData,
+  type CommunityFiltersResponseData,
   communityFiltersResponseDataSchema,
 } from "../schemas/responseSchemas";
 

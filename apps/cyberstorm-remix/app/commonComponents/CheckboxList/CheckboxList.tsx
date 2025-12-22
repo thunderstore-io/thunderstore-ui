@@ -8,7 +8,7 @@ import { memo } from "react";
 import { type TRISTATE } from "~/commonComponents/types";
 
 import { Actionable, NewIcon } from "@thunderstore/cyberstorm";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { classnames } from "@thunderstore/cyberstorm";
 
 import "./CheckboxList.css";
 

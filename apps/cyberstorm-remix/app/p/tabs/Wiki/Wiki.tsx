@@ -16,9 +16,9 @@ import { type OutletContextShape } from "~/root";
 
 import { NewButton, NewIcon, SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { getPackageWiki } from "@thunderstore/dapper-ts/src/methods/package";
+import { getPackageWiki } from "@thunderstore/dapper-ts";
+import { ApiError } from "@thunderstore/thunderstore-api";
 
-import { ApiError } from "../../../../../../packages/thunderstore-api/src";
 import "./Wiki.css";
 
 export async function loader({ params }: LoaderFunctionArgs) {

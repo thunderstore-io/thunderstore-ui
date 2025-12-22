@@ -3,7 +3,7 @@ import { memo } from "react";
 import {
   type TabsSizes,
   type TabsVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import {
   Frame,

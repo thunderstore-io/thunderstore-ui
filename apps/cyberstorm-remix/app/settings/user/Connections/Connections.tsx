@@ -12,9 +12,8 @@ import { type OutletContextShape } from "~/root";
 
 import { NewLink, OverwolfLogo, useToast } from "@thunderstore/cyberstorm";
 import { ApiError } from "@thunderstore/thunderstore-api";
+import { userLinkedAccountDisconnect } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-
-import { userLinkedAccountDisconnect } from "../../../../../../packages/thunderstore-api/src";
 
 type ProvidersType = {
   name: string;

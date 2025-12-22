@@ -1,4 +1,4 @@
-import { DapperInterface } from "./dapper";
+import type { DapperInterface } from "./dapper";
 
 interface GlobalContext {
   Dapper?: DapperContext;

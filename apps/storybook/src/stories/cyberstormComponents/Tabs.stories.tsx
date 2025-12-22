@@ -7,7 +7,7 @@ import "@thunderstore/cyberstorm-theme";
 import {
   TabsSizesList,
   TabsVariantsList,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 const meta = {
   title: "Cyberstorm/Tabs",
