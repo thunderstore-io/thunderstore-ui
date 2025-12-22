@@ -4,10 +4,8 @@ import {
   RequestBodyParseError,
   RequestQueryParamsParseError,
 } from "../../../../../packages/thunderstore-api/src";
-
-type Validator = {
-  required?: boolean;
-};
+import type { Validator } from "./validation";
+import { isRawInvalid } from "./validation";
 
 interface UseStrongFormProps<
   Inputs,
@@ -21,7 +19,7 @@ interface UseStrongFormProps<
    * Validators for the form inputs.
    *
    * NOTE: If you add new validator types here, make sure to implement the
-   * validation logic in the `isReady` memo inside `useStrongForm`.
+   * validation logic in `isRawInvalid` in `validation.ts`.
    */
   validators?: {
     [K in keyof Inputs]?: Validator;
@@ -70,20 +68,12 @@ export function useStrongForm<
   >({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
 
-  const isValueEmpty = (value: unknown) => {
-    if (typeof value === "string") {
-      return value.trim() === "";
-    }
-    return value === undefined || value === null;
-  };
-
   const isReady = useMemo(() => {
     if (!props.validators) return true;
     for (const key in props.validators) {
       const validator = props.validators[key];
       const value = props.inputs[key as keyof Inputs];
-      // NOTE: Expand the checks as more validators are added
-      if (validator?.required && isValueEmpty(value)) {
+      if (isRawInvalid(validator, value)) {
         return false;
       }
     }
@@ -95,7 +85,7 @@ export function useStrongForm<
       const validator = props.validators?.[field];
       const value = props.inputs[field];
       const isRequired = Boolean(validator?.required);
-      const rawInvalid = isRequired && isValueEmpty(value);
+      const rawInvalid = isRawInvalid(validator, value);
       const interactions = fieldInteractions[field];
       const hasFinishedInteraction =
         Boolean(interactions?.hasFocused && interactions?.hasBlurred) ||
@@ -151,7 +141,9 @@ export function useStrongForm<
       return {
         ...interactionProps,
         "aria-invalid": fieldState.isInvalid,
+        "aria-required": fieldState.isRequired,
         csModifiers: modifiers,
+        required: fieldState.isRequired,
       };
     },
     [getFieldInteractionProps, getFieldState]
@@ -192,6 +184,10 @@ export function useStrongForm<
 
   const submit = async () => {
     setHasAttemptedSubmit(true);
+
+    if (!isReady) {
+      return;
+    }
     if (submitting) {
       const error = new Error("Form is already submitting!");
       if (props.onSubmitError) {
@@ -239,38 +235,61 @@ export function useStrongForm<
               ) as SubmissionError
             );
             setInputErrors(error.error.formErrors as InputErrors);
-          } else if (error instanceof RequestQueryParamsParseError) {
+            return;
+          }
+          if (error instanceof RequestQueryParamsParseError) {
             setSubmitError(
               new Error(
                 "Some of the query parameters are invalid"
               ) as SubmissionError
             );
             setInputErrors(error.error.formErrors as InputErrors);
-          } else if (error instanceof ParseError) {
+            return;
+          }
+          if (error instanceof ParseError) {
             setSubmitError(
               new Error(
                 "Request succeeded, but the response was invalid"
               ) as SubmissionError
             );
             setInputErrors(error.error.formErrors as InputErrors);
-            throw error;
-          } else {
+            if (props.onSubmitError) {
+              props.onSubmitError(error as SubmissionError);
+            }
             throw error;
           }
+
+          if (props.onSubmitError) {
+            props.onSubmitError(error as SubmissionError);
+          }
+          throw error;
         });
       return submitOutput;
-    } catch (error) {
-      if (props.onSubmitError) {
-        props.onSubmitError(error as SubmissionError);
-      }
-      throw error;
     } finally {
       setSubmitting(false);
     }
   };
 
+  const handleSubmit = useCallback(
+    (e?: { preventDefault: () => void }) => {
+      e?.preventDefault();
+      setHasAttemptedSubmit(true);
+      if (!isReady) {
+        return;
+      }
+      void submit().catch((error) => {
+        // Prevent unhandled rejections, but don't silently swallow unexpected errors.
+        if (!props.onSubmitError) {
+          console.error(error);
+        }
+      });
+    },
+    [isReady, submit]
+  );
+
   return {
     submit,
+    handleSubmit,
     submitting,
     submitOutput,
     submitError,

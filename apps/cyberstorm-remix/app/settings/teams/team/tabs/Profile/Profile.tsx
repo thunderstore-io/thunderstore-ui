@@ -93,6 +93,11 @@ function ProfileForm(props: { team: TeamDetails }) {
     InputErrors
   >({
     inputs: formInputs,
+    validators: {
+      donation_link: {
+        url: true,
+      },
+    },
     refiner: async (inputs: typeof formInputs) => ({
       donation_link: nullForEmptyString(inputs.donation_link),
     }),
@@ -113,6 +118,11 @@ function ProfileForm(props: { team: TeamDetails }) {
       });
     },
   });
+
+  const donationLinkFieldProps = strongForm.getFieldComponentProps(
+    "donation_link",
+    { disabled: formDisabled }
+  );
 
   return (
     <div className="settings-items__item">
@@ -135,13 +145,14 @@ function ProfileForm(props: { team: TeamDetails }) {
               }
               rootClasses="team-profile__input"
               disabled={formDisabled}
+              {...donationLinkFieldProps}
             />
           </div>
         </div>
         <NewButton
           rootClasses="team-profile__save"
           onClick={strongForm.submit}
-          disabled={formDisabled}
+          disabled={formDisabled || !strongForm.isReady}
         >
           Save changes
         </NewButton>

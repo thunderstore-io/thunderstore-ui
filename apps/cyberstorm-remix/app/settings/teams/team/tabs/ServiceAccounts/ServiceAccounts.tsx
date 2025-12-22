@@ -201,8 +201,11 @@ function AddServiceAccountForm(props: {
         </Modal.Body>
       ) : (
         <>
-          <Modal.Body>
-            <div className="service-accounts__form">
+          <form
+            className="service-accounts__form"
+            onSubmit={strongForm.handleSubmit}
+          >
+            <Modal.Body>
               <div>
                 Enter the nickname of the service account you wish to add to the
                 team <span>{props.teamName}</span>
@@ -222,7 +225,6 @@ function AddServiceAccountForm(props: {
                   }}
                   placeholder={"ExampleName"}
                   maxLength={32}
-                  required
                   {...nicknameFieldProps}
                 />
                 <div className="service-accounts__nickname-input-max-length">
@@ -230,16 +232,13 @@ function AddServiceAccountForm(props: {
                 </div>
               </div>
               {error && <NewAlert csVariant="danger">{error}</NewAlert>}
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <NewButton
-              onClick={strongForm.submit}
-              disabled={!strongForm.isReady}
-            >
-              Add Service Account
-            </NewButton>
-          </Modal.Footer>
+            </Modal.Body>
+            <Modal.Footer>
+              <NewButton type="submit" disabled={!strongForm.isReady}>
+                Add Service Account
+              </NewButton>
+            </Modal.Footer>
+          </form>
         </>
       )}
     </Modal>
