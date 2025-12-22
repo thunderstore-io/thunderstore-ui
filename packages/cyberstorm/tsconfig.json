@@ -3,7 +3,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "skipLibCheck": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "removeComments": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -27,7 +27,8 @@
       {
         "name": "typescript-plugin-css-modules"
       }
-    ]
+    ],
+    "baseUrl": "."
   },
   "include": ["./src/**/*.tsx", "./src/**/*.ts"],
   "exclude": ["node_modules"]
