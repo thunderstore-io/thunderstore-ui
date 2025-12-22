@@ -13,7 +13,9 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "coverage": "vitest run --coverage",
-    "tsc": "tsc -b"
+    "tsc": "tsc -b",
+    "test:container": "node tools/scripts/run_test_container.mjs test",
+    "coverage:container": "node tools/scripts/run_test_container.mjs coverage"
   },
   "engines": {
     "node": ">=20.17.0"

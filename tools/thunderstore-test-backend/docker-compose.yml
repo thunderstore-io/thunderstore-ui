@@ -1,9 +1,10 @@
 version: "3.8"
 
 x-django-service: &django-service
-  image: ${DJANGO_IMAGE:-thunderstore/thunderstore:release-0.145.1}
+  image: ${DJANGO_IMAGE:-thunderstore/thunderstore:release-0.151.0}
   environment:
     CORS_ALLOWED_ORIGINS: "*"
+    CORS_ALLOW_ALL_ORIGINS: "True"
     CELERY_BROKER_URL: "pyamqp://django:django@rabbitmq/django"
     DATABASE_URL: "psql://django:django@db/django"
     REDIS_URL: "redis://redis:6379/0"
@@ -37,7 +38,7 @@ x-django-service: &django-service
     USE_ASYNC_PACKAGE_SUBMISSION_FLOW: "True"
     USE_TIME_SERIES_PACKAGE_DOWNLOAD_METRICS: "True"
     ALLOWED_HOSTS: "*"
-    PRIMARY_HOST: "127.0.0.1:8000"
+    PRIMARY_HOST: "${PRIMARY_HOST:-127.0.0.1:8000}"
   depends_on:
     - db
     - redis
@@ -80,3 +81,37 @@ services:
       - ./fix_migration.py:/app/fix_migration.py
     ports:
       - "127.0.0.1:8000:8000"
+
+  cyberstorm-tests:
+    user: "0:0"
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    working_dir: /workspace
+    volumes:
+      - ../../:/src:ro
+      - workspace_test_src:/workspace
+      - thunderstore_ui_test_node_modules:/workspace/node_modules
+      - nimbus_test_node_modules:/workspace/apps/cyberstorm-remix/node_modules
+      - yarn_cache:/usr/local/share/.cache/yarn
+    environment:
+      NODE_ENV: test
+      NPM_CONFIG_USERCONFIG: /run/secrets/npmrc
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+      VITE_THUNDERSTORE_TEST_API_HOST: "http://django:8000"
+      RSYNC_ARGS: "-a --delete --info=progress2 --exclude=.git --exclude=build-secrets --exclude=.npmrc --exclude=node_modules --exclude=.turbo --exclude=.cache --exclude=apps/cyberstorm-remix/build --exclude=apps/cyberstorm-remix/.react-router"
+    secrets:
+      - npmrc
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+volumes:
+  workspace_test_src:
+  thunderstore_ui_test_node_modules:
+  nimbus_test_node_modules:
+  yarn_cache:
+
+secrets:
+  npmrc:
+    file: "../../build-secrets/.npmrc"
