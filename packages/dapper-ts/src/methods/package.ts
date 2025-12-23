@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import {
   ApiError,
-  PackageVersionDependenciesRequestQueryParams,
+  type PackageVersionDependenciesRequestQueryParams,
   fetchPackageChangelog,
   fetchPackagePermissions,
   fetchPackageReadme,
@@ -15,7 +15,7 @@ import {
   postPackageSubmission,
 } from "@thunderstore/thunderstore-api";
 
-import { DapperTsInterface } from "../index";
+import type { DapperTsInterface } from "../index";
 
 export async function getPackageChangelog(
   this: DapperTsInterface,

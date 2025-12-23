@@ -20,6 +20,7 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "composite": true,
+    "declarationMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
     "jsx": "react-jsx",

@@ -7,6 +7,13 @@
   "main": "dist/thunderstore-dapper-ts.cjs.js",
   "module": "dist/thunderstore-dapper-ts.esm.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "module": "./dist/thunderstore-dapper-ts.esm.js",
+      "default": "./dist/thunderstore-dapper-ts.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],

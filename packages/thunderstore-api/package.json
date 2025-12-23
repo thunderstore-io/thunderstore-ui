@@ -8,7 +8,6 @@
   "module": "dist/thunderstore-thunderstore-api.esm.js",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "module": "./dist/thunderstore-thunderstore-api.esm.js",
       "default": "./dist/thunderstore-thunderstore-api.cjs.js"
     },
