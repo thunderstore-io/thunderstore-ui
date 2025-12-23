@@ -6,6 +6,13 @@
   "main": "dist/thunderstore-react-dnd.cjs.js",
   "module": "dist/thunderstore-react-dnd.esm.js",
   "types": "dist/thunderstore-react-dnd.cjs.d.ts",
+  "exports": {
+    ".": {
+      "module": "./dist/thunderstore-react-dnd.esm.js",
+      "default": "./dist/thunderstore-react-dnd.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],

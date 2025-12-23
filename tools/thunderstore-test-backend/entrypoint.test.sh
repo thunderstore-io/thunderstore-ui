@@ -80,8 +80,8 @@ if [ "$did_sync" = "true" ]; then
     echo "ERROR: yarn is required but was not found in PATH" >&2
     exit 127
   fi
-  echo "Refreshing workspace links (postinstall)..."
-  yarn run -s postinstall
+  echo "Refreshing workspace links (preconstruct dev)..."
+  yarn run -s preconstruct dev
 fi
 
 if [ "$#" -eq 0 ]; then

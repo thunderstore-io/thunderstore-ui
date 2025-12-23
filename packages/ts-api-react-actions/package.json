@@ -6,6 +6,13 @@
   "main": "dist/thunderstore-ts-api-react-actions.cjs.js",
   "module": "dist/thunderstore-ts-api-react-actions.esm.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "module": "./dist/thunderstore-ts-api-react-actions.esm.js",
+      "default": "./dist/thunderstore-ts-api-react-actions.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],

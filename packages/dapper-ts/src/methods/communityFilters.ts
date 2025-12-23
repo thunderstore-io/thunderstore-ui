@@ -1,6 +1,6 @@
 import { fetchCommunityFilters } from "@thunderstore/thunderstore-api";
 
-import { DapperTsInterface } from "../index";
+import type { DapperTsInterface } from "../index";
 
 export async function getCommunityFilters(
   this: DapperTsInterface,

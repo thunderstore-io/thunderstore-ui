@@ -10,6 +10,7 @@
     "postinstall": "preconstruct dev && manypkg check",
     "build": "preconstruct build && yarn workspace @thunderstore/cyberstorm-theme build && yarn workspace @thunderstore/cyberstorm build && yarn workspace @thunderstore/ts-uploader build",
     "plop": "plop",
+    "validate:exports": "node tools/scripts/validate_package_exports.mjs",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "coverage": "vitest run --coverage",

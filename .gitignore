@@ -1,3 +1,8 @@
+# Local scratch outputs
+/artifacts/
+
+# TypeScript incremental build outputs
+*.tsbuildinfo
 .idea
 /node_modules/
 **/yarn-error.log

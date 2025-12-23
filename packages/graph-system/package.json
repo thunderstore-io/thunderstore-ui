@@ -6,6 +6,13 @@
   "main": "dist/thunderstore-graph-system.cjs.js",
   "module": "dist/thunderstore-graph-system.esm.js",
   "types": "dist/thunderstore-graph-system.cjs.d.ts",
+  "exports": {
+    ".": {
+      "module": "./dist/thunderstore-graph-system.esm.js",
+      "default": "./dist/thunderstore-graph-system.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],
