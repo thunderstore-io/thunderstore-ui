@@ -1,39 +1,3 @@
-const legacyProd = {
-  protocol: "https://",
-  hostname: "thunderstore.io",
-  port: "",
-  tld: "io",
-};
-const betaProd = {
-  protocol: "https://",
-  hostname: "new.thunderstore.io",
-  port: "",
-  tld: "io",
-};
-const legacyQA = {
-  protocol: "https://",
-  hostname: "thunderstore.dev",
-  port: "",
-  tld: "dev",
-};
-const betaQA = {
-  protocol: "https://",
-  hostname: "new.thunderstore.dev",
-  port: "",
-  tld: "dev",
-};
-const legacyDev = {
-  protocol: "http://",
-  hostname: "thunderstore.temp",
-  port: "",
-  tld: "temp",
-};
-const betaDev = {
-  protocol: "http://",
-  hostname: "new.thunderstore.temp",
-  port: "",
-  tld: "temp",
-};
 async function checkBetaRedirect(legacy, beta, goToBetaRoR2) {
   const legacyOnlyPages = [
     "/settings",
@@ -124,25 +88,79 @@ async function insertSwitchButton(legacy, beta) {
     }
   }
 }
-const legacy = window.location.hostname.endsWith(legacyProd.tld)
-  ? legacyProd
-  : window.location.hostname.endsWith(legacyQA.tld)
-    ? legacyQA
-    : legacyDev;
-const beta = window.location.hostname.endsWith(betaProd.tld)
-  ? betaProd
-  : window.location.hostname.endsWith(betaQA.tld)
-    ? betaQA
-    : betaDev;
-async function insertSwitchButtonListener() {
-  insertSwitchButton(legacy, beta);
-  document.removeEventListener("DOMContentLoaded", insertSwitchButtonListener);
+function hasBrowserGlobals() {
+  return typeof window !== "undefined" && typeof document !== "undefined";
 }
-if (
-  document.readyState === "complete" ||
-  document.readyState === "interactive"
-) {
-  insertSwitchButton(legacy, beta);
-} else {
-  document.addEventListener("DOMContentLoaded", insertSwitchButtonListener);
+export function initBetaSwitch() {
+  if (!hasBrowserGlobals()) {
+    return;
+  }
+  const globalWindow = window;
+  const initFlag = "__thunderstore_beta_switch_initialized__";
+  if (globalWindow[initFlag]) {
+    return;
+  }
+  globalWindow[initFlag] = true;
+  const legacyProd = {
+    protocol: "https://",
+    hostname: "thunderstore.io",
+    port: "",
+    tld: "io",
+  };
+  const betaProd = {
+    protocol: "https://",
+    hostname: "new.thunderstore.io",
+    port: "",
+    tld: "io",
+  };
+  const legacyQA = {
+    protocol: "https://",
+    hostname: "thunderstore.dev",
+    port: "",
+    tld: "dev",
+  };
+  const betaQA = {
+    protocol: "https://",
+    hostname: "new.thunderstore.dev",
+    port: "",
+    tld: "dev",
+  };
+  const legacyDev = {
+    protocol: "http://",
+    hostname: "thunderstore.localhost",
+    port: "",
+    tld: "localhost",
+  };
+  const betaDev = {
+    protocol: "http://",
+    hostname: "new.thunderstore.localhost",
+    port: "",
+    tld: "localhost",
+  };
+  const legacy = window.location.hostname.endsWith(legacyProd.tld)
+    ? legacyProd
+    : window.location.hostname.endsWith(legacyQA.tld)
+      ? legacyQA
+      : legacyDev;
+  const beta = window.location.hostname.endsWith(betaProd.tld)
+    ? betaProd
+    : window.location.hostname.endsWith(betaQA.tld)
+      ? betaQA
+      : betaDev;
+  async function insertSwitchButtonListener() {
+    insertSwitchButton(legacy, beta);
+    document.removeEventListener(
+      "DOMContentLoaded",
+      insertSwitchButtonListener
+    );
+  }
+  if (
+    document.readyState === "complete" ||
+    document.readyState === "interactive"
+  ) {
+    insertSwitchButton(legacy, beta);
+  } else {
+    document.addEventListener("DOMContentLoaded", insertSwitchButtonListener);
+  }
 }
+initBetaSwitch();
