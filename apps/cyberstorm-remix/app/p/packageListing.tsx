@@ -67,6 +67,7 @@ import {
   InternalNotes,
   RejectionReason,
 } from "./components/PackageListing/ReviewInformation";
+import { PackageMetaTags } from "./components/PackageListing/PackageMetaTags";
 
 import "./packageListing.css";
 
@@ -272,33 +273,14 @@ export default function PackageListing() {
         <Await resolve={community}>
           {(resolvedCommunity) => (
             <>
-              <meta
-                title={`${formatToDisplayName(
-                  listing.name
-                )} | Thunderstore - The ${resolvedCommunity.name} Mod Database`}
+              <PackageMetaTags
+                packageName={listing.name}
+                packageDescription={listing.description}
+                communityName={resolvedCommunity.name}
+                pathname={location.pathname}
+                namespace={listing.namespace}
+                iconUrl={listing.icon_url}
               />
-              <meta name="description" content={listing.description} />
-              <meta property="og:type" content="website" />
-              <meta
-                property="og:url"
-                content={`${getPublicEnvVariables(["VITE_BETA_SITE_URL"])}${
-                  location.pathname
-                }`}
-              />
-              <meta
-                property="og:title"
-                content={`${formatToDisplayName(listing.name)} by ${
-                  listing.namespace
-                }`}
-              />
-              <meta property="og:description" content={listing.description} />
-              <meta property="og:image:width" content="256" />
-              <meta property="og:image:height" content="256" />
-              <meta
-                property="og:image"
-                content={listing.icon_url ?? undefined}
-              />
-              <meta property="og:site_name" content="Thunderstore" />
             </>
           )}
         </Await>
