@@ -33,6 +33,22 @@ if [ -z "$(ls -A node_modules)" ] || [ ! -f node_modules/.bin/react-router ]; th
     su node -c "yarn install --frozen-lockfile --production=false"
 fi
 
+# Ensure non-preconstruct workspace dependencies are built
+if [ ! -d "packages/cyberstorm-theme/dist" ] || \
+   [ ! -d "packages/cyberstorm/dist" ] || \
+   [ ! -d "packages/ts-uploader/dist" ]; then
+    echo "Building workspace dependencies..."
+    su node -c "yarn workspace @thunderstore/cyberstorm-theme build"
+    su node -c "yarn workspace @thunderstore/cyberstorm build"
+    su node -c "yarn workspace @thunderstore/ts-uploader build"
+fi
+
+# Start watchers for non-preconstruct workspace dependencies to reflect source changes
+echo "Starting dependency watchers..."
+su node -c "yarn workspace @thunderstore/cyberstorm-theme dev" &
+su node -c "yarn workspace @thunderstore/cyberstorm dev" &
+su node -c "yarn workspace @thunderstore/ts-uploader dev" &
+
 # Map thunderstore.localhost to the backend nginx container IP so SSR API calls hit
 # the backend without changing client-side env values.
 backend_nginx_ip=$(getent hosts nginx | awk '{print $1}')

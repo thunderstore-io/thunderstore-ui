@@ -34,7 +34,8 @@ import {
   ToastProvider,
   isRecord,
 } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
+import "@thunderstore/cyberstorm-theme/css";
+import "@thunderstore/cyberstorm/css";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 import { type RequestConfig } from "@thunderstore/thunderstore-api";
