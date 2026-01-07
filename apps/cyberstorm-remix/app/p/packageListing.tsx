@@ -26,6 +26,8 @@ import {
   faCaretRight,
   faScaleBalanced,
   faCog,
+  faListUl,
+  faBoxOpen,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
