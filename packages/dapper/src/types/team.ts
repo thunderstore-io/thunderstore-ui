@@ -16,3 +16,9 @@ export interface TeamMember {
   avatar: string | null;
   role: "owner" | "member";
 }
+
+export interface Team {
+  identifier: number;
+  name: string;
+  donation_link: string | null;
+}
