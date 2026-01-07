@@ -70,6 +70,7 @@ import {
 import { PackageMetaTags } from "./components/PackageListing/PackageMetaTags";
 import { PackageHeader } from "./components/PackageListing/PackageHeader";
 import { PackageDrawer } from "./components/PackageListing/PackageDrawer";
+import { PackageActions } from "./components/PackageListing/PackageActions";
 
 import "./packageListing.css";
 
@@ -341,7 +342,7 @@ export default function PackageListing() {
                 <Suspense fallback={<p>Loading...</p>}>
                   <Await resolve={team}>
                     {(resolvedTeam) => (
-                      <Actions
+                      <PackageActions
                         team={resolvedTeam}
                         listing={listing}
                         isLiked={isLiked}
