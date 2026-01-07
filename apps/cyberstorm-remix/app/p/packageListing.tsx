@@ -16,7 +16,6 @@ import {
 } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
 import {
-  faUsers,
   faHandHoldingHeart,
   faDownload,
   faThumbsUp,
@@ -24,10 +23,8 @@ import {
   faCaretRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 
 import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
-import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
 import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
 import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
 import { type OutletContextShape } from "app/root";
@@ -38,18 +35,15 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 
 import {
-  Drawer,
   Heading,
   NewButton,
   NewIcon,
   NewLink,
   NewTag,
   RelativeTime,
-  Tabs,
   ThunderstoreLogo,
   formatFileSize,
   formatInteger,
-  formatToDisplayName,
   useToast,
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
