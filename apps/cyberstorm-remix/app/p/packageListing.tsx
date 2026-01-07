@@ -25,13 +25,7 @@ import {
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
 
-import {
-  NewButton,
-  NewIcon,
-  RelativeTime,
-  ThunderstoreLogo,
-  useToast,
-} from "@thunderstore/cyberstorm";
+import { NewIcon, RelativeTime, useToast } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import {
@@ -51,8 +45,7 @@ import { PackageHeader } from "./components/PackageListing/PackageHeader";
 import { PackageDrawer } from "./components/PackageListing/PackageDrawer";
 import { PackageActions } from "./components/PackageListing/PackageActions";
 import { PackageTabs } from "./components/PackageListing/PackageTabs";
-import { PackageBox } from "./components/PackageListing/PackageBox";
-import { PackageMeta } from "./components/PackageListing/PackageMeta";
+import { PackageSidebar } from "./components/PackageListing/PackageSidebar";
 
 import "./packageListing.css";
 
@@ -353,57 +346,18 @@ export default function PackageListing() {
               </>
             </section>
 
-            <aside className="package-listing-sidebar">
-              <NewButton
-                csVariant="accent"
-                csSize="big"
-                rootClasses="package-listing-sidebar__install"
-                primitiveType="link"
-                href={listing.install_url}
-              >
-                <NewIcon csMode="inline">
-                  <ThunderstoreLogo />
-                </NewIcon>
-                Install
-              </NewButton>
-
-              <div className="package-listing-sidebar__main">
-                <div className="package-listing-sidebar__actions">
-                  <Suspense>
-                    <Await resolve={team}>
-                      {(resolvedTeam) => (
-                        <PackageActions
-                          team={resolvedTeam}
-                          listing={listing}
-                          isLiked={isLiked}
-                          currentUser={currentUser}
-                          packageLikeAction={packageLikeAction}
-                        />
-                      )}
-                    </Await>
-                  </Suspense>
-
-                  {ReportPackageButton}
-                </div>
-                <PackageMeta
-                  listing={listing}
-                  lastUpdated={lastUpdated}
-                  firstUploaded={firstUploaded}
-                />
-              </div>
-
-              <Suspense>
-                <Await resolve={community}>
-                  {(resolvedCommunity) => (
-                    <PackageBox
-                      listing={listing}
-                      community={resolvedCommunity}
-                      domain={domain}
-                    />
-                  )}
-                </Await>
-              </Suspense>
-            </aside>
+            <PackageSidebar
+              listing={listing}
+              team={team}
+              isLiked={isLiked}
+              currentUser={currentUser}
+              packageLikeAction={packageLikeAction}
+              ReportPackageButton={ReportPackageButton}
+              lastUpdated={lastUpdated}
+              firstUploaded={firstUploaded}
+              community={community}
+              domain={domain}
+            />
           </div>
         </section>
       </div>
