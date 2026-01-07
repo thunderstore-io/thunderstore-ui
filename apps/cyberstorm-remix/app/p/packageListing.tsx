@@ -69,6 +69,7 @@ import {
 } from "./components/PackageListing/ReviewInformation";
 import { PackageMetaTags } from "./components/PackageListing/PackageMetaTags";
 import { PackageHeader } from "./components/PackageListing/PackageHeader";
+import { PackageDrawer } from "./components/PackageListing/PackageDrawer";
 
 import "./packageListing.css";
 
@@ -329,25 +330,13 @@ export default function PackageListing() {
                   </NewIcon>
                 </button>
 
-                <Drawer
-                  popoverId="packageDetailDrawer"
-                  headerContent={
-                    <Heading csLevel="3" csSize="3">
-                      Details
-                    </Heading>
-                  }
-                  rootClasses="package-listing__drawer"
-                >
-                  {packageMeta(lastUpdated, firstUploaded, listing)}
-
-                  <Suspense fallback={<p>Loading...</p>}>
-                    <Await resolve={community}>
-                      {(resolvedCommunity) =>
-                        packageBoxes(listing, resolvedCommunity, domain)
-                      }
-                    </Await>
-                  </Suspense>
-                </Drawer>
+                <PackageDrawer
+                  lastUpdated={lastUpdated}
+                  firstUploaded={firstUploaded}
+                  listing={listing}
+                  community={community}
+                  domain={domain}
+                />
 
                 <Suspense fallback={<p>Loading...</p>}>
                   <Await resolve={team}>
