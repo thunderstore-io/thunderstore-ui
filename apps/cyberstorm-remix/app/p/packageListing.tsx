@@ -71,6 +71,7 @@ import { PackageMetaTags } from "./components/PackageListing/PackageMetaTags";
 import { PackageHeader } from "./components/PackageListing/PackageHeader";
 import { PackageDrawer } from "./components/PackageListing/PackageDrawer";
 import { PackageActions } from "./components/PackageListing/PackageActions";
+import { PackageTabs } from "./components/PackageListing/PackageTabs";
 
 import "./packageListing.css";
 
@@ -357,98 +358,7 @@ export default function PackageListing() {
               </div>
 
               <>
-                <Tabs>
-                  <NewLink
-                    key="description"
-                    primitiveType="cyberstormLink"
-                    linkId="Package"
-                    community={listing.community_identifier}
-                    namespace={listing.namespace}
-                    package={listing.name}
-                    aria-current={currentTab === "details"}
-                    rootClasses={`tabs-item${
-                      currentTab === "details" ? " tabs-item--current" : ""
-                    }`}
-                  >
-                    Details
-                  </NewLink>
-
-                  <NewLink
-                    key="required"
-                    primitiveType="cyberstormLink"
-                    linkId="PackageRequired"
-                    community={listing.community_identifier}
-                    namespace={listing.namespace}
-                    package={listing.name}
-                    aria-current={currentTab === "required"}
-                    rootClasses={`tabs-item${
-                      currentTab === "required" ? " tabs-item--current" : ""
-                    }`}
-                  >
-                    Required ({listing.dependency_count})
-                  </NewLink>
-
-                  <NewLink
-                    key="wiki"
-                    primitiveType="cyberstormLink"
-                    linkId="PackageWiki"
-                    community={listing.community_identifier}
-                    namespace={listing.namespace}
-                    package={listing.name}
-                    aria-current={currentTab === "wiki"}
-                    rootClasses={`tabs-item${
-                      currentTab === "wiki" ? " tabs-item--current" : ""
-                    }`}
-                  >
-                    Wiki
-                  </NewLink>
-
-                  <NewLink
-                    key="changelog"
-                    primitiveType="cyberstormLink"
-                    linkId="PackageChangelog"
-                    community={listing.community_identifier}
-                    namespace={listing.namespace}
-                    package={listing.name}
-                    aria-current={currentTab === "changelog"}
-                    disabled={!listing.has_changelog}
-                    rootClasses={`tabs-item${
-                      currentTab === "changelog" ? " tabs-item--current" : ""
-                    }`}
-                  >
-                    Changelog
-                  </NewLink>
-
-                  <NewLink
-                    key="versions"
-                    primitiveType="cyberstormLink"
-                    linkId="PackageVersions"
-                    community={listing.community_identifier}
-                    namespace={listing.namespace}
-                    package={listing.name}
-                    aria-current={currentTab === "versions"}
-                    rootClasses={`tabs-item${
-                      currentTab === "versions" ? " tabs-item--current" : ""
-                    }`}
-                  >
-                    Versions
-                  </NewLink>
-
-                  <NewLink
-                    key="source"
-                    primitiveType="cyberstormLink"
-                    linkId="PackageSource"
-                    community={listing.community_identifier}
-                    namespace={listing.namespace}
-                    package={listing.name}
-                    aria-current={currentTab === "source"}
-                    rootClasses={`tabs-item${
-                      currentTab === "source" ? " tabs-item--current" : ""
-                    }`}
-                  >
-                    Analysis
-                  </NewLink>
-                </Tabs>
+                <PackageTabs listing={listing} currentTab={currentTab} />
 
                 <div className="package-listing__content">
                   <Outlet
