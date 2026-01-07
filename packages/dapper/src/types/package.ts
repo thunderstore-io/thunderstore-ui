@@ -36,6 +36,8 @@ export interface PackageListingDetails extends PackageListing {
   has_changelog: boolean;
   install_url: string;
   latest_version_number: string;
+  listing_admin_url?: string | null;
+  package_admin_url?: string | null;
   team: PackageTeam;
   website_url: string | null;
 }
