@@ -68,6 +68,7 @@ import {
   RejectionReason,
 } from "./components/PackageListing/ReviewInformation";
 import { PackageMetaTags } from "./components/PackageListing/PackageMetaTags";
+import { PackageHeader } from "./components/PackageListing/PackageHeader";
 
 import "./packageListing.css";
 
@@ -314,46 +315,7 @@ export default function PackageListing() {
 
           <div className="package-listing__main">
             <section className="package-listing__package-content-section">
-              <PageHeader
-                headingLevel="1"
-                headingSize="3"
-                image={listing.icon_url}
-                description={listing.description}
-                variant="detailed"
-                meta={
-                  <>
-                    <NewLink
-                      primitiveType="cyberstormLink"
-                      linkId="Team"
-                      community={listing.community_identifier}
-                      team={listing.namespace}
-                      csVariant="cyber"
-                      rootClasses="page-header__meta-item"
-                    >
-                      <NewIcon csMode="inline" noWrapper>
-                        <FontAwesomeIcon icon={faUsers} />
-                      </NewIcon>
-                      {listing.namespace}
-                    </NewLink>
-
-                    {listing.website_url ? (
-                      <NewLink
-                        primitiveType="link"
-                        href={listing.website_url}
-                        csVariant="cyber"
-                        rootClasses="page-header__meta-item"
-                      >
-                        {listing.website_url}
-                        <NewIcon csMode="inline" noWrapper>
-                          <FontAwesomeIcon icon={faArrowUpRight} />
-                        </NewIcon>
-                      </NewLink>
-                    ) : null}
-                  </>
-                }
-              >
-                {formatToDisplayName(listing.name)}
-              </PageHeader>
+              <PackageHeader packageListing={listing} />
 
               <div className="package-listing__narrow-actions">
                 <button
