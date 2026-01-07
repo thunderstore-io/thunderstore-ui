@@ -1,5 +1,4 @@
 import {
-  memo,
   type ReactElement,
   Suspense,
   useEffect,
@@ -15,17 +14,9 @@ import {
   type LoaderFunctionArgs,
 } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
-import {
-  faHandHoldingHeart,
-  faDownload,
-  faThumbsUp,
-  faWarning,
-  faCaretRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
-import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
 import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
 import { type OutletContextShape } from "app/root";
 import { isPromise } from "cyberstorm/utils/typeChecks";
@@ -35,20 +26,14 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 
 import {
-  Heading,
   NewButton,
   NewIcon,
-  NewLink,
-  NewTag,
   RelativeTime,
   ThunderstoreLogo,
-  formatFileSize,
-  formatInteger,
   useToast,
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
-import type { CurrentUser } from "@thunderstore/dapper/types";
-import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
+import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicListing,
   getPrivateListing,
@@ -66,6 +51,8 @@ import { PackageHeader } from "./components/PackageListing/PackageHeader";
 import { PackageDrawer } from "./components/PackageListing/PackageDrawer";
 import { PackageActions } from "./components/PackageListing/PackageActions";
 import { PackageTabs } from "./components/PackageListing/PackageTabs";
+import { PackageBox } from "./components/PackageListing/PackageBox";
+import { PackageMeta } from "./components/PackageListing/PackageMeta";
 
 import "./packageListing.css";
 
@@ -353,7 +340,6 @@ export default function PackageListing() {
 
               <>
                 <PackageTabs listing={listing} currentTab={currentTab} />
-
                 <div className="package-listing__content">
                   <Outlet
                     context={
@@ -386,7 +372,7 @@ export default function PackageListing() {
                   <Suspense>
                     <Await resolve={team}>
                       {(resolvedTeam) => (
-                        <Actions
+                        <PackageActions
                           team={resolvedTeam}
                           listing={listing}
                           isLiked={isLiked}
@@ -399,15 +385,22 @@ export default function PackageListing() {
 
                   {ReportPackageButton}
                 </div>
-
-                {packageMeta(lastUpdated, firstUploaded, listing)}
+                <PackageMeta
+                  listing={listing}
+                  lastUpdated={lastUpdated}
+                  firstUploaded={firstUploaded}
+                />
               </div>
 
               <Suspense>
                 <Await resolve={community}>
-                  {(resolvedCommunity) =>
-                    packageBoxes(listing, resolvedCommunity, domain)
-                  }
+                  {(resolvedCommunity) => (
+                    <PackageBox
+                      listing={listing}
+                      community={resolvedCommunity}
+                      domain={domain}
+                    />
+                  )}
                 </Await>
               </Suspense>
             </aside>
@@ -417,206 +410,5 @@ export default function PackageListing() {
 
       {ReportPackageModal}
     </>
-  );
-}
-
-function packageTags(
-  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>,
-  community: Awaited<ReturnType<DapperTsInterface["getCommunity"]>>
-) {
-  return listing.categories.map((category) => {
-    return (
-      <NewTag
-        key={category.name}
-        csMode="cyberstormLink"
-        linkId="Community"
-        community={community.identifier}
-        queryParams={`includedCategories=${category.id}`}
-        csSize="small"
-        csVariant="primary"
-      >
-        {category.name}
-      </NewTag>
-    );
-  });
-}
-
-function packageBoxes(
-  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>,
-  community: Awaited<ReturnType<DapperTsInterface["getCommunity"]>>,
-  domain: string
-) {
-  const pt = packageTags(listing, community);
-
-  return (
-    <>
-      {pt.length > 0 || listing.is_deprecated || listing.is_nsfw ? (
-        <div className="package-listing-sidebar__categories">
-          <div className="package-listing-sidebar__header">
-            <Heading csLevel="4" csSize="4">
-              Categories
-            </Heading>
-          </div>
-          {pt.length > 0 ? (
-            <div className="package-listing-sidebar__body">{pt}</div>
-          ) : null}
-          {listing.is_deprecated || listing.is_nsfw ? (
-            <div className="package-listing-sidebar__body">
-              {listing.is_deprecated ? (
-                <NewTag
-                  csSize="small"
-                  csModifiers={["dark"]}
-                  csVariant="yellow"
-                >
-                  <NewIcon noWrapper csMode="inline">
-                    <FontAwesomeIcon icon={faWarning} />
-                  </NewIcon>
-                  Deprecated
-                </NewTag>
-              ) : null}
-              {listing.is_nsfw ? (
-                <NewTag csSize="small" csModifiers={["dark"]} csVariant="pink">
-                  <NewIcon noWrapper csMode="inline">
-                    <FontAwesomeIcon icon={faLips} />
-                  </NewIcon>
-                  NSFW
-                </NewTag>
-              ) : null}
-            </div>
-          ) : null}
-        </div>
-      ) : null}
-      {listing.team.members.length > 0 ? (
-        <TeamMembers listing={listing} domain={domain} />
-      ) : null}
-    </>
-  );
-}
-
-const Actions = memo(function Actions(props: {
-  team: Awaited<ReturnType<DapperTsInterface["getTeamDetails"]>>;
-  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>;
-  isLiked: boolean;
-  currentUser: CurrentUser | undefined;
-  packageLikeAction: (
-    isLiked: boolean,
-    namespace: string,
-    packageName: string,
-    isLoggedIn: boolean
-  ) => void;
-}) {
-  const { team, listing, isLiked, currentUser, packageLikeAction } = props;
-  return (
-    <>
-      <NewButton
-        primitiveType="link"
-        href={listing.download_url}
-        csVariant="secondary"
-        rootClasses="package-listing-sidebar__download"
-      >
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faDownload} />
-        </NewIcon>
-        Download
-      </NewButton>
-      {team.donation_link ? (
-        <NewButton
-          primitiveType="link"
-          href={team.donation_link}
-          csVariant="secondary"
-          csSize="big"
-          csModifiers={["only-icon"]}
-        >
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faHandHoldingHeart} />
-          </NewIcon>
-        </NewButton>
-      ) : null}
-      <NewButton
-        primitiveType="button"
-        onClick={() =>
-          packageLikeAction(
-            isLiked,
-            listing.namespace,
-            listing.name,
-            Boolean(currentUser?.username)
-          )
-        }
-        tooltipText="Like"
-        csVariant={isLiked ? "primary" : "secondary"}
-        csSize="big"
-        csModifiers={["only-icon"]}
-      >
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faThumbsUp} />
-        </NewIcon>
-      </NewButton>
-    </>
-  );
-});
-
-function packageMeta(
-  lastUpdated: ReactElement | undefined,
-  firstUploaded: ReactElement | undefined,
-  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>
-) {
-  return (
-    <div className="package-listing-sidebar__meta">
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Last Updated</div>
-        <div className="package-listing-sidebar__content">{lastUpdated}</div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">First Uploaded</div>
-        <div className="package-listing-sidebar__content">{firstUploaded}</div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Downloads</div>
-        <div className="package-listing-sidebar__content">
-          {formatInteger(listing.download_count)}
-        </div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Likes</div>
-        <div className="package-listing-sidebar__content">
-          {formatInteger(listing.rating_count)}
-        </div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Size</div>
-        <div className="package-listing-sidebar__content">
-          {formatFileSize(listing.size)}
-        </div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Dependency string</div>
-        <div className="package-listing-sidebar__content">
-          <div className="package-listing-sidebar__dependency-string-wrapper">
-            <span
-              title={listing.full_version_name}
-              className="package-listing-sidebar__dependency-string"
-            >
-              {listing.full_version_name}
-            </span>
-            <CopyButton text={listing.full_version_name} />
-          </div>
-        </div>
-      </div>
-      <div className="package-listing-sidebar__item">
-        <div className="package-listing-sidebar__label">Dependants</div>
-        <div className="package-listing-sidebar__content">
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="PackageDependants"
-            community={listing.community_identifier}
-            namespace={listing.namespace}
-            package={listing.name}
-            csVariant="cyber"
-          >
-            {listing.dependant_count} other mods
-          </NewLink>
-        </div>
-      </div>
-    </div>
   );
 }
