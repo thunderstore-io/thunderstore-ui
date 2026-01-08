@@ -41,13 +41,20 @@ export default [
             "/c/:communityId/p/:namespaceId/:packageId/v/:packageVersion/",
             "p/tabs/Readme/PackageVersionReadme.tsx"
           ),
-          route("required", "p/tabs/Required/PackageVersionRequired.tsx"),
+          route("required", "p/tabs/Required/Required.tsx", {
+            id: "VersionRequired",
+          }),
           route("versions", "p/tabs/Versions/PackageVersionVersions.tsx"),
         ]
       ),
       route(":namespaceId/:packageId/edit", "p/packageEdit.tsx"),
     ]),
   ]),
+  /**
+   * Disabled until we figure out how to ensure the community-agnostic
+   * endpoints won't serve rejected packages (rejections are listing-,
+   * and thus community-specific).
+
   route(
     "/p/:namespaceId/:packageId/v/:packageVersion",
     "p/packageVersionWithoutCommunity.tsx",
@@ -56,16 +63,16 @@ export default [
         "/p/:namespaceId/:packageId/v/:packageVersion/",
         "p/tabs/Readme/PackageVersionWithoutCommunityReadme.tsx"
       ),
-      route(
-        "required",
-        "p/tabs/Required/PackageVersionWithoutCommunityRequired.tsx"
-      ),
+      route("required", "p/tabs/Required/Required.tsx", {
+        id: "WithoutCommunityRequired",
+      }),
       route(
         "versions",
         "p/tabs/Versions/PackageVersionWithoutCommunityVersions.tsx"
       ),
     ]
   ),
+  */
   route(
     "/c/:communityId/p/:namespaceId/:packageId/dependants",
     "p/dependants/Dependants.tsx"

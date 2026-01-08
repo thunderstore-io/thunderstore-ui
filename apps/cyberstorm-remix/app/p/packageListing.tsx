@@ -61,6 +61,7 @@ import {
   getPackageListingStatus,
   getUserPermissions,
 } from "./listingUtils";
+import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { ManagementTools } from "./components/PackageListing/ManagementTools";
 import {
   InternalNotes,
@@ -105,7 +106,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   };
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ params, request }: LoaderFunctionArgs) {
   const { communityId, namespaceId, packageId } = params;
 
   if (!communityId || !namespaceId || !packageId) {
@@ -113,11 +114,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   }
 
   const tools = getSessionTools();
-  const config = tools.getConfig();
-  const dapper = new DapperTs(() => ({
-    apiHost: config.apiHost,
-    sessionId: config.sessionId,
-  }));
+  const dapper = getDapperForRequest(request);
 
   const listing = await getPrivateListing(dapper, {
     communityId,
