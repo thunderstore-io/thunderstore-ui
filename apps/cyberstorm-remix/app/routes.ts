@@ -35,7 +35,7 @@ export default [
       ]),
       route(
         ":namespaceId/:packageId/v/:packageVersion",
-        "p/packageVersion.tsx",
+        "p/packageListingVersion.tsx",
         [
           route(
             "/c/:communityId/p/:namespaceId/:packageId/v/:packageVersion/",

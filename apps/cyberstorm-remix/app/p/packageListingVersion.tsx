@@ -28,15 +28,7 @@ import {
   faDownload,
   faCaretRight,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  memo,
-  type ReactElement,
-  Suspense,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { useHydrated } from "remix-utils/use-hydrated";
+import { memo, Suspense } from "react";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTime/RelativeTime";
@@ -79,7 +71,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
   });
 
   return {
-    community: await dapper.getCommunity(communityId),
     listing,
     packageVersion,
     team: await dapper.getTeamDetails(namespaceId),
@@ -108,7 +99,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   });
 
   return {
-    community: dapper.getCommunity(communityId),
     listing,
     packageVersion,
     team: dapper.getTeamDetails(namespaceId),
@@ -132,41 +122,13 @@ export function shouldRevalidate(arg: ShouldRevalidateFunctionArgs) {
   return arg.defaultShouldRevalidate;
 }
 
-export default function PackageVersion() {
-  const { community, listing, packageVersion, team } = useLoaderData<
+export default function PackageListingVersion() {
+  const { listing, packageVersion, team } = useLoaderData<
     typeof loader | typeof clientLoader
   >();
 
   const location = useLocation();
-
   const outletContext = useOutletContext() as OutletContextShape;
-
-  const isHydrated = useHydrated();
-  const startsHydrated = useRef(isHydrated);
-
-  // START: For sidebar meta dates
-  const [firstUploaded, setFirstUploaded] = useState<
-    ReactElement | undefined
-  >();
-
-  // This will be loaded 2 times in development because of:
-  // https://react.dev/reference/react/StrictMode
-  // If strict mode is removed from the entry.client.tsx, this should only run once
-  useEffect(() => {
-    if (!startsHydrated.current && isHydrated) {
-      return;
-    }
-
-    if (!listing) {
-      return;
-    }
-
-    setFirstUploaded(
-      <RelativeTime time={listing.datetime_created} suppressHydrationWarning />
-    );
-  }, []);
-  // END: For sidebar meta dates
-
   const currentTab = location.pathname.split("/")[8] || "details";
 
   if (!listing) {
@@ -175,42 +137,31 @@ export default function PackageVersion() {
 
   return (
     <>
-      <Suspense>
-        <Await resolve={community}>
-          {(resolvedCommunity) => (
-            <>
-              <meta
-                title={`${formatToDisplayName(
-                  listing.full_version_name
-                )} | Thunderstore - The ${resolvedCommunity.name} Mod Database`}
-              />
-              <meta name="description" content={listing.description} />
-              <meta property="og:type" content="website" />
-              <meta
-                property="og:url"
-                content={`${
-                  getPublicEnvVariables(["VITE_BETA_SITE_URL"])
-                    .VITE_BETA_SITE_URL
-                }${location.pathname}`}
-              />
-              <meta
-                property="og:title"
-                content={`${formatToDisplayName(
-                  listing.full_version_name
-                )} by ${listing.namespace}`}
-              />
-              <meta property="og:description" content={listing.description} />
-              <meta property="og:image:width" content="256" />
-              <meta property="og:image:height" content="256" />
-              <meta
-                property="og:image"
-                content={listing.icon_url ?? undefined}
-              />
-              <meta property="og:site_name" content="Thunderstore" />
-            </>
-          )}
-        </Await>
-      </Suspense>
+      <meta
+        title={`${formatToDisplayName(
+          listing.full_version_name
+        )} | Thunderstore - The ${listing.community_name} Mod Database`}
+      />
+      <meta name="description" content={listing.description} />
+      <meta property="og:type" content="website" />
+      <meta
+        property="og:url"
+        content={`${
+          getPublicEnvVariables(["VITE_BETA_SITE_URL"]).VITE_BETA_SITE_URL
+        }${location.pathname}`}
+      />
+      <meta
+        property="og:title"
+        content={`${formatToDisplayName(listing.full_version_name)} by ${
+          listing.namespace
+        }`}
+      />
+      <meta property="og:description" content={listing.description} />
+      <meta property="og:image:width" content="256" />
+      <meta property="og:image:height" content="256" />
+      <meta property="og:image" content={listing.icon_url ?? undefined} />
+      <meta property="og:site_name" content="Thunderstore" />
+
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
           <div className="package-listing__main">
@@ -289,7 +240,7 @@ export default function PackageVersion() {
                   }
                   rootClasses="package-listing__drawer"
                 >
-                  {packageMeta(firstUploaded, listing)}
+                  {packageMeta(listing)}
                 </Drawer>
                 <Suspense fallback={<p>Loading...</p>}>
                   <Await resolve={team}>
@@ -379,7 +330,7 @@ export default function PackageVersion() {
                   </Await>
                 </Suspense>
 
-                {packageMeta(firstUploaded, listing)}
+                {packageMeta(listing)}
               </div>
             </aside>
           </div>
@@ -424,15 +375,17 @@ const Actions = memo(function Actions(props: {
   );
 });
 
-function packageMeta(
-  firstUploaded: ReactElement | undefined,
-  listing: PackageListingDetails
-) {
+function packageMeta(listing: PackageListingDetails) {
   return (
     <div className="package-listing-sidebar__meta">
       <div className="package-listing-sidebar__item">
         <div className="package-listing-sidebar__label">Date Uploaded</div>
-        <div className="package-listing-sidebar__content">{firstUploaded}</div>
+        <div className="package-listing-sidebar__content">
+          <RelativeTime
+            time={listing.datetime_created}
+            suppressHydrationWarning
+          />
+        </div>
       </div>
       <div className="package-listing-sidebar__item">
         <div className="package-listing-sidebar__label">Downloads</div>
