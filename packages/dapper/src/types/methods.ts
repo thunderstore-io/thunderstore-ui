@@ -44,7 +44,8 @@ export type GetPackageChangelog = (
 export type GetPackageListingDetails = (
   community: string,
   namespace: string,
-  name: string
+  name: string,
+  version?: string
 ) => Promise<PackageListingDetails>;
 
 export type GetPackageListings = (
