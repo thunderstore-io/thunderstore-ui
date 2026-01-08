@@ -7,7 +7,7 @@ type PackageMetaTagsProps = {
   communityName: string;
   pathname: string;
   namespace: string;
-  iconUrl?: string;
+  iconUrl: string | null;
 };
 
 export function PackageMetaTags({

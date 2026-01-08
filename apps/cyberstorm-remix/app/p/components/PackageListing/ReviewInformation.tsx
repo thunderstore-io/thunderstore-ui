@@ -1,7 +1,7 @@
 import { type PackageListingStatus } from "@thunderstore/dapper/types";
 
 export interface ReviewInformationProps {
-  status: PackageListingStatus;
+  status?: PackageListingStatus;
 }
 
 export const InternalNotes = ({ status }: ReviewInformationProps) => {
