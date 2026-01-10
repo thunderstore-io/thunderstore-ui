@@ -2,7 +2,7 @@ import { useEffect, type JSX } from "react";
 import { isRouteErrorResponse, useRouteError } from "react-router";
 import { captureRemixErrorBoundaryError } from "@sentry/remix";
 
-import { ApiError } from "@thunderstore/thunderstore-api";
+import { isApiError } from "@thunderstore/thunderstore-api";
 
 import "./RouteErrorBoundary.css";
 
@@ -31,7 +31,7 @@ export function RouteErrorBoundary() {
 
   if (isRouteErrorResponse(error)) {
     statusCode = error.status;
-  } else if (error instanceof ApiError) {
+  } else if (isApiError(error)) {
     statusCode = error.response.status;
   }
 

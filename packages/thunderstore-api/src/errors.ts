@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { isRecord } from "./typeguards";
+
 interface SerializableResponse {
   headers: Record<string, string>;
   status: number;
@@ -14,8 +16,21 @@ type JSONValue =
   | { [x: string]: JSONValue }
   | JSONValue[];
 
-export function isApiError(e: Error | ApiError | unknown): e is ApiError {
-  return e instanceof ApiError;
+export function isApiError(e: unknown): e is ApiError {
+  if (!isRecord(e)) {
+    return false;
+  }
+
+  const response = e["response"];
+  if (!isRecord(response)) {
+    return false;
+  }
+
+  return (
+    typeof e["message"] === "string" &&
+    typeof response["status"] === "number" &&
+    "responseJson" in e
+  );
 }
 
 export class ApiError extends Error {
