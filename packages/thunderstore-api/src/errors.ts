@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+interface SerializableResponse {
+  headers: Record<string, string>;
+  status: number;
+  statusText: string;
+  url: string;
+}
+
 type JSONValue =
   | string
   | number
@@ -12,12 +19,12 @@ export function isApiError(e: Error | ApiError | unknown): e is ApiError {
 }
 
 export class ApiError extends Error {
-  response: Response;
+  response: SerializableResponse;
   responseJson?: JSONValue;
 
   constructor(args: {
     message: string;
-    response: Response;
+    response: SerializableResponse;
     responseJson?: JSONValue;
   }) {
     super(args.message);
@@ -34,9 +41,19 @@ export class ApiError extends Error {
       responseJson = undefined;
     }
 
+    const headers: Record<string, string> = {};
+    response.headers.forEach((value, key) => {
+      headers[key] = value;
+    });
+
     return new ApiError({
       message: `${response.status}: ${response.statusText}`,
-      response: response,
+      response: {
+        headers,
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url,
+      },
       responseJson: responseJson,
     });
   }
