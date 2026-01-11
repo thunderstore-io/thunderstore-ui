@@ -20,6 +20,7 @@ import {
   NewDropDown,
   NewDropDownDivider,
   NewDropDownItem,
+  NewDropDownSub,
   NewAvatar,
   NewIcon,
   NewLink,
@@ -393,18 +394,43 @@ export function DesktopUserDropdown(props: {
           Settings
         </NewLink>
       </NewDropDownItem>
-      <NewDropDownItem asChild>
-        <NewLink
-          primitiveType="cyberstormLink"
-          linkId="Teams"
-          rootClasses="dropdown__item navigation-header__dropdown-item"
-        >
-          <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-            <FontAwesomeIcon icon={faUsers} />
-          </NewIcon>
-          Teams
-        </NewLink>
-      </NewDropDownItem>
+      <NewDropDownSub
+        trigger={
+          <>
+            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+              <FontAwesomeIcon icon={faUsers} />
+            </NewIcon>
+            Teams
+            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+              <FontAwesomeIcon icon={faCaretRight} />
+            </NewIcon>
+          </>
+        }
+      >
+        <NewDropDownItem asChild>
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Teams"
+            rootClasses="dropdown__item navigation-header__dropdown-item"
+          >
+            All teams
+          </NewLink>
+        </NewDropDownItem>
+        <NewDropDownDivider />
+        {user.teams_full && user.teams_full.length > 0 ? (
+          user.teams_full.map((team) => (
+            <NewDropDownItem key={team.name} asChild>
+              <NewLink
+                primitiveType="link"
+                href={`/c/all/p/${team.name}`}
+                rootClasses="dropdown__item navigation-header__dropdown-item"
+              >
+                {team.name}
+              </NewLink>
+            </NewDropDownItem>
+          ))
+        ) : null}
+      </NewDropDownSub>
       <NewDropDownItem asChild>
         <NewLink
           primitiveType="link"
@@ -557,17 +583,63 @@ export function MobileUserPopoverContent(props: {
             </NewIcon>
             Settings
           </NewLink>
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Teams"
-            csVariant="primary"
-            rootClasses="__item --thick"
+          <Menu
+            popoverId={"mobileNavAccountTeams"}
+            trigger={
+              <button
+                popoverTarget="mobileNavAccountTeams"
+                popoverTargetAction="show"
+                className="__item --thick"
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faUsers} />
+                </NewIcon>
+                Teams
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faCaretRight} />
+                </NewIcon>
+              </button>
+            }
+            controls={
+              <NewButton
+                popoverTarget="mobileNavAccountTeams"
+                popoverTargetAction="hide"
+                aria-label="Back to previous menu"
+                csSize="medium"
+                csVariant="secondary"
+                csModifiers={["ghost", "only-icon"]}
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faLongArrowLeft} />
+                </NewIcon>
+              </NewButton>
+            }
           >
-            <NewIcon csMode="inline" noWrapper>
-              <FontAwesomeIcon icon={faUsers} />
-            </NewIcon>
-            Teams
-          </NewLink>
+            <nav className="mobile-navigation__popover__popover">
+              <NewLink
+                primitiveType="cyberstormLink"
+                linkId="Teams"
+                rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+              >
+                All teams
+              </NewLink>
+              {user.teams_full && user.teams_full.length > 0 ? (
+                <>
+                  <div className="mobile-navigation__divider" />
+                  {user.teams_full.map((team) => (
+                    <NewLink
+                      key={team.name}
+                      primitiveType="link"
+                      href={`/c/all/p/${team.name}`}
+                      rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+                    >
+                      {team.name}
+                    </NewLink>
+                  ))}
+                </>
+              ) : null}
+            </nav>
+          </Menu>
           <NewLink
             primitiveType="link"
             href={buildLogoutUrl(domain)}
