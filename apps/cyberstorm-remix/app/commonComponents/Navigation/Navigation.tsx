@@ -20,6 +20,7 @@ import {
   NewDropDown,
   NewDropDownDivider,
   NewDropDownItem,
+  NewDropDownSub,
   NewAvatar,
   NewIcon,
   NewLink,
@@ -393,18 +394,43 @@ export function DesktopUserDropdown(props: {
           Settings
         </NewLink>
       </NewDropDownItem>
-      <NewDropDownItem asChild>
-        <NewLink
-          primitiveType="cyberstormLink"
-          linkId="Teams"
-          rootClasses="dropdown__item navigation-header__dropdown-item"
-        >
-          <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-            <FontAwesomeIcon icon={faUsers} />
-          </NewIcon>
-          Teams
-        </NewLink>
-      </NewDropDownItem>
+      <NewDropDownSub
+        trigger={
+          <>
+            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+              <FontAwesomeIcon icon={faUsers} />
+            </NewIcon>
+            Teams
+            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+              <FontAwesomeIcon icon={faCaretRight} />
+            </NewIcon>
+          </>
+        }
+      >
+        <NewDropDownItem asChild>
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Teams"
+            rootClasses="dropdown__item navigation-header__dropdown-item"
+          >
+            All teams
+          </NewLink>
+        </NewDropDownItem>
+        <NewDropDownDivider />
+        {user.teams_full && user.teams_full.length > 0 ? (
+          user.teams_full.map((team) => (
+            <NewDropDownItem key={team.name} asChild>
+              <NewLink
+                primitiveType="link"
+                href={`/c/all/p/${team.name}`}
+                rootClasses="dropdown__item navigation-header__dropdown-item"
+              >
+                {team.name}
+              </NewLink>
+            </NewDropDownItem>
+          ))
+        ) : null}
+      </NewDropDownSub>
       <NewDropDownItem asChild>
         <NewLink
           primitiveType="link"

@@ -8,6 +8,9 @@ import {
   Content,
   type DropdownMenuItemProps,
   Item,
+  Sub,
+  SubTrigger,
+  SubContent,
 } from "@radix-ui/react-dropdown-menu";
 import { classnames, componentClasses } from "../../utils/utils";
 import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
@@ -135,6 +138,51 @@ export const DropDownDivider = memo(function DropDownDivider(
   );
 });
 
+interface DropDownSubProps extends PrimitiveComponentDefaultProps {
+  trigger: ReactNode | ReactElement;
+  csVariant?: DropDownVariants;
+  csSize?: DropDownSizes;
+  csModifiers?: DropDownModifiers[];
+}
+
+export const DropDownSub = memo(function DropDownSub(props: DropDownSubProps) {
+  const {
+    children,
+    rootClasses,
+    csVariant = "primary",
+    csSize = "medium",
+    csModifiers,
+    trigger,
+  } = props;
+
+  return (
+    <Sub>
+      <SubTrigger
+        className={classnames(
+          "dropdown__item",
+          ...componentClasses("dropdown__item", csVariant, csSize, csModifiers),
+          rootClasses
+        )}
+      >
+        {trigger}
+      </SubTrigger>
+      <Portal>
+        <SubContent
+          className={classnames(
+            "dropdown",
+            ...componentClasses("dropdown", csVariant, csSize, csModifiers),
+            rootClasses
+          )}
+          sideOffset={8}
+        >
+          {children}
+        </SubContent>
+      </Portal>
+    </Sub>
+  );
+});
+
 DropDown.displayName = "DropDown";
 DropDownItem.displayName = "DropDownItem";
 DropDownDivider.displayName = "DropDownDivider";
+DropDownSub.displayName = "DropDownSub";
