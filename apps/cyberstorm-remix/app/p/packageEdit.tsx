@@ -40,7 +40,7 @@ export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
 
 const package404 = new Response("Package not found", { status: 404 });
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader() {
   return undefined;
 }
 

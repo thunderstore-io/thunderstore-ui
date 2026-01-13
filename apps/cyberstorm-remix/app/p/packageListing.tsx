@@ -281,13 +281,15 @@ export default function PackageListing() {
               <meta property="og:type" content="website" />
               <meta
                 property="og:url"
-                content={`${getPublicEnvVariables(["VITE_BETA_SITE_URL"])}${location.pathname
-                  }`}
+                content={`${getPublicEnvVariables(["VITE_BETA_SITE_URL"])}${
+                  location.pathname
+                }`}
               />
               <meta
                 property="og:title"
-                content={`${formatToDisplayName(listing.name)} by ${listing.namespace
-                  }`}
+                content={`${formatToDisplayName(listing.name)} by ${
+                  listing.namespace
+                }`}
               />
               <meta property="og:description" content={listing.description} />
               <meta property="og:image:width" content="256" />
@@ -430,8 +432,9 @@ export default function PackageListing() {
                     namespace={listing.namespace}
                     package={listing.name}
                     aria-current={currentTab === "details"}
-                    rootClasses={`tabs-item${currentTab === "details" ? " tabs-item--current" : ""
-                      }`}
+                    rootClasses={`tabs-item${
+                      currentTab === "details" ? " tabs-item--current" : ""
+                    }`}
                   >
                     Details
                   </NewLink>
@@ -444,8 +447,9 @@ export default function PackageListing() {
                     namespace={listing.namespace}
                     package={listing.name}
                     aria-current={currentTab === "required"}
-                    rootClasses={`tabs-item${currentTab === "required" ? " tabs-item--current" : ""
-                      }`}
+                    rootClasses={`tabs-item${
+                      currentTab === "required" ? " tabs-item--current" : ""
+                    }`}
                   >
                     Required ({listing.dependency_count})
                   </NewLink>
@@ -458,8 +462,9 @@ export default function PackageListing() {
                     namespace={listing.namespace}
                     package={listing.name}
                     aria-current={currentTab === "wiki"}
-                    rootClasses={`tabs-item${currentTab === "wiki" ? " tabs-item--current" : ""
-                      }`}
+                    rootClasses={`tabs-item${
+                      currentTab === "wiki" ? " tabs-item--current" : ""
+                    }`}
                   >
                     Wiki
                   </NewLink>
@@ -473,8 +478,9 @@ export default function PackageListing() {
                     package={listing.name}
                     aria-current={currentTab === "changelog"}
                     disabled={!listing.has_changelog}
-                    rootClasses={`tabs-item${currentTab === "changelog" ? " tabs-item--current" : ""
-                      }`}
+                    rootClasses={`tabs-item${
+                      currentTab === "changelog" ? " tabs-item--current" : ""
+                    }`}
                   >
                     Changelog
                   </NewLink>
@@ -487,8 +493,9 @@ export default function PackageListing() {
                     namespace={listing.namespace}
                     package={listing.name}
                     aria-current={currentTab === "versions"}
-                    rootClasses={`tabs-item${currentTab === "versions" ? " tabs-item--current" : ""
-                      }`}
+                    rootClasses={`tabs-item${
+                      currentTab === "versions" ? " tabs-item--current" : ""
+                    }`}
                   >
                     Versions
                   </NewLink>
@@ -501,8 +508,9 @@ export default function PackageListing() {
                     namespace={listing.namespace}
                     package={listing.name}
                     aria-current={currentTab === "source"}
-                    rootClasses={`tabs-item${currentTab === "source" ? " tabs-item--current" : ""
-                      }`}
+                    rootClasses={`tabs-item${
+                      currentTab === "source" ? " tabs-item--current" : ""
+                    }`}
                   >
                     Analysis
                   </NewLink>
