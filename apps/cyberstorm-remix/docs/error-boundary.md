@@ -15,6 +15,8 @@ export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorB
 ### TODO
 
 - Use `RouteErrorBoundary` in route components
+- Consistently use `isApiError` instead of `instanceof ApiError`, as the latter doesn't work well with errors thrown by loaders
+- Consider adding a singleton DapperTS instance for SSR loaders that automatically handles ssrSafe for all methods
 - Add "retry buttons" (e.g. reloading the page on 500 series of errors)
 - As `RouteErrorBoundary` is all-or-nothing solution when it comes to rendering, consider if there's a need for more granular non-route component level error boundaries. We might not need or want to use them, as error boundaries are intended more for render time errors, and any errors caused by user interaction should be handled by the component logic itself
   - If it turns out we don't want other error boundaries, consider renaming `RouteErrorBoundary` to just `ErrorBoundary`

@@ -1,5 +1,14 @@
 import { z } from "zod";
 
+import { isRecord } from "./typeguards";
+
+interface SerializableResponse {
+  headers: Record<string, string>;
+  status: number;
+  statusText: string;
+  url: string;
+}
+
 type JSONValue =
   | string
   | number
@@ -7,17 +16,30 @@ type JSONValue =
   | { [x: string]: JSONValue }
   | JSONValue[];
 
-export function isApiError(e: Error | ApiError | unknown): e is ApiError {
-  return e instanceof ApiError;
+export function isApiError(e: unknown): e is ApiError {
+  if (!isRecord(e)) {
+    return false;
+  }
+
+  const response = e["response"];
+  if (!isRecord(response)) {
+    return false;
+  }
+
+  return (
+    typeof e["message"] === "string" &&
+    typeof response["status"] === "number" &&
+    "responseJson" in e
+  );
 }
 
 export class ApiError extends Error {
-  response: Response;
+  response: SerializableResponse;
   responseJson?: JSONValue;
 
   constructor(args: {
     message: string;
-    response: Response;
+    response: SerializableResponse;
     responseJson?: JSONValue;
   }) {
     super(args.message);
@@ -34,9 +56,19 @@ export class ApiError extends Error {
       responseJson = undefined;
     }
 
+    const headers: Record<string, string> = {};
+    response.headers.forEach((value, key) => {
+      headers[key] = value;
+    });
+
     return new ApiError({
       message: `${response.status}: ${response.statusText}`,
-      response: response,
+      response: {
+        headers,
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url,
+      },
       responseJson: responseJson,
     });
   }
