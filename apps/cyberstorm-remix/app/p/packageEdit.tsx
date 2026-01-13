@@ -140,7 +140,7 @@ export default function PackageListing() {
   }
 
   const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
-    categories: loaderData?.listing.categories.map((c) => c.slug) ?? [],
+    categories: loaderData?.listing?.categories?.map((c) => c.slug) ?? [],
   });
 
   type SubmitorOutput = Awaited<ReturnType<typeof packageListingUpdate>>;
