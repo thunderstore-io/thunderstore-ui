@@ -919,9 +919,10 @@ function managementTools(
           </NewButton>
         </div>
       ) : null}
-      {(packagePermissions.permissions.can_view_listing_admin_page ||
-        packagePermissions.permissions.can_view_package_admin_page) &&
-      (listing.listing_admin_url || listing.package_admin_url) ? (
+      {(packagePermissions.permissions.can_view_listing_admin_page &&
+        listing.listing_admin_url) ||
+      (packagePermissions.permissions.can_view_package_admin_page &&
+        listing.package_admin_url) ? (
         <div className="package-listing-management-tools__island">
           {packagePermissions.permissions.can_view_listing_admin_page &&
           listing.listing_admin_url ? (
