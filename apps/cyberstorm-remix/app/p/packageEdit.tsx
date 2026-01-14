@@ -6,35 +6,29 @@ import {
   NewIcon,
   NewSelectSearch,
   NewTag,
+  SkeletonBox,
   formatToDisplayName,
   useToast,
 } from "@thunderstore/cyberstorm";
 import "./packageEdit.css";
 import {
+  ApiError,
   packageDeprecate,
   packageListingUpdate,
   type PackageListingUpdateRequestData,
   packageUnlist,
 } from "@thunderstore/thunderstore-api";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import { type OutletContextShape } from "~/root";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { useReducer, useEffect } from "react";
+import { useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faCheck } from "@fortawesome/pro-solid-svg-icons";
+import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
+import { getPrivateListing } from "app/p/listingUtils";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-import { getPublicListing, getPrivateListing } from "./listingUtils";
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  if (!data || data.listing === undefined) {
-    return [];
-  }
-
+export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
   return [
     {
       title: data
@@ -44,78 +38,49 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ];
 };
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  const { communityId, namespaceId, packageId } = params;
+const package404 = new Response("Package not found", { status: 404 });
 
-  if (!communityId || !namespaceId || !packageId) {
-    throw new Response("Package not found", { status: 404 });
-  }
-
-  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-  const dapper = new DapperTs(() => {
-    return {
-      apiHost: publicEnvVariables.VITE_API_URL,
-      sessionId: undefined,
-    };
-  });
-  return {
-    community: await dapper.getCommunity(communityId),
-    communityFilters: await dapper.getCommunityFilters(communityId),
-    listing: await getPublicListing(dapper, {
-      communityId,
-      namespaceId,
-      packageId,
-    }),
-    team: await dapper.getTeamDetails(namespaceId),
-    filters: await dapper.getCommunityFilters(communityId),
-    permissions: undefined,
-  };
+export async function loader() {
+  return undefined;
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({ params, request }: LoaderFunctionArgs) {
   const { communityId, namespaceId, packageId } = params;
 
   if (!communityId || !namespaceId || !packageId) {
-    throw new Response("Package not found", { status: 404 });
+    throw package404;
   }
 
-  const tools = getSessionTools();
-  const dapper = new DapperTs(() => {
-    return {
-      apiHost: tools?.getConfig().apiHost,
-      sessionId: tools?.getConfig().sessionId,
-    };
-  });
+  try {
+    const dapper = getDapperForRequest(request);
 
-  const permissions = await dapper.getPackagePermissions(
-    communityId,
-    namespaceId,
-    packageId
-  );
+    // Fetch everything at once for faster page load, even if we may
+    //  overfetch in case we lack authentication/authorization.
+    const [listing, permissions, filters] = await Promise.all([
+      getPrivateListing(dapper, { communityId, namespaceId, packageId }),
+      dapper.getPackagePermissions(communityId, namespaceId, packageId),
+      dapper.getCommunityFilters(communityId),
+    ]);
 
-  const listing = await getPrivateListing(dapper, {
-    communityId: communityId,
-    namespaceId: namespaceId,
-    packageId: packageId,
-  });
+    if (!permissions) {
+      throw new Response("Unauthenticated", { status: 401 });
+    } else if (
+      !permissions.permissions.can_manage &&
+      !permissions.permissions.can_moderate
+    ) {
+      throw new Response("Unauthorized", { status: 403 });
+    }
 
-  return {
-    community: await dapper.getCommunity(communityId),
-    communityFilters: await dapper.getCommunityFilters(communityId),
-    listing: listing,
-    team: await dapper.getTeamDetails(namespaceId),
-    filters: await dapper.getCommunityFilters(communityId),
-    permissions: permissions,
-  };
+    return { listing, permissions, filters };
+  } catch (error) {
+    throw error instanceof ApiError ? package404 : error;
+  }
 }
 
 clientLoader.hydrate = true;
 
 export default function PackageListing() {
-  const { community, listing, filters, permissions } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
-
+  const loaderData = useLoaderData<typeof loader | typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
   const config = outletContext.requestConfig;
   const toast = useToast();
@@ -174,22 +139,9 @@ export default function PackageListing() {
     };
   }
 
-  const [formInputs, updateFormFieldState] = useReducer(
-    formFieldUpdateAction,
-    undefined,
-    () => ({
-      categories: listing?.categories.map((c) => c.slug) ?? [],
-    })
-  );
-
-  useEffect(() => {
-    if (!listing) return;
-
-    updateFormFieldState({
-      field: "categories",
-      value: listing.categories.map((c) => c.slug),
-    });
-  }, [listing?.categories]);
+  const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
+    categories: loaderData?.listing?.categories?.map((c) => c.slug) ?? [],
+  });
 
   type SubmitorOutput = Awaited<ReturnType<typeof packageListingUpdate>>;
 
@@ -201,7 +153,7 @@ export default function PackageListing() {
     return await packageListingUpdate({
       config: config,
       params: {
-        community: community.identifier,
+        community: listing.community_identifier,
         namespace: listing.namespace,
         package: listing.name,
       },
@@ -240,10 +192,11 @@ export default function PackageListing() {
     },
   });
 
-  // TODO: Add proper loading element
-  if (!listing) {
-    return <div>Loading package...</div>;
+  if (!loaderData) {
+    return <SkeletonBox className="package-edit__skeleton" />;
   }
+
+  const { listing, filters, permissions } = loaderData;
 
   return (
     <>
@@ -252,7 +205,7 @@ export default function PackageListing() {
       </PageHeader>
       <div className="package-edit__main">
         <section className="package-edit__section">
-          {permissions?.permissions.can_unlist ? (
+          {permissions.permissions.can_unlist && (
             <>
               <div className="package-edit__row">
                 <div className="package-edit__info">
@@ -274,7 +227,7 @@ export default function PackageListing() {
                       unlistAction({
                         config: config,
                         params: {
-                          community: community.identifier,
+                          community: listing.community_identifier,
                           namespace: listing.namespace,
                           package: listing.name,
                         },
@@ -292,8 +245,8 @@ export default function PackageListing() {
               </div>
               <div className="package-edit__divider" />
             </>
-          ) : null}
-          {permissions?.permissions.can_manage_deprecation ? (
+          )}
+          {permissions.permissions.can_manage_deprecation && (
             <>
               <div className="package-edit__row">
                 <div className="package-edit__info">
@@ -343,7 +296,7 @@ export default function PackageListing() {
               </div>
               <div className="package-edit__divider" />
             </>
-          ) : null}
+          )}
           {permissions?.permissions.can_manage_categories ? (
             <>
               <div className="package-edit__row">
