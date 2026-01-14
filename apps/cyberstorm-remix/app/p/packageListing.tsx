@@ -26,6 +26,8 @@ import {
   faCaretRight,
   faScaleBalanced,
   faCog,
+  faListUl,
+  faBoxOpen,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
@@ -898,42 +900,6 @@ function managementTools(
               config={requestConfig}
             />
           ) : null}
-          {/* {packagePermissions.permissions.can_view_listing_admin_page ? (
-              <NewButton
-                csSize="small"
-                csVariant="secondary"
-                primitiveType="link"
-                href={`${
-                  import.meta.env.VITE_SITE_URL
-                }/djangoadmin/community/packagelisting/206/change/`}
-              >
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faList} />
-                </NewIcon>
-                Listing admin
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faArrowUpRight} />
-                </NewIcon>
-              </NewButton>
-            ) : null}
-            {packagePermissions.permissions.can_view_package_admin_page ? (
-              <NewButton
-                csSize="small"
-                csVariant="secondary"
-                primitiveType="link"
-                href={`${
-                  import.meta.env.VITE_SITE_URL
-                }/djangoadmin/repository/package/16/change/`}
-              >
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faBoxOpen} />
-                </NewIcon>
-                Package admin
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faArrowUpRight} />
-                </NewIcon>
-              </NewButton>
-            ) : null} */}
         </div>
       ) : null}
       {packagePermissions.permissions.can_manage ? (
@@ -951,6 +917,47 @@ function managementTools(
             </NewIcon>
             Manage Package
           </NewButton>
+        </div>
+      ) : null}
+      {(packagePermissions.permissions.can_view_listing_admin_page &&
+        listing.listing_admin_url) ||
+      (packagePermissions.permissions.can_view_package_admin_page &&
+        listing.package_admin_url) ? (
+        <div className="package-listing-management-tools__island">
+          {packagePermissions.permissions.can_view_listing_admin_page &&
+          listing.listing_admin_url ? (
+            <NewButton
+              csSize="small"
+              csVariant="secondary"
+              primitiveType="link"
+              href={listing.listing_admin_url}
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faListUl} />
+              </NewIcon>
+              Package Listing Admin
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faArrowUpRight} />
+              </NewIcon>
+            </NewButton>
+          ) : null}
+          {packagePermissions.permissions.can_view_package_admin_page &&
+          listing.package_admin_url ? (
+            <NewButton
+              csSize="small"
+              csVariant="secondary"
+              primitiveType="link"
+              href={listing.package_admin_url}
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faBoxOpen} />
+              </NewIcon>
+              Package Admin
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faArrowUpRight} />
+              </NewIcon>
+            </NewButton>
+          ) : null}
         </div>
       ) : null}
     </div>

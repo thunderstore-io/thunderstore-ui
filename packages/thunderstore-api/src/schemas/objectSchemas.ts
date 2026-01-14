@@ -167,6 +167,8 @@ export const packageListingDetailsSchema = packageListingSchema.extend({
   has_changelog: z.boolean(),
   install_url: z.string(),
   latest_version_number: z.string().min(1),
+  listing_admin_url: z.string().nullable().optional(),
+  package_admin_url: z.string().nullable().optional(),
   team: packageTeamSchema,
   website_url: z.string().nullable(),
 });
