@@ -1,84 +1,108 @@
 import { Suspense } from "react";
-import { type LoaderFunctionArgs } from "react-router";
-import { useLoaderData, Await } from "react-router";
-import { DapperTs } from "@thunderstore/dapper-ts";
+import { Await, type LoaderFunctionArgs, useLoaderData } from "react-router";
+
 import { SkeletonBox } from "@thunderstore/cyberstorm";
-import { PaginatedDependencies } from "~/commonComponents/PaginatedDependencies/PaginatedDependencies";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { DapperTs } from "@thunderstore/dapper-ts";
+
+import { PaginatedDependencies } from "app/commonComponents/PaginatedDependencies/PaginatedDependencies";
+import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
+
+const Dependency404 = new Response("Package dependencies not found", {
+  status: 404,
+});
+
+const getPageFromUrl = (url: string): number | undefined => {
+  const searchParams = new URL(url).searchParams;
+  const maybePage = searchParams.get("page");
+  return maybePage ? Number(maybePage) : undefined;
+};
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: publicEnvVariables.VITE_API_URL,
-        sessionId: undefined,
-      };
-    });
-    const searchParams = new URL(request.url).searchParams;
-    const page = searchParams.get("page");
-    const listing = await dapper.getPackageListingDetails(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
+  const { communityId, namespaceId, packageId, packageVersion } = params;
 
-    return {
-      version: await dapper.getPackageVersionDetails(
-        params.namespaceId,
-        params.packageId,
-        listing.latest_version_number
-      ),
-      dependencies: await dapper.getPackageVersionDependencies(
-        params.namespaceId,
-        params.packageId,
-        listing.latest_version_number,
-        page === null ? undefined : Number(page)
-      ),
-    };
+  // Either communityId or packageVersion is required depending on route.
+  if (!namespaceId || !packageId || (!communityId && !packageVersion)) {
+    throw Dependency404;
   }
-  throw new Response("Package version dependencies not found", { status: 404 });
+
+  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
+  const dapper = new DapperTs(() => ({
+    apiHost: publicEnvVariables.VITE_API_URL,
+    sessionId: undefined,
+  }));
+
+  let version: string;
+
+  if (packageVersion) {
+    version = packageVersion;
+  } else if (communityId) {
+    const listingArgs = { communityId, namespaceId, packageId };
+    const listing = await getPublicListing(dapper, listingArgs);
+
+    // Listing that's not available on unauthenticated SSR request
+    // might be available for authenticated user on client. Return
+    // undefined rather than throw error to allow refetch on client.
+    if (!listing) {
+      return { dependencies: undefined };
+    }
+
+    version = listing.latest_version_number;
+  } else {
+    throw Dependency404; // Can't happen, satisfies TypeScript
+  }
+
+  return {
+    dependencies: await dapper.getPackageVersionDependencies(
+      namespaceId,
+      packageId,
+      version,
+      getPageFromUrl(request.url)
+    ),
+  };
 }
 
 export async function clientLoader({ params, request }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
-    const tools = getSessionTools();
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
-      };
-    });
-    const searchParams = new URL(request.url).searchParams;
-    const page = searchParams.get("page");
-    const listing = await dapper.getPackageListingDetails(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
+  const { communityId, namespaceId, packageId, packageVersion } = params;
 
-    return {
-      version: dapper.getPackageVersionDetails(
-        params.namespaceId,
-        params.packageId,
-        listing.latest_version_number
-      ),
-      dependencies: dapper.getPackageVersionDependencies(
-        params.namespaceId,
-        params.packageId,
-        listing.latest_version_number,
-        page === null ? undefined : Number(page)
-      ),
-    };
+  // Either communityId or packageVersion is required depending on route.
+  if (!namespaceId || !packageId || (!communityId && !packageVersion)) {
+    throw Dependency404;
   }
-  throw new Response("Package version dependencies not found", { status: 404 });
+
+  const dapper = getDapperForRequest(request);
+  let version: string;
+
+  if (packageVersion) {
+    version = packageVersion;
+  } else if (communityId) {
+    const listingArgs = { communityId, namespaceId, packageId };
+    const listing = await getPrivateListing(dapper, listingArgs);
+    version = listing.latest_version_number;
+  } else {
+    throw Dependency404; // Can't happen, satisfies TypeScript
+  }
+
+  return {
+    dependencies: dapper.getPackageVersionDependencies(
+      namespaceId,
+      packageId,
+      version,
+      getPageFromUrl(request.url)
+    ),
+  };
 }
 
+clientLoader.hydrate = true;
+
 export default function PackageVersionRequired() {
-  const { dependencies } = useLoaderData();
+  const { dependencies } = useLoaderData<typeof loader | typeof clientLoader>();
+
+  // SSR failed to fetch, retry as authenticated user on client.
+  if (dependencies === undefined) {
+    return <SkeletonBox className="paginated-dependencies__skeleton" />;
+  }
 
   return (
     <Suspense

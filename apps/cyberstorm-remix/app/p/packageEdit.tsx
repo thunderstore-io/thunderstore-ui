@@ -6,31 +6,29 @@ import {
   NewIcon,
   NewSelectSearch,
   NewTag,
+  SkeletonBox,
   formatToDisplayName,
   useToast,
 } from "@thunderstore/cyberstorm";
 import "./packageEdit.css";
 import {
-  ApiError,
   packageDeprecate,
   packageListingUpdate,
   type PackageListingUpdateRequestData,
   packageUnlist,
+  isApiError,
 } from "@thunderstore/thunderstore-api";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import { type OutletContextShape } from "~/root";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faCheck } from "@fortawesome/pro-solid-svg-icons";
+import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
+import { getPrivateListing } from "app/p/listingUtils";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
   return [
     {
       title: data
@@ -40,92 +38,52 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
   ];
 };
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
-    try {
-      const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: publicEnvVariables.VITE_API_URL,
-          sessionId: undefined,
-        };
-      });
-      return {
-        community: await dapper.getCommunity(params.communityId),
-        communityFilters: await dapper.getCommunityFilters(params.communityId),
-        listing: await dapper.getPackageListingDetails(
-          params.communityId,
-          params.namespaceId,
-          params.packageId
-        ),
-        team: await dapper.getTeamDetails(params.namespaceId),
-        filters: await dapper.getCommunityFilters(params.communityId),
-        permissions: undefined,
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Package not found", { status: 404 });
-      } else {
-        // REMIX TODO: Add sentry
-        throw error;
-      }
-    }
-  }
-  throw new Response("Package not found", { status: 404 });
+const package404 = new Response("Package not found", { status: 404 });
+
+export async function loader() {
+  return undefined;
 }
 
-// TODO: Needs to check if package is available for the logged in user
-export async function clientLoader({ params }: LoaderFunctionArgs) {
-  if (params.communityId && params.namespaceId && params.packageId) {
-    try {
-      const tools = getSessionTools();
-      const dapper = new DapperTs(() => {
-        return {
-          apiHost: tools?.getConfig().apiHost,
-          sessionId: tools?.getConfig().sessionId,
-        };
-      });
+export async function clientLoader({ params, request }: LoaderFunctionArgs) {
+  const { communityId, namespaceId, packageId } = params;
 
-      const permissions = await dapper.getPackagePermissions(
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      );
-
-      if (!permissions?.permissions.can_manage) {
-        throw new Response("Unauthorized", { status: 403 });
-      }
-
-      return {
-        community: await dapper.getCommunity(params.communityId),
-        communityFilters: await dapper.getCommunityFilters(params.communityId),
-        listing: await dapper.getPackageListingDetails(
-          params.communityId,
-          params.namespaceId,
-          params.packageId
-        ),
-        team: await dapper.getTeamDetails(params.namespaceId),
-        filters: await dapper.getCommunityFilters(params.communityId),
-        permissions: permissions,
-      };
-    } catch (error) {
-      if (error instanceof ApiError) {
-        throw new Response("Package not found", { status: 404 });
-      } else {
-        throw error;
-      }
-    }
+  if (!communityId || !namespaceId || !packageId) {
+    throw package404;
   }
-  throw new Response("Package not found", { status: 404 });
+
+  try {
+    const dapper = getDapperForRequest(request);
+
+    // Fetch everything at once for faster page load, even if we may
+    //  overfetch in case we lack authentication/authorization.
+    const [listing, permissions, filters] = await Promise.all([
+      getPrivateListing(dapper, { communityId, namespaceId, packageId }),
+      dapper.getPackagePermissions(communityId, namespaceId, packageId),
+      dapper.getCommunityFilters(communityId),
+    ]);
+
+    if (!permissions) {
+      throw new Response("Unauthenticated", { status: 401 });
+    } else if (
+      !permissions.permissions.can_manage &&
+      !permissions.permissions.can_moderate
+    ) {
+      throw new Response("Unauthorized", { status: 403 });
+    }
+
+    return { listing, permissions, filters };
+  } catch (error) {
+    if (isApiError(error) && error.response.status === 404) {
+      throw package404;
+    }
+    throw error;
+  }
 }
 
 clientLoader.hydrate = true;
 
 export default function PackageListing() {
-  const { community, listing, filters, permissions } = useLoaderData<
-    typeof loader | typeof clientLoader
-  >();
-
+  const loaderData = useLoaderData<typeof loader | typeof clientLoader>();
   const outletContext = useOutletContext() as OutletContextShape;
   const config = outletContext.requestConfig;
   const toast = useToast();
@@ -185,16 +143,20 @@ export default function PackageListing() {
   }
 
   const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
-    categories: listing.categories.map((c) => c.slug),
+    categories: loaderData?.listing?.categories?.map((c) => c.slug) ?? [],
   });
 
   type SubmitorOutput = Awaited<ReturnType<typeof packageListingUpdate>>;
 
   async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
+    if (!listing) {
+      throw new Error("Listing not loaded");
+    }
+
     return await packageListingUpdate({
       config: config,
       params: {
-        community: community.identifier,
+        community: listing.community_identifier,
         namespace: listing.namespace,
         package: listing.name,
       },
@@ -233,6 +195,12 @@ export default function PackageListing() {
     },
   });
 
+  if (!loaderData) {
+    return <SkeletonBox className="package-edit__skeleton" />;
+  }
+
+  const { listing, filters, permissions } = loaderData;
+
   return (
     <>
       <PageHeader headingLevel="1" headingSize="2">
@@ -240,7 +208,7 @@ export default function PackageListing() {
       </PageHeader>
       <div className="package-edit__main">
         <section className="package-edit__section">
-          {permissions?.permissions.can_unlist ? (
+          {permissions.permissions.can_unlist && (
             <>
               <div className="package-edit__row">
                 <div className="package-edit__info">
@@ -262,7 +230,7 @@ export default function PackageListing() {
                       unlistAction({
                         config: config,
                         params: {
-                          community: community.identifier,
+                          community: listing.community_identifier,
                           namespace: listing.namespace,
                           package: listing.name,
                         },
@@ -280,8 +248,8 @@ export default function PackageListing() {
               </div>
               <div className="package-edit__divider" />
             </>
-          ) : null}
-          {permissions?.permissions.can_manage_deprecation ? (
+          )}
+          {permissions.permissions.can_manage_deprecation && (
             <>
               <div className="package-edit__row">
                 <div className="package-edit__info">
@@ -331,39 +299,43 @@ export default function PackageListing() {
               </div>
               <div className="package-edit__divider" />
             </>
-          ) : null}
-          <div className="package-edit__row">
-            <div className="package-edit__info">
-              <div className="package-edit__title">Categories</div>
-              <div className="package-edit__description">
-                Select descriptive categories to help people discover your
-                package.
+          )}
+          {permissions?.permissions.can_manage_categories ? (
+            <>
+              <div className="package-edit__row">
+                <div className="package-edit__info">
+                  <div className="package-edit__title">Categories</div>
+                  <div className="package-edit__description">
+                    Select descriptive categories to help people discover your
+                    package.
+                  </div>
+                </div>
+                <div className="package-edit__row-content">
+                  <NewSelectSearch
+                    placeholder="Select categories"
+                    multiple
+                    options={filters.package_categories.map((category) => ({
+                      value: category.slug,
+                      label: category.name,
+                    }))}
+                    onChange={(val) => {
+                      updateFormFieldState({
+                        field: "categories",
+                        value: val ? val.map((v) => v.value) : [],
+                      });
+                    }}
+                    value={formInputs.categories.map((categoryId) => ({
+                      value: categoryId,
+                      label:
+                        filters.package_categories.find(
+                          (c) => c.slug === categoryId
+                        )?.name || "",
+                    }))}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="package-edit__row-content">
-              <NewSelectSearch
-                placeholder="Select categories"
-                multiple
-                options={filters.package_categories.map((category) => ({
-                  value: category.slug,
-                  label: category.name,
-                }))}
-                onChange={(val) => {
-                  updateFormFieldState({
-                    field: "categories",
-                    value: val ? val.map((v) => v.value) : [],
-                  });
-                }}
-                value={formInputs.categories.map((categoryId) => ({
-                  value: categoryId,
-                  label:
-                    filters.package_categories.find(
-                      (c) => c.slug === categoryId
-                    )?.name || "",
-                }))}
-              />
-            </div>
-          </div>
+            </>
+          ) : null}
           <div className="package-edit__divider" />
           <div className="package-edit__row">
             <div className="package-edit__info">
