@@ -24,7 +24,7 @@ export interface ReviewPackageFormProps {
   communityId: string;
   namespaceId: string;
   packageId: string;
-  packageListingStatus: PackageListingStatus;
+  packageListingStatus?: PackageListingStatus;
   config: () => RequestConfig;
   toast: ReturnType<typeof useToast>;
 }

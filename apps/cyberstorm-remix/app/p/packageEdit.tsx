@@ -12,11 +12,11 @@ import {
 } from "@thunderstore/cyberstorm";
 import "./packageEdit.css";
 import {
-  ApiError,
   packageDeprecate,
   packageListingUpdate,
   type PackageListingUpdateRequestData,
   packageUnlist,
+  isApiError,
 } from "@thunderstore/thunderstore-api";
 import { type OutletContextShape } from "~/root";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
@@ -73,7 +73,10 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
 
     return { listing, permissions, filters };
   } catch (error) {
-    throw error instanceof ApiError ? package404 : error;
+    if (isApiError(error) && error.response.status === 404) {
+      throw package404;
+    }
+    throw error;
   }
 }
 
