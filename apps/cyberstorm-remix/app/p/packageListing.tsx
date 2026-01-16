@@ -1,41 +1,40 @@
 import {
-  memo,
+  faCaretRight,
+  faDownload,
+  faHandHoldingHeart,
+  faThumbsUp,
+  faUsers,
+  faWarning,
+} from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
+import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
+import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
+import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
+import { type OutletContextShape } from "app/root";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
+import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
+import {
   type ReactElement,
   Suspense,
+  memo,
   useEffect,
   useRef,
   useState,
 } from "react";
 import {
   Await,
+  type LoaderFunctionArgs,
   Outlet,
   useLoaderData,
   useLocation,
   useOutletContext,
-  type LoaderFunctionArgs,
 } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
-import {
-  faUsers,
-  faHandHoldingHeart,
-  faDownload,
-  faThumbsUp,
-  faWarning,
-  faCaretRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
-
-import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
-import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
-import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
-import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
-import { type OutletContextShape } from "app/root";
-import { isPromise } from "cyberstorm/utils/typeChecks";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
 
 import {
   Drawer,
@@ -53,21 +52,20 @@ import {
   useToast,
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
-import type { CurrentUser } from "@thunderstore/dapper/types";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
-import {
-  getPublicListing,
-  getPrivateListing,
-  getPackageListingStatus,
-  getUserPermissions,
-} from "./listingUtils";
-import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
+import type { CurrentUser } from "@thunderstore/dapper/types";
+
 import { ManagementTools } from "./components/PackageListing/ManagementTools";
 import {
   InternalNotes,
   RejectionReason,
 } from "./components/PackageListing/ReviewInformation";
-
+import {
+  getPackageListingStatus,
+  getPrivateListing,
+  getPublicListing,
+  getUserPermissions,
+} from "./listingUtils";
 import "./packageListing.css";
 
 type PackageListingOutletContext = OutletContextShape & {
@@ -185,19 +183,10 @@ export default function PackageListing() {
   // TODO: no need to get namespace and name from listing if we have them in params
   const fetchAndSetRatedPackages = async () => {
     const rp = await dapper.getRatedPackages();
-    if (isPromise(listing)) {
-      listing.then((listingData) => {
-        setIsLiked(
-          rp.rated_packages.includes(
-            `${listingData.namespace}-${listingData.name}`
-          )
-        );
-      });
-    } else {
-      setIsLiked(
-        rp.rated_packages.includes(`${listing.namespace}-${listing.name}`)
-      );
-    }
+    if (!listing) return;
+    setIsLiked(
+      rp.rated_packages.includes(`${listing.namespace}-${listing.name}`)
+    );
   };
 
   useEffect(() => {
@@ -223,32 +212,12 @@ export default function PackageListing() {
       return;
     }
 
-    if (isPromise(listing)) {
-      listing.then((listingData) => {
-        setLastUpdated(
-          <RelativeTime
-            time={listingData.last_updated}
-            suppressHydrationWarning
-          />
-        );
-        setFirstUploaded(
-          <RelativeTime
-            time={listingData.datetime_created}
-            suppressHydrationWarning
-          />
-        );
-      });
-    } else {
-      setLastUpdated(
-        <RelativeTime time={listing.last_updated} suppressHydrationWarning />
-      );
-      setFirstUploaded(
-        <RelativeTime
-          time={listing.datetime_created}
-          suppressHydrationWarning
-        />
-      );
-    }
+    setLastUpdated(
+      <RelativeTime time={listing.last_updated} suppressHydrationWarning />
+    );
+    setFirstUploaded(
+      <RelativeTime time={listing.datetime_created} suppressHydrationWarning />
+    );
   }, []);
   // END: For sidebar meta dates
 
