@@ -26,6 +26,7 @@
       "types": "./dist/index.d.ts"
     },
     "./css": "./dist/cyberstorm-theme.css",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./src/components": "./src/components.tsx"
   }
 }
