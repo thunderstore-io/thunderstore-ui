@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import "@thunderstore/cyberstorm-theme";
+import { useState } from "react";
+
 import {
   NewSelectSearch,
   type NewSelectSearchProps,
   type SelectOption,
 } from "@thunderstore/cyberstorm";
-import { useState } from "react";
+import "@thunderstore/cyberstorm-theme";
 import {
   SelectSearchModifiersList,
   SelectSearchSizesList,

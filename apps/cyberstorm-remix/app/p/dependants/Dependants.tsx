@@ -1,21 +1,23 @@
-import { Await, useLoaderData, useOutletContext } from "react-router";
-import {
-  formatToDisplayName,
-  NewLink,
-  SkeletonBox,
-} from "@thunderstore/cyberstorm";
-import "./Dependants.css";
-import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
-import { type OutletContextShape } from "../../root";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import type { Route } from "./+types/Dependants";
 import { Suspense } from "react";
+import { Await, useLoaderData, useOutletContext } from "react-router";
+import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+
+import {
+  NewLink,
+  SkeletonBox,
+  formatToDisplayName,
+} from "@thunderstore/cyberstorm";
+import { DapperTs } from "@thunderstore/dapper-ts";
+
+import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
+import { type OutletContextShape } from "../../root";
+import type { Route } from "./+types/Dependants";
+import "./Dependants.css";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId && params.packageId && params.namespaceId) {

@@ -1,6 +1,7 @@
-import { NewButton, NewIcon } from "@thunderstore/cyberstorm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlagSwallowtail } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { NewButton, NewIcon } from "@thunderstore/cyberstorm";
 
 export function ReportPackageButton(props: { onClick: () => void }) {
   return (

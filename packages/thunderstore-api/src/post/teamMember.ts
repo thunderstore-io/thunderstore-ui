@@ -1,14 +1,10 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import {
-  TeamAddMemberRequestData,
-  teamAddMemberRequestDataSchema,
-} from "../schemas/requestSchemas";
-import { TeamAddMemberRequestParams } from "../schemas/requestSchemas";
-import {
-  TeamAddMemberResponseData,
-  teamAddMemberResponseDataSchema,
-} from "../schemas/responseSchemas";
+import type { ApiEndpointProps } from "../index";
+import { teamAddMemberRequestDataSchema } from "../schemas/requestSchemas";
+import type { TeamAddMemberRequestData } from "../schemas/requestSchemas";
+import type { TeamAddMemberRequestParams } from "../schemas/requestSchemas";
+import { teamAddMemberResponseDataSchema } from "../schemas/responseSchemas";
+import type { TeamAddMemberResponseData } from "../schemas/responseSchemas";
 
 export function teamAddMember(
   props: ApiEndpointProps<

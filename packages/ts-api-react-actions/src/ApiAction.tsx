@@ -1,6 +1,11 @@
 import { useCallback } from "react";
-import { ApiEndpointProps, ApiError } from "@thunderstore/thunderstore-api";
-import { ApiEndpoint } from "@thunderstore/ts-api-react";
+
+import type {
+  ApiEndpointProps,
+  ApiError,
+} from "@thunderstore/thunderstore-api";
+import type { ApiEndpoint } from "@thunderstore/ts-api-react";
+
 import { useApiAction } from "./useApiAction";
 
 export interface ApiActionProps<
@@ -39,7 +44,7 @@ export function ApiAction<
         }
       } catch (e) {
         if (onSubmitError) {
-          onSubmitError(e);
+          onSubmitError(e instanceof Error ? e : new Error(String(e)));
         } else {
           throw e;
         }

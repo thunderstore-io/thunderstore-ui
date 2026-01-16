@@ -1,10 +1,3 @@
-import "./Alert.css";
-import React from "react";
-import { classnames, componentClasses } from "../../utils/utils";
-import {
-  type AlertSizes,
-  type AlertVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
 import {
   faCheckCircle,
   faExclamationCircle,
@@ -12,7 +5,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faOctagonExclamation } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+
+import {
+  type AlertSizes,
+  type AlertVariants,
+} from "@thunderstore/cyberstorm-theme";
+
 import { NewIcon, type PrimitiveComponentDefaultProps } from "../..";
+import { classnames, componentClasses } from "../../utils/utils";
+import "./Alert.css";
 
 export interface AlertProps extends PrimitiveComponentDefaultProps {
   csVariant?: AlertVariants;

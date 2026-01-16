@@ -1,24 +1,25 @@
-import React, { memo, type ReactElement } from "react";
-import "./Select.css";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import {
-  Root,
   Content,
   Item,
   Portal,
+  Root,
   Trigger,
   Viewport,
 } from "@radix-ui/react-select";
-import type { SelectOption } from "../../utils/types";
-import { classnames, componentClasses } from "../../utils/utils";
-import { NewButton, NewIcon } from "../..";
+import React, { type ReactElement, memo } from "react";
+
 import {
   type SelectModifiers,
   type SelectSizes,
   type SelectVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
+
+import { NewButton, NewIcon } from "../..";
+import type { SelectOption } from "../../utils/types";
+import { classnames, componentClasses } from "../../utils/utils";
+import "./Select.css";
 
 type _SelectProps<T> = {
   variant?: "default" | "accent" | "wide";

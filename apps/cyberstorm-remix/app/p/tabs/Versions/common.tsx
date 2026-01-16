@@ -1,8 +1,13 @@
 import { faDownload } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { NewAlert, NewButton, NewIcon } from "@thunderstore/cyberstorm";
-import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
 import { memo } from "react";
+
+import {
+  NewAlert,
+  NewButton,
+  NewIcon,
+  ThunderstoreLogo,
+} from "@thunderstore/cyberstorm";
 
 export const ModManagerBanner = memo(function ModManagerBanner() {
   return (

@@ -1,5 +1,6 @@
-import { GraphNode } from ".";
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
+
+import { GraphNode } from ".";
 
 export class GraphExecutor<IType, OType> {
   private nodes: GraphNode<unknown, unknown>[];

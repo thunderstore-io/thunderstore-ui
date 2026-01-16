@@ -1,13 +1,9 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import {
-  TeamCreateRequestData,
-  teamCreateRequestDataSchema,
-} from "../schemas/requestSchemas";
-import {
-  TeamCreateResponseData,
-  teamCreateResponseDataSchema,
-} from "../schemas/responseSchemas";
+import type { ApiEndpointProps } from "../index";
+import { teamCreateRequestDataSchema } from "../schemas/requestSchemas";
+import type { TeamCreateRequestData } from "../schemas/requestSchemas";
+import { teamCreateResponseDataSchema } from "../schemas/responseSchemas";
+import type { TeamCreateResponseData } from "../schemas/responseSchemas";
 
 export function teamCreate(
   props: ApiEndpointProps<object, object, TeamCreateRequestData>

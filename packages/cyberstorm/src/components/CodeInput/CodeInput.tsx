@@ -1,7 +1,7 @@
-import styles from "./CodeInput.module.css";
+import { classnames } from "../../utils/utils";
 import { TextAreaInput } from "../TextAreaInput/TextAreaInput";
 import { ValidationBar } from "../ValidationBar/ValidationBar";
-import { classnames } from "../../utils/utils";
+import styles from "./CodeInput.module.css";
 
 interface CodeInputProps {
   value?: string;

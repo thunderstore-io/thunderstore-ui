@@ -1,3 +1,12 @@
+import { faDiscord } from "@fortawesome/free-brands-svg-icons";
+import { faBook, faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+} from "cyberstorm/security/publicEnvVariables";
+import { Suspense } from "react";
 import type {
   LoaderFunctionArgs,
   ShouldRevalidateFunctionArgs,
@@ -9,26 +18,19 @@ import {
   useLocation,
   useOutletContext,
 } from "react-router";
+
 import {
   Heading,
   NewButton,
   NewIcon,
   NewLink,
   SkeletonBox,
+  classnames,
 } from "@thunderstore/cyberstorm";
-import "./Community.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBook, faDownload } from "@fortawesome/free-solid-svg-icons";
-import { faDiscord } from "@fortawesome/free-brands-svg-icons";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { DapperTs } from "@thunderstore/dapper-ts";
+
 import { type OutletContextShape } from "../root";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
-import { Suspense } from "react";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import "./Community.css";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.communityId) {

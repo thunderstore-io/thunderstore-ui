@@ -1,12 +1,14 @@
-import { Await, useLoaderData } from "react-router";
-import { type LoaderFunctionArgs } from "react-router";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { Suspense } from "react";
+import { Await, useLoaderData } from "react-router";
+import { type LoaderFunctionArgs } from "react-router";
+
+import { SkeletonBox } from "@thunderstore/cyberstorm";
+import { DapperTs } from "@thunderstore/dapper-ts";
+
 import "./Changelog.css";
 
 export async function loader({ params }: LoaderFunctionArgs) {

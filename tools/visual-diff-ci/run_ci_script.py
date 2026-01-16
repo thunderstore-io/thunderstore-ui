@@ -132,6 +132,9 @@ class BgProcess:
 
 def setup_frontend():
     run_command([YARN_PATH, "install", "--frozen-lockfile"], cwd=REPO_ROOT)
+    run_command([YARN_PATH, "workspace", "@thunderstore/ts-uploader", "build"], cwd=REPO_ROOT)
+    run_command([YARN_PATH, "workspace", "@thunderstore/cyberstorm-theme", "build"], cwd=REPO_ROOT)
+    run_command([YARN_PATH, "workspace", "@thunderstore/cyberstorm", "build"], cwd=REPO_ROOT)
     run_command([YARN_PATH, "workspace", "@thunderstore/cyberstorm-remix", "build"], cwd=REPO_ROOT)
 
 
@@ -158,7 +161,7 @@ def wait_for_url(url: str) -> bool:
         except Exception:
             return False
 
-    timeout_threshold = time.time() + 60
+    timeout_threshold = time.time() + 90
     while (result := poll_backend()) is False and time.time() < timeout_threshold:
         print(
             "Polling failed, "
@@ -173,12 +176,26 @@ BACKEND_DIR = REPO_ROOT / "tools" / "thunderstore-test-backend"
 
 
 def start_backend() -> bool:
-    run_command("docker compose up -d", cwd=BACKEND_DIR)
+    run_command(
+        [
+            "docker",
+            "compose",
+            "up",
+            "-d",
+            "--remove-orphans",
+            "db",
+            "redis",
+            "rabbitmq",
+            "minio",
+            "django",
+        ],
+        cwd=BACKEND_DIR,
+    )
     return wait_for_url("http://127.0.0.1:8000/")
 
 
 def stop_backend():
-    run_command("docker compose down", cwd=BACKEND_DIR)
+    run_command(["docker", "compose", "down", "--remove-orphans"], cwd=BACKEND_DIR)
 
 
 PLAYWRIGHT_DIR = (REPO_ROOT / "tools" / "cyberstorm-playwright").resolve()

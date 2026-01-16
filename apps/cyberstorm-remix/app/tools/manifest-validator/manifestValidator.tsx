@@ -1,3 +1,9 @@
+import { Buffer } from "buffer";
+import { useEffect, useState } from "react";
+import { useOutletContext } from "react-router";
+import { useDebounce } from "use-debounce";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+
 import {
   CodeInput,
   NewAlert,
@@ -5,19 +11,14 @@ import {
   isRecord,
   isStringArray,
 } from "@thunderstore/cyberstorm";
-import "./manifestValidator.css";
-import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router";
-import { Buffer } from "buffer";
 import {
-  isApiError,
   type RequestConfig,
+  isApiError,
   toolsManifestValidate,
 } from "@thunderstore/thunderstore-api";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { type OutletContextShape } from "../../root";
 
-import { useDebounce } from "use-debounce";
+import { type OutletContextShape } from "../../root";
+import "./manifestValidator.css";
 
 export default function ManifestValidator() {
   const outletContext = useOutletContext() as OutletContextShape;
@@ -28,10 +29,7 @@ export default function ManifestValidator() {
 
   const selectOptions = currentUser
     ? currentUser.teams.map((team) => {
-        if (typeof team === "string") {
-          return { value: team, label: team };
-        }
-        return { value: team.name, label: team.name };
+        return { value: team, label: team };
       })
     : [];
 

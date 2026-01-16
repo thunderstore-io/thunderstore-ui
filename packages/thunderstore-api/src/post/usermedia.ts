@@ -1,20 +1,24 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import type { ApiEndpointProps } from "../index";
 import {
-  UsermediaAbortUploadRequestParams,
-  UsermediaFinishUploadRequestData,
   usermediaFinishUploadRequestDataSchema,
-  UsermediaFinishUploadRequestParams,
-  UsermediaInitiateUploadRequestData,
   usermediaInitiateUploadRequestDataSchema,
 } from "../schemas/requestSchemas";
+import type {
+  UsermediaAbortUploadRequestParams,
+  UsermediaFinishUploadRequestData,
+  UsermediaFinishUploadRequestParams,
+  UsermediaInitiateUploadRequestData,
+} from "../schemas/requestSchemas";
 import {
-  UsermediaAbortUploadResponseData,
   usermediaAbortUploadResponseDataSchema,
-  UsermediaFinishUploadResponseData,
   usermediaFinishUploadResponseDataSchema,
-  UsermediaInitiateUploadResponseData,
   usermediaInitiateUploadResponseDataSchema,
+} from "../schemas/responseSchemas";
+import type {
+  UsermediaAbortUploadResponseData,
+  UsermediaFinishUploadResponseData,
+  UsermediaInitiateUploadResponseData,
 } from "../schemas/responseSchemas";
 
 export function postUsermediaInitiate(

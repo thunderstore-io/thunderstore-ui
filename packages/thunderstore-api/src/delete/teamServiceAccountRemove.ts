@@ -1,8 +1,8 @@
-import {
+import { apiFetch } from "../apiFetch";
+import type {
   ApiEndpointProps,
   TeamServiceAccountRemoveRequestParams,
 } from "../index";
-import { apiFetch } from "../apiFetch";
 
 export function teamServiceAccountRemove(
   props: ApiEndpointProps<TeamServiceAccountRemoveRequestParams, object, object>

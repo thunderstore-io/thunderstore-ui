@@ -1,6 +1,12 @@
-import "./Teams.css";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { useReducer, useState } from "react";
 import type { MetaFunction } from "react-router";
 import { useOutletContext, useRevalidator } from "react-router";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
+
 import {
   Heading,
   Modal,
@@ -11,23 +17,20 @@ import {
   NewTextInput,
   useToast,
 } from "@thunderstore/cyberstorm";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useReducer, useState } from "react";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { postTeamCreate } from "@thunderstore/dapper-ts";
 import {
   type RequestConfig,
-  teamCreate,
   type TeamCreateRequestData,
+  teamCreate,
 } from "@thunderstore/thunderstore-api";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { postTeamCreate } from "@thunderstore/dapper-ts/src/methods/team";
-import { type OutletContextShape, type RootLoadersType } from "../../root";
 import { NamespacedStorageManager } from "@thunderstore/ts-api-react";
 import {
-  setSessionStale,
   SESSION_STORAGE_KEY,
-} from "@thunderstore/ts-api-react/src/SessionContext";
+  setSessionStale,
+} from "@thunderstore/ts-api-react";
+
+import { type OutletContextShape, type RootLoadersType } from "../../root";
+import "./Teams.css";
 
 export const meta: MetaFunction<
   unknown,
@@ -130,6 +133,8 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
   const revalidator = useRevalidator();
   const toast = useToast();
 
+  const [open, setOpen] = useState(false);
+
   async function createTeamRevalidate() {
     setSessionStale(new NamespacedStorageManager(SESSION_STORAGE_KEY), true);
     revalidator.revalidate();
@@ -168,6 +173,7 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
     onSubmitSuccess: (fi) => {
       createTeamRevalidate();
       updateFormFieldState({ field: "name", value: "" });
+      setOpen(false);
       toast.addToast({
         csVariant: "success",
         children: `Team ${fi.name} created!`,
@@ -183,7 +189,7 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
     },
   });
 
-  const [open, setOpen] = useState(false);
+  const teamNameFieldProps = strongForm.getFieldComponentProps("name");
 
   return (
     <Modal
@@ -201,38 +207,41 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
       }
     >
       <Modal.Title>Create Team</Modal.Title>
-      <Modal.Body>
-        <div className="create-team-form__description">
-          Enter the name of the team you wish to create. Team names can contain
-          the characters a-z A-Z 0-9 _ and must not start or end with an _.
-        </div>
-        <div className="create-team-form__input">
-          <label className="create-team-form__label" htmlFor="teamName">
-            Team Name
-          </label>
-          <NewTextInput
-            onChange={(v) =>
-              updateFormFieldState({
-                field: "name",
-                value: v.target.value,
-              })
-            }
-            placeholder={"MyCoolTeam"}
-            id="teamName"
-          />
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <NewButton
-          disabled={!strongForm.isReady}
-          csVariant="accent"
-          onClick={() => {
-            strongForm.submit().then(() => setOpen(false));
-          }}
-        >
-          Create
-        </NewButton>
-      </Modal.Footer>
+      <form onSubmit={strongForm.handleSubmit}>
+        <Modal.Body>
+          <div className="create-team-form__description">
+            Enter the name of the team you wish to create. Team names can
+            contain the characters a-z A-Z 0-9 _ and must not start or end with
+            an _.
+          </div>
+          <div className="create-team-form__input">
+            <label className="create-team-form__label" htmlFor="teamName">
+              Team Name <RequiredIndicator />
+            </label>
+            <NewTextInput
+              value={formInputs.name}
+              onChange={(v) =>
+                updateFormFieldState({
+                  field: "name",
+                  value: v.target.value,
+                })
+              }
+              placeholder={"MyCoolTeam"}
+              id="teamName"
+              {...teamNameFieldProps}
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <NewButton
+            type="submit"
+            disabled={!strongForm.isReady}
+            csVariant="accent"
+          >
+            Create
+          </NewButton>
+        </Modal.Footer>
+      </form>
     </Modal>
   );
 }

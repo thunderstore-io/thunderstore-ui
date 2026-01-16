@@ -1,5 +1,6 @@
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type RequestConfig } from "@thunderstore/thunderstore-api";
+
 import { getSessionTools } from "../security/publicEnvVariables";
 import { deduplicatePromiseForRequest } from "./requestCache";
 
@@ -36,7 +37,10 @@ export function initializeClientDapper(factory?: ConfigFactory) {
 
   if (!window.Dapper) {
     const resolvedFactory = resolveConfigFactory();
-    window.Dapper = new DapperTs(resolvedFactory);
+    const tools = getSessionTools();
+    window.Dapper = new DapperTs(resolvedFactory, () =>
+      tools.clearInvalidSession()
+    );
   }
 }
 

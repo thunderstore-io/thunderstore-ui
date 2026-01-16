@@ -59,6 +59,12 @@ jobs:
             poetry-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-
       - name: Install poetry dependencies
         run: poetry install
+      - name: Set fontawesome token
+        run: |
+          npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+          npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
+      - name: Install Yarn dependencies
+        run: yarn install --ignore-scripts --frozen-lockfile
       - name: Cache pre-commit cache
         uses: actions/cache@v4
         with:
@@ -110,42 +116,44 @@ jobs:
           npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
       - name: Install Yarn dependencies
         run: yarn install --frozen-lockfile
+      - name: Build @thunderstore/typed-event-emitter
+        run: yarn workspace @thunderstore/typed-event-emitter build
+      - name: Build @thunderstore/thunderstore-api
+        run: yarn workspace @thunderstore/thunderstore-api build
+      - name: Build @thunderstore/use-promise
+        run: yarn workspace @thunderstore/use-promise build
+      - name: Build @thunderstore/react-dnd
+        run: yarn workspace @thunderstore/react-dnd build
       - name: Build @thunderstore/beta-switch
         run: yarn workspace @thunderstore/beta-switch build
+      - name: Build @thunderstore/graph-system
+        run: yarn workspace @thunderstore/graph-system build
+      - name: Build @thunderstore/dapper
+        run: yarn workspace @thunderstore/dapper build
+      - name: Build @thunderstore/cyberstorm-theme
+        run: yarn workspace @thunderstore/cyberstorm-theme build
+      - name: Build @thunderstore/ts-uploader
+        run: yarn workspace @thunderstore/ts-uploader build
+      - name: Build @thunderstore/ts-uploader-react
+        run: yarn workspace @thunderstore/ts-uploader-react build
       - name: Build @thunderstore/cyberstorm
         run: yarn workspace @thunderstore/cyberstorm build
       - name: Build @thunderstore/cyberstorm-forms
         run: yarn workspace @thunderstore/cyberstorm-forms build
-      - name: Build @thunderstore/cyberstorm-remix
-        run: yarn workspace @thunderstore/cyberstorm-remix build
-      - name: Build @thunderstore/storybook
-        run: yarn workspace @thunderstore/storybook build
-      - name: Build @thunderstore/dapper
-        run: yarn workspace @thunderstore/dapper build
-      - name: Build @thunderstore/dapper-fake
-        run: yarn workspace @thunderstore/dapper-fake build
       - name: Build @thunderstore/dapper-ts
         run: yarn workspace @thunderstore/dapper-ts build
-      - name: Build @thunderstore/graph-system
-        run: yarn workspace @thunderstore/graph-system build
-      - name: Build @thunderstore/react-dnd
-        run: yarn workspace @thunderstore/react-dnd build
-      - name: Build @thunderstore/thunderstore-api
-        run: yarn workspace @thunderstore/thunderstore-api build
+      - name: Build @thunderstore/dapper-fake
+        run: yarn workspace @thunderstore/dapper-fake build
       - name: Build @thunderstore/ts-api-react
         run: yarn workspace @thunderstore/ts-api-react build
       - name: Build @thunderstore/ts-api-react-actions
         run: yarn workspace @thunderstore/ts-api-react-actions build
       - name: Build @thunderstore/ts-api-react-forms
         run: yarn workspace @thunderstore/ts-api-react-forms build
-      - name: Build @thunderstore/ts-uploader
-        run: yarn workspace @thunderstore/ts-uploader build
-      - name: Build @thunderstore/ts-uploader-react
-        run: yarn workspace @thunderstore/ts-uploader-react build
-      - name: Build @thunderstore/typed-event-emitter
-        run: yarn workspace @thunderstore/typed-event-emitter build
-      - name: Build @thunderstore/use-promise
-        run: yarn workspace @thunderstore/use-promise build
+      - name: Build @thunderstore/cyberstorm-remix
+        run: yarn workspace @thunderstore/cyberstorm-remix build
+      - name: Build @thunderstore/storybook
+        run: yarn workspace @thunderstore/storybook build
 
   test:
     name: Test
@@ -225,6 +233,8 @@ jobs:
           npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
       - name: Install Yarn dependencies
         run: yarn install --frozen-lockfile
+      - name: Build dependencies
+        run: yarn build
       - name: Publish to Chromatic
         uses: chromaui/action@v1
         with:

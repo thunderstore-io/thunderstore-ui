@@ -1,3 +1,7 @@
+import { type OutletContextShape } from "app/root";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { Suspense, useReducer } from "react";
 import {
   Await,
@@ -8,14 +12,11 @@ import {
 
 import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
 import {
-  teamDetailsEdit,
   type TeamDetails,
   type TeamDetailsEditRequestData,
+  teamDetailsEdit,
 } from "@thunderstore/thunderstore-api";
 
-import { type OutletContextShape } from "app/root";
-import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import "./Profile.css";
 
 export const clientLoader = makeTeamSettingsTabLoader(
@@ -48,6 +49,8 @@ function ProfileForm(props: { team: TeamDetails }) {
   const outletContext = useOutletContext() as OutletContextShape;
   const revalidator = useRevalidator();
   const toast = useToast();
+
+  const formDisabled = !isTeamOwner(team.name, outletContext.currentUser);
 
   function formFieldUpdateAction(
     state: TeamDetailsEditRequestData,
@@ -90,6 +93,11 @@ function ProfileForm(props: { team: TeamDetails }) {
     InputErrors
   >({
     inputs: formInputs,
+    validators: {
+      donation_link: {
+        url: true,
+      },
+    },
     refiner: async (inputs: typeof formInputs) => ({
       donation_link: nullForEmptyString(inputs.donation_link),
     }),
@@ -111,6 +119,11 @@ function ProfileForm(props: { team: TeamDetails }) {
     },
   });
 
+  const donationLinkFieldProps = strongForm.getFieldComponentProps(
+    "donation_link",
+    { disabled: formDisabled }
+  );
+
   return (
     <div className="settings-items__item">
       <div className="settings-items__meta">
@@ -131,10 +144,16 @@ function ProfileForm(props: { team: TeamDetails }) {
                 })
               }
               rootClasses="team-profile__input"
+              disabled={formDisabled}
+              {...donationLinkFieldProps}
             />
           </div>
         </div>
-        <NewButton rootClasses="team-profile__save" onClick={strongForm.submit}>
+        <NewButton
+          rootClasses="team-profile__save"
+          onClick={strongForm.submit}
+          disabled={formDisabled || !strongForm.isReady}
+        >
           Save changes
         </NewButton>
       </div>

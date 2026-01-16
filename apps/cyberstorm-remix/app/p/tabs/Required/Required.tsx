@@ -1,13 +1,12 @@
+import { PaginatedDependencies } from "app/commonComponents/PaginatedDependencies/PaginatedDependencies";
+import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { Suspense } from "react";
 import { Await, type LoaderFunctionArgs, useLoaderData } from "react-router";
 
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
-
-import { PaginatedDependencies } from "app/commonComponents/PaginatedDependencies/PaginatedDependencies";
-import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
-import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
-import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 
 const Dependency404 = new Response("Package dependencies not found", {
   status: 404,

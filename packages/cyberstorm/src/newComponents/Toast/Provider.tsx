@@ -1,12 +1,13 @@
 "use client";
 import * as RadixToast from "@radix-ui/react-toast";
 import {
-  createContext,
   type PropsWithChildren,
+  createContext,
   useContext,
   useReducer,
 } from "react";
 import { v4 as uuid } from "uuid";
+
 import { type ToastProps } from "./Toast";
 import { Viewport } from "./Viewport";
 

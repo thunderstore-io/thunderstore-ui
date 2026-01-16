@@ -2,7 +2,6 @@
   "name": "@thunderstore/cyberstorm-remix",
   "version": "0.1.0",
   "private": true,
-  "sideEffects": false,
   "type": "module",
   "scripts": {
     "build": "react-router build",
@@ -16,8 +15,8 @@
   "dependencies": {
     "@fortawesome/pro-light-svg-icons": "7.1.0",
     "@fortawesome/pro-solid-svg-icons": "7.1.0",
-    "@react-router/node": "^7.6.2",
-    "@react-router/serve": "^7.6.2",
+    "@react-router/node": "^7.12.0",
+    "@react-router/serve": "^7.12.0",
     "@sentry/remix": "^10.8.0",
     "@sentry/vite-plugin": "^4.3.0",
     "@thunderstore/cyberstorm": "^0.1.0",
@@ -33,8 +32,8 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-markdown": "^10.1.0",
-    "react-router": "^7.6.2",
-    "react-syntax-highlighter": "15.6.6",
+    "react-router": "^7.12.0",
+    "react-syntax-highlighter": "16.1.0",
     "rehype-sanitize": "^6.0.0",
     "remark-gfm": "^4.0.1",
     "remix-utils": "^7.7.0",
@@ -50,7 +49,7 @@
     "playwright": "1.55.1",
     "typescript": "^5.6.2",
     "typescript-plugin-css-modules": "^5.1.0",
-    "vite": "7.1.7",
+    "vite": "^7.2.6",
     "vite-tsconfig-paths": "^5.0.1",
     "vitest": "3.2.4"
   },

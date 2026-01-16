@@ -1,19 +1,21 @@
-import React from "react";
-import "./SelectSearch.css";
-import type { SelectOption } from "../../utils/types";
-import { classnames, componentClasses } from "../../utils/utils";
-import { NewIcon, NewTag } from "../../index";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCaretDown,
   faCircleXmark,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+
 import {
-  type SelectSearchVariants,
-  type SelectSearchSizes,
   type SelectSearchModifiers,
-} from "@thunderstore/cyberstorm-theme/src/components";
+  type SelectSearchSizes,
+  type SelectSearchVariants,
+} from "@thunderstore/cyberstorm-theme";
+
+import { NewIcon, NewTag } from "../../index";
+import type { SelectOption } from "../../utils/types";
+import { classnames, componentClasses } from "../../utils/utils";
+import "./SelectSearch.css";
 
 export type SelectSearchProps =
   | {

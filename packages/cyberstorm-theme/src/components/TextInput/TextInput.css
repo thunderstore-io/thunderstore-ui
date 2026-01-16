@@ -27,6 +27,10 @@
     &:focus-within .text-input__left-icon {
       --text-input-left-icon-color: var(--input-icon-color--focus);
     }
+
+    &.text-input__wrapper--invalid .text-input__left-icon {
+      --text-input-left-icon-color: var(--input-icon-color--invalid);
+    }
   }
 
   .text-input[value] {
@@ -55,12 +59,24 @@
     --right-padding-bonus: var(--space-16);
   }
 
-  .text-input:hover {
+  .text-input:where(.text-input--invalid),
+  .text-input:where(.text-input--invalid):hover,
+  .text-input:where(.text-input--invalid):focus-within {
+    --text-input-text-color: var(--input-text-color--invalid);
+    --text-input-background-color: var(--input-bg-color--invalid);
+    --text-input-border-color: var(--input-border-color--invalid);
+  }
+
+  .text-input:disabled {
+    cursor: not-allowed;
+  }
+
+  .text-input:hover:not(:disabled) {
     --text-input-background-color: var(--input-bg-color--hover);
     --text-input-border-color: var(--input-border-color--hover);
   }
 
-  .text-input:focus-within {
+  .text-input:focus-within:not(:disabled) {
     --text-input-text-color: var(--input-text-color--focus);
     --text-input-background-color: var(--input-bg-color--focus);
     --text-input-border-color: var(--input-border-color--focus);

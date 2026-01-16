@@ -1,11 +1,12 @@
+import { z } from "zod";
+
 import {
   ApiError,
   ParseError,
-  RequestConfig,
   RequestBodyParseError,
   RequestQueryParamsParseError,
 } from "./index";
-import { z } from "zod";
+import type { RequestConfig } from "./index";
 import { serializeQueryString } from "./queryString";
 
 const BASE_HEADERS = {

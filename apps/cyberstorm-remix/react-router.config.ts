@@ -11,7 +11,7 @@ import "react-router";
 export default {
   // ...Other options
   future: {
-    unstable_middleware: true, // 👈 Enable middleware
+    // unstable_middleware: true, // 👈 Enable middleware
     // ...Other future or unstable flags
   },
 } satisfies Config;

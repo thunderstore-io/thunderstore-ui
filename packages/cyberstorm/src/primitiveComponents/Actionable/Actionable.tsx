@@ -1,9 +1,10 @@
+import React, { memo } from "react";
+
+import { type ThunderstoreLinkProps } from "../../components/Links/LinkingProvider";
 import {
   CyberstormLink,
   type CyberstormLinkIds,
 } from "../../components/Links/Links";
-import React, { memo } from "react";
-import { type ThunderstoreLinkProps } from "../../components/Links/LinkingProvider";
 import {
   type PrimitiveComponentDefaultProps,
   TooltipWrapper,

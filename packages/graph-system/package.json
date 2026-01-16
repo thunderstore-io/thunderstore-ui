@@ -6,6 +6,13 @@
   "main": "dist/thunderstore-graph-system.cjs.js",
   "module": "dist/thunderstore-graph-system.esm.js",
   "types": "dist/thunderstore-graph-system.cjs.d.ts",
+  "exports": {
+    ".": {
+      "module": "./dist/thunderstore-graph-system.esm.js",
+      "default": "./dist/thunderstore-graph-system.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],
@@ -19,6 +26,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@babel/runtime": "^7.25.6",
     "@thunderstore/thunderstore-api": "^0.1.0",
     "@thunderstore/typed-event-emitter": "*",
     "typescript": "^5.6.2"

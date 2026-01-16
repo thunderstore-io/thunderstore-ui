@@ -4,7 +4,7 @@ import {
   fetchCurrentUserTeamPermissions,
 } from "@thunderstore/thunderstore-api";
 
-import { DapperTsInterface } from "../index";
+import type { DapperTsInterface } from "../index";
 
 export async function getCurrentUser(this: DapperTsInterface) {
   try {
@@ -17,13 +17,12 @@ export async function getCurrentUser(this: DapperTsInterface) {
     return data;
   } catch (error) {
     if (error instanceof ApiError && error.response.status === 401) {
-      // If the user is not authenticated, we remove the session hook
+      // Any 401 means the session/auth context is invalid or stale.
+      // Clear persisted session data to allow consumers to recover (e.g. re-auth).
       this.removeSessionHook?.();
       return null;
-    } else {
-      // If it's another error, we throw it
-      throw error;
     }
+    throw error;
   }
 }
 

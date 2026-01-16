@@ -5,7 +5,14 @@
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/ts-api-react",
   "main": "dist/thunderstore-ts-api-react.cjs.js",
   "module": "dist/thunderstore-ts-api-react.esm.js",
-  "types": "dist/thunderstore-ts-api-react.cjs.d.ts",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "module": "./dist/thunderstore-ts-api-react.esm.js",
+      "default": "./dist/thunderstore-ts-api-react.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],

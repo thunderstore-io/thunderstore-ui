@@ -1,5 +1,6 @@
-import { LinkLibrary } from "@thunderstore/cyberstorm";
 import React from "react";
+
+import { LinkLibrary } from "@thunderstore/cyberstorm";
 
 interface CyberstormLinkProps {
   children?: React.ReactNode;

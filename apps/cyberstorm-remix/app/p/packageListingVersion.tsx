@@ -1,3 +1,14 @@
+import {
+  faCaretRight,
+  faDownload,
+  faHandHoldingHeart,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
+import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
+import { Suspense, memo } from "react";
 import type {
   LoaderFunctionArgs,
   ShouldRevalidateFunctionArgs,
@@ -9,6 +20,10 @@ import {
   useLocation,
   useOutletContext,
 } from "react-router";
+import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { type OutletContextShape } from "~/root";
+
 import {
   Drawer,
   Heading,
@@ -16,37 +31,22 @@ import {
   NewButton,
   NewIcon,
   NewLink,
+  RelativeTime,
   SkeletonBox,
   Tabs,
-} from "@thunderstore/cyberstorm";
-import "./packageListing.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ThunderstoreLogo } from "@thunderstore/cyberstorm/src/svg/svg";
-import {
-  faUsers,
-  faHandHoldingHeart,
-  faDownload,
-  faCaretRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { memo, Suspense } from "react";
-import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
-import { RelativeTime } from "@thunderstore/cyberstorm/src/components/RelativeTime/RelativeTime";
-import {
+  ThunderstoreLogo,
   formatFileSize,
   formatInteger,
   formatToDisplayName,
-} from "@thunderstore/cyberstorm/src/utils/utils";
+} from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { type OutletContextShape } from "~/root";
-import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
-import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
-import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
-import { getPrivateListing, getPublicListing } from "./listingUtils";
 import {
   type PackageListingDetails,
   type TeamDetails,
 } from "@thunderstore/dapper/types";
+
+import { getPrivateListing, getPublicListing } from "./listingUtils";
+import "./packageListing.css";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { communityId, namespaceId, packageId, packageVersion } = params;

@@ -1,5 +1,9 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { type OutletContextShape } from "app/root";
+import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { Suspense, useReducer, useState } from "react";
 import {
   Await,
@@ -7,26 +11,23 @@ import {
   useOutletContext,
   useRevalidator,
 } from "react-router";
+import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 
 import {
+  CodeBox,
+  Modal,
   NewAlert,
   NewButton,
-  Modal,
   NewIcon,
   NewTextInput,
-  CodeBox,
 } from "@thunderstore/cyberstorm";
 import {
-  teamAddServiceAccount,
   type TeamServiceAccountAddRequestData,
+  teamAddServiceAccount,
 } from "@thunderstore/thunderstore-api";
 
-import { type OutletContextShape } from "app/root";
-import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
-import { isTeamOwner } from "cyberstorm/utils/permissions";
-import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
-import { ServiceAccountsTable } from "./ServiceAccountsTable";
 import "./ServiceAccounts.css";
+import { ServiceAccountsTable } from "./ServiceAccountsTable";
 
 export const clientLoader = makeTeamSettingsTabLoader(
   async (dapper, teamName) => ({
@@ -154,6 +155,8 @@ function AddServiceAccountForm(props: {
     },
   });
 
+  const nicknameFieldProps = strongForm.getFieldComponentProps("nickname");
+
   const handleOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen);
     if (!nextOpen) {
@@ -197,46 +200,46 @@ function AddServiceAccountForm(props: {
           </NewAlert>
         </Modal.Body>
       ) : (
-        <Modal.Body>
+        <>
           <form
             className="service-accounts__form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (strongForm.isReady) {
-                strongForm.submit();
-              }
-            }}
+            onSubmit={strongForm.handleSubmit}
           >
-            <div>
-              Enter the nickname of the service account you wish to add to the
-              team <span>{props.teamName}</span>
-            </div>
-            <div className="service-accounts__nickname-input">
-              <NewTextInput
-                value={formInputs.nickname}
-                onChange={(e) => {
-                  updateFormFieldState({
-                    field: "nickname",
-                    value: e.target.value,
-                  });
-                }}
-                placeholder={"ExampleName"}
-                maxLength={32}
-              />
-              <div className="service-accounts__nickname-input-max-length">
-                Max. 32 characters
+            <Modal.Body>
+              <div>
+                Enter the nickname of the service account you wish to add to the
+                team <span>{props.teamName}</span>
               </div>
-            </div>
-            {error && <NewAlert csVariant="danger">{error}</NewAlert>}
+              <label htmlFor="serviceAccountNickname">
+                Nickname <RequiredIndicator />
+              </label>
+              <div className="service-accounts__nickname-input">
+                <NewTextInput
+                  id="serviceAccountNickname"
+                  value={formInputs.nickname}
+                  onChange={(e) => {
+                    updateFormFieldState({
+                      field: "nickname",
+                      value: e.target.value,
+                    });
+                  }}
+                  placeholder={"ExampleName"}
+                  maxLength={32}
+                  {...nicknameFieldProps}
+                />
+                <div className="service-accounts__nickname-input-max-length">
+                  Max. 32 characters
+                </div>
+              </div>
+              {error && <NewAlert csVariant="danger">{error}</NewAlert>}
+            </Modal.Body>
+            <Modal.Footer>
+              <NewButton type="submit" disabled={!strongForm.isReady}>
+                Add Service Account
+              </NewButton>
+            </Modal.Footer>
           </form>
-        </Modal.Body>
-      )}
-      {serviceAccountAdded ? null : (
-        <Modal.Footer>
-          <NewButton onClick={strongForm.submit} disabled={!strongForm.isReady}>
-            Add Service Account
-          </NewButton>
-        </Modal.Footer>
+        </>
       )}
     </Modal>
   );

@@ -1,4 +1,5 @@
 import { expect, it } from "vitest";
+
 import { config, testData } from "../../__tests__/defaultConfig";
 import { fetchPackageChangelog } from "../packageChangelog";
 

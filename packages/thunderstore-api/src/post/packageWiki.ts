@@ -1,18 +1,22 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import type { ApiEndpointProps } from "../index";
 import {
-  PackageWikiPageCreateRequestData,
-  PackageWikiPageCreateRequestParams,
   packageWikiPageCreateRequestDataSchema,
-  PackageWikiPageEditRequestData,
-  PackageWikiPageEditRequestParams,
   packageWikiPageEditRequestDataSchema,
 } from "../schemas/requestSchemas";
+import type {
+  PackageWikiPageCreateRequestData,
+  PackageWikiPageCreateRequestParams,
+  PackageWikiPageEditRequestData,
+  PackageWikiPageEditRequestParams,
+} from "../schemas/requestSchemas";
 import {
-  PackageWikiPageCreateResponseData,
   packageWikiPageCreateResponseDataSchema,
-  PackageWikiPageEditResponseData,
   packageWikiPageEditResponseDataSchema,
+} from "../schemas/responseSchemas";
+import type {
+  PackageWikiPageCreateResponseData,
+  PackageWikiPageEditResponseData,
 } from "../schemas/responseSchemas";
 
 export async function postPackageWikiPageCreate(

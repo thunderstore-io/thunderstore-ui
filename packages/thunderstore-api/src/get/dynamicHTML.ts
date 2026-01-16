@@ -1,10 +1,10 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import type { ApiEndpointProps } from "../index";
+import type { DynamicHTMLRequestParams } from "../schemas/requestSchemas";
 import {
-  DynamicHTMLResponseData,
+  type DynamicHTMLResponseData,
   dynamicHTMLResponseDataSchema,
 } from "../schemas/responseSchemas";
-import { DynamicHTMLRequestParams } from "../schemas/requestSchemas";
 
 export async function fetchDynamicHTML(
   props: ApiEndpointProps<DynamicHTMLRequestParams, object, object>

@@ -1,10 +1,11 @@
+import { useEffect, useState } from "react";
+
 import {
   IBaseUploadHandle,
+  UploadError,
   UploadProgress,
   UploadStatus,
-  UploadError,
 } from "@thunderstore/ts-uploader";
-import { useEffect, useState } from "react";
 
 export const useUploadProgress = (
   handle?: IBaseUploadHandle

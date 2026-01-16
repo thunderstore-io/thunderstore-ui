@@ -1,13 +1,9 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
-import {
-  MarkdownRenderRequestData,
-  markdownRenderRequestDataSchema,
-} from "../schemas/requestSchemas";
-import {
-  MarkdownRenderResponseData,
-  markdownRenderResponseDataSchema,
-} from "../schemas/responseSchemas";
+import type { ApiEndpointProps } from "../index";
+import { markdownRenderRequestDataSchema } from "../schemas/requestSchemas";
+import type { MarkdownRenderRequestData } from "../schemas/requestSchemas";
+import { markdownRenderResponseDataSchema } from "../schemas/responseSchemas";
+import type { MarkdownRenderResponseData } from "../schemas/responseSchemas";
 
 export interface toolsMarkdownPreviewApiArgs {
   markdown: string;

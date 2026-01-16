@@ -1,4 +1,4 @@
-import { ApiEndpointProps } from "@thunderstore/thunderstore-api";
+import type { ApiEndpointProps } from "@thunderstore/thunderstore-api";
 
 export type ApiEndpoint<Params, QueryParams, Data, Return> = (
   props: ApiEndpointProps<Params, QueryParams, Data>

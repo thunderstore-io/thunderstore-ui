@@ -1,21 +1,22 @@
-import { memo, type PropsWithChildren } from "react";
-
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./BreadCrumbs.css";
-import { classnames, componentClasses } from "../../utils/utils";
+import { type PropsWithChildren, memo } from "react";
+
 import {
+  type BreadCrumbsModifiers,
+  type BreadCrumbsSizes,
+  type BreadCrumbsVariants,
+} from "@thunderstore/cyberstorm-theme";
+
+import {
+  type NewCyberstormLinkProps,
   NewIcon,
   NewLink,
-  type NewCyberstormLinkProps,
   type NewLinkProps,
 } from "../..";
 import { Frame } from "../../primitiveComponents/Frame/Frame";
-import {
-  type BreadCrumbsVariants,
-  type BreadCrumbsSizes,
-  type BreadCrumbsModifiers,
-} from "@thunderstore/cyberstorm-theme/src/components";
+import { classnames, componentClasses } from "../../utils/utils";
+import "./BreadCrumbs.css";
 
 type BreadCrumbsProps = PropsWithChildren<{
   rootClasses?: string;

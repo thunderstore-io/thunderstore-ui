@@ -1,0 +1,29 @@
+FROM node:24-bookworm
+
+WORKDIR /workspace
+
+ARG PLAYWRIGHT_VERSION=1.55.1
+
+ENV NODE_ENV=test
+
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends rsync \
+	&& rm -rf /var/lib/apt/lists/*
+
+# Install Playwright + its OS deps and browsers at image build time so
+# containers don't redo this on every start.
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+RUN npm -g i "playwright@${PLAYWRIGHT_VERSION}" \
+	&& npx playwright install-deps chromium \
+	&& npx playwright install chromium \
+	&& mkdir -p "$PLAYWRIGHT_BROWSERS_PATH" \
+	&& chown -R node:node "$PLAYWRIGHT_BROWSERS_PATH"
+
+# Copy entrypoint script
+COPY entrypoint.test.sh /usr/local/bin/entrypoint.test.sh
+RUN chmod +x /usr/local/bin/entrypoint.test.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.test.sh"]
+
+# Default: run the repo test script (vitest)
+CMD ["yarn", "test"]
