@@ -23,6 +23,6 @@ export default defineConfig({
       ],
       reporter: ["text", "json"],
     },
-    projects: ["apps/**/*/vitest.config.ts", "packages/*/vitest.config.ts"],
+    projects: ["apps/*/vitest.config.ts", "packages/*/vitest.config.ts"],
   },
 });
