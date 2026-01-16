@@ -1,31 +1,141 @@
-import { assert, describe, it, beforeEach } from "vitest";
 import {
-  SESSION_STORAGE_KEY,
-  CURRENT_USER_KEY,
-  STALE_KEY,
+  afterEach,
+  assert,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
+
+import type { User } from "@thunderstore/thunderstore-api";
+import {
   API_HOST_KEY,
   COOKIE_DOMAIN_KEY,
-  getSessionContext,
-  getSessionStale,
-  setSessionStale,
-  runSessionValidationCheck,
-  storeCurrentUser,
+  CURRENT_USER_KEY,
+  SESSION_STORAGE_KEY,
+  STALE_KEY,
+  StorageManager,
+  clearCookies,
+  clearInvalidSession,
   clearSession,
+  getConfig,
+  getCookie,
+  getSessionContext,
   getSessionCurrentUser,
-} from "@thunderstore/ts-api-react/src/SessionContext";
-import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
-import type { User } from "@thunderstore/thunderstore-api";
+  getSessionStale,
+  runSessionValidationCheck,
+  setSessionStale,
+  storeCurrentUser,
+  updateCurrentUser,
+} from "@thunderstore/ts-api-react";
+
+vi.mock("@thunderstore/dapper-ts", () => ({
+  DapperTs: vi.fn(),
+}));
+
+let getCurrentUserMock: ReturnType<typeof vi.fn>;
 
 describe("SessionContext", () => {
   const testApiHost = "https://api.example.invalid";
   const testCookieDomain = ".example.invalid";
 
-  beforeEach(() => {
+  beforeEach(async () => {
     // Clear localStorage before each test
     window.localStorage.clear();
     // Clear cookies
     document.cookie =
       "sessionid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    getCurrentUserMock = vi.fn().mockResolvedValue(null);
+    const { DapperTs } = await import("@thunderstore/dapper-ts");
+    vi.mocked(DapperTs).mockImplementation(
+      () => ({ getCurrentUser: getCurrentUserMock }) as any
+    );
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  describe("getCookie", () => {
+    it("should return cookie value when present", () => {
+      document.cookie = "sessionid=test-session-id";
+      assert.strictEqual(getCookie("sessionid"), "test-session-id");
+    });
+
+    it("should return null when cookie is missing", () => {
+      document.cookie = "other=123";
+      assert.isNull(getCookie("sessionid"));
+    });
+  });
+
+  describe("getConfig", () => {
+    it("should use domain fallback when apiHost is not stored", () => {
+      document.cookie = "sessionid=abc";
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+
+      const config = getConfig(storage, "http://fallback.invalid");
+      assert.strictEqual(config.apiHost, "http://fallback.invalid");
+      assert.strictEqual(config.sessionId, "abc");
+    });
+
+    it("should use stored apiHost over domain", () => {
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+      storage.setValue(API_HOST_KEY, "http://stored.invalid");
+
+      const config = getConfig(storage, "http://fallback.invalid");
+      assert.strictEqual(config.apiHost, "http://stored.invalid");
+    });
+  });
+
+  describe("clearCookies", () => {
+    it("should clear sessionid cookie", () => {
+      document.cookie = "sessionid=abc; path=/";
+      clearCookies("localhost");
+      assert.isNull(getCookie("sessionid"));
+    });
+  });
+
+  describe("clearInvalidSession", () => {
+    it("should clear current user and mark session stale", () => {
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+      storage.setValue(COOKIE_DOMAIN_KEY, ".example.invalid");
+
+      const testUser: User = {
+        username: "testUser",
+        capabilities: [],
+        connections: [],
+        subscription: { expires: null },
+        teams: [],
+        teams_full: [],
+      };
+      storeCurrentUser(storage, testUser);
+
+      clearInvalidSession(storage);
+
+      assert.isNull(storage.safeGetJsonValue(CURRENT_USER_KEY));
+      assert.strictEqual(storage.safeGetValue(STALE_KEY), "yes");
+    });
+
+    it("should not throw if storage operations fail", () => {
+      const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+      const brokenStorage = {
+        safeGetValue: () => {
+          throw new Error("boom");
+        },
+        removeValue: () => {
+          throw new Error("boom");
+        },
+        setValue: () => {
+          throw new Error("boom");
+        },
+      } as unknown as StorageManager;
+
+      clearInvalidSession(brokenStorage);
+      assert.isTrue(errorSpy.mock.calls.length >= 1);
+    });
   });
 
   describe("StorageManager", () => {
@@ -302,6 +412,48 @@ describe("SessionContext", () => {
       assert.strictEqual(result.username, "storedUser");
       assert.deepEqual(result.capabilities, ["cap1"]);
       assert.deepEqual(result.teams, ["team1"]);
+    });
+
+    it("should throw when stored user is invalid", async () => {
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+      storage.setJsonValue(CURRENT_USER_KEY, { username: 123 } as unknown);
+      setSessionStale(storage, false);
+
+      await expect(getSessionCurrentUser(storage, false)).rejects.toThrow(
+        /Failed to parse current user/
+      );
+    });
+  });
+
+  describe("updateCurrentUser", () => {
+    it("should store currentUser and clear stale when user is returned", async () => {
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+
+      getCurrentUserMock.mockResolvedValue({
+        username: "testUser",
+        capabilities: [],
+        connections: [],
+        subscription: { expires: null },
+        teams: [],
+        teams_full: [],
+      });
+
+      await updateCurrentUser(storage);
+
+      const storedUser = storage.safeGetJsonValue(CURRENT_USER_KEY) as User;
+      assert.strictEqual(storedUser.username, "testUser");
+      assert.strictEqual(storage.safeGetValue(STALE_KEY), "no");
+    });
+
+    it("should clear currentUser when API returns null/empty and clear stale", async () => {
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+      storage.setJsonValue(CURRENT_USER_KEY, { username: "old" } as unknown);
+
+      getCurrentUserMock.mockResolvedValue(null);
+      await updateCurrentUser(storage);
+
+      assert.isNull(storage.safeGetJsonValue(CURRENT_USER_KEY));
+      assert.strictEqual(storage.safeGetValue(STALE_KEY), "no");
     });
   });
 });

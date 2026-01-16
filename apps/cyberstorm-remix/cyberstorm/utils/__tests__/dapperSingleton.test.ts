@@ -1,14 +1,16 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { DapperTs } from "@thunderstore/dapper-ts";
+
+import type { Community } from "../../../../../packages/thunderstore-api/src";
+import * as publicEnvVariables from "../../security/publicEnvVariables";
 import {
-  initializeClientDapper,
   getClientDapper,
   getDapperForRequest,
+  initializeClientDapper,
   resetDapperSingletonForTest,
 } from "../dapperSingleton";
 import { deduplicatePromiseForRequest } from "../requestCache";
-import { DapperTs } from "@thunderstore/dapper-ts";
-import * as publicEnvVariables from "../../security/publicEnvVariables";
-import type { Community } from "../../../../../packages/thunderstore-api/src";
 
 // Mock getSessionTools
 vi.mock("../../security/publicEnvVariables", () => ({
@@ -193,6 +195,27 @@ describe("dapperSingleton", () => {
       expect(manualFunc).not.toHaveBeenCalled();
       // The underlying dapper method should have been called once
       expect(mockGetCommunity).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("resetDapperSingletonForTest", () => {
+    it("clears request-scoped proxy cache and config factory", () => {
+      initializeClientDapper();
+      const request = new Request("http://localhost");
+
+      const proxy1 = getDapperForRequest(request);
+      // Ensure factory was resolved once
+      expect(publicEnvVariables.getSessionTools).toHaveBeenCalled();
+
+      resetDapperSingletonForTest();
+
+      // After reset, same request should produce a new proxy
+      const proxy2 = getDapperForRequest(request);
+      expect(proxy2).not.toBe(proxy1);
+
+      // And config factory should be re-resolved
+      initializeClientDapper();
+      expect(publicEnvVariables.getSessionTools).toHaveBeenCalled();
     });
   });
 });

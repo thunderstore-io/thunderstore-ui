@@ -1,9 +1,8 @@
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { type LoaderFunctionArgs } from "react-router";
 
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { ApiError, type GenericApiError } from "@thunderstore/thunderstore-api";
-
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 
 /**
  * TODO
@@ -45,9 +44,12 @@ export function makeTeamSettingsTabLoader<T>(
 
 const setupDapper = () => {
   const tools = getSessionTools();
-  const config = tools?.getConfig();
-  return new DapperTs(() => ({
-    apiHost: config?.apiHost,
-    sessionId: config?.sessionId,
-  }));
+  const config = tools.getConfig();
+  return new DapperTs(
+    () => ({
+      apiHost: config.apiHost,
+      sessionId: config.sessionId,
+    }),
+    () => tools.clearInvalidSession()
+  );
 };
