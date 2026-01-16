@@ -28,10 +28,7 @@ export default function ManifestValidator() {
 
   const selectOptions = currentUser
     ? currentUser.teams.map((team) => {
-        if (typeof team === "string") {
-          return { value: team, label: team };
-        }
-        return { value: team.name, label: team.name };
+        return { value: team, label: team };
       })
     : [];
 

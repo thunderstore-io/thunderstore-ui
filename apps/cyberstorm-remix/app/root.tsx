@@ -1,5 +1,15 @@
 import "./styles/index.css";
-import "@thunderstore/cyberstorm-theme";
+
+// import { LinksFunction } from "@remix-run/react/dist/routeModules";
+import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
+import { withSentry } from "@sentry/remix";
+import {
+  getPublicEnvVariables,
+  getSessionTools,
+  type publicEnvVariablesType,
+} from "cyberstorm/security/publicEnvVariables";
+import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
+import { type ReactNode, Suspense, memo, useEffect, useRef } from "react";
 import {
   Await,
   Links,
@@ -14,40 +24,33 @@ import {
   useLocation,
   useMatches,
 } from "react-router";
-// import { LinksFunction } from "@remix-run/react/dist/routeModules";
-import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
+import { useHydrated } from "remix-utils/use-hydrated";
 
-import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
 import {
   AdContainer,
-  isRecord,
   LinkingProvider,
   NewBreadCrumbs,
   NewBreadCrumbsLink,
+  ToastProvider,
+  isRecord,
 } from "@thunderstore/cyberstorm";
+import "@thunderstore/cyberstorm-theme/css";
+import "@thunderstore/cyberstorm/css";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type CurrentUser } from "@thunderstore/dapper/types";
-
-import { withSentry } from "@sentry/remix";
-import { memo, type ReactNode, Suspense, useEffect, useRef } from "react";
-import { useHydrated } from "remix-utils/use-hydrated";
-import Toast from "@thunderstore/cyberstorm/src/newComponents/Toast";
-import { Footer } from "./commonComponents/Footer/Footer";
 import { type RequestConfig } from "@thunderstore/thunderstore-api";
-import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
-import { NamespacedStorageManager } from "@thunderstore/ts-api-react";
 import {
+  NamespacedStorageManager,
+  SESSION_STORAGE_KEY,
+  StorageManager,
   getSessionContext,
   getSessionStale,
-  SESSION_STORAGE_KEY,
   runSessionValidationCheck,
-} from "@thunderstore/ts-api-react/src/SessionContext";
-import {
-  getPublicEnvVariables,
-  type publicEnvVariablesType,
-} from "cyberstorm/security/publicEnvVariables";
-import { StorageManager } from "@thunderstore/ts-api-react/src/storage";
+} from "@thunderstore/ts-api-react";
+
 import type { Route } from "./+types/root";
+import { Footer } from "./commonComponents/Footer/Footer";
+import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
@@ -338,7 +341,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         )}
         <div className="container container--y container--full island layout">
           <LinkingProvider value={LinkLibrary}>
-            <Toast.Provider toastDuration={10000}>
+            <ToastProvider toastDuration={10000}>
               <TooltipProvider>
                 <NavigationWrapper
                   domain={resolvedEnvVars?.VITE_API_URL || ""}
@@ -557,7 +560,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Footer />
                 {shouldShowAds ? <AdsInit /> : null}
               </TooltipProvider>
-            </Toast.Provider>
+            </ToastProvider>
           </LinkingProvider>
           <ScrollRestoration />
           <Scripts />
@@ -578,12 +581,19 @@ const TooltipProvider = memo(function TooltipProvider({
 
 function App() {
   const data = useLoaderData<RootLoadersType>();
-  const dapper = new DapperTs(() => {
-    return {
-      apiHost: data?.publicEnvVariables.VITE_API_URL,
-      sessionId: data?.config.sessionId,
-    };
-  });
+  const sessionTools = getSessionTools();
+  const dapper = new DapperTs(
+    () => {
+      return {
+        apiHost: data?.publicEnvVariables.VITE_API_URL,
+        sessionId: data?.config.sessionId,
+      };
+    },
+    () =>
+      sessionTools.clearInvalidSession(
+        data?.publicEnvVariables.VITE_COOKIE_DOMAIN
+      )
+  );
 
   return (
     <Outlet

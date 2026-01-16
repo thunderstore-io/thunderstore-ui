@@ -1,38 +1,38 @@
-import { DapperInterface } from "@thunderstore/dapper";
-import { RequestConfig } from "@thunderstore/thunderstore-api";
+import type { DapperInterface } from "@thunderstore/dapper";
+import type { RequestConfig } from "@thunderstore/thunderstore-api";
 
-import { getDynamicHTML } from "./methods/dynamicHTML";
 import { getCommunities, getCommunity } from "./methods/communities";
 import { getCommunityFilters } from "./methods/communityFilters";
-import { getRatedPackages } from "./methods/ratedPackages";
 import {
   getCurrentUser,
   getCurrentUserTeamPermissions,
 } from "./methods/currentUser";
+import { getDynamicHTML } from "./methods/dynamicHTML";
 import {
   getPackageChangelog,
+  getPackagePermissions,
   getPackageReadme,
-  getPackageVersions,
-  postPackageSubmissionMetadata,
+  getPackageSource,
   getPackageSubmissionStatus,
+  getPackageVersionDependencies,
+  getPackageVersions,
   getPackageWiki,
   getPackageWikiPage,
-  getPackagePermissions,
-  getPackageSource,
-  getPackageVersionDependencies,
+  postPackageSubmissionMetadata,
 } from "./methods/package";
 import {
   getPackageListingDetails,
   getPackageListingStatus,
   getPackageListings,
 } from "./methods/packageListings";
+import { getPackageVersionDetails } from "./methods/packageVersion";
+import { getRatedPackages } from "./methods/ratedPackages";
 import {
   getTeamDetails,
   getTeamMembers,
   getTeamServiceAccounts,
   postTeamCreate,
 } from "./methods/team";
-import { getPackageVersionDetails } from "./methods/packageVersion";
 
 export interface DapperTsInterface extends DapperInterface {
   config: () => RequestConfig;
@@ -70,7 +70,7 @@ export class DapperTs implements DapperTsInterface {
     this.getTeamDetails = this.getTeamDetails.bind(this);
     this.getTeamMembers = this.getTeamMembers.bind(this);
     this.getTeamServiceAccounts = this.getTeamServiceAccounts.bind(this);
-    this.postTeamCreate = () => this.postTeamCreate.bind(this);
+    this.postTeamCreate = this.postTeamCreate.bind(this);
     this.postPackageSubmissionMetadata =
       this.postPackageSubmissionMetadata.bind(this);
     this.getPackageSubmissionStatus =

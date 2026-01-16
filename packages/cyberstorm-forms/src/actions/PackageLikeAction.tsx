@@ -1,10 +1,8 @@
-import { useFormToaster } from "@thunderstore/cyberstorm-forms";
+import { ApiError, packageRate } from "@thunderstore/thunderstore-api";
+import type { RequestConfig } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-import {
-  ApiError,
-  RequestConfig,
-  packageRate,
-} from "@thunderstore/thunderstore-api";
+
+import { useFormToaster } from "../useFormToaster";
 
 export function PackageLikeAction(props: {
   isLoggedIn: boolean;
@@ -15,11 +13,14 @@ export function PackageLikeAction(props: {
     { state: "rated" | "unrated" },
     { isLoggedIn: boolean; e: Error | ApiError | unknown }
   >({
-    successMessage: (successProps) =>
+    successMessage: (successProps: { state: "rated" | "unrated" }) =>
       `${
         successProps.state === "rated" ? "Liked" : "Removed like from"
       } package`,
-    errorMessage: (errorProps) =>
+    errorMessage: (errorProps: {
+      isLoggedIn: boolean;
+      e: Error | ApiError | unknown;
+    }) =>
       errorProps.isLoggedIn
         ? `Error: ${errorProps.e}`
         : "You must be logged in to like a package!",

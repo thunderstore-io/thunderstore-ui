@@ -7,4 +7,5 @@ export type {
   UploadPartStatus,
   UploadError,
   UploadMetrics,
+  UserMedia,
 } from "./uploaders/types";
