@@ -10,7 +10,7 @@ import {
   type SelectSearchModifiers,
   type SelectSearchSizes,
   type SelectSearchVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import { NewIcon, NewTag } from "../../index";
 import type { SelectOption } from "../../utils/types";

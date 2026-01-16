@@ -2,7 +2,7 @@ import { faBan, faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo } from "react";
 
-import { type ImageVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { type ImageVariants } from "@thunderstore/cyberstorm-theme";
 
 import { NewIcon } from "../..";
 import {

@@ -6,7 +6,7 @@ import {
   type BreadCrumbsModifiers,
   type BreadCrumbsSizes,
   type BreadCrumbsVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import {
   type NewCyberstormLinkProps,

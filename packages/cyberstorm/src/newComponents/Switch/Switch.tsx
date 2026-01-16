@@ -5,7 +5,7 @@ import {
   type SwitchModifiers,
   type SwitchSizes,
   type SwitchVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import { classnames, componentClasses } from "../../utils/utils";
 import "./Switch.css";

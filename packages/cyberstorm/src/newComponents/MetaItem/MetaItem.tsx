@@ -3,7 +3,7 @@ import React from "react";
 import {
   type MetaItemSizes,
   type MetaItemVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import {
   Actionable,

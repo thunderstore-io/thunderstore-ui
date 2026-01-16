@@ -12,8 +12,8 @@ import {
   useState,
 } from "react";
 
-import { type ModalVariants } from "@thunderstore/cyberstorm-theme/src/components";
-import { type ModalSizes } from "@thunderstore/cyberstorm-theme/src/components/Modal/Modal";
+import { type ModalVariants } from "@thunderstore/cyberstorm-theme";
+import { type ModalSizes } from "@thunderstore/cyberstorm-theme";
 
 import { NewButton, NewIcon } from "../..";
 import { classnames, componentClasses } from "../../utils/utils";

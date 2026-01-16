@@ -26,6 +26,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "jsx": "react-jsx",
+    "types": ["react", "react-dom"],
     "plugins": [
       {
         "name": "typescript-plugin-css-modules"

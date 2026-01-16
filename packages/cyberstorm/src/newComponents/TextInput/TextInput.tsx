@@ -6,7 +6,7 @@ import {
   type TextInputModifiers,
   type TextInputSizes,
   type TextInputVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import { NewIcon } from "../..";
 import { Actionable } from "../../primitiveComponents/Actionable/Actionable";

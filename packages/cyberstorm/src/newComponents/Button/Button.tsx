@@ -4,7 +4,7 @@ import {
   type ButtonModifiers,
   type ButtonSizes,
   type ButtonVariants,
-} from "@thunderstore/cyberstorm-theme/src/components";
+} from "@thunderstore/cyberstorm-theme";
 
 import {
   Actionable,
