@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import "@thunderstore/cyberstorm-theme";
+
 import { Image } from "@thunderstore/cyberstorm";
+import "@thunderstore/cyberstorm-theme";
 import { ImageVariantsList } from "@thunderstore/cyberstorm-theme/src/components";
+
 import catHeim from "../assets/catheim.png";
 
 const meta = {

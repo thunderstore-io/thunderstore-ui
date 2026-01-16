@@ -1,14 +1,15 @@
 // THIS API ENDPOINT IS NOT IMPLEMENTED YET IN THE THUNDERSTORE API
-
+import { apiFetch } from "../apiFetch";
 import {
-  ApiEndpointProps,
-  TeamServiceAccountAddRequestData,
   teamServiceAccountAddRequestDataSchema,
-  TeamServiceAccountAddRequestParams,
-  TeamServiceAccountAddResponseData,
   teamServiceAccountAddResponseSchema,
 } from "../index";
-import { apiFetch } from "../apiFetch";
+import type {
+  ApiEndpointProps,
+  TeamServiceAccountAddRequestData,
+  TeamServiceAccountAddRequestParams,
+  TeamServiceAccountAddResponseData,
+} from "../index";
 
 export type teamAddServiceAccountMetaArgs = {
   teamIdentifier: string;

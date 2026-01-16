@@ -20,7 +20,7 @@ export interface PackageListing {
 export type PackageListings = PaginatedList<PackageListing>;
 
 export interface PackageListingStatus {
-  review_status: string;
+  review_status: string | null;
   rejection_reason: string | null;
   internal_notes: string | null;
 }

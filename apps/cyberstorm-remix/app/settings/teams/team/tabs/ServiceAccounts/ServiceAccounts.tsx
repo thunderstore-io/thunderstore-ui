@@ -11,6 +11,7 @@ import {
   useOutletContext,
   useRevalidator,
 } from "react-router";
+import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 
 import {
   CodeBox,
@@ -25,7 +26,6 @@ import {
   teamAddServiceAccount,
 } from "@thunderstore/thunderstore-api";
 
-import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 import "./ServiceAccounts.css";
 import { ServiceAccountsTable } from "./ServiceAccountsTable";
 

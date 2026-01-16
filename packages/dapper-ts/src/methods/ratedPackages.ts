@@ -1,6 +1,6 @@
 import { fetchRatedPackages } from "@thunderstore/thunderstore-api";
 
-import { DapperTsInterface } from "../index";
+import type { DapperTsInterface } from "../index";
 
 export async function getRatedPackages(this: DapperTsInterface) {
   const data = await fetchRatedPackages({

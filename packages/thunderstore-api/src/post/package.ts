@@ -1,23 +1,27 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import type { ApiEndpointProps } from "../index";
 import {
-  PackageDeprecateRequestData,
   packageDeprecateRequestDataSchema,
-  PackageDeprecateRequestParams,
   packageRateRequestDataSchema,
-  PackageUnlistRequestData,
   packageUnlistRequestDataSchema,
+} from "../schemas/requestSchemas";
+import type {
+  PackageDeprecateRequestData,
+  PackageDeprecateRequestParams,
+  PackageUnlistRequestData,
   PackageUnlistRequestParams,
 } from "../schemas/requestSchemas";
-import { PackageRateRequestData } from "../schemas/requestSchemas";
-import { PackageRateRequestParams } from "../schemas/requestSchemas";
+import type { PackageRateRequestData } from "../schemas/requestSchemas";
+import type { PackageRateRequestParams } from "../schemas/requestSchemas";
 import {
-  PackageDeprecateResponseData,
   packageDeprecateResponseDataSchema,
   packageRateResponseDataSchema,
+  packageUnlistResponseDataSchema,
+} from "../schemas/responseSchemas";
+import type {
+  PackageDeprecateResponseData,
   PackageRateResponseData,
   PackageUnlistResponseData,
-  packageUnlistResponseDataSchema,
 } from "../schemas/responseSchemas";
 
 export function packageRate(

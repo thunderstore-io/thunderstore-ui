@@ -65,7 +65,12 @@ describe("dapperClientLoaders", () => {
     const dataFetcher = vi.fn().mockImplementation(() => {
       throw new ApiError({
         message: "403: Forbidden",
-        response: new Response(null, { status: 403, statusText: "Forbidden" }),
+        response: {
+          headers: {},
+          status: 403,
+          statusText: "Forbidden",
+          url: "",
+        },
         responseJson: { detail: "Nope" },
       });
     });
@@ -93,7 +98,12 @@ describe("dapperClientLoaders", () => {
     const dataFetcher = vi.fn().mockImplementation(() => {
       throw new ApiError({
         message: "404: Not Found",
-        response: new Response(null, { status: 404, statusText: "Not Found" }),
+        response: {
+          headers: {},
+          status: 404,
+          statusText: "Not Found",
+          url: "",
+        },
       });
     });
 

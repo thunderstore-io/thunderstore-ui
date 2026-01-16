@@ -1,5 +1,7 @@
 import { faTrashCan } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { type OutletContextShape } from "app/root";
+import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { useState } from "react";
 import { useOutletContext } from "react-router";
 
@@ -11,20 +13,17 @@ import {
   NewLink,
   NewSelect,
   NewTable,
-  useToast,
+  NewTableSort,
   type SelectOption,
+  useToast,
 } from "@thunderstore/cyberstorm";
-import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
 import {
-  teamEditMember,
-  teamRemoveMember,
   type RequestConfig,
   type TeamMember,
+  teamEditMember,
+  teamRemoveMember,
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-
-import { type OutletContextShape } from "app/root";
-import { isTeamOwner } from "cyberstorm/utils/permissions";
 
 const teamMemberColumns = [
   { value: "User", disableSort: false },
@@ -151,7 +150,7 @@ export function MembersTable(props: {
       headers={teamMemberColumns}
       rows={tableData}
       sortByHeader={1}
-      sortDirection={TableSort.ASC}
+      sortDirection={NewTableSort.ASC}
     />
   );
 }

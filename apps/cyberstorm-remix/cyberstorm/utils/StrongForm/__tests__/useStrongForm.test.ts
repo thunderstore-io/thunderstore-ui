@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef } from "react";
-import { createRoot } from "react-dom/client";
 import { act } from "react";
+import { createRoot } from "react-dom/client";
 import { afterEach, assert, describe, expect, it, vi } from "vitest";
 
 import {

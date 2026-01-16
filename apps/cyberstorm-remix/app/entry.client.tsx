@@ -1,15 +1,14 @@
 import * as Sentry from "@sentry/remix";
-import { useEffect, startTransition, StrictMode } from "react";
-import { hydrateRoot } from "react-dom/client";
-import { useLocation, useMatches } from "react-router";
-import { HydratedRouter } from "react-router/dom";
-
 import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { denyUrls } from "cyberstorm/utils/sentry";
 import { initializeClientDapper } from "cyberstorm/utils/dapperSingleton";
+import { denyUrls } from "cyberstorm/utils/sentry";
+import { StrictMode, startTransition, useEffect } from "react";
+import { hydrateRoot } from "react-dom/client";
+import { useLocation, useMatches } from "react-router";
+import { HydratedRouter } from "react-router/dom";
 
 const publicEnvVariables = getPublicEnvVariables([
   "VITE_SITE_URL",

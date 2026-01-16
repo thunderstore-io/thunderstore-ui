@@ -12,12 +12,12 @@ import { getCurrentUser, getCurrentUserTeamPermissions } from "../currentUser";
 
 vi.mock("@thunderstore/thunderstore-api", () => {
   class ApiError extends Error {
-    response: Response;
+    response: unknown;
     responseJson?: unknown;
 
     constructor(args: {
       message: string;
-      response: Response;
+      response: unknown;
       responseJson?: unknown;
     }) {
       super(args.message);
@@ -72,10 +72,12 @@ describe("dapper-ts currentUser methods", () => {
 
     const fetchCurrentUserMock = fetchCurrentUser as unknown as Mock;
 
-    const response = new Response(null, {
+    const response = {
+      headers: {},
       status: 401,
       statusText: "Unauthorized",
-    });
+      url: "",
+    };
     const err = new ApiError({ message: "401: Unauthorized", response });
 
     fetchCurrentUserMock.mockRejectedValue(err);
@@ -94,10 +96,12 @@ describe("dapper-ts currentUser methods", () => {
 
     const fetchCurrentUserMock = fetchCurrentUser as unknown as Mock;
 
-    const response = new Response(null, {
+    const response = {
+      headers: {},
       status: 500,
       statusText: "Server Error",
-    });
+      url: "",
+    };
     const err = new ApiError({ message: "500: Server Error", response });
 
     fetchCurrentUserMock.mockRejectedValue(err);

@@ -1,3 +1,6 @@
+import { type OutletContextShape } from "app/root";
+import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { Suspense } from "react";
 import {
   Await,
@@ -6,12 +9,9 @@ import {
   useRevalidator,
 } from "react-router";
 
-import { type OutletContextShape } from "app/root";
-import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
-import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { MemberAddForm } from "./MemberAddForm";
-import { MembersTable } from "./MembersTable";
 import "./Members.css";
+import { MembersTable } from "./MembersTable";
 
 export const clientLoader = makeTeamSettingsTabLoader(
   async (dapper, teamName) => ({

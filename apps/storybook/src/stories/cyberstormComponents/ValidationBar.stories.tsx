@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { ValidationBar } from "@thunderstore/cyberstorm";
+
 import "./ValidationBar.css";
 
 const meta = {

@@ -1,15 +1,16 @@
 import { faBan, faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { memo } from "react";
 
-import "./Image.css";
-import { classnames, componentClasses } from "../../utils/utils";
+import { type ImageVariants } from "@thunderstore/cyberstorm-theme/src/components";
+
+import { NewIcon } from "../..";
 import {
   Frame,
   type FrameWindowProps,
 } from "../../primitiveComponents/Frame/Frame";
-import { NewIcon } from "../..";
-import { memo } from "react";
-import { type ImageVariants } from "@thunderstore/cyberstorm-theme/src/components";
+import { classnames, componentClasses } from "../../utils/utils";
+import "./Image.css";
 
 interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
   src: string | null | undefined;

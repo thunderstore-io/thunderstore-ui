@@ -1,10 +1,9 @@
+import { type OutletContextShape } from "app/root";
 import { useOutletContext } from "react-router";
 
-import { NewTable, Heading } from "@thunderstore/cyberstorm";
-import { TableSort } from "@thunderstore/cyberstorm/src/newComponents/Table/Table";
+import { Heading, NewTable, NewTableSort } from "@thunderstore/cyberstorm";
 import { type TeamServiceAccount } from "@thunderstore/thunderstore-api";
 
-import { type OutletContextShape } from "app/root";
 import { ServiceAccountRemoveModal } from "./ServiceAccountRemoveModal";
 import "./ServiceAccounts.css";
 
@@ -61,7 +60,7 @@ export function ServiceAccountsTable(props: {
       headers={serviceAccountColumns}
       rows={tableData}
       sortByHeader={1}
-      sortDirection={TableSort.ASC}
+      sortDirection={NewTableSort.ASC}
     />
   );
 }

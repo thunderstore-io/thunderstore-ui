@@ -2,6 +2,7 @@ import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer, useState } from "react";
+import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 
 import {
   Modal,
@@ -17,8 +18,6 @@ import {
   type TeamAddMemberRequestData,
   teamAddMember,
 } from "@thunderstore/thunderstore-api";
-
-import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 
 const roleOptions: SelectOption<"owner" | "member">[] = [
   { value: "member", label: "Member" },

@@ -1,8 +1,10 @@
-import "./PackageFormatDocs.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { CodeBox, NewIcon, NewTable } from "@thunderstore/cyberstorm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+
+import { CodeBox, NewIcon, NewTable } from "@thunderstore/cyberstorm";
+
+import "./PackageFormatDocs.css";
 
 export default function PackageFormatDocs() {
   return (

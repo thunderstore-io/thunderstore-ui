@@ -1,23 +1,23 @@
-import { ApiEndpointProps } from "../index";
 import { apiFetch } from "../apiFetch";
+import type { ApiEndpointProps } from "../index";
 import {
+  packageListingApproveRequestDataSchema,
+  packageListingRejectRequestDataSchema,
+  packageListingReportRequestDataSchema,
+  packageListingUpdateRequestDataSchema,
+} from "../schemas/requestSchemas";
+import type {
   PackageListingApproveRequestData,
   PackageListingApproveRequestParams,
   PackageListingRejectRequestData,
   PackageListingRejectRequestParams,
+  PackageListingReportRequestData,
+  PackageListingReportRequestParams,
   PackageListingUpdateRequestData,
   PackageListingUpdateRequestParams,
-  packageListingUpdateRequestDataSchema,
-  packageListingApproveRequestDataSchema,
-  packageListingRejectRequestDataSchema,
-  PackageListingReportRequestParams,
-  PackageListingReportRequestData,
-  packageListingReportRequestDataSchema,
 } from "../schemas/requestSchemas";
-import {
-  PackageListingUpdateResponseData,
-  packageListingUpdateResponseDataSchema,
-} from "../schemas/responseSchemas";
+import { packageListingUpdateResponseDataSchema } from "../schemas/responseSchemas";
+import type { PackageListingUpdateResponseData } from "../schemas/responseSchemas";
 
 export function packageListingUpdate(
   props: ApiEndpointProps<

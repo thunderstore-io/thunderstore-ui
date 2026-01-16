@@ -1,19 +1,21 @@
-import { type CSSProperties, type ReactNode, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSort,
   faSortDown,
   faSortUp,
 } from "@fortawesome/free-solid-svg-icons";
-import "./Table.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { type CSSProperties, type ReactNode, useState } from "react";
+import React from "react";
+
+import {
+  type TableModifiers,
+  type TableSizes,
+  type TableVariants,
+} from "@thunderstore/cyberstorm-theme/src/components";
+
 import { NewIcon } from "../..";
 import { classnames, componentClasses } from "../../utils/utils";
-import {
-  type TableVariants,
-  type TableSizes,
-  type TableModifiers,
-} from "@thunderstore/cyberstorm-theme/src/components";
-import React from "react";
+import "./Table.css";
 
 interface SortButtonProps {
   identifier: number;

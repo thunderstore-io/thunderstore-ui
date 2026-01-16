@@ -1,5 +1,6 @@
+import { describe, expect, it } from "vitest";
+
 import { GraphEdge, GraphNode } from "..";
-import { describe, it, expect } from "vitest";
 
 describe("GraphEdge", () => {
   it("should create an edge with source and target nodes", () => {

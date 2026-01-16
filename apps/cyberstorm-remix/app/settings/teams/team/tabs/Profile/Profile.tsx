@@ -1,6 +1,7 @@
 import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
+import { isTeamOwner } from "cyberstorm/utils/permissions";
 import { Suspense, useReducer } from "react";
 import {
   Await,
@@ -16,7 +17,6 @@ import {
   teamDetailsEdit,
 } from "@thunderstore/thunderstore-api";
 
-import { isTeamOwner } from "cyberstorm/utils/permissions";
 import "./Profile.css";
 
 export const clientLoader = makeTeamSettingsTabLoader(

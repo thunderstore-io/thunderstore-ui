@@ -34,6 +34,34 @@ import {
   postTeamCreate,
 } from "./methods/team";
 
+export {
+  getCommunities,
+  getCommunity,
+  getCommunityFilters,
+  getCurrentUser,
+  getCurrentUserTeamPermissions,
+  getDynamicHTML,
+  getPackageChangelog,
+  getPackagePermissions,
+  getPackageReadme,
+  getPackageSource,
+  getPackageSubmissionStatus,
+  getPackageVersionDependencies,
+  getPackageVersions,
+  getPackageWiki,
+  getPackageWikiPage,
+  postPackageSubmissionMetadata,
+  getPackageListingDetails,
+  getPackageListingStatus,
+  getPackageListings,
+  getPackageVersionDetails,
+  getRatedPackages,
+  getTeamDetails,
+  getTeamMembers,
+  getTeamServiceAccounts,
+  postTeamCreate,
+};
+
 export interface DapperTsInterface extends DapperInterface {
   config: () => RequestConfig;
   removeSessionHook?: () => void;

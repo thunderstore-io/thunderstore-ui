@@ -1,19 +1,21 @@
-import { faCog, faList, faBoxOpen } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBoxOpen, faCog, faList } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
-import { ReviewPackageForm } from "./ReviewPackageForm";
-import { type DapperTsInterface } from "@thunderstore/dapper-ts";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { NewButton, NewIcon, useToast } from "@thunderstore/cyberstorm";
-import {
-  fetchPackagePermissions,
-  type RequestConfig,
-} from "@thunderstore/thunderstore-api";
+import { type DapperTsInterface } from "@thunderstore/dapper-ts";
 import { type PackageListingStatus } from "@thunderstore/dapper/types";
+import {
+  type RequestConfig,
+  fetchPackagePermissions,
+} from "@thunderstore/thunderstore-api";
+
+import { ReviewPackageForm } from "./ReviewPackageForm";
 
 export interface ManagementToolsProps {
   packagePermissions: Awaited<ReturnType<typeof fetchPackagePermissions>>;
   listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>;
-  listingStatus: PackageListingStatus;
+  listingStatus?: PackageListingStatus;
   toast: ReturnType<typeof useToast>;
   requestConfig: () => RequestConfig;
 }

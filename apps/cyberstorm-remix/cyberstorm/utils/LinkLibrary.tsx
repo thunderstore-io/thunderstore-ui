@@ -1,10 +1,11 @@
+import { type PropsWithChildren } from "react";
+import React from "react";
+import { Link as RRLink, type LinkProps as RRLinkProps } from "react-router";
+
 import type {
   LinkLibrary,
   ThunderstoreLinkProps,
 } from "@thunderstore/cyberstorm";
-import { type LinkProps as RRLinkProps, Link as RRLink } from "react-router";
-import { type PropsWithChildren } from "react";
-import React from "react";
 
 interface LinkProps
   extends React.AnchorHTMLAttributes<HTMLAnchorElement>,

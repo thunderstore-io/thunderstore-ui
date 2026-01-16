@@ -1,9 +1,11 @@
-import { memo, type PropsWithChildren } from "react";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./Collapsible.css";
+import { type PropsWithChildren, memo } from "react";
+
 import { NewIcon } from "@thunderstore/cyberstorm";
-import { classnames } from "@thunderstore/cyberstorm/src/utils/utils";
+import { classnames } from "@thunderstore/cyberstorm";
+
+import "./Collapsible.css";
 
 interface Props extends PropsWithChildren {
   headerTitle: string;

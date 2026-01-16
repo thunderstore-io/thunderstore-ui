@@ -6,6 +6,7 @@
  * wishes.
  */
 import React, { type PropsWithChildren } from "react";
+
 import { LinkingContext, type ThunderstoreLinkProps } from "./LinkingProvider";
 
 interface typeWorkaroundProps extends PropsWithChildren {

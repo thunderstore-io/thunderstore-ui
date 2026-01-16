@@ -1,15 +1,15 @@
-import { PackageListingType } from "@thunderstore/dapper/types";
+import type { PackageListingType } from "@thunderstore/dapper/types";
 import {
+  PackageListingsOrderingEnum,
   fetchCommunityPackageListings,
   fetchNamespacePackageListings,
   fetchPackageDependantsListings,
   fetchPackageListingDetails,
   fetchPackageListingStatus,
-  PackageListingsOrderingEnum,
-  PackageListingsRequestQueryParams,
 } from "@thunderstore/thunderstore-api";
+import type { PackageListingsRequestQueryParams } from "@thunderstore/thunderstore-api";
 
-import { DapperTsInterface } from "../index";
+import type { DapperTsInterface } from "../index";
 
 export async function getPackageListings(
   this: DapperTsInterface,

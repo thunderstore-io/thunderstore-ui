@@ -1,20 +1,21 @@
-import {
-  fetchPackageChangelog,
-  fetchPackageReadme,
-  fetchPackageVersions,
-  postPackageSubmission,
-  fetchPackageSubmissionStatus,
-  fetchPackageWiki,
-  fetchPackageWikiPage,
-  fetchPackagePermissions,
-  fetchPackageSource,
-  ApiError,
-  fetchPackageVersionDependencies,
-  PackageVersionDependenciesRequestQueryParams,
-} from "@thunderstore/thunderstore-api";
 import { z } from "zod";
 
-import { DapperTsInterface } from "../index";
+import {
+  ApiError,
+  fetchPackageChangelog,
+  fetchPackagePermissions,
+  fetchPackageReadme,
+  fetchPackageSource,
+  fetchPackageSubmissionStatus,
+  fetchPackageVersionDependencies,
+  fetchPackageVersions,
+  fetchPackageWiki,
+  fetchPackageWikiPage,
+  postPackageSubmission,
+} from "@thunderstore/thunderstore-api";
+import type { PackageVersionDependenciesRequestQueryParams } from "@thunderstore/thunderstore-api";
+
+import type { DapperTsInterface } from "../index";
 
 export async function getPackageChangelog(
   this: DapperTsInterface,
