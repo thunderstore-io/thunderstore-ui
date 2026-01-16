@@ -132,6 +132,9 @@ class BgProcess:
 
 def setup_frontend():
     run_command([YARN_PATH, "install", "--frozen-lockfile"], cwd=REPO_ROOT)
+    run_command([YARN_PATH, "workspace", "@thunderstore/ts-uploader", "build"], cwd=REPO_ROOT)
+    run_command([YARN_PATH, "workspace", "@thunderstore/cyberstorm-theme", "build"], cwd=REPO_ROOT)
+    run_command([YARN_PATH, "workspace", "@thunderstore/cyberstorm", "build"], cwd=REPO_ROOT)
     run_command([YARN_PATH, "workspace", "@thunderstore/cyberstorm-remix", "build"], cwd=REPO_ROOT)
 
 
