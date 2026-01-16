@@ -3,7 +3,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "skipLibCheck": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "removeComments": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -20,10 +20,11 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "composite": true,
+    "declarationMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
     "jsx": "react-jsx",
-    "types": ["@vitest/browser/providers/playwright"]
+    "types": ["vite/client", "@vitest/browser/providers/playwright"]
   },
   "include": ["./src/**/*.tsx", "./src/**/*.ts"],
   "exclude": ["node_modules"]

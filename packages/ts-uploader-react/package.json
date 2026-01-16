@@ -6,6 +6,13 @@
   "main": "dist/thunderstore-ts-uploader-react.cjs.js",
   "module": "dist/thunderstore-ts-uploader-react.esm.js",
   "types": "dist/thunderstore-ts-uploader-react.cjs.d.ts",
+  "exports": {
+    ".": {
+      "module": "./dist/thunderstore-ts-uploader-react.esm.js",
+      "default": "./dist/thunderstore-ts-uploader-react.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],
@@ -14,6 +21,7 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
+    "@babel/runtime": "^7.25.6",
     "@thunderstore/ts-uploader": "*",
     "@types/react": "^19.1.0",
     "react": "^19.1.0",

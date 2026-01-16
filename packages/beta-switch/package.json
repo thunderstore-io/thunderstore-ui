@@ -6,11 +6,21 @@
   "main": "dist/thunderstore-beta-switch.cjs.js",
   "module": "dist/thunderstore-beta-switch.esm.js",
   "types": "dist/thunderstore-beta-switch.cjs.d.ts",
+  "exports": {
+    ".": {
+      "module": "./dist/thunderstore-beta-switch.esm.js",
+      "default": "./dist/thunderstore-beta-switch.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.25.6"
   }
 }

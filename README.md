@@ -150,6 +150,25 @@ running:
 docker compose -f docker-compose.build.yml build
 ```
 
+## Testing (Docker)
+
+Frontend tests run in Vitest browser mode (Playwright). To keep the environment consistent, use the dedicated test runner compose file instead of the dev container.
+
+Prereqs:
+- Ensure `./build-secrets/.npmrc` exists (same requirement as Docker builds).
+
+Run tests:
+
+```bash
+yarn test:container
+```
+
+Run coverage:
+
+```bash
+yarn coverage:container
+```
+
 ## pre-commit
 
 [Pre-commit](https://pre-commit.com/) enforces code style practices in this

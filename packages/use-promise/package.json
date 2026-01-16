@@ -5,7 +5,14 @@
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/use-promise",
   "main": "dist/thunderstore-use-promise.cjs.js",
   "module": "dist/thunderstore-use-promise.esm.js",
-  "types": "dist/thunderstore-use-promise.cjs.d.ts",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "module": "./dist/thunderstore-use-promise.esm.js",
+      "default": "./dist/thunderstore-use-promise.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],

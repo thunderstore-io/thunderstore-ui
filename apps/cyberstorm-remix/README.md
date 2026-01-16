@@ -30,8 +30,8 @@ The easiest way to run the full stack (Backend + Frontend) is using Docker.
     (If you have some pre-existing containers, please do `docker compose -f docker-compose.remix.development.yml down -v` and `docker compose -f docker-compose.remix.development.yml up -d --build`)
 
 4.  **Open Browser**
-    -   **Frontend**: [http://new.localhost](http://new.localhost)
-    -   **Backend**: [http://localhost](http://localhost)
+    -   **Frontend**: [http://new.thunderstore.localhost](http://new.thunderstore.localhost)
+    -   **Backend**: [http://thunderstore.localhost](http://thunderstore.localhost)
 
 ## Manual Setup
 

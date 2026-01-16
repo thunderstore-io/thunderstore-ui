@@ -3,7 +3,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "skipLibCheck": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "removeComments": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -20,6 +20,9 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
     "outDir": "./dist",
     "rootDir": "./src",
     "jsx": "react-jsx",
@@ -27,7 +30,8 @@
       {
         "name": "typescript-plugin-css-modules"
       }
-    ]
+    ],
+    "baseUrl": "."
   },
   "include": ["./src/**/*.tsx", "./src/**/*.ts"],
   "exclude": ["node_modules"]

@@ -11,7 +11,7 @@
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
@@ -21,7 +21,17 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "paths": {
+      "@thunderstore/dapper/types": [
+        "../../packages/dapper/src/types/index.ts"
+      ],
+      "@thunderstore/*": [
+        "../../packages/*/src/index.ts",
+        "../../packages/*/src/index.tsx",
+        "../../packages/*"
+      ]
+    }
   },
   "include": ["src"]
 }

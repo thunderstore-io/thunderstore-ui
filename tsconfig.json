@@ -1,0 +1,24 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/thunderstore-api" },
+    { "path": "packages/dapper" },
+    { "path": "packages/dapper-fake" },
+    { "path": "packages/dapper-ts" },
+    { "path": "packages/ts-api-react" },
+    { "path": "packages/ts-api-react-actions" },
+    { "path": "packages/ts-api-react-forms" },
+    { "path": "packages/typed-event-emitter" },
+    { "path": "packages/use-promise" },
+    { "path": "packages/react-dnd" },
+    { "path": "packages/ts-uploader" },
+    { "path": "packages/ts-uploader-react" },
+    { "path": "packages/cyberstorm-theme" },
+    { "path": "packages/cyberstorm" },
+    { "path": "packages/cyberstorm-forms" },
+    { "path": "packages/graph-system" },
+    { "path": "packages/beta-switch" },
+    { "path": "apps/cyberstorm-remix" },
+    { "path": "apps/storybook" }
+  ]
+}

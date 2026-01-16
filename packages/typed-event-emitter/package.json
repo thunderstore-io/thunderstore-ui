@@ -6,6 +6,13 @@
   "main": "dist/thunderstore-typed-event-emitter.cjs.js",
   "module": "dist/thunderstore-typed-event-emitter.esm.js",
   "types": "dist/thunderstore-typed-event-emitter.cjs.d.ts",
+  "exports": {
+    ".": {
+      "module": "./dist/thunderstore-typed-event-emitter.esm.js",
+      "default": "./dist/thunderstore-typed-event-emitter.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],
@@ -15,7 +22,9 @@
     "test": "vitest run",
     "watch": "vitest watch"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@babel/runtime": "^7.25.6"
+  },
   "devDependencies": {
     "@vitest/browser": "3.2.4",
     "playwright": "1.55.1",
