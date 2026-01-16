@@ -233,6 +233,8 @@ jobs:
           npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
       - name: Install Yarn dependencies
         run: yarn install --frozen-lockfile
+      - name: Build ts-uploader
+        run: yarn workspace @thunderstore/ts-uploader build
       - name: Build cyberstorm-theme
         run: yarn workspace @thunderstore/cyberstorm-theme build
       - name: Build cyberstorm
