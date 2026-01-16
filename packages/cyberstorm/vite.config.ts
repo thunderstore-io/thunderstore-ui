@@ -4,7 +4,7 @@ import dts from "vite-plugin-dts";
 
 import pkg from "./package.json";
 
-const { dependencies, peerDependencies } = pkg as any;
+const { dependencies, peerDependencies } = pkg as unknown;
 
 export default defineConfig({
   plugins: [
