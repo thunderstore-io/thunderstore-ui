@@ -233,6 +233,8 @@ jobs:
           npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.NPM_FA_TOKEN }}
       - name: Install Yarn dependencies
         run: yarn install --frozen-lockfile
+      - name: Build dependencies
+        run: yarn build
       - name: Publish to Chromatic
         uses: chromaui/action@v1
         with:
