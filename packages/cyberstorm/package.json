@@ -45,7 +45,7 @@
     "react": "^19.1.0",
     "react-data-table-component": "^7.6.2",
     "react-dom": "^19.1.0",
-    "react-syntax-highlighter": "15.6.6",
+    "react-syntax-highlighter": "16.1.0",
     "s-ago": "^2.2.0",
     "styled-components": "^6.1.13",
     "use-debounce": "^10.0.3",
