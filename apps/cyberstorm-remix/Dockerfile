@@ -13,6 +13,9 @@ RUN chown node:node -R /app
 USER node
 RUN --mount=type=secret,id=npmrc,target=/home/node/.npmrc,uid=1000 yarn install --frozen-lockfile
 ENV NODE_ENV production
+RUN yarn workspace @thunderstore/cyberstorm-theme build
+RUN yarn workspace @thunderstore/cyberstorm build
+RUN yarn workspace @thunderstore/ts-uploader build
 RUN yarn workspace @thunderstore/cyberstorm-remix build
 
 ENV PORT 3000
