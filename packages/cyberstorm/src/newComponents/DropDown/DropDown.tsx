@@ -1,9 +1,14 @@
 import {
   Content,
   type DropdownMenuItemProps,
+  type DropdownMenuSubContentProps,
+  type DropdownMenuSubTriggerProps,
   Item,
   Portal,
   Root,
+  Sub,
+  SubContent,
+  SubTrigger,
   Trigger,
 } from "@radix-ui/react-dropdown-menu";
 import { type ReactElement, type ReactNode, memo } from "react";
@@ -136,6 +141,81 @@ export const DropDownDivider = memo(function DropDownDivider(
   );
 });
 
+export const DropDownSub = Sub;
+
+interface DropDownSubTriggerProps
+  extends PrimitiveComponentDefaultProps,
+    DropdownMenuSubTriggerProps {
+  csVariant?: DropDownItemVariants;
+  csSize?: DropDownItemSizes;
+  csModifiers?: DropDownItemModifiers[];
+}
+
+export const DropDownSubTrigger = memo(function DropDownSubTrigger(
+  props: DropDownSubTriggerProps
+) {
+  const {
+    children,
+    rootClasses,
+    csVariant = "primary",
+    csSize = "medium",
+    csModifiers,
+    ...fProps
+  } = props;
+
+  return (
+    <SubTrigger
+      {...fProps}
+      className={classnames(
+        "dropdown__item",
+        ...componentClasses("dropdown__item", csVariant, csSize, csModifiers),
+        rootClasses
+      )}
+    >
+      {children}
+    </SubTrigger>
+  );
+});
+
+interface DropDownSubContentProps
+  extends PrimitiveComponentDefaultProps,
+    DropdownMenuSubContentProps {
+  csVariant?: DropDownVariants;
+  csSize?: DropDownSizes;
+  csModifiers?: DropDownModifiers[];
+}
+
+export const DropDownSubContent = memo(function DropDownSubContent(
+  props: DropDownSubContentProps
+) {
+  const {
+    children,
+    rootClasses,
+    csVariant = "primary",
+    csSize = "medium",
+    csModifiers,
+    ...fProps
+  } = props;
+
+  return (
+    <Portal>
+      <SubContent
+        {...fProps}
+        className={classnames(
+          "dropdown",
+          ...componentClasses("dropdown", csVariant, csSize, csModifiers),
+          rootClasses
+        )}
+      >
+        {children}
+      </SubContent>
+    </Portal>
+  );
+});
+
 DropDown.displayName = "DropDown";
+DropDownSub.displayName = "DropDownSub";
+DropDownSubTrigger.displayName = "DropDownSubTrigger";
+DropDownSubContent.displayName = "DropDownSubContent";
 DropDownItem.displayName = "DropDownItem";
 DropDownDivider.displayName = "DropDownDivider";
