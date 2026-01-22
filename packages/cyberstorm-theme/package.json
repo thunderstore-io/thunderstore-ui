@@ -4,9 +4,25 @@
   "description": "Cyberstorm theme",
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/cyberstorm-theme",
   "type": "module",
-  "main": "dist/thunderstore-cyberstorm-theme.umd.cjs",
-  "module": "dist/thunderstore-cyberstorm-theme.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.tsx",
+  "module": "src/index.tsx",
+  "types": "src/index.tsx",
+  "publishConfig": {
+    "main": "dist/thunderstore-cyberstorm-theme.umd.cjs",
+    "module": "dist/thunderstore-cyberstorm-theme.js",
+    "types": "dist/index.d.ts",
+    "style": "dist/cyberstorm-theme.css",
+    "exports": {
+      ".": {
+        "import": "./dist/thunderstore-cyberstorm-theme.js",
+        "require": "./dist/thunderstore-cyberstorm-theme.umd.cjs",
+        "types": "./dist/index.d.ts"
+      },
+      "./css": "./dist/cyberstorm-theme.css",
+      "./package.json": "./package.json",
+      "./src/components": "./src/components.tsx"
+    }
+  },
   "style": "dist/cyberstorm-theme.css",
   "scripts": {
     "build": "vite build",
@@ -20,11 +36,7 @@
     "vite-plugin-dts": "^4.5.4"
   },
   "exports": {
-    ".": {
-      "import": "./dist/thunderstore-cyberstorm-theme.js",
-      "require": "./dist/thunderstore-cyberstorm-theme.umd.cjs",
-      "types": "./dist/index.d.ts"
-    },
+    ".": "./src/index.tsx",
     "./css": "./dist/cyberstorm-theme.css",
     "./package.json": "./package.json",
     "./src/components": "./src/components.tsx"
