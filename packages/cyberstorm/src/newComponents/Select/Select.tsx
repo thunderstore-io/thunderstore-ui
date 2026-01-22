@@ -74,6 +74,7 @@ function SelectComponent<T extends string>(props: SelectProps<T>) {
     >
       <Trigger asChild>
         <NewButton
+          type="button"
           csVariant="secondary"
           csSize={csSize}
           aria-label={forwardedProps["aria-label"]}
