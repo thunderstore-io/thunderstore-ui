@@ -12,9 +12,11 @@ import {
 export function NavigationWrapper({
   domain,
   currentUser,
+  communityId,
 }: {
   domain: string;
   currentUser: CurrentUser | undefined;
+  communityId?: string;
 }) {
   // const isHydrated = useHydrated();
   // const startsHydrated = useRef(isHydrated);
@@ -50,6 +52,7 @@ export function NavigationWrapper({
         // hydrationCheck={!startsHydrated.current && isHydrated}
         currentUser={currentUser}
         domain={domain}
+        communityId={communityId}
       />
       <MobileNavigationMenu domain={domain} />
       {currentUser ? (

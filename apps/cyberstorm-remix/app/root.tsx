@@ -290,6 +290,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
     (m) => m.id === "tools/markdown-preview/markdownPreview"
   );
 
+  const communityId = matches.find((m) => m.params.communityId)?.params
+    .communityId;
+
   const shouldShowAds = location.pathname.startsWith("/teams")
     ? false
     : location.pathname.startsWith("/settings")
@@ -346,6 +349,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <NavigationWrapper
                   domain={resolvedEnvVars?.VITE_API_URL || ""}
                   currentUser={data?.currentUser}
+                  communityId={communityId}
                 />
                 <div className="container container--x container--full island">
                   <main className="container container--x container--full island-item layout__main">
