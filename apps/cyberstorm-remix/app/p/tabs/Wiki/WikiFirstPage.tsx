@@ -170,6 +170,8 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   }
 }
 
+clientLoader.hydrate = true as const;
+
 export default function WikiFirstPage() {
   const { wiki, firstPage, communityId, namespaceId, packageId, permissions } =
     useLoaderData<typeof loader | typeof clientLoader>();
