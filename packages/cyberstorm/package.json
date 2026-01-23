@@ -8,10 +8,28 @@
   "description": "Shared components for Thunderstore",
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/cyberstorm",
   "type": "module",
-  "main": "dist/thunderstore-cyberstorm.umd.cjs",
-  "module": "dist/thunderstore-cyberstorm.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
   "style": "dist/cyberstorm.css",
+  "publishConfig": {
+    "main": "dist/thunderstore-cyberstorm.umd.cjs",
+    "module": "dist/thunderstore-cyberstorm.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "import": "./dist/thunderstore-cyberstorm.js",
+        "require": "./dist/thunderstore-cyberstorm.umd.cjs",
+        "types": "./dist/index.d.ts"
+      },
+      "./css": {
+        "import": "./dist/cyberstorm.css",
+        "require": "./dist/cyberstorm.css",
+        "types": "./dist/index.d.ts"
+      },
+      "./package.json": "./package.json"
+    }
+  },
   "files": [
     "dist"
   ],
@@ -59,11 +77,7 @@
     "vite-plugin-dts": "^4.5.4"
   },
   "exports": {
-    ".": {
-      "import": "./dist/thunderstore-cyberstorm.js",
-      "require": "./dist/thunderstore-cyberstorm.umd.cjs",
-      "types": "./dist/index.d.ts"
-    },
+    ".": "./src/index.ts",
     "./css": {
       "import": "./dist/cyberstorm.css",
       "require": "./dist/cyberstorm.css",

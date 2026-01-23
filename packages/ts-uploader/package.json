@@ -3,9 +3,22 @@
   "version": "0.1.0",
   "description": "Handles file uploads to Thunderstore",
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/packages/ts-uploader",
-  "main": "dist/thunderstore-ts-uploader.umd.cjs",
-  "module": "dist/thunderstore-ts-uploader.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "publishConfig": {
+    "main": "dist/thunderstore-ts-uploader.umd.cjs",
+    "module": "dist/thunderstore-ts-uploader.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/thunderstore-ts-uploader.js",
+        "require": "./dist/thunderstore-ts-uploader.umd.cjs"
+      },
+      "./package.json": "./package.json"
+    }
+  },
   "files": [
     "dist"
   ],
@@ -32,11 +45,7 @@
     "vitest": "3.2.4"
   },
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/thunderstore-ts-uploader.js",
-      "require": "./dist/thunderstore-ts-uploader.umd.cjs"
-    },
+    ".": "./src/index.ts",
     "./package.json": "./package.json"
   }
 }
