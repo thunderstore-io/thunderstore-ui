@@ -45,9 +45,10 @@ fi
 
 # Start watchers for non-preconstruct workspace dependencies to reflect source changes
 echo "Starting dependency watchers..."
-su node -c "yarn workspace @thunderstore/cyberstorm-theme dev" &
-su node -c "yarn workspace @thunderstore/cyberstorm dev" &
-su node -c "yarn workspace @thunderstore/ts-uploader dev" &
+# Silence stdout to keep the console clean, but allow stderr so errors are visible.
+su node -c "yarn workspace @thunderstore/cyberstorm-theme dev" > /dev/null &
+su node -c "yarn workspace @thunderstore/cyberstorm dev" > /dev/null &
+su node -c "yarn workspace @thunderstore/ts-uploader dev" > /dev/null &
 
 # Map thunderstore.localhost to the backend nginx container IP so SSR API calls hit
 # the backend without changing client-side env values.
