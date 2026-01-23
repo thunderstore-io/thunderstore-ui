@@ -52,8 +52,21 @@ su node -c "yarn workspace @thunderstore/ts-uploader dev" > /dev/null &
 
 # Map thunderstore.localhost to the backend nginx container IP so SSR API calls hit
 # the backend without changing client-side env values.
-backend_nginx_ip=$(getent hosts nginx | awk '{print $1}')
+echo "Resolving backend_nginx_ip..."
+backend_nginx_ip=""
+# Retry for up to 30 seconds to allow DNS to propagate
+for i in $(seq 1 30); do
+  # Take the first IP typically IPv4
+  backend_nginx_ip=$(getent hosts nginx | awk '{print $1}' | head -n 1)
+  if [ -n "$backend_nginx_ip" ]; then
+    break
+  fi
+  echo "Waiting for nginx resolution... ($i/30)"
+  sleep 1
+done
+
 if [ -n "$backend_nginx_ip" ]; then
+  echo "Resolved nginx to $backend_nginx_ip. Updating /etc/hosts..."
   # Prepend to /etc/hosts so it takes precedence.
   # Make idempotent to avoid duplicate lines on restarts.
   if ! grep -q "^${backend_nginx_ip}[[:space:]][[:space:]]*thunderstore\.localhost\([[:space:]]\|$\)" /etc/hosts 2>/dev/null; then
@@ -66,7 +79,12 @@ if [ -n "$backend_nginx_ip" ]; then
     } > "$tmp_hosts"
     cat "$tmp_hosts" > /etc/hosts || printf "%s thunderstore.localhost\n" "$backend_nginx_ip" >> /etc/hosts
     rm -f "$tmp_hosts"
+    echo "Updated /etc/hosts with $backend_nginx_ip thunderstore.localhost"
+  else
+    echo "Entry already exists in /etc/hosts"
   fi
+else
+  echo "WARNING: Failed to resolve nginx hostname. SSR requests to thunderstore.localhost will likely fail."
 fi
 
 # Execute the passed command as node (preserve argument boundaries)
