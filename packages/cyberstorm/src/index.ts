@@ -69,6 +69,9 @@ export {
   DropDown as NewDropDown,
   DropDownItem as NewDropDownItem,
   DropDownDivider as NewDropDownDivider,
+  DropDownSub as NewDropDownSub,
+  DropDownSubTrigger as NewDropDownSubTrigger,
+  DropDownSubContent as NewDropDownSubContent,
 } from "./newComponents/DropDown/DropDown";
 export * as EmptyState from "./newComponents/EmptyState";
 export { Heading } from "./newComponents/Heading/Heading";
