@@ -30,6 +30,9 @@ import {
   NewDropDown,
   NewDropDownDivider,
   NewDropDownItem,
+  NewDropDownSub,
+  NewDropDownSubContent,
+  NewDropDownSubTrigger,
   NewIcon,
   NewLink,
   OverwolfLogo,
@@ -45,8 +48,9 @@ export function Navigation(props: {
   // hydrationCheck: boolean;
   currentUser?: CurrentUser;
   domain: string;
+  communityId?: string;
 }) {
-  const { currentUser, domain } = props;
+  const { currentUser, domain, communityId } = props;
   return (
     <>
       <header
@@ -176,7 +180,11 @@ export function Navigation(props: {
           ) : null}
 
           {currentUser ? (
-            <DesktopUserDropdown user={currentUser} domain={domain} />
+            <DesktopUserDropdown
+              user={currentUser}
+              domain={domain}
+              communityId={communityId}
+            />
           ) : (
             <DesktopLoginPopover />
           )}
@@ -352,8 +360,9 @@ export function DesktopLoginPopover() {
 export function DesktopUserDropdown(props: {
   user: CurrentUser;
   domain: string;
+  communityId?: string;
 }) {
-  const { user, domain } = props;
+  const { user, domain, communityId } = props;
 
   const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
 
@@ -392,18 +401,45 @@ export function DesktopUserDropdown(props: {
           Settings
         </NewLink>
       </NewDropDownItem>
-      <NewDropDownItem asChild>
-        <NewLink
-          primitiveType="cyberstormLink"
-          linkId="Teams"
-          rootClasses="dropdown__item navigation-header__dropdown-item"
-        >
-          <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-            <FontAwesomeIcon icon={faUsers} />
-          </NewIcon>
-          Teams
-        </NewLink>
-      </NewDropDownItem>
+      {communityId ? (
+        <NewDropDownSub>
+          <NewDropDownSubTrigger rootClasses="dropdown__item navigation-header__dropdown-item">
+            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+              <FontAwesomeIcon icon={faUsers} />
+            </NewIcon>
+            Teams
+          </NewDropDownSubTrigger>
+          <NewDropDownSubContent>
+            {user.teams.map((teamName) => (
+              <NewDropDownItem key={teamName} asChild>
+                <NewLink
+                  primitiveType="link"
+                  href={`/c/${communityId}/p/${teamName}/`}
+                  rootClasses="dropdown__item navigation-header__dropdown-item"
+                >
+                  <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+                    <FontAwesomeIcon icon={faUsers} />
+                  </NewIcon>
+                  {teamName}
+                </NewLink>
+              </NewDropDownItem>
+            ))}
+          </NewDropDownSubContent>
+        </NewDropDownSub>
+      ) : (
+        <NewDropDownItem asChild>
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Teams"
+            rootClasses="dropdown__item navigation-header__dropdown-item"
+          >
+            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+              <FontAwesomeIcon icon={faUsers} />
+            </NewIcon>
+            Teams
+          </NewLink>
+        </NewDropDownItem>
+      )}
       <NewDropDownItem asChild>
         <NewLink
           primitiveType="link"
