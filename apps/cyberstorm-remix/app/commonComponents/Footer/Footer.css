@@ -133,6 +133,7 @@
       background-position: 100% 100%;
       content: "\0020";
       aspect-ratio: 5/1;
+      pointer-events: none;
     }
   }
 
