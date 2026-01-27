@@ -9,12 +9,13 @@ import { ReportPackageButton } from "./ReportPackageButton";
 import {
   ReportPackageForm,
   type ReportPackageFormProps,
+  type ReportPackageFormState,
 } from "./ReportPackageForm";
 import { ReportPackageModal } from "./ReportPackageModal";
 import { ReportPackageSubmitted } from "./ReportPackageSubmitted";
 
-const createInitialFormInputs = (): PackageListingReportRequestData => ({
-  reason: "Other",
+const createInitialFormInputs = (): ReportPackageFormState => ({
+  reason: null,
   description: "",
 });
 
@@ -25,7 +26,7 @@ export function useReportPackage(formProps: {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [formInputs, setFormInputs] = useState<PackageListingReportRequestData>(
+  const [formInputs, setFormInputs] = useState<ReportPackageFormState>(
     createInitialFormInputs
   );
 
@@ -35,9 +36,9 @@ export function useReportPackage(formProps: {
     setError(null);
   };
 
-  type UpdateFormInput = <K extends keyof PackageListingReportRequestData>(
+  type UpdateFormInput = <K extends keyof ReportPackageFormState>(
     field: K,
-    value: PackageListingReportRequestData[K]
+    value: ReportPackageFormState[K]
   ) => void;
 
   const updateFormInput = useCallback<UpdateFormInput>((field, value) => {
