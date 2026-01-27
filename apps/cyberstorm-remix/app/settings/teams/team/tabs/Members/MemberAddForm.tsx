@@ -115,65 +115,64 @@ export function MemberAddForm(props: {
         </NewButton>
       }
     >
-      <form onSubmit={strongForm.handleSubmit}>
-        <Modal.Body>
-          <div className="add-member-form__text">
-            Enter the username of the user you wish to add to the team{" "}
-            <span className="add-member-form__text--bold">
-              {props.teamName}
-            </span>
-            .
+      <Modal.Body>
+        <div className="add-member-form__text">
+          Enter the username of the user you wish to add to the team{" "}
+          <span className="add-member-form__text--bold">{props.teamName}</span>.
+        </div>
+        <div className="add-member-form__fields">
+          <div className="add-member-form__field add-member-form__username">
+            <label className="add-member-form__label" htmlFor="username">
+              Username <RequiredIndicator />
+            </label>
+            <NewTextInput
+              name={"username"}
+              placeholder={"Enter username..."}
+              value={formInputs.username}
+              onChange={(e) => {
+                setError(null);
+                updateFormFieldState({
+                  field: "username",
+                  value: e.target.value,
+                });
+              }}
+              enterHook={() => {
+                strongForm.handleSubmit();
+              }}
+              rootClasses="add-member-form__username-input"
+              id="username"
+              {...usernameFieldProps}
+            />
+            {error && <div className="add-member-form__error">{error}</div>}
           </div>
-          <div className="add-member-form__fields">
-            <div className="add-member-form__field add-member-form__username">
-              <label className="add-member-form__label" htmlFor="username">
-                Username <RequiredIndicator />
-              </label>
-              <NewTextInput
-                name={"username"}
-                placeholder={"Enter username..."}
-                value={formInputs.username}
-                onChange={(e) => {
-                  setError(null);
-                  updateFormFieldState({
-                    field: "username",
-                    value: e.target.value,
-                  });
-                }}
-                rootClasses="add-member-form__username-input"
-                id="username"
-                {...usernameFieldProps}
-              />
-              {error && <div className="add-member-form__error">{error}</div>}
-            </div>
-            <div className="add-member-form__field">
-              <label className="add-member-form__label" htmlFor="role">
-                Role
-              </label>
-              <NewSelect
-                name={"role"}
-                placeholder="Select role..."
-                options={roleOptions}
-                defaultValue="member"
-                value={formInputs.role}
-                onChange={(value) => {
-                  updateFormFieldState({ field: "role", value: value });
-                }}
-                id="role"
-              />
-            </div>
+          <div className="add-member-form__field">
+            <label className="add-member-form__label" htmlFor="role">
+              Role
+            </label>
+            <NewSelect
+              name={"role"}
+              placeholder="Select role..."
+              options={roleOptions}
+              defaultValue="member"
+              value={formInputs.role}
+              onChange={(value) => {
+                updateFormFieldState({ field: "role", value: value });
+              }}
+              id="role"
+            />
           </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <NewButton
-            type="submit"
-            csVariant="accent"
-            disabled={!strongForm.isReady}
-          >
-            Add member
-          </NewButton>
-        </Modal.Footer>
-      </form>
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <NewButton
+          type="submit"
+          csVariant="accent"
+          onClick={strongForm.handleSubmit}
+          disabled={!strongForm.isReady}
+        >
+          Add member
+        </NewButton>
+      </Modal.Footer>
     </Modal>
   );
 }

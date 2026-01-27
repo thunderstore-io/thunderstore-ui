@@ -271,22 +271,19 @@ export function useStrongForm<
     }
   };
 
-  const handleSubmit = useCallback(
-    (e?: { preventDefault: () => void }) => {
-      e?.preventDefault();
-      setHasAttemptedSubmit(true);
-      if (!isReady) {
-        return;
+  const handleSubmit = (e?: { preventDefault: () => void }) => {
+    e?.preventDefault();
+    setHasAttemptedSubmit(true);
+    if (!isReady) {
+      return;
+    }
+    void submit().catch((error) => {
+      // Prevent unhandled rejections, but don't silently swallow unexpected errors.
+      if (!props.onSubmitError) {
+        console.error(error);
       }
-      void submit().catch((error) => {
-        // Prevent unhandled rejections, but don't silently swallow unexpected errors.
-        if (!props.onSubmitError) {
-          console.error(error);
-        }
-      });
-    },
-    [isReady, submit]
-  );
+    });
+  };
 
   return {
     submit,
