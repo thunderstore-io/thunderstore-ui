@@ -26,6 +26,13 @@ const reportOptions: SelectOption<PackageListingReportRequestData["reason"]>[] =
     { value: "Other", label: "Other" },
   ];
 
+export type ReportPackageFormState = Omit<
+  PackageListingReportRequestData,
+  "reason"
+> & {
+  reason: PackageListingReportRequestData["reason"] | null;
+};
+
 export interface ReportPackageFormProps {
   community: string;
   namespace: string;
@@ -37,10 +44,10 @@ interface ReportPackageFormFullProps extends ReportPackageFormProps {
   onOpenChange: (isOpen: boolean) => void;
   setError: (error: string | null) => void;
   setIsSubmitted: (isSubmitted: boolean) => void;
-  formInputs: PackageListingReportRequestData;
-  updateFormInput: <K extends keyof PackageListingReportRequestData>(
+  formInputs: ReportPackageFormState;
+  updateFormInput: <K extends keyof ReportPackageFormState>(
     field: K,
-    value: PackageListingReportRequestData[K]
+    value: ReportPackageFormState[K]
   ) => void;
   resetFormInputs: () => void;
 }
@@ -65,6 +72,10 @@ export function ReportPackageForm(
   type SubmitorOutput = Awaited<ReturnType<typeof packageListingReport>>;
 
   async function submitor(data: typeof formInputs): Promise<SubmitorOutput> {
+    if (!data.reason) {
+      throw new Error("Please select a reason");
+    }
+
     return await packageListingReport({
       config: config,
       params: requestParams,
@@ -122,7 +133,7 @@ export function ReportPackageForm(
             // TODO: placeholder doesn't currently work as `value` is set below.
             // Even if `value` is removed, "other" value is submitted if user
             // doesn't choose anything else, which is confusing.
-            // placeholder="Please select..."
+            placeholder="Please select..."
             value={formInputs.reason}
             onChange={(value) => {
               updateFormInput("reason", value);
