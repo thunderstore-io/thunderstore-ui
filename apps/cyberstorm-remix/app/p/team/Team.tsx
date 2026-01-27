@@ -33,10 +33,13 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
     const filters = await dapper.getCommunityFilters(params.communityId);
+    const community = await dapper.getCommunity(params.communityId);
 
     return {
       teamId: params.namespaceId,
       filters: filters,
+      // Community is required for the breadcrumbs in the root layout
+      community: community,
       listings: await dapper.getPackageListings(
         {
           kind: "namespace",
@@ -80,9 +83,13 @@ export async function clientLoader({
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
     const filters = dapper.getCommunityFilters(params.communityId);
+    const community = dapper.getCommunity(params.communityId);
+
     return {
       teamId: params.namespaceId,
       filters: filters,
+      // Community is required for the breadcrumbs in the root layout
+      community: community,
       listings: dapper.getPackageListings(
         {
           kind: "namespace",
