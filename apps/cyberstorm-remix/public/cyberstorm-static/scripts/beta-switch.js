@@ -91,7 +91,7 @@ async function insertSwitchButton(legacy, beta) {
 function hasBrowserGlobals() {
   return typeof window !== "undefined" && typeof document !== "undefined";
 }
-export function initBetaSwitch() {
+function initBetaSwitch() {
   if (!hasBrowserGlobals()) {
     return;
   }
