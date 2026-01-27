@@ -315,7 +315,6 @@ export const getFakePackageSource = async (namespace: string, name: string) => {
     namespace,
     package_name: name,
     version_number: getVersionNumber(),
-    last_decompilation_date: faker.date.recent({ days: 700 }).toISOString(),
     decompilations: getFakeDecompilations(),
   };
 };

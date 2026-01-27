@@ -142,7 +142,6 @@ export default function Source() {
       >
         {(resolvedValue) => {
           const decompilations = resolvedValue?.decompilations ?? [];
-          const lastDecompilationDate = resolvedValue?.last_decompilation_date;
           if (decompilations.length === 0) {
             return (
               <Alert csVariant="info">Decompiled source not available.</Alert>
@@ -161,7 +160,7 @@ export default function Source() {
                     </Heading>
                     <div className="package-source__header-meta">
                       <DecompilationDateDisplay
-                        lastDecompilationDate={lastDecompilationDate}
+                        lastDecompilationDate={decompilation.datetime_created}
                       />
                     </div>
                   </div>
