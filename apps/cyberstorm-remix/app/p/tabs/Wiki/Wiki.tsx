@@ -90,6 +90,8 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
   }
 }
 
+clientLoader.hydrate = true as const;
+
 export default function Wiki() {
   const { wiki, communityId, namespaceId, packageId, slug, permissions } =
     useLoaderData<typeof loader | typeof clientLoader>();

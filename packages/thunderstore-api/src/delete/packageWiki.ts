@@ -25,6 +25,7 @@ export async function deletePackageWikiPage(
         cache: "no-store",
         body: JSON.stringify(data),
       },
+      useSession: true,
     },
     requestSchema: packageWikiPageDeleteRequestDataSchema,
     queryParamsSchema: undefined,
