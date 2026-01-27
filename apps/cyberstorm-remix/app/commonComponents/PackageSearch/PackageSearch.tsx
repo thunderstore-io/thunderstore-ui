@@ -189,14 +189,14 @@ export function PackageSearch(props: Props) {
       // On mount, resolve filters promise and set sections and categories states
       filters.then((resolvedFilters) => {
         // Set sorted sections
-        setSortedSections(
-          resolvedFilters.sections.sort((a, b) => b.priority - a.priority)
+        const sections = resolvedFilters.sections.sort(
+          (a, b) => b.priority - a.priority
         );
-        if (sortedSections && sortedSections.length !== 0) {
-          setSearchParamsBlob((prev) => ({
-            ...prev,
-            section: sortedSections[0].uuid,
-          }));
+        setSortedSections(sections);
+        if (sections.length !== 0) {
+          setSearchParamsBlob((prev) =>
+            prev.section === "" ? { ...prev, section: sections[0].uuid } : prev
+          );
         }
         if (resolvedFilters.package_categories !== categoriesRef.current) {
           // Set current "initial" categories
@@ -244,6 +244,7 @@ export function PackageSearch(props: Props) {
           typeof v === "string" ? v : v ? "include" : "off"
         ),
       label: c.name,
+      value: c.id,
     };
   });
   // Categories end
@@ -287,7 +288,7 @@ export function PackageSearch(props: Props) {
         sortedSections
       );
     }
-  }, [searchParams]);
+  }, [searchParams, sortedSections]);
 
   useEffect(() => {
     if (
@@ -334,22 +335,26 @@ export function PackageSearch(props: Props) {
           resetPage = true;
         }
         // Section
-        if (
-          debouncedSearchParamsBlob.section === "" ||
-          (sortedSections && sortedSections.length === 0)
-        ) {
-          searchParams.delete("section");
-        } else {
-          if (sortedSections && sortedSections.length !== 0) {
-            if (debouncedSearchParamsBlob.section === sortedSections[0]?.uuid) {
-              // If the first one, ensure the search param isn't set as it's defaulted to the first one in SearchParmsToBlob function.
-              searchParams.delete("section");
-            } else {
-              searchParams.set("section", debouncedSearchParamsBlob.section);
-            }
-          } else {
-            // This else is for completeness
+        if (sortedSections) {
+          if (
+            debouncedSearchParamsBlob.section === "" ||
+            sortedSections.length === 0
+          ) {
             searchParams.delete("section");
+          } else {
+            if (sortedSections.length !== 0) {
+              if (
+                debouncedSearchParamsBlob.section === sortedSections[0]?.uuid
+              ) {
+                // If the first one, ensure the search param isn't set as it's defaulted to the first one in SearchParmsToBlob function.
+                searchParams.delete("section");
+              } else {
+                searchParams.set("section", debouncedSearchParamsBlob.section);
+              }
+            } else {
+              // This else is for completeness
+              searchParams.delete("section");
+            }
           }
         }
 
@@ -450,7 +455,7 @@ export function PackageSearch(props: Props) {
         searchParamsBlobRef.current = debouncedSearchParamsBlob;
       }
     }
-  }, [debouncedSearchParamsBlob]);
+  }, [debouncedSearchParamsBlob, sortedSections]);
 
   // WHOLE LIKE THING
   const [ratedPackages, setRatedPackages] = useState<string[]>([]);
@@ -525,6 +530,7 @@ export function PackageSearch(props: Props) {
                           : false
                     ),
                   label: "Deprecated",
+                  value: "deprecated",
                 },
                 {
                   state: searchParamsBlob.nsfw,
@@ -541,6 +547,7 @@ export function PackageSearch(props: Props) {
                           : false
                     ),
                   label: "NSFW",
+                  value: "nsfw",
                 },
               ]}
             />

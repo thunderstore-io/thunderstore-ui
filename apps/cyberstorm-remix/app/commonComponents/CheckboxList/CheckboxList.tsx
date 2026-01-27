@@ -4,7 +4,7 @@ import {
   faSquareCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { memo } from "react";
+import { memo, useId } from "react";
 import { type TRISTATE } from "~/commonComponents/types";
 
 import { Actionable, NewIcon } from "@thunderstore/cyberstorm";
@@ -19,6 +19,7 @@ interface Props {
     state: boolean | TRISTATE;
     setStateFunc: typeA<boolean | TRISTATE>;
     label: string;
+    value: string;
   }[];
 }
 
@@ -30,19 +31,21 @@ const currentState = (state: TRISTATE | boolean) =>
  */
 export const CheckboxList = memo(function CheckboxList(props: Props) {
   const { items } = props;
+  const idPrefix = useId();
 
   return (
     <ol className="checkbox-list">
       {items.map((item) => {
         const cs = currentState(item.state);
+        const itemKey = `${idPrefix}-${item.value}`;
         return (
-          <li key={item.label}>
+          <li key={itemKey}>
             <label
               className={classnames(
                 "checkbox-list__label",
                 `checkbox-list__label--${cs}`
               )}
-              htmlFor={`checkbox-list__checkbox__${item.label}`}
+              htmlFor={`checkbox-list__checkbox__${itemKey}`}
             >
               <span>
                 <Actionable
@@ -57,7 +60,7 @@ export const CheckboxList = memo(function CheckboxList(props: Props) {
                     }
                   }}
                   rootClasses="checkbox-list__icon checkbox-list__checkbox-button"
-                  id={`checkbox-list__checkbox__${item.label}`}
+                  id={`checkbox-list__checkbox__${itemKey}`}
                 >
                   <NewIcon csMode="inline" noWrapper>
                     <FontAwesomeIcon
