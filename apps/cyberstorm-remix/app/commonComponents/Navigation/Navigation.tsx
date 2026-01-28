@@ -410,6 +410,19 @@ export function DesktopUserDropdown(props: {
             Teams
           </NewDropDownSubTrigger>
           <NewDropDownSubContent>
+            <NewDropDownItem asChild>
+              <NewLink
+                primitiveType="cyberstormLink"
+                linkId="Teams"
+                rootClasses="dropdown__item navigation-header__dropdown-item"
+              >
+                <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+                  <FontAwesomeIcon icon={faUsers} />
+                </NewIcon>
+                All Teams
+              </NewLink>
+            </NewDropDownItem>
+            {user.teams.length > 0 ? <NewDropDownDivider /> : null}
             {user.teams.map((teamName) => (
               <NewDropDownItem key={teamName} asChild>
                 <NewLink
