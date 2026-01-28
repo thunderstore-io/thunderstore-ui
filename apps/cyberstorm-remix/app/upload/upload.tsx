@@ -856,7 +856,7 @@ const SubmissionResult = (props: {
             value: (
               <NewLink
                 primitiveType="link"
-                href={v.url}
+                href={`/c/${v.community.identifier}/p/${props.submissionStatusResult.package_version.namespace}/${props.submissionStatusResult.package_version.name}/`}
                 target="_blank"
                 csVariant="cyber"
               >
