@@ -104,7 +104,6 @@ export interface PackageSource {
   namespace: string;
   package_name: string;
   version_number: string;
-  last_decompilation_date?: string | null;
   decompilations: Decompilation[];
 }
 
@@ -114,6 +113,7 @@ interface Decompilation {
   result_size: string;
   result: string;
   is_truncated: boolean;
+  datetime_created?: string | null;
 }
 
 export interface PackageSubmissionError {

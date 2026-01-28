@@ -224,6 +224,7 @@ export const decompilationSchema = z.object({
   result_size: z.string(),
   result: z.string(),
   is_truncated: z.boolean(),
+  datetime_created: z.string().datetime().optional().nullable(),
 });
 
 export const packageSourceSchema = z.object({
@@ -231,7 +232,6 @@ export const packageSourceSchema = z.object({
   namespace: z.string().min(1),
   package_name: z.string().min(1),
   version_number: z.string().min(1),
-  last_decompilation_date: z.string().datetime().nullable().optional(),
   decompilations: decompilationSchema.array(),
 });
 
