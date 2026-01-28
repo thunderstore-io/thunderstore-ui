@@ -432,16 +432,10 @@ export function PackageSearch(props: Props) {
         );
 
         if (
-          navigationType !== "POP" ||
-          (navigationType === "POP" &&
-            !compareSearchParamBlobs(
-              uncommittedSearchParams,
-              searchParamsBlobRef.current
-            ) &&
-            compareSearchParamBlobs(
-              uncommittedSearchParams,
-              debouncedSearchParamsBlob
-            ))
+          !compareSearchParamBlobs(
+            uncommittedSearchParams,
+            searchParamsBlobRef.current
+          )
         ) {
           if (useReplace) {
             setSearchParams(searchParams, {
