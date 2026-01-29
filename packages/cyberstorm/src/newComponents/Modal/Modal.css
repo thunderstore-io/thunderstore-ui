@@ -1,6 +1,7 @@
 @layer components {
   .modal__overlay {
     position: fixed;
+    z-index: 1000;
     background: rgb(0 0 0 / 0.6);
     animation: overlay-show 150ms cubic-bezier(0.16, 1, 0.3, 1);
     inset: 0;
