@@ -97,7 +97,23 @@ clientLoader.hydrate = true as const;
 export const shouldRevalidate: ShouldRevalidateFunction = ({
   currentParams,
   nextParams,
+  defaultShouldRevalidate,
+  currentUrl,
+  nextUrl,
 }) => {
+  if (defaultShouldRevalidate) {
+    return true;
+  }
+
+  // Reload when navigating away from edit/new pages to reflect changes in the sidebar
+  if (
+    (currentUrl.pathname.endsWith("/edit") &&
+      !nextUrl.pathname.endsWith("/edit")) ||
+    (currentUrl.pathname.endsWith("/new") && !nextUrl.pathname.endsWith("/new"))
+  ) {
+    return true;
+  }
+
   return (
     currentParams.communityId !== nextParams.communityId ||
     currentParams.namespaceId !== nextParams.namespaceId ||

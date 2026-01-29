@@ -8,6 +8,7 @@ import {
   type LoaderFunctionArgs,
   useNavigate,
   useOutletContext,
+  useRevalidator,
 } from "react-router";
 import { useLoaderData } from "react-router";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
@@ -115,21 +116,26 @@ export default function WikiEdit() {
   const toast = useToast();
 
   const navigate = useNavigate();
+  const revalidator = useRevalidator();
 
   const [selectedTab, setSelectedTab] = useState<"write" | "preview">("write");
 
-  async function moveToWikiPage() {
+  async function moveToWikiPage(slug?: string) {
+    revalidator.revalidate();
     toast.addToast({
       csVariant: "info",
       children: `Moving to wiki page`,
       duration: 4000,
     });
     navigate(
-      `/c/${communityId}/p/${namespaceId}/${packageId}/wiki/${page.slug}`
+      `/c/${communityId}/p/${namespaceId}/${packageId}/wiki/${
+        slug || page.slug
+      }`
     );
   }
 
   async function moveToWiki() {
+    revalidator.revalidate();
     toast.addToast({
       csVariant: "info",
       children: `Moving to wiki page`,
@@ -186,13 +192,13 @@ export default function WikiEdit() {
   >({
     inputs: formInputs,
     submitor,
-    onSubmitSuccess: () => {
+    onSubmitSuccess: (result) => {
       toast.addToast({
         csVariant: "success",
-        children: `Page ${page.title} has been updated`,
+        children: `Page ${result.title} has been updated`,
         duration: 4000,
       });
-      moveToWikiPage();
+      moveToWikiPage(result.slug);
     },
     onSubmitError: (error) => {
       toast.addToast({

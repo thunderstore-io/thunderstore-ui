@@ -2,6 +2,7 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
+import { useEffect, useState } from "react";
 import { type LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useRouteLoaderData } from "react-router";
 
@@ -159,10 +160,30 @@ export default function WikiFirstPage() {
   const { wiki, firstPage, communityId, namespaceId, packageId } =
     useLoaderData<typeof loader | typeof clientLoader>();
 
-  const wikiLayoutData = useRouteLoaderData("wikiLayout") as {
-    permissions: ReturnType<typeof getPackagePermissions> | undefined;
-  };
-  const permissions = wikiLayoutData?.permissions;
+  const wikiLayoutData = useRouteLoaderData("wikiLayout") as
+    | {
+        permissions: ReturnType<typeof getPackagePermissions> | undefined;
+      }
+    | undefined;
+
+  const [canManage, setCanManage] = useState<boolean>(false);
+
+  useEffect(() => {
+    async function resolveCanManage() {
+      setCanManage(false);
+      const result = (await wikiLayoutData?.permissions)?.permissions
+        .can_manage;
+      if (!ignore) {
+        setCanManage(result ?? false);
+      }
+    }
+
+    let ignore = false;
+    resolveCanManage();
+    return () => {
+      ignore = true;
+    };
+  }, [wikiLayoutData]);
 
   if (wiki && firstPage) {
     return (
@@ -173,9 +194,7 @@ export default function WikiFirstPage() {
         packageId={packageId}
         previousPage={undefined}
         nextPage={wiki.pages.length > 1 ? wiki.pages[1].slug : undefined}
-        canManage={permissions?.then((perms) =>
-          typeof perms === "undefined" ? false : perms.permissions.can_manage
-        )}
+        canManage={canManage}
       />
     );
   }

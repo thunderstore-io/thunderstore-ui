@@ -2,6 +2,7 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
+import { useEffect, useState } from "react";
 import { type LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useRouteLoaderData } from "react-router";
 
@@ -173,10 +174,30 @@ export default function WikiPage() {
     typeof loader | typeof clientLoader
   >();
 
-  const wikiLayoutData = useRouteLoaderData("wikiLayout") as {
-    permissions: ReturnType<typeof getPackagePermissions> | undefined;
-  };
-  const permissions = wikiLayoutData?.permissions;
+  const wikiLayoutData = useRouteLoaderData("wikiLayout") as
+    | {
+        permissions: ReturnType<typeof getPackagePermissions> | undefined;
+      }
+    | undefined;
+
+  const [canManage, setCanManage] = useState<boolean>(false);
+
+  useEffect(() => {
+    async function resolveCanManage() {
+      setCanManage(false);
+      const result = (await wikiLayoutData?.permissions)?.permissions
+        .can_manage;
+      if (!ignore) {
+        setCanManage(result ?? false);
+      }
+    }
+
+    let ignore = false;
+    resolveCanManage();
+    return () => {
+      ignore = true;
+    };
+  }, [wikiLayoutData]);
 
   const notFoundElement = <div>Wiki page not found.</div>;
 
@@ -202,9 +223,7 @@ export default function WikiPage() {
         packageId={packageId}
         previousPage={previousPage}
         nextPage={nextPage}
-        canManage={permissions?.then((perms) =>
-          typeof perms === "undefined" ? false : perms.permissions.can_manage
-        )}
+        canManage={canManage}
       />
     );
   }
