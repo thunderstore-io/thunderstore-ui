@@ -2,13 +2,11 @@ import {
   getPublicEnvVariables,
   getSessionTools,
 } from "cyberstorm/security/publicEnvVariables";
-import { Suspense, useMemo } from "react";
-import { Await, type LoaderFunctionArgs } from "react-router";
-import { useLoaderData } from "react-router";
+import { type LoaderFunctionArgs } from "react-router";
+import { useLoaderData, useRouteLoaderData } from "react-router";
 
-import { SkeletonBox } from "@thunderstore/cyberstorm";
-import { DapperTs } from "@thunderstore/dapper-ts";
 import {
+  DapperTs,
   getPackagePermissions,
   getPackageWiki,
   getPackageWikiPage,
@@ -20,11 +18,10 @@ import { WikiContent } from "./WikiContent";
 
 type ResultType = {
   wiki: Awaited<ReturnType<typeof getPackageWiki>> | undefined;
-  firstPage: ReturnType<typeof getPackageWikiPage> | undefined;
+  firstPage: Awaited<ReturnType<typeof getPackageWikiPage>> | undefined;
   communityId: string;
   namespaceId: string;
   packageId: string;
-  permissions: ReturnType<typeof getPackagePermissions> | undefined;
 };
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -42,7 +39,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      permissions: undefined,
     };
 
     try {
@@ -51,14 +47,13 @@ export async function loader({ params }: LoaderFunctionArgs) {
         params.packageId
       );
       if (wiki.pages && wiki.pages.length > 0) {
-        const firstPage = dapper.getPackageWikiPage(wiki.pages[0].id);
+        const firstPage = await dapper.getPackageWikiPage(wiki.pages[0].id);
         result = {
           wiki: wiki,
           firstPage: firstPage,
           communityId: params.communityId,
           namespaceId: params.namespaceId,
           packageId: params.packageId,
-          permissions: undefined,
         };
       } else {
         result = {
@@ -67,7 +62,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
           communityId: params.communityId,
           namespaceId: params.namespaceId,
           packageId: params.packageId,
-          permissions: undefined,
         };
       }
     } catch (error) {
@@ -80,7 +74,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
             communityId: params.communityId,
             namespaceId: params.namespaceId,
             packageId: params.packageId,
-            permissions: undefined,
           };
         } else {
           throw error;
@@ -105,19 +98,12 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
 
-    const permissions = dapper.getPackagePermissions(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
-
     let result: ResultType = {
       wiki: undefined,
       firstPage: undefined,
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      permissions: permissions,
     };
 
     try {
@@ -126,14 +112,13 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         params.packageId
       );
       if (wiki.pages && wiki.pages.length > 0) {
-        const firstPage = dapper.getPackageWikiPage(wiki.pages[0].id);
+        const firstPage = await dapper.getPackageWikiPage(wiki.pages[0].id);
         result = {
           wiki: wiki,
           firstPage: firstPage,
           communityId: params.communityId,
           namespaceId: params.namespaceId,
           packageId: params.packageId,
-          permissions: permissions,
         };
       } else {
         result = {
@@ -142,7 +127,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           communityId: params.communityId,
           namespaceId: params.namespaceId,
           packageId: params.packageId,
-          permissions: permissions,
         };
       }
     } catch (error) {
@@ -155,7 +139,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
             communityId: params.communityId,
             namespaceId: params.namespaceId,
             packageId: params.packageId,
-            permissions: permissions,
           };
         } else {
           throw error;
@@ -173,41 +156,28 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 clientLoader.hydrate = true as const;
 
 export default function WikiFirstPage() {
-  const { wiki, firstPage, communityId, namespaceId, packageId, permissions } =
+  const { wiki, firstPage, communityId, namespaceId, packageId } =
     useLoaderData<typeof loader | typeof clientLoader>();
 
-  const wikiAndFirstPageMemo = useMemo(
-    () => Promise.all([Promise.resolve(wiki), firstPage]),
-    [wiki, firstPage]
-  );
+  const wikiLayoutData = useRouteLoaderData("wikiLayout") as {
+    permissions: ReturnType<typeof getPackagePermissions> | undefined;
+  };
+  const permissions = wikiLayoutData?.permissions;
 
-  return (
-    <Suspense fallback={<SkeletonBox className="package-wiki__skeleton" />}>
-      <Await resolve={wikiAndFirstPageMemo}>
-        {(resolvedValue) => {
-          const [wiki, firstPage] = resolvedValue;
-          if (wiki && firstPage) {
-            return (
-              <WikiContent
-                page={firstPage}
-                communityId={communityId}
-                namespaceId={namespaceId}
-                packageId={packageId}
-                previousPage={undefined}
-                nextPage={
-                  wiki.pages.length > 1 ? wiki.pages[1].slug : undefined
-                }
-                canManage={permissions?.then((perms) =>
-                  typeof perms === "undefined"
-                    ? false
-                    : perms.permissions.can_manage
-                )}
-              />
-            );
-          }
-          return <>There are no wiki pages available.</>;
-        }}
-      </Await>
-    </Suspense>
-  );
+  if (wiki && firstPage) {
+    return (
+      <WikiContent
+        page={firstPage}
+        communityId={communityId}
+        namespaceId={namespaceId}
+        packageId={packageId}
+        previousPage={undefined}
+        nextPage={wiki.pages.length > 1 ? wiki.pages[1].slug : undefined}
+        canManage={permissions?.then((perms) =>
+          typeof perms === "undefined" ? false : perms.permissions.can_manage
+        )}
+      />
+    );
+  }
+  return <>There are no wiki pages available.</>;
 }

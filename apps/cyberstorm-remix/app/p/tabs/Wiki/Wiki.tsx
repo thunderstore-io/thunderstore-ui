@@ -9,7 +9,9 @@ import {
   Await,
   type LoaderFunctionArgs,
   Outlet,
+  type ShouldRevalidateFunction,
   useOutletContext,
+  useParams,
 } from "react-router";
 import { useLoaderData } from "react-router";
 import { type OutletContextShape } from "~/root";
@@ -92,9 +94,21 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 
 clientLoader.hydrate = true as const;
 
+export const shouldRevalidate: ShouldRevalidateFunction = ({
+  currentParams,
+  nextParams,
+}) => {
+  return (
+    currentParams.communityId !== nextParams.communityId ||
+    currentParams.namespaceId !== nextParams.namespaceId ||
+    currentParams.packageId !== nextParams.packageId
+  );
+};
+
 export default function Wiki() {
-  const { wiki, communityId, namespaceId, packageId, slug, permissions } =
+  const { wiki, communityId, namespaceId, packageId, permissions } =
     useLoaderData<typeof loader | typeof clientLoader>();
+  const { slug } = useParams();
 
   const outletContext = useOutletContext() as OutletContextShape;
 
