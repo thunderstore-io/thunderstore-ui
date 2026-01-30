@@ -4,6 +4,7 @@ import {
   type LoaderFunctionArgs,
   useNavigate,
   useOutletContext,
+  useRevalidator,
 } from "react-router";
 import { useLoaderData } from "react-router";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
@@ -58,10 +59,12 @@ export default function Wiki() {
   const toast = useToast();
 
   const navigate = useNavigate();
+  const revalidator = useRevalidator();
 
   const [selectedTab, setSelectedTab] = useState<"write" | "preview">("write");
 
   async function moveToWikiPage(slug: string) {
+    revalidator.revalidate();
     toast.addToast({
       csVariant: "info",
       children: `Moving to the created wiki page`,

@@ -26,7 +26,7 @@ interface WikiContentProps {
   packageId: string;
   previousPage?: string;
   nextPage?: string;
-  canManage?: Promise<boolean>;
+  canManage?: boolean;
 }
 
 export const WikiContent = memo(function WikiContent({
