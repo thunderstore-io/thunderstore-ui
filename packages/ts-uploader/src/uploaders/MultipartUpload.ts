@@ -191,10 +191,12 @@ export class MultipartUpload extends BaseUpload {
       }
     );
 
-    await this.executor.executeGraph();
-
-    // Remove the listener to prevent memory leaks
-    this.graphCompleteListener();
+    try {
+      await this.executor.executeGraph();
+    } finally {
+      // Remove the listener to prevent memory leaks
+      this.graphCompleteListener();
+    }
   }
 
   async pause() {
