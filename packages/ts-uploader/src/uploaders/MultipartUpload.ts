@@ -533,14 +533,14 @@ async function doPartUploads(props: {
   return Promise.all(outputs);
 }
 
+const isUploadPartError = (e: unknown): e is UploadPartError =>
+  e instanceof Object && "code" in e;
+
 // TODO: This could be removed if the uploadPart function bubbled up the errors correctly
 async function confirmPartsAreUploaded(
   uploadAndPartTuples: (UploadPartError | [PreparedUpload, CompletePartState])[]
 ): Promise<CompleteUpload> {
-  // Check for errors
-  const errors = uploadAndPartTuples.filter(
-    (x): x is UploadPartError => x instanceof Object && "code" in x
-  );
+  const errors = uploadAndPartTuples.filter(isUploadPartError);
   if (errors.length > 0) {
     throw new Error(
       `Upload failed with errors: ${errors
@@ -552,18 +552,17 @@ async function confirmPartsAreUploaded(
   // Confirm that all tuples are related to the same upload
   const uploadsMap = new Map<string, PreparedUpload>();
   const partStates: CompletePartState[] = [];
-  uploadAndPartTuples.forEach((uNpT) => {
-    // This check is redundant and should not hit the else clause, but you know typescript 👉😎👉
-    if (Array.isArray(uNpT)) {
+  uploadAndPartTuples
+    .filter(
+      (x): x is [PreparedUpload, CompletePartState] => !isUploadPartError(x)
+    )
+    .forEach((uNpT) => {
       const [preparedUpload, completePartState] = uNpT;
       if (!uploadsMap.has(preparedUpload.usermedia.uuid)) {
         uploadsMap.set(preparedUpload.usermedia.uuid, preparedUpload);
       }
       partStates.push(completePartState);
-    } else {
-      throw new Error("Unexpected upload format");
-    }
-  });
+    });
 
   // Check that the uploads are related to the same upload handle
   // Refactor this, if it somepoint turns out that we want to have multiple uploads in the same batch
