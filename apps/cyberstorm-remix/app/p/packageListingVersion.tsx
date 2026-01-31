@@ -8,6 +8,7 @@ import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
+import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { Suspense, memo } from "react";
 import type {
   LoaderFunctionArgs,
@@ -55,9 +56,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Package not found", { status: 404 });
   }
 
-  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
   const dapper = new DapperTs(() => ({
-    apiHost: publicEnvVariables.VITE_API_URL,
+    apiHost: getApiHostForSsr(),
     sessionId: undefined,
   }));
 

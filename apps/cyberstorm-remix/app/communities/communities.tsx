@@ -5,10 +5,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faFire, faGhost } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { Suspense, memo, useEffect, useRef, useState } from "react";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import {
@@ -72,10 +70,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const order = searchParams.get("order") ?? SortOptions.Popular;
   const search = searchParams.get("search");
   const page = undefined;
-  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
   const dapper = new DapperTs(() => {
     return {
-      apiHost: publicEnvVariables.VITE_API_URL,
+      apiHost: getApiHostForSsr(),
       sessionId: undefined,
     };
   });

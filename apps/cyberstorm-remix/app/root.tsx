@@ -9,6 +9,7 @@ import {
   type publicEnvVariablesType,
 } from "cyberstorm/security/publicEnvVariables";
 import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
+import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { type ReactNode, Suspense, memo, useEffect, useRef } from "react";
 import {
   Await,
@@ -100,23 +101,21 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader() {
-  const publicEnvVariables = getPublicEnvVariables([
-    "VITE_SITE_URL",
-    "VITE_BETA_SITE_URL",
-    "VITE_API_URL",
-    "VITE_COOKIE_DOMAIN",
-    "VITE_AUTH_BASE_URL",
-    "VITE_AUTH_RETURN_URL",
-    "VITE_CLIENT_SENTRY_DSN",
-  ]);
-  const config: RequestConfig = {
-    apiHost: publicEnvVariables.VITE_API_URL,
-    sessionId: undefined,
-  };
   return {
-    publicEnvVariables: publicEnvVariables,
+    publicEnvVariables: getPublicEnvVariables([
+      "VITE_SITE_URL",
+      "VITE_BETA_SITE_URL",
+      "VITE_API_URL",
+      "VITE_COOKIE_DOMAIN",
+      "VITE_AUTH_BASE_URL",
+      "VITE_AUTH_RETURN_URL",
+      "VITE_CLIENT_SENTRY_DSN",
+    ]),
     currentUser: undefined,
-    config,
+    config: {
+      apiHost: getApiHostForSsr(),
+      sessionId: undefined,
+    },
   };
 }
 
@@ -587,12 +586,7 @@ function App() {
   const data = useLoaderData<RootLoadersType>();
   const sessionTools = getSessionTools();
   const dapper = new DapperTs(
-    () => {
-      return {
-        apiHost: data?.publicEnvVariables.VITE_API_URL,
-        sessionId: data?.config.sessionId,
-      };
-    },
+    () => data.config,
     () =>
       sessionTools.clearInvalidSession(
         data?.publicEnvVariables.VITE_COOKIE_DOMAIN

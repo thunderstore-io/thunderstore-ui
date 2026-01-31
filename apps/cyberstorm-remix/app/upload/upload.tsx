@@ -6,11 +6,9 @@ import {
   faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { type MetaFunction } from "react-router";
 import { useLoaderData, useOutletContext } from "react-router";
@@ -69,10 +67,9 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader() {
-  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
   const dapper = new DapperTs(() => {
     return {
-      apiHost: publicEnvVariables.VITE_API_URL,
+      apiHost: getApiHostForSsr(),
       sessionId: undefined,
     };
   });
