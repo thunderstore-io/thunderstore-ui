@@ -1,6 +1,6 @@
 import { GraphExecutor, GraphNode } from "@thunderstore/graph-system";
 import {
-  RequestConfig,
+  type RequestConfig,
   postUsermediaAbort,
   postUsermediaFinish,
   postUsermediaInitiate,
@@ -9,20 +9,18 @@ import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 
 import { MD5WorkerManager, getMD5WorkerManager } from "../workers";
 import { BaseUpload } from "./BaseUpload";
-import {
+import type {
   CompleteUpload,
   FinalizedUpload,
+  MultiPartUploadOptions,
   PreparedUpload,
+  UploadConfig,
   UploadPartError,
+  UploadPartStatus,
   UploadPartUrl,
+  UploadProgress,
   UploadStatus,
   UserMedia,
-} from "./types";
-import {
-  MultiPartUploadOptions,
-  UploadConfig,
-  UploadPartStatus,
-  UploadProgress,
 } from "./types";
 import { slicePart } from "./utls";
 
