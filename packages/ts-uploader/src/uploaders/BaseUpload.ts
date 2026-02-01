@@ -1,6 +1,6 @@
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 
-import {
+import type {
   IBaseUploadHandle,
   UploadConfig,
   UploadError,

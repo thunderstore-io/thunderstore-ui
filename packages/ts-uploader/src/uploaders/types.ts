@@ -1,7 +1,7 @@
-import { RequestConfig } from "@thunderstore/thunderstore-api";
+import { type RequestConfig } from "@thunderstore/thunderstore-api";
 import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 
-import {
+import type {
   CompletePartState,
   PartState,
   PreparedPartState,

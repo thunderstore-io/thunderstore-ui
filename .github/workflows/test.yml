@@ -150,6 +150,8 @@ jobs:
         run: yarn workspace @thunderstore/ts-api-react-actions build
       - name: Build @thunderstore/ts-api-react-forms
         run: yarn workspace @thunderstore/ts-api-react-forms build
+      - name: Typecheck @thunderstore/cyberstorm-remix
+        run: yarn workspace @thunderstore/cyberstorm-remix typecheck
       - name: Build @thunderstore/cyberstorm-remix
         run: yarn workspace @thunderstore/cyberstorm-remix build
       - name: Build @thunderstore/storybook

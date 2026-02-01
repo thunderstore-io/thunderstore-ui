@@ -1,6 +1,6 @@
 import { GraphExecutor, GraphNode } from "@thunderstore/graph-system";
 import {
-  RequestConfig,
+  type RequestConfig,
   postUsermediaAbort,
   postUsermediaFinish,
   postUsermediaInitiate,
@@ -9,20 +9,18 @@ import { TypedEventEmitter } from "@thunderstore/typed-event-emitter";
 
 import { MD5WorkerManager, getMD5WorkerManager } from "../workers";
 import { BaseUpload } from "./BaseUpload";
-import {
+import type {
   CompleteUpload,
   FinalizedUpload,
+  MultiPartUploadOptions,
   PreparedUpload,
+  UploadConfig,
   UploadPartError,
+  UploadPartStatus,
   UploadPartUrl,
+  UploadProgress,
   UploadStatus,
   UserMedia,
-} from "./types";
-import {
-  MultiPartUploadOptions,
-  UploadConfig,
-  UploadPartStatus,
-  UploadProgress,
 } from "./types";
 import { slicePart } from "./utls";
 
@@ -63,9 +61,9 @@ export interface IUploadHandle {
 
 export class MultipartUpload extends BaseUpload {
   private file: File;
-  private usermedia: UserMedia;
+  private usermedia?: UserMedia;
   private requestConfig: () => RequestConfig;
-  private executor: GraphExecutor<CompleteUpload, FinalizedUpload> | undefined;
+  private executor?: GraphExecutor<CompleteUpload, FinalizedUpload>;
   private graphCompleteListener?: () => void;
 
   constructor(
@@ -76,12 +74,17 @@ export class MultipartUpload extends BaseUpload {
     super(config);
     this.file = options.file;
     this.metrics.totalBytes = this.file.size;
+    this.usermedia = undefined;
     this.requestConfig = requestConfig;
     this.executor = undefined;
     this.graphCompleteListener = undefined;
   }
 
   get handle(): UserMedia {
+    if (this.usermedia === undefined) {
+      throw new Error("MultipartUpload.usermedia accessed before set");
+    }
+
     return this.usermedia;
   }
 
@@ -230,12 +233,12 @@ export class MultipartUpload extends BaseUpload {
       if (this.graphCompleteListener) {
         this.graphCompleteListener();
       }
-      if (this.usermedia.status !== "upload_complete") {
+      if (this.handle.status !== "upload_complete") {
         // This might be bad, but we can't abort something that is done.
-        this.usermedia = await postUsermediaAbort({
+        this.handle = await postUsermediaAbort({
           config: this.requestConfig,
           params: {
-            uuid: this.usermedia.uuid,
+            uuid: this.handle.uuid,
           },
           data: {},
           queryParams: {},
