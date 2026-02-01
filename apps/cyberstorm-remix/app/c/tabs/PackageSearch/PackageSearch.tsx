@@ -1,7 +1,5 @@
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { useLoaderData, useOutletContext } from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { PackageOrderOptions } from "~/commonComponents/PackageSearch/components/PackageOrder";
@@ -13,10 +11,9 @@ import type { Route } from "./+types/PackageSearch";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
-        apiHost: publicEnvVariables.VITE_API_URL,
+        apiHost: getApiHostForSsr(),
         sessionId: undefined,
       };
     });

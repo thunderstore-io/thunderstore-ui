@@ -1,7 +1,5 @@
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
 import { Suspense } from "react";
 import { Await, type LoaderFunctionArgs } from "react-router";
@@ -22,10 +20,9 @@ import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
-        apiHost: publicEnvVariables.VITE_API_URL,
+        apiHost: getApiHostForSsr(),
         sessionId: undefined,
       };
     });

@@ -1,7 +1,5 @@
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { Suspense } from "react";
 import { Await, useLoaderData } from "react-router";
 import { type LoaderFunctionArgs } from "react-router";
@@ -32,9 +30,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
   const dapper = new DapperTs(() => ({
-    apiHost: publicEnvVariables.VITE_API_URL,
+    apiHost: getApiHostForSsr(),
     sessionId: undefined,
   }));
 

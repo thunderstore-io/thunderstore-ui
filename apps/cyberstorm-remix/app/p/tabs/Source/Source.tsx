@@ -1,9 +1,7 @@
 import { faClock, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { Suspense } from "react";
 import { Await, type LoaderFunctionArgs, useOutletContext } from "react-router";
 import { useLoaderData } from "react-router";
@@ -38,10 +36,9 @@ type ResultType = {
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
-        apiHost: publicEnvVariables.VITE_API_URL,
+        apiHost: getApiHostForSsr(),
         sessionId: undefined,
       };
     });

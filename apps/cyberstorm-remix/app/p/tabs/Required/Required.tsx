@@ -1,7 +1,7 @@
 import { PaginatedDependencies } from "app/commonComponents/PaginatedDependencies/PaginatedDependencies";
 import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
-import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
+import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { Suspense } from "react";
 import { Await, type LoaderFunctionArgs, useLoaderData } from "react-router";
 
@@ -26,9 +26,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     throw Dependency404;
   }
 
-  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
   const dapper = new DapperTs(() => ({
-    apiHost: publicEnvVariables.VITE_API_URL,
+    apiHost: getApiHostForSsr(),
     sessionId: undefined,
   }));
 

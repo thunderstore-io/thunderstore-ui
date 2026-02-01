@@ -1,8 +1,6 @@
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { useReducer, useState } from "react";
 import {
   type LoaderFunctionArgs,
@@ -43,10 +41,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
     params.packageId &&
     params.slug
   ) {
-    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
     const dapper = new DapperTs(() => {
       return {
-        apiHost: publicEnvVariables.VITE_API_URL,
+        apiHost: getApiHostForSsr(),
         sessionId: undefined,
       };
     });
