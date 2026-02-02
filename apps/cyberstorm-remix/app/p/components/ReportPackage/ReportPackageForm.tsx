@@ -134,7 +134,7 @@ export function ReportPackageForm(
             // Even if `value` is removed, "other" value is submitted if user
             // doesn't choose anything else, which is confusing.
             placeholder="Please select..."
-            value={formInputs.reason}
+            value={formInputs.reason || undefined}
             onChange={(value) => {
               updateFormInput("reason", value);
             }}
