@@ -61,7 +61,7 @@ export interface IUploadHandle {
 
 export class MultipartUpload extends BaseUpload {
   private file: File;
-  private usermedia?: UserMedia;
+  private _handle?: UserMedia;
   private requestConfig: () => RequestConfig;
   private executor?: GraphExecutor<CompleteUpload, FinalizedUpload>;
   private graphCompleteListener?: () => void;
@@ -74,22 +74,22 @@ export class MultipartUpload extends BaseUpload {
     super(config);
     this.file = options.file;
     this.metrics.totalBytes = this.file.size;
-    this.usermedia = undefined;
+    this._handle = undefined;
     this.requestConfig = requestConfig;
     this.executor = undefined;
     this.graphCompleteListener = undefined;
   }
 
   get handle(): UserMedia {
-    if (this.usermedia === undefined) {
-      throw new Error("MultipartUpload.usermedia accessed before set");
+    if (this._handle === undefined) {
+      throw new Error("MultipartUpload.handle accessed before set");
     }
 
-    return this.usermedia;
+    return this._handle;
   }
 
-  set handle(usermedia: UserMedia) {
-    this.usermedia = usermedia;
+  set handle(handle: UserMedia) {
+    this._handle = handle;
   }
 
   get currentStatus(): UploadStatus {
@@ -186,7 +186,7 @@ export class MultipartUpload extends BaseUpload {
 
     this.graphCompleteListener = this.executor.onGraphComplete.addListener(
       (output) => {
-        this.usermedia = output.usermedia;
+        this.handle = output.usermedia;
         this.setStatus("complete");
       }
     );
