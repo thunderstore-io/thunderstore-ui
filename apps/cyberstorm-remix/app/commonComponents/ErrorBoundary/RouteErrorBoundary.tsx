@@ -93,8 +93,8 @@ const errorDescriptions: Record<StatusCode, JSX.Element | string> = {
     </>
   ),
   500: "Our server tripped over its own cables. Try again in a moment!",
-  502: "Our server can&apos;t be reached right now. Try again in a moment!",
-  503: "Our server can&apos;t be reached right now. Try again in a moment!",
-  504: "Our server can&apos;t be reached right now. Try again in a moment!",
+  502: "Our server can't be reached right now. Try again in a moment!",
+  503: "Our server can't be reached right now. Try again in a moment!",
+  504: "Our server can't be reached right now. Try again in a moment!",
   "???": "The browser did not enjoy our spaghetti code. Try again in a moment!",
 };
