@@ -17,5 +17,6 @@ export default defineConfig({
         `thunderstore-cyberstorm-theme.${format === "es" ? "js" : "umd.cjs"}`,
       formats: ["es", "umd"],
     },
+    emptyOutDir: false,
   },
 });
