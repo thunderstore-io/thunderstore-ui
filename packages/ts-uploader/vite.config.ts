@@ -12,6 +12,7 @@ export default defineConfig({
         `thunderstore-ts-uploader.${format === "es" ? "js" : "umd.cjs"}`,
       formats: ["es", "umd"],
     },
+    emptyOutDir: false,
     rollupOptions: {
       external: [
         "@thunderstore/graph-system",

@@ -21,6 +21,7 @@ export default defineConfig({
         `thunderstore-cyberstorm.${format === "es" ? "js" : "umd.cjs"}`,
       formats: ["es", "umd"],
     },
+    emptyOutDir: false,
     rollupOptions: {
       external: [
         ...Object.keys(peerDependencies || {}),
