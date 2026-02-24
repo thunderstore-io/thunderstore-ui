@@ -4,6 +4,7 @@
     flex-direction: column;
     gap: 4rem;
     align-items: flex-start;
+    min-height: 20rem;
   }
 
   .settings-user__body {
