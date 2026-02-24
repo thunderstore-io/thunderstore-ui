@@ -6,15 +6,20 @@ import { type ReactElement, useRef } from "react";
 import { useOutletContext, useRevalidator } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
 import { Connection } from "~/commonComponents/Connection/Connection";
-import { Loading } from "~/commonComponents/Loading/Loading";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { type OutletContextShape } from "~/root";
 
-import { NewLink, OverwolfLogo, useToast } from "@thunderstore/cyberstorm";
-import { ApiError } from "@thunderstore/thunderstore-api";
+import {
+  NewLink,
+  OverwolfLogo,
+  SkeletonBox,
+  useToast,
+} from "@thunderstore/cyberstorm";
+import {
+  ApiError,
+  userLinkedAccountDisconnect,
+} from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
-
-import { userLinkedAccountDisconnect } from "../../../../../../packages/thunderstore-api/src";
 
 type ProvidersType = {
   name: string;
@@ -42,21 +47,21 @@ export default function Connections() {
   const revalidator = useRevalidator();
   const toast = useToast();
   const disconnectingProviderRef = useRef<string | null>(null);
+  const currentUser = outletContext.currentUser;
 
   const onlyOneConnected = () => {
-    const connectedProviders =
-      outletContext.currentUser?.connections?.length ?? 0;
+    const connectedProviders = currentUser?.connections?.length ?? 0;
     return connectedProviders === 1;
   };
 
   const getConnection = (provider: ProvidersType) =>
-    outletContext.currentUser?.connections?.find(
+    currentUser?.connections?.find(
       (c) => c.provider?.toLowerCase() === provider.identifier
     );
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onSubmitSuccess = (_r: unknown) => {
-    const username = outletContext.currentUser?.username;
+    const username = currentUser?.username;
 
     revalidator.revalidate();
 
@@ -106,13 +111,9 @@ export default function Connections() {
     "VITE_BETA_SITE_URL",
   ]);
 
-  if (!isHydrated) {
-    return <Loading />;
-  }
-
-  if (!outletContext.currentUser) {
-    return <NotLoggedIn />;
-  }
+  if (!isHydrated) return <SkeletonBox />;
+  if (currentUser === undefined) return <SkeletonBox />;
+  if (currentUser === null) return <NotLoggedIn />;
 
   return (
     <div className="settings-items">
