@@ -314,10 +314,11 @@ export function PackageSearch(props: Props) {
 
         // Search
         if (oldSearch !== debouncedSearchParamsBlob.search) {
-          if (debouncedSearchParamsBlob.search === "") {
+          const trimmedSearch = debouncedSearchParamsBlob.search.trim();
+          if (trimmedSearch === "") {
             searchParams.delete("search");
           } else {
-            searchParams.set("search", debouncedSearchParamsBlob.search);
+            searchParams.set("search", trimmedSearch);
           }
           resetPage = true;
           useReplace = true;
