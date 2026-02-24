@@ -234,9 +234,7 @@ function AddServiceAccountForm(props: {
               {error && <NewAlert csVariant="danger">{error}</NewAlert>}
             </Modal.Body>
             <Modal.Footer>
-              <NewButton type="submit" disabled={!strongForm.isReady}>
-                Add Service Account
-              </NewButton>
+              <NewButton type="submit">Add Service Account</NewButton>
             </Modal.Footer>
           </form>
         </>

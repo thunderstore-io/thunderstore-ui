@@ -233,11 +233,7 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <NewButton
-            type="submit"
-            disabled={!strongForm.isReady}
-            csVariant="accent"
-          >
+          <NewButton type="submit" csVariant="accent">
             Create
           </NewButton>
         </Modal.Footer>
