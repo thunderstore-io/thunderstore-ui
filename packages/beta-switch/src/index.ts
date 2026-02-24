@@ -32,6 +32,11 @@ async function checkBetaRedirect(
 
     if (window.location.hostname === beta.hostname) {
       switchProject = legacy;
+
+      const packageEditReg = new RegExp("c/[^/]+/p/[^/]+/[^/]+/edit/?$");
+      if (packageEditReg.test(path)) {
+        path = path.replace(/\/edit\/?$/, "/");
+      }
     } else if (window.location.hostname === legacy.hostname) {
       switchProject = beta;
       legacyOnlyPages.forEach((regPath) => {
