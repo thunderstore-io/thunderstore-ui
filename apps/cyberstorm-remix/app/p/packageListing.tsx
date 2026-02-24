@@ -5,7 +5,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight, faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CopyButton } from "app/commonComponents/CopyButton/CopyButton";
 import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
 import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
 import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
@@ -34,6 +33,7 @@ import {
 import { useHydrated } from "remix-utils/use-hydrated";
 
 import {
+  CopyButton,
   Drawer,
   Heading,
   NewIcon,

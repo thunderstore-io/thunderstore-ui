@@ -31,6 +31,10 @@ export { TooltipWrapper } from "./primitiveComponents/utils/utils";
 // components
 export { CodeBox, type CodeBoxProps } from "./components/CodeBox/CodeBox";
 export {
+  CopyButton,
+  type CopyButtonProps,
+} from "./components/CopyButton/CopyButton";
+export {
   LinkingProvider,
   type LinkLibrary,
   LinkingContext,
