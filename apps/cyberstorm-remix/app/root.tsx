@@ -10,7 +10,14 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
-import { type ReactNode, Suspense, memo, useEffect, useRef } from "react";
+import {
+  type ReactNode,
+  Suspense,
+  memo,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Await,
   Links,
@@ -613,30 +620,67 @@ export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorB
 function AdsInit() {
   const isHydrated = useHydrated();
   const startsHydrated = useRef(isHydrated);
+  const [adsScriptLoaded, setAdsScriptLoaded] = useState(
+    typeof window !== "undefined" && typeof window.nitroAds !== "undefined"
+  );
 
   // This will be loaded 2 times in development because of:
   // https://react.dev/reference/react/StrictMode
   // If strict mode is removed from the entry.client.tsx, this should only run once
   useEffect(() => {
     if (!startsHydrated.current && isHydrated) return;
-    if (
-      typeof window !== "undefined" &&
-      typeof window.nitroAds === "undefined"
-    ) {
-      const $script = document.createElement("script");
-      $script.src = "https://s.nitropay.com/ads-785.js";
-      $script.setAttribute("async", "true");
-      $script.setAttribute("data-log-level", "silent");
 
-      document.body.append($script);
+    let $script: HTMLScriptElement | undefined;
+    let cancelled = false;
 
-      return () => $script.remove();
+    const loadAds = () => {
+      if (typeof window === "undefined") {
+        return;
+      }
+
+      if (typeof window.nitroAds === "undefined") {
+        $script = document.createElement("script");
+        $script.src = "https://s.nitropay.com/ads-785.js";
+        $script.setAttribute("async", "true");
+        $script.setAttribute("data-log-level", "silent");
+
+        $script.onload = () => {
+          if (!cancelled) {
+            setAdsScriptLoaded(true);
+          }
+        };
+
+        document.body.append($script);
+      } else if (typeof window.nitroAds !== "undefined") {
+        if (!cancelled) {
+          setAdsScriptLoaded(true);
+        }
+      }
+    };
+
+    if (document.readyState === "complete") {
+      loadAds();
+    } else {
+      window.addEventListener("load", loadAds);
     }
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener("load", loadAds);
+      if ($script) {
+        $script.onload = null;
+        $script.remove();
+      }
+    };
   }, []);
 
   const nitroAds = typeof window !== "undefined" ? window.nitroAds : undefined;
   useEffect(() => {
-    if (nitroAds !== undefined && nitroAds.createAd !== undefined) {
+    if (
+      adsScriptLoaded &&
+      nitroAds !== undefined &&
+      nitroAds.createAd !== undefined
+    ) {
       adContainerIds.forEach((cid) => {
         if (nitroAds !== undefined && nitroAds.createAd !== undefined) {
           nitroAds.createAd(cid, {
@@ -657,7 +701,7 @@ function AdsInit() {
         }
       });
     }
-  }, [nitroAds]);
+  }, [adsScriptLoaded, nitroAds]);
 
   return <></>;
 }
