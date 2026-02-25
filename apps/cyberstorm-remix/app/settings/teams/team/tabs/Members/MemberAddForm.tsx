@@ -168,7 +168,6 @@ export function MemberAddForm(props: {
           type="submit"
           csVariant="accent"
           onClick={strongForm.handleSubmit}
-          disabled={!strongForm.isReady}
         >
           Add member
         </NewButton>

@@ -151,8 +151,8 @@ function ProfileForm(props: { team: TeamDetails }) {
         </div>
         <NewButton
           rootClasses="team-profile__save"
-          onClick={strongForm.submit}
-          disabled={formDisabled || !strongForm.isReady}
+          onClick={strongForm.handleSubmit}
+          disabled={formDisabled}
         >
           Save changes
         </NewButton>
