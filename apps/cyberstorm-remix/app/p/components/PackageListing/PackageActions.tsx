@@ -98,6 +98,8 @@ export const PackageActions = memo(function PackageActions(
                 <NewButton
                   primitiveType="link"
                   href={resolvedTeam.donation_link}
+                  aria-label="Donate"
+                  tooltipText="Donate"
                   csVariant="secondary"
                   csSize="big"
                   csModifiers={["only-icon"]}
