@@ -4,7 +4,6 @@ import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
 import { useNavigate, useOutletContext, useRevalidator } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
-import { Loading } from "~/commonComponents/Loading/Loading";
 import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { type OutletContextShape } from "~/root";
 
@@ -13,6 +12,7 @@ import {
   NewButton,
   NewIcon,
   NewTextInput,
+  SkeletonBox,
   useToast,
 } from "@thunderstore/cyberstorm";
 import { userDelete } from "@thunderstore/thunderstore-api";
@@ -22,14 +22,11 @@ import "./Account.css";
 export default function Account() {
   const outletContext = useOutletContext() as OutletContextShape;
   const isHydrated = useHydrated();
+  const currentUser = outletContext.currentUser;
 
-  if (!isHydrated) {
-    return <Loading />;
-  }
-
-  if (!outletContext.currentUser) {
-    return <NotLoggedIn />;
-  }
+  if (!isHydrated) return <SkeletonBox />;
+  if (currentUser === undefined) return <SkeletonBox />;
+  if (currentUser === null) return <NotLoggedIn />;
 
   return (
     <div className="settings-items user-account">
@@ -55,14 +52,14 @@ export default function Account() {
               <span>
                 As a precaution, to delete your account, please input{" "}
                 <span className="user-account__username">
-                  {outletContext.currentUser.username}
+                  {currentUser?.username}
                 </span>{" "}
                 into the field below.
               </span>
             </p>
             <div className="user-account__actions">
               <DeleteAccountForm
-                currentUser={outletContext.currentUser}
+                currentUser={currentUser}
                 requestConfig={outletContext.requestConfig}
               />
             </div>
