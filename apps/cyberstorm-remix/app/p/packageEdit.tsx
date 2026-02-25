@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPrivateListing } from "app/p/listingUtils";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
@@ -147,6 +147,14 @@ export default function PackageListing() {
   const [formInputs, updateFormFieldState] = useReducer(formFieldUpdateAction, {
     categories: loaderData?.listing?.categories?.map((c) => c.slug) ?? [],
   });
+
+  // Synchronize formInputs.categories with loaderData
+  useEffect(() => {
+    updateFormFieldState({
+      field: "categories",
+      value: loaderData?.listing?.categories?.map((c) => c.slug) ?? [],
+    });
+  }, [loaderData?.listing?.categories]);
 
   type SubmitorOutput = Awaited<ReturnType<typeof packageListingUpdate>>;
 
