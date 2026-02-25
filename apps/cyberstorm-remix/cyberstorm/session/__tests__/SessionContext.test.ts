@@ -1,12 +1,4 @@
-import {
-  afterEach,
-  assert,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from "vitest";
+import { afterEach, assert, beforeEach, describe, it, vi } from "vitest";
 
 import type { User } from "@thunderstore/thunderstore-api";
 import {
@@ -50,6 +42,7 @@ describe("SessionContext", () => {
     getCurrentUserMock = vi.fn().mockResolvedValue(null);
     const { DapperTs } = await import("@thunderstore/dapper-ts");
     vi.mocked(DapperTs).mockImplementation(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       () => ({ getCurrentUser: getCurrentUserMock }) as any
     );
   });
@@ -173,6 +166,48 @@ describe("SessionContext", () => {
 
       storage.removeValue("toRemove");
       assert.isNull(storage.safeGetValue("toRemove"));
+    });
+
+    it("safeGetJsonValue(key, true) should remove invalid JSON", () => {
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+      storage.setValue("invalidJson", "{ broken");
+
+      assert.isNull(storage.safeGetJsonValue("invalidJson", true));
+      assert.isNull(storage.getValue("invalidJson"));
+    });
+
+    it("safeGetJsonValue(key, true) should parse valid JSON", () => {
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+      const data = { valid: true };
+      storage.setJsonValue("validJson", data);
+
+      assert.deepEqual(storage.safeGetJsonValue("validJson", true), data);
+      assert.isNotNull(storage.getValue("validJson"));
+    });
+
+    it("safeGetJsonValue(key, true) should preserve valid null value", () => {
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+      storage.setJsonValue("nullValue", null);
+
+      assert.isNull(storage.safeGetJsonValue("nullValue", true));
+      // storage.getValue returns the string "null" because setJsonValue uses JSON.stringify(null) -> "null"
+      assert.strictEqual(storage.getValue("nullValue"), "null");
+    });
+
+    it("safeGetJsonValue(key, true) should not throw if storage operations fail", () => {
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+
+      // We can't easily replace the private getter _storage, so we'll mock the StorageManager instance method that calls it
+      // actually, let's just mock getValue and removeValue on the instance
+      vi.spyOn(storage, "getValue").mockImplementation(() => {
+        throw new Error("Read failed");
+      });
+      vi.spyOn(storage, "removeValue").mockImplementation(() => {
+        throw new Error("Write failed");
+      });
+
+      // Should return null and not throw
+      assert.isNull(storage.safeGetJsonValue("anyKey", true));
     });
   });
 
@@ -326,6 +361,31 @@ describe("SessionContext", () => {
         testCookieDomain
       );
     });
+
+    it("should clean up invalid JSON in localStorage during validation check", () => {
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+      // Set invalid JSON that causes syntax error
+      storage.setValue(CURRENT_USER_KEY, "{ broken_json: true");
+
+      runSessionValidationCheck(storage, testApiHost, testCookieDomain);
+
+      // Should be removed
+      assert.isNull(storage.safeGetValue(CURRENT_USER_KEY));
+    });
+
+    it("should clean up invalid schema data in localStorage during validation check", () => {
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+      // Valid JSON but invalid schema (missing required fields)
+      storage.setJsonValue(CURRENT_USER_KEY, {
+        username: "OldFormatUser",
+        // Missing capabilities, connections etc
+      });
+
+      runSessionValidationCheck(storage, testApiHost, testCookieDomain);
+
+      // Should be removed because parseCurrentUser fails
+      assert.isNull(storage.safeGetValue(CURRENT_USER_KEY));
+    });
   });
 
   describe("getSessionContext", () => {
@@ -414,14 +474,35 @@ describe("SessionContext", () => {
       assert.deepEqual(result.teams, ["team1"]);
     });
 
-    it("should throw when stored user is invalid", async () => {
+    it("should return empty user and clear storage when stored user is invalid", async () => {
       const storage = new StorageManager(SESSION_STORAGE_KEY);
-      storage.setJsonValue(CURRENT_USER_KEY, { username: 123 } as unknown);
+      // Malformed user object (invalid schema)
+      const invalidUser = { username: 123, someRandomField: "test" };
+      storage.setJsonValue(CURRENT_USER_KEY, invalidUser);
       setSessionStale(storage, false);
 
-      await expect(getSessionCurrentUser(storage, false)).rejects.toThrow(
-        /Failed to parse current user/
-      );
+      const result = await getSessionCurrentUser(storage, false);
+
+      // Should return properly formatted empty user
+      assert.isNull(result.username);
+      assert.deepEqual(result.capabilities, []);
+
+      // Storage should be cleared of the invalid data
+      assert.isNull(storage.safeGetJsonValue(CURRENT_USER_KEY));
+    });
+
+    it("should handle malformed JSON string in localStorage and clean it up", async () => {
+      const storage = new StorageManager(SESSION_STORAGE_KEY);
+      // Directly set invalid JSON string that JSON.parse would fail on,
+      // bypass setJsonValue to simulate data corruption or raw manipulation
+      storage.setValue(CURRENT_USER_KEY, "{ invalid-json-string");
+      setSessionStale(storage, false);
+
+      const result = await getSessionCurrentUser(storage, false);
+
+      assert.isNull(result.username);
+      // Verify cleanup happened
+      assert.isNull(storage.safeGetValue(CURRENT_USER_KEY));
     });
   });
 

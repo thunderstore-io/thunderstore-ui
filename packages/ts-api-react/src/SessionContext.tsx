@@ -157,7 +157,7 @@ export const runSessionValidationCheck = (
   const sessionidCookie = getCookie("sessionid");
   const storedApiHost = _storage.safeGetValue(API_HOST_KEY);
   const storedCookieDomain = _storage.safeGetValue(COOKIE_DOMAIN_KEY);
-  const storedCurrentUser = _storage.safeGetJsonValue(CURRENT_USER_KEY);
+  const storedCurrentUser = _storage.safeGetJsonValue(CURRENT_USER_KEY, true);
 
   // Update apiHost incase it has changed
   if (storedApiHost !== apiHost) {
@@ -179,11 +179,17 @@ export const runSessionValidationCheck = (
   }
 
   // sessionid missing but there is a currentUser, session is stale
-  if (
-    storedCurrentUser !== null &&
-    parseCurrentUser(storedCurrentUser).username
-  ) {
-    _storage.setValue(STALE_KEY, "yes");
+  try {
+    if (
+      storedCurrentUser !== null &&
+      parseCurrentUser(storedCurrentUser).username
+    ) {
+      _storage.setValue(STALE_KEY, "yes");
+    }
+  } catch (e) {
+    console.error("Failed to parse current user", e);
+    // If parsing fails, the data is invalid. We should remove it.
+    _storage.removeValue(CURRENT_USER_KEY);
   }
   return false;
 };
@@ -239,12 +245,19 @@ export const getSessionCurrentUser = async (
     // If the session is stale, we need to refresh it
     await updateCurrentUser(_storage);
   }
-  const currentUser = _storage.safeGetJsonValue(CURRENT_USER_KEY);
+  const currentUser = _storage.safeGetJsonValue(CURRENT_USER_KEY, true);
 
   if (currentUser === null) {
     return emptyCurrentUser;
   }
-  return parseCurrentUser(currentUser);
+  try {
+    return parseCurrentUser(currentUser);
+  } catch (e) {
+    console.warn("Invalid current user data found, clearing session", e);
+    // Remove the invalid data from storage
+    _storage.removeValue(CURRENT_USER_KEY);
+    return emptyCurrentUser;
+  }
 };
 
 export const getSessionContext = (
