@@ -45,6 +45,7 @@ import {
   NewLink,
   NewTag,
   RelativeTime,
+  SkeletonBox,
   Tabs,
   ThunderstoreLogo,
   formatFileSize,
@@ -231,7 +232,7 @@ export default function PackageListing() {
 
   // TODO: Add proper loading element
   if (!listing) {
-    return <div>Loading package...</div>;
+    return <SkeletonBox />;
   }
 
   // TODO: some variables are available in props (communityId, namespaceId, packageId)
@@ -365,7 +366,7 @@ export default function PackageListing() {
                 >
                   {packageMeta(lastUpdated, firstUploaded, listing)}
 
-                  <Suspense fallback={<p>Loading...</p>}>
+                  <Suspense fallback={<SkeletonBox />}>
                     <Await resolve={community}>
                       {(resolvedCommunity) =>
                         packageBoxes(listing, resolvedCommunity, domain)
@@ -374,7 +375,7 @@ export default function PackageListing() {
                   </Suspense>
                 </Drawer>
 
-                <Suspense fallback={<p>Loading...</p>}>
+                <Suspense fallback={<SkeletonBox />}>
                   <Await resolve={team}>
                     {(resolvedTeam) => (
                       <Actions
