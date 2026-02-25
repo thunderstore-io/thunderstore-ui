@@ -15,12 +15,14 @@ interface Props {
   dependencies: DependencyResponse;
   pageSize?: number;
   siblingCount?: number;
+  communityId?: string;
 }
 
 export function PaginatedDependencies({
   dependencies,
   pageSize = 20, // Default page size from backend
   siblingCount = 4,
+  communityId,
 }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
@@ -53,6 +55,7 @@ export function PaginatedDependencies({
           <ListingDependency
             key={`${dep.name}-${dep.version_number}-${idx}`}
             dependency={dep}
+            communityId={communityId}
           />
         ))}
       </div>

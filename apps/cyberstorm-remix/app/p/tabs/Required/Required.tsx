@@ -52,6 +52,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   }
 
   return {
+    communityId: communityId,
     dependencies: await dapper.getPackageVersionDependencies(
       namespaceId,
       packageId,
@@ -83,6 +84,7 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
   }
 
   return {
+    communityId: communityId,
     dependencies: dapper.getPackageVersionDependencies(
       namespaceId,
       packageId,
@@ -95,7 +97,9 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
 clientLoader.hydrate = true;
 
 export default function PackageVersionRequired() {
-  const { dependencies } = useLoaderData<typeof loader | typeof clientLoader>();
+  const { communityId, dependencies } = useLoaderData<
+    typeof loader | typeof clientLoader
+  >();
 
   // SSR failed to fetch, retry as authenticated user on client.
   if (dependencies === undefined) {
@@ -113,7 +117,10 @@ export default function PackageVersionRequired() {
         }
       >
         {(resolvedDependencies) => (
-          <PaginatedDependencies dependencies={resolvedDependencies} />
+          <PaginatedDependencies
+            dependencies={resolvedDependencies}
+            communityId={communityId}
+          />
         )}
       </Await>
     </Suspense>

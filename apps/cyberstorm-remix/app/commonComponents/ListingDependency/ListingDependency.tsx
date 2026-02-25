@@ -52,6 +52,7 @@ export function ListingDependency(props: ListingDependencyProps) {
             <NewLink
               primitiveType="cyberstormLink"
               linkId="Team"
+              community={communityId}
               team={dependency.namespace}
               csVariant="primary"
             >
