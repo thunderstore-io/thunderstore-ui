@@ -1,8 +1,5 @@
 import {
   faCaretRight,
-  faDownload,
-  faHandHoldingHeart,
-  faThumbsUp,
   faUsers,
   faWarning,
 } from "@fortawesome/free-solid-svg-icons";
@@ -22,7 +19,6 @@ import { getApiHostForSsr } from "cyberstorm/utils/env";
 import {
   type ReactElement,
   Suspense,
-  memo,
   useEffect,
   useRef,
   useState,
@@ -40,14 +36,12 @@ import { useHydrated } from "remix-utils/use-hydrated";
 import {
   Drawer,
   Heading,
-  NewButton,
   NewIcon,
   NewLink,
   NewTag,
   RelativeTime,
   SkeletonBox,
   Tabs,
-  ThunderstoreLogo,
   formatFileSize,
   formatInteger,
   formatToDisplayName,
@@ -55,9 +49,9 @@ import {
 } from "@thunderstore/cyberstorm";
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
-import type { CurrentUser } from "@thunderstore/dapper/types";
 
 import { ManagementTools } from "./components/PackageListing/ManagementTools";
+import { PackageActions } from "./components/PackageListing/PackageActions";
 import {
   InternalNotes,
   RejectionReason,
@@ -343,29 +337,27 @@ export default function PackageListing() {
                 {formatToDisplayName(listing.name)}
               </PageHeader>
 
-              <PackageDetailsNarrow
-                lastUpdated={lastUpdated}
-                firstUploaded={firstUploaded}
-                listing={listing}
-                community={community}
-                domain={domain}
-              />
               <div className="package-listing__narrow-actions">
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={team}>
-                    {(resolvedTeam) => (
-                      <Actions
-                        team={resolvedTeam}
-                        listing={listing}
-                        isLiked={isLiked}
-                        currentUser={currentUser}
-                        packageLikeAction={packageLikeAction}
-                      />
-                    )}
-                  </Await>
-                </Suspense>
-
-                {ReportPackageButton}
+                <PackageActions
+                  downloadUrl={listing.download_url}
+                  team={team}
+                  installUrl={listing.install_url}
+                  reportPackageButton={ReportPackageButton}
+                  packageDetailsNarrow={
+                    <PackageDetailsNarrow
+                      lastUpdated={lastUpdated}
+                      firstUploaded={firstUploaded}
+                      listing={listing}
+                      community={community}
+                      domain={domain}
+                    />
+                  }
+                  isLiked={isLiked}
+                  currentUser={currentUser}
+                  packageLikeAction={packageLikeAction}
+                  namespace={listing.namespace}
+                  packageName={listing.name}
+                />
               </div>
 
               <>
@@ -476,40 +468,19 @@ export default function PackageListing() {
             </section>
 
             <aside className="package-listing-sidebar">
-              <NewButton
-                csVariant="accent"
-                csSize="big"
-                rootClasses="package-listing-sidebar__install"
-                primitiveType="link"
-                href={listing.install_url}
-              >
-                <NewIcon csMode="inline">
-                  <ThunderstoreLogo />
-                </NewIcon>
-                Install
-              </NewButton>
+              <PackageActions
+                downloadUrl={listing.download_url}
+                team={team}
+                installUrl={listing.install_url}
+                reportPackageButton={ReportPackageButton}
+                isLiked={isLiked}
+                currentUser={currentUser}
+                packageLikeAction={packageLikeAction}
+                namespace={listing.namespace}
+                packageName={listing.name}
+              />
 
-              <div className="package-listing-sidebar__main">
-                <div className="package-listing-sidebar__actions">
-                  <Suspense>
-                    <Await resolve={team}>
-                      {(resolvedTeam) => (
-                        <Actions
-                          team={resolvedTeam}
-                          listing={listing}
-                          isLiked={isLiked}
-                          currentUser={currentUser}
-                          packageLikeAction={packageLikeAction}
-                        />
-                      )}
-                    </Await>
-                  </Suspense>
-
-                  {ReportPackageButton}
-                </div>
-
-                {packageMeta(lastUpdated, firstUploaded, listing)}
-              </div>
+              {packageMeta(lastUpdated, firstUploaded, listing)}
 
               <Suspense>
                 <Await resolve={community}>
@@ -558,13 +529,7 @@ function PackageDetailsNarrow(props: {
     | Awaited<ReturnType<DapperTsInterface["getCommunity"]>>;
   domain: string;
 }) {
-  const {
-    lastUpdated,
-    firstUploaded,
-    listing,
-    community,
-    domain,
-  } = props;
+  const { lastUpdated, firstUploaded, listing, community, domain } = props;
 
   return (
     <>
@@ -653,68 +618,6 @@ function packageBoxes(
     </>
   );
 }
-
-const Actions = memo(function Actions(props: {
-  team: Awaited<ReturnType<DapperTsInterface["getTeamDetails"]>>;
-  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>;
-  isLiked: boolean;
-  currentUser: CurrentUser | undefined;
-  packageLikeAction: (
-    isLiked: boolean,
-    namespace: string,
-    packageName: string,
-    isLoggedIn: boolean
-  ) => void;
-}) {
-  const { team, listing, isLiked, currentUser, packageLikeAction } = props;
-  return (
-    <>
-      <NewButton
-        primitiveType="link"
-        href={listing.download_url}
-        csVariant="secondary"
-        rootClasses="package-listing-sidebar__download"
-      >
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faDownload} />
-        </NewIcon>
-        Download
-      </NewButton>
-      {team.donation_link ? (
-        <NewButton
-          primitiveType="link"
-          href={team.donation_link}
-          csVariant="secondary"
-          csSize="big"
-          csModifiers={["only-icon"]}
-        >
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faHandHoldingHeart} />
-          </NewIcon>
-        </NewButton>
-      ) : null}
-      <NewButton
-        primitiveType="button"
-        onClick={() =>
-          packageLikeAction(
-            isLiked,
-            listing.namespace,
-            listing.name,
-            Boolean(currentUser?.username)
-          )
-        }
-        tooltipText="Like"
-        csVariant={isLiked ? "primary" : "secondary"}
-        csSize="big"
-        csModifiers={["only-icon"]}
-      >
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faThumbsUp} />
-        </NewIcon>
-      </NewButton>
-    </>
-  );
-});
 
 function packageMeta(
   lastUpdated: ReactElement | undefined,

@@ -18,17 +18,6 @@
     justify-content: flex-start;
   }
 
-  .package-listing__actions {
-    position: absolute;
-    top: -5rem;
-    right: 3rem;
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-md);
-    align-items: flex-end;
-    justify-content: center;
-  }
-
   .package-listing-management-tools {
     display: flex;
     gap: var(--gap-xs);
@@ -140,6 +129,11 @@
     height: 3.56rem;
   }
 
+  .package-listing-sidebar__actions-skeleton {
+    width: 20rem;
+    height: 2.25rem;
+  }
+
   .package-listing-sidebar__install {
     justify-content: center;
     width: 100%;
@@ -153,13 +147,16 @@
     align-self: stretch;
   }
 
-  .package-listing-sidebar__actions-skeleton {
-    width: 20rem;
-    height: 2.25rem;
+  .package-listing__package-actions {
+    display: flex;
+    gap: var(--gap-xs);
+    align-items: flex-start;
+    align-self: stretch;
   }
 
-  .package-listing-sidebar__actions {
-    display: flex;
+  .package-listing__narrow-actions {
+    display: none;
+    flex-direction: column;
     gap: var(--gap-xs);
     align-items: flex-start;
     align-self: stretch;
@@ -233,11 +230,6 @@
     word-break: break-word;
   }
 
-  .package-listing-sidebar__boxes-skeleton {
-    width: 20rem;
-    height: 11rem;
-  }
-
   .package-listing-sidebar__categories {
     display: flex;
     flex-direction: column;
@@ -267,26 +259,11 @@
     max-width: 300px;
   }
 
-  .package-listing__narrow-actions {
-    display: none;
-    gap: 0.5rem;
-    align-items: flex-start;
-    align-self: stretch;
-  }
-
   .package-listing__drawer-button {
     width: 100%;
   }
 
   @media (width < 41rem) {
-    .package-listing__actions {
-      position: unset;
-      top: unset;
-      right: unset;
-      display: flex;
-      flex: 1 1 0;
-    }
-
     .package-listing-management-tools {
       flex: 1 1 0;
       flex-flow: row wrap;
@@ -295,17 +272,12 @@
 
   /* Sidebar narrow/wide switch breakpoint */
   @media (width <= 990px) {
-    .package-listing-sidebar {
-      display: none;
-    }
-
     .package-listing__narrow-actions {
       display: flex;
     }
 
-    .package-listing {
-      flex-wrap: wrap;
-      overflow: unset;
+    .package-listing-sidebar {
+      display: none;
     }
 
     .package-listing__main {

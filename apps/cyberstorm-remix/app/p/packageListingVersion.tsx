@@ -1,21 +1,15 @@
-import {
-  faCaretRight,
-  faDownload,
-  faHandHoldingHeart,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
-import { Suspense, memo } from "react";
+import { Suspense } from "react";
 import type {
   LoaderFunctionArgs,
   ShouldRevalidateFunctionArgs,
 } from "react-router";
 import {
-  Await,
   Outlet,
   useLoaderData,
   useLocation,
@@ -29,23 +23,19 @@ import {
   Drawer,
   Heading,
   NewAlert,
-  NewButton,
   NewIcon,
   NewLink,
   RelativeTime,
   SkeletonBox,
   Tabs,
-  ThunderstoreLogo,
   formatFileSize,
   formatInteger,
   formatToDisplayName,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import {
-  type PackageListingDetails,
-  type TeamDetails,
-} from "@thunderstore/dapper/types";
+import type { PackageListingDetails } from "@thunderstore/dapper/types";
 
+import { PackageActions } from "./components/PackageListing/PackageActions";
 import { getPrivateListing, getPublicListing } from "./listingUtils";
 import "./packageListing.css";
 
@@ -214,34 +204,37 @@ export default function PackageListingVersion() {
               </PageHeader>
 
               <div className="package-listing__narrow-actions">
-                <button
-                  popoverTarget="packageDetailDrawer"
-                  popoverTargetAction="show"
-                  className="button button--variant--secondary button--size--medium package-listing__drawer-button"
-                >
-                  Details
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faCaretRight} />
-                  </NewIcon>
-                </button>
-                <Drawer
-                  popoverId="packageDetailDrawer"
-                  headerContent={
-                    <Heading csLevel="3" csSize="3">
-                      Details
-                    </Heading>
+                <PackageActions
+                  downloadUrl={listing.download_url}
+                  team={team}
+                  installUrl={listing.install_url ?? ""}
+                  installDisabled={!listing.install_url}
+                  packageDetailsNarrow={
+                    <>
+                      <button
+                        popoverTarget="packageDetailDrawer"
+                        popoverTargetAction="show"
+                        className="button button--variant--secondary button--size--medium package-listing__drawer-button"
+                      >
+                        Details
+                        <NewIcon csMode="inline" noWrapper>
+                          <FontAwesomeIcon icon={faCaretRight} />
+                        </NewIcon>
+                      </button>
+                      <Drawer
+                        popoverId="packageDetailDrawer"
+                        headerContent={
+                          <Heading csLevel="3" csSize="3">
+                            Details
+                          </Heading>
+                        }
+                        rootClasses="package-listing__drawer"
+                      >
+                        {packageMeta(listing)}
+                      </Drawer>
+                    </>
                   }
-                  rootClasses="package-listing__drawer"
-                >
-                  {packageMeta(listing)}
-                </Drawer>
-                <Suspense fallback={<p>Loading...</p>}>
-                  <Await resolve={team}>
-                    {(resolvedTeam) => (
-                      <Actions team={resolvedTeam} listing={listing} />
-                    )}
-                  </Await>
-                </Suspense>
+                />
               </div>
 
               <Tabs>
@@ -297,30 +290,18 @@ export default function PackageListingVersion() {
               </div>
             </section>
             <aside className="package-listing-sidebar">
-              <NewButton
-                csVariant="accent"
-                csSize="big"
-                rootClasses="package-listing-sidebar__install"
-                primitiveType="link"
-                href={listing.install_url || ""}
-                disabled={!listing.install_url}
-              >
-                <NewIcon csMode="inline">
-                  <ThunderstoreLogo />
-                </NewIcon>
-                Install
-              </NewButton>
               <div className="package-listing-sidebar__main">
                 <Suspense
                   fallback={
                     <SkeletonBox className="package-listing-sidebar__actions-skeleton" />
                   }
                 >
-                  <Await resolve={team}>
-                    {(resolvedTeam) => (
-                      <Actions team={resolvedTeam} listing={listing} />
-                    )}
-                  </Await>
+                  <PackageActions
+                    downloadUrl={listing.download_url}
+                    team={team}
+                    installUrl={listing.install_url ?? ""}
+                    installDisabled={!listing.install_url}
+                  />
                 </Suspense>
 
                 {packageMeta(listing)}
@@ -332,41 +313,6 @@ export default function PackageListingVersion() {
     </>
   );
 }
-
-const Actions = memo(function Actions(props: {
-  listing: PackageListingDetails;
-  team: TeamDetails;
-}) {
-  const { listing, team } = props;
-  return (
-    <div className="package-listing-sidebar__actions">
-      <NewButton
-        primitiveType="link"
-        href={listing.download_url}
-        csVariant="secondary"
-        rootClasses="package-listing-sidebar__download"
-      >
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faDownload} />
-        </NewIcon>
-        Download
-      </NewButton>
-      {team.donation_link ? (
-        <NewButton
-          primitiveType="link"
-          href={team.donation_link}
-          csVariant="secondary"
-          csSize="big"
-          csModifiers={["only-icon"]}
-        >
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faHandHoldingHeart} />
-          </NewIcon>
-        </NewButton>
-      ) : null}
-    </div>
-  );
-});
 
 function packageMeta(listing: PackageListingDetails) {
   return (
