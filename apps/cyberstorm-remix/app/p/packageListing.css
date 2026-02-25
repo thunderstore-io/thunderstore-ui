@@ -269,7 +269,6 @@
 
   .package-listing__narrow-actions {
     display: none;
-    flex-direction: column;
     gap: 0.5rem;
     align-items: flex-start;
     align-self: stretch;

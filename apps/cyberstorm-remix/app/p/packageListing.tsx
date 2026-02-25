@@ -343,38 +343,14 @@ export default function PackageListing() {
                 {formatToDisplayName(listing.name)}
               </PageHeader>
 
+              <PackageDetailsNarrow
+                lastUpdated={lastUpdated}
+                firstUploaded={firstUploaded}
+                listing={listing}
+                community={community}
+                domain={domain}
+              />
               <div className="package-listing__narrow-actions">
-                <button
-                  popoverTarget="packageDetailDrawer"
-                  popoverTargetAction="show"
-                  className="button button--variant--secondary button--size--medium package-listing__drawer-button"
-                >
-                  Details
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faCaretRight} />
-                  </NewIcon>
-                </button>
-
-                <Drawer
-                  popoverId="packageDetailDrawer"
-                  headerContent={
-                    <Heading csLevel="3" csSize="3">
-                      Details
-                    </Heading>
-                  }
-                  rootClasses="package-listing__drawer"
-                >
-                  {packageMeta(lastUpdated, firstUploaded, listing)}
-
-                  <Suspense fallback={<SkeletonBox />}>
-                    <Await resolve={community}>
-                      {(resolvedCommunity) =>
-                        packageBoxes(listing, resolvedCommunity, domain)
-                      }
-                    </Await>
-                  </Suspense>
-                </Drawer>
-
                 <Suspense fallback={<SkeletonBox />}>
                   <Await resolve={team}>
                     {(resolvedTeam) => (
@@ -571,6 +547,59 @@ function packageTags(
       </NewTag>
     );
   });
+}
+
+function PackageDetailsNarrow(props: {
+  lastUpdated: ReactElement | undefined;
+  firstUploaded: ReactElement | undefined;
+  listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>;
+  community:
+    | Promise<Awaited<ReturnType<DapperTsInterface["getCommunity"]>>>
+    | Awaited<ReturnType<DapperTsInterface["getCommunity"]>>;
+  domain: string;
+}) {
+  const {
+    lastUpdated,
+    firstUploaded,
+    listing,
+    community,
+    domain,
+  } = props;
+
+  return (
+    <>
+      <button
+        popoverTarget="packageDetailDrawer"
+        popoverTargetAction="show"
+        className="button button--variant--secondary button--size--medium package-listing__drawer-button"
+      >
+        Details
+        <NewIcon csMode="inline" noWrapper>
+          <FontAwesomeIcon icon={faCaretRight} />
+        </NewIcon>
+      </button>
+
+      <Drawer
+        popoverId="packageDetailDrawer"
+        headerContent={
+          <Heading csLevel="3" csSize="3">
+            Details
+          </Heading>
+        }
+        rootClasses="package-listing__drawer"
+      >
+        {packageMeta(lastUpdated, firstUploaded, listing)}
+
+        <Suspense fallback={<p>Loading...</p>}>
+          <Await resolve={community}>
+            {(resolvedCommunity) =>
+              packageBoxes(listing, resolvedCommunity, domain)
+            }
+          </Await>
+        </Suspense>
+      </Drawer>
+    </>
+  );
 }
 
 function packageBoxes(
