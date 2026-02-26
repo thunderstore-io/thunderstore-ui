@@ -1,9 +1,4 @@
-import {
-  faCaretRight,
-  faDownload,
-  faHandHoldingHeart,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCaretRight, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,7 +10,6 @@ import { isPromise } from "cyberstorm/utils/typeChecks";
 import {
   type ReactElement,
   Suspense,
-  memo,
   useEffect,
   useMemo,
   useRef,
@@ -41,23 +35,19 @@ import {
   Drawer,
   Heading,
   NewAlert,
-  NewButton,
   NewIcon,
   NewLink,
   RelativeTime,
   SkeletonBox,
   Tabs,
-  ThunderstoreLogo,
   formatFileSize,
   formatInteger,
   formatToDisplayName,
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
-import {
-  getPackageVersionDetails,
-  getTeamDetails,
-} from "@thunderstore/dapper-ts";
+import { getPackageVersionDetails } from "@thunderstore/dapper-ts";
 
+import { PackageActions } from "./components/PackageListing/PackageActions";
 import "./packageListing.css";
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -255,39 +245,39 @@ export default function PackageVersion() {
               </Suspense>
 
               <div className="package-listing__narrow-actions">
-                <button
-                  popoverTarget="packageDetailDrawer"
-                  popoverTargetAction="show"
-                  className="button button--variant--secondary button--size--medium package-listing__drawer-button"
-                >
-                  Details
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faCaretRight} />
-                  </NewIcon>
-                </button>
-                <Drawer
-                  popoverId="packageDetailDrawer"
-                  headerContent={
-                    <Heading csLevel="3" csSize="3">
-                      Details
-                    </Heading>
-                  }
-                  rootClasses="package-listing__drawer"
-                >
-                  <Suspense fallback={<p>Loading...</p>}>
-                    <Await resolve={version}>
-                      {(resolvedValue) => (
-                        <>{packageMeta(firstUploaded, resolvedValue)}</>
-                      )}
-                    </Await>
-                  </Suspense>
-                </Drawer>
                 <Suspense fallback={<p>Loading...</p>}>
                   <Await resolve={versionAndTeamPromise}>
-                    {(resolvedValue) => (
-                      <Actions
-                        team={resolvedValue[1]}
-                        version={resolvedValue[0]}
+                    {([versionData, teamData]) => (
+                      <PackageActions
+                        downloadUrl={versionData.download_url}
+                        team={teamData}
+                        installUrl={versionData.install_url ?? ""}
+                        installDisabled={!versionData.install_url}
+                        packageDetailsNarrow={
+                          <>
+                            <button
+                              popoverTarget="packageDetailDrawer"
+                              popoverTargetAction="show"
+                              className="button button--variant--secondary button--size--medium package-listing__drawer-button"
+                            >
+                              Details
+                              <NewIcon csMode="inline" noWrapper>
+                                <FontAwesomeIcon icon={faCaretRight} />
+                              </NewIcon>
+                            </button>
+                            <Drawer
+                              popoverId="packageDetailDrawer"
+                              headerContent={
+                                <Heading csLevel="3" csSize="3">
+                                  Details
+                                </Heading>
+                              }
+                              rootClasses="package-listing__drawer"
+                            >
+                              {packageMeta(firstUploaded, versionData)}
+                            </Drawer>
+                          </>
+                        }
                       />
                     )}
                   </Await>
@@ -360,29 +350,6 @@ export default function PackageVersion() {
               </div>
             </section>
             <aside className="package-listing-sidebar">
-              <Suspense
-                fallback={
-                  <SkeletonBox className="package-listing-sidebar__install-skeleton" />
-                }
-              >
-                <Await resolve={version}>
-                  {(resolvedValue) => (
-                    <NewButton
-                      csVariant="accent"
-                      csSize="big"
-                      rootClasses="package-listing-sidebar__install"
-                      primitiveType="link"
-                      href={resolvedValue.install_url || ""}
-                      disabled={!resolvedValue.install_url}
-                    >
-                      <NewIcon csMode="inline">
-                        <ThunderstoreLogo />
-                      </NewIcon>
-                      Install
-                    </NewButton>
-                  )}
-                </Await>
-              </Suspense>
               <div className="package-listing-sidebar__main">
                 <Suspense
                   fallback={
@@ -390,10 +357,12 @@ export default function PackageVersion() {
                   }
                 >
                   <Await resolve={versionAndTeamPromise}>
-                    {(resolvedValue) => (
-                      <Actions
-                        team={resolvedValue[1]}
-                        version={resolvedValue[0]}
+                    {([versionData, teamData]) => (
+                      <PackageActions
+                        downloadUrl={versionData.download_url}
+                        team={teamData}
+                        installUrl={versionData.install_url ?? ""}
+                        installDisabled={!versionData.install_url}
                       />
                     )}
                   </Await>
@@ -417,41 +386,6 @@ export default function PackageVersion() {
     </>
   );
 }
-
-const Actions = memo(function Actions(props: {
-  team: Awaited<ReturnType<typeof getTeamDetails>>;
-  version: Awaited<ReturnType<typeof getPackageVersionDetails>>;
-}) {
-  const { team, version } = props;
-  return (
-    <div className="package-listing-sidebar__actions">
-      <NewButton
-        primitiveType="link"
-        href={version.download_url}
-        csVariant="secondary"
-        rootClasses="package-listing-sidebar__download"
-      >
-        <NewIcon csMode="inline" noWrapper>
-          <FontAwesomeIcon icon={faDownload} />
-        </NewIcon>
-        Download
-      </NewButton>
-      {team.donation_link ? (
-        <NewButton
-          primitiveType="link"
-          href={team.donation_link}
-          csVariant="secondary"
-          csSize="big"
-          csModifiers={["only-icon"]}
-        >
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faHandHoldingHeart} />
-          </NewIcon>
-        </NewButton>
-      ) : null}
-    </div>
-  );
-});
 
 function packageMeta(
   firstUploaded: ReactElement | undefined,
