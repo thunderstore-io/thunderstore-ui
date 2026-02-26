@@ -79,22 +79,22 @@ export const PackageActions = memo(function PackageActions(
         </NewButton>
       )}
       {packageDetailsNarrow ?? null}
-      <Suspense fallback={<p>Loading...</p>}>
-        <Await resolve={team}>
-          {(resolvedTeam) => (
-            <div className="package-listing__package-actions">
-              <NewButton
-                primitiveType="link"
-                href={downloadUrl}
-                csVariant="secondary"
-                rootClasses="package-listing-sidebar__download"
-              >
-                <NewIcon csMode="inline" noWrapper>
-                  <FontAwesomeIcon icon={faDownload} />
-                </NewIcon>
-                Download
-              </NewButton>
-              {resolvedTeam?.donation_link ? (
+      <div className="package-listing__package-actions">
+        <NewButton
+          primitiveType="link"
+          href={downloadUrl}
+          csVariant="secondary"
+          rootClasses="package-listing-sidebar__download"
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faDownload} />
+          </NewIcon>
+          Download
+        </NewButton>
+        <Suspense fallback={null}>
+          <Await resolve={team}>
+            {(resolvedTeam) =>
+              resolvedTeam?.donation_link ? (
                 <NewButton
                   primitiveType="link"
                   href={resolvedTeam.donation_link}
@@ -108,33 +108,33 @@ export const PackageActions = memo(function PackageActions(
                     <FontAwesomeIcon icon={faHandHoldingHeart} />
                   </NewIcon>
                 </NewButton>
-              ) : null}
-              {showLikeButton && (
-                <NewButton
-                  primitiveType="button"
-                  onClick={() =>
-                    packageLikeAction!(
-                      isLiked!,
-                      namespace!,
-                      packageName!,
-                      Boolean(currentUser?.username)
-                    )
-                  }
-                  tooltipText="Like"
-                  csVariant={isLiked ? "primary" : "secondary"}
-                  csSize="big"
-                  csModifiers={["only-icon"]}
-                >
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faThumbsUp} />
-                  </NewIcon>
-                </NewButton>
-              )}
-              {reportPackageButton ?? null}
-            </div>
-          )}
-        </Await>
-      </Suspense>
+              ) : null
+            }
+          </Await>
+        </Suspense>
+        {showLikeButton && (
+          <NewButton
+            primitiveType="button"
+            onClick={() =>
+              packageLikeAction!(
+                isLiked!,
+                namespace!,
+                packageName!,
+                Boolean(currentUser?.username)
+              )
+            }
+            tooltipText="Like"
+            csVariant={isLiked ? "primary" : "secondary"}
+            csSize="big"
+            csModifiers={["only-icon"]}
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faThumbsUp} />
+            </NewIcon>
+          </NewButton>
+        )}
+        {reportPackageButton ?? null}
+      </div>
     </>
   );
 });
