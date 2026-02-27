@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { Suspense, memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import {
   Await,
   useLoaderData,
@@ -16,6 +16,7 @@ import {
   useSearchParams,
 } from "react-router";
 import { useDebounce } from "use-debounce";
+import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 import {
@@ -202,7 +203,7 @@ export default function CommunitiesPage() {
         </div>
 
         <div className="container container--x container--stretch communities__results">
-          <Suspense fallback={<CommunitiesListSkeleton />}>
+          <ClientSuspense fallback={<CommunitiesListSkeleton />}>
             <Await
               resolve={communities}
               errorElement={<div>Error loading communities</div>}
@@ -211,7 +212,7 @@ export default function CommunitiesPage() {
                 <CommunitiesList communitiesData={resolvedValue} />
               )}
             </Await>
-          </Suspense>
+          </ClientSuspense>
         </div>
       </div>
     </>

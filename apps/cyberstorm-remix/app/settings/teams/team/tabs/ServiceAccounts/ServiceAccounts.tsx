@@ -4,13 +4,14 @@ import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
-import { Suspense, useReducer, useState } from "react";
+import { useReducer, useState } from "react";
 import {
   Await,
   useLoaderData,
   useOutletContext,
   useRevalidator,
 } from "react-router";
+import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 
 import {
@@ -44,7 +45,7 @@ export default function ServiceAccounts() {
   }
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <ClientSuspense fallback={<div>Loading...</div>}>
       <Await resolve={serviceAccounts}>
         {(resolvedServiceAccounts) => (
           <div className="settings-items">
@@ -70,7 +71,7 @@ export default function ServiceAccounts() {
           </div>
         )}
       </Await>
-    </Suspense>
+    </ClientSuspense>
   );
 }
 

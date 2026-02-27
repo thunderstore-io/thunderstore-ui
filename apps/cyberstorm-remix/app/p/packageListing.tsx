@@ -13,13 +13,7 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import {
-  type ReactElement,
-  Suspense,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { type ReactElement, useEffect, useRef, useState } from "react";
 import {
   Await,
   Outlet,
@@ -28,6 +22,7 @@ import {
   useOutletContext,
 } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
+import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 
 import {
   CopyButton,
@@ -271,7 +266,7 @@ export default function PackageListing() {
     <>
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
-          <Suspense>
+          <ClientSuspense>
             <Await resolve={listingStatus}>
               {(resolvedStatus) => (
                 <Await resolve={permissions}>
@@ -293,7 +288,7 @@ export default function PackageListing() {
                 </Await>
               )}
             </Await>
-          </Suspense>
+          </ClientSuspense>
 
           <div className="package-listing__main">
             <section className="package-listing__package-content-section">
@@ -483,13 +478,13 @@ export default function PackageListing() {
 
               {packageMeta(lastUpdated, firstUploaded, listing)}
 
-              <Suspense>
+              <ClientSuspense>
                 <Await resolve={community}>
                   {(resolvedCommunity) =>
                     packageBoxes(listing, resolvedCommunity, domain)
                   }
                 </Await>
-              </Suspense>
+              </ClientSuspense>
             </aside>
           </div>
         </section>
@@ -556,13 +551,13 @@ function PackageDetailsNarrow(props: {
       >
         {packageMeta(lastUpdated, firstUploaded, listing)}
 
-        <Suspense fallback={<p>Loading...</p>}>
+        <ClientSuspense fallback={<p>Loading...</p>}>
           <Await resolve={community}>
             {(resolvedCommunity) =>
               packageBoxes(listing, resolvedCommunity, domain)
             }
           </Await>
-        </Suspense>
+        </ClientSuspense>
       </Drawer>
     </>
   );

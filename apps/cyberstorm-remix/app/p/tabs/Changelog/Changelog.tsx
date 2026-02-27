@@ -2,8 +2,8 @@ import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { Suspense } from "react";
 import { Await, useLoaderData } from "react-router";
+import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -78,7 +78,7 @@ export default function Changelog() {
   const { changelog } = useLoaderData<typeof loader | typeof clientLoader>();
 
   return (
-    <Suspense
+    <ClientSuspense
       fallback={<SkeletonBox className="package-changelog__skeleton" />}
     >
       <Await
@@ -100,6 +100,6 @@ export default function Changelog() {
           )
         }
       </Await>
-    </Suspense>
+    </ClientSuspense>
   );
 }
