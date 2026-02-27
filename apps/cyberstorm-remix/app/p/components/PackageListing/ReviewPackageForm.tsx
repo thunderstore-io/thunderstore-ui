@@ -15,6 +15,8 @@ import {
 import { type PackageListingStatus } from "@thunderstore/dapper/types";
 import {
   type RequestConfig,
+  extractApiErrorMessage,
+  extractApiFieldErrorMessage,
   packageListingApprove,
   packageListingReject,
 } from "@thunderstore/thunderstore-api";
@@ -46,10 +48,14 @@ export function ReviewPackageForm({
   const [rejectionReason, setRejectionReason] = useState(
     packageListingStatus?.rejection_reason ?? ""
   );
-
   const [internalNotes, setInternalNotes] = useState(
     packageListingStatus?.internal_notes ?? ""
   );
+
+  const [fieldErrors, setFieldErrors] = useState<Record<
+    string,
+    string[]
+  > | null>(null);
 
   const reviewStatus = packageListingStatus?.review_status ?? "unreviewed";
   const reviewStatusColor =
@@ -61,11 +67,13 @@ export function ReviewPackageForm({
   useEffect(() => {
     setRejectionReason(packageListingStatus?.rejection_reason ?? "");
     setInternalNotes(packageListingStatus?.internal_notes ?? "");
+    setFieldErrors(null);
   }, [packageListingStatus]);
 
   const rejectPackageAction = ApiAction({
     endpoint: packageListingReject,
     onSubmitSuccess: () => {
+      setFieldErrors(null);
       toast.addToast({
         csVariant: "success",
         children: `Package rejected`,
@@ -74,9 +82,15 @@ export function ReviewPackageForm({
       revalidate();
     },
     onSubmitError: (error) => {
+      const fieldError = extractApiFieldErrorMessage(error, "rejection_reason");
+      if (fieldError) {
+        setFieldErrors({ rejection_reason: [fieldError] });
+        return;
+      }
+
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: extractApiErrorMessage(error),
         duration: 8000,
       });
     },
@@ -85,6 +99,7 @@ export function ReviewPackageForm({
   const approvePackageAction = ApiAction({
     endpoint: packageListingApprove,
     onSubmitSuccess: () => {
+      setFieldErrors(null);
       toast.addToast({
         csVariant: "success",
         children: `Package approved`,
@@ -93,9 +108,15 @@ export function ReviewPackageForm({
       revalidate();
     },
     onSubmitError: (error) => {
+      const fieldError = extractApiFieldErrorMessage(error, "internal_notes");
+      if (fieldError) {
+        setFieldErrors({ internal_notes: [fieldError] });
+        return;
+      }
+
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: extractApiErrorMessage(error),
         duration: 8000,
       });
     },
@@ -131,28 +152,46 @@ export function ReviewPackageForm({
           </NewTag>
         </div>
 
+        {/* Reject reason */}
         <div className="review-package__block">
           <p className="review-package__label">
             Reject reason (saved on reject)
           </p>
           <NewTextInput
             value={rejectionReason}
-            onChange={(e) => setRejectionReason(e.target.value)}
+            onChange={(e) => {
+              setRejectionReason(e.target.value);
+              setFieldErrors(null);
+            }}
             placeholder="Invalid submission"
             csSize="textarea"
             rootClasses="review-package__textarea"
           />
+          {fieldErrors?.rejection_reason?.[0] && (
+            <NewAlert csVariant="danger" csSize="small">
+              {fieldErrors.rejection_reason[0]}
+            </NewAlert>
+          )}
         </div>
 
+        {/* Internal notes */}
         <div className="review-package__block">
           <p className="review-package__label">Internal notes</p>
           <NewTextInput
             value={internalNotes}
-            onChange={(e) => setInternalNotes(e.target.value)}
+            onChange={(e) => {
+              setInternalNotes(e.target.value);
+              setFieldErrors(null);
+            }}
             placeholder=".exe requires manual review"
             csSize="textarea"
             rootClasses="review-package__textarea"
           />
+          {fieldErrors?.internal_notes?.[0] && (
+            <NewAlert csVariant="danger" csSize="small">
+              {fieldErrors.internal_notes[0]}
+            </NewAlert>
+          )}
         </div>
       </Modal.Body>
 
@@ -170,7 +209,7 @@ export function ReviewPackageForm({
               queryParams: {},
               data: {
                 rejection_reason: rejectionReason,
-                internal_notes: internalNotes ? internalNotes : null,
+                internal_notes: internalNotes || null,
               },
             })
           }
@@ -190,7 +229,7 @@ export function ReviewPackageForm({
               },
               queryParams: {},
               data: {
-                internal_notes: internalNotes ? internalNotes : null,
+                internal_notes: internalNotes || null,
               },
             })
           }
