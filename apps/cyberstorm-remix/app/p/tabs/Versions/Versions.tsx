@@ -2,9 +2,9 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
-import { Suspense } from "react";
 import { Await } from "react-router";
 import { useLoaderData } from "react-router";
+import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 
 import {
   Heading,
@@ -94,7 +94,9 @@ export default function Versions() {
   }
 
   return (
-    <Suspense fallback={<SkeletonBox className="package-versions__skeleton" />}>
+    <ClientSuspense
+      fallback={<SkeletonBox className="package-versions__skeleton" />}
+    >
       <Await resolve={versions}>
         {(resolvedValue) => (
           <div className="package-versions">
@@ -150,7 +152,7 @@ export default function Versions() {
           </div>
         )}
       </Await>
-    </Suspense>
+    </ClientSuspense>
   );
 }
 

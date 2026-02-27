@@ -3,8 +3,8 @@ import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { Suspense } from "react";
 import { Await, useLoaderData } from "react-router";
+import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -124,7 +124,7 @@ export default function PackageVersionRequired() {
   }
 
   return (
-    <Suspense
+    <ClientSuspense
       fallback={<SkeletonBox className="paginated-dependencies__skeleton" />}
     >
       <Await
@@ -140,6 +140,6 @@ export default function PackageVersionRequired() {
           />
         )}
       </Await>
-    </Suspense>
+    </ClientSuspense>
   );
 }

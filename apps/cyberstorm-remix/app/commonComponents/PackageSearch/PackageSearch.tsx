@@ -2,9 +2,10 @@ import { faGhost, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
 import { isPromise } from "cyberstorm/utils/typeChecks";
-import { Suspense, memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Await, useNavigationType, useSearchParams } from "react-router";
 import { useDebounce } from "use-debounce";
+import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 
 import {
   CardPackage,
@@ -606,7 +607,7 @@ export function PackageSearch(props: Props) {
               </div>
             </div>
             <div className="package-search__results">
-              <Suspense fallback={<SkeletonBox />}>
+              <ClientSuspense fallback={<SkeletonBox />}>
                 <Await resolve={listings}>
                   {(resolvedValue) => (
                     <PackageCount
@@ -617,12 +618,12 @@ export function PackageSearch(props: Props) {
                     />
                   )}
                 </Await>
-              </Suspense>
+              </ClientSuspense>
             </div>
           </div>
         </div>
         <div className="package-search__packages">
-          <Suspense fallback={<PackageSearchPackagesSkeleton />}>
+          <ClientSuspense fallback={<PackageSearchPackagesSkeleton />}>
             <Await resolve={listings}>
               {(resolvedValue) => (
                 <>
@@ -696,10 +697,10 @@ export function PackageSearch(props: Props) {
                 </>
               )}
             </Await>
-          </Suspense>
+          </ClientSuspense>
         </div>
         <div className="package-search__pagination">
-          <Suspense fallback={<SkeletonBox />}>
+          <ClientSuspense fallback={<SkeletonBox />}>
             <Await resolve={listings}>
               {(resolvedValue) => (
                 <NewPagination
@@ -715,7 +716,7 @@ export function PackageSearch(props: Props) {
                 />
               )}
             </Await>
-          </Suspense>
+          </ClientSuspense>
         </div>
       </div>
     </div>

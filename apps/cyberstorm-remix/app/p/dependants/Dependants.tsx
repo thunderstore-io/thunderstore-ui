@@ -1,8 +1,8 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { Suspense } from "react";
 import { Await, useLoaderData, useOutletContext } from "react-router";
+import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
@@ -169,7 +169,7 @@ export default function Dependants() {
   return (
     <>
       <section className="dependants">
-        <Suspense fallback={<SkeletonBox />}>
+        <ClientSuspense fallback={<SkeletonBox />}>
           <Await resolve={listing}>
             {(resolvedValue) => (
               <PageHeader headingLevel="1" headingSize="3">
@@ -197,7 +197,7 @@ export default function Dependants() {
               </PageHeader>
             )}
           </Await>
-        </Suspense>
+        </ClientSuspense>
         <>
           <PackageSearch
             listings={listings}
