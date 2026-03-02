@@ -1,9 +1,9 @@
 @layer components {
   .table__scroll-wrapper {
-    overflow-x: auto;
     width: 100%;
-    max-width: 100%;
     min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
   }
 
   .table {

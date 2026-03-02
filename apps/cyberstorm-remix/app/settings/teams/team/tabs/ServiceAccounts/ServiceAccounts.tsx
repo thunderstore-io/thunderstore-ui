@@ -236,7 +236,7 @@ function AddServiceAccountForm(props: {
       )}
       {serviceAccountAdded ? null : (
         <Modal.Footer>
-          <NewButton type="submit" csVariant="accent" onClick={strongForm.handleSubmit}>
+          <NewButton csVariant="accent" onClick={strongForm.handleSubmit}>
             Add Service Account
           </NewButton>
         </Modal.Footer>

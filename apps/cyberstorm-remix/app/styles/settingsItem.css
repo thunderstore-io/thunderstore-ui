@@ -4,8 +4,8 @@
     flex: 1 1 0;
     flex-direction: column;
     gap: 4rem;
-    max-width: 100%;
     min-width: 0;
+    max-width: 100%;
   }
 
   .settings-items__item {
@@ -13,8 +13,8 @@
     flex: 1 1 0;
     flex-direction: row;
     gap: 5rem;
-    max-width: 100%;
     min-width: 0;
+    max-width: 100%;
   }
 
   .settings-items__meta {
@@ -60,11 +60,11 @@
     flex-direction: column;
     gap: var(--gap-md);
     align-items: stretch;
+    max-width: 100%;
     padding: var(--space-16) var(--space-32);
     border-radius: var(--radius-md);
-    background: var(--color-surface-default);
-    max-width: 100%;
     overflow-x: auto;
+    background: var(--color-surface-default);
   }
 
   @media (width <= 48rem) {
