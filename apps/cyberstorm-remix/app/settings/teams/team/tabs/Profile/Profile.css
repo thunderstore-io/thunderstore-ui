@@ -2,10 +2,9 @@
   .team-profile__donationLink {
     display: flex;
     flex-direction: row;
+    min-width: min-content;
     gap: var(--gap-md);
     align-items: center;
-    align-self: stretch;
-  }
 
   .team-profile__label {
     display: flex;
@@ -17,7 +16,8 @@
   }
 
   .team-profile__input {
-    width: 100%;
+    flex: 1 1 0;
+    min-width: 7rem;
   }
 
   .team-profile__save {
