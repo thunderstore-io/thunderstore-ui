@@ -10,6 +10,7 @@ import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/Required
 import {
   Heading,
   Modal,
+  NewAlert,
   NewButton,
   NewIcon,
   NewLink,
@@ -21,6 +22,8 @@ import { postTeamCreate } from "@thunderstore/dapper-ts";
 import {
   type RequestConfig,
   type TeamCreateRequestData,
+  extractApiErrorMessage,
+  extractApiFieldErrorMessage,
   teamCreate,
 } from "@thunderstore/thunderstore-api";
 import { NamespacedStorageManager } from "@thunderstore/ts-api-react";
@@ -181,9 +184,18 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
       });
     },
     onSubmitError: (error) => {
+      const fieldError = extractApiFieldErrorMessage(error, "name");
+
+      if (fieldError) {
+        strongForm.setInputErrors({
+          name: fieldError,
+        });
+        return;
+      }
+
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: extractApiErrorMessage(error),
         duration: 8000,
       });
     },
@@ -231,6 +243,13 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
               {...teamNameFieldProps}
             />
           </div>
+          {strongForm.inputErrors?.name && (
+            <NewAlert csVariant="danger" csSize="small">
+              {Array.isArray(strongForm.inputErrors.name)
+                ? strongForm.inputErrors.name[0]
+                : strongForm.inputErrors.name}
+            </NewAlert>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <NewButton type="submit" csVariant="accent">
