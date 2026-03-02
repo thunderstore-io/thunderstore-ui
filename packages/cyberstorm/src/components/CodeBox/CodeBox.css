@@ -1,0 +1,21 @@
+@layer components {
+  .codebox-wrapper {
+    position: relative;
+    display: flex;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .codebox-wrapper--inline {
+    display: inline-flex;
+  }
+
+  .codebox-copy-button {
+    position: absolute;
+    top: var(--space-8);
+    right: var(--space-8);
+
+    /* Ensure it is above the code/scrollbar */
+    z-index: 10;
+  }
+}

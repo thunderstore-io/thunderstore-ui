@@ -1,4 +1,4 @@
-@layer nimbus-components {
+@layer components {
   .copy-button {
     display: flex;
     flex: 0 1 0;

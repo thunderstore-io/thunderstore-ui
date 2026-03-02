@@ -15,11 +15,11 @@ import {
   useLocation,
   useOutletContext,
 } from "react-router";
-import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
 
 import {
+  CopyButton,
   Drawer,
   Heading,
   NewAlert,

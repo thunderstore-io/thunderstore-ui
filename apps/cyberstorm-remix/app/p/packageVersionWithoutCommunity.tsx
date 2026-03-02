@@ -27,11 +27,11 @@ import {
   useOutletContext,
 } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
-import { CopyButton } from "~/commonComponents/CopyButton/CopyButton";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
 
 import {
+  CopyButton,
   Drawer,
   Heading,
   NewAlert,
