@@ -299,5 +299,6 @@ export function useStrongForm<
     getFieldState,
     getFieldInteractionProps,
     getFieldComponentProps,
+    setInputErrors,
   };
 }
