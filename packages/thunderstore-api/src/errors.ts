@@ -33,6 +33,33 @@ export function isApiError(e: unknown): e is ApiError {
   );
 }
 
+export function extractApiErrorMessage(error: ApiError | Error): string {
+  const fallbackMessage = "An unknown error occurred";
+
+  if (!isApiError(error)) return error.message || fallbackMessage;
+
+  const fieldErrors = error.getFieldErrors?.() ?? {};
+  const errorResponseCode = error.response.status;
+  const errorMessage =
+    fieldErrors.non_field_errors?.[0] ||
+    fieldErrors.detail?.[0] ||
+    fieldErrors.root?.[0] ||
+    fallbackMessage;
+
+  return `${errorResponseCode}: ${errorMessage}`;
+}
+
+export function extractApiFieldErrorMessage(
+  error: ApiError | Error,
+  field: string
+): string {
+  if (!field || !isApiError(error)) return "";
+
+  const fieldErrors = error.getFieldErrors?.() ?? {};
+  const errorMessage = fieldErrors[field]?.[0];
+  return errorMessage || "";
+}
+
 export class ApiError extends Error {
   response: SerializableResponse;
   responseJson?: JSONValue;
