@@ -1,14 +1,11 @@
 import { faCaretRight, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { Suspense } from "react";
-import type {
-  LoaderFunctionArgs,
-  ShouldRevalidateFunctionArgs,
-} from "react-router";
+import type { ShouldRevalidateFunctionArgs } from "react-router";
 import {
   Outlet,
   useLoaderData,
@@ -35,11 +32,12 @@ import {
 import { DapperTs } from "@thunderstore/dapper-ts";
 import type { PackageListingDetails } from "@thunderstore/dapper/types";
 
+import type { Route } from "./+types/packageListingVersion";
 import { PackageActions } from "./components/PackageListing/PackageActions";
 import { getPrivateListing, getPublicListing } from "./listingUtils";
 import "./packageListing.css";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: Route.LoaderArgs) {
   const { communityId, namespaceId, packageId, packageVersion } = params;
 
   if (!communityId || !namespaceId || !packageId || !packageVersion) {
@@ -58,14 +56,53 @@ export async function loader({ params }: LoaderFunctionArgs) {
     packageVersion,
   });
 
+  if (!listing) {
+    throw new Response("Package not found", { status: 404 });
+  }
+
+  const community = await dapper.getCommunity(communityId);
+  const url = new URL(request.url);
+
   return {
+    community,
     listing,
     packageVersion,
     team: await dapper.getTeamDetails(namespaceId),
+    seo: createSeo({
+      descriptors: [
+        {
+          title: `${formatToDisplayName(listing.name)} v${packageVersion} | ${
+            community.name
+          } Mod Database`,
+        },
+        { name: "description", content: listing.description },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url.href },
+        {
+          property: "og:title",
+          content: `${formatToDisplayName(
+            listing.name
+          )} v${packageVersion} by ${listing.namespace}`,
+        },
+        { property: "og:description", content: listing.description },
+        ...(listing.icon_url
+          ? [
+              { property: "og:image", content: listing.icon_url },
+              { property: "og:image:width", content: "256" },
+              { property: "og:image:height", content: "256" },
+            ]
+          : []),
+        { property: "og:site_name", content: "Thunderstore" },
+      ],
+    }),
   };
 }
 
-export async function clientLoader({ params, request }: LoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  request,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
   const { communityId, namespaceId, packageId, packageVersion } = params;
 
   if (!communityId || !namespaceId || !packageId || !packageVersion) {
@@ -82,9 +119,11 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
   });
 
   return {
+    community: dapper.getCommunity(communityId),
     listing,
     packageVersion,
     team: dapper.getTeamDetails(namespaceId),
+    seo: (await serverLoader()).seo,
   };
 }
 
@@ -120,31 +159,6 @@ export default function PackageListingVersion() {
 
   return (
     <>
-      <meta
-        title={`${formatToDisplayName(
-          listing.full_version_name
-        )} | Thunderstore - The ${listing.community_name} Mod Database`}
-      />
-      <meta name="description" content={listing.description} />
-      <meta property="og:type" content="website" />
-      <meta
-        property="og:url"
-        content={`${
-          getPublicEnvVariables(["VITE_BETA_SITE_URL"]).VITE_BETA_SITE_URL
-        }${location.pathname}`}
-      />
-      <meta
-        property="og:title"
-        content={`${formatToDisplayName(listing.full_version_name)} by ${
-          listing.namespace
-        }`}
-      />
-      <meta property="og:description" content={listing.description} />
-      <meta property="og:image:width" content="256" />
-      <meta property="og:image:height" content="256" />
-      <meta property="og:image" content={listing.icon_url ?? undefined} />
-      <meta property="og:site_name" content="Thunderstore" />
-
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
           <div className="package-listing__main">

@@ -6,11 +6,10 @@ import {
   faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
-import { type MetaFunction } from "react-router";
 import { useLoaderData, useOutletContext } from "react-router";
 
 import {
@@ -44,6 +43,7 @@ import {
 
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../root";
+import type { Route } from "./+types/upload";
 import "./Upload.css";
 
 interface CommunityOption {
@@ -56,16 +56,6 @@ interface CategoryOption {
   label: string;
 }
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Upload | Thunderstore" },
-    {
-      name: "description",
-      content: "Upload a package to Thunderstore",
-    },
-  ];
-};
-
 export async function loader() {
   const dapper = new DapperTs(() => {
     return {
@@ -73,19 +63,24 @@ export async function loader() {
       sessionId: undefined,
     };
   });
-  return await dapper.getCommunities();
+  const communities = await dapper.getCommunities();
+  return {
+    ...communities,
+    seo: createSeo({
+      descriptors: [
+        { title: "Upload package | Thunderstore" },
+        {
+          name: "description",
+          content: "Upload a package to Thunderstore.",
+        },
+      ],
+    }),
+  };
 }
 
-export async function clientLoader() {
-  // console.log("clientloader context", getSessionTools(context));
-  const tools = getSessionTools();
-  const dapper = new DapperTs(() => {
-    return {
-      apiHost: tools?.getConfig().apiHost,
-      sessionId: tools?.getConfig().sessionId,
-    };
-  });
-  return await dapper.getCommunities();
+export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
+  const communities = await serverLoader();
+  return communities;
 }
 
 export default function Upload() {

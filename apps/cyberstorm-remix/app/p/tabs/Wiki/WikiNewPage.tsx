@@ -1,11 +1,7 @@
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { createSeo } from "cyberstorm/utils/meta";
 import { useReducer, useState } from "react";
-import {
-  type LoaderFunctionArgs,
-  useNavigate,
-  useOutletContext,
-  useRevalidator,
-} from "react-router";
+import { useNavigate, useOutletContext, useRevalidator } from "react-router";
 import { useLoaderData } from "react-router";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 import { type OutletContextShape } from "~/root";
@@ -23,26 +19,34 @@ import {
   postPackageWikiPageCreate,
 } from "@thunderstore/thunderstore-api";
 
+import type { Route } from "./+types/WikiNewPage";
 import "./Wiki.css";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params }: Route.LoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     return {
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
+      seo: createSeo({
+        descriptors: [{ title: "Create new wiki page | Thunderstore" }],
+      }),
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     return {
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
+      seo: (await serverLoader()).seo,
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");

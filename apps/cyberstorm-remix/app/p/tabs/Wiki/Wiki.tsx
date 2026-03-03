@@ -2,10 +2,10 @@ import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { Suspense } from "react";
 import {
   Await,
-  type LoaderFunctionArgs,
   Outlet,
   type ShouldRevalidateFunction,
   useOutletContext,
@@ -17,11 +17,12 @@ import { type OutletContextShape } from "~/root";
 import { NewButton, NewIcon, SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { getPackageWiki } from "@thunderstore/dapper-ts";
-import { ApiError } from "@thunderstore/thunderstore-api";
+import { isApiError } from "@thunderstore/thunderstore-api";
 
+import type { Route } from "./+types/Wiki";
 import "./Wiki.css";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params }: Route.LoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const dapper = new DapperTs(() => {
       return {
@@ -35,7 +36,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     try {
       wiki = await dapper.getPackageWiki(params.namespaceId, params.packageId);
     } catch (error) {
-      if (error instanceof ApiError) {
+      if (isApiError(error)) {
         if (error.response.status === 404) {
           wiki = undefined;
         } else {
@@ -52,13 +53,27 @@ export async function loader({ params }: LoaderFunctionArgs) {
       packageId: params.packageId,
       slug: params.slug,
       permissions: undefined,
+      seo: createSeo({
+        descriptors: [
+          {
+            title: `${params.namespaceId}-${params.packageId} Wiki | Thunderstore`,
+          },
+          {
+            name: "description",
+            content: `Wiki for ${params.namespaceId}-${params.packageId}`,
+          },
+        ],
+      }),
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -83,6 +98,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       packageId: params.packageId,
       slug: params.slug,
       permissions: permissions,
+      seo: (await serverLoader()).seo,
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");

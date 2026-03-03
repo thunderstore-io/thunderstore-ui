@@ -1,7 +1,7 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { useEffect, useState } from "react";
-import { type LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useRouteLoaderData } from "react-router";
 
 import {
@@ -12,6 +12,7 @@ import {
 } from "@thunderstore/dapper-ts";
 import { isApiError } from "@thunderstore/thunderstore-api";
 
+import type { Route } from "./+types/WikiFirstPage";
 import "./Wiki.css";
 import { WikiContent } from "./WikiContent";
 
@@ -21,9 +22,10 @@ type ResultType = {
   communityId: string;
   namespaceId: string;
   packageId: string;
+  seo?: ReturnType<typeof createSeo>;
 };
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params }: Route.LoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const dapper = new DapperTs(() => {
       return {
@@ -52,6 +54,17 @@ export async function loader({ params }: LoaderFunctionArgs) {
           communityId: params.communityId,
           namespaceId: params.namespaceId,
           packageId: params.packageId,
+          seo: createSeo({
+            descriptors: [
+              {
+                title: `${firstPage.title} - ${params.namespaceId}-${params.packageId} | Thunderstore`,
+              },
+              {
+                name: "description",
+                content: `Wiki page for ${params.namespaceId}-${params.packageId}`,
+              },
+            ],
+          }),
         };
       } else {
         result = {
@@ -60,6 +73,11 @@ export async function loader({ params }: LoaderFunctionArgs) {
           communityId: params.communityId,
           namespaceId: params.namespaceId,
           packageId: params.packageId,
+          seo: createSeo({
+            descriptors: [
+              { title: `${params.namespaceId}-${params.packageId} Wiki` },
+            ],
+          }),
         };
       }
     } catch (error) {
@@ -72,6 +90,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
             communityId: params.communityId,
             namespaceId: params.namespaceId,
             packageId: params.packageId,
+            seo: createSeo({ descriptors: [{ title: "Wiki Not Found" }] }),
           };
         } else {
           throw error;
@@ -81,12 +100,14 @@ export async function loader({ params }: LoaderFunctionArgs) {
       }
     }
     return result;
-  } else {
-    throw new Error("Namespace ID or Package ID is missing");
   }
+  throw new Error("Namespace ID or Package ID is missing");
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -96,12 +117,15 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
 
+    const serverData = await serverLoader();
+
     let result: ResultType = {
       wiki: undefined,
       firstPage: undefined,
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
+      seo: serverData.seo,
     };
 
     try {
@@ -117,6 +141,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           communityId: params.communityId,
           namespaceId: params.namespaceId,
           packageId: params.packageId,
+          seo: serverData.seo,
         };
       } else {
         result = {
@@ -125,6 +150,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
           communityId: params.communityId,
           namespaceId: params.namespaceId,
           packageId: params.packageId,
+          seo: serverData.seo,
         };
       }
     } catch (error) {
@@ -137,6 +163,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
             communityId: params.communityId,
             namespaceId: params.namespaceId,
             packageId: params.packageId,
+            seo: serverData.seo,
           };
         } else {
           throw error;

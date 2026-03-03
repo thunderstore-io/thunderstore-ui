@@ -7,8 +7,8 @@ import { faFire, faGhost } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { Suspense, memo, useEffect, useRef, useState } from "react";
-import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import {
   Await,
   useLoaderData,
@@ -28,17 +28,8 @@ import {
 import { DapperTs } from "@thunderstore/dapper-ts";
 import type { Communities } from "@thunderstore/dapper/types";
 
+import type { Route } from "./+types/communities";
 import "./Communities.css";
-
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Communities | Thunderstore" },
-    {
-      name: "description",
-      content: "Browse all communities on Thunderstore",
-    },
-  ];
-};
 
 enum SortOptions {
   Name = "name",
@@ -65,8 +56,9 @@ const selectOptions = [
   },
 ];
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const searchParams = new URL(request.url).searchParams;
+export async function loader({ request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const searchParams = url.searchParams;
   const order = searchParams.get("order") ?? SortOptions.Popular;
   const search = searchParams.get("search");
   const page = undefined;
@@ -82,10 +74,33 @@ export async function loader({ request }: LoaderFunctionArgs) {
       order === null ? undefined : order,
       search === null ? undefined : search
     ),
+    seo: createSeo({
+      descriptors: [
+        { title: "Communities | Thunderstore" },
+        {
+          name: "description",
+          content: "Browse all communities on Thunderstore",
+        },
+        { property: "og:type", content: "website" },
+        {
+          property: "og:url",
+          content: `${url.origin}/communities`,
+        },
+        { property: "og:title", content: "Communities | Thunderstore" },
+        {
+          property: "og:description",
+          content: "Browse all communities on Thunderstore",
+        },
+        { property: "og:site_name", content: "Thunderstore" },
+      ],
+    }),
   };
 }
 
-export async function clientLoader({ request }: LoaderFunctionArgs) {
+export async function clientLoader({
+  request,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
   const tools = getSessionTools();
   const dapper = new DapperTs(() => {
     return {
@@ -103,6 +118,7 @@ export async function clientLoader({ request }: LoaderFunctionArgs) {
       order ?? SortOptions.Popular,
       search ?? ""
     ),
+    seo: (await serverLoader()).seo,
   };
 }
 

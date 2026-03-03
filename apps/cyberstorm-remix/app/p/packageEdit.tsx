@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPrivateListing } from "app/p/listingUtils";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
+import { createSeo } from "cyberstorm/utils/meta";
 import { useEffect, useReducer } from "react";
-import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
@@ -16,7 +16,6 @@ import {
   NewSelectSearch,
   NewTag,
   SkeletonBox,
-  formatToDisplayName,
   useToast,
 } from "@thunderstore/cyberstorm";
 import {
@@ -28,25 +27,30 @@ import {
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
+import type { Route } from "./+types/packageEdit";
 import "./packageEdit.css";
-
-export const meta: MetaFunction<typeof clientLoader> = ({ data }) => {
-  return [
-    {
-      title: data
-        ? `${formatToDisplayName(data.listing.name)} - Edit package`
-        : "Edit package",
-    },
-  ];
-};
 
 const package404 = new Response("Package not found", { status: 404 });
 
-export async function loader() {
-  return undefined;
+export async function loader({ params }: Route.LoaderArgs) {
+  return {
+    listing: undefined,
+    permissions: undefined,
+    filters: undefined,
+    seo: createSeo({
+      descriptors: [
+        { title: `Edit ${params.packageId} | Thunderstore` },
+        { name: "description", content: `Edit package ${params.packageId}` },
+      ],
+    }),
+  };
 }
 
-export async function clientLoader({ params, request }: LoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  request,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
   const { communityId, namespaceId, packageId } = params;
 
   if (!communityId || !namespaceId || !packageId) {
@@ -73,7 +77,7 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
       throw new Response("Unauthorized", { status: 403 });
     }
 
-    return { listing, permissions, filters };
+    return { listing, permissions, filters, seo: (await serverLoader()).seo };
   } catch (error) {
     if (isApiError(error) && error.response.status === 404) {
       throw package404;
@@ -96,7 +100,7 @@ export default function PackageListing() {
     onSubmitSuccess: () => {
       toast.addToast({
         csVariant: "success",
-        children: listing.is_deprecated
+        children: listing?.is_deprecated
           ? "Package undeprecated"
           : "Package deprecated",
         duration: 4000,
@@ -205,7 +209,7 @@ export default function PackageListing() {
     },
   });
 
-  if (!loaderData) {
+  if (!loaderData.listing) {
     return <SkeletonBox className="package-edit__skeleton" />;
   }
 
@@ -218,7 +222,7 @@ export default function PackageListing() {
       </PageHeader>
       <div className="package-edit__main">
         <section className="package-edit__section">
-          {permissions.permissions.can_unlist && (
+          {permissions?.permissions?.can_unlist && (
             <>
               <div className="package-edit__row">
                 <div className="package-edit__info">
@@ -259,7 +263,7 @@ export default function PackageListing() {
               <div className="package-edit__divider" />
             </>
           )}
-          {permissions.permissions.can_manage_deprecation && (
+          {permissions?.permissions?.can_manage_deprecation && (
             <>
               <div className="package-edit__row">
                 <div className="package-edit__info">
@@ -334,7 +338,7 @@ export default function PackageListing() {
                         value: val ? val.map((v) => v.value) : [],
                       });
                     }}
-                    value={formInputs.categories.map((categoryId) => ({
+                    value={formInputs.categories.map((categoryId: string) => ({
                       value: categoryId,
                       label:
                         filters.package_categories.find(
@@ -360,9 +364,9 @@ export default function PackageListing() {
                 csSize="big"
                 primitiveType="cyberstormLink"
                 linkId="Package"
-                community={listing.community_identifier}
-                namespace={listing.namespace}
-                package={listing.name}
+                community={listing?.community_identifier}
+                namespace={listing?.namespace}
+                package={listing?.name}
               >
                 Cancel
               </NewButton>

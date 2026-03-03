@@ -2,8 +2,9 @@ import { faClock, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { type SeoReturn, createSeo } from "cyberstorm/utils/meta";
 import { Suspense } from "react";
-import { Await, type LoaderFunctionArgs, useOutletContext } from "react-router";
+import { Await, useOutletContext } from "react-router";
 import { useLoaderData } from "react-router";
 import ago from "s-ago";
 import { type OutletContextShape } from "~/root";
@@ -20,6 +21,7 @@ import { DapperTs, getPackageSource } from "@thunderstore/dapper-ts";
 import { isApiError } from "@thunderstore/thunderstore-api";
 
 import { CodeBoxHTML } from "../../../commonComponents/CodeBoxHTML/CodeBoxHTML";
+import type { Route } from "./+types/Source";
 import "./Source.css";
 
 type PackageListingOutletContext = OutletContextShape & {
@@ -32,9 +34,10 @@ type ResultType = {
   source?:
     | Awaited<ReturnType<typeof getPackageSource>>
     | ReturnType<typeof getPackageSource>;
+  seo?: SeoReturn;
 };
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params }: Route.LoaderArgs) {
   if (params.namespaceId && params.packageId) {
     const dapper = new DapperTs(() => {
       return {
@@ -56,6 +59,17 @@ export async function loader({ params }: LoaderFunctionArgs) {
         status: null,
         source: source,
         message: undefined,
+        seo: createSeo({
+          descriptors: [
+            {
+              title: `${params.namespaceId}-${params.packageId} Source | Thunderstore`,
+            },
+            {
+              name: "description",
+              content: `Source code for ${params.namespaceId}-${params.packageId}`,
+            },
+          ],
+        }),
       };
     } catch (error) {
       if (isApiError(error)) {
@@ -64,6 +78,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
             status: "error",
             source: undefined,
             message: `Failed to load source: ${error.message}`,
+            seo: createSeo({ descriptors: [{ title: "Source Not Found" }] }),
           };
         } else {
           throw error;
@@ -78,10 +93,14 @@ export async function loader({ params }: LoaderFunctionArgs) {
     status: "error",
     message: "Failed to load source",
     source: undefined,
+    seo: createSeo({ descriptors: [{ title: "Source Not Found" }] }),
   };
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
   if (params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -104,12 +123,14 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         status: null,
         source: source,
         message: undefined,
+        seo: (await serverLoader()).seo,
       };
     } catch (error) {
       result = {
         status: "error",
         source: undefined,
         message: "Failed to load source",
+        seo: (await serverLoader()).seo,
       };
       throw error;
     }
@@ -119,6 +140,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
     status: "error",
     message: "Failed to load source",
     source: undefined,
+    seo: (await serverLoader()).seo,
   };
 }
 

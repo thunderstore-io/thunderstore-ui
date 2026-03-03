@@ -1,5 +1,6 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
 import { Suspense } from "react";
 import { Await, type LoaderFunctionArgs } from "react-router";
@@ -29,17 +30,37 @@ export async function loader({ params }: LoaderFunctionArgs) {
     return {
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
+      versions: await dapper.getPackageVersions(
+        params.namespaceId,
+        params.packageId
+      ),
+      seo: createSeo({
+        descriptors: [
+          {
+            title: `${params.namespaceId}-${params.packageId} Versions | Thunderstore`,
+          },
+          {
+            name: "description",
+            content: `Versions for ${params.namespaceId}-${params.packageId}`,
+          },
+        ],
+      }),
     };
   }
   return {
     status: "error",
     message: "Failed to load versions",
     versions: [],
+    seo: createSeo({ descriptors: [{ title: "Versions Not Found" }] }),
   };
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  serverLoader,
+}: LoaderFunctionArgs & {
+  serverLoader: () => Promise<ReturnType<typeof loader>>;
+}) {
   if (params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -52,12 +73,14 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
+      seo: (await serverLoader()).seo,
     };
   }
   return {
     status: "error",
     message: "Failed to load versions",
     versions: [],
+    seo: (await serverLoader()).seo,
   };
 }
 

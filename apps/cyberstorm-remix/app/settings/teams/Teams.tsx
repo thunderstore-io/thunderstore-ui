@@ -1,8 +1,9 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { createSeo } from "cyberstorm/utils/meta";
 import { useReducer, useState } from "react";
-import type { MetaFunction } from "react-router";
 import { useOutletContext, useRevalidator } from "react-router";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
@@ -32,24 +33,9 @@ import {
   setSessionStale,
 } from "@thunderstore/ts-api-react";
 
-import { type OutletContextShape, type RootLoadersType } from "../../root";
+import { type OutletContextShape } from "../../root";
+import type { Route } from "./+types/Teams";
 import "./Teams.css";
-
-export const meta: MetaFunction<
-  unknown,
-  {
-    root: RootLoadersType;
-  }
-> = ({ matches }) => {
-  const rootData = matches.find((match) => match.id === "root")?.data;
-  return [
-    { title: `Teams of ${rootData?.currentUser?.username}` },
-    {
-      name: "description",
-      content: `Teams of ${rootData?.currentUser?.username}`,
-    },
-  ];
-};
 
 function formFieldUpdateAction(
   state: TeamCreateRequestData,
@@ -61,6 +47,44 @@ function formFieldUpdateAction(
   return {
     ...state,
     [action.field]: action.value,
+  };
+}
+
+// Client loader to fetch current user for SEO titles
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  const tools = getSessionTools();
+  const currentUser = await tools?.getSessionCurrentUser();
+  const url = new URL(request.url);
+
+  if (!currentUser?.username) {
+    return {
+      seo: createSeo({
+        descriptors: [{ title: "Teams | Thunderstore" }],
+      }),
+    };
+  }
+
+  return {
+    seo: createSeo({
+      descriptors: [
+        { title: `Teams of ${currentUser.username} | Thunderstore` },
+        {
+          name: "description",
+          content: `Teams of ${currentUser.username}`,
+        },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url.href },
+        {
+          property: "og:title",
+          content: `Teams of ${currentUser.username} | Thunderstore`,
+        },
+        {
+          property: "og:description",
+          content: `Teams of ${currentUser.username}`,
+        },
+        { property: "og:site_name", content: "Thunderstore" },
+      ],
+    }),
   };
 }
 
