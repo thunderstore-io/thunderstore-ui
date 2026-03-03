@@ -62,7 +62,7 @@ export class StorageManager {
         return null;
       }
     } catch (e) {
-      console.warn(`JSON parse from ${this.namespace} storage failed`, e);
+      console.warn(`Failed to read or parse value from ${this.namespace} storage`, e);
 
       if (cleanupUnsupported) {
         try {
