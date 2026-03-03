@@ -200,44 +200,46 @@ function AddServiceAccountForm(props: {
           </NewAlert>
         </Modal.Body>
       ) : (
-        <>
+        <Modal.Body>
           <form
             className="service-accounts__form"
             onSubmit={strongForm.handleSubmit}
           >
-            <Modal.Body>
-              <div>
-                Enter the nickname of the service account you wish to add to the
-                team <span>{props.teamName}</span>
+            <div>
+              Enter the nickname of the service account you wish to add to the
+              team <span>{props.teamName}</span>
+            </div>
+            <label htmlFor="serviceAccountNickname">
+              Nickname <RequiredIndicator />
+            </label>
+            <div className="service-accounts__nickname-input">
+              <NewTextInput
+                id="serviceAccountNickname"
+                value={formInputs.nickname}
+                onChange={(e) => {
+                  updateFormFieldState({
+                    field: "nickname",
+                    value: e.target.value,
+                  });
+                }}
+                placeholder={"ExampleName"}
+                maxLength={32}
+                {...nicknameFieldProps}
+              />
+              <div className="service-accounts__nickname-input-max-length">
+                Max. 32 characters
               </div>
-              <label htmlFor="serviceAccountNickname">
-                Nickname <RequiredIndicator />
-              </label>
-              <div className="service-accounts__nickname-input">
-                <NewTextInput
-                  id="serviceAccountNickname"
-                  value={formInputs.nickname}
-                  onChange={(e) => {
-                    updateFormFieldState({
-                      field: "nickname",
-                      value: e.target.value,
-                    });
-                  }}
-                  placeholder={"ExampleName"}
-                  maxLength={32}
-                  {...nicknameFieldProps}
-                />
-                <div className="service-accounts__nickname-input-max-length">
-                  Max. 32 characters
-                </div>
-              </div>
-              {error && <NewAlert csVariant="danger">{error}</NewAlert>}
-            </Modal.Body>
-            <Modal.Footer>
-              <NewButton type="submit">Add Service Account</NewButton>
-            </Modal.Footer>
+            </div>
+            {error && <NewAlert csVariant="danger">{error}</NewAlert>}
           </form>
-        </>
+        </Modal.Body>
+      )}
+      {serviceAccountAdded ? null : (
+        <Modal.Footer>
+          <NewButton csVariant="accent" onClick={strongForm.handleSubmit}>
+            Add Service Account
+          </NewButton>
+        </Modal.Footer>
       )}
     </Modal>
   );

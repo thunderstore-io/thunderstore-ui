@@ -66,6 +66,7 @@ export interface TableProps {
   csVariant?: TableVariants;
   csSize?: TableSizes;
   csModifiers?: TableModifiers[];
+  horizontalScroll?: boolean;
   customSortCompare?: {
     [key: number]: (
       a: TableRow,
@@ -133,6 +134,7 @@ export function Table(props: TableProps) {
     csVariant = "default",
     csSize = "medium",
     csModifiers = [],
+    horizontalScroll = true,
     customSortCompare,
     ref,
   } = props;
@@ -163,7 +165,7 @@ export function Table(props: TableProps) {
     columnCSSProps = { "--column-count": headers.length } as CSSProperties;
   }
 
-  return (
+  const tableElement = (
     <table
       className={classnames(
         "table",
@@ -223,6 +225,12 @@ export function Table(props: TableProps) {
       </tbody>
     </table>
   );
+
+  if (horizontalScroll) {
+    return <div className="table__scroll-wrapper">{tableElement}</div>;
+  }
+
+  return tableElement;
 }
 
 Table.displayName = "Table";
