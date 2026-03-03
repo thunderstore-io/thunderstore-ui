@@ -43,16 +43,25 @@ export default function Account() {
               You are about to delete your account. Once deleted, it will be
               gone forever. Please be certain.
             </NewAlert>
+            {currentUser.teams && currentUser.teams.length > 0 && (
+              <p className="user-account__instructions">
+                You will lose access to these teams:
+                <br />
+                <span className="user-account__username">
+                  {currentUser.teams.join(", ")}
+                </span>
+              </p>
+            )}
             <p className="user-account__instructions">
-              The mods that have been uploaded on this account will remain
-              public on the site even after deletion. If you need them to be
-              taken down as well, please contact an administrator on the
-              community Discord server.
-              <br />
+              Any content you have uploaded will remain on the site even after
+              account deletion. If you need it taken down as well, please
+              contact an administrator in the Thunderstore Discord server.
+            </p>
+            <p className="user-account__instructions">
               <span>
                 As a precaution, to delete your account, please input{" "}
                 <span className="user-account__username">
-                  {currentUser?.username}
+                  {currentUser.username}
                 </span>{" "}
                 into the field below.
               </span>
