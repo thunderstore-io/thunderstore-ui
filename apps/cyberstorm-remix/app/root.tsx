@@ -3,6 +3,7 @@ import "./styles/index.css";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 import { withSentry } from "@sentry/remix";
+import { Breadcrumbs } from "app/commonComponents/Breadcrumbs/Breadcrumbs";
 import {
   getPublicEnvVariables,
   getSessionTools,
@@ -10,16 +11,8 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { type ReactNode, memo, useEffect, useRef, useState } from "react";
 import {
-  type ReactNode,
-  Suspense,
-  memo,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import {
-  Await,
   Links,
   Meta,
   type MetaFunction,
@@ -27,7 +20,6 @@ import {
   Scripts,
   ScrollRestoration,
   type ShouldRevalidateFunctionArgs,
-  type UIMatch,
   useLoaderData,
   useLocation,
   useMatches,
@@ -37,10 +29,7 @@ import { useHydrated } from "remix-utils/use-hydrated";
 import {
   AdContainer,
   LinkingProvider,
-  NewBreadCrumbs,
-  NewBreadCrumbsLink,
   ToastProvider,
-  isRecord,
 } from "@thunderstore/cyberstorm";
 import "@thunderstore/cyberstorm-theme/css";
 import "@thunderstore/cyberstorm/css";
@@ -249,53 +238,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
   //   splitPath.length > 5 && splitPath[1] === "c" && splitPath[3] === "p";
   const matches = useMatches();
 
-  const userSettingsPage = matches.find(
-    (m) => m.id === "settings/user/Settings"
-  );
-  const userSettingsAccountPage = matches.find(
-    (m) => m.id === "settings/user/Account/Account"
-  );
-  const teamsPage = matches.find((m) => m.id === "settings/teams/Teams");
-  const teamSettingsPage = matches.find(
-    (m) => m.id === "settings/teams/team/teamSettings"
-  );
-  const teamSettingsProfilePage = matches.find(
-    (m) => m.id === "settings/teams/team/tabs/Profile/Profile"
-  );
-  const teamSettingsMembersPage = matches.find(
-    (m) => m.id === "settings/teams/team/tabs/Members/Members"
-  );
-  const teamSettingsServiceAccountsPage = matches.find(
-    (m) => m.id === "settings/teams/team/tabs/ServiceAccounts/ServiceAccounts"
-  );
-  const teamSettingsSettingsPage = matches.find(
-    (m) => m.id === "settings/teams/team/tabs/Settings/Settings"
-  );
-  const communitiesPage = matches.find(
-    (m) => m.id === "communities/communities"
-  );
-  const uploadPage = matches.find((m) => m.id === "upload/upload");
-  const communityPage = matches.find((m) => m.id === "c/community");
-  const packageListingPage = matches.find((m) => m.id === "p/packageListing");
-  const packageVersionPage = matches.find((m) => m.id === "p/packageVersion");
-  const packageVersionWithoutCommunityPage = matches.find(
-    (m) => m.id === "p/packageVersionWithoutCommunity"
-  );
-  const packageEditPage = matches.find((m) => m.id === "p/packageEdit");
-  const packageDependantsPage = matches.find(
-    (m) => m.id === "p/dependants/Dependants"
-  );
-  const packageTeamPage = matches.find((m) => m.id === "p/team/Team");
-  const packageFormatDocsPage = matches.find(
-    (m) => m.id === "tools/package-format-docs/packageFormatDocs"
-  );
-  const manifestValidatorPage = matches.find(
-    (m) => m.id === "tools/manifest-validator/manifestValidator"
-  );
-  const markdownPreviewPage = matches.find(
-    (m) => m.id === "tools/markdown-preview/markdownPreview"
-  );
-
   const communityId = matches.find((m) => m.params.communityId)?.params
     .communityId;
 
@@ -361,199 +303,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   <main className="container container--x container--full island-item layout__main">
                     <section className="container container--y container--full layout__content">
                       {/* Breadcrumbs are build progressively */}
-                      <NewBreadCrumbs>
-                        {/* User Settings */}
-                        {userSettingsPage ? (
-                          userSettingsAccountPage ? (
-                            <NewBreadCrumbsLink
-                              primitiveType="cyberstormLink"
-                              linkId="Settings"
-                              csVariant="cyber"
-                            >
-                              Settings
-                            </NewBreadCrumbsLink>
-                          ) : (
-                            <span>
-                              <span>Settings</span>
-                            </span>
-                          )
-                        ) : null}
-                        {/* User Settings account */}
-                        {userSettingsAccountPage ? (
-                          <span>
-                            <span>Account</span>
-                          </span>
-                        ) : null}
-                        {/* Teams */}
-                        {teamsPage || teamSettingsPage ? (
-                          <NewBreadCrumbsLink
-                            primitiveType="cyberstormLink"
-                            linkId="Teams"
-                            csVariant="cyber"
-                          >
-                            Teams
-                          </NewBreadCrumbsLink>
-                        ) : null}
-                        {/* Team settings */}
-                        {teamSettingsPage ? (
-                          <NewBreadCrumbsLink
-                            primitiveType="cyberstormLink"
-                            linkId="TeamSettings"
-                            csVariant="cyber"
-                            team={teamSettingsPage.params.namespaceId}
-                          >
-                            {teamSettingsPage.params.namespaceId}
-                          </NewBreadCrumbsLink>
-                        ) : null}
-                        {/* Team Settings Profile */}
-                        {teamSettingsProfilePage ? (
-                          <span>
-                            <span>Profile</span>
-                          </span>
-                        ) : null}
-                        {/* Team Settings Members */}
-                        {teamSettingsMembersPage ? (
-                          <span>
-                            <span>Members</span>
-                          </span>
-                        ) : null}
-                        {/* Team Settings Service Accounts */}
-                        {teamSettingsServiceAccountsPage ? (
-                          <span>
-                            <span>Service Accounts</span>
-                          </span>
-                        ) : null}
-                        {/* Team Settings Settings */}
-                        {teamSettingsSettingsPage ? (
-                          <span>
-                            <span>Settings</span>
-                          </span>
-                        ) : null}
-                        {/* Upload */}
-                        {uploadPage ? (
-                          <span>
-                            <span>Upload</span>
-                          </span>
-                        ) : null}
-                        {/* Communities page */}
-                        {communitiesPage ||
-                        communityPage ||
-                        packageDependantsPage ||
-                        packageTeamPage ? (
-                          communityPage ||
-                          packageDependantsPage ||
-                          packageTeamPage ? (
-                            <NewBreadCrumbsLink
-                              primitiveType="cyberstormLink"
-                              linkId="Communities"
-                              csVariant="cyber"
-                            >
-                              Communities
-                            </NewBreadCrumbsLink>
-                          ) : (
-                            <span>
-                              <span>Communities</span>
-                            </span>
-                          )
-                        ) : null}
-                        {/* Community page */}
-                        {getCommunityBreadcrumb(
-                          communityPage ||
-                            packageListingPage ||
-                            packageDependantsPage ||
-                            packageTeamPage ||
-                            packageVersionPage,
-                          Boolean(packageListingPage) ||
-                            Boolean(packageDependantsPage) ||
-                            Boolean(packageTeamPage) ||
-                            Boolean(packageVersionPage)
-                        )}
-                        {/* Package listing page */}
-                        {getPackageListingBreadcrumb(
-                          packageListingPage,
-                          packageEditPage,
-                          packageDependantsPage
-                        )}
-                        {/* Package Version Page */}
-                        {packageVersionPage ? (
-                          <>
-                            <NewBreadCrumbsLink
-                              primitiveType="cyberstormLink"
-                              linkId="Package"
-                              community={packageVersionPage.params.communityId}
-                              namespace={packageVersionPage.params.namespaceId}
-                              package={packageVersionPage.params.packageId}
-                              csVariant="cyber"
-                            >
-                              {packageVersionPage.params.packageId}
-                            </NewBreadCrumbsLink>
-                            <span>
-                              <span>
-                                {packageVersionPage.params.packageVersion}
-                              </span>
-                            </span>
-                          </>
-                        ) : null}
-                        {/* Package version without community Page */}
-                        {packageVersionWithoutCommunityPage ? (
-                          <>
-                            <span>
-                              <span>
-                                {
-                                  packageVersionWithoutCommunityPage.params
-                                    .namespaceId
-                                }
-                              </span>
-                            </span>
-                            <span>
-                              <span>
-                                {
-                                  packageVersionWithoutCommunityPage.params
-                                    .packageId
-                                }
-                              </span>
-                            </span>
-                            <span>
-                              <span>
-                                {
-                                  packageVersionWithoutCommunityPage.params
-                                    .packageVersion
-                                }
-                              </span>
-                            </span>
-                          </>
-                        ) : null}
-                        {packageEditPage ? (
-                          <span>
-                            <span>Edit package</span>
-                          </span>
-                        ) : null}
-                        {packageDependantsPage ? (
-                          <span>
-                            <span>Dependants</span>
-                          </span>
-                        ) : null}
-                        {packageTeamPage ? (
-                          <span>
-                            <span>{packageTeamPage.params.namespaceId}</span>
-                          </span>
-                        ) : null}
-                        {packageFormatDocsPage ? (
-                          <span>
-                            <span>Package Format Docs</span>
-                          </span>
-                        ) : null}
-                        {manifestValidatorPage ? (
-                          <span>
-                            <span>Manifest Validator</span>
-                          </span>
-                        ) : null}
-                        {markdownPreviewPage ? (
-                          <span>
-                            <span>Markdown Preview</span>
-                          </span>
-                        ) : null}
-                      </NewBreadCrumbs>
+                      <Breadcrumbs />
                       {children}
                     </section>
                   </main>
@@ -731,107 +481,4 @@ function BetaButtonInit() {
   }, []);
 
   return <></>;
-}
-
-function getCommunityBreadcrumb(
-  communityPage: UIMatch | undefined,
-  isNotLast: boolean
-) {
-  if (!communityPage) return null;
-  return (
-    <>
-      {communityPage &&
-      isRecord(communityPage.data) &&
-      Object.prototype.hasOwnProperty.call(communityPage.data, "community") ? (
-        <Suspense
-          fallback={
-            <span>
-              <span>Loading...</span>
-            </span>
-          }
-        >
-          <Await resolve={communityPage.data.community}>
-            {(resolvedValue) => {
-              let label = undefined;
-              let icon = undefined;
-              if (isRecord(resolvedValue)) {
-                label =
-                  Object.prototype.hasOwnProperty.call(resolvedValue, "name") &&
-                  typeof resolvedValue.name === "string"
-                    ? resolvedValue.name
-                    : communityPage.params.communityId;
-                icon =
-                  Object.prototype.hasOwnProperty.call(
-                    resolvedValue,
-                    "community_icon_url"
-                  ) && typeof resolvedValue.community_icon_url === "string" ? (
-                    <img src={resolvedValue.community_icon_url} alt="" />
-                  ) : undefined;
-              }
-              return isNotLast ? (
-                <NewBreadCrumbsLink
-                  primitiveType="cyberstormLink"
-                  linkId="Community"
-                  community={communityPage.params.communityId}
-                  csVariant="cyber"
-                >
-                  {icon}
-                  {label}
-                </NewBreadCrumbsLink>
-              ) : (
-                <span>
-                  <span>
-                    {icon}
-                    {label}
-                  </span>
-                </span>
-              );
-            }}
-          </Await>
-        </Suspense>
-      ) : null}
-    </>
-  );
-}
-
-function getPackageListingBreadcrumb(
-  packageListingPage: UIMatch | undefined,
-  packageEditPage: UIMatch | undefined,
-  packageDependantsPage: UIMatch | undefined
-) {
-  if (!packageListingPage && !packageEditPage && !packageDependantsPage)
-    return null;
-  return (
-    <>
-      {packageListingPage ? (
-        <span>
-          <span>{packageListingPage.params.packageId}</span>
-        </span>
-      ) : null}
-      {packageEditPage ? (
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Package"
-          community={packageEditPage.params.communityId}
-          namespace={packageEditPage.params.namespaceId}
-          package={packageEditPage.params.packageId}
-          csVariant="cyber"
-        >
-          {packageEditPage.params.packageId}
-        </NewBreadCrumbsLink>
-      ) : null}
-      {packageDependantsPage ? (
-        <NewBreadCrumbsLink
-          primitiveType="cyberstormLink"
-          linkId="Package"
-          community={packageDependantsPage.params.communityId}
-          namespace={packageDependantsPage.params.namespaceId}
-          package={packageDependantsPage.params.packageId}
-          csVariant="cyber"
-        >
-          {packageDependantsPage.params.packageId}
-        </NewBreadCrumbsLink>
-      ) : null}
-    </>
-  );
 }
