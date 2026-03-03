@@ -53,7 +53,7 @@ export class StorageManager {
 
   /** Returns null if storage is unavailable, it contained no value or json threw an error. */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  safeGetJsonValue(key: string): any | null {
+  safeGetJsonValue(key: string, removeOnError = false): any | null {
     try {
       const value = this.getValue(key);
       if (value) {
@@ -62,7 +62,19 @@ export class StorageManager {
         return null;
       }
     } catch (e) {
-      console.warn(`JSON parse from ${this.namespace} storage failed`, e);
+      console.warn(
+        `Failed to read or parse value from ${this.namespace} storage`,
+        e
+      );
+
+      if (removeOnError) {
+        try {
+          this.removeValue(key);
+        } catch (e) {
+          console.warn(`Failed to remove value ${key} from storage`, e);
+        }
+      }
+
       return null;
     }
   }
