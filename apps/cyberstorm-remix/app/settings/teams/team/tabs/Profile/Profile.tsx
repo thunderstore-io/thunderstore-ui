@@ -10,10 +10,17 @@ import {
   useRevalidator,
 } from "react-router";
 
-import { NewButton, NewTextInput, useToast } from "@thunderstore/cyberstorm";
+import {
+  NewAlert,
+  NewButton,
+  NewTextInput,
+  useToast,
+} from "@thunderstore/cyberstorm";
 import {
   type TeamDetails,
   type TeamDetailsEditRequestData,
+  extractApiErrorMessage,
+  extractApiFieldErrorMessage,
   teamDetailsEdit,
 } from "@thunderstore/thunderstore-api";
 
@@ -111,9 +118,22 @@ function ProfileForm(props: { team: TeamDetails }) {
       revalidator.revalidate();
     },
     onSubmitError: (error) => {
+      const fieldError = extractApiFieldErrorMessage(error, "donation_link");
+
+      if (fieldError) {
+        strongForm.setInputErrors({
+          donation_link: [fieldError],
+        });
+        return;
+      }
+
+      strongForm.setInputErrors((prev) =>
+        prev ? { ...prev, donation_link: undefined } : prev
+      );
+
       toast.addToast({
         csVariant: "danger",
-        children: `Error occurred: ${error.message || "Unknown error"}`,
+        children: extractApiErrorMessage(error),
         duration: 8000,
       });
     },
@@ -149,6 +169,11 @@ function ProfileForm(props: { team: TeamDetails }) {
             />
           </div>
         </div>
+        {strongForm.inputErrors?.donation_link?.[0] && (
+          <NewAlert csVariant="danger" csSize="small">
+            {strongForm.inputErrors.donation_link[0]}
+          </NewAlert>
+        )}
         <NewButton
           rootClasses="team-profile__save"
           onClick={strongForm.handleSubmit}
