@@ -1,5 +1,6 @@
 import "./styles/index.css";
 
+import { config } from "@fortawesome/fontawesome-svg-core";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 import { withSentry } from "@sentry/remix";
@@ -48,6 +49,8 @@ import {
 import type { Route } from "./+types/root";
 import { Footer } from "./commonComponents/Footer/Footer";
 import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
+
+config.autoAddCss = false;
 
 // REMIX TODO: https://remix.run/docs/en/main/route/links
 // export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
