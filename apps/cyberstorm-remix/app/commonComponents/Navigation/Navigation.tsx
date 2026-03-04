@@ -300,7 +300,7 @@ export function DesktopLoginPopover() {
             })}
             rootClasses="navigation-login__link navigation-login__discord"
           >
-            <NewIcon csMode="inline" noWrapper>
+            <NewIcon csMode="inline" wrapperClasses="navigation-login__icon">
               <FontAwesomeIcon icon={faDiscord} />
             </NewIcon>
             Connect with Discord
@@ -314,7 +314,7 @@ export function DesktopLoginPopover() {
             })}
             rootClasses="navigation-login__link navigation-login__github"
           >
-            <NewIcon csMode="inline" noWrapper>
+            <NewIcon csMode="inline" wrapperClasses="navigation-login__icon">
               <FontAwesomeIcon icon={faGithub} />
             </NewIcon>
             Connect with Github
@@ -328,7 +328,7 @@ export function DesktopLoginPopover() {
             })}
             rootClasses="navigation-login__link navigation-login__overwolf"
           >
-            <NewIcon csMode="inline">
+            <NewIcon csMode="inline" wrapperClasses="navigation-login__icon">
               <OverwolfLogo />
             </NewIcon>
             Connect with Overwolf
