@@ -31,6 +31,7 @@
     flex-direction: column;
     gap: 2rem;
     width: 80%;
+    min-width: 16rem;
     height: 100%;
     padding: 1.5rem;
     background: #15152d;
