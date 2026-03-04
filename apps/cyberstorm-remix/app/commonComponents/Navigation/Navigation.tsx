@@ -598,7 +598,7 @@ export function MobileUserPopoverContent(props: {
             primitiveType="cyberstormLink"
             linkId="Settings"
             csVariant="primary"
-            rootClasses="__item --thick"
+            rootClasses="__item --thick mobile-navigation__popover-item"
           >
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faCog} />
@@ -609,7 +609,7 @@ export function MobileUserPopoverContent(props: {
             primitiveType="cyberstormLink"
             linkId="Teams"
             csVariant="primary"
-            rootClasses="__item --thick"
+            rootClasses="__item --thick mobile-navigation__popover-item"
           >
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faUsers} />
@@ -673,7 +673,7 @@ export function MobileUserPopoverContent(props: {
               })}
               rootClasses="navigation-login__link navigation-login__discord"
             >
-              <NewIcon csMode="inline" noWrapper>
+              <NewIcon wrapperClasses="navigation-login__icon" csMode="inline">
                 <FontAwesomeIcon icon={faDiscord} />
               </NewIcon>
               Connect with Discord
@@ -687,7 +687,7 @@ export function MobileUserPopoverContent(props: {
               })}
               rootClasses="navigation-login__link navigation-login__github"
             >
-              <NewIcon csMode="inline" noWrapper>
+              <NewIcon wrapperClasses="navigation-login__icon" csMode="inline">
                 <FontAwesomeIcon icon={faGithub} />
               </NewIcon>
               Connect with Github
@@ -701,7 +701,7 @@ export function MobileUserPopoverContent(props: {
               })}
               rootClasses="navigation-login__link navigation-login__overwolf"
             >
-              <NewIcon csMode="inline" noWrapper>
+              <NewIcon wrapperClasses="navigation-login__icon" csMode="inline">
                 <OverwolfLogo />
               </NewIcon>
               Connect with Overwolf
