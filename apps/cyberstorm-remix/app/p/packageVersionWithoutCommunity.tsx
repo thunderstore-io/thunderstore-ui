@@ -1,11 +1,9 @@
 import { faCaretRight, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import {
   type ReactElement,
@@ -48,9 +46,10 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { getPackageVersionDetails } from "@thunderstore/dapper-ts";
 
 import { PackageActions } from "./components/PackageListing/PackageActions";
+// import type { Route } from "./+types/packageVersionWithoutCommunity";
 import "./packageListing.css";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
     const dapper = new DapperTs(() => {
       return {
@@ -59,19 +58,49 @@ export async function loader({ params }: LoaderFunctionArgs) {
       };
     });
 
+    const version = await dapper.getPackageVersionDetails(
+      params.namespaceId,
+      params.packageId,
+      params.packageVersion
+    );
+    const team = await dapper.getTeamDetails(params.namespaceId);
+    const url = new URL(request.url);
+
     return {
-      version: await dapper.getPackageVersionDetails(
-        params.namespaceId,
-        params.packageId,
-        params.packageVersion
-      ),
-      team: await dapper.getTeamDetails(params.namespaceId),
+      version: version,
+      team: team,
+      seo: createSeo({
+        descriptors: [
+          {
+            title: `${formatToDisplayName(version.full_version_name)} | ${
+              team.name
+            }`,
+          },
+          { name: "description", content: version.description },
+          { property: "og:type", content: "website" },
+          { property: "og:url", content: url.href },
+          {
+            property: "og:title",
+            content: `${formatToDisplayName(version.full_version_name)} | ${
+              team.name
+            }`,
+          },
+          { property: "og:description", content: version.description },
+          { property: "og:image", content: version.icon_url },
+          { property: "og:site_name", content: "Thunderstore" },
+        ],
+      }),
     };
   }
   throw new Response("Package not found", { status: 404 });
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  serverLoader,
+}: LoaderFunctionArgs & {
+  serverLoader: () => ReturnType<typeof loader>;
+}) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -81,13 +110,18 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       };
     });
 
+    const version = await dapper.getPackageVersionDetails(
+      params.namespaceId,
+      params.packageId,
+      params.packageVersion
+    );
+    const team = await dapper.getTeamDetails(params.namespaceId);
+    const sl = await serverLoader();
+
     return {
-      version: dapper.getPackageVersionDetails(
-        params.namespaceId,
-        params.packageId,
-        params.packageVersion
-      ),
-      team: dapper.getTeamDetails(params.namespaceId),
+      version: version,
+      team: team,
+      seo: sl.seo,
     };
   }
   throw new Response("Package not found", { status: 404 });
@@ -155,45 +189,6 @@ export default function PackageVersion() {
 
   return (
     <>
-      <Suspense>
-        <Await resolve={versionAndTeamPromise}>
-          {(resolvedValue) => (
-            <>
-              <meta
-                title={`${formatToDisplayName(
-                  resolvedValue[0].full_version_name
-                )} | ${resolvedValue[1].name}`}
-              />
-              <meta name="description" content={resolvedValue[0].description} />
-              <meta property="og:type" content="website" />
-              <meta
-                property="og:url"
-                content={`${
-                  getPublicEnvVariables(["VITE_BETA_SITE_URL"])
-                    .VITE_BETA_SITE_URL
-                }${location.pathname}`}
-              />
-              <meta
-                property="og:title"
-                content={`${formatToDisplayName(
-                  resolvedValue[0].full_version_name
-                )} by ${resolvedValue[0].namespace}`}
-              />
-              <meta
-                property="og:description"
-                content={resolvedValue[0].description}
-              />
-              <meta property="og:image:width" content="256" />
-              <meta property="og:image:height" content="256" />
-              <meta
-                property="og:image"
-                content={resolvedValue[0].icon_url ?? undefined}
-              />
-              <meta property="og:site_name" content="Thunderstore" />
-            </>
-          )}
-        </Await>
-      </Suspense>
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
           <div className="package-listing__main">

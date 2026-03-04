@@ -9,12 +9,10 @@ import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
 import { useReportPackage } from "app/p/components/ReportPackage/useReportPackage";
 import TeamMembers from "app/p/components/TeamMembers/TeamMembers";
 import { type OutletContextShape } from "app/root";
-import {
-  getPublicEnvVariables,
-  getSessionTools,
-} from "cyberstorm/security/publicEnvVariables";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import {
   type ReactElement,
   Suspense,
@@ -24,7 +22,6 @@ import {
 } from "react";
 import {
   Await,
-  type LoaderFunctionArgs,
   Outlet,
   useLoaderData,
   useLocation,
@@ -50,6 +47,7 @@ import {
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
 
+import type { Route } from "./+types/packageListing";
 import { ManagementTools } from "./components/PackageListing/ManagementTools";
 import { PackageActions } from "./components/PackageListing/PackageActions";
 import {
@@ -68,7 +66,7 @@ type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
 };
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: Route.LoaderArgs) {
   const { communityId, namespaceId, packageId } = params;
 
   if (!communityId || !namespaceId || !packageId) {
@@ -86,8 +84,15 @@ export async function loader({ params }: LoaderFunctionArgs) {
     packageId,
   });
 
+  if (!listing) {
+    throw new Response("Package not found", { status: 404 });
+  }
+
+  const community = await dapper.getCommunity(communityId);
+  const url = new URL(request.url);
+
   return {
-    community: await dapper.getCommunity(communityId),
+    community,
     communityFilters: await dapper.getCommunityFilters(communityId),
     listing: listing,
     listingStatus: undefined,
@@ -96,10 +101,41 @@ export async function loader({ params }: LoaderFunctionArgs) {
     community_identifier: communityId,
     namespace_id: namespaceId,
     package_id: packageId,
+    seo: createSeo({
+      descriptors: [
+        {
+          title: `${formatToDisplayName(listing.name)} | Thunderstore - The ${
+            community.name
+          } Mod Database`,
+        },
+        { name: "description", content: listing.description },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url.href },
+        {
+          property: "og:title",
+          content: `${formatToDisplayName(listing.name)} by ${
+            listing.namespace
+          }`,
+        },
+        { property: "og:description", content: listing.description },
+        ...(listing.icon_url
+          ? [
+              { property: "og:image", content: listing.icon_url },
+              { property: "og:image:width", content: "256" },
+              { property: "og:image:height", content: "256" },
+            ]
+          : []),
+        { property: "og:site_name", content: "Thunderstore" },
+      ],
+    }),
   };
 }
 
-export async function clientLoader({ params, request }: LoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  request,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
   const { communityId, namespaceId, packageId } = params;
 
   if (!communityId || !namespaceId || !packageId) {
@@ -137,6 +173,7 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
     community_identifier: communityId,
     namespace_id: namespaceId,
     package_id: packageId,
+    seo: (await serverLoader()).seo,
   };
 }
 
@@ -232,42 +269,6 @@ export default function PackageListing() {
   // TODO: some variables are available in props (communityId, namespaceId, packageId)
   return (
     <>
-      <Suspense>
-        <Await resolve={community}>
-          {(resolvedCommunity) => (
-            <>
-              <meta
-                title={`${formatToDisplayName(
-                  listing.name
-                )} | Thunderstore - The ${resolvedCommunity.name} Mod Database`}
-              />
-              <meta name="description" content={listing.description} />
-              <meta property="og:type" content="website" />
-              <meta
-                property="og:url"
-                content={`${getPublicEnvVariables(["VITE_BETA_SITE_URL"])}${
-                  location.pathname
-                }`}
-              />
-              <meta
-                property="og:title"
-                content={`${formatToDisplayName(listing.name)} by ${
-                  listing.namespace
-                }`}
-              />
-              <meta property="og:description" content={listing.description} />
-              <meta property="og:image:width" content="256" />
-              <meta property="og:image:height" content="256" />
-              <meta
-                property="og:image"
-                content={listing.icon_url ?? undefined}
-              />
-              <meta property="og:site_name" content="Thunderstore" />
-            </>
-          )}
-        </Await>
-      </Suspense>
-
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
           <Suspense>

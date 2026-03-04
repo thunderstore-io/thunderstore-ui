@@ -1,8 +1,9 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
 import { Suspense } from "react";
-import { Await, type LoaderFunctionArgs } from "react-router";
+import { Await } from "react-router";
 import { useLoaderData } from "react-router";
 
 import {
@@ -14,11 +15,12 @@ import {
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
+import type { Route } from "./+types/PackageVersionVersions";
 import { columns } from "./Versions";
 import "./Versions.css";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params }: Route.LoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const dapper = new DapperTs(() => {
       return {
@@ -30,17 +32,35 @@ export async function loader({ params }: LoaderFunctionArgs) {
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
-      versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
+      versions: await dapper.getPackageVersions(
+        params.namespaceId,
+        params.packageId
+      ),
+      seo: createSeo({
+        descriptors: [
+          {
+            title: `${params.namespaceId}-${params.packageId} Versions | Thunderstore - The ${params.communityId} Mod Database`,
+          },
+          {
+            name: "description",
+            content: `Versions for ${params.namespaceId}-${params.packageId}`,
+          },
+        ],
+      }),
     };
   }
   return {
     status: "error",
     message: "Failed to load versions",
     versions: [],
+    seo: createSeo({ descriptors: [{ title: "Versions Not Found" }] }),
   };
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -54,12 +74,14 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       namespaceId: params.namespaceId,
       packageId: params.packageId,
       versions: dapper.getPackageVersions(params.namespaceId, params.packageId),
+      seo: (await serverLoader()).seo,
     };
   }
   return {
     status: "error",
     message: "Failed to load versions",
     versions: [],
+    seo: (await serverLoader()).seo,
   };
 }
 

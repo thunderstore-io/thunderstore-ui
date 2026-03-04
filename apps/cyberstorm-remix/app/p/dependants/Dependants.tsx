@@ -1,5 +1,6 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { Suspense } from "react";
 import { Await, useLoaderData, useOutletContext } from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
@@ -36,14 +37,19 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
     const filters = await dapper.getCommunityFilters(params.communityId);
+    const listing = await dapper.getPackageListingDetails(
+      params.communityId,
+      params.namespaceId,
+      params.packageId
+    );
+
+    if (!listing) {
+      throw new Response("Package not found", { status: 404 });
+    }
 
     return {
       community: dapper.getCommunity(params.communityId),
-      listing: dapper.getPackageListingDetails(
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      ),
+      listing,
       filters: filters,
       listings: await dapper.getPackageListings(
         {
@@ -61,6 +67,39 @@ export async function loader({ params, request }: Route.LoaderArgs) {
         nsfw === "true" ? true : false,
         deprecated === "true" ? true : false
       ),
+      seo: createSeo({
+        descriptors: [
+          {
+            title: `Dependants of ${formatToDisplayName(
+              listing.name
+            )} | Thunderstore`,
+          },
+          {
+            name: "description",
+            content: `Mods that depend on ${listing.name}`,
+          },
+          { property: "og:type", content: "website" },
+          { property: "og:url", content: request.url },
+          {
+            property: "og:title",
+            content: `Dependants of ${formatToDisplayName(
+              listing.name
+            )} | Thunderstore`,
+          },
+          {
+            property: "og:description",
+            content: `Mods that depend on ${listing.name}`,
+          },
+          ...(listing.icon_url
+            ? [
+                { property: "og:image", content: listing.icon_url },
+                { property: "og:image:width", content: "256" },
+                { property: "og:image:height", content: "256" },
+              ]
+            : []),
+          { property: "og:site_name", content: "Thunderstore" },
+        ],
+      }),
     };
   }
   throw new Response("Community not found", { status: 404 });
@@ -69,6 +108,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 export async function clientLoader({
   request,
   params,
+  serverLoader,
 }: Route.ClientLoaderArgs) {
   if (params.communityId && params.packageId && params.namespaceId) {
     const tools = getSessionTools();
@@ -113,6 +153,7 @@ export async function clientLoader({
         nsfw === "true" ? true : false,
         deprecated === "true" ? true : false
       ),
+      seo: (await serverLoader()).seo,
     };
   }
   throw new Response("Community not found", { status: 404 });

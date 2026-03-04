@@ -1,5 +1,6 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { useLoaderData, useOutletContext } from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { PackageOrderOptions } from "~/commonComponents/PackageSearch/components/PackageOrder";
@@ -28,6 +29,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
     const filters = await dapper.getCommunityFilters(params.communityId);
+    const community = await dapper.getCommunity(params.communityId);
 
     return {
       filters: filters,
@@ -45,6 +47,15 @@ export async function loader({ params, request }: Route.LoaderArgs) {
         nsfw === "true" ? true : false,
         deprecated === "true" ? true : false
       ),
+      seo: createSeo({
+        descriptors: [
+          { title: `Packages for ${community.name} | Thunderstore` },
+          {
+            name: "description",
+            content: `Browse packages for ${community.name}`,
+          },
+        ],
+      }),
     };
   }
   throw new Response("Community not found", { status: 404 });
@@ -53,6 +64,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 export async function clientLoader({
   request,
   params,
+  serverLoader,
 }: Route.ClientLoaderArgs) {
   if (params.communityId) {
     const tools = getSessionTools();
@@ -89,6 +101,7 @@ export async function clientLoader({
         nsfw === "true" ? true : false,
         deprecated === "true" ? true : false
       ),
+      seo: (await serverLoader()).seo,
     };
   }
   throw new Response("Community not found", { status: 404 });

@@ -1,10 +1,35 @@
+import { createSeo } from "cyberstorm/utils/meta";
 import { Outlet, useLocation, useOutletContext } from "react-router";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
 import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 
 import { type OutletContextShape } from "../../root";
+import type { Route } from "./+types/Settings";
 import "./Settings.css";
+
+export async function loader({ request }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  return {
+    seo: createSeo({
+      descriptors: [
+        { title: "Settings | Thunderstore" },
+        {
+          name: "description",
+          content: "Manage your Thunderstore account settings",
+        },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url.href },
+        { property: "og:title", content: "Settings | Thunderstore" },
+        {
+          property: "og:description",
+          content: "Manage your Thunderstore account settings",
+        },
+        { property: "og:site_name", content: "Thunderstore" },
+      ],
+    }),
+  };
+}
 
 export default function UserSettings() {
   const context = useOutletContext<OutletContextShape>();

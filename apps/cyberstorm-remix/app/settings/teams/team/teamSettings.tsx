@@ -1,25 +1,39 @@
-import { PageHeader } from "app/commonComponents/PageHeader/PageHeader";
-import { type OutletContextShape } from "app/root";
-import {
-  type MetaFunction,
-  Outlet,
-  useLocation,
-  useOutletContext,
-  useParams,
-} from "react-router";
+import { createSeo } from "cyberstorm/utils/meta";
+import { Outlet, useLocation, useOutletContext, useParams } from "react-router";
+import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { type OutletContextShape } from "~/root";
 
 import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 
+import type { Route } from "./+types/teamSettings";
 import "./teamSettings.css";
 
-export const meta: MetaFunction = ({ params }) => {
-  return [
-    { title: `Team ${params.namespaceId ?? ""} settings` },
-    { name: "description", content: "Manage team related settings" },
-  ];
-};
+export async function loader({ params, request }: Route.LoaderArgs) {
+  const teamName = params.namespaceId ?? "";
+  const url = new URL(request.url);
 
-export default function Community() {
+  return {
+    seo: createSeo({
+      descriptors: [
+        { title: `Team ${teamName} settings | Thunderstore` },
+        { name: "description", content: `Manage ${teamName} team settings` },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: url.href },
+        {
+          property: "og:title",
+          content: `Team ${teamName} settings | Thunderstore`,
+        },
+        {
+          property: "og:description",
+          content: `Manage ${teamName} team settings`,
+        },
+        { property: "og:site_name", content: "Thunderstore" },
+      ],
+    }),
+  };
+}
+
+export default function TeamSettings() {
   const teamName = useParams().namespaceId ?? "";
   const location = useLocation();
   const outletContext = useOutletContext() as OutletContextShape;

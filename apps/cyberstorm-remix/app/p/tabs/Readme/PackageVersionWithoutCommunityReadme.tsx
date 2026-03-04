@@ -1,5 +1,6 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { Suspense } from "react";
 import { Await, type LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
@@ -7,6 +8,7 @@ import { useLoaderData } from "react-router";
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
+// import type { Route } from "./+types/PackageVersionWithoutCommunityReadme";
 import "./Readme.css";
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -23,16 +25,35 @@ export async function loader({ params }: LoaderFunctionArgs) {
         params.packageId,
         params.packageVersion
       ),
+      seo: createSeo({
+        descriptors: [
+          {
+            title: `${params.namespaceId}-${params.packageId} ${params.packageVersion} Readme | Thunderstore`,
+          },
+          {
+            name: "description",
+            content: `Readme for ${params.namespaceId}-${params.packageId} ${params.packageVersion}`,
+          },
+        ],
+      }),
     };
   }
   return {
     status: "error",
     message: "Failed to load readme",
     readme: { html: "" },
+    seo: createSeo({
+      descriptors: [{ title: "Readme Not Found | Thunderstore" }],
+    }),
   };
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  serverLoader,
+}: LoaderFunctionArgs & {
+  serverLoader: () => Promise<ReturnType<typeof loader>>;
+}) {
   if (params.namespaceId && params.packageId && params.packageVersion) {
     const tools = getSessionTools();
     const dapper = new DapperTs(() => {
@@ -47,12 +68,14 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
         params.packageId,
         params.packageVersion
       ),
+      seo: (await serverLoader()).seo,
     };
   }
   return {
     status: "error",
     message: "Failed to load readme",
     readme: { html: "" },
+    seo: (await serverLoader()).seo,
   };
 }
 

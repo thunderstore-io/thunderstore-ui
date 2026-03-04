@@ -2,11 +2,14 @@ import { PaginatedDependencies } from "app/commonComponents/PaginatedDependencie
 import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { Suspense } from "react";
-import { Await, type LoaderFunctionArgs, useLoaderData } from "react-router";
+import { Await, useLoaderData } from "react-router";
 
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
+
+import type { Route } from "./+types/Required";
 
 const Dependency404 = new Response("Package dependencies not found", {
   status: 404,
@@ -18,7 +21,7 @@ const getPageFromUrl = (url: string): number | undefined => {
   return maybePage ? Number(maybePage) : undefined;
 };
 
-export async function loader({ params, request }: LoaderFunctionArgs) {
+export async function loader({ params, request }: Route.LoaderArgs) {
   const { communityId, namespaceId, packageId, packageVersion } = params;
 
   // Either communityId or packageVersion is required depending on route.
@@ -43,7 +46,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     // might be available for authenticated user on client. Return
     // undefined rather than throw error to allow refetch on client.
     if (!listing) {
-      return { dependencies: undefined };
+      return { dependencies: undefined, seo: createSeo({ descriptors: [] }) };
     }
 
     version = listing.latest_version_number;
@@ -59,10 +62,23 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       version,
       getPageFromUrl(request.url)
     ),
+    seo: createSeo({
+      descriptors: [
+        { title: `${namespaceId}-${packageId} Dependencies | Thunderstore` },
+        {
+          name: "description",
+          content: `Dependencies for ${namespaceId}-${packageId}`,
+        },
+      ],
+    }),
   };
 }
 
-export async function clientLoader({ params, request }: LoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  request,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
   const { communityId, namespaceId, packageId, packageVersion } = params;
 
   // Either communityId or packageVersion is required depending on route.
@@ -91,6 +107,7 @@ export async function clientLoader({ params, request }: LoaderFunctionArgs) {
       version,
       getPageFromUrl(request.url)
     ),
+    seo: (await serverLoader()).seo,
   };
 }
 

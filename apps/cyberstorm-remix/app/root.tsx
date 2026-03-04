@@ -12,11 +12,11 @@ import {
 } from "cyberstorm/security/publicEnvVariables";
 import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { type ReactNode, memo, useEffect, useRef, useState } from "react";
 import {
   Links,
   Meta,
-  type MetaFunction,
   Outlet,
   Scripts,
   ScrollRestoration,
@@ -49,6 +49,7 @@ import {
 import type { Route } from "./+types/root";
 import { Footer } from "./commonComponents/Footer/Footer";
 import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
+import { Seo } from "./commonComponents/Seo/Seo";
 
 config.autoAddCss = false;
 
@@ -89,16 +90,6 @@ export type OutletContextShape = {
   dapper: DapperTs;
 };
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Thunderstore" },
-    {
-      name: "description",
-      content: "Thunderstore, the place to be. And to find mods!",
-    },
-  ];
-};
-
 export async function loader() {
   return {
     publicEnvVariables: getPublicEnvVariables([
@@ -115,10 +106,26 @@ export async function loader() {
       apiHost: getApiHostForSsr(),
       sessionId: undefined,
     },
+    seo: createSeo({
+      descriptors: [
+        { title: "Thunderstore" },
+        {
+          name: "description",
+          content: "A ecosystem for sharing mods for games!",
+        },
+        { name: "msapplication-TileColor", content: "#29295b" },
+        { name: "theme-color", content: "#29295b" },
+        { charSet: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+      ],
+    }),
   };
 }
 
-export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+export async function clientLoader({
+  request,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
   const publicEnvVariables = getPublicEnvVariables([
     "VITE_SITE_URL",
     "VITE_BETA_SITE_URL",
@@ -142,9 +149,10 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   );
 
   let forceUpdateCurrentUser = false;
+  const url = new URL(request.url);
   if (
-    request.url.startsWith(`${publicEnvVariables.VITE_BETA_SITE_URL}/teams`) ||
-    request.url.startsWith(`${publicEnvVariables.VITE_BETA_SITE_URL}/settings`)
+    url.pathname.startsWith("/teams") ||
+    url.pathname.startsWith("/settings")
   ) {
     forceUpdateCurrentUser = true;
   } else {
@@ -168,6 +176,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
     publicEnvVariables: publicEnvVariables,
     currentUser: currentUser.username ? currentUser : undefined,
     config,
+    seo: (await serverLoader()).seo,
   };
 }
 
@@ -257,10 +266,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <meta name="msapplication-TileColor" content="#29295b" />
-        <meta name="theme-color" content="#29295b" />
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Seo />
         <Meta />
         <link
           rel="apple-touch-icon"

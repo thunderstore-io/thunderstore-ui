@@ -1,13 +1,9 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
+import { createSeo } from "cyberstorm/utils/meta";
 import { useReducer, useState } from "react";
-import {
-  type LoaderFunctionArgs,
-  useNavigate,
-  useOutletContext,
-  useRevalidator,
-} from "react-router";
+import { useNavigate, useOutletContext, useRevalidator } from "react-router";
 import { useLoaderData } from "react-router";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 import { type OutletContextShape } from "~/root";
@@ -32,9 +28,10 @@ import {
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
 
+import type { Route } from "./+types/WikiPageEdit";
 import "./Wiki.css";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params }: Route.LoaderArgs) {
   if (
     params.communityId &&
     params.namespaceId &&
@@ -62,13 +59,27 @@ export async function loader({ params }: LoaderFunctionArgs) {
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
+      seo: createSeo({
+        descriptors: [
+          {
+            title: `Edit ${page.title} - ${params.namespaceId}-${params.packageId} | Thunderstore`,
+          },
+          {
+            name: "description",
+            content: `Edit wiki page for ${params.namespaceId}-${params.packageId}`,
+          },
+        ],
+      }),
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
 }
 
-export async function clientLoader({ params }: LoaderFunctionArgs) {
+export async function clientLoader({
+  params,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
   if (
     params.communityId &&
     params.namespaceId &&
@@ -97,6 +108,7 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
       communityId: params.communityId,
       namespaceId: params.namespaceId,
       packageId: params.packageId,
+      seo: (await serverLoader()).seo,
     };
   } else {
     throw new Error("Namespace ID or Package ID is missing");
