@@ -1,9 +1,9 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { Suspense } from "react";
 import { Await } from "react-router";
 import { useLoaderData } from "react-router";
+import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -81,7 +81,9 @@ export default function Readme() {
   const { readme } = useLoaderData<typeof loader | typeof clientLoader>();
 
   return (
-    <Suspense fallback={<SkeletonBox className="package-readme__skeleton" />}>
+    <ClientSuspense
+      fallback={<SkeletonBox className="package-readme__skeleton" />}
+    >
       <Await resolve={readme}>
         {(resolvedValue) =>
           resolvedValue ? (
@@ -96,6 +98,6 @@ export default function Readme() {
           )
         }
       </Await>
-    </Suspense>
+    </ClientSuspense>
   );
 }

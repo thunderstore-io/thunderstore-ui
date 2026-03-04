@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { Suspense } from "react";
 import {
   Await,
   Outlet,
@@ -12,6 +11,7 @@ import {
   useParams,
 } from "react-router";
 import { useLoaderData } from "react-router";
+import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 import { type OutletContextShape } from "~/root";
 
 import { NewButton, NewIcon, SkeletonBox } from "@thunderstore/cyberstorm";
@@ -144,7 +144,7 @@ export default function Wiki() {
   return (
     <div className="package-wiki">
       <div className="package-wiki-nav">
-        <Suspense>
+        <ClientSuspense>
           <Await resolve={permissions}>
             {(resolvedValue) =>
               resolvedValue?.permissions.can_manage ? (
@@ -165,10 +165,10 @@ export default function Wiki() {
               ) : null
             }
           </Await>
-        </Suspense>
+        </ClientSuspense>
         <div className="package-wiki-nav__section">
           <div className="package-wiki-nav__list">
-            <Suspense
+            <ClientSuspense
               fallback={<SkeletonBox className="package-wiki-nav__skeleton" />}
             >
               <Await resolve={wiki} errorElement={<></>}>
@@ -229,7 +229,7 @@ export default function Wiki() {
                   })
                 }
               </Await>
-            </Suspense>
+            </ClientSuspense>
           </div>
         </div>
       </div>
