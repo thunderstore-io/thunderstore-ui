@@ -56,12 +56,8 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const currentUser = await tools?.getSessionCurrentUser();
   const url = new URL(request.url);
 
-  if (!currentUser?.username) {
-    return {
-      seo: createSeo({
-        descriptors: [{ title: "Teams | Thunderstore" }],
-      }),
-    };
+  if (!currentUser.username) {
+    throw new Response("Unauthorized", { status: 401 });
   }
 
   return {
