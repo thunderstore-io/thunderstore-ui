@@ -11,8 +11,6 @@ import {
   ThunderstoreLogoHorizontal,
 } from "@thunderstore/cyberstorm";
 
-import "./Footer.css";
-
 const AD_IMAGE_SRC = "/cyberstorm-static/images/tsmm_screenshot.webp";
 const DISCORD_URL = "https://discord.thunderstore.io/";
 const GITHUB_URL = "https://github.com/thunderstore-io";

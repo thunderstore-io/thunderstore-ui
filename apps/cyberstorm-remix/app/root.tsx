@@ -1,4 +1,4 @@
-import "./styles/index.css";
+import "./styles/cyberstorm.css";
 
 import { config } from "@fortawesome/fontawesome-svg-core";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
@@ -32,8 +32,6 @@ import {
   LinkingProvider,
   ToastProvider,
 } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme/css";
-import "@thunderstore/cyberstorm/css";
 import { DapperTs } from "@thunderstore/dapper-ts";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 import { type RequestConfig } from "@thunderstore/thunderstore-api";
@@ -266,6 +264,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        {/*
+          We define CSS layers inline at the very top of the head to guarantee they are registered
+          before any other styles (bundled or otherwise) are processed. This prevents specificity
+          issues where bundler chunk ordering could otherwise cause unlayered styles to override
+          our layer system.
+        */}
+        <style>
+          {`@layer utils, colors, layout, components, overrides, theme, theme-utils, theme-colors, theme-layout, theme-components, theme-components-sizes, theme-components-colors, theme-components-layouts, theme-components-miscs, nimbus, nimbus-utils, nimbus-colors, nimbus-layout, nimbus-components, nimbus-components-sizes, nimbus-components-colors, nimbus-components-layouts, nimbus-components-miscs, nimbus-overrides;`}
+        </style>
         <Seo />
         <Meta />
         <link

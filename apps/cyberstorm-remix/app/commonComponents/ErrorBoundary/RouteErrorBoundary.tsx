@@ -4,8 +4,6 @@ import { isRouteErrorResponse, useRouteError } from "react-router";
 
 import { isApiError } from "@thunderstore/thunderstore-api";
 
-import "./RouteErrorBoundary.css";
-
 type StatusCode = number | "???";
 
 /**

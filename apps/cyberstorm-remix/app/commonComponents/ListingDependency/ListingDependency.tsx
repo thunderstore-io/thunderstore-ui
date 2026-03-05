@@ -1,8 +1,6 @@
 import { Image, NewLink, formatToDisplayName } from "@thunderstore/cyberstorm";
 import { type PackageVersionDependency } from "@thunderstore/thunderstore-api";
 
-import "./ListingDependency.css";
-
 export interface ListingDependencyProps {
   dependency: PackageVersionDependency;
   communityId?: string;

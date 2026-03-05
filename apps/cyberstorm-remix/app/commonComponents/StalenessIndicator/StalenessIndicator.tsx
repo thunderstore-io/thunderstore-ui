@@ -4,8 +4,6 @@ import { type ReactNode } from "react";
 
 import { NewIcon, classnames } from "@thunderstore/cyberstorm";
 
-import "./StalenessIndicator.css";
-
 interface Props {
   children: ReactNode;
   rootClasses?: string;

@@ -18,8 +18,9 @@ export default defineConfig({
       entry: resolve(__dirname, "src/index.ts"),
       name: "ThunderstoreCyberstorm",
       fileName: (format) =>
-        `thunderstore-cyberstorm.${format === "es" ? "js" : "umd.cjs"}`,
-      formats: ["es", "umd"],
+        `thunderstore-cyberstorm.${format === "es" ? "js" : "cjs"}`,
+      formats: ["es", "cjs"],
+      cssFileName: "thunderstore-cyberstorm",
     },
     emptyOutDir: false,
     rollupOptions: {

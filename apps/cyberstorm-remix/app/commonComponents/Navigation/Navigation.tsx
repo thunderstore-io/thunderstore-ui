@@ -41,9 +41,6 @@ import {
 } from "@thunderstore/cyberstorm";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 
-import "./MobileNavigation.css";
-import "./Navigation.css";
-
 export function Navigation(props: {
   // hydrationCheck: boolean;
   currentUser?: CurrentUser;

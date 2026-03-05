@@ -19,6 +19,7 @@
         "types": "./dist/index.d.ts"
       },
       "./css": "./dist/cyberstorm-theme.css",
+      "./fonts.css": "./dist/fonts.css",
       "./package.json": "./package.json",
       "./src/components": "./src/components.tsx"
     }
@@ -37,7 +38,8 @@
   },
   "exports": {
     ".": "./src/index.tsx",
-    "./css": "./dist/cyberstorm-theme.css",
+    "./css": "./src/index.css",
+    "./fonts.css": "./src/styles/fonts.css",
     "./package.json": "./package.json",
     "./src/components": "./src/components.tsx"
   }
