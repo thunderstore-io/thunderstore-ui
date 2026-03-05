@@ -1,4 +1,3 @@
-"use client";
 import * as RadixToast from "@radix-ui/react-toast";
 import {
   type PropsWithChildren,

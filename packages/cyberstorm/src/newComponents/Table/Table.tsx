@@ -13,8 +13,8 @@ import {
   type TableVariants,
 } from "@thunderstore/cyberstorm-theme";
 
-import { NewIcon } from "../..";
 import { classnames, componentClasses } from "../../utils/utils";
+import { Icon as NewIcon } from "../Icon/Icon";
 import "./Table.css";
 
 interface SortButtonProps {

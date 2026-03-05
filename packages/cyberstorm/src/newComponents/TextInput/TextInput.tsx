@@ -8,7 +8,6 @@ import {
   type TextInputVariants,
 } from "@thunderstore/cyberstorm-theme";
 
-import { NewIcon } from "../..";
 import { Actionable } from "../../primitiveComponents/Actionable/Actionable";
 import { Frame } from "../../primitiveComponents/Frame/Frame";
 import {
@@ -17,6 +16,7 @@ import {
   type InputTextInputProps,
 } from "../../primitiveComponents/Input/Input";
 import { classnames, componentClasses } from "../../utils/utils";
+import { Icon as NewIcon } from "../Icon/Icon";
 import "./TextInput.css";
 
 export interface TextInputProps
