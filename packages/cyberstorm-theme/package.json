@@ -15,7 +15,6 @@
     "exports": {
       ".": {
         "import": "./dist/thunderstore-cyberstorm-theme.js",
-        "require": "./dist/thunderstore-cyberstorm-theme.umd.cjs",
         "types": "./dist/index.d.ts"
       },
       "./css": "./dist/cyberstorm-theme.css",

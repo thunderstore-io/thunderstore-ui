@@ -13,8 +13,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/thunderstore-cyberstorm.js",
-      "require": "./dist/thunderstore-cyberstorm.cjs"
+      "import": "./dist/thunderstore-cyberstorm.js"
     },
     "./css": "./dist/thunderstore-cyberstorm.css",
     "./package.json": "./package.json"
@@ -27,12 +26,10 @@
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",
-        "import": "./dist/thunderstore-cyberstorm.js",
-        "require": "./dist/thunderstore-cyberstorm.cjs"
+        "import": "./dist/thunderstore-cyberstorm.js"
       },
       "./css": {
-        "import": "./dist/thunderstore-cyberstorm.css",
-        "require": "./dist/thunderstore-cyberstorm.css"
+        "import": "./dist/thunderstore-cyberstorm.css"
       },
       "./package.json": "./package.json"
     },
