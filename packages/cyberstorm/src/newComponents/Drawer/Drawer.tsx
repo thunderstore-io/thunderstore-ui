@@ -7,12 +7,13 @@ import {
   type DrawerVariants,
 } from "@thunderstore/cyberstorm-theme";
 
-import { NewButton, NewIcon } from "../..";
 import {
   Frame,
   type FramePopoverProps,
 } from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
+import { Button as NewButton } from "../Button/Button";
+import { Icon as NewIcon } from "../Icon/Icon";
 import "./Drawer.css";
 
 interface Props extends Omit<FramePopoverProps, "primitiveType"> {

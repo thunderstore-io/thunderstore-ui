@@ -13,12 +13,12 @@ import {
   type CodeInputVariants,
 } from "@thunderstore/cyberstorm-theme";
 
-import { NewIcon } from "../..";
 import {
   Input,
   type InputTextAreaProps,
 } from "../../primitiveComponents/Input/Input";
 import { classnames, componentClasses } from "../../utils/utils";
+import { Icon as NewIcon } from "../Icon/Icon";
 import "./CodeInput.css";
 
 export interface CodeInputProps

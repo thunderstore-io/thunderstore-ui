@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type ReactNode } from "react";
 
-import { NewIcon } from "../..";
+import { Icon as NewIcon } from "../../newComponents/Icon/Icon";
 import { classnames } from "../../utils/utils";
 import styles from "./ValidationBar.module.css";
 

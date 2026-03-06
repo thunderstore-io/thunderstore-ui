@@ -585,7 +585,18 @@ describe("StrongForm.useStrongForm", () => {
   });
 
   it("sets submitError + inputErrors on RequestBodyParseError and does not throw", async () => {
-    let strongForm: AnyStrongForm | undefined;
+    let strongForm:
+      | ReturnType<
+          typeof useStrongForm<
+            Inputs,
+            Inputs,
+            Error,
+            unknown,
+            Error,
+            { name?: string }
+          >
+        >
+      | undefined;
 
     const bodyParseError = Object.assign(
       Object.create(RequestBodyParseError.prototype),
@@ -636,7 +647,18 @@ describe("StrongForm.useStrongForm", () => {
   });
 
   it("sets submitError + inputErrors on RequestQueryParamsParseError and does not throw", async () => {
-    let strongForm: AnyStrongForm | undefined;
+    let strongForm:
+      | ReturnType<
+          typeof useStrongForm<
+            Inputs,
+            Inputs,
+            Error,
+            unknown,
+            Error,
+            { name?: string }
+          >
+        >
+      | undefined;
 
     const queryParseError = Object.assign(
       Object.create(RequestQueryParamsParseError.prototype),
@@ -687,7 +709,18 @@ describe("StrongForm.useStrongForm", () => {
   });
 
   it("sets submitError + inputErrors and throws on ParseError", async () => {
-    let strongForm: AnyStrongForm | undefined;
+    let strongForm:
+      | ReturnType<
+          typeof useStrongForm<
+            Inputs,
+            Inputs,
+            Error,
+            unknown,
+            unknown,
+            { name?: string }
+          >
+        >
+      | undefined;
 
     const parseError = Object.assign(Object.create(ParseError.prototype), {
       error: { formErrors: { name: "bad" } },

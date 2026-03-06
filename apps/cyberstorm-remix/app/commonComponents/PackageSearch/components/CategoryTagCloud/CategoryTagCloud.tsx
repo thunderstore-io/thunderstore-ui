@@ -5,7 +5,6 @@ import { memo } from "react";
 import { NewButton, NewIcon, NewTag } from "@thunderstore/cyberstorm";
 
 import { type CategorySelection, TRISTATE_STATES } from "../../../types";
-import "./CategoryTagCloud.css";
 
 const OFF = TRISTATE_STATES[0];
 

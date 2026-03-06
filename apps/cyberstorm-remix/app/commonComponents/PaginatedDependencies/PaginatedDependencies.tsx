@@ -4,7 +4,6 @@ import { Heading, NewPagination } from "@thunderstore/cyberstorm";
 import { type PackageVersionDependency } from "@thunderstore/thunderstore-api";
 
 import { ListingDependency } from "../ListingDependency/ListingDependency";
-import "./PaginatedDependencies.css";
 
 interface DependencyResponse {
   results: PackageVersionDependency[];

@@ -1,5 +1,3 @@
-"use client";
-
 // Probably shouldn't from Dapper, but what can you do when you need these.
 // import { CurrentUser } from "@thunderstore/dapper/types";
 import { DapperTs } from "@thunderstore/dapper-ts";

@@ -4,12 +4,12 @@ import { memo } from "react";
 
 import { type ImageVariants } from "@thunderstore/cyberstorm-theme";
 
-import { NewIcon } from "../..";
 import {
   Frame,
   type FrameWindowProps,
 } from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
+import { Icon as NewIcon } from "../Icon/Icon";
 import "./Image.css";
 
 interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {

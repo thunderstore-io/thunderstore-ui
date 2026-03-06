@@ -16,9 +16,10 @@ import {
   type SelectVariants,
 } from "@thunderstore/cyberstorm-theme";
 
-import { NewButton, NewIcon } from "../..";
 import type { SelectOption } from "../../utils/types";
 import { classnames, componentClasses } from "../../utils/utils";
+import { Button as NewButton } from "../Button/Button";
+import { Icon as NewIcon } from "../Icon/Icon";
 import "./Select.css";
 
 type _SelectProps<T> = {

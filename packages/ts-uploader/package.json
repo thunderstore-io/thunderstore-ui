@@ -13,8 +13,7 @@
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",
-        "import": "./dist/thunderstore-ts-uploader.js",
-        "require": "./dist/thunderstore-ts-uploader.umd.cjs"
+        "import": "./dist/thunderstore-ts-uploader.js"
       },
       "./package.json": "./package.json"
     }
