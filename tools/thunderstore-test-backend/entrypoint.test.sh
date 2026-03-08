@@ -8,6 +8,27 @@ if [ -f /run/secrets/npmrc ]; then
   # Keep tight perms; contains auth tokens.
   mkdir -p "$HOME_DIR"
   install -m 0600 /run/secrets/npmrc "$HOME_DIR/.npmrc"
+elif [ -n "${NPM_CONFIG_USERCONFIG:-}" ]; then
+  if [ -d /run/secrets/npmrc ]; then
+    printf >&2 "\033[1;31m%s\033[0m\n" ""
+    printf >&2 "\033[1;31m%s\033[0m\n" "================================================================================="
+    printf >&2 "\033[1;31m%s\033[0m\n" "ERROR: /run/secrets/npmrc is a directory, not a file."
+    printf >&2 "\033[1;31m%s\033[0m\n" ""
+    printf >&2 "\033[1;31m%s\033[0m\n" "Docker auto-creates missing paths as directories."
+    printf >&2 "\033[1;31m%s\033[0m\n" "To fix, run:"
+    printf >&2 "\033[1;31m%s\033[0m\n" ""
+    printf >&2 "\033[1;31m%s\033[0m\n" "  docker compose -f tools/thunderstore-test-backend/docker-compose.yml down"
+    printf >&2 "\033[1;31m%s\033[0m\n" "  rm -rf build-secrets/.npmrc && touch build-secrets/.npmrc"
+    printf >&2 "\033[1;31m%s\033[0m\n" "  docker compose -f tools/thunderstore-test-backend/docker-compose.yml up --build"
+    printf >&2 "\033[1;31m%s\033[0m\n" "================================================================================="
+    printf >&2 "\033[1;31m%s\033[0m\n" ""
+    exit 1
+  else
+    echo "WARNING: /run/secrets/npmrc not found." >&2
+    echo "  Create build-secrets/.npmrc (empty file is fine for development)." >&2
+    echo "Continuing without npm registry auth." >&2
+    unset NPM_CONFIG_USERCONFIG
+  fi
 fi
 
 export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-/ms-playwright}"
