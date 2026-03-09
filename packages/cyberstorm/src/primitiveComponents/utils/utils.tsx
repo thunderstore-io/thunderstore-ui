@@ -1,6 +1,6 @@
 import { type PropsWithChildren, memo } from "react";
 
-import { Tooltip } from "../..";
+import { Tooltip } from "../../newComponents/Tooltip/Tooltip";
 
 interface TooltipWrapperProps extends PropsWithChildren {
   tooltipText?: string;

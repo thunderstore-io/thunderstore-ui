@@ -5,8 +5,6 @@ import { type PropsWithChildren, memo } from "react";
 import { NewIcon } from "@thunderstore/cyberstorm";
 import { classnames } from "@thunderstore/cyberstorm";
 
-import "./Collapsible.css";
-
 interface Props extends PropsWithChildren {
   headerTitle: string;
   defaultOpen?: boolean;

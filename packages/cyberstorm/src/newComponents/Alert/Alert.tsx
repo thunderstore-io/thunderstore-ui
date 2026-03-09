@@ -12,8 +12,9 @@ import {
   type AlertVariants,
 } from "@thunderstore/cyberstorm-theme";
 
-import { NewIcon, type PrimitiveComponentDefaultProps } from "../..";
+import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
 import { classnames, componentClasses } from "../../utils/utils";
+import { Icon as NewIcon } from "../Icon/Icon";
 import "./Alert.css";
 
 export interface AlertProps extends PrimitiveComponentDefaultProps {

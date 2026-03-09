@@ -10,8 +10,6 @@ import { type TRISTATE } from "~/commonComponents/types";
 import { Actionable, NewIcon } from "@thunderstore/cyberstorm";
 import { classnames } from "@thunderstore/cyberstorm";
 
-import "./CheckboxList.css";
-
 type typeA<B> = (v: B) => void;
 
 interface Props {

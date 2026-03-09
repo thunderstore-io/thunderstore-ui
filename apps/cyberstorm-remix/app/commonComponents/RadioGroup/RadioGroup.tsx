@@ -6,8 +6,6 @@ import { memo } from "react";
 import { NewIcon, classnames } from "@thunderstore/cyberstorm";
 import { type Section } from "@thunderstore/dapper/types";
 
-import "./RadioGroup.css";
-
 interface Props {
   sections: Section[];
   selected: string;

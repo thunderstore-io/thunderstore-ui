@@ -15,9 +15,10 @@ import {
 import { type ModalVariants } from "@thunderstore/cyberstorm-theme";
 import { type ModalSizes } from "@thunderstore/cyberstorm-theme";
 
-import { NewButton, NewIcon } from "../..";
 import { classnames, componentClasses } from "../../utils/utils";
+import { Button as NewButton } from "../Button/Button";
 import { type ButtonComponentProps } from "../Button/Button";
+import { Icon as NewIcon } from "../Icon/Icon";
 import "./Modal.css";
 
 /**

@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 
-import { NewIcon } from "../..";
 import { classnames } from "../../utils/utils";
+import { Icon as NewIcon } from "../Icon/Icon";
 import "./EmptyState.css";
 
 interface Props {

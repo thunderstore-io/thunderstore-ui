@@ -2,7 +2,9 @@ import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
 import type { Preview } from "@storybook/react-vite";
 
 import { LinkingProvider } from "@thunderstore/cyberstorm";
-import "@thunderstore/cyberstorm-theme";
+import "@thunderstore/cyberstorm-theme/css";
+import "@thunderstore/cyberstorm-theme/fonts.css";
+import "@thunderstore/cyberstorm/css";
 
 import { LinkLibrary } from "../LinkLibrary";
 import "./styles.css";

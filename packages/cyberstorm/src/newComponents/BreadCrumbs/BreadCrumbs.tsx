@@ -8,14 +8,10 @@ import {
   type BreadCrumbsVariants,
 } from "@thunderstore/cyberstorm-theme";
 
-import {
-  type NewCyberstormLinkProps,
-  NewIcon,
-  NewLink,
-  type NewLinkProps,
-} from "../..";
 import { Frame } from "../../primitiveComponents/Frame/Frame";
 import { classnames, componentClasses } from "../../utils/utils";
+import { Icon } from "../Icon/Icon";
+import { type CyberstormLinkProps, Link, type LinkProps } from "../Link/Link";
 import "./BreadCrumbs.css";
 
 type BreadCrumbsProps = PropsWithChildren<{
@@ -52,22 +48,22 @@ export const BreadCrumbs = memo(function BreadCrumbs(props: BreadCrumbsProps) {
         aria-label="Home"
         rootClasses={"breadcrumbs__homelink"}
       >
-        <NewIcon noWrapper csVariant="cyber">
+        <Icon noWrapper csVariant="cyber">
           <FontAwesomeIcon icon={faHouse} className={"breadcrumbs__home"} />
-        </NewIcon>
+        </Icon>
       </BreadCrumbsLink>
       {children}
     </Frame>
   );
 });
 
-export function BreadCrumbsLink(props: NewLinkProps | NewCyberstormLinkProps) {
+export function BreadCrumbsLink(props: LinkProps | CyberstormLinkProps) {
   const { children, ...forwardedProps } = props;
 
   return (
-    <NewLink {...forwardedProps} ref={props.ref}>
+    <Link {...forwardedProps} ref={props.ref}>
       <span>{children}</span>
-    </NewLink>
+    </Link>
   );
 }
 

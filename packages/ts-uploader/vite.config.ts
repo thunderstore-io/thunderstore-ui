@@ -19,6 +19,13 @@ export default defineConfig({
         "@thunderstore/thunderstore-api",
         "@thunderstore/typed-event-emitter",
       ],
+      output: {
+        globals: {
+          "@thunderstore/graph-system": "graphSystem",
+          "@thunderstore/thunderstore-api": "thunderstoreApi",
+          "@thunderstore/typed-event-emitter": "typedEventEmitter",
+        },
+      },
     },
   },
   plugins: [dts({ rollupTypes: true })],

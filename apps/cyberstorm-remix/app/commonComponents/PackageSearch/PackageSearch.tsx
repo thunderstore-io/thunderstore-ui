@@ -30,7 +30,6 @@ import { CheckboxList } from "../CheckboxList/CheckboxList";
 import { CollapsibleMenu } from "../Collapsible/Collapsible";
 import { RadioGroup } from "../RadioGroup/RadioGroup";
 import { type CategorySelection, type TRISTATE } from "../types";
-import "./PackageSearch.css";
 import { CategoryTagCloud } from "./components/CategoryTagCloud/CategoryTagCloud";
 import { PackageCount } from "./components/PackageCount/PackageCount";
 import {

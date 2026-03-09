@@ -3,8 +3,6 @@ import { memo, useMemo } from "react";
 
 import { CodeBox, NewAlert } from "@thunderstore/cyberstorm";
 
-import "./CodeBoxHTML.css";
-
 export interface CodeBoxHTMLProps {
   value?: string;
   maxHeight?: number;

@@ -17,7 +17,6 @@ import {
 } from "@thunderstore/cyberstorm-theme";
 import { type PackageListing } from "@thunderstore/dapper/types";
 
-import { Image, NewIcon, NewLink, NewMetaItem, NewTag } from "../../..";
 import { RelativeTime } from "../../../components/RelativeTime/RelativeTime";
 import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
 import {
@@ -26,6 +25,11 @@ import {
   formatInteger,
   formatToDisplayName,
 } from "../../../utils/utils";
+import { Icon as NewIcon } from "../../Icon/Icon";
+import { Image } from "../../Image/Image";
+import { Link as NewLink } from "../../Link/Link";
+import { MetaItem as NewMetaItem } from "../../MetaItem/MetaItem";
+import { Tag as NewTag } from "../../Tag/Tag";
 import "./CardPackage.css";
 
 interface Props {

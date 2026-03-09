@@ -12,9 +12,10 @@ import {
   type SelectSearchVariants,
 } from "@thunderstore/cyberstorm-theme";
 
-import { NewIcon, NewTag } from "../../index";
 import type { SelectOption } from "../../utils/types";
 import { classnames, componentClasses } from "../../utils/utils";
+import { Icon as NewIcon } from "../Icon/Icon";
+import { Tag as NewTag } from "../Tag/Tag";
 import "./SelectSearch.css";
 
 export type SelectSearchProps =

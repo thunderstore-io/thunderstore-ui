@@ -2,8 +2,6 @@ import { type ReactElement, useState } from "react";
 
 import { classnames } from "@thunderstore/cyberstorm";
 
-import "./CollapsibleText.css";
-
 export interface CollapsibleTextProps {
   text?: string;
   maxLength?: number;

@@ -9,9 +9,13 @@ import { memo } from "react";
 
 import { type Community } from "@thunderstore/dapper/types";
 
-import { Image, NewIcon, NewLink, NewMetaItem, NewTag } from "../../..";
 import { TooltipWrapper } from "../../../primitiveComponents/utils/utils";
 import { formatInteger } from "../../../utils/utils";
+import { Icon as NewIcon } from "../../Icon/Icon";
+import { Image } from "../../Image/Image";
+import { Link as NewLink } from "../../Link/Link";
+import { MetaItem as NewMetaItem } from "../../MetaItem/MetaItem";
+import { Tag as NewTag } from "../../Tag/Tag";
 import "./CardCommunity.css";
 
 interface Props {

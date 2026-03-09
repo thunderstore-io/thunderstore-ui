@@ -18,7 +18,7 @@
   "vueIndentScriptAndStyle": false,
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
   "importOrder": [
-    "^\\./styles/index\\.css$",
+    "^\\./styles/cyberstorm\\.css$",
     "<THIRD_PARTY_MODULES>",
     "^@thunderstore/(.*)$",
     "^[./]"

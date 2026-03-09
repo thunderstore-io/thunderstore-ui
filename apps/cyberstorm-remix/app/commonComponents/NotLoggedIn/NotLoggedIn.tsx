@@ -1,5 +1,3 @@
-import "./NotLoggedIn.css";
-
 export function NotLoggedIn() {
   return (
     <div className="not-logged-in">

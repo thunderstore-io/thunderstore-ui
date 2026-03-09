@@ -2,9 +2,9 @@ import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
-import { NewIcon } from "../..";
 import { Actionable } from "../../primitiveComponents/Actionable/Actionable";
 import { classnames, range } from "../../utils/utils";
+import { Icon as NewIcon } from "../Icon/Icon";
 import "./Pagination.css";
 
 export interface PaginationProps {

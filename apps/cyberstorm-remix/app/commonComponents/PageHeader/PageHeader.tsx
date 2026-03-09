@@ -3,8 +3,6 @@ import { type PropsWithChildren, type ReactElement, memo } from "react";
 import { Heading, Image, classnames } from "@thunderstore/cyberstorm";
 import type { HeadingSizes } from "@thunderstore/cyberstorm-theme";
 
-import "./PageHeader.css";
-
 export interface PageHeaderProps extends PropsWithChildren {
   image?: string | null;
   icon?: string | null;
