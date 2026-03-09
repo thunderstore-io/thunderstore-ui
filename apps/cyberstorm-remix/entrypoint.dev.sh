@@ -17,6 +17,27 @@ cp /workspace/tools/nginx/*.conf /etc/nginx/user-conf/ 2>/dev/null || true
 if [ -f /run/secrets/npmrc ]; then
   # Copy with tight permissions; file contains auth tokens.
   install -m 0600 -o node -g node /run/secrets/npmrc /home/node/.npmrc
+elif [ -n "${NPM_CONFIG_USERCONFIG:-}" ]; then
+  if [ -d /run/secrets/npmrc ]; then
+    printf >&2 "\033[1;31m%s\033[0m\n" ""
+    printf >&2 "\033[1;31m%s\033[0m\n" "==================================================================="
+    printf >&2 "\033[1;31m%s\033[0m\n" "ERROR: /run/secrets/npmrc is a directory, not a file."
+    printf >&2 "\033[1;31m%s\033[0m\n" ""
+    printf >&2 "\033[1;31m%s\033[0m\n" "Docker auto-creates missing paths as directories."
+    printf >&2 "\033[1;31m%s\033[0m\n" "To fix, run:"
+    printf >&2 "\033[1;31m%s\033[0m\n" ""
+    printf >&2 "\033[1;31m%s\033[0m\n" "  docker compose -f docker-compose.remix.development.yml down"
+    printf >&2 "\033[1;31m%s\033[0m\n" "  rm -rf build-secrets/.npmrc && touch build-secrets/.npmrc"
+    printf >&2 "\033[1;31m%s\033[0m\n" "  docker compose -f docker-compose.remix.development.yml up --build"
+    printf >&2 "\033[1;31m%s\033[0m\n" "==================================================================="
+    printf >&2 "\033[1;31m%s\033[0m\n" ""
+    exit 1
+  else
+    echo "WARNING: /run/secrets/npmrc not found." >&2
+    echo "  Create build-secrets/.npmrc (empty file is fine for development)." >&2
+    echo "Continuing without npm registry auth." >&2
+    unset NPM_CONFIG_USERCONFIG
+  fi
 fi
 
 ensure_node_dirs \
