@@ -107,4 +107,10 @@
       opacity: 1;
     }
   }
+
+  @media (width <= 41rem) {
+    .modal__content {
+      width: 95vw;
+    }
+  }
 }

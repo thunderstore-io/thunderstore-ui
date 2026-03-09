@@ -1,6 +1,7 @@
 @layer components {
   .switch {
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
     width: var(--switch-width);

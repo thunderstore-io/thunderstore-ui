@@ -2,13 +2,19 @@
   .team-settings {
     display: flex;
     flex-direction: column;
-    gap: 4rem;
+    gap: 2rem;
     align-items: flex-start;
 
     > section {
       display: flex;
       flex: 1 1 0;
       align-self: stretch;
+    }
+  }
+
+  @media (width <= 48rem) {
+    .team-settings {
+      gap: 1rem;
     }
   }
 }

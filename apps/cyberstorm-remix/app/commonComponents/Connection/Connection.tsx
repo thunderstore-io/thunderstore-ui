@@ -23,17 +23,22 @@ export function Connection(props: ConnectionProps) {
   return (
     <div className={`connection ${connection ? "" : "connection--disabled"}`}>
       <div className="connection__body">
-        <NewIcon wrapperClasses="connection__icon">{icon}</NewIcon>
-        <div className="connection__name">{name}</div>
-      </div>
-      <div className="connection__actions">
-        {connection ? (
-          <div className="connection__description">
-            <span className="connection__connected">Connected as</span>
-            <span className="connection__username">{connection.username}</span>
+        <div className="connection__info">
+          <div className="connection__provider">
+            <NewIcon wrapperClasses="connection__icon">{icon}</NewIcon>
+            <div className="connection__name">{name}</div>
           </div>
-        ) : null}
+          {connection ? (
+            <div className="connection__description">
+              <span className="connection__connected">Connected as</span>
+              <span className="connection__username">
+                {connection.username}
+              </span>
+            </div>
+          ) : null}
+        </div>
         <NewSwitch
+          rootClasses="connection__switch"
           disabled={disabled}
           value={connection !== undefined}
           onChange={() => {

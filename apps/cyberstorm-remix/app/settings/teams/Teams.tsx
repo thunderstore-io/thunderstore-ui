@@ -243,44 +243,41 @@ function CreateTeamForm(props: { config: () => RequestConfig }) {
       }
     >
       <Modal.Title>Create Team</Modal.Title>
-      <form onSubmit={strongForm.handleSubmit}>
-        <Modal.Body>
-          <div className="create-team-form__description">
-            Enter the name of the team you wish to create. Team names can
-            contain the characters a-z A-Z 0-9 _ and must not start or end with
-            an _.
-          </div>
-          <div className="create-team-form__input">
-            <label className="create-team-form__label" htmlFor="teamName">
-              Team Name <RequiredIndicator />
-            </label>
-            <NewTextInput
-              value={formInputs.name}
-              onChange={(v) =>
-                updateFormFieldState({
-                  field: "name",
-                  value: v.target.value,
-                })
-              }
-              placeholder={"MyCoolTeam"}
-              id="teamName"
-              {...teamNameFieldProps}
-            />
-          </div>
-          {strongForm.inputErrors?.name && (
-            <NewAlert csVariant="danger" csSize="small">
-              {Array.isArray(strongForm.inputErrors.name)
-                ? strongForm.inputErrors.name[0]
-                : strongForm.inputErrors.name}
-            </NewAlert>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <NewButton type="submit" csVariant="accent">
-            Create
-          </NewButton>
-        </Modal.Footer>
-      </form>
+      <Modal.Body>
+        <div className="create-team-form__description">
+          Enter the name of the team you wish to create. Team names can contain
+          the characters a-z A-Z 0-9 _ and must not start or end with an _.
+        </div>
+        <div className="create-team-form__input">
+          <label className="create-team-form__label" htmlFor="teamName">
+            Team Name <RequiredIndicator />
+          </label>
+          <NewTextInput
+            value={formInputs.name}
+            onChange={(v) =>
+              updateFormFieldState({
+                field: "name",
+                value: v.target.value,
+              })
+            }
+            placeholder={"MyCoolTeam"}
+            id="teamName"
+            {...teamNameFieldProps}
+          />
+        </div>
+        {strongForm.inputErrors?.name && (
+          <NewAlert csVariant="danger" csSize="small">
+            {Array.isArray(strongForm.inputErrors.name)
+              ? strongForm.inputErrors.name[0]
+              : strongForm.inputErrors.name}
+          </NewAlert>
+        )}
+      </Modal.Body>
+      <Modal.Footer>
+        <NewButton type="submit" csVariant="accent" onClick={strongForm.submit}>
+          Create
+        </NewButton>
+      </Modal.Footer>
     </Modal>
   );
 }
