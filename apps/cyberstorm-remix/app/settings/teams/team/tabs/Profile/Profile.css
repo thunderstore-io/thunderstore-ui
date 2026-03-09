@@ -24,4 +24,16 @@
   .team-profile__save {
     align-self: flex-end;
   }
+
+  @media (width <= 48rem) {
+    .team-profile__label {
+      min-width: 4rem;
+    }
+  }
+
+  @media (width <= 375px) {
+    .team-profile__label {
+      min-width: 2rem;
+    }
+  }
 }
