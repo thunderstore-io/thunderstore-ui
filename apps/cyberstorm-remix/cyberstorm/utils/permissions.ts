@@ -10,9 +10,9 @@ export const isTeamOwner = (
 
 export async function assertTeamAccess(teamName: string) {
   const tools = getSessionTools();
-  const currentUser = await tools?.getSessionCurrentUser();
+  const currentUser = await tools?.getSessionCurrentUser(true);
 
-  if (!currentUser.username) {
+  if (!currentUser?.username) {
     throw new Response("Unauthorized", { status: 401 });
   }
 
