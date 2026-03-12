@@ -552,7 +552,11 @@ export type TeamServiceAccountAddRequestParams = z.infer<
 >;
 
 export const teamServiceAccountAddRequestDataSchema = z.object({
-  nickname: z.string().min(1),
+  nickname: z
+    .string()
+    .min(1)
+    .max(32)
+    .regex(/^[A-Za-z0-9_]+$/),
 });
 
 export type TeamServiceAccountAddRequestData = z.infer<
