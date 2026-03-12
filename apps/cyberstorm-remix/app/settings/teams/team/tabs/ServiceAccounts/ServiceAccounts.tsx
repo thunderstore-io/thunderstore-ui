@@ -214,19 +214,25 @@ function AddServiceAccountForm(props: {
             </label>
             <div className="service-accounts__nickname-input">
               <NewTextInput
+                rootClasses="service-accounts__nickname-input-text-input"
                 id="serviceAccountNickname"
                 value={formInputs.nickname}
                 onChange={(e) => {
-                  updateFormFieldState({
-                    field: "nickname",
-                    value: e.target.value,
-                  });
+                  const nextValue = e.target.value;
+                  if (/^[A-Za-z0-9_]*$/.test(nextValue)) {
+                    updateFormFieldState({
+                      field: "nickname",
+                      value: nextValue,
+                    });
+                  }
                 }}
                 placeholder={"ExampleName"}
                 maxLength={32}
                 {...nicknameFieldProps}
               />
               <div className="service-accounts__nickname-input-max-length">
+                Allowed characters: a-z A-Z 0-9 _.
+                <br />
                 Max. 32 characters
               </div>
             </div>
