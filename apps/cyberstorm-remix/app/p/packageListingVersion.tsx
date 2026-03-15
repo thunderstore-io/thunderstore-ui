@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import type { ShouldRevalidateFunctionArgs } from "react-router";
 import {
@@ -37,66 +38,68 @@ import { PackageActions } from "./components/PackageListing/PackageActions";
 import { getPrivateListing, getPublicListing } from "./listingUtils";
 import "./packageListing.css";
 
-export async function loader({ params, request }: Route.LoaderArgs) {
-  const { communityId, namespaceId, packageId, packageVersion } = params;
+export const loader = ssrLoader(
+  async ({ params, request }: Route.LoaderArgs) => {
+    const { communityId, namespaceId, packageId, packageVersion } = params;
 
-  if (!communityId || !namespaceId || !packageId || !packageVersion) {
-    throw new Response("Package not found", { status: 404 });
+    if (!communityId || !namespaceId || !packageId || !packageVersion) {
+      throw new Response("Package not found", { status: 404 });
+    }
+
+    const dapper = new DapperTs(() => ({
+      apiHost: getApiHostForSsr(),
+      sessionId: undefined,
+    }));
+
+    const listing = await getPublicListing(dapper, {
+      communityId,
+      namespaceId,
+      packageId,
+      packageVersion,
+    });
+
+    if (!listing) {
+      throw new Response("Package not found", { status: 404 });
+    }
+
+    const community = await dapper.getCommunity(communityId);
+    const url = new URL(request.url);
+
+    return {
+      community,
+      listing,
+      packageVersion,
+      team: await dapper.getTeamDetails(namespaceId),
+      seo: createSeo({
+        descriptors: [
+          {
+            title: `${formatToDisplayName(listing.name)} v${packageVersion} | ${
+              community.name
+            } Mod Database`,
+          },
+          { name: "description", content: listing.description },
+          { property: "og:type", content: "website" },
+          { property: "og:url", content: url.href },
+          {
+            property: "og:title",
+            content: `${formatToDisplayName(
+              listing.name
+            )} v${packageVersion} by ${listing.namespace}`,
+          },
+          { property: "og:description", content: listing.description },
+          ...(listing.icon_url
+            ? [
+                { property: "og:image", content: listing.icon_url },
+                { property: "og:image:width", content: "256" },
+                { property: "og:image:height", content: "256" },
+              ]
+            : []),
+          { property: "og:site_name", content: "Thunderstore" },
+        ],
+      }),
+    };
   }
-
-  const dapper = new DapperTs(() => ({
-    apiHost: getApiHostForSsr(),
-    sessionId: undefined,
-  }));
-
-  const listing = await getPublicListing(dapper, {
-    communityId,
-    namespaceId,
-    packageId,
-    packageVersion,
-  });
-
-  if (!listing) {
-    throw new Response("Package not found", { status: 404 });
-  }
-
-  const community = await dapper.getCommunity(communityId);
-  const url = new URL(request.url);
-
-  return {
-    community,
-    listing,
-    packageVersion,
-    team: await dapper.getTeamDetails(namespaceId),
-    seo: createSeo({
-      descriptors: [
-        {
-          title: `${formatToDisplayName(listing.name)} v${packageVersion} | ${
-            community.name
-          } Mod Database`,
-        },
-        { name: "description", content: listing.description },
-        { property: "og:type", content: "website" },
-        { property: "og:url", content: url.href },
-        {
-          property: "og:title",
-          content: `${formatToDisplayName(
-            listing.name
-          )} v${packageVersion} by ${listing.namespace}`,
-        },
-        { property: "og:description", content: listing.description },
-        ...(listing.icon_url
-          ? [
-              { property: "og:image", content: listing.icon_url },
-              { property: "og:image:width", content: "256" },
-              { property: "og:image:height", content: "256" },
-            ]
-          : []),
-        { property: "og:site_name", content: "Thunderstore" },
-      ],
-    }),
-  };
-}
+);
 
 export async function clientLoader({
   params,

@@ -13,6 +13,7 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import {
   type ReactElement,
   Suspense,
@@ -66,70 +67,72 @@ type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
 };
 
-export async function loader({ params, request }: Route.LoaderArgs) {
-  const { communityId, namespaceId, packageId } = params;
+export const loader = ssrLoader(
+  async ({ params, request }: Route.LoaderArgs) => {
+    const { communityId, namespaceId, packageId } = params;
 
-  if (!communityId || !namespaceId || !packageId) {
-    throw new Response("Package not found", { status: 404 });
+    if (!communityId || !namespaceId || !packageId) {
+      throw new Response("Package not found", { status: 404 });
+    }
+
+    const dapper = new DapperTs(() => ({
+      apiHost: getApiHostForSsr(),
+      sessionId: undefined,
+    }));
+
+    const listing = await getPublicListing(dapper, {
+      communityId,
+      namespaceId,
+      packageId,
+    });
+
+    if (!listing) {
+      throw new Response("Package not found", { status: 404 });
+    }
+
+    const community = await dapper.getCommunity(communityId);
+    const url = new URL(request.url);
+
+    return {
+      community,
+      communityFilters: await dapper.getCommunityFilters(communityId),
+      listing: listing,
+      listingStatus: undefined,
+      team: await dapper.getTeamDetails(namespaceId),
+      permissions: undefined,
+      community_identifier: communityId,
+      namespace_id: namespaceId,
+      package_id: packageId,
+      seo: createSeo({
+        descriptors: [
+          {
+            title: `${formatToDisplayName(listing.name)} | Thunderstore - The ${
+              community.name
+            } Mod Database`,
+          },
+          { name: "description", content: listing.description },
+          { property: "og:type", content: "website" },
+          { property: "og:url", content: url.href },
+          {
+            property: "og:title",
+            content: `${formatToDisplayName(listing.name)} by ${
+              listing.namespace
+            }`,
+          },
+          { property: "og:description", content: listing.description },
+          ...(listing.icon_url
+            ? [
+                { property: "og:image", content: listing.icon_url },
+                { property: "og:image:width", content: "256" },
+                { property: "og:image:height", content: "256" },
+              ]
+            : []),
+          { property: "og:site_name", content: "Thunderstore" },
+        ],
+      }),
+    };
   }
-
-  const dapper = new DapperTs(() => ({
-    apiHost: getApiHostForSsr(),
-    sessionId: undefined,
-  }));
-
-  const listing = await getPublicListing(dapper, {
-    communityId,
-    namespaceId,
-    packageId,
-  });
-
-  if (!listing) {
-    throw new Response("Package not found", { status: 404 });
-  }
-
-  const community = await dapper.getCommunity(communityId);
-  const url = new URL(request.url);
-
-  return {
-    community,
-    communityFilters: await dapper.getCommunityFilters(communityId),
-    listing: listing,
-    listingStatus: undefined,
-    team: await dapper.getTeamDetails(namespaceId),
-    permissions: undefined,
-    community_identifier: communityId,
-    namespace_id: namespaceId,
-    package_id: packageId,
-    seo: createSeo({
-      descriptors: [
-        {
-          title: `${formatToDisplayName(listing.name)} | Thunderstore - The ${
-            community.name
-          } Mod Database`,
-        },
-        { name: "description", content: listing.description },
-        { property: "og:type", content: "website" },
-        { property: "og:url", content: url.href },
-        {
-          property: "og:title",
-          content: `${formatToDisplayName(listing.name)} by ${
-            listing.namespace
-          }`,
-        },
-        { property: "og:description", content: listing.description },
-        ...(listing.icon_url
-          ? [
-              { property: "og:image", content: listing.icon_url },
-              { property: "og:image:width", content: "256" },
-              { property: "og:image:height", content: "256" },
-            ]
-          : []),
-        { property: "og:site_name", content: "Thunderstore" },
-      ],
-    }),
-  };
-}
+);
 
 export async function clientLoader({
   params,

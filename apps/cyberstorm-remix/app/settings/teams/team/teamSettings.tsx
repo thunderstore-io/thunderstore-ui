@@ -1,4 +1,5 @@
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Outlet, useLocation, useOutletContext, useParams } from "react-router";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
@@ -8,30 +9,32 @@ import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 import type { Route } from "./+types/teamSettings";
 import "./teamSettings.css";
 
-export async function loader({ params, request }: Route.LoaderArgs) {
-  const teamName = params.namespaceId ?? "";
-  const url = new URL(request.url);
+export const loader = ssrLoader(
+  async ({ params, request }: Route.LoaderArgs) => {
+    const teamName = params.namespaceId ?? "";
+    const url = new URL(request.url);
 
-  return {
-    seo: createSeo({
-      descriptors: [
-        { title: `Team ${teamName} settings | Thunderstore` },
-        { name: "description", content: `Manage ${teamName} team settings` },
-        { property: "og:type", content: "website" },
-        { property: "og:url", content: url.href },
-        {
-          property: "og:title",
-          content: `Team ${teamName} settings | Thunderstore`,
-        },
-        {
-          property: "og:description",
-          content: `Manage ${teamName} team settings`,
-        },
-        { property: "og:site_name", content: "Thunderstore" },
-      ],
-    }),
-  };
-}
+    return {
+      seo: createSeo({
+        descriptors: [
+          { title: `Team ${teamName} settings | Thunderstore` },
+          { name: "description", content: `Manage ${teamName} team settings` },
+          { property: "og:type", content: "website" },
+          { property: "og:url", content: url.href },
+          {
+            property: "og:title",
+            content: `Team ${teamName} settings | Thunderstore`,
+          },
+          {
+            property: "og:description",
+            content: `Manage ${teamName} team settings`,
+          },
+          { property: "og:site_name", content: "Thunderstore" },
+        ],
+      }),
+    };
+  }
+);
 
 export default function TeamSettings() {
   const teamName = useParams().namespaceId ?? "";

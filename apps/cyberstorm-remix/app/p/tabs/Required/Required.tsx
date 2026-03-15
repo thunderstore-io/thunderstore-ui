@@ -3,6 +3,7 @@ import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import { Await, useLoaderData } from "react-router";
 
@@ -21,58 +22,60 @@ const getPageFromUrl = (url: string): number | undefined => {
   return maybePage ? Number(maybePage) : undefined;
 };
 
-export async function loader({ params, request }: Route.LoaderArgs) {
-  const { communityId, namespaceId, packageId, packageVersion } = params;
+export const loader = ssrLoader(
+  async ({ params, request }: Route.LoaderArgs) => {
+    const { communityId, namespaceId, packageId, packageVersion } = params;
 
-  // Either communityId or packageVersion is required depending on route.
-  if (!namespaceId || !packageId || (!communityId && !packageVersion)) {
-    throw Dependency404;
-  }
-
-  const dapper = new DapperTs(() => ({
-    apiHost: getApiHostForSsr(),
-    sessionId: undefined,
-  }));
-
-  let version: string;
-
-  if (packageVersion) {
-    version = packageVersion;
-  } else if (communityId) {
-    const listingArgs = { communityId, namespaceId, packageId };
-    const listing = await getPublicListing(dapper, listingArgs);
-
-    // Listing that's not available on unauthenticated SSR request
-    // might be available for authenticated user on client. Return
-    // undefined rather than throw error to allow refetch on client.
-    if (!listing) {
-      return { dependencies: undefined, seo: createSeo({ descriptors: [] }) };
+    // Either communityId or packageVersion is required depending on route.
+    if (!namespaceId || !packageId || (!communityId && !packageVersion)) {
+      throw Dependency404;
     }
 
-    version = listing.latest_version_number;
-  } else {
-    throw Dependency404; // Can't happen, satisfies TypeScript
-  }
+    const dapper = new DapperTs(() => ({
+      apiHost: getApiHostForSsr(),
+      sessionId: undefined,
+    }));
 
-  return {
-    communityId: communityId,
-    dependencies: await dapper.getPackageVersionDependencies(
-      namespaceId,
-      packageId,
-      version,
-      getPageFromUrl(request.url)
-    ),
-    seo: createSeo({
-      descriptors: [
-        { title: `${namespaceId}-${packageId} Dependencies | Thunderstore` },
-        {
-          name: "description",
-          content: `Dependencies for ${namespaceId}-${packageId}`,
-        },
-      ],
-    }),
-  };
-}
+    let version: string;
+
+    if (packageVersion) {
+      version = packageVersion;
+    } else if (communityId) {
+      const listingArgs = { communityId, namespaceId, packageId };
+      const listing = await getPublicListing(dapper, listingArgs);
+
+      // Listing that's not available on unauthenticated SSR request
+      // might be available for authenticated user on client. Return
+      // undefined rather than throw error to allow refetch on client.
+      if (!listing) {
+        return { dependencies: undefined, seo: createSeo({ descriptors: [] }) };
+      }
+
+      version = listing.latest_version_number;
+    } else {
+      throw Dependency404; // Can't happen, satisfies TypeScript
+    }
+
+    return {
+      communityId: communityId,
+      dependencies: await dapper.getPackageVersionDependencies(
+        namespaceId,
+        packageId,
+        version,
+        getPageFromUrl(request.url)
+      ),
+      seo: createSeo({
+        descriptors: [
+          { title: `${namespaceId}-${packageId} Dependencies | Thunderstore` },
+          {
+            name: "description",
+            content: `Dependencies for ${namespaceId}-${packageId}`,
+          },
+        ],
+      }),
+    };
+  }
+);
 
 export async function clientLoader({
   params,

@@ -1,6 +1,7 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useEffect, useState } from "react";
 import { useLoaderData, useRouteLoaderData } from "react-router";
 
@@ -25,7 +26,7 @@ type ResultType = {
   seo?: ReturnType<typeof createSeo>;
 };
 
-export async function loader({ params }: Route.LoaderArgs) {
+export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
   if (
     params.communityId &&
     params.namespaceId &&
@@ -112,7 +113,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
-}
+});
 
 export async function clientLoader({
   params,

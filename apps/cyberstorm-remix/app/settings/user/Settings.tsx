@@ -1,4 +1,5 @@
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Outlet, useLocation, useOutletContext } from "react-router";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
@@ -8,7 +9,7 @@ import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Settings";
 import "./Settings.css";
 
-export async function loader({ request }: Route.LoaderArgs) {
+export const loader = ssrLoader(async ({ request }: Route.LoaderArgs) => {
   const url = new URL(request.url);
   return {
     seo: createSeo({
@@ -29,7 +30,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       ],
     }),
   };
-}
+});
 
 export default function UserSettings() {
   const context = useOutletContext<OutletContextShape>();

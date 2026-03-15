@@ -4,6 +4,7 @@ import { getPrivateListing } from "app/p/listingUtils";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useEffect, useReducer } from "react";
 import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
@@ -32,7 +33,7 @@ import "./packageEdit.css";
 
 const package404 = new Response("Package not found", { status: 404 });
 
-export async function loader({ params }: Route.LoaderArgs) {
+export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
   return {
     listing: undefined,
     permissions: undefined,
@@ -44,7 +45,7 @@ export async function loader({ params }: Route.LoaderArgs) {
       ],
     }),
   };
-}
+});
 
 export async function clientLoader({
   params,

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { type SeoReturn, createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import { Await, useOutletContext } from "react-router";
 import { useLoaderData } from "react-router";
@@ -37,7 +38,7 @@ type ResultType = {
   seo?: SeoReturn;
 };
 
-export async function loader({ params }: Route.LoaderArgs) {
+export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
   if (params.namespaceId && params.packageId) {
     const dapper = new DapperTs(() => {
       return {
@@ -95,7 +96,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     source: undefined,
     seo: createSeo({ descriptors: [{ title: "Source Not Found" }] }),
   };
-}
+});
 
 export async function clientLoader({
   params,
