@@ -9,7 +9,7 @@ React Router has two methods for fetching data for "route components", i.e. comp
 - User session is available only on client side, so any API requests are made as an unauthenticated user. Therefore there's no point in implementing `loader()` for a route that requires authentication.
 - `loader()` should always `await` the Promise returned from the DapperTs query method.
 - `loader()` should throw `Response` objects when data fetching fails to ensure proper error handling.
-  - `ssrSafe()` helper should be used to achieve this.
+  - `ssrLoader()` higher-order function should be used to ensure `ApiError`s are cast to `Response`s.
 
 ## `clientLoader()`
 
@@ -49,9 +49,9 @@ import { Await, type LoaderFunctionArgs, useLoaderData } from "react-router";
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
-import { ssrSafe } from "app/commonComponents/ErrorBoundary";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 
 // This component is now wrapped in the default error boundary.
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
@@ -59,24 +59,25 @@ export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorB
 // Provides data for server side rendering. Used on "hard load", i.e. when
 // entering the page with direct URL. Used also on client side navigation, but
 // only if clientLoader() is not defined.
-export async function loader({ params }: LoaderFunctionArgs) {
-  const { communityId } = params;
+export const loader = ssrLoader(
+  async ({ params }: LoaderFunctionArgs) {
+    const { communityId } = params;
 
-  if (!communityId) {
-    throw new Response("Community not found", { status: 404 });
+    if (!communityId) {
+      throw new Response("Community not found", { status: 404 });
+    }
+
+    const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
+    const dapper = new DapperTs(() => ({
+      apiHost: publicEnvVariables.VITE_API_URL,
+    }));
+
+    // Await data returned by dapper.
+    return {
+      community: await dapper.getCommunity(communityId),
+    };
   }
-
-  const publicEnvVariables = getPublicEnvVariables(["VITE_API_URL"]);
-  const dapper = new DapperTs(() => ({
-    apiHost: publicEnvVariables.VITE_API_URL,
-  }));
-
-  // Await data returned from SSR loader().
-  // Use ssrSafe for proper error handling.
-  return {
-    community: await ssrSafe(() => dapper.getCommunity(communityId)),
-  };
-}
+);
 
 // Provides data for client side rendering. Used on "soft load", i.e. when
 // navigating to the page from another page within the app. Used also on hard
@@ -128,7 +129,6 @@ export default function Community() {
 
 - Use `RouteErrorBoundary` in route components
 - Consistently use `isApiError` instead of `instanceof ApiError`, as the latter doesn't work well with errors thrown by loaders
-- Consider adding a singleton DapperTS instance for SSR loaders that automatically handles ssrSafe for all methods
 - Add "retry buttons" (e.g. reloading the page on 500 series of errors)
 - As `RouteErrorBoundary` is all-or-nothing solution when it comes to rendering, consider if there's a need for more granular non-route component level error boundaries. We might not need or want to use them, as error boundaries are intended more for render-time errors, and any errors caused by user interaction should be handled by the component logic itself
   - If it turns out we don't want other error boundaries, consider renaming `RouteErrorBoundary` to just `ErrorBoundary`
