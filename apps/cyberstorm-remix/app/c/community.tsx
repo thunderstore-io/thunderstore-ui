@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import type { ShouldRevalidateFunctionArgs } from "react-router";
 import {
@@ -29,39 +30,41 @@ import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/community";
 import "./Community.css";
 
-export async function loader({ params, request }: Route.LoaderArgs) {
-  if (params.communityId) {
-    const dapper = new DapperTs(() => {
+export const loader = ssrLoader(
+  async ({ params, request }: Route.LoaderArgs) => {
+    if (params.communityId) {
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: getApiHostForSsr(),
+          sessionId: undefined,
+        };
+      });
+      const community = await dapper.getCommunity(params.communityId);
+      const url = new URL(request.url);
       return {
-        apiHost: getApiHostForSsr(),
-        sessionId: undefined,
+        community: community,
+        seo: createSeo({
+          descriptors: [
+            { title: `The ${community.name} Mod Database` },
+            { name: "description", content: `Mods for ${community.name}` },
+            { property: "og:image", content: community.cover_image_url ?? "" },
+            {
+              property: "og:url",
+              content: `${url.origin}${url.pathname}`,
+            },
+            {
+              property: "og:description",
+              content: `Thunderstore is a mod database and API for downloading ${community.name} mods`,
+            },
+            { property: "og:image:width", content: "360" },
+            { property: "og:image:height", content: "480" },
+          ],
+        }),
       };
-    });
-    const community = await dapper.getCommunity(params.communityId);
-    const url = new URL(request.url);
-    return {
-      community: community,
-      seo: createSeo({
-        descriptors: [
-          { title: `The ${community.name} Mod Database` },
-          { name: "description", content: `Mods for ${community.name}` },
-          { property: "og:image", content: community.cover_image_url ?? "" },
-          {
-            property: "og:url",
-            content: `${url.origin}${url.pathname}`,
-          },
-          {
-            property: "og:description",
-            content: `Thunderstore is a mod database and API for downloading ${community.name} mods`,
-          },
-          { property: "og:image:width", content: "360" },
-          { property: "og:image:height", content: "480" },
-        ],
-      }),
-    };
+    }
+    throw new Response("Community not found", { status: 404 });
   }
-  throw new Response("Community not found", { status: 404 });
-}
+);
 
 export async function clientLoader({
   params,

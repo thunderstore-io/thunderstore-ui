@@ -1,6 +1,7 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import { Await, useLoaderData, useOutletContext } from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
@@ -18,92 +19,94 @@ import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Dependants";
 import "./Dependants.css";
 
-export async function loader({ params, request }: Route.LoaderArgs) {
-  if (params.communityId && params.packageId && params.namespaceId) {
-    const dapper = new DapperTs(() => {
+export const loader = ssrLoader(
+  async ({ params, request }: Route.LoaderArgs) => {
+    if (params.communityId && params.packageId && params.namespaceId) {
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: getApiHostForSsr(),
+          sessionId: undefined,
+        };
+      });
+      const searchParams = new URL(request.url).searchParams;
+      const ordering =
+        searchParams.get("ordering") ?? PackageOrderOptions.Updated;
+      const page = searchParams.get("page");
+      const search = searchParams.get("search");
+      const includedCategories = searchParams.get("includedCategories");
+      const excludedCategories = searchParams.get("excludedCategories");
+      const section = searchParams.get("section");
+      const nsfw = searchParams.get("nsfw");
+      const deprecated = searchParams.get("deprecated");
+      const filters = await dapper.getCommunityFilters(params.communityId);
+      const listing = await dapper.getPackageListingDetails(
+        params.communityId,
+        params.namespaceId,
+        params.packageId
+      );
+
+      if (!listing) {
+        throw new Response("Package not found", { status: 404 });
+      }
+
       return {
-        apiHost: getApiHostForSsr(),
-        sessionId: undefined,
+        community: dapper.getCommunity(params.communityId),
+        listing,
+        filters: filters,
+        listings: await dapper.getPackageListings(
+          {
+            kind: "package-dependants",
+            communityId: params.communityId,
+            namespaceId: params.namespaceId,
+            packageName: params.packageId,
+          },
+          ordering ?? "",
+          page === null ? undefined : Number(page),
+          search ?? "",
+          includedCategories?.split(",") ?? undefined,
+          excludedCategories?.split(",") ?? undefined,
+          section ? (section === "all" ? "" : section) : "",
+          nsfw === "true" ? true : false,
+          deprecated === "true" ? true : false
+        ),
+        seo: createSeo({
+          descriptors: [
+            {
+              title: `Dependants of ${formatToDisplayName(
+                listing.name
+              )} | Thunderstore`,
+            },
+            {
+              name: "description",
+              content: `Mods that depend on ${listing.name}`,
+            },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: request.url },
+            {
+              property: "og:title",
+              content: `Dependants of ${formatToDisplayName(
+                listing.name
+              )} | Thunderstore`,
+            },
+            {
+              property: "og:description",
+              content: `Mods that depend on ${listing.name}`,
+            },
+            ...(listing.icon_url
+              ? [
+                  { property: "og:image", content: listing.icon_url },
+                  { property: "og:image:width", content: "256" },
+                  { property: "og:image:height", content: "256" },
+                ]
+              : []),
+            { property: "og:site_name", content: "Thunderstore" },
+          ],
+        }),
       };
-    });
-    const searchParams = new URL(request.url).searchParams;
-    const ordering =
-      searchParams.get("ordering") ?? PackageOrderOptions.Updated;
-    const page = searchParams.get("page");
-    const search = searchParams.get("search");
-    const includedCategories = searchParams.get("includedCategories");
-    const excludedCategories = searchParams.get("excludedCategories");
-    const section = searchParams.get("section");
-    const nsfw = searchParams.get("nsfw");
-    const deprecated = searchParams.get("deprecated");
-    const filters = await dapper.getCommunityFilters(params.communityId);
-    const listing = await dapper.getPackageListingDetails(
-      params.communityId,
-      params.namespaceId,
-      params.packageId
-    );
-
-    if (!listing) {
-      throw new Response("Package not found", { status: 404 });
     }
-
-    return {
-      community: dapper.getCommunity(params.communityId),
-      listing,
-      filters: filters,
-      listings: await dapper.getPackageListings(
-        {
-          kind: "package-dependants",
-          communityId: params.communityId,
-          namespaceId: params.namespaceId,
-          packageName: params.packageId,
-        },
-        ordering ?? "",
-        page === null ? undefined : Number(page),
-        search ?? "",
-        includedCategories?.split(",") ?? undefined,
-        excludedCategories?.split(",") ?? undefined,
-        section ? (section === "all" ? "" : section) : "",
-        nsfw === "true" ? true : false,
-        deprecated === "true" ? true : false
-      ),
-      seo: createSeo({
-        descriptors: [
-          {
-            title: `Dependants of ${formatToDisplayName(
-              listing.name
-            )} | Thunderstore`,
-          },
-          {
-            name: "description",
-            content: `Mods that depend on ${listing.name}`,
-          },
-          { property: "og:type", content: "website" },
-          { property: "og:url", content: request.url },
-          {
-            property: "og:title",
-            content: `Dependants of ${formatToDisplayName(
-              listing.name
-            )} | Thunderstore`,
-          },
-          {
-            property: "og:description",
-            content: `Mods that depend on ${listing.name}`,
-          },
-          ...(listing.icon_url
-            ? [
-                { property: "og:image", content: listing.icon_url },
-                { property: "og:image:width", content: "256" },
-                { property: "og:image:height", content: "256" },
-              ]
-            : []),
-          { property: "og:site_name", content: "Thunderstore" },
-        ],
-      }),
-    };
+    throw new Response("Community not found", { status: 404 });
   }
-  throw new Response("Community not found", { status: 404 });
-}
+);
 
 export async function clientLoader({
   request,

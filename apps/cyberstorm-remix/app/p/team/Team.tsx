@@ -1,6 +1,7 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { useLoaderData, useOutletContext } from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
@@ -12,73 +13,75 @@ import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Team";
 import "./Team.css";
 
-export async function loader({ params, request }: Route.LoaderArgs) {
-  if (params.communityId && params.namespaceId) {
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: getApiHostForSsr(),
-        sessionId: undefined,
-      };
-    });
-    const searchParams = new URL(request.url).searchParams;
-    const ordering =
-      searchParams.get("ordering") ?? PackageOrderOptions.Updated;
-    const page = searchParams.get("page");
-    const search = searchParams.get("search");
-    const includedCategories = searchParams.get("includedCategories");
-    const excludedCategories = searchParams.get("excludedCategories");
-    const section = searchParams.get("section");
-    const nsfw = searchParams.get("nsfw");
-    const deprecated = searchParams.get("deprecated");
-    const filters = await dapper.getCommunityFilters(params.communityId);
-    const community = await dapper.getCommunity(params.communityId);
+export const loader = ssrLoader(
+  async ({ params, request }: Route.LoaderArgs) => {
+    if (params.communityId && params.namespaceId) {
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: getApiHostForSsr(),
+          sessionId: undefined,
+        };
+      });
+      const searchParams = new URL(request.url).searchParams;
+      const ordering =
+        searchParams.get("ordering") ?? PackageOrderOptions.Updated;
+      const page = searchParams.get("page");
+      const search = searchParams.get("search");
+      const includedCategories = searchParams.get("includedCategories");
+      const excludedCategories = searchParams.get("excludedCategories");
+      const section = searchParams.get("section");
+      const nsfw = searchParams.get("nsfw");
+      const deprecated = searchParams.get("deprecated");
+      const filters = await dapper.getCommunityFilters(params.communityId);
+      const community = await dapper.getCommunity(params.communityId);
 
-    return {
-      teamId: params.namespaceId,
-      filters: filters,
-      // Community is required for the breadcrumbs in the root layout
-      community: community,
-      listings: await dapper.getPackageListings(
-        {
-          kind: "namespace",
-          communityId: params.communityId,
-          namespaceId: params.namespaceId,
-        },
-        ordering ?? "",
-        page === null ? undefined : Number(page),
-        search ?? "",
-        includedCategories?.split(",") ?? undefined,
-        excludedCategories?.split(",") ?? undefined,
-        section ? (section === "all" ? "" : section) : "",
-        nsfw === "true" ? true : false,
-        deprecated === "true" ? true : false
-      ),
-      seo: createSeo({
-        descriptors: [
+      return {
+        teamId: params.namespaceId,
+        filters: filters,
+        // Community is required for the breadcrumbs in the root layout
+        community: community,
+        listings: await dapper.getPackageListings(
           {
-            title: `Mods uploaded by ${params.namespaceId} | Thunderstore - The ${community.name} Mod Database`,
+            kind: "namespace",
+            communityId: params.communityId,
+            namespaceId: params.namespaceId,
           },
-          {
-            name: "description",
-            content: `Browse mods uploaded by ${params.namespaceId}`,
-          },
-          { property: "og:type", content: "website" },
-          { property: "og:url", content: request.url },
-          {
-            property: "og:title",
-            content: `Mods by ${params.namespaceId} | Thunderstore`,
-          },
-          {
-            property: "og:description",
-            content: `Browse mods uploaded by ${params.namespaceId}`,
-          },
-          { property: "og:site_name", content: "Thunderstore" },
-        ],
-      }),
-    };
+          ordering ?? "",
+          page === null ? undefined : Number(page),
+          search ?? "",
+          includedCategories?.split(",") ?? undefined,
+          excludedCategories?.split(",") ?? undefined,
+          section ? (section === "all" ? "" : section) : "",
+          nsfw === "true" ? true : false,
+          deprecated === "true" ? true : false
+        ),
+        seo: createSeo({
+          descriptors: [
+            {
+              title: `Mods uploaded by ${params.namespaceId} | Thunderstore - The ${community.name} Mod Database`,
+            },
+            {
+              name: "description",
+              content: `Browse mods uploaded by ${params.namespaceId}`,
+            },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: request.url },
+            {
+              property: "og:title",
+              content: `Mods by ${params.namespaceId} | Thunderstore`,
+            },
+            {
+              property: "og:description",
+              content: `Browse mods uploaded by ${params.namespaceId}`,
+            },
+            { property: "og:site_name", content: "Thunderstore" },
+          ],
+        }),
+      };
+    }
+    throw new Response("Community not found", { status: 404 });
   }
-  throw new Response("Community not found", { status: 404 });
-}
+);
 
 export async function clientLoader({
   request,

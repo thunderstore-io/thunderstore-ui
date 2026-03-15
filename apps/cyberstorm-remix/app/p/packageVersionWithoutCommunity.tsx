@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { isPromise } from "cyberstorm/utils/typeChecks";
 import {
   type ReactElement,
@@ -49,51 +50,53 @@ import { PackageActions } from "./components/PackageListing/PackageActions";
 // import type { Route } from "./+types/packageVersionWithoutCommunity";
 import "./packageListing.css";
 
-export async function loader({ params, request }: LoaderFunctionArgs) {
-  if (params.namespaceId && params.packageId && params.packageVersion) {
-    const dapper = new DapperTs(() => {
+export const loader = ssrLoader(
+  async ({ params, request }: LoaderFunctionArgs) => {
+    if (params.namespaceId && params.packageId && params.packageVersion) {
+      const dapper = new DapperTs(() => {
+        return {
+          apiHost: getApiHostForSsr(),
+          sessionId: undefined,
+        };
+      });
+
+      const version = await dapper.getPackageVersionDetails(
+        params.namespaceId,
+        params.packageId,
+        params.packageVersion
+      );
+      const team = await dapper.getTeamDetails(params.namespaceId);
+      const url = new URL(request.url);
+
       return {
-        apiHost: getApiHostForSsr(),
-        sessionId: undefined,
+        version: version,
+        team: team,
+        seo: createSeo({
+          descriptors: [
+            {
+              title: `${formatToDisplayName(version.full_version_name)} | ${
+                team.name
+              }`,
+            },
+            { name: "description", content: version.description },
+            { property: "og:type", content: "website" },
+            { property: "og:url", content: url.href },
+            {
+              property: "og:title",
+              content: `${formatToDisplayName(version.full_version_name)} | ${
+                team.name
+              }`,
+            },
+            { property: "og:description", content: version.description },
+            { property: "og:image", content: version.icon_url },
+            { property: "og:site_name", content: "Thunderstore" },
+          ],
+        }),
       };
-    });
-
-    const version = await dapper.getPackageVersionDetails(
-      params.namespaceId,
-      params.packageId,
-      params.packageVersion
-    );
-    const team = await dapper.getTeamDetails(params.namespaceId);
-    const url = new URL(request.url);
-
-    return {
-      version: version,
-      team: team,
-      seo: createSeo({
-        descriptors: [
-          {
-            title: `${formatToDisplayName(version.full_version_name)} | ${
-              team.name
-            }`,
-          },
-          { name: "description", content: version.description },
-          { property: "og:type", content: "website" },
-          { property: "og:url", content: url.href },
-          {
-            property: "og:title",
-            content: `${formatToDisplayName(version.full_version_name)} | ${
-              team.name
-            }`,
-          },
-          { property: "og:description", content: version.description },
-          { property: "og:image", content: version.icon_url },
-          { property: "og:site_name", content: "Thunderstore" },
-        ],
-      }),
-    };
+    }
+    throw new Response("Package not found", { status: 404 });
   }
-  throw new Response("Package not found", { status: 404 });
-}
+);
 
 export async function clientLoader({
   params,

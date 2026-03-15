@@ -13,6 +13,7 @@ import {
 import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { type ReactNode, memo, useEffect, useRef, useState } from "react";
 import {
   Links,
@@ -88,7 +89,7 @@ export type OutletContextShape = {
   dapper: DapperTs;
 };
 
-export async function loader() {
+export const loader = ssrLoader(async () => {
   return {
     publicEnvVariables: getPublicEnvVariables([
       "VITE_SITE_URL",
@@ -118,7 +119,7 @@ export async function loader() {
       ],
     }),
   };
-}
+});
 
 export async function clientLoader({
   request,

@@ -1,6 +1,7 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import { Await, type LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
@@ -11,7 +12,7 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 // import type { Route } from "./+types/PackageVersionWithoutCommunityReadme";
 import "./Readme.css";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export const loader = ssrLoader(async ({ params }: LoaderFunctionArgs) => {
   if (params.namespaceId && params.packageId && params.packageVersion) {
     const dapper = new DapperTs(() => {
       return {
@@ -46,7 +47,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
       descriptors: [{ title: "Readme Not Found | Thunderstore" }],
     }),
   };
-}
+});
 
 export async function clientLoader({
   params,

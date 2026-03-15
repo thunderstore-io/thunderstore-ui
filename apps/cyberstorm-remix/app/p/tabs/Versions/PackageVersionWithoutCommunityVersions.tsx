@@ -2,6 +2,7 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
+import { ssrLoader } from "cyberstorm/utils/ssrLoader";
 import { Suspense } from "react";
 import { Await, type LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
@@ -19,7 +20,7 @@ import { columns } from "./Versions";
 import "./Versions.css";
 import { DownloadLink, InstallLink, ModManagerBanner } from "./common";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export const loader = ssrLoader(async ({ params }: LoaderFunctionArgs) => {
   if (params.namespaceId && params.packageId) {
     const dapper = new DapperTs(() => {
       return {
@@ -53,7 +54,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     versions: [],
     seo: createSeo({ descriptors: [{ title: "Versions Not Found" }] }),
   };
-}
+});
 
 export async function clientLoader({
   params,
