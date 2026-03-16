@@ -88,6 +88,7 @@ export interface PackagePermissions {
   };
   permissions: {
     can_manage: boolean;
+    can_manage_wiki: boolean;
     can_manage_deprecation: boolean;
     can_manage_categories: boolean;
     can_deprecate: boolean;

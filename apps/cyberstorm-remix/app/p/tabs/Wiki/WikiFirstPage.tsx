@@ -196,7 +196,7 @@ export default function WikiFirstPage() {
     async function resolveCanManage() {
       setCanManage(false);
       const result = (await wikiLayoutData?.permissions)?.permissions
-        .can_manage;
+        .can_manage_wiki;
       if (!ignore) {
         setCanManage(result ?? false);
       }

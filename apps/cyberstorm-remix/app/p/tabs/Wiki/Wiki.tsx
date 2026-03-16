@@ -147,7 +147,7 @@ export default function Wiki() {
         <Suspense>
           <Await resolve={permissions}>
             {(resolvedValue) =>
-              resolvedValue?.permissions.can_manage ? (
+              resolvedValue?.permissions.can_manage_wiki ? (
                 <div className="package-wiki-nav__header">
                   <NewButton
                     primitiveType="cyberstormLink"

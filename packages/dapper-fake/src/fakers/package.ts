@@ -109,6 +109,7 @@ export const getFakePackagePermissions = async (
     },
     permissions: {
       can_manage: canManage,
+      can_manage_wiki: faker.datatype.boolean(0.5),
       can_manage_deprecation: faker.datatype.boolean(0.5),
       can_manage_categories: faker.datatype.boolean(0.5),
       can_deprecate: faker.datatype.boolean(0.5),

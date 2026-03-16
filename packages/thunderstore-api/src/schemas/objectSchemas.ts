@@ -191,6 +191,7 @@ export type PackageInfo = z.infer<typeof packageInfoSchema>;
 
 export const permissionsSchema = z.object({
   can_manage: z.boolean(),
+  can_manage_wiki: z.boolean(),
   can_manage_deprecation: z.boolean(),
   can_manage_categories: z.boolean(),
   can_deprecate: z.boolean(),
