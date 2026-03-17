@@ -8,6 +8,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { NewSelect } from "@thunderstore/cyberstorm";
 
+import {
+  PackageOrderOptions,
+  type PackageOrderOptionsType,
+} from "./packageOrderOptions";
+
 interface Props {
   order: PackageOrderOptionsType;
   setOrder: (val: PackageOrderOptionsType) => void;
@@ -21,19 +26,6 @@ export const PackageOrder = (props: Props) => (
     id="packageOrder"
   />
 );
-
-export enum PackageOrderOptions {
-  Created = "newest",
-  Downloaded = "most-downloaded",
-  Rated = "top-rated",
-  Updated = "last-updated",
-}
-export type PackageOrderOptionsType = `${PackageOrderOptions}`;
-
-export function isPackageOrderOptions(value: string) {
-  const enumValues = Object.values(PackageOrderOptions) as string[];
-  return enumValues.includes(value);
-}
 
 const selectOptions = [
   {

@@ -1,6 +1,7 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { getSectionDefault } from "cyberstorm/utils/section";
 import { Suspense } from "react";
 import { Await, useLoaderData, useOutletContext } from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
@@ -13,7 +14,7 @@ import {
 } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
-import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/PackageOrder";
+import { PackageOrderOptions } from "../../commonComponents/PackageSearch/components/packageOrderOptions";
 import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Dependants";
 import "./Dependants.css";
@@ -43,6 +44,8 @@ export async function loader({ params, request }: Route.LoaderArgs) {
       params.packageId
     );
 
+    const finalSection = getSectionDefault(section, filters.sections);
+
     if (!listing) {
       throw new Response("Package not found", { status: 404 });
     }
@@ -63,7 +66,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
         search ?? "",
         includedCategories?.split(",") ?? undefined,
         excludedCategories?.split(",") ?? undefined,
-        section ? (section === "all" ? "" : section) : "",
+        finalSection,
         nsfw === "true" ? true : false,
         deprecated === "true" ? true : false
       ),
@@ -128,16 +131,15 @@ export async function clientLoader({
     const section = searchParams.get("section");
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
-    const filters = dapper.getCommunityFilters(params.communityId);
-    return {
-      community: dapper.getCommunity(params.communityId),
-      listing: dapper.getPackageListingDetails(
-        params.communityId,
-        params.namespaceId,
-        params.packageId
-      ),
-      filters: filters,
-      listings: dapper.getPackageListings(
+
+    // Leverage identical data coming from serverLoader
+    const serverData = await serverLoader();
+    const filters = serverData.filters;
+
+    const listingsPromise = (async () => {
+      const finalSection = getSectionDefault(section, filters.sections);
+
+      return dapper.getPackageListings(
         {
           kind: "package-dependants",
           communityId: params.communityId,
@@ -149,11 +151,18 @@ export async function clientLoader({
         search ?? "",
         includedCategories?.split(",") ?? undefined,
         excludedCategories?.split(",") ?? undefined,
-        section ? (section === "all" ? "" : section) : "",
+        finalSection,
         nsfw === "true" ? true : false,
         deprecated === "true" ? true : false
-      ),
-      seo: (await serverLoader()).seo,
+      );
+    })();
+
+    return {
+      community: serverData.community,
+      listing: serverData.listing,
+      filters: filters,
+      listings: listingsPromise,
+      seo: serverData.seo,
     };
   }
   throw new Response("Community not found", { status: 404 });
