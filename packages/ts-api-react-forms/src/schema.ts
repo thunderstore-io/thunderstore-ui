@@ -33,7 +33,11 @@ export const teamDetailsEditFormSchema = z.object({
 export const teamAddServiceAccountFormSchema = z.object({
   nickname: z
     .string({ required_error: "Nickname is required" })
-    .min(1, { message: "Nickname is required" }),
+    .min(1, { message: "Nickname is required" })
+    .max(32, { message: "Nickname must be at most 32 characters" })
+    .regex(/^[A-Za-z0-9_]+$/, {
+      message: "Nickname can only contain a-z A-Z 0-9 _ characters",
+    }),
 });
 
 export const userDeleteFormSchema = z.object({
