@@ -61,7 +61,7 @@ export const searchParamsToBlob = (
       initialPage &&
       !Number.isNaN(Number.parseInt(initialPage)) &&
       Number.isSafeInteger(Number.parseInt(initialPage))
-        ? Number.parseInt(initialPage)
+        ? Math.max(1, Number.parseInt(initialPage))
         : 1,
     includedCategories:
       initialIncludedCategories !== null ? initialIncludedCategories : "",
@@ -169,7 +169,7 @@ export function synchronizeSearchParams(
   const oldIncludedCategories = searchParams.get("includedCategories") ?? "";
   const oldExcludedCategories = searchParams.get("excludedCategories") ?? "";
   const oldPage = searchParams.get("page")
-    ? Number(searchParams.get("page"))
+    ? Math.max(1, Number(searchParams.get("page")))
     : 1;
 
   // Search
@@ -259,19 +259,12 @@ export function synchronizeSearchParams(
 
   let newPage = oldPage;
   // Page number
-  if (oldPage !== debouncedSearchParamsBlob.page) {
-    if (debouncedSearchParamsBlob.page === 1 || resetPage) {
-      searchParams.delete("page");
-      newPage = 1;
-    } else {
-      searchParams.set("page", String(debouncedSearchParamsBlob.page));
-      newPage = debouncedSearchParamsBlob.page;
-    }
-  } else {
-    if (resetPage) {
-      searchParams.delete("page");
-      newPage = 1;
-    }
+  if (resetPage || debouncedSearchParamsBlob.page === 1) {
+    searchParams.delete("page");
+    newPage = 1;
+  } else if (oldPage !== debouncedSearchParamsBlob.page) {
+    searchParams.set("page", String(debouncedSearchParamsBlob.page));
+    newPage = debouncedSearchParamsBlob.page;
   }
 
   return { useReplace, resetPage, newPage };
