@@ -80,7 +80,7 @@ describe("searchParamsToBlob", () => {
     expect(result.search).toBe("hello world");
   });
 
-  test("falls back to the first section when section is empty and sections are provided", () => {
+  test("selects the highest-priority section when section param is empty", () => {
     const params = new URLSearchParams();
     const result = searchParamsToBlob(params, sections);
 
