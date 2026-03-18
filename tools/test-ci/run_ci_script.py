@@ -86,7 +86,7 @@ def run_command(
 
 def setup_frontend():
     run_command([YARN_PATH, "install", "--frozen-lockfile"], cwd=REPO_ROOT)
-    run_command([YARN_PATH, "playwright", "install"], cwd=REPO_ROOT)
+    run_command([YARN_PATH, "playwright", "install", "--with-deps"], cwd=REPO_ROOT)
 
 
 def wait_for_url(url: str) -> bool:

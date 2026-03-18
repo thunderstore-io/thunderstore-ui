@@ -92,16 +92,28 @@ export function deduplicatePromiseForRequest<Args extends unknown[], Result>(
   // Remove from cache after a timeout to prevent memory leaks from hanging promises
   // or unbounded growth in long-lived requests.
   const CACHE_TIMEOUT_MS = 60000;
+  let timeoutId: ReturnType<typeof setTimeout>;
+
   if (typeof WeakRef !== "undefined") {
     const requestRef = new WeakRef(request);
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
       const req = requestRef.deref();
       if (req) {
         removeFromCache(req);
       }
     }, CACHE_TIMEOUT_MS);
   } else {
-    setTimeout(() => removeFromCache(request), CACHE_TIMEOUT_MS);
+    timeoutId = setTimeout(() => removeFromCache(request), CACHE_TIMEOUT_MS);
+  }
+
+  if (request.signal) {
+    if (request.signal.aborted) {
+      clearTimeout(timeoutId);
+    } else {
+      request.signal.addEventListener("abort", () => clearTimeout(timeoutId), {
+        once: true,
+      });
+    }
   }
 
   cache.push({
