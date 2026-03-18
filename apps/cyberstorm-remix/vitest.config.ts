@@ -17,4 +17,7 @@ export default defineProject({
       instances: [{ browser: "chromium", headless: true }],
     },
   },
+  optimizeDeps: {
+    include: ["semver/functions/valid", "react/jsx-dev-runtime"],
+  },
 });
