@@ -216,7 +216,7 @@ export function PackageSearch(props: Props) {
           sortedSections
         );
 
-        if (newPage !== debouncedSearchParamsBlob.page || resetPage) {
+        if (newPage !== currentPage || resetPage) {
           setCurrentPage(newPage);
         }
 
