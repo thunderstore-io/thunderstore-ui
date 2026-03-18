@@ -86,13 +86,16 @@ export function deduplicatePromiseForRequest<Args extends unknown[], Result>(
     }
   };
 
-  // Remove from cache if it rejects to allow retrying
-  promise.catch(() => removeFromCache(request));
-
   // Remove from cache after a timeout to prevent memory leaks from hanging promises
   // or unbounded growth in long-lived requests.
   const CACHE_TIMEOUT_MS = 60000;
   let timeoutId: ReturnType<typeof setTimeout>;
+
+  // Remove from cache if it rejects to allow retrying
+  promise.catch(() => {
+    removeFromCache(request);
+    clearTimeout(timeoutId);
+  });
 
   if (typeof WeakRef !== "undefined") {
     const requestRef = new WeakRef(request);
