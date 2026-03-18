@@ -11,12 +11,30 @@ import {
 import { useStrongForm } from "../useStrongForm";
 import type { Validator } from "../validation";
 
+const activeDeferreds: Array<{
+  reject: (reason?: unknown) => void;
+  pending: boolean;
+}> = [];
+
 function deferred<T>() {
   let resolve!: (value: T) => void;
   let reject!: (reason?: unknown) => void;
+  let pending = true;
   const promise = new Promise<T>((res, rej) => {
-    resolve = res;
-    reject = rej;
+    resolve = (v) => {
+      pending = false;
+      res(v);
+    };
+    reject = (r) => {
+      pending = false;
+      rej(r);
+    };
+  });
+  activeDeferreds.push({
+    reject,
+    get pending() {
+      return pending;
+    },
   });
   return { promise, resolve, reject };
 }
@@ -81,7 +99,18 @@ function assertAssigned<T>(value: T | null | undefined): asserts value is T {
 
 const cleanupMounted: Array<() => void> = [];
 
-afterEach(() => {
+afterEach(async () => {
+  for (const def of activeDeferreds) {
+    if (def.pending) {
+      def.reject(new Error("Deferred cleaned up before resolution"));
+    }
+  }
+  activeDeferreds.length = 0;
+
+  await act(async () => {
+    await flushMicrotasks(3);
+  });
+
   while (cleanupMounted.length > 0) {
     cleanupMounted.pop()?.();
   }
