@@ -18,6 +18,13 @@ export default defineProject({
     },
   },
   optimizeDeps: {
-    include: ["semver/functions/valid", "react/jsx-dev-runtime"],
+    include: [
+      "semver/functions/valid",
+      "react/jsx-dev-runtime",
+      "react",
+      "react-dom",
+      "react-dom/client",
+      "react-dom/server",
+    ],
   },
 });
