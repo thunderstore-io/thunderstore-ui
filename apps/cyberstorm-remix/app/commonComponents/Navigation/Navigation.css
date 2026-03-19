@@ -180,9 +180,9 @@
 
   .navigation-login__icon {
     display: inline-flex;
-    min-width: 1.2rem;
     align-items: center;
     justify-content: center;
+    min-width: 1.2rem;
   }
 
   .navigation-login__discord {
