@@ -13,33 +13,39 @@ export default function PackageFormatDocs() {
         Package Format Docs
       </PageHeader>
       <section className="container container--y container--full package-format-docs">
-        <p className="package-format-docs__title">
-          A valid package is a zip file that contains the following files:
-        </p>
-        <div className="package-format-docs__table-wrapper">
-          <NewTable
-            headers={firstTableDataColumns}
-            rows={firstTableData}
-            disableSort={true}
-            gridTemplateColumns="minmax(12.5rem, 0.5fr) minmax(auto, 3fr)"
-          />
+        <div className="container container--y package-format-docs__container">
+          <p className="package-format-docs__title">
+            A valid package is a zip file that contains the following files:
+          </p>
+          <div className="package-format-docs__table-wrapper">
+            <NewTable
+              headers={firstTableDataColumns}
+              rows={firstTableData}
+              disableSort={true}
+              gridTemplateColumns="minmax(12.5rem, 0.5fr) minmax(auto, 3fr)"
+            />
+          </div>
         </div>
-        <p className="package-format-docs__title">
-          Additionally, the manifest.json must contain the following fields:
-        </p>
-        <div className="package-format-docs__table-wrapper">
-          <NewTable
-            headers={secondTableDataColumns}
-            rows={secondTableData}
-            disableSort={true}
-            gridTemplateColumns="minmax(22%, 0.5fr) minmax(18%, 0.5fr) minmax(30%, 1.25fr) minmax(30%, 1.25fr)"
-          />
+        <div className="container container--y package-format-docs__container">
+          <p className="package-format-docs__title">
+            Additionally, the manifest.json must contain the following fields:
+          </p>
+          <div className="package-format-docs__table-wrapper">
+            <NewTable
+              headers={secondTableDataColumns}
+              rows={secondTableData}
+              disableSort={true}
+              gridTemplateColumns="minmax(22%, 0.5fr) minmax(18%, 0.5fr) minmax(30%, 1.25fr) minmax(30%, 1.25fr)"
+            />
+          </div>
         </div>
-        <p className="package-format-docs__title">
-          Example manifest.json content:
-        </p>
-        <div className="package-format-docs__table-wrapper">
-          <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} language="json" />
+        <div className="container container--y package-format-docs__container">
+          <p className="package-format-docs__title">
+            Example manifest.json content:
+          </p>
+          <div className="package-format-docs__table-wrapper">
+            <CodeBox value={EXAMPLE_MANIFEST_JSON_TEXT} language="json" />
+          </div>
         </div>
       </section>
     </>
