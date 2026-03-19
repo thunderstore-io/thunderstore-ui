@@ -149,13 +149,20 @@ export function CardPackage(props: Props) {
       {csVariant === "card" ? (
         <>
           {meta}
-          <span className="card-package__updated">
-            Last updated:
-            <RelativeTime
-              time={packageData.last_updated}
-              suppressHydrationWarning
-            />
-          </span>
+          <TooltipWrapper
+            tooltipText={new Date(packageData.last_updated).toLocaleString()}
+          >
+            <span className="card-package__updated">
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faClockRotateLeft} />
+              </NewIcon>
+              <RelativeTime
+                time={packageData.last_updated}
+                suppressHydrationWarning
+                disableTitle
+              />
+            </span>
+          </TooltipWrapper>
         </>
       ) : null}
     </div>

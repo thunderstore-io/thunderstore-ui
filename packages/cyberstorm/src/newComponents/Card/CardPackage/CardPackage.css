@@ -172,8 +172,11 @@
   }
 
   .card-package__updated {
+    display: inline-flex;
     color: var(--card-package--updated-color);
     font-weight: var(--card-package--updated-font-weight);
     font-size: var(--card-package--updated-font-size);
+    align-items: center;
+    gap: var(--space-6);
   }
 }
