@@ -10,6 +10,8 @@ import { Await } from "react-router";
 import { NewButton, NewIcon, ThunderstoreLogo } from "@thunderstore/cyberstorm";
 import type { CurrentUser } from "@thunderstore/dapper/types";
 
+import "./PackageActions.css";
+
 export type TeamDetailsLike = {
   donation_link?: string | null;
 };
@@ -72,7 +74,10 @@ export const PackageActions = memo(function PackageActions(
           href={installUrl}
           disabled={installDisabled}
         >
-          <NewIcon csMode="inline">
+          <NewIcon
+            wrapperClasses="package-actions__install-link-icon"
+            csMode="inline"
+          >
             <ThunderstoreLogo />
           </NewIcon>
           Install
