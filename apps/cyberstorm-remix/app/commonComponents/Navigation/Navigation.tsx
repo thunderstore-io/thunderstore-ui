@@ -480,7 +480,7 @@ export function DesktopUserDropdown(props: {
   );
 }
 
-export function MobileNavigationMenu({ domain }: { domain: string }) {
+export function MobileNavigationMenu({ domain, currentUser }: { domain: string; currentUser?: CurrentUser }) {
   const location = useLocation();
 
   useEffect(() => {
@@ -594,8 +594,32 @@ export function MobileNavigationMenu({ domain }: { domain: string }) {
         >
           News
         </NewLink>
+        <div className="mobile-navigation__divider" />
+        <div id="nimbusBetaMobile" suppressHydrationWarning />
+        <NewButton
+          primitiveType="link"
+          href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+          csSize="small"
+          csVariant="accent"
+          aria-label="Get Thunderstore Mod Manager App"
+        >
+          Get Manager
+        </NewButton>
+        {currentUser?.username ? (
+          <NewButton
+            primitiveType="cyberstormLink"
+            linkId="PackageUpload"
+            csVariant="secondary"
+            csSize="small"
+            tooltipText="Upload"
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faUpload} />
+            </NewIcon>
+            Upload
+          </NewButton>
+        ) : null}
       </nav>
-      <div id="nimbusBetaMobile" suppressHydrationWarning />
     </Menu>
   );
 }

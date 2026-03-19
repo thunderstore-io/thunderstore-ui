@@ -54,7 +54,7 @@ export function NavigationWrapper({
         domain={domain}
         communityId={communityId}
       />
-      <MobileNavigationMenu domain={domain} />
+      <MobileNavigationMenu domain={domain} currentUser={currentUser} />
       {currentUser ? (
         <MobileUserPopoverContent user={currentUser} domain={domain} />
       ) : (
