@@ -166,6 +166,15 @@ function ProfileForm(props: { team: TeamDetails }) {
                   value: e.target.value,
                 })
               }
+              clearValue={
+                formDisabled
+                  ? undefined
+                  : () =>
+                      updateFormFieldState({
+                        field: "donation_link",
+                        value: "",
+                      })
+              }
               rootClasses="team-profile__input"
               disabled={formDisabled}
               {...donationLinkFieldProps}
