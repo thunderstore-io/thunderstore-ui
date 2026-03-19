@@ -104,7 +104,7 @@
     flex: 1 0 0;
     flex-direction: column;
     gap: var(--gap-3xl);
-    align-items: flex-start;
+    align-items: stretch;
     align-self: stretch;
   }
 
