@@ -509,6 +509,20 @@ export function PackageSearch(props: Props) {
               )}
             </Await>
           </Suspense>
+          <Suspense fallback={<SkeletonBox />}>
+            <Await resolve={listings}>
+              {(resolvedValue) =>
+                resolvedValue.count > 0 ? (
+                  <PackageCount
+                    page={currentPage}
+                    pageSize={PER_PAGE}
+                    searchQuery={searchParamsBlob.search}
+                    totalCount={resolvedValue.count}
+                  />
+                ) : null
+              }
+            </Await>
+          </Suspense>
         </div>
       </div>
     </div>

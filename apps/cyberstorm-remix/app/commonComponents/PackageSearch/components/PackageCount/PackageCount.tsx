@@ -27,9 +27,10 @@ export const PackageCount = memo(function PackageCount(props: Props) {
 
   return (
     <p className="package-count">
-      {`${first}${
+      <b>{`${first}${
         first !== totalCount ? `-${Math.min(last, totalCount)}` : ""
-      } of ${totalCount} results ${query}`}
+      } `}</b>
+      &nbsp;of&nbsp;<b>{totalCount}</b>&nbsp;result
     </p>
   );
 });
