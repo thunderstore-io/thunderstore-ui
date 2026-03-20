@@ -47,6 +47,16 @@
     > .button {
       align-self: stretch;
       justify-content: flex-start;
+
+      > span {
+        display: block;
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: left;
+        text-overflow: ellipsis;
+      }
     }
 
     > .package-wiki-nav__unselected {

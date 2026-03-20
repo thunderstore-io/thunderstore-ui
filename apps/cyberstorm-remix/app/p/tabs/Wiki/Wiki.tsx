@@ -188,7 +188,7 @@ export default function Wiki() {
                           package={packageId}
                           wikipageslug={page.slug}
                         >
-                          {page.title}
+                          <span>{page.title}</span>
                         </NewButton>
                       );
                     }
@@ -205,7 +205,7 @@ export default function Wiki() {
                           package={packageId}
                           wikipageslug={page.slug}
                         >
-                          {page.title}
+                          <span>{page.title}</span>
                         </NewButton>
                       );
                     }
@@ -223,7 +223,7 @@ export default function Wiki() {
                         csModifiers={["ghost"]}
                         rootClasses="package-wiki-nav__unselected"
                       >
-                        {page.title}
+                        <span>{page.title}</span>
                       </NewButton>
                     );
                   })
