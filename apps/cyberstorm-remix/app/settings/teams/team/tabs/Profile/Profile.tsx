@@ -105,7 +105,7 @@ function ProfileForm(props: { team: TeamDetails }) {
     inputs: formInputs,
     validators: {
       donation_link: {
-        url: true,
+        httpsUrl: true,
       },
     },
     refiner: async (inputs: typeof formInputs) => ({
@@ -151,6 +151,7 @@ function ProfileForm(props: { team: TeamDetails }) {
     <div className="settings-items__item">
       <div className="settings-items__meta">
         <p className="settings-items__title">Donation Link</p>
+        <p className="settings-items__description">Must be a valid HTTPS URL</p>
       </div>
       <div className="settings-items__content">
         <div className="settings-items__island">
@@ -172,6 +173,12 @@ function ProfileForm(props: { team: TeamDetails }) {
             />
           </div>
         </div>
+        {strongForm.getFieldState("donation_link").isInvalid &&
+          !strongForm.inputErrors?.donation_link?.[0] && (
+            <NewAlert csVariant="danger" csSize="small">
+              Must be a valid HTTPS URL
+            </NewAlert>
+          )}
         {strongForm.inputErrors?.donation_link?.[0] && (
           <NewAlert csVariant="danger" csSize="small">
             {strongForm.inputErrors.donation_link[0]}
