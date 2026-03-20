@@ -80,4 +80,10 @@
   .drawer__wrapper:popover-open > .drawer {
     display: flex;
   }
+
+  .drawer__divider {
+    align-self: stretch;
+    height: var(--divider-height);
+    background-color: var(--divider-bg-color);
+  }
 }

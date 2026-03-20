@@ -11,7 +11,7 @@ import {
   SubTrigger,
   Trigger,
 } from "@radix-ui/react-dropdown-menu";
-import { type ReactElement, type ReactNode, memo } from "react";
+import { type ReactElement, type ReactNode, memo, useContext } from "react";
 
 import {
   type DropDownDividerModifiers,
@@ -26,6 +26,7 @@ import {
 } from "@thunderstore/cyberstorm-theme";
 
 import { type PrimitiveComponentDefaultProps } from "../../primitiveComponents/utils/utils";
+import { TopLayerContainerContext } from "../../utils/TopLayerContainerContext";
 import { classnames, componentClasses } from "../../utils/utils";
 import "./DropDown.css";
 
@@ -50,13 +51,15 @@ export const DropDown = memo(function DropDown(props: DropDownProps) {
     trigger,
   } = props;
 
+  const container = useContext(TopLayerContainerContext);
+
   return (
     <Root modal={false} defaultOpen={defaultOpen}>
       <Trigger asChild disabled={!children}>
         {trigger}
       </Trigger>
 
-      <Portal>
+      <Portal container={container ?? undefined}>
         <Content
           align={contentAlignment}
           sideOffset={8}
@@ -197,8 +200,10 @@ export const DropDownSubContent = memo(function DropDownSubContent(
     ...fProps
   } = props;
 
+  const container = useContext(TopLayerContainerContext);
+
   return (
-    <Portal>
+    <Portal container={container ?? undefined}>
       <SubContent
         {...fProps}
         className={classnames(
