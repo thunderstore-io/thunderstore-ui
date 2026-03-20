@@ -1,3 +1,4 @@
+import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
@@ -90,12 +91,20 @@ export default function Versions() {
   >();
 
   if (status === "error") {
-    return <div>{message}</div>;
+    return <TabFetchState variant="danger" message={message} />;
   }
 
   return (
     <Suspense fallback={<SkeletonBox className="package-versions__skeleton" />}>
-      <Await resolve={versions}>
+      <Await
+        resolve={versions}
+        errorElement={
+          <TabFetchState
+            variant="danger"
+            message="Error occurred while loading versions"
+          />
+        }
+      >
         {(resolvedValue) => (
           <div className="package-versions">
             <ModManagerBanner />

@@ -1,3 +1,4 @@
+import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
@@ -80,7 +81,12 @@ export default function Changelog() {
     <Suspense
       fallback={<SkeletonBox className="package-changelog__skeleton" />}
     >
-      <Await resolve={changelog}>
+      <Await
+        resolve={changelog}
+        errorElement={
+          <TabFetchState variant="danger" message="Failed to load changelog" />
+        }
+      >
         {(resolvedValue) =>
           resolvedValue ? (
             <div className="markdown-wrapper">
@@ -90,7 +96,7 @@ export default function Changelog() {
               />
             </div>
           ) : (
-            <div>No changelog available</div>
+            <TabFetchState variant="info" message="No changelog available" />
           )
         }
       </Await>

@@ -1,3 +1,4 @@
+import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
@@ -222,5 +223,10 @@ export default function WikiFirstPage() {
       />
     );
   }
-  return <>There are no wiki pages available.</>;
+  return (
+    <TabFetchState
+      variant="info"
+      message="There are no wiki pages available."
+    />
+  );
 }

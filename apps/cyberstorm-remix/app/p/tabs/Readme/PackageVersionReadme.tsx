@@ -1,3 +1,4 @@
+import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
@@ -82,23 +83,33 @@ export default function PackageVersionReadme() {
     typeof loader | typeof clientLoader
   >();
 
-  if (status === "error") return <div>{message}</div>;
+  if (status === "error") {
+    return <TabFetchState variant="danger" message={message} />;
+  }
+
   return (
     <Suspense fallback={<SkeletonBox className="package-readme__skeleton" />}>
       <Await
         resolve={readme}
-        errorElement={<div>Error occurred while loading description</div>}
+        errorElement={
+          <TabFetchState
+            variant="danger"
+            message="Error occurred while loading description"
+          />
+        }
       >
-        {(resolvedValue) => (
-          <>
+        {(resolvedValue) =>
+          resolvedValue && resolvedValue.html ? (
             <div className="markdown-wrapper">
               <div
                 dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
                 className="markdown"
               />
             </div>
-          </>
-        )}
+          ) : (
+            <TabFetchState variant="info" message="No details available" />
+          )
+        }
       </Await>
     </Suspense>
   );
