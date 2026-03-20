@@ -218,7 +218,7 @@ export default function Community() {
           </div>
           <NewButton
             csSize="big"
-            csVariant="accent"
+            csVariant="secondary"
             primitiveType="cyberstormLink"
             linkId="PackageUpload"
             rootClasses="community__upload-button"
