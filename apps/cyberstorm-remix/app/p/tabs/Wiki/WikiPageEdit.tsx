@@ -1,10 +1,15 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { useReducer, useState } from "react";
-import { useNavigate, useOutletContext, useRevalidator } from "react-router";
-import { useLoaderData } from "react-router";
+import {
+  useLoaderData,
+  useNavigate,
+  useOutletContext,
+  useRevalidator,
+} from "react-router";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 import { type OutletContextShape } from "~/root";
 
@@ -14,6 +19,7 @@ import {
   NewButton,
   NewLink,
   NewTextInput,
+  SkeletonBox,
   Tabs,
   classnames,
   useToast,
@@ -24,6 +30,7 @@ import {
   type PackageWikiPageResponseData,
   type RequestConfig,
   deletePackageWikiPage,
+  isApiError,
   postPackageWikiPageEdit,
 } from "@thunderstore/thunderstore-api";
 import { ApiAction } from "@thunderstore/ts-api-react-actions";
@@ -78,6 +85,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export async function clientLoader({
   params,
+  request,
   serverLoader,
 }: Route.ClientLoaderArgs) {
   if (
@@ -87,12 +95,42 @@ export async function clientLoader({
     params.slug
   ) {
     const tools = getSessionTools();
+    const sessionId = tools?.getConfig().sessionId;
+
+    if (!sessionId) {
+      const url = new URL(request.url);
+      return redirectToLogin(url.pathname + url.search + url.hash);
+    }
+
     const dapper = new DapperTs(() => {
       return {
         apiHost: tools?.getConfig().apiHost,
-        sessionId: tools?.getConfig().sessionId,
+        sessionId: sessionId,
       };
     });
+
+    try {
+      const permissions = await dapper.getPackagePermissions(
+        params.communityId,
+        params.namespaceId,
+        params.packageId
+      );
+
+      if (!permissions) {
+        const url = new URL(request.url);
+        return redirectToLogin(url.pathname + url.search + url.hash);
+      }
+
+      if (!permissions.permissions.can_manage_wiki) {
+        throw new Response("Unauthorized", { status: 403 });
+      }
+    } catch (error) {
+      if (isApiError(error) && error.response.status === 404) {
+        throw new Response("Package not found", { status: 404 });
+      }
+      throw error;
+    }
+
     const wiki = await dapper.getPackageWiki(
       params.namespaceId,
       params.packageId
@@ -113,6 +151,16 @@ export async function clientLoader({
   } else {
     throw new Error("Namespace ID or Package ID is missing");
   }
+}
+
+clientLoader.hydrate = true;
+
+export function HydrateFallback() {
+  return (
+    <div className="package-wiki-content__body">
+      <SkeletonBox className="skeleton" />
+    </div>
+  );
 }
 
 export default function WikiEdit() {
