@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useOutletContext } from "react-router";
 
 import {
+  Heading,
   Modal,
   NewAvatar,
   NewButton,
@@ -151,6 +152,7 @@ export function MembersTable(props: {
       rows={tableData}
       sortByHeader={1}
       sortDirection={NewTableSort.ASC}
+      titleRowContent={<Heading csLevel="3">Members</Heading>}
     />
   );
 }
