@@ -4,7 +4,6 @@ import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { useReducer } from "react";
 import { useNavigate, useOutletContext, useRevalidator } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
-import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { type OutletContextShape } from "~/root";
 
 import {
@@ -25,8 +24,7 @@ export default function Account() {
   const currentUser = outletContext.currentUser;
 
   if (!isHydrated) return <SkeletonBox />;
-  if (currentUser === undefined) return <SkeletonBox />;
-  if (currentUser === null) return <NotLoggedIn />;
+  if (!currentUser?.username) return <SkeletonBox />;
 
   return (
     <div className="settings-items user-account">

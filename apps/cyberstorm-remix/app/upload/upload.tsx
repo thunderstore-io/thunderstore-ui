@@ -6,7 +6,9 @@ import {
   faUsers,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
@@ -41,6 +43,7 @@ import {
   type UserMedia,
 } from "@thunderstore/ts-uploader";
 
+import { RouteErrorBoundary } from "../commonComponents/ErrorBoundary/RouteErrorBoundary";
 import { PageHeader } from "../commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/upload";
@@ -78,9 +81,26 @@ export async function loader() {
   };
 }
 
-export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
+export async function clientLoader({
+  request,
+  serverLoader,
+}: Route.ClientLoaderArgs) {
+  const tools = getSessionTools();
+  const currentUser = await tools?.getSessionCurrentUser(true);
+
+  if (!currentUser?.username) {
+    const url = new URL(request.url);
+    return redirectToLogin(url.pathname + url.search + url.hash);
+  }
+
   const communities = await serverLoader();
   return communities;
+}
+
+clientLoader.hydrate = true;
+
+export function ErrorBoundary() {
+  return <RouteErrorBoundary />;
 }
 
 export default function Upload() {

@@ -2,6 +2,7 @@ import { faBan, faCheck } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPrivateListing } from "app/p/listingUtils";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { createSeo } from "cyberstorm/utils/meta";
 import { useEffect, useReducer } from "react";
@@ -69,7 +70,8 @@ export async function clientLoader({
     ]);
 
     if (!permissions) {
-      throw new Response("Unauthenticated", { status: 401 });
+      const url = new URL(request.url);
+      return redirectToLogin(url.pathname + url.search + url.hash);
     } else if (
       !permissions.permissions.can_manage &&
       !permissions.permissions.can_moderate

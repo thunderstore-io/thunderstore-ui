@@ -7,12 +7,17 @@ import { ApiError } from "@thunderstore/thunderstore-api";
 import { makeTeamSettingsTabLoader } from "../dapperClientLoaders";
 
 vi.mock("cyberstorm/security/publicEnvVariables", () => ({
+  getPublicEnvVariables: vi.fn().mockReturnValue({}),
   getSessionTools: vi.fn().mockReturnValue({
     getConfig: vi.fn().mockReturnValue({
       apiHost: "http://api.example.invalid",
       sessionId: "sid",
     }),
     clearInvalidSession: vi.fn(),
+    getSessionCurrentUser: vi.fn().mockResolvedValue({
+      username: "testuser",
+      teams_full: [{ name: "MyTeam", role: "owner" }],
+    }),
   }),
 }));
 

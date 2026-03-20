@@ -6,7 +6,6 @@ import { type ReactElement, useRef } from "react";
 import { useOutletContext, useRevalidator } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
 import { Connection } from "~/commonComponents/Connection/Connection";
-import { NotLoggedIn } from "~/commonComponents/NotLoggedIn/NotLoggedIn";
 import { type OutletContextShape } from "~/root";
 
 import {
@@ -112,8 +111,7 @@ export default function Connections() {
   ]);
 
   if (!isHydrated) return <SkeletonBox />;
-  if (currentUser === undefined) return <SkeletonBox />;
-  if (currentUser === null) return <NotLoggedIn />;
+  if (!currentUser?.username) return <SkeletonBox />;
 
   return (
     <div className="settings-items">
