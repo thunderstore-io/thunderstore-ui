@@ -179,7 +179,10 @@
   }
 
   .navigation-login__icon {
+    display: inline-flex;
     min-width: 1.2rem;
+    align-items: center;
+    justify-content: center;
   }
 
   .navigation-login__discord {
@@ -225,10 +228,6 @@
       padding: 0.75rem 1rem;
       white-space: normal;
       text-wrap: wrap;
-    }
-
-    .navigation-login__icon {
-      min-width: 1.2rem;
     }
   }
 }
