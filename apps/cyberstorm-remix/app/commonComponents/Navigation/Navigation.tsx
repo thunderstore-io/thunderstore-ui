@@ -20,6 +20,8 @@ import {
   buildAuthLoginUrl,
   buildLogoutUrl,
 } from "cyberstorm/utils/ThunderstoreAuth";
+import { useEffect } from "react";
+import { useLocation } from "react-router";
 
 import {
   Heading,
@@ -40,6 +42,18 @@ import {
   classnames,
 } from "@thunderstore/cyberstorm";
 import { type CurrentUser } from "@thunderstore/dapper/types";
+
+const hidePopoverById = (popoverId: string) => {
+  const element = document.getElementById(popoverId) as
+    | (HTMLElement & { hidePopover?: () => void })
+    | null;
+  element?.hidePopover?.();
+};
+
+const closeMobileNavigationMenus = () => {
+  hidePopoverById("mobileNavMenuDevelopers");
+  hidePopoverById("mobileNavMenu");
+};
 
 export function Navigation(props: {
   // hydrationCheck: boolean;
@@ -467,9 +481,23 @@ export function DesktopUserDropdown(props: {
 }
 
 export function MobileNavigationMenu({ domain }: { domain: string }) {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Close mobile nav on client-side route transitions.
+    closeMobileNavigationMenus();
+  }, [location.pathname, location.search, location.hash]);
+
   return (
     <Menu popoverId={"mobileNavMenu"} rootClasses="mobile-navigation__menu">
-      <nav className="mobile-navigation__popover">
+      <nav
+        className="mobile-navigation__popover"
+        onClickCapture={(event) => {
+          if ((event.target as Element | null)?.closest("a")) {
+            closeMobileNavigationMenus();
+          }
+        }}
+      >
         <NewLink
           primitiveType="cyberstormLink"
           linkId="Communities"
