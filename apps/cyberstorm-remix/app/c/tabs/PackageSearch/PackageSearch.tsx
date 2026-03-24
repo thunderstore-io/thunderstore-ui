@@ -64,6 +64,10 @@ export async function loader({ params, request }: Route.LoaderArgs) {
   throw new Response("Community not found", { status: 404 });
 }
 
+let cachedFilters: any = null;
+let cachedCommunityId: string | null = null;
+let cachedSeo: any = null;
+
 export async function clientLoader({
   request,
   params,
@@ -88,10 +92,23 @@ export async function clientLoader({
     const nsfw = searchParams.get("nsfw");
     const deprecated = searchParams.get("deprecated");
 
-    // Use the filters already fetched by the server so that React Router
-    // doesn't send an extra data request during client-side hydration
-    const serverData = await serverLoader();
-    const filters = serverData.filters;
+    let filters;
+    let seo;
+    if (
+      cachedCommunityId === params.communityId &&
+      cachedFilters &&
+      cachedSeo
+    ) {
+      filters = cachedFilters;
+      seo = cachedSeo;
+    } else {
+      const serverData = await serverLoader();
+      filters = serverData.filters;
+      seo = serverData.seo;
+      cachedFilters = filters;
+      cachedSeo = seo;
+      cachedCommunityId = params.communityId;
+    }
 
     const listingsPromise = (async () => {
       const finalSection = getSectionDefault(section, filters.sections);
@@ -115,7 +132,7 @@ export async function clientLoader({
     return {
       filters: filters,
       listings: listingsPromise,
-      seo: serverData.seo,
+      seo: seo,
     };
   }
   throw new Response("Community not found", { status: 404 });

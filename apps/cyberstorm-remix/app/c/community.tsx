@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import React from "react";
 import type { ShouldRevalidateFunctionArgs } from "react-router";
 import {
   Outlet,
@@ -102,8 +103,13 @@ export default function Community() {
 
   const outletContext = useOutletContext() as OutletContextShape;
 
-  return (
-    <>
+  const memoizedContext = React.useMemo(
+    () => ({ ...outletContext, community }),
+    [outletContext, community]
+  );
+
+  const headerContent = React.useMemo(
+    () => (
       <div className="community__header">
         <div
           className={classnames(
@@ -231,7 +237,14 @@ export default function Community() {
           </NewButton>
         </div>
       </div>
-      <Outlet context={outletContext} />
+    ),
+    [community, isPackageListingSubPath, isSubPath]
+  );
+
+  return (
+    <>
+      {headerContent}
+      <Outlet context={memoizedContext} />
     </>
   );
 }

@@ -11,7 +11,14 @@ import {
 import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { type ReactNode, memo, useEffect, useRef, useState } from "react";
+import {
+  type ReactNode,
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { LinksFunction } from "react-router";
 import {
   Links,
@@ -261,6 +268,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
           ? false
           : true;
 
+  const navigationBlock = useMemo(
+    () => (
+      <NavigationWrapper
+        domain={resolvedEnvVars?.VITE_API_URL || ""}
+        currentUser={data?.currentUser}
+        communityId={communityId}
+      />
+    ),
+    [resolvedEnvVars?.VITE_API_URL, data?.currentUser, communityId]
+  );
+
   return (
     <html lang="en">
       <head>
@@ -310,11 +328,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <LinkingProvider value={LinkLibrary}>
             <ToastProvider toastDuration={10000}>
               <TooltipProvider>
-                <NavigationWrapper
-                  domain={resolvedEnvVars?.VITE_API_URL || ""}
-                  currentUser={data?.currentUser}
-                  communityId={communityId}
-                />
+                {navigationBlock}
                 <div className="container container--x container--full island">
                   <main className="container container--x container--full island-item layout__main">
                     <section className="container container--y container--full layout__content">
@@ -323,15 +337,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       {children}
                     </section>
                   </main>
-                  {shouldShowAds ? (
-                    <div className="container container--y island-item layout__ads">
-                      <div className="container container--y layout__ads-inner">
-                        {adContainerIds.map((cid, k_i) => (
-                          <AdContainer key={k_i} containerId={cid} />
-                        ))}
-                      </div>
-                    </div>
-                  ) : null}
+                  <AdsColumn shouldShow={shouldShowAds} />
                 </div>
                 <Footer />
                 {shouldShowAds ? <AdsInit /> : null}
@@ -352,30 +358,54 @@ const TooltipProvider = memo(function TooltipProvider({
 }: {
   children: ReactNode;
 }) {
-  return <RadixTooltip delayDuration={80}>{children}</RadixTooltip>;
+  return (
+    <RadixTooltip delayDuration={80} skipDelayDuration={200}>
+      {children}
+    </RadixTooltip>
+  );
 });
+
+const AdsColumn = memo(function AdsColumn({
+  shouldShow,
+}: {
+  shouldShow: boolean;
+}) {
+  if (!shouldShow) return null;
+
+  return (
+    <div className="container container--y island-item layout__ads">
+      <div className="container container--y layout__ads-inner">
+        {adContainerIds.map((cid, k_i) => (
+          <AdContainer key={k_i} containerId={cid} />
+        ))}
+      </div>
+    </div>
+  );
+});
+
+AdsColumn.displayName = "AdsColumn";
 
 function App() {
   const data = useLoaderData<RootLoadersType>();
-  const sessionTools = getSessionTools();
-  const dapper = new DapperTs(
-    () => data.config,
-    () =>
-      sessionTools.clearInvalidSession(
-        data?.publicEnvVariables.VITE_COOKIE_DOMAIN
-      )
-  );
 
-  return (
-    <Outlet
-      context={{
-        currentUser: data?.currentUser,
-        requestConfig: dapper.config,
-        domain: data?.publicEnvVariables.VITE_API_URL,
-        dapper: dapper,
-      }}
-    />
-  );
+  const appOutletContext = useMemo(() => {
+    const sessionTools = getSessionTools();
+    const dapper = new DapperTs(
+      () => data.config,
+      () =>
+        sessionTools.clearInvalidSession(
+          data?.publicEnvVariables.VITE_COOKIE_DOMAIN
+        )
+    );
+    return {
+      currentUser: data?.currentUser,
+      requestConfig: dapper.config,
+      domain: data?.publicEnvVariables.VITE_API_URL,
+      dapper: dapper,
+    };
+  }, [data?.config, data?.currentUser, data?.publicEnvVariables]);
+
+  return <Outlet context={appOutletContext} />;
 }
 
 export default withSentry(App);

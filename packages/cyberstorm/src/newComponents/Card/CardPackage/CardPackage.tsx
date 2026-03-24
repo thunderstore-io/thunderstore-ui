@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import ago from "s-ago";
 
 import { type CardPackageVariants } from "@thunderstore/cyberstorm-theme";
@@ -43,7 +43,7 @@ interface Props {
   rootClasses?: string;
 }
 
-export function CardPackage(props: Props) {
+export const CardPackage = memo(function CardPackage(props: Props) {
   const {
     packageData,
     isLiked,
@@ -290,6 +290,6 @@ export function CardPackage(props: Props) {
       {csVariant === "fullWidth" ? cardFooter : null}
     </div>
   );
-}
+});
 
 CardPackage.displayName = "CardPackage";
