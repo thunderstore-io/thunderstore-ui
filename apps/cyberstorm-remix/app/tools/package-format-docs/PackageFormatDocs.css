@@ -3,6 +3,10 @@
     gap: var(--gap-5xl);
   }
 
+  .package-format-docs__container {
+    gap: var(--gap-md);
+  }
+
   .package-format-docs__title {
     color: var(--color-text-primary);
     font-weight: var(--font-weight-regular);
