@@ -13,7 +13,11 @@ import {
   faArrowRightToBracket,
   faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
-import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faArrowUpRight,
+  faCodeSimple,
+  faXmarkLarge,
+} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import {
@@ -43,18 +47,22 @@ import {
 } from "@thunderstore/cyberstorm";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 
+const NAVIGATION_POPOVER_ID = "mobileNavMenu";
+const DEVELOPERS_POPOVER_ID = "mobileNavMenuDevelopers";
+
 const hidePopoverById = (popoverId: string) => {
   const element = document.getElementById(popoverId) as
-    | (HTMLElement & { hidePopover?: () => void })
+    | (HTMLElement & {
+        togglePopover?: (force?: boolean) => boolean | undefined;
+      })
     | null;
-  element?.hidePopover?.();
+  element?.togglePopover?.(false);
 };
 
 const closeMobileNavigationMenus = () => {
-  hidePopoverById("mobileNavMenuDevelopers");
-  hidePopoverById("mobileNavMenu");
+  hidePopoverById(DEVELOPERS_POPOVER_ID);
+  hidePopoverById(NAVIGATION_POPOVER_ID);
 };
-
 export function Navigation(props: {
   // hydrationCheck: boolean;
   currentUser?: CurrentUser;
@@ -204,7 +212,7 @@ export function Navigation(props: {
 
       <nav className="mobile-navigation">
         <button
-          popoverTarget="mobileNavMenu"
+          popoverTarget={NAVIGATION_POPOVER_ID}
           popoverTargetAction="show"
           className="mobile-navigation__item"
         >
@@ -480,7 +488,103 @@ export function DesktopUserDropdown(props: {
   );
 }
 
-export function MobileNavigationMenu({ domain }: { domain: string }) {
+function MobileDevelopersMenu({ domain }: { domain: string }) {
+  return (
+    <Menu
+      popoverId={DEVELOPERS_POPOVER_ID}
+      trigger={
+        <button
+          popoverTarget={DEVELOPERS_POPOVER_ID}
+          popoverTargetAction="show"
+          className="mobile-navigation__popover-item mobile-navigation__popover--thick mobile-navigation__developers-button"
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faCodeSimple} />
+          </NewIcon>
+          Developers
+          <NewIcon style={{ marginLeft: "auto" }} csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faCaretRight} />
+          </NewIcon>
+        </button>
+      }
+      controls={
+        <div className="mobile-navigation__popover-controls">
+          <NewButton
+            popoverTarget={DEVELOPERS_POPOVER_ID}
+            popoverTargetAction="hide"
+            aria-label="Back to previous menu"
+            csSize="medium"
+            csVariant="secondary"
+            csModifiers={["ghost", "only-icon"]}
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faLongArrowLeft} />
+            </NewIcon>
+          </NewButton>
+          <NewButton
+            onClick={closeMobileNavigationMenus}
+            aria-label="Close menu"
+            csSize="medium"
+            csVariant="secondary"
+            csModifiers={["ghost", "only-icon"]}
+            rootClasses="mobile-navigation__popover-close-button"
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faXmarkLarge} />
+            </NewIcon>
+          </NewButton>
+        </div>
+      }
+    >
+      <nav
+        className="mobile-navigation__popover"
+        aria-label="Mobile developer menu"
+      >
+        <NewLink
+          primitiveType="link"
+          href={`${domain}/api/docs/`}
+          rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+        >
+          API Docs
+        </NewLink>
+        <NewLink
+          primitiveType="link"
+          href="https://github.com/thunderstore-io"
+          rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+        >
+          GitHub
+        </NewLink>
+        <NewLink
+          primitiveType="cyberstormLink"
+          linkId="PackageFormatDocs"
+          rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+        >
+          Package Format Docs
+        </NewLink>
+        <NewLink
+          primitiveType="cyberstormLink"
+          linkId="MarkdownPreview"
+          rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+        >
+          Markdown Preview
+        </NewLink>
+        <NewLink
+          primitiveType="cyberstormLink"
+          linkId="ManifestValidator"
+          rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+        >
+          Manifest Validator
+        </NewLink>
+      </nav>
+    </Menu>
+  );
+}
+
+export function MobileNavigationMenu(props: {
+  domain: string;
+  currentUser?: CurrentUser;
+}) {
+  const { domain, currentUser } = props;
   const location = useLocation();
 
   useEffect(() => {
@@ -489,113 +593,96 @@ export function MobileNavigationMenu({ domain }: { domain: string }) {
   }, [location.pathname, location.search, location.hash]);
 
   return (
-    <Menu popoverId={"mobileNavMenu"} rootClasses="mobile-navigation__menu">
-      <nav
-        className="mobile-navigation__popover"
-        onClickCapture={(event) => {
-          if ((event.target as Element | null)?.closest("a")) {
-            closeMobileNavigationMenus();
-          }
-        }}
-      >
-        <NewLink
-          primitiveType="cyberstormLink"
-          linkId="Communities"
-          rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
-        >
-          Communities
-        </NewLink>
-        <Menu
-          popoverId={"mobileNavMenuDevelopers"}
-          trigger={
-            <button
-              popoverTarget="mobileNavMenuDevelopers"
-              popoverTargetAction="show"
-              className="mobile-navigation__popover-item mobile-navigation__popover--thick mobile-navigation__developers-button"
-            >
-              Developers
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faCaretRight} />
-              </NewIcon>
-            </button>
-          }
-          controls={
-            <NewButton
-              popoverTarget="mobileNavMenuDevelopers"
-              popoverTargetAction="hide"
-              aria-label="Back to previous menu"
-              csSize="medium"
-              csVariant="secondary"
-              csModifiers={["ghost", "only-icon"]}
-            >
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faLongArrowLeft} />
-              </NewIcon>
-            </NewButton>
-          }
-        >
-          <nav className="mobile-navigation__popover__popover">
-            <NewLink
-              primitiveType="link"
-              href={`${domain}/api/docs/`}
-              rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
-            >
-              API Docs
-            </NewLink>
-            <NewLink
-              primitiveType="link"
-              href="https://github.com/thunderstore-io"
-              rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
-            >
-              GitHub
-            </NewLink>
-            <NewLink
-              primitiveType="cyberstormLink"
-              linkId="PackageFormatDocs"
-              rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
-            >
-              Package Format Docs
-            </NewLink>
-            <NewLink
-              primitiveType="cyberstormLink"
-              linkId="MarkdownPreview"
-              rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
-            >
-              Markdown Preview
-            </NewLink>
-            <NewLink
-              primitiveType="cyberstormLink"
-              linkId="ManifestValidator"
-              rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
-            >
-              Manifest Validator
-            </NewLink>
-          </nav>
-        </Menu>
+    <Menu
+      popoverId={NAVIGATION_POPOVER_ID}
+      rootClasses="mobile-navigation__menu"
+      controls={
+        <div className="mobile-navigation__popover-controls">
+          <NewButton
+            onClick={closeMobileNavigationMenus}
+            aria-label="Close menu"
+            csSize="medium"
+            csVariant="secondary"
+            csModifiers={["ghost", "only-icon"]}
+            rootClasses="mobile-navigation__popover-close-button"
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faXmarkLarge} />
+            </NewIcon>
+          </NewButton>
+        </div>
+      }
+    >
+      <nav className="mobile-navigation__popover" aria-label="Mobile main menu">
+        <section>
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Communities"
+            rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faGamepad} />
+            </NewIcon>
+            Communities
+          </NewLink>
+          <MobileDevelopersMenu domain={domain} />
+        </section>
         <div className="mobile-navigation__divider" />
-        <NewLink
-          primitiveType="link"
-          href="https://pages.thunderstore.io/p/contact-us"
-          rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
-        >
-          Contact Us
-        </NewLink>
-        <NewLink
-          primitiveType="link"
-          href="https://pages.thunderstore.io/p/privacy-policy"
-          rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
-        >
-          Privacy Policy
-        </NewLink>
-        <NewLink
-          primitiveType="link"
-          href="https://blog.thunderstore.io/"
-          rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
-        >
-          News
-        </NewLink>
+        <section>
+          <NewLink
+            primitiveType="link"
+            href="https://pages.thunderstore.io/p/contact-us"
+            rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
+          >
+            Contact Us
+          </NewLink>
+          <NewLink
+            primitiveType="link"
+            href="https://pages.thunderstore.io/p/privacy-policy"
+            rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
+          >
+            Privacy Policy
+          </NewLink>
+          <NewLink
+            primitiveType="link"
+            href="https://blog.thunderstore.io/"
+            rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
+          >
+            News
+          </NewLink>
+        </section>
+        <div className="mobile-navigation__divider" />
+        <section>
+          <div id="nimbusBetaMobile" suppressHydrationWarning />
+        </section>
+        <section>
+          <NewButton
+            primitiveType="link"
+            href="https://www.overwolf.com/app/Thunderstore-Thunderstore_Mod_Manager"
+            csSize="small"
+            csVariant="accent"
+            aria-label="Get Thunderstore Mod Manager App"
+          >
+            Get Manager
+          </NewButton>
+        </section>
+        {currentUser?.username ? (
+          <section>
+            <NewButton
+              primitiveType="cyberstormLink"
+              linkId="PackageUpload"
+              csVariant="secondary"
+              csSize="small"
+              tooltipText="Upload"
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faUpload} />
+              </NewIcon>
+              Upload
+            </NewButton>
+          </section>
+        ) : null}
       </nav>
-      <div id="nimbusBetaMobile" suppressHydrationWarning />
     </Menu>
   );
 }
