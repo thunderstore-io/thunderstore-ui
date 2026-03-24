@@ -8,6 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faLips } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
 import ago from "s-ago";
 
 import { type CardPackageVariants } from "@thunderstore/cyberstorm-theme";
@@ -52,6 +53,17 @@ export function CardPackage(props: Props) {
     csModifiers,
     rootClasses,
   } = props;
+
+  const [tooltipText, setTooltipText] = useState(
+    new Date(packageData.last_updated).toLocaleString("en-US")
+  );
+
+  useEffect(() => {
+    setTooltipText(
+      new Date(packageData.last_updated).toLocaleString(navigator.languages)
+    );
+  }, [packageData.last_updated]);
+
   const updateTime = Date.parse(packageData.last_updated);
   const updateTimeDelta = Math.round((Date.now() - updateTime) / 86400000);
   const isUpdated = updateTimeDelta < 3;
@@ -149,10 +161,8 @@ export function CardPackage(props: Props) {
       {csVariant === "card" ? (
         <>
           {meta}
-          <TooltipWrapper
-            tooltipText={new Date(packageData.last_updated).toLocaleString()}
-          >
-            <span className="card-package__updated">
+          <TooltipWrapper tooltipText={tooltipText}>
+            <span className="card-package__updated" aria-label="Last Updated">
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faClockRotateLeft} />
               </NewIcon>

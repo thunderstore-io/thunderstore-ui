@@ -5,7 +5,9 @@ interface Props {
   prefix?: string;
   /** Time value to display */
   time: Date | string;
+  /** Suppress hydration warning */
   suppressHydrationWarning?: boolean;
+  /** Disable title attribute */
   disableTitle?: boolean;
 }
 
