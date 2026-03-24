@@ -52,9 +52,11 @@ const DEVELOPERS_POPOVER_ID = "mobileNavMenuDevelopers";
 
 const hidePopoverById = (popoverId: string) => {
   const element = document.getElementById(popoverId) as
-    | (HTMLElement & { hidePopover?: () => void })
+    | (HTMLElement & {
+        togglePopover?: (force?: boolean) => boolean | undefined;
+      })
     | null;
-  element?.hidePopover?.();
+  element?.togglePopover?.(false);
 };
 
 const closeMobileNavigationMenus = () => {
@@ -534,7 +536,10 @@ function MobileDevelopersMenu({ domain }: { domain: string }) {
         </div>
       }
     >
-      <nav className="mobile-navigation__popover">
+      <nav
+        className="mobile-navigation__popover"
+        aria-label="Mobile developer menu"
+      >
         <NewLink
           primitiveType="link"
           href={`${domain}/api/docs/`}
@@ -608,7 +613,7 @@ export function MobileNavigationMenu(props: {
         </div>
       }
     >
-      <nav className="mobile-navigation__popover">
+      <nav className="mobile-navigation__popover" aria-label="Mobile main menu">
         <section>
           <NewLink
             primitiveType="cyberstormLink"
