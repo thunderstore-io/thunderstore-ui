@@ -5,7 +5,10 @@ interface Props {
   prefix?: string;
   /** Time value to display */
   time: Date | string;
+  /** Suppress hydration warning */
   suppressHydrationWarning?: boolean;
+  /** Disable title attribute */
+  disableTitle?: boolean;
 }
 
 /**
@@ -14,13 +17,18 @@ interface Props {
  * E.g. "now" or "1 hour ago".
  */
 export const RelativeTime = (props: Props) => {
-  const { time, prefix = "", suppressHydrationWarning = false } = props;
+  const {
+    time,
+    prefix = "",
+    suppressHydrationWarning = false,
+    disableTitle = false,
+  } = props;
   const dt = typeof time === "string" ? new Date(time) : time;
 
   return (
     <span
       suppressHydrationWarning={suppressHydrationWarning}
-      title={dt.toString()}
+      title={disableTitle ? undefined : dt.toString()}
     >
       {prefix ?? null} {ago(dt)}
     </span>
