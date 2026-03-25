@@ -70,6 +70,15 @@ export function Navigation(props: {
   communityId?: string;
 }) {
   const { currentUser, domain, communityId } = props;
+  const location = useLocation();
+
+  const isExactCommunityPage =
+    !!communityId &&
+    [`/c/${communityId}`, `/c/${communityId}/`].includes(location.pathname);
+
+  const logoLinkId =
+    communityId && !isExactCommunityPage ? "Community" : "Communities";
+
   return (
     <>
       <header
@@ -79,7 +88,8 @@ export function Navigation(props: {
         <nav className="navigation-header__global" aria-label="Main">
           <NewLink
             primitiveType="cyberstormLink"
-            linkId="Index"
+            linkId={logoLinkId}
+            community={communityId}
             rootClasses="navigation-header__logo"
             aria-label="Home"
             csVariant="cyber"
