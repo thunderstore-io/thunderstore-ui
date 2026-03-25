@@ -52,11 +52,10 @@
     align-self: stretch;
     justify-content: center;
     padding: var(--space-48) 0;
-
     color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-regular);
 
     font-size: var(--font-size-body-md);
-    font-weight: var(--font-weight-regular);
     line-height: var(--line-height-md);
 
     > .skeleton {

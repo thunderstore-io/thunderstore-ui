@@ -405,7 +405,6 @@ export function PackageSearch(props: Props) {
                     <PackageCount
                       page={currentPage}
                       pageSize={PER_PAGE}
-                      searchQuery={searchParamsBlob.search}
                       totalCount={resolvedValue.count}
                     />
                   )}
@@ -516,7 +515,6 @@ export function PackageSearch(props: Props) {
                   <PackageCount
                     page={currentPage}
                     pageSize={PER_PAGE}
-                    searchQuery={searchParamsBlob.search}
                     totalCount={resolvedValue.count}
                   />
                 ) : null
