@@ -211,6 +211,10 @@
     .community__game-icon {
       display: none;
     }
+
+    .community__upload-button {
+      width: 100%;
+    }
   }
 
   @media (width <= 48rem) {
