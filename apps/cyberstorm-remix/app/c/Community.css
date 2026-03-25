@@ -29,7 +29,6 @@
     max-height: 12.5rem;
     border-radius: 0.5rem;
     overflow-y: hidden;
-    transition: height 2s;
 
     > img {
       width: 100%;
@@ -65,10 +64,6 @@
     height: max-content;
     margin-top: -1rem;
     padding-left: 1rem;
-    transition:
-      height ease 1s,
-      opacity 0.2s,
-      visibility 1s 0s;
   }
 
   .community__content-header {
@@ -82,13 +77,7 @@
   }
 
   .community__content-header--hide {
-    height: 0;
-    visibility: collapse;
-    opacity: 0;
-    transition:
-      height ease 1s,
-      opacity 0.8s 0.2s,
-      visibility 1s 0s;
+    display: none;
   }
 
   .community__game-icon {
