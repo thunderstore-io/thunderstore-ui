@@ -43,6 +43,7 @@ export class DapperFake implements DapperInterface {
   public getPackageVersions = getFakePackageVersions;
   public getPackageSource = getFakePackageSource;
   public getPackageVersionDependencies = getFakePackageVersionDependencies;
+  public getPrivateTeamDetails = getFakeTeamDetails;
   public getTeamDetails = getFakeTeamDetails;
   public getTeamMembers = getFakeTeamMembers;
   public getTeamServiceAccounts = getFakeServiceAccounts;
