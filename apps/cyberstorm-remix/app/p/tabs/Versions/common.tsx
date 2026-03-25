@@ -9,6 +9,8 @@ import {
   ThunderstoreLogo,
 } from "@thunderstore/cyberstorm";
 
+import "./common.css";
+
 export const ModManagerBanner = memo(function ModManagerBanner() {
   return (
     <NewAlert csVariant="info">
@@ -51,7 +53,7 @@ export const InstallLink = memo(function InstallLink(props: {
       primitiveType="link"
       href={props.install_url}
     >
-      <NewIcon csMode="inline">
+      <NewIcon wrapperClasses="version-install-link__icon" csMode="inline">
         <ThunderstoreLogo />
       </NewIcon>
       Install
