@@ -24,7 +24,7 @@ export function teamDetailsEdit(
   >
 ): Promise<TeamDetailsEditResponseData> {
   const { config, data, params } = props;
-  const path = `api/cyberstorm/team/${params.teamIdentifier}/update/`;
+  const path = `api/cyberstorm/team/${params.teamIdentifier}/settings/`;
 
   return apiFetch({
     args: {
