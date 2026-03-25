@@ -1,4 +1,5 @@
 import {
+  fetchPrivateTeamDetails,
   fetchTeamDetails,
   fetchTeamMembers,
   fetchTeamServiceAccounts,
@@ -12,6 +13,22 @@ export async function getTeamDetails(
   teamName: string
 ) {
   const data = await fetchTeamDetails({
+    config: this.config,
+    params: {
+      team_name: teamName,
+    },
+    data: {},
+    queryParams: {},
+  });
+
+  return data;
+}
+
+export async function getPrivateTeamDetails(
+  this: DapperTsInterface,
+  teamName: string
+) {
+  const data = await fetchPrivateTeamDetails({
     config: this.config,
     params: {
       team_name: teamName,
