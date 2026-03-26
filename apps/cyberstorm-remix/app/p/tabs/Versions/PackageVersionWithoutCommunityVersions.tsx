@@ -116,7 +116,7 @@ export default function Versions() {
                         package={packageId}
                         namespace={namespaceId}
                         version={v.version_number}
-                        csVariant="cyber"
+                        csVariant="primary"
                       >
                         {v.version_number}
                       </NewLink>

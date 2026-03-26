@@ -48,7 +48,7 @@ export const InstallLink = memo(function InstallLink(props: {
 }) {
   return (
     <NewButton
-      csVariant="accent"
+      csVariant="secondary"
       csSize="small"
       primitiveType="link"
       href={props.install_url}

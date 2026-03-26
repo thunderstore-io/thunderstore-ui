@@ -154,16 +154,10 @@ export function Table(props: TableProps) {
     }
   }
 
-  // const rowCount = { "--row-count": rows.length } as CSSProperties;
-  let columnCSSProps = {};
-  if (gridTemplateColumns) {
-    columnCSSProps = {
-      "--column-count": headers.length,
-      "--dynamic-grid-template-columns": gridTemplateColumns,
-    } as CSSProperties;
-  } else {
-    columnCSSProps = { "--column-count": headers.length } as CSSProperties;
-  }
+  const gridStyle = {
+    "--grid-template-columns":
+      gridTemplateColumns || `repeat(${headers.length}, 1fr)`,
+  } as CSSProperties;
 
   const tableElement = (
     <table
@@ -172,25 +166,18 @@ export function Table(props: TableProps) {
         ...componentClasses("table", csVariant, csSize, csModifiers),
         rootClasses
       )}
+      style={gridStyle}
       ref={ref}
     >
-      <colgroup>
-        <col span={headers.length} />
-      </colgroup>
       {titleRowContent ? (
         <caption className="table__caption">{titleRowContent}</caption>
       ) : null}
       <thead>
-        <tr className="table__row" style={columnCSSProps}>
+        <tr className="table__row">
           {headers.map((header, headerI) => (
-            <th
-              key={headerI}
-              className="table__header"
-              style={columnCSSProps}
-              scope="col"
-            >
+            <th key={headerI} className="table__header" scope="col">
               {header.disableSort ? (
-                header.value
+                <p className="table__header-text">{header.value}</p>
               ) : (
                 <SortButton
                   identifier={headerI}
@@ -206,7 +193,7 @@ export function Table(props: TableProps) {
       </thead>
       <tbody>
         {rows.map((row, rowI) => (
-          <tr key={`row${rowI}`} className="table__row" style={columnCSSProps}>
+          <tr key={`row${rowI}`} className="table__row">
             {row.map((col, colI) => (
               <td
                 key={`row${rowI}_col${colI}`}

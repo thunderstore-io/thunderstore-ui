@@ -117,7 +117,7 @@ export default function Versions() {
                         community={communityId}
                         namespace={namespaceId}
                         version={v.version_number}
-                        csVariant="cyber"
+                        csVariant="primary"
                       >
                         {v.version_number}
                       </NewLink>

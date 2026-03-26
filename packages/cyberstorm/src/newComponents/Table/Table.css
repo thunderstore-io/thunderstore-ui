@@ -9,12 +9,58 @@
   .table {
     --table-border: 1px solid var(--color-surface-a8);
 
+    display: grid;
+    grid-auto-rows: minmax(45px, auto);
+    grid-template-columns: var(--grid-template-columns);
     width: 100%;
     max-width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
+
+    thead,
+    tbody,
+    .table__row {
+      display: contents;
+    }
 
     .table__row {
+      font-size: var(--font-size-body-md);
+      line-height: 150%;
+    }
+
+    .table__caption {
+      grid-column: 1 / -1;
+      padding: 1rem;
+      border-top: var(--table-border);
+      border-right: var(--table-border);
+      border-left: var(--table-border);
+      border-top-left-radius: var(--radius-md);
+      border-top-right-radius: var(--radius-md);
+      text-align: left;
+    }
+
+    .table__header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: var(--space-8) var(--space-4);
+      font-weight: 700;
+      font-size: var(--font-size-body-sm);
+      line-height: 125%;
+      text-wrap: nowrap;
+      background: var(--color-surface-a4);
+    }
+
+    .table__header-text {
+      margin: 0;
+      padding: var(--space-4) var(--space-12);
+      font-weight: 700;
+      font-size: var(--font-size-body-md);
+      line-height: 150%;
+    }
+
+    .table__item {
+      align-content: center;
+      padding: 8px 16px;
       background-color: var(--table-row-background-color);
     }
 
@@ -65,6 +111,9 @@
       display: flex;
       gap: 1rem;
       align-items: center;
+      height: var(--space-32);
+      padding: 0 var(--space-12);
+      border-radius: var(--radius-md);
       background: transparent;
     }
 
@@ -78,33 +127,6 @@
         }
       }
     }
-  }
-
-  .table__caption {
-    padding: 1rem;
-    border-top: var(--table-border);
-    border-right: var(--table-border);
-    border-left: var(--table-border);
-    border-top-left-radius: var(--radius-md);
-    border-top-right-radius: var(--radius-md);
-    text-align: left;
-  }
-
-  .table__header {
-    color: var(--color-text-tertiary);
-    font-weight: 700;
-
-    font-size: var(--font-size-body-md);
-    line-height: 150%; /* 21px */
-    text-align: left;
-    text-wrap: nowrap;
-    background: var(--color-surface-a4);
-  }
-
-  .table__item {
-    align-content: center;
-    padding: 8px 16px;
-    vertical-align: top;
   }
 
   :root {

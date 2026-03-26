@@ -57,7 +57,7 @@ export function ServiceAccountRemoveModal({
       titleContent="Confirm service account removal"
       trigger={
         isTeamOwner(teamName, outletContext.currentUser) && ( // Only show trigger if user can delete
-          <NewButton csVariant="danger" csSize="xsmall">
+          <NewButton csVariant="danger" csSize="small">
             <NewIcon csMode="inline" noWrapper>
               <FontAwesomeIcon icon={faTrash} />
             </NewIcon>
