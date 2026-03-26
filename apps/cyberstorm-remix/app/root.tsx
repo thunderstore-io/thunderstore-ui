@@ -24,6 +24,7 @@ import {
   useLoaderData,
   useLocation,
   useMatches,
+  useRouteLoaderData,
 } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
 
@@ -212,7 +213,7 @@ clientLoader.hydrate = true;
 const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const data = useLoaderData<RootLoadersType>();
+  const data = useRouteLoaderData<RootLoadersType>("root");
   let envVars = undefined;
   let shouldUpdatePublicEnvVars = false;
   if (import.meta.env.SSR) {
