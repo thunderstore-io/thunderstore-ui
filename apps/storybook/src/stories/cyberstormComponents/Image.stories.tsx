@@ -20,7 +20,12 @@ const meta = {
     alt: { control: "text" },
     square: { control: "boolean" },
   },
-  args: { src: null, cardType: "community" },
+  args: {
+    src: null,
+    cardType: "community",
+    intrinsicWidth: 150,
+    intrinsicHeight: 200,
+  },
 } satisfies Meta<typeof Image>;
 
 export default meta;
