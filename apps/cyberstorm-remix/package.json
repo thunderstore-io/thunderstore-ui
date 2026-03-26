@@ -54,7 +54,7 @@
     "vitest": "3.2.4"
   },
   "engines": {
-    "node": ">=20.17.0"
+    "node": ">=24.0.0"
   },
   "repository": "https://github.com/thunderstore-io/thunderstore-ui/tree/master/apps/cyberstorm-remix"
 }

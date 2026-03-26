@@ -41,5 +41,8 @@
     "./fonts.css": "./src/styles/fonts.css",
     "./package.json": "./package.json",
     "./src/components": "./src/components.tsx"
+  },
+  "engines": {
+    "node": ">=24.0.0"
   }
 }

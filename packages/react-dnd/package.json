@@ -27,5 +27,8 @@
   },
   "devDependencies": {
     "typescript-plugin-css-modules": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=24.0.0"
   }
 }

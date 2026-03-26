@@ -38,5 +38,8 @@
       "index.ts"
     ],
     "exports": true
+  },
+  "engines": {
+    "node": ">=24.0.0"
   }
 }

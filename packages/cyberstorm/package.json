@@ -62,7 +62,7 @@
     "@thunderstore/dapper": "^0.1.0",
     "@thunderstore/thunderstore-api": "*",
     "@thunderstore/use-promise": "^0.1.0",
-    "@types/node": "^20.16.0",
+    "@types/node": "^24.0.0",
     "@types/react": "^19.1.0",
     "@types/uuid": "^10.0.0",
     "react": "^19.1.0",
@@ -80,5 +80,8 @@
     "typescript-plugin-css-modules": "^5.1.0",
     "vite": "^7.2.6",
     "vite-plugin-dts": "^4.5.4"
+  },
+  "engines": {
+    "node": ">=24.0.0"
   }
 }

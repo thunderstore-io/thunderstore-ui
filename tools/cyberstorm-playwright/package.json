@@ -11,6 +11,9 @@
     "@percy/cli": "^1.29.2",
     "@percy/playwright": "^1.0.6",
     "@playwright/test": "^1.46.1",
-    "@types/node": "^22.5.0"
+    "@types/node": "^24.0.0"
+  },
+  "engines": {
+    "node": ">=24.0.0"
   }
 }

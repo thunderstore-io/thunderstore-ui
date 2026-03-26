@@ -25,5 +25,8 @@
     "@faker-js/faker": "^9.0.2",
     "@thunderstore/dapper": "^0.1.0",
     "@thunderstore/thunderstore-api": "^0.1.0"
+  },
+  "engines": {
+    "node": ">=24.0.0"
   }
 }

@@ -16,7 +16,7 @@
   "files": [
     "dist"
   ],
-  "engine": {
+  "engines": {
     "node": ">=24.0.0"
   },
   "scripts": {

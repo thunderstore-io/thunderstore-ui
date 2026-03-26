@@ -37,12 +37,13 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.8"
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: "24"
       - name: Get node version
         id: node-version
-        run: echo "::set-output name=node-version::$(node --version)"
+        run: echo "node-version=$(node --version)" >> $GITHUB_OUTPUT
       - uses: snok/install-poetry@v1
         with:
           version: 1.4.1
@@ -105,10 +106,10 @@ jobs:
       VITE_AUTH_RETURN_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Node 24
+      - name: Set up Node version
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: ${{ needs.get-node-version.outputs.node-version }}
           cache: "yarn"
       - name: Set fontawesome token
         run: |
@@ -175,10 +176,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
-      - name: Set up Node 24
+      - name: Set up Node version
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: ${{ needs.get-node-version.outputs.node-version }}
           cache: "yarn"
       - name: Set fontawesome token
         run: |
