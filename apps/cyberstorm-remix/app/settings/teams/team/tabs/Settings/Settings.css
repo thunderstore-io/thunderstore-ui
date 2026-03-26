@@ -1,9 +1,39 @@
 @layer nimbus-layout {
+  .team-settings__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .team-settings__instructions {
+    margin: 0 0 0.5rem;
+    color: var(--color-text-secondary);
+  }
+
+  .team-settings__instructions:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .team-settings__action-container {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .team-settings__link {
+    color: var(--color-cyber-green-9);
+    text-decoration: underline;
+  }
+
+  .team-settings__link:hover {
+    color: var(--color-cyber-green-10);
+  }
+
   .team-settings__leave-and-disband-button {
     align-self: flex-start;
   }
 
   .team-settings__text--bold {
+    color: var(--color-text-primary);
     font-weight: var(--font-weight-bold);
   }
 
@@ -11,5 +41,7 @@
     display: flex;
     flex-direction: column;
     align-self: stretch;
+    max-width: 400px;
+    margin-top: 1rem;
   }
 }

@@ -4,7 +4,7 @@ import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
-import { Suspense, useReducer, useState } from "react";
+import { Suspense, useReducer } from "react";
 import {
   Await,
   useLoaderData,
@@ -13,7 +13,6 @@ import {
 } from "react-router";
 
 import {
-  Modal,
   NewAlert,
   NewButton,
   NewIcon,
@@ -64,17 +63,15 @@ export default function Settings() {
                 </p>
               </div>
               <div className="settings-items__content">
-                {resolvedPermissions.can_leave_team ? (
-                  <LeaveTeamForm
-                    userName={outletContext.currentUser?.username ?? ""}
-                    teamName={teamName}
-                    toast={toast}
-                    config={outletContext.requestConfig}
-                    updateTrigger={moveToTeams}
-                  />
-                ) : (
-                  <LastOwnerAlert />
-                )}
+                {!resolvedPermissions.can_leave_team && <LastOwnerAlert />}
+                <LeaveTeamForm
+                  userName={outletContext.currentUser?.username ?? ""}
+                  teamName={teamName}
+                  toast={toast}
+                  config={outletContext.requestConfig}
+                  updateTrigger={moveToTeams}
+                  disabled={!resolvedPermissions.can_leave_team}
+                />
               </div>
             </div>
             <div className="settings-items__separator" />
@@ -86,18 +83,19 @@ export default function Settings() {
                 </p>
               </div>
               <div className="settings-items__content">
-                {resolvedPermissions.can_disband_team ? (
-                  <DisbandTeamForm
-                    teamName={teamName}
-                    updateTrigger={moveToTeams}
-                    config={outletContext.requestConfig}
-                    toast={toast}
-                  />
-                ) : isTeamOwner(teamName, outletContext.currentUser) ? (
-                  <TeamHasPackagesAlert />
-                ) : (
-                  <NotTeamOwnerAlert />
-                )}
+                {!resolvedPermissions.can_disband_team &&
+                  (isTeamOwner(teamName, outletContext.currentUser) ? (
+                    <TeamHasPackagesAlert />
+                  ) : (
+                    <NotTeamOwnerAlert />
+                  ))}
+                <DisbandTeamForm
+                  teamName={teamName}
+                  updateTrigger={moveToTeams}
+                  config={outletContext.requestConfig}
+                  toast={toast}
+                  disabled={!resolvedPermissions.can_disband_team}
+                />
               </div>
             </div>
           </div>
@@ -108,7 +106,7 @@ export default function Settings() {
 }
 
 const LastOwnerAlert = () => (
-  <NewAlert csVariant="info">
+  <NewAlert csVariant="danger">
     You cannot currently leave this team as you are its last owner.
     <br />
     To leave the team, you need to assign another owner to it. Alternatively,
@@ -117,7 +115,7 @@ const LastOwnerAlert = () => (
 );
 
 const TeamHasPackagesAlert = () => (
-  <NewAlert csVariant="info">
+  <NewAlert csVariant="danger">
     You cannot currently disband this team as it has packages.
     <br />
     If you need to archive this team, contact #support in the{" "}
@@ -126,7 +124,7 @@ const TeamHasPackagesAlert = () => (
 );
 
 const NotTeamOwnerAlert = () => (
-  <NewAlert csVariant="info">Only team owners can disband teams.</NewAlert>
+  <NewAlert csVariant="danger">Only team owners can disband teams.</NewAlert>
 );
 
 function LeaveTeamForm(props: {
@@ -135,9 +133,9 @@ function LeaveTeamForm(props: {
   updateTrigger: () => Promise<void>;
   config: () => RequestConfig;
   toast: ReturnType<typeof useToast>;
+  disabled?: boolean;
 }) {
-  const { userName, teamName, toast, updateTrigger, config } = props;
-  const [open, setOpen] = useState(false);
+  const { userName, teamName, toast, updateTrigger, config, disabled } = props;
   const kickMemberAction = ApiAction({
     endpoint: teamRemoveMember,
     onSubmitSuccess: () => {
@@ -158,32 +156,22 @@ function LeaveTeamForm(props: {
   });
 
   return (
-    <Modal
-      open={open}
-      onOpenChange={setOpen}
-      titleContent="Leave team?"
-      csSize="small"
-      trigger={
+    <div className="team-settings__form">
+      <div>
+        <p className="team-settings__instructions">
+          You are about to leave the team{" "}
+          <span className="team-settings__text--bold">{teamName}</span>.
+        </p>
+        <p className="team-settings__instructions">
+          If you are an owner of the team, you can only leave if the team has
+          another owner assigned.
+        </p>
+      </div>
+      <div className="team-settings__action-container">
         <NewButton
           csVariant="danger"
           rootClasses="team-settings__leave-and-disband-button"
-        >
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faTrashCan} />
-          </NewIcon>
-          Leave team
-        </NewButton>
-      }
-    >
-      <Modal.Body>
-        <span>
-          You are about to leave the team{" "}
-          <span className="team-settings__text--bold">{teamName}</span>.
-        </span>
-      </Modal.Body>
-      <Modal.Footer>
-        <NewButton
-          csVariant="danger"
+          disabled={disabled}
           onClick={() =>
             kickMemberAction({
               config: config,
@@ -193,10 +181,13 @@ function LeaveTeamForm(props: {
             })
           }
         >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faTrashCan} />
+          </NewIcon>
           Leave team
         </NewButton>
-      </Modal.Footer>
-    </Modal>
+      </div>
+    </div>
   );
 }
 
@@ -207,10 +198,9 @@ function DisbandTeamForm(props: {
   updateTrigger: () => Promise<void>;
   config: () => RequestConfig;
   toast: ReturnType<typeof useToast>;
+  disabled?: boolean;
 }) {
-  const { teamName, toast, updateTrigger, config } = props;
-
-  const [open, setOpen] = useState(false);
+  const { teamName, toast, updateTrigger, config, disabled } = props;
 
   function formFieldUpdateAction(
     state: TeamDisbandRequestData,
@@ -263,7 +253,6 @@ function DisbandTeamForm(props: {
         duration: 4000,
       });
       updateTrigger();
-      setOpen(false);
     },
     onSubmitError: (error) => {
       toast.addToast({
@@ -275,44 +264,42 @@ function DisbandTeamForm(props: {
   });
 
   return (
-    <Modal
-      open={open}
-      onOpenChange={setOpen}
-      titleContent="Disband team?"
-      csSize="small"
-      trigger={
-        <NewButton
-          csVariant="danger"
-          rootClasses="team-settings__leave-and-disband-button"
-        >
-          <NewIcon csMode="inline" noWrapper>
-            <FontAwesomeIcon icon={faTrashCan} />
-          </NewIcon>
-          Disband team
-        </NewButton>
-      }
-    >
-      <Modal.Body>
-        <div>
+    <div className="team-settings__form">
+      <div>
+        <p className="team-settings__instructions">
           You are about to disband the team{" "}
           <span className="team-settings__text--bold">{teamName}</span>.
-        </div>
-        <div>
+        </p>
+        <p className="team-settings__instructions">
+          Be aware you can currently only disband teams with no packages. If you
+          need to archive a team with existing packages, contact #support in the{" "}
+          <a
+            href="https://discord.thunderstore.io/"
+            className="team-settings__link"
+          >
+            Thunderstore Discord
+          </a>
+          .
+        </p>
+        <p className="team-settings__instructions">
           As a precaution, to disband your team, please input{" "}
           <span className="team-settings__text--bold">{teamName}</span> into the
           field below.
-        </div>
+        </p>
 
         <form
           onSubmit={(event) => {
             event.preventDefault();
-            if (!formDisabled) {
+            if (!disabled && !formDisabled) {
               strongForm.submit();
             }
           }}
           className="disband-team-form__form"
         >
           <NewTextInput
+            aria-label="Confirm team name to disband"
+            value={formInputs.team_name}
+            disabled={disabled}
             onChange={(e) =>
               updateFormFieldState({
                 field: "team_name",
@@ -321,11 +308,13 @@ function DisbandTeamForm(props: {
             }
           />
         </form>
-      </Modal.Body>
-      <Modal.Footer>
+      </div>
+
+      <div className="team-settings__action-container">
         <NewButton
           csVariant="danger"
-          disabled={formDisabled}
+          rootClasses="team-settings__leave-and-disband-button"
+          disabled={disabled || formDisabled}
           onClick={() => {
             strongForm.submit();
           }}
@@ -335,8 +324,8 @@ function DisbandTeamForm(props: {
           </NewIcon>
           Disband team
         </NewButton>
-      </Modal.Footer>
-    </Modal>
+      </div>
+    </div>
   );
 }
 
