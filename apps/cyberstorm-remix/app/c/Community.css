@@ -20,6 +20,7 @@
 
   .community__background {
     align-self: stretch;
+    container-type: inline-size;
 
     > img {
       width: 100%;
@@ -37,13 +38,18 @@
       max-height: 12rem;
       aspect-ratio: 4 / 1;
     }
+
+    @container (width < 20rem) {
+      > img {
+        border-radius: 0.25rem;
+      }
+    }
   }
 
   .community__background--packagePage {
-    height: 6.25rem;
-    overflow: hidden;
-
     > img {
+      max-height: 6rem;
+      aspect-ratio: 8 / 1;
       opacity: 0.3;
       mix-blend-mode: luminosity;
     }
