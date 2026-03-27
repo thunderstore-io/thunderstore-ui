@@ -5,8 +5,6 @@ interface Props {
   page: number;
   /** Packages show per page */
   pageSize: number;
-  /** Currently active text search */
-  searchQuery: string;
   /** Total number of packages matching current query */
   totalCount: number;
 }
@@ -16,20 +14,20 @@ interface Props {
  * for the current filters.
  */
 export const PackageCount = memo(function PackageCount(props: Props) {
-  const { page, pageSize, searchQuery, totalCount } = props;
+  const { page, pageSize, totalCount } = props;
   const first = (page - 1) * pageSize + 1;
   const last = first + pageSize - 1;
-  const query = searchQuery !== "" ? ` for "${searchQuery}"` : "";
 
   if (totalCount === 0) {
-    return <p className="package-count">No results{query}</p>;
+    return <p className="package-count">No results</p>;
   }
 
   return (
     <p className="package-count">
-      {`${first}${
+      <b>{`${first}${
         first !== totalCount ? `-${Math.min(last, totalCount)}` : ""
-      } of ${totalCount} results ${query}`}
+      } `}</b>
+      &nbsp;of&nbsp;<b>{totalCount}</b>&nbsp;result{totalCount === 1 ? "" : "s"}
     </p>
   );
 });
