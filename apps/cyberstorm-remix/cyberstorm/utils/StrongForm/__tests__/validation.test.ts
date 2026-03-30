@@ -45,6 +45,35 @@ describe("StrongForm.validation.isRawInvalid", () => {
     assert.isTrue(isRawInvalid(v, "://broken"));
   });
 
+  it("does not mark optional httpsUrl empty values invalid", () => {
+    const v: Validator = { httpsUrl: true };
+    assert.isFalse(isRawInvalid(v, ""));
+    assert.isFalse(isRawInvalid(v, "   "));
+    assert.isFalse(isRawInvalid(v, null));
+    assert.isFalse(isRawInvalid(v, undefined));
+  });
+
+  it("marks non-string httpsUrl values invalid", () => {
+    const v: Validator = { httpsUrl: true };
+    assert.isTrue(isRawInvalid(v, 123));
+    assert.isTrue(isRawInvalid(v, {}));
+    assert.isTrue(isRawInvalid(v, []));
+  });
+
+  it("accepts https URLs for httpsUrl", () => {
+    const v: Validator = { httpsUrl: true };
+    assert.isFalse(isRawInvalid(v, "https://example.com"));
+    assert.isFalse(isRawInvalid(v, "  https://example.com  "));
+  });
+
+  it("rejects http, non-https or malformed URLs for httpsUrl", () => {
+    const v: Validator = { httpsUrl: true };
+    assert.isTrue(isRawInvalid(v, "http://example.com"));
+    assert.isTrue(isRawInvalid(v, "example.com"));
+    assert.isTrue(isRawInvalid(v, "ftp://example.com"));
+    assert.isTrue(isRawInvalid(v, "://broken"));
+  });
+
   it("required + url requires non-empty and valid", () => {
     const v: Validator = { required: true, url: true };
     assert.isTrue(isRawInvalid(v, ""));

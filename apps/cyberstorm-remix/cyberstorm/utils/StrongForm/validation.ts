@@ -5,6 +5,7 @@ import { isValueEmpty } from "./utils";
 export type Validator = {
   required?: boolean;
   url?: boolean;
+  httpsUrl?: boolean;
 };
 
 const httpUrlSchema = z
@@ -18,8 +19,20 @@ const httpUrlSchema = z
     }
   );
 
+const httpsUrlSchema = z
+  .string()
+  .trim()
+  .url()
+  .refine((value) => value.startsWith("https://"), {
+    message: "URL must start with https://",
+  });
+
 function isValidHttpUrl(value: string): boolean {
   return httpUrlSchema.safeParse(value).success;
+}
+
+function isValidHttpsUrl(value: string): boolean {
+  return httpsUrlSchema.safeParse(value).success;
 }
 
 export function isRawInvalid(
@@ -30,6 +43,16 @@ export function isRawInvalid(
 
   if (validator.required && isValueEmpty(value)) {
     return true;
+  }
+
+  if (validator.httpsUrl) {
+    if (isValueEmpty(value)) {
+      return false;
+    }
+    if (typeof value !== "string") {
+      return true;
+    }
+    return !isValidHttpsUrl(value);
   }
 
   if (validator.url) {
