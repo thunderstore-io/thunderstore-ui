@@ -125,7 +125,7 @@ export const TextInput = memo(function TextInput(props: TextInputProps) {
           )}
           tooltipText="Clear"
           tooltipSide="left"
-          aria-label="Clear search input"
+          aria-label="Clear input"
         >
           <NewIcon csMode="inline" noWrapper>
             <FontAwesomeIcon icon={faXmarkLarge} />
