@@ -55,8 +55,10 @@
         transform: skew(30deg);
       }
 
-      &:hover {
-        background-color: var(--breadcrumb-item-bg-color--hover);
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--breadcrumb-item-bg-color--hover);
+        }
       }
     }
 
@@ -93,11 +95,11 @@
         content: "\0020";
       }
 
-      &:hover {
-        background-color: var(--breadcrumb-item-bg-color--hover);
-
-        &::before {
-          background-color: var(--breadcrumb-item-bg-color--hover);
+      @media (hover: hover) {
+        &:hover {
+          &::before {
+            background-color: var(--breadcrumb-item-bg-color--hover);
+          }
         }
       }
     }
@@ -113,10 +115,6 @@
       background-color: var(--breadcrumb-item-bg-color--hover);
       transform: skew(30deg);
       content: "\0020";
-
-      &:hover {
-        background-color: var(--breadcrumb-item-bg-color--hover);
-      }
     }
   }
 }
