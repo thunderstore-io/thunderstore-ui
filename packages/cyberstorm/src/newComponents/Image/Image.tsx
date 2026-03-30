@@ -71,7 +71,14 @@ export const Image = memo(function Image(props: ImageProps) {
             "image--fullwidth"
           )}
         >
-          <img src={src} loading={loading} alt={alt} className="image__src" />
+          <img
+            src={src}
+            loading={loading}
+            alt={alt}
+            className="image__src"
+            width={intrinsicWidth}
+            height={intrinsicHeight}
+          />
         </Frame>
       ) : (
         <NewIcon
