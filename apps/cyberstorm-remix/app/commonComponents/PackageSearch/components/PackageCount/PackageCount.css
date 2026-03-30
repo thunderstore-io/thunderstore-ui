@@ -8,4 +8,10 @@
     font-size: var(--font-size-body-md);
     word-break: break-all;
   }
+
+  @media (width <= 48rem) {
+    .package-count {
+      justify-content: flex-start;
+    }
+  }
 }
