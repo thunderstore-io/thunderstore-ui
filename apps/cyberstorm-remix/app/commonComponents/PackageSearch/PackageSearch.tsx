@@ -236,13 +236,16 @@ export function PackageSearch(props: Props) {
             searchParamsBlobRef.current
           )
         ) {
+          const isOnlyPageChange = !resetPage && newPage !== currentPage;
+          const preventScrollReset = !isOnlyPageChange;
+
           if (useReplace) {
             setSearchParams(searchParams, {
               replace: true,
-              preventScrollReset: true,
+              preventScrollReset,
             });
           } else {
-            setSearchParams(searchParams, { preventScrollReset: true });
+            setSearchParams(searchParams, { preventScrollReset });
           }
         }
         searchParamsBlobRef.current = debouncedSearchParamsBlob;
