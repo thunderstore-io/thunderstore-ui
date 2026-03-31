@@ -2,12 +2,14 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type OutletContextShape } from "app/root";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
+import { useState } from "react";
 
 import {
   Modal,
   NewAlert,
   NewButton,
   NewIcon,
+  NewTextInput,
   useToast,
 } from "@thunderstore/cyberstorm";
 import {
@@ -32,6 +34,10 @@ export function ServiceAccountRemoveModal({
   revalidate,
 }: ServiceAccountRemoveModalProps) {
   const toast = useToast();
+  const [open, setOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
+  const isNameMatch = inputValue.trim() === serviceAccount.name;
 
   const removeServiceAccountAction = ApiAction({
     endpoint: teamServiceAccountRemove,
@@ -42,6 +48,8 @@ export function ServiceAccountRemoveModal({
         duration: 4000,
       });
       revalidate();
+      setOpen(false);
+      setInputValue("");
     },
     onSubmitError: (error) => {
       toast.addToast({
@@ -54,6 +62,13 @@ export function ServiceAccountRemoveModal({
 
   return (
     <Modal
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+        if (!isOpen) {
+          setInputValue("");
+        }
+      }}
       titleContent="Confirm service account removal"
       trigger={
         isTeamOwner(teamName, outletContext.currentUser) && ( // Only show trigger if user can delete
@@ -79,10 +94,25 @@ export function ServiceAccountRemoveModal({
           </span>
           .
         </div>
+        <div>
+          As a precaution, to remove the service account, please input{" "}
+          <span className="team-service-accounts__highlight">
+            {serviceAccount.name}
+          </span>{" "}
+          into the field below.
+        </div>
+        <NewTextInput
+          onChange={(e) => setInputValue(e.target.value)}
+          value={inputValue}
+          id={`serviceAccountNameInput-${serviceAccount.identifier}`}
+          aria-label="Confirm service account name"
+        />
       </Modal.Body>
       <Modal.Footer>
         <NewButton
+          disabled={!isNameMatch}
           onClick={() => {
+            if (!isNameMatch) return;
             removeServiceAccountAction({
               config: outletContext.requestConfig,
               params: {
