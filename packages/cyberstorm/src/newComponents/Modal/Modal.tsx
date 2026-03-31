@@ -7,6 +7,7 @@ import {
   cloneElement,
   isValidElement,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -15,6 +16,7 @@ import {
 import { type ModalVariants } from "@thunderstore/cyberstorm-theme";
 import { type ModalSizes } from "@thunderstore/cyberstorm-theme";
 
+import { TopLayerContainerContext } from "../../utils/TopLayerContainerContext";
 import { classnames, componentClasses } from "../../utils/utils";
 import { Button as NewButton } from "../Button/Button";
 import { type ButtonComponentProps } from "../Button/Button";
@@ -252,6 +254,8 @@ export function Modal(props: ModalProps) {
     };
   }, [effectiveOpen, restoreBodyPointerEvents]);
 
+  const container = useContext(TopLayerContainerContext);
+
   let exit = <Modal.Exit />;
 
   let title = titleContent ? <Modal.Title>{titleContent}</Modal.Title> : null;
@@ -301,7 +305,7 @@ export function Modal(props: ModalProps) {
       onOpenChange={handleOpenChange}
     >
       {trigger ? <Dialog.Trigger asChild>{trigger}</Dialog.Trigger> : null}
-      <Dialog.Portal>
+      <Dialog.Portal container={container ?? undefined}>
         <Dialog.Overlay
           className={classnames(
             "modal__overlay",

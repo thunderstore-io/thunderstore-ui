@@ -31,7 +31,6 @@ export const RadioGroup = memo(function RadioGroup(props: Props) {
               : "radio-group__label--unselected"
           )}
         >
-          {s.name}
           <RadixRadioGroup.Item value={s.uuid} className="radio-group__radio">
             {s.uuid !== selected ? (
               <NewIcon csMode="inline" noWrapper>
@@ -44,6 +43,7 @@ export const RadioGroup = memo(function RadioGroup(props: Props) {
               </NewIcon>
             </RadixRadioGroup.Indicator>
           </RadixRadioGroup.Item>
+          {s.name}
         </label>
       ))}
     </RadixRadioGroup.Root>

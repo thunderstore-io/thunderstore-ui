@@ -1,4 +1,5 @@
 import { faGhost, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faFilterList } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
 import { isPromise } from "cyberstorm/utils/typeChecks";
@@ -8,8 +9,12 @@ import { useDebounce } from "use-debounce";
 
 import {
   CardPackage,
+  Drawer,
+  DrawerDivider,
   EmptyState,
+  Heading,
   NewButton,
+  NewIcon,
   NewPagination,
   NewTextInput,
   SkeletonBox,
@@ -266,106 +271,136 @@ export function PackageSearch(props: Props) {
   });
   // WHOLE LIKE THING
 
+  const filtersContent = (
+    <>
+      {sortedSections && sortedSections.length > 0 ? (
+        <CollapsibleMenu headerTitle="Sections" defaultOpen>
+          <RadioGroup
+            sections={[
+              ...sortedSections,
+              {
+                uuid: "all",
+                name: "All",
+                slug: "all",
+                priority: -999999999,
+              },
+            ]}
+            selected={
+              searchParamsBlob.section === ""
+                ? sortedSections[0]?.uuid
+                : searchParamsBlob.section
+            }
+            setSelected={setParamsBlobValue(
+              setSearchParamsBlob,
+              searchParamsBlob,
+              "section"
+            )}
+          />
+        </CollapsibleMenu>
+      ) : null}
+      {categories && categories.length > 0 ? (
+        <CollapsibleMenu headerTitle="Categories" defaultOpen>
+          <CheckboxList items={filtersCategoriesItems} />
+        </CollapsibleMenu>
+      ) : null}
+      <CollapsibleMenu headerTitle="Other filters" defaultOpen>
+        <CheckboxList
+          items={[
+            {
+              state: searchParamsBlob.deprecated,
+              setStateFunc: (v: boolean | TRISTATE) =>
+                setParamsBlobValue(
+                  setSearchParamsBlob,
+                  searchParamsBlob,
+                  "deprecated"
+                )(typeof v === "boolean" ? v : v === "include" ? true : false),
+              label: "Deprecated",
+              value: "deprecated",
+            },
+            {
+              state: searchParamsBlob.nsfw,
+              setStateFunc: (v: boolean | TRISTATE) =>
+                setParamsBlobValue(
+                  setSearchParamsBlob,
+                  searchParamsBlob,
+                  "nsfw"
+                )(typeof v === "boolean" ? v : v === "include" ? true : false),
+              label: "NSFW",
+              value: "nsfw",
+            },
+          ]}
+        />
+      </CollapsibleMenu>
+    </>
+  );
+
   return (
     <div className="package-search">
       <div className="package-search__sidebar">
-        <div className="package-search__filters">
-          {sortedSections && sortedSections.length > 0 ? (
-            <CollapsibleMenu headerTitle="Sections" defaultOpen>
-              <RadioGroup
-                sections={[
-                  ...sortedSections,
-                  {
-                    uuid: "all",
-                    name: "All",
-                    slug: "all",
-                    priority: -999999999,
-                  },
-                ]}
-                selected={
-                  searchParamsBlob.section === ""
-                    ? sortedSections[0]?.uuid
-                    : searchParamsBlob.section
-                }
-                setSelected={setParamsBlobValue(
-                  setSearchParamsBlob,
-                  searchParamsBlob,
-                  "section"
-                )}
-              />
-            </CollapsibleMenu>
-          ) : null}
-          {categories && categories.length > 0 ? (
-            <CollapsibleMenu headerTitle="Categories" defaultOpen>
-              <CheckboxList items={filtersCategoriesItems} />
-            </CollapsibleMenu>
-          ) : null}
-          <CollapsibleMenu headerTitle="Other filters" defaultOpen>
-            <CheckboxList
-              items={[
-                {
-                  state: searchParamsBlob.deprecated,
-                  setStateFunc: (v: boolean | TRISTATE) =>
-                    setParamsBlobValue(
-                      setSearchParamsBlob,
-                      searchParamsBlob,
-                      "deprecated"
-                    )(
-                      typeof v === "boolean"
-                        ? v
-                        : v === "include"
-                          ? true
-                          : false
-                    ),
-                  label: "Deprecated",
-                  value: "deprecated",
-                },
-                {
-                  state: searchParamsBlob.nsfw,
-                  setStateFunc: (v: boolean | TRISTATE) =>
-                    setParamsBlobValue(
-                      setSearchParamsBlob,
-                      searchParamsBlob,
-                      "nsfw"
-                    )(
-                      typeof v === "boolean"
-                        ? v
-                        : v === "include"
-                          ? true
-                          : false
-                    ),
-                  label: "NSFW",
-                  value: "nsfw",
-                },
-              ]}
-            />
-          </CollapsibleMenu>
-        </div>
+        <div className="package-search__filters">{filtersContent}</div>
       </div>
 
       <div className="package-search__content">
-        <NewTextInput
-          placeholder="Search Mods..."
-          value={searchParamsBlob.search}
-          onChange={(e) =>
-            setParamsBlobValue(
-              setSearchParamsBlob,
-              searchParamsBlob,
-              "search"
-            )(e.target.value)
-          }
-          clearValue={() =>
-            setParamsBlobValue(
-              setSearchParamsBlob,
-              searchParamsBlob,
-              "search"
-            )("")
-          }
-          leftIcon={<FontAwesomeIcon icon={faSearch} />}
-          id="searchInput"
-          type="search"
-          rootClasses="package-search__search"
-        />
+        <div className="package-search__search-wrapper">
+          <NewTextInput
+            placeholder="Search Mods..."
+            value={searchParamsBlob.search}
+            onChange={(e) =>
+              setParamsBlobValue(
+                setSearchParamsBlob,
+                searchParamsBlob,
+                "search"
+              )(e.target.value)
+            }
+            clearValue={() =>
+              setParamsBlobValue(
+                setSearchParamsBlob,
+                searchParamsBlob,
+                "search"
+              )("")
+            }
+            leftIcon={<FontAwesomeIcon icon={faSearch} />}
+            id="searchInput"
+            type="search"
+            rootClasses="package-search__search"
+          />
+          <Drawer
+            popoverId="package-search-filters-drawer"
+            headerContent={
+              <Heading csLevel="3" csSize="3">
+                Filters
+              </Heading>
+            }
+            trigger={
+              <NewButton
+                popoverTarget="package-search-filters-drawer"
+                aria-label="Filters"
+                rootClasses="package-search__drawer-toggle"
+                csVariant="secondary"
+                csModifiers={["only-icon"]}
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faFilterList} />
+                </NewIcon>
+              </NewButton>
+            }
+          >
+            <div className="package-search__filters package-search__filters--drawer">
+              <div className="package-search__drawer-sorting">
+                <PackageOrder
+                  order={searchParamsBlob.order ?? PackageOrderOptions.Updated}
+                  setOrder={setParamsBlobValue(
+                    setSearchParamsBlob,
+                    searchParamsBlob,
+                    "order"
+                  )}
+                />
+              </div>
+              <DrawerDivider />
+              {filtersContent}
+            </div>
+          </Drawer>
+        </div>
         <div className="package-search__search-params">
           <CategoryTagCloud
             searchValue={searchParamsBlob.search}

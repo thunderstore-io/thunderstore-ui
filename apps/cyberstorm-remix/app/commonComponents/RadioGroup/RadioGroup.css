@@ -9,9 +9,9 @@
 
   .radio-group__label {
     display: flex;
-    gap: var(--gap-sm);
+    gap: 0.75rem;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: var(--space-8) var(--space-16);
     border-radius: var(--radius-md);
     color: var(--color-text-secondary);
@@ -49,8 +49,10 @@
   }
 
   .radio-group__radio {
+    position: relative;
     display: flex;
     align-items: center;
+    justify-content: center;
     width: var(--space-18);
     height: var(--space-18);
     background: transparent;

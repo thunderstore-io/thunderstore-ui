@@ -8,7 +8,7 @@ import {
   Trigger,
   Viewport,
 } from "@radix-ui/react-select";
-import React, { type ReactElement, memo } from "react";
+import React, { type ReactElement, memo, useContext } from "react";
 
 import {
   type SelectModifiers,
@@ -16,6 +16,7 @@ import {
   type SelectVariants,
 } from "@thunderstore/cyberstorm-theme";
 
+import { TopLayerContainerContext } from "../../utils/TopLayerContainerContext";
 import type { SelectOption } from "../../utils/types";
 import { classnames, componentClasses } from "../../utils/utils";
 import { Button as NewButton } from "../Button/Button";
@@ -61,6 +62,8 @@ function SelectComponent<T extends string>(props: SelectProps<T>) {
     ...forwardedProps
   } = props;
 
+  const container = useContext(TopLayerContainerContext);
+
   const selectItemElements = options
     ? mapSelectData(options, csVariant, csSize, csModifiers)
     : null;
@@ -103,7 +106,7 @@ function SelectComponent<T extends string>(props: SelectProps<T>) {
         </NewButton>
       </Trigger>
 
-      <Portal>
+      <Portal container={container ?? undefined}>
         <Content
           position="popper"
           sideOffset={4}

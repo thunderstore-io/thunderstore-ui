@@ -68,7 +68,7 @@ export {
   type CodeInputProps,
 } from "./newComponents/CodeInput/CodeInput";
 export { CycleButton } from "./newComponents/CycleButton/CycleButton";
-export { Drawer } from "./newComponents/Drawer/Drawer";
+export { Drawer, DrawerDivider } from "./newComponents/Drawer/Drawer";
 export {
   DropDown as NewDropDown,
   DropDownItem as NewDropDownItem,

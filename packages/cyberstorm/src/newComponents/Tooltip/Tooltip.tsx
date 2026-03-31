@@ -1,6 +1,7 @@
 import { Arrow, Content, Portal, Root, Trigger } from "@radix-ui/react-tooltip";
-import { type ReactNode, memo } from "react";
+import { type ReactNode, memo, useContext } from "react";
 
+import { TopLayerContainerContext } from "../../utils/TopLayerContainerContext";
 import "./Tooltip.css";
 
 export interface TooltipProps {
@@ -25,10 +26,13 @@ export const Tooltip = memo(function Tooltip(props: TooltipProps) {
     children,
     open,
   } = props;
+
+  const container = useContext(TopLayerContainerContext);
+
   return (
     <Root open={open}>
       <Trigger asChild>{children}</Trigger>
-      <Portal>
+      <Portal container={container ?? undefined}>
         <Content
           className="tooltip"
           sideOffset={sideOffset ? sideOffset : 5}
