@@ -1,3 +1,4 @@
+import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
@@ -226,7 +227,9 @@ export default function WikiPage() {
     };
   }, [wikiLayoutData]);
 
-  const notFoundElement = <div>Wiki page not found.</div>;
+  const notFoundElement = (
+    <TabFetchState variant="info" message="Wiki page not found." />
+  );
 
   if (wiki && page) {
     const currentPageIndex = wiki.pages.findIndex((p) => p.id === page.id);

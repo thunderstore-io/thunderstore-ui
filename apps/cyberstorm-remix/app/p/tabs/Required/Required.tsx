@@ -1,4 +1,5 @@
 import { PaginatedDependencies } from "app/commonComponents/PaginatedDependencies/PaginatedDependencies";
+import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
@@ -130,7 +131,10 @@ export default function PackageVersionRequired() {
       <Await
         resolve={dependencies}
         errorElement={
-          <div>Error occurred while loading required dependencies</div>
+          <TabFetchState
+            variant="danger"
+            message="Error occurred while loading required dependencies"
+          />
         }
       >
         {(resolvedDependencies) => (

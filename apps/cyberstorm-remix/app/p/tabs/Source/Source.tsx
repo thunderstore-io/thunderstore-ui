@@ -1,5 +1,6 @@
 import { faClock, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { type SeoReturn, createSeo } from "cyberstorm/utils/meta";
@@ -151,19 +152,27 @@ export default function Source() {
   const outletContext = useOutletContext() as PackageListingOutletContext;
 
   if (status === "error") {
-    return <div>{message}</div>;
+    return <TabFetchState variant="danger" message={message} />;
   }
   return (
     <Suspense fallback={<SkeletonBox className="package-source__skeleton" />}>
       <Await
         resolve={source}
-        errorElement={<div>Error occurred while loading source</div>}
+        errorElement={
+          <TabFetchState
+            variant="danger"
+            message="Error occurred while loading source"
+          />
+        }
       >
         {(resolvedValue) => {
           const decompilations = resolvedValue?.decompilations ?? [];
           if (decompilations.length === 0) {
             return (
-              <Alert csVariant="info">Decompiled source not available.</Alert>
+              <TabFetchState
+                variant="info"
+                message="Decompiled source not available."
+              />
             );
           }
           return decompilations.map((decompilation) => {
