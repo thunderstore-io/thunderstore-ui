@@ -2,7 +2,6 @@ import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
-import { assertTeamAccess } from "cyberstorm/utils/permissions";
 import { Suspense, useReducer } from "react";
 import {
   Await,
@@ -29,11 +28,7 @@ import "./Profile.css";
 
 export const clientLoader = makeTeamSettingsTabLoader(
   async (dapper, teamName) => {
-    // TODO: for hygiene we shouldn't use this public endpoint but
-    // have an endpoint that confirms user permissions and returns
-    // possibly sensitive information.
-    const team = await dapper.getTeamDetails(teamName);
-    await assertTeamAccess(teamName);
+    const team = await dapper.getPrivateTeamDetails(teamName);
     return { team };
   }
 );

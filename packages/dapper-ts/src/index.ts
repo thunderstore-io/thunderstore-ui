@@ -28,6 +28,7 @@ import {
 import { getPackageVersionDetails } from "./methods/packageVersion";
 import { getRatedPackages } from "./methods/ratedPackages";
 import {
+  getPrivateTeamDetails,
   getTeamDetails,
   getTeamMembers,
   getTeamServiceAccounts,
@@ -56,6 +57,7 @@ export {
   getPackageListings,
   getPackageVersionDetails,
   getRatedPackages,
+  getPrivateTeamDetails,
   getTeamDetails,
   getTeamMembers,
   getTeamServiceAccounts,
@@ -95,6 +97,7 @@ export class DapperTs implements DapperTsInterface {
     this.getPackageWikiPage = this.getPackageWikiPage.bind(this);
     this.getPackagePermissions = this.getPackagePermissions.bind(this);
     this.getPackageSource = this.getPackageSource.bind(this);
+    this.getPrivateTeamDetails = this.getPrivateTeamDetails.bind(this);
     this.getTeamDetails = this.getTeamDetails.bind(this);
     this.getTeamMembers = this.getTeamMembers.bind(this);
     this.getTeamServiceAccounts = this.getTeamServiceAccounts.bind(this);
@@ -124,6 +127,7 @@ export class DapperTs implements DapperTsInterface {
   public getPackageWikiPage = getPackageWikiPage;
   public getPackagePermissions = getPackagePermissions;
   public getPackageSource = getPackageSource;
+  public getPrivateTeamDetails = getPrivateTeamDetails;
   public getTeamDetails = getTeamDetails;
   public getTeamMembers = getTeamMembers;
   public getTeamServiceAccounts = getTeamServiceAccounts;

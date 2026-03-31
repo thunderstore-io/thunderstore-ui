@@ -101,6 +101,8 @@ export type PostPackageSubmissionMetadata = (
 
 export type GetTeamDetails = (teamName: string) => Promise<TeamDetails>;
 
+export type GetPrivateTeamDetails = (teamName: string) => Promise<TeamDetails>;
+
 export type GetTeamMembers = (teamId: string) => Promise<TeamMember[]>;
 
 export type GetTeamServiceAccounts = (
