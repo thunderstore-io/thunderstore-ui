@@ -7,7 +7,6 @@
       gap: var(--gap-sm);
       align-items: center;
       justify-content: space-between;
-      padding: var(--space-8) var(--space-16);
       border-radius: var(--radius-md);
       color: var(--color-text-secondary);
       font-weight: var(--font-weight-regular);
@@ -21,6 +20,7 @@
         flex-wrap: nowrap;
         gap: 0.75rem;
         align-items: center;
+        padding: var(--space-8) 0 var(--space-8) var(--space-16);
       }
 
       &.checkbox-list__label--off {
@@ -31,7 +31,7 @@
         }
 
         .checkbox-list__exclude-button svg {
-          --icon-color: transparent;
+          --icon-color: var(--color-surface-a8);
         }
       }
 
@@ -114,8 +114,9 @@
       &.checkbox-list__exclude-button {
         --icon-inline-size: var(--space-16);
 
-        width: var(--space-20);
-        height: var(--space-20);
+        width: calc(var(--space-20) + calc(var(--space-16) * 2));
+        height: calc(var(--space-20) + calc(var(--space-8) * 2));
+        padding: var(--space-8) var(--space-16);
 
         &:hover {
           --icon-color: var(--color-accent-red-8);
