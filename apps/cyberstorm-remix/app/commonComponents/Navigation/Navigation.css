@@ -114,6 +114,10 @@
     font-size: var(--font-size-body-md);
   }
 
+  .navigation-header__team-icon-button svg {
+    transition: ease-out var(--animation-duration-sm);
+  }
+
   .navigation-header__dropdown-item[data-highlighted] svg,
   .navigation-header__dropdown-item[data-highlighted],
   .navigation-header__dropdown-item {
@@ -207,6 +211,54 @@
 
     > a {
       color: var(--color-text-tertiary);
+    }
+  }
+
+  .navigation-header__team-wrapper {
+    display: flex;
+    gap: var(--space-4);
+    align-items: stretch;
+    width: 100%;
+    padding: var(--space-4) var(--space-8) var(--space-4) var(--space-16);
+  }
+
+  .navigation-header__team-link {
+    flex-grow: 1;
+    padding-right: var(--space-8);
+  }
+
+  .navigation-header__team-icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    --icon-inline-size: var(--space-16);
+
+    width: calc(var(--space-20) + calc(var(--space-8) * 2));
+    height: calc(var(--space-20) + calc(var(--space-8) * 2));
+    padding: var(--space-8);
+    border-radius: var(--button-md-border-radius, 0.5rem);
+    background-color: transparent !important;
+    transition: ease-out var(--animation-duration-sm);
+
+    &:focus,
+    &:focus-visible {
+      outline: none;
+    }
+
+    &:disabled,
+    &.cyberstorm-link--disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    &:hover:not(:disabled, .cyberstorm-link--disabled),
+    &[data-highlighted]:not(:disabled, .cyberstorm-link--disabled) {
+      background-color: var(--button-secondary-bg-color--hover) !important;
+
+      svg {
+        --icon-color: var(--color-text-primary);
+      }
     }
   }
 

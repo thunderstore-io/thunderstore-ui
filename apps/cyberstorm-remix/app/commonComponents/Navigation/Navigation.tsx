@@ -1,18 +1,18 @@
 import { faDiscord, faGithub } from "@fortawesome/free-brands-svg-icons";
 import {
   faBars,
+  faBoxOpen,
   faCaretDown,
   faCaretRight,
   faCog,
   faGamepad,
   faLongArrowLeft,
+  faSearch,
+  faSignOut,
   faUpload,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  faArrowRightToBracket,
-  faSignOut,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightToBracket } from "@fortawesome/free-solid-svg-icons";
 import {
   faArrowUpRight,
   faCodeSimple,
@@ -24,7 +24,7 @@ import {
   buildAuthLoginUrl,
   buildLogoutUrl,
 } from "cyberstorm/utils/ThunderstoreAuth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 
 import {
@@ -36,11 +36,9 @@ import {
   NewDropDown,
   NewDropDownDivider,
   NewDropDownItem,
-  NewDropDownSub,
-  NewDropDownSubContent,
-  NewDropDownSubTrigger,
   NewIcon,
   NewLink,
+  NewTextInput,
   OverwolfLogo,
   ThunderstoreLogo,
   classnames,
@@ -192,6 +190,10 @@ export function Navigation(props: {
           </div>
           {currentUser?.username ? (
             <span className="navigation-header__profile-actions">
+              <DesktopTeamsDropdown
+                user={currentUser}
+                communityId={communityId}
+              />
               <NewButton
                 primitiveType="cyberstormLink"
                 linkId="PackageUpload"
@@ -209,11 +211,7 @@ export function Navigation(props: {
           ) : null}
 
           {currentUser ? (
-            <DesktopUserDropdown
-              user={currentUser}
-              domain={domain}
-              communityId={communityId}
-            />
+            <DesktopUserDropdown user={currentUser} domain={domain} />
           ) : (
             <DesktopLoginPopover />
           )}
@@ -386,12 +384,113 @@ export function DesktopLoginPopover() {
   );
 }
 
+export function DesktopTeamsDropdown(props: {
+  user: CurrentUser;
+  communityId?: string;
+}) {
+  const { user, communityId } = props;
+  const [search, setSearch] = useState("");
+
+  const filteredTeams = user.teams.filter((team) =>
+    team.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <NewDropDown
+      contentAlignment="end"
+      trigger={
+        <NewButton
+          csModifiers={["only-icon"]}
+          csSize="small"
+          csVariant="secondary"
+          tooltipText="Teams"
+        >
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faUsers} />
+          </NewIcon>
+        </NewButton>
+      }
+    >
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+      <div
+        className="navigation-header__search-wrapper"
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <NewTextInput
+          type="search"
+          placeholder="Search teams..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          leftIcon={<FontAwesomeIcon icon={faSearch} />}
+          clearValue={() => setSearch("")}
+        />
+      </div>
+      <NewDropDownDivider />
+      <NewDropDownItem asChild>
+        <NewLink
+          primitiveType="cyberstormLink"
+          linkId="Teams"
+          rootClasses="dropdown__item navigation-header__dropdown-item"
+        >
+          <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+            <FontAwesomeIcon icon={faUsers} />
+          </NewIcon>
+          All Teams
+        </NewLink>
+      </NewDropDownItem>
+      {filteredTeams.length > 0 ? <NewDropDownDivider /> : null}
+      {filteredTeams.map((teamName) => (
+        <div key={teamName} className="navigation-header__team-wrapper">
+          <div className="dropdown__item navigation-header__dropdown-item navigation-header__team-link">
+            {teamName}
+          </div>
+          <NewDropDownItem asChild>
+            <NewLink
+              primitiveType="cyberstormLink"
+              linkId="TeamSettings"
+              team={teamName}
+              rootClasses="dropdown__item navigation-header__dropdown-item navigation-header__team-icon-button"
+            >
+              <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+                <FontAwesomeIcon icon={faCog} />
+              </NewIcon>
+            </NewLink>
+          </NewDropDownItem>
+          <NewDropDownItem asChild disabled={!communityId}>
+            {communityId ? (
+              <NewLink
+                primitiveType="cyberstormLink"
+                linkId="Team"
+                team={teamName}
+                community={communityId}
+                rootClasses="dropdown__item navigation-header__dropdown-item navigation-header__team-icon-button"
+              >
+                <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+                  <FontAwesomeIcon icon={faBoxOpen} />
+                </NewIcon>
+              </NewLink>
+            ) : (
+              <button
+                disabled
+                className="dropdown__item navigation-header__dropdown-item navigation-header__team-icon-button cyberstorm-link--disabled"
+              >
+                <NewIcon csMode="inline" noWrapper csVariant="tertiary">
+                  <FontAwesomeIcon icon={faBoxOpen} />
+                </NewIcon>
+              </button>
+            )}
+          </NewDropDownItem>
+        </div>
+      ))}
+    </NewDropDown>
+  );
+}
+
 export function DesktopUserDropdown(props: {
   user: CurrentUser;
   domain: string;
-  communityId?: string;
 }) {
-  const { user, domain, communityId } = props;
+  const { user, domain } = props;
 
   const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
 
@@ -430,58 +529,6 @@ export function DesktopUserDropdown(props: {
           Settings
         </NewLink>
       </NewDropDownItem>
-      {communityId ? (
-        <NewDropDownSub>
-          <NewDropDownSubTrigger rootClasses="dropdown__item navigation-header__dropdown-item">
-            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-              <FontAwesomeIcon icon={faUsers} />
-            </NewIcon>
-            Teams
-          </NewDropDownSubTrigger>
-          <NewDropDownSubContent>
-            <NewDropDownItem asChild>
-              <NewLink
-                primitiveType="cyberstormLink"
-                linkId="Teams"
-                rootClasses="dropdown__item navigation-header__dropdown-item"
-              >
-                <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-                  <FontAwesomeIcon icon={faUsers} />
-                </NewIcon>
-                All Teams
-              </NewLink>
-            </NewDropDownItem>
-            {user.teams.length > 0 ? <NewDropDownDivider /> : null}
-            {user.teams.map((teamName) => (
-              <NewDropDownItem key={teamName} asChild>
-                <NewLink
-                  primitiveType="link"
-                  href={`/c/${communityId}/p/${teamName}/`}
-                  rootClasses="dropdown__item navigation-header__dropdown-item"
-                >
-                  <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-                    <FontAwesomeIcon icon={faUsers} />
-                  </NewIcon>
-                  {teamName}
-                </NewLink>
-              </NewDropDownItem>
-            ))}
-          </NewDropDownSubContent>
-        </NewDropDownSub>
-      ) : (
-        <NewDropDownItem asChild>
-          <NewLink
-            primitiveType="cyberstormLink"
-            linkId="Teams"
-            rootClasses="dropdown__item navigation-header__dropdown-item"
-          >
-            <NewIcon csMode="inline" noWrapper csVariant="tertiary">
-              <FontAwesomeIcon icon={faUsers} />
-            </NewIcon>
-            Teams
-          </NewLink>
-        </NewDropDownItem>
-      )}
       <NewDropDownItem asChild>
         <NewLink
           primitiveType="link"
