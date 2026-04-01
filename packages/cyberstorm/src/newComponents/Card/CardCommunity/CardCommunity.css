@@ -42,9 +42,8 @@
 
   .card-community__meta {
     display: flex;
-    flex-direction: row;
-    gap: var(--gap-md);
-    margin-top: auto;
+    flex-flow: row wrap;
+    gap: var(--gap-xs) var(--gap-md);
   }
 
   .card-community__tag {
