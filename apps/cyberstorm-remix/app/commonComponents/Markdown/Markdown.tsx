@@ -1,4 +1,4 @@
-import { MarkdownHooks } from "react-markdown";
+import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
 
 import { nimbusSanitize } from "./Sanitize";
@@ -28,13 +28,9 @@ export function Markdown(props: MarkdownProps) {
   return (
     <div className="markdown-wrapper">
       <div className="markdown">
-        <MarkdownHooks
-          remarkPlugins={[gfm]}
-          rehypePlugins={[nimbusSanitize]}
-          fallback={"Loading markdown..."}
-        >
+        <ReactMarkdown remarkPlugins={[gfm]} rehypePlugins={[nimbusSanitize]}>
           {input && input !== "" ? input : placeholder ? placeholder : ""}
-        </MarkdownHooks>
+        </ReactMarkdown>
       </div>
     </div>
   );
