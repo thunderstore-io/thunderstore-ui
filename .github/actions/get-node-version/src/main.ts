@@ -49,6 +49,8 @@ import semver from "semver";
     return;
   }
 
-  info(`Setting outputs.node-version to "${engineVersionRangeMinimum.major}"`);
-  setOutput("node-version", engineVersionRangeMinimum.major);
+  info(
+    `Setting outputs.node-version to "${engineVersionRangeMinimum.version}"`
+  );
+  setOutput("node-version", engineVersionRangeMinimum.version);
 })();
