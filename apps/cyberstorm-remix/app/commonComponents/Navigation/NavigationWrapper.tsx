@@ -3,11 +3,7 @@
 // import { useEffect, useRef, useState } from "react";
 import { type CurrentUser } from "@thunderstore/dapper/types";
 
-import {
-  MobileNavigationMenu,
-  MobileUserPopoverContent,
-  Navigation,
-} from "./Navigation";
+import { MobileNavigationMenu, Navigation } from "./Navigation";
 
 export function NavigationWrapper({
   domain,
@@ -55,11 +51,6 @@ export function NavigationWrapper({
         communityId={communityId}
       />
       <MobileNavigationMenu domain={domain} currentUser={currentUser} />
-      {currentUser ? (
-        <MobileUserPopoverContent user={currentUser} domain={domain} />
-      ) : (
-        <MobileUserPopoverContent />
-      )}
     </>
   );
 }

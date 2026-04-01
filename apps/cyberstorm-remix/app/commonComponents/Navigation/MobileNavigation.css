@@ -7,29 +7,6 @@
     }
   }
 
-  .mobile-navigation__item {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    align-items: center;
-    color: var(--color-text-tertiary);
-    font-weight: 400;
-    font-size: 0.75rem;
-    line-height: 1.2rem;
-
-    &:active {
-      color: var(--color-cyber-green-5);
-    }
-
-    &:hover {
-      color: var(--color-text-secondary);
-    }
-
-    svg {
-      height: 1.375rem;
-    }
-  }
-
   .mobile-navigation__menu,
   .mobile-navigation__user {
     display: none;
@@ -109,7 +86,7 @@
   }
 
   /* Mobile breakpoint */
-  @media (width <= 475px) {
+  @media (width <= 750px) {
     .mobile-navigation {
       position: fixed;
       bottom: 0;
