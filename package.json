@@ -19,7 +19,7 @@
     "coverage:container": "node tools/scripts/run_test_container.mjs coverage"
   },
   "engines": {
-    "node": "24.9.0"
+    "node": "24.14.1"
   },
   "dependencies": {
     "@babel/core": "7.25.2",
