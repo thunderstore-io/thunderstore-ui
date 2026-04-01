@@ -149,15 +149,12 @@
     color: var(--color-text-tertiary);
   }
 
-  .navigation-login__modal {
-    max-width: min-content;
-  }
-
   .navigation-login {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     align-items: center;
+    align-self: stretch;
     padding: var(--space-32);
   }
 
@@ -225,6 +222,10 @@
     }
   }
 
+  .navigation-header__user-mobile {
+    display: none;
+  }
+
   /* Medium breakpoint: hide text for Upload and Legacy Switch */
   @media (width <= 900px) {
     .navigation-header__upload-text {
@@ -246,6 +247,14 @@
 
     .navigation-header__mobile-menu {
       display: inline-flex;
+    }
+
+    .navigation-header__user-desktop {
+      display: none;
+    }
+
+    .navigation-header__user-mobile {
+      display: block;
     }
 
     .navigation-header__main,

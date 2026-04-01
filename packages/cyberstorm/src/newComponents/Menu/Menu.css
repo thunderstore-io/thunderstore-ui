@@ -5,19 +5,38 @@
     width: 100%;
     height: 100%;
     background: transparent;
-
-    transform: translateX(-100%);
     transition:
       transform var(--animation-duration-sm),
       display var(--animation-duration-sm) allow-discrete;
 
     &:popover-open {
       transform: none;
+    }
+  }
 
-      @starting-style {
-        & {
-          transform: translateX(-100%);
-        }
+  /* Side configurations */
+  .menu--side--left {
+    flex-direction: row;
+    transform: translateX(-100%);
+  }
+
+  .menu--side--left:popover-open {
+    @starting-style {
+      & {
+        transform: translateX(-100%);
+      }
+    }
+  }
+
+  .menu--side--right {
+    flex-direction: row-reverse;
+    transform: translateX(100%);
+  }
+
+  .menu--side--right:popover-open {
+    @starting-style {
+      & {
+        transform: translateX(100%);
       }
     }
   }
@@ -34,6 +53,7 @@
     min-width: 16rem;
     height: 100%;
     padding: 1.5rem;
+    overflow-y: auto;
     background: #15152d;
   }
 
