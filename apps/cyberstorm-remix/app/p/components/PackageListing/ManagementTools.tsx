@@ -1,4 +1,4 @@
-import { faBoxOpen, faCog, faList } from "@fortawesome/free-solid-svg-icons";
+import { faBoxOpen, faCog, faListUl } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -32,7 +32,6 @@ export function ManagementTools({
 
   return (
     <div className="package-listing-management-tools">
-      {/* Review Package */}
       {perms.can_moderate && (
         <div className="package-listing-management-tools__island">
           <ReviewPackageForm
@@ -43,46 +42,9 @@ export function ManagementTools({
             toast={toast}
             config={requestConfig}
           />
-
-          {/* Package Listing admin link */}
-          {perms.can_view_listing_admin_page && (
-            <NewButton
-              csSize="small"
-              csVariant="secondary"
-              primitiveType="link"
-              href=""
-            >
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faList} />
-              </NewIcon>
-              Listing admin
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faArrowUpRight} />
-              </NewIcon>
-            </NewButton>
-          )}
-
-          {/* Package admin link */}
-          {perms.can_view_package_admin_page && (
-            <NewButton
-              csSize="small"
-              csVariant="secondary"
-              primitiveType="link"
-              href=""
-            >
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faBoxOpen} />
-              </NewIcon>
-              Package admin
-              <NewIcon csMode="inline" noWrapper>
-                <FontAwesomeIcon icon={faArrowUpRight} />
-              </NewIcon>
-            </NewButton>
-          )}
         </div>
       )}
 
-      {/* Manage package */}
       {(perms.can_manage || perms.can_moderate) && (
         <div className="package-listing-management-tools__island">
           <NewButton
@@ -100,6 +62,44 @@ export function ManagementTools({
           </NewButton>
         </div>
       )}
+
+      {(perms.can_view_listing_admin_page && listing.listing_admin_url) ||
+      (perms.can_view_package_admin_page && listing.package_admin_url) ? (
+        <div className="package-listing-management-tools__island">
+          {perms.can_view_listing_admin_page && listing.listing_admin_url ? (
+            <NewButton
+              csSize="small"
+              csVariant="secondary"
+              primitiveType="link"
+              href={listing.listing_admin_url}
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faListUl} />
+              </NewIcon>
+              Package Listing Admin
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faArrowUpRight} />
+              </NewIcon>
+            </NewButton>
+          ) : null}
+          {perms.can_view_package_admin_page && listing.package_admin_url ? (
+            <NewButton
+              csSize="small"
+              csVariant="secondary"
+              primitiveType="link"
+              href={listing.package_admin_url}
+            >
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faBoxOpen} />
+              </NewIcon>
+              Package Admin
+              <NewIcon csMode="inline" noWrapper>
+                <FontAwesomeIcon icon={faArrowUpRight} />
+              </NewIcon>
+            </NewButton>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }
