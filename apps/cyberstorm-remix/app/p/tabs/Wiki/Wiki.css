@@ -120,6 +120,12 @@
     gap: 2rem;
     align-items: flex-start;
     align-self: stretch;
+
+    > .skeleton {
+      width: 100%;
+      height: 500px;
+      border-radius: 8px;
+    }
   }
 
   .package-wiki-content__footer {
