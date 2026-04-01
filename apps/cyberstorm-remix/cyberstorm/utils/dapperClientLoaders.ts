@@ -1,4 +1,5 @@
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { assertTeamAccess } from "cyberstorm/utils/permissions";
 import { type LoaderFunctionArgs } from "react-router";
 
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -22,11 +23,14 @@ import { ApiError, type GenericApiError } from "@thunderstore/thunderstore-api";
 export function makeTeamSettingsTabLoader<T>(
   dataFetcher: (dapper: DapperTs, teamName: string) => Promise<T>
 ) {
-  return async function clientLoader({ params }: LoaderFunctionArgs) {
+  return async function clientLoader({ params, request }: LoaderFunctionArgs) {
     const teamName = params.namespaceId!;
+    const url = new URL(request.url);
+    const requestPathname = url.pathname + url.search + url.hash;
 
     try {
       const dapper = setupDapper();
+      await assertTeamAccess(teamName, requestPathname);
       const data = await dataFetcher(dapper, teamName);
       return { teamName, ...data };
     } catch (error) {

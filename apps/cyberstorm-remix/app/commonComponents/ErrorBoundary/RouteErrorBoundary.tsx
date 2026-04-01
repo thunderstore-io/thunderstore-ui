@@ -1,6 +1,12 @@
 import { captureRemixErrorBoundaryError } from "@sentry/remix";
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { type JSX, useEffect } from "react";
-import { isRouteErrorResponse, useRouteError } from "react-router";
+import {
+  isRouteErrorResponse,
+  useLocation,
+  useNavigate,
+  useRouteError,
+} from "react-router";
 
 import { isApiError } from "@thunderstore/thunderstore-api";
 
@@ -13,6 +19,8 @@ type StatusCode = number | "???";
  */
 export function RouteErrorBoundary() {
   const error = useRouteError();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Seeing double console logs caused by React's strictMode (that
   // *should* happen only in dev mode) makes me want to ensure any
@@ -32,6 +40,36 @@ export function RouteErrorBoundary() {
   } else if (isApiError(error)) {
     statusCode = error.response.status;
   }
+
+  // RouteErrorBoundary useEffect handles everything locally.
+  useEffect(() => {
+    let active = true;
+
+    async function checkAuth() {
+      if (statusCode === 401) {
+        const tools = getSessionTools();
+        const storedUser = await tools?.getSessionCurrentUser(true);
+        const isLoggedIn = Boolean(storedUser?.username);
+
+        if (!isLoggedIn && active) {
+          navigate(
+            `/login?returnUrl=${encodeURIComponent(
+              location.pathname + location.search + location.hash
+            )}`,
+            {
+              replace: true,
+            }
+          );
+        }
+      }
+    }
+
+    checkAuth();
+
+    return () => {
+      active = false;
+    };
+  }, [statusCode, location.pathname, location.search, location.hash, navigate]);
 
   return (
     <div className="error-boundary">

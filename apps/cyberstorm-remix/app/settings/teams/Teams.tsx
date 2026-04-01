@@ -2,6 +2,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
+import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { createSeo } from "cyberstorm/utils/meta";
 import { useReducer, useState } from "react";
 import { useOutletContext, useRevalidator } from "react-router";
@@ -53,11 +54,11 @@ function formFieldUpdateAction(
 // Client loader to fetch current user for SEO titles
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const tools = getSessionTools();
-  const currentUser = await tools?.getSessionCurrentUser();
+  const currentUser = await tools?.getSessionCurrentUser(true);
   const url = new URL(request.url);
 
-  if (!currentUser.username) {
-    throw new Response("Unauthorized", { status: 401 });
+  if (!currentUser?.username) {
+    return redirectToLogin(url.pathname + url.search + url.hash);
   }
 
   return {
@@ -83,6 +84,8 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
     }),
   };
 }
+
+clientLoader.hydrate = true;
 
 export default function Teams() {
   const outletContext = useOutletContext() as OutletContextShape;

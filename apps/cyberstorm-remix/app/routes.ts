@@ -92,6 +92,8 @@ export default [
   ),
   route("/package/create", "upload/upload.tsx"),
 
+  route("/login", "login/login.tsx"),
+
   route("/settings", "settings/user/Settings.tsx", [
     route("", "settings/user/Connections/Connections.tsx", {
       index: true,

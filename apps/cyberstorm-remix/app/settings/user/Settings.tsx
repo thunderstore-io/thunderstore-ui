@@ -1,3 +1,5 @@
+import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
+import { redirectToLogin } from "cyberstorm/utils/ThunderstoreAuth";
 import { createSeo } from "cyberstorm/utils/meta";
 import { Outlet, useLocation, useOutletContext } from "react-router";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
@@ -8,8 +10,16 @@ import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Settings";
 import "./Settings.css";
 
-export async function loader({ request }: Route.LoaderArgs) {
+// Client loader to fetch current user for SEO titles and secure the route
+export async function clientLoader({ request }: Route.ClientLoaderArgs) {
+  const tools = getSessionTools();
+  const currentUser = await tools?.getSessionCurrentUser(true);
   const url = new URL(request.url);
+
+  if (!currentUser?.username) {
+    return redirectToLogin(url.pathname + url.search + url.hash);
+  }
+
   return {
     seo: createSeo({
       descriptors: [
@@ -30,6 +40,8 @@ export async function loader({ request }: Route.LoaderArgs) {
     }),
   };
 }
+
+clientLoader.hydrate = true;
 
 export default function UserSettings() {
   const context = useOutletContext<OutletContextShape>();

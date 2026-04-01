@@ -58,6 +58,7 @@ export function Breadcrumbs() {
   const markdownPreviewPage = matches.find(
     (m) => m.id === "tools/markdown-preview/markdownPreview"
   );
+  const loginPage = matches.find((m) => m.id === "login/login");
 
   const communityBreadcrumb = useMemo(
     () =>
@@ -287,6 +288,15 @@ export function Breadcrumbs() {
     );
   }, [packageFormatDocsPage, manifestValidatorPage, markdownPreviewPage]);
 
+  const loginBreadcrumb = useMemo(() => {
+    if (!loginPage) return null;
+    return (
+      <span>
+        <span>Log in</span>
+      </span>
+    );
+  }, [loginPage]);
+
   return (
     <NewBreadCrumbs>
       {userSettingsBreadcrumb}
@@ -299,6 +309,7 @@ export function Breadcrumbs() {
       {packageVersionWithoutCommunityBreadcrumb}
       {miscPackageBreadcrumb}
       {toolsBreadcrumb}
+      {loginBreadcrumb}
     </NewBreadCrumbs>
   );
 }
