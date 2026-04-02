@@ -17,12 +17,13 @@ interface Props extends Omit<FramePopoverProps, "primitiveType"> {
   trigger?: ReactNode;
   controls?: ReactNode;
   csVariant?: MenuVariants;
+  csSide?: "left" | "right";
 }
 
 // TODO: Add storybook story
 // TODO: Add support for color, size and text systems
 export function Menu(props: Props) {
-  const { rootClasses, csVariant } = props;
+  const { rootClasses, csVariant, csSide = "left" } = props;
 
   return (
     <>
@@ -32,6 +33,7 @@ export function Menu(props: Props) {
         popoverId={props.popoverId}
         rootClasses={classnames(
           "menu",
+          `menu--side--${csSide}`,
           ...componentClasses("menu", csVariant, undefined, undefined),
           rootClasses
         )}

@@ -223,11 +223,22 @@ export function Navigation(props: {
           ) : null}
 
           {currentUser ? (
-            <DesktopUserDropdown
-              user={currentUser}
-              domain={domain}
-              communityId={communityId}
-            />
+            <>
+              <div className="navigation-header__user-desktop">
+                <DesktopUserDropdown
+                  user={currentUser}
+                  domain={domain}
+                  communityId={communityId}
+                />
+              </div>
+              <div className="navigation-header__user-mobile">
+                <MobileUserMenu
+                  user={currentUser}
+                  domain={domain}
+                  communityId={communityId}
+                />
+              </div>
+            </>
           ) : (
             <DesktopLoginPopover />
           )}
@@ -259,7 +270,6 @@ export function DesktopLoginPopover() {
           Log In
         </NewButton>
       }
-      contentClasses="navigation-login__modal"
     >
       <div className="navigation-login">
         <svg
@@ -472,6 +482,111 @@ export function DesktopUserDropdown(props: {
         </NewLink>
       </NewDropDownItem>
     </NewDropDown>
+  );
+}
+
+export function MobileUserMenu(props: {
+  user: CurrentUser;
+  domain: string;
+  communityId?: string;
+}) {
+  const { user, domain, communityId } = props;
+  const avatar = user.connections.find((c) => c.avatar !== null)?.avatar;
+
+  return (
+    <Menu
+      csSide="right"
+      popoverId="mobileNavAccount"
+      trigger={
+        <button
+          className="navigation-header__user-button"
+          popoverTarget="mobileNavAccount"
+          popoverTargetAction="show"
+        >
+          <NewAvatar src={avatar} username={user.username} csSize="verySmoll" />
+          <NewIcon csMode="inline" noWrapper>
+            <FontAwesomeIcon icon={faCaretDown} />
+          </NewIcon>
+        </button>
+      }
+      controls={
+        <div className="mobile-navigation__popover-controls">
+          <NewButton
+            popoverTarget="mobileNavAccount"
+            popoverTargetAction="hide"
+            aria-label="Close menu"
+            csSize="medium"
+            csVariant="secondary"
+            csModifiers={["ghost", "only-icon"]}
+            rootClasses="mobile-navigation__popover-close-button"
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faXmark} />
+            </NewIcon>
+          </NewButton>
+        </div>
+      }
+    >
+      <nav className="mobile-navigation__popover" aria-label="Mobile user menu">
+        <div className="mobile-navigation__avatar">
+          <NewAvatar src={avatar} username={user.username} csSize="medium" />
+          <div className="mobile-navigation__user-details">{user.username}</div>
+        </div>
+        <div className="mobile-navigation__divider" />
+        <section>
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Settings"
+            rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faCog} />
+            </NewIcon>
+            Settings
+          </NewLink>
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Teams"
+            rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faUsers} />
+            </NewIcon>
+            {communityId ? "All Teams" : "Teams"}
+          </NewLink>
+          {communityId &&
+            user.teams.map((teamName) => (
+              <NewLink
+                key={teamName}
+                primitiveType="link"
+                href={`/c/${communityId}/p/${teamName}/`}
+                rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thin"
+                style={{ paddingLeft: "var(--space-32)" }}
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faUsers} />
+                </NewIcon>
+                <span className="mobile-navigation__popover-text">
+                  {teamName}
+                </span>
+              </NewLink>
+            ))}
+        </section>
+        <div className="mobile-navigation__divider" />
+        <section>
+          <NewLink
+            primitiveType="link"
+            href={buildLogoutUrl(domain)}
+            rootClasses="mobile-navigation__popover-item mobile-navigation__popover--thick"
+          >
+            <NewIcon csMode="inline" noWrapper>
+              <FontAwesomeIcon icon={faSignOut} />
+            </NewIcon>
+            Log Out
+          </NewLink>
+        </section>
+      </nav>
+    </Menu>
   );
 }
 
