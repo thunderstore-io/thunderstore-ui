@@ -78,7 +78,7 @@ export async function loader({ params }: Route.LoaderArgs) {
           result = {
             status: "error",
             source: undefined,
-            message: `Failed to load source: ${error.message}`,
+            message: "Analysis not available",
             seo: createSeo({ descriptors: [{ title: "Source Not Found" }] }),
           };
         } else {
@@ -92,7 +92,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   }
   return {
     status: "error",
-    message: "Failed to load source",
+    message: "Analysis not available",
     source: undefined,
     seo: createSeo({ descriptors: [{ title: "Source Not Found" }] }),
   };
@@ -130,7 +130,7 @@ export async function clientLoader({
       result = {
         status: "error",
         source: undefined,
-        message: "Failed to load source",
+        message: "Analysis not available",
         seo: (await serverLoader()).seo,
       };
       throw error;
@@ -139,7 +139,7 @@ export async function clientLoader({
   }
   return {
     status: "error",
-    message: "Failed to load source",
+    message: "Analysis not available",
     source: undefined,
     seo: (await serverLoader()).seo,
   };
@@ -152,27 +152,21 @@ export default function Source() {
   const outletContext = useOutletContext() as PackageListingOutletContext;
 
   if (status === "error") {
-    return <TabFetchState variant="danger" message={message} />;
+    return <TabFetchState variant="info" message={message} />;
   }
   return (
     <Suspense fallback={<SkeletonBox className="package-source__skeleton" />}>
       <Await
         resolve={source}
         errorElement={
-          <TabFetchState
-            variant="danger"
-            message="Error occurred while loading source"
-          />
+          <TabFetchState variant="info" message="Analysis not available" />
         }
       >
         {(resolvedValue) => {
           const decompilations = resolvedValue?.decompilations ?? [];
           if (decompilations.length === 0) {
             return (
-              <TabFetchState
-                variant="info"
-                message="Decompiled source not available."
-              />
+              <TabFetchState variant="info" message="Analysis not available" />
             );
           }
           return decompilations.map((decompilation) => {
