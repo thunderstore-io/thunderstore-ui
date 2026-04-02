@@ -5,15 +5,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { Suspense } from "react";
 import type { ShouldRevalidateFunctionArgs } from "react-router";
 import {
-  Await,
   Outlet,
   useLoaderData,
   useLocation,
   useOutletContext,
 } from "react-router";
+import { SuspenseIfPromise } from "~/commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 
 import {
   Heading,
@@ -114,18 +113,16 @@ export default function Community() {
               : null
           )}
         >
-          <Suspense fallback={<SkeletonBox />}>
-            <Await resolve={community}>
-              {(resolvedValue) =>
-                resolvedValue.hero_image_url ? (
-                  <img
-                    src={resolvedValue.hero_image_url}
-                    alt={resolvedValue.name}
-                  />
-                ) : null
-              }
-            </Await>
-          </Suspense>
+          <SuspenseIfPromise fallback={<SkeletonBox />} resolve={community}>
+            {(resolvedValue) =>
+              resolvedValue.hero_image_url ? (
+                <img
+                  src={resolvedValue.hero_image_url}
+                  alt={resolvedValue.name}
+                />
+              ) : null
+            }
+          </SuspenseIfPromise>
         </div>
 
         <div
@@ -137,82 +134,86 @@ export default function Community() {
           <div className="community__content-header">
             <div className="community__game-icon">
               <div className="community__game-icon-tinified">
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) =>
-                      resolvedValue.community_icon_url ? (
-                        <img
-                          src={resolvedValue.community_icon_url}
-                          alt={resolvedValue.name}
-                        />
-                      ) : null
-                    }
-                  </Await>
-                </Suspense>
+                <SuspenseIfPromise
+                  resolve={community}
+                  fallback={<SkeletonBox />}
+                >
+                  {(resolvedValue) =>
+                    resolvedValue.community_icon_url ? (
+                      <img
+                        src={resolvedValue.community_icon_url}
+                        alt={resolvedValue.name}
+                      />
+                    ) : null
+                  }
+                </SuspenseIfPromise>
               </div>
             </div>
             <div className="community__content-header-content">
               <div className="community__header-info">
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) => (
-                      <Heading
-                        csLevel={"1"}
-                        csSize={"3"}
-                        csVariant="primary"
-                        mode="display"
-                      >
-                        {resolvedValue.name}
-                      </Heading>
-                    )}
-                  </Await>
-                </Suspense>
+                <SuspenseIfPromise
+                  resolve={community}
+                  fallback={<SkeletonBox />}
+                >
+                  {(resolvedValue) => (
+                    <Heading
+                      csLevel={"1"}
+                      csSize={"3"}
+                      csVariant="primary"
+                      mode="display"
+                    >
+                      {resolvedValue.name}
+                    </Heading>
+                  )}
+                </SuspenseIfPromise>
               </div>
               <div className="community__header-meta">
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) =>
-                      resolvedValue.wiki_url ? (
-                        <NewLink
-                          primitiveType="link"
-                          href={resolvedValue.wiki_url}
-                          csVariant="cyber"
-                          rootClasses="community__item"
-                        >
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faBook} />
-                          </NewIcon>
-                          <span>Modding Wiki</span>
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faArrowUpRight} />
-                          </NewIcon>
-                        </NewLink>
-                      ) : null
-                    }
-                  </Await>
-                </Suspense>
-                <Suspense fallback={<SkeletonBox />}>
-                  <Await resolve={community}>
-                    {(resolvedValue) =>
-                      resolvedValue.discord_url ? (
-                        <NewLink
-                          primitiveType="link"
-                          href={resolvedValue.discord_url}
-                          csVariant="cyber"
-                          rootClasses="community__item"
-                        >
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faDiscord} />
-                          </NewIcon>
-                          <span>Modding Discord</span>
-                          <NewIcon csMode="inline" noWrapper>
-                            <FontAwesomeIcon icon={faArrowUpRight} />
-                          </NewIcon>
-                        </NewLink>
-                      ) : null
-                    }
-                  </Await>
-                </Suspense>
+                <SuspenseIfPromise
+                  resolve={community}
+                  fallback={<SkeletonBox />}
+                >
+                  {(resolvedValue) =>
+                    resolvedValue.wiki_url ? (
+                      <NewLink
+                        primitiveType="link"
+                        href={resolvedValue.wiki_url}
+                        csVariant="cyber"
+                        rootClasses="community__item"
+                      >
+                        <NewIcon csMode="inline" noWrapper>
+                          <FontAwesomeIcon icon={faBook} />
+                        </NewIcon>
+                        <span>Modding Wiki</span>
+                        <NewIcon csMode="inline" noWrapper>
+                          <FontAwesomeIcon icon={faArrowUpRight} />
+                        </NewIcon>
+                      </NewLink>
+                    ) : null
+                  }
+                </SuspenseIfPromise>
+                <SuspenseIfPromise
+                  resolve={community}
+                  fallback={<SkeletonBox />}
+                >
+                  {(resolvedValue) =>
+                    resolvedValue.discord_url ? (
+                      <NewLink
+                        primitiveType="link"
+                        href={resolvedValue.discord_url}
+                        csVariant="cyber"
+                        rootClasses="community__item"
+                      >
+                        <NewIcon csMode="inline" noWrapper>
+                          <FontAwesomeIcon icon={faDiscord} />
+                        </NewIcon>
+                        <span>Modding Discord</span>
+                        <NewIcon csMode="inline" noWrapper>
+                          <FontAwesomeIcon icon={faArrowUpRight} />
+                        </NewIcon>
+                      </NewLink>
+                    ) : null
+                  }
+                </SuspenseIfPromise>
               </div>
             </div>
           </div>

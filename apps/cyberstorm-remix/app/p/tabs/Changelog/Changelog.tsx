@@ -2,8 +2,8 @@ import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { Suspense } from "react";
-import { Await, useLoaderData } from "react-router";
+import { useLoaderData } from "react-router";
+import { SuspenseIfPromise } from "~/commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -78,28 +78,25 @@ export default function Changelog() {
   const { changelog } = useLoaderData<typeof loader | typeof clientLoader>();
 
   return (
-    <Suspense
+    <SuspenseIfPromise
       fallback={<SkeletonBox className="package-changelog__skeleton" />}
+      resolve={changelog}
+      errorElement={
+        <TabFetchState variant="danger" message="Failed to load changelog" />
+      }
     >
-      <Await
-        resolve={changelog}
-        errorElement={
-          <TabFetchState variant="danger" message="Failed to load changelog" />
-        }
-      >
-        {(resolvedValue) =>
-          resolvedValue ? (
-            <div className="markdown-wrapper">
-              <div
-                dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
-                className="markdown"
-              />
-            </div>
-          ) : (
-            <TabFetchState variant="info" message="No changelog available" />
-          )
-        }
-      </Await>
-    </Suspense>
+      {(resolvedValue) =>
+        resolvedValue ? (
+          <div className="markdown-wrapper">
+            <div
+              dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
+              className="markdown"
+            />
+          </div>
+        ) : (
+          <TabFetchState variant="info" message="No changelog available" />
+        )
+      }
+    </SuspenseIfPromise>
   );
 }

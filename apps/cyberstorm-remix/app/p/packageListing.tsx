@@ -13,15 +13,8 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { type ReactElement, useEffect, useRef, useState } from "react";
 import {
-  type ReactElement,
-  Suspense,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import {
-  Await,
   Outlet,
   useLoaderData,
   useLocation,
@@ -47,6 +40,7 @@ import {
 import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
 
+import { SuspenseIfPromise } from "../commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 import type { Route } from "./+types/packageListing";
 import { ManagementTools } from "./components/PackageListing/ManagementTools";
 import { PackageActions } from "./components/PackageListing/PackageActions";
@@ -271,29 +265,27 @@ export default function PackageListing() {
     <>
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
-          <Suspense>
-            <Await resolve={listingStatus}>
-              {(resolvedStatus) => (
-                <Await resolve={permissions}>
-                  {(resolvedPermissions) =>
-                    resolvedPermissions ? (
-                      <>
-                        <ManagementTools
-                          listingStatus={resolvedStatus}
-                          packagePermissions={resolvedPermissions}
-                          listing={listing}
-                          toast={toast}
-                          requestConfig={config}
-                        />
-                        <RejectionReason status={resolvedStatus} />
-                        <InternalNotes status={resolvedStatus} />
-                      </>
-                    ) : null
-                  }
-                </Await>
-              )}
-            </Await>
-          </Suspense>
+          <SuspenseIfPromise resolve={listingStatus}>
+            {(resolvedStatus) => (
+              <SuspenseIfPromise resolve={permissions}>
+                {(resolvedPermissions) =>
+                  resolvedPermissions ? (
+                    <>
+                      <ManagementTools
+                        listingStatus={resolvedStatus}
+                        packagePermissions={resolvedPermissions}
+                        listing={listing}
+                        toast={toast}
+                        requestConfig={config}
+                      />
+                      <RejectionReason status={resolvedStatus} />
+                      <InternalNotes status={resolvedStatus} />
+                    </>
+                  ) : null
+                }
+              </SuspenseIfPromise>
+            )}
+          </SuspenseIfPromise>
 
           <div className="package-listing__main">
             <section className="package-listing__package-content-section">
@@ -483,13 +475,11 @@ export default function PackageListing() {
 
               {packageMeta(lastUpdated, firstUploaded, listing)}
 
-              <Suspense>
-                <Await resolve={community}>
-                  {(resolvedCommunity) =>
-                    packageBoxes(listing, resolvedCommunity, domain)
-                  }
-                </Await>
-              </Suspense>
+              <SuspenseIfPromise resolve={community}>
+                {(resolvedCommunity) =>
+                  packageBoxes(listing, resolvedCommunity, domain)
+                }
+              </SuspenseIfPromise>
             </aside>
           </div>
         </section>
@@ -556,13 +546,11 @@ function PackageDetailsNarrow(props: {
       >
         {packageMeta(lastUpdated, firstUploaded, listing)}
 
-        <Suspense fallback={<p>Loading...</p>}>
-          <Await resolve={community}>
-            {(resolvedCommunity) =>
-              packageBoxes(listing, resolvedCommunity, domain)
-            }
-          </Await>
-        </Suspense>
+        <SuspenseIfPromise fallback={<p>Loading...</p>} resolve={community}>
+          {(resolvedCommunity) =>
+            packageBoxes(listing, resolvedCommunity, domain)
+          }
+        </SuspenseIfPromise>
       </Drawer>
     </>
   );

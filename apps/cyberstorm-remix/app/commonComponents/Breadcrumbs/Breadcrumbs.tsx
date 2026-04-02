@@ -1,11 +1,13 @@
-import { Suspense, useMemo } from "react";
-import { Await, type UIMatch, useMatches } from "react-router";
+import { useMemo } from "react";
+import { type UIMatch, useMatches } from "react-router";
 
 import {
   NewBreadCrumbs,
   NewBreadCrumbsLink,
   isRecord,
 } from "@thunderstore/cyberstorm";
+
+import { SuspenseIfPromise } from "../SuspenseIfPromise/SuspenseIfPromise";
 
 export function Breadcrumbs() {
   const matches = useMatches();
@@ -323,52 +325,51 @@ function getCommunityBreadcrumb(
     <>
       {isRecord(communityPage.data) &&
       Object.prototype.hasOwnProperty.call(communityPage.data, "community") ? (
-        <Suspense
+        <SuspenseIfPromise
+          resolve={communityPage.data.community}
           fallback={
             <span>
               <span>Loading...</span>
             </span>
           }
         >
-          <Await resolve={communityPage.data.community}>
-            {(resolvedValue) => {
-              let label = undefined;
-              let icon = undefined;
-              if (isRecord(resolvedValue)) {
-                label =
-                  Object.prototype.hasOwnProperty.call(resolvedValue, "name") &&
-                  typeof resolvedValue.name === "string"
-                    ? resolvedValue.name
-                    : communityPage.params.communityId;
-                icon =
-                  Object.prototype.hasOwnProperty.call(
-                    resolvedValue,
-                    "community_icon_url"
-                  ) && typeof resolvedValue.community_icon_url === "string" ? (
-                    <img src={resolvedValue.community_icon_url} alt="" />
-                  ) : undefined;
-              }
-              return isNotLast ? (
-                <NewBreadCrumbsLink
-                  primitiveType="cyberstormLink"
-                  linkId="Community"
-                  community={communityPage.params.communityId}
-                  csVariant="cyber"
-                >
+          {(resolvedValue) => {
+            let label = undefined;
+            let icon = undefined;
+            if (isRecord(resolvedValue)) {
+              label =
+                Object.prototype.hasOwnProperty.call(resolvedValue, "name") &&
+                typeof resolvedValue.name === "string"
+                  ? resolvedValue.name
+                  : communityPage.params.communityId;
+              icon =
+                Object.prototype.hasOwnProperty.call(
+                  resolvedValue,
+                  "community_icon_url"
+                ) && typeof resolvedValue.community_icon_url === "string" ? (
+                  <img src={resolvedValue.community_icon_url} alt="" />
+                ) : undefined;
+            }
+            return isNotLast ? (
+              <NewBreadCrumbsLink
+                primitiveType="cyberstormLink"
+                linkId="Community"
+                community={communityPage.params.communityId}
+                csVariant="cyber"
+              >
+                {icon}
+                {label}
+              </NewBreadCrumbsLink>
+            ) : (
+              <span>
+                <span>
                   {icon}
                   {label}
-                </NewBreadCrumbsLink>
-              ) : (
-                <span>
-                  <span>
-                    {icon}
-                    {label}
-                  </span>
                 </span>
-              );
-            }}
-          </Await>
-        </Suspense>
+              </span>
+            );
+          }}
+        </SuspenseIfPromise>
       ) : null}
     </>
   );

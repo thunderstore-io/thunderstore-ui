@@ -3,15 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { Suspense } from "react";
 import {
-  Await,
   Outlet,
   type ShouldRevalidateFunction,
   useOutletContext,
   useParams,
 } from "react-router";
 import { useLoaderData } from "react-router";
+import { SuspenseIfPromise } from "~/commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 import { type OutletContextShape } from "~/root";
 
 import { NewButton, NewIcon, SkeletonBox } from "@thunderstore/cyberstorm";
@@ -144,71 +143,37 @@ export default function Wiki() {
   return (
     <div className="package-wiki">
       <div className="package-wiki-nav">
-        <Suspense>
-          <Await resolve={permissions}>
-            {(resolvedValue) =>
-              resolvedValue?.permissions.can_manage_wiki ? (
-                <div className="package-wiki-nav__header">
-                  <NewButton
-                    primitiveType="cyberstormLink"
-                    linkId="PackageWikiNewPage"
-                    community={communityId}
-                    namespace={namespaceId}
-                    package={packageId}
-                  >
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faPlus} />
-                    </NewIcon>
-                    New Page
-                  </NewButton>
-                </div>
-              ) : null
-            }
-          </Await>
-        </Suspense>
+        <SuspenseIfPromise resolve={permissions}>
+          {(resolvedValue) =>
+            resolvedValue?.permissions.can_manage_wiki ? (
+              <div className="package-wiki-nav__header">
+                <NewButton
+                  primitiveType="cyberstormLink"
+                  linkId="PackageWikiNewPage"
+                  community={communityId}
+                  namespace={namespaceId}
+                  package={packageId}
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faPlus} />
+                  </NewIcon>
+                  New Page
+                </NewButton>
+              </div>
+            ) : null
+          }
+        </SuspenseIfPromise>
         <div className="package-wiki-nav__section">
           <div className="package-wiki-nav__list">
-            <Suspense
+            <SuspenseIfPromise
+              resolve={wiki}
               fallback={<SkeletonBox className="package-wiki-nav__skeleton" />}
+              errorElement={<></>}
             >
-              <Await resolve={wiki} errorElement={<></>}>
-                {(resolvedValue) =>
-                  resolvedValue &&
-                  resolvedValue.pages.map((page, index) => {
-                    if (!slug && index === 0) {
-                      return (
-                        <NewButton
-                          key={page.id}
-                          csSize="small"
-                          csVariant="secondary"
-                          primitiveType="cyberstormLink"
-                          linkId="PackageWikiPage"
-                          community={communityId}
-                          namespace={namespaceId}
-                          package={packageId}
-                          wikipageslug={page.slug}
-                        >
-                          <span>{page.title}</span>
-                        </NewButton>
-                      );
-                    }
-                    if (page.slug === slug) {
-                      return (
-                        <NewButton
-                          key={page.id}
-                          csSize="small"
-                          csVariant="secondary"
-                          primitiveType="cyberstormLink"
-                          linkId="PackageWikiPage"
-                          community={communityId}
-                          namespace={namespaceId}
-                          package={packageId}
-                          wikipageslug={page.slug}
-                        >
-                          <span>{page.title}</span>
-                        </NewButton>
-                      );
-                    }
+              {(resolvedValue) =>
+                resolvedValue &&
+                resolvedValue.pages.map((page, index) => {
+                  if (!slug && index === 0) {
                     return (
                       <NewButton
                         key={page.id}
@@ -220,16 +185,48 @@ export default function Wiki() {
                         namespace={namespaceId}
                         package={packageId}
                         wikipageslug={page.slug}
-                        csModifiers={["ghost"]}
-                        rootClasses="package-wiki-nav__unselected"
                       >
                         <span>{page.title}</span>
                       </NewButton>
                     );
-                  })
-                }
-              </Await>
-            </Suspense>
+                  }
+                  if (page.slug === slug) {
+                    return (
+                      <NewButton
+                        key={page.id}
+                        csSize="small"
+                        csVariant="secondary"
+                        primitiveType="cyberstormLink"
+                        linkId="PackageWikiPage"
+                        community={communityId}
+                        namespace={namespaceId}
+                        package={packageId}
+                        wikipageslug={page.slug}
+                      >
+                        <span>{page.title}</span>
+                      </NewButton>
+                    );
+                  }
+                  return (
+                    <NewButton
+                      key={page.id}
+                      csSize="small"
+                      csVariant="secondary"
+                      primitiveType="cyberstormLink"
+                      linkId="PackageWikiPage"
+                      community={communityId}
+                      namespace={namespaceId}
+                      package={packageId}
+                      wikipageslug={page.slug}
+                      csModifiers={["ghost"]}
+                      rootClasses="package-wiki-nav__unselected"
+                    >
+                      <span>{page.title}</span>
+                    </NewButton>
+                  );
+                })
+              }
+            </SuspenseIfPromise>
           </div>
         </div>
       </div>

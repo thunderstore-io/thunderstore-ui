@@ -4,14 +4,10 @@ import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
-import { Suspense, useReducer, useState } from "react";
-import {
-  Await,
-  useLoaderData,
-  useOutletContext,
-  useRevalidator,
-} from "react-router";
+import { useReducer, useState } from "react";
+import { useLoaderData, useOutletContext, useRevalidator } from "react-router";
 import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
+import { SuspenseIfPromise } from "~/commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 
 import {
   CodeBox,
@@ -44,33 +40,32 @@ export default function ServiceAccounts() {
   }
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Await resolve={serviceAccounts}>
-        {(resolvedServiceAccounts) => (
-          <div className="settings-items">
-            <div className="settings-items__item">
-              <div className="settings-items__meta">
-                <p className="settings-items__title">Service accounts</p>
-                <p className="settings-items__description">
-                  Your loyal servants
-                </p>
-                <AddServiceAccountForm
-                  teamName={teamName}
-                  serviceAccountRevalidate={serviceAccountRevalidate}
-                />
-              </div>
-              <div className="settings-items__content">
-                <ServiceAccountsTable
-                  serviceAccounts={resolvedServiceAccounts}
-                  serviceAccountRevalidate={serviceAccountRevalidate}
-                  teamName={teamName}
-                />
-              </div>
+    <SuspenseIfPromise
+      resolve={serviceAccounts}
+      fallback={<div>Loading...</div>}
+    >
+      {(resolvedServiceAccounts) => (
+        <div className="settings-items">
+          <div className="settings-items__item">
+            <div className="settings-items__meta">
+              <p className="settings-items__title">Service accounts</p>
+              <p className="settings-items__description">Your loyal servants</p>
+              <AddServiceAccountForm
+                teamName={teamName}
+                serviceAccountRevalidate={serviceAccountRevalidate}
+              />
+            </div>
+            <div className="settings-items__content">
+              <ServiceAccountsTable
+                serviceAccounts={resolvedServiceAccounts}
+                serviceAccountRevalidate={serviceAccountRevalidate}
+                teamName={teamName}
+              />
             </div>
           </div>
-        )}
-      </Await>
-    </Suspense>
+        </div>
+      )}
+    </SuspenseIfPromise>
   );
 }
 

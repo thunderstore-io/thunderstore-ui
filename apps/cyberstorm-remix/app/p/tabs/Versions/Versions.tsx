@@ -3,9 +3,8 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { rowSemverCompare } from "cyberstorm/utils/semverCompare";
-import { Suspense } from "react";
-import { Await } from "react-router";
 import { useLoaderData } from "react-router";
+import { SuspenseIfPromise } from "~/commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 
 import {
   Heading,
@@ -95,71 +94,70 @@ export default function Versions() {
   }
 
   return (
-    <Suspense fallback={<SkeletonBox className="package-versions__skeleton" />}>
-      <Await
-        resolve={versions}
-        errorElement={
-          <TabFetchState
-            variant="danger"
-            message="Error occurred while loading versions"
-          />
-        }
-      >
-        {(resolvedValue) => (
-          <div className="package-versions">
-            <ModManagerBanner />
-            <div className="package-versions__table-wrapper">
-              <NewTable
-                titleRowContent={
-                  <Heading csSize="3" csLevel="3">
-                    Versions
-                  </Heading>
-                }
-                headers={columns}
-                rows={resolvedValue.map((v) => [
-                  {
-                    value: (
-                      <NewLink
-                        primitiveType="cyberstormLink"
-                        linkId="PackageVersion"
-                        package={packageId}
-                        community={communityId}
-                        namespace={namespaceId}
-                        version={v.version_number}
-                        csVariant="primary"
-                      >
-                        {v.version_number}
-                      </NewLink>
-                    ),
-                    sortValue: v.version_number,
-                  },
-                  {
-                    value: new Date(v.datetime_created).toUTCString(),
-                    sortValue: v.datetime_created,
-                  },
-                  {
-                    value: v.download_count.toLocaleString(),
-                    sortValue: v.download_count,
-                  },
-                  {
-                    value: (
-                      <div className="package-versions__actions">
-                        <DownloadLink {...v} />
-                        <InstallLink {...v} />
-                      </div>
-                    ),
-                    sortValue: 0,
-                  },
-                ])}
-                sortDirection={NewTableSort.DESC}
-                csModifiers={["alignLastColumnRight"]}
-                customSortCompare={{ 0: rowSemverCompare }}
-              />
-            </div>
+    <SuspenseIfPromise
+      resolve={versions}
+      fallback={<SkeletonBox className="package-versions__skeleton" />}
+      errorElement={
+        <TabFetchState
+          variant="danger"
+          message="Error occurred while loading versions"
+        />
+      }
+    >
+      {(resolvedValue) => (
+        <div className="package-versions">
+          <ModManagerBanner />
+          <div className="package-versions__table-wrapper">
+            <NewTable
+              titleRowContent={
+                <Heading csSize="3" csLevel="3">
+                  Versions
+                </Heading>
+              }
+              headers={columns}
+              rows={resolvedValue.map((v) => [
+                {
+                  value: (
+                    <NewLink
+                      primitiveType="cyberstormLink"
+                      linkId="PackageVersion"
+                      package={packageId}
+                      community={communityId}
+                      namespace={namespaceId}
+                      version={v.version_number}
+                      csVariant="primary"
+                    >
+                      {v.version_number}
+                    </NewLink>
+                  ),
+                  sortValue: v.version_number,
+                },
+                {
+                  value: new Date(v.datetime_created).toUTCString(),
+                  sortValue: v.datetime_created,
+                },
+                {
+                  value: v.download_count.toLocaleString(),
+                  sortValue: v.download_count,
+                },
+                {
+                  value: (
+                    <div className="package-versions__actions">
+                      <DownloadLink {...v} />
+                      <InstallLink {...v} />
+                    </div>
+                  ),
+                  sortValue: 0,
+                },
+              ])}
+              sortDirection={NewTableSort.DESC}
+              csModifiers={["alignLastColumnRight"]}
+              customSortCompare={{ 0: rowSemverCompare }}
+            />
           </div>
-        )}
-      </Await>
-    </Suspense>
+        </div>
+      )}
+    </SuspenseIfPromise>
   );
 }
 

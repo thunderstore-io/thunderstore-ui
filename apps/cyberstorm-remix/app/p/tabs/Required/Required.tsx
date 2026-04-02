@@ -4,8 +4,8 @@ import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { Suspense } from "react";
-import { Await, useLoaderData } from "react-router";
+import { useLoaderData } from "react-router";
+import { SuspenseIfPromise } from "~/commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -125,25 +125,22 @@ export default function PackageVersionRequired() {
   }
 
   return (
-    <Suspense
+    <SuspenseIfPromise
+      resolve={dependencies}
       fallback={<SkeletonBox className="paginated-dependencies__skeleton" />}
+      errorElement={
+        <TabFetchState
+          variant="danger"
+          message="Error occurred while loading required dependencies"
+        />
+      }
     >
-      <Await
-        resolve={dependencies}
-        errorElement={
-          <TabFetchState
-            variant="danger"
-            message="Error occurred while loading required dependencies"
-          />
-        }
-      >
-        {(resolvedDependencies) => (
-          <PaginatedDependencies
-            dependencies={resolvedDependencies}
-            communityId={communityId}
-          />
-        )}
-      </Await>
-    </Suspense>
+      {(resolvedDependencies) => (
+        <PaginatedDependencies
+          dependencies={resolvedDependencies}
+          communityId={communityId}
+        />
+      )}
+    </SuspenseIfPromise>
   );
 }
