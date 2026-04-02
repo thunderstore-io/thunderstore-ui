@@ -1,11 +1,13 @@
 import { type ReactNode, Suspense } from "react";
+import { useHydrated } from "remix-utils/use-hydrated";
 
 /**
  * A wrapper around React's Suspense component that conditionally renders Suspense
  * only on the client-side (CSR). During Server-Side Rendering (SSR), it renders
  * the children directly without a Suspense boundary.
  *
- * This checks `import.meta.env.SSR` to determine the environment.
+ * This checks if the component is mounted on the client to determine the environment
+ * across hydration passes.
  *
  * Use this to avoid Suspense limitations or issues during SSR, while still
  * benefiting from Suspense on the client.
@@ -21,7 +23,9 @@ export function ClientSuspense({
   children: ReactNode;
   fallback?: ReactNode;
 }) {
-  if (import.meta.env.SSR) {
+  const isHydrated = useHydrated();
+
+  if (!isHydrated) {
     return <>{children}</>;
   }
 
