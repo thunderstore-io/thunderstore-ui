@@ -2,9 +2,9 @@ import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { Suspense } from "react";
-import { Await, type LoaderFunctionArgs } from "react-router";
+import { type LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
+import { SuspenseIfPromise } from "~/commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -90,29 +90,28 @@ export default function PackageVersionReadme() {
   }
 
   return (
-    <Suspense fallback={<SkeletonBox className="package-readme__skeleton" />}>
-      <Await
-        resolve={readme}
-        errorElement={
-          <TabFetchState
-            variant="danger"
-            message="Error occurred while loading description"
-          />
-        }
-      >
-        {(resolvedValue) =>
-          resolvedValue && resolvedValue.html ? (
-            <div className="markdown-wrapper">
-              <div
-                dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
-                className="markdown"
-              />
-            </div>
-          ) : (
-            <TabFetchState variant="info" message="No details available" />
-          )
-        }
-      </Await>
-    </Suspense>
+    <SuspenseIfPromise
+      resolve={readme}
+      fallback={<SkeletonBox className="package-readme__skeleton" />}
+      errorElement={
+        <TabFetchState
+          variant="danger"
+          message="Error occurred while loading description"
+        />
+      }
+    >
+      {(resolvedValue) =>
+        resolvedValue && resolvedValue.html ? (
+          <div className="markdown-wrapper">
+            <div
+              dangerouslySetInnerHTML={{ __html: resolvedValue.html }}
+              className="markdown"
+            />
+          </div>
+        ) : (
+          <TabFetchState variant="info" message="No details available" />
+        )
+      }
+    </SuspenseIfPromise>
   );
 }

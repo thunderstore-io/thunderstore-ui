@@ -3,9 +3,10 @@ import { faFilterList } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
 import { isPromise } from "cyberstorm/utils/typeChecks";
-import { Suspense, memo, useEffect, useRef, useState } from "react";
-import { Await, useNavigationType, useSearchParams } from "react-router";
+import { memo, useEffect, useRef, useState } from "react";
+import { useNavigationType, useSearchParams } from "react-router";
 import { useDebounce } from "use-debounce";
+import { SuspenseIfPromise } from "~/commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 
 import {
   CardPackage,
@@ -337,6 +338,70 @@ export function PackageSearch(props: Props) {
     </>
   );
 
+  const renderPackages = (resolvedValue: PackageListings) => (
+    <>
+      {resolvedValue.results.length > 0 ? (
+        <div className="package-search__grid">
+          {resolvedValue.results.map((p) => (
+            <CardPackage
+              key={`${p.namespace}-${p.name}`}
+              packageData={p}
+              isLiked={ratedPackages.includes(`${p.namespace}-${p.name}`)}
+              packageLikeAction={() => {
+                if (likeAction) {
+                  likeAction(
+                    ratedPackages.includes(`${p.namespace}-${p.name}`),
+                    p.namespace,
+                    p.name,
+                    Boolean(currentUser?.username)
+                  );
+                }
+              }}
+            />
+          ))}
+        </div>
+      ) : (searchParamsBlob.order !== undefined && searchParams.size > 1) ||
+        (searchParamsBlob.order === undefined && searchParams.size > 0) ? (
+        <EmptyState.Root className="no-result">
+          <EmptyState.Icon wrapperClasses="no-result__ghostbounce">
+            <FontAwesomeIcon icon={faSearch} />
+          </EmptyState.Icon>
+          <div className="no-result__info">
+            <EmptyState.Title>No results found</EmptyState.Title>
+            <EmptyState.Message>
+              Make sure all keywords are spelled correctly or try different
+              search parameters.
+            </EmptyState.Message>
+          </div>
+          <NewButton
+            onClick={() =>
+              resetParams(
+                setSearchParamsBlob,
+                searchParamsBlob.order,
+                sortedSections
+              )
+            }
+            rootClasses="no-result__button"
+          >
+            Clear all filters
+          </NewButton>
+        </EmptyState.Root>
+      ) : (
+        <EmptyState.Root className="no-result">
+          <EmptyState.Icon wrapperClasses="no-result__ghostbounce">
+            <FontAwesomeIcon icon={faGhost} />
+          </EmptyState.Icon>
+          <div className="no-result__info">
+            <EmptyState.Title>It&apos;s empty in here</EmptyState.Title>
+            <EmptyState.Message>
+              Be the first to upload a mod!
+            </EmptyState.Message>
+          </div>
+        </EmptyState.Root>
+      )}
+    </>
+  );
+
   return (
     <div className="package-search">
       <div className="package-search__sidebar">
@@ -437,128 +502,53 @@ export function PackageSearch(props: Props) {
               </div>
             </div>
             <div className="package-search__results">
-              <Suspense fallback={<SkeletonBox />}>
-                <Await resolve={listings}>
-                  {(resolvedValue) => (
-                    <PackageCount
-                      page={currentPage}
-                      pageSize={PER_PAGE}
-                      totalCount={resolvedValue.count}
-                    />
-                  )}
-                </Await>
-              </Suspense>
-            </div>
-          </div>
-        </div>
-        <div className="package-search__packages">
-          <Suspense fallback={<PackageSearchPackagesSkeleton />}>
-            <Await resolve={listings}>
-              {(resolvedValue) => (
-                <>
-                  {resolvedValue.results.length > 0 ? (
-                    <div className="package-search__grid">
-                      {resolvedValue.results.map((p) => (
-                        <CardPackage
-                          key={`${p.namespace}-${p.name}`}
-                          packageData={p}
-                          isLiked={ratedPackages.includes(
-                            `${p.namespace}-${p.name}`
-                          )}
-                          packageLikeAction={() => {
-                            if (likeAction) {
-                              likeAction(
-                                ratedPackages.includes(
-                                  `${p.namespace}-${p.name}`
-                                ),
-                                p.namespace,
-                                p.name,
-                                Boolean(currentUser?.username)
-                              );
-                            }
-                          }}
-                        />
-                      ))}
-                    </div>
-                  ) : (searchParamsBlob.order !== undefined &&
-                      searchParams.size > 1) ||
-                    (searchParamsBlob.order === undefined &&
-                      searchParams.size > 0) ? (
-                    <EmptyState.Root className="no-result">
-                      <EmptyState.Icon wrapperClasses="no-result__ghostbounce">
-                        <FontAwesomeIcon icon={faSearch} />
-                      </EmptyState.Icon>
-                      <div className="no-result__info">
-                        <EmptyState.Title>No results found</EmptyState.Title>
-                        <EmptyState.Message>
-                          Make sure all keywords are spelled correctly or try
-                          different search parameters.
-                        </EmptyState.Message>
-                      </div>
-                      <NewButton
-                        onClick={() =>
-                          resetParams(
-                            setSearchParamsBlob,
-                            searchParamsBlob.order,
-                            sortedSections
-                          )
-                        }
-                        rootClasses="no-result__button"
-                      >
-                        Clear all filters
-                      </NewButton>
-                    </EmptyState.Root>
-                  ) : (
-                    <EmptyState.Root className="no-result">
-                      <EmptyState.Icon wrapperClasses="no-result__ghostbounce">
-                        <FontAwesomeIcon icon={faGhost} />
-                      </EmptyState.Icon>
-                      <div className="no-result__info">
-                        <EmptyState.Title>
-                          It&apos;s empty in here
-                        </EmptyState.Title>
-                        <EmptyState.Message>
-                          Be the first to upload a mod!
-                        </EmptyState.Message>
-                      </div>
-                    </EmptyState.Root>
-                  )}
-                </>
-              )}
-            </Await>
-          </Suspense>
-        </div>
-        <div className="package-search__pagination">
-          <Suspense fallback={<SkeletonBox />}>
-            <Await resolve={listings}>
-              {(resolvedValue) => (
-                <NewPagination
-                  currentPage={currentPage}
-                  onPageChange={setParamsBlobValue(
-                    setSearchParamsBlob,
-                    searchParamsBlob,
-                    "page"
-                  )}
-                  pageSize={PER_PAGE}
-                  siblingCount={4}
-                  totalCount={resolvedValue.count}
-                />
-              )}
-            </Await>
-          </Suspense>
-          <Suspense fallback={<SkeletonBox />}>
-            <Await resolve={listings}>
-              {(resolvedValue) =>
-                resolvedValue.count > 0 ? (
+              <SuspenseIfPromise resolve={listings} fallback={<SkeletonBox />}>
+                {(resolvedValue) => (
                   <PackageCount
                     page={currentPage}
                     pageSize={PER_PAGE}
                     totalCount={resolvedValue.count}
                   />
-                ) : null
-              }
-            </Await>
-          </Suspense>
+                )}
+              </SuspenseIfPromise>
+            </div>
+          </div>
+        </div>
+        <div className="package-search__packages">
+          <SuspenseIfPromise
+            resolve={listings}
+            fallback={<PackageSearchPackagesSkeleton />}
+          >
+            {(resolvedValue) => renderPackages(resolvedValue)}
+          </SuspenseIfPromise>
+        </div>
+        <div className="package-search__pagination">
+          <SuspenseIfPromise resolve={listings} fallback={<SkeletonBox />}>
+            {(resolvedValue) => (
+              <NewPagination
+                currentPage={currentPage}
+                onPageChange={setParamsBlobValue(
+                  setSearchParamsBlob,
+                  searchParamsBlob,
+                  "page"
+                )}
+                pageSize={PER_PAGE}
+                siblingCount={4}
+                totalCount={resolvedValue.count}
+              />
+            )}
+          </SuspenseIfPromise>
+          <SuspenseIfPromise resolve={listings} fallback={<SkeletonBox />}>
+            {(resolvedValue) =>
+              resolvedValue.count > 0 ? (
+                <PackageCount
+                  page={currentPage}
+                  pageSize={PER_PAGE}
+                  totalCount={resolvedValue.count}
+                />
+              ) : null
+            }
+          </SuspenseIfPromise>
         </div>
       </div>
     </div>

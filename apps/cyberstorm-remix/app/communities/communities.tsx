@@ -8,15 +8,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
-import { Suspense, memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import {
-  Await,
   useLoaderData,
   useNavigationType,
   useSearchParams,
 } from "react-router";
 import { useDebounce } from "use-debounce";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
+import { SuspenseIfPromise } from "~/commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 
 import {
   CardCommunity,
@@ -112,13 +112,16 @@ export async function clientLoader({
   const order = searchParams.get("order");
   const search = searchParams.get("search");
   const page = undefined;
+
+  const serverData = await serverLoader();
+
   return {
     communities: dapper.getCommunities(
       page,
       order ?? SortOptions.Popular,
       search ?? ""
     ),
-    seo: (await serverLoader()).seo,
+    seo: serverData.seo,
   };
 }
 
@@ -202,16 +205,15 @@ export default function CommunitiesPage() {
         </div>
 
         <div className="container container--x container--stretch communities__results">
-          <Suspense fallback={<CommunitiesListSkeleton />}>
-            <Await
-              resolve={communities}
-              errorElement={<div>Error loading communities</div>}
-            >
-              {(resolvedValue) => (
-                <CommunitiesList communitiesData={resolvedValue} />
-              )}
-            </Await>
-          </Suspense>
+          <SuspenseIfPromise
+            resolve={communities}
+            fallback={<CommunitiesListSkeleton />}
+            errorElement={<div>Error loading communities</div>}
+          >
+            {(resolvedValue) => (
+              <CommunitiesList communitiesData={resolvedValue} />
+            )}
+          </SuspenseIfPromise>
         </div>
       </div>
     </>

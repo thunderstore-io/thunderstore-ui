@@ -4,8 +4,8 @@ import {
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type ReactNode, Suspense, memo } from "react";
-import { Await } from "react-router";
+import { type ReactNode, memo } from "react";
+import { SuspenseIfPromise } from "~/commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 
 import { NewButton, NewIcon, ThunderstoreLogo } from "@thunderstore/cyberstorm";
 import type { CurrentUser } from "@thunderstore/dapper/types";
@@ -96,27 +96,25 @@ export const PackageActions = memo(function PackageActions(
           </NewIcon>
           Download
         </NewButton>
-        <Suspense fallback={null}>
-          <Await resolve={team}>
-            {(resolvedTeam) =>
-              resolvedTeam?.donation_link ? (
-                <NewButton
-                  primitiveType="link"
-                  href={resolvedTeam.donation_link}
-                  aria-label="Donate"
-                  tooltipText="Donate"
-                  csVariant="secondary"
-                  csSize="big"
-                  csModifiers={["only-icon"]}
-                >
-                  <NewIcon csMode="inline" noWrapper>
-                    <FontAwesomeIcon icon={faHandHoldingHeart} />
-                  </NewIcon>
-                </NewButton>
-              ) : null
-            }
-          </Await>
-        </Suspense>
+        <SuspenseIfPromise resolve={team} fallback={null}>
+          {(resolvedTeam) =>
+            resolvedTeam?.donation_link ? (
+              <NewButton
+                primitiveType="link"
+                href={resolvedTeam.donation_link}
+                aria-label="Donate"
+                tooltipText="Donate"
+                csVariant="secondary"
+                csSize="big"
+                csModifiers={["only-icon"]}
+              >
+                <NewIcon csMode="inline" noWrapper>
+                  <FontAwesomeIcon icon={faHandHoldingHeart} />
+                </NewIcon>
+              </NewButton>
+            ) : null
+          }
+        </SuspenseIfPromise>
         {showLikeButton && (
           <NewButton
             primitiveType="button"

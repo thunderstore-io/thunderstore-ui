@@ -4,10 +4,10 @@ import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { type SeoReturn, createSeo } from "cyberstorm/utils/meta";
-import { Suspense } from "react";
-import { Await, useOutletContext } from "react-router";
+import { useOutletContext } from "react-router";
 import { useLoaderData } from "react-router";
 import ago from "s-ago";
+import { SuspenseIfPromise } from "~/commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 import { type OutletContextShape } from "~/root";
 
 import {
@@ -155,63 +155,59 @@ export default function Source() {
     return <TabFetchState variant="info" message={message} />;
   }
   return (
-    <Suspense fallback={<SkeletonBox className="package-source__skeleton" />}>
-      <Await
-        resolve={source}
-        errorElement={
-          <TabFetchState variant="info" message="Analysis not available" />
+    <SuspenseIfPromise
+      resolve={source}
+      fallback={<SkeletonBox className="package-source__skeleton" />}
+      errorElement={
+        <TabFetchState variant="info" message="Analysis not available" />
+      }
+    >
+      {(resolvedValue) => {
+        const decompilations = resolvedValue?.decompilations ?? [];
+        if (decompilations.length === 0) {
+          return (
+            <TabFetchState variant="info" message="Analysis not available" />
+          );
         }
-      >
-        {(resolvedValue) => {
-          const decompilations = resolvedValue?.decompilations ?? [];
-          if (decompilations.length === 0) {
-            return (
-              <TabFetchState variant="info" message="Analysis not available" />
-            );
-          }
-          return decompilations.map((decompilation) => {
-            return (
+        return decompilations.map((decompilation) => {
+          return (
+            <div
+              className="package-source"
+              key={decompilation.source_file_name}
+            >
+              <div className="package-source__header">
+                <div className="package-source__header-info">
+                  <Heading csLevel="2">
+                    {decompilation.source_file_name}
+                  </Heading>
+                  <div className="package-source__header-meta">
+                    <DecompilationDateDisplay
+                      lastDecompilationDate={decompilation.datetime_created}
+                    />
+                  </div>
+                </div>
+                <DownloadButton
+                  download_url={outletContext.packageDownloadUrl}
+                  packageSize={decompilation.result_size}
+                />
+              </div>
+              {decompilation.is_truncated && (
+                <Alert csVariant="warning">
+                  The result has been truncated due to the large size, download
+                  it to view the full contents!
+                </Alert>
+              )}
               <div
-                className="package-source"
+                className="package-source__decompilations-file"
                 key={decompilation.source_file_name}
               >
-                <div className="package-source__header">
-                  <div className="package-source__header-info">
-                    <Heading csLevel="2">
-                      {decompilation.source_file_name}
-                    </Heading>
-                    <div className="package-source__header-meta">
-                      <DecompilationDateDisplay
-                        lastDecompilationDate={decompilation.datetime_created}
-                      />
-                    </div>
-                  </div>
-                  <DownloadButton
-                    download_url={outletContext.packageDownloadUrl}
-                    packageSize={decompilation.result_size}
-                  />
-                </div>
-                {decompilation.is_truncated && (
-                  <Alert csVariant="warning">
-                    The result has been truncated due to the large size,
-                    download it to view the full contents!
-                  </Alert>
-                )}
-                <div
-                  className="package-source__decompilations-file"
-                  key={decompilation.source_file_name}
-                >
-                  <CodeBoxHTML
-                    value={decompilation.result}
-                    language={"csharp"}
-                  />
-                </div>
+                <CodeBoxHTML value={decompilation.result} language={"csharp"} />
               </div>
-            );
-          });
-        }}
-      </Await>
-    </Suspense>
+            </div>
+          );
+        });
+      }}
+    </SuspenseIfPromise>
   );
 }
 

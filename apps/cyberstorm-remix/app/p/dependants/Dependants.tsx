@@ -2,8 +2,7 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { getSectionDefault } from "cyberstorm/utils/section";
-import { Suspense } from "react";
-import { Await, useLoaderData, useOutletContext } from "react-router";
+import { useLoaderData, useOutletContext } from "react-router";
 import { PackageSearch } from "~/commonComponents/PackageSearch/PackageSearch";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 
@@ -178,35 +177,29 @@ export default function Dependants() {
   return (
     <>
       <section className="dependants">
-        <Suspense fallback={<SkeletonBox />}>
-          <Await resolve={listing}>
-            {(resolvedValue) => (
-              <PageHeader headingLevel="1" headingSize="3">
-                Mods that depend on{" "}
-                <NewLink
-                  primitiveType="cyberstormLink"
-                  linkId="Package"
-                  community={resolvedValue.community_identifier}
-                  namespace={resolvedValue.namespace}
-                  package={resolvedValue.name}
-                  csVariant="cyber"
-                >
-                  {formatToDisplayName(resolvedValue.name)}
-                </NewLink>
-                {" by "}
-                <NewLink
-                  primitiveType="cyberstormLink"
-                  linkId="Team"
-                  community={resolvedValue.community_identifier}
-                  team={resolvedValue.namespace}
-                  csVariant="cyber"
-                >
-                  {resolvedValue.namespace}
-                </NewLink>
-              </PageHeader>
-            )}
-          </Await>
-        </Suspense>
+        <PageHeader headingLevel="1" headingSize="3">
+          Mods that depend on{" "}
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Package"
+            community={listing.community_identifier}
+            namespace={listing.namespace}
+            package={listing.name}
+            csVariant="cyber"
+          >
+            {formatToDisplayName(listing.name)}
+          </NewLink>
+          {" by "}
+          <NewLink
+            primitiveType="cyberstormLink"
+            linkId="Team"
+            community={listing.community_identifier}
+            team={listing.namespace}
+            csVariant="cyber"
+          >
+            {listing.namespace}
+          </NewLink>
+        </PageHeader>
         <>
           <PackageSearch
             listings={listings}

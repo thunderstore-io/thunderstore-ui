@@ -4,13 +4,9 @@ import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
-import { Suspense, useReducer } from "react";
-import {
-  Await,
-  useLoaderData,
-  useNavigate,
-  useOutletContext,
-} from "react-router";
+import { useReducer } from "react";
+import { useLoaderData, useNavigate, useOutletContext } from "react-router";
+import { SuspenseIfPromise } from "~/commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 
 import {
   NewAlert,
@@ -51,57 +47,55 @@ export default function Settings() {
   }
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Await resolve={permissions}>
-        {(resolvedPermissions) => (
-          <div className="settings-items">
-            <div className="settings-items__item">
-              <div className="settings-items__meta">
-                <p className="settings-items__title">Leave team</p>
-                <p className="settings-items__description">
-                  Resign from the team
-                </p>
-              </div>
-              <div className="settings-items__content">
-                {!resolvedPermissions.can_leave_team && <LastOwnerAlert />}
-                <LeaveTeamForm
-                  userName={outletContext.currentUser?.username ?? ""}
-                  teamName={teamName}
-                  toast={toast}
-                  config={outletContext.requestConfig}
-                  updateTrigger={moveToTeams}
-                  disabled={!resolvedPermissions.can_leave_team}
-                />
-              </div>
+    <SuspenseIfPromise resolve={permissions} fallback={<div>Loading...</div>}>
+      {(resolvedPermissions) => (
+        <div className="settings-items">
+          <div className="settings-items__item">
+            <div className="settings-items__meta">
+              <p className="settings-items__title">Leave team</p>
+              <p className="settings-items__description">
+                Resign from the team
+              </p>
             </div>
-            <div className="settings-items__separator" />
-            <div className="settings-items__item">
-              <div className="settings-items__meta">
-                <p className="settings-items__title">Disband team</p>
-                <p className="settings-items__description">
-                  Remove the team completely
-                </p>
-              </div>
-              <div className="settings-items__content">
-                {!resolvedPermissions.can_disband_team &&
-                  (isTeamOwner(teamName, outletContext.currentUser) ? (
-                    <TeamHasPackagesAlert />
-                  ) : (
-                    <NotTeamOwnerAlert />
-                  ))}
-                <DisbandTeamForm
-                  teamName={teamName}
-                  updateTrigger={moveToTeams}
-                  config={outletContext.requestConfig}
-                  toast={toast}
-                  disabled={!resolvedPermissions.can_disband_team}
-                />
-              </div>
+            <div className="settings-items__content">
+              {!resolvedPermissions.can_leave_team && <LastOwnerAlert />}
+              <LeaveTeamForm
+                userName={outletContext.currentUser?.username ?? ""}
+                teamName={teamName}
+                toast={toast}
+                config={outletContext.requestConfig}
+                updateTrigger={moveToTeams}
+                disabled={!resolvedPermissions.can_leave_team}
+              />
             </div>
           </div>
-        )}
-      </Await>
-    </Suspense>
+          <div className="settings-items__separator" />
+          <div className="settings-items__item">
+            <div className="settings-items__meta">
+              <p className="settings-items__title">Disband team</p>
+              <p className="settings-items__description">
+                Remove the team completely
+              </p>
+            </div>
+            <div className="settings-items__content">
+              {!resolvedPermissions.can_disband_team &&
+                (isTeamOwner(teamName, outletContext.currentUser) ? (
+                  <TeamHasPackagesAlert />
+                ) : (
+                  <NotTeamOwnerAlert />
+                ))}
+              <DisbandTeamForm
+                teamName={teamName}
+                updateTrigger={moveToTeams}
+                config={outletContext.requestConfig}
+                toast={toast}
+                disabled={!resolvedPermissions.can_disband_team}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </SuspenseIfPromise>
   );
 }
 

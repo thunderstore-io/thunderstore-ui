@@ -1,5 +1,3 @@
-import "./styles/cyberstorm.css";
-
 import { config } from "@fortawesome/fontawesome-svg-core";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
@@ -14,6 +12,7 @@ import { LinkLibrary } from "cyberstorm/utils/LinkLibrary";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { type ReactNode, memo, useEffect, useRef, useState } from "react";
+import type { LinksFunction } from "react-router";
 import {
   Links,
   Meta,
@@ -49,11 +48,11 @@ import type { Route } from "./+types/root";
 import { Footer } from "./commonComponents/Footer/Footer";
 import { NavigationWrapper } from "./commonComponents/Navigation/NavigationWrapper";
 import { Seo } from "./commonComponents/Seo/Seo";
+import styles from "./styles/cyberstorm.css?url";
 
 config.autoAddCss = false;
 
-// REMIX TODO: https://remix.run/docs/en/main/route/links
-// export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 declare global {
   interface Window {

@@ -5,9 +5,9 @@ import {
   faEdit,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Suspense, memo } from "react";
-import { Await } from "react-router";
+import { memo } from "react";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
+import { SuspenseIfPromise } from "~/commonComponents/SuspenseIfPromise/SuspenseIfPromise";
 
 import {
   Heading,
@@ -64,30 +64,28 @@ export const WikiContent = memo(function WikiContent({
             </span>
           </div>
         </div>
-        <Suspense>
-          <Await resolve={canManage}>
-            {(resolvedValue) =>
-              resolvedValue ? (
-                <div className="package-wiki-content__actions">
-                  <NewButton
-                    csSize="small"
-                    primitiveType="cyberstormLink"
-                    linkId="PackageWikiPageEdit"
-                    community={communityId}
-                    namespace={namespaceId}
-                    package={packageId}
-                    wikipageslug={page.slug}
-                  >
-                    <NewIcon csMode="inline" noWrapper>
-                      <FontAwesomeIcon icon={faEdit} />
-                    </NewIcon>
-                    Edit
-                  </NewButton>
-                </div>
-              ) : null
-            }
-          </Await>
-        </Suspense>
+        <SuspenseIfPromise resolve={canManage}>
+          {(resolvedValue) =>
+            resolvedValue ? (
+              <div className="package-wiki-content__actions">
+                <NewButton
+                  csSize="small"
+                  primitiveType="cyberstormLink"
+                  linkId="PackageWikiPageEdit"
+                  community={communityId}
+                  namespace={namespaceId}
+                  package={packageId}
+                  wikipageslug={page.slug}
+                >
+                  <NewIcon csMode="inline" noWrapper>
+                    <FontAwesomeIcon icon={faEdit} />
+                  </NewIcon>
+                  Edit
+                </NewButton>
+              </div>
+            ) : null
+          }
+        </SuspenseIfPromise>
       </div>
       <div className="package-wiki-content__body">
         <Markdown input={page.markdown_content} />
