@@ -1,5 +1,5 @@
 # For running @thunderstore/cyberstorm-remix in Docker container.
-FROM node:24.14.0-alpine3.21
+FROM node:24.14.0-alpine3.23
 RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
