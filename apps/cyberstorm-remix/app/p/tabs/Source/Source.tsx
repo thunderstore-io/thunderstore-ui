@@ -4,10 +4,10 @@ import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { type SeoReturn, createSeo } from "cyberstorm/utils/meta";
-import { Suspense } from "react";
 import { Await, useOutletContext } from "react-router";
 import { useLoaderData } from "react-router";
 import ago from "s-ago";
+import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 import { type OutletContextShape } from "~/root";
 
 import {
@@ -155,7 +155,9 @@ export default function Source() {
     return <TabFetchState variant="info" message={message} />;
   }
   return (
-    <Suspense fallback={<SkeletonBox className="package-source__skeleton" />}>
+    <ClientSuspense
+      fallback={<SkeletonBox className="package-source__skeleton" />}
+    >
       <Await
         resolve={source}
         errorElement={
@@ -211,7 +213,7 @@ export default function Source() {
           });
         }}
       </Await>
-    </Suspense>
+    </ClientSuspense>
   );
 }
 

@@ -1,4 +1,4 @@
-import { Suspense, useMemo } from "react";
+import { useMemo } from "react";
 import { Await, type UIMatch, useMatches } from "react-router";
 
 import {
@@ -6,6 +6,8 @@ import {
   NewBreadCrumbsLink,
   isRecord,
 } from "@thunderstore/cyberstorm";
+
+import { ClientSuspense } from "../ClientSuspense/ClientSuspense";
 
 export function Breadcrumbs() {
   const matches = useMatches();
@@ -323,7 +325,7 @@ function getCommunityBreadcrumb(
     <>
       {isRecord(communityPage.data) &&
       Object.prototype.hasOwnProperty.call(communityPage.data, "community") ? (
-        <Suspense
+        <ClientSuspense
           fallback={
             <span>
               <span>Loading...</span>
@@ -368,7 +370,7 @@ function getCommunityBreadcrumb(
               );
             }}
           </Await>
-        </Suspense>
+        </ClientSuspense>
       ) : null}
     </>
   );

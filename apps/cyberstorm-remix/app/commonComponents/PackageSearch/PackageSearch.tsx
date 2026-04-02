@@ -3,7 +3,7 @@ import { faFilterList } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { setParamsBlobValue } from "cyberstorm/utils/searchParamsUtils";
 import { isPromise } from "cyberstorm/utils/typeChecks";
-import { Suspense, memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Await, useNavigationType, useSearchParams } from "react-router";
 import { useDebounce } from "use-debounce";
 
@@ -31,6 +31,7 @@ import {
 } from "@thunderstore/thunderstore-api";
 
 import { CheckboxList } from "../CheckboxList/CheckboxList";
+import { ClientSuspense } from "../ClientSuspense/ClientSuspense";
 import { CollapsibleMenu } from "../Collapsible/Collapsible";
 import { RadioGroup } from "../RadioGroup/RadioGroup";
 import { type CategorySelection, type TRISTATE } from "../types";
@@ -437,7 +438,7 @@ export function PackageSearch(props: Props) {
               </div>
             </div>
             <div className="package-search__results">
-              <Suspense fallback={<SkeletonBox />}>
+              <ClientSuspense fallback={<SkeletonBox />}>
                 <Await resolve={listings}>
                   {(resolvedValue) => (
                     <PackageCount
@@ -447,12 +448,12 @@ export function PackageSearch(props: Props) {
                     />
                   )}
                 </Await>
-              </Suspense>
+              </ClientSuspense>
             </div>
           </div>
         </div>
         <div className="package-search__packages">
-          <Suspense fallback={<PackageSearchPackagesSkeleton />}>
+          <ClientSuspense fallback={<PackageSearchPackagesSkeleton />}>
             <Await resolve={listings}>
               {(resolvedValue) => (
                 <>
@@ -526,10 +527,10 @@ export function PackageSearch(props: Props) {
                 </>
               )}
             </Await>
-          </Suspense>
+          </ClientSuspense>
         </div>
         <div className="package-search__pagination">
-          <Suspense fallback={<SkeletonBox />}>
+          <ClientSuspense fallback={<SkeletonBox />}>
             <Await resolve={listings}>
               {(resolvedValue) => (
                 <NewPagination
@@ -545,8 +546,8 @@ export function PackageSearch(props: Props) {
                 />
               )}
             </Await>
-          </Suspense>
-          <Suspense fallback={<SkeletonBox />}>
+          </ClientSuspense>
+          <ClientSuspense fallback={<SkeletonBox />}>
             <Await resolve={listings}>
               {(resolvedValue) =>
                 resolvedValue.count > 0 ? (
@@ -558,7 +559,7 @@ export function PackageSearch(props: Props) {
                 ) : null
               }
             </Await>
-          </Suspense>
+          </ClientSuspense>
         </div>
       </div>
     </div>

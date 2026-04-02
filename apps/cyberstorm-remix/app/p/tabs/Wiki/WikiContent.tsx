@@ -5,8 +5,9 @@ import {
   faEdit,
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Suspense, memo } from "react";
+import { memo } from "react";
 import { Await } from "react-router";
+import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 import { Markdown } from "~/commonComponents/Markdown/Markdown";
 
 import {
@@ -64,7 +65,7 @@ export const WikiContent = memo(function WikiContent({
             </span>
           </div>
         </div>
-        <Suspense>
+        <ClientSuspense>
           <Await resolve={canManage}>
             {(resolvedValue) =>
               resolvedValue ? (
@@ -87,7 +88,7 @@ export const WikiContent = memo(function WikiContent({
               ) : null
             }
           </Await>
-        </Suspense>
+        </ClientSuspense>
       </div>
       <div className="package-wiki-content__body">
         <Markdown input={page.markdown_content} />
