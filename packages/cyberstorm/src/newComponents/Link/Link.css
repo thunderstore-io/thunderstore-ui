@@ -3,8 +3,10 @@
     color: var(--link-color);
     text-decoration: none;
 
-    &:hover {
-      color: var(--link-color-hover);
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        color: var(--link-color-hover);
+      }
     }
   }
 

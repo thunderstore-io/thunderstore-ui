@@ -3,18 +3,22 @@
   .link:where(.link--variant--primary) {
     --link-color: var(--link-primary-color--default);
 
-    &:where(:hover) {
-      --link-color-hover: var(--link-primary-color--hover);
+    @media (hover: hover) and (pointer: fine) {
+      &:where(:hover) {
+        --link-color-hover: var(--link-primary-color--hover);
+      }
     }
   }
 
   .link:where(.link--variant--cyber) {
     --link-color: var(--link-cyber-color--default);
 
-    &:where(:hover) {
-      --link-color-hover: var(--link-cyber-color--hover);
+    @media (hover: hover) and (pointer: fine) {
+      &:where(:hover) {
+        --link-color-hover: var(--link-cyber-color--hover);
 
-      text-decoration: underline;
+        text-decoration: underline;
+      }
     }
   }
 
