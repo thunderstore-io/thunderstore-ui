@@ -16,6 +16,7 @@ import {
 interface Props {
   order: PackageOrderOptionsType;
   setOrder: (val: PackageOrderOptionsType) => void;
+  id?: string;
 }
 
 export const PackageOrder = (props: Props) => (
@@ -23,7 +24,7 @@ export const PackageOrder = (props: Props) => (
     options={selectOptions}
     value={props.order}
     onChange={props.setOrder}
-    id="packageOrder"
+    id={props.id ?? "packageOrder"}
   />
 );
 

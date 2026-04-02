@@ -1,5 +1,6 @@
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { memo } from "react";
 
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./AdContainer.css";
@@ -8,7 +9,7 @@ interface AdContainerProps {
   containerId: string;
 }
 
-export function AdContainer(props: AdContainerProps) {
+export const AdContainer = memo(function AdContainer(props: AdContainerProps) {
   const { containerId } = props;
 
   return (
@@ -28,6 +29,6 @@ export function AdContainer(props: AdContainerProps) {
       <div className="ad-container__content" id={containerId} />
     </div>
   );
-}
+});
 
 AdContainer.displayName = "AdContainer";
