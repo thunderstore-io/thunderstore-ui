@@ -4,14 +4,13 @@ import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
-import { useReducer } from "react";
+import { Suspense, useReducer } from "react";
 import {
   Await,
   useLoaderData,
   useNavigate,
   useOutletContext,
 } from "react-router";
-import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 
 import {
   NewAlert,
@@ -52,7 +51,7 @@ export default function Settings() {
   }
 
   return (
-    <ClientSuspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Loading...</div>}>
       <Await resolve={permissions}>
         {(resolvedPermissions) => (
           <div className="settings-items">
@@ -102,7 +101,7 @@ export default function Settings() {
           </div>
         )}
       </Await>
-    </ClientSuspense>
+    </Suspense>
   );
 }
 

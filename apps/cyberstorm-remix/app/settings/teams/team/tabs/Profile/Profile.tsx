@@ -2,14 +2,13 @@ import { type OutletContextShape } from "app/root";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
-import { useReducer } from "react";
+import { Suspense, useReducer } from "react";
 import {
   Await,
   useLoaderData,
   useOutletContext,
   useRevalidator,
 } from "react-router";
-import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 
 import {
   NewAlert,
@@ -38,7 +37,7 @@ export default function Profile() {
   const { team } = useLoaderData<typeof clientLoader>();
 
   return (
-    <ClientSuspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Loading...</div>}>
       <Await resolve={team}>
         {(resolvedTeam) => (
           <div className="settings-items team-profile">
@@ -46,7 +45,7 @@ export default function Profile() {
           </div>
         )}
       </Await>
-    </ClientSuspense>
+    </Suspense>
   );
 }
 

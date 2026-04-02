@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { Suspense } from "react";
 import type { ShouldRevalidateFunctionArgs } from "react-router";
 import {
   Await,
@@ -13,7 +14,6 @@ import {
   useLocation,
   useOutletContext,
 } from "react-router";
-import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 
 import {
   Heading,
@@ -114,7 +114,7 @@ export default function Community() {
               : null
           )}
         >
-          <ClientSuspense fallback={<SkeletonBox />}>
+          <Suspense fallback={<SkeletonBox />}>
             <Await resolve={community}>
               {(resolvedValue) =>
                 resolvedValue.hero_image_url ? (
@@ -125,7 +125,7 @@ export default function Community() {
                 ) : null
               }
             </Await>
-          </ClientSuspense>
+          </Suspense>
         </div>
 
         <div
@@ -137,7 +137,7 @@ export default function Community() {
           <div className="community__content-header">
             <div className="community__game-icon">
               <div className="community__game-icon-tinified">
-                <ClientSuspense fallback={<SkeletonBox />}>
+                <Suspense fallback={<SkeletonBox />}>
                   <Await resolve={community}>
                     {(resolvedValue) =>
                       resolvedValue.community_icon_url ? (
@@ -148,12 +148,12 @@ export default function Community() {
                       ) : null
                     }
                   </Await>
-                </ClientSuspense>
+                </Suspense>
               </div>
             </div>
             <div className="community__content-header-content">
               <div className="community__header-info">
-                <ClientSuspense fallback={<SkeletonBox />}>
+                <Suspense fallback={<SkeletonBox />}>
                   <Await resolve={community}>
                     {(resolvedValue) => (
                       <Heading
@@ -166,10 +166,10 @@ export default function Community() {
                       </Heading>
                     )}
                   </Await>
-                </ClientSuspense>
+                </Suspense>
               </div>
               <div className="community__header-meta">
-                <ClientSuspense fallback={<SkeletonBox />}>
+                <Suspense fallback={<SkeletonBox />}>
                   <Await resolve={community}>
                     {(resolvedValue) =>
                       resolvedValue.wiki_url ? (
@@ -190,8 +190,8 @@ export default function Community() {
                       ) : null
                     }
                   </Await>
-                </ClientSuspense>
-                <ClientSuspense fallback={<SkeletonBox />}>
+                </Suspense>
+                <Suspense fallback={<SkeletonBox />}>
                   <Await resolve={community}>
                     {(resolvedValue) =>
                       resolvedValue.discord_url ? (
@@ -212,7 +212,7 @@ export default function Community() {
                       ) : null
                     }
                   </Await>
-                </ClientSuspense>
+                </Suspense>
               </div>
             </div>
           </div>
