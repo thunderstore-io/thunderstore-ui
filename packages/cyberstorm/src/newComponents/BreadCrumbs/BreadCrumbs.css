@@ -55,7 +55,7 @@
         transform: skew(30deg);
       }
 
-      @media (hover: hover) {
+      @media (hover: hover) and (pointer: fine) {
         &:hover {
           background-color: var(--breadcrumb-item-bg-color--hover);
         }
@@ -95,7 +95,7 @@
         content: "\0020";
       }
 
-      @media (hover: hover) {
+      @media (hover: hover) and (pointer: fine) {
         &:hover {
           &::before {
             background-color: var(--breadcrumb-item-bg-color--hover);
