@@ -1,13 +1,13 @@
 import { type OutletContextShape } from "app/root";
 import { makeTeamSettingsTabLoader } from "cyberstorm/utils/dapperClientLoaders";
 import { isTeamOwner } from "cyberstorm/utils/permissions";
+import { Suspense } from "react";
 import {
   Await,
   useLoaderData,
   useOutletContext,
   useRevalidator,
 } from "react-router";
-import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 
 import { MemberAddForm } from "./MemberAddForm";
 import "./Members.css";
@@ -31,7 +31,7 @@ export default function Members() {
   const isOwner = isTeamOwner(teamName, outletContext.currentUser);
 
   return (
-    <ClientSuspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Loading...</div>}>
       <Await resolve={members}>
         {(resolvedMembers) => (
           <div className="settings-items">
@@ -59,6 +59,6 @@ export default function Members() {
           </div>
         )}
       </Await>
-    </ClientSuspense>
+    </Suspense>
   );
 }

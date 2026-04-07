@@ -4,9 +4,8 @@ import {
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type ReactNode, memo } from "react";
+import { type ReactNode, Suspense, memo } from "react";
 import { Await } from "react-router";
-import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 
 import { NewButton, NewIcon, ThunderstoreLogo } from "@thunderstore/cyberstorm";
 import type { CurrentUser } from "@thunderstore/dapper/types";
@@ -97,7 +96,7 @@ export const PackageActions = memo(function PackageActions(
           </NewIcon>
           Download
         </NewButton>
-        <ClientSuspense fallback={null}>
+        <Suspense fallback={null}>
           <Await resolve={team}>
             {(resolvedTeam) =>
               resolvedTeam?.donation_link ? (
@@ -117,7 +116,7 @@ export const PackageActions = memo(function PackageActions(
               ) : null
             }
           </Await>
-        </ClientSuspense>
+        </Suspense>
         {showLikeButton && (
           <NewButton
             primitiveType="button"

@@ -2,9 +2,9 @@ import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { Suspense } from "react";
 import { Await } from "react-router";
 import { useLoaderData } from "react-router";
-import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 
 import { SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
@@ -88,9 +88,7 @@ export default function PackageVersionReadme() {
   }
 
   return (
-    <ClientSuspense
-      fallback={<SkeletonBox className="package-readme__skeleton" />}
-    >
+    <Suspense fallback={<SkeletonBox className="package-readme__skeleton" />}>
       <Await
         resolve={readme}
         errorElement={
@@ -113,6 +111,6 @@ export default function PackageVersionReadme() {
           )
         }
       </Await>
-    </ClientSuspense>
+    </Suspense>
   );
 }

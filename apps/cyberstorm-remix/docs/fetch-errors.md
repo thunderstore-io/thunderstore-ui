@@ -16,7 +16,7 @@ React Router has two methods for fetching data for "route components", i.e. comp
 - DapperTs makes API requests as an authenticated or unauthenticated user depending on the user session and the route in question.
 - To deduplicate requests from different components to the same endpoint, `clientLoader()` should use `getDapperForRequest()` helper. For consistency's sake it should be used even if there's no need for deduplication.
 - `clientLoader()` should return pending Promises by default. Promises should be awaited inside `clientLoader()` only if the value is used by it internally.
-- If `clientLoader()` returns pending Promises, the component should use `<ClientSuspense>` and `<Await>` to wrap elements that depend on those pieces of the data.
+- If `clientLoader()` returns pending Promises, the component should use `<Suspense>` and `<Await>` to wrap elements that depend on those pieces of the data.
   - Note that if `<Await>` defines `errorElement` prop, it is rendered instead of exported `RouteErrorBoundary`.
 
 ## RouteErrorBoundary
@@ -43,7 +43,6 @@ Hydration in this context means the browser-side process where React/React-Route
 ## Example
 
 ```typescript
-import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 import { Await, type LoaderFunctionArgs, useLoaderData } from "react-router";
 
 import { SkeletonBox } from "@thunderstore/cyberstorm";
@@ -52,6 +51,7 @@ import { DapperTs } from "@thunderstore/dapper-ts";
 import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { ssrLoader } from "cyberstorm/utils/ssrLoader";
+import { Suspense } from "react";
 
 // This component is now wrapped in the default error boundary.
 export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
@@ -115,11 +115,11 @@ export default function Community() {
       <h1>Thunderstore mod repository</h1>
 
       {/* Limit Suspense to parts that use the awaited data (if sensible) */}
-      <ClientSuspense fallback={<SkeletonBox />}>
+      <Suspense fallback={<SkeletonBox />}>
         <Await resolve={community}>
           {(resolvedCommunity) => <p>List of {resolvedCommunity.name} mods:</p>}
         </Await>
-      </ClientSuspense>
+      </Suspense>
     </>
   );
 }

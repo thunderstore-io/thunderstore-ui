@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getDapperForRequest } from "cyberstorm/utils/dapperSingleton";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
+import { Suspense } from "react";
 import type { ShouldRevalidateFunctionArgs } from "react-router";
 import {
   Outlet,
@@ -11,7 +12,6 @@ import {
   useLocation,
   useOutletContext,
 } from "react-router";
-import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
 
@@ -305,7 +305,7 @@ export default function PackageListingVersion() {
             </section>
             <aside className="package-listing-sidebar">
               <div className="package-listing-sidebar__main">
-                <ClientSuspense
+                <Suspense
                   fallback={
                     <SkeletonBox className="package-listing-sidebar__actions-skeleton" />
                   }
@@ -316,7 +316,7 @@ export default function PackageListingVersion() {
                     installUrl={listing.install_url ?? ""}
                     installDisabled={!listing.install_url}
                   />
-                </ClientSuspense>
+                </Suspense>
 
                 {packageMeta(listing)}
               </div>

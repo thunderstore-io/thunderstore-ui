@@ -5,7 +5,14 @@ import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { createSeo } from "cyberstorm/utils/meta";
 import { isPromise } from "cyberstorm/utils/typeChecks";
-import { type ReactElement, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type ReactElement,
+  Suspense,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type {
   LoaderFunctionArgs,
   ShouldRevalidateFunctionArgs,
@@ -18,7 +25,6 @@ import {
   useOutletContext,
 } from "react-router";
 import { useHydrated } from "remix-utils/use-hydrated";
-import { ClientSuspense } from "~/commonComponents/ClientSuspense/ClientSuspense";
 import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { type OutletContextShape } from "~/root";
 
@@ -190,7 +196,7 @@ export default function PackageVersion() {
               <NewAlert csVariant="warning">
                 You are viewing a potentially older version of this package.
               </NewAlert>
-              <ClientSuspense
+              <Suspense
                 fallback={
                   <SkeletonBox className="package-listing__page-header-skeleton" />
                 }
@@ -231,10 +237,10 @@ export default function PackageVersion() {
                     </PageHeader>
                   )}
                 </Await>
-              </ClientSuspense>
+              </Suspense>
 
               <div className="package-listing__narrow-actions">
-                <ClientSuspense fallback={<p>Loading...</p>}>
+                <Suspense fallback={<p>Loading...</p>}>
                   <Await resolve={versionAndTeamPromise}>
                     {([versionData, teamData]) => (
                       <PackageActions
@@ -270,9 +276,9 @@ export default function PackageVersion() {
                       />
                     )}
                   </Await>
-                </ClientSuspense>
+                </Suspense>
               </div>
-              <ClientSuspense
+              <Suspense
                 fallback={
                   <SkeletonBox className="package-listing__nav-skeleton" />
                 }
@@ -333,14 +339,14 @@ export default function PackageVersion() {
                     </>
                   )}
                 </Await>
-              </ClientSuspense>
+              </Suspense>
               <div className="package-listing__content">
                 <Outlet context={outletContext} />
               </div>
             </section>
             <aside className="package-listing-sidebar">
               <div className="package-listing-sidebar__main">
-                <ClientSuspense
+                <Suspense
                   fallback={
                     <SkeletonBox className="package-listing-sidebar__actions-skeleton" />
                   }
@@ -355,8 +361,8 @@ export default function PackageVersion() {
                       />
                     )}
                   </Await>
-                </ClientSuspense>
-                <ClientSuspense
+                </Suspense>
+                <Suspense
                   fallback={
                     <SkeletonBox className="package-listing-sidebar__skeleton" />
                   }
@@ -366,7 +372,7 @@ export default function PackageVersion() {
                       <>{packageMeta(firstUploaded, resolvedValue)}</>
                     )}
                   </Await>
-                </ClientSuspense>
+                </Suspense>
               </div>
             </aside>
           </div>
