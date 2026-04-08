@@ -57,7 +57,7 @@ interface Props {
   config: () => RequestConfig;
   currentUser?: CurrentUser;
   dapper: DapperTs;
-  teamName: string;
+  teamName?: string;
 }
 
 /**
