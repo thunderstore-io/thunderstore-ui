@@ -113,6 +113,11 @@ export const TextInput = memo(function TextInput(props: TextInputProps) {
       {clearValue && fProps.value !== "" ? (
         <Actionable
           primitiveType="button"
+          type="button"
+          onPointerDown={(e) => {
+            // Prevent input from losing focus on click/touch
+            e.preventDefault();
+          }}
           onClick={() => clearValue()}
           rootClasses={classnames(
             "text-input__clear-value-button",
