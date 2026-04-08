@@ -57,13 +57,14 @@ interface Props {
   config: () => RequestConfig;
   currentUser?: CurrentUser;
   dapper: DapperTs;
+  teamName: string;
 }
 
 /**
  * Component for filtering and rendering a PackageList
  */
 export function PackageSearch(props: Props) {
-  const { listings, filters, config, currentUser, dapper } = props;
+  const { listings, filters, config, currentUser, dapper, teamName } = props;
 
   const navigationType = useNavigationType();
 
@@ -518,7 +519,9 @@ export function PackageSearch(props: Props) {
                           It&apos;s empty in here
                         </EmptyState.Title>
                         <EmptyState.Message>
-                          Be the first to upload a mod!
+                          {teamName
+                            ? `Team ${teamName} hasn't uploaded any mods for this community yet.`
+                            : "Be the first to upload a mod!"}
                         </EmptyState.Message>
                       </div>
                     </EmptyState.Root>
