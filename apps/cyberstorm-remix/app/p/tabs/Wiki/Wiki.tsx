@@ -308,25 +308,27 @@ export default function Wiki() {
 
           return (
             <div className="package-wiki">
-              {(hasPages || !hasPages) && (
-                <Suspense>
-                  <Await resolve={permissions}>
-                    {(resolvedPermissions) =>
-                      resolvedPermissions?.permissions.can_manage_wiki ||
-                      hasPages ? (
-                        <WikiNav
-                          communityId={communityId}
-                          namespaceId={namespaceId}
-                          packageId={packageId}
-                          slug={slug}
-                          wiki={resolvedWiki}
-                          permissions={permissions}
-                        />
-                      ) : null
-                    }
-                  </Await>
-                </Suspense>
-              )}
+              <Suspense>
+                <Await resolve={permissions}>
+                  {(resolvedPermissions) => {
+                    const canManageWiki =
+                      !!resolvedPermissions?.permissions.can_manage_wiki;
+                    const shouldShowWikiNav = canManageWiki || hasPages;
+
+                    return shouldShowWikiNav ? (
+                      <WikiNav
+                        communityId={communityId}
+                        namespaceId={namespaceId}
+                        packageId={packageId}
+                        slug={slug}
+                        wiki={resolvedWiki}
+                        permissions={permissions}
+                      />
+                    ) : null;
+                  }}
+                </Await>
+              </Suspense>
+
               <div className="package-wiki-content">
                 {shouldRenderOutlet ? (
                   <Outlet context={outletContext} />
