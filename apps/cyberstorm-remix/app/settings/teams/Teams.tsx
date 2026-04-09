@@ -1,4 +1,4 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPeopleGroup, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
 import { useStrongForm } from "cyberstorm/utils/StrongForm/useStrongForm";
@@ -10,6 +10,7 @@ import { PageHeader } from "~/commonComponents/PageHeader/PageHeader";
 import { RequiredIndicator } from "~/commonComponents/RequiredIndicator/RequiredIndicator";
 
 import {
+  EmptyState,
   Heading,
   Modal,
   NewAlert,
@@ -146,7 +147,15 @@ export default function Teams() {
                 ])}
               />
             ) : (
-              <p>No teams found</p>
+              <EmptyState.Root>
+                <EmptyState.Icon>
+                  <FontAwesomeIcon icon={faPeopleGroup} />
+                </EmptyState.Icon>
+                <EmptyState.Title>No teams</EmptyState.Title>
+                <EmptyState.Message>
+                  You are not a member of any teams yet.
+                </EmptyState.Message>
+              </EmptyState.Root>
             )}
           </div>
         </div>

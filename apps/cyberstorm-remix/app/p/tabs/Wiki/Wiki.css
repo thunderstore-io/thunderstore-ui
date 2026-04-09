@@ -74,7 +74,7 @@
     flex: 1 0 0;
     flex-direction: column;
     gap: 1.5rem;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .package-wiki-content__header {

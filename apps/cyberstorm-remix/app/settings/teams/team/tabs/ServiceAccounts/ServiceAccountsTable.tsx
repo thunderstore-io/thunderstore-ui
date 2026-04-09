@@ -1,7 +1,14 @@
+import { faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type OutletContextShape } from "app/root";
 import { useOutletContext } from "react-router";
 
-import { Heading, NewTable, NewTableSort } from "@thunderstore/cyberstorm";
+import {
+  EmptyState,
+  Heading,
+  NewTable,
+  NewTableSort,
+} from "@thunderstore/cyberstorm";
 import { type TeamServiceAccount } from "@thunderstore/thunderstore-api";
 
 import { ServiceAccountRemoveModal } from "./ServiceAccountRemoveModal";
@@ -54,7 +61,17 @@ export function ServiceAccountsTable(props: {
     ];
   });
 
-  return (
+  return tableData.length === 0 ? (
+    <EmptyState.Root>
+      <EmptyState.Icon>
+        <FontAwesomeIcon icon={faPeopleGroup} />
+      </EmptyState.Icon>
+      <EmptyState.Title>No service accounts</EmptyState.Title>
+      <EmptyState.Message>
+        This team does not have any service accounts yet.
+      </EmptyState.Message>
+    </EmptyState.Root>
+  ) : (
     <NewTable
       titleRowContent={<Heading csLevel="3">Service Accounts</Heading>}
       headers={serviceAccountColumns}

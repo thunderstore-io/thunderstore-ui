@@ -163,6 +163,7 @@ export default function Team() {
             config={outletContext.requestConfig}
             currentUser={outletContext.currentUser}
             dapper={outletContext.dapper}
+            teamName={teamId}
           />
         </>
       </section>

@@ -1,3 +1,5 @@
+import { faGhost } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PaginatedDependencies } from "app/commonComponents/PaginatedDependencies/PaginatedDependencies";
 import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getPrivateListing, getPublicListing } from "app/p/listingUtils";
@@ -7,7 +9,7 @@ import { createSeo } from "cyberstorm/utils/meta";
 import { Suspense } from "react";
 import { Await, useLoaderData } from "react-router";
 
-import { SkeletonBox } from "@thunderstore/cyberstorm";
+import { EmptyState, SkeletonBox } from "@thunderstore/cyberstorm";
 import { DapperTs } from "@thunderstore/dapper-ts";
 
 import type { Route } from "./+types/Required";
@@ -137,12 +139,24 @@ export default function PackageVersionRequired() {
           />
         }
       >
-        {(resolvedDependencies) => (
-          <PaginatedDependencies
-            dependencies={resolvedDependencies}
-            communityId={communityId}
-          />
-        )}
+        {(resolvedDependencies) =>
+          resolvedDependencies.results.length === 0 ? (
+            <EmptyState.Root>
+              <EmptyState.Icon>
+                <FontAwesomeIcon icon={faGhost} />
+              </EmptyState.Icon>
+              <EmptyState.Title>No dependencies</EmptyState.Title>
+              <EmptyState.Message>
+                This package does not require any other packages to work.
+              </EmptyState.Message>
+            </EmptyState.Root>
+          ) : (
+            <PaginatedDependencies
+              dependencies={resolvedDependencies}
+              communityId={communityId}
+            />
+          )
+        }
       </Await>
     </Suspense>
   );
