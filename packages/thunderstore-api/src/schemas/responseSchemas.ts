@@ -126,6 +126,8 @@ export const packageListingStatusResponseDataSchema = z.object({
   review_status: z.enum(["unreviewed", "approved", "rejected"]).nullable(),
   rejection_reason: z.string().nullable(),
   internal_notes: z.string().nullable(),
+  package_admin_url: z.string().nullable(),
+  listing_admin_url: z.string().nullable(),
 });
 
 export type PackageListingStatusResponseData = z.infer<

@@ -1,14 +1,12 @@
 import { apiFetch } from "../apiFetch";
 import type { ApiEndpointProps } from "../index";
 import { BASE_LISTING_PATH } from "../index";
-import {
-  packageListingDetailsSchema,
-  packageListingStatusSchema,
-} from "../schemas/objectSchemas";
+import { packageListingDetailsSchema } from "../schemas/objectSchemas";
 import type { PackageListingDetailsRequestParams } from "../schemas/requestSchemas";
-import type {
-  PackageListingDetailsResponseData,
-  PackageListingStatusResponseData,
+import {
+  type PackageListingDetailsResponseData,
+  type PackageListingStatusResponseData,
+  packageListingStatusResponseDataSchema,
 } from "../schemas/responseSchemas";
 
 export async function fetchPackageListingDetails(
@@ -47,6 +45,6 @@ export async function fetchPackageListingStatus(
     },
     requestSchema: undefined,
     queryParamsSchema: undefined,
-    responseSchema: packageListingStatusSchema,
+    responseSchema: packageListingStatusResponseDataSchema,
   });
 }

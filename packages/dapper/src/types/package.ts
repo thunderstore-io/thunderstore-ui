@@ -23,6 +23,8 @@ export interface PackageListingStatus {
   review_status: string | null;
   rejection_reason: string | null;
   internal_notes: string | null;
+  listing_admin_url: string | null;
+  package_admin_url: string | null;
 }
 
 export interface PackageListingDetails extends PackageListing {

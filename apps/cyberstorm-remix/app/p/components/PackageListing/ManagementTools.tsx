@@ -1,6 +1,7 @@
 import { faBoxOpen, faCog, faListUl } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
 import { NewButton, NewIcon, useToast } from "@thunderstore/cyberstorm";
 import { type DapperTsInterface } from "@thunderstore/dapper-ts";
@@ -29,6 +30,8 @@ export function ManagementTools({
 }: ManagementToolsProps) {
   const perms = packagePermissions.permissions;
   const pkg = packagePermissions.package;
+
+  const { VITE_SITE_URL: siteUrl } = getPublicEnvVariables(["VITE_SITE_URL"]);
 
   return (
     <div className="package-listing-management-tools">
@@ -63,15 +66,18 @@ export function ManagementTools({
         </div>
       )}
 
-      {(perms.can_view_listing_admin_page && listing.listing_admin_url) ||
-      (perms.can_view_package_admin_page && listing.package_admin_url) ? (
+      {(perms.can_view_listing_admin_page &&
+        listingStatus?.listing_admin_url) ||
+      (perms.can_view_package_admin_page &&
+        listingStatus?.package_admin_url) ? (
         <div className="package-listing-management-tools__island">
-          {perms.can_view_listing_admin_page && listing.listing_admin_url ? (
+          {perms.can_view_listing_admin_page &&
+          listingStatus?.listing_admin_url ? (
             <NewButton
               csSize="small"
               csVariant="secondary"
               primitiveType="link"
-              href={listing.listing_admin_url}
+              href={`${siteUrl}${listingStatus.listing_admin_url}`}
             >
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faListUl} />
@@ -82,12 +88,13 @@ export function ManagementTools({
               </NewIcon>
             </NewButton>
           ) : null}
-          {perms.can_view_package_admin_page && listing.package_admin_url ? (
+          {perms.can_view_package_admin_page &&
+          listingStatus?.package_admin_url ? (
             <NewButton
               csSize="small"
               csVariant="secondary"
               primitiveType="link"
-              href={listing.package_admin_url}
+              href={`${siteUrl}${listingStatus.package_admin_url}`}
             >
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faBoxOpen} />
