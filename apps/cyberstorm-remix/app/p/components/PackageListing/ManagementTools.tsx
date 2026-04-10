@@ -1,10 +1,10 @@
 import { faBoxOpen, faCog, faListUl } from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getPublicEnvVariables } from "cyberstorm/security/publicEnvVariables";
 
 import { NewButton, NewIcon, useToast } from "@thunderstore/cyberstorm";
 import { type DapperTsInterface } from "@thunderstore/dapper-ts";
-import { type PackageListingStatus } from "@thunderstore/dapper/types";
 import {
   type RequestConfig,
   fetchPackagePermissions,
@@ -15,7 +15,9 @@ import { ReviewPackageForm } from "./ReviewPackageForm";
 export interface ManagementToolsProps {
   packagePermissions: Awaited<ReturnType<typeof fetchPackagePermissions>>;
   listing: Awaited<ReturnType<DapperTsInterface["getPackageListingDetails"]>>;
-  listingStatus?: PackageListingStatus;
+  listingStatus:
+    | Awaited<ReturnType<DapperTsInterface["getPackageListingStatus"]>>
+    | undefined;
   toast: ReturnType<typeof useToast>;
   requestConfig: () => RequestConfig;
 }
@@ -29,6 +31,17 @@ export function ManagementTools({
 }: ManagementToolsProps) {
   const perms = packagePermissions.permissions;
   const pkg = packagePermissions.package;
+
+  const publicEnvVariables = getPublicEnvVariables(["VITE_SITE_URL"]);
+
+  const canViewAdminPages =
+    perms.can_view_listing_admin_page &&
+    listingStatus &&
+    listingStatus.listing_admin_url;
+  const canViewPackageAdminPages =
+    perms.can_view_package_admin_page &&
+    listingStatus &&
+    listingStatus.package_admin_url;
 
   return (
     <div className="package-listing-management-tools">
@@ -63,15 +76,14 @@ export function ManagementTools({
         </div>
       )}
 
-      {(perms.can_view_listing_admin_page && listing.listing_admin_url) ||
-      (perms.can_view_package_admin_page && listing.package_admin_url) ? (
+      {listingStatus && (canViewAdminPages || canViewPackageAdminPages) ? (
         <div className="package-listing-management-tools__island">
-          {perms.can_view_listing_admin_page && listing.listing_admin_url ? (
+          {canViewAdminPages ? (
             <NewButton
               csSize="small"
               csVariant="secondary"
               primitiveType="link"
-              href={listing.listing_admin_url}
+              href={`${publicEnvVariables.VITE_SITE_URL}${listingStatus.listing_admin_url}`}
             >
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faListUl} />
@@ -82,12 +94,12 @@ export function ManagementTools({
               </NewIcon>
             </NewButton>
           ) : null}
-          {perms.can_view_package_admin_page && listing.package_admin_url ? (
+          {canViewPackageAdminPages ? (
             <NewButton
               csSize="small"
               csVariant="secondary"
               primitiveType="link"
-              href={listing.package_admin_url}
+              href={`${publicEnvVariables.VITE_SITE_URL}${listingStatus.package_admin_url}`}
             >
               <NewIcon csMode="inline" noWrapper>
                 <FontAwesomeIcon icon={faBoxOpen} />
