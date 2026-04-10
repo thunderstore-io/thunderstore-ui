@@ -5,15 +5,23 @@ import {
   getFakeCommunity,
   getFakeCommunityFilters,
 } from "./fakers/community";
-import { getFakeChangelog, getFakeReadme } from "./fakers/markup";
+import {
+  getFakeChangelog,
+  getFakeDynamicHTML,
+  getFakeReadme,
+} from "./fakers/markup";
 import {
   getFakePackageListingDetails,
+  getFakePackageListingStatus,
   getFakePackageListings,
   getFakePackagePermissions,
   getFakePackageSource,
   getFakePackageVersionDependencies,
   getFakePackageVersionDetails,
   getFakePackageVersions,
+  getFakePackageWiki,
+  getFakePackageWikiPage,
+  getFakeRatedPackages,
 } from "./fakers/package";
 import { getFakeServiceAccounts } from "./fakers/serviceAccount";
 import { postFakePackageSubmissionMetadata } from "./fakers/submission";
@@ -34,16 +42,21 @@ export class DapperFake implements DapperInterface {
   public getCommunityFilters = getFakeCommunityFilters;
   public getCurrentUser = getFakeCurrentUser;
   public getCurrentUserTeamPermissions = getFakeCurrentUserTeamPermissions;
+  public getDynamicHTML = getFakeDynamicHTML;
   public getPackageChangelog = getFakeChangelog;
   public getPackagePermissions = getFakePackagePermissions;
   public getPackageListingDetails = getFakePackageListingDetails;
+  public getPackageListingStatus = getFakePackageListingStatus;
   public getPackageListings = getFakePackageListings;
   public getPackageReadme = getFakeReadme;
   public getPackageVersionDetails = getFakePackageVersionDetails;
   public getPackageVersions = getFakePackageVersions;
   public getPackageSource = getFakePackageSource;
   public getPackageVersionDependencies = getFakePackageVersionDependencies;
+  public getPackageWiki = getFakePackageWiki;
+  public getPackageWikiPage = getFakePackageWikiPage;
   public getPrivateTeamDetails = getFakeTeamDetails;
+  public getRatedPackages = getFakeRatedPackages;
   public getTeamDetails = getFakeTeamDetails;
   public getTeamMembers = getFakeTeamMembers;
   public getTeamServiceAccounts = getFakeServiceAccounts;

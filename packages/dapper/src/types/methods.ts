@@ -5,12 +5,17 @@ import {
 } from "./community";
 import {
   type PackageListingDetails,
+  type PackageListingStatus,
   type PackageListings,
   type PackagePermissions,
   type PackageSource,
   type PackageSubmissionResponse,
   type PackageVersion,
   type PackageVersionDependencies,
+  type PackageVersionDetails,
+  type PackageWiki,
+  type PackageWikiPage,
+  type RatedPackages,
 } from "./package";
 import { type PackageListingType } from "./props";
 import { type HTMLContentResponse, type MarkdownResponse } from "./shared";
@@ -114,3 +119,26 @@ export type GetPackageSubmissionStatus = (
 ) => Promise<PackageSubmissionResponse>;
 
 export type PostTeamCreate = (name: string) => Promise<TeamDetails>;
+
+export type GetDynamicHTML = (placement: string) => Promise<string[]>;
+
+export type GetPackageListingStatus = (
+  communityId: string,
+  namespaceId: string,
+  packageName: string
+) => Promise<PackageListingStatus>;
+
+export type GetPackageVersionDetails = (
+  namespaceId: string,
+  packageName: string,
+  packageVersion: string
+) => Promise<PackageVersionDetails>;
+
+export type GetPackageWiki = (
+  namespaceId: string,
+  packageName: string
+) => Promise<PackageWiki>;
+
+export type GetPackageWikiPage = (id: string) => Promise<PackageWikiPage>;
+
+export type GetRatedPackages = () => Promise<RatedPackages>;
