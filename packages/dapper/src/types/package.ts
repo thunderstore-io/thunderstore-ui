@@ -21,8 +21,10 @@ export type PackageListings = PaginatedList<PackageListing>;
 
 export interface PackageListingStatus {
   review_status: string | null;
-  rejection_reason: string | null;
-  internal_notes: string | null;
+  rejection_reason?: string | null;
+  internal_notes?: string | null;
+  listing_admin_url: string | null; // This is actually just a path
+  package_admin_url: string | null; // This is actually just a path
 }
 
 export interface PackageListingDetails extends PackageListing {
@@ -173,3 +175,49 @@ export interface PackageSubmissionStatus {
 export type PackageSubmissionResponse =
   | PackageSubmissionStatus
   | PackageSubmissionError;
+
+export interface PackageVersionDetails {
+  description: string;
+  download_count: number;
+  icon_url: string | null;
+  install_url: string | null;
+  name: string;
+  version_number: string;
+  namespace: string;
+  size: number;
+  datetime_created: string;
+  dependency_count: number;
+  download_url: string;
+  full_version_name: string;
+  team: PackageTeam;
+  website_url: string | null;
+}
+
+export interface PackageWiki {
+  id: string;
+  title: string;
+  slug: string;
+  datetime_created: string;
+  datetime_updated: string;
+  pages: Array<{
+    id: string;
+    title: string;
+    slug: string;
+    datetime_created: string;
+    datetime_updated: string;
+  }>;
+}
+
+export interface PackageWikiPage {
+  id: string;
+  title: string;
+  slug: string;
+  datetime_created: string;
+  datetime_updated: string;
+  markdown_content: string;
+  html?: string;
+}
+
+export interface RatedPackages {
+  rated_packages: string[];
+}

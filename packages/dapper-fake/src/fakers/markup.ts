@@ -106,3 +106,7 @@ alert(message);
 <p>This web site is using <code>markedjs/marked</code>.</p>
 `,
 });
+
+export const getFakeDynamicHTML = async (placement: string) => [
+  `<p>Fake Dynamic HTML for ${placement}</p>`,
+];

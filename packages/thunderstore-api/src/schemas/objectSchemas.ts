@@ -137,6 +137,8 @@ export const packageListingStatusSchema = z.object({
   review_status: z.enum(["unreviewed", "approved", "rejected"]),
   rejection_reason: z.string().nullable().optional(),
   internal_notes: z.string().nullable().optional(),
+  listing_admin_url: z.string().nullable(), // This is actually just a path
+  package_admin_url: z.string().nullable(), // This is actually just a path
 });
 
 export type PackageListing = z.infer<typeof packageListingSchema>;

@@ -199,6 +199,10 @@ export const getFakePackageVersionDetails = async (
         version_number: getVersionNumber(),
         is_removed: removed,
         is_unavailable: unavailable,
+        install_url: `ror2mm://v1/install/thunderstore.io/${faker.word.sample()}/${faker.word
+          .words(3)
+          .split(" ")
+          .join("_")}/${getVersionNumber()}/`,
       };
     })
   );
@@ -211,9 +215,10 @@ export const getFakePackageVersionDetails = async (
     namespace,
     size: faker.number.int({ min: 20_000, max: 4_000_000_000 }),
     datetime_created: faker.date.past({ years: 2 }).toISOString(),
-    dependencies,
     dependency_count: dependencies.length,
     download_url: `https://thunderstore.io/package/download/${namespace}/${name}/${version}/`,
+    install_url: `ror2mm://v1/install/thunderstore.io/${namespace}/${name}/${version}/`,
+    version_number: version,
     full_version_name: `${namespace}-${name}-${version}`,
     team: {
       name: faker.word.words(3),
@@ -330,4 +335,55 @@ const getFakeDecompilations = () => {
       is_truncated: faker.datatype.boolean(0.5),
     };
   });
+};
+
+export const getFakePackageListingStatus = async (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _communityId: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _namespaceId: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _packageName: string
+) => {
+  return {
+    review_status: "approved",
+    rejection_reason: null,
+    internal_notes: null,
+    listing_admin_url: "/admin/listing/123/",
+    package_admin_url: "/admin/package/123/",
+  };
+};
+
+export const getFakePackageWiki = async (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _namespaceId: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _packageName: string
+) => {
+  return {
+    id: faker.string.uuid(),
+    title: "Fake Wiki",
+    slug: "fake-wiki",
+    datetime_created: "2024-01-01T00:00:00Z",
+    datetime_updated: "2024-01-01T00:00:00Z",
+    pages: [],
+  };
+};
+
+export const getFakePackageWikiPage = async (id: string) => {
+  return {
+    id,
+    title: "Fake Wiki Page",
+    slug: "fake-wiki-page",
+    datetime_created: "2024-01-01T00:00:00Z",
+    datetime_updated: "2024-01-01T00:00:00Z",
+    markdown_content: "# Fake Wiki Page Content",
+    html: "<h1>Fake Wiki Page Content</h1>",
+  };
+};
+
+export const getFakeRatedPackages = async () => {
+  return {
+    rated_packages: [],
+  };
 };

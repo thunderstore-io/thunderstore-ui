@@ -8,6 +8,7 @@ import {
   markdownRenderSchema,
   packageListingDetailsSchema,
   packageListingSchema,
+  packageListingStatusSchema,
   packagePermissionsSchema,
   packageSourceSchema,
   packageSubmissionStatusSchema,
@@ -122,11 +123,8 @@ export type PackageListingDetailsResponseData = z.infer<
 >;
 
 // PackageListingStatusResponse
-export const packageListingStatusResponseDataSchema = z.object({
-  review_status: z.enum(["unreviewed", "approved", "rejected"]).nullable(),
-  rejection_reason: z.string().nullable(),
-  internal_notes: z.string().nullable(),
-});
+export const packageListingStatusResponseDataSchema =
+  packageListingStatusSchema;
 
 export type PackageListingStatusResponseData = z.infer<
   typeof packageListingStatusResponseDataSchema
