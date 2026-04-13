@@ -26,7 +26,7 @@ import {
 import { DapperTs } from "@thunderstore/dapper-ts";
 
 import { type OutletContextShape } from "../root";
-import type { Route } from "./+types/community";
+import type { Route } from "./+types/Community";
 import "./Community.css";
 
 export async function loader({ params, request }: Route.LoaderArgs) {

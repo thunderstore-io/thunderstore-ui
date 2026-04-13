@@ -12,7 +12,7 @@ export default [
   route("healthz", "./healthz.tsx"),
 
   route("/communities", "./communities/communities.tsx"),
-  route("/c/:communityId", "c/community.tsx", [
+  route("/c/:communityId", "c/Community.tsx", [
     route("/c/:communityId/", "c/tabs/PackageSearch/PackageSearch.tsx"),
     ...prefix("p", [
       route(":namespaceId/:packageId", "p/packageListing.tsx", [

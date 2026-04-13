@@ -36,7 +36,7 @@ export function Breadcrumbs() {
     (m) => m.id === "communities/communities"
   );
   const uploadPage = matches.find((m) => m.id === "upload/upload");
-  const communityPage = matches.find((m) => m.id === "c/community");
+  const communityPage = matches.find((m) => m.id === "c/Community");
   const packageListingPage = matches.find((m) => m.id === "p/packageListing");
   const packageVersionPage = matches.find(
     (m) => m.id === "p/packageListingVersion"
