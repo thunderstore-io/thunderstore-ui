@@ -2,7 +2,6 @@ import { faClock, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TabFetchState } from "app/p/components/TabFetchState/TabFetchState";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
-import { getApiHostForSsr } from "cyberstorm/utils/env";
 import { type SeoReturn, createSeo } from "cyberstorm/utils/meta";
 import { Suspense } from "react";
 import { Await, useOutletContext } from "react-router";
@@ -19,7 +18,6 @@ import {
   TooltipWrapper,
 } from "@thunderstore/cyberstorm";
 import { DapperTs, getPackageSource } from "@thunderstore/dapper-ts";
-import { isApiError } from "@thunderstore/thunderstore-api";
 
 import { CodeBoxHTML } from "../../../commonComponents/CodeBoxHTML/CodeBoxHTML";
 import type { Route } from "./+types/Source";
@@ -40,55 +38,22 @@ type ResultType = {
 
 export async function loader({ params }: Route.LoaderArgs) {
   if (params.namespaceId && params.packageId) {
-    const dapper = new DapperTs(() => {
-      return {
-        apiHost: getApiHostForSsr(),
-        sessionId: undefined,
-      };
-    });
-    let result: ResultType = {
+    return {
       status: null,
       source: undefined,
       message: undefined,
+      seo: createSeo({
+        descriptors: [
+          {
+            title: `${params.namespaceId}-${params.packageId} Source | Thunderstore`,
+          },
+          {
+            name: "description",
+            content: `Source code for ${params.namespaceId}-${params.packageId}`,
+          },
+        ],
+      }),
     };
-    try {
-      const source = await dapper.getPackageSource(
-        params.namespaceId,
-        params.packageId
-      );
-      result = {
-        status: null,
-        source: source,
-        message: undefined,
-        seo: createSeo({
-          descriptors: [
-            {
-              title: `${params.namespaceId}-${params.packageId} Source | Thunderstore`,
-            },
-            {
-              name: "description",
-              content: `Source code for ${params.namespaceId}-${params.packageId}`,
-            },
-          ],
-        }),
-      };
-    } catch (error) {
-      if (isApiError(error)) {
-        if (error.response.status > 400) {
-          result = {
-            status: "error",
-            source: undefined,
-            message: "Analysis not available",
-            seo: createSeo({ descriptors: [{ title: "Source Not Found" }] }),
-          };
-        } else {
-          throw error;
-        }
-      } else {
-        throw error;
-      }
-    }
-    return result;
   }
   return {
     status: "error",
@@ -97,6 +62,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     seo: createSeo({ descriptors: [{ title: "Source Not Found" }] }),
   };
 }
+clientLoader.hydrate = true;
 
 export async function clientLoader({
   params,
