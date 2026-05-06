@@ -97,6 +97,9 @@ export function ReportPackageForm(
     InputErrors
   >({
     inputs: formInputs,
+    validators: {
+      description: { maxLength: 12288 },
+    },
     submitor,
     onSubmitSuccess: () => {
       setIsSubmitted(true);
@@ -116,6 +119,7 @@ export function ReportPackageForm(
   const handleCancel = () => {
     resetFormInputs();
     setError(null);
+    strongForm.resetFormState();
     onOpenChange(false);
   };
 
@@ -154,7 +158,13 @@ export function ReportPackageForm(
             placeholder="Invalid submission"
             csSize="textarea"
             rootClasses="report-package__textarea"
+            {...strongForm.getFieldComponentProps("description")}
           />
+          {strongForm.getFieldError("description") && (
+            <NewAlert csVariant="danger" csSize="small">
+              {strongForm.getFieldError("description")}
+            </NewAlert>
+          )}
         </div>
         {error && (
           <div className="report-package__block">

@@ -102,7 +102,10 @@ export function MemberAddForm(props: {
       open={open}
       onOpenChange={(val) => {
         setOpen(val);
-        if (!val) setError(null);
+        if (!val) {
+          setError(null);
+          strongForm.resetFormState();
+        }
       }}
       titleContent="Add Team Member"
       csSize="small"

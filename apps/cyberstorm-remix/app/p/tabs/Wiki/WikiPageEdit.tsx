@@ -16,6 +16,7 @@ import { type OutletContextShape } from "~/root";
 import {
   Heading,
   Modal,
+  NewAlert,
   NewButton,
   NewLink,
   NewTextInput,
@@ -248,6 +249,10 @@ export default function WikiEdit() {
     InputErrors
   >({
     inputs: formInputs,
+    validators: {
+      title: { required: true, maxLength: 512 },
+      markdown_content: { required: true, maxLength: 100000 },
+    },
     submitor,
     onSubmitSuccess: (result) => {
       toast.addToast({
@@ -321,7 +326,13 @@ export default function WikiEdit() {
                   value: e.target.value,
                 })
               }
+              {...strongForm.getFieldComponentProps("title")}
             />
+            {strongForm.getFieldError("title") && (
+              <NewAlert csVariant="danger" csSize="small">
+                {strongForm.getFieldError("title")}
+              </NewAlert>
+            )}
             <NewTextInput
               csSize="textarea"
               value={formInputs.markdown_content}
@@ -334,7 +345,13 @@ export default function WikiEdit() {
               name="markdown_content"
               rootClasses="package-wiki-edit__markdown-input"
               style={{ height: "500px" }}
+              {...strongForm.getFieldComponentProps("markdown_content")}
             />
+            {strongForm.getFieldError("markdown_content") && (
+              <NewAlert csVariant="danger" csSize="small">
+                {strongForm.getFieldError("markdown_content")}
+              </NewAlert>
+            )}
           </>
         ) : (
           <Markdown input={formInputs.markdown_content} />
