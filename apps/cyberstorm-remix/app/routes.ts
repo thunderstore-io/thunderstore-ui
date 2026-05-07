@@ -1,14 +1,13 @@
 import {
   type RouteConfig,
   index,
-  // index,
   layout,
   prefix,
   route,
 } from "@react-router/dev/routes";
 
 export default [
-  // index("./communities/communities.tsx"),
+  index("./communities/communities.tsx", { id: "rootIndex" }),
   route("healthz", "./healthz.tsx"),
 
   route("/communities", "./communities/communities.tsx"),
