@@ -1,9 +1,26 @@
 @layer nimbus-layout {
+  .settings-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-3xl);
+    align-items: flex-start;
+    min-height: 20rem;
+  }
+
+  .settings-page__body {
+    display: flex;
+    flex: 1 1 0;
+    align-self: stretch;
+  }
+
   .settings-items {
+    --settings-meta-width: 21rem;
+    --settings-item-column-gap: 5rem;
+
     display: flex;
     flex: 1 1 0;
     flex-direction: column;
-    gap: 4rem;
+    gap: var(--gap-5xl);
     min-width: 0;
     max-width: 100%;
   }
@@ -11,14 +28,15 @@
   .settings-items__separator {
     width: 100%;
     height: 1px;
+    margin: var(--space-8) 0;
     background: var(--color-surface-default);
   }
 
   .settings-items__item {
-    display: flex;
-    flex: 1 1 0;
-    flex-flow: row wrap;
-    gap: 4rem;
+    display: grid;
+    grid-template-columns: minmax(0, var(--settings-meta-width)) minmax(0, 1fr);
+    gap: var(--gap-md) var(--settings-item-column-gap);
+    align-items: start;
     min-width: 0;
     max-width: 100%;
   }
@@ -29,7 +47,6 @@
     gap: var(--gap-xs);
     align-items: flex-start;
     align-self: stretch;
-    width: 21rem;
   }
 
   .settings-items__title {
@@ -56,6 +73,7 @@
     flex-direction: column;
     gap: var(--gap-md);
     align-items: stretch;
+    min-width: 0;
     max-width: 100%;
     container: settings-items-content / inline-size;
   }
@@ -72,9 +90,19 @@
     background: var(--color-surface-default);
   }
 
-  @media (width <= 48rem) {
+  @media (width <= 960px) {
     .settings-items {
-      gap: 2rem;
+      --settings-meta-width: 13rem;
+    }
+  }
+
+  @media (width <= 48rem) {
+    .settings-page {
+      gap: var(--gap-md);
+    }
+
+    .settings-items {
+      gap: var(--gap-3xl);
     }
 
     .settings-items__island {
@@ -82,12 +110,8 @@
     }
 
     .settings-items__item {
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .settings-items__meta {
-      width: 100%;
+      grid-template-columns: 1fr;
+      gap: var(--gap-md);
     }
 
     .settings-items__content {
@@ -97,7 +121,7 @@
 
   @media (width <= 375px) {
     .settings-items {
-      gap: 1rem;
+      gap: var(--gap-md);
     }
 
     .settings-items__island {
