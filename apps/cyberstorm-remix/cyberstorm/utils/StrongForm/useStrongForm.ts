@@ -6,7 +6,7 @@ import {
   RequestQueryParamsParseError,
 } from "../../../../../packages/thunderstore-api/src";
 import type { Validator } from "./validation";
-import { getValidationError, isRawInvalid } from "./validation";
+import { getValidationError } from "./validation";
 
 interface UseStrongFormProps<
   Inputs,
@@ -63,7 +63,7 @@ export function useStrongForm<
     for (const key in props.validators) {
       const validator = props.validators[key];
       const value = props.inputs[key as keyof Inputs];
-      if (isRawInvalid(validator, value)) {
+      if (getValidationError(validator, value) !== undefined) {
         return false;
       }
     }
@@ -75,11 +75,10 @@ export function useStrongForm<
       const validator = props.validators?.[field];
       const value = props.inputs[field];
       const isRequired = Boolean(validator?.required);
-      const rawInvalid = isRawInvalid(validator, value);
+      const validationError = getValidationError(validator, value);
+      const rawInvalid = validationError !== undefined;
       const isInvalid = rawInvalid && hasAttemptedSubmit;
-      const errorMessage = hasAttemptedSubmit
-        ? getValidationError(validator, value)
-        : undefined;
+      const errorMessage = hasAttemptedSubmit ? validationError : undefined;
       return {
         isRequired,
         isInvalid,
