@@ -8,7 +8,6 @@ import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 
 import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Settings";
-import "./Settings.css";
 
 // Client loader to fetch current user for SEO titles and secure the route
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
@@ -58,7 +57,7 @@ export default function UserSettings() {
         Settings
       </PageHeader>
 
-      <div className="settings-user">
+      <div className="settings-page">
         <Tabs>
           <NewLink
             key="settings"
@@ -80,7 +79,7 @@ export default function UserSettings() {
           </NewLink>
         </Tabs>
 
-        <section className="settings-user__body">
+        <section className="settings-page__body">
           <Outlet context={context} />
         </section>
       </div>

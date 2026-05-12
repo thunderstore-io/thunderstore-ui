@@ -6,7 +6,6 @@ import { type OutletContextShape } from "~/root";
 import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 
 import type { Route } from "./+types/teamSettings";
-import "./teamSettings.css";
 
 export async function loader({ params, request }: Route.LoaderArgs) {
   const teamName = params.namespaceId ?? "";
@@ -46,7 +45,7 @@ export default function TeamSettings() {
       <PageHeader headingLevel="1" headingSize="2">
         {teamName}
       </PageHeader>
-      <div className="team-settings">
+      <div className="settings-page">
         <Tabs>
           <NewLink
             key="profile"
@@ -97,7 +96,7 @@ export default function TeamSettings() {
             Settings
           </NewLink>
         </Tabs>
-        <section>
+        <section className="settings-page__body">
           <Outlet context={outletContext} />
         </section>
       </div>
