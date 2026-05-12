@@ -240,7 +240,7 @@
   }
 
   /* Mobile breakpoint */
-  @media (width <= 750px) {
+  @media (width <= 48rem) {
     .navigation-header__start {
       padding: 0 var(--space-8);
     }
