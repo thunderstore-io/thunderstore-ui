@@ -6,14 +6,22 @@ import "./AdContainer.css";
 
 interface AdContainerProps {
   containerId: string;
+  videoAd?: boolean;
 }
 
 export function AdContainer(props: AdContainerProps) {
-  const { containerId } = props;
+  const { containerId, videoAd } = props;
 
   return (
-    <div className="ad-container">
-      <div className="ad-container__fallback ad-container__fallback--variant--primary">
+    <div
+      className={`ad-container ${videoAd ? "video-ad-container" : ""}`}
+      data-cid={containerId}
+    >
+      <div
+        className={`ad-container__fallback ${
+          videoAd ? "video-ad-container__fallback" : ""
+        } ad-container__fallback--variant--primary`}
+      >
         Thunderstore development is made possible with ads. Please consider
         making an exception to your adblock.
         <NewIcon

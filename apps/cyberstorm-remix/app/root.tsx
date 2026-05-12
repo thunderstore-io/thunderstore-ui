@@ -62,21 +62,32 @@ declare global {
     nitroAds?: {
       createAd: (
         containerId: string,
-        params: {
-          demo: boolean;
-          format: string;
-          refreshLimit: number;
-          refreshTime: number;
-          renderVisibleOnly: boolean;
-          refreshVisibleOnly: boolean;
-          sizes: string[][];
-          report: {
-            enabled: boolean;
-            wording: string;
-            position: string;
-          };
-          mediaQuery: string;
-        }
+        params:
+          | {
+              format: "display";
+              demo?: boolean;
+              refreshLimit?: number;
+              refreshTime?: number;
+              renderVisibleOnly?: boolean;
+              refreshVisibleOnly?: boolean;
+              sizes: string[][];
+              report: {
+                enabled: boolean;
+                wording: string;
+                position: string;
+              };
+              mediaQuery: string;
+            }
+          | {
+              format: "video";
+              demo?: boolean;
+              report: {
+                enabled: boolean;
+                wording: string;
+                position: string;
+              };
+              mediaQuery: string;
+            }
       ) => void;
     };
   }
@@ -210,7 +221,15 @@ export function shouldRevalidate({
 
 clientLoader.hydrate = true;
 
-const adContainerIds = ["right-column-1", "right-column-2", "right-column-3"];
+// Per-slot min-height thresholds align with the CSS hide breakpoints in
+// app/styles/layout.css so NitroPay does not instantiate ads in slots that
+// CSS would render `display: none`. Keep these values in sync with that file.
+const adContainerSlots = [
+  { containerId: "right-column-1", minHeight: 526 },
+  { containerId: "right-column-2", minHeight: 801 },
+  { containerId: "right-column-3", minHeight: 1076 },
+] as const;
+const adContainerIds = adContainerSlots.map((slot) => slot.containerId);
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useRouteLoaderData<RootLoadersType>("root");
@@ -330,6 +349,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
                         {adContainerIds.map((cid, k_i) => (
                           <AdContainer key={k_i} containerId={cid} />
                         ))}
+                        <AdContainer
+                          containerId={"bottom-video-ad"}
+                          videoAd={true}
+                        />
                       </div>
                     </div>
                   ) : null}
@@ -448,24 +471,32 @@ function AdsInit() {
       nitroAds !== undefined &&
       nitroAds.createAd !== undefined
     ) {
-      adContainerIds.forEach((cid) => {
-        if (nitroAds !== undefined && nitroAds.createAd !== undefined) {
-          nitroAds.createAd(cid, {
-            demo: false,
-            format: "display",
-            refreshLimit: 0,
-            refreshTime: 30,
-            renderVisibleOnly: true,
-            refreshVisibleOnly: true,
-            sizes: [["300", "250"]],
-            report: {
-              enabled: true,
-              wording: "Report Ad",
-              position: "bottom-right",
-            },
-            mediaQuery: "(min-width: 1475px) and (min-height: 400px)",
-          });
-        }
+      adContainerSlots.forEach(({ containerId, minHeight }) => {
+        nitroAds.createAd(containerId, {
+          demo: false,
+          format: "display",
+          refreshLimit: 0,
+          refreshTime: 30,
+          renderVisibleOnly: true,
+          refreshVisibleOnly: true,
+          sizes: [["300", "250"]],
+          report: {
+            enabled: true,
+            wording: "Report Ad",
+            position: "bottom-right",
+          },
+          mediaQuery: `(min-width: 1475px) and (min-height: ${minHeight}px)`,
+        });
+      });
+      nitroAds.createAd("bottom-video-ad", {
+        demo: false,
+        format: "video",
+        report: {
+          enabled: true,
+          wording: "Report Ad",
+          position: "bottom-right",
+        },
+        mediaQuery: "(min-width: 1475px) and (min-height: 250px)",
       });
     }
   }, [adsScriptLoaded, nitroAds]);
