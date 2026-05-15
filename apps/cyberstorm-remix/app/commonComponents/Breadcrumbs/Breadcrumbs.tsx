@@ -1,7 +1,9 @@
+import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { Suspense, useMemo } from "react";
 import { Await, type UIMatch, useMatches } from "react-router";
 
 import {
+  Image,
   NewBreadCrumbs,
   NewBreadCrumbsLink,
   isRecord,
@@ -340,13 +342,19 @@ function getCommunityBreadcrumb(
                   typeof resolvedValue.name === "string"
                     ? resolvedValue.name
                     : communityPage.params.communityId;
-                icon =
-                  Object.prototype.hasOwnProperty.call(
-                    resolvedValue,
-                    "community_icon_url"
-                  ) && typeof resolvedValue.community_icon_url === "string" ? (
-                    <img src={resolvedValue.community_icon_url} alt="" />
-                  ) : undefined;
+                icon = (
+                  <Image
+                    src={
+                      typeof resolvedValue.community_icon_url === "string"
+                        ? resolvedValue.community_icon_url
+                        : null
+                    }
+                    fallbackIcon={faGamepad}
+                    square
+                    alt=""
+                    rootClasses="breadcrumbs__community-icon"
+                  />
+                );
               }
               return isNotLast ? (
                 <NewBreadCrumbsLink

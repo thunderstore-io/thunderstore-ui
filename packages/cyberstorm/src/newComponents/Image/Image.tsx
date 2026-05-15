@@ -1,4 +1,4 @@
-import { faBan, faGamepad } from "@fortawesome/free-solid-svg-icons";
+import { type IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { memo } from "react";
 
@@ -12,10 +12,10 @@ import { classnames, componentClasses } from "../../utils/utils";
 import { Icon as NewIcon } from "../Icon/Icon";
 import "./Image.css";
 
-interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
+export interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
   src: string | null | undefined;
-  /** Type of the image defines the icon used as the fallback. */
-  cardType: "community" | "communityIcon" | "package";
+  /** Icon shown when `src` is missing. */
+  fallbackIcon: IconDefinition;
   /** Alt text for the image. Leave empty for decorative images. */
   alt?: string;
   /** Force 1:1 aspect ratio */
@@ -26,14 +26,13 @@ interface ImageProps extends Omit<FrameWindowProps, "primitiveType"> {
   intrinsicHeight?: number;
 }
 
-// TODO: Needs a storybook story
 /**
  * Show the image, or use predefined icon as the fallback.
  */
 export const Image = memo(function Image(props: ImageProps) {
   const {
     src,
-    cardType,
+    fallbackIcon,
     alt = "",
     rootClasses,
     square = false,
@@ -95,7 +94,7 @@ export const Image = memo(function Image(props: ImageProps) {
           noWrapper
           csMode="inline"
         >
-          <FontAwesomeIcon icon={getIcon(cardType)} />
+          <FontAwesomeIcon icon={fallbackIcon} />
         </NewIcon>
       )}
     </Frame>
@@ -103,13 +102,3 @@ export const Image = memo(function Image(props: ImageProps) {
 });
 
 Image.displayName = "Image";
-
-// There is an issue with Typescript (eslint) and prettier disagreeing if
-// the type should have parentheses
-// prettier-ignore
-const getIcon = (type: ImageProps["cardType"] = "community") =>
-  ({
-    communityIcon: faGamepad,
-    community: faGamepad,
-    package: faBan,
-  }[type]);

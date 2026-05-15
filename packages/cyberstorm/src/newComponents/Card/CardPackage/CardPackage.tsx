@@ -1,4 +1,5 @@
 import {
+  faBan,
   faClockRotateLeft,
   faCodeMerge,
   faDownload,
@@ -239,7 +240,7 @@ export function CardPackage(props: Props) {
         ) : null}
         <Image
           src={packageData.icon_url}
-          cardType="package"
+          fallbackIcon={faBan}
           rootClasses="card-package__image-wrapper"
           square
           intrinsicWidth={256}

@@ -1,3 +1,5 @@
+import { faBan } from "@fortawesome/free-solid-svg-icons";
+
 import { Image, NewLink, formatToDisplayName } from "@thunderstore/cyberstorm";
 import { type PackageVersionDependency } from "@thunderstore/thunderstore-api";
 
@@ -13,7 +15,7 @@ export function ListingDependency(props: ListingDependencyProps) {
     <div className="listing-dependency">
       <Image
         src={dependency.icon_url}
-        cardType="package"
+        fallbackIcon={faBan}
         square={true}
         intrinsicWidth={80}
         intrinsicHeight={80}

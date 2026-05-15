@@ -2,6 +2,7 @@ import {
   faBoxOpen,
   faDownload,
   faFire,
+  faGamepad,
 } from "@fortawesome/free-solid-svg-icons";
 import { faSparkles } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -58,7 +59,7 @@ export const CardCommunity = memo(function CardCommunity(props: Props) {
       >
         <Image
           src={community.cover_image_url}
-          cardType="community"
+          fallbackIcon={faGamepad}
           rootClasses="card-community__image"
           intrinsicWidth={360}
           intrinsicHeight={480}
