@@ -3,7 +3,10 @@ import { assertTeamAccess } from "cyberstorm/utils/permissions";
 import { type LoaderFunctionArgs } from "react-router";
 
 import { DapperTs } from "@thunderstore/dapper-ts";
-import { ApiError, type GenericApiError } from "@thunderstore/thunderstore-api";
+import {
+  type GenericApiError,
+  isApiError,
+} from "@thunderstore/thunderstore-api";
 
 /**
  * TODO
@@ -34,7 +37,7 @@ export function makeTeamSettingsTabLoader<T>(
       const data = await dataFetcher(dapper, teamName);
       return { teamName, ...data };
     } catch (error) {
-      if (error instanceof ApiError) {
+      if (isApiError(error)) {
         const status = error.response.status;
         const statusText =
           (error.responseJson as GenericApiError)?.detail ??
