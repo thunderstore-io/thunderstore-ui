@@ -2668,6 +2668,11 @@
     argparse "~1.0.9"
     string-argv "~0.3.1"
 
+"@rybbit/js@0.6.2":
+  version "0.6.2"
+  resolved "https://registry.npmjs.org/@rybbit/js/-/js-0.6.2.tgz#0d8a03971dfd52f14d7b347c2aa6ddf519821df3"
+  integrity sha512-UQ3OMau8EevhK1PA6ed74pClNgF3QRG3RlZAsPVzuMZ7UUjk695+sv8ibV1tx8/2IOcfcICNMtUxINcGi20wjg==
+
 "@sentry-internal/browser-utils@10.34.0":
   version "10.34.0"
   resolved "https://registry.npmjs.org/@sentry-internal/browser-utils/-/browser-utils-10.34.0.tgz#a90ef399a48ce55f1786558d34b46885f138f5a8"
