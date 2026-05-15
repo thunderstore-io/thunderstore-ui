@@ -28,6 +28,8 @@ import { isApiError } from "@thunderstore/thunderstore-api";
 import type { Route } from "./+types/Wiki";
 import "./Wiki.css";
 
+export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
 export async function loader({ params }: Route.LoaderArgs) {
   if (params.communityId && params.namespaceId && params.packageId) {
     const dapper = new DapperTs(() => {

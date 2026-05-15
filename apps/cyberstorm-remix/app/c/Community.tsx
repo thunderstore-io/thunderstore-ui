@@ -34,6 +34,8 @@ import { type OutletContextShape } from "../root";
 import type { Route } from "./+types/Community";
 import "./Community.css";
 
+export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
 export async function loader({ params, request }: Route.LoaderArgs) {
   if (params.communityId) {
     const dapper = new DapperTs(() => {

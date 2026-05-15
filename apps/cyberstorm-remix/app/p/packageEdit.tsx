@@ -31,6 +31,8 @@ import { ApiAction } from "@thunderstore/ts-api-react-actions";
 import type { Route } from "./+types/packageEdit";
 import "./packageEdit.css";
 
+export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
 const package404 = new Response("Package not found", { status: 404 });
 
 export async function loader({ params }: Route.LoaderArgs) {

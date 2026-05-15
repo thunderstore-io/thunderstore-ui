@@ -39,6 +39,8 @@ import { type OutletContextShape } from "../../root";
 import type { Route } from "./+types/Teams";
 import "./Teams.css";
 
+export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
 function formFieldUpdateAction(
   state: TeamCreateRequestData,
   action: {

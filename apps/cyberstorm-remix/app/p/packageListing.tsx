@@ -62,6 +62,8 @@ import {
 } from "./listingUtils";
 import "./packageListing.css";
 
+export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
 type PackageListingOutletContext = OutletContextShape & {
   packageDownloadUrl?: string;
 };

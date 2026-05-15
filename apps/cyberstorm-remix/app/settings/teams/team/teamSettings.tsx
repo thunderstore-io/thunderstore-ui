@@ -7,6 +7,8 @@ import { NewLink, Tabs } from "@thunderstore/cyberstorm";
 
 import type { Route } from "./+types/teamSettings";
 
+export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
 export async function loader({ params, request }: Route.LoaderArgs) {
   const teamName = params.namespaceId ?? "";
   const url = new URL(request.url);

@@ -37,6 +37,8 @@ import { PackageActions } from "./components/PackageListing/PackageActions";
 import { getPrivateListing, getPublicListing } from "./listingUtils";
 import "./packageListing.css";
 
+export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
 export async function loader({ params, request }: Route.LoaderArgs) {
   const { communityId, namespaceId, packageId, packageVersion } = params;
 

@@ -31,6 +31,8 @@ import type { Communities } from "@thunderstore/dapper/types";
 import type { Route } from "./+types/communities";
 import "./Communities.css";
 
+export { RouteErrorBoundary as ErrorBoundary } from "app/commonComponents/ErrorBoundary";
+
 enum SortOptions {
   Name = "name",
   Latest = "-datetime_created",
