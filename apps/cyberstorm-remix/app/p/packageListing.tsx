@@ -49,12 +49,8 @@ import { PackageLikeAction } from "@thunderstore/cyberstorm-forms";
 import { DapperTs, type DapperTsInterface } from "@thunderstore/dapper-ts";
 
 import type { Route } from "./+types/packageListing";
-import { ManagementTools } from "./components/PackageListing/ManagementTools";
 import { PackageActions } from "./components/PackageListing/PackageActions";
-import {
-  InternalNotes,
-  RejectionReason,
-} from "./components/PackageListing/ReviewInformation";
+import { PackageListingManagement } from "./components/PackageListing/PackageListingManagement";
 import {
   getPackageListingStatus,
   getPrivateListing,
@@ -185,6 +181,7 @@ clientLoader.hydrate = true;
 export default function PackageListing() {
   const {
     community,
+    communityFilters,
     listing,
     listingStatus,
     team,
@@ -274,29 +271,14 @@ export default function PackageListing() {
     <>
       <div className="container container--y container--full">
         <section className="package-listing__package-section">
-          <Suspense>
-            <Await resolve={listingStatus}>
-              {(resolvedStatus) => (
-                <Await resolve={permissions}>
-                  {(resolvedPermissions) =>
-                    resolvedPermissions ? (
-                      <>
-                        <ManagementTools
-                          listingStatus={resolvedStatus}
-                          packagePermissions={resolvedPermissions}
-                          listing={listing}
-                          toast={toast}
-                          requestConfig={config}
-                        />
-                        <RejectionReason status={resolvedStatus} />
-                        <InternalNotes status={resolvedStatus} />
-                      </>
-                    ) : null
-                  }
-                </Await>
-              )}
-            </Await>
-          </Suspense>
+          <PackageListingManagement
+            listing={listing}
+            listingStatus={listingStatus}
+            permissions={permissions}
+            communityFilters={communityFilters}
+            toast={toast}
+            requestConfig={config}
+          />
 
           <div className="package-listing__main">
             <section className="package-listing__package-content-section">

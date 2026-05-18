@@ -28,7 +28,6 @@ export type CyberstormLinkIds =
   | "ManifestValidator"
   | "MarkdownPreview"
   | "Package"
-  | "PackageEdit"
   | "PackageRequired"
   | "PackageWiki"
   | "PackageWikiNewPage"

@@ -46,7 +46,6 @@ export default [
           route("versions", "p/tabs/Versions/PackageVersionVersions.tsx"),
         ]
       ),
-      route(":namespaceId/:packageId/edit", "p/packageEdit.tsx"),
     ]),
   ]),
   /**
