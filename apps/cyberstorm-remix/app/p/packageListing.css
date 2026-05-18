@@ -1,4 +1,14 @@
 @layer nimbus-layout {
+  .package-listing__package-section {
+    position: relative;
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    align-items: flex-start;
+    align-self: stretch;
+  }
+
   .package-listing__main {
     display: flex;
     gap: var(--gap-3xl);
@@ -6,15 +16,55 @@
     align-self: stretch;
   }
 
-  .package-listing__package-section {
-    position: relative;
+  .package-listing__package-content-section {
     display: flex;
     flex: 1 0 0;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--gap-xl);
+    align-items: flex-start;
+    padding-top: var(--gap-md);
+    overflow-x: scroll;
+    scrollbar-width: none;
+  }
+
+  .community--packageListingSubpath .package-listing__package-content-section {
+    padding-top: 0;
+  }
+
+  .package-listing__page-header-skeleton {
+    height: 10rem;
+  }
+
+  .package-listing__nav-skeleton {
+    height: 47px;
+  }
+
+  .package-listing__content {
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    gap: var(--gap-3xl);
+    align-items: stretch;
+    align-self: stretch;
+  }
+
+  .package-listing__package-actions {
+    display: flex;
+    gap: var(--gap-xs);
     align-items: flex-start;
     align-self: stretch;
-    justify-content: flex-start;
+  }
+
+  .package-listing__narrow-actions {
+    display: none;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    align-items: flex-start;
+    align-self: stretch;
+  }
+
+  .package-listing__drawer-button {
+    width: 100%;
   }
 
   .package-listing-management-tools {
@@ -29,7 +79,7 @@
   .package-listing-management-tools__island {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: var(--space-6);
     align-items: center;
     justify-content: flex-end;
     padding: var(--space-8);
@@ -38,6 +88,7 @@
     background: var(--color-surface-1);
   }
 
+  .package-listing-sidebar__categories,
   .review-information-card {
     display: flex;
     flex-direction: column;
@@ -60,16 +111,14 @@
   .review-package__block {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--gap-md);
     align-items: flex-start;
   }
 
   .review-package__label {
     color: var(--color-text-primary);
-    font-weight: 700;
-    font-size: 1rem;
-    font-style: normal;
-    line-height: normal;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-body-md);
   }
 
   .review-package__textarea {
@@ -83,34 +132,6 @@
     justify-content: space-between;
   }
 
-  .package-listing__package-content-section {
-    display: flex;
-    flex: 1 0 0;
-    flex-direction: column;
-    gap: var(--gap-xl);
-    align-items: flex-start;
-    padding-top: 1rem;
-    overflow-x: scroll;
-    scrollbar-width: none;
-  }
-
-  .package-listing__page-header-skeleton {
-    height: 10rem;
-  }
-
-  .package-listing__nav-skeleton {
-    height: 47px;
-  }
-
-  .package-listing__content {
-    display: flex;
-    flex: 1 0 0;
-    flex-direction: column;
-    gap: var(--gap-3xl);
-    align-items: stretch;
-    align-self: stretch;
-  }
-
   .package-listing-sidebar {
     position: sticky;
     top: var(--header-height);
@@ -119,27 +140,6 @@
     flex-shrink: 0;
     gap: var(--gap-md);
     align-items: flex-start;
-    padding-top: var(--gap-md);
-  }
-
-  .package-listing-sidebar__skeleton {
-    width: 20rem;
-    height: 21.4rem;
-  }
-
-  .package-listing-sidebar__install-skeleton {
-    width: 20rem;
-    height: 3.56rem;
-  }
-
-  .package-listing-sidebar__actions-skeleton {
-    width: 20rem;
-    height: 2.25rem;
-  }
-
-  .package-listing-sidebar__install {
-    justify-content: center;
-    width: 100%;
   }
 
   .package-listing-sidebar__main {
@@ -150,19 +150,27 @@
     align-self: stretch;
   }
 
-  .package-listing__package-actions {
-    display: flex;
-    gap: var(--gap-xs);
-    align-items: flex-start;
-    align-self: stretch;
+  .package-listing-sidebar__actions-skeleton,
+  .package-listing-sidebar__install-skeleton,
+  .package-listing-sidebar__skeleton {
+    width: 20rem;
   }
 
-  .package-listing__narrow-actions {
-    display: none;
-    flex-direction: column;
-    gap: var(--gap-xs);
-    align-items: flex-start;
-    align-self: stretch;
+  .package-listing-sidebar__skeleton {
+    height: 21.4rem;
+  }
+
+  .package-listing-sidebar__install-skeleton {
+    height: 3.56rem;
+  }
+
+  .package-listing-sidebar__actions-skeleton {
+    height: 2.25rem;
+  }
+
+  .package-listing-sidebar__install {
+    justify-content: center;
+    width: 100%;
   }
 
   .package-listing-sidebar__download {
@@ -195,19 +203,21 @@
     background: var(--color-surface-default);
   }
 
+  .package-listing-sidebar__content,
+  .package-listing-sidebar__dependency-string,
   .package-listing-sidebar__label {
-    color: var(--color-text-tertiary);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-body-sm);
     line-height: normal;
   }
 
+  .package-listing-sidebar__label {
+    color: var(--color-text-tertiary);
+  }
+
   .package-listing-sidebar__content {
     flex: 1 0 0;
     color: var(--color-text-primary);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-body-sm);
-    line-height: normal;
     text-align: right;
   }
 
@@ -221,27 +231,8 @@
 
   .package-listing-sidebar__dependency-string {
     max-width: 15ch;
-
-    /* overflow-x: clip; */
     color: var(--color-text-primary);
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-body-sm);
-
-    /* white-space: nowrap; */
-
-    /* text-overflow: ellipsis; */
     word-break: break-word;
-  }
-
-  .package-listing-sidebar__categories {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-md);
-    align-items: flex-start;
-    align-self: stretch;
-    padding: var(--space-16);
-    border-radius: var(--radius-md);
-    background-color: var(--color-surface-default);
   }
 
   .package-listing-sidebar__header {
@@ -258,28 +249,21 @@
     align-content: flex-start;
     align-items: flex-start;
     align-self: stretch;
-    min-width: 100px;
-    max-width: 300px;
-  }
-
-  .package-listing__drawer-button {
-    width: 100%;
+    min-width: 6.25rem;
+    max-width: 18.75rem;
   }
 
   @media (width < 41rem) {
     .package-listing-management-tools {
       flex: 1 1 0;
-      flex-flow: row wrap;
     }
 
     .package-listing-management-tools__island {
-      flex-flow: row wrap;
       justify-content: center;
       width: 100%;
     }
   }
 
-  /* Sidebar narrow/wide switch breakpoint */
   @media (width <= 990px) {
     .package-listing__narrow-actions {
       display: flex;

@@ -104,8 +104,18 @@ export default function Community() {
   const outletContext = useOutletContext() as OutletContextShape;
 
   return (
-    <>
-      <div className="community__header">
+    <div
+      className={classnames(
+        "community",
+        isPackageListingSubPath ? "community--packageListingSubpath" : null
+      )}
+    >
+      <div
+        className={classnames(
+          "community__header",
+          isPackageListingSubPath ? "community__header--compact" : null
+        )}
+      >
         <div
           className={classnames(
             "community__background",
@@ -118,10 +128,12 @@ export default function Community() {
             <Await resolve={community}>
               {(resolvedValue) =>
                 resolvedValue.hero_image_url ? (
-                  <img
-                    src={resolvedValue.hero_image_url}
-                    alt={resolvedValue.name}
-                  />
+                  <div className="community__background-image">
+                    <img
+                      src={resolvedValue.hero_image_url}
+                      alt={resolvedValue.name}
+                    />
+                  </div>
                 ) : null
               }
             </Await>
@@ -231,6 +243,6 @@ export default function Community() {
         </div>
       </div>
       <Outlet context={outletContext} />
-    </>
+    </div>
   );
 }

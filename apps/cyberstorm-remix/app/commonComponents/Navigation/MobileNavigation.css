@@ -96,7 +96,7 @@
   }
 
   /* Mobile breakpoint */
-  @media (width <= 750px) {
+  @media (width <= 48rem) {
     .mobile-navigation {
       position: fixed;
       bottom: 0;
