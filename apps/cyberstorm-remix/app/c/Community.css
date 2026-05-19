@@ -38,9 +38,19 @@
     width: 5.5rem;
     height: 5.5rem;
 
-    > img {
+    .community__game-icon-image {
       width: 5.5rem;
       height: 5.5rem;
+    }
+
+    .community__game-icon-image .image__src {
+      width: 5.5rem;
+      height: 5.5rem;
+    }
+
+    .community__game-icon-image .image__icon {
+      width: 2.75rem;
+      height: 2.75rem;
     }
   }
 

@@ -1,3 +1,4 @@
+import { faBan, faGamepad } from "@fortawesome/free-solid-svg-icons";
 import { type PropsWithChildren, type ReactElement, memo } from "react";
 
 import { Heading, Image, classnames } from "@thunderstore/cyberstorm";
@@ -19,8 +20,8 @@ export const PageHeader = memo(function PageHeader(props: PageHeaderProps) {
     headingSize,
     headingLevel,
     description = null,
-    image = null,
-    icon = null,
+    image,
+    icon,
     meta,
     variant = "simple",
   } = props;
@@ -32,21 +33,21 @@ export const PageHeader = memo(function PageHeader(props: PageHeaderProps) {
         variant === "detailed" ? "page-header--detailed" : "page-header--simple"
       )}
     >
-      {image ? (
+      {image !== undefined ? (
         <Image
           src={image}
           square
-          cardType="community"
+          fallbackIcon={faBan}
           intrinsicWidth={96}
           intrinsicHeight={96}
           rootClasses="page-header__image"
         />
       ) : null}
-      {icon ? (
+      {icon !== undefined ? (
         <Image
           src={icon}
           square
-          cardType="community"
+          fallbackIcon={faGamepad}
           intrinsicWidth={56}
           intrinsicHeight={56}
           rootClasses="page-header__icon"

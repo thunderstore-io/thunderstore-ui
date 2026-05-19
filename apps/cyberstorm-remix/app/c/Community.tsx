@@ -1,5 +1,9 @@
 import { faDiscord } from "@fortawesome/free-brands-svg-icons";
-import { faBook, faDownload } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBook,
+  faDownload,
+  faGamepad,
+} from "@fortawesome/free-solid-svg-icons";
 import { faArrowUpRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getSessionTools } from "cyberstorm/security/publicEnvVariables";
@@ -17,6 +21,7 @@ import {
 
 import {
   Heading,
+  Image,
   NewButton,
   NewIcon,
   NewLink,
@@ -151,14 +156,17 @@ export default function Community() {
               <div className="community__game-icon-tinified">
                 <Suspense fallback={<SkeletonBox />}>
                   <Await resolve={community}>
-                    {(resolvedValue) =>
-                      resolvedValue.community_icon_url ? (
-                        <img
-                          src={resolvedValue.community_icon_url}
-                          alt={resolvedValue.name}
-                        />
-                      ) : null
-                    }
+                    {(resolvedValue) => (
+                      <Image
+                        src={resolvedValue.community_icon_url}
+                        fallbackIcon={faGamepad}
+                        square
+                        alt={resolvedValue.name}
+                        intrinsicWidth={88}
+                        intrinsicHeight={88}
+                        rootClasses="community__game-icon-image"
+                      />
+                    )}
                   </Await>
                 </Suspense>
               </div>
