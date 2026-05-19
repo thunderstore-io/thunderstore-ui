@@ -34,7 +34,7 @@
     "playwright": "1.55.1",
     "typescript": "^5.6.2",
     "vite": "^7.2.6",
-    "vitest": "3.2.4"
+    "vitest": "4.1.6"
   },
   "preconstruct": {
     "entrypoints": [
