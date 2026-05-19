@@ -98,7 +98,7 @@ export function ReportPackageForm(
   >({
     inputs: formInputs,
     validators: {
-      description: { maxLength: 12288 },
+      description: {},
     },
     submitor,
     onSubmitSuccess: () => {

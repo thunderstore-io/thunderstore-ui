@@ -251,7 +251,7 @@ export default function WikiEdit() {
     inputs: formInputs,
     validators: {
       title: { required: true, maxLength: 512 },
-      markdown_content: { required: true, maxLength: 100000 },
+      markdown_content: { required: true },
     },
     submitor,
     onSubmitSuccess: (result) => {
