@@ -3,6 +3,7 @@ import "./styles/cyberstorm.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 // import { LinksFunction } from "@remix-run/react/dist/routeModules";
 import { Provider as RadixTooltip } from "@radix-ui/react-tooltip";
+import rybbit from "@rybbit/js";
 import { withSentry } from "@sentry/remix";
 import { Breadcrumbs } from "app/commonComponents/Breadcrumbs/Breadcrumbs";
 import {
@@ -99,6 +100,8 @@ export async function loader() {
       "VITE_AUTH_BASE_URL",
       "VITE_AUTH_RETURN_URL",
       "VITE_CLIENT_SENTRY_DSN",
+      "VITE_RYBBIT_SITE_ID",
+      "VITE_RYBBIT_ANALYTICS_HOST",
     ]),
     currentUser: undefined,
     config: {
@@ -133,6 +136,8 @@ export async function clientLoader({
     "VITE_AUTH_BASE_URL",
     "VITE_AUTH_RETURN_URL",
     "VITE_CLIENT_SENTRY_DSN",
+    "VITE_RYBBIT_SITE_ID",
+    "VITE_RYBBIT_ANALYTICS_HOST",
   ]);
   if (
     !publicEnvVariables.VITE_API_URL ||
@@ -225,6 +230,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       "VITE_AUTH_BASE_URL",
       "VITE_AUTH_RETURN_URL",
       "VITE_CLIENT_SENTRY_DSN",
+      "VITE_RYBBIT_SITE_ID",
+      "VITE_RYBBIT_ANALYTICS_HOST",
     ]);
     shouldUpdatePublicEnvVars = true;
   } else {
@@ -367,6 +374,16 @@ function App() {
       )
   );
 
+  useEffect(() => {
+    const siteId = data?.publicEnvVariables.VITE_RYBBIT_SITE_ID;
+    const analyticsHost = data?.publicEnvVariables.VITE_RYBBIT_ANALYTICS_HOST;
+    if (!siteId || !analyticsHost) return;
+    rybbit.init({ analyticsHost, siteId }).catch(console.error);
+  }, [
+    data?.publicEnvVariables.VITE_RYBBIT_SITE_ID,
+    data?.publicEnvVariables.VITE_RYBBIT_ANALYTICS_HOST,
+  ]);
+
   return (
     <Outlet
       context={{
@@ -469,6 +486,94 @@ function AdsInit() {
       });
     }
   }, [adsScriptLoaded, nitroAds]);
+
+  useEffect(() => {
+    const onLoaded = (e: Event) => {
+      const { geo, regionCode } = (e as CustomEvent).detail;
+      rybbit.event("nitropay_loaded", { geo, regionCode });
+    };
+    const onCreateAd = (e: Event) => {
+      const { id, acceptable } = (e as CustomEvent).detail;
+      rybbit.event("nitropay_ad_created", { ad_id: id, acceptable });
+    };
+    const onRendered = (e: Event) => {
+      const { type } = (e as CustomEvent).detail;
+      rybbit.event("nitropay_ad_rendered", { type });
+    };
+    const onBidReceived = (e: Event) => {
+      const { adUnitCode, bidder, cpm } = (e as CustomEvent).detail;
+      rybbit.event("nitropay_bid_received", { ad_id: adUnitCode, bidder, cpm });
+    };
+    const onAnchorVisibility = (e: Event) => {
+      const { id, location } = (e as CustomEvent).detail;
+      rybbit.event("nitropay_anchor_visibility", { ad_id: id, location });
+    };
+    const onComplete = (e: Event) => {
+      const { adUnitCode, type } = (e as CustomEvent).detail;
+      rybbit.event("nitropay_video_complete", { ad_id: adUnitCode, type });
+    };
+    const onReset = (e: Event) => {
+      const { id } = (e as CustomEvent).detail;
+      rybbit.event("nitropay_ad_reset", { ad_id: id });
+    };
+    const onInterstitialAvailability = (e: Event) => {
+      const { id } = (e as CustomEvent).detail;
+      rybbit.event("nitropay_interstitial_available", { ad_id: id });
+    };
+    const onInterstitialRender = (e: Event) => {
+      const { id } = (e as CustomEvent).detail;
+      rybbit.event("nitropay_interstitial_rendered", { ad_id: id });
+    };
+    const onInterstitialNavigate = (e: Event) => {
+      const { href } = (e as CustomEvent).detail;
+      rybbit.event("nitropay_interstitial_navigate", { href: href ?? "" });
+    };
+
+    document.addEventListener("nitroAds.loaded", onLoaded);
+    document.addEventListener("nitroAds.createAd", onCreateAd);
+    document.addEventListener("nitroAds.rendered", onRendered);
+    document.addEventListener("nitroAds.bidReceived", onBidReceived);
+    document.addEventListener("nitroAds.anchorVisibility", onAnchorVisibility);
+    document.addEventListener("nitroAds.complete", onComplete);
+    document.addEventListener("nitroAds.reset", onReset);
+    document.addEventListener(
+      "nitroAds.interstitialAvailability",
+      onInterstitialAvailability
+    );
+    document.addEventListener(
+      "nitroAds.interstitialRender",
+      onInterstitialRender
+    );
+    document.addEventListener(
+      "nitroAds.interstitialNavigate",
+      onInterstitialNavigate
+    );
+
+    return () => {
+      document.removeEventListener("nitroAds.loaded", onLoaded);
+      document.removeEventListener("nitroAds.createAd", onCreateAd);
+      document.removeEventListener("nitroAds.rendered", onRendered);
+      document.removeEventListener("nitroAds.bidReceived", onBidReceived);
+      document.removeEventListener(
+        "nitroAds.anchorVisibility",
+        onAnchorVisibility
+      );
+      document.removeEventListener("nitroAds.complete", onComplete);
+      document.removeEventListener("nitroAds.reset", onReset);
+      document.removeEventListener(
+        "nitroAds.interstitialAvailability",
+        onInterstitialAvailability
+      );
+      document.removeEventListener(
+        "nitroAds.interstitialRender",
+        onInterstitialRender
+      );
+      document.removeEventListener(
+        "nitroAds.interstitialNavigate",
+        onInterstitialNavigate
+      );
+    };
+  }, []);
 
   return <></>;
 }
