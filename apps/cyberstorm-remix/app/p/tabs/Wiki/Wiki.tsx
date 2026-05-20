@@ -45,13 +45,10 @@ export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
     try {
       wiki = await dapper.getPackageWiki(params.namespaceId, params.packageId);
     } catch (error) {
-      if (isApiError(error)) {
-        if (error.response.status === 404) {
-          wiki = undefined;
-        } else {
-          wiki = undefined;
-          console.error("Error fetching package wiki:", error);
-        }
+      if (isApiError(error) && error.response.status === 404) {
+        wiki = undefined;
+      } else {
+        throw error;
       }
     }
 

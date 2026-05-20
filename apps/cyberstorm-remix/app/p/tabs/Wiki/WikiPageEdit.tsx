@@ -58,7 +58,7 @@ export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
     );
     const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
     if (!pageId) {
-      throw new Error("Page not found");
+      throw new Response("Page not found", { status: 404 });
     }
     const page = await dapper.getPackageWikiPage(pageId);
 
@@ -80,7 +80,9 @@ export const loader = ssrLoader(async ({ params }: Route.LoaderArgs) => {
       }),
     };
   } else {
-    throw new Error("Namespace ID or Package ID is missing");
+    throw new Response("Namespace ID or Package ID is missing", {
+      status: 404,
+    });
   }
 });
 
@@ -138,7 +140,7 @@ export async function clientLoader({
     );
     const pageId = wiki.pages.find((p) => p.slug === params.slug)?.id;
     if (!pageId) {
-      throw new Error("Page not found");
+      throw new Response("Page not found", { status: 404 });
     }
     const page = await dapper.getPackageWikiPage(pageId);
 
@@ -150,7 +152,9 @@ export async function clientLoader({
       seo: (await serverLoader()).seo,
     };
   } else {
-    throw new Error("Namespace ID or Package ID is missing");
+    throw new Response("Namespace ID or Package ID is missing", {
+      status: 404,
+    });
   }
 }
 
