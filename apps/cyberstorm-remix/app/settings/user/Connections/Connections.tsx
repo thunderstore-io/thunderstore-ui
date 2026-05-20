@@ -82,7 +82,7 @@ export default function Connections() {
     let message = "Error when disconnecting account.";
 
     if (isApiError(error)) {
-      const fieldErrors = error.getFieldErrors();
+      const fieldErrors = error.getFieldErrors?.() ?? {};
       message =
         fieldErrors.non_field_errors?.[0] ||
         fieldErrors.detail?.[0] ||

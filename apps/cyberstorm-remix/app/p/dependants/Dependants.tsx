@@ -55,7 +55,7 @@ export const loader = ssrLoader(
       }
 
       return {
-        community: dapper.getCommunity(params.communityId),
+        community: await dapper.getCommunity(params.communityId),
         listing,
         filters: filters,
         listings: await dapper.getPackageListings(
