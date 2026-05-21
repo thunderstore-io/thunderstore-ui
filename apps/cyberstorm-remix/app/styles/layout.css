@@ -56,4 +56,23 @@
       padding-bottom: 55px;
     }
   }
+
+  /* Progressively hide stacked right-column ads as viewport height shrinks */
+  @media (height <= 525px) {
+    .layout__ads-inner .ad-container[data-cid="right-column-1"] {
+      display: none;
+    }
+  }
+
+  @media (height <= 800px) {
+    .layout__ads-inner .ad-container[data-cid="right-column-2"] {
+      display: none;
+    }
+  }
+
+  @media (height <= 1075px) {
+    .layout__ads-inner .ad-container[data-cid="right-column-3"] {
+      display: none;
+    }
+  }
 }
